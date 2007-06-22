@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.118 2007/05/25 06:40:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.120 2007/06/22 11:02:57 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -68,6 +68,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property mail_subject type=textbox
 		@caption Maili subject
 		@comment Kui m&auml;&auml;ramata, siis foorumi topic
+
+        @groupinfo required_fields caption="Kohustuslikud v&auml;ljad" parent=general
+        @default group=required_fields
+
+                @property required_fields type=chooser multiple=1 orient=vertical
+                @caption Kohustuslikud v&auml;ljad
 
 	@groupinfo users caption="Kasutajad" parent=general
 	@default group=users
@@ -268,6 +274,14 @@ class forum_v2 extends class_base
 		);
 	
 		lc_site_load("forum",&$this);
+
+		$this->comment_fields = array(
+                        "name" => t("Pealkiri"),
+                        "uname" => t("Autor"),
+                        "uemail" => t("Autori e-mail"),
+                        "commtext" => t("Kommentaar"),
+                );
+
 	}
 
 	function get_property($arr)
@@ -280,6 +294,11 @@ class forum_v2 extends class_base
 		//	case "comments_on_page":
 		//		$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
 		//		break;
+
+                        case "required_fields":
+                                $data["options"] = $this->comment_fields;
+                                break;
+
 			case "topics_sort_order":
 				$data['options'] = $this->topics_sort_order;
 				break;
@@ -2164,7 +2183,22 @@ class forum_v2 extends class_base
 			}
 		}
 
-		if ( isset($arr['name']) && empty($arr['name']) )
+                $req_f = $obj_inst->prop("required_fields");
+                $conv = array(
+                        "name" => "name",
+                        "commtext" => "commtext",
+                        "uname" => "author",
+                        "uemail" => "email",
+                );
+                foreach($req_f as $field)
+                {
+                        if(isset($arr[$field]) && empty($arr[$field]))
+                        {
+                                $errors[$conv[$field]] = 1;
+                        }
+                }
+
+		/*if ( isset($arr['name']) && empty($arr['name']) )
 		{
 			$errors['name'] = 1;
 		}
@@ -2179,7 +2213,7 @@ class forum_v2 extends class_base
 		if ( isset($arr['uemail']) && empty($arr['uemail']) )
 		{
 			$errors['email'] = 1;
-		}
+		}*/
 
 		if ( !empty($errors) )
 		{

@@ -114,6 +114,17 @@
             <comment>Kui m&amp;amp;auml;&amp;amp;auml;ramata, siis foorumi topic</comment>
       </property>
       <property>
+            <name>required_fields</name>
+            <table>objects</table>
+            <group>required_fields</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <caption>Kohustuslikud v&amp;amp;auml;ljad</caption>
+      </property>
+      <property>
             <name>show_logged</name>
             <table>objects</table>
             <group>users</group>
@@ -432,6 +443,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <default>0</default>
             <caption>Teemade s&amp;amp;uuml;gavus</caption>
       </property>
       <property>
@@ -543,6 +555,10 @@
                   <caption>Meiliseaded</caption>
                   <parent>general</parent>
             </mail_settings>
+            <required_fields>
+                  <caption>Kohustuslikud v&amp;amp;auml;ljad</caption>
+                  <parent>general</parent>
+            </required_fields>
             <users>
                   <caption>Kasutajad</caption>
                   <parent>general</parent>
