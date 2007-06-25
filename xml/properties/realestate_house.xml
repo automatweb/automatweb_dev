@@ -1740,6 +1740,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <trans>1</trans>
+            <confirm_save_data>1</confirm_save_data>
             <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>

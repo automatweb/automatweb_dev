@@ -4,7 +4,7 @@
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_PROPERTY, on_create)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
-@classinfo syslog_type=ST_REALESTATE_PROPERTY relationmgr=yes no_status=1 trans=1
+@classinfo syslog_type=ST_REALESTATE_PROPERTY relationmgr=yes no_status=1 trans=1 confirm_save_data=1
 
 @tableinfo realestate_property index=oid master_table=objects master_index=oid
 
@@ -393,7 +393,6 @@ class realestate_property extends class_base
 	{
 		if($o->is_property("total_floor_area") && $o->prop("total_floor_area") > 0)
 		{
-
 			return $o->prop("transaction_price") / $o->prop("total_floor_area");
 		}
 		else return 0;
@@ -431,8 +430,16 @@ class realestate_property extends class_base
 				break;
 
 			case "header":
-				$type_obj = obj($this_object->prop("transaction_type"));
-				if(is_object($type_obj)) $trans_type = $type_obj->name();
+				if ($this->can("view", $this_object->prop("transaction_type")))
+				{
+					$type_obj = obj($this_object->prop("transaction_type"));
+					$trans_type = $type_obj->name();
+				}
+				else
+				{
+					$trans_type = t("[tundmatu tehing]");
+				}
+
 				$classes = aw_ini_get("classes");
 				$prop["value"] = '<div style="padding: .8em;">'.$trans_type.', <b>' . $classes[$this_object->class_id ()]["name"] . '</b> - ' . $this_object->name () . '<br>AW ID '.$this_object->prop("oid").', City24 ID '.$this_object->prop("city24_object_id").'</div>';
 				break;
