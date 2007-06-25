@@ -42,6 +42,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 			@property is_archived type=checkbox ch_value=1 table=realestate_property parent=box123 no_caption=1
 			@caption Arhiveeritud
 
+			@property booked_until type=hidden field=meta method=serialize
+			@property is_booked type=checkbox ch_value=1 field=meta method=serialize parent=box123 no_caption=1
+			@caption Broneeritud
+
 		@property expire type=text field=meta method=serialize
 		@caption aegub
 
@@ -143,19 +147,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property project type=relpicker reltype=RELTYPE_REALESTATE_PROJECT clid=CL_PROJECT automatic=1 field=meta method=serialize
 		@caption Projekt
 
-
-//see nagu peaks järjekorra lõpus olema tegelt
 		@property transaction_constraints type=classificator table=realestate_property
 		@caption Piirangud
 
 		@property buyer_heard_from type=classificator field=meta method=serialize
 		@caption Infoallikas
-
-
-	@groupinfo temp caption="põhimõtteliselt prügikast"
-	@default group=grp_sub_main
-
-		property seller type=releditor reltype=RELTYPE_REALESTATE_SELLER rel_id=first editonly=1 props=firstname,lastname,personal_id,gender,birthday,phone,email,comment,notes
 
 
 @default group=grp_additional_info
@@ -187,9 +183,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @default group=grp_map
 	@property map_create type=text store=no
 	@caption Loo kaart (salvestatakse kaardi pilt ja asukoha andmed)
-
-	// @property map_show type=text field=meta method=serialize
-	// @caption Kaart
 
 	@property map_url type=text field=meta method=serialize
 	@caption Kaart
@@ -406,6 +399,13 @@ class realestate_property extends class_base
 
 		switch($prop["name"])
 		{
+			case "is_booked":
+				if (1 < $this_object->prop("booked_until"))
+				{
+					$prop["post_append_text"] = t(" kuni: ") . date($this->re_manager->prop("default_date_format"), $this_object->prop("booked_until"));
+				}
+				break;
+
 			case "price_per_m2":
 				$prop["value"] = $this->get_price_per_m2($this_object);
 				break;
@@ -689,10 +689,6 @@ class realestate_property extends class_base
 				{
 					$prop["value"] = t("Kaarti pole veel loodud.");
 				}
-				break;
-
-			case "map_show":
-				$prop["value"] = "";
 				break;
 
 			 case "picture_icon":

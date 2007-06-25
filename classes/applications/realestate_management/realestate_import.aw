@@ -668,7 +668,9 @@ class realestate_import extends class_base
 					"NAITAKORTERINR" === $data["tag"] or
 					"SEISUKORD_EHITUSAASTA" === $data["tag"] or
 					"TEHING_KUURENT" === $data["tag"] or
-					"TEHING_PIIRANGUD" === $data["tag"]
+					"TEHING_PIIRANGUD" === $data["tag"] or
+					"IS_BOOKED" === $data["tag"] or
+					"BOOKED_UNTIL_DATE" === $data["tag"]
 				)
 				{
 					$this->property_data[$data["tag"]] = $data["value"];//!!! mis puhul value on siin undefined index?
@@ -1027,13 +1029,33 @@ class realestate_import extends class_base
 						$property->set_prop ("price_per_m2", $value);
 					}
 
+					### booked
+					if(isset($this->property_data["IS_BOOKED"]) and !$property->prop("is_booked"))
+					{
+						$property->set_prop("is_booked", 1);
+
+						if (isset($this->property_data["BOOKED_UNTIL_DATE"]))
+						{
+							list ($year, $month, $day) = sscanf(trim ($data["value"]),"%u-%u-%u");
+
+							if (2006 < $year and 1 <= $month and 12 >= $month and 1 <= $day and 31 >= $day)
+							{
+								$value = mktime(0, 0, 0, $month, $day, $year);
+								$property->set_prop("booked_until", $value);
+							}
+						}
+					}
+					else
+					{
+						$property->set_prop("is_booked", 0);
+					}
+
 					#### transaction_rent
 					$value = isset($this->property_data["TEHING_KUUYYR"]) ? round ($this->property_data["TEHING_KUUYYR"], 2) : 0;
 					$property->set_prop ("transaction_rent", $value);
 
 					#### property_area
-					if($property->is_property("property_area"))
-						$property->set_prop ("property_area", $this->property_data["KRUNT"]);
+					if($property->is_property("property_area")) $property->set_prop ("property_area", $this->property_data["KRUNT"]);
 
 					#### transaction_constraints
 					if ($this->changed_transaction_constraints)
@@ -1217,9 +1239,6 @@ class realestate_import extends class_base
 					#### additional_info
 					$value = isset($this->property_data["LISAINFO_INFO"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, (REALESTATE_IMPORT_CHARSET_TO."//TRANSLIT"), $this->property_data["LISAINFO_INFO"]) : "";
 					$property->set_prop ("additional_info_et", $value);
-
-					#### property_area
-					if($property->is_property("property_area"))$property->set_prop ("property_area", $this->property_data["KRUNT"]);
 
 					#### picture_icon
 					if ($property->prop ("picture_icon_city24") != $this->property_data["IKOONI_URL"])

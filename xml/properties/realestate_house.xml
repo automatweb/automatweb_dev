@@ -65,6 +65,26 @@
             <caption>Arhiveeritud</caption>
       </property>
       <property>
+            <name>booked_until</name>
+            <table>objects</table>
+            <group>grp_sub_main</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>is_booked</name>
+            <table>objects</table>
+            <group>grp_sub_main</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>box123</parent>
+            <no_caption>1</no_caption>
+            <caption>Broneeritud</caption>
+      </property>
+      <property>
             <name>expire</name>
             <table>objects</table>
             <group>grp_sub_main</group>
@@ -1772,9 +1792,6 @@
                   <parent>grp_main</parent>
                   <caption>Kuulutuse andmed</caption>
             </advertisement_data>
-            <temp>
-                  <caption>Muu</caption>
-            </temp>
             <house_info>
                   <parent>grp_detailed</parent>
                   <caption>Maja &amp;uuml;ldinfo</caption>
@@ -1787,6 +1804,9 @@
                   <parent>grp_detailed</parent>
                   <caption>Maja</caption>
             </house>
+            <temp>
+                  <caption>Muu</caption>
+            </temp>
       </groupinfo>
       <tableinfo>
             <realestate_property>
