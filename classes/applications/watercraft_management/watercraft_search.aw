@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.18 2007/06/05 17:02:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.19 2007/06/25 11:09:44 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -81,6 +81,9 @@
 	@property seller type=select table=watercraft_search
 	@caption M&uuml;&uuml;ja
 	
+	@property contact_name type=textbox table=watercraft_search
+	@caption Kontaktisik
+
 	@property price type=range table=watercraft_search
 	@caption Hind
 
@@ -127,6 +130,7 @@ class watercraft_search extends class_base
 			'passanger_count' => t('Reisijaid'),
 			'additional_equipment' => t('Lisavarustus'),
 			'seller' => t('M&uuml;&uuml;ja'),
+			'contact_name' => t('Kontaktisik'),
 			'price' => t('Hind'),
 			'ad_id' => t('Kuulutuse ID'),
 		);
@@ -1011,7 +1015,7 @@ class watercraft_search extends class_base
 				section_id int,
 				ad_id int,
 
-				additional_equipment varchar(255),
+				additional_equipment varchar(255)
 
 			)');
 			return true;
@@ -1062,6 +1066,7 @@ class watercraft_search extends class_base
 			case 'additional_equipment':
 			case 'search_result_template':
 			case 'search_form_template':
+			case 'contact_name':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'varchar(255)'

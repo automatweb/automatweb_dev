@@ -43,10 +43,10 @@
       </property>
       <property>
             <name>result_order</name>
-            <table>watercraft_search</table>
+            <table>objects</table>
             <group>general</group>
-            <type>chooser</type>
-            <default>1</default>
+            <type>table</type>
+            <store>no</store>
             <field>result_order</field>
             <caption>Otsingutulemuste sorteerimine </caption>
       </property>
@@ -184,12 +184,29 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
       </property>
       <property>
+            <name>contact_name</name>
+            <table>watercraft_search</table>
+            <group>search</group>
+            <type>textbox</type>
+            <field>contact_name</field>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
             <name>price</name>
             <table>watercraft_search</table>
             <group>search</group>
             <type>range</type>
             <field>price</field>
             <caption>Hind</caption>
+      </property>
+      <property>
+            <name>ad_id</name>
+            <table>watercraft_search</table>
+            <group>search</group>
+            <type>textbox</type>
+            <size>15</size>
+            <field>ad_id</field>
+            <caption>Kuulutuse id</caption>
       </property>
       <property>
             <name>watercraft_search_submit</name>
