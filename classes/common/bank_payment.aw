@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.60 2007/06/19 09:41:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.61 2007/06/25 13:06:52 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -511,7 +511,7 @@ class bank_payment extends class_base
 					if(array_key_exists($val[$this->ref[$bank_id]] ,  $done)) continue;
 					$done[$val[$this->ref[$bank_id]]] = $val[$this->ref[$bank_id]];
 				}
-/*				 if(aw_global_get("uid") == "struktuur"){//arr($val);
+/*´				 if(aw_global_get("uid") == "struktuur"){//arr($val);
  					$_SESSION["bank_return"]["data"] = $val;
  					arr($val["good"] = $this->check_response($val));
  					arr($val["VK_MSG"]);
@@ -521,6 +521,7 @@ class bank_payment extends class_base
 					$log_data[$val["timestamp"]]["payer"] = $val["VK_SND_NAME"];
 					$log_data[$val["timestamp"]]["ref"] = $val[$this->ref[$bank_id]];
 					$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
+					$log_data[$val["timestamp"]]["ip"] = $val["ip"];
 					$log_data[$val["timestamp"]]["sum"] = $val["VK_AMOUNT"];
 					$log_data[$val["timestamp"]]["bank"] = $bank_id;
 					$log_data[$val["timestamp"]]["acc"] = $val["VK_REC_ACC"];
@@ -592,6 +593,7 @@ class bank_payment extends class_base
 				"ok" =>  $val["ok"] ? t("&otilde;nnestus") : t("eba&otilde;nnestus"),
 				"good" => $val["good"] ? t("ok") : t(""),
 				"acc" => $val["acc"],
+				"ip" => $val["ip"],
 			));
 		}
 		//see summa toimib hetkel vaid eeldusel , et valuuta on igal pool sama
@@ -709,6 +711,12 @@ class bank_payment extends class_base
 		$t->define_field(array(
 			"name" => "acc",
 			"caption" => t("Arve"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "ip",
+			"caption" => t("IP"),
 			"align" => "center",
 			"sortable" => 1
 		));

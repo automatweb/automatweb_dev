@@ -89,12 +89,13 @@ if($_POST["VK_REF"])
 }
 if($_GET["ecuno"])
 {
-	$id = substr($_GET["ecuno"], 0, -1);}
-	foreach ($_GET as $key => $val)
-	{
-		$_SESSION["bank_return"]["data"][$key] = $val;
-	}
-	//see siis automaatse tagasituleku puhul pangast, miskip'rast teeb hansa get meetodika selle
+	$id = substr($_GET["ecuno"], 0, -1);
+}
+foreach ($_GET as $key => $val)
+{
+	$_SESSION["bank_return"]["data"][$key] = $val;
+}
+//see siis automaatse tagasituleku puhul pangast, miskip'rast teeb hansa get meetodika selle
 if($_SESSION["bank_return"]["data"]["VK_REF"])
 {
 	$id = substr($_SESSION["bank_return"]["data"]["VK_REF"] ,0 , -1 );
@@ -108,6 +109,7 @@ if($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"])
 $log = date("d/m/Y H:i : ",time());
 $bi = get_instance(CL_BANK_PAYMENT);
 $_SESSION["bank_return"]["data"]["timestamp"] = time();
+$_SESSION["bank_return"]["data"]["ip"] = $_SERVER['REMOTE_ADDR'];
 $_SESSION["bank_return"]["data"]["good"] = $bi->check_response();
 
 //foreach($_SESSION["bank_return"]["data"] as $key => $val)
@@ -121,7 +123,7 @@ fwrite($fh, serialize($_SESSION["bank_return"]["data"])."\n");
 fclose($fh);
 
 
-//esimene on hansapanga, EYP, sampo ja krediidipanga positiivne vastus, teine krediitkaardikeskuse
+//esimene on hansapanga, EYP, sampo ja krediidipanga positiivne vastus, teine nordea(ükskõik milline.. et negatiivne peaks mujale minema)... kolmas krediitkaardikeskuse
 	if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1101  || $_POST["VK_SERVICE"] == 1101 || $_GET["SOLOPMT-RETURN-VERSION"] == "0002"||  ($_GET["action"] == "afb" && $_GET["respcode"] == "000")
 	|| ($_SESSION["bank_return"]["data"]["action"] == "afb" && $_SESSION["bank_return"]["data"]["respcode"] == "000")
 	)
