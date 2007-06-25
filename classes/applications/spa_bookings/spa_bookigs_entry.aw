@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.61 2007/06/20 10:15:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.62 2007/06/25 10:48:27 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1024,9 +1024,9 @@ $t->set_sortable(false);
 					"</div>
 
 					<div  id='bk".$o->id()."' style='display: ".($o->modified() > (time() - 300) ? "block" : "none")."'>".
-						'<table border="1" width="100%">
+						'<table border="0" width="100%" style="border: 1px solid black;">
 						<tr>
-							<td width="100%" height="26" align="center" style="background-image:url(http://www.kalevspa.ee/img/taust_pealkiri.gif)" class="bronpealingid">
+							<td width="100%" height="26" align="left" style="background-image:url(http://www.kalevspa.ee/img/taust_pealkiri.gif)" class="bronpealingid">
 							'.$booking_str.'
 							</td>
 						</tr>
@@ -1076,7 +1076,7 @@ $t->set_sortable(false);
 		if ($from < 100 || $to < 100)
 		{
 			$from = get_day_start();
-			$to = get_day_start() + 24*3600*7;
+			$to = get_day_start() + 24*3600*7 - 1;//see -1 sellepärast et kui kella 00st võtab, siis on juba uus päev ja võtab järgmise päeva ka sisse
 		}
 		$range_from = $from;
 		$range_to = $to;
@@ -1084,7 +1084,7 @@ $t->set_sortable(false);
 		$rs = get_week_start($from) + 24*7*3600;
 		// now, draw table for the active range
 		classload("vcl/table");
-		$t = new aw_table();
+		$t = new aw_table();//if(aw_global_get("uid") == "st88rl2206"){ arr(date("H:i d.m.Y" , $range_to)); arr(date("H:i d.m.Y" , $range_from));}
 		$num_days = floor(($range_to - $range_from) / (24*3600)+1);
 		for ($i = 0; $i < $num_days; $i++)
 		{
