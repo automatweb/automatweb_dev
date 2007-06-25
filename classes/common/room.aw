@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.194 2007/06/19 12:46:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.195 2007/06/25 10:50:58 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -5446,6 +5446,11 @@ class room extends class_base
 			if (!is_array($oh->prop("apply_group")) || !count($oh->prop("apply_group")) || count(array_intersect($gl, safe_array($oh->prop("apply_group")))))
 			{
 				$rv[] = $oh;
+			}
+			//sel juhul kui üks on konkreetselt antud grupile mõjuv, siis tagastaks selle ja ei hakkaks üldse edasi vaatamagi
+			if (is_array($oh->prop("apply_group")) && count($oh->prop("apply_group")) && count(array_intersect($gl, safe_array($oh->prop("apply_group")))))
+			{
+				return array($oh);
 			}
 		}
 		return count($rv) ? $rv : null;
