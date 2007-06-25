@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.20 2007/06/25 11:38:40 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.21 2007/06/25 13:05:47 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -854,7 +854,6 @@ class watercraft_search extends class_base
 			'class_id' => CL_WATERCRAFT,
 			'parent' => $arr['obj_inst']->prop('data'),
 		);
-
 		if (!empty($arr['limit']))
 		{
 			$filter['limit'] = $arr['limit'];
@@ -894,8 +893,8 @@ class watercraft_search extends class_base
 			// if it is range:
 			if ( is_array($arr['request'][$name]) )
 			{
-				$from = (int)$arr['request'][$name]['from'];
-				$to = (int)$arr['request'][$name]['to'];
+				$from = (float)$arr['request'][$name]['from'];
+				$to = (float)$arr['request'][$name]['to'];
 
 				// if both are empty, then don't need to search by that:
 				if ( empty($from) && empty($to) )
