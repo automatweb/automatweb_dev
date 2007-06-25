@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.19 2007/06/25 11:09:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.20 2007/06/25 11:38:40 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -309,6 +309,7 @@ class watercraft_search extends class_base
 				
 				break;
 			case 'additional_equipment':
+			case 'contact_name':
 			case 'ad_id':
 				$prop['value'] = $arr['request'][$prop["name"]];
 				break;
