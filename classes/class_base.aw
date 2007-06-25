@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.553 2007/06/14 12:43:51 dragut Exp $
+// $Id: class_base.aw,v 2.554 2007/06/25 11:25:14 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2990,6 +2990,10 @@ class class_base extends aw_template
 							}
 						};
 					};
+					if (is_callable(array($val["vcl_inst"], "callback_mod_reforb")))
+					{
+						$this->_do_call_vcl_mod_reforbs[] = array($val["vcl_inst"], "callback_mod_reforb");
+					}
 					continue;
 
 

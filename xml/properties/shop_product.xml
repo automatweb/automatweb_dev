@@ -795,6 +795,18 @@
             <caption>Lingid</caption>
       </property>
       <property>
+            <name>match_prod</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MATCH_PROD</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <caption>Kokkusobivad tooted</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -827,6 +839,9 @@
             <lnk>
                   <caption>Lingid</caption>
             </lnk>
+            <match_prod>
+                  <caption>Kokkusobivad tooted</caption>
+            </match_prod>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -937,6 +952,11 @@
                   <clid>CL_CRM_TAX_RATE</clid>
                   <caption>Maksum&amp;amp;auml;&amp;amp;auml;r</caption>
             </TAX_RATE>
+            <MATCH_PROD>
+                  <value>19</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Kokkusobiv toode</caption>
+            </MATCH_PROD>
       </reltypes>
       <layout>
             <reservation>

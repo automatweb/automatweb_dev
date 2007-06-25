@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.95 2007/04/25 07:58:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.96 2007/06/25 11:25:10 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -403,6 +403,7 @@ class releditor extends core
 		{
 			$parent = $arr['obj_inst']->parent();
 		}
+		$s_clids = array();
 		foreach ($arr['prop']['clid'] as $clid)
 		{
 			if ($arr["prop"]["direct_links"])
@@ -426,6 +427,7 @@ class releditor extends core
 			}
 
 			$createlinks[] = array('class' => $clid, 'url' => $newurl);
+			$s_clids[] = $clid;
 		}
 
 		$tb = get_instance("vcl/toolbar");
@@ -464,6 +466,12 @@ class releditor extends core
 		}
 
 		$act_input = $this->elname . "_action";
+
+		$tb->add_search_button(array(
+			"pn" => "s_reled",
+			"multiple" => 1,
+			"clid" => $s_clids
+		));
 
 		$tb->add_button(array(
 			"name" => "delete",
@@ -788,6 +796,12 @@ class releditor extends core
 
 		$clid = $arr["prop"]["clid"][0];
 
+		if ($arr["prop"]["reltype"])
+		{
+			$ps = get_instance("vcl/popup_search");
+			$ps->do_create_rels($obj, $arr["request"]["s_reled"], $arr["prop"]["reltype"]);
+		}
+
 		if ($clid == 7)
 		{
 			$use_clid = "doc";
@@ -819,7 +833,7 @@ class releditor extends core
 					$delete_default = true;
 				}
 
-				if ($prop['delete_relations'] == '1')
+				if (true || $prop['delete_relations'] == '1')
 				{
 					$c->delete();
 				}
@@ -1083,6 +1097,10 @@ class releditor extends core
 		//return $this->t->draw();
 	}
 
+	function callback_mod_reforb($arr)
+	{
+		$arr["s_reled"] = "0";
+	}
 
 };
 ?>
