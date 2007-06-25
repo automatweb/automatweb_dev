@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.62 2007/06/25 10:48:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.63 2007/06/25 11:11:18 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -864,7 +864,7 @@ $t->set_sortable(false);
 				foreach(safe_array($o->meta("extra_prods")) as $extra_item_entry)
 				{
 					$rb = obj($extra_item_entry["reservation"]);
-					if ($rb->prop("start1") < 100)
+					if ($rb->prop("start1") < 100 || $rb->prop("verified"))
 					{
 						$has_times = $has_times - 1;
 					}

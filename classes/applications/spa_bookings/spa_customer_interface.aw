@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.20 2007/06/14 09:38:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.21 2007/06/25 11:11:18 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -793,7 +793,8 @@ class spa_customer_interface extends class_base
 		return $total_sum;
 	}
 
-	function get_extra_prods_sum($os)
+	//sv - calculates also verified reservations / already paid
+	function get_extra_prods_sum($os,$sv)
 	{
                 $room_res_inst = get_instance(CL_ROOM_RESERVATION);
                 $total_sum = 0;
@@ -815,6 +816,16 @@ class spa_customer_interface extends class_base
 					continue;
 				}
 				$b = obj($extra_item_entry["reservation"]);
+				if ($b->prop("start1") < 100)
+				{
+					continue;
+				}
+				
+				if (!$sv && $b->prop("verified"))
+				{
+					continue;
+				}
+				
 				$sum = $room_res_inst->get_total_bron_price(array(
 					"bron" => $b,
 				));
@@ -911,8 +922,14 @@ class spa_customer_interface extends class_base
 			foreach($bron->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
 			{
 				$b = $c->to();
+				if ($b->prop("start1") < 100)
+				{
+					continue;
+				}
 				$b->set_prop("verified", 1);
+				aw_disable_acl();
 				$b->save();
+				aw_restore_acl();
 			}
 		}
 		if($o->meta("ru"))
