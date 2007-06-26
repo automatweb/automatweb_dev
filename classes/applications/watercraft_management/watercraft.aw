@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.22 2007/06/12 11:52:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.23 2007/06/26 07:05:19 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -581,12 +581,13 @@ class watercraft extends class_base
 
 		$this->sail_types = array(
 			'groot' => t('Groot/suurpuri'),
-			'foka_1' => t('Foka 1'),
-			'foka_2' => t('Foka 2'),
-			'foka_3' => t('Foka 3'),
-			'genoa_1' => t('Genoa 1'),
-			'genoa_2' => t('Genoa 2'),
-			'genoa_3' => t('Genoa 3'),
+			'foka_1' => t('Foka&nbsp;1'),
+			'foka_2' => t('Foka&nbsp;2'),
+			'foka_3' => t('Foka&nbsp;3'),
+			'genoa_1' => t('Genoa&nbsp;1'),
+			'genoa_2' => t('Genoa&nbsp;2'),
+			'genoa_3' => t('Genoa&nbsp;3'),
+			'gennaker' => t('Gennaker'),
 			'spinnaker' => t('Spinnaker'),
 			'stormfoka' => t('Tormifoka'),
 		);
@@ -701,7 +702,7 @@ class watercraft extends class_base
 				$prop['options'] = $this->custom_range(0, 20);
 				break;
 			case 'engine_count':
-				$prop['options'] = $this->custom_range(1, 4);
+				$prop['options'] = $this->custom_range(0, 4);
 				break;
 			case 'engine_type':
 				$prop['options'] = $this->engine_type;
