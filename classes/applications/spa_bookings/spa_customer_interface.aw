@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.21 2007/06/25 11:11:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.22 2007/06/26 10:18:38 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -866,8 +866,10 @@ class spa_customer_interface extends class_base
 		else
 		{
 			$o = obj($arr["id"]);
-		
 		}
+		
+		$l = get_instance("languages");
+		$lang_id = $l->get_langid($_SESSION["ct_lang_id"]);
 		
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		if(is_oid($bank_payment))
@@ -877,6 +879,7 @@ class spa_customer_interface extends class_base
 				"id" => $bank_payment,
 				"amount" =>  $this->get_extra_prods_sum($arr["id"]),
 				"reference_nr" => $o->id(),
+				"lang" => $lang_id,
 			));
 		}
 		$o->set_meta("ru" , $r);
