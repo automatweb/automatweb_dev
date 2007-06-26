@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.70 2007/06/19 15:55:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.71 2007/06/26 15:07:26 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -860,7 +860,7 @@ class reservation extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "picture",
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 		));
 		$t->define_field(array(
 			"name" => "name",
