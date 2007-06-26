@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.63 2007/06/25 11:11:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.64 2007/06/26 10:56:49 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1542,7 +1542,7 @@ $t->set_sortable(false);
 		$sum = array();
 		foreach($items as $entry)
 		{
-			if (!$entry["is_extra"])
+			if (!$entry["is_extra"] || !($entry["from"] > 100))
 			{
 				continue;
 			}
