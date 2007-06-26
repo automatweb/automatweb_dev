@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.21 2007/06/25 13:05:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.22 2007/06/26 09:39:22 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -602,7 +602,6 @@ class watercraft_search extends class_base
 			{
 				$images_lut[$image->parent()][] = $image->id();
 			}
-	//		$watercraft_property_list = array();
 			foreach ($items->arr() as $item_id => $item)
 			{
 				$properties = array();
@@ -621,6 +620,7 @@ class watercraft_search extends class_base
 						$properties['watercraft_'.$name] = $value;
 					}
 				}
+
 				$properties["watercraft_location"] = array();
 				if($this->can("view", $proplist["location"]))
 				{
@@ -633,8 +633,19 @@ class watercraft_search extends class_base
 				}
 				$properties["watercraft_location"] = ($_t = join(", ", $properties["watercraft_location"]))?$_t:"-";
 
-				$image_inst = get_instance(CL_IMAGE);
 				$images_count = count($images_lut[$item_id]);
+
+				$this->vars(array(
+					'watercraft_view_url' => aw_url_change_var(array(
+						'section' => $obj->prop('section_id') ? $obj->prop('section_id') : aw_global_get('section'),
+						'watercraft_id' => $item_id,
+						'return_url' => (!empty($_GET['return_url'])) ? $_GET['return_url'] : get_ru()
+					)),
+					'watercraft_images_count' => $images_count,
+					) + $properties
+				);
+
+				$image_inst = get_instance(CL_IMAGE);
 				$image_str = '';
 				if ($images_count > 0)
 				{
@@ -653,26 +664,11 @@ class watercraft_search extends class_base
 				{
 					$image_str .= $this->parse('WATERCRAFT_NO_IMAGE');
 				}
-				
-				
 
-/*
-				if (empty($watercraft_property_list))
-				{
-					$watercraft_property_list = array_keys($properties);
-				}
-*/
 				$this->vars(array(
-					'watercraft_view_url' => aw_url_change_var(array(
-						'section' => $obj->prop('section_id')?$obj->prop('section_id'):aw_global_get('section'),
-						'watercraft_id' => $item_id,
-						'return_url' => (!empty($_GET['return_url'])) ? $_GET['return_url'] : get_ru()
-					)),
-					'watercraft_images_count' => $images_count,
 					'WATERCRAFT_IMAGE' => $image_str
-					) + $properties
-				);
-				
+				));
+
 				$items_str .= $this->parse('SEARCH_RESULT_ITEM');
 			}
 
@@ -714,6 +710,7 @@ class watercraft_search extends class_base
 			'PAGES' => $pages_str,
 			'name' => $obj->prop('name'),
 		));
+
 		return $this->parse();
 	}
 
