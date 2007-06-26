@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.61 2007/06/25 13:06:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.62 2007/06/26 10:24:44 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -181,6 +181,31 @@ class bank_payment extends class_base
 		"sampopank" => "VK_REF",
 		"credit_card" => "ecuno",
 		"nordeapank" => "SOLOPMT-RETURN-REF",
+	);
+
+	var $languages = array(
+		"hansa" => array(
+			"et" => "EST",
+			"EST" => "EST",
+			"" => "EST",
+			"en" => "ENG",
+			"ENG" => "ENG",
+		),
+		"nordea" => array(
+			"et" => 4,
+			"EST" => 4,
+			"en" => 3,
+			"ENG" => 3,
+			"" => 4,
+			"fi" => 1,
+		),
+		"cc" => array(
+			"et" => "et",
+			"EST" => "et",
+			"" => "et",
+			"en" => "en",
+			"ENG" => "en",
+		),
 	);
 
 	/** 
@@ -1021,6 +1046,15 @@ class bank_payment extends class_base
 		if(!$arr["service"]) $arr["service"] = "1002";
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
+		if(array_key_exists($arr["lang"] , $this->languages["hansa"]))
+		{
+			$arr["lang"] = $this->languages["hansa"][$arr["lang"]];
+		}
+		else
+		{
+			$arr["lang"] = "ENG";
+		}
+/*	
 		if($arr["lang"] == "et")
 		{
 			$arr["lang"] = "EST";
@@ -1029,7 +1063,7 @@ class bank_payment extends class_base
 		{
 			$arr["lang"] = "ENG";
 		}
-		if(!$arr["lang"]) $arr["lang"] = "EST";
+		if(!$arr["lang"]) $arr["lang"] = "EST";*/
 		if(!$arr["stamp"]) $arr["stamp"] = "666";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
@@ -1409,10 +1443,17 @@ class bank_payment extends class_base
 		if(!$arr["date"]) $arr["date"] = 'EXPRESS';
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
-		
 		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
-		
-		if($arr["lang"] == "et" || $arr["lang"] == "EST")
+		if(array_key_exists($arr["lang"] , $this->languages["nordea"]))
+		{
+			$arr["lang"] = $this->languages["nordea"][$arr["lang"]];
+		}
+		else
+		{
+			$arr["lang"] = "3";
+		}
+
+	/*	if($arr["lang"] == "et" || $arr["lang"] == "EST")
 		{
 			$arr["lang"] = 4;
 		}
@@ -1421,7 +1462,7 @@ class bank_payment extends class_base
 			$arr["lang"] = 3;
 		}
 		if(!($arr["lang"] > 0)) $arr["lang"] = "3";
-		
+		*/
 		return($arr);
 	}
 
@@ -1433,7 +1474,7 @@ class bank_payment extends class_base
 			$arr = $this->_add_object_data($payment , $arr);
 		}
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
-		if($arr["lang"] == "EST")
+	/*	if($arr["lang"] == "EST")
 		{
 			$arr["lang"] = "et";
 		}
@@ -1441,7 +1482,18 @@ class bank_payment extends class_base
 		{
 			$arr["lang"] = "en";
 		}
-		if(!$arr["lang"]) $arr["lang"] = "et";
+		if($arr["lang"] && $arr["lang"] != "et") $arr["lang"] = "en";
+		if(!$arr["lang"]) $arr["lang"] = "et";*/
+		
+		
+		if(array_key_exists($arr["lang"] , $this->languages["cc"]))
+		{
+			$arr["lang"] = $this->languages["cc"][$arr["lang"]];
+		}
+		else
+		{
+			$arr["lang"] = "en";
+		}
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["priv_key"])
@@ -1548,7 +1600,7 @@ class bank_payment extends class_base
 			"SOLOPMT_RCV_ID"      => $sender_id, // 3.    Service Provider ID  SOLOPMT_RCV_ID    Customer ID (in Nordea's register)  AN 15    M 
 //			"SOLOPMT_RCV_ACCOUNT" => $acc,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
 //			"SOLOPMT_RCV_NAME"    => $name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
-			"SOLOPMT_LANGUAGE"    => 3,//$lang,// 6.    Payment Language  SOLOPMT_LANGUAGE  1 = Finnish 2 = Swedish 3 = English    N 1   O 
+			"SOLOPMT_LANGUAGE"    => $lang,// 6.    Payment Language  SOLOPMT_LANGUAGE  1 = Finnish 2 = Swedish 3 = English    N 1   O 
 			"SOLOPMT_AMOUNT"      => $amount,// 7.    Payment Amount    SOLOPMT_AMOUNT    E.g. 990.00    AN 19    M 
 			"SOLOPMT_REF"         => $reference_nr,// 8.    Payment Reference Number   SOLOPMT_REF    Standard reference number  AN 20    M 
 			"SOLOPMT_DATE"        => $date,// 9.    Payment Due Date  SOLOPMT_DATE   "EXPRESS" or "DD.MM.YYYY"  AN 10    M 
