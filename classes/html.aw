@@ -332,8 +332,8 @@ class html extends aw_template
 	function textarea($args = array())
 	{
 		extract($args);
-		$cols = isset($cols) ? $cols : 40;
-		$rows = isset($rows) ? $rows : 5;
+		$cols = !empty($cols) ? $cols : 60;
+		$rows = !empty($rows) ? $rows : 40;
 		$value = isset($value) ? $value : "";
 		$onFocus = isset($onFocus) ? ' onFocus="'.$onFocus.'"' : '';
 		$onBlur = isset($onBlur) ? ' onBlur="'.$onBlur.'"' : '';
