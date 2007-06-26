@@ -180,7 +180,7 @@ class crm_company_docs_impl extends class_base
 			)),
 			"has_root" => 1,
 			"persist_state" => 1,
-			"root_name" => t("asdsad"),
+			"root_name" => "",
 			"root_url" => "#",
 		));
 		
