@@ -101,6 +101,61 @@ class crm_company_docs_impl extends class_base
 		}
 	}
 
+	/**
+		@attrib name=get_tree_stuff all_args=1
+	**/
+	function get_tree_stuff($arr)
+	{
+		extract($_GET); extract($_POST); extract($arr);
+		$tree = get_instance("vcl/treeview");
+		$tree->start_tree(array (
+			"type" => TREE_DHTML,
+			"branch" => 1,
+			"tree_id" => "offers_tree",
+		));
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+			"lang_id" => array(),	
+			"parent" => $parent,
+			"sort_by" => "objects.class_id ASC",
+		));
+
+		classload("core/icons");
+		$file_inst = get_instance(CL_FILE);
+		foreach($ol->arr() as $o)
+		{
+			$d = array(
+				"id" => $o->id(),
+				"name" => $o->name(),
+				"iconurl" => icons::get_icon_url($o->class_id()),
+				"url" => aw_url_change_var("tf", $o->id() , $set_retu),
+			);
+			if($o->class_id() == CL_FILE)
+			{
+				$d["url"] = $file_inst->get_url($o->id());
+				$d["url_target"] = "new window";
+			}
+			
+			$tree->add_item(0,$d);
+			
+			$ol2 = new object_list(array(
+				"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+				"lang_id" => array(),	
+				"parent" => $o->id(),
+			));
+			foreach($ol2->arr() as $o2)
+			{
+				$tree->add_item($o->id(), array(
+					"id" => $o2->id(),
+					"name" => $o2->name(),
+					"url" => aw_url_change_var("tf", $o2->id(),$set_retu),
+				));
+			}
+		}
+		die($tree->finalize_tree());
+	}
+	
 	function _get_docs_tree($arr)
 	{
 		if ($arr["request"]["do_doc_search"])
@@ -114,6 +169,70 @@ class crm_company_docs_impl extends class_base
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);
 
 		classload("core/icons");
+		
+		$file_inst = get_instance(CL_FILE);
+		$arr["prop"]["vcl_inst"]->start_tree (array (
+			"type" => TREE_DHTML,
+			"tree_id" => "crm_docs_t",
+			"get_branch_func" => $this->mk_my_orb("get_tree_stuff",array(
+				"set_retu" => get_ru(),
+				"parent" => " ",
+			)),
+			"has_root" => 1,
+			"persist_state" => 1,
+			"root_name" => t("asdsad"),
+			"root_url" => "#",
+		));
+		
+		$arr["prop"]["vcl_inst"]->add_item(0,array(
+			"id" => $fld->id(),
+			"name" => $fld->name(),
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("tf", $fld->id()),
+			"is_open" => 1,
+		));
+		$ol = new object_list(array(
+			"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+			"lang_id" => array(),	
+			"parent" => $fld->id(),
+			"sort_by" => "objects.class_id ASC",
+			//"sortby" => "objects.class_id",
+		));
+		//arr($ol);
+		foreach($ol->arr() as $o)
+		{
+			$d = array(
+				"id" => $o->id(),
+				"name" => $o->name(),
+				"iconurl" => icons::get_icon_url($o->class_id()),
+				"url" => aw_url_change_var("tf", $o->id() , $set_retu),
+			);
+			if($o->class_id() == CL_FILE)
+			{
+				$d["url"] = $file_inst->get_url($o->id());
+				$d["url_target"] = "new window";
+			}
+			
+			$arr["prop"]["vcl_inst"]->add_item($fld->id(),$d);
+			
+		$ol2 = new object_list(array(
+			"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+			"lang_id" => array(),	
+			"parent" => $o->id(),
+		));
+		foreach($ol2->arr() as $o2)
+		{
+			$arr["prop"]["vcl_inst"]->add_item($o->id(), array(
+				"id" => $o2->id(),
+				"name" => $o2->name(),
+				"url" => aw_url_change_var("tf", $o2->id()),
+			));
+		}
+			
+			
+		}
+		if(false)
+		{
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML, 
@@ -128,9 +247,19 @@ class crm_company_docs_impl extends class_base
 				"sort_by" => "objects.jrk"
 			)),
 			"var" => "tf",
+			"persist_state" => 1,
 			"icon" => icons::get_icon_url(CL_MENU)
 		));
-
+		
+		}
+/*		foreach($arr["prop"]["vcl_inst"]->items as $id => $items)
+		{
+			foreach($items as $item)
+			{
+				if(aw_global_get("uid") == "marko") arr($item);
+			}
+		}
+*/
 		// if there is a server folder object attached, then get the rest of the folders from that
 		$sf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
 		if ($sf)
@@ -156,6 +285,7 @@ class crm_company_docs_impl extends class_base
 				$t->add_item($item["parent"] === 0 ? $sf->id() : $item["parent"], $item);
 			}
 		}
+
 	}
 
 	function _init_docs_tbl(&$t, $r)
