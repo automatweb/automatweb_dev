@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rooms_folder
 msgid "Omaduse Ruumide kaust (rooms_folder) caption"
-msgstr ""
+msgstr "Rooms folder"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rooms_folder_comment
 msgid "Omaduse Ruumide kaust (rooms_folder) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_owner
 msgid "Omaduse Omanik (owner) caption"
-msgstr ""
+msgstr "Owner"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_owner_comment
 msgid "Omaduse Omanik (owner) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_name
 msgid "Omaduse Ruumi nimi (rs_name) caption"
-msgstr ""
+msgstr "Room name"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_name_comment
 msgid "Omaduse Ruumi nimi (rs_name) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_booker_name
 msgid "Omaduse Broneerija nimi (rs_booker_name) caption"
-msgstr ""
+msgstr "Booker name"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_booker_name_comment
 msgid "Omaduse Broneerija nimi (rs_booker_name) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_booking_from
 msgid "Omaduse Broneering alates (rs_booking_from) caption"
-msgstr ""
+msgstr "Booking from"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_booking_from_comment
 msgid "Omaduse Broneering alates (rs_booking_from) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_booking_to
 msgid "Omaduse Broneering kuni (rs_booking_to) caption"
-msgstr ""
+msgstr "Booking to"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_booking_to_comment
 msgid "Omaduse Broneering kuni (rs_booking_to) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_btn
 msgid "Omaduse Otsi (rs_btn) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_rs_btn_comment
 msgid "Omaduse Otsi (rs_btn) kommentaar"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_stats_rs_booking_from
 msgid "Omaduse Broneering alates (stats_rs_booking_from) caption"
-msgstr ""
+msgstr "Booking from"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_stats_rs_booking_from_comment
 msgid "Omaduse Broneering alates (stats_rs_booking_from) kommentaar"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_stats_rs_booking_to
 msgid "Omaduse Broneering kuni (stats_rs_booking_to) caption"
-msgstr ""
+msgstr "Booking to"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_stats_rs_booking_to_comment
 msgid "Omaduse Broneering kuni (stats_rs_booking_to) kommentaar"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_stats_rs_btn
 msgid "Omaduse Otsi (stats_rs_btn) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_stats_rs_btn_comment
 msgid "Omaduse Otsi (stats_rs_btn) kommentaar"
@@ -243,7 +243,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_name
 msgid "Omaduse Ruumi nimi (r_rs_name) caption"
-msgstr ""
+msgstr "Room name"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_name_comment
 msgid "Omaduse Ruumi nimi (r_rs_name) kommentaar"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_booker_name
 msgid "Omaduse Broneerija nimi (r_rs_booker_name) caption"
-msgstr ""
+msgstr "Booker name"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_booker_name_comment
 msgid "Omaduse Broneerija nimi (r_rs_booker_name) kommentaar"
@@ -267,7 +267,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_booking_from
 msgid "Omaduse Broneering alates (r_rs_booking_from) caption"
-msgstr ""
+msgstr "Booking from"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_booking_from_comment
 msgid "Omaduse Broneering alates (r_rs_booking_from) kommentaar"
@@ -279,7 +279,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_booking_to
 msgid "Omaduse Broneering kuni (r_rs_booking_to) caption"
-msgstr ""
+msgstr "Booking to"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_booking_to_comment
 msgid "Omaduse Broneering kuni (r_rs_booking_to) kommentaar"
@@ -291,7 +291,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_btn
 msgid "Omaduse Otsi (r_rs_btn) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_r_rs_btn_comment
 msgid "Omaduse Otsi (r_rs_btn) kommentaar"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:group_rooms
 msgid "Grupi Ruumid (rooms) pealkiri"
-msgstr ""
+msgstr "Rooms"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:group_rooms_help
 msgid "Grupi Ruumid (rooms) help"
@@ -339,11 +339,11 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:rel_RELTYPE_RF
 msgid "Seose Ruumide kaust (RELTYPE_RF) tekst"
-msgstr ""
+msgstr "Rooms folder"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:rel_RELTYPE_OWNER
 msgid "Seose Omanik (RELTYPE_OWNER) tekst"
-msgstr ""
+msgstr "Owner"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:rel_RELTYPE_GROUP
 msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
@@ -355,22 +355,22 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:layout_r_srch
 msgid "Kujundusosa Otsing (r_srch) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:layout_stats_r_srch
 msgid "Kujundusosa Otsing (stats_r_srch) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:layout_rr_srch
 msgid "Kujundusosa Otsing (rr_srch) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:202
 msgid "&nbsp;"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:209
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1252
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1275
 msgid "Ruum"
 msgstr ""
 
@@ -382,87 +382,87 @@ msgstr ""
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:446
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:455
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:452
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:461
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:460
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:469
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:469
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:478
 msgid "Kalender"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:471
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:480
 msgid "Valige palun v&auml;hemalt &uuml;ks ruum!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:482
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:679
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:491
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:702
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:556
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:565
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:556
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:565
 msgid "Naine"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:943
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:966
 msgid "Klient saabus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:943
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:966
 msgid "Klient ei saabunud"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:983
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1006
 msgid "Eile"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:994
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1017
 msgid "T&auml;na"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1005
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1028
 msgid "Homme"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1030
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1053
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1173
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1196
 msgid "Reisib&uuml;roo"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1210
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1233
 msgid "%s tk"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1258
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1281
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1267
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1290
 msgid "Kellaajad"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1273
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1296
 msgid "Tunde"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1280
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1303
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1500
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1523
 msgid "<b>Summa:</b>"
 msgstr ""
