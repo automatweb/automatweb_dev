@@ -374,6 +374,20 @@ class crm_company_cedit_impl extends core
 		{
 			$pn = "url";
 		}
+		else
+		{
+			$seti = get_instance(CL_CRM_SETTINGS);
+			$sts = $seti->get_current_settings();
+		}
+		if($sts && $sts->prop("org_link_menu"))
+		{
+			$parent = $sts->prop("org_link_menu");
+		}
+		else
+		{
+			$parent = $arr["obj_inst"]->id();
+		}
+		
 		foreach(safe_array($arr["request"]["cedit_url"]) as $id => $data)
 		{
 			if ($this->can("view", $id))
@@ -387,7 +401,7 @@ class crm_company_cedit_impl extends core
 			if ($id == -1)
 			{
 				$o = obj();
-				$o->set_parent($arr["obj_inst"]->id());
+				$o->set_parent($parent);
 				$o->set_class_id(CL_EXTLINK);
 				$o->set_name($data["url"]);
 				$has = false;

@@ -152,6 +152,15 @@
             <caption>Toimetuse salvestamise kontroller</caption>
       </property>
       <property>
+            <name>org_link_menu</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Organisatsioonide linkide kataloog</caption>
+      </property>
+      <property>
             <name>tables_toolbar</name>
             <table>objects</table>
             <group>tables</group>
@@ -324,6 +333,11 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>Kontroller</caption>
             </CTR>
+            <MENU>
+                  <value>10</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kontroller</caption>
+            </MENU>
       </reltypes>
       <layout>
             <vsplitbox>

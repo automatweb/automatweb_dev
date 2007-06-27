@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.20 2007/06/12 12:41:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.21 2007/06/27 12:22:51 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -60,6 +60,8 @@
   	@property task_save_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
 	@caption Toimetuse salvestamise kontroller
 
+  	@property org_link_menu type=relpicker table=objects field=meta reltype=RELTYPE_MENU
+	@caption Organisatsioonide linkide kataloog
 
 @default group=tables
 	@property tables_toolbar type=toolbar store=no no_caption=1
@@ -130,6 +132,9 @@
 @caption Galerii seaded
 
 @reltype CTR value=9 clid=CL_FORM_CONTROLLER
+@caption Kontroller
+
+@reltype MENU value=10 clid=CL_MENU
 @caption Kontroller
 
 */
