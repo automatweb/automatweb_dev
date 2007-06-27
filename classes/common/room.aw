@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.195 2007/06/25 10:50:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.196 2007/06/27 14:30:10 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -77,10 +77,10 @@
 		@property buffer_after_unit type=select no_caption=1 parent=general_down
 		
 		@property use_product_times type=checkbox parent=general_down no_caption=1
-		@caption Kasuta toodetele määratud aegu
+		@caption Kasuta toodetele m&auml;&auml;ratud aegu
 		
 		@property allow_multiple type=checkbox parent=general_down no_caption=1
-		@caption Luba mitu broneeringut ühele ajale
+		@caption Luba mitu broneeringut &uuml;hele ajale
 		
 		@property group_product_menu type=checkbox parent=general_down no_caption=1
 		@caption Grupeeri tooted kaustadesse		
@@ -166,7 +166,7 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 				@caption Hind
 
 				@property prod_discount_loc type=chooser parent=currency_l
-				@caption Toodete soodushind võetakse: 
+				@caption Toodete soodushind v&otilde;etakse: 
 
 
 				@property prod_web_discount type=textbox size=2 parent=currency_l
@@ -176,7 +176,7 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 			@layout add_face type=vbox area_caption=Lisanduv&nbsp;hind&nbsp;inimestele&nbsp;&uuml;le&nbsp;normaalmahutavuse closeable=1 parent=top_split
 
 				@property add_price_per_face type=text no_caption=1  parent=add_face
-				@caption Lisanduv hind inimestele üle normaalmahutavuse
+				@caption Lisanduv hind inimestele &uuml;le normaalmahutavuse
 
 
 		@layout middle_split type=hbox width=50%:50%
@@ -1362,7 +1362,7 @@ class room extends class_base
 		));
 			
 		$t->define_data(array(
-			"caption" => t("Märkused"),
+			"caption" => t("M&auml;rkused"),
 			"value" => html::textarea(array(
 				"name" => "bron[comment]",
 				"size" => 40,
@@ -1394,6 +1394,10 @@ class room extends class_base
 		die($err.html::form(array("method" => "POST", "content" => $t->draw())));
 	}
 	
+	/**
+	
+		@attrib params=name name=admin_add_bron_popup_table all_args=1
+	**/
 	function admin_add_bron_popup_table($arr)
 	{
 		extract($arr);
@@ -1461,7 +1465,7 @@ class room extends class_base
 		));
 			
 		$t->define_data(array(
-			"caption" => t("Märkused"),
+			"caption" => t("M&auml;rkused"),
 			"value" => html::textarea(array(
 				"name" => "bron[comment]",
 				"size" => 40,
@@ -1701,7 +1705,7 @@ class room extends class_base
 		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
 		{
 			$this->vars(array(
-				"length_sel" => t("Vali broneeringu pikkus: ").$this->_get_length_select(array("obj_inst" => $arr["obj_inst"]))
+				"length_sel" => t("Vali broneeringu pikkus:").$this->_get_length_select(array("obj_inst" => $arr["obj_inst"]))
 			));
 		}
 
@@ -3092,11 +3096,28 @@ class room extends class_base
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
+		/*
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+		));
+		*/
 
 		foreach($this->get_room_resources($arr["obj_inst"]->id()) as $oid => $obj)
 		{
+			$url = $this->mk_my_orb("change", array(
+				"id" => $obj->id(),
+				"return_url" => get_ru(),
+			), CL_MRP_RESOURCE);
 			$t->define_data(array(
+				/*
+				"name" => html::href(array(
+					"caption" => $obj->name(),
+					"url" => $url,
+				)),
+				*/
 				"name" => $obj->name(),
+				"amount" => is_array($obj->prop("thread_data"))?count($obj->prop("thread_data")):1,
 			));
 		}
 	}
@@ -4776,7 +4797,6 @@ class room extends class_base
 			$customers[] = $res->prop("customer");
 		}
 		ksort($this->res_table);
-
 		if (count($customers))
 		{
 			$cust_ol = new object_list(array(
