@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.196 2007/06/27 14:30:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.197 2007/06/27 14:40:19 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1676,6 +1676,10 @@ class room extends class_base
 		$this->read_template("cal_header.tpl");
 		$this->vars(array(
 			"pop" => $ret,
+			"week_select_caption" => t("Vali n&auml;dal"),
+			"date_from_caption" => t("Alates"),
+			"date_to_caption" => t("Kuni"),
+			"without_detail_information" => t("Ilma detailse infota"),
 			"week_select" => $ws,
 			"date_from" => html::date_select(array(
                   	      "name" => "set_d_from",
