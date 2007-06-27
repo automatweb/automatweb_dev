@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.9 2007/04/23 10:13:16 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.10 2007/06/27 09:21:14 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -200,7 +200,7 @@ die(dbg::dump($data));
 		$this->vars(array(
 			"content" => nl2br($fc)
 		));
-		return $this->parse();
+		return $this->finish_with_style($this->parse());
 	}
 
 	/**  
@@ -247,7 +247,7 @@ die(dbg::dump($data));
 			))
 		));
 
-		return $this->parse();
+		return $this->finish_with_style($this->parse());
 	}
 
 	function _req_mk_clf_tree(&$tv, $path)
@@ -434,8 +434,7 @@ die(dbg::dump($data));
 			"view_class" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"]))
 		));
 
-		$str = $this->parse();
-		return $str;
+		return $this->finish_with_style($this->parse());
 	}
 
 	/**
@@ -501,7 +500,7 @@ die(dbg::dump($data));
 			}
 		}
 
-		return $op;
+		return $this->finish_with_style($op);
 	}
 
 	/**
@@ -620,7 +619,7 @@ die(dbg::dump($data));
 			$str .= "?>";
 		}
 
-		return highlight_string($str,true);
+		return $this->finish_with_style(highlight_string($str,true));
 	}
 
 	function _display_dependencies($dependencies)
@@ -802,7 +801,7 @@ die(dbg::dump($data));
 			"list" => $list
 		));
 
-		return $this->parse();
+		return $this->finish_with_style($this->parse());
 	}
 
 	function do_class_doclist()
@@ -821,9 +820,10 @@ die(dbg::dump($data));
 		$this->ic = get_instance("core/cons");
 		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
 
-		return $tv->finalize_tree(array(
+		$str = $tv->finalize_tree(array(
 			"rootnode" => $this->basedir,
 		));
+		return $this->finish_with_style($str);
 	}
 
 	function _req_mk_clfdoc_tree(&$tv, $path)
@@ -890,9 +890,10 @@ die(dbg::dump($data));
 		$this->ic = get_instance("core/icons");
 		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
 
-		return $tv->finalize_tree(array(
+		$str = $tv->finalize_tree(array(
 			"rootnode" => $this->basedir,
 		));
+		return $this->finish_with_style($str);
 	}
 
 	/** displays the documentation file $file
@@ -921,6 +922,11 @@ die(dbg::dump($data));
 		$str = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".htmlspecialchars(stripslashes('\$2')).\"</pre>\"",$str);
 		$str = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$str);
 
+		return $this->finish_with_style($str);
+	}
+
+	function finish_with_style($str)
+	{
 		$tpl = get_instance("applications/docgen/docgen_viewer");
 		$tpl->read_template("style.tpl");
 		$tpl->vars(array(
@@ -1075,7 +1081,7 @@ die(dbg::dump($data));
 			"class" => $v_class,
 			"func" => $func
 		));
-		return $this->parse();
+		return $this->finish_with_style($this->parse());
 	}
 
 	/** displays top frame 
@@ -1178,7 +1184,7 @@ die(dbg::dump($data));
 			))
 		));
 
-		return $this->parse();
+		return $this->finish_with_style($this->parse());
 	}
 
 	function _req_mk_prop_tree($arr)
@@ -1260,7 +1266,7 @@ die(dbg::dump($data));
 			))
 		));
 
-		return $this->parse();
+		return $this->finish_with_style($this->parse());
 	}
 
 	function _req_mk_clf_api_tree(&$tv, $path, $api_files)
