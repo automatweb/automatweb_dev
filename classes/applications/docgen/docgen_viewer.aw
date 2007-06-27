@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.10 2007/06/27 09:21:14 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.11 2007/06/27 09:22:29 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -930,7 +930,7 @@ die(dbg::dump($data));
 		$tpl = get_instance("applications/docgen/docgen_viewer");
 		$tpl->read_template("style.tpl");
 		$tpl->vars(array(
-			"content" => nl2br($str)
+			"content" => $str
 		));
 		return $tpl->parse();
 	}
