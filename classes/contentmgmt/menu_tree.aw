@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.19 2007/06/20 14:41:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.20 2007/06/27 15:23:44 markop Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -13,6 +13,14 @@
 	@property menus type=select multiple=1 size=15 trans=1
 	@caption Men&uuml;&uuml;d
 
+	@property menu_tb type=toolbar no_caption=1
+	@caption Men&uuml;&uuml; toolbar
+
+	@property root_menu multiple=1 type=relpicker no_caption=1 reltype=RELTYPE_ROOT_MENU
+
+	@property menu_table type=table no_caption=1
+	@caption Men&uuml;&uuml; seoste tabel
+
 	@property children_only type=checkbox ch_value=1 trans=1
 	@caption Ainult alammen&uuml;&uuml;d
 
@@ -24,6 +32,9 @@
 
 	@property no_unclickable type=checkbox ch_value=1 default=1
 	@caption &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid
+
+	@reltype ROOT_MENU value=1 clid=CL_MENU
+	@caption Men&uuml;&uuml;
 
 */
 class menu_tree extends class_base
@@ -52,8 +63,27 @@ class menu_tree extends class_base
 					5 => 5
 				);
 				break;
-
+			case "root_menu":
+				return PROP_IGNORE;
 			case "menus":
+				//nüüdsest peaks seostega seda asja tegema
+				//et üleminek oleks valutu :
+				foreach($data["value"] as $m)
+				{
+					$args["obj_inst"]->connect(array(
+						"to" => $m,
+						"reltype" => "RELTYPE_ROOT_MENU",
+					));
+				}
+				
+				$cs = $args["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_ROOT_MENU",
+				));
+				if(sizeof($cs))
+				{
+					return PROP_IGNORE;
+				}
+				
 				$ol = new object_list(array(
 					"class_id" => CL_MENU,
 					"status" => array(STAT_ACTIVE,STAT_NOTACTIVE),
@@ -72,6 +102,13 @@ class menu_tree extends class_base
 				}
 				asort($menus);
 				$data["options"] = $menus;
+				break;
+
+			case "menu_tb":
+				$this->_get_menu_tb($args);
+				break;
+			case "menu_table":
+				$this->_get_menu_table($args);
 				break;
 
 			case "template":
@@ -95,6 +132,15 @@ class menu_tree extends class_base
 		$this->mt_obj = $obj;
 
 		$menus = safe_array($obj->meta("menus"));
+		$cs = $obj->connections_from(array(
+			"type" => "RELTYPE_ROOT_MENU",
+		));
+		foreach($cs as $c)
+		{
+			$to = $c->to();
+			$menus[] = $to->id();
+		}
+	
 		if (count($menus) == 0)
 		{
 			$ol = new object_list();
@@ -315,6 +361,93 @@ class menu_tree extends class_base
 		};
 		$this->restore_handle();
 	}
+
+	function _get_menu_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Men&uuml;&uuml;"),
+			"align" => "center",
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+			"width" => "30px",
+		));
+		
+		$cs = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_ROOT_MENU",
+		));
+		foreach($cs as $c)
+		{
+			$to = $c->to();
+			$t->define_data(array(
+				"name" => $to->path_str(),
+				"oid" => $to->id(),
+			));
+		}
+	}
+
+	function _get_menu_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$url = $this->mk_my_orb("do_search", array(
+			"pn" => "root_menu",
+			"id" => $arr["obj_inst"]->id(),
+			"clid" => CL_MENU,
+//			"multiple" => 1,
+		), "popup_search");
+		
+		$tb->add_button(array(
+			"name" => "search_menu",
+			"tooltip" => t("Lisa men&uuml;&uuml;"),
+			"img" => "search.gif",
+			//"action" => "search_menus",
+			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)"
+		));
+		$tb->add_button(array(
+			"name" => "remove_menu",
+			"tooltip" => t("Eemalda men&uuml;&uuml;"),
+			"img" => "delete.gif",
+			"action" => "delete_menus",
+		));
+		return PROP_OK;
+	}
+
+        /**
+                @attrib name=delete_menus
+        **/
+        function delete_menus($arr)
+        {
+		$o = obj($arr["id"]);
+		foreach($arr["sel"] as $menu)
+		{
+			$o->disconnect(array(
+				"from" => $menu,
+			));
+		}
+		return html::get_change_url($arr["id"], array(
+			"return_url" => $arr["return_url"],
+		));
+        }
+
+        /**
+                @attrib name=search_menus
+        **/
+        function search_menus($arr)
+        {
+
+		$t->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Avamisaeg"),
+
+		));
+        	$o = obj($arr["id"]);
+               arr($arr);
+                return $arr[""];
+        }
 
 	function _req_sfo($o, $sfo, $sfo_i)
 	{

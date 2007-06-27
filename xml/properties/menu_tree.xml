@@ -13,6 +13,39 @@
             <caption>Men&amp;amp;uuml;&amp;amp;uuml;d</caption>
       </property>
       <property>
+            <name>menu_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Men&amp;amp;uuml;&amp;amp;uuml; toolbar</caption>
+      </property>
+      <property>
+            <name>root_menu</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <multiple>1</multiple>
+            <type>relpicker</type>
+            <no_caption>1</no_caption>
+            <reltype>RELTYPE_ROOT_MENU</reltype>
+      </property>
+      <property>
+            <name>menu_table</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Men&amp;amp;uuml;&amp;amp;uuml; seoste tabel</caption>
+      </property>
+      <property>
             <name>children_only</name>
             <table>objects</table>
             <field>meta</field>
@@ -57,5 +90,12 @@
             <trans>1</trans>
             <syslog_type>ST_MENU_TREE</syslog_type>
       </classinfo>
+      <reltypes>
+            <ROOT_MENU>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Men&amp;amp;uuml;&amp;amp;uuml;</caption>
+            </ROOT_MENU>
+      </reltypes>
 </properties>
 
