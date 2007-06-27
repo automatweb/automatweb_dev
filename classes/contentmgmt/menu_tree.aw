@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.20 2007/06/27 15:23:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.21 2007/06/27 15:26:19 markop Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -68,20 +68,21 @@ class menu_tree extends class_base
 			case "menus":
 				//nüüdsest peaks seostega seda asja tegema
 				//et üleminek oleks valutu :
-				foreach($data["value"] as $m)
-				{
-					$args["obj_inst"]->connect(array(
-						"to" => $m,
-						"reltype" => "RELTYPE_ROOT_MENU",
-					));
-				}
-				
+
 				$cs = $args["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_ROOT_MENU",
 				));
 				if(sizeof($cs))
 				{
 					return PROP_IGNORE;
+				}
+				
+				foreach($data["value"] as $m)
+				{
+					$args["obj_inst"]->connect(array(
+						"to" => $m,
+						"reltype" => "RELTYPE_ROOT_MENU",
+					));
 				}
 				
 				$ol = new object_list(array(
