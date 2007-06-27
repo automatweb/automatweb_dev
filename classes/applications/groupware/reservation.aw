@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.72 2007/06/27 09:25:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.73 2007/06/27 09:27:27 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -860,7 +860,7 @@ class reservation extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "picture",
-			"caption" => t("&nbsp;"),
+			"caption" => t(""),
 		));
 		$t->define_field(array(
 			"name" => "name",
@@ -2386,8 +2386,6 @@ flush();
 	/** Returns products data
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
-		@param products optional type=array
-			products array(oid1, oid2)
 		@returns array
 			array(prod1 => array("sum" => .. , "amount" => .. ) , ...)
 	**/
@@ -2406,10 +2404,6 @@ flush();
 		$products = $reservation->meta("amount");
 		foreach($products as $product => $amount)
 		{
-			if(is_array($products) &&  !in_array($product , $products))
-			{
-				continue;
-			}
 			$products[$product]["amount"] = $amount;
 			$products[$product]["sum"] = $this->get_product_price(array("reservation" => $reservation, "curr" => $curr));
 		}
