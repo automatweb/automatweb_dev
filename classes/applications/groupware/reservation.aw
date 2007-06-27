@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.71 2007/06/26 15:07:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.72 2007/06/27 09:25:25 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -2386,10 +2386,8 @@ flush();
 	/** Returns products data
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
-		@param products required type=array
+		@param products optional type=array
 			products array(oid1, oid2)
-		@param curr optional type=oid
-			currency object id
 		@returns array
 			array(prod1 => array("sum" => .. , "amount" => .. ) , ...)
 	**/
@@ -2400,7 +2398,7 @@ flush();
 		{
 			$reservation = obj($reservation);
 		}
-		if(!is_object($reservation) || !is_array($products))
+		if(!is_object($reservation))
 		{
 			return false;
 		}
@@ -2408,6 +2406,10 @@ flush();
 		$products = $reservation->meta("amount");
 		foreach($products as $product => $amount)
 		{
+			if(is_array($products) &&  !in_array($product , $products))
+			{
+				continue;
+			}
 			$products[$product]["amount"] = $amount;
 			$products[$product]["sum"] = $this->get_product_price(array("reservation" => $reservation, "curr" => $curr));
 		}
@@ -2432,15 +2434,13 @@ flush();
 		{
 			return false;
 		}
-		
+		$amount = $reservation->meta("amount");
+		$price = $reservation->meta("products_price");		
 		foreach($data as $prod => $val)
 		{
 			$amount[$prod] = $val["amount"];
 			$price[$prod] = $val["sum"];
 		}
-		
-		$amount = $reservation->meta("amount");
-		$price = $reservation->meta("products_price");
 		$reservation->set_meta("amount", $amount);
 		$reservation->set_meta("products_price", $price);
 		return true;
