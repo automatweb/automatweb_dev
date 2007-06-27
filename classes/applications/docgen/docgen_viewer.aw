@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.11 2007/06/27 09:22:29 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.12 2007/06/27 09:29:52 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -445,6 +445,7 @@ die(dbg::dump($data));
 	**/
 	function prop_info($arr)
 	{
+		echo $this->finish_with_style("");
 		$obj = new object($arr['id']);
 		$data = unserialize($obj->meta('properties_data'));
 
@@ -922,7 +923,7 @@ die(dbg::dump($data));
 		$str = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".htmlspecialchars(stripslashes('\$2')).\"</pre>\"",$str);
 		$str = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$str);
 
-		return $this->finish_with_style($str);
+		return $this->finish_with_style(nl2br($str));
 	}
 
 	function finish_with_style($str)
