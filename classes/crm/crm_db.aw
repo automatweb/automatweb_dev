@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.42 2007/04/19 14:21:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.43 2007/06/27 13:34:22 markop Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -163,6 +163,8 @@ class crm_db extends class_base
 
 	function sector_tree($arr)
 	{
+		$item_count = array();
+
 		$t = &$arr["prop"]["vcl_inst"];		
 		$sa = new aw_array($arr["obj_inst"]->prop("dir_tegevusala"));
 		$sectors_list = new object_list();
@@ -176,6 +178,13 @@ class crm_db extends class_base
 			$sectors_list->add($menu_tree->to_list());
 		}
 		$ids = $this->make_keys($sectors_list->ids());
+		foreach($sectors_list->arr() as $oid => $sect)
+		{
+			$org_count = $this->_get_retated_orgs($sect->id());
+			$item_count[$sect->parent()] = $item_count[$sect->parent()] + $org_count;
+			$item_count[$sect->id()] = $item_count[$sect->id()] + $org_count;
+		}
+		
 		foreach($sectors_list->arr() as $oid => $sect)
 		{
 			$id = $sect->id();
@@ -193,14 +202,26 @@ class crm_db extends class_base
 				"text" => t("Kustuta"),
 				"link" => $this->mk_my_orb("delete_organizations", array("id" => $arr["obj_inst"]->id(), "sel[$id]" => $id, "post_ru" => get_ru())),
 			));
-			$name = $name." ".$pm->get_menu();
+			$name = $name." (".$item_count[$id].") ".$pm->get_menu();
 			$t->add_item($parent, array(
 				"id" => $id,
 				"name" => $name,//strlen($name) > 20 ? substr($name, 0, 20).".." : $name,
 				"url" => aw_url_change_var("teg_oid", $sect->id()),
 			));
 		}
+		
 		$t->set_selected_item(ifset($arr["request"], "teg_oid"));
+	}
+
+	function _get_retated_orgs($s)
+	{
+		$org_list = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD.id" => $s,
+		));
+		return $org_list->count();
 	}
 
 	function _init_company_table(&$t)
