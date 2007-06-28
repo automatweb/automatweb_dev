@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.5 2007/06/20 13:10:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.6 2007/06/28 15:16:07 markop Exp $
 // events_manager.aw - Kuhu minna moodul 
 /*
 
@@ -199,7 +199,7 @@ class events_manager extends class_base
 				break;
 					
 			case "e_find_news":
-				$prop["options"] = array(t("Arhiivist"),t("Uute hulgast"));
+				$prop["options"] = array(t("Arhiivist"),t("Kestvatest"),t("Uute hulgast"));
 				break;
 			case "event_table":
 				$this->_get_event_table($arr);
@@ -437,9 +437,19 @@ class events_manager extends class_base
 //				$filter["name"] = "%".$search_data["e_find_text"]."%";
 				//kui kalendrisündmuseobjektiasjadkorda saab , siis lisab juurde
 			}
-			if($search_data["e_find_news"])
+			if($search_data["e_find_news"] == 2)
 			{
 				$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+			}
+			elseif($search_data["e_find_news"] == 1)
+			{
+				$filter[] = new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" => array(
+						"start1" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+						"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+					)
+				));
 			}
 			else
 			{
