@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.74 2007/06/27 09:30:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.75 2007/06/28 11:51:26 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -847,6 +847,10 @@ class reservation extends class_base
 				"reservation" => $o,
 				"sum" => $arr["final_sum"],
 			));
+			$this->set_product_discount(array(
+				"reservation" => $o,
+				"products" => $arr["change_discount"],
+			));
 			$o->set_meta("amount", $arr["amount"]);
 			$o->set_meta("prod_discount", $arr["discount"]);
 			$o->save();
@@ -857,6 +861,10 @@ class reservation extends class_base
 
 	function _get_products_tbl($arr)
 	{
+		if(!$arr["web"])
+		{
+			$is_admin = 1;
+		}
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "picture",
@@ -874,6 +882,10 @@ class reservation extends class_base
 			"name" => "amount",
 			"caption" => t("Kogus"),
 		));
+		if($is_admin)$t->define_field(array(
+			"name" => "discount",
+			"caption" => t("Soodus"),
+		));
 		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("Summa")
@@ -888,6 +900,7 @@ class reservation extends class_base
 		{
 			$prod_list = $this->get_room_products($arr["obj_inst"]->prop("resource"));
 			$amount = $arr["obj_inst"]->meta("amount");
+			$discount = $this->get_product_discount($arr["obj_inst"]->id());
 		}
 		$room = obj($arr["obj_inst"]->prop("resource"));
 		//arr($prod_list);
@@ -932,7 +945,9 @@ class reservation extends class_base
 
 			if($sell_products)
 			{
-				$prod_sum = $this->get_product_price(array("product" => $prod->id(), "reservation" => $arr["obj_inst"]));
+				$prod_price = $this->get_product_price(array("product" => $prod->id(), "reservation" => $arr["obj_inst"]));
+				$prod_sum = $prod_price * $amount[$prod->id()];
+				$prod_sum = $prod_sum - ($prod_sum * $discount[$prod->id()])/100;
 				$t->define_data(array(
 					"picture" => $image,
 					"name" => "<b>".$prod->name()."<b> <i>".$prod->comment()."</i>",
@@ -940,10 +955,16 @@ class reservation extends class_base
 						"name"=>'amount['.$prod->id().']',
 						"value" => $amount[$prod->id()],
 						"size" => 5,
-						"onChange" => "el=document.getElementById('pr".$prod->id()."');el.innerHTML=this.value*".$prod_sum.";els=document.getElementsByTagName('span');tots = 0;for(i=0; i < els.length; i++) { el=els[i]; if (el.id.indexOf('pr') == 0) { tots += parseInt(el.innerHTML);}} te=document.getElementById('total');te.innerHTML=tots;disc=parseInt(document.changeform.discount.value);disc_el=document.getElementById('disc_val');if(disc>0){disc_el.innerHTML=(tots*(disc/100));} sum_val = document.getElementById('sum_val');if (disc > 0) {sum_val.innerHTML=(tots-(tots*(disc/100)));} else { sum_val.innerHTML=tots; } "
+						"onChange" => "el=document.getElementById('pr".$prod->id()."');el.innerHTML=this.value*".$prod_price.";els=document.getElementsByTagName('span');tots = 0;for(i=0; i < els.length; i++) { el=els[i]; if (el.id.indexOf('pr') == 0) { tots += parseInt(el.innerHTML);}} te=document.getElementById('total');te.innerHTML=tots;disc=parseInt(document.changeform.discount.value);disc_el=document.getElementById('disc_val');if(disc>0){disc_el.innerHTML=(tots*(disc/100));} sum_val = document.getElementById('sum_val');if (disc > 0) {sum_val.innerHTML=(tots-(tots*(disc/100)));} else { sum_val.innerHTML=tots; } "
 					)),
-					"price" => !$arr["web"] ? $this->_get_admin_price_view($prod,$prod_sum):number_format($prod_sum, 2),
-					"sum" => "<span id='pr".$prod->id()."'>".number_format($prod_sum * $amount[$prod->id()], 2)."</span>",
+					"discount" =>  html::textbox(array(
+						"name"=>'change_discount['.$prod->id().']',
+						"value" => $discount[$prod->id()],
+						"size" => 2,
+					))." %",
+					
+					"price" => $is_admin ? $this->_get_admin_price_view($prod,$prod_price):number_format($prod_price, 2),
+					"sum" => "<span id='pr".$prod->id()."'>".number_format($prod_sum, 2)."</span>",
 					//ei julge praegu külge panna
 /*					"sum" =>  html::textbox(array(
 						"name"=>'price['.$prod->id().']',
@@ -954,7 +975,7 @@ class reservation extends class_base
 */					
 					"parent" => $po->name()
 				));
-				$sum += $prod_sum * $amount[$prod->id()];
+				$sum += $prod_sum;
 			}
 			else
 			{
@@ -1001,11 +1022,20 @@ class reservation extends class_base
 	//	$t->sort_by(array("rgroupby" => array("parent" => "parent")));
 		$t->set_sortable(false);
 		
+		//if(aw_global_get("uid") == "struktuur"){arr($total_price_set); arr($discount[$prod->id()]);}
+		
+		$total_price_set = $this->get_products_price(array("reservation" => $arr["obj_inst"]));
 		$t->define_data(array(
 			"name" => t("Kogusumma"),
-			"sum" => "<span id=total>".number_format($sum, 2)."</span>"
+			"sum" => "<span id=total>".number_format($sum, 2)."</span>",
+			"amount" => html::textbox(array(
+				"name"=>"final_sum",
+				"value" => $total_price_set ? number_format($total_price_set, 2) : "",
+				"size" => 5,
+			)),
 		));
 
+		if($total_price_set) $sum = $total_price_set;
 		$disc = $sum * ($arr["obj_inst"]->meta("prod_discount") / 100.0);
 		$t->define_data(array(
 			"name" => t("Allahindlus (%)"),
@@ -1021,15 +1051,6 @@ class reservation extends class_base
 		$t->define_data(array(
 			"name" => t("<b>Summa</b>"),
 			"sum" => "<span id='sum_val'>".number_format($sum-$disc, 2)."</span>"
-		));
-		
-		$t->define_data(array(
-			"name" => t("<b></b>"),
-			"sum" => html::textbox(array(
-				"name"=>"final_sum",
-				"value" => number_format($this->get_products_price(array("reservation" => $arr["obj_inst"])) ? $this->get_products_price(array("reservation" => $arr["obj_inst"])) : ($sum-$disc), 2),
-				"size" => 5,
-			)),
 		));
 		
 		return $t;
@@ -2619,6 +2640,58 @@ flush();
 		$reservation->set_prop("products_discount" , $discount);
 		return 1;
 	}
+	
+	/** sets reservation product discount
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+		@param products required type=array
+			array(prod1 => discount1 , prod2 => discount2 , ...)
+		@returns 1 - success , 0 - unsuccess
+	**/
+	function set_product_discount($arr)
+	{
+		extract($arr);
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return 0;
+		}
+		$discount = $reservation->meta("product_discount");
+		if(!is_array($discount)) $discount = array();
+		
+		foreach($products as $p => $d)
+		{
+			if(isset($d))
+			{
+				$discount[$p] = $d;
+			}
+		}
+		$reservation->set_meta("product_discount" , $discount);
+		return 1;
+	}
+
+	/** gets reservation products discount
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+		@returns array
+			array(prod1 => discount, prod2 => discount , ...)
+	**/
+	function get_product_discount($reservation)
+	{
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
+		}
+		return $reservation->meta("product_discount");
+	}
+
 
 //siit alumised juba võiks töötada	
 //totaalse hinna ja allahindluse teema
