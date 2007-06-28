@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.64 2007/06/26 10:56:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.65 2007/06/28 13:43:07 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -770,6 +770,7 @@ $t->set_sortable(false);
 		}
 		$payment_info = "";
 		$total_payment_amt = 0;
+		$extra_stuff=array();
 		foreach($ol->arr() as $o)
 		{
 			classload("vcl/table");
@@ -806,7 +807,6 @@ $t->set_sortable(false);
 				date("d.m.Y", $o->prop("end")),
 				$package->trans_get_val("name")
 			);
-			
 			$booking_str2 = html::href(array(
 				"caption" => $booking_str,
 				"url" => "javascript:void(0)",
@@ -901,6 +901,7 @@ $t->set_sortable(false);
 			foreach(safe_array($o->meta("extra_prods")) as $extra_item_entry)
 			{
 				$grp_list[] = "__ei|".$extra_item_entry["prod"];
+				$extra_stuff[$extra_item_entry["prod"]] = $extra_item_entry["prod"];
 			}
 			foreach($grp_list as $prod_group)
 			{
@@ -972,7 +973,7 @@ $t->set_sortable(false);
 					{
 						$has_unc = true;
 					}
-
+					
 					if (substr($prod_group, 0, 5) == "__ei|")
 					{
 						$fd[] = array(
@@ -980,6 +981,16 @@ $t->set_sortable(false);
 							"name" => t("----Lisateenused"),
 							"when" => ""
 						);
+					}
+					
+					if(!$lt_line_set && true && in_array(reset($prods_in_group), $extra_stuff))
+					{//$prod_str[] = "<b>".t("Lisateenused:")."<b>";
+						$ot->define_data(array(
+							"booking" => "",
+							"name" => '<table  width="100%" style="padding-bottom: 10px; padding-top: 10px; border-bottom: 1px dotted black; line-height: 25px;"><tr><td><b>'.t("Lisateenused:").'<b></td></tr></table>',
+							"when" => "",
+						));
+						$lt_line_set = 1;
 					}
 
 					$fd[] = (array(
