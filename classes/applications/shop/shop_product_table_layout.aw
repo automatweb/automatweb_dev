@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.15 2007/02/19 14:21:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.16 2007/06/28 12:58:45 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -87,7 +87,7 @@ class shop_product_table_layout extends class_base
 				continue;
 			}
 
-			$this->vars(array(
+			$this->vars_safe(array(
 				"msg" => $errmsg["msg"],
 				"prod_name" => $errmsg["prod_name"],
 				"prod_id" => $errmsg["prod_id"],
@@ -99,7 +99,7 @@ class shop_product_table_layout extends class_base
 
 		aw_session_del("soc_err");
 
-		$this->vars(array(
+		$this->vars_safe(array(
 			"ERROR" => $err
 		));
 
@@ -159,7 +159,7 @@ class shop_product_table_layout extends class_base
 				}
 			}
 			
-			$this->vars(array(
+			$this->vars_safe(array(
 				"COL" => $this->t_str
 			));
 			$this->ft_str .= $this->parse($this->r_template);
@@ -167,7 +167,7 @@ class shop_product_table_layout extends class_base
 			$this->r_cnt++;
 		}
 	
-		$this->vars(array(
+		$this->vars_safe(array(
 			"product" => $p_html
 		));
 		$this->t_str .= $this->parse($this->r_template.".COL");
@@ -178,7 +178,7 @@ class shop_product_table_layout extends class_base
 	**/
 	function finish_table()
 	{
-		$this->vars(array(
+		$this->vars_safe(array(
 			"COL" => $this->t_str
 		));
 
@@ -213,7 +213,7 @@ class shop_product_table_layout extends class_base
 		{
 			$wd = 0;
 		}
-		$this->vars(array(
+		$this->vars_safe(array(
 			"ROW" => $this->ft_str,
 			"ROW1" => $this->ft_str,
 			"ROW2" => "",
@@ -228,7 +228,7 @@ class shop_product_table_layout extends class_base
 
 		if ($this->cnt)
 		{
-			$this->vars(array(
+			$this->vars_safe(array(
 				"HAS_PRODS" => $this->parse("HAS_PRODS")
 			));
 		}

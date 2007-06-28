@@ -954,7 +954,10 @@
             </TAX_RATE>
             <MATCH_PROD>
                   <value>19</value>
-                  <clid>CL_SHOP_PRODUCT</clid>
+                  <clid>
+                        <num_0>CL_SHOP_PRODUCT</num_0>
+                        <num_1>CL_SHOP_PRODUCT_PACKAGING</num_1>
+                  </clid>
                   <caption>Kokkusobiv toode</caption>
             </MATCH_PROD>
       </reltypes>

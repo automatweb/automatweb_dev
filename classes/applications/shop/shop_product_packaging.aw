@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.28 2007/02/28 09:03:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.29 2007/06/28 12:58:45 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -185,7 +185,7 @@ class shop_product_packaging extends class_base
 			"clid" => CL_SHOP_PRODUCT_PACKAGING
 		));
 		$this->trans_props = array(
-			"name","comment"
+			"name","comment","userta1"
 		);
 	}
 
@@ -205,6 +205,7 @@ class shop_product_packaging extends class_base
 					3600 => t("Tundi"),
 				);
 				break;
+
 		};
 		return $retval;
 	}

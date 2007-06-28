@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.51 2007/04/10 08:02:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.52 2007/06/28 12:58:45 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -867,7 +867,7 @@ class shop_order_center extends class_base
 			{
 				continue;
 			}
-			$this->vars(array(
+			$this->vars_safe(array(
 				"name" => $ord->name(),
 				"tm" => $ord->created(),
 				"sum" => number_format($ord->prop("sum"), 2),
@@ -906,7 +906,7 @@ class shop_order_center extends class_base
 
 		foreach($ool->arr() as $ord)
 		{
-			$this->vars(array(
+			$this->vars_safe(array(
 				"name" => $ord->name(),
 				"tm" => $ord->created(),
 				"sum" => number_format($ord->prop("sum"), 2),
@@ -917,7 +917,7 @@ class shop_order_center extends class_base
 		}
 		
 
-		$this->vars(array(
+		$this->vars_safe(array(
 			"LINE" => $l,
 			"reforb" => $this->mk_reforb("submit_my_orders")
 		));
