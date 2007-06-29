@@ -28,7 +28,7 @@
             <parent>general_up_up</parent>
             <type>datetime_select</type>
             <field>deadline</field>
-            <caption>Maksmist&amp;auml;htaeg</caption>
+            <caption>Maksmist&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>verified</name>

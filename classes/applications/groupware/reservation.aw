@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.75 2007/06/28 11:51:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.76 2007/06/29 12:02:10 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -30,7 +30,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@caption Nimi
 	
 	@property deadline type=datetime_select table=planner field=deadline
-	@caption Maksmistähtaeg
+	@caption Maksmist&auml;htaeg
 			
 	@property verified type=checkbox ch_value=1 table=aw_room_reservations field=aw_verified no_caption=1 default=1
 	@caption Kinnitatud
@@ -1254,14 +1254,14 @@ class reservation extends class_base
 		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
 		if ($len > 3600)
 		{
-			$arr["prop"]["post_append_text"] = sprintf(t(" / Hetkel pikkus: %d tundi"), 
+			$arr["prop"]["post_append_text"] = sprintf(t("&nbsp;/ Hetkel pikkus: %d tundi"), 
 				floor($len / 3600),
 				floor(($len - floor($len / 3600)*3600) / 60)
 			);
 		}
 		else
 		{
-			$arr["prop"]["post_append_text"] = sprintf(t(" / Hetkel pikkus: %02d minutit"),
+			$arr["prop"]["post_append_text"] = sprintf(t("&nbsp;/ Hetkel pikkus: %02d minutit"),
 				floor($len / 60)
 			);
 		}
