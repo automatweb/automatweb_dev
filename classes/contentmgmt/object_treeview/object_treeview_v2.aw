@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.108 2007/02/14 14:40:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.109 2007/06/29 12:06:07 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1488,7 +1488,7 @@ class object_treeview_v2 extends class_base
 				{
 					$table->define_field(array(
 						"name" => "col_".$i,
-						"caption" => t(""),
+						"caption" => t("&nbsp;"),
 					));
 				}
 				$folders[$_GET['tv_sel']]['name'] = "<strong>".$folders[$_GET['tv_sel']]['name']."</strong>";

@@ -9,13 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:class_324_help
 msgid "Klassi Objektide nimekiri v2 help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_ds
 msgid "Omaduse Andmed (ds) caption"
-msgstr "Data source"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_ds_comment
 msgid "Omaduse Andmed (ds) kommentaar"
@@ -27,7 +28,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_no_cache_page
 msgid "Omaduse Lehte ei cacheta (no_cache_page) caption"
-msgstr "Page is not cached"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_no_cache_page_comment
 msgid "Omaduse Lehte ei cacheta (no_cache_page) kommentaar"
@@ -39,7 +40,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_search
 msgid "Omaduse Otsing (search) caption"
-msgstr "Search"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_search_comment
 msgid "Omaduse Otsing (search) kommentaar"
@@ -59,11 +60,11 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_add_new_ds_help
 msgid "Omaduse Lisa uus andmeallikas (add_new_ds) help"
-msgstr "Add new datasource"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_add_new_ds_type
 msgid "Omaduse Uue andmeallika t&uuml;&uuml;p (add_new_ds_type) caption"
-msgstr "New datasource type"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_add_new_ds_type_comment
 msgid "Omaduse Uue andmeallika t&uuml;&uuml;p (add_new_ds_type) kommentaar"
@@ -75,7 +76,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_copy_ds
 msgid "Omaduse Kopeeri olemasolev andmeallikas (copy_ds) caption"
-msgstr "Copy existing datasource"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_copy_ds_comment
 msgid "Omaduse Kopeeri olemasolev andmeallikas (copy_ds) kommentaar"
@@ -87,7 +88,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sel_copy_ds
 msgid "Omaduse Vali kopeeritav andmeallikas (sel_copy_ds) caption"
-msgstr "Choose for datasource copy"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sel_copy_ds_comment
 msgid "Omaduse Vali kopeeritav andmeallikas (sel_copy_ds) kommentaar"
@@ -99,7 +100,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_connect_ds
 msgid "Omaduse Seos olemasoleva andmeallikaga (connect_ds) caption"
-msgstr "Connection to existing datasource"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_connect_ds_comment
 msgid "Omaduse Seos olemasoleva andmeallikaga (connect_ds) kommentaar"
@@ -111,7 +112,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sel_connect_ds
 msgid "Omaduse Vali seostatav andmeallikas (sel_connect_ds) caption"
-msgstr "Choose a associable datasource"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sel_connect_ds_comment
 msgid "Omaduse Vali seostatav andmeallikas (sel_connect_ds) kommentaar"
@@ -123,7 +124,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_inherit_from
 msgid "Omaduse P&auml;ri omadused objektinimekirjast (inherit_from) caption"
-msgstr "Inherit properties from object list"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_inherit_from_comment
 msgid "Omaduse P&auml;ri omadused objektinimekirjast (inherit_from) kommentaar"
@@ -135,7 +136,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sel_inherit_from
 msgid "Omaduse Vali p&auml;ritav objektinimekiri (sel_inherit_from) caption"
-msgstr "Choose inheritable object list"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sel_inherit_from_comment
 msgid "Omaduse Vali p&auml;ritav objektinimekiri (sel_inherit_from) kommentaar"
@@ -147,7 +148,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_inherit_view_props_from
 msgid "Omaduse P&auml;ri n&auml;itamise omadused objektist (inherit_view_props_from) caption"
-msgstr "Inherit display properties from"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_inherit_view_props_from_comment
 msgid "Omaduse P&auml;ri n&auml;itamise omadused objektist (inherit_view_props_from) kommentaar"
@@ -159,7 +160,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_folders
 msgid "Omaduse N&auml;ita katalooge (show_folders) caption"
-msgstr "Display folders"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_folders_comment
 msgid "Omaduse N&auml;ita katalooge (show_folders) kommentaar"
@@ -171,7 +172,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_add
 msgid "Omaduse N&auml;ita t&ouml;&ouml;riistariba (show_add) caption"
-msgstr "Display toolbar"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_add_comment
 msgid "Omaduse N&auml;ita t&ouml;&ouml;riistariba (show_add) kommentaar"
@@ -183,7 +184,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_link_new_win
 msgid "Omaduse Vaata link uues aknas (show_link_new_win) caption"
-msgstr "View link in new window"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_link_new_win_comment
 msgid "Omaduse Vaata link uues aknas (show_link_new_win) kommentaar"
@@ -195,7 +196,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_link_field
 msgid "Omaduse Millises v&auml;ljas vaata linki n&auml;idata (show_link_field) caption"
-msgstr "Show link field"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_link_field_comment
 msgid "Omaduse Millises v&auml;ljas vaata linki n&auml;idata (show_link_field) kommentaar"
@@ -207,7 +208,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_url_field
 msgid "Omaduse Millises v&auml;ljas lingi url (url_field) caption"
-msgstr "Link url field"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_url_field_comment
 msgid "Omaduse Millises v&auml;ljas lingi url (url_field) kommentaar"
@@ -219,7 +220,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_hide_content_table_by_default
 msgid "Omaduse Vaikimisi &auml;ra n&auml;ita sisu tabelit (hide_content_table_by_default) caption"
-msgstr "Hide content table by default"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_hide_content_table_by_default_comment
 msgid "Omaduse Vaikimisi &auml;ra n&auml;ita sisu tabelit (hide_content_table_by_default) kommentaar"
@@ -231,7 +232,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_tree_type
 msgid "Omaduse Puu n&auml;itamise meetod (tree_type) caption"
-msgstr "Tree dispaly method"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_tree_type_comment
 msgid "Omaduse Puu n&auml;itamise meetod (tree_type) kommentaar"
@@ -243,7 +244,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_folders_table_column_count
 msgid "Omaduse Mitu tulpa n&auml;idata kaustade tabelis (folders_table_column_count) caption"
-msgstr "Folders table column count"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_folders_table_column_count_comment
 msgid "Omaduse Mitu tulpa n&auml;idata kaustade tabelis (folders_table_column_count) kommentaar"
@@ -255,7 +256,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_per_page
 msgid "Omaduse Mitu rida lehel (per_page) caption"
-msgstr "Rows per page"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_per_page_comment
 msgid "Omaduse Mitu rida lehel (per_page) kommentaar"
@@ -267,7 +268,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_hidden_cols
 msgid "Omaduse N&auml;ita peidetud tulpasid? (show_hidden_cols) caption"
-msgstr "Display hidden columns"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_hidden_cols_comment
 msgid "Omaduse N&auml;ita peidetud tulpasid? (show_hidden_cols) kommentaar"
@@ -279,7 +280,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sortbl
 msgid "Omaduse Andmete sorteerimine (sortbl) caption"
-msgstr "Sorting"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sortbl_comment
 msgid "Omaduse Andmete sorteerimine (sortbl) kommentaar"
@@ -291,7 +292,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_filter_table
 msgid "Omaduse Andmete filtreerimine (filter_table) caption"
-msgstr "Filtering"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_filter_table_comment
 msgid "Omaduse Andmete filtreerimine (filter_table) kommentaar"
@@ -303,7 +304,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_group_by_folder
 msgid "Omaduse Kaustade j&auml;rgi grupeeritav v&auml;li (group_by_folder) caption"
-msgstr "Group by folder field"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_group_by_folder_comment
 msgid "Omaduse Kaustade j&auml;rgi grupeeritav v&auml;li (group_by_folder) kommentaar"
@@ -315,7 +316,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_group_in_table
 msgid "Omaduse Millise v&auml;lja j&auml;rgi tabel grupeerida (group_in_table) caption"
-msgstr "Field to group by in table"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_group_in_table_comment
 msgid "Omaduse Millise v&auml;lja j&auml;rgi tabel grupeerida (group_in_table) kommentaar"
@@ -327,7 +328,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_filter_by_char_field
 msgid "Omaduse Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse (filter_by_char_field) caption"
-msgstr "Filter by char field"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_filter_by_char_field_comment
 msgid "Omaduse Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse (filter_by_char_field) kommentaar"
@@ -339,7 +340,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_filter_by_char_order
 msgid "Omaduse Kuidas sorteerida (filter_by_char_order) caption"
-msgstr "Sort by"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_filter_by_char_order_comment
 msgid "Omaduse Kuidas sorteerida (filter_by_char_order) kommentaar"
@@ -351,7 +352,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_alphabet_in_lower_case
 msgid "Omaduse T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti  (alphabet_in_lower_case) caption"
-msgstr "Alphabet in lower case"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_alphabet_in_lower_case_comment
 msgid "Omaduse T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti  (alphabet_in_lower_case) kommentaar"
@@ -375,7 +376,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sproc_params
 msgid "Omaduse Andmeallika parameetrid (sproc_params) caption"
-msgstr "Data source parameters"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_sproc_params_comment
 msgid "Omaduse Andmeallika parameetrid (sproc_params) kommentaar"
@@ -387,7 +388,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_title_bgcolor
 msgid "Omaduse Pealkirja taustav&auml;rv (title_bgcolor) caption"
-msgstr "Title background colour"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_title_bgcolor_comment
 msgid "Omaduse Pealkirja taustav&auml;rv (title_bgcolor) kommentaar"
@@ -399,7 +400,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_even_bgcolor
 msgid "Omaduse Paaris rea taustav&auml;rv (even_bgcolor) caption"
-msgstr "Even row background colour"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_even_bgcolor_comment
 msgid "Omaduse Paaris rea taustav&auml;rv (even_bgcolor) kommentaar"
@@ -411,7 +412,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_even_css_text
 msgid "Omaduse Paaris rea css (even_css_text) caption"
-msgstr "Even row css"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_even_css_text_comment
 msgid "Omaduse Paaris rea css (even_css_text) kommentaar"
@@ -423,7 +424,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_odd_bgcolor
 msgid "Omaduse Paaritu rea taustav&auml;rv (odd_bgcolor) caption"
-msgstr "Odd row background colour"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_odd_bgcolor_comment
 msgid "Omaduse Paaritu rea taustav&auml;rv (odd_bgcolor) kommentaar"
@@ -435,7 +436,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_odd_css_text
 msgid "Omaduse Paaritu rea css (odd_css_text) caption"
-msgstr "Odd row css"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_odd_css_text_comment
 msgid "Omaduse Paaritu rea css (odd_css_text) kommentaar"
@@ -447,7 +448,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_group_header_bgcolor
 msgid "Omaduse Grupeeriva rea taustav&auml;rv (group_header_bgcolor) caption"
-msgstr "Group row background colour"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_group_header_bgcolor_comment
 msgid "Omaduse Grupeeriva rea taustav&auml;rv (group_header_bgcolor) kommentaar"
@@ -459,7 +460,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_table_css
 msgid "Omaduse Tabeli stiil (table_css) caption"
-msgstr "Table style"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_table_css_comment
 msgid "Omaduse Tabeli stiil (table_css) kommentaar"
@@ -471,7 +472,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_header_css
 msgid "Omaduse Pealkirja stiil (header_css) caption"
-msgstr "Title style"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_header_css_comment
 msgid "Omaduse Pealkirja stiil (header_css) kommentaar"
@@ -483,7 +484,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_group_css
 msgid "Omaduse Grupeeriva rea stiil (group_css) caption"
-msgstr "Grouping row style"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_group_css_comment
 msgid "Omaduse Grupeeriva rea stiil (group_css) kommentaar"
@@ -495,7 +496,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_columns
 msgid "Omaduse Tulbad (columns) caption"
-msgstr "Columns"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_columns_comment
 msgid "Omaduse Tulbad (columns) kommentaar"
@@ -507,7 +508,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_columns_modify
 msgid "Omaduse Tulbade andmete muundamine (columns_modify) caption"
-msgstr "Column data transform"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_columns_modify_comment
 msgid "Omaduse Tulbade andmete muundamine (columns_modify) kommentaar"
@@ -519,7 +520,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_is_inheritable
 msgid "Omaduse Kasutatav p&auml;rimiseks (is_inheritable) caption"
-msgstr "Is inheritable"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_is_inheritable_comment
 msgid "Omaduse Kasutatav p&auml;rimiseks (is_inheritable) kommentaar"
@@ -531,7 +532,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_search_show
 msgid "Omaduse Tabeli v&auml;ljad (search_show) caption"
-msgstr "Table fields"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_search_show_comment
 msgid "Omaduse Tabeli v&auml;ljad (search_show) kommentaar"
@@ -555,7 +556,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_showing
 msgid "Grupi N&auml;itamine (showing) pealkiri"
-msgstr "Display settings"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_showing_help
 msgid "Grupi N&auml;itamine (showing) help"
@@ -563,7 +564,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
-msgstr "Styles"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_styles_help
 msgid "Grupi Stiilid (styles) help"
@@ -571,7 +572,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_columns
 msgid "Grupi Tulbad (columns) pealkiri"
-msgstr "Columns"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_columns_help
 msgid "Grupi Tulbad (columns) help"
@@ -579,7 +580,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_columns_def
 msgid "Grupi Tulpade defineerimine (columns_def) pealkiri"
-msgstr "Define columns"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_columns_def_help
 msgid "Grupi Tulpade defineerimine (columns_def) help"
@@ -587,7 +588,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_columns_modify
 msgid "Grupi Andmete muundamine (columns_modify) pealkiri"
-msgstr "Transform data"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_columns_modify_help
 msgid "Grupi Andmete muundamine (columns_modify) help"
@@ -595,7 +596,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_inherit
 msgid "Grupi P&auml;rimine (inherit) pealkiri"
-msgstr "Inheriting"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_inherit_help
 msgid "Grupi P&auml;rimine (inherit) help"
@@ -603,7 +604,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
-msgstr "Search"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:group_search_help
 msgid "Grupi Otsing (search) help"
@@ -611,19 +612,19 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:rel_RELTYPE_DATASOURCE
 msgid "Seose andmed (RELTYPE_DATASOURCE) tekst"
-msgstr "data"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:rel_RELTYPE_CSS
 msgid "Seose css stiil (RELTYPE_CSS) tekst"
-msgstr "css style"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:rel_RELTYPE_SEARCH
 msgid "Seose otsing (RELTYPE_SEARCH) tekst"
-msgstr "search"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:rel_RELTYPE_TRANSFORM
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
-msgstr "data transformer"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:rel_RELTYPE_VIEW_CONTROLLER
 msgid "Seose Tulpade n&auml;itamise kontroller (RELTYPE_VIEW_CONTROLLER) tekst"
@@ -631,28 +632,27 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:191
 msgid "Ikoon"
-msgstr "Icon"
+msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:192
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1112
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:192 classes/contentmgmt/object_treeview/object_treeview_v2.aw:1112
 msgid "Nimi"
-msgstr "Name"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:193
 msgid "Suurus"
-msgstr "Size"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:194
 msgid "T&uuml;&uuml;p"
-msgstr "Type"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:195
 msgid "Muutmise kuup&auml;ev"
-msgstr "Modification date"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:196
 msgid "Muutja"
-msgstr "Modifiedby"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:197
 msgid "Loomise kuup&auml;ev"
@@ -664,36 +664,35 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:199
 msgid "Muuda"
-msgstr "Change"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:200
 msgid "Vali"
-msgstr "Select"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:294
 msgid "DHTML"
-msgstr "DHTML"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:295
 msgid "Tabel"
-msgstr "Table"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:296
 msgid "Kombineeritud"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:489
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:501
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:489 classes/contentmgmt/object_treeview/object_treeview_v2.aw:501
 msgid "%s andmeallikas"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:993
 msgid "K&otilde;ik"
-msgstr "All"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1119
 msgid "Kas n&auml;idata"
-msgstr "Display?"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1127
 msgid "Kontroller"
@@ -701,23 +700,23 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1133
 msgid "Jrk"
-msgstr "Ord"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1140
 msgid "Eraldaja enne"
-msgstr "Separator before"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1147
 msgid "Tekst"
-msgstr "Text"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1154
 msgid "Eraldaja p&auml;rast"
-msgstr "Seprattor after"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1161
 msgid "Muudetav"
-msgstr "Modifiable"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1167
 msgid "Sorteeritav"
@@ -725,7 +724,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1174
 msgid "Milliste v&auml;ljade sisu n&auml;idata<br>Eraldaja&nbsp;&nbsp;|&nbsp;&nbsp;Vasak&nbsp;tekst&nbsp;&nbsp;|&nbsp;&nbsp;V&auml;li&nbsp;&nbsp;|&nbsp;&nbsp;Parem&nbsp;tekst"
-msgstr "Fields to display<br>Separator&nbsp;&nbsp;|&nbsp;&nbsp;Left&nbsp;text&nbsp;&nbsp;|&nbsp;&nbsp;Field&nbsp;&nbsp;|&nbsp;&nbsp;Right&nbsp;text"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1491
 msgid "&nbsp;"
@@ -733,57 +732,55 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1573
 msgid "Uus"
-msgstr "New"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1596
 msgid "Kustuta"
-msgstr "Delete"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1601
 msgid "Oled kindel et tahad objekte kustutada?"
-msgstr "Are you sure you want to delete objects?"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1611
 msgid "Salvesta"
-msgstr "Save"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1739
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2023
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2044
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2023 classes/contentmgmt/object_treeview/object_treeview_v2.aw:2044
 msgid "Kasvav"
-msgstr "Ascending"
+msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2023
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2044
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2023 classes/contentmgmt/object_treeview/object_treeview_v2.aw:2044
 msgid "Kahanev"
-msgstr "Descending"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2073
 msgid "Sorditav v&auml;li"
-msgstr "Sortable field"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2079
 msgid "Kasvav / kahanev"
-msgstr "Ascending / Descending"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2085
 msgid "Kuup&auml;ev tekstina?"
-msgstr "Date as text?"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2150
 msgid "Grupp"
-msgstr "Group"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2156
 msgid "Filtreeritav v&auml;li"
-msgstr "Filtered field"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2162
 msgid "Filtreeritav v&auml;&auml;rtus"
-msgstr "Filtered value"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2168
 msgid "V&auml;listav"
@@ -791,7 +788,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2174
 msgid "Kas t&auml;pne?"
-msgstr "Exact?"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2200
 msgid "Asukoht"
@@ -799,8 +796,9 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2531
 msgid "Tulp"
-msgstr "Column"
+msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2537
 msgid "Muundaja"
-msgstr "Transformer"
+msgstr ""
+

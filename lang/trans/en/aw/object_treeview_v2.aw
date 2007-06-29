@@ -2,6 +2,14 @@
 $GLOBALS["TRANS"]["Omaduse Andmed (ds) caption"] = "Data source";
 $GLOBALS["TRANS"]["Omaduse Lehte ei cacheta (no_cache_page) caption"] = "Page is not cached";
 $GLOBALS["TRANS"]["Omaduse Otsing (search) caption"] = "Search";
+$GLOBALS["TRANS"]["Omaduse Lisa uus andmeallikas (add_new_ds) help"] = "Add new datasource";
+$GLOBALS["TRANS"]["Omaduse Uue andmeallika t&uuml;&uuml;p (add_new_ds_type) caption"] = "New datasource type";
+$GLOBALS["TRANS"]["Omaduse Kopeeri olemasolev andmeallikas (copy_ds) caption"] = "Copy existing datasource";
+$GLOBALS["TRANS"]["Omaduse Vali kopeeritav andmeallikas (sel_copy_ds) caption"] = "Choose for datasource copy";
+$GLOBALS["TRANS"]["Omaduse Seos olemasoleva andmeallikaga (connect_ds) caption"] = "Connection to existing datasource";
+$GLOBALS["TRANS"]["Omaduse Vali seostatav andmeallikas (sel_connect_ds) caption"] = "Choose a associable datasource";
+$GLOBALS["TRANS"]["Omaduse P&auml;ri omadused objektinimekirjast (inherit_from) caption"] = "Inherit properties from object list";
+$GLOBALS["TRANS"]["Omaduse Vali p&auml;ritav objektinimekiri (sel_inherit_from) caption"] = "Choose inheritable object list";
 $GLOBALS["TRANS"]["Omaduse P&auml;ri n&auml;itamise omadused objektist (inherit_view_props_from) caption"] = "Inherit display properties from";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita katalooge (show_folders) caption"] = "Display folders";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita t&ouml;&ouml;riistariba (show_add) caption"] = "Display toolbar";
