@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.76 2007/06/29 12:02:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.77 2007/06/29 12:04:39 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1254,14 +1254,14 @@ class reservation extends class_base
 		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
 		if ($len > 3600)
 		{
-			$arr["prop"]["post_append_text"] = sprintf(t("&nbsp;/ Hetkel pikkus: %d tundi"), 
+			$arr["prop"]["post_append_text"] = sprintf(t("/ Hetkel pikkus: %d tundi"), 
 				floor($len / 3600),
 				floor(($len - floor($len / 3600)*3600) / 60)
 			);
 		}
 		else
 		{
-			$arr["prop"]["post_append_text"] = sprintf(t("&nbsp;/ Hetkel pikkus: %02d minutit"),
+			$arr["prop"]["post_append_text"] = sprintf(t("/ Hetkel pikkus: %02d minutit"),
 				floor($len / 60)
 			);
 		}
