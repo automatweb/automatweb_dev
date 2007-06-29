@@ -107,6 +107,26 @@
             <field>unset_table</field>
       </property>
       <property>
+            <name>mail_identity</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAP</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili identiteet</caption>
+      </property>
+      <property>
+            <name>mail_default_folder</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIL_DEF_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimis kataloog meili bugidele</caption>
+      </property>
+      <property>
             <name>search_tb</name>
             <table>objects</table>
             <group>search</group>
@@ -821,6 +841,10 @@
                   <caption>Teavitused</caption>
                   <parent>general</parent>
             </reminders>
+            <mail_settings>
+                  <caption>Meiliseaded</caption>
+                  <parent>general</parent>
+            </mail_settings>
             <reqs_main>
                   <caption>N&amp;amp;otilde;uded</caption>
             </reqs_main>
@@ -977,6 +1001,16 @@
                   <clid>CL_BUG</clid>
                   <caption>Bugi</caption>
             </BUG>
+            <IMAP>
+                  <value>6</value>
+                  <clid>CL_PROTO_IMAP</clid>
+                  <caption>Imap</caption>
+            </IMAP>
+            <MAIL_DEF_FOLDER>
+                  <value>7</value>
+                  <clid>CL_BUG</clid>
+                  <caption>Meilitud bugide kataloog</caption>
+            </MAIL_DEF_FOLDER>
       </reltypes>
       <layout>
             <bug>

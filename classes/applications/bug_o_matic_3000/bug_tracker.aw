@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.102 2007/06/13 07:25:42 voldemar Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.102 2007/06/13 07:25:42 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.103 2007/06/29 13:17:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.103 2007/06/29 13:17:12 kristo Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -48,6 +48,14 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Kelle buge n&auml;idata
 
 	@property unset_table type=table store=no no_caption=1
+
+@default group=mail_settings
+
+	@property mail_identity type=relpicker reltype=RELTYPE_IMAP field=meta method=serialize
+	@caption Meili identiteet
+
+	@property mail_default_folder type=relpicker reltype=RELTYPE_MAIL_DEF_FOLDER field=meta method=serialize
+	@caption Vaikimis kataloog meili bugidele
 
 @default group=search
 
@@ -317,6 +325,7 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo settings_g caption="Muud seaded" parent=general
 @groupinfo unestimated_bugs caption="Ennustamata bugid" parent=general
 @groupinfo reminders caption="Teavitused" parent=general
+@groupinfo mail_settings caption="Meiliseaded" parent=general
 
 
 @groupinfo reqs_main caption="N&otilde;uded"
@@ -373,6 +382,11 @@ define("BUG_STATUS_CLOSED", 5);
 @reltype BUG value=5 clid=CL_BUG
 @caption Bugi
 
+@reltype IMAP value=6 clid=CL_PROTO_IMAP
+@caption Imap
+
+@reltype MAIL_DEF_FOLDER value=7 clid=CL_BUG
+@caption Meilitud bugide kataloog
 */
 
 classload("applications/bug_o_matic_3000/bug");
@@ -2647,11 +2661,12 @@ class bug_tracker extends class_base
 
 		$has = false;
 		$gt_list = $this->get_undone_bugs_by_p($p);
+		$bi = get_instance(CL_BUG);
 		foreach($gt_list as $gt)
 		{
 			$chart->add_row (array (
 				"name" => $gt->id(),
-				"title" => $gt->name(),
+				"title" => $gt->name(), //." (".$bi->get_sort_priority($gt).") ",
 				"uri" => html::get_change_url(
 					$gt->id(),
 					array("return_url" => get_ru())
@@ -3322,7 +3337,7 @@ echo "<hr>";
 	function disp_wh($arr)
 	{
 		classload("core/date/date_calc");
-		$tmp = mktime(0,0,0,1,22,2007);
+		$tmp = mktime(0,0,0,1,1,2007);
 		$coms = new object_list(array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
@@ -3334,7 +3349,8 @@ echo "<hr>";
 //		echo "com count = ".$coms->count()." <br>";
 echo "<div style='font-size: 10px;'>";
 		//$i = array("marko" => "", "dragut" => "", "tarvo" => "", "sander" => "");
-		$i = array("helle" => "", "sander" => "");
+		$i = array("helle" => "", "sander" => "", "tarvo" => "");
+
 		foreach($coms->arr() as $com)
 		{
 			if ($com->createdby() == "")
@@ -3452,6 +3468,300 @@ echo "<div style='font-size: 10px;'>";
 		header('Content-disposition: root_access; filename="req.csv"');
 		print $t->get_csv_file();
 		die();
+	}
+
+	/**
+		@attrib name=mail_scanner nologin="1"
+	**/
+	function mail_scanner($arr)
+	{
+		$u = get_instance("users");
+		$u->login(array("uid" => "kix", "password" => "jobu13"));
+		aw_switch_user(array("uid" => "kix"));
+		$ol = new object_list(array(
+			"class_id" => CL_BUG_TRACKER,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+
+		foreach($ol->arr() as $bt)
+		{
+			if (!$this->can("view", $bt->prop("mail_identity")))
+			{
+				continue;
+			}
+
+			$imap = obj($bt->prop("mail_identity"));
+			$imap_i = $imap->instance();
+			$imap_i->connect_server(array(
+				"obj_inst" => $imap
+			));
+
+			echo $imap_i->test_connection(array(
+				"obj_inst" => $imap
+			))."<br>";
+
+			echo "tested conns <br>\n";
+			flush();
+			// now we need to figure out which emails to scan. preferably new ones only. 
+			$fld_c = $imap_i->get_folder_contents(array("from" => 0, "to" => 100000));
+			echo "got cont <br>\n";
+			flush();
+
+			// process messages and create bugs from them
+			foreach($fld_c as $msg_id => $msg)
+			{
+				echo "process $msg[subject] <br>\n";
+				flush();
+				$imap_i->msg_content = "";
+				$ms = $imap_i->fetch_message(array("msgid" => $msg_id));
+
+				$b = obj();
+				$b->set_class_id(CL_BUG);
+				// parent - get default folder from settings OR
+				// see if the mail has it set
+				$b->set_parent($this->_parse_parent_from_mail_or_default($bt, $ms["content"]));
+
+				$b->set_name($msg["subject"]);
+				$b->set_prop("bug_status",1);
+				$b->set_prop("bug_priority", $this->_parse_priority_from_mail($ms["content"]));
+				$who = $this->_parse_who_from_mail($msg);
+				$b->set_prop("who", $who);
+				$u = get_instance(CL_USER);
+				$b->set_prop("monitors", $this->_parse_monitors_from_message($ms["content"], $u->get_company_for_person($who)));
+
+				$b->set_prop("bug_content", $ms["content"]);
+				$b->set_prop("customer", $this->_parse_customer_from_message($ms["content"]));
+				$b->set_prop("customer_person", $this->_parse_customer_person_from_message($ms["content"], $b->prop("customer")));
+				$b->set_prop("project", $this->_parse_project_from_message($ms["content"]));
+				$b->set_prop("bug_mail", $msg["froma"]);
+				$b->set_meta("imap_id", $msg_id);
+				aw_disable_acl();
+				$b->save();
+				aw_restore_acl();
+			}		
+			$imap_i->delete_msgs_from_folder(array_keys($fld_c));
+		}
+		die("all done");
+	}
+
+	function _parse_parent_from_mail_or_default($bt, $c)
+	{
+		if (preg_match("/Kaust: (.*)^/imsU", $c, $mt))
+		{
+			$path = explode("/", trim($mt[1]));
+			$fld = obj($this->can("view", $bt->prop("bug_folder")) ? $bt->prop("bug_folder") : $bt->id());
+			foreach($path as $path_item)
+			{
+				$ol = new object_list(array(
+					"parent" => $fld->id(),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"name" => trim($path_item)
+				));
+				if (!$ol->count())
+				{
+					return $bt->prop("mail_default_folder");
+				}
+				$fld = $ol->begin();
+			}
+			return $fld->id();
+		}
+		else
+		{
+			return $bt->prop("mail_default_folder");
+		}
+	}
+
+	function _parse_priority_from_mail($c)
+	{
+		if (preg_match("/Pri: (.*)^/imsU", $c, $mt))
+		{
+			return (int)trim($mt[1]);
+		}
+		return 3;
+	}
+
+	function _parse_who_from_mail($msg)
+	{
+		// find the person to whom this mail address belongs to
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_PERSON.RELTYPE_EMAIL.mail" => trim($msg["froma"])
+		));
+		if ($ol->count())
+		{
+			$p = $ol->begin();
+			return $p->id();
+		}
+		return null;
+	}
+
+	function _parse_monitors_from_message($c, $co)
+	{
+		// all members of our company whose emails are in the email
+		$emls = $this->make_keys($this->_parse_emails_from_message($c));
+
+		if (!count($emls))
+		{
+			return null;
+		}
+		if (!is_object($co))
+		{
+			return null;
+		}
+
+		// get all ppl for the company
+		$co_inst = get_instance(CL_CRM_COMPANY);
+		$ppl = $co_inst->get_employee_picker($co);
+
+		// and find their emails
+		$rv = array();
+		foreach($ppl as $p_id => $p_name)
+		{
+			$po = obj($p_id);
+			foreach($po->connections_from(array("type" => "RELTYPE_EMAIL")) as $c)
+			{
+				$m = $c->to();
+				if (isset($emls[$m->prop("mail")]))
+				{
+					$rv[] = $p_id;
+				}
+			}
+		}
+
+		return $rv;
+	}
+
+	function _parse_customer_from_message($c)
+	{
+		$emls = $this->_parse_emails_from_message($c);
+		if (!count($emls))
+		{
+			return null;
+		}
+		// now I suppose we should find all customers email addresses and see if any of them overlap
+		$mail2cust = $this->_get_customer_email_list($emls);
+		$possible_custs = array();
+		foreach($emls as $email)
+		{
+			if (isset($mail2cust[trim($email)]))
+			{
+				$possible_custs[] = $mail2cust[trim($email)];
+			}
+		}
+
+		$cur_co = get_current_company();
+		foreach($possible_custs as $id)
+		{
+			$o = obj($id);
+			if ($o->class_id() == CL_CRM_COMPANY && $cur_co->id() != $id)
+			{
+				return $o->id();
+			}
+		}
+		return null;
+	}
+
+	function _parse_customer_person_from_message($c, $customer)
+	{
+		if (!$customer)
+		{
+			return null;
+		}
+		$m =  $this->_parse_monitors_from_message($c, obj($customer));
+		if (is_array($m) && count($m))
+		{
+			return reset($m);
+		}
+		return null;
+	}
+
+	function _parse_project_from_message($c)
+	{
+		return null;
+	}
+
+	function _parse_emails_from_message($c)
+	{
+		preg_match_all('/([a-z0-9-]*((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/imsU',$c, $mt, PREG_PATTERN_ORDER);
+		return $mt[0];
+	}
+
+	function _get_customer_email_list($emails)
+	{
+		$ret = array();
+
+		$ml_ol = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"mail" => $emails,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		if (!$ml_ol->count())
+		{
+			return $ret;
+		}
+		$ml_ids = $ml_ol->ids();
+
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_CRM_COMPANY,
+			"type" => "RELTYPE_EMAIL",
+			"to" => $ml_ids
+		));
+		$ids = array();
+		foreach($conns as $con)
+		{
+			$ids[] = $con["to"];
+		}
+		if (count($ids))
+		{
+			$ol = new object_list(array("oid" => $ids, "lang_id" => array(), "site_id" => array()));
+			$ol->arr();
+		}
+
+		foreach($conns as $con)
+		{
+			$eml = obj($con["to"]);
+
+			if ($eml->prop("mail") != "")
+			{
+				$ret[$eml->prop("mail")] = $con["from"];
+			}
+		}
+
+		$conns = $c->find(array(
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_EMAIL",
+			"to" => $ml_ids
+		));
+		$ids = array();
+		foreach($conns as $con)
+		{
+			$ids[] = $con["to"];
+		}
+		if (count($ids))
+		{
+			$ol = new object_list(array("oid" => $ids, "lang_id" => array(), "site_id" => array()));
+			$ol->arr();
+		}
+		$u = get_instance(CL_USER);
+		foreach($conns as $con)
+		{
+			$eml = obj($con["to"]);
+
+			if ($eml->prop("mail") != "")
+			{
+				// get company for person
+				// and return that instead
+				$ret[$eml->prop("mail")] = $u->get_company_for_person($con["from"]);
+			}
+		}
+
+		return $ret;
 	}
 }
 ?>

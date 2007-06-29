@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.82 2007/06/06 12:34:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.83 2007/06/29 13:17:12 kristo Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -429,7 +429,7 @@ class bug extends class_base
 				{
 					$u = get_instance(CL_USER);
 					$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
-					$crea = sprintf(t("Looja: %s"), $p->name());
+					$crea = sprintf(t("Looja: %s / %s"), $p->name(), date("d.m.Y H:i", $arr["obj_inst"]->created()));
 				}
 				else
 				if ($arr["request"]["from_req"])
@@ -854,7 +854,7 @@ class bug extends class_base
 				$prop["value"] = str_replace(",", ".", $prop["value"]);
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
-					$com = sprintf(t("Tundide kliendile arv muudeti %s => %s"), $old, $prop["value"]);
+					$com = sprintf(t("Tunde kliendile arv muudeti %s => %s"), $old, $prop["value"]);
 					$this->add_comments[] = $com;
 				}
 				break;
@@ -1037,7 +1037,7 @@ class bug extends class_base
 		}
 
 
-		$rv += (double)1.0/((double)10000.0 - (double)$bug->id());
+		$rv += 1.0 - ((double)1.0/((double)1000000.0 - (double)$bug->id()));
 
 		return $rv;
 	}
