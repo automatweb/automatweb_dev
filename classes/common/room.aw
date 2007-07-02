@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.197 2007/06/27 14:40:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.198 2007/07/02 13:28:46 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -216,13 +216,9 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 		
 				@property min_prices_props type=callback callback=gen_min_prices_props parent=min_prices
 
-			
-	
 				@property web_min_prod_price type=callback callback=cb_gen_web_min_prices 
 
 	
-
-
 	@groupinfo prices_price caption="Hinnad" parent=prices
 	@default group=prices_price,prices_bargain_price
 		@property prices_search type=hidden no_caption=1 store=no
@@ -1733,7 +1729,7 @@ class room extends class_base
 		$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
 		$this->openhours = $this->get_current_openhours_for_room($arr["obj_inst"]);
 		$this->pauses = $this->get_current_pauses_for_room($arr["obj_inst"]);
-
+		$si = get_instance(CL_ROOM_SETTINGS);
 		if(is_array($this->openhours))
 		{
  			$open = $this->open = $open_inst->get_times_for_date(reset($this->openhours), $time);
@@ -1930,6 +1926,7 @@ class room extends class_base
 									"return_url" => get_ru(),
 									"calendar" => $cal,
 									"resource" => $room_id,
+									"ver" => $si->get_verified_default_for_group($settings),
 								));
 								$w = 1000;
 								$h = 600;
@@ -4481,7 +4478,7 @@ class room extends class_base
 			$time_from = $price->prop("time_from");
 			$time_to = $price->prop("time_to");
 			$end = $start + $price->prop("time") * $this->step_length;//arr("/");arr($end);arr("\\");
-			if(!((mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <= $start) && 
+			if(!($time_to == $time_from) && !((mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <= $start) && 
 			     (mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))>= ($start + $price->prop("time") * $this->step_length))
 			))
 			{
@@ -4493,8 +4490,12 @@ class room extends class_base
 				}
 				continue; //siia tuleb mingi eriti sünge kood, mis peaks hindu ajaliselt tükeldama hakkama ....
 			}
-			//	arr(date("G:i",mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start))));arr(date("G:i",$start)); arr(date("G:i",$start + $price->prop("time") * $this->step_length));  arr(date("G:i",mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))));
-			//arr($price->prop("time") * $this->step_length); arr($time);
+	//		if(aw_global_get("uid") == "struktuur"){
+	//		arr((mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))>= ($start + $price->prop("time") * $this->step_length)));
+	//		arr($price->prop("time")); arr($this->step_length);
+	//		arr(date("G:i",mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start))));arr(date("G:i",$start)); arr(date("G:i",$start + $price->prop("time") * $this->step_length));  arr(date("G:i",mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))));
+	//		arr($price->prop("time") * $this->step_length); arr($time);arr("");
+	//		}
 			if($time + 60 >= ($price->prop("time") * $this->step_length) && (!$smaller || ($smaller->prop("time") < $price->prop("time"))))
 			{
 				$smaller = $price;
