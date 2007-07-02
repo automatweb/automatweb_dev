@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.23 2007/06/26 07:05:19 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.24 2007/07/02 09:50:28 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -430,7 +430,7 @@
 		@caption Kogus (tk)
 
 
-	@property additional_equipment_info type=textarea table=watercraft
+	@property additional_equipment_info rows=10 type=textarea table=watercraft
 	@caption T&auml;iendav info
 
 @reltype LOCATION value=1 clid=CL_CRM_CITY
@@ -587,8 +587,8 @@ class watercraft extends class_base
 			'genoa_1' => t('Genoa&nbsp;1'),
 			'genoa_2' => t('Genoa&nbsp;2'),
 			'genoa_3' => t('Genoa&nbsp;3'),
-			'gennaker' => t('Gennaker'),
 			'spinnaker' => t('Spinnaker'),
+			'gennaker' => t('Gennaker'),
 			'stormfoka' => t('Tormifoka'),
 		);
 		$this->sail_table_fields = array(
@@ -864,7 +864,7 @@ class watercraft extends class_base
 
 		// custom sail types:
 		$t->define_data(array(
-			'type' => t('Muu puri'),
+			'type' => t('Muu&nbsp;puri'),
 			'area' => '',
 			'material' => '',
 			'age_and_condition' => ''

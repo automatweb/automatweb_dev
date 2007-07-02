@@ -92,6 +92,14 @@
             <caption>Muu asukoht</caption>
       </property>
       <property>
+            <name>location_precise</name>
+            <table>watercraft</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>location_precise</field>
+            <caption>T&amp;amp;auml;psem asukoht</caption>
+      </property>
+      <property>
             <name>condition</name>
             <table>watercraft</table>
             <group>general</group>
@@ -115,6 +123,33 @@
             <reltype>RELTYPE_SELLER</reltype>
             <field>seller</field>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
+      </property>
+      <property>
+            <name>contact_name</name>
+            <table>watercraft</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>contact_name</field>
+            <caption>Kontaktisiku nimi</caption>
+            <comment>Kontaktisiku nimi, juhuks kui kuulutuse kontaktisik on m&amp;amp;uuml;&amp;amp;uuml;jast erinev.</comment>
+      </property>
+      <property>
+            <name>contact_email</name>
+            <table>watercraft</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>contact_email</field>
+            <caption>Kontaktisiku e-mail</caption>
+            <comment>Kontaktisiku e-mail, juhuks kui kuulutuse kontaktisik on m&amp;amp;uuml;&amp;amp;uuml;jast erinev.</comment>
+      </property>
+      <property>
+            <name>contact_phone</name>
+            <table>watercraft</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>contact_phone</field>
+            <caption>Kontaktisiku telefoninumber</caption>
+            <comment>Kontaktisiku telefoninumber, juhuks kui kuulutuse kontaktisik on m&amp;amp;uuml;&amp;amp;uuml;jast erinev.</comment>
       </property>
       <property>
             <name>price</name>
@@ -881,6 +916,7 @@
             <name>additional_equipment_info</name>
             <table>watercraft</table>
             <group>additional_equipment</group>
+            <rows>10</rows>
             <type>textarea</type>
             <field>additional_equipment_info</field>
             <caption>T&amp;amp;auml;iendav info</caption>
