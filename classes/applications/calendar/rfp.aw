@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.17 2007/05/29 10:19:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.18 2007/07/02 08:48:49 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -39,15 +39,40 @@
 
 		@groupinfo final_catering caption="Toitlustus" parent=final_info
 		@default group=final_catering
-			@property products_tbl type=text store=no no_caption=1
+
+			@property final_add_reservation_tb group=final_prices,final_resource,final_catering no_caption=1 type=toolbar
+
+			@layout cat_hsplit type=hbox width=30%:70%
+
+				@layout cat_left parent=cat_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
+					@property products_tree parent=cat_left type=treeview store=no no_caption=1
+
+				@layout cat_right parent=cat_hsplit type=vbox closeable=1 area_caption=Tooted
+					
+					@property products_tbl parent=cat_right type=text store=no no_caption=1
 
 		@groupinfo final_resource caption="Ressursid" parent=final_info
 		@default group=final_resource
-			@property resources_tbl type=text store=no no_caption=1
+
+			@layout res_hsplit type=hbox width=30%:70%
+
+				@layout res_left parent=res_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
+					@property resources_tree parent=res_left type=treeview store=no no_caption=1
+
+				@layout res_right parent=res_hsplit type=vbox closeable=1 area_caption=Ressursid
+					@property resources_tbl parent=res_right type=text store=no no_caption=1
 
 		@groupinfo final_prices caption="Hinnad" parent=final_info
 		@default group=final_prices
-			@property tmp4 type=text
+			
+
+			@layout prs_hsplit type=hbox width=30%:70%
+
+				@layout prs_left parent=prs_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
+					@property prices_tree parent=prs_left type=treeview store=no no_caption=1
+
+				@layout prs_right parent=prs_hsplit type=vbox closeable=1 area_caption=Hinnad
+					@property prices_tbl parent=prs_right type=text store=no no_caption=1
 
 		@groupinfo final_submission caption="Kinnitamine" parent=final_info
 		@default group=final_submission
@@ -201,7 +226,7 @@
 			@property data_mf_24h type=text
 			@caption Hoia 24 tundi kinni
 
-			@property data_mf_catering type=text
+			@property data_mf_catering type=text group=main_fun
 			@caption Pea&uuml;rituse toitlustus
 			
 			@property data_mf_catering_type type=text
@@ -273,6 +298,10 @@
 
 @reltype WEBFORM clid=CL_CONFERENCE_PLANNING value=2
 @caption Tellimuse vorm
+
+@reltype RESERVATION clid=CL_RESERVATION value=3
+@caption Ruumi broneering
+
 */
 
 class rfp extends class_base
@@ -316,32 +345,98 @@ class rfp extends class_base
 		switch($prop["name"])
 		{
 			// final_data thingies
+			case "final_add_reservation_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_menu_button(array(
+					"name" => "add",
+					"img" => "new.gif",
+					"tooltip" => t("Reserveering"),
+				));
+				$rooms = $arr["obj_inst"]->prop("final_rooms");
+				foreach($rooms as $room)
+				{
+					$url = $this->mk_my_orb("do_add_reservation", array(
+						"id" => $room,
+						"start1" => time(),
+						"end" => time(),
+						"resource" => $room,
+						"parent" => $room,
+					), CL_ROOM);
+					
+					$o = obj($room);
+					$tb->add_menu_item(array(
+						"parent" => "add",
+						"text" => sprintf(t("Ruumi '%s'"), $o->name()),
+						"url" => $url,
+					));
+				}
+				break;
+			case "products_tree":
+			case "resources_tree":
+			case "prices_tree":
+				$t = &$prop["vcl_inst"];
+				$rooms = $arr["obj_inst"]->prop("final_rooms");
+				foreach($rooms as $room)
+				{
+					if($this->can("view", $room))
+					{
+						$room_o = obj($room);
+						$t->add_item(0, array(
+							"id" => "room_".$room,
+							"name" => $room_o->name(),
+						));
+						$ol = new object_list(array(
+							"class_id" => CL_RESERVATION,
+							"CL_RESERVATION.RELTYPE_RESOURCE" => $room,
+						));
+						foreach($ol->arr() as $oid => $obj)
+						{
+							$t->add_item("room_".$room, array(
+								"id" => "reserv_".$oid,
+								"name" => date("d.m.Y H:i", $obj->prop("start1")). " - " . date("d.m.Y H:i", $obj->prop("end")),
+								"url" => aw_url_change_var(array(
+									"reservation_oid" => $oid,
+								)),
+							));
+						}
+					}
+					
+				}
+				break;
 			case "products_tbl":
 			case "resources_tbl":
-				$bron = 1348;
-				$obj = obj($bron);
-				$inst = $obj->instance();
-				classload("vcl/table");
-				$args = array(
-					"request" => array(
-						"class" => "reservation",
-						"action" => "change",
-						"id" => $bron,
-					),
-					"obj_inst" => $obj,
-					"groupinfo" => array(),
-					"prop" => array(
-						"store" => "no",
-						"name" => $arr["prop"]["name"],
-						"type" => "table",
-						"no_caption" => "1",
-						"vcl_inst" => new vcl_table(),
-					),
-				);
-				$function = "_get_".$arr["prop"]["name"];
-				$inst->$function(&$args);
-				$prop["value"] = $args["prop"]["vcl_inst"]->get_html();
+				if($this->can("view", $arr["request"]["reservation_oid"]))
+				{
+					$obj = obj($arr["request"]["reservation_oid"]);
+					$inst = $obj->instance();
+					classload("vcl/table");
+					$args = array(
+						"request" => array(
+							"class" => "reservation",
+							"action" => "change",
+							"id" => $bron,
+						),
+						"obj_inst" => $obj,
+						"groupinfo" => array(),
+						"prop" => array(
+							"store" => "no",
+							"name" => $arr["prop"]["name"],
+							"type" => "table",
+							"no_caption" => "1",
+							"vcl_inst" => new vcl_table(),
+						),
+					);
+					$function = "_get_".$arr["prop"]["name"];
+					$inst->$function(&$args);
+					$prop["value"] = $args["prop"]["vcl_inst"]->get_html();
+				}
+				else
+				{
+					$prop["value"] = t("Palun valige reserveering");
+				}
 				break;
+
+
 			case "tmp4":
 				$prop["value"] = "Ruumi hindade/soodustuste & koguhinna/soodustuse määramine";
 				break;
@@ -367,6 +462,10 @@ class rfp extends class_base
 				break;
 
 			case "data_mf_catering":
+				if(substr($arr["request"]["group"], 0, 5) == "final")
+				{
+					$prop["no_caption"] = 1;
+				}
 				$prop["value"] = aw_unserialize($prop["value"]);
 				$props = $arr["obj_inst"]->get_property_list();
 				classload("vcl/table");
@@ -481,13 +580,58 @@ class rfp extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "products_tbl":
+				if($this->can("view", $arr["request"]["reservation_oid"]))
+				{
+					$res = get_instance(CL_RESERVATION); 
+					$res->set_products_info($arr["request"]["reservation_oid"], $arr["request"]);
+				}
+			break;
+			case "resources_tbl":
+				$res = get_instance(CL_RESERVATION);
+				if(strlen($arr["request"]["resources_total_discount"]) && $this->can("view", $arr["request"]["reservation_oid"]))
+				{
+					$res->set_resources_discount(array(
+						"reservation" => $arr["request"]["reservation_oid"],
+						"discount" => $arr["request"]["resources_total_discount"],
+					));
+				}
+				
+				if(count($arr["request"]["resources_total_price"]) && $this->can("view", $arr["request"]["reservation_oid"]))
+				{
+					$res->set_resources_price(array(
+						"reservation" => $arr["request"]["reservation_oid"],
+						"prices" => $arr["request"]["resources_total_price"],
+					));
+				}
+				
+				if(count($arr["request"]["resources_info"]) && $this->can("view", $arr["request"]["reservation_oid"]))
+				{
+					$res->set_resources_data(array(
+						"reservation" => $arr["request"]["reservation_oid"],
+						"resources_info" => $arr["request"]["resources_info"],
+					));
+				}
+			break;
 		}
 		return $retval;
 	}	
 
 	function callback_mod_reforb($arr)
 	{
+		if($arr["group"] == "final_resource" || $arr["group"] == "final_catering")
+		{
+			$arr["reservation_oid"] = $_GET["reservation_oid"];
+		}
 		$arr["post_ru"] = post_ru();
+	}
+
+	function callback_mod_retval($arr)
+	{
+		if($arr["request"]["group"] == "final_resource" || $arr["request"]["group"] == "final_catering")
+		{
+			$arr["args"]["reservation_oid"] = $arr["request"]["reservation_oid"];
+		}
 	}
 
 	////////////////////////////////////

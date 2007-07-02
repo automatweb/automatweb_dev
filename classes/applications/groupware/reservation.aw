@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.78 2007/07/02 06:24:45 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.79 2007/07/02 08:48:45 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -2423,8 +2423,8 @@ flush();
 			return false;
 		}
 	
-		$products = $reservation->meta("amount");
-		foreach($products as $product => $amount)
+		$prd = $reservation->meta("amount");
+		foreach($prd as $product => $amount)
 		{
 			$products[$product]["amount"] = $amount;
 			$products[$product]["sum"] = $this->get_product_price(array("reservation" => $reservation, "curr" => $curr));
