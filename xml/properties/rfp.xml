@@ -40,6 +40,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>0</default>
             <caption>Rahvusvaheline</caption>
             <comment>Kas &amp;amp;uuml;ritus on rahvusvaheline</comment>
       </property>
@@ -64,12 +65,49 @@
             <comment>Konverentsil viibivate v&amp;amp;auml;lisk&amp;amp;uuml;aliste arv</comment>
       </property>
       <property>
+            <name>final_add_reservation_tb</name>
+            <table>objects</table>
+            <group>
+                  <num_0>final_prices</num_0>
+                  <num_1>final_resource</num_1>
+                  <num_2>final_catering</num_2>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <no_caption>1</no_caption>
+            <type>toolbar</type>
+            <store>no</store>
+      </property>
+      <property>
+            <name>products_tree</name>
+            <table>objects</table>
+            <group>final_catering</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>cat_left</parent>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>products_tbl</name>
             <table>objects</table>
             <group>final_catering</group>
             <field>meta</field>
             <method>serialize</method>
+            <parent>cat_right</parent>
             <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>resources_tree</name>
+            <table>objects</table>
+            <group>final_resource</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>res_left</parent>
+            <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
@@ -79,17 +117,32 @@
             <group>final_resource</group>
             <field>meta</field>
             <method>serialize</method>
+            <parent>res_right</parent>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
-            <name>tmp4</name>
+            <name>prices_tree</name>
             <table>objects</table>
             <group>final_prices</group>
             <field>meta</field>
             <method>serialize</method>
+            <parent>prs_left</parent>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>prices_tbl</name>
+            <table>objects</table>
+            <group>final_prices</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>prs_right</parent>
             <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>tmp5</name>
@@ -225,6 +278,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>0</default>
             <caption>N&amp;amp;ouml;us alternatiivsete kuup&amp;amp;auml;evadega</caption>
       </property>
       <property>
@@ -235,6 +289,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>0</default>
             <caption>Majutusvajadused</caption>
       </property>
       <property>
@@ -299,6 +354,7 @@
             <method>serialize</method>
             <type>type</type>
             <ch_value>1</ch_value>
+            <default>0</default>
             <caption>Kuup&amp;amp;auml;evad on paindlikud</caption>
       </property>
       <property>
@@ -345,6 +401,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>0</default>
             <caption>Arhiveeritud</caption>
       </property>
       <property>
@@ -355,6 +412,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>0</default>
             <caption>Kiire</caption>
       </property>
       <property>
@@ -456,6 +514,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>0</default>
             <caption>Puhkeruumide soov</caption>
       </property>
       <property>
@@ -753,6 +812,70 @@
                   <value>2</value>
                   <caption>Tellimuse vorm</caption>
             </WEBFORM>
+            <RESERVATION>
+                  <clid>CL_RESERVATION</clid>
+                  <value>3</value>
+                  <caption>Ruumi broneering</caption>
+            </RESERVATION>
       </reltypes>
+      <layout>
+            <cat_hsplit>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>final_catering</group>
+            </cat_hsplit>
+            <cat_left>
+                  <parent>cat_hsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ruumid&amp;nbsp;ja&amp;nbsp;reserveeringud</area_caption>
+                  <group>final_catering</group>
+            </cat_left>
+            <cat_right>
+                  <parent>cat_hsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tooted</area_caption>
+                  <group>final_catering</group>
+            </cat_right>
+            <res_hsplit>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>final_resource</group>
+            </res_hsplit>
+            <res_left>
+                  <parent>res_hsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ruumid&amp;nbsp;ja&amp;nbsp;reserveeringud</area_caption>
+                  <group>final_resource</group>
+            </res_left>
+            <res_right>
+                  <parent>res_hsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursid</area_caption>
+                  <group>final_resource</group>
+            </res_right>
+            <prs_hsplit>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>final_prices</group>
+            </prs_hsplit>
+            <prs_left>
+                  <parent>prs_hsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ruumid&amp;nbsp;ja&amp;nbsp;reserveeringud</area_caption>
+                  <group>final_prices</group>
+            </prs_left>
+            <prs_right>
+                  <parent>prs_hsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Hinnad</area_caption>
+                  <group>final_prices</group>
+            </prs_right>
+      </layout>
 </properties>
 

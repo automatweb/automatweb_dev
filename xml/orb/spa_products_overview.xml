@@ -3,4 +3,3 @@
 	<class name="spa_products_overview" folder="applications/spa_bookings" extends="class_base">
 	</class>
 </orb>
-		
