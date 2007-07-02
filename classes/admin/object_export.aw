@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.17 2007/05/07 08:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.18 2007/07/02 11:42:38 tarvo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -418,13 +418,13 @@ class object_export extends class_base
 //flush();
 		if ($arr["request"]["do_exp"] == 1)
 		{
-			header("Content-type: application/csv");
+			header("Content-type: application/csv; charset=UTF-8");
 			header("Content-disposition: inline; filename=eksport.csv;");
 			die($t->get_csv_file($sep == "" ? "," : $sep));
 		}
 		elseif($arr["request"]["xls"] == 1)
 		{
-			header("Content-type: application/vnd.ms-excel");
+			header("Content-type: application/vnd.ms-excel; charset=UTF-8");
 			header("Content-disposition: inline; filename=eksport.xls;");
 			die($t->draw());
 		}
