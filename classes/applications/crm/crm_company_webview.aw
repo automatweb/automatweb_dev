@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.40 2007/06/15 10:17:08 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.41 2007/07/02 13:07:29 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1362,11 +1362,18 @@ class crm_company_webview extends class_base
 			}
 			$address = $phone = $fax = $openhours = $email = $web = "";
 			$name = $o->name();
+			$tmp_ad = $this->can("view", $o->prop("contact"))?obj($o->prop("contact")):false;
+			$tmp_cty = $tmp_ad?$tmp_ad->prop("maakond.name"):false;
+			$cty_cap = $tmp_cty?$name." (".$tmp_cty.")":$name;
 			$this->vars(array(
 				'company_name' => $do_link ? html::href(array(
 						'url' => $url . $o->id() . '&l='.$arr['id'],
 						'caption' => $name))
 						: $name,
+				'company_name_with_county' => $do_link ? html::href(array(
+						'url' => $url . $o->id() . '&l='.$arr['id'],
+						'caption' => $cty_cap))
+						: $cty_cap,
 				'company_name_url' => $url . $o->id() . '&l=' .$arr['id'],
 				'company_name_text' => $name,
 				'company_changeurl' => $this->can('edit', $o->id()) ? html::href(array(
