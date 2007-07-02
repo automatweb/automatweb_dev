@@ -152,23 +152,23 @@ class crm_document_base extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function _get_parts_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		/*$tb->add_button(array(
+		$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
-			"tooltip" => t("Lisa isik"),
-			"action" => "add_persons_to_flow"
-		));*/
-		/*$tb->add_button(array(
+			"tooltip" => t("Salvesta"),
+			"action" => "save_parts"
+		));
+		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => t("Eemalda isik"),
-			"action" => "del_persons_from_flow"
-		));*/
+			"tooltip" => t("Kustuta eeldustedevused"),
+			"action" => "remove_parts"
+		));
 	}
 
 	function _init_acts_t(&$t)
@@ -179,6 +179,18 @@ class crm_document_base extends class_base
 			"align" => "center"
 		));
 
+		$t->define_field(array(
+			"name" => "predicate",
+			"caption" => t("Eeldustegevus(ed)"),
+			"align" => "center"
+		));
+		
+		$t->define_field(array(
+			"name" => "done",
+			"caption" => t("Tehtud"),
+			"align" => "center"
+		));
+		
 		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Kuup&auml;ev"),
@@ -197,17 +209,12 @@ class crm_document_base extends class_base
 			"align" => "center"
 		));
 
-		$t->define_field(array(
-			"name" => "predicate",
-			"caption" => t("Eeldustegevus(ed)"),
-			"align" => "center"
+		$t->define_chooser(array(
+			"name" => "remove",
+			"field" => "oid",
+			"width" => "20px",
 		));
-
-		$t->define_field(array(
-			"name" => "done",
-			"caption" => t("Tehtud"),
-			"align" => "center"
-		));
+		
 /*	$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -241,6 +248,14 @@ class crm_document_base extends class_base
 				$o_actors[$c->prop("to")] = $c->prop("to.name");
 			}
 		}
+		
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		foreach ($p->connections_from(array("type" => "RELTYPE_IMPORTANT_PERSON")) as $c)
+		{
+			$o_actors[$c->prop("to")] = $c->prop("to.name");
+		}
+		
 		foreach($acts as $act_c)
 		{
 			if ($act_c === null)
@@ -261,7 +276,15 @@ class crm_document_base extends class_base
 			if ($actor != "")
 			{
 				$aco = obj($act->prop("actor"));
-				$actor .= " ".$aco->prop_str("work_contact");
+				
+				if($aco->prop("work_contact.short_name"))
+				{
+					$actor .= " ".$aco->prop("work_contact.short_name");
+				}
+				else
+				{
+					$actor .= " ".$aco->prop_str("work_contact");arr($actor);
+				}
 			}
 			$actors = $o_actors;
 			if ($act->prop("actor"))
@@ -299,7 +322,8 @@ class crm_document_base extends class_base
 			$prev_idx = $cur_numer;
 
 			$t->define_data(array(
-				"date" => $calinst->draw_datetime_edit("a[$idx][date]", ($act->prop("date") > 100 ? $act->prop("date") : time())),
+				"date" => html::date_select(array("name" => "a[$idx][date]" , "value" => ($act->prop("date") > 100 ? $act->prop("date") : time()) , "month" => "text", "day" => "text")),
+				//$calinst->draw_datetime_edit("a[$idx][date]", ($act->prop("date") > 100 ? $act->prop("date") : time())),
 				"actor" => $actor,
 				"action" => html::textbox(array(
 					"name" => "a[$idx][action]",

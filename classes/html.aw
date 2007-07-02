@@ -825,7 +825,10 @@ class html extends aw_template
 		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled
 	@param buttons optional type=bool
 		Enables the "popup calendar" and "clear date select" buttons to the end of the select.
-
+	@param month optional type=string
+		if month = "text" then month is shown as textbox, not selectbox
+	@param day optional type=string
+		if day = "text" then day is shown as textbox, not selectbox	
 	@returns string/html date selector
 
 	@comments
@@ -836,6 +839,8 @@ class html extends aw_template
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
 
+		$set = array();
+
 		if ($args['buttons'])
 		{
 			$buttons = true;
@@ -844,6 +849,26 @@ class html extends aw_template
 		{
 			$buttons = false;
 		}
+
+
+		if (!empty($args["day"]) && $args["day"] == "text")
+		{
+			$set["day_textbox"] = 1;
+		}
+		else
+		{
+			$set["day"] = 1;
+		}
+		if (!empty($args["month"]) && $args["month"] == "text")
+		{
+			$set["month_textbox"] = 1;
+		}
+		else
+		{
+			$set["month"] = 1;
+		};
+		$set["year"] = 1;
+
 
 		if (!empty($args["format"]) && is_array($args["format"]) && count($args["format"]))
 		{
@@ -856,7 +881,7 @@ class html extends aw_template
 		}
 		else
 		{
-			$selector->configure(array("day" => 1, "month" => 1, "year" => 1));
+			$selector->configure($set);
 		}
 		if(!empty($args["mon_for"]))
 		{
@@ -878,6 +903,8 @@ class html extends aw_template
 		{
 			$val = time();
 		}
+
+
 
 		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
 		$year_to = isset($args["year_to"]) ? $args["year_to"] : date("Y") + 5;

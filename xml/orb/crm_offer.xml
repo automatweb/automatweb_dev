@@ -7,14 +7,14 @@
 				</arguments>
 			</function>
 		</action>
-
+		
 		<action name="del_parts">
 			<function name="del_parts">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-
+		
 		<action name="add_to_typical_component_list">
 			<function name="add_to_typical_component_list">
 				<arguments>
@@ -24,7 +24,7 @@
 				</arguments>
 			</function>
 		</action>
-
+		
 		<action name="remove_from_typical_component_list">
 			<function name="remove_from_typical_component_list">
 				<arguments>
@@ -34,7 +34,7 @@
 				</arguments>
 			</function>
 		</action>
-
+		
 		<action name="add_based_on_typical">
 			<function name="add_based_on_typical">
 				<arguments>
@@ -45,6 +45,20 @@
 				</arguments>
 			</function>
 		</action>
-
+		
+		<action name="remove_parts" all_args="1">
+			<function name="remove_parts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="save_parts" all_args="1">
+			<function name="save_parts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
 	</class>
 </orb>

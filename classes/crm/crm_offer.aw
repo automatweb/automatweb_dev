@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.54 2006/11/29 11:12:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.55 2007/07/02 12:07:25 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -211,7 +211,9 @@ class crm_offer extends class_base
 			case "acts":
 				$i = get_instance("applications/crm/crm_document_base");
 				return $i->get_property($arr);
-
+			case "parts_tb":
+				$i = get_instance("applications/crm/crm_document_base");
+				return $i->get_property($arr);
 			case "start1":
 				$p = get_instance(CL_PLANNER);
 				$cal = $p->get_calendar_for_user();
@@ -381,9 +383,9 @@ class crm_offer extends class_base
 				$this->_set_files($arr);
 				break;
 
-			case "acts":
-				$i = get_instance("applications/crm/crm_document_base");
-				return $i->set_property($arr);
+//			case "acts":
+//				$i = get_instance("applications/crm/crm_document_base");
+//				return $i->set_property($arr);
 
 			case "salesman":
 				if($data["value"])
@@ -1385,7 +1387,31 @@ class crm_offer extends class_base
 		$this->_lv--;
 	}
 
-
+	/**
+		@attrib name=remove_parts all_args=1
+	**/
+	function remove_parts($arr)
+	{
+		$obj = obj($arr["id"]);
+		foreach($arr["remove"] as $id)
+		{
+			$obj->disconnect(array(
+				"from" => $id,
+			));
+		}
+		return $arr["post_ru"];
+	}
+	
+	/**
+		@attrib name=save_parts all_args=1
+	**/
+	function save_parts($arr)
+	{
+		$i = get_instance("applications/crm/crm_document_base");
+		$i->_save_acts(array("request" => $arr, "obj_inst" => obj($arr["id"])));
+		return $arr["post_ru"];
+	}
+	
 	function do_db_upgrade($table, $field, $query, $error)
 	{
 		if (empty($field))
