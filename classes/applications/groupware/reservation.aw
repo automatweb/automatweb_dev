@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.79 2007/07/02 08:48:45 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.80 2007/07/02 11:03:24 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -102,10 +102,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property special_discount type=textbox size=5 table=aw_room_reservations field=aw_special_discount
 	@caption Spetsiaal allahindlus
 
-	@property special_sum type=textbox size=5
+	@property special_sum type=textbox size=5 table=aw_room_reservations field=aw_special_sum
 	@caption Spetsiaal hind
 	
-	@property products_discount type=textbox size=5
+	@property products_discount type=hidden size=5 table=aw_room_reservations field=aw_products_discount no_caption=1
 	@caption Toodete allahindlus
 	
 	property code type=hidden size=5 table=planner field=code
@@ -245,6 +245,19 @@ class reservation extends class_base
 					$prop["onclick"] = "document.changeform.reason.value=prompt(\"Sisestage t&uuml;histuse p&otilde;hjus\");if (document.changeform.reason.value == \"\") {document.changeform.verified.checked=true; } else {submit_changeform(\"unverify\");}";
 				}
 				break;
+			case "special_sum":
+				$curr = $arr["obj_inst"]->prop("resource.currency");
+				if(!(is_array($curr) && sizeof($curr) > 1))
+				{
+					$prop["value"] = $this->get_total_price(array(
+						"reservation" => $arr["obj_inst"]->id(),
+					));
+				}
+				else
+				{
+					$prop["value"] = null;
+				}
+				break;
 				
 			case "sum":
 				$prop["value"] = $this->_format_sum($arr["obj_inst"]);
@@ -301,6 +314,7 @@ class reservation extends class_base
 //			case "sum":
 //				break;
 
+
 			case "name":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
@@ -315,6 +329,11 @@ class reservation extends class_base
 				);
 				$prop["type"] = "text";
 				break;
+
+// 			case "products_discount":
+// 				if(aw_global_get("uid") == "struktuur")arr($prop);
+// 				break;
+
 
 			case "customer":
 				if ($arr["request"]["set_cust"])
@@ -402,6 +421,13 @@ class reservation extends class_base
 					$prop["error"] = t("Broneeringu l&ouml;pp peab olema hiljem kui algus");
 					return PROP_FATAL_ERROR;
 				}
+				break;
+				
+			case "special_sum":
+				$this->set_total_price(array(
+					"reservation" => $arr["obj_inst"]->id(),
+					"sum" => $prop["value"],
+				));
 				break;
 		}
 		return $retval;
@@ -853,7 +879,12 @@ class reservation extends class_base
 				"products" => $arr["change_discount"],
 			));
 			$o->set_meta("amount", $arr["amount"]);
-			$o->set_meta("prod_discount", $arr["discount"]);
+			$this->set_products_discount(array(
+				"reservation" => $o->id(),
+				"discount" => $arr["discount"],
+			));
+			
+//			$o->set_meta("prod_discount", $arr["discount"]);
 			$o->save();
 			return true;
 		}
@@ -1036,13 +1067,15 @@ class reservation extends class_base
 			)),
 		));
 
+		$set_doscount = $this->get_products_discount($arr["obj_inst"]->id());
+
 		if($total_price_set) $sum = $total_price_set;
-		$disc = $sum * ($arr["obj_inst"]->meta("prod_discount") / 100.0);
+		$disc = $sum * ($set_doscount / 100.0);
 		$t->define_data(array(
 			"name" => t("Allahindlus (%)"),
 			"amount" => html::textbox(array(
 				"name" => "discount",
-				"value" => $arr["obj_inst"]->meta("prod_discount"),
+				"value" => $set_doscount,
 				"size" => 4,
 				"onChange" => "els=document.getElementsByTagName('span');tots = 0;for(i=0; i < els.length; i++) { el=els[i]; if (el.id.indexOf('pr') == 0) { tots += parseInt(el.innerHTML);}} te=document.getElementById('total');te.innerHTML=tots;disc=parseInt(document.changeform.discount.value);disc_el=document.getElementById('disc_val');if(disc>0){disc_el.innerHTML=(tots*(disc/100));} sum_val = document.getElementById('sum_val');if (disc > 0) {sum_val.innerHTML=(tots-(tots*(disc/100)));} else { sum_val.innerHTML=tots; }"
 			)),
@@ -1753,6 +1786,8 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 				aw_people int,
 				aw_sum text
 				aw_special_sum double,
+				aw_special_discount double,
+				aw_products_discount double,
 				resource_price varchar(13),
 				resource_discount varchar(13),
 			)");
@@ -1809,6 +1844,8 @@ flush();
 					));
 					break;
 				case "aw_special_sum":
+				case "aw_special_discount":
+				case "aw_products_discount":
 					$this->db_add_col($t, array(
 						"name" => $f,
 						"type" => "double"
@@ -2607,7 +2644,7 @@ flush();
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
 	**/
-	function get_products_discount($arr)
+	function get_products_discount($reservation)
 	{
 		extract($arr);
 		if(is_oid($reservation) && $this->can("view" , $reservation))
@@ -2713,7 +2750,7 @@ flush();
 		{
 			return 0;
 		}
-		$sum = $reservation->prop("special_sum");
+		$sum = $reservation->meta("special_sum");
 		if(is_array($sum))
 		{
 			if($curr)
@@ -2770,17 +2807,17 @@ flush();
 		//kui määratakse kindla valuutaga summa, kui mitte, siis võib arvestada default valuutana
 		if(!$curr)
 		{
-			$reservation->set_prop("special_sum" , $sum);
+			$reservation->set_meta("special_sum" , $sum);
 		}
 		else
 		{
-			$sum_array = $reservation->prop("special_sum");
+			$sum_array = $reservation->meta("special_sum");
 			if(!is_array($sum_array))
 			{
 				$sum_array = array($this->get_default_currency($reservation) => $sum_array);
 			}
 			$sum_array[$curr] = $sum;
-			$reservation->set_prop("special_sum" , $sum_array);
+			$reservation->set_meta("special_sum" , $sum_array);
 		}
 		$reservation->save();
 		return 1;
