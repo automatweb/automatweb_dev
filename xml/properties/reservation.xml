@@ -60,7 +60,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_RESOURCE</reltype>
             <field>aw_resource</field>
-            <caption>Ressurss</caption>
+            <caption>Ruum</caption>
       </property>
       <property>
             <name>customer</name>
