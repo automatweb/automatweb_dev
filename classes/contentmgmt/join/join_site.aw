@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.56 2007/05/29 11:14:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.57 2007/07/03 14:40:35 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1421,6 +1421,12 @@ class join_site extends class_base
 			{
 				$join_done = true;
 				// add the user
+
+				obj_set_opt("no_cache", 1);
+				$c = get_instance("cache");
+				$c->full_flush();
+				aw_global_set("no_cache_flush",1);
+
 				$cu = get_instance(CL_USER);
 				$u_oid = $cu->add_user(array(
 					"uid" => $n_uid,
@@ -2536,8 +2542,23 @@ class join_site extends class_base
 				}
 			}
 		}
+
 		if ($clid == CL_USER)
 		{
+			if (!empty($submit_data["passwd_again"]))
+			{
+				$p = array(
+					"name" => "passwd_again",
+					"value" => $submit_data["passwd_again"],
+				);
+				$pr = array(
+					"request" => $submit_data,
+					"prop" => $p,
+					"obj_inst" => $data_o
+				);
+				$i = get_instance(CL_USER);
+				$i->set_property($pr);
+			}
 			aw_disable_acl();
 			$data_o->save();
 			aw_restore_acl();
