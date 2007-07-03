@@ -79,6 +79,27 @@
             <caption>Arvestab laoseisu</caption>
       </property>
       <property>
+            <name>procurement_templates</name>
+            <table>objects</table>
+            <group>settings</group>
+            <multiple>1</multiple>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_PROCUREMENT_TEMPLATE</reltype>
+            <caption>Hangete templeidid</caption>
+      </property>
+      <property>
+            <name>procurement_files_menu</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_PROCUREMENT_FILES_MENU</reltype>
+            <caption>Hangete failide men&amp;amp;uuml;&amp;amp;uuml;</caption>
+      </property>
+      <property>
             <name>p_tb</name>
             <table>objects</table>
             <group>p</group>
@@ -732,6 +753,16 @@
                   <clid>CL_MENU</clid>
                   <caption>Hankekeskkonna kataloog</caption>
             </PROCUREMENT_CENTER_FOLDERS>
+            <PROCUREMENT_TEMPLATE>
+                  <value>4</value>
+                  <clid>CL_MESSAGE_TEMPLATE</clid>
+                  <caption>Hanke templeit</caption>
+            </PROCUREMENT_TEMPLATE>
+            <PROCUREMENT_FILES_MENU>
+                  <value>5</value>
+                  <clid>CL_MENU</clid>
+                  <caption></caption>
+            </PROCUREMENT_FILES_MENU>
       </reltypes>
       <layout>
             <settings_l>

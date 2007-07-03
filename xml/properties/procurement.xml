@@ -55,6 +55,41 @@
             <caption>Hanke kood</caption>
       </property>
       <property>
+            <name>contact_person1</name>
+            <table>aw_procurements</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_person1</field>
+            <caption>Kontaktisik1</caption>
+      </property>
+      <property>
+            <name>contact_person2</name>
+            <table>aw_procurements</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_person2</field>
+            <caption>Kontaktisik2</caption>
+      </property>
+      <property>
+            <name>contact_person3</name>
+            <table>aw_procurements</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_person3</field>
+            <caption>Kontaktisik3</caption>
+      </property>
+      <property>
+            <name>procurement_info</name>
+            <table>aw_procurements</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>aw_info</field>
+            <caption>Vabatekst hanke kohta</caption>
+      </property>
+      <property>
             <name>d_tb</name>
             <table>objects</table>
             <group>d</group>
@@ -218,6 +253,43 @@
             <field>crit_t</field>
             <caption>Kriteeriumid</caption>
       </property>
+      <property>
+            <name>template</name>
+            <table>objects</table>
+            <group>print</group>
+            <type>select</type>
+            <store>no</store>
+            <field>template</field>
+            <caption>Templeit</caption>
+      </property>
+      <property>
+            <name>print_offerer</name>
+            <table>objects</table>
+            <group>print</group>
+            <type>select</type>
+            <store>no</store>
+            <field>print_offerer</field>
+            <caption>Pakkuja </caption>
+      </property>
+      <property>
+            <name>print_contact_person</name>
+            <table>objects</table>
+            <group>print</group>
+            <type>select</type>
+            <store>no</store>
+            <field>print_contact_person</field>
+            <caption>Pakkuja kontaktisik </caption>
+      </property>
+      <property>
+            <name>print_submit</name>
+            <table>objects</table>
+            <group>print</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>print_submit</field>
+            <caption>Print</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROCUREMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -257,6 +329,9 @@
                   <caption>Tehtud pakkumised</caption>
                   <submit>no</submit>
             </o>
+            <print>
+                  <caption>Print</caption>
+            </print>
       </groupinfo>
       <tableinfo>
             <aw_procurements>
@@ -296,6 +371,16 @@
                   <clid>CL_PROCUREMENT_CRITERIA</clid>
                   <caption>Kriteerium</caption>
             </CRITERIA>
+            <CONTACT_PERSON>
+                  <value>7</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kontaktisik</caption>
+            </CONTACT_PERSON>
+            <FILES_MENU>
+                  <value>8</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kontaktisik</caption>
+            </FILES_MENU>
       </reltypes>
       <layout>
             <d_l>

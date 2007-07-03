@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.37 2007/06/21 12:41:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.38 2007/07/03 14:59:08 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -36,9 +36,15 @@
 		
 	@property search_date_add_unit type=select no_caption=1 parent=settings_l field=meta method=serialize
 
-
 	@property no_warehouse type=checkbox no_caption=1 field=meta method=serialize
 	@caption Arvestab laoseisu
+
+	@property procurement_templates multiple=1 type=relpicker field=meta method=serialize reltype=RELTYPE_PROCUREMENT_TEMPLATE
+	@caption Hangete templeidid
+
+	@property procurement_files_menu type=relpicker field=meta method=serialize reltype=RELTYPE_PROCUREMENT_FILES_MENU
+	@caption Hangete failide men&uuml;&uuml;
+
 
 @default group=p
 
@@ -210,6 +216,12 @@ default group=offerers_tree
 
 @reltype PROCUREMENT_CENTER_FOLDERS value=3 clid=CL_MENU
 @caption Hankekeskkonna kataloog
+
+@reltype PROCUREMENT_TEMPLATE value=4 clid=CL_MESSAGE_TEMPLATE
+@caption Hanke templeit
+
+@reltype PROCUREMENT_FILES_MENU value=5 clid=CL_MENU
+@caption 
 
 */
 
@@ -515,6 +527,13 @@ class procurement_center extends class_base
 			'action' => 'delete_procurements',
 			'confirm' => t("Kas oled kindel et soovid valitud hanked kustudada?")
 		));
+		
+		$tb->add_button(array(
+			'name' => 'add_procurements_to_session',
+			'img' => 'restore.gif',
+			'tooltip' => t('Lisa valitud hanked prinditavate hangete hulka'),
+			'action' => 'add_procurements_to_session',
+		));
 	}
 
 	/**
@@ -523,6 +542,19 @@ class procurement_center extends class_base
 	function delete_procurements($arr)
 	{
 		object_list::iterate_list($arr["sel"], "delete");
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=add_procurements_to_session
+	**/
+	function add_procurements_to_session($arr)
+	{
+		foreach($arr["sel"] as $id)
+		{
+			$_SESSION["procurement_center"]["print_procurements"][$id] = $id;
+		}
+		
 		return $arr["post_ru"];
 	}
 
@@ -2584,6 +2616,32 @@ class procurement_center extends class_base
 			"img" => "mail_send.gif",
 			'action' => 'send_mails',
 		));
+		
+		$tb->add_menu_button(array(
+			'name'=>'print',
+			'tooltip'=> t('Print'),
+			"img" => "print.gif",
+		));
+	
+		foreach($_SESSION["procurement_center"]["print_procurements"] as $id)
+		{
+			$o = obj($id);
+			$tb->add_menu_item(array(
+				'parent'=>'print',
+				'text' => $o->name(),
+				'link' => "javascript:document.changeform.id.value='".$o->id()."';
+					document.changeform.class.value='procurement';
+					document.changeform.group.value='print';
+					document.changeform.action.value='print_procurements';
+					document.changeform.submit();",
+			//	'action' => 'print_procurements',
+			//	'link' => "#",
+				//html::get_change_url($o->id(), array(
+			//		"return_url" => get_ru(),
+			//		"group" => "print",
+			//	)),
+			));
+		}
 	}
 	
 	function _do_cust_cat_tb_submenus(&$tb, $link, $p, $p_str, $oncl = null)

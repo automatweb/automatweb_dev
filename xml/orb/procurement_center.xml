@@ -8,6 +8,13 @@
 			</function>
 		</action>
 
+		<action name="add_procurements_to_session">
+			<function name="add_procurements_to_session">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_tree_stuff" all_args="1">
 			<function name="get_tree_stuff">
 				<arguments>

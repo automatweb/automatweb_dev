@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.18 2007/06/21 12:41:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.19 2007/07/03 14:59:08 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -29,6 +29,18 @@
 
 	@property procurement_nr type=textbox table=aw_procurements field=aw_nr size=20
 	@caption Hanke kood
+	
+	@property contact_person1 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_procurements field=aw_person1
+	@caption Kontaktisik1
+
+	@property contact_person2 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_procurements field=aw_person2
+	@caption Kontaktisik2
+
+	@property contact_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_procurements field=aw_person3
+	@caption Kontaktisik3
+	
+	@property procurement_info type=textarea table=aw_procurements field=aw_info
+	@caption Vabatekst hanke kohta
 
 @default group=d
 
@@ -99,6 +111,21 @@
 
 @groupinfo o caption="Tehtud pakkumised" submit=no
 
+@groupinfo print caption="Print"
+@default group=print
+
+@property template type=select store=no
+@caption Templeit
+
+@property print_offerer type=select store=no
+@caption Pakkuja 
+
+@property print_contact_person type=select store=no
+@caption Pakkuja kontaktisik 
+
+@property print_submit type=submit store=no no_caption=1
+@caption Print
+
 @reltype OFFERER value=1 clid=CL_CRM_COMPANY
 @caption Pakkuja
 
@@ -117,6 +144,11 @@
 @reltype CRITERIA value=6 clid=CL_PROCUREMENT_CRITERIA
 @caption Kriteerium
 
+@reltype CONTACT_PERSON value=7 clid=CL_CRM_PERSON
+@caption Kontaktisik
+
+@reltype FILES_MENU value=8 clid=CL_MENU
+@caption Kontaktisik
 */
 
 
@@ -140,12 +172,33 @@ class procurement extends class_base
 		);
 	}
 
+	/**
+		@attrib name=print_procurements
+	**/
+	function print_procurements($arr)
+	{
+		return html::get_change_url($arr["id"], array(
+			"return_url" => $arr["post_ru"],
+			"group" => "print",
+			"offerers" => $arr["sel"],
+		));
+		return $arr["post_ru"];
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "name":
+				$menu = $this->get_files_menu(array(
+					"orderer" => $arr["request"]["orderer"],
+					"name" => $prop["value"],
+					"o" => $arr["obj_inst"],
+				));
+				//@reltype FILES_MENU value=8 clid=CL_MENU
+				break;
 			case "proj":
 				if (!$this->can("view", $arr["obj_inst"]->prop("winning_offer")))
 				{
@@ -161,7 +214,61 @@ class procurement extends class_base
 			case "crit_tb":
 				$this->_crit_tb($arr);
 				break;
-
+				
+			case "print_offerer":
+				$offlist = new object_list(array(
+					"oid" => $arr["obj_inst"]->prop("offerers"),
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$offlist->add($arr["request"]["offerers"]);
+				$prop["options"] = $offlist->names();
+				if(is_array($arr["request"]["offerers"]))
+				{
+					$prop["value"] = reset($arr["request"]["offerers"]);
+				}
+				break;
+				
+			case "print_contact_person":
+				if(is_array($arr["request"]["offerers"]) && sizeof($arr["request"]["offerers"]))
+				{
+					$offerer = reset($arr["request"]["offerers"]);
+					$offerer_obj = obj($offerer);
+					foreach($offerer_obj->connections_from(array("type" => "RELTYPE_CONTACT_PERSON")) as $c)
+					{
+						$prop["options"][$c->prop("to")] = $c->prop("to.name");
+					}
+				}
+				break;	
+				
+			case "template":
+				if($this->can("view" , $arr["obj_inst"]->prop("orderer")))
+				{
+					$center = $this->model->get_proc_center_for_co(obj($arr["obj_inst"]->prop("orderer")));
+					if(is_object($center))
+					{
+						foreach($center->prop("procurement_templates") as $t)
+						{
+							$t_o = obj($t);
+							$prop["options"][$t] = $t_o-> name();
+						}
+					}
+				}
+				break;
+			case "contact_person2":
+				if(!$arr["obj_inst"]->prop("contact_person1"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			
+			case "contact_person3":
+				if(!$arr["obj_inst"]->prop("contact_person2"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+				
 			case "team":
 				$this->_team($arr);
 				break;
@@ -392,11 +499,47 @@ class procurement extends class_base
 				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("id" => $arr["obj_inst"]->id(), "return_url" => $arr["request"]["return_url"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
 				</script>";
 				die($popup);
-				break;
+			break;
 		}
 		return $retval;
 	}
 
+	function get_files_menu($arr)
+	{
+		extract($arr);
+		if(is_oid($o->id()))
+		{
+			$menu = $o->get_first_obj_by_reltype("RELTYPE_FILES_MENU");
+			if(!$orderer) $orderer = $o->prop("orderer");
+			if(!$name) $orderer = $o->name();
+		}
+		else
+		{
+			return null;
+		}
+		
+		if(is_oid($orderer))
+		{
+			$center = $this->model->get_proc_center_for_co(obj($orderer));
+			if($center->prop("procurement_files_menu"))
+			{
+				$parent = $center->prop("procurement_files_menu");
+			}
+		}
+
+		if(!is_object($menu))
+		{
+			if(!$parent) return null;
+		
+			$menu = new object();
+			$menu->set_class_id(CL_MENU);
+			$menu->set_name($name." kirjad");
+			$menu->set_parent($parent);
+			$menu->save();
+			$o->connect(array("to" => $menu->id() , "reltype" => 8));
+		}
+		return $menu;
+	}
 
 	function _get_sub_folder_objects($obj)
 	{
@@ -690,6 +833,9 @@ class procurement extends class_base
 
 		switch($f)
 		{
+			case "aw_info":
+				$this->db_add_col($t, array("name" => $f, "type" => "text"));
+				return true;
 			case "aw_nr":
 				$this->db_add_col($t, array("name" => $f, "type" => "varchar(20)"));
 				return true;
@@ -702,6 +848,9 @@ class procurement extends class_base
 			case "aw_compl_date_req":
 			case "aw_shipment_date_req":
 			case "aw_proj":
+			case "aw_person3":
+			case "aw_person2":
+			case "aw_person1":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
 		}
