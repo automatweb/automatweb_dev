@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.237 2007/06/05 10:13:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.238 2007/07/04 10:05:46 kristo Exp $
 
 /*
 
@@ -2585,7 +2585,7 @@ class site_show extends class_base
 			}
 			else
 			{
-				if (!$this->brother_level_from && !$o->is_brother() && ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
+				if (((!$this->brother_level_from && !$o->is_brother()) || aw_ini_get("menuedit.show_real_location"))&& ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
 				{
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{
@@ -2631,35 +2631,8 @@ class site_show extends class_base
 				}
 				else
 				{
-					if ($o->is_brother() || $this->brother_level_from)
+					if (($o->is_brother() || $this->brother_level_from) && !aw_ini_get("menuedit.show_real_location"))
 					{
-						/*if ($_GET["path"] == "")
-						{
-							$link .= "?section=".$o->id()."&path=".join(",",$this->path_ids).",".$o->id();
-						}
-						else
-						{
-							$new_path = array();
-							$found = false;
-							foreach($this->path_ids as $_path_id)
-							{
-								$new_path[] = $_path_id;
-								$pio = obj($_path_id);
-								if ($pio->brother_of() == $o->parent())
-								{
-									$found = true;
-									break;
-								}
-							}
-							if (!$found)
-							{
-								$link .= "?section=".$o->id()."&path=".join(",",$this->path_ids).",".$o->id();
-							}
-							else
-							{
-								$link .= "?section=".$o->id()."&path=".join(",",$new_path).",".$o->id();
-							}
-						}*/
 						$link .= "?section=".$o->id()."&path=".join(",", $this->_cur_menu_path);
 					}
 					else
