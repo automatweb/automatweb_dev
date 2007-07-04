@@ -442,6 +442,10 @@ class obj_xml_gen
 			}
 			else
 			{
+				if ($this->cur_obj[$this->index1][$this->index2] != "")
+				{
+					$this->cur_obj[$this->index1][$this->index2] .= "\n";
+				}
 				$this->cur_obj[$this->index1][$this->index2] .= $str;
 			}
 		}
