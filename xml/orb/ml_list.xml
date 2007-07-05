@@ -35,11 +35,11 @@
 			</function>
 		</action>
 
-		<action name="unsubscribe">
+		<action name="unsubscribe" all_args="1">
 			<function name="unsubscribe">
 				<arguments>
 					<required name="usr" type="int" />
-					<required name="list_source" />
+					<optional name="list_source" />
 					<required name="list" type="int" />
 				</arguments>
 			</function>

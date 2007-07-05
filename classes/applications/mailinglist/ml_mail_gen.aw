@@ -158,13 +158,25 @@ class ml_mail_gen extends run_in_background
 			$uo = $user->from();
 			$data["name"] = $uo->prop("real_name");
 		}
+		$us_array = array(
+			"usr" => $arr["member_id"] ,
+			"list" => $arr["list_id"]
+		);
+		
+		//teeb lahkumise lingi ümber selliseks, et ei oleks massiivi
+		if(is_array($arr["msg"]["meta"]["list_source"]))
+		{
+			$n = 0;
+			foreach($arr["msg"]["meta"]["list_source"] as $id)
+			{
+				$us_array["list_source".$n] = $id;
+				$n++;
+			}
+		}
+		
 		$unsubscribe_link = $this->mk_my_orb(
 			"unsubscribe",
-			array(
-				"list_source" => $arr["msg"]["meta"]["list_source"],
-				"usr" => $arr["member_id"] ,
-				"list" => $arr["list_id"]
-			),
+			$us_array,
 			"ml_list",
 			false,
 			true
@@ -226,7 +238,7 @@ class ml_mail_gen extends run_in_background
 			foreach($matches[1] as $v)
 			{
 				$this->used_variables[$v] = 1;
-				$text = preg_replace("/#$v#/", $data[$v] ? $data[$v] : "", $text);
+				if($data[$v]) $text = preg_replace("/#$v#/", $data[$v] ? $data[$v] : "", $text);
 				//decho("matced $v<br />");
 			};
 		};

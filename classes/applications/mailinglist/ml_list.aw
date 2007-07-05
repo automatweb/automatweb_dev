@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.102 2007/05/16 11:51:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.103 2007/07/05 15:39:51 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1388,9 +1388,9 @@ class ml_list extends class_base
 	// !Returns redir_unsubscribe_obj if defined ... section, if not
 
 	/** unsubscribe
-		@attrib name=unsubscribe no_login=1
+		@attrib name=unsubscribe no_login=1 all_args=1
 		@param usr required type=int
-		@param list_source required
+		@param list_source optional
 		@param list required type=int
 	**/
 	function unsubscribe($arr)
@@ -1401,7 +1401,22 @@ class ml_list extends class_base
 		{
 			$member = obj($arr["usr"]);
 			$email = $member->prop("mail");
-		}		
+		}
+		if(!is_array($arr["list_source"]))
+		{
+			$list_source = array();
+			foreach($arr as $key => $val)
+			{
+				if(substr_count($val["mail"], $key))
+				{
+					$list_source[$key] = $val;
+				}
+			}
+		}
+		else
+		{
+			$list_source = $arr["list_source"];
+		}
 		$retval = $ml_member->unsubscribe_member_from_list(array(
 			"email" => $email,
 			"list_id" => $arr["list"],
