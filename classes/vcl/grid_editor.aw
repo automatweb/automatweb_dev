@@ -1430,6 +1430,8 @@ class grid_editor extends class_base
 		$d->create_relative_links($table);
 
 		$al = get_instance("alias_parser");
+		unset($tpls["image_inplace"]);
+		unset($tpls["image_inplace_linked"]);
 		$al->parse_oo_aliases($oid,&$table,array("templates" => $tpls));
 
 		return $table;
