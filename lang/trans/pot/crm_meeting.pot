@@ -51,15 +51,15 @@ msgid "Omaduse Lisatingimused (add_clauses) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_start1
-msgid "Omaduse Algus (start1) caption"
+msgid "Omaduse Algab  (start1) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_start1_comment
-msgid "Omaduse Algus (start1) kommentaar"
+msgid "Omaduse Algab  (start1) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_start1_help
-msgid "Omaduse Algus (start1) help"
+msgid "Omaduse Algab  (start1) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_end
@@ -207,15 +207,15 @@ msgid "Omaduse  (files_table) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_summary
-msgid "Omaduse Kokkuvõte (summary) caption"
+msgid "Omaduse Kokkuv&otilde;te (summary) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_summary_comment
-msgid "Omaduse Kokkuvõte (summary) kommentaar"
+msgid "Omaduse Kokkuv&otilde;te (summary) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_summary_help
-msgid "Omaduse Kokkuvõte (summary) help"
+msgid "Omaduse Kokkuv&otilde;te (summary) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_is_done
@@ -243,15 +243,15 @@ msgid "Omaduse Isiklik (is_personal) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_whole_day
-msgid "Omaduse Kestab terve päeva (whole_day) caption"
+msgid "Omaduse Kestab terve p&auml;eva (whole_day) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_whole_day_comment
-msgid "Omaduse Kestab terve päeva (whole_day) kommentaar"
+msgid "Omaduse Kestab terve p&auml;eva (whole_day) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_whole_day_help
-msgid "Omaduse Kestab terve päeva (whole_day) help"
+msgid "Omaduse Kestab terve p&auml;eva (whole_day) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udefch1
@@ -264,6 +264,18 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udefch1_help
 msgid "Omaduse User-defined checkbox 1 (udefch1) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_udeflb1
+msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_udeflb1_comment
+msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_udeflb1_help
+msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb1
@@ -786,6 +798,10 @@ msgstr ""
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_UDEFLB1
+msgid "Seose Kasutajadefineritud muutuja 1 (RELTYPE_UDEFLB1) tekst"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:rel_RELTYPE_PREDICATE
 msgid "Seose Eeldustegevus (RELTYPE_PREDICATE) tekst"
 msgstr ""
@@ -814,67 +830,71 @@ msgstr ""
 msgid "Kujundusosa Kokkuvõte (center_bit_bottom) pealkiri"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:324
+#: classes/crm/crm_meeting.aw:339
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:325
+#: classes/crm/crm_meeting.aw:340 classes/crm/crm_meeting.aw:1452
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:326
+#: classes/crm/crm_meeting.aw:341
 msgid "Terve p&auml;ev"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:327
+#: classes/crm/crm_meeting.aw:342
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:328
+#: classes/crm/crm_meeting.aw:343 classes/crm/crm_meeting.aw:1459
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:550
+#: classes/crm/crm_meeting.aw:565
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:561
+#: classes/crm/crm_meeting.aw:576
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:563
+#: classes/crm/crm_meeting.aw:578
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:571
+#: classes/crm/crm_meeting.aw:586
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:580
+#: classes/crm/crm_meeting.aw:595
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1132
+#: classes/crm/crm_meeting.aw:1147
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1137
+#: classes/crm/crm_meeting.aw:1152
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1142
+#: classes/crm/crm_meeting.aw:1157
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1147
+#: classes/crm/crm_meeting.aw:1162
 msgid "Tunnihind"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1152
+#: classes/crm/crm_meeting.aw:1167
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1186
+#: classes/crm/crm_meeting.aw:1201
 msgid "Loo uus arve"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1324
+msgid "Nimi, osaleja ja projekt peavad olema täidetud!"
 msgstr ""
 

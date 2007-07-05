@@ -10,59 +10,59 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/contentmgmt/site_show.aw:1982
+#: classes/contentmgmt/site_show.aw:1989
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2063
+#: classes/contentmgmt/site_show.aw:2070
 msgid "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2266
+#: classes/contentmgmt/site_show.aw:2273
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2796
+#: classes/contentmgmt/site_show.aw:2803
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress:"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2832
+#: classes/contentmgmt/site_show.aw:2839
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2837
+#: classes/contentmgmt/site_show.aw:2844
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3028
+#: classes/contentmgmt/site_show.aw:3035
 msgid "Lisa uus k&otilde;rvale"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3038
+#: classes/contentmgmt/site_show.aw:3045
 msgid "Lisa uus alamkaust"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3048
+#: classes/contentmgmt/site_show.aw:3055
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3058
+#: classes/contentmgmt/site_show.aw:3065
 msgid "Muuda &otilde;igusi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3067
+#: classes/contentmgmt/site_show.aw:3074
 msgid "Peida"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3071
+#: classes/contentmgmt/site_show.aw:3078
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3079 classes/contentmgmt/site_show.aw:3111
+#: classes/contentmgmt/site_show.aw:3086 classes/contentmgmt/site_show.aw:3118
 msgid "Kleebi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3099
+#: classes/contentmgmt/site_show.aw:3106
 msgid "Lisa uus"
 msgstr ""
 

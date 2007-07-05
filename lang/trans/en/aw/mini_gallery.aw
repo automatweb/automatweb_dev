@@ -8,7 +8,6 @@ $GLOBALS["TRANS"]["Omaduse Piltide j&auml;rjestamine (sorter) caption"] = "Order
 $GLOBALS["TRANS"]["Omaduse Uploadi ZIP fail (zip_file) caption"] = "Upload ZIP file";
 $GLOBALS["TRANS"]["Omaduse V&auml;rskenda (refresh) caption"] = "Refresh";
 $GLOBALS["TRANS"]["Grupi Import (import) pealkiri"] = "Import";
-$GLOBALS["TRANS"]["Grupi Halda pilte (manage) pealkiri"] = "Manage images";
 $GLOBALS["TRANS"]["Seose Piltide kataloog (RELTYPE_IMG_FOLDER) tekst"] = "image folder";
 $GLOBALS["TRANS"]["Seose Stiil (RELTYPE_STYLE) tekst"] = "style";
 $GLOBALS["TRANS"]["Nimi"] = "Name";

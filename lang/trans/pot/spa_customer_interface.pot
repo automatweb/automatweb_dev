@@ -86,11 +86,11 @@ msgstr ""
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:952
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1003
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:952
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1003
 msgid "Naine"
 msgstr ""
 

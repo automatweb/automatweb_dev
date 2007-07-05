@@ -555,14 +555,14 @@ msgid "Seose Garantiip&otilde;hikiri (RELTYPE_G_STATUES) tekst"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_PAYMENT_ORDER
-msgid "Seose Volikiri (RELTYPE_PAYMENT_ORDER) tekst"
+msgid "Seose Maksekorraldus (RELTYPE_PAYMENT_ORDER) tekst"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_TRADEMARK_STATUS
 msgid "Seose Staatus (RELTYPE_TRADEMARK_STATUS) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:236 classes/applications/clients/patent_office/patent.aw:1624
+#: classes/applications/clients/patent_office/patent.aw:236 classes/applications/clients/patent_office/patent.aw:1621
 msgid "S&otilde;nam&auml;rk"
 msgstr ""
 
@@ -578,11 +578,11 @@ msgstr ""
 msgid "Ruumiline m&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:237 classes/applications/clients/patent_office/patent.aw:1679
+#: classes/applications/clients/patent_office/patent.aw:237 classes/applications/clients/patent_office/patent.aw:1675
 msgid "Kollektiivkaubam&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:237 classes/applications/clients/patent_office/patent.aw:1681
+#: classes/applications/clients/patent_office/patent.aw:237 classes/applications/clients/patent_office/patent.aw:1677
 msgid "Garantiim&auml;rk"
 msgstr ""
 
@@ -590,7 +590,7 @@ msgstr ""
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:264 classes/applications/clients/patent_office/patent.aw:283 classes/applications/clients/patent_office/patent.aw:302 classes/applications/clients/patent_office/patent.aw:1823
+#: classes/applications/clients/patent_office/patent.aw:264 classes/applications/clients/patent_office/patent.aw:283 classes/applications/clients/patent_office/patent.aw:302 classes/applications/clients/patent_office/patent.aw:1819
 msgid "Allkirjastamine"
 msgstr ""
 
@@ -622,15 +622,15 @@ msgstr ""
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:420 classes/applications/clients/patent_office/patent.aw:1950 classes/applications/clients/patent_office/patent.aw:2061
+#: classes/applications/clients/patent_office/patent.aw:420 classes/applications/clients/patent_office/patent.aw:1946 classes/applications/clients/patent_office/patent.aw:2057
 msgid "Klass"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:424 classes/applications/clients/patent_office/patent.aw:1954
+#: classes/applications/clients/patent_office/patent.aw:424 classes/applications/clients/patent_office/patent.aw:1950
 msgid "Klassi nimi"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:428 classes/applications/clients/patent_office/patent.aw:1958 classes/applications/clients/patent_office/patent.aw:2065
+#: classes/applications/clients/patent_office/patent.aw:428 classes/applications/clients/patent_office/patent.aw:1954 classes/applications/clients/patent_office/patent.aw:2061
 msgid "Kaup/teenus"
 msgstr ""
 
@@ -642,175 +642,175 @@ msgstr ""
 msgid "Saadan taotluse"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:734 classes/applications/clients/patent_office/patent.aw:1280 classes/applications/clients/patent_office/patent.aw:2258
+#: classes/applications/clients/patent_office/patent.aw:734 classes/applications/clients/patent_office/patent.aw:1277 classes/applications/clients/patent_office/patent.aw:2254
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:747 classes/applications/clients/patent_office/patent.aw:1272
+#: classes/applications/clients/patent_office/patent.aw:747 classes/applications/clients/patent_office/patent.aw:1269
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:748 classes/applications/clients/patent_office/patent.aw:1273
+#: classes/applications/clients/patent_office/patent.aw:748 classes/applications/clients/patent_office/patent.aw:1270
 msgid "Reg.kood"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1281
+#: classes/applications/clients/patent_office/patent.aw:1278
 msgid "Isikukood"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1456
+#: classes/applications/clients/patent_office/patent.aw:1453
 msgid "%s, %s  - %s"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1572
+#: classes/applications/clients/patent_office/patent.aw:1569
 msgid "Eesti"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1578
+#: classes/applications/clients/patent_office/patent.aw:1575
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; V&auml;lismaa"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1586
+#: classes/applications/clients/patent_office/patent.aw:1583
 msgid "F&uuml;&uuml;siline isik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1598
+#: classes/applications/clients/patent_office/patent.aw:1595
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Juriidiline isik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1634
+#: classes/applications/clients/patent_office/patent.aw:1631
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Kujutism&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1644
+#: classes/applications/clients/patent_office/patent.aw:1640
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Kombineeritud m&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1653
+#: classes/applications/clients/patent_office/patent.aw:1649
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Ruumiline m&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1664
+#: classes/applications/clients/patent_office/patent.aw:1660
 msgid "S&otilde;naline osa:"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1664
+#: classes/applications/clients/patent_office/patent.aw:1660
 msgid "Kaubam&auml;rk:"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1666
+#: classes/applications/clients/patent_office/patent.aw:1662
 msgid "(kui taotlete kollektiivkaubam&auml;rki)"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1673
+#: classes/applications/clients/patent_office/patent.aw:1669
 msgid "(kui taotlete garantiikaubam&auml;rki)"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1702 classes/applications/clients/patent_office/patent.aw:1767 classes/applications/clients/patent_office/patent.aw:2070
+#: classes/applications/clients/patent_office/patent.aw:1698 classes/applications/clients/patent_office/patent.aw:1763 classes/applications/clients/patent_office/patent.aw:2066
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1721
+#: classes/applications/clients/patent_office/patent.aw:1717
 msgid "Eemalda"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1761
+#: classes/applications/clients/patent_office/patent.aw:1757
 msgid "Sisene klassifikaatorisse"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:1818
+#: classes/applications/clients/patent_office/patent.aw:1814
 msgid "Allkirjastaja ametinimetus"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2013
+#: classes/applications/clients/patent_office/patent.aw:2009
 msgid "Oled kindel, et soovid valitud klassi kustutada?"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2015 classes/applications/clients/patent_office/patent.aw:2310
+#: classes/applications/clients/patent_office/patent.aw:2011 classes/applications/clients/patent_office/patent.aw:2306
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2262
+#: classes/applications/clients/patent_office/patent.aw:2258
 msgid "Isikukood/reg.kood"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2269
+#: classes/applications/clients/patent_office/patent.aw:2265
 msgid "&Uuml;hine esindaja"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2274
+#: classes/applications/clients/patent_office/patent.aw:2270
 msgid ""
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2302 classes/applications/clients/patent_office/patent.aw:2303 classes/applications/clients/patent_office/patent.aw:2311
+#: classes/applications/clients/patent_office/patent.aw:2298 classes/applications/clients/patent_office/patent.aw:2299 classes/applications/clients/patent_office/patent.aw:2307
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2448
+#: classes/applications/clients/patent_office/patent.aw:2444
 msgid "Kohustuslik v&auml;hemalt &uuml;he klassi lisamine"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2455
+#: classes/applications/clients/patent_office/patent.aw:2451
 msgid "S&otilde;nam&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2459 classes/applications/clients/patent_office/patent.aw:2467 classes/applications/clients/patent_office/patent.aw:2471
+#: classes/applications/clients/patent_office/patent.aw:2455 classes/applications/clients/patent_office/patent.aw:2463 classes/applications/clients/patent_office/patent.aw:2467
 msgid "Peab olema lisatud ka reproduktsioon"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2463
+#: classes/applications/clients/patent_office/patent.aw:2459
 msgid "Kombineeritud m&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2481
+#: classes/applications/clients/patent_office/patent.aw:2477
 msgid "Kodumaine v&otilde;i v&auml;lismaine peab olema valitud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2485
+#: classes/applications/clients/patent_office/patent.aw:2481
 msgid "F&uuml;&uuml;siline v&otilde;i juriidiline isik peab olema valitud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2489
+#: classes/applications/clients/patent_office/patent.aw:2485
 msgid "Isikukood/Registri kood on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2496
+#: classes/applications/clients/patent_office/patent.aw:2492
 msgid "Nimi on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2504
+#: classes/applications/clients/patent_office/patent.aw:2500
 msgid "Eesnimi on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2508
+#: classes/applications/clients/patent_office/patent.aw:2504
 msgid "Perekonnanimi on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2513
+#: classes/applications/clients/patent_office/patent.aw:2509
 msgid "Linn on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2517
+#: classes/applications/clients/patent_office/patent.aw:2513
 msgid "T&auml;nav on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2521
+#: classes/applications/clients/patent_office/patent.aw:2517
 msgid "Riik on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2525
+#: classes/applications/clients/patent_office/patent.aw:2521
 msgid "Postiindeks on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:2545
+#: classes/applications/clients/patent_office/patent.aw:2541
 msgid "Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:3109 classes/applications/clients/patent_office/patent.aw:3246
+#: classes/applications/clients/patent_office/patent.aw:3105 classes/applications/clients/patent_office/patent.aw:3242
 msgid "Vastu v&otilde;etud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:3109 classes/applications/clients/patent_office/patent.aw:3246
+#: classes/applications/clients/patent_office/patent.aw:3105 classes/applications/clients/patent_office/patent.aw:3242
 msgid "Saadetud"
 msgstr ""
 

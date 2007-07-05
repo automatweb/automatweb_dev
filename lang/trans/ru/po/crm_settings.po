@@ -193,6 +193,30 @@ msgstr ""
 msgid "Omaduse Toimetuse ridade kontroller (task_rows_controller) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_task_save_controller
+msgid "Omaduse Toimetuse salvestamise kontroller (task_save_controller) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_task_save_controller_comment
+msgid "Omaduse Toimetuse salvestamise kontroller (task_save_controller) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_task_save_controller_help
+msgid "Omaduse Toimetuse salvestamise kontroller (task_save_controller) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_org_link_menu
+msgid "Omaduse Organisatsioonide linkide kataloog (org_link_menu) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_org_link_menu_comment
+msgid "Omaduse Organisatsioonide linkide kataloog (org_link_menu) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_org_link_menu_help
+msgid "Omaduse Organisatsioonide linkide kataloog (org_link_menu) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:prop_tables_toolbar
 msgid "Omaduse  (tables_toolbar) caption"
 msgstr ""
@@ -373,74 +397,78 @@ msgstr ""
 msgid "Seose Kontroller (RELTYPE_CTR) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:194
+#: classes/applications/crm/crm_settings.aw:rel_RELTYPE_MENU
+msgid "Seose Kontroller (RELTYPE_MENU) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:202
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:195
+#: classes/applications/crm/crm_settings.aw:203
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:196
+#: classes/applications/crm/crm_settings.aw:204
 msgid "Arvel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:197
+#: classes/applications/crm/crm_settings.aw:205
 msgid "Arveta"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:210
+#: classes/applications/crm/crm_settings.aw:218
 msgid "Tabelvaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:211
+#: classes/applications/crm/crm_settings.aw:219
 msgid "Kalendervaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:231
+#: classes/applications/crm/crm_settings.aw:239
 msgid "Salvesta tabeli seaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:252
+#: classes/applications/crm/crm_settings.aw:260
 msgid "Taasta algseaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:253
+#: classes/applications/crm/crm_settings.aw:261
 msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:266
+#: classes/applications/crm/crm_settings.aw:274
 msgid "Minu t&ouml;&ouml;koht"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:273
+#: classes/applications/crm/crm_settings.aw:281
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:280
+#: classes/applications/crm/crm_settings.aw:288
 msgid "Eraisikust klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:287
+#: classes/applications/crm/crm_settings.aw:295
 msgid "T&ouml;&ouml;kaaslane"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:294
+#: classes/applications/crm/crm_settings.aw:302
 msgid "Kliendi t&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:344
+#: classes/applications/crm/crm_settings.aw:352
 msgid "Veeru nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:348
+#: classes/applications/crm/crm_settings.aw:356
 msgid "Järjekord"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:352
+#: classes/applications/crm/crm_settings.aw:360
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:356
+#: classes/applications/crm/crm_settings.aw:364
 msgid "Pealkiri"
 msgstr ""

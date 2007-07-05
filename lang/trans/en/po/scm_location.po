@@ -13,6 +13,30 @@ msgstr ""
 msgid "Klassi Toimumiskoht help"
 msgstr ""
 
+#: classes/applications/scm/scm_location.aw:prop_comment
+msgid "Omaduse Kirjeldus (comment) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_comment_comment
+msgid "Omaduse Kirjeldus (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_comment_help
+msgid "Omaduse Kirjeldus (comment) help"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_loc_path
+msgid "Omaduse Kohale saab (loc_path) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_loc_path_comment
+msgid "Omaduse Kohale saab (loc_path) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_loc_path_help
+msgid "Omaduse Kohale saab (loc_path) help"
+msgstr ""
+
 #: classes/applications/scm/scm_location.aw:prop_address
 msgid "Omaduse Aadress (address) caption"
 msgstr ""
@@ -25,16 +49,28 @@ msgstr ""
 msgid "Omaduse Aadress (address) help"
 msgstr ""
 
+#: classes/applications/scm/scm_location.aw:prop_map_url
+msgid "Omaduse Kaart (map_url) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_map_url_comment
+msgid "Omaduse Kaart (map_url) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_map_url_help
+msgid "Omaduse Kaart (map_url) help"
+msgstr ""
+
 #: classes/applications/scm/scm_location.aw:prop_map
-msgid "Omaduse Asukohakaart (map) caption"
+msgid "Omaduse Kaardi pilt (map) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_location.aw:prop_map_comment
-msgid "Omaduse Asukohakaart (map) kommentaar"
+msgid "Omaduse Kaardi pilt (map) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_location.aw:prop_map_help
-msgid "Omaduse Asukohakaart (map) help"
+msgid "Omaduse Kaardi pilt (map) help"
 msgstr ""
 
 #: classes/applications/scm/scm_location.aw:prop_photo
@@ -47,6 +83,18 @@ msgstr ""
 
 #: classes/applications/scm/scm_location.aw:prop_photo_help
 msgid "Omaduse Foto kohast (photo) help"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_make_copy
+msgid "Omaduse Tee koopia (make_copy) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_make_copy_comment
+msgid "Omaduse Tee koopia (make_copy) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_make_copy_help
+msgid "Omaduse Tee koopia (make_copy) help"
 msgstr ""
 
 #: classes/applications/scm/scm_location.aw:rel_RELTYPE_MAP

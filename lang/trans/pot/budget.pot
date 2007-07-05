@@ -38,7 +38,67 @@ msgstr ""
 msgid "Omaduse Kogusumma (total) help"
 msgstr ""
 
+#: classes/applications/budgeting/budget.aw:prop_m
+msgid "Omaduse  (m) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_m_comment
+msgid "Omaduse  (m) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_m_help
+msgid "Omaduse  (m) help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_desc
+msgid "Omaduse Hetkel projekti kasum (desc) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_desc_comment
+msgid "Omaduse Hetkel projekti kasum (desc) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_desc_help
+msgid "Omaduse Hetkel projekti kasum (desc) help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:group_m
+msgid "Grupi Raha (m) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:group_m_help
+msgid "Grupi Raha (m) help"
+msgstr ""
+
 #: classes/applications/budgeting/budget.aw:rel_RELTYPE_PROJECT
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:98
+msgid "Maksugrupp"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:103
+msgid "Maks"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:108
+msgid "Maksu protsent"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:113
+msgid "Muuda protsenti"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:118
+msgid "Maksu summa"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:123
+msgid "Edasi kandub"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:153
+msgid "<br>(Maksimaalne erinevus %s)"
 msgstr ""
 

@@ -13,6 +13,18 @@ msgstr ""
 msgid "Klassi Leping help"
 msgstr ""
 
+#: classes/crm/crm_deal.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
 #: classes/crm/crm_deal.aw:prop_project
 msgid "Omaduse Projekt (project) caption"
 msgstr ""
@@ -35,18 +47,6 @@ msgstr ""
 
 #: classes/crm/crm_deal.aw:prop_task_help
 msgid "Omaduse &Uuml;lesanne (task) help"
-msgstr ""
-
-#: classes/crm/crm_deal.aw:prop_customer
-msgid "Omaduse Klient (customer) caption"
-msgstr ""
-
-#: classes/crm/crm_deal.aw:prop_customer_comment
-msgid "Omaduse Klient (customer) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_deal.aw:prop_customer_help
-msgid "Omaduse Klient (customer) help"
 msgstr ""
 
 #: classes/crm/crm_deal.aw:prop_creator
@@ -107,6 +107,18 @@ msgstr ""
 
 #: classes/crm/crm_deal.aw:prop_sides_help
 msgid "Omaduse Osapooled (sides) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_files_tb
+msgid "Omaduse Failid (files_tb) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_files_tb_comment
+msgid "Omaduse Failid (files_tb) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_files_tb_help
+msgid "Omaduse Failid (files_tb) help"
 msgstr ""
 
 #: classes/crm/crm_deal.aw:prop_files
@@ -199,4 +211,40 @@ msgstr ""
 
 #: classes/crm/crm_deal.aw:rel_RELTYPE_ACTION
 msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:334
+msgid "Lisa fail"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:341
+msgid "Kustuta failid"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:342
+msgid "Oled kindel et soovid failid kustutada?"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:348
+msgid "Salvesta muudatused"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:413 classes/crm/crm_deal.aw:448
+msgid "Muuda"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:432
+msgid "Nimi"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:436
+msgid "Fail"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:440
+msgid "Muudetud"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:444
+msgid "Muutja"
 msgstr ""

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_bill.aw:class_1009_help
 msgid "Klassi Arve help"
 msgstr ""
@@ -462,107 +461,116 @@ msgstr ""
 msgid "Laekunud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:207 classes/applications/crm/crm_bill.aw:490 classes/applications/crm/crm_bill.aw:528
+#: classes/applications/crm/crm_bill.aw:209
+#: classes/applications/crm/crm_bill.aw:492
+#: classes/applications/crm/crm_bill.aw:540
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:317
+#: classes/applications/crm/crm_bill.aw:319
 msgid "Sellise numberiga arve on juba olemas!"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:324
+#: classes/applications/crm/crm_bill.aw:326
 msgid "Number ei ole seerias!"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:427
+#: classes/applications/crm/crm_bill.aw:429
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:432
+#: classes/applications/crm/crm_bill.aw:434
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:437
+#: classes/applications/crm/crm_bill.aw:439
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:442
+#: classes/applications/crm/crm_bill.aw:444
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:447 classes/applications/crm/crm_bill.aw:2205
+#: classes/applications/crm/crm_bill.aw:449
+#: classes/applications/crm/crm_bill.aw:2221
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:452
+#: classes/applications/crm/crm_bill.aw:454
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:457
+#: classes/applications/crm/crm_bill.aw:459
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:462
+#: classes/applications/crm/crm_bill.aw:464
 msgid "Artikkel"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:466
+#: classes/applications/crm/crm_bill.aw:468
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:471
+#: classes/applications/crm/crm_bill.aw:473
 msgid "+KM?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:476 classes/applications/crm/crm_bill.aw:597 classes/applications/crm/crm_bill.aw:698
+#: classes/applications/crm/crm_bill.aw:478
+#: classes/applications/crm/crm_bill.aw:609
+#: classes/applications/crm/crm_bill.aw:710
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:651
+#: classes/applications/crm/crm_bill.aw:527
+msgid "Kulud:"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:663
 msgid "Kokkuleppehind"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1375 classes/applications/crm/crm_bill.aw:1781
+#: classes/applications/crm/crm_bill.aw:1387
+#: classes/applications/crm/crm_bill.aw:1797
 msgid "Prinditav arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2121
+#: classes/applications/crm/crm_bill.aw:2137
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2128
+#: classes/applications/crm/crm_bill.aw:2144
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2136
+#: classes/applications/crm/crm_bill.aw:2152
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2143
+#: classes/applications/crm/crm_bill.aw:2159
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2150
+#: classes/applications/crm/crm_bill.aw:2166
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2155
+#: classes/applications/crm/crm_bill.aw:2171
 msgid "Koonda read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2164
+#: classes/applications/crm/crm_bill.aw:2180
 msgid "Kustuta read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2165
+#: classes/applications/crm/crm_bill.aw:2181
 msgid "Oled kindel et soovid read kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2194
+#: classes/applications/crm/crm_bill.aw:2210
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2199
+#: classes/applications/crm/crm_bill.aw:2215
 msgid "Tunde"
 msgstr ""
-

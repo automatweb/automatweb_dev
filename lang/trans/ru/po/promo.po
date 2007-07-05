@@ -696,6 +696,6 @@ msgstr ""
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1165
+#: classes/contentmgmt/promo.aw:1169
 msgid "Otsi uus objekt:"
 msgstr ""

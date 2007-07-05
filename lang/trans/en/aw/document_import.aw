@@ -8,10 +8,8 @@ $GLOBALS["TRANS"]["Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rub
 $GLOBALS["TRANS"]["Omaduse dokumenti l&otilde;petav tag (end_tag) caption"] = "Document end tag";
 $GLOBALS["TRANS"]["Grupi Seaded (settings) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Seose Periood (RELTYPE_DOCIMP_PERIOD) tekst"] = "Period";
-$GLOBALS["TRANS"]["Asukoht"] = "Location";
-$GLOBALS["TRANS"]["Pealkiri"] = "Title";
-$GLOBALS["TRANS"]["Autor"] = "Author";
 $GLOBALS["TRANS"]["Sisu"] = "Content";
-$GLOBALS["TRANS"]["Tagi %s sisu ette pane "] = "Prepend tag %s content with";
-$GLOBALS["TRANS"]["Tagi %s sisu taha pane "] = "Append tag %s content with";
+$GLOBALS["TRANS"]["Pealkiri"] = "Title";
+$GLOBALS["TRANS"]["Asukoht"] = "Location";
+$GLOBALS["TRANS"]["Autor"] = "Author";
 ?>

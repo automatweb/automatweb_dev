@@ -250,27 +250,27 @@ msgstr ""
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1028
+#: classes/common/room_reservation.aw:1035
 msgid "Nimi on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1032
+#: classes/common/room_reservation.aw:1039
 msgid "Telefon on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1036
+#: classes/common/room_reservation.aw:1043
 msgid "E-Mail on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1231
+#: classes/common/room_reservation.aw:1238
 msgid "Salvesta"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1499
+#: classes/common/room_reservation.aw:1511
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1568 classes/common/room_reservation.aw:1617
+#: classes/common/room_reservation.aw:1580 classes/common/room_reservation.aw:1629
 msgid "Broneering: %s"
 msgstr ""
 

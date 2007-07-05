@@ -342,19 +342,19 @@ msgstr ""
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr ""
 
-#: classes/file.aw:783
+#: classes/file.aw:790
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/file.aw:1370
+#: classes/file.aw:1377
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/file.aw:1480
+#: classes/file.aw:1487
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/file.aw:1488
+#: classes/file.aw:1495
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 

@@ -191,22 +191,22 @@ msgid "Su"
 msgstr ""
 
 #: classes/applications/calendar/rfp_manager.aw:164
-msgid " - Nimetu - "
+msgid "- Nimetu -"
 msgstr ""
 
 #: classes/applications/calendar/rfp_manager.aw:179
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:376
+#: classes/applications/calendar/rfp_manager.aw:366
 msgid "Aktiviseeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:376
+#: classes/applications/calendar/rfp_manager.aw:366
 msgid "Arhiveeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:383
+#: classes/applications/calendar/rfp_manager.aw:373
 msgid "Kustuta"
 msgstr ""
 

@@ -33,6 +33,10 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/core/obj/object.aw:126
+#: classes/core/obj/object.aw:109
+msgid "Call to undefined method '%s'."
+msgstr ""
+
+#: classes/core/obj/object.aw:142
 msgid "object loader is not object!!"
 msgstr "object loader is not object!!"

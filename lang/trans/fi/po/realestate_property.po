@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_property.aw:class_936_help
 msgid "Klassi Kinnisvaraobjekt help"
 msgstr ""
@@ -794,11 +793,13 @@ msgstr ""
 msgid "Kinnisvarahalduskeskkond objekti jaoks m&auml;&auml;ramata v&otilde;i puudub juurdep&auml;&auml;su&otilde;igus"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:567 classes/applications/realestate_management/realestate_property.aw:591
+#: classes/applications/realestate_management/realestate_property.aw:567
+#: classes/applications/realestate_management/realestate_property.aw:591
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:621 classes/applications/realestate_management/realestate_property.aw:832
+#: classes/applications/realestate_management/realestate_property.aw:621
+#: classes/applications/realestate_management/realestate_property.aw:832
 msgid "Keeleobjekti ei leitud."
 msgstr ""
 
@@ -818,10 +819,12 @@ msgstr ""
 msgid "Vaheta ikooni"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_property.aw:737
 #: classes/applications/realestate_management/realestate_property.aw:738
 msgid "Muuda"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_property.aw:747
 #: classes/applications/realestate_management/realestate_property.aw:748
 msgid "Eemalda"
 msgstr ""
@@ -950,11 +953,13 @@ msgstr ""
 msgid "Korter"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2393 classes/applications/realestate_management/realestate_property.aw:2489
+#: classes/applications/realestate_management/realestate_property.aw:2393
+#: classes/applications/realestate_management/realestate_property.aw:2489
 msgid "Maakleri pilt"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2404 classes/applications/realestate_management/realestate_property.aw:2501
+#: classes/applications/realestate_management/realestate_property.aw:2404
+#: classes/applications/realestate_management/realestate_property.aw:2501
 msgid "Maakleri id"
 msgstr ""
 
@@ -962,19 +967,23 @@ msgstr ""
 msgid "Maakleri kasutajanimi City24 s&uuml;steemis"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2427 classes/applications/realestate_management/realestate_property.aw:2512
+#: classes/applications/realestate_management/realestate_property.aw:2427
+#: classes/applications/realestate_management/realestate_property.aw:2512
 msgid "Maakler"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2438 classes/applications/realestate_management/realestate_property.aw:2523
+#: classes/applications/realestate_management/realestate_property.aw:2438
+#: classes/applications/realestate_management/realestate_property.aw:2523
 msgid "Maakleri e-mail"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2449 classes/applications/realestate_management/realestate_property.aw:2534
+#: classes/applications/realestate_management/realestate_property.aw:2449
+#: classes/applications/realestate_management/realestate_property.aw:2534
 msgid "Maakleri telefon"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2460 classes/applications/realestate_management/realestate_property.aw:2545
+#: classes/applications/realestate_management/realestate_property.aw:2460
+#: classes/applications/realestate_management/realestate_property.aw:2545
 msgid "Maakleri ametinimetus"
 msgstr ""
 
@@ -1017,4 +1026,3 @@ msgstr ""
 #: classes/applications/realestate_management/realestate_property.aw:2799
 msgid "Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal kustutada. Viga &otilde;iguste seadetes. J&auml;&auml;b orbobjekt, mille id on %s"
 msgstr ""
-

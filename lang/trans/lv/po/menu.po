@@ -1702,26 +1702,26 @@ msgstr ""
 msgid "&Auml;ra v&otilde;ta viimaseid dokumente"
 msgstr ""
 
-#: classes/menu.aw:2145
+#: classes/menu.aw:2152
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/menu.aw:2147
+#: classes/menu.aw:2158
 msgid "Otsi uus objekt:"
 msgstr ""
 
-#: classes/menu.aw:2158
+#: classes/menu.aw:2169
 msgid "Aeg"
 msgstr ""
 
-#: classes/menu.aw:2167
+#: classes/menu.aw:2178
 msgid "Isik"
 msgstr ""
 
-#: classes/menu.aw:2173
+#: classes/menu.aw:2184
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/menu.aw:2179
+#: classes/menu.aw:2190
 msgid "Kasutajagrupp"
 msgstr ""

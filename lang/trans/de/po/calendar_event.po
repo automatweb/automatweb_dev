@@ -193,18 +193,6 @@ msgstr ""
 msgid "Omaduse  (utextbox10) help"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:prop_utextarea1
-msgid "Omaduse  (utextarea1) caption"
-msgstr ""
-
-#: classes/applications/calendar/calendar_event.aw:prop_utextarea1_comment
-msgid "Omaduse  (utextarea1) kommentaar"
-msgstr ""
-
-#: classes/applications/calendar/calendar_event.aw:prop_utextarea1_help
-msgid "Omaduse  (utextarea1) help"
-msgstr ""
-
 #: classes/applications/calendar/calendar_event.aw:prop_utextarea2
 msgid "Omaduse  (utextarea2) caption"
 msgstr ""
@@ -373,6 +361,138 @@ msgstr ""
 msgid "Omaduse  (utextvar10) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:prop_ufupload1
+msgid "Omaduse Faili upload 1 (ufupload1) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ufupload1_comment
+msgid "Omaduse Faili upload 1 (ufupload1) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ufupload1_help
+msgid "Omaduse Faili upload 1 (ufupload1) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_title
+msgid "Omaduse Sissejuhatus (title) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_title_comment
+msgid "Omaduse Sissejuhatus (title) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_title_help
+msgid "Omaduse Sissejuhatus (title) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_short_description
+msgid "Omaduse L&uuml;hikirjeldus (short_description) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_short_description_comment
+msgid "Omaduse L&uuml;hikirjeldus (short_description) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_short_description_help
+msgid "Omaduse L&uuml;hikirjeldus (short_description) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_description
+msgid "Omaduse Kirjeldus (description) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_description_comment
+msgid "Omaduse Kirjeldus (description) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_description_help
+msgid "Omaduse Kirjeldus (description) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_section
+msgid "Omaduse Valdkonnad (section) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_section_comment
+msgid "Omaduse Valdkonnad (section) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_section_help
+msgid "Omaduse Valdkonnad (section) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_location
+msgid "Omaduse Toimumiskoht (location) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_location_comment
+msgid "Omaduse Toimumiskoht (location) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_location_help
+msgid "Omaduse Toimumiskoht (location) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer
+msgid "Omaduse Korraldaja (organizer) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer_comment
+msgid "Omaduse Korraldaja (organizer) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer_help
+msgid "Omaduse Korraldaja (organizer) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_make_copy
+msgid "Omaduse Tee koopia (make_copy) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_make_copy_comment
+msgid "Omaduse Tee koopia (make_copy) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_make_copy_help
+msgid "Omaduse Tee koopia (make_copy) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_level
+msgid "Omaduse Tase (level) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_level_comment
+msgid "Omaduse Tase (level) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_level_help
+msgid "Omaduse Tase (level) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_published
+msgid "Omaduse Avaldatud (published) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_published_comment
+msgid "Omaduse Avaldatud (published) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_published_help
+msgid "Omaduse Avaldatud (published) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_front_event
+msgid "Omaduse Esilehe s&uuml;ndmus (front_event) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_front_event_comment
+msgid "Omaduse Esilehe s&uuml;ndmus (front_event) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_front_event_help
+msgid "Omaduse Esilehe s&uuml;ndmus (front_event) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:prop_aliasmgr
 msgid "Omaduse Aliastehaldur (aliasmgr) caption"
 msgstr ""
@@ -463,4 +583,16 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_SECTION
 msgid "Seose Tegevusala (RELTYPE_SECTION) tekst"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_ORGANIZER
+msgid "Seose Korraldaja (RELTYPE_ORGANIZER) tekst"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_URL
+msgid "Seose Korraldaja (RELTYPE_URL) tekst"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_LOCATION
+msgid "Seose Toimumiskoht (RELTYPE_LOCATION) tekst"
 msgstr ""

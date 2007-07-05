@@ -60,7 +60,6 @@ $GLOBALS["TRANS"]["Kasutaja"] = "User";
 $GLOBALS["TRANS"]["Isik"] = "Person";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Organisation";
 $GLOBALS["TRANS"]["Telliti"] = "Ordered";
-$GLOBALS["TRANS"]["<center>Leiti "] = "<center>Found ";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Genereeri HTML pakkumine"] = "Generate HTML offer";
 $GLOBALS["TRANS"]["Saada meilile"] = "Send to e-mail";

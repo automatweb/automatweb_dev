@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Summa (amount) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus (max_deviation) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_comment
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus (max_deviation) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_help
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus (max_deviation) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_tax.aw:prop_pri
 msgid "Omaduse Prioriteet (pri) caption"
 msgstr ""
@@ -98,6 +110,18 @@ msgstr ""
 msgid "Omaduse Viivis (%) (penalty_pct) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_tax.aw:prop_tax_grp
+msgid "Omaduse Maksugrupp (tax_grp) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_tax_grp_comment
+msgid "Omaduse Maksugrupp (tax_grp) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_tax_grp_help
+msgid "Omaduse Maksugrupp (tax_grp) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_tax.aw:rel_RELTYPE_FROM_ACCT
 msgid "Seose Kontolt (RELTYPE_FROM_ACCT) tekst"
 msgstr ""
@@ -106,11 +130,15 @@ msgstr ""
 msgid "Seose Kontole (RELTYPE_TO_ACCT) tekst"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:117
+#: classes/applications/budgeting/budgeting_tax.aw:rel_RELTYPE_TAX_GRP
+msgid "Seose Maksugrupp (RELTYPE_TAX_GRP) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:134
 msgid "&Uuml;hekordne"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:118
+#: classes/applications/budgeting/budgeting_tax.aw:135
 msgid "Korduv"
 msgstr ""
 

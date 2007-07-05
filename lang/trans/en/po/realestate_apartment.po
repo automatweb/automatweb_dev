@@ -1635,7 +1635,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_wood_heating
 msgid "Omaduse Ahjuk&uuml;te (has_wood_heating) caption"
-msgstr ""
+msgstr "stove heating"
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_wood_heating_comment
 msgid "Omaduse Ahjuk&uuml;te (has_wood_heating) kommentaar"
@@ -1863,7 +1863,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_separate_wc
 msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) caption"
-msgstr "Separate WC and bathroom"
+msgstr "separate WC and bathroom"
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_separate_wc_comment
 msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) kommentaar"

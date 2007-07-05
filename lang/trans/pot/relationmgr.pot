@@ -10,6 +10,18 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/vcl/relationmgr.aw:46 classes/vcl/relationmgr.aw:794
+msgid "Alias"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:47
+msgid "Too vend"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:48
+msgid "&Otilde;igus"
+msgstr ""
+
 #: classes/vcl/relationmgr.aw:120 classes/vcl/relationmgr.aw:558
 msgid "Objekti t&uuml;&uuml;p"
 msgstr ""
@@ -43,7 +55,7 @@ msgid "Staatus"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:219
-msgid "Kõik"
+msgid "K&otilde;ik"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:220
@@ -71,11 +83,11 @@ msgid "ID"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:294 classes/vcl/relationmgr.aw:767
-msgid ""
+msgid "&nbsp;"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:310 classes/vcl/relationmgr.aw:839
-msgid "Tüüp"
+msgid "T&uuml;&uuml;p"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:320
@@ -92,6 +104,10 @@ msgstr ""
 
 #: classes/vcl/relationmgr.aw:354
 msgid "Vali"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:571 classes/vcl/relationmgr.aw:847
+msgid "Seose t&uuml;&uuml;p"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:582
@@ -130,19 +146,11 @@ msgstr ""
 msgid "Muu info"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:794
-msgid "Alias"
-msgstr ""
-
 #: classes/vcl/relationmgr.aw:802
 msgid "Link"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:811
 msgid "Cache"
-msgstr ""
-
-#: classes/vcl/relationmgr.aw:847
-msgid "Seose tüüp"
 msgstr ""
 

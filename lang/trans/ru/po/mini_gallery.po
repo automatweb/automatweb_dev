@@ -133,6 +133,18 @@ msgstr ""
 msgid "Omaduse  (mg_table) help"
 msgstr ""
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_mg_fld_table
+msgid "Omaduse  (mg_fld_table) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_mg_fld_table_comment
+msgid "Omaduse  (mg_fld_table) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_mg_fld_table_help
+msgid "Omaduse  (mg_fld_table) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
@@ -142,11 +154,27 @@ msgid "Grupi Import (import) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_manage
-msgid "Grupi Halda pilte (manage) pealkiri"
+msgid "Grupi Halda (manage) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_manage_help
-msgid "Grupi Halda pilte (manage) help"
+msgid "Grupi Halda (manage) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_manage_img
+msgid "Grupi Halda pilte (manage_img) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_manage_img_help
+msgid "Grupi Halda pilte (manage_img) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_manage_fld
+msgid "Grupi Halda kaustu (manage_fld) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_manage_fld_help
+msgid "Grupi Halda kaustu (manage_fld) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
@@ -157,72 +185,77 @@ msgstr ""
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:65
-#: classes/contentmgmt/gallery/mini_gallery.aw:513
+#: classes/contentmgmt/gallery/mini_gallery.aw:71
+#: classes/contentmgmt/gallery/mini_gallery.aw:596
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:66
-#: classes/contentmgmt/gallery/mini_gallery.aw:519
+#: classes/contentmgmt/gallery/mini_gallery.aw:72
+#: classes/contentmgmt/gallery/mini_gallery.aw:602
+#: classes/contentmgmt/gallery/mini_gallery.aw:704
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:67
+#: classes/contentmgmt/gallery/mini_gallery.aw:73
 msgid "Loomise kuup&auml;ev vanemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:68
+#: classes/contentmgmt/gallery/mini_gallery.aw:74
 msgid "Muutmise kuup&auml;ev vanemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:69
+#: classes/contentmgmt/gallery/mini_gallery.aw:75
 msgid "Pildistamise kuup&auml;ev vanemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:70
+#: classes/contentmgmt/gallery/mini_gallery.aw:76
 msgid "Loomise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:71
+#: classes/contentmgmt/gallery/mini_gallery.aw:77
 msgid "Muutmise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:72
+#: classes/contentmgmt/gallery/mini_gallery.aw:78
 msgid "Pildistamise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:313
+#: classes/contentmgmt/gallery/mini_gallery.aw:396
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:477
+#: classes/contentmgmt/gallery/mini_gallery.aw:560
 msgid "Galerii"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:477
+#: classes/contentmgmt/gallery/mini_gallery.aw:560
 msgid "pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:491
+#: classes/contentmgmt/gallery/mini_gallery.aw:574
 msgid "Lisa uus pilt"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:497
+#: classes/contentmgmt/gallery/mini_gallery.aw:580
 msgid "Salvesta pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:503
+#: classes/contentmgmt/gallery/mini_gallery.aw:586
 msgid "Kustuta valitud pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:505
+#: classes/contentmgmt/gallery/mini_gallery.aw:588
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:525
+#: classes/contentmgmt/gallery/mini_gallery.aw:608
 msgid "Muutja"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:531
+#: classes/contentmgmt/gallery/mini_gallery.aw:614
 msgid "Muudetud"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:699
+msgid "Kausta nimi"
 msgstr ""

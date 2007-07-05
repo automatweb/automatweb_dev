@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Pangamakse help"
 msgstr ""
 
+#: classes/common/bank_payment.aw:prop_cancel_url
+msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_cancel_url_comment
+msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_cancel_url_help
+msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) help"
+msgstr ""
+
 #: classes/common/bank_payment.aw:prop_default_unit_sum
 msgid "Omaduse Vaikimisi &uuml;hiku summa (default_unit_sum) caption"
 msgstr ""
@@ -26,28 +38,16 @@ msgstr ""
 msgid "Omaduse Vaikimisi &uuml;hiku summa (default_unit_sum) help"
 msgstr ""
 
-#: classes/common/bank_payment.aw:prop_expl
-msgid "Omaduse Selgitus (expl) caption"
-msgstr ""
-
-#: classes/common/bank_payment.aw:prop_expl_comment
-msgid "Omaduse Selgitus (expl) kommentaar"
-msgstr ""
-
-#: classes/common/bank_payment.aw:prop_expl_help
-msgid "Omaduse Selgitus (expl) help"
-msgstr ""
-
 #: classes/common/bank_payment.aw:prop_template
-msgid "Omaduse Pangaformide template (template) caption"
+msgid "Omaduse Pangavormide template (template) caption"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_template_comment
-msgid "Omaduse Pangaformide template (template) kommentaar"
+msgid "Omaduse Pangavormide template (template) kommentaar"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_template_help
-msgid "Omaduse Pangaformide template (template) help"
+msgid "Omaduse Pangavormide template (template) help"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_private_key
@@ -86,16 +86,16 @@ msgstr ""
 msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (bank_return_url) help"
 msgstr ""
 
-#: classes/common/bank_payment.aw:prop_cancel_url
-msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) caption"
+#: classes/common/bank_payment.aw:prop_expl
+msgid "Omaduse Selgitus (expl) caption"
 msgstr ""
 
-#: classes/common/bank_payment.aw:prop_cancel_url_comment
-msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) kommentaar"
+#: classes/common/bank_payment.aw:prop_expl_comment
+msgid "Omaduse Selgitus (expl) kommentaar"
 msgstr ""
 
-#: classes/common/bank_payment.aw:prop_cancel_url_help
-msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) help"
+#: classes/common/bank_payment.aw:prop_expl_help
+msgid "Omaduse Selgitus (expl) help"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_test
@@ -195,15 +195,15 @@ msgid "Omaduse viide (find_ref) help"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_find_one
-msgid "Omaduse Ei n&auml;ita korduvaid (find_one) caption"
+msgid "Omaduse 1 rida makse kohta (find_one) caption"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_find_one_comment
-msgid "Omaduse Ei n&auml;ita korduvaid (find_one) kommentaar"
+msgid "Omaduse 1 rida makse kohta (find_one) kommentaar"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_find_one_help
-msgid "Omaduse Ei n&auml;ita korduvaid (find_one) help"
+msgid "Omaduse 1 rida makse kohta (find_one) help"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_do_find
@@ -230,6 +230,18 @@ msgstr ""
 msgid "Omaduse  (log) help"
 msgstr ""
 
+#: classes/common/bank_payment.aw:prop_doc
+msgid "Omaduse Dokumentatsioon (doc) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_doc_comment
+msgid "Omaduse Dokumentatsioon (doc) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_doc_help
+msgid "Omaduse Dokumentatsioon (doc) help"
+msgstr ""
+
 #: classes/common/bank_payment.aw:group_bank
 msgid "Grupi Pankade info (bank) pealkiri"
 msgstr ""
@@ -254,6 +266,14 @@ msgstr ""
 msgid "Grupi Test (test) help"
 msgstr ""
 
+#: classes/common/bank_payment.aw:group_doc
+msgid "Grupi Teadmiseks (doc) pealkiri"
+msgstr ""
+
+#: classes/common/bank_payment.aw:group_doc_help
+msgid "Grupi Teadmiseks (doc) help"
+msgstr ""
+
 #: classes/common/bank_payment.aw:rel_RELTYPE_KEY
 msgid "Seose Privaatv&otilde;ti (RELTYPE_KEY) tekst"
 msgstr ""
@@ -262,75 +282,207 @@ msgstr ""
 msgid "Seose Privaatv&otilde;ti (RELTYPE_P_KEY) tekst"
 msgstr ""
 
-#: classes/common/bank_payment.aw:548
+#: classes/common/bank_payment.aw:layout_general_left
+msgid "Kujundusosa Nõutavad (general_left) pealkiri"
+msgstr ""
+
+#: classes/common/bank_payment.aw:layout_general_right
+msgid "Kujundusosa   (general_right) pealkiri"
+msgstr ""
+
+#: classes/common/bank_payment.aw:588
 msgid "&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:548
+#: classes/common/bank_payment.aw:588
 msgid "eba&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:549
+#: classes/common/bank_payment.aw:589
 msgid "ok"
 msgstr ""
 
-#: classes/common/bank_payment.aw:549
+#: classes/common/bank_payment.aw:589
 msgid ""
 msgstr ""
 
-#: classes/common/bank_payment.aw:556
+#: classes/common/bank_payment.aw:596
 msgid "Kokku:"
 msgstr ""
 
-#: classes/common/bank_payment.aw:579
-msgid "\n"
+#: classes/common/bank_payment.aw:607
+msgid "Logifaili suurus on hetkel"
 msgstr ""
 
-#: classes/common/bank_payment.aw:609
+#: classes/common/bank_payment.aw:607
+msgid "baiti"
+msgstr ""
+
+#: classes/common/bank_payment.aw:611
+msgid "Mingine jama on failiga"
+msgstr ""
+
+#: classes/common/bank_payment.aw:611
+msgid "Kas pole &otilde;igusi, v&otilde; faili"
+msgstr ""
+
+#: classes/common/bank_payment.aw:635
+msgid "Hetkel pole kataloogis"
+msgstr ""
+
+#: classes/common/bank_payment.aw:635
+msgid "&uuml;htegi temleidi faili"
+msgstr ""
+
+#: classes/common/bank_payment.aw:671
 msgid "Aeg"
 msgstr ""
 
-#: classes/common/bank_payment.aw:615
+#: classes/common/bank_payment.aw:677
 msgid "Maksja"
 msgstr ""
 
-#: classes/common/bank_payment.aw:621
+#: classes/common/bank_payment.aw:683
 msgid "Viitenumber"
 msgstr ""
 
-#: classes/common/bank_payment.aw:627
+#: classes/common/bank_payment.aw:689
 msgid "Summa"
 msgstr ""
 
-#: classes/common/bank_payment.aw:633
+#: classes/common/bank_payment.aw:695
 msgid "Seletus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:639
+#: classes/common/bank_payment.aw:701 classes/common/bank_payment.aw:769
 msgid "Pank"
 msgstr ""
 
-#: classes/common/bank_payment.aw:645
+#: classes/common/bank_payment.aw:707
 msgid "Arve"
 msgstr ""
 
-#: classes/common/bank_payment.aw:651
+#: classes/common/bank_payment.aw:713
 msgid "&Otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:656
+#: classes/common/bank_payment.aw:718
 msgid "SK"
 msgstr ""
 
-#: classes/common/bank_payment.aw:750
+#: classes/common/bank_payment.aw:853
 msgid "Url , kuhu suunata"
 msgstr ""
 
-#: classes/common/bank_payment.aw:950
+#: classes/common/bank_payment.aw:1056
 msgid "Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage"
 msgstr ""
 
-#: classes/common/bank_payment.aw:950
+#: classes/common/bank_payment.aw:1056
 msgid "siia"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1777
+msgid "Veidi olulisemat infot"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1779
+msgid "Alustamiseks:"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1783
+msgid "Vaja s&otilde;lmida pangalingi leping pankadega - ilma ei juhtu midagi..."
+msgstr ""
+
+#: classes/common/bank_payment.aw:1787
+msgid "Vaja tekitada kaupmehele privaatv&otilde;ti ja sertifikaadi p&auml;ring"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1791
+msgid "privkey.pem on tekkinud privaatv&otilde;ti mis peab saama asukohaks"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1795
+msgid "cert_req.pem on tekkinud sertifikaadip&auml;ring mis tuleb saata pankadele"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1803
+msgid "Vastu saadakse avalikud võtmed, mis peavad jõudma kataloogi"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1807
+msgid "failide nimed peaksid olema vastavalt pankadele:"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1812
+msgid "Tab'i \"Pankade info\" alla pangalt saadud kaupmehe ID, \n<br>kui kindlale arvele vaja raha saata, siis oleks vaja m&auml;rkida ka arve number ja saaja nimi (toimib pankadel millel on ka selline v&otilde;imalus olemas)"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1816
+msgid "Kontrolli , et kataloogis"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1816
+msgid "oleks olemas ja kirjutamis&otilde;igustega fail nimega bank_log.txt"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1820
+msgid "Lihtsamal juhul peaks n&uuml;&uuml;d maksmine toimima, keerulisemal on vaja templeitides v&ouml;i koodis mudida"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1824
+msgid "Kasutab lihtsalt üht MAC v&otilde;tit, mis peaks asuma v&otilde;tmete kataloogis nimega nordea.mac"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1828
+msgid "Neile vaja saata tagasiside url, milleks on"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1830
+msgid "Vaja teha veel testv&otilde;ti ja sertifikaadi p&auml;ring testimiseks(seal tuleb enne katsetada testkeskkonnas ja vastavad tegelased (Kaardikeskusest) peaks saama &uuml;le vaadata kas k&otilde;ik on nagu peab)"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1834
+msgid "Toimib vaid Krediitkaardi , SEB &uuml;hispanga ja Nordea'ga"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1835
+msgid "Nordea puhul peab pangast saama testkasutaja andmed &uuml;hekordsete testmaksete jaoks (k&otilde;ik toimib nagu p&auml;riselt, lihtsalt raha ei tule arvele)\n<br>"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1836
+msgid "Krediitkaardi puhul peab lisama testprivaatv&ouml;tme Tab'i test alla"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1837
+msgid "SEB puhul peab lisama testprivaatv&ouml;tmeks SEB testkaupmehe privaatv&otilde;tme"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1838
+msgid "Nii krediitkaardi kui ka SEB puhul on eraldi testkeskkond, kus saab tegutseda pangalt saadud testkasutajaga.. et suunamine sinna toimuks, vaja m&auml;rkida testrezhiim linnuke"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1841
+msgid "Kaupluse avaleht"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1842
+msgid "Kauluse avalehel tahavad pangad n&auml;ha viidet selle kohta, et saidil saab maksta nende pangalingiga.. selleks peaks olema avalehel vastav ikoon. Neid saab :"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1843 classes/common/bank_payment.aw:1845
+msgid "panga kood"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1844
+msgid "Maksmisele minnes tuleks &uuml;ldjuhul kasutada ka pankade poolt antud ikoone. Neid saab :"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1848
+msgid "Panga koodid"
+msgstr ""
+
+#: classes/common/bank_payment.aw:1849
+msgid "(Neid l&auml;heb vaja templeitide valmistamisel m&otilde;nel juhul)"
 msgstr ""
 

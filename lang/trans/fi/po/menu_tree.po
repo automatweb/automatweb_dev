@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/menu_tree.aw:class_93_help
 msgid "Klassi Sisukaart help"
 msgstr ""
@@ -36,6 +35,30 @@ msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_menus_help
 msgid "Omaduse Men&uuml;&uuml;d (menus) help"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_tb
+msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) caption"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_tb_comment
+msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_tb_help
+msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) help"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_table
+msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) caption"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_table_comment
+msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_table_help
+msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) help"
 msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_children_only
@@ -86,7 +109,22 @@ msgstr ""
 msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) help"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:47
+#: classes/contentmgmt/menu_tree.aw:rel_RELTYPE_ROOT_MENU
+msgid "Seose Men&uuml;&uuml; (RELTYPE_ROOT_MENU) tekst"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:56
 msgid "K&otilde;ik"
 msgstr ""
 
+#: classes/contentmgmt/menu_tree.aw:383
+msgid "Men&uuml;&uuml;"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:410
+msgid "Lisa men&uuml;&uuml;"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:416
+msgid "Eemalda men&uuml;&uuml;"
+msgstr ""

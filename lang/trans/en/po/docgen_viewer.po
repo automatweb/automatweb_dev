@@ -173,9 +173,9 @@ msgstr ""
 #: classes/applications/docgen/docgen_viewer.aw:97
 #: classes/applications/docgen/docgen_viewer.aw:227
 #: classes/applications/docgen/docgen_viewer.aw:816
-#: classes/applications/docgen/docgen_viewer.aw:885
-#: classes/applications/docgen/docgen_viewer.aw:1163
-#: classes/applications/docgen/docgen_viewer.aw:1233
+#: classes/applications/docgen/docgen_viewer.aw:886
+#: classes/applications/docgen/docgen_viewer.aw:1170
+#: classes/applications/docgen/docgen_viewer.aw:1240
 msgid "Classes"
 msgstr "Classes"
 
@@ -192,35 +192,35 @@ msgstr ""
 msgid "none"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1033
+#: classes/applications/docgen/docgen_viewer.aw:1040
 msgid "ALL DONE"
 msgstr "ALL DONE"
 
-#: classes/applications/docgen/docgen_viewer.aw:1095
+#: classes/applications/docgen/docgen_viewer.aw:1102
 msgid "Klasside &uuml;levaade"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1101
+#: classes/applications/docgen/docgen_viewer.aw:1108
 msgid "K&otilde;ik klassid"
 msgstr "All classes"
 
-#: classes/applications/docgen/docgen_viewer.aw:1107
+#: classes/applications/docgen/docgen_viewer.aw:1114
 msgid "API klassid"
 msgstr "API classes"
 
-#: classes/applications/docgen/docgen_viewer.aw:1113
+#: classes/applications/docgen/docgen_viewer.aw:1120
 msgid "Eraldi dokumentatsioon"
 msgstr "Seprate documentation"
 
-#: classes/applications/docgen/docgen_viewer.aw:1120
+#: classes/applications/docgen/docgen_viewer.aw:1127
 msgid "Classbase tagid"
 msgstr "Classbase tags"
 
-#: classes/applications/docgen/docgen_viewer.aw:1126
+#: classes/applications/docgen/docgen_viewer.aw:1133
 msgid "Uuenda API andmebaas"
 msgstr "Renew API database"
 
-#: classes/applications/docgen/docgen_viewer.aw:1137
+#: classes/applications/docgen/docgen_viewer.aw:1144
 msgid "Foorum"
 msgstr "Forum"
 

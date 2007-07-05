@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_price_cur
 msgid "Omaduse Hinnad valuutades (price_cur) caption"
-msgstr ""
+msgstr "Prices in currencies"
 
 #: classes/applications/shop/shop_product.aw:prop_price_cur_comment
 msgid "Omaduse Hinnad valuutades (price_cur) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_purchase_price
 msgid "Omaduse Ostu hind (purchase_price) caption"
-msgstr ""
+msgstr "Buying price"
 
 #: classes/applications/shop/shop_product.aw:prop_purchase_price_comment
 msgid "Omaduse Ostu hind (purchase_price) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_reservation_time
 msgid "Omaduse Broneeritav aeg (reservation_time) caption"
-msgstr ""
+msgstr "Booking time "
 
 #: classes/applications/shop/shop_product.aw:prop_reservation_time_comment
 msgid "Omaduse Broneeritav aeg (reservation_time) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_buffer_time_before
 msgid "Omaduse Puhveraeg enne (buffer_time_before) caption"
-msgstr ""
+msgstr "Buffer time before"
 
 #: classes/applications/shop/shop_product.aw:prop_buffer_time_before_comment
 msgid "Omaduse Puhveraeg enne (buffer_time_before) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_buffer_time_after
 msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) caption"
-msgstr ""
+msgstr "Buffer time after"
 
 #: classes/applications/shop/shop_product.aw:prop_buffer_time_after_comment
 msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) kommentaar"
@@ -159,7 +159,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_price_settings
 msgid "Omaduse Hinnakujundus (price_settings) caption"
-msgstr ""
+msgstr "Price style"
 
 #: classes/applications/shop/shop_product.aw:prop_price_settings_comment
 msgid "Omaduse Hinnakujundus (price_settings) kommentaar"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_tax_rate
 msgid "Omaduse Maksum&auml;&auml;r (tax_rate) caption"
-msgstr ""
+msgstr "Tax rate"
 
 #: classes/applications/shop/shop_product.aw:prop_tax_rate_comment
 msgid "Omaduse Maksum&auml;&auml;r (tax_rate) kommentaar"
@@ -1127,19 +1127,19 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:417
 msgid "Minutit"
-msgstr ""
+msgstr "Minutes"
 
 #: classes/applications/shop/shop_product.aw:418
 msgid "Tundi"
-msgstr ""
+msgstr "Hours"
 
 #: classes/applications/shop/shop_product.aw:458
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/shop/shop_product.aw:463
 msgid "Valuuta"
-msgstr ""
+msgstr "Currency"
 
 #: classes/applications/shop/shop_product.aw:620
 msgid "shop_product::draw(): no layout set!"

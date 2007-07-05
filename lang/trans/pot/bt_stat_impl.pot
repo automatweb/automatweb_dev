@@ -10,51 +10,51 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:14 classes/applications/bug_o_matic_3000/bt_stat_impl.aw:227
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:14 classes/applications/bug_o_matic_3000/bt_stat_impl.aw:244
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:29 classes/applications/bug_o_matic_3000/bt_stat_impl.aw:242
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:29 classes/applications/bug_o_matic_3000/bt_stat_impl.aw:259
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:90
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:107
 msgid "T&ouml;&ouml;tundide statistika aastate ja kuude kaupa"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:99
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:116
 msgid "Bugi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:104
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:121
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:152
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:169
 msgid "%s t&ouml;&ouml;tunnid ajavahemikul %s - %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:163
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:180
 msgid "Bug"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:168
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:185
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:173
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:190
 msgid "T&ouml;&ouml;tunde"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:329
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:346
 msgid "T&ouml;&ouml;tundide statistika projektide ja kuude kaupa"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:334
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:351
 msgid "<b>Summa</b>"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:385
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:402
 msgid "%s t&ouml;&ouml;tunnid projektis %s ajavahemikul %s - %s"
 msgstr ""
 

@@ -319,7 +319,7 @@ msgid "Seose Otsing (RELTYPE_SEARCH) tekst"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_EVENT_VALIDATOR
-msgid "Seose Sündmuste näitamise kontroller (RELTYPE_EVENT_VALIDATOR) tekst"
+msgid "Seose S&uuml;ndmuste n&auml;itamise kontroller (RELTYPE_EVENT_VALIDATOR) tekst"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:129
@@ -398,11 +398,11 @@ msgstr ""
 msgid "Väljundvorm on valimata"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1022
+#: classes/calendar/calendar_view.aw:1038
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1029
+#: classes/calendar/calendar_view.aw:1045
 msgid "&gt;&gt;"
 msgstr ""
 

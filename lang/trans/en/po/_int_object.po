@@ -141,29 +141,28 @@ msgstr "object::set_cache_dirty(%s): parameter must be integer or boolean!"
 msgid "object::instance(): no object loaded or class id not set!"
 msgstr "object::instance(): no object loaded or class id not set!"
 
-#: classes/core/obj/_int_object.aw:1444
-msgid "object::create_brother(%s): no object loaded!"
-msgstr "object::create_brother(%s): no object loaded!"
-
-#: classes/core/obj/_int_object.aw:1453
+#: classes/core/obj/_int_object.aw:1450
 msgid "object::create_brother(%s): no parent!"
 msgstr "object::create_brother(%s): no parent!"
 
-#: classes/core/obj/_int_object.aw:1757
+#: classes/core/obj/_int_object.aw:1754
 msgid "object::load(%s): no view access for object %s!"
 msgstr "object::load(%s): no view access for object %s!"
 
-#: classes/core/obj/_int_object.aw:2094
+#: classes/core/obj/_int_object.aw:2098
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr "object::path(%s): error in object hierarchy, infinite loop!"
 
-#: classes/core/obj/_int_object.aw:2143
+#: classes/core/obj/_int_object.aw:2147
 msgid "object::save(): no acess to save object %s under %s !"
 msgstr "object::save(): no acess to save object %s under %s !"
 
-#: classes/core/obj/_int_object.aw:2158
+#: classes/core/obj/_int_object.aw:2162
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr "object::save(): no access to add object under folder %s (gidlist = %s)!"
+
+#~ msgid "object::create_brother(%s): no object loaded!"
+#~ msgstr "object::create_brother(%s): no object loaded!"
 
 #~ msgid "object::merge(%s): parameter must be an array of properties to merge!"
 #~ msgstr "object::merge(%s): parameter must be an array of properties to merge!"

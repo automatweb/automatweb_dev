@@ -10,23 +10,23 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/doc_display.aw:385
+#: classes/doc_display.aw:393
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/doc_display.aw:391
+#: classes/doc_display.aw:399
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc_display.aw:396
+#: classes/doc_display.aw:404
 msgid "Peida"
 msgstr ""
 
-#: classes/doc_display.aw:400
+#: classes/doc_display.aw:408
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/doc_display.aw:406
+#: classes/doc_display.aw:414
 msgid "Kleebi"
 msgstr ""
 

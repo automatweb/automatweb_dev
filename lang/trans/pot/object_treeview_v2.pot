@@ -727,7 +727,7 @@ msgid "Milliste v&auml;ljade sisu n&auml;idata<br>Eraldaja&nbsp;&nbsp;|&nbsp;&nb
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1491
-msgid ""
+msgid "&nbsp;"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1573

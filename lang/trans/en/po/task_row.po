@@ -184,3 +184,41 @@ msgstr "Invoice"
 #: classes/applications/groupware/task_row.aw:rel_RELTYPE_IMPL
 msgid "Seose Teostaja (RELTYPE_IMPL) tekst"
 msgstr "Implementor"
+
+#: classes/applications/groupware/task_row.aw:255
+msgid "Toimetus"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:260
+msgid "Tegevus"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:265
+#: classes/applications/groupware/task_row.aw:306
+msgid "Tehtud"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:272
+#: classes/applications/groupware/task_row.aw:313
+msgid "Arvele"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:278
+msgid "Aegade puhul t&auml;hendab t&uuml;hi lahter stopperi aega."
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:284
+msgid "Prognoositud tunde"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:289
+msgid "Kulunud tunde"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:294
+msgid "Tunde kliendile"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:325
+msgid "Toimetus ja tegevus peavad m&auml;&auml;ratud olema"
+msgstr ""

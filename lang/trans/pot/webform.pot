@@ -898,15 +898,15 @@ msgstr ""
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2575
+#: classes/contentmgmt/webform.aw:2584
 msgid "Kinnita"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2580
+#: classes/contentmgmt/webform.aw:2589
 msgid "Tagasi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2702
+#: classes/contentmgmt/webform.aw:2711
 msgid "Liigu edasi &raquo;"
 msgstr ""
 

@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Peenraha&uuml;hiku nimetus (small_unit_name) help"
 msgstr ""
 
+#: classes/formgen/currency.aw:prop_symbol
+msgid "Omaduse S&uuml;mbol (symbol) caption"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_symbol_comment
+msgid "Omaduse S&uuml;mbol (symbol) kommentaar"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_symbol_help
+msgid "Omaduse S&uuml;mbol (symbol) help"
+msgstr ""
+
 #: classes/formgen/currency.aw:prop_rates
 msgid "Omaduse Kaustad kust otsida (rates) caption"
 msgstr ""
@@ -102,42 +114,46 @@ msgstr ""
 msgid "Grupi T&otilde;lge (translate) help"
 msgstr ""
 
-#: classes/formgen/currency.aw:94
+#: classes/formgen/currency.aw:97
 msgid "Keel"
 msgstr ""
 
-#: classes/formgen/currency.aw:99
+#: classes/formgen/currency.aw:102
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/formgen/currency.aw:103
+#: classes/formgen/currency.aw:106
 msgid "Peenraha"
 msgstr ""
 
-#: classes/formgen/currency.aw:181
+#: classes/formgen/currency.aw:184
 msgid "Alguskuupäev"
 msgstr ""
 
-#: classes/formgen/currency.aw:185
+#: classes/formgen/currency.aw:188
 msgid "Lõppkuupäev"
 msgstr ""
 
-#: classes/formgen/currency.aw:189
+#: classes/formgen/currency.aw:192
 msgid "Valuuta"
 msgstr ""
 
-#: classes/formgen/currency.aw:193
+#: classes/formgen/currency.aw:196
 msgid "Kurss"
 msgstr ""
 
-#: classes/formgen/currency.aw:197
+#: classes/formgen/currency.aw:200
 msgid "Ostukurss"
 msgstr ""
 
-#: classes/formgen/currency.aw:201
+#: classes/formgen/currency.aw:204
 msgid "Müügikurss"
 msgstr ""
 
-#: classes/formgen/currency.aw:235
+#: classes/formgen/currency.aw:238
 msgid "Kursid"
+msgstr ""
+
+#: classes/formgen/currency.aw:327
+msgid "currency::convert - kas %s või %s pole valuutadaobjektide id'd"
 msgstr ""

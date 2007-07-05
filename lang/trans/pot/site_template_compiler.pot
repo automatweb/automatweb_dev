@@ -14,7 +14,7 @@ msgstr ""
 msgid "site_template_compiler::cimpile_template_level(%s, %s): broken template near MENU_%s_L%s"
 msgstr ""
 
-#: classes/contentmgmt/site_template_compiler.aw:977
+#: classes/contentmgmt/site_template_compiler.aw:981
 msgid "show_site::generate_code(): could not find generator for op %s (%s) op = %s"
 msgstr ""
 

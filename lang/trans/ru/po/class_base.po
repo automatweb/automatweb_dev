@@ -93,43 +93,43 @@ msgstr ""
 msgid "Lisainfo grupi kohta puudub"
 msgstr ""
 
-#: classes/class_base.aw:1442
+#: classes/class_base.aw:1500
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1450
+#: classes/class_base.aw:1508
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1487
+#: classes/class_base.aw:1545
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1694 classes/class_base.aw:5042
-#: classes/class_base.aw:5053
+#: classes/class_base.aw:1752 classes/class_base.aw:5099
+#: classes/class_base.aw:5110
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:1708
+#: classes/class_base.aw:1766
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3546
+#: classes/class_base.aw:3603
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/class_base.aw:3555
+#: classes/class_base.aw:3612
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4939
+#: classes/class_base.aw:4996
 msgid "%s is not a valid configuration form!"
 msgstr ""
 
-#: classes/class_base.aw:5355
+#: classes/class_base.aw:5412
 msgid "T&otilde;lge aktiivne"
 msgstr ""
 
-#: classes/class_base.aw:5363
+#: classes/class_base.aw:5420
 msgid "Salvesta"
 msgstr ""

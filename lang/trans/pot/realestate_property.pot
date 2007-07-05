@@ -818,11 +818,11 @@ msgstr ""
 msgid "Vaheta ikooni"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:738
+#: classes/applications/realestate_management/realestate_property.aw:737 classes/applications/realestate_management/realestate_property.aw:738
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:748
+#: classes/applications/realestate_management/realestate_property.aw:747 classes/applications/realestate_management/realestate_property.aw:748
 msgid "Eemalda"
 msgstr ""
 

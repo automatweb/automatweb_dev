@@ -61,31 +61,31 @@ msgstr "Submit and go forward"
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:825
+#: classes/cfg/htmlclient.aw:831
 msgid "Tagasiside"
 msgstr "Feedback"
 
-#: classes/cfg/htmlclient.aw:827
+#: classes/cfg/htmlclient.aw:833
 msgid "Kasutajatugi"
 msgstr "Support"
 
-#: classes/cfg/htmlclient.aw:828
+#: classes/cfg/htmlclient.aw:834
 msgid "Abi"
 msgstr "Help"
 
-#: classes/cfg/htmlclient.aw:829
+#: classes/cfg/htmlclient.aw:835
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/cfg/htmlclient.aw:832
+#: classes/cfg/htmlclient.aw:838
 msgid "J&auml;rjehoidja"
 msgstr "Bookmarks"
 
-#: classes/cfg/htmlclient.aw:836
+#: classes/cfg/htmlclient.aw:842
 msgid "Ajalugu"
 msgstr "History"
 
-#: classes/cfg/htmlclient.aw:840
+#: classes/cfg/htmlclient.aw:846
 msgid "Lisa kiiresti"
 msgstr "Add quickly"
 

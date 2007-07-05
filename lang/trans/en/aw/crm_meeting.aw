@@ -1,10 +1,9 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Algab  (start1) caption"] = "Starts";
 $GLOBALS["TRANS"]["Omaduse Sisu (content) caption"] = "Content";
 $GLOBALS["TRANS"]["Omaduse Klient (customer) caption"] = "Customer";
 $GLOBALS["TRANS"]["Omaduse Projekt (project) caption"] = "Project";
-$GLOBALS["TRANS"]["Omaduse Kokkuvõte (summary) caption"] = "Summary";
 $GLOBALS["TRANS"]["Omaduse Tehtud (is_done) caption"] = "Done";
-$GLOBALS["TRANS"]["Omaduse Kestab terve päeva (whole_day) caption"] = "Lasts all day";
 $GLOBALS["TRANS"]["Omaduse Arve number (bill_no) caption"] = "Invoice no";
 $GLOBALS["TRANS"]["Omaduse Osalejad (participants) caption"] = "Participants";
 $GLOBALS["TRANS"]["Omaduse Toolbar (task_toolbar) caption"] = "Toolbar";

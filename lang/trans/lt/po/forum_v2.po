@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/forum/forum_v2.aw:class_211_help
 msgid "Klassi Foorum help"
 msgstr ""
@@ -108,6 +107,18 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_help
 msgid "Omaduse Maili subject (mail_subject) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_required_fields
+msgid "Omaduse Kohustuslikud v&auml;ljad (required_fields) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_required_fields_comment
+msgid "Omaduse Kohustuslikud v&auml;ljad (required_fields) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_required_fields_help
+msgid "Omaduse Kohustuslikud v&auml;ljad (required_fields) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_logged
@@ -618,6 +629,14 @@ msgstr ""
 msgid "Grupi Meiliseaded (mail_settings) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:group_required_fields
+msgid "Grupi Kohustuslikud v&auml;ljad (required_fields) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:group_required_fields_help
+msgid "Grupi Kohustuslikud v&auml;ljad (required_fields) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:group_users
 msgid "Grupi Kasutajad (users) pealkiri"
 msgstr ""
@@ -718,83 +737,98 @@ msgstr ""
 msgid "Seose Kontrollpilt (RELTYPE_IMAGE_VERIFICATION) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:264
+#: classes/contentmgmt/forum/forum_v2.aw:270
 msgid "Uuemad teemad eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:265
+#: classes/contentmgmt/forum/forum_v2.aw:271
 msgid "T&auml;hestikulises j&auml;rjekorras (A-Z)"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:266
+#: classes/contentmgmt/forum/forum_v2.aw:272
 msgid "Viimati kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:267
+#: classes/contentmgmt/forum/forum_v2.aw:273
 msgid "Enim kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:305
+#: classes/contentmgmt/forum/forum_v2.aw:279
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:280
+msgid "Autor"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:281
+msgid "Autori e-mail"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:282
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:324
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1477
+#: classes/contentmgmt/forum/forum_v2.aw:1496
 msgid "Sisestatud kontrollnumber on vale! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1481
+#: classes/contentmgmt/forum/forum_v2.aw:1500
 msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1485
+#: classes/contentmgmt/forum/forum_v2.aw:1504
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1489
+#: classes/contentmgmt/forum/forum_v2.aw:1508
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1493
+#: classes/contentmgmt/forum/forum_v2.aw:1512
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1497
+#: classes/contentmgmt/forum/forum_v2.aw:1516
 msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1712
+#: classes/contentmgmt/forum/forum_v2.aw:1731
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1717
+#: classes/contentmgmt/forum/forum_v2.aw:1736
 msgid "J&auml;ta v&auml;lja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1724
+#: classes/contentmgmt/forum/forum_v2.aw:1743
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1897
+#: classes/contentmgmt/forum/forum_v2.aw:1916
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1946
+#: classes/contentmgmt/forum/forum_v2.aw:1965
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1958
+#: classes/contentmgmt/forum/forum_v2.aw:1977
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1981
+#: classes/contentmgmt/forum/forum_v2.aw:2000
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2408
+#: classes/contentmgmt/forum/forum_v2.aw:2442
 msgid "teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2415
+#: classes/contentmgmt/forum/forum_v2.aw:2449
 msgid "aadresside kaust"
 msgstr ""
-

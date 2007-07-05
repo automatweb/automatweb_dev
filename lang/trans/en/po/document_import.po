@@ -88,44 +88,32 @@ msgstr ""
 
 # classes/import/document_import.aw:prop_location_tags
 #: classes/import/document_import.aw:prop_location_tags
-msgid ""
-"Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,"
-"rubriik_kala=900) (location_tags) caption"
+msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) caption"
 msgstr "Location tags (format: section_events=890,section_news=900)"
 
 # classes/import/document_import.aw:prop_location_tags_comment
 #: classes/import/document_import.aw:prop_location_tags_comment
-msgid ""
-"Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,"
-"rubriik_kala=900) (location_tags) kommentaar"
+msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) kommentaar"
 msgstr ""
 
 # classes/import/document_import.aw:prop_location_tags_help
 #: classes/import/document_import.aw:prop_location_tags_help
-msgid ""
-"Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,"
-"rubriik_kala=900) (location_tags) help"
+msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) help"
 msgstr ""
 
 # classes/import/document_import.aw:prop_field_tags
 #: classes/import/document_import.aw:prop_field_tags
-msgid ""
-"Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: "
-"rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) caption"
+msgid "Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) caption"
 msgstr "Content tags (format: section_events=890,section_news=900)"
 
 # classes/import/document_import.aw:prop_field_tags_comment
 #: classes/import/document_import.aw:prop_field_tags_comment
-msgid ""
-"Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: "
-"rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) kommentaar"
+msgid "Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) kommentaar"
 msgstr ""
 
 # classes/import/document_import.aw:prop_field_tags_help
 #: classes/import/document_import.aw:prop_field_tags_help
-msgid ""
-"Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: "
-"rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) help"
+msgid "Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) help"
 msgstr ""
 
 # classes/import/document_import.aw:prop_end_tag
@@ -158,6 +146,78 @@ msgstr ""
 msgid "Omaduse  (content_transform) help"
 msgstr ""
 
+#: classes/import/document_import.aw:prop_root_folder
+msgid "Omaduse Juurkaust (root_folder) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_root_folder_comment
+msgid "Omaduse Juurkaust (root_folder) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_root_folder_help
+msgid "Omaduse Juurkaust (root_folder) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_file_url
+msgid "Omaduse Faili URL (file_url) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_file_url_comment
+msgid "Omaduse Faili URL (file_url) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_file_url_help
+msgid "Omaduse Faili URL (file_url) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_title_pattern
+msgid "Omaduse Pealkirja muster (title_pattern) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_title_pattern_comment
+msgid "Omaduse Pealkirja muster (title_pattern) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_title_pattern_help
+msgid "Omaduse Pealkirja muster (title_pattern) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_content_pattern
+msgid "Omaduse Sisu muster (content_pattern) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_content_pattern_comment
+msgid "Omaduse Sisu muster (content_pattern) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_content_pattern_help
+msgid "Omaduse Sisu muster (content_pattern) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_scan_log
+msgid "Omaduse Log (scan_log) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_scan_log_comment
+msgid "Omaduse Log (scan_log) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_scan_log_help
+msgid "Omaduse Log (scan_log) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_do_html_import
+msgid "Omaduse Impordi (do_html_import) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_do_html_import_comment
+msgid "Omaduse Impordi (do_html_import) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_do_html_import_help
+msgid "Omaduse Impordi (do_html_import) help"
+msgstr ""
+
 # classes/import/document_import.aw:group_settings
 #: classes/import/document_import.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
@@ -166,6 +226,22 @@ msgstr "Settings"
 # classes/import/document_import.aw:group_settings_help
 #: classes/import/document_import.aw:group_settings_help
 msgid "Grupi Seaded (settings) help"
+msgstr ""
+
+#: classes/import/document_import.aw:group_xml_settings
+msgid "Grupi XML (xml_settings) pealkiri"
+msgstr ""
+
+#: classes/import/document_import.aw:group_xml_settings_help
+msgid "Grupi XML (xml_settings) help"
+msgstr ""
+
+#: classes/import/document_import.aw:group_html_settings
+msgid "Grupi HTML (html_settings) pealkiri"
+msgstr ""
+
+#: classes/import/document_import.aw:group_html_settings_help
+msgid "Grupi HTML (html_settings) help"
 msgstr ""
 
 # classes/import/document_import.aw:rel_RELTYPE_DOCIMP_PERIOD
@@ -177,26 +253,49 @@ msgstr "Period"
 msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
 msgstr ""
 
-#: classes/import/document_import.aw:201
-msgid "Asukoht"
-msgstr "Location"
+#: classes/import/document_import.aw:rel_RELTYPE_ROOT_FOLDER
+msgid "Seose Juurkaust (RELTYPE_ROOT_FOLDER) tekst"
+msgstr ""
 
-#: classes/import/document_import.aw:205
-msgid "Pealkiri"
-msgstr "Title"
+#: classes/import/document_import.aw:178
+msgid "---"
+msgstr ""
 
-#: classes/import/document_import.aw:209
-msgid "Autor"
-msgstr "Author"
-
-#: classes/import/document_import.aw:213
+#: classes/import/document_import.aw:182 classes/import/document_import.aw:202
+#: classes/import/document_import.aw:460
 msgid "Sisu"
 msgstr "Content"
 
-#: classes/import/document_import.aw:277
-msgid "Tagi %s sisu ette pane "
-msgstr "Prepend tag %s content with"
+#: classes/import/document_import.aw:198 classes/import/document_import.aw:452
+msgid "Pealkiri"
+msgstr "Title"
 
-#: classes/import/document_import.aw:289
-msgid "Tagi %s sisu taha pane "
-msgstr "Append tag %s content with"
+#: classes/import/document_import.aw:211
+msgid "Lae alla ja tee objektiks"
+msgstr ""
+
+#: classes/import/document_import.aw:214
+msgid "Link"
+msgstr ""
+
+#: classes/import/document_import.aw:448
+msgid "Asukoht"
+msgstr "Location"
+
+#: classes/import/document_import.aw:456
+msgid "Autor"
+msgstr "Author"
+
+#: classes/import/document_import.aw:524
+msgid "Tagi %s sisu ette pane"
+msgstr ""
+
+#: classes/import/document_import.aw:536
+msgid "Tagi %s sisu taha pane"
+msgstr ""
+
+#~ msgid "Tagi %s sisu ette pane "
+#~ msgstr "Prepend tag %s content with"
+
+#~ msgid "Tagi %s sisu taha pane "
+#~ msgstr "Append tag %s content with"

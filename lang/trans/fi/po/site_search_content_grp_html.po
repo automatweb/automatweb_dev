@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:class_975_help
 msgid "Klassi Otsingu html indekseerija help"
 msgstr ""
@@ -190,27 +189,28 @@ msgstr ""
 msgid "Seose metaandmete kontroller (RELTYPE_META_CTR) tekst"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:224
-msgid "Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\nIndekseeriti %s lehte, mis sialdasid %s baiti teksti."
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:223
+msgid ""
+"Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\n"
+"Indekseeriti %s lehte, mis sialdasid %s baiti teksti."
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:236
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:235
 msgid "Indekseerija nimega %s alustas t&ouml;&ouml;d %s.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:237
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:236
 msgid "Hetkel on indekseeritud %s lehte.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:238
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:237
 msgid "J&auml;rjekorras on %s lehte.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:239
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:238
 msgid "Viimati uuendati staatust %s.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:248
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:247
 msgid "Indekseerija k&auml;ivitati %s, peatati %s."
 msgstr ""
-

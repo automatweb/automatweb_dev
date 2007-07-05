@@ -9,6 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/obj/obj_xml_gen.aw:141
+#: classes/core/obj/obj_xml_gen.aw:142
 msgid "obj_xml_gen::_ser_one_obj(): could not find parent %s in d_map!"
 msgstr ""

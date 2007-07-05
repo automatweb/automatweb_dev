@@ -15,13 +15,13 @@ msgstr ""
 #: classes/applications/crm/crm_company_cedit_impl.aw:166
 #: classes/applications/crm/crm_company_cedit_impl.aw:332
 #: classes/applications/crm/crm_company_cedit_impl.aw:344
-#: classes/applications/crm/crm_company_cedit_impl.aw:454
-#: classes/applications/crm/crm_company_cedit_impl.aw:466
-#: classes/applications/crm/crm_company_cedit_impl.aw:593
-#: classes/applications/crm/crm_company_cedit_impl.aw:608
-#: classes/applications/crm/crm_company_cedit_impl.aw:725
-#: classes/applications/crm/crm_company_cedit_impl.aw:803
-#: classes/applications/crm/crm_company_cedit_impl.aw:820
+#: classes/applications/crm/crm_company_cedit_impl.aw:468
+#: classes/applications/crm/crm_company_cedit_impl.aw:480
+#: classes/applications/crm/crm_company_cedit_impl.aw:607
+#: classes/applications/crm/crm_company_cedit_impl.aw:622
+#: classes/applications/crm/crm_company_cedit_impl.aw:739
+#: classes/applications/crm/crm_company_cedit_impl.aw:817
+#: classes/applications/crm/crm_company_cedit_impl.aw:834
 msgid "Muuda"
 msgstr ""
 
@@ -33,10 +33,10 @@ msgstr ""
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:556
+#: classes/applications/crm/crm_company_cedit_impl.aw:570
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:731
+#: classes/applications/crm/crm_company_cedit_impl.aw:745
 msgid "Vali &uuml;ks"
 msgstr ""
