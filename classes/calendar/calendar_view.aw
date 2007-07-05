@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.50 2007/06/06 12:26:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.51 2007/07/05 13:55:32 markop Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -541,6 +541,8 @@ class calendar_view extends class_base
 	
 	function __sort_events_by_time($el1, $el2)
 	{
+		if($this->day_start > $el1["start1"] && $this->day_start < $el2["start1"]) return 1;
+		if($this->day_start < $el1["start1"] && $this->day_start > $el2["start1"]) return -1;
 		return (int)($el1["start1"] - $el2["start1"]);
 	}
 
@@ -1055,7 +1057,7 @@ class calendar_view extends class_base
 					"obj_inst" => $to_o,
 					"range" => $range,
 				));
-
+				$vcal->events_sorted = 1;
 				$vcal->items = array();
 				foreach($events as $event)
 				{

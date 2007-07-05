@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.87 2007/05/21 09:10:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.88 2007/07/05 13:55:31 markop Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1250,16 +1250,17 @@ class vcalendar extends aw_template
 		if (is_array($this->items[$dstamp]))
 		{
 			$events = $this->items[$dstamp];
-
-			if (aw_ini_get('vcalendar.sort_events_starting_today_first'))
+			if(!$this->events_sorted)
 			{
-				uasort($events, array($this, '__sort_events_starting_today_first'));
+				if (aw_ini_get('vcalendar.sort_events_starting_today_first'))
+				{
+					uasort($events, array($this, '__sort_events_starting_today_first'));
+				}
+				else
+				{
+					uasort($events,array($this,"__asc_sort"));
+				}
 			}
-			else
-			{
-				uasort($events,array($this,"__asc_sort"));
-			}
-
 			if(!$this->first_event)
 			{
 				$this->first_event = reset($events);
