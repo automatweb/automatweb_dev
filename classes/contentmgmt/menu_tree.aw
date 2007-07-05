@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.21 2007/06/27 15:26:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.22 2007/07/05 09:43:54 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -122,6 +122,19 @@ class menu_tree extends class_base
 
 		}
 		return PROP_OK;
+	}
+
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "menus":
+				arr($prop);
+				break;
+		}
+		return $retval;
 	}
 
 	function parse_alias($args = array())

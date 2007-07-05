@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.198 2007/07/02 13:28:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.199 2007/07/05 09:43:54 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -97,7 +97,7 @@
 			caption inimeste arv / broneeringute arv
 		
 		
-valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva täiendava info selle valdkonna objektitüübi kaudu, nt konverentsid).
+valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva t&auml;iendava info selle valdkonna objektitüübi kaudu, nt konverentsid).
 - puhveraeg enne (mitu tundi enne reserveeringu algust lisaks bronnitakse ruumide ettevalmistamiseks)
 - puhveraeg pärast (mitu tundi peale reserveeringu lõppu broneeritakse ruumide korrastamiseks
 

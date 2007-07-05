@@ -45,7 +45,7 @@
 		<action name="pay">
 			<function name="pay">
 				<arguments>
-					<required name="id" type="int" acl="view" />
+					<required name="id" acl="view" />
 					<optional name="r" />
 					<required name="bank_payment" />
 					<optional name="section" />

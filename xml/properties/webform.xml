@@ -88,6 +88,7 @@
             <field>meta</field>
             <type>chooser</type>
             <multiple>1</multiple>
+            <default>0</default>
             <caption>Kuva veateateid</caption>
       </property>
       <property>

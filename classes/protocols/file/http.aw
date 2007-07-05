@@ -20,7 +20,7 @@ class http
 	@comment
 		gets requested data from url
 	**/
-	function get($url, $sess = null)
+	function get($url, $sess = null, $cook_name = "automatweb")
 	{
 //echo "enter get $url <br>";
 		enter_function("http::get");
@@ -43,9 +43,10 @@ class http
 		$req .= "User-agent: AW-http-fetch\r\n";
 		if ($sess !== null)
 		{
-			$req .= "Cookie: automatweb=".$sess."\r\n";
+			$req .= "Cookie: $cook_name=".$sess."\r\n";
 		}
 		$req .= "\r\n\r\n";
+//echo "req = ".nl2br($req)." <br>";
 		classload("protocols/socket");
 		$socket = new socket(array(
 			"host" => $host,
@@ -96,8 +97,8 @@ class http
                         	        	$loc = dirname($url)."/".$loc;
 					}
                                 }
-echo "redirect to $loc <br>";
-				return $this->get($loc);
+//echo "redirect to $loc <br>";
+				return $this->get($loc, $sess, $cook_name);
 			}
 		}
 

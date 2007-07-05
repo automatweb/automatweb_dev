@@ -92,5 +92,31 @@
 			</function>
 		</action>
 
+		<action name="group_can_do_bron">
+			<function name="group_can_do_bron">
+				<arguments>
+					<required name="s" type="object" />
+					<required name="tm" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_prod_data_for_room">
+			<function name="get_prod_data_for_room">
+				<arguments>
+					<required name="room" type="object" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_day_workers">
+			<function name="get_day_workers">
+				<arguments>
+					<required name="o" type="object" />
+					<required name="time" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

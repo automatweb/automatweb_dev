@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.24 2007/05/23 16:42:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.25 2007/07/05 09:43:50 kristo Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
@@ -94,6 +94,8 @@
 @property utextvar10 type=classificator store=connect reltype=RELTYPE_UTEXTVAR10
 @caption 
 
+@property ufupload1 type=fileupload
+@caption Faili upload 1
 
 @property title type=textarea field=title
 @caption Sissejuhatus

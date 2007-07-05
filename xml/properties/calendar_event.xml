@@ -239,6 +239,14 @@
             <caption></caption>
       </property>
       <property>
+            <name>ufupload1</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>fileupload</type>
+            <field>ufupload1</field>
+            <caption>Faili upload 1</caption>
+      </property>
+      <property>
             <name>title</name>
             <group>general</group>
             <table>planner</table>
