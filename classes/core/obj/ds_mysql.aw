@@ -2344,7 +2344,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$joins = array();
 		foreach($clids as $clid)
 		{
-			if (!($sql = aw_cache_get("storage::get_read_properties_sql",$clid)))
+			// this can not be cached, because it holds in it object id's for the query. silly, really. 
+			if (true || !($sql = aw_cache_get("storage::get_read_properties_sql",$clid)))
 			{
 				$sql = $this->get_read_properties_sql(array(
 					"properties" => $GLOBALS["properties"][$clid],
