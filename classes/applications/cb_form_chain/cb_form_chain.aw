@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.42 2006/12/21 11:12:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.43 2007/07/06 09:04:47 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -12,6 +12,7 @@
 
 	@property confirm_sep_page type=checkbox ch_value=1
 	@caption Kinnitusvaade enne saatmist
+
 
 	@property entry_finder_controller type=relpicker reltype=RELTYPE_ENTRY_FINDER_CONTOLLER
 	@caption Olemasoleva sisestuse leidmise kontroller
@@ -579,9 +580,7 @@ class cb_form_chain extends class_base
 		{
 			$pgs[$dat["page"]] = $dat["page"];
 		}
-
 		asort($pgs);
-
 		return $pgs;
 	}
 
@@ -1418,7 +1417,7 @@ class cb_form_chain extends class_base
 
 		foreach($props as $pn => $pd)
 		{
-			if ($props[$pn]["type"] == "date_select" && $inf[$pn] == 0)
+			if ($props[$pn]["type"] == "date_select" && ($inf[$pn] == 0  || $inf[$pn] == -1))
 			{
 				continue;
 			}
@@ -1469,6 +1468,13 @@ class cb_form_chain extends class_base
 			"confirm" => t("Oled kindel et soovid sisestusi kustutada?"),
 			"action" => "delete_entries"
 		));
+
+		$tb->add_button(array(
+			"name" => "export",
+			"img" => "export.gif",
+			"tooltip" => t("Ekspordi"),
+			"action" => "export_entries"
+		));
 	}
 
 	function _init_entry_table(&$t)
@@ -1496,6 +1502,13 @@ class cb_form_chain extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
+
+		$t->define_field(array(
+                        "name" => "createdby_ip",
+                        "caption" => t("IP"),
+                        "align" => "center",
+                        "sortable" => 1
+                ));
 
 		$t->define_field(array(
 			"name" => "view",
@@ -1547,7 +1560,8 @@ class cb_form_chain extends class_base
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("showe", array("id" => $o->id(), array("return_url" => get_ru()))),
 					"caption" => t("Change")
-				))
+				)),
+				"createdby_ip" => $this->db_fetch_field("SELECT ip FROM syslog WHERE oid = ".$o->id()." LIMIT 1", "ip")
 			));
 		}
 		$t->set_default_sortby("created");
@@ -1623,6 +1637,10 @@ class cb_form_chain extends class_base
 		}
 		if ($pd["type"] == "date_select")
 		{
+			if (date_edit::get_timestamp($val) == -1 || date_edit::get_timestamp($val) == 0)
+			{
+				return "";
+			}
 			$val = date("d.m.Y", date_edit::get_timestamp($val));
 		}
 
@@ -1718,11 +1736,27 @@ class cb_form_chain extends class_base
 				{
 					$v["value"] .= html::hidden(array(
 						"name" => "f_".$wf->id()."_".$i."[$k]",
-						"value" => $v["value"]
-					));
+						"value" => $_SESSION["cbfc_data"][$wf->id()][$i][$k] //$v["value"]
+					)) .$_SESSION["cbfc_data"][$wf->id()][$i][$k];
+				}
+				else
+				{
+					$v["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
 				}
 
 				unset($v["subtitle"]);
+
+				if ($v["type"] == "text" && $v["caption"] == "")
+				{
+					//$v["value"] = $v["caption"];
+					$v["no_caption"] = 1;
+				}
+
+				if ($v["type"] == "date_select" && !$v["value"] && $v["defaultx"])
+				{
+					$v["value"] = $v["defaultx"];
+				}
+
 				$nps[$k] = $v;
 			}
 			$props = $nps;
@@ -1921,6 +1955,7 @@ class cb_form_chain extends class_base
 		{
 			$ret[$pg] = $i["name"];
 		}
+		asort($ret);
 		return $ret;
 	}
 	
@@ -1985,6 +2020,67 @@ class cb_form_chain extends class_base
 			}
 		}
 		return false;
+	}
+
+	function callback_get_redir($arr)
+	{
+		$l = get_instance("languages");
+		$ll = $l->get_list();
+		$ret = array();
+		$vals = $arr["obj_inst"]->meta("redir");
+		foreach($ll as $lid => $ln)
+		{
+			$nm = "rd[$lid]";
+			$ret[$nm] = array(
+				"name" => $nm,
+				"type" => "relpicker",
+				"reltype" => "RELTYPE_DOC",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"value" => $vals[$lid],
+				"caption" => sprintf(t("Kuhu suunata p&auml;rast sisestust (%s)"), $ln)
+			);
+		}
+
+		return $ret;
+	}
+
+	function _save_redir($arr)
+	{
+		foreach(safe_array($arr["request"]["rd"]) as $lid => $selecta)
+		{
+			if ($this->can("view", $selecta))
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $selecta,
+					"type" => "RELTYPE_DOC"
+				));
+			}
+		}
+		$arr["obj_inst"]->set_meta("redir", $arr["request"]["rd"]);
+	}
+
+	/**
+		@attrib name=export_entries
+	**/
+	function export_entries($arr)
+	{
+		$res = "";
+		foreach(safe_array($arr["sel"]) as $item)
+		{
+			$io = obj($item);
+			$ii = $io->instance();
+			list($header, $content) = $ii->show_csv($io);
+			if ($res == "")
+			{
+				$res = $header;
+			}
+			$res .= $content;
+		}
+		header("Content-type: text/csv");
+		header("Content-disposition: inline; filename=entries.csv;");
+		die($res);
 	}
 
 	function _display_entry_data_table($form_dat, $props, $wf, $o)
@@ -2458,45 +2554,6 @@ class cb_form_chain extends class_base
 		return $this->show(array(
 			"id" => $o->prop("cb_form_id")
 		));
-	}
-
-	function callback_get_redir($arr)
-	{
-		$l = get_instance("languages");
-		$ll = $l->get_list();
-		$ret = array();
-		$vals = $arr["obj_inst"]->meta("redir");
-		foreach($ll as $lid => $ln)
-		{
-			$nm = "rd[$lid]";
-			$ret[$nm] = array(
-				"name" => $nm,
-				"type" => "relpicker",
-				"reltype" => "RELTYPE_DOC",
-				"table" => "objects",
-				"field" => "meta",
-				"method" => "serialize",
-				"value" => $vals[$lid],
-				"caption" => sprintf(t("Kuhu suunata p&auml;rast sisestust (%s)"), $ln)
-			);
-		}
-
-		return $ret;
-	}
-
-	function _save_redir($arr)
-	{
-		foreach(safe_array($arr["request"]["rd"]) as $lid => $selecta)
-		{
-			if ($this->can("view", $selecta))
-			{
-				$arr["obj_inst"]->connect(array(
-					"to" => $selecta,
-					"type" => "RELTYPE_DOC"
-				));
-			}
-		}
-		$arr["obj_inst"]->set_meta("redir", $arr["request"]["rd"]);
 	}
 
 	function _page_is_filled($o, $page)

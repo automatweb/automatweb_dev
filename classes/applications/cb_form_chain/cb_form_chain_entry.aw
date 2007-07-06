@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.16 2006/11/28 14:21:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.17 2007/07/06 09:04:47 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus
 /*
 
@@ -121,6 +121,7 @@ class cb_form_chain_entry extends class_base
 
 			$f2d[$d->meta("webform_id")][] = $d;
 		}
+		
 		foreach($f2d as $wf_id => $entries)
 		{
 			if (!$wf_id)
@@ -182,7 +183,15 @@ class cb_form_chain_entry extends class_base
 					$metaf = $entry->meta("metaf");
 					if ($pd["type"] == "date_select")
 					{
-						$row["e".$idx] = date("d.m.Y", $entry->prop($pn));
+						if ($entry->prop($pn) != -1 && $entry->prop($pn) != 0)
+						{
+							$row["e".$idx] = date("d.m.Y", $entry->prop($pn));
+						}
+						else
+						{
+							$row["e".$idx] = "";
+							continue;
+						}
 					}
 					else
 					if ($pd["type"] == "text")
@@ -226,7 +235,15 @@ class cb_form_chain_entry extends class_base
 				{
 					if ($pd["type"] == "date_select")
 					{
-						$row[$pn] = date("d.m.Y", $entry->prop($pn));
+						if ($entry->prop($pn) != -1 && $entry->prop($pn) != 0)
+						{
+							$row[$pn] = date("d.m.Y", $entry->prop($pn));
+						}
+						else
+						{
+							$row[$pn] = "";
+							continue;
+						}
 					}
 					else
 					if ($pd["type"] == "text")
@@ -276,7 +293,7 @@ class cb_form_chain_entry extends class_base
 		{
 			if ($pd["type"] == "date_select")
 			{
-				if ($d->prop($pn) == 0)
+				if ($d->prop($pn) == 0 || $d->prop($pn) == -1)
 				{
 					continue;
 				}
@@ -331,6 +348,97 @@ class cb_form_chain_entry extends class_base
 			"form_name" => $form_obj->name()
 		));
 		return $this->parse("FORM");
+	}
+
+	function _format_csv_field($d, $sep = ";")
+	{
+		$new=strtr($d,array('"'=>'""'));
+		if (!(strpos($d,$sep)===false) || $new != $d || strpos($d, "\n") !== false)
+		{
+			$new='"'.$new.'"';
+		};
+		return strip_tags($new);
+	}
+
+	function show_csv($o)
+	{
+		$d = array();
+		if (is_oid($o->prop("cb_form_id")) && $this->can("view", $o->prop("cb_form_id")))
+		{
+			$form = obj($o->prop("cb_form_id"));
+			$di = safe_array($form->meta("d"));
+		}
+
+
+		$form_str = "";
+
+		// make a list of form -> entry, then display either table or form
+		$f2d = array();
+		foreach($o->connections_from(array("type" => "RELTYPE_ENTRY")) as $c)
+		{
+			$d = $c->to();
+
+			$f2d[$d->meta("webform_id")][] = $d;
+		}
+
+		$header = "";
+		$content = "";
+		foreach($f2d as $wf_id => $entries)
+		{
+			if (count($entries) > 1)
+			{
+				die("not implemented");
+			}
+			else
+			{
+				$wf = get_instance(CL_WEBFORM);
+				$props = $wf->get_props_from_wf(array(
+					"id" => $wf_id
+				));
+
+				$d = reset($entries);
+				$metaf = $d->meta("metaf");
+				foreach($props as $pn => $pd)
+				{
+					$header .= $this->_format_csv_field($pd["caption"]).";";
+					if ($pd["type"] == "date_select")
+					{
+						if ($d->prop($pn) == 0 || $d->prop($pn) == -1)
+						{
+							$val = "";
+						}
+						else
+						{
+							$val = date("d.m.Y", $d->prop($pn));
+						}
+					}
+					else
+					if ($pd["type"] == "text")
+					{
+						$val = $metaf[$pn];
+					}
+					else
+					{
+						if ($pd["type"] == "classificator" && $pd["store"] == "connect")
+						{
+							$ol = new object_list($d->connections_from(array("type" => $pd["reltype"])));
+							$val = join("<br>", $ol->names());
+						}
+						else
+						{
+							$val = $d->prop_str($pn);
+						}
+					}
+
+					$content .= $this->_format_csv_field($val).";";
+				}
+			}
+		}
+
+		$header .= "\r\n";
+		$content .= "\r\n";
+
+		return array($header, $content);
 	}
 
 	function do_db_upgrade($t, $f)
