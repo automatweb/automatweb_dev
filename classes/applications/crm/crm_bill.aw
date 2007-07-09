@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.112 2007/06/12 09:43:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.113 2007/07/09 13:42:38 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -2127,10 +2127,21 @@ class crm_bill extends class_base
 		$xml .= "</response>";
 		die($xml);
 	}
-
+	
 	function _bill_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+
+		$has_val = 1;
+		$rows = $this->get_bill_rows($arr["obj_inst"]);
+		foreach($rows as $row)
+		{
+			if(!$row["amt"] || !$row["sum"])
+			{
+				$has_val = 0;
+				break;
+			}
+		}
 
 		$tb->add_button(array(
 			"name" => "new",
@@ -2145,24 +2156,40 @@ class crm_bill extends class_base
 			"img" => "print.gif"
 		));
 		
+		$onclick = "";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille väärtus on 0 krooni")."');	if(fRet){";
+		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
+		if(!$has_val) $onclick.= "}else;";
+		
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');",
+			"onClick" => $onclick,
 			"text" => t("Prindi arve")
 		));
 
-		$tb->add_menu_item(array(
-			"parent" => "print",
-			"url" => "#",
-			"onClick" => "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');",
-			"text" => t("Prindi arve lisa")
-		));
+		$onclick = "";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille väärtus on 0 krooni")."');	if(fRet){";
+		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
+		if(!$has_val) $onclick.= "}else;";
+		
 
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');",
+			"onClick" => $onclick,
+			"text" => t("Prindi arve lisa")
+		));
+
+		$onclick = "";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille väärtus on 0 krooni")."');	if(fRet){";
+		$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
+		if(!$has_val) $onclick.= "}else;";
+
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => $onclick,
 			"text" => t("Prindi arve koos lisaga")
 		));
 
