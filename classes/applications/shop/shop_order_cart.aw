@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.64 2007/04/24 18:04:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.65 2007/07/09 11:01:56 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1676,12 +1676,17 @@ class shop_order_cart extends class_base
 		aw_restore_acl();
 		
 		//if(aw_global_get("uid") == "struktuur"){arr($_SESSION["bank_payment"]["url"]); die();}
+		if(is_oid($arr["oc"]))
+		{
+			$expl_oc = " (".$arr["oc"].")"; //et tellimiskeskkonna objekt ka näha jääks
+		}
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $real_sum,
 			"reference_nr" => $order_id,
 			"payment_id" => $bank_payment,
-			"expl" => $order_id,"lang"=>$bank_lang,
+			"expl" => $order_id.$expl_oc,
+			"lang"=>$bank_lang,
 		));
 		return $ret;
 	}
