@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.200 2007/07/09 10:36:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.201 2007/07/09 12:57:50 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1734,7 +1734,7 @@ class room extends class_base
 		{
  			$open = $this->open = $open_inst->get_times_for_date(reset($this->openhours), $time);
 		}
-		
+
 		$this->start = $arr["request"]["start"];
 
 		exit_function("get_calendar_tbl");
@@ -1884,7 +1884,7 @@ class room extends class_base
 					$end_step += 3600;
 					$prev_dst = date("I", $start_step);
 				}
-				if(!is_array($this->openhours) || $this->is_open($start_step,$end_step,($base_add + $step * $step_length * $time_step) > (24*3600)))
+				if(!is_array($this->openhours) || $this->is_open($start_step,$end_step,($base_add + $step * $step_length * $time_step) >= (24*3600)))
 				{
 					$visible=1;
 					$rowspan[$x] = 1;
