@@ -48,6 +48,27 @@
 			</function>
 		</action>
 
+		<action name="copy_task_rows" all_args="1">
+			<function name="copy_task_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cut_task_rows" all_args="1">
+			<function name="cut_task_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_task_rows" all_args="1">
+			<function name="paste_task_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="create_bill_from_task">
 			<function name="create_bill_from_task">
 				<arguments>

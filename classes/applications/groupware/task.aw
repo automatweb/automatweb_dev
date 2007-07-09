@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.173 2007/07/09 13:54:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.174 2007/07/09 14:59:08 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2702,6 +2702,76 @@ class task extends class_base
 			"tooltip" => t("Kustuta read"),
 			"action" => "delete_task_rows"
 		));
+	
+		$tb->add_button(array(
+			"name" => "copy",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri read"),
+			"action" => "copy_task_rows"
+		));
+	
+		$tb->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"tooltip" => t("L&otulde;ika read"),
+			"action" => "cut_task_rows"
+		));
+		
+		if($_SESSION["task_rows"])
+		{
+			$tb->add_button(array(
+				"name" => "paste",
+				"img" => "paste.gif",
+				"tooltip" => t("Aseta read"),
+				"action" => "paste_task_rows"
+			));
+		}
+	}
+
+	/**
+		@attrib name=copy_task_rows all_args=1
+	**/
+	function copy_task_rows($arr)
+	{
+		$_SESSION["task_rows"] = null;
+		$_SESSION["task_rows"]["sel"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+	
+	/**
+		@attrib name=cut_task_rows all_args=1
+	**/
+	function cut_task_rows($arr)
+	{
+		$_SESSION["task_rows"] = null;
+		$_SESSION["task_rows"]["sel"] = $arr["sel"];
+		$_SESSION["task_rows"]["remove_conn"] = $arr["id"];
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=paste_task_rows all_args=1
+	**/
+	function paste_task_rows($arr)
+	{
+		if(is_oid($_SESSION["task_rows"]["remove_conn"]) && $this->can("view" , $_SESSION["task_rows"]["remove_conn"]))
+		{
+			$rem_task = obj($_SESSION["task_rows"]["remove_conn"]);
+		}
+		$task = obj($arr["id"]);
+		foreach($_SESSION["task_rows"]["sel"] as $row)
+		{
+			$task->connect(array("to"=> $row, "type" => "RELTYPE_ROW"));
+			if(is_object($rem_task))
+			{
+				$rem_task->disconnect(array(
+					"from" => $row,
+					"reltype" => "RELTYPE_ROW",
+				));
+			}
+		}
+		$_SESSION["task_rows"] = null;
+		return $arr["post_ru"];
 	}
 
 	/**
