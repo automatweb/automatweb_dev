@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.5 2007/05/04 10:34:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.6 2007/07/09 12:25:23 kristo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -72,7 +72,7 @@ class object_basket extends class_base
 		$sub_ct = $this->get_template_string("LINE");
 		preg_match_all("/\{VAR\:(.*)\}/imsU", $sub_ct, $mt, PREG_PATTERN_ORDER);
 
-		$per_page = 2;
+		$per_page = 4;
 		$cur_page_from = $_GET["bm_page"] * $per_page;
 		$cur_page_to = ($_GET["bm_page"]+1) * $per_page;
 
@@ -80,7 +80,7 @@ class object_basket extends class_base
 		$counter = 0;
 		foreach($objs as $dat)
 		{
-			if ($counter >= $cur_page_from && $counter <= $cur_page_to)
+			if ($counter > $cur_page_from && $counter <= $cur_page_to)
 			{
 				$v = array(
 					"remove_single_url" => $this->mk_my_orb("remove_single", array("basket" => $basket->id(), "item" => $dat["oid"], "ru" => get_ru()))
@@ -101,18 +101,17 @@ class object_basket extends class_base
 						}
 					}
 				}
-				$this->vars($v);
+				$this->vars_safe($v);
 				$ls .= $this->parse("LINE");
 			}
 			$counter++;
 		}
-
 		$pgs = "";
 		$num_pages = count($objs) / $per_page;
 		for($i = 0; $i < $num_pages; $i++)
 		{
-			$this->vars(array(
-				"page_from" => ($i*$per_page),
+			$this->vars_safe(array(
+				"page_from" => ($i*$per_page)+1,
 				"page_to" => min(($i+1)*$per_page, count($objs)),
 				"page_link" => aw_url_change_var("bm_page", $i)
 			));
@@ -126,7 +125,7 @@ class object_basket extends class_base
 			}
 		}
 
-		$this->vars(array(
+		$this->vars_safe(array(
 			"PAGE" => $pgs,
 			"SEL_PAGE" => "",
 			"LINE" => $ls,

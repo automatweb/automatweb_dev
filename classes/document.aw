@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.369 2007/06/05 09:41:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.370 2007/07/09 12:28:01 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1383,7 +1383,7 @@ class document extends aw_template
                         $document_link = aw_ini_get("baseurl")."/?section=".$doc_o->id()."&path=".join(",",$new_path).",".$doc_o->id();
 		}
 
-		$this->vars(array(
+		$this->vars_safe(array(
 			"sel_lang_img_url" => $sel_lang_img_url,
 			"doc_modified" => $_date,
 			"doc_mod" => $doc["doc_modified"],
@@ -3339,6 +3339,7 @@ class document extends aw_template
 			case "aw_varuser3":
 			case "aw_target_audience":
 			case "aw_is_goal":
+			case "aw_in_budget":
 			case "no_show_in_promo":
 				$this->db_add_col($table, array(
 					"name" => $field,
