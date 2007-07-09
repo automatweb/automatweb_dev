@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.554 2007/06/25 11:25:14 kristo Exp $
+// $Id: class_base.aw,v 2.555 2007/07/09 08:06:05 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -980,7 +980,7 @@ class class_base extends aw_template
 						"id" => $o->id(),
 						"return_url" => get_ru(),
 					), $o->class_id());
-					$warn = "Objektis <b><a href=\"".$url."\">".$o->name()."</a></b> on m&auml;&auml;ramata v&auml;&auml;rtused: '".join("', '", $wprops)."'";
+					$warn = "Objektis <b><a href=\"".$url."\">".(strlen($_t = $o->name())?$_t:t("Nimetu"))."</a></b> on m&auml;&auml;ramata v&auml;&auml;rtused: '".join("', '", $wprops)."'";
 					warning($warn, $maxlevel);
 				}
 			}
@@ -995,7 +995,7 @@ class class_base extends aw_template
 				$final_warns[] = join("<br/>", $warns);
 			}
 			// LETS STOP ROKKIN'
-			$this->cli->config = count($final_warns)?($this->cli->config + array( "warn" => join("<br/>", $final_warns))):false;
+			$this->cli->config = count($final_warns)?($this->cli->config + array( "warn" => join("<br/>", $final_warns))):$this->cli->config;
 		}
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
