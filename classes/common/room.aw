@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.199 2007/07/05 09:43:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.200 2007/07/09 10:36:58 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1888,7 +1888,7 @@ class room extends class_base
 				{
 					$visible=1;
 					$rowspan[$x] = 1;
-					if ($this->is_paused($start_step,$end_step))
+/*-					if ($this->is_paused($start_step,$end_step))
 					{
 						if($col_buffer)
 						{
@@ -1902,74 +1902,90 @@ class room extends class_base
 						$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
 					}
 					else
-					if($this->check_if_available(array(
+*/					if($this->check_if_available(array(
 						"room" => $room_id,
 						"start" => $start_step,
 						"end" => $end_step,
 						
 					)))
 					{
-						$arr["timestamp"] = $start_step;
-						$prod_menu="";
-						if($use_product_times)
+						if ($this->is_paused($start_step,$end_step))
 						{
-							$arr["menu_id"] = "menu_".$start_step."_".$room_id;
-							$img_id = 'm_'.$room_id.'_'.$start_step;
-							$prod_menu = '<a class="menuButton" href="javascript:void(0)" onclick="bron_disp_popup(\'bron_menu_'.$room_id.'\', '.$start_step.',\''.$img_id.'\');" alt="" title="" id=""><img alt="" title="" border="0" src="'.aw_ini_get("icons.server").'/class_.gif" id="'.$img_id.'" ></a>';
-						}
-						else
-						if ($settings->prop("bron_popup_immediate") && is_admin())
-						{
-							if ($settings->prop("bron_popup_detailed"))
+							if($col_buffer)
 							{
-								$url = html::get_new_url(CL_RESERVATION, $b_parent, array(
-									"return_url" => get_ru(),
-									"calendar" => $cal,
-									"resource" => $room_id,
-									"ver" => $si->get_verified_default_for_group($settings),
-								));
-								$w = 1000;
-								$h = 600;
+								$col[$x] = "#".$col_buffer;
 							}
 							else
 							{
-								$url = $this->mk_my_orb("admin_add_bron_popup", array(
-					                                "parent" => $b_parent,
-				                                	"calendar" => $cal,
-				        	                        "resource" => $room_id,
-					                                "return_url" => get_ru(),
-			                	        	));
-								$w = 500;
-								$h = 400;
+								"#EE6363";
 							}
-
-							$onclick[$x] = "doBronExec('".$room_id."_".$start_step."', ".($step_length * $time_step).",null,null,'$url', '$w', '$h', 0)";
+							$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+							$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
 						}
 						else
 						{
-							$onclick[$x] = "doBron('".$room_id."_".$start_step."' , ".($step_length * $time_step).")";
-							//$string = t("VABA");
-						}
-
-						if (!$this->group_can_do_bron($settings, $start_step))
-						{
-							$onclick[$x] = "";
-							$prod_menu = "";
-						}
-						$val = 0;
-						$string = t("VABA");
-						$col[$x] = "#E1E1E1";
-						if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
-						{
-							//teeb selle kontrolli ka , et äkki tüübid ültse teist ruumi tahavad juba... et siis läheks sassi
-							if(!$_SESSION["room_reservation"]["room_id"] || $_SESSION["room_reservation"]["room_id"] == $room_id || in_array($room_id, $_SESSION["room_reservation"]["room_id"]))
+							$arr["timestamp"] = $start_step;
+							$prod_menu="";
+							if($use_product_times)
 							{
-								$val = 1;
-								$col[$x] = "red";
-								$string = t("Broneeri");
+								$arr["menu_id"] = "menu_".$start_step."_".$room_id;
+								$img_id = 'm_'.$room_id.'_'.$start_step;
+								$prod_menu = '<a class="menuButton" href="javascript:void(0)" onclick="bron_disp_popup(\'bron_menu_'.$room_id.'\', '.$start_step.',\''.$img_id.'\');" alt="" title="" id=""><img alt="" title="" border="0" src="'.aw_ini_get("icons.server").'/class_.gif" id="'.$img_id.'" ></a>';
 							}
+							else
+							if ($settings->prop("bron_popup_immediate") && is_admin())
+							{
+								if ($settings->prop("bron_popup_detailed"))
+								{
+									$url = html::get_new_url(CL_RESERVATION, $b_parent, array(
+										"return_url" => get_ru(),
+										"calendar" => $cal,
+										"resource" => $room_id,
+										"ver" => $si->get_verified_default_for_group($settings),
+									));
+									$w = 1000;
+									$h = 600;
+								}
+								else
+								{
+									$url = $this->mk_my_orb("admin_add_bron_popup", array(
+										"parent" => $b_parent,
+										"calendar" => $cal,
+										"resource" => $room_id,
+										"return_url" => get_ru(),
+									));
+									$w = 500;
+									$h = 400;
+								}
+	
+								$onclick[$x] = "doBronExec('".$room_id."_".$start_step."', ".($step_length * $time_step).",null,null,'$url', '$w', '$h', 0)";
+							}
+							else
+							{
+								$onclick[$x] = "doBron('".$room_id."_".$start_step."' , ".($step_length * $time_step).")";
+								//$string = t("VABA");
+							}
+	
+							if (!$this->group_can_do_bron($settings, $start_step))
+							{
+								$onclick[$x] = "";
+								$prod_menu = "";
+							}
+							$val = 0;
+							$string = t("VABA");
+							$col[$x] = "#E1E1E1";
+							if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
+							{
+								//teeb selle kontrolli ka , et äkki tüübid ültse teist ruumi tahavad juba... et siis läheks sassi
+								if(!$_SESSION["room_reservation"]["room_id"] || $_SESSION["room_reservation"]["room_id"] == $room_id || in_array($room_id, $_SESSION["room_reservation"]["room_id"]))
+								{
+									$val = 1;
+									$col[$x] = "red";
+									$string = t("Broneeri");
+								}
+							}
+							$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$room_id.']['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
 						}
-						$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$room_id.']['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
 					}
 					else
 					{
@@ -2180,7 +2196,7 @@ class room extends class_base
 									$dx_p["caption"] = "--//--";
 									$d[$x] = html::popup($dx_p);
 								}
-							}				
+							}
 
 							if ($col_buffer != "")
 							{
@@ -4723,7 +4739,7 @@ class room extends class_base
 					{
 						$this->is_after_buffer = 0;
 					}
-					if($val["verified"])
+					if($val["verified"] && !$this->is_after_buffer) // juhul kui pole järelpuhver ja on kinnitatud, siis pole vaja enam edasi otsida
 					{
 						return false;
 					}
@@ -4801,7 +4817,7 @@ class room extends class_base
 			$this->res_table[$start]["id"] = $res->id();
 			$customers[] = $res->prop("customer");
 		}
-		ksort($this->res_table);
+		ksort($this->res_table);//if(aw_global_get("uid") == "struktuur") arr($this->res_table);
 		if (count($customers))
 		{
 			$cust_ol = new object_list(array(
