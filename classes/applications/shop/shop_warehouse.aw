@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.49 2007/06/05 15:49:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.50 2007/07/09 13:59:32 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1809,7 +1809,7 @@ class shop_warehouse extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$mb = $o->modifiedby();
-			if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_company")))
+			if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_person")))
 			{
 				$_person = obj($o->prop("orderer_person"));
 				$mb = $_person->name();
