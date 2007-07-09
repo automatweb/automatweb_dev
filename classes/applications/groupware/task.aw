@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.174 2007/07/09 14:59:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.175 2007/07/09 15:30:37 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -873,9 +873,29 @@ class task extends class_base
 		}
 		$retval = PROP_OK;
 		switch($data["name"])
-		{	
+		{
 			case "rows_oe":
-				$data["value"]= t("Muud kulud")."\n";
+				$on_bill_str = $_SESSION["task"]["__bill_filt_comp"][1];
+				unset($_SESSION["task"]["__bill_filt_comp"]);
+				if($arr["new"])
+				{
+					break;
+				}
+				
+				if($on_bill_str == t("Arveta"))
+				{
+					$data["value"]= t("Muud kulud, mille kohta ei ole arvet esitatud");
+				}
+				elseif($on_bill_str == t("Arvel"))
+				{
+					$data["value"]= t("Muud kulud, mille kohta on arve esitatud");
+				}
+				else
+				{
+					$data["value"]= t("Muud kulud");
+				}
+				
+				$data["value"].= ":\n<br>";
 				$cs = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_EXPENSE",
 				));
@@ -894,8 +914,16 @@ class task extends class_base
 						$bno = "";
 						if ($this->can("view", $ob->prop("bill_id")))
 						{
+							if($on_bill_str == t("Arveta"))
+							{
+								continue;
+							}
 							$bo = obj($ob->prop("bill_id"));
 							$bno = $bo->prop("bill_no");
+						}
+						elseif($on_bill_str == t("Arvel"))
+						{
+							continue;
 						}
 						$onbill = "";
 						if ($ob->prop("bill_id"))
@@ -934,16 +962,16 @@ class task extends class_base
 						{
 							$a = t("arve nr"). " ";
 						}
-	
+						$there_are_oe = 1;
 						$data["value"].= $ob->name().", ". $ob->prop("cost") . " " .$c. ", " . $d. ", " .$w . ", " . $onbill."\n<br>";
 					}
 	//			$nr++;
 				}
 				if(is_object($co_cu)) $cu_name = $co_cu->name();
 				$data["value"].=t("Kokku:")." ".$sum." ".$cu_name;
+				if(!$there_are_oe) $data["value"] = "";
 				break;
-		
-		
+				
 			case "predicates":
 				return PROP_IGNORE;
 				break;
@@ -2088,6 +2116,7 @@ class task extends class_base
 
 	function __bill_filt_comp($key, $str, $row)
 	{
+		$_SESSION["task"]["__bill_filt_comp"] = array($key, $str, $row);
 		if (!is_oid($row["oid"]))
 		{
 			return true;
