@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.172 2007/06/12 12:41:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.173 2007/07/09 13:54:22 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -92,6 +92,12 @@
 
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
 @caption Saata arve
+
+@property in_budget type=checkbox ch_value=1 table=planner field=aw_in_budget
+@caption Eelarvesse
+
+@property service_type type=relpicker store=connect reltype=RELTYPE_SERVICE_TYPE
+@caption Teenuse liik
 
 @property priority type=textbox size=5 table=planner field=priority
 @caption Prioriteet
@@ -263,6 +269,9 @@ caption Osalejad
 
 @reltype EXPENSE value=10 clid=CL_CRM_EXPENSE
 @caption Muu kulu
+
+@reltype SERVICE_TYPE value=11 clid=CL_CRM_SERVICE_TYPE
+@caption Teenuse liik
 */
 
 
@@ -977,20 +986,22 @@ class task extends class_base
 
 			case "add_clauses":
 				$data["options"] = array(
-					"status" => t("Aktiivne"),
+//					"status" => t("Aktiivne"),
 					"is_done" => t("Tehtud"),
 					"whole_day" => t("Terve p&auml;ev"),
 					"is_goal" => t("Verstapost"),
 					"is_personal" => t("Isiklik"),
 					"send_bill" => t("Arvele"),
+					"in_budget" => t("Eelarvesse"),
 				);
 				$data["value"] = array(
-					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
+//					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
 					"is_done" => $arr["obj_inst"]->prop("is_done") ? 1 : 0,
 					"whole_day" => $arr["obj_inst"]->prop("whole_day") ? 1 : 0,
 					"is_goal" => $arr["obj_inst"]->prop("is_goal") ? 1 : 0,
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
+					"in_budget" => $arr["obj_inst"]->prop("in_budget") ? 1 : 0,
 				);
 				break;
 			case "priority":
@@ -1408,12 +1419,13 @@ class task extends class_base
 				}
 				break;
 			case "add_clauses":
-				$arr["obj_inst"]->set_status($prop["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
+//				$arr["obj_inst"]->set_status($prop["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
 				$arr["obj_inst"]->set_prop("is_done", $prop["value"]["is_done"] ? 8 : 0);
 				$arr["obj_inst"]->set_prop("whole_day", $prop["value"]["whole_day"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_goal", $prop["value"]["is_goal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $prop["value"]["is_personal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("send_bill", $prop["value"]["send_bill"] ? 1 : 0);
+				$arr["obj_inst"]->set_prop("in_budget", $prop["value"]["in_budget"] ? 1 : 0);
 				break;
 
 			case "is_done":
@@ -1935,9 +1947,20 @@ class task extends class_base
 				$selected = $settings_inst->bills_filter_options[$sts->prop("default_task_rows_bills_filter")];
 			}
 		}
+		
+/*		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev")."<br>",
+			"align" => "center",
+			"sortable" => 1,
+			"chgbgcolor" => "col",
+			"callback" =>  array(&$this, "__date_format"),
+			"callb_pass_row" => true,
+		));
+*/		
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => t("Jrk"),
+			"caption" => t("Jrk")."<br>".t("Kuup&auml;ev"),
 			"align" => "center",
 			"callback" =>  array(&$this, "__ord_format"),
 			"callb_pass_row" => true,
@@ -1956,16 +1979,6 @@ class task extends class_base
 			"name" => "task",
 			"caption" => t("Tegevus"),
 			"align" => "center",
-		));
-
-		$t->define_field(array(
-			"name" => "date",
-			"caption" => t("Kuup&auml;ev"),
-			"align" => "center",
-			"sortable" => 1,
-			"chgbgcolor" => "col",
-			"callback" =>  array(&$this, "__date_format"),
-			"callb_pass_row" => true,
 		));
 
 		$t->define_field(array(
@@ -2007,9 +2020,7 @@ class task extends class_base
 			),
 			"filter_compare" => array(&$this, "__done_filt_comp"),
 		));
-
 		
-
 		$t->define_field(array(
 			"name" => "on_bill",
 			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>Arvele</a>"),
@@ -2411,6 +2422,7 @@ class task extends class_base
 		));
 	}
 
+
 	function __ord_format($val)
 	{
 		$this->visible_rows_sum += $val["sum_val"];
@@ -2420,7 +2432,7 @@ class task extends class_base
 						"name" => "rows[".$val["idx"]."][ord]",
 						"value" => $val["ord_val"],
 						"size" => 3,
-			));
+			)).$this->__date_format($val);
 		}
 	}
 	
@@ -3640,6 +3652,11 @@ class task extends class_base
 			"caption" => t("Kood"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "service_type",
+			"caption" => t("Teenuse liik"),
+			"align" => "center"
+		));
 
 		$curr_object_list = new object_list(array(
 			"class_id" => CL_CURRENCY,
@@ -3693,6 +3710,12 @@ class task extends class_base
 			));
 		}
 
+		$stypes = new object_list(array(
+			"class_id" => CL_CRM_SERVICE_TYPE,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+
 		$t->define_data(array(
 			"priority" => html::textbox(array(
 				"name" => "priority",
@@ -3740,7 +3763,12 @@ class task extends class_base
 				"value" => $arr["obj_inst"]->prop("hr_price_currency"),
 			)),
 			"bill_no" => $bno,
-			"code" => $arr["obj_inst"]->prop("code")
+			"code" => $arr["obj_inst"]->prop("code"),
+			"service_type" => html::select(array(
+				"name" => "service_type",
+				"options" => array("" => "") + $stypes->names(),
+				"value" => $arr["obj_inst"]->prop("service_type")
+			))
 		));
 	}
 
