@@ -474,5 +474,12 @@
 			</function>
 		</action>
 
+		<action name="save_rows" all_args="1">
+			<function name="save_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

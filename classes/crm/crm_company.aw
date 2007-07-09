@@ -966,7 +966,14 @@ default group=org_objects
 @default group=service_types
 
 	@property stypes_tb type=toolbar store=no no_caption=1
-	@property stypes_tbl type=table store=no no_caption=1
+
+	@layout stypes_split type=hbox width=30%:70%
+
+		@layout stypes_tree_box type=vbox parent=stypes_split closeable=1 area_caption=Teenuse&nbsp;liikide&nbsp;kategooriad
+
+			@property stypes_tree type=treeview store=no no_caption=1 parent=stypes_tree_box
+
+		@property stypes_tbl type=table store=no no_caption=1 parent=stypes_split
 
 @default group=my_view
 
@@ -1579,6 +1586,7 @@ class crm_company extends class_base
 		{
 			case "stypes_tb":
 			case "stypes_tbl":
+			case "stypes_tree":
 				static $st_impl;
 				if (!$st_impl)
 				{
@@ -7616,6 +7624,28 @@ Bank accounts: üksteise all
 			}
 		}
 		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=save_rows all_args=1
+	**/
+	function save_rows($arr)
+	{
+		foreach($arr["rows"] as $key => $row)
+		{
+			if($row["time_to_cust"] != $row["time_to_cust_real"])
+			{
+				if(!($this->can("view" , $key)))
+				{
+					continue;
+				}
+				$br = obj($key);
+				$br->set_prop("time_to_cust" , str_replace("," , "." , $row["time_to_cust"]));
+				$br->save();
+				//arr(str_replace("," , "." , $row["time_to_cust_real"])); arr($br->prop("time_to_cust"));
+			}
+		}
+		return $_SESSION["aw_session_track"]["server"]["referer"];
 	}
 
 }
