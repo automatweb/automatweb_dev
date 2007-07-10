@@ -861,12 +861,25 @@ class crm_company_bills_impl extends class_base
 				$filt["state"] = "0";
 			}
 			else
-			{
+			{//arr($arr["request"]);
 				if ($arr["request"]["bill_s_cust"] != "")
 				{
 					$filt["customer"] = "%".$arr["request"]["bill_s_cust"]."%";
 				}
-				$filt["bill_no"] = "%".$arr["request"]["bill_s_bill_no"]."%";
+				if($arr["request"]["bill_s_bill_no"] && $arr["request"]["bill_s_bill_to"])
+				{
+					$filt["bill_no"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $arr["request"]["bill_s_bill_no"] , $arr["request"]["bill_s_bill_to"], "int");
+//					$filt["bill_no"] = "%".$arr["request"]["bill_s_bill_no"]."%";
+				}
+				elseif($arr["request"]["bill_s_bill_no"])
+				{
+					$filt["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["request"]["bill_s_bill_no"], "","int");
+				}
+				elseif($arr["request"]["bill_s_bill_to"])
+				{
+					$filt["bill_no"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["request"]["bill_s_bill_to"], "","int");
+				}
+				
 				$filt["bill_date_range"] = array(
 					"from" => date_edit::get_timestamp($arr["request"]["bill_s_from"]),
 					"to" => date_edit::get_timestamp($arr["request"]["bill_s_to"])
@@ -876,7 +889,7 @@ class crm_company_bills_impl extends class_base
 					$filt["client_mgr"] = "%".$arr["request"]["bill_s_client_mgr"]."%";
 				}
 				$filt["state"] = $arr["request"]["bill_s_status"];
-			}
+			}//arr($filt);
 			$bills = $d->get_bills_by_co($arr["obj_inst"], $filt);
 			$format = t('%s arved');
 		}

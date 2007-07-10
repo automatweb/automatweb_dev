@@ -754,8 +754,11 @@ default group=org_objects
 			@property bill_s_cust type=textbox size=30 store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Klient
 
-			@property bill_s_bill_no type=textbox size=30 store=no parent=bills_list_s captionside=top group=bills_list
-			@caption Arve nr
+			@property bill_s_bill_no type=textbox size=15 store=no parent=bills_list_s captionside=top group=bills_list
+			@caption Arve nr alates
+'
+			@property bill_s_bill_to type=textbox size=15 store=no parent=bills_list_s captionside=top group=bills_list
+			@caption Arve nr kuni
 
 			@property bill_s_from type=date_select store=no parent=bills_list_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox
 			@caption Esitatud alates

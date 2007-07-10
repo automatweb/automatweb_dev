@@ -2174,12 +2174,24 @@
             <table>objects</table>
             <group>bills_list</group>
             <type>textbox</type>
-            <size>30</size>
+            <size>15</size>
             <store>no</store>
             <parent>bills_list_s</parent>
             <captionside>top</captionside>
             <field>bill_s_bill_no</field>
-            <caption>Arve nr</caption>
+            <caption>Arve nr alates</caption>
+      </property>
+      <property>
+            <name>bill_s_bill_to</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>textbox</type>
+            <size>15</size>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <field>bill_s_bill_to</field>
+            <caption>Arve nr kuni</caption>
       </property>
       <property>
             <name>bill_s_from</name>
@@ -2983,12 +2995,23 @@
             <field>stypes_tb</field>
       </property>
       <property>
+            <name>stypes_tree</name>
+            <table>objects</table>
+            <group>service_types</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stypes_tree_box</parent>
+            <field>stypes_tree</field>
+      </property>
+      <property>
             <name>stypes_tbl</name>
             <table>objects</table>
             <group>service_types</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>stypes_split</parent>
             <field>stypes_tbl</field>
       </property>
       <property>
@@ -4266,6 +4289,18 @@
                   <parent>res_lt</parent>
                   <group>resources</group>
             </res_lt_tbl>
+            <stypes_split>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>service_types</group>
+            </stypes_split>
+            <stypes_tree_box>
+                  <type>vbox</type>
+                  <parent>stypes_split</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Teenuse&amp;nbsp;liikide&amp;nbsp;kategooriad</area_caption>
+                  <group>service_types</group>
+            </stypes_tree_box>
       </layout>
 </properties>
 
