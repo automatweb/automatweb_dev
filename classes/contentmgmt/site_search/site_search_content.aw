@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.90 2007/07/10 09:51:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.91 2007/07/10 10:21:08 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -2236,7 +2236,14 @@ class site_search_content extends class_base
 				$nm .= ".html";
 			}
 			$num_reps = $this->_get_num_reps($settings["str"], $settings["s_opt"], $entry["content"]);
-			$so = obj($entry["site_id"]);
+			if (!$this->can("view", $entry["site_id"]))
+			{
+				$so = obj();
+			}
+			else
+			{
+				$so = obj($entry["site_id"]);
+			}
 			$t->define_data(array(
 				"loc" => $so->prop("short_name"),
 				"link" => html::img(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.10 2007/07/10 09:50:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.11 2007/07/10 10:21:08 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -221,7 +221,7 @@ echo "url = ".htmlentities($url)." <br>";
 		{
 			return $this->queue->has_more() ? BG_OK : BG_DONE;
 		}
-		$i->set_cookie($this->cookie);
+		$i->set_cookie("automatweb", $this->cookie);
 
 		$this->pages[$url]["o"] =& $i;
 		$page =& $this->pages[$url]["o"];

@@ -121,18 +121,28 @@ class ss_parser_html extends ss_parser_base
 		return $ret;
 	}
 
-	function get_text_content()
+	function get_text_content($indexer)
 	{
 		$this->_init_content();
 
+		$ct = $this->content;
+		if (is_object($indexer) && $indexer->prop("content_regex") != "")
+		{
+			if( preg_match($indexer->prop("content_regex"), $ct, $mt))
+			{
+				$ct = $mt[1];
+			}
+		}
+
 		// also remove javascript content
-		$fc = preg_replace("/<script(.*)<\/script>/imsU","", $this->content);
+		$fc = preg_replace("/<script(.*)<\/script>/imsU","", $ct);
 		// and css styles
 		$fc = preg_replace("/<style(.*)<\/style>/imsU","", $fc);
 		// and html comments
 		$fc = preg_replace("/<!--(.*)-->/imsU","", $fc);
 
-		return trim(strip_tags($fc));
+		$r = trim(strip_tags($fc));
+		return $r;
 	}
 
 	function get_last_modified()
