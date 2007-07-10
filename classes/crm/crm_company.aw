@@ -4676,6 +4676,22 @@ class crm_company extends class_base
 			$row->set_prop("time_to_cust" , str_replace(",", ".", $val));
 			$row->save();
 		}
+		
+		foreach($arr["rows"] as $key => $row)
+		{
+			if($row["time_to_cust"] != $row["time_to_cust_real"])
+			{
+				if(!($this->can("view" , $key)))
+				{
+					continue;
+				}
+				$br = obj($key);
+				$br->set_prop("time_to_cust" , str_replace("," , "." , $row["time_to_cust"]));
+				$br->save();
+				//arr(str_replace("," , "." , $row["time_to_cust_real"])); arr($br->prop("time_to_cust"));
+			}
+		}
+		
 		return $_SESSION["create_bill_ru"];
 	}
 

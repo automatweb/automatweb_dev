@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.174 2007/06/18 14:02:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.175 2007/07/10 10:11:32 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -4204,11 +4204,17 @@ class crm_person extends class_base
 				"task" => html::obj_change_url($task),
 				"content" => $bi->_split_long_words($o->prop("content")),
 				"length" => number_format($o->prop("time_real"), 2, ',', ''),
-				"length_cust" => html::textbox(array(
-					"name" => "time_to_cust[".$o->id()."]",
+				
+				//"length_cust" => number_format($o->prop("time_to_cust"), 2, ',', ''),
+				"length_cust" => (!is_oid($bn))?html::textbox(array(
+					"name" => "rows[".$o->id()."][time_to_cust]",
 					"value" => number_format($o->prop("time_to_cust"), 2, ',', ''),
 					"size" => 4,
-				)),
+				)).html::hidden(array(
+					"name" => "rows[".$o->id()."][time_to_cust_real]",
+					"value" => number_format($o->prop("time_to_cust"), 2, ',', ''),
+				)):number_format($o->prop("time_to_cust"), 2, ',', ''),
+				
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
 				"check" => $check,
