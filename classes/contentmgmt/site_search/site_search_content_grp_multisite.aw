@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.2 2007/05/30 11:47:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.3 2007/07/10 09:51:50 kristo Exp $
 // site_search_content_grp_multisite.aw - Saidi sisu otsingu grupp mitu saiti 
 /*
 
@@ -11,7 +11,7 @@
 	@property sel_grps type=relpicker multiple=1 reltype=RELTYPE_GRP field=meta method=serialize
 	@caption Otsingu grupid
 
-@reltype GRP value=1 clid=CL_SITE_SEARCH_CONTENT_GRP_HTML
+@reltype GRP value=1 clid=CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP
 @caption Otsingu grupp
 
 */
@@ -55,10 +55,26 @@ class site_search_content_grp_multisite extends class_base
         {
 		$go = obj($r["group"]);
                 $i = get_instance(CL_SITE_SEARCH_CONTENT);
+		$gps = array();
+		foreach(safe_array($go->prop("sel_grps")) as $sel_grp)
+		{
+			if ($this->can("view", $sel_grp))
+			{
+				$go = obj($sel_grp);
+				if ($go->class_id() == CL_SITE_SEARCH_CONTENT_GRP)
+				{
+					$gps[] = $go->site_id();
+				}
+				else
+				{
+					$gps[] = $go->id();
+				}
+			}
+		}
                 return $i->fetch_static_search_results(array(
                         "str" => $r["str"],
                         "no_lang_id" => true,
-                        "site_id" => $go->prop("sel_grps")
+                        "site_id" => $gps
                 ));
         }
 	

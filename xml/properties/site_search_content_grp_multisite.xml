@@ -21,7 +21,10 @@
       <reltypes>
             <GRP>
                   <value>1</value>
-                  <clid>CL_SITE_SEARCH_CONTENT_GRP_HTML</clid>
+                  <clid>
+			<num_0>CL_SITE_SEARCH_CONTENT_GRP_HTML</num_0>
+			<num_1>CL_SITE_SEARCH_CONTENT_GRP</num_1>
+		</clid>
                   <caption>Otsingu grupp</caption>
             </GRP>
       </reltypes>

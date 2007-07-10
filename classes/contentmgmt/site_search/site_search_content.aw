@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.89 2007/05/30 11:47:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.90 2007/07/10 09:51:50 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -757,7 +757,6 @@ class site_search_content extends class_base
 		{
 			$group = $ob->meta("default_grp");
 		}
-
 		$s_gr = "";
 		foreach($gr as $gid => $gname)
 		{
@@ -769,7 +768,7 @@ class site_search_content extends class_base
 			$this->vars(array(
 				"group" => $gid,
 				"name" => $gname,
-				"checked" => checked($group == $gid),
+				"checked" => checked($group == $gid || isset($group[$gid])),
 				"selected" => selected($group == $gid)
 			));
 			$s_gr .= $this->parse("GROUP");
@@ -1843,7 +1842,6 @@ class site_search_content extends class_base
 				$conns = $o->connections_from(array(
 					"type" => "RELTYPE_SEARCH_GRP",
 				));
-
 				if (!is_array($group))
 				{
 					$group = array($group => $group);

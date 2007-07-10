@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.6 2005/09/29 06:31:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.7 2007/07/10 09:51:50 kristo Exp $
 // site_search_content_grp_fs.aw - Otsingu failis&uuml;steemi indekseerija 
 /*
 
@@ -176,7 +176,7 @@ flush();
 		flush();
 		foreach($paths as $path)
 		{
-			if (!isset($this->pages[$path]) && !$this->queue->contains($path))
+			if (!isset($this->pages[$path]) && !$this->queue->contains($path) && $path[0] == "/")
 			{
 				$this->queue->push($path);
 			$p_cnt++;
@@ -261,6 +261,8 @@ flush();
 		
 		$this->quote(&$fc);
 		$this->quote(&$title);
+		$this->quote(&$url);
+		$this->quote(&$fn);
 
 		$fields = array(
 			"content" => $fc,
@@ -347,5 +349,17 @@ flush();
 		}
 		die(t("Sellist faili ei ole!"));
 	}
+
+        function scs_get_search_results($r)
+        {
+                $i = get_instance(CL_SITE_SEARCH_CONTENT);
+//$GLOBALS["INTENSE_DUKE"] = 1;
+                return $i->fetch_static_search_results(array(
+                        "str" => $r["str"],
+                        "no_lang_id" => true,
+                        "site_id" => $r["group"]
+                ));
+        }
+
 }
 ?>

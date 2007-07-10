@@ -56,6 +56,12 @@ class ss_parser_base
 			list($usec, $sec) = explode(" ", microtime());
 			$tm_s = ((float)$usec + (float)$sec);
 
+			if (filesize($this->url) > 5000000)
+			{
+				$this->content = $this->headers = "";
+				return ;
+			}
+
 			$this->content = $this->_get($this->url);
 			$this->headers = "Last-modified: ".gmdate("D, d M Y H:i:s",filemtime($this->url))." GMT\n";
 
