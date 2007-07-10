@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.9 2007/05/30 11:47:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.10 2007/07/10 09:50:34 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -19,6 +19,12 @@
 
 	@property meta_ctr type=relpicker reltype=RELTYPE_META_CTR field=meta method=serialize
 	@caption Metaandmete kontroller
+
+	@property aw_username type=textbox field=meta method=serialize
+	@caption AW kasutaja
+
+	@property aw_pwd type=password field=meta method=serialize
+	@caption AW parool
 
 	@property i_status type=text store=no
 	@caption Staatus
@@ -122,6 +128,22 @@ echo "baseurl = ".$this->baseurl." <br>";
 		$this->queue->push($this->baseurl);
 
 		$this->ignore_pages = $this->make_keys(explode("\n", trim($o->prop("ignore_urls"))));
+
+		if ($o->prop("aw_username") != "" && $o->prop("aw_pwd") != "")
+		{
+			// log in and get kuuki
+			$awt = get_instance("protocols/file/http");
+			$awt->handshake(array(
+				"host" => $o->prop("url"),
+			));
+			$awt->login(array(
+				"host" => $o->prop("url"), 
+				"uid" => $o->prop("aw_username"), 
+				"password" => $o->prop("aw_pwd")
+			));
+			$this->cookie = $awt->cookie;
+			echo "logged in, cookie is {$this->cookie} <br>";
+		}
 	}
 
 	function bg_run_continue($o)
@@ -129,6 +151,22 @@ echo "baseurl = ".$this->baseurl." <br>";
 		$this->queue->set_all($o->meta("stored_queue"));
 		$this->pages = $this->make_keys($o->meta("stored_visited_pages"));
 		echo "restored queue, items = ".$this->queue->count()." pages = ".count($this->pages)."<br>";
+
+		if ($o->prop("aw_username") != "" && $o->prop("aw_pwd") != "")
+		{
+			// log in and get kuuki
+			$awt = get_instance("protocols/file/http");
+			$awt->handshake(array(
+				"host" => $o->prop("url"),
+			));
+			$awt->login(array(
+				"host" => $o->prop("url"), 
+				"uid" => $o->prop("aw_username"), 
+				"password" => $o->prop("aw_pwd")
+			));
+			$this->cookie = $awt->cookie;
+			echo "logged in, cookie is {$this->cookie} <br>";
+		}
 	}
 
 
@@ -183,6 +221,7 @@ echo "url = ".htmlentities($url)." <br>";
 		{
 			return $this->queue->has_more() ? BG_OK : BG_DONE;
 		}
+		$i->set_cookie($this->cookie);
 
 		$this->pages[$url]["o"] =& $i;
 		$page =& $this->pages[$url]["o"];

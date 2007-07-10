@@ -29,6 +29,24 @@
             <caption>Metaandmete kontroller</caption>
       </property>
       <property>
+            <name>aw_username</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>AW kasutaja</caption>
+      </property>
+      <property>
+            <name>aw_pwd</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>password</type>
+            <caption>AW parool</caption>
+      </property>
+      <property>
             <name>i_status</name>
             <table>objects</table>
             <field>meta</field>

@@ -2,6 +2,14 @@
 
 class ss_parser_base
 {
+	/** sets the session cookie to use for http requests
+	**/
+	function set_cookie($name, $value)
+	{
+		$this->session = $value;
+		$this->cookie_name = $name;
+	}
+
 	/** returns an array of urls that the current page contains
 	**/
 	function get_links()
