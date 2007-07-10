@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.176 2007/07/10 10:29:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.177 2007/07/10 11:30:48 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1054,8 +1054,8 @@ class crm_person extends class_base
 			case "stats_s_type":
 				$data["value"] = $arr["request"]["stats_s_type"];
 				$data["options"] = array(
+					"rows" => t("Ridade kaupa"),
 					"" => t("Kokkuv&otilde;te"),
-					"rows" => t("Ridade kaupa")
 				);
 				break;
 
@@ -3496,7 +3496,7 @@ class crm_person extends class_base
 
 	function _get_my_stats($arr)
 	{
-		if ($arr["request"]["stats_s_type"] == "rows" || !$arr["request"]["stats_s_type"])
+ 		if ($arr["request"]["stats_s_type"] == "rows" || !isset($arr["request"]["stats_s_type"]))
 		{
 			$this->_get_my_stats_rows($arr);
 			return;

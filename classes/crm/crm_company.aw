@@ -2518,8 +2518,8 @@ class crm_company extends class_base
 			case "my_stats_s_type":
 				$data["value"] = $arr["request"]["my_stats_s_type"];
 				$data["options"] = array(
+					"rows" => t("Ridade kaupa"),
 					"" => t("Kokkuv&otilde;te"),
-					"rows" => t("Ridade kaupa")
 				);
 				break;
 
