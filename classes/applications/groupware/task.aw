@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.175 2007/07/09 15:30:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.176 2007/07/10 12:21:58 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2157,6 +2157,12 @@ class task extends class_base
 
 	function _rows($arr)
 	{
+	//	$tasks = new object_list(array("class_id" => CL_TASK, "lang_id" => array()));
+	//	foreach($tasks->arr() as $task)
+	//	{
+	//		if($task->prop("hr_price_currency") != $task->prop("deal_price_currency")) arr($task->id());
+	//	}
+	
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
 		if ($sts && $sts->prop("task_rows_controller"))
@@ -2174,20 +2180,16 @@ class task extends class_base
 		$impls = $this->_get_possible_participants($arr["obj_inst"], true, $arr["obj_inst"]->prop("participants"));
 		$this->_init_rows_t($t, array_values($impls));
 
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$u = get_instance(CL_USER);
 		$def_impl = $u->get_current_person();
 		$o_def_impl = array($def_impl => $def_impl);
-
-		if($arr["obj_inst"]->id() > 0)	
-		{
-			$cs = $arr["obj_inst"]->connections_from(array(
-				"type" => "RELTYPE_ROW",
-			));
-		}
-		else 
-		{
-			$cs = array();	
-		}
+		$cs = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_ROW",
+		));
 		foreach ($cs as $key => $ro)
 		{
 			$ob = $ro->to();
@@ -2341,21 +2343,22 @@ class task extends class_base
 			if ($idx > 0)
 			{
 				$url = $this->mk_my_orb("stopper_pop", array(
+					"id" => $idx,
 					"s_action" => "start",
-					"type" => CL_TASK_ROW,
-					"name" => $data["value"],
-					"source_id" => $idx,
+					"type" => t("Toimetus"),
+					"name" => $data["value"]
 				));
-				$stopper = " <a href='javascript:void();' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",800,600)'>".t("Stopper")."</a>";
+				$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
 			}
 			else
 			{
 				$url = $this->mk_my_orb("stopper_pop", array(
+					"id" => $arr["obj_inst"]->id(),
 					"s_action" => "start",
-					"type" => CL_TASK_ROW,
+					"type" => t("Toimetus"),
 					"name" => $arr["obj_inst"]->name()
 				));
-				$stopper = " <a href='javascript:void();' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+				$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
 			}
 
 			$onbill = "";
@@ -2380,56 +2383,100 @@ class task extends class_base
 				));
 				$bv = ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill"));
 			}
-			$t->define_data(array(
-				"idx" => $idx,
-				"sum_val" => $row->prop("time_to_cust"),
-				"ord_val" => $row->prop("ord"),
-				"date_val" => $date,
-				"date_sel" => $date_sel,
-				"ord" => $row->prop("ord"),
-				"id" => $row->id(),
-				"task" => $pref."<a name='row_".$idx."'></a>".html::textarea(array(
-					"name" => "rows[$idx][task]",
-					"value" => $row->prop("content"),
-					"rows" => 5,
-					"cols" => 45
-				)).$app,
-				"date" => $row->prop("date") - ($row->prop("date")%3600),
-				"impl" => html::select(array(
-					"name" => "rows[$idx][impl]",
-					"options" => $impls,
-					"value" => $is,
-					"multiple" => 1
-				)),
-				"impl_val" => $is_str,
-				"time" => html::textbox(array(
-					"name" => "rows[$idx][time_guess]",
-					"value" => $row->prop("time_guess"),
-					"size" => 3
-				))." - Prognoos<br>".
-				html::textbox(array(
-					"name" => "rows[$idx][time_real]",
-					"value" => $row->prop("time_real"),
-					"size" => 3
-				))." - Kulunud<br>".
-				html::textbox(array(
-					"name" => "rows[$idx][time_to_cust]",
-					"value" => $row->prop("time_to_cust"),
-					"size" => 3
-				))." - Kliendile<br>".$stopper,
-				"done" => html::checkbox(array(
-					"name" => "rows[$idx][done]",
-					"value" => 1,
-					"checked" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done")
-				)),
-				"done_val" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done"),
-				"on_bill" => $onbill,
-				"bill_val" => $bv,
-				"comments" => $comments,
-				"comments_cnt" => $comments_cnt,
-				"oid" => $row->id(),
-				"col" => $col
-			));
+			$this->sum+= $row->prop("time_to_cust");
+
+			//kui arve on olemas, siis ei tahaks lasta muuta enam asju
+			if($this->can("view" , $row->prop("bill_id")))
+			{
+				$imps = "";
+				foreach($is as $impo)
+				{
+					$imps.= $impls[$impo]."<br>\n";
+				}
+				$t->define_data(array(
+					"idx" => $idx,
+					"ord_val" => $row->prop("ord"),
+					"date_val" => $date,
+					"date_sel" => $date_sel,
+					"sum_val" => $row->prop("time_to_cust"),
+					"ord" => $row->prop("ord"),
+					"id" => $row->id(),
+					"task" => $row->prop("content"),
+					"date" => $row->prop("date") - ($row->prop("date")%3600),
+					"impl" => $imps,
+
+//					"impl" => html::select(array(
+//					"name" => "rows[$idx][impl]",
+//					"options" => $impls,
+//					"value" => $is,
+//					"multiple" => 1
+//				)),
+					"impl_val" => $is_str,
+					"time" => $row->prop("time_guess")." - Prognoos<br>".$row->prop("time_real")." - Kulunud<br>".$row->prop("time_to_cust")." - Kliendile<br>",
+					"done" => "",
+					"done_val" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done"),
+					"on_bill" => $onbill,
+					"bill_val" => $bv,
+					"comments" => $comments,
+					"comments_cnt" => $comments_cnt,
+					"oid" => $row->id(),
+					"col" => $col,
+					"bill_id" => $row->prop("bill_id"),
+				));
+			}
+			else
+			{
+				$t->define_data(array(
+					"idx" => $idx,
+					"ord_val" => $row->prop("ord"),
+					"date_val" => $date,
+					"date_sel" => $date_sel,
+					"sum_val" => $row->prop("time_to_cust"),
+					"ord" => $row->prop("ord"),
+					"id" => $row->id(),
+					"task" => $pref."<a name='row_".$idx."'></a>".html::textarea(array(
+						"name" => "rows[$idx][task]",
+						"value" => $row->prop("content"),
+						"rows" => 5,
+						"cols" => 45
+					)).$app,
+					"date" => $row->prop("date") - ($row->prop("date")%3600),
+					"impl" => html::select(array(
+						"name" => "rows[$idx][impl]",
+						"options" => $impls,
+						"value" => $is,
+						"multiple" => 1
+					)),
+					"impl_val" => $is_str,
+					"time" => html::textbox(array(
+						"name" => "rows[$idx][time_guess]",
+						"value" => $row->prop("time_guess"),
+						"size" => 3
+					))." - Prognoos<br>".
+					html::textbox(array(
+						"name" => "rows[$idx][time_real]",
+						"value" => $row->prop("time_real"),
+						"size" => 3
+					))." - Kulunud<br>".
+					html::textbox(array(
+						"name" => "rows[$idx][time_to_cust]",
+						"value" => $row->prop("time_to_cust"),
+						"size" => 3
+					))." - Kliendile<br>".$stopper,
+					"done" => html::checkbox(array(
+						"name" => "rows[$idx][done]",
+						"value" => 1,
+						"checked" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done")
+					)),
+					"done_val" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done"),
+					"on_bill" => $onbill,
+					"bill_val" => $bv,
+					"comments" => $comments,
+					"comments_cnt" => $comments_cnt,
+					"oid" => $row->id(),
+					"col" => $col
+				));
+			}
 		}
 /*		if(is_oid($arr["obj_inst"]->prop("hr_price_currency")))
 		{
@@ -2450,7 +2497,6 @@ class task extends class_base
 			"task_object" => $arr["obj_inst"],
 		));
 	}
-
 
 	function __ord_format($val)
 	{
@@ -2497,6 +2543,10 @@ class task extends class_base
 	{
 		if($val["date_val"])
 		{
+			if($this->can("view" , $val["bill_id"]))
+			{
+				return $val["date_val"];
+			}
 			return html::textbox(array(
 					"name" => "rows[".$val["idx"]."][date]",
 					"value" => $val["date_val"],
@@ -2504,6 +2554,7 @@ class task extends class_base
 			)).$val["date_sel"];
 		}
 	}
+	
 	function __id_format($val)
 	{
 		return " ";
@@ -3334,7 +3385,7 @@ class task extends class_base
 		$max_ord = 0;
 		foreach(safe_array($_POST["rows"]) as $_oid => $e)
 		{
-			if (!is_oid($_oid))
+			if (!is_oid($_oid) || !$this->can("view", $_oid))
 			{
 				if ($e["task"] == "")
 				{
@@ -3383,54 +3434,62 @@ class task extends class_base
 					$is_mod = true;
 				}
 			}
-			if ($e["time_to_cust"] == "")
-			{
-				$e["time_to_cust"] = $e["time_real"];
-			}
 
-			foreach(safe_array($e["impl"]) as $i)
+			if(isset($e["impl"]))
 			{
-				if ($this->can("view", $i))
+				foreach(safe_array($e["impl"]) as $i)
 				{
-					$this->add_participant($task, obj($i));
+					if ($this->can("view", $i))
+					{
+						$this->add_participant($task, obj($i));
+					}
 				}
 			}
-
-			if ($o->prop("content") != $e["task"])
-			{
-				$o->set_prop("content", $e["task"]);
-				$is_mod = true;
-			}
 			
-			if ($o->class_id() == CL_CRM_MEETING)
+			if(isset($e["task"]))
 			{
-				$mti = $o->instance();
-				$pr = array(
-					"name" => "participants",
-					"value" => $this->make_keys($e["impl"]),
-				);
-				$_POST["participants"] = $this->make_keys($e["impl"]);
-				$mti->set_property(array(
-					"obj_inst" => $o,
-					"request" => $arr["request"],
-					"prop" => $pr
-				));
-				$is_mod = true;
-			}
-			else
-			{
-				if ($o->prop("impl") != $this->make_keys($e["impl"]))
+				if ($o->prop("content") != $e["task"])
 				{
-					$o->set_prop("impl", $e["impl"]);
+					$o->set_prop("content", $e["task"]);
 					$is_mod = true;
 				}
 			}
-
-			$e["time_guess"] = str_replace(",", ".", $e["time_guess"]);
-			if ($o->prop("time_guess") != $e["time_guess"])
+			
+			if(isset($e["impl"]))
 			{
-				$o->set_prop("time_guess", $e["time_guess"]);
-				$is_mod = true;
+				if ($o->class_id() == CL_CRM_MEETING)
+				{
+					$mti = $o->instance();
+					$pr = array(
+						"name" => "participants",
+						"value" => $this->make_keys($e["impl"]),
+					);
+					$_POST["participants"] = $this->make_keys($e["impl"]);
+					$mti->set_property(array(
+						"obj_inst" => $o,
+						"request" => $arr["request"],
+						"prop" => $pr
+					));
+					$is_mod = true;
+				}
+				else
+				{
+					if ($o->prop("impl") != $this->make_keys($e["impl"]))
+					{
+						$o->set_prop("impl", $e["impl"]);
+						$is_mod = true;
+					}
+				}
+			}
+
+			if(isset($e["time_guess"]))
+			{
+				$e["time_guess"] = str_replace(",", ".", $e["time_guess"]);
+				if ($o->prop("time_guess") != $e["time_guess"])
+				{
+					$o->set_prop("time_guess", $e["time_guess"]);
+					$is_mod = true;
+				}
 			}
 
 			//järjekorra seadmine
@@ -3445,53 +3504,70 @@ class task extends class_base
 				$o->set_prop("ord", $e["ord"]);
 				$is_mod = true;
 			}
-
-			$e["time_real"] = str_replace(",", ".", $e["time_real"]);
-			if ($o->prop("time_real") != $e["time_real"])
+			
+			if(isset($e["time_real"]))
 			{
-				$o->set_prop("time_real", $e["time_real"]);
-				$is_mod = true;
-			}
-
-			$e["time_to_cust"] = str_replace(",", ".", $e["time_to_cust"]);
-			if ($o->prop("time_to_cust") != $e["time_to_cust"])
-			{
-				$o->set_prop("time_to_cust", $e["time_to_cust"]);
-				$is_mod = true;
-			}
-
-			if ($o->class_id() == CL_CRM_MEETING)
-			{
-				$o->set_prop("is_done", $e["done"] ? 8 : 0);
-				$is_mod = true;
-			}	
-			else
-			{
-				if ((int)$o->prop("done") != (int)$e["done"])
+				$e["time_real"] = str_replace(",", ".", $e["time_real"]);
+				if ($o->prop("time_real") != $e["time_real"])
 				{
-					$o->set_prop("done", (int)$e["done"]);
+					$o->set_prop("time_real", $e["time_real"]);
 					$is_mod = true;
 				}
 			}
-
-			if ($o->class_id() != CL_CRM_MEETING)
+			
+			if(isset($e["time_to_cust"]))
 			{
-				if ((int)$o->prop("on_bill") != (int)$e["on_bill"])
+				if ($e["time_to_cust"] == "")
 				{
-					$o->set_prop("on_bill", (int)$e["on_bill"]);
-					if ($o->is_property("to_bill_date"))
+					$e["time_to_cust"] = $e["time_real"];
+				}
+			
+				$e["time_to_cust"] = str_replace(",", ".", $e["time_to_cust"]);
+				if ($o->prop("time_to_cust") != $e["time_to_cust"])
+				{
+					$o->set_prop("time_to_cust", $e["time_to_cust"]);
+					$is_mod = true;
+				}
+			}
+			
+			if(isset($e["done"]))
+			{
+				if ($o->class_id() == CL_CRM_MEETING)
+				{
+					$o->set_prop("is_done", $e["done"] ? 8 : 0);
+					$is_mod = true;
+				}	
+				else
+				{
+					if ((int)$o->prop("done") != (int)$e["done"])
 					{
-						$o->set_prop("to_bill_date", time());
+						$o->set_prop("done", (int)$e["done"]);
+						$is_mod = true;
 					}
-					$is_mod = true;
 				}
 			}
-			else
-			{
-				$o->set_meta("on_bill", (int)$e["on_bill"]);
-				$o->set_prop("send_bill", (int)$e["on_bill"]);
-			}
 
+			if(isset($e["on_bill"]))
+			{
+				if ($o->class_id() != CL_CRM_MEETING)
+				{
+					if ((int)$o->prop("on_bill") != (int)$e["on_bill"])
+					{
+						$o->set_prop("on_bill", (int)$e["on_bill"]);
+						if ($o->is_property("to_bill_date"))
+						{
+							$o->set_prop("to_bill_date", time());
+						}
+						$is_mod = true;
+					}
+				}
+				else
+				{
+					$o->set_meta("on_bill", (int)$e["on_bill"]);
+					$o->set_prop("send_bill", (int)$e["on_bill"]);
+				}
+			}
+			
 			if ($is_mod)
 			{
 				$o->save();
