@@ -57,6 +57,30 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>customer_name</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_customer_name</field>
+            <caption>Kliendi nimi</caption>
+      </property>
+      <property>
+            <name>customer_address</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_customer_address</field>
+            <caption>Kliendi aadress</caption>
+      </property>
+      <property>
+            <name>customer_code</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+	    <type>textbox</type>
+            <field>aw_customer_code</field>
+            <caption>Kliendikood</caption>
+      </property>
+      <property>
             <name>impl</name>
             <table>aw_crm_bill</table>
             <group>general</group>

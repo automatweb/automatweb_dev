@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.113 2007/07/09 13:42:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.114 2007/07/10 15:29:41 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -31,6 +31,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete
 	@caption Klient
+
+	@property customer_name type=textbox table=aw_crm_bill field=aw_customer_name
+	@caption Kliendi nimi
+	
+	@property customer_address type=textbox table=aw_crm_bill field=aw_customer_address
+	@caption Kliendi aadress
+
+	@property customer_code table=aw_crm_bill field=aw_customer_code
+	@caption Kliendikood
 
 	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
 	@caption Arve esitaja
@@ -230,7 +239,20 @@ class crm_bill extends class_base
 				$this->_bill_rows($arr);
 				break;
 
+			case "customer_name":
+			case "customer_code":
+			case "customer_address":
+				if(!$arr["obj_inst"]->prop("customer_name"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "customer":
+				if($arr["obj_inst"]->prop("customer_name"))
+				{
+					return PROP_IGNORE;
+				}
 				$i = get_instance(CL_CRM_COMPANY);
 				$p_i = get_instance(CL_CRM_PERSON);
 				$cust = $i->get_my_customers();
@@ -348,6 +370,14 @@ class crm_bill extends class_base
 					$this->_set_recv_date = time();
 				}
 				break;
+			case "customer_name":
+			case "customer_code":
+			case "customer_address":
+				if($arr["request"]["customer"])
+				{
+					return PROP_IGNORE;
+				}
+				break;
 
 			case "impl":
 				if(!$prop["value"])
@@ -355,27 +385,33 @@ class crm_bill extends class_base
 					$u = get_instance(CL_USER);
 					$prop["value"] = $u->get_current_company();
 				}
-			
+
 			case "customer":
 				// check if the 
-
- 				if(!is_oid($prop["value"]))
- 				{
- 					if(is_oid($arr["request"]["customer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["customer_awAutoCompleteTextbox"]))
- 					{
- 						$prop["value"] = $arr["request"]["customer_awAutoCompleteTextbox"];
- 					}
- 					else
- 					{
- 						$ol = new object_list(array(
- 							"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
- 							"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
- 							"lang_id" => array(),
- 						));
- 						$cust_obj = $ol->begin();
- 						$prop["value"] = $cust_obj->id();
- 					}
- 				}
+				if($prop["name"] == "customer" && isset($arr["request"]["customer_name"]))
+				{
+					return PROP_IGNORE;
+				}
+				if(!is_oid($prop["value"]))
+				{
+					if(is_oid($arr["request"]["customer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["customer_awAutoCompleteTextbox"]))
+					{
+						$prop["value"] = $arr["request"]["customer_awAutoCompleteTextbox"];
+					}
+					else
+					{
+						$ol = new object_list(array(
+							"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
+							"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+							"lang_id" => array(),
+						));
+						$cust_obj = $ol->begin();
+						if(is_object($cust_obj))
+						{
+							$prop["value"] = $cust_obj->id();
+						}
+					}
+				}
 				if ($this->can("view", $prop["value"]) && (($arr["obj_inst"]->prop("bill_due_date_days") == 0) || ($arr["obj_inst"]->prop("bill_due_date_days") == null)))
 				{
 					$cc = get_instance(CL_CRM_COMPANY);
@@ -394,23 +430,108 @@ class crm_bill extends class_base
 						));
 						$crel = reset($ol->arr());
 					}
-					if ($crel)
+					if ($prop["value"] != $arr["obj_inst"]->prop($prop["name"]))
 					{
-						$this->_set_bddd = $crel->prop("bill_due_date_days");
+						if ($crel)
+						{
+							$this->_set_bddd = $crel->prop("bill_due_date_days");
+						}
+						if(!($arr["obj_inst"]->prop("bill_due_date_days") > 0))
+						{
+							$this->_set_bddd = $co_obj->prop("bill_due_days");
+						}
+						if(!($arr["obj_inst"]->prop("bill_due_date_days") > 0) && $client_obj->class_id() == CL_CRM_COMPANY)
+						{
+							$this->_set_bddd = $client_obj->prop("bill_due_days");
+						}
 					}
-					if(!($arr["obj_inst"]->prop("bill_due_date_days") > 0))
+				}
+				if ($prop["name"] == "customer" && ($this->can("view", $prop["value"]) || is_oid($arr["obj_inst"]->prop("customer"))))
+				{
+					if($this->can("view", $prop["value"]))
 					{
-						$this->_set_bddd = $co_obj->prop("bill_due_days");
+						$cust_obj = obj($prop["value"]);
+						
 					}
-					if(!($arr["obj_inst"]->prop("bill_due_date_days") > 0) && $client_obj->class_id() == CL_CRM_COMPANY)
+					$arr["obj_inst"]->set_prop("customer_name" , $cust_obj->name());
+					$arr["obj_inst"]->set_prop("customer_code" ,$cust_obj->prop("code"));
+					if($cust_obj->class_id() == CL_CRM_COMPANY)
 					{
-						$this->_set_bddd = $client_obj->prop("bill_due_days");
+						$arr["obj_inst"]->set_prop("customer_address" , $cust_obj->prop("contact.name"));
 					}
+					else
+					{
+						$arr["obj_inst"]->set_prop("customer_address" , $cust_obj->prop("address.name"));
+					}
+					$arr["obj_inst"]->save();
 				}
 		}
 		return $retval;
-	}	
+	}
+	
+	function get_customer_name($b)
+	{
+		if(is_oid($b))
+		{
+			$b = obj($b);
+		}
+		if($b->prop("customer_name"))
+		{
+			return $b->prop("customer_name");
+		}
+		else
+		{
+			return $b->prop("customer.name");
+		}
+	}
 
+	function get_customer_address($b)
+	{
+		if(is_oid($b))
+		{
+			$b = obj($b);
+		}
+		if($b->prop("customer_name"))
+		{
+			return $b->prop("customer_address");
+		}
+		else
+		{
+			if($this->can("view" , $b->prop("customer")))
+			{
+				$cust_obj = obj($b->prop("customer"));
+				if($cust_obj->class_id() == CL_CRM_COMPANY)
+				{
+					return $cust_obj->prop("contact.name");
+				}
+				else
+				{
+					return $cust_obj->prop("address.name");
+				}
+			}
+			else
+			{
+				return "";
+			}
+		}
+	}
+
+	function get_customer_code($b)
+	{
+		if(is_oid($b))
+		{
+			$b = obj($b);
+		}
+		if($b->prop("customer_name"))
+		{
+			return $b->prop("customer_code");
+		}
+		else
+		{
+			return $b->prop("customer.code");
+		}
+	}
+	
 	function num($a)
 	{
 		return str_replace(",", ".", $a);
@@ -2295,6 +2416,9 @@ class crm_bill extends class_base
 	{
 		switch($field)
 		{
+			case "aw_customer_name":
+			case "aw_customer_address":
+			case "aw_customer_code":
 			case "aw_time_spent_desc":
 				$this->db_add_col($table, array(
 					"name" => $field,
@@ -2309,6 +2433,7 @@ class crm_bill extends class_base
 				return true;
 		}
 	}
+
 
 	/**
 		@attrib name=reconcile_rows
