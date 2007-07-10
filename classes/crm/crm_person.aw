@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.175 2007/07/10 10:11:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.176 2007/07/10 10:29:22 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3496,7 +3496,7 @@ class crm_person extends class_base
 
 	function _get_my_stats($arr)
 	{
-		if ($arr["request"]["stats_s_type"] == "rows")
+		if ($arr["request"]["stats_s_type"] == "rows" || !$arr["request"]["stats_s_type"])
 		{
 			$this->_get_my_stats_rows($arr);
 			return;
@@ -4075,14 +4075,27 @@ class crm_person extends class_base
 
 	function _get_my_stats_rows($arr)
 	{
+		classload("core/date/date_calc");
 		$r = $arr["request"];
 		// list all rows for me and the time span
-		$r["stats_s_from"] = date_edit::get_timestamp($r["stats_s_from"]);
-		$r["stats_s_to"] = date_edit::get_timestamp($r["stats_s_to"]);
-
+		if(!($r["stats_s_from"]))
+		{
+			$r["stats_s_from"] = get_month_start();
+		}
+		else
+		{
+			$r["stats_s_from"] = date_edit::get_timestamp($r["stats_s_from"]);
+		}
+		if($r["stats_s_to"])
+		{
+			$r["stats_s_to"] = time();
+		}
+		else
+		{
+			$r["stats_s_to"] = date_edit::get_timestamp($r["stats_s_to"]);
+		}
 		if ($r["stats_s_time_sel"] != "")
 		{
-			classload("core/date/date_calc");
 			switch($r["stats_s_time_sel"])
 			{
 				case "today":
@@ -4146,9 +4159,9 @@ class crm_person extends class_base
 		$bill_inst = get_instance(CL_CRM_BILL);
 		$company_curr = $stat_inst->get_company_currency();
 		$bi = get_instance(CL_BUG);
-
+		
 		$l_cus_s = 0;
-
+		
 		foreach($ol->arr() as $o)
 		{
 			$impl = $check = $bs = $bn = "";
@@ -4156,7 +4169,7 @@ class crm_person extends class_base
 			if ($this->can("view", $o->prop("bill_id")))
 			{
 				$b = obj($o->prop("bill_id"));
-				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no"));
+				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
 				$bn = $b->prop("bill_no");
 				$bs = $bill_inst->states[$b->prop("state")];
 				$agreement = $b->meta("agreement_price");
@@ -4174,7 +4187,7 @@ class crm_person extends class_base
 			{
 				$bs = t("Arve puudub");
 			}
-
+			
 			$task = obj($row2task[$o->id()]);
 			if (!is_oid($task->id()))
 			{
@@ -4183,20 +4196,20 @@ class crm_person extends class_base
 
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
-
+			
 			//kui on kokkuleppehind kas arvel, või kui arvet ei ole, siis toimetusel... tuleb vähe arvutada
 			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
 				$sum = $row_inst->get_row_ageement_price($o);
 			}
-
+			
 			//õigesse valuutasse
 			$sum = $stat_inst->convert_to_company_currency(array(
 				"sum"=>$sum,
 				"o"=>$task,
 				"company_curr" => $company_curr,
 			));
-
+			
 			$t->define_data(array(
 				"date" => $o->prop("date"),
 				"cust" => html::obj_change_url($task->prop("customer")),
@@ -4204,7 +4217,6 @@ class crm_person extends class_base
 				"task" => html::obj_change_url($task),
 				"content" => $bi->_split_long_words($o->prop("content")),
 				"length" => number_format($o->prop("time_real"), 2, ',', ''),
-				
 				//"length_cust" => number_format($o->prop("time_to_cust"), 2, ',', ''),
 				"length_cust" => (!is_oid($bn))?html::textbox(array(
 					"name" => "rows[".$o->id()."][time_to_cust]",
