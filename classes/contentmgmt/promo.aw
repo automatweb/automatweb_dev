@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.104 2007/07/11 09:43:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.105 2007/07/11 10:36:09 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -864,6 +864,9 @@ class promo extends class_base
 			"site_id" => array()
 		));
 
+		$o = $o->get_original();
+		$arr["oid"] = $o->brother_of();
+
 		$path = $o->path();
 	 	// get brothers as well, causet they might be in boxes as well
 		$bros = new object_list(array(
@@ -874,9 +877,10 @@ class promo extends class_base
 		$paths = array();
 		foreach($bros->arr() as $bro)
 		{
-			$paths[] = $bro->path();
+			$paths[$bro->id()] = $bro->path();
 		}
 
+		$set_oid = $o->id();
 		foreach($boxes->arr() as $box)
 		{
 			$add_to_list = false;
@@ -886,7 +890,7 @@ class promo extends class_base
 			$is_in_promo = false;
 			foreach($fld as $f => $subs)
 			{
-				if ($f == $o->parent() || ($subs && $this->_is_in_paths($paths, $f)))
+				if ($f == $o->parent() || ($subs && ($set_oid = $this->_is_in_paths($paths, $f))))
 				{
 					$is_in_promo = true;
 					break;
@@ -914,8 +918,7 @@ class promo extends class_base
 					// add the new document to it
 					// and give the id's and sort by and length to an object_list and let the database sort it all out
 					$ids = safe_array($box->meta("content_documents"));
-					$ids[$o->id()] = $o->id();
-
+					$ids[$set_oid] = $set_oid;
 					$limit = $box->prop("ndocs");
 
 					$filt = array(
@@ -961,7 +964,7 @@ class promo extends class_base
 			if ($add_to_list)
 			{
 				$mt = safe_array($box->meta("content_documents"));
-				$mt[$o->id()] = $o->id();
+				$mt[$set_oid] = $set_oid;
 
 				if ($box->prop("sort_by") != "")
 				{
@@ -1019,12 +1022,14 @@ class promo extends class_base
 
 	function _is_in_paths($paths, $f)
 	{
-		$rv = false;
-		foreach($paths as $path)
+		foreach($paths as $oid => $path)
 		{
-			$rv |= $this->_is_in_path($path, $f);
+			if ($this->_is_in_path($path, $f))
+			{
+				return $oid;
+			}
 		}
-		return $rv;
+		return false;
 	}
 
 	function _get_ordby($box)
