@@ -64,13 +64,13 @@
 	@caption Number
 
 	@property sp_comment type=textbox view_element=1
-	@caption Kirjeldus
+	@caption Nimetus
 
 	@property sp_starttime type=datetime_select view_element=1
-	@caption Alustamisaeg (meterjalide saabumine)
+	@caption Alustamisaeg (materjalide saabumine) alates
 
 	@property sp_due_date type=datetime_select view_element=1
-	@caption Tähtaeg
+	@caption Tähtaeg alates
 
 	@property sp_customer type=textbox view_element=1
 	@caption Klient
@@ -1198,10 +1198,10 @@ class mrp_workspace extends class_base
 
 			case "sp_status":
 				$prop["options"] = array(
-					MRP_STATUS_DONE => t("Tehtud"),
-					MRP_STATUS_ABORTED => t("Katkestatud"),
-					MRP_STATUS_PLANNED => t("Avatud"),
-					MRP_STATUS_ARCHIVED => t('Arhiveeritud')
+					MRP_STATUS_DONE => $this->states[MRP_STATUS_DONE],
+					MRP_STATUS_ABORTED => $this->states[MRP_STATUS_ABORTED],
+					MRP_STATUS_PLANNED => $this->states[MRP_STATUS_PLANNED],
+					MRP_STATUS_ARCHIVED => $this->states[MRP_STATUS_ARCHIVED]
 				);
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
@@ -4931,9 +4931,11 @@ class mrp_workspace extends class_base
 		$rows = "";
 		$i = 1;
 		$state_colours = $this->state_colours;
-		$state_colours["hilighted"] = "#FFE706";
+		$state_colours["hilighted"] = MRP_COLOUR_HILIGHTED;
+		$state_colours["unavailable"] = MRP_COLOUR_UNAVAILABLE;
 		$states = $this->states;
 		$states["hilighted"] = t("Valitud projekt");
+		$states["unavailable"] = t("Kinnine aeg");
 
 
 		foreach ($state_colours as $state => $colour)

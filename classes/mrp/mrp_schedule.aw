@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.136 2007/05/07 08:07:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.137 2007/07/11 21:29:09 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1046,7 +1046,7 @@ class mrp_schedule extends class_base
 
 		### function
 		$value1 = $this->combined_priority ($due_date1, $project_priority1);
-		$value2 = $this->combined_priority ($due_date2, $project_priority2);
+		$value2 = $this->combined_priority ($due_date2, $project_priority2);//!!! selle peaks siit mujale v6ibolla viima kui seda mitu korda samade param-tega tehakse.
 
 		### return result
 		if ($value1 > $value2)

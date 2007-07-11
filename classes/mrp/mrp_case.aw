@@ -15,7 +15,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @groupinfo grp_case_data caption="Projekti andmed" parent=general
 groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
-@groupinfo grp_case_view caption="Vaatleja töölaud"
+@groupinfo grp_case_view caption="Vaatleja töölaud" submit=no
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
@@ -1068,6 +1068,7 @@ class mrp_case extends class_base
 			// "img" => "set_on_hold.gif",
 			"tooltip" => t("Plaanist v&auml;lja"),
 			"action" => "set_on_hold",
+			"confirm" => t("Projekt plaanist v&auml;lja?"),
 			"disabled" => $disabled,
 		));
 
@@ -1089,7 +1090,7 @@ class mrp_case extends class_base
 			"name" => "abort_btn",
 			// "img" => "abort.gif",
 			"tooltip" => t("Katkesta"),
-			"confirm" => t("Katkesta projekt?"),
+			"confirm" => t("Katkestada projekt?"),
 			"action" => "abort",
 			"disabled" => $disabled,
 		));

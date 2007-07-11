@@ -25,8 +25,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@caption Kategooria
 
 @default group=grp_resource_schedule
-	@property cal_tb type=toolbar store=no no_caption=1
-
 	@property resource_calendar type=text store=no no_caption=1
 	@caption T&ouml;&ouml;d
 

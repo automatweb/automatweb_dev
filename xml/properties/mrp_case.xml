@@ -461,6 +461,7 @@
             </grp_case_workflow>
             <grp_case_view>
                   <caption>Vaatleja t&amp;ouml;&amp;ouml;laud</caption>
+                  <submit>no</submit>
             </grp_case_view>
             <grp_case_schedule>
                   <caption>Kalender</caption>
