@@ -900,6 +900,11 @@ class crm_company_bills_impl extends class_base
 
 		if ($arr["request"]["export_hr"] > 0)
 		{
+			if (is_array($arr["request"]["bi"]) && count($arr["request"]["bi"]))
+			{
+				$bills = new object_list();
+				$bills->add($arr["request"]["bi"]);
+			}
 			$this->_do_export_hr($bills, $arr, $arr["request"]["export_hr"]);
 		}
 
@@ -910,7 +915,7 @@ class crm_company_bills_impl extends class_base
 			if (is_oid($bill->prop("customer")) && $this->can("view", $bill->prop("customer")))
 			{
 				$tmp = obj($bill->prop("customer"));
-				$cust = html::get_change_url($tmp->id(), array("return_url" => get_ru()), $tmp->name());
+				$cust = html::get_change_url($tmp->id(), array("return_url" => get_ru()), $bill_i->get_customer_name($bill->id()));
 				$cm = html::obj_change_url($tmp->prop("client_manager"));
 			}
 			if ($arr["request"]["group"] == "bills_search")
