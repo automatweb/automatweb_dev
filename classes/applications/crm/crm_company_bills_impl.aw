@@ -873,11 +873,13 @@ class crm_company_bills_impl extends class_base
 				}
 				elseif($arr["request"]["bill_s_bill_no"])
 				{
-					$filt["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["request"]["bill_s_bill_no"], "","int");
+//					$filt["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["request"]["bill_s_bill_no"], "","int");
+					$filt["bill_no"] = $arr["request"]["bill_s_bill_no"];
 				}
 				elseif($arr["request"]["bill_s_bill_to"])
 				{
-					$filt["bill_no"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["request"]["bill_s_bill_to"], "","int");
+//					$filt["bill_no"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["request"]["bill_s_bill_to"], "","int");
+					$filt["bill_no"] = $arr["request"]["bill_s_bill_to"];
 				}
 				
 				$filt["bill_date_range"] = array(
