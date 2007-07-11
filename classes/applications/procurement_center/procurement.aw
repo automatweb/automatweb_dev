@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.19 2007/07/03 14:59:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.20 2007/07/11 15:41:30 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -114,18 +114,22 @@
 @groupinfo print caption="Print"
 @default group=print
 
-@property template type=select store=no
-@caption Templeit
+	@property template type=select store=no
+	@caption Templeit
+	
+	@property print_offerer type=select store=no
+	@caption Pakkuja 
+	
+	@property print_contact_person type=select store=no
+	@caption Pakkuja kontaktisik 
+	
+	@property print_type type=select store=no no_caption=1
+	@caption Pakkuja kontaktisik 
+	
+	@property print_submit type=submit store=no no_caption=1
+	@caption Print
 
-@property print_offerer type=select store=no
-@caption Pakkuja 
-
-@property print_contact_person type=select store=no
-@caption Pakkuja kontaktisik 
-
-@property print_submit type=submit store=no no_caption=1
-@caption Print
-
+#reltypes
 @reltype OFFERER value=1 clid=CL_CRM_COMPANY
 @caption Pakkuja
 
@@ -148,7 +152,7 @@
 @caption Kontaktisik
 
 @reltype FILES_MENU value=8 clid=CL_MENU
-@caption Kontaktisik
+@caption Failide kataloog
 */
 
 
@@ -221,12 +225,19 @@ class procurement extends class_base
 					"lang_id" => array(),
 					"site_id" => array()
 				));
-				$offlist->add($arr["request"]["offerers"]);
+				if($arr["request"]["offerers"])
+				{
+					$offlist->add($arr["request"]["offerers"]);
+				}
 				$prop["options"] = $offlist->names();
 				if(is_array($arr["request"]["offerers"]))
 				{
 					$prop["value"] = reset($arr["request"]["offerers"]);
 				}
+				break;
+			
+			case "print_type":
+				$prop["options"] = array("DOC" , "PDF");
 				break;
 				
 			case "print_contact_person":
@@ -499,6 +510,10 @@ class procurement extends class_base
 				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("id" => $arr["obj_inst"]->id(), "return_url" => $arr["request"]["return_url"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
 				</script>";
 				die($popup);
+			break;
+			case "print_offerer":
+				$this->print_procurement($arr["request"]);
+				
 			break;
 		}
 		return $retval;
@@ -1310,6 +1325,170 @@ class procurement extends class_base
 		}
 		die(iconv(aw_global_get("charset"), "UTF-8", $ret));
 	}
-
+	
+	function print_procurement($arr)
+	{
+		extract ($arr);
+		
+		if(!$this->can("view" , $template))
+		{
+			return t("Templeiti on ka tarvis");
+		}
+		if(!$print_offerer)
+		{
+			return t("Valida tuleb v&auml;hemalt 1 pakkuja");
+		}
+		if(!$this->can("view" , $id))
+		{
+			return t("Hanke id'd ka vaja");
+		}
+		
+		$o = obj($id);
+		$offerer = obj($print_offerer);
+		
+		$menu = $this->get_files_menu(array(
+			"orderer" => $o->prop("orderer"),
+			"name" => $o->prop("name"),
+			"o" => $o,
+		));
+		
+		$template_obj = obj($template);
+		$this->use_template($template_obj->prop("content"));
+		if($this->can("view" , $print_contact_person))
+		{
+			$pcpo = obj($print_contact_person);
+			$contact_person = $pcpo->name();
+		}
+		$this->vars(array(
+			"orderer_name" =>$o->prop("orderer.name"),
+			"orderer_city" =>$o->prop("orderer.contact.linn.name"),
+			"orderer_index" => $o->prop("orderer.contact.postiindeks"),
+			"orderer_country" => $o->prop("orderer.contact.riik.name"),
+			"orderer_county" => $o->prop("orderer.contact.maakond.name"),
+			"odrerer_area" => $o->prop("orderer.contact.piirkond.name"),
+			"orderer_street" => $o->prop("orderer.contact.aadress"),
+			"orderer_address" => $o->prop("orderer.contact.name"),
+			"nr" => $o->prop("procurement_nr"),
+			"name" => $o->name(),
+			"offerer_name" => $offerer->name(),
+			"offerer_phone" => $offerer->prop("phone_id.name"),
+			"offerer_email" => $offerer->prop("email_id.mail"),
+			"offerer_fax" => $offerer->prop("telefax_id.name"),
+			"offers_date" => $o->prop("offers_date"),
+			"offers_date_str" => date("d.m.Y" , $o->prop("offers_date")),
+			"procurement_info" => $o->prop("procurement_info"),
+			"contact_person" => $contact_person,
+		));
+		
+		//tekitab produktide subi
+		$products = $o->meta("products");
+		$p = "";
+		foreach($products as $key => $product)
+		{
+			if(!$product["product"]) continue;
+			$unit = "";
+			if($this->can("view" , $product["unit"]))
+			{
+				$uo =obj($product["unit"]);
+				$unit = $uo->prop("unit_code");
+			}
+			$this->vars(array(
+				"product" => $product["product"],
+				"amount" => $product["amount"],
+				"unit" => $unit,
+			));
+			$p.=$this->parse("PRODUCTS");
+		}
+		$this->vars(array("PRODUCTS" => $p));
+		
+		//kontaktisikud
+		$cp = "";
+		if($this->can("view" , $o->prop("contact_person1")))
+		{
+			$cpo = obj($o->prop("contact_person1"));
+			$this->vars(array(
+				"cp_name" => $cpo->name(),
+				"cp_email" => $cpo->prop("email.mail"),
+				"cp_phone" => $cpo->prop("phone.name"),
+				"cp_fax" => $cpo->prop("fax.name"),
+				"cp_rank" => $cpo->prop("rank.name"),
+				"cp1_name" => $cpo->name(),
+				"cp1_email" => $cpo->prop("email.mail"),
+				"cp1_phone" => $cpo->prop("phone.name"),
+				"cp1_fax" => $cpo->prop("fax.name"),
+				"cp1_rank" => $cpo->prop("rank.name"),
+			));
+			$cp.=$this->parse("CONTACT_PERSON");
+		}
+		if($this->can("view" , $o->prop("contact_person2")))
+		{	
+			$cpo = obj($o->prop("contact_person2"));
+			$this->vars(array(
+				"cp_name" => $cpo->name(),
+				"cp_email" => $cpo->prop("email.mail"),
+				"cp_phone" => $cpo->prop("phone.name"),
+				"cp_fax" => $cpo->prop("fax.name"),
+				"cp_rank" => $cpo->prop("rank.name"),
+				"cp2_name" => $cpo->name(),
+				"cp2_email" => $cpo->prop("email.mail"),
+				"cp2_phone" => $cpo->prop("phone.name"),
+				"cp2_fax" => $cpo->prop("fax.name"),
+				"cp2_rank" => $cpo->prop("rank.name"),
+			));
+			$cp.=$this->parse("CONTACT_PERSON");
+		}
+		if($this->can("view" , $o->prop("contact_person3")))
+		{
+			$cpo = obj($o->prop("contact_person3"));
+			$this->vars(array(
+				"cp_name" => $cpo->name(),
+				"cp_email" => $cpo->prop("email.mail"),
+				"cp_phone" => $cpo->prop("phone.name"),
+				"cp_fax" => $cpo->prop("fax.name"),
+				"cp_rank" => $cpo->prop("rank.name"),
+				"cp3_name" => $cpo->name(),
+				"cp3_email" => $cpo->prop("email.mail"),
+				"cp3_phone" => $cpo->prop("phone.name"),
+				"cp3_fax" => $cpo->prop("fax.name"),
+				"cp3_rank" => $cpo->prop("rank.name"),
+			));
+			$cp.=$this->parse("CONTACT_PERSON");
+		}
+		$this->vars(array("CONTACT_PERSON" => $cp));
+		
+//		lihtsalt muutujate testimiseks
+//		foreach($this->vars as $key => $val)
+//		{
+//			print $key." - {VAR:".$key."}\n<br>";
+//		}
+		
+/*		$file = new object();
+		$file->set_parent($menu->id());
+		$file->set_name($o->name()." - " .$offerer->name(), " - ".date("d.m.Y", time()));
+		$file->set_class_id(CL_FILE);
+		$file->save;
+		
+*/
+		
+		$fi = get_instance(CL_FILE);
+		$file_id = $fi->create_file_from_string(array(
+			"parent" => $menu->id(),
+			"name" => $o->name()." - " .$offerer->name(), " - ".date("d.m.Y", time()),
+			"content" => $this->parse(),
+		));
+		$sign_url = $fi->get_url($file_id);
+		
+		die($this->parse());
+		
+		
+		print "<script type='text/javascript'>
+					window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");
+		</script>";
+//arr($this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id())));
+		header("Location:".$this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id())));
+		return $this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id()));
+		die($this->parse());
+	}
+	
 }
 ?>

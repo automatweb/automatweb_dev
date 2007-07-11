@@ -281,6 +281,16 @@
             <caption>Pakkuja kontaktisik </caption>
       </property>
       <property>
+            <name>print_type</name>
+            <table>objects</table>
+            <group>print</group>
+            <type>select</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>print_type</field>
+            <caption>Pakkuja kontaktisik </caption>
+      </property>
+      <property>
             <name>print_submit</name>
             <table>objects</table>
             <group>print</group>
@@ -379,7 +389,7 @@
             <FILES_MENU>
                   <value>8</value>
                   <clid>CL_MENU</clid>
-                  <caption>Kontaktisik</caption>
+                  <caption>Failide kataloog</caption>
             </FILES_MENU>
       </reltypes>
       <layout>
