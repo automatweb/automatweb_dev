@@ -1102,12 +1102,12 @@ class crm_company_bills_impl extends class_base
 	function _do_export_hr($bills, $arr, $type = 1)
 	{
 		$u = get_instance(CL_USER);
+		$i = get_instance(CL_CRM_BILL);
 		$p = obj($u->get_current_person());
 		$co = obj($u->get_current_company());
 		$fn = trim(mb_strtoupper($p->prop("firstname")));
-	
+		
 		$ct = array();
-		$i = get_instance(CL_CRM_BILL);
 
 		$renumber = false;
 		if ($_GET["exp_bno"] > 0)
@@ -1119,6 +1119,7 @@ class crm_company_bills_impl extends class_base
 		$max = 0;
 		foreach($bills->arr() as $b)
 		{
+
 			$agreement_price = $b->meta("agreement_price");
 			if ($renumber)
 			{
@@ -1176,7 +1177,7 @@ class crm_company_bills_impl extends class_base
 				//$rfn = $fn;
 				$rfn = $p->prop("comment");
 			}
-			
+			$rfn = str_replace("\n", "", str_replace("\r", "", trim($rfn)));	
 			$penalty = "0,00";
 			if ($this->can("view", $b->prop("customer")))
 			{
@@ -1193,9 +1194,8 @@ class crm_company_bills_impl extends class_base
 			{
 				$date = date("d.m.Y", $b->prop("bill_date"));
 			}
-			
-			$min = min($min, $date);
-			$max = max($max, $date);
+			$min = min($min, $b->prop("bill_date"));
+			$max = max($max, $b->prop("bill_date"));
 
 
 			// bill info row
@@ -1219,21 +1219,29 @@ class crm_company_bills_impl extends class_base
 			$brow[] = ""; 
 			$brow[] = $rfn;						// OBJEKT (kasutaja eesnimi suurte tähtedega, nt TEDDI)
 			$brow[] = "";
-			$brow[] = 0;						//  0 (teadmata - vaikeväärtus 0)    
+			$brow[] = 0;						//  0 (teadmata - vaikeväärtus 0)   
+			$i = get_instance(CL_CRM_BILL); 
 			$cur = $i->get_bill_currency($b);
 			$brow[] = "";
 			$brow[] = "";
 			$brow[] = "";
 			$brow[] = ($cur ? $cur : t("EEK"));			// EEK (valuuta) 
-			$brow[] = ""; 
+			$brow[] = $cur == "EUR" ? "15,64664" : ""; 
 			$brow[] = $date;					// arve kuupäev//////////////
 			$brow[] = 0;						// (teadmata - vaikeväärtus 0)   
 			$brow[] = "";
 			$brow[] = "";
-			$brow[] = "";
-			$brow[] = ""; 
-			$brow[] = "15,65";					// (EURO kurss) 
-			$brow[] = "1,00";					// (kursi suhe, vaikeväärtus 1,00) 
+			$brow[] = $cur == "EUR" ? "1" : ""; 
+			if (true || $cur == "EEK")
+			{
+				$brow[] = "";
+				$brow[] = "";
+			}
+			else
+			{
+				$brow[] = "15,65";					// (EURO kurss) 
+				$brow[] = "1,00";					// (kursi suhe, vaikeväärtus 1,00) 
+			}
 			$brow[] = "";
 			$brow[] = ""; 
 			$ct[] = join("\t", $brow);
@@ -1244,9 +1252,10 @@ class crm_company_bills_impl extends class_base
 			{
 				$cust = obj($b->prop("customer"));
 
-				$custr[] = $cust->comment();	// kliendi kood hansaraamas
-				$custr[] = $cust->name()." ".$cust->prop("ettevotlusvorm.shortname");	// kliendi kood hansaraamas
+				$custr[] = str_replace("\n", "", str_replace("\r", "", trim($cust->comment())));	// kliendi kood hansaraamas
+				$custr[] = str_replace("\n", "", str_replace("\r", "", trim($i->get_customer_name($b->id()))))." ".str_replace("\n", "", str_replace("\r", "", trim($cust->prop("ettevotlusvorm.shortname"))));	// kliendi kood hansaraamas
 				
+				/*
 				if($cust->class_id() == CL_CRM_PERSON)
 				{
 					$custr[] = $cust->prop_str("address");
@@ -1257,7 +1266,11 @@ class crm_company_bills_impl extends class_base
 					$custr[] = $cust->prop_str("contact");
 					$custr[] = $cust->prop("contact.postiindeks")." ".$cust->prop("contact.riik.name");
 				}
-				$cust_code = $cust->prop("code");
+				*/
+				$custr[] = $i->get_customer_address($b->id());
+				$custr[] = $i->get_customer_address($b->id() , "index")." ".$i->get_customer_address($b->id() , "country");
+				
+				$cust_code = str_replace("\n", "", str_replace("\r", "", trim($i->get_customer_code($b->id()))));
 				list($cm) = explode(" ", $cust->prop_str("client_manager"));
 				$cm = mb_strtoupper($cm);
 			}
@@ -1309,6 +1322,7 @@ class crm_company_bills_impl extends class_base
 			$pr[] = str_replace(".", ",", $sum);	//39520,60 (Summa koos käibemaksuga)    
 			$pr[] = "";
 			$pr[] = "";
+			$pr[] = "";
 			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM_WO_TAX));		// 33492,03 (summa käibemaksuta)  
 			$pr[] = "0";	// (teadmata - vaikeväärtus 0) 
 			$pr[] = "0";	//  (teadmata - vaikeväärtus 0)   
@@ -1323,15 +1337,17 @@ class crm_company_bills_impl extends class_base
 			$pr[] = "";	
 			$pr[] =	"0";	// (teadmata - vaikeväärtus 0) 
 			$pr[] = ""; 
-			$pr[] = str_replace(".", ",", $i->get_bill_sum($b, BILL_AMT)); //77,00 (kogus kokku) 
-			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00)  
-			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00)  
-			$pr[] = "0";		// (teadmata - vaikeväärtus 0) 
+			//$pr[] = str_replace(".", ",", $i->get_bill_sum($b, BILL_AMT)); //77,00 (kogus kokku) 
 			$pr[] = "";
-			$pr[] = "0";	//(teadmata - vaikeväärtus 0) 
+			$pr[] = "";	// (teadmata - vaikeväärtus 0,00)  
+			$pr[] = "";	// (teadmata - vaikeväärtus 0,00)  
+			$pr[] = "";		// (teadmata - vaikeväärtus 0) 
+			$pr[] = "0";
+			$pr[] = "";	//(teadmata - vaikeväärtus 0) 
 			$pr[] = "0";	//(teadmata - vaikeväärtus 0)  
+			$pr[] = "0";
+			$pr[] = ""; //(teadmata - vaikeväärtus 0)
 			$pr[] = "";
-			$pr[] = "0"; //(teadmata - vaikeväärtus 0)
 			$ct[] = join("\t", $pr);
 
 			$rows = $i->get_bill_rows($b);
@@ -1376,11 +1392,9 @@ class crm_company_bills_impl extends class_base
 				if ($dd == "")
 				{
 					$dd = trim($row["comment"]);
-				} 
-
-				$dd_bits = $this->split_by_word($dd);
-				$ri[] = $dd_bits[0];    // testartikkel (toimetuse rea sisu)
-
+				}
+				$dd_bits = $this->split_by_word($dd); 
+				$ri[] = $dd_bits[0];	// testartikkel (toimetuse rea sisu) 
 				$ri[] = str_replace(".", ",", $row["price"]);	// 555,00 (ühiku hind) 
 //				$sum = round(str_replace(",", ".", $row["sum"])*2.0+0.049,1)/2.0;
 				$sum = str_replace(",", ".", $row["sum"]);
@@ -1404,6 +1418,7 @@ class crm_company_bills_impl extends class_base
 				$ri[] = "";
 				$ri[] = "";
 				$ri[] = $row["unit"];	//TK (ühik)     
+
 
 				$ct[] = join("\t", $ri);
 				for($i = 1; $i < count($dd_bits); $i++)
