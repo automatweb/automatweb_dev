@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.62 2007/06/26 10:24:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.63 2007/07/11 16:19:43 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -498,6 +498,11 @@ class bank_payment extends class_base
 		//arr($log_array);
 		$log_data = array();
 		$done = array();
+		$from = date_edit::get_timestamp($_SESSION["bank_payment"]["find_date_start"]);
+		$to = date_edit::get_timestamp($_SESSION["bank_payment"]["find_date_end"]);
+		if(!($to > 100)) $to = time();
+		if(!($from > 100)) $to = time() - 3600-24-31;
+		
 		foreach($log_array as $log)
 		{
 			if(is_array(unserialize($log)))
@@ -515,11 +520,11 @@ class bank_payment extends class_base
 				{
 					$bank_id = $this->merchant_id[$val["SOLOPMT-RETURN-VERSION"]];
 				}
-				if(date_edit::get_timestamp($filter["find_date_start"]) > 1 && !(date_edit::get_timestamp($filter["find_date_start"]) == date_edit::get_timestamp($filter["find_date_end"])) && date_edit::get_timestamp($filter["find_date_start"]) > $val["timestamp"])
+				if($from > 1 && !($from == $to) && $from > $val["timestamp"])
 				{
 					continue;
 				}
-				if(date_edit::get_timestamp($filter["find_date_end"]) > 1 && !(date_edit::get_timestamp($filter["find_date_start"]) == date_edit::get_timestamp($filter["find_date_end"])) && date_edit::get_timestamp($filter["find_date_end"]) < $val["timestamp"])
+				if($to > 1 && !($from == $to) && $to < $val["timestamp"])
 				{
 					continue;
 				}
@@ -671,12 +676,38 @@ class bank_payment extends class_base
 				$prop["value"] = 1;
 				break;
 			case "find_name":
-			case "find_date_start":
-			case "find_date_end":
 			case "find_ref":
 				if($search_data[$prop["name"]])
 				{
 					$prop["value"] = $search_data[$prop["name"]];
+				}
+				break;
+			case "find_date_start":
+				if(isset($_SESSION["bank_payment"]["find_date_start"]))
+				{
+					$prop["value"] = $_SESSION["bank_payment"]["find_date_start"];
+				}
+				else
+				{
+					$prop["value"] = array(
+						"day" => date("d" , (time()-(31 * 24 * 3600))),
+						"month" => date("m" , (time()-(31 * 24 * 3600))),
+						"year" => date("Y" , (time()-(31 * 24 * 3600))),
+					);
+				}
+				break;
+			case "find_date_end":
+				if(isset($_SESSION["bank_payment"]["find_date_end"]))
+				{
+					$prop["value"] = $_SESSION["bank_payment"]["find_date_end"];
+				}
+				else
+				{
+					$prop["value"] = array(
+						"day" => date("d" , time()) + 1,
+						"month" => date("m" , time()),
+						"year" => date("Y" , time()),
+					);
 				}
 				break;
 			case "test_priv_key":
@@ -773,6 +804,8 @@ class bank_payment extends class_base
 				break;
 			case "log":
 				$_SESSION["bank_payment"]["find_one"] = $arr["request"]["find_one"];
+				$_SESSION["bank_payment"]["find_date_start"] = $arr["request"]["find_date_start"];
+				$_SESSION["bank_payment"]["find_date_end"] = $arr["request"]["find_date_end"];
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				break;
 		}
