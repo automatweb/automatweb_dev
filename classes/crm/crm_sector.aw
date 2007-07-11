@@ -11,6 +11,9 @@
 	@property alias type=textbox size=55 table=objects field=alias
 	@caption Alias
 
+	@property link type=textbox size=60 table=objects field=meta method=serialize
+	@caption Link
+
 	@property ord type=textbox size=5 table=objects field=jrk
 	@caption J&auml;rjekord
 
@@ -27,6 +30,9 @@
 	@property image type=relpicker reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
 	@caption Pilt
 
+	@property info_document type=relpicker reltype=RELTYPE_DOCUMENT field=meta method=serialize
+	@caption Tutvustus
+
 	@classinfo no_status=1 syslog_type=ST_CRM_SECTOR
 
 
@@ -38,6 +44,9 @@
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption Pilt
+
+@reltype DOCUMENT value=2 clid=CL_DOCUMENT
+@caption Dokument
 */
 
 /*
