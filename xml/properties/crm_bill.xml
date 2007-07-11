@@ -73,10 +73,19 @@
             <caption>Kliendi aadress</caption>
       </property>
       <property>
+            <name>customer_address_meta</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <field>customer_address_meta</field>
+            <caption>Kliendi aadressi muutujad metas</caption>
+      </property>
+      <property>
             <name>customer_code</name>
             <table>aw_crm_bill</table>
             <group>general</group>
-	    <type>textbox</type>
+            <type>textbox</type>
             <field>aw_customer_code</field>
             <caption>Kliendikood</caption>
       </property>

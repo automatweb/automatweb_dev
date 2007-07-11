@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.115 2007/07/11 11:21:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.116 2007/07/11 12:25:29 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -37,8 +37,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	
 	@property customer_address type=textbox table=aw_crm_bill field=aw_customer_address
 	@caption Kliendi aadress
+	
+	@property customer_address_meta type=text no_caption=1
+	@caption Kliendi aadressi muutujad metas
 
-	@property customer_code table=aw_crm_bill field=aw_customer_code
+	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code
 	@caption Kliendikood
 
 	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
@@ -246,6 +249,30 @@ class crm_bill extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				break;
+				
+			case "customer_address_meta":
+				if(!$arr["obj_inst"]->prop("customer_name"))
+				{
+					return PROP_IGNORE;
+				}
+				$ad = $arr["obj_inst"]->meta("customer_addr");
+				$dt = array("country" => t("Riik"),"country_en" => t("Riik inglise keeles"),"county" => t("Maakond"),"city" => t("Linn"),"street" => t("T&auml;nav, maja, korter"),"index" => t("Postiindeks"));
+				$prop["value"] = "<table><tr>";
+				foreach($ad as $key => $val)
+				{
+					$prop["value"] .= "<td>" . $dt[$key] . "</td>";
+				}
+				$prop["value"].= "</tr><tr>";
+				foreach($ad as $key => $val)
+				{
+					$prop["value"].= "<td>" . html::textbox(array(
+						"name" => "address_meta[".$key."]",
+						"size" => 20,
+						"value" => $val,
+					)) . "</td>";
+				}
+				$prop["value"].= "</tr></table>";
 				break;
 
 			case "customer":
@@ -471,25 +498,32 @@ class crm_bill extends class_base
 					{
 						$arr["obj_inst"]->set_prop("customer_address" , $cust_obj->prop("contact.name"));
 						$customer_addr["street"] = $cust_obj->prop("contact.aadress");
+						$customer_addr["city"] = $cust_obj->prop("contact.linn.name");
 						$customer_addr["county"] = $cust_obj->prop("contact.maakond.name");
 						$customer_addr["country"] = $cust_obj->prop("contact.riik.name");
 						$customer_addr["country_en"] = $cust_obj->prop("contact.riik.name_en");
 						$customer_addr["index"] = $cust_obj->prop("contact.postiindeks");
-						$customer_addr["city"] = $cust_obj->prop("contact.linn.name");
 					}
 					else
 					{
 						$arr["obj_inst"]->set_prop("customer_address" , $cust_obj->prop("address.name"));
 						$customer_addr["street"] = $cust_obj->prop("address.aadress");
+						$customer_addr["city"] = $cust_obj->prop("address.linn.name");
 						$customer_addr["county"] = $cust_obj->prop("address.maakond.name");
 						$customer_addr["country"] = $cust_obj->prop("address.riik.name");
 						$customer_addr["country_en"] = $cust_obj->prop("address.riik.name_en");
 						$customer_addr["index"] = $cust_obj->prop("address.postiindeks");
-						$customer_addr["city"] = $cust_obj->prop("address.linn.name");
 					}
 					$arr["obj_inst"]->set_meta("customer_addr" , $customer_addr);
 					$arr["obj_inst"]->save();
 				}
+				break;
+				case "customer_address_meta":
+					if(is_array($arr["request"]["address_meta"]) && sizeof($arr["request"]["address_meta"]))
+					{
+						$arr["obj_inst"]->set_meta("customer_addr" , $arr["request"]["address_meta"]);
+					}
+				break;
 		}
 		return $retval;
 	}
