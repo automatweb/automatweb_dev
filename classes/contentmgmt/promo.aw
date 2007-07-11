@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.103 2007/06/06 10:04:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.104 2007/07/11 09:43:13 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -865,6 +865,17 @@ class promo extends class_base
 		));
 
 		$path = $o->path();
+	 	// get brothers as well, causet they might be in boxes as well
+		$bros = new object_list(array(
+			"brother_of" => $o->brother_of(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$paths = array();
+		foreach($bros->arr() as $bro)
+		{
+			$paths[] = $bro->path();
+		}
 
 		foreach($boxes->arr() as $box)
 		{
@@ -875,7 +886,7 @@ class promo extends class_base
 			$is_in_promo = false;
 			foreach($fld as $f => $subs)
 			{
-				if ($f == $o->parent() || ($subs && $this->_is_in_path($path, $f)))
+				if ($f == $o->parent() || ($subs && $this->_is_in_paths($paths, $f)))
 				{
 					$is_in_promo = true;
 					break;
@@ -1004,6 +1015,16 @@ class promo extends class_base
 			}
 		}
 		return false;
+	}
+
+	function _is_in_paths($paths, $f)
+	{
+		$rv = false;
+		foreach($paths as $path)
+		{
+			$rv |= $this->_is_in_path($path, $f);
+		}
+		return $rv;
 	}
 
 	function _get_ordby($box)
