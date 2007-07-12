@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.201 2007/06/05 09:41:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.202 2007/07/12 08:58:33 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -220,7 +220,7 @@ class image extends class_base
 				$row["link"] = $this->trans_get_val($o, "link");
 				$row["meta"]["author"] = $this->trans_get_val($o, "author");
 				$row["meta"]["alt"] = $this->trans_get_val($o, "alt");
-				if ($row["meta"]["alt"] == "")
+				if ($row["meta"]["alt"] == "" && aw_ini_get("image.default_alt_text_is_name"))
 				{
 					$row["meta"]["alt"] = $row["name"];
 				}
@@ -423,6 +423,7 @@ class image extends class_base
 			{
 				$ha = localparse($tpls["HAS_AUTHOR"], $vars);
 			}
+
 			$vars["HAS_AUTHOR"] = $ha;
 			if ($this->is_flash($idata["file"]))
 			{
@@ -476,14 +477,14 @@ class image extends class_base
 			}
 			else
 			{
-				if (!empty($tpls["image_inplace"]) && !$this->image_inplace_used)
+				if ($tpls["image_inplace"] && !$GLOBALS["image_inplace_used"][$f["from"]])
 				{
 					$tpl = "image_inplace";
 					$inplace = $tpl;
 					// mix seda lauset vaja on?
 					// sellep2rast et kui on 2 pilti pandud - siis esimese jaoks kasutatakse image_inplace subi ja j2rgmiste jaoks
 					// tavalist image subi juba - terryf
-					$this->image_inplace_used = true;
+					$GLOBALS["image_inplace_used"][$f["from"]] = true;
 				}
 				else
 				{
