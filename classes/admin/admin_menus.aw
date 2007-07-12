@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.121 2007/03/28 10:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.122 2007/07/12 11:22:00 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -387,8 +387,7 @@ class admin_menus extends aw_template
 		}
 		else
 		{
-			global $fail;
-
+			$fail = $_FILES["fail"]["tmp_name"];
 			$f = @fopen($fail, "r");
 			if ($f)
 			{
