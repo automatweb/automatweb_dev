@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.20 2007/07/11 15:41:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.21 2007/07/12 11:11:56 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -114,10 +114,13 @@
 @groupinfo print caption="Print"
 @default group=print
 
+	@property print_tb type=toolbar store=no no_caption=1
+	@caption Printimise toolbar
+
 	@property template type=select store=no
 	@caption Templeit
 	
-	@property print_offerer type=select store=no
+	@property print_offerer type=select store=no multiple=1
 	@caption Pakkuja 
 	
 	@property print_contact_person type=select store=no
@@ -193,6 +196,10 @@ class procurement extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		if($arr["request"]["del_sess"])
+		{
+			unset($_SESSION["procurement"]["print_data"]);
+		}
 		switch($prop["name"])
 		{
 			case "name":
@@ -220,6 +227,10 @@ class procurement extends class_base
 				break;
 				
 			case "print_offerer":
+				if($_SESSION["procurement"]["print_data"])
+				{
+					return PROP_IGNORE;
+				}
 				$offlist = new object_list(array(
 					"oid" => $arr["obj_inst"]->prop("offerers"),
 					"lang_id" => array(),
@@ -232,15 +243,55 @@ class procurement extends class_base
 				$prop["options"] = $offlist->names();
 				if(is_array($arr["request"]["offerers"]))
 				{
-					$prop["value"] = reset($arr["request"]["offerers"]);
+					$prop["value"] = reset($arr["request"]["offerers"]["print_offerer"]);
 				}
 				break;
 			
 			case "print_type":
+				if($_SESSION["procurement"]["print_data"]["print_offerer"])
+				{
+					return PROP_IGNORE;
+				}
 				$prop["options"] = array("DOC" , "PDF");
 				break;
 				
+			case "print_tb":
+				if(!$_SESSION["procurement"]["print_data"]["print_offerer"])
+				{
+					return PROP_IGNORE;
+				}
+				$arr["prop"]["vcl_inst"]->add_button(array(
+					"name" => "go_back",
+					"tooltip" => t("Tagasi pakkujate valikusse"),
+					"img" => "delete.gif",
+					"url" => aw_url_change_var("del_sess",1),
+					//"action" => "shit",
+				));
+				break;
+				
 			case "print_contact_person":
+				if(!$_SESSION["procurement"]["print_data"]["print_offerer"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["type"] = "text";
+				$prop["value"] = "<table>";
+				foreach($_SESSION["procurement"]["print_data"]["print_offerer"] as $po)
+				{
+					$offerer_obj = obj($po);
+					$options = array();
+					foreach($offerer_obj->connections_from(array("type" => "RELTYPE_CONTACT_PERSON")) as $c)
+					{
+						$options[$c->prop("to")] = $c->prop("to.name");
+					}
+					$prop["value"].= "<tr><td>".$offerer_obj->name()." : </td><td>" .html::select(array(
+						"name" => "print_contact_person[".$po."]",
+						"options" => $options,
+					))."</td></tr>";
+				}
+				$prop["value"].= "</table>";
+/*				
+				
 				if(is_array($arr["request"]["offerers"]) && sizeof($arr["request"]["offerers"]))
 				{
 					$offerer = reset($arr["request"]["offerers"]);
@@ -249,10 +300,15 @@ class procurement extends class_base
 					{
 						$prop["options"][$c->prop("to")] = $c->prop("to.name");
 					}
-				}
+				}*/
 				break;	
 				
+				
 			case "template":
+				if($_SESSION["procurement"]["print_data"])
+				{
+					return PROP_IGNORE;
+				}
 				if($this->can("view" , $arr["obj_inst"]->prop("orderer")))
 				{
 					$center = $this->model->get_proc_center_for_co(obj($arr["obj_inst"]->prop("orderer")));
@@ -511,8 +567,18 @@ class procurement extends class_base
 				</script>";
 				die($popup);
 			break;
+			case "print_contact_person":
+				if(is_array($arr["request"]["print_contact_person"]))
+				{
+					$_SESSION["procurement"]["print_data"]["contact_persons"] = $arr["request"]["print_contact_person"];
+					$this->print_procurement($_SESSION["procurement"]["print_data"]);
+				}
 			case "print_offerer":
-				$this->print_procurement($arr["request"]);
+				if(is_array($prop["value"]))
+				{
+					$_SESSION["procurement"]["print_data"] = $arr["request"];
+				}
+				//$this->print_procurement($arr["request"]);
 				
 			break;
 		}
@@ -1329,7 +1395,7 @@ class procurement extends class_base
 	function print_procurement($arr)
 	{
 		extract ($arr);
-		
+		unset($_SESSION["procurement"]["print_data"]);
 		if(!$this->can("view" , $template))
 		{
 			return t("Templeiti on ka tarvis");
@@ -1344,148 +1410,170 @@ class procurement extends class_base
 		}
 		
 		$o = obj($id);
-		$offerer = obj($print_offerer);
-		
 		$menu = $this->get_files_menu(array(
 			"orderer" => $o->prop("orderer"),
 			"name" => $o->prop("name"),
 			"o" => $o,
 		));
-		
 		$template_obj = obj($template);
 		$this->use_template($template_obj->prop("content"));
-		if($this->can("view" , $print_contact_person))
-		{
-			$pcpo = obj($print_contact_person);
-			$contact_person = $pcpo->name();
-		}
-		$this->vars(array(
-			"orderer_name" =>$o->prop("orderer.name"),
-			"orderer_city" =>$o->prop("orderer.contact.linn.name"),
-			"orderer_index" => $o->prop("orderer.contact.postiindeks"),
-			"orderer_country" => $o->prop("orderer.contact.riik.name"),
-			"orderer_county" => $o->prop("orderer.contact.maakond.name"),
-			"odrerer_area" => $o->prop("orderer.contact.piirkond.name"),
-			"orderer_street" => $o->prop("orderer.contact.aadress"),
-			"orderer_address" => $o->prop("orderer.contact.name"),
-			"nr" => $o->prop("procurement_nr"),
-			"name" => $o->name(),
-			"offerer_name" => $offerer->name(),
-			"offerer_phone" => $offerer->prop("phone_id.name"),
-			"offerer_email" => $offerer->prop("email_id.mail"),
-			"offerer_fax" => $offerer->prop("telefax_id.name"),
-			"offers_date" => $o->prop("offers_date"),
-			"offers_date_str" => date("d.m.Y" , $o->prop("offers_date")),
-			"procurement_info" => $o->prop("procurement_info"),
-			"contact_person" => $contact_person,
-		));
 		
-		//tekitab produktide subi
-		$products = $o->meta("products");
-		$p = "";
-		foreach($products as $key => $product)
+		$conv = get_instance("core/converters/html2pdf");
+		$fi = get_instance(CL_FILE);
+		
+		foreach($print_offerer as $po)
 		{
-			if(!$product["product"]) continue;
-			$unit = "";
-			if($this->can("view" , $product["unit"]))
+			$offerer = obj($po);
+			$contact_person = "";
+			if($this->can("view" , $contact_persons[$po]))
 			{
-				$uo =obj($product["unit"]);
-				$unit = $uo->prop("unit_code");
+				$pcpo = obj($contact_persons[$po]);
+				$contact_person = $pcpo->name();
 			}
 			$this->vars(array(
-				"product" => $product["product"],
-				"amount" => $product["amount"],
-				"unit" => $unit,
+				"orderer_name" =>$o->prop("orderer.name"),
+				"orderer_city" =>$o->prop("orderer.contact.linn.name"),
+				"orderer_index" => $o->prop("orderer.contact.postiindeks"),
+				"orderer_country" => $o->prop("orderer.contact.riik.name"),
+				"orderer_county" => $o->prop("orderer.contact.maakond.name"),
+				"odrerer_area" => $o->prop("orderer.contact.piirkond.name"),
+				"orderer_street" => $o->prop("orderer.contact.aadress"),
+				"orderer_address" => $o->prop("orderer.contact.name"),
+				"nr" => $o->prop("procurement_nr"),
+				"name" => $o->name(),
+				"offerer_name" => $offerer->name(),
+				"offerer_phone" => $offerer->prop("phone_id.name"),
+				"offerer_email" => $offerer->prop("email_id.mail"),
+				"offerer_fax" => $offerer->prop("telefax_id.name"),
+				"offers_date" => $o->prop("offers_date"),
+				"offers_date_str" => date("d.m.Y" , $o->prop("offers_date")),
+				"procurement_info" => $o->prop("procurement_info"),
+				"contact_person" => $contact_person,
 			));
-			$p.=$this->parse("PRODUCTS");
-		}
-		$this->vars(array("PRODUCTS" => $p));
 		
-		//kontaktisikud
-		$cp = "";
-		if($this->can("view" , $o->prop("contact_person1")))
-		{
-			$cpo = obj($o->prop("contact_person1"));
-			$this->vars(array(
-				"cp_name" => $cpo->name(),
-				"cp_email" => $cpo->prop("email.mail"),
-				"cp_phone" => $cpo->prop("phone.name"),
-				"cp_fax" => $cpo->prop("fax.name"),
-				"cp_rank" => $cpo->prop("rank.name"),
-				"cp1_name" => $cpo->name(),
-				"cp1_email" => $cpo->prop("email.mail"),
-				"cp1_phone" => $cpo->prop("phone.name"),
-				"cp1_fax" => $cpo->prop("fax.name"),
-				"cp1_rank" => $cpo->prop("rank.name"),
-			));
-			$cp.=$this->parse("CONTACT_PERSON");
-		}
-		if($this->can("view" , $o->prop("contact_person2")))
-		{	
-			$cpo = obj($o->prop("contact_person2"));
-			$this->vars(array(
-				"cp_name" => $cpo->name(),
-				"cp_email" => $cpo->prop("email.mail"),
-				"cp_phone" => $cpo->prop("phone.name"),
-				"cp_fax" => $cpo->prop("fax.name"),
-				"cp_rank" => $cpo->prop("rank.name"),
-				"cp2_name" => $cpo->name(),
-				"cp2_email" => $cpo->prop("email.mail"),
-				"cp2_phone" => $cpo->prop("phone.name"),
-				"cp2_fax" => $cpo->prop("fax.name"),
-				"cp2_rank" => $cpo->prop("rank.name"),
-			));
-			$cp.=$this->parse("CONTACT_PERSON");
-		}
-		if($this->can("view" , $o->prop("contact_person3")))
-		{
-			$cpo = obj($o->prop("contact_person3"));
-			$this->vars(array(
-				"cp_name" => $cpo->name(),
-				"cp_email" => $cpo->prop("email.mail"),
-				"cp_phone" => $cpo->prop("phone.name"),
-				"cp_fax" => $cpo->prop("fax.name"),
-				"cp_rank" => $cpo->prop("rank.name"),
-				"cp3_name" => $cpo->name(),
-				"cp3_email" => $cpo->prop("email.mail"),
-				"cp3_phone" => $cpo->prop("phone.name"),
-				"cp3_fax" => $cpo->prop("fax.name"),
-				"cp3_rank" => $cpo->prop("rank.name"),
-			));
-			$cp.=$this->parse("CONTACT_PERSON");
-		}
-		$this->vars(array("CONTACT_PERSON" => $cp));
+			//tekitab produktide subi
+			$products = $o->meta("products");
+			$p = "";
+			foreach($products as $key => $product)
+			{
+				if(!$product["product"]) continue;
+				$unit = "";
+				if($this->can("view" , $product["unit"]))
+				{
+					$uo =obj($product["unit"]);
+					$unit = $uo->prop("unit_code");
+				}
+				$this->vars(array(
+					"product" => $product["product"],
+					"amount" => $product["amount"],
+					"unit" => $unit,
+				));
+				$p.=$this->parse("PRODUCTS");
+			}
+			$this->vars(array("PRODUCTS" => $p));
 		
-//		lihtsalt muutujate testimiseks
-//		foreach($this->vars as $key => $val)
+			//kontaktisikud
+			$cp = "";
+			if($this->can("view" , $o->prop("contact_person1")))
+			{
+				$cpo = obj($o->prop("contact_person1"));
+				$this->vars(array(
+					"cp_name" => $cpo->name(),
+					"cp_email" => $cpo->prop("email.mail"),
+					"cp_phone" => $cpo->prop("phone.name"),
+					"cp_fax" => $cpo->prop("fax.name"),
+					"cp_rank" => $cpo->prop("rank.name"),
+					"cp1_name" => $cpo->name(),
+					"cp1_email" => $cpo->prop("email.mail"),
+					"cp1_phone" => $cpo->prop("phone.name"),
+					"cp1_fax" => $cpo->prop("fax.name"),
+					"cp1_rank" => $cpo->prop("rank.name"),
+				));
+				$cp.=$this->parse("CONTACT_PERSON");
+			}
+			if($this->can("view" , $o->prop("contact_person2")))
+			{	
+				$cpo = obj($o->prop("contact_person2"));
+				$this->vars(array(
+					"cp_name" => $cpo->name(),
+					"cp_email" => $cpo->prop("email.mail"),
+					"cp_phone" => $cpo->prop("phone.name"),
+					"cp_fax" => $cpo->prop("fax.name"),
+					"cp_rank" => $cpo->prop("rank.name"),
+					"cp2_name" => $cpo->name(),
+					"cp2_email" => $cpo->prop("email.mail"),
+					"cp2_phone" => $cpo->prop("phone.name"),
+					"cp2_fax" => $cpo->prop("fax.name"),
+					"cp2_rank" => $cpo->prop("rank.name"),
+				));
+				$cp.=$this->parse("CONTACT_PERSON");
+			}
+			if($this->can("view" , $o->prop("contact_person3")))
+			{
+				$cpo = obj($o->prop("contact_person3"));
+				$this->vars(array(
+					"cp_name" => $cpo->name(),
+					"cp_email" => $cpo->prop("email.mail"),
+					"cp_phone" => $cpo->prop("phone.name"),
+					"cp_fax" => $cpo->prop("fax.name"),
+					"cp_rank" => $cpo->prop("rank.name"),
+					"cp3_name" => $cpo->name(),
+					"cp3_email" => $cpo->prop("email.mail"),
+					"cp3_phone" => $cpo->prop("phone.name"),
+					"cp3_fax" => $cpo->prop("fax.name"),
+					"cp3_rank" => $cpo->prop("rank.name"),
+				));
+				$cp.=$this->parse("CONTACT_PERSON");
+			}
+			$this->vars(array("CONTACT_PERSON" => $cp));
+			
+	//		lihtsalt muutujate testimiseks
+	//		foreach($this->vars as $key => $val)
+	//		{
+	//			print $key." - {VAR:".$key."}\n<br>";
+	//		}
+			
+	/*		$file = new object();
+			$file->set_parent($menu->id());
+			$file->set_name($o->name()." - " .$offerer->name(), " - ".date("d.m.Y", time()));
+			$file->set_class_id(CL_FILE);
+			$file->save;
+			
+	*/
+
+			$file_id = $fi->create_file_from_string(array(
+				"parent" => $menu->id(),
+				"name" => ($print_type)?($o->name()." - " .$offerer->name()." - ".date("d.m.Y", time()).".pdf"):($o->name()." - " .$offerer->name()." - ".date("d.m.Y", time()).".html"),
+				"type" =>  ($print_type)?"application/pdf":"",
+				"content" => ($print_type)?$conv->convert(array(
+					"source" => $this->parse(),
+					"filename" => $o->name()." - " .$offerer->name()." - ".date("d.m.Y", time()).".pdf",
+				)):$this->parse(),
+			));
+
+			$sign_url = $fi->get_url($file_id);
+//		if($print_type)
 //		{
-//			print $key." - {VAR:".$key."}\n<br>";
+//			die($conv->gen_pdf(array(
+//				"source" => $this->parse(),
+//				"filename" => $o->name()." - " .$offerer->name()." - ".date("d.m.Y", time()).".pdf",
+//			)));
 //		}
+//		
+//		die($this->parse());
 		
-/*		$file = new object();
-		$file->set_parent($menu->id());
-		$file->set_name($o->name()." - " .$offerer->name(), " - ".date("d.m.Y", time()));
-		$file->set_class_id(CL_FILE);
-		$file->save;
-		
-*/
-		
-		$fi = get_instance(CL_FILE);
-		$file_id = $fi->create_file_from_string(array(
-			"parent" => $menu->id(),
-			"name" => $o->name()." - " .$offerer->name(), " - ".date("d.m.Y", time()),
-			"content" => $this->parse(),
-		));
-		$sign_url = $fi->get_url($file_id);
-		
-		die($this->parse());
-		
-		
-		print "<script type='text/javascript'>
-					window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");
-		</script>";
+			print "<script type='text/javascript'>
+						window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");
+			</script>";
+		}
+		$adminif = obj($_SESSION["cur_admin_if"]);
+		$loch=html::get_change_url($_SESSION["cur_admin_if"], array("parent" => $menu->id(), "group" => "o",));
+
+		print "<script type='text/javascript'>window.location.href='".$loch."'</script>";
 //arr($this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id())));
-		header("Location:".$this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id())));
+
+//		header("Location: ".$loch);
+		die();
 		return $this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id()));
 		die($this->parse());
 	}

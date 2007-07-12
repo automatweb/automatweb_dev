@@ -254,6 +254,16 @@
             <caption>Kriteeriumid</caption>
       </property>
       <property>
+            <name>print_tb</name>
+            <table>objects</table>
+            <group>print</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>print_tb</field>
+            <caption>Printimise toolbar</caption>
+      </property>
+      <property>
             <name>template</name>
             <table>objects</table>
             <group>print</group>
@@ -268,6 +278,7 @@
             <group>print</group>
             <type>select</type>
             <store>no</store>
+            <multiple>1</multiple>
             <field>print_offerer</field>
             <caption>Pakkuja </caption>
       </property>
