@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.21 2007/07/12 11:11:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.22 2007/07/12 12:54:57 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -274,22 +274,34 @@ class procurement extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				$co_inst = get_instance(CL_CRM_COMPANY);
+				
 				$prop["type"] = "text";
 				$prop["value"] = "<table>";
 				foreach($_SESSION["procurement"]["print_data"]["print_offerer"] as $po)
 				{
 					$offerer_obj = obj($po);
 					$options = array();
-					foreach($offerer_obj->connections_from(array("type" => "RELTYPE_CONTACT_PERSON")) as $c)
+					$contact_conns = $offerer_obj->connections_from(array("type" => "RELTYPE_CONTACT_PERSON"));
+					if(sizeof($contact_conns))
 					{
-						$options[$c->prop("to")] = $c->prop("to.name");
+						foreach($contact_conns as $c)
+						{
+							$options[$c->prop("to")] = $c->prop("to.name");
+						}
 					}
+					else
+					{
+						$options = $co_inst->get_employee_picker($offerer_obj);
+					}
+					
 					$prop["value"].= "<tr><td>".$offerer_obj->name()." : </td><td>" .html::select(array(
 						"name" => "print_contact_person[".$po."]",
 						"options" => $options,
 					))."</td></tr>";
 				}
 				$prop["value"].= "</table>";
+
 /*				
 				
 				if(is_array($arr["request"]["offerers"]) && sizeof($arr["request"]["offerers"]))
