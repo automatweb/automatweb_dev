@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.43 2007/07/06 09:04:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.44 2007/07/12 09:07:37 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1894,6 +1894,10 @@ class cb_form_chain extends class_base
 
 			foreach($props as $k => $v)
 			{
+				if (!empty($v["defaultx"]) && !isset($_SESSION["cbfc_data"][$wf->id()][$i][$k]))
+				{
+					$_SESSION["cbfc_data"][$wf->id()][$i][$k] = $v["defaultx"];
+				}
 				$props[$k]["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
 			}
 
