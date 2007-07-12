@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.31 2007/06/19 10:36:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.32 2007/07/12 14:38:13 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1156,11 +1156,12 @@ class spa_bookings_overview extends class_base
 		{
 			$f["package"] = $arr["request"]["stats_rs_package"];
 		}
-
 		$ol = new object_list($f);
-
+//if(aw_global_get("uid") == "struktuur") arr($f);
 		$pks = array();
 		$d = array();
+		enter_function("sbo::_get_stats_r_list");
+		$room_instance = get_instance(CL_ROOM);
 		foreach($ol->arr() as $o)
 		{
 			if (!$this->can("view", $o->prop("package")) || $o->createdby() == "")
@@ -1174,7 +1175,6 @@ class spa_bookings_overview extends class_base
 			foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
 			{
 				$b = $c->to();
-				$room_instance = get_instance(CL_ROOM);
 				$sum = $room_instance->cal_room_price(array(
 					"room" => $b->prop("resource"),
 					"start" => $b->prop("start1"),
@@ -1189,7 +1189,7 @@ class spa_bookings_overview extends class_base
 				}
 			}
 		}
-
+		exit_function("sbo::_get_stats_r_list");
 		$t->define_field(array(
 			"name" => "tb",
 			"align" => "center",
@@ -1315,7 +1315,6 @@ class spa_bookings_overview extends class_base
 
 		$from = date_edit::get_timestamp($arr["request"]["r_rs_booking_from"]);
 		$to = date_edit::get_timestamp($arr["request"]["r_rs_booking_to"]);
-
 		$srch = !empty($arr["request"]["r_rs_name"]) || !empty($arr["request"]["r_rs_booker_name"]) || $from > 1 || $to > 1 ;	
 		$room2booking = array();
 		if ($srch)
