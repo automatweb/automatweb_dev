@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.63 2007/07/11 16:19:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.64 2007/07/12 12:42:42 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -501,8 +501,7 @@ class bank_payment extends class_base
 		$from = date_edit::get_timestamp($_SESSION["bank_payment"]["find_date_start"]);
 		$to = date_edit::get_timestamp($_SESSION["bank_payment"]["find_date_end"]);
 		if(!($to > 100)) $to = time();
-		if(!($from > 100)) $to = time() - 3600-24-31;
-		
+		if(!($from > 100)) $from = time() - 3600*24*31;
 		foreach($log_array as $log)
 		{
 			if(is_array(unserialize($log)))
