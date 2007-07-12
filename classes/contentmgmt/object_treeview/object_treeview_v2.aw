@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.109 2007/06/29 12:06:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.110 2007/07/12 10:53:14 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1768,11 +1768,11 @@ class object_treeview_v2 extends class_base
 
 							if (!empty($url_field))
 							{
-								$content = $this->_get_link($content, $arr[$url_field], $parms['tree_obj_ih']);
+								$content = $this->_get_link($content, $arr[$url_field], $parms['tree_obj_ih'], !empty($arr["target"]));
 							}
 							else
 							{
-								$content = $this->_get_link($content, $url, $parms['tree_obj_ih']);
+								$content = $this->_get_link($content, $url, $parms['tree_obj_ih'],!empty($arr["target"]));
 							}
 
 						}
@@ -1782,7 +1782,7 @@ class object_treeview_v2 extends class_base
 					{
 						// here i will make sure, that existing objects, which don't have the
 						// show_link_field property set, have show link in name field
-						$content = $this->_get_link($content, $url, $parms['tree_obj_ih']);
+						$content = $this->_get_link($content, $url, $parms['tree_obj_ih'], !empty($arr["target"]));
 					}
 				}
 				$image_obj = "";	
@@ -2381,13 +2381,13 @@ class object_treeview_v2 extends class_base
 		return $return_url;
 	}
 
-	function _get_link($name, $url, $pfk)
+	function _get_link($name, $url, $pfk, $newwin = false)
 	{
 		$ld = array(
 			"url" => $url,
 			"caption" => $name,
 		);
-		if ($pfk->prop("show_link_new_win"))
+		if ($pfk->prop("show_link_new_win") || $newwin)
 		{
 			$ld["target"] = "_blank";
 		}

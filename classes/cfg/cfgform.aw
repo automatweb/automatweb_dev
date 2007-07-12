@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.122 2007/07/12 10:23:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.123 2007/07/12 10:53:13 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1333,7 +1333,6 @@ class cfgform extends class_base
 				{
 					continue;
 				}
-
 				switch ($prpdata["type"])
 				{
 					case "textarea":
@@ -1348,6 +1347,7 @@ class cfgform extends class_base
 							"prp_key" => $property["name"],
 						));
 						$property["cfgform_additional_options"] = $this->parse("textarea_options");
+						$this->vars(array("textarea_options" => ""));
 						break;
 
 					case "textbox":
@@ -1357,6 +1357,7 @@ class cfgform extends class_base
 							"prp_key" => $property["name"],
 						));
 						$property["cfgform_additional_options"] = $this->parse("textbox_options");
+						$this->vars(array("textbox_options" => ""));
 						break;
 
 					case "relpicker":
@@ -1367,12 +1368,12 @@ class cfgform extends class_base
 							"prp_key" => $property["name"],
 						));
 						$property["cfgform_additional_options"] = $this->parse("relpicker_options");
+						$this->vars(array("relpicker_options" => ""));
 						break;
 
 					default:
 						$property["cfgform_additional_options"] = "";
 				}
-
 				if (!empty($property["cfgform_additional_options"]))
 				{
 					$this->vars(array(
@@ -1381,12 +1382,17 @@ class cfgform extends class_base
 						"tmp_id" => $cnt,
 					));
 					$options = $this->parse("options");
+					$this->vars(array("options" => ""));
 				}
 				else
 				{
 					$options = "";
+					$this->vars(array(
+						"prp_options" => "",
+						"prp_opts_caption" => "",
+						"tmp_id" => ""
+					));
 				}
-
 				$used_props[$property["name"]] = 1;
 				$this->vars(array(
 					"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
@@ -1759,7 +1765,6 @@ class cfgform extends class_base
 						$prplist[$key]["ord"] = $arr["request"]["prop_ord"][$key];
 					}
 				}
-
 				if (is_array($arr["request"]["prpconfig"]))
 				{
 					foreach($arr["request"]["prpconfig"] as $key => $val)
@@ -1773,7 +1778,6 @@ class cfgform extends class_base
 						};
 					};
 				};
-
 				// if there's any additional properties concerning object, then save them too just in case..
 
 				//$this->cfg_groups = $grplist;
