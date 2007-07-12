@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.121 2007/06/05 14:20:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.122 2007/07/12 10:23:33 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -2946,6 +2946,12 @@ class cfgform extends class_base
 		if ("new" == $action and empty($vars["parent"]))
 		{
 			$vars["parent"] = $this_o->id();
+		}
+
+
+		if ("new" == $action && !$this->can("add", $vars["parent"]))
+		{
+			return "";
 		}
 
 		$vars["action"] = $action;
