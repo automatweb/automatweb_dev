@@ -22,8 +22,8 @@ msgid "Vaata erinevusi"
 msgstr "Check differences"
 
 #: classes/vcl/version_manager.aw:57 classes/vcl/version_manager.aw:105
-msgid "M&amp;auml;&amp;auml;ra aktiivseks"
-msgstr "Set to active"
+msgid "M&auml;&auml;ra aktiivseks"
+msgstr ""
 
 #: classes/vcl/version_manager.aw:111
 msgid "Kustuta versioonid"
@@ -44,3 +44,6 @@ msgstr "Active version"
 #: classes/vcl/version_manager.aw:199
 msgid "Valitud versioon"
 msgstr "Selected version"
+
+#~ msgid "M&amp;auml;&amp;auml;ra aktiivseks"
+#~ msgstr "Set to active"

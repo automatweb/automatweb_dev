@@ -712,7 +712,7 @@ msgid "--vali--"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:432
-msgid "Looja: %s"
+msgid "Looja: %s / %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:448
@@ -764,7 +764,7 @@ msgid "Prognoositud tundide arv muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:857
-msgid "Tundide kliendile arv muudeti %s => %s"
+msgid "Tunde kliendile arv muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:872

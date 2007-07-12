@@ -14,7 +14,6 @@ $GLOBALS["TRANS"]["Aktiivne objekt"] = "Active object";
 $GLOBALS["TRANS"]["Originaalobjekti ID"] = "Original object ID";
 $GLOBALS["TRANS"]["Originaalobjekt"] = "Original";
 $GLOBALS["TRANS"]["Koopia"] = "Copy";
-$GLOBALS["TRANS"][" (Aktiivne)"] = " (Active)";
 $GLOBALS["TRANS"]["Uued"] = "New";
 $GLOBALS["TRANS"]["Uus %s"] = "New %s";
 $GLOBALS["TRANS"]["Tee sündmus %s"] = "Create event %s";

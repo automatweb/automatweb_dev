@@ -10,41 +10,51 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/groupware/project_goal.aw:class_938_help
+#: classes/applications/groupware/project_goal.aw:class_938_help
 msgid "Klassi Verstapost help"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_start1
+#: classes/applications/groupware/project_goal.aw:prop_start1
 msgid "Omaduse Algus (start1) caption"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_start1_comment
+#: classes/applications/groupware/project_goal.aw:prop_start1_comment
 msgid "Omaduse Algus (start1) kommentaar"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_start1_help
+#: classes/applications/groupware/project_goal.aw:prop_start1_help
 msgid "Omaduse Algus (start1) help"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_end
+#: classes/applications/groupware/project_goal.aw:prop_end
 msgid "Omaduse L&otilde;pp (end) caption"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_end_comment
+#: classes/applications/groupware/project_goal.aw:prop_end_comment
 msgid "Omaduse L&otilde;pp (end) kommentaar"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_end_help
+#: classes/applications/groupware/project_goal.aw:prop_end_help
 msgid "Omaduse L&otilde;pp (end) help"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_content
+#: classes/applications/groupware/project_goal.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_content_comment
+#: classes/applications/groupware/project_goal.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
 msgstr ""
 
 # classes/applications/groupware/project_goal.aw:prop_content_help
+#: classes/applications/groupware/project_goal.aw:prop_content_help
 msgid "Omaduse Sisu (content) help"
 msgstr ""

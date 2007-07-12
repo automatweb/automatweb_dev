@@ -227,7 +227,7 @@ msgid "Faili lisamine eba&otilde;nnestus!"
 msgstr ""
 
 #: classes/common/digidoc/ddoc.aw:539
-msgid "Uue DigiDoc konteineri loomine eba&otilde;nnestus: "
+msgid "Uue DigiDoc konteineri loomine eba&otilde;nnestus:"
 msgstr ""
 
 #: classes/common/digidoc/ddoc.aw:547

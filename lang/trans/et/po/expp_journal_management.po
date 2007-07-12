@@ -50,21 +50,15 @@ msgid "Omaduse Organisatsioon (organisation_link) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_show_organisations_publications
-msgid ""
-"Omaduse Kuva selle v&auml;ljaandja teisi v&auml;ljaandeid "
-"(show_organisations_publications) caption"
+msgid "Omaduse Kuva selle v&auml;ljaandja teisi v&auml;ljaandeid (show_organisations_publications) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_show_organisations_publications_comment
-msgid ""
-"Omaduse Kuva selle v&auml;ljaandja teisi v&auml;ljaandeid "
-"(show_organisations_publications) kommentaar"
+msgid "Omaduse Kuva selle v&auml;ljaandja teisi v&auml;ljaandeid (show_organisations_publications) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_show_organisations_publications_help
-msgid ""
-"Omaduse Kuva selle v&auml;ljaandja teisi v&auml;ljaandeid "
-"(show_organisations_publications) help"
+msgid "Omaduse Kuva selle v&auml;ljaandja teisi v&auml;ljaandeid (show_organisations_publications) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_name
@@ -116,21 +110,15 @@ msgid "Omaduse Tellimistingimused (ordering_terms) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_order_composition_information
-msgid ""
-"Omaduse Tellimuse vormistamise informatsioon (order_composition_information) "
-"caption"
+msgid "Omaduse Tellimuse vormistamise informatsioon (order_composition_information) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_order_composition_information_comment
-msgid ""
-"Omaduse Tellimuse vormistamise informatsioon (order_composition_information) "
-"kommentaar"
+msgid "Omaduse Tellimuse vormistamise informatsioon (order_composition_information) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_order_composition_information_help
-msgid ""
-"Omaduse Tellimuse vormistamise informatsioon (order_composition_information) "
-"help"
+msgid "Omaduse Tellimuse vormistamise informatsioon (order_composition_information) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_design_image
@@ -218,21 +206,15 @@ msgid "Omaduse Dokument (custom_design_document) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_toolbar
-msgid ""
-"Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) "
-"caption"
+msgid "Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_toolbar_comment
-msgid ""
-"Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) "
-"kommentaar"
+msgid "Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_toolbar_help
-msgid ""
-"Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) "
-"help"
+msgid "Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_table
@@ -248,13 +230,11 @@ msgid "Omaduse Almav&auml;ljaanded (publications_table) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_toolbar
-msgid ""
-"Omaduse Piltide t&ouml;&ouml;riistariba (general_images_toolbar) caption"
+msgid "Omaduse Piltide t&ouml;&ouml;riistariba (general_images_toolbar) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_toolbar_comment
-msgid ""
-"Omaduse Piltide t&ouml;&ouml;riistariba (general_images_toolbar) kommentaar"
+msgid "Omaduse Piltide t&ouml;&ouml;riistariba (general_images_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_toolbar_help
@@ -278,8 +258,7 @@ msgid "Omaduse Failide t&ouml;&ouml;riistariba (general_files_toolbar) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_toolbar_comment
-msgid ""
-"Omaduse Failide t&ouml;&ouml;riistariba (general_files_toolbar) kommentaar"
+msgid "Omaduse Failide t&ouml;&ouml;riistariba (general_files_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_toolbar_help
@@ -303,8 +282,7 @@ msgid "Omaduse Linkide t&ouml;&ouml;riistariba (general_links_toolbar) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_toolbar_comment
-msgid ""
-"Omaduse Linkide t&ouml;&ouml;riistariba (general_links_toolbar) kommentaar"
+msgid "Omaduse Linkide t&ouml;&ouml;riistariba (general_links_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_toolbar_help
@@ -324,20 +302,15 @@ msgid "Omaduse Lingid (general_links_table) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_documents_toolbar
-msgid ""
-"Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) "
-"caption"
+msgid "Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_documents_toolbar_comment
-msgid ""
-"Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) "
-"kommentaar"
+msgid "Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_documents_toolbar_help
-msgid ""
-"Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) help"
+msgid "Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_documents_table
@@ -353,21 +326,15 @@ msgid "Omaduse Dokumendid (general_documents_table) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_polls_toolbar
-msgid ""
-"Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) "
-"caption"
+msgid "Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_polls_toolbar_comment
-msgid ""
-"Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) "
-"kommentaar"
+msgid "Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_polls_toolbar_help
-msgid ""
-"Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) "
-"help"
+msgid "Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_polls_table
@@ -383,20 +350,15 @@ msgid "Omaduse Kiirk&uumlsitlused (general_polls_table) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_webforms_toolbar
-msgid ""
-"Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) "
-"caption"
+msgid "Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_webforms_toolbar_comment
-msgid ""
-"Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) "
-"kommentaar"
+msgid "Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_webforms_toolbar_help
-msgid ""
-"Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) help"
+msgid "Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_webforms_table
@@ -448,14 +410,11 @@ msgid "Omaduse T&otilde;lgi\t (transl) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_organisation_general_information
-msgid ""
-"Grupi Ettev&otilde;tte &uuml;ldandmed (organisation_general_information) "
-"pealkiri"
+msgid "Grupi Ettev&otilde;tte &uuml;ldandmed (organisation_general_information) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_organisation_general_information_help
-msgid ""
-"Grupi Ettev&otilde;tte &uuml;ldandmed (organisation_general_information) help"
+msgid "Grupi Ettev&otilde;tte &uuml;ldandmed (organisation_general_information) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications
@@ -467,8 +426,7 @@ msgid "Grupi V&auml;ljaanded (publications) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications_general_info
-msgid ""
-"Grupi V&auml;ljaannete &uuml;ldinfo (publications_general_info) pealkiri"
+msgid "Grupi V&auml;ljaannete &uuml;ldinfo (publications_general_info) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications_general_info_help
@@ -568,44 +526,43 @@ msgid "Seose Esikaane pilt (RELTYPE_COVER_IMAGE) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_CRM_SECTION
-msgid "Seose &amp;Uuml;ksus/Toode (RELTYPE_CRM_SECTION) tekst"
+msgid "Seose &Uuml;ksus/Toode (RELTYPE_CRM_SECTION) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_PUBLICATION
-msgid "Seose V&amp;auml;ljaanne (RELTYPE_PUBLICATION) tekst"
+msgid "Seose V&auml;ljaanne (RELTYPE_PUBLICATION) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_PUBLICATION_IMAGE
-msgid "Seose V&amp;auml;ljaande pilt (RELTYPE_PUBLICATION_IMAGE) tekst"
+msgid "Seose V&auml;ljaande pilt (RELTYPE_PUBLICATION_IMAGE) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_MINI_GALLERY
-msgid "Seose &amp;Uuml;ldine minigalerii (RELTYPE_GENERAL_MINI_GALLERY) tekst"
+msgid "Seose &Uuml;ldine minigalerii (RELTYPE_GENERAL_MINI_GALLERY) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_FILE
-msgid "Seose &amp;Uuml;ldine fail (RELTYPE_GENERAL_FILE) tekst"
+msgid "Seose &Uuml;ldine fail (RELTYPE_GENERAL_FILE) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_LINK
-msgid "Seose &amp;Uuml;ldine link (RELTYPE_GENERAL_LINK) tekst"
+msgid "Seose &Uuml;ldine link (RELTYPE_GENERAL_LINK) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_IMAGE
-msgid "Seose &amp;Uuml;ldine pilt  (RELTYPE_GENERAL_IMAGE) tekst"
+msgid "Seose &Uuml;ldine pilt  (RELTYPE_GENERAL_IMAGE) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_FORUM
-msgid "Seose &amp;Uuml;ldine foorum (RELTYPE_GENERAL_FORUM) tekst"
+msgid "Seose &Uuml;ldine foorum (RELTYPE_GENERAL_FORUM) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_WEBFORM
-msgid "Seose &amp;Uuml;ldine veebivorm (RELTYPE_GENERAL_WEBFORM) tekst"
+msgid "Seose &Uuml;ldine veebivorm (RELTYPE_GENERAL_WEBFORM) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_POLL
-msgid ""
-"Seose &amp;Uuml;ldine kiirk&amp;uuml;sitlus (RELTYPE_GENERAL_POLL) tekst"
+msgid "Seose &Uuml;ldine kiirk&uuml;sitlus (RELTYPE_GENERAL_POLL) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_DOCUMENT
@@ -613,7 +570,7 @@ msgid "Seose Dokument (RELTYPE_GENERAL_DOCUMENT) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_PUBLICATION_HOMEPAGE
-msgid "Seose V&amp;auml;ljaandja koduleht (RELTYPE_PUBLICATION_HOMEPAGE) tekst"
+msgid "Seose V&auml;ljaandja koduleht (RELTYPE_PUBLICATION_HOMEPAGE) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_ORDERING_TERMS

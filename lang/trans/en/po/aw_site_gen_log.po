@@ -10,26 +10,32 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/install/aw_site_gen_log.aw:class_204_help
+#: classes/install/aw_site_gen_log.aw:class_204_help
 msgid "Klassi AW Saidi loomise log help"
 msgstr ""
 
 # classes/install/aw_site_gen_log.aw:prop_show
+#: classes/install/aw_site_gen_log.aw:prop_show
 msgid "Omaduse  (show) caption"
 msgstr ""
 
 # classes/install/aw_site_gen_log.aw:prop_show_comment
+#: classes/install/aw_site_gen_log.aw:prop_show_comment
 msgid "Omaduse  (show) kommentaar"
 msgstr ""
 
 # classes/install/aw_site_gen_log.aw:prop_show_help
+#: classes/install/aw_site_gen_log.aw:prop_show_help
 msgid "Omaduse  (show) help"
 msgstr ""
 
 # classes/install/aw_site_gen_log.aw:group_view
+#: classes/install/aw_site_gen_log.aw:group_view
 msgid "Grupi Vaata logi (view) pealkiri"
 msgstr "Display log"
 
 # classes/install/aw_site_gen_log.aw:group_view_help
+#: classes/install/aw_site_gen_log.aw:group_view_help
 msgid "Grupi Vaata logi (view) help"
 msgstr ""
 

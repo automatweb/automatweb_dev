@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/obj_inherit_props_conf.aw:class_834_help
 msgid "Klassi Omaduste p&auml;rimise reegel help"
 msgstr ""
@@ -178,7 +177,8 @@ msgstr ""
 msgid "Omaduse t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/core/obj_inherit_props_conf.aw:279 classes/core/obj_inherit_props_conf.aw:471
+#: classes/core/obj_inherit_props_conf.aw:279
+#: classes/core/obj_inherit_props_conf.aw:471
 msgid "Kasuta"
 msgstr ""
 
@@ -214,7 +214,6 @@ msgstr ""
 msgid "Muutmise aeg"
 msgstr ""
 
-#: classes/core/obj_inherit_props_conf.aw:539
+#: classes/core/obj_inherit_props_conf.aw:543
 msgid "--Vali--"
 msgstr ""
-

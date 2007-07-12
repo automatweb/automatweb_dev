@@ -134,24 +134,15 @@ msgid "Omaduse  (title8) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_andmete_kinnitus
-msgid ""
-"Omaduse Kinnitan andmed (peale andmete kinnitamist ja seej&auml;rel "
-"salvestamist ei saa neid piiratud &otilde;igustega kasutaja enam muuta.) "
-"(andmete_kinnitus) caption"
+msgid "Omaduse Kinnitan andmed (peale andmete kinnitamist ja seej&auml;rel salvestamist ei saa neid piiratud &otilde;igustega kasutaja enam muuta.) (andmete_kinnitus) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_andmete_kinnitus_comment
-msgid ""
-"Omaduse Kinnitan andmed (peale andmete kinnitamist ja seej&auml;rel "
-"salvestamist ei saa neid piiratud &otilde;igustega kasutaja enam muuta.) "
-"(andmete_kinnitus) kommentaar"
+msgid "Omaduse Kinnitan andmed (peale andmete kinnitamist ja seej&auml;rel salvestamist ei saa neid piiratud &otilde;igustega kasutaja enam muuta.) (andmete_kinnitus) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_andmete_kinnitus_help
-msgid ""
-"Omaduse Kinnitan andmed (peale andmete kinnitamist ja seej&auml;rel "
-"salvestamist ei saa neid piiratud &otilde;igustega kasutaja enam muuta.) "
-"(andmete_kinnitus) help"
+msgid "Omaduse Kinnitan andmed (peale andmete kinnitamist ja seej&auml;rel salvestamist ei saa neid piiratud &otilde;igustega kasutaja enam muuta.) (andmete_kinnitus) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_isik_firstname
@@ -250,28 +241,16 @@ msgstr ""
 msgid "Omaduse  (avaldus_title) help"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused_b
-msgid "Omaduse  (sisseastumisavaldused_b) caption"
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused
+msgid "Omaduse  (sisseastumisavaldused) caption"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused_b_comment
-msgid "Omaduse  (sisseastumisavaldused_b) kommentaar"
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused_comment
+msgid "Omaduse  (sisseastumisavaldused) kommentaar"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused_b_help
-msgid "Omaduse  (sisseastumisavaldused_b) help"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused_m
-msgid "Omaduse  (sisseastumisavaldused_m) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused_m_comment
-msgid "Omaduse  (sisseastumisavaldused_m) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused_m_help
-msgid "Omaduse  (sisseastumisavaldused_m) help"
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastumisavaldused_help
+msgid "Omaduse  (sisseastumisavaldused) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_konkursilehed_tbl
@@ -392,6 +371,18 @@ msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_riigieksamid_title_help
 msgid "Omaduse Riigieksamite hinded (riigieksamid_title) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_ex_kirjand
+msgid "Omaduse Kirjand (ex_kirjand) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_ex_kirjand_comment
+msgid "Omaduse Kirjand (ex_kirjand) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_ex_kirjand_help
+msgid "Omaduse Kirjand (ex_kirjand) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_ex_kirjand_aasta
@@ -875,20 +866,15 @@ msgid "Omaduse Keskmine hinne (keskhinne_text) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_hinded_title_b
-msgid ""
-"Omaduse Hinded keskharidust t&otilde;endaval dokumendil (hinded_title_b) "
-"caption"
+msgid "Omaduse Hinded keskharidust t&otilde;endaval dokumendil (hinded_title_b) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_hinded_title_b_comment
-msgid ""
-"Omaduse Hinded keskharidust t&otilde;endaval dokumendil (hinded_title_b) "
-"kommentaar"
+msgid "Omaduse Hinded keskharidust t&otilde;endaval dokumendil (hinded_title_b) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_hinded_title_b_help
-msgid ""
-"Omaduse Hinded keskharidust t&otilde;endaval dokumendil (hinded_title_b) help"
+msgid "Omaduse Hinded keskharidust t&otilde;endaval dokumendil (hinded_title_b) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_hinded_title_m
@@ -1095,6 +1081,18 @@ msgstr ""
 msgid "Omaduse E (ak_hinne_e) help"
 msgstr ""
 
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_ak_hinne_l6put88
+msgid "Omaduse L&otilde;put&ouml;&ouml;/eksami hinne (ak_hinne_l6put88) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_ak_hinne_l6put88_comment
+msgid "Omaduse L&otilde;put&ouml;&ouml;/eksami hinne (ak_hinne_l6put88) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_ak_hinne_l6put88_help
+msgid "Omaduse L&otilde;put&ouml;&ouml;/eksami hinne (ak_hinne_l6put88) help"
+msgstr ""
+
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastuja_ylevaade
 msgid "Omaduse  (sisseastuja_ylevaade) caption"
 msgstr ""
@@ -1153,6 +1151,18 @@ msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_sisseastuja_nr_title_help
 msgid "Omaduse Sisseastuja number (sisseastuja_nr_title) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemuste_teavitusviis
+msgid "Omaduse Konkursitulemuste teavitamise viis (tulemuste_teavitusviis) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemuste_teavitusviis_comment
+msgid "Omaduse Konkursitulemuste teavitamise viis (tulemuste_teavitusviis) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemuste_teavitusviis_help
+msgid "Omaduse Konkursitulemuste teavitamise viis (tulemuste_teavitusviis) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_isik_title
@@ -1360,20 +1370,15 @@ msgid "Omaduse Eelnevalt omandatud haridusastme kood (haridus_kood) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_aasta
-msgid ""
-"Omaduse Eelmise haridusasutuse l&otilde;petamise aasta (haridus_aasta) "
-"caption"
+msgid "Omaduse Eelmise haridusasutuse l&otilde;petamise aasta (haridus_aasta) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_aasta_comment
-msgid ""
-"Omaduse Eelmise haridusasutuse l&otilde;petamise aasta (haridus_aasta) "
-"kommentaar"
+msgid "Omaduse Eelmise haridusasutuse l&otilde;petamise aasta (haridus_aasta) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_aasta_help
-msgid ""
-"Omaduse Eelmise haridusasutuse l&otilde;petamise aasta (haridus_aasta) help"
+msgid "Omaduse Eelmise haridusasutuse l&otilde;petamise aasta (haridus_aasta) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_v2lismaal
@@ -1401,19 +1406,27 @@ msgid "Omaduse L&otilde;petatud medaliga (haridus_medal) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_k6rgkool
-msgid ""
-"Omaduse Eelnevalt l&otilde;petatud k&otilde;rgkool (haridus_k6rgkool) caption"
+msgid "Omaduse Eelnevalt l&otilde;petatud k&otilde;rgkool (haridus_k6rgkool) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_k6rgkool_comment
-msgid ""
-"Omaduse Eelnevalt l&otilde;petatud k&otilde;rgkool (haridus_k6rgkool) "
-"kommentaar"
+msgid "Omaduse Eelnevalt l&otilde;petatud k&otilde;rgkool (haridus_k6rgkool) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_k6rgkool_help
-msgid ""
-"Omaduse Eelnevalt l&otilde;petatud k&otilde;rgkool (haridus_k6rgkool) help"
+msgid "Omaduse Eelnevalt l&otilde;petatud k&otilde;rgkool (haridus_k6rgkool) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_kool_eriala
+msgid "Omaduse L&otilde;petatud eriala (haridus_kool_eriala) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_kool_eriala_comment
+msgid "Omaduse L&otilde;petatud eriala (haridus_kool_eriala) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_haridus_kool_eriala_help
+msgid "Omaduse L&otilde;petatud eriala (haridus_kool_eriala) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_kool_title
@@ -1421,8 +1434,7 @@ msgid "Omaduse Kool, mille l&otilde;putunnistus esitatud (kool_title) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_kool_title_comment
-msgid ""
-"Omaduse Kool, mille l&otilde;putunnistus esitatud (kool_title) kommentaar"
+msgid "Omaduse Kool, mille l&otilde;putunnistus esitatud (kool_title) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_kool_title_help
@@ -1813,55 +1825,16 @@ msgstr ""
 msgid "Omaduse Maastikuarhitektuuri erialatest (tulemus_vk) help"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vl
-msgid "Omaduse Liha- ja piimatehnoloogia eriala vestlus (tulemus_vl) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vl_comment
-msgid ""
-"Omaduse Liha- ja piimatehnoloogia eriala vestlus (tulemus_vl) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vl_help
-msgid "Omaduse Liha- ja piimatehnoloogia eriala vestlus (tulemus_vl) help"
-msgstr ""
-
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vm
 msgid "Omaduse Maastikukaitse- ja hoolduse eriala vestlus (tulemus_vm) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vm_comment
-msgid ""
-"Omaduse Maastikukaitse- ja hoolduse eriala vestlus (tulemus_vm) kommentaar"
+msgid "Omaduse Maastikukaitse- ja hoolduse eriala vestlus (tulemus_vm) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vm_help
 msgid "Omaduse Maastikukaitse- ja hoolduse eriala vestlus (tulemus_vm) help"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vv
-msgid "Omaduse Veterinaarmeditsiini eriala vestlus (tulemus_vv) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vv_comment
-msgid "Omaduse Veterinaarmeditsiini eriala vestlus (tulemus_vv) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vv_help
-msgid "Omaduse Veterinaarmeditsiini eriala vestlus (tulemus_vv) help"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vr
-msgid "Omaduse Rakendush&uuml;drobioloogia eriala vestlus (tulemus_vr) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vr_comment
-msgid ""
-"Omaduse Rakendush&uuml;drobioloogia eriala vestlus (tulemus_vr) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:prop_tulemus_vr_help
-msgid "Omaduse Rakendush&uuml;drobioloogia eriala vestlus (tulemus_vr) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:group_grp_sisseastuja_avaldused

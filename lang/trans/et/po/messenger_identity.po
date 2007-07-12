@@ -70,11 +70,3 @@ msgstr ""
 #: classes/applications/messenger/messenger_identity.aw:prop_signature_help
 msgid "Omaduse Signatuur (signature) help"
 msgstr ""
-
-#: classes/applications/messenger/messenger_identity.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/messenger/messenger_identity.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""

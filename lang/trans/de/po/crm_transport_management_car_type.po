@@ -14,19 +14,19 @@ msgid "Klassi Automark help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:prop_type
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) caption"
+msgid "Omaduse T&uuml;&uuml;p (type) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:prop_type_comment
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) kommentaar"
+msgid "Omaduse T&uuml;&uuml;p (type) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:prop_type_help
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) help"
+msgid "Omaduse T&uuml;&uuml;p (type) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:35
-msgid "S&amp;otilde;iduauto"
+msgid "S&otilde;iduauto"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:36

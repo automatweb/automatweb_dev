@@ -209,10 +209,10 @@ msgstr "Outgoing transfers"
 msgid "Grupi Väljamaksed (other_account_overview_outgoing) help"
 msgstr ""
 
-#: classes/pank/account.aw:rel_RELTYPE_TAX_CHAIN
-msgid "Seose Maksu p&auml;rg (RELTYPE_TAX_CHAIN) tekst"
-msgstr "Tax chain"
-
 # classes/pank/account.aw:rel_RELTYPE_TAX_CHAIN
-#~ msgid "Seose Maksu pärg (RELTYPE_TAX_CHAIN) tekst"
-#~ msgstr "tax chain"
+#: classes/pank/account.aw:rel_RELTYPE_TAX_CHAIN
+msgid "Seose Maksu pärg (RELTYPE_TAX_CHAIN) tekst"
+msgstr "tax chain"
+
+#~ msgid "Seose Maksu p&auml;rg (RELTYPE_TAX_CHAIN) tekst"
+#~ msgstr "Tax chain"

@@ -35,7 +35,6 @@ $GLOBALS["TRANS"]["Toode"] = "Product";
 $GLOBALS["TRANS"]["Kogus"] = "Amount";
 $GLOBALS["TRANS"]["Hind"] = "Price";
 $GLOBALS["TRANS"]["-- Vali toode --"] = "--Select product--";
-$GLOBALS["TRANS"]["-- Vali p&auml;ev ja ruum -- "] = "--Select day and room--";
 $GLOBALS["TRANS"]["-- Vali ruum --"] = "--Select room--";
 $GLOBALS["TRANS"]["Lisa ruum"] = "Add room";
 $GLOBALS["TRANS"]["Eemalda ruum"] = "Remove room";

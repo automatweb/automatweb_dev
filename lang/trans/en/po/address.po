@@ -146,8 +146,8 @@ msgid "Riik/haldusjaotus peab olema valitud!"
 msgstr ""
 
 #: classes/common/address/address.aw:243
-msgid "Viga: k6rgem haldusjaotus m22ramata. "
-msgstr ""
+msgid "Viga: k6rgem haldusjaotus m22ramata."
+msgstr "Error: parent administrative unit not defined"
 
 #: classes/common/address/address.aw:265
 msgid "Valikute taotleja-property m22ramata."
@@ -156,9 +156,6 @@ msgstr ""
 #: classes/common/address/address.aw:359
 msgid "Tänav"
 msgstr "Street"
-
-#~ msgid "Viga: k6rgem haldusjaotus m22ramata."
-#~ msgstr "Error: parent administrative unit not defined"
 
 #~ msgid "Viga: valikute taotleja-property m22ramata."
 #~ msgstr "Error: options requester not defined"

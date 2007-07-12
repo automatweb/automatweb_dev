@@ -231,10 +231,10 @@ msgstr "Name"
 msgid "Võta alamkaustadest ka"
 msgstr "Include subfolders"
 
-#: classes/contentmgmt/newsfeed.aw:453
+#: classes/contentmgmt/newsfeed.aw:456
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:459
+#: classes/contentmgmt/newsfeed.aw:462
 msgid "Vali"
 msgstr ""

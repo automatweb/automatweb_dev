@@ -59,14 +59,6 @@ msgstr ""
 msgid "Omaduse  (activity) help"
 msgstr ""
 
-#: classes/core/users/auth/auth_remote_settings.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/core/users/auth/auth_remote_settings.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/core/users/auth/auth_remote_settings.aw:group_sel_sites
 #: classes/core/users/auth/auth_remote_settings.aw:group_sel_sites
 msgid "Grupi Vali saidid (sel_sites) pealkiri"
@@ -123,9 +115,8 @@ msgid "Kasutaja, kellena teise saidi kasutajad ligi saavad"
 msgstr "User that the other users will gain access as"
 
 #: classes/core/users/auth/auth_remote_settings.aw:309
-msgid ""
-"Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a "
-"href='mailto:support@automatweb.com'>administraatoriga</a> "
+msgid "Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a href='mailto:support@automatweb.com'>administraatoriga</a>"
 msgstr ""
-"The given link does not allow you to enter the help center, please contact "
-"<a href='mailto:support@automatweb.com'>administraatoriga</a>"
+
+#~ msgid "Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a href='mailto:support@automatweb.com'>administraatoriga</a> "
+#~ msgstr "The given link does not allow you to enter the help center, please contact <a href='mailto:support@automatweb.com'>administraatoriga</a>"

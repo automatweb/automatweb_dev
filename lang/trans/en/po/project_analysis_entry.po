@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/groupware/project_analysis_entry.aw:class_1113_help
-msgid "Klassi Projekti anal&amp;uuml;&amp;uuml;si sisestus help"
+msgid "Klassi Projekti anal&uuml;&uuml;si sisestus help"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_entry.aw:prop_proj
@@ -45,4 +44,3 @@ msgstr ""
 #: classes/applications/groupware/project_analysis_entry.aw:rel_RELTYPE_EVAL
 msgid "Seose Hindaja (RELTYPE_EVAL) tekst"
 msgstr ""
-

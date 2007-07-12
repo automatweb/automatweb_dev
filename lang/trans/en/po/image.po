@@ -460,23 +460,23 @@ msgstr "comment"
 msgid "kommentaari"
 msgstr "comments"
 
-#: classes/image.aw:957
+#: classes/image.aw:958
 msgid "Uues aknas"
 msgstr "In a new window"
 
-#: classes/image.aw:958
+#: classes/image.aw:959
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr "Don't show in print view"
 
-#: classes/image.aw:971
+#: classes/image.aw:972
 msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/image.aw:1577
+#: classes/image.aw:1578
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/image.aw:2104
+#: classes/image.aw:2105
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 

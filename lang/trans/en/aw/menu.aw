@@ -24,7 +24,6 @@ $GLOBALS["TRANS"]["Omaduse Sisu t&auml;htsus (0-1.0) (change_pri) help"] = "conf
 $GLOBALS["TRANS"]["Omaduse &Auml;ra n&auml;ita ekspordis (no_export) caption"] = "Do not display in export";
 $GLOBALS["TRANS"]["Omaduse &Auml;ra n&auml;ita ekspordis (no_export) help"] = "option for eliminating the folder from the folder export";
 $GLOBALS["TRANS"]["Omaduse Eksport (export) caption"] = "Export";
-$GLOBALS["TRANS"]["Omaduse Lehe pealkiri (page_title) caption"] = "Page title";
 $GLOBALS["TRANS"]["Omaduse Ainult sisselogitud kasutajatele (users_only) caption"] = "Users only";
 $GLOBALS["TRANS"]["Omaduse Ainult sisselogitud kasutajatele (users_only) help"] = "the content of the folder is hidden from the users who are not logged in.";
 $GLOBALS["TRANS"]["Omaduse Lingi iseloom (link_behaviour) caption"] = "Link's properties";

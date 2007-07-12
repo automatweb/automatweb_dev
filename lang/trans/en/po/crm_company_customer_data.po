@@ -251,7 +251,7 @@ msgid "Seose Ostja (RELTYPE_BUYER) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_SELLER
-msgid "Seose M&amp;uuml;&amp;uuml;ja (RELTYPE_SELLER) tekst"
+msgid "Seose M&uuml;&uuml;ja (RELTYPE_SELLER) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_CONTACT_PERSON
@@ -267,7 +267,7 @@ msgid "Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_EXT_SYS_ENTRY
-msgid "Seose Siduss&amp;uuml;steemi sisestus (RELTYPE_EXT_SYS_ENTRY) tekst"
+msgid "Seose Siduss&uuml;steemi sisestus (RELTYPE_EXT_SYS_ENTRY) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:124

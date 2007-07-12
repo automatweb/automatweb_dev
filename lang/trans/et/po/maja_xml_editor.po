@@ -76,22 +76,17 @@ msgstr ""
 
 # classes/applications/xml_editor/maja_xml_editor.aw:prop_xml_to_db_connections
 #: classes/applications/xml_editor/maja_xml_editor.aw:prop_xml_to_db_connections
-msgid ""
-"Omaduse XML ja DB v&auml;ljade vahelised seosed (xml_to_db_connections) "
-"caption"
+msgid "Omaduse XML ja DB v&auml;ljade vahelised seosed (xml_to_db_connections) caption"
 msgstr ""
 
 # classes/applications/xml_editor/maja_xml_editor.aw:prop_xml_to_db_connections_comment
 #: classes/applications/xml_editor/maja_xml_editor.aw:prop_xml_to_db_connections_comment
-msgid ""
-"Omaduse XML ja DB v&auml;ljade vahelised seosed (xml_to_db_connections) "
-"kommentaar"
+msgid "Omaduse XML ja DB v&auml;ljade vahelised seosed (xml_to_db_connections) kommentaar"
 msgstr ""
 
 # classes/applications/xml_editor/maja_xml_editor.aw:prop_xml_to_db_connections_help
 #: classes/applications/xml_editor/maja_xml_editor.aw:prop_xml_to_db_connections_help
-msgid ""
-"Omaduse XML ja DB v&auml;ljade vahelised seosed (xml_to_db_connections) help"
+msgid "Omaduse XML ja DB v&auml;ljade vahelised seosed (xml_to_db_connections) help"
 msgstr ""
 
 # classes/applications/xml_editor/maja_xml_editor.aw:prop_additional_info_table
@@ -332,14 +327,6 @@ msgstr ""
 # classes/applications/xml_editor/maja_xml_editor.aw:prop_db_table_05_help
 #: classes/applications/xml_editor/maja_xml_editor.aw:prop_db_table_05_help
 msgid "Omaduse Andmebaasi tabel (db_table_05) help"
-msgstr ""
-
-#: classes/applications/xml_editor/maja_xml_editor.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/xml_editor/maja_xml_editor.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 # classes/applications/xml_editor/maja_xml_editor.aw:group_db_saving_settings

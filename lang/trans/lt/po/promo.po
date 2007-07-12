@@ -688,14 +688,14 @@ msgstr ""
 msgid "Pane pealkirjaks"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1109
+#: classes/contentmgmt/promo.aw:1135
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1163
+#: classes/contentmgmt/promo.aw:1189
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1169
+#: classes/contentmgmt/promo.aw:1195
 msgid "Otsi uus objekt:"
 msgstr ""

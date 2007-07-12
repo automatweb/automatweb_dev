@@ -149,14 +149,14 @@ msgstr ""
 msgid "object::load(%s): no view access for object %s!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:2098
+#: classes/core/obj/_int_object.aw:2105
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:2147
+#: classes/core/obj/_int_object.aw:2154
 msgid "object::save(): no acess to save object %s under %s !"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:2162
+#: classes/core/obj/_int_object.aw:2169
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr ""

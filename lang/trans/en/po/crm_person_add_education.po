@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_person_add_education.aw:class_645_help
-msgid "Klassi Täienduskoolitus help"
+msgid "Klassi T&auml;ienduskoolitus help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_org
@@ -61,4 +60,3 @@ msgstr ""
 #: classes/applications/crm/crm_person_add_education.aw:prop_length_help
 msgid "Omaduse Kestvus päevades (length) help"
 msgstr ""
-

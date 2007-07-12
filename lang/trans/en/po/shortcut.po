@@ -10,21 +10,28 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/admin/shortcut.aw:class_215_help
+#: classes/admin/shortcut.aw:class_215_help
 msgid "Klassi Shortcut help"
 msgstr ""
 
 # classes/admin/shortcut.aw:prop_status
+#: classes/admin/shortcut.aw:prop_status
 msgid "Omaduse Staatus (status) caption"
 msgstr "Status"
 
 # classes/admin/shortcut.aw:prop_status_comment
+#: classes/admin/shortcut.aw:prop_status_comment
 msgid "Omaduse Staatus (status) kommentaar"
 msgstr ""
 
 # classes/admin/shortcut.aw:prop_status_help
+#: classes/admin/shortcut.aw:prop_status_help
 msgid "Omaduse Staatus (status) help"
 msgstr ""
 
 #: classes/admin/shortcut.aw:75
-msgid " (kiirviide)"
-msgstr " (shortcut)"
+msgid "(kiirviide)"
+msgstr ""
+
+#~ msgid " (kiirviide)"
+#~ msgstr " (shortcut)"

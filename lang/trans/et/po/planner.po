@@ -888,5 +888,5 @@ msgid "Asukoht"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:2857
-msgid "Lisa valitud s&uuml;ndmustele osalejaks: "
+msgid "Lisa valitud s&uuml;ndmustele osalejaks:"
 msgstr ""

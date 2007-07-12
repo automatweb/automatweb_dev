@@ -1837,7 +1837,7 @@ msgid "Suletud"
 msgstr "Closed"
 
 #: classes/mrp/mrp_workspace.aw:414 classes/mrp/mrp_workspace.aw:427
-#: classes/mrp/mrp_workspace.aw:1204 classes/mrp/mrp_workspace.aw:1856
+#: classes/mrp/mrp_workspace.aw:1856
 msgid "Arhiveeritud"
 msgstr "Archived"
 
@@ -1853,8 +1853,7 @@ msgstr "Planned"
 msgid "Töös"
 msgstr "In progress"
 
-#: classes/mrp/mrp_workspace.aw:421 classes/mrp/mrp_workspace.aw:1202
-#: classes/mrp/mrp_workspace.aw:1826
+#: classes/mrp/mrp_workspace.aw:421 classes/mrp/mrp_workspace.aw:1826
 msgid "Katkestatud"
 msgstr "Aborted"
 
@@ -1918,14 +1917,6 @@ msgstr "Prerequisites done"
 #: classes/mrp/mrp_workspace.aw:1153
 msgid "Otsingu tulemus"
 msgstr ""
-
-#: classes/mrp/mrp_workspace.aw:1201
-msgid "Tehtud"
-msgstr "Done"
-
-#: classes/mrp/mrp_workspace.aw:1203
-msgid "Avatud"
-msgstr "Opened"
 
 #: classes/mrp/mrp_workspace.aw:1238
 msgid "J&auml;rgmine lehek&uuml;lg"
@@ -2035,7 +2026,7 @@ msgstr "Aborted jobs"
 
 #: classes/mrp/mrp_workspace.aw:1908 classes/mrp/mrp_workspace.aw:2146
 #: classes/mrp/mrp_workspace.aw:2251 classes/mrp/mrp_workspace.aw:3760
-#: classes/mrp/mrp_workspace.aw:5028
+#: classes/mrp/mrp_workspace.aw:5030
 msgid "Klient"
 msgstr "Customer"
 
@@ -2139,11 +2130,11 @@ msgid "Kaota valik"
 msgstr "Clear selection"
 
 #: classes/mrp/mrp_workspace.aw:2824
-msgid " &nbsp;&nbsp;Valitud projekt: "
-msgstr " &nbsp;&nbsp;Selected project: "
+msgid "&nbsp;&nbsp;Valitud projekt:"
+msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2941
-msgid "Ressurssi/ressursse <i>%s</i> arhiveerida ei saa, sest sellel/neil on lõpetamata projekte. "
+msgid "Ressurssi/ressursse <i>%s</i> arhiveerida ei saa, sest sellel/neil on lõpetamata projekte."
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3193
@@ -2246,21 +2237,34 @@ msgstr "Are you sure you want to enter a comment?"
 msgid "Logi v&auml;lja"
 msgstr "Log out"
 
-#: classes/mrp/mrp_workspace.aw:4936 classes/mrp/mrp_workspace.aw:5020
+#: classes/mrp/mrp_workspace.aw:4937 classes/mrp/mrp_workspace.aw:5022
 msgid "Valitud projekt"
 msgstr "Selected project"
 
-#: classes/mrp/mrp_workspace.aw:5061
+#: classes/mrp/mrp_workspace.aw:4938
+msgid "Kinnine aeg"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:5063
 msgid "Nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5066 classes/mrp/mrp_workspace.aw:5081
+#: classes/mrp/mrp_workspace.aw:5068 classes/mrp/mrp_workspace.aw:5083
 msgid "Vali see"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5157
+#: classes/mrp/mrp_workspace.aw:5159
 msgid "Resurss"
 msgstr ""
+
+#~ msgid "Tehtud"
+#~ msgstr "Done"
+
+#~ msgid "Avatud"
+#~ msgstr "Opened"
+
+#~ msgid " &nbsp;&nbsp;Valitud projekt: "
+#~ msgstr " &nbsp;&nbsp;Selected project: "
 
 #~ msgid "Kustutada kõik valitud ressursid?"
 #~ msgstr "Delete all selected resources?"

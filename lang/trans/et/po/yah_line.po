@@ -10,35 +10,36 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/layout/yah_line.aw:class_181_help
+#: classes/layout/yah_line.aw:class_181_help
 msgid "Klassi Asukohariba help"
 msgstr ""
 
 # classes/layout/yah_line.aw:prop_separator
+#: classes/layout/yah_line.aw:prop_separator
 msgid "Omaduse Eraldaja (separator) caption"
 msgstr ""
 
 # classes/layout/yah_line.aw:prop_separator_comment
+#: classes/layout/yah_line.aw:prop_separator_comment
 msgid "Omaduse Eraldaja (separator) kommentaar"
 msgstr ""
 
 # classes/layout/yah_line.aw:prop_separator_help
+#: classes/layout/yah_line.aw:prop_separator_help
 msgid "Omaduse Eraldaja (separator) help"
 msgstr ""
 
 # classes/layout/yah_line.aw:prop_show_nosubs
-msgid ""
-"Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente "
-"(show_nosubs) caption"
+#: classes/layout/yah_line.aw:prop_show_nosubs
+msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) caption"
 msgstr ""
 
 # classes/layout/yah_line.aw:prop_show_nosubs_comment
-msgid ""
-"Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente "
-"(show_nosubs) kommentaar"
+#: classes/layout/yah_line.aw:prop_show_nosubs_comment
+msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) kommentaar"
 msgstr ""
 
 # classes/layout/yah_line.aw:prop_show_nosubs_help
-msgid ""
-"Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente "
-"(show_nosubs) help"
+#: classes/layout/yah_line.aw:prop_show_nosubs_help
+msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) help"
 msgstr ""

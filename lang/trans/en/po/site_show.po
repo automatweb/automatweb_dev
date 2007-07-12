@@ -21,47 +21,47 @@ msgstr "site_show::exec_subtemplate_handlers(): could not find subtemplate handl
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr "site_show::make_final_vars(): need JOIN_FORM sub back!"
 
-#: classes/contentmgmt/site_show.aw:2803
+#: classes/contentmgmt/site_show.aw:2776
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress:"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2839
+#: classes/contentmgmt/site_show.aw:2812
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 
-#: classes/contentmgmt/site_show.aw:2844
+#: classes/contentmgmt/site_show.aw:2817
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr "No ACL error messages defined! no can_view access for object %s"
 
-#: classes/contentmgmt/site_show.aw:3035
+#: classes/contentmgmt/site_show.aw:3008
 msgid "Lisa uus k&otilde;rvale"
 msgstr "Add new on same level"
 
-#: classes/contentmgmt/site_show.aw:3045
+#: classes/contentmgmt/site_show.aw:3018
 msgid "Lisa uus alamkaust"
 msgstr "Add new subfolder"
 
-#: classes/contentmgmt/site_show.aw:3055
+#: classes/contentmgmt/site_show.aw:3028
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/contentmgmt/site_show.aw:3065
+#: classes/contentmgmt/site_show.aw:3038
 msgid "Muuda &otilde;igusi"
 msgstr "Change rights"
 
-#: classes/contentmgmt/site_show.aw:3074
+#: classes/contentmgmt/site_show.aw:3047
 msgid "Peida"
 msgstr "Hide"
 
-#: classes/contentmgmt/site_show.aw:3078
+#: classes/contentmgmt/site_show.aw:3051
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/contentmgmt/site_show.aw:3086 classes/contentmgmt/site_show.aw:3118
+#: classes/contentmgmt/site_show.aw:3059 classes/contentmgmt/site_show.aw:3091
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/contentmgmt/site_show.aw:3106
+#: classes/contentmgmt/site_show.aw:3079
 msgid "Lisa uus"
 msgstr "Add new"
 

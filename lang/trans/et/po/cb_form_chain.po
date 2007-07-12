@@ -624,161 +624,169 @@ msgstr ""
 msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:241
-#: classes/applications/cb_form_chain/cb_form_chain.aw:271
+#: classes/applications/cb_form_chain/cb_form_chain.aw:242
+#: classes/applications/cb_form_chain/cb_form_chain.aw:272
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:253
+#: classes/applications/cb_form_chain/cb_form_chain.aw:254
 msgid "Uus veebivorm"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:313
+#: classes/applications/cb_form_chain/cb_form_chain.aw:314
 msgid "Vorm"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:319
-#: classes/applications/cb_form_chain/cb_form_chain.aw:452
+#: classes/applications/cb_form_chain/cb_form_chain.aw:320
+#: classes/applications/cb_form_chain/cb_form_chain.aw:453
 msgid "Lehek&uuml;lg"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:325
+#: classes/applications/cb_form_chain/cb_form_chain.aw:326
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:331
+#: classes/applications/cb_form_chain/cb_form_chain.aw:332
 msgid "Korduv"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:337
+#: classes/applications/cb_form_chain/cb_form_chain.aw:338
 msgid "Fikseeritud ridade arv"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:343
+#: classes/applications/cb_form_chain/cb_form_chain.aw:344
 msgid "Elemendid tabelina"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:349
+#: classes/applications/cb_form_chain/cb_form_chain.aw:350
 msgid "Andmed tabelina"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:355
+#: classes/applications/cb_form_chain/cb_form_chain.aw:356
 msgid "Kinnituse vaates tabel &uuml;levalt alla"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:361
+#: classes/applications/cb_form_chain/cb_form_chain.aw:362
 msgid "Korduste kontroller"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:367
+#: classes/applications/cb_form_chain/cb_form_chain.aw:368
 msgid "Default andmete kontroller"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:377
+#: classes/applications/cb_form_chain/cb_form_chain.aw:378
 msgid "Vormiahela veebivormid"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:458
+#: classes/applications/cb_form_chain/cb_form_chain.aw:459
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:464
+#: classes/applications/cb_form_chain/cb_form_chain.aw:465
 msgid "N&auml;ita salvesta nuppu"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:470
+#: classes/applications/cb_form_chain/cb_form_chain.aw:471
 msgid "Info kontroller"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1460
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1459
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1468
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2043
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2090
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1467
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2143
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2190
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1469
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1468
 msgid "Oled kindel et soovid sisestusi kustutada?"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1478
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2292
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1475
+msgid "Ekspordi"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1484
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2392
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1485
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2299
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1491
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2399
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1495
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2309
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1501
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2409
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1502
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1542
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2333
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2436
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1508
+msgid "IP"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1515
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1555
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2433
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2536
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1509
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2028
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2083
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2340
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1522
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2128
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2183
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2440
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1545
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2439
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1558
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2539
 msgid "PDF"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:1549
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2443
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1562
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2543
 msgid "Change"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2031
-msgid "Uus"
-msgstr ""
-
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2107
-msgid "Omadus"
-msgstr ""
-
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2113
-msgid "Mitmes tulp"
-msgstr ""
-
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2119
-msgid "Eraldaja enne"
-msgstr ""
-
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2125
-msgid "Eraldaja p&auml;rast"
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2046
+msgid "Kuhu suunata p&auml;rast sisestust (%s)"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:2131
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2207
+msgid "Omadus"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2213
+msgid "Mitmes tulp"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2219
+msgid "Eraldaja enne"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2225
+msgid "Eraldaja p&auml;rast"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2231
 msgid "N&auml;ita tabelis"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2283
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2383
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2316
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2416
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2326
+#: classes/applications/cb_form_chain/cb_form_chain.aw:2426
 msgid "Muutja"
-msgstr ""
-
-#: classes/applications/cb_form_chain/cb_form_chain.aw:2480
-msgid "Kuhu suunata p&auml;rast sisestust (%s)"
 msgstr ""

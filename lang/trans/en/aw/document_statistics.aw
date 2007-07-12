@@ -17,7 +17,6 @@ $GLOBALS["TRANS"]["Grupi Stiilid (styles) pealkiri"] = "Styles";
 $GLOBALS["TRANS"]["Seose kataloog (RELTYPE_SHOW_FOLDER) tekst"] = "folder";
 $GLOBALS["TRANS"]["Seose periood (RELTYPE_SHOW_PERIOD) tekst"] = "period";
 $GLOBALS["TRANS"]["Seose css stiil (RELTYPE_CSS) tekst"] = "css style";
-$GLOBALS["TRANS"]["#sisu# asendatakse statistika tabeliga. "] = "#sisu# gets replaced by statistics table";
 $GLOBALS["TRANS"]["P&auml;ev"] = "Day";
 $GLOBALS["TRANS"]["N&auml;dal"] = "Week";
 $GLOBALS["TRANS"]["Kuu"] = "Month";

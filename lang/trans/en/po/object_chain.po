@@ -10,21 +10,26 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/object_chain.aw:class_86_help
+#: classes/object_chain.aw:class_86_help
 msgid "Klassi Objektigrupp help"
 msgstr ""
 
 # classes/object_chain.aw:prop_objs
+#: classes/object_chain.aw:prop_objs
 msgid "Omaduse Vali objektid (objs) caption"
 msgstr "Select objects"
 
 # classes/object_chain.aw:prop_objs_comment
+#: classes/object_chain.aw:prop_objs_comment
 msgid "Omaduse Vali objektid (objs) kommentaar"
 msgstr ""
 
 # classes/object_chain.aw:prop_objs_help
+#: classes/object_chain.aw:prop_objs_help
 msgid "Omaduse Vali objektid (objs) help"
 msgstr ""
 
 # classes/object_chain.aw:rel_RELTYPE_OBJECT
+#: classes/object_chain.aw:rel_RELTYPE_OBJECT
 msgid "Seose objekt (RELTYPE_OBJECT) tekst"
 msgstr "object"

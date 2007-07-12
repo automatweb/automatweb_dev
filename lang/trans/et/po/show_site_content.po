@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/layout/show_site_content.aw:class_182_help
+#: classes/layout/show_site_content.aw:class_182_help
 msgid "Klassi Sisu help"
 msgstr ""

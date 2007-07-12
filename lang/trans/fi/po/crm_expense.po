@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_expense.aw:class_1144_help
 msgid "Klassi Kulu help"
 msgstr ""
@@ -86,6 +85,30 @@ msgstr ""
 msgid "Omaduse Kes tegi (who) help"
 msgstr ""
 
+#: classes/applications/crm/crm_expense.aw:prop_has_tax
+msgid "Omaduse Lisandub k&auml;ibemaks? (has_tax) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_has_tax_comment
+msgid "Omaduse Lisandub k&auml;ibemaks? (has_tax) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_has_tax_help
+msgid "Omaduse Lisandub k&auml;ibemaks? (has_tax) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_currency
+msgid "Omaduse Valuuta (currency) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_currency_comment
+msgid "Omaduse Valuuta (currency) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_currency_help
+msgid "Omaduse Valuuta (currency) help"
+msgstr ""
+
 #: classes/applications/crm/crm_expense.aw:rel_RELTYPE_BILL
 msgid "Seose Arve (RELTYPE_BILL) tekst"
 msgstr ""
@@ -93,4 +116,3 @@ msgstr ""
 #: classes/applications/crm/crm_expense.aw:rel_RELTYPE_PEOPLE
 msgid "Seose Arve (RELTYPE_PEOPLE) tekst"
 msgstr ""
-

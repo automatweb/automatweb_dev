@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_offer_mgr.aw:class_903_help
 msgid "Klassi Pakkumiste haldus help"
 msgstr ""
@@ -67,7 +66,7 @@ msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
 #: classes/crm/crm_offer_mgr.aw:rel_RELTYPE_TYPICAL_COMPONENT
-msgid "Seose t&amp;uuml;piline komponent (RELTYPE_TYPICAL_COMPONENT) tekst"
+msgid "Seose t&uuml;piline komponent (RELTYPE_TYPICAL_COMPONENT) tekst"
 msgstr ""
 
 #: classes/crm/crm_offer_mgr.aw:93
@@ -117,4 +116,3 @@ msgstr ""
 #: classes/crm/crm_offer_mgr.aw:244
 msgid "Oled kindel et soovid valitud tellimused kustutada?"
 msgstr ""
-

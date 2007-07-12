@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/external/external_system_entry.aw:class_1074_help
 msgid "Klassi Sidestus help"
 msgstr ""
@@ -51,10 +50,9 @@ msgid "Omaduse V&auml;&auml;rtus (value) help"
 msgstr ""
 
 #: classes/common/external/external_system_entry.aw:rel_RELTYPE_EXTSYS
-msgid "Seose Siduss&amp;uuml;steem (RELTYPE_EXTSYS) tekst"
+msgid "Seose Siduss&uuml;steem (RELTYPE_EXTSYS) tekst"
 msgstr ""
 
 #: classes/common/external/external_system_entry.aw:rel_RELTYPE_OBJ
 msgid "Seose AW Objekt (RELTYPE_OBJ) tekst"
 msgstr ""
-

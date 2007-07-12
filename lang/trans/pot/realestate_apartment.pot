@@ -110,6 +110,30 @@ msgstr ""
 msgid "Omaduse Arhiveeritud (is_archived) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_booked_until
+msgid "Omaduse  (booked_until) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_booked_until_comment
+msgid "Omaduse  (booked_until) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_booked_until_help
+msgid "Omaduse  (booked_until) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_booked
+msgid "Omaduse Broneeritud (is_booked) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_booked_comment
+msgid "Omaduse Broneeritud (is_booked) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_booked_help
+msgid "Omaduse Broneeritud (is_booked) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_expire
 msgid "Omaduse aegub (expire) caption"
 msgstr ""
@@ -192,6 +216,18 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_price2_help
 msgid "Omaduse M&uuml;&uuml;gihind (transaction_price2) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_price_per_m2
+msgid "Omaduse Ruutmeetri hind (price_per_m2) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_price_per_m2_comment
+msgid "Omaduse Ruutmeetri hind (price_per_m2) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_price_per_m2_help
+msgid "Omaduse Ruutmeetri hind (price_per_m2) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_rent
@@ -2203,6 +2239,6 @@ msgid "Kohustuslik v&auml;li"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:560
-msgid "Viga andmetes: korruste arv korrusest v&auml;iksem. "
+msgid "Viga andmetes: korruste arv korrusest v&auml;iksem."
 msgstr ""
 

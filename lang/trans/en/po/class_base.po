@@ -103,6 +103,10 @@ msgstr "tab panel"
 msgid "Lisainfo grupi kohta puudub"
 msgstr "no additional info about group"
 
+#: classes/class_base.aw:983
+msgid "Nimetu"
+msgstr ""
+
 #: classes/class_base.aw:1500
 msgid "Muuda"
 msgstr "Change"
@@ -115,8 +119,8 @@ msgstr "New"
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1752 classes/class_base.aw:5099
-#: classes/class_base.aw:5110
+#: classes/class_base.aw:1752 classes/class_base.aw:5103
+#: classes/class_base.aw:5114
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
@@ -124,23 +128,23 @@ msgstr "Connection manager"
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3603
+#: classes/class_base.aw:3607
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3612
+#: classes/class_base.aw:3616
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4996
+#: classes/class_base.aw:5000
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 
-#: classes/class_base.aw:5412
+#: classes/class_base.aw:5416
 msgid "T&otilde;lge aktiivne"
 msgstr "Translation is active"
 
-#: classes/class_base.aw:5420
+#: classes/class_base.aw:5424
 msgid "Salvesta"
 msgstr ""
 

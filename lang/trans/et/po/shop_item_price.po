@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/shop/shop_item_price.aw:class_293_help
+#: classes/applications/shop/shop_item_price.aw:class_293_help
 msgid "Klassi Toote Hind help"
 msgstr ""

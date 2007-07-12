@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/shop/shop_order_cart_value.aw:class_345_help
+#: classes/applications/shop/shop_order_cart_value.aw:class_345_help
 msgid "Klassi Poe ostukorvi v&auml;&auml;rtus help"
 msgstr ""

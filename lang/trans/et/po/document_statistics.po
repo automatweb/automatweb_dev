@@ -240,7 +240,7 @@ msgid "Seose css stiil (RELTYPE_CSS) tekst"
 msgstr ""
 
 #: classes/contentmgmt/document_statistics.aw:82
-msgid "#sisu# asendatakse statistika tabeliga. "
+msgid "#sisu# asendatakse statistika tabeliga."
 msgstr ""
 
 #: classes/contentmgmt/document_statistics.aw:87

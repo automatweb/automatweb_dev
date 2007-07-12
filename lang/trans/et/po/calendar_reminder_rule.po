@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/calendar/calendar_reminder_rule.aw:class_482_help
+#: classes/applications/calendar/calendar_reminder_rule.aw:class_482_help
 msgid "Klassi Meeldetuletuse reegel help"
 msgstr ""

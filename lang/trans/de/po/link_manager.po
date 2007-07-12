@@ -29,26 +29,26 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/link_manager.aw:165
+#: classes/admin/link_manager.aw:166
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/link_manager.aw:203
+#: classes/admin/link_manager.aw:204
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/link_manager.aw:209
+#: classes/admin/link_manager.aw:210
 msgid "URL"
 msgstr ""
 
-#: classes/admin/link_manager.aw:216
+#: classes/admin/link_manager.aw:217
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/link_manager.aw:222
+#: classes/admin/link_manager.aw:223
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/link_manager.aw:229
+#: classes/admin/link_manager.aw:230
 msgid "Viimased 30"
 msgstr ""

@@ -310,7 +310,7 @@ msgid "Seose Tegevusvaldkonnad (RELTYPE_SECTORS) tekst"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_PERSON_OT
-msgid "Seose Objektit&uuml;&uuml;p (RELTYPE_PERSON_OT) tekst"
+msgid "Seose Objektitüüp (RELTYPE_PERSON_OT) tekst"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_OWNER_ORG

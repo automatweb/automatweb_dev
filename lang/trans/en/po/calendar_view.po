@@ -474,10 +474,10 @@ msgstr "Additional fields"
 msgid "Väljundvorm on valimata"
 msgstr "Output form is not selected"
 
-#: classes/calendar/calendar_view.aw:1038
+#: classes/calendar/calendar_view.aw:1040
 msgid "&lt;&lt;"
 msgstr "&lt;&lt;"
 
-#: classes/calendar/calendar_view.aw:1045
+#: classes/calendar/calendar_view.aw:1047
 msgid "&gt;&gt;"
 msgstr "&gt;&gt;"

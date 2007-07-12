@@ -195,7 +195,7 @@ msgid "Grupi Tingimused (if_ov) help"
 msgstr ""
 
 #: classes/core/obj_inherit_props_conf.aw:rel_RELTYPE_INHERIT_FROM
-msgid "Seose p&amp;auml;ritav objekt (RELTYPE_INHERIT_FROM) tekst"
+msgid "Seose p&auml;ritav objekt (RELTYPE_INHERIT_FROM) tekst"
 msgstr ""
 
 # classes/core/obj_inherit_props_conf.aw:rel_RELTYPE_INHERIT_TO

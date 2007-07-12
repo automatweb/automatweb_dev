@@ -101,20 +101,12 @@ msgstr ""
 msgid "Omaduse L&auml;htekood (source_html) help"
 msgstr ""
 
-#: classes/admin/config/config_aw_document_template.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/admin/config/config_aw_document_template.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/admin/config/config_aw_document_template.aw:group_grp_source
-msgid "Grupi Lähtekood (grp_source) pealkiri"
+msgid "Grupi L&auml;htekood (grp_source) pealkiri"
 msgstr ""
 
 #: classes/admin/config/config_aw_document_template.aw:group_grp_source_help
-msgid "Grupi Lähtekood (grp_source) help"
+msgid "Grupi L&auml;htekood (grp_source) help"
 msgstr ""
 
 #: classes/admin/config/config_aw_document_template.aw:50

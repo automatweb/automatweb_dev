@@ -14,39 +14,39 @@ msgid "Klassi Vedu help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_start_date
-msgid "Omaduse Alguskuup&amp;auml;ev (start_date) caption"
+msgid "Omaduse Alguskuup&auml;ev (start_date) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_start_date_comment
-msgid "Omaduse Alguskuup&amp;auml;ev (start_date) kommentaar"
+msgid "Omaduse Alguskuup&auml;ev (start_date) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_start_date_help
-msgid "Omaduse Alguskuup&amp;auml;ev (start_date) help"
+msgid "Omaduse Alguskuup&auml;ev (start_date) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_end_date
-msgid "Omaduse L&amp;otilde;pukuup&amp;auml;ev (end_date) caption"
+msgid "Omaduse L&otilde;pukuup&auml;ev (end_date) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_end_date_comment
-msgid "Omaduse L&amp;otilde;pukuup&amp;auml;ev (end_date) kommentaar"
+msgid "Omaduse L&otilde;pukuup&auml;ev (end_date) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_end_date_help
-msgid "Omaduse L&amp;otilde;pukuup&amp;auml;ev (end_date) help"
+msgid "Omaduse L&otilde;pukuup&auml;ev (end_date) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_return_deadline
-msgid "Omaduse Tagasisaabumise t&amp;auml;htaeg (return_deadline) caption"
+msgid "Omaduse Tagasisaabumise t&auml;htaeg (return_deadline) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_return_deadline_comment
-msgid "Omaduse Tagasisaabumise t&amp;auml;htaeg (return_deadline) kommentaar"
+msgid "Omaduse Tagasisaabumise t&auml;htaeg (return_deadline) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_return_deadline_help
-msgid "Omaduse Tagasisaabumise t&amp;auml;htaeg (return_deadline) help"
+msgid "Omaduse Tagasisaabumise t&auml;htaeg (return_deadline) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_route
@@ -134,21 +134,15 @@ msgid "Omaduse Ekspediitor (dispatcher) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_code
-msgid ""
-"Omaduse Kood (tuletatakse ekspediitori kasutajanimest + autoincremental "
-"number) (code) caption"
+msgid "Omaduse Kood (tuletatakse ekspediitori kasutajanimest + autoincremental number) (code) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_code_comment
-msgid ""
-"Omaduse Kood (tuletatakse ekspediitori kasutajanimest + autoincremental "
-"number) (code) kommentaar"
+msgid "Omaduse Kood (tuletatakse ekspediitori kasutajanimest + autoincremental number) (code) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_code_help
-msgid ""
-"Omaduse Kood (tuletatakse ekspediitori kasutajanimest + autoincremental "
-"number) (code) help"
+msgid "Omaduse Kood (tuletatakse ekspediitori kasutajanimest + autoincremental number) (code) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:prop_carriage_status
@@ -296,7 +290,7 @@ msgid "Kinnitatud"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:120
-msgid "Hetkel t&amp;ouml;&amp;ouml;s"
+msgid "Hetkel t&ouml;&ouml;s"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage.aw:121

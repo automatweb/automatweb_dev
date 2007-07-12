@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/applications/questionary/question.aw:class_1155_help
-msgid "Klassi K&uml;simus help"
+msgid "Klassi K&uuml;simus help"
 msgstr ""
 
 #: classes/applications/questionary/question.aw:prop_jrk

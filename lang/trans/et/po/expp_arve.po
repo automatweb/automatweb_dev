@@ -74,17 +74,17 @@ msgid "poolkuud"
 msgstr ""
 
 #: classes/expp/expp_arve.aw:173
-msgid "e-post: "
+msgid "e-post:"
 msgstr ""
 
 #: classes/expp/expp_arve.aw:174
-msgid "tel: "
+msgid "tel:"
 msgstr ""
 
 #: classes/expp/expp_arve.aw:175
-msgid "mobiil: "
+msgid "mobiil:"
 msgstr ""
 
 #: classes/expp/expp_arve.aw:176
-msgid "faks: "
+msgid "faks:"
 msgstr ""

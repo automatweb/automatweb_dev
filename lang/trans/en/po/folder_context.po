@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/contentmgmt/folder_context.aw:class_966_help
+#: classes/contentmgmt/folder_context.aw:class_966_help
 msgid "Klassi Kontekst help"
 msgstr ""

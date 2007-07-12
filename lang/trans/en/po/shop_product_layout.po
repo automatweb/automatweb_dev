@@ -10,17 +10,21 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/shop/shop_product_layout.aw:class_315_help
+#: classes/applications/shop/shop_product_layout.aw:class_315_help
 msgid "Klassi Lao toote kujundus help"
 msgstr ""
 
 # classes/applications/shop/shop_product_layout.aw:prop_template
+#: classes/applications/shop/shop_product_layout.aw:prop_template
 msgid "Omaduse Template (template) caption"
 msgstr "Template"
 
 # classes/applications/shop/shop_product_layout.aw:prop_template_comment
+#: classes/applications/shop/shop_product_layout.aw:prop_template_comment
 msgid "Omaduse Template (template) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_product_layout.aw:prop_template_help
+#: classes/applications/shop/shop_product_layout.aw:prop_template_help
 msgid "Omaduse Template (template) help"
 msgstr ""

@@ -61,21 +61,17 @@ msgstr ""
 
 # classes/import/livelink_import.aw:prop_fileprefix
 #: classes/import/livelink_import.aw:prop_fileprefix
-msgid ""
-"Omaduse Prefiks tabelisse kirjutatavatele failinimedele (fileprefix) caption"
+msgid "Omaduse Prefiks tabelisse kirjutatavatele failinimedele (fileprefix) caption"
 msgstr "Prefix for files in table"
 
 # classes/import/livelink_import.aw:prop_fileprefix_comment
 #: classes/import/livelink_import.aw:prop_fileprefix_comment
-msgid ""
-"Omaduse Prefiks tabelisse kirjutatavatele failinimedele (fileprefix) "
-"kommentaar"
+msgid "Omaduse Prefiks tabelisse kirjutatavatele failinimedele (fileprefix) kommentaar"
 msgstr ""
 
 # classes/import/livelink_import.aw:prop_fileprefix_help
 #: classes/import/livelink_import.aw:prop_fileprefix_help
-msgid ""
-"Omaduse Prefiks tabelisse kirjutatavatele failinimedele (fileprefix) help"
+msgid "Omaduse Prefiks tabelisse kirjutatavatele failinimedele (fileprefix) help"
 msgstr ""
 
 # classes/import/livelink_import.aw:prop_message
@@ -151,14 +147,6 @@ msgstr ""
 # classes/import/livelink_import.aw:prop_ll_http_auth_help
 #: classes/import/livelink_import.aw:prop_ll_http_auth_help
 msgid "Omaduse HTTP autoriseerimisel samad andmed (ll_http_auth) help"
-msgstr ""
-
-#: classes/import/livelink_import.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/import/livelink_import.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 # classes/import/livelink_import.aw:group_auth

@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/groupware/project_files_impl.aw:17
+msgid "Kataloog"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:18 classes/applications/groupware/project_files_impl.aw:174
+msgid "Fail"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:19 classes/applications/groupware/project_files_impl.aw:175
+msgid "Memo"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:20 classes/applications/groupware/project_files_impl.aw:176
+msgid "CRM Dokument"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:21 classes/applications/groupware/project_files_impl.aw:177
+msgid "Leping"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:22 classes/applications/groupware/project_files_impl.aw:178
+msgid "Pakkumine"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:23 classes/applications/groupware/project_files_impl.aw:179
+msgid "Eesm&auml;rkide hindamise t&ouml;&ouml;laud"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:24 classes/applications/groupware/project_files_impl.aw:180
+msgid "Riskide hindamise t&ouml;&ouml;laud"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:25 classes/applications/groupware/project_files_impl.aw:181
+msgid "Anal&uuml;&uuml;si t&ouml;&ouml;laud"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:26 classes/applications/groupware/project_files_impl.aw:182
+msgid "Arendustellimus"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:32
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:60
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:68
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:77
+msgid "Kleebi"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:94
+msgid "%s failid"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:151
+msgid "Sorteerimata"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:162
+msgid "T&uuml;&uuml;bi j&auml;rgi"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:218 classes/applications/groupware/project_files_impl.aw:260
+msgid ""
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:226
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:233
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:240
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/groupware/project_files_impl.aw:250
+msgid "Muudetud"
+msgstr ""
+

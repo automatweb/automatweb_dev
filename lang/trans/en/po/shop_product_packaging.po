@@ -709,10 +709,10 @@ msgstr ""
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:503
+#: classes/applications/shop/shop_product_packaging.aw:504
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/shop/shop_product_packaging.aw:508
+#: classes/applications/shop/shop_product_packaging.aw:509
 msgid "Valuuta"
 msgstr "Currency"

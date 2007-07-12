@@ -14,11 +14,11 @@ msgid "object::load(%s): no such object!"
 msgstr "object::load(%s): no such object!"
 
 #: classes/core/obj/ds_mysql.aw:174 classes/core/obj/ds_mysql.aw:241
-#: classes/core/obj/ds_mysql.aw:2711
+#: classes/core/obj/ds_mysql.aw:2712
 msgid "ds_mysql::read_properties(): no reltype for prop %s (%s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:342 classes/core/obj/ds_mysql.aw:2793
+#: classes/core/obj/ds_mysql.aw:342 classes/core/obj/ds_mysql.aw:2794
 msgid "ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch! q = %s"
 msgstr ""
 
@@ -26,7 +26,7 @@ msgstr ""
 msgid "ds_mysql::final_delete_object(%s): no suct object exists!"
 msgstr "ds_mysql::final_delete_object(%s): no suct object exists!"
 
-#: classes/core/obj/ds_mysql.aw:1403 classes/core/obj/ds_mysql.aw:2990
+#: classes/core/obj/ds_mysql.aw:1403 classes/core/obj/ds_mysql.aw:2991
 msgid "filter cannot contain properties (%s) that are in serialized fields other than metadata!"
 msgstr "filter cannot contain properties (%s) that are in serialized fields other than metadata!"
 

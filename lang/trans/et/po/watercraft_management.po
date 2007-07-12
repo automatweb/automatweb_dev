@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/applications/watercraft_management/watercraft_management.aw:class_1118_help
-msgid "Klassi Veesõidukite haldus help"
+msgid "Klassi Vees&otilde;idukite haldus help"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:prop_keeper

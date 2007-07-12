@@ -10,30 +10,37 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/poll_ng.aw:class_165_help
+#: classes/poll_ng.aw:class_165_help
 msgid "Klassi Poll (uus) help"
 msgstr ""
 
 # classes/poll_ng.aw:prop_choices
+#: classes/poll_ng.aw:prop_choices
 msgid "Omaduse Variandid (choices) caption"
 msgstr ""
 
 # classes/poll_ng.aw:prop_choices_comment
+#: classes/poll_ng.aw:prop_choices_comment
 msgid "Omaduse Variandid (choices) kommentaar"
 msgstr ""
 
 # classes/poll_ng.aw:prop_choices_help
+#: classes/poll_ng.aw:prop_choices_help
 msgid "Omaduse Variandid (choices) help"
 msgstr ""
 
 # classes/poll_ng.aw:group_choices
+#: classes/poll_ng.aw:group_choices
 msgid "Grupi Vastusevariandid (choices) pealkiri"
 msgstr ""
 
 # classes/poll_ng.aw:group_choices_help
+#: classes/poll_ng.aw:group_choices_help
 msgid "Grupi Vastusevariandid (choices) help"
 msgstr ""
 
 # classes/poll_ng.aw:rel_RELTYPE_ANSWER
+#: classes/poll_ng.aw:rel_RELTYPE_ANSWER
 msgid "Seose polli vastus (RELTYPE_ANSWER) tekst"
 msgstr ""
 

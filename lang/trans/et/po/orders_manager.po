@@ -10,70 +10,87 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/orders/orders_manager.aw:class_842_help
+#: classes/applications/orders/orders_manager.aw:class_842_help
 msgid "Klassi Tellimuste haldus help"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_export_folder
+#: classes/applications/orders/orders_manager.aw:prop_export_folder
 msgid "Omaduse Ekspordi kataloog (export_folder) caption"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_export_folder_comment
+#: classes/applications/orders/orders_manager.aw:prop_export_folder_comment
 msgid "Omaduse Ekspordi kataloog (export_folder) kommentaar"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_export_folder_help
+#: classes/applications/orders/orders_manager.aw:prop_export_folder_help
 msgid "Omaduse Ekspordi kataloog (export_folder) help"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_orders_toolbar
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar
 msgid "Omaduse Tellimuste toolbar (orders_toolbar) caption"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_orders_toolbar_comment
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar_comment
 msgid "Omaduse Tellimuste toolbar (orders_toolbar) kommentaar"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_orders_toolbar_help
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar_help
 msgid "Omaduse Tellimuste toolbar (orders_toolbar) help"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_orders_table
+#: classes/applications/orders/orders_manager.aw:prop_orders_table
 msgid "Omaduse Tellimuste tabel (orders_table) caption"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_orders_table_comment
+#: classes/applications/orders/orders_manager.aw:prop_orders_table_comment
 msgid "Omaduse Tellimuste tabel (orders_table) kommentaar"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:prop_orders_table_help
+#: classes/applications/orders/orders_manager.aw:prop_orders_table_help
 msgid "Omaduse Tellimuste tabel (orders_table) help"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:group_ordermnager
+#: classes/applications/orders/orders_manager.aw:group_ordermnager
 msgid "Grupi Tellimused (ordermnager) pealkiri"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:group_ordermnager_help
+#: classes/applications/orders/orders_manager.aw:group_ordermnager_help
 msgid "Grupi Tellimused (ordermnager) help"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:group_ordermnager_unc
+#: classes/applications/orders/orders_manager.aw:group_ordermnager_unc
 msgid "Grupi Kinnitamata (ordermnager_unc) pealkiri"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:group_ordermnager_unc_help
+#: classes/applications/orders/orders_manager.aw:group_ordermnager_unc_help
 msgid "Grupi Kinnitamata (ordermnager_unc) help"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:group_ordermnager_cf
+#: classes/applications/orders/orders_manager.aw:group_ordermnager_cf
 msgid "Grupi Kinnitatud (ordermnager_cf) pealkiri"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:group_ordermnager_cf_help
+#: classes/applications/orders/orders_manager.aw:group_ordermnager_cf_help
 msgid "Grupi Kinnitatud (ordermnager_cf) help"
 msgstr ""
 
 # classes/applications/orders/orders_manager.aw:rel_RELTYPE_CFGMANAGER
+#: classes/applications/orders/orders_manager.aw:rel_RELTYPE_CFGMANAGER
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 

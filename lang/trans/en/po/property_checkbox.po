@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/class_designer/property_checkbox.aw:class_884_help
+#: classes/applications/class_designer/property_checkbox.aw:class_884_help
 msgid "Klassi Valikuruut help"
 msgstr ""

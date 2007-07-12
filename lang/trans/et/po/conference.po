@@ -462,7 +462,7 @@ msgid "-- Vali toode --"
 msgstr ""
 
 #: classes/applications/calendar/conference.aw:391
-msgid "-- Vali p&auml;ev ja ruum -- "
+msgid "-- Vali p&auml;ev ja ruum --"
 msgstr ""
 
 #: classes/applications/calendar/conference.aw:397

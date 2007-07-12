@@ -1830,7 +1830,7 @@ msgid "Suletud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:414 classes/mrp/mrp_workspace.aw:427
-#: classes/mrp/mrp_workspace.aw:1204 classes/mrp/mrp_workspace.aw:1856
+#: classes/mrp/mrp_workspace.aw:1856
 msgid "Arhiveeritud"
 msgstr ""
 
@@ -1846,8 +1846,7 @@ msgstr ""
 msgid "Töös"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:421 classes/mrp/mrp_workspace.aw:1202
-#: classes/mrp/mrp_workspace.aw:1826
+#: classes/mrp/mrp_workspace.aw:421 classes/mrp/mrp_workspace.aw:1826
 msgid "Katkestatud"
 msgstr ""
 
@@ -1910,14 +1909,6 @@ msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1153
 msgid "Otsingu tulemus"
-msgstr ""
-
-#: classes/mrp/mrp_workspace.aw:1201
-msgid "Tehtud"
-msgstr ""
-
-#: classes/mrp/mrp_workspace.aw:1203
-msgid "Avatud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1238
@@ -2028,7 +2019,7 @@ msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1908 classes/mrp/mrp_workspace.aw:2146
 #: classes/mrp/mrp_workspace.aw:2251 classes/mrp/mrp_workspace.aw:3760
-#: classes/mrp/mrp_workspace.aw:5028
+#: classes/mrp/mrp_workspace.aw:5030
 msgid "Klient"
 msgstr ""
 
@@ -2132,11 +2123,11 @@ msgid "Kaota valik"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2824
-msgid " &nbsp;&nbsp;Valitud projekt: "
+msgid "&nbsp;&nbsp;Valitud projekt:"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2941
-msgid "Ressurssi/ressursse <i>%s</i> arhiveerida ei saa, sest sellel/neil on lõpetamata projekte. "
+msgid "Ressurssi/ressursse <i>%s</i> arhiveerida ei saa, sest sellel/neil on lõpetamata projekte."
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3193
@@ -2239,19 +2230,23 @@ msgstr ""
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:4936 classes/mrp/mrp_workspace.aw:5020
+#: classes/mrp/mrp_workspace.aw:4937 classes/mrp/mrp_workspace.aw:5022
 msgid "Valitud projekt"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5061
+#: classes/mrp/mrp_workspace.aw:4938
+msgid "Kinnine aeg"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:5063
 msgid "Nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5066 classes/mrp/mrp_workspace.aw:5081
+#: classes/mrp/mrp_workspace.aw:5068 classes/mrp/mrp_workspace.aw:5083
 msgid "Vali see"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5157
+#: classes/mrp/mrp_workspace.aw:5159
 msgid "Resurss"
 msgstr ""
 

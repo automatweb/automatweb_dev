@@ -7,6 +7,7 @@ $GLOBALS["TRANS"]["Grupi P&auml;rimine (ihf) pealkiri"] = "Inheriting";
 $GLOBALS["TRANS"]["Grupi Doonorklass (ihf_donor) pealkiri"] = "Donor class";
 $GLOBALS["TRANS"]["Grupi Sihtklass (ihf_destination) pealkiri"] = "Target class";
 $GLOBALS["TRANS"]["Grupi Tingimused (if_ov) pealkiri"] = "Conditions";
+$GLOBALS["TRANS"]["Seose p&auml;ritav objekt (RELTYPE_INHERIT_FROM) tekst"] = "inherit from";
 $GLOBALS["TRANS"]["Seose kirjutatav objekt (RELTYPE_INHERIT_TO) tekst"] = "write to";
 $GLOBALS["TRANS"]["Kustuta valitud"] = "Delete selected";
 $GLOBALS["TRANS"]["Omadus"] = "Property";

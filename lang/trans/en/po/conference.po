@@ -462,8 +462,8 @@ msgid "-- Vali toode --"
 msgstr "--Select product--"
 
 #: classes/applications/calendar/conference.aw:391
-msgid "-- Vali p&auml;ev ja ruum -- "
-msgstr "--Select day and room--"
+msgid "-- Vali p&auml;ev ja ruum --"
+msgstr ""
 
 #: classes/applications/calendar/conference.aw:397
 msgid "-- Vali ruum --"
@@ -504,3 +504,6 @@ msgstr "Add performer"
 #: classes/applications/calendar/conference.aw:761
 msgid "Eemalda esineja"
 msgstr "Remove performer"
+
+#~ msgid "-- Vali p&auml;ev ja ruum -- "
+#~ msgstr "--Select day and room--"

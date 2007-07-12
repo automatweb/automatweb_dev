@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/shop/shop_taxes.aw:class_292_help
+#: classes/applications/shop/shop_taxes.aw:class_292_help
 msgid "Klassi Maksud help"
 msgstr ""

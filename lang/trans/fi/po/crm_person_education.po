@@ -1,0 +1,80 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_person_education.aw:class_487_help
+msgid "Klassi Haridus help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_school
+msgid "Omaduse Kool (school) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_school_comment
+msgid "Omaduse Kool (school) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_school_help
+msgid "Omaduse Kool (school) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_field
+msgid "Omaduse Valdkond (field) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_field_comment
+msgid "Omaduse Valdkond (field) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_field_help
+msgid "Omaduse Valdkond (field) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_speciality
+msgid "Omaduse Eriala (speciality) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_speciality_comment
+msgid "Omaduse Eriala (speciality) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_speciality_help
+msgid "Omaduse Eriala (speciality) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_start
+msgid "Omaduse Algus (start) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_start_comment
+msgid "Omaduse Algus (start) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_start_help
+msgid "Omaduse Algus (start) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_end
+msgid "Omaduse Lõpp (end) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_end_comment
+msgid "Omaduse Lõpp (end) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_end_help
+msgid "Omaduse Lõpp (end) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:rel_RELTYPE_FIELD
+msgid "Seose Valdkond (RELTYPE_FIELD) tekst"
+msgstr ""
+

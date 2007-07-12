@@ -342,7 +342,7 @@ msgid "Kaota valik"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:574
-msgid " &nbsp;&nbsp;Valitud projekt: "
+msgid "&nbsp;&nbsp;Valitud projekt:"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:579
@@ -358,15 +358,15 @@ msgid "Vali uus t&ouml;&ouml;aeg: <br>"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:614
-msgid "Alates:<br> "
+msgid "Alates:<br>"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:618
-msgid "Kuni:<br> "
+msgid "Kuni:<br>"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:622
-msgid "K&auml;sitsi m&auml;&auml;ratud:<br> "
+msgid "K&auml;sitsi m&auml;&auml;ratud:<br>"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:659

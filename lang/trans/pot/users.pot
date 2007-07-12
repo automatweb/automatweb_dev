@@ -62,15 +62,15 @@ msgstr ""
 msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
-#: classes/users.aw:797
+#: classes/users.aw:796
 msgid "Sellist v&otilde;tit pole v&auml;ljastatud"
 msgstr ""
 
-#: classes/users.aw:809
+#: classes/users.aw:808
 msgid "See v&otilde;ti on juba aegunud"
 msgstr ""
 
-#: classes/users.aw:809
+#: classes/users.aw:808
 msgid "Telli uusi v&otilde;ti"
 msgstr ""
 

@@ -1,0 +1,80 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/groupware/project_teams_impl.aw:19
+msgid "Tiim"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:35 classes/applications/groupware/project_teams_impl.aw:95
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:47 classes/applications/groupware/project_teams_impl.aw:106
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:57 classes/applications/groupware/project_teams_impl.aw:115
+msgid "Kleebi"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:69
+msgid "Uus Meeskond"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:85
+msgid "Lisa valitud isikud meeskonda"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:132 classes/applications/groupware/project_teams_impl.aw:185
+msgid "T&ouml;&ouml;perekonnad"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:160 classes/applications/groupware/project_teams_impl.aw:202
+msgid "Projekti meeskond"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:209
+msgid "T&ouml;&ouml;perekonna"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:209
+msgid "liikmed"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:289 classes/applications/groupware/project_teams_impl.aw:366 classes/applications/groupware/project_teams_impl.aw:421
+msgid "Rollid"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:301
+msgid "Otsingu tulemused"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:381 classes/applications/groupware/project_teams_impl.aw:437
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:389
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:397
+msgid "Ametinimetus"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:405
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/groupware/project_teams_impl.aw:413
+msgid "E-post"
+msgstr ""
+

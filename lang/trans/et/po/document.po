@@ -21,36 +21,36 @@ msgstr ""
 msgid "Loe edasi"
 msgstr ""
 
-#: classes/document.aw:1131 classes/document.aw:1180
+#: classes/document.aw:1138 classes/document.aw:1187
 msgid "Vaata lisaks:"
 msgstr ""
 
-#: classes/document.aw:1136 classes/document.aw:1185
+#: classes/document.aw:1143 classes/document.aw:1192
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2387
+#: classes/document.aw:2394
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2394
+#: classes/document.aw:2401
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2402
+#: classes/document.aw:2409
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:2912
+#: classes/document.aw:2919
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
 msgstr ""
 
-#: classes/document.aw:2942
+#: classes/document.aw:2949
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:2944
+#: classes/document.aw:2951
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""

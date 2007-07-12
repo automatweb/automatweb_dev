@@ -332,8 +332,8 @@ msgid "Koopia"
 msgstr "Copy"
 
 #: classes/applications/calendar/staging.aw:172
-msgid " (Aktiivne)"
-msgstr " (Active)"
+msgid "(Aktiivne)"
+msgstr ""
 
 #: classes/applications/calendar/staging.aw:190
 msgid "Uued"
@@ -346,6 +346,9 @@ msgstr "New %s"
 #: classes/applications/calendar/staging.aw:209
 msgid "Tee sündmus %s"
 msgstr "Create event %s"
+
+#~ msgid " (Aktiivne)"
+#~ msgstr " (Active)"
 
 # classes/applications/calendar/staging.aw:prop_needs_translation
 #~ msgid "Omaduse Vajab tõlget (needs_translation) caption"

@@ -16,23 +16,17 @@ msgstr ""
 
 # classes/applications/survey/survey_manager.aw:prop_survey_folder
 #: classes/applications/survey/survey_manager.aw:prop_survey_folder
-msgid ""
-"Omaduse Millisesse kataloogi täidetud ankeedid salvestada? (survey_folder) "
-"caption"
+msgid "Omaduse Millisesse kataloogi täidetud ankeedid salvestada? (survey_folder) caption"
 msgstr ""
 
 # classes/applications/survey/survey_manager.aw:prop_survey_folder_comment
 #: classes/applications/survey/survey_manager.aw:prop_survey_folder_comment
-msgid ""
-"Omaduse Millisesse kataloogi täidetud ankeedid salvestada? (survey_folder) "
-"kommentaar"
+msgid "Omaduse Millisesse kataloogi täidetud ankeedid salvestada? (survey_folder) kommentaar"
 msgstr ""
 
 # classes/applications/survey/survey_manager.aw:prop_survey_folder_help
 #: classes/applications/survey/survey_manager.aw:prop_survey_folder_help
-msgid ""
-"Omaduse Millisesse kataloogi täidetud ankeedid salvestada? (survey_folder) "
-"help"
+msgid "Omaduse Millisesse kataloogi täidetud ankeedid salvestada? (survey_folder) help"
 msgstr ""
 
 # classes/applications/survey/survey_manager.aw:prop_use_cfgform
@@ -67,14 +61,12 @@ msgstr ""
 
 # classes/applications/survey/survey_manager.aw:prop_users_only
 #: classes/applications/survey/survey_manager.aw:prop_users_only
-msgid ""
-"Omaduse Täita saavad ainult registreeritud kasutajad (users_only) caption"
+msgid "Omaduse Täita saavad ainult registreeritud kasutajad (users_only) caption"
 msgstr ""
 
 # classes/applications/survey/survey_manager.aw:prop_users_only_comment
 #: classes/applications/survey/survey_manager.aw:prop_users_only_comment
-msgid ""
-"Omaduse Täita saavad ainult registreeritud kasutajad (users_only) kommentaar"
+msgid "Omaduse Täita saavad ainult registreeritud kasutajad (users_only) kommentaar"
 msgstr ""
 
 # classes/applications/survey/survey_manager.aw:prop_users_only_help
@@ -203,7 +195,7 @@ msgid "Seose Seadete vorm (RELTYPE_SURVEY_CFGFORM) tekst"
 msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:rel_RELTYPE_REDIRECT_TO
-msgid "Seose Kuhu peale t&auml;itmist suunata (RELTYPE_REDIRECT_TO) tekst"
+msgid "Seose Kuhu peale täitmist suunata (RELTYPE_REDIRECT_TO) tekst"
 msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:125

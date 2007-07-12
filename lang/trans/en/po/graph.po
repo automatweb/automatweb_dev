@@ -234,22 +234,17 @@ msgstr ""
 
 # classes/applications/graph/graph.aw:prop_show_y_val
 #: classes/applications/graph/graph.aw:prop_show_y_val
-msgid ""
-"Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) "
-"caption"
+msgid "Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) caption"
 msgstr ""
 
 # classes/applications/graph/graph.aw:prop_show_y_val_comment
 #: classes/applications/graph/graph.aw:prop_show_y_val_comment
-msgid ""
-"Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) "
-"kommentaar"
+msgid "Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) kommentaar"
 msgstr ""
 
 # classes/applications/graph/graph.aw:prop_show_y_val_help
 #: classes/applications/graph/graph.aw:prop_show_y_val_help
-msgid ""
-"Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) help"
+msgid "Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) help"
 msgstr ""
 
 # classes/applications/graph/graph.aw:prop_x_axis_text
@@ -319,8 +314,7 @@ msgstr ""
 
 # classes/applications/graph/graph.aw:prop_show_grid_val_comment
 #: classes/applications/graph/graph.aw:prop_show_grid_val_comment
-msgid ""
-"Omaduse N&auml;itan gridil v&auml;&auml;rtusi (show_grid_val) kommentaar"
+msgid "Omaduse N&auml;itan gridil v&auml;&auml;rtusi (show_grid_val) kommentaar"
 msgstr ""
 
 # classes/applications/graph/graph.aw:prop_show_grid_val_help
@@ -391,14 +385,6 @@ msgstr ""
 msgid "Omaduse  (img) help"
 msgstr ""
 
-#: classes/applications/graph/graph.aw:group_general
-msgid "Grupi ‹ldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/graph/graph.aw:group_general_help
-msgid "Grupi ‹ldine (general) help"
-msgstr ""
-
 # classes/applications/graph/graph.aw:group_data
 #: classes/applications/graph/graph.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
@@ -410,11 +396,11 @@ msgid "Grupi Andmed (data) help"
 msgstr ""
 
 #: classes/applications/graph/graph.aw:group_data_settings
-msgid "Grupi M‰‰rangud (data_settings) pealkiri"
+msgid "Grupi M&auml;&auml;rangud (data_settings) pealkiri"
 msgstr ""
 
 #: classes/applications/graph/graph.aw:group_data_settings_help
-msgid "Grupi M‰‰rangud (data_settings) help"
+msgid "Grupi M&auml;&auml;rangud (data_settings) help"
 msgstr ""
 
 # classes/applications/graph/graph.aw:group_data_entry

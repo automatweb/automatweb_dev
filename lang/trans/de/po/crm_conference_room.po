@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_conference_room.aw:class_1143_help
-msgid "Klassi Ruum help"
+msgid "Klassi Konverentsiruum help"
 msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_area
@@ -110,3 +109,10 @@ msgstr ""
 msgid "Omaduse Ainult toolid diagonaalis (type_chair_diag) help"
 msgstr ""
 
+#: classes/crm/crm_conference_room.aw:layout_left
+msgid "Kujundusosa Üldine (left) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_conference_room.aw:layout_right
+msgid "Kujundusosa Maks.kohti (right) pealkiri"
+msgstr ""

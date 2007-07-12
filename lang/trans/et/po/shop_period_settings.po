@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/shop/shop_period_settings.aw:class_291_help
+#: classes/applications/shop/shop_period_settings.aw:class_291_help
 msgid "Klassi Ajaseaded help"
 msgstr ""

@@ -29,6 +29,18 @@ msgstr ""
 msgid "Omaduse Kinnita (confirm) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_income_tb
+msgid "Omaduse  (income_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_income_tb_comment
+msgid "Omaduse  (income_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_income_tb_help
+msgid "Omaduse  (income_tb) help"
+msgstr ""
+
 # classes/applications/shop/shop_warehouse_reception.aw:prop_income
 #: classes/applications/shop/shop_warehouse_reception.aw:prop_income
 msgid "Omaduse  (income) caption"

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/digidoc/ddoc.aw:class_1186_help
 msgid "Klassi DigiDoc help"
 msgstr ""
@@ -227,7 +226,7 @@ msgid "Faili lisamine eba&otilde;nnestus!"
 msgstr ""
 
 #: classes/common/digidoc/ddoc.aw:539
-msgid "Uue DigiDoc konteineri loomine eba&otilde;nnestus: "
+msgid "Uue DigiDoc konteineri loomine eba&otilde;nnestus:"
 msgstr ""
 
 #: classes/common/digidoc/ddoc.aw:547
@@ -266,15 +265,18 @@ msgstr ""
 msgid "Viga sessiooni loomisel!"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:870 classes/common/digidoc/ddoc.aw:938 classes/common/digidoc/ddoc.aw:994
+#: classes/common/digidoc/ddoc.aw:870 classes/common/digidoc/ddoc.aw:938
+#: classes/common/digidoc/ddoc.aw:994
 msgid "Ei saanud lisada faili konteinerisse:"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:881 classes/common/digidoc/ddoc.aw:949 classes/common/digidoc/ddoc.aw:1004
+#: classes/common/digidoc/ddoc.aw:881 classes/common/digidoc/ddoc.aw:949
+#: classes/common/digidoc/ddoc.aw:1004
 msgid "Ei saanud DigiDoc konteinerit k&auml;tte:"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:889 classes/common/digidoc/ddoc.aw:957 classes/common/digidoc/ddoc.aw:1012
+#: classes/common/digidoc/ddoc.aw:889 classes/common/digidoc/ddoc.aw:957
+#: classes/common/digidoc/ddoc.aw:1012
 msgid "DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"
 msgstr ""
 
@@ -294,7 +296,8 @@ msgstr ""
 msgid "Allkirjastamise ettevalmistusetapp eba&otilde;nnestus! Palun proovige uuesti!"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:1499 classes/common/digidoc/ddoc.aw:1536 classes/common/digidoc/ddoc.aw:1548 classes/common/digidoc/ddoc.aw:1558
+#: classes/common/digidoc/ddoc.aw:1499 classes/common/digidoc/ddoc.aw:1536
+#: classes/common/digidoc/ddoc.aw:1548 classes/common/digidoc/ddoc.aw:1558
 msgid "T&auml;psem veateade: %s"
 msgstr ""
 
@@ -317,4 +320,3 @@ msgstr ""
 #: classes/common/digidoc/ddoc.aw:1639
 msgid "Ei suutnud saada uut digidoc konteinerit:"
 msgstr ""
-

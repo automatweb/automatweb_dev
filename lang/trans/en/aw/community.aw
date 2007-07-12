@@ -28,7 +28,6 @@ $GLOBALS["TRANS"]["Seose Seadete haldur (RELTYPE_CFG_MANAGER) tekst"] = "Connect
 $GLOBALS["TRANS"]["Blokeeri"] = "Block";
 $GLOBALS["TRANS"]["Tee moderaatoriks"] = "Make moderator";
 $GLOBALS["TRANS"]["Tee liikmeks"] = "Make member";
-$GLOBALS["TRANS"]["Eemalda "] = "Remove ";
 $GLOBALS["TRANS"]["ID"] = "ID";
 $GLOBALS["TRANS"]["Kasutaja"] = "User";
 $GLOBALS["TRANS"]["Nimi"] = "Name";

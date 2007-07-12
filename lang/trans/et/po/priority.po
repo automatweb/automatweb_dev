@@ -10,25 +10,31 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/priority.aw:class_114_help
+#: classes/priority.aw:class_114_help
 msgid "Klassi Prioriteet help"
 msgstr ""
 
 # classes/priority.aw:prop_pri
+#: classes/priority.aw:prop_pri
 msgid "Omaduse Prioriteedid (pri) caption"
 msgstr ""
 
 # classes/priority.aw:prop_pri_comment
+#: classes/priority.aw:prop_pri_comment
 msgid "Omaduse Prioriteedid (pri) kommentaar"
 msgstr ""
 
 # classes/priority.aw:prop_pri_help
+#: classes/priority.aw:prop_pri_help
 msgid "Omaduse Prioriteedid (pri) help"
 msgstr ""
 
 # classes/priority.aw:group_pri
+#: classes/priority.aw:group_pri
 msgid "Grupi Prioriteedid (pri) pealkiri"
 msgstr ""
 
 # classes/priority.aw:group_pri_help
+#: classes/priority.aw:group_pri_help
 msgid "Grupi Prioriteedid (pri) help"
 msgstr ""

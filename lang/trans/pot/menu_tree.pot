@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) help"
 msgstr ""
 
+#: classes/contentmgmt/menu_tree.aw:prop_root_menu
+msgid "Omaduse  (root_menu) caption"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_root_menu_comment
+msgid "Omaduse  (root_menu) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_root_menu_help
+msgid "Omaduse  (root_menu) help"
+msgstr ""
+
 #: classes/contentmgmt/menu_tree.aw:prop_menu_table
 msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) caption"
 msgstr ""
@@ -114,19 +126,27 @@ msgstr ""
 msgid "Seose Men&uuml;&uuml; (RELTYPE_ROOT_MENU) tekst"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:56
+#: classes/contentmgmt/menu_tree.aw:58
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:383
+#: classes/contentmgmt/menu_tree.aw:385
 msgid "Men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:410
+#: classes/contentmgmt/menu_tree.aw:419
 msgid "Lisa men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:416
+#: classes/contentmgmt/menu_tree.aw:422
+msgid "Otsi"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:426
 msgid "Eemalda men&uuml;&uuml;"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:458
+msgid "Avamisaeg"
 msgstr ""
 

@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/site_search/parsers/parser_base.aw:93
+#: classes/contentmgmt/site_search/parsers/parser_base.aw:107
 msgid "parser_base::_put(%s, content): can not open %s for writing!"
 msgstr ""
 
-#: classes/contentmgmt/site_search/parsers/parser_base.aw:104
+#: classes/contentmgmt/site_search/parsers/parser_base.aw:118
 msgid "parser_base::_get(%s): can not open file for reading!"
 msgstr ""
-

@@ -50,6 +50,30 @@ msgstr ""
 msgid "Omaduse Metaandmete kontroller (meta_ctr) help"
 msgstr ""
 
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_aw_username
+msgid "Omaduse AW kasutaja (aw_username) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_aw_username_comment
+msgid "Omaduse AW kasutaja (aw_username) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_aw_username_help
+msgid "Omaduse AW kasutaja (aw_username) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_aw_pwd
+msgid "Omaduse AW parool (aw_pwd) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_aw_pwd_comment
+msgid "Omaduse AW parool (aw_pwd) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_aw_pwd_help
+msgid "Omaduse AW parool (aw_pwd) help"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_i_status
 msgid "Omaduse Staatus (i_status) caption"
 msgstr ""
@@ -190,27 +214,27 @@ msgstr ""
 msgid "Seose metaandmete kontroller (RELTYPE_META_CTR) tekst"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:223
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:262
 msgid "Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\nIndekseeriti %s lehte, mis sialdasid %s baiti teksti."
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:235
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:274
 msgid "Indekseerija nimega %s alustas t&ouml;&ouml;d %s.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:236
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:275
 msgid "Hetkel on indekseeritud %s lehte.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:237
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:276
 msgid "J&auml;rjekorras on %s lehte.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:238
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:277
 msgid "Viimati uuendati staatust %s.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:247
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:286
 msgid "Indekseerija k&auml;ivitati %s, peatati %s."
 msgstr ""
 

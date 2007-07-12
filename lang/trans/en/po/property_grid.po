@@ -10,17 +10,21 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/class_designer/property_grid.aw:class_882_help
+#: classes/applications/class_designer/property_grid.aw:class_882_help
 msgid "Klassi Grid help"
 msgstr ""
 
 # classes/applications/class_designer/property_grid.aw:prop_grid_type
+#: classes/applications/class_designer/property_grid.aw:prop_grid_type
 msgid "Omaduse Gridi tüüp (grid_type) caption"
 msgstr "Grid type"
 
 # classes/applications/class_designer/property_grid.aw:prop_grid_type_comment
+#: classes/applications/class_designer/property_grid.aw:prop_grid_type_comment
 msgid "Omaduse Gridi tüüp (grid_type) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/property_grid.aw:prop_grid_type_help
+#: classes/applications/class_designer/property_grid.aw:prop_grid_type_help
 msgid "Omaduse Gridi tüüp (grid_type) help"
 msgstr ""

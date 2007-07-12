@@ -194,9 +194,10 @@ msgstr "Conditions"
 msgid "Grupi Tingimused (if_ov) help"
 msgstr ""
 
+# classes/core/obj_inherit_props_conf.aw:rel_RELTYPE_INHERIT_FROM
 #: classes/core/obj_inherit_props_conf.aw:rel_RELTYPE_INHERIT_FROM
-msgid "Seose p&amp;auml;ritav objekt (RELTYPE_INHERIT_FROM) tekst"
-msgstr ""
+msgid "Seose p&auml;ritav objekt (RELTYPE_INHERIT_FROM) tekst"
+msgstr "inherit from"
 
 # classes/core/obj_inherit_props_conf.aw:rel_RELTYPE_INHERIT_TO
 #: classes/core/obj_inherit_props_conf.aw:rel_RELTYPE_INHERIT_TO
@@ -255,7 +256,3 @@ msgstr "Modified"
 #: classes/core/obj_inherit_props_conf.aw:543
 msgid "--Vali--"
 msgstr "--Select--"
-
-# classes/core/obj_inherit_props_conf.aw:rel_RELTYPE_INHERIT_FROM
-#~ msgid "Seose p&auml;ritav objekt (RELTYPE_INHERIT_FROM) tekst"
-#~ msgstr "inherit from"

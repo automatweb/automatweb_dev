@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/core/abstract_data_class.aw:class_340_help
+#: classes/core/abstract_data_class.aw:class_340_help
 msgid "Klassi Tundmatud andmed help"
 msgstr ""

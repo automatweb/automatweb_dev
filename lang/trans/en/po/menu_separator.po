@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/admin/menu_separator.aw:class_214_help
+#: classes/admin/menu_separator.aw:class_214_help
 msgid "Klassi Men&uuml;&uuml; eraldusjoon help"
 msgstr ""

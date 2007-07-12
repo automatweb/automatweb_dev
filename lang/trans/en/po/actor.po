@@ -10,29 +10,36 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/workflow/actor.aw:class_172_help
+#: classes/workflow/actor.aw:class_172_help
 msgid "Klassi Tegija help"
 msgstr ""
 
 # classes/workflow/actor.aw:prop_description
+#: classes/workflow/actor.aw:prop_description
 msgid "Omaduse Rolli kirjeldus (description) caption"
 msgstr "Role description"
 
 # classes/workflow/actor.aw:prop_description_comment
+#: classes/workflow/actor.aw:prop_description_comment
 msgid "Omaduse Rolli kirjeldus (description) kommentaar"
 msgstr ""
 
 # classes/workflow/actor.aw:prop_description_help
+#: classes/workflow/actor.aw:prop_description_help
 msgid "Omaduse Rolli kirjeldus (description) help"
 msgstr ""
 
 # classes/workflow/actor.aw:group_general
+#: classes/workflow/actor.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 # classes/workflow/actor.aw:group_general_help
+#: classes/workflow/actor.aw:group_general_help
 msgid "Grupi Üldine (general) help"
 msgstr ""
 
 # classes/workflow/actor.aw:rel_RELTYPE_INSTRUCTION
+#: classes/workflow/actor.aw:rel_RELTYPE_INSTRUCTION
 msgid "Seose instruktsioon (RELTYPE_INSTRUCTION) tekst"
 msgstr "instructions"

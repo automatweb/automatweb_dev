@@ -37,6 +37,18 @@ msgstr ""
 msgid "Omaduse Alias (alias) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_link
+msgid "Omaduse Link (link) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_link_comment
+msgid "Omaduse Link (link) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_link_help
+msgid "Omaduse Link (link) help"
+msgstr ""
+
 #: classes/crm/crm_sector.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
 msgstr ""
@@ -97,6 +109,18 @@ msgstr ""
 msgid "Omaduse Pilt (image) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_info_document
+msgid "Omaduse Tutvustus (info_document) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_info_document_comment
+msgid "Omaduse Tutvustus (info_document) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_info_document_help
+msgid "Omaduse Tutvustus (info_document) help"
+msgstr ""
+
 #: classes/crm/crm_sector.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -119,4 +143,8 @@ msgstr ""
 
 #: classes/crm/crm_sector.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:rel_RELTYPE_DOCUMENT
+msgid "Seose Dokument (RELTYPE_DOCUMENT) tekst"
 msgstr ""

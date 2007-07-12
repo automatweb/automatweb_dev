@@ -9,42 +9,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/applications/class_designer/property_textbox.aw:class_881_help
-msgid "Klassi Tekstiväli help"
+#: classes/applications/class_designer/property_textbox.aw:class_881_help
+msgid "Klassi Tekstiv&auml;li help"
 msgstr ""
 
 # classes/applications/class_designer/property_textbox.aw:prop_ord
+#: classes/applications/class_designer/property_textbox.aw:prop_ord
 msgid "Omaduse Jrk (ord) caption"
 msgstr "Ord"
 
 # classes/applications/class_designer/property_textbox.aw:prop_ord_comment
+#: classes/applications/class_designer/property_textbox.aw:prop_ord_comment
 msgid "Omaduse Jrk (ord) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/property_textbox.aw:prop_ord_help
+#: classes/applications/class_designer/property_textbox.aw:prop_ord_help
 msgid "Omaduse Jrk (ord) help"
 msgstr ""
 
 # classes/applications/class_designer/property_textbox.aw:prop_size
+#: classes/applications/class_designer/property_textbox.aw:prop_size
 msgid "Omaduse Pikkus (size) caption"
 msgstr "Length"
 
 # classes/applications/class_designer/property_textbox.aw:prop_size_comment
+#: classes/applications/class_designer/property_textbox.aw:prop_size_comment
 msgid "Omaduse Pikkus (size) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/property_textbox.aw:prop_size_help
+#: classes/applications/class_designer/property_textbox.aw:prop_size_help
 msgid "Omaduse Pikkus (size) help"
 msgstr ""
 
 # classes/applications/class_designer/property_textbox.aw:prop_maxlength
+#: classes/applications/class_designer/property_textbox.aw:prop_maxlength
 msgid "Omaduse Max. pikkus (maxlength) caption"
 msgstr "Max. Length"
 
 # classes/applications/class_designer/property_textbox.aw:prop_maxlength_comment
+#: classes/applications/class_designer/property_textbox.aw:prop_maxlength_comment
 msgid "Omaduse Max. pikkus (maxlength) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/property_textbox.aw:prop_maxlength_help
+#: classes/applications/class_designer/property_textbox.aw:prop_maxlength_help
 msgid "Omaduse Max. pikkus (maxlength) help"
 msgstr ""

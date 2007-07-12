@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/where_to_go/where_to_go.aw:class_993_help
 msgid "Klassi Kuhu minna help"
 msgstr ""
@@ -231,7 +230,7 @@ msgid "Seose Toimumispaikade kaust (RELTYPE_PLACES_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_EVENTS_FOLDER
-msgid "Seose &amp;Uuml;rituste kaust (RELTYPE_EVENTS_FOLDER) tekst"
+msgid "Seose &Uuml;rituste kaust (RELTYPE_EVENTS_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_FORUM
@@ -247,7 +246,7 @@ msgid "Seose Korraldaja (RELTYPE_ORGANISER) tekst"
 msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_GENRE
-msgid "Seose &amp;#142;anr (RELTYPE_GENRE) tekst"
+msgid "Seose &#142;anr (RELTYPE_GENRE) tekst"
 msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:186
@@ -297,4 +296,3 @@ msgstr ""
 #: classes/applications/where_to_go/where_to_go.aw:440
 msgid "Sellist klassi ei saa lisada!"
 msgstr ""
-

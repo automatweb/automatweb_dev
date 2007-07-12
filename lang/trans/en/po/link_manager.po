@@ -29,26 +29,26 @@ msgstr "Location"
 msgid "Vali"
 msgstr "Choose"
 
-#: classes/admin/link_manager.aw:165
+#: classes/admin/link_manager.aw:166
 msgid "Vali see"
 msgstr "Choose this"
 
-#: classes/admin/link_manager.aw:203
+#: classes/admin/link_manager.aw:204
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/admin/link_manager.aw:209
+#: classes/admin/link_manager.aw:210
 msgid "URL"
 msgstr "URL"
 
-#: classes/admin/link_manager.aw:216
+#: classes/admin/link_manager.aw:217
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/admin/link_manager.aw:222
+#: classes/admin/link_manager.aw:223
 msgid "Minu lisatud"
 msgstr "Added by me"
 
-#: classes/admin/link_manager.aw:229
+#: classes/admin/link_manager.aw:230
 msgid "Viimased 30"
 msgstr "Last 30"

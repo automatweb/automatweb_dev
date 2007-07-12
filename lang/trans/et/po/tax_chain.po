@@ -9,6 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/pank/tax_chain.aw:class_808_help
-msgid "Klassi Maksu pärg help"
+#: classes/pank/tax_chain.aw:class_808_help
+msgid "Klassi Maksu p&auml;rg help"
 msgstr ""

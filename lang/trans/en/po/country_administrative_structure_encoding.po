@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/country/country_administrative_structure_encoding.aw:class_1033_help
 msgid "Klassi Haldusjaotuse kodeering help"
 msgstr ""
@@ -50,14 +49,6 @@ msgstr ""
 msgid "Omaduse  (encodings_list) help"
 msgstr ""
 
-#: classes/common/country/country_administrative_structure_encoding.aw:group_general
-msgid "Grupi ‹ldine (general) pealkiri"
-msgstr ""
-
-#: classes/common/country/country_administrative_structure_encoding.aw:group_general_help
-msgid "Grupi ‹ldine (general) help"
-msgstr ""
-
 #: classes/common/country/country_administrative_structure_encoding.aw:group_grp_encodings
 msgid "Grupi Vasted (grp_encodings) pealkiri"
 msgstr ""
@@ -81,4 +72,3 @@ msgstr ""
 #: classes/common/country/country_administrative_structure_encoding.aw:177
 msgid "V‰‰rtus/Vaste"
 msgstr ""
-

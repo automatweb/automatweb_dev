@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/conference.aw:class_1166_help
 msgid "Klassi Konverents help"
 msgstr ""
@@ -394,7 +393,8 @@ msgstr ""
 msgid "Luncheon"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:137 classes/applications/calendar/conference.aw:147
+#: classes/applications/calendar/conference.aw:137
+#: classes/applications/calendar/conference.aw:147
 msgid "Dinner"
 msgstr ""
 
@@ -406,7 +406,8 @@ msgstr ""
 msgid "Wedding"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:140 classes/applications/calendar/conference.aw:148
+#: classes/applications/calendar/conference.aw:140
+#: classes/applications/calendar/conference.aw:148
 msgid "Other"
 msgstr ""
 
@@ -434,7 +435,9 @@ msgstr ""
 msgid "vabu ressursse"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:290 classes/applications/calendar/conference.aw:347 classes/applications/calendar/conference.aw:570
+#: classes/applications/calendar/conference.aw:290
+#: classes/applications/calendar/conference.aw:347
+#: classes/applications/calendar/conference.aw:570
 msgid "Ruum"
 msgstr ""
 
@@ -459,7 +462,7 @@ msgid "-- Vali toode --"
 msgstr ""
 
 #: classes/applications/calendar/conference.aw:391
-msgid "-- Vali p&auml;ev ja ruum -- "
+msgid "-- Vali p&auml;ev ja ruum --"
 msgstr ""
 
 #: classes/applications/calendar/conference.aw:397
@@ -501,4 +504,3 @@ msgstr ""
 #: classes/applications/calendar/conference.aw:761
 msgid "Eemalda esineja"
 msgstr ""
-

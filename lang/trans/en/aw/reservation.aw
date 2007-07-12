@@ -1,7 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Maksmist&auml;htaeg (deadline) caption"] = "Paying deadline";
 $GLOBALS["TRANS"]["Omaduse Kinnitatud (verified) caption"] = "Verified";
-$GLOBALS["TRANS"]["Omaduse Ressurss (resource) caption"] = "Resource";
 $GLOBALS["TRANS"]["Omaduse Klient (customer) caption"] = "Client";
 $GLOBALS["TRANS"]["Omaduse Eesnimi (cp_fn) caption"] = "First name";
 $GLOBALS["TRANS"]["Omaduse Perenimi (cp_ln) caption"] = "Last name";

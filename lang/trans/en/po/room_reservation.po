@@ -235,7 +235,11 @@ msgstr "Stage name"
 msgid "Template"
 msgstr "Template"
 
-#: classes/common/room_reservation.aw:425
+#: classes/common/room_reservation.aw:444
+msgid "Vali enne jätkamist sobiv aeg!"
+msgstr ""
+
+#: classes/common/room_reservation.aw:445
 msgid "Vali enne j&auml;tkamist sobiv aeg!"
 msgstr "Before continuing, please select suitable time"
 
@@ -263,11 +267,11 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1511
+#: classes/common/room_reservation.aw:1516
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1580
-#: classes/common/room_reservation.aw:1629
+#: classes/common/room_reservation.aw:1585
+#: classes/common/room_reservation.aw:1634
 msgid "Broneering: %s"
 msgstr ""

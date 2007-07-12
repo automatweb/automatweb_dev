@@ -10,29 +10,36 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/intranet/intranet.aw:class_233_help
+#: classes/intranet/intranet.aw:class_233_help
 msgid "Klassi Intranet help"
 msgstr ""
 
 # classes/intranet/intranet.aw:prop_showlink
+#: classes/intranet/intranet.aw:prop_showlink
 msgid "Omaduse Näita (showlink) caption"
 msgstr "Display"
 
 # classes/intranet/intranet.aw:prop_showlink_comment
+#: classes/intranet/intranet.aw:prop_showlink_comment
 msgid "Omaduse Näita (showlink) kommentaar"
 msgstr ""
 
 # classes/intranet/intranet.aw:prop_showlink_help
+#: classes/intranet/intranet.aw:prop_showlink_help
 msgid "Omaduse Näita (showlink) help"
 msgstr ""
 
 # classes/intranet/intranet.aw:prop_tpldata
+#: classes/intranet/intranet.aw:prop_tpldata
 msgid "Omaduse alamtemplated (tpldata) caption"
 msgstr "subtemplates"
 
 # classes/intranet/intranet.aw:prop_tpldata_comment
+#: classes/intranet/intranet.aw:prop_tpldata_comment
 msgid "Omaduse alamtemplated (tpldata) kommentaar"
 msgstr ""
 
 # classes/intranet/intranet.aw:prop_tpldata_help
+#: classes/intranet/intranet.aw:prop_tpldata_help
 msgid "Omaduse alamtemplated (tpldata) help"
 msgstr ""

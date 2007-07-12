@@ -22,7 +22,7 @@ msgid "Vaata erinevusi"
 msgstr ""
 
 #: classes/vcl/version_manager.aw:57 classes/vcl/version_manager.aw:105
-msgid "M&amp;auml;&amp;auml;ra aktiivseks"
+msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
 #: classes/vcl/version_manager.aw:111

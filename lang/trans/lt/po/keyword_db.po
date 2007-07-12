@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/keyword_db.aw:class_83_help
+msgid "Klassi V&otilde;tmes&otilde;nade baas help"
+msgstr ""
+
+#: classes/keyword_db.aw:prop_keyw_cats
+msgid "Omaduse Kataloogid, mille alt v&otilde;tmes&otilde;nad kuuluvad sellesse baasi (keyw_cats) caption"
+msgstr ""
+
+#: classes/keyword_db.aw:prop_keyw_cats_comment
+msgid "Omaduse Kataloogid, mille alt v&otilde;tmes&otilde;nad kuuluvad sellesse baasi (keyw_cats) kommentaar"
+msgstr ""
+
+#: classes/keyword_db.aw:prop_keyw_cats_help
+msgid "Omaduse Kataloogid, mille alt v&otilde;tmes&otilde;nad kuuluvad sellesse baasi (keyw_cats) help"
+msgstr ""
+
+#: classes/keyword_db.aw:prop_bro_cats
+msgid "Omaduse Kataloogid, mille alla saab selle baasi v&otilde;tmes&otilde;nu vennastada (bro_cats) caption"
+msgstr ""
+
+#: classes/keyword_db.aw:prop_bro_cats_comment
+msgid "Omaduse Kataloogid, mille alla saab selle baasi v&otilde;tmes&otilde;nu vennastada (bro_cats) kommentaar"
+msgstr ""
+
+#: classes/keyword_db.aw:prop_bro_cats_help
+msgid "Omaduse Kataloogid, mille alla saab selle baasi v&otilde;tmes&otilde;nu vennastada (bro_cats) help"
+msgstr ""
+

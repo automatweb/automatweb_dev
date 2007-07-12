@@ -26,39 +26,27 @@ msgid "Omaduse Juurkaust/-grupp (root) help"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_default_loginmenu
-msgid ""
-"Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) "
-"caption"
+msgid "Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) caption"
 msgstr "Default login-menu for new groups"
 
 #: classes/core/users/user_manager.aw:prop_default_loginmenu_comment
-msgid ""
-"Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) "
-"kommentaar"
+msgid "Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) kommentaar"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_default_loginmenu_help
-msgid ""
-"Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) "
-"help"
+msgid "Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) help"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_inactive_period
-msgid ""
-"Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) "
-"caption"
+msgid "Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) caption"
 msgstr "User automatic deactivation time"
 
 #: classes/core/users/user_manager.aw:prop_inactive_period_comment
-msgid ""
-"Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) "
-"kommentaar"
+msgid "Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) kommentaar"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_inactive_period_help
-msgid ""
-"Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) "
-"help"
+msgid "Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) help"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_users_tb
@@ -190,14 +178,12 @@ msgid "Seose Juurkaust/-grupp (RELTYPE_ROOT) tekst"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:rel_RELTYPE_LOGIN_ROOT
-msgid ""
-"Seose Loginmen&amp;uuml;&amp;uuml;de juurkaust (RELTYPE_LOGIN_ROOT) tekst"
-msgstr "Root folder for login-menus"
+msgid "Seose Loginmen&uuml;&uuml;de juurkaust (RELTYPE_LOGIN_ROOT) tekst"
+msgstr ""
 
 #: classes/core/users/user_manager.aw:rel_RELTYPE_LOGIN_CONF
-msgid ""
-"Seose Loginmen&amp;uuml;&amp;uuml; seadete objekt  (RELTYPE_LOGIN_CONF) tekst"
-msgstr "Login-menu configuration"
+msgid "Seose Loginmen&uuml;&uuml; seadete objekt  (RELTYPE_LOGIN_CONF) tekst"
+msgstr ""
 
 #: classes/core/users/user_manager.aw:80
 msgid "Vali õigused"
@@ -465,3 +451,9 @@ msgstr "Root for nonrelated folders"
 #: classes/core/users/user_manager.aw:1170
 msgid "Seostamata confiobject"
 msgstr "Nonrelated configuration object"
+
+#~ msgid "Seose Loginmen&amp;uuml;&amp;uuml;de juurkaust (RELTYPE_LOGIN_ROOT) tekst"
+#~ msgstr "Root folder for login-menus"
+
+#~ msgid "Seose Loginmen&amp;uuml;&amp;uuml; seadete objekt  (RELTYPE_LOGIN_CONF) tekst"
+#~ msgstr "Login-menu configuration"

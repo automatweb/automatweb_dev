@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_field_other.aw:class_1114_help
 msgid "Klassi Muu (valdkond) help"
 msgstr ""
@@ -159,12 +158,12 @@ msgid "Kesklinnas"
 msgstr "Centre"
 
 #: classes/applications/crm/crm_field_other.aw:78
-msgid "V&amp;auml;ljaspool kesklinna"
-msgstr "Outside centre"
+msgid "V&auml;ljaspool kesklinna"
+msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:79
-msgid "V&amp;auml;ljaspool linna"
-msgstr "Outside town"
+msgid "V&auml;ljaspool linna"
+msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:84
 msgid "A"
@@ -186,3 +185,8 @@ msgstr "D"
 msgid "E"
 msgstr "E"
 
+#~ msgid "V&amp;auml;ljaspool kesklinna"
+#~ msgstr "Outside centre"
+
+#~ msgid "V&amp;auml;ljaspool linna"
+#~ msgstr "Outside town"

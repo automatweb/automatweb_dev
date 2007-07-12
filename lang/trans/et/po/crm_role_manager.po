@@ -42,7 +42,7 @@ msgid "E-post"
 msgstr ""
 
 #: classes/crm/crm_role_manager.aw:336
-msgid "&amp;Uuml;ksus"
+msgid "&Uuml;ksus"
 msgstr ""
 
 #: classes/crm/crm_role_manager.aw:342

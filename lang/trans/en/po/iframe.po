@@ -74,19 +74,16 @@ msgstr ""
 msgid "Omaduse Kõrgus (height) help"
 msgstr ""
 
-# classes/contentmgmt/iframe.aw:prop_frameborder
 #: classes/contentmgmt/iframe.aw:prop_frameborder
-msgid "Omaduse Ümbritseda raamiga (frameborder) caption"
-msgstr "Frame border"
-
-# classes/contentmgmt/iframe.aw:prop_frameborder_comment
-#: classes/contentmgmt/iframe.aw:prop_frameborder_comment
-msgid "Omaduse Ümbritseda raamiga (frameborder) kommentaar"
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) caption"
 msgstr ""
 
-# classes/contentmgmt/iframe.aw:prop_frameborder_help
+#: classes/contentmgmt/iframe.aw:prop_frameborder_comment
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) kommentaar"
+msgstr ""
+
 #: classes/contentmgmt/iframe.aw:prop_frameborder_help
-msgid "Omaduse Ümbritseda raamiga (frameborder) help"
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) help"
 msgstr ""
 
 # classes/contentmgmt/iframe.aw:prop_scrolling
@@ -108,3 +105,7 @@ msgstr ""
 #: classes/contentmgmt/iframe.aw:rel_RELTYPE_CONTENT
 msgid "Seose sisu (RELTYPE_CONTENT) tekst"
 msgstr "content"
+
+# classes/contentmgmt/iframe.aw:prop_frameborder
+#~ msgid "Omaduse Ümbritseda raamiga (frameborder) caption"
+#~ msgstr "Frame border"

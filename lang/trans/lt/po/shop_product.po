@@ -985,6 +985,18 @@ msgstr ""
 msgid "Omaduse Lingid (lnk) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_match_prod
+msgid "Omaduse Kokkusobivad tooted (match_prod) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_match_prod_comment
+msgid "Omaduse Kokkusobivad tooted (match_prod) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_match_prod_help
+msgid "Omaduse Kokkusobivad tooted (match_prod) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -1043,6 +1055,14 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_lnk_help
 msgid "Grupi Lingid (lnk) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_match_prod
+msgid "Grupi Kokkusobivad tooted (match_prod) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_match_prod_help
+msgid "Grupi Kokkusobivad tooted (match_prod) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_transl
@@ -1125,22 +1145,26 @@ msgstr ""
 msgid "Seose Maksum&auml;&auml;r (RELTYPE_TAX_RATE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:417
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_MATCH_PROD
+msgid "Seose Kokkusobiv toode (RELTYPE_MATCH_PROD) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:429
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:418
+#: classes/applications/shop/shop_product.aw:430
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:458
+#: classes/applications/shop/shop_product.aw:470
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:463
+#: classes/applications/shop/shop_product.aw:475
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:620
+#: classes/applications/shop/shop_product.aw:632
 msgid "shop_product::draw(): no layout set!"
 msgstr ""

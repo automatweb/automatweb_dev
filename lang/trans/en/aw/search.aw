@@ -43,5 +43,5 @@ $GLOBALS["TRANS"]["Saidi ID"] = "Site ID";
 $GLOBALS["TRANS"]["Leia vendi"] = "Find brothers";
 $GLOBALS["TRANS"]["Loodud"] = "Created";
 $GLOBALS["TRANS"]["Muudetud"] = "Modified";
-$GLOBALS["TRANS"]["<a href='javascript:selall(\"sel\")'>Vali</a>"] = "<a href='javascript:selall(\"sel\")'>Select</a>";
+$GLOBALS["TRANS"]["<a href='javascript:selall(\\"sel\\")'>Vali</a>"] = "<a href='javascript:selall(\\"sel\\")'>Select</a>";
 ?>

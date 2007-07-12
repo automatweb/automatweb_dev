@@ -306,7 +306,7 @@ msgid "Koopia"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:172
-msgid " (Aktiivne)"
+msgid "(Aktiivne)"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:190

@@ -66,8 +66,7 @@ msgstr ""
 
 # classes/applications/class_designer/class_designer.aw:prop_from_existing_class_comment
 #: classes/applications/class_designer/class_designer.aw:prop_from_existing_class_comment
-msgid ""
-"Omaduse Olemasoleva klassi p&otilde;hjal (from_existing_class) kommentaar"
+msgid "Omaduse Olemasoleva klassi p&otilde;hjal (from_existing_class) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/class_designer.aw:prop_from_existing_class_help
@@ -713,6 +712,7 @@ msgid "Uus"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:631
+#: classes/applications/class_designer/class_designer.aw:935
 msgid "Grupp"
 msgstr ""
 
@@ -725,6 +725,7 @@ msgid "tab"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:674
+#: classes/applications/class_designer/class_designer.aw:967
 msgid "vbox"
 msgstr ""
 
@@ -775,14 +776,6 @@ msgstr ""
 #: classes/applications/class_designer/class_designer.aw:1931
 #: classes/applications/class_designer/class_designer.aw:1975
 msgid "Muuda"
-msgstr ""
-
-#: classes/applications/class_designer/class_designer.aw:935
-msgid "Grupp "
-msgstr ""
-
-#: classes/applications/class_designer/class_designer.aw:967
-msgid "vbox "
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:1879

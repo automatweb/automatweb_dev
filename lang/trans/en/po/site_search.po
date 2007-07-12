@@ -10,13 +10,16 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/layout/site_search.aw:class_205_help
+#: classes/layout/site_search.aw:class_205_help
 msgid "Klassi Saidi otsing help"
 msgstr ""
 
 # classes/layout/site_search.aw:group_general
+#: classes/layout/site_search.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 # classes/layout/site_search.aw:group_general_help
+#: classes/layout/site_search.aw:group_general_help
 msgid "Grupi Üldine (general) help"
 msgstr ""

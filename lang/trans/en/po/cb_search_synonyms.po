@@ -10,29 +10,36 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/cfg/cb_search_synonyms.aw:class_830_help
+#: classes/cfg/cb_search_synonyms.aw:class_830_help
 msgid "Klassi Classbase otsingu s&uuml;non&uuml;mid help"
 msgstr ""
 
 # classes/cfg/cb_search_synonyms.aw:prop_desc
+#: classes/cfg/cb_search_synonyms.aw:prop_desc
 msgid "Omaduse  (desc) caption"
 msgstr ""
 
 # classes/cfg/cb_search_synonyms.aw:prop_desc_comment
+#: classes/cfg/cb_search_synonyms.aw:prop_desc_comment
 msgid "Omaduse  (desc) kommentaar"
 msgstr ""
 
 # classes/cfg/cb_search_synonyms.aw:prop_desc_help
+#: classes/cfg/cb_search_synonyms.aw:prop_desc_help
 msgid "Omaduse  (desc) help"
 msgstr ""
 
 # classes/cfg/cb_search_synonyms.aw:prop_syntb
+#: classes/cfg/cb_search_synonyms.aw:prop_syntb
 msgid "Omaduse S&uuml;non&uuml;mise sisestamine (syntb) caption"
 msgstr "Synonym entry"
 
 # classes/cfg/cb_search_synonyms.aw:prop_syntb_comment
+#: classes/cfg/cb_search_synonyms.aw:prop_syntb_comment
 msgid "Omaduse S&uuml;non&uuml;mise sisestamine (syntb) kommentaar"
 msgstr ""
 
 # classes/cfg/cb_search_synonyms.aw:prop_syntb_help
+#: classes/cfg/cb_search_synonyms.aw:prop_syntb_help
 msgid "Omaduse S&uuml;non&uuml;mise sisestamine (syntb) help"
 msgstr ""

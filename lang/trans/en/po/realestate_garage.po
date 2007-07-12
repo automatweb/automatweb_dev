@@ -25,18 +25,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_garage.aw:prop_header
 msgid "Omaduse  (header) caption"
 msgstr ""
@@ -121,6 +109,42 @@ msgstr ""
 msgid "Omaduse Arhiveeritud (is_archived) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_garage.aw:prop_booked_until
+msgid "Omaduse  (booked_until) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_booked_until_comment
+msgid "Omaduse  (booked_until) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_booked_until_help
+msgid "Omaduse  (booked_until) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_is_booked
+msgid "Omaduse Broneeritud (is_booked) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_is_booked_comment
+msgid "Omaduse Broneeritud (is_booked) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_is_booked_help
+msgid "Omaduse Broneeritud (is_booked) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_expire
+msgid "Omaduse aegub (expire) caption"
+msgstr "Expires"
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_expire_comment
+msgid "Omaduse aegub (expire) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_expire_help
+msgid "Omaduse aegub (expire) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_garage.aw:prop_title1
 msgid "Omaduse Objekti aadress (title1) caption"
 msgstr "Address of object"
@@ -145,16 +169,16 @@ msgstr ""
 msgid "Omaduse Aadress (address_connection) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title2
-msgid "Omaduse Tehingu andmed (title2) caption"
-msgstr "Data of transaction"
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title2_comment
-msgid "Omaduse Tehingu andmed (title2) kommentaar"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_
+msgid "Omaduse  () caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title2_help
-msgid "Omaduse Tehingu andmed (title2) help"
+#: classes/applications/realestate_management/realestate_garage.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop__help
+msgid "Omaduse  () help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_type
@@ -193,6 +217,18 @@ msgstr ""
 msgid "Omaduse M&uuml;&uuml;gihind (transaction_price2) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_garage.aw:prop_price_per_m2
+msgid "Omaduse Ruutmeetri hind (price_per_m2) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_price_per_m2_comment
+msgid "Omaduse Ruutmeetri hind (price_per_m2) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_price_per_m2_help
+msgid "Omaduse Ruutmeetri hind (price_per_m2) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_rent
 msgid "Omaduse Kuu&uuml;&uuml;r (transaction_rent) caption"
 msgstr ""
@@ -203,18 +239,6 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_rent_help
 msgid "Omaduse Kuu&uuml;&uuml;r (transaction_rent) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_constraints
-msgid "Omaduse Piirangud (transaction_constraints) caption"
-msgstr "Constraints"
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_constraints_comment
-msgid "Omaduse Piirangud (transaction_constraints) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_constraints_help
-msgid "Omaduse Piirangud (transaction_constraints) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_down_payment
@@ -253,28 +277,28 @@ msgstr ""
 msgid "Omaduse Tehing s&otilde;lmitud (transaction_closed) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title3
-msgid "Omaduse M&uuml;&uuml;ja andmed (title3) caption"
-msgstr "Data of seller"
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title3_comment
-msgid "Omaduse M&uuml;&uuml;ja andmed (title3) kommentaar"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_title100
+msgid "Omaduse M&uuml;&uuml;ja andmed (title100) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title3_help
-msgid "Omaduse M&uuml;&uuml;ja andmed (title3) help"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_title100_comment
+msgid "Omaduse M&uuml;&uuml;ja andmed (title100) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_title100_help
+msgid "Omaduse M&uuml;&uuml;ja andmed (title100) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_seller_search
-msgid "Omaduse M&uuml;&uuml;ja (seller_search) caption"
+msgid "Omaduse  (seller_search) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_seller_search_comment
-msgid "Omaduse M&uuml;&uuml;ja (seller_search) kommentaar"
+msgid "Omaduse  (seller_search) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_seller_search_help
-msgid "Omaduse M&uuml;&uuml;ja (seller_search) help"
+msgid "Omaduse  (seller_search) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_seller
@@ -289,40 +313,28 @@ msgstr ""
 msgid "Omaduse  (seller) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_seller_heard_from
-msgid "Omaduse Infoallikas (seller_heard_from) caption"
-msgstr "Source of information"
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_seller_heard_from_comment
-msgid "Omaduse Infoallikas (seller_heard_from) kommentaar"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_title101
+msgid "Omaduse Ostja andmed (title101) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_seller_heard_from_help
-msgid "Omaduse Infoallikas (seller_heard_from) help"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_title101_comment
+msgid "Omaduse Ostja andmed (title101) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title31
-msgid "Omaduse Ostja andmed (title31) caption"
-msgstr "Data of purchaser"
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title31_comment
-msgid "Omaduse Ostja andmed (title31) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title31_help
-msgid "Omaduse Ostja andmed (title31) help"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_title101_help
+msgid "Omaduse Ostja andmed (title101) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_search
-msgid "Omaduse Ostja (buyer_search) caption"
-msgstr "Purchaser"
+msgid "Omaduse  (buyer_search) caption"
+msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_search_comment
-msgid "Omaduse Ostja (buyer_search) kommentaar"
+msgid "Omaduse  (buyer_search) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_search_help
-msgid "Omaduse Ostja (buyer_search) help"
+msgid "Omaduse  (buyer_search) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_buyer
@@ -335,18 +347,6 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_help
 msgid "Omaduse  (buyer) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_heard_from
-msgid "Omaduse Infoallikas (buyer_heard_from) caption"
-msgstr "Source of information"
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_heard_from_comment
-msgid "Omaduse Infoallikas (buyer_heard_from) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_heard_from_help
-msgid "Omaduse Infoallikas (buyer_heard_from) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_title5
@@ -362,19 +362,15 @@ msgid "Omaduse T&auml;nukiri (title5) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_appreciation_note_date
-msgid ""
-"Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) caption"
+msgid "Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_appreciation_note_date_comment
-msgid ""
-"Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) "
-"kommentaar"
+msgid "Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_appreciation_note_date_help
-msgid ""
-"Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) help"
+msgid "Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_appreciation_note_type
@@ -382,24 +378,11 @@ msgid "Omaduse T&auml;nukirja t&uuml;&uuml;p (appreciation_note_type) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_appreciation_note_type_comment
-msgid ""
-"Omaduse T&auml;nukirja t&uuml;&uuml;p (appreciation_note_type) kommentaar"
+msgid "Omaduse T&auml;nukirja t&uuml;&uuml;p (appreciation_note_type) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_appreciation_note_type_help
 msgid "Omaduse T&auml;nukirja t&uuml;&uuml;p (appreciation_note_type) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title4
-msgid "Omaduse Lisaandmed (title4) caption"
-msgstr "Additional information"
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title4_comment
-msgid "Omaduse Lisaandmed (title4) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_garage.aw:prop_title4_help
-msgid "Omaduse Lisaandmed (title4) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_realestate_agent1
@@ -475,19 +458,15 @@ msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_show_house_number_on_web
-msgid ""
-"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
+msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
 msgstr "Show house number on the webpage"
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_show_house_number_on_web_comment
-msgid ""
-"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) "
-"kommentaar"
+msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_show_house_number_on_web_help
-msgid ""
-"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
+msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_special_homepage
@@ -503,19 +482,15 @@ msgid "Omaduse Objekti koduleht (special_homepage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_special_status
-msgid ""
-"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) caption"
+msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) caption"
 msgstr "Special status"
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_special_status_comment
-msgid ""
-"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) "
-"kommentaar"
+msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_special_status_help
-msgid ""
-"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) help"
+msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_project
@@ -530,16 +505,28 @@ msgstr ""
 msgid "Omaduse Projekt (project) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_expire
-msgid "Omaduse aegub (expire) caption"
-msgstr "Expires"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_constraints
+msgid "Omaduse Piirangud (transaction_constraints) caption"
+msgstr "Constraints"
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_expire_comment
-msgid "Omaduse aegub (expire) kommentaar"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_constraints_comment
+msgid "Omaduse Piirangud (transaction_constraints) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:prop_expire_help
-msgid "Omaduse aegub (expire) help"
+#: classes/applications/realestate_management/realestate_garage.aw:prop_transaction_constraints_help
+msgid "Omaduse Piirangud (transaction_constraints) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_heard_from
+msgid "Omaduse Infoallikas (buyer_heard_from) caption"
+msgstr "Source of information"
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_heard_from_comment
+msgid "Omaduse Infoallikas (buyer_heard_from) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_buyer_heard_from_help
+msgid "Omaduse Infoallikas (buyer_heard_from) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_additional_info_et
@@ -651,21 +638,15 @@ msgid "Omaduse V&auml;ike pilt (picture_icon_image) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_map_create
-msgid ""
-"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
-"caption"
+msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) caption"
 msgstr "Create a map image"
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_map_create_comment
-msgid ""
-"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
-"kommentaar"
+msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_map_create_help
-msgid ""
-"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
-"help"
+msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:prop_map_url
@@ -828,13 +809,36 @@ msgstr "Group map"
 msgid "Grupi Kaart (grp_map) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_garage.aw:group_grp_sub_main
+msgid "Grupi Üldine (grp_sub_main) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:group_grp_sub_main_help
+msgid "Grupi Üldine (grp_sub_main) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:group_transaction_data
+msgid "Grupi Tehingu andmed (transaction_data) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:group_transaction_data_help
+msgid "Grupi Tehingu andmed (transaction_data) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:group_advertisement_data
+msgid "Grupi Kuulutuse andmed (advertisement_data) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:group_advertisement_data_help
+msgid "Grupi Kuulutuse andmed (advertisement_data) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_garage.aw:rel_RELTYPE_REALESTATE_ADDRESS
 msgid "Seose Aadress (RELTYPE_REALESTATE_ADDRESS) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:rel_RELTYPE_REALESTATE_SELLER
-msgid ""
-"Seose Klient (M&amp;uuml;&amp;uuml;ja) (RELTYPE_REALESTATE_SELLER) tekst"
+msgid "Seose Klient (M&uuml;&uuml;ja) (RELTYPE_REALESTATE_SELLER) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:rel_RELTYPE_REALESTATE_BUYER
@@ -858,7 +862,7 @@ msgid "Seose Pilt (RELTYPE_REALESTATE_PICTURE) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:rel_RELTYPE_REALESTATE_PICTUREICON
-msgid "Seose V&amp;auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
+msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_garage.aw:70
@@ -869,6 +873,24 @@ msgstr "%s century"
 #: classes/applications/realestate_management/realestate_garage.aw:99
 msgid "Kohustuslik v&auml;li"
 msgstr ""
+
+#~ msgid "Omaduse Tehingu andmed (title2) caption"
+#~ msgstr "Data of transaction"
+
+#~ msgid "Omaduse M&uuml;&uuml;ja andmed (title3) caption"
+#~ msgstr "Data of seller"
+
+#~ msgid "Omaduse Infoallikas (seller_heard_from) caption"
+#~ msgstr "Source of information"
+
+#~ msgid "Omaduse Ostja andmed (title31) caption"
+#~ msgstr "Data of purchaser"
+
+#~ msgid "Omaduse Ostja (buyer_search) caption"
+#~ msgstr "Purchaser"
+
+#~ msgid "Omaduse Lisaandmed (title4) caption"
+#~ msgstr "Additional information"
 
 #~ msgid "Omaduse Vajab tõlget (needs_translation) caption"
 #~ msgstr "Need for translation"

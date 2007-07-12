@@ -70,11 +70,11 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:105 classes/admin/admin_if.aw:884
+#: classes/admin/admin_if.aw:105 classes/admin/admin_if.aw:906
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_if.aw:112 classes/admin/admin_if.aw:890
+#: classes/admin/admin_if.aw:112 classes/admin/admin_if.aw:912
 msgid "Kopeeri"
 msgstr ""
 
@@ -82,11 +82,11 @@ msgstr ""
 msgid "Kleebi"
 msgstr ""
 
-#: classes/admin/admin_if.aw:129 classes/admin/admin_if.aw:900
+#: classes/admin/admin_if.aw:129 classes/admin/admin_if.aw:922
 msgid "Kustuta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:130 classes/admin/admin_if.aw:896
+#: classes/admin/admin_if.aw:130 classes/admin/admin_if.aw:918
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
@@ -114,63 +114,63 @@ msgstr ""
 msgid "Jrk"
 msgstr ""
 
-#: classes/admin/admin_if.aw:518 classes/admin/admin_if.aw:797
+#: classes/admin/admin_if.aw:519 classes/admin/admin_if.aw:803
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/admin/admin_if.aw:527
+#: classes/admin/admin_if.aw:529
 msgid "Muutja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:537
+#: classes/admin/admin_if.aw:539
 msgid "Muudetud"
 msgstr ""
 
-#: classes/admin/admin_if.aw:550
+#: classes/admin/admin_if.aw:552
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/admin/admin_if.aw:560
+#: classes/admin/admin_if.aw:562
 msgid "Tegevus"
 msgstr ""
 
-#: classes/admin/admin_if.aw:569
+#: classes/admin/admin_if.aw:571
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/admin_if.aw:797
+#: classes/admin/admin_if.aw:803
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/admin/admin_if.aw:853
+#: classes/admin/admin_if.aw:875
 msgid "Ava"
 msgstr ""
 
-#: classes/admin/admin_if.aw:873
+#: classes/admin/admin_if.aw:895
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1172
+#: classes/admin/admin_if.aw:1194
 msgid "Administreerimisliides"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1194
+#: classes/admin/admin_if.aw:1216
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1195
+#: classes/admin/admin_if.aw:1217
 msgid "Asukoht:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1196
+#: classes/admin/admin_if.aw:1218
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
 msgstr ""
 
-#: classes/admin/admin_if.aw:1197
+#: classes/admin/admin_if.aw:1219
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1198
+#: classes/admin/admin_if.aw:1220
 msgid "Seaded"
 msgstr ""
 

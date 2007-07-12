@@ -42,8 +42,7 @@ msgid "Omaduse Ekspediitorite ametinimetused (dispatchers_professions) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_dispatchers_professions_comment
-msgid ""
-"Omaduse Ekspediitorite ametinimetused (dispatchers_professions) kommentaar"
+msgid "Omaduse Ekspediitorite ametinimetused (dispatchers_professions) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_dispatchers_professions_help
@@ -63,17 +62,15 @@ msgid "Omaduse Juhtide ametinimetused (leaders_professions) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_orders_toolbar
-msgid ""
-"Omaduse Staatuste t&amp;ouml;&amp;ouml;riistariba (orders_toolbar) caption"
+msgid "Omaduse Staatuste t&ouml;&ouml;riistariba (orders_toolbar) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_orders_toolbar_comment
-msgid ""
-"Omaduse Staatuste t&amp;ouml;&amp;ouml;riistariba (orders_toolbar) kommentaar"
+msgid "Omaduse Staatuste t&ouml;&ouml;riistariba (orders_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_orders_toolbar_help
-msgid "Omaduse Staatuste t&amp;ouml;&amp;ouml;riistariba (orders_toolbar) help"
+msgid "Omaduse Staatuste t&ouml;&ouml;riistariba (orders_toolbar) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_orders_status_tree
@@ -197,19 +194,15 @@ msgid "Omaduse Ekspediitorite tabel (orders_dispatchers_table) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_routes_toolbar
-msgid ""
-"Omaduse Marsruutide t&amp;ouml;&amp;ouml;riistariba (routes_toolbar) caption"
+msgid "Omaduse Marsruutide t&ouml;&ouml;riistariba (routes_toolbar) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_routes_toolbar_comment
-msgid ""
-"Omaduse Marsruutide t&amp;ouml;&amp;ouml;riistariba (routes_toolbar) "
-"kommentaar"
+msgid "Omaduse Marsruutide t&ouml;&ouml;riistariba (routes_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_routes_toolbar_help
-msgid ""
-"Omaduse Marsruutide t&amp;ouml;&amp;ouml;riistariba (routes_toolbar) help"
+msgid "Omaduse Marsruutide t&ouml;&ouml;riistariba (routes_toolbar) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_routes_search_address
@@ -237,30 +230,27 @@ msgid "Omaduse Marsruutide tabel (routes_table) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_carriages_toolbar
-msgid ""
-"Omaduse Vedude t&amp;ouml;&amp;ouml;riistariba (carriages_toolbar) caption"
+msgid "Omaduse Vedude t&ouml;&ouml;riistariba (carriages_toolbar) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_carriages_toolbar_comment
-msgid ""
-"Omaduse Vedude t&amp;ouml;&amp;ouml;riistariba (carriages_toolbar) kommentaar"
+msgid "Omaduse Vedude t&ouml;&ouml;riistariba (carriages_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_carriages_toolbar_help
-msgid "Omaduse Vedude t&amp;ouml;&amp;ouml;riistariba (carriages_toolbar) help"
+msgid "Omaduse Vedude t&ouml;&ouml;riistariba (carriages_toolbar) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_carriages_search_client
-msgid "Omaduse Otsi kliendi j&amp;auml;rgi (carriages_search_client) caption"
+msgid "Omaduse Otsi kliendi j&auml;rgi (carriages_search_client) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_carriages_search_client_comment
-msgid ""
-"Omaduse Otsi kliendi j&amp;auml;rgi (carriages_search_client) kommentaar"
+msgid "Omaduse Otsi kliendi j&auml;rgi (carriages_search_client) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_carriages_search_client_help
-msgid "Omaduse Otsi kliendi j&amp;auml;rgi (carriages_search_client) help"
+msgid "Omaduse Otsi kliendi j&auml;rgi (carriages_search_client) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_carriages_table
@@ -276,21 +266,15 @@ msgid "Omaduse Vedude tabel (carriages_table) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_resources_trucks_toolbar
-msgid ""
-"Omaduse Veoautode t&amp;ouml;&amp;ouml;riistariba (resources_trucks_toolbar) "
-"caption"
+msgid "Omaduse Veoautode t&ouml;&ouml;riistariba (resources_trucks_toolbar) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_resources_trucks_toolbar_comment
-msgid ""
-"Omaduse Veoautode t&amp;ouml;&amp;ouml;riistariba (resources_trucks_toolbar) "
-"kommentaar"
+msgid "Omaduse Veoautode t&ouml;&ouml;riistariba (resources_trucks_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_resources_trucks_toolbar_help
-msgid ""
-"Omaduse Veoautode t&amp;ouml;&amp;ouml;riistariba (resources_trucks_toolbar) "
-"help"
+msgid "Omaduse Veoautode t&ouml;&ouml;riistariba (resources_trucks_toolbar) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_resources_trucks_table
@@ -306,21 +290,15 @@ msgid "Omaduse Veoautode tabel (resources_trucks_table) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_resources_trailers_toolbar
-msgid ""
-"Omaduse Haagiste t&amp;ouml;&amp;ouml;riistariba "
-"(resources_trailers_toolbar) caption"
+msgid "Omaduse Haagiste t&ouml;&ouml;riistariba (resources_trailers_toolbar) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_resources_trailers_toolbar_comment
-msgid ""
-"Omaduse Haagiste t&amp;ouml;&amp;ouml;riistariba "
-"(resources_trailers_toolbar) kommentaar"
+msgid "Omaduse Haagiste t&ouml;&ouml;riistariba (resources_trailers_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_resources_trailers_toolbar_help
-msgid ""
-"Omaduse Haagiste t&amp;ouml;&amp;ouml;riistariba "
-"(resources_trailers_toolbar) help"
+msgid "Omaduse Haagiste t&ouml;&ouml;riistariba (resources_trailers_toolbar) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_resources_trailers_table
@@ -396,17 +374,15 @@ msgid "Omaduse Staatuste tabel (my_orders_table) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_my_carriages_search_client
-msgid ""
-"Omaduse Otsi kliendi j&amp;auml;rgi (my_carriages_search_client) caption"
+msgid "Omaduse Otsi kliendi j&auml;rgi (my_carriages_search_client) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_my_carriages_search_client_comment
-msgid ""
-"Omaduse Otsi kliendi j&amp;auml;rgi (my_carriages_search_client) kommentaar"
+msgid "Omaduse Otsi kliendi j&auml;rgi (my_carriages_search_client) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_my_carriages_search_client_help
-msgid "Omaduse Otsi kliendi j&amp;auml;rgi (my_carriages_search_client) help"
+msgid "Omaduse Otsi kliendi j&auml;rgi (my_carriages_search_client) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:prop_my_carriages_table
@@ -502,11 +478,11 @@ msgid "Grupi Haagised (resources_trailers) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:group_my_desktop
-msgid "Grupi Minu T&amp;ouml;&amp;ouml;laud (my_desktop) pealkiri"
+msgid "Grupi Minu T&ouml;&ouml;laud (my_desktop) pealkiri"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:group_my_desktop_help
-msgid "Grupi Minu T&amp;ouml;&amp;ouml;laud (my_desktop) help"
+msgid "Grupi Minu T&ouml;&ouml;laud (my_desktop) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:group_my_clients
@@ -582,7 +558,7 @@ msgid "Hetkel vedamisel"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:244
-msgid "&amp;Uuml;le t&amp;auml;htaja"
+msgid "&Uuml;le t&auml;htaja"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:245
@@ -639,7 +615,7 @@ msgstr ""
 #: classes/applications/crm/transport_management/crm_transport_management.aw:793
 #: classes/applications/crm/transport_management/crm_transport_management.aw:906
 #: classes/applications/crm/transport_management/crm_transport_management.aw:960
-msgid "L&amp;auml;htekoht"
+msgid "L&auml;htekoht"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:365
@@ -658,7 +634,7 @@ msgstr ""
 #: classes/applications/crm/transport_management/crm_transport_management.aw:566
 #: classes/applications/crm/transport_management/crm_transport_management.aw:632
 #: classes/applications/crm/transport_management/crm_transport_management.aw:914
-msgid "T&amp;auml;htaeg"
+msgid "T&auml;htaeg"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:377
@@ -758,12 +734,12 @@ msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:785
 #: classes/applications/crm/transport_management/crm_transport_management.aw:952
-msgid "Alguskuup&amp;auml;ev"
+msgid "Alguskuup&auml;ev"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:789
 #: classes/applications/crm/transport_management/crm_transport_management.aw:956
-msgid "L&amp;otilde;ppkuup&amp;auml;ev"
+msgid "L&otilde;ppkuup&auml;ev"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:988
@@ -785,7 +761,7 @@ msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:1020
 #: classes/applications/crm/transport_management/crm_transport_management.aw:1071
-msgid "Keret&amp;uuml;&amp;uuml;p"
+msgid "Keret&uuml;&uuml;p"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management.aw:1024

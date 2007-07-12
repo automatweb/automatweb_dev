@@ -472,10 +472,10 @@ msgstr ""
 msgid "Väljundvorm on valimata"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1038
+#: classes/calendar/calendar_view.aw:1040
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1045
+#: classes/calendar/calendar_view.aw:1047
 msgid "&gt;&gt;"
 msgstr ""

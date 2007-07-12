@@ -85,26 +85,12 @@ msgstr ""
 msgid "Omaduse &otilde;ppetase (sisseastuja_edit_oppetase) help"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_edit_oppetase_b
-msgid "Omaduse &otilde;ppetase (sisseastuja_edit_oppetase_b) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_edit_oppetase_b_comment
-msgid "Omaduse &otilde;ppetase (sisseastuja_edit_oppetase_b) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_edit_oppetase_b_help
-msgid "Omaduse &otilde;ppetase (sisseastuja_edit_oppetase_b) help"
-msgstr ""
-
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_edit_submit_btn
-msgid ""
-"Omaduse Otsi olemasolevat/Lisa uus (sisseastuja_edit_submit_btn) caption"
+msgid "Omaduse Otsi olemasolevat/Lisa uus (sisseastuja_edit_submit_btn) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_edit_submit_btn_comment
-msgid ""
-"Omaduse Otsi olemasolevat/Lisa uus (sisseastuja_edit_submit_btn) kommentaar"
+msgid "Omaduse Otsi olemasolevat/Lisa uus (sisseastuja_edit_submit_btn) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_edit_submit_btn_help
@@ -124,15 +110,15 @@ msgid "Omaduse Sisseastumiskatse (katse_kood) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katsetulem_title
-msgid "Omaduse Katse tulemused (katsetulem_title) caption"
+msgid "Omaduse Sisseastumiskatsete toimumisajad ja kohad (katsetulem_title) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katsetulem_title_comment
-msgid "Omaduse Katse tulemused (katsetulem_title) kommentaar"
+msgid "Omaduse Sisseastumiskatsete toimumisajad ja kohad (katsetulem_title) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katsetulem_title_help
-msgid "Omaduse Katse tulemused (katsetulem_title) help"
+msgid "Omaduse Sisseastumiskatsete toimumisajad ja kohad (katsetulem_title) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katsetulemused
@@ -181,6 +167,18 @@ msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_nimekiri_table_m_help
 msgid "Omaduse  (sisseastuja_nimekiri_table_m) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_nimekiri_table_a
+msgid "Omaduse  (sisseastuja_nimekiri_table_a) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_nimekiri_table_a_comment
+msgid "Omaduse  (sisseastuja_nimekiri_table_a) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_nimekiri_table_a_help
+msgid "Omaduse  (sisseastuja_nimekiri_table_a) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_sisseastuja_nimekiri_table_d
@@ -316,92 +314,135 @@ msgid "Omaduse Avalduste kaust (avalduste_kaust) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_v2ljund_kaust
-msgid ""
-"Omaduse Veebiv2ljundi HTML failide kaust (absolute filesystem path) "
-"(v2ljund_kaust) caption"
+msgid "Omaduse Veebiv2ljundi HTML failide kaust (absolute filesystem path) (v2ljund_kaust) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_v2ljund_kaust_comment
-msgid ""
-"Omaduse Veebiv2ljundi HTML failide kaust (absolute filesystem path) "
-"(v2ljund_kaust) kommentaar"
+msgid "Omaduse Veebiv2ljundi HTML failide kaust (absolute filesystem path) (v2ljund_kaust) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_v2ljund_kaust_help
-msgid ""
-"Omaduse Veebiv2ljundi HTML failide kaust (absolute filesystem path) "
-"(v2ljund_kaust) help"
+msgid "Omaduse Veebiv2ljundi HTML failide kaust (absolute filesystem path) (v2ljund_kaust) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_bakalaureuse_seaded
-msgid ""
-"Omaduse Bakalaureuse&otilde;ppe sisseastuja seadetehaldur "
-"(bakalaureuse_seaded) caption"
+msgid "Omaduse Bakalaureuse&otilde;ppe sisseastuja seadetehaldur (bakalaureuse_seaded) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_bakalaureuse_seaded_comment
-msgid ""
-"Omaduse Bakalaureuse&otilde;ppe sisseastuja seadetehaldur "
-"(bakalaureuse_seaded) kommentaar"
+msgid "Omaduse Bakalaureuse&otilde;ppe sisseastuja seadetehaldur (bakalaureuse_seaded) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_bakalaureuse_seaded_help
-msgid ""
-"Omaduse Bakalaureuse&otilde;ppe sisseastuja seadetehaldur "
-"(bakalaureuse_seaded) help"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded
-msgid ""
-"Omaduse Magistri&otilde;ppe sisseastuja seadetehaldur (magistri_seaded) "
-"caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded_comment
-msgid ""
-"Omaduse Magistri&otilde;ppe sisseastuja seadetehaldur (magistri_seaded) "
-"kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded_help
-msgid ""
-"Omaduse Magistri&otilde;ppe sisseastuja seadetehaldur (magistri_seaded) help"
+msgid "Omaduse Bakalaureuse&otilde;ppe sisseastuja seadetehaldur (bakalaureuse_seaded) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_bakalaureuse_seaded_piiratud
-msgid ""
-"Omaduse Bakalaureuse&otilde;ppe sisseastuja piiratud &otilde;igustega "
-"seadetehaldur (bakalaureuse_seaded_piiratud) caption"
+msgid "Omaduse Bakalaureuse&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur (bakalaureuse_seaded_piiratud) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_bakalaureuse_seaded_piiratud_comment
-msgid ""
-"Omaduse Bakalaureuse&otilde;ppe sisseastuja piiratud &otilde;igustega "
-"seadetehaldur (bakalaureuse_seaded_piiratud) kommentaar"
+msgid "Omaduse Bakalaureuse&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur (bakalaureuse_seaded_piiratud) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_bakalaureuse_seaded_piiratud_help
-msgid ""
-"Omaduse Bakalaureuse&otilde;ppe sisseastuja piiratud &otilde;igustega "
-"seadetehaldur (bakalaureuse_seaded_piiratud) help"
+msgid "Omaduse Bakalaureuse&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur (bakalaureuse_seaded_piiratud) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded
+msgid "Omaduse Magistri&otilde;ppe (4+2) sisseastuja seadetehaldur (magistri_seaded) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded_comment
+msgid "Omaduse Magistri&otilde;ppe (4+2) sisseastuja seadetehaldur (magistri_seaded) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded_help
+msgid "Omaduse Magistri&otilde;ppe (4+2) sisseastuja seadetehaldur (magistri_seaded) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded_piiratud
-msgid ""
-"Omaduse Magistri&otilde;ppe sisseastuja piiratud &otilde;igustega "
-"seadetehaldur (magistri_seaded_piiratud) caption"
+msgid "Omaduse Magistri&otilde;ppe (4+2) sisseastuja piiratud &otilde;igustega seadetehaldur (magistri_seaded_piiratud) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded_piiratud_comment
-msgid ""
-"Omaduse Magistri&otilde;ppe sisseastuja piiratud &otilde;igustega "
-"seadetehaldur (magistri_seaded_piiratud) kommentaar"
+msgid "Omaduse Magistri&otilde;ppe (4+2) sisseastuja piiratud &otilde;igustega seadetehaldur (magistri_seaded_piiratud) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded_piiratud_help
-msgid ""
-"Omaduse Magistri&otilde;ppe sisseastuja piiratud &otilde;igustega "
-"seadetehaldur (magistri_seaded_piiratud) help"
+msgid "Omaduse Magistri&otilde;ppe (4+2) sisseastuja piiratud &otilde;igustega seadetehaldur (magistri_seaded_piiratud) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded32
+msgid "Omaduse Magistri&otilde;ppe (3+2) sisseastuja seadetehaldur (magistri_seaded32) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded32_comment
+msgid "Omaduse Magistri&otilde;ppe (3+2) sisseastuja seadetehaldur (magistri_seaded32) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded32_help
+msgid "Omaduse Magistri&otilde;ppe (3+2) sisseastuja seadetehaldur (magistri_seaded32) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded32_piiratud
+msgid "Omaduse Magistri&otilde;ppe (3+2) sisseastuja piiratud &otilde;igustega seadetehaldur (magistri_seaded32_piiratud) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded32_piiratud_comment
+msgid "Omaduse Magistri&otilde;ppe (3+2) sisseastuja piiratud &otilde;igustega seadetehaldur (magistri_seaded32_piiratud) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_magistri_seaded32_piiratud_help
+msgid "Omaduse Magistri&otilde;ppe (3+2) sisseastuja piiratud &otilde;igustega seadetehaldur (magistri_seaded32_piiratud) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_doktori_seaded
+msgid "Omaduse Doktori&otilde;ppe sisseastuja seadetehaldur (doktori_seaded) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_doktori_seaded_comment
+msgid "Omaduse Doktori&otilde;ppe sisseastuja seadetehaldur (doktori_seaded) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_doktori_seaded_help
+msgid "Omaduse Doktori&otilde;ppe sisseastuja seadetehaldur (doktori_seaded) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_doktori_seaded_piiratud
+msgid "Omaduse Doktori&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur (doktori_seaded_piiratud) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_doktori_seaded_piiratud_comment
+msgid "Omaduse Doktori&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur (doktori_seaded_piiratud) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_doktori_seaded_piiratud_help
+msgid "Omaduse Doktori&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur (doktori_seaded_piiratud) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_opetaja_seaded
+msgid "Omaduse &Otilde;petajakoolituse sisseastuja seadetehaldur (opetaja_seaded) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_opetaja_seaded_comment
+msgid "Omaduse &Otilde;petajakoolituse sisseastuja seadetehaldur (opetaja_seaded) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_opetaja_seaded_help
+msgid "Omaduse &Otilde;petajakoolituse sisseastuja seadetehaldur (opetaja_seaded) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_opetaja_seaded_piiratud
+msgid "Omaduse &Otilde;petajakoolituse sisseastuja piiratud &otilde;igustega seadetehaldur (opetaja_seaded_piiratud) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_opetaja_seaded_piiratud_comment
+msgid "Omaduse &Otilde;petajakoolituse sisseastuja piiratud &otilde;igustega seadetehaldur (opetaja_seaded_piiratud) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_opetaja_seaded_piiratud_help
+msgid "Omaduse &Otilde;petajakoolituse sisseastuja piiratud &otilde;igustega seadetehaldur (opetaja_seaded_piiratud) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_keskkonna_seaded
@@ -414,6 +455,54 @@ msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_keskkonna_seaded_help
 msgid "Omaduse Keskkonna seadetehaldur (keskkonna_seaded) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_ek_aegkoht
+msgid "Omaduse Eesti keele test (katse_ek_aegkoht) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_ek_aegkoht_comment
+msgid "Omaduse Eesti keele test (katse_ek_aegkoht) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_ek_aegkoht_help
+msgid "Omaduse Eesti keele test (katse_ek_aegkoht) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_vk_aegkoht
+msgid "Omaduse Maastikuarhitektuuri erialatest (katse_vk_aegkoht) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_vk_aegkoht_comment
+msgid "Omaduse Maastikuarhitektuuri erialatest (katse_vk_aegkoht) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_vk_aegkoht_help
+msgid "Omaduse Maastikuarhitektuuri erialatest (katse_vk_aegkoht) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_kk_aegkoht
+msgid "Omaduse Maastikuarhitektuuri joonistuseksam (katse_kk_aegkoht) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_kk_aegkoht_comment
+msgid "Omaduse Maastikuarhitektuuri joonistuseksam (katse_kk_aegkoht) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_kk_aegkoht_help
+msgid "Omaduse Maastikuarhitektuuri joonistuseksam (katse_kk_aegkoht) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_vm_aegkoht
+msgid "Omaduse Maastikukaitse- ja hoolduse erialavestlus (katse_vm_aegkoht) caption"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_vm_aegkoht_comment
+msgid "Omaduse Maastikukaitse- ja hoolduse erialavestlus (katse_vm_aegkoht) kommentaar"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:prop_katse_vm_aegkoht_help
+msgid "Omaduse Maastikukaitse- ja hoolduse erialavestlus (katse_vm_aegkoht) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_sisseastuja
@@ -449,11 +538,19 @@ msgid "Grupi Bakalaureuse&otilde;pe (grp_ylevaade_otsing_b) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_ylevaade_otsing_m
-msgid "Grupi Magistri&otilde;pe (grp_ylevaade_otsing_m) pealkiri"
+msgid "Grupi Magistri&otilde;pe (4+2) (grp_ylevaade_otsing_m) pealkiri"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_ylevaade_otsing_m_help
-msgid "Grupi Magistri&otilde;pe (grp_ylevaade_otsing_m) help"
+msgid "Grupi Magistri&otilde;pe (4+2) (grp_ylevaade_otsing_m) help"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_ylevaade_otsing_a
+msgid "Grupi Magistri&otilde;pe (3+2) (grp_ylevaade_otsing_a) pealkiri"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_ylevaade_otsing_a_help
+msgid "Grupi Magistri&otilde;pe (3+2) (grp_ylevaade_otsing_a) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_ylevaade_otsing_d
@@ -473,11 +570,11 @@ msgid "Grupi &otilde;petajakoolitus (grp_ylevaade_otsing_o) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_v2ljund
-msgid "Grupi &uuml;levaated (grp_v2ljund) pealkiri"
+msgid "Grupi &Uuml;levaated (grp_v2ljund) pealkiri"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_v2ljund_help
-msgid "Grupi &uuml;levaated (grp_v2ljund) help"
+msgid "Grupi &Uuml;levaated (grp_v2ljund) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:group_grp_seaded
@@ -508,165 +605,111 @@ msgstr ""
 msgid "Seose Sisseastuja (RELTYPE_SISSEASTUJA) tekst"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:246
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:284
 msgid "Vaata/Muuda"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:251
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:289
 msgid "Sisseastuja Nr."
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:257
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1191
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:295
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1229
 msgid "Nimi"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:263
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:301
 msgid "Isikukood"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:268
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:306
 msgid "Loodud"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:274
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:312
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:335
-msgid "Muuda"
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:373
+msgid "Muuda4"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:365
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:384
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:403
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:422
 msgid "Kustuta valitud sisseastuja(d)"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:366
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:386
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:404
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:424
 msgid "Kustutada k&otilde;ik valitud sisseastuja(te) andmed ja avaldused?"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:375
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:413
 msgid "Uus otsing"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:667
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:705
 msgid "[Vaata]"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:683
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:750
-msgid "sisseastuja nr."
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:692
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:758
-msgid "punkte"
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:713
+msgid "."
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_keskkond.aw:721
+msgid "sisseastuja nr."
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:730
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:796
+msgid "punkte"
+msgstr ""
+
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:759
 msgid "[Muuda]"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:985
-msgid "Faili ei saand kirjutada. "
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:990
-msgid "Faili ei saand luua. "
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1028
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1202
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1066
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1240
 msgid "Eriala"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1034
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1072
 msgid "&otilde;ppekohti"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1040
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1078
 msgid "Esitatud avaldusi"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1051
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1089
 msgid "Konkurss"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1163
-msgid "<b>Kokku:"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1174
-msgid "<b>Avaldusi kokku:"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1198
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1236
 msgid "&otilde;ppevorm"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1322
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1361
 msgid "Jrk nr"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1328
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1367
 msgid "Sisseastuja kood"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1333
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1372
 msgid "Konkursipunktid"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1338
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1377
 msgid "Vastuv&otilde;tukomisjoni otsus"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1343
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1382
 msgid "Registreerus"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1348
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1387
 msgid "Punkte"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1441
-msgid "Riigieelarveline"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1442
-msgid "Riigieelarveväline"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1443
-msgid "Kaug&otilde;pe"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1449
-msgid "Konkursid"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1450
-msgid "Avalduste nimekiri"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1451
-msgid "Vastuv&otilde;etud"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1457
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1466
-msgid "Bakalaureuse&otilde;pe"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1458
-msgid "Magistri&otilde;pe"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1459
-msgid "Doktori&otilde;pe"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1460
-msgid "&Otilde;petajakoolitus"
 msgstr ""

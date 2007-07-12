@@ -10,53 +10,66 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/class_designer/property_chooser.aw:class_883_help
+#: classes/applications/class_designer/property_chooser.aw:class_883_help
 msgid "Klassi Valik help"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_ord
+#: classes/applications/class_designer/property_chooser.aw:prop_ord
 msgid "Omaduse Jrk (ord) caption"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_ord_comment
+#: classes/applications/class_designer/property_chooser.aw:prop_ord_comment
 msgid "Omaduse Jrk (ord) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_ord_help
+#: classes/applications/class_designer/property_chooser.aw:prop_ord_help
 msgid "Omaduse Jrk (ord) help"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_multiple
+#: classes/applications/class_designer/property_chooser.aw:prop_multiple
 msgid "Omaduse Saab teha mitu valikut (multiple) caption"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_multiple_comment
+#: classes/applications/class_designer/property_chooser.aw:prop_multiple_comment
 msgid "Omaduse Saab teha mitu valikut (multiple) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_multiple_help
+#: classes/applications/class_designer/property_chooser.aw:prop_multiple_help
 msgid "Omaduse Saab teha mitu valikut (multiple) help"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_orient
+#: classes/applications/class_designer/property_chooser.aw:prop_orient
 msgid "Omaduse Elemendid on vertikaalis (orient) caption"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_orient_comment
+#: classes/applications/class_designer/property_chooser.aw:prop_orient_comment
 msgid "Omaduse Elemendid on vertikaalis (orient) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_orient_help
+#: classes/applications/class_designer/property_chooser.aw:prop_orient_help
 msgid "Omaduse Elemendid on vertikaalis (orient) help"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_options
+#: classes/applications/class_designer/property_chooser.aw:prop_options
 msgid "Omaduse Valikud (iga valik eraldi real) (options) caption"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_options_comment
+#: classes/applications/class_designer/property_chooser.aw:prop_options_comment
 msgid "Omaduse Valikud (iga valik eraldi real) (options) kommentaar"
 msgstr ""
 
 # classes/applications/class_designer/property_chooser.aw:prop_options_help
+#: classes/applications/class_designer/property_chooser.aw:prop_options_help
 msgid "Omaduse Valikud (iga valik eraldi real) (options) help"
 msgstr ""

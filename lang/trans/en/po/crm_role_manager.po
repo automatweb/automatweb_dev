@@ -42,12 +42,9 @@ msgid "E-post"
 msgstr "E-mail"
 
 #: classes/crm/crm_role_manager.aw:336
-msgid "&amp;Uuml;ksus"
-msgstr ""
+msgid "&Uuml;ksus"
+msgstr "Unit"
 
 #: classes/crm/crm_role_manager.aw:342
 msgid "Ametinimetus"
 msgstr "Profession"
-
-#~ msgid "&Uuml;ksus"
-#~ msgstr "Unit"

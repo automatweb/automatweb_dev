@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/shop/shop_prod_codes.aw:class_290_help
+#: classes/applications/shop/shop_prod_codes.aw:class_290_help
 msgid "Klassi Tootekoodid help"
 msgstr ""

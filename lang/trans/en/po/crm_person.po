@@ -2173,12 +2173,12 @@ msgid "Eelmine kuu"
 msgstr "Last month"
 
 #: classes/crm/crm_person.aw:1057
-msgid "Kokkuv&otilde;te"
-msgstr "Summary"
-
-#: classes/crm/crm_person.aw:1058
 msgid "Ridade kaupa"
 msgstr "By rows"
+
+#: classes/crm/crm_person.aw:1058
+msgid "Kokkuv&otilde;te"
+msgstr "Summary"
 
 #: classes/crm/crm_person.aw:1230
 msgid "H&auml;rra"
@@ -2299,7 +2299,7 @@ msgstr ""
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/crm/crm_person.aw:1632 classes/crm/crm_person.aw:4268
+#: classes/crm/crm_person.aw:1632 classes/crm/crm_person.aw:4286
 msgid "Lisa"
 msgstr "Add"
 
@@ -2507,39 +2507,39 @@ msgstr "Invoice status"
 msgid "Vali"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4159
+#: classes/crm/crm_person.aw:4172
 msgid "Arve nr %s"
 msgstr "Invoice no %s"
 
-#: classes/crm/crm_person.aw:4167
+#: classes/crm/crm_person.aw:4180
 msgid "Arvele"
 msgstr "To invoice"
 
-#: classes/crm/crm_person.aw:4175
+#: classes/crm/crm_person.aw:4188
 msgid "Arve puudub"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4212
+#: classes/crm/crm_person.aw:4230
 msgid "Tehtud"
 msgstr "Done"
 
-#: classes/crm/crm_person.aw:4212
+#: classes/crm/crm_person.aw:4230
 msgid "Tegemata"
 msgstr "Not done"
 
-#: classes/crm/crm_person.aw:4227
+#: classes/crm/crm_person.aw:4245
 msgid "<b>Summa</b>"
 msgstr "<b>Sum</b>"
 
-#: classes/crm/crm_person.aw:4274
+#: classes/crm/crm_person.aw:4292
 msgid "Kustuta p&auml;devused"
 msgstr "Delete skills"
 
-#: classes/crm/crm_person.aw:4282
+#: classes/crm/crm_person.aw:4300
 msgid "P&auml;devus"
 msgstr "Skill"
 
-#: classes/crm/crm_person.aw:4288
+#: classes/crm/crm_person.aw:4306
 msgid "Omandatud"
 msgstr "Skill aquired"
 

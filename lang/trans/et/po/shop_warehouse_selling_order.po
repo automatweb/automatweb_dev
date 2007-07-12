@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_warehouse_selling_order.aw:class_1041_help
-msgid "Klassi Müügitellimus help"
+msgid "Klassi M&uuml;&uuml;gitellimus help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_selling_order.aw:prop_date
@@ -141,4 +140,3 @@ msgstr ""
 #: classes/applications/shop/shop_warehouse_selling_order.aw:135
 msgid "&Uuml;hik"
 msgstr ""
-

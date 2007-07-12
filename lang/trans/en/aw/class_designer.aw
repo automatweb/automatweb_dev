@@ -27,6 +27,4 @@ $GLOBALS["TRANS"]["Jrk"] = "Ord";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Tüüp"] = "Type";
 $GLOBALS["TRANS"]["Muuda"] = "Change";
-$GLOBALS["TRANS"]["Grupp "] = "Group ";
-$GLOBALS["TRANS"]["vbox "] = "vbox ";
 ?>
