@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.555 2007/07/09 08:06:05 tarvo Exp $
+// $Id: class_base.aw,v 2.556 2007/07/12 11:38:38 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5381,11 +5381,11 @@ class class_base extends aw_template
 		{
 			if ($lid == $o->lang_id())
 			{
-				//continue;
+				continue;
 			}
 			if (is_array($uo) && count($uo) && !isset($uo[$lid]))
 			{
-				//continue;
+				continue;
 			}
 
 			$nm = "sep_$lid";

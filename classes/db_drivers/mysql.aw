@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.40 2007/05/07 08:07:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.41 2007/07/12 11:38:42 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -55,10 +55,6 @@ class mysql
 
 	function db_query($qtext,$errors = true)
 	{
-		if (!empty($GLOBALS["QD"]))
-		{
-			die($qtext);
-		}
 		global $DUKE, $INTENSE_DUKE, $SLOW_DUKE;
 		if ($SLOW_DUKE == 1)
 		{
@@ -83,6 +79,18 @@ class mysql
 			print '</pre>';
 			list($micro,$sec) = split(' ',microtime());
 			$ts_s = $sec + $micro;
+		}
+
+		if ($GLOBALS["cfg"]["debug"]["query_profile"] && $_GET["QD"] == 1)
+		{
+			// collect queries by function name
+			// go over functions in the backtrace and add query counts for each of them
+			$bt = debug_backtrace();
+			foreach($bt as $entry)
+			{
+				$fn = $entry["class"]."::".$entry["function"];
+				$GLOBALS["profile_query_counts"][$fn] ++;
+			}
 		}
 		aw_global_set('qcount',aw_global_get('qcount')+1);
 

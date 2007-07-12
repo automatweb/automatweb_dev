@@ -117,6 +117,7 @@ class doc_display extends aw_template
 		$uinst = get_instance(CL_USER);
 		$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
 		
+		$title = $doc->trans_get_val("title");
 		$this->vars_safe(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,

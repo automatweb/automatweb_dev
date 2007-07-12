@@ -1613,6 +1613,14 @@ class object
 	**/
 	function get_tableinfo()
 	{
+		if (!is_object($GLOBALS["objects"][$this->oid]))
+		{
+			return array();
+		}
+		if (!method_exists($GLOBALS["objects"][$this->oid], "get_tableinfo"))
+		{
+			return array();
+		}
 		return $GLOBALS["objects"][$this->oid]->get_tableinfo();
 	}
 

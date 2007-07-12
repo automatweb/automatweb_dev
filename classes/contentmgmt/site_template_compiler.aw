@@ -268,10 +268,8 @@ class site_template_compiler extends aw_template
 				}
 			}
 		}
-
 		// HAS_SUBITEMS_AREA_L1_SEL check - these will go after each level is inserted in the template
 		$tpls = $this->get_subtemplates_regex("(HAS_SUBITEMS.*)");
-
 		// now figure out the menu areas that are used
 		$_tpls = array();
  		foreach($tpls as $tpl)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.13 2007/03/05 09:46:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.14 2007/07/12 11:38:43 kristo Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor extends core
@@ -80,6 +80,7 @@ function generic_unloader()
 		if (confirm("'.t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?").'"))
 		{
 			document.changeform.submit();
+			return false;
 		}
 	}
 } 

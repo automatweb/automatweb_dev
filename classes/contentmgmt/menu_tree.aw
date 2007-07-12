@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.22 2007/07/05 09:43:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.23 2007/07/12 11:38:41 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -99,7 +99,7 @@ class menu_tree extends class_base
 				$menus = array();
 				for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 				{
-					$menus[$o->id()] = $o->path_str();
+					$menus[$o->id()] = $o->path_str()." (".$o->id().")";
 				}
 				asort($menus);
 				$data["options"] = $menus;

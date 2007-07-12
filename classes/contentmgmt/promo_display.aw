@@ -293,7 +293,8 @@ class promo_display
 
 					if ($d_cnt >= $o->prop("tpl_lead_last_count") && $o->prop("tpl_lead_last"))
                                         {
-                                                $tpl_filename = $o->prop("tpl_lead_last");
+                                                $tpl_filename = $tplmgr->get_template_file_by_id(array("id" => $o->prop("tpl_lead_last")));
+						
                                         }
 
 					enter_function("promo-prev");

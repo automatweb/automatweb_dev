@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.15 2007/06/12 11:52:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.16 2007/07/12 11:38:40 kristo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -602,7 +602,7 @@ class watercraft_add extends class_base
 			$watercraft_management_oid = $o->prop('watercraft_management');
 			if (!$this->can('view', $watercraft_management_oid))
 			{
-				return $err_url?$err_url:$return_url;
+				return $err_url ? $err_url : $return_url;
 			}
 			$watercraft_management_obj = new object($watercraft_management_oid);
 			$watercraft_obj = new object();
@@ -682,7 +682,7 @@ class watercraft_add extends class_base
 		{
 			$_SESSION['watercraft_input_data']['watercraft_id'] = $watercraft_obj->save();
 		}
-		return $err_url?$err_url:$return_url;
+		return $err_url ? $err_url : $return_url;
 	}
 
 	// draw's pages and returns it as string

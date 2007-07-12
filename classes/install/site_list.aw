@@ -9,7 +9,7 @@ class site_list extends class_base
 
 	/**  
 		
-		@attrib name=site_list params=name default="0"
+		@attrib name=site_list params=name default="1"
 		
 		@param actonly optional type=int
 

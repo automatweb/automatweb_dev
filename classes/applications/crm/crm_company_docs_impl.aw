@@ -112,6 +112,7 @@ class crm_company_docs_impl extends class_base
 			"type" => TREE_DHTML,
 			"branch" => 1,
 			"tree_id" => "offers_tree",
+			"persist_state" => 1
 		));
 
 		$ol = new object_list(array(
@@ -182,6 +183,7 @@ class crm_company_docs_impl extends class_base
 			"persist_state" => 1,
 			"root_name" => "",
 			"root_url" => "#",
+			//"open_path" => 
 		));
 		
 		$arr["prop"]["vcl_inst"]->add_item(0,array(

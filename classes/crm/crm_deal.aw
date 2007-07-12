@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.20 2007/06/05 16:22:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.21 2007/07/12 11:38:42 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -404,11 +404,12 @@ class crm_deal extends class_base
 			$name = basename($fu);
 			$fname = $file_inst->check_file_path($f->prop("file"));
 			$t->define_data(array(
-				"name" => html::textbox(array("size" => 70,"value" => //html::href(array(
+				"name" => //html::textbox(array("size" => 70,"value" => //html::href(array(
 					//"url" => 
-					$file_inst->get_url($f->id(), $f->name()),
+				//	$file_inst->get_url($f->id(), $f->name()),
 				//	"caption" => $f->name(),))
-				)),//$f->name(),
+				//)),
+				$f->name(),
 				"oid" => $f->id(),
 				"change" => html::obj_change_url($f->id(),t("Muuda")),
 				"changed" => date("d.m.Y h:i" , $f->prop("modified")),

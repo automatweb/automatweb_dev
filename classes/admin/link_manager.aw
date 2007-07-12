@@ -155,7 +155,8 @@ class link_manager extends aw_template
 				"doc_id" => $arr["docid"],
 				"link_id" => $o->id(),
 			), CL_EXTLINK);
-			$link_name = html_entity_decode(str_replace("\"", "\\\"", $o->name()));
+			//$link_name = html_entity_decode(str_replace("\"", "\\\"", $o->name()));
+			$link_name = str_replace("\"", "\\\"", $o->name());
 			$location = $this->gen_location_for_obj($o);
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),

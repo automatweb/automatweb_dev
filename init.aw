@@ -930,6 +930,17 @@ function aw_shutdown()
 	//echo function_exists('memory_get_usage') ? ("memory_get_usage = " . memory_get_usage()." \n") : "";
 	echo "enter_function calls = ".$GLOBALS["enter_function_calls"]." \n";
 	echo "exit_function calls = ".$GLOBALS["exit_function_calls"]." \n";
+
+	if (is_array($GLOBALS["profile_query_counts"]))
+	{
+		echo "query counts by function:\n";
+		asort($GLOBALS["profile_query_counts"]);
+		foreach($GLOBALS["profile_query_counts"] as $fn => $cnt)
+		{
+			echo "$fn => $cnt \n";
+		}
+	}
+
 /*	echo "error handler calls = ".$GLOBALS["error_handler_calls"]." \n";
 	echo "error handler calls by type: \n";
 	foreach($GLOBALS["error_handler_calls_by_type"] as $errno => $cnt)

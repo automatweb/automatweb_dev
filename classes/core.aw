@@ -92,7 +92,6 @@ class core extends acl_base
 	**/
 	function _log($type,$action,$text,$oid = 0,$honor_ini = true)
 	{
-return; // TEMP
 		if(aw_ini_get('logging_disabled') && $honor_ini)
 		{
 			return;
@@ -710,6 +709,10 @@ return; // TEMP
 		if ($send_mail)
 		{
 			send_mail("vead@struktuur.ee", $subj, $content,$head);
+			if (aw_ini_get("errors.send_to") != "")
+			{
+				send_mail(aw_ini_get("errors.send_to"), $subj, $content,$head);
+			}
 			$_SESSION["last_mail"] = $mh;
 			$_SESSION["last_mail_time"] = time();
 		}

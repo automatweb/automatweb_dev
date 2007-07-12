@@ -153,5 +153,12 @@
 			</function>
 		</action>
 
+		<action name="mail_scanner" nologin="1">
+			<function name="mail_scanner">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

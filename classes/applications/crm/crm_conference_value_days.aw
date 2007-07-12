@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.6 2007/06/01 11:22:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.7 2007/07/12 11:38:40 kristo Exp $
 // crm_conference_value_days.aw - Konverentsi kalendrivaade 
 /*
 
@@ -89,7 +89,7 @@ class crm_conference_value_days extends class_base
 
 //		$data = array("joga" => "jogajoga");
 //		$this->vars($data);
-		//property väärtuse saatmine kujul "property_nimi"_value
+		//property vï¿½rtuse saatmine kujul "property_nimi"_value
 		$html = "";
 		$months = 3;
 		

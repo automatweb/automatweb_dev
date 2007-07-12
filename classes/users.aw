@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.180 2007/05/22 10:07:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.181 2007/07/12 11:38:39 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -762,7 +762,7 @@ class users extends users_user
 
 	**/
 	function password_hash($args = array())
-	{	
+	{
 		extract($args);
 		$uid = $u;
 		$key = $k;
@@ -789,7 +789,6 @@ class users extends users_user
 
 		$uo = obj($row["oid"]);
 		$pwhash = $uo->meta("password_hash");
-
 		if ($pwhash != $key)
 		{	
 			$this->read_adm_template("hash_results.tpl");
@@ -846,7 +845,6 @@ class users extends users_user
 		{
 			return "<span style='color: red'>Sellist v&otilde;tit pole v&auml;ljastatud!</span><br />";
 		};
-
 		if ($args["change"])
 		{
 			if ($args["pass1"] && $args["pass2"])
@@ -901,7 +899,7 @@ class users extends users_user
 			aw_session_set("status_msg","Sellist v&otilde;tit pole v&auml;ljastatud");
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
-		
+
 		if (not(is_valid("password",$pass1)))
 		{
 			aw_session_set("status_msg","Parool sisaldab keelatud m&auml;rke");

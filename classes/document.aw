@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.371 2007/07/10 07:43:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.372 2007/07/12 11:38:39 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -884,7 +884,6 @@ class document extends aw_template
 	
 		// v6tame pealkirjast <p> maha
 		$doc["title"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["title"]);
-
 		// only parse aliases if there might be something to parse
 		if (strpos($doc["title"],"#") !== false)
 		{
@@ -892,7 +891,7 @@ class document extends aw_template
 			{
 					$doc["title"] = $this->parse_aliases(array(
 						"text"	=> $doc["title"],
-						"oid"	=> $doc["docid"],
+						"oid"	=> $docid,
 					));
 			}
 			else
@@ -959,6 +958,14 @@ class document extends aw_template
 		$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
 
 		$awt->stop("almgr-parse-oo-aliases");
+		$this->vars($al->get_vars());
+
+		$al->parse_oo_aliases($doc["docid"],&$doc["title"],array("templates" => &$this->templates,"meta" => &$meta));
+                if ($leadonly > -1)
+                {
+                        /*$doc["title"] = str_replace("</a>", "</a><a href='/".$doc["docid"]."'>", $doc["title"]);
+                        $doc["title"] = str_replace("<a", "</a><a", $doc["title"]);*/
+                }
 		$this->vars($al->get_vars());
 
 		// this damn ugly-ass hack is here because we need to be able to put the last search value

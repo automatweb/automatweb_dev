@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.42 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.43 2007/07/12 11:38:40 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -727,7 +727,6 @@ class cb_search extends class_base
 				{
 					$add_f[] = $c_o->id();
 				}
-
 				foreach($res_data as $o)
 				{
 					$row = array();
@@ -772,6 +771,7 @@ class cb_search extends class_base
 					{
 						$view_controller_inst->check_property(&$row, $val, $this->search_data);
 					}
+
 					$t->define_data($row);
 				};
 				exit_function("cb_search::mk_result_table::objloop");

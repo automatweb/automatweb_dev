@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.120 2007/06/12 09:43:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.121 2007/07/12 11:38:40 kristo Exp $
 // project.aw - Projekt
 /*
 
@@ -1811,6 +1811,7 @@ class project extends class_base
 				{
 					enter_function("project-assign-event");
 					$events[$orig->id()]["parent_" . $prj_level . "_name"] = $this->_pnames[$pid];
+					$events[$orig->id()]["parent_" . $prj_level . "_oid"] = $this->_oids[$pid];
 					exit_function("project-assign-event");
 				};
 			};
@@ -2190,6 +2191,7 @@ class project extends class_base
 		$this->_pnames = array();
 		$this->_fullnames = array();
 		$saast = array();
+		$this->_oids = array();
 		foreach($conns as $conn)
 		{
 			$o1 = new object($conn["from"]);
@@ -2200,6 +2202,11 @@ class project extends class_base
 			$this->_pnames[$conn["to"]] = $conn["to.name"];
 			$this->_pnames[$o1->id()] = $o1->name();
 			$this->_pnames[$o2->id()] = $o2->name();
+
+			$this->_oids[$conn["from"]] = $conn["from"];
+			$this->_oids[$conn["to"]] = $conn["to"];
+			$this->_oids[$o1->id()] = $o1->id();
+			$this->_oids[$o2->id()] = $o2->id();
 		};
 
 		$this->subs = $subs;
@@ -2860,6 +2867,7 @@ class project extends class_base
 			"sort_by" => "planner.start",
 			"site_id" => array(),
 			new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
+			new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN,array("start1", "end"), array($arr["start"], $arr["end"]))
 		));
 
 		foreach($ol->arr() as $o)

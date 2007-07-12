@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.71 2007/04/09 14:35:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.72 2007/07/12 11:38:39 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1910,6 +1910,10 @@ echo "mod ".$con["to.name"]."<br>";
 						return true;
 				}
 				break;
+
+			case "aw_account_balances":
+				$i = get_instance(CL_CRM_CATEGORY);
+ 	                        return $i->do_db_upgrade($tbl, $field);
 		}
 	}
 
@@ -1927,6 +1931,10 @@ echo "mod ".$con["to.name"]."<br>";
 		$fi = get_instance(CL_FILE);
 		foreach($ol->arr() as $o)
 		{
+			if (!$o->parent() || !$o->class_id())
+			{
+				continue;
+			}
 			$fn = $fi->generate_file_path(array(
 				"type" => $o->prop("type"),
 				"file_name" => $o->name()

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="site_list" folder="install" extends="class_base">
-		<action name="site_list">
+		<action name="site_list" default="1">
 			<function name="orb_list">
 				<arguments>
 					<optional name="actonly" type="int" />

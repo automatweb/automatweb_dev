@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.20 2007/04/18 12:39:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.21 2007/07/12 11:38:41 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -301,13 +301,16 @@ class newsfeed extends class_base
 			$ol_args = array(
 				"class_id" => $classes,
 				"status" => STAT_ACTIVE,
-				"sort_by" => $_ob,
 				new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => $cond
 				)),
 				new object_list_filter(array("non_filter_classes" => CL_DOCUMENT))
 			);
+			if (trim($_ob) != "")
+			{
+				$ol_args["sort_by"] = $_ob;
+			}
 			if ($limittype == "last")
 			{
 				$ol_args["limit"] = $count;
