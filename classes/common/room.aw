@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.201 2007/07/09 12:57:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.202 2007/07/12 14:37:26 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3958,6 +3958,24 @@ class room extends class_base
 		return $this->parse();
 	}
 	
+	function get_room_price_instance()
+	{
+		if(!$this->room_price_instance)
+		{
+			$this->room_price_instance = get_instance(CL_ROOM_PRICE);
+		}
+		return $this->room_price_instance;
+	}
+	
+	function get_user_instance()
+	{
+		if(!$this->user_instance)
+		{
+			$this->user_instance = get_instance(CL_USER);
+		}
+		return $this->user_instance;
+	}
+	
 	/** calculates room price
 		@attrib params=name api=1
 		@param room required type=oid
@@ -3998,8 +4016,8 @@ class room extends class_base
 		$this->step_length = $this->step_lengths[$room->prop("time_unit")];
 		$sum = array();
 		$rv = array();	
-		
-		$price_inst = get_instance(CL_ROOM_PRICE);
+		$u = $this->get_user_instance();	
+		$price_inst = $this->get_room_price_instance();
 		$this_price = "";
 		$this_prices = array();
 		$prices = $room->connections_from(array(
@@ -4019,8 +4037,7 @@ class room extends class_base
 		if (is_object($arr["bron"]))
 		{
 			$bron_made = $arr["bron"]->created();
-			$gi = get_instance(CL_USER);
-			$gro = $gi->get_highest_pri_grp_for_user($arr["bron"]->createdby(), true);
+			$gro = $u->get_highest_pri_grp_for_user($arr["bron"]->createdby(), true);
 			$grp = $gro->id();
 		}
 
@@ -4112,7 +4129,6 @@ class room extends class_base
 		
 		
 		$warehouse = $room->prop("warehouse");
-		$u = get_instance(CL_USER);
 		if(is_object($arr["bron"]))
 		{
 			$grp = $u->get_highest_pri_grp_for_user($arr["bron"]->createdby(), true);
