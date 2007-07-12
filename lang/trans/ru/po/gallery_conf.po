@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/gallery/gallery_conf.aw:class_187_help
 msgid "Klassi Galerii seaded help"
 msgstr ""
@@ -84,6 +83,18 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_send_from_addr_help
 msgid "Omaduse Meili From aadress (send_from_addr) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_controller
+msgid "Omaduse Pildi muundamise kontroller (controller) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_controller_comment
+msgid "Omaduse Pildi muundamise kontroller (controller) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_controller_help
+msgid "Omaduse Pildi muundamise kontroller (controller) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop
@@ -542,3 +553,6 @@ msgstr ""
 msgid "Seose galerii lehe layout (RELTYPE_LAYOUT) tekst"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_conf.aw:rel_RELTYPE_CONTROLLER
+msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
+msgstr ""

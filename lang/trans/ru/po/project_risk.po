@@ -38,39 +38,39 @@ msgid "Omaduse Kirjeldus (comment) help"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_type
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) caption"
+msgid "Omaduse T&uuml;&uuml;p (type) caption"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_type_comment
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) kommentaar"
+msgid "Omaduse T&uuml;&uuml;p (type) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_type_help
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) help"
+msgid "Omaduse T&uuml;&uuml;p (type) help"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_identification_date
-msgid "Omaduse Tuvastamise kuup&amp;auml;ev (identification_date) caption"
+msgid "Omaduse Tuvastamise kuup&auml;ev (identification_date) caption"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_identification_date_comment
-msgid "Omaduse Tuvastamise kuup&amp;auml;ev (identification_date) kommentaar"
+msgid "Omaduse Tuvastamise kuup&auml;ev (identification_date) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_identification_date_help
-msgid "Omaduse Tuvastamise kuup&amp;auml;ev (identification_date) help"
+msgid "Omaduse Tuvastamise kuup&auml;ev (identification_date) help"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_last_eval_date
-msgid "Omaduse Viimase hindamise kuup&amp;auml;ev (last_eval_date) caption"
+msgid "Omaduse Viimase hindamise kuup&auml;ev (last_eval_date) caption"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_last_eval_date_comment
-msgid "Omaduse Viimase hindamise kuup&amp;auml;ev (last_eval_date) kommentaar"
+msgid "Omaduse Viimase hindamise kuup&auml;ev (last_eval_date) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_last_eval_date_help
-msgid "Omaduse Viimase hindamise kuup&amp;auml;ev (last_eval_date) help"
+msgid "Omaduse Viimase hindamise kuup&auml;ev (last_eval_date) help"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:prop_countermeasure
@@ -90,7 +90,7 @@ msgid "Seose Omanik (RELTYPE_OWNER) tekst"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:43
-msgid "&amp;Auml;ririsk"
+msgid "&Auml;ririsk"
 msgstr ""
 
 #: classes/applications/groupware/project_risk.aw:44

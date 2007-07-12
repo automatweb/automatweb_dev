@@ -9,8 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/protocols/protocol_finder.aw:19
+#: classes/protocols/protocol_finder.aw:31
 msgid "protocol_fnider::inst(%s): no protocol implemented for url"
 msgstr ""
-

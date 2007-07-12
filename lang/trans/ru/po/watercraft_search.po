@@ -378,11 +378,6 @@ msgstr ""
 msgid "S&uuml;vis"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:126
-#: classes/applications/watercraft_management/watercraft_search.aw:169
-msgid "Valmistamisaasta"
-msgstr ""
-
 #: classes/applications/watercraft_management/watercraft_search.aw:127
 msgid "Reisijaid"
 msgstr ""
@@ -437,10 +432,6 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:142
 msgid "Navigatsioonis&uuml;steem"
-msgstr ""
-
-#: classes/applications/watercraft_management/watercraft_search.aw:143
-msgid "Navigatsioonituled"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:144
@@ -543,11 +534,6 @@ msgstr ""
 #: classes/applications/watercraft_management/watercraft_search.aw:204
 #: classes/applications/watercraft_management/watercraft_search.aw:221
 msgid "Suuremad (uuemad) ennem"
-msgstr ""
-
-#: classes/applications/watercraft_management/watercraft_search.aw:242
-#: classes/applications/watercraft_management/watercraft_search.aw:250
-msgid "--vali--"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:261

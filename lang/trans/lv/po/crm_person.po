@@ -2172,11 +2172,11 @@ msgid "Eelmine kuu"
 msgstr ""
 
 #: classes/crm/crm_person.aw:1057
-msgid "Kokkuv&otilde;te"
+msgid "Ridade kaupa"
 msgstr ""
 
 #: classes/crm/crm_person.aw:1058
-msgid "Ridade kaupa"
+msgid "Kokkuv&otilde;te"
 msgstr ""
 
 #: classes/crm/crm_person.aw:1230
@@ -2298,7 +2298,7 @@ msgstr ""
 msgid "Lisa %s"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1632 classes/crm/crm_person.aw:4268
+#: classes/crm/crm_person.aw:1632 classes/crm/crm_person.aw:4286
 msgid "Lisa"
 msgstr ""
 
@@ -2506,38 +2506,38 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4159
+#: classes/crm/crm_person.aw:4172
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4167
+#: classes/crm/crm_person.aw:4180
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4175
+#: classes/crm/crm_person.aw:4188
 msgid "Arve puudub"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4212
+#: classes/crm/crm_person.aw:4230
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4212
+#: classes/crm/crm_person.aw:4230
 msgid "Tegemata"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4227
+#: classes/crm/crm_person.aw:4245
 msgid "<b>Summa</b>"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4274
+#: classes/crm/crm_person.aw:4292
 msgid "Kustuta p&auml;devused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4282
+#: classes/crm/crm_person.aw:4300
 msgid "P&auml;devus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:4288
+#: classes/crm/crm_person.aw:4306
 msgid "Omandatud"
 msgstr ""

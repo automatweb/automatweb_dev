@@ -13,40 +13,16 @@ msgstr ""
 msgid "Klassi Avaldus help"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_b
-msgid "Omaduse Eriala (eriala_b) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_b_comment
-msgid "Omaduse Eriala (eriala_b) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_b_help
-msgid "Omaduse Eriala (eriala_b) help"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_m
-msgid "Omaduse Eriala (eriala_m) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_m_comment
-msgid "Omaduse Eriala (eriala_m) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_m_help
-msgid "Omaduse Eriala (eriala_m) help"
-msgstr ""
-
 #: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala
-msgid "Omaduse  (eriala) caption"
+msgid "Omaduse Eriala (eriala) caption"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_comment
-msgid "Omaduse  (eriala) kommentaar"
+msgid "Omaduse Eriala (eriala) kommentaar"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_help
-msgid "Omaduse  (eriala) help"
+msgid "Omaduse Eriala (eriala) help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_sisseastuja_nr

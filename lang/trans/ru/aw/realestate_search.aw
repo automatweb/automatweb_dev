@@ -2,7 +2,7 @@
 $GLOBALS["TRANS"]["Omaduse Objekt (search_class_id) caption"] = "Объект";
 $GLOBALS["TRANS"]["Omaduse City24 ID (search_city24_id) caption"] = "City24 ID";
 $GLOBALS["TRANS"]["Omaduse Tehingu tp (search_transaction_type) caption"] = "Тип сделки";
-$GLOBALS["TRANS"]["Omaduse Hind min (search_transaction_price_min) caption"] = "Max price";
+$GLOBALS["TRANS"]["Omaduse Hind min (search_transaction_price_min) caption"] = "Цена";
 $GLOBALS["TRANS"]["Omaduse Hind max (search_transaction_price_max) caption"] = "Цена";
 $GLOBALS["TRANS"]["Omaduse &Uuml;ldpind min (search_total_floor_area_min) caption"] = "Общая площадь";
 $GLOBALS["TRANS"]["Omaduse Kuulutusi lehe kohta (per_page) caption"] = "?? ???";
@@ -44,7 +44,7 @@ $GLOBALS["TRANS"]["K&otilde;ik"] = "?";
 $GLOBALS["TRANS"]["K&otilde;ik maaklerid"] = "?????";
 $GLOBALS["TRANS"]["Tp"] = "T?";
 $GLOBALS["TRANS"]["Maakond"] = "??";
-$GLOBALS["TRANS"]["Linn"] = "Town";
+$GLOBALS["TRANS"]["Linn"] = "??";
 $GLOBALS["TRANS"]["Vald"] = "B???";
 $GLOBALS["TRANS"]["Tehing"] = "???";
 ?>

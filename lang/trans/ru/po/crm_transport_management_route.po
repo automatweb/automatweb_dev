@@ -110,5 +110,5 @@ msgid "Linn"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_route.aw:183
-msgid "J&amp;auml;rjekord"
+msgid "J&auml;rjekord"
 msgstr ""

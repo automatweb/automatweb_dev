@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/protocols/mail/imap.aw:class_229_help
-msgid "Klassi IMAP sissep&amp;auml;&amp;auml;s help"
+msgid "Klassi IMAP sissep&auml;&auml;s help"
 msgstr ""
 
 #: classes/protocols/mail/imap.aw:prop_server

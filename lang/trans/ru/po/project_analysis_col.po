@@ -9,21 +9,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/groupware/project_analysis_col.aw:class_1111_help
-msgid "Klassi Projekti anal&amp;uuml;&amp;uuml;si tulp help"
+msgid "Klassi Projekti anal&uuml;&uuml;si tulp help"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_col.aw:prop_ord
-msgid "Omaduse J&amp;auml;rjekord (ord) caption"
+msgid "Omaduse J&auml;rjekord (ord) caption"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_col.aw:prop_ord_comment
-msgid "Omaduse J&amp;auml;rjekord (ord) kommentaar"
+msgid "Omaduse J&auml;rjekord (ord) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_col.aw:prop_ord_help
-msgid "Omaduse J&amp;auml;rjekord (ord) help"
+msgid "Omaduse J&auml;rjekord (ord) help"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_col.aw:prop_group_name
@@ -61,4 +60,3 @@ msgstr ""
 #: classes/applications/groupware/project_analysis_col.aw:prop_priority_help
 msgid "Omaduse Prioriteed (priority) help"
 msgstr ""
-

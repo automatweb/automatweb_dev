@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/address/address_street.aw:class_960_help
-msgid "Klassi Tänav v2 help"
+msgid "Klassi T&auml;nav v2 help"
 msgstr ""
 
 #: classes/common/address/address_street.aw:prop_administrative_structure_oid
@@ -25,4 +24,3 @@ msgstr ""
 #: classes/common/address/address_street.aw:prop_administrative_structure_oid_help
 msgid "Omaduse  (administrative_structure_oid) help"
 msgstr ""
-

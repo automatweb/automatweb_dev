@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/class_designer/class_designer.aw:class_320_help
 msgid "Klassi Klassidisainer help"
 msgstr ""
@@ -574,7 +573,10 @@ msgstr ""
 msgid "SQL table is up to date"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:361 classes/applications/class_designer/class_designer.aw:368 classes/applications/class_designer/class_designer.aw:458 classes/applications/class_designer/class_designer.aw:462
+#: classes/applications/class_designer/class_designer.aw:361
+#: classes/applications/class_designer/class_designer.aw:368
+#: classes/applications/class_designer/class_designer.aw:458
+#: classes/applications/class_designer/class_designer.aw:462
 msgid "Eelvaade"
 msgstr ""
 
@@ -587,6 +589,7 @@ msgid "Uus"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:631
+#: classes/applications/class_designer/class_designer.aw:935
 msgid "Grupp"
 msgstr ""
 
@@ -599,6 +602,7 @@ msgid "tab"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:674
+#: classes/applications/class_designer/class_designer.aw:967
 msgid "vbox"
 msgstr ""
 
@@ -630,27 +634,30 @@ msgstr ""
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:837 classes/applications/class_designer/class_designer.aw:1833 classes/applications/class_designer/class_designer.aw:1858 classes/applications/class_designer/class_designer.aw:1912 classes/applications/class_designer/class_designer.aw:1996
+#: classes/applications/class_designer/class_designer.aw:837
+#: classes/applications/class_designer/class_designer.aw:1833
+#: classes/applications/class_designer/class_designer.aw:1858
+#: classes/applications/class_designer/class_designer.aw:1912
+#: classes/applications/class_designer/class_designer.aw:1996
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:842 classes/applications/class_designer/class_designer.aw:1916 classes/applications/class_designer/class_designer.aw:2000
+#: classes/applications/class_designer/class_designer.aw:842
+#: classes/applications/class_designer/class_designer.aw:1916
+#: classes/applications/class_designer/class_designer.aw:2000
 msgid "Tüüp"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:847 classes/applications/class_designer/class_designer.aw:903 classes/applications/class_designer/class_designer.aw:1931 classes/applications/class_designer/class_designer.aw:1975
+#: classes/applications/class_designer/class_designer.aw:847
+#: classes/applications/class_designer/class_designer.aw:903
+#: classes/applications/class_designer/class_designer.aw:1931
+#: classes/applications/class_designer/class_designer.aw:1975
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:935
-msgid "Grupp "
-msgstr ""
-
-#: classes/applications/class_designer/class_designer.aw:967
-msgid "vbox "
-msgstr ""
-
-#: classes/applications/class_designer/class_designer.aw:1879 classes/applications/class_designer/class_designer.aw:1890 classes/applications/class_designer/class_designer.aw:1901
+#: classes/applications/class_designer/class_designer.aw:1879
+#: classes/applications/class_designer/class_designer.aw:1890
+#: classes/applications/class_designer/class_designer.aw:1901
 msgid "Salvesta"
 msgstr ""
 
@@ -673,4 +680,3 @@ msgstr ""
 #: classes/applications/class_designer/class_designer.aw:1992
 msgid "Parent"
 msgstr ""
-

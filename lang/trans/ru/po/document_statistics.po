@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/document_statistics.aw:class_303_help
 msgid "Klassi Dokumentide vaatamise statistika help"
 msgstr ""
@@ -158,14 +157,6 @@ msgstr ""
 msgid "Omaduse Vaatamiste arvu stiil (comment_style) help"
 msgstr ""
 
-#: classes/contentmgmt/document_statistics.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/document_statistics.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/document_statistics.aw:group_folders
 msgid "Grupi Kataloogid ja perioodid (folders) pealkiri"
 msgstr ""
@@ -203,7 +194,7 @@ msgid "Seose css stiil (RELTYPE_CSS) tekst"
 msgstr ""
 
 #: classes/contentmgmt/document_statistics.aw:82
-msgid "#sisu# asendatakse statistika tabeliga. "
+msgid "#sisu# asendatakse statistika tabeliga."
 msgstr ""
 
 #: classes/contentmgmt/document_statistics.aw:87
@@ -253,4 +244,3 @@ msgstr ""
 #: classes/contentmgmt/document_statistics.aw:201
 msgid "Periood"
 msgstr ""
-

@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_warehouse_selling_sheet.aw:class_1039_help
-msgid "Klassi Müügi-saateleht help"
+msgid "Klassi M&uuml;&uuml;gi-saateleht help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_selling_sheet.aw:prop_date
@@ -161,4 +160,3 @@ msgstr ""
 #: classes/applications/shop/shop_warehouse_selling_sheet.aw:157
 msgid "Summa"
 msgstr ""
-

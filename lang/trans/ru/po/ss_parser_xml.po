@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/site_search/parsers/ss_parser_xml.aw:34
-msgid "ss_parser_xml::get_text_content(): "
+msgid "ss_parser_xml::get_text_content():"
 msgstr ""
 
 #: classes/contentmgmt/site_search/parsers/ss_parser_xml.aw:34
 msgid "XML error: %s at line %d"
 msgstr ""
-

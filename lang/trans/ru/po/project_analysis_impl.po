@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/groupware/project_analysis_impl.aw:16
-msgid "Anal&amp;uuml;&amp;uuml;si t&amp;ouml;&amp;ouml;laud"
+msgid "Anal&uuml;&uuml;si t&ouml;&ouml;laud"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_impl.aw:23
@@ -27,6 +26,5 @@ msgid "Hindamislaua looja nimi"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_impl.aw:43
-msgid "Kuup&amp;auml;ev"
+msgid "Kuup&auml;ev"
 msgstr ""
-

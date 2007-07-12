@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/country/country_administrative_structure.aw:class_961_help
 msgid "Klassi Riigi haldusjaotus v2 help"
 msgstr ""
@@ -71,7 +70,7 @@ msgid "Grupi Haldusjaotuse struktuur (grp_administrative_structure) help"
 msgstr ""
 
 #: classes/common/country/country_administrative_structure.aw:rel_RELTYPE_ADMINISTRATIVE_DIVISION
-msgid "Seose Haldus&uuml;ksus (RELTYPE_ADMINISTRATIVE_DIVISION) tekst"
+msgid "Seose Haldusüksus (RELTYPE_ADMINISTRATIVE_DIVISION) tekst"
 msgstr ""
 
 #: classes/common/country/country_administrative_structure.aw:rel_RELTYPE_COUNTRY
@@ -85,4 +84,3 @@ msgstr ""
 #: classes/common/country/country_administrative_structure.aw:116
 msgid "%s aadressi kasutab seda haldusjaotust! Muudatuste salvestamisel tekivad neis aadressides vead."
 msgstr ""
-

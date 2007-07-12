@@ -146,7 +146,7 @@ msgid "Riik/haldusjaotus peab olema valitud!"
 msgstr ""
 
 #: classes/common/address/address.aw:243
-msgid "Viga: k6rgem haldusjaotus m22ramata. "
+msgid "Viga: k6rgem haldusjaotus m22ramata."
 msgstr ""
 
 #: classes/common/address/address.aw:265

@@ -1,17 +1,10 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Hind (transaction_price) caption"] = "Цена";
-$GLOBALS["TRANS"]["Omaduse Mььgihind (transaction_price2) caption"] = "Продажная цена";
-$GLOBALS["TRANS"]["Omaduse Kuuььr (transaction_rent) caption"] = "Аренда на месяц";
-$GLOBALS["TRANS"]["Omaduse Piirangud (transaction_constraints) caption"] = "Ограничения";
 $GLOBALS["TRANS"]["Omaduse Ettemaks (transaction_down_payment) caption"] = "Предоплата";
-$GLOBALS["TRANS"]["Omaduse M&uuml;&uuml;ja andmed (title3) caption"] = "Данные продавецa";
-$GLOBALS["TRANS"]["Omaduse Mььja (seller_search) caption"] = "Продавец";
-$GLOBALS["TRANS"]["Omaduse Ostja andmed (title31) caption"] = "Данные Покупателя";
-$GLOBALS["TRANS"]["Omaduse Ostja (buyer_search) caption"] = "Покупатель";
-$GLOBALS["TRANS"]["Omaduse Lisaandmed (title4) caption"] = "Дополнительноe данные";
 $GLOBALS["TRANS"]["Omaduse Maakler 1 (realestate_agent1) caption"] = "Маклер 1";
 $GLOBALS["TRANS"]["Omaduse Maakler 2 (realestate_agent2) caption"] = "Маклер 2";
 $GLOBALS["TRANS"]["Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) caption"] = "Цена: 25 EEK за 7 суток";
+$GLOBALS["TRANS"]["Omaduse Piirangud (transaction_constraints) caption"] = "Ограничения";
 $GLOBALS["TRANS"]["Omaduse Lisainfo EST (additional_info_et) caption"] = "Дополнительная информация";
 $GLOBALS["TRANS"]["Omaduse Lisainfo ENG (additional_info_en) caption"] = "Дополнительная информация";
 $GLOBALS["TRANS"]["Omaduse Lisainfo FIN (additional_info_fi) caption"] = "Дополнительная информация";

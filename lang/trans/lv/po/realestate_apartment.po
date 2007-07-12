@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_apartment.aw:class_943_help
 msgid "Klassi Korter help"
 msgstr ""
@@ -110,6 +109,30 @@ msgstr ""
 msgid "Omaduse Arhiveeritud (is_archived) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_booked_until
+msgid "Omaduse  (booked_until) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_booked_until_comment
+msgid "Omaduse  (booked_until) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_booked_until_help
+msgid "Omaduse  (booked_until) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_booked
+msgid "Omaduse Broneeritud (is_booked) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_booked_comment
+msgid "Omaduse Broneeritud (is_booked) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_booked_help
+msgid "Omaduse Broneeritud (is_booked) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_expire
 msgid "Omaduse aegub (expire) caption"
 msgstr ""
@@ -192,6 +215,18 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_price2_help
 msgid "Omaduse M&uuml;&uuml;gihind (transaction_price2) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_price_per_m2
+msgid "Omaduse Ruutmeetri hind (price_per_m2) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_price_per_m2_comment
+msgid "Omaduse Ruutmeetri hind (price_per_m2) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_price_per_m2_help
+msgid "Omaduse Ruutmeetri hind (price_per_m2) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_rent
@@ -795,15 +830,15 @@ msgid "Omaduse Objekti vabastamine (available_from) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_floor
-msgid "Omaduse Korrus		 (floor) caption"
+msgid "Omaduse Korrus\t\t (floor) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_floor_comment
-msgid "Omaduse Korrus		 (floor) kommentaar"
+msgid "Omaduse Korrus\t\t (floor) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_floor_help
-msgid "Omaduse Korrus		 (floor) help"
+msgid "Omaduse Korrus\t\t (floor) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_rooms
@@ -843,15 +878,15 @@ msgid "Omaduse K&ouml;etav pind (heatable_area) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type
-msgid "Omaduse Varaomand		 (ownership_type) caption"
+msgid "Omaduse Varaomand\t\t (ownership_type) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type_comment
-msgid "Omaduse Varaomand		 (ownership_type) kommentaar"
+msgid "Omaduse Varaomand\t\t (ownership_type) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type_help
-msgid "Omaduse Varaomand		 (ownership_type) help"
+msgid "Omaduse Varaomand\t\t (ownership_type) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_condition
@@ -2198,11 +2233,11 @@ msgstr ""
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:526 classes/applications/realestate_management/realestate_apartment.aw:534
+#: classes/applications/realestate_management/realestate_apartment.aw:526
+#: classes/applications/realestate_management/realestate_apartment.aw:534
 msgid "Kohustuslik v&auml;li"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:560
-msgid "Viga andmetes: korruste arv korrusest v&auml;iksem. "
+msgid "Viga andmetes: korruste arv korrusest v&auml;iksem."
 msgstr ""
-
