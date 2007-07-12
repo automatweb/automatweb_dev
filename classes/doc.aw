@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.152 2007/03/29 13:22:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.153 2007/07/12 12:44:39 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1654,10 +1654,21 @@ class doc extends class_base
 
 	function callback_get_transl($arr)
 	{
-		$val = '<div id="floatlayerk" style="left: 800px; top: 200px; width: 200px; border:solid black 1px;padding:5px; background: #dddddd;overflow: -moz-scrollbars-vertical;">'.
-			t("<b>Pealkiri:</b>")." ".$arr["obj_inst"]->prop("title")."<br><br>".
-			t("<b>Lead:</b>")." ".$arr["obj_inst"]->prop("lead")."<br><br>".
-			t("<b>Sisu:</b>")." ".$arr["obj_inst"]->prop("content").
+		$pl = $arr["obj_inst"]->get_property_list();
+		$cfgform_id = $this->get_cfgform_for_object(array(
+			"obj_inst" => $arr["obj_inst"],
+			"args" => $arr["request"],
+		));
+		if ($this->can("view", $cfgform_id))
+		{
+			$cf = get_instance(CL_CFGFORM);
+			$pl = $cf->get_props_from_cfgform(array("id" => $cfgform_id));
+		}
+
+		$val = '<div id="floatlayerk" style="left: 800px; top: 200px; width: 250px; border:solid black 1px;padding:5px; background: #dddddd;overflow: -moz-scrollbars-vertical;">'.
+			t("<b>".$pl["title"]["caption"].":</b>")." ".$arr["obj_inst"]->prop("title")."<br><br>".
+			t("<b>".$pl["lead"]["caption"].":</b>")." ".$arr["obj_inst"]->prop("lead")."<br><br>".
+			t("<b>".$pl["content"]["caption"].":</b>")." ".$arr["obj_inst"]->prop("content").
 			'</div>';
 		$val .= '<script language="javascript">el=document.getElementById(\'floatlayerk\');if (el) {el.style.position=\'absolute\';el.style.left=800;el.style.top=200;}</script>';
 
