@@ -106,6 +106,14 @@ class doc_display extends aw_template
 		$al->parse_oo_aliases($doc->id(), &$userta5, array("templates" => $this->templates, "meta" => $mt));
 		$userta6 = $orig->trans_get_val("userta6");
 		$al->parse_oo_aliases($doc->id(), &$userta6, array("templates" => $this->templates, "meta" => $mt));
+	
+		$title = $doc->trans_get_val("title");
+		if (aw_global_get("set_doc_title") != "")
+                {
+                        $title = aw_global_get("set_doc_title");
+                        aw_global_set("set_doc_title","");
+                }
+	
 		$uinst = get_instance(CL_USER);
 		$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
 		
@@ -113,7 +121,7 @@ class doc_display extends aw_template
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
 			"text_no_aliases" => $text_no_aliases,
-			"title" => $doc->trans_get_val("title"),
+			"title" => $title,
 			"author" => $doc->prop("author"),
 			"channel" => $doc->prop("channel"),
 			"docid" => $doc->id(),
