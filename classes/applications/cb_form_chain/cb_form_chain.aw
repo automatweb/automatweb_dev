@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.44 2007/07/12 09:07:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.45 2007/07/12 12:37:42 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1940,8 +1940,12 @@ class cb_form_chain extends class_base
 			$this->vars(array(
 				"ELEMENT" => $els
 			));
-			$forms .= $this->parse("FORM");
+			$tmp = $this->parse("FORM");
+			$forms .= $tmp;
 		}
+
+		$ap = get_instance("alias_parser");
+		$ap->parse_oo_aliases($wf->id(), $h);
 
 		$this->vars(array(
 			"HEADER" => $h,
