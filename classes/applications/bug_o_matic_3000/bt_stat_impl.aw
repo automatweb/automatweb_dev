@@ -38,7 +38,7 @@ class bt_stat_impl extends core
 		// table year is group, month is col
 		// row is person
 		$req_start = empty($arr["request"]["stat_hrs_start"]) ? mktime(0, 0, 0, date("n"), 1, date("Y"), 1) : mktime(0, 0, 0, $arr["request"]["stat_hrs_start"]["month"], $arr["request"]["stat_hrs_start"]["day"], $arr["request"]["stat_hrs_start"]["year"], 1);
-		$req_end = empty($arr["request"]["stat_hrs_end"]) ? time() + 86400 : mktime(0, 0, 0, $arr["request"]["stat_hrs_end"]["month"], $arr["request"]["stat_hrs_end"]["day"], $arr["request"]["stat_hrs_end"]["year"], 1);
+		$req_end = empty($arr["request"]["stat_hrs_end"]) ? time() + 86400 : mktime(23, 59, 59, $arr["request"]["stat_hrs_end"]["month"], $arr["request"]["stat_hrs_end"]["day"], $arr["request"]["stat_hrs_end"]["year"], 1);
 		$time_constraint = null;
 
 		if (2 < $req_start and $req_start < $req_end)
@@ -50,7 +50,7 @@ class bt_stat_impl extends core
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"add_wh" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+			"add_wh" => new obj_predicate_not(0),
 			"created" => $time_constraint
 		));
 		$stat_hrs = array();
