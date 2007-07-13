@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.23 2007/07/13 08:57:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.24 2007/07/13 09:18:25 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -1076,8 +1076,19 @@ class spa_customer_interface extends class_base
 		));
 	}
 
+	function get_image_instance()
+	{
+		if(!$this->image_instance)
+		{
+			$this->image_instance = get_instance(CL_IMAGE);
+		}
+		return $this->image_instance;
+	}
+
 	function _add_prod_vars($id)
 	{
+		
+		$i = $this->get_image_instance();
 		if(!$this->can("view" , $id))
 		{
 			return;
@@ -1092,6 +1103,37 @@ class spa_customer_interface extends class_base
 		foreach($prod->get_property_list() as $k => $v)
 		{
 			$this->vars(array("product_".$k => $prod->trans_get_val($k)));
+		}
+		$cnt = 0;
+		$imgc = $prod->connections_from(array("type" => "RELTYPE_IMAGE"));
+		usort($imgc, create_function('$a,$b', 'return $a->prop("to.jrk") - $b->prop("to.jrk");'));
+		foreach($imgc as $c)
+		{
+			$u = $i->get_url_by_id($c->prop("to"));
+			$pid = $c->prop("to");
+			$image_obj = $c->to();
+			$this->vars_safe(array(
+				"image".$cnt => image::make_img_tag_wl($image_obj->id()),
+				"image_br".$cnt => "<br><br>".image::make_img_tag($u, $c->prop("to.name")),
+				"image".$cnt."_comment" => "<br>".$image_obj->prop('comment'),
+				//"name" => $prod->name(),
+				"image".$cnt."_url" => $u,
+				"image".$cnt."_onclick" => image::get_on_click_js($c->prop("to")),
+				"packaging_image".$cnt => "",
+				"packaging_image".$cnt."_url" => ""
+			
+			));
+	
+			if ($image_obj->prop("file2") != "")
+			{
+				$this->vars_safe(array(
+					"IMAGE".$cnt."_HAS_BIG" => $this->parse("IMAGE".$cnt."_HAS_BIG")
+				));
+			}
+			$this->vars_safe(array(
+				"HAS_IMAGE".$cnt => $this->parse("HAS_IMAGE".$cnt)
+			));
+			$cnt++;
 		}
 	}
 
@@ -1111,7 +1153,7 @@ class spa_customer_interface extends class_base
 		{
 			$this->_add_prod_vars($po->id());
 		}
-		$i = get_instance(CL_IMAGE);
+		$i = $this->get_image_instance();
 		$cnt = 1;
 		$imgc = $po->connections_from(array("type" => "RELTYPE_IMAGE"));
 		usort($imgc, create_function('$a,$b', 'return $a->prop("to.jrk") - $b->prop("to.jrk");'));
