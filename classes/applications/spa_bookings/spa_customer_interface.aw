@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.22 2007/06/26 10:18:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.23 2007/07/13 08:57:31 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -533,7 +533,7 @@ class spa_customer_interface extends class_base
 	{
 		// list prods and let the user select one
                 $tmp = obj($arr["id"]);
-                if ($tmp->class_id() != CL_ROOM)
+                if ($tmp->class_id() != CL_SPA_CUSTOMER_INTERFACE)
                 {
                         $pp = $this->_get_default_prod_parents();
                 }
@@ -548,7 +548,6 @@ class spa_customer_interface extends class_base
 			"site_id" => array(),
 			"parent" => $pp
 		));
-
 		$room_products = $this->_get_room_products($arr["id"]);
 		$p = array();
 		foreach($ol->arr() as $o)
