@@ -228,6 +228,25 @@
             <caption>Saata arve</caption>
       </property>
       <property>
+            <name>in_budget</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_in_budget</field>
+            <caption>Eelarvesse</caption>
+      </property>
+      <property>
+            <name>service_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <store>connect</store>
+            <reltype>RELTYPE_SERVICE_TYPE</reltype>
+            <field>service_type</field>
+            <caption>Teenuse liik</caption>
+      </property>
+      <property>
             <name>priority</name>
             <table>planner</table>
             <group>general</group>
@@ -732,6 +751,11 @@
                   <clid>CL_CRM_EXPENSE</clid>
                   <caption>Muu kulu</caption>
             </EXPENSE>
+            <SERVICE_TYPE>
+                  <value>11</value>
+                  <clid>CL_CRM_SERVICE_TYPE</clid>
+                  <caption>Teenuse liik</caption>
+            </SERVICE_TYPE>
       </reltypes>
       <layout>
             <top_bit>
