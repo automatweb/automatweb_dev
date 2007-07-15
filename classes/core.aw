@@ -156,6 +156,59 @@ class core extends acl_base
 		}
 	}
 
+	/** This writes a line to log file in site directory
+
+		@attrib api=1 name=site_log params=pos 
+
+		@param type required type=string
+			Line to write into log file
+
+		@comment
+			The logging can be disabled or enabled by the ini setting site_logging. Every day has its own log file with date. Log files will be in $sitedir/files/logs directory.
+
+		@errors
+			none
+
+		@returns
+			true when the string is successfully written into log file
+			false on some failure (usually permissions writing/folder existance related)
+
+		@examples
+			$this->site_log('foobar');
+	**/
+	function site_log($string)
+	{
+		if (aw_ini_get('site_log') != 1)
+		{
+			return false;
+		}
+
+		$site_basedir = aw_ini_get('site_basedir');
+		$folder = aw_ini_get('site_basedir').'/files';
+		if (!is_dir($folder) || !is_writable($folder))
+		{
+			return false;
+		}
+		$folder .= '/logs';
+		if (!is_dir($folder))
+		{
+			mkdir($folder, 0777); // for some reason, this mode thing doesn't work, need to set permissions separately --dragut
+			chmod($folder, 0777);
+			if (!is_writable($folder))
+			{
+				return false;
+			}
+		}
+		
+		$filename = $folder.'/log_'.date('Y-m-d').'.log';
+
+		$f = fopen($filename, 'a');
+		fwrite($f, $string."\n");
+		fclose($f);
+		
+		return true;
+	}
+
 	/** Converts the given timestamp to text format.
 		@attrib api=1
 
