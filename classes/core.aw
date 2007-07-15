@@ -200,10 +200,12 @@ class core extends acl_base
 			}
 		}
 		
-		$filename = $folder.'/log_'.date('Y-m-d').'.log';
+		$filename = $folder.'/log-'.date('Y-m-d').'.log';
 
 		$f = fopen($filename, 'a');
+		flock($f, LOCK_EX);
 		fwrite($f, $string."\n");
+		flock($f, LOCK_UN);
 		fclose($f);
 		
 		return true;
