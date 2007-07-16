@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.176 2007/07/10 12:21:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.177 2007/07/16 09:43:16 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -3547,7 +3547,7 @@ class task extends class_base
 				}
 			}
 
-			if(isset($e["on_bill"]))
+			if(!$o->prop("bill_no"))//isset($e["on_bill"]))
 			{
 				if ($o->class_id() != CL_CRM_MEETING)
 				{
