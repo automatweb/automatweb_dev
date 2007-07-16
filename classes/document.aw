@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.372 2007/07/12 11:38:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.373 2007/07/16 09:06:26 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3348,6 +3348,7 @@ class document extends aw_template
 			case "aw_is_goal":
 			case "aw_in_budget":
 			case "no_show_in_promo":
+			case "ufupload1":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => int
