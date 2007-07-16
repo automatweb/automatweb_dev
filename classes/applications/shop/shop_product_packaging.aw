@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.29 2007/06/28 12:58:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.30 2007/07/16 10:25:37 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -185,7 +185,9 @@ class shop_product_packaging extends class_base
 			"clid" => CL_SHOP_PRODUCT_PACKAGING
 		));
 		$this->trans_props = array(
-			"name","comment","userta1"
+			"name","comment","user1", "user2", "user3", "user4", "user5", "user6",
+			"user7", "user8", "user9", "user10", "user11", "user12", "user13", "user14", 
+			"user15", "userta1", "userta2", "userta3", "userta4", "userta5"
 		);
 	}
 

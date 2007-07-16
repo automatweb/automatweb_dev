@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.556 2007/07/12 11:38:38 kristo Exp $
+// $Id: class_base.aw,v 2.557 2007/07/16 10:25:38 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -331,7 +331,7 @@ class class_base extends aw_template
 			$filter["layout_mode"] == "fixed_toolbar";
 		}
 		$properties = $this->get_property_group($filter);
-		
+
 		/////////////////////
 
 		$defview = 0;
@@ -4530,7 +4530,7 @@ class class_base extends aw_template
 			"clfile" => $arr["clfile"],
 			"filter" => $filter,
 		));
-		
+
 		// nii .. ja kuidas ma n&uuml;&uuml;d saan teada k&otilde;ik omadused, mis mind huvitavad?
 
 		// I could use a different approach here ... for example, if I'm saving then
@@ -5371,6 +5371,17 @@ class class_base extends aw_template
 		{
 			$cf = get_instance(CL_CFGFORM);
 			$pl = $cf->get_props_from_cfgform(array("id" => $cfgform_id));
+
+			$ppl = $cf->get_cfg_proplist($cfgform_id);
+			// also, get group list and then throw out all the props that are not in visible groups
+			$gps = $cf->get_cfg_groups($cfgform_id);
+			foreach($pl as $k => $v)
+			{
+				if ($gps[$ppl[$k]["group"]]["grphide"] == 1)
+				{
+					unset($pl[$k]);
+				}
+			}
 		}
 		$o = $arr["obj_inst"];
 		$o = $o->get_original();
