@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.122 2007/07/12 11:22:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.123 2007/07/16 13:05:59 tarvo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -573,14 +573,67 @@ class admin_menus extends aw_template
 	function copy_feedback($arr)
 	{
 		extract($arr);
-		$this->read_template("copy_feedback.tpl");
 		$this->mk_path($parent, t("Vali kuidas objekte kopeerida"));
 
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_copy_feedback", array("parent" => $parent, "period" => $period,"sel" => $sel))
+		$hc = get_instance("cfg/htmlclient", array(
+			"tabs" => true,
+		));
+		$hc->add_tab(array(
+			"active" => true,
+			"caption" => t("Objekti kopeerimine"),
+		));
+		$hc->start_output();
+		$hc->add_property(array(
+			"name" => "objects",
+			"type" => "text",
+			"caption" => "&nbsp;",
+			"value" => "<b>".t("Objektid")."</b>",
+		));
+		$hc->add_property(array(
+			"name" => "ser_type",
+			"type" => "chooser",
+			"orient" => "vertical",
+			"options" => array(
+				"2" => t("Kopeeri alamobjektid"),
+				"1" => t("Kopeeri alammen&uuml;&uuml;d"),
+				"3" => t("Kopeeri dokumendid"),
+			),
+		));
+		$hc->add_property(array(
+			"name" => "rels",
+			"type" => "text",
+			"caption" => "&nbsp;",
+			"value" => "<b>".t("Seosed")."</b>",
+		));
+		$hc->add_property(array(
+			"name" => "ser_rels",
+			"type" => "chooser",
+			"orient" => "vertical",
+			"options" => array(
+				"1" => t("Seosta samade objektidega"),
+				"2" => t("Loo uued seotud objektid"),
+			),
+		));
+		$hc->add_property(array(
+			"name" => "submit_override",
+			"type" => "submit",
+			"caption" => t("Kopeeri"),
+		));
+		$hc->finish_output(array(
+			"data" => array(
+				"action" => "submit_copy_feedback",
+				"parent" => $parent,
+				"period" => $period,
+				"sel" => $sel,
+				"orb_class" => "admin_menus",
+			),
 		));
 
-		return $this->parse();
+		$props = $hc->get_result(array(
+			//"form_only" => 1,
+		));
+
+		return $props;
 	}
 
 	/**  
@@ -1284,7 +1337,7 @@ class admin_menus extends aw_template
 				$this->t->define_data($row);
 			}
 
-			//axel häkkis,
+			//axel h&auml;kkis,
 			$row['icon_url'] = $iu;
 			$row['caption'] = $caption;
 			$row['chlink'] = $chlink;
@@ -1497,7 +1550,7 @@ class admin_menus extends aw_template
 		
 		$view_types = array(
 			"big" => t("Suured ikoonid"),
-			"small" => t("Väiksed ikoonid"),
+			"small" => t("V&auml;iksed ikoonid"),
 			"detail" => t("Detailne vaade"),
 		);
 
