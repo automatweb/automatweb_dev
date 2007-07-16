@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.76 2007/05/07 08:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.77 2007/07/16 14:08:42 markop Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -31,6 +31,52 @@ class sys extends aw_template
 		print $ser;
 		exit;
 	}
+
+	function show_table_sizes()
+	{
+		classload("vcl/table");
+		$t = new vcl_table();
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Tabeli nimi"),
+		));
+
+		$t->define_field(array(
+			"name" => "size",
+			"caption" => t("Suurus"),
+		));
+
+		$t->define_field(array(
+			"name" => "perc",
+			"caption" => "%",
+		));
+
+		$dbs = 0;
+		$result = mysql_query('SHOW TABLE STATUS');
+	
+		$res = array();
+		while($row = mysql_fetch_array($result))
+		{
+			$dbs += $row["Data_length"] + $row["index_length"];
+			$res[$row["Name"]] = $row["Data_length"] + $row["index_length"];
+		}
+		arsort($res);
+		foreach($res as $name => $size)
+		{
+			if($size)$t->define_data(array(
+				"name" => $name, 
+				"size" => $size,
+				"perc" => number_format(($size/$dbs * 100), 2). " %",
+			));
+		}
+		$t->define_data(array(
+			"name" => t("Total").":",
+			"size" => $dbs,
+			"perc" => "100 %",
+		));
+		return $t->draw();
+	}
+
 
 	/** Genereerib andmebaasi tabelite loomise sqli
 
