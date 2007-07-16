@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.24 2007/06/19 10:57:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.25 2007/07/16 12:30:59 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -31,6 +31,9 @@
 	
 	@property customer_menu type=relpicker field=meta method=serialize reltype=RELTYPE_MENU
 	@caption Kataloog kuhu kliendid salvestada
+	
+	@property min_price_to_all type=checkbox ch_value=1 field=meta method=serialize 
+	@caption Miinimumhind m&otilde;jub k&otilde;igile
 	
 @property disp_bron_len type=checkbox ch_value=1 field=meta method=serialize
 @caption &Auml;ra kuva aja pikkust kalendris
@@ -679,13 +682,15 @@ class room_settings extends class_base
 	{
 		$grp_settings = $settings->meta("grp_settings");
 		$gl = aw_global_get("gidlist_pri_oid");
-		asort($gl);
+		arsort($gl);
 		$gl = array_keys($gl);
 		$grp = $gl[1];
+		
 		if (count($gl) == 1)
 		{
 			$grp = $gl[0];
 		}
+		
 		return $grp_settings[$grp]["confirmed_default"];
 	}
 }

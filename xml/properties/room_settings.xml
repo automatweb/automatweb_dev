@@ -80,6 +80,16 @@
             <caption>Kataloog kuhu kliendid salvestada</caption>
       </property>
       <property>
+            <name>min_price_to_all</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Miinimumhind m&amp;amp;otilde;jub k&amp;amp;otilde;igile</caption>
+      </property>
+      <property>
             <name>disp_bron_len</name>
             <table>objects</table>
             <group>general</group>

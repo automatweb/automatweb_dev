@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.202 2007/07/12 14:37:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.203 2007/07/16 12:30:59 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -4186,6 +4186,25 @@ class room extends class_base
 				// calculate the amount of money saved by the discount back from the discounted price
 				$adv = 100 - $prod_discount;
 				$rv["prod_discount_value"][$currency] = ((100.0 * $tmp) / $adv) - $tmp;
+			}
+		}
+	
+		
+		//teeb kõigepealt kontrolli, et kas miinimumhind on olemas üldse, kõhutunnne ütleb, et seadete otsimine võtab rohkem aega,... niiet paneb selle hilisemaks
+		if(is_array($room->meta("web_room_min_price")) && sizeof($room->meta("web_room_min_price")))
+		{
+			$min = $room->meta("web_room_min_price");
+			foreach($sum as $curr => $val)
+			{
+				if($min[$curr] && $min[$curr] > $val)
+				{
+					$set = $this->get_settings_for_room($room);
+					if($set->prop("min_price_to_all"))
+					{
+						$sum[$curr] = $min[$curr];
+						$rv["room_price"][$curr] = $min[$curr];
+					}
+				}
 			}
 		}
 		
