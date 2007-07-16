@@ -419,16 +419,6 @@
             <no_caption>1</no_caption>
       </property>
       <property>
-            <name>keywords2</name>
-            <table>objects</table>
-            <group>keywords</group>
-            <type>keyword_selector</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_KEYWORD</reltype>
-            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
-      </property>
-      <property>
             <name>openhours</name>
             <table>objects</table>
             <group>open_hrs</group>
@@ -3105,6 +3095,16 @@
             <field>versions</field>
       </property>
       <property>
+            <name>keywords2</name>
+            <table>objects</table>
+            <group>keywords</group>
+            <type>keyword_selector</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_KEYWORD</reltype>
+            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
             <name>see_all_link</name>
             <table>objects</table>
             <group>sell_offers_grp_offers</group>
@@ -3145,11 +3145,6 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <keywords>
-                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
-                  <parent>general_sub</parent>
-                  <submit>no</submit>
-            </keywords>
             <general_sub>
                   <caption>&amp;amp;Uuml;ldandmed</caption>
                   <parent>general</parent>
@@ -3448,6 +3443,11 @@
                   <caption>Seaded</caption>
                   <parent>people</parent>
             </user_settings>
+            <keywords>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
+                  <parent>documents_all</parent>
+                  <submit>no</submit>
+            </keywords>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>

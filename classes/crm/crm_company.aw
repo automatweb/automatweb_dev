@@ -161,12 +161,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@property extern_id type=hidden table=kliendibaas_firma field=extern_id no_caption=1
 
-@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=general_sub submit=no 
-@default group=keywords
-	@property keywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
-	@caption V&otilde;tmes&otilde;nad
-
-
 
 @default group=open_hrs
 
@@ -1013,6 +1007,10 @@ default group=org_objects
 
 groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
 
+@default group=keywords
+	@property keywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
+	@caption V&otilde;tmes&otilde;nad
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldandmed" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
@@ -1104,6 +1102,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @groupinfo versions caption=Versioonid submit=no save=no parent=stats
 @groupinfo open_hrs caption="Avamisajad" parent=people
 @groupinfo user_settings caption="Seaded" parent=people
+@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all submit=no 
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
