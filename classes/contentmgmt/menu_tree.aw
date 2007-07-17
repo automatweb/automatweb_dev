@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.23 2007/07/12 11:38:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.24 2007/07/17 09:26:01 markop Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -313,7 +313,7 @@ class menu_tree extends class_base
 		$filt = array(
 			"class_id" => CL_MENU,
 			"parent" => $parents,
-			"status" => $hu ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
+			"status" => $hu && aw_ini_get("languages.default") != aw_global_get("ct_lang_id") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
