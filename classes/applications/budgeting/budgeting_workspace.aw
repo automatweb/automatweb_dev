@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.3 2007/06/08 12:35:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.4 2007/07/17 08:45:46 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -496,7 +496,7 @@ class budgeting_workspace extends class_base
 			}
 		}
 		else
-		if (substr($pt, 0, 4) == "cust")
+		if (substr($pt, 0, 5) == "cust_")
 		{
 			list(, $cust_id) = explode("_", $pt);
 			$s = t("Projektid");
@@ -508,6 +508,26 @@ class budgeting_workspace extends class_base
 				"url" => $this->mk_my_orb("change", $arr["r"]),
 			));
 			$tv->add_item($ti, array("id" => "tmp"));
+
+			$s = t("Teenuse liigid");
+			$ti = "custstypes_".$cust_id;
+			$arr["r"]["tax_fld"] = $ti;
+			$tv->add_item(0, array(
+				"id" => $ti,
+				"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+				"url" => $this->mk_my_orb("change", $arr["r"]),
+			));
+			$tv->add_item($ti, array("id" => "kmp"));
+
+			$s = t("Tooteperekonnad");
+			$ti = "custprodcats_".$cust_id;
+			$arr["r"]["tax_fld"] = $ti;
+			$tv->add_item(0, array(
+				"id" => $ti,
+				"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+				"url" => $this->mk_my_orb("change", $arr["r"]),
+			));
+			$tv->add_item($ti, array("id" => "tmp3"));
 		}
 		else
 		if (substr($pt, 0, 8) == "projects")
@@ -556,6 +576,239 @@ class budgeting_workspace extends class_base
 				));
 			}
 		}
+		else
+		if ($pt == "service_type")
+		{
+			$co = get_current_company();
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_SERVICE_TYPE_CATEGORY,CL_CRM_SERVICE_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $co->id()
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				$ti = "stypecat_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_CRM_SERVICE_TYPE_CATEGORY)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+		else
+		if (substr($pt, 0, 10)  == "custstypes")
+		{
+			list(, $cust_id) = explode("_", $pt);
+			$co = get_current_company();
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_SERVICE_TYPE_CATEGORY,CL_CRM_SERVICE_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $co->id()
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				$ti = "custstypecat_".$cust_id."_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_CRM_SERVICE_TYPE_CATEGORY)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+		else
+		if (substr($pt, 0, 8)  == "stypecat")
+		{
+			list(, $cat_id) = explode("_", $pt);
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_SERVICE_TYPE_CATEGORY,CL_CRM_SERVICE_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $cat_id
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				$ti = "stypecat_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_CRM_SERVICE_TYPE_CATEGORY)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+		else
+		if (substr($pt, 0, 12)  == "custstypecat")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $pt);
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_SERVICE_TYPE_CATEGORY,CL_CRM_SERVICE_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $cat_id
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				$ti = "custstypecat_".$cust_id."_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_CRM_SERVICE_TYPE_CATEGORY)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+		else
+		if ($pt  == "prod_families")
+		{
+			$co = get_current_company();
+			$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+			if (!$wh)
+			{
+				die($tv->finalize_tree());
+			}
+			$wh_i = $wh->instance();
+			list($fld, $ot) = $wh_i->get_packet_folder_list(array(
+				"id" => $wh->id()
+			));
+			foreach($ot->level($fld) as $cat)
+			{
+				$s = $cat->name();
+				$ti = "prodfamily_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				$tv->add_item($ti, array("id" => "tmp"));
+			}
+		}
+		else
+		if (substr($pt, 0, 12)  == "custprodcats")
+		{
+			list(, $cust_id) = explode("_", $pt);
+			$co = get_current_company();
+			$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+			if (!$wh)
+			{
+				die($tv->finalize_tree());
+			}
+			$wh_i = $wh->instance();
+			list($fld, $ot) = $wh_i->get_packet_folder_list(array(
+				"id" => $wh->id()
+			));
+			foreach($ot->level($fld) as $cat)
+			{
+				$s = $cat->name();
+				$ti = "custprodfamily_".$cust_id."_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				$tv->add_item($ti, array("id" => "tmp"));
+			}
+		}
+		else
+		if (substr($pt, 0, 10)  == "prodfamily")
+		{
+			list(, $cat_id) = explode("_", $pt);
+			$ol = new object_list(array(
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $cat_id
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				if ($cat->class_id() == CL_MENU)
+				{
+					$ti = "prodfamily_".$cat->id();
+				}
+				else
+				{
+					$ti = "prod_".$cat->id();
+				}
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_MENU)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+		else
+		if (substr($pt, 0, 14)  == "custprodfamily")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $pt);
+			$ol = new object_list(array(
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $cat_id
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				if ($cat->class_id() == CL_MENU)
+				{
+					$ti = "custprodfamily_".$cust_id."_".$cat->id();
+				}
+				else
+				{
+					$ti = "custprod_".$cust_id."_".$cat->id();
+				}
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_MENU)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+
 		die($tv->finalize_tree());
 	}
 

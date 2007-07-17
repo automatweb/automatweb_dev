@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.2 2007/06/08 12:35:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.3 2007/07/17 08:45:46 kristo Exp $
 // budget.aw - Eelarve 
 /*
 
@@ -13,7 +13,7 @@
 	@property project type=relpicker reltype=RELTYPE_PROJECT field=aw_project
 	@caption Project
 
-@default group=m
+@default group=m1,m2
 
 	@property total type=textbox size=5
 	@caption Kogusumma
@@ -24,6 +24,8 @@
 	@caption Hetkel projekti kasum
 
 @groupinfo m caption="Raha"
+	@groupinfo m1 caption="Voovaade" parent=m
+	@groupinfo m2 caption="Grupivaade" parent=m
 
 
 @reltype PROJECT value=1 clid=CL_PROJECT
@@ -91,13 +93,16 @@ class budget extends class_base
 		$arr["obj_inst"]->set_meta("mod_tax_pct", $arr["request"]["p"]);
 	}
 
-	function _init_m_t(&$t)
+	function _init_m_t(&$t, $arr)
 	{
-		$t->define_field(array(
-			"name" => "tax_grp",
-			"caption" => t("Maksugrupp"),
-			"align" => "center"
-		));
+		if ($arr["request"]["group"] != "m2")
+		{
+			$t->define_field(array(
+				"name" => "tax_grp",
+				"caption" => t("Maksugrupp"),
+				"align" => "center"
+			));
+		}
 		$t->define_field(array(
 			"name" => "tax",
 			"caption" => t("Maks"),
@@ -128,7 +133,7 @@ class budget extends class_base
 	function _get_m($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_m_t($t);
+		$this->_init_m_t($t, $arr);
 		$t->set_sortable(false);
 
 		// get all taxes that go away above the project
@@ -152,8 +157,13 @@ class budget extends class_base
 			{
 				$add .= sprintf(t("<br>(Maksimaalne erinevus %s)"), $tax->prop("max_deviation"));
 			}
+			$gn = $tax->prop("tax_grp.name");
+			if ($gn == "")
+			{
+				$gn = t("Muud maksud");
+			}
 			$t->define_data(array(
-				"tax_grp" => $tax->prop("tax_grp.name"),
+				"tax_grp" => $gn,
 				"tax" => html::obj_change_url($tax),
 				"tax_pct" => $tax->prop("amount"),
 				"tot_amt" => number_format($tax_amt, 2),
@@ -178,11 +188,17 @@ class budget extends class_base
 			$tax_amt = $task->prop("num_hrs_guess") * $task->prop("hr_price");
 			$amt -= $tax_amt;
 			$t->define_data(array(
+				"tax_grp" => t("Muud maksud"),
 				"tax" => html::obj_change_url($task),
 				"tax_pct" => "",
 				"tot_amt" => number_format($tax_amt, 2),
 				"forward" => number_format($amt, 2)
 			));
+		}
+
+		if ($arr["request"]["group"] == "m2")
+		{
+			$t->set_rgroupby(array("tax_grp" => "tax_grp"));
 		}
 	}
 

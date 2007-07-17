@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.22 2007/07/12 12:54:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.23 2007/07/17 08:45:47 kristo Exp $
 // procurement.aw - Hange
 /*
 
@@ -29,7 +29,7 @@
 
 	@property procurement_nr type=textbox table=aw_procurements field=aw_nr size=20
 	@caption Hanke kood
-	
+
 	@property contact_person1 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_procurements field=aw_person1
 	@caption Kontaktisik1
 
@@ -38,7 +38,7 @@
 
 	@property contact_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_procurements field=aw_person3
 	@caption Kontaktisik3
-	
+
 	@property procurement_info type=textarea table=aw_procurements field=aw_info
 	@caption Vabatekst hanke kohta
 
@@ -119,16 +119,16 @@
 
 	@property template type=select store=no
 	@caption Templeit
-	
+
 	@property print_offerer type=select store=no multiple=1
-	@caption Pakkuja 
-	
+	@caption Pakkuja
+
 	@property print_contact_person type=select store=no
-	@caption Pakkuja kontaktisik 
-	
+	@caption Pakkuja kontaktisik
+
 	@property print_type type=select store=no no_caption=1
-	@caption Pakkuja kontaktisik 
-	
+	@caption Pakkuja kontaktisik
+
 	@property print_submit type=submit store=no no_caption=1
 	@caption Print
 
@@ -225,9 +225,9 @@ class procurement extends class_base
 			case "crit_tb":
 				$this->_crit_tb($arr);
 				break;
-				
+
 			case "print_offerer":
-				if($_SESSION["procurement"]["print_data"])
+				if($_SESSION["procurement"]["print_data"]["print_offerer"])
 				{
 					return PROP_IGNORE;
 				}
@@ -246,7 +246,7 @@ class procurement extends class_base
 					$prop["value"] = reset($arr["request"]["offerers"]["print_offerer"]);
 				}
 				break;
-			
+
 			case "print_type":
 				if($_SESSION["procurement"]["print_data"]["print_offerer"])
 				{
@@ -254,7 +254,7 @@ class procurement extends class_base
 				}
 				$prop["options"] = array("DOC" , "PDF");
 				break;
-				
+
 			case "print_tb":
 				if(!$_SESSION["procurement"]["print_data"]["print_offerer"])
 				{
@@ -268,14 +268,14 @@ class procurement extends class_base
 					//"action" => "shit",
 				));
 				break;
-				
+
 			case "print_contact_person":
 				if(!$_SESSION["procurement"]["print_data"]["print_offerer"])
 				{
 					return PROP_IGNORE;
 				}
 				$co_inst = get_instance(CL_CRM_COMPANY);
-				
+
 				$prop["type"] = "text";
 				$prop["value"] = "<table>";
 				foreach($_SESSION["procurement"]["print_data"]["print_offerer"] as $po)
@@ -294,7 +294,7 @@ class procurement extends class_base
 					{
 						$options = $co_inst->get_employee_picker($offerer_obj);
 					}
-					
+
 					$prop["value"].= "<tr><td>".$offerer_obj->name()." : </td><td>" .html::select(array(
 						"name" => "print_contact_person[".$po."]",
 						"options" => $options,
@@ -302,8 +302,8 @@ class procurement extends class_base
 				}
 				$prop["value"].= "</table>";
 
-/*				
-				
+/*
+
 				if(is_array($arr["request"]["offerers"]) && sizeof($arr["request"]["offerers"]))
 				{
 					$offerer = reset($arr["request"]["offerers"]);
@@ -313,11 +313,11 @@ class procurement extends class_base
 						$prop["options"][$c->prop("to")] = $c->prop("to.name");
 					}
 				}*/
-				break;	
-				
-				
+				break;
+
+
 			case "template":
-				if($_SESSION["procurement"]["print_data"])
+				if($_SESSION["procurement"]["print_data"]["print_offerer"])
 				{
 					return PROP_IGNORE;
 				}
@@ -340,14 +340,14 @@ class procurement extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-			
+
 			case "contact_person3":
 				if(!$arr["obj_inst"]->prop("contact_person2"))
 				{
 					return PROP_IGNORE;
 				}
 				break;
-				
+
 			case "team":
 				$this->_team($arr);
 				break;
@@ -591,7 +591,7 @@ class procurement extends class_base
 					$_SESSION["procurement"]["print_data"] = $arr["request"];
 				}
 				//$this->print_procurement($arr["request"]);
-				
+
 			break;
 		}
 		return $retval;
@@ -610,7 +610,7 @@ class procurement extends class_base
 		{
 			return null;
 		}
-		
+
 		if(is_oid($orderer))
 		{
 			$center = $this->model->get_proc_center_for_co(obj($orderer));
@@ -622,8 +622,11 @@ class procurement extends class_base
 
 		if(!is_object($menu))
 		{
-			if(!$parent) return null;
-		
+			if(!$parent)
+			{
+				die(t("Hangete failide men&uuml;&uuml; m&auml;&auml;ramata"));
+				return null;
+			}
 			$menu = new object();
 			$menu->set_class_id(CL_MENU);
 			$menu->set_name($name." kirjad");
@@ -1403,7 +1406,7 @@ class procurement extends class_base
 		}
 		die(iconv(aw_global_get("charset"), "UTF-8", $ret));
 	}
-	
+
 	function print_procurement($arr)
 	{
 		extract ($arr);
@@ -1420,7 +1423,7 @@ class procurement extends class_base
 		{
 			return t("Hanke id'd ka vaja");
 		}
-		
+
 		$o = obj($id);
 		$menu = $this->get_files_menu(array(
 			"orderer" => $o->prop("orderer"),
@@ -1429,10 +1432,10 @@ class procurement extends class_base
 		));
 		$template_obj = obj($template);
 		$this->use_template($template_obj->prop("content"));
-		
+
 		$conv = get_instance("core/converters/html2pdf");
 		$fi = get_instance(CL_FILE);
-		
+
 		foreach($print_offerer as $po)
 		{
 			$offerer = obj($po);
@@ -1462,7 +1465,7 @@ class procurement extends class_base
 				"procurement_info" => $o->prop("procurement_info"),
 				"contact_person" => $contact_person,
 			));
-		
+
 			//tekitab produktide subi
 			$products = $o->meta("products");
 			$p = "";
@@ -1483,7 +1486,7 @@ class procurement extends class_base
 				$p.=$this->parse("PRODUCTS");
 			}
 			$this->vars(array("PRODUCTS" => $p));
-		
+
 			//kontaktisikud
 			$cp = "";
 			if($this->can("view" , $o->prop("contact_person1")))
@@ -1504,7 +1507,7 @@ class procurement extends class_base
 				$cp.=$this->parse("CONTACT_PERSON");
 			}
 			if($this->can("view" , $o->prop("contact_person2")))
-			{	
+			{
 				$cpo = obj($o->prop("contact_person2"));
 				$this->vars(array(
 					"cp_name" => $cpo->name(),
@@ -1538,19 +1541,19 @@ class procurement extends class_base
 				$cp.=$this->parse("CONTACT_PERSON");
 			}
 			$this->vars(array("CONTACT_PERSON" => $cp));
-			
+
 	//		lihtsalt muutujate testimiseks
 	//		foreach($this->vars as $key => $val)
 	//		{
 	//			print $key." - {VAR:".$key."}\n<br>";
 	//		}
-			
+
 	/*		$file = new object();
 			$file->set_parent($menu->id());
 			$file->set_name($o->name()." - " .$offerer->name(), " - ".date("d.m.Y", time()));
 			$file->set_class_id(CL_FILE);
 			$file->save;
-			
+
 	*/
 
 			$file_id = $fi->create_file_from_string(array(
@@ -1571,9 +1574,9 @@ class procurement extends class_base
 //				"filename" => $o->name()." - " .$offerer->name()." - ".date("d.m.Y", time()).".pdf",
 //			)));
 //		}
-//		
+//
 //		die($this->parse());
-		
+
 			print "<script type='text/javascript'>
 						window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");
 			</script>";
@@ -1589,6 +1592,6 @@ class procurement extends class_base
 		return $this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id()));
 		die($this->parse());
 	}
-	
+
 }
 ?>

@@ -189,18 +189,46 @@ class crm_company_objects_impl extends class_base
 	function _get_stypes_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_new_button(array(CL_CRM_SERVICE_TYPE), $arr["obj_inst"]->id(), 66);
+		$tb->add_new_button(array(CL_CRM_SERVICE_TYPE,CL_CRM_SERVICE_TYPE_CATEGORY), !empty($arr["request"]["stype"]) ? $arr["request"]["stype"] : $arr["obj_inst"]->id(), 66);
 		$tb->add_delete_button();
 	}
 
 	function _get_stypes_tbl($arr)
 	{
+		$pt = !empty($arr["request"]["stype"]) ? $arr["request"]["stype"] : $arr["obj_inst"]->id();
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->table_from_ol(
-			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SERVICE_TYPE"))),
+			new object_list(array(
+				"parent" => $pt,
+				"class_id" => CL_CRM_SERVICE_TYPE,
+				"lang_id" => array(),
+				"site_id" => array()
+			)),
 			array("name", "hr_price"),
 			CL_CRM_SERVICE_TYPE
 		);
+	}
+
+	function _get_stypes_tree($arr)
+	{
+		classload("vcl/treeview");
+		classload("core/icons");
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML, 
+				"persist_state" => true,
+				"tree_id" => "service_types",
+			),
+			"root_item" => $arr["obj_inst"],
+			"ot" => new object_tree(array(
+				"class_id" => array(CL_CRM_SERVICE_TYPE_CATEGORY),
+				"parent" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array()
+			)),
+			"var" => "stype",
+			"icon" => icons::get_icon_url(CL_MENU)
+		));
 	}
 }
 ?>

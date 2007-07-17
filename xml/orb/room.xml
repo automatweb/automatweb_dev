@@ -30,6 +30,13 @@
 			</function>
 		</action>
 
+		<action name="admin_add_bron_popup_table" all_args="1">
+			<function name="admin_add_bron_popup_table">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_add_reservation" all_args="1">
 			<function name="do_add_reservation">
 				<arguments>

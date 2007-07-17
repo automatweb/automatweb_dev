@@ -10,15 +10,6 @@
             <caption>Toodete csv failide baasaadress</caption>
       </property>
       <property>
-            <name>folder_url</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Kataloogideks jagamise csv url</caption>
-      </property>
-      <property>
             <name>prod_folder</name>
             <table>objects</table>
             <group>general</group>
@@ -29,13 +20,23 @@
             <caption>Toodete kataloog</caption>
       </property>
       <property>
-            <name>file_ext</name>
+            <name>images_folder</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Failide laiend</caption>
+            <caption>Serveri kaust kuhu pildid salvestatakse</caption>
+      </property>
+      <property>
+            <name>files_to_import</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>Imporditavad failid</caption>
       </property>
       <property>
             <name>do_i</name>
@@ -58,36 +59,6 @@
             <caption>Teosta piltide import</caption>
       </property>
       <property>
-            <name>restart_pict_i</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Alusta piltide importi algusest</caption>
-      </property>
-      <property>
-            <name>restart_prod_i</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Alusta toodete importi algusest</caption>
-      </property>
-      <property>
-            <name>just_update_prod_data</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Uuenda ainult toote andmed</caption>
-      </property>
-      <property>
             <name>last_import_log</name>
             <table>objects</table>
             <group>general</group>
@@ -98,33 +69,15 @@
             <caption>Viimase impordi logi</caption>
       </property>
       <property>
-            <name>orig_img</name>
+            <name>imported_products_table</name>
             <table>objects</table>
-            <group>imgs</group>
+            <group>imported_products</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <size>10</size>
+            <type>table</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Algne pilt</caption>
-      </property>
-      <property>
-            <name>view_img</name>
-            <table>objects</table>
-            <group>imgs</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-      </property>
-      <property>
-            <name>to_img</name>
-            <table>objects</table>
-            <group>imgs</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <store>no</store>
-            <caption>Mis pildid asendada</caption>
+            <caption>Imporditud toodete tabel</caption>
       </property>
       <property>
             <name>fnames</name>
@@ -258,48 +211,6 @@
             <cols>80</cols>
             <comment>Ilmselt hetkel ei t&amp;amp;ouml;&amp;amp;ouml;ta!</comment>
             <caption>Landscape vaatega lehed</caption>
-      </property>
-      <property>
-            <name>folders</name>
-            <table>objects</table>
-            <group>folders</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>inf_pages</name>
-            <table>objects</table>
-            <group>folders</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textarea</type>
-            <rows>3</rows>
-            <cols>40</cols>
-            <caption>L&amp;amp;otilde;pmatus vaatega lehed</caption>
-      </property>
-      <property>
-            <name>foldpri</name>
-            <table>objects</table>
-            <group>folderspri</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textarea</type>
-            <rows>20</rows>
-            <cols>20</cols>
-            <caption>T&amp;amp;auml;htede prioriteedid</caption>
-      </property>
-      <property>
-            <name>foldernames</name>
-            <table>objects</table>
-            <group>foldersnames</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <caption>Kaustade nimed impordi jaoks</caption>
       </property>
       <property>
             <name>containers_toolbar</name>
@@ -452,16 +363,6 @@
             <store>no</store>
             <caption>Info</caption>
       </property>
-      <property>
-            <name>do_fixes</name>
-            <table>objects</table>
-            <group>post_import_fix</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Soorita parandus</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_OTTO_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -470,9 +371,9 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <imgs>
-                  <caption>Pildid</caption>
-            </imgs>
+            <imported_products>
+                  <caption>Imporditud tooted</caption>
+            </imported_products>
             <files>
                   <caption>Failid</caption>
             </files>
@@ -492,7 +393,7 @@
                   <caption>Soodustooted</caption>
             </discount_products>
             <foldersa>
-                  <caption>Kataloogid</caption>
+                  <caption>Kataloogid / Kategooriad</caption>
             </foldersa>
             <categories>
                   <caption>Kategooriad</caption>
@@ -502,18 +403,6 @@
                   <caption>Kategooriate seaded</caption>
                   <parent>foldersa</parent>
             </category_settings>
-            <folders>
-                  <caption>Kataloogid (deprecated)</caption>
-                  <parent>foldersa</parent>
-            </folders>
-            <folderspri>
-                  <caption>Kataloogide m&amp;amp;auml;&amp;amp;auml;rangud (deprecated)</caption>
-                  <parent>foldersa</parent>
-            </folderspri>
-            <foldersnames>
-                  <caption>Kaustade nimed (deprecated)</caption>
-                  <parent>foldersa</parent>
-            </foldersnames>
             <containers>
                   <caption>Konteinerid</caption>
             </containers>
@@ -526,9 +415,6 @@
             <delete>
                   <caption>Kustutamine</caption>
             </delete>
-            <post_import_fix>
-                  <caption>Parandused</caption>
-            </post_import_fix>
       </groupinfo>
       <reltypes>
             <FOLDER>

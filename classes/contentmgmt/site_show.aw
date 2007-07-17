@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.238 2007/07/04 10:05:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.239 2007/07/17 08:45:47 kristo Exp $
 
 /*
 
@@ -1669,8 +1669,8 @@ class site_show extends class_base
 				{
 					$ya .= $this->parse("YAH_LINK");
 				}
-				$this->title_yah.=" / ".$ref->name();
-				$this->title_yah_arr[] = $ref->name();
+				$this->title_yah.=" / ".str_replace("&nbsp;"," ",strip_tags($ref->trans_get_val("name")));
+				$this->title_yah_arr[] = str_replace("&nbsp;"," ",strip_tags($ref->trans_get_val("name")));
 			}
 
 			if ($prev && $prev->id() == $this->cfg["rootmenu"])

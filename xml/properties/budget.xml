@@ -12,7 +12,10 @@
       <property>
             <name>total</name>
             <table>aw_budgets</table>
-            <group>m</group>
+            <group>
+                  <num_0>m1</num_0>
+                  <num_1>m2</num_1>
+            </group>
             <type>textbox</type>
             <size>5</size>
             <field>total</field>
@@ -21,7 +24,10 @@
       <property>
             <name>m</name>
             <table>aw_budgets</table>
-            <group>m</group>
+            <group>
+                  <num_0>m1</num_0>
+                  <num_1>m2</num_1>
+            </group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -30,7 +36,10 @@
       <property>
             <name>desc</name>
             <table>aw_budgets</table>
-            <group>m</group>
+            <group>
+                  <num_0>m1</num_0>
+                  <num_1>m2</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <field>desc</field>
@@ -47,6 +56,14 @@
             <m>
                   <caption>Raha</caption>
             </m>
+            <m1>
+                  <caption>Voovaade</caption>
+                  <parent>m</parent>
+            </m1>
+            <m2>
+                  <caption>Grupivaade</caption>
+                  <parent>m</parent>
+            </m2>
       </groupinfo>
       <tableinfo>
             <aw_budgets>

@@ -180,7 +180,7 @@
             <submit>no</submit>
             <type>checkbox</type>
             <store>no</store>
-	    <caption>1 rida makse kohta</caption>
+            <caption>1 rida makse kohta</caption>
       </property>
       <property>
             <name>do_find</name>
@@ -191,6 +191,7 @@
             <submit>no</submit>
             <type>submit</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Otsi</caption>
       </property>
       <property>

@@ -323,15 +323,6 @@ class crm_company_overview_impl extends class_base
 			));
 		}
 
-		$t->define_field(array(
-			"caption" => t("Pealkiri"),
-			"name" => "name",
-			"align" => "left",
-//			"chgbgcolor" => "col",
-			"sortable" => 1,
-			"colspan" => "colspan",
-		));
-
 		if ($r["group"] == "meetings")
 		{
 			$t->define_field(array(
@@ -361,6 +352,16 @@ class crm_company_overview_impl extends class_base
 				"filter" => array_unique($filt["proj_name"])
 			));
 		}
+		
+		$t->define_field(array(
+			"caption" => t("Pealkiri"),
+			"name" => "name",
+			"align" => "left",
+//			"chgbgcolor" => "col",
+			"sortable" => 1,
+			"colspan" => "colspan",
+		));
+
 		if ($r["group"] != "meetings")
 		{
 			$t->define_field(array(

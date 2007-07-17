@@ -56,6 +56,7 @@
 			<function name="clear_discount_products">
 				<arguments>
 					<optional name="id" />
+					<optional name="lang_id" />
 				</arguments>
 			</function>
 		</action>

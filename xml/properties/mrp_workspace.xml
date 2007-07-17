@@ -136,7 +136,7 @@
             <group>grp_search_proj</group>
             <type>textbox</type>
             <view_element>1</view_element>
-            <caption>Kirjeldus</caption>
+            <caption>Nimetus</caption>
       </property>
       <property>
             <name>sp_starttime</name>
@@ -146,7 +146,7 @@
             <group>grp_search_proj</group>
             <type>datetime_select</type>
             <view_element>1</view_element>
-            <caption>Alustamisaeg (meterjalide saabumine)</caption>
+            <caption>Alustamisaeg (materjalide saabumine) alates</caption>
       </property>
       <property>
             <name>sp_due_date</name>
@@ -156,7 +156,7 @@
             <group>grp_search_proj</group>
             <type>datetime_select</type>
             <view_element>1</view_element>
-            <caption>T&amp;auml;htaeg</caption>
+            <caption>T&amp;auml;htaeg alates</caption>
       </property>
       <property>
             <name>sp_customer</name>
