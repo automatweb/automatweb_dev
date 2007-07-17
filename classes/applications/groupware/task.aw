@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.177 2007/07/16 09:43:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.178 2007/07/17 09:06:26 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2793,7 +2793,7 @@ class task extends class_base
 		$tb->add_button(array(
 			"name" => "cut",
 			"img" => "cut.gif",
-			"tooltip" => t("L&otulde;ika read"),
+			"tooltip" => t("L&otilde;ika read"),
 			"action" => "cut_task_rows"
 		));
 		
