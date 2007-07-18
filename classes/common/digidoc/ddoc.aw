@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.24 2007/03/06 16:46:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.25 2007/07/18 06:50:25 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -50,6 +50,7 @@ define("USER_DEFAULT_DIR", 2);
 define("DEFAULT_DDOC_TYPE", "DIGIDOC-XML");
 define("DEFAULT_DDOC_VERSION", "1.3");
 
+
 class ddoc extends class_base
 {
 	function ddoc()
@@ -59,6 +60,25 @@ class ddoc extends class_base
 			"clid" => CL_DDOC
 		));
 		$this->digidoc = false;
+
+		$this->errors = array(
+			"DDOC_ERR_WSDL" => "WSDL::%s failed. Pear error message: '%s'. %s",
+			"DDOC_ERR_DDOC" => "ddoc::%s failed. %s",
+			"DDOC_ERR_DIGIDOC" => "digidoc::%s failed. %s",
+
+		);
+		$this->warns = array(
+			"DDOC_WARN_DDOC" => "ddoc::%s failed. %s",
+		);
+		foreach($this->errors as $k => $v)
+		{
+			define($k, $v);
+		}
+		foreach($this->warns as $k => $v)
+		{
+			define($k, $v);
+		}
+
 		/*
 		$loc = aw_ini_get("basedir")."/classes/common/digidoc/conf.php";
 		include_once($loc);
@@ -74,9 +94,22 @@ class ddoc extends class_base
 	function do_init()
 	{
 		$loc = aw_ini_get("basedir")."/classes/common/digidoc/conf.php";
-		include_once($loc);
-		include_once(aw_ini_get("basedir")."/classes/common/digidoc/ddoc_parser.aw");
-		include_once(aw_ini_get("basedir")."/classes/protocols/file/digidoc.aw");
+		if(!include_once($loc))
+		{
+			$this->sign_err(DDOC_ERR_DDOC, "do_init", "File '".$loc."' couldn't be opened.");
+		}
+
+		$loc = aw_ini_get("basedir")."/classes/common/digidoc/ddoc_parser.aw";
+		if(!include_once($loc))
+		{
+			$this->sign_err(DDOC_ERR_DDOC, "do_init", "File '".$loc."' couldn't be opened.");
+		}
+
+		$loc = aw_ini_get("basedir")."/classes/protocols/file/digidoc.aw";
+		if(!include_once($loc))
+		{
+			$this->sign_err(DDOC_ERR_DDOC, "do_init", "File '".$loc."' couldn't be opened.");
+		}
 		digidoc::load_WSDL();
 		$this->digidoc = new digidoc();
 	}
@@ -245,6 +278,7 @@ class ddoc extends class_base
 		{
 			//-- set_property --//
 			case "ddoc":
+
 				// actually i should check wheather it is a correct ddoc file
 				if (is_array($data["value"]))
 				{
@@ -526,6 +560,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "create_empty", "Parameter oid incorrect.");
 			return false;
 		}
 		$name = $name?$name:"Digidoc (".date("d/m/Y H:i").")";
@@ -535,6 +570,7 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->CreateSignedDoc(DEFAULT_DDOC_TYPE, DEFAULT_DDOC_VERSION);
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "CreateSignedDoc", "Creating new empty ddoc (Type:".DEFAULT_DDOC_TYPE."/Vers:".DEFAULT_DDOC_VERSION.") failed.", $ret->getMessage());
 			error::raise(array(
 				"msg" => t("Uue DigiDoc konteineri loomine eba&otilde;nnestus: ".$ret->getMessage()),
 			));
@@ -543,6 +579,7 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->GetSignedDoc();
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", "Getting signed container failed.", $ret->getMessage());
 			error::raise(array(
 				"msg" => t("Ei saanud k&auml;tte DigiDoc konteinerit:".$ret->getMessage()),
 			));
@@ -590,18 +627,21 @@ class ddoc extends class_base
 	{
 		if(substr($id,0,1) != "D" || !is_numeric(substr($id,1)))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "remove_file", "The removable file id(".$id.") isn't correct.");
 			error::raise(array(
 				"msg" => t("Eemaldatava faili id ei ole korrektne"),
 			));
 		}
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "remove_file", "The object oid(".$oid.") is incorrect.");
 			error::raise(array(
 				"msg" => t("Vale objekti id!"),
 			));
 		}
 		if($this->is_signed($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "remove_file", "Can't remove file from signed ddoc.");
 			error::raise(array(
 				"msg" => t("Ei saa eemaldada faile allkirjastatud DigiDoc'ilt"),
 			));
@@ -611,6 +651,7 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->RemoveDataFile($id);
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "RemoveDataFile", "Removing file from container failed.", $ret->getMessage());
 			$this->_e();
 			return false;
 		}
@@ -618,6 +659,7 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->GetSignedDoc();
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", "Getting new container contents failed.", $ret->getMessage());
 			error::raise(array(
 				"msg" => t("Ei saanud DigiDoc'i sisu k&auml;tte:".$ret->getMessage()),
 			));
@@ -648,6 +690,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "is_signed", "Parameter oid(".$oid.") incorrect.");
 			error::raise(array(
 				"msg" => t("Vale objetki id!"),
 			));
@@ -671,6 +714,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "remove_signatures", "Parameter oid(".$oid.") incorrect.");
 			return false;
 		}
 		$this->_s($oid);
@@ -679,6 +723,7 @@ class ddoc extends class_base
 		$ret = ddoc2_parser::Parse($this->digidoc->WSDL->xml, 'body');
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "GetSignedDocInfo", "Getting container info failed". $ret->getMessage());
 			die("error@_remove_sigantures:getsigneddocinfo:".$ret->getMessage());
 		}
 		$this->_e();
@@ -725,6 +770,7 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->StartSession($oid?$p->GetDigiDoc(LOCAL_FILES):"", TRUE, '');
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "startSession", $ret->message);
 			switch(trim($ret->message))
 			{
 				case "curl_exec error 7":
@@ -750,6 +796,7 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->CloseSession();
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "closeSession", $ret->message);
 			return false;
 		}
 		return true;
@@ -768,6 +815,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "get_ddoc", "Incorrect oid(".$oid.") parametere.");
 			return false;
 		}
 		$o = obj($oid);
@@ -789,16 +837,23 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid) || !strlen($contents))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "set_ddoc", "Incorrect object id or no contents supplied.");
 			return false;
 		}
 		$o = obj($oid);
 		$f = $o->prop("ddoc_location");
 		if(!($h = @fopen($f,"w")))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "set_ddoc", sprintf("File '%s' can't be opened", $f));
 			return false;
 		}
-		fwrite($h, $contents);
-		fclose($contents);
+		if(!fwrite($h, $contents))
+		{
+			$this->sign_err(DDOC_ERR_DDOC, "set_ddoc", "Can't write to '".$f."'");
+			fclose($h);
+			return false;
+		}
+		fclose($h);
 		if($reload_ddoc)
 		{
 			$this->_do_reset_ddoc($oid);
@@ -822,15 +877,17 @@ class ddoc extends class_base
 	{
 		if(!is_oid($arr["oid"]))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "add_file", "Incorrect oid param.");
 			return false;
 		}
-		// TODO other_oid
 		if(!is_oid($arr["file_oid"]) && !is_oid($arr["other_oid"]) && (!$arr["file"]["name"] || !$arr["file"]["size"] || !$arr["file"]["MIME"] || !$arr["file"]["content"]))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "add_file", "Neither file oid, other object oid or uploaded file data wasn't set!");
 			return false;
 		}
 		if($this->is_signed($arr["oid"]))
 		{
+			$this->sign_err(DDOC_WARN_DDOC, "add_file", "Can't add file to signed object.");
 			return false;
 		}
 
@@ -866,6 +923,7 @@ class ddoc extends class_base
 			}
 			if(PEAR::isError($ret))
 			{
+				$this->sign_err(DDOC_ERR_WSDL, "addDataFile", $ret->getMessage());
 				error::raise(array(
 					"msg" => t("Ei saanud lisada faili konteinerisse:".$ret->getMessage()),
 				));
@@ -877,6 +935,7 @@ class ddoc extends class_base
 			$ret = $this->digidoc->WSDL->GetSignedDoc();
 			if(PEAR::isError($ret))
 			{
+				$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", $ret->getMessage(), " error getting new & updated ddoc contents");
 				error::raise(array(
 					"msg" => t("Ei saanud DigiDoc konteinerit k&auml;tte:".$ret->getMessage()),
 				));
@@ -934,6 +993,7 @@ class ddoc extends class_base
 			}
 			if(PEAR::isError($ret))
 			{
+				$this->sign_err(DDOC_ERR_WSDL, "addDataFile", $ret->getMessage());
 				error::raise(array(
 					"msg" => t("Ei saanud lisada faili konteinerisse:".$ret->getMessage()),
 				));
@@ -945,6 +1005,7 @@ class ddoc extends class_base
 			$ret = $this->digidoc->WSDL->GetSignedDoc();
 			if(PEAR::isError($ret))
 			{
+				$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", $ret->getMessage());
 				error::raise(array(
 					"msg" => t("Ei saanud DigiDoc konteinerit k&auml;tte:".$ret->getMessage()),
 				));
@@ -1079,6 +1140,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($arr["oid"]) || !strlen($arr["ddoc_id"]) || (!is_oid($arr["file"]) && !$arr["remove"]))
 		{
+			$this->sign_err(DDOR_ERR_DDOC, "_write_file_metainfo", "parameters incorrect");
 			return false;
 		}
 		$o = obj($arr["oid"]);
@@ -1115,6 +1177,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDDOC, "_do_reset_ddoc", "Incorrect parameter oid.");
 			return false;
 		}
 		
@@ -1130,6 +1193,10 @@ class ddoc extends class_base
 		
 		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 		$ret =  $this->digidoc->WSDL->GetSignedDocInfo();
+		if(PEAR::isError($ret))
+		{
+			$this->sign_err("DDOC_ERR_WSDL", "GetSignedDocInfo", $ret->getMessage());
+		}
 
 		$ret2 = ddoc2_parser::Parse($this->digidoc->WSDL->xml, 'body');
 
@@ -1148,6 +1215,10 @@ class ddoc extends class_base
 		{
 			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 			$file = $this->digidoc->WSDL->GetDataFile($std_obj["Id"]);
+			if(PEAR::isError($file))
+			{
+				$this->sign_err(DDOC_ERR_WSDL, "getDataFile", $file->getMessage());
+			}
 			$hash = $p->getFileHash(array(
 				"name" => $file["DataFileData"]->Filename,
 				"MIME" => $file["DataFileData"]->MimeType,
@@ -1302,6 +1373,35 @@ class ddoc extends class_base
 		
 		return $this->mk_my_orb("sign", $arr, CL_DDOC);
 	}
+
+	function sign_err()
+	{
+		if(($argc = func_num_args()) < 1)
+		{
+			return false;
+		}
+		$argv = func_get_args();
+		$msg = $argv[0];
+		unset($argv[0]);
+		$backtrace = debug_backtrace();
+		
+		$handle = fopen(aw_ini_get("site_basedir")."/files/digidoc_error_dbg", 'a');
+		
+		fwrite($handle, "\n---------");
+		// ususal error info
+		fwrite($handle, "\n[".date("d.m.Y h:i:s", time())."] ".vsprintf($msg, $argv));
+		// backtrace
+		fwrite($handle, "\nBacktrace (last 2):");
+		foreach(split("\n", print_r($backtrace[0], true)) as $line)
+			fwrite($handle, "\n".$line);
+		foreach(split("\n", print_r($backtrace[1], true)) as $line)
+			fwrite($handle, "\n".$line);
+		// user info
+		fwrite($handle, "User:'".aw_ini_get("uid")."', Request URI:'".$_SERVER["REQUEST_URI"]."', Remote addr(host):'".$_SERVER["REMOTE_ADDR"]."(".$_SERVER["REMOTE_HOST"].")', USER_AGENT:'".$_SERVER["HTTP_USER_AGENT"]."', Referer:'".$_SERVER["HTTP_REFERER"]."'");
+
+		fclose($handle);
+		return $msg;
+	}
 	
 	/**
 		@attrib params=name name=sign all_args=1
@@ -1352,6 +1452,7 @@ class ddoc extends class_base
 
 					if(!$this->create_empty($new_ddoc->id(), $file_obj->name()))
 					{
+						$this->sign_err(DDOC_ERR_DDOC, "sign", "Creating new empty ddoc container failed.");
 						error::raise(array(
 							"msg" => t("Uue t&uuml;hja digidoc konteineri loomine eba&otilde;nnestus"),
 						));
@@ -1361,6 +1462,7 @@ class ddoc extends class_base
 						"file_oid" => $arr["file_oid"],
 					)))
 					{
+						$this->sign_err(DDOC_ERR_DDOC, "sign", "Adding file to ddoc container failed.");
 						error::raise(array(
 							"msg" => t("Faili lisamine digidoc konteinerisse eba&otilde;nnestus"),
 						));
@@ -1372,6 +1474,7 @@ class ddoc extends class_base
 					$other_obj = obj($arr["other_oid"]);
 					if($other_obj->class_id() == CL_FILE )
 					{
+						$this->sign_err(DDOC_ERR_DDOC, "sign", "Incorrect object id, nothing to sign.");
 						return false;
 					}
 					$new_ddoc = obj();
@@ -1381,6 +1484,7 @@ class ddoc extends class_base
 
 					if(!$this->create_empty($new_ddoc->id(), $other_obj->name()))
 					{
+						$this->sign_err(DDOC_ERR_DDOC, "sign", "Creating new empty ddoc container failed.");
 						error::raise(array(
 							"msg" => t("Uue t&uuml;hja digidoc konteineri loomine eba&otilde;nnestus"),
 						));
@@ -1390,6 +1494,7 @@ class ddoc extends class_base
 						"other_oid" => $arr["other_oid"],
 					)))
 					{
+						$this->sign_err(DDOC_ERR_DDOC, "sign", "Adding file to ddoc container failed.");
 						error::raise(array(
 							"msg" => t("Faili lisamine digidoc konteinerisse eba&otilde;nnestus"),
 						));
@@ -1399,6 +1504,7 @@ class ddoc extends class_base
 				}
 				else
 				{
+					$this->sign_err(DDOC_ERR_DDOC, "sign", "Incorrect params. No suitable object to sign.");
 					return false;
 				}
 			}
@@ -1424,6 +1530,7 @@ class ddoc extends class_base
 			$ret = $this->digidoc->WSDL->getSignatureModules($brow_os, $arr["step"], "HTML");
 			if(PEAR::isError($ret))
 			{
+				$this->sign_err(DDOC_ERR_WSDL, "getSignatureModules", "Getting signature modules failed.", $ret->getMessage());
 				die("Failed getting signature modules: ".$ret->getMessage());
 			}
 			else
@@ -1494,6 +1601,7 @@ class ddoc extends class_base
 				// chekking preparation results
 				if(PEAR::isError($ret))
 				{
+					$this->sign_err(DDOC_ERR_WSDL, "PrepareSignature", "Preparing signature in FINALIZE part failed.", $ret->getMessage());
 					$err = array(
 						t("Allkirjastamise ettevalmistusetapp eba&otilde;nnestus! Palun proovige uuesti!"),
 						sprintf(t("T&auml;psem veateade: %s"), $ret->getMessage()),
@@ -1531,6 +1639,7 @@ class ddoc extends class_base
 				$ret = $this->digidoc->WSDL->FinalizeSignature($arr["signatureId"], $arr["signValueHex"]);
 				if(PEAR::isError($ret))
 				{
+					$this->sign_err(DDOC_ERR_WSDL, "FinalizeSignature", "Finalizing signature in end part failed", $ret->getMessage());
 					$err = array(
 						t("Allkirjastamise l&otilde;puetapp eba&otilde;nnestus! Palun proovige uuesti."),
 						sprintf(t("T&auml;psem veateade: %s"), $ret->getMessage()),
@@ -1543,6 +1652,7 @@ class ddoc extends class_base
 					$ret = $this->digidoc->WSDL->GetSignedDoc();
 					if(PEAR::isError($ret))
 					{
+						$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", "Signing (end part) failed (getting new ddoc contents).", $ret->getMessage());
 						$err = array(
 							t("Allkirjastatud digidoc konteineri saamine eba&otilde;nnestus."),
 							sprintf(t("T&auml;psem veateade: %s"), $ret->getMessage()),
@@ -1553,6 +1663,9 @@ class ddoc extends class_base
 					$content = $p->getDigiDoc();
 					if(!$this->set_ddoc($ddoc_oid, $content, true))
 					{
+						$this->sign_err(DDOC_ERR_DDOC, "sign", "End part of signing failed because setting new ddoc contents failed.");
+
+
 						$err = array(
 							t("DigiDoc konteineri sisu m&auml;&auml;ramine eba&otilde;nnestus"),
 							sprintf(t("T&auml;psem veateade: %s"), $ret->getMessage()),
@@ -1594,6 +1707,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "remove_signature", "Parameter oid incorrect.");
 			return false;
 		}
 		if(substr($id, 0, 1) == "S" && is_numeric(substr($id, 1)))
@@ -1606,6 +1720,7 @@ class ddoc extends class_base
 		}
 		else
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "remove_signature", "Parameter id incorrect.");
 			return false;
 		}
 		if($_oid)
@@ -1627,6 +1742,7 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->RemoveSignature($id);
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "RemoveSignature", "Removing signature failed.", $ret->getMessage());
 			error::raise(array(
 				"msg" => t("Ei suutnud eemaldada allkirja digidoc konteinerist:".$ret->getMessage()),
 			));
@@ -1635,6 +1751,7 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->GetSignedDoc();
 		if(PEAR::isError($ret))
 		{
+			$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", "Getting new DDoc container failed.", $ret->getMessage());
 			error::raise(array(
 				"msg" => t("Ei suutnud saada uut digidoc konteinerit:".$ret->getMessage()),
 			));
@@ -1645,7 +1762,9 @@ class ddoc extends class_base
 			$ddcontent = ($ddoc->getDigiDoc());
 			if(!$this->set_ddoc($oid, $ddcontent))
 			{
-				die("rem.sig.set_ddoc.rotting:");
+				$msg = "Setting new digidoc contents failed.";
+				$this->sign_err(DDOC_ERR_DDOC, "remove_signature", $msg);
+				die($msg);
 			}
 		}
 		// end session
@@ -1683,6 +1802,7 @@ class ddoc extends class_base
 	{
 		if(!strlen($arr["ddoc_id"]) || !is_oid($arr["oid"]) || !is_oid($arr["signer"]) || !strlen($arr["signer_fn"]) || !strlen($arr["signer_ln"]) || !strlen($arr["signer_pid"]) || !strlen($arr["signing_time"]))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "_write_signature_metainfo", "Parameters incorrect.");
 			return false;
 		}
 		$o = obj($arr["oid"]);
@@ -1698,6 +1818,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "_clear_old_signed_files", "Incorrect parameter oid.");
 			return false;
 		}
 		$o = obj($oid);
@@ -1725,6 +1846,7 @@ class ddoc extends class_base
 	{
 		if(!is_oid($oid))
 		{
+			$this->sign_err(DDOC_ERR_DDOC, "_clear_old_signatures", "Incorrect parameter oid.");
 			return false;
 		}
 		$o = obj($oid);

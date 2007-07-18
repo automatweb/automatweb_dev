@@ -52,6 +52,8 @@ class digidoc {
 				}
 				if(PEAR::isError($wcode))
 				{
+					$ddoc = get_instance(CL_DDOC);
+					$ddoc->sign_err(DDOC_ERR_DIGIDOC, "load_WSDL", "Error in recived code.[wsdl:".$wsdl."][conn:".$connection."]", $this->getMessage());
 					return false;
 				}
 				ddFile::saveLocalFile( DD_WSDL_FILE, "<?php\n".$wcode."\n?".">");
