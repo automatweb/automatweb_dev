@@ -82,13 +82,16 @@ class object_script_interpreter extends class_base
 
 	/** executes the script given in $script
 
-		@attrib name=exec api=1
+		@attrib name=exec api=1 params=name
 	
 		@param script required type=string
 			The script to execute in a string
 
 		@param vars optional type=array
 			Array of name=>value pairs that will be set as variables in the script
+
+		@param silent optional type=bool default=false
+			If set to true, the script execution is silent
 
 		@errors
 			error is thrown if a syntax error is in the file or it contains undefined symbols
@@ -155,7 +158,7 @@ class object_script_interpreter extends class_base
 			}
 			if ($nl != "")
 			{
-				$this->_exec_line($nl);
+				$this->_exec_line($nl, !$arr["silent"]);
 			}
 		}
 
@@ -360,12 +363,15 @@ class object_script_interpreter extends class_base
 	}
 
 
-	function _exec_line($line)
+	function _exec_line($line, $echo = true)
 	{
 		$line = $this->_replace_syms($line);
 		$toks = $this->_tokenize_line($line);
-		echo "exec line $line <br>\n";
-		flush();
+		if ($echo)
+		{
+			echo "exec line $line <br>\n";
+			flush();
+		}
 		$this->_exec_toks($toks);
 	}
 

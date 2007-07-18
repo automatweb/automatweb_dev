@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.25 2007/02/06 14:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.26 2007/07/18 13:05:52 kristo Exp $
 
 /*
 
@@ -562,15 +562,21 @@ class banner extends class_base
 		}
 	}
 
-	function get_banner_html($loc, $count)
+	function get_banner_html($loc, $count, $banner = null)
 	{
-		$banner = $this->get_grp($loc, false);
+		if ($banner === null)
+		{
+			$banner = $this->get_grp($loc, false);
+		}
 		if ($banner)
 		{
 			$content = $banner->trans_get_val("banner_file");
 			if (is_oid($content) && $this->can("view", $content))
 			{
-				$this->add_simple_view($banner->id(), $loc);
+				if ($loc)
+				{
+					$this->add_simple_view($banner->id(), $loc);
+				}
 				$content_o = obj($content);
 				$url = $this->mk_my_orb("proc_banner", array("click" => 1, "bid" => $banner->id()), "banner", false, false, "&amp;");
 				$target = $banner->prop("banner_new_win") ? "target=\"_blank\"" : "";

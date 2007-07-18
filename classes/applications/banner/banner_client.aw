@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_client.aw,v 1.5 2005/05/13 09:10:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_client.aw,v 1.6 2007/07/18 13:05:52 kristo Exp $
 
 /*
 
@@ -8,6 +8,12 @@
 @classinfo syslog_type=ST_BANNER_LOCATION relationmgr=yes
 @default table=objects
 @default group=general
+
+@property cont_place type=select store=no
+@caption Koht veebis
+
+@property cont_doc_tpl type=select store=no
+@caption Dokumendi template
 
 @property html type=textarea cols=80 rows=10 table=banner_clients 
 @caption Asukoha HTML
@@ -24,6 +30,43 @@ class banner_client extends class_base
 		));
 
 		$this->def_html = "<a href='/orb.aw?class=banner&action=proc_banner&gid=%s&click=1&ss=[ss]'><img src='/orb.aw?class=banner&action=proc_banner&gid=%s&ss=[ss]' border=0></a>";
+	}
+
+	function get_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "cont_place":
+				if (!$arr["request"]["mgr"])
+				{
+					return PROP_IGNORE;
+				}
+				$mg = obj($arr["request"]["mgr"]);
+				$pls = aw_ini_get("promo.areas");
+				$prop["options"] = array();
+				foreach(safe_array($mg->prop("container_places")) as $plid)
+				{
+					$prop["options"][$plid] = $pls[$plid]["name"];
+				}
+				break;
+
+			case "cont_doc_tpl":
+				if (!$arr["request"]["mgr"])
+				{
+					return PROP_IGNORE;
+				}
+				$mg = obj($arr["request"]["mgr"]);
+				$prop["options"] = array();
+				foreach(safe_array($mg->prop("document_templates")) as $plid)
+				{
+					$tmp = obj($plid);
+					$prop["options"][$tmp->prop("t_id")] = $tmp->name();
+				}
+				break;
+		}
+
+		return PROP_OK;
 	}
 
 	function set_property($arr)
