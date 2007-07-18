@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.65 2007/07/09 11:01:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.66 2007/07/18 14:13:48 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1674,21 +1674,60 @@ class shop_order_cart extends class_base
 		aw_disable_acl();
 		$order_obj->save();
 		aw_restore_acl();
+//		arr($cart);
 		
-		//if(aw_global_get("uid") == "struktuur"){arr($_SESSION["bank_payment"]["url"]); die();}
-		if(is_oid($arr["oc"]))
+		$expl = $order_id;
+		if(is_object($oc) && $oc->prop("show_prod_and_package"))
 		{
-			$expl_oc = " (".$arr["oc"].")"; //et tellimiskeskkonna objekt ka näha jääks
+			$expl = substr($expl.$this->get_prod_expl($cart), 0, 69);
 		}
+		
+		if(is_oid($arr["oc"]) && strlen($expl." (".$arr["oc"].")") < 70)
+		{
+			$expl.= " (".$arr["oc"].")"; //et tellimiskeskkonna objekt ka näha jääks
+		}
+		
+//		if(aw_global_get("uid") == "struktuur"){arr($_SESSION["bank_payment"]["url"]);arr($expl); die();}
+		
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $real_sum,
 			"reference_nr" => $order_id,
 			"payment_id" => $bank_payment,
-			"expl" => $order_id.$expl_oc,
+			"expl" => $expl,
 			"lang"=>$bank_lang,
 		));
 		return $ret;
+	}
+	
+	function get_prod_expl($cart)
+	{
+		$str = "";
+		foreach($cart["items"] as $id => $item)
+		{
+			foreach($item as $data)
+			{
+				if($data["items"])
+				{
+					if($this->can("view" , $id))
+					{
+						$io = obj($id);
+						if($io->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+						{
+							if($prod = reset($io->connections_to(array(
+								"from.class_id" => CL_SHOP_PRODUCT,
+							))))
+							{
+								$prod = $prod->from();
+								$str.=" ".$prod->name()." - ";
+							}
+						}
+						$str.=" ".$io->name();
+					}
+				}
+			}
+		}
+		return $str;
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.52 2007/06/28 12:58:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.53 2007/07/18 14:13:48 markop Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -69,6 +69,9 @@
 
 @property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
 @caption Pangamakse objekt
+
+@property show_prod_and_package type=checkbox ch_value=1
+@caption N&auml;ita selgituses toodet/paketti
 
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
@@ -1075,13 +1078,16 @@ class shop_order_center extends class_base
 		$cf_ps = $class_i->load_from_storage(array(
 			"id" => $cff->id()
 		));
-
+		
 		$v_ctrs = safe_array($cff->meta("view_controllers"));
 
 		// get all props
 		$cfgx = get_instance("cfg/cfgutils");
 		$all_ps = $cfgx->load_properties(array(
 			"clid" => $class_id,
+		));
+		$all_ps = $class_i->parse_properties(array(
+			"properties" => &$all_ps
 		));
 
 		$ps_pmap = safe_array($oc->meta("ps_pmap"));
