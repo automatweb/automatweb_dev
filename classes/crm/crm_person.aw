@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.177 2007/07/10 11:30:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.178 2007/07/18 09:24:03 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -102,6 +102,63 @@ caption Msn/yahoo/aol/icq
 
 @property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
 @caption Palga dokument
+------------------------------------------------------------------
+
+@groupinfo cust_rel caption="Kliendisuhe" parent=general
+@default group=cust_rel
+
+	@layout co_bottom_seller area_caption=Kliendisuhe&#44;&nbsp;tema_ostab_meilt closeable=1 type=hbox width=50%:50%
+			
+		@layout co_bottom_seller_l type=vbox parent=co_bottom_seller
+
+			@property co_is_cust type=checkbox ch_value=1 store=no parent=co_bottom_seller_l no_caption=1 prop_cb=1
+			@caption Kehtib
+
+			@property cust_contract_creator type=select table=kliendibaas_isik parent=co_bottom_seller_l
+			@caption Kliendisuhte looja
+
+			@property cust_contract_date type=date_select table=kliendibaas_isik parent=co_bottom_seller_l
+			@caption Kliendisuhte alguskuup&auml;ev
+			
+			@property contact_person type=text store=no parent=co_bottom_seller_l
+			@caption Kliendpoolne kontaktisik
+		
+		@layout co_bottom_seller_r type=vbox parent=co_bottom_seller
+			
+			@property priority type=textbox table=kliendibaas_isik  parent=co_bottom_seller_r
+			@caption Kliendi prioriteet
+
+			@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE parent=co_bottom_seller_r
+			@caption Sissetuleku meetod
+
+			@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_isik parent=co_bottom_seller_r
+			@caption Kliendihaldur
+
+			@property bill_due_date_days type=textbox size=5 table=kliendibaas_isik parent=co_bottom_seller_r
+			@caption Makset&auml;htaeg (p&auml;evi)
+
+			@property bill_penalty_pct type=textbox table=kliendibaas_isik size=5  parent=co_bottom_seller_r
+			@caption Arve viivise %
+
+	@layout co_bottom_buyer area_caption=Kliendisuhe&#44;&nbsp;meie_ostame_talt closeable=1 type=hbox width=50%:50%
+
+		@layout co_bottom_buyer_l type=vbox parent=co_bottom_buyer
+			@property co_is_buyer type=checkbox ch_value=1 store=no parent=co_bottom_buyer_l no_caption=1 prop_cb=1
+			@caption Kehtib
+
+			@property buyer_contract_creator type=select store=no parent=co_bottom_buyer_l 
+			@caption Hankijasuhte looja
+
+			@property buyer_contract_date type=date_select store=no parent=co_bottom_buyer_l prop_cb=1
+			@caption Hankijasuhte alguskuup&auml;ev
+
+		@layout co_bottom_buyer_r type=vbox parent=co_bottom_buyer
+			@property buyer_priority type=textbox store=no  parent=co_bottom_buyer_r prop_cb=1
+			@caption M&uuml;&uuml;ja prioriteet
+
+			@property buyer_contact_person type=text store=no parent=co_bottom_buyer_r prop_cb=1
+			@caption M&uuml;&uuml;ja kontaktisik
+
 ------------------------------------------------------------------
 
 @groupinfo contact caption="Kontaktandmed" parent=general
@@ -719,6 +776,16 @@ caption S&otilde;bragrupid
 
 @reltype CURRENCY value=68 clid=CL_CURRENCY
 @caption valuuta
+
+@reltype REFERAL_TYPE value=69 clid=CL_META
+@caption sissetuleku meetod
+
+@reltype CONTACT_PERSON value=70 clid=CL_CRM_PERSON
+@caption Kontaktisik
+
+@reltype BUYER_REFERAL_TYPE value=71 clid=CL_META
+@caption sissetuleku meetod
+
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
@@ -832,18 +899,167 @@ class crm_person extends class_base
 				}
 				break;
 
-
 			case "address":
 				return PROP_IGNORE;
+				
+			//kliendisuhte teema
+			case "contact_person":
+				$arr["prop"]["value"] = $arr["obj_inst"]->id();
+			case "priority":
+			case "bill_due_date_days":
+			case "bill_penalty_pct":
+			case "referal_type":
+			case "client_manager":
+			
+				if($prop["name"] == "bill_penalty_pct") $prop["value"] = str_replace(",", ".", $prop["value"]);
+				$this->set_cust_rel_data($arr);
+				break;
+			
+			case "cust_contract_date":
+			// save to rel
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				{
+					$rel->set_prop($prop["name"], date_edit::get_timestamp($prop["value"]));
+					$rel->save();
+				}
+				break;
+				
+			case "buyer_contract_date":
+				$co = get_current_company();
+				if (($rel = $this->get_cust_rel($co , 0 , $arr["obj_inst"])))
+				{
+					$rel->set_prop("buyer_contract_date", date_edit::get_timestamp($prop["value"]));
+					$rel->save();
+				}
+				break;
+			case "buyer_contact_person":
+				$arr["prop"]["value"] = $arr["obj_inst"]->id();
+			case "buyer_priority":
+			case "buyer_contract_creator":
+				$this->set_buyer_rel_data($arr);
+				break;
+				
+			case "cust_contract_creator":
+			case "bill_due_days":
+				// save to rel
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				{
+					$rel->set_prop($prop["name"] == "bill_due_days" ? "bill_due_date_days" : $prop["name"], $prop["value"]);
+					$rel->save();
+				}
+				break;
+				
+			case "co_is_cust":
+			case "co_is_buyer":
+				$fn = "_set_".$prop["name"];
+					$this->$fn($arr);
+				break;
 		};
 		return $retval;
 	}
+
+	function _get_cust_contract_creator($arr)
+	{
+		// list of all persons in my company
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		$arr["prop"]["options"] = $this->get_employee_picker(obj($co), true);
+		if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+		{
+			$arr["prop"]["value"] = $rel->prop($arr["prop"]["name"]);
+		}
+
+		if (!isset($arr["prop"]["options"][$arr["prop"]["value"]]) && $this->can("view", $arr["prop"]["value"]))
+		{
+			$v = obj($arr["prop"]["value"]);
+			$arr["prop"]["options"][$arr["prop"]["value"]] = $v->name();
+		}
+	}
+
+	function _get_buyer_contract_creator($arr)
+	{
+		// list of all persons in my company
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		$arr["prop"]["options"] = $this->get_employee_picker(obj($co), true);
+		if (($rel = $this->get_cust_rel(obj($co) , 0 , $arr["obj_inst"])))
+		{
+			$arr["prop"]["value"] = $rel->prop($arr["prop"]["name"]);
+		}
+
+		if (!isset($arr["prop"]["options"][$arr["prop"]["value"]]) && $this->can("view", $arr["prop"]["value"]))
+		{
+			$v = obj($arr["prop"]["value"]);
+			$arr["prop"]["options"][$arr["prop"]["value"]] = $v->name();
+		}
+	}
+
+	function get_employee_picker($co = null, $add_empty = false, $important_only = false)
+	{
+		$coi = get_instance(CL_CRM_COMPANY);
+		if (!$co)
+		{
+			$u = get_instance(CL_USER);
+			$co = obj($u->get_current_company());
+		}
+
+		static $cache;
+		if (isset($cache[$co->id()][$add_empty][$important_only]))
+		{
+			return $cache[$co->id()][$add_empty][$important_only];
+		}
+
+		if ($add_empty)
+		{
+			$res = array("" => t("--vali--"));
+		}
+		else
+		{
+			$res = array();
+		}
+		$coi->get_all_workers_for_company($co, $res);
+		if (!count($res))
+		{
+			$cache[$co->id()][$add_empty][$important_only] = $res;
+			return $res;
+		}
+
+		if ($important_only)
+		{
+			// filter out my important persons
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+
+			$tmp = array();
+			foreach($p->connections_from(array("type" => "RELTYPE_IMPORTANT_PERSON")) as $c)
+			{
+				if ($res[$c->prop("to")])
+				{
+					$tmp[$c->prop("to")] = $c->prop("to");
+				}
+			}
+			$res = $tmp;
+		}
+
+		if (count($res))
+		{
+			$ol = new object_list(array("oid" => $res, "sort_by" => "objects.name", "lang_id" => array(), "site_id" => array()));
+		}
+		else
+		{
+			$ol = new object_list();
+		}
+		$res = ($add_empty ? array("" => t("--vali--")) : array()) +  $ol->names();
+		uasort($res, array(&$this, "__person_name_sorter"));
+		$cache[$co->id()][$add_empty][$important_only] = $res;
+		return $res;
+	}
+
 
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-
 		switch($data["name"])
 		{
 			case "work_projects":
@@ -1505,6 +1721,79 @@ class crm_person extends class_base
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_adr_tbl($t, $arr);
 				$t->table_caption = t("Aadressid");
+				break;
+			//rel joga
+			case "referal_type":
+				$c = get_instance("cfg/classificator");
+				$data["options"] = array("" => t("--vali--")) + $c->get_options_for(array(
+					"name" => "referal_type",
+					"clid" => CL_CRM_COMPANY
+				));
+				break;
+				
+			case "bill_due_days":
+			case "cust_contract_date":
+			case "priority":
+			case "bill_penalty_pct":
+				// read from rel
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				{
+					if ($arr["request"]["action"] == "view")
+					{
+						$data["value"] = $rel->prop_str($data["name"]);
+					}
+					else
+					{
+						$data["value"] = $rel->prop($data["name"]);
+					}
+				}
+				if (isset($data["options"]) && !isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$data["value"]] = $tmp->name();
+				}
+				break;
+			case "buyer_priority":
+			case "buyer_contract_date":
+				if (($rel = $this->get_cust_rel(get_current_company() , false , $arr["obj_inst"])))
+				{
+					if ($arr["request"]["action"] == "view")
+					{
+						$data["value"] = $rel->prop_str($data["name"]);
+					}
+					else
+					{
+						$data["value"] = $rel->prop($data["name"]);
+					}
+				}
+				if (isset($data["options"]) && !isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$data["value"]] = $tmp->name();
+				}
+				
+				break;
+			case "buyer_contract_creator":
+				$this->_get_buyer_contract_creator($arr);
+				break;
+			case "cust_contract_creator":
+				$this->_get_cust_contract_creator($arr);
+				break;
+			//kliendisuhte teema
+			case "buyer_contact_person":
+			case "contact_person":
+				$data["value"] = html::href(array(
+					"url" => html::get_change_url($arr["obj_inst"]->id()),
+					"caption" => $arr["obj_inst"]->name(),
+				));
+				break;
+				
+			case "co_is_cust":
+			case "bill_penalty_pct":
+			case "co_is_buyer":
+			//case "buyer_referal_type":
+					$fn = "_get_".$data["name"];
+					$this->$fn($arr);
 				break;
 		}
 		return $retval;
@@ -3297,6 +3586,12 @@ class crm_person extends class_base
 			case "picture2":
 			case "client_manager":
 			case "aw_is_customer":
+			case "cust_contract_creator":
+			case "cust_contract_date":
+			case "priority":
+			case "bill_due_date_days":
+			case "bill_penalty_pct":
+			case "buyer_contract_person":
 			case "address":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
@@ -4426,6 +4721,95 @@ class crm_person extends class_base
 		));
 		return $ol->arr();
 	}
+	
+//----------------------- kliendisuhte funktsioonid-----------------------	
+	function get_cust_rel($o,$crea_if_not_exists,$my_co)
+	{
+		$co_inst = get_instance(CL_CRM_COMPANY);
+		return $co_inst->get_cust_rel($o, $crea_if_not_exists, $my_co);
+	}
 
+
+	function _get_co_is_cust($arr)
+	{
+		$crel = $this->get_cust_rel($arr["obj_inst"]);
+		if ($crel || $arr["request"]["set_as_is_cust"])
+		{
+			$arr["prop"]["value"] = 1;
+		}
+	}
+
+	function _set_co_is_cust($arr)
+	{
+		if ($arr["prop"]["value"] == 1)
+		{
+			$crel = $this->get_cust_rel($arr["obj_inst"], true);
+		}
+		else
+		{
+			$crel = $this->get_cust_rel($arr["obj_inst"]);
+			if ($crel)
+			{
+				$crel->delete();
+			}
+		}
+	}
+
+	function _get_co_is_buyer($arr)
+	{
+		$cur = get_current_company();
+		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
+		if ($crel || $arr["request"]["set_as_is_buyer"])
+		{
+			$arr["prop"]["value"] = 1;
+		}
+	}
+
+	function _set_co_is_buyer($arr)
+	{
+		$cur = get_current_company();
+		if ($arr["prop"]["value"] == 1)
+		{
+			$crel = $this->get_cust_rel($cur, true,$arr["obj_inst"]);
+		}
+		else
+		{
+			$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
+			if ($crel)
+			{
+				$crel->delete();
+			}
+		}
+	}
+
+	function set_cust_rel_data($arr)
+	{
+		if (!$arr["request"]["co_is_cust"])
+		{
+			return;
+		}
+		$cur = get_current_company();
+		$crel = $this->get_cust_rel($arr["obj_inst"], false, $cur);
+		if ($crel)
+		{
+			$crel->set_prop($arr["prop"]["name"], $arr["prop"]["value"]);
+			$crel->save();
+		}
+	}
+	
+	function set_buyer_rel_data($arr)
+	{
+		if (!$arr["request"]["co_is_buyer"])
+		{
+			return;
+		}
+		$cur = get_current_company();
+		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
+		if ($crel)
+		{
+			$crel->set_prop($arr["prop"]["name"], $arr["prop"]["value"]);
+			$crel->save();
+		}
+	}
 }
 ?>
