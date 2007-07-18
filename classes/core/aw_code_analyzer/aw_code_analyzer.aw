@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.7 2007/07/12 11:38:42 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.8 2007/07/18 12:19:35 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -51,10 +51,8 @@ class aw_code_analyzer extends class_base
 		{
 			$fp = $file;
 		}
-//file_get_contents($fp)
-		//$this->tokens = token_get_all("<?php echo foo();");
-$tokens = token_get_all('<?php echo; ?>');
-die(dbg::dump($tokens));
+		$this->tokens = token_get_all(file_get_contents($fp));
+
 		$this->data = array();
 		$this->brace_level = 0;
 		$this->in_class = false;
