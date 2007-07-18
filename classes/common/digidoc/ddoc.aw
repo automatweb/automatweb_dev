@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.26 2007/07/18 07:04:37 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.27 2007/07/18 07:20:41 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -68,7 +68,7 @@ class ddoc extends class_base
 
 		);
 		$this->warns = array(
-			"DDOC_WARN_DDOC" => "ddoc::%s failed. %s",
+			"DDOC_WARN_DDOC" => "ddoc::%s warning!. %s",
 		);
 		foreach($this->errors as $k => $v)
 		{
@@ -542,6 +542,7 @@ class ddoc extends class_base
 	function get_file($arr)
 	{
 		$content = $this->get_ddoc($arr["oid"]);
+		//if(aw_global_get("uid") == "struktuur")arr($content);
 		$o = obj($arr["oid"]);
 		$this->do_init();
 		$name = (substr($o->name(), -4, 4) == ".ddoc")?$o->name():$o->name().".ddoc";
@@ -1305,12 +1306,13 @@ class ddoc extends class_base
 			// why the hell do they put the T in the middle???.. 
 			$signing_time = strtotime(str_replace("T", " ",$sign["SigningTime"]));
 
-			$ol = new object_list(array(
+			$filter = array(
 				"class_id" => CL_CRM_PERSON,
 				"firstname" => ($fn = ucfirst(strtolower(mb_convert_encoding($name[1], "ISO-8859-1", "UTF-8")))),
 				"lastname" => ($ln = ucfirst(strtolower(mb_convert_encoding($name[0], "ISO-8859-1", "UTF-8")))),
 				"personal_id" => $sign["Signer"]["IDCode"],
-			));
+			);
+			$ol = new object_list($filter);
 			if($ol->count())
 			{
 				$p_obj = $ol->begin();
@@ -1326,7 +1328,7 @@ class ddoc extends class_base
 				$p_obj->set_prop("personal_id", $sign["Signer"]["IDCode"]);
 				$p_obj->save();
 			}
-			$this->_write_signature_metainfo(array(
+			$retval = $this->_write_signature_metainfo(array(
 				"ddoc_id" => $sign["Id"],
 				"oid" => $oid,
 				"signer" => $p_obj->id(),
@@ -1340,6 +1342,7 @@ class ddoc extends class_base
 				"signing_country" => $sign["SignatureProductionPlace"]["CountryName"],
 				"signing_role" => $sign["SignerRole"]["Role"],
 			));
+
 			$o->connect(array(
 				"type" => "RELTYPE_SIGNER",
 				"to" => $p_obj->id(),
@@ -1384,21 +1387,34 @@ class ddoc extends class_base
 		$argv = func_get_args();
 		$msg = $argv[0];
 		unset($argv[0]);
+
+		$no_backtrace = false;
+		if($argv[1] == "NO_BACKTRACE")
+		{
+			$no_backtrace = true;
+			unset($argv[1]);
+		}
 		$backtrace = debug_backtrace();
 		
 		$handle = fopen(aw_ini_get("site_basedir")."/files/digidoc_error_dbg", 'a');
 		
 		fwrite($handle, "\n---------");
 		// ususal error info
-		fwrite($handle, "\n[".date("d.m.Y h:i:s", time())."] ".vsprintf($msg, $argv));
-		// backtrace
-		fwrite($handle, "\nBacktrace (last 2):");
-		foreach(split("\n", print_r($backtrace[0], true)) as $line)
-			fwrite($handle, "\n".$line);
-		foreach(split("\n", print_r($backtrace[1], true)) as $line)
-			fwrite($handle, "\n".$line);
+		fwrite($handle, "\n[".date("d.m.Y h:i:s", time())."]");
+		fwrite($handle, "\n".vsprintf($msg, $argv));
+
+		if(!$no_backtrace)
+		{
+			// backtrace
+			fwrite($handle, "\nBacktrace (last 2):");
+			foreach(split("\n", print_r($backtrace[0], true)) as $line)
+				fwrite($handle, "\n".$line);
+			foreach(split("\n", print_r($backtrace[1], true)) as $line)
+				fwrite($handle, "\n".$line);
+		}
+
 		// user info
-		fwrite($handle, "User:'".aw_ini_get("uid")."', Request URI:'".$_SERVER["REQUEST_URI"]."', Remote addr(host):'".$_SERVER["REMOTE_ADDR"]."(".$_SERVER["REMOTE_HOST"].")', USER_AGENT:'".$_SERVER["HTTP_USER_AGENT"]."', Referer:'".$_SERVER["HTTP_REFERER"]."'");
+		fwrite($handle, "\nUser:'".aw_global_get("uid")."', Request URI:'".$_SERVER["REQUEST_URI"]."', Remote addr(host):'".$_SERVER["REMOTE_ADDR"]."(".$_SERVER["REMOTE_HOST"].")', USER_AGENT:'".$_SERVER["HTTP_USER_AGENT"]."', Referer:'".$_SERVER["HTTP_REFERER"]."'");
 
 		fclose($handle);
 		return $msg;
@@ -1686,6 +1702,7 @@ class ddoc extends class_base
 					*/
 					$tpl->read_template("sign_end.tpl");
 					$html = $tpl->parse();	
+					$this->sign_err(DDOC_WARN_DDOC, "NO_BACKTRACE", "sign", "Signature succesfully added.");
 				}
 
 
