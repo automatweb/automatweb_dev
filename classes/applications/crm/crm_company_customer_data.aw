@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.9 2007/06/18 14:02:53 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.10 2007/07/18 10:02:42 markop Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -118,7 +118,11 @@ class crm_company_customer_data extends class_base
 				$i = get_instance(CL_CRM_COMPANY);
 				$arr["prop"]["options"] = $i->get_employee_picker(obj($co), true);
 				break;
-
+			case "buyer_contract_creator":
+				// list of all persons in my company
+				$i = get_instance(CL_CRM_COMPANY);
+				$arr["prop"]["options"] = $i->get_employee_picker(obj($arr["obj_inst"]->prop("buyer")), true);
+				break;
 			case "referal_type":
 				$c = get_instance("cfg/classificator");
 				$prop["options"] = array("" => t("--vali--")) + $c->get_options_for(array(
