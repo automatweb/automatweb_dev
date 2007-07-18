@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.83 2007/06/29 13:17:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.84 2007/07/18 10:20:23 markop Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -10,13 +10,18 @@ define("BUG_STATUS_CLOSED", 5);
 
 @tableinfo aw_bugs index=aw_id master_index=brother_of master_table=objects
 
+@property created type=hidden table=objects field=created
+
 @default group=general
 @default table=aw_bugs
 
 @property bug_tb type=toolbar no_caption=1 save=no
 
+
+
 @layout name type=vbox closeable=1 area_caption=L&uuml;hikirjeldus
 
+	
 	@property name type=textbox table=objects parent=name no_caption=1
 
 @layout settings_wrap type=vbox closeable=1 area_caption=M&auml;&auml;rangud
