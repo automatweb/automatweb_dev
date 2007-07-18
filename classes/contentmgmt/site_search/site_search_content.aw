@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.91 2007/07/10 10:21:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.92 2007/07/18 14:35:14 markop Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -614,12 +614,20 @@ class site_search_content extends class_base
 			}
 		}
 		
-		$sectors_list = new object_list(array(
-			"parent" => $cid->prop("dir_tegevusala"),
+		$sector_parents = new object_list(array(
+			"oid" => $cid->prop("dir_tegevusala"),
 			"sort_by" => "objects.jrk,objects.name",
-			"class_id" => CL_CRM_SECTOR,
 		));
-
+		$sectors_list = new object_list();
+		
+		foreach($sector_parents->ids() as $parent)
+		{
+			$sectors_list->add(new object_list(array(
+				"parent" => $parent,
+				"sort_by" => "objects.jrk,objects.name",
+				"class_id" => CL_CRM_SECTOR,
+			)));
+		}
 		$sec_opt = "";
 		$parent = 0;
 		
@@ -1831,7 +1839,6 @@ class site_search_content extends class_base
 			"keyword" => $keyword,
 			"area" => $area,
 		));
-		
 		$results = array();
 
 		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust näitama
