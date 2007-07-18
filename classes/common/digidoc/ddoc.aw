@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.25 2007/07/18 06:50:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.26 2007/07/18 07:04:37 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -293,6 +293,7 @@ class ddoc extends class_base
 					$file_type = $_FILES["ddoc"]["type"];
 				};
 				
+				classload("common/digidoc/ddoc_parser");
 				$parser = new ddoc2_parser();
 				$parser->setDigiDocFormatAndVersion(file_get_contents($file));
 				if(!strlen($parser->format) || !strlen($parser->version))
@@ -1306,8 +1307,8 @@ class ddoc extends class_base
 
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_PERSON,
-				"firstname" => ($fn = ucfirst(strtolower($name[1]))),
-				"lastname" => ($ln = ucfirst(strtolower($name[0]))),
+				"firstname" => ($fn = ucfirst(strtolower(mb_convert_encoding($name[1], "ISO-8859-1", "UTF-8")))),
+				"lastname" => ($ln = ucfirst(strtolower(mb_convert_encoding($name[0], "ISO-8859-1", "UTF-8")))),
 				"personal_id" => $sign["Signer"]["IDCode"],
 			));
 			if($ol->count())
