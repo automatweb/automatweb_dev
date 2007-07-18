@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.6 2007/04/20 11:31:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.7 2007/07/18 10:34:36 markop Exp $
 // crm_db_search.aw - Kliendibaasi otsingu grupp 
 /*
 
@@ -19,7 +19,7 @@
 @property only_active type=checkbox ch_value=1 field=meta method=serialize
 @caption Ainult aktiivsed
 
-@property dir_tegevusala type=relpicker reltype=RELTYPE_TEGEVUSALA_CAT
+@property dir_tegevusala type=relpicker reltype=RELTYPE_TEGEVUSALA_CAT multiple=1
 @caption Tegevusalade kaust
 
 @property keywords type=textbox field=meta method=serialize
