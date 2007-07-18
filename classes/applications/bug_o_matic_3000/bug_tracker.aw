@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.103 2007/06/29 13:17:12 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.103 2007/06/29 13:17:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.104 2007/07/18 09:55:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.104 2007/07/18 09:55:51 kristo Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -3119,7 +3119,8 @@ class bug_tracker extends class_base
 			"class_id" => CL_BUG,
 			"parent" => $gt_list->ids(),
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"bug_status" => new obj_predicate_not(BUG_CLOSED)
 		));
 
 		foreach($sub_bugs->arr() as $sub_bug)
