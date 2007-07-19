@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.53 2007/04/10 08:02:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.54 2007/07/19 14:15:55 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -229,12 +229,14 @@ class shop_order extends class_base
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Nimi")
+			"caption" => t("Nimi"),
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "count",
 			"caption" => t("Mitu"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->parse_xml_def("shop/prods_table");
 		$matchers = array();
@@ -250,6 +252,7 @@ class shop_order extends class_base
 		$t->define_chooser(array(
 			"field" => "id",
 			"name" => "sel",
+			"chgbgcolor" => "color",
 		));
 		$add_fields = array();
 		$cfgform = get_instance(CL_CFGFORM);
@@ -342,13 +345,18 @@ class shop_order extends class_base
 				{
 					if($key == "duedate" || $key == "tduedate")
 					{
-						$vals[$key] .= '<a href="javascript:void(0);" onClick="cal.select(changeform.prod_data_'.$id.'__'.$x.'__'.$key.'_,\'anchor'.$id.'\',\'dd/MM/yy\'); return false;" title="Vali kuup&auml;ev" name="anchor'.$id.'" id="anchor'.$id.'">vali</a>';
+						$vals[$key] .= '<a href="javascript:void(0);" onClick="cal.select(changeform.prod_data_'.$id.'__'.$x.'__'.$key.'_,\'anchor'.$id.'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$id.'" id="anchor'.$id.'">vali</a>';
 					}
 					if($key == "tduedate")
 					{
 						$vals[$key] .= ' <a href="javascript:void(0);" onclick="document.changeform.prod_data_'.$id.'__'.$x.'__tduedate_.value = document.changeform.prod_data_'.$id.'__'.$x.'__duedate_.value">sama</a>';
 					}
 				}
+				if($val["unsent"])
+				{
+					$vals["color"] = "red";
+				}
+				
 				$t->define_data(array(
 					"name" => $name,
 					"count" => $cnt,
@@ -356,11 +364,15 @@ class shop_order extends class_base
 				) + $vals);
 			}
 		}
+//		arr($add_fields);
+		//võtab tarne täitmise ära ja asemele Täidetud tellimus/arve number
+	//	$add_fields[t("Tarne t&auml;itmine")] = t("T&auml;idetud tellimus/arve number");
 		foreach($add_fields as $key => $val)
 		{
 			$t->define_field(array(
 				"name" => $key,
 				"caption" => $val,
+				"chgbgcolor" => "color",
 			));
 		}
 	}
@@ -1257,6 +1269,10 @@ class shop_order extends class_base
 			$calc_price = $product_info_i->get_calc_price($product_info);
 			foreach($prodx->get() as $x => $val)
 			{
+				if(!$val["unsent"])
+				{
+					continue;
+				}
 				for($i = 1; $i < 21; $i++)
 				{
 					$ui = $product_info->prop("user".$i);

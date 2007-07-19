@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.50 2007/07/09 13:59:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.51 2007/07/19 14:15:55 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -61,13 +61,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 @property storage_export type=table store=no group=storage_export no_caption=1
 @caption V&auml;ljaminekud
-
 ////////// ordering tab
 @groupinfo order caption="Tellimused"
 @groupinfo order_unconfirmed parent=order caption="Kinnitamata"
 @groupinfo order_confirmed parent=order caption="Kinnitatud"
+@groupinfo order_undone parent=order caption="T&auml;itmata tellimused"
 @groupinfo order_orderer_cos parent=order caption="Tellijad"
 @groupinfo order_search parent=order caption="Otsing" submit_method=get
+
+@property order_undone type=table store=no group=order_undone no_caption=1
 
 @property order_unconfirmed_toolbar type=toolbar no_caption=1 group=order_unconfirmed store=no
 @property order_unconfirmed type=table store=no group=order_unconfirmed no_caption=1
@@ -279,7 +281,10 @@ class shop_warehouse extends class_base
 			case "order_unconfirmed_toolbar":
 				$this->mk_order_unconfirmed_toolbar($arr);
 				break;
-
+			case "order_undone":
+				$this->do_order_undone_tbl($arr);
+				break;
+		
 			case "order_unconfirmed":
 				$this->do_order_unconfirmed_tbl($arr);
 				break;
@@ -645,6 +650,150 @@ class shop_warehouse extends class_base
 		$t->set_default_sortby("page");
 		$t->sort_by();
 	}
+
+
+	function _init_undone_tbl(&$t,$cl)
+	{
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Toode"),
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "code",
+			"caption" => t("Tootekood"),
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("Tellimuse nr."),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+		
+		if(!$cl)$t->define_field(array(
+			"name" => "client",
+			"caption" => t("Klient"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+	}
+	
+	function __br_sort($a, $b)
+	{
+		if(!($this->can("view" , $a) && $this->can("view" , $b))) return 1;
+		$p1 = obj($a);
+		$p2 = obj($b);
+		if($p1->name() > $p2->name()) return 1;
+		return -1;
+	}
+	
+	/**
+		@attrib name=unsent_table
+		@param client optional type=id acl=view
+	**/
+	function unsent_table($arr)
+	{
+		classload("vcl/table");
+		$arr["prop"]["vcl_inst"] = new aw_table(array(
+			"layout" => "generic"
+		));
+		$arr["cl"] = 1;
+		$this->do_order_undone_tbl($arr);
+		return $arr["prop"]["vcl_inst"]->draw();
+	}
+	
+	function do_order_undone_tbl(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$cl = $arr["cl"];
+		$this->_init_undone_tbl($t,$cl);
+
+		// list orders from order folder
+		$filter = array(
+			"class_id" => CL_SHOP_ORDER,
+//			"confirmed" => 0
+		);
+		if($arr["client"])
+		{
+			$filter["orderer_company"] = $arr["client"];
+		}
+		if($cl)
+		{
+			$filter["createdby"] = aw_global_get("uid");
+		}
+		$ol = new object_list($filter);
+		
+		$undone_products = array();
+
+		foreach($ol->arr() as $o)
+		{
+			foreach($o->meta("ord_item_data") as $id => $items)
+			{
+				foreach($items as $item)
+				{
+					if($item["unsent"])
+					{
+						$undone_products[$id][$o->id()] = $item["unsent"];
+						break;
+					}
+				}
+			}
+		}
+		
+		$upkeys = array_keys($undone_products);
+		usort($upkeys, array(&$this, "__br_sort"));
+		foreach($upkeys as $product)
+		{
+			$order = $undone_products[$product];
+			if(!$this->can("view" , $product)) continue;
+			$product_obj = obj($product);
+			$t->define_data(array(
+				"product" => $cl?$product_obj->name():html::get_change_url($product, array("return_url" => get_ru()) , $product_obj->name()),
+				"code" => $product_obj->prop("user2"),
+			));
+			
+			$prod_count = 0;
+			
+			foreach($order as $key => $amount)
+			{
+				if(!$this->can("view" , $key)) continue;
+				$order = obj($key);
+				$client = "";
+				if($this->can("view" , $order->prop("orderer_company")))
+				{
+					$client_o = obj($order->prop("orderer_company"));
+					$client = html::get_change_url($order->prop("orderer_company"), array("return_url" => get_ru()) , $client_o->name());
+				}
+				$t->define_data(array(
+					"order" => $cl?html::href(array("url" => $key, "caption" => $key)):html::get_change_url($key, array("return_url" => get_ru() , "group" => "items") , $key),
+					"client" => $client,
+					"amount" => $amount,
+					"color" => $order->prop("confirmed")?"":"lime",
+				));
+				$prod_count+=$amount;
+			}
+			$t->define_data(array(
+				"product" => t("Kokku:"),
+				"amount" => "<b>".$prod_count."</b>",
+			));
+		}
+
+		$t->set_sortable(false);
+
+//		$t->set_default_sortby("modified");
+//		$t->set_default_sorder("DESC");
+//		$t->sort_by();
+	}
+	
 
 	function do_del_prod($arr)
 	{

@@ -125,6 +125,15 @@
             <caption>V&amp;amp;auml;ljaminekud</caption>
       </property>
       <property>
+            <name>order_undone</name>
+            <table>objects</table>
+            <group>order_undone</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>order_undone</field>
+      </property>
+      <property>
             <name>order_unconfirmed_toolbar</name>
             <table>objects</table>
             <group>order_unconfirmed</group>
@@ -425,6 +434,10 @@
                   <parent>order</parent>
                   <caption>Kinnitatud</caption>
             </order_confirmed>
+            <order_undone>
+                  <parent>order</parent>
+                  <caption>T&amp;amp;auml;itmata tellimused</caption>
+            </order_undone>
             <order_orderer_cos>
                   <parent>order</parent>
                   <caption>Tellijad</caption>
