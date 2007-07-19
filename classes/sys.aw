@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.78 2007/07/19 09:13:04 voldemar Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -53,7 +52,7 @@ class sys extends aw_template
 
 		$dbs = 0;
 		$result = mysql_query('SHOW TABLE STATUS');
-	
+
 		$res = array();
 		while($row = mysql_fetch_array($result))
 		{
@@ -64,7 +63,7 @@ class sys extends aw_template
 		foreach($res as $name => $size)
 		{
 			if($size)$t->define_data(array(
-				"name" => $name, 
+				"name" => $name,
 				"size" => $size,
 				"perc" => number_format(($size/$dbs * 100), 2). " %",
 			));
@@ -1098,13 +1097,98 @@ class sys extends aw_template
 			exit ("File not found.");
 		}
 
-		$res = parse_config($input_file, true);
+		$res = self::parse_config_to_ini($input_file);
 
 		if ($res === false)
 		{
 			exit ("No config data returned from parser.");
 		}
 		else
+		{
+			$fp = fopen ($output_file, "w");
+			fwrite ($fp, $res, strlen($res));
+			fclose ($fp);
+			exit ("aw.ini successfully written.");
+		}
+	}
+
+	/* public static */ function parse_config_to_ini($file, $include = false)
+	{
+		// put result lines in here
+		$res = array();
+		$linenum = 0;
+		$fd = file($file);
+
+		foreach($fd as $line)
+		{
+			$linenum++;
+			$oline = $line;
+			$add = true;
+			// ok, parse line
+			// 1st, strip comments
+			if (($pos = strpos($line,"#")) !== false)
+			{
+				$line = substr($line,0,$pos);
+			}
+			// now, strip all whitespace
+			$line = trim($line);
+
+			if ($line != "")
+			{
+				if (substr($line, 0, strlen("include")) == "include")
+				{
+					// process include
+					$line = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$line);
+					$ifile = trim(substr($line, strlen("include")));
+					if (!file_exists($ifile) || !is_readable($ifile))
+					{
+						fwrite($GLOBALS["stderr"], "Failed to open include file on line $linenum in file $file ($ifile) \n");
+						return false;
+					}
+					$incl_res = self::parse_config_to_ini($ifile, true);
+					if ($incl_res === false)
+					{
+						fwrite($GLOBALS["stderr"], "\tthat was included from line $linenum in file $file \n");
+						return false;
+					}
+					else
+					{
+						foreach($incl_res as $iline)
+						{
+							$res[] = $iline;
+						}
+						$add = false;
+					}
+				}
+				else
+				{
+					// now, config opts are class.variable = value
+					$eqpos = strpos($line," = ");
+					if ($eqpos !== false)
+					{
+						$var = trim(substr($line,0,$eqpos));
+						$varvalue = trim(substr($line,$eqpos+3));
+
+						// now, replace all variables in varvalue
+						$varvalue = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$varvalue);
+						$var = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$var);
+
+						if (($dotpos = strpos($var,".")) === false)
+						{
+							$varname = $var;
+							$GLOBALS["cfg"][$varname] = $varvalue;
+							//echo "setting [$varclass][$varname] to $varvalue <br>";
+						}
+					}
+				}
+			}
+			if ($add)
+			{
+				$res[] = $oline;
+			}
+		}
+
+		if (!$include)
 		{
 			$res =
 			"######################################################################\n".
@@ -1113,15 +1197,11 @@ class sys extends aw_template
 			"#                                                                    #\n".
 			"# Instead, edit aw.ini.root and/or the files included from it.       #\n".
 			"# after editing, to regenerate this file execute cd \$AWROOT;make ini #\n".
-			"# or call orb class 'sys' action 'make_ini'                          #\n".
 			"######################################################################\n\n\n" .
-			join ("\n", $res);
-
-			$fp = fopen ($output_file, "w");
-			fwrite ($fp, $res, strlen ($res));
-			fclose ($fp);
-			exit ("aw.ini successfully written.");
+			join ("", $res);
 		}
+
+		return $res;
 	}
 
 /**
