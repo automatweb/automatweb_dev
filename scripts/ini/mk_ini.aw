@@ -1,9 +1,12 @@
 <?php
+
 // what this script does, is take the starting file from the command line, reads that file
 // and replaces all include commands in that file with the contents of the file that is included
-$basedir = realpath(".");
-include("$basedir/init.aw");
+
 $stderr = fopen('php://stderr', 'w');
+
+$basedir = realpath(".");
+require("$basedir/scripts/ini/parse_config_to_ini.aw");
 
 if ($_SERVER["argc"] < 1 || !file_exists($_SERVER["argv"][1]))
 {
@@ -13,9 +16,8 @@ if ($_SERVER["argc"] < 1 || !file_exists($_SERVER["argv"][1]))
 }
 
 $basedir = dirname($_SERVER["argv"][1]);
-aw_ini_set("basedir", $basedir);
-
-$res = parse_config($_SERVER["argv"][1]);
+$GLOBALS["cfg"]["basedir"] = $basedir;
+$res = parse_config_to_ini($_SERVER["argv"][1]);
 
 if ($res === false)
 {
@@ -23,13 +25,7 @@ if ($res === false)
 }
 else
 {
-	echo "######################################################################\n";
-	echo "# THIS IS AN AUTOMATICALLY GENERATED FILE!!!                         #\n";
-	echo "# DO NOT EDIT THIS!!                                                 #\n";
-	echo "#                                                                    #\n";
-	echo "# Instead, edit aw.ini.root and/or the files included from it.       #\n";
-	echo "# after editing, to regenerate this file execute cd \$AWROOT;make ini #\n";
-	echo "######################################################################\n\n\n";
-	echo join("\n", $res);
+	echo $res;
 }
+
 ?>
