@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.237 2007/06/07 13:54:32 kristo Exp $
-// defs.aw - common functions 
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.238 2007/07/19 09:13:04 voldemar Exp $
+// defs.aw - common functions
 if (!defined("DEFS"))
 {
 	define("DEFS",1);
@@ -112,7 +112,7 @@ if (!defined("DEFS"))
 		return $retval;
 	}
 
-	/** returns a list of class id's that are "container" classes 
+	/** returns a list of class id's that are "container" classes
 		@attrib api=1
 
 		@comment
@@ -144,7 +144,7 @@ if (!defined("DEFS"))
 
 	/** creates links from e-mail addresses in the given text
 		@attrib api=1
-	
+
 		@param str required type=string
 
 		@returns
@@ -156,7 +156,7 @@ if (!defined("DEFS"))
 		{
 			$str = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
 		}
-		return preg_replace("/((\s|^))((http(s?):\/\/)|(www\.))([a-zA-Z0-9\.\-\/_]+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $str); 
+		return preg_replace("/((\s|^))((http(s?):\/\/)|(www\.))([a-zA-Z0-9\.\-\/_]+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $str);
 	}
 
 	/** posts an AW message
@@ -187,13 +187,13 @@ if (!defined("DEFS"))
 
 		$inst = get_instance("core/msg/msg_dispatch");
 		$inst->post_message(array(
-			"msg" => $msg, 
+			"msg" => $msg,
 			"params" => $params
 		));
 
 		aw_restore_messages();
 	}
-	
+
 	/** disables aw message sending
 		@attrib api=1
 
@@ -210,7 +210,7 @@ if (!defined("DEFS"))
 		@attrib api=1
 
 		@comment
-			Restores the previous state of the message sending flag. 
+			Restores the previous state of the message sending flag.
 
 		@examples
 			aw_disable_messages();
@@ -219,7 +219,7 @@ if (!defined("DEFS"))
 			aw_restore_messages();
 			post_message(MSG_USER_LOGIN, array());	// this will not get sent either
 			aw_restore_messages();
-			post_message(MSG_USER_LOGIN, array());	// this WILL get sent 
+			post_message(MSG_USER_LOGIN, array());	// this WILL get sent
 	**/
 	function aw_restore_messages()
 	{
@@ -231,10 +231,10 @@ if (!defined("DEFS"))
 
 		@comment
 			The default behaviour for aw messages is such, that when a message
-			gets posted, while the execution is already inside a message handler, then 
-			the message is ignored. 
+			gets posted, while the execution is already inside a message handler, then
+			the message is ignored.
 
-			Using this function you can enable messages get posted from message handlers. 
+			Using this function you can enable messages get posted from message handlers.
 			The reason for theis behaviour is, that it is VERY easy to create message handlers
 			that will trigger loops, so use this very carefully.
 
@@ -262,7 +262,7 @@ if (!defined("DEFS"))
 		if(!is_object($inst))
 		{
 			$inst = get_instance("core/locale/en/date");
-		}	
+		}
 		return $inst->get_lc_date($time, $format);
 	}
 
@@ -297,7 +297,7 @@ if (!defined("DEFS"))
 
 		$inst = get_instance("core/msg/msg_dispatch");
 		$inst->post_message_with_param(array(
-			"msg" => $msg, 
+			"msg" => $msg,
 			"param" => $param,
 			"params" => $params
 		));
@@ -305,7 +305,7 @@ if (!defined("DEFS"))
 		aw_restore_messages();
 	}
 
-	/** sends e-mail 
+	/** sends e-mail
 		@attrib api=1
 
 		@param to required type=string
@@ -324,7 +324,7 @@ if (!defined("DEFS"))
 			The arguments to pass to sendmail
 
 		@comment
-			Replacement for php's mail(), so that we can always add headers of parameters to sendmail for every message sent via aw. 
+			Replacement for php's mail(), so that we can always add headers of parameters to sendmail for every message sent via aw.
 			So use this instead of mail()
 
 		@examples
@@ -352,7 +352,7 @@ if (!defined("DEFS"))
 
 		};
 	}
-	
+
 	/** returns an array of all classes defined in the system
 		@attrib api=1 params=name
 
@@ -420,21 +420,21 @@ if (!defined("DEFS"))
 	/** adds or changes a variable in the current or given url
 		@attrib api=1
 
-		@returns 
+		@returns
 			the url with variables changed as the parameters indicate
 
 		@comment
-			This function is probably the most versatile function ever in terms of the parameters it accepts. 
+			This function is probably the most versatile function ever in terms of the parameters it accepts.
 
 		@examples
-			$url = aw_url_change_var("a", "b"); // reads the current url and changes variable a to have value b 
+			$url = aw_url_change_var("a", "b"); // reads the current url and changes variable a to have value b
 			$url = aw_url_change_var("c", "d", $url); // changes the value for variable d to d in the url in the variable $url
 			$url = aw_url_change_var(array(
 				"e" => "f",
 				"g" => NULL
 			)); // changes the variable e to f and removes the variable g from the current url and returns it
 			$url = aw_url_change_var(array(
-				"h" => "i", 
+				"h" => "i",
 				"j" => "k"
 			), false, $url); // changes h to value j j to value k in the url in variable $url
 
@@ -477,7 +477,7 @@ if (!defined("DEFS"))
 		@returns
 			The generated password. It can contain lower/uppercase letters, numbers and -_ chars
 
-	**/	
+	**/
 	function generate_password($arr = array())
 	{
 		extract($arr);
@@ -499,8 +499,8 @@ if (!defined("DEFS"))
 
 	function create_safe_links($src)
 	{
-		// create link if it already is not part of an <a tag 
-		// but how the f*** do I do that	
+		// create link if it already is not part of an <a tag
+		// but how the f*** do I do that
 		$src = preg_replace("/(([a-zA-Z0-9 >]))((http(s?):\/\/)|(www\.))([a-zA-Z0-9\.\/%-]+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $src);
 		return $src;
 	}
@@ -532,7 +532,7 @@ if (!defined("DEFS"))
 	{
 		// kogu asendus tehakse ühe reaga
 		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
-		// mis eval-ist läbi lastakse. 
+		// mis eval-ist läbi lastakse.
 		$src = @preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
 		$src = @preg_replace("/{DATE:(.+?)\|(.+?)}/e","((is_numeric(\$vars[\"\\1\"]) && \$vars[\"\\1\"] > 1 )? date(\"\\2\",\$vars[\"\\1\"]) : \"\")",$src);
 		return @preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
@@ -634,7 +634,7 @@ if (!defined("DEFS"))
 		@attrib api=1
 
 		@param clid required type=int
-			The value to check for a valid class_id 
+			The value to check for a valid class_id
 
 		@returns
 			true if the parameter is a valid class id
@@ -658,7 +658,7 @@ if (!defined("DEFS"))
 		@param string required type=string
 			The string to check for validity
 
-		@returns 
+		@returns
 			true if the string is a valid string for the given set, false if not
 
 		@examples
@@ -721,7 +721,7 @@ if (!defined("DEFS"))
 		if ( ($parts[2] < 1) || ($parts[2] > 12) )
 		{
 			$valid = false;
-		} 
+		}
 		return $valid;
 	};
 
@@ -730,7 +730,7 @@ if (!defined("DEFS"))
 	// y < z
 	function between($a,$y,$z, $onTrue = true, $onFalse = false)
 	{
-		if (($a >= $y) && ($a <= $z))			
+		if (($a >= $y) && ($a <= $z))
 		{
 			return $onTrue;
 		}
@@ -743,7 +743,7 @@ if (!defined("DEFS"))
 	/** check if the parameter is an e-mail address
 	// !Kas argument on e-maili aadress?
 	// Courtesy of martin@linuxator.com ;)**/
-	function is_email ($address = "") 
+	function is_email ($address = "")
 	{
 		return preg_match('/([a-z0-9-]*((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',$address);
 	}
@@ -777,7 +777,7 @@ if (!defined("DEFS"))
 	{
 		return ($arg) ? "SELECTED" : "";
 	}
-	
+
 	////
 	// !Kasutamiseks vormides elementide juures, mis võivad olla disabled olekus
 	function disabled($arg)
@@ -838,7 +838,7 @@ if (!defined("DEFS"))
 	// !sama, mis eelmine, ainult et moodustuvad paarid
 	// array iga elemendi indeksist ja väärtusest
 	// format peab siis sisaldama vähemalt kahte kohta muutujate jaoks
-	// kui $type != 0, siis pööratakse array nö ringi ... key ja val vahetatakse ära	
+	// kui $type != 0, siis pööratakse array nö ringi ... key ja val vahetatakse ära
 	function map2($format,$array,$type = 0,$empty = false)
 	{
 		$retval = array();
@@ -947,7 +947,7 @@ if (!defined("DEFS"))
 
 		return $str;
 	}
-	
+
 	function aw_unserialize($str,$dequote = 0)
 	{
 		$retval = false;
@@ -979,7 +979,7 @@ if (!defined("DEFS"))
 		}
 		elseif (!empty($str))
 		{
-			
+
 			$retval = unserialize($str);
 		}
 		return $retval;
@@ -993,10 +993,10 @@ if (!defined("DEFS"))
 	// oh, dammit. Shouldn't the aw_globals also be initalized and accesed
 	// through the aw_dir/init.aw - ?
 
-	// well. our own stuff kinda.. I dunno, feels better. but yeah, it also feels a lot slower. 
+	// well. our own stuff kinda.. I dunno, feels better. but yeah, it also feels a lot slower.
 	// and yeah. we shouldn't need these before aw_startup() and we could init it in there.. - terryf
 
-	// .. and now they are. 
+	// .. and now they are.
 	function _aw_global_init()
 	{
 		// reset aw_global_* function globals
@@ -1007,7 +1007,7 @@ if (!defined("DEFS"))
 		// but we must do this in a certain order - first the global vars, then the session vars and then the server vars
 		// why? well, then you can't override server vars from the url.
 
-		// known variables - these can be modified by the user and are not to be trusted, so we get them first 
+		// known variables - these can be modified by the user and are not to be trusted, so we get them first
 		$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order","cal","date", "project", "view");
 		foreach($impvars as $k)
 		{
@@ -1038,7 +1038,7 @@ if (!defined("DEFS"))
 		{
 			aw_global_set($var,isset($_SERVER[$var]) ? $_SERVER[$var] : null);
 		}
-		
+
 		if (isset($_COOKIE["lang_id"]) && !isset($_SESSION["lang_id"]))
 		{
 			aw_global_set("lang_id", $_COOKIE["lang_id"]);
@@ -1185,7 +1185,7 @@ if (!defined("DEFS"))
 
 	function aw_session_cache_set($cache,$key,$val = "")
 	{
-		// if $key is array, we will just stick it into the cache. 
+		// if $key is array, we will just stick it into the cache.
 		// NO!! that's what aw_cache_set_array() is for!!! - terryf
 		if (!is_array($_SESSION["__aw_sess_cache"]))
 		{
@@ -1212,7 +1212,7 @@ if (!defined("DEFS"))
 	}
 
 	////
-	// !saves a local variable's value to the session - there is no session_get, because 
+	// !saves a local variable's value to the session - there is no session_get, because
 	// session vars are automatically registered as globals as well, so for retrieval you can use aw_global_get()
 	function aw_session_set($name,$value)
 	{
@@ -1274,7 +1274,7 @@ if (!defined("DEFS"))
 		}
 		array_push($old_uids, aw_global_get("uid"));
 		aw_global_set("old_uids", $old_uids);
-		
+
 		__aw_int_do_switch_user($arr["uid"]);
 	}
 
@@ -1364,7 +1364,7 @@ if (!defined("DEFS"))
 		////
 		// !resolvib ip aadressiks. cacheb kiiruse huvides tulemusi
 		// voib kasutada ntx syslogi juures
-		// tagastab 2 elemendiga array, esimene on lahendatud 
+		// tagastab 2 elemendiga array, esimene on lahendatud
 		// nimi, teine aadress, mis ette anti voi stringist välja
 		// parsiti
 		function gethostbyaddr($addr)
@@ -1410,17 +1410,17 @@ if (!defined("DEFS"))
 				$valid = false;
 			};
 
-			if (isset($parts[1]) && $parts[1] == 0) 
+			if (isset($parts[1]) && $parts[1] == 0)
 			{
 				$valid = false;
 			};
 
-			if ($valid) 
+			if ($valid)
 			{
 				// kontrollime, kas koik oktetid on ikka lubatud vahemikus
 				for ($i = 1; $i <= 4; $i++)
 				{
-					if ( ($parts[$i] < 0) || ($parts[$i] > 255) ) 
+					if ( ($parts[$i] < 0) || ($parts[$i] > 255) )
 					{
 						$valid = false;
 					};
@@ -1551,7 +1551,7 @@ if (!defined("DEFS"))
 
 				$awa = new aw_array($bt[$i]["args"]);
 				$msg .= "<font size=\"-1\">(".htmlentities(join(",", $awa->get())).") file = ".$bt[$i]["file"]."</font>";
-			
+
 				$msg .= " <br><br>\n\n";
 			}
 			return $msg;
@@ -1640,7 +1640,7 @@ if (!defined("DEFS"))
 				return "";
 			};
 		}
-		
+
 		function get_lc_month($num)
 		{
 			static $lc_date_inst;
@@ -1722,7 +1722,7 @@ if (!defined("DEFS"))
 
 
 	/**
-		The class is defined in the base class framework, so it is always available and therefore you cannot use get_instance to instance it, but must use 
+		The class is defined in the base class framework, so it is always available and therefore you cannot use get_instance to instance it, but must use
 		$inst = new aw_array();
 		The class is meant to make array handling a bit easier and to avoid statements like
 		if (is_array($arr))
@@ -1922,16 +1922,16 @@ if (!defined("DEFS"))
 
 	function do_nothing()
 	{
-	
+
 	}
-	
+
 	/** returns the parameter or an array if the parameter is not an array
 
 		@attrib api=1
 	**/
 	function safe_array($var)
 	{
-		if (is_array($var)) 
+		if (is_array($var))
 		{
 			return $var;
 		}
@@ -1944,7 +1944,7 @@ if (!defined("DEFS"))
 	**/
 	function cfg_get_admin_rootmenu2()
 	{
-		$ret = $GLOBALS["cfg"]["__default"]["admin_rootmenu2"];
+		$ret = $GLOBALS["cfg"]["admin_rootmenu2"];
 		if (is_array($ret))
 		{
 			return reset($ret);
@@ -2018,13 +2018,13 @@ if (!defined("DEFS"))
 					$hour += 12;
 				}
 			}
-			
+
 			// %m - month number, two digits 01,12
 			if ($tmp = strptime_extract($format, $string, 'm'))
 			{
 				$month = $tmp;
 			}
-			
+
 			// %M - minute, two digits 00-59
 			if ($tmp = strptime_extract($format, $string, 'M'))
 			{
@@ -2049,7 +2049,7 @@ if (!defined("DEFS"))
 					$year += 2000;
 				}
 			}
-			
+
 			// %Y - year as a decimal number including the century
 			if ($tmp = strptime_extract($format, $string, 'Y'))
 			{
@@ -2073,10 +2073,10 @@ if (!defined("DEFS"))
 					$string = substr($string, strpos($string, $char) + 1);
 				}
 			}
-			
+
 			list($val) = preg_split('=([^a-zA-Z0-9%])=', $string, 2);
 			return $val;
 		}
-	}	
+	}
 };
 ?>

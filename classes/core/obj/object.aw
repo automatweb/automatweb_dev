@@ -115,12 +115,13 @@ class object
 	/** loads an object
 		@attrib api=1
 
-		@comment
-			Parameters are the same as the constructor's, objects can be loaded based on:
+		@param param required
+			type: can be object id, object instance or alias
 
-				object id
-				alias
-				object instance
+		@param force_reload optional
+		 	if TRUE, object will be reloaded from data source.
+			type: boolean
+			default: FALSE
 
 		@errors
 			- If user has no access, acl error is thrown.
@@ -780,7 +781,7 @@ class object
 		// we might need to change $this, if an object override is present for the new class id
 		// we can't do this in _int_object, because if a new object is created, then _int_object actually
 		// does not know it's own id, strangely enough
-		$cld = $GLOBALS["cfg"]["__default"]["classes"][$param];
+		$cld = $GLOBALS["cfg"]["classes"][$param];
 		if (!empty($cld["object_override"]))
 		{
 			if (get_class($GLOBALS["objects"][$this->oid]) != basename($cld["object_override"]))

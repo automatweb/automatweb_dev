@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.181 2007/07/12 11:38:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.182 2007/07/19 09:13:04 voldemar Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -19,16 +19,16 @@ class users extends users_user
 		$this->lc_load("users","lc_users");
 	}
 
-	/** generates the form for changing the users ($id) password 
-		
+	/** generates the form for changing the users ($id) password
+
 		@attrib name=change_pwd params=name is_public="1" caption="Change password" default="0"
-		
+
 		@param id optional
 		@param error optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -55,8 +55,8 @@ class users extends users_user
 		));
 		return $this->parse();
 	}
-	
-	/**	
+
+	/**
 		@attrib name=change_password_not_logged nologin=1 all_args=1 is_public="1"
 	**/
 	function change_password_not_logged($arr)
@@ -68,9 +68,9 @@ class users extends users_user
 		));
 		return $this->parse();
 	}
-	
-	
-	/**	
+
+
+	/**
 		@attrib name=submit_change_password_not_logged nologin=1 is_public="1"
 		@param username optional
 		@param old_pass optional
@@ -96,7 +96,7 @@ class users extends users_user
 		{
 			$error = "Vigane v&otilde;i vale parool";
 		}
-		
+
 		elseif(!is_valid("uid", $username))
 		{
 			$error =  "Vigane kasutajanimimi $uid";
@@ -126,14 +126,14 @@ class users extends users_user
 		{
 			//sellep&auml;rast ,et me teda uuesti parooli muutmisele ei saadaks paneme talle &uuml;he logini kirja
 			//$q = "UPDATE users SET logins = logins+1 WHERE uid = '$username'";
-			
+
 			aw_disable_acl();
 				$user_obj = &obj(users::get_oid_for_uid($username));
 				$logins = $user_obj->prop("logins") + 1;
 				$user_obj->set_prop("logins", $logins);
-				$user_obj->save(); 
+				$user_obj->save();
 			aw_restore_acl();
-			
+
 			$this->login(array(
 				"uid" => $username,
 				"password" => $old_pass,
@@ -144,17 +144,17 @@ class users extends users_user
 				"id" => aw_global_get("uid"),
 			));
 		}
-		
+
 	}
-	
-	/** saves the uses changed password 
-		
+
+	/** saves the uses changed password
+
 		@attrib name=submit_change_pwd params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -212,7 +212,7 @@ class users extends users_user
 		{
 			return $arr["return_url"];
 		}
-		
+
 		if (is_admin())
 		{
 			return $this->mk_my_orb("gen_list", array(), "users");
@@ -224,14 +224,14 @@ class users extends users_user
 		}
 	}
 
-	/** adds the user and ssets all join form entries from site interface 
-		
+	/** adds the user and ssets all join form entries from site interface
+
 		@attrib name=submit_user_site params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -251,12 +251,12 @@ class users extends users_user
 
 			$us = get_instance(CL_USER);
 			$us->add_user(array(
-				"join_form_entry" => $jfs, 
-				"uid" => $add_state["uid"], 
+				"join_form_entry" => $jfs,
+				"uid" => $add_state["uid"],
 				"password" => $add_state["pass"],
-				"email" => $add_state["email"], 
+				"email" => $add_state["email"],
 				"join_grp" => $join_grp
-			));			
+			));
 
 			$si = __get_site_instance();
 			if (method_exists($si, "on_add_user_site"))
@@ -477,7 +477,7 @@ class users extends users_user
 			// n2itame kasutaja tegemise formi
 			$this->read_template("add_site.tpl");
 			$this->vars(array(
-				"error" => $add_state["error"], 
+				"error" => $add_state["error"],
 				"uid" => $add_state["uid"],
 				"email" => $add_state["email"],
 				"reforb"	=> $this->mk_reforb("submit_user_site", array("join_grp" => $add_group, "section" => aw_global_get("section"), "after_join" => $after_join))
@@ -492,7 +492,7 @@ class users extends users_user
 		}
 	}
 
-	//// 
+	////
 	// !tagastab nimekirja formi sisestustest, mis on kasutaja t2itnud ja mis kuuluvad kasutaja liitumisformide gruppi $group
 	function get_join_form_entries($group)
 	{
@@ -567,7 +567,7 @@ class users extends users_user
 						{
 							$ret.=$f->show(array(
 								"id" => $joinform,
-								"entry_id" => $joinentry, 
+								"entry_id" => $joinentry,
 								"op_id" => $ops[$joinform],
 								"no_html" => $nohtml,
 								"no_load_op" => $arr["no_load_op"]
@@ -595,9 +595,9 @@ class users extends users_user
 
 	////
 	// !shows the form where the user can enter his/her password and then sends a pre-defined email to the user
-	/** this actually sends the reminder-email 
-		
-		@attrib name=pwd_remind params=name nologin="1" 
+	/** this actually sends the reminder-email
+
+		@attrib name=pwd_remind params=name nologin="1"
 
 	**/
 	function pwd_remind($arr)
@@ -612,14 +612,14 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	/** this actually sends the reminder-email 
-		
+	/** this actually sends the reminder-email
+
 		@attrib name=submit_pwd_remind params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -631,7 +631,7 @@ class users extends users_user
 		{
 			$username = $this->db_fetch_field("SELECT uid FROM users WHERE email = '$username'","uid");
 			$udata = $this->get_user(array("uid" => $username));
-		}	
+		}
 
 		$c = get_instance("config");
 		$mail = $c->get_simple_config("remind_pwd_mail".aw_global_get("LC"));
@@ -647,14 +647,14 @@ class users extends users_user
 		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
 	}
 
-	/** Generates an unique hash, which when used in a url can be used to let the used change 
-		
+	/** Generates an unique hash, which when used in a url can be used to let the used change
+
 		@attrib name=send_hash params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 		his/her password
 
@@ -662,7 +662,7 @@ class users extends users_user
 	function send_hash($args = array())
 	{
 		extract($args);
-		
+
 		if (not(aw_ini_get("auth.md5_passwords")))
 		{
 			return "<font color=red>This site does not use encrypted passwords and therefore this function does not work</font>";
@@ -679,14 +679,14 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=submit_send_hash params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -738,26 +738,26 @@ class users extends users_user
 			$msg = $this->parse();
 			$from = sprintf("%s <%s>", $this->cfg["webmaster_name"], $this->cfg["webmaster_mail"]);
 			send_mail(
-				$row["email"], 
+				$row["email"],
 				sprintf(t("Paroolivahetus saidil %s"), aw_global_get("HTTP_HOST")), $msg, "From: $from");
 			aw_session_set(
-				"status_msg", 
+				"status_msg",
 				sprintf(t("Parooli muutmise link saadeti  aadressile <b>%s</b>. Vaata oma postkasti<br />T&auml;name!<br />"), $row["email"])
 			);
 		};
 		return $this->mk_my_orb("send_hash",array("section" => $args["section"]));
 	}
 
-	/** Allows the user to change his/her password 
-		
+	/** Allows the user to change his/her password
+
 		@attrib name=pwhash params=name nologin="1" default="0"
-		
+
 		@param k required
 		@param u required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -790,7 +790,7 @@ class users extends users_user
 		$uo = obj($row["oid"]);
 		$pwhash = $uo->meta("password_hash");
 		if ($pwhash != $key)
-		{	
+		{
 			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
 				"msg" => t("Sellist v&otilde;tit pole v&auml;ljastatud"),
@@ -819,18 +819,18 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=change_pwd_hash params=name nologin="1" default="0"
-		
+
 		@param pass1 required
 		@param pass2 required
 		@param a required
 		@param change optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -868,14 +868,14 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	/** Submits the password 
-		
+	/** Submits the password
+
 		@attrib name=submit_password_hash params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -890,7 +890,7 @@ class users extends users_user
 			aw_session_set("status_msg","Sellist kasutajat pole registreeritud");
 			return $this->mk_my_orb("send_hash",array());
 		};
-		
+
 		$uo = obj($row["oid"]);
 		$pwhash1 = $uo->prop("password_hash");
 
@@ -950,7 +950,7 @@ class users extends users_user
 			if ($gd["name"] == $uid && $gd["type"] == 1)
 			{
 				aw_global_set("current_user_group", $gd);
-			}	
+			}
 		}
 
 		if (!empty($_SESSION["nliug"]) && !is_admin())
@@ -1038,13 +1038,13 @@ class users extends users_user
 					$lang_id = aw_global_get("lang_id");
 					if (is_array($ar2) && $ar2[$lang_id])
 					{
-						aw_ini_set("","admin_rootmenu2",$ar2[$lang_id]);
-						aw_ini_set("","ini_rootmenu", $GLOBALS["cfg"]["__default"]["rootmenu"]);
-						aw_ini_set("","rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+						aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
+						aw_ini_set("ini_rootmenu", aw_ini_get("rootmenu"));
+						aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
 					}
 					if (is_array($gf) && $gf[$lang_id])
 					{
-						aw_ini_set("","frontpage",$gf[$lang_id]);
+						aw_ini_set("frontpage",$gf[$lang_id]);
 					}
 				}
 			}
@@ -1062,13 +1062,13 @@ class users extends users_user
 					$lang_id = aw_global_get("lang_id");
 					if (is_array($ar2) && $ar2[$lang_id])
 					{
-						aw_ini_set("","admin_rootmenu2",$ar2[$lang_id]);
-						aw_ini_set("","ini_rootmenu", $GLOBALS["cfg"]["__default"]["rootmenu"]);
-						aw_ini_set("","rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+						aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
+						aw_ini_set("ini_rootmenu", aw_ini_get("rootmenu"));
+						aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
 					}
 					if (is_array($gf) && $gf[$lang_id])
 					{
-						aw_ini_set("","frontpage",$gf[$lang_id]);
+						aw_ini_set("frontpage",$gf[$lang_id]);
 					}
 				}
 			}
@@ -1096,7 +1096,7 @@ class users extends users_user
 				}
 				if (count($admr))
 				{
-					aw_ini_set("","admin_rootmenu2",$admr);
+					aw_ini_set("admin_rootmenu2",$admr);
 				}
 			}
 		}
@@ -1105,7 +1105,7 @@ class users extends users_user
 			// no user is logged in. what we need to do here is check if a not-logged-in user group exists
 			// and if it does, then set the gidlist accordingly
 			// if not, then create a group for them under the groups folder
-			// now the only problem is how do I identify the group. 
+			// now the only problem is how do I identify the group.
 			// that's gonna be a problem, but I guess the only way is the config table.
 
 			if (empty($_SESSION["non_logged_in_users_group"]) || !is_array($_SESSION["non_logged_in_users_group"]))
@@ -1177,7 +1177,7 @@ class users extends users_user
 		$host = aw_global_get("HTTP_HOST");
 		return str_replace("orb.aw", "index.aw", str_replace("/automatweb", "", $this->mk_my_orb("pwhash",array(
 			"u" => $uid,
-			"k" => $hash, 
+			"k" => $hash,
 			"section" => $this->get_cval("join_hash_section".aw_global_get("LC"))
 		),"users",0,0)));
 	}
@@ -1238,7 +1238,7 @@ class users extends users_user
 
 			// give admins access to admin interface
 
-			
+
 			aw_global_set("__in_post_message", 1);
 			// can not use cache here, go direct
 			$adm_oid = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$admg'", "oid");
@@ -1307,10 +1307,10 @@ class users extends users_user
 	}
 
 	////
-	// !sends user welcome mail to user and others 
+	// !sends user welcome mail to user and others
 	// parameters:
 	//	uid - the user whose mail to send
-	//	pass - if set, #password# is replaced by this, 
+	//	pass - if set, #password# is replaced by this,
 	//	       since passwords in db are hashed, we can't read it from there
 	function send_welcome_mail($arr)
 	{
@@ -1325,7 +1325,7 @@ class users extends users_user
 		$mail = str_replace("#parool#", $pass,$mail);
 		$mail = str_replace("#kasutaja#", $uid,$mail);
 		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array(
-			"nohtml" => true, 
+			"nohtml" => true,
 			"user" => $uid
 		))),$mail);
 		$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($uid), $mail);
@@ -1353,14 +1353,14 @@ class users extends users_user
 		$name = str_replace($to_replace, $replace_with, strtolower(htmlentities($name)));
 		return $name;
 	}
-	
+
 	/**
 		@attrib params=pos
 		@param first required type=string
 		@param last required type=string
 		@comment
 		finds first available uid in format firstname.lastname[.###]
-		etc: 'john.smith','johm.smith.051' ... 
+		etc: 'john.smith','johm.smith.051' ...
 	**/
 	function _find_username($first, $last)
 	{
@@ -1467,14 +1467,14 @@ class users extends users_user
 		classload("core/users/id_config");
 		$act_inst = get_instance(CL_ID_CONFIG);
 		$act = id_config::get_active();
-		
+
 
 		// this little modafocka is here beacause estonian language has freaking umlauts etc..
 		$data = $this->returncertdata($_SERVER["SSL_CLIENT_CERT"]);
 		$arr["firstname"] = $data["f_name"];
 		$arr["lastname"] = $data["l_name"];
 		$arr["ik"] = $data["pid"];
-	
+
 		/* for debug
 		if($_SERVER["REMOTE_ADDR"] == "62.65.36.186")
 		{
@@ -1483,7 +1483,7 @@ class users extends users_user
 
 		$arr["gender"] = ($arr["ik"][0] == 1 || $arr["ik"][0] == 3 || $arr["ik"][0] == 5)?1:2;
 
-		
+
 		if($act_inst->use_safelist())
 		{
 			$sl = $act_inst->get_safelist();
@@ -1507,7 +1507,7 @@ class users extends users_user
 		$password = substr(gen_uniq_id(),0,8);
 		aw_disable_acl();
 		$ol = new object_list(array(
-			"class_id" => CL_CRM_PERSON, 
+			"class_id" => CL_CRM_PERSON,
 			"personal_id" => $arr["ik"],
 			"site_id" => array(),
 			"lang_id" => array(),
@@ -1529,7 +1529,7 @@ class users extends users_user
 				"password" => $password,
 				"real_name" => $arr["firstname"]." ".$arr["lastname"],
 			));
-			// set new users user groups depending on the active id_config settings 
+			// set new users user groups depending on the active id_config settings
 			foreach($grs as $gr)
 			{
 				$gr_obj = obj($gr);
@@ -1547,7 +1547,7 @@ class users extends users_user
 			$person_obj->set_prop("lastname",$arr["lastname"]);
 			$person_obj->set_prop("gender",$arr["gender"]);
 			$person_id = $person_obj->save_new();
-			
+
 
 
 			$o = new object($u_obj->id());
@@ -1564,7 +1564,7 @@ class users extends users_user
 		else
 		{
 			//obj_set_opt("no_cache", 1);
-			//$GLOBALS["DUKE"] = 1; 
+			//$GLOBALS["DUKE"] = 1;
 			$c = new connection();
 			$conns = $c->find(array(
 				"from.class_id" => CL_USER,
@@ -1610,9 +1610,9 @@ class users extends users_user
 	}
 
 	/** login
-		
+
 		@attrib name=login params=name default="0" nologin="1" is_public="1" caption="Logi sisse"
-		
+
 		@param uid required
 		@param password optional
 		@param remote_ip optional
@@ -1622,10 +1622,10 @@ class users extends users_user
 		@param hash optional
 		@param server optional
 		@param remote_auth optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 			logs the user in, if all arguments are correct and redirects to the correct url
 
@@ -1636,11 +1636,11 @@ class users extends users_user
 		if (!empty($arr["hash"]))
 		{
 			$q = "
-				SELECT 
-					* 
-				FROM 
-					user_hashes 
-				WHERE 
+				SELECT
+					*
+				FROM
+					user_hashes
+				WHERE
 					hash = '$arr[hash]' AND
 					hash_time > ".time()." AND
 					uid = '$arr[uid]'
@@ -1680,12 +1680,12 @@ class users extends users_user
 	}
 
 	/** logout
-		
+
 		@attrib name=logout params=name default="0" nologin="1" is_public="1" caption="Logi v&auml;lja"
-		
+
 		@returns
-		
-		
+
+
 		@comment
 			logs the current user out
 
@@ -1706,7 +1706,7 @@ class users extends users_user
 		{
 			return LC_USERS_NOT_LOGGED_IN;
 		}
-	
+
 		if (not($fid))
 		{
 			$udata = $this->get_user();
@@ -1721,8 +1721,8 @@ class users extends users_user
 
 		$t = get_instance("formgen/form");
 		return $t->gen_preview(array(
-			"id" => $fid, 
-			"entry_id" => $fs[$fid], 
+			"id" => $fid,
+			"entry_id" => $fs[$fid],
 			"reforb" => $this->mk_reforb("save_udata", array("fid" => $fid,"user_id" => $id,"section" => aw_global_get("section")))
 		));
 	}
@@ -1738,7 +1738,7 @@ class users extends users_user
 		return $ret;
 	}
 
-	/** this saves the data entered in the form and flushes all necessary caches and group memberships 
+	/** this saves the data entered in the form and flushes all necessary caches and group memberships
 		@attrib name=save_udata params=name default="0"
 		@returns
 		@comment
@@ -1760,7 +1760,7 @@ class users extends users_user
 		$fs[$fid] = $t->entry_id;
 
 		// write the entry to the user table as well, in case it is a new entry
-		$this->save(array("uid" => $user_id, "join_form_entry" => aw_serialize($fs,SERIALIZE_NATIVE))); 
+		$this->save(array("uid" => $user_id, "join_form_entry" => aw_serialize($fs,SERIALIZE_NATIVE)));
 
 		$this->update_dyn_user($user_id);
 

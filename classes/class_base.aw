@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.557 2007/07/16 10:25:38 kristo Exp $
+// $Id: class_base.aw,v 2.558 2007/07/19 09:13:04 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -726,9 +726,9 @@ class class_base extends aw_template
 			{
 				$cli->add_property($val);
 			}
-		};
-		$awt->stop("add-property");
+		}
 
+		$awt->stop("add-property");
 
 		$orb_class = $this->_ct[$this->clid]["file"];
 		if (empty($orb_class))
@@ -746,7 +746,7 @@ class class_base extends aw_template
 		{
 			$orb_class = $cls_id;
 		};
-		
+
 		$argblock = array(
 			"id" => $this->id,
 			// this should refer to the active group
@@ -1369,7 +1369,7 @@ class class_base extends aw_template
 	// environment if so.
 	function init_class_base()
 	{
-		$_ct = $GLOBALS["cfg"]["__default"]["classes"];
+		$_ct = aw_ini_get("classes");
 		// only classes which have defined properties
 		// can use class_base
 
@@ -2198,7 +2198,7 @@ class class_base extends aw_template
 		if (empty($val["type"]))
 		{
 			return false;
-		};
+		}
 
 		// so I can access this later
 		$val["orig_type"] = $val["type"];
@@ -2396,7 +2396,7 @@ class class_base extends aw_template
 			};
 		}
 		else
-		if ( 	
+		if (
 			empty($property["emb"]) &&
 			is_object($this->obj_inst) &&
 			(!isset($property["store"]) || $property["store"] != "no") &&
@@ -2455,10 +2455,12 @@ class class_base extends aw_template
 	{
 		global $awt;
 		$properties = &$args["properties"];
+
 		if (!is_array($properties))
 		{
 			return false;
-		};
+		}
+
 		if(isset($args["classinfo"]) && is_array($args["classinfo"]))
 		{
 			foreach($args["classinfo"] as $k => $val)
@@ -2542,15 +2544,13 @@ class class_base extends aw_template
 						{
 							$resprops[$ekey] = $eval;
 						}
-					};
+					}
 				}
 			}
 			else
 			{
 				$resprops[$key] = $val;
-			};
-
-
+			}
 		}
 
 		$properties = $resprops;
@@ -2593,7 +2593,8 @@ class class_base extends aw_template
 				else
 				{
 					$ot = get_instance($reginst);
-				};
+				}
+
 				if (is_callable(array($ot,"init_vcl_property")))
 				{
 					$res = $ot->init_vcl_property(array(
@@ -2610,6 +2611,7 @@ class class_base extends aw_template
 						"relinfo" => $this->relinfo,
 						"view" => $this->view,
 					));
+
 					if (is_array($res))
 					{
 						foreach($res as $rkey => $rval)
@@ -2618,9 +2620,10 @@ class class_base extends aw_template
 							$resprops[$rkey] = $rval;
 							$resprops[$rkey]["capt_ord"] = isset($val["capt_ord"]) ? $val["capt_ord"] : "";
 							$resprops[$rkey]["wf_capt_ord"] = isset($val["wf_capt_ord"]) ? $val["wf_capt_ord"] : "";
-						};
-					};
-				};
+						}
+					}
+				}
+
 				if (is_callable(array($ot, "callback_mod_reforb")))
 				{
 					$this->_do_call_vcl_mod_reforbs[] = array($ot, "callback_mod_reforb");
@@ -2684,7 +2687,7 @@ class class_base extends aw_template
 			else
 			{
 				$resprops[$key] = $val;
-			};
+			}
 
 			if (isset($val["richtext"]) && 1 == $val["richtext"])
 			{
@@ -2709,7 +2712,6 @@ class class_base extends aw_template
 
 
 		$properties = $resprops;
-
 		$resprops = array();
 
 		// need to cycle over the property nodes, do replacements
@@ -2924,7 +2926,7 @@ class class_base extends aw_template
 						};
 					};
 					continue;
-				};
+				}
 
 				if ($val["type"] == "relmanager")
 				{
@@ -2945,7 +2947,7 @@ class class_base extends aw_template
 						$resprops[$key] = $val;
 					};
 					continue;
-				};
+				}
 
 				if ($val["type"] == "releditor")
 				{
@@ -2995,8 +2997,6 @@ class class_base extends aw_template
 						$this->_do_call_vcl_mod_reforbs[] = array($val["vcl_inst"], "callback_mod_reforb");
 					}
 					continue;
-
-
 				}
 
 				if ($val["type"] == "toolbar")
@@ -3046,7 +3046,7 @@ class class_base extends aw_template
 							));
 
 						}
-					};
+					}
 
 					// if we are using rte, then add RTE buttons to the toolbar
 					//if (1 == $this->has_feature("has_rte"))
@@ -3070,7 +3070,7 @@ class class_base extends aw_template
 							));
 						}
 					};
-				};
+				}
 
 				// this deals with subitems .. what a sucky approach
 				if (isset($val["items"]) && is_array($val["items"]) && sizeof($val["items"]) > 0)
@@ -3090,9 +3090,10 @@ class class_base extends aw_template
 				if (empty($name))
 				{
 					$name = $key;
-				};
+				}
+
 				$resprops[$name] = $val;
-			};
+			}
 		}
 
 		if (!$this->cfgform_id && $this->clid == CL_DOCUMENT)
@@ -4522,7 +4523,7 @@ class class_base extends aw_template
 		{
 			$arr["clid"] = $this->clid;
 		}
-		
+
 		$cls_id = aw_global_get("class");
 		// XXX: add some checks
 		$all_properties = $this->load_defaults(array(
@@ -5004,7 +5005,7 @@ class class_base extends aw_template
 
 			$ci = $cfgform_obj->instance();
 			$prps = $ci->get_cfg_proplist($cfgform_obj->id());
-			
+
 			$rv = $prps;
 			$grps = $ci->get_cfg_groups($cfgform_obj->id());
 			foreach($cfg_flags as $key => $val)

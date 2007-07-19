@@ -2,7 +2,7 @@
 //session_name("automatweb");
 //session_start();
 
-//uid = "";	// for the extra paranoid 
+//uid = "";	// for the extra paranoid
 
 include("const.aw");
 
@@ -56,8 +56,8 @@ if ($set_ct_lang_id)
 
 $LC = aw_global_get("LC");
 
-@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
-@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["__default"]["ext"]);
+@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
+@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
 
 
 $awt = new aw_timer;

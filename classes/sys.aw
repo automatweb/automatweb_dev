@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.77 2007/07/16 14:08:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.78 2007/07/19 09:13:04 voldemar Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -908,7 +908,7 @@ class sys extends aw_template
 	}
 
 	/**
-		@attrib name=do_dump 
+		@attrib name=do_dump
 	**/
 	function db_dump($arr)
 	{
@@ -1000,7 +1000,7 @@ class sys extends aw_template
 **/
 	function make_property_definitions()
 	{
-		
+
 		if (!headers_sent())
 		{
 			header ("Content-Type: text/plain");
@@ -1098,7 +1098,7 @@ class sys extends aw_template
 			exit ("File not found.");
 		}
 
-		$res = $this->_parse_cfg($input_file);
+		$res = parse_config($input_file, true);
 
 		if ($res === false)
 		{
@@ -1113,121 +1113,15 @@ class sys extends aw_template
 			"#                                                                    #\n".
 			"# Instead, edit aw.ini.root and/or the files included from it.       #\n".
 			"# after editing, to regenerate this file execute cd \$AWROOT;make ini #\n".
+			"# or call orb class 'sys' action 'make_ini'                          #\n".
 			"######################################################################\n\n\n" .
-			join ("", $res);
+			join ("\n", $res);
 
 			$fp = fopen ($output_file, "w");
 			fwrite ($fp, $res, strlen ($res));
 			fclose ($fp);
 			exit ("aw.ini successfully written.");
 		}
-	}
-
-	function _parse_cfg($file)
-	{
-		// put result lines in here
-		$res = array();
-
-		$linenum = 0;
-		$fd = file($file);
-		foreach($fd as $line)
-		{
-			$linenum++;
-			$oline = $line;
-			$add = true;
-			// ok, parse line
-			// 1st, strip comments
-			if (($pos = strpos($line,"#")) !== false)
-			{
-				$line = substr($line,0,$pos);
-			}
-			// now, strip all whitespace
-			$line = trim($line);
-
-			if ($line != "")
-			{
-				if (substr($line, 0, strlen("include")) == "include")
-				{
-					// process include
-					$line = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$line);
-					$ifile = trim(substr($line, strlen("include")));
-					if (!file_exists($ifile) || !is_readable($ifile))
-					{
-						echo "Failed to open include file on line $linenum in file $file ($ifile) \n";
-						return false;
-					}
-					$in = $this->_parse_cfg($ifile);
-					if ($in === false)
-					{
-						echo "\tthat was included from line $linenum in file $file \n";
-						return false;
-					}
-					else
-					{
-						foreach($in as $iline)
-						{
-							$res[] = $iline;
-						}
-						$add = false;
-					}
-				}
-				else
-				{
-					// now, config opts are class.variable = value
-					$eqpos = strpos($line," = ");
-					if ($eqpos !== false)
-					{
-						$var = trim(substr($line,0,$eqpos));
-						$varvalue = trim(substr($line,$eqpos+3));
-
-						// now, replace all variables in varvalue
-						$varvalue = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$varvalue);
-						$var = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$var);
-
-						// if the varname contains . split it into class and variable parts
-						// if not, class will be __default
-						if (($dotpos = strpos($var,".")) !== false)
-						{
-							$varclass = substr($var,0,$dotpos);
-							$varname = substr($var,$dotpos+1);
-						}
-						else
-						{
-							$varclass = "__default";
-							$varname = $var;
-						}
-
-						// check if variable is an array
-						if (($bpos = strpos($varname,"[")) !== false)
-						{
-							// ok, do the bad eval version
-							$arrparams = substr($varname,$bpos);
-							$arrname = substr($varname,0,$bpos);
-							if (!is_array($this->make_ini_globals["cfg"][$varclass][$arrname]))
-							{
-								$this->make_ini_globals["cfg"][$varclass][$arrname] = array();
-							}
-							$code = "\$this->make_ini_globals[cfg][\$varclass][\$arrname]".$arrparams." = \"".$varvalue."\";";
-							// echo "evaling $code <br>\n";
-							eval($code);
-						}
-						else
-						{
-							// and stuff the thing in the array
-							$this->make_ini_globals["cfg"][$varclass][$varname] = $varvalue;
-							//echo "setting [$varclass][$varname] to $varvalue <br>";
-						}
-					}
-				}
-			}
-
-			if ($add)
-			{
-				$res[] = $oline;
-			}
-		}
-
-		return $res;
 	}
 
 /**

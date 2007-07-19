@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.5 2005/04/21 08:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.6 2007/07/19 09:13:11 voldemar Exp $
 // mysql.aw - MySQL draiver
 class mssql
 {
@@ -9,20 +9,20 @@ class mssql
 	var $errmsg; # where we keep our error messages
 	var $rec_count;
 
-	function db_init() 
+	function db_init()
 	{
 		lc_load('definition');
 	}
-		
+
 
 	////
 	// !We need to be able to create multiple connections
 	// even better, connections might go to different databases
-	function db_connect($server,$base,$username,$password) 
+	function db_connect($server,$base,$username,$password)
 	{
 		global $DEBUG;
 		$this->dbh =  mssql_connect($server,$username,$password);
-		if (!$this->dbh) 
+		if (!$this->dbh)
 		{
 			echo "Can't connect to database";
 			print '<br />';
@@ -34,7 +34,7 @@ class mssql
 			echo "Can't connect to database";
 			print '<br />';
 			print mssql_get_last_message();
-			exit;	
+			exit;
 		};
 		$this->db_base = $base;
 	}
@@ -62,7 +62,7 @@ class mssql
 		}
 	}
 
-	function db_query($qtext,$errors = true) 
+	function db_query($qtext,$errors = true)
 	{
 		global $DUKE, $INTENSE_DUKE;
 		//$qtext = preg_replace("/`([^`]+)`/i","[\${1}]",$qtext);
@@ -85,7 +85,7 @@ class mssql
 			list($micro,$sec) = split(' ',microtime());
 			$ts_s = $sec + $micro;
 		}
-		aw_global_set('qcount',aw_global_get('qcount')+1); 
+		aw_global_set('qcount',aw_global_get('qcount')+1);
 
 		if (not($this->dbh))
 		{
@@ -102,7 +102,7 @@ class mssql
 		};
 		$this->qID = mssql_query($qtext, $this->dbh);
 		$this->log_query($qtext);
-		if (!$this->qID ) 
+		if (!$this->qID )
 		{
 			echo dbg::short_backtrace();
 			echo mssql_get_last_message()."<br>";
@@ -117,8 +117,8 @@ class mssql
 			$eri = new class_base;
 			$eri->init();
 			$eri->raise_error(ERR_DB_QUERY,LC_MYSQL_ERROR_QUERY."\n".$qtext."\n".mysql_errno($this->dbh)."\n".mysql_error($this->dbh),true,false);
-		} 
-		else 
+		}
+		else
 		{
 			$this->num_rows = @mssql_num_fields($this->qID);
 			$this->num_fields = @mssql_num_fields($this->qID);
@@ -157,11 +157,11 @@ class mssql
 			$this->qID = array_pop($this->qhandles);
 		};
 	}
-		
 
-	function db_next($deq = true) 
+
+	function db_next($deq = true)
 	{
-		$deq = !$GLOBALS['cfg']['__default']['magic_quotes_runtime'];
+		$deq = !$GLOBALS['cfg']['magic_quotes_runtime'];
 		# this function cannot be called before a query is made
 		// don't need numeric indices
 		$res = @mssql_fetch_array($this->qID,MSSQL_ASSOC);
@@ -177,7 +177,7 @@ class mssql
 		return $res;
 	}
 
-	function db_last_insert_id() 
+	function db_last_insert_id()
 	{
 		$res = mysql_insert_id($this->dbh);
 		return $res;
@@ -191,7 +191,7 @@ class mssql
 		}
 		return $this->db_next();
 	}
-	
+
 	# seda voib kasutada, kui on vaja teada saada mingit kindlat välja
 	# a 'la cval tabelist config
 	# $cval = db_fetch_field("SELECT cval FROM config WHERE ckey = '$ckey'","cval")
@@ -222,48 +222,48 @@ class mssql
 
 
 	# need 2 funktsiooni oskavad käituda nii array-de kui ka stringidega
-	function quote(&$arr) 
+	function quote(&$arr)
 	{
-		if (is_array($arr)) 
+		if (is_array($arr))
 		{
-			while(list($k,$v) = each($arr)) 
+			while(list($k,$v) = each($arr))
 			{
-				if (is_array($arr[$k])) 
+				if (is_array($arr[$k]))
 				{
 					// do nothing
-				} 
-				else 
+				}
+				else
 				{
 					$arr[$k] = str_replace("'", "''", $arr[$k]); //addslashes($arr[$k]);
 				};
 			};
 			reset($arr);
-		} 
-		else 
+		}
+		else
 		{
 			$arr = str_replace("'", "''", $arr); //addslashes($arr);
 			return $arr;
 		};
 	}
 
-	function dequote(&$arr) 
+	function dequote(&$arr)
 	{
-		if (is_array($arr)) 
+		if (is_array($arr))
 		{
-			while(list($k,$v) = each($arr)) 
+			while(list($k,$v) = each($arr))
 			{
-				if (is_array($arr[$k])) 
+				if (is_array($arr[$k]))
 				{
 					$this->dequote(&$arr[$k]);
-				} 
-				else 
+				}
+				else
 				{
 					$arr[$k] = str_replace("''", "'", $arr[$k]); //stripslashes($arr[$k]);
 				};
 			};
 			reset($arr);
-		} 
-		else 
+		}
+		else
 		{
 			$arr = str_replace("''", "'", $arr); //stripslashes($arr);
 		};
@@ -288,7 +288,7 @@ class mssql
 		}
 		return $ret["name"];
 	}
-	
+
 	function db_get_fields()
 	{
 		$retval = array();
@@ -326,9 +326,9 @@ class mssql
 			$len =  $row["length"];
 			$flags = "";
 			$ret['fields'][$_name] = array(
-				'name' => $_name, 
-				'length' => $len, 
-				'type' => $type, 
+				'name' => $_name,
+				'length' => $len,
+				'type' => $type,
 				'flags' => '',
 				'default' => $row['cdefault']
 			);
@@ -449,7 +449,7 @@ class mssql
 					{
 						$flags[] = 'NOT NULL';
 					};
-			
+
 					if ($row['Extra'])
 					{
 						$flags[] = $row['Extra'];
@@ -460,7 +460,7 @@ class mssql
 						'flags' => $flags,
 						'key' => $row['Key'],
 					);
-					
+
 				};
 				$this->restore_handle();
 			};

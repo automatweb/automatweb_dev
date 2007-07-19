@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.388 2007/07/12 11:38:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.389 2007/07/19 09:13:04 voldemar Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -360,7 +360,7 @@ class menuedit extends aw_template
 			if ($_obj->class_id() == CL_MENU && $_obj->prop("link") != "" && $_obj->id() != aw_ini_get("frontpage"))
 			{
 				if (strpos($_obj->trans_get_val("link"), $_obj->id()) === false &&
-					!($realsect == aw_ini_get("frontpage") 	&& $_obj->trans_get_val("link") == "/") 
+					!($realsect == aw_ini_get("frontpage") 	&& $_obj->trans_get_val("link") == "/")
 					&& !$_GET["class"]
 				)
 				{
@@ -438,7 +438,7 @@ class menuedit extends aw_template
 				// we must reset the objcache here, because
 				// it already contains the section obj
 				// and after the language switch it contains the old language
-				// anyway, tyhis does not add much overhead, 
+				// anyway, tyhis does not add much overhead,
 				// because here we should only have the section object loaded
 			}
 		};
@@ -453,7 +453,7 @@ class menuedit extends aw_template
 		if (is_array($frontpage))
 		{
 			$frontpage = $frontpage[aw_global_get("lang_id")];
-			aw_ini_set("","frontpage",$frontpage);
+			aw_ini_set("frontpage",$frontpage);
 			$this->cfg["frontpage"] = $frontpage;
 		}
 		// kui sektsiooni viimane m?k on "-", paneme selle objekti sees psti
@@ -564,7 +564,7 @@ class menuedit extends aw_template
 						$path = array_reverse($check_obj->path());
 						$curr_id = $check_obj->id();
 						$candidates[$curr_id] = "";
-	
+
 						$stop = false;
 
 						foreach($path as $path_obj)
@@ -750,7 +750,7 @@ class menuedit extends aw_template
 				"mask" => OBJ_FLAG_IS_SELECTED,
 				"flags" => OBJ_FLAG_IS_SELECTED
 			)
-		));	
+		));
 		$gr = aw_global_get("REQUEST_URI");
 		$repl_gr = $gr;
 		$repls = false;

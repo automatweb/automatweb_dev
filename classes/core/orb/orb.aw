@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.21 2007/05/16 14:02:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.22 2007/07/19 09:13:10 voldemar Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
-class orb extends aw_template 
+class orb extends aw_template
 {
 	var $data;
 	var $info;
@@ -23,11 +23,11 @@ class orb extends aw_template
 	// without calling the instructor
 	function process_request($args = array())
 	{
-		// peavad olema vähemalt 
+		// peavad olema vähemalt
 		// a) class
 		// b) action
 		// c) vars (sisaldab vastavalt vajadusele kas $HTTP_GET_VARS-i voi $HTTP_POST_VARS-i
-		
+
 		// optional
 		// d) silent. veateateid ei väljastata. caller peaks kontrollima return valuet,
 		// kui see on false, siis oli viga.
@@ -57,19 +57,19 @@ class orb extends aw_template
 		if (!isset($class))
 		{
 			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,true,$silent);
-		};
-	
+		}
+
 		// damn, I'm smart
 		if (is_oid($class))
 		{
 			//$class = "class_visualizer";
-		};
+		}
 
 		// laeme selle klassi siis
 		$orb_defs = $this->try_load_class($class);
 
 		$this->orb_defs = $orb_defs;
-		
+
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
 		$this->check_login(array("class" => $class,"action" => $action));
@@ -82,7 +82,7 @@ class orb extends aw_template
 				$this->check_class_access($class);
 			}
 		}
-		
+
 		// if the action is found in one of the classes defined by
 		// the extends attribute, it should know which class was really
 		// requested.
@@ -118,9 +118,7 @@ class orb extends aw_template
 		else
 		{
 			$found = false;
-		};
-
-
+		}
 
 		foreach($cl2load as $clname)
 		{
@@ -147,7 +145,7 @@ class orb extends aw_template
 				{
 					$found = true;
 					// copy the function definition from the extended class to the called class
-					// this way it works like real inheritance - all the other properties, 
+					// this way it works like real inheritance - all the other properties,
 					// including which class is instantiated, come from the class that was called
 					// and not the class in which the function was found
 					$orb_defs[$class][$action] = $_orb_defs[$clname][$action];
@@ -161,7 +159,7 @@ class orb extends aw_template
 		{
 			$this->raise_error(ERR_ORB_CAUNDEF,sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),true,$silent);
 		};
-		
+
 		// check acl
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $vars);
 
@@ -189,7 +187,7 @@ class orb extends aw_template
 				// reforbi funktsioon peab tagastama aadressi, kuhu edasi minna
 				$url = $t->$fname($vars);
 			}
- 
+
 			// ja tagasi main programmi
 			$this->data = $url;
 			return;
@@ -246,7 +244,7 @@ class orb extends aw_template
 
 				$params[$key] = $vars[$key];
 			};
- 
+
 			//optional arguments
 			$_o = new aw_array($optional);
 			foreach($_o->get() as $key => $val)
@@ -360,16 +358,16 @@ class orb extends aw_template
 		xml_parse_into_struct($parser,$args["content"],&$values,&$tags);
 		// R.I.P. parser
 		xml_parser_free($parser);
-	
+
 		// konteinerite tüübid
 		$containers = array("class","action","function","arguments");
-	
+
 		// argumentide tüübid
 		$argtypes = array("optional","required","define");
-	
+
 		// argumentide andmetüübid (int, string, whatever)
 		$types = array();
-	
+
 		// ja siia moodustub loplik struktuur
 		$orb_defs = array();
 
@@ -377,13 +375,13 @@ class orb extends aw_template
 		{
 			// parajasti töödeldava tag-i nimi
 			$tag = $val["tag"];
-	
+
 			// on kas tyhi, "open", "close" voi "complete".
 			$tagtype = $val["type"];
- 
+
 			// tagi parameetrid, array
 			$attribs = isset($val["attributes"]) ? $val["attributes"] : array();
- 
+
 			// kui tegemist on nö "konteiner" tag-iga, siis...
 			if (in_array($tag,$containers))
 			{
@@ -507,7 +505,7 @@ class orb extends aw_template
 		}; // foreach;
 		return $orb_defs;
 	} // function
-						
+
 
 	function get_data()
 	{
@@ -562,7 +560,7 @@ class orb extends aw_template
 			$cl = new object($class);
 			if ($cl->prop("from_existing_class") == 1)
 			{
-				$gen_class_name = basename($GLOBALS["cfg"]["__default"]["classes"][$cl->prop("reg_class_id")]["orig_file"]);
+				$gen_class_name = basename($GLOBALS["cfg"]["classes"][$cl->prop("reg_class_id")]["orig_file"]);
 			}
 			else
 			{
@@ -586,11 +584,11 @@ class orb extends aw_template
 			$extname = $ret[$class]["_extends"][0];
 			$tmp = $this->load_xml_orb_def($extname);
 			$ret[$class] = array_merge(safe_array(isset($tmp[$extname]) ? $tmp[$extname] : null ),safe_array($ret[$class]));
-			
+
 			//$ret = array_merge($tmp[$extname],$ret);
 		};
 
-		// try and figure out the folder for this class 
+		// try and figure out the folder for this class
 		$folder = "";
 
 		if (isset($ret[$class]["___folder"]))
@@ -681,8 +679,8 @@ class orb extends aw_template
 	//	action - orb action to exec
 	// optional
 	//  class - class for the action - default the current class
-	//  params - params to the action 
-	//  method - the method to use when doing the function call - possible values: local / xmlrpc / (soap - not implemented yet) 
+	//  params - params to the action
+	//  method - the method to use when doing the function call - possible values: local / xmlrpc / (soap - not implemented yet)
 	//  server - if doing a rpc call, the server where to connect
 	//  login_obj - if we must log in to a serverm the id of the CL_AW_LOGIN that will be used to login to the server
 	//              if this is set, then server will be ignored
@@ -778,7 +776,7 @@ class orb extends aw_template
 					$ret[$key] = $params[$key];
 				};
 			}
-			
+
 			//optional arguments
 			if (is_array($optional))
 			{
@@ -795,7 +793,7 @@ class orb extends aw_template
 					}
 					else
 					// note, there seems to be some bitrot here, isset breaks things
-		
+
 					if ($orb_defs[$class][$action]["defaults"][$key])
 					{
 						$ret[$key] = $orb_defs[$class][$action]["defaults"][$key];
@@ -836,7 +834,7 @@ class orb extends aw_template
 	}
 
 	////
-	// !returns the session id for the rpc call 
+	// !returns the session id for the rpc call
 	// params:
 	// either login_obj or server must be specified
 	// login_obj - the oid of the CL_AW_LOGIN object - the server is read from that
@@ -889,7 +887,7 @@ class orb extends aw_template
 
 		// do the method calling thing
 		$orb_defs = $this->try_load_class($request["class"]);
-	
+
 		$params = $this->check_method_params($orb_defs, $request["params"], $request["class"], $request["action"]);
 
 		if (!isset($orb_defs[$request["class"]][$request["action"]]))
@@ -910,7 +908,7 @@ class orb extends aw_template
 
 		return $inst->encode_return_data($ret);
 	}
-	
+
 	////
 	// !Returns a list of all defined ORB classes
 	// interface(string) - name of the interface file
@@ -995,7 +993,7 @@ class orb extends aw_template
 
 		return $methods;
 	}
-	
+
 	function get_public_method($args = array())
 	{
 		extract($args);

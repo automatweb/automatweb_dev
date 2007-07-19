@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.41 2007/07/12 11:38:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.42 2007/07/19 09:13:11 voldemar Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -188,7 +188,7 @@ class mysql
 
 	function db_next($deq = true)
 	{
-		$deq = !$GLOBALS['cfg']['__default']['magic_quotes_runtime'];
+		$deq = !$GLOBALS['cfg']['magic_quotes_runtime'];
 		# this function cannot be called before a query is made
 		// don't need numeric indices
 		$res = @mysql_fetch_array($this->qID,MYSQL_ASSOC);

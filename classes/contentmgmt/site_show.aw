@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.239 2007/07/17 08:45:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.240 2007/07/19 09:13:08 voldemar Exp $
 
 /*
 
-This message will get posted when we are showing the site. 
-parameters: 
+This message will get posted when we are showing the site.
+parameters:
 	inst - instance to which to import the variables
 	params - array of parameters passed to site_show
 EMIT_MESSAGE(MSG_ON_SITE_SHOW_IMPORT_VARS);
@@ -52,7 +52,7 @@ class site_show extends class_base
 	// vars - array kuhu saab sisu kirjutada, et seal olevad muutujad pannaxe menyyediti template sisse
 	// sub_callbacks - array template_name => funxiooninimi neid kutsutakse siis v2lja kui vastav sub on template sees olemas
 	// format - the format to generate the output in
-	// no_left_pane - if true, the LEFT_PANE sub is by default not shown, 
+	// no_left_pane - if true, the LEFT_PANE sub is by default not shown,
 	// no_right_pane - if true, the RIGHT_PANE sub is by default not shown
 	// tpldir - if set, templates are read from $tpldir/automatweb/menuedit folder
 	function show($arr)
@@ -86,7 +86,7 @@ class site_show extends class_base
 		$this->sel_section_obj = obj($this->sel_section);
 
 		$this->site_title = $this->sel_section_obj->trans_get_val("name");
-		
+
 		// read the left/right pane props from the sel menu
 		if (!$this->sel_section_obj->prop("left_pane"))
 		{
@@ -153,7 +153,7 @@ class site_show extends class_base
 		$p = get_instance(CL_SITE_STYLES);
 		$p->on_site_show_import_vars(array("inst" => &$this));
 	}
-	
+
 	function _get_sel_section($sect)
 	{
 		$last_menu = 0;
@@ -244,7 +244,7 @@ class site_show extends class_base
 				}
 				else
 				{
-					// check whether this object has any properties that 
+					// check whether this object has any properties that
 					// none of the previous ones had
 					if (empty($this->properties[$key]) && ($obj->class_id() == CL_MENU || $key == "users_only") && $obj->prop($key))
 					{
@@ -529,7 +529,7 @@ class site_show extends class_base
 			return false;
 		}
 
-		// if it is a document, use this one. 
+		// if it is a document, use this one.
 		if (($obj->class_id() == CL_DOCUMENT) || ($obj->class_id() == CL_PERIODIC_SECTION) || $obj->class_id() == CL_BROTHER_DOCUMENT)
 		{
 			return $obj->id();	// most important not to change this, it is!
@@ -658,7 +658,7 @@ class site_show extends class_base
 		$filt_lang_id = aw_global_get("lang_id");
 		$filter = array();
 		// no default, show list
-		if ($docid < 1)	
+		if ($docid < 1)
 		{
 			if ($obj->prop("content_all_langs"))
 			{
@@ -712,14 +712,14 @@ class site_show extends class_base
 					$sections = array($obj->id());
 				};
 
-				foreach($ilm as $ilm_item)	// ilm contains menus that the user wants not to get docs from 
+				foreach($ilm as $ilm_item)	// ilm contains menus that the user wants not to get docs from
 				{
 					unset($sections[$ilm_item]);
 				}
 
 				$no_in_promo = 1;
 
-				// get kws from promo 
+				// get kws from promo
 				if ($this->can("view", $_GET["set_kw"]))
 				{
 					$filter["CL_DOCUMENT.RELTYPE_KEYWORD"] = $_GET["set_kw"];
@@ -748,7 +748,7 @@ class site_show extends class_base
 
 				if ($obj->prop("use_doc_content_type") && $_SESSION["doc_content_type"])
 				{
-					$filter["doc_content_type"] = $_SESSION["doc_content_type"]; 
+					$filter["doc_content_type"] = $_SESSION["doc_content_type"];
 				}
 
 			}
@@ -761,7 +761,7 @@ class site_show extends class_base
 
 				if (!empty($_SESSION["doc_content_type"]))
 				{
-					$filter["doc_content_type"] = $_SESSION["doc_content_type"]; 
+					$filter["doc_content_type"] = $_SESSION["doc_content_type"];
 				}
 
 				foreach($gm_c as $gm)
@@ -836,7 +836,7 @@ class site_show extends class_base
 			};
 			if ($obj->prop("ndocs") > 0)
 			{
-				$filter["limit"] = $obj->prop("ndocs"); 
+				$filter["limit"] = $obj->prop("ndocs");
 			}
 			if ($obj->prop("ndocs") == -1)
 			{
@@ -985,7 +985,7 @@ class site_show extends class_base
 			}
 
 			$rsid = aw_ini_get("site_id");
-			
+
 			$tc = 0;
 			$done_oids = array();
 			foreach($documents->arr() as $o)
@@ -999,7 +999,7 @@ class site_show extends class_base
 				{
 					continue;
 				}
-			
+
 				if (aw_ini_get("user_interface.hide_untranslated") && !$o->prop_is_translated("title"))
 				{
 					continue;
@@ -1064,16 +1064,16 @@ class site_show extends class_base
 			$d = get_instance(CL_DOCUMENT);
 			$d->set_period($activeperiod);
 			$d->list_docs($this->section_obj->id(), $activeperiod,2);
-	
+
 			if ($d->num_rows() > 1)
 			{
 				$docid = array();
-				while($row = $d->db_next()) 
+				while($row = $d->db_next())
 				{
 					$docid[] = $row["docid"];
 				}
-			} 
-			else 
+			}
+			else
 			if ($d->num_rows() == 1)
 			{
 				$row = $d->db_next();
@@ -1093,7 +1093,7 @@ class site_show extends class_base
 		$ct = "";
 
 
-		// oleks vaja teha voimalus feedbacki tegemiseks. S.t. doku voib 
+		// oleks vaja teha voimalus feedbacki tegemiseks. S.t. doku voib
 		// lisaks enda sisule tekitada veel mingeid datat, mida siis menuedit
 		// voiks paigutada saidi raami sisse. Related links .. voi nimekiri
 		// mingitest artiklis esinevatest asjadest. You name it.
@@ -1101,7 +1101,7 @@ class site_show extends class_base
 
 		$section_id = $this->section_obj->id();
 		$tplmgr = get_instance("templatemgr");
-		if (is_array($docid)) 
+		if (is_array($docid))
 		{
 			$template = $tplmgr->get_lead_template($section_id);
 			// I need to  know that for the public method menus
@@ -1114,7 +1114,7 @@ class site_show extends class_base
 
 			$this->vars(array("DOCUMENT_LIST" => $this->parse("DOCUMENT_LIST")));
 			$this->_is_in_document_list = 1;
-			
+
 
 			$_numdocs = count($docid);
 			$_curdoc = 1;
@@ -1137,8 +1137,8 @@ class site_show extends class_base
 				));
 				$_curdoc++;
 			}
-		} 
-		else 
+		}
+		else
 		{
 			$awt->start("get-long");
 
@@ -1156,7 +1156,7 @@ class site_show extends class_base
 			{
 				// if full_content_trans is set, and this document is not translated
 				// to the current ct lang and redirect is set, then do the redirect
-				if (aw_ini_get("user_interface.full_content_trans") && 
+				if (aw_ini_get("user_interface.full_content_trans") &&
 					aw_ini_get("user_interface.ct_notact_redirect") != "")
 				{
 					$doc_o = obj($docid);
@@ -1208,7 +1208,7 @@ class site_show extends class_base
 				{
 					$this->site_title = $d->title;
 				}
-				
+
 				if (is_array($d->blocks))
 				{
 					$blocks = $blocks + $d->blocks;
@@ -1238,7 +1238,7 @@ class site_show extends class_base
 	function show_documents(&$arr)
 	{
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
-		if (!isset($arr["docid"]) || $arr["docid"] < 1) 
+		if (!isset($arr["docid"]) || $arr["docid"] < 1)
 		{
 			$docid = $this->get_default_document();
 		}
@@ -1372,7 +1372,7 @@ class site_show extends class_base
 			{
 				$img_act_url = $o->meta("img_act_url");
 			}
-			
+
 			if ($img_act_url != "")
 			{
 				$sel_image_url = image::check_url($img_act_url);
@@ -1679,7 +1679,7 @@ class site_show extends class_base
 			}
 			$prev = $ref;
 		}
-		
+
 		// form table yah links get made here.
 		// basically the session contains a vriable fg_table_sessions that has all the possible yah links for
 		// all shown tables (and yeah, I know it is gonna be friggin huge.
@@ -1747,7 +1747,7 @@ class site_show extends class_base
 				"lang_code" => $sel_lang["acceptlang"]
 			));
 			return "";
-		}		
+		}
 		$num = 0;
 		foreach($lar as $row)
 		{
@@ -1869,7 +1869,7 @@ class site_show extends class_base
 			"lang_code" => $sel_lang["acceptlang"]
 		));
 	}
-	
+
 
 	///////////////////////////////////////////////
 	// template compiler runtime functions
@@ -1920,7 +1920,7 @@ class site_show extends class_base
 		}
 
 		// now, the trick here is, of course that if the menu area parent is in the path
-		// all the ones that follow, are also in that menu area so to return the level, 
+		// all the ones that follow, are also in that menu area so to return the level,
 		// we just count the number of things in the path after the start pos of the menu area
 		return count($this->path) - ($pos+1);
 	}
@@ -1981,7 +1981,7 @@ class site_show extends class_base
 		{
 			$this->read_template("../../".$tpldir."/".$tpl,true);
 		}
-		
+
 		if ($filename == "")
 		{
 			error::raise(array(
@@ -1989,7 +1989,7 @@ class site_show extends class_base
 				"msg" => t("site_show::do_draw_menus(): no compiled filename set!")
 			));
 		}
-	
+
 		// fake paths for default menus
 		$path_bak = $this->path_ids;
 
@@ -2085,7 +2085,7 @@ class site_show extends class_base
 		{
 			// check if there are any promo templates, cause this call makes at least one query and this is faster
 			// also, we don't need to check for the default promo templates
-			// cause those are checked for earlier. 
+			// cause those are checked for earlier.
 			$pa = aw_ini_get("promo.areas");
 			if (is_array($pa) && count($pa) > 0)
 			{
@@ -2131,7 +2131,7 @@ class site_show extends class_base
 		{
 			return;
 		}
-		
+
 		$banner_server = aw_ini_get("menuedit.banner_server");
 		$ext = $this->cfg["ext"];
 		$uid = aw_global_get("uid");
@@ -2176,7 +2176,7 @@ class site_show extends class_base
 			$adt_o = obj($this->active_doc);
 			$adt = $adt_o->name();
 		}
-		
+
 		$u = get_instance(CL_USER);
 		aw_disable_acl();
 		$p = obj($u->get_current_person());
@@ -2225,7 +2225,7 @@ class site_show extends class_base
 		// insert sel images
 		foreach(safe_array($this->properties["images"]) as $nr => $id)
 		{
-			$url = $this->image->get_url_by_id($id);	
+			$url = $this->image->get_url_by_id($id);
 			$this->vars(array(
 				"path_menu_image_".$nr."_url" => $url,
 				"path_menu_image_".$nr => html::img(array(
@@ -2244,13 +2244,13 @@ class site_show extends class_base
 			"IS_NOT_FRONTPAGE2" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
 		));
 
-	
+
 		if (aw_global_get("uid") == "")
 		{
 			$this->vars(array(
-				"login" => $this->parse("login"), 
-				"login2" => $this->parse("login2"), 
-				"login3" => $this->parse("login3"), 
+				"login" => $this->parse("login"),
+				"login2" => $this->parse("login2"),
+				"login3" => $this->parse("login3"),
 				"logged" => "",
 				"logged2" => "",
 				"logged3" => "",
@@ -2317,7 +2317,7 @@ class site_show extends class_base
 			$rp = "";
 
 			$this->vars_safe(array(
-				"logged" => $this->parse("logged"), 
+				"logged" => $this->parse("logged"),
 				"logged1" => $this->parse("logged1"),
 				"logged2" => $this->parse("logged2"),
 				"logged3" => $this->parse("logged3"),
@@ -2341,9 +2341,9 @@ class site_show extends class_base
 		{
 			$rp = $this->parse("NO_RIGHT_PANE");
 		}
-		
+
 		$this->vars_safe(array(
-			"LEFT_PANE" => $lp, 
+			"LEFT_PANE" => $lp,
 			"RIGHT_PANE" => $rp,
 			"NO_LEFT_PANE" => "",
 			"NO_RIGHT_PANE" => ""
@@ -2472,7 +2472,7 @@ class site_show extends class_base
 					"obj" => (!empty($pobject) ? $pobject : false),
 					"pgroup" =>  (!empty($pgroup) ? $pgroup : false),
 				));
-	
+
 				// check acl
 				if ($_act == "new" && !$this->can("add", aw_global_get("section")))
 				{
@@ -2540,11 +2540,11 @@ class site_show extends class_base
 				$link = "";
 			};
 		}
-		else 
+		else
 		if (!$this->brother_level_from && $link_str != "")
 		{
 			$link = $link_str;
-			if (is_numeric($link)) // link is without preceding / 
+			if (is_numeric($link)) // link is without preceding /
 			{
 				$link = obj_link($link);
 			}
@@ -2592,13 +2592,13 @@ class site_show extends class_base
 						if (aw_ini_get("ini_rootmenu"))
 						{
 							$tmp = aw_ini_get("rootmenu");
-							aw_ini_set("", "rootmenu", aw_ini_get("ini_rootmenu"));
+							aw_ini_set("rootmenu", aw_ini_get("ini_rootmenu"));
 						}
 						$_p = $o->path();
 
 						if (aw_ini_get("ini_rootmenu"))
 						{
-							aw_ini_set("", "rootmenu", $tmp);
+							aw_ini_set("rootmenu", $tmp);
 						}
 						$alp = array();
 						foreach($_p as $p_o)
@@ -2608,7 +2608,7 @@ class site_show extends class_base
 								$alp[] = urlencode(($use_trans ? $p_o->trans_get_val("alias") : $p_o->alias()));
 							}
 						}
-						
+
 						$link .= join("/",$alp);
 						if (sizeof($tmp) > 0)
 						{
@@ -2661,7 +2661,7 @@ class site_show extends class_base
 	function get_cached_compiled_filename($arr)
 	{
 		$tpl = $arr["tpldir"]."/".$arr["template"];
-		
+
 		$what_to_replace = array('/','.','\\',':');
 		$str_part = str_replace($what_to_replace, '_', $tpl);
 
@@ -2680,11 +2680,11 @@ class site_show extends class_base
 		$co = get_instance("contentmgmt/site_template_compiler");
 		$code = $co->compile($path, $tpl, $mdefs, $no_cache);
 		$tpl = $path."/".$tpl;
-		
+
 		$what_to_replace = array("\\","/",".",":");
 		$str_part = str_replace($what_to_replace, "_", $tpl);
 		$fn = "compiled_menu_template-".$str_part."-".aw_global_get('lang_id');
-		
+
 		$ca = get_instance("cache");
 		$ca->file_set($fn, $code);
 
@@ -2740,7 +2740,7 @@ class site_show extends class_base
 		$this->make_yah();
 
 		$this->make_langs();
-		
+
 		// execute menu drawing code
 		$awt->start("part2");
 		$this->do_draw_menus($arr);
@@ -2762,7 +2762,7 @@ class site_show extends class_base
 		$awt->stop("part5");
 
 		$awt->start("part6");
-		$this->make_final_vars();		
+		$this->make_final_vars();
 		$awt->stop("part6");
 
 		$rv = $this->parse();
@@ -2770,7 +2770,7 @@ class site_show extends class_base
 		$rv .= $this->build_popups();
 		return $rv;
 	}
-	
+
 	function no_ip_access_redir($o)
 	{
 		die(t("Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: ".aw_global_get("REMOTE_ADDR")."<br>Leht: ".$o));
@@ -2783,7 +2783,7 @@ class site_show extends class_base
 		$c = get_instance("config");
 		$ec = $c->get_simple_config("errors");
 		$ra = aw_unserialize($ec);
-			
+
 		$gidlist = aw_global_get("gidlist");
 		if (is_array($gidlist))
 		{
@@ -2799,7 +2799,7 @@ class site_show extends class_base
 					$d_url = $ra[$gid]["url"];
 				}
 			}
-			
+
 			if ($d_url != "")
 			{
 				if ($d_url != aw_global_get("REQUEST_URI"))
@@ -2811,7 +2811,7 @@ class site_show extends class_base
 				{
 					$this->raise_error(ERR_ACL_ERR,t("Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"),1);
 				};
-					
+
 			}
 		}
 		$this->raise_error(ERR_MNEDIT_NOACL,sprintf(t("No ACL error messages defined! no can_view access for object %s"), $section),true);
@@ -2863,7 +2863,7 @@ class site_show extends class_base
 		if (aw_ini_get("ini_rootmenu"))
 		{
 			$tmp = aw_ini_get("rootmenu");
-			aw_ini_set("", "rootmenu", aw_ini_get("ini_rootmenu"));
+			aw_ini_set("rootmenu", aw_ini_get("ini_rootmenu"));
 		}
 
 		//if (is_object($this->section_obj))
@@ -2891,7 +2891,7 @@ class site_show extends class_base
 
 		if (aw_ini_get("ini_rootmenu"))
 		{
-			aw_ini_set("", "rootmenu", $tmp);
+			aw_ini_set("rootmenu", $tmp);
 		}
 
 		$pfp = aw_ini_get("shop.prod_fld_path");
@@ -2913,10 +2913,10 @@ class site_show extends class_base
 	/** compiles and displays a template containing menu subs
 
 		@comment
-		
+
 			parameters:
 				template required - template with path, example: contentmgmt/foo/blah.tpl
-				mdefs - optional -	if set, defines new menu areas for the template compiler. 
+				mdefs - optional -	if set, defines new menu areas for the template compiler.
 									format is the same as in the ini file
 
 	**/
@@ -2992,7 +2992,7 @@ class site_show extends class_base
 		{
 			return;
 		}
-		if (!$this->can("admin", $menu->id()) && 
+		if (!$this->can("admin", $menu->id()) &&
 			!$this->can("add", $menu->id()) &&
 			!$this->can("edit", $menu->id())
 		)
@@ -3010,7 +3010,7 @@ class site_show extends class_base
 				"link" => "javascript:void(0)"
 			));
 		}
-		
+
 		if ($this->can("add", $menu->id()))
 		{
 			$url = $this->mk_my_orb("new", array("parent" => $menu->id(), "ord_after" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
@@ -3020,7 +3020,7 @@ class site_show extends class_base
 				"link" => "javascript:void(0)"
 			));
 		}
-		
+
 		if ($this->can("change", $menu->id()))
 		{
 			$url = $this->mk_my_orb("change", array("id" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
@@ -3030,7 +3030,7 @@ class site_show extends class_base
 				"link" => "javascript:void(0)"
 			));
 		}
-		
+
 		if ($this->can("admin", $menu->id()))
 		{
 			$url = $this->mk_my_orb("disp_manager", array("id" => $menu->id()), "acl_manager", true);
@@ -3040,7 +3040,7 @@ class site_show extends class_base
 				"link" => "javascript:void(0)"
 			));
 		}
-		
+
 		if ($this->can("edit", $menu->id()))
 		{
 			$pm->add_item(array(
@@ -3093,7 +3093,7 @@ class site_show extends class_base
 			));
 		}
 		return $pm->get_menu();
-		
+
 	}
 }
 ?>

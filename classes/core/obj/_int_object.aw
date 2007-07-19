@@ -1527,6 +1527,7 @@ class _int_object
 				return $tmp->trans_get_val($prop);
 			}
 		}
+
 		switch($prop)
 		{
 			case "name":
@@ -1548,6 +1549,7 @@ class _int_object
 			default:
 				$val = $this->prop($prop);
 		}
+
 		$trans = false;
 		$cur_lid = false;
 		if (!empty($GLOBALS["cfg"]["user_interface"]["content_trans"]) && ($cur_lid = aw_global_get("lang_id")) != $this->lang_id())
@@ -1771,7 +1773,7 @@ class _int_object
 		$this->_int_load_property_values();
 
 		// now that we know the class id, change the object instance out from beneath us, if it is set so in the ini file
-		$cld = $GLOBALS["cfg"]["__default"]["classes"][$this->obj["class_id"]];
+		$cld = $GLOBALS["cfg"]["classes"][$this->obj["class_id"]];
 		if (!empty($cld["object_override"]))
 		{
 			$i = get_instance($cld["object_override"]);
@@ -1820,6 +1822,7 @@ class _int_object
 		{
 			$file = empty($GLOBALS["cfg"]["classes"][$cl_id]["file"]) ? null : basename($GLOBALS["cfg"]["classes"][$cl_id]["file"]);
 		}
+
 		list(
 				$GLOBALS["properties"][$cl_id],
 				$GLOBALS["tableinfo"][$cl_id],
@@ -2056,12 +2059,12 @@ class _int_object
 
 		if (is_admin())
 		{
-			$rootmenu = (array)$GLOBALS["cfg"]["__default"]["admin_rootmenu2"];
+			$rootmenu = (array)$GLOBALS["cfg"]["admin_rootmenu2"];
 			$add = false;
 		}
 		else
 		{
-			$rootmenu = array($GLOBALS["cfg"]["__default"]["rootmenu"]);
+			$rootmenu = array($GLOBALS["cfg"]["rootmenu"]);
 			$add = true;
 		}
 
@@ -2190,7 +2193,7 @@ class _int_object
 		$this->_int_set_of_value("hits", 0);
 		if (!$this->obj["site_id"])
 		{
-			$this->_int_set_of_value("site_id", $GLOBALS["cfg"]["__default"]["site_id"]);
+			$this->_int_set_of_value("site_id", $GLOBALS["cfg"]["site_id"]);
 		}
 
 		// new objects can't be created with deleted status

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.47 2006/12/14 10:11:59 kristo Exp $
-// object_import.aw - Objektide Import 
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.48 2007/07/19 09:13:03 voldemar Exp $
+// object_import.aw - Objektide Import
 /*
 
 @classinfo syslog_type=ST_OBJECT_IMPORT relationmgr=yes no_comment=1 no_status=1
@@ -17,15 +17,15 @@
 @caption Imporditava objekti t&uuml;&uuml;p
 
 @property unique_id type=select multiple=1
-@caption Unikaalne omadus 
+@caption Unikaalne omadus
 
-@property folder_field type=select 
+@property folder_field type=select
 @caption Tulp, mille j&auml;rgi jagatakse kataloogidesse
 
 @property folder_is_parent type=checkbox ch_value=1
 @caption Objektid samsse kataloogi, kus imporditavad
 
-@layout ds_hbox type=hbox 
+@layout ds_hbox type=hbox
 @caption Andmeallikas
 
 	@property ds type=relpicker reltype=RELTYPE_DATASOURCE parent=ds_hbox no_caption=1
@@ -33,7 +33,7 @@
 	@property ds_file type=select parent=ds_hbox editonly=1
 	@caption Fail andmeallikast
 
-@property do_import type=checkbox ch_value=1 
+@property do_import type=checkbox ch_value=1
 @caption Teosta import
 
 @property import_status type=text
@@ -116,7 +116,7 @@ class object_import extends class_base
 					$retval = PROP_IGNORE;
 				}
 				break;
-		
+
 			case "last_import_log":
 				$prop["value"] = join("<br>", safe_array($prop["value"]));
 				break;
@@ -125,13 +125,13 @@ class object_import extends class_base
 				$o = $arr["obj_inst"];
 				if (is_oid($o->prop("recurrence")) && $o->prop("aimp_uid") != "" && $o->prop("aimp_pwd") != "")
 				{
-					$t = get_instance(CL_RECURRENCE); 
+					$t = get_instance(CL_RECURRENCE);
 					$next = $t->get_next_event(array(
 						"id" => $o->prop("recurrence")
 					));
 
-					$prop["value"] = sprintf(t("%s, kell %s, kasutaja %s &otilde;igustes."), 
-						get_lc_date($next, LC_DATE_FORMAT_LONG_FULLYEAR), 
+					$prop["value"] = sprintf(t("%s, kell %s, kasutaja %s &otilde;igustes."),
+						get_lc_date($next, LC_DATE_FORMAT_LONG_FULLYEAR),
 						date("H:i", $next),
 						$o->prop("aimp_uid")
 					);
@@ -255,7 +255,7 @@ class object_import extends class_base
 			case "folders":
 				$arr["obj_inst"]->set_meta("fld_values", $arr["request"]["values"]);
 				break;
-			
+
 			case "status":
 				$prop["value"] = STAT_ACTIVE;
 				break;
@@ -281,10 +281,10 @@ class object_import extends class_base
 				}
 				return PROP_IGNORE;
 				break;
-				
+
 		}
 		return $retval;
-	}	
+	}
 
 	function _init_folders_table(&$t)
 	{
@@ -513,7 +513,7 @@ class object_import extends class_base
 
 		$this->_init_connect_props_table($t, $cols);
 
-		$p2c = $arr["obj_inst"]->meta("p2c");		
+		$p2c = $arr["obj_inst"]->meta("p2c");
 		$isimp = $arr["obj_inst"]->meta("isimp");
 
 		foreach($this->get_props_from_obj($arr["obj_inst"]) as $pn => $pd)
@@ -563,7 +563,7 @@ class object_import extends class_base
 
 		@attrib name=automatic_import
 
-		@param id required 
+		@param id required
 
 	**/
 	function automatic_import($arr)
@@ -578,10 +578,10 @@ class object_import extends class_base
 
 		@attrib name=do_check_import nologin="1"
 
-		@param oid optional 
+		@param oid optional
 	**/
 	function do_check_import($arr = array())
-	{	
+	{
 		if (false && date("H") > 8 && date("H") < 19)
 		{
 			echo "not during the day! <br>";
@@ -615,7 +615,7 @@ class object_import extends class_base
 
 			if (is_oid($o->prop("recurrence")) && $o->prop("aimp_uid") != "" && $o->prop("aimp_pwd") != "")
 			{
-				$t = get_instance(CL_RECURRENCE); 
+				$t = get_instance(CL_RECURRENCE);
 				$next = $t->get_next_event(array(
 					"id" => $o->prop("recurrence")
 				));
@@ -642,7 +642,7 @@ class object_import extends class_base
 		// read it
 		// if there is an unique column
 		//		check if there already is an object with that value
-		//		if true, use that 
+		//		if true, use that
 		// else
 		//		create new object
 		// match col => prop
@@ -664,7 +664,7 @@ class object_import extends class_base
 					"password" => aw_ini_get("object_import.password")
 				));
 			}
-			aw_ini_set("cache", "use_html_cache", 0); /// set this so we won't do a cache flush on every object save - and we're gonna do lots of saves here
+			aw_ini_set("cache.use_html_cache", 0); /// set this so we won't do a cache flush on every object save - and we're gonna do lots of saves here
 			$sc = get_instance("scheduler");
 			$sc->add(array(
 				"event" => $this->mk_my_orb("do_check_import"),
@@ -691,7 +691,7 @@ class object_import extends class_base
 			$ds_o = obj($o->prop("ds"), $o->prop("ds_file"));
 			$ds_i = $ds_o->instance();
 			$data_rows = $ds_i->get_objects($ds_o);
-			
+
 			// read props
 			list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
 				"clid" => $class_id
@@ -703,7 +703,7 @@ class object_import extends class_base
 			{
 				// get uniqueness filtr.
 				// we need to load all possible objects to do this. damn.
-				// storage simply can not handle this for 65k objects. 
+				// storage simply can not handle this for 65k objects.
 				// so we do query :(
 				echo "creating uniqueness filter <br>\n";
 				flush();
@@ -738,7 +738,7 @@ class object_import extends class_base
 					$t_oid = $existing_objects[$key];
 
 					if (is_oid($t_oid) && $this->can("view", $t_oid))
-					{	
+					{
 						$dat = obj($t_oid);
 						echo sprintf(t("leidsin juba olemasoleva objekti %s, kasutan olemasolevat objekti <br>"), $dat->name());
 					}
@@ -764,7 +764,7 @@ class object_import extends class_base
 				$dat->set_meta("object_type", $type_o->id());
 				$dat->set_class_id($class_id);
 				$dat->set_parent($folder);
-			
+
 				$linebak = $line;
 				if (!is_array($p2c))
 				{
@@ -825,7 +825,7 @@ class object_import extends class_base
 				}
 				// now, if we have separate folder settings, then move to correct place.
 				if (($fldfld = $o->prop("folder_field")))
-				{	
+				{
 					$flds = new aw_array($o->meta("fld_values"));
 					$fldfld_val = $line[$fldfld];
 					foreach($flds->get() as $fld_id => $fld_val)
@@ -843,7 +843,7 @@ class object_import extends class_base
 					{
 						if ($uv_pv != "")
 						{
-							$dat->set_prop($uv_pn, $uv_pv);	
+							$dat->set_prop($uv_pn, $uv_pv);
 						}
 					}
 				}
@@ -866,7 +866,7 @@ class object_import extends class_base
 					$this->_add_log($o, sprintf(t("Imporditud %s objekti"), $line_n));
 				}
 			}
-			aw_ini_set("cache", "use_html_cache", 1);
+			aw_ini_set("cache.use_html_cache", 1);
 			$this->_add_log($o, $this->_delete_objects($o, $properties, $tableinfo, $data_rows, $p2c, $userval, $class_id));
 			$c = get_instance("cache");
 			aw_global_set("no_cache_flush", 0);
@@ -909,7 +909,7 @@ class object_import extends class_base
 		$o = $arr["obj_inst"];
 		if (is_oid($o->prop("recurrence")) && $o->prop("aimp_uid") != "" && $o->prop("aimp_pwd") != "")
 		{
-			$t = get_instance(CL_RECURRENCE); 
+			$t = get_instance(CL_RECURRENCE);
 			$next = $t->get_next_event(array(
 				"id" => $o->prop("recurrence")
 			));
@@ -950,7 +950,7 @@ class object_import extends class_base
 		}
 		echo "Hoiatus! ei leidnud vastet klassifikaatori v&auml;&auml;rtusele $str!<Br>Praegused variandid: ".join(",", $this->classif_cache[$arr["name"]])."<br><hr><br>";
 		return NULL;
-	}	
+	}
 
 	function _get_uniq_existing($o, $properties, $tableinfo)
 	{
@@ -1015,14 +1015,14 @@ class object_import extends class_base
 		echo t("got filter <Br>\n");
 		flush();
 
-		// compare filter to lines read from ds	
+		// compare filter to lines read from ds
 		// make list of objects that are in uniq filter but not in ds
 		foreach($lines as $line)
 		{
 			$key = $this->_get_un_key_for_obj($o, $p2c, $line, $userval, $properties, $class_id);
 			unset($uniq[$key]);
 		}
-	
+
 		echo t("unset keys <br>\n");
 		flush();
 
@@ -1082,7 +1082,7 @@ class object_import extends class_base
 			$u_col = $p2c[$unique_id];
 			$val = $line[$u_col];
 
-			// if this col has a user-defined value, use that. 
+			// if this col has a user-defined value, use that.
 			if (!empty($userval[$unique_id]))
 			{
 				$val = $userval[$unique_id];

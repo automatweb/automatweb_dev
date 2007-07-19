@@ -1,5 +1,5 @@
 <?php
-$uid = "";	// for the extra paranoid 
+$uid = "";	// for the extra paranoid
 ini_set("session.save_handler", "files");
 session_name("automatweb");
 
@@ -51,8 +51,8 @@ if (!empty($set_ct_lang_id))
 
 $LC = aw_global_get("LC");
 
-@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
-@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["__default"]["ext"]);
+@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
+@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
 
 
 $awt = new aw_timer;

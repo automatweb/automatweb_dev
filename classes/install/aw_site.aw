@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.48 2007/03/28 10:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.49 2007/07/19 09:13:12 voldemar Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -136,7 +136,7 @@ class aw_site extends class_base
 						return PROP_IGNORE;
 					}
 				}
-	
+
 				if ($arr['obj_inst']->meta('site_url') == '')
 				{
 					$this->err_str = t("Saidi url on m&auml;&auml;ramata!");
@@ -343,12 +343,12 @@ class aw_site extends class_base
 			// clear objects list
 			$GLOBALS["objects"] = array();
 			$site = $this->get_site_def($id);
-		
+
 			if (!$this->is_site_ok($site))
 			{
 				$this->raise_error(ERR_SITE_CFG, sprintf(t("error in site config: %s"), $this->err_str),true,false);
 			}
-				
+
 			echo t("Loon saiti! \n<br />HOIATUS! Saidi loomine v&otilde;tab paar minutit aega!<br /><br />\n");
 			flush();
 
@@ -356,7 +356,7 @@ class aw_site extends class_base
 
 			aw_global_set("__is_install",1);
 
-			// now, do the actual thing. 
+			// now, do the actual thing.
 
 			// start logger
 			$log = get_instance("install/aw_site_gen_log");
@@ -378,7 +378,7 @@ class aw_site extends class_base
 			$this->create_site_database($site, $ini_opts, &$log);
 
 			// now let each class that is registered handle the install process
-			// each class gets an instance of a dummy class, where it can set 
+			// each class gets an instance of a dummy class, where it can set
 			// properties and then those properties will get written to the ini file
 			$this->do_init_classes($site, $ini_opts, &$log);
 
@@ -478,7 +478,7 @@ class aw_site extends class_base
 			"result" => t("OK")
 		));
 
-		
+
 		$this->_do_add_folder($site['logroot'], &$log);
 
 		// create apache vhost file
@@ -496,7 +496,7 @@ class aw_site extends class_base
 			"file" => $vhost_file_name,
 			"content" => $vhost_conf
 		));
-			
+
 		$si = get_instance("install/su_exec");
 		$si->add_cmd("copy $vhost_file_name ".$site["vhost_file"]);
 		$si->exec();
@@ -590,7 +590,7 @@ class aw_site extends class_base
 		// ok, fuck it, we fake the site_id so that the objects all get the correct site_id
 		$osid = aw_ini_get("site_id");
 		aw_global_set("real_site_id", $osid);
-		$GLOBALS["cfg"]["__default"]["site_id"] = $ini_opts["site_id"];
+		aw_ini_set("site_id", $ini_opts["site_id"]);
 
 		// connect to the site database
 		$dbi = get_instance("class_base");
@@ -602,7 +602,7 @@ class aw_site extends class_base
 			'password' => $ini_opts['db.pass']
 		));
 
-		// right. now we must somehow assume the identity of the new site. 
+		// right. now we must somehow assume the identity of the new site.
 		// quiestion is, how the hell do we do that?
 		// ok, what the hell, right now just update objects.site_id to have the new id after doing stuff
 		// createdby uids will still be incorrect, but we can update that later as well
@@ -631,7 +631,7 @@ class aw_site extends class_base
 
 		if (!$site['site_obj']['use_existing_database'])
 		{
-			// start it all. create the root object. the father. the ROOT of all things - both good and evil. may life treat it well. 
+			// start it all. create the root object. the father. the ROOT of all things - both good and evil. may life treat it well.
 			// farewell, my darling! go, and flourish!
 			$dbi->db_query("INSERT INTO objects(oid, name, class_id, parent, status) values(1,'root',1,0,2)");
 			$dbi->db_query("INSERT INTO menu(id, type) values(1,".MN_CLIENT.")");
@@ -734,7 +734,7 @@ class aw_site extends class_base
 		flush();
 
 		// now, create the menus based on subs in main.tpl
-		$this->_do_create_menus_from_template($dbi, $site, $ini_opts, $log, $osi_vars);		
+		$this->_do_create_menus_from_template($dbi, $site, $ini_opts, $log, $osi_vars);
 
 		echo "did menus from template <br>\n";
 		flush();
@@ -773,7 +773,7 @@ class aw_site extends class_base
 		$dbi->db_query("INSERT INTO objects_cache_data SELECT oid,cachedirty,cachedata FROM objects");
 		$ini_opts["cache.table_is_sep"] = 1;
 
-		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
+		aw_ini_set("site_id", $osid);
 
 		$GLOBALS["object_loader"]->switch_db_connection($old_ds);
 		$GLOBALS["cfg"]["acl"]["no_check"] = 0;
@@ -862,9 +862,9 @@ class aw_site extends class_base
 
 			// grant permission
 			$q = "
-				GRANT ALL PRIVILEGES 
-					ON $site[db_name].* 
-					TO $site[db_user]@".aw_ini_get("install.mysql_client")." 
+				GRANT ALL PRIVILEGES
+					ON $site[db_name].*
+					TO $site[db_user]@".aw_ini_get("install.mysql_client")."
 					IDENTIFIED BY '$site[db_pwd]'
 			";
 			//echo "exec $q <br />";
@@ -984,9 +984,9 @@ class aw_site extends class_base
 				return false;
 			}
 		}
-		
 
-		// check if we can manage the nameserver for the url 
+
+		// check if we can manage the nameserver for the url
 		// if we can not, then check if the domain name exists
 		if (!$this->is_managed_nameserver($site['url']))
 		{
@@ -1061,7 +1061,7 @@ class aw_site extends class_base
 
 	function get_site_def($id)
 	{
-		$ob = obj($id);	
+		$ob = obj($id);
 		$site_url = str_replace("http://","",$ob->meta('site_url'));
 		$site_url = str_replace("/","",$site_url);
 
@@ -1109,7 +1109,7 @@ class aw_site extends class_base
 		}
 		return false;
 	}
-	
+
 	function create_ini_file($site, &$ini_opts, &$log)
 	{
 		//echo "ini_opts = <pre>", var_dump($ini_opts),"</pre> <br />";
@@ -1148,7 +1148,7 @@ class aw_site extends class_base
 	}
 
 	function get_site_id($site, &$ini_opts, &$log)
-	{		
+	{
 		$server_id = $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "get_server_id_by_ip",
@@ -1189,7 +1189,7 @@ class aw_site extends class_base
 		// get current server id
 		$server_id = $this->do_orb_method_call(array(
 			"class" => "site_list",
-			"action" => "get_server_id_by_ip", 
+			"action" => "get_server_id_by_ip",
 			"params" => array(
 				"ip" => aw_ini_get("install.default_ip")
 			),
@@ -1203,10 +1203,10 @@ class aw_site extends class_base
 			return PROP_IGNORE;
 		}
 
-		// ok, here we must figoure out a list of sites in that server 
+		// ok, here we must figoure out a list of sites in that server
 		$this->server_site_list = $this->do_orb_method_call(array(
 			"class" => "site_list",
-			"action" => "get_site_list", 
+			"action" => "get_site_list",
 			"params" => array(
 				//"server_id" => $server_id
 			),
@@ -1346,7 +1346,7 @@ class aw_site extends class_base
 			$_tpls[] = $tpl;
 		}
 		$tpls = array_unique($_tpls);
-		
+
 		// now, make array that says how many for each area
 		// MENU_VASAK_L2_ITEM_FOO
 		$areas = array();
@@ -1371,7 +1371,7 @@ class aw_site extends class_base
 			{
 				$crss = true;
 			}
-		
+
 			$astr = str_replace("6", "&otilde;", $astr);
 			$astr = str_replace("y", "&uuml;", $astr);
 			$astr = str_replace("Y", "&Uuml;", $astr);
@@ -1405,7 +1405,7 @@ class aw_site extends class_base
 			}
 
 			$pt = $o->id();
-			echo "created root menu for area, name = ".$astr." men&uuml;&uuml; id = $pt <br>\n"; 
+			echo "created root menu for area, name = ".$astr." men&uuml;&uuml; id = $pt <br>\n";
 			// also set ini opt
 			$ini_opts["menuedit.menu_defs[$pt]"] = $area;
 			for ($i = 0; $i < $levels; $i++)
@@ -1418,7 +1418,7 @@ class aw_site extends class_base
 				$o->set_name($astr." tase ".($i+1));
 				$o->save();
 
-				echo "created level $i menu for area, name = ".$astr." tase ".($i+1)." under obj $pt <br>\n"; 
+				echo "created level $i menu for area, name = ".$astr." tase ".($i+1)." under obj $pt <br>\n";
 				$pt = $o->id();
 			}
 		}
@@ -1430,7 +1430,7 @@ class aw_site extends class_base
 			list(, $sn) = each($site['site_obj']['select_tpl_sites']);
 			$sn = str_replace("http://","",$sn);
 		}
-	
+
 		if ($sn == "")
 		{
 			// try the imcss site
@@ -1461,7 +1461,7 @@ class aw_site extends class_base
 		}
 		else
 		{
-			// make demo promo boxes 
+			// make demo promo boxes
 			$tpl = new aw_template;
 			$tpl->read_tpl(file($site["docroot"]."/templates/automatweb/menuedit/main.tpl"));
 			$tpls = $tpl->get_subtemplates_regex("(.*_PROMO)");
@@ -1480,7 +1480,7 @@ class aw_site extends class_base
 				"SCROLL_PROMO" => "scroll",
 				"LEFT_PROMO" => "0",
 				"RIGHT_PROMO" => 1,
-				"UP_PROMO" => "2", 
+				"UP_PROMO" => "2",
 				"DOWN_PROMO" => "3",
 			);
 
@@ -1488,7 +1488,7 @@ class aw_site extends class_base
 				"SCROLL_PROMO" => t("Skrolliv"),
 				"LEFT_PROMO" => t("Vasak"),
 				"RIGHT_PROMO" => t("Parem"),
-				"UP_PROMO" => t("&Uuml;lemine"), 
+				"UP_PROMO" => t("&Uuml;lemine"),
 				"DOWN_PROMO" => t("Alumine"),
 			);
 
@@ -1504,7 +1504,7 @@ class aw_site extends class_base
 
 		foreach($templates as $id => $dat)
 		{
-			$ini_opts["promo.areas[$id][def]"] = $dat["def"];		
+			$ini_opts["promo.areas[$id][def]"] = $dat["def"];
 			$ini_opts["promo.areas[$id][name]"] = $dat["name"];
 
 			$astr = $dat["name"];
@@ -1585,7 +1585,7 @@ class aw_site extends class_base
 		// get old defs
 		$old = $o->meta("old_site_opts");
 
-		// check if template sources are modified	
+		// check if template sources are modified
 		if ($o->prop("use_existing_templates"))
 		{
 			$do_copy_existing_tpls = false;
@@ -1594,7 +1594,7 @@ class aw_site extends class_base
 				$do_copy_existing_tpls = true;
 			}
 			else
-			if ($o->prop("select_tpl_folders") != $old["site_obj"]["select_tpl_folders"])	
+			if ($o->prop("select_tpl_folders") != $old["site_obj"]["select_tpl_folders"])
 			{
 				$do_copy_existing_tpls = true;
 			}
@@ -1609,7 +1609,7 @@ class aw_site extends class_base
 		{
 			$this->_do_change_imgcss($o);
 		}
-	
+
 		// check if url changed
 		if ($o->prop("site_url") != $old["url"])
 		{
@@ -1656,7 +1656,7 @@ class aw_site extends class_base
 			));
 		}
 		$sue->add_cmd("rm -rf $cache");
-	
+
 		// rewrite apache vhost file
 		$vhname = aw_ini_get("install.vhost_folder").$sn;
 		$vhname_to = aw_ini_get("install.vhost_folder").$nu;
@@ -1683,8 +1683,8 @@ class aw_site extends class_base
 		$vhname = aw_ini_get("install.logroot").$sn;
 		$vhname_to = aw_ini_get("install.logroot").$nu;
 		$sue->add_cmd("move $vhname $vhname_to ");
-	
-		// rewrite ini file 
+
+		// rewrite ini file
 		$inif = $sb."/aw.ini";
 		$inif_nu = $sb_to."/aw.ini";
 		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_ini");
@@ -1781,7 +1781,7 @@ class aw_site extends class_base
 		$this->do_copy_existing_templates($def, true, false, false);
 
 		// clear out pagecache
-		
+
 	}
 
 	/** deletes the old templates from the site and copies new ones
@@ -1804,7 +1804,7 @@ class aw_site extends class_base
 			"no_errors" => true
 		));
 		$t = $_t["tpldir"];
-		
+
 		echo "got tpldir as $t <Br>";
 
 		if (is_link($t))

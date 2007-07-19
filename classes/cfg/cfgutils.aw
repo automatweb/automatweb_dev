@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.85 2007/06/05 09:41:25 kristo Exp $
+// $Id: cfgutils.aw,v 1.86 2007/07/19 09:13:04 voldemar Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -35,7 +35,7 @@ class cfgutils extends aw_template
 		};
 		// XXX: remove this after document class has been converted
 		$this->clist[7] = "doc";
-		
+
 		$this->clist_init_done = true;
 	}
 
@@ -109,17 +109,17 @@ class cfgutils extends aw_template
 	function get_classes_with_properties($args = array())
 	{
 		$result = array();
-		$value = ($value) ? $value : "name";
+		$value = "name";
 		$clist = aw_ini_get("classes");
 
-		$tmp = aw_ini_get("classes");
-		foreach($tmp as $clid => $desc)
+		foreach($clist as $clid => $desc)
 		{
 			if ($this->has_properties(array("clid" => $clid)))
 			{
 				$result[$clid] = $desc[$value];
-			};
+			}
 		}
+
 		asort($result);
 		return $result;
 	}
@@ -177,7 +177,8 @@ class cfgutils extends aw_template
 			else
 			{
 				$source = $this->get_file(array("file" => $fqfn));
-			};
+			}
+
 			$p = xml_parser_create();
 			$x = xml_parser_set_option($p, XML_OPTION_CASE_FOLDING, 0);
 			$x = xml_parser_set_option($p, XML_OPTION_SKIP_WHITE, 1);
@@ -218,7 +219,7 @@ class cfgutils extends aw_template
 					};
 					// if this tags parent is a 'container' (containing multiple values),
 					// then add to that, otherwise just use the name of the tag
-					if ($tagname) 
+					if ($tagname)
 					{
 						$propdef[$propkey][$propname][$tagname][] = $val["value"];
 					}
@@ -291,7 +292,7 @@ class cfgutils extends aw_template
 			{
 				$propdef['layout'][$k]['caption'] = html_entity_decode(isset($d['caption']) ? $d['caption'] : "");
 			}
-		
+
 		}
 
 		$this->propdef = $propdef;
@@ -351,7 +352,7 @@ class cfgutils extends aw_template
 				if (isset($dat["caption"]))
 				{
 					$relinfo[$k]["caption"] = html_entity_decode($dat["caption"]);
-				}		
+				}
 			}
 		}
 
@@ -382,7 +383,7 @@ class cfgutils extends aw_template
 				}
 
 				$properties[$k]["orig_caption"] = isset($properties[$k]["caption"]) ? $properties[$k]["caption"] : "";
-				
+
 				$t_str = "Omaduse ".$d["caption"]." (".$d["name"].") caption";
 				$tmp = t2($t_str);
 				if ($tmp !== NULL)
@@ -441,7 +442,7 @@ class cfgutils extends aw_template
 					{
 						$relinfo[$k]["caption"] = $tmp;
 					}
-					
+
 				}
 			};
 			// new
@@ -618,14 +619,14 @@ class cfgutils extends aw_template
 		@param clid optional type=int
 			The class id whose properties to load
 
-		@errors 
+		@errors
 			none
 
 		@comment
 			One of file or clid must be given
 
 		@returns
-			array of properties, with the property name as the key and property data 
+			array of properties, with the property name as the key and property data
 			as the value
 	**/
 	function load_properties($args = array())
@@ -633,16 +634,18 @@ class cfgutils extends aw_template
 		$clid = $args["clid"];
 		$file = isset($args["file"]) ? $args["file"] : null;
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
+
 		if (empty($file))
 		{
-			$file = basename($GLOBALS["cfg"]["__default"]["classes"][$clid]["file"]);
+			$file = basename($GLOBALS["cfg"]["classes"][$clid]["file"]);
 			if ($clid == 7) $file = "doc";
 		}
+
 		$tft = 0;
 		$adm_ui_lc = null;
 		if (isset($GLOBALS['cfg']['user_interface']["default_language"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
-			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($file).".aw";
+			$trans_fn = $GLOBALS["cfg"]["basedir"]."/lang/trans/" . $adm_ui_lc . "/aw/" . basename($file).".aw";
 			if (file_exists($trans_fn))
 			{
 				require_once($trans_fn);
@@ -681,9 +684,9 @@ class cfgutils extends aw_template
 			);
 			$this->cache->file_set($key, aw_serialize($cache_d, SERIALIZE_PHP_FILE));
 		}
+
 		return $ret;
 	}
-
 
 	function load_properties_unc($args)
 	{
@@ -692,6 +695,7 @@ class cfgutils extends aw_template
 		extract($args);
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
 		$clinf = aw_ini_get("classes");
+
 		if (empty($file))
 		{
 			$file = basename($clinf[$clid]["file"]);
@@ -700,13 +704,14 @@ class cfgutils extends aw_template
 
 		if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
-			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($file).".aw";
+			$trans_fn = $GLOBALS["cfg"]["basedir"]."/lang/trans/" . $adm_ui_lc . "/aw/".basename($file) .".aw";
 			if (file_exists($trans_fn))
 			{
 				incl_f($trans_fn);
 				require_once($trans_fn);
 			}
 		}
+
 		$this->groupinfo = array();
 		$coreprops = $this->load_class_properties(array(
 			"load_trans" => $args["load_trans"],
@@ -745,21 +750,19 @@ class cfgutils extends aw_template
 				"filter" => $filter,
 				"system" => $args["system"],
 			));
-
-
-		};
+		}
 
 		if (empty($this->classinfo["trans"]))
 		{
 			unset($coreprops["needs_translation"]);
 			unset($coreprops["is_translated"]);
-		};
+		}
 
 		if (is_array($objprops))
 		{
 			foreach($objprops as $name => $objprop)
 			{
-				// if a property belongs to multiple groups and one of them is not 
+				// if a property belongs to multiple groups and one of them is not
 				// defined then add the group, value of the group attribute becomes
 				// the caption
 				if (empty($this->groupinfo[$objprop["group"]]))
@@ -843,20 +846,20 @@ class cfgutils extends aw_template
 
 		@returns
 			array of relation data for the last loaded class
-			array contains three entries for each relation type. 
+			array contains three entries for each relation type.
 			for each type, there are keys:
 				RELTYPE_FOO
 				FOO
 				51
 
-			in other words, the complete reltype name, short reltype name and reltype value. 
+			in other words, the complete reltype name, short reltype name and reltype value.
 			for each of these, the array value is an array of (value, clid, caption)
 	**/
 	function get_relinfo()
 	{
 		return is_array($this->relinfo) ? $this->relinfo : array();
 	}
-	
+
 	/** Returns the content of the forminfo tag for the last loaded class
 		@attrib api=1
 
@@ -867,7 +870,7 @@ class cfgutils extends aw_template
 	{
 		return isset($this->propdef["forminfo"]) ? $this->propdef["forminfo"] : array();
 	}
-	
+
 	/** Returns the content of the tableinfo tags for the last loaded class
 		@attrib api=1
 

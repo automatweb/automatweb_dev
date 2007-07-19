@@ -884,9 +884,9 @@ class core extends acl_base
 		if (is_numeric($cl_name))
 		{
 			$fx = array_search($cl_name,$GLOBALS["cfg"]["class_lut"]);
-			if (isset($GLOBALS["cfg"]["__default"]["classes"][$cl_name]))
+			if (isset($GLOBALS["cfg"]["classes"][$cl_name]))
 			{
-				$cl_name = $GLOBALS["cfg"]["__default"]["classes"][$cl_name]["file"];
+				$cl_name = $GLOBALS["cfg"]["classes"][$cl_name]["file"];
 			}
 		};
 
@@ -923,7 +923,7 @@ class core extends acl_base
 			$r_use_orb = false;
 		}
 
-		$in_admin = $GLOBALS["cfg"]["__default"]["in_admin"];
+		$in_admin = $GLOBALS["cfg"]["in_admin"];
 
 		// XXX: admin_folders sets use_empty directly, but shouldn't.
 		if (empty($this->use_empty))

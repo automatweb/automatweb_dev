@@ -27,12 +27,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		$this->quote(&$alias);
 		$q = sprintf("
-			SELECT 
-				%s 
-			FROM 
-				objects 
-			WHERE 
-				alias = '%s' AND 
+			SELECT
+				%s
+			FROM
+				objects
+			WHERE
+				alias = '%s' AND
 				status != 0 %s %s
 		", OID, $alias, $site_id,$parent);
 
@@ -101,9 +101,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// unserialize acldata
 		$ret["acldata"] = aw_unserialize(isset($ret["acldata"]) ? $ret["acldata"] : null);
 
-		// filter it for all current groups 
+		// filter it for all current groups
 
-		// or we could join the acl table based on the current user. 
+		// or we could join the acl table based on the current user.
 		// but we can't do that, cause here we can't do things based on the user
 		// then again we could just read all the acl and save that. maybe. you think?
 
@@ -162,7 +162,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			if ($prop["store"] == "connect")
 			{
-				if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+				if ($GLOBALS["cfg"]["site_id"] != 139)
 				{
 					$_co_reltype = $prop["reltype"];
 					$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
@@ -229,7 +229,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				else
 				if ($prop["store"] == "connect")
 				{
-					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+					if ($GLOBALS["cfg"]["site_id"] != 139)
 					{
 						$_co_reltype = $prop["reltype"];
 						$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
@@ -314,15 +314,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			else
 			{
 				$q = "
-					SELECT 
+					SELECT
 						target,
 						reltype
-					FROM 
-						aliases 
+					FROM
+						aliases
 					LEFT JOIN objects ON objects.oid = aliases.target
-					WHERE 
-						source = '".$object_id."' AND 
-						reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
+					WHERE
+						source = '".$object_id."' AND
+						reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND
 						objects.status != 0
 				";
 				$this->db_query($q);
@@ -430,7 +430,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				else
 				if ($prop["store"] == "connect")
 				{
-					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+					if ($GLOBALS["cfg"]["site_id"] != 139)
 					{
 						// resolve reltype and do find_connections
 						$_co_reltype = $prop["reltype"];
@@ -459,7 +459,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if ($full)
 		{
-			$q = "SELECT 
+			$q = "SELECT
 				objects.oid as oid,
 				objects.parent as parent,
 				objects.name as name,
@@ -541,17 +541,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$source  = "source = '".$object_id."'";
 			}
 			$q2 = "
-				SELECT 
+				SELECT
 					source,
 					target,
 					reltype,
 					objects.name as target_name
-				FROM 
-					aliases 
+				FROM
+					aliases
 				LEFT JOIN objects ON objects.oid = aliases.target
-				WHERE 
-					$source AND 
-					reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
+				WHERE
+					$source AND
+					reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND
 					objects.status != 0
 			";
 		}
@@ -560,7 +560,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	}
 
 
-	// creates new, empty object 
+	// creates new, empty object
 	// params:
 	//	properties - prop array from propreader
 	//	objdata - object data from objtable
@@ -578,14 +578,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-			
+
 			if ($data["table"] == "objects" && $data["field"] == "meta" && !isset($arr["objdata"]["meta"][$data["name"]]) && !empty($data["default"]))
 			{
 				$arr["objdata"]["meta"][$data["name"]] = $data["default"];
 			}
 		}
 		extract($arr);
-		
+
 		$metadata = aw_serialize($objdata["meta"]);
 
 		$this->quote(&$metadata);
@@ -650,7 +650,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				continue;
 			}
-			
+
 			if ($data["table"] == "objects")
 			{
 				continue;
@@ -727,8 +727,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		return $oid;
 	}
 
-	// saves object properties, including all object table fields, 
-	// just stores the data, does not update or check it in any way, 
+	// saves object properties, including all object table fields,
+	// just stores the data, does not update or check it in any way,
 	// except for db quoting of course
 	// params:
 	//	properties - prop array from propreader
@@ -856,19 +856,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					if ($prop['method'] == "bitmask")
 					{
 						$val = $propvalues[$prop["name"]];
-	
+
 						if (!isset($seta[$prop["field"]]))
-						{	
+						{
 							// jost objects.flags support for now
 							$seta[$prop["field"]] = $objdata["flags"];
 						}
 
 						// make mask for the flag - mask value is the previous field value with the
-						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]	
+						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]
 						$mask = $seta[$prop["field"]] & (~((int)$prop["ch_value"]));
 						// add the value
 						$mask |= $val;
-						
+
 						$seta[$prop["field"]] = $mask;;
 					}
 					else
@@ -917,13 +917,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function read_connection($id)
 	{
 		return $this->db_fetch_row("
-			SELECT 
+			SELECT
 				".$this->connection_query_fetch()."
-			FROM 
+			FROM
 				aliases a
 				LEFT JOIN objects o_s ON o_s.oid = a.source
 				LEFT JOIN objects o_t ON o_t.oid = a.target
-			WHERE 
+			WHERE
 				id = $id
 		");
 	}
@@ -937,7 +937,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if ($data["id"])
 		{
-			$q = "UPDATE aliases SET 
+			$q = "UPDATE aliases SET
 				source = '$data[from]',
 				target = '$data[to]',
 				type = '$data[type]',
@@ -1028,13 +1028,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function find_connections($arr)
 	{
 		$sql = "
-			SELECT 
+			SELECT
 				".$this->connection_query_fetch()."
-			FROM 
+			FROM
 				aliases a
 				LEFT JOIN objects o_s ON o_s.oid = a.source
 				LEFT JOIN objects o_t ON o_t.oid = a.target
-			WHERE 
+			WHERE
 				o_s.status != 0 AND
 				o_t.status != 0
 		";
@@ -1130,7 +1130,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	}
 
 	// params:
-	//	array of filter parameters 
+	//	array of filter parameters
 	// if class id is present, properties can also be filtered, otherwise only object table fields
 	function search($params, $to_fetch = NULL)
 	{
@@ -1195,14 +1195,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$datafetch = true;
 			if ($fetch_sql == "")
 			{
-				$fetch_sql = "					
+				$fetch_sql = "
 					objects.oid as oid,
 					objects.name as name,
-					objects.parent as parent, 
+					objects.parent as parent,
 					objects.brother_of as brother_of,
 					objects.status as status,
 					objects.class_id as class_id
-					$acld 
+					$acld
 				";
 				$datafetch = false;
 			}
@@ -1216,18 +1216,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// and thus you would get less than the limit amount of objects
 				// which, in the sql sense is quite falid, since joins are cross products on data sets
 				// but in the gimme-a-list-of-objects-with-those-props is not
-				// so we solve this by making sure we only get separate objects in the result set. 
-				// we do this by adding the group by clause here. 
-				// it slows things by quite a bit, but unfortunately, it is the only way to avoid this. 
+				// so we solve this by making sure we only get separate objects in the result set.
+				// we do this by adding the group by clause here.
+				// it slows things by quite a bit, but unfortunately, it is the only way to avoid this.
 				$gpb = "GROUP BY objects.oid";
 			}
 
 			$q = "
-				SELECT 
+				SELECT
 					$fetch_sql
-				FROM 
-					$joins 
-				WHERE 
+				FROM
+					$joins
+				WHERE
 					$where $gpb ".$this->sby."  ".$this->limit;
 
 			$acldata = array();
@@ -1302,7 +1302,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				"msg" => sprintf(t("ds_mysql::final_delete_object(%s): no suct object exists!"), $oid)
 			));
 		}
-			
+
 		// load props by clid
 		$cl = aw_ini_get("classes");
 		$file = $cl[$clid]["file"];
@@ -1369,7 +1369,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->has_lang_id = true;
 			}
 
-			
+
 			$tbl = "objects";
 			$fld = $key;
 
@@ -1377,8 +1377,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if (strpos($key, ".") !== false)
 			{
 				list($tbl, $fld) = $this->_do_proc_complex_param(array(
-					"key" => &$key, 
-					"val" => $val, 
+					"key" => &$key,
+					"val" => $val,
 					"params" => $p_tmp
 				));
 			}
@@ -1507,7 +1507,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 										"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ,OBJ_COMP_NULL,OBJ_COMP_IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
 									));
 							}
-		
+
 							if ($val->comparator == OBJ_COMP_IN_TIMESPAN)
 							{
 								$tbl_fld1 = $this->_get_tablefield_from_prop($val->data[0]);
@@ -1539,7 +1539,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 						default:
 							error::raise(array(
-								"id" => "OBJ_BF_NOTSUPPORTED",	
+								"id" => "OBJ_BF_NOTSUPPORTED",
 								"msg" => sprintf(t("complex compares of this type (%s) are not yet supported on bitfields (%s)!"), get_class($val), $key)
 							));
 							return;
@@ -1606,7 +1606,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						{
 							$opn_app = "OR $tf IS NULL";
 						}
-	
+
 						if (strpos($v_data, "%") !== false)
 						{
 							$sql[] = " (".$tf." NOT LIKE '".$v_data."'  $opn_app ) ";
@@ -1827,7 +1827,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if (!isset($GLOBALS["properties"][$clid]) || !isset($GLOBALS["tableinfo"][$clid]) || !isset($GLOBALS["relinfo"][$clid]))
 			{
 				list($GLOBALS["properties"][$clid], $GLOBALS["tableinfo"][$clid], $GLOBALS["relinfo"][$clid]) = $GLOBALS["object_loader"]->load_properties(array(
-					"file" => ($clid == CL_DOCUMENT ? "doc" : basename($GLOBALS["cfg"]["__default"]["classes"][$clid]["file"])),
+					"file" => ($clid == CL_DOCUMENT ? "doc" : basename($GLOBALS["cfg"]["classes"][$clid]["file"])),
 					"clid" => $clid
 				));
 			}
@@ -1859,11 +1859,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->quote($metadata);
 		$this->quote(&$objdata);
 
-		$objdata["createdby"] = $objdata["modifiedby"] = aw_global_get("uid");		
-		$objdata["created"] = $objdata["modified"] = time();		
+		$objdata["createdby"] = $objdata["modifiedby"] = aw_global_get("uid");
+		$objdata["created"] = $objdata["modified"] = time();
 
-		$objdata["lang_id"] = aw_global_get("lang_id");		
-		$objdata["site_id"] = aw_ini_get("site_id");		
+		$objdata["lang_id"] = aw_global_get("lang_id");
+		$objdata["site_id"] = aw_ini_get("site_id");
 
 		// create oid
 		$q = "
@@ -1897,14 +1897,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		return $oid;
 	}
 
-	// $key, $val 
+	// $key, $val
 	function _do_proc_complex_param($arr)
 	{
 		extract($arr);
-		
+
 		$filt = explode(".", $key);
 		$clid = constant($filt[0]);
-		
+
 		if (!is_class_id($clid))
 		{
 			if (!is_array($params["class_id"]))
@@ -1923,7 +1923,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		else
 		{
 			// if the first part is a class id and there are only two parts then it is not a join
-			// then it is a specification on what class's property to search from 
+			// then it is a specification on what class's property to search from
 			// UNLESS the second part begins with RELTYPE
 			if (count($filt) == 2)
 			{
@@ -1932,7 +1932,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					// so just return the table and field for that class
 					$prop = $GLOBALS["properties"][$clid][$filt[1]];
 					$this->used_tables[$prop["table"]] = $prop["table"];
-					return array($prop["table"], $prop["field"]);	
+					return array($prop["table"], $prop["field"]);
 				}
 			}
 		}
@@ -2052,7 +2052,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				$prev_filt = $join["field"];
 				$prev_clid = $join["from_class"];
-				
+
 				$objt_name = "objects_".$join["from_class"]."_".$join["field"];
 				if (!isset($done_ot_js[$objt_name]))
 				{
@@ -2175,7 +2175,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					"id" => ERR_OBJ_NO_RP,
 					"msg" => t("ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise")
 				));*/
-	
+
 				error::raise_if($cur_prop["method"] == "serialize", array(
 					"id" => ERR_OBJ_NO_META,
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"), $pp, $cur_clid)
@@ -2206,19 +2206,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							if (!$relt)
 							{
 								$new_clid = @constant($cur_prop["clid"]);
-							}				
+							}
 
 							error::raise_if(!$relt && !$new_clid, array(
 								"id" => ERR_OBJ_NO_REL,
 								"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"), $relt_s, $cur_clid, $cur_prop["name"])
 							));
-		
+
 							if (!$new_clid)
 							{
 								$new_clid = $GLOBALS["relinfo"][$cur_clid][$relt_s]["clid"][0];
 							}
 							break;
-		
+
 						default:
 							$new_clid = $set_clid;
 							error::raise_if(!$set_clid, array(
@@ -2398,7 +2398,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$ret2[] = $row;
 					//$GLOBALS["obj_conn_fetch_vals"][$this->oid][$param]
 				}
-			}			
+			}
 		}
 		return $ret;
 	}
@@ -2557,19 +2557,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					if ($prop['method'] == "bitmask")
 					{
 						$val = $propvalues[$prop["name"]];
-	
+
 						if (!isset($seta[$prop["field"]]))
-						{	
+						{
 							// jost objects.flags support for now
 							$seta[$prop["field"]] = $objdata["flags"];
 						}
 
 						// make mask for the flag - mask value is the previous field value with the
-						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]	
+						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]
 						$mask = $seta[$prop["field"]] & (~((int)$prop["ch_value"]));
 						// add the value
 						$mask |= $val;
-						
+
 						$seta[$prop["field"]] = $mask;;
 					}
 					else
@@ -2700,7 +2700,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				else
 				if ($prop["store"] == "connect")
 				{
-					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+					if ($GLOBALS["cfg"]["site_id"] != 139)
 					{
 						$_co_reltype = $prop["reltype"];
 						$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
@@ -2725,7 +2725,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if (count($fields) > 0)
 			{
 				$q = "SELECT ".join(",", $fields)." FROM ".$table."_versions WHERE `version_id` = '".$arr["objdata"]["load_version"]."'";
-				
+
 				$data = $this->db_fetch_row($q);
 				if (is_array($data))
 				{
@@ -2766,15 +2766,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			else
 			{
 				$q = "
-					SELECT 
+					SELECT
 						target,
 						reltype
-					FROM 
-						aliases 
+					FROM
+						aliases
 					LEFT JOIN objects ON objects.oid = aliases.target
-					WHERE 
-						source = '".$object_id."' AND 
-						reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
+					WHERE
+						source = '".$object_id."' AND
+						reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND
 						objects.status != 0
 				";
 				$this->db_query($q);
@@ -2901,19 +2901,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					if ($prop['method'] == "bitmask")
 					{
 						$val = $propvalues[$prop["name"]];
-	
+
 						if (!isset($seta[$prop["field"]]))
-						{	
+						{
 							// jost objects.flags support for now
 							$seta[$prop["field"]] = $objdata["flags"];
 						}
 
 						// make mask for the flag - mask value is the previous field value with the
-						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]	
+						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]
 						$mask = $seta[$prop["field"]] & (~((int)$prop["ch_value"]));
 						// add the value
 						$mask |= $val;
-						
+
 						$seta[$prop["field"]] = $mask;;
 					}
 					else
@@ -2965,8 +2965,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if (strpos($key, ".") !== false)
 		{
 			list($tbl, $fld) = $this->_do_proc_complex_param(array(
-				"key" => &$key, 
-				"val" => $val, 
+				"key" => &$key,
+				"val" => $val,
 				"params" => $p_tmp
 			));
 		}
