@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.54 2007/07/19 14:15:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.55 2007/07/19 14:21:29 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -1269,10 +1269,6 @@ class shop_order extends class_base
 			$calc_price = $product_info_i->get_calc_price($product_info);
 			foreach($prodx->get() as $x => $val)
 			{
-				if(!$val["unsent"])
-				{
-					continue;
-				}
 				for($i = 1; $i < 21; $i++)
 				{
 					$ui = $product_info->prop("user".$i);
