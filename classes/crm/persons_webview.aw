@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.17 2007/01/10 13:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.18 2007/07/20 10:00:54 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -19,6 +19,9 @@
 //----------------------------------------------
 @groupinfo view caption=Näitamine
 @default group=view
+
+@property show_only_public_phones type=checkbox ch_value=1
+@caption Näita ainult avalikke numbreid
 
 - Isikute järjestamisprintsiip (saab valida mitu, peale salvestamist tekib uus valik), Listbox Omadus (perenimi, ametinimetuse jrk, isiku jrk), mille kõrval Listbox Järjestamine (Väiksem enne/Suurem enne)
 @property persons_principe type=callback callback=callback_get_persons_principe
@@ -110,6 +113,8 @@ class persons_webview extends class_base
 			3 => t("kesk-eri"),
 			4 => t("kõrgem"),
 		);
+		
+		$this->phone_types = array("phone" => "");//see on selleks, et lihtsalt telefoni tüübid kirja panna ja järgmistel inimestel vastavad muutujad ära nullida, muidu võtab eelmiselt isikult
 		
 		$this->help = nl2br(htmlentities(t("
 			Osakondade tasemed, mida näidataks, saab märkida kujul '1,2,3' või '1-2' või '3'
@@ -970,23 +975,23 @@ class persons_webview extends class_base
 		}
 		
 		//igast telefoninumbrid
+		$phone_array = $this->phone_types;
 		$phone = $phone_obj = $phones= $home_phone= $work_phone=$short_phone=$cell_phone=$in_phone=$skype="";
+		
 		$phone_obj = $worker->get_first_obj_by_reltype("RELTYPE_PHONE");
+		
 		if(is_object($phone_obj)) $phone = $phone_obj->name();
 
 		$phone_list = new object_list($worker->connections_from (array (
 			"type" => "RELTYPE_PHONE",
 		)));
-		$phone_array = array();
 		foreach($phone_list->arr() as $phone_obj)
 		{
-			if(strlen($phones) >0) $phones .= ' , ';
-			$phones .= $phone_obj->name();
-			$phone_array[$phone_obj->prop("type")."_phone"] = $phone_obj->name(); //need siis muutujad vastavalt erinevate telefonityypidele
-			$phone_array[$phone_obj->prop("type")."_phones"] .= ", ".$phone_obj->name();
-			if($phone_array[$phone_obj->prop("type")."_phones"][0] == ',')//see v]iks koma eest koristada
+			if(!$this->view_obj->prop("show_only_public_phones") || $phone_obj->prop("is_public"))
 			{
-				array_shift($phone_array[$phone_obj->prop("type")."_phones"]); array_shift($phone_array[$phone_obj->prop("type")."_phones"]);
+				$phone_array[$phone_obj->prop("type")."_phone"][] = $phone_obj->name(); //need siis muutujad vastavalt erinevate telefonityypidele
+				$phone_array["phone"][] = $phone_obj->name();
+				$this->phone_types[$phone_obj->prop("type")."_phone"] = "";
 			}
 		}
 
@@ -1003,8 +1008,6 @@ class persons_webview extends class_base
 			if(strlen($urls) > 0 ) $urls .= ', ';
 			if(strlen($urls) > 0 ) $urls .= $url_obj->prop("url");
 		}
-
-
 
 		//mail	
 		$email = $email_obj = $emails = "";
@@ -1054,8 +1057,12 @@ class persons_webview extends class_base
 		$contact = $person_inst->get_short_description($worker->id());
 
 
-
-		$this->vars_safe($phone_array);
+		foreach($phone_array as $key => $val)
+		{
+			$this->vars_safe(array(
+				$key => join(" ," , $val),
+			));
+		}
 		$this->vars_safe(array(
 		//	"profession" => $profession,
 			"name" => $worker->name(),
