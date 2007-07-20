@@ -92,6 +92,7 @@
 				<arguments>
 					<required name="id" type="int" />
 					<optional name="comments" type="int" />
+					<optional name="minigal" type="int" />
 				</arguments>
 			</function>
 		</action>

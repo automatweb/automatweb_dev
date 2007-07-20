@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.202 2007/07/12 08:58:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.203 2007/07/20 09:19:33 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -326,7 +326,11 @@ class image extends class_base
 		{
 			// Count comments, if needed
 			$num_comments = 0;
-			$show_link_arr = array("id" => $f["target"]);
+			if(is_array($args["add_show_link_arr"]) && count($args["add_show_link_arr"]))
+			{
+				$show_link_arr = $args["add_show_link_arr"];
+			}
+			$show_link_arr["id"] = $f["target"];
 			if ($do_comments)
 			{
 				$com = get_instance(CL_COMMENT);
@@ -1510,6 +1514,8 @@ class image extends class_base
 		
 		@param id required type=int
 		@param comments optional type=int
+		@param minigal optional type=int
+			this is for cases where picture is shown from minigallery, and prev/next buttons have to correspond to minigallery sort
 
 	**/
 	function show_big($arr)
@@ -1600,13 +1606,22 @@ class image extends class_base
 		if ($this->is_template("NEXT_LINK"))
 		{
 			$set_next = null;
-			$images = new object_list(array(
-				"class_id" => CL_IMAGE,
-				"parent" => $im["parent"],
-				"sort_by" => "objects.jrk,objects.created desc",
-				"lang_id" => array(),
-				"site_id" => array()
-			));
+			if($this->can("view", $arr["minigal"]))
+			{
+				$mg = get_instance(CL_MINI_GALLERY);
+				$ob = obj($arr["minigal"]);
+				$images = $mg->_pic_list($ob);
+			}
+			else
+			{
+				$images = new object_list(array(
+					"class_id" => CL_IMAGE,
+					"parent" => $im["parent"],
+					"sort_by" => "objects.jrk,objects.created desc",
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+			}
 			foreach($images->ids() as $im_id)
 			{
 				if ($set_next)

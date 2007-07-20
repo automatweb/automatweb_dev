@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.38 2007/06/06 10:28:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.39 2007/07/20 09:19:34 tarvo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -203,21 +203,8 @@ class mini_gallery extends class_base
 		return $a_val - $b_val;
 	}
 
-	function show($arr)
+	function _pic_list($ob)
 	{
-		$ob = $this->ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-
-		lc_site_load("mini_gallery", &$this);
-
-		$s_id = $ob->prop("style");
-		$use_style = null;
-		if(is_oid($s_id) && $this->can("view", $s_id))
-		{
-			$style_i = get_instance(CL_STYLE);
-			active_page_data::add_site_css_style($s_id);
-			$use_style = $style_i->get_style_name($s_id);
-		}
 
 		$sby = "objects.jrk,objects.created desc";
 		if ($ob->prop("sorter") != "")
@@ -236,6 +223,26 @@ class mini_gallery extends class_base
 				"non_filter_classes" => CL_IMAGE
 			))
 		));
+		return $images;
+	}
+
+	function show($arr)
+	{
+		$ob = $this->ob = new object($arr["id"]);
+		$this->read_template("show.tpl");
+
+		lc_site_load("mini_gallery", &$this);
+
+		$s_id = $ob->prop("style");
+		$use_style = null;
+		if(is_oid($s_id) && $this->can("view", $s_id))
+		{
+			$style_i = get_instance(CL_STYLE);
+			active_page_data::add_site_css_style($s_id);
+			$use_style = $style_i->get_style_name($s_id);
+		}
+
+		$images = $this->_pic_list($ob);
 		if (!$images->count())
 		{
 			return;
@@ -332,6 +339,9 @@ class mini_gallery extends class_base
 						"use_style" => $use_style,
 						"force_comments" => $ob->prop("comments"),
 						"link_prefix" => empty($arr['link_prefix']) ? "" : $arr['link_prefix'],
+						"add_show_link_arr" => array(
+							"minigal" => $ob->id(),
+						),
 						"add_vars" => array(
 							"count" => $numbr
 						)
