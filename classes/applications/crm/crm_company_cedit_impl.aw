@@ -205,6 +205,7 @@ class crm_company_cedit_impl extends core
 				{
 					$o->set_prop($k, $v);
 				}
+				$o->set_prop("is_public", $data["is_public"]);
 				$o->save();
 			}
 			else
