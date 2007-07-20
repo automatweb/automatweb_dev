@@ -2073,6 +2073,7 @@ class _int_object
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent))
 			{
 				unset($t);
+				$__from_raise_error = aw_global_get("__from_raise_error");
 				aw_global_set("__from_raise_error", 1);
 				$t = new object($parent);
 				if ($GLOBALS["aw_is_error"])
@@ -2080,7 +2081,7 @@ class _int_object
 					$parent = 0;
 					break;
 				}
-				aw_global_set("__from_raise_error", 0);
+				aw_global_set("__from_raise_error", $__from_raise_error);
 
 				if (is_oid($param["to"]) && $t->id() == $param["to"])
 				{
