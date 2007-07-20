@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.389 2007/07/19 09:13:04 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.390 2007/07/20 10:36:34 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -589,7 +589,6 @@ class menuedit extends aw_template
 					};
 				}
 
-
 				foreach($candidates as $cand_id => $cand_path)
 				{
 					$path_for_obj = substr($cand_path,0,-1);
@@ -619,7 +618,22 @@ class menuedit extends aw_template
 					$lang_id = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
 					// check translations
 					$this->quote(&$section);
-					$menu_id = $this->db_fetch_field("SELECT menu_id FROM aw_alias_trans WHERE lang_id = $lang_id AND alias = '$section'", "menu_id");
+					$menu_id = null;
+					if (aw_ini_get("user_interface.full_content_trans"))
+					{
+						$menu_id = $this->db_fetch_field("SELECT menu_id FROM aw_alias_trans WHERE lang_id = $lang_id AND alias = '$section'", "menu_id");
+					}
+					else
+					if (aw_ini_get("menuedit.login_on_no_access") == 1)
+					{
+						$row = $this->db_fetch_row("SELECT oid,status FROM objects WHERE lang_id = $lang_id AND alias = '$section'");
+						if ($row && $row["status"] > 1)
+						{
+							// try login, just in case this is protected
+							classload("core/users/auth/auth_config");
+							auth_config::redir_to_login();
+						}
+					}
 					if ($this->can("view", $menu_id))
 					{
 						$obj = obj($menu_id);
