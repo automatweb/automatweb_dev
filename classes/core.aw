@@ -954,12 +954,16 @@ class core extends acl_base
 		$res .= ($sep == "/") ? "/" : "?";
 		foreach($this->orb_values as $name => $value)
 		{
-			$add = $name."=".$value.$sep;
-			if(strlen($res.$add) > 3000)
+			// lets skip the parameter only when it is empty string --dragut
+			if ($value !== '')
 			{
-				break;
+				$add = $name."=".$value.$sep;
+				if(strlen($res.$add) > 3000)
+				{
+					break;
+				}
+				$res .= $add;
 			}
-			$res .= $add;
 		};
 		return substr($res,0,-strlen($sep));
 	}
