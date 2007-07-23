@@ -1545,6 +1545,15 @@ class join_site extends class_base
 			$this->join_done = true;
 			aw_session_set("join_err", array());
 			$rv = $obj->prop("after_join_url");
+			$lang_id = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+			if ($obj->lang_id() != $lang_id)
+			{
+				$lp = $obj->prop("lang_props");
+				if ($lp["bt"]["__after_join_url"][$lang_id] != "")
+				{
+					$rv = $lp["bt"]["__after_join_url"][$lang_id];
+				}
+			}
 			if ($rv == "")
 			{
 				$rv = aw_ini_get("baseurl");
