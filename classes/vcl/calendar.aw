@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.88 2007/07/05 13:55:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.89 2007/07/23 14:30:33 markop Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1258,7 +1258,8 @@ class vcalendar extends aw_template
 				}
 				else
 				{
-					uasort($events,array($this,"__asc_sort"));
+					uasort($events, array($this, "__sort_events_by_jrk"));
+	//				uasort($events,array($this,"__asc_sort"));
 				}
 			}
 			if(!$this->first_event)
@@ -1803,6 +1804,22 @@ class vcalendar extends aw_template
 	function __desc_sort($el1,$el2)
 	{
 		return (int)($el2["timestamp"] - $el1["timestamp"]);
+	}
+
+	function __sort_events_by_jrk($el1, $el2)
+	{
+		$e1_len = $el1["end"] - $el1["start"];
+		$e2_len = $el2["end"] - $el2["start"];
+
+		if($e1_len > 86400 && $e2_len <= 86400) return 1;
+		if($e1_len <= 86400 && $e2_len > 86400) return -1;
+		if($e1_len <= 86400 && $e2_len <= 86400)
+		{
+			return $el1["start"] -$el2["start"];
+		}
+		$p1 = obj($el1["parent"]);
+		$p2 = obj($el2["parent"]);
+		return $p1->ord() - $p2->ord();
 	}
 
 	function __sort_events_starting_today_first($el1, $el2)
