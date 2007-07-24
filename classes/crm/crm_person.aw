@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.178 2007/07/18 09:24:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.179 2007/07/24 13:08:12 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1062,6 +1062,12 @@ class crm_person extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "org_section":
+				if(!is_array($data["value"]) && is_array(unserialize($data["value"])))
+				{
+					$data["value"] = unserialize($data["value"]);
+				}
+				break;
 			case "work_projects":
 				$t = &$data["vcl_inst"];
 				$t->define_field(array(

@@ -198,6 +198,7 @@ class crm_company_cedit_impl extends core
 		}
 		foreach(safe_array($arr["request"]["cedit_phone"]) as $id => $data)
 		{
+
 			if ($this->can("view", $id))
 			{
 				$o = obj($id);
@@ -211,6 +212,7 @@ class crm_company_cedit_impl extends core
 			else
 			if ($id == -1)
 			{
+				if(!$data["name"]) continue;
 				$o = obj();
 				$o->set_parent($arr["obj_inst"]->id());
 				$o->set_class_id(CL_CRM_PHONE);
