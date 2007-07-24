@@ -31,6 +31,7 @@
             <table>watercraft_management</table>
             <group>sub_general</group>
             <type>relpicker</type>
+            <multiple>1</multiple>
             <reltype>RELTYPE_SEARCH</reltype>
             <field>search</field>
             <caption>Otsing</caption>
