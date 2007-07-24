@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.23 2007/07/24 08:55:04 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.24 2007/07/24 09:07:11 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -582,7 +582,7 @@ class watercraft_search extends class_base
 				$items_ol = $this->search(array(
 					'obj_inst' => $obj,
 					'request' => $search_params,
-					'limit' => $max_results
+					'limit' => $max_results,
 					'only_visible' => true,
 				));
 				$items_count = $items_ol->count();
