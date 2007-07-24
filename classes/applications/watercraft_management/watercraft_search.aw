@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.22 2007/06/26 09:39:22 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.23 2007/07/24 08:55:04 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -259,6 +259,8 @@ class watercraft_search extends class_base
 				break;
 			case 'search_form_conf':
 				$prop['options'] = $this->search_form_elements;
+				$wc = get_instance(CL_WATERCRAFT);
+				$prop['options'] += $wc->deal_type;
 				break;
 
 			case 'watercraft_type':
@@ -434,7 +436,7 @@ class watercraft_search extends class_base
 					'id' => $id,
 					'return_url' => get_ru()
 				), CL_WATERCRAFT),
-				'caption' => htmlentities($item->name())
+				'caption' => strlen($name =htmlentities($item->name()))?$name:t("- nimetu -"),
 			));
 
 			$manufacturer_str = '';
@@ -581,6 +583,7 @@ class watercraft_search extends class_base
 					'obj_inst' => $obj,
 					'request' => $search_params,
 					'limit' => $max_results
+					'only_visible' => true,
 				));
 				$items_count = $items_ol->count();
 
@@ -851,6 +854,11 @@ class watercraft_search extends class_base
 			'class_id' => CL_WATERCRAFT,
 			'parent' => $arr['obj_inst']->prop('data'),
 		);
+		if($arr["only_visible"])
+		{
+			$filter["visible"] = "1";
+		}
+
 		if (!empty($arr['limit']))
 		{
 			$filter['limit'] = $arr['limit'];

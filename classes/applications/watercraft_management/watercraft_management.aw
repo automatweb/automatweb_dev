@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.10 2006/10/17 15:00:24 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.11 2007/07/24 08:55:04 tarvo Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -21,7 +21,7 @@
 		@property data type=relpicker reltype=RELTYPE_DATA table=watercraft_management
 		@caption Vees&otilde;idukite andmed
 
-		@property search type=relpicker reltype=RELTYPE_SEARCH table=watercraft_management
+		@property search type=relpicker multiple=1 reltype=RELTYPE_SEARCH table=watercraft_management
 		@caption Otsing
 
 		@property manufacturers type=relpicker reltype=RELTYPE_MANUFACTURERS table=watercraft_management
@@ -347,6 +347,12 @@ class watercraft_management extends class_base
 			'caption' => t('Hind')
 		));
 		$t->define_field(array(
+			'name' => 'created',
+			'type' => 'time',
+			'format' => 'h:i d.m.Y',
+			'caption' => t('Lisamise aeg')
+		));
+		$t->define_field(array(
 			'name' => 'visible',
 			'caption' => t('N&auml;htav'),
 			'align' => 'center',
@@ -382,7 +388,7 @@ class watercraft_management extends class_base
 					'id' => $id,
 					'return_url' => get_ru()
 				), CL_WATERCRAFT),
-				'caption' => $watercraft->name()
+				'caption' => strlen($watercraft->name())?$watercraft->name():t("- nimetu -"),
 			));
 
 			$manufacturer_str = '';
@@ -429,6 +435,7 @@ class watercraft_management extends class_base
 				'location' => $location_str,
 				'seller' => $seller_str,
 				'price' => $watercraft->prop('price'),
+				'created' => $watercraft->prop('created'),
 				'visible' => ($watercraft->prop('visible') == 1) ? t('Jah') : t('Ei'),
 				'archive' => ($watercraft->prop('archived') == 1) ? t('Jah') : t('Ei'),
 			));
