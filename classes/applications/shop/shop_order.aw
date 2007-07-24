@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.55 2007/07/19 14:21:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.56 2007/07/24 10:10:50 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -216,6 +216,7 @@ class shop_order extends class_base
 		}
 	}
 
+
 	function do_ord_table(&$arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -226,15 +227,23 @@ class shop_order extends class_base
 		}
 		$pd = $arr["obj_inst"]->meta("ord_content");
 		$pd_data = new aw_array($arr["obj_inst"]->meta("ord_item_data"));
+//		$t->define_field(array(
+//			"name" => "user2",
+//			"caption" => t("Artikli kood"),
+//			"chgbgcolor" => "color",
+//		));
+		
+		
+		
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Nimi"),
+			"caption" => t("Toode"),
 			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "count",
-			"caption" => t("Mitu"),
+			"caption" => t("Tellitav kogus"),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
@@ -257,6 +266,7 @@ class shop_order extends class_base
 		$add_fields = array();
 		$cfgform = get_instance(CL_CFGFORM);
 		$conf = $arr["obj_inst"]->prop("confirmed") == 1;
+		//$arr["obj_inst"]->set_prop("confirmed" , 0);$arr["obj_inst"]->save();
 		$arrz = array("name", "comment", "status", "item_count", "item_type", "price", "must_order_num", "brother_of", "parent", "class_id", "lang_id" ,"period", "created", "modified", "periodic");
 		foreach($pd_data->get() as $id => $prod)
 		{
@@ -364,9 +374,10 @@ class shop_order extends class_base
 				) + $vals);
 			}
 		}
-//		arr($add_fields);
+	
 		//võtab tarne täitmise ära ja asemele Täidetud tellimus/arve number
 	//	$add_fields[t("Tarne t&auml;itmine")] = t("T&auml;idetud tellimus/arve number");
+
 		foreach($add_fields as $key => $val)
 		{
 			$t->define_field(array(
@@ -375,11 +386,53 @@ class shop_order extends class_base
 				"chgbgcolor" => "color",
 			));
 		}
+		
+		//teeb miski sorteerimise ka oma äranägemise järgi
+		//	Kood, Toode (praegune Nimi), Ühik, Pakend (praegune Kogus), Tellitav kogus (senine Mitu - vaadata ka üle, kas ikka kuvatakse selle väärtust), Soovitav tarne täitmine (praegune Tarne täitmistähtaeg), Tarne täitmine/arve nr, Osaline tarne täitmine/tarnitud (praegune Tarne täitmine osaliselt), Osaline tarne täitmine/tarnimata (praegune Saatmata kogus), Eritoon, Värvikaart, Erihind (uus väli, nagu värvikaart, kuid mida kuvatakse ainult adminnis)
+		$order = array("user2" , "name" , "uservar1" , "user1" , "count" , "duedate" , "bill" , "pduedate" , "unsent" , "special" , "colorcard" , "special_price");
+
+		$tmp_defs = array();
+		
+		foreach($t->rowdefs as  $def)
+		{
+			$tmp_defs[$def["name"]] = $def; 
+		}
+		unset($t->rowdefs);
+		
+		foreach($order as $ord)
+		{
+			if($tmp_defs[$ord])
+			{
+				$t->define_field($tmp_defs[$ord]);
+				unset($tmp_defs[$ord]);
+			}
+		}
+		foreach($tmp_defs as $def)
+		{
+			$t->define_field($def);
+		}
+		
+		
 	}
 
 	function save_ord_table(&$arr)
 	{
-		$arr["obj_inst"]->set_meta("ord_item_data", $arr["request"]["prod_data"]);
+		$meta = $arr["obj_inst"]->meta("ord_item_data");
+		foreach($arr["request"]["prod_data"] as $prod => $stuff)
+		{
+			foreach($stuff as $id => $row)
+			{
+				foreach($row as $key => $val)
+				{
+					$meta[$prod][$id][$key] = $val;
+				}
+			}
+		}
+		$arr["obj_inst"]->set_meta("ord_item_data",$meta);
+		
+//		arr($meta);arr($arr["request"]["prod_data"]);
+//		arr(array_merge_recursive($meta , $arr["request"]["prod_data"]));
+		
 		//$arr["obj_inst"]->set_meta("ord_content", $arr["request"]["pd"]);
 	}
 

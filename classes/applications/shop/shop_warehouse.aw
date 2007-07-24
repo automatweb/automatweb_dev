@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.51 2007/07/19 14:15:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.52 2007/07/24 10:10:50 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -733,7 +733,7 @@ class shop_warehouse extends class_base
 		$ol = new object_list($filter);
 		
 		$undone_products = array();
-
+		$ord_data = array();
 		foreach($ol->arr() as $o)
 		{
 			foreach($o->meta("ord_item_data") as $id => $items)
@@ -742,13 +742,13 @@ class shop_warehouse extends class_base
 				{
 					if($item["unsent"])
 					{
+						$ord_data[$o->id()][$id] = $item;
 						$undone_products[$id][$o->id()] = $item["unsent"];
 						break;
 					}
 				}
 			}
 		}
-		
 		$upkeys = array_keys($undone_products);
 		usort($upkeys, array(&$this, "__br_sort"));
 		foreach($upkeys as $product)
@@ -756,9 +756,17 @@ class shop_warehouse extends class_base
 			$order = $undone_products[$product];
 			if(!$this->can("view" , $product)) continue;
 			$product_obj = obj($product);
+			$unit = "";
+			if($this->can("view", $product_obj->prop("uservar1")))
+			{
+				$cls_obj = obj($product_obj->prop("uservar1"));
+				$unit = $cls_obj->name();
+			}
 			$t->define_data(array(
 				"product" => $cl?$product_obj->name():html::get_change_url($product, array("return_url" => get_ru()) , $product_obj->name()),
 				"code" => $product_obj->prop("user2"),
+				"unit" => $unit,
+				"packaging" => $product_obj->prop("user1"),
 			));
 			
 			$prod_count = 0;
@@ -773,17 +781,26 @@ class shop_warehouse extends class_base
 					$client_o = obj($order->prop("orderer_company"));
 					$client = html::get_change_url($order->prop("orderer_company"), array("return_url" => get_ru()) , $client_o->name());
 				}
+				
+		
 				$t->define_data(array(
 					"order" => $cl?html::href(array("url" => $key, "caption" => $key)):html::get_change_url($key, array("return_url" => get_ru() , "group" => "items") , $key),
 					"client" => $client,
 					"amount" => $amount,
 					"color" => $order->prop("confirmed")?"":"lime",
+					
+		//			"packaging" => $ord_data[$order->id()][$product]["user1"],
+					"date" => $ord_data[$order->id()][$product]["duedate"],
+					"bill" => $ord_data[$order->id()][$product]["bill"],
 				));
 				$prod_count+=$amount;
 			}
+			
+
 			$t->define_data(array(
 				"product" => t("Kokku:"),
 				"amount" => "<b>".$prod_count."</b>",
+
 			));
 		}
 
@@ -793,7 +810,6 @@ class shop_warehouse extends class_base
 //		$t->set_default_sorder("DESC");
 //		$t->sort_by();
 	}
-	
 
 	function do_del_prod($arr)
 	{
@@ -1851,6 +1867,20 @@ class shop_warehouse extends class_base
 					$mb = $_ud[$pp];
 				}
 			}
+			$color = "";
+			$pd_data = $o->meta("ord_item_data");
+			foreach($pd_data as $prod)
+			{
+				foreach($prod as $p)
+				{
+					if($p["unsent"])
+					{
+						$color = "blue";
+						break;
+					}
+				}
+				if($color) break;
+			}
 			$t->define_data(array(
 				"id" => $o->id(),
 				"name" => $o->name(),
@@ -1860,7 +1890,7 @@ class shop_warehouse extends class_base
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
 						"group" => "items",
-						"return_url" => get_ru(),
+						"return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
 					), CL_SHOP_ORDER),
 					"caption" => t("Vaata")
 				)),
@@ -1868,7 +1898,8 @@ class shop_warehouse extends class_base
 					"name" => "confirm[".$o->id()."]",
 					"value" => 1
 				)),
-				"price" => $o->prop("sum")
+				"price" => $o->prop("sum"),
+				"color" => $color,
 			));
 		}
 		$t->set_default_sortby("modified");
@@ -1881,31 +1912,36 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"name" => "id",
 			"caption" => t("ID"),
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"name" => "price",
 			"caption" => t("Hind"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"name" => "confirm",
 			"caption" => t("Kinnita"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"name" => "modifiedby",
 			"caption" => t("Kes"),
 			"align" => "center",
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
@@ -1914,13 +1950,15 @@ class shop_warehouse extends class_base
 			"type" => "time",
 			"format" => "d.m.Y H:i",
 			"align" => "center",
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"name" => "view",
 			"caption" => t("Vaata"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 	}
 
