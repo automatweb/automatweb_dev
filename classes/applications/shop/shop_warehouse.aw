@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.52 2007/07/24 10:10:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.53 2007/07/24 10:42:57 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -655,26 +655,45 @@ class shop_warehouse extends class_base
 	function _init_undone_tbl(&$t,$cl)
 	{
 		$t->define_field(array(
+			"name" => "code",
+			"caption" => t("Kood"),
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
 			"name" => "product",
 			"caption" => t("Toode"),
 			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
-			"name" => "code",
-			"caption" => t("Tootekood"),
+			"name" => "unit",
+			"caption" => t("M&otilde;&otilde;t&uuml;hik"),
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "packaging",
+			"caption" => t("Pakend"),
 			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"name" => "amount",
-			"caption" => t("Kogus"),
+			"caption" => t("Tellitav Kogus"),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
-			"name" => "order",
-			"caption" => t("Tellimuse nr."),
+			"name" => "date",
+			"caption" => t("Soovitav tarne t&auml;itmine"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+		
+		$t->define_field(array(
+			"name" => "bill",
+			"caption" => t("Tarne t&auml;itmine/ arve nr"),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
@@ -682,6 +701,13 @@ class shop_warehouse extends class_base
 		if(!$cl)$t->define_field(array(
 			"name" => "client",
 			"caption" => t("Klient"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+		
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("Tellimuse nr."),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
