@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.238 2007/07/19 09:13:04 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.239 2007/07/24 11:46:52 markop Exp $
 // defs.aw - common functions
 if (!defined("DEFS"))
 {
@@ -1936,6 +1936,45 @@ if (!defined("DEFS"))
 			return $var;
 		}
 		return array();
+	}
+
+	function aw_merge()
+	{
+	     	if(($argc = func_num_args()) < 1)
+	     	{
+	     		return false;
+	     	}
+         	foreach(func_get_args() as $k => $array)
+         	{
+                 	foreach($array as $k => $v)
+                 	{
+                        	$retval[$k] = $v;
+                        }
+               }
+	         return $retval;
+ 	}
+ 	
+ 	function req_aw_merge()
+ 	{
+        	if(($argc = func_num_args()) < 1)
+                {
+                	return false;
+                }
+         	foreach(func_get_args() as $k => $array)
+         	{
+                	foreach($array as $k => $v)
+                	{
+                        	if(is_array($v))
+                        	{
+                                	$retval[$k] = aw_merge($retval[$k], req_aw_merge($v));
+                         	}
+                         	else
+                         	{
+                                	$retval[$k] = $v;
+                                }
+                        }
+                }
+               return $retval;
 	}
 
 	/** returns admin_rootmenu2 setting - always an integer, even if it is an array
