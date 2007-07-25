@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.26 2007/07/25 13:05:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.27 2007/07/25 13:18:31 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -266,7 +266,14 @@ class watercraft_search extends class_base
 				break;
 
 			case 'deal_type':
-				$prop["value"] = aw_unserialize($prop["value"]);
+				if(is_array($arr["request"]["deal_type"]))
+				{
+					$prop["value"] = $arr["request"]["deal_type"];
+				}
+				else
+				{
+				    $prop["value"] = aw_unserialize($prop["value"]);
+				}
 				$prop['options'] = array(t("K&otilde;ik")) + $this->watercraft_inst->deal_type;
 				break;
 			case 'watercraft_type':
@@ -601,6 +608,7 @@ class watercraft_search extends class_base
 					'request' => $search_params,
 					'limit' => ($active_page * $results_on_page).', '.$results_on_page,
 					'sort_by' => ($_GET["sortby"] && $_GET["order"])?"watercraft.".$_GET['sortby']." ".$_GET['order']:"",
+					'only_visible' => true,
 				));
 			}
 			
