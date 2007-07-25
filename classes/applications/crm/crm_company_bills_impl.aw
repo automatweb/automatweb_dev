@@ -72,7 +72,7 @@ class crm_company_bills_impl extends class_base
 		$all_tasks = new object_list(array(
 			"class_id" => CL_TASK,
 			"send_bill" => 1,
-			"is_done" => 1,
+	//		"is_done" => 1,
 			"lang_id" => array(),
 		));
 		
@@ -391,7 +391,7 @@ class crm_company_bills_impl extends class_base
 		$all_tasks = new object_list(array(
 			"class_id" => CL_TASK,
 			"send_bill" => 1,
-			"is_done" => 1,
+	//		"is_done" => 1,
 			"project" => $arr["request"]["proj"],
 		));
 		$tasks = new object_list();
