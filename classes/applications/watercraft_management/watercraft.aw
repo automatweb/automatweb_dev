@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.24 2007/07/02 09:50:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.25 2007/07/25 10:10:54 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -629,7 +629,7 @@ class watercraft extends class_base
 				}
 				break;
 			case 'manufacturer':
-				$management = $this->get_management_object($arr);
+				$management = get_active(CL_WATERCRAFT_MANAGEMENT);
 				$prop['options'][] = t('--Vali--');
 				if ( $management !== false )
 				{
@@ -644,7 +644,7 @@ class watercraft extends class_base
 				}
 				break;
 			case 'location':
-				$management = $this->get_management_object($arr);
+				$management = get_active(CL_WATERCRAFT_MANAGEMENT);
 				$prop['options'][] = t('--Vali--');
 				if ( $management !== false )
 				{
@@ -1320,22 +1320,6 @@ class watercraft extends class_base
 			$result[$value] = $value;
 		}
 		return $result;
-	}
-
-	function get_management_object($arr)
-	{
-		$managements_ol = new object_list(array(
-			'class_id' => CL_WATERCRAFT_MANAGEMENT,
-			'data' => $arr['obj_inst']->parent()
-		));
-		if ( $managements_ol->count() > 0 )
-		{
-			return $managements_ol->begin();
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 	/**

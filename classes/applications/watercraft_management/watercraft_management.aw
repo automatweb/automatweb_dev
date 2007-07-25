@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.11 2007/07/24 08:55:04 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.12 2007/07/25 10:10:54 tarvo Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -122,6 +122,11 @@
 	@property watercrafts_table type=table no_caption=1 group=all,motor_boat,sailing_ship,dinghy,rowing_boat,scooter,sailboard,canoe,fishing_boat,other,accessories,search parent=watercraft_search_frame_right
 	@caption Vees&otilde;idukite tabel
 
+
+@groupinfo activity caption=Aktiivsus
+
+        @property activity type=table group=activity no_caption=1
+        @caption Aktiivsus
 			
 
 @reltype KEEPER value=1 clid=CL_CRM_COMPANY
@@ -252,6 +257,50 @@ class watercraft_management extends class_base
 		}
 		return $retval;
 	}	
+
+
+        function _get_activity($arr)
+        {
+                // this is supposed to return a list of all active polls
+                // to let the user choose the active one
+                $table = &$arr["prop"]["vcl_inst"];
+                $table->parse_xml_def("activity_list");
+
+                $pl = new object_list(array(
+                        "class_id" => $this->clid
+                ));
+                for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
+                {
+                        $actcheck = checked($o->flag(OBJ_FLAG_IS_SELECTED));
+                        $act_html = "<input type='radio' name='active' $actcheck value='".$o->id()."'>";
+                        $row = $o->arr();
+                        $row["active"] = $act_html;
+                        $table->define_data($row);
+                };
+        }
+
+        function _set_activity($arr)
+        {
+                $ol = new object_list(array(
+                        "class_id" => $this->clid,
+                ));
+                for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+                {
+                        if ($o->flag(OBJ_FLAG_IS_SELECTED) && $o->id() != $arr["request"]["active"])
+                        {
+                                $o->set_flag(OBJ_FLAG_IS_SELECTED, false);
+                                $o->save();
+                        }
+                        else
+                        if ($o->id() == $arr["request"]["active"] && !$o->flag(OBJ_FLAG_IS_SELECTED))
+                        {
+                                $o->set_flag(OBJ_FLAG_IS_SELECTED, true);
+                                $o->save();
+                        }
+                }
+        }
+
+
 
 	function _get_watercrafts_toolbar($arr)
 	{

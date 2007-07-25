@@ -307,6 +307,16 @@
             <field>watercrafts_table</field>
             <caption>Vees&amp;amp;otilde;idukite tabel</caption>
       </property>
+      <property>
+            <name>activity</name>
+            <table>objects</table>
+            <group>activity</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>activity</field>
+            <caption>Aktiivsus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_WATERCRAFT_MANAGEMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -377,6 +387,9 @@
             <search>
                   <caption>Otsing</caption>
             </search>
+            <activity>
+                  <caption>Aktiivsus</caption>
+            </activity>
       </groupinfo>
       <tableinfo>
             <watercraft_management>

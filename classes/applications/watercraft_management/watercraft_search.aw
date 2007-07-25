@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.24 2007/07/24 09:07:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.25 2007/07/25 10:10:54 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -278,11 +278,7 @@ class watercraft_search extends class_base
 			case 'location':
 				$prop['options'][0] = t('K&otilde;ik');
 
-				$watercraft_managements = $arr['obj_inst']->connections_to(array(
-					'from.class_id' => CL_WATERCRAFT_MANAGEMENT
-				));
-
-				$watercraft_management = reset($watercraft_managements);
+				$watercraft_management = get_active(CL_WATERCRAFT_MANAGEMENT);
 
 				if (!empty($watercraft_management))
 				{
