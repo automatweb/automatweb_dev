@@ -209,6 +209,15 @@
             <caption>Kuulutuse id</caption>
       </property>
       <property>
+            <name>deal_type</name>
+            <table>watercraft_search</table>
+            <group>search</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <field>deal_type</field>
+            <caption>Tehingu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>watercraft_search_submit</name>
             <table>objects</table>
             <group>search</group>

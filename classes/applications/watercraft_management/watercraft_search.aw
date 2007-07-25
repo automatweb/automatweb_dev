@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.25 2007/07/25 10:10:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.26 2007/07/25 13:05:34 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -90,6 +90,9 @@
 	@property ad_id type=textbox size=15 table=watercraft_search
 	@caption Kuulutuse id
 
+	@property deal_type type=chooser multiple=1 table=watercraft_search
+	@caption Tehingu t&uuml;&uuml;p
+
 	@property watercraft_search_submit type=submit no_caption=1
 	@caption Otsi
 
@@ -133,6 +136,7 @@ class watercraft_search extends class_base
 			'contact_name' => t('Kontaktisik'),
 			'price' => t('Hind'),
 			'ad_id' => t('Kuulutuse ID'),
+			'deal_type' => t('Tehingu t&uuml;&uuml;p'),
 		);
 	
 		$this->additional_equipment_elements = array(
@@ -259,10 +263,12 @@ class watercraft_search extends class_base
 				break;
 			case 'search_form_conf':
 				$prop['options'] = $this->search_form_elements;
-				$wc = get_instance(CL_WATERCRAFT);
-				$prop['options'] += $wc->deal_type;
 				break;
 
+			case 'deal_type':
+				$prop["value"] = aw_unserialize($prop["value"]);
+				$prop['options'] = array(t("K&otilde;ik")) + $this->watercraft_inst->deal_type;
+				break;
 			case 'watercraft_type':
 				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->watercraft_type; 
 				$prop['selected'] = $arr['request']['watercraft_type'];
@@ -336,6 +342,9 @@ class watercraft_search extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "deal_type":
+				$prop["value"] = aw_serialize($prop["value"], SERIALIZE_NATIVE);
+				break;
 			case "result_order":
 				$fields = $arr["request"]["sortable_fields"];
 				$new = $fields["new"];
@@ -416,6 +425,10 @@ class watercraft_search extends class_base
 		{
 			if ($property['group'] == 'search' && !empty($properties[$property['name']]))
 			{
+				if($property["name"] == "deal_type")
+				{
+					$properties[$property["name"]] = aw_unserialize($properties[$property["name"]]);
+				}
 				$search_params[$property['name']] = $properties[$property['name']];
 			}
 		}
@@ -889,6 +902,7 @@ class watercraft_search extends class_base
 			$filter["price"] = new obj_predicate_not("struudel");
 		}
 		
+
 		foreach ($this->search_form_elements as $name => $caption)
 		{
 			// if it is range:
@@ -900,6 +914,25 @@ class watercraft_search extends class_base
 				// if both are empty, then don't need to search by that:
 				if ( empty($from) && empty($to) )
 				{
+					if($name == "deal_type")
+					{
+						if($arr["request"][$name][0])
+						{
+							continue;
+						}
+						$wc = get_instance(CL_WATERCRAFT);
+						foreach($wc->deal_type as $const => $capt)
+						{
+							if($arr["request"][$name][$const])
+							{
+								$deal_t[] = $const;
+							}
+						}
+						if(count($deal_t))
+						{
+							$filter[$name] = $deal_t;
+						}
+					}
 					continue;
 				}
 				else
@@ -1015,6 +1048,7 @@ class watercraft_search extends class_base
 				price_to int,
 				section_id int,
 				ad_id int,
+				deal_type text,
 
 				additional_equipment varchar(255)
 
@@ -1071,6 +1105,12 @@ class watercraft_search extends class_base
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'varchar(255)'
+				));
+                                return true;
+			case 'deal_type':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'text'
 				));
                                 return true;
                 }
