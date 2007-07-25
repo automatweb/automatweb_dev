@@ -63,22 +63,33 @@ function aw_ini_get($var)
 {
 //	enter_function("__global::aw_ini_get",array());
 	$path = explode(".", $var);
-	$val = array();
 
-	foreach ($path as $index)
+	if ("" === $path[0])
 	{
-		if (isset($val[$index]))
+		return;
+	}
+	// elseif ("classes" === $path[0])
+	// {
+	// }
+	else
+	{
+		$val = array();
+
+		foreach ($path as $index)
 		{
-			$val = $val[$index];
-		}
-		elseif(isset($GLOBALS["cfg"][$index]))
-		{
-			$val = $GLOBALS["cfg"][$index];
-		}
-		else
-		{
-			return;
-			// throw new awex_not_found("Invalid key");//!!!
+			if (isset($val[$index]))
+			{
+				$val = $val[$index];
+			}
+			elseif(isset($GLOBALS["cfg"][$index]))
+			{
+				$val = $GLOBALS["cfg"][$index];
+			}
+			else
+			{
+				return;
+				// throw new awex_not_found("Invalid key");//!!!
+			}
 		}
 	}
 
@@ -98,9 +109,9 @@ function aw_ini_set($var, $value, $save = false)
 		eval($setting);
 	}
 
-	if ($save)
-	{
-	}
+	// if ($save)
+	// {
+	// }
 }
 
 function parse_config($file, $return = false)
@@ -118,7 +129,7 @@ function parse_config($file, $return = false)
 
 			if (2 === count($data))
 			{ // process regular variable
-				$var = str_replace(array("[", "]"), array(".", ""), trim($data[0]));//!!! should be deprecated and only '.' notation used. kept here for back compatibility.
+				$var = str_replace(array('["','"]',"['","']","[","]"), array(".","",".", "",".", ""), trim($data[0]));//!!! should be deprecated and only '.' notation used. kept here for back compatibility.
 				$value = trim($data[1]);
 
 				// now, replace all variables in varvalue
