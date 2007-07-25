@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.13 2007/07/25 10:19:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.14 2007/07/25 10:21:54 tarvo Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -753,7 +753,7 @@ class watercraft_management extends class_base
 				data int, 
 				locations int, 
 				manufacturers int, 
-				search int
+				search int,
 			)');
 			return true;
 		}
