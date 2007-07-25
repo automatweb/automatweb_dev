@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.12 2007/07/25 10:10:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.13 2007/07/25 10:19:43 tarvo Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -21,7 +21,7 @@
 		@property data type=relpicker reltype=RELTYPE_DATA table=watercraft_management
 		@caption Vees&otilde;idukite andmed
 
-		@property search type=relpicker multiple=1 reltype=RELTYPE_SEARCH table=watercraft_management
+		@property search type=relpicker reltype=RELTYPE_SEARCH table=watercraft_management
 		@caption Otsing
 
 		@property manufacturers type=relpicker reltype=RELTYPE_MANUFACTURERS table=watercraft_management
