@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.169 2007/06/08 07:20:50 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.170 2007/07/25 09:03:44 tarvo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -651,6 +651,10 @@ class htmlclient extends aw_template
 					"lang" => aw_ini_get("user_interface.default_language"),
 					"props" => $this->rtes,
 				));
+				foreach($this->rtes as $rte)
+				{
+					$data["cb_nobreaks[${rte}]"] = 1;
+				}
 			}
 			else
 			{
