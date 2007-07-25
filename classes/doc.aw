@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.153 2007/07/12 12:44:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.154 2007/07/25 13:54:38 markop Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -528,7 +528,7 @@ class doc extends class_base
 		switch($data["name"])
 		{
 			case "transl":
-				$this->trans_save($args, $this->trans_props);
+				$this->trans_save($args, $this->trans_props, array("user1", "user3", "user5", "userta2", "userta4","userta3", ));
 				$this->funnel_ct_content($args);
 				break;
 
@@ -1674,7 +1674,7 @@ class doc extends class_base
 
 
 		
-		$rv = $this->trans_callback($arr, $this->trans_props);
+		$rv = $this->trans_callback($arr, $this->trans_props, array("user1", "user3", "user5", "userta2", "userta3", "userta4", "userta5", "userta6"));
 		$rvv = array();
 		$nm = "origt";
 		$rvv[$nm] = array(
@@ -1683,6 +1683,7 @@ class doc extends class_base
 			"type" => "text",
 			"value" => $val,
 		);
+
 		return $rvv + $rv;
 	}
 
