@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.239 2007/07/24 11:46:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.240 2007/07/25 09:51:38 tarvo Exp $
 // defs.aw - common functions
 if (!defined("DEFS"))
 {
@@ -1357,6 +1357,26 @@ if (!defined("DEFS"))
 		$gen_warnings[$level][] = $msg;
 	}
 
+	function get_active($clid)
+	{
+
+                $pl = new object_list(array(
+                        "class_id" => $clid,
+                ));
+		if(!$pl->count())
+		{
+			return false;
+		}
+                for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
+                {
+                        if($o->flag(OBJ_FLAG_IS_SELECTED))
+                        {
+                                break;
+                        }
+                }
+		return $o;
+	}
+
 	////
 	// !all network functions go in here, all must be static
 	class inet
@@ -1938,6 +1958,10 @@ if (!defined("DEFS"))
 		return array();
 	}
 
+	/**
+		@comment
+			Works like php's array_merge, with a little difference. when array_merge reindexes numeric array keys, then aw_merge doens't
+	**/
 	function aw_merge()
 	{
 	     	if(($argc = func_num_args()) < 1)
@@ -1945,15 +1969,19 @@ if (!defined("DEFS"))
 	     		return false;
 	     	}
          	foreach(func_get_args() as $k => $array)
-         	{
+		{
                  	foreach($array as $k => $v)
                  	{
                         	$retval[$k] = $v;
                         }
-               }
-	         return $retval;
+		}
+		return $retval;
  	}
- 	
+ 
+	/**
+		@comment
+			Same as aw_merge, but does the same thing recursevly through array
+	**/	
  	function req_aw_merge()
  	{
         	if(($argc = func_num_args()) < 1)
@@ -1974,7 +2002,7 @@ if (!defined("DEFS"))
                                 }
                         }
                 }
-               return $retval;
+		return $retval;
 	}
 
 	/** returns admin_rootmenu2 setting - always an integer, even if it is an array
