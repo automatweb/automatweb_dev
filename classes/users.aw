@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.182 2007/07/19 09:13:04 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.183 2007/07/25 05:10:28 voldemar Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1630,7 +1630,7 @@ class users extends users_user
 			logs the user in, if all arguments are correct and redirects to the correct url
 
 	**/
-	function login($arr)
+	function login($arr = array())
 	{
 		// if hash is given and it is in the db
 		if (!empty($arr["hash"]))

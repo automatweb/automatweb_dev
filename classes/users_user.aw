@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.140 2007/06/14 10:16:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.141 2007/07/25 05:10:28 voldemar Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -26,9 +26,9 @@ EMIT_MESSAGE(MSG_USER_LOGOUT);
 
 */
 
-class users_user extends aw_template 
+class users_user extends aw_template
 {
-	function users_user() 
+	function users_user()
 	{
 		$this->init("");
 	}
@@ -43,7 +43,7 @@ class users_user extends aw_template
 		$host	= isset($params["remote_host"]) ? $params["remote_host"] : null;
 		$t = time();
 		$msg = "";
-		
+
 		$do_auth = true;
 
 		if ($uid == "")
@@ -87,9 +87,9 @@ class users_user extends aw_template
 			if ($_POST["remote_auth"] == 1)
 			{
 				die(t("0"));
-			}	
+			}
 
-			// suck. 
+			// suck.
 			global $verbosity;
 			if ($verbosity = 1)
 			{
@@ -100,7 +100,7 @@ class users_user extends aw_template
 			if ($_msg != "")
 			{
 				$msg = $_msg;
-			}			
+			}
 
 			$redir_url = aw_ini_get("users.redir_on_failed_login");
 			if ($redir_url == "")
@@ -117,17 +117,17 @@ class users_user extends aw_template
 			print $msg;
 			exit;
 		};
-		
+
 		//If user logs on first time and there is setting in .ini file then he/she must chane password before login is compleated
-		
+
 		// njah. Mitte ei taha. Aga midagi yle ka ei jaa. Logime vaese bastardi sisse
 		// HUZZAH!
-		
+
 		aw_disable_acl();
 		if (!$uid)
 		{
 			error::raise(array(
-				"id" => "ERR_NO_UID",	
+				"id" => "ERR_NO_UID",
 				"msg" => t("uid is empty!")
 			));
 		}
@@ -135,7 +135,7 @@ class users_user extends aw_template
 		if (!$u_oid)
 		{
 			error::raise(array(
-				"id" => "ERR_NO_UID_OID",	
+				"id" => "ERR_NO_UID_OID",
 				"msg" => sprintf(t("oid for uid is empty uid = '%s'!"), $uid)
 			));
 		}
@@ -162,18 +162,18 @@ class users_user extends aw_template
 		$_SESSION["user_history_has_folders"] = $user_obj->prop("history_has_folders");
 		if (aw_ini_get("users.count_logins"))
 		{
-			$user_obj->save(); 
+			$user_obj->save();
 		}
 		aw_restore_acl();
 
 		aw_session_set("user_adm_ui_lc", $user_obj->prop("ui_language"));
-		
+
 		$this->_log(ST_USERS, SA_LOGIN, $uid);
 		if (aw_ini_get("users.tafkap"))
 		{
 			setcookie("tafkap",$uid,strtotime("+7 years"));
 		};
-		
+
 		setcookie("nocache",1);
 		$_SESSION["uid"] = $uid;
 		aw_global_set("uid", $uid);
@@ -188,7 +188,7 @@ class users_user extends aw_template
 		if (!empty($params["remote_auth"]))
 		{
 			die(t("1"));
-		}	
+		}
 
 		if (isset($_SESSION["auth_redir_post"]) && is_array($_SESSION["auth_redir_post"]))
 		{
@@ -265,19 +265,19 @@ class users_user extends aw_template
 			return true;
 		}
 	}
-	
+
 	function is_first_login($uid)
 	{
 		$user = &obj(users::get_oid_for_uid($uid));
 		if(!$user->prop("logins"))
 		{
 			return true;
-		}	
+		}
 	}
-	
+
 	////
 	// !Logib kasutaja valja
-	function logout($uid) 
+	function logout($uid)
 	{
 $ma = -1;
         session_cache_limiter("must-revalidate, max-age=".$ma);
@@ -300,7 +300,7 @@ $t = time();
 
 	////
 	// !Logib välja. Orb-i versioon
-	function orb_logout($args)
+	function orb_logout($args = array())
 	{
 		extract($args);
 		$this->logout(aw_global_get("uid"));
@@ -314,15 +314,15 @@ $t = time();
 			return $this->cfg["baseurl"];
 		}
 	}
-	
+
 	////
 	// !Salvestab kasutaja info. Ma ei tea kui relevantne see on, sest osa andmed hoitakse ju enivei
 	// hoopis vormides
 	// suht relevantne on , kasutaja tabelis on ka sitax inffi.
-	function save($data) 
+	function save($data)
 	{
 		$this->quote($data);
-		$sets = array();	
+		$sets = array();
 
 		reset($data);
 		while (list($k,$v) = each($data))
@@ -348,14 +348,14 @@ $t = time();
 
 	///
 	// FIXME: positsioneeritud parameetrid sakivad
-	function listgroups($gorderby = -1,$gsorder = -1,$type = -1,$type2 = -1,$parent=-1) 
+	function listgroups($gorderby = -1,$gsorder = -1,$type = -1,$type2 = -1,$parent=-1)
 	{
-		if ($gorderby != -1) 
+		if ($gorderby != -1)
 		{
 			$field = ($gorderby == "gcount") ? "gcount" : "groups.$gorderby";
 			$sufix = " ORDER BY $field $gsorder ";
-		} 
-		else 
+		}
+		else
 		{
 			$sufix = "";
 		};
@@ -379,7 +379,7 @@ $t = time();
 			FROM groups
 			LEFT JOIN groupmembers on (groups.gid = groupmembers.gid)
 			LEFT JOIN users ON users.uid = groupmembers.uid
-			$ss 
+			$ss
 			GROUP BY groups.gid,groups.oid
 			$sufix";
 		$this->db_query($q);
@@ -391,14 +391,14 @@ $t = time();
 
 		if (count($tmp) > 0)
 		{
-			$q = "select groups.*,objects.name as o_name from groups 
+			$q = "select groups.*,objects.name as o_name from groups
 					LEFT JOIN objects ON objects.oid = groups.oid
 			where gid in (".join(",", $tmp).")";
 			$this->db_query($q);
 		}
 
 	}
-	
+
 	// This should eventually replace the previous function
 	// argumendid:
 	// type(int or array) - mis tyypi gruppe listida?
@@ -471,7 +471,7 @@ $t = time();
 		return $ret;
 	}
 
-	function addgroup($parent,$gname,$type=0,$data = 0,$priority = USER_GROUP_PRIORITY,$search_form = 0, $obj_parent = 0) 
+	function addgroup($parent,$gname,$type=0,$data = 0,$priority = USER_GROUP_PRIORITY,$search_form = 0, $obj_parent = 0)
 	{
 		$this->quote($gname);
 		$uid = aw_global_get("uid");
@@ -509,9 +509,9 @@ $t = time();
 		return $gid;
 	}
 
-	function fetchgroup($gid) 
+	function fetchgroup($gid)
 	{
-		$q = "SELECT groups.oid,groups.gid,count(groupmembers.gid) AS gcount,groups.priority FROM groups 
+		$q = "SELECT groups.oid,groups.gid,count(groupmembers.gid) AS gcount,groups.priority FROM groups
 					LEFT JOIN groupmembers on (groups.gid = groupmembers.gid)
 					WHERE groups.gid = '$gid'
 					GROUP BY groups.gid,groups.oid,groups.priority";
@@ -524,7 +524,7 @@ $t = time();
 	// !Grupi kasutjate nimekiri, returns array[uid] = uid
 	function getgroupmembers2($gid)
 	{
-		$this->db_query("SELECT groupmembers.*,users.join_form_entry as join_form_entry FROM groupmembers 
+		$this->db_query("SELECT groupmembers.*,users.join_form_entry as join_form_entry FROM groupmembers
 										 LEFT JOIN users ON users.uid = groupmembers.uid
 										 WHERE gid = '$gid' AND users.blocked < 1");
 		$ret = array();
@@ -550,9 +550,9 @@ $t = time();
 		}
 	}
 
-	function remove_users_from_group($gid,$users,$checkdyn = false) 
+	function remove_users_from_group($gid,$users,$checkdyn = false)
 	{
-		if (is_array($users)) 
+		if (is_array($users))
 		{
 			if ($checkdyn)
 			{
@@ -564,7 +564,7 @@ $t = time();
 			$garr[$gid] = $gid;
 			$gstr = join(",",$garr);
 
-			while(list(,$k) = each($users)) 
+			while(list(,$k) = each($users))
 			{
 				// if checking is on, and the group is dynamic
 				// then update user record so that he will not be reinserted into that group again
@@ -602,15 +602,15 @@ $t = time();
 		}
 	}
 
-	function add_users_to_group($gid,$users,$permanent = 0,$check = false) 
+	function add_users_to_group($gid,$users,$permanent = 0,$check = false)
 	{
 		$t = time();
 		$uid = aw_global_get("uid");
-		if (is_array($users)) 
+		if (is_array($users))
 		{
 			$garr = $this->get_grp_parent_grps($gid);
 			$garr[$gid] = $gid;
-			while(list(,$k) = each($users)) 
+			while(list(,$k) = each($users))
 			{
 				$permanent = $permanent ? 1 : 0;
 
@@ -649,7 +649,7 @@ $t = time();
 	////
 	// !adds an user
 	// parameters:
-	//	uid 
+	//	uid
 	//	password
 	//	email
 	//	join_grp
@@ -657,7 +657,7 @@ $t = time();
 	//	use_md5_passwords - optional,if true, encodes password with md5, regardless of the default
 	//	all_users_group - if set, overrides the system default
 	//  no_add_user
-	function add($data) 
+	function add($data)
 	{
 		extract($data);
 		$t = time();
@@ -791,7 +791,7 @@ $t = time();
 		$this->db_query("SELECT * FROM users WHERE uid != '' ");
 		while ($row = $this->db_next())
 		{
-			// make sure we don't addd users that are set as not to be added to this group. 
+			// make sure we don't addd users that are set as not to be added to this group.
 			$udata = unserialize($row["exclude_grps"]);
 			if (!$udata[$gid])
 			{
@@ -1186,7 +1186,7 @@ $t = time();
 		return $ret;
 	}
 
-	//// 
+	////
 	// !Returns user information
 	// parameters:
 	//	uid - required, the user to fetch

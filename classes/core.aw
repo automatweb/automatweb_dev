@@ -158,7 +158,7 @@ class core extends acl_base
 
 	/** This writes a line to log file in site directory
 
-		@attrib api=1 name=site_log params=pos 
+		@attrib api=1 name=site_log params=pos
 
 		@param type required type=string
 			Line to write into log file
@@ -199,7 +199,7 @@ class core extends acl_base
 				return false;
 			}
 		}
-		
+
 		$filename = $folder.'/log-'.date('Y-m-d').'.log';
 
 		$f = fopen($filename, 'a');
@@ -207,7 +207,7 @@ class core extends acl_base
 		fwrite($f, $string."\n");
 		flock($f, LOCK_UN);
 		fclose($f);
-		
+
 		return true;
 	}
 
@@ -1344,12 +1344,12 @@ class core extends acl_base
 	////
 	// !serializemise funktsioonid.
 	// need on siin sellex et kui objekt ei implemendi serializemist, siis errorit ei tulex.
-	function _serialize($arr)
+	function _serialize($arr = array())
 	{
 		return false;
 	}
 
-	function _unserialize($arr)
+	function _unserialize($arr = array())
 	{
 		return false;
 	}
