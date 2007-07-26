@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.53 2007/07/24 10:42:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.54 2007/07/26 09:40:37 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1901,7 +1901,7 @@ class shop_warehouse extends class_base
 				{
 					if($p["unsent"])
 					{
-						$color = "blue";
+						$color = "#BBCCEE";
 						break;
 					}
 				}
@@ -1916,7 +1916,7 @@ class shop_warehouse extends class_base
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
 						"group" => "items",
-						"return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
+						"return_url" =>get_ru(),// urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
 					), CL_SHOP_ORDER),
 					"caption" => t("Vaata")
 				)),
