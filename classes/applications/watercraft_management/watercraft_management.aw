@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.14 2007/07/25 10:21:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.15 2007/07/26 05:51:08 tarvo Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -29,6 +29,9 @@
 
 		@property locations type=relpicker reltype=RELTYPE_LOCATIONS table=watercraft_management
 		@caption Asukohad
+
+		@property max_days type=textbox table=watercraft_management
+		@caption Kuvatavate kuulutuste maksimaalne vanus p&auml;evades
 
 	@groupinfo manufacturers_management caption="Tootjate haldamine" parent=general
 	@default group=manufacturers_management
@@ -754,6 +757,7 @@ class watercraft_management extends class_base
 				locations int, 
 				manufacturers int, 
 				search int,
+				max_days int,
 			)');
 			return true;
 		}
@@ -766,6 +770,7 @@ class watercraft_management extends class_base
 			case 'locations':
 			case 'manufacturers':
 			case 'search':
+			case 'max_days':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'

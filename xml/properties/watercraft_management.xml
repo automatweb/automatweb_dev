@@ -54,6 +54,14 @@
             <caption>Asukohad</caption>
       </property>
       <property>
+            <name>max_days</name>
+            <table>watercraft_management</table>
+            <group>sub_general</group>
+            <type>textbox</type>
+            <field>max_days</field>
+            <caption>Kuvatavate kuulutuste maksimaalne vanus p&amp;amp;auml;evades</caption>
+      </property>
+      <property>
             <name>manufacturers_management_toolbar</name>
             <table>objects</table>
             <group>manufacturers_management</group>

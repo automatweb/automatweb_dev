@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.27 2007/07/25 13:18:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.28 2007/07/26 05:51:08 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -908,6 +908,18 @@ class watercraft_search extends class_base
 		if($filter["sort_by"])
 		{
 			$filter["price"] = new obj_predicate_not("struudel");
+		}
+
+
+		$man = get_active(CL_WATERCRAFT_MANAGEMENT);
+		$d = (int)($man->prop("max_days"));
+		$t = false;
+		// calculates the days backwards and sets the filter to 'modified' prop from beginning of that day
+		if($d)
+		{
+			$d_in_s = 60 * 60 * 24;
+			$back = time() - ($d_in_s * $d);
+			$filter["modified"] = new obj_predicate_compare(OBJ_COMP_GREATER, mktime(0,0,0, date("n", $back), date("j", $back), date("Y", $back)));
 		}
 		
 
