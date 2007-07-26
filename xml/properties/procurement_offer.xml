@@ -10,6 +10,15 @@
             <caption>Hange</caption>
       </property>
       <property>
+            <name>procurement_nr</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <submit>no</submit>
+            <field>procurement_nr</field>
+            <caption>Hanke number</caption>
+      </property>
+      <property>
             <name>offerer</name>
             <table>aw_procurement_offers</table>
             <group>general</group>

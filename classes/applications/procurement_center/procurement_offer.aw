@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.29 2007/07/05 09:43:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.30 2007/07/26 12:26:07 markop Exp $
 // procurement_offer.aw - Pakkumine hankele
 /*
 
@@ -12,6 +12,9 @@
 
 	@property procurement type=relpicker reltype=RELTYPE_PROCUREMENT table=aw_procurement_offers field=aw_procurement
 	@caption Hange
+
+	@property procurement_nr type=text submit=no
+	@caption Hanke number
 
 	@property offerer type=relpicker reltype=RELTYPE_OFFERER table=aw_procurement_offers field=aw_offerer
 	@caption Pakkuja
@@ -232,6 +235,10 @@ class procurement_offer extends class_base
 
 			case "p_tbl":
 				$this->_p_tbl($arr);
+				break;
+				
+			case "procurement_nr":
+				$prop["value"] = $arr["obj_inst"]->prop("procurement.procurement_nr");
 				break;
 
 			case "products":
