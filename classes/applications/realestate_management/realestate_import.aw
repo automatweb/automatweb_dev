@@ -521,6 +521,7 @@ class realestate_import extends class_base
 					// unset ($property);
 					$property = NULL; // v2idetavalt on m2lukasutus unsetiga v6rreldes nii efektiivsem
 					$GLOBALS["objects"][$property_id] = null;
+					unset($GLOBALS["objects"][$property_id]);
 				}
 				else
 				{
@@ -689,6 +690,7 @@ class realestate_import extends class_base
 						$property_id = $property->id ();
 						$property = NULL;
 						$GLOBALS["objects"][$property_id] = null;
+						unset($GLOBALS["objects"][$property_id]);
 					}
 
 					$new_property = true;
@@ -940,7 +942,7 @@ class realestate_import extends class_base
 					$address_text = $address->prop ("address_array");
 					$address_text[ADDRESS_COUNTRY_TYPE] = null;
 
-					if ($address_text != $address_city24 and $maja_nr !== $address->prop("street_address") and $korteri_nr !== $address->prop("apartment") and $current_user === $maakler_user)
+					if (!empty($arr["import_all"]) or ($address_text != $address_city24 and $maja_nr !== $address->prop("street_address") and $korteri_nr !== $address->prop("apartment") and $current_user === $maakler_user))
 					{
 						##### set address
 						$address->set_prop ("unit_name", array (
@@ -980,7 +982,7 @@ class realestate_import extends class_base
 						aw_restore_acl();
 
 						$address_text = $address->prop ("address_array");
-						$address_text[ADDRESS_COUNTRY_TYPE] = null;
+						unset($address_text[ADDRESS_COUNTRY_TYPE]);
 						$address_text = implode (", ", $address_text);
 						$name = $address_text . " " . $address->prop ("street_address") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
 						$property->set_name ($name);//!!! nime panemine yhte funktsiooni!
@@ -989,6 +991,7 @@ class realestate_import extends class_base
 					$tmp = $address->id ();
 					$address = null;
 					$GLOBALS["objects"][$tmp] = null;
+					unset($GLOBALS["objects"][$tmp]);
 
 					#### transaction_type
 					if ($this->changed_transaction_types)
@@ -1284,6 +1287,7 @@ class realestate_import extends class_base
 						$tmp = $image->id ();
 						$image = null;
 						$GLOBALS["objects"][$tmp] = null;
+						unset($GLOBALS["objects"][$tmp]);
 					}
 
 					#### pictures
@@ -1357,6 +1361,7 @@ class realestate_import extends class_base
 							$tmp = $image->id ();
 							$image = null;
 							$GLOBALS["objects"][$tmp] = null;
+							unset($GLOBALS["objects"][$tmp]);
 						}
 						elseif ($key != $existing_pictures[$picture_url]->ord())
 						{ # change order
