@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.25 2007/01/04 14:06:36 markop Exp $
-// realestate_add.aw - Kinnisvaraobjekti lisamine 
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.26 2007/07/27 09:52:41 voldemar Exp $
+// realestate_add.aw - Kinnisvaraobjekti lisamine
 /*
 
 @classinfo syslog_type=ST_REALESTATE_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -11,7 +11,7 @@
 @default method=serialize
 
 @property realestate_type type=select
-@caption Kinnisvaraobjekti tüüp 
+@caption Kinnisvaraobjekti tüüp
 
 @property realestate_environment type=relpicker reltype=RELTYPE_MANEGER
 @caption Kinnisvarahalduse keskkond
@@ -44,7 +44,7 @@ caption Dokument millele suunata
 @groupinfo import caption="Import"
 @default group=import
 
-@property import type=textarea store=no 
+@property import type=textarea store=no
 @caption see tuleb arvatavasti iga uue impordiga ümber progeda, et momendil töötab juhul kui tabel on kujul (misiganes	Asula_nimi		Asula_tüüp(5-väikelinn , 6-linnaosa)	misiganes	parent parent_nimi	maakond	maakonna_nimi) ja esimestes kahes reas kasulikku infor pole
 
 //tõlgitavaks
@@ -74,10 +74,10 @@ class realestate_add extends class_base
 		CL_REALESTATE_GARAGE => "Garaaz",
 		CL_REALESTATE_LAND => "Maa",
 	);
-	
+
 	function realestate_add()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "realestate_add",
@@ -122,7 +122,7 @@ class realestate_add extends class_base
 				break;
 			case "levels":
 				$this->do_table($arr);
-				break;		
+				break;
 			case "help":
 				$template_dir = $this->site_template_dir;
 				$prop["value"] = nl2br(htmlentities("
@@ -130,7 +130,7 @@ class realestate_add extends class_base
 				Template fail peab asuma kataloogis :".$template_dir.".
 				Kui tahad templates näha valmis tehtud property't koos õigete valikutega jne, siis kasuta templates muutujuat {VAR:property}, kui vaja läheb vaid property väärtust , kasuta muutujat {VAR:property_value} (property asemele siis vastava property nimi, mille saab Kohustuslike väljade alt...sulgudes olev tekst).
 				Kui miski property kohta märkida, et see on kohustluslik, siis töötab asi nii, et juhul , kui mingisse teplate'i kirjutatakse vastava property nimi, siis sealt edasi ei lasta , enne kui ta miski väärtuse kaasa saab.
-				
+
 				Et saaks erinevatele tasemetele tagasi minna, siis tuleks kasutada template'is miskit taolist asja:
 				<!-- SUB: ACT_LEVEL -->
 				<a href={VAR:level_url}>{VAR:level_name}</a>
@@ -139,25 +139,25 @@ class realestate_add extends class_base
 				{VAR:level_name}
 				<!-- END SUB: LEVEL -->
 				kus siis {VAR:level_name} asemele tekkivad kõik tasemete nimed ja {VAR:level_url} asemele tasemete urlid... vaid juhul kui vastavale tasemele pääsemiseks on vajalikud väljad juba täidetud. {VAR:reforb} oleks ka kasulik kuskile formi sisse panna
-				
-				Kasutuses veel (vajalikud xmlrewquest jaoks): 
+
+				Kasutuses veel (vajalikud xmlrewquest jaoks):
 				{VAR:url}
 				{VAR:admin_structure_id} ,Riigi haldusjaotuse ID
 				{VAR:div0}-{VAR:div4}, vastavalt siis maakonna, linna, linnaosa, valla ja asula/küla haldusüksuse IDd
-				
+
 				miski suvalise kasutaja lisatud kinnisvaraobjektide nimekirja genereerimiseks peab olema õiges kaustas fail list.tpl
 				muutujad:
 				name - kinnisvaraobjekti nimi
 				id - objekti id... kui see urliks panna, siis näitab objekti andmeid
 				change - url, millelt saab antud kinnisvaraobjekti muuta
-				
+
 				kui objekt on lisatud saidilt miski dokumendi kaudu mis siiamaani eksisteerib, siis muutmisel kasutatakse sama dokumenti... kui seda pole, siis on vajalik default_change.tpl nimeline fail
-				
+
 				piltide muutujad:
 				{VAR:picture0} - {VAR:picture9} pildid img tag'ina
 				{VAR:picture0del} - {VAR:picture9del} piltide kustutamise chexkboxid
 				pildiuploadide nimed peavad olema picture0upload - picture9upload.
-				
+
 				"));
 				break;
 		};
@@ -187,7 +187,7 @@ class realestate_add extends class_base
 				break;
 			case "import":
 				$this->import($arr);
-			
+
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 			break;
@@ -209,7 +209,7 @@ class realestate_add extends class_base
 		$realestate_environment_obj = obj($parent);
 		$admin_structure_id = $realestate_environment_obj->prop("administrative_structure");
 		$admin_structure = obj($admin_structure_id);
-		
+
 		$rows = explode("\n" , $arr["prop"]["value"]);
 		unset($rows[0],$rows[1]);
 		$data = array();
@@ -239,7 +239,7 @@ class realestate_add extends class_base
 					"name" => trim($row["county_name"]).'maa',
 				);
 			}
-			
+
 			if(substr_count($row["parent_name"], ' linn') == 1)
 			{
 				$citys[$row["parent"]] = array(
@@ -264,35 +264,18 @@ class realestate_add extends class_base
 				"parent" => $admin_structure_id, // required. aw object or oid
 				"division" => $address_props["county"],
 				"type" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
-				"return_object" => false,
 			);
-			$county_id = $admin_structure->set_prop("unit_by_name", $param);
+			$county_o = $admin_structure->set_prop("unit_by_name", $param);
 			print '--------------------maakond'.$county["name"].'--------------------<br>';
 			foreach($citys as $city)
 			{
 				if($city["parent"] == $county["id"])
 				{
-					$param = array(
-						"name" => $city["name"],
-						"parent" => $county_id,
-						"division" => $address_props["city"],
-						"type" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
-						"return_object" => false,
-					);					
-					$city_id = $admin_structure->set_prop("unit_by_name", $param);
 					print "lisatud linn - ".$city["name"].'<br>Linnaosad:<br>';
 					foreach($data as $row)
 					{
 						if(($row["parent"] == $city["id"]) && ($row["nr"] == 6))
 						{
-							$param = array(
-								"name" => $row["name"],
-								"parent" => $city_id,
-								"division" => $address_props["citypart"],
-								"type" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
-								"return_object" => false,
-							);	
-							$citypart_id = $admin_structure->set_prop("unit_by_name", $param);
 							print $row["name"].'<br>';
 						}
 					}
@@ -304,37 +287,27 @@ class realestate_add extends class_base
 				{
 					$param = array(
 						"name" => $vald["name"],
-						"parent" => $county_id,
+						"parent" => $county_o->id(),
 						"division" => $address_props["vald"],
 						"type" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
-						"return_object" => false,
 					);
-					$vald_id = $admin_structure->set_prop("unit_by_name", $param);
+					$vald_o = $admin_structure->set_prop("unit_by_name", $param);
 					print "lisatud vald - ".$vald["name"].'<br>';
-					print 'Alevikud, külad ja muud gettod:<br>';
+					print 'Alevikud, külad ja muud getod:<br>';
 					foreach($data as $row)
 					{
 						if($row["parent"] == $vald["id"])
 						{
 							if($row["nr"] == 5)
 							{
-								$param = array(
-									"name" => $row["name"],
-									"parent" => $county_id,
-									"division" => $address_props["city"],
-									"type" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
-									"return_object" => false,
-								);
-								$city_id = $admin_structure->set_prop("unit_by_name", $param);
 								echo "linn - ".$row["name"].'<br>';
 								continue;
 							}
 							$param = array(
 								"name" => $row["name"],
-								"parent" => $vald_id,
+								"parent" => $vald_o->id(),
 								"division" => $address_props["settlement"],
 								"type" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
-								"return_object" => false,
 							);
 							$settlement_id = $admin_structure->set_prop("unit_by_name", $param);
 							print $row["name"].'<br>';
@@ -369,14 +342,14 @@ class realestate_add extends class_base
 			$so->save();
 		};
 	}
-	
+
 	//tekitab võimalike pankade ja propertyte nimekirja
 	function callback_bank($arr)
 	{
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
 		$meta = $arr["obj_inst"]->meta("bank");
 		foreach($bank_payment->for_all_banks as $key => $val)
-		{	
+		{
 			$ret[] = array(
 				"name" => "meta[".$key."]",
 				"caption" => $val,
@@ -384,9 +357,9 @@ class realestate_add extends class_base
 				"value" => $meta[$key],
 			);
 		}
-		
+
 		foreach($bank_payment->banks as $key => $val)
-		{	
+		{
 			$ret[] = array(
 				"name" => "meta[".$key."][use]",
 				"type" => "chechbox" ,
@@ -406,7 +379,7 @@ class realestate_add extends class_base
 		}
 		return $ret;
 	}
-	
+
 	//tekitab vastava kinnisvara objektide propertite nimekirja,
 	//kust siis saab valida, mida on kohustuslik täita jne
 	function callback_get_fields($arr)
@@ -428,10 +401,10 @@ class realestate_add extends class_base
 					"clid" => CL_REALESTATE_PROPERTY,
 				))
 			);
-			
+
 			$groups = $cfgu->get_groupinfo();
 			$meta = $arr["obj_inst"]->meta("required_fields");
-			
+
 			foreach($props as $name => $prop)
 			{
 				if($prop["caption"])
@@ -454,17 +427,17 @@ class realestate_add extends class_base
 		}
 		return $ret;
 	}
-	
+
 	function do_table($arr)
 	{
 		$levels = $arr["obj_inst"]->meta("levels");
 		$t = &$arr["prop"]["vcl_inst"];
-		
+
 		$t->define_field(array(
 			"name" => "id",
 			"caption" => t("Tase"),
 //			"sortable" => 1,
-		));		
+		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Etapi nimi"),
@@ -497,13 +470,13 @@ class realestate_add extends class_base
 			$data = array(
 				"id" => $count,
 			);
-		
+
 			$data["name"] = html::textbox(array(
 				"name" => "meta[".$count."][name]",
 				"size" => 30,
 				"value" => $level["name"],
 			));
-			
+
 			foreach($langdata as $lid => $lang)
 			{
 				 $data[$lid] = html::textbox(array(
@@ -525,13 +498,13 @@ class realestate_add extends class_base
 		$new_data = array(
 			"id" => $count,
 		);
-		
+
 		 $new_data["name"] = html::textbox(array(
 			"name" => "meta[".$count."][name]",
 			"size" => 30,
 			"value" => "",
 		));
-		
+
 		foreach($langdata as $lid => $lang)
 		{
 			 $new_data[$lid] = html::textbox(array(
@@ -549,12 +522,12 @@ class realestate_add extends class_base
 		$t->define_data($new_data);
 		$t->set_sortable(false);
 	}
-	
+
 	//kui kinnisvaraobjekti tüüpi pole määratud, siis pole tasemete ja kohustuslike väljade grupid eriti vajalikud
 	function callback_mod_tab($arr)
 	{
-		if((!$arr["obj_inst"]->prop("realestate_type")) 
-		&& (($arr["id"] == "required_fields") 
+		if((!$arr["obj_inst"]->prop("realestate_type"))
+		&& (($arr["id"] == "required_fields")
 		|| ($arr["id"] == "levels")))
 		{
 			return false;
@@ -565,7 +538,7 @@ class realestate_add extends class_base
 		}
 		return true;
 	}
-	
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
@@ -619,7 +592,7 @@ class realestate_add extends class_base
 						"msg" => t("väli '".$key."' peab olema täidetud"),
 						"fatal" => false,
 						"show" => true,
-					));					
+					));
 					$ret = true;
 				}
 			}
@@ -681,7 +654,7 @@ class realestate_add extends class_base
 		$_SESSION["realestate_input_data"]["realestate_id"] = $id;
 		$_SESSION["realestate_input_data"]["filled_level"] = 256;//lihtsalt miski suur number
 	}
-	
+
 	function is_admin()
 	{
 		$grps = aw_ini_get("realestate.admin_groups");
@@ -696,7 +669,7 @@ class realestate_add extends class_base
 		}
 		return $has;
 	}
-	
+
 	function result_page($arr)
 	{
 		$ret = "";
@@ -709,8 +682,8 @@ class realestate_add extends class_base
 				if(!$bank_payment->check_response()) return "mingi jama";
 				$obj_id = substr($_SESSION["bank_return"]["data"]["VK_REF"], 0, (strlen($_SESSION["bank_return"]["data"]["VK_REF"])-1));
 				if(is_oid($obj_id))
-				{	
-					$realest_obj = obj($obj_id);	
+				{
+					$realest_obj = obj($obj_id);
 					$valid_for = $realest_obj->prop("weeks_valid_for");
 					$realest_obj->set_prop("is_visible" , "1");
 					if(!$realest_obj->prop("expire") || (time() > $realest_obj->prop("expire"))) $expire = time();
@@ -766,7 +739,7 @@ class realestate_add extends class_base
 				$this->vars(array("pay_link"	=> $bank_payment->mk_my_orb("pay_site", array()),));
 				$pay .= $this->parse("PAY");
 			}
-		
+
 			$this->vars(array(
 				"PAY"		=> $pay,
 				"MAKE_VISIBLE"	=> $make_visible,
@@ -776,7 +749,7 @@ class realestate_add extends class_base
 				"pay_link"	=> $bank_payment->mk_my_orb("pay_site", array()),
 			));
 			return $this->parse();
-		
+
 //		}
 		//juhul kui template faili pole, siis annab miski random variandi...
 		$ret.= $prop_obj->request_execute($realest_obj);
@@ -793,11 +766,11 @@ class realestate_add extends class_base
 		}
 		return $ret;
 	}
-	
+
 	/** Change the realestate object info.
-		
+
 		@attrib name=parse_alias is_public="1" caption="Change"
-	
+
 	**/
 	function parse_alias($arr)
 	{
@@ -853,7 +826,7 @@ class realestate_add extends class_base
 			{
 				$level = $level-1;
 			}
-			else 
+			else
 			{
 				if($level > $_SESSION["realestate_input_data"]["filled_level"])
 				{
@@ -862,18 +835,18 @@ class realestate_add extends class_base
 			}
 			$tpl = $levels[($level-1)]["template"];
 			$tpl2 = $levels[$level]["template"];
-			$_SESSION["realestate_input_data"]["level"] = $level+1;	
+			$_SESSION["realestate_input_data"]["level"] = $level+1;
 		}
 		else //muudetaval kinnisvaraobjektil pole teada kuda teda sisestati.... st muutmiseks läheb käiku miski default template... antud juhul "default_change.tpl", sinna soovitaks muutmist võimaldada vaid propertytele, mis kõigil erinevatel kinnisvaraobjekti tüüpidel olemas, muidu ... minupärast võib ju, kuid ei soovitaks..
 		{
 			$tpl = "default_change.tpl";
 		}
 		$this->read_template($tpl);
-		
+
 		lc_site_load("realestate", &$this);
 		//tekitab muutujad erinevate tasemete nimede ja linkidega
 		$this->level_vars(array("levels" => $levels , "data" => $data));
-		
+
 		//juhul , kui template faile rohkem ei ole, siis läheb edasi objekti salvestama
 		if(!$tpl2)
 		{
@@ -897,7 +870,7 @@ class realestate_add extends class_base
 			"clid"		=> $clid,
 			"parent"	=> $parent,
 		));
-		$this->vars($props_html);	
+		$this->vars($props_html);
 		//property väärtuse saatmine kujul "property_nimi"_value
 		$data_value = array();
 		foreach($_SESSION["realestate_input_data"] as $key => $value)
@@ -910,8 +883,8 @@ class realestate_add extends class_base
 			$asd = explode("e+" , $data_value["transaction_price_value"]);
 			$data_value["transaction_price_value"] = (double)$asd[0] * pow(10 , (int)$asd[1]);
 		}
-		
-		$this->vars($data_value);	
+
+		$this->vars($data_value);
 
 		$subs = array("county", "city" ,"citypart", "vald" , "settlement");
 		$parents = array(
@@ -944,7 +917,7 @@ class realestate_add extends class_base
 			if ($this->is_template($sub))
 			{
 				$this->vars(array($sub => $this->get_divisions(array(
-					"admin_structure_id"	=> $admin_structure_id, 
+					"admin_structure_id"	=> $admin_structure_id,
 					"division"		=> $division[$key],
 					"parent"		=> $parent_division,
 					"sub"			=> $sub,
@@ -968,9 +941,9 @@ class realestate_add extends class_base
 				"class_id" => CL_IMAGE,
 			)));
 			$x = 0;
-			
+
 			$existing_pics = $pictures->ids();
-			
+
 				if($this_object->meta("pic_order"))
 				{
 					$tmp_existing_pics = array();
@@ -990,7 +963,7 @@ class realestate_add extends class_base
 					}
 					$existing_pics = $tmp_existing_pics;
 				}
-			
+
 /*			foreach($pictures->arr() as $pic)
 			{
 				$this->vars(array(
@@ -1062,7 +1035,7 @@ class realestate_add extends class_base
 			));
 			$c .= $this->parse("LEVEL");
 		}
-		
+
 		$this->vars(array(
 			"ACT_LEVEL" => $c_act,
 		));
@@ -1072,7 +1045,7 @@ class realestate_add extends class_base
 	}
 
 	/** get_divisions
-		@attrib name=get_divisions nologin="1" 
+		@attrib name=get_divisions nologin="1"
 	**/
 	function get_divisions($arr)
 	{
@@ -1132,7 +1105,7 @@ class realestate_add extends class_base
 	}
 
 	function get_props_for_site($arr)
-	{	
+	{
 		extract($arr);
 		if($_SESSION["realestate_input_data"]["realestate_id"])
 		{
@@ -1162,7 +1135,7 @@ class realestate_add extends class_base
 			$rd->get_property(array("prop" => &$o_props[$key] , $prop, "request" => $request , "obj_inst" => $dummy));
 			}
 		}
-	
+
 		$cfgu = get_instance("cfg/cfgutils");
 		$els = array_merge(
 			$o_props,
@@ -1170,13 +1143,13 @@ class realestate_add extends class_base
 				"clid" => CL_REALESTATE_PROPERTY,
 			))
 		);
-		
+
 		//tegeleb vaid nende varidega, mis templates olemas on.... äkki teeb veidi kiiremaks
 		foreach($els as $prop=>$val)
 		{
 			if(!$this->template_has_var($prop)) unset($els[$prop]);
 		}
-		
+
 		$rd->load_defaults();
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
@@ -1188,7 +1161,7 @@ class realestate_add extends class_base
 			unset($els[$key]["autocomplete_source"]);
 			unset($els[$key]["autocomplete_params"]);
 		}
-		
+
 		classload("cfg/htmlclient");
 		$html = array();
 		foreach($els as $key => $val)
@@ -1216,11 +1189,11 @@ class realestate_add extends class_base
 	//	arr($html);
 		return $html;
 	}
-	
-	/** Generate a list of realestate objects added by user 
-		
+
+	/** Generate a list of realestate objects added by user
+
 		@attrib name=my_realestate_list is_public="1" caption="Minu kinnisvaraobjektid"
-	
+
 	**/
 	function my_realestate_list($args)
 	{
@@ -1231,7 +1204,7 @@ class realestate_add extends class_base
 				CL_REALESTATE_APARTMENT , CL_REALESTATE_COMMERCIAL,
 				CL_REALESTATE_GARAGE , CL_REALESTATE_LAND,
 		);
-	
+
 		$all_objects = array();
 		foreach($types as $type)
 		{
@@ -1244,25 +1217,25 @@ class realestate_add extends class_base
 			$all_objects = array_merge($all_objects,$obj_list->arr());
 			exit_function ("array_merge");
 		}
-	
+
 		$trans_types = array(
 				301 => t("Müük"),
 				300 => t("Ost"),
 				299 => t("Üürile anda"),
 		);
-		
+
 		$tpl = "list.tpl";
 		$this->read_template($tpl);
 		lc_site_load("realestate", $this);
 		$html = get_instance("html");
 		if(sizeof($all_objects) == 0) $this->vars(array("nothing" => "Pakkumised puuduvad"));
-		
+
 		$has = $this->is_admin();
 		if ($this->is_template("LIST"))
 		{
 			$c = "";
 			foreach($all_objects as $key => $rlst_object)
-			{	
+			{
 				$tyyp = $rlst_object->prop_str("transaction_type");
 //				if($rlst_object->is_brother()) continue;//ignoreerib miskiseid brothereid
 				if(is_oid($rlst_object->meta("added_from"))) $change = $rlst_object->meta("added_from")."?id=".$rlst_object->id();
@@ -1270,7 +1243,7 @@ class realestate_add extends class_base
 				$time = time();
 				$expire = (int)(($rlst_object->prop("expire") - $time)/86400);
 				if($rlst_object->prop("expire") - $time<1) $expire = t("Aegunud");
-				else 
+				else
 				{
 					if($expire < 30)$expire = t("Nähtav")." ".$expire." ".t("päeva");
 					else $expire = t("Nähtav");
@@ -1315,7 +1288,7 @@ class realestate_add extends class_base
 						$a_e .= $this->parse("ADMIN_EXTEND");
 					}
 				}
-				
+
 				if($rlst_object->prop("is_visible"))
 				{
 					$this->vars(array("invisible"	=>  $this->mk_my_orb("make_invisible", array("id" => $rlst_object->id())),));
@@ -1387,9 +1360,9 @@ class realestate_add extends class_base
 	}
 
 	/** subscribe
-		@attrib name=subscribe nologin="1" 
-		@param id required type=int 
-		@param rel_id required type=int 
+		@attrib name=subscribe nologin="1"
+		@param id required type=int
+		@param rel_id required type=int
 	**/
 	function subscribe($args = array())//tegeleb postitatud infoga
 	{
@@ -1427,7 +1400,7 @@ class realestate_add extends class_base
 			));
 			$realestate_obj->set_prop("realestate_agent1" , $uid);
 		}
-		
+
 		$pictures = new object_list($realestate_obj->connections_from (array (
 			"type" => "RELTYPE_REALESTATE_PICTURE",
 			"class_id" => CL_IMAGE,
@@ -1456,7 +1429,7 @@ class realestate_add extends class_base
 			}
 			$existing_pics = $tmp_existing_pics;
 		}
-		
+
 		if(is_array($args["delete"]))//kustutab pildiseosed
 		{
 			foreach($args["delete"] as $val)
@@ -1470,14 +1443,14 @@ class realestate_add extends class_base
 				}
 			}
 		}
-		
+
 		$x = 0;
 		while($x<10)
 		{
 			if(array_key_exists("picture".$x."upload" , $_FILES))
 			{
 				$image_inst = get_instance(CL_IMAGE);
-				$upload_image = $image_inst->add_upload_image("picture".$x."upload", $_SESSION["realestate_input_data"]["realestate_id"]); 
+				$upload_image = $image_inst->add_upload_image("picture".$x."upload", $_SESSION["realestate_input_data"]["realestate_id"]);
 				// if there is image uploaded:
 				if ($upload_image !== false)
 				{
@@ -1488,7 +1461,7 @@ class realestate_add extends class_base
 					if($x == 0)
 					{
 						$this->make_icon(array(
-							"upload_image" => "picture".$x."upload", 
+							"upload_image" => "picture".$x."upload",
 							"realestate_obj" => &$realestate_obj,
 						));
 					}
@@ -1498,7 +1471,7 @@ class realestate_add extends class_base
 							"from" => $existing_pics[$x],
 							"reltype" => "RELTYPE_REALESTATE_PICTURE",
 						));
-						
+
 					}
 					$existing_pics[$x] = $upload_image['id'];
 				}
@@ -1536,7 +1509,7 @@ class realestate_add extends class_base
 				"reltype" => "RELTYPE_REALESTATE_ADDRESS",
 			));
 		}
-		
+
 		$_SESSION["realestate_input_data"]["name"] = $this->gen_name();
 		$picture_icon = $realestate_obj->prop("picture_icon");//ei tea miks, a järgmise tsükliga kaob miskipärast ära see property väärtus
 		foreach($_SESSION["realestate_input_data"] as $key => $val)
@@ -1594,14 +1567,14 @@ class realestate_add extends class_base
 		if($args["do"] == "submit" )
 		{
 			return aw_ini_get("baseurl")."/".$args["section"]."?end=1";
-//			return aw_ini_get("baseurl")."/".$main_obj->prop("redir_object");	
+//			return aw_ini_get("baseurl")."/".$main_obj->prop("redir_object");
 		}
 		else
 		{
 			return aw_url_change_var("level", $level , aw_url_change_var("id", null , $args["return_to"]));
 		}
 	}
-	
+
 	function make_icon($args)
 	{
 		extract($args);
@@ -1621,7 +1594,7 @@ class realestate_add extends class_base
 		));
 		$ids = array();
 		foreach($conns_from as $conn)
-		{	
+		{
 			$ids[] = $conn->prop("to");
 		}
 		$realestate_obj->disconnect(array("from" => $ids));
@@ -1633,11 +1606,11 @@ class realestate_add extends class_base
 		$realestate_obj->save();
 	}
 
-	/** delete 
+	/** delete
 		@attrib name=delete_property
 	**/
 	function delete_property($args)
-	{	
+	{
 		$uid = aw_global_get("uid");
 		global $id;
 		if($this->can("view", $id))
@@ -1647,12 +1620,12 @@ class realestate_add extends class_base
 		}
 		return $this->mk_my_orb("my_realestate_list", array());
 	}
-	
-	/** extend offer 
+
+	/** extend offer
 		@attrib name=make_invisible
 	**/
 	function make_invisible($args)
-	{	
+	{
 		$uid = aw_global_get("uid");
 		global $id;
 		if(is_oid($id))
@@ -1663,8 +1636,8 @@ class realestate_add extends class_base
 		}
 		return $this->mk_my_orb("my_realestate_list", array());
 	}
-	
-	/** extend offer 
+
+	/** extend offer
 		@attrib name=extend
 	**/
 	function extend($args)
@@ -1718,7 +1691,7 @@ class realestate_add extends class_base
 			}
 			die($ret);
 		}
-		
+
 		$url = $this->mk_my_orb("extend", array(
 			"id" => $id,
 		), CL_REALESTATE_ADD);
@@ -1737,7 +1710,7 @@ class realestate_add extends class_base
 		<BR><INPUT TYPE="submit" value="'.t("pikendan").'">
 		</FORM>
 		';
-		
+
 		$ret_url = $this->mk_my_orb("parse_alias", array(), CL_REALESTATE_ADD);
 		$ret_url = $ret_url.'&end=1';
 		if($extend)
@@ -1754,7 +1727,7 @@ class realestate_add extends class_base
 				"url" 		=> $ret_url,
 				"cancel"	=> $ret_url,
 			);
-			$bank_payment = get_instance(CL_BANK_PAYMENT);	
+			$bank_payment = get_instance(CL_BANK_PAYMENT);
 			$ret.= '<a href="javascript:window.close();" ';
 			$ret.= 'onClick=window.opener.location.href="'.$bank_payment->mk_my_orb("pay_site", array("die" => 1));
 			$ret.= '"> '.t("Maksma").' </a>';
@@ -1765,8 +1738,8 @@ class realestate_add extends class_base
 		}
 		die($ret);
 	}
-	
-	/** Check expired objects 
+
+	/** Check expired objects
 		@attrib name=expire is_public="1"
 	**/
 	function expire()

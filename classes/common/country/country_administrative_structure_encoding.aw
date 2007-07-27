@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure_encoding.aw,v 1.3 2005/11/22 10:07:19 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure_encoding.aw,v 1.4 2007/07/27 09:52:41 voldemar Exp $
 // country_administrative_structure_encoding.aw - Haldusjaotuse kodeering
 /*
 
@@ -29,6 +29,8 @@
 @caption Haldusjaotus
 
 */
+
+require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class country_administrative_structure_encoding extends class_base
 {

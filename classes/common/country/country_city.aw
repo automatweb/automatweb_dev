@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_city.aw,v 1.5 2006/05/23 10:53:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_city.aw,v 1.6 2007/07/27 09:52:41 voldemar Exp $
 // country_city.aw - Linn
 /*
 
@@ -21,16 +21,9 @@
 
 */
 
-### address system settings
-if (!defined ("ADDRESS_SYSTEM"))
-{
-	define ("ADDRESS_SYSTEM", 1);
-	define ("NEWLINE", "<br />");
-	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_DBG_FLAG", "address_dbg");
-}
+require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 classload("common/country/country_administrative_unit");
+
 class country_city extends country_administrative_unit
 {
 	function country_city()

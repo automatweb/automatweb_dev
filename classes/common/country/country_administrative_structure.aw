@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.4 2005/12/07 16:58:50 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.5 2007/07/27 09:52:41 voldemar Exp $
 // country_administrative_structure.aw - Riigi haldusjaotus
 /*
 
@@ -21,7 +21,7 @@
 	@caption Aadresside administraatori kasutaja uid
 
 @default group=grp_administrative_structure
-	@property administrative_structure type=releditor reltype=RELTYPE_ADMINISTRATIVE_DIVISION mode=manager props=name,type,parent_division,division,jrk table_fields=jrk,name,parent_division_show editonly=1
+	@property administrative_structure type=releditor reltype=RELTYPE_ADMINISTRATIVE_DIVISION mode=manager props=name,type,parent_division,division,jrk table_fields=jrk,name,parent_division editonly=1
 	@caption Haldusjaotuse struktuur
 
 	@property administrative_structure_data type=hidden
@@ -37,15 +37,7 @@
 
 */
 
-### address system settings
-if (!defined ("ADDRESS_SYSTEM"))
-{
-	define ("ADDRESS_SYSTEM", 1);
-	define ("NEWLINE", "<br />");
-	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_DBG_FLAG", "address_dbg");
-}
+require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class country_administrative_structure extends class_base
 {
@@ -71,20 +63,20 @@ class country_administrative_structure extends class_base
 
 			if (is_object ($country))
 			{
-				$units = array ();
-				$units[$country->id ()] = $country->name ();
+				$divisions = array ();
+				$divisions[$country->id ()] = $country->name ();
 
 				foreach ($this_object->connections_from (array ("type" => "RELTYPE_ADMINISTRATIVE_DIVISION")) as $connection)
 				{
-					$unit = $connection->to ();
+					$division = $connection->to ();
 
-					if ($arr["request"]["administrative_structure"] != $unit->id ())
+					if ($arr["request"]["administrative_structure"] != $division->id ())
 					{
-						$units[$unit->id ()] = $unit->name ();
+						$divisions[$division->id ()] = $division->name ();
 					}
 				}
 
-				aw_global_set ("address_system_parent_select_units", $units);
+				aw_global_set ("address_system_parent_select_divisions", $divisions);
 			}
 		}
 	}

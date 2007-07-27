@@ -1,17 +1,10 @@
 <?php
 
-### address system settings
-if (!defined ("ADDRESS_SYSTEM"))
-{
-	define ("ADDRESS_SYSTEM", 1);
-	define ("NEWLINE", "<br />");
-	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_DBG_FLAG", "address_dbg");
-}
+require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class address_object extends _int_object
 {
+	var $as_changed = false;
 	var $as_address_data = array ();
 	var $as_address_data_loaded = false;
 	var $as_administrative_structure;
@@ -115,11 +108,10 @@ class address_object extends _int_object
 
 	function save ()
 	{
-		$status = $this->as_save ();
-
-		if ($status)
+		if ($this->as_save())
 		{
-			return parent::save ();
+			$this->as_changed = false;
+			return parent::save();
 		}
 		else
 		{
@@ -144,9 +136,9 @@ class address_object extends _int_object
 			$this->as_load_country ();
 			$address_array[ADDRESS_COUNTRY_TYPE] = $this->as_country->name ();
 
-			foreach ($this->as_address_data as $unit_data)
+			foreach ($this->as_address_data as $division_id => $unit_data)
 			{
-				$address_array[$unit_data["division"]] = $unit_data["name"];
+				$address_array[$division_id] = $unit_data["name"];
 			}
 		}
 
@@ -183,9 +175,9 @@ class address_object extends _int_object
 			$this->as_load_country ();
 			$address_array[ADDRESS_COUNTRY_TYPE] = $this->as_country->id ();
 
-			foreach ($this->as_address_data as $unit_data)
+			foreach ($this->as_address_data as $division_id => $unit_data)
 			{
-				$address_array[$unit_data["division"]] = $unit_data["id"];
+				$address_array[$division_id] = $unit_data["id"];
 			}
 		}
 
@@ -205,7 +197,7 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -215,7 +207,7 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -237,13 +229,13 @@ class address_object extends _int_object
 			}
 			else
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: unit of wrong class [%s]. id: [%s]", $unit->class_id (), $arr["id"]).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: unit of wrong class [%s]. id: [%s]", $unit->class_id (), $arr["id"]).AS_NEWLINE; }
 				return false;
 			}
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_by_id: division object not found. id: [{$arr["id"]}]".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_by_id: division object not found. id: [{$arr["id"]}]".AS_NEWLINE; }
 			return false;
 		}
 
@@ -254,17 +246,19 @@ class address_object extends _int_object
 
 		if (is_object($division) and ($admin_structure_id != $division->prop ("administrative_structure")))
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: division [%s] admin structure [%s] different from current [%s]. division var: [%s]", $division->id (), $division->prop ("administrative_structure"), $admin_structure_id, $division).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: division [%s] admin structure [%s] different from current [%s]. division var: [%s]", $division->id (), $division->prop ("administrative_structure"), $admin_structure_id, $division).AS_NEWLINE; }
 			return false;
 		}
 
 		### ...
-		$key = is_object ($division) ? $division->ord () : $division;
-		$this->as_address_data[$key] = array (
-			"division" => $division,
+		$ord = is_object ($division) ? $division->ord() : $division;
+		$division_id = is_object ($division) ? $division->id() : $division;
+		$this->as_address_data[$division_id] = array (
+			"ord" => $ord,
 			"unit" => is_object ($unit) ? $unit : NULL,
 			"id" => $arr["id"],
 		);
+		$this->as_changed = true;
 	}
 
     // @attrib name=as_set_by_name
@@ -273,6 +267,13 @@ class address_object extends _int_object
 	// @comment Sets administrative unit corresponding to given division (admin division object, oid or ADDRESS_STREET_TYPE)
 	function as_set_by_name ($arr)
 	{
+		### validate name. validation needed here to give a chance to avoid corruptions in address structure -- spot errors before any changes made.
+		if (empty ($arr["name"]))
+		{
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::setbyname: name not defined for unit [%s]", var_export($arr["division"], true)) . AS_NEWLINE; }
+			return false;
+		}
+
 		### get&validate admin division
 		if (is_object ($arr["division"]))
 		{
@@ -280,7 +281,7 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -290,7 +291,7 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -300,7 +301,7 @@ class address_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_by_name: division object not defined. name: [{$arr["name"]}]".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_by_name: division object not defined. name: [{$arr["name"]}]".AS_NEWLINE; }
 			return false;
 		}
 
@@ -309,23 +310,18 @@ class address_object extends _int_object
 
 		if (is_object ($division) and $this->as_administrative_structure->id () != $division->prop ("administrative_structure"))
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] admin structure [%s] different from current [%s]", $division->id (), $division->prop ("administrative_structure"), $this->as_administrative_structure->id ()).NEWLINE; }
-			return false;
-		}
-
-		### validate name. validation needed here to give a chance to avoid corruptions in address structure -- spot errors before any changes made.
-		if (empty ($arr["name"]))
-		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::setbyname: name not defined for unit [%s]", $division->id ()) . NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] admin structure [%s] different from current [%s]", $division->id (), $division->prop ("administrative_structure"), $this->as_administrative_structure->id ()).AS_NEWLINE; }
 			return false;
 		}
 
 		### ...
-		$key = is_object ($division) ? $division->ord () : $division;
-		$this->as_address_data[$key] = array (
-			"division" => $division,
-			"name" => (string) $arr["name"],
+		$ord = is_object ($division) ? $division->ord() : $division;
+		$division_id = is_object ($division) ? $division->id() : $division;
+		$this->as_address_data[$division_id] = array (
+			"ord" => $ord,
+			"name" => (string) $arr["name"]
 		);
+		$this->as_changed = true;
 	}
 
     // @attrib name=as_get_by_id
@@ -358,47 +354,26 @@ class address_object extends _int_object
 
     // @attrib name=as_get_by_division
 	// @param name required
-	// @comment returns first administrative unit corresponding to given name
+	// @comment returns first administrative unit corresponding to given division
 	function as_get_by_division ($division)
 	{
 		### get&validate admin division
 		if (is_object ($division))
 		{
-			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
-			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
-				return false;
-			}
+			$division_id = $division->id();
 		}
-		elseif (is_oid ($division))
+		elseif (ADDRESS_STREET_TYPE === $division)
 		{
-			$division = obj ($division);
-
-			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
-			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
-				return false;
-			}
-		}
-		elseif (ADDRESS_STREET_TYPE == (string) $division)
-		{
-			$division = ADDRESS_STREET_TYPE;
+			$division_id = ADDRESS_STREET_TYPE;
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_by_name: division object not defined. name: [{$arr["name"]}]".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_by_name: division object not defined. name: [{$arr["name"]}]".AS_NEWLINE; }
 			return false;
 		}
 
 		$this->as_load_data ();
-
-		foreach ($this->as_address_data as $unit_data)
-		{
-			if ($unit_data["id"] == $division->id ())
-			{
-				return $unit_data["name"];
-			}
-		}
+		return isset($this->as_address_data[$division_id]["name"]) ? $this->as_address_data[$division_id]["name"] : false;
 	}
 
     // @attrib name=as_get_unit_encoded
@@ -414,7 +389,7 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -424,7 +399,7 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -434,7 +409,7 @@ class address_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::as_get_unit_encoded: division object not defined".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::as_get_unit_encoded: division object not defined".AS_NEWLINE; }
 			return false;
 		}
 
@@ -449,21 +424,21 @@ class address_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::as_get_unit_encoded: encoding object not defined".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::as_get_unit_encoded: encoding object not defined".AS_NEWLINE; }
 			return false;
 		}
 
 		if ($encoding->class_id () != CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING)
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: encoding [%s] of wrong class [%s]", $encoding->id (), $encoding->class_id ()).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: encoding [%s] of wrong class [%s]", $encoding->id (), $encoding->class_id ()).AS_NEWLINE; }
 			return false;
 		}
 
 		$this->as_load_data ();
-		$key = is_object ($division) ? $division->ord () : $division;
+		$division_id = is_object ($division) ? $division->id() : $division;
 		$param = array (
 			"prop" => "encoding_by_unit",
-			"unit" => $this->as_address_data[$key]["id"],
+			"unit" => $this->as_address_data[$division_id]["id"],
 		);
 		$encoded_value = $encoding->prop ($param);
 		return $encoded_value;
@@ -497,7 +472,7 @@ class address_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_structure: administrative_structure not defined".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_structure: administrative_structure not defined".AS_NEWLINE; }
 			return false;
 		}
 
@@ -524,7 +499,7 @@ class address_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_country: country not defined".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_country: country not defined".AS_NEWLINE; }
 
 			return false;
 		}
@@ -533,7 +508,7 @@ class address_object extends _int_object
 
 		if (!is_object ($this->as_administrative_structure))
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_country: country has no administrarive structure defined".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_country: country has no administrarive structure defined".AS_NEWLINE; }
 
 			$this->as_country = NULL;
 			return false;
@@ -547,92 +522,77 @@ class address_object extends _int_object
 	// @comment Saves address location currently defined in this address object
 	function as_save ()
 	{
-		$this->as_load_structure ();
+		$this->as_load_structure();
 
 		### process units
-		ksort ($this->as_address_data, SORT_STRING);
 		$parent = $this->as_administrative_structure;
+		$address_data = array();
+		$topology = (array) $this->as_administrative_structure->meta("as_division_hierarchy_sequence");
 
-		foreach ($this->as_address_data as $ord => $unit_data)
+		foreach ($topology as $division_id)
 		{
-			### check if unit goes under right place in address structure
-			if ((string) $unit_data["division"] == ADDRESS_STREET_TYPE)
-			{ ### last position. name should be for street
-				$division = ADDRESS_STREET_TYPE;
-				$division_of_parent = $parent_division = 0;
-			}
-			elseif ($parent->class_id () == CL_COUNTRY_ADMINISTRATIVE_STRUCTURE)
-			{ ### first position.
-				$division = is_object ($unit_data["division"]) ? $unit_data["division"] : obj ($unit_data["division"]);
-				$division_of_parent = $parent_division = 0;
-			}
-			elseif (in_array ($parent->class_id (), $this->as_unit_classes))
+			if (ADDRESS_STREET_TYPE === $division_id)
 			{
-				$division = is_object ($unit_data["division"]) ? $unit_data["division"] : obj ($unit_data["division"]);
-				$division_of_parent = $parent->subclass ();
-				$parent_division = $division->prop ("parent_division");
+				$division = $division_id;
+			}
+			elseif (is_oid($division_id))
+			{
+				$division = obj($division_id);
 			}
 			else
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_save: parent of wrong class [%s]", $parent->class_id ()) . NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("Fatal error. address::as_save: division not found. Given identifier: [%s].", $division_id) . AS_NEWLINE; }
 				return false;
 			}
 
-			if ($division_of_parent != $parent_division)
-			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_save: division of parent [%s] wrong. doesn't match parent division [%s]", $division_of_parent, $parent_division) . NEWLINE; }
-				// return false;
-				continue; // more fault tolerance. Sets units in parental relation to the one encountered first. Units of wrong parental relation ignored.
-			}
+			$unit_data = $this->as_address_data[$division_id];
 
 			### set location on this level
-			$new_parent = NULL;
+			$unit_o = NULL;
 
 			if (is_object ($unit_data["unit"]))
 			{ ### specific unit given
-				$new_parent = $unit_data["unit"];
+				$unit_o = $unit_data["unit"];
 			}
 			elseif (is_oid ($unit_data["id"]))
 			{ ### specific unit given by oid
-				$new_parent = obj ($unit_data["id"]);
+				$unit_o = obj ($unit_data["id"]);
 			}
 			elseif (!empty ($unit_data["name"]))
 			{ ### unit specified by name
-				### add unit
-				$new_parent = $this->as_administrative_structure->set_prop ("unit_by_name", array (
+				### add pending unit
+				$args = array (
 					"name" => $unit_data["name"],
-					"parent" => $parent,
 					"division" => $division,
-					"return_object" => true,
-					"calling_address_obj_oid" => $this->obj["oid"],
-				));
+					"parent" => $parent,
+					"calling_address_obj_oid" => $this->obj["oid"]
+				);
+				$unit_o = $this->as_administrative_structure->set_prop ("unit_by_name", $args);
 
-				if ($new_parent === false)
+				if ($unit_o === false)
 				{
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("Fatal error. address::as_save: adm_struct::set_prop(unit_by_name) failed. Unit name [%s]. Division [%s]", $unit_data["name"], var_export($division, true)) . AS_NEWLINE; }
 					return false;
 				}
 			}
 
-			if (isset ($new_parent))
+			if (isset ($unit_o))
 			{
-				$this->as_address_data[$ord] = array (
-					"name" => $new_parent->name (),
-					"id" => $new_parent->id (),
-					"division" => is_object ($division) ? $division->id () : $division,
-					"class" => $new_parent->class_id (),
+				$address_data[$division_id] = array (
+					"name" => $unit_o->name (),
+					"id" => $unit_o->id (),
+					"ord" => is_object ($division) ? $division->ord() : $division,
+					"class" => $unit_o->class_id (),
 				);
-				$parent = $new_parent;
-				$this->connect (array (
-					"to" => $new_parent,
-					"reltype" => "RELTYPE_ADMINISTRATIVE_UNIT",
-				));
+				$parent = $unit_o;
 			}
 			else
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_save: unit not specified on this level [%s].", $division) . NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_save: unit not specified on this level. Division [%s].", var_export($division, true)) . AS_NEWLINE; }
 			}
 		}
 
+		$this->as_address_data = $address_data;
 		$this->set_prop ("administrative_structure", $this->as_administrative_structure);
 		$this->set_prop ("country", $this->as_administrative_structure->prop ("country"));
 		$this->set_prop ("address_data", $this->as_address_data);
@@ -642,17 +602,20 @@ class address_object extends _int_object
 
 	function as_load_structure ()
 	{
-		$administrative_structure = parent::prop ("administrative_structure");
+		if (!is_object($this->as_administrative_structure))
+		{
+			$administrative_structure = parent::prop ("administrative_structure");
 
-		if (is_oid ($administrative_structure))
-		{
-			$this->as_administrative_structure = obj ($administrative_structure);
-		}
-		else
-		{
-			error::raise(array(
-				"msg" => sprintf(t("address::as_load_structure(): administrative_structure not defined for object (%s)!"), $this->obj["oid"])
-			));
+			if (is_oid ($administrative_structure))
+			{
+				$this->as_administrative_structure = obj ($administrative_structure);
+			}
+			else
+			{
+				error::raise(array(
+					"msg" => sprintf(t("address::as_load_structure(): administrative_structure not defined for object (%s)!"), $this->obj["oid"])
+				));
+			}
 		}
 	}
 
@@ -675,8 +638,9 @@ class address_object extends _int_object
 	{
 		if (!$this->as_address_data_loaded)
 		{
-			$this->as_address_data = $this->prop ("address_data");
+			$this->as_address_data = (array) $this->prop("address_data");
 			$this->as_address_data_loaded = true;
+			$this->as_changed = false;
 		}
 	}
 }

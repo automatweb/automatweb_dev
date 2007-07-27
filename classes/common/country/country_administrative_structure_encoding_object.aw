@@ -1,14 +1,6 @@
 <?php
 
-### address system settings
-if (!defined ("ADDRESS_SYSTEM"))
-{
-	define ("ADDRESS_SYSTEM", 1);
-	define ("NEWLINE", "<br />");
-	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_DBG_FLAG", "address_dbg");
-}
+require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class country_administrative_structure_encoding_object extends _int_object
 {
@@ -79,7 +71,7 @@ class country_administrative_structure_encoding_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructureencoding::as_get_unit_encoding: unit not defined or not visible [{$arr["unit"]}]".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructureencoding::as_get_unit_encoding: unit not defined or not visible [{$arr["unit"]}]".AS_NEWLINE; }
 			return false;
 		}
 

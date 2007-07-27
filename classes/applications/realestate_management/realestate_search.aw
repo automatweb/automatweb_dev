@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.46 2007/05/17 13:18:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.47 2007/07/27 09:52:41 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1275,14 +1275,14 @@ exit_function("jigaboo");
 						$template = $this_object->prop ("result_format").".tpl";
 						$this->read_template($template);
 						lc_site_load("realestate_search",&$this);
-					
+
 					}
 					$table->set_layout("realestate_searchresult");
 					$table->define_field(array(
 						"name" => "object",
 						"caption" => NULL,
 					));
-					
+
 					if ($this->result_count > $this->result_table_recordsperpage)
 					{
 						$table->define_pageselector (array (
@@ -1312,7 +1312,7 @@ exit_function("jigaboo");
 							$default_icon = $realestate_manager->prop ("default_".$types[$this_object->class_id()]."_image");
 						}
 						$property_inst = get_instance(CL_REALESTATE_PROPERTY);
-						
+
 						$c = "";
 						$property = $list->begin ();
 						while (is_object ($property))
@@ -1333,8 +1333,8 @@ exit_function("jigaboo");
 							}
 							$i = 1;
 							$no_picture_data = true;
-							
-							
+
+
 							foreach ($properties as $name => $prop_data)
 							{
 								if (array_key_exists ($name, $property_inst->extras_property_names) and (int) ($prop_data["value"]))
@@ -1361,17 +1361,17 @@ exit_function("jigaboo");
 										$this->vars ($prop_vars);
 										$data[$name] = $this->parse ($name);// main time consumer in this loop
 									}
-					
+
 									$data[$name . "_value"] = $prop_data["strvalue"];
 									$data[$name . "_caption"] = $prop_data["caption"];
 								}
 							}
-							
+
 							// "/" oli kuskile vahelt kadunud....
 							$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
 							$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
 							$data["additional_info"] = $this_object->prop ("additional_info_" . aw_global_get("LC"));
-					
+
 							//et ei näitataks hinda, kui see on 0
 							if(!$data["transaction_price_value"] > 0)
 							{
@@ -1382,7 +1382,7 @@ exit_function("jigaboo");
 							{
 								$data["agent_email"] = "";
 							}
-							
+
 							$cl_instance_var = "cl_property_" . $property->class_id ();
 							$object_html = $this->$cl_instance_var->view (array (
 								"this" => $property,
@@ -1459,7 +1459,7 @@ exit_function("jigaboo");
 					));
 					$rows .= $this->parse ("RE_SEARCHFORM_ROW");
 				}
-				
+
 				$this->vars (array (
 					"RE_SEARCHFORM_ROW" => $rows,
 				));
@@ -1500,7 +1500,7 @@ exit_function("jigaboo");
 			{
 				$number_of_results = (0 < $this->result_count) ? sprintf (t("Leitud %s objekti"), $this->result_count) : t("Otsinguparameetritele vastavaid objekte ei leitud");
 			}
-			
+
 			$this->vars (array (
 				"RE_SEARCHFORM" => $form,
 				"table_style" => $table_style,
@@ -1982,7 +1982,7 @@ exit_function("jigaboo");
 			$search_sort_by = array_key_exists ($arr["sort_by"], $this->search_sort_options) ? $this->search_sort_options[$arr["sort_by"]]["table"] . "" . $arr["sort_by"] : NULL;
 			//tegelt see $arr["sort_by"]]["table"] jääb mulle ikka arusaamatuks, et miks teda vaja läheb.... moment kirjutasin lihtsalt üle selle väärtuse
 			if($_GET["realestate_sort_by"])$search_sort_by = $_GET["realestate_sort_by"];
-			
+
 			$search_sort_ord = array_key_exists ($arr["sort_ord"], $this->search_sort_orders) ? $arr["sort_ord"] : NULL;
 		}
 		else
@@ -2056,7 +2056,7 @@ exit_function("jigaboo");
 			case "transaction_price":
 				$search_sort_by = $arr["search"]["sort_by"];
 				break;
-	
+
 			default:
 				$search_sort_by = "name";
 		}
@@ -2240,7 +2240,7 @@ exit_function("jigaboo");
 				// $address_constraint = new object_list_filter (array (
 					// "logic" => "OR",
 					// "conditions" => array (
-						// $search_ci_clstr . ".RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// $search_ci_clstr . ".RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
 					// )
 				// ));
 			// }
@@ -2249,14 +2249,14 @@ exit_function("jigaboo");
 				// $address_constraint = new object_list_filter (array (
 					// "logic" => "OR",
 					// "conditions" => array (
-						// "CL_REALESTATE_APARTMENT.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-						// "CL_REALESTATE_COMMERCIAL.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-						// "CL_REALESTATE_COTTAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-						// "CL_REALESTATE_GARAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-						// "CL_REALESTATE_HOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-						// "CL_REALESTATE_HOUSEPART.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-						// "CL_REALESTATE_LAND.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-						// "CL_REALESTATE_ROWHOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// "CL_REALESTATE_APARTMENT.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
+						// "CL_REALESTATE_COMMERCIAL.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
+						// "CL_REALESTATE_COTTAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
+						// "CL_REALESTATE_GARAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
+						// "CL_REALESTATE_HOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
+						// "CL_REALESTATE_HOUSEPART.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
+						// "CL_REALESTATE_LAND.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
+						// "CL_REALESTATE_ROWHOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
 					// )
 				// ));
 				// $address_constraint = NULL;
@@ -2384,7 +2384,7 @@ exit_function("jigaboo");
 				{
 					$tmp_list->add($obj);
 				}
-			}		
+			}
 			$result_list = $tmp_list;
 		}
 		//kui saidilt tuleb otsing
@@ -2470,17 +2470,17 @@ exit_function("jigaboo");
 			if($this_object->prop("max_results") >0  && $this->result_count > $this_object->prop("max_results"))
 			{
 				$max_limit = 1;
-			}			
+			}
 			### limit
 			$limit = ((int) $_GET["ft_page"] * $this->result_table_recordsperpage) . "," . $this->result_table_recordsperpage;
 			if(
-				$max_limit 
+				$max_limit
 				&& ((int) $_GET["ft_page"]+1) * $this->result_table_recordsperpage > $this_object->prop("max_results"))
 			{
 				$limit = ((int) $_GET["ft_page"] * $this->result_table_recordsperpage) . "," .( $this_object->prop("max_results") - ($_GET["ft_page"] * $this->result_table_recordsperpage));
 			}
 			$args["limit"] = $limit;
-			//	ei m]eld v'lja miskit paremat moodust, kuidas nende ainult piltidega listiga edasi majandada	
+			//	ei m]eld v'lja miskit paremat moodust, kuidas nende ainult piltidega listiga edasi majandada
 			// loodab, et ikka muu ka n[[d m]jub veel
 			// tegelt kahtlane, et miks siin [ldse uus list on vaja teha
 			$tmp_list = new object_list();
@@ -2626,7 +2626,7 @@ exit_function("jigaboo");
 		elseif($child_division->prop ("type") == CL_COUNTRY_CITYDISTRICT) $all_selection = t("K&otilde;ik linnaosad");
 		elseif($child_division->name() == "Vald") $all_selection = t("K&otilde;ik vallad");
 		else $all_selection = t("K&otilde;ik asulad");
-		
+
 		$options = array(REALESTATE_SEARCH_ALL . "=>" . $all_selection);
 
 		if (is_oid ($parent_value) and is_object ($child_division) and is_object ($administrative_structure))

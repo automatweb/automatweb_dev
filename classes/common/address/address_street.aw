@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.3 2005/11/21 09:14:56 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.4 2007/07/27 09:52:41 voldemar Exp $
 // address_street.aw - Tänav
 /*
 
@@ -13,15 +13,7 @@
 
 */
 
-### address system settings
-if (!defined ("ADDRESS_SYSTEM"))
-{
-	define ("ADDRESS_SYSTEM", 1);
-	define ("NEWLINE", "<br />");
-	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_DBG_FLAG", "address_dbg");
-}
+require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class address_street extends class_base
 {

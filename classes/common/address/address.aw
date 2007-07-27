@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.10 2006/04/21 09:24:56 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.11 2007/07/27 09:52:41 voldemar Exp $
 // address.aw - Aadress v2
 /*
 
@@ -40,20 +40,9 @@
 @reltype ADMINISTRATIVE_STRUCTURE value=1 clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE
 @caption Haldusjaotus
 
-@reltype ADMINISTRATIVE_UNIT value=2 clid=clid=CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT,CL_COUNTRY
-@caption Halduspiirkond
-
 */
 
-### address system settings
-if (!defined ("ADDRESS_SYSTEM"))
-{
-	define ("ADDRESS_SYSTEM", 1);
-	define ("NEWLINE", "<br />");
-	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
-	define ("ADDRESS_DBG_FLAG", "address_dbg");
-}
+require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class address extends class_base
 {
