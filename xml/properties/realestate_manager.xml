@@ -2,17 +2,14 @@
 <properties>
       <property>
             <name>name</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <type>textbox</type>
-            <group>grp_settings</group>
             <field>name</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>property_toolbar</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -25,15 +22,15 @@
                   <num_8>grp_realestate_properties_all</num_8>
                   <num_9>grp_realestate_properties_search</num_9>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>properties_list</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -46,15 +43,15 @@
                   <num_8>grp_realestate_properties_all</num_8>
                   <num_9>grp_realestate_properties_search</num_9>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>title2</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -66,6 +63,9 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -73,9 +73,6 @@
       </property>
       <property>
             <name>proplist_filter_modifiedafter</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -87,15 +84,15 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
             <store>no</store>
             <caption>muutmisaeg peale</caption>
       </property>
       <property>
             <name>proplist_filter_modifiedbefore</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -107,15 +104,15 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
             <store>no</store>
             <caption>muutmisaeg enne</caption>
       </property>
       <property>
             <name>proplist_filter_createdafter</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -127,15 +124,15 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
             <store>no</store>
             <caption>lisamisaeg peale</caption>
       </property>
       <property>
             <name>proplist_filter_createdbefore</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -147,15 +144,15 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
             <store>no</store>
             <caption>lisamisaeg enne</caption>
       </property>
       <property>
             <name>proplist_filter_pricemin</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -167,15 +164,15 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textbox</type>
             <store>no</store>
             <caption>hind &amp;uuml;le</caption>
       </property>
       <property>
             <name>proplist_filter_pricemax</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -187,15 +184,15 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textbox</type>
             <store>no</store>
             <caption>hind alla</caption>
       </property>
       <property>
             <name>proplist_filter_legal_status</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -207,6 +204,9 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>chooser</type>
             <multiple>1</multiple>
             <store>no</store>
@@ -214,9 +214,6 @@
       </property>
       <property>
             <name>proplist_filter_quality_class</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -228,6 +225,9 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>chooser</type>
             <multiple>1</multiple>
             <store>no</store>
@@ -235,9 +235,6 @@
       </property>
       <property>
             <name>proplist_filter_closedafter</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -249,15 +246,15 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
             <store>no</store>
             <caption>tehingu s&amp;otilde;lmimise aeg peale</caption>
       </property>
       <property>
             <name>proplist_filter_closedbefore</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -269,15 +266,15 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
             <store>no</store>
             <caption>tehingu s&amp;otilde;lmimise aeg enne</caption>
       </property>
       <property>
             <name>proplist_filter_transaction_closed</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -289,6 +286,9 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
@@ -296,9 +296,6 @@
       </property>
       <property>
             <name>button1</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_realestate_properties_houses</num_0>
                   <num_1>grp_realestate_properties_rowhouses</num_1>
@@ -310,16 +307,19 @@
                   <num_7>grp_realestate_properties_land_estates</num_7>
                   <num_8>grp_realestate_properties_all</num_8>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>submit</type>
             <store>no</store>
             <caption>Otsi</caption>
       </property>
       <property>
             <name>property_search</name>
+            <group>grp_realestate_properties_search</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_realestate_properties_search</group>
             <type>releditor</type>
             <reltype>RELTYPE_PROPERTY_SEARCH</reltype>
             <rel_id>first</rel_id>
@@ -346,43 +346,43 @@
       </property>
       <property>
             <name>button2</name>
+            <group>grp_realestate_properties_search</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_realestate_properties_search</group>
             <type>submit</type>
             <store>no</store>
             <caption>Otsi</caption>
       </property>
       <property>
             <name>box</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_users_tree</num_0>
                   <num_1>grp_users_mgr</num_1>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
       <property>
             <name>user_list_toolbar</name>
+            <group>grp_users_tree</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_tree</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>user_list_tree</name>
+            <group>grp_users_tree</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_tree</group>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -390,10 +390,10 @@
       </property>
       <property>
             <name>user_list</name>
+            <group>grp_users_tree</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_tree</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -401,10 +401,10 @@
       </property>
       <property>
             <name>user_mgr_tree</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -412,10 +412,10 @@
       </property>
       <property>
             <name>user_mgr_show_all_objects</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
@@ -425,10 +425,10 @@
       </property>
       <property>
             <name>title1</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -437,10 +437,10 @@
       </property>
       <property>
             <name>user_mgr_division_rights</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -448,10 +448,10 @@
       </property>
       <property>
             <name>title12</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -460,10 +460,10 @@
       </property>
       <property>
             <name>rights_administrative_structure</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
@@ -475,10 +475,10 @@
       </property>
       <property>
             <name>rights_admindivision</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>select</type>
             <parent>tbox</parent>
             <store>no</store>
@@ -487,19 +487,19 @@
       </property>
       <property>
             <name>rights_admindivision_current</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>hidden</type>
             <store>no</store>
       </property>
       <property>
             <name>rights_adminunit</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>select</type>
             <parent>tbox</parent>
             <multiple>1</multiple>
@@ -509,30 +509,30 @@
       </property>
       <property>
             <name>clients_toolbar</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>clients_list</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>title4</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -540,50 +540,50 @@
       </property>
       <property>
             <name>clientlist_filter_name</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>textbox</type>
             <store>no</store>
             <caption>nimi</caption>
       </property>
       <property>
             <name>clientlist_filter_address</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>textbox</type>
             <store>no</store>
             <caption>aadress</caption>
       </property>
       <property>
             <name>clientlist_filter_appreciationafter</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>date_select</type>
             <store>no</store>
             <caption>t&amp;auml;nukirja kuup&amp;auml;ev peale</caption>
       </property>
       <property>
             <name>clientlist_filter_appreciationbefore</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>date_select</type>
             <store>no</store>
             <caption>t&amp;auml;nukirja kuup&amp;auml;ev enne</caption>
       </property>
       <property>
             <name>clientlist_filter_appreciationtype</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>chooser</type>
             <multiple>1</multiple>
             <store>no</store>
@@ -591,10 +591,10 @@
       </property>
       <property>
             <name>clientlist_filter_agent</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>select</type>
             <multiple>1</multiple>
             <store>no</store>
@@ -603,59 +603,59 @@
       </property>
       <property>
             <name>button3</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>submit</type>
             <store>no</store>
             <caption>Otsi</caption>
       </property>
       <property>
             <name>realestate_client_selection_name</name>
+            <group>grp_client_list</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_list</group>
             <type>hidden</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>client_selections_toolbar</name>
+            <group>grp_client_selections</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_selections</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>client_selections_list</name>
+            <group>grp_client_selections</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_client_selections</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>almightyuser</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>textbox</type>
             <caption>&amp;quot;K&amp;otilde;ik lubatud&amp;quot; kasutaja uid</caption>
       </property>
       <property>
             <name>houses_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -663,10 +663,10 @@
       </property>
       <property>
             <name>rowhouses_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -674,10 +674,10 @@
       </property>
       <property>
             <name>cottages_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -685,10 +685,10 @@
       </property>
       <property>
             <name>houseparts_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -696,10 +696,10 @@
       </property>
       <property>
             <name>apartments_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -707,10 +707,10 @@
       </property>
       <property>
             <name>commercial_properties_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -718,10 +718,10 @@
       </property>
       <property>
             <name>garages_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -729,10 +729,10 @@
       </property>
       <property>
             <name>land_estates_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -740,10 +740,10 @@
       </property>
       <property>
             <name>clients_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -751,10 +751,10 @@
       </property>
       <property>
             <name>projects_folder</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -762,10 +762,10 @@
       </property>
       <property>
             <name>realestate_search</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PROPERTY_SEARCH</reltype>
             <clid>CL_REALESTATE_SEARCH</clid>
@@ -774,10 +774,10 @@
       </property>
       <property>
             <name>default_house_image</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_DEFAULT_PICTURE1</reltype>
             <rel_id>first</rel_id>
@@ -787,10 +787,10 @@
       </property>
       <property>
             <name>default_rowhouse_image</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_DEFAULT_PICTURE2</reltype>
             <rel_id>first</rel_id>
@@ -800,10 +800,10 @@
       </property>
       <property>
             <name>default_cottage_image</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_DEFAULT_PICTURE3</reltype>
             <rel_id>first</rel_id>
@@ -813,10 +813,10 @@
       </property>
       <property>
             <name>default_housepart_image</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_DEFAULT_PICTURE4</reltype>
             <rel_id>first</rel_id>
@@ -826,10 +826,10 @@
       </property>
       <property>
             <name>default_apartment_image</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_DEFAULT_PICTURE5</reltype>
             <rel_id>first</rel_id>
@@ -839,10 +839,10 @@
       </property>
       <property>
             <name>default_commercial_image</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_DEFAULT_PICTURE6</reltype>
             <rel_id>first</rel_id>
@@ -852,10 +852,10 @@
       </property>
       <property>
             <name>default_garage_image</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_DEFAULT_PICTURE7</reltype>
             <rel_id>first</rel_id>
@@ -865,10 +865,10 @@
       </property>
       <property>
             <name>default_land_image</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_DEFAULT_PICTURE8</reltype>
             <rel_id>first</rel_id>
@@ -878,20 +878,20 @@
       </property>
       <property>
             <name>default_date_format</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>textbox</type>
             <default>jmYHi</default>
             <caption>Kuup&amp;auml;evaformaat</caption>
       </property>
       <property>
             <name>properties_list_perpage</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>textbox</type>
             <default>25</default>
             <comment>Objektide arv lehel kinnisvarahalduskeskkonna objektide vaates</comment>
@@ -899,10 +899,10 @@
       </property>
       <property>
             <name>map_server_url</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>textbox</type>
             <size>100</size>
             <comment>V&amp;otilde;imalikud muutujad urlis: address_parsed - objekti aadress, mis antakse argumendina kaasa, save_url - url millele p&amp;auml;rigut tehes tagastatakse kaardi andmed argumentidena</comment>
@@ -910,10 +910,10 @@
       </property>
       <property>
             <name>realestatemgr_cfgmgr</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_CFGMGR</reltype>
             <clid>CL_CFGMANAGER</clid>
@@ -921,20 +921,20 @@
       </property>
       <property>
             <name>available_variables_names</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>text</type>
             <store>no</store>
             <caption>Template'ites kasutada olevad muutujad</caption>
       </property>
       <property>
             <name>title5</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -942,23 +942,24 @@
       </property>
       <property>
             <name>administrative_structure</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
             <automatic>1</automatic>
+            <editonly>1</editonly>
             <comment>Riigi haldusjaotus, milles s&amp;uuml;steemis hallatavad kinnisvaraobjektid asuvad</comment>
             <caption>Haldusjaotus</caption>
       </property>
       <property>
             <name>address_equivalent_1</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_1</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
@@ -968,10 +969,10 @@
       </property>
       <property>
             <name>address_equivalent_2</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_2</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
@@ -980,10 +981,10 @@
       </property>
       <property>
             <name>address_equivalent_3</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_3</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
@@ -992,10 +993,10 @@
       </property>
       <property>
             <name>address_equivalent_4</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_4</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
@@ -1004,10 +1005,10 @@
       </property>
       <property>
             <name>address_equivalent_5</name>
+            <group>grp_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_5</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>

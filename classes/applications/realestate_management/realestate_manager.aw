@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.16 2006/08/17 09:52:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.17 2007/07/27 07:30:06 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -27,6 +27,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 @groupinfo grp_clients_mailer caption="Klientidele e-posti saatmine"
 
 
+@default group=general
 @default table=objects
 	@property name type=textbox group=grp_settings
 	@caption Nimi
@@ -211,22 +212,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 	@property default_rowhouse_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE2 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
 	@caption Vaikimisi ridaelamu pilt
-	
+
 	@property default_cottage_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE3 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
 	@caption Vaikimisi suvila pilt
-	
+
 	@property default_housepart_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE4 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
 	@caption Vaikimisi majaosa pilt
-	
+
 	@property default_apartment_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE5 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
 	@caption Vaikimisi korteri pilt
-	
+
 	@property default_commercial_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE6 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
 	@caption Vaikimisi äripinna pilt
-	
+
 	@property default_garage_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE7 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
 	@caption Vaikimisi garaazi pilt
-	
+
 	@property default_land_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE8 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
 	@caption Vaikimisi maa pilt
 
@@ -253,7 +254,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 	@property title5 type=text store=no subtitle=1
 	@caption Aadressid
-		@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1
+		@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1 editonly=1
 		@comment Riigi haldusjaotus, milles süsteemis hallatavad kinnisvaraobjektid asuvad
 		@caption Haldusjaotus
 
@@ -2330,7 +2331,7 @@ class realestate_manager extends class_base
 			"records_per_page" => (strlen(trim($this_object->prop ("properties_list_perpage"))) ? $this_object->prop ("properties_list_perpage") : 25),
 		);
 
-		// hack - to make filters and pageselectors work, we can't do our own paging, we must let the table do it, but then it is dog slow. 
+		// hack - to make filters and pageselectors work, we can't do our own paging, we must let the table do it, but then it is dog slow.
 		// so we do out own paging, if no filters are selected
 		if (count($table->selected_filters) < 1)
 		{
