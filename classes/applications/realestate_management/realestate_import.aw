@@ -2098,13 +2098,14 @@ class realestate_import extends class_base
 		$cl_cache = get_instance ("cache");
 		$cl_cache->full_flush ();
 
-		if (1 != $quiet)
-		{
-			echo t("Import tehtud.");
-		}
-
 		ini_set ("ignore_user_abort", $ignore_user_abort_prev_val);
 		ini_set ("max_execution_time", $max_execution_time_prev_val);
+
+		if (1 != $quiet)
+		{
+			echo sprintf(t("Import tehtud. Staatus: %s"), $status);
+			exit;
+		}
 
 		return $status;
 	}
