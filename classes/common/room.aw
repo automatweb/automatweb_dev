@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.203 2007/07/16 12:30:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.204 2007/07/30 15:32:22 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -4258,6 +4258,8 @@ class room extends class_base
 		}
 		$ret = 0;
 		extract($arr);
+		$priority = 0;
+		
 		
 		if(is_oid($room) && $this->can("view" , $room))
 		{
@@ -4331,13 +4333,18 @@ class room extends class_base
 						)
 					)
 					{//arr(array_intersect($grp, $groups));arr($grp); arr($groups);arr($bargain);
-						$ret = $bargain->prop("bargain_percent");
+						//kui enne oli ka mõni , a prioriteet oli suurem, siis see ei lähe
+						if(!($priority  > $bargain->prop("priority")))
+						{
+						//	if(aw_global_get("uid") == "struktuur" )arr($bargain->prop("priority"));
+							$ret = $bargain->prop("bargain_percent");
+							$priority = $bargain->prop("priority");
+						}
 					}
 				}
 			}
 		}
 		$this->rnd_discount = $ret;
-		
 		return $ret;
 	}
 	
@@ -4416,6 +4423,8 @@ class room extends class_base
 	function get_bargain($arr)
 	{
 		extract($arr);
+		$priority = 0;
+		$ret = 0;
 		$gl = aw_global_get("gidlist_pri_oid");
 		asort($gl);
 		$gl = array_keys($gl);
@@ -4481,27 +4490,36 @@ class room extends class_base
 						)
 					)
 					{
+						if(($priority  > $bargain->prop("priority")))
+						{
+							continue;
+						}
+					
 						$from = $bargain->prop("time_from");
 						$to = $bargain->prop("time_to");//arr(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start))); arr(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))); arr($start);arr($end);
 						//juhul kui aeg mahub täpselt soodushinna sisse
 						if(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start && mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end)
 						{
-							return 0.01*$bargain->prop("bargain_percent");
+							$ret = 0.01*$bargain->prop("bargain_percent");
+							$priority = $bargain->prop("priority");
+							continue;
 						}
 						//juhul kui mõni kattub poolikult... esimene siis , et kui allahindlus algul on,... teine, et allahindlus tuleb poolepealt
 						if((mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start) && (mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) > $start))
 						{
-							return 0.01*$bargain->prop("bargain_percent")*(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) - $start)/($end-$start);
+							$ret = 0.01*$bargain->prop("bargain_percent")*(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) - $start)/($end-$start);
+							continue;
 						}
 						if((mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end) && (mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) < $end))
 						{
-							return 0.01*$bargain->prop("bargain_percent")*($end - mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)))/($end-$start);
+							$ret = 0.01*$bargain->prop("bargain_percent")*($end - mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)))/($end-$start);
+							continue;
 						}
 					}
 				}
 			}
 		}
-		return 0;
+		return $ret;
 	}
 	
 	/**

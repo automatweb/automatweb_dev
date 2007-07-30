@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.10 2007/01/31 11:59:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.11 2007/07/30 15:32:21 markop Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -54,6 +54,9 @@
 
 	@property prices_props type=callback callback=gen_prices_props
 	@caption Hinnad
+	
+	@property priority type=select
+	@caption Prioriteet
 
 @reltype GROUP value=1 clid=CL_GROUP
 @caption Kehtib grupile
@@ -124,6 +127,8 @@ class room_price extends class_base
 				break;
 
 			// ignore's for normal price
+			case "priority":
+				$prop["options"] = array("1" , "2" , "3");
 			case "recur":
 			case "active":
 			case "bargain_percent":
