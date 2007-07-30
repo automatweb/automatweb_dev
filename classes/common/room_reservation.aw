@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.68 2007/07/19 09:13:06 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.69 2007/07/30 11:11:17 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -342,6 +342,7 @@ class room_reservation extends class_base
 			$this->read_template($tpl);
 			lc_site_load("room_reservation", &$this);
 			$this->vars($this->get_object_data($_GET["id"]));
+			$this->vars(array("error" => ($_SESSION["reservation"]["error"]) ? $this->parse("error") : "",));
 			return $this->parse();
 		}
 
@@ -477,6 +478,7 @@ class room_reservation extends class_base
 				"bron_id" => $_SESSION["room_reservation"][$room->id()]["bron_id"],
 				"room" => $room->id(),
 				"res" => $targ->id(),
+			"error" => ($_SESSION["reservation"]["error"]) ? $this->parse("error") : "",
 			)),
 		));
 		$_SESSION["room_reservation"][$room->id()]["errors"] = null;
@@ -1481,6 +1483,7 @@ class room_reservation extends class_base
 	function bank_return($arr)
 	{
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		unset($_SESSION["reservation"]["error"]);
 
 		if(!(is_oid($arr["id"]) && $this->can("view" , $arr["id"])))
 		{
@@ -1641,6 +1644,7 @@ class room_reservation extends class_base
 		$this->read_site_template($tpl);
 		lc_site_load("room_reservation", &$this);
 		$this->vars($this->get_object_data($id));
+		$this->vars(array("error" => ($_SESSION["reservation"]["error"]) ? $this->parse("error") : "",));
 		$html =  $this->parse();
 		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->create_message(array(
@@ -1660,6 +1664,7 @@ class room_reservation extends class_base
 	{
 		if(is_oid($id) && $this->can("view" , $id))
 		{
+			$room_inst = get_instance(CL_ROOM);
 			$bron = obj($id);
 			$bron->set_prop("verified" , 1);
 			aw_disable_acl();
@@ -1673,6 +1678,16 @@ class room_reservation extends class_base
 			}
 			$bron->save();
 			aw_restore_acl();
+			//juhuks kui mõni enne maksmist magama jäänud, kuid siiski seda mõne tunni pärast teha kavatseb
+			if(!$room_inst->check_if_available(array(
+				"room" => $bron->prop("resource"),
+				"start" => $bron->prop("start1"),
+				"end" => $bron->prop("end"),
+				"ignore_booking" => $bron->id(),
+			)))
+			{
+				$_SESSION["reservation"]["error"].=  sprintf(t("%s - Sorry, but Your payment was made too late and another person has already booked this time!"), $bron->name())."<br>\n";
+			}
 			return 1;
 		}
 		else
