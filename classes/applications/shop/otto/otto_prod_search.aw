@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.15 2006/09/26 09:37:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.16 2007/07/30 08:36:22 dragut Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -21,6 +21,16 @@ class otto_prod_search extends class_base
 		array("Spordirõivad", array(1383)),
 		array("Mööbel", array(143)),
 		array("Kodusisustus", array(144))
+		//array("Eripakkumised", array(149113))
+	);
+
+	var $search_fld_fin = array(
+		array("Naiset", array(318)),
+		array("Miehet", array(319)),
+		array("Lapset ja teinit", array(1426)),
+		array("Kengät", array(142)),
+		array("Urheilu", array(1424)),
+		array("Sisustus", array(1427))
 		//array("Eripakkumised", array(149113))
 	);
 
@@ -63,6 +73,11 @@ class otto_prod_search extends class_base
 		if (aw_global_get("lang_id") == 6)
 		{
 			$this->search_fld = $this->search_fld_lat;
+		}
+
+		if (aw_global_get("lang_id") == 13)
+		{
+			$this->search_fld = $this->search_fld_fin;
 		}
 
 		if ( (aw_ini_get("site_id") == 276) || (aw_ini_get("site_id") == 277) )
@@ -168,12 +183,14 @@ class otto_prod_search extends class_base
 				"logic" => "OR",
 				"conditions" => array(
 					"name" => "%".$arr["str"]."%",
-					"user3" => "%".$arr["str"]."%",
+				//	"user3" => "%".$arr["str"]."%", // I think that there is no point of searching by images names --dragut
+					"user6" => "%".substr($arr["str"], 0,6)."%",
 					"userta2" => "%".$arr["str"]."%",
-					"user20" => "%".substr($arr["str"], 0,6)."%",
+				//	"user20" => "%".substr($arr["str"], 0,6)."%",
 				)
 			)),
 			"price" => new obj_predicate_not(10000000),
+			"user3" => new obj_predicate_not(''), // don't show products, which don't have images --dragut
 //			"user18" => $this->_get_pgs()
 		);
 
@@ -239,9 +256,10 @@ class otto_prod_search extends class_base
 		$import_object = obj(aw_ini_get("otto.import"));
 
 		enter_function('otto_prod_search::do_draw_res::create_object_list');
+
 		$ol_cnt = new object_list($filter);
 		exit_function('otto_prod_search::do_draw_res::create_object_list');
-
+/*
 		// filter by name does NOT work. at all. must filter by image number. 
 		// so write some badass sql here
 		enter_function('otto_prod_search::do_draw_res::imnr_and_objects_and_prods_data');
@@ -250,26 +268,6 @@ class otto_prod_search extends class_base
 		{
 			$jstr = "-1";
 		}
-/*
-		$q = "
-			SELECT 
-				o.brother_of as oid,
-				pi.imnr as imnr,
-				pr.user20 as product_code,
-				pr.user11 as user11,
-				pr.user18 as user18
-			FROM 
-				aw_shop_products pr
-				LEFT JOIN otto_prod_img pi ON (pi.pcode = pr.user20 AND pi.nr = 1)
-				LEFT JOIN objects o ON pr.aw_oid = o.oid 
-			WHERE
-				o.status > 0 AND o.lang_id = ".$lang_id." AND
-				pr.aw_oid IN (".$jstr.") AND
-				pi.imnr IS NOT NULL
-			GROUP BY
-				pi.imnr
-		";
-*/
 		$q = "
 			SELECT 
 				o.brother_of as oid,
@@ -288,6 +286,7 @@ class otto_prod_search extends class_base
 			GROUP BY
 				pi.imnr
 		";
+
 		$this->db_query($q);
 
 		$ol_cnt = new object_list();
@@ -422,10 +421,13 @@ class otto_prod_search extends class_base
 			}
 		}
 
-		exit_function('otto_prod_search::do_draw_res::get_products_to_show');
 
+		exit_function('otto_prod_search::do_draw_res::get_products_to_show');
+*/
+		
 		enter_function('otto_prod_search::do_draw_res::gen_page_list');
-		$total = count($image_data);
+	//	$total = count($image_data);
+		$total = $ol_cnt->count();
 
 		$per_page = 10;
 		$page = $_GET["page"] ? $_GET["page"] : 0;
@@ -475,77 +477,96 @@ class otto_prod_search extends class_base
 		exit_function('otto_prod_search::do_draw_res::gen_page_list');
 
 		enter_function('otto_prod_search::do_draw_res::slice_out_current_page');
-		$image_data = array_slice($image_data, $from, 10); 
+		
+		$filter['limit'] = $from.", 10";
+
+		$ol = new object_list($filter);
+
+		// I need sections for those products:
+		if ($ol->count())
+		{
+			$sections = $this->db_fetch_array("
+				select
+					otto_prod_to_section_lut.product as product_oid,
+					otto_prod_to_section_lut.section as section
+				from
+					otto_prod_to_section_lut
+					left join objects on (otto_prod_to_section_lut.section = objects.oid)
+				where
+					product in (".implode(',', $ol->ids()).") and
+					otto_prod_to_section_lut.lang_id = ".aw_global_get('lang_id')." and
+					objects.status > 0
+			");
+		}
+		$sections_lut = array();
+		foreach ($sections as $value)
+		{
+			// XXX see sektsioonide raalimine tuleb p6hjalikumalt yle vaadata !!! --dragut
+			if (!array_key_exists($value['product_oid'], $sections_lut))
+			{
+				$sections_lut[$value['product_oid']] = $value['section'];
+			}
+		
+		}
+
 		exit_function('otto_prod_search::do_draw_res::slice_out_current_page');
 
-		// lets take the first picture
-		$data = reset($image_data);
 		enter_function('otto_prod_search::do_draw_res::draw_current_page');
-		for ($j = 0; $j < 5; $j++)
+		
+		$counter = 0;
+		$ps = '';
+		foreach ($ol->arr() as $product_oid => $product_obj)
 		{
-			$ps = "";
-			for ($i = 0; $i < 2; $i++)
-			{
-				if ($data !== false)
-				{
-				//	$this->vars($data);
-					$product_obj = new object($data['product_oid']);
-				//	$product_obj = $data['product_obj'];
+			$prod_inst = $product_obj->instance();
 
-					$prod_inst = $product_obj->instance();
-					enter_function('otto_prod_search::do_draw_res::draw_current_page::viewlink');
+			$viewlink = $this->mk_my_orb('show_items', array(
+				'section' => $sections_lut[$product_oid],
+				'id' => aw_ini_get('shop.prod_fld_path_oc'),
+				'oview' => 2,
+				'apid' => $product_oid
+			), 'shop_order_center');
 
-					$viewlink = $this->mk_my_orb('show_items', array(
-						'section' => $data['section'],
-						'id' => aw_ini_get('shop.prod_fld_path_oc'),
-						'oview' => 2,
-						'apid' => $product_obj->id()
-					), 'shop_order_center');
-					exit_function('otto_prod_search::do_draw_res::draw_current_page::viewlink');
-					enter_function('otto_prod_search::do_draw_res::draw_current_page::img_tag');
-					$image = html::img(array(
-						'url' => $this->get_img_url($data['imnr'], 'formatb'),
-						'width' => 80,
-						'border' => '0'
-					));
-					exit_function('otto_prod_search::do_draw_res::draw_current_page::img_tag');
-
-					// i need to check for the discount products new price:
-					enter_function('otto_prod_search::do_draw_res::draw_current_page::prod_price');
-
-					if (!empty($discount_products_data[$data['product_code']]))
-					{
-						$new_price = $discount_products_data[$data['product_code']]['new_price'];
-						$prod_price = number_format(str_replace(',', '', $new_price), 2);
-					}
-					else
-					{
-						$prod_price = $prod_inst->get_price($product_obj);
-					}
-					exit_function('otto_prod_search::do_draw_res::draw_current_page::prod_price');
-
-					enter_function('otto_prod_search::do_draw_res::draw_current_page::prod_vars');
-					$this->vars(array(
-						'prod_link' => $viewlink,
-						'prod_name' => $this->char_replace($product_obj->name()),
-						'prod_desc' => $this->char_replace($product_obj->prop(userta2)),
-						'prod_price' => $prod_price,
-						'pimg' => html::href(array(
-							'url' => $viewlink,
-							'caption' => $image
-						)),
-					));
-					exit_function('otto_prod_search::do_draw_res::draw_current_page::prod_vars');
-					$ps .= $this->parse('PROD');
-				}
-
-				$data = next($image_data);
-			}
-			$this->vars(array(
-				'PROD' => $ps
+			$images = explode(',', $product_obj->prop('user3'));
+			$image = html::img(array(
+				'url' => $this->get_image_url(reset($images), 2),
+				'width' => 80,
+				'border' => '0'
 			));
-			
-			$l .= $this->parse('LINE');
+
+			// i need to check for the discount products new price:
+/*
+			if (!empty($discount_products_data[$data['product_code']]))
+			{
+				$new_price = $discount_products_data[$data['product_code']]['new_price'];
+				$prod_price = number_format(str_replace(',', '', $new_price), 2);
+			}
+			else
+			{
+				$prod_price = $prod_inst->get_price($product_obj);
+			}
+*/
+			$prod_price = number_format($product_obj->prop('user14'), 2, '.', ''); // min price
+
+			$this->vars(array(
+				'prod_link' => $viewlink,
+				'prod_name' => $this->char_replace($product_obj->name()),
+				'prod_desc' => $this->char_replace($product_obj->prop('userta2')),
+				'prod_price' => $prod_price,
+				'pimg' => html::href(array(
+					'url' => $viewlink,
+					'caption' => $image
+				)),
+			));
+			$ps .= $this->parse('PROD');
+			$counter++;
+			if ( (($counter % 2) == 0) || ($counter == $total) )
+			{
+				$this->vars(array(
+					'PROD' => $ps
+				));
+				$ps = '';
+				$l .= $this->parse('LINE');
+			}
 		}
 		exit_function('otto_prod_search::do_draw_res::draw_current_page');
 
@@ -581,19 +602,21 @@ class otto_prod_search extends class_base
 
 			if ($_GET["price_from"] > 0 && $_GET["price_to"] > 0)
 			{
-				$filter["price"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $_GET["price_from"], $_GET["price_to"]);
+			//	$filter["price"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $_GET["price_from"], $_GET["price_to"]);
+				$filter["user14"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $_GET["price_from"], $_GET["price_to"]);
 			}
 			else
 			if ($_GET["price_from"] > 0)
 			{
-				$filter["price"] = new obj_predicate_compare(OBJ_COMP_GREATER, $_GET["price_from"]);
+			//	$filter["price"] = new obj_predicate_compare(OBJ_COMP_GREATER, $_GET["price_from"]);
+				$filter["user14"] = new obj_predicate_compare(OBJ_COMP_GREATER, $_GET["price_from"]);
 			}
 			else
 			if ($_GET["price_to"] > 0)
 			{
-				$filter["price"] = new obj_predicate_compare(OBJ_COMP_LESS, $_GET["price_to"]);
+			//	$filter["price"] = new obj_predicate_compare(OBJ_COMP_LESS, $_GET["price_to"]);
+				$filter["user14"] = new obj_predicate_compare(OBJ_COMP_LESS, $_GET["price_to"]);
 			}
-
 			$parents = array();
 			foreach($awa->get() as $fld)
 			{
@@ -631,14 +654,7 @@ class otto_prod_search extends class_base
 				}
 				$arr['categories'] = $categories;
 
-
-
-//				$filter["parent"] = $parents;
-
-
 			}
-
-		//	$filter["user18"] = $this->_get_pgs();
 
 			$str = $this->do_draw_res($arr, $filter);
 		}
@@ -681,6 +697,11 @@ class otto_prod_search extends class_base
 			$ret[$row["pg"]] = $row["pg"];
 		}
 		return $ret;
+	}
+
+	function get_image_url($imnr, $format)
+	{
+		return aw_ini_get('baseurl').'/vv_product_images/'.$imnr{0}.'/'.$imnr{1}.'/'.$imnr.'_'.$format.'.jpg';
 	}
 
 	function get_img_url($imnr,$f = "formatb")
