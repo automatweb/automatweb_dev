@@ -931,7 +931,6 @@ class realestate_import extends class_base
 					$korteri_nr = isset($this->property_data["ASUKOHT_KORTERINR"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["ASUKOHT_KORTERINR"])) : "";
 					// $kohanimi = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["KOHANIMI"])); // ei kasutata praegu 2007/06/16
 
-					$address_city24 = array(ADDRESS_COUNTRY_TYPE => null);
 					$address_city24[$maakond_division->id()] = isset($this->property_data["MAAKOND"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["MAAKOND"])) : "";
 					$address_city24[$linn_division->id()] = isset($this->property_data["LINN"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["LINN"])) : "";
 					$address_city24[$linnaosa_division->id()] = isset($this->property_data["LINNAOSA"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["LINNAOSA"])) : "";
@@ -940,7 +939,7 @@ class realestate_import extends class_base
 					$address_city24["street"] = isset($this->property_data["TANAV"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["TANAV"])) : "";
 
 					$address_text = $address->prop ("address_array");
-					$address_text[ADDRESS_COUNTRY_TYPE] = null;
+					unset($address_text[ADDRESS_COUNTRY_TYPE]);
 
 					if (!empty($arr["import_all"]) or ($address_text != $address_city24 and $maja_nr !== $address->prop("street_address") and $korteri_nr !== $address->prop("apartment") and $current_user === $maakler_user))
 					{
