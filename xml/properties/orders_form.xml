@@ -108,6 +108,24 @@
             <caption>Dokument kuhu suunata peale esitamist</caption>
       </property>
       <property>
+            <name>order_item_template</name>
+            <table>objects</table>
+            <group>config</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Tellimuse kujundusp&amp;amp;otilde;hi</caption>
+      </property>
+      <property>
+            <name>orders_form_template</name>
+            <table>objects</table>
+            <group>config</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Tellija andmete kujundusp&amp;amp;otilde;hi</caption>
+      </property>
+      <property>
             <name>ordering</name>
             <table>objects</table>
             <group>ordering</group>

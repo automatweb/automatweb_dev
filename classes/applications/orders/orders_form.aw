@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.19 2007/01/10 11:45:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.20 2007/07/30 13:35:28 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -51,6 +51,11 @@
 @property thankudoc type=relpicker reltype=RELTYPE_THANKU
 @caption Dokument kuhu suunata peale esitamist
 
+@property order_item_template type=select
+@caption Tellimuse kujundusp&otilde;hi
+
+@property orders_form_template type=select
+@caption Tellija andmete kujundusp&otilde;hi
 
 
 @groupinfo ordering caption=Tellimine submit=no
@@ -275,7 +280,14 @@ class orders_form extends class_base
 			$form_obj = obj($_SESSION["order_form_id"]);
 			$order = obj($_SESSION["order_cart_id"]);
 		}
-		$this->read_template("orders_form.tpl");
+		if($form_obj->prop("orders_form_template"))
+		{
+			$this->read_template($form_obj->prop("orders_form_template"));
+		}
+		else
+		{
+			$this->read_template("orders_form.tpl");
+		}
 		$this->submerge = 1;
 		
 		if($_GET["group"] == "persondata")
@@ -382,7 +394,7 @@ class orders_form extends class_base
 			"udef_textbox6" => $order->prop("udef_textbox6"),
 			"udef_textbox7" => $order->prop("udef_textbox7"),
 			"person_contact" => $person->prop("comment"),
-			"birthday" => $person->prop("birthday"),
+			"birthday" => get_lc_date($person->prop("birthday"), 1),,
 			"payment_type" => ($_SESSION["orders_form"]["payment"]["type"] == "cod" ? "Lunamaks" : "J&auml;relmaks"),
 		));
 		$add_props = array();
@@ -584,7 +596,14 @@ class orders_form extends class_base
 		
 		unset($_SESSION["cb_values"]);
 		$retval = $this->parse();
-		$this->read_template("orders_form.tpl");
+		if($o->prop("orders_form_template"))
+		{
+			$this->read_template($o->prop("orders_form_template"));
+		}
+		else
+		{
+			$this->read_template("orders_form.tpl");
+		}
 		return $retval;
 	}
 	
@@ -592,7 +611,14 @@ class orders_form extends class_base
 	{
 		$rval = "";
 		$obj_inst = obj($arr["id"]);
-		$this->read_template("orders_order_item.tpl");
+		if($obj_inst->prop("order_item_template"))
+		{
+			$this->read_template($obj_inst->prop("order_item_template"));
+		}
+		else
+		{
+			$this->read_template("orders_order_item.tpl");
+		}
 		$num_rows = ((int)$obj_inst->prop("num_rows")) >= 1 ? (int)$obj_inst->prop("num_rows") : 1;
 		$add_change_caption = "Lisa tellimusse";
 		
@@ -674,7 +700,15 @@ class orders_form extends class_base
 		));
 		//$this->submerge = 1;
 		$retval = $this->parse();
-		$this->read_template("orders_form.tpl");
+		if($obj_inst->prop("orders_form_template"))
+		{
+			$this->read_template($obj_inst->prop("orders_form_template"));
+		}
+		else
+		{
+			$this->read_template("orders_form.tpl");
+		}
+		
 		$this->submerge = 1;
 		
 		return $retval;
@@ -866,6 +900,26 @@ class orders_form extends class_base
 		{
 			case "rent_item_types":
 				$this->_do_rent_item_types($arr);
+				break;
+			case "order_item_template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "applications/orders"
+				));
+				if(!sizeof($prop["options"]))
+				{
+					$prop["caption"] .= t("\n".$this->site_template_dir."");
+				}
+				break;
+			case "orders_form_template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "applications/orders"
+				));
+				if(!sizeof($prop["options"]))
+				{
+					$prop["caption"] .= t("\n".$this->site_template_dir."");
+				}
 				break;
 		}
 		return PROP_OK;
