@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.24 2007/07/13 09:18:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.25 2007/07/30 11:09:01 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -84,7 +84,6 @@ class spa_customer_interface extends class_base
 	{
 		classload("core/date/date_calc");
 		$this->read_template("book_times.tpl");
-
 		lc_site_load("spa_customer_interface", &$this);
 		$p = get_current_person();
 		$ol = new object_list(array(
@@ -449,7 +448,8 @@ class spa_customer_interface extends class_base
 			"BOOKING" => $bookings,
 			"add_pk_url" => $this->mk_my_orb("add_pkt", array("id" => $id, "r" => get_ru())),
 			"cur_f_booking" => $cur_f_booking,
-			"cur_booking" => $cur_booking
+			"cur_booking" => $cur_booking,
+			"error" => ($_SESSION["reservation"]["error"]) ? $this->parse("error") : "",
 		));
 		if ($bookings != "")
 		{
@@ -867,6 +867,24 @@ class spa_customer_interface extends class_base
 			$o = obj($arr["id"]);
 		}
 		
+		//kui vahepeal miskit kinni pandud juba, siis parem oleks tagasi saata
+		$room_inst = get_instance(CL_ROOM);
+		unset($_SESSION["reservation"]["error"]);
+		foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+		{
+			$b = $c->to();
+			if(!$room_inst->check_if_available(array(
+				"room" => $b->prop("resource"),
+				"start" => $b->prop("start1"),
+				"end" => $b->prop("end"),
+				"ignore_booking" => $b->id(),
+			)))
+			{
+				$_SESSION["reservation"]["error"].=  sprintf(t("%s - Sorry, but Your payment was made too late and another person has already booked this time!"), $b->name())."<br>\n";
+				if($r) return $r;
+			}
+		}
+
 		$l = get_instance("languages");
 		$lang_id = $l->get_langid($_SESSION["ct_lang_id"]);
 		
@@ -918,6 +936,7 @@ class spa_customer_interface extends class_base
 		{
 			$brons = array($arr["id"]);
 		}
+		$room_inst = get_instance(CL_ROOM);
 		foreach($brons as $bron_id)
 		{
 			$bron = obj($bron_id);
@@ -932,8 +951,20 @@ class spa_customer_interface extends class_base
 				aw_disable_acl();
 				$b->save();
 				aw_restore_acl();
+				
+				//juhuks kui mõni enne maksmist magama jäänud, kuid siiski seda mõne tunni pärast teha kavatseb
+				if(!$room_inst->check_if_available(array(
+					"room" => $b->prop("resource"),
+					"start" => $b->prop("start1"),
+					"end" => $b->prop("end"),
+					"ignore_booking" => $b->id(),
+				)))
+				{
+					$_SESSION["reservation"]["error"].=  sprintf(t("%s - Sorry, but Your payment was made too late and another person has already booked this time!"), $b->name())."<br>\n";
+				}
 			}
 		}
+		
 		if($o->meta("ru"))
 		{
 			header("Location:".$o->meta("ru"));
