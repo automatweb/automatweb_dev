@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.17 2007/07/27 07:30:06 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.18 2007/07/30 11:45:07 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -403,11 +403,12 @@ class realestate_manager extends class_base
 			{
 				echo t("Haldusjaotus määramata või puudub juurdepääs!");
 			}
+
+			aw_session_set ("realsestate_usr_mgr_company", $arr["request"]["company"]);
+			aw_session_set ("realsestate_usr_mgr_cat", $arr["request"]["cat"]);
+			aw_session_set ("realsestate_usr_mgr_unit", $arr["request"]["unit"]);
 		}
 
-		aw_session_set ("realsestate_usr_mgr_cat", $arr["request"]["cat"]);
-		aw_session_set ("realsestate_usr_mgr_unit", $arr["request"]["unit"]);
-		aw_session_set ("realsestate_usr_mgr_company", $arr["request"]["company"]);
 		$this->cl_users = get_instance("users");
 		$this->cl_user = get_instance (CL_USER);
 		$this->cl_classificator = get_instance(CL_CLASSIFICATOR);
@@ -1230,6 +1231,15 @@ class realestate_manager extends class_base
 				$this->_delegate_co_v($arr, "_get_cedit_tree", $o);
 				$trees[$o->id ()] = $arr["prop"]["vcl_inst"];
 			}
+		}
+
+		if (0 === count($trees))
+		{
+			$tree->add_item(0, array(
+				"name" => t("(Kasutajaorganisatsioone pole)"),
+				"id" => 1,
+				"url" => "#"
+			));
 		}
 
 		### merge trees to one
