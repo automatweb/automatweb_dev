@@ -1620,7 +1620,16 @@ class realestate_property extends class_base
 		// "/" oli kuskile vahelt kadunud....
 		$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
 		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
-		$data["additional_info"] = nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")));
+		
+		if($this->is_template("additional_info"))
+		{
+			$this->vars (array("value" => $nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")))));
+			$data["additional_info"] = $this->parse("additional_info");
+		}
+		else
+		{
+			$data["additional_info"] = nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")));
+		}
 
 		//et ei näitataks hinda, kui see on 0
 		if(!$data["transaction_price_value"] > 0)
@@ -1950,7 +1959,15 @@ class realestate_property extends class_base
 
 		$data["docid"] = $this_object->id ();
 		$data["extras"] = $extras;
-		$data["additional_info"] = nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")));
+		if($this->is_template("additional_info"))
+		{
+			$this->vars (array("value" => $nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")))));
+			$data["additional_info"] = $this->parse("additional_info");
+		}
+		else
+		{
+			$data["additional_info"] = nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")));
+		}
 		$data["city24_object_id"] = $this_object->prop ("city24_object_id");
 
 		### ...
