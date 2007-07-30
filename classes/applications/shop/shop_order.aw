@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.56 2007/07/24 10:10:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.57 2007/07/30 10:14:55 dragut Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -973,7 +973,7 @@ class shop_order extends class_base
 					$uo = obj(aw_global_get("uid_oid"));
 					$_send_to = $uo->prop("email");
 				}
-				
+				$awm->clean();
 				$awm->create_message(array(
 					"froma" => $mail_from_addr,
 					"fromn" => $mail_from_name,
@@ -981,9 +981,11 @@ class shop_order extends class_base
 					"to" => $_send_to,
 					"body" => strip_tags(str_replace("<br>", "\n",$html)),
 				));
+
 				$awm->htmlbodyattach(array(
 					"data" => $html
 				));
+
 				if(!$params["no_mail"])
 				{
 					$awm->gen_mail();
@@ -1363,7 +1365,8 @@ class shop_order extends class_base
 					"order_data_color" => $val["color"],
 					"order_data_size" => $val['size'],
 					"order_data_price" => $val['price'],
-					"logged" => (aw_global_get("uid") == "" ? "" : $this->parse("logged"))
+					"logged" => (aw_global_get("uid") == "" ? "" : $this->parse("logged")),
+					"product_code" => $prod->prop('user6') // this is here for OTTO, probably need to make product_code property to packaging class --dragut
 				));
 				$total += ($pr * $val["items"]);
 	
@@ -1543,7 +1546,7 @@ class shop_order extends class_base
 			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id())),
 			"discount" => $o->meta("discount"),
 			"discount_value" => number_format(($total * ($o->meta("discount") / 100.0)),2),
-			"postal_price" => number_format($o->meta("postal_price"))
+			"postal_price" => number_format($o->meta("postal_price"), 2)
 		));
 
 		if (!$arr["is_pdf"])
