@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.24 2007/07/17 09:26:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.25 2007/07/31 12:14:27 markop Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -9,18 +9,6 @@
 	@default group=general
 
 	@classinfo trans=1 syslog_type=ST_MENU_TREE
-
-	@property menus type=select multiple=1 size=15 trans=1
-	@caption Men&uuml;&uuml;d
-
-	@property menu_tb type=toolbar no_caption=1
-	@caption Men&uuml;&uuml; toolbar
-
-	@property root_menu multiple=1 type=relpicker no_caption=1 reltype=RELTYPE_ROOT_MENU
-
-	@property menu_table type=table no_caption=1
-	@caption Men&uuml;&uuml; seoste tabel
-
 	@property children_only type=checkbox ch_value=1 trans=1
 	@caption Ainult alammen&uuml;&uuml;d
 
@@ -32,6 +20,17 @@
 
 	@property no_unclickable type=checkbox ch_value=1 default=1
 	@caption &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid
+	
+	@property menus type=select multiple=1 size=15 trans=1
+	@caption Men&uuml;&uuml;d
+	
+	@property root_menu multiple=1 type=relpicker no_caption=1 reltype=RELTYPE_ROOT_MENU
+
+	@property menu_tb type=toolbar no_caption=1
+	@caption Men&uuml;&uuml; toolbar
+
+	@property menu_table type=table no_caption=1
+	@caption Men&uuml;&uuml; seoste tabel
 
 	@reltype ROOT_MENU value=1 clid=CL_MENU
 	@caption Men&uuml;&uuml;
@@ -68,7 +67,7 @@ class menu_tree extends class_base
 			case "menus":
 				//nüüdsest peaks seostega seda asja tegema
 				//et üleminek oleks valutu :
-
+				if(!is_oid($args["obj_inst"]->id()) || !$data["value"]) return PROP_IGNORE;
 				$cs = $args["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_ROOT_MENU",
 				));
@@ -99,16 +98,18 @@ class menu_tree extends class_base
 				$menus = array();
 				for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 				{
-					$menus[$o->id()] = $o->path_str()." (".$o->id().")";
+					$menus[$o->id()] = $o->path_str();
 				}
 				asort($menus);
 				$data["options"] = $menus;
 				break;
 
 			case "menu_tb":
+				if(!is_oid($args["obj_inst"]->id())) return PROP_IGNORE;
 				$this->_get_menu_tb($args);
 				break;
 			case "menu_table":
+				if(!is_oid($args["obj_inst"]->id())) return PROP_IGNORE;
 				$this->_get_menu_table($args);
 				break;
 
@@ -122,19 +123,6 @@ class menu_tree extends class_base
 
 		}
 		return PROP_OK;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			case "menus":
-				arr($prop);
-				break;
-		}
-		return $retval;
 	}
 
 	function parse_alias($args = array())
@@ -183,7 +171,6 @@ class menu_tree extends class_base
 			));
 		}
 		$menus = $ol->ids();
-		
 		$cho = $obj->meta("children_only");
 		$this->children_only = !empty($cho) ? true : false;
 		$tpl = ($obj->meta("template") ? $obj->meta("template") : "menu_tree.tpl");
