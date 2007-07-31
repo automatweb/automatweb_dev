@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.123 2007/06/11 08:30:40 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.124 2007/07/31 12:45:16 markop Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -52,6 +52,8 @@
 @property confirm_page_template type=select
 @caption Kinnitusvaate templeit
 
+@property send_all_rows_to_mail type=checkbox ch_value=1
+@caption Saada kõik read meilile
 
 @default group=general_redir
 
@@ -2456,7 +2458,7 @@ class webform extends class_base
 					}
 				}
 				else
-				if(!in_array($prplist[$key]["type"], $this->no_trans) && !empty($arr[$key]))
+				if(!in_array($prplist[$key]["type"], $this->no_trans) && !(empty($arr[$key]) && !$obj_inst->prop("send_all_rows_to_mail")))
 				{
 					$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).": ".$arr[$key]."\n";
 				}

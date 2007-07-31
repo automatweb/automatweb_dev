@@ -111,6 +111,16 @@
             <caption>Kinnitusvaate templeit</caption>
       </property>
       <property>
+            <name>send_all_rows_to_mail</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saada k&amp;otilde;ik read meilile</caption>
+      </property>
+      <property>
             <name>redirect</name>
             <table>objects</table>
             <group>general_redir</group>
