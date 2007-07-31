@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.43 2007/07/12 11:38:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.44 2007/07/31 12:57:39 markop Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -118,7 +118,8 @@ class cb_search extends class_base
 				{
 					$ol = new object_list(array(
 						"class_id" => CL_CFGFORM,
-						"subclass" => $arr["obj_inst"]->prop("root_class")
+						"subclass" => $arr["obj_inst"]->prop("root_class"),
+						"site_id" => array(),
 					));
 					$prop["options"] = array("" => "") + $ol->names();
 				}
@@ -129,7 +130,8 @@ class cb_search extends class_base
 				{
 					$ol = new object_list(array(
 						"class_id" => CL_OBJECT_TYPE,
-						"subclass" => $arr["obj_inst"]->prop("root_class")
+						"subclass" => $arr["obj_inst"]->prop("root_class"),
+						"site_id" => array(),
 					));
 					$prop["options"] = array("" => "") + $ol->names();
 				}
