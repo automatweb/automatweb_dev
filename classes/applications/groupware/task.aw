@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.178 2007/07/17 09:06:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.179 2007/08/03 16:18:20 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2388,6 +2388,7 @@ class task extends class_base
 			//kui arve on olemas, siis ei tahaks lasta muuta enam asju
 			if($this->can("view" , $row->prop("bill_id")))
 			{
+				$date = date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : $row->created()));
 				$imps = "";
 				foreach($is as $impo)
 				{
