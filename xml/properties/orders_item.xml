@@ -41,12 +41,36 @@
             <caption>Kogus</caption>
       </property>
       <property>
+            <name>product_count_undone</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>product_count_undone</field>
+            <caption>Tarnimata kogus</caption>
+      </property>
+      <property>
             <name>product_price</name>
             <table>aw_orders_item</table>
             <group>general</group>
             <type>textbox</type>
             <field>product_price</field>
             <caption>Hind</caption>
+      </property>
+      <property>
+            <name>product_duedate</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>product_duedate</field>
+            <caption>Soovitav tarne t&amp;amp;auml;itmine</caption>
+      </property>
+      <property>
+            <name>product_bill</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>product_bill</field>
+            <caption>Tarne t&amp;auml;itmine/arve nr</caption>
       </property>
       <property>
             <name>product_page</name>

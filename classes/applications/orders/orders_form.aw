@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.20 2007/07/30 13:35:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.21 2007/08/03 16:22:12 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -52,10 +52,10 @@
 @caption Dokument kuhu suunata peale esitamist
 
 @property order_item_template type=select
-@caption Tellimuse kujundusp&otilde;hi
+@caption Tellimuse rea kujundusp&ouml;hi
 
 @property orders_form_template type=select
-@caption Tellija andmete kujundusp&otilde;hi
+@caption Tellimuse vormi kujundusp&ouml;hi
 
 
 @groupinfo ordering caption=Tellimine submit=no

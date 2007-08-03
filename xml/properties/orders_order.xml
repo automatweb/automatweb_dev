@@ -251,7 +251,8 @@
                   <num_2>product_color</num_2>
                   <num_3>product_size</num_3>
                   <num_4>product_count</num_4>
-                  <num_5>product_price</num_5>
+                  <num_5>product_count_undone</num_5>
+                  <num_6>product_price</num_6>
             </props>
             <reltype>RELTYPE_ORDER</reltype>
             <field>orders</field>
@@ -273,6 +274,15 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>orders_table</field>
+      </property>
+      <property>
+            <name>submit_rows</name>
+            <table>orders_order</table>
+            <group>orderitems</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>submit_rows</field>
+            <caption>Salvesta</caption>
       </property>
       <property>
             <name>forward</name>

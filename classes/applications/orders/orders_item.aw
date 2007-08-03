@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_item.aw,v 1.2 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_item.aw,v 1.3 2007/08/03 16:22:12 markop Exp $
 // orders_item.aw - Tellimuse rida 
 /*
 
@@ -24,8 +24,17 @@
 @property product_count type=textbox
 @caption Kogus
 
+@property product_count_undone type=textbox
+@caption Tarnimata kogus
+
 @property product_price type=textbox
 @caption Hind
+
+@property product_duedate type=textbox
+@caption Soovitav tarne t&auml;itmine
+
+@property product_bill type=textbox
+@caption Tarne t&auml;itmine/arve nr
 
 @property product_page type=textbox
 @caption Lehekülg
@@ -76,6 +85,20 @@ class orders_item extends class_base
 		return $retval;
 	}	
 	*/
-
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "product_count_undone":
+			case "product_duedate":
+			case "product_bill":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "text"
+				));
+				break;
+		}
+		return true;
+	}
 }
 ?>

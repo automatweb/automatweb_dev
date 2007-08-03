@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.54 2007/07/26 09:40:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.55 2007/08/03 16:26:43 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -69,6 +69,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @groupinfo order_orderer_cos parent=order caption="Tellijad"
 @groupinfo order_search parent=order caption="Otsing" submit_method=get
 
+@property order_undone_tb type=toolbar store=no group=order_undone no_caption=1
 @property order_undone type=table store=no group=order_undone no_caption=1
 
 @property order_unconfirmed_toolbar type=toolbar no_caption=1 group=order_unconfirmed store=no
@@ -281,10 +282,13 @@ class shop_warehouse extends class_base
 			case "order_unconfirmed_toolbar":
 				$this->mk_order_unconfirmed_toolbar($arr);
 				break;
+
 			case "order_undone":
 				$this->do_order_undone_tbl($arr);
 				break;
-		
+			case "order_undone_tb":
+				$this->do_order_undone_tb($arr);
+				break;
 			case "order_unconfirmed":
 				$this->do_order_unconfirmed_tbl($arr);
 				break;
@@ -693,7 +697,7 @@ class shop_warehouse extends class_base
 		
 		$t->define_field(array(
 			"name" => "bill",
-			"caption" => t("Tarne t&auml;itmine/ arve nr"),
+			"caption" => t("Tellimuse kuup&auml;ev"),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
@@ -737,10 +741,43 @@ class shop_warehouse extends class_base
 		return $arr["prop"]["vcl_inst"]->draw();
 	}
 	
+
+	/**
+		@attrib name=undone_xls
+		@param undone_xls optional type=id acl=view
+	**/
+	function undone_xls($arr)
+	{
+		classload("vcl/table");
+		$arr["prop"]["vcl_inst"] = new aw_table(array(
+			"layout" => "generic"
+		));
+		$arr["xls"] = 1;
+		$this->do_order_undone_tbl($arr);
+		header("Content-type: application/csv");
+		header("Content-disposition: inline; filename=undone.csv;");
+		die($arr["prop"]["vcl_inst"]->get_csv_file());
+	}
+	
+	function do_order_undone_tb(&$arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			"name" => "xls",
+			"tooltip" => t("Exceli-tabeli vormis"),
+			"url" => $this->mk_my_orb("undone_xls", array(
+				"id" => $arr["obj_inst"]->id(),
+				"return_url" => get_ru()
+			), CL_SHOP_WAREHOUSE)
+		));
+	}
+	
 	function do_order_undone_tbl(&$arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$cl = $arr["cl"];
+		$xls = $arr["xls"];
 		$this->_init_undone_tbl($t,$cl);
 
 		// list orders from order folder
@@ -788,7 +825,7 @@ class shop_warehouse extends class_base
 				$cls_obj = obj($product_obj->prop("uservar1"));
 				$unit = $cls_obj->name();
 			}
-			$t->define_data(array(
+			if(!$xls) $t->define_data(array(
 				"product" => $cl?$product_obj->name():html::get_change_url($product, array("return_url" => get_ru()) , $product_obj->name()),
 				"code" => $product_obj->prop("user2"),
 				"unit" => $unit,
@@ -810,10 +847,14 @@ class shop_warehouse extends class_base
 				
 		
 				$t->define_data(array(
+					"product" => (!$xls)?"":($cl?$product_obj->name():html::get_change_url($product, array("return_url" => get_ru()) , $product_obj->name())),
+					"code" => (!$xls)?"":($product_obj->prop("user2") ? $product_obj->prop("user2") : " "),
+					"unit" => (!$xls)?"":($unit ? $unit : " "),
+					"packaging" => (!$xls)?"":($product_obj->prop("user1") ? $product_obj->prop("user1") : " "),
 					"order" => $cl?html::href(array("url" => $key, "caption" => $key)):html::get_change_url($key, array("return_url" => get_ru() , "group" => "items") , $key),
 					"client" => $client,
 					"amount" => $amount,
-					"color" => $order->prop("confirmed")?"":"lime",
+					"color" => $order->prop("confirmed")?"":"#CCFFCC",
 					
 		//			"packaging" => $ord_data[$order->id()][$product]["user1"],
 					"date" => $ord_data[$order->id()][$product]["duedate"],
@@ -823,7 +864,7 @@ class shop_warehouse extends class_base
 			}
 			
 
-			$t->define_data(array(
+			if(!$xls) $t->define_data(array(
 				"product" => t("Kokku:"),
 				"amount" => "<b>".$prod_count."</b>",
 

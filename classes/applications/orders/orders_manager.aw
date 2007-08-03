@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.8 2005/06/02 13:17:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.9 2007/08/03 16:22:12 markop Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -14,6 +14,9 @@
 
 	@groupinfo ordermnager_unc caption="Kinnitamata" submit=no parent=ordermnager
 
+	@groupinfo ordermnager_undone caption="T&auml;itmata" submit=no parent=ordermnager
+		@property order_undone_tb type=toolbar store=no group=ordermnager_undone no_caption=1
+		@property order_undone type=table store=no group=ordermnager_undone no_caption=1
 	@groupinfo ordermnager_cf caption="Kinnitatud" submit=no parent=ordermnager
 
 @default group=ordermnager_unc,ordermnager_cf
@@ -65,8 +68,206 @@ class orders_manager extends class_base
 			case "orders_toolbar":
 				$this->do_orders_toolbar($arr);
 				break;
+			case "order_undone_tb":
+//				$this->do_order_undone_tb($arr);
+				break;
+			case "order_undone":
+				$this->do_order_undone_tbl($arr);
+				break;
 		};
 		return $retval;
+	}
+	
+	function do_order_undone_tb(&$arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			"name" => "xls",
+			"tooltip" => t("Exceli-tabeli vormis"),
+			"url" => $this->mk_my_orb("undone_xls", array(
+				"id" => $arr["obj_inst"]->id(),
+				"return_url" => get_ru()
+			), CL_SHOP_WAREHOUSE)
+		));
+	}
+	
+	function do_order_undone_tbl(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$cl = $arr["cl"];
+		$this->_init_undone_tbl($t,$cl);
+
+		// list orders from order folder
+		$filter = array(
+			"class_id" => CL_ORDERS_ORDER,
+//			"confirmed" => 0
+		);
+		if($arr["client"])
+		{
+			$filter["orderer_company"] = $arr["client"];
+		}
+		if($cl)
+		{
+			$filter["createdby"] = aw_global_get("uid");
+		}
+		$ol = new object_list($filter);
+		
+		$undone_products = array();
+		$ord_data = array();
+		foreach($ol->arr() as $o)
+		{
+			foreach($o->connections_from(array("type" => "RELTYPE_ORDER")) as $it)
+			{
+				$item = $it->to();
+				if(!$item->prop("product_count_undone")) continue;
+//				arr($item->name());
+
+				$pol = new object_list(array("user2" => $item->prop("product_code") , "class_id" => CL_SHOP_PRODUCT));
+				if(is_array($pol) && sizeof($pol->arr()))
+				{
+					$product_obj = reset($pol->arr());
+					if($product_obj->class_id() != CL_SHOP_PRODUCT)
+					{
+						$product_obj = "";
+					}
+					$id = $product_obj->id();
+				}
+				if(!is_object($product_obj))
+				{
+					if($item->prop("product_code"))
+					{
+						$id = $item->prop("product_code");
+					}
+					else
+					{
+						$id = $item->name();
+					}
+				}
+				$undone_products[$id][$o->id()] = array(
+					"product_count" => $item->prop("product_count"),
+					"name" => $item->name(),
+					"product_code" => $item->prop("product_code"),
+					"product_color" => $item->prop("product_color"),
+					"product_size" => $item->prop("product_size"),
+					"product_price" => $item->prop("product_price"),
+					"product_page" => $item->prop("product_page"),
+					"product_image" => $item->prop("product_image"),
+				);
+			}
+		}
+		$upkeys = array_keys($undone_products);
+//		usort($upkeys, array(&$this, "__br_sort"));
+		foreach($upkeys as $product)
+		{
+			$product_data = array();
+			$order = $undone_products[$product];
+			$product_obj = "";
+			if(is_oid($product) && $this->can("view" , $product))
+			{
+				$product_obj = obj($product);
+				if($product_obj->class_id() != CL_SHOP_PRODUCT)
+				{
+					$product_obj = "";
+				}
+				else
+				{
+					$product_data["product"] = $cl?$product_obj->name():html::get_change_url($product, array("return_url" => get_ru()) , $product_obj->name());
+					$product_data["code"] = $product_obj->prop("user2");
+				}
+			}
+
+			if(!is_object($product_obj))
+			{
+				$o = reset($order);
+				$product_data["product"] = $o["name"];
+				$product_data["code"] = $o["product_code"];
+
+			}
+			$unit = "";
+			$t->define_data(array(
+				"product" => $product_data["product"],
+				"code" => $product_data["code"],
+				"unit" => $unit,
+//				"packaging" => $product_obj->prop("user1"),
+			));
+			
+			$prod_count = 0;
+			
+			foreach($order as $key => $amount)
+			{
+				if(!$this->can("view" , $key)) continue;
+				$order = obj($key);
+				$client = "";
+				if($client_o = $order->get_first_obj_by_reltype(array("type" => "RELTYPE_PERSON")));
+				{
+					$client = html::get_change_url($client_o->id(), array("return_url" => get_ru()) , $client_o->name());
+				}
+				
+		
+				$t->define_data(array(
+					"order" => $cl?html::href(array("url" => $key, "caption" => $key)):html::get_change_url($key, array("return_url" => get_ru() , "group" => "items") , $key),
+					"client" => $client,
+					"amount" => $amount["product_count"],
+					"color" => $order->prop("confirmed")?"":"#CCFFCC",
+					
+		//			"packaging" => $ord_data[$order->id()][$product]["user1"],
+					"date" => $ord_data[$order->id()][$product]["duedate"],
+					"bill" => $ord_data[$order->id()][$product]["bill"],
+				));
+				$prod_count+=$amount["product_count"];
+			}
+			
+
+			$t->define_data(array(
+				"product" => t("Kokku:"),
+				"amount" => "<b>".$prod_count."</b>",
+
+			));
+		}
+
+		$t->set_sortable(false);
+
+//		$t->set_default_sortby("modified");
+//		$t->set_default_sorder("DESC");
+//		$t->sort_by();
+	}
+
+
+	function _init_undone_tbl(&$t,$cl)
+	{
+		$t->define_field(array(
+			"name" => "code",
+			"caption" => t("Kood"),
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Toode"),
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Tellitav Kogus"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		
+		if(!$cl)$t->define_field(array(
+			"name" => "client",
+			"caption" => t("Klient"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("Tellimuse nr."),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
 	}
 	
 	function do_orders_toolbar($arr)

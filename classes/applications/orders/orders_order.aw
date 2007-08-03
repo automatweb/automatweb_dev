@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.21 2007/01/10 11:45:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.22 2007/08/03 16:22:12 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -59,11 +59,14 @@
 @property submit2 type=submit action=do_persondata_submit store=no group=orderinfo
 @caption Kinnita tellimus
 
-@property orders type=releditor store=no props=name,product_code,product_color,product_size,product_count,product_price reltype=RELTYPE_ORDER group=orderitems
+@property orders type=releditor store=no props=name,product_code,product_color,product_size,product_count,product_count_undone,product_price reltype=RELTYPE_ORDER group=orderitems
 @property submit type=submit group=orderitems store=no
 @caption Lisa tellimus
 
 @property orders_table type=table store=no group=orderitems no_caption=1
+
+@property submit_rows type=submit group=orderitems store=no
+@caption Salvesta
 
 @property forward type=submit action=do_persondata_form group=orderitems store=no
 @caption Edasi
@@ -114,6 +117,33 @@ class orders_order extends class_base
 		}
 	}
 	
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "orders_table":
+				$this->save_rows($arr);
+				break;
+		}
+		return $retval;
+	}	
+
+	function save_rows($arr)
+	{
+		foreach($arr["request"]["rows"] as $row => $data)
+                {
+			if(!is_oid($row) || !$this->can("edit" , $row)) continue;
+			$ro = obj($row);
+			foreach($data as $prop => $val)
+			{
+				$ro->set_prop($prop , $val);
+			}
+			$ro->save();
+                }
+	}
+
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them
 
@@ -221,18 +251,43 @@ class orders_order extends class_base
 						"caption" => t("Kogus"),
 					));
 					$table->define_field(array(
+						"name" => "product_count_undone",
+						"caption" => t("Tarnimata kogus"),
+					));
+					$table->define_field(array(
 						"name" => "product_price",
 						"caption" => t("Hind"),
 					));
+					$table->define_field(array(
+						"name" => "product_duedate",
+						"caption" => t("Soovitav tarne t&auml;itmine"),
+					));
+					$table->define_field(array(
+						"name" => "product_bill",
+						"caption" => t("Tarne t&auml;itmine/arve nr"),
+					));
 				}
-				
-				foreach ($ol->arr() as $obj)
-				{
-					$table->define_data($obj->properties());
-				}
+				$this->define_table_data(&$table , $ol);
 				break;
 		};
 		return $retval;
+	}
+
+	function define_table_data(&$table , $ol)
+	{
+		foreach ($ol->arr() as $obj)
+		{
+			$data = array();
+			foreach($obj->properties() as $prop => $val)
+			{
+				$data[$prop] = html::textbox(array(
+					"name" => "rows[".$obj->id()."][".$prop."]",
+					"value" => $val,
+					"size" => ($prop == "name") ? 40:10,
+				));
+			}
+			$table->define_data($data);
+		}
 	}
 
 	function callback_post_save($arr)

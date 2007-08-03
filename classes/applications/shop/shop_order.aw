@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.57 2007/07/30 10:14:55 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.58 2007/08/03 16:26:43 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -102,6 +102,13 @@ class shop_order extends class_base
 				$t = &$arr["prop"]["vcl_inst"];
 				$t->add_button(array(
 					"name" => "delete",
+					"tooltip" => t("Eemalda tellimusest tooted"),
+					"confirm" => t("Oled kindel, et soovitud valitud tooted tellimusest eemaldada?"),
+					"action" => "remove_items",
+					"img" => "delete.gif",
+				));
+				$t->add_button(array(
+					"name" => "xls",
 					"tooltip" => t("Eemalda tellimusest tooted"),
 					"confirm" => t("Oled kindel, et soovitud valitud tooted tellimusest eemaldada?"),
 					"action" => "remove_items",
@@ -353,7 +360,7 @@ class shop_order extends class_base
 				// forgive me for doing this hack :(( -- ahz
 				foreach($vals as $key => $item)
 				{
-					if($key == "duedate" || $key == "tduedate")
+					if($key == "duedate" || $key == "tduedate" || $key == "bill")
 					{
 						$vals[$key] .= '<a href="javascript:void(0);" onClick="cal.select(changeform.prod_data_'.$id.'__'.$x.'__'.$key.'_,\'anchor'.$id.'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$id.'" id="anchor'.$id.'">vali</a>';
 					}
@@ -364,7 +371,7 @@ class shop_order extends class_base
 				}
 				if($val["unsent"])
 				{
-					$vals["color"] = "red";
+					$vals["color"] = "#FFCCCC";
 				}
 				
 				$t->define_data(array(
@@ -705,6 +712,7 @@ class shop_order extends class_base
 				{
 					$i_o->set_prop("item_count", $i_o->prop("item_count")-$quant["items"]);
 				}
+				$this->order_items[$iid][$x]["unsent"] = $quant["items"];
 			}
 			if ($i_o->prop("item_count") != $orig_count)
 			{
@@ -1324,6 +1332,11 @@ class shop_order extends class_base
 			$calc_price = $product_info_i->get_calc_price($product_info);
 			foreach($prodx->get() as $x => $val)
 			{
+				//näitab ainult neid kus on miskit veel saatmata, kui nii on tahetud
+				if($arr["unsent"] && !$val["unsent"])
+				{
+					continue;
+				}
 				for($i = 1; $i < 21; $i++)
 				{
 					$ui = $product_info->prop("user".$i);
@@ -1768,6 +1781,7 @@ class shop_order extends class_base
 		{
 			$vars["template"] = "show_ordered.tpl";
 		}
+		$vars["unsent"] = $_GET["unsent"];
 		return $this->show($vars);
 	}
 
