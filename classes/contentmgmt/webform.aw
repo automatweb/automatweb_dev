@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.124 2007/07/31 12:45:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.125 2007/08/07 13:56:07 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2088,13 +2088,13 @@ class webform extends class_base
 				{
 					$val["parent"] = "submitx";
 					$tmpx[$key] = $val;
-					//unset($els[$key]);
+				//	unset($els[$key]);
 				}
 				elseif($all_props[$key]["type"] == "reset")
 				{
 					$val["parent"] = "submitx";
 					$tmpx[$key] = $val;
-					unset($els[$key]);
+				//	unset($els[$key]);
 				}
 			}
 			if($val["type"] == "select")
