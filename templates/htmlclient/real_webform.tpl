@@ -154,6 +154,21 @@
 </table>
 <!-- END SUB: GRID_HBOX -->
 
+<!-- SUB: GRID_HBOX_OUTER -->
+<!-- SUB: GRID_HBOX -->
+<!-- hbox -->
+<table border="0" cellspacing="0" cellpadding="0" width='100%'>
+<tr>
+<!-- SUB: GRID_HBOX_ITEM -->
+<td valign='top' {VAR:item_width} style="padding-left: 5px;">
+{VAR:item}
+</td>
+<!-- END SUB: GRID_HBOX_ITEM -->
+</tr>
+</table>
+<!-- END SUB: GRID_HBOX -->
+<!-- END SUB: GRID_HBOX_OUTER -->
+
 <!-- SUB: GRID_VBOX -->
 <!-- vbox -->
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
