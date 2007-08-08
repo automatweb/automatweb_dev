@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.119 2007/06/22 11:01:05 kristo Exp $
-// forum_v2.aw.aw - Foorum 2.0 
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.121 2007/08/08 07:00:34 voldemar Exp $
+// forum_v2.aw.aw - Foorum 2.0
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
 */
@@ -175,7 +175,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property topics_on_page type=textbox
 		@caption Teemasid lehel
 
-		@property topics_sort_order type=select 
+		@property topics_sort_order type=select
 		@caption Teemade j&auml;rjekord
 
 		@property comments_on_page type=textbox
@@ -199,7 +199,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 	@groupinfo image_verification caption=Kontrollpilt parent=settings
 	@default group=image_verification
 
-		@property use_image_verification type=checkbox ch_value=1 
+		@property use_image_verification type=checkbox ch_value=1
 		@caption Kasuta kontrollpilti
 
 		@property verification_image type=releditor use_form=emb reltype=RELTYPE_IMAGE_VERIFICATION rel_id=first
@@ -243,7 +243,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 	@reltype EMAIL value=8 clid=CL_ML_MEMBER
 	@caption Meiliaadress
-	
+
 	@reltype IMAGE_VERIFICATION value=9 clid=CL_IMAGE_VERIFICATION
 	@caption Kontrollpilt
 
@@ -272,8 +272,17 @@ class forum_v2 extends class_base
 			TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST => t('Viimati kommenteeritud eespool'),
 			TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST => t('Enim kommenteeritud eespool')
 		);
-	
+
 		lc_site_load("forum",&$this);
+
+		$this->comment_fields = array(
+                        "name" => t("Pealkiri"),
+                        "uname" => t("Autor"),
+                        "pname" => t("Autori nimi"),
+                        "uemail" => t("Autori e-mail"),
+                        "commtext" => t("Kommentaar"),
+                );
+
 	}
 
 	function get_property($arr)
@@ -333,9 +342,9 @@ class forum_v2 extends class_base
 				break;
 
 
-		};	
+		};
 		return $retval;
-	} 
+	}
 
 	function set_property($arr)
 	{
@@ -350,7 +359,7 @@ class forum_v2 extends class_base
 			case "container":
 				$this->update_contents($arr);
 				break;
-			
+
 			case "import_xml_file":
 				$tmpname = $_FILES["import_xml_file"]["tmp_name"];
 				if (is_uploaded_file($tmpname))
@@ -412,7 +421,7 @@ class forum_v2 extends class_base
 		));
 		$id = $this->obj_inst->id();
 		$o = $this->obj_inst;
-		
+
 		print "creating forum object with name " . $forumdata["name"] . "<br>";
 		print "creating folder for topics " . $forumdata["name"] . " teemad" . "<br>";
 		print "creating topics<br>";
@@ -451,7 +460,7 @@ class forum_v2 extends class_base
 		{
 			$topic_folder = $o->prop("topic_folder");
 		};
-			
+
 		$o->save();
 
 		// first, create a list of all topics in this folder
@@ -603,7 +612,7 @@ class forum_v2 extends class_base
 		//$prop["value"] = $retval;
 		//return array($prop);
 		return $rv;
-	}	
+	}
 
 	function draw_all_folders($args = array())
 	{
@@ -612,7 +621,7 @@ class forum_v2 extends class_base
 		$this->read_template("forum.tpl");
 
 		$c = "";
-		
+
 		$this->_add_style("style_new_topic_row");
 		$this->_add_style("style_l1_folder");
 		$this->_add_style("style_folder_caption");
@@ -705,9 +714,9 @@ class forum_v2 extends class_base
 						"_alias" => get_class($this),
 					)),
 				));
-				
-//				$tplname = "L" . $this->level . "_FOLDER"; 
-				
+
+//				$tplname = "L" . $this->level . "_FOLDER";
+
 				$tplname = "FOLDER";
 				$this->vars(array(
 					"spacer" => str_repeat("&nbsp;",6*($this->level-1)),
@@ -739,7 +748,7 @@ class forum_v2 extends class_base
 		));
 
 		// for each second level folder, figure out the amount of topics
-		// and posts 
+		// and posts
 		list($topic_counts,$topic_list) = $this->get_topic_list(array(
 			"parents" => $sub_folder_list->ids(),
 		));
@@ -752,7 +761,7 @@ class forum_v2 extends class_base
 			list(,$comment_count) = $this->get_comment_counts(array(
 				"parents" => $topic_list[$sub_folder_obj->id()],
 			));
-			
+
 			$last = $this->get_last_comments(array(
 				"parents" => $topic_list[$sub_folder_obj->id()],
 			));
@@ -868,7 +877,7 @@ class forum_v2 extends class_base
 			};
 			if ($o->id() == $topic_obj->id())
 			{
-				// this creates the link back to the front page 
+				// this creates the link back to the front page
 				// of the topic and stops processing
 				$name = html::href(array(
 					"url" => $this->mk_my_orb("change",array(
@@ -900,7 +909,7 @@ class forum_v2 extends class_base
 			}
 			$path[] = $name;
 		};
-		
+
 		$this->_add_style("style_topic_caption");
 		$this->_add_style("style_topic_replies");
 		$this->_add_style("style_topic_author");
@@ -984,7 +993,7 @@ class forum_v2 extends class_base
 			);
 		}
 
-		// if the topics list is marked not sorted, then we have to sort it now: 
+		// if the topics list is marked not sorted, then we have to sort it now:
 		if ($is_sorted === false)
 		{
 			switch ($topics_sort_order)
@@ -995,7 +1004,7 @@ class forum_v2 extends class_base
 				case TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST:
 					uasort($topics_list, array($this, '__sort_topics_most_commented_first'));
 					break;
-				
+
 			}
 		}
 
@@ -1016,7 +1025,7 @@ class forum_v2 extends class_base
 		$from = ($selpage - 1) * $topics_on_page + 1;
 		$to = $from + $topics_on_page - 1;
 		$cnt = 0;
-		
+
 
 		// each topic can have its own ACL (I highly doubt that this is ever going
 		// to happen though) and DELETE_ACTION subtemplate is parsed only if any of
@@ -1025,7 +1034,7 @@ class forum_v2 extends class_base
 		$section = aw_global_get("section");
 		$can_admin = $this->_can_admin(array("forum_id" => $args["obj_inst"]->id()));
 
-		
+
 		foreach($topics_list as $topic)
 		{
 			$cnt++;
@@ -1107,9 +1116,9 @@ class forum_v2 extends class_base
 				"PAGER" => $pager,
 			));
 			$pager = "";
-		};	
+		};
 
-	
+
 
 		$this->vars(array(
 			"SUBTOPIC" => $c,
@@ -1163,12 +1172,12 @@ class forum_v2 extends class_base
 		{
 			$comments_on_page = 5;
 		};
-		
+
 		$t = get_instance(CL_COMMENT);
 		$comments = $t->get_comment_list(array("parent" => $topic_obj->id()));
 
 		$c = $pager = "";
-		
+
 		$tcount = sizeof($comments);
 		$num_pages = (int)(($tcount / $comments_on_page));
 		if ($tcount % $comments_on_page)
@@ -1188,7 +1197,7 @@ class forum_v2 extends class_base
 		$from = ($selpage - 1) * $comments_on_page + 1;
 		$to = $from + $comments_on_page - 1;
 		$cnt = 0;
-		
+
 		$oid = $args["obj_inst"]->id();
 
 		$can_delete = $this->_can_admin(array("forum_id" => $oid));
@@ -1209,6 +1218,7 @@ class forum_v2 extends class_base
 					"date" => $this->time2date($comment["created"],2),
 					"createdby" => $comment["createdby"],
 					"uname" => $comment["uname"],
+					"pname" => $comment["pname"],
 					"uemail" => $comment["uemail"],
 					"ip" => $comment["ip"],
 					"comment_image1" => $this->get_image_tag(array("id" => $comment['oid'])),
@@ -1271,10 +1281,10 @@ class forum_v2 extends class_base
 					$c .= $this->parse("COMMENT_ODD");
 				}
 			};
-		};		
+		};
 
 		$section = aw_global_get("section");
-		
+
 		// draw pager
 		for ($i = 1; $i <= $num_pages; $i++)
 		{
@@ -1291,10 +1301,10 @@ class forum_v2 extends class_base
 			));
 			$pager .= $this->parse($selpage == $i ? "active_page" : "page");
 		};
-	
+
 		// path drawing starts
 		$path = array();
-		$fld = $topic_obj->parent(); 
+		$fld = $topic_obj->parent();
 		$obj_chain = array_reverse($topic_obj->path());
 
 		$show = true;
@@ -1310,7 +1320,7 @@ class forum_v2 extends class_base
 			{
 				$show = false;
 			};
-			
+
 			if (!$show)
 			{
 				continue;
@@ -1345,12 +1355,12 @@ class forum_v2 extends class_base
 				));
 			};
 
-						
+
 			//};
 			array_unshift($path,$name);
 			//$path[] = $name;
 		};
-		
+
 		$fp = $this->_get_fp_link(array(
 			"id" => $oid,
 			"group" => $args["request"]["group"],
@@ -1429,7 +1439,7 @@ class forum_v2 extends class_base
 
 			$retval = array();
 
-			
+
 			if (false === strpos(aw_global_get("REQUEST_URI"),"class="))
 			{
 				$embedded = true;
@@ -1443,19 +1453,19 @@ class forum_v2 extends class_base
 					"value" => 1,
 				);
 			};
-			
+
 			$uid = aw_global_get("uid");
 			$add = "";
 			if(!empty($uid))
 			{
 				$uid_oid = users::get_oid_for_uid($uid);
 				$user_obj = new object($uid_oid);
-	
+
 				$this->vars(array(
 					"author" => $uid,
 					"author_email" => $user_obj->prop("email.mail"),
 				));
-			
+
 			}
 
 			// if user tries to add comment, and he has an error during the submitting
@@ -1542,7 +1552,7 @@ class forum_v2 extends class_base
 
 			$rv .= $this->parse();
 		};
-			
+
 		$retval["contents"] = array(
 			"type" => "text",
 			"name" => "contents",
@@ -1578,7 +1588,7 @@ class forum_v2 extends class_base
 			"name_prefix" => "emb",
 		));
 	}
-	
+
 	function callback_gen_add_comment($args = array())
 	{
 		$t = get_instance(CL_COMMENT);
@@ -1592,7 +1602,7 @@ class forum_v2 extends class_base
 		$all_props = $t->get_property_group(array(
 			"group" => $emb_group,
 		));
-		
+
 		$all_props[] = array("type" => "hidden","name" => "class","value" => "forum_comment");
 		$all_props[] = array("type" => "hidden","name" => "action","value" => "submit");
 		$all_props[] = array("type" => "hidden","name" => "group","value" => $emb_group);
@@ -1626,7 +1636,7 @@ class forum_v2 extends class_base
 			{
 				$rv_args["_alias"] = get_class($this);
 			};
-		};	
+		};
 	}
 
 	function get_topic_list($args = array())
@@ -1637,7 +1647,7 @@ class forum_v2 extends class_base
 				"parent" => $args["parents"],
 				"class_id" => CL_MSGBOARD_TOPIC,
 				"status" => STAT_ACTIVE,
-			));	
+			));
 			foreach ($topic_list->arr() as $topic)
 			{
 				$parent = $topic->parent();
@@ -1647,7 +1657,7 @@ class forum_v2 extends class_base
 		};
 		return array($topic_count,$tlist);
 	}
-	
+
 	function get_comment_counts($args = array())
 	{
 		$comment_count = array();
@@ -1769,7 +1779,7 @@ class forum_v2 extends class_base
 					"name" => "exclude_subs[${id}]",
 					"checked" => $this->exclude_subs[$id],
 				)),
-			));			
+			));
 			$level++;
 			$this->_do_rec_topic(array("parent" => $id));
 			$level--;
@@ -1811,7 +1821,7 @@ class forum_v2 extends class_base
 			),
 		));
         }
-	
+
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
@@ -1872,14 +1882,14 @@ class forum_v2 extends class_base
 		return $this->parse();
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=add_topic params=name all_args="1" nologin="1"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1915,8 +1925,8 @@ class forum_v2 extends class_base
                         "clid" => CL_MSGBOARD_TOPIC,
                 ));
 		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
-		
-		// if user is logged in, 
+
+		// if user is logged in,
 		$uid = aw_global_get("uid");
 		if (!empty($uid))
 		{
@@ -1924,7 +1934,7 @@ class forum_v2 extends class_base
 			$uid_oid = users::get_oid_for_uid($uid);
 			$user_obj = new object($uid_oid);
 			$props['author_email']['value'] = $user_obj->prop("email");
-			
+
 			if ($this->obj_inst->prop("show_logged") != 1)
 			{
 				$props['author_name']['type'] = "text";
@@ -2033,18 +2043,18 @@ class forum_v2 extends class_base
 			"a_name" => $this->parse("a_name".$add),
 			"a_email" => $this->parse("a_email".$add),
 		));
-		
+
 		return $this->parse();
 		*/
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=submit_topic params=name all_args="1" nologin="1"
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2067,7 +2077,7 @@ class forum_v2 extends class_base
 				// forum_topic's empty field checks
 				$arr['author_email'] = (empty($arr['author_email'])) ? "none" : $arr['author_email'];
 
-			} 
+			}
 		}
                 $emb = $arr;
 		$emb["parent"] = $arr["folder"];
@@ -2125,12 +2135,12 @@ class forum_v2 extends class_base
 				'topic_url' => $topic_url
 			));
 		}
-		
+
 		return $topic_url;
 	}
-	
-	/** Creates a new comment object for a topic 
-		
+
+	/** Creates a new comment object for a topic
+
 		@attrib name=submit_comment params=name all_args="1" nologin="1"
 
 	**/
@@ -2171,6 +2181,7 @@ class forum_v2 extends class_base
 				$user_obj = new object($uid_oid);
 
 				$arr["uname"] = $uid;
+				$arr["pname"] = $user_obj->name();
 				$arr["uemail"] = $user_obj->prop("email");
 			}
 		}
@@ -2247,10 +2258,10 @@ class forum_v2 extends class_base
 			$image_parent = $this->comm_id;
 		}
 		// if there is image which should be uploaded
-		$upload_image = $image_inst->add_upload_image("uimage", $image_parent); 
+		$upload_image = $image_inst->add_upload_image("uimage", $image_parent);
 		if ($upload_image !== false && is_oid($this->comm_id) && $this->can("view", $this->comm_id))
 		{
-			
+
 			$comment_obj = new object($this->comm_id);
 			$comment_obj->connect(array(
 				"to" => $upload_image['id'],
@@ -2280,7 +2291,7 @@ class forum_v2 extends class_base
 			"message" => $arr["commtext"],
 			"forum_id" => $arr["id"],
 		));
-		
+
 		$rv = $this->finish_action($arr);
 		$rv = aw_url_change_var("class","",$rv);
 		return $rv;
@@ -2309,15 +2320,15 @@ class forum_v2 extends class_base
 		return $this->finish_action($arr);
 	}
 
-	/**  
+	/**
 		@attrib name=change params=name all_args="1" nologin="1"
-		
-		@param id optional type=int 
+
+		@param id optional type=int
 		@param group optional
 		@param period optional
 		@param alias_to optional
 		@param return_url optional
-		
+
                 @returns
 
                 @comment
@@ -2335,7 +2346,7 @@ class forum_v2 extends class_base
 
 
 	/**
-		@comment 
+		@comment
 			checks whether the remote user can admin the forum
 	**/
 //	function _can_admin($forum_id)
@@ -2391,7 +2402,7 @@ class forum_v2 extends class_base
 		return sizeof($conns) > 0;
 
 	}
-	
+
 
 	function on_connect_menu($arr)
 	{
@@ -2451,17 +2462,17 @@ class forum_v2 extends class_base
 		@attrib name=add_faq no_login=1
 		@param id required type="int" acl="edit"
 		@param topic required type="int" acl="edit"
-		@param section optional 
-	**/	
+		@param section optional
+	**/
 	function add_faq($arr)
 	{
-		
+
 		$forum_obj = new object($arr['id']);
 		$faq_folder_id = $forum_obj->prop("faq_folder");
 		if (!empty($faq_folder_id))
 		{
 
-			$topic_obj = new object($arr['topic']);	
+			$topic_obj = new object($arr['topic']);
 
 			$comment_inst = get_instance(CL_COMMENT);
 			$comments = $comment_inst->get_comment_list(array("parent" => $topic_obj->id()));
@@ -2472,14 +2483,14 @@ class forum_v2 extends class_base
 				$comments_str .= "-------------------------------------------------------<br />\n";
 				$comments_str .= $comment['commtext']."<br /><br />\n\n";
 			}
-	
+
 			$faq_document = new object();
 			$faq_document->set_class_id(CL_DOCUMENT);
 			$faq_document->set_parent($faq_folder_id);
 			$topic_obj_name = $topic_obj->name();
 			$faq_document->set_name($topic_obj_name);
 			$faq_document->set_status(STAT_ACTIVE);
-			$faq_document->set_prop("title", $topic_obj_name); 
+			$faq_document->set_prop("title", $topic_obj_name);
 			$faq_document->set_prop("lead", $this->_filter_output($topic_obj->comment()));
 			$faq_document->set_prop("content", $this->_filter_output($comments_str));
 			$faq_document->save();
@@ -2490,7 +2501,7 @@ class forum_v2 extends class_base
 				"section" => $arr['section'],
 				"group" => "contents",
 				"_alias" => get_class($this),
-			) 
+			)
 		);
 	}
 

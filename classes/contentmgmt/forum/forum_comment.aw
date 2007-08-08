@@ -1,29 +1,32 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.18 2006/02/22 15:18:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.19 2007/08/08 07:00:34 voldemar Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
 @default table=objects
 @default group=general
 
-@property name type=textbox 
+@property name type=textbox
 @caption Pealkiri
 
 @default table=forum_comments
 
 @property uname type=textbox
+@caption Kasutaja
+
+@property pname type=textbox
 @caption Nimi
 
-@property uemail type=textbox 
+@property uemail type=textbox
 @caption E-post
 
-@property remember type=checkbox store=no 
+@property remember type=checkbox store=no
 @caption Jäta nimi ja e-post meelde
 
-@property commtext type=textarea 
+@property commtext type=textarea
 @caption Kommentaar
 
-@property ip type=textbox 
+@property ip type=textbox
 @caption IP
 
 @classinfo syslog_type=ST_COMMENT no_status=1 relationmgr=yes
@@ -43,6 +46,7 @@
 		| id          | bigint(20) unsigned |      | PRI | 0       |       |
 		| comm_parent | bigint(20) unsigned |      |     | 0       |       |
 		| uname       | varchar(255)        | YES  |     | NULL    |       |
+		| pname       | varchar(255)        | YES  |     | NULL    |       |
 		| uemail      | varchar(255)        | YES  |     | NULL    |       |
 		| commtext    | text                | YES  |     | NULL    |       |
 		| ip          | varchar(255)        | YES  |     | NULL    |       |
@@ -73,6 +77,28 @@ class forum_comment extends class_base
 					$prop["value"] = $_COOKIE["aw_mb_name"];
 					$this->dequote($prop["value"]);
 				};
+				break;
+			case "pname":
+				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
+				{
+					$uid = $_COOKIE["aw_mb_name"];
+					$this->dequote($uid);
+					$p_oid = users::get_oid_for_uid($uid);
+
+					if (is_oid($p_oid))
+					{
+						$p_o = new object($p_oid);
+						$prop["value"] = $p_o->name();
+					}
+					else
+					{
+						error::raise(array(
+							"msg" => "Person not defined for uid [".$uid."].",
+							"fatal" => false,
+							"show" => false
+						));
+					}
+				}
 				break;
 			case "uemail":
 				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
@@ -112,7 +138,7 @@ class forum_comment extends class_base
 					$prop["value"] = aw_global_get("REMOTE_ADDR");
 				};
 				break;
-	
+
 		};
 		return $retval;
 	}
@@ -146,11 +172,11 @@ class forum_comment extends class_base
 		};
 		return $retval;
 	}
-	
+
 	////
 	// !Returns a number of comments under parent
 	//   parent - commented object
-	//   period - 
+	//   period -
 	function get_comment_count($arr)
 	{
 		if (empty($arr["parent"]))
@@ -165,6 +191,24 @@ class forum_comment extends class_base
 			"site_id" => array()
 		));
 		return $clist->count();
+	}
+
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		if ($table === "forum_comments")
+		{
+			ini_set("ignore_user_abort", "1");
+
+			switch($field)
+			{
+				case "pname":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "VARCHAR(255)"
+					));
+					break;
+			}
+		}
 	}
 }
 ?>
