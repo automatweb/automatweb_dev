@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.121 2007/08/08 07:00:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.122 2007/08/08 07:22:13 voldemar Exp $
 // forum_v2.aw.aw - Foorum 2.0
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -253,6 +253,7 @@ define('TOPICS_SORT_ORDER_NEWEST_TOPICS_FIRST', 1);
 define('TOPICS_SORT_ORDER_ALPHABET', 2);
 define('TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST', 3);
 define('TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST', 4);
+define('TOPICS_SORT_ORDER_OBJ_ORD', 5);
 
 class forum_v2 extends class_base
 {
@@ -270,7 +271,8 @@ class forum_v2 extends class_base
 			TOPICS_SORT_ORDER_NEWEST_TOPICS_FIRST => t('Uuemad teemad eespool'),
 			TOPICS_SORT_ORDER_ALPHABET => t('T&auml;hestikulises j&auml;rjekorras (A-Z)'),
 			TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST => t('Viimati kommenteeritud eespool'),
-			TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST => t('Enim kommenteeritud eespool')
+			TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST => t('Enim kommenteeritud eespool'),
+			TOPICS_SORT_ORDER_OBJ_ORD => t('Objektide jrk. nr. j&auml;rgi')
 		);
 
 		lc_site_load("forum",&$this);
@@ -296,13 +298,10 @@ class forum_v2 extends class_base
 		//		$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
 		//		break;
 
-                        case "required_fields":
-                                $data["options"] = $this->comment_fields;
-                                break;
-
-			case "topics_sort_order":
-				$data['options'] = $this->topics_sort_order;
+			case "required_fields":
+				$data["options"] = $this->comment_fields;
 				break;
+
 			case "topics_sort_order":
 				$data['options'] = $this->topics_sort_order;
 				break;
@@ -935,6 +934,9 @@ class forum_v2 extends class_base
 					break;
 				case TOPICS_SORT_ORDER_NEWEST_TOPICS_FIRST:
 					$topics_list_params['sort_by'] = 'objects.created DESC';
+					break;
+				case TOPICS_SORT_ORDER_OBJ_ORD:
+					$topics_list_params['sort_by'] = 'objects.jrk ASC';
 					break;
 				default:
 					// if topics list can't be sorted via object_list, then we mark, that topics are not sorted:
@@ -1640,7 +1642,8 @@ class forum_v2 extends class_base
 	}
 
 	function get_topic_list($args = array())
-	{	$topic_count = $tlist = array();
+	{
+		$topic_count = $tlist = array();
 		if (sizeof($args["parents"]) != 0)
 		{
 			$topic_list = new object_list(array(
