@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.28 2007/07/26 05:51:08 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.29 2007/08/08 00:13:47 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -272,7 +272,7 @@ class watercraft_search extends class_base
 				}
 				else
 				{
-				    $prop["value"] = aw_unserialize($prop["value"]);
+					$prop["value"] = aw_unserialize($prop["value"]);
 				}
 				$prop['options'] = array(t("K&otilde;ik")) + $this->watercraft_inst->deal_type;
 				break;
@@ -577,7 +577,15 @@ class watercraft_search extends class_base
 			{
 				if ($property['group'] == 'search')
 				{
-					$search_params[$property['name']] = $properties[$property['name']];
+					// deal_type value is saved as serialized data
+					if ($property['name'] == 'deal_type')
+					{
+						$search_params[$property['name']] = aw_unserialize($properties[$property['name']]);
+					}
+					else
+					{
+						$search_params[$property['name']] = $properties[$property['name']];
+					}
 				}
 			}
 			$do_search = true;
@@ -925,15 +933,16 @@ class watercraft_search extends class_base
 
 		foreach ($this->search_form_elements as $name => $caption)
 		{
-			// if it is range:
+			// if it is range or chooser: 
 			if ( is_array($arr['request'][$name]) )
 			{
 				$from = (float)$arr['request'][$name]['from'];
 				$to = (float)$arr['request'][$name]['to'];
 
-				// if both are empty, then don't need to search by that:
+				// if both are empty, then we have an empty range or a chooser:
 				if ( empty($from) && empty($to) )
 				{
+					// chooser:
 					if($name == "deal_type")
 					{
 						if($arr["request"][$name][0])
@@ -953,6 +962,7 @@ class watercraft_search extends class_base
 							$filter[$name] = $deal_t;
 						}
 					}
+
 					continue;
 				}
 				else
