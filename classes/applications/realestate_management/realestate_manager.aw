@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.18 2007/07/30 11:45:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.19 2007/08/09 09:31:34 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -3443,6 +3443,7 @@ class realestate_manager extends class_base
 			$property->set_parent ($parent);
 			$property->set_prop ("realestate_manager", $this_object->id ());
 			$property->set_prop ("weeks_valid_for", 12);
+			$property->set_prop("is_visible", 1);
 			$property->set_name (t("..."));
 			$property->save ();
 

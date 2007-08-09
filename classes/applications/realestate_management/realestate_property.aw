@@ -1411,7 +1411,7 @@ class realestate_property extends class_base
 		$data["link_return_url"] = $arr["return_url"];
 		// $data["link_open"] = obj_link ($this_object_id);
 		$data["link_open"] = aw_url_change_var ("realestate_show_property", $this_object_id);
-		$data["class_name"] = t($class_name);
+		$data["class_name"] = $class_name;
 
 		### get template
 		$tmp = $this->template_dir;
@@ -1620,7 +1620,7 @@ class realestate_property extends class_base
 		// "/" oli kuskile vahelt kadunud....
 		$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
 		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
-		
+
 		if($this->is_template("additional_info"))
 		{
 			$this->vars (array("value" => $nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")))));

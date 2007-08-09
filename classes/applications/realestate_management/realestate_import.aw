@@ -441,34 +441,16 @@ class realestate_import extends class_base
 
 		foreach ($list as $property)
 		{
-			if (0 < $property->prop ("city24_object_id"))
+			$city_id = (int) $property->prop ("city24_object_id");
+			if (isset($imported_object_ids[$city_id]))
 			{
-				$city_id = (int) $property->prop ("city24_object_id");
-				if (isset($imported_object_ids[$city_id]))
-				{
-					$duplicates[] = $city_id;
-				}
-				else
-				{
-					$imported_object_ids[$city_id] = (int) $property->id ();
-				}
-			}
-		}
-
-		/*$duplicates = array ();
-		$tmp = array ();
-
-		foreach ($imported_object_ids as $city24_id => $aw_oid)
-		{
-			if (in_array ($city24_id, $tmp))
-			{
-				$duplicates[] = $city24_id;
+				$duplicates[] = $city_id;
 			}
 			else
 			{
-				$tmp[] = $city24_id;
+				$imported_object_ids[$city_id] = (int) $property->id ();
 			}
-		}*/
+		}
 
 		if (count ($duplicates))
 		{
@@ -510,6 +492,7 @@ class realestate_import extends class_base
 			{ ### finish last processed property import
 				if (is_object ($property))
 				{
+					$property->save ();
 					if (1 != $quiet) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s."), $this->property_data["ID"], $property->id ()) . REALESTATE_NEWLINE; flush(); }
 
 					// if ($property_status === REALESTATE_IMPORT_OK)
@@ -547,47 +530,52 @@ class realestate_import extends class_base
 			elseif (("ROW" === $data["tag"]) and ("open" === $data["type"]))
 			{
 				### start property import
+				$new_property = true;
 				$this->property_data = array ();
 				$this->property_data["PILT"] = array ();
 			}
 			elseif (is_array ($this->property_data))
 			{ ### get&process property data
-				if ("EDIT_DATE" === $data["tag"])
+				if ("ID" === $data["tag"])
+				{
+					$city24_id = (int) $data["value"];
+					$this->property_data["ID"] = $city24_id;
+
+					### load existing object corresponding to city24 id
+					if (array_key_exists($city24_id, $imported_object_ids))
+					{
+						$property = new object($imported_object_ids[$city24_id]);
+						$new_property = false;
+
+						if (!$property->prop("is_visible"))
+						{
+							$property->set_prop("is_visible", 1);
+						}
+					}
+				}
+				elseif ("EDIT_DATE" === $data["tag"] and is_object($property))
 				{
 					list ($year, $month, $day, $hour, $min, $sec) = sscanf(trim ($data["value"]),"%u-%u-%u %u:%u:%u");
 
 					if (1992 < $year and 1 <= $month and 12 >= $month and 1 <= $day and 31 >= $day and 0 <= $hour and 24 >= $hour)
 					{
-						$city24_id = isset($this->property_data["ID"]) ? (int) $this->property_data["ID"] : 0;
+						$city24_modified = mktime ($hour, $min, $sec, $month, $day, $year);
 
-						if (array_key_exists ($city24_id, $imported_object_ids))
+						if (
+							empty($arr["import_all"])  and
+							1 < $last_import and
+							$city24_modified < $last_import and
+							$city24_modified < $import_time and
+							$city24_modified < $property->meta("city24_last_import")
+						)
 						{
-							$property = obj ($imported_object_ids[$city24_id]);
-							$city24_modified = mktime ($hour, $min, $sec, $month, $day, $year);
-
-							if (!$property->prop("is_visible"))
-							{
-								$property->set_prop("is_visible", 1);
-								$property->save();
-							}
-
-							if (
-								empty($arr["import_all"])  and
-								1 < $last_import and
-								$city24_modified < $last_import and
-								$city24_modified < $import_time and
-								$city24_modified < $property->meta("city24_last_import")
-							)
-							{
-								$this->property_data = null;
-								$this->end_property_import = true;
-							}
+							$this->property_data = null;
+							$this->end_property_import = true;
 						}
 					}
 				}
 				elseif
 				(
-					"ID" === $data["tag"] or
 					"TEHING" === $data["tag"] or
 					"MAAKOND" === $data["tag"] or
 					"LINN" === $data["tag"] or
@@ -684,25 +672,7 @@ class realestate_import extends class_base
 				elseif (("ROW" === $data["tag"]) and ("close" === $data["type"]))
 				{ ### import property to aw
 					$property_status = REALESTATE_IMPORT_OK;
-
-					if (is_object($property))
-					{
-						$property_id = $property->id ();
-						$property = NULL;
-						$GLOBALS["objects"][$property_id] = null;
-						unset($GLOBALS["objects"][$property_id]);
-					}
-
-					$new_property = true;
 					$this->end_property_import = true;
-					$city24_id = (int) $this->property_data["ID"];
-
-					### load existing object corresponding to city24 id
-					if (array_key_exists ($city24_id, $imported_object_ids))
-					{
-						$property = obj ($imported_object_ids[$city24_id]);
-						$new_property = false;
-					}
 
 					### get agent
 					#### city24 agent priority
@@ -1815,8 +1785,6 @@ class realestate_import extends class_base
 							break;
 					}
 
-					$property->set_prop ("is_visible", 1);
-
 					if (REALESTATE_IMPORT_OK !== $property_status)
 					{
 						$property->set_meta("city24_last_import", 0);
@@ -1825,8 +1793,6 @@ class realestate_import extends class_base
 					{
 						$property->set_meta("city24_last_import", $import_time);
 					}
-
-					$property->save ();
 				}
 			}
 		}
@@ -1851,10 +1817,9 @@ class realestate_import extends class_base
 				{ ### finish last processed property import
 					if (is_object ($property))
 					{
-						if (1 != $quiet)
-						{
-							echo sprintf (t("Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $lang_name, $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE;
-						}
+						$property->save ();
+
+						if (1 != $quiet) echo sprintf (t("Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $lang_name, $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE;
 
 						// if ($property_status)
 						// {
@@ -2040,8 +2005,6 @@ class realestate_import extends class_base
 						{
 							$property->set_meta("city24_last_import", 0);
 						}
-
-						$property->save ();
 					}
 				}
 			}
