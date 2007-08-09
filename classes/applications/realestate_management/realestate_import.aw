@@ -574,9 +574,9 @@ class realestate_import extends class_base
 							if (
 								empty($arr["import_all"])  and
 								1 < $last_import and
-								$city24_modified >= $last_import and
+								$city24_modified < $last_import and
 								$city24_modified < $import_time and
-								$city24_modified >= $property->meta("city24_last_import")
+								$city24_modified < $property->meta("city24_last_import")
 							)
 							{
 								$this->property_data = null;
