@@ -357,6 +357,9 @@ class doc_display extends aw_template
 			$this->vars(array("FORUM_ADD_SUB_ALWAYS" => ""));
 			$this->vars(array("FORUM_ADD_SUB" => ""));
 		}
+		$this->vars(array(
+			'FORUM_ADD' => $fr
+		));
 	}
 
 	function _do_charset($doc)
