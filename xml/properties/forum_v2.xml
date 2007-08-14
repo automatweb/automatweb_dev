@@ -447,6 +447,17 @@
             <caption>Teemade s&amp;amp;uuml;gavus</caption>
       </property>
       <property>
+            <name>topic_last_author</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <default>1</default>
+            <caption>Viimane autor</caption>
+            <comment>Teemade nimekirjas viimase lisajana n&amp;amp;auml;idata, kes lisas teema v&amp;amp;otilde;i vastuse</comment>
+      </property>
+      <property>
             <name>topic_selector</name>
             <table>objects</table>
             <group>topic_selector</group>

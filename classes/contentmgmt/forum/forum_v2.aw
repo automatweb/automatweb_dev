@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.122 2007/08/08 07:22:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.123 2007/08/14 12:16:12 voldemar Exp $
 // forum_v2.aw.aw - Foorum 2.0
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -184,6 +184,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property topic_depth type=select default=0
 		@caption Teemade s&uuml;gavus
 
+		@property topic_last_author type=select default=1
+		@caption Viimane autor
+		@comment Teemade nimekirjas viimase lisajana n&auml;idata, kes lisas teema v&otilde;i vastuse
+
 		@property topic_selector type=table no_caption=1
 		@caption Teemade tasemed
 
@@ -255,6 +259,9 @@ define('TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST', 3);
 define('TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST', 4);
 define('TOPICS_SORT_ORDER_OBJ_ORD', 5);
 
+define('TOPICS_LAST_REPLY_AUTHOR', 1);
+define('TOPICS_LAST_TOPIC_AUTHOR', 2);
+
 class forum_v2 extends class_base
 {
 
@@ -273,6 +280,11 @@ class forum_v2 extends class_base
 			TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST => t('Viimati kommenteeritud eespool'),
 			TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST => t('Enim kommenteeritud eespool'),
 			TOPICS_SORT_ORDER_OBJ_ORD => t('Objektide jrk. nr. j&auml;rgi')
+		);
+
+		$this->topic_last_author = array(
+			TOPICS_LAST_REPLY_AUTHOR => t("vastus"),
+			TOPICS_LAST_TOPIC_AUTHOR => t("teema")
 		);
 
 		lc_site_load("forum",&$this);
@@ -304,6 +316,10 @@ class forum_v2 extends class_base
 
 			case "topics_sort_order":
 				$data['options'] = $this->topics_sort_order;
+				break;
+
+			case "topic_last_author":
+				$data["options"] = $this->topic_last_author;
 				break;
 
 			case "topic_depth":
@@ -638,7 +654,7 @@ class forum_v2 extends class_base
 		if (empty($depth) && $depth != 0)
 		{
 			$depth = 1;
-		};
+		}
 
 		$this->depth = $depth;
 
@@ -670,9 +686,10 @@ class forum_v2 extends class_base
 				$c .= $this->_draw_one_level(array(
 					"parent" => $conn->prop("to"),
 					"id" => $args["obj_inst"]->id(),
+					"obj_inst" => $args["obj_inst"]
 				));
-			};
-		};
+			}
+		}
 
 		$this->vars(array(
 			"forum_contents" => $c,
@@ -689,6 +706,7 @@ class forum_v2 extends class_base
 			$c .= $this->_draw_last_level(array(
 				"parent" => $arr["parent"],
 				"id" => $arr["id"],
+				"obj_inst" => $arr["obj_inst"]
 			));
 		}
 		else
@@ -745,6 +763,7 @@ class forum_v2 extends class_base
 			"class_id" => CL_MENU,
 			"status" => STAT_ACTIVE,
 		));
+		$topic_last_author = $arr["obj_inst"]->prop("topic_last_author");
 
 		// for each second level folder, figure out the amount of topics
 		// and posts
@@ -761,9 +780,7 @@ class forum_v2 extends class_base
 				"parents" => $topic_list[$sub_folder_obj->id()],
 			));
 
-			$last = $this->get_last_comments(array(
-				"parents" => $topic_list[$sub_folder_obj->id()],
-			));
+			$last = (TOPICS_LAST_REPLY_AUTHOR === $topic_last_author) ? $this->get_last_comments(array('parents' => $topic_list[$sub_folder_obj->id()])) :  $this->get_last_topic($sub_folder_obj->id());
 
 
 			$mdate = $last["created"];
@@ -804,11 +821,10 @@ class forum_v2 extends class_base
 		return $c;
 	}
 
+/* UNUSED METHODS
 	function get_folder_tree($arr)
 	{
 		$this->tree = array();
-
-
 	}
 
 	////
@@ -824,6 +840,7 @@ class forum_v2 extends class_base
 			$this->tree[$folder_obj->parent()][$folder_obj->id()] = $folder_obj->name();
 		};
 	}
+*/
 
 	function _get_fp_link($arr)
 	{
@@ -849,7 +866,7 @@ class forum_v2 extends class_base
 		if (empty($topics_on_page))
 		{
 			$topics_on_page = 5;
-		};
+		}
 
 		$oid = $args["obj_inst"]->id();
 
@@ -985,6 +1002,7 @@ class forum_v2 extends class_base
 			{
 				continue;
 			}
+
 			$topics_list[$topic_oid] = array(
 				'name' => ( 1 == $topic->prop('locked') ) ? '[L] '.$topic->name() : $topic->name(),
 				'author' => $topic->prop('author_name'),
@@ -1693,6 +1711,18 @@ class forum_v2 extends class_base
 		return $retval;
 	}
 
+	function get_last_topic($parent)
+	{
+		$retval = array();
+		if (is_oid($parent))
+		{
+			$q = "SELECT created,createdby FROM objects WHERE parent=" . $parent . " AND class_id = " . CL_MSGBOARD_TOPIC . " AND status != 0 ORDER BY created DESC LIMIT 1";
+			$this->db_query($q);
+			$retval = $this->db_next();
+		}
+		return $retval;
+	}
+
 	function _add_style($name)
 	{
 		classload("layout/active_page_data");
@@ -2064,10 +2094,12 @@ class forum_v2 extends class_base
 	function submit_topic($arr)
 	{
 		$t = get_instance(CL_MSGBOARD_TOPIC);
+
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$obj_inst = obj($arr["id"]);
 			$uid = aw_global_get("uid");
+
 			if($obj_inst->prop("show_logged") != 1 && !empty($uid))
 			{
 				$user = obj(aw_global_get("uid_oid"));
@@ -2082,18 +2114,20 @@ class forum_v2 extends class_base
 
 			}
 		}
-                $emb = $arr;
+
+		$emb = $arr;
 		$emb["parent"] = $arr["folder"];
 		$emb["forum_id"] = $arr["id"];
 		$arr["group"] = "contents";
 		$emb["status"] = STAT_ACTIVE;
 		$emb["return"] = "id";
 		unset($emb["id"]);
-                $this->topic_id = $t->submit($emb);
+		$this->topic_id = $t->submit($emb);
 
 		$image_inst = get_instance(CL_IMAGE);
 		// figure out the images parent:
 		$images_folder_id = $obj_inst->prop("images_folder");
+
 		if (!empty($images_folder_id))
 		{
 			// if there is images_folder set, then put images there:
@@ -2104,8 +2138,10 @@ class forum_v2 extends class_base
 			// else lets put it under the object where the image is added:
 			$image_parent = $this->topic_id;
 		}
+
 		// if there is image uploaded:
 		$upload_image = $image_inst->add_upload_image("uimage", $image_parent);
+
 		if ($upload_image !== false && is_oid($this->topic_id) && $this->can("view", $this->topic_id))
 		{
 			$topic_obj = new object($this->topic_id);
