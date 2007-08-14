@@ -93,7 +93,8 @@ class cb_translate extends aw_template
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree (array (
 			"type" => TREE_DHTML,
-			"open_path" => array("fld_10","fld_37","fld_59"),
+			//"open_path" => array("fld_10","fld_37","fld_59"),
+			//"open_path" => array("fld_1"),
 			//"open_path" => array("fld_10","fld_37","fld_59","867"),
 			"root_name" => iconv("iso-8859-1", "utf-8", "AW KLASSIDE T&Otilde;LKIMINE"),
 			"url_target" => "editorcontent",
@@ -134,6 +135,34 @@ class cb_translate extends aw_template
 				));
 			}
 
+			// 
+			$layouts = $cfgu->get_layoutinfo();
+			if(count($layouts) && is_array($layouts))
+			{
+				$tree->add_item("root", array(
+					"name" => t("Kujundusosad"),
+					"id" => "layout_0",
+					"is_open" => true,
+				));
+
+				foreach($layouts as $lkey => $ldata)
+				{
+					if($ldata["closeable"])
+					{
+						$tree->add_item("layout_0",array(
+							"name" => iconv(aw_global_get("charset"), "utf-8", $ldata["area_caption"]?$ldata["area_caption"]:t("Nimetu")),
+							"id" => "lyt_".$lkey,
+							"url" => $this->mk_my_orb("groupedit",array(
+								"clid" => trim($arr["parent"]),
+								"lytid" => $lkey,
+							)),
+							"is_open" => 1,
+							"iconurl" => "images/icons/help_topic.gif",
+						));
+					}
+				}
+			}
+
 			// properties
 			foreach($props as $pkey => $pdata)
 			{
@@ -164,20 +193,28 @@ class cb_translate extends aw_template
 
 			// reltypes
 			$rels = $cfgu->get_relinfo();
-			foreach($rels as $key => $rel)
+			if(count($rels))
 			{
-				if(substr($key,0,8) == "RELTYPE_")
+				$tree->add_item("root", array(
+					"id" => "rel_root",
+					"name" => t("Seosed"),
+					"iconurl" => "images/icons/connectionmanager.gif",
+					"is_open" => true,
+				));
+				foreach($rels as $key => $rel)
 				{
-					$tree->add_item(0 , array(
-						"name" => iconv(aw_global_get("charset"), "utf-8", html_entity_decode($rel["caption"])),
-						"id" => $key,
-						"url" => $this->mk_my_orb("releditor",array(
-							"clid" => trim($arr["clid"]),
-							"reltype" => $key,
-						)),
-						"iconurl" => "images/icons/connectionmanager.gif",
-					));
-					//$new[$key] = $rel;
+					if(substr($key,0,8) == "RELTYPE_")
+					{
+						$tree->add_item("rel_root", array(
+							"name" => iconv(aw_global_get("charset"), "utf-8", html_entity_decode($rel["caption"])),
+							"id" => $key,
+							"url" => $this->mk_my_orb("releditor",array(
+								"clid" => trim($arr["clid"]),
+								"reltype" => $key,
+							)),
+							"iconurl" => "images/icons/connectionmanager.gif",
+						));
+					}
 				}
 			}
 
@@ -372,6 +409,30 @@ class cb_translate extends aw_template
 
 			}
 
+			// 
+			$layouts = $cfgu->get_layoutinfo();
+			if(count($layouts))
+			{
+				$tree->add_item(0, array(
+					"name" => t("Kujundusosad"),
+					"id" => "layout_0",
+				));
+				foreach($layouts as $lkey => $ldata)
+				{
+					$node_parent = isset($ldata["parent"]) ? $parent."_lyt_".$ldata["parent"] : "layout_0";
+					$tree->add_item($node_parent,array(
+						"name" => iconv(aw_global_get("charset"), "utf-8", $ldata["area_caption"]?$ldata["area_caption"]:t("Nimetu")),
+						"id" => $parent."_lyt_".$lkey,
+						"url" => $this->mk_my_orb("groupedit",array(
+							"clid" => trim($arr["parent"]),
+							"lytid" => $lkey,
+						)),
+						//"is_open" => 1,
+						"iconurl" => "images/icons/help_topic.gif",
+					));
+				}
+			}
+			
 			// properties
 			foreach($props as $pkey => $pdata)
 			{
@@ -720,7 +781,6 @@ class cb_translate extends aw_template
 		}
 
 		// gen title
-
 		$title = ($obj_is_folder)?t("Kaust")." '".$clsfld[$arr["clid"]]["name"]."'":t("Klass")." '".$cls[$arr["clid"]]["name"]."'";
 		$this->vars(array(
 			"caption" => ($obj_is_folder)?iconv($charset_from_local, "utf-8",$clsfld[$arr["clid"]]["name"]):iconv($charset_from_local, "utf-8",$cls[$arr["clid"]]["name"]),
