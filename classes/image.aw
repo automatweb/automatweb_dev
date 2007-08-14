@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.203 2007/07/20 09:19:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.204 2007/08/14 11:57:13 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -322,6 +322,14 @@ class image extends class_base
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$alstr = array("k" => "center","v" => "left","p" => "right","" => "");
+		
+		if($htmlentities)
+		{
+			$idata["comment"] = htmlentities($idata["comment"]);
+			$idata["meta"]["alt"] = htmlentities($idata["meta"]["alt"]);
+			$idata["meta"]["author"] = htmlentities($idata["meta"]["author"]);
+		}
+		
 		if ($idata)
 		{
 			// Count comments, if needed
@@ -2138,7 +2146,7 @@ class image extends class_base
 	**/
 	function fetch_image_tag_for_doc($arr)
 	{
-		$s = $this->parse_alias(array("alias" => array("target" => $arr["id"])));
+		$s = $this->parse_alias(array("alias" => array("target" => $arr["id"]), "htmlentities" => true));
 		die(str_replace("automatweb/", "", $s["replacement"]));
 	}
 	
