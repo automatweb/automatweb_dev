@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.154 2007/06/06 10:28:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.155 2007/08/14 09:56:47 tarvo Exp $
 /*
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
@@ -1446,7 +1446,7 @@ class file extends class_base
 	{
 		$o = obj($arr["id"]);
 		$i = $o->instance();
-		$s = $i->parse_alias(array("alias" => array("target" => $arr["id"])));
+		$s = $i->parse_alias(array("alias" => array("target" => $arr["id"]), "htmlentities" => true));
 		die(str_replace(aw_ini_get("baseurl"), "", $s));
 	}
 
@@ -1520,5 +1520,6 @@ class file extends class_base
 		}
 		return false;
 	}
+	
 };
 ?>
