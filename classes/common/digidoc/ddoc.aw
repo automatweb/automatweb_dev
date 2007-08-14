@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.27 2007/07/18 07:20:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.28 2007/08/14 11:01:35 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -1405,12 +1405,14 @@ class ddoc extends class_base
 
 		if(!$no_backtrace)
 		{
+			$backtrace_len = 4;
 			// backtrace
-			fwrite($handle, "\nBacktrace (last 2):");
-			foreach(split("\n", print_r($backtrace[0], true)) as $line)
-				fwrite($handle, "\n".$line);
-			foreach(split("\n", print_r($backtrace[1], true)) as $line)
-				fwrite($handle, "\n".$line);
+			fwrite($handle, "\nBacktrace (last ".$backtrace_len." calls):");
+			for($i = 0; $i < $backtrace_len; $i++)
+			{
+				foreach(split("\n", print_r($backtrace[$i], true)) as $line)
+					fwrite($handle, "\n".$line);
+			}
 		}
 
 		// user info
@@ -1552,11 +1554,11 @@ class ddoc extends class_base
 			}
 			else
 			{
-				$mod = $ret["modules"];
+				$mod = $ret["Modules"];
 				while(list($k, $v) = each($mod))
 				{
-					$name = $v->location;
-					$mods[$name]["html"] = base64_decode($v->content);
+					$name = $v->Location;
+					$mods[$name]["html"] = base64_decode($v->Content);
 				}
 			}
 		}
