@@ -36,6 +36,24 @@ function cfgformToggleOpts(id)
 		im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif";
 	}
 }
+
+function cfgformToggleSelectProps(grpId)
+{
+	var inputElems = document.body.getElementsByTagName("input");
+	var el = null;
+	var prevState = null;
+
+	for (i in inputElems)
+	{
+		el = inputElems[i];
+
+		if ("checkbox" == el.type && el.className == ("prpGrp" + grpId))
+		{
+			prevState = el.checked;
+			el.checked = !prevState;
+		}
+	}
+}
 </script>
 
 <fieldset style="border: 1px solid blue; -moz-border-radius: 0.5em;">
@@ -46,8 +64,7 @@ function cfgformToggleOpts(id)
 		<td width="100">{VAR:capt_prp_key}</td>
 		<td width="150">{VAR:capt_prp_caption}</td>
 		<td width="100">{VAR:capt_prp_type}</td>
-		<td width="200">{VAR:capt_prp_options}</td>
-		<td width="30">{VAR:capt_prp_mark}</td>
+		<td width="30"></td>
 	</tr>
 	</table>
 </fieldset>
@@ -56,6 +73,9 @@ function cfgformToggleOpts(id)
 <fieldset style="border: 1px solid #AAA; -moz-border-radius: 0.5em;">
 <legend>{VAR:grp_caption}</legend>
 	<table cellpadding="2" class="cfgform_layout_tbl">
+	<tr>
+		<td colspan="6" style="text-align: right;"><a href="javascript:cfgformToggleSelectProps('{VAR:grp_id}')">{VAR:capt_prp_mark}</a></td>
+	</tr>
 	<!-- SUB: property -->
 	<tr>
 		<td width="50" bgcolor="{VAR:bgcolor}"><input type="text" name="prop_ord[{VAR:prp_key}]" value="{VAR:prp_order}" size="2"></td>
@@ -70,7 +90,7 @@ function cfgformToggleOpts(id)
 			</div>
 		<!-- END SUB: options -->
 		</td>
-		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"></td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" class="prpGrp{VAR:grp_id}" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"></td>
 	</tr>
 	<!-- END SUB: property -->
 	</table>

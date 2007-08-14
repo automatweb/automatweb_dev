@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.123 2007/07/12 10:53:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.124 2007/08/14 10:37:29 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1316,6 +1316,7 @@ class cfgform extends class_base
 		$cnt = 0;
 		foreach($by_group as $key => $proplist)
 		{
+			$grp_id = str_replace("_", "-", $key);
 			$caption = $this->grplist[$key]["caption"]." ($key)";
 
 			$this->vars(array(
@@ -1324,6 +1325,7 @@ class cfgform extends class_base
 			));
 
 			$sc = "";
+
 			foreach($proplist as $property)
 			{
 				$cnt++;
@@ -1374,6 +1376,7 @@ class cfgform extends class_base
 					default:
 						$property["cfgform_additional_options"] = "";
 				}
+
 				if (!empty($property["cfgform_additional_options"]))
 				{
 					$this->vars(array(
@@ -1393,6 +1396,7 @@ class cfgform extends class_base
 						"tmp_id" => ""
 					));
 				}
+
 				$used_props[$property["name"]] = 1;
 				$this->vars(array(
 					"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
@@ -1401,12 +1405,15 @@ class cfgform extends class_base
 					"prp_key" => $prpdata["name"],
 					"prp_order" => $property["ord"],
 					"options" => $options,
+					"grp_id" => $grp_id,
 				));
 				$sc .= $this->parse("property");
 			}
 
 			$this->vars(array(
 				"property" => $sc,
+				"grp_id" => $grp_id,
+				"capt_prp_mark" => t("Inverteeri valik")
 			));
 			$c .= $this->parse("group");
 		}
@@ -1417,9 +1424,7 @@ class cfgform extends class_base
 			"capt_prp_order" => t("Jrk."),
 			"capt_prp_key" => t("Nimi"),
 			"capt_prp_caption" => t("Pealkiri"),
-			"capt_prp_type" => t("Tüüp"),
-			"capt_prp_options" => t("Lisavalikud"),
-			"capt_prp_mark" => t("Vali"),
+			"capt_prp_type" => t("Tüüp")
 		));
 
 		$item = $arr["prop"];
@@ -1756,7 +1761,7 @@ class cfgform extends class_base
 				// well, save the names then
 				//$grplist = $this->grplist;
 				$prplist = $this->prplist;
-				
+
 				if (is_array($arr["request"]["prpnames"]))
 				{
 					foreach($arr["request"]["prpnames"] as $key => $val)
