@@ -20,8 +20,8 @@
 <table border="1" width="100%" height="96%" cellspacing="2" cellpadding="0" style="border-collapse: collapse; background: #e1e1e1;">
 <tr>
 <td width="200" valign="top" style="background-color: #fff;">{VAR:editor_content_tree}</td>
-<td valign="top" style="background-color: #fff;">
-<iframe src="{VAR:editor_content}" name="editorcontent" frameborder="0" width="100%" height="100%">
+<td valign="top" style="background-color: #fff;width:100%;height:100%">
+<iframe src="{VAR:editor_content}" name="editorcontent" frameborder="0" width="100%" height="700">
 </iframe>
 </td>
 </tr>
