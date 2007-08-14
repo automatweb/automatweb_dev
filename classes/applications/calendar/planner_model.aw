@@ -308,14 +308,14 @@ class planner_model extends core
 			$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
 				FROM planner
 				LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
-				WHERE 
-				((".$this->db_fn("planner.start")." >= '${_start}' AND 
-				(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL))
-				OR
-				("
-				.$this->db_fn("planner.start")." <= '${_end}' AND "
-				.$this->db_fn("planner.end")." >= '${_start}'
-				)) AND ". $this->db_fn("objects.status")." ";
+				WHERE NOT (".$this->db_fn("planner.start")." >= '${_end}' AND
+				".$this->db_fn("planner.end")." <= '${_start}') AND ". $this->db_fn("objects.status")." ";
+
+		/*	$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
+				FROM planner
+				LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
+				WHERE ".$this->db_fn("planner.start")." >= '${_start}' AND
+				(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND ". $this->db_fn("objects.status")." ";*/
 		}
 		else
 		{
