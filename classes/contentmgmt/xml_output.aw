@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/xml_output.aw,v 1.1 2007/07/19 14:29:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/xml_output.aw,v 1.2 2007/08/15 13:56:19 kristo Exp $
 // xml_output.aw - XML V&auml;ljund 
 /*
 
@@ -61,32 +61,59 @@ class xml_output extends class_base
 			$this->recursive_xml($arr);
 		}
 		
-		$filt = array(
-			"parent" => $arr["parent"],
-			"class_id" => $arr["class_id"]
-		);
-		if (!empty($arr["status"]))
+		if ($arr["class_id"] == CL_DOCUMENT)
 		{
-			$filt["status"] = $arr["status"];
+			$ss = get_instance("contentmgmt/site_show");
+			$ss->_init_path_vars();
+			$docs = $ss->get_default_document(array(
+				"obj" => obj($arr["parent"])
+			));
+			$data = array();
+			if (is_array($docs))
+			{
+				foreach($docs as $docid)
+				{
+					$data[] = obj($docid);
+				}
+			}
+			else
+			if ($this->can("view", $docs))
+			{
+				$data[] = obj($docs);
+			}
 		}
-		$ol = new object_list($filt);
-
+		else
+		{
+			$filt = array(
+				"parent" => $arr["parent"],
+				"class_id" => $arr["class_id"]
+			);
+			if (!empty($arr["status"]))
+			{
+				$filt["status"] = $arr["status"];
+			}
+			$ol = new object_list($filt);
+			$data = $ol->arr();
+		}
 		$params = explode(",", $arr["params"]);
 
 		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<objects>\n";
-		foreach($ol->arr() as $o)
+		foreach($data as $o)
 		{
 			$xml .= "\t<object id=\"".$o->id()."\">\n";
 			foreach($params as $prop)
 			{
 				if (method_exists($o, $prop))
 				{
-					$xml .= "\t\t<$prop>".$this->_format($o->$prop())."</$prop>\n";
+					$val = $o->$prop();
 				}
 				else
 				{
-					$xml .= "\t\t<$prop>".$this->_format($o->prop($prop))."</$prop>\n";
+					$val = $o->prop($prop);
 				}
+				$alp = get_instance("alias_parser");
+				$alp->parse_oo_aliases($o->id(), $val);
+				$xml .= "\t\t<$prop>".$this->_format($val)."</$prop>\n";
 			}
 			$xml .= "\t</object>";
 		}
@@ -145,10 +172,15 @@ class xml_output extends class_base
 
 	function _format($val)
 	{
-		return iconv(aw_global_get("charset"), "utf-8", str_replace(
-			"&", "&amp;", 
+		$rv =  iconv(aw_global_get("charset"), "utf-8", str_replace(
+			"&", "&", 
 				$val
 		));
+		if (strpos($rv, "<") !== false || strpos($rv, "&") !== false)
+		{
+			$rv = "<![CDATA[".$rv."]]>";
+		}
+		return $rv;
 	}
 
 	function menu_structure($arr)
