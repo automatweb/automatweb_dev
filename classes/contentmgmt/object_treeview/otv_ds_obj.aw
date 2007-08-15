@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.59 2007/06/05 10:13:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.60 2007/08/15 11:15:49 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -530,7 +530,7 @@ class otv_ds_obj extends class_base
 		{
 			$c_o = $c->to();
 			$clids[] = $c_o->subclass();
-
+			
 			$_tmp = obj();
 			$_tmp->set_class_id($c_o->subclass());
 			$pl = $_tmp->get_property_list();
@@ -566,7 +566,6 @@ class otv_ds_obj extends class_base
 			"lang_id" => array()
 		);
 		// if there is $params['filters'] array then lets filter
-
 		if(!empty($params['filters']) && is_array($params['filters']))
 		{
 			// make array by group
@@ -577,7 +576,11 @@ class otv_ds_obj extends class_base
 				{
 					$filter["group"] = "";
 				}
-
+				
+				if ($filter["field"] == "status")
+				{
+					unset($_ft["status"]);
+				}
 				if (strpos($filter["value"], "<?php") !== false)
 				{
 					eval(str_replace("<?php", "", $filter["value"]));
