@@ -298,6 +298,7 @@ class propcollector extends aw_template
 		{
 			$fields["group"] = $this->defaults["group"];
 		};
+		$fields["area_caption"] = htmlentities($fields["area_caption"]);
 		$this->layout[$name] = $fields;
 		$this->name = $name;
 		$this->last_element = "layout";

@@ -40,7 +40,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@caption Registri number
 
 			@property ettevotlusvorm type=relpicker table=kliendibaas_firma automatic=1 reltype=RELTYPE_ETTEVOTLUSVORM parent=co_top_left 
-			@caption Õiguslik vorm
+			@caption &Otilde;iguslik vorm
 
 			@property comment type=textarea cols=40 rows=2 table=objects parent=co_top_left 
 			@caption Kommentaar
@@ -172,7 +172,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 @default group=org_sections
 
 	@property kaubamargid type=textarea cols=65 rows=3 table=kliendibaas_firma
-	@caption Kaubamärgid
+	@caption Kaubam&auml;rgid
 
 	@property tegevuse_kirjeldus type=textarea cols=65 rows=3 table=kliendibaas_firma
 	@caption Tegevuse kirjeldus
@@ -227,27 +227,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@caption Kindlustus
 
 	@property insurance_certificate type=releditor reltype=RELTYPE_INSURANCE_CERT_FILE rel_id=first method=serialize field=meta table=objects props=file
-	@caption Lisa kindlustust tõendav dokument
+	@caption Lisa kindlustust t&otilde;endav dokument
 
 	@property insurance_certificate_view type=releditor reltype=RELTYPE_INSURANCE_CERT_FILE rel_id=first store=no props=filename
 	// @property insurance_certificate_view type=text store=no
-	@caption Kindlustust tõendav dokument
+	@caption Kindlustust t&otilde;endav dokument
 
 	@property tax_clearance_title type=text subtitle=1
 	@caption Maksuinfo
 
 	@property tax_clearance_expires type=date_select table=objects field=meta method=serialize default=-1
-	@caption Maksuvõla puudumise tõend aegub
+	@caption Maksuv&otilde;la puudumise t&otilde;end aegub
 
 	@property tax_clearance_status type=text store=no
-	@caption Maksuvõla puudumise tõendi staatus
+	@caption Maksuv&otilde;la puudumise t&otilde;endi staatus
 
 	@property tax_clearance_certificate type=releditor reltype=RELTYPE_TAX_CLEARANCE_FILE rel_id=first method=serialize field=meta table=objects props=file
-	@caption Lisa maksuvõla puudumise tõend
+	@caption Lisa maksuv&otilde;la puudumise t&otilde;end
 
 	@property tax_clearance_certificate_view type=releditor reltype=RELTYPE_TAX_CLEARANCE_FILE rel_id=first store=no props=filename
 	// @property tax_clearance_certificate_view type=text store=no
-	@caption Maksuvõla puudumise tõend
+	@caption Maksuv&otilde;la puudumise t&otilde;end
 
 ------ Yldine - kasutajate seaded grupp
 @default group=user_settings
@@ -259,7 +259,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@caption Kataloog serveris, kus asuvad failid
 
 	@property all_action_rows type=checkbox ch_value=1  table=objects field=meta method=serialize
-	@caption Kuva Tegevused vaates kõiki ridu
+	@caption Kuva Tegevused vaates k&otilde;iki ridu
 
 --------------------------------------
 @default group=contacts2
@@ -290,7 +290,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@caption Siduss&uuml;steemi ID
 
 			@property contact_search_ext_id type=textbox size=30 store=no parent=vbox_contacts_left captionside=top
-			@caption Numbriline sidussüsteemi ID
+			@caption Numbriline siduss&uuml;steemi ID
 
 			@property contact_search type=hidden store=no no_caption=1 parent=vbox_contacts_left value=1 captionside=top
 			@caption contact_search
@@ -742,7 +742,7 @@ default group=org_objects
 		@layout bills_list_s type=vbox parent=bills_list_box closeable=1 area_caption=Otsing
 
 			otsing Kliendi, arve nr,  esitamise ajavahemiku,
-			kliendihalduri, koostamisel/makstud/maksmata järgi
+			kliendihalduri, koostamisel/makstud/maksmata j&auml;rgi
 
 
 			@property bill_s_cust type=textbox size=30 store=no parent=bills_list_s captionside=top group=bills_list
@@ -989,10 +989,10 @@ default group=org_objects
 	@caption Kommentaar
 
     @property comment_type type=chooser store=no
-	@caption Kommentaari tüüp
+	@caption Kommentaari t&uuml;&uuml;p
 
 	@property last_com_type type=text store=no
-	@caption Viimase kommentaari tüüp
+	@caption Viimase kommentaari t&uuml;&uuml;p
 
 	@property com_statistics type=text store=no
 	@caption Kommentaaride statistika
@@ -1013,7 +1013,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldandmed" parent=general
-@groupinfo cedit caption="Üldkontaktid" parent=general
+@groupinfo cedit caption="&Uuml;ldkontaktid" parent=general
 @groupinfo org_sections caption="Tegevus" parent=general
 @groupinfo add_info caption="Lisainfo" parent=general
 @groupinfo special_offers caption="Eripakkumised" submit=no parent=general
@@ -1022,7 +1022,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 @groupinfo people caption="T&ouml;&ouml;tajad" save=no
 
 	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no save=no
-	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no save=no
+	@groupinfo personal_offers caption="T&ouml;&ouml;pakkumised" parent=people submit=no save=no
 	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no save=no
 	@groupinfo contacts_edit caption="Toimeta isikuid" parent=people submit=no
 
@@ -1030,10 +1030,10 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 @groupinfo contacts caption="Kontaktid"
 @groupinfo overview caption="Tegevused" save=no
 
-	@groupinfo all_actions caption="Kõik" parent=overview submit=no save=no
+	@groupinfo all_actions caption="K&otilde;ik" parent=overview submit=no save=no
 	@groupinfo my_tasks caption="Toimetused" parent=overview submit=no save=no
 	@groupinfo meetings caption="Kohtumised" parent=overview submit=no save=no
-	@groupinfo calls caption="Kõned" parent=overview submit=no save=no
+	@groupinfo calls caption="K&otilde;ned" parent=overview submit=no save=no
 	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no save=no
 	@groupinfo ovrv_mails caption="Meilid" parent=overview submit=no save=no
 
@@ -1105,7 +1105,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all submit=no 
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
-@caption Õiguslik vorm
+@caption &Otilde;iguslik vorm
 
 @reltype ADDRESS value=3 clid=CL_CRM_ADDRESS
 @caption Kontaktaadress
@@ -1117,10 +1117,10 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @caption Tooted
 
 @reltype CHILD_ORG value=7 clid=CL_CRM_COMPANY
-@caption Tütar-organisatsioonid
+@caption T&uuml;tar-organisatsioonid
 
 @reltype WORKERS value=8 clid=CL_CRM_PERSON
-@caption Töötajad
+@caption T&ouml;&ouml;tajad
 
 @reltype OFFER value=9 clid=CL_CRM_OFFER
 @caption Pakkumine
@@ -1132,7 +1132,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @caption Kohtumine
 
 @reltype CALL value=12 clid=CL_CRM_CALL
-@caption Kõne
+@caption K&otilde;ne
 
 @reltype TASK value=13 clid=CL_TASK
 @caption Toimetus
@@ -1153,10 +1153,10 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @caption T&ouml;&ouml;pakkumine
 
 @reltype TOOPAKKUJA value=20 clid=CL_CRM_COMPANY
-@caption Tööpakkuja
+@caption T&ouml;&ouml;pakkuja
 
 @reltype TOOTSIJA value=21 clid=CL_CRM_PERSON
-@caption Tööotsija
+@caption T&ouml;&ouml;otsija
 
 @reltype CUSTOMER value=22 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Klient
@@ -1177,10 +1177,10 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @caption tellimus
 
 @reltype SECTION value=28 clid=CL_CRM_SECTION
-@caption Üksus
+@caption &Uuml;ksus
 
 @reltype PROFESSIONS value=29 clid=CL_CRM_PROFESSION
-@caption Võimalikud ametid
+@caption V&otilde;imalikud ametid
 
 @reltype CATEGORY value=30 clid=CL_CRM_CATEGORY
 @caption Kategooria
@@ -1189,7 +1189,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @caption Persoon, kellele firma on klient
 
 @reltype SELLER value=32 clid=CL_CRM_PERSON
-@caption Persoon, kes müüs
+@caption Persoon, kes m&uuml;&uuml;s
 
 @reltype PROJECT value=33 clid=CL_PROJECT
 @caption Projekt
@@ -1198,7 +1198,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @caption Kliendihaldur
 
 @reltype SECTION_WEBSIDE value=35 clid=CL_CRM_MANAGER
-@caption Üksus veebis
+@caption &Uuml;ksus veebis
 
 @reltype GROUP value=36 clid=CL_GROUP
 @caption Organisatsiooni grupp
@@ -1273,7 +1273,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @caption Kindlustusdokumendi fail
 
 @reltype TAX_CLEARANCE_FILE value=60 clid=CL_FILE
-@caption Maksuvõla puudumise tõendi fail
+@caption Maksuv&otilde;la puudumise t&otilde;endi fail
 
 @reltype SHOP_WAREHOUSE_PURCHASE_BILL value=61 clid=CL_SHOP_WAREHOUSE_PURCHASE_BILL
 @caption Ostu arve
@@ -1691,7 +1691,7 @@ class crm_company extends class_base
 					if (strlen(trim($t["text"])))
 					{
 						$tmp[] = $t["text"] .
-							"<br /><br /><b>" . t("Tüüp:") . "</b> " . $this->comment_types[$t["type"]] .
+							"<br /><br /><b>" . t("T&uuml;&uuml;p:") . "</b> " . $this->comment_types[$t["type"]] .
 							// "<br /><b>" . t("Aeg:") . "</b> " . date("d. M Y H:i", $t["time"]) .
 							"<br /><b>" . t("Aeg:") . "</b> " . strftime("%d. %b %Y %H:%M", $t["time"]) .
 							"<br /><b>" . t("Autor:") . "</b> " . $t["user"] . "<br />";
@@ -1762,7 +1762,7 @@ class crm_company extends class_base
 				if (1 > $arr["obj_inst"]->prop($prop_prefix . "_expires"))
 				{
 					# not defined
-					$data["value"] = t("Määramata");
+					$data["value"] = t("M&auml;&auml;ramata");
 				}
 				elseif (time() >= $arr["obj_inst"]->prop($prop_prefix . "_expires"))
 				{
@@ -2394,7 +2394,7 @@ class crm_company extends class_base
 			case 'bill_task_list':
 				if($arr["request"]["different_customers"])
 				{
-					$data["error"] = t("Tööd on teostatud erinevatele klientidele, palun kontrolli!");
+					$data["error"] = t("T&ouml;&ouml;d on teostatud erinevatele klientidele, palun kontrolli!");
 					return PROP_ERROR;
 				}
 			case 'bill_proj_list':
@@ -4243,7 +4243,7 @@ class crm_company extends class_base
 						"parent" => "firma_sub",
 						"text" => $classinf["name"],
 						"link" => $has_parent ? $url : "",
-						"title" => $has_parent ? "" : t("Kataloog määramata"),
+						"title" => $has_parent ? "" : t("Kataloog m&auml;&auml;ramata"),
 						"disabled" => $has_parent ? false : true,
 					));
 				};
@@ -4297,7 +4297,7 @@ class crm_company extends class_base
 					$disabled = $has_parent ? false : true;
 					$toolbar->add_menu_item(array(
 						"parent" => "calendar_sub",
-						"title" => $has_parent ? "" : t("Kalender või kalendri sündmuste kataloog määramata"),
+						"title" => $has_parent ? "" : t("Kalender v&otilde;i kalendri s&uuml;ndmuste kataloog m&auml;&auml;ramata"),
 						"text" => $classinf["name"],
 						"disabled" => $has_parent ? false : true,
 						"link" => $has_parent ? $url : "",
