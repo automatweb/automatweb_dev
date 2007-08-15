@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.5 2006/10/12 14:52:08 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.6 2007/08/15 16:57:39 dragut Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
@@ -149,84 +149,30 @@ class image_verification extends class_base
 		$font_size = $arr['obj_inst']->prop('font_size');
 		$angle = 0;
 
-		$codes = array(
-			'left' => array('str' => t('Sisesta vasakpoolsed neli numbrit'), 'code' => rand(1000, 9999)),
-			'right' => array('str' => t('Sisesta parempoolsed neli numbrit'), 'code' => rand(1000, 9999)),
-		);
+		$sel_code = rand(1,3);
 
-		$random_key = array_rand($codes);
-		$question_str = $codes[$random_key]['str'];
-		$code = $codes[$random_key]['code'];
-
-	// for debug:
-	//	$codes[$random_key]['code'] = '_'.$codes[$random_key]['code'].'_';
-
-		/**
-			Ok, lets put this additional string thingie here
-			Maybe i should implement several versions of which 
-			picture is shown and how the code will be generated
-		**/
-
-		$numbers = array(
-			0 => t('null'),
-			1 => t('üks'),
-			2 => t('kaks'),
-			3 => t('kolm'),
-			4 => t('neli'),
-			5 => t('viis'),
-			6 => t('kuus'),
-			7 => t('seitse'),
-			8 => t('kaheksa'),
-			9 => t('üheksa'),
-		);
-
-		$random_nr = array_rand($numbers);
-		$adds = array(
-			'start' => sprintf(t('Lisa algusesse %s'), $numbers[$random_nr]),
-			'end' => sprintf(t('Lisa lõppu %s'), $numbers[$random_nr]),
-		);
-
-		$random_add = array_rand($adds);
-		if ($random_add == 'start')
+		$col_width = $im_width / 4;
+		for ($i = 1; $i <= 3; $i++)
 		{
-			$code = (string)$random_nr.(string)$code;
+			$code = rand(1000, 9999);
+			$text_box = imagettfbbox($font_size, $angle, $font_file, $code);
+			$start_x = ($col_width * $i) - (abs($text_box[4] - $text_box[6]) / 2); 
+			$start_y = ($im_height / 2) + (abs($text_box[1] - $text_box[7]) / 2); 
+
+			$text_box_width = abs($text_box[4] - $text_box[6]);
+			$text_box_height = abs($text_box[1] - $text_box[7]);
+
+			if ($i == $sel_code)
+			{
+				// lets draw the box around the selected code
+				imagerectangle($im, $start_x - 5, $start_y - $text_box_height - 5, $start_x + $text_box_width + 5, $start_y + 5, $text_color);
+
+				// save the selected code to the session:
+				$_SESSION['verification_code'] = $code;
+			}
+
+			imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $code);
 		}
-		else
-		{
-			$code = (string)$code.(string)$random_nr;
-		}
-
-		$add_str = $adds[$random_add];
-		
-
-		/****/
-
-		$code_str = $codes['left']['code'].$codes['right']['code'];
-		
-		$line_height = $im_height / 4;
-
-		$text_box = imagettfbbox($font_size, $angle, $font_file, $question_str);
-		$start_x = ($im_width / 2) - (abs($text_box[4] - $text_box[6]) / 2);
-		$start_y = $line_height + ($line_height / 4);
-
-		imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $question_str);
-
-
-		// additional question:
-		$text_box = imagettfbbox($font_size, $angle, $font_file, $add_str);
-		$start_x = ($im_width / 2) - (abs($text_box[4] - $text_box[6]) / 2);
-		$start_y = (2 * $line_height) + ($line_height / 4);
-
-		imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $add_str);
-
-		$text_box = imagettfbbox($font_size, $angle, $font_file, $code_str);
-		$start_x = ($im_width / 2) - (abs($text_box[4] - $text_box[6]) / 2);
-		$start_y = (3 * $line_height) + ($line_height / 4);
-
-		imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $code_str);
-
-		// register the code in session:
-		$_SESSION['verification_code'] = $code;
 
 		// output the image
 		header('Content-type: image/png');
@@ -248,11 +194,6 @@ class image_verification extends class_base
 	{
 		$correct_code = $_SESSION['verification_code'];
 
-		// XXX when the code is validated, then lets remove the code from session
-		// with this it should be possible to get only one code from an image and
-		// and try to validate with it - it is not possible to get the picture, parse several
-		// variants and then try them all
-		// maybe there should be separate method for that in the future --dragut
 		unset($_SESSION['verification_code']);
 
 		if (!empty($correct_code) && !empty($code) && $code == $correct_code)
