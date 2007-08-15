@@ -66,7 +66,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@caption Kliendikategooria
 	
 
-	@layout co_bottom_seller area_caption=Kliendisuhe&#44;&nbsp;tema_ostab_meilt closeable=1 type=hbox width=50%:50%
+	@layout co_bottom_seller area_caption="Kliendisuhe,&nbsp;tema_ostab_meilt" closeable=1 type=hbox width=50%:50%
 			
 		@layout co_bottom_seller_l type=vbox parent=co_bottom_seller
 
@@ -116,7 +116,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 
 
-	@layout co_bottom_buyer area_caption=Kliendisuhe&#44;&nbsp;meie_ostame_talt closeable=1 type=hbox width=50%:50%
+	@layout co_bottom_buyer area_caption="Kliendisuhe,&nbsp;meie_ostame_talt" closeable=1 type=hbox width=50%:50%
 			
 		@layout co_bottom_buyer_l type=vbox parent=co_bottom_buyer
 

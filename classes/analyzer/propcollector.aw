@@ -502,7 +502,14 @@ class propcollector extends aw_template
 			if ($fname && $fvalue)
 			{
 				// try to split fvalue
-				$_split = explode(",",$fvalue);
+				if(substr($fvalue, 0, 1) ==  "\"" && substr($fvalue, -1, 1) == "\"")
+				{
+					$fvalue = substr($fvalue, 1, strlen($fvalue) - 2);
+				}
+				else
+				{
+					$_split = explode(",",$fvalue);
+				}
 				if (sizeof($_split) > 1)
 				{
 					$fields[$fname] = $_split;

@@ -3817,7 +3817,7 @@
                   <area_caption></area_caption>
             </co_top_right>
             <co_bottom_seller>
-                  <area_caption>Kliendisuhe&amp;amp;#44;&amp;amp;nbsp;tema_ostab_meilt</area_caption>
+                  <area_caption>Kliendisuhe,&amp;amp;nbsp;tema_ostab_meilt</area_caption>
                   <closeable>1</closeable>
                   <type>hbox</type>
                   <width>50%:50%</width>
@@ -3836,7 +3836,7 @@
                   <area_caption></area_caption>
             </co_bottom_seller_r>
             <co_bottom_buyer>
-                  <area_caption>Kliendisuhe&amp;amp;#44;&amp;amp;nbsp;meie_ostame_talt</area_caption>
+                  <area_caption>Kliendisuhe,&amp;amp;nbsp;meie_ostame_talt</area_caption>
                   <closeable>1</closeable>
                   <type>hbox</type>
                   <width>50%:50%</width>
