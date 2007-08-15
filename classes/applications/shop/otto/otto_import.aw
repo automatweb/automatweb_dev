@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.48 2007/06/28 13:30:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.49 2007/08/15 17:23:10 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1047,7 +1047,7 @@ class otto_import extends class_base
 				}
 				$row = $this->char_replacement($row);
 				$row[4] = str_replace(".","", $row[4]);
-				$row[4] = substr(str_replace(" ","", $row[4]), 0, 7);
+				$row[4] = substr(str_replace(" ","", $row[4]), 0, 8);
 				$data[] = $row[4];
 			}
 		}
@@ -1112,8 +1112,8 @@ class otto_import extends class_base
 			else
 			{
 
-				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewSearch-SearchStart;sid=mDuGagg9T0iHakspt6yqShOR_0e4OZ2Xs5qs8J39FNYYHvjet0FaQJmF?ls=0&Orengelet.sortPipelet.sortResultSetSize=15&SearchDetail=one&stype=N&Query_Text=".$pcode;
-
+//				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewSearch-SearchStart;sid=mDuGagg9T0iHakspt6yqShOR_0e4OZ2Xs5qs8J39FNYYHvjet0FaQJmF?ls=0&Orengelet.sortPipelet.sortResultSetSize=15&SearchDetail=one&stype=N&Query_Text=".$pcode;
+				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
 				echo "Loading <a href=\"$url\">page</a> content <br>\n";
 				flush();
 				$html = $this->file_get_contents($url);
@@ -1139,7 +1139,10 @@ class otto_import extends class_base
 					$o_html = $html;
 
 
-					preg_match_all("/<a id=\"silkhref\" href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
+				//	preg_match_all("/<a id=\"silkhref\" href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
+
+					preg_match_all("/Javascript:gotoSearchArticle\(\'(.*)\'\);/imsU", $html, $mt, PREG_PATTERN_ORDER);
+
 					$urld = array();
 					// echo (dbg::dump($mt));
 					foreach($mt[1] as $url)
@@ -1585,6 +1588,20 @@ class otto_import extends class_base
 		// unset the products list which was imported last time:
 		unset($_SESSION['otto_import_product_data']);
 
+		// let check if otto_import_log_database table exists or not
+		if ($this->db_get_table('otto_import_log') === false)
+		{
+			// if it doesn't, then create it
+			// in the beginning of import, lets get import timestamp, which can be used as one import identifier
+			// maybe there will be some other fields/data needed to be stored into this log table, but we can add it later
+			$this->db_query('create table otto_import_log (id int primary key not null auto_increment, import_time int, product_id int)');
+		}
+		else
+		{
+			// if we want to keep only 20 last import logs in the table, then this is probably the place to strip the extra lines from the table
+		}
+		
+
 		if ($this->doing_pict_i)
 		{
 			$this->pictimp($o);
@@ -1629,13 +1646,18 @@ class otto_import extends class_base
 	{
 		set_time_limit(0);
 		$otto_import_lang_id = $o->lang_id();
+		$import_time = time();
 		$not_found_products_by_page = array();
 
 		echo "START UPDATE CSV DB<br>";
 
 		echo "<b>[!!]</b> start reading data from csv files <b>[!!]</b><br>\n";
 
-		$this->import_data_from_csv($o); // reading data from csv file into temporary db tables
+		// reading data from csv file into temporary db tables
+		$this->import_data_from_csv(array(
+			'import_object' => $o, 
+			'import_time' => $import_time
+		)); 
 
 		echo "<br><b>[!!]</b>  end reading data from the csv files <b>[!!]</b><br><br>\n";
 
@@ -1651,7 +1673,8 @@ class otto_import extends class_base
 
 		// all products (previosuly packages) - first file content
 		$products = $this->db_fetch_array("select * from otto_imp_t_prod where lang_id = ".aw_global_get('lang_id'));
-		
+	
+	
 		foreach ($products as $product)
 		{
 			$product_data = array();
@@ -2136,8 +2159,6 @@ order by prices_nr,code,price
 		{
 			unlink($file);
 		}
-
-
 /*
 		// print out the conclusion
 		if (!empty($not_found_products_by_page))
@@ -2184,14 +2205,16 @@ order by prices_nr,code,price
 		die(t("all done! <br>"));
 	}
 
-	function import_data_from_csv($o)
+	function import_data_from_csv($arr)
 	{
 		$lang_id = aw_global_get('lang_id');
+		$o = $arr['import_object'];
+		$import_time = $arr['import_time'];
+
 		$this->db_query("DELETE FROM otto_imp_t_prod WHERE lang_id=".$lang_id);
 		$this->db_query("DELETE FROM otto_imp_t_codes WHERE lang_id=".$lang_id);
 		$this->db_query("DELETE FROM otto_imp_t_prices WHERE lang_id=".$lang_id);
 
-		$import_time = time();
 
 		$fext = 'xls';
 
@@ -2349,7 +2372,7 @@ order by prices_nr,code,price
 				$full_code = str_replace(".","", $row[4]);
 				$full_code = str_replace(" ","", $full_code);
 
-				$row[4] = substr(str_replace(".","", str_replace(" ","", $row[4])), 0, 7);
+				$row[4] = substr(str_replace(".","", str_replace(" ","", $row[4])), 0, 8);
 				$color = $row[3];
 				if ($row[2] != "")
 				{
