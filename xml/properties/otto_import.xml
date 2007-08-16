@@ -20,6 +20,16 @@
             <caption>Toodete kataloog</caption>
       </property>
       <property>
+            <name>shop_product_config_form</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SHOP_PRODUCT_CONFIG_FORM</reltype>
+            <caption>Lao toote seadete vorm</caption>
+      </property>
+      <property>
             <name>images_folder</name>
             <table>objects</table>
             <group>general</group>
@@ -78,6 +88,47 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Imporditud toodete tabel</caption>
+      </property>
+      <property>
+            <name>products_manager_pcode</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Tootekood</caption>
+      </property>
+      <property>
+            <name>products_manager_prod_id</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Toote objekti id</caption>
+      </property>
+      <property>
+            <name>products_manager_search_submit</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>products_manager_table</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Tooted</caption>
       </property>
       <property>
             <name>fnames</name>
@@ -374,6 +425,9 @@
             <imported_products>
                   <caption>Imporditud tooted</caption>
             </imported_products>
+            <products_manager>
+                  <caption>Toodete haldus</caption>
+            </products_manager>
             <files>
                   <caption>Failid</caption>
             </files>
@@ -422,6 +476,11 @@
                   <clid>CL_MENU</clid>
                   <caption>kataloog</caption>
             </FOLDER>
+            <SHOP_PRODUCT_CONFIG_FORM>
+                  <value>2</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Lao toote seadete vorm</caption>
+            </SHOP_PRODUCT_CONFIG_FORM>
       </reltypes>
 </properties>
 
