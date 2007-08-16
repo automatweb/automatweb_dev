@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.49 2007/08/15 17:23:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.50 2007/08/16 11:53:58 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -15,6 +15,9 @@
 
 @property prod_folder type=relpicker reltype=RELTYPE_FOLDER
 @caption Toodete kataloog
+
+@property shop_product_config_form type=relpicker reltype=RELTYPE_SHOP_PRODUCT_CONFIG_FORM
+@caption Lao toote seadete vorm
 
 @property images_folder type=textbox
 @caption Serveri kaust kuhu pildid salvestatakse
@@ -44,6 +47,20 @@ caption Uuenda ainult toote andmed
 
 	@property imported_products_table type=table no_caption=1 group=imported_products
 	@caption Imporditud toodete tabel
+
+@groupinfo products_manager caption="Toodete haldus" 
+
+	@property products_manager_pcode type=textbox store=no group=products_manager
+	@caption Tootekood
+
+	@property products_manager_prod_id type=textbox store=no group=products_manager
+	@caption Toote objekti id
+
+	@property products_manager_search_submit type=submit group=products_manager
+	@caption Otsi
+
+	@property products_manager_table type=table group=products_manager no_caption=1
+	@caption Tooted
 
 @groupinfo files caption="Failid"
 
@@ -183,6 +200,8 @@ groupinfo post_import_fix caption="Parandused"
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
 
+@reltype SHOP_PRODUCT_CONFIG_FORM value=2 clid=CL_CFGFORM
+@caption Lao toote seadete vorm
 
 */
 
@@ -422,6 +441,10 @@ class otto_import extends class_base
 				return false;
 			}
 		}
+		if ($arr['id'] == 'products_manager' && $_SERVER['REMOTE_ADDR'] != '89.219.147.106')
+		{
+			return false;
+		}
 	}
 
 	function callback_mod_reforb($arr)
@@ -438,7 +461,18 @@ class otto_import extends class_base
 		{
 			$arr['args']['container_id'] = $arr['request']['container_id'];
 		}
-		
+
+		////
+		// products manager
+		if ( isset($arr['request']['products_manager_prod_id']) )
+		{
+			$arr['args']['products_manager_prod_id'] = (int)$arr['request']['products_manager_prod_id'];
+		}
+		if ( isset($arr['request']['products_manager_pcode']) )
+		{
+			$arr['args']['products_manager_pcode'] = $arr['request']['products_manager_pcode'];
+		}
+	
 		////
 		// category data filter
 		if ( isset($arr['request']['data_filter']['aw_folder_id']) )
@@ -654,6 +688,80 @@ class otto_import extends class_base
 			$prod->set_prop('user3', implode(',', $existing_images));
 			$prod->save();
 		}
+	}
+
+	function _get_products_manager_prod_id($arr)
+	{
+		$arr['prop']['value'] = $arr['request']['products_manager_prod_id'];
+		return PROP_OK;
+	}
+
+	function _get_products_manager_pcode($arr)
+	{
+		$arr['prop']['value'] = $arr['request']['products_manager_pcode'];
+		return PROP_IGNORE; // take this product code field out right now
+		return PROP_OK;
+	}
+
+	function _get_products_manager_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+
+		$prod_id = $arr['request']['products_manager_prod_id'];
+		if ( $this->can('view', $prod_id) )
+		{
+			$prod_obj = new object($prod_id);
+			$t->set_caption($prod_obj->name());
+			$t->set_sortable(false);
+			$t->define_field(array(
+				'name' => 'caption',
+				'caption' => t('foo'),
+			));
+			$t->define_field(array(
+				'name' => 'data',
+				'caption' => t('Andmed'),
+			));
+
+			$t->define_data(array(
+				'caption' => t('Toote kirjeldus'),
+				'data' => $prod_obj->prop('userta2')
+			));
+
+			$pics_str = '';
+			$pics = explode(',', $prod_obj->prop('user3'));
+			foreach ($pics as $pic)
+			{
+			//	$pics_str .= '<div style="border: 1px solid red;width: 250px;">';
+				$pics_str .= html::img(array(
+					'url' => aw_ini_get('baseurl').'/vv_product_images/'.$pic{0}.'/'.$pic{1}.'/'.$pic.'_2.jpg',
+				));
+				$pics_str .= '<div style="display:inline;border:1px solid blue;">foobar</div>';
+			//	$pics_str .= '</div>';
+			}
+			$t->define_data(array(
+				'caption' => t('Pildid'),
+				'data' => $pics_str
+			));
+		}
+		else
+		{
+/*
+			$t->define_field(array(
+				'name' => 'oid',
+				'caption' => t('OID')
+			));
+			$t->define_field(array(
+				'name' => 'data',
+				'caption' => t('Andmed')
+			));
+			$t->define_field(array(
+				'name' => 'images',
+				'caption' => t('Pildid'),
+			));
+*/
+		}
+		return PROP_OK;
 	}
 
 	function _get_containers_toolbar($arr)
@@ -991,6 +1099,764 @@ class otto_import extends class_base
 		return PROP_OK;
 	}
 
+	function _get_files_order($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'file',
+			'caption' => t('Fail'),
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'order',
+			'caption' => t('J&auml;rjekord'),	
+			'chgbgcolor' => 'line_color'
+		));
+
+		$count = 0;
+		$saved_data = $args['obj_inst']->meta('files_order');
+		foreach (safe_array($saved_data) as $file => $order)
+		{
+			$t->define_data(array(
+				'file' => html::textbox(array(
+					'name' => 'files_order['.$count.'][file]',
+					'value' => $file,
+					'size' => '10'
+				)),
+				'order' => html::textbox(array(
+					'name' => 'files_order['.$count.'][order]',
+					'value' => $order
+				)),
+			));
+			$count++;
+		}
+
+		$t->define_data(array(
+			'file' => html::textbox(array(
+				'name' => 'files_order['.$count.'][file]',
+				'size' => '10'
+			)),
+			'order' => html::textbox(array(
+				'name' => 'files_order['.$count.'][order]'
+			)),
+			'line_color' => 'lightblue'
+		));
+		return PROP_OK;
+	}
+
+	function _set_files_order($args)
+	{
+		$valid_data = array();
+		foreach (safe_array($args['request']['files_order']) as $data)
+		{
+			if (!empty($data['file']) && !empty($data['order']))
+			{
+				$valid_data[$data['file']] = $data['order'];
+			}
+		}
+		$args['obj_inst']->set_meta('files_order', $valid_data);
+		// i think that to avoid the scannig for orders from otto_prod_img table
+		// i should keep them in meta too ... maybe it isn't necessary, anyway, this is
+		// the place where i should update otto_prod_img table and set the order
+		
+		foreach ($valid_data as $file => $order)
+		{
+			// i need the short version of the file name, aka. page (in otto_prod_img p_pg field)
+			list(, $cur_pg) = explode(".", $file);
+			$cur_pg = substr($cur_pg,1);
+			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
+			{
+				$cur_pg = (int)$cur_pg;
+			}
+			$cur_pg = trim($cur_pg);
+			$this->db_query("UPDATE otto_prod_img set file_order='".(int)$order."' WHERE p_pg='$cur_pg'");
+		}
+		return PROP_OK;
+	}
+
+	function _get_file_suffix($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'file',
+			'caption' => t('Faili t&auml;ht'),
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'suffix',
+			'caption' => t('Suffiks'),	
+			'chgbgcolor' => 'line_color'
+		));
+
+		$count = 0;
+		$saved_data = $args['obj_inst']->meta('file_suffix');
+
+		foreach (safe_array($saved_data) as $file => $suffix)
+		{
+			$t->define_data(array(
+				'file' => html::textbox(array(
+					'name' => 'file_suffix['.$count.'][file]',
+					'value' => $file,
+					'size' => '10'
+				)),
+				'suffix' => html::textbox(array(
+					'name' => 'file_suffix['.$count.'][suffix]',
+					'value' => $suffix
+				)),
+			));
+			$count++;
+		}
+
+		$t->define_data(array(
+			'file' => html::textbox(array(
+				'name' => 'file_suffix['.$count.'][file]',
+				'size' => '10'
+			)),
+			'suffix' => html::textbox(array(
+				'name' => 'file_suffix['.$count.'][suffix]'
+			)),
+			'line_color' => 'lightblue'
+		));
+		return PROP_OK;
+	}
+
+	function _set_file_suffix($args)
+	{
+		$valid_data = array();
+		foreach (safe_array($args['request']['file_suffix']) as $data)
+		{
+			if (!empty($data['file']) && !empty($data['suffix']))
+			{
+				$valid_data[$data['file']] = $data['suffix'];
+			}
+		}
+		$args['obj_inst']->set_meta('file_suffix', $valid_data);
+		return PROP_OK;
+	}
+
+
+	function _get_categories($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'jrk',
+			'caption' => t('Jrk'),
+			'align' => 'center',
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'aw_folder_id',
+			'caption' => t('AW Kataloogi ID'),
+			'align' => 'center',
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'categories',
+			'caption' => t('Kategooriad'),
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'filter_button',
+			'caption' => t('Filtreeri'),
+			'chgbgcolor' => 'line_color'
+		));
+		
+		$count = 1;
+		$data = array();
+		$aw_folder_ids = array();
+		if (!empty($args['request']['filter_aw_folder_id']))
+		{
+			$aw_folder_ids[] = $args['request']['filter_aw_folder_id'];
+		}
+		if (!empty($args['request']['filter_category']))
+		{
+			$this->db_query("
+				select
+					aw_folder
+				from
+					otto_imp_t_aw_to_cat
+				where 
+					lang_id = ".aw_global_get('lang_id')." and
+					category like '%".$args['request']['filter_category']."%' 
+			");
+			while ($row = $this->db_next())
+			{
+				$aw_folder_ids[] = $row['aw_folder'];
+			}
+		}
+
+		if (!empty($aw_folder_ids))
+		{
+			$sql_params = " and aw_folder in (".implode(',', $aw_folder_ids).")";
+		}
+
+		$this->db_query("SELECT * FROM otto_imp_t_aw_to_cat WHERE lang_id=".aw_global_get('lang_id'). $sql_params);
+		while ($row = $this->db_next())
+		{
+			if (!in_array($row['category'], $data[$row['aw_folder']]))
+			{
+				$data[$row['aw_folder']][] = $row['category'];
+			}
+		}
+
+		$t->define_data(array(
+			'jrk' => t('Filter'),
+			'aw_folder_id' => html::textbox(array(
+				'name' => 'data_filter[aw_folder_id]',
+				'value' => (!empty($args['request']['filter_aw_folder_id'])) ? $args['request']['filter_aw_folder_id'] : '',
+				'size' => '10'
+			)),
+			'categories' => html::textbox(array(
+				'name' => 'data_filter[category]',
+				'value' => (!empty($args['request']['filter_category'])) ? $args['request']['filter_category'] : '',
+				'size' => '80',
+			)),
+			'filter_button' => html::submit(array(
+				'name' => 'filter_categories',
+				'value' => t('Filtreeri')
+			)),
+			'line_color' => 'green'
+
+		));
+
+		foreach ($data as $aw_folder => $categories)
+		{
+
+			$t->define_data(array(
+				'jrk' => $count,
+				'aw_folder_id' => html::textbox(array(
+					'name' => 'data['.$aw_folder.'][aw_folder_id]',
+					'value' => $aw_folder,
+					'size' => '10'
+				)),
+				'categories' => html::textbox(array(
+					'name' => 'data['.$aw_folder.'][categories]',
+					'value' => implode(',', $categories),
+					'size' => '80',
+				)),
+			));
+			$count++;
+
+		}
+
+		for ($i = 0; $i<10; $i++)
+		{
+			$t->define_data(array(
+				'aw_folder_id' => html::textbox(array(
+					'name' => 'new_data['.$count.'][aw_folder_id]',
+					'value' => '',
+					'size' => '10'
+				)),
+				'categories' => html::textbox(array(
+					'name' => 'new_data['.$count.'][categories]',
+					'value' => '',
+					'size' => '80'
+				)),
+				'line_color' => 'lightblue'
+			));
+			$count++;
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_categories($args)
+	{
+		if (!array_key_exists('filter_categories', $args['request']))
+		{
+
+			$aw_folder_ids = array_keys($args['request']['data']);
+
+			if (!empty($aw_folder_ids))
+			{
+				$categories_by_section = array();
+				$this->db_query('select * from otto_imp_t_aw_to_cat where lang_id = '.aw_global_get('lang_id').' and aw_folder in ('.implode(',', $aw_folder_ids).')');
+				while ($row = $this->db_next())
+				{
+					$categories_by_section[$row['aw_folder']][] = $row['category'];
+				}
+
+				$this->db_query('delete from otto_imp_t_aw_to_cat where lang_id = '.aw_global_get('lang_id').' and aw_folder in ('.implode(',', $aw_folder_ids).')');
+				foreach ($args['request']['data'] as $data)
+				{
+					$categories = explode(',', $data['categories']);
+					$old_categories = $categories_by_section[$data['aw_folder_id']];
+					// nyyd oleks vaja selline trikk teha, et kui kategooriate paigutus on muutunud, siis peaks
+					// ka vastava kategooria tooted uute sektsioonide alla m22rama, v6i siis 2ra v6tta
+
+					$added_categories = array_diff($categories, $old_categories);
+					$deleted_categories = array_diff($old_categories, $categories);
+
+					arr($added_categories);
+					$tmp_added_categories = array();
+					foreach ($added_categories as $key => $value)
+					{
+						if (!empty($value))
+						{
+							$tmp_added_categories[] = $value;
+						}
+					}
+					$added_categories = $tmp_added_categories;
+
+					if (!empty($added_categories))
+					{
+						echo "added categories <br /> \n";
+						arr($added_categories);
+						// mul on vaja k6iki nende kategooriatega tooteid
+
+						$prod_ol = new object_list(array(
+							'class_id' => CL_SHOP_PRODUCT,
+							'user11' => $added_categories
+						));
+						$prod_ol_ids = $prod_ol->ids();
+						if (!empty($prod_ol_ids))
+						{
+							// v6tame need tooted selle sektsiooni alt mis praegust aktiivne on
+							$this->db_query("
+								select 
+									* 
+								from 
+									otto_prod_to_section_lut 
+								where 
+									section = ".$data['aw_folder_id']." and 
+									product in (".implode(',', $prod_ol_ids).") and 
+									lang_id = ".aw_global_get('lang_id')."
+								");
+							$tmp_prods = array();
+							while ($row = $this->db_next())
+							{
+								$tmp_prods[$row['product']] = $row['section'];
+							}
+							arr($tmp_prods);
+						}
+
+						foreach ($prod_ol_ids as $prod_id)
+						{
+							if (!isset($tmp_prods[$prod_id]))
+							{
+								echo ">>> ".$prod_id." lisatakse sektsiooni ".$data['aw_folder_id']." alla <br /> \n";
+								$this->db_query("
+									insert into 
+										otto_prod_to_section_lut 
+									set
+										product = ".$prod_id.",
+										section = ".$data['aw_folder_id'].",
+										lang_id = ".aw_global_get('lang_id')."
+								");
+							}
+							else
+							{
+								echo "### ".$prod_id." n2idatakse juba sektsiooni ".$data['aw_folder_id']." all (ei tee midagi) <br />\n";
+							}
+						}
+						
+					}
+
+
+
+					arr($deleted_categories);
+					$tmp_deleted_categories = array();
+					foreach ($deleted_categories as $key => $value)
+					{
+						if (!empty($value))
+						{
+							$tmp_deleted_categories[] = $value;
+						}
+					}
+					$deleted_categories = $tmp_deleted_categories;
+
+					if (!empty($deleted_categories))
+					{
+						echo "deleted categories <br /> \n";
+						arr($deleted_categories);
+						$prod_ol = new object_list(array(
+							'class_id' => CL_SHOP_PRODUCT,
+							'user11' => $deleted_categories
+						));
+
+						$prod_ol_ids = $prod_ol->ids();
+						if (!empty($prod_ol_ids))
+						{
+							$this->db_query("
+								select
+									aw_oid, user11
+								from
+									aw_shop_products
+								where
+									aw_oid in (".implode(',', $prod_ol_ids).")
+							");
+							$prod_cats = array();
+							while ($row = $this->db_next())
+							{
+								$prod_cats[$row['aw_oid']] = explode(',', $row['user11']);
+							}
+
+							foreach ($prod_ol_ids as $prod_id)
+							{
+								$tmp_arr_intersect = array_intersect($prod_cats[$prod_id], $categories);
+								arr($tmp_arr_intersect);
+								if (empty($tmp_arr_intersect))
+								{
+									echo "--- remove ".$prod_id." from section ".$data['aw_folder_id']." <br /> \n";
+									$this->db_query("
+										delete from
+											otto_prod_to_section_lut 
+										where 
+											product = ".$prod_id." and 
+											section = ".$data['aw_folder_id']." and
+											lang_id = ".aw_global_get('lang_id')."
+									");
+								}
+							}
+						}
+					}
+					$categories = array_unique($categories);
+					foreach ($categories as $category)
+					{
+						if (!empty($category) && !empty($data['aw_folder_id']))
+						{
+							$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
+								category = '$category',
+								aw_folder = ".$data['aw_folder_id'].",
+								lang_id = ".aw_global_get('lang_id')."
+							");
+						}
+					}
+				}
+			}
+
+			foreach ($args['request']['new_data'] as $data)
+			{
+				$categories = explode(',', $data['categories']);
+				$categories = array_unique($categories);
+				foreach ($categories as $category)
+				{
+					if (!empty($category) && !empty($data['aw_folder_id']))
+					{
+						$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
+							category = '$category',
+							aw_folder = ".$data['aw_folder_id'].",
+							lang_id = ".aw_global_get('lang_id')."
+						");
+					}
+				}
+			}
+		}
+		
+		return PROP_OK;
+	}
+
+	function _get_bubble_pictures($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'category',
+			'caption' => t('Kategooria'),
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'image_url',
+			'caption' => t('Pildi aadress'),
+			'chgbgcolor' => 'line_color'
+		));
+
+		$t->define_field(array(
+			'name' => 'title',
+			'caption' => t('Nimetus'),
+			'chgbgcolor' => 'line_color'
+		));
+
+		$t->define_field(array(
+			'name' => 'filter_button',
+			'caption' => t('Filtreeri'),
+			'chgbgcolor' => 'line_color'
+		));
+
+		$count = 0;
+		$saved_data = $args['obj_inst']->meta('bubble_pictures');
+		$show_data = array();
+
+		$filter_bubble_category = $args['request']['bubble_filter']['category'];
+		$filter_bubble_image_url = $args['request']['bubble_filter']['image_url'];
+		$filter_bubble_title = $args['request']['bubble_filter']['title'];
+
+		foreach (safe_array($saved_data) as $category => $data)
+		{
+			$show_data[$data['image_url']]['category'][] = $category;
+			$show_data[$data['image_url']]['image_url'] = $data['image_url'];
+			$show_data[$data['image_url']]['title'] = $data['title'];
+		}
+
+		$t->define_data(array(
+			'category' => html::textbox(array(
+				'name' => 'bubble_filter[category]',
+				'value' => $filter_bubble_category
+			)),
+			'image_url' => html::textbox(array(
+				'name' => 'bubble_filter[image_url]',
+				'value' => $filter_bubble_image_url
+			)),
+			'title' => html::textbox(array(
+				'name' => 'bubble_filter[title]',
+				'value' => $filter_bubble_title
+			)),
+			'filter_button' => html::submit(array(
+				'name' => 'filter_bubble_images',
+				'value' => t('Filtreeri')
+			)),
+			'line_color' => 'green'
+		));
+
+		foreach ( $show_data as $data )
+		{
+			$add_line = false;
+			$categories_str = implode(',', $data['category']);
+			if (!empty($filter_bubble_category) || !empty($filter_bubble_image_url) || !empty($filter_bubble_title))
+			{
+				if (strpos($categories_str, $filter_bubble_category) !== false)
+				{
+					$add_line = true;
+				}
+				if (strpos($data['image_url'], $filter_bubble_image_url) !== false)
+				{
+					$add_line = true;
+				}
+				if (strpos($data['title'], $filter_bubble_title) !== false)
+				{
+					$add_line = true;
+				}
+
+			}
+			else
+			{
+				$add_line = true;
+			}
+
+			if ($add_line)
+			{
+
+				$t->define_data(array(
+					'category' => html::textbox(array(
+						'name' => 'bubble_data['.$count.'][category]',
+						'value' => $categories_str
+					)),
+					'image_url' => html::textbox(array(
+						'name' => 'bubble_data['.$count.'][image_url]',
+						'value' => $data['image_url']
+					)),
+					'title' => html::textbox(array(
+						'name' => 'bubble_data['.$count.'][title]',
+						'value' => $data['title']
+					)),
+	/*
+					'image_upload' => html::fileupload(array(
+						'name' => 'bubble_data['.$count.'][image_upload]'
+					)),
+	*/
+				));
+				$count++;
+
+			}
+		}
+		$t->define_data(array(
+			'category' => html::textbox(array(
+				'name' => 'bubble_data['.$count.'][category]'
+			)),
+			'image_url' => html::textbox(array(
+				'name' => 'bubble_data['.$count.'][image_url]'
+			)),
+			'title' => html::textbox(array(
+				'name' => 'bubble_data['.$count.'][title]',
+			)),
+			'line_color' => 'lightblue'
+		));
+		return PROP_OK;
+	}
+
+	function _set_bubble_pictures($args)
+	{
+		if (!array_key_exists('filter_bubble_images', $args['request']))
+		{
+			$valid_data = $args['obj_inst']->meta('bubble_pictures');
+			foreach (safe_array($args['request']['bubble_data']) as $data)
+			{
+				if (!empty($data['category']) && !empty($data['image_url']))
+				{
+					$categories = explode(',', $data['category']);
+					foreach ($categories as $category)
+					{
+						$valid_data[$category] = array(
+							'image_url' => $data['image_url'], 
+							'title' => $data['title']
+						);
+					}
+				}
+			}
+			$args['obj_inst']->set_meta('bubble_pictures', $valid_data);
+		}
+			return PROP_OK;
+
+	}
+
+	function _get_firm_pictures($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);		
+
+		$t->define_field(array(
+			'name' => 'category',
+			'caption' => t('Kategooria'),
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'image_url',
+			'caption' => t('Pildi aadress'),
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'title',
+			'caption' => t('Nimetus'),
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'filter_button',
+			'caption' => t('Filtreeri'),
+			'chgbgcolor' => 'line_color'
+		));
+
+		$count = 0;
+		$saved_data = $args['obj_inst']->meta('firm_pictures');
+
+		$filter_firm_category = $args['request']['firm_filter']['category'];
+		$filter_firm_image_url = $args['request']['firm_filter']['image_url'];
+		$filter_firm_title = $args['request']['firm_filter']['title'];
+
+		$show_data = array();
+		foreach (safe_array($saved_data) as $category => $data)
+		{
+			$key = (empty($data['image_url'])) ? $data['title'] : $data['image_url'];
+			
+			$show_data[$key]['category'][] = $category;
+			$show_data[$key]['image_url'] = $data['image_url'];
+			$show_data[$key]['title'] = $data['title'];
+		}
+
+		$t->define_data(array(
+			'category' => html::textbox(array(
+				'name' => 'firm_filter[category]',
+				'value' => $filter_firm_category
+			)),
+			'image_url' => html::textbox(array(
+				'name' => 'firm_filter[image_url]',
+				'value' => $filter_firm_image_url
+			)),
+			'title' => html::textbox(array(
+				'name' => 'firm_filter[title]',
+				'value' => $filter_firm_title
+			)),
+			'filter_button' => html::submit(array(
+				'name' => 'filter_firm_images',
+				'value' => t('Filtreeri')
+			)),
+			'line_color' => 'green'
+		));
+
+		foreach ($show_data as $data)
+		{
+			$add_line = false;
+			$categories_str = implode(',', $data['category']);
+			if (!empty($filter_firm_category) || !empty($filter_firm_image_url) || !empty($filter_firm_title))
+			{
+				if (strpos($categories_str, $filter_firm_category) !== false)
+				{
+					$add_line = true;
+				}
+				if (strpos($data['image_url'], $filter_firm_image_url) !== false)
+				{
+					$add_line = true;
+				}
+				if (strpos($data['title'], $filter_firm_title) !== false)
+				{
+					$add_line = true;
+				}
+
+			}
+			else
+			{
+				$add_line = true;
+			}
+			if ($add_line)
+			{
+				$t->define_data(array(
+					'category' => html::textbox(array(
+						'name' => 'firm_data['.$count.'][category]',
+						'value' => $categories_str
+					)),
+					'image_url' => html::textbox(array(
+						'name' => 'firm_data['.$count.'][image_url]',
+						'value' => $data['image_url']
+					)),
+					'title' => html::textbox(array(
+						'name' => 'firm_data['.$count.'][title]',
+						'value' => $data['title']
+					)),
+				));
+				$count++;
+			}
+		}
+
+		for ($i = 0; $i < 5; $i++ )
+		{	
+			$t->define_data(array(
+				'category' => html::textbox(array(
+					'name' => 'firm_data['.$count.'][category]'
+				)),
+				'image_url' => html::textbox(array(
+					'name' => 'firm_data['.$count.'][image_url]'
+				)),
+				'title' => html::textbox(array(
+					'name' => 'firm_data['.$count.'][title]'
+				)),
+				'line_color' => 'lightblue'
+			));
+			$count++;
+		}
+		return PROP_OK;
+	}
+
+	function _set_firm_pictures($args)
+	{
+		if (!array_key_exists('filter_firm_images', $args['request']))
+		{
+			$valid_data = $args['obj_inst']->meta('firm_pictures');
+			foreach (safe_array($args['request']['firm_data']) as $data)
+			{
+				if (!empty($data['category']))
+				{
+					$categories = explode(',', $data['category']);
+					foreach ($categories as $category)
+					{
+					//	$valid_data[$data['category']] = array(
+						$valid_data[$category] = array(
+							'image_url' => $data['image_url'],
+							'title' => $data['title']
+						);
+					}
+				}
+			}
+			$args['obj_inst']->set_meta('firm_pictures', $valid_data);
+		}
+		return PROP_OK;
+	}
+
 	function get_product_codes($o)
 	{
 		$data = array();
@@ -1112,8 +1978,8 @@ class otto_import extends class_base
 			else
 			{
 
-//				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewSearch-SearchStart;sid=mDuGagg9T0iHakspt6yqShOR_0e4OZ2Xs5qs8J39FNYYHvjet0FaQJmF?ls=0&Orengelet.sortPipelet.sortResultSetSize=15&SearchDetail=one&stype=N&Query_Text=".$pcode;
-				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
+				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewSearch-SearchStart;sid=mDuGagg9T0iHakspt6yqShOR_0e4OZ2Xs5qs8J39FNYYHvjet0FaQJmF?ls=0&Orengelet.sortPipelet.sortResultSetSize=15&SearchDetail=one&stype=N&Query_Text=".$pcode;
+
 				echo "Loading <a href=\"$url\">page</a> content <br>\n";
 				flush();
 				$html = $this->file_get_contents($url);
@@ -1139,10 +2005,7 @@ class otto_import extends class_base
 					$o_html = $html;
 
 
-				//	preg_match_all("/<a id=\"silkhref\" href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
-
-					preg_match_all("/Javascript:gotoSearchArticle\(\'(.*)\'\);/imsU", $html, $mt, PREG_PATTERN_ORDER);
-
+					preg_match_all("/<a id=\"silkhref\" href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
 					$urld = array();
 					// echo (dbg::dump($mt));
 					foreach($mt[1] as $url)
@@ -1588,20 +2451,6 @@ class otto_import extends class_base
 		// unset the products list which was imported last time:
 		unset($_SESSION['otto_import_product_data']);
 
-		// let check if otto_import_log_database table exists or not
-		if ($this->db_get_table('otto_import_log') === false)
-		{
-			// if it doesn't, then create it
-			// in the beginning of import, lets get import timestamp, which can be used as one import identifier
-			// maybe there will be some other fields/data needed to be stored into this log table, but we can add it later
-			$this->db_query('create table otto_import_log (id int primary key not null auto_increment, import_time int, product_id int)');
-		}
-		else
-		{
-			// if we want to keep only 20 last import logs in the table, then this is probably the place to strip the extra lines from the table
-		}
-		
-
 		if ($this->doing_pict_i)
 		{
 			$this->pictimp($o);
@@ -1646,18 +2495,13 @@ class otto_import extends class_base
 	{
 		set_time_limit(0);
 		$otto_import_lang_id = $o->lang_id();
-		$import_time = time();
 		$not_found_products_by_page = array();
 
 		echo "START UPDATE CSV DB<br>";
 
 		echo "<b>[!!]</b> start reading data from csv files <b>[!!]</b><br>\n";
 
-		// reading data from csv file into temporary db tables
-		$this->import_data_from_csv(array(
-			'import_object' => $o, 
-			'import_time' => $import_time
-		)); 
+		$this->import_data_from_csv($o); // reading data from csv file into temporary db tables
 
 		echo "<br><b>[!!]</b>  end reading data from the csv files <b>[!!]</b><br><br>\n";
 
@@ -1673,8 +2517,7 @@ class otto_import extends class_base
 
 		// all products (previosuly packages) - first file content
 		$products = $this->db_fetch_array("select * from otto_imp_t_prod where lang_id = ".aw_global_get('lang_id'));
-	
-	
+		
 		foreach ($products as $product)
 		{
 			$product_data = array();
@@ -1746,7 +2589,11 @@ class otto_import extends class_base
 				$product_obj->set_class_id(CL_SHOP_PRODUCT);
 				$product_obj->set_parent($o->prop("prod_folder"));
 
-				$product_obj->set_meta("cfgform_id", 599);
+				$shop_product_cfgform_id = $o->prop('shop_product_config_form');
+				if (!empty($shop_product_cfgform_id))
+				{
+					$product_obj->set_meta("cfgform_id", $shop_product_cfgform_id);
+				}
 				$product_obj->set_meta("object_type", 1040);
 				$product_obj->set_prop("item_type", 593);
 
@@ -1825,6 +2672,7 @@ class otto_import extends class_base
 				group by 
 					aw_folder
 			");
+
 			$product_sections = array();
 			foreach ($sections as $section)
 			{
@@ -2159,6 +3007,8 @@ order by prices_nr,code,price
 		{
 			unlink($file);
 		}
+
+
 /*
 		// print out the conclusion
 		if (!empty($not_found_products_by_page))
@@ -2205,16 +3055,14 @@ order by prices_nr,code,price
 		die(t("all done! <br>"));
 	}
 
-	function import_data_from_csv($arr)
+	function import_data_from_csv($o)
 	{
 		$lang_id = aw_global_get('lang_id');
-		$o = $arr['import_object'];
-		$import_time = $arr['import_time'];
-
 		$this->db_query("DELETE FROM otto_imp_t_prod WHERE lang_id=".$lang_id);
 		$this->db_query("DELETE FROM otto_imp_t_codes WHERE lang_id=".$lang_id);
 		$this->db_query("DELETE FROM otto_imp_t_prices WHERE lang_id=".$lang_id);
 
+		$import_time = time();
 
 		$fext = 'xls';
 
@@ -3136,762 +3984,6 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		return $ret;
 	}
 
-	function _get_files_order($args)
-	{
-		$t = &$args['prop']['vcl_inst'];
-		$t->set_sortable(false);
-
-		$t->define_field(array(
-			'name' => 'file',
-			'caption' => t('Fail'),
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'order',
-			'caption' => t('J&auml;rjekord'),	
-			'chgbgcolor' => 'line_color'
-		));
-
-		$count = 0;
-		$saved_data = $args['obj_inst']->meta('files_order');
-		foreach (safe_array($saved_data) as $file => $order)
-		{
-			$t->define_data(array(
-				'file' => html::textbox(array(
-					'name' => 'files_order['.$count.'][file]',
-					'value' => $file,
-					'size' => '10'
-				)),
-				'order' => html::textbox(array(
-					'name' => 'files_order['.$count.'][order]',
-					'value' => $order
-				)),
-			));
-			$count++;
-		}
-
-		$t->define_data(array(
-			'file' => html::textbox(array(
-				'name' => 'files_order['.$count.'][file]',
-				'size' => '10'
-			)),
-			'order' => html::textbox(array(
-				'name' => 'files_order['.$count.'][order]'
-			)),
-			'line_color' => 'lightblue'
-		));
-		return PROP_OK;
-	}
-
-	function _set_files_order($args)
-	{
-		$valid_data = array();
-		foreach (safe_array($args['request']['files_order']) as $data)
-		{
-			if (!empty($data['file']) && !empty($data['order']))
-			{
-				$valid_data[$data['file']] = $data['order'];
-			}
-		}
-		$args['obj_inst']->set_meta('files_order', $valid_data);
-		// i think that to avoid the scannig for orders from otto_prod_img table
-		// i should keep them in meta too ... maybe it isn't necessary, anyway, this is
-		// the place where i should update otto_prod_img table and set the order
-		
-		foreach ($valid_data as $file => $order)
-		{
-			// i need the short version of the file name, aka. page (in otto_prod_img p_pg field)
-			list(, $cur_pg) = explode(".", $file);
-			$cur_pg = substr($cur_pg,1);
-			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
-			{
-				$cur_pg = (int)$cur_pg;
-			}
-			$cur_pg = trim($cur_pg);
-			$this->db_query("UPDATE otto_prod_img set file_order='".(int)$order."' WHERE p_pg='$cur_pg'");
-		}
-		return PROP_OK;
-	}
-
-	function _get_file_suffix($args)
-	{
-		$t = &$args['prop']['vcl_inst'];
-		$t->set_sortable(false);
-
-		$t->define_field(array(
-			'name' => 'file',
-			'caption' => t('Faili t&auml;ht'),
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'suffix',
-			'caption' => t('Suffiks'),	
-			'chgbgcolor' => 'line_color'
-		));
-
-		$count = 0;
-		$saved_data = $args['obj_inst']->meta('file_suffix');
-
-		foreach (safe_array($saved_data) as $file => $suffix)
-		{
-			$t->define_data(array(
-				'file' => html::textbox(array(
-					'name' => 'file_suffix['.$count.'][file]',
-					'value' => $file,
-					'size' => '10'
-				)),
-				'suffix' => html::textbox(array(
-					'name' => 'file_suffix['.$count.'][suffix]',
-					'value' => $suffix
-				)),
-			));
-			$count++;
-		}
-
-		$t->define_data(array(
-			'file' => html::textbox(array(
-				'name' => 'file_suffix['.$count.'][file]',
-				'size' => '10'
-			)),
-			'suffix' => html::textbox(array(
-				'name' => 'file_suffix['.$count.'][suffix]'
-			)),
-			'line_color' => 'lightblue'
-		));
-		return PROP_OK;
-	}
-
-	function _set_file_suffix($args)
-	{
-		$valid_data = array();
-		foreach (safe_array($args['request']['file_suffix']) as $data)
-		{
-			if (!empty($data['file']) && !empty($data['suffix']))
-			{
-				$valid_data[$data['file']] = $data['suffix'];
-			}
-		}
-		$args['obj_inst']->set_meta('file_suffix', $valid_data);
-		return PROP_OK;
-	}
-
-
-	function _get_categories($args)
-	{
-		$t = &$args['prop']['vcl_inst'];
-		$t->set_sortable(false);
-
-		$t->define_field(array(
-			'name' => 'jrk',
-			'caption' => t('Jrk'),
-			'align' => 'center',
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'aw_folder_id',
-			'caption' => t('AW Kataloogi ID'),
-			'align' => 'center',
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'categories',
-			'caption' => t('Kategooriad'),
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'filter_button',
-			'caption' => t('Filtreeri'),
-			'chgbgcolor' => 'line_color'
-		));
-		
-		$count = 1;
-		$data = array();
-		$aw_folder_ids = array();
-		if (!empty($args['request']['filter_aw_folder_id']))
-		{
-			$aw_folder_ids[] = $args['request']['filter_aw_folder_id'];
-		}
-		if (!empty($args['request']['filter_category']))
-		{
-			$this->db_query("
-				select
-					aw_folder
-				from
-					otto_imp_t_aw_to_cat
-				where 
-					lang_id = ".aw_global_get('lang_id')." and
-					category like '%".$args['request']['filter_category']."%' 
-			");
-			while ($row = $this->db_next())
-			{
-				$aw_folder_ids[] = $row['aw_folder'];
-			}
-		}
-
-		if (!empty($aw_folder_ids))
-		{
-			$sql_params = " and aw_folder in (".implode(',', $aw_folder_ids).")";
-		}
-
-		$this->db_query("SELECT * FROM otto_imp_t_aw_to_cat WHERE lang_id=".aw_global_get('lang_id'). $sql_params);
-		while ($row = $this->db_next())
-		{
-			if (!in_array($row['category'], $data[$row['aw_folder']]))
-			{
-				$data[$row['aw_folder']][] = $row['category'];
-			}
-		}
-
-		$t->define_data(array(
-			'jrk' => t('Filter'),
-			'aw_folder_id' => html::textbox(array(
-				'name' => 'data_filter[aw_folder_id]',
-				'value' => (!empty($args['request']['filter_aw_folder_id'])) ? $args['request']['filter_aw_folder_id'] : '',
-				'size' => '10'
-			)),
-			'categories' => html::textbox(array(
-				'name' => 'data_filter[category]',
-				'value' => (!empty($args['request']['filter_category'])) ? $args['request']['filter_category'] : '',
-				'size' => '80',
-			)),
-			'filter_button' => html::submit(array(
-				'name' => 'filter_categories',
-				'value' => t('Filtreeri')
-			)),
-			'line_color' => 'green'
-
-		));
-
-		foreach ($data as $aw_folder => $categories)
-		{
-
-			$t->define_data(array(
-				'jrk' => $count,
-				'aw_folder_id' => html::textbox(array(
-					'name' => 'data['.$aw_folder.'][aw_folder_id]',
-					'value' => $aw_folder,
-					'size' => '10'
-				)),
-				'categories' => html::textbox(array(
-					'name' => 'data['.$aw_folder.'][categories]',
-					'value' => implode(',', $categories),
-					'size' => '80',
-				)),
-			));
-			$count++;
-
-		}
-
-		for ($i = 0; $i<10; $i++)
-		{
-			$t->define_data(array(
-				'aw_folder_id' => html::textbox(array(
-					'name' => 'new_data['.$count.'][aw_folder_id]',
-					'value' => '',
-					'size' => '10'
-				)),
-				'categories' => html::textbox(array(
-					'name' => 'new_data['.$count.'][categories]',
-					'value' => '',
-					'size' => '80'
-				)),
-				'line_color' => 'lightblue'
-			));
-			$count++;
-		}
-
-		return PROP_OK;
-	}
-
-	function _set_categories($args)
-	{
-		if (!array_key_exists('filter_categories', $args['request']))
-		{
-
-			$aw_folder_ids = array_keys($args['request']['data']);
-
-			if (!empty($aw_folder_ids))
-			{
-				$categories_by_section = array();
-				$this->db_query('select * from otto_imp_t_aw_to_cat where lang_id = '.aw_global_get('lang_id').' and aw_folder in ('.implode(',', $aw_folder_ids).')');
-				while ($row = $this->db_next())
-				{
-					$categories_by_section[$row['aw_folder']][] = $row['category'];
-				}
-
-				$this->db_query('delete from otto_imp_t_aw_to_cat where lang_id = '.aw_global_get('lang_id').' and aw_folder in ('.implode(',', $aw_folder_ids).')');
-				foreach ($args['request']['data'] as $data)
-				{
-					$categories = explode(',', $data['categories']);
-					$old_categories = $categories_by_section[$data['aw_folder_id']];
-					// nyyd oleks vaja selline trikk teha, et kui kategooriate paigutus on muutunud, siis peaks
-					// ka vastava kategooria tooted uute sektsioonide alla m22rama, v6i siis 2ra v6tta
-
-					$added_categories = array_diff($categories, $old_categories);
-					$deleted_categories = array_diff($old_categories, $categories);
-
-					arr($added_categories);
-					$tmp_added_categories = array();
-					foreach ($added_categories as $key => $value)
-					{
-						if (!empty($value))
-						{
-							$tmp_added_categories[] = $value;
-						}
-					}
-					$added_categories = $tmp_added_categories;
-
-					if (!empty($added_categories))
-					{
-						echo "added categories <br /> \n";
-						arr($added_categories);
-						// mul on vaja k6iki nende kategooriatega tooteid
-
-						$prod_ol = new object_list(array(
-							'class_id' => CL_SHOP_PRODUCT,
-							'user11' => $added_categories
-						));
-						$prod_ol_ids = $prod_ol->ids();
-						if (!empty($prod_ol_ids))
-						{
-							// v6tame need tooted selle sektsiooni alt mis praegust aktiivne on
-							$this->db_query("
-								select 
-									* 
-								from 
-									otto_prod_to_section_lut 
-								where 
-									section = ".$data['aw_folder_id']." and 
-									product in (".implode(',', $prod_ol_ids).") and 
-									lang_id = ".aw_global_get('lang_id')."
-								");
-							$tmp_prods = array();
-							while ($row = $this->db_next())
-							{
-								$tmp_prods[$row['product']] = $row['section'];
-							}
-							arr($tmp_prods);
-						}
-
-						foreach ($prod_ol_ids as $prod_id)
-						{
-							if (!isset($tmp_prods[$prod_id]))
-							{
-								echo ">>> ".$prod_id." lisatakse sektsiooni ".$data['aw_folder_id']." alla <br /> \n";
-								$this->db_query("
-									insert into 
-										otto_prod_to_section_lut 
-									set
-										product = ".$prod_id.",
-										section = ".$data['aw_folder_id'].",
-										lang_id = ".aw_global_get('lang_id')."
-								");
-							}
-							else
-							{
-								echo "### ".$prod_id." n2idatakse juba sektsiooni ".$data['aw_folder_id']." all (ei tee midagi) <br />\n";
-							}
-						}
-						
-					}
-
-
-
-					arr($deleted_categories);
-					$tmp_deleted_categories = array();
-					foreach ($deleted_categories as $key => $value)
-					{
-						if (!empty($value))
-						{
-							$tmp_deleted_categories[] = $value;
-						}
-					}
-					$deleted_categories = $tmp_deleted_categories;
-
-					if (!empty($deleted_categories))
-					{
-						echo "deleted categories <br /> \n";
-						arr($deleted_categories);
-						$prod_ol = new object_list(array(
-							'class_id' => CL_SHOP_PRODUCT,
-							'user11' => $deleted_categories
-						));
-
-						$prod_ol_ids = $prod_ol->ids();
-						if (!empty($prod_ol_ids))
-						{
-							$this->db_query("
-								select
-									aw_oid, user11
-								from
-									aw_shop_products
-								where
-									aw_oid in (".implode(',', $prod_ol_ids).")
-							");
-							$prod_cats = array();
-							while ($row = $this->db_next())
-							{
-								$prod_cats[$row['aw_oid']] = explode(',', $row['user11']);
-							}
-
-							foreach ($prod_ol_ids as $prod_id)
-							{
-								$tmp_arr_intersect = array_intersect($prod_cats[$prod_id], $categories);
-								arr($tmp_arr_intersect);
-								if (empty($tmp_arr_intersect))
-								{
-									echo "--- remove ".$prod_id." from section ".$data['aw_folder_id']." <br /> \n";
-									$this->db_query("
-										delete from
-											otto_prod_to_section_lut 
-										where 
-											product = ".$prod_id." and 
-											section = ".$data['aw_folder_id']." and
-											lang_id = ".aw_global_get('lang_id')."
-									");
-								}
-							}
-						}
-					}
-
-
-					foreach ($categories as $category)
-					{
-						if (!empty($category) && !empty($data['aw_folder_id']))
-						{
-							$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
-								category = '$category',
-								aw_folder = ".$data['aw_folder_id'].",
-								lang_id = ".aw_global_get('lang_id')."
-							");
-						}
-					}
-				}
-			}
-
-			foreach ($args['request']['new_data'] as $data)
-			{
-				foreach (explode(',', $data['categories']) as $category)
-				{
-					if (!empty($category) && !empty($data['aw_folder_id']))
-					{
-						$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
-							category = '$category',
-							aw_folder = ".$data['aw_folder_id'].",
-							lang_id = ".aw_global_get('lang_id')."
-						");
-					}
-				}
-			}
-		}
-		
-		return PROP_OK;
-	}
-
-	function _get_bubble_pictures($args)
-	{
-		$t = &$args['prop']['vcl_inst'];
-		$t->set_sortable(false);
-
-		$t->define_field(array(
-			'name' => 'category',
-			'caption' => t('Kategooria'),
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'image_url',
-			'caption' => t('Pildi aadress'),
-			'chgbgcolor' => 'line_color'
-		));
-
-		$t->define_field(array(
-			'name' => 'title',
-			'caption' => t('Nimetus'),
-			'chgbgcolor' => 'line_color'
-		));
-
-		$t->define_field(array(
-			'name' => 'filter_button',
-			'caption' => t('Filtreeri'),
-			'chgbgcolor' => 'line_color'
-		));
-
-		$count = 0;
-		$saved_data = $args['obj_inst']->meta('bubble_pictures');
-		$show_data = array();
-
-		$filter_bubble_category = $args['request']['bubble_filter']['category'];
-		$filter_bubble_image_url = $args['request']['bubble_filter']['image_url'];
-		$filter_bubble_title = $args['request']['bubble_filter']['title'];
-
-		foreach (safe_array($saved_data) as $category => $data)
-		{
-			$show_data[$data['image_url']]['category'][] = $category;
-			$show_data[$data['image_url']]['image_url'] = $data['image_url'];
-			$show_data[$data['image_url']]['title'] = $data['title'];
-		}
-
-		$t->define_data(array(
-			'category' => html::textbox(array(
-				'name' => 'bubble_filter[category]',
-				'value' => $filter_bubble_category
-			)),
-			'image_url' => html::textbox(array(
-				'name' => 'bubble_filter[image_url]',
-				'value' => $filter_bubble_image_url
-			)),
-			'title' => html::textbox(array(
-				'name' => 'bubble_filter[title]',
-				'value' => $filter_bubble_title
-			)),
-			'filter_button' => html::submit(array(
-				'name' => 'filter_bubble_images',
-				'value' => t('Filtreeri')
-			)),
-			'line_color' => 'green'
-		));
-
-		foreach ( $show_data as $data )
-		{
-			$add_line = false;
-			$categories_str = implode(',', $data['category']);
-			if (!empty($filter_bubble_category) || !empty($filter_bubble_image_url) || !empty($filter_bubble_title))
-			{
-				if (strpos($categories_str, $filter_bubble_category) !== false)
-				{
-					$add_line = true;
-				}
-				if (strpos($data['image_url'], $filter_bubble_image_url) !== false)
-				{
-					$add_line = true;
-				}
-				if (strpos($data['title'], $filter_bubble_title) !== false)
-				{
-					$add_line = true;
-				}
-
-			}
-			else
-			{
-				$add_line = true;
-			}
-
-			if ($add_line)
-			{
-
-				$t->define_data(array(
-					'category' => html::textbox(array(
-						'name' => 'bubble_data['.$count.'][category]',
-						'value' => $categories_str
-					)),
-					'image_url' => html::textbox(array(
-						'name' => 'bubble_data['.$count.'][image_url]',
-						'value' => $data['image_url']
-					)),
-					'title' => html::textbox(array(
-						'name' => 'bubble_data['.$count.'][title]',
-						'value' => $data['title']
-					)),
-	/*
-					'image_upload' => html::fileupload(array(
-						'name' => 'bubble_data['.$count.'][image_upload]'
-					)),
-	*/
-				));
-				$count++;
-
-			}
-		}
-		$t->define_data(array(
-			'category' => html::textbox(array(
-				'name' => 'bubble_data['.$count.'][category]'
-			)),
-			'image_url' => html::textbox(array(
-				'name' => 'bubble_data['.$count.'][image_url]'
-			)),
-			'title' => html::textbox(array(
-				'name' => 'bubble_data['.$count.'][title]',
-			)),
-			'line_color' => 'lightblue'
-		));
-		return PROP_OK;
-	}
-
-	function _set_bubble_pictures($args)
-	{
-		if (!array_key_exists('filter_bubble_images', $args['request']))
-		{
-			$valid_data = $args['obj_inst']->meta('bubble_pictures');
-			foreach (safe_array($args['request']['bubble_data']) as $data)
-			{
-				if (!empty($data['category']) && !empty($data['image_url']))
-				{
-					$categories = explode(',', $data['category']);
-					foreach ($categories as $category)
-					{
-						$valid_data[$category] = array(
-							'image_url' => $data['image_url'], 
-							'title' => $data['title']
-						);
-					}
-				}
-			}
-			$args['obj_inst']->set_meta('bubble_pictures', $valid_data);
-		}
-			return PROP_OK;
-
-	}
-
-	function _get_firm_pictures($args)
-	{
-		$t = &$args['prop']['vcl_inst'];
-		$t->set_sortable(false);		
-
-		$t->define_field(array(
-			'name' => 'category',
-			'caption' => t('Kategooria'),
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'image_url',
-			'caption' => t('Pildi aadress'),
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'title',
-			'caption' => t('Nimetus'),
-			'chgbgcolor' => 'line_color'
-		));
-		$t->define_field(array(
-			'name' => 'filter_button',
-			'caption' => t('Filtreeri'),
-			'chgbgcolor' => 'line_color'
-		));
-
-		$count = 0;
-		$saved_data = $args['obj_inst']->meta('firm_pictures');
-
-		$filter_firm_category = $args['request']['firm_filter']['category'];
-		$filter_firm_image_url = $args['request']['firm_filter']['image_url'];
-		$filter_firm_title = $args['request']['firm_filter']['title'];
-
-		$show_data = array();
-		foreach (safe_array($saved_data) as $category => $data)
-		{
-			$key = (empty($data['image_url'])) ? $data['title'] : $data['image_url'];
-			
-			$show_data[$key]['category'][] = $category;
-			$show_data[$key]['image_url'] = $data['image_url'];
-			$show_data[$key]['title'] = $data['title'];
-		}
-
-		$t->define_data(array(
-			'category' => html::textbox(array(
-				'name' => 'firm_filter[category]',
-				'value' => $filter_firm_category
-			)),
-			'image_url' => html::textbox(array(
-				'name' => 'firm_filter[image_url]',
-				'value' => $filter_firm_image_url
-			)),
-			'title' => html::textbox(array(
-				'name' => 'firm_filter[title]',
-				'value' => $filter_firm_title
-			)),
-			'filter_button' => html::submit(array(
-				'name' => 'filter_firm_images',
-				'value' => t('Filtreeri')
-			)),
-			'line_color' => 'green'
-		));
-
-		foreach ($show_data as $data)
-		{
-			$add_line = false;
-			$categories_str = implode(',', $data['category']);
-			if (!empty($filter_firm_category) || !empty($filter_firm_image_url) || !empty($filter_firm_title))
-			{
-				if (strpos($categories_str, $filter_firm_category) !== false)
-				{
-					$add_line = true;
-				}
-				if (strpos($data['image_url'], $filter_firm_image_url) !== false)
-				{
-					$add_line = true;
-				}
-				if (strpos($data['title'], $filter_firm_title) !== false)
-				{
-					$add_line = true;
-				}
-
-			}
-			else
-			{
-				$add_line = true;
-			}
-			if ($add_line)
-			{
-				$t->define_data(array(
-					'category' => html::textbox(array(
-						'name' => 'firm_data['.$count.'][category]',
-						'value' => $categories_str
-					)),
-					'image_url' => html::textbox(array(
-						'name' => 'firm_data['.$count.'][image_url]',
-						'value' => $data['image_url']
-					)),
-					'title' => html::textbox(array(
-						'name' => 'firm_data['.$count.'][title]',
-						'value' => $data['title']
-					)),
-				));
-				$count++;
-			}
-		}
-
-		for ($i = 0; $i < 5; $i++ )
-		{	
-			$t->define_data(array(
-				'category' => html::textbox(array(
-					'name' => 'firm_data['.$count.'][category]'
-				)),
-				'image_url' => html::textbox(array(
-					'name' => 'firm_data['.$count.'][image_url]'
-				)),
-				'title' => html::textbox(array(
-					'name' => 'firm_data['.$count.'][title]'
-				)),
-				'line_color' => 'lightblue'
-			));
-			$count++;
-		}
-		return PROP_OK;
-	}
-
-	function _set_firm_pictures($args)
-	{
-		if (!array_key_exists('filter_firm_images', $args['request']))
-		{
-			$valid_data = $args['obj_inst']->meta('firm_pictures');
-			foreach (safe_array($args['request']['firm_data']) as $data)
-			{
-				if (!empty($data['category']))
-				{
-					$categories = explode(',', $data['category']);
-					foreach ($categories as $category)
-					{
-					//	$valid_data[$data['category']] = array(
-						$valid_data[$category] = array(
-							'image_url' => $data['image_url'],
-							'title' => $data['title']
-						);
-					}
-				}
-			}
-			$args['obj_inst']->set_meta('firm_pictures', $valid_data);
-		}
-		return PROP_OK;
-	}
 
 	function read_img_from_baur($arr)
 	{
