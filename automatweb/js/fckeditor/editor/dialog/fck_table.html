@@ -217,10 +217,10 @@ function IsDigit( e )
 								<table cellSpacing="0" cellPadding="0" border="0">
 									<tr>
 										<td><span fckLang="DlgTableWidth">Width</span>:</td>
-										<td>&nbsp;<input id="txtWidth" type="text" maxLength="4" size="3" value="200" name="txtWidth" onkeypress="return IsDigit(event);"></td>
+										<td>&nbsp;<input id="txtWidth" type="text" maxLength="4" size="3" value="100" name="txtWidth" onkeypress="return IsDigit(event);"></td>
 										<td>&nbsp;<select id="selWidthType" name="selWidthType">
-												<option fckLang="DlgTableWidthPx" value="pixels" selected>pixels</option>
-												<option fckLang="DlgTableWidthPc" value="percent">percent</option>
+												<option fckLang="DlgTableWidthPx" value="pixels">pixels</option>
+												<option fckLang="DlgTableWidthPc" value="percent" selected>percent</option>
 											</select></td>
 									</tr>
 									<tr>
@@ -235,13 +235,13 @@ function IsDigit( e )
 									</tr>
 									<tr>
 										<td nowrap><span fckLang="DlgTableCellSpace">Cell spacing</span>:</td>
-										<td>&nbsp;<input id="txtCellSpacing" type="text" maxLength="2" size="2" value="1" name="txtCellSpacing"
+										<td>&nbsp;<input id="txtCellSpacing" type="text" maxLength="2" size="2" value="0" name="txtCellSpacing"
 												onkeypress="return IsDigit(event);"></td>
 										<td>&nbsp;</td>
 									</tr>
 									<tr>
 										<td nowrap><span fckLang="DlgTableCellPad">Cell padding</span>:</td>
-										<td>&nbsp;<input id="txtCellPadding" type="text" maxLength="2" size="2" value="1" name="txtCellPadding"
+										<td>&nbsp;<input id="txtCellPadding" type="text" maxLength="2" size="2" value="3" name="txtCellPadding"
 												onkeypress="return IsDigit(event);"></td>
 										<td>&nbsp;</td>
 									</tr>
