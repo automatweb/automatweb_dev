@@ -15,6 +15,7 @@
 				<arguments>
 					<required name="script" type="string" />
 					<optional name="vars" type="array" />
+					<optional name="silent" type="bool" default="false" />
 				</arguments>
 			</function>
 		</action>
