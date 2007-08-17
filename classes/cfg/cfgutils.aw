@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.86 2007/07/19 09:13:04 voldemar Exp $
+// $Id: cfgutils.aw,v 1.87 2007/08/17 10:00:34 tarvo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -436,7 +436,7 @@ class cfgutils extends aw_template
 						$dat[0]['caption']['text'] = "";
 					}
 					*/
-					$tmp = "Seose ".$dat["caption"]." (RELTYPE_".$k.") tekst";
+					$tmp = "Seose ".htmlentities($dat["caption"])." (RELTYPE_".$k.") tekst";
 					$tmp = t2($tmp);
 					if ($tmp !== NULL)
 					{
@@ -450,7 +450,7 @@ class cfgutils extends aw_template
 			{
 				foreach($layout as $k => $dat)
 				{
-					$tmp = "Kujundusosa ".$dat["area_caption"]." (".$k.") pealkiri";
+					$tmp = "Kujundusosa ".htmlentities($dat["area_caption"])." (".$k.") pealkiri";
 					$tmp = t2($tmp);
 					if($tmp !== NULL)
 					{

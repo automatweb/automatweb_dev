@@ -144,6 +144,7 @@ class cb_translate extends aw_template
 					"name" => t("Kujundusosad"),
 					"id" => "layout_0",
 					"is_open" => true,
+					"url" => "javascript:void();",
 				));
 
 				foreach($layouts as $lkey => $ldata)
@@ -201,6 +202,7 @@ class cb_translate extends aw_template
 					"name" => t("Seosed"),
 					"iconurl" => "images/icons/connectionmanager.gif",
 					"is_open" => true,
+					"url" => "javascript:void();",
 				));
 				foreach($rels as $key => $rel)
 				{
@@ -473,6 +475,7 @@ class cb_translate extends aw_template
 				"id" => "rel_root",
 				"name" => t("Seosed"),
 				"iconurl" => "images/icons/connectionmanager.gif",
+				"url" => "javascript:void();",
 			));
 			foreach($rels as $key => $rel)
 			{
@@ -721,7 +724,7 @@ class cb_translate extends aw_template
 		));
 
 		// gen title
-		$title = sprintf("Klassi '%s' seos '%s' ('%s' t&uuml;&uuml;pi)", $cls[$arr["clid"]]["name"], "<b>".$rels[$arr["reltype"]]["caption"]."</b>", $arr["reltype"]);
+		$title = sprintf("Klassi '%s' seos '%s' ('%s' t&uuml;&uuml;pi)", iconv($charset_from_local, "UTF-8", $cls[$arr["clid"]]["name"]), "<b>".iconv($charset_from_local, "UTF-8", $rels[$arr["reltype"]]["caption"])."</b>", $arr["reltype"]);
 
 		$this->cb_htmlc->add_property(array(
 			"name" => "general_title",
@@ -745,7 +748,8 @@ class cb_translate extends aw_template
 			$charset_from = $lang["charset"];
 			foreach($class_po_file as $po)
 			{
-				$comp = "Seose ".$rels[$arr["reltype"]]["caption"]." (".$arr["reltype"].") tekst";
+				//$comp = "Seose ".iconv($charset_from_local, $lang["charset"], $rels[$arr["reltype"]]["caption"])." (".$arr["reltype"].") tekst";
+				$comp = "Seose ".htmlentities($rels[$arr["reltype"]]["caption"], $charset["from"])." (".$arr["reltype"].") tekst";
 				if($po["msgid"] == $comp)
 				{
 					$caption = $po["msgstr"];
@@ -790,7 +794,7 @@ class cb_translate extends aw_template
 				"class" => "cb_translate",
 				"clid" => trim($arr["clid"]),
 				"reltype" => $arr["reltype"],
-				"caption" => $rels[$arr["reltype"]]["caption"],
+				"caption" => iconv($charset_from_local, "UTF-8", $rels[$arr["reltype"]]["caption"]),
 			),
 		));
 		
@@ -1431,7 +1435,7 @@ class cb_translate extends aw_template
 		));
 
 		// gen title
-		$title = sprintf("Klass '%s', Kujudusosa '%s' ('%s' t&uuml;&uuml;pi)", $cls[$arr["clid"]]["name"], "<b>".$layouts[$arr["lid"]]["area_caption"]."</b>", $layouts[$arr["lid"]]["type"]);
+		$title = sprintf("Klass '%s', Kujudusosa '%s' ('%s' t&uuml;&uuml;pi)", iconv($charset_from_local, "UTF-8", $cls[$arr["clid"]]["name"]), "<b>".iconv($charset_from_local, "UTF-8", $layouts[$arr["lid"]]["area_caption"])."</b>", $layouts[$arr["lid"]]["type"]);
 		$this->cb_htmlc->add_property(array(
 			"name" => "general_title",
 			"type" => "text",
@@ -1460,7 +1464,7 @@ class cb_translate extends aw_template
 			$class_po_file = $pot_scanner->parse_po_file($file_location);
 			foreach($class_po_file as $po)
 			{
-				if($po["msgid"] == "Kujundusosa ".$layouts[$arr["lid"]]["area_caption"]." (".$arr["lid"].") pealkiri")
+				if($po["msgid"] == "Kujundusosa ".htmlentities(iconv($charset_from_local, $lang["charset"], $layouts[$arr["lid"]]["area_caption"]))." (".$arr["lid"].") pealkiri")
 				{
 					$caption = $po["msgstr"];
 					break;
