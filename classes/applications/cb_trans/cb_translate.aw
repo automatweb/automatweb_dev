@@ -6,6 +6,7 @@ define("GRP", 3);
 define("PRP", 4);
 define("REL", 5);
 define("TXT", 6);
+define("LYT", 7);
 
 class cb_translate extends aw_template
 {
@@ -152,9 +153,9 @@ class cb_translate extends aw_template
 						$tree->add_item("layout_0",array(
 							"name" => iconv(aw_global_get("charset"), "utf-8", $ldata["area_caption"]?$ldata["area_caption"]:t("Nimetu")),
 							"id" => "lyt_".$lkey,
-							"url" => $this->mk_my_orb("groupedit",array(
-								"clid" => trim($arr["parent"]),
-								"lytid" => $lkey,
+							"url" => $this->mk_my_orb("layouttrans",array(
+								"clid" => trim($arr["clid"]),
+								"lid" => $lkey,
 							)),
 							"is_open" => 1,
 							"iconurl" => "images/icons/help_topic.gif",
@@ -411,25 +412,29 @@ class cb_translate extends aw_template
 
 			// 
 			$layouts = $cfgu->get_layoutinfo();
-			if(count($layouts))
+			if(count($layouts) && is_array($layouts))
 			{
 				$tree->add_item(0, array(
 					"name" => t("Kujundusosad"),
 					"id" => "layout_0",
+					"url" => "javascript:void();",
 				));
 				foreach($layouts as $lkey => $ldata)
 				{
-					$node_parent = isset($ldata["parent"]) ? $parent."_lyt_".$ldata["parent"] : "layout_0";
-					$tree->add_item($node_parent,array(
-						"name" => iconv(aw_global_get("charset"), "utf-8", $ldata["area_caption"]?$ldata["area_caption"]:t("Nimetu")),
-						"id" => $parent."_lyt_".$lkey,
-						"url" => $this->mk_my_orb("groupedit",array(
-							"clid" => trim($arr["parent"]),
-							"lytid" => $lkey,
-						)),
-						//"is_open" => 1,
-						"iconurl" => "images/icons/help_topic.gif",
-					));
+					//$node_parent = isset($ldata["parent"]) ? $parent."_lyt_".$ldata["parent"] : "layout_0";
+					if($ldata["closeable"])
+					{
+						$tree->add_item("layout_0",array(
+							"name" => iconv(aw_global_get("charset"), "utf-8", $ldata["area_caption"]?$ldata["area_caption"]:t("Nimetu")),
+							"id" => $parent."_lyt_".$lkey,
+							"url" => $this->mk_my_orb("layouttrans",array(
+								"clid" => trim($arr["parent"]),
+								"lid" => $lkey,
+							)),
+							//"is_open" => 1,
+							"iconurl" => "images/icons/help_topic.gif",
+						));
+					}
 				}
 			}
 			
@@ -464,11 +469,16 @@ class cb_translate extends aw_template
 			// reltypes
 
 			$rels = $cfgu->get_relinfo();
+			$tree->add_item(0, array(
+				"id" => "rel_root",
+				"name" => t("Seosed"),
+				"iconurl" => "images/icons/connectionmanager.gif",
+			));
 			foreach($rels as $key => $rel)
 			{
 				if(substr($key,0,8) == "RELTYPE_")
 				{
-					$tree->add_item(0 , array(
+					$tree->add_item("rel_root" , array(
 						"name" => iconv(aw_global_get("charset"), "utf-8", html_entity_decode($rel["caption"])),
 						"id" => $key,
 						"url" => $this->mk_my_orb("releditor",array(
@@ -513,13 +523,18 @@ class cb_translate extends aw_template
 	/** manages single class or classfolder editing
 		@attrib name=lineeditor
 		@param clid required
+		@param saved_langs optional
 	**/
 	function lineeditor($arr)
 	{
 		$charset_from_local = "iso-8859-1";
 		aw_global_set("output_charset", "UTF-8");
+		
+		/*
 		$this->read_template("linetrans.tpl");
-		//$this->sub_merge = 1;
+		$this->sub_merge = 1;
+		*/		
+
 		$pot_scanner = get_instance("core/trans/pot_scanner");
 		$languages = $pot_scanner->get_langs();
 
@@ -527,56 +542,84 @@ class cb_translate extends aw_template
 		$aw_location = $cls[trim($arr["clid"])]["file"];
 		$po = split("[/]",$aw_location);
 		$po_file = $po[count($po)-1];
-
 		$langs_info = aw_ini_get("languages.list");
+		foreach($langs_info as $lang)
+		{
+			$mod_lang[$lang["acceptlang"]] = $lang;
+		}
+		
+		$this->cb_htmlc = get_instance("cfg/htmlclient");
+		$this->cb_htmlc->start_output(array(
+			"template" => "default",
+		));
+
+		$title = sprintf("Klass '%s' tekstid.", $cls[$arr["clid"]]["name"]);
+		$this->cb_htmlc->add_property(array(
+			"name" => "general_title",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $title,
+			"textsize" => "17px;",
+		));
+	
+
 		foreach($languages as $key => $language)
 		{
-			foreach($langs_info as $lang_info)
-			{
-				if($lang_info["acceptlang"] == $language)
-				{
-					$charset_from = $lang_info["charset"];
-					break;
-				}
-			}
 			$file_location = aw_ini_get("basedir")."/lang/trans/".$language."/po/".$po_file.".po";
-			$class_po_file = $pot_scanner->parse_po_file($file_location);
-			foreach($langs_info as $lang)
+			if(!$this->check_langfile($language, $po_file.".po"))
 			{
-				if($lang["acceptlang"] == $language)
-				{
-					break;
-				}
+				$no_writable_langs[] = $mod_lang[$language]["name"]."(".$language.")";
+				$no_writable_short[] = $language;
+				continue;
 			}
+	
+			$lang = $mod_lang[$language];
+			$class_po_file = $pot_scanner->parse_po_file($file_location);
 			foreach($class_po_file as $entry)
 			{
 				$header = $entry["headers"][0];
 				if(is_numeric(trim(end(split(":", trim(substr($header,strpos($header, " "))))))))
 				{
-					$data_to_be_shown[$entry["msgid"]][$language]["caption"] = iconv($charset_from, "utf-8", $entry["msgstr"]);
-					$data_to_be_shown[$entry["msgid"]][$language]["lang_name"] = iconv($charset_from, "utf-8", $lang["name"]);
+					$data_to_be_shown[$entry["msgid"]][$language]["caption"] = iconv($lang["charset"], "utf-8", $entry["msgstr"]);
+					$data_to_be_shown[$entry["msgid"]][$language]["lang_name"] = iconv($lang["charset"], "utf-8", $lang["name"]);
 				}
 
 			}
 		}
 		foreach($data_to_be_shown as $text => $data)
 		{
+			/*
 			$this->vars(array(
 				"text" => iconv($charset_from_local, "utf-8", $text),
 			));
 			$tmp .= $this->parse("SUB_TRANSLATE");
+			*/
 
+			$this->cb_htmlc->add_property(array(
+				"name" => "txt_".++$i,
+				"type" => "text",
+				"caption" => t("Tekst"),
+				"value" => iconv($charset_from_local, "utf-8", $text),
+			));
 			foreach($data as $lang => $inf)
 			{
+				$this->cb_htmlc->add_property(array(
+					"name" => "vars[".$lang."][".iconv($charset_from_local, "utf-8", $text)."]",
+					"type" => "textbox",
+					"caption" => iconv($charset_from_local, "utf-8", $inf["lang_name"]),
+					"value" => $inf["caption"],
+				));
+				/*
 				$this->vars(array(
 						"lang_short" => iconv($charset_from_local, "utf-8", $lang),
 						"lang_name" => $inf["lang_name"],
 						"lang_caption" => $inf["caption"],
 				));
 				$tmp .= $this->parse("LANG_TRANSLATE");
+				*/
 			}
-			// shows languages which don't have an entry
-			foreach(array_diff($languages, array_keys($data)) as $l)
+			// shows languages which don't have an entry, but hide languges that haven't write access
+			foreach(array_diff(array_diff($no_writable_short, $languages), array_keys($data)) as $l)
 			{
 				foreach($langs_info as $lang_tmp)
 				{
@@ -585,39 +628,72 @@ class cb_translate extends aw_template
 						break;
 					}
 				}
+				
+				$this->cb_htmlc->add_property(array(
+					"name" => "vars[".$l."][".$text."]",
+					"type" => "textbox",
+					"caption" => iconv($charset_from_local, "utf-8", $lang_tmp["name"]),
+				));
+				/*
 				$this->vars(array(
 						"lang_short" => iconv($charset_from_local, "utf-8", $l),
 						"lang_name" => $lang_tmp["name"],
 						"lang_caption" => "",
 				));
 				$tmp .= $this->parse("LANG_TRANSLATE");
+				*/
 			}
+			$this->cb_htmlc->add_property(array(
+				"name" => "sp_".$i,
+				"no_caption" => 1,
+				"value" => "&nbsp;",
+			));
 
 		}
 
-		$title = t("Klassi")." '".$cls[$arr["clid"]]["name"]."' ".t("tekstid.");
-		$this->vars(array(
-			"contents" => $tmp,
-			"title" => iconv($charset_from_local, "utf-8", $title),
-			"reforb" => $this->mk_reforb("submit_editor",array(
-				"clid" => $arr["clid"],
-				"text" =>
-					"1",
-			)),
+		if(count($no_writable_langs))
+		{
+			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+		}
+		$this->cb_htmlc->finish_output(array(
+			"action" => "submit_editor",
+			"method" => "POST",
+			"data" => array(
+				"class" => "cb_translate",
+				"clid" => trim($arr["clid"]),
+				"text" => 1,
+			),
 		));
-		//return die($this->parse());
-		return $this->parse();
+		
+		$save_msg = array();
+		if(strlen($arr["saved_langs"]))
+		{
+			foreach(split(",", $arr["saved_langs"]) as $lng)
+			{
+				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
+			}
+		}
+		return $this->cb_htmlc->get_result(array(
+			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
+		));
 	}
+
 	/** manages single class or classfolder editing
 		@attrib name=releditor
 		@param reltype required
 		@param clid required
+		@param saved_langs optional
 	**/
 	function releditor($arr)
 	{
 		$charset_from_local = "iso-8859-1";
 		aw_global_set("output_charset", "UTF-8");
+
+		/*
 		$this->read_template("reltrans.tpl");
+		$this->sub_merge = 1;
+		*/
+
 		$cu = get_instance("cfg/cfgutils");
 		$cu->load_properties(array(
 			"clid" => $arr["clid"],
@@ -625,7 +701,6 @@ class cb_translate extends aw_template
 		));
 		$rels = $cu->get_relinfo(array("clid" => $arr["clid"]));
 
-		$this->sub_merge = 1;
 		$pot_scanner = get_instance("core/trans/pot_scanner");
 		$languages = $pot_scanner->get_langs();
 
@@ -634,19 +709,40 @@ class cb_translate extends aw_template
 		$po = split("[/]",$aw_location);
 		$po_file = $po[count($po)-1];
 		$langs_info = aw_ini_get("languages.list");
+
+		foreach($langs_info as $lang_info)
+		{
+			$mod_lang[$lang_info["acceptlang"]] = $lang_info;
+		}
+
+		$this->cb_htmlc = get_instance("cfg/htmlclient");
+		$this->cb_htmlc->start_output(array(
+			"template" => "default",
+		));
+
+		// gen title
+		$title = sprintf("Klassi '%s' seos '%s' ('%s' t&uuml;&uuml;pi)", $cls[$arr["clid"]]["name"], "<b>".$rels[$arr["reltype"]]["caption"]."</b>", $arr["reltype"]);
+
+		$this->cb_htmlc->add_property(array(
+			"name" => "general_title",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $title,
+			"textsize" => "17px;",
+		));
+
 		foreach($languages as $key => $language)
 		{
-			foreach($langs_info as $lang_info)
-			{
-				if($lang_info["acceptlang"] == $language)
-				{
-					$charset_from = $lang_info["charset"];
-					break;
-				}
-			}
 			unset($caption);
 			$file_location = aw_ini_get("basedir")."/lang/trans/".$language."/po/".$po_file.".po";
+			if(!$this->check_langfile($language, $po_file.".po"))
+			{
+				$no_writable_langs[] = $mod_lang[$language]["name"]."(".$language.")";
+				continue;
+			}
 			$class_po_file = $pot_scanner->parse_po_file($file_location);
+			$lang = $mod_lang[$language];
+			$charset_from = $lang["charset"];
 			foreach($class_po_file as $po)
 			{
 				$comp = "Seose ".$rels[$arr["reltype"]]["caption"]." (".$arr["reltype"].") tekst";
@@ -655,20 +751,67 @@ class cb_translate extends aw_template
 					$caption = $po["msgstr"];
 				}
 			}
-			foreach($langs_info as $lang)
-			{
-				if($lang["acceptlang"] == $language)
-				{
-					break;
-				}
-			}
+
+			$this->cb_htmlc->add_property(array(
+				"name" => "langname_".$language,
+				"type" => "text",
+				"caption" => t("Keel"),
+				"value" => iconv($charset_from_local, "utf-8", $lang["name"]),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][caption]",
+				"type" => "textbox",
+				"caption" => t("Pealkiri"),
+				"value" => iconv($charset_from, "utf-8", $caption),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "sp_".$language,
+				"no_caption" => 1,
+				"value" => "&nbsp;",
+			));
+			/*
 			$this->vars(array(
 					"lang_short" => iconv($charset_from_local, "utf-8", $language),
 					"lang_name" => iconv($charset_from_local, "utf-8", $lang["name"]),
 					"lang_caption" => iconv($charset_from, "utf-8", $caption),
-					""
 			));
 			$this->parse("SUB_TRANSLATE");
+			*/
+		}
+
+		if(count($no_writable_langs))
+		{
+			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+		}
+		$this->cb_htmlc->finish_output(array(
+			"action" => "submit_editor",
+			"method" => "POST",
+			"data" => array(
+				"class" => "cb_translate",
+				"clid" => trim($arr["clid"]),
+				"reltype" => $arr["reltype"],
+				"caption" => $rels[$arr["reltype"]]["caption"],
+			),
+		));
+		
+		$save_msg = array();
+		if(strlen($arr["saved_langs"]))
+		{
+			foreach(split(",", $arr["saved_langs"]) as $lng)
+			{
+				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
+			}
+		}
+		return $this->cb_htmlc->get_result(array(
+			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
+		));
+/*
+		if(count($no_writable_langs))
+		{
+			$this->vars(array(
+				"caption" => join(", ", $no_writable_langs),
+			));
+			$this->parse("FILE_ACCESS_ERROR");
 		}
 
 		$title = t("Klassi")." '".$cls[$arr["clid"]]["name"]."' ".t("seos")." '".$rels[$arr["reltype"]]["caption"]."'";
@@ -683,11 +826,13 @@ class cb_translate extends aw_template
 		));
 		//return die($this->parse());
 		return $this->parse();
+*/
 	}
 
 	/** manages single class or classfolder editing
 		@attrib name=classeditor
 		@param clid required
+		@param saved_langs optional
 	**/
 	function classeditor($arr)
 	{
@@ -699,36 +844,56 @@ class cb_translate extends aw_template
 			$obj_is_folder = true;
 			$arr["clid"] = substr($arr["clid"],4);
 		}
+		/*
 		$this->read_template("proptrans.tpl");
 		$this->sub_merge = 1;
-
+		*/
 		$pot_scanner = get_instance("core/trans/pot_scanner");
 		$languages = $pot_scanner->get_langs();
 
 		if(!$obj_is_folder)
 		{
-			$cls = parse_config(aw_ini_get("basedir")."/config/ini/classes.ini", true);
-			$cls = $cls["classes"];
+			$cls = aw_ini_get("classes"); //$cls["classes"];
 		}
 		else
 		{
-			$clsfld = parse_config(aw_ini_get("basedir")."/config/ini/classfolders.ini", true);
-			$clsfld = $clsfld["classfolders"];
+			
+			$clsfld = aw_ini_get("classfolders"); //$clsfld["classfolders"];
 		}
-
 		$langs_info = aw_ini_get("languages.list");
+		foreach($langs_info as $lang_info)
+		{
+			$mod_lang[$lang_info["acceptlang"]] = $lang_info;
+		}
+				
+		$this->cb_htmlc = get_instance("cfg/htmlclient");
+		$this->cb_htmlc->start_output(array(
+			"template" => "default",
+		));
+
+		// gen title
+
+		// gen title
+		$cls = aw_ini_get("classes");
+		$title = sprintf("%s '%s' nimi", $obj_is_folder?t("Kausta"):t("Klassi"), "<b>".($obj_is_folder?$clsfld[$arr["clid"]]["name"]:$cls[$arr["clid"]]["name"])."</b>");
+		$this->cb_htmlc->add_property(array(
+			"name" => "general_title",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $title,
+			"textsize" => "17px;",
+		));
+	
 		foreach($languages as $key => $language)
 		{
-			foreach($langs_info as $lang_info)
-			{
-				if($lang_info["acceptlang"] == $language)
-				{
-					$charset_from = $lang_info["charset"];
-					break;
-				}
-			}
+			$charset_from = $mod_lang[$language]["charset"];
 			unset($caption,$comment,$help);
 			$ini_po_loc = aw_ini_get("basedir")."/lang/trans/".$language."/po/aw.ini.po";
+			if(!$this->check_langfile($language, "aw.ini.po"))
+			{
+				$no_writable_langs[] = $mod_lang[$language]["name"]."(".$language.")";
+				continue;
+			}
 			$ini_po_file = $pot_scanner->parse_po_file($ini_po_loc);
 			foreach($ini_po_file as $po)
 			{
@@ -770,6 +935,37 @@ class cb_translate extends aw_template
 					break;
 				}
 			}
+
+			$this->cb_htmlc->add_property(array(
+				"name" => "langname_".$language,
+				"type" => "text",
+				"caption" => t("Keel"),
+				"value" => iconv($charset_from_local, "utf-8", $mod_lang[$language]["name"]),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][caption]",
+				"type" => "textbox",
+				"caption" => t("Pealkiri"),
+				"value" => iconv($charset_from, "utf-8", $caption),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][comment]",
+				"type" => "textbox",
+				"caption" => t("Kommentaar"),
+				"value" => iconv($charset_from, "utf-8", $comment),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][help]",
+				"type" => "textbox",
+				"caption" => t("Abitekst"),
+				"value" => iconv($charset_from, "utf-8", $help),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "sp_".$language,
+				"no_caption" => 1,
+				"value" => "&nbsp;",
+			));
+/*
 			$this->vars(array(
 				"lang_short" => iconv($charset_from_local, "utf-8", $language),
 				"lang_name" => iconv($charset_from_local, "utf-8", $lang["name"]),
@@ -778,9 +974,45 @@ class cb_translate extends aw_template
 				"lang_help" => iconv($charset_from, "utf-8", $help),
 			));
 			$this->parse("SUB_TRANSLATE");
+*/
+		}
+
+		if(count($no_writable_langs))
+		{
+			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+		}
+		$this->cb_htmlc->finish_output(array(
+			"action" => "submit_editor",
+			"method" => "POST",
+			"data" => array(
+				"class" => "cb_translate",
+				"clid" => ($obj_is_folder)?"fld_".$arr["clid"]:"".$arr["clid"],
+				"caption" => ($obj_is_folder)?iconv($charset_from_local, "utf-8",$clsfld[$arr["clid"]]["name"]):iconv($charset_from_local, "utf-8",$cls[$arr["clid"]]["name"]),
+			),
+		));
+		
+		$save_msg = array();
+		if(strlen($arr["saved_langs"]))
+		{
+			foreach(split(",", $arr["saved_langs"]) as $lng)
+			{
+				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
+			}
+		}
+		return $this->cb_htmlc->get_result(array(
+			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
+		));
+/*
+		if(count($no_writable_langs))
+		{
+			$this->vars(array(
+				"caption" => join(", ", $no_writable_langs),
+			));
+			$this->parse("FILE_ACCESS_ERROR");
 		}
 
 		// gen title
+		$cls = aw_ini_get("classes");
 		$title = ($obj_is_folder)?t("Kaust")." '".$clsfld[$arr["clid"]]["name"]."'":t("Klass")." '".$cls[$arr["clid"]]["name"]."'";
 		$this->vars(array(
 			"caption" => ($obj_is_folder)?iconv($charset_from_local, "utf-8",$clsfld[$arr["clid"]]["name"]):iconv($charset_from_local, "utf-8",$cls[$arr["clid"]]["name"]),
@@ -792,12 +1024,14 @@ class cb_translate extends aw_template
 
 		return ($this->parse());
 		//return die($this->parse());
+*/
 	}
 
 	/**
 		@attrib name=groupedit
 		@param clid required type=int
 		@param grpid required
+		@param saved_langs optional
 	**/
 	function groupedit($arr)
 	{
@@ -821,19 +1055,38 @@ class cb_translate extends aw_template
 		$po = split("[/]",$aw_location);
 		$po_file = $po[count($po)-1];
 
+		
+		$this->cb_htmlc = get_instance("cfg/htmlclient");
+		$this->cb_htmlc->start_output(array(
+			"template" => "default",
+		));
+
+		$title = sprintf("Klass '%s', Grupp '%s'", $cls[$arr["clid"]]["name"], "<b>".$groups[$arr["grpid"]]["caption"]."</b>");
+
+		$this->cb_htmlc->add_property(array(
+			"name" => "general_title",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $title,
+			"textsize" => "17px;",
+		));
+
+
 		$langs_info = aw_ini_get("languages.list");
+		foreach($langs_info as $lang_info)
+		{
+			$mod_lang[$lang_info["acceptlang"]] = $lang_info;
+		}
 		foreach($languages as $key => $language)
 		{
-			foreach($langs_info as $lang_info)
-			{
-				if($lang_info["acceptlang"] == $language)
-				{
-					$charset_from = $lang_info["charset"];
-					break;
-				}
-			}
 			$file_location = aw_ini_get("basedir")."/lang/trans/".$language."/po/".$po_file.".po";
 			$class_po_file = $pot_scanner->parse_po_file($file_location);
+			$charset_from = $mod_lang[$language]["charset"];
+			if(!$this->check_langfile($language, $po_file.".po"))
+			{
+				$no_writable_langs[] = $mod_lang[$language]["name"]."(".$language.")";
+				continue;
+			}
 			unset($caption,$comment,$help);
 			$comp = "Grupi ".$groups[$arr["grpid"]]["caption"]." (".$arr["grpid"].") ";
 			foreach($class_po_file as $po)
@@ -858,6 +1111,39 @@ class cb_translate extends aw_template
 					break;
 				}
 			}
+
+			// new
+			$this->cb_htmlc->add_property(array(
+				"name" => "langname_".$language,
+				"type" => "text",
+				"caption" => t("Keel"),
+				"value" => iconv($charset_from_local, "utf-8", $lang["name"]),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][caption]",
+				"type" => "textbox",
+				"caption" => t("Pealkiri"),
+				"value" => iconv($charset_from, "utf-8", $caption),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][comment]",
+				"type" => "textbox",
+				"caption" => t("Kommentaar"),
+				"value" => iconv($charset_from, "utf-8", $comment),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][help]",
+				"type" => "textbox",
+				"caption" => t("Abitekst"),
+				"value" => iconv($charset_from, "utf-8", $help),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "sp_".$language,
+				"no_caption" => 1,
+				"value" => "&nbsp;",
+			));
+			/// new
+/*
 			$this->vars(array(
 					"lang_short" => iconv($charset_from_local, "utf-8", $language),
 					"lang_name" => iconv($charset_from_local, "utf-8", $lang["name"]),
@@ -866,8 +1152,49 @@ class cb_translate extends aw_template
 					"lang_help" => iconv($charset_from, "utf-8", $help),
 			));
 			$this->parse("SUB_TRANSLATE");
-
+*/
 		};
+
+
+		if(count($no_writable_langs))
+		{
+			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+			$this->vars(array(
+				"caption" => join(", ", $no_writable_langs),
+			));
+			$this->parse("FILE_ACCESS_ERROR");
+		}
+		$this->cb_htmlc->finish_output(array(
+			"action" => "submit_editor",
+			"method" => "POST",
+			"data" => array(
+				"class" => "cb_translate",
+				"clid" => trim($arr["clid"]),
+				"grpid" => $arr["grpid"],
+				"caption" => iconv($charset_from_local, "utf-8", $groups[$arr["grpid"]]["caption"]),
+			),
+		));
+		
+		$save_msg = array();
+		if(strlen($arr["saved_langs"]))
+		{
+			foreach(split(",", $arr["saved_langs"]) as $lng)
+			{
+				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
+			}
+		}
+		return $this->cb_htmlc->get_result(array(
+			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
+		));
+/*
+		if(count($no_writable_langs))
+		{
+			$this->vars(array(
+				"caption" => join(", ", $no_writable_langs),
+			));
+			$this->parse("FILE_ACCESS_ERROR");
+		}
+
 		// gen title
 		$title = t("Klass")." '".$cls[$arr["clid"]]["name"]."'";
 		$title .= ", ".t("Grupp")." '".$groups[$arr["grpid"]]["caption"]."'";
@@ -881,6 +1208,7 @@ class cb_translate extends aw_template
 		));
 		return ($this->parse());
 		//return die($this->parse());
+*/
 	}
 
 
@@ -889,6 +1217,7 @@ class cb_translate extends aw_template
 		@param clid required
 		@param propid required
 		@param grpid required
+		@param saved_langs optional
 	**/
 	function proptrans($arr)
 	{
@@ -912,19 +1241,39 @@ class cb_translate extends aw_template
 
 		$groups = $cfgu->get_groupinfo();
 		$langs_info = aw_ini_get("languages.list");
+		
+		$this->cb_htmlc = get_instance("cfg/htmlclient");
+		$this->cb_htmlc->start_output(array(
+			"template" => "default",
+		));
+
+		$title = sprintf("Klass '%s', Grupp '%s', Omadus '%s'('%s' t&uuml;&uuml;pi)", $cls[$arr["clid"]]["name"], $groups[$arr["grpid"]]["caption"], "<b>".$props[$arr["propid"]]["caption"]."</b>", $props[$arr["propid"]]["type"]);
+
+		$this->cb_htmlc->add_property(array(
+			"name" => "general_title",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $title,
+			"textsize" => "17px;",
+		));
+
+
+		foreach($langs_info as $lang_info)
+		{
+			$mod_lang[$lang_info["acceptlang"]] = $lang_info;
+		}
 		foreach($languages as $key => $language)
 		{
-			foreach($langs_info as $lang_info)
-			{
-				if($lang_info["acceptlang"] == $language)
-				{
-					$charset_from = $lang_info["charset"];
-					break;
-				}
-			}
 			$file_location = aw_ini_get("basedir")."/lang/trans/".$language."/po/".$po_file.".po";
 			$class_po_file = $pot_scanner->parse_po_file($file_location);
 			unset($caption,$comment,$help);
+			$lang = $mod_lang[$language];
+
+			if(!$this->check_langfile($language, $po_file.".po"))
+			{
+				$no_writable_langs[] = $mod_lang[$language]["name"]."(".$language.")";
+				continue;
+			}
 			foreach($class_po_file as $po)
 			{
 				if($language == aw_global_get("LC"))
@@ -944,14 +1293,41 @@ class cb_translate extends aw_template
 					$help = $po["msgstr"];
 				}
 			}
-			foreach($langs_info as $lang)
-			{
-				if($lang["acceptlang"] == $language)
-				{
-					break;
-				}
-			}
+			$charset_from = $lang["charset"];
 			$langdir = aw_ini_get("basedir")."/lang/trans/".$language."/po/".$arr["proptrans"].".po";
+
+			// new
+			$this->cb_htmlc->add_property(array(
+				"name" => "langname_".$language,
+				"type" => "text",
+				"caption" => t("Keel"),
+				"value" => iconv($charset_from_local, "utf-8", $lang["name"]),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][caption]",
+				"type" => "textbox",
+				"caption" => t("Pealkiri"),
+				"value" => iconv($charset_from, "utf-8", $caption),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][comment]",
+				"type" => "textbox",
+				"caption" => t("Kommentaar"),
+				"value" => iconv($charset_from, "utf-8", $comment),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][help]",
+				"type" => "textbox",
+				"caption" => t("Abitekst"),
+				"value" => iconv($charset_from, "utf-8", $help),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "sp_".$language,
+				"no_caption" => 1,
+				"value" => "&nbsp;",
+			));
+			/// new
+
 			$this->vars(array(
 				"lang_name" => iconv($charset_from_local, "utf-8", $lang["name"]),
 				"lang_short" => iconv($charset_from_local, "utf-8", $language),
@@ -962,6 +1338,41 @@ class cb_translate extends aw_template
 
 			$this->parse("SUB_TRANSLATE");
 		};
+
+
+		if(count($no_writable_langs))
+		{
+			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+			$this->vars(array(
+				"caption" => join(", ", $no_writable_langs),
+			));
+			$this->parse("FILE_ACCESS_ERROR");
+		}
+		$this->cb_htmlc->finish_output(array(
+			"action" => "submit_editor",
+			"method" => "POST",
+			"data" => array(
+				"class" => "cb_translate",
+				"clid" => trim($arr["clid"]),
+				"grpid" => $arr["grpid"],
+				"propid" => $arr["propid"],
+				"caption" => iconv($charset_from_local, "utf-8", $props[$arr["propid"]]["caption"]),
+			),
+		));
+		
+		$save_msg = array();
+		if(strlen($arr["saved_langs"]))
+		{
+			foreach(split(",", $arr["saved_langs"]) as $lng)
+			{
+				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
+			}
+		}
+		return $this->cb_htmlc->get_result(array(
+			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
+		));
+
+		/*
 		// gen title
 		$title = t("Klass")." '".$cls[$arr["clid"]]["name"]."'";
 		$title .= ", ".t("Grupp")." '".$groups[$arr["grpid"]]["caption"]."'";
@@ -978,7 +1389,129 @@ class cb_translate extends aw_template
 			)),
 		));
 		return ($this->parse());
-		//return die($this->parse());
+		*/
+	}
+
+	/**
+		@attrib name=layouttrans
+		@param clid required
+		@param lid required
+		@param saved_langs optional
+	**/
+	function layouttrans($arr)
+	{
+		$charset_from_local = "iso-8859-1";
+		aw_global_set("output_charset", "UTF-8");
+		$pot_scanner = get_instance("core/trans/pot_scanner");
+		$languages = $pot_scanner->get_langs();
+		
+		/*
+		$this->read_template("layouttrans.tpl");
+		$this->sub_merge = 1;
+		*/
+
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_properties(array(
+				"clid" => trim($arr["clid"]),
+				"load_trans" => 0,
+		));
+
+		$cls = aw_ini_get("classes");
+		$aw_location = $cls[trim($arr["clid"])]["file"];
+		$po = split("[/]",$aw_location);
+		$po_file = $po[count($po)-1];
+
+		$layouts = $cfgu->get_layoutinfo();
+
+		$langs_info = aw_ini_get("languages.list");
+		
+		$this->cb_htmlc = get_instance("cfg/htmlclient");
+		$this->cb_htmlc->start_output(array(
+			"template" => "default",
+		));
+
+		// gen title
+		$title = sprintf("Klass '%s', Kujudusosa '%s' ('%s' t&uuml;&uuml;pi)", $cls[$arr["clid"]]["name"], "<b>".$layouts[$arr["lid"]]["area_caption"]."</b>", $layouts[$arr["lid"]]["type"]);
+		$this->cb_htmlc->add_property(array(
+			"name" => "general_title",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $title,
+			"textsize" => "17px;",
+		));
+
+		foreach($langs_info as $lang_info)
+		{
+			$mod_lang[$lang_info["acceptlang"]] = $lang_info;
+		}
+		foreach($languages as $key => $language)
+		{
+			$lang = $mod_lang[$language];
+			$file_location = aw_ini_get("basedir")."/lang/trans/".$language."/po/".$po_file.".po";
+			unset($caption,$comment,$help);
+
+			// we check if the translation file is writable or not
+			if(!$this->check_langfile($language, $po_file.".po"))
+			{
+				$no_writable_langs[] = $mod_lang[$language]["name"]."(".$language.")";
+				continue;
+			}
+
+			$class_po_file = $pot_scanner->parse_po_file($file_location);
+			foreach($class_po_file as $po)
+			{
+				if($po["msgid"] == "Kujundusosa ".$layouts[$arr["lid"]]["area_caption"]." (".$arr["lid"].") pealkiri")
+				{
+					$caption = $po["msgstr"];
+					break;
+				}
+			}
+
+			$this->cb_htmlc->add_property(array(
+				"name" => "langname_".$language,
+				"type" => "text",
+				"caption" => t("Keel"),
+				"value" => iconv($charset_from_local, "utf-8", $lang["name"]),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "vars[".$language."][pealkiri]",
+				"type" => "textbox",
+				"caption" => t("Pealkiri"),
+				"value" => iconv($lang["charset"], "utf-8", $caption),
+			));
+			$this->cb_htmlc->add_property(array(
+				"name" => "sp_".$language,
+				"no_caption" => 1,
+				"value" => "&nbsp;",
+			));
+		};
+
+		if(count($no_writable_langs))
+		{
+			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+		}
+		$this->cb_htmlc->finish_output(array(
+			"action" => "submit_editor",
+			"method" => "POST",
+			"data" => array(
+				"class" => "cb_translate",
+				"clid" => trim($arr["clid"]),
+				"lid" => $arr["lid"],
+				"caption" => str_replace("&#44;", ",", iconv($charset_from_local, "utf-8", $layouts[$arr["lid"]]["area_caption"])),
+			),
+		));
+		
+		$save_msg = array();
+		if(strlen($arr["saved_langs"]))
+		{
+			foreach(split(",", $arr["saved_langs"]) as $lng)
+			{
+				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
+			}
+		}
+		return $this->cb_htmlc->get_result(array(
+			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
+		));
 	}
 
 	/**
@@ -986,35 +1519,100 @@ class cb_translate extends aw_template
 	**/
 	function show_changes()
 	{
-		$this->read_template("show_changes.tpl");
 		aw_global_set("output_charset", "utf-8");
+		
+		/*
+		$this->read_template("show_changes.tpl");
 		$this->sub_merge = 1;
-		$data = unserialize(stripslashes(core::get_cval("trans_changes")));
-		$langs_info = aw_ini_get("languages.list");
+		*/
 
+		$data = aw_unserialize(core::get_cval("trans_changes"));
+		$langs_info = aw_ini_get("languages.list");
+		foreach($langs_info as $lang)
+		{
+			$mod_lang[$lang["acceptlang"]] = $lang;
+		}
+		$this->cb_htmlc = get_instance("cfg/htmlclient");
+		$this->cb_htmlc->start_output(array(
+			"template" => "default",
+		));
+		classload("vcl/table");
+		$t = new aw_table();
+		$t->define_field(array(
+			"name" => "lang",
+			"caption" => t("Keel"),
+			"chgbgcolor" => "write_err",
+		));
+		$t->define_field(array(
+			"name" => "object",
+			"caption" => t("Element"),
+			"chgbgcolor" => "write_err",
+		));
+		$t->define_field(array(
+			"name" => "from",
+			"caption" => t("Ennem"),
+			"chgbgcolor" => "write_err",
+		));
+		$t->define_field(array(
+			"name" => "to",
+			"caption" => t("P&auml;rast"),
+			"chgbgcolor" => "write_err",
+		));
+
+		$any_non_writable = false;
 		foreach($data as $change)
 		{
-			foreach($langs_info as $lang)
+			$writable = true;
+			if(!$this->check_langfile($change["lang"], basename($change["file"], ".po").".aw", true))
 			{
-				if($change["lang"] == $lang["acceptlang"])
-				{
-					$change["charset"] = $lang["charset"];
-					$change["lang"] = $lang["name"];
-					break;
-				}
+				$writable = false;
+				$any_non_writable = true;
 			}
+			$change["charset"] = $mod_lang[$change["lang"]]["charset"];
+			$change["langname"] = $mod_lang[$change["lang"]]["name"];
 			// check for type of object
 			$header = $change["headers"][0];
 			$this->vars(array(
-				"lang" => iconv($change["charset"], "utf-8",$change["lang"]),
+				"bgcolor" => $writable?"FFFFFF":"F11111",
+				"bgcolor_lang" => $writable?"FF0000":"F11111",
+				"lang" => iconv($change["charset"], "utf-8",$change["langname"]),
 				"object" => iconv($change["charset"], "utf-8", $change["msgid"]),
 				"prev" => (strlen($change["prev_contents"]) < 1)?iconv(aw_global_get("charset"), "utf-8", sprintf("<i>%s</i>", t("tekst puudus"))):iconv($change["charset"], "utf-8", nl2br($change["prev_contents"])),
 				"new" => (strlen($change["contents"]) < 1)?iconv(aw_global_get("charset"), "utf-8", sprintf("<i>%s</i>", t("tekst eemaldati"))):iconv($change["charset"], "utf-8", nl2br($change["contents"])),
 			));
 			$this->parse("SUB_CHANGE");
 			$is = true;
-		}
 
+			// new approach
+			$t->define_data(array(
+				"lang" => iconv($change["charset"], "utf-8",$change["langname"]),
+				"object" => iconv($change["charset"], "utf-8", $change["msgid"]),
+				"from" => (strlen($change["prev_contents"]) < 1)?iconv(aw_global_get("charset"), "utf-8", sprintf("<i>%s</i>", t("tekst puudus"))):iconv($change["charset"], "utf-8", nl2br($change["prev_contents"])),
+				"to" => (strlen($change["contents"]) < 1)?iconv(aw_global_get("charset"), "utf-8", sprintf("<i>%s</i>", t("tekst eemaldati"))):iconv($change["charset"], "utf-8", nl2br($change["contents"])),
+				"write_err" => !$writable?"#F11111":"",
+			));
+		}
+		if($any_non_writable)
+		{
+			$this->gen_error(t("punasega t&auml;histatud ridu ei ole v&otilde;imalik t&otilde;lkefailide kirjutus&otilde;iguste puudumise t&otilde;ttu salvestada!"));
+		}
+		
+		$this->cb_htmlc->add_property(array(
+			"name" => "changetable",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $t->draw(),
+		));
+		$this->cb_htmlc->finish_output(array(
+			"action" => "apply_changes",
+			"method" => "POST",
+			"data" => array(
+				"class" => "cb_translate",
+			),
+		));
+		return $this->cb_htmlc->get_result();
+
+		/*
 		$this->vars(array(
 			"caption" => iconv(aw_global_get("charset"), "utf-8",t("Sooritatud muudatused")),
 		));
@@ -1037,8 +1635,16 @@ class cb_translate extends aw_template
 			$this->parse("NO_CHANGE");
 		}
 		return die($this->parse());
+		*/
 	}
 
+	function gen_error($str)
+	{
+		$this->cb_htmlc->vars(array(
+			"error_text" => $str,
+		));
+		$this->cb_htmlc->error = $this->cb_htmlc->parse("ERROR");
+	}
 
 	/**
 		@attrib name=actual_commit
@@ -1068,6 +1674,7 @@ class cb_translate extends aw_template
 	**/
 	function commit_changes()
 	{
+		/*
 		$this->read_template("commit.tpl");
 		$this->sub_merge = 1;
 		$arr = unserialize(stripslashes(core::get_cval("trans_applyed")));
@@ -1104,6 +1711,7 @@ class cb_translate extends aw_template
 		));
 
 		return die($this->parse());
+		*/
 	}
 
 	/**
@@ -1113,30 +1721,46 @@ class cb_translate extends aw_template
 	{
 		$t=get_instance("core/trans/pot_scanner");
 
-		$data = unserialize(stripslashes(core::get_cval("trans_changes")));
+		$data = aw_unserialize(core::get_cval("trans_changes"));
+		$unwr_changes = array();
 		foreach($data as $change)
 		{
 			$aw_file = aw_ini_get("basedir")."/lang/trans/".$change["lang"]."/aw/".basename($change["file"], ".po").".aw";
-			$files[] = $aw_file;
-			$lang[$aw_file] = $change["lang"];
-			$files_to_commit[] = "lang/trans/".$change["lang"]."/aw/".basename($change["file"], ".po").".aw";
-			$files_to_commit[] = "lang/trans/pot/".basename($change["file"], ".po").".pot";
-			$files_to_commit[] = "lang/trans/".$change["lang"]."/po/".basename($change["file"]);
+			f($aw_file);
+			if(is_writable($aw_file))
+			{
+				f("is");
+				$files[] = $aw_file;
+				$lang[$aw_file] = $change["lang"];
+				$files_to_commit[] = "lang/trans/".$change["lang"]."/aw/".basename($change["file"], ".po").".aw";
+				$files_to_commit[] = "lang/trans/pot/".basename($change["file"], ".po").".pot";
+				$files_to_commit[] = "lang/trans/".$change["lang"]."/po/".basename($change["file"]);
+			}
+			else
+			{
+				f("not");
+				$unwr_changes[] = $change;
+			}
 		}
 		$files = array_unique($files);
 		foreach($files as $file)
 		{
 			$t->_make_aw_from_po(aw_ini_get("basedir")."/lang/trans/".$lang[$file]."/po/".basename($file, ".aw").".po",$file);
-
-			// reads peviously made changes from conf
-			$not_applyed = unserialize(stripslashes(core::get_cval("trans_applyed")));
-			$not_applyed = array_merge($not_applyed, $files_to_commit);
-			$not_applyed = array_unique($not_applyed);
-			// writes into config, writes files to be commited
-			core::set_cval("trans_applyed", serialize(addslashes($not_applyed)));
-			core::set_cval("trans_changes", "");
 		}
-		return $this->mk_my_orb("", array("action" => "commit_changes"));
+
+
+		/* well, this jack shit actually sets the flag for files that are translated, but not yet commited. but because this commit stuff is really pain in the butt.. i ignore this right now
+		// reads peviously made changes from conf
+		$not_applyed = unserialize(stripslashes(core::get_cval("trans_applyed")));
+		$not_applyed = array_merge($not_applyed, $files_to_commit);
+		$not_applyed = array_unique($not_applyed);
+		// writes into config, writes files to be commited
+		core::set_cval("trans_applyed", serialize(addslashes($not_applyed)));
+		*/
+		f($unwr_changes);
+		core::set_cval("trans_changes", aw_serialize($unwr_changes, SERIALIZE_NATIVE));
+		
+		return $this->mk_my_orb("show_changes");
 	}
 
 	/**
@@ -1144,7 +1768,6 @@ class cb_translate extends aw_template
 	**/
 	function submit_editor($arr)
 	{
-		//arr($arr);
 		$arr["caption"] = htmlentities($arr["caption"], ENT_COMPAT, "UTF-8");
 		//die(arr($arr));
 		$langs_info = aw_ini_get("languages.list");
@@ -1164,6 +1787,10 @@ class cb_translate extends aw_template
 		{
 			$save_type = TXT;
 		}
+		elseif(trim($arr["lid"]))
+		{
+			$save_type = LYT;
+		}
 		elseif(is_numeric(trim($arr["clid"])))
 		{
 			$save_type = CLS;
@@ -1180,6 +1807,11 @@ class cb_translate extends aw_template
 				"help" => "help",
 				"strid_start" => "Omaduse",
 				"id" => $arr["propid"],
+			),
+			LYT => array(
+				"pealkiri" => "pealkiri",
+				"strid_start" => "Kujundusosa",
+				"id" => $arr["lid"],
 			),
 			GRP => array(
 				"caption" =>
@@ -1218,7 +1850,6 @@ class cb_translate extends aw_template
 		$cls = aw_ini_get("classes");
 
 		$pot_scanner = get_instance("core/trans/pot_scanner");
-
 		foreach($arr["vars"] as $lang => $vars)
 		{
 			foreach($langs_info as $lang_info)
@@ -1229,7 +1860,7 @@ class cb_translate extends aw_template
 					break;
 				}
 			}
-			if($save_type == PRP || $save_type == GRP || $save_type == REL)
+			if(in_array($save_type, array(PRP, GRP, REL, LYT)))
 			{
 				$file = aw_ini_get("basedir")."/lang/trans/".$lang."/po/".end(split("/",$cls[$arr["clid"]]["file"])).".po";
 				if(is_file($file))
@@ -1454,11 +2085,11 @@ class cb_translate extends aw_template
 		{
 			foreach($change_log as $change_nr => $change)
 			{
-				if($save_type == GRP || $save_type == PRP || $save_type == REL || $save_type == TXT)
+				if(in_array($save_type, array(GRP, PRP, REL, TXT, LYT)))
 				{
 					$file_location = aw_ini_get("basedir")."/lang/trans/".$change["lang"]."/po/".end(split("/",$cls[$arr["clid"]]["file"])).".po";
 				}
-				if($save_type == CLS || $save_type == FLD)
+				if(in_array($save_type, array(CLS, FLD)))
 				{
 					$file_location = aw_ini_get("basedir")."/lang/trans/".$change["lang"]."/po/aw.ini.po";
 				}
@@ -1519,6 +2150,10 @@ class cb_translate extends aw_template
 							$header = "# classes/".$cls[trim($arr["clid"])]["file"].".".aw_ini_get("ext").":rel_".$arr["reltype"];
 							$msgid = "Seose ".$arr["caption"]." (".$arr["reltype"].") ".$tmp[REL][$change["var"]];
 							break;
+						case LYT:
+							$header = "# classes/".$cls[trim($arr["clid"])]["file"].".".aw_ini_get("ext").":layout_".$arr["lid"];
+							$msgid = "Kujundusosa ".$arr["caption"]." (".$arr["lid"].") ".$tmp[LYT][$change["var"]];
+							break;
 						case TXT:
 							$header = $change["headers"];
 							$msgid = $change["msgid"];
@@ -1535,7 +2170,7 @@ class cb_translate extends aw_template
 				$pot_scanner->write_po_file(array("location" => $file_location, "contents" => $file));
 
 				// reads peviously made changes from conf
-				$not_applyed = unserialize(stripslashes(core::get_cval("trans_changes")));
+				$not_applyed = aw_unserialize(core::get_cval("trans_changes"));
 
 				// checks if changes have to be added or overwritten
 				foreach($change_log as $new_change)
@@ -1555,8 +2190,9 @@ class cb_translate extends aw_template
 					}
 				}
 				// writes into config
-				$to_be_applyed = addslashes(serialize($not_applyed));
+				$to_be_applyed = aw_serialize($not_applyed, SERIALIZE_NATIVE);
 				core::set_cval("trans_changes", $to_be_applyed);
+				$return_params["saved_langs"][$change["lang"]] = $change["lang"];
 				//core::set_cval("trans_changes", "");
 			}
 		}
@@ -1565,6 +2201,7 @@ class cb_translate extends aw_template
 			//arr("mitte muhvigi pole muudetud");
 		}
 		$return_params["clid"] = $arr["clid"];
+		$return_params["saved_langs"] = is_array($return_params["saved_langs"])?join(",", $return_params["saved_langs"]):"";
 		switch($save_type)
 		{
 			case FLD:
@@ -1592,6 +2229,11 @@ class cb_translate extends aw_template
 			case TXT:
 				$return_params["action"] = "lineeditor";
 				$return_params["clid"] = $tmp[CLS]["id"];
+				break;
+			case LYT:
+				$return_params["action"] = "layouttrans";
+				$return_params["clid"] = $tmp[CLS]["id"];
+				$return_params["lid"] = $tmp[LYT]["id"];
 				break;
 		}
 
@@ -1622,6 +2264,19 @@ class cb_translate extends aw_template
 			}
 		}
 		return array_unique($return);
+	}
+
+	function check_langfile($lang, $file, $aw = false)
+	{
+		
+		if(is_writable(aw_ini_get("basedir")."/lang/trans/".$lang."/".($aw?"aw":"po")."/".$file))
+		{
+			return true;
+		}
+		else
+		{
+			 return false;
+		}
 	}
 
 };

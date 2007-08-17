@@ -21,6 +21,7 @@
 			<function name="lineeditor">
 				<arguments>
 					<required name="clid" />
+					<optional name="saved_langs" />
 				</arguments>
 			</function>
 		</action>
@@ -30,6 +31,7 @@
 				<arguments>
 					<required name="reltype" />
 					<required name="clid" />
+					<optional name="saved_langs" />
 				</arguments>
 			</function>
 		</action>
@@ -38,6 +40,7 @@
 			<function name="classeditor">
 				<arguments>
 					<required name="clid" />
+					<optional name="saved_langs" />
 				</arguments>
 			</function>
 		</action>
@@ -47,6 +50,7 @@
 				<arguments>
 					<required name="clid" type="int" />
 					<required name="grpid" />
+					<optional name="saved_langs" />
 				</arguments>
 			</function>
 		</action>
@@ -57,6 +61,17 @@
 					<required name="clid" />
 					<required name="propid" />
 					<required name="grpid" />
+					<optional name="saved_langs" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="layouttrans">
+			<function name="layouttrans">
+				<arguments>
+					<required name="clid" />
+					<required name="lid" />
+					<optional name="saved_langs" />
 				</arguments>
 			</function>
 		</action>

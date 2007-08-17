@@ -14,7 +14,7 @@
 <td>
 {VAR:editor_caption}
 </td><td align="right">
-{VAR:commit_link} / {VAR:apply_link}
+{VAR:apply_link}
 </td></table>
 {VAR:toolbar}
 <table border="1" width="100%" height="96%" cellspacing="2" cellpadding="0" style="border-collapse: collapse; background: #e1e1e1;">
