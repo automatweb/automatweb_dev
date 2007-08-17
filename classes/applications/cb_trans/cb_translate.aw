@@ -1726,10 +1726,8 @@ class cb_translate extends aw_template
 		foreach($data as $change)
 		{
 			$aw_file = aw_ini_get("basedir")."/lang/trans/".$change["lang"]."/aw/".basename($change["file"], ".po").".aw";
-			f($aw_file);
 			if(is_writable($aw_file))
 			{
-				f("is");
 				$files[] = $aw_file;
 				$lang[$aw_file] = $change["lang"];
 				$files_to_commit[] = "lang/trans/".$change["lang"]."/aw/".basename($change["file"], ".po").".aw";
@@ -1738,7 +1736,6 @@ class cb_translate extends aw_template
 			}
 			else
 			{
-				f("not");
 				$unwr_changes[] = $change;
 			}
 		}
@@ -1757,7 +1754,6 @@ class cb_translate extends aw_template
 		// writes into config, writes files to be commited
 		core::set_cval("trans_applyed", serialize(addslashes($not_applyed)));
 		*/
-		f($unwr_changes);
 		core::set_cval("trans_changes", aw_serialize($unwr_changes, SERIALIZE_NATIVE));
 		
 		return $this->mk_my_orb("show_changes");
