@@ -23,6 +23,7 @@
             <field>priority</field>
             <type>textbox</type>
             <size>15</size>
+            <warning>0</warning>
             <caption>Prioriteet</caption>
       </property>
       <property>

@@ -40,7 +40,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 	@property name field=name type=textbox
 	@caption Nimi
 
-	@property priority field=priority type=textbox size=15
+	@property priority field=priority type=textbox size=15 warning=0
 	@caption Prioriteet
 
 	@property modified type=text table=objects field=modified
