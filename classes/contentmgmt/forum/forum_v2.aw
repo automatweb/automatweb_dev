@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.123 2007/08/14 12:16:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.124 2007/08/20 13:53:04 voldemar Exp $
 // forum_v2.aw.aw - Foorum 2.0
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -717,6 +717,7 @@ class forum_v2 extends class_base
 				"parent" => $arr["parent"],
 				"class_id" => CL_MENU,
 				"status" => STAT_ACTIVE,
+				"sort_by" => "objects.jrk ASC"
 			));
 			foreach ($folder_list->arr() as $folder_obj)
 			{
@@ -762,6 +763,7 @@ class forum_v2 extends class_base
 			"parent" => $arr["parent"],
 			"class_id" => CL_MENU,
 			"status" => STAT_ACTIVE,
+			"sort_by" => "objects.jrk ASC"
 		));
 		$topic_last_author = $arr["obj_inst"]->prop("topic_last_author");
 
