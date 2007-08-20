@@ -1034,15 +1034,14 @@ class site_template_compiler extends aw_template
 	function _g_op_show_item($arr)
 	{
 		// get the latest list name / o name from the stack
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$list_name = $dat["list_name"];
 		$o_name = $dat["o_name"];
 		$content_name = $dat["content_name"];
 		$inst_name = $dat["inst_name"];
 		$fun_name = $dat["fun_name"];
 
-                        $ret .= $this->_gi()."if (".$o_name."->is_brother() && (!\$this->brother_level_from || \$this->brother_level_from == ".$arr["level"]."))\n";
+                        $ret .= $this->_gi()."if (is_object(".$o_name.") && ".$o_name."->is_brother() && (!\$this->brother_level_from || \$this->brother_level_from == ".$arr["level"]."))\n";
                         $ret .= $this->_gi()."{\n";
                         $this->brace_level++;
                                 $ret .= $this->_gi()."\$this->brother_level_from = ".$arr["level"].";\n";
@@ -1263,8 +1262,7 @@ class site_template_compiler extends aw_template
 
 	function _g_op_show_item_insert($arr)
 	{
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$content_name = $dat["content_name"];
 		$o_name = $dat["o_name"];
 
@@ -1294,8 +1292,7 @@ class site_template_compiler extends aw_template
 
 	function _g_op_list_begin($arr)
 	{
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$list_name = $dat["list_name"];
 
 		$ret  .= $this->_gi()."\$__list_filter = array(\n";
@@ -1342,8 +1339,7 @@ class site_template_compiler extends aw_template
 
 	function _g_op_list_end($arr)
 	{
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$list_name = $dat["list_name"];
 		$inst_name = $dat["inst_name"];
 		$fun_name = $dat["fun_name"];
@@ -1373,8 +1369,7 @@ class site_template_compiler extends aw_template
 	function _g_op_loop_list_begin($arr)
 	{
 		// get the latest list name / o name from the stack
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$list_name = $dat["list_name"];
 		$o_name = $dat["o_name"];
 		$fun_name = $dat["fun_name"];
@@ -1386,26 +1381,27 @@ class site_template_compiler extends aw_template
 
 		$ret = "";
 		$ret .= $this->_gi().$content_name." = \"\";\n";
+		$ret .= $this->_gi()."\$mmi_cnt = 0;\n";
 
 		$ret .= $this->_gi()."for(\n((\"make_menu_item\" == " . $fun_name . ") ? (\$mmi_cnt = 1) : (".$o_name." = ".$list_name."->begin())), ((\"make_menu_item\" == " . $fun_name . ") ? (\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this))  : (".$loop_counter_name." = 0)), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (\$prev_obj = NULL));\n ((\"make_menu_item\" == " . $fun_name . ") ? is_array(\$tmp_vars_array) : (!".$list_name."->end()));\n ((\"make_menu_item\" == " . $fun_name . ") ? (\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this)) : (\$prev_obj = ".$o_name.")), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$o_name." = ".$list_name."->next())), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$loop_counter_name."++))\n)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 
-			$ret .= $this->_gi()."\$this->_cur_menu_path[] = ".$o_name."->id();\n";
-
 			$ret .= $this->_gi()."if (empty(\$mmi_cnt))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 
-		if (aw_ini_get("user_interface.hide_untranslated"))
-		{
-			$ret .= $this->_gi()."if (!".$o_name."->prop_is_translated(\"name\"))\n";
-			$ret .= $this->_gi()."{\n";
-			$this->brace_level++;
-			$ret .= $this->_gi()."continue;\n";
-			$this->brace_level--;
-			$ret .= $this->_gi()."}\n";
-		}
+			$ret .= $this->_gi()."\$this->_cur_menu_path[] = ".$o_name."->id();\n";
+
+			if (aw_ini_get("user_interface.hide_untranslated"))
+			{
+				$ret .= $this->_gi()."if (!".$o_name."->prop_is_translated(\"name\"))\n";
+				$ret .= $this->_gi()."{\n";
+				$this->brace_level++;
+				$ret .= $this->_gi()."continue;\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."}\n";
+			}
 
 			if (aw_ini_get("user_interface.full_content_trans"))
 			{
@@ -1417,7 +1413,7 @@ class site_template_compiler extends aw_template
 				$ret .= $this->_gi()."}\n";
 			}
 
-			$ret .= $this->_gi()."if (".$o_name."->is_brother() && (!\$this->brother_level_from || \$this->brother_level_from == ".$arr["level"]."))\n";
+			$ret .= $this->_gi()."if (is_object(".$o_name.") && ".$o_name."->is_brother() && (!\$this->brother_level_from || \$this->brother_level_from == ".$arr["level"]."))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 				$ret .= $this->_gi()."\$this->brother_level_from = ".$arr["level"].";\n";
@@ -1547,8 +1543,7 @@ class site_template_compiler extends aw_template
 
 	function _g_op_if_cond($arr)
 	{
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$o_name = $dat["o_name"];
 		$loop_counter_name = $dat["loop_counter_name"];
 		$list_name = $dat["list_name"];
@@ -1668,8 +1663,7 @@ class site_template_compiler extends aw_template
 		if ($content_name == "")
 		{
 			// get it from the current stack
-			end($this->list_name_stack);
-			$dat = current($this->list_name_stack);
+			$dat = end($this->list_name_stack);
 			$list_name = $dat["list_name"];
 			$content_name = $dat["content_name"];
 		}
@@ -1906,9 +1900,7 @@ class site_template_compiler extends aw_template
 	function _g_op_get_obj_tree_list($arr)
 	{
 		$ret = "";
-
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$list_name = $dat["list_name"];
 		$inst_name = $dat["inst_name"];
 		$fun_name = $dat["fun_name"];
@@ -2036,8 +2028,7 @@ class site_template_compiler extends aw_template
 
 	function _g_op_has_lugu($arr)
 	{
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$o_name = $dat["o_name"];
 
 		$ret = "";
@@ -2105,9 +2096,7 @@ class site_template_compiler extends aw_template
 	function _g_op_if_submenus($arr)
 	{
 		$ret = "";
-
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
 
 		$ret .= $this->_gi()."if (\$this->can(\"view\", \$parent_obj->prop(\"submenus_from_menu\")))\n";
@@ -2124,8 +2113,7 @@ class site_template_compiler extends aw_template
 
 	function _g_op_get_obj_submenus($arr)
 	{
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$list_name = $dat["list_name"];
 		$inst_name = $dat["inst_name"];
 		$fun_name = $dat["fun_name"];
@@ -2231,9 +2219,7 @@ class site_template_compiler extends aw_template
 	function _g_op_grp_end($arr)
 	{
 		$res = "";
-
-		end($this->list_name_stack);
-		$dat = current($this->list_name_stack);
+		$dat = end($this->list_name_stack);
 		$content_name = $dat["content_name"];
 		$o_name = $dat["o_name"];
 		$loop_counter_name = $dat["loop_counter_name"];
