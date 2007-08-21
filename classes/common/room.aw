@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.204 2007/07/30 15:32:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.205 2007/08/21 08:20:56 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -4166,7 +4166,7 @@ class room extends class_base
 			if($people > $room->prop("normal_capacity"))
 			{
 				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency , "start" => $start, "end" => $end));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
-				$this->bargain_value[$currency] = $this->cal_people_price_discount(array("room" => $room, "people" => $people, "cur" => $currency , "start" => $start, "end" => $end));
+				$this->bargain_value[$currency]+= $this->cal_people_price_discount(array("room" => $room, "people" => $people, "cur" => $currency , "start" => $start, "end" => $end));
 				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency, "start" => $start, "end" => $end));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
 			}
 //			if(is_array($products) && sizeof($products))
@@ -4412,7 +4412,7 @@ class room extends class_base
 			}
 			$n++;
 		}
-		$this->people_price_discount = (($discount * 0.01)*$sum);
+		$this->people_price_discount[$cur] = (($discount * 0.01)*$sum);
 		return $sum - (($discount * 0.01)*$sum);
 	//array("room" => $room, "people" => $people, "cur" => $currency));	
 	}
