@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.28 2007/08/14 11:01:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.29 2007/08/21 22:49:33 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -568,8 +568,8 @@ class ddoc extends class_base
 		$name = $name?$name:"Digidoc (".date("d/m/Y H:i").")";
 
 		$this->_s(false);
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->CreateSignedDoc(DEFAULT_DDOC_TYPE, DEFAULT_DDOC_VERSION);
+		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->CreateSignedDoc($_SESSION["scode"], DEFAULT_DDOC_TYPE, DEFAULT_DDOC_VERSION);
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err(DDOC_ERR_WSDL, "CreateSignedDoc", "Creating new empty ddoc (Type:".DEFAULT_DDOC_TYPE."/Vers:".DEFAULT_DDOC_VERSION.") failed.", $ret->getMessage());
@@ -577,8 +577,8 @@ class ddoc extends class_base
 				"msg" => t("Uue DigiDoc konteineri loomine eba&otilde;nnestus: ".$ret->getMessage()),
 			));
 		}
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->GetSignedDoc();
+		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDoc($_SESSION["scode"]);
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", "Getting signed container failed.", $ret->getMessage());
@@ -649,16 +649,16 @@ class ddoc extends class_base
 			));
 		}
 		$this->_s($oid);
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->RemoveDataFile($id);
+		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->RemoveDataFile($_SESSION["scode"], $id);
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err(DDOC_ERR_WSDL, "RemoveDataFile", "Removing file from container failed.", $ret->getMessage());
 			$this->_e();
 			return false;
 		}
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->GetSignedDoc();
+		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDoc($_SESSION["scode"]);
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", "Getting new container contents failed.", $ret->getMessage());
@@ -720,8 +720,8 @@ class ddoc extends class_base
 			return false;
 		}
 		$this->_s($oid);
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->GetSignedDocInfo();
+		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDocInfo($_SESSION["scode"]);
 		$ret = ddoc2_parser::Parse($this->digidoc->WSDL->xml, 'body');
 		if(PEAR::isError($ret))
 		{
@@ -769,7 +769,7 @@ class ddoc extends class_base
 		}
 		$cont = $oid?$this->get_ddoc($oid):"";
 		$p = new ddoc2_parser($cont);
-		$ret = $this->digidoc->WSDL->StartSession($oid?$p->GetDigiDoc(LOCAL_FILES):"", TRUE, '');
+		$ret = $this->digidoc->WSDL->StartSession("", $oid?$p->GetDigiDoc(LOCAL_FILES):"", TRUE, '');
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err(DDOC_ERR_WSDL, "startSession", $ret->message);
@@ -787,15 +787,15 @@ class ddoc extends class_base
 		else
 		{
 			$xml = $p->Parse($this->digidoc->WSDL->xml, 'body');
-			$_SESSION["scode"] = $xml["sesscode"];
+			$_SESSION["scode"] = $xml["Sesscode"];
 			$_SESSION["ddoc_name"] = $oid;
 		}
 	}
 
 	function _e()
 	{
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->CloseSession();
+		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->CloseSession($_SESSION["code"]);
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err(DDOC_ERR_WSDL, "closeSession", $ret->message);
@@ -906,7 +906,7 @@ class ddoc extends class_base
 			);
 
 			$this->_s($arr["oid"]);
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 
 			$p = new ddoc2_parser();
 			$o = obj($arr["oid"]);
@@ -916,12 +916,12 @@ class ddoc extends class_base
 
 			if(LOCAL_FILES)
 			{
-				$ret = $this->digidoc->WSDL->addDataFile($hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
+				$ret = $this->digidoc->WSDL->addDataFile($_SESSION["scode"], $hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
 			}
 			else
 			{
 				$f = $file;
-				$ret = $this->digidoc->WSDL->addDataFile($f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
+				$ret = $this->digidoc->WSDL->addDataFile($_SESSION["scode"], $f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
 			}
 			if(PEAR::isError($ret))
 			{
@@ -933,8 +933,8 @@ class ddoc extends class_base
 			// datafile added now
 
 			// lets get the new and improved ddoc file
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-			$ret = $this->digidoc->WSDL->GetSignedDoc();
+			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret = $this->digidoc->WSDL->GetSignedDoc($_SESSION["scode"]);
 			if(PEAR::isError($ret))
 			{
 				$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", $ret->getMessage(), " error getting new & updated ddoc contents");
@@ -976,7 +976,7 @@ class ddoc extends class_base
 			);
 
 			$this->_s($arr["oid"]);
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 
 			$p = new ddoc2_parser();
 			$o = obj($arr["oid"]);
@@ -986,12 +986,12 @@ class ddoc extends class_base
 
 			if(LOCAL_FILES)
 			{
-				$ret = $this->digidoc->WSDL->addDataFile($hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
+				$ret = $this->digidoc->WSDL->addDataFile($_SESSION["scode"], $hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
 			}
 			else
 			{
 				$f = $file;
-				$ret = $this->digidoc->WSDL->addDataFile($f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
+				$ret = $this->digidoc->WSDL->addDataFile($_SESSION["scode"], $f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
 			}
 			if(PEAR::isError($ret))
 			{
@@ -1003,8 +1003,8 @@ class ddoc extends class_base
 			// datafile added now
 
 			// lets get the new and improved ddoc file
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-			$ret = $this->digidoc->WSDL->GetSignedDoc();
+			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret = $this->digidoc->WSDL->GetSignedDoc($_SESSION["scode"]);
 			if(PEAR::isError($ret))
 			{
 				$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", $ret->getMessage());
@@ -1037,19 +1037,19 @@ class ddoc extends class_base
 		{
 			// uploaditud faili lisamine
 			$this->_s($arr["oid"]);
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 			if(LOCAL_FILES)
 			{
 				$p = new ddoc2_parser();
 				$o = obj($arr["oid"]);
 				$n = count(aw_unserialize($o->prop("files")));
 				$hash = $p->getFileHash($arr["file"], "D".$n);
-				$ret = $this->digidoc->WSDL->addDataFile($hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
+				$ret = $this->digidoc->WSDL->addDataFile($_SESSION["scode"], $hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
 			}
 			else
 			{
 				$f = $arr["file"];
-				$ret = $this->digidoc->WSDL->addDataFile($f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
+				$ret = $this->digidoc->WSDL->addDataFile($_SESSION["scode"], $f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
 			}
 			if(PEAR::isError($ret))
 			{
@@ -1059,8 +1059,8 @@ class ddoc extends class_base
 			}
 			
 			// lets get the new and improved ddoc file
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-			$ret = $this->digidoc->WSDL->GetSignedDoc();
+			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret = $this->digidoc->WSDL->GetSignedDoc($_SESSION["scode"]);
 			if(PEAR::isError($ret))
 			{
 				error::raise(array(
@@ -1193,8 +1193,8 @@ class ddoc extends class_base
 
 		$this->_s($oid);
 		
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret =  $this->digidoc->WSDL->GetSignedDocInfo();
+		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret =  $this->digidoc->WSDL->GetSignedDocInfo($_SESSION["scode"]);
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err("DDOC_ERR_WSDL", "GetSignedDocInfo", $ret->getMessage());
@@ -1215,8 +1215,8 @@ class ddoc extends class_base
 
 		foreach($ret2["SignedDocInfo"]["DataFileInfo"] as $std_obj)
 		{
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-			$file = $this->digidoc->WSDL->GetDataFile($std_obj["Id"]);
+			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$file = $this->digidoc->WSDL->GetDataFile($_SESSION["scode"], $std_obj["Id"]);
 			if(PEAR::isError($file))
 			{
 				$this->sign_err(DDOC_ERR_WSDL, "getDataFile", $file->getMessage());
@@ -1370,7 +1370,7 @@ class ddoc extends class_base
 	**/
 	function sign_url($arr)
 	{
-		if(!is_oid($arr["ddoc_oid"]) && !is_oid($arr["file_oid"]) && !is_oid($arr["other_oid"]))
+		if(!$this->can("view", $arr["ddoc_oid"]) && !$this->can("view", $arr["file_oid"]) && !$this->can("view", $arr["other_oid"]))
 		{
 			return t("#");
 		}
@@ -1545,8 +1545,8 @@ class ddoc extends class_base
 		{
 			$browser = ddFile::getBrowser();
 			$brow_os = ($browser['OS'] == 'Win' ? 'WIN32' : 'LINUX').'-'.($browser['BROWSER_AGENT']=='IE' ? 'IE' : 'MOZILLA');
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-			$ret = $this->digidoc->WSDL->getSignatureModules($brow_os, $arr["step"], "HTML");
+			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret = $this->digidoc->WSDL->getSignatureModules($_SESSION["scode"], $brow_os, $arr["step"], "HTML");
 			if(PEAR::isError($ret))
 			{
 				$this->sign_err(DDOC_ERR_WSDL, "getSignatureModules", "Getting signature modules failed.", $ret->getMessage());
@@ -1609,8 +1609,8 @@ class ddoc extends class_base
 				$_SESSION["prev_sign_mark"] = time();
 				if(!$use_prev)
 				{
-					$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-					$ret = $this->digidoc->WSDL->PrepareSignature($arr["signCertHex"], $arr["signCertId"], $arr["role"], $arr["city"], $arr["state"], $arr["postalcode"], $arr["country"]);
+					//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+					$ret = $this->digidoc->WSDL->PrepareSignature($_SESSION["scode"], $arr["signCertHex"], $arr["signCertId"], $arr["Role"], $arr["City"], $arr["State"], $arr["PostalCode"], $arr["Country"], "");
 				}
 				else
 				{
@@ -1630,9 +1630,9 @@ class ddoc extends class_base
 				else
 				{
 					$_SESSION["prev_sign_value"] = aw_serialize($ret, SERIALIZE_NATIVE);
-					$_SESSION["signatureId"] = !isset($_SESSION["signatureId"])?$ret["SignatureId"]:$_SESSION["signatureId"];
-					$_SESSION['signedInfoDigest'] = !isset($_SESSION['signedInfoDigest'])?$ret['SignedInfoDigest']:$_SESSION['signedInfoDigest'];
-					$rep['{2}'] = $_SESSION['signedInfoDigest'];
+					$_SESSION["SignatureId"] = !isset($_SESSION["SignatureId"])?$ret["SignatureId"]:$_SESSION["SignatureId"];
+					$_SESSION['SignedInfoDigest'] = !isset($_SESSION['SignedInfoDigest'])?$ret['SignedInfoDigest']:$_SESSION['SignedInfoDigest'];
+					$rep['{2}'] = $_SESSION['SignedInfoDigest'];
 
 					$tpl->vars(array(
 						"HTML_HEAD_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-HEAD"]["html"]),
@@ -1640,8 +1640,8 @@ class ddoc extends class_base
 						"HTML_FORM_END_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-FORM-END"]["html"]),
 						"HTML_BODY_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-BODY"]["html"]),
 						"reforb" => $this->mk_reforb("FINALIZE", array(
-							"signatureId" => $_SESSION["signatureId"],
-							"signedInfoDigest" => $_SESSION["signedInfoDigest"],
+							"SignatureId" => $_SESSION["SignatureId"],
+							"SignedInfoDigest" => $_SESSION["SignedInfoDigest"],
 							"step" => "END",
 							"ddoc_oid" => $ddoc_oid,
 						)),
@@ -1652,10 +1652,10 @@ class ddoc extends class_base
 
 			break;
 			case "END":
-				unset($_SESSION["signatureId"]);
-				unset($_SESSION["signedInfoDigest"]);
+				unset($_SESSION["SignatureId"]);
+				unset($_SESSION["SignedInfoDigest"]);
 				$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-				$ret = $this->digidoc->WSDL->FinalizeSignature($arr["signatureId"], $arr["signValueHex"]);
+				$ret = $this->digidoc->WSDL->FinalizeSignature($arr["SignatureId"], $arr["signValueHex"]);
 				if(PEAR::isError($ret))
 				{
 					$this->sign_err(DDOC_ERR_WSDL, "FinalizeSignature", "Finalizing signature in end part failed", $ret->getMessage());
@@ -1667,8 +1667,8 @@ class ddoc extends class_base
 				}
 				else
 				{
-					$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-					$ret = $this->digidoc->WSDL->GetSignedDoc();
+					//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+					$ret = $this->digidoc->WSDL->GetSignedDoc($_SESSION["scode"]);
 					if(PEAR::isError($ret))
 					{
 						$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", "Signing (end part) failed (getting new ddoc contents).", $ret->getMessage());
@@ -1758,8 +1758,8 @@ class ddoc extends class_base
 		// start session
 		$this->_s($oid);
 
-		$this->digidoc->addHeader('SessionCode', $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->RemoveSignature($id);
+		//$this->digidoc->addHeader('SessionCode', $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->RemoveSignature($_SESSION["scode"], $id);
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err(DDOC_ERR_WSDL, "RemoveSignature", "Removing signature failed.", $ret->getMessage());
@@ -1767,8 +1767,8 @@ class ddoc extends class_base
 				"msg" => t("Ei suutnud eemaldada allkirja digidoc konteinerist:".$ret->getMessage()),
 			));
 		}
-		$this->digidoc->addHeader('SessionCode', $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->GetSignedDoc();
+		//$this->digidoc->addHeader('SessionCode', $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDoc($_SESSION["scode"]);
 		if(PEAR::isError($ret))
 		{
 			$this->sign_err(DDOC_ERR_WSDL, "GetSignedDoc", "Getting new DDoc container failed.", $ret->getMessage());
