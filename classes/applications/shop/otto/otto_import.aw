@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.50 2007/08/16 11:53:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.51 2007/08/22 14:04:03 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -61,6 +61,9 @@ caption Uuenda ainult toote andmed
 
 	@property products_manager_table type=table group=products_manager no_caption=1
 	@caption Tooted
+
+	@property products_manager_change_submit type=submit group=products_manager
+	@caption Salvesta
 
 @groupinfo files caption="Failid"
 
@@ -732,34 +735,24 @@ class otto_import extends class_base
 			$pics = explode(',', $prod_obj->prop('user3'));
 			foreach ($pics as $pic)
 			{
-			//	$pics_str .= '<div style="border: 1px solid red;width: 250px;">';
+				$pics_str .= '<table style="display:inline; border:1px solid red">';
+				$pics_str .= '<tr><td style="border: 1px solid blue">';
 				$pics_str .= html::img(array(
 					'url' => aw_ini_get('baseurl').'/vv_product_images/'.$pic{0}.'/'.$pic{1}.'/'.$pic.'_2.jpg',
 				));
-				$pics_str .= '<div style="display:inline;border:1px solid blue;">foobar</div>';
-			//	$pics_str .= '</div>';
+				$pics_str .= '</td></tr>';
+				$pic_del_check_box = html::checkbox(array(
+					'name' => 'pic_del['.$pic.']',
+					'value' => 1,
+					'caption' => t('Kustuta'),
+				));
+				$pics_str .= '<tr><td style="border:1px solid green"><strong>'.$pic.'</strong>'.$pic_del_check_box.'</td></tr>';
+				$pics_str .= '</table>';
 			}
 			$t->define_data(array(
 				'caption' => t('Pildid'),
 				'data' => $pics_str
 			));
-		}
-		else
-		{
-/*
-			$t->define_field(array(
-				'name' => 'oid',
-				'caption' => t('OID')
-			));
-			$t->define_field(array(
-				'name' => 'data',
-				'caption' => t('Andmed')
-			));
-			$t->define_field(array(
-				'name' => 'images',
-				'caption' => t('Pildid'),
-			));
-*/
 		}
 		return PROP_OK;
 	}
@@ -1978,7 +1971,7 @@ class otto_import extends class_base
 			else
 			{
 
-				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewSearch-SearchStart;sid=mDuGagg9T0iHakspt6yqShOR_0e4OZ2Xs5qs8J39FNYYHvjet0FaQJmF?ls=0&Orengelet.sortPipelet.sortResultSetSize=15&SearchDetail=one&stype=N&Query_Text=".$pcode;
+				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
 
 				echo "Loading <a href=\"$url\">page</a> content <br>\n";
 				flush();
@@ -2005,13 +1998,12 @@ class otto_import extends class_base
 					$o_html = $html;
 
 
-					preg_match_all("/<a id=\"silkhref\" href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
+					preg_match_all("/Javascript:gotoSearchArticle\(\'(.*)\'\);/imsU", $html, $mt, PREG_PATTERN_ORDER);
 					$urld = array();
 					// echo (dbg::dump($mt));
 					foreach($mt[1] as $url)
 					{
-						$url = $url."&SearchDetail=one&stype=N&Orengelet.sortPipelet.sortResultSetSize=15&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=".$pcode;
-
+					//	$url = $url."&SearchDetail=one&stype=N&Orengelet.sortPipelet.sortResultSetSize=15&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=".$pcode;
 						$urld[$url] = $url;
 					}
 
