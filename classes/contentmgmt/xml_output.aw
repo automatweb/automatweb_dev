@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/xml_output.aw,v 1.2 2007/08/15 13:56:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/xml_output.aw,v 1.3 2007/08/23 08:37:28 kristo Exp $
 // xml_output.aw - XML V&auml;ljund 
 /*
 
@@ -81,6 +81,18 @@ class xml_output extends class_base
 			{
 				$data[] = obj($docs);
 			}
+
+			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<objects>\n";
+			foreach($data as $o)
+			{
+				$xml .= "\t<object id=\"".$o->id()."\">\n";
+				$xml .= "\t\t<lead_url>".$this->_format($this->mk_my_orb("format_doc_content", array("id" => $o->id(), "leadonly" => 1)))."</lead_url>\n";
+				$xml .= "\t\t<long_url>".$this->_format($this->mk_my_orb("format_doc_content", array("id" => $o->id())))."</long_url>\n";
+				$xml .= "\t</object>";
+			}
+			$xml .= "</objects>";
+			header("Content-type: text/xml; charset=utf-8");
+			die($xml);
 		}
 		else
 		{
@@ -289,6 +301,22 @@ class xml_output extends class_base
 			$this->_req_menus_xml($o->id(), $xml, $params, $arr);
 			$xml .= "\t</object>";
 		}
+	}
+
+	/**
+		@attrib name=format_doc_content
+		@param id required type=int acl=view
+		@param leadonly optional type=int 
+	**/
+	function format_doc_content($arr)
+	{
+		$o = obj($arr["id"]);
+		$dd = get_instance("doc_display");
+		die($dd->gen_preview(array(
+			"docid" => $o->id(),
+			"tpl" => $arr["leadonly"] ? "xml_output_leadonly.tpl" : "xml_output.tpl",
+			"leadonly" => $arr["leadonly"]
+		)));
 	}
 }
 ?>
