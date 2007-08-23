@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.89 2007/07/23 14:30:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.90 2007/08/23 12:34:21 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -555,46 +555,56 @@ class vcalendar extends aw_template
 
 		enter_function("draw_calendar_content");
 
-		if (!empty($arr["text"]))
+		// turns out a lot of the time the calendar has no var for content and drawing it
+		// can take a SIGNIFICANT amount of time
+		$this->read_template($this->container_template);
+		if ($this->template_has_var_full("content"))
 		{
-			$content = $arr["text"];
+			if (!empty($arr["text"]))
+			{
+				$content = $arr["text"];
+			}	
+			else
+			{
+				switch($this->range["viewtype"])
+				{
+					case "month":
+						$awt->start("draw-month");
+						$content = $this->draw_month();
+						$awt->stop("draw-month");
+						$caption = locale::get_lc_month(date("m",$this->range["timestamp"]));
+						$caption .= " ";
+						$caption .= date("Y",$this->range["timestamp"]);
+						break;
+	
+					case "week":
+					case "last_events":
+						$content = $this->draw_week();
+						$ms = locale::get_lc_month(date("m",$this->range["start"]));
+						$me = locale::get_lc_month(date("m",$this->range["end"]));
+						$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
+						break;
+
+					case "relative":
+						$content = $this->draw_relative();
+						$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
+						break;
+	
+					case "year":
+						$content = $this->draw_year();
+						$caption = "";
+						break;
+					
+					default:
+						$content = $this->draw_day($arr);
+						$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
+				};
+			};
 		}
 		else
 		{
-			switch($this->range["viewtype"])
-			{
-				case "month":
-					$awt->start("draw-month");
-					$content = $this->draw_month();
-					$awt->stop("draw-month");
-					$caption = locale::get_lc_month(date("m",$this->range["timestamp"]));
-					$caption .= " ";
-					$caption .= date("Y",$this->range["timestamp"]);
-					break;
-
-				case "week":
-				case "last_events":
-					$content = $this->draw_week();
-					$ms = locale::get_lc_month(date("m",$this->range["start"]));
-					$me = locale::get_lc_month(date("m",$this->range["end"]));
-					$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
-					break;
-
-				case "relative":
-					$content = $this->draw_relative();
-					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
-					break;
-
-				case "year":
-					$content = $this->draw_year();
-					$caption = "";
-					break;
-					
-				default:
-					$content = $this->draw_day($arr);
-					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
-			};
-		};
+			$content = "";
+		}
 		exit_function("draw_calendar_content");
 		//$awt->stop("load-properties");
 		
@@ -607,7 +617,8 @@ class vcalendar extends aw_template
 		// if overview_func is not defined, then no overview thingie will be drawn
 		// it's that easy.
 		enter_function("vcl/calendar::get_html::overview");
-		if ($this->overview_func)
+		$this->read_template($this->container_template);
+		if ($this->overview_func && $this->template_has_var_full("overview"))
 		{
 			$ostart = $this->range["overview_start"];
 			$oend = $this->range["overview_end"];
@@ -1443,6 +1454,7 @@ class vcalendar extends aw_template
 			$style_background = $this->styles["minical_background"];
 		};
 
+		$done_days = array();
 		$j = $realstart;
 		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$realstart));
 		while($j <= $realend)
@@ -1454,6 +1466,11 @@ class vcalendar extends aw_template
 				$reals = mktime(0,0,0,$s_parts["mon"],$s_parts["day"],$s_parts["year"]);
 				$s_parts["day"]++;
 				$dstamp = date("Ymd",$reals);
+				if (isset($done_days[$dstamp]))
+				{
+					continue;
+				}
+				$done_days[$dstamp] = 1;
 				$has_events = $this->overview_items[$dstamp];
 				$style = $has_events ? $style_day_with_events : $style_day_without_events;
 				if (between($i,$arr["start"],$arr["end"]))
