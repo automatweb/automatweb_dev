@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.170 2007/07/25 09:03:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.171 2007/08/23 10:00:48 tarvo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -988,6 +988,7 @@ class htmlclient extends aw_template
 							"name" => $arr["name"] . "[" . $key . "]",
 							"checked" => ($arr["value"][$key]),
 							"value" => $key,
+							"disabled" => $arr["disabled"][$key],
 						));
 					}
 					else
@@ -998,6 +999,7 @@ class htmlclient extends aw_template
 							"checked" => isset($arr["value"]) && ($arr["value"] == $key),
 							"value" => $key,
 							"onclick" => $arr["onclick"],
+							"disabled" => $arr["disabled"][$key],
 						));
 					};
 					if ($arr["orient"] == "vertical")
