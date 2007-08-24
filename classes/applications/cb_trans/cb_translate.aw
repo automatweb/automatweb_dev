@@ -1,4 +1,26 @@
 <?php
+/*
+
+@classinfo syslog_type=ST_CB_TRANSLATE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
+
+@groupinfo translation caption="T&otilde;lkimine"
+@default group=translation
+	@property translation_tb type=toolbar no_caption=1
+
+	@layout translation_hsplit_1 type=hbox width=15%:85%
+		@layout translation_vsplit_left type=vbox closeable=1 area_caption=Klassihierarhia parent=translation_hsplit_1
+			@property classtree type=treeview parent=translation_vsplit_left no_caption=1
+
+		@layout translation_vsplit_right type=vbox closeable=1 area_caption=Tolgitavad_asjad parent=translation_hsplit_1
+			@property tmp1 type=text parent=translation_vsplit_right
+			@caption fafa1
+	
+*/
 
 define("FLD", 1);
 define("CLS", 2);
@@ -8,12 +30,62 @@ define("REL", 5);
 define("TXT", 6);
 define("LYT", 7);
 
-class cb_translate extends aw_template
+class cb_translate extends class_base
 {
 	function cb_translate()
 	{
-		$this->init("applications/cb_translate");
+		$this->init(array(
+			"tpldir" => "applications/cb_translate",
+			"clid" => CL_CB_TRANSLATE,
+		));
+		aw_global_set("output_charset", "utf-8");
 	}
+	
+	function init_cfgu($clid = false)
+	{
+		if(!$this->cfgu)
+		{
+			$this->cfgu = get_instance("cfg/cfgutils");
+		}
+		if($clid)
+		{
+			return $this->cfgu->load_properties(array(
+					"clid" => $clid,
+			));
+		}
+	}
+
+// get props
+	function _get_translation_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "fafa",
+			"caption" => "fafa",
+			"img" => "save.gif",
+		));
+	}
+
+	function _get_classtree($arr)
+	{
+		$clid = $arr["request"]["clid"]?$arr["request"]["clid"]:"fld_0";
+		$arr["prop"]["vcl_inst"]->start_tree (array (
+			"type" => TREE_DHTML,
+			//"open_path" => array("fld_10","fld_37","fld_59"),
+			//"open_path" => array("fld_1"),
+			//"open_path" => array("fld_10","fld_37","fld_59","867"),
+			"root_name" => iconv("iso-8859-1", "utf-8", "AW KLASSIDE T&Otilde;LKIMINE"),
+			"url_target" => "editorcontent",
+			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $clid, "parent" => " ")),
+			"has_root" => 1,
+			"baseurl" => aw_ini_get("baseurl"),
+			"ext" => aw_ini_get("ext"),
+		));
+		$this->_gen_tree($arr["prop"]["vcl_inst"], $clid);
+	}
+
+// set props
+
 	/**
 		@attrib name=editor
 		@param clid required
@@ -39,10 +111,62 @@ class cb_translate extends aw_template
 			"action" => "",
 		));
 
+		$tb->add_button(array(
+			"name" => "search",
+			"caption" => t("Otsi"),
+			"img" => "search.gif",
+			"target" => "editorcontent",
+			"action" => "search_trans",
+		));
+
+/*
+
+		Actually the idea for this next thingie was that you can enter a aw url to the so called address bar and translate application finds out which translation strings are used during loading this page. then those strings are just shown to the user and he can translate these. makes it easier for dumbuser.
+
+		The idea was that aw_url method gets the url, does pageload to that url with certain parameter. aw recognizes this parameter and collects all translate strings used. then, instead of the rendered page, aw returns those strings with vital information where they are etc.. and aw_url method does the rest.
+
+		So, if anybody wishes, he can implement that, i just don't have time for it right now.. i'll better try to implement a search functionality.
+
+		taiu
+
+
+		$tb->add_separator();
+		
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		$cdata = html::textbox(array(
+			"name" => "trans_url",
+			"size" => "100%",
+		));
+		$cdata = t("AW://").$cdata;
+		$htmlc->add_property(array(
+			"name" => "trans_url",
+			"no_caption" => 1,
+			"type" => "text",
+			"value" => $cdata,
+			"post_append_text" => html::href(array(
+				"url" => "javascript:submit_changeform(\"aw_url\");",
+				"caption" => t("GO"),
+			)),
+		));
+		$htmlc->finish_output(array(
+			"action" => "aw_url",
+			"data" => array(
+				"class" => "cb_translate",
+			),
+			"submit" => "no",
+		));
+		$cdata = $htmlc->get_result(array(
+			"form_only" => 1,
+		));
+		$tb->add_cdata($cdata);
+*/
+
+/// toolbar
+
 		$props = $cfgu->load_properties(array(
 				"clid" => $arr["clid"],
 		));
-
 		$clinf = aw_ini_get("classes");
 		$clfinf = aw_ini_get("classfolders");
 
@@ -101,8 +225,13 @@ class cb_translate extends aw_template
 			"url_target" => "editorcontent",
 			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $arr["clid"], "parent" => " ")),
 			"has_root" => 1,
+			"root_id" => 0,
+			"baseurl" => aw_ini_get("baseurl"),
+			"ext" => aw_ini_get("ext"),
 		));
+		$this->_gen_tree($tree, $arr["clid"]);
 
+		/*
 		classload("core/icons");
 
 		if($arr["clid"] && is_numeric($arr["clid"]) && !$parent_is_folder)
@@ -265,7 +394,7 @@ class cb_translate extends aw_template
 				}
 			}
 		}
-
+		*/
 		$editor_orb_name = strlen($arr["group"])?"groupedit":"classeditor";
 
 		$this->vars(array(
@@ -291,6 +420,101 @@ class cb_translate extends aw_template
 			)),
 		));
 		return $this->parse();
+
+	}
+
+	function _gen_tree(&$tree, $start_id)
+	{
+		// checks what's current tree root
+		$parent = trim($start_id);
+		$parent_is_folder = false;
+		if ("fld_" == substr($parent,0,4))
+		{
+			$start_id = substr($parent,4);
+			$parent_is_folder = true;
+		}
+		
+		// load cls & clsfld info
+		$cls = aw_ini_get("classes");
+		$clsfld = aw_ini_get("classfolders");
+		// cfgutils for loading props/layouts etc
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_properties(array(
+				"clid" => $start_id,
+		));
+
+		classload("core/icons");
+		if($start_id && is_numeric($start_id) && !$parent_is_folder)
+		{
+			$tree->add_item(0,array(
+				"name" => iconv(aw_global_get("charset"), "utf-8", $cls[$start_id]["name"]),
+				"id" => "root",
+				"url" => $this->mk_my_orb("classeditor", array("clid" => $start_id)),
+				"is_open" => 1,
+				"iconurl" => icons::get_icon_url($start_id),
+				"url_target" => "editorcontent",
+			));
+
+			// sets data_in_place feature
+			$tree->set_feature(3);
+
+			//groups
+			$this->add_tree_group($tree, $start_id, "root");
+
+			//layouts 
+			$this->add_tree_layouts($tree, $start_id, "root");
+
+			//properties
+			$this->add_tree_property($tree, $start_id);
+
+			//reltypes
+			$this->add_tree_relations($tree, $start_id, "root");
+
+			// texts from code -> t() func
+			// must be read from po? :S.. how the fuck can i understand which are from code which not
+			$tree->add_item(0 , array(
+				"name" => "varia",
+				"id" => $parent."_".PI,
+				"iconurl" => "images/icons/rte_align_center.gif",
+				"url" => $this->mk_my_orb("lineeditor",array(
+					"clid" => trim($start_id),
+				)),
+			));
+		}
+
+		if(strlen($start_id) && is_numeric($start_id) && $parent_is_folder)
+		{
+			// the class_tree that has been generated by admin_menu does not contain enough information
+			// for me
+			$tcnt = 0;
+			$atc = get_instance("admin/add_tree_conf");
+			$class_tree = $atc->get_class_tree();
+
+			foreach($class_tree as $item_id => $item_collection)
+			{
+				if($start_id == substr($item_id,4))
+				{
+					foreach($item_collection as $el_id => $el_data)
+					{
+						$parnt = is_numeric($item_id) && $item_id == 0 ? "root" : $item_id;
+						$tcnt++;
+
+						$tree->add_item(0,array(
+							"name" => iconv(aw_global_get("charset"), "utf-8", $el_data["name"]),
+							"id" => $el_data["id"],
+							"url" => $this->mk_my_orb("classeditor", array("clid" => $el_data["id"])),
+							"is_open" => 0,
+							"iconurl" => empty($el_data["clid"]) ? "" : icons::get_icon_url($el_data["clid"]),
+						));
+
+						$tree->add_item($el_data["id"],array(
+							"name" => "fafa",
+							"id" => $el_data["id"] + 10000,
+						));
+					}
+				}
+			}
+		}
 
 	}
 
@@ -392,107 +616,18 @@ class cb_translate extends aw_template
 		{
 			// sets data_in_place feature
 			$tree->set_feature(3);
-			$props = $cfgu->load_properties(array(
-				"clid" => $parent,
-			));
-			$groups = $cfgu->get_groupinfo();
-			foreach($groups as $gkey => $gdata)
-			{
-				$node_parent = isset($gdata["parent"]) ? $parent."_grp_".$gdata["parent"] : 0;
-				$tree->add_item($node_parent,array(
-					"name" => iconv(aw_global_get("charset"), "utf-8", $gdata["caption"]),
-					"id" => $parent."_grp_".$gkey,
-					"url" => $this->mk_my_orb("groupedit",array(
-						"clid" => trim($arr["parent"]),
-						"grpid" => $gkey,
-					)),
-					//"is_open" => 1,
-					"iconurl" => "images/icons/help_topic.gif",
-				));
 
-			}
+			//groups
+			$this->add_tree_group($tree, $parent);
 
-			// 
-			$layouts = $cfgu->get_layoutinfo();
-			if(count($layouts) && is_array($layouts))
-			{
-				$tree->add_item(0, array(
-					"name" => t("Kujundusosad"),
-					"id" => "layout_0",
-					"url" => "javascript:void();",
-				));
-				foreach($layouts as $lkey => $ldata)
-				{
-					//$node_parent = isset($ldata["parent"]) ? $parent."_lyt_".$ldata["parent"] : "layout_0";
-					if($ldata["closeable"])
-					{
-						$tree->add_item("layout_0",array(
-							"name" => iconv(aw_global_get("charset"), "utf-8", $ldata["area_caption"]?$ldata["area_caption"]:t("Nimetu")),
-							"id" => $parent."_lyt_".$lkey,
-							"url" => $this->mk_my_orb("layouttrans",array(
-								"clid" => trim($arr["parent"]),
-								"lid" => $lkey,
-							)),
-							//"is_open" => 1,
-							"iconurl" => "images/icons/help_topic.gif",
-						));
-					}
-				}
-			}
+			//layouts
+			$this->add_tree_layouts($tree, $parent);
 			
-			// properties
-			foreach($props as $pkey => $pdata)
-			{
-				if($pdata["type"] == "hidden")
-				{
-					continue;
-				}
-				if(!is_array($pdata["group"]))
-				{
-					$pdata["group"] = array($pdata["group"]);
-				}
-				foreach($pdata["group"] as $parent_group)
-				{
-					$caption = strlen($pdata["caption"])? $pdata["caption"] : $pdata["name"];
-					$tree->add_item($parent."_grp_".$parent_group ,array(
-						"name" => iconv(aw_global_get("charset"), "utf-8", $caption),
-						"id" => $parent."_".$pkey,
-						"url" => $this->mk_my_orb("proptrans",array(
-							"clid" => trim($arr["parent"]),
-							"grpid" => $parent_group,
-							"propid" => $pkey,
-						)),
-						//"is_open" => 1,
-						"iconurl" => icons::get_icon_url(86),
-					));
-				}
-			}
-
-			// reltypes
-
-			$rels = $cfgu->get_relinfo();
-			$tree->add_item(0, array(
-				"id" => "rel_root",
-				"name" => t("Seosed"),
-				"iconurl" => "images/icons/connectionmanager.gif",
-				"url" => "javascript:void();",
-			));
-			foreach($rels as $key => $rel)
-			{
-				if(substr($key,0,8) == "RELTYPE_")
-				{
-					$tree->add_item("rel_root" , array(
-						"name" => iconv(aw_global_get("charset"), "utf-8", html_entity_decode($rel["caption"])),
-						"id" => $key,
-						"url" => $this->mk_my_orb("releditor",array(
-							"clid" => trim($arr["parent"]),
-							"reltype" => $key,
-						)),
-						"iconurl" => "images/icons/connectionmanager.gif",
-					));
-					//$new[$key] = $rel;
-				}
-			}
+			//properties
+			$this->add_tree_property($tree, $parent);
+			
+			//reltypes
+			$this->add_tree_relations($tree, $parent);
 
 			// texts from code -> t() func
 			// must be read from po? :S.. how the fuck can i understand which are from code which not
@@ -522,6 +657,127 @@ class cb_translate extends aw_template
 		print "</pre>";
 
 	}
+
+	// add treenodes
+
+	function add_tree_group(&$tree, $clid, $root = false)
+	{
+		$this->init_cfgu($clid);
+		$groups = $this->cfgu->get_groupinfo();
+		foreach($groups as $gkey => $gdata)
+		{
+			$node_parent = isset($gdata["parent"]) ? $clid."_grp_".$gdata["parent"] : ($root === false?0:$root);
+			$tree->add_item($node_parent,array(
+				"name" => iconv(aw_global_get("charset"), "utf-8", $gdata["caption"]),
+				"id" => $clid."_grp_".$gkey,
+				"url" => $this->mk_my_orb("groupedit",array(
+					"clid" => trim($clid),
+					"grpid" => $gkey,
+				)),
+				//"is_open" => 1,
+				"iconurl" => "images/icons/help_topic.gif",
+			));
+
+		}
+	}
+
+	function add_tree_property(&$tree, $clid)
+	{
+		$props = $this->init_cfgu($clid);
+		foreach($props as $pkey => $pdata)
+		{
+			if($pdata["type"] == "hidden")
+			{
+				continue;
+			}
+			if(!is_array($pdata["group"]))
+			{
+				$pdata["group"] = array($pdata["group"]);
+			}
+			foreach($pdata["group"] as $parent_group)
+			{
+				$caption = strlen($pdata["caption"])? $pdata["caption"] : $pdata["name"];
+				$tree->add_item($clid."_grp_".$parent_group ,array(
+					"name" => iconv(aw_global_get("charset"), "utf-8", $caption),
+					"id" => $parent."_".$pkey,
+					"url" => $this->mk_my_orb("proptrans",array(
+						"clid" => trim($clid),
+						"grpid" => $parent_group,
+						"propid" => $pkey,
+					)),
+					//"is_open" => 1,
+					"iconurl" => icons::get_icon_url(86),
+				));
+			}
+		}
+	}
+
+	function add_tree_relations(&$tree, $clid, $root = false)
+	{
+		$props = $this->init_cfgu($clid);
+		$rels = $this->cfgu->get_relinfo();
+		if(count($rels))
+		{
+			$tree->add_item(($root === false?0:$root), array(
+				"id" => "rel_root",
+				"name" => t("Seosed"),
+				"iconurl" => "images/icons/connectionmanager.gif",
+				//"is_open" => true,
+				"url" => "javascript:void();",
+			));
+			foreach($rels as $key => $rel)
+			{
+				if(substr($key,0,8) == "RELTYPE_")
+				{
+					$tree->add_item("rel_root", array(
+						"name" => iconv(aw_global_get("charset"), "utf-8", html_entity_decode($rel["caption"])),
+						"id" => $key,
+						"url" => $this->mk_my_orb("releditor",array(
+							"clid" => trim($clid),
+							"reltype" => $key,
+						)),
+						"iconurl" => "images/icons/connectionmanager.gif",
+					));
+				}
+			}
+		}
+	}
+
+	function add_tree_layouts(&$tree, $clid, $root = false)
+	{
+		$props = $this->init_cfgu($clid);
+		$layouts = $this->cfgu->get_layoutinfo();
+		if(count($layouts) && is_array($layouts))
+		{
+			$tree->add_item(($root === false?0:$root), array(
+				"name" => t("Kujundusosad"),
+				"id" => "layout_0",
+				//"is_open" => true,
+				"url" => "javascript:void();",
+			));
+
+			foreach($layouts as $lkey => $ldata)
+			{
+				if($ldata["closeable"])
+				{
+					$tree->add_item("layout_0",array(
+						"name" => iconv(aw_global_get("charset"), "utf-8", $ldata["area_caption"]?$ldata["area_caption"]:t("Nimetu")),
+						"id" => "lyt_".$lkey,
+						"url" => $this->mk_my_orb("layouttrans",array(
+							"clid" => trim($clid),
+							"lid" => $lkey,
+						)),
+						//"is_open" => 1,
+						"iconurl" => "images/icons/help_topic.gif",
+					));
+				}
+			}
+		}
+
+	}
+
+
+// trans methods
 
 	/** manages single class or classfolder editing
 		@attrib name=lineeditor
@@ -611,6 +867,7 @@ class cb_translate extends aw_template
 					"type" => "textbox",
 					"caption" => iconv($charset_from_local, "utf-8", $inf["lang_name"]),
 					"value" => $inf["caption"],
+					"size" => 80,
 				));
 				/*
 				$this->vars(array(
@@ -636,6 +893,7 @@ class cb_translate extends aw_template
 					"name" => "vars[".$l."][".$text."]",
 					"type" => "textbox",
 					"caption" => iconv($charset_from_local, "utf-8", $lang_tmp["name"]),
+					"size" => 80,
 				));
 				/*
 				$this->vars(array(
@@ -765,7 +1023,8 @@ class cb_translate extends aw_template
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][caption]",
 				"type" => "textbox",
-				"caption" => t("Pealkiri"),
+				"caption" => t("Seose nimi"),
+				"size" => 50,
 				"value" => iconv($charset_from, "utf-8", $caption),
 			));
 			$this->cb_htmlc->add_property(array(
@@ -949,20 +1208,25 @@ class cb_translate extends aw_template
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][caption]",
 				"type" => "textbox",
-				"caption" => t("Pealkiri"),
+				"caption" => t("Nimi"),
 				"value" => iconv($charset_from, "utf-8", $caption),
+				"size" => 50,
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][comment]",
-				"type" => "textbox",
+				"type" => "textarea",
 				"caption" => t("Kommentaar"),
 				"value" => iconv($charset_from, "utf-8", $comment),
+				"cols" => 50,
+				"rows" => 5,
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][help]",
-				"type" => "textbox",
+				"type" => "textarea",
 				"caption" => t("Abitekst"),
 				"value" => iconv($charset_from, "utf-8", $help),
+				"cols" => 50,
+				"rows" => 10,
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "sp_".$language,
@@ -1043,9 +1307,10 @@ class cb_translate extends aw_template
 		$pot_scanner = get_instance("core/trans/pot_scanner");
 		$languages = $pot_scanner->get_langs();
 		aw_global_set("output_charset", "UTF-8");
-
+		/*
 		$this->read_template("proptrans.tpl");
 		$this->sub_merge = 1;
+		*/
 		$cfgu = get_instance("cfg/cfgutils");
 
 		$props = $cfgu->load_properties(array(
@@ -1126,18 +1391,23 @@ class cb_translate extends aw_template
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][caption]",
 				"type" => "textbox",
-				"caption" => t("Pealkiri"),
+				"caption" => t("Grupi nimi"),
+				"size" => 50,
 				"value" => iconv($charset_from, "utf-8", $caption),
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][comment]",
-				"type" => "textbox",
+				"type" => "textarea",
+				"cols" => 50,
+				"rows" => 5,
 				"caption" => t("Kommentaar"),
 				"value" => iconv($charset_from, "utf-8", $comment),
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][help]",
-				"type" => "textbox",
+				"type" => "textarea",
+				"cols" => 50,
+				"rows" => 10,
 				"caption" => t("Abitekst"),
 				"value" => iconv($charset_from, "utf-8", $help),
 			));
@@ -1310,20 +1580,25 @@ class cb_translate extends aw_template
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][caption]",
 				"type" => "textbox",
-				"caption" => t("Pealkiri"),
+				"caption" => t("Omaduse nimi"),
 				"value" => iconv($charset_from, "utf-8", $caption),
+				"size" => 50,
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][comment]",
-				"type" => "textbox",
+				"type" => "textarea",
 				"caption" => t("Kommentaar"),
 				"value" => iconv($charset_from, "utf-8", $comment),
+				"rows" => 5,
+				"cols" => 50,
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][help]",
-				"type" => "textbox",
+				"type" => "textarea",
 				"caption" => t("Abitekst"),
 				"value" => iconv($charset_from, "utf-8", $help),
+				"rows" => 10,
+				"cols" => 50,
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "sp_".$language,
@@ -1480,8 +1755,9 @@ class cb_translate extends aw_template
 			$this->cb_htmlc->add_property(array(
 				"name" => "vars[".$language."][pealkiri]",
 				"type" => "textbox",
-				"caption" => t("Pealkiri"),
+				"caption" => t("Kujundusosa nimi"),
 				"value" => iconv($lang["charset"], "utf-8", $caption),
+				"size" => 50,
 			));
 			$this->cb_htmlc->add_property(array(
 				"name" => "sp_".$language,
@@ -2277,6 +2553,47 @@ class cb_translate extends aw_template
 		{
 			 return false;
 		}
+	}
+
+	/**
+		@attrib name=aw_url params=name all_args=1
+		@param trans_url required string
+	**/
+	function aw_url($arr)
+	{
+		$url = parse_url($arr);
+		$site_url = parse_url(aw_ini_get("baseurl"));
+		if($url["host"] != $site_url["host"])
+		{
+			return false;
+		}
+		
+		
+		return $arr["trans_url"];
+	}
+
+	/**
+		@attrib name=search_trans params=name all_args=1
+	**/
+	function search_trans($arr)
+	{
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output(array(
+			"template" => "default",
+		));
+		$htmlc->add_property(array(
+			"name" => "string",
+			"caption" => t("Otsitav s&otilde;na"),
+			"type" => "textbox",
+		));
+		$htmlc->finish_output(array(
+			"action" => "fafa",
+			"method" => "POST"
+		));
+		$ret = $htmlc->get_result(array(
+			"form_only" => 1,
+		));
+		return $ret;
 	}
 
 };
