@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.8 2007/07/18 12:19:35 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.9 2007/08/24 09:41:20 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -81,6 +81,7 @@ class aw_code_analyzer extends class_base
 						break;
 
 					case T_COMMENT:
+					case T_DOC_COMMENT:
 						$this->last_comment = $str;
 						$this->last_comment_line = $this->get_line();
 						break;
