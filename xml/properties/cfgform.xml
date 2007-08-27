@@ -478,6 +478,16 @@
             <type>textbox</type>
             <caption>Aadress kuhu suunata</caption>
       </property>
+      <property>
+            <name>orb_settings</name>
+            <table>objects</table>
+            <group>orb_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_capton>12</no_capton>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>
@@ -526,6 +536,10 @@
                   <caption>Klass aliasena</caption>
                   <parent>settings</parent>
             </cfgview_settings>
+            <orb_settings>
+                  <caption>ORB seaded</caption>
+                  <parent>settings</parent>
+            </orb_settings>
             <translate>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </translate>
@@ -615,12 +629,14 @@
             <add_grp>
                   <type>vbox</type>
                   <group>groupdata_a</group>
+                  <area_caption></area_caption>
                   <caption>Lisa uus tab</caption>
             </add_grp>
             <mlist>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>show_props</group>
+                  <area_caption></area_caption>
             </mlist>
       </layout>
 </properties>

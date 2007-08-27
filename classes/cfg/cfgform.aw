@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.124 2007/08/14 10:37:29 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.125 2007/08/27 15:39:32 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -25,6 +25,8 @@
 
 	// cfgview -- cfgform is embedded as alias and requested object is shown as configured in that cfgform
 	@groupinfo cfgview_settings caption="Klass aliasena" parent=settings
+
+	@groupinfo orb_settings caption="ORB seaded" parent=settings
 
 	@groupinfo translate caption="T&otilde;lgi"
 		@groupinfo lang_1 caption="lang" parent=translate
@@ -182,6 +184,10 @@
 	@property cfgview_ru type=textbox field=meta method=serialize
 	@caption Aadress kuhu suunata
 
+@default group=orb_settings
+
+	@property orb_settings type=table store=no no_capton=12
+
 // ---------- RELATIONS -------------
 
 	@reltype PROP_GROUP value=1 clid=CL_MENU
@@ -245,6 +251,10 @@ class cfgform extends class_base
 		{
 			case "edit_groups_tb":
 				$this->_edit_groups_tb($arr);
+				break;
+
+			case "orb_settings":
+				$this->_get_orb_settings($arr);
 				break;
 
 			case "edit_groups":
@@ -823,6 +833,10 @@ class cfgform extends class_base
 		switch($data["name"])
 		{
 			// add grp form props
+			case "orb_settings":
+				$this->_set_orb_settings($arr);
+				break;
+
 			case "add_grp_parent":
 				if (!empty($arr["request"]["cfgform_add_grp"]))
 				{
@@ -3054,6 +3068,97 @@ class cfgform extends class_base
 				// "comment" => "komment",
 			);
 		}
+	}
+
+
+	function _get_orb_settings($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "action",
+			"caption" => "action",
+			"align" => "center"
+		));
+
+		$o = $arr["obj_inst"];
+		$groups_list = new object_list($o->connections_from(array("type" => "RELTYPE_VIEW_DFN_GRP")));
+
+		if (!$groups_list->count())
+		{
+			$groups_list = new object_list(array(
+				"class_id" => array(CL_GROUP),
+				"type" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+				"lang_id" => "%",
+			));
+		}
+
+		foreach($groups_list->arr() as  $group_obj)
+		{
+			$t->define_field(array(
+				"name" => $group_obj->id(),
+				"caption" => html::href(array(
+					"caption" => $group_obj->name(),
+					"url" => "#",
+					"onClick" => "aw_sel_chb(document.changeform,\"[".$group_obj->id()."]\");"
+				))
+			));
+		}
+
+		$orb = get_instance("core/orb/orb");
+		$clss = aw_ini_get("classes");
+		$methods = $orb->get_class_actions(array(
+			"class" => basename($clss[$arr["obj_inst"]->subclass()]["file"])
+		));
+		$dd = $o->meta("orb_acl");
+		foreach($methods as $method)
+		{
+			$d = array(
+				"action" => $method
+			);
+			foreach($groups_list->arr() as  $group_obj)
+			{
+				$d[$group_obj->id()] = html::checkbox(array(
+					"name" => "d[$method][".$group_obj->id()."]",
+					"value" => 1,
+					"checked" => $dd[$method][$group_obj->id()] == 1
+				));
+			}
+
+			$t->define_data($d);
+		}
+		$t->set_caption(t("Vali, millisd kasutajagrupid ei tohi milliseid actione kasutada."));
+	}
+
+	function _set_orb_settings($arr)
+	{
+		$arr["obj_inst"]->set_meta("orb_acl", $arr["request"]["d"]);
+	}
+
+	/** Checks if the current user has access to the given method in the given cfgform
+		@attrib api=1 params=name
+		@param action required type=string
+		@param cfgform required type=int
+	**/
+	function check_user_orb_access($arr)
+	{
+		$cf = obj($arr["cfgform"]);
+		$orb_data = $cf->meta("orb_acl");
+
+		$gl = aw_global_get("gidlist_pri_oid");
+                asort($gl);
+                $gl = array_keys($gl);
+                $grp = $gl[1];
+                if (count($gl) == 1)
+                {
+                        $grp = $gl[0];
+                }
+
+		if ($orb_data[$arr["action"]][$grp] == 1)
+		{
+			return false;
+		}
+		return true;
 	}
 }
 

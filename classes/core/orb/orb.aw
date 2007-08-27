@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.22 2007/07/19 09:13:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.23 2007/08/27 15:39:34 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -34,6 +34,32 @@ class orb extends aw_template
 		if ($args["class"] == "periods")
 		{
 			$args["class"] = "period";
+		}
+
+		if ($this->can("view", $args["vars"]["id"]))
+		{
+			$o = obj($args["vars"]["id"]);
+			$inst = get_instance("class_base");
+			$cfgform_id = $inst->get_cfgform_for_object(array(
+				"obj_inst" => $o,
+				"args" => array(
+					"action" => $args["action"],
+					"cfgform" => $args["vars"]["cfgform"]
+				)
+			));
+
+			if ($this->can("view", $cfgform_id))
+			{
+				$cfi = get_instance(CL_CFGFORM);
+				if (!$cfi->check_user_orb_access(array("action" => $args["action"], "cfgform" => $cfgform_id)))
+				{
+					error::raise(array(
+						"id" => "ERR_NO_ACCESS",
+						"msg" => t("Teil pole &otilde;igusi selle lehe vaatamiseks!")
+					));
+					die();
+				}
+			}
 		}
 
 		extract($args);
@@ -990,6 +1016,31 @@ class orb extends aw_template
 				$methods[(($no_id) ? "" : ($id . "/")) . $key] = $name . " / " . $caption;
 			}
 		};
+
+		return $methods;
+	}
+
+	/** Returns a list of all actions defined for a class
+		@attrib api=1 params=name
+
+		@param class required type=string
+			The class to return actions for
+	**/
+	function get_class_actions($arr)
+	{
+		$methods = array();
+		$cur_class = $arr["class"];
+		do {
+			$orb_defs = $this->load_xml_orb_def($cur_class);
+			foreach(safe_array($orb_defs[$cur_class]) as $key => $val)
+			{
+				if ($key == "_extends" || $key == "___folder")
+				{
+					continue;
+				}
+				$methods[$key] = $val["function"];
+			};
+		} while(($cur_class = $orb_defs[$cur_class]["_extends"][0]) != "");
 
 		return $methods;
 	}
