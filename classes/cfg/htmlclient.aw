@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.171 2007/08/23 10:00:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.172 2007/08/28 08:57:51 voldemar Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1277,10 +1277,14 @@ class htmlclient extends aw_template
 			{
 				$layout_items[] = $this->put_griditem($this->proplist[$pkey]);
 				$this->proplist[$pkey]["__ignore"] = 1;
-			};
-		};
+			}
+		}
 
-		if ("hbox" == $ldata["type"])
+		if (empty($layout_items) and empty($sub_layouts))
+		{
+			$html = "";
+		}
+		elseif ("hbox" == $ldata["type"])
 		{
 			$cell_widths = array();
 			if (!empty($ldata["width"]))
@@ -1348,7 +1352,7 @@ class htmlclient extends aw_template
 				$html .= $_t;
 			}
 			else
-			{			
+			{
 				$this->vars(array(
 					"GRID_HBOX" => $_t,
 					"grid_outer_name" => $layout_name."_outer",
@@ -1413,7 +1417,7 @@ class htmlclient extends aw_template
 				"VGRID_HAS_CLOSER" => $ghc,
 				"VGRID_CLOSER_END" => $gce
 			));
-			
+
 			//$html .= $this->parse("GRID_HBOX");
 			$_t = $this->parse("GRID_VBOX");
 			if($this->view_layout && $this->view_layout == $layout_name && !$this->view_outer)
@@ -1428,7 +1432,7 @@ class htmlclient extends aw_template
 				));
 				$html .= $this->parse("GRID_VBOX_OUTER");
 			}
-		};
+		}
 
 		return $html;
 	}
