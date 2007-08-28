@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.87 2007/08/17 10:00:34 tarvo Exp $
+// $Id: cfgutils.aw,v 1.88 2007/08/28 09:02:01 voldemar Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -361,8 +361,8 @@ class cfgutils extends aw_template
 		{
 			$layout[$k]["area_caption"] = html_entity_decode(str_replace("&nbsp;"," ", isset($dat["area_caption"]) ? $dat["area_caption"] : null));
 		}
-		// translate
 
+		// translate
 		if($args["load_trans"] == 1)
 		{
 			foreach($properties as $k => $d)
@@ -458,7 +458,7 @@ class cfgutils extends aw_template
 					}
 				}
 			}
-		};
+		}
 
 		$this->classinfo = $classinfo;
 		$tmp = array();
@@ -607,7 +607,7 @@ class cfgutils extends aw_template
 		@attrib api=1
 
 		@param load_trans optional type=bool
-			wheater to load translated properties or not(by default it loads)
+			whether to load translated properties or not (by default it loads)
 
 		@param filter optional type=array
 			array of filters to filter the properties by. for instance group => general
@@ -794,17 +794,26 @@ class cfgutils extends aw_template
 		return $rv;
 	}
 
-	function parse_cfgform($args = array())
+	function parse_cfgform($args = array(), $get_layout = false)
 	{
-		$proplist = $grplist = array();
+		$proplist = $grplist = $layout = array();
 		if (isset($args["xml_definition"]))
 		{
 			$proplist = $this->load_class_properties(array(
 				'source' => $args['xml_definition'],
 			));
-			$grplist = $this->groupinfo;
+			$grplist = (array) $this->groupinfo;
+			$layout = (array) $this->layout;
 		}
-		return array($proplist,$grplist);
+
+		if ($get_layout)
+		{
+			return array($proplist,$grplist,$layout);
+		}
+		else
+		{
+			return array($proplist,$grplist);
+		}
 	}
 
 	function parse_definition($args = array())
