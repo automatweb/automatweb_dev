@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.125 2007/08/27 15:39:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.126 2007/08/28 09:05:29 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -80,9 +80,6 @@
 
 	@property classinfo_disable_relationmgr type=checkbox ch_value=1 field=meta method=serialize
 	@caption &Auml;ra kasuta seostehaldurit
-
-	// @property edit_groups type=callback callback=callback_edit_groups group=groupdata_a
-	// @caption Muuda tabe
 
 	@property edit_groups_tb type=toolbar group=groupdata_a no_caption=1 store=no
 	@caption Tabide toolbar
@@ -221,6 +218,8 @@
 */
 class cfgform extends class_base
 {
+	var $cfgview_actions = array();
+
 	function cfgform($arr = array())
 	{
 		$this->init(array(
@@ -229,6 +228,13 @@ class cfgform extends class_base
 		));
 		$this->trans_props = array(
 			"name"
+		);
+		$this->cfgview_actions = array(
+			"view" => t("Vaatamine (view)"),
+			"change" => t("Muutmine (change)"),
+			"new" => t("Lisamine (new)"),
+			"cfgview_change_new" => t("Muutmine (ka lisamine lubatud)"),
+			"cfgview_view_new" => t("Vaatamine (ka lisamine lubatud)"),
 		);
 	}
 
@@ -352,6 +358,7 @@ class cfgform extends class_base
 			case "trans_tbl_grps":
 				$this->_trans_tbl_grps($arr);
 				break;
+
 			case "treeview":
 				$this->do_meta_tree($arr);
 				break;
@@ -360,13 +367,7 @@ class cfgform extends class_base
 				break;
 
 			case "cfgview_action":
-				$data["options"] = array(
-					"view" => t("Vaatamine (view)"),
-					"change" => t("Muutmine (change)"),
-					"new" => t("Lisamine (new)"),
-					"cfgview_change_new" => t("Muutmine (ka lisamine lubatud)"),
-					"cfgview_view_new" => t("Vaatamine (ka lisamine lubatud)"),
-				);
+				$data["options"] = $this->cfgview_actions;
 				break;
 
 			case "cfgview_view_params":
@@ -791,7 +792,6 @@ class cfgform extends class_base
 				"name" => $o->name(),
 			));
 		};
-
 	}
 
 
@@ -801,6 +801,7 @@ class cfgform extends class_base
 
 		$this->grplist = safe_array($obj->meta("cfg_groups"));
 		$this->prplist = safe_array($obj->meta("cfg_proplist"));
+		$this->layout = safe_array($obj->meta("cfg_layout"));
 	}
 
 	function _init_properties($class_id)
@@ -812,15 +813,13 @@ class cfgform extends class_base
 
 		$tmp = aw_ini_get("classes");
 		$fl = $tmp[$class_id]["file"];
+
 		if ($fl == "document")
 		{
 			$fl = "doc";
-		};
+		}
+
 		$inst = get_instance($fl);
-		$cfgu = get_instance("cfg/cfgutils");
-		$_all_props = $cfgu->load_properties(array(
-			"file" => $fl,
-		));
 		$this->all_props = $inst->get_all_properties();
 	}
 
@@ -945,7 +944,7 @@ class cfgform extends class_base
 						$data["value"] = $contents;
 					};
 					$retval = $this->_load_xml_definition($contents);
-				};
+				}
 				break;
 
 			case "subclass":
@@ -960,35 +959,8 @@ class cfgform extends class_base
 				// over xml-rpc
 				elseif ($arr["new"] && empty($arr["request"]["cfg_proplist"]))
 				{
-					// fool around a bit to get the correct data
-					$subclass = $arr["request"]["subclass"];
-					// now that's the tricky part ... this thingsbum overrides
-					// all the settings in the document config form
-					$this->_init_properties($subclass);
-					$cfgu = get_instance("cfg/cfgutils");
-					if ($subclass == CL_DOCUMENT)
-					{
-						$def = join("",file(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml"));
-						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-						$this->cfg_proplist = $proplist;
-						$this->cfg_groups = $grplist;
-					}
-					else
-					{
-						$tmp = aw_ini_get("classes");
-						$fname = $tmp[$subclass]["file"];
-						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/class_base.xml"));
-						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-						$this->cfg_groups = $grplist;
-						$this->cfg_proplist = $proplist;
-						$fname = basename($fname);
-						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/$fname.xml"));
-						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-						// nono. It needs to fucking merge those things with classbase
-						$this->cfg_proplist = $this->cfg_proplist + $proplist;
-						$this->cfg_groups = $this->cfg_groups + $grplist;
-					};
-				};
+					$this->cff_init_from_class($arr["obj_inst"], $arr["request"]["subclass"], false);
+				}
 				break;
 
 			case "availprops":
@@ -1067,6 +1039,7 @@ class cfgform extends class_base
 
 		$this->_save_cfg_groups($obj_inst);
 		$this->_save_cfg_props($obj_inst);
+		$this->_save_cfg_layout($obj_inst);
 
 		return true;
 	}
@@ -1279,6 +1252,65 @@ class cfgform extends class_base
 
 			$o->set_meta("cfg_proplist",$this->cfg_proplist);
 		}
+	}
+
+	function _save_cfg_layout($o)
+	{
+		$o->set_meta("cfg_layout", $this->cfg_layout);
+	}
+
+	function _init_layout_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "ord",
+			"sortable" => false,
+			"caption" => t("Jrk."),
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"sortable" => false,
+			"caption" => t("Nimi"),
+		));
+
+		$t->define_field(array(
+			"name" => "caption",
+			"sortable" => false,
+			"caption" => t("Pealkiri"),
+		));
+
+		$t->define_field(array(
+			"name" => "type",
+			"sortable" => false,
+			"caption" => t("T&uuml;&uuml;p"),
+		));
+
+		$t->define_field(array(
+			"name" => "options",
+			"sortable" => false,
+			"caption" => t("Valikud"),
+		));
+
+		$t->define_field(array(
+			"name" => "selection",
+			"sortable" => false,
+		));
+	}
+
+	function _layout_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_layout_tbl($t);
+		$this_o = $arr["obj_inst"];
+
+		$t->define_data(array(
+			// "ord" => ,
+			// "name" => ,
+			// "caption" => ,
+			// "type" => ,
+			// "options" => ,
+			// "selection" =>
+		));
 	}
 
 	////
@@ -2275,42 +2307,49 @@ class cfgform extends class_base
 			$cff->cff_add_prop($cf_obj, "bujaka", array("caption" => t("Bujaka"), "group" => "general"));
 			$cf_obj->save();
 	**/
-	function cff_init_from_class($o, $clid)
+	// $save parameter for internal use
+	function cff_init_from_class($o, $clid, $save = true)
 	{
-		$o->set_prop("subclass", $clid);
-		// fool around a bit to get the correct data
-		$subclass = $clid;
-
 		// now that's the tricky part ... this thingsbum overrides
 		// all the settings in the document config form
-		$this->_init_properties($subclass);
+		$this->_init_properties($clid);
 		$cfgu = get_instance("cfg/cfgutils");
 
-		if ($subclass == CL_DOCUMENT)
+		if ($clid == CL_DOCUMENT)
 		{
 			$def = join("",file(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml"));
-			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+			list($proplist,$grplist, $layout) = $cfgu->parse_cfgform(array("xml_definition" => $def), true);
 			$this->cfg_proplist = $proplist;
 			$this->cfg_groups = $grplist;
+			$this->cfg_layout = $layout;
 		}
 		else
 		{
 			$tmp = aw_ini_get("classes");
-			$fname = $tmp[$subclass]["file"];
+
+			$fname = $tmp[$clid]["file"];
 			$def = join("",file(aw_ini_get("basedir") . "/xml/properties/class_base.xml"));
-			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+			list($proplist,$grplist, $layout) = $cfgu->parse_cfgform(array("xml_definition" => $def), true);
 			$this->cfg_proplist = $proplist;
 			$this->cfg_groups = $grplist;
+			$this->cfg_layout = $layout;
+
 			$fname = basename($fname);
 			$def = join("",file(aw_ini_get("basedir") . "/xml/properties/$fname.xml"));
-			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+			list($proplist,$grplist, $layout) = $cfgu->parse_cfgform(array("xml_definition" => $def), true);
 			// nono. It needs to fucking merge those things with classbase
 			$this->cfg_proplist = $this->cfg_proplist + $proplist;
 			$this->cfg_groups = $this->cfg_groups + $grplist;
+			$this->cfg_layout = $this->cfg_layout + $layout;
 		}
 
-		$this->_save_cfg_groups($o);
-		$this->_save_cfg_props($o);
+		if ($save)
+		{
+			$o->set_prop("subclass", $clid);
+			$this->_save_cfg_groups($o);
+			$this->_save_cfg_props($o);
+			$this->_save_cfg_layout($o);
+		}
 	}
 
 	/** Removes all properties from the given config form
@@ -2684,6 +2723,7 @@ class cfgform extends class_base
 			// save
 			$this->_save_cfg_groups($this_o);
 			$this->_save_cfg_props($this_o);
+			$this->_save_cfg_layout($this_o);
 
 			$this_o->save();
 		}
@@ -2944,19 +2984,19 @@ class cfgform extends class_base
 
 		$classes = aw_ini_get("classes");
 		$class = strtolower(substr($classes[$this_o->prop("subclass")]["def"], 3));
-		$action = $this_o->prop("cfgview_action") ? $this_o->prop("cfgview_action") : "view";
+		$action = array_key_exists($this_o->prop("cfgview_action"), $this->cfgview_actions) ? $this_o->prop("cfgview_action") : "view";
 
-		if ("cfgview_change_new" == $action or "cfgview_view_new" == $action)
+		if ("cfgview_change_new" === $action or "cfgview_view_new" === $action)
 		{
 			if (!is_oid($vars["id"]))
 			{
 				$action = "new";
 			}
-			elseif ("cfgview_change_new" == $action)
+			elseif ("cfgview_change_new" === $action)
 			{
 				$action = "change";
 			}
-			elseif ("cfgview_view_new" == $action)
+			elseif ("cfgview_view_new" === $action)
 			{
 				$action = "view";
 			}
@@ -2966,13 +3006,13 @@ class cfgform extends class_base
 			return;
 		}
 
-		if ("new" == $action and empty($vars["parent"]))
+		if ("new" === $action and empty($vars["parent"]))
 		{
 			$vars["parent"] = $this_o->id();
 		}
 
 
-		if ("new" == $action && !$this->can("add", $vars["parent"]))
+		if ("new" === $action && !$this->can("add", $vars["parent"]))
 		{
 			return "";
 		}
