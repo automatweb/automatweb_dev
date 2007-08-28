@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.55 2007/08/03 16:26:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.56 2007/08/28 10:54:16 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -696,12 +696,19 @@ class shop_warehouse extends class_base
 		));
 		
 		$t->define_field(array(
+			"name" => "order_date",
+			"caption" => t("Tellimuse kuup&auml;ev"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+/*
+		$t->define_field(array(
 			"name" => "bill",
 			"caption" => t("Tellimuse kuup&auml;ev"),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
-		
+*/		
 		if(!$cl)$t->define_field(array(
 			"name" => "client",
 			"caption" => t("Klient"),
@@ -859,6 +866,7 @@ class shop_warehouse extends class_base
 		//			"packaging" => $ord_data[$order->id()][$product]["user1"],
 					"date" => $ord_data[$order->id()][$product]["duedate"],
 					"bill" => $ord_data[$order->id()][$product]["bill"],
+					"order_date" => date("d.m.Y" , $order->created()),
 				));
 				$prod_count+=$amount;
 			}

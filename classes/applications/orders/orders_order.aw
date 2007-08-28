@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.22 2007/08/03 16:22:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.23 2007/08/28 10:54:26 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -58,6 +58,15 @@
 
 @property submit2 type=submit action=do_persondata_submit store=no group=orderinfo
 @caption Kinnita tellimus
+
+@property orderer_info type=text store=no group=orderitems
+@caption Tellija
+
+
+@property orders_table type=table store=no group=orderitems no_caption=1
+
+@property submit_rows type=submit group=orderitems store=no
+@caption Salvesta
 
 @property orders type=releditor store=no props=name,product_code,product_color,product_size,product_count,product_count_undone,product_price reltype=RELTYPE_ORDER group=orderitems
 @property submit type=submit group=orderitems store=no
@@ -169,6 +178,16 @@ class orders_order extends class_base
 				}
 				break;
 			
+			case "orderer_info":
+				$oi_data = array();
+				$oi_data[] = $person->name();
+				if($person->prop("personal_id")) $oi_data[] = $person->prop("personal_id");
+				if($person->prop("email")) $oi_data[] = $person->prop("email.mail");
+				if($person->prop("phone")) $oi_data[] = $person->prop("phone.name");
+				if($person->prop("comment")) $oi_data[] = $person->prop("comment");
+
+				$prop["value"] = join (", " , $oi_data);
+				break;
 			
 			case "lastname":
 				if($person)
@@ -283,8 +302,13 @@ class orders_order extends class_base
 				$data[$prop] = html::textbox(array(
 					"name" => "rows[".$obj->id()."][".$prop."]",
 					"value" => $val,
-					"size" => ($prop == "name") ? 40:10,
+					"size" => ($prop == "name") ? 30:9,
 				));
+				if($prop == "product_duedate" || $prop == "product_bill")
+				{
+					$data[$prop].= '<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
+cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$obj->id().'" id="anchor'.$obj->id().'">vali</a>';
+				}
 			}
 			$table->define_data($data);
 		}
