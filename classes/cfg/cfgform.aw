@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.126 2007/08/28 09:05:29 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.127 2007/08/28 12:13:35 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -3167,7 +3167,7 @@ class cfgform extends class_base
 
 			$t->define_data($d);
 		}
-		$t->set_caption(t("Vali, millisd kasutajagrupid ei tohi milliseid actione kasutada."));
+		$t->set_caption(t("Vali, millised kasutajagrupid ei tohi milliseid actione kasutada."));
 	}
 
 	function _set_orb_settings($arr)

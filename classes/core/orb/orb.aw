@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.23 2007/08/27 15:39:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.24 2007/08/28 12:13:33 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -43,7 +43,7 @@ class orb extends aw_template
 			$cfgform_id = $inst->get_cfgform_for_object(array(
 				"obj_inst" => $o,
 				"args" => array(
-					"action" => $args["action"],
+					"action" => "change",
 					"cfgform" => $args["vars"]["cfgform"]
 				)
 			));
