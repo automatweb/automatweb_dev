@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.67 2007/08/29 08:27:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.68 2007/08/29 14:41:15 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1465,6 +1465,8 @@ $t->set_sortable(false);
 		foreach($p_rooms as $room)
 		{
 			$room_inst = $room->instance();
+			$room_inst->pauses = $room_inst->get_current_pauses_for_room($room);
+			if($room_inst->is_paused($arr["start"], $arr["end"])) continue;
 			if ($room_inst->check_if_available(array("room" => $room->id(), "start" => $arr["start"], "end" => $arr["end"])))
 			{
 				$rv_id = $room_inst->make_reservation(array(
