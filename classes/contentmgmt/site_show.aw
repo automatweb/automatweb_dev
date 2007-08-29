@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.241 2007/08/29 10:51:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.242 2007/08/29 13:08:48 kristo Exp $
 
 /*
 
@@ -995,19 +995,36 @@ class site_show extends class_base
 				}
 			}
 
-			$documents = new object_list($filter);
+			// what is going on here: we can't limit the list as the user said, if 
+			// we are going to flter the list later, because it will get less items as requested
+			// so, if we are not filtering the list, limit the query, else just read the ids
+			// and count the objects that should be added manually. it seems the best
+			// possible saolution, although it reads too many objects that might be inactive, but it is the only way I see
 			if (!$get_inact && aw_ini_get("user_interface.full_content_trans"))
 			{
+				unset($filter["limit"]);
+				$documents = new object_list($filter);
+				$nd = $obj->prop("ndocs");
 				// filter the list for both-inactive docs
 				$doc_ol = new object_list();
-				foreach($documents->arr() as $__doc_o)
+				$_tmp_cnt = 0;
+				foreach($documents->ids() as $__doc_id)
 				{
+					$__doc_o = obj($__doc_id);
 					if ($__doc_o->status() == STAT_ACTIVE || $__doc_o->meta("trans_".aw_global_get("ct_lang_id")."_status"))
 					{
 						$doc_ol->add($__doc_o);
+						if ($nd > 0 && ++$_tmp_cnt >= $nd)
+						{
+							break;
+						}
 					}
 				}
 				$documents = $doc_ol;
+			}
+			else
+			{
+				$documents = new object_list($filter);
 			}
 
 			if ($has_rand)
