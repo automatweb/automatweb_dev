@@ -381,6 +381,7 @@
             <contacts_edit>
                   <type>hbox</type>
                   <group>ppl</group>
+                  <area_caption></area_caption>
             </contacts_edit>
             <contacts_edit_tree>
                   <type>hbox</type>
@@ -393,35 +394,39 @@
                   <type>hbox</type>
                   <parent>contacts_edit</parent>
                   <group>ppl</group>
+                  <area_caption></area_caption>
             </contacts_edit_table>
             <sk_main>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>skills</group>
+                  <area_caption></area_caption>
             </sk_main>
             <sk_tree>
                   <type>hbox</type>
                   <parent>sk_main</parent>
                   <closeable>1</closeable>
-                  <area_caption>P&amp;auml;devuste&amp;nbsp;puu</area_caption>
+                  <area_caption>P&amp;amp;auml;devuste&amp;amp;nbsp;puu</area_caption>
                   <group>skills</group>
             </sk_tree>
             <skl_main>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>skills_losing</group>
+                  <area_caption></area_caption>
             </skl_main>
             <skl_tree>
                   <type>hbox</type>
                   <parent>skl_main</parent>
                   <closeable>1</closeable>
-                  <area_caption>Organisatsiooni&amp;nbsp;struktuur</area_caption>
+                  <area_caption>Organisatsiooni&amp;amp;nbsp;struktuur</area_caption>
                   <group>skills_losing</group>
             </skl_tree>
             <graph_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>graph</group>
+                  <area_caption></area_caption>
             </graph_split>
             <graph_tree>
                   <type>vbox</type>

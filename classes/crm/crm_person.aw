@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.179 2007/07/24 13:08:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.180 2007/08/29 08:27:14 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3506,14 +3506,14 @@ class crm_person extends class_base
 	**/
 	function has_user($o)
 	{
-		obj_set_opt("no_cache", 1);
+		$prev = obj_set_opt("no_cache", 1);
 		$c = new connection();
 		$res = $c->find(array(
 			"to" => $o->id(),
 			"from.class_id" => CL_USER,
 			"type" => 2 // CL_USER.RELTYPE_PERSON
 		));
-		obj_set_opt("no_cache", 0);
+		obj_set_opt("no_cache", $prev);
 
 		if (count($res))
 		{

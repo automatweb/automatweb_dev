@@ -55,6 +55,7 @@
                   <type>hbox</type>
                   <width>25%:75%</width>
                   <group>reservations</group>
+                  <area_caption></area_caption>
             </hsplit>
             <left>
                   <type>vbox</type>
@@ -66,7 +67,7 @@
             <right>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Broneeringud&amp;nbsp;ja&amp;nbsp;toitlustus</area_caption>
+                  <area_caption>Broneeringud&amp;amp;nbsp;ja&amp;amp;nbsp;toitlustus</area_caption>
                   <parent>hsplit</parent>
                   <group>reservations</group>
             </right>

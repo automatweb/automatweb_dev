@@ -107,6 +107,7 @@
             <group>general</group>
             <type>hidden</type>
             <store>no</store>
+            <value>0</value>
             <field>completion_confirmation</field>
             <caption>Completion confirmation</caption>
       </property>

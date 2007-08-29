@@ -122,11 +122,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>orderers</group>
+                  <area_caption></area_caption>
             </ord>
             <impl>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>impls</group>
+                  <area_caption></area_caption>
             </impl>
       </layout>
 </properties>

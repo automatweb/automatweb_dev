@@ -169,61 +169,73 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>product_groups</group>
+                  <area_caption></area_caption>
             </product_groups_frame>
             <product_group_search_params_frame>
                   <type>vbox</type>
                   <parent>product_groups_frame</parent>
                   <group>product_groups</group>
+                  <area_caption></area_caption>
             </product_group_search_params_frame>
             <product_group_search_results_frame>
                   <type>vbox</type>
                   <parent>product_groups_frame</parent>
                   <group>product_groups</group>
+                  <area_caption></area_caption>
             </product_group_search_results_frame>
             <products_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>product_items</group>
+                  <area_caption></area_caption>
             </products_frame>
             <product_search_params_frame>
                   <type>vbox</type>
                   <parent>products_frame</parent>
                   <group>product_items</group>
+                  <area_caption></area_caption>
             </product_search_params_frame>
             <product_search_results_frame>
                   <type>vbox</type>
                   <parent>products_frame</parent>
                   <group>product_items</group>
+                  <area_caption></area_caption>
             </product_search_results_frame>
             <client_groups_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>client_groups</group>
+                  <area_caption></area_caption>
             </client_groups_frame>
             <client_group_search_params_frame>
                   <type>vbox</type>
                   <parent>client_groups_frame</parent>
                   <group>client_groups</group>
+                  <area_caption></area_caption>
             </client_group_search_params_frame>
             <client_group_search_results_frame>
                   <type>vbox</type>
                   <parent>client_groups_frame</parent>
                   <group>client_groups</group>
+                  <area_caption></area_caption>
             </client_group_search_results_frame>
             <clients_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>client_items</group>
+                  <area_caption></area_caption>
             </clients_frame>
             <client_search_params_frame>
                   <type>vbox</type>
                   <parent>clients_frame</parent>
                   <group>client_items</group>
+                  <area_caption></area_caption>
             </client_search_params_frame>
             <client_search_results_frame>
                   <type>vbox</type>
                   <parent>clients_frame</parent>
                   <group>client_items</group>
+                  <area_caption></area_caption>
             </client_search_results_frame>
       </layout>
 </properties>

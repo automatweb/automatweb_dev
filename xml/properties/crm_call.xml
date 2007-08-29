@@ -471,32 +471,37 @@
             <top_bit>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>P&amp;otilde;hiandmed</area_caption>
+                  <area_caption>P&amp;amp;otilde;hiandmed</area_caption>
                   <group>general</group>
             </top_bit>
             <top_2way>
                   <type>hbox</type>
                   <parent>top_bit</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </top_2way>
             <top_2way_left>
                   <type>vbox</type>
                   <parent>top_2way</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </top_2way_left>
             <top_2way_right>
                   <type>vbox</type>
                   <parent>top_2way</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </top_2way_right>
             <center_bit>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
             </center_bit>
             <center_bit_left>
                   <type>vbox</type>
                   <parent>center_bit</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </center_bit_left>
             <center_bit_left_ct>
                   <type>hbox</type>
@@ -509,6 +514,7 @@
                   <type>vbox</type>
                   <parent>center_bit</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </center_bit_right>
             <center_bit_right_top>
                   <type>vbox</type>
@@ -529,6 +535,7 @@
             <num_hrs>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
             </num_hrs>
       </layout>
 </properties>

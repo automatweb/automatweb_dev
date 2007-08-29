@@ -55,6 +55,7 @@
             <fs>
                   <type>hbox</type>
                   <group>explorer</group>
+                  <area_caption></area_caption>
             </fs>
       </layout>
 </properties>

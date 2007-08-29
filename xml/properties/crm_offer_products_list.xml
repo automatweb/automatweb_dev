@@ -55,16 +55,19 @@
                   <type>hbox</type>
                   <group>packages_show</group>
                   <width>20%:80%</width>
+                  <area_caption></area_caption>
             </vbox_p_others>
             <vbox_p_tree>
                   <type>vbox</type>
                   <group>packages_show</group>
                   <parent>vbox_p_others</parent>
+                  <area_caption></area_caption>
             </vbox_p_tree>
             <vbox_p_tbl>
                   <type>vbox</type>
                   <group>packages_show</group>
                   <parent>vbox_p_others</parent>
+                  <area_caption></area_caption>
             </vbox_p_tbl>
       </layout>
 </properties>

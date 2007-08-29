@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.43 2007/07/19 09:16:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.44 2007/08/29 08:27:13 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1790,6 +1790,21 @@ class crm_company_webview extends class_base
 
 		));
 		return $ret;
+	}
+
+	/**
+		@attrib name=show_sect_doc nologin="1"
+	**/ 
+	function show_sect_doc($arr)
+	{
+		$so = obj(aw_global_get("section"));
+		$doc = $so->prop("info_document");
+		if (is_oid($doc))
+		{
+			$ss = get_instance("contentmgmt/site_show");
+			$ss->_init_path_vars($arr);
+			return $ss->_int_show_documents($doc);
+		}
 	}
 }
 ?>

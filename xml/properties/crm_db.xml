@@ -281,11 +281,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>f2</group>
+                  <area_caption></area_caption>
             </org>
             <ta>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>tegevusalad</group>
+                  <area_caption></area_caption>
             </ta>
       </layout>
 </properties>

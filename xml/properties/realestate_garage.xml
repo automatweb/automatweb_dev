@@ -686,6 +686,7 @@
             <box123>
                   <type>hbox</type>
                   <group>grp_sub_main</group>
+                  <area_caption></area_caption>
                   <caption>Staatus</caption>
             </box123>
       </layout>

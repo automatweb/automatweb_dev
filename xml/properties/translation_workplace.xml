@@ -110,11 +110,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>translatable</group>
+                  <area_caption></area_caption>
             </tr_ver_split>
             <tr_left>
                   <type>vbox</type>
                   <parent>tr_ver_split</parent>
                   <group>translatable</group>
+                  <area_caption></area_caption>
             </tr_left>
             <tr_left_top>
                   <type>vbox</type>

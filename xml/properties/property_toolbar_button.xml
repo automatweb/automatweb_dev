@@ -108,15 +108,18 @@
             <hbox1>
                   <type>hbox</type>
                   <group>men_props</group>
+                  <area_caption></area_caption>
             </hbox1>
             <vbox1>
                   <type>vbox</type>
                   <group>men_props</group>
+                  <area_caption></area_caption>
             </vbox1>
             <hbox2>
                   <type>hbox</type>
                   <group>men_props</group>
                   <parent>vbox1</parent>
+                  <area_caption></area_caption>
             </hbox2>
       </layout>
 </properties>

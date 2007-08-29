@@ -353,16 +353,19 @@
                   <type>hbox</type>
                   <group>content</group>
                   <width>20%:80%</width>
+                  <area_caption></area_caption>
             </vbox_others>
             <vbox_tree>
                   <type>vbox</type>
                   <group>content</group>
                   <parent>vbox_others</parent>
+                  <area_caption></area_caption>
             </vbox_tree>
             <vbox_tbl>
                   <type>vbox</type>
                   <group>content</group>
                   <parent>vbox_others</parent>
+                  <area_caption></area_caption>
             </vbox_tbl>
       </layout>
 </properties>

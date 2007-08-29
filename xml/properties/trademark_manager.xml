@@ -211,24 +211,26 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>applications</group>
+                  <area_caption></area_caption>
             </objects_lay>
             <objects_l>
                   <type>vbox</type>
                   <parent>objects_lay</parent>
                   <group>applications</group>
+                  <area_caption></area_caption>
             </objects_l>
             <trademark_tr_l>
                   <type>vbox</type>
                   <parent>objects_l</parent>
                   <closeable>1</closeable>
-                  <area_caption>Taotluste&amp;nbsp;puu</area_caption>
+                  <area_caption>Taotluste&amp;amp;nbsp;puu</area_caption>
                   <group>applications</group>
             </trademark_tr_l>
             <objects_find_params>
                   <type>vbox</type>
                   <parent>objects_l</parent>
                   <closeable>1</closeable>
-                  <area_caption>Objektide&amp;nbsp;otsing</area_caption>
+                  <area_caption>Objektide&amp;amp;nbsp;otsing</area_caption>
                   <group>applications</group>
             </objects_find_params>
       </layout>

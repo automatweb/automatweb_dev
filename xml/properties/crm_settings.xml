@@ -344,6 +344,7 @@
                   <type>hbox</type>
                   <no_caption>1</no_caption>
                   <group>tables</group>
+                  <area_caption></area_caption>
             </vsplitbox>
       </layout>
 </properties>

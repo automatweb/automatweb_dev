@@ -25,6 +25,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>textbox</type>
+            <default>0</default>
             <size>5</size>
             <caption>Kaugus linnast (km)</caption>
       </property>

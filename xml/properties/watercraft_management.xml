@@ -437,16 +437,19 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>search</group>
+                  <area_caption></area_caption>
             </watercraft_search_frame>
             <watercraft_search_frame_left>
                   <type>vbox</type>
                   <parent>watercraft_search_frame</parent>
                   <group>search</group>
+                  <area_caption></area_caption>
             </watercraft_search_frame_left>
             <watercraft_search_frame_right>
                   <type>vbox</type>
                   <parent>watercraft_search_frame</parent>
                   <group>search</group>
+                  <area_caption></area_caption>
             </watercraft_search_frame_right>
       </layout>
 </properties>

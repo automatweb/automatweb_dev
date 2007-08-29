@@ -554,34 +554,38 @@
             <name>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>L&amp;uuml;hikirjeldus</area_caption>
+                  <area_caption>L&amp;amp;uuml;hikirjeldus</area_caption>
                   <group>general</group>
             </name>
             <settings_wrap>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>M&amp;auml;&amp;auml;rangud</area_caption>
+                  <area_caption>M&amp;amp;auml;&amp;amp;auml;rangud</area_caption>
                   <group>general</group>
             </settings_wrap>
             <settings>
                   <type>hbox</type>
                   <parent>settings_wrap</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </settings>
             <settings_col1>
                   <type>vbox</type>
                   <parent>settings</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </settings_col1>
             <settings_col2>
                   <type>vbox</type>
                   <parent>settings</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </settings_col2>
             <settings_col3>
                   <type>vbox</type>
                   <parent>settings</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </settings_col3>
             <url>
                   <type>vbox</type>
@@ -593,6 +597,7 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </content>
             <bc>
                   <type>vbox</type>
@@ -605,12 +610,13 @@
                   <type>vbox</type>
                   <parent>content</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </content_right>
             <data>
                   <type>vbox</type>
                   <parent>content_right</parent>
                   <closeable>1</closeable>
-                  <area_caption>Tundide&amp;nbsp;arv</area_caption>
+                  <area_caption>Tundide&amp;amp;nbsp;arv</area_caption>
                   <group>general</group>
             </data>
             <data_time>
@@ -618,6 +624,7 @@
                   <parent>data</parent>
                   <width>40%:40%:20%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </data_time>
             <data_cust>
                   <type>vbox</type>
@@ -631,6 +638,7 @@
                   <parent>data_cust</parent>
                   <width>40%:40%:20%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </data_cust_hb>
             <data_ord>
                   <type>vbox</type>
@@ -644,6 +652,7 @@
                   <parent>data_ord</parent>
                   <width>40%:40%:20%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </data_ord_hb>
             <data_r_bot>
                   <type>vbox</type>

@@ -967,11 +967,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </reservation>
             <buffer>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </buffer>
       </layout>
 </properties>

@@ -479,11 +479,13 @@
                   <type>hbox</type>
                   <width>15%:85%</width>
                   <group>mess_list</group>
+                  <area_caption></area_caption>
             </message_view>
             <mail_view_split>
                   <type>hbox</type>
                   <width>15%:85%</width>
                   <group>mail_view</group>
+                  <area_caption></area_caption>
             </mail_view_split>
       </layout>
 </properties>

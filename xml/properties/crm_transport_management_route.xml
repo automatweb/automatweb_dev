@@ -89,16 +89,19 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>route_content</group>
+                  <area_caption></area_caption>
             </route_content_frame>
             <route_content_left>
                   <type>vbox</type>
                   <parent>route_content_frame</parent>
                   <group>route_content</group>
+                  <area_caption></area_caption>
             </route_content_left>
             <route_content_right>
                   <type>vbox</type>
                   <parent>route_content_frame</parent>
                   <group>route_content</group>
+                  <area_caption></area_caption>
             </route_content_right>
       </layout>
 </properties>

@@ -288,79 +288,79 @@
       <layout>
             <acct_split>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:80%"]]>
-                  </width>
+                  <width>20%:80%</width>
                   <group>accounts</group>
+                  <area_caption></area_caption>
             </acct_split>
             <acct_tree>
                   <parent>acct_split</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Kontode&amp;nbsp;puu</area_caption>
+                  <area_caption>Kontode&amp;amp;nbsp;puu</area_caption>
                   <group>accounts</group>
             </acct_tree>
             <acct_table>
                   <parent>acct_split</parent>
                   <type>vbox</type>
                   <group>accounts</group>
+                  <area_caption></area_caption>
             </acct_table>
             <tax_split>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:80%"]]>
-                  </width>
+                  <width>20%:80%</width>
                   <group>taxes</group>
+                  <area_caption></area_caption>
             </tax_split>
             <tax_tree>
                   <parent>tax_split</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Maksude&amp;nbsp;puu</area_caption>
+                  <area_caption>Maksude&amp;amp;nbsp;puu</area_caption>
                   <group>taxes</group>
             </tax_tree>
             <tax_table>
                   <parent>tax_split</parent>
                   <type>vbox</type>
                   <group>taxes</group>
+                  <area_caption></area_caption>
             </tax_table>
             <fund_split>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:80%"]]>
-                  </width>
+                  <width>20%:80%</width>
                   <group>funds</group>
+                  <area_caption></area_caption>
             </fund_split>
             <fund_tree>
                   <parent>fund_split</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Fondide&amp;nbsp;puu</area_caption>
+                  <area_caption>Fondide&amp;amp;nbsp;puu</area_caption>
                   <group>funds</group>
             </fund_tree>
             <fund_table>
                   <parent>fund_split</parent>
                   <type>vbox</type>
                   <group>funds</group>
+                  <area_caption></area_caption>
             </fund_table>
             <transfer_split>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:80%"]]>
-                  </width>
+                  <width>20%:80%</width>
                   <group>transfers</group>
+                  <area_caption></area_caption>
             </transfer_split>
             <transfer_search>
                   <parent>transfer_split</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Otsi&amp;nbsp;&amp;uuml;lekandeid</area_caption>
+                  <area_caption>Otsi&amp;amp;nbsp;&amp;amp;uuml;lekandeid</area_caption>
                   <group>transfers</group>
             </transfer_search>
             <transfer_table>
                   <parent>transfer_split</parent>
                   <type>vbox</type>
                   <group>transfers</group>
+                  <area_caption></area_caption>
             </transfer_table>
       </layout>
 </properties>

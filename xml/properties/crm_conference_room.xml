@@ -101,12 +101,13 @@
             <split>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
             </split>
             <left>
                   <parent>split</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>&amp;Uuml;ldine</area_caption>
+                  <area_caption>&amp;amp;Uuml;ldine</area_caption>
                   <group>general</group>
             </left>
             <right>

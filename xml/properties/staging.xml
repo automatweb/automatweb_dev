@@ -215,6 +215,7 @@
             <place_box>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
                   <caption>Toimumispaik</caption>
             </place_box>
       </layout>

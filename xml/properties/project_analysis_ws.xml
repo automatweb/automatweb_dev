@@ -154,6 +154,7 @@
             <srt_hb>
                   <type>hbox</type>
                   <group>strat_res_tree</group>
+                  <area_caption></area_caption>
             </srt_hb>
       </layout>
 </properties>

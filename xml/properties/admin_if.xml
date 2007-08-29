@@ -47,6 +47,7 @@
                   <type>hbox</type>
                   <width>30%:80%</width>
                   <group>o</group>
+                  <area_caption></area_caption>
             </o_bottom>
             <o_bot_left>
                   <type>vbox</type>
@@ -59,6 +60,7 @@
                   <type>vbox</type>
                   <parent>o_bottom</parent>
                   <group>o</group>
+                  <area_caption></area_caption>
             </o_bot_right>
       </layout>
 </properties>

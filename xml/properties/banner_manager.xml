@@ -100,6 +100,7 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>mgr</group>
+                  <area_caption></area_caption>
             </mgr_v_split>
             <mgr_tree_l>
                   <type>vbox</type>
@@ -112,6 +113,7 @@
                   <type>vbox</type>
                   <parent>mgr_v_split</parent>
                   <group>mgr</group>
+                  <area_caption></area_caption>
             </mgr_tbls>
       </layout>
 </properties>

@@ -246,6 +246,7 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>r_list</group>
+                  <area_caption></area_caption>
             </p_l>
       </layout>
 </properties>

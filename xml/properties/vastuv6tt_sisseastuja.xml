@@ -1048,6 +1048,7 @@
             <table>vastuv6tt_sisseastuja</table>
             <group>grp_sisseastuja_andmed</group>
             <type>chooser</type>
+            <multiple>0</multiple>
             <field>elukoht</field>
             <caption>Alaline elukoht</caption>
       </property>

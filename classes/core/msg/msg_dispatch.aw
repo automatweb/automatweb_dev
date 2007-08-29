@@ -3,11 +3,10 @@
 // this is the aw message dispatcher
 // it accepts messages and delivers them to all listeners
 
-class msg_dispatch extends class_base
+class msg_dispatch
 {
 	function msg_dispatch()
 	{
-		$this->init();
 	}
 
 	////
@@ -92,9 +91,9 @@ class msg_dispatch extends class_base
 	function _get_handlers_for_message($msg)
 	{
 		$msg = str_replace(".", "", $msg);
-		$file = $this->cfg["basedir"]."/xml/msgmaps/".$msg.".xml";
+		$file = aw_ini_get("basedir")."/xml/msgmaps/".$msg.".xml";
 		
-		$fc = $this->get_file(array("file" => $file));
+		$fc = file_get_contents($file);
 		error::raise_if($fc === false, array(
 			"id" => "ERR_NO_SUCH_MESSAGE",
 			"msg" => sprintf(t("msg_dispatch::post_message - no such message (%s) defined!"), $msg)

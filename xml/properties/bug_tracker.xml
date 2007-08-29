@@ -1024,12 +1024,13 @@
                         <num_4>by_cust</num_4>
                         <num_5>by_monitor</num_5>
                   </group>
+                  <area_caption></area_caption>
             </bug>
             <bug_tree>
                   <type>vbox</type>
                   <parent>bug</parent>
                   <closeable>1</closeable>
-                  <area_caption>Arendus&amp;uuml;lesanded</area_caption>
+                  <area_caption>Arendus&amp;amp;uuml;lesanded</area_caption>
                   <group>
                         <num_0>by_default</num_0>
                         <num_1>by_project</num_1>
@@ -1042,6 +1043,7 @@
             <s_top_v>
                   <type>hbox</type>
                   <group>search</group>
+                  <area_caption></area_caption>
             </s_top_v>
             <s_name_lay>
                   <type>vbox</type>
@@ -1054,6 +1056,7 @@
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>search</group>
+                  <area_caption></area_caption>
             </s_top>
             <s_type_lay>
                   <type>vbox</type>
@@ -1073,6 +1076,7 @@
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>search</group>
+                  <area_caption></area_caption>
             </s_bott>
             <s_status_lay>
                   <type>vbox</type>
@@ -1092,23 +1096,26 @@
                   <type>hbox</type>
                   <parent>s_who_l</parent>
                   <group>search</group>
+                  <area_caption></area_caption>
             </s_who_empty_l>
             <reqs_tt>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>reqs</group>
+                  <area_caption></area_caption>
             </reqs_tt>
             <reqs_tree>
                   <type>vbox</type>
                   <parent>reqs_tt</parent>
                   <closeable>1</closeable>
-                  <area_caption>N&amp;otilde;uete&amp;nbsp;kategooriad</area_caption>
+                  <area_caption>N&amp;amp;otilde;uete&amp;amp;nbsp;kategooriad</area_caption>
                   <group>reqs</group>
             </reqs_tree>
             <reqs_p_tt>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>reqs_proj</group>
+                  <area_caption></area_caption>
             </reqs_p_tt>
             <reqs_p_tree>
                   <type>vbox</type>
@@ -1121,18 +1128,20 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>devo</group>
+                  <area_caption></area_caption>
             </dev_orders_h>
             <dev_orders_tree_v>
                   <type>vbox</type>
                   <parent>dev_orders_h</parent>
                   <closeable>1</closeable>
-                  <area_caption>Arendustellimuste&amp;nbsp;kategooriad</area_caption>
+                  <area_caption>Arendustellimuste&amp;amp;nbsp;kategooriad</area_caption>
                   <group>devo</group>
             </dev_orders_tree_v>
             <reqs_c_tt>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>reqs_cust</group>
+                  <area_caption></area_caption>
             </reqs_c_tt>
             <reqs_c_tree>
                   <type>vbox</type>
@@ -1145,6 +1154,7 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>devo_proj</group>
+                  <area_caption></area_caption>
             </devo_p_tt>
             <devo_p_tree>
                   <type>vbox</type>
@@ -1157,6 +1167,7 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>devo_cust</group>
+                  <area_caption></area_caption>
             </devo_c_tt>
             <devo_c_tree>
                   <type>vbox</type>
@@ -1169,6 +1180,7 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>problems_units</group>
+                  <area_caption></area_caption>
             </pu_h>
             <pu_tree_b>
                   <type>vbox</type>
@@ -1181,6 +1193,7 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>problems_proj</group>
+                  <area_caption></area_caption>
             </pp_h>
             <pp_tree_b>
                   <type>vbox</type>
@@ -1193,17 +1206,19 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>problems_req</group>
+                  <area_caption></area_caption>
             </pr_h>
             <pr_tree_b>
                   <type>vbox</type>
                   <parent>pr_h</parent>
                   <closeable>1</closeable>
-                  <area_caption>N&amp;otilde;uded</area_caption>
+                  <area_caption>N&amp;amp;otilde;uded</area_caption>
                   <group>problems_req</group>
             </pr_tree_b>
             <stat_hrs_range>
                   <type>hbox</type>
                   <group>stat_hrs_overview</group>
+                  <area_caption></area_caption>
             </stat_hrs_range>
       </layout>
 </properties>

@@ -482,11 +482,13 @@
             <box1>
                   <type>hbox</type>
                   <group>grp_search</group>
+                  <area_caption></area_caption>
                   <caption>Hinnavahemik</caption>
             </box1>
             <box2>
                   <type>hbox</type>
                   <group>grp_search</group>
+                  <area_caption></area_caption>
                   <caption>&amp;amp;uuml;ldpinna vahemik</caption>
             </box2>
       </layout>

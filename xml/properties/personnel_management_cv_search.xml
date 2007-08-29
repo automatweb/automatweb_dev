@@ -172,6 +172,7 @@
             <pay>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
             </pay>
       </layout>
       <forminfo>

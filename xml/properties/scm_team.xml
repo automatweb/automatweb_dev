@@ -122,6 +122,7 @@
                   <type>hbox</type>
                   <width>15%:85%</width>
                   <group>registration</group>
+                  <area_caption></area_caption>
             </split_reg>
       </layout>
 </properties>

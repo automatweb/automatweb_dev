@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.52 2007/06/05 09:41:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.53 2007/08/29 08:27:12 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -689,6 +689,10 @@ class cache extends core
 	**/
 	function file_clear_pt($pt)
 	{
+		if (aw_global_get("no_cache_flush") == 1)
+		{
+			return;
+		}
 		// now, this is where the magic happens. 
 		// basically, we rename the whole folder and clear it's contents later. 
 		$fq = $this->cfg["page_cache"]."/".$pt;
@@ -852,7 +856,6 @@ class cache extends core
 		$dirname = str_replace(".","",$pathinfo["dirname"]);
 
 		$fqfn = $this->cfg["basedir"] . $dirname . "/" . $pathinfo["basename"];
-		
 		// this is all nice and good, but I need a way to load files from the
 		// site directory as well. 
 

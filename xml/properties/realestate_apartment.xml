@@ -548,7 +548,7 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>show_apartment_no</name>
+            <name>show_apartment_number</name>
             <table>objects</table>
             <group>advertisement_data</group>
             <type>checkbox</type>
@@ -1738,51 +1738,61 @@
             <box123>
                   <type>hbox</type>
                   <group>grp_sub_main</group>
+                  <area_caption></area_caption>
                   <caption>Staatus</caption>
             </box123>
             <box1>
                   <type>vbox</type>
                   <group>advertisement_data</group>
+                  <area_caption></area_caption>
                   <caption>Vahendustasu</caption>
             </box1>
             <box8>
                   <type>vbox</type>
                   <group>house_and_property</group>
+                  <area_caption></area_caption>
                   <caption>Garaazh</caption>
             </box8>
             <box4>
                   <type>vbox</type>
                   <group>kitchen</group>
+                  <area_caption></area_caption>
                   <caption>K&amp;ouml;&amp;ouml;giseinad</caption>
             </box4>
             <box2>
                   <type>vbox</type>
                   <group>rooms</group>
+                  <area_caption></area_caption>
                   <caption>R&amp;amp;otilde;dud</caption>
             </box2>
             <box3>
                   <type>vbox</type>
                   <group>rooms</group>
+                  <area_caption></area_caption>
                   <caption>Siseuksed</caption>
             </box3>
             <box5>
                   <type>vbox</type>
                   <group>rooms</group>
+                  <area_caption></area_caption>
                   <caption>Toaseinad</caption>
             </box5>
             <box9>
                   <type>vbox</type>
                   <group>rooms</group>
+                  <area_caption></area_caption>
                   <caption>Parkett</caption>
             </box9>
             <box7>
                   <type>vbox</type>
                   <group>rooms</group>
+                  <area_caption></area_caption>
                   <caption>Elektriarvesti</caption>
             </box7>
             <box6>
                   <type>vbox</type>
                   <group>san_rooms</group>
+                  <area_caption></area_caption>
                   <caption>Vann</caption>
             </box6>
       </layout>

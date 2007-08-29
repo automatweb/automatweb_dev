@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.66 2007/07/23 13:07:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.67 2007/08/29 08:27:13 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -294,6 +294,9 @@ class spa_bookigs_entry extends class_base
 
 	function _set_cust_entry($arr)
 	{
+		aw_global_set("no_cache_flush", 1);
+		obj_set_opt("no_cache", 1);
+
 		//xml_rpc teenuse jaoks
 		$_SESSION["add_package_service"] = array();
 //die(dbg::dump($arr["request"]));

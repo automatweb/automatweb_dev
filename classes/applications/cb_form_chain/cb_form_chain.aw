@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.45 2007/07/12 12:37:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.46 2007/08/29 08:27:12 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -934,7 +934,6 @@ class cb_form_chain extends class_base
 		else
 		{
 			$form_str = "";
-
 			// for each page
 			$pgs = $this->_get_page_list($o);
 			foreach($pgs as $pg)

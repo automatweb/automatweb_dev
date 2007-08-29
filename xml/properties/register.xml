@@ -204,6 +204,7 @@
             <datalt>
                   <type>hbox</type>
                   <group>data</group>
+                  <area_caption></area_caption>
             </datalt>
       </layout>
 </properties>

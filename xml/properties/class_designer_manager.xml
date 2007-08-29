@@ -85,11 +85,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>mgr</group>
+                  <area_caption></area_caption>
             </mgr_hbox>
             <rels_hbox>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>rels</group>
+                  <area_caption></area_caption>
             </rels_hbox>
       </layout>
 </properties>

@@ -75,6 +75,7 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>manager</group>
+                  <area_caption></area_caption>
             </mlist>
       </layout>
 </properties>

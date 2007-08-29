@@ -273,16 +273,19 @@
                   <type>hbox</type>
                   <width>15%:85%</width>
                   <group>employee_list</group>
+                  <area_caption></area_caption>
             </employee_list>
             <candidate>
                   <type>hbox</type>
                   <width>15%:85%</width>
                   <group>candidate</group>
+                  <area_caption></area_caption>
             </candidate>
             <offers>
                   <type>hbox</type>
                   <width>15%:85%</width>
                   <group>offers</group>
+                  <area_caption></area_caption>
             </offers>
       </layout>
 </properties>

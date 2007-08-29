@@ -166,21 +166,25 @@
             <hbox_toolbar>
                   <type>hbox</type>
                   <group>users</group>
+                  <area_caption></area_caption>
             </hbox_toolbar>
             <hbox_data>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>users</group>
+                  <area_caption></area_caption>
             </hbox_data>
             <vbox_users_tree>
                   <type>vbox</type>
                   <parent>hbox_data</parent>
                   <group>users</group>
+                  <area_caption></area_caption>
             </vbox_users_tree>
             <vbox_users_content>
                   <type>vbox</type>
                   <parent>hbox_data</parent>
                   <group>users</group>
+                  <area_caption></area_caption>
             </vbox_users_content>
       </layout>
 </properties>

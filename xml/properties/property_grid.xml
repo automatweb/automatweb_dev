@@ -7,6 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
+            <default>0</default>
             <caption>Gridi t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <classinfo>

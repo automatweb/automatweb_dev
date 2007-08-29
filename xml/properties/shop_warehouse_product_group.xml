@@ -85,16 +85,19 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>products</group>
+                  <area_caption></area_caption>
             </products_frame>
             <search_params_frame>
                   <type>vbox</type>
                   <parent>products_frame</parent>
                   <group>products</group>
+                  <area_caption></area_caption>
             </search_params_frame>
             <search_result_frame>
                   <type>vbox</type>
                   <parent>products_frame</parent>
                   <group>products</group>
+                  <area_caption></area_caption>
             </search_result_frame>
       </layout>
 </properties>

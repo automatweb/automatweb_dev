@@ -1385,7 +1385,7 @@ class user extends class_base
 		$umail = $o->prop("email");
 		$uname = $o->prop("real_name");
 
-		obj_set_opt("no_cache", 1);
+		$prev = obj_set_opt("no_cache", 1);
 		if($mail = $o->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 		{
 			if ($mail->class_id() != CL_ML_MEMBER)
@@ -1394,7 +1394,7 @@ class user extends class_base
 				$this->on_save_user($arr);
 				return;
 			}
-			obj_set_opt("no_cache", 0);
+			obj_set_opt("no_cache", $prev);
 			$mail->set_prop("mail", $umail);
 			$mail->set_prop("name", $uname);
 			$mail->set_name($uname." &lt;".$umail."&gt;");
@@ -1402,7 +1402,7 @@ class user extends class_base
 		}
 		else
 		{
-			obj_set_opt("no_cache", 0);
+			obj_set_opt("no_cache", $prev);
 			$mail = new object();
 			$mail->set_class_id(CL_ML_MEMBER);
 			$mail->set_parent($o->id());

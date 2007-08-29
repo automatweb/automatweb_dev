@@ -280,7 +280,7 @@
             <store>no</store>
             <multiple>1</multiple>
             <field>print_offerer</field>
-            <caption>Pakkuja </caption>
+            <caption>Pakkuja</caption>
       </property>
       <property>
             <name>print_contact_person</name>
@@ -289,7 +289,7 @@
             <type>select</type>
             <store>no</store>
             <field>print_contact_person</field>
-            <caption>Pakkuja kontaktisik </caption>
+            <caption>Pakkuja kontaktisik</caption>
       </property>
       <property>
             <name>print_type</name>
@@ -299,7 +299,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>print_type</field>
-            <caption>Pakkuja kontaktisik </caption>
+            <caption>Pakkuja kontaktisik</caption>
       </property>
       <property>
             <name>print_submit</name>
@@ -408,11 +408,13 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>d</group>
+                  <area_caption></area_caption>
             </d_l>
             <o_l>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>o</group>
+                  <area_caption></area_caption>
             </o_l>
       </layout>
 </properties>

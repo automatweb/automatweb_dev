@@ -1939,7 +1939,7 @@
       </reltypes>
       <layout>
             <co_bottom_seller>
-                  <area_caption>Kliendisuhe&amp;#44;&amp;nbsp;tema_ostab_meilt</area_caption>
+                  <area_caption>Kliendisuhe&amp;amp;#44;&amp;amp;nbsp;tema_ostab_meilt</area_caption>
                   <closeable>1</closeable>
                   <type>hbox</type>
                   <width>50%:50%</width>
@@ -1949,14 +1949,16 @@
                   <type>vbox</type>
                   <parent>co_bottom_seller</parent>
                   <group>cust_rel</group>
+                  <area_caption></area_caption>
             </co_bottom_seller_l>
             <co_bottom_seller_r>
                   <type>vbox</type>
                   <parent>co_bottom_seller</parent>
                   <group>cust_rel</group>
+                  <area_caption></area_caption>
             </co_bottom_seller_r>
             <co_bottom_buyer>
-                  <area_caption>Kliendisuhe&amp;#44;&amp;nbsp;meie_ostame_talt</area_caption>
+                  <area_caption>Kliendisuhe&amp;amp;#44;&amp;amp;nbsp;meie_ostame_talt</area_caption>
                   <closeable>1</closeable>
                   <type>hbox</type>
                   <width>50%:50%</width>
@@ -1966,11 +1968,13 @@
                   <type>vbox</type>
                   <parent>co_bottom_buyer</parent>
                   <group>cust_rel</group>
+                  <area_caption></area_caption>
             </co_bottom_buyer_l>
             <co_bottom_buyer_r>
                   <type>vbox</type>
                   <parent>co_bottom_buyer</parent>
                   <group>cust_rel</group>
+                  <area_caption></area_caption>
             </co_bottom_buyer_r>
             <ct_super>
                   <type>vbox</type>
@@ -1983,11 +1987,12 @@
                   <parent>ct_super</parent>
                   <width>30%:30%:30%</width>
                   <group>contact</group>
+                  <area_caption></area_caption>
             </contact_l>
             <work_super>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>T&amp;ouml;&amp;ouml;koht</area_caption>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;koht</area_caption>
                   <group>contact</group>
             </work_super>
             <work>
@@ -1995,17 +2000,20 @@
                   <parent>work_super</parent>
                   <width>30%:30%:30%</width>
                   <group>contact</group>
+                  <area_caption></area_caption>
             </work>
             <work_down>
                   <type>hbox</type>
                   <parent>work_super</parent>
                   <width>20%:80%</width>
                   <group>contact</group>
+                  <area_caption></area_caption>
             </work_down>
             <ceditphf>
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>contact</group>
+                  <area_caption></area_caption>
             </ceditphf>
             <cedit_phone>
                   <type>vbox</type>
@@ -2025,6 +2033,7 @@
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>contact</group>
+                  <area_caption></area_caption>
             </ceditemlurl>
             <cedit_email>
                   <type>vbox</type>
@@ -2050,21 +2059,25 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>documents_all</group>
+                  <area_caption></area_caption>
             </docs_lt>
             <docs_left>
                   <type>vbox</type>
                   <parent>docs_lt</parent>
                   <group>documents_all</group>
+                  <area_caption></area_caption>
             </docs_left>
             <docs_search>
                   <type>vbox</type>
                   <parent>docs_left</parent>
                   <group>documents_all</group>
+                  <area_caption></area_caption>
             </docs_search>
             <docs_s_but_row>
                   <type>hbox</type>
                   <parent>docs_left</parent>
                   <group>documents_all</group>
+                  <area_caption></area_caption>
             </docs_s_but_row>
       </layout>
 </properties>

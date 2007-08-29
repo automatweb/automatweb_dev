@@ -337,31 +337,32 @@
             <pr_add_twopart_hbox>
                   <type>hbox</type>
                   <group>parts_other</group>
+                  <area_caption></area_caption>
                   <caption>Hinnamuutus kaheosalise akna puhul</caption>
             </pr_add_twopart_hbox>
             <pr_add_threepart_hbox>
                   <type>hbox</type>
                   <group>parts_other</group>
+                  <area_caption></area_caption>
                   <caption>Hinnamuutus kolmeosalise akna puhul</caption>
             </pr_add_threepart_hbox>
             <pr_add_tpart_hbox>
                   <type>hbox</type>
                   <group>parts_other</group>
+                  <area_caption></area_caption>
                   <caption>Hinnamuutus T-kujulise akna puhul</caption>
             </pr_add_tpart_hbox>
             <min_pr_l>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:90%"]]>
-                  </width>
+                  <width>20%:90%</width>
                   <group>install</group>
+                  <area_caption></area_caption>
             </min_pr_l>
             <min_pr_l_p>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:90%"]]>
-                  </width>
+                  <width>20%:90%</width>
                   <group>install</group>
+                  <area_caption></area_caption>
             </min_pr_l_p>
       </layout>
 </properties>

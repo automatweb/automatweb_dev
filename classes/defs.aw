@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.240 2007/07/25 09:51:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.241 2007/08/29 08:27:12 kristo Exp $
 // defs.aw - common functions
 if (!defined("DEFS"))
 {
@@ -332,6 +332,7 @@ if (!defined("DEFS"))
 	**/
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")
 	{
+		
 		if (!is_email($to))
 		{
 			return;
@@ -757,9 +758,7 @@ if (!defined("DEFS"))
 	// !Genereerib md5 hashi kas parameetrist voi suvalisest arvust.
 	function gen_uniq_id($param = "")
 	{
-		// md5sum on alati 32 märki pikk
-		$src = (strlen($param) > 0) ? $param : uniqid(rand());
-		return md5($src);
+		return md5(uniqid('',true));
 	};
 
 	////

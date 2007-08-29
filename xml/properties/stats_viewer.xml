@@ -468,11 +468,12 @@
             <a>
                   <type>vbox</type>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </a>
             <dates>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Kuup&amp;auml;evad</area_caption>
+                  <area_caption>Kuup&amp;amp;auml;evad</area_caption>
                   <group>stats_filter</group>
             </dates>
             <dates_top>
@@ -480,16 +481,19 @@
                   <parent>dates</parent>
                   <width>50%:50%</width>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </dates_top>
             <dates_left>
                   <type>vbox</type>
                   <parent>dates_top</parent>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </dates_left>
             <dates_right>
                   <type>vbox</type>
                   <parent>dates_top</parent>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </dates_right>
             <us>
                   <type>vbox</type>
@@ -502,16 +506,19 @@
                   <parent>us</parent>
                   <width>50%:50%</width>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </us_top>
             <us_left>
                   <type>vbox</type>
                   <parent>us_top</parent>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </us_left>
             <us_right>
                   <type>vbox</type>
                   <parent>us_top</parent>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </us_right>
             <obj>
                   <type>vbox</type>
@@ -524,21 +531,25 @@
                   <parent>obj</parent>
                   <width>50%:50%</width>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </obj_top>
             <obj_left>
                   <type>vbox</type>
                   <parent>obj_top</parent>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </obj_left>
             <obj_right>
                   <type>vbox</type>
                   <parent>obj_top</parent>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </obj_right>
             <act>
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </act>
             <act_left>
                   <type>vbox</type>
@@ -558,11 +569,12 @@
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>stats_filter</group>
+                  <area_caption></area_caption>
             </s>
             <s_left>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Sessioon&amp;nbsp;&amp;&amp;nbsp;IP</area_caption>
+                  <area_caption>Sessioon&amp;amp;nbsp;&amp;amp;&amp;amp;nbsp;IP</area_caption>
                   <parent>s</parent>
                   <group>stats_filter</group>
             </s_left>
@@ -575,16 +587,15 @@
             </s_right>
             <browser_split>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:80%"]]>
-                  </width>
+                  <width>20%:80%</width>
                   <group>browser</group>
+                  <area_caption></area_caption>
             </browser_split>
             <browser_tree>
                   <parent>browser_split</parent>
                   <type>hbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Kuup&amp;auml;evad</area_caption>
+                  <area_caption>Kuup&amp;amp;auml;evad</area_caption>
                   <group>browser</group>
             </browser_tree>
       </layout>

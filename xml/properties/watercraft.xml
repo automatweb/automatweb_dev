@@ -975,144 +975,168 @@
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Elekter 110V</caption>
             </electricity_110V_row>
             <electricity_220V_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Elekter 220V</caption>
             </electricity_220V_row>
             <radio_station_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Raadiojaam</caption>
             </radio_station_row>
             <stereo_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Stereo</caption>
             </stereo_row>
             <cd_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>CD</caption>
             </cd_row>
             <waterproof_speakers_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Veekindlad k&amp;amp;otilde;larid</caption>
             </waterproof_speakers_row>
             <burglar_alarm_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Signalisatsioon</caption>
             </burglar_alarm_row>
             <navigation_system_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Navigatsioonis&amp;amp;uuml;steem</caption>
             </navigation_system_row>
             <navigation_lights_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Navigatsioonituled</caption>
             </navigation_lights_row>
             <trailer_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Treiler</caption>
             </trailer_row>
             <toilet_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Tualett</caption>
             </toilet_row>
             <shower_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Dush</caption>
             </shower_row>
             <lifejacket_row>
                   <type>hbox</type>
                   <width>10%:45%:45%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>P&amp;amp;auml;&amp;amp;auml;stevest</caption>
             </lifejacket_row>
             <swimming_ladder_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Ujumisredel</caption>
             </swimming_ladder_row>
             <awning_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Varikatus</caption>
             </awning_row>
             <kitchen_cooker_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>K&amp;amp;ouml;&amp;amp;ouml;k/Pliit</caption>
             </kitchen_cooker_row>
             <vendrid_row>
                   <type>hbox</type>
                   <width>10%:45%:45%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Vendrid</caption>
             </vendrid_row>
             <fridge_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>K&amp;amp;uuml;lmkapp</caption>
             </fridge_row>
             <anchor_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Ankur</caption>
             </anchor_row>
             <oars_row>
                   <type>hbox</type>
                   <width>10%:45%:45%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Aerud</caption>
             </oars_row>
             <tv_video_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>TV-video</caption>
             </tv_video_row>
             <fuel_row>
                   <type>hbox</type>
                   <width>10%:90%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>K&amp;amp;uuml;te</caption>
             </fuel_row>
             <water_tank_row>
                   <type>hbox</type>
                   <width>10%:45%:45%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>Veepaak</caption>
             </water_tank_row>
             <life_boat_row>
                   <type>hbox</type>
                   <width>10%:45%:45%</width>
                   <group>additional_equipment</group>
+                  <area_caption></area_caption>
                   <caption>P&amp;amp;auml;&amp;amp;auml;stepaat</caption>
             </life_boat_row>
       </layout>

@@ -314,19 +314,24 @@ class _int_object_loader extends core
 		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
 			"oid" => $t_oid
 		));
-		
-		if (aw_ini_get("site_show.objlastmod_only_menu"))
-		{
-			if ($GLOBALS["objects"][$t_oid]->class_id() == CL_MENU)
+
+		static $lastmod_set;
+		if (!$lastmod_set)
+		{		
+			if (aw_ini_get("site_show.objlastmod_only_menu"))
+			{
+				if ($GLOBALS["objects"][$t_oid]->class_id() == CL_MENU)
+				{
+					// write the current time as last modification time of any object.
+					$this->cache->file_set("objlastmod", time());
+				}
+			}
+			else
 			{
 				// write the current time as last modification time of any object.
 				$this->cache->file_set("objlastmod", time());
 			}
-		}
-		else
-		{
-			// write the current time as last modification time of any object.
-			$this->cache->file_set("objlastmod", time());
+			$lastmod_set = 1;
 		}
 
 		return $t_oid;

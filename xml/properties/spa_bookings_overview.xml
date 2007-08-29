@@ -343,11 +343,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>rooms</group>
+                  <area_caption></area_caption>
             </r_split>
             <r_left>
                   <type>vbox</type>
                   <parent>r_split</parent>
                   <group>rooms</group>
+                  <area_caption></area_caption>
             </r_left>
             <r_tree>
                   <type>vbox</type>
@@ -367,11 +369,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>stats</group>
+                  <area_caption></area_caption>
             </stats_r_split>
             <stats_r_left>
                   <type>vbox</type>
                   <parent>stats_r_split</parent>
                   <group>stats</group>
+                  <area_caption></area_caption>
             </stats_r_left>
             <stats_r_srch>
                   <type>vbox</type>
@@ -384,11 +388,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>reports</group>
+                  <area_caption></area_caption>
             </rr_split>
             <rr_left>
                   <type>vbox</type>
                   <parent>rr_split</parent>
                   <group>reports</group>
+                  <area_caption></area_caption>
             </rr_left>
             <rr_srch>
                   <type>vbox</type>

@@ -60,11 +60,11 @@ msgstr "Select object copying method"
 
 #: classes/admin/admin_menus.aw:761
 msgid "Menyyde importimisel tekkis viga real %s"
-msgstr ""
+msgstr "Error occured on line %s of the menu import file"
 
 #: classes/admin/admin_menus.aw:778
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s"
-msgstr ""
+msgstr "Could not find parent menu on line %s of the menu import file"
 
 #: classes/admin/admin_menus.aw:1250
 msgid "Link"

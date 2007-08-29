@@ -209,46 +209,55 @@
             <main_toolbar_hbox>
                   <type>hbox</type>
                   <group>pank_owner_group_main_sub</group>
+                  <area_caption></area_caption>
             </main_toolbar_hbox>
             <main_hbox>
                   <type>hbox</type>
                   <group>pank_owner_group_main_sub</group>
                   <width>20%:80%</width>
+                  <area_caption></area_caption>
             </main_hbox>
             <main_vbox_left>
                   <type>vbox</type>
                   <group>pank_owner_group_main_sub</group>
                   <parent>main_hbox</parent>
+                  <area_caption></area_caption>
             </main_vbox_left>
             <main_vbox_right>
                   <type>vbox</type>
                   <group>pank_owner_group_main_sub</group>
                   <parent>main_hbox</parent>
+                  <area_caption></area_caption>
             </main_vbox_right>
             <trans_hbox>
                   <type>hbox</type>
                   <group>pank_make_trans</group>
                   <width>20%:20%:30%</width>
+                  <area_caption></area_caption>
             </trans_hbox>
             <trans_vbox_left>
                   <type>vbox</type>
                   <group>pank_make_trans</group>
                   <parent>trans_hbox</parent>
+                  <area_caption></area_caption>
             </trans_vbox_left>
             <trans_vbox_middle>
                   <type>vbox</type>
                   <group>pank_make_trans</group>
                   <parent>trans_hbox</parent>
+                  <area_caption></area_caption>
             </trans_vbox_middle>
             <trans_vbox_right>
                   <type>vbox</type>
                   <group>pank_make_trans</group>
                   <parent>trans_hbox</parent>
+                  <area_caption></area_caption>
             </trans_vbox_right>
             <trans_vbox_last>
                   <type>vbox</type>
                   <group>pank_make_trans</group>
                   <parent>trans_hbox</parent>
+                  <area_caption></area_caption>
             </trans_vbox_last>
       </layout>
 </properties>

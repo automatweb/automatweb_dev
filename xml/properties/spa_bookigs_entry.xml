@@ -403,6 +403,7 @@
                         <num_0>cust</num_0>
                         <num_1>all_bookings</num_1>
                   </group>
+                  <area_caption></area_caption>
             </ver_split>
             <search>
                   <type>vbox</type>

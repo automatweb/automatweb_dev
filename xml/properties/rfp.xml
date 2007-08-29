@@ -823,12 +823,13 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>final_catering</group>
+                  <area_caption></area_caption>
             </cat_hsplit>
             <cat_left>
                   <parent>cat_hsplit</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Ruumid&amp;nbsp;ja&amp;nbsp;reserveeringud</area_caption>
+                  <area_caption>Ruumid&amp;amp;nbsp;ja&amp;amp;nbsp;reserveeringud</area_caption>
                   <group>final_catering</group>
             </cat_left>
             <cat_right>
@@ -842,12 +843,13 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>final_resource</group>
+                  <area_caption></area_caption>
             </res_hsplit>
             <res_left>
                   <parent>res_hsplit</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Ruumid&amp;nbsp;ja&amp;nbsp;reserveeringud</area_caption>
+                  <area_caption>Ruumid&amp;amp;nbsp;ja&amp;amp;nbsp;reserveeringud</area_caption>
                   <group>final_resource</group>
             </res_left>
             <res_right>
@@ -861,12 +863,13 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>final_prices</group>
+                  <area_caption></area_caption>
             </prs_hsplit>
             <prs_left>
                   <parent>prs_hsplit</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Ruumid&amp;nbsp;ja&amp;nbsp;reserveeringud</area_caption>
+                  <area_caption>Ruumid&amp;amp;nbsp;ja&amp;amp;nbsp;reserveeringud</area_caption>
                   <group>final_prices</group>
             </prs_left>
             <prs_right>

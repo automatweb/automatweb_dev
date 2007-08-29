@@ -125,10 +125,9 @@
       <layout>
             <vsplitbox>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["30%:70%"]]>
-                  </width>
+                  <width>30%:70%</width>
                   <group>grp_users</group>
+                  <area_caption></area_caption>
             </vsplitbox>
       </layout>
 </properties>

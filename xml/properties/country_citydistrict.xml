@@ -58,6 +58,16 @@
             <caption>Vali k&amp;otilde;rgem halduspiirkond</caption>
       </property>
       <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
+      <property>
             <name>administrative_structure_oid</name>
             <table>objects</table>
             <group>general</group>
@@ -70,6 +80,11 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <reltypes>
             <PARENT_ADMINISTRATIVE_UNIT>
                   <value>1</value>

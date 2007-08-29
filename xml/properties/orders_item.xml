@@ -70,7 +70,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>product_bill</field>
-            <caption>Tarne t&amp;auml;itmine/arve nr</caption>
+            <caption>Tarne t&amp;amp;auml;itmine/arve nr</caption>
       </property>
       <property>
             <name>product_page</name>

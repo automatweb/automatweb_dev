@@ -374,18 +374,20 @@
                   <closeable>1</closeable>
                   <width>30%:70%</width>
                   <group>events</group>
+                  <area_caption></area_caption>
             </events_top>
             <events_top_left>
                   <type>vbox</type>
                   <parent>events_top</parent>
                   <closeable>1</closeable>
-                  <area_caption>S&amp;uuml;ndmuste&amp;nbsp;Otsing</area_caption>
+                  <area_caption>S&amp;amp;uuml;ndmuste&amp;amp;nbsp;Otsing</area_caption>
                   <group>events</group>
             </events_top_left>
             <events_top_right>
                   <type>vbox</type>
                   <parent>events_top</parent>
                   <group>events</group>
+                  <area_caption></area_caption>
             </events_top_right>
       </layout>
 </properties>

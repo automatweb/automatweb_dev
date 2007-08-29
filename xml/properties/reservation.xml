@@ -513,11 +513,12 @@
             <general_split>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
             </general_split>
             <general_up>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>&amp;Uuml;ldinfo</area_caption>
+                  <area_caption>&amp;amp;Uuml;ldinfo</area_caption>
                   <parent>general_split</parent>
                   <group>general</group>
             </general_up>
@@ -525,16 +526,18 @@
                   <parent>general_up</parent>
                   <type>vbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
             </general_up_up>
             <sbt_layout>
                   <type>hbox</type>
                   <parent>general_up</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </sbt_layout>
             <general_down>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Aeg&amp;#44;&amp;nbsp;ja&amp;nbsp;hind</area_caption>
+                  <area_caption>Aeg&amp;amp;#44;&amp;amp;nbsp;ja&amp;amp;nbsp;hind</area_caption>
                   <parent>general_split</parent>
                   <group>general</group>
             </general_down>

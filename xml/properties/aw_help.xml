@@ -83,21 +83,25 @@
             <help_hbox_toolbar>
                   <type>hbox</type>
                   <group>help_ui</group>
+                  <area_caption></area_caption>
             </help_hbox_toolbar>
             <help_tree_table>
                   <type>hbox</type>
                   <group>help_ui</group>
                   <width>30%:70%</width>
+                  <area_caption></area_caption>
             </help_tree_table>
             <help_hbox_tree>
                   <type>vbox</type>
                   <group>help_ui</group>
                   <parent>help_tree_table</parent>
+                  <area_caption></area_caption>
             </help_hbox_tree>
             <help_hbox_table>
                   <type>vbox</type>
                   <group>help_ui</group>
                   <parent>help_tree_table</parent>
+                  <area_caption></area_caption>
             </help_hbox_table>
       </layout>
 </properties>

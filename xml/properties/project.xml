@@ -1053,12 +1053,13 @@
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>general2</group>
+                  <area_caption></area_caption>
             </up_bit>
             <left_bit>
                   <type>vbox</type>
                   <parent>up_bit</parent>
                   <closeable>1</closeable>
-                  <area_caption>&amp;Uuml;ldandmed</area_caption>
+                  <area_caption>&amp;amp;Uuml;ldandmed</area_caption>
                   <group>general2</group>
             </left_bit>
             <center_bit>
@@ -1066,6 +1067,7 @@
                   <parent>up_bit</parent>
                   <no_padding>1</no_padding>
                   <group>general2</group>
+                  <area_caption></area_caption>
             </center_bit>
             <project_time>
                   <type>vbox</type>
@@ -1087,23 +1089,25 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>files</group>
+                  <area_caption></area_caption>
             </files_lay>
             <files_left_lay>
                   <type>vbox</type>
                   <parent>files_lay</parent>
                   <group>files</group>
+                  <area_caption></area_caption>
             </files_left_lay>
             <files_tree_lay>
                   <closeable>1</closeable>
                   <type>vbox</type>
-                  <area_caption>Projekti&amp;nbsp;dokumendid</area_caption>
+                  <area_caption>Projekti&amp;amp;nbsp;dokumendid</area_caption>
                   <parent>files_left_lay</parent>
                   <group>files</group>
             </files_tree_lay>
             <files_find_lay>
                   <closeable>1</closeable>
                   <type>vbox</type>
-                  <area_caption>Dokumentide&amp;nbsp;otsing</area_caption>
+                  <area_caption>Dokumentide&amp;amp;nbsp;otsing</area_caption>
                   <parent>files_left_lay</parent>
                   <group>files</group>
             </files_find_lay>
@@ -1111,11 +1115,13 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>team</group>
+                  <area_caption></area_caption>
             </team>
             <team_left>
                   <parent>team</parent>
                   <type>vbox</type>
                   <group>team</group>
+                  <area_caption></area_caption>
             </team_left>
             <team_tree>
                   <parent>team_left</parent>
@@ -1128,25 +1134,25 @@
                   <parent>team_left</parent>
                   <closeable>1</closeable>
                   <type>vbox</type>
-                  <area_caption>Isikute&amp;nbsp;otsing</area_caption>
+                  <area_caption>Isikute&amp;amp;nbsp;otsing</area_caption>
                   <group>team</group>
             </team_search>
             <team_r>
                   <parent>team</parent>
                   <type>vbox</type>
                   <group>team</group>
+                  <area_caption></area_caption>
             </team_r>
             <goal_vb>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:80%"]]>
-                  </width>
+                  <width>20%:80%</width>
                   <group>goals_edit</group>
+                  <area_caption></area_caption>
             </goal_vb>
             <goal_tree_lay>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Eesm&amp;auml;rgid</area_caption>
+                  <area_caption>Eesm&amp;amp;auml;rgid</area_caption>
                   <parent>goal_vb</parent>
                   <group>goals_edit</group>
             </goal_tree_lay>
@@ -1157,13 +1163,14 @@
                         <num_0>req</num_0>
                         <num_1>req_process</num_1>
                   </group>
+                  <area_caption></area_caption>
             </req_l>
             <req_tree_l>
                   <type>vbox</type>
                   <parent>req_l</parent>
                   <closeable>1</closeable>
                   <no_padding>1</no_padding>
-                  <area_caption>N&amp;otilde;uded&amp;nbsp;puu&amp;nbsp;kujul</area_caption>
+                  <area_caption>N&amp;amp;otilde;uded&amp;amp;nbsp;puu&amp;amp;nbsp;kujul</area_caption>
                   <group>
                         <num_0>req</num_0>
                         <num_1>req_process</num_1>
@@ -1177,6 +1184,7 @@
                         <num_0>req</num_0>
                         <num_1>req_process</num_1>
                   </group>
+                  <area_caption></area_caption>
             </req_tbl_l>
       </layout>
 </properties>

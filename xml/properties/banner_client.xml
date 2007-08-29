@@ -1,6 +1,24 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>cont_place</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <store>no</store>
+            <field>cont_place</field>
+            <caption>Koht veebis</caption>
+      </property>
+      <property>
+            <name>cont_doc_tpl</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <store>no</store>
+            <field>cont_doc_tpl</field>
+            <caption>Dokumendi template</caption>
+      </property>
+      <property>
             <name>html</name>
             <table>banner_clients</table>
             <group>general</group>

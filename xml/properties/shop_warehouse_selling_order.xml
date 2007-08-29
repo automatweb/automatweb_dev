@@ -40,7 +40,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>create_selling_sheet</field>
-            <caption>Mooduste m&amp;amp;uuml;&amp;amp;uuml;gi-saateleht</caption>
+            <caption>Moodusta m&amp;amp;uuml;&amp;amp;uuml;gi-saateleht</caption>
       </property>
       <property>
             <name>append_to_selling_sheet</name>

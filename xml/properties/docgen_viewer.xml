@@ -1,6 +1,9 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <comment></comment>
+      </property>
+      <property>
             <name>foorum</name>
             <table>objects</table>
             <group>general</group>
@@ -105,18 +108,19 @@
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>class_overview</group>
+                  <area_caption></area_caption>
             </ver_split>
             <tree>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Klasside&amp;nbsp;puu</area_caption>
+                  <area_caption>Klasside&amp;amp;nbsp;puu</area_caption>
                   <parent>ver_split</parent>
                   <group>class_overview</group>
             </tree>
             <tbl>
                   <type>hbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Klassi&amp;nbsp;info</area_caption>
+                  <area_caption>Klassi&amp;amp;nbsp;info</area_caption>
                   <parent>ver_split</parent>
                   <group>class_overview</group>
             </tbl>

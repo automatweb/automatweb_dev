@@ -509,6 +509,7 @@
             <phbox1>
                   <type>hbox</type>
                   <group>planner</group>
+                  <area_caption></area_caption>
             </phbox1>
             <pvbox1>
                   <type>vbox</type>
@@ -518,6 +519,7 @@
                         <num_2>int_refs</num_2>
                         <num_3>ext_refs</num_3>
                   </group>
+                  <area_caption></area_caption>
             </pvbox1>
             <phbox2>
                   <type>hbox</type>
@@ -529,24 +531,29 @@
                         <num_2>int_refs</num_2>
                         <num_3>ext_refs</num_3>
                   </group>
+                  <area_caption></area_caption>
             </phbox2>
             <hbox1>
                   <type>hbox</type>
                   <group>designer</group>
+                  <area_caption></area_caption>
             </hbox1>
             <vbox1>
                   <type>vbox</type>
                   <group>designer</group>
+                  <area_caption></area_caption>
             </vbox1>
             <hbox2>
                   <type>hbox</type>
                   <group>designer</group>
                   <parent>vbox1</parent>
                   <width>30%:70%</width>
+                  <area_caption></area_caption>
             </hbox2>
             <hbox3>
                   <type>hbox</type>
                   <group>designer</group>
+                  <area_caption></area_caption>
             </hbox3>
       </layout>
 </properties>

@@ -140,6 +140,7 @@
                   <type>hbox</type>
                   <width>15%:15%:70%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </pay>
       </layout>
 </properties>

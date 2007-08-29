@@ -473,121 +473,145 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>orders_status</group>
+                  <area_caption></area_caption>
             </orders_status_frame>
             <orders_status_left>
                   <type>vbox</type>
                   <parent>orders_status_frame</parent>
                   <group>orders_status</group>
+                  <area_caption></area_caption>
             </orders_status_left>
             <orders_status_right>
                   <type>vbox</type>
                   <parent>orders_status_frame</parent>
                   <group>orders_status</group>
+                  <area_caption></area_caption>
             </orders_status_right>
             <orders_routes_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>orders_routes</group>
+                  <area_caption></area_caption>
             </orders_routes_frame>
             <orders_routes_left>
                   <type>vbox</type>
                   <parent>orders_routes_frame</parent>
                   <group>orders_routes</group>
+                  <area_caption></area_caption>
             </orders_routes_left>
             <orders_routes_right>
                   <type>vbox</type>
                   <parent>orders_routes_frame</parent>
                   <group>orders_routes</group>
+                  <area_caption></area_caption>
             </orders_routes_right>
             <orders_clients_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>orders_clients</group>
+                  <area_caption></area_caption>
             </orders_clients_frame>
             <orders_clients_left>
                   <type>vbox</type>
                   <parent>orders_clients_frame</parent>
                   <group>orders_clients</group>
+                  <area_caption></area_caption>
             </orders_clients_left>
             <orders_clients_right>
                   <type>vbox</type>
                   <parent>orders_clients_frame</parent>
                   <group>orders_clients</group>
+                  <area_caption></area_caption>
             </orders_clients_right>
             <orders_dispatchers_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>orders_dispatchers</group>
+                  <area_caption></area_caption>
             </orders_dispatchers_frame>
             <orders_dispatchers_left>
                   <type>vbox</type>
                   <parent>orders_dispatchers_frame</parent>
                   <group>orders_dispatchers</group>
+                  <area_caption></area_caption>
             </orders_dispatchers_left>
             <orders_dispatchers_right>
                   <type>vbox</type>
                   <parent>orders_dispatchers_frame</parent>
                   <group>orders_dispatchers</group>
+                  <area_caption></area_caption>
             </orders_dispatchers_right>
             <routes_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>routes</group>
+                  <area_caption></area_caption>
             </routes_frame>
             <routes_frame_right>
                   <type>vbox</type>
                   <parent>routes_frame</parent>
                   <group>routes</group>
+                  <area_caption></area_caption>
             </routes_frame_right>
             <routes_frame_left>
                   <type>vbox</type>
                   <parent>routes_frame</parent>
                   <group>routes</group>
+                  <area_caption></area_caption>
             </routes_frame_left>
             <carriages_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>carriages</group>
+                  <area_caption></area_caption>
             </carriages_frame>
             <carriages_frame_right>
                   <type>vbox</type>
                   <parent>carriages_frame</parent>
                   <group>carriages</group>
+                  <area_caption></area_caption>
             </carriages_frame_right>
             <carriages_frame_left>
                   <type>vbox</type>
                   <parent>carriages_frame</parent>
                   <group>carriages</group>
+                  <area_caption></area_caption>
             </carriages_frame_left>
             <my_orders_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>my_orders</group>
+                  <area_caption></area_caption>
             </my_orders_frame>
             <my_orders_left>
                   <type>vbox</type>
                   <parent>my_orders_frame</parent>
                   <group>my_orders</group>
+                  <area_caption></area_caption>
             </my_orders_left>
             <my_orders_right>
                   <type>vbox</type>
                   <parent>my_orders_frame</parent>
                   <group>my_orders</group>
+                  <area_caption></area_caption>
             </my_orders_right>
             <my_carriages_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>my_carriages</group>
+                  <area_caption></area_caption>
             </my_carriages_frame>
             <my_carriages_left>
                   <type>vbox</type>
                   <parent>my_carriages_frame</parent>
                   <group>my_carriages</group>
+                  <area_caption></area_caption>
             </my_carriages_left>
             <my_carriages_right>
                   <type>vbox</type>
                   <parent>my_carriages_frame</parent>
                   <group>my_carriages</group>
+                  <area_caption></area_caption>
             </my_carriages_right>
       </layout>
 </properties>

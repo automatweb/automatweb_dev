@@ -106,10 +106,9 @@
       <layout>
             <cu_hbox>
                   <type>hbox</type>
-                  <width>
-                  <![CDATA["20%:80%"]]>
-                  </width>
+                  <width>20%:80%</width>
                   <group>content_user</group>
+                  <area_caption></area_caption>
             </cu_hbox>
       </layout>
 </properties>

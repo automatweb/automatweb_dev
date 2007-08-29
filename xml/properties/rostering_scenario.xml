@@ -117,6 +117,7 @@
             <contacts_edit>
                   <type>hbox</type>
                   <group>settings_sect</group>
+                  <area_caption></area_caption>
             </contacts_edit>
             <contacts_edit_tree>
                   <type>hbox</type>
@@ -129,6 +130,7 @@
                   <type>hbox</type>
                   <parent>contacts_edit</parent>
                   <group>settings_sect</group>
+                  <area_caption></area_caption>
             </contacts_edit_table>
       </layout>
 </properties>

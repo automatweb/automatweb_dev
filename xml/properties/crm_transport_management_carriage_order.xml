@@ -376,10 +376,12 @@
             <unloading_location_frame>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
             </unloading_location_frame>
             <loading_location_frame>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
             </loading_location_frame>
       </layout>
 </properties>

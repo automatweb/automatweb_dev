@@ -472,7 +472,7 @@
             <group>buyings</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
-            <store>no	</store>
+            <store>no</store>
             <field>buyings_tb</field>
       </property>
       <property>
@@ -589,7 +589,7 @@
             <group>products</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
-            <store>no	</store>
+            <store>no</store>
             <field>products_tb</field>
       </property>
       <property>
@@ -761,132 +761,142 @@
             <PROCUREMENT_FILES_MENU>
                   <value>5</value>
                   <clid>CL_MENU</clid>
-                  <caption></caption>
             </PROCUREMENT_FILES_MENU>
       </reltypes>
       <layout>
             <settings_l>
                   <type>hbox</type>
                   <group>settings</group>
+                  <area_caption></area_caption>
             </settings_l>
             <p_l>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>p</group>
+                  <area_caption></area_caption>
             </p_l>
             <p_left>
                   <type>vbox</type>
                   <parent>p_l</parent>
                   <group>p</group>
+                  <area_caption></area_caption>
             </p_left>
             <p_tree>
                   <type>vbox</type>
                   <parent>p_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Hangete&amp;nbsp;puu</area_caption>
+                  <area_caption>Hangete&amp;amp;nbsp;puu</area_caption>
                   <group>p</group>
             </p_tree>
             <p_search>
                   <type>vbox</type>
                   <parent>p_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Hangete&amp;nbsp;otsing</area_caption>
+                  <area_caption>Hangete&amp;amp;nbsp;otsing</area_caption>
                   <group>p</group>
             </p_search>
             <offerers_lay>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>offerers</group>
+                  <area_caption></area_caption>
             </offerers_lay>
             <offerers_l>
                   <type>vbox</type>
                   <parent>offerers_lay</parent>
                   <group>offerers</group>
+                  <area_caption></area_caption>
             </offerers_l>
             <offerers_tree_l>
                   <type>vbox</type>
                   <parent>offerers_l</parent>
                   <closeable>1</closeable>
-                  <area_caption>Pakkujate&amp;nbsp;puu</area_caption>
+                  <area_caption>Pakkujate&amp;amp;nbsp;puu</area_caption>
                   <group>offerers</group>
             </offerers_tree_l>
             <offerers_find_params>
                   <type>vbox</type>
                   <parent>offerers_l</parent>
                   <closeable>1</closeable>
-                  <area_caption>Pakkujate&amp;nbsp;otsing</area_caption>
+                  <area_caption>Pakkujate&amp;amp;nbsp;otsing</area_caption>
                   <group>offerers</group>
             </offerers_find_params>
             <offers_l>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>offers</group>
+                  <area_caption></area_caption>
             </offers_l>
             <offers_left>
                   <type>vbox</type>
                   <parent>offers_l</parent>
                   <group>offers</group>
+                  <area_caption></area_caption>
             </offers_left>
             <offers_tree>
                   <type>vbox</type>
                   <parent>offers_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Pakkumiste&amp;nbsp;puu</area_caption>
+                  <area_caption>Pakkumiste&amp;amp;nbsp;puu</area_caption>
                   <group>offers</group>
             </offers_tree>
             <offers_find_params>
                   <type>vbox</type>
                   <parent>offers_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Pakkumiste&amp;nbsp;otsing</area_caption>
+                  <area_caption>Pakkumiste&amp;amp;nbsp;otsing</area_caption>
                   <group>offers</group>
             </offers_find_params>
             <buyings_l>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>buyings</group>
+                  <area_caption></area_caption>
             </buyings_l>
             <buyings_left>
                   <type>vbox</type>
                   <parent>buyings_l</parent>
                   <group>buyings</group>
+                  <area_caption></area_caption>
             </buyings_left>
             <buyings_tree>
                   <type>vbox</type>
                   <parent>buyings_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Ostude&amp;nbsp;puu</area_caption>
+                  <area_caption>Ostude&amp;amp;nbsp;puu</area_caption>
                   <group>buyings</group>
             </buyings_tree>
             <buyings_find_params>
                   <type>vbox</type>
                   <parent>buyings_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Ostude&amp;nbsp;otsing</area_caption>
+                  <area_caption>Ostude&amp;amp;nbsp;otsing</area_caption>
                   <group>buyings</group>
             </buyings_find_params>
             <products_l>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>products</group>
+                  <area_caption></area_caption>
             </products_l>
             <products_left>
                   <type>vbox</type>
                   <parent>products_l</parent>
                   <group>products</group>
+                  <area_caption></area_caption>
             </products_left>
             <products_tree>
                   <type>vbox</type>
                   <parent>products_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Toodete&amp;nbsp;puu</area_caption>
+                  <area_caption>Toodete&amp;amp;nbsp;puu</area_caption>
                   <group>products</group>
             </products_tree>
             <products_find_params>
                   <type>vbox</type>
                   <parent>products_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
+                  <area_caption>Toodete&amp;amp;nbsp;otsing</area_caption>
                   <group>products</group>
             </products_find_params>
       </layout>

@@ -144,6 +144,7 @@
                         <num_0>rfps_active</num_0>
                         <num_1>rfps_archive</num_1>
                   </group>
+                  <area_caption></area_caption>
             </hsplit>
             <searchbox>
                   <closeable>1</closeable>
@@ -162,6 +163,7 @@
                         <num_0>rfps_active</num_0>
                         <num_1>rfps_archive</num_1>
                   </group>
+                  <area_caption></area_caption>
             </main>
       </layout>
 </properties>

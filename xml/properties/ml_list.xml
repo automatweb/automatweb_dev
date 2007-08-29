@@ -788,6 +788,7 @@
             <status_bottom>
                   <type>hbox</type>
                   <group>list_status</group>
+                  <area_caption></area_caption>
             </status_bottom>
       </layout>
 </properties>

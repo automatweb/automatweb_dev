@@ -231,6 +231,7 @@
             <opa>
                   <type>hbox</type>
                   <group>op_act</group>
+                  <area_caption></area_caption>
             </opa>
       </layout>
 </properties>

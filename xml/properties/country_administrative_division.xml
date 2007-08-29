@@ -15,8 +15,8 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <comment>Haldusüksuse tüüp</comment>
-            <caption>Tüüp</caption>
+            <comment>Haldus&amp;uuml;ksuse t&amp;uuml;&amp;uuml;p</comment>
+            <caption>T&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>parent_division_show</name>
@@ -25,7 +25,7 @@
             <type>text</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kõrgem haldusüksus</caption>
+            <caption>K&amp;otilde;rgem haldus&amp;uuml;ksus</caption>
       </property>
       <property>
             <name>parent_division</name>
@@ -43,8 +43,8 @@
             <automatic>1</automatic>
             <field>meta</field>
             <method>serialize</method>
-            <comment>Haldusüksus, millesse käesolev haldusüksus kuulub</comment>
-            <caption>Kõrgem haldusüksus</caption>
+            <comment>Haldus&amp;uuml;ksus, millesse k&amp;auml;esolev haldus&amp;uuml;ksus kuulub</comment>
+            <caption>K&amp;otilde;rgem haldus&amp;uuml;ksus</caption>
       </property>
       <property>
             <name>jrk</name>
@@ -53,8 +53,8 @@
             <type>textbox</type>
             <datatype>int</datatype>
             <field>jrk</field>
-            <comment>Positiivne täisarv (vahemikus 1 kuni 1000000)</comment>
-            <caption>Järjekord</caption>
+            <comment>Positiivne t&amp;auml;isarv (vahemikus 1 kuni 1000000)</comment>
+            <caption>J&amp;auml;rjekord</caption>
       </property>
       <classinfo>
             <syslog_type>ST_COUNTRY_ADMINISTRATIVE_DIVISION</syslog_type>
@@ -72,7 +72,7 @@
                         <num_3>CL_COUNTRY_CITYDISTRICT</num_3>
                         <num_4>CL_COUNTRY</num_4>
                   </clid>
-                  <caption>Kõrgem haldusüksus</caption>
+                  <caption>K&amp;otilde;rgem haldus&amp;uuml;ksus</caption>
             </PARENT_ADMINISTRATIVE_UNIT>
       </reltypes>
 </properties>

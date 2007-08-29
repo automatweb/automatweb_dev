@@ -383,6 +383,7 @@
                   <type>hbox</type>
                   <width>15%:85%</width>
                   <group>webform_detail</group>
+                  <area_caption></area_caption>
             </hsplit>
             <treeview>
                   <type>vbox</type>
@@ -395,11 +396,12 @@
                   <type>vbox</type>
                   <parent>hsplit</parent>
                   <group>webform_detail</group>
+                  <area_caption></area_caption>
             </rpane>
             <trans>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>T&amp;otilde;lked</area_caption>
+                  <area_caption>T&amp;amp;otilde;lked</area_caption>
                   <parent>rpane</parent>
                   <group>webform_detail</group>
             </trans>

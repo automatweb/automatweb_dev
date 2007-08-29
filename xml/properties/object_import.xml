@@ -28,7 +28,7 @@
             <method>serialize</method>
             <type>select</type>
             <multiple>1</multiple>
-            <caption>Unikaalne omadus </caption>
+            <caption>Unikaalne omadus</caption>
       </property>
       <property>
             <name>folder_field</name>
@@ -244,6 +244,7 @@
             <ds_hbox>
                   <type>hbox</type>
                   <group>general</group>
+                  <area_caption></area_caption>
                   <caption>Andmeallikas</caption>
             </ds_hbox>
       </layout>

@@ -757,18 +757,19 @@
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </general_split>
             <general_up>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>&amp;Uuml;ldinfo</area_caption>
+                  <area_caption>&amp;amp;Uuml;ldinfo</area_caption>
                   <parent>general_split</parent>
                   <group>general</group>
             </general_up>
             <general_down>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Mahutavus&amp;#44;&amp;nbsp;kasutustingimused</area_caption>
+                  <area_caption>Mahutavus&amp;amp;#44;&amp;amp;nbsp;kasutustingimused</area_caption>
                   <parent>general_split</parent>
                   <group>general</group>
             </general_down>
@@ -777,41 +778,46 @@
                   <width>30%:70%</width>
                   <parent>general_down</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </buffer_before_l>
             <buffer_after_l>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <parent>general_down</parent>
                   <group>general</group>
+                  <area_caption></area_caption>
             </buffer_after_l>
             <products_l>
                   <type>hbox</type>
                   <width>30%:70%</width>
                   <group>products</group>
+                  <area_caption></area_caption>
             </products_l>
             <products_left>
                   <type>vbox</type>
                   <parent>products_l</parent>
                   <group>products</group>
+                  <area_caption></area_caption>
             </products_left>
             <products_tree>
                   <type>vbox</type>
                   <parent>products_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Toodete&amp;nbsp;puu</area_caption>
+                  <area_caption>Toodete&amp;amp;nbsp;puu</area_caption>
                   <group>products</group>
             </products_tree>
             <products_find_params>
                   <type>vbox</type>
                   <parent>products_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
+                  <area_caption>Toodete&amp;amp;nbsp;otsing</area_caption>
                   <group>products</group>
             </products_find_params>
             <top_split>
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>prices_general</group>
+                  <area_caption></area_caption>
             </top_split>
             <currency_l>
                   <type>vbox</type>
@@ -822,7 +828,7 @@
             </currency_l>
             <add_face>
                   <type>vbox</type>
-                  <area_caption>Lisanduv&amp;nbsp;hind&amp;nbsp;inimestele&amp;nbsp;&amp;uuml;le&amp;nbsp;normaalmahutavuse</area_caption>
+                  <area_caption>Lisanduv&amp;amp;nbsp;hind&amp;amp;nbsp;inimestele&amp;amp;nbsp;&amp;amp;uuml;le&amp;amp;nbsp;normaalmahutavuse</area_caption>
                   <closeable>1</closeable>
                   <parent>top_split</parent>
                   <group>prices_general</group>
@@ -831,6 +837,7 @@
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <group>prices_general</group>
+                  <area_caption></area_caption>
             </middle_split>
             <middle>
                   <type>vbox</type>
@@ -844,6 +851,7 @@
                   <width>5%:5%:20%:60%</width>
                   <parent>middle</parent>
                   <group>prices_general</group>
+                  <area_caption></area_caption>
                   <caption>Aja samm</caption>
             </time_step>
             <selectbox_time_step>
@@ -851,12 +859,13 @@
                   <width>5%:5%:20%:60%</width>
                   <parent>middle</parent>
                   <group>prices_general</group>
+                  <area_caption></area_caption>
                   <caption>Valiku aja samm</caption>
             </selectbox_time_step>
             <min_prices>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Kogu&amp;nbsp;ruumi&amp;nbsp;broneeringu&amp;nbsp;miinimumhind</area_caption>
+                  <area_caption>Kogu&amp;amp;nbsp;ruumi&amp;amp;nbsp;broneeringu&amp;amp;nbsp;miinimumhind</area_caption>
                   <parent>middle_split</parent>
                   <group>prices_general</group>
             </min_prices>

@@ -208,6 +208,7 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>events</group>
+                  <area_caption></area_caption>
             </events_layout>
       </layout>
 </properties>

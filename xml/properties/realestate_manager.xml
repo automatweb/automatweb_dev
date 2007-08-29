@@ -1216,18 +1216,22 @@
                         <num_1>grp_users_mgr</num_1>
                   </group>
                   <width>
-                  <![CDATA["30%:70%"]]>
+                        <num_0>grp_users_tree</num_0>
+                        <num_1>grp_users_mgr</num_1>
                   </width>
+                  <area_caption></area_caption>
             </vsplitbox>
             <lbox>
                   <type>vbox</type>
                   <parent>vsplitbox</parent>
                   <group>grp_users_mgr</group>
+                  <area_caption></area_caption>
             </lbox>
             <tbox>
                   <type>vbox</type>
                   <parent>vsplitbox</parent>
                   <group>grp_users_mgr</group>
+                  <area_caption></area_caption>
             </tbox>
       </layout>
 </properties>

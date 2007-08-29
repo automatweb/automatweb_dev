@@ -26,7 +26,7 @@
             <store>no</store>
             <default>-1</default>
             <field>s_date_from</field>
-            <caption>Kuup&amp;auml;ev alates</caption>
+            <caption>Kuup&amp;amp;auml;ev alates</caption>
       </property>
       <property>
             <name>s_date_to</name>
@@ -36,7 +36,7 @@
             <store>no</store>
             <default>-1</default>
             <field>s_date_to</field>
-            <caption>Kuup&amp;auml;ev kuni</caption>
+            <caption>Kuup&amp;amp;auml;ev kuni</caption>
       </property>
       <property>
             <name>s_salesp_name</name>
@@ -45,7 +45,7 @@
             <type>textbox</type>
             <store>no</store>
             <field>s_salesp_name</field>
-            <caption>M&amp;uuml;&amp;uuml;gimehe nimi</caption>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gimehe nimi</caption>
       </property>
       <property>
             <name>s_btn</name>
@@ -91,7 +91,7 @@
             <store>no</store>
             <default>-1</default>
             <field>ts_date_from</field>
-            <caption>Kuup&amp;auml;ev alates</caption>
+            <caption>Kuup&amp;amp;auml;ev alates</caption>
       </property>
       <property>
             <name>ts_date_to</name>
@@ -101,7 +101,7 @@
             <store>no</store>
             <default>-1</default>
             <field>ts_date_to</field>
-            <caption>Kuup&amp;auml;ev kuni</caption>
+            <caption>Kuup&amp;amp;auml;ev kuni</caption>
       </property>
       <property>
             <name>ts_salesp_name</name>
@@ -110,7 +110,7 @@
             <type>textbox</type>
             <store>no</store>
             <field>ts_salesp_name</field>
-            <caption>M&amp;uuml;&amp;uuml;gimehe nimi</caption>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gimehe nimi</caption>
       </property>
       <property>
             <name>ts_btn</name>
