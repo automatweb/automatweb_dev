@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.25 2007/07/30 11:09:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.26 2007/08/29 09:11:37 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -873,6 +873,10 @@ class spa_customer_interface extends class_base
 		foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
 		{
 			$b = $c->to();
+			if(!($b->prop("start1") > 1) && !($b->prop("end") > 1))
+			{
+				continue;
+			}
 			if(!$room_inst->check_if_available(array(
 				"room" => $b->prop("resource"),
 				"start" => $b->prop("start1"),
