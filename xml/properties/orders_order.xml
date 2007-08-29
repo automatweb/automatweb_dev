@@ -240,6 +240,15 @@
             <caption>Kinnita tellimus</caption>
       </property>
       <property>
+            <name>orderer_info</name>
+            <table>orders_order</table>
+            <group>orderitems</group>
+            <type>text</type>
+            <store>no</store>
+            <field>orderer_info</field>
+            <caption>Tellija</caption>
+      </property>
+      <property>
             <name>orders_table</name>
             <table>orders_order</table>
             <group>orderitems</group>
@@ -256,15 +265,6 @@
             <store>no</store>
             <field>submit_rows</field>
             <caption>Salvesta</caption>
-      </property>
-      <property>
-            <name>orderer_info</name>
-            <table>orders_order</table>
-            <group>orderitems</group>
-            <type>text</type>
-            <store>no</store>
-            <field>orderer_info</field>
-            <caption>Tellija</caption>
       </property>
       <property>
             <name>orders</name>

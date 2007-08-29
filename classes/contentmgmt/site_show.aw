@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.240 2007/07/19 09:13:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.241 2007/08/29 10:51:03 kristo Exp $
 
 /*
 
@@ -964,6 +964,37 @@ class site_show extends class_base
 			{
 				obj_set_opt("no_cache", 1);
 			}
+
+			if (is_array($arr["date_filter"]))
+			{
+				$df = $arr["date_filter"];
+				if ($df["day"])
+				{
+					$s_tm = mktime(0, 0, 0, $df["month"], $df["day"], $df["year"]);
+					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $s_tm, $s_tm+24*3600);
+				}
+				else
+				if ($df["week"])
+				{
+					$s_tm = mktime(0, 0, 0, 1, 1, $df["year"]) + $df["week"] * 24*3600*7;
+					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $s_tm, $s_tm+24*3600*7);
+				}
+				else
+				if ($df["month"])
+				{
+					$s_tm = mktime(0, 0, 0, $df["month"], 1, $df["year"]);
+					$e_tm = mktime(0, 0, 0, $df["month"]+1, 1, $df["year"]);
+					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $s_tm, $e_tm);
+				}
+				else
+				if ($df["year"])
+				{
+					$s_tm = mktime(0, 0, 0, 1, 1, $df["year"]);
+					$e_tm = mktime(0, 0, 0, 1, 1, $df["year"]+1);
+					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $s_tm, $e_tm);
+				}
+			}
+
 			$documents = new object_list($filter);
 			if (!$get_inact && aw_ini_get("user_interface.full_content_trans"))
 			{
@@ -1237,10 +1268,21 @@ class site_show extends class_base
 
 	function show_documents(&$arr)
 	{
+		$p = array();
+		if ($_GET["year"] || $_GET["month"] || $_GET["day"] || $_GET["week"])
+		{
+			$p = array("date_filter" => array(
+				"year" => $_GET["year"],
+				"month" => $_GET["month"],
+				"day" => $_GET["day"],
+				"week" => $_GET["week"]
+			));
+		}
+
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
 		if (!isset($arr["docid"]) || $arr["docid"] < 1)
 		{
-			$docid = $this->get_default_document();
+			$docid = $this->get_default_document($p);
 		}
 		else
 		{

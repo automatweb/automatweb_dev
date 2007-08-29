@@ -131,6 +131,16 @@
             <caption>Tooted</caption>
       </property>
       <property>
+            <name>products_manager_change_submit</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Salvesta</caption>
+      </property>
+      <property>
             <name>fnames</name>
             <table>objects</table>
             <group>files_import</group>
