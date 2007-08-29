@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.205 2007/08/21 08:20:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.206 2007/08/29 14:40:54 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2551,8 +2551,13 @@ class room extends class_base
 				if(
 					is_array($pauses) && 
 					($pauses[0] || $pauses[1]) && 
-					($pauses[1]-1 >= $end_this) && 
-					($pauses[0] <= $start_this)
+//					($pauses[1]-1 >= $end_this) && 
+//					($pauses[0] <= $start_this)
+					(
+						($pauses[0] < $end_this && $pauses[1] > $start_this)
+//						|| 
+//						($pauses[1] < $end_this && $pauses[1] > $start_this)
+					)
 				)
 				{
 					return true;
@@ -4900,8 +4905,11 @@ class room extends class_base
 		{
 			return $this->check_from_table($arr);
 		}
-		
 		extract($arr);
+		if(!($start > 1) && !($end > 1))
+		{
+			return true;
+		}
 		if(!(is_oid($room) && $this->can("view" , $room)))
 		{
 			return false;
