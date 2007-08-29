@@ -1,11 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.124 2007/08/20 13:53:04 voldemar Exp $
-// forum_v2.aw.aw - Foorum 2.0
 /*
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
-*/
 
-/*
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
+
 	@classinfo syslog_type=ST_FORUM
 	@classinfo relationmgr=yes
 
@@ -188,6 +185,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@caption Viimane autor
 		@comment Teemade nimekirjas viimase lisajana n&auml;idata, kes lisas teema v&otilde;i vastuse
 
+		@property show_last_posts_count type=textbox default=3 type=int
+		@caption Viimaseid postitusi kuva
+		@comment Mitut n&auml;idata viimaste postituste vaates
+
 		@property topic_selector type=table no_caption=1
 		@caption Teemade tasemed
 
@@ -215,14 +216,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property import_xml_file type=fileupload store=no
 		@caption Vali XML fail
 
-	@groupinfo contents caption="Eelvaade" submit=no
+	@groupinfo views caption="Vaated" submit=no
+	@groupinfo contents caption="Eelvaade" submit=no parent=views
 	@default group=contents
-
 		@property topic type=hidden store=no
 		@caption Topic ID (sys)
 
 		@property show type=callback callback=callback_gen_contents store=no no_caption=1
 		@caption Foorumi sisu
+
+	@groupinfo last_posts caption="Viimased postitused" submit=no parent=views
+	@default group=last_posts
+		@property last_posts type=table store=no no_caption=1
+		@caption Foorumi viimased postitused
+
+
+// ---------------- RELTYPES ------------------
 
 	@reltype TOPIC_FOLDER value=1 clid=CL_MENU
 	@caption Teemade kaust
@@ -262,9 +271,14 @@ define('TOPICS_SORT_ORDER_OBJ_ORD', 5);
 define('TOPICS_LAST_REPLY_AUTHOR', 1);
 define('TOPICS_LAST_TOPIC_AUTHOR', 2);
 
+
+// forum data structure:
+// folders (cl_menu) (containing other folders if depth > 1) contain topics
+// (cl_msgboard_topic) which in turn contain comments (cl_comment) to topics.
+
+
 class forum_v2 extends class_base
 {
-
 	var $topics_sort_order = array();
 
 	function forum_v2()
@@ -320,6 +334,10 @@ class forum_v2 extends class_base
 
 			case "topic_last_author":
 				$data["options"] = $this->topic_last_author;
+				break;
+
+			case "last_posts":
+				$this->_last_posts_tbl($arr);
 				break;
 
 			case "topic_depth":
@@ -627,6 +645,50 @@ class forum_v2 extends class_base
 		//$prop["value"] = $retval;
 		//return array($prop);
 		return $rv;
+	}
+
+	function _last_posts_tbl($arr)
+	{
+		$this_o = $arr["obj_inst"];
+
+		// init table
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "comment",
+		));
+
+		// get last posts
+		$last_posts_count = $this_o->prop("show_last_posts_count");
+		$last_posts = array();
+		$parents = new object_tree(array(
+			"parent" => $this_o->prop("topic_folder"),
+			"class_id" => array(CL_MSGBOARD_TOPIC, CL_MENU)
+		));
+		$parents = $parents->ids();//!!! ajutine. kui palju teemasid siis muu lahendus vajalik
+		$comments = new object_list(array(
+			"parent" => $parents,
+			"class_id" => CL_COMMENT,
+			"sort_by" => "objects.created DESC",
+			"limit" => $last_posts_count
+		));
+
+		// fill table
+		$comments->begin();
+		$this->read_template("comment_in_last_comments.tpl");
+
+		while ($comment = $comments->next())
+		{
+			$this->vars(array(
+				"name" => $comment->name(),
+				"createdby" => $comment->createdby(),
+				"created" => $this->time2date($comment->created(), 2),
+			));
+			$t->define_data(array(
+				"comment" => $this->parse()
+			));
+		}
+
+		$t->set_sortable(false);
 	}
 
 	function draw_all_folders($args = array())

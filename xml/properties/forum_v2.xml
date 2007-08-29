@@ -458,6 +458,17 @@
             <comment>Teemade nimekirjas viimase lisajana n&amp;amp;auml;idata, kes lisas teema v&amp;amp;otilde;i vastuse</comment>
       </property>
       <property>
+            <name>show_last_posts_count</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>int</type>
+            <default>3</default>
+            <caption>Viimaseid postitusi kuva</caption>
+            <comment>Mitut n&amp;amp;auml;idata viimaste postituste vaates</comment>
+      </property>
+      <property>
             <name>topic_selector</name>
             <table>objects</table>
             <group>topic_selector</group>
@@ -553,6 +564,17 @@
             <no_caption>1</no_caption>
             <caption>Foorumi sisu</caption>
       </property>
+      <property>
+            <name>last_posts</name>
+            <table>objects</table>
+            <group>last_posts</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Foorumi viimased postitused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -596,10 +618,20 @@
                   <caption>Import</caption>
                   <parent>settings</parent>
             </import>
+            <views>
+                  <caption>Vaated</caption>
+                  <submit>no</submit>
+            </views>
             <contents>
                   <caption>Eelvaade</caption>
                   <submit>no</submit>
+                  <parent>views</parent>
             </contents>
+            <last_posts>
+                  <caption>Viimased postitused</caption>
+                  <submit>no</submit>
+                  <parent>views</parent>
+            </last_posts>
       </groupinfo>
       <reltypes>
             <TOPIC_FOLDER>
