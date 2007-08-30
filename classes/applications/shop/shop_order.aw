@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.58 2007/08/03 16:26:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.59 2007/08/30 10:56:37 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -254,7 +254,7 @@ class shop_order extends class_base
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
-		$t->parse_xml_def("shop/prods_table");
+		$t->parse_xml_def("shop/shop_order_items");
 		$matchers = array();
 		foreach($t->rowdefs as $row)
 		{
