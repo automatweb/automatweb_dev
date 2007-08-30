@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.23 2007/08/28 10:54:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.24 2007/08/30 10:55:12 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -55,27 +55,24 @@
 
 @property udef_checkbox1 type=checkbox user=1 field=meta method=serialize table=objects
 
-
 @property submit2 type=submit action=do_persondata_submit store=no group=orderinfo
 @caption Kinnita tellimus
 
 @property orderer_info type=text store=no group=orderitems
 @caption Tellija
 
-
 @property orders_table type=table store=no group=orderitems no_caption=1
 
 @property submit_rows type=submit group=orderitems store=no
 @caption Salvesta
+
+@property childtitle1 type=text store=no subtitle=1 group=orderitems
+@caption Uus tellimuse rida
 
 @property orders type=releditor store=no props=name,product_code,product_color,product_size,product_count,product_count_undone,product_price reltype=RELTYPE_ORDER group=orderitems
-@property submit type=submit group=orderitems store=no
+
+@property submit type=submit group=orderitems store=no no_caption=1
 @caption Lisa tellimus
-
-@property orders_table type=table store=no group=orderitems no_caption=1
-
-@property submit_rows type=submit group=orderitems store=no
-@caption Salvesta
 
 @property forward type=submit action=do_persondata_form group=orderitems store=no
 @caption Edasi
@@ -250,32 +247,22 @@ class orders_order extends class_base
 				else
 				{
 					$table->define_field(array(
+						"name" => "product_code",
+						"caption" => t("Artikli kood"),
+					));
+					$table->define_field(array(
 						"name" => "name",
 						"caption" => t("Toode"),
 					));
-					$table->define_field(array(
-						"name" => "product_code",
-						"caption" => t("Toote kood"),
-					));
-					$table->define_field(array(
-						"name" => "product_color",
-						"caption" => t("Värv"),
-					));
-					$table->define_field(array(
-						"name" => "product_size",
-						"caption" => t("Suurus"),
-					));
+
 					$table->define_field(array(
 						"name" => "product_count",
 						"caption" => t("Kogus"),
 					));
+
 					$table->define_field(array(
-						"name" => "product_count_undone",
-						"caption" => t("Tarnimata kogus"),
-					));
-					$table->define_field(array(
-						"name" => "product_price",
-						"caption" => t("Hind"),
+						"name" => "product_size",
+						"caption" => t("Tellitav_kogus"),
 					));
 					$table->define_field(array(
 						"name" => "product_duedate",
@@ -285,6 +272,22 @@ class orders_order extends class_base
 						"name" => "product_bill",
 						"caption" => t("Tarne t&auml;itmine/arve nr"),
 					));
+
+					$table->define_field(array(
+						"name" => "product_count_undone",
+						"caption" => t("Tarnimata kogus"),
+					));
+
+					$table->define_field(array(
+						"name" => "product_color",
+						"caption" => t("V&auml;rvikaart"),
+					));
+
+					$table->define_field(array(
+						"name" => "product_price",
+						"caption" => t("Erihind"),
+					));
+
 				}
 				$this->define_table_data(&$table , $ol);
 				break;

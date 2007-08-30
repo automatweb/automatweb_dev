@@ -267,6 +267,16 @@
             <caption>Salvesta</caption>
       </property>
       <property>
+            <name>childtitle1</name>
+            <table>orders_order</table>
+            <group>orderitems</group>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>childtitle1</field>
+            <caption>Uus tellimuse rida</caption>
+      </property>
+      <property>
             <name>orders</name>
             <table>orders_order</table>
             <group>orderitems</group>
@@ -290,6 +300,7 @@
             <group>orderitems</group>
             <type>submit</type>
             <store>no</store>
+            <no_caption>1</no_caption>
             <field>submit</field>
             <caption>Lisa tellimus</caption>
       </property>
