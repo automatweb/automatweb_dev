@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.21 2007/08/03 16:22:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.22 2007/08/30 13:00:35 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -52,10 +52,10 @@
 @caption Dokument kuhu suunata peale esitamist
 
 @property order_item_template type=select
-@caption Tellimuse rea kujundusp&ouml;hi
+@caption Tellimuse kujundusp&otilde;hi
 
 @property orders_form_template type=select
-@caption Tellimuse vormi kujundusp&ouml;hi
+@caption Tellija andmete kujundusp&otilde;hi
 
 
 @groupinfo ordering caption=Tellimine submit=no
@@ -244,12 +244,13 @@ class orders_form extends class_base
 				return aw_ini_get("baseurl");
 			}
 		}
-
+		
 		if(!is_oid($_SESSION["order_cart_id"]) || !$this->can("view", $_SESSION["order_cart_id"]) || !$_SESSION["order_form_id"])
 		{
 			$order = new object();
 			$order->set_class_id(CL_ORDERS_ORDER);
 			$order->set_parent($arr["oid"] ? $arr["oid"] : $arr["id"]);
+			$order->set_meta("orders_form" , $arr["id"]);
 			$order->save();
 
 			$_SESSION["order_cart_id"] = $order->id();
@@ -279,6 +280,7 @@ class orders_form extends class_base
 		{
 			$form_obj = obj($_SESSION["order_form_id"]);
 			$order = obj($_SESSION["order_cart_id"]);
+			$order->set_meta("orders_form" , $_SESSION["order_form_id"]);
 		}
 		if($form_obj->prop("orders_form_template"))
 		{
@@ -394,7 +396,7 @@ class orders_form extends class_base
 			"udef_textbox6" => $order->prop("udef_textbox6"),
 			"udef_textbox7" => $order->prop("udef_textbox7"),
 			"person_contact" => $person->prop("comment"),
-			"birthday" => get_lc_date($person->prop("birthday"), 1),,
+			"birthday" => get_lc_date($person->prop("birthday"), 1),
 			"payment_type" => ($_SESSION["orders_form"]["payment"]["type"] == "cod" ? "Lunamaks" : "J&auml;relmaks"),
 		));
 		$add_props = array();
@@ -460,7 +462,24 @@ class orders_form extends class_base
 		}
 
 		$retval = $this->parse();
-		$this->read_template("orders_form.tpl");
+	//	$this->read_template("orders_form.tpl");
+//if(aw_global_get("uid") == "struktuur")arr($arr);
+		if(is_oid($arr["id"])&& $this->can("view" , $arr["id"]))
+		{
+			$o = obj($arr["id"]);
+                	if($o->prop("orders_form_template"))
+                	{
+                        	$this->read_template($o->prop("orders_form_template"));
+                	}
+                	else
+                	{
+                	        $this->read_template("orders_form.tpl");
+       		         }
+		}
+		else
+		{
+			$this->read_template("orders_form.tpl");
+		}
 
 		return $retval;
 	}

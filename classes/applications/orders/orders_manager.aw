@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.9 2007/08/03 16:22:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.10 2007/08/30 13:00:36 markop Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -9,6 +9,8 @@
 @property export_folder type=textbox field=meta method=serialize group=general
 @caption Ekspordi kataloog
 
+@property order_form type=relpicker reltype=RELTYPE_ORDERS_FORM field=meta method=serialize group=general
+@caption Tellimuse vorm
 
 @groupinfo ordermnager caption="Tellimused" submit=no
 
@@ -29,6 +31,10 @@
 
 @reltype CFGMANAGER value=1 clid=CL_CFGMANAGER
 @caption Seadete haldur
+
+@reltype ORDERS_FORM value=1 clid=CL_ORDERS_FORM
+@caption Tellimuse vorm
+
 */
 
 class orders_manager extends class_base
@@ -117,6 +123,10 @@ class orders_manager extends class_base
 		$ord_data = array();
 		foreach($ol->arr() as $o)
 		{
+			if($arr["obj_inst"]->prop("order_form") && $arr["obj_inst"]->prop("order_form") != $o->meta("orders_form"))
+			{
+				continue;
+			}
 			foreach($o->connections_from(array("type" => "RELTYPE_ORDER")) as $it)
 			{
 				$item = $it->to();
@@ -206,7 +216,7 @@ class orders_manager extends class_base
 				
 		
 				$t->define_data(array(
-					"order" => $cl?html::href(array("url" => $key, "caption" => $key)):html::get_change_url($key, array("return_url" => get_ru() , "group" => "items") , $key),
+					"order" => $cl?html::href(array("url" => $key, "caption" => $key)):html::get_change_url($key, array("return_url" => get_ru() , "group" => "orderitems") , $key),
 					"client" => $client,
 					"amount" => $amount["product_count"],
 					"color" => $order->prop("confirmed")?"":"#CCFFCC",
@@ -330,6 +340,10 @@ class orders_manager extends class_base
 		
 		foreach ($ol->arr() as $order)
 		{
+			if($arr["obj_inst"]->prop("order_form") && $arr["obj_inst"]->prop("order_form") != $order->meta("orders_form"))
+			{
+				continue;
+			}
 			if ($arr["request"]["group"] == "ordermnager_cf")
 			{
 				if ($order->prop("order_confirmed") != 1)

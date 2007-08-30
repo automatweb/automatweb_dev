@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.24 2007/08/30 10:55:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.25 2007/08/30 13:00:36 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -249,43 +249,52 @@ class orders_order extends class_base
 					$table->define_field(array(
 						"name" => "product_code",
 						"caption" => t("Artikli kood"),
+						"chgbgcolor"=>"color",
 					));
 					$table->define_field(array(
 						"name" => "name",
 						"caption" => t("Toode"),
+						"chgbgcolor"=>"color",
 					));
 
 					$table->define_field(array(
 						"name" => "product_count",
 						"caption" => t("Kogus"),
+						"chgbgcolor"=>"color",
 					));
 
 					$table->define_field(array(
 						"name" => "product_size",
 						"caption" => t("Tellitav_kogus"),
+						"chgbgcolor"=>"color",
 					));
 					$table->define_field(array(
 						"name" => "product_duedate",
 						"caption" => t("Soovitav tarne t&auml;itmine"),
+						"chgbgcolor"=>"color",
 					));
 					$table->define_field(array(
 						"name" => "product_bill",
 						"caption" => t("Tarne t&auml;itmine/arve nr"),
+						"chgbgcolor"=>"color",
 					));
 
 					$table->define_field(array(
 						"name" => "product_count_undone",
 						"caption" => t("Tarnimata kogus"),
+						"chgbgcolor"=>"color",
 					));
 
 					$table->define_field(array(
 						"name" => "product_color",
 						"caption" => t("V&auml;rvikaart"),
+						"chgbgcolor"=>"color",
 					));
 
 					$table->define_field(array(
 						"name" => "product_price",
 						"caption" => t("Erihind"),
+						"chgbgcolor"=>"color",
 					));
 
 				}
@@ -312,6 +321,10 @@ class orders_order extends class_base
 					$data[$prop].= '<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
 cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$obj->id().'" id="anchor'.$obj->id().'">vali</a>';
 				}
+			}
+			if($obj->prop("product_count_undone"))
+			{
+				$data["color"] = "#FFCCCC";
 			}
 			$table->define_data($data);
 		}
@@ -470,6 +483,7 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 				$item->set_prop("product_color", $submit_data["product_color"]);
 				$item->set_prop("product_size", $submit_data["product_size"]);
 				$item->set_prop("product_count", $submit_data["product_count"]);
+				$item->set_prop("product_count_undone", $submit_data["product_count"]);
 				$item->set_prop("product_price", $submit_data["product_price"]);
 				$item->set_prop("product_image", $submit_data["product_image"]);
 				$item->set_prop("product_page", $submit_data["product_page"]);

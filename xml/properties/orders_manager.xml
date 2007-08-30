@@ -10,6 +10,16 @@
             <caption>Ekspordi kataloog</caption>
       </property>
       <property>
+            <name>order_form</name>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDERS_FORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Tellimuse vorm</caption>
+      </property>
+      <property>
             <name>order_undone_tb</name>
             <table>objects</table>
             <type>toolbar</type>
@@ -84,6 +94,11 @@
                   <clid>CL_CFGMANAGER</clid>
                   <caption>Seadete haldur</caption>
             </CFGMANAGER>
+            <ORDERS_FORM>
+                  <value>1</value>
+                  <clid>CL_ORDERS_FORM</clid>
+                  <caption>Tellimuse vorm</caption>
+            </ORDERS_FORM>
       </reltypes>
 </properties>
 
