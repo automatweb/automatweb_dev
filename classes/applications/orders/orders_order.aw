@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.25 2007/08/30 13:00:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.26 2007/08/30 14:42:06 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -227,7 +227,7 @@ class orders_order extends class_base
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_ORDER"
 				));
-				
+
 				$ol = new object_list($conns);
 				$o = $ol->begin();
 				$cfgform = $o->meta("cfgform_id");
@@ -235,12 +235,13 @@ class orders_order extends class_base
 				if(is_oid($cfgform) && $this->can("view", $cfgform))
 				{
 					$cfgform_i = get_instance(CL_CFGFORM);
-					$props = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
-					foreach($props as $prop)
+					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
+					foreach($props2 as $prop2)
 					{
 						$table->define_field(array(
-							"name" => $prop["name"],
-							"caption" => $prop["caption"],
+							"name" => $prop2["name"],
+							"caption" => $prop2["caption"],
+							"chgbgcolor"=>"color",
 						));
 					}
 				}
@@ -460,7 +461,6 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 			$submit_data["class"] = "orders_item";
 			$submit_data["group"] = "general";
 			$submit_data["parent"] = $_SESSION["order_cart_id"];
-			
 			$oform = &obj($_SESSION["order_form_id"]);
 			$check["cfgform_id"] = $oform->prop("itemform");
 			$check["request"] = $submit_data;
@@ -487,7 +487,7 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 				$item->set_prop("product_price", $submit_data["product_price"]);
 				$item->set_prop("product_image", $submit_data["product_image"]);
 				$item->set_prop("product_page", $submit_data["product_page"]);
-			
+				$item->set_meta("cfgform_id" , $_SESSION["order_item_form_id"]);
 				$item->save();
 				$conn = new connection();
 				

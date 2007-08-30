@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.22 2007/08/30 13:00:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.23 2007/08/30 14:42:06 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -251,6 +251,7 @@ class orders_form extends class_base
 			$order->set_class_id(CL_ORDERS_ORDER);
 			$order->set_parent($arr["oid"] ? $arr["oid"] : $arr["id"]);
 			$order->set_meta("orders_form" , $arr["id"]);
+			//arr($arr);
 			$order->save();
 
 			$_SESSION["order_cart_id"] = $order->id();
@@ -264,7 +265,9 @@ class orders_form extends class_base
 			}
 
 			$form_obj = &obj($_SESSION["order_form_id"]);
-		
+			$order->set_meta("itemform" , $form_obj->prop("itemform"));
+			$order->save();
+			$_SESSION["order_item_form_id"] = $form_obj->prop("itemform");
 			if($conns = $form_obj->connections_from(array("type" => "RELTYPE_ADDORDER")))
 			{
 				foreach ($conns as $conn)
@@ -280,7 +283,6 @@ class orders_form extends class_base
 		{
 			$form_obj = obj($_SESSION["order_form_id"]);
 			$order = obj($_SESSION["order_cart_id"]);
-			$order->set_meta("orders_form" , $_SESSION["order_form_id"]);
 		}
 		if($form_obj->prop("orders_form_template"))
 		{
