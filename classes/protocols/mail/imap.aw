@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.39 2006/06/26 10:52:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.40 2007/08/31 10:39:03 tarvo Exp $
 // imap.aw - IMAP login 
 /*
-	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. õigemini ta tagastab need boxid kus seike kiri sees
+	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. &otilde;igemini ta tagastab need boxid kus seike kiri sees
 */
 /*
 
@@ -43,7 +43,46 @@ class imap extends class_base
 		$this->init(array(
 			"clid" => CL_PROTO_IMAP
 		));
+		$this->msg_field_captions = array(
+			"toaddress" => t("Kellele"),
+			"to" => t("Kellele"),
+			"fromaddress" => t("Kellelt"),
+			"from" => t("Kellelt"),
+			"ccaddress" => t("CC"),
+			"cc" => t("CC"),
+			"bccaddress" => t("BCC"),
+			"bcc" => t("BCC"),
+			"reply_toaddress" => t("Tagasi"),
+			"reply_to" => t("Tagasi"),
+			"senderaddress" => t("Saatja"),
+			"sender" => t("Saatja"),
+			"return_pathaddress" => t("return_pathaddress"),
+			"return_path" => t("return_path"),
+			"remail" => t("remail"),
+			"date" => t("Aeg"),
+			"Date" => t("Aeg"),
+			"subject" => t("Teema"),
+			"Subject" => t("Teema"),
+			"in_reply_to" => t("in_reply_to"),
+			"message_id" => t("message_id"),
+			"newsgroups" => t("newsgroups"),
+			"followup_to" => t("followup_to"),
+			"references" => t("references"),
+			"Recent" => t("Hijutine"),
+			"Unseen" => t("N&auml;gemata"),
+			"Flagged" => t("M&auml;rgitud"),
+			"Answered" => t("Vastatud"),
+			"Deleted" => t("Kustutatud"),
+			"Draft" => t("Draft"),
+			"Msgno" => t("Msgno"),
+			"MailDate" => t("MailDate"),
+			"Size" => t("Suurus"),
+			"udate" => t("Aeg"),
+			"fetchfrom" => t("fetchfrom"),
+			"fetchsubject" => t("fetchsubject"),
 
+			"attachments" => t("Manused"),
+		);
 		$this->connected = false;
 	}
 
@@ -143,45 +182,39 @@ class imap extends class_base
 			$obj = $arr["obj_inst"];
 			$this->obj_id = $obj->id();
 
-			$server = $obj->prop("server");
-			$port = $obj->prop("port");
-			$user = $obj->prop("user");
+			$this->server = $obj->prop("server");
+			$this->port = $obj->prop("port");
+			$this->user = $obj->prop("user");
 			$password = $obj->prop("password");
 
 
 			//  cert validating could probably be made an option later on
 			$mask = (1 == $obj->prop("use_ssl")) ? "{%s:%d/ssl/novalidate-cert}" : "{%s:%d}";
-			$this->servspec = sprintf($mask,$server,$port);
-			$mbox = str_replace("*","&",$this->use_mailbox);
-			$this->mboxspec = $this->servspec . $mbox;
-			$this->mbox = @imap_open($this->mboxspec, $user, $password);
+			$this->servspec = sprintf($mask, $this->server, $this->port);
+
+			$this->reset_mboxspec();
+			$this->mbox = @imap_open($this->mboxspec, $this->user, $password);
 			$err = imap_errors();
 			if (is_array($err))
 			{
-				arr("'".join("','",$err)."' -> on mailbox : ".$this->use_mailbox);
-				return join("<br>",$err);
+				$this->imap_errors = $err;
+				$this->connected = false;
+				return $this->imap_errors;
 			};
 			$this->connected = true;
 		}
 
-		// this is where we store _all_ folders for that account
-		$this->fldr_cache_id = "imapfld" . md5("imap-acc-folders".$this->servspec.$user.$this->obj_id);
+		$this->reset_cache_ids();
 
-		// headers for a single mailbox
-		$this->mbox_cache_id = "imap" . md5("imap-".$this->obj_id.$this->mboxspec.$user);
-
-		// overview information for each folder. it's in separate file because it's kind
-		// of expensive (read slow) to scan over all the folders at once, so we do this
-		// when a folder is opened
-		$this->overview_cache_id = "imap" . md5("imap-over".$this->servspec.$user.$this->obj_id);
-
-		// message list for each folder. contains just message id's in order that $this->_imap_sort() returns.
-		// if empty .. i have to fill this right away, dont i??
-		$this->mbox_msg_list_cache_id = "imap" . md5("msgs-list".$this->mboxspec.$user.$this->obj_id);
 		$cache = get_instance("cache");
 		$ser = $cache->file_get($this->mbox_msg_list_cache_id);	
 		
-		$mboxinf = imap_mailboxmsginfo($this->mbox);
+		$t = microtime();
+		$t2 = time();
+		//d($this->mbox);
+		//$mboxinf = imap_mailboxmsginfo($this->mbox);
+		$mboxinf = imap_status($this->mbox, $this->use_mailbox, SA_ALL);
+		//die((microtime() - $t)." vs sec:".(time() - $t2));
 		$ovr = $this->_get_overview();
 		$last_check = $ovr[$this->mboxspec];
 		$new_check = $this->_get_ovr_checksum($mboxinf);
@@ -250,6 +283,42 @@ class imap extends class_base
 		return imap_sort($this->mbox,SORTDATE,1,SE_UID && SE_NOPREFETCH);
 	}
 
+
+	/**
+		@comment
+			well, this function figures out which messages aren't in the cache and have to be donwloaded from server
+	**/
+	function _gen_missing_msg_list($arr)
+	{
+		global $awt;
+		if (!is_array($arr["cache"]))
+		{
+			$arr["cache"] = array();
+		};
+
+		$awt->start("msgr::imap::get_folder_contents / imap_sort");
+		$fo = $this->_imap_sort();
+		$awt->stop("msgr::imap::get_folder_contents / imap_sort");
+		foreach($fo as $k=>$v)
+		{
+			if($k >= ($arr["from"]-1) && $k < $arr["to"])
+			{
+				$fop[$k] = $v;
+			}
+		}
+
+		foreach(array_keys($arr["cache"]) as $key=>$val)
+		{
+			if(!in_array($val, $fop))
+			{
+				// removes deleted messages from cache
+				unset($arr["cache"][$val]);
+			}
+		}
+		$to_fetch = array_diff($fop,array_keys($arr["cache"]));
+		return count($to_fetch)?$to_fetch:false;
+	}
+
 	/**
 	@attrib api=1 params=name
 	@param to optional type=int or string "*"
@@ -263,11 +332,20 @@ class imap extends class_base
 	**/
 	function get_folder_contents($arr)
 	{
+		global $awt;
+		$awt->start("msgr::imap::get_folder_contents / before last&new check");
 		$cache = get_instance("cache");
-		$mboxinf = imap_mailboxmsginfo($this->mbox);
+		//$mboxinf = imap_mailboxmsginfo($this->mbox);
+		$awt->start("msgr::imap::get_folder_contents / imap_status");
+		$mboxinf = imap_status($this->mbox, $this->use_mailbox, SA_ALL);
+		$awt->stop("msgr::imap::get_folder_contents / imap_status");
+		$awt->start("msgr::imap::get_folder_contents / get_overview");
 		$ovr = $this->_get_overview();
+		$awt->stop("msgr::imap::get_folder_contents / get_overview");
 		$last_check = $ovr[$this->mboxspec];
+		$awt->start("msgr::imap::get_folder_contents / get_ovr_chsum");
 		$new_check = $this->_get_ovr_checksum($mboxinf);
+		$awt->stop("msgr::imap::get_folder_contents / get_ovr_chsum");
 
 		$src = $cache->file_get($this->mbox_cache_id);
 		$mbox_over = aw_unserialize($src);
@@ -275,45 +353,32 @@ class imap extends class_base
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
 		// mailbox has changed, reload from server
-		if ($last_check != $new_check || true)
+		// fooook!.. this sucks bigtime. what if i want mails that i haven't seen yet, i'll say you what then happens.. you don't see them!!
+		$awt->start("msgr::imap::get_folder_contents / before last&new check");
+		$arg = array(
+			"cache" => &$mbox_over["contents"],
+			"from" => $arr["from"],
+			"to" => $arr["to"]
+		);
+		if (($to_fetch = $this->_gen_missing_msg_list($arg)) || $last_check != $new_check)
 		{
 			// update ovr
 			$ovr[$this->mboxspec] = $new_check;
 			$this->_set_overview($ovr);
-			$mboxinf = imap_mailboxmsginfo($this->mbox);
+			$awt->start("msgr::imap::get_folder_contents / mailboxmsginfo");
+			$mboxinf = imap_status($this->mbox);
+			$awt->stop("msgr::imap::get_folder_contents / mailboxmsginfo");
 
-			if (!is_array($mbox_over["contents"]))
-			{
-				$mbox_over["contents"] = array();
-			};
-
-			$mbox_over["modified"] = $fmod;
-			$mbox_over["count"] = $count;
-			$fo = $this->_imap_sort();
-			foreach($fo as $k=>$v)
-			{
-				if($k >= ($arr["from"]-1) && $k < $arr["to"])
-				{
-					$fop[$k] = $v;
-				}
-			}
-			foreach(array_keys($mbox_over["contents"]) as $key=>$val)
-			{
-				if(!in_array($val, $fop))
-				{
-					// removes deleted messages from cache
-					unset($mbox_over["contents"][$val]);
-				}
-			}
-			$to_fetch = array_diff($fop,array_keys($mbox_over["contents"]));
 			$req_msgs = $mbox_over["contents"];
 			// this will update the message cache ... it has to contain all
 			// the message bits in this mailbox
 			if (count($to_fetch) > 0)
 			{
 				$overview = "";
+				$awt->start("msgr::imap::get_folder_contents / fetch missing mails");
 				foreach($to_fetch as $cur_enum => $msg_uid)
 				{
+					$awt->count("msgr::imap::get_folder_contents / fetch missing mails");
 					//print "fetching message with uid $msg_uid<br>";
 					//flush();
 					$hdrinfo = @imap_headerinfo($this->mbox,$msg_uid);
@@ -329,7 +394,7 @@ class imap extends class_base
 						$dinfo = $hdrinfo->udate;
 					}
 					$req_msgs[$rkey] = array(
-						"encoding" => $str->parameters[0]->value,
+						"encoding" => is_array($str->parameters)?$str->parameters[0]->value:false,
 						"from" => $message->from,
 						"froma" => $addrinf["addr"],
 						"fromn" => $this->MIME_decode($addrinf["name"]),
@@ -348,12 +413,15 @@ class imap extends class_base
 						"enum" => $cur_enum,
 					);
 				};
+				$awt->stop("msgr::imap::get_folder_contents / fetch missing mails");
 			};
 			uasort($req_msgs,array($this,"__date_sort"));
-
 			$mbox_over["contents"] = $req_msgs;
-			$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
+
 		}
+
+		$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
+
 		if(is_array($mbox_over["contents"]))
 		{
 			foreach($mbox_over["contents"] as $msgid => $ritem)
@@ -366,6 +434,7 @@ class imap extends class_base
 				};
 			}
 		};
+
 		$rv = $mbox_over["contents"];
 		enter_function("imap::from_filter");
 		if(strlen($arr["from_filter"]))
@@ -378,6 +447,37 @@ class imap extends class_base
 		}
 		exit_function("imap::from_filter");
 		return $rv;
+	}
+
+	/**
+		@comment
+			Well, this basically does only one thing: removes mail's from cache that aren't in the remote server any more..
+	**/
+	function refresh_cache()
+	{
+		$cache = get_instance("cache");
+		$mboxinf = imap_status($this->mbox, $this->use_mailbox, SA_ALL);
+		$ovr = $this->_get_overview();
+		$last_check = $ovr[$this->mboxspec];
+		$new_check = $this->_get_ovr_checksum($mboxinf);
+
+		$src = $cache->file_get($this->mbox_cache_id);
+		$mbox_over = aw_unserialize($src);
+		$back = $mbox_over["contents"];
+		// mailbox has changed, reload from server
+		if ($last_check != $new_check)
+		{
+			$fo = $this->_imap_sort();
+			// here we loop over current cache, check if this mail is in mailbox, if isn't .. then remove it from cache array.
+			foreach($mbox_over["contents"] as $k => $val)
+			{
+				if(!in_array($k, $fo))
+				{
+					unset($mbox_over["contents"][$k]);
+				}
+			}
+		}
+		
 	}
 	
 	/**
@@ -394,6 +494,53 @@ class imap extends class_base
 	{
 		$status = imap_status($this->mbox, $this->servspec . $arr["use_mailbox"], SA_ALL);
 		return array($status->messages => $status->unseen);
+	}
+	
+
+	/**
+		@comment
+			when connecting or changing folders, mbox_cache_id changes(this holds the msg id's of a specific folder). And so we could do this at one place, we use this function!!
+	**/
+	function reset_mbox_cache_id()
+	{
+		$this->reset_mboxspec();
+		$this->mbox_cache_id = "imap".md5("imap-".$this->obj_id.$this->mboxspec.$this->user);
+	}
+
+	/**
+		@comment
+			resets mboxsec, which is used in some of the cache_ids
+	**/
+	function reset_mboxspec()
+	{
+		$mbox = str_replace("*","&",$this->use_mailbox);
+		$this->mboxspec = $this->servspec . $mbox;
+	}
+
+	/**
+		@comment
+			this resets all the cache_ids, including mbox_cache_id
+	**/
+	function reset_cache_ids()
+	{
+		
+		// chachefile for single mailbox, this is a separate function because it has to be regenerated after every folderchange
+		$this->reset_mbox_cache_id();
+		
+
+		// this is where we store _all_ folders for that account
+		$this->fldr_cache_id = "imapfld" . md5("imap-acc-folders".$this->servspec.$this->user.$this->obj_id);
+
+		// overview information for each folder. it's in separate file because it's kind
+		// of expensive (read slow) to scan over all the folders at once, so we do this
+		// when a folder is opened
+		$this->overview_cache_id = "imap" . md5("imap-over".$this->servspec.$this->user.$this->obj_id);
+
+		// message list for each folder. contains just message id's in order that $this->_imap_sort() returns.
+		// if empty .. i have to fill this right away, dont i??
+
+		// this->mboxspec is used here, and this is resetted in imap::reset_mobx_cache_id(), which is called few lines before
+		$this->mbox_msg_list_cache_id = "imap" . md5("msgs-list".$this->mboxspec.$this->user.$this->obj_id);
 	}
 
 	/**
@@ -415,9 +562,12 @@ class imap extends class_base
 	**/
 	function change_folder($arr)
 	{
+		// shouldn't i set new mbox_cache_id here also??
 		if(imap_reopen($this->mbox, $this->servspec . $arr["use_mailbox"]))
 		{
+			e("folder changed to:".$arr["use_mailbox"]);
 			$this->use_mailbox = $arr["use_mailbox"];
+			$this->reset_mbox_cache_id();
 		}
 		else
 		{
@@ -485,6 +635,11 @@ class imap extends class_base
 				imap_delete($this->mbox,$id,FT_UID);
 			}
 			imap_expunge($this->mbox);
+			// well, i have to update the cache also now?.. wolnd't i?
+			// actually this sucks.. beacause this cache thingie is implemented into get_folder_contents function.. and i don't need to call that right now, do i?
+			// maybe i'd need a cache refresh function?? .. because there's a good chance i need it somewhere else too?
+			// jeah, that sounds good. i'll then do a refresher
+			$this->refresh_cache();
 		}
 
 	}
@@ -549,7 +704,7 @@ class imap extends class_base
 			[subject] => [Predev] Re: cvs commit by markop in	automatweb_dev/classes/applications/mailinglist
 			[cc] => predev@struktuur.ee
 			[date] =>  4-May-2006 19:25:40 +0300
-			[content] =>  18:30 oli meiliserveri järjekorras natuke üle 4000 meili. Huvitav kas sellest?
+			[content] =>  18:30 oli meiliserveri j&auml;rjekorras natuke &uuml;le 4000 meili. Huvitav kas sellest?
 			Anti
 		)
 	**/
@@ -599,9 +754,7 @@ class imap extends class_base
 		*/
 		
 		$decoder = new Mail_mimeDecode($header. $body);
-
 		$structure = $decoder->decode($params);
-
 
 		$rv = "";
 
@@ -610,6 +763,11 @@ class imap extends class_base
 
 		$this->partlist = array();
 		$this->attachments = array();
+		if($arr["include_part_body"])
+		{
+			$this->include_part_body = is_array($arr["include_part_body"])?$arr["include_part_body"]:array($arr["include_part_body"]);
+		}
+
 		if (!empty($structure->body))
 		{
 			$msgdata["content"] = $structure->body;
@@ -644,7 +802,7 @@ class imap extends class_base
 		}
 		else
 		{
-			if(strtolower($val->ctype_primary) == "text" && strtolower($val->ctype_secondary) == "plain" && ($val->disposition == "inline" || empty($val->disposition)))
+			if(strtolower($val->ctype_primary) == "text" && strtolower($val->ctype_secondary) == "plain" && empty($val->disposition))
 			{
 				if(!empty($val->ctype_parameters["charset"]) && in_array(strtolower($val->ctype_parameters["charset"]), $this->charsets))
 				{
@@ -662,13 +820,21 @@ class imap extends class_base
 				// send this one to garbage, because we don't accept html at the moment...
 				return;
 			}
-			elseif(!empty($val->disposition) && $val->disposition == "attachment")
+			elseif(!empty($val->disposition) && ($val->disposition == "attachment" || $val->disposition == "inline") && !empty($val->d_parameters["filename"]))
 			{
-				$this->attachments[$key] = $val->d_parameters["filename"];
+				// this disposition attachment or inline is because thunderbird uses inline somewhy .. 
+
+				$this->attachments[$key]["filename"] = $val->d_parameters["filename"];
+				$this->attachments[$key]["size"] = strlen($val->body);
+				$this->attachments[$key]["content_type"] = $val->ctype_primary."/".$val->ctype_secondary;
 				if (!empty($val->headers["content-description"]))
 				{
-					$this->attachments[$key] .= " : " . $val->headers["content-description"];
+					$this->attachments[$key]["description"] = $val->headers["content-description"];
 				};
+				if(in_array($key,$this->include_part_body))
+				{
+					$this->attachments[$key]["body"] = $val->body;
+				}
 			}
 			else
 			{
