@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.39 2007/02/06 10:57:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.40 2007/08/31 10:36:26 tarvo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -32,7 +32,7 @@
 	@caption Teema
 
 	property date type=text store=no
-	caption Kuupäev
+	caption Kuup&auml;ev
 	
 	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
 	@caption HTML kiri
@@ -61,7 +61,7 @@
 	@property cb_part type=hidden store=no form=all
 	@caption Cb part
 
-	@groupinfo general caption="Üldine" submit=no
+	@groupinfo general caption="&Uuml;ldine" submit=no
 	@groupinfo add caption="Lisa"
 
 	@tableinfo messages index=id master_table=objects master_index=oid
@@ -70,7 +70,7 @@
 	/@caption Kirja vaatamise toolbar
 
 	@property msg_headers type=text store=no form=showmsg no_caption=1
-	@caption Kirja päised
+	@caption Kirja p&auml;ised
 
 	@property msg_content type=text store=no form=showmsg no_caption=1
 	@caption Kirja sisu
@@ -113,11 +113,42 @@ class mail_message extends class_base
 		//$body = $arr["content"];
 		$body = nl2br($arr["content"]);
 		unset($arr["content"]);
+
+		foreach($arr["attachments"] as $k => $data)
+		{
+			$img = html::img(array(
+				"border" => 0,
+				"url" => aw_ini_get("baseurl")."/automatweb/images/attach.gif",
+			));
+			$caption = $img."&nbsp;".$data["filename"];
+			$attach = html::href(array(
+				"caption" => $caption,
+				"url" => $this->mk_my_orb("get_msg_attachment", array(
+					"msgr_id" => $arg["msgrid"],
+					"msg_id" => $arg["msgid"],
+					"attach_id" => $k,
+				), CL_MESSENGER_V2),
+			));
+			if($data["description"])
+			{
+				$attach .= "&nbsp;&nbsp;<font style=\"font-size:10px;color:gray;\">".$data["description"]."</font>";
+			}
+			$attaches[] = $attach;
+		}
+		if(count($attaches))
+		{
+			$arr["attachments"] = join("<br/>", $attaches);
+		}
 		$this->read_template("headers.tpl");
+		$imap = get_instance(CL_PROTO_IMAP);
 		foreach($arr as $name => $value)
 		{
+			if(empty($value))
+			{
+				continue;
+			}
 			$this->vars(array(
-				"caption" => $name,
+				"caption" => $imap->msg_field_captions[$name],
 				"content" => $value,	
 			));
 			$headers .= $this->parse("header_line");
@@ -133,7 +164,10 @@ class mail_message extends class_base
 	// with specified id
 	function fetch_message($arr)
 	{
-		$msgr = get_instance(CL_MESSENGER_V2);
+		if(!$this->msgr)
+		{
+			$this->msgr = get_instance(CL_MESSENGER_V2);
+		}
 		if (!is_numeric($arr["msgid"]))
 		{
 			list($mailbox,$msgid) = explode("*",$arr["msgid"]);
@@ -143,18 +177,19 @@ class mail_message extends class_base
 			$msgid = $arr["msgid"];
 			$mailbox = $arr["mailbox"];
 		};
-		$msgr->set_opt("use_mailbox",$mailbox);
-		$msgr->_connect_server(array(
+		$this->msgr->set_opt("use_mailbox",$mailbox);
+		
+		$this->msgr->_connect_server(array(
 			"msgr_id" => $arr["msgrid"],
 		));
-                
-		$rv = $msgr->drv_inst->fetch_message(array(
+           
+		$rv = $this->msgr->drv_inst->fetch_message(array(
 			"msgid" => $msgid,
 		));
 
 		if ($rv && isset($arr["fullheaders"]))
 		{
-			$rv["fullheaders"] = $msgr->drv_inst->fetch_headers(array(
+			$rv["fullheaders"] = $this->msgr->drv_inst->fetch_headers(array(
 				"msgid" => $msgid,
 			));
 		};
@@ -312,7 +347,7 @@ class mail_message extends class_base
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
 				"bcc" => $msgobj->prop("bcc"),
-				"body" => t("Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"),
+				"body" => t("Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"),
 			));
 			if($this->message)
 			{
@@ -739,11 +774,11 @@ class mail_message extends class_base
 	// listile peale valik - "kasuta seda malli"
 	// kui ole valikut, siis dropdownis mallid .....
 
-	// kirja objektile user defined välju - by default väljas
+	// kirja objektile user defined v&auml;lju - by default v&auml;ljas
 
 	// uus seos - listi liikmete allikaks saaks panna gruppi ja ka kasutajale meili saatmine
 
-	// listi juurde statistika tab, et oleks näha kes on kirju lugenud
+	// listi juurde statistika tab, et oleks n&auml;ha kes on kirju lugenud
 
 	// alias mis kuvab parooli muutmise lehe
 
@@ -761,7 +796,7 @@ class mail_message extends class_base
 		$tb->add_button(array(
 			"name" => "reply3",
 			"action" => "mail_reply_all",
-			"tooltip" => t("Vasta/kõigile"),
+			"tooltip" => t("Vasta/k&otilde;igile"),
 			"img" => "mail_reply_all.gif",
 		));
 
@@ -913,7 +948,7 @@ class mail_message extends class_base
 		$tb->add_menu_button(array(
 			"name" => "viewmode",
 			"img" => "preview.gif",
-			"tooltip" => t("Päised"),
+			"tooltip" => t("P&auml;ised"),
 		));
 
 		$tb->add_menu_item(array(
@@ -924,7 +959,7 @@ class mail_message extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "viewmode",
-			"text" => t("Kõik päised"),
+			"text" => t("K&otilde;ik p&auml;ised"),
 			"url" => aw_url_change_var("viewmode","headers"),
 		));
 	}
@@ -965,7 +1000,7 @@ class mail_message extends class_base
 
 		$awm->gen_mail();
 		print "<script>window.close();</script>";
-		print "Selle akna võib peale kirja saatmist sulgeda<br />";
+		print "Selle akna v&otilde;ib peale kirja saatmist sulgeda<br />";
 		print "-------<br />";
 		print "saadetud<br />";
 		die();
@@ -1128,7 +1163,7 @@ class mail_message extends class_base
 		};
 
 		$props["class_id"]["value"] = $arr["create_class"];
-		// kuidas ma teen siia nimekirja kõigist kasutaja projektidest?
+		// kuidas ma teen siia nimekirja k&otilde;igist kasutaja projektidest?
 
 		$users = get_instance("users");
 		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
@@ -1257,7 +1292,7 @@ class mail_message extends class_base
 	
 	/** Deletes a message / kind'a deprecated i guess 
 		
-		@attrib name=mail_delete
+		@attrib name=mail_delete all_args=1
 
 	**/
 	function mail_delete($arr)
@@ -1268,6 +1303,7 @@ class mail_message extends class_base
                         "msgr_id" => $arr["msgrid"],
                 ));
 		$msgr->drv_inst->delete_msgs_from_folder(array($arr["msgid"]));
+		exit;
 		print t("kustutatud!");
 		print "<script>window.opener.location.reload();</script>";
 		print "<a href='javascript:window.close();'>".t("sulge aken")."</a>";
@@ -1382,7 +1418,7 @@ class mail_message extends class_base
 	
 	/** Prepares a message for replying
 		
-		@attrib name=mail_reply  
+		@attrib name=mail_reply all_args=1 
 	**/
 	function mail_reply($arr)
 	{
@@ -1402,6 +1438,10 @@ class mail_message extends class_base
 		$msgobj->save();
 
 		$arr["id"] = $msgobj->id();
+		if($arr["return_url"])
+		{
+			return $arr["return_url"].($arr["draft_id"]?$arr["draft_id"]."=".$arr["id"]:"");
+		}
 		return $this->_gen_edit_url($arr);
 	}
 	
@@ -1530,6 +1570,24 @@ class mail_message extends class_base
 		$bt = $msgr->get_first_obj_by_reltype("RELTYPE_BUGTRACKER");
 		$retu = html::get_change_url($bt->id(), array("group" => "bugs", "b_id" => $arr["pick_bug_parent"]));
 		return html::get_change_url($o->id(), array("return_url" => $retu));
+	}
+
+	/**
+		@param msgr_id required type=oid
+		@param msgi_d required type=int
+		@param attach_id required type=int
+	**/
+	function get_attachment($arr)
+	{
+		$msgr = get_instance(CL_MESSENGER_V2);
+		$msgr->_connect_server(array(
+			"msgr_id" => $arr["msgr_id"],
+		));
+		$ms = $msgr->drv_inst->fetch_message(array(
+			"msgid" => $arr["msg_id"],
+			"include_part_body" => $arr["attach_id"],
+		));
+		return $ms["attachments"][$arr["attach_id"]];
 	}
 };
 ?>

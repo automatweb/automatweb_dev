@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.26 2006/06/26 08:03:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.27 2007/08/31 10:36:26 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -27,40 +27,6 @@ caption Identiteet
 @property config type=relpicker reltype=RELTYPE_MAIL_CONFIG
 @caption Konfiguratsioon
 
-@property mailbox type=hidden group=mess_list,mail_view
-@caption Mailbox ID (sys)
-
-@groupinfo main_view caption="Kirjad" submit=no
-	@groupinfo mess_list caption="Postkast" parent=main_view
-		@property mail_toolbar type=toolbar no_caption=1 group=mess_list store=no
-		@caption Msg. toolbar
-
-		@layout message_view type=hbox width=15%:85% group=mess_list
-
-		@property treeview type=text parent=message_view group=mess_list no_caption=1
-		@caption Folderid
-
-		@property message_list type=table no_caption=1 group=mess_list parent=message_view no_caption=1
-		@caption Kirjad
-
-	@groupinfo new_mail caption="Uus kiri" parent=main_view submit=no
-		@property new_mail_toolbar type=toolbar group=new_mail submit=no no_caption=1
-		@caption uue maili tuulbar
-		
-		@property message_info type=releditor reltype=RELTYPE_MAIL_MESSAGE group=new_mail props=mfrom,mto,cc,name,message,msgrid
-		@caption Maili andmed
-
-	@groupinfo mail_view caption="Kirja vaade" parent=main_view submit=no
-		@layout mail_view_split type=hbox width=15%:85% group=mail_view
-
-			@property mail_view_tree type=text parent=mail_view_split group=mail_view no_caption=1
-			@caption Kaustapuu
-
-			@property mail_contents type=text parent=mail_view_split no_caption=1 group=mail_view
-			@caption Maili vaate t&ouml;&ouml;riistariba
-
-// muu mudru
-
 @property msg_outbox type=relpicker reltype=RELTYPE_FOLDER
 @caption Saadetud kirjad
 
@@ -68,12 +34,79 @@ caption Identiteet
 @caption Mustandite kataloog
 
 @property page_reload type=textbox size=5
-@caption Kirjade värskendamine (sekundites)
+@caption Kirjade v&auml;rskendamine (sekundites)
 
 @property num_attachments type=select field=meta method=serialize group=advanced default=1 
 @caption Manuste arv
 
-@default group=search 
+@property grouping type=checkbox ch_value=1 default=0 field=meta method=serialize group=grouping
+@caption Kirjade ajaline grupeerimine
+
+/@property mailbox type=hidden group=mess_list,mail_view
+/@caption Mailbox ID (sys)
+
+@groupinfo main_view caption="Kirjad" submit=no
+@default group=main_view
+
+	@property mail_toolbar type=toolbar no_caption=1 store=no
+	@caption Msg. toolbar
+	
+	@layout pane_split type=hbox width=10%:70%:20%
+
+		@layout left_pane type=vbox parent=pane_split
+			@layout msg_tree type=vbox parent=left_pane closeable=1 area_caption=Kaustad
+				@property treeview type=text parent=msg_tree no_caption=1
+				@caption Folderid
+
+
+		@layout middle_pane type=vbox parent=pane_split
+// lets make some wierd layouts here.. haha
+
+			@layout msg_contents type=vbox parent=middle_pane closeable=1 area_caption=Kiri
+				@property message_contents type=text no_caption=1 store=no parent=msg_contents
+
+				
+			@layout msg_list type=vbox parent=middle_pane
+				@property message_list type=table no_caption=1 parent=msg_list no_caption=1
+				@caption Kirjad
+
+			@layout msg_new type=vbox parent=middle_pane closeable=1 area_caption=Kirja&nbsp;sisu
+				@property new_mail_toolbar type=toolbar parent=msg_new submit=no no_caption=1
+				@caption uue maili tuulbar
+		
+				@property message_info type=releditor reltype=RELTYPE_MAIL_MESSAGE parent=msg_new props=mfrom,mto,cc,name,message,msgrid
+				@caption Maili andmed
+
+			@layout msg_new2 type=vbox parent=middle_pane closeable=1 area_caption=Uus&nbsp;kiri
+				@property msg_new2_from type=select parent=msg_new2 store=no
+				@caption Kellelt
+
+				@property msg_new2_to type=textbox parent=msg_new2 store=no
+				@caption Kellele
+
+				@property msg_new2_cc type=textbox parent=msg_new2 store=no
+				@caption Koopia
+
+				@property msg_new2_subject type=textbox parent=msg_new2 store=no
+				@caption Teema
+
+				@property msg_new2_msg type=textarea parent=msg_new2 store=no
+				@caption Sisu
+
+			@layout msg_search type=vbox parent=middle_pane closeable=1 area_caption=Otsing
+				@property tmp type=text no_caption=1 store=no parent=msg_search
+
+		@layout right_pane type=vbox parent=pane_split
+
+			@layout msg_address_book type=vbox parent=right_pane closeable=1 area_caption=Aadressiraamat
+				@property msg_ab_contents type=text no_caption=1 store=no parent=msg_address_book
+				@caption Aadressiraamat
+
+			@layout msg_calendar type=vbox parent=right_pane closeable=1 area_caption=Kalender
+				@property msg_calendar type=text parent=msg_calendar no_caption=1
+				@caption Kalender
+
+@default group=search
 
 @property s_toolbar type=toolbar no_caption=1
 @caption Otsingu toolbar
@@ -97,9 +130,6 @@ caption Identiteet
 @caption IMAP
 
 @default group=rules_settings
-property autofilter_delay type=select
-caption Filtrite käivitamise intervall
-comment Minutites
 
 @property testfilters type=text 
 @caption Testi filtreid
@@ -124,13 +154,14 @@ comment Minutites
 
 @groupinfo settings caption="Seaded" parent=general
 @groupinfo advanced caption="Lisaks" parent=general
+@groupinfo grouping caption="Grupeerimine" parent=general
 @groupinfo imap caption="IMAP" parent=general
 @groupinfo search caption=Otsing submit=no submit_action=change submit_method=GET
 @groupinfo rules caption=Reeglid submit=no
 @groupinfo rules_add caption="Lisa reegel" parent=rules
 @groupinfo rules_editor caption="Reeglid" submit=no parent=rules
 @groupinfo rules_settings caption="Seaded"
-@groupinfo a_book caption="Aadressiraamat"
+@groupinfo a_book caption="Aadressiraamat" submit=no
 @groupinfo book_add caption="Lisa" parent=a_book
 @groupinfo book_view caption="Aadressid" parent=a_book submit=no
 
@@ -250,6 +281,28 @@ class messenger_v2 extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			// calendar
+			case "msg_calendar":
+				$prop["value"] = "kalender";
+				break;
+			// address book
+			case "msg_ab_contents":
+				$cl = get_instance(CL_CONTACT_LIST);
+				$cls = array();
+				$cls = $cl->get_contact_lists_for_messenger($arr["obj_inst"]->id());
+				$adds = $cl->get_addresses($cls);
+				foreach($adds as $add)
+				{
+					$obj = new object($k);
+					$add["name"] = split("[ ]", $add["name"]);
+					foreach($add["name"] as $k => $name)
+					{
+						$add["name"][$k] = ucfirst(strtolower($name));
+					}
+					$prop["value"] .= join(" ", $add["name"])."&nbsp;&nbsp;(".$add["mail"].")<br/>";
+				}
+				break;
+			// others
 			case "num_attachments":
 				$prop["options"] = array(
 					0 => 0,
@@ -262,7 +315,7 @@ class messenger_v2 extends class_base
 				break;
 
 			case "message_list":
-				set_page_reload($arr["obj_inst"]->prop("page_reload"));
+				//set_page_reload($arr["obj_inst"]->prop("page_reload"));
 				$retval = $this->gen_message_list($arr);
 				break;
 			
@@ -325,7 +378,7 @@ class messenger_v2 extends class_base
 					"name" => "delete",
 					"img" => "delete.gif",
 					"confirm" => t("Kustutada?"),
-					"tooltip" => t("Kustuta märgitud kirjad"),
+					"tooltip" => t("Kustuta m&auml;rgitud kirjad"),
 					"action" => "delete_search_results",
 				));
 				break;
@@ -387,7 +440,9 @@ class messenger_v2 extends class_base
 					"name" => "send_mail",
 					"tooltip" => t("Saada kiri"),
 					"img" => "mail_send.gif",
-					"action" => "_catch_mail_send",
+					//"action" => "_catch_mail_send",
+					"onClick" => "msgr_sendmail();",
+					"url" => "#",
 				));
 				/*
 				$fck_inst = get_instance("vcl/fck_editor");
@@ -398,20 +453,28 @@ class messenger_v2 extends class_base
 				*/
 			break;
 			/* mail view_group */
-			case "mail_contents":
+			case "message_contents":
 				// generating toolbar
 				$tb = get_instance("vcl/toolbar");
 				/*
+				$url = $this->mk_my_orb("mail_reply", array(
+					"msgrid" => $arr["request"]["msgrid"],
+					"msgid" => $arr["request"]["msgid"],
+					"mailbox" => $arr["request"]["mailbox"],
+					//"return_url" => aw_url_change("view_layout", "msg_new"),
+				), CL_MESSAGE);
 				$tb->add_button(array(
 					"name" => "reply",
-					"action" => "mail_reply",
+					//"action" => "mail_reply",
+					"url" => "javascript:void();",
+					"onClick" => "javascript:msgr_load('msg_contents_outer', 'msg_new', false, 'url')",
 					"tooltip" => t("Vasta"),
 					"img" => "mail_reply.gif",
 				));
 				$tb->add_button(array(
 					"name" => "reply3",
 					"action" => "mail_reply_all",
-					"tooltip" => t("Vasta/kõigile"),
+					"tooltip" => t("Vasta/k&otilde;igile"),
 					"img" => "mail_reply_all.gif",
 				));
 
@@ -432,6 +495,7 @@ class messenger_v2 extends class_base
 				));
 				$tb->add_separator();
 				*/
+
 				if(!strlen($arr["request"]["msgid"]))
 				{
 					$enum = aw_global_get("table_enum");
@@ -442,34 +506,31 @@ class messenger_v2 extends class_base
 					$arr["request"]["mailbox"] = "INBOX";
 				}
 				$move = $this->_msg_move($arr);
+				$url = $this->mk_my_orb("change", array(
+					"group" => $arr["request"]["group"],
+					"msgrid" => $arr["request"]["msgrid"],
+					"mailbox" => $arr["request"]["mailbox"],
+					"id" => $arr["request"]["id"],
+				));
 				$tb->add_button(array(
 					"name" => "next",
-					"tooltip" => t("Järgmine kiri"),
+					"tooltip" => t("J&auml;rgmine kiri"),
 					"img" => "up_r_arr.png",
-					"url" => $this->mk_my_orb("change",array(
-						"group" => $arr["request"]["group"],
-						"msgrid" => $arr["request"]["msgrid"],
-						"msgid" => $move["next"],
-						"mailbox" => $arr["request"]["mailbox"],
-						"id" => $arr["request"]["id"],
-					)),
+					"url" => "javascript:void();",
+					"onClick" => "javascript:msgr_load('middle_pane_outer', 'msg_contents', true, '".$url."&msgid=".$move["next"]."');",
 				));
 				$tb->add_cdata(sprintf(t("%s of %s"), $move["cur"], $move["total"]));
 				$tb->add_button(array(
 					"name" => "prev",
 					"tooltip" => t("Eelmine kiri"),
 					"img" => "down_r_arr.png",
-					"url" => $this->mk_my_orb("change", array(
-						"group" => $arr["request"]["group"],
-						"msgrid" => $arr["request"]["msgrid"],
-						"msgid" => $move["prev"],
-						"mailbox" => $arr["request"]["mailbox"],
-						"id" => $arr["request"]["id"],
-					)),
+					"url" => "#",
+					"onClick" => "javascipt:msgr_load('middle_pane_outer', 'msg_contents', true, '".$url."&msgid=".$move["prev"]."');",
 				));
 				
 				$tb_html = $tb->get_toolbar();
 				$ms_html = $this->_fetch_message_contents(&$arr);
+				//if($arr["request"]["view_layout"]) { die("doup");}
 		
 				$prop["value"] = $this->parse();
 
@@ -520,19 +581,22 @@ class messenger_v2 extends class_base
 	**/
 	function _catch_mail_send($arg)
 	{
-		// drafti tegemise peab siia tõstma.. muidu tehakse iga kord uue maili tab'iga uus mõtetu draft?!?
+		// uh, see on siin selleks, et miksip2rast ajax post requestist tulnud asjad siia $arg'i ei j6udnud. who knows why...
+		$arg = array_merge($arg, $_POST);
+		// drafti tegemise peab siia t&otilde;stma.. muidu tehakse iga kord uue maili tab'iga uus m&otilde;tetu draft?!?
 		$mm = get_instance(CL_MESSAGE);
+		$arg["message_info"]["msgrid"] = $arg["id"];
 		$arg["msgid"] = $mm->create_draft(array(
 			"msgrid" => $arg["message_info"]["msgrid"],
 		));
 		// this sucks.. but right now, with this heat.. i can't do any better
 		$msgobj = obj($arg["msgid"]);
-		$msgobj->set_prop("mfrom", $arg["message_info"]["mfrom"]);
-		$msgobj->set_prop("mto", $arg["message_info"]["mto"]);
-		$msgobj->set_prop("cc", $arg["message_info"]["cc"]);
-		$msgobj->set_prop("name", $arg["message_info"]["name"]);
-		$msgobj->set_prop("message", $arg["message"]);
-		$msgobj->set_name($arg["message_info"]["name"]);
+		$msgobj->set_prop("mfrom", mb_convert_encoding($arg["message_info"]["mfrom"], "ISO-8859-1", "UTF-8"));
+		$msgobj->set_prop("mto", mb_convert_encoding($arg["message_info"]["mto"], "ISO-8859-1", "UTF-8"));
+		$msgobj->set_prop("cc", mb_convert_encoding($arg["message_info"]["cc"], "ISO-8859-1", "UTF-8"));
+		$msgobj->set_prop("name", mb_convert_encoding($arg["message_info"]["name"], "ISO-8859-1", "UTF-8"));
+		$msgobj->set_prop("message", mb_convert_encoding($arg["message"], "ISO-8859-1", "UTF-8"));
+		$msgobj->set_name(mb_convert_encoding($arg["message_info"]["name"], "ISO-8859-1", "UTF-8"));
 		$msgobj->save();
 		
 		$arg = array_merge($arg, $arg["message_info"]);
@@ -540,8 +604,7 @@ class messenger_v2 extends class_base
 		$mm->mail_send(
 			$arg
 		);
-		$url  = $this->mk_my_orb("my_messages");
-		return $url;
+		// well.. this thingie goes thru ajax now, so we dont need to return url
 	}
 
 	/** fetches message contents for mail_view 
@@ -551,6 +614,7 @@ class messenger_v2 extends class_base
 		if($arg["request"]["msgid"] && $arg["request"]["mailbox"])
 		{
 			$inst = get_instance(CL_MESSAGE);
+			$inst->msgr = &$this;
 			$ret = $inst->formatted_message(array(
 				"msgid" => $arg["request"]["msgid"],
 				"msgrid" => $arg["request"]["id"],
@@ -558,6 +622,173 @@ class messenger_v2 extends class_base
 			));
 		}
 		return  $ret;
+	}
+
+	function callback_mod_layout($arr)
+	{
+		$layouts_to_be_ignored = array("msg_contents", "msg_address_book", /*"msg_tree",*/ "msg_list", "msg_new", "msg_new2", "msg_search", "msg_calendar");
+		foreach($layouts_to_be_ignored as $layout)
+		{
+			if($arr["name"] == $layout && $arr["request"]["view_layout"] != $layout)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$sendmail_url = $this->mk_my_orb("_catch_mail_send", array(
+			"id" => $arr["obj_inst"]->id(),
+		));
+		$v1 = "Palun oodake kuni soovitud andmeid laetakse";
+		$v2 = "<img src=\"".aw_ini_get("baseurl")."/automatweb/images/LoadingClock.gif\">";
+		$new_pane_url = $this->mk_my_orb("change", $arr["request"]);
+		$js = "
+			// this holds loading message
+			//temp_layout = '<div id=\"vbox\"><div class=\"pais\"><div class=\"caption\">Laadin ...</div><div class=\"closer\"></div></div><div class=\"sisu3\">".$v2."</div><div>';
+			temp_layout = '<div id=\"vbox\" style=\"margin:50 auto; position: absolute; width: 200px; height: 100px;\">".$v2."<div>';
+
+			// 
+			loading = false;
+			// info about layouts. in which area, which layout lies
+			layouts = new Array();
+			layouts['left_pane_outer'] = 'msg_tree';
+
+			// 
+			ourl = '".$new_pane_url."';
+			msgr = ".(($arr["request"]["group"] == "main_view")?true:false).";
+			// triggers messenger initializer
+			// holds active folder
+			var active_folder = 'INBOX';
+			f(active_folder);
+			// to where the layout is being currently loaded
+			async_location = false;
+			// holds last loaded layouts name
+			last_loaded_layout = false;
+
+			// sends mail & switches new mail form with mailbox list
+			function msgr_sendmail()
+			{
+				show_ajax_loader();
+				surl = '".$sendmail_url."';
+				//document.getElementById('right_pane_outer').display = 'none';
+				params = '&message_info[mfrom]=' + Url.encode(document.getElementById('message_info[mfrom]').value) + '&message_info[mto]=' + Url.encode(document.getElementById('message_info_mto_').value) + '&message_info[cc]=' + Url.encode(document.getElementById('message_info_cc_').value) + '&message_info[name]=' + Url.encode(document.getElementById('message_info_name_').value) + '&message=' + Url.encode(document.getElementById('message').value);
+				aw_post_url_contents(surl, params);
+				msgr_load('middle_pane_outer', 'msg_list', false, ourl);
+			}
+
+			// loads given folder contents to right pane
+			function msgr_show_folder(folder, page)
+			{
+				if(!page)
+				{
+					page = 0;
+				}
+				msgr_load('middle_pane_outer', 'msg_list', false, ourl + '&mailbox=' + folder + '&ft_page=' + page);
+				active_folder = folder;
+			}
+
+			function msgr_collect_checkboxes(elem)
+			{
+				var retval = new String();
+				for(i=0; i < elem.length; i++){
+					if(elem[i].type == 'checkbox' && elem[i].checked){
+						retval = retval + '&'+ elem[i].name + '=' +elem[i].value;
+					}
+				}
+				return retval;
+			}
+
+
+			function _msgr_handle_loaded()
+			{
+				if(async_location)
+				{
+					add = last_loaded_type?document.getElementById(async_location).innerHTML:'';
+					document.getElementById(async_location).innerHTML = (last_loaded_type=='PRE')?(req.responseText + add):(req.responseText + add);
+					hide_ajax_loader();
+					async_location = false;
+					f('Loading messenger layout '+ last_loaded_layout +' (' + aw_timer('msgr::load_layout') + 'ms)');
+				}
+			}
+
+			function msgr_close(subject)
+			{
+				el=document.getElementById(subject);
+				im=document.getElementById(subject + '_closer_img');
+				if (el.style.display == 'none')
+				{
+					el.style.display = 'block';
+					im.src = 'http://tarvo.dev.struktuur.ee/automatweb/images/aw06/closer_up.gif';	aw_get_url_contents('http://tarvo.dev.struktuur.ee/automatweb/orb.aw?class=user&action=open_layer&u_class=messenger_v2&u_group=main_view&u_layout=' + subject);
+				}
+				else
+				{
+					el.style.display = 'none';
+					im.src = 'http://tarvo.dev.struktuur.ee/automatweb/images/aw06/closer_down.gif';	aw_get_url_contents('http://tarvo.dev.struktuur.ee/automatweb/orb.aw?class=user&action=close_layer&u_class=messenger_v2&u_group=main_view&u_layout=' + subject);
+				}
+			}
+
+			function msgr_load(to, content, add, ovr_url)
+			{
+				aw_timer('msgr::load_layout');
+				last_loaded_layout = content;
+				last_loaded_type = add;
+				from_url = ((ovr_url)?ovr_url:ourl) + '&view_layout=' + content;
+				if(add)
+				{
+					element = (document.getElementById(content + '_outer') == null)?false:document.getElementById(content + '_outer');
+					if(layouts[content] && element.parentNode && element.parentNode.removeChild)
+					{
+						element.parentNode.removeChild(element);
+					}
+					async_location = to;
+					aw_do_xmlhttprequest(from_url, _msgr_handle_loaded);
+					show_ajax_loader();
+					//document.getElementById(to).innerHTML = temp_layout;
+					//document.getElementById(to).innerHTML = document.getElementById(to).innerHTML + aw_get_url_contents(from_url);
+				}
+				else
+				{
+					for(x in layouts)
+					{
+						if(layouts[x] == content)
+						{
+							layouts[x] = false;
+						}
+					}
+					async_location = to;
+					aw_do_xmlhttprequest(from_url, _msgr_handle_loaded);
+					show_ajax_loader();
+					//document.getElementById(to).innerHTML = temp_layout;
+					//document.getElementById(to).innerHTML = aw_get_url_contents(from_url);
+				}
+				layouts[content] = to;
+			}
+
+			function show_ajax_loader()
+			{
+				document.getElementById('ajax_loader_div').style.display = 'block';
+			}
+			function hide_ajax_loader()
+			{
+				document.getElementById('ajax_loader_div').style.display = 'none';
+			}
+
+			function msgr_onLoad()
+			{
+				if(msgr)
+				{
+					//msgr_load('left_pane_outer', ourl + '&view_layout=msg_tree');
+					//msgr_load('left_pane_outer', 'msg_address_book', true);
+					msgr_show_folder(active_folder);
+				}
+			}
+			
+			document.onLoad = msgr_onLoad();
+		";
+		return $js;
 	}
 
 	/** saves for example address book values
@@ -597,7 +828,7 @@ class messenger_v2 extends class_base
 			//$_sdat =$conns[0];
 			if (empty($_sdat))
 			{
-				$this->connect_errors = t("IMAP sissepääs on konfigureerimata");
+				$this->connect_errors = t("IMAP sissep&auml;&auml;s on konfigureerimata");
 				return false;
 			};
 			$sdat = new object($_sdat->to());
@@ -616,7 +847,7 @@ class messenger_v2 extends class_base
 			{
 				$this->connect_errors = $errors;
 				return false;
-			}			
+			}
 			$awt->stop("imap-server-connect");
 			$this->drv_inst->set_opt("messenger_id",$arr["msgr_id"]);
 
@@ -667,7 +898,7 @@ class messenger_v2 extends class_base
 	
 	/** defines fields for main_view table (gen_message_list uses it)
 	**/
-	function _mk_mb_table(&$t)
+	function _mk_mb_table(&$t, $obj)
 	{
 		$t->define_field(array(
 			"name" => "answered",
@@ -719,6 +950,13 @@ class messenger_v2 extends class_base
 			"sortable" => 1,
 			"numeric" => 1,
 		));
+		if($obj->prop("grouping"))
+		{
+			$t->define_field(array(
+				"name" => "time_group",
+				"caption" => t("G"),
+			));
+		}
 		$t->define_chooser(array(
 			"name" => "mark",
 			"field" => "id",
@@ -729,11 +967,14 @@ class messenger_v2 extends class_base
 	**/
 	function gen_message_list(&$arr)
 	{
+		global $awt;
+		$awt->start("msgr::gen_message_list/connect_server");
 		$this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
 			"no_folders" => true,
 			"gen_mess_list_srat" => "1",
 		));
+		$awt->stop("msgr::gen_message_list/connect_server");
 
 		if ($this->connect_errors)
 		{
@@ -741,40 +982,103 @@ class messenger_v2 extends class_base
 			return PROP_ERROR;
 		};
 
-		$perpage = empty($this->perpage) ? 50 : $this->perpage;
+		$perpage = empty($this->perpage) ? 25 : $this->perpage;
 
-		$ft_page = (int)$GLOBALS["ft_page"];
+		$ft_page = (int)$arr["request"]["ft_page"];
 
 		global $awt;
-		$awt->start("list-folder-contents");
+		$awt->start("msgr::gen_message_list/list-folder-contents");
+		$awt->count("msgr::gen_message_list/list-folder-contents");
 		$contents = $this->drv_inst->get_folder_contents(array(
-			"from" => $perpage * $ft_page + 1,
-			"to" => $perpage * ($ft_page + 1),
+			"to" => ($perpage * ($ft_page + 1)) - 1,
+			"from" => $perpage * $ft_page,
 			"from_filter" => $arr["request"]["quicksearch"],
 		));
-
-		$awt->stop("list-folder-contents");
-
-		$count = $this->drv_inst->count;
-		
+		$count = $this->drv_inst->folder_count(array(
+			"use_mailbox" => $this->use_mailbox,
+		));
 		$t = &$arr["prop"]["vcl_inst"];	
-		$this->_mk_mb_table(&$t);
-		$t->d_row_cnt = $count;
-
-		$pageselector = "";
-
-		if ($t->d_row_cnt > $perpage)
+		
+		if(key($count) > $this->perpage)
 		{
-			$pageselector = $t->draw_text_pageselector(array(
-				"records_per_page" => $perpage
-			));
-		};
+			$pages = ceil(key($count) / $this->perpage);
+			if($ft_page != 0 && key($count) > 1)
+			{
+				$ps[] = html::href(array(
+					"caption" => "&lt;&lt;",
+					"url" => "#",
+				));
+			}
+
+			$nth = false;
+			for($i = 0; $i < $pages ; $i++)
+			{
+				if(($i > 2 && $i+2 < $ft_page) || ($i < $pages - 2 && $i > $ft_page + 2))
+				{
+					$nth = true;
+					continue;
+				}
+				else
+				{
+					if($nth)
+					{
+						$ps[] = "...";
+					}
+					$nth = false;
+
+				}
+				$ps[] = html::href(array(
+					"caption" => ($ft_page == $i)?sprintf("<b>%s</b>", ($i + 1)): ($i + 1) ,
+					"url" => "#",
+					"onClick" => "javascript:msgr_show_folder(\"".$this->use_mailbox."\", ".$i.");",
+				));
+			}
+			if($ft_page != key($count) - 1  && key($count) > 1)
+			{
+				$ps[] = html::href(array(
+					"caption" => "&gt;&gt;",
+					"url" => "#",
+				));
+			}
+			$t->set_header("<div width=\"100%\" align=\"right\">".join("&nbsp;", $ps)."</div>");
+		}
+		$awt->stop("msgr::gen_message_list/list-folder-contents");
+
+		$this->_mk_mb_table(&$t, $arr["obj_inst"]);
+
 
 		$fldr = $this->use_mailbox;	
-		$t->table_header = $pageselector;
 
+
+		if($grouping = $arr["obj_inst"]->prop("grouping"))
+		{
+			// calculate some periods
+			$today = mktime(0,0,0, date("m"), date("d"), date("Y"));
+			$week_before = $today - (60*60*24*7);
+			// end calc
+			$t->set_rgroupby(array(
+				"time_group" => "time_group",
+			));
+		}
+
+		$awt->start("msgr::gen_message_list/loop-over-contents");
 		foreach($contents as $key => $message)
 		{
+			if($grouping)
+			{
+				if($message["tstamp"] >= $today)
+				{
+					$period = "Today";
+				}
+				elseif($message["tstamp"] < $today && $message["tstamp"] >= $week_before)
+				{
+					$period = "Last&nbsp;week";
+				}
+				else
+				{
+					$period = "Old&nbsp;mails";
+				}
+			}
 			$seen = $message["seen"];
 			$fromline = "";
 			if (!empty($message["fromn"]))
@@ -793,6 +1097,7 @@ class messenger_v2 extends class_base
 			// this should be unique enough
 			$wname = "msgr" . $key;
 			
+			/*
 			$url = $this->mk_my_orb("change", array(
 				"group" => "mail_view",
 				"id" => $arr["obj_inst"]->id(),
@@ -800,9 +1105,21 @@ class messenger_v2 extends class_base
 				"msgrid" => $arr["obj_inst"]->id(),
 				"mailbox" => $this->use_mailbox,
 			));
-			$new_link = "<a href=\"".$url."\">".$this->_format(parse_obj_name($message["subject"]), $seen)."</a>";
+			*/
+			$url = "#";
+			$onClick = $this->mk_my_orb("change", array(
+				"group" => "main_view",
+				"msgrid" => $arr["obj_inst"]->id(),
+				"id" => $arr["obj_inst"]->id(),
+				"mailbox" => $this->use_mailbox,
+				"msgid" => $key,
+				"view_layout" => "msg_contents",
+			));
+			//$new_link = "<a href=\"".$url."\" onClick=\"javascript:msgr_close('msg_list');javascript:msgr_load('middle_pane_outer', 'msg_contents', true, '".$onClick."');\">".$this->_format(parse_obj_name($message["subject"]), $seen, 20)."</a>";
+			$new_link = "<a href=\"".$url."\" onClick=\"javascript:msgr_load('middle_pane_outer', 'msg_contents', 'PRE', '".$onClick."');\">".$this->_format(parse_obj_name($message["subject"]), $seen, 20)."</a>";
 			
 			$t->define_data(array(
+				"time_group" => $period,
 				"id" => $key,
 				"from" => $this->_format($fromline, $seen),
 				/*
@@ -830,6 +1147,7 @@ class messenger_v2 extends class_base
 			));
 			
 		};
+		$awt->stop("msgr::gen_message_list/loop-over-contents");
 
 			
 		$t->set_default_sortby("date");
@@ -839,9 +1157,10 @@ class messenger_v2 extends class_base
 	}
 
 
-	function _format($str,$flag)
+	function _format($str,$flag, $len = false)
 	{
-		return ($flag) ? $str : "<strong>$str</strong>";
+		$str = ($flag) ? $str : "<strong>$str</strong>";
+		return $len?substr($str, 0, $len)."...":$str;
 	}
 
 	function _conv_stat($code)
@@ -881,11 +1200,15 @@ class messenger_v2 extends class_base
 
 		$back = $this->use_mailbox;
 		$this->use_mailbox = $arg["mailbox"];
-		$this->_connect_server(array(
+		$err = $this->_connect_server(array(
 			"msgr_id" => $arg["messenger"],
 			"force_reconnect" => true,
 			"count_contents" => "1",
 		));
+		if($err)
+		{
+			return array();
+		}
 		$mboxinf = imap_mailboxmsginfo($this->mbox);
 
 		$ret = array($mboxinf->Nmsgs => $mboxinf->Unread);
@@ -929,36 +1252,22 @@ class messenger_v2 extends class_base
 			"type" => TREE_DHTML,
 			"tree_id" => "msgr_tree", // what if there are multiple messengers?
 			"persist_state" => 1,
+			"js_bold_nodes" => 1,
 		));
 		
-		$i = 1;
-		
-		$tree->add_item(0,array(
-			"name" => parse_obj_name($this->_name),
-			"id" => $i,
-			"url" => $this->mk_my_orb("change",array(
-				"id" => $arr["obj_inst"]->id(),
-				"group" => "main_view",
-			)),
-		));
-
-		$i++;
-
 		$tree->add_item(0,array(
 			"name" => "Local folders",
-			"id" => $i,
+			"id" => "local_root",
 		));
 
-		$local_fld = $i;
 		$this->localfolders = array();
 		$conns = $this->msgobj->connections_from(array("type" => "RELTYPE_FOLDER"));
 		foreach($conns as $folder_item)
 		{
-			$i++;
 			$sdat = new object($folder_item->to());
-			$tree->add_item($local_fld,array(
-				"name" => $sdat->prop("name")."a",
-				"id" => $i,
+			$tree->add_item("local_root",array(
+				"name" => $sdat->prop("name"),
+				"id" => "local_".$sdat->id(),
 				"url" => $this->mk_my_orb("change",array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["prop"]["group"],
@@ -967,6 +1276,8 @@ class messenger_v2 extends class_base
 			));
 			$this->localfolders[$sdat->id()] = $sdat->prop("name");
 		};
+		
+		$i = 0;
 
 		foreach($this->mailboxlist as $key => $val)
 		{
@@ -974,11 +1285,11 @@ class messenger_v2 extends class_base
 			$enum[$val["name"]] = $i;
 			
 			// kui mailboxi nimi ei sisalda punkti, siis on tegemist esimese taseme folderiga
-			// tegelikult .. eraldaja määratakse ära namespacega, ilmselt võib olla see ka
+			// tegelikult .. eraldaja m&auml;&auml;ratakse &auml;ra namespacega, ilmselt v&otilde;ib olla see ka
 			// midagi muud kui punkt. aga praegu piisab punktist.
 			if (strpos($val["name"],".") === false)
 			{
-				$parent = 1;
+				$parent = 0;
 				$name = $val["name"];
 			}
 			else
@@ -998,11 +1309,15 @@ class messenger_v2 extends class_base
 			$tree->add_item($parent,array(
 				"name" => $name . " (".key($count)." / ".current($count).")",
 				"id" => $i,
+				"onClick" => "javascript:msgr_show_folder('".$val["name"]."');",
+				"url" => "#",
+				/*
 				"url" => $this->mk_my_orb("change",array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => "main_view",
 					"mailbox" => $val["int_name"],
 				)),
+				*/
 			));
 				
 		}
@@ -1020,6 +1335,8 @@ class messenger_v2 extends class_base
 		$rv = $this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
 		));
+		//d($arr);
+		//die();
 		
 		if ($this->connect_errors)
 		{
@@ -1031,23 +1348,63 @@ class messenger_v2 extends class_base
 		$drafts = $this->msgobj->prop("msg_drafts");
 		$toolbar = &$arr["prop"]["vcl_inst"];
 
+		$url = get_ru()."&view_layout=msg_new";
 		$toolbar->add_button(array(
 			"name" => "newmessage",
 			"tooltip" => t("Uus kiri"),
+			/*
 			"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("create_draft",array(
 				"msgrid" => $this->msgobj->id(),
 				"cb_part" => 1,
 			),"mail_message",false,true) . "','msgr',800,600)",
+			*/
+			"url" => "#",
+			"onClick" => "msgr_load('middle_pane_outer', '".$url."');",
 			"img" => "new.gif",
+
 		));
+
+		$delurl = $this->mk_my_orb("delete_messages");
+		$toolbar->add_button(array(
+			"name" => "removemessage",
+			"tooltip" => t("Kustuta valitud kirjad"),
+			"url" => "#",
+			"onClick" => "aw_post_url_contents('".$delurl."', '&mailbox='+active_folder+'&id=".$arr["obj_inst"]->id()."'+msgr_collect_checkboxes(document.changeform.elements));msgr_show_folder(active_folder);",
+			"img" => "delete.gif",
+
+		));
+
+		/*
+		$url = get_ru()."&view_layout=msg_new2";
+		$ab_url = get_ru()."&view_layout=msg_address_book";
+		$toolbar->add_button(array(
+			"name" => "change_data2",
+			"tooltip" => t("addressbook"),
+			"url" => "#",
+			"onClick" => "javasctip:msgr_load('left_pane_outer', '".$ab_url."');",
+			"img" => "delete.gif",
+		));
+
+		$url = get_ru()."&view_layout=msg_search";
+		$toolbar->add_button(array(
+			"name" => "change_data3",
+			"tooltip" => t("search bar"),
+			"url" => "#",
+			"onClick" => "javasctip:msgr_load('left_pane_outer', '".$url."');",
+			"img" => "search.gif",
+		));
+		*/
+
 		
+		$toolbar->add_separator();
+		$toolbar->add_cdata("<div id=\"loading_progress\"></div>");
 		$toolbar->add_separator();
 
 		if ($rv == false)
 		{
 			return false;
 		};
-		
+		/*
 		$toolbar->add_cdata(
 			html::textbox(array(
 				"name" => "search_field",
@@ -1091,12 +1448,13 @@ class messenger_v2 extends class_base
 		
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => t("Kustuta märgitud kirjad"),
-			"confirm" => t("Kustutada märgitud kirjad?"),
+			"tooltip" => t("Kustuta m&auml;rgitud kirjad"),
+			"confirm" => t("Kustutada m&auml;rgitud kirjad?"),
 			"action" => "delete_messages",
 			"img" => "delete.gif",
 			"side" => "right",
 		));
+		*/
 	}
 	
 	function parse_alias($args)
@@ -1175,7 +1533,7 @@ class messenger_v2 extends class_base
 
 		if ($this->done === false)
 		{
-			$rv = t("ükski kiri INBOXis ei matchinud ühegi ruuliga<br>");
+			$rv = t("&uuml;kski kiri INBOXis ei matchinud &uuml;hegi ruuliga<br>");
 		};
 		return "<pre>" . $rv . "</pre>";
 
@@ -1192,7 +1550,7 @@ class messenger_v2 extends class_base
 
 		if (sizeof($conns) == 0)
 		{
-			return t("ühtegi ruuli pole seostatud");
+			return t("&uuml;htegi ruuli pole seostatud");
 		};
 
 		$rv = "";
@@ -1314,7 +1672,7 @@ class messenger_v2 extends class_base
 
 	/** Deletes messages from server
 /** Deletes messages from server
-		@attrib name=delete_messages
+		@attrib name=delete_messages all_args=1
 
 	**/
 	function delete_messages($arr)
@@ -1325,6 +1683,10 @@ class messenger_v2 extends class_base
 			$this->_connect_server(array(
 				"msgr_id" => $arr["id"],
 			));
+			// why the hell is this change folder here?
+			// bite my legs of if it's necessary...
+			
+			// shit on me... this is actually necessary .. :S
 			$this->drv_inst->change_folder(array(
 				"use_mailbox" => $arr["mailbox"],
 			));
@@ -1408,7 +1770,6 @@ class messenger_v2 extends class_base
 			$fn = $folder_o->name;
 			$status = imap_status($this->drv_inst->mbox,$folder_o->name,SA_ALL);
 			print "fn = $fn";
-			arr($status);
 
 		};
 		print "all done<br>";
@@ -1602,7 +1963,7 @@ class messenger_v2 extends class_base
 	**/
 	function v3($arr)
 	{
-		// vata see asi peab mul nüüd väljastama selle serverivärgi
+		// vata see asi peab mul n&uuml;&uuml;d v&auml;ljastama selle serveriv&auml;rgi
 		$msgobj = new object($arr["id"]);
 		$this->read_template("ui.tpl");
 		$this->vars(array(
@@ -1626,7 +1987,7 @@ class messenger_v2 extends class_base
 		//$_sdat =$conns[0];
 		if (empty($_sdat))
 		{
-			print "IMAP sissepääs on konfigureerimata";
+			print "IMAP sissep&auml;&auml;s on konfigureerimata";
 			return false;
 		};
 		$obj = $_sdat->to();
@@ -1661,6 +2022,26 @@ class messenger_v2 extends class_base
 
 			mail($to, $subject, $message, $headers);
 		}
+	}
+
+	/**
+		@attrib name=get_msg_attachment params=name
+		@param msgr_id required type=oid
+		@param msg_id required type=int
+		@param attach_id required type=int
+	**/
+	function get_msg_attachment($arr)
+	{
+		$mm = get_instance(CL_MESSAGE);
+		$attach = $mm->get_attachment($arr);
+		header("Content-Type:".$attach["content_type"]);
+		header("Expires:".gmdate("D, d M Y H:i:s")." GMT");
+		header('Content-Disposition:attachment; filename="'.$attach["filename"].'"');
+		Header("Content-Disposition-type: attachment"); 
+		Header("Content-Transfer-Encoding: binary");
+		Header("Content-Length: ".$attach["size"]);
+		echo $attach["body"];
+		die();
 	}
 }
 ?>
