@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.29 2007/08/31 10:59:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.30 2007/08/31 11:01:16 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -662,7 +662,6 @@ class messenger_v2 extends class_base
 			// triggers messenger initializer
 			// holds active folder
 			var active_folder = 'INBOX';
-			f(active_folder);
 			// to where the layout is being currently loaded
 			async_location = false;
 			// holds last loaded layouts name
