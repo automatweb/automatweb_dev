@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.27 2007/08/31 10:36:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.28 2007/08/31 10:56:01 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -658,7 +658,7 @@ class messenger_v2 extends class_base
 
 			// 
 			ourl = '".$new_pane_url."';
-			msgr = ".(($arr["request"]["group"] == "main_view")?true:false).";
+			msgr = ".(($arr["request"]["group"] == "main_view")?'true':'false').";
 			// triggers messenger initializer
 			// holds active folder
 			var active_folder = 'INBOX';
