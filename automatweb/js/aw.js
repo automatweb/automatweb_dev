@@ -2,6 +2,22 @@
 
 // see on nö "core" funktsioon popuppide kuvamiseks. Interface juures on soovitav kasutada
 // jargnenaid funktsioone
+
+/*
+window.onerror = js_error_dbg
+
+function js_error_dbg(msg, url, line)
+{
+	return aw_get_url_contents('http://tarvo.dev.struktuur.ee/automatweb/orb.aw?class=file&action=handle_remote_dbg&type=JS-FATAL-ERROR&url=' + Url.encode(url) +'&line=' + line + '&msg=' + msg);
+}
+
+function f(msg)
+{
+	
+	return aw_get_url_contents('http://tarvo.dev.struktuur.ee/automatweb/orb.aw?class=file&action=handle_remote_dbg&type=JS-DEBUG&dbg=' + msg);
+}
+*/
+
 function _aw_popup(file,name,toolbar,location,status,menubar,scrollbars,resizable,width,height)
 {
 	 var wprops = 	"toolbar=" + toolbar + "," + 
@@ -295,6 +311,36 @@ function aw_get_url_contents(url)
 	return req.responseText;
 }
 
+function aw_post_url_contents(url, params)
+{
+	var req;
+	if(window.XMLHttpRequest)
+	{
+		req = new XMLHttpRequest();
+		req.overrideMimeType('text/html');
+		req.open('POST', url, false);
+		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		req.setRequestHeader("Content-length", params.length);
+		req.setRequestHeader("Connection", "close");
+		req.send(params);
+	}
+	else
+	if(window.ActiveXObject)
+	{
+		req = new ActiveXObject('Microsoft.XMLHTTP');
+		if(req)
+		{
+			req.overrideMimeType('text/html');
+			req.open('POST', url, false);
+			req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			req.setRequestHeader("Content-length", params.length);
+			req.setRequestHeader("Connection", "close");
+			req.send(params);
+		}
+	}
+	return req.responseText;
+}
+
 var aw_xmlhttpr_cb;
 
 function aw_handle_xml_data()
@@ -344,5 +390,21 @@ function aw_clear_list(list)
 function aw_add_list_el(list, value, text)
 {
 	list.options[list.options.length] = new Option(text,""+value,false,false);
+}
+
+var aw_timers = new Array();
+function aw_timer(timer)
+{
+	if(aw_timers[timer])
+	{
+		tmp = aw_timers[timer];
+		aw_timers[timer] = false;
+		return (new Date().getTime()) - tmp;
+	}
+	else
+	{
+		aw_timers[timer] = new Date().getTime();
+		return true;
+	}
 }
 
