@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.30 2007/08/31 11:01:16 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.31 2007/08/31 11:06:18 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -731,7 +731,7 @@ class messenger_v2 extends class_base
 
 			function msgr_load(to, content, add, ovr_url)
 			{
-				aw_timer('msgr::load_layout');
+				//aw_timer('msgr::load_layout');
 				last_loaded_layout = content;
 				last_loaded_type = add;
 				from_url = ((ovr_url)?ovr_url:ourl) + '&view_layout=' + content;
