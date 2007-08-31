@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.6 2007/06/28 15:16:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.7 2007/08/31 14:04:47 markop Exp $
 // events_manager.aw - Kuhu minna moodul 
 /*
 
@@ -133,6 +133,9 @@
 	@property mapserver_url type=textbox
 	@caption Kaardiserveri url
 
+	@property similar_time type=textbox
+	@caption Sarnaste sündmuste kattumisaeg (tundides)
+
 #RELTYPES
 
 @reltype SECTOR value=1 clid=CL_CRM_SECTOR
@@ -220,7 +223,7 @@ class events_manager extends class_base
 				{
 					$prop["options"]["value"] = $_SESSION["events_manager"]["dft"];
 				}
-				$prop["options"] = array(1,7,15,30,60,90,180,365);
+				$prop["options"] = array(1=> 1,7=> 7,15=> 15,30=> 30,60=> 60,90=> 90,180=> 180,365=> 365);
 				$prop["onchange"] = "javascript:document.changeform.submit();";
 				break;
 		
@@ -236,6 +239,7 @@ class events_manager extends class_base
 		switch($prop["name"])
 		{
 			case "e_find_news":
+				unset($arr["request"]["rawdata"]);
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				break;
 			case "days_from_today":
@@ -555,7 +559,7 @@ class events_manager extends class_base
 		$this->_init_event_table($t,$arr);
 		$cal_event = get_instance(CL_CALENDAR_EVENT);
 		$arr["dft"] = ($_SESSION["events_manager"]["dft"]) ? $_SESSION["events_manager"]["dft"] : 1;
-		$ol = $this->_get_event_list($arr);
+		$ol = $this->_get_similar_event_list($arr);
 		
 		$t->set_sortable(false);
 		foreach($ol->arr() as $o)
@@ -572,6 +576,67 @@ class events_manager extends class_base
 				"oid" => $o->id(),
 			));
 		}
+	}
+
+	function _get_similar_event_list($arr)
+	{
+		$days = $arr["dft"];
+//		$GLOBALS["DUKE"] = 1;
+		enter_function("events::sql");
+		$q = "
+			SELECT
+			objects.oid as oid,
+			objects.name as name,
+			objects.parent as parent,
+			objects.brother_of as brother_of,
+			objects.status as status,
+			objects.class_id as class_id,
+			objects.acldata as acldata,
+			objects.parent as parent,
+ 			planner.start as start,
+ 			planner.end as end,
+ 			planner.ucheck5 as location
+			FROM
+			objects  LEFT JOIN planner ON planner.id = objects.brother_of
+			WHERE
+			objects.class_id = 819
+			AND planner.start  <  ".(time() + 86400 * $days)."
+			AND planner.end  > ".time()."
+			AND  objects.status > 0
+			AND planner.ucheck5 IN (
+				SELECT ucheck5 FROM planner GROUP BY ucheck5 
+				HAVING COUNT(ucheck5)>1 
+			)
+			ORDER BY planner.ucheck5, planner.`start` DESC;
+		";
+		
+		$hrs = $arr["obj_inst"]->prop("similar_time") * 3600;
+		$ol = new object_list();
+		$this->db_query($q);
+		$last = array();
+		while($w = $this->db_next())
+		{
+			if($w["location"] == $last["location"] && ($last["start"] < $w["end"] + $hrs) && ($last["end"] + $hrs > $w["start"]))
+			{
+				$ol->add($w["oid"]);
+				$ol->add($last["oid"]);
+			}
+			$last = $w;
+		}
+		exit_function("events::sql");
+/*
+		enter_function("events::ol");
+		$filter = array(
+			"class_id" => array(CL_CALENDAR_EVENT),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, (time() + 86400 * $days)),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, (time())),
+		);
+		$ol = new object_list($filter);
+		//arr($ol->names());
+		exit_function("events::ol");
+*/		return $ol; 
 	}
 
 	function _get_events_tb(&$arr)
