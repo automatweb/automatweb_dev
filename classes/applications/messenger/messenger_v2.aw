@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.28 2007/08/31 10:56:01 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.29 2007/08/31 10:59:54 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -710,7 +710,7 @@ class messenger_v2 extends class_base
 					document.getElementById(async_location).innerHTML = (last_loaded_type=='PRE')?(req.responseText + add):(req.responseText + add);
 					hide_ajax_loader();
 					async_location = false;
-					f('Loading messenger layout '+ last_loaded_layout +' (' + aw_timer('msgr::load_layout') + 'ms)');
+					//f('Loading messenger layout '+ last_loaded_layout +' (' + aw_timer('msgr::load_layout') + 'ms)');
 				}
 			}
 
