@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.25 2007/07/05 09:43:50 kristo Exp $
-// calendar_event.aw - Kalendri sündmus 
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.26 2007/09/02 09:47:58 voldemar Exp $
+// calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
 
@@ -10,10 +10,10 @@
 @property jrk type=textbox size=4 table=objects
 @caption Jrk
 
-@property start1 type=datetime_select field=start 
+@property start1 type=datetime_select field=start
 @caption Algab
 
-@property end type=datetime_select field=end 
+@property end type=datetime_select field=end
 @caption Lõpeb
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
@@ -22,77 +22,77 @@
 @property project_selector2 type=project_selector store=no group=projects22 all_projects=1
 @caption Projektid 2
 
-@property utextbox1 type=textbox 
+@property utextbox1 type=textbox
 @caption
 
 @property utextbox2 type=textbox
-@caption 
+@caption
 
 @property utextbox3 type=textbox
-@caption 
+@caption
 
 @property utextbox4 type=textbox
-@caption 
+@caption
 
 @property utextbox5 type=textbox
-@caption 
+@caption
 
 @property utextbox6 type=textbox
-@caption 
+@caption
 
 @property utextbox7 type=textbox
-@caption 
+@caption
 
 @property utextbox8 type=textbox
-@caption 
+@caption
 
 @property utextbox9 type=textbox
-@caption 
+@caption
 
 @property utextbox10 type=textbox
-@caption 
+@caption
 
 @property utextarea2 type=textarea
-@caption 
+@caption
 
 @property utextarea3 type=textarea
-@caption 
+@caption
 
 @property utextarea4 type=textarea
-@caption 
+@caption
 
 @property utextarea5 type=textarea
-@caption 
+@caption
 
 @property utextvar1 type=classificator
-@caption 
+@caption
 
 @property utextvar2 type=classificator
-@caption 
+@caption
 
 @property utextvar3 type=classificator
-@caption 
+@caption
 
 @property utextvar4 type=classificator
-@caption 
+@caption
 
 @property utextvar5 type=classificator
-@caption 
+@caption
 
 @property utextvar6 type=classificator
-@caption 
+@caption
 
 @property utextvar7 type=classificator
-@caption 
+@caption
 
 @property utextvar8 type=classificator
-@caption 
+@caption
 
 @property utextvar9 type=classificator
-@caption 
+@caption
 
 @property utextvar10 type=classificator store=connect reltype=RELTYPE_UTEXTVAR10
-@caption 
+@caption
 
 @property ufupload1 type=fileupload
 @caption Faili upload 1
@@ -111,16 +111,16 @@
 property url type=releditor table=objects field=meta method=serialize reltype=RELTYPE_URL use_form=emb rel_id=first
 caption S&uuml;ndmuse kodulehek&uuml;lg
 
-@property section type=relpicker multiple=1 reltype=RELTYPE_SECTION method=serialize field=meta table=objects
+@property section type=relpicker multiple=1 reltype=RELTYPE_SECTION method=serialize field=meta table=objects automatic=1 size=10
 @caption Valdkonnad
 
-@property location type=relpicker reltype=RELTYPE_LOCATION field=ucheck5
+@property location type=popup_search d=aw_customer reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATION style=autocomplete field=ucheck5 no_edit=1
 @caption Toimumiskoht
 
-@property organizer type=popup_search d=aw_customer reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY style=autocomplete method=serialize field=meta table=objects 
+@property organizer type=popup_search d=aw_customer reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY style=autocomplete method=serialize field=meta table=objects no_edit=1
 @caption Korraldaja
 
-@property make_copy store=no type=choose
+@property make_copy store=no type=checkbox ch_value=1
 @caption Tee koopia
 
 @property level type=select field=level field=ucheck4
@@ -182,6 +182,7 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 
 */
 
+
 class calendar_event extends class_base
 {
 	function calendar_event()
@@ -190,9 +191,8 @@ class calendar_event extends class_base
 			"tpldir" => "applications/calendar/calendar_event",
 			"clid" => CL_CALENDAR_EVENT
 		));
-		
-		$this->level_options = array("V&auml;lismaal toimuv", "&uuml;leriikliku t&auml;htsusega", "kohaliku t&auml;htsusega");
 
+		$this->level_options = array("V&auml;lismaal toimuv", "&Uuml;leriikliku t&auml;htsusega", "Kohaliku t&auml;htsusega");
 	}
 
 	function do_db_upgrade($tbl, $field, $q, $err)
@@ -228,7 +228,7 @@ class calendar_event extends class_base
 			};
 		};
 		return $retval;
-	}	
+	}
 
 	function get_property($arr)
 	{
@@ -253,7 +253,7 @@ class calendar_event extends class_base
 		};
 		return $retval;
 	}
-	
+
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -363,7 +363,7 @@ class calendar_event extends class_base
 		$html = $htmlc->get_result(array(
 			"form_only" => 1
 		));
-	
+
 		return $html;
 	}
 

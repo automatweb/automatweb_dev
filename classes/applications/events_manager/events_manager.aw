@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.7 2007/08/31 14:04:47 markop Exp $
-// events_manager.aw - Kuhu minna moodul 
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.8 2007/09/02 09:47:59 voldemar Exp $
+// events_manager.aw - Kuhu minna moodul
 /*
 
 @classinfo syslog_type=ST_EVENTS_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -19,58 +19,58 @@
 
 	@property events_tb type=toolbar store=no no_caption=1
 	@caption P&otilde;hitoolbar
-	
+
 		@layout events_top type=hbox closeable=1 width=30%:70%
 
 		@layout events_top_left type=vbox parent=events_top closeable=1 area_caption=S&uuml;ndmuste&nbsp;Otsing
 		#nupud: Lisa uus, Kustuta märgistatud sündmused (confirmation "Olete kindel, et soovite kustudada kõik valitud sündmused?"), Sündmuste väljatrükk (sisu selgub hiljem), Arhiiv (toggle. n2itab tabelis syndmusi mis toimund. nupu nimi muutub: "Uued"), Järjesta laekumise järgi (järjestab syndmused created j2rgi kahanevalt)
-		#	Otsinguvorm vasakul (otsingutulemused tabelis):		
-			
+		#	Otsinguvorm vasakul (otsingutulemused tabelis):
+
 			@property e_find_sectors type=select multiple=1 parent=events_top_left
 			@caption Valdkonnad
 			# seostatud valdkonnaobjektid
-		
+
 			@property e_find_editor type=select multiple=1 parent=events_top_left
 			@caption Toimetaja
 			#	valikud: Toimetajad + Veebikasutaja
-		 
+
 			@property e_find_text type=textbox parent=events_top_left size=20
 			@caption  Tekst
 			#otsing syndmuste pealkirjadest, sissejuhatustest, kirjeldustest
-			
+
 			@property e_find_news type=chooser no_caption=1 parent=events_top_left
 			@caption Arhiivist, Uute hulgast
 			# valikud: Arhiivist, Uute hulgast
-			
+
 			@property event_search_button type=submit store=no
 			@caption Otsi
-			
+
 			@property see_all type=text store=no no_caption=1
 			@caption N&auml;ita k&otilde;iki s&uuml;ndmusi
-			
+
 		@layout events_top_right type=vbox parent=events_top
-	
+
 		#Tabel paremal:
-			
+
 			@property event_table type=table no_caption=1 parent=events_top_right
 			@caption S&uumlndmuste tabel
 			#	(tabelite definitsioonid vt. allpool) Vaikimisi n2idatakse ainult tulevaid ja kestvaid syndmusi (vt. toolbari nupp Arhiiv). Syndmused, mille parent on "Sündmuste kataloog". Kui pole m22ratud siis tyhi tabel.
-			#?? kuskile panna otsingust v2lja saamise v6imalus -- n2ita k6iki syndmusi ??		
+			#?? kuskile panna otsingust v2lja saamise v6imalus -- n2ita k6iki syndmusi ??
 
 @groupinfo places caption="Toimumiskohad" submit=no
 @default group=places
 
-	@property places_tb type=toolbar no_caption=1 
+	@property places_tb type=toolbar no_caption=1
 	@caption Toimumiskohtade toolbar
 	  #nupud: Lisa uus
-	@property places_table type=table no_caption=1 
+	@property places_table type=table no_caption=1
 	@caption Toimumiskohtade tabel
 	  #objektid vastava kataloogi alt
-			
+
 @groupinfo similar_find caption="Sarnased s&uuml;ndmused" submit=no
 @default group=similar_find
-	
-	@property similar_tb type=toolbar no_caption=1 
+
+	@property similar_tb type=toolbar no_caption=1
 	@caption sarnaste s&uuml;ndmuste toolbar
 	  #nupud: Kustuta märgistatud sündmused (confirmation "Olete kindel, et soovite kustudada kõik valitud sündmused?")
 	@property days_from_today type=select
@@ -79,39 +79,39 @@
 	@property similar_table type=table no_caption=1
 	@caption Leitud sarnased sündmused
 	  #V6rrelda aktiivseid syndmusi pealkirja, aja ja toimumiskoha j2rgi. arvestada mahtu kuni 3000
-			
+
 @groupinfo organiser caption="Korraldajad" submit=no
 @default group=organiser
 	@property organiser_tb type=toolbar no_caption=1
 	@caption Korraldajate toolbar
-	
+
 	@property organiser_table type=table no_caption=1
 	@caption Korraldajate tabel
 	  #objektid vastava kataloogi alt
-			
+
 @groupinfo sectors caption="Valdkonnad" submit=no
 @default group=sectors
 	@property sectors_tb type=toolbar no_caption=1
 	@caption  toolbar
-	
+
 	@property sectors_table type=table no_caption=1
 	@caption Valdkondade tabel
 	  #nupud: Lisa uus
-			
+
 @groupinfo editors caption="Toimetajad" submit=no
 @default group=editors
 
 	@property editor_tb type=toolbar no_caption=1
 	@caption Toimetajad toolbar
-			
+
 	@property editors_table type=table no_caption=1
-			
-@groupinfo settings caption="seaded"
+
+@groupinfo settings caption="Seaded"
 @default group=settings
-	
+
 	@property event_menu type=relpicker reltype=RELTYPE_EVENT_MENU
 	@caption S&uuml;ndmuste kataloog
-	
+
 	@property places_menu type=relpicker reltype=RELTYPE_PLACE_MENU
 	@caption Toimumiskohtade kataloog
 
@@ -126,10 +126,10 @@
 
 	@property owner type=relpicker reltype=RELTYPE_OWNER
 	@caption Omanik
-	
+
 	@property languages type=relpicker multiple=1 reltype=RELTYPE_LANGUAGE
 	@caption Sisu keeled
-	
+
 	@property mapserver_url type=textbox
 	@caption Kaardiserveri url
 
@@ -189,7 +189,7 @@ class events_manager extends class_base
 					$prop["options"] = $sector_list->names();
 				}
 				break;
-		
+
 			case "e_find_editor":
 				$groups_list = new object_list(array(
 					"class_id" => CL_GROUP,
@@ -200,14 +200,14 @@ class events_manager extends class_base
 				$prop["options"] = $groups_list->names();
 //				$prop["options"] = array(t("Toimetajad"),t("Veebikasutaja"));
 				break;
-					
+
 			case "e_find_news":
 				$prop["options"] = array(t("Arhiivist"),t("Kestvatest"),t("Uute hulgast"));
 				break;
 			case "event_table":
 				$this->_get_event_table($arr);
 				break;
-				
+
 			case "places_table":
 				$this->_get_places_table($arr);
 				break;
@@ -226,12 +226,12 @@ class events_manager extends class_base
 				$prop["options"] = array(1=> 1,7=> 7,15=> 15,30=> 30,60=> 60,90=> 90,180=> 180,365=> 365);
 				$prop["onchange"] = "javascript:document.changeform.submit();";
 				break;
-		
+
 			//-- get_property --//
 		};
 		return $retval;
 	}
-	
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -248,7 +248,7 @@ class events_manager extends class_base
 			//-- set_property --//
 		}
 		return $retval;
-	}	
+	}
 
 	function _get_places_table($arr)
 	{
@@ -273,7 +273,7 @@ class events_manager extends class_base
 			));
 		}
 	}
-	
+
 	function _get_organiser_table($arr)
 	{
 		if(!$arr["obj_inst"]->prop("organiser_menu"))
@@ -297,7 +297,7 @@ class events_manager extends class_base
 			));
 		}
 	}
-	
+
 	function _get_sectors_table($arr)
 	{
 		if(!$arr["obj_inst"]->prop("sector_menu"))
@@ -320,10 +320,10 @@ class events_manager extends class_base
 			));
 		}
 	}
-	
+
 	function _get_editors_table($arr)
 	{
-	//kasutaja vaja 
+	//kasutaja vaja
 		$ol = new object_list(array(
 			"site_id" => array(),
 			"lang_id" => array(),
@@ -346,7 +346,7 @@ class events_manager extends class_base
 			));
 		}
 	}
-	
+
 
 	function _get_places_tb($arr)
 	{
@@ -364,7 +364,7 @@ class events_manager extends class_base
 			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud toimumiskohad?"),
 		));
 	}
-	
+
 	function _get_sectors_tb($arr)
 	{
 		$arr["prop"]["vcl_inst"]->add_button(array(
@@ -374,7 +374,7 @@ class events_manager extends class_base
 			"action" => "add_new_sector",
 		));
 	}
-	
+
 	function _get_organiser_tb($arr)
 	{
 		$arr["prop"]["vcl_inst"]->add_button(array(
@@ -391,7 +391,7 @@ class events_manager extends class_base
 			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud korraldajad?"),
 		));
 	}
-	
+
 	function _get_editor_tb($arr)
 	{
 		$arr["prop"]["vcl_inst"]->add_button(array(
@@ -416,7 +416,7 @@ class events_manager extends class_base
 			"site_id" => array(),
 			"lang_id" => array(),
 		);
-		
+
 		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
 			$search_data = $arr["obj_inst"]->meta("search_data");
@@ -459,7 +459,7 @@ class events_manager extends class_base
 			{
 				$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS, time());
 			}
-			
+
 			$arr["obj_inst"]->set_meta("search_data", null);
 			$arr["obj_inst"]->save();
 		}//siia peaks jõudma kui midagi pole valitud
@@ -479,7 +479,7 @@ class events_manager extends class_base
 		{
 			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, time()- 24*3600*$arr["dft"] , time());
 		}
-		
+
 		if($arr["request"]["archived"] == 1)
 		{
 			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS, time());
@@ -488,16 +488,16 @@ class events_manager extends class_base
 		{
 			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
 		}
-		return new object_list($filter); 
+		return new object_list($filter);
 	}
 
 	function _get_event_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		
+
 		$this->_init_event_table($t,$arr);
 		$cal_event = get_instance(CL_CALENDAR_EVENT);
-		
+
 		//selle va gruppide otsingu pärast peab peale listi tegemist asju välja pookima hakkama
 		$sd = $arr["obj_inst"]->meta("search_data");
 		if(is_array($sd["e_find_editor"]) && sizeof($sd["e_find_editor"]))
@@ -528,7 +528,7 @@ class events_manager extends class_base
 			{
 				continue;
 			}
-			
+
 			$publish = "";
 			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTOR");
 			if(!$o->prop("published"))
@@ -540,7 +540,7 @@ class events_manager extends class_base
 				));
 			}
 			$change_url = html::obj_change_url($o , t("Muuda"));
-			
+
 			$t->define_data(array(
 				"name" => html::obj_change_url($o->id()),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
@@ -560,14 +560,14 @@ class events_manager extends class_base
 		$cal_event = get_instance(CL_CALENDAR_EVENT);
 		$arr["dft"] = ($_SESSION["events_manager"]["dft"]) ? $_SESSION["events_manager"]["dft"] : 1;
 		$ol = $this->_get_similar_event_list($arr);
-		
+
 		$t->set_sortable(false);
 		foreach($ol->arr() as $o)
 		{
 			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTOR");
 			$publish = html::href(array("url" => "#" , "title" => t("Avalda") , "caption" => t("Avalda")));
 			$change_url = html::obj_change_url($o , t("Muuda"));
-			
+
 			$t->define_data(array(
 				"name" => html::obj_change_url($o->id()),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
@@ -604,12 +604,12 @@ class events_manager extends class_base
 			AND planner.end  > ".time()."
 			AND  objects.status > 0
 			AND planner.ucheck5 IN (
-				SELECT ucheck5 FROM planner GROUP BY ucheck5 
-				HAVING COUNT(ucheck5)>1 
+				SELECT ucheck5 FROM planner GROUP BY ucheck5
+				HAVING COUNT(ucheck5)>1
 			)
 			ORDER BY planner.ucheck5, planner.`start` DESC;
 		";
-		
+
 		$hrs = $arr["obj_inst"]->prop("similar_time") * 3600;
 		$ol = new object_list();
 		$this->db_query($q);
@@ -636,7 +636,7 @@ class events_manager extends class_base
 		$ol = new object_list($filter);
 		//arr($ol->names());
 		exit_function("events::ol");
-*/		return $ol; 
+*/		return $ol;
 	}
 
 	function _get_events_tb(&$arr)
@@ -667,7 +667,7 @@ class events_manager extends class_base
 			"url" => aw_url_change_var("archived",($arr["request"]["archived"] == 1 ? -1 : 1)),
 			"tooltip" => $arr["request"]["archived"] == 1 ? t("Uued"):t("Arhiiv"),
 		));
-		
+
 		//kui uuest vajutada mis juhtub?
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "sort",
@@ -714,7 +714,7 @@ class events_manager extends class_base
 			"field" => "oid"
 		));
 	}
-	
+
 	function _init_organiser_table(&$t)
 	{
 		$t->define_field(array(
@@ -732,7 +732,7 @@ class events_manager extends class_base
 			"field" => "oid"
 		));
 	}
-	
+
 	function _init_sectors_table(&$t)
 	{
 		$t->define_field(array(
@@ -746,7 +746,7 @@ class events_manager extends class_base
 // 			"align" => "center"
 // 		));
 	}
-	
+
 	function _init_editors_table(&$t)
 	{
 		$t->define_field(array(
@@ -764,7 +764,7 @@ class events_manager extends class_base
 			"field" => "oid"
 		));
 	}
-	
+
 	function _init_event_table(&$t,$arr)
 	{
 		$t->define_field(array(
@@ -826,7 +826,7 @@ class events_manager extends class_base
 		));
 		return $this->parse();
 	}
-	
+
 	/**
 		@attrib name=delete_events is_public="1" caption="Change"
 	**/
@@ -893,7 +893,7 @@ class events_manager extends class_base
 		$organiser->save();
 		return html::get_change_url($organiser->id(),array("return_url" => $arr["post_ru"]));
 	}
-	
+
 	/**
 		@attrib name=add_new_sector is_public="1" caption="Change"
 	**/

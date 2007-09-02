@@ -58,7 +58,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox2</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextbox3</name>
@@ -66,7 +65,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox3</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextbox4</name>
@@ -74,7 +72,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox4</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextbox5</name>
@@ -82,7 +79,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox5</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextbox6</name>
@@ -90,7 +86,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox6</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextbox7</name>
@@ -98,7 +93,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox7</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextbox8</name>
@@ -106,7 +100,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox8</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextbox9</name>
@@ -114,7 +107,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox9</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextbox10</name>
@@ -122,7 +114,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox10</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextarea2</name>
@@ -130,7 +121,6 @@
             <table>planner</table>
             <type>textarea</type>
             <field>utextarea2</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextarea3</name>
@@ -138,7 +128,6 @@
             <table>planner</table>
             <type>textarea</type>
             <field>utextarea3</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextarea4</name>
@@ -146,7 +135,6 @@
             <table>planner</table>
             <type>textarea</type>
             <field>utextarea4</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextarea5</name>
@@ -154,7 +142,6 @@
             <table>planner</table>
             <type>textarea</type>
             <field>utextarea5</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar1</name>
@@ -162,7 +149,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar1</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar2</name>
@@ -170,7 +156,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar2</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar3</name>
@@ -178,7 +163,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar3</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar4</name>
@@ -186,7 +170,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar4</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar5</name>
@@ -194,7 +177,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar5</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar6</name>
@@ -202,7 +184,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar6</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar7</name>
@@ -210,7 +191,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar7</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar8</name>
@@ -218,7 +198,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar8</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar9</name>
@@ -226,7 +205,6 @@
             <table>planner</table>
             <type>classificator</type>
             <field>utextvar9</field>
-            <caption></caption>
       </property>
       <property>
             <name>utextvar10</name>
@@ -236,7 +214,6 @@
             <store>connect</store>
             <reltype>RELTYPE_UTEXTVAR10</reltype>
             <field>utextvar10</field>
-            <caption></caption>
       </property>
       <property>
             <name>ufupload1</name>
@@ -281,15 +258,21 @@
             <reltype>RELTYPE_SECTION</reltype>
             <method>serialize</method>
             <field>meta</field>
+            <automatic>1</automatic>
+            <size>10</size>
             <caption>Valdkonnad</caption>
       </property>
       <property>
             <name>location</name>
             <group>general</group>
             <table>planner</table>
-            <type>relpicker</type>
+            <type>popup_search</type>
+            <d>aw_customer</d>
             <reltype>RELTYPE_LOCATION</reltype>
+            <clid>CL_SCM_LOCATION</clid>
+            <style>autocomplete</style>
             <field>ucheck5</field>
+            <no_edit>1</no_edit>
             <caption>Toimumiskoht</caption>
       </property>
       <property>
@@ -303,6 +286,7 @@
             <style>autocomplete</style>
             <method>serialize</method>
             <field>meta</field>
+            <no_edit>1</no_edit>
             <caption>Korraldaja</caption>
       </property>
       <property>
@@ -310,7 +294,8 @@
             <group>general</group>
             <table>planner</table>
             <store>no</store>
-            <type>choose</type>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>make_copy</field>
             <caption>Tee koopia</caption>
       </property>
