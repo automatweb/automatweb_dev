@@ -387,6 +387,8 @@ class realestate_import extends class_base
 		}
 // /* dbg */ if (1 == $_GET["re_import_dbg"]){ arr($employees); }
 
+		$employee_data = null;
+
 		### initialize log
 		$import_log = array ();
 		$status_messages = array ();
@@ -427,19 +429,19 @@ class realestate_import extends class_base
 		);
 		$realestate_folders = array_unique($realestate_folders);
 
+		$imported_object_ids = array ();
+		$duplicates = array ();
 		$list = new object_list (array (
 			"class_id" => $realestate_classes,
 			"parent" => $realestate_folders,
 			"city24_object_id" => new obj_predicate_prop (OBJ_COMP_GREATER, 0),
+			"is_archived" => 0,
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-		$list = $list->arr ();
+		$list = $list->begin();
 
-		$imported_object_ids = array ();
-		$duplicates = array ();
-
-		foreach ($list as $property)
+		while ($property = $list->next())
 		{
 			$city_id = (int) $property->prop ("city24_object_id");
 			if (isset($imported_object_ids[$city_id]))
@@ -448,9 +450,11 @@ class realestate_import extends class_base
 			}
 			else
 			{
-				$imported_object_ids[$city_id] = (int) $property->id ();
+				$imported_object_ids[$city_id] = $property->id();
 			}
 		}
+
+		$list = null;
 
 		if (count ($duplicates))
 		{
@@ -461,6 +465,8 @@ class realestate_import extends class_base
 
 			if (1 != $quiet) echo $error_msg;
 		}
+
+		$duplicates = null;
 
 		$imported_properties = array ();
 
@@ -1802,6 +1808,7 @@ class realestate_import extends class_base
 			"RUS" => "ru",
 			"FIN" => "fi",
 		);
+
 		foreach ($additional_languages as $lang_name => $lang_code)
 		{
 			$tmp_import_url = str_replace ("lang", "tmpvariable39903", $import_url);
