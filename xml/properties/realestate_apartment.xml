@@ -648,7 +648,7 @@
             <datatype>int</datatype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Korrus		</caption>
+            <caption>Korrus</caption>
       </property>
       <property>
             <name>number_of_rooms</name>
@@ -682,7 +682,7 @@
             <group>apartment_info</group>
             <type>classificator</type>
             <field>ownership_type</field>
-            <caption>Varaomand		</caption>
+            <caption>Varaomand</caption>
       </property>
       <property>
             <name>condition</name>

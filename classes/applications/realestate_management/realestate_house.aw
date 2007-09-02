@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_house.aw,v 1.8 2007/03/13 11:07:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_house.aw,v 1.9 2007/09/02 07:21:29 voldemar Exp $
 // realestate_house.aw - Maja
 /*
 
@@ -17,7 +17,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @default group=advertisement_data
 
 
-	@layout box1 type=vbox 
+	@layout box1 type=vbox
 	@caption Vahendustasu
 	@property transaction_broker_fee type=textbox field=meta method=serialize no_caption=1 parent=box1
 	@property transaction_broker_fee_type type=select field=meta method=serialize no_caption=1 parent=box1
@@ -45,7 +45,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 @default group=grp_main
 	@default group=temp
-		
+
 		@property location_description type=classificator table=realestate_property
 		@caption Paiknemine
 
@@ -165,7 +165,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 			@property exterior_finishing type=textbox table=realestate_property
 			@caption V&auml;lisviimistlus
-		
+
 		@property childtitle11 type=text store=no subtitle=1
 		@caption Viimistlus
 
@@ -212,7 +212,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 			@property has_central_hot_water type=checkbox ch_value=1 field=meta method=serialize
 			@caption Tsentraalne soojaveevarustus
-			
+
 			@property has_local_sewerage type=checkbox ch_value=1 field=meta method=serialize
 			@caption Lokaalne kanalisatsioon
 
@@ -262,7 +262,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 			@property has_oil_heating type=checkbox ch_value=1 field=meta method=serialize
 			@caption &otilde;lik&uuml;te
-			
+
 		@property heating_type type=textbox field=heating_type table=realestate_property
 		@caption K&uuml;tte t&uuml;&uuml;p
 
@@ -495,10 +495,8 @@ class realestate_house extends realestate_property
 
 			case "year_built":
 				$empty = array ("" => "");
-				$centuries = range (11,19);
-				$years = range (1901, date ("Y"));
-				$centuries = array_reverse ($centuries);
-				$years = array_reverse ($years);
+				$centuries = range (19,11);
+				$years = range (date ("Y"), 1901);
 
 				foreach ($years as $year)
 				{
@@ -673,7 +671,7 @@ class realestate_house extends realestate_property
 	{
 		return parent::get_property_data ($arr);
 	}
-	
+
 	function do_db_upgrade($table, $field, $q, $err)
 	{
 		switch($field)
@@ -686,7 +684,7 @@ class realestate_house extends realestate_property
 				return true;
 		}
 	}
-	
-	
+
+
 }
 ?>

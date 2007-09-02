@@ -51,8 +51,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@default group=apartment_info
 
 		@property floor type=textbox datatype=int field=meta method=serialize
-		@caption Korrus		
-		
+		@caption Korrus
+
 		@property number_of_rooms type=textbox datatype=int table=realestate_property
 		@caption Tubade arv
 
@@ -64,7 +64,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption K&ouml;etav pind
 
 		@property ownership_type type=classificator table=realestate_property
-		@caption Varaomand		
+		@caption Varaomand
 
 		@property condition type=classificator table=realestate_property
 		@caption Valmidus
@@ -208,7 +208,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Lisainfo tubade kohta
 
 
-		@property childtitle60 type=text store=no subtitle=1 
+		@property childtitle60 type=text store=no subtitle=1
 		@caption Viimistlus
 
 			@property rooms_condition type=textbox table=realestate_property field=rooms_condition
@@ -435,10 +435,8 @@ class realestate_apartment extends realestate_property
 
 			case "year_built":
 				$empty = array ("" => "");
-				$centuries = range (11,19);
-				$years = range (1901, date ("Y"));
-				$centuries = array_reverse ($centuries);
-				$years = array_reverse ($years);
+				$centuries = range (19,11);
+				$years = range (date ("Y"), 1901);
 
 				foreach ($years as $year)
 				{

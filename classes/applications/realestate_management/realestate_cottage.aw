@@ -193,7 +193,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 		@property has_air_heating type=checkbox ch_value=1 field=meta method=serialize
 		@caption &otilde;hkk&uuml;te
-		
+
 		@property has_oil_heating type=checkbox ch_value=1 field=meta method=serialize
 		@caption &otilde;lik&uuml;te
 
@@ -399,10 +399,8 @@ class realestate_cottage extends realestate_property
 
 			case "year_built":
 				$empty = array ("" => "");
-				$centuries = range (11,19);
-				$years = range (1901, date ("Y"));
-				$centuries = array_reverse ($centuries);
-				$years = array_reverse ($years);
+				$centuries = range (19,11);
+				$years = range (date ("Y"), 1901);
 
 				foreach ($years as $year)
 				{

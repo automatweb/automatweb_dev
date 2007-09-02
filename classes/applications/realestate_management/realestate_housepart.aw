@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_housepart.aw,v 1.6 2006/07/20 13:40:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_housepart.aw,v 1.7 2007/09/02 07:21:29 voldemar Exp $
 // realestate_housepart.aw - Majaosa
 /*
 
@@ -195,10 +195,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 		@property has_air_heating type=checkbox ch_value=1 field=meta method=serialize
 		@caption &otilde;hkk&uuml;te
-		
+
 		@property has_oil_heating type=checkbox ch_value=1 field=meta method=serialize
 		@caption &otilde;lik&uuml;te
-		
+
 	@property childtitle3 type=text store=no subtitle=1
 	@caption Kommunikatsioonid
 		@property has_alarm_installed type=checkbox ch_value=1 field=meta method=serialize
@@ -401,10 +401,8 @@ class realestate_housepart extends realestate_property
 
 			case "year_built":
 				$empty = array ("" => "");
-				$centuries = range (11,19);
-				$years = range (1901, date ("Y"));
-				$centuries = array_reverse ($centuries);
-				$years = array_reverse ($years);
+				$centuries = range (19,11);
+				$years = range (date ("Y"), 1901);
 
 				foreach ($years as $year)
 				{

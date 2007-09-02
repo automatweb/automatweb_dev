@@ -657,8 +657,6 @@ class realestate_property extends class_base
 					"id" => $this_object->id (),
 				), "realestate_property"));
 
-				### "http://www.city24.ee/client/city24client?pageId=1006&destPageId=1108&address={$address_parsed}&backUrl={$save_url}"
-				### "http://www.city24.ee/client/city24client?pageId=1006&destPageId=1108&address={VAR:address_parsed}&backUrl={VAR:save_url}"
 				$data = array (
 					"address_parsed" => $address_parsed,
 					"save_url" => $save_url,
