@@ -46,6 +46,9 @@
 	@comment URL millelt objektid imporditakse
 	@caption URL
 
+	@property city24_import_memlimit type=textbox default=1024
+	@caption PHP M&auml;lukasutuse limiit impordil (Mb)
+
 	@property city24_import type=text editonly=1
 	@comment URL millele päringut tehes imporditakse objektid City24 süsteemist AW'i
 	@caption City24 Importimine
@@ -239,9 +242,13 @@ class realestate_import extends class_base
 	function city24_import ($arr)
 	{
 		// error_reporting(E_ALL);
+		$this_object = obj ($arr["id"]);
 
 		$ignore_user_abort_prev_val = ini_get("ignore_user_abort");
 		$max_execution_time_prev_val = ini_get("max_execution_time");
+		$max_mem_prev_val = ini_get("memory_limit");
+		$memory_limit = (empty($this_object->prop("city24_import_memlimit")) ? "1024" : $this_object->prop("city24_import_memlimit")) . "M";
+		ini_set("memory_limit", $memory_limit);
 		ini_set ("max_execution_time", "3600");
 		ini_set ("ignore_user_abort", "1");
 		aw_global_set ("no_cache_flush", 1);
@@ -270,7 +277,6 @@ class realestate_import extends class_base
 		}
 
 		$import_time = time();
-		$this_object = obj ($arr["id"]);
 		$last_import = $this_object->prop ("last_city24import");
 
 		if (1 < $last_import and REALESTATE_MIN_REQUEST_INTERVAL > ($import_time - $last_import))
@@ -2074,6 +2080,7 @@ class realestate_import extends class_base
 
 		ini_set ("ignore_user_abort", $ignore_user_abort_prev_val);
 		ini_set ("max_execution_time", $max_execution_time_prev_val);
+		ini_set ("memory_limit", $max_mem_prev_val);
 
 		if (1 != $quiet)
 		{

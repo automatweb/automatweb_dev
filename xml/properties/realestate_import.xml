@@ -115,6 +115,16 @@
             <caption>URL</caption>
       </property>
       <property>
+            <name>city24_import_memlimit</name>
+            <table>objects</table>
+            <group>grp_city24_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <default>1024</default>
+            <caption>PHP M&amp;amp;auml;lukasutuse limiit impordil (Mb)</caption>
+      </property>
+      <property>
             <name>city24_import</name>
             <table>objects</table>
             <group>grp_city24_general</group>
