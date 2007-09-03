@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.127 2007/08/28 12:13:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.128 2007/09/03 13:00:08 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -2965,6 +2965,7 @@ class cfgform extends class_base
 		enter_function("cfg_form::get_class_cfgview");
 		$this_o = obj($args["id"]);
 
+		// request vars
 		if (!is_array($_GET) || (sizeof($_GET) == 0))
 		{
 			$_GET = $HTTP_GET_VARS;
@@ -2980,11 +2981,21 @@ class cfgform extends class_base
 			$AW_GET_VARS = array();
 		}
 
-		$vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
-
 		$classes = aw_ini_get("classes");
 		$class = strtolower(substr($classes[$this_o->prop("subclass")]["def"], 3));
 		$action = array_key_exists($this_o->prop("cfgview_action"), $this->cfgview_actions) ? $this_o->prop("cfgview_action") : "view";
+
+		// additional params
+		$params = explode("&", $this_o->prop("cfgview_" . $action . "_params"));
+
+		foreach ($params as $param)
+		{
+			$param = explode("=", $param, 2);
+			$vars[$param[0]] = $param[1];
+			$_GET[$param[0]] = $param[1];
+		}
+
+		$vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
 
 		if ("cfgview_change_new" === $action or "cfgview_view_new" === $action)
 		{
@@ -3021,16 +3032,6 @@ class cfgform extends class_base
 		$vars["cfgform"] = $args["id"];
 		$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 		$_GET["awcb_display_mode"] = $args["display_mode"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
-
-		// additional params
-		$params = explode("&", $this_o->prop("cfgview_" . $action . "_params"));
-
-		foreach ($params as $param)
-		{
-			$param = explode("=", $param, 2);
-			$vars[$param[0]] = $param[1];
-			$_GET[$param[0]] = $param[1];
-		}
 
 		// make request
 		classload("core/orb/orb");
