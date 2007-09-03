@@ -2057,6 +2057,12 @@ class _int_object
 		$parent = $this->id();
 		$cnt = 0;
 
+		if ($param["full_path"])
+		{
+			$rootmenu = 1;
+			$add = false;
+		}
+		else
 		if (is_admin())
 		{
 			$rootmenu = (array)$GLOBALS["cfg"]["admin_rootmenu2"];

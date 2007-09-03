@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.204 2007/08/14 11:57:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.205 2007/09/03 12:34:53 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1743,7 +1743,9 @@ class image extends class_base
 		}
 
 		$oc = obj($pt);
-		$oc = $oc->path();
+		$oc = $oc->path(array(
+			"full_path" => true
+		));
 
 		$rv = false;
 		if ($apply_image)
