@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.5 2007/02/27 15:41:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.6 2007/09/03 13:57:46 markop Exp $
 // crm_expense.aw - Kulu 
 /*
 
@@ -37,7 +37,7 @@
 	@caption Arve
 
 	@reltype PEOPLE value=2 clid=CL_CRM_PERSON
-	@caption Arve
+	@caption Isik
 
 */
 
