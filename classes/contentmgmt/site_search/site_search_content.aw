@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.92 2007/07/18 14:35:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.93 2007/09/03 11:30:14 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1151,7 +1151,10 @@ class site_search_content extends class_base
 			$keyresults = $this->search_keywords($str, $menus, $arr["obj"], $date);
 			if($ret && $keyresults)
 			{
-				$ret = $ret + $keyresults;
+				foreach($keyresults as $k => $v)
+				{
+					$ret[] = $v;
+				}
 			}
 			else
 			if($keyresults)
