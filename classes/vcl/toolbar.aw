@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.24 2007/06/05 09:41:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.25 2007/09/03 10:01:44 dragut Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -49,7 +49,7 @@ class toolbar extends aw_template
 			$toolbar->add_menu_button(array(
 				"name" => "delete",
 				"tooltip" => t("Kustuta"),
-				"img" => "dele.gif",
+				"img" => "delete.gif",
 			));
 			//Whitout img, new (green document) icon is used
 	**/
@@ -94,7 +94,7 @@ class toolbar extends aw_template
 			$toolbar->add_menu_button(array(
 				"name" => "delete",
 				"tooltip" => t("Kustuta"),
-				"img" => "dele.gif",
+				"img" => "delete.gif",
 			));
 			$tmp->add_menu_item(array(
 				"parent" => "delete",
@@ -151,7 +151,7 @@ class toolbar extends aw_template
 			$toolbar->add_menu_button(array(
 				"name" => "delete",
 				"tooltip" => t("Kustuta"),
-				"img" => "dele.gif",
+				"img" => "delete.gif",
 			));
 			$tmp->add_menu_separator(array("parent"=>"tmp"));
 			// adds just one lonely separator to the delete menu button
