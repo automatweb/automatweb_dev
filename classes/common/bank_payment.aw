@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.64 2007/07/12 12:42:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.65 2007/09/04 11:59:47 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -238,8 +238,6 @@ class bank_payment extends class_base
 	
 	/** 
 		@attrib name=bank_forms api=1 default=1 nologin=1 is_public=1 all_args=1
-	/**
-	@attrib api=1 params=name
 	@param id optional type=oid
 		bank_payment object ID 
 	@param amount optional type=int
@@ -271,9 +269,8 @@ class bank_payment extends class_base
 		<form name="makse" id="makse" method="post" action="http://marko.dev.struktuur.ee/orb.aw?class=bank_payment&id=10580">
 		<input type="textbox" name="amount" value=3000000>
 		<input type=submit value="maksa ilgelt pappi">
-		</form>'
+		</form>
 	**/
-
 	function bank_forms($arr = array())
 	{
 		$data = $_GET+$_POST+$arr;
@@ -298,7 +295,7 @@ class bank_payment extends class_base
 		
 		if(!$this->read_template($tpl, $silent=1))
 		{
-			return "";	
+			return "Makse templeit puudu";	
 		}
 		
 		lc_site_load("bank_payment", &$this);
@@ -805,6 +802,7 @@ class bank_payment extends class_base
 				$_SESSION["bank_payment"]["find_one"] = $arr["request"]["find_one"];
 				$_SESSION["bank_payment"]["find_date_start"] = $arr["request"]["find_date_start"];
 				$_SESSION["bank_payment"]["find_date_end"] = $arr["request"]["find_date_end"];
+				$arr["request"]["rawdata"] = null;
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				break;
 		}
@@ -1760,6 +1758,34 @@ class bank_payment extends class_base
 		return $ret;
 	}
 	
+	//mõnes kohas äkki tahab kuskile objekti ka salvestada infot makse kohta... näiteks broneeringu juures..
+	//niiet paneb kõik selle käma sessiooni selgemalt kirja... võtab sessioonist $_SESSION["bank_return"]["data"] küljest kõik
+	function get_payment_info($val)
+	{
+		$ret = array(
+			"time" => time(),
+		);
+		if(!$val) $val = $_SESSION["bank_return"]["data"];
+		if($val["VK_SND_ID"])
+		{
+			$bank_id = $this->merchant_id[$val["VK_SND_ID"]];
+			$ret["sum"] = $val["VK_AMOUNT"];
+		}
+		elseif($val["action"])
+		{
+			$bank_id = $this->merchant_id[$val["action"]];
+			$ret["sum"] = $val["eamount"]/100;
+		}
+		else
+		{
+			$bank_id = $this->merchant_id[$val["SOLOPMT-RETURN-VERSION"]];
+		}
+		$ret["bank"] = $this->banks[$bank_id];
+		$ret["payer"] = $val["VK_SND_NAME"];
+		$ret["curr"] = $val["VK_CURR"];
+		return $ret;
+	}
+
 	/**
 	@attrib name=check_response is_public="1" caption="Change" no_login=1 api=1
 	@returns 1 if the signature is correct, 0 if it is incorrect, and -1 on error

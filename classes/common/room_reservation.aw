@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.69 2007/07/30 11:11:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.70 2007/09/04 11:59:47 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -594,7 +594,7 @@ class room_reservation extends class_base
 			$currency = obj($curr);
 	//		$data["sum"][] =  $val." ".$currency->name();
 			$data["bargain"][] = (0+$room_inst->bargain_value[$curr])." ".$currency->name();
-			$data["sum_wb"][] = ((double) $val + (double)$room_inst->bargain_value[$curr])." ".$currency->name();
+			$data["sum_wb"][] = ((double) $val + (double)$room_inst->bargain_value[$curr]) ." ".$currency->name();
 		}
 		foreach ($bron->meta("amount") as $prod => $amount)
 		{
@@ -839,10 +839,10 @@ class room_reservation extends class_base
 
 				$data["sum"][$curr] = $sum[$curr]." ".$currency->name();
 				$data["bargain"][$curr] = ($data["menu_disc"][$curr]+$room_inst->bargain_value[$curr])." ".$currency->name();
-				$data["sum_wb"][$curr] = ((double)$sum[$curr] + (double)$room_inst->bargain_value[$curr])." ".$currency->name();
+				$data["sum_wb"][$curr] = ((double)$sum[$curr] +  (double)$room_inst->bargain_value[$curr])." ".$currency->name();
 			}
 		}
-	//if(aw_global_get("uid") == "struktuur"){arr($room_inst->bargain_value);arr($sum);}
+//	if(aw_global_get("uid") == "struktuur"){arr($room_inst->people_price_discount);arr($sum);}
 		$min_prod_prices = $room->meta("web_min_prod_prices");
 		$min_prices = $room->meta("web_room_min_price");
 		foreach ($show_curr as $curr)
@@ -1104,7 +1104,25 @@ class room_reservation extends class_base
 			"charset" => aw_global_get("charset")
 		));
 //		die($ret);
-		die($sf->parse());
+		$s = $sf->parse();
+		global $awt;
+		$sums = $awt->summaries();
+
+		                echo "<!--\n";
+				                while(list($k,$v) = each($sums))
+						                {
+								                        print "$k = $v\n";
+											                };
+													                echo " querys = ".aw_global_get("qcount")." \n";
+															                if (function_exists("get_time"))
+																	                {
+																			                        echo "total  = ".(get_time()-$GLOBALS["__START"])."\n";
+																						                        echo "proc  = ".($GLOBALS["__END_DISP"]-$GLOBALS["__START"])."\n";
+																									                        echo "print  = ".(get_time()-$GLOBALS["__END_DISP"])."\n";
+																												                }
+																														                echo "-->\n";
+																																
+		die($s);
 		die($t->draw()."<br>".html::submit());
 	}
 
@@ -1667,6 +1685,8 @@ class room_reservation extends class_base
 			$room_inst = get_instance(CL_ROOM);
 			$bron = obj($id);
 			$bron->set_prop("verified" , 1);
+			//broneeringusse maksest tuleva info, niipalju kui seda saab...siia seepärast, et ei taha mitmes kohas acl disableda
+			$bron->set_meta("payment_info" , $bank_inst->get_payment_info());
 			aw_disable_acl();
 			if(!$bron->meta("mail_sent"))//topelt mailide vältimiseks
 			{
