@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.8 2007/09/02 09:47:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.9 2007/09/04 12:23:05 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -603,10 +603,6 @@ class events_manager extends class_base
 			AND planner.start  <  ".(time() + 86400 * $days)."
 			AND planner.end  > ".time()."
 			AND  objects.status > 0
-			AND planner.ucheck5 IN (
-				SELECT ucheck5 FROM planner GROUP BY ucheck5
-				HAVING COUNT(ucheck5)>1
-			)
 			ORDER BY planner.ucheck5, planner.`start` DESC;
 		";
 
