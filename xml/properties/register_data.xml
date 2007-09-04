@@ -168,6 +168,186 @@
             <caption>User-defined 20</caption>
       </property>
       <property>
+            <name>user21</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 21</caption>
+      </property>
+      <property>
+            <name>user22</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 22</caption>
+      </property>
+      <property>
+            <name>user23</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 23</caption>
+      </property>
+      <property>
+            <name>user24</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 24</caption>
+      </property>
+      <property>
+            <name>user25</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 25</caption>
+      </property>
+      <property>
+            <name>user26</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 26</caption>
+      </property>
+      <property>
+            <name>user27</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 27</caption>
+      </property>
+      <property>
+            <name>user28</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 28</caption>
+      </property>
+      <property>
+            <name>user29</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 29</caption>
+      </property>
+      <property>
+            <name>user30</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 30</caption>
+      </property>
+      <property>
+            <name>user31</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 31</caption>
+      </property>
+      <property>
+            <name>user32</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 32</caption>
+      </property>
+      <property>
+            <name>user33</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 33</caption>
+      </property>
+      <property>
+            <name>user34</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 34</caption>
+      </property>
+      <property>
+            <name>user35</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 35</caption>
+      </property>
+      <property>
+            <name>user36</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 36</caption>
+      </property>
+      <property>
+            <name>user37</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 37</caption>
+      </property>
+      <property>
+            <name>user38</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 28</caption>
+      </property>
+      <property>
+            <name>user39</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 39</caption>
+      </property>
+      <property>
+            <name>user40</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 40</caption>
+      </property>
+      <property>
             <name>userta1</name>
             <group>data</group>
             <table>aw_register_data</table>
@@ -812,186 +992,6 @@
             <method>serialize</method>
             <field>meta</field>
             <type>hidden</type>
-      </property>
-      <property>
-            <name>user21</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 21</caption>
-      </property>
-      <property>
-            <name>user22</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 22</caption>
-      </property>
-      <property>
-            <name>user23</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 23</caption>
-      </property>
-      <property>
-            <name>user24</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 24</caption>
-      </property>
-      <property>
-            <name>user25</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 25</caption>
-      </property>
-      <property>
-            <name>user26</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 26</caption>
-      </property>
-      <property>
-            <name>user27</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 27</caption>
-      </property>
-      <property>
-            <name>user28</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 28</caption>
-      </property>
-      <property>
-            <name>user29</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 29</caption>
-      </property>
-      <property>
-            <name>user30</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 30</caption>
-      </property>
-      <property>
-            <name>user31</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 31</caption>
-      </property>
-      <property>
-            <name>user32</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 32</caption>
-      </property>
-      <property>
-            <name>user33</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 33</caption>
-      </property>
-      <property>
-            <name>user34</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 34</caption>
-      </property>
-      <property>
-            <name>user35</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 35</caption>
-      </property>
-      <property>
-            <name>user36</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 36</caption>
-      </property>
-      <property>
-            <name>user37</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 37</caption>
-      </property>
-      <property>
-            <name>user38</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 28</caption>
-      </property>
-      <property>
-            <name>user39</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 39</caption>
-      </property>
-      <property>
-            <name>user40</name>
-            <group>textboxes</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>textbox</type>
-            <caption>User-defined 40</caption>
       </property>
       <property>
             <name>user41</name>

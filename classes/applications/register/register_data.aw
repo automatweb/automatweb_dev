@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.43 2007/05/24 08:12:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.44 2007/09/04 09:06:12 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -74,6 +74,66 @@
 
 @property user20 type=textbox field=aw_user20
 @caption User-defined 20
+
+@property user21 type=textbox field=aw_user21
+@caption User-defined 21
+
+@property user22 type=textbox field=aw_user22
+@caption User-defined 22
+
+@property user23 type=textbox field=aw_user23
+@caption User-defined 23
+
+@property user24 type=textbox field=aw_user24
+@caption User-defined 24
+
+@property user25 type=textbox field=aw_user25
+@caption User-defined 25
+
+@property user26 type=textbox field=aw_user26
+@caption User-defined 26
+
+@property user27 type=textbox field=aw_user27
+@caption User-defined 27
+
+@property user28 type=textbox field=aw_user28
+@caption User-defined 28
+
+@property user29 type=textbox field=aw_user29
+@caption User-defined 29
+
+@property user30 type=textbox field=aw_user30
+@caption User-defined 30
+
+@property user31 type=textbox field=aw_user31
+@caption User-defined 31
+
+@property user32 type=textbox field=aw_user32
+@caption User-defined 32
+
+@property user33 type=textbox field=aw_user33
+@caption User-defined 33
+
+@property user34 type=textbox field=aw_user34
+@caption User-defined 34
+
+@property user35 type=textbox field=aw_user35
+@caption User-defined 35
+
+@property user36 type=textbox field=aw_user36
+@caption User-defined 36
+
+@property user37 type=textbox field=aw_user37
+@caption User-defined 37
+
+@property user38 type=textbox field=aw_user38
+@caption User-defined 38
+
+@property user39 type=textbox field=aw_user39
+@caption User-defined 39
+
+@property user40 type=textbox field=aw_user40
+@caption User-defined 40
 
 @property userta1 type=textarea field=aw_tauser1 rows=20 cols=50
 @caption User-defined ta 1
