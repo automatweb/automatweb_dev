@@ -1560,20 +1560,18 @@ class site_template_compiler extends aw_template
 				$ret = "(empty(\$mmi_cnt) && (\$this->_helper_get_levels_in_path_for_area(".$arr["a_parent"].") >= ".$arr["level"].") && !\$this->_helper_is_in_path(".$o_name."->".$this->id_func."()) && \$this->_helper_is_in_path(".$o_name."->parent())) && \$this->section_obj->id() != \$this->sel_section_obj->id() && ";
 			}
 		}
-		else
-		if ($arr["prop"] == "loop_counter")
+		elseif ($arr["prop"] == "loop_counter")
 		{
 			if ($arr["value"] == "list_end")
 			{
-				$ret = "(".$loop_counter_name." == (".$list_name."->count()-1)) && ";
+				$ret = "(empty(\$mmi_cnt) && (".$loop_counter_name." == (".$list_name."->count()-1))) && ";
 			}
 			else
 			{
 				$ret = "(".$loop_counter_name." == ".$arr["value"].") && ";
 			}
 		}
-		else
-		if ($arr["prop"] == "oid")
+		elseif ($arr["prop"] == "oid")
 		{
 			if ($arr["value"] == "is_in_path")
 			{
@@ -1584,8 +1582,7 @@ class site_template_compiler extends aw_template
 				$ret = "(".$o_name."->".$this->id_func."() == ".$arr["value"].") && ";
 			}
 		}
-		else
-		if ($arr["prop"] == "prev_oid")
+		elseif ($arr["prop"] == "prev_oid")
 		{
 			if ($arr["value"] == "is_in_path")
 			{
