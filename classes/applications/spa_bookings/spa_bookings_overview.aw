@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.32 2007/07/12 14:38:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.33 2007/09/04 14:25:35 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -646,10 +646,12 @@ class spa_bookings_overview extends class_base
 		@attrib name=show_cals_pop
 		@param id required
 		@param rooms optional
+		@param title optional
 	**/
 	function show_cals_pop($arr)
 	{
 		classload("vcl/table");
+ 		aw_global_set("title_action",$_GET["title"]);
 		$html = "";
 		$this->read_template("room_cals.tpl");
 		$cals = "";
