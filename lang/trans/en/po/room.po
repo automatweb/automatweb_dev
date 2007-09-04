@@ -911,31 +911,31 @@ msgstr "Days"
 
 #: classes/common/room.aw:347
 msgid "Sunday"
-msgstr "Laup&auml;ev"
+msgstr "Sunday"
 
 #: classes/common/room.aw:347
 msgid "Monday"
-msgstr "Esmasp&auml;ev"
+msgstr "Monday"
 
 #: classes/common/room.aw:347
 msgid "Tuesday"
-msgstr "Teisip&auml;ev"
+msgstr "Tuesday"
 
 #: classes/common/room.aw:347
 msgid "Wednesday"
-msgstr "Kolmap&auml;ev"
+msgstr "Wednesday"
 
 #: classes/common/room.aw:347
 msgid "Thursday"
-msgstr "Neljap&auml;ev"
+msgstr "Thursday"
 
 #: classes/common/room.aw:347
 msgid "Friday"
-msgstr "Reede"
+msgstr "Friday"
 
 #: classes/common/room.aw:347
 msgid "Saturday"
-msgstr "Laup&auml;ev"
+msgstr "Saturday"
 
 #: classes/common/room.aw:350
 msgid "Su"
