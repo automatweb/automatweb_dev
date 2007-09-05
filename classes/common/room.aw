@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.206 2007/08/29 14:40:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.207 2007/09/05 15:00:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -4046,7 +4046,6 @@ class room extends class_base
 			$grp = $gro->id();
 		}
 
-
 		foreach($prices as $conn)
 		{
 			$price = $conn->to();
@@ -4094,7 +4093,7 @@ class room extends class_base
 			{
 				$step++;
 			}
-			
+			//arr($price);
 			if(!is_object($price))//juhul kui miski uus aeg vms... hakkab otsast peale
 			{
 				$price = $this->get_best_time_in_prices(array(
@@ -4455,6 +4454,7 @@ class room extends class_base
 			foreach($bargain_conns as $conn)
 			{
 				$bargain = $conn->to();//kui järgnevas iffis midagi ei tööta.... siis edu... mulle vist 
+				//if($bargain->prop("type") == 2 && $bargain->prop("active") == 1){arr($bargain);arr($bargain->prop("date_from")); arr($bargain->prop("date_to")); arr($start); arr($time);print " - - - - - - " ;}
 				if(
 					($bargain->prop("active") == 1) &&
 					($bargain->prop("type") == 2) &&
@@ -4462,7 +4462,7 @@ class room extends class_base
 					(
 						(
 							$bargain->prop("date_from") <= ($start+60) &&
-							($bargain->prop("date_to") + 60) >= ($start+$time)
+							($bargain->prop("date_to") + 86400) >= ($start+$time)//südaööni
 						)||
 						(
 							$bargain->prop("recur")	&&
@@ -4539,7 +4539,7 @@ class room extends class_base
 			price object... largest of smaller times... or smallest of larger times
 	**/
 	function get_best_time_in_prices($arr)
-	{
+	{//arr($arr);
 		extract($arr);
 		$largest = "";
 		$smaller = "";
@@ -5399,8 +5399,13 @@ class room extends class_base
 		return $ret;
 	}
 
-	function _init_oh_t(&$t)
+	function _init_oh_t(&$t,$pause)
 	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
 		$t->define_field(array(
 			"name" => "date_from",
 			"caption" => t("Kehtib alates"),
@@ -5425,7 +5430,7 @@ class room extends class_base
 		));
 		$t->define_field(array(
 			"name" => "oh",
-			"caption" => t("Avamisajad"),
+			"caption" => $pause ? t("Pausid") : t("Avamisajad"),
 			"align" => "center",
 			"width" => "50%"
 		));
@@ -5446,12 +5451,13 @@ class room extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_oh_t($t);
-
+		$t->set_caption(t("Avamisajad"));
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_OPENHOURS")) as $c)
 		{
 			$oh = $c->to();
 			$i = $oh->instance();
 			$t->define_data(array(
+				"name" => $oh->name(),
 				"apply_group" => $oh->prop_str("apply_group"),
 				"oh" => $i->show(array("id" => $oh->id())),
 				"edit" => html::get_change_url($oh->id(), array("return_url" => get_ru()), t("Muuda")),
@@ -5466,13 +5472,14 @@ class room extends class_base
 	function _get_ch_t($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_oh_t($t);
-
+		$this->_init_oh_t($t,1);
+		$t->set_caption(t("Pausid"));
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PAUSES")) as $c)
 		{
 			$oh = $c->to();
 			$i = $oh->instance();
 			$t->define_data(array(
+				"name" => $oh->name(),
 				"apply_group" => $oh->prop_str("apply_group"),
 				"oh" => $i->show(array("id" => $oh->id())),
 				"edit" => html::get_change_url($oh->id(), array("return_url" => get_ru()), t("Muuda")),
@@ -5522,7 +5529,12 @@ class room extends class_base
                         "text" => t("Paus"),
                         "link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)"
                 ));
-		$t->add_delete_button();
+		$t->add_button(array(
+			"name" => "remove_oh",
+			"tooltip" => t("Eemalda avamisaeg"),
+			"img" => "delete.gif",
+			"action" => "remove_images",
+		));
 	}
 
 	/** Returns the openhours object for the current user, or null if none applies
