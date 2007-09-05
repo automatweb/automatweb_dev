@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.374 2007/07/18 13:05:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.375 2007/09/05 10:01:52 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2048,9 +2048,6 @@ class document extends aw_template
 			$docidstr = " OR documents.docid IN (" . join(",",$docids) . ")";
 		};
 
-		$mc = get_instance("menu_cache");
-		$mc->make_caches();
-
 		$plist = join(",",$parent_list);
 		if ($ostr[0] == "\"")
 		{
@@ -2091,7 +2088,7 @@ class document extends aw_template
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			if (not($this->can("view",$row["docid"])) || !is_array($mc->get_cached_menu($row["parent"])))
+			if (not($this->can("view",$row["docid"])))
 			{
 				continue;
 			};
