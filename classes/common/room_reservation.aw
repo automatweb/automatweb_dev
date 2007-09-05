@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.70 2007/09/04 11:59:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.71 2007/09/05 12:54:28 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1680,6 +1680,7 @@ class room_reservation extends class_base
 
 	function make_verified($id)
 	{
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		if(is_oid($id) && $this->can("view" , $id))
 		{
 			$room_inst = get_instance(CL_ROOM);
