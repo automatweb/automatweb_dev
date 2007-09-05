@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.26 2007/08/29 09:11:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.27 2007/09/05 12:55:46 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -931,6 +931,7 @@ class spa_customer_interface extends class_base
 	**/
 	function bank_return($arr)
 	{
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$o = obj($arr["id"]);
 		if(is_array($o->meta("all_brons")))
 		{
@@ -952,6 +953,7 @@ class spa_customer_interface extends class_base
 					continue;
 				}
 				$b->set_prop("verified", 1);
+				$b->set_meta("payment_info" , $bank_inst->get_payment_info());
 				aw_disable_acl();
 				$b->save();
 				aw_restore_acl();
