@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.53 2007/07/18 14:13:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.54 2007/09/05 11:33:33 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -770,6 +770,10 @@ class shop_order_center extends class_base
 		extract($arr);
 		$soce = aw_global_get("soc_err");
 //arr($_SESSION["soc_err"]);
+		error::raise_if(!is_object($t_layout), array(
+			"id" => "ERR_NO_LAYOUT",
+			"msg" => "do_draw_prods_with_layout(): layout not set!"
+		));
 		$tl_inst = $t_layout->instance();
 		$tl_inst->start_table($t_layout, $soc);
 		if($this->web_discount)

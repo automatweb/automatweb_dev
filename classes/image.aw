@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.205 2007/09/03 12:34:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.206 2007/09/05 11:33:31 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1732,6 +1732,35 @@ class image extends class_base
 		}
 		$o = obj($id);
 		$url = $this->get_url($o->prop("file"));
+		return $this->check_url($url);
+	}
+
+	/** Get big image url by image id
+
+		@attrib params=pos api=1 
+
+		@param id required type=int
+			Image object's id
+		@errors 
+			none
+
+		@returns 
+			empty value if the image object has no view access, url to the big image othervise
+
+		@comment 
+			none
+
+		@examples
+			none
+	**/
+	function get_big_url_by_id($id)
+	{
+		if (!$this->can("view", $id))
+		{
+			return "";
+		}
+		$o = obj($id);
+		$url = $this->get_url($o->prop("file2"));
 		return $this->check_url($url);
 	}
 
