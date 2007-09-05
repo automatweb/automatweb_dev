@@ -304,6 +304,46 @@
             <type>textbox</type>
             <caption>Sarnaste s&amp;uuml;ndmuste kattumisaeg (tundides)</caption>
       </property>
+      <property>
+            <name>event_form</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>S&amp;amp;uuml;ndmuste vorm</caption>
+      </property>
+      <property>
+            <name>places_form</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Toimumiskohtade vorm</caption>
+      </property>
+      <property>
+            <name>organiser_form</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Korraldajate vorm</caption>
+      </property>
+      <property>
+            <name>sector_form</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Valdkondade vorm</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_EVENTS_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -376,6 +416,11 @@
                   <clid>CL_LANGUAGE</clid>
                   <caption>Keel</caption>
             </LANGUAGE>
+            <CFGFORM>
+                  <value>8</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Seadete vorm</caption>
+            </CFGFORM>
       </reltypes>
       <layout>
             <events_top>

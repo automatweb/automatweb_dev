@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.9 2007/09/04 12:23:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.10 2007/09/05 11:24:03 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -136,6 +136,19 @@
 	@property similar_time type=textbox
 	@caption Sarnaste sündmuste kattumisaeg (tundides)
 
+	@property event_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
+	@caption S&uuml;ndmuste vorm
+
+	@property places_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
+	@caption Toimumiskohtade vorm
+
+	@property organiser_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
+	@caption Korraldajate vorm
+
+	@property sector_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
+	@caption Valdkondade vorm
+
+
 #RELTYPES
 
 @reltype SECTOR value=1 clid=CL_CRM_SECTOR
@@ -158,6 +171,10 @@
 
 @reltype LANGUAGE value=7 clid=CL_LANGUAGE
 @caption Keel
+
+@reltype CFGFORM value=8 clid=CL_CFGFORM
+@caption Seadete vorm
+
 
 
 */
@@ -267,7 +284,7 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
-				"name" => html::obj_change_url($o->id()),
+				"name" => html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("places_form")),$o->name()),//html::obj_change_url($o->id()),
 				"comment" => $o->prop("comment"),
 				"oid" => $o->id(),
 			));
@@ -291,7 +308,7 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
-				"name" => html::obj_change_url($o->id()),
+				"name" => html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("organiser_form")),$o->name() ),//"name" => html::obj_change_url($o->id()),
 				"address" => $o->prop("contact.name"),
 				"oid" => $o->id(),
 			));
@@ -315,7 +332,8 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
-				"name" => html::obj_change_url($o->id()),
+				"name" => html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("sectors_form")),$o->name() ),
+				//"name" => html::obj_change_url($o->id()),
 				//"address" => $o->prop("contact.name"),
 			));
 		}
@@ -542,7 +560,7 @@ class events_manager extends class_base
 			$change_url = html::obj_change_url($o , t("Muuda"));
 
 			$t->define_data(array(
-				"name" => html::obj_change_url($o->id()),
+				"name" => html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("event_form")),$o->name()),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"sector" => (is_object($sec))?$sec->name():"",
 				"level" => $cal_event->level_options[$o->prop("level")],
