@@ -26,7 +26,7 @@ function parse_config_to_ini($file, $include = false)
 			if (substr($line, 0, strlen("include")) == "include")
 			{
 				// process include
-				$line = preg_replace('/\$\{(.*)\}/e','$GLOBALS["cfg"]["\\1"]',$line);
+				$line = preg_replace('/\$\{(.*)\}/e','aw_ini_get("\\1")',$line);
 				$ifile = trim(substr($line, strlen("include")));
 				if (!file_exists($ifile) || !is_readable($ifile))
 				{
@@ -46,6 +46,7 @@ function parse_config_to_ini($file, $include = false)
 						$res[] = $iline;
 					}
 					$add = false;
+					$res[] = "\n";// to cope with files not ending with newline
 				}
 			}
 			else
@@ -58,17 +59,18 @@ function parse_config_to_ini($file, $include = false)
 					$varvalue = trim(substr($line,$eqpos+3));
 
 					// now, replace all variables in varvalue
-					$varvalue = preg_replace('/\$\{(.*)\}/e', '$GLOBALS["cfg"]["\\1"]', $varvalue);
-					$var = preg_replace('/\$\{(.*)\}/e', '$GLOBALS["cfg"]["\\1"]', $var);
+					$varvalue = preg_replace('/\$\{(.*)\}/e', 'aw_ini_get("\\1")', $varvalue);
+					$var = preg_replace('/\$\{(.*)\}/e', 'aw_ini_get("\\1")', $var);
 
 					if (($dotpos = strpos($var,".")) === false)
 					{
 						$varname = $var;
-						$GLOBALS["cfg"][$varname] = $varvalue;
+						aw_ini_set($varname, $varvalue);
 					}
 				}
 			}
 		}
+
 		if ($add)
 		{
 			$res[] = $oline;

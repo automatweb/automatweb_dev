@@ -6,7 +6,8 @@
 $stderr = fopen('php://stderr', 'w');
 
 $basedir = realpath(".");
-require("$basedir/scripts/ini/parse_config_to_ini.aw");
+require_once("$basedir/init.aw");
+require_once("$basedir/scripts/ini/parse_config_to_ini.aw");
 
 if ($_SERVER["argc"] < 1 || !file_exists($_SERVER["argv"][1]))
 {
