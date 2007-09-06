@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.21 2007/09/06 12:19:04 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.22 2007/09/06 12:48:54 voldemar Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -81,8 +81,7 @@ class forum_comment extends class_base
 			case "pname":
 				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
 				{
-					$uid = $_COOKIE["aw_mb_name"];
-					$this->dequote($uid);
+					$uid = aw_global_get("uid");
 					$p_oid = users::get_oid_for_uid($uid);
 
 					if (is_oid($p_oid))

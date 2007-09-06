@@ -1547,6 +1547,7 @@ class forum_v2 extends class_base
 
 				$this->vars(array(
 					"author" => $uid,
+					"author_pname" => $user_obj->name(),
 					"author_email" => $user_obj->prop("email.mail"),
 				));
 
