@@ -143,6 +143,19 @@ function parse_config($file, $return = false)
 				}
 				else
 				{
+					$setting_index = explode(".", $var);
+					$setting_path = "\$GLOBALS['cfg']";
+
+					foreach ($setting_index as $key => $index)
+					{
+						$setting_path .= "['" . $index . "']";
+
+						if (isset($setting_index[$key + 1]) and eval("return (isset(" . $setting_path . ") and !is_array(" . $setting_path . "));"))
+						{
+							eval($setting_path . " = array();");
+						}
+					}
+
 					$setting = "\$GLOBALS['cfg']['" . str_replace(".", "']['", $var) . "'] = " . var_export($value, true) . ";";
 					eval($setting);
 				}
@@ -234,7 +247,7 @@ function init_config($arr)
 			$GLOBALS["cfg"] = unserialize($fc);
 			if (is_array($GLOBALS["cfg"]["classes"]) && $GLOBALS["cfg"]["frontpage"] > 0)
 			{
-				$read_from_cache = true;
+				// $read_from_cache = true;
 			}
 		}
 		else
@@ -1319,4 +1332,142 @@ function check_pagecache_folders()
 	}
 }
 
+/*
+function __autoload($class_name)
+{
+	$dir = aw_ini_get("site_basedir");
+
+	// determine if class is aw class or local
+	if (0 === strpos($class_name, OBJ_LOCAL_CLASS_PREFIX))
+	{
+		// load local class
+		$class_file = $dir . "/files/classes/" . $class_name . "." . aw_ini_get("ext");
+	}
+	else
+	{
+		$class_dir = aw_ini_get("basedir") . "/classes/";
+
+		// try existing index
+		$class_dfn_file = $dir . "/files/class_index/" . $class_name . "." . aw_ini_get("ext");
+
+		if (!is_readable($class_dfn_file))
+		{
+			// update index and try again
+			aw_update_class_index($class_dir, $dir . "/files/class_index/");
+
+			if (!is_readable($class_dfn_file))
+			{
+				trigger_error("Class definition not found", E_USER_ERROR);
+			}
+		}
+
+		$class_dfn = unserialize(file_get_contents($class_dfn_file));
+
+		if (1 >= (int) $class_dfn["last_update"])
+		{
+			trigger_error("Class definition corrupted", E_USER_ERROR);
+		}
+
+		// load aw class
+		// $GLOBALS["class_index"][$class_name] = $class_dfn; //!!! laadida siin kogu dfn globalsisse?
+		$class_file = $class_dir . $class_dfn["file"] . "." . aw_ini_get("ext");
+	}
+
+	require_once($class_file);
+}
+
+function aw_update_class_index($class_dir, $index_dir, $path = "")
+{
+	// set update time
+	if (!isset($GLOBALS["aw_update_class_index_exec_time"]))
+	{
+		$GLOBALS["aw_update_class_index_exec_time"] = time();
+	}
+
+	// make index directory if not found
+	if (!is_dir($index_dir))
+	{
+		mkdir($index_dir, 0700);
+	}
+
+	// scan all files in given class directory for php class definitions
+	if (is_dir($class_dir))
+	{
+		if ($handle = opendir($class_dir))
+		{
+			$non_dirs = array(".", "..", "CVS");
+
+			while (($file = readdir($handle)) !== false)
+			{
+				$class_file = $class_dir . $file;
+
+				// process only code files
+				if ("file" === @filetype($class_file) and strrchr($file, ".") === "." . aw_ini_get("ext"))
+				{
+					// parse code
+					$tmp = token_get_all(file_get_contents($class_file));
+					$next = "";
+
+					foreach ($tmp as $token)
+					{
+						if (T_CLASS === $token[0] or (defined("T_INTERFACE") and T_INTERFACE === $token[0]))
+						{
+							$next = "expecting name";
+						}
+						elseif (T_STRING === $token[0] and "expecting name" === $next)
+						{
+							// try to read old data for class found
+							$class_name = $token[1];
+							$class_dfn_file = $index_dir . $class_name . "." . aw_ini_get("ext");
+							$class_dfn = false;
+
+							if (is_readable($class_dfn_file))
+							{
+								$class_dfn = unserialize(file_get_contents($class_dfn_file));
+							}
+
+							$modified = filemtime($class_file);
+
+							if (
+								false === $class_dfn or
+								!isset($class_dfn["last_update"]) or
+								$class_dfn["last_update"] < $modified or
+								false === $modified
+							)
+							{ // previous definition not found or class modified
+								// new definition
+								$class_dfn = array(
+									"file" => $path . substr($file, 0, - 1 - strlen(aw_ini_get("ext"))),// relative path without extension
+									"last_update" => $GLOBALS["aw_update_class_index_exec_time"]
+								);
+
+								// update index file
+								$cl_handle = @fopen($class_dfn_file, "w");
+
+								if (false !== $cl_handle)
+								{
+									fwrite($cl_handle, serialize($class_dfn));
+									fclose($cl_handle);
+								}
+								else
+								{
+									trigger_error("Unable to update class index", E_USER_ERROR);
+								}
+							}
+
+							$next = "";
+						}
+					}
+				}
+				elseif ("dir" === @filetype($class_file) and !in_array($file, $non_dirs))
+				{
+					aw_update_class_index($class_file . "/", $index_dir, $path . $file . "/");
+				}
+			}
+
+			closedir($handle);
+		}
+	}
+}
+*/
 ?>
