@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.93 2007/09/03 11:30:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.94 2007/09/06 11:27:21 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -614,77 +614,65 @@ class site_search_content extends class_base
 			}
 		}
 		
-		$sector_parents = new object_list(array(
-			"oid" => $cid->prop("dir_tegevusala"),
-			"sort_by" => "objects.jrk,objects.name",
-		));
-		$sectors_list = new object_list();
-		
-		foreach($sector_parents->ids() as $parent)
-		{
-			$sectors_list->add(new object_list(array(
-				"parent" => $parent,
-				"sort_by" => "objects.jrk,objects.name",
-				"class_id" => CL_CRM_SECTOR,
-			)));
-		}
-		$sec_opt = "";
-		$parent = 0;
-		
 		//paneb default väärtused
 		if(is_oid($arr["field"]))
 		{
 			$_SESSION["active_section"] = $arr["field"];
 		}
-		foreach($sectors_list->arr() as $sec)
+		if($cid->class_id() == CL_CRM_DB_SEARCH)
 		{
-			$selected = "";
-			if($_SESSION["active_section"] == $sec->id())
-			{
-				$selected = "selected";
-			}
-			$this->vars(array(
-				"sec_value" => $sec->id(),
-				"sec_name" => strtoupper($sec->name()),
-				"selected" => $selected,
-			));
-			$sec_opt.= $this->parse("SEC_OPTION");
-			
-			//vahepeal kataloogid ka ritta
-/*			if($sec->parent() != $parent)
-			{
-				$parent = $sec->parent();
-				$p_obj = obj($parent);
-				$this->vars(array(
-					"sec_value" => $p_obj->id(),
-					"sec_name" => strtoupper($p_obj->name()),
-				));
-				$sec_opt.= $this->parse("SEC_OPTION");
-			}
-			$this->vars(array(
-				"sec_value" => $sec->id(),
-				"sec_name" => "--".$sec->name(),
-			));
-			$sec_opt.= $this->parse("SEC_OPTION");*/
-			$child_list = new object_list(array(
-				"parent" => $sec->id(),
+			$sector_parents = new object_list(array(
+				"oid" => $cid->prop("dir_tegevusala"),
 				"sort_by" => "objects.jrk,objects.name",
-				"class_id" => CL_CRM_SECTOR,
 			));
-			foreach($child_list->arr() as $child)
+			$sectors_list = new object_list();
+		
+			foreach($sector_parents->ids() as $parent)
+			{
+				$sectors_list->add(new object_list(array(
+					"parent" => $parent,
+					"sort_by" => "objects.jrk,objects.name",
+					"class_id" => CL_CRM_SECTOR,
+				)));
+			}
+			$sec_opt = "";
+			$parent = 0;
+		
+			foreach($sectors_list->arr() as $sec)
 			{
 				$selected = "";
-				if($_SESSION["active_section"] == $child->id())
+				if($_SESSION["active_section"] == $sec->id())
 				{
 					$selected = "selected";
 				}
 				$this->vars(array(
-					"sec_value" => $child->id(),
-					"sec_name" => "--".$child->name(),
+					"sec_value" => $sec->id(),
+					"sec_name" => strtoupper($sec->name()),
 					"selected" => $selected,
 				));
 				$sec_opt.= $this->parse("SEC_OPTION");
-			}
+			
+				//vahepeal kataloogid ka ritta
+				$child_list = new object_list(array(
+					"parent" => $sec->id(),
+					"sort_by" => "objects.jrk,objects.name",
+					"class_id" => CL_CRM_SECTOR,
+				));
+				foreach($child_list->arr() as $child)
+				{
+					$selected = "";
+					if($_SESSION["active_section"] == $child->id())
+					{
+						$selected = "selected";
+					}
+					$this->vars(array(
+						"sec_value" => $child->id(),
+						"sec_name" => "--".$child->name(),
+						"selected" => $selected,
+					));
+					$sec_opt.= $this->parse("SEC_OPTION");
+				}
+			}	
 		}
 		$keywords = explode("," , $cid->prop("keywords"));
 		$kd = $cid->prop("keywords2");
