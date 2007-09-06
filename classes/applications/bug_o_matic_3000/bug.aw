@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.84 2007/07/18 10:20:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.85 2007/09/06 10:27:42 kristo Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -1833,6 +1833,15 @@ class bug extends class_base
 		}
 
 		return $retval;
+	}
+
+	function handle_stopper_start($o)
+	{
+		if ($o->prop("bug_status") == BUG_OPEN)
+		{
+			$o->set_prop("bug_status",  BUG_INPROGRESS);
+			$o->save();
+		}
 	}
 }
 ?>

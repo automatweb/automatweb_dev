@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.179 2007/08/03 16:18:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.180 2007/09/06 10:27:41 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3309,7 +3309,13 @@ class task extends class_base
 					$new_stop["oid"] = $arr["oid"] = $o->id();
 					$arr["name"] = $o->name();
 					//$this->change_stop_type(array($arr["ident"]));
+					$inst = $o->instance();
+					if (method_exists($inst, "handle_stopper_start"))
+					{
+						$inst->handle_stopper_start($o);
+					}
 				}
+				
 			}
 			
 			if (isset($arr["type"]))
