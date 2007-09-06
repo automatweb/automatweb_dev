@@ -90,14 +90,16 @@
             <caption>Imporditud toodete tabel</caption>
       </property>
       <property>
-            <name>products_manager_pcode</name>
+            <name>products_manager_toolbar</name>
             <table>objects</table>
             <group>products_manager</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>toolbar</type>
             <store>no</store>
-            <caption>Tootekood</caption>
+            <no_caption>1</no_caption>
+            <parent>hbox_products_manager_toolbar</parent>
+            <caption>Toodete halduse t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
       </property>
       <property>
             <name>products_manager_prod_id</name>
@@ -107,7 +109,36 @@
             <method>serialize</method>
             <type>textbox</type>
             <store>no</store>
-            <caption>Toote objekti id</caption>
+            <size>20</size>
+            <captionside>top</captionside>
+            <parent>vbox_products_manager_search</parent>
+            <caption>Toote OID</caption>
+      </property>
+      <property>
+            <name>products_manager_pcode</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <size>20</size>
+            <captionside>top</captionside>
+            <parent>vbox_products_manager_search</parent>
+            <caption>Tootekood</caption>
+      </property>
+      <property>
+            <name>products_search</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <store>no</store>
+            <value>1</value>
+            <no_caption>1</no_caption>
+            <parent>vbox_products_manager_search</parent>
+            <caption>products_search</caption>
       </property>
       <property>
             <name>products_manager_search_submit</name>
@@ -116,17 +147,32 @@
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
+            <no_caption>1</no_caption>
+            <parent>vbox_products_manager_search</parent>
             <store>no</store>
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>products_manager_table</name>
+            <name>products_manager_search_results_table</name>
             <table>objects</table>
             <group>products_manager</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
+            <parent>vbox_products_manager</parent>
+            <store>no</store>
+            <caption>Toodete otsingu tulemused</caption>
+      </property>
+      <property>
+            <name>products_manager_item_table</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>vbox_products_manager</parent>
             <store>no</store>
             <caption>Tooted</caption>
       </property>
@@ -137,6 +183,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
+            <no_caption>1</no_caption>
+            <parent>vbox_products_manager</parent>
             <store>no</store>
             <caption>Salvesta</caption>
       </property>
@@ -492,5 +540,28 @@
                   <caption>Lao toote seadete vorm</caption>
             </SHOP_PRODUCT_CONFIG_FORM>
       </reltypes>
+      <layout>
+            <hbox_products_manager_toolbar>
+                  <type>hbox</type>
+                  <group>products_manager</group>
+            </hbox_products_manager_toolbar>
+            <hbox_products_manager>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>products_manager</group>
+            </hbox_products_manager>
+            <vbox_products_manager_search>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
+                  <group>products_manager</group>
+                  <parent>hbox_products_manager</parent>
+            </vbox_products_manager_search>
+            <vbox_products_manager>
+                  <type>vbox</type>
+                  <group>products_manager</group>
+                  <parent>hbox_products_manager</parent>
+            </vbox_products_manager>
+      </layout>
 </properties>
 

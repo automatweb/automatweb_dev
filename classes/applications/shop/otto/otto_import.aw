@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.51 2007/08/22 14:04:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.52 2007/09/06 14:35:43 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -50,20 +50,37 @@ caption Uuenda ainult toote andmed
 
 @groupinfo products_manager caption="Toodete haldus" 
 
-	@property products_manager_pcode type=textbox store=no group=products_manager
-	@caption Tootekood
+	@layout hbox_products_manager_toolbar type=hbox group=products_manager
 
-	@property products_manager_prod_id type=textbox store=no group=products_manager
-	@caption Toote objekti id
+		@property products_manager_toolbar type=toolbar store=no no_caption=1 group=products_manager parent=hbox_products_manager_toolbar
+		@caption Toodete halduse t&ouml;&ouml;riistariba
 
-	@property products_manager_search_submit type=submit group=products_manager
-	@caption Otsi
+	@layout hbox_products_manager type=hbox width=20%:80% group=products_manager
 
-	@property products_manager_table type=table group=products_manager no_caption=1
-	@caption Tooted
+		@layout vbox_products_manager_search type=vbox closeable=1 area_caption=Toodete&nbsp;otsing group=products_manager parent=hbox_products_manager
+		
+			@property products_manager_prod_id type=textbox store=no size=20 captionside=top group=products_manager parent=vbox_products_manager_search
+			@caption Toote OID
 
-	@property products_manager_change_submit type=submit group=products_manager
-	@caption Salvesta
+			@property products_manager_pcode type=textbox store=no size=20 captionside=top group=products_manager parent=vbox_products_manager_search
+			@caption Tootekood
+
+			@property products_search type=hidden store=no value=1 no_caption=1 group=products_manager parent=vbox_products_manager_search
+			@caption products_search
+
+			@property products_manager_search_submit type=submit no_caption=1 group=products_manager parent=vbox_products_manager_search
+			@caption Otsi
+
+		@layout vbox_products_manager type=vbox group=products_manager parent=hbox_products_manager
+
+			@property products_manager_search_results_table type=table no_caption=1 group=products_manager parent=vbox_products_manager
+			@caption Toodete otsingu tulemused
+
+			@property products_manager_item_table type=table no_caption=1 group=products_manager parent=vbox_products_manager
+			@caption Tooted
+
+			@property products_manager_change_submit type=submit no_caption=1 group=products_manager parent=vbox_products_manager
+			@caption Salvesta
 
 @groupinfo files caption="Failid"
 
@@ -433,7 +450,12 @@ class otto_import extends class_base
 		}
 		return $retval;
 	}	
-
+/*
+	function callback_on_load($arr)
+	{
+		
+	}
+*/
 	function callback_mod_tab($arr)
 	{
 		if ($arr['id'] == 'discount_products')
@@ -446,8 +468,17 @@ class otto_import extends class_base
 		}
 		if ($arr['id'] == 'products_manager' && $_SERVER['REMOTE_ADDR'] != '89.219.147.106')
 		{
+		//	return false;
+		}
+	}
+
+	function callback_mod_layout($arr)
+	{
+		if ($arr['name'] == 'vbox_products_manager_search' && $this->can('view', $arr['request']['products_manager_prod_id']))
+		{
 			return false;
 		}
+		return true;
 	}
 
 	function callback_mod_reforb($arr)
@@ -467,15 +498,21 @@ class otto_import extends class_base
 
 		////
 		// products manager
-		if ( isset($arr['request']['products_manager_prod_id']) )
-		{
-			$arr['args']['products_manager_prod_id'] = (int)$arr['request']['products_manager_prod_id'];
-		}
-		if ( isset($arr['request']['products_manager_pcode']) )
+		if ($arr['request']['products_search'])
 		{
 			$arr['args']['products_manager_pcode'] = $arr['request']['products_manager_pcode'];
+			$arr['args']['products_search'] = $arr['request']['products_search'];
 		}
-	
+		$product_id = (int)$arr['request']['products_manager_prod_id'];
+		if ( $this->can('view', $product_id) )
+		{
+			$product_obj = new object($product_id);
+			if ($product_obj->class_id() == CL_SHOP_PRODUCT)
+			{
+				$arr['args']['products_manager_prod_id'] = $product_id;
+			}
+		}
+
 		////
 		// category data filter
 		if ( isset($arr['request']['data_filter']['aw_folder_id']) )
@@ -516,6 +553,36 @@ class otto_import extends class_base
 		{
 			$arr['args']['firm_filter']['title'] = $arr['request']['firm_filter']['title'];
 		}
+
+	}
+
+	function callback_pre_save($arr)
+	{
+		if($arr['obj_inst']->prop('do_fixes'))
+		{
+			$arr['obj_inst']->set_prop('do_fixes',0);
+			
+			$this->do_post_import_fixes($arr['obj_inst']);
+		}
+		
+		if ($arr["obj_inst"]->prop("do_i"))
+		{
+			echo "START IMPORT<br>";
+			if ($arr["obj_inst"]->prop("do_pict_i"))
+			{
+				echo "[ Tee piltide import ]<br>\n";
+				$this->doing_pict_i = true;
+			}
+			$arr["obj_inst"]->set_prop("do_i", 0);
+			$arr["obj_inst"]->set_prop("do_pict_i", 0);
+			
+			$this->do_prod_import($arr["obj_inst"]);
+		}
+
+	}
+
+	function callback_post_save($arr)
+	{
 
 	}
 
@@ -578,38 +645,6 @@ class otto_import extends class_base
 		$t->set_sortable(false);
 	}
 
-	function callback_pre_save($arr)
-	{
-		if($arr['obj_inst']->prop('do_fixes'))
-		{
-			$arr['obj_inst']->set_prop('do_fixes',0);
-			
-			$this->do_post_import_fixes($arr['obj_inst']);
-		}
-		
-		if ($arr["obj_inst"]->prop("do_i"))
-		{
-			echo "START IMPORT<br>";
-			if ($arr["obj_inst"]->prop("do_pict_i"))
-			{
-				echo "[ Tee piltide import ]<br>\n";
-				$this->doing_pict_i = true;
-			}
-/*
-			if ($arr['obj_inst']->prop("restart_pict_i"))
-			{
-				echo "[ Piltide import algusest ]<br>\n";
-				$this->restart_pictures_import = true;
-			}
-*/
-			$arr["obj_inst"]->set_prop("do_i", 0);
-			$arr["obj_inst"]->set_prop("do_pict_i", 0);
-		//	$arr["obj_inst"]->set_prop("restart_pict_i", 0);
-			
-			$this->do_prod_import($arr["obj_inst"]);
-		}
-
-	}
 
 	function _get_imported_products_table($arr)
 	{
@@ -693,33 +728,140 @@ class otto_import extends class_base
 		}
 	}
 
+	function _get_products_manager_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+/*
+// i'll finish this deleting thing later ... lets focus on that category changing thing right now ...
+
+		$t->add_button(array(
+			'name' => 'delete_images_from_product',
+			'tooltip' => t('Kustuta pildid toote juurest'),
+			'img' => 'delete.gif',
+			'action' => 'delete_images_from_product',
+			'confirm' => t('Oled sa kindel, et soovid valitud pildid toote juurest kustutada?')
+		));
+*/
+		if ($this->can('view', $arr['request']['products_manager_prod_id']))
+		{
+
+			$t->add_button(array(
+				'name' => 'search',
+				'tooltip' => t('Otsing'),
+				'img' => 'search.gif',
+				'url' => $this->mk_my_orb('change', array(
+					'id' => $arr['obj_inst']->id(),
+					'group' => 'products_manager'
+				), CL_OTTO_IMPORT),
+			));
+
+		}
+		return PROP_OK;
+	}
+
 	function _get_products_manager_prod_id($arr)
 	{
-		$arr['prop']['value'] = $arr['request']['products_manager_prod_id'];
+		// don't put '0' into textbox if no prod_id is set
+		if (!empty($arr['request']['products_manager_prod_id']))
+		{
+			$arr['prop']['value'] = $arr['request']['products_manager_prod_id'];
+		}
 		return PROP_OK;
 	}
 
 	function _get_products_manager_pcode($arr)
 	{
 		$arr['prop']['value'] = $arr['request']['products_manager_pcode'];
-		return PROP_IGNORE; // take this product code field out right now
 		return PROP_OK;
 	}
 
-	function _get_products_manager_table($arr)
+	
+	function _get_products_manager_search_results_table($arr)
 	{
+		if ($this->can('view', $arr['request']['products_manager_prod_id']))
+		{
+			return PROP_IGNORE;
+		}
 
 		$t = &$arr['prop']['vcl_inst'];
 
+		$t->set_sortable(false);
+		$t->define_field(array(
+			'name' => 'oid',
+			'caption' => t('Toote OID'),
+		));
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimetus'),
+		));
+		$t->define_field(array(
+			'name' => 'change',
+			'caption' => t('Muuda'),
+		));
+
+		if ($arr['request']['products_search'])
+		{
+			$filter = array('class_id' => CL_SHOP_PRODUCT);
+			if (!empty($arr['request']['products_manager_prod_id']))
+			{
+				$filter['oid'] = $arr['request']['products_manager_prod_id'];
+			}
+			if (!empty($arr['request']['products_manager_pcode']))
+			{
+				$filter['user6'] = '%'.$arr['request']['products_manager_pcode'].'%';
+			}
+
+			$ol = new object_list();
+			if (count($filter) > 1)
+			{
+				$ol = new object_list($filter);
+			}
+
+			foreach ($ol->arr() as $oid => $o)
+			{
+				$t->define_data(array(
+					'oid' => $oid,
+					'name' => $o->name(),
+					'change' => html::href(array(
+						'caption' => t('Muuda'),
+						'url' => $this->mk_my_orb('change', array(
+							'id' => $arr['obj_inst']->id(),
+							'products_manager_prod_id' => $oid,
+							'group' => 'products_manager'
+						), CL_OTTO_IMPORT)
+					)),
+				));
+			}
+		}
+
+		return PROP_OK;
+
+	}
+
+	function _get_products_manager_item_table($arr)
+	{
 		$prod_id = $arr['request']['products_manager_prod_id'];
+
+		if (!$this->can('view', $prod_id))
+		{
+			return PROP_IGNORE;
+		}
+		
+		$prod_obj = new object($prod_id);
+		if ($prod_obj->class_id() != CL_SHOP_PRODUCT)
+		{
+			return PROP_IGNORE;
+		}
+
 		if ( $this->can('view', $prod_id) )
 		{
-			$prod_obj = new object($prod_id);
+
+			$t = &$arr['prop']['vcl_inst'];
 			$t->set_caption($prod_obj->name());
 			$t->set_sortable(false);
 			$t->define_field(array(
 				'name' => 'caption',
-				'caption' => t('foo'),
+				'caption' => '',
 			));
 			$t->define_field(array(
 				'name' => 'data',
@@ -727,8 +869,26 @@ class otto_import extends class_base
 			));
 
 			$t->define_data(array(
+				'caption' => t('Toote OID'),
+				'data' => $prod_id . html::hidden(array(
+					'name' => 'products_manager_prod_id',
+					'value' => $prod_id
+				))
+			));
+
+			$t->define_data(array(
 				'caption' => t('Toote kirjeldus'),
 				'data' => $prod_obj->prop('userta2')
+			));
+
+			// categories:
+			$t->define_data(array(
+				'caption' => t('Kategooriad'),
+				'data' => html::textbox(array(
+					'name' => 'categories',
+					'value' => $prod_obj->prop('user11'),
+					'size' => 100
+				)),
 			));
 
 			$pics_str = '';
@@ -753,8 +913,80 @@ class otto_import extends class_base
 				'caption' => t('Pildid'),
 				'data' => $pics_str
 			));
+
+
 		}
 		return PROP_OK;
+	}
+
+	function _set_products_manager_item_table($arr)
+	{
+
+		if (!isset($arr['request']['products_manager_change_submit']) || !$this->can('view', $arr['request']['products_manager_prod_id']))
+		{
+			return PROP_IGNORE;
+		}
+
+		$prod_id = $arr['request']['products_manager_prod_id'];
+		$prod_obj = new object($arr['request']['products_manager_prod_id']);
+
+		if ($prod_obj->class_id() != CL_SHOP_PRODUCT)
+		{
+			return PROP_IGNORE;
+		}
+
+		// check if categories have been changed: 
+		if ($prod_obj->prop('user11') != $arr['request']['categories'])
+		{
+			$categories = array();
+			foreach (explode(',', $arr['request']['categories']) as $cat)
+			{
+				if (!empty($cat))
+				{
+					$categories[] = $cat;
+				}
+			}
+
+			// save new categories list to product object as well:
+			$prod_obj->set_prop('user11', implode(',', $categories));
+			$prod_obj->save();
+
+			// delete this products data from products to sections look-up table:
+			$this->db_query("delete from otto_prod_to_section_lut where product=".$prod_id);
+
+			// get new sections list for the categories which are set for this product:
+			$sections = $this->db_fetch_array("
+				select
+					aw_folder
+				from
+					otto_imp_t_aw_to_cat
+				where
+					category in (".implode(',', map("'%s'", $categories)).") and
+					lang_id = ".aw_global_get('lang_id')."
+				group by
+					aw_folder
+			");
+			
+			// add the new sections  info to products to section look-up table:
+			foreach ($sections as $section)
+			{
+				$this->db_query('insert into otto_prod_to_section_lut set
+					product='.$prod_id.',
+					section='.$section['aw_folder'].',
+					lang_id='.aw_global_get('lang_id').'
+				');
+			}
+
+		}
+	}
+	
+	function _get_products_manager_change_submit($arr)
+	{
+		if ($this->can('view', $arr['request']['products_manager_prod_id']))
+		{
+			return PROP_OK;
+		}
+		return PROP_IGNORE;
 	}
 
 	function _get_containers_toolbar($arr)
