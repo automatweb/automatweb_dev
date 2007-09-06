@@ -1540,17 +1540,24 @@ class forum_v2 extends class_base
 
 			$uid = aw_global_get("uid");
 			$add = "";
+
 			if(!empty($uid))
 			{
 				$uid_oid = users::get_oid_for_uid($uid);
 				$user_obj = new object($uid_oid);
+				$cl_users = get_instance(CL_USER);
+				$p_o = $cl_users->get_person_for_user($user_obj);
+
+				if (is_object($p_o))
+				{
+					$pname = $p_o->name();
+				}
 
 				$this->vars(array(
 					"author" => $uid,
-					"author_pname" => $user_obj->name(),
+					"author_pname" => $pname,
 					"author_email" => $user_obj->prop("email.mail"),
 				));
-
 			}
 
 			// if user tries to add comment, and he has an error during the submitting

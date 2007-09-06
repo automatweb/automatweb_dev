@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.22 2007/09/06 12:48:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.23 2007/09/06 13:06:28 voldemar Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -82,20 +82,16 @@ class forum_comment extends class_base
 				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
 				{
 					$uid = aw_global_get("uid");
-					$p_oid = users::get_oid_for_uid($uid);
 
-					if (is_oid($p_oid))
+					if(!empty($uid))
 					{
-						$p_o = new object($p_oid);
-						$prop["value"] = $p_o->name();
-					}
-					else
-					{
-						error::raise(array(
-							"msg" => "Person not defined for uid [".$uid."].",
-							"fatal" => false,
-							"show" => false
-						));
+						$cl_users = get_instance(CL_USER);
+						$p_o = $cl_users->get_person_for_uid($uid);
+
+						if (is_object($p_o))
+						{
+							$prop["value"] = $p_o->name();
+						}
 					}
 				}
 				break;
@@ -168,21 +164,16 @@ class forum_comment extends class_base
 			if (empty($pname))
 			{
 				$uid = $comment->createdby();
-				$this->dequote($uid);
-				$p_oid = users::get_oid_for_uid($uid);
 
-				if (is_oid($p_oid))
+				if(!empty($uid))
 				{
-					$p_o = new object($p_oid);
-					$pname = $p_o->name();
-				}
-				else
-				{
-					error::raise(array(
-						"msg" => "Person not defined for uid [".$uid."].",
-						"fatal" => false,
-						"show" => false
-					));
+					$cl_users = get_instance(CL_USER);
+					$p_o = $cl_users->get_person_for_uid($uid);
+
+					if (is_object($p_o))
+					{
+						$pname = $p_o->name();
+					}
 				}
 			}
 
