@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.20 2007/09/06 12:02:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.21 2007/09/06 12:19:04 voldemar Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -164,12 +164,33 @@ class forum_comment extends class_base
 		$retval = array();
 		foreach($clist->arr() as $comment)
 		{
+			$pname = $comment->prop("pname");
+
+			if (empty($pname))
+			{
+				$uid = $comment->createdby();
+				$this->dequote($uid);
+				$p_oid = users::get_oid_for_uid($uid);
+
+				if (is_oid($p_oid))
+				{
+					$p_o = new object($p_oid);
+					$pname = $p_o->name();
+				}
+				else
+				{
+					error::raise(array(
+						"msg" => "Person not defined for uid [".$uid."].",
+						"fatal" => false,
+						"show" => false
+					));
+				}
+			}
+
 			$row = $comment->properties();
 			$row["created"] = $comment->created();
 			$row["createdby"] = $comment->createdby();
-			$row["uname"] = $comment->prop("uname");
-			$row["pname"] = $comment->prop("pname");
-			$row["uemail"] = $comment->prop("uemail");
+			$row["pname"] = $pname;
 			$row["oid"] = $comment->id();
 			$retval[$comment->id()] = $row;
 		};
