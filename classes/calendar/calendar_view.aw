@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.52 2007/07/23 14:30:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.53 2007/09/06 08:05:53 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -499,6 +499,7 @@ class calendar_view extends class_base
 					"range" => $range,
 					"first_image" => $first_image,
 					"project_media" => $project_media,
+					"status" => $arr["status"]
 				));
 				foreach($events as $event)
 				{
