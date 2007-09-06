@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.26 2007/08/30 14:42:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.27 2007/09/06 13:59:23 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -244,6 +244,11 @@ class orders_order extends class_base
 							"chgbgcolor"=>"color",
 						));
 					}
+					$table->define_field(array(
+						"name" => "product_count_undone",
+						"caption" => t("Tarnimata kogus"),
+						"chgbgcolor"=>"color",
+					));
 				}
 				else
 				{
@@ -483,10 +488,13 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 				$item->set_prop("product_color", $submit_data["product_color"]);
 				$item->set_prop("product_size", $submit_data["product_size"]);
 				$item->set_prop("product_count", $submit_data["product_count"]);
+				$item->set_prop("comment", $submit_data["comment"]);
 				$item->set_prop("product_count_undone", $submit_data["product_count"]);
 				$item->set_prop("product_price", $submit_data["product_price"]);
 				$item->set_prop("product_image", $submit_data["product_image"]);
 				$item->set_prop("product_page", $submit_data["product_page"]);
+				$item->set_prop("product_duedate", $submit_data["product_duedate"]);
+				$item->set_prop("product_bill", $submit_data["product_bill"]);
 				$item->set_meta("cfgform_id" , $_SESSION["order_item_form_id"]);
 				$item->save();
 				$conn = new connection();
@@ -805,6 +813,9 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 			"product_price" => $item->prop("product_price"),
 			"product_image" => $item->prop("product_image"),
 			"product_page" => $item->prop("product_page"),
+			"comment" => $item->prop("comment"),
+			"product_bill" => $item->prop("product_bill"),
+			"product_duedate" => $item->prop("product_duedate"),
 			"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
 			"name" => $name,
 		));
@@ -990,10 +1001,19 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 	{
 		$form_i = get_instance(CL_ORDERS_FORM);
 		$_SESSION["order_cart_id"] = $obj->id();
-		$form = new object_list(array(
-			"class_id" => CL_ORDERS_FORM,
-		));
-		$form = reset($form->arr());
+		if(is_oid($obj->meta("orders_form")) && $this->can("view" , $obj->meta("orders_form")))
+		{
+			$form = obj($obj->meta("orders_form"));
+		}
+		else
+		{
+			$form = new object_list(array(
+				"class_id" => CL_ORDERS_FORM,
+			));
+			$form = reset($form->arr());
+		}
+
+//foreach($form->arr() as $a) arr($a->meta());
 		$_SESSION["order_form_id"] = $form->id();
 		$_SESSION["show_order"] = 1;
 		$val = $form_i->change(array("show_order" => 1));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.23 2007/08/30 14:42:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.24 2007/09/06 13:59:23 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -466,9 +466,22 @@ class orders_form extends class_base
 		$retval = $this->parse();
 	//	$this->read_template("orders_form.tpl");
 //if(aw_global_get("uid") == "struktuur")arr($arr);
+
 		if(is_oid($arr["id"])&& $this->can("view" , $arr["id"]))
 		{
 			$o = obj($arr["id"]);
+                	if($o->prop("orders_form_template"))
+                	{
+                        	$this->read_template($o->prop("orders_form_template"));
+                	}
+                	else
+                	{
+                	        $this->read_template("orders_form.tpl");
+       		         }
+		}
+		elseif(is_oid($_SESSION["order_form_id"])&& $this->can("view" , $_SESSION["order_form_id"]))
+		{
+			$o = obj($_SESSION["order_form_id"]);
                 	if($o->prop("orders_form_template"))
                 	{
                         	$this->read_template($o->prop("orders_form_template"));
@@ -650,6 +663,7 @@ class orders_form extends class_base
 			$_SESSION["order_eoid"] = $_GET["editid"];
 			
 			$values[0]["name"] = $obj->prop("name");
+			$values[0]["comment"] = $obj->prop("comment");
 			$values[0]["product_size"] = $obj->prop("product_size");
 			$values[0]["product_color"] = $obj->prop("product_color");
 			$values[0]["product_code"] = $obj->prop("product_code");
@@ -657,7 +671,8 @@ class orders_form extends class_base
 			$values[0]["product_price"] = $obj->prop("product_price");
 			$values[0]["product_page"] = $obj->prop("product_page");
 			$values[0]["product_image"] = $obj->prop("product_image");
-			
+			$values[0]["product_duedate"] = $obj->prop("product_duedate");
+			$values[0]["product_bill"] = $obj->prop("product_bill");
 			$add_change_caption = "Salvesta muudatused";
 		}
 		else 
@@ -709,6 +724,14 @@ class orders_form extends class_base
 				
 				"product_image_error" => $errors["product_image"]["msg"],
 				"product_image_value" => $values["product_image"],
+
+				"product_duedate_error" => $errors["product_duedate"]["msg"],
+				"product_duedate_value" => $values["product_duedate"],
+
+				"product_bill_error" => $errors["product_bill"]["msg"],
+				"product_bill_value" => $values["product_bill"],
+				"comment_error" => $errors["comment"]["msg"],
+				"comment_value" => $values["comment"],
 			));
 			
 			unset($_SESSION["order_form_errors"]["items"][$key]);
@@ -871,6 +894,11 @@ class orders_form extends class_base
 		$this->submerge = 1;
 		foreach ($ol->arr() as $item)
 		{
+			//kui kuskilt porno kohast tahetakse ainult saatmata asju näha
+			if($_GET["unsent"] && !$item->prop("product_count_undone"))
+			{
+				continue;
+			}
 			$_state = $states[$item->prop("product_code")];
 			$this->vars(array(
 				"name" => $item->name(),
@@ -888,10 +916,13 @@ class orders_form extends class_base
 				"product_code" => $item->prop("product_code"),
 				"product_color" => $item->prop("product_color"),
 				"product_size" => $item->prop("product_size"),
-				"product_count" => $item->prop("product_count"),
+				"product_count" => !$_GET["unsent"] ? $item->prop("product_count"):$item->prop("product_count_undone"),
 				"product_price" => $item->prop("product_price"),
 				"product_image" => $item->prop("product_image"),
 				"product_page" => $item->prop("product_page"),
+				"product_duedate" => $item->prop("product_duedate"),
+				"product_bill" => $item->prop("product_bill"),
+				"comment" => $item->prop("comment"),
 				"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
 				"product_status" => ""/*$this->prod_statuses[$_state]*/
 			));
