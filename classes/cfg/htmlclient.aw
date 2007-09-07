@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.172 2007/08/28 08:57:51 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.173 2007/09/07 06:40:56 voldemar Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -769,9 +769,23 @@ class htmlclient extends aw_template
 		}
 
 		// elem. id for all aw interface container tables
-		if (is_oid($arr["awcb_cfgform_id"]))
-		{
-			$this->vars["contenttbl_id"] = "awcbContentTbl" . $arr["awcb_cfgform_id"];
+		if (is_object($arr["awcb_cfgform"]))
+		{ // load misc options from given cfgform
+			$cfgform_o = $arr["awcb_cfgform"];
+
+			if ($cfgform_o->prop("awcb_add_id"))
+			{// add cfgform object id to main container element id
+				$this->vars["contenttbl_id"] = "awcbContentTbl" . $cfgform_o->id();
+			}
+			else
+			{
+				$this->vars["contenttbl_id"] = "awcbContentTblDefault";
+			}
+
+			if ($cfgform_o->prop("awcb_form_only"))
+			{
+				$arr["form_only"] = 1;
+			}
 		}
 		else
 		{
