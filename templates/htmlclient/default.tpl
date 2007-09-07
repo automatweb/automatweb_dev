@@ -3,12 +3,12 @@
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
 
 <!-- END SUB: SHOW_CHANGEFORM -->
-<table id="" width="100%" border="0" cellspacing="0" cellpadding="0"> <!-- aw06contenttable -->
+<table id="{VAR:contenttbl_id}" width="100%" border="0" cellspacing="0" cellpadding="0"> <!-- aw06contenttable -->
 
 <!-- SUB: SAVE_MESSAGE -->
 <tr>
 	<td colspan="2" class="DataSavedMessage">{VAR:message}</td>
-</tr>	
+</tr>
 <!-- END SUB: SAVE_MESSAGE -->
 	{VAR:content}
 
@@ -17,21 +17,21 @@
 	    <td colspan="2" id="error">{VAR:error_text}</td>
 	</tr>
 	<!-- END SUB: ERROR -->
-	
+
 	<!-- SUB: PROP_ERR_MSG -->
 	<tr>
 	    <td width="100"></td>
 	    <td id="error_msg">{VAR:err_msg}</td>
 	</tr>
 	<!-- END SUB: PROP_ERR_MSG -->
-	
+
 	<!-- SUB: LINE -->
 	<tr>
 	    <td width="100" id="linecaption" >{VAR:caption}</td>
 	    <td id="lineelment">{VAR:element}</td>
 	</tr>
 	<!-- END SUB: LINE -->
-  
+
 	<!-- SUB: HEADER -->
 	<tr>
 	    <td></td>
@@ -90,7 +90,7 @@ this.disabled=true;self.disabled=true;
 			<!-- SUB: GRID_ERR_MSG -->
 			<span style='color: red;'>{VAR:err_msg}</span>
 			<!-- END SUB: GRID_ERR_MSG -->
-			
+
 			<!-- SUB: CAPTION_TOP -->
 			{VAR:caption}:<br/>
 			{VAR:element}
@@ -111,7 +111,7 @@ this.disabled=true;self.disabled=true;
 		<!-- SUB: GRIDITEM_NO_CAPTION -->
 		<div class="aw04gridcell_no_caption">{VAR:element}</div>
 		<!-- END SUB: GRIDITEM_NO_CAPTION -->
-	
+
 		<!-- SUB: GRID_HBOX_OUTER -->
 		<div id="{VAR:grid_outer_name}">
 			<!-- SUB: GRID_HBOX -->
@@ -126,7 +126,7 @@ this.disabled=true;self.disabled=true;
 				</div>
 				<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
 				<!-- END SUB: GRID_HAS_CLOSER -->
-				
+
 				<table border=0 cellspacing=0 cellpadding=0 width='100%'>
 					<tr>
 						<!-- SUB: GRID_HBOX_ITEM -->
