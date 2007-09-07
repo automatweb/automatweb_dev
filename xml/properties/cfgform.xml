@@ -1,6 +1,22 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>cfg_proplist</name>
+            <table>objects</table>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Omadused</caption>
+      </property>
+      <property>
+            <name>cfg_groups</name>
+            <table>objects</table>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tabid</caption>
+      </property>
+      <property>
             <name>subclass</name>
             <table>objects</table>
             <group>general</group>
@@ -48,55 +64,6 @@
             <store>no</store>
             <editonly>1</editonly>
             <caption>Definitsioon</caption>
-      </property>
-      <property>
-            <name>classinfo_fixed_toolbar</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Fix. toolbar</caption>
-      </property>
-      <property>
-            <name>classinfo_allow_rte</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>chooser</type>
-            <caption>RTE</caption>
-      </property>
-      <property>
-            <name>classinfo_allow_rte_toggle</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;ita RTE/HTML nuppu</caption>
-      </property>
-      <property>
-            <name>default_view_is_html</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Default vaade HTML</caption>
-      </property>
-      <property>
-            <name>classinfo_disable_relationmgr</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>&amp;amp;Auml;ra kasuta seostehaldurit</caption>
       </property>
       <property>
             <name>edit_groups_tb</name>
@@ -223,24 +190,6 @@
             <caption>K&amp;amp;otilde;ik omadused</caption>
       </property>
       <property>
-            <name>cfg_proplist</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Omadused</caption>
-      </property>
-      <property>
-            <name>cfg_groups</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Tabid</caption>
-      </property>
-      <property>
             <name>subaction</name>
             <table>objects</table>
             <group>
@@ -283,17 +232,6 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Vaikimisi v&amp;auml;&amp;auml;rtused</caption>
-      </property>
-      <property>
-            <name>sysdefault</name>
-            <table>objects</table>
-            <group>system</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>S&amp;amp;uuml;steemi seaded</caption>
       </property>
       <property>
             <name>trans_tbl_capt</name>
@@ -386,6 +324,17 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+      </property>
+      <property>
+            <name>sysdefault</name>
+            <table>objects</table>
+            <group>system</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>S&amp;amp;uuml;steemi seaded</caption>
       </property>
       <property>
             <name>treeview</name>
@@ -488,6 +437,58 @@
             <store>no</store>
             <no_capton>12</no_capton>
       </property>
+      <property>
+            <name>classinfo_fixed_toolbar</name>
+            <table>objects</table>
+            <group>view_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Fix. toolbar</caption>
+      </property>
+      <property>
+            <name>classinfo_allow_rte</name>
+            <table>objects</table>
+            <group>view_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>RTE</caption>
+      </property>
+      <property>
+            <name>classinfo_disable_relationmgr</name>
+            <table>objects</table>
+            <group>view_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Peida seostehaldur</caption>
+      </property>
+      <property>
+            <name>awcb_add_id</name>
+            <table>objects</table>
+            <group>view_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>0</default>
+            <caption>Lisa id</caption>
+            <comment>Lisa klassi objekti kuvamisel konteineri id-le seadete vormi id</comment>
+      </property>
+      <property>
+            <name>awcb_form_only</name>
+            <table>objects</table>
+            <group>view_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>0</default>
+            <caption>N&amp;amp;auml;ita ainult vormi</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>
@@ -540,6 +541,10 @@
                   <caption>ORB seaded</caption>
                   <parent>settings</parent>
             </orb_settings>
+            <view_settings>
+                  <caption>Liidese kuvamine</caption>
+                  <parent>settings</parent>
+            </view_settings>
             <translate>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </translate>

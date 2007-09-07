@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.128 2007/09/03 13:00:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.129 2007/09/07 06:44:49 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
 //!!! todo. default cfgformi m22ramine editonlyna yldise alla. koos lingiga current defauldile.
+
+// cfgview -- cfgform is embedded as alias and requested object is shown as configured in that cfgform
+// awcb -- automatweb class_base
 
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CFGFORM
@@ -22,11 +25,9 @@
 	@groupinfo settings caption="Seaded"
 	@groupinfo defaults caption="Omaduste v&auml;&auml;rtused" parent=settings
 	@groupinfo system caption="Vormi seaded" parent=settings
-
-	// cfgview -- cfgform is embedded as alias and requested object is shown as configured in that cfgform
 	@groupinfo cfgview_settings caption="Klass aliasena" parent=settings
-
 	@groupinfo orb_settings caption="ORB seaded" parent=settings
+	@groupinfo view_settings caption="Liidese kuvamine" parent=settings
 
 	@groupinfo translate caption="T&otilde;lgi"
 		@groupinfo lang_1 caption="lang" parent=translate
@@ -46,82 +47,74 @@
 
 
 	@default table=objects
+		@property cfg_proplist type=hidden field=meta method=serialize
+		@caption Omadused
+
+		@property cfg_groups type=hidden field=meta method=serialize
+		@caption Tabid
+
+
 	@default group=general
+		@property subclass type=select newonly=1
+		@caption Klass
 
-	@property subclass type=select newonly=1
-	@caption Klass
-
-	@property ctype type=text editonly=1 field=subclass
-	@caption T&uuml;&uuml;p
+		@property ctype type=text editonly=1 field=subclass
+		@caption T&uuml;&uuml;p
 
 	@default field=meta
 	@default method=serialize
 
-	@property use_output type=relpicker reltype=RELTYPE_OUTPUT
-	@caption V&auml;ljundvorm
+		@property use_output type=relpicker reltype=RELTYPE_OUTPUT
+		@caption V&auml;ljundvorm
 
-	@property xml_definition type=fileupload editonly=1
-	@caption Uploadi vormi fail
+		@property xml_definition type=fileupload editonly=1
+		@caption Uploadi vormi fail
 
-	@property preview type=text store=no editonly=1
-	@caption Definitsioon
+		@property preview type=text store=no editonly=1
+		@caption Definitsioon
 
-	@property classinfo_fixed_toolbar type=checkbox ch_value=1 field=meta method=serialize
-	@caption Fix. toolbar
 
-	@property classinfo_allow_rte type=chooser field=meta method=serialize
-	@caption RTE
+	@default group=groupdata_a
+		@property edit_groups_tb type=toolbar no_caption=1 store=no
+		@caption Tabide toolbar
 
-	@property classinfo_allow_rte_toggle type=checkbox ch_value=1 field=meta method=serialize
-	@caption N&auml;ita RTE/HTML nuppu
+		@property edit_groups type=table no_caption=1 store=no
+		@caption Muuda tabe
 
-	@property default_view_is_html type=checkbox ch_value=1 field=meta method=serialize
-	@caption Default vaade HTML
+		@layout add_grp type=vbox
+		@caption Lisa uus tab
+			@property add_grp_return type=text store=no parent=add_grp
+			@caption
 
-	@property classinfo_disable_relationmgr type=checkbox ch_value=1 field=meta method=serialize
-	@caption &Auml;ra kasuta seostehaldurit
+			@property add_grp_name type=textbox store=no parent=add_grp
+			@comment Süsteemne identifitseerija tabile. Ainult ladina tähestiku tähed ning alakriips ( _ ) lubatud. Vähim pikkus 2.
+			@caption Nimi
 
-	@property edit_groups_tb type=toolbar group=groupdata_a no_caption=1 store=no
-	@caption Tabide toolbar
+			@property add_grp_caption type=textbox store=no parent=add_grp
+			@caption Pealkiri
 
-	@property edit_groups type=table group=groupdata_a no_caption=1 store=no
-	@caption Muuda tabe
+			@property add_grp_parent type=select store=no parent=add_grp
+			@caption Millise tabi alla
 
-	@layout add_grp type=vbox group=groupdata_a
-	@caption Lisa uus tab
-		@property add_grp_return group=groupdata_a type=text store=no parent=add_grp
-		@caption
 
-		@property add_grp_name group=groupdata_a type=textbox store=no parent=add_grp
-		@comment Süsteemne identifitseerija tabile. Ainult ladina tähestiku tähed ning alakriips ( _ ) lubatud. Vähim pikkus 2.
-		@caption Nimi
+	@default group=groupdata_b
+		@property group_movement type=table store=no no_caption=1
+		@caption Tabide vaheline liikumine
 
-		@property add_grp_caption group=groupdata_a type=textbox store=no parent=add_grp
-		@caption Pealkiri
 
-		@property add_grp_parent group=groupdata_a type=select store=no parent=add_grp
-		@caption Millise tabi alla
+	@default group=layout
+		@property navtoolbar type=toolbar store=no no_caption=1 editonly=1
+		@caption Toolbar
 
-	@property group_movement type=table group=groupdata_b store=no no_caption=1
-	@caption Tabide vaheline liikumine
+		@property layout type=callback callback=callback_gen_layout store=no no_caption=1
+		@caption Layout
 
-	@property navtoolbar type=toolbar group=layout store=no no_caption=1 editonly=1
-	@caption Toolbar
-
-	@property layout type=callback callback=callback_gen_layout store=no group=layout no_caption=1
-	@caption Layout
 
 	@property availtoolbar type=toolbar group=avail store=no no_caption=1 editonly=1
 	@caption Av. Toolbar
 
 	@property availprops type=table store=no group=avail no_caption=1
 	@caption K&otilde;ik omadused
-
-	@property cfg_proplist type=hidden field=meta method=serialize
-	@caption Omadused
-
-	@property cfg_groups type=hidden field=meta method=serialize
-	@caption Tabid
 
 	@property subaction type=hidden store=no group=layout,avail
 	@caption Subaction (sys)
@@ -135,9 +128,6 @@
 	@property default_table type=table group=defaults no_caption=1
 	@caption Vaikimisi väärtused
 
-	@property sysdefault type=table group=system no_caption=1
-	@caption S&uuml;steemi seaded
-
 	@property trans_tbl_capt type=text subtitle=1 group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12
 	@caption Omadused
 
@@ -148,6 +138,12 @@
 
 	@property trans_tbl_grps type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
 
+
+@default group=system
+	@property sysdefault type=table no_caption=1
+	@caption S&uuml;steemi seaded
+
+
 @default group=show_props
 @layout mlist type=hbox width=20%:80%
 	@property treeview type=treeview store=no parent=mlist no_caption=1
@@ -155,9 +151,9 @@
 
 
 @default group=transl
-
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
+
 
 @default group=cfgview_settings
 	@property cfgview_action type=select field=meta method=serialize
@@ -181,21 +177,36 @@
 	@property cfgview_ru type=textbox field=meta method=serialize
 	@caption Aadress kuhu suunata
 
-@default group=orb_settings
 
+@default group=orb_settings
 	@property orb_settings type=table store=no no_capton=12
 
-// ---------- RELATIONS -------------
 
+@default group=view_settings
+	@property classinfo_fixed_toolbar type=checkbox ch_value=1
+	@caption Fix. toolbar
+
+	@property classinfo_allow_rte type=chooser
+	@caption RTE
+
+	@property classinfo_disable_relationmgr type=checkbox ch_value=1
+	@caption Peida seostehaldur
+
+	@property awcb_add_id type=checkbox ch_value=1 default=0
+	@caption Lisa id
+	@comment Lisa klassi objekti kuvamisel konteineri id-le seadete vormi id
+
+	@property awcb_form_only type=checkbox ch_value=1 default=0
+	@caption N&auml;ita ainult vormi
+
+
+
+// ---------- RELATIONS -------------
 	@reltype PROP_GROUP value=1 clid=CL_MENU
 	@caption omaduste kataloog
 
-	reltype ELEMENT value=2 clid=CL_RTE
-	caption element
-
 	@reltype CONTROLLER value=3 clid=CL_CFGCONTROLLER
 	@caption Salvestamise kontroller
-
 
 	@reltype VIEWCONTROLLER value=5 clid=CL_CFG_VIEW_CONTROLLER
 	@caption N&auml;itamise kontroller
@@ -205,7 +216,6 @@
 
 	@reltype VIEW_DFN_GRP value=6 clid=CL_GROUP
 	@caption Kasutajagrupp omaduste lubamiseks/keelamiseks
-
 
 
 	// so, how da fuck do I implement the grid layout thingie?
@@ -2963,99 +2973,124 @@ class cfgform extends class_base
 	function get_class_cfgview($args)
 	{
 		enter_function("cfg_form::get_class_cfgview");
-		$this_o = obj($args["id"]);
 
 		// request vars
-		if (!is_array($_GET) || (sizeof($_GET) == 0))
+		if (empty($this->cfgview_vars))
 		{
-			$_GET = $HTTP_GET_VARS;
+			$this->cfgview_vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
 		}
 
-		if (!is_array($_POST))
+		// get view
+		$content = "";
+		$main_view = (empty($this->cfgview_vars["class"]) or $class === $this->cfgview_vars["class"]);
+
+		if ($main_view)
 		{
-			$_POST = $HTTP_POST_VARS;
+			$this_o = obj($args["id"]);
+			$classes = aw_ini_get("classes");
+			$class = strtolower(substr($classes[$this_o->prop("subclass")]["def"], 3));
+			$this->_get_cfgview_params($this_o);
+			$action = $this->cfgview_vars["action"];
+
+			if ("new" !== $action and !is_oid($this->cfgview_vars["id"]))
+			{
+				return "";
+			}
+
+			if ("new" === $action and empty($this->cfgview_vars["parent"]))
+			{
+				$this->cfgview_vars["parent"] = $this_o->id();
+			}
+
+			if ("new" === $action && !$this->can("add", $this->cfgview_vars["parent"]))
+			{
+				return "";
+			}
+
+			$this->cfgview_vars["cfgform"] = $args["id"];
+			$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
+			$_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
+
+			// make request
+			classload("core/orb/orb");
+			$orb = new orb();
+			$orb->process_request(array(
+				"class" => $class,
+				"action" => $action,
+				"reforb" => $this->cfgview_vars["reforb"],
+				"user"	=> 1,//!!! whats that for?
+				"vars" => $this->cfgview_vars,
+				"silent" => false,
+			));
+			$content = $orb->get_data();
 		}
 
-		if (!isset($AW_GET_VARS) || !is_array($AW_GET_VARS))
-		{
-			$AW_GET_VARS = array();
-		}
+		exit_function("cfg_form::get_class_cfgview");
+		return $content;
+	}
 
-		$classes = aw_ini_get("classes");
-		$class = strtolower(substr($classes[$this_o->prop("subclass")]["def"], 3));
+	function _get_cfgview_params($this_o)
+	{
 		$action = array_key_exists($this_o->prop("cfgview_action"), $this->cfgview_actions) ? $this_o->prop("cfgview_action") : "view";
-
-		// additional params
-		$params = explode("&", $this_o->prop("cfgview_" . $action . "_params"));
-
-		foreach ($params as $param)
-		{
-			$param = explode("=", $param, 2);
-			$vars[$param[0]] = $param[1];
-			$_GET[$param[0]] = $param[1];
-		}
-
-		$vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
 
 		if ("cfgview_change_new" === $action or "cfgview_view_new" === $action)
 		{
-			if (!is_oid($vars["id"]))
+			$this->_load_cfgview_params($this_o, "new");
+
+			if (!is_oid($this->cfgview_vars["id"]))
 			{
 				$action = "new";
 			}
 			elseif ("cfgview_change_new" === $action)
 			{
 				$action = "change";
+				$this->_load_cfgview_params($this_o, $action);
 			}
 			elseif ("cfgview_view_new" === $action)
 			{
 				$action = "view";
+				$this->_load_cfgview_params($this_o, $action);
 			}
 		}
-		elseif ("new" !== $action and !is_oid($vars["id"]))
+		else
 		{
-			return;
+			$this->_load_cfgview_params($this_o, $action);
 		}
 
-		if ("new" === $action and empty($vars["parent"]))
+		$this->cfgview_vars["action"] = $action;
+	}
+
+	function _load_cfgview_params($this_o, $action)
+	{
+		$prop_name_indic = "cfgview_params_" . $action . "_loaded";
+
+		if (!$this->$prop_name_indic)
 		{
-			$vars["parent"] = $this_o->id();
+			$params = explode("&", $this_o->prop("cfgview_" . $action . "_params"));
+
+			foreach ($params as $param)
+			{
+				$param = explode("=", $param, 2);
+				$this->cfgview_vars[$param[0]] = $param[1];
+				$_GET[$param[0]] = $param[1];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
+			}
+
+			$this->$prop_name_indic = true;
 		}
-
-
-		if ("new" === $action && !$this->can("add", $vars["parent"]))
-		{
-			return "";
-		}
-
-		$vars["action"] = $action;
-		$vars["cfgform"] = $args["id"];
-		$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
-		$_GET["awcb_display_mode"] = $args["display_mode"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
-
-		// make request
-		classload("core/orb/orb");
-		$orb = new orb();
-		$vars["action"] = $action;
-		$orb->process_request(array(
-			"class" => $class,
-			"action" => $action,
-			"reforb" => $vars["reforb"],
-			"user"	=> 1,//!!! whats that for?
-			"vars" => $vars,
-			"silent" => false,
-		));
-		$content = $orb->get_data();
-
-		exit_function("cfg_form::get_class_cfgview");
-		return $content;
 	}
 
 	/// submenus from object interface methods
 	function make_menu_item($this_o, $level, $parent_o, $site_show_i)
 	{
+		if (empty($this->cfgview_vars))
+		{
+			$this->cfgview_vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
+		}
+
+		$this->_get_cfgview_params($this_o);
+
 		// no groups for new object form
-		if (empty($_GET["id"]) || !is_oid($_GET["id"]))
+		if (!is_oid($this->cfgview_vars["id"]))
 		{
 			return false;
 		}
@@ -3085,7 +3120,7 @@ class cfgform extends class_base
 		$this->make_menu_item_counter++;
 
 		// selected grp
-		if ($_GET["group"] == $grp_name)
+		if ($this->cfgview_vars["group"] == $grp_name)
 		{
 		}
 
@@ -3095,14 +3130,22 @@ class cfgform extends class_base
 			$this->make_menu_item_counter = NULL;
 			return false;
 		}
+		elseif (!empty($this->cfgview_vars["class"]))
+		{
+			$this->make_menu_item_counter = NULL;
+			return false;
+		}
 		else
 		{
+			$vars = array (
+				"just_saved" => NULL,
+				"group" => $grp_name
+			);
+			$link = aw_url_change_var($vars);
+
 			return array(
 				"text" => $this->grplist[$grp_name]["caption"],
-				"link" => aw_url_change_var(array (
-					"group" => $grp_name,
-					"just_saved" => NULL,
-				)),
+				"link" => $link,
 				// "section" => $o_91_2->id(),
 				// "menu_edit" => $this->__helper_menu_edit($o_91_2),
 				// "parent_section" => is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
