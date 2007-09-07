@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.558 2007/07/19 09:13:04 voldemar Exp $
+// $Id: class_base.aw,v 2.559 2007/09/07 06:41:27 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1758,13 +1758,20 @@ class class_base extends aw_template
 
 		//if (empty($args["content"]))
 		//{
-			$content = $this->cli->get_result(array(
-				"awcb_cfgform_id" => $this->cfgform_id,
+			$cli_args = array(
 				"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
 				"content" => $args["content"],
 				"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]),
 				"save_message" => $this->just_saved ? t("Andmed salvestatud!") : null
-			));
+			);
+
+			if (is_oid($this->cfgform_id))
+			{
+				$cfgform_o = new object($this->cfgform_id);
+				$cli_args["awcb_cfgform"] = $cfgform_o;
+			}
+
+			$content = $this->cli->get_result($cli_args);
 		//}
 		//else
 		//{
