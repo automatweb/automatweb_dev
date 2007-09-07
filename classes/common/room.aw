@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.207 2007/09/05 15:00:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.208 2007/09/07 12:27:50 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -4143,6 +4143,7 @@ class room extends class_base
 			"end" => $end,
 			"room" => $room->id(),
 			"group" => $grp,
+			"bron" => $bron,
 		));
 
 		// special discount does nota pply to products
@@ -4151,12 +4152,11 @@ class room extends class_base
 			$prod_discount = $arr["bron"]->prop("special_discount");
 		}*/
 		// and if the user has set a discount for prods separately, then that overrides everything
-		if (is_object($arr["bron"]) && $arr["bron"]->meta("prod_discount"))
+		if (is_object($arr["bron"]) && $arr["bron"]->prop("products_discount"))
 		{
-			 $prod_discount = $arr["bron"]->meta("prod_discount");
+			 $prod_discount = $arr["bron"]->prop("products_discount");
 		}
-
-		$rv["prod_discount"] = $prod_discount;
+//if(aw_global_get("uid") == "struktuur") {arr($arr["bron"]->prop("products_discount"));arr($arr["bron"]->meta());}
 		foreach($room->prop("currency") as $currency)
 		{
 			if(!$sum[$currency])
@@ -4179,6 +4179,7 @@ class room extends class_base
 				$tmp = $this->cal_products_price(array(
 					"products" => $products,
 					"currency" => $currency,
+					"bron" => $bron,
 					"prod_discount" => $prod_discount,
 					"room" => $room,
 					"start" => $start,
@@ -4188,11 +4189,22 @@ class room extends class_base
 				$rv["prod_price"][$currency] += $tmp;
 
 				// calculate the amount of money saved by the discount back from the discounted price
-				$adv = 100 - $prod_discount;
+				$adv = 100 - $prod_discount;//if(aw_global_get("uid") == "struktuur") arr($tmp); a
+				if(!$prod_discount)
+				{
+					$adv = 100 - $this->average_discount_for_products;
+				}
 				$rv["prod_discount_value"][$currency] = ((100.0 * $tmp) / $adv) - $tmp;
 			}
 		}
-	
+		if($prod_discount)
+		{
+			$rv["prod_discount"] = $prod_discount;
+		}
+		else
+		{
+			$rv["prod_discount"] = $this->average_discount_for_products;
+		}
 		
 		//teeb kõigepealt kontrolli, et kas miinimumhind on olemas üldse, kõhutunnne ütleb, et seadete otsimine võtab rohkem aega,... niiet paneb selle hilisemaks
 		if(is_array($room->meta("web_room_min_price")) && sizeof($room->meta("web_room_min_price")))
@@ -4670,6 +4682,8 @@ class room extends class_base
 		@param prod_discount optional type=int
 		@param room optional type=object
 			room object
+		@param bron optional type=object
+			bron object, takes prod price and discount from bron
 		@param start optional type=int
 			timestamp , reservation starts (needed for product discounts)
 		@param end optional type=int
@@ -4690,27 +4704,62 @@ class room extends class_base
 	function cal_products_price($arr)
 	{
 		extract($arr);
-			
+		$this->last_discount = 0;
 		if(is_array($products) && sizeof($products))//kui tooteid pole, võiks selle osa vahele jätta... võibolla võidab paar millisekundit
 		{
+			$bron_inst = get_instance(CL_RESERVATION);
+
 			if(is_object($room) && !$prod_discount)
 			{
-				$prod_discount = $this->get_prod_discount(array("room" => $room->id(), "start" => $start, "end" => $end));
+				$prod_discount = $this->get_prod_discount(array(
+					"room" => $room->id(),
+					"start" => $start,
+					"end" => $end,
+					"bron" => $bron,
+				));
 			}
-			$sum = 0;
-			foreach($products as $id => $amt)
+			if(!$prod_discount)
 			{
-				if($amt && $this->can("view", $id))
+				$discount_array = $bron_inst->get_product_discount($bron->id());
+			}
+
+			if(is_object($bron) && ($total_price_set = $bron_inst->get_products_price(array("reservation" => $bron))))
+			{
+				$sum = $total_price_set;
+			}
+			else
+			{
+				$sum = 0;
+				foreach($products as $id => $amt)
 				{
-					$product = obj($id);
-					if(is_oid($currency))
+					if($amt && $this->can("view", $id))
 					{
-						$cur_pr = $product->meta("cur_prices");
-						if($cur_pr[$currency])
+						$product = obj($id);
+						if($prod_discount)
 						{
-							$sum += $cur_pr[$currency] *  $amt;
+							if(is_oid($currency))
+							{
+								$cur_pr = $product->meta("cur_prices");
+								if($cur_pr[$currency])
+								{
+									$sum += $cur_pr[$currency] *  $amt;
+								}
+								else $sum += $product->prop("price") * $amt;
+							}
 						}
-						else $sum += $product->prop("price") * $amt;
+						else
+						{
+							$this_product_doscount = $discount_array[$id];
+							$cur_pr = $product->meta("cur_prices");
+							$cost = 0;
+							if($cur_pr[$currency])
+							{
+								$cost = $cur_pr[$currency] *  $amt;
+							}
+							else $cost = $product->prop("price") * $amt;
+							$sum += $cost - $this_product_doscount * 0.01 * $cost;
+							$this->last_discount+= $cost*0.01*$this_product_doscount;
+						}
 					}
 				}
 			}
@@ -4722,21 +4771,36 @@ class room extends class_base
 			}
 		}
 		
+		//statistika jaoks arvutaks miski keskmise sooduse toodetele jne
+		if(!$prod_discount)
+		{
+			$this->average_discount_for_products = ($this->last_discount / ($sum + $this->last_discount)) * 100;
+		}
+
 		//ja juhul kui jääb alla miinimumi, siis jääb miinimum
 		if(is_object($room) && is_oid($currency))
 		{
 			$min = $room->meta("web_min_prod_prices");
 			if($sum < $min[$currency])
 			{
+				if(!$prod_discount)
+				{
+					$this->average_discount_for_products = ((($sum + $this->last_discount) - $min[$currency]) / $min[$currency]) * 100;
+				}
 				$sum = $min[$currency];
 			}
 		}
+
 		return $sum;
 	}
 
 	function get_prod_discount($arr)
 	{
 		extract($arr);
+		if (is_object($bron) && $bron->prop("products_discount"))
+		{
+			 return $bron->prop("products_discount");
+		}
 		if(is_oid($room) && $this->can("view" , $room))
 		{
 			$o = obj($room);
