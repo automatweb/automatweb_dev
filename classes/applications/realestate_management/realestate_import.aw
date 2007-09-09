@@ -1879,12 +1879,10 @@ class realestate_import extends class_base
 						$city24_id = (int) $this->property_data["ID"];
 
 						### load existing object corresponding to city24 id
-						$list = new object_list (array (
-							"class_id" => $realestate_classes,
-							"parent" => $realestate_folders,
-							"city24_object_id" => $city24_id,
-						));
-						$property = $list->begin ();
+						if (array_key_exists($city24_id, $imported_object_ids))
+						{
+							$property = new object($imported_object_ids[$city24_id]);
+						}
 
 						if (!is_object ($property))
 						{
