@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_item.aw,v 1.3 2007/08/03 16:22:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_item.aw,v 1.4 2007/09/10 10:27:37 kristo Exp $
 // orders_item.aw - Tellimuse rida 
 /*
 

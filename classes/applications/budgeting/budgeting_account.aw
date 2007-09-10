@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_account.aw,v 1.1 2007/05/04 10:33:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_account.aw,v 1.2 2007/09/10 10:27:33 kristo Exp $
 // rostering_account.aw - Eelarvestamise konto 
 /*
 
@@ -91,7 +91,7 @@ class budgeting_account extends class_base
 		));
 		$arr["prop"]["vcl_inst"]->table_from_ol(
 			$data,
-			array("name", "comment"),
+			array("name", "from_acct", "to_acct", "in_project", "amount", "when"),
 			CL_BUDGETING_TRANSFER
 		);
 	}
@@ -111,7 +111,7 @@ class budgeting_account extends class_base
 		));
 		$arr["prop"]["vcl_inst"]->table_from_ol(
 			$data,
-			array("name", "comment"),
+			array("name", "to_acct", "amount", "pri", "tax_grp"),
 			CL_BUDGETING_TAX
 		);
 	}

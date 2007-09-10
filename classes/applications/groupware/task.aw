@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.180 2007/09/06 10:27:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.181 2007/09/10 10:27:36 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1047,6 +1047,8 @@ class task extends class_base
 			case "is_personal":
 			case "send_bill":
 			case "hr_price_currency":
+			case "in_budget":
+			case "service_type":
 				return PROP_IGNORE;
 
 			case "controller_disp":
@@ -1462,6 +1464,8 @@ class task extends class_base
 			case "is_goal":
 			case "is_personal":
 			case "send_bill":
+			case "in_budget":
+			case "service_type":
 				return PROP_IGNORE;
 
 			case "sel_resources":

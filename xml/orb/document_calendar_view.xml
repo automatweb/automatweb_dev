@@ -3,4 +3,3 @@
 	<class name="document_calendar_view" folder="contentmgmt" extends="class_base">
 	</class>
 </orb>
-		

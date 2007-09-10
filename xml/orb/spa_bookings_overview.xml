@@ -15,6 +15,7 @@
 				<arguments>
 					<required name="id" />
 					<optional name="rooms" />
+					<optional name="title" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.10 2007/08/30 13:00:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.11 2007/09/10 10:27:37 kristo Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 

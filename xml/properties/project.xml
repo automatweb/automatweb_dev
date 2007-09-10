@@ -789,6 +789,24 @@
             <field>stats</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
       </property>
+      <property>
+            <name>prods_toolbar</name>
+            <table>objects</table>
+            <group>prods</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>prods_toolbar</field>
+      </property>
+      <property>
+            <name>prods_table</name>
+            <table>objects</table>
+            <group>prods</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>prods_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -883,10 +901,20 @@
             <add_event>
                   <caption>Muuda s&amp;uuml;ndmust</caption>
             </add_event>
+            <files_main>
+                  <caption>Dokumendid</caption>
+                  <submit>no</submit>
+            </files_main>
             <files>
                   <caption>Dokumendid</caption>
                   <submit>no</submit>
+                  <parent>files_main</parent>
             </files>
+            <prods>
+                  <caption>Tooted</caption>
+                  <submit>no</submit>
+                  <parent>files_main</parent>
+            </prods>
             <trans>
                   <caption>T&amp;otilde;lkimine</caption>
             </trans>
@@ -1047,6 +1075,11 @@
                   <clid>CL_PROJECT_ANALYSIS_WS</clid>
                   <caption>Anal&amp;amp;uuml;&amp;amp;uuml;si t&amp;amp;ouml;&amp;amp;ouml;laud</caption>
             </ANALYSIS_WS>
+            <PRODUCT>
+                  <value>24</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Toode</caption>
+            </PRODUCT>
       </reltypes>
       <layout>
             <up_bit>

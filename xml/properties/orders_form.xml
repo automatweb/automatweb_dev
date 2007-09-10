@@ -114,7 +114,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Tellimuse rea kujundusp&amp;amp;ouml;hi</caption>
+            <caption>Tellimuse kujundusp&amp;amp;otilde;hi</caption>
       </property>
       <property>
             <name>orders_form_template</name>
@@ -123,7 +123,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Tellimuse vormi kujundusp&amp;amp;ouml;hi</caption>
+            <caption>Tellija andmete kujundusp&amp;amp;otilde;hi</caption>
       </property>
       <property>
             <name>ordering</name>

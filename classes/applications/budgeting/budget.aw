@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.3 2007/07/17 08:45:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.4 2007/09/10 10:27:32 kristo Exp $
 // budget.aw - Eelarve 
 /*
 
@@ -106,12 +106,23 @@ class budget extends class_base
 		$t->define_field(array(
 			"name" => "tax",
 			"caption" => t("Maks"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "tax_pri",
+			"caption" => t("Prioriteet"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "tax_pct",
 			"caption" => t("Maksu protsent"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "mod_tax_pct",
@@ -121,12 +132,16 @@ class budget extends class_base
 		$t->define_field(array(
 			"name" => "tot_amt",
 			"caption" => t("Maksu summa"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "forward",
 			"caption" => t("Edasi kandub"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
 		));
 	}
 
@@ -134,7 +149,6 @@ class budget extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_m_t($t, $arr);
-		$t->set_sortable(false);
 
 		// get all taxes that go away above the project
 		// then all tasks in the project
@@ -172,7 +186,9 @@ class budget extends class_base
 					"name" => "p[".$tax->id()."]",
 					"value" => $p[$tax->id()],
 					"size" => 5
-				)).$add
+				)).$add,
+				"tax_pri" => $tax->prop("pri"),
+				"rown" => ++$rown
 			));
 		}
 
@@ -192,7 +208,8 @@ class budget extends class_base
 				"tax" => html::obj_change_url($task),
 				"tax_pct" => "",
 				"tot_amt" => number_format($tax_amt, 2),
-				"forward" => number_format($amt, 2)
+				"forward" => number_format($amt, 2),
+				"rown" => ++$rown
 			));
 		}
 
@@ -200,6 +217,9 @@ class budget extends class_base
 		{
 			$t->set_rgroupby(array("tax_grp" => "tax_grp"));
 		}
+		$t->set_default_sortby("rown");
+		$t->sort_by();
+		$t->set_sortable(false);
 	}
 
 	function _get_desc($arr)

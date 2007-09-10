@@ -10,5 +10,26 @@
 			</function>
 		</action>
 
+		<action name="cut_taxes">
+			<function name="cut_taxes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="copy_taxes">
+			<function name="copy_taxes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_taxes">
+			<function name="paste_taxes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

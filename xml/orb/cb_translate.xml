@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cb_translate" folder="applications/cb_trans" extends="aw_template">
+	<class name="cb_translate" folder="applications/cb_trans" extends="class_base">
 		<action name="editor">
 			<function name="editor">
 				<arguments>
@@ -106,6 +106,21 @@
 
 		<action name="submit_editor">
 			<function name="submit_editor">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="aw_url" all_args="1">
+			<function name="aw_url">
+				<arguments>
+					<required name="trans_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search_trans" all_args="1">
+			<function name="search_trans">
 				<arguments>
 				</arguments>
 			</function>

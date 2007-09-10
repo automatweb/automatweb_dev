@@ -189,7 +189,7 @@ class crm_company_objects_impl extends class_base
 	function _get_stypes_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_new_button(array(CL_CRM_SERVICE_TYPE,CL_CRM_SERVICE_TYPE_CATEGORY), !empty($arr["request"]["stype"]) ? $arr["request"]["stype"] : $arr["obj_inst"]->id(), 66);
+		$tb->add_new_button(array(CL_CRM_SERVICE_TYPE,CL_CRM_SERVICE_TYPE_CATEGORY), !empty($arr["request"]["stype"]) ? $arr["request"]["stype"] : $arr["obj_inst"]->id(), 67);
 		$tb->add_delete_button();
 	}
 

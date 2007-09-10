@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.4 2007/07/17 08:45:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.5 2007/09/10 10:27:33 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -151,6 +151,7 @@ class budgeting_workspace extends class_base
 		{
 			$arr["post_ru"] = post_ru();
 		}
+		$arr["tax_fld"] = $_GET["tax_fld"];
 	}
 
 	function _get_acct_tree($arr)
@@ -256,7 +257,7 @@ class budgeting_workspace extends class_base
 				"lang_id" => array(),
 				"site_id" => array()
 			)),
-			array("name", "comment", "pri"),
+			array("name", "comment", "to_acct", "amount", "pri"),
 			CL_BUDGETING_TAX
 		);
 	}
@@ -283,6 +284,26 @@ class budgeting_workspace extends class_base
 	{
 		$arr["prop"]["vcl_inst"]->add_new_button(array(CL_BUDGETING_TAX), $arr["obj_inst"]->id(), null, array("place" => $arr["request"]["tax_fld"]));
 		$arr["prop"]["vcl_inst"]->add_delete_button();
+
+		$arr["prop"]["vcl_inst"]->add_separator();
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"action" => "cut_taxes",
+		));
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "copy",
+			"img" => "copy.gif",
+			"action" => "copy_taxes",
+		));
+		if (is_array($_SESSION["bdgt_taxes_cut"]) || is_array($_SESSION["bdgt_taxes_copied"]))
+		{
+			$arr["prop"]["vcl_inst"]->add_button(array(
+				"name" => "paste",
+				"img" => "paste.gif",
+				"action" => "paste_taxes",
+			));
+		}
 	}
 
 	function _get_transfer_tb($arr)
@@ -455,6 +476,123 @@ class budgeting_workspace extends class_base
 
 		}
 		else
+		if (substr($pt, 0, 12)  == "projprodcats")
+		{
+			list(, $cust_id) = explode("_", $pt);
+			$co = get_current_company();
+			$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+			if (!$wh)
+			{
+				die($tv->finalize_tree());
+			}
+			$wh_i = $wh->instance();
+			list($fld, $ot) = $wh_i->get_packet_folder_list(array(
+				"id" => $wh->id()
+			));
+			foreach($ot->level($fld) as $cat)
+			{
+				$s = $cat->name();
+				$ti = "projprodfamily_".$cust_id."_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				$tv->add_item($ti, array("id" => "tmp"));
+			}
+		}
+		else
+		if (substr($pt, 0, 14)  == "projprodfamily")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $pt);
+			$ol = new object_list(array(
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $cat_id
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				if ($cat->class_id() == CL_MENU)
+				{
+					$ti = "projprodfamily_".$cust_id."_".$cat->id();
+				}
+				else
+				{
+					$ti = "projprod_".$cust_id."_".$cat->id();
+				}
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_MENU)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+		else
+		if (substr($pt, 0, 10)  == "projstypes")
+		{
+			list(, $cust_id) = explode("_", $pt);
+			$co = get_current_company();
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_SERVICE_TYPE_CATEGORY,CL_CRM_SERVICE_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $co->id()
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				$ti = "projstypecat_".$cust_id."_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_CRM_SERVICE_TYPE_CATEGORY)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+		else
+		if (substr($pt, 0, 12)  == "projstypecat")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $pt);
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_SERVICE_TYPE_CATEGORY,CL_CRM_SERVICE_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $cat_id
+			));
+			foreach($ol->arr() as $cat)
+			{
+				$s = $cat->name();
+				$ti = "projstypecat_".$cust_id."_".$cat->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+					"icon" => icons::get_icon_url($cat->id())
+				));
+				if ($cat->class_id() == CL_CRM_SERVICE_TYPE_CATEGORY)
+				{
+					$tv->add_item($ti, array("id" => "tmp"));
+				}
+			}
+		}
+		else
 		if (substr($pt, 0, 4) == "area")
 		{
 			list(, $area_id) = explode("_", $pt);
@@ -575,6 +713,26 @@ class budgeting_workspace extends class_base
 					"icon" => icons::get_icon_url(CL_TASK)
 				));
 			}
+
+			$s = t("Teenuse liigid");
+			$ti = "projstypes_".$proj_id;
+			$arr["r"]["tax_fld"] = $ti;
+			$tv->add_item(0, array(
+				"id" => $ti,
+				"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+				"url" => $this->mk_my_orb("change", $arr["r"]),
+			));
+			$tv->add_item($ti, array("id" => "kmp"));
+
+			$s = t("Tooteperekonnad");
+			$ti = "projprodcats_".$proj_id;
+			$arr["r"]["tax_fld"] = $ti;
+			$tv->add_item(0, array(
+				"id" => $ti,
+				"name" => $tax_fld == $ti ? "<b>".$s."</b>" : $s,
+				"url" => $this->mk_my_orb("change", $arr["r"]),
+			));
+			$tv->add_item($ti, array("id" => "tmp3"));
 		}
 		else
 		if ($pt == "service_type")
@@ -844,6 +1002,57 @@ class budgeting_workspace extends class_base
 			array("name", "comment"),
 			CL_BUDGETING_TAX_GROUP
 		);
+	}
+
+	/**
+		@attrib name=cut_taxes
+	**/
+	function cut_taxes($arr)
+	{
+		$_SESSION["bdgt_taxes_cut"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=copy_taxes
+	**/
+	function copy_taxes($arr)
+	{
+		$_SESSION["bdgt_taxes_copied"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=paste_taxes
+	**/
+	function paste_taxes($arr)
+	{
+		foreach(safe_array($_SESSION["bdgt_taxes_cut"]) as $tax_id)
+		{
+			$to = obj($tax_id);
+			$to->set_prop("from_place", $arr["tax_fld"]);
+			$to->save();
+		}
+		$_SESSION["bdgt_taxes_cut"] = null;
+
+		foreach(safe_array($_SESSION["bdgt_taxes_copied"]) as $tax_id)
+		{
+			$to = obj($tax_id);
+			$to->set_prop("from_place", $arr["tax_fld"]);
+			$to->save_new();
+			
+			$old = obj($tax_id);
+			foreach($old->connections_from() as $c)
+			{
+				$to->connect(array(
+					"from" => $c->prop("from"),
+					"to" => $c->prop("to"),
+					"type" => $c->prop("reltype"),
+				));
+			}
+		}
+		$_SESSION["bdgt_taxes_copied"] = null;
+		return $arr["post_ru"];
 	}
 }
 ?>

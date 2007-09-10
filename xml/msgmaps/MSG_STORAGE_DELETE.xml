@@ -85,4 +85,9 @@
       <func>on_delete</func>
       <param>CL_REALESTATE_PROPERTY</param>
 </num_16>
+<num_17>
+      <class>file</class>
+      <func>on_delete_person</func>
+      <param>CL_CRM_PERSON</param>
+</num_17>
 </xml>

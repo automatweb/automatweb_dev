@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.3 2007/06/08 12:35:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.4 2007/09/10 10:27:33 kristo Exp $
 // budgeting_tax.aw - Eelarvestamise maks 
 /*
 
@@ -17,11 +17,13 @@
 	@caption Kontole
 
 	@property amount type=textbox size=5 field=aw_amt
-	@caption Summa
-	@comment Kui l&otilde;peb % m&auml;rgiga, siis protsentides
+	@caption Summa (Kui l&otilde;peb % m&auml;rgiga, siis protsentides)
 
-	@property max_deviation type=textbox size=5 field=aw_max_deviation
-	@caption Maksimaalne projektip&otilde;hine muudatus
+	@property max_deviation_minus type=textbox size=5 field=aw_max_deviation_minus
+	@caption Maksimaalne projektip&otilde;hine muudatus -
+
+	@property max_deviation_plus type=textbox size=5 field=aw_max_deviation_plus
+	@caption Maksimaalne projektip&otilde;hine muudatus +
 
 	@property pri type=textbox size=5 field=aw_pri
 	@caption Prioriteet
@@ -115,6 +117,8 @@ class budgeting_tax extends class_base
 				return true;
 
 			case "aw_max_deviation":
+			case "aw_max_deviation_minus":
+			case "aw_max_deviation_plus":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "double"
@@ -134,6 +138,30 @@ class budgeting_tax extends class_base
 			1 => t("&Uuml;hekordne"),
 			2 => t("Korduv")
 		);
+	}
+
+	function callback_post_save($arr)
+	{	
+		$ol = new object_list(array(
+			"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
+			"tax" => $arr["obj_inst"]->id()
+		));
+		if (!$ol->count())
+		{
+			$o = obj();
+			$o->set_parent($arr["obj_inst"]->id());
+			$o->set_class_id(CL_BUDGETING_TAX_FOLDER_RELATION);
+			$o->set_name(sprintf(t("Seos maksu %s ja kausta %s vahel"), $arr["obj_inst"]->name(), $arr["obj_inst"]->prop("from_place")));
+			$o->set_prop("tax", $arr["obj_inst"]->id());
+			$o->set_prop("folder", $arr["obj_inst"]->prop("from_place"));
+			$o->save();
+		}
+		else
+		{
+			$o = $ol->begin();
+			$o->set_prop("folder", $arr["obj_inst"]->prop("from_place"));
+			$o->save();
+		}
 	}
 }
 ?>

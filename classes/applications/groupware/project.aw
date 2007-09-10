@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.121 2007/07/12 11:38:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.122 2007/09/10 10:27:35 kristo Exp $
 // project.aw - Projekt
 /*
 
@@ -279,6 +279,10 @@
 	@property stats type=text store=no
 	@caption T&ouml;&ouml;tunnid
 
+@default group=prods
+
+	@property prods_toolbar type=toolbar store=no no_caption=1
+	@property prods_table type=table store=no no_caption=1
 
 @groupinfo general2 parent=general caption="&Uuml;ldandmed"
 	@groupinfo info_t caption="Lisainfo" parent=general
@@ -300,7 +304,9 @@
 @groupinfo valuation caption="Hindamine" submit=no
 	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=valuation store=no submit=no
 @groupinfo add_event caption="Muuda sündmust"
-@groupinfo files caption="Dokumendid" submit=no
+@groupinfo files_main caption="Dokumendid" submit=no
+	@groupinfo files caption="Dokumendid" submit=no parent=files_main
+	@groupinfo prods caption="Tooted" submit=no parent=files_main
 @groupinfo trans caption="Tõlkimine"
 @groupinfo team caption="Meeskond" submit=no
 @groupinfo transl caption=T&otilde;lgi
@@ -375,6 +381,9 @@
 @reltype ANALYSIS_WS value=23 clid=CL_PROJECT_ANALYSIS_WS
 @caption Anal&uuml;&uuml;si t&ouml;&ouml;laud
 
+@reltype PRODUCT value=24 clid=CL_SHOP_PRODUCT
+@caption Toode
+
 */
 
 class project extends class_base
@@ -407,6 +416,14 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "prods_toolbar":
+				$this->_get_prods_toolbar($arr);
+				break;
+
+			case "prods_table":
+				$this->_get_prods_table($arr);
+				break;
+
 			case "hidden_team":
 				if($arr["request"]["team"]) $data["value"] = $arr["request"]["team"];
 				if($arr["request"]["hidden_team"]) $data["value"] = $arr["request"]["hidden_team"];
@@ -838,6 +855,11 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "prods_toolbar":
+				$ps = get_instance("vcl/popup_search");
+				$ps->do_create_rels($arr["obj_inst"], $arr["request"]["prod_search_res"], 24);
+				break;
+
 /*			case "risks_eval":
 				$this->_save_risks_eval($arr);
 				break;
@@ -2597,6 +2619,7 @@ class project extends class_base
 		$arr["team"] = $_GET["team"];
 		$arr["connect_orderer"] = $_GET["connect_orderer"];
 		$arr["connect_impl"] = $_GET["connect_impl"];
+		$arr["prod_search_res"] = "0";
 	}
 
 	function request_execute($o)
@@ -5278,6 +5301,29 @@ class project extends class_base
 		header('Content-disposition: root_access; filename="req.csv"');
 		print $t->get_csv_file();
 		die();
+	}
+
+	function _get_prods_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_search_button(array(
+			"pn" => "prod_search_res",
+			"multiple" => 1,
+			"clid" => CL_SHOP_PRODUCT,
+		));
+		$tb->add_delete_rels_button();
+	}
+
+	function _get_prods_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_PRODUCT"
+			))),
+			array("name", "comment", "price"),
+			CL_SHOP_PRODUCT
+		);
 	}
 };
 ?>

@@ -24,17 +24,25 @@
             <type>textbox</type>
             <size>5</size>
             <field>aw_amt</field>
-            <caption>Summa</caption>
-            <comment>Kui l&amp;amp;otilde;peb % m&amp;amp;auml;rgiga, siis protsentides</comment>
+            <caption>Summa (Kui l&amp;amp;otilde;peb % m&amp;amp;auml;rgiga, siis protsentides)</caption>
       </property>
       <property>
-            <name>max_deviation</name>
+            <name>max_deviation_minus</name>
             <table>aw_budgeting_tax</table>
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-            <field>aw_max_deviation</field>
-            <caption>Maksimaalne projektip&amp;amp;otilde;hine muudatus</caption>
+            <field>aw_max_deviation_minus</field>
+            <caption>Maksimaalne projektip&amp;amp;otilde;hine muudatus -</caption>
+      </property>
+      <property>
+            <name>max_deviation_plus</name>
+            <table>aw_budgeting_tax</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_max_deviation_plus</field>
+            <caption>Maksimaalne projektip&amp;amp;otilde;hine muudatus +</caption>
       </property>
       <property>
             <name>pri</name>
