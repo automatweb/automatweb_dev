@@ -1,12 +1,32 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.1 2007/09/10 12:04:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.2 2007/09/10 12:29:48 markop Exp $
 // event_time.aw - Toimumisaeg 
 /*
 
+@tableinfo aw_event_time index=aw_oid master_table=objects master_index=brother_of
+
 @classinfo syslog_type=ST_EVENT_TIME relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
-@default table=objects
 @default group=general
+@default table=aw_event_time
+
+default table=objects
+default group=general
+
+#GENERAL
+@property start type=datetime_select field=start
+@caption Algab
+
+@property end type=datetime_select field=end
+@caption Lõpeb
+
+@property location type=relpicker reltype=RELTYPE_LOCATION field=location
+@caption Toimumiskoht
+
+
+#RELTYPES
+@reltype LOCATION value=1 clid=CL_SCM_LOCATION
+@caption Toimumiskoht
 
 */
 
@@ -60,6 +80,36 @@ class event_time extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "" && $t == "aw_event_time")
+		{
+			$this->db_query("CREATE TABLE aw_event_time(
+				aw_oid int primary key,
+				start int,
+				end int,
+				location int
+			)");
+			return true;
+		}
+		else
+		{
+			switch($f)
+			{
+				case "start":
+				case "end":
+				case "location":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "int"
+					));
+					break;
+			}
+			return true;
+		}
+		return false;
 	}
 
 //-- methods --//
