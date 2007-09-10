@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.242 2007/08/29 13:08:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.243 2007/09/10 08:21:55 kristo Exp $
 
 /*
 
@@ -1166,7 +1166,7 @@ class site_show extends class_base
 
 			$_numdocs = count($docid);
 			$_curdoc = 1;
-			$no_strip_lead = aw_global_get("document.no_strip_lead");
+			$no_strip_lead = aw_ini_get("document.no_strip_lead");
 
 			foreach($docid as $dk => $did)
 			{
@@ -1708,7 +1708,7 @@ class site_show extends class_base
 			));
 
 			$show_always = false;
-			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() != CL_DOCUMENT) && $show)
+			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() == CL_DOCUMENT) && $show)
 			{
 				if ($this->is_template("YAH_LINK_BEGIN") && $ya == "")
 				{
@@ -1852,7 +1852,14 @@ class site_show extends class_base
 				{
 					$url = str_replace("/".aw_global_get("ct_lang_lc")."/", "/".$row["acceptlang"]."/", $url);
 				}*/
-				$url = $this->make_menu_link($this->section_obj, $row["acceptlang"]);
+				if (substr($_GET["class"], 0, 4) == "shop")
+				{
+					$url = aw_url_change_var("section", $row["acceptlang"]."/".aw_global_get("section"));
+				}
+				else
+				{
+					$url = $this->make_menu_link($this->section_obj, $row["acceptlang"]);
+				}
 			}
 			$this->vars(array(
 				"name" => $row["name"],
