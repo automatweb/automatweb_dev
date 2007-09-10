@@ -324,6 +324,26 @@
             <caption>Esilehe s&amp;amp;uuml;ndmus</caption>
       </property>
       <property>
+            <name>event_time</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_TIME</reltype>
+            <store>connect</store>
+            <field>event_time</field>
+            <caption>Toimumisaeg</caption>
+      </property>
+      <property>
+            <name>event_time_table</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>event_time_table</field>
+            <caption>Toimumisaegade tabel</caption>
+      </property>
+      <property>
             <name>aliasmgr</name>
             <group>general</group>
             <table>planner</table>
@@ -435,6 +455,11 @@
                   <clid>CL_SCM_LOCATION</clid>
                   <caption>Toimumiskoht</caption>
             </LOCATION>
+            <EVENT_TIME>
+                  <value>9</value>
+                  <clid>CL_EVENT_TIME</clid>
+                  <caption>Toimumisaeg</caption>
+            </EVENT_TIME>
       </reltypes>
 </properties>
 

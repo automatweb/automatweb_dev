@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.26 2007/09/02 09:47:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.27 2007/09/10 15:57:16 markop Exp $
 // calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
@@ -132,6 +132,12 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @property front_event type=checkbox field=ucheck3
 @caption Esilehe s&uuml;ndmus
 
+@property event_time type=relpicker reltype=RELTYPE_EVENT_TIME store=connect
+@caption Toimumisaeg
+
+@property event_time_table type=table no_caption=1 store=no
+@caption Toimumisaegade tabel
+
 
 @property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
@@ -179,6 +185,8 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @reltype LOCATION value=8 clid=CL_SCM_LOCATION
 @caption Toimumiskoht
 
+@reltype EVENT_TIME value=9 clid=CL_EVENT_TIME
+@caption Toimumisaeg
 
 */
 
@@ -217,7 +225,11 @@ class calendar_event extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "event_time":
+				return PROP_IGNORE;
+			case "event_time_table":
+				$this->save_event_times($arr["request"]["event_time"]);
+				break;
 		}
 		$meta = $arr["obj_inst"]->meta();
 		if (substr($prop["name"],0,1) == "u")
@@ -239,6 +251,11 @@ class calendar_event extends class_base
 			case "level":
 				$prop["options"] = $this->level_options;
 				break;
+			case "event_time":
+				return PROP_IGNORE;
+			case "event_time_table":
+				$this->do_event_time_table($arr);
+				break;
 		}
 		if ($arr["obj_inst"])
 		{
@@ -253,6 +270,146 @@ class calendar_event extends class_base
 		};
 		return $retval;
 	}
+
+	function save_event_times($times)
+	{
+		$event = obj($this->id);
+		foreach($times as $id => $val)
+		{
+			if(is_oid($id) && $this->can("view" , $id))
+			{
+				$o = obj($id);
+			}
+			else
+			{
+				if($val["start"] && $val["location"])
+				{
+					$o = new object();
+					$o->set_name("");
+					$o->set_class_id(CL_EVENT_TIME);
+					$o->set_parent($this->id);
+				}
+				else
+				{
+					continue;
+				}
+			}
+			$loc_list = new object_list(array(
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => $val["location"],
+				"class_id" => CL_SCM_LOCATION,
+			));
+			if($loc_list->count())
+			{
+				$location = reset($loc_list->arr());
+			}
+			else
+			{
+				$location = new object();
+				$location->set_name($val["location"]);
+				$location->set_class_id(CL_SCM_LOCATION);
+				$location->set_parent($id);
+			}
+			$o->set_prop("location" , $location->id());
+			
+			$start_dt = explode(" ", $val["start"]);
+			$end_dt = explode(" ", $val["end"]);
+			$start_d = explode(".", $start_dt[0]);
+			$end_d = explode(".", $end_dt[0]);
+			$start_t = explode(":", $start_dt[1]);
+			$end_t = explode(":",$end_dt[1]);
+
+			$o->set_prop("start" , mktime($start_t[0] , $start_t[1] , 0  , $start_d[1],$start_d[0],$start_d[2]));
+			$o->set_prop("end" , mktime($end_t[0] , $end_t[1] , 0 ,$end_d[1],$end_d[0],$end_d[2]));
+			$o->save();
+			$event->connect(array("to" => $o->id(), "reltype" => 9));
+		}
+	}
+
+	function do_event_time_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => t("Algus"),
+		));
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => t("L&otilde;pp"),
+		));
+		$t->define_field(array(
+			"name" => "location",
+			"caption" => t("Asukoht"),
+		));
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
+		{
+			$o = $c->to();
+			$t->define_data(array(
+				"start" => html::textbox(array(
+					"name" => "event_time[".$o->id()."][start]",
+					"size" => 14,
+					"value" => date("d.m.Y H:i" , $o->prop("start")),
+				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
+cal.select(changeform.event_time_'.$o->id().'__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
+				"end" => html::textbox(array(
+					"name" => "event_time[".$o->id()."][end]",
+					"size" => 14,
+					"value" => date("d.m.Y H:i" , $o->prop("end")),
+				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
+cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
+				"location" => html::textbox(array(
+					"name" => "event_time[".$o->id()."][location]",
+					"size" => 30,
+					"value" => $o->prop("location.name"),
+					"autocomplete_source" => $this->mk_my_orb ("locations_autocomplete_source", array(), CL_CALENDAR_EVENT, false, true),
+					"autocomplete_params" => "event_time[".$o->id()."][location]",
+				)),
+			));
+		}
+
+		$t->define_data(array(
+			"start" => html::textbox(array(
+					"name" => "event_time[new][start]",
+					"size" => 14,
+					"value" => "",
+				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
+cal.select(changeform.event_time_new__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
+			"end" => html::textbox(array(
+					"name" => "event_time[new][end]",
+					"size" => 14,
+					"value" => "",
+				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
+cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
+			"location" => html::textbox(array(
+				"name" => "event_time[new][location]",
+				"size" => 30,
+				"value" => "",
+				"autocomplete_source" => $this->mk_my_orb ("locations_autocomplete_source", array(), CL_CALENDAR_EVENT, false, true),
+				"autocomplete_params" => "event_time[new][location]",
+			)),
+		));
+	}
+
+	/**
+		@attrib name=locations_autocomplete_source
+		@param location optional
+	**/
+	function locations_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_SCM_LOCATION,
+			"name" => "%".$arr["location"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 2000,
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed

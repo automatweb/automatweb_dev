@@ -1,5 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="calendar_event" folder="applications/calendar" extends="class_base">
+		<action name="locations_autocomplete_source">
+			<function name="locations_autocomplete_source">
+				<arguments>
+					<optional name="location" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
