@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.16 2007/06/28 12:58:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.17 2007/09/10 10:57:27 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -242,7 +242,6 @@ class shop_product_table_layout extends class_base
 		{
 			return;
 		}
-
 		$cur_page = $_GET["sptlp"];
 		$num_pages = $this->cnt / $this->per_page;
 
