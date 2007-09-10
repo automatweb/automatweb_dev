@@ -288,7 +288,9 @@ class acl_manager extends class_base
 				$grp_ol = new object_list(array(
 					"class_id" => array(CL_GROUP, CL_USER_GROUP),
 					"name" => $o->name(),
-					"type" => 1
+					"type" => 1,
+					"lang_id" => array(),
+					"site_id" => array()
 				));
 				if (!$grp_ol->count())
 				{
