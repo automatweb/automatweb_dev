@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.10 2007/09/05 11:24:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.11 2007/09/11 13:52:56 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -559,14 +559,40 @@ class events_manager extends class_base
 			}
 			$change_url = html::obj_change_url($o , t("Muuda"));
 
+	//		$make_copy = html::href(array(
+	//			"url" => $this->mk_my_orb("make_copy" , array("id" => $o->id(),"post_ru" => post_ru())),
+	//			"title" => t("Tee koopia"),
+	//			"caption" => t("Tee koopia"),
+	//		));
+
+			$translated = "";
+			if(is_array($o->meta("translations")))
+			{
+				$langs = array();
+				foreach($o->meta("translations") as $lang => $trans)
+				{
+					$langs[$lang] = $GLOBALS["cfg"]["languages"]["list"][$lang]["name"];
+					foreach($trans as $prop => $val)
+					{
+						if(!$val) unset($langs[$lang]);
+						break;
+					}
+				}
+//				foreach ($langs as $l)
+//				{
+					$translated = join (", " ,$langs);
+//				}
+			}
+
 			$t->define_data(array(
-				"name" => html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("event_form")),$o->name()),
+				"name" => html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("event_form")),$o->name()?$o->name():t("(Nimetu)")),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"sector" => (is_object($sec))?$sec->name():"",
 				"level" => $cal_event->level_options[$o->prop("level")],
-				"tasks" => $publish . " " . $change_url,
+				"tasks" => $make_copy . " " . $publish . " " . $change_url,
 				"oid" => $o->id(),
 				"region" => $o->prop("location.address.maakond.name") ." ".$o->prop("location.address.linn.name"),
+				"translated" => $translated,
 			));
 		}
 	}
@@ -752,7 +778,8 @@ class events_manager extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1,
 		));
 // 		$t->define_field(array(
 // 			"name" => "address",
@@ -815,6 +842,11 @@ class events_manager extends class_base
 				"align" => "center"
 			));
 		}
+		$t->define_field(array(
+			"name" => "translated",
+			"caption" => t("T&otilde;lgitud"),
+			"align" => "center"
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"

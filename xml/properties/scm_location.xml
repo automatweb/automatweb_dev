@@ -66,12 +66,28 @@
             <multiple>1</multiple>
             <caption>Tee koopia</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SCM_LOCATION</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <reltypes>
             <MAP>
                   <value>1</value>

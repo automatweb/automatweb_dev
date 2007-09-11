@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.4 2007/05/23 16:41:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.5 2007/09/11 13:52:55 markop Exp $
 // scm_location.aw - Toimumiskoht 
 /*
 
@@ -33,6 +33,14 @@
 @property make_copy type=choose multiple=1
 @caption Tee koopia
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
+
+
 @reltype MAP value=1 clid=CL_IMAGE
 @caption Kaart
 
@@ -52,6 +60,9 @@ class scm_location extends class_base
 			"tpldir" => "applications/scm/scm_location",
 			"clid" => CL_SCM_LOCATION
 		));
+		$this->trans_props = array(
+			"name", "loc_path", "description"
+		);
 	}
 
 	function get_property($arr)
@@ -72,9 +83,16 @@ class scm_location extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 		}
 		return $retval;
 	}	
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
 
 	function callback_mod_reforb($arr)
 	{

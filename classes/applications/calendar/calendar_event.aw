@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.27 2007/09/10 15:57:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.28 2007/09/11 13:52:59 markop Exp $
 // calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
@@ -111,7 +111,7 @@
 property url type=releditor table=objects field=meta method=serialize reltype=RELTYPE_URL use_form=emb rel_id=first
 caption S&uuml;ndmuse kodulehek&uuml;lg
 
-@property section type=relpicker multiple=1 reltype=RELTYPE_SECTION method=serialize field=meta table=objects automatic=1 size=10
+@property sector type=relpicker multiple=1 reltype=RELTYPE_SECTOR method=serialize field=meta table=objects automatic=1 size=10
 @caption Valdkonnad
 
 @property location type=popup_search d=aw_customer reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATION style=autocomplete field=ucheck5 no_edit=1
@@ -161,6 +161,13 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
+
 @reltype PICTURE value=1 clid=CL_IMAGE
 @caption Pilt
 
@@ -173,7 +180,7 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @reltype UTEXTVAR10 value=4 clid=CL_META
 @caption RELTYPE_UTEXTVAR10
 
-@reltype SECTION value=5 clid=CL_CRM_SECTION
+@reltype SECTOR value=5 clid=CL_CRM_SECTOR
 @caption Tegevusala
 
 @reltype ORGANIZER value=6 clid=CL_CRM_COMPANY
@@ -201,6 +208,9 @@ class calendar_event extends class_base
 		));
 
 		$this->level_options = array("V&auml;lismaal toimuv", "&Uuml;leriikliku t&auml;htsusega", "Kohaliku t&auml;htsusega");
+		$this->trans_props = array(
+			"name", "title",  "short_description", "description"
+		);
 	}
 
 	function do_db_upgrade($tbl, $field, $q, $err)
@@ -226,9 +236,13 @@ class calendar_event extends class_base
 		switch($prop["name"])
 		{
 			case "event_time":
+			case "make_copy":
 				return PROP_IGNORE;
 			case "event_time_table":
 				$this->save_event_times($arr["request"]["event_time"]);
+				break;
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
 				break;
 		}
 		$meta = $arr["obj_inst"]->meta();
@@ -240,6 +254,20 @@ class calendar_event extends class_base
 			};
 		};
 		return $retval;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+	//		return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 
 	function get_property($arr)
@@ -342,19 +370,23 @@ class calendar_event extends class_base
 			"name" => "location",
 			"caption" => t("Asukoht"),
 		));
+		$t->define_field(array(
+			"name" => "delete",
+			"caption" => "X",
+		));
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
 		{
 			$o = $c->to();
 			$t->define_data(array(
 				"start" => html::textbox(array(
 					"name" => "event_time[".$o->id()."][start]",
-					"size" => 14,
+					"size" => 15,
 					"value" => date("d.m.Y H:i" , $o->prop("start")),
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
 cal.select(changeform.event_time_'.$o->id().'__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
 				"end" => html::textbox(array(
 					"name" => "event_time[".$o->id()."][end]",
-					"size" => 14,
+					"size" => 15,
 					"value" => date("d.m.Y H:i" , $o->prop("end")),
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
 cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
@@ -365,26 +397,33 @@ cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy H
 					"autocomplete_source" => $this->mk_my_orb ("locations_autocomplete_source", array(), CL_CALENDAR_EVENT, false, true),
 					"autocomplete_params" => "event_time[".$o->id()."][location]",
 				)),
+				"delete" => html::href(array(
+					"caption" => t("Kustuta"),
+					"url" =>  $this->mk_my_orb("remove_event_time", array(
+						"id" => $o->id(),
+						"return_url" => get_ru(),
+					)),
+				)),
 			));
 		}
 
 		$t->define_data(array(
 			"start" => html::textbox(array(
 					"name" => "event_time[new][start]",
-					"size" => 14,
+					"size" => 15,
 					"value" => "",
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
 cal.select(changeform.event_time_new__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
 			"end" => html::textbox(array(
 					"name" => "event_time[new][end]",
-					"size" => 14,
+					"size" => 15,
 					"value" => "",
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
 cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
 			"location" => html::textbox(array(
 				"name" => "event_time[new][location]",
 				"size" => 30,
-				"value" => "",
+				"value" => $arr["obj_inst"]->prop("location") ? $arr["obj_inst"]->prop("location.name"):"",
 				"autocomplete_source" => $this->mk_my_orb ("locations_autocomplete_source", array(), CL_CALENDAR_EVENT, false, true),
 				"autocomplete_params" => "event_time[new][location]",
 			)),
@@ -410,6 +449,18 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 		return $ac->finish_ac($ol->names());
 	}
 
+	/**
+		@attrib name=remove_event_time
+		@param id required
+		@param return_url required
+	**/
+	function delete_items($arr)
+	{
+		extract($arr);
+		$o = obj($id);
+		$o->delete();
+		return $return_url;
+	}
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed

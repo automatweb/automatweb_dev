@@ -9,5 +9,14 @@
 			</function>
 		</action>
 
+		<action name="remove_event_time">
+			<function name="delete_items">
+				<arguments>
+					<required name="id" />
+					<required name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

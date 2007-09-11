@@ -250,12 +250,12 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
-            <name>section</name>
+            <name>sector</name>
             <group>general</group>
             <table>objects</table>
             <type>relpicker</type>
             <multiple>1</multiple>
-            <reltype>RELTYPE_SECTION</reltype>
+            <reltype>RELTYPE_SECTOR</reltype>
             <method>serialize</method>
             <field>meta</field>
             <automatic>1</automatic>
@@ -395,6 +395,17 @@
             </props>
             <caption>Kordused</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <group>transl</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -406,6 +417,9 @@
             <recurrence>
                   <caption>Kordumine</caption>
             </recurrence>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -435,11 +449,11 @@
                   <clid>CL_META</clid>
                   <caption>RELTYPE_UTEXTVAR10</caption>
             </UTEXTVAR10>
-            <SECTION>
+            <SECTOR>
                   <value>5</value>
-                  <clid>CL_CRM_SECTION</clid>
+                  <clid>CL_CRM_SECTOR</clid>
                   <caption>Tegevusala</caption>
-            </SECTION>
+            </SECTOR>
             <ORGANIZER>
                   <value>6</value>
                   <clid>CL_CRM_COMPANY</clid>
