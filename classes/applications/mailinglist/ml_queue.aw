@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.35 2007/04/03 16:01:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.36 2007/09/12 15:03:08 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -411,7 +411,7 @@ class ml_queue extends aw_template
 		flush();
 		//decho("process_queue:<br />");//dbg
 		$tm = time();
-		$old = time() - 10 * 60;
+		$old = time() - 1800;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)");
 		//echo "select <br />\n";
@@ -443,7 +443,7 @@ class ml_queue extends aw_template
 
 			$all_at_once = false;
 
-			if (!($r["delay"] && $patch_size))
+			if (!($patch_size))
 			{
 				// everything at once
 				
@@ -460,9 +460,8 @@ class ml_queue extends aw_template
 			$test_qid = $r["qid"];
 			$test_q = $this->db_fetch_row("SELECT * FROM ml_queue WHERE qid = '$test_qid'");
 			//arr($test_q);
-			
 			$tm = time();
-			$old = time() - 10 * 60;//kui nüüd 2 minutit möödas viimase maili saatmisest, siis võib suht kindel olla, et eelmine queue on pange pand
+			$old = time() - 1800;//kui nüüd 30 minutit möödas viimase maili saatmisest, siis võib suht kindel olla, et eelmine queue on pange pand
 			
 			if(
 			   !($test_q["status"] == 1)
@@ -560,9 +559,9 @@ class ml_queue extends aw_template
 				{
 					//$pos=" ,position=total ";
 					//$this->increase_avoidmids_ready($r["aid"]);
-					$this->mark_queue_finished($qid);
-				} 
-				else
+					$stat = $this->mark_queue_finished($qid);
+				}
+				if (ML_QUEUE_READY != $stat)
 				{
 					// unlock it
 					$this->db_query("UPDATE ml_queue SET status = $stat WHERE qid = '$qid'");
@@ -594,11 +593,14 @@ class ml_queue extends aw_template
 			{
 				$qx = "UPDATE ml_queue SET status = 2, position=".$count["cnt"]." , total=".$count["cnt"]."  WHERE qid = ".$q["qid"];
 				$this->db_query($qx);
+				echo "mudis veidi statistikat ".$q["total"]." - ".$q["position"]."<br>".$qx."<br>\n";
 			}
 		}
 		return 0;
 	}
 
+	//see on veidi ohtlik asi, kasutamiseks ainult siis kui saatmise tsükkel on just lõppenud
+	//hiljem võib olla meelega maha kustutatud mailid baasist, et vähem ruumi võtaks
 	function check_final_stats($qid)
 	{
 		$qx = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = ".$qid." AND (mail_sent IS NULL OR mail_sent = 0)";
@@ -606,6 +608,7 @@ class ml_queue extends aw_template
 		$count = $this->db_next();
 		if(!$count["cnt"])
 		{
+			echo "statisika ok";
 			return 0;
 		}
 		else 
@@ -620,6 +623,8 @@ class ml_queue extends aw_template
 				
 			$qx = "UPDATE ml_queue SET position=".$count_sent["cnt"]." , total=".$count_all["cnt"]."  WHERE qid = ".$qid;
 			$this->db_query($qx);
+			echo "statisika porno";
+			echo "\n".$count_sent["cnt"];
 		}
 		return $count["cnt"];
 	}
@@ -706,6 +711,16 @@ class ml_queue extends aw_template
 		flush();
 		$this->awm->headers["Bcc"] = $msg["bounce"];
 		$this->awm->set_header("Content-Type","text/plain; charset=\"".$msg["charset"]."\"");
+		
+		//see on viimane kaitseliin, et topelt kuhugi maile minna ei saaks
+		$qx = "SELECT mail_sent FROM ml_sent_mails WHERE id = ".$msg["id"];
+		$this->db_query($qx);
+		$mail = $this->db_next();
+		if($mail["mail_sent"])
+		{
+			die("tundub, et miski eriline jama on taas juhtunud");
+		}
+//sleep(10);
 		$this->awm->gen_mail();
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
@@ -729,7 +744,7 @@ class ml_queue extends aw_template
 		echo "saata veel tegelt maile täpselt ".$status."<br>\n";
 		if(!($status == 0))
 		{
-			return;
+			return 1;
 		}
 		$this->db_query("UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'");
 		$this->restore_handle();
