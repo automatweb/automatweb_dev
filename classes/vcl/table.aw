@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.107 2007/06/05 09:41:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.108 2007/09/12 12:38:25 hannes Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -386,7 +386,7 @@ class aw_table extends aw_template
 			"text" || "buttons" || "lb"
 		@param records_per_page required type=int
 			Number of records per page.
-		@param d_row_cnt required type=int
+		@param d_row_cnt optional type=int
 			Number of records in total.
 		@param no_recount type=bool
 		@param position type=string default=top
