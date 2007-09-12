@@ -687,6 +687,25 @@ class crm_company_cust_impl extends class_base
 		}
 		$link = "#";
 		$this->_do_cust_cat_tb_submenus($tb, $link, $arr["obj_inst"], "save_as_cust", "document.changeform.elements.cust_cat.value=%s;submit_changeform('save_as_customer')");
+
+		$tb->add_separator();
+
+		$c = get_instance("vcl/popup_menu");
+		$c->begin_menu("crm_co_ppl_filt");
+
+		$c->add_item(array(
+			"text" => t("T&uuml;hista"),
+			"link" => aw_url_change_var("filt_p", null)
+		));
+		for($i = ord('A'); $i < ord("Z"); $i++)
+		{
+			$c->add_item(array(
+				"text" => chr($i).($arr["request"]["filt_p"] == chr($i) ? t(" (Valitud)") : "" ),
+				"link" => aw_url_change_var("filt_p", chr($i))
+			));
+		}
+
+		$tb->add_cdata(t(" Vali filter: ").$c->get_menu().(!empty($arr["request"]["filt_p"]) ? t(" Valitud: ").$arr["request"]["filt_p"] : "" ));
 	}
 
 	function _get_my_customers_listing_tree($arr)
@@ -1852,6 +1871,16 @@ class crm_company_cust_impl extends class_base
 			}
 
 			$o = obj($org);
+
+			if (!empty($arr["request"]["filt_p"]))
+			{
+				$nm = $o->name();
+				if ($nm[0] != $arr["request"]["filt_p"])
+				{
+					continue;
+				}
+			}
+
 			// aga &uuml;lej&auml;&auml;nud on k&otilde;ik seosed!
 			$name = $client_manager = $pm = $vorm = $tegevus = $contact = $juht = $juht_id = $phone = $fax = $url = $mail = $ceo = "";
 

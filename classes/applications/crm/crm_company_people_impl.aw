@@ -99,6 +99,25 @@ class crm_company_people_impl extends class_base
 				'action' => 'send_mails',
 			));
 		}
+
+		$tb->add_separator();
+
+		$c = get_instance("vcl/popup_menu");
+		$c->begin_menu("crm_co_ppl_filt");
+
+		$c->add_item(array(
+			"text" => t("T&uuml;hista"),
+			"link" => aw_url_change_var("filt_p", null)
+		));
+		for($i = ord('A'); $i < ord("Z"); $i++)
+		{
+			$c->add_item(array(
+				"text" => chr($i).($arr["request"]["filt_p"] == chr($i) ? t(" (Valitud)") : "" ),
+				"link" => aw_url_change_var("filt_p", chr($i))
+			));
+		}
+
+		$tb->add_cdata(t(" Vali filter: ").$c->get_menu().(!empty($arr["request"]["filt_p"]) ? t(" Valitud: ").$arr["request"]["filt_p"] : "" ));
 	}
 
 	function _get_unit_listing_tree($arr)
@@ -219,9 +238,7 @@ class crm_company_people_impl extends class_base
 
 		classload("core/icons");
 		$t = &$arr["prop"]["vcl_inst"];
-		enter_function("ghr::init_t");
 		$this->_init_human_resources_table($t);
-		exit_function("ghr::init_t");
 
 		$format = t('%s t&ouml;&ouml;tajad');
 		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
@@ -236,10 +253,8 @@ class crm_company_people_impl extends class_base
 		// alias_to_org oleks isiku id
 		// reltype_org oleks vastava seose id
 
-		enter_function("ghr::gcalu");
 		$pl = get_instance(CL_PLANNER);
 		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
-		exit_function("ghr::gcalu");
 
 		// XXX: I should check whether $this->cal_id exists and only include those entries
 		// when it does.
@@ -250,7 +265,6 @@ class crm_company_people_impl extends class_base
 		$persons = array();
 		$professions = array();
 		//if section present, i'll get all the professions
-		enter_function("ghr::units");
 		if(is_oid($arr['request']['unit']))
 		{
 			$tmp_obj = new object($arr['request']['unit']);
@@ -262,9 +276,7 @@ class crm_company_people_impl extends class_base
 				$professions[$conn->prop('to')] = $conn->prop('to.name');
 			}
 		}
-		exit_function("ghr::units");
 
-		enter_function("ghr::cats");
 		if(is_oid($arr['request']['cat']) && $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT)
 		{
 			$professions = array();
@@ -288,10 +300,8 @@ class crm_company_people_impl extends class_base
 				$professions[$p_con["to"]] = $p_con["to.name"];
 			}
 		}
-		exit_function("ghr::cats");
 
 		//if listing from a specific unit, then the reltype is different
-		enter_function("ghr::unit2");
 		if((int)$arr['request']['unit'])
 		{
 			$obj = new object((int)$arr['request']['unit']);
@@ -320,7 +330,6 @@ class crm_company_people_impl extends class_base
 				}
 			}
 		}
-		exit_function("ghr::unit2");
 
 		if ($arr["request"]["all_if_empty"] && !count($conns))
 		{
@@ -336,7 +345,6 @@ class crm_company_people_impl extends class_base
 			}
 		}
 
-		enter_function("ghr::ll");
 		if (isset($arr["person_filter"]) && is_array($arr["person_filter"]))
 		{
 			$tmp = array();
@@ -395,18 +403,18 @@ class crm_company_people_impl extends class_base
 		foreach($persons as $person)
 		{
 			$person = new object($person);
-		enter_function("ghr::loop::fetch1");
+			if (!empty($arr["request"]["filt_p"]))
+			{
+				$nm = $person->name();
+				if ($nm[0] != $arr["request"]["filt_p"])
+				{
+					continue;
+				}
+			}
 			$idat = $crmp->fetch_all_data($person->id());
-		exit_function("ghr::loop::fetch1");
-		enter_function("ghr::loop::fetch2");
-			/*$pdat = $crmp->fetch_person_by_id(array(
-				"id" => $person->id(),
-				"cal_id" => $cal_id,
-			));*/
 			$pdat["ranks_arr"] = $p2r[$person->id()];
 			$pdat["sections_arr"] = $p2s[$person->id()];
 			$pdat["rank"] = join(", ", $pdat["ranks_arr"]);
-		exit_function("ghr::loop::fetch2");
 			if(is_oid($arr['request']['cat']))
 			{
 				//persons only from this category
@@ -416,16 +424,12 @@ class crm_company_people_impl extends class_base
 				}
 			}
 
-		enter_function("ghr::loop::rank");
-			
 			if(is_oid($arr['request']['cat']) || is_oid($arr['request']['unit']))
 			{
 				$ol = new object_list($person->connections_from(array("type" => "RELTYPE_RANK")));
 				$pdat["rank"] = html::obj_change_url($ol->ids());
 			}
-		exit_function("ghr::loop::rank");
 
-		enter_function("ghr::loop::sectp");
 			$sections_professions = array();
 			$section = '';
 			foreach($pdat['sections_arr'] as $key=>$value)
@@ -441,7 +445,6 @@ class crm_company_people_impl extends class_base
 				$section = current($pdat['sections_arr']);;
 				break;
 			}
-		exit_function("ghr::loop::sectp");
 
 			//kui amet kuulub $pdat['sections_arr'] olevasse sektsiooni ja persoon on seotud
 			//selle ametiga, siis seda n&auml;idata kujul
@@ -483,8 +486,6 @@ class crm_company_people_impl extends class_base
 			$pdat["phone"] = join(", ", $phs);
 
 
-
-		enter_function("ghr::loop::pictt");
 			$imgo = $person->get_first_obj_by_reltype("RELTYPE_PICTURE");
 			$img = "";
 			if ($imgo)
@@ -509,9 +510,7 @@ class crm_company_people_impl extends class_base
 				"cutcopied" => $ccp
 			);
 			$t->define_data($tdata);
-		exit_function("ghr::loop::pictt");
 		};
-		exit_function("ghr::loop");
 	}
 
 	function _add_edit_stuff_to_table($arr)
