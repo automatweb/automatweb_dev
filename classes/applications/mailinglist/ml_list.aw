@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.103 2007/07/05 15:39:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.104 2007/09/12 15:28:17 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2147,7 +2147,7 @@ class ml_list extends class_base
 		foreach($rows as $row)
 		{
 			$column = explode($separator , $row);
-			if(!(strlen($column[0]) > 0) || !(strlen($column[1]) > 5)) continue;
+			if(!(strlen($column[1]) > 5)) continue;
 			$mail = trim($column[1]);
 			if(!$no_return)
 			{
