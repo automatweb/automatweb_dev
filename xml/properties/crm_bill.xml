@@ -143,6 +143,14 @@
             <caption>Kandekuup&amp;amp;auml;ev</caption>
       </property>
       <property>
+            <name>payment_mode</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_payment_mode</field>
+            <caption>Makseviis</caption>
+      </property>
+      <property>
             <name>state</name>
             <table>aw_crm_bill</table>
             <group>general</group>

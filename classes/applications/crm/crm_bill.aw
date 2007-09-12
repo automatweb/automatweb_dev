@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.116 2007/07/11 12:25:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.117 2007/09/12 12:02:29 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -61,6 +61,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property bill_trans_date type=date_select table=aw_crm_bill field=aw_trans_date default=-1
 	@caption Kandekuup&auml;ev
+
+	@property payment_mode type=select table=aw_crm_bill field=aw_payment_mode
+	@caption Makseviis
 
 	@property state type=select table=aw_crm_bill field=aw_state
 	@caption Staatus
@@ -186,6 +189,9 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "payment_mode":
+				$prop["options"] = array("" , t("&Uuml;lekandega") , t("Sularahas"));
+				break;
 			case "billp_tb":
 				$this->_bill_tb($arr);
 				break;
@@ -2531,6 +2537,7 @@ class crm_bill extends class_base
 				));
 				return true;
 			case "aw_trans_date":
+			case "aw_payment_mode":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int"
