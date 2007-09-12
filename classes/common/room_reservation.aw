@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.71 2007/09/05 12:54:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.72 2007/09/12 10:30:54 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1678,6 +1678,7 @@ class room_reservation extends class_base
 		$awm->gen_mail();
 	}
 
+	//see märgib ka makstuks, kui vaja seda funktsiooni ka muudmoodi kasutada, siis peaks miski muutuja juurde tekitama, mis maksmise asjadega ei tegeleks
 	function make_verified($id)
 	{
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
@@ -1688,6 +1689,7 @@ class room_reservation extends class_base
 			$bron->set_prop("verified" , 1);
 			//broneeringusse maksest tuleva info, niipalju kui seda saab...siia seepärast, et ei taha mitmes kohas acl disableda
 			$bron->set_meta("payment_info" , $bank_inst->get_payment_info());
+			$bron->set_meta("paid" , 1);
 			aw_disable_acl();
 			if(!$bron->meta("mail_sent"))//topelt mailide vältimiseks
 			{

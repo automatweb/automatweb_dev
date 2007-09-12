@@ -43,6 +43,17 @@
             <caption>Kinnitatud</caption>
       </property>
       <property>
+            <name>paid</name>
+            <table>aw_room_reservations</table>
+            <group>general</group>
+            <parent>general_up_up</parent>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_paid</field>
+            <no_caption>1</no_caption>
+            <caption>Makstud</caption>
+      </property>
+      <property>
             <name>unverify_reason</name>
             <table>objects</table>
             <group>general</group>
