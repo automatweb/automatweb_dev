@@ -1546,11 +1546,16 @@ class forum_v2 extends class_base
 				$uid_oid = users::get_oid_for_uid($uid);
 				$user_obj = new object($uid_oid);
 				$cl_users = get_instance(CL_USER);
-				$p_o = $cl_users->get_person_for_user($user_obj);
+				$p_oid = $cl_users->get_person_for_user($user_obj);
 
-				if (is_object($p_o))
+				if ($this->can("view", $p_oid))
 				{
+					$p_o = obj($p_oid);
 					$pname = $p_o->name();
+				}
+				else
+				{
+					$pname = $uid;
 				}
 
 				$this->vars(array(
