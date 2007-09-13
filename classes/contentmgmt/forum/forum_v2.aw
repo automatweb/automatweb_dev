@@ -2044,6 +2044,7 @@ class forum_v2 extends class_base
 			$user_obj = new object($uid_oid);
 			$props['author_email']['value'] = $user_obj->prop("email");
 
+			$cl_users = get_instance(CL_USER);
 			$p_oid = $cl_users->get_person_for_user($user_obj);
 
 			if ($this->can("view", $p_oid))
