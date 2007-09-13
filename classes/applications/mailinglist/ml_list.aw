@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.104 2007/09/12 15:28:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.105 2007/09/13 11:53:34 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -619,7 +619,8 @@ class ml_list extends class_base
 		if(count($use_folders) < 1)
 		{
 			$allow = false;
-			$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba valitud listidega liitunud");
+			$args["op"] = 0;
+			//$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba valitud listidega liitunud");
 		}
 		
 		if(empty($args["name"])){
