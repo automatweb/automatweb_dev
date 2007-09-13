@@ -1,5 +1,54 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>expires</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>expires</field>
+            <caption>Insurance expires</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>status</field>
+            <caption>Insurance status</caption>
+      </property>
+      <property>
+            <name>certificate</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>fileupload</type>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <field>certificate</field>
+            <caption>Upload insurance certificate</caption>
+      </property>
+      <property>
+            <name>company</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_COMPANY</reltype>
+            <caption>Company</caption>
+      </property>
+      <property>
+            <name>broker</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_BROKER</reltype>
+            <caption>Broker</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_INSURANCE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +56,17 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <COMPANY>
+                  <value>1</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Company</caption>
+            </COMPANY>
+            <ORDER>
+                  <value>20</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Broker</caption>
+            </ORDER>
+      </reltypes>
 </properties>
 

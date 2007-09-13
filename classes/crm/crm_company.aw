@@ -249,6 +249,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	// @property tax_clearance_certificate_view type=text store=no
 	@caption Maksuv&otilde;la puudumise t&otilde;end
 
+	@property card_number type=textbox table=objects field=meta method=serialize
+	@caption Card number
+
+	
+
 ------ Yldine - kasutajate seaded grupp
 @default group=user_settings
 

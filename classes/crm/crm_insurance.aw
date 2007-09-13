@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_insurance.aw,v 1.1 2007/09/13 12:15:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_insurance.aw,v 1.2 2007/09/13 12:33:26 markop Exp $
 // crm_insurance.aw - Kindlustus 
 /*
 
@@ -7,6 +7,27 @@
 
 @default table=objects
 @default group=general
+
+@property expires type=date_select
+@caption Insurance expires
+
+@property status type=select
+@caption Insurance status
+
+@property certificate type=fileupload form=+emb
+@caption Upload insurance certificate
+
+@property company type=relpicker field=meta method=serialize reltype=RELTYPE_COMPANY
+@caption Company
+
+@property broker type=relpicker field=meta method=serialize reltype=RELTYPE_BROKER
+@caption Broker
+
+@reltype COMPANY value=1 clid=CL_CRM_COMPANY
+@caption Company
+
+@reltype ORDER value=20 clid=CL_CRM_PERSON
+@caption Broker
 
 */
 

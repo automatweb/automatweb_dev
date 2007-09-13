@@ -686,6 +686,15 @@
             <caption>Maksuv&amp;amp;otilde;la puudumise t&amp;amp;otilde;end</caption>
       </property>
       <property>
+            <name>card_number</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Card number</caption>
+      </property>
+      <property>
             <name>do_create_users</name>
             <table>objects</table>
             <group>user_settings</group>
