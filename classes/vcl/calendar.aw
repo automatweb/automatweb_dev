@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.90 2007/08/23 12:34:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.91 2007/09/13 10:04:09 markop Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1600,7 +1600,9 @@ class vcalendar extends aw_template
 				"viewtype" => "month",
 				"date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
 				"section" => $this->target_section,
-			))
+			)),
+			"month_name" => locale::get_lc_month($m),
+			"year" => $y,
 		));
 		return $this->parse();
 	}
