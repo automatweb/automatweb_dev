@@ -5,28 +5,18 @@
             <table>objects</table>
             <group>general</group>
             <type>date_select</type>
-            <field>expires</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Insurance expires</caption>
-      </property>
-      <property>
-            <name>status</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>select</type>
-            <field>status</field>
-            <caption>Insurance status</caption>
       </property>
       <property>
             <name>certificate</name>
             <table>objects</table>
             <group>general</group>
-            <type>fileupload</type>
-            <form>
-                  <num_0>add</num_0>
-                  <num_1>edit</num_1>
-                  <num_2>emb</num_2>
-            </form>
-            <field>certificate</field>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_FILE</reltype>
             <caption>Upload insurance certificate</caption>
       </property>
       <property>
@@ -62,11 +52,16 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Company</caption>
             </COMPANY>
-            <ORDER>
-                  <value>20</value>
+            <BROKER>
+                  <value>2</value>
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Broker</caption>
-            </ORDER>
+            </BROKER>
+            <FILE>
+                  <value>3</value>
+                  <clid>CL_FILE</clid>
+                  <caption>File</caption>
+            </FILE>
       </reltypes>
 </properties>
 

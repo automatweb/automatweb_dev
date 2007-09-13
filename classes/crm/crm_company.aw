@@ -252,7 +252,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property card_number type=textbox table=objects field=meta method=serialize
 	@caption Card number
 
-	
+	@property insurance_title2 type=text subtitle=1
+	@caption Insurance
+
+	@property insurance_tb type=toolbar no_caption=1 store=no
+	@caption Insurance toolbar
+
+	@property insurance_table type=table no_caption=1 store=no
+	@caption Insurance table
 
 ------ Yldine - kasutajate seaded grupp
 @default group=user_settings
@@ -1303,6 +1310,10 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype SERVICE_TYPE value=67 clid=CL_CRM_SERVICE_TYPE
 @caption Teenuse liik
+
+@reltype INSURANCE value=68 clid=CL_CRM_INSURANCE
+@caption Insurance
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
@@ -1601,6 +1612,12 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $st_impl->$fn($arr);
+			case "insurance_table":
+				$this->_get_insurance_tbl(&$arr);
+				break;
+			case "insurance_tb":
+				$this->_get_insurance_tb(&$data);
+				break;
 
 			// CEDIT tab
 			case "cedit_toolbar":
@@ -2802,7 +2819,6 @@ class crm_company extends class_base
 			"tooltip" => t("Salvesta"),
 		));
 	}
-
 
 	function get_all_workers_for_company($obj,&$data,$workers_too=false)
 	{
@@ -7669,6 +7685,82 @@ Bank accounts: üksteise all
 			}
 		}
 		return $_SESSION["aw_session_track"]["server"]["referer"];
+	}
+
+	function _get_insurance_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Name"),
+		));
+		$t->define_field(array(
+			"name" => "expires",
+			"caption" => t("Expires"),
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Status"),
+		));
+		$t->define_field(array(
+			"name" => "certificate",
+			"caption" => t("Certificate"),
+		));
+		$t->define_field(array(
+			"name" => "company",
+			"caption" => t("Company"),
+		));
+		$t->define_field(array(
+			"name" => "broker",
+			"caption" => t("Broker"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$file_inst = get_instance(CL_FILE);
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_INSURANCE")) as $conn)
+		{
+			$insurance = $conn->to();
+			$t->define_data(array(
+				"name" => html::obj_change_url($insurance->id()),
+				"expires" => date("d.m.Y" , $insurance->prop("expires")),
+				"status" => $insurance->prop("expires") > time() ? "<font color=green>".t("Valid")."</font>"  : "<font color=red>".t("Expired")."</font>",
+				"certificate" => html::href(array(
+					"url" => $file_inst->get_url($insurance->prop("certificate"), $insurance->prop("certificate.name")),
+					"caption" => $insurance->prop("certificate.name"),
+					"target" => "New window",
+				)),
+				"company" => html::obj_change_url($insurance->prop("company")),
+				"broker" => html::obj_change_url($insurance->prop("broker")),
+				"oid" => $insurance->id(),
+			));
+		}
+	}
+
+	function _get_insurance_tb($arr)
+	{
+		$tb = &$arr["prop"]["toolbar"];
+
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus kindlustus"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 68,
+				"return_url" => get_ru(),
+				"parent" => $arr["obj_inst"]->parent(),
+			), "crm_insurance"),
+		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_objects",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
 	}
 
 }

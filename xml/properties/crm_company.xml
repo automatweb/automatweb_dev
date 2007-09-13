@@ -695,6 +695,35 @@
             <caption>Card number</caption>
       </property>
       <property>
+            <name>insurance_title2</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <field>insurance_title2</field>
+            <caption>Insurance</caption>
+      </property>
+      <property>
+            <name>insurance_tb</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>insurance_tb</field>
+            <caption>Insurance toolbar</caption>
+      </property>
+      <property>
+            <name>insurance_table</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>insurance_table</field>
+            <caption>Insurance table</caption>
+      </property>
+      <property>
             <name>do_create_users</name>
             <table>objects</table>
             <group>user_settings</group>
@@ -3804,6 +3833,11 @@
                   <clid>CL_CRM_SERVICE_TYPE</clid>
                   <caption>Teenuse liik</caption>
             </SERVICE_TYPE>
+            <INSURANCE>
+                  <value>68</value>
+                  <clid>CL_CRM_INSURANCE</clid>
+                  <caption>Insurance</caption>
+            </INSURANCE>
       </reltypes>
       <layout>
             <co_top>
