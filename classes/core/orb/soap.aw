@@ -15,8 +15,7 @@ class soap extends aw_template
 		$soapclient->debug = 0;
 
 		$return = $soapclient->call($arr["action"] , $arr["params"]);
-
-		return $return[$arr["action"]];
+		return $return;
 	}
 		
 

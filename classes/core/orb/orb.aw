@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.24 2007/08/28 12:13:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.25 2007/09/13 13:17:01 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -712,7 +712,7 @@ class orb extends aw_template
 	//              if this is set, then server will be ignored
 	function do_method_call($arr)
 	{
-		$arr['server'] = isset($arr['server']) ? str_replace('http://','',$arr['server']) : NULL;
+//		$arr['server'] = isset($arr['server']) ? str_replace('http://','',$arr['server']) : NULL;
 
 		extract($arr);
 
@@ -730,17 +730,16 @@ class orb extends aw_template
 		};
 
 		// get orb defs for the class
-		$orb_defs = $this->try_load_class($class);
 
 		// check params
-		if (!isset($method) || (isset($method) && ($method ==
-"local")))
+		if (!isset($method) || (isset($method) && ($method == "local")))
 		{
+			$orb_defs = $this->try_load_class($class);
 			$params = $this->check_method_params($orb_defs, $params, $class, $action);
 			$arr["params"] = $params;
+			$this->do_orb_acl_checks($orb_defs[$class][$action], $params);
 		}
 
-		$this->do_orb_acl_checks($orb_defs[$class][$action], $params);
 
 		// do the call
 		if (!isset($method) || (isset($method) && ($method == "local")))
