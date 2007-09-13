@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.22 2006/11/14 15:08:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.23 2007/09/13 10:03:26 voldemar Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1
@@ -17,14 +17,14 @@
 	@caption Autori nimi
 
 	@property author_email type=textbox field=meta method=serialize
-	@caption Autori meil
+	@caption Autori e-post
 
 	@property locked type=checkbox ch_value=1 field=meta method=serialize
 	@caption Teema lukus
 	@comment Lukus teemale uusi kommentaare lisada ei saa
 
 	@property answers_to_mail type=checkbox ch_value=1 store=no
-	@caption Soovin vastuseid e-mailile
+	@caption Soovin vastuseid e-postiga
 
 	@property image type=releditor reltype=RELTYPE_FORUM_IMAGE rel_id=first use_form=emb field=meta method=serialize
 	@caption Pilt
@@ -92,7 +92,7 @@ class forum_topic extends class_base
 					$prop["error"] = $prop["caption"] . " ei tohi olla tühi!";
 					$retval = PROP_FATAL_ERROR;
 				};
-			
+
 				break;
 			case "comment":
 				if (empty($prop["value"]))
@@ -115,7 +115,7 @@ class forum_topic extends class_base
 						{       $prop['error'] = t('Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt');
 							$retval = PROP_FATAL_ERROR;
 						}
-						
+
 					}
 				}
 				break;
@@ -123,7 +123,7 @@ class forum_topic extends class_base
 				if ($this->can('view', $arr['request']['forum_id']))
 				{
 					$forum_obj = new object($arr['request']['forum_id']);
-					if ($forum_obj->prop('use_image_verification'))	
+					if ($forum_obj->prop('use_image_verification'))
 					{
 						$image_verification_inst = get_instance('core/util/image_verification/image_verification');
 						if ( !$image_verification_inst->validate($arr['request']['ver_code']) )

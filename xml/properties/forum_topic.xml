@@ -32,7 +32,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Autori meil</caption>
+            <caption>Autori e-post</caption>
       </property>
       <property>
             <name>locked</name>
@@ -53,7 +53,7 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <field>answers_to_mail</field>
-            <caption>Soovin vastuseid e-mailile</caption>
+            <caption>Soovin vastuseid e-postiga</caption>
       </property>
       <property>
             <name>image</name>

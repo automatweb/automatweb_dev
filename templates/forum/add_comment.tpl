@@ -23,10 +23,10 @@
 	<!-- END SUB: a_name_logged -->
 </tr>
 <tr>
-	<td class="{VAR:style_form_text}">Autori e-mail:</td>
+	<td class="{VAR:style_form_text}">Autori e-post:</td>
 	<!-- SUB: a_email -->
 	<td class="{VAR:style_form_text}">{VAR:author_email}</td>
-	<!-- END SUB: a_email -->	
+	<!-- END SUB: a_email -->
 	<!-- SUB: a_email_logged -->
 	<td><input type="text" name="uemail" value="{VAR:author_email}" class="{VAR:style_form_element}"></td>
 	<!-- END SUB: a_email_logged -->
