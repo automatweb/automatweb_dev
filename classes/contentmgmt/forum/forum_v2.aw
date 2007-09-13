@@ -2040,17 +2040,29 @@ class forum_v2 extends class_base
 		$uid = aw_global_get("uid");
 		if (!empty($uid))
 		{
-			$props['author_name']['value'] = $uid;
 			$uid_oid = users::get_oid_for_uid($uid);
 			$user_obj = new object($uid_oid);
 			$props['author_email']['value'] = $user_obj->prop("email");
+
+			$p_oid = $cl_users->get_person_for_user($user_obj);
+
+			if ($this->can("view", $p_oid))
+			{
+				$p_o = obj($p_oid);
+				$pname = $p_o->name();
+			}
+			else
+			{
+				$pname = $uid;
+			}
+
+			$props['author_name']['value'] = $pname;
 
 			if ($this->obj_inst->prop("show_logged") != 1)
 			{
 				$props['author_name']['type'] = "text";
 				$props['author_email']['type'] = "text";
 			}
-
 		}
 
 		$cb_values = aw_global_get("cb_values");
