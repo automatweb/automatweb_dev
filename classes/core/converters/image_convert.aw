@@ -337,7 +337,7 @@ class image_convert extends class_base
 				"width" => "100",
 				"height" => "80",
 			);
-			$img_contents = $img->get("new_image.jpg", 2);
+			$img_contents = $img->save("new_image.jpg", 2);
 			// saves image (resized to 100x80 and converted to jpeg) to new_image.jpg.
 	**/
 	function save($filename, $type)
