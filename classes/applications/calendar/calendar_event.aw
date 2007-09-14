@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.28 2007/09/11 13:52:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.29 2007/09/14 14:44:33 markop Exp $
 // calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
@@ -239,6 +239,7 @@ class calendar_event extends class_base
 			case "make_copy":
 				return PROP_IGNORE;
 			case "event_time_table":
+				$this->id = $arr["obj_inst"]->id();
 				$this->save_event_times($arr["request"]["event_time"]);
 				break;
 			case "transl":
@@ -299,11 +300,33 @@ class calendar_event extends class_base
 		return $retval;
 	}
 
+	function check_format($t)
+	{
+		if(!$t["start"] || !$t["location"])
+		{
+			return null;
+		}
+		$start_dt = explode(" ", $t["start"]);
+		$end_dt = explode(" ", $t["end"]);
+
+		$start_d = explode(".", $start_dt[0]);
+		$end_d = explode(".", $end_dt[0]);
+
+		$start_t = explode(":", $start_dt[1]);
+		$end_t = explode(":",$end_dt[1]);
+
+		if(!($start_d[0] > -1 && $start_d[0] < 32 && $start_d[1] > 0 && $start_d[1] < 13 && $start_d[2] > 100 && $start_d[2] < 3000 && $start_t[0] > -1 && $start_t[0]< 61 && $start_t[1] > -1 && $start_t[0] <61)) return t("Algusaeg ei vasta formaadile");
+		if(!($end_d[0] > -1 && $end_d[0] < 32 && $end_d[1] > 0 && $end_d[1] < 13 && $end_d[2] > 100 && $end_d[2] < 3000 && $end_t[0] > -1 && $end_t[0]< 61 && $end_t[1] > -1 && $end_t[0] <61)) return t("L&otilde;puaeg ei vasta formaadile");
+
+		return null;
+	}
+
 	function save_event_times($times)
 	{
 		$event = obj($this->id);
 		foreach($times as $id => $val)
 		{
+			$error[$id] = $this->check_format($val);
 			if(is_oid($id) && $this->can("view" , $id))
 			{
 				$o = obj($id);
@@ -334,12 +357,12 @@ class calendar_event extends class_base
 			}
 			else
 			{
-				$location = new object();
-				$location->set_name($val["location"]);
-				$location->set_class_id(CL_SCM_LOCATION);
-				$location->set_parent($id);
+//				$location = new object();
+//				$location->set_name($val["location"]);
+//				$location->set_class_id(CL_SCM_LOCATION);
+//				$location->set_parent($id);
+				$error[$id] = t("Sellist toimumiskohta pole");
 			}
-			$o->set_prop("location" , $location->id());
 			
 			$start_dt = explode(" ", $val["start"]);
 			$end_dt = explode(" ", $val["end"]);
@@ -348,11 +371,16 @@ class calendar_event extends class_base
 			$start_t = explode(":", $start_dt[1]);
 			$end_t = explode(":",$end_dt[1]);
 
-			$o->set_prop("start" , mktime($start_t[0] , $start_t[1] , 0  , $start_d[1],$start_d[0],$start_d[2]));
-			$o->set_prop("end" , mktime($end_t[0] , $end_t[1] , 0 ,$end_d[1],$end_d[0],$end_d[2]));
-			$o->save();
-			$event->connect(array("to" => $o->id(), "reltype" => 9));
+			if(!$error[$id])
+			{
+				$o->set_prop("start" , mktime($start_t[0] , $start_t[1] , 0  , $start_d[1],$start_d[0],$start_d[2]));
+				$o->set_prop("end" , mktime($end_t[0] , $end_t[1] , 0 ,$end_d[1],$end_d[0],$end_d[2]));
+				$o->set_prop("location" , $location->id());
+				$o->save();
+				$event->connect(array("to" => $o->id(), "reltype" => 9));
+			}
 		}
+		$_SESSION["event_time_save_errors"] = $error;
 	}
 
 	function do_event_time_table($arr)
@@ -383,7 +411,7 @@ class calendar_event extends class_base
 					"size" => 15,
 					"value" => date("d.m.Y H:i" , $o->prop("start")),
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.event_time_'.$o->id().'__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
+cal.select(changeform.event_time_'.$o->id().'__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a><font color=red> '.$_SESSION["event_time_save_errors"][$o->id()]." </font>",
 				"end" => html::textbox(array(
 					"name" => "event_time[".$o->id()."][end]",
 					"size" => 15,
@@ -413,7 +441,7 @@ cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy H
 					"size" => 15,
 					"value" => "",
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.event_time_new__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
+cal.select(changeform.event_time_new__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a><font color=red> '.$_SESSION["event_time_save_errors"]["new"]." </font>",
 			"end" => html::textbox(array(
 					"name" => "event_time[new][end]",
 					"size" => 15,
@@ -428,6 +456,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 				"autocomplete_params" => "event_time[new][location]",
 			)),
 		));
+		unset($_SESSION["event_time_save_errors"]);
 	}
 
 	/**

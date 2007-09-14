@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.11 2007/09/11 13:52:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.12 2007/09/14 14:44:31 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -559,11 +559,11 @@ class events_manager extends class_base
 			}
 			$change_url = html::obj_change_url($o , t("Muuda"));
 
-	//		$make_copy = html::href(array(
-	//			"url" => $this->mk_my_orb("make_copy" , array("id" => $o->id(),"post_ru" => post_ru())),
-	//			"title" => t("Tee koopia"),
-	//			"caption" => t("Tee koopia"),
-	//		));
+			$make_copy = html::href(array(
+				"url" => $this->mk_my_orb("make_copy" , array("id" => $o->id(),"post_ru" => post_ru())),
+				"title" => t("Tee koopia"),
+				"caption" => t("Tee koopia"),
+			));
 
 			$translated = "";
 			if(is_array($o->meta("translations")))
@@ -978,6 +978,55 @@ class events_manager extends class_base
 		$event = obj($arr["id"]);
 		$event->set_prop("published" , 1);
 		$event->save();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=make_copy is_public="1" all_args=1
+	**/
+	function make_copy($arr)
+	{
+		$event = obj($arr["id"]);
+
+		$o = new object();
+		$o->set_class_id(CL_CALENDAR_EVENT);
+		$o->set_parent($event->parent());
+		$o->set_name($event->name());
+
+		$o->set_prop("published" , 0);
+		$o->set_prop("start1" , $event->prop("start1"));
+		$o->set_prop("end" , $event->prop("end"));
+		$o->set_prop("front_event" , $event->prop("front_event"));
+		$o->set_prop("level" , $event->prop("level"));
+		$o->set_prop("organizer" , $event->prop("organizer"));
+		$o->set_prop("location" , $event->prop("location"));
+		$o->set_prop("sector" , $event->prop("sector"));
+		$o->set_prop("description" , $event->prop("description"));
+		$o->set_prop("short_description" , $event->prop("short_description"));
+		$o->set_prop("title" , $event->prop("title"));
+
+		$o->save();
+		$o->set_meta($event->meta());
+		$o->save();
+
+		foreach($event->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
+		{
+			$t = $c->to();
+			$nt = new object();
+			$nt->set_parent($o->id());
+			$nt->set_class_id(CL_EVENT_TIME);
+			$nt->set_name($nt->name() . " - ".t("toimumisaeg"));
+
+			$nt->set_prop("start" , $t->prop("start"));
+			$nt->set_prop("end" , $t->prop("end"));
+			$nt->set_prop("location" , $t->prop("location"));
+			$nt->save();
+	
+			$nt->connect(array("to" => $t->prop("location") , "reltype" => 1));
+
+			$o->connect(array("to" => $nt->id() , "reltype" => 9));
+		}
+
 		return $arr["post_ru"];
 	}
 

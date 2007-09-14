@@ -50,5 +50,12 @@
 			</function>
 		</action>
 
+		<action name="make_copy" is_public="1" all_args="1">
+			<function name="make_copy">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
