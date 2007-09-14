@@ -20,6 +20,42 @@
             <field>acct_tree</field>
       </property>
       <property>
+            <name>acct_s_nm</name>
+            <table>objects</table>
+            <group>accounts</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>acct_group</parent>
+            <size>15</size>
+            <captionside>top</captionside>
+            <field>acct_s_nm</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>acct_s_type</name>
+            <table>objects</table>
+            <group>accounts</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>acct_group</parent>
+            <captionside>top</captionside>
+            <field>acct_s_type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>acct_s_sbt</name>
+            <table>objects</table>
+            <group>accounts</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>acct_group</parent>
+            <size>15</size>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>acct_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>acct_table</name>
             <table>objects</table>
             <group>accounts</group>
@@ -47,6 +83,55 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>tax_tree</field>
+      </property>
+      <property>
+            <name>tax_s_nm</name>
+            <table>objects</table>
+            <group>taxes</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>tax_search</parent>
+            <size>15</size>
+            <captionside>top</captionside>
+            <field>tax_s_nm</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>tax_s_toact</name>
+            <table>objects</table>
+            <group>taxes</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>tax_search</parent>
+            <captionside>top</captionside>
+            <size>15</size>
+            <field>tax_s_toact</field>
+            <caption>Kontole</caption>
+      </property>
+      <property>
+            <name>tax_s_group</name>
+            <table>objects</table>
+            <group>taxes</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>tax_search</parent>
+            <captionside>top</captionside>
+            <size>15</size>
+            <field>tax_s_group</field>
+            <caption>Maksugrupp</caption>
+      </property>
+      <property>
+            <name>tax_ssbt</name>
+            <table>objects</table>
+            <group>taxes</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>tax_search</parent>
+            <size>15</size>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>tax_ssbt</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>tax_table</name>
@@ -292,13 +377,26 @@
                   <group>accounts</group>
                   <area_caption></area_caption>
             </acct_split>
-            <acct_tree>
+            <acct_left>
+                  <type>vbox</type>
                   <parent>acct_split</parent>
+                  <group>accounts</group>
+                  <area_caption></area_caption>
+            </acct_left>
+            <acct_tree>
+                  <parent>acct_left</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Kontode&amp;amp;nbsp;puu</area_caption>
                   <group>accounts</group>
             </acct_tree>
+            <acct_group>
+                  <type>vbox</type>
+                  <parent>acct_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>accounts</group>
+            </acct_group>
             <acct_table>
                   <parent>acct_split</parent>
                   <type>vbox</type>
@@ -311,13 +409,26 @@
                   <group>taxes</group>
                   <area_caption></area_caption>
             </tax_split>
-            <tax_tree>
+            <tax_left>
+                  <type>vbox</type>
                   <parent>tax_split</parent>
+                  <group>taxes</group>
+                  <area_caption></area_caption>
+            </tax_left>
+            <tax_tree>
+                  <parent>tax_left</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Maksude&amp;amp;nbsp;puu</area_caption>
                   <group>taxes</group>
             </tax_tree>
+            <tax_search>
+                  <parent>tax_left</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>taxes</group>
+            </tax_search>
             <tax_table>
                   <parent>tax_split</parent>
                   <type>vbox</type>

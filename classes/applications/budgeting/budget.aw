@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.4 2007/09/10 10:27:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.5 2007/09/14 12:38:37 kristo Exp $
 // budget.aw - Eelarve 
 /*
 
@@ -12,6 +12,9 @@
 
 	@property project type=relpicker reltype=RELTYPE_PROJECT field=aw_project
 	@caption Project
+
+	@property scenario type=relpicker reltype=RELTYPE_SCENARIO field=aw_scenario
+	@caption Stsenaarium
 
 @default group=m1,m2
 
@@ -30,6 +33,9 @@
 
 @reltype PROJECT value=1 clid=CL_PROJECT
 @caption Projekt
+
+@reltype SCENARIO value=2 clid=CL_BUDGETING_SCENARIO
+@caption Stsenaarium
 
 */
 
@@ -82,6 +88,14 @@ class budget extends class_base
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "double"
+				));
+				return true;
+				break;
+
+			case "aw_scenario":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
 				));
 				return true;
 				break;

@@ -10,6 +10,15 @@
             <caption>Project</caption>
       </property>
       <property>
+            <name>scenario</name>
+            <table>aw_budgets</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SCENARIO</reltype>
+            <field>aw_scenario</field>
+            <caption>Stsenaarium</caption>
+      </property>
+      <property>
             <name>total</name>
             <table>aw_budgets</table>
             <group>
@@ -78,6 +87,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Projekt</caption>
             </PROJECT>
+            <SCENARIO>
+                  <value>2</value>
+                  <clid>CL_BUDGETING_SCENARIO</clid>
+                  <caption>Stsenaarium</caption>
+            </SCENARIO>
       </reltypes>
 </properties>
 

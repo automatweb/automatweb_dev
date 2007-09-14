@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.5 2007/09/10 10:27:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.6 2007/09/14 12:38:37 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -14,9 +14,24 @@
 
 	@layout acct_split type=hbox width="20%:80%" 
 
-		@layout acct_tree parent=acct_split type=vbox closeable=1 area_caption=Kontode&nbsp;puu
+		@layout acct_left type=vbox parent=acct_split 
 
-			@property acct_tree type=treeview parent=acct_tree store=no no_caption=1
+
+			@layout acct_tree parent=acct_left type=vbox closeable=1 area_caption=Kontode&nbsp;puu
+
+				@property acct_tree type=treeview parent=acct_tree store=no no_caption=1
+
+			@layout acct_group type=vbox parent=acct_left closeable=1 area_caption=Otsing
+
+				@property acct_s_nm type=textbox store=no parent=acct_group size=15 captionside=top
+				@caption Nimi
+
+				@property acct_s_type type=select store=no parent=acct_group captionside=top
+				@caption T&uuml;&uuml;p
+
+				@property acct_s_sbt type=submit store=no parent=acct_group size=15 captionside=top no_caption=1
+				@caption Otsi
+
 
 		@layout acct_table parent=acct_split type=vbox
 
@@ -28,9 +43,26 @@
 
 	@layout tax_split type=hbox width="20%:80%" 
 
-		@layout tax_tree parent=tax_split type=vbox closeable=1 area_caption=Maksude&nbsp;puu
+		@layout tax_left type=vbox parent=tax_split
+	
+			@layout tax_tree parent=tax_left type=vbox closeable=1 area_caption=Maksude&nbsp;puu
 
-			@property tax_tree type=treeview parent=tax_tree store=no no_caption=1
+				@property tax_tree type=treeview parent=tax_tree store=no no_caption=1
+
+			@layout tax_search parent=tax_left type=vbox closeable=1 area_caption=Otsing
+
+				@property tax_s_nm type=textbox store=no parent=tax_search size=15 captionside=top
+				@caption Nimi
+
+				@property tax_s_toact type=textbox store=no parent=tax_search captionside=top size=15
+				@caption Kontole
+
+				@property tax_s_group type=textbox store=no parent=tax_search captionside=top size=15
+				@caption Maksugrupp
+
+				@property tax_ssbt type=submit store=no parent=tax_search size=15 captionside=top no_caption=1
+				@caption Otsi
+
 
 		@layout tax_table parent=tax_split type=vbox
 
@@ -176,19 +208,91 @@ class budgeting_workspace extends class_base
 		));
 	}
 
+	function _init_acct_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "owner",
+			"caption" => t("Omanik"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "balance",
+			"caption" => t("Saldo"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "last_transfer",
+			"caption" => t("Viimane kanne"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "last_transfer_amt",
+			"caption" => t("Summa"),
+			"align" => "center",
+			"sortable" => 1
+		));
+	}
+
 	function _get_acct_table($arr)
 	{
-		$pt = $arr["request"]["acct_fld"] ? $arr["request"]["acct_fld"] : $this->get_acct_tree_parent($arr["obj_inst"]);
-		$arr["prop"]["vcl_inst"]->table_from_ol(
-			new object_list(array(
+		if (!empty($arr["request"]["acct_s_sbt"]))
+		{
+			$all_clids = array(CL_BUDGETING_ACCOUNT, CL_BUDGETING_FUND, CL_CRM_CATEGORY, CL_CRM_COMPANY, CL_CRM_PERSON, CL_PROJECT, CL_SHOP_PRODUCT, CL_TASK);
+			$ol = new object_list(array(
+				"class_id" => !empty($arr["request"]["acct_s_type"]) ? $arr["request"]["acct_s_type"] : $all_clids,
+				"name" => "%".$arr["request"]["acct_s_nm"]."%",
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
+		else
+		{
+			$pt = $arr["request"]["acct_fld"] ? $arr["request"]["acct_fld"] : $this->get_acct_tree_parent($arr["obj_inst"]);
+			$ol = new object_list(array(
 				"class_id" => CL_BUDGETING_ACCOUNT,
 				"parent" => $pt,
 				"lang_id" => array(),
 				"site_id" => array()
-			)),
-			array("name", "comment"),
-			CL_BUDGETING_ACCOUNT
-		);
+			));
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_acct_t($t);
+		foreach($ol->arr() as $o)
+		{
+			$tf = new object_list(array(
+				"class_id" => CL_BUDGETING_TRANSFER,
+				"from_acct" => $o->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "created desc",
+				"limit" => 1
+			));
+			$last_trans = "";
+			$last_trans_amt = "";
+			if ($tf->count())
+			{
+				$tr = $tf->begin();
+				$last_trans = html::obj_change_url($tr);
+				$last_trans_amt = $tr->prop("amount");
+			}
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"owner" => html::obj_change_url($o->prop("owner")),
+				"balance" => $o->prop("balance"),
+				"last_transfer" => $last_trans,
+				"last_transfer_amt" => $last_trans_amt
+			));
+		}
 	}
 
 	function get_acct_tree_parent($o)
@@ -249,15 +353,37 @@ class budgeting_workspace extends class_base
 
 	function _get_tax_table($arr)
 	{
-		$pt = $arr["request"]["tax_fld"] ? $arr["request"]["tax_fld"] : $this->get_tax_tree_parent($arr["obj_inst"]);
-		$arr["prop"]["vcl_inst"]->table_from_ol(
-			new object_list(array(
+		if (!empty($arr["request"]["tax_ssbt"]))
+		{
+			$filt = array(
+				"class_id" => CL_BUDGETING_TAX,
+				"name" => "%".$arr["request"]["tax_s_nm"]."%",
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+			if (!empty($arr["request"]["tax_s_toact"]))
+			{
+				$filt["CL_BUDGETING_TAX.to_acct.name"] = "%".$arr["request"]["tax_s_toact"]."%";
+			}
+			if (!empty($arr["request"]["tax_s_group"]))
+			{
+				$filt["CL_BUDGETING_TAX.RELTYPE_TAX_GRP.name"] = "%".$arr["request"]["tax_s_group"]."%";
+			}
+			$ol = new object_list($filt);
+		}
+		else
+		{
+			$pt = $arr["request"]["tax_fld"] ? $arr["request"]["tax_fld"] : $this->get_tax_tree_parent($arr["obj_inst"]);
+			$ol = new object_list(array(
 				"class_id" => CL_BUDGETING_TAX,
 				"from_place" => $pt,
 				"lang_id" => array(),
 				"site_id" => array()
-			)),
-			array("name", "comment", "to_acct", "amount", "pri"),
+			));
+		}
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			$ol,
+			array("name", "comment", "to_acct", "amount", "pri", "max_deviation_minus", "max_deviation_plus", "tax_grp"),
 			CL_BUDGETING_TAX
 		);
 	}
@@ -1053,6 +1179,55 @@ class budgeting_workspace extends class_base
 		}
 		$_SESSION["bdgt_taxes_copied"] = null;
 		return $arr["post_ru"];
+	}
+
+	function _get_acct_s_type($arr)
+	{
+		$clss = aw_ini_get("classes");
+		$arr["prop"]["options"] = array(
+			"" => t("K&otilde;ik"),
+			CL_BUDGETING_ACCOUNT => $clss[CL_BUDGETING_ACCOUNT]["name"],
+			CL_BUDGETING_FUND => $clss[CL_BUDGETING_FUND]["name"],
+			CL_CRM_CATEGORY => $clss[CL_CRM_CATEGORY]["name"],
+			CL_CRM_COMPANY => $clss[CL_CRM_COMPANY]["name"],
+			CL_CRM_PERSON => $clss[CL_CRM_PERSON]["name"],
+			CL_PROJECT => $clss[CL_PROJECT]["name"],
+			CL_SHOP_PRODUCT => $clss[CL_SHOP_PRODUCT]["name"],
+			CL_TASK => $clss[CL_TASK]["name"],
+		);
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_acct_s_nm($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["acct_s_nm"] = $arr["request"]["acct_s_nm"];
+		$arr["args"]["acct_s_type"] = $arr["request"]["acct_s_type"];
+		$arr["args"]["acct_s_sbt"] = $arr["request"]["acct_s_sbt"];
+
+		$arr["args"]["tax_s_nm"] = $arr["request"]["tax_s_nm"];
+		$arr["args"]["tax_s_toact"] = $arr["request"]["tax_s_toact"];
+		$arr["args"]["tax_s_group"] = $arr["request"]["tax_s_group"];
+		$arr["args"]["tax_ssbt"] = $arr["request"]["tax_ssbt"];
+	}
+
+	function _get_tax_s_nm($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_tax_s_toact($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_tax_s_group($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 	}
 }
 ?>

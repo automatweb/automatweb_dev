@@ -89,6 +89,16 @@
             <reltype>RELTYPE_TAX_GRP</reltype>
             <caption>Maksugrupp</caption>
       </property>
+      <property>
+            <name>tax_scenario</name>
+            <table>aw_budgeting_tax</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_tax_scenario</field>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_SCENARIO</reltype>
+            <caption>Stsenaarium</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUDGETING_TAX</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -126,6 +136,11 @@
                   <clid>CL_BUDGETING_TAX_GROUP</clid>
                   <caption>Maksugrupp</caption>
             </TAX_GRP>
+            <SCENARIO>
+                  <value>4</value>
+                  <clid>CL_BUDGETING_SCENARIO</clid>
+                  <caption>Stsenaarium</caption>
+            </SCENARIO>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.4 2007/09/10 10:27:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.5 2007/09/14 12:38:37 kristo Exp $
 // budgeting_tax.aw - Eelarvestamise maks 
 /*
 
@@ -40,6 +40,9 @@
 	@property tax_grp type=relpicker  field=aw_tax_grp automatic=1 reltype=RELTYPE_TAX_GRP
 	@caption Maksugrupp
 
+	@property tax_scenario type=relpicker  field=aw_tax_scenario automatic=1 reltype=RELTYPE_SCENARIO
+	@caption Stsenaarium
+
 @reltype FROM_ACCT value=1 clid=CL_BUDGETING_ACCOUNT
 @caption Kontolt
 
@@ -48,6 +51,9 @@
 
 @reltype TAX_GRP value=3 clid=CL_BUDGETING_TAX_GROUP
 @caption Maksugrupp
+
+@reltype SCENARIO value=4 clid=CL_BUDGETING_SCENARIO
+@caption Stsenaarium
 */
 
 class budgeting_tax extends class_base
@@ -110,6 +116,7 @@ class budgeting_tax extends class_base
 
 			case "aw_pri":
 			case "aw_tax_grp":
+			case "aw_tax_scenario":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
