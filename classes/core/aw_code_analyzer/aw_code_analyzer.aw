@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.9 2007/08/24 09:41:20 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.10 2007/09/14 07:12:47 hannes Exp $
 
 	@comment
 	analyses aw code
@@ -59,7 +59,6 @@ class aw_code_analyzer extends class_base
 		$this->in_function = false;
 		$this->cur_line = 1;
 		$this->cur_file = $file;
-
 		$this->classinfo = aw_ini_get("classes");
 
 /* dbg siin ja edaspidi selles failis parandus veale. kui esines stringides muutuja: "asdfas{$sadf}dflkljlsd" siis kuna '{' ei t88delda siin T_CURLY_OPEN-ina, kutsuti '}' esinemisel handle_brace_end ilma vastava handle_brace_begin-ita. dbg on ajutine lahendus! */ $variable_token_occurred = false;
@@ -285,7 +284,6 @@ class aw_code_analyzer extends class_base
 		$name_t = $this->get();
 		$this->assert($name_t, T_STRING);
 		list($name_id, $name) = $name_t;
-
 		$this->current_class = $name;
 		$this->data["classes"][$name] = array();
 		$this->data["classes"][$name]["name"] = $name;
