@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.52 2007/09/06 14:35:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.53 2007/09/17 23:25:16 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -224,6 +224,9 @@ groupinfo post_import_fix caption="Parandused"
 @caption Lao toote seadete vorm
 
 */
+
+define('BIG_PICTURE', 1);
+define('SMALL_PICTURE', 2);
 
 class otto_import extends class_base
 {
@@ -465,10 +468,6 @@ class otto_import extends class_base
 			{
 				return false;
 			}
-		}
-		if ($arr['id'] == 'products_manager' && $_SERVER['REMOTE_ADDR'] != '89.219.147.106')
-		{
-		//	return false;
 		}
 	}
 
@@ -867,13 +866,22 @@ class otto_import extends class_base
 				'name' => 'data',
 				'caption' => t('Andmed'),
 			));
+			$prod_id_hidden_element = html::hidden(array(
+				'name' => 'products_manager_prod_id',
+				'value' => $prod_id
+			));
+
+			$prod_link = html::href(array(
+				'caption' => $prod_id,
+				'url' => $this->mk_my_orb('change', array(
+					'id' => $prod_id,
+					'return_url' => get_ru()
+				), CL_SHOP_PRODUCT)
+			));
 
 			$t->define_data(array(
 				'caption' => t('Toote OID'),
-				'data' => $prod_id . html::hidden(array(
-					'name' => 'products_manager_prod_id',
-					'value' => $prod_id
-				))
+				'data' => $prod_link . $prod_id_hidden_element
 			));
 
 			$t->define_data(array(
@@ -891,11 +899,32 @@ class otto_import extends class_base
 				)),
 			));
 
+			// product page:
+			$t->define_data(array(
+				'caption' => t('Leht'),
+				'data' => html::textbox(array(
+					'name' => 'product_page',
+					'value' => $prod_obj->prop('user18'),
+					'size' => 10
+				)),
+			));
+
+			// product codes:
+			$t->define_data(array(
+				'caption' => t('Toote koodid'),
+				'data' => html::textbox(array(
+					'name' => 'product_codes',
+					'value' => $prod_obj->prop('user6'),
+					'size' => 100
+				)),
+			));
+
 			$pics_str = '';
 			$pics = explode(',', $prod_obj->prop('user3'));
+
 			foreach ($pics as $pic)
 			{
-				$pics_str .= '<table style="display:inline; border:1px solid red">';
+				$pics_str .= '<table style="display:inline;">';
 				$pics_str .= '<tr><td style="border: 1px solid blue">';
 				$pics_str .= html::img(array(
 					'url' => aw_ini_get('baseurl').'/vv_product_images/'.$pic{0}.'/'.$pic{1}.'/'.$pic.'_2.jpg',
@@ -906,15 +935,26 @@ class otto_import extends class_base
 					'value' => 1,
 					'caption' => t('Kustuta'),
 				));
-				$pics_str .= '<tr><td style="border:1px solid green"><strong>'.$pic.'</strong>'.$pic_del_check_box.'</td></tr>';
+				$first_pic_radiobutton = html::radiobutton(array(
+					'name' => 'first_pic',
+					'value' => $pic,
+					'caption' => t('Esimeseks pildiks')
+				));
+				$pics_str .= '<tr><td style="border:1px solid green; text-align:center"><strong>'.$pic.'</strong></td></tr>';
+				$pics_str .= '<tr><td style="border:1px solid green">'.$first_pic_radiobutton.'</td></tr>';
+				$pics_str .= '<tr><td style="border:1px solid green">'.$pic_del_check_box.'</td></tr>';
 				$pics_str .= '</table>';
 			}
 			$t->define_data(array(
 				'caption' => t('Pildid'),
 				'data' => $pics_str
 			));
-
-
+			$t->define_data(array(
+				'caption' => t('Uus pilt'),
+				'data' => html::fileupload(array(
+					'name' => 'new_picture',
+				)),
+			));
 		}
 		return PROP_OK;
 	}
@@ -935,6 +975,10 @@ class otto_import extends class_base
 			return PROP_IGNORE;
 		}
 
+		// to prevent saving the same product object multiple times, i set a boolean variable to keep track
+		// if i need to save the object or not
+		$save = false;
+
 		// check if categories have been changed: 
 		if ($prod_obj->prop('user11') != $arr['request']['categories'])
 		{
@@ -949,7 +993,8 @@ class otto_import extends class_base
 
 			// save new categories list to product object as well:
 			$prod_obj->set_prop('user11', implode(',', $categories));
-			$prod_obj->save();
+		//	$prod_obj->save();
+			$save = true;
 
 			// delete this products data from products to sections look-up table:
 			$this->db_query("delete from otto_prod_to_section_lut where product=".$prod_id);
@@ -977,6 +1022,92 @@ class otto_import extends class_base
 				');
 			}
 
+		}
+
+		// product page:
+		if ($prod_obj->prop('user18') != $arr['request']['product_page'])
+		{
+			$prod_obj->set_prop('user18', $arr['request']['product_page']);
+			$save = true;
+		}
+
+		// product codes
+		if ($prod_obj->prop('user6') != $arr['request']['product_codes'])
+		{
+			$prod_obj->set_prop('user6', $arr['request']['product_codes']);
+			$save = true;
+		}
+
+		////
+		// pics
+
+		$pics = explode(',', $prod_obj->prop('user3'));
+		$pics_mod = false;
+
+		// set first picture
+		if (!empty($arr['request']['first_pic']))
+		{
+			array_unshift($pics, $arr['request']['first_pic']);
+			$pics = array_unique($pics);
+			$pics_mod = true;
+		}
+
+		// delete picture
+		if (!empty($arr['request']['pic_del']))
+		{
+			$pics_to_del = array_keys($arr['request']['pic_del']);
+			$pics = array_diff($pics, $pics_to_del);
+			$pics_mod = true;
+		}
+
+		// new picture
+		if ($_FILES['new_picture']['error'] == UPLOAD_ERR_OK && is_uploaded_file($_FILES['new_picture']['tmp_name']))
+		{
+			$folder = $arr['obj_inst']->prop('images_folder');
+			$filename = basename($_FILES['new_picture']['name'], '.jpg');
+
+			$big_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg';
+			$small_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg';
+			if (!file_exists($big_picture))
+			{
+				$this->download_image(array(
+					'image' => $_FILES['new_picture']['tmp_name'],
+					'target_folder' => $folder,
+					'format' => BIG_PICTURE,
+					'filename' => $filename
+				));
+			}
+
+			if (!file_exists($small_picture))
+			{
+				$image_converter = get_instance('core/converters/image_convert');
+				$image_converter->load_from_file($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg');
+
+				$image_converter->resize_simple(168, 240);
+				$image_converter->save($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg', 2);
+
+			}
+
+			// add picture to product only when both big and small picture files exist:
+			if (file_exists($big_picture) && file_exists($small_picture))
+			{
+				array_push($pics, $filename);
+				$pics_mod = true;
+			}
+
+		}
+		
+		if ($pics_mod)
+		{
+			$prod_obj->set_prop('user3', implode(',', $pics));
+			$save = true;
+		}
+
+
+		// if i need to save the product object, then lets do it once in the end:
+		if ($save)
+		{
+			$prod_obj->save();
 		}
 	}
 	
@@ -5021,9 +5152,15 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 	// format - images format (1 - for big image, 2 for thumbnail)
 	// target_folder - server folder where to download images
 	// filename - the new filename, if empty, then original filename is used provided by image parameter
+	// debug - if set to true, then print out what is happening during download process (boolean)
 	function download_image($arr)
 	{
-		echo "[ START DOWNLOADING IMAGE ]<br>\n";
+		$debug = $arr['debug'];
+
+		if ($debug)
+		{
+			echo "[ START DOWNLOADING IMAGE ]<br>\n";
+		}
 
 		if (empty($arr['filename']))
 		{
@@ -5031,20 +5168,26 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		}
 		else
 		{
-			$filename = $arr['filename'];
+			$filename = basename($arr['filename'], '.jpg');
 		}
 
 		$folder = $arr['target_folder'].'/'.$filename{0};
 
 		if (!is_dir($folder))
 		{
-			echo "-- creating directory ($folder) <br>\n";
+			if ($debug)
+			{
+				echo "-- creating directory ($folder) <br>\n";
+			}
 			mkdir($folder);
 		}
 		$folder .= '/'.$filename{1};
 		if (!is_dir($folder))
 		{
-			echo "-- creating directory ($folder) <br>\n";
+			if ($debug)
+			{
+				echo "-- creating directory ($folder) <br>\n";
+			}
 			mkdir($folder);
 		}
 
@@ -5052,16 +5195,25 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		$new_filename = $folder.'/'.$filename.'_'.$arr['format'].'.jpg';
 		if (file_exists($new_filename))
 		{
-			echo "[ END DOWNLOADING IMAGE -- pilt [ $new_filename ] juba olemas ]<br>\n";
+			if ($debug)
+			{
+				echo "[ END DOWNLOADING IMAGE -- pilt [ $new_filename ] juba olemas ]<br>\n";
+			}
 			return true;
 		}
 
-		echo "-- reading image (".$arr['image'].") <br>\n";
+		if ($debug)
+		{
+			echo "-- reading image (".$arr['image'].") <br>\n";
+		}
 		$f = fopen($arr['image'], 'rb');
 
 		if ($f === false)
 		{
-			echo "[ END DOWNLOADING IMAGE -- pilti [ ".$arr['image']." ] ei suudetud lugeda ]<br>\n";
+			if ($debug)
+			{
+				echo "[ END DOWNLOADING IMAGE -- pilti [ ".$arr['image']." ] ei suudetud lugeda ]<br>\n";
+			}
 			return false;
 		}
 
@@ -5071,19 +5223,35 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		}
 		fclose($f);
 		$filename = $folder."/".$filename."_".$arr["format"].".jpg";
-		echo "-- writing image (".$filename.") <br>\n";
+
+		if ($debug)
+		{
+			echo "-- writing image (".$filename.") <br>\n";
+		}
+
 		if (chmod($filename, 0777) === true)
 		{
-			echo "-- &otilde;iguste muutmine failil ".$filename." &otilde;nnestus [ OK ] <br /> \n";
+			if ($debug)
+			{
+				echo "-- &otilde;iguste muutmine failil ".$filename." &otilde;nnestus [ OK ] <br /> \n";
+			}
 		}
 		else
 		{
-			echo "-- &otilde;iguste muutmine failil ".$filename." eba&otilde;nnestus [ FAIL ] <br /> \n";
+			if ($debug)
+			{
+				echo "-- &otilde;iguste muutmine failil ".$filename." eba&otilde;nnestus [ FAIL ] <br /> \n";
+			}
 		}
 		$f = fopen($filename, 'w');
 		fwrite($f, $content);
 		fclose($f);
-		echo "[ END DOWNLOADING IMAGE -- pilt on alla laetud]<br />\n";
+
+		if ($debug)
+		{
+			echo "[ END DOWNLOADING IMAGE -- pilt on alla laetud]<br />\n";
+		}
+
 		return true;
 	}
 
