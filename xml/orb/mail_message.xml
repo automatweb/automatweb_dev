@@ -54,7 +54,7 @@
 			</function>
 		</action>
 
-		<action name="mail_delete">
+		<action name="mail_delete" all_args="1">
 			<function name="mail_delete">
 				<arguments>
 				</arguments>
@@ -68,7 +68,7 @@
 			</function>
 		</action>
 
-		<action name="mail_reply">
+		<action name="mail_reply" all_args="1">
 			<function name="mail_reply">
 				<arguments>
 				</arguments>

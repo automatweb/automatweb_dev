@@ -157,7 +157,7 @@
             <form>showmsg</form>
             <no_caption>1</no_caption>
             <field>msg_headers</field>
-            <caption>Kirja p&amp;auml;ised</caption>
+            <caption>Kirja p&amp;amp;auml;ised</caption>
       </property>
       <property>
             <name>msg_content</name>
@@ -207,7 +207,7 @@
       </classinfo>
       <groupinfo>
             <general>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <submit>no</submit>
             </general>
             <add>

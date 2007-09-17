@@ -3,4 +3,3 @@
 	<class name="event_time" folder="applications/calendar" extends="class_base">
 	</class>
 </orb>
-		

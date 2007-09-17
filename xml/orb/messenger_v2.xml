@@ -31,7 +31,7 @@
 			</function>
 		</action>
 
-		<action name="delete_messages">
+		<action name="delete_messages" all_args="1">
 			<function name="delete_messages">
 				<arguments>
 				</arguments>
@@ -99,6 +99,16 @@
 		<action name="send_shitload_of_emails">
 			<function name="send_shitload_of_emails">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_msg_attachment">
+			<function name="get_msg_attachment">
+				<arguments>
+					<required name="msgr_id" type="oid" />
+					<required name="msg_id" type="int" />
+					<required name="attach_id" type="int" />
 				</arguments>
 			</function>
 		</action>

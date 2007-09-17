@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="ows_bron" folder="applications/ows_bron" extends="class_base">
+		<action name="show_booking_details" all_args="1">
+			<function name="show_booking_details">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_available_rooms" all_args="1">
+			<function name="show_available_rooms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

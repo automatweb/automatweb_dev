@@ -37,104 +37,6 @@
             <caption>Konfiguratsioon</caption>
       </property>
       <property>
-            <name>mailbox</name>
-            <table>objects</table>
-            <group>
-                  <num_0>mess_list</num_0>
-                  <num_1>mail_view</num_1>
-            </group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Mailbox ID (sys)</caption>
-      </property>
-      <property>
-            <name>mail_toolbar</name>
-            <table>objects</table>
-            <group>mess_list</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Msg. toolbar</caption>
-      </property>
-      <property>
-            <name>treeview</name>
-            <table>objects</table>
-            <group>mess_list</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <parent>message_view</parent>
-            <no_caption>1</no_caption>
-            <caption>Folderid</caption>
-      </property>
-      <property>
-            <name>message_list</name>
-            <table>objects</table>
-            <group>mess_list</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <parent>message_view</parent>
-            <store>no</store>
-            <caption>Kirjad</caption>
-      </property>
-      <property>
-            <name>new_mail_toolbar</name>
-            <table>objects</table>
-            <group>new_mail</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <submit>no</submit>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>uue maili tuulbar</caption>
-      </property>
-      <property>
-            <name>message_info</name>
-            <table>objects</table>
-            <group>new_mail</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>releditor</type>
-            <reltype>RELTYPE_MAIL_MESSAGE</reltype>
-            <props>
-                  <num_0>mfrom</num_0>
-                  <num_1>mto</num_1>
-                  <num_2>cc</num_2>
-                  <num_3>name</num_3>
-                  <num_4>message</num_4>
-                  <num_5>msgrid</num_5>
-            </props>
-            <caption>Maili andmed</caption>
-      </property>
-      <property>
-            <name>mail_view_tree</name>
-            <table>objects</table>
-            <group>mail_view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <parent>mail_view_split</parent>
-            <no_caption>1</no_caption>
-            <caption>Kaustapuu</caption>
-      </property>
-      <property>
-            <name>mail_contents</name>
-            <table>objects</table>
-            <group>mail_view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <parent>mail_view_split</parent>
-            <no_caption>1</no_caption>
-            <caption>Maili vaate t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
-      </property>
-      <property>
             <name>msg_outbox</name>
             <table>objects</table>
             <group>settings</group>
@@ -162,7 +64,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Kirjade v&amp;auml;rskendamine (sekundites)</caption>
+            <caption>Kirjade v&amp;amp;auml;rskendamine (sekundites)</caption>
       </property>
       <property>
             <name>num_attachments</name>
@@ -173,6 +75,183 @@
             <type>select</type>
             <default>1</default>
             <caption>Manuste arv</caption>
+      </property>
+      <property>
+            <name>grouping</name>
+            <table>objects</table>
+            <group>grouping</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>0</default>
+            <caption>Kirjade ajaline grupeerimine</caption>
+      </property>
+      <property>
+            <name>mail_toolbar</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Msg. toolbar</caption>
+      </property>
+      <property>
+            <name>treeview</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>msg_tree</parent>
+            <no_caption>1</no_caption>
+            <caption>Folderid</caption>
+      </property>
+      <property>
+            <name>message_contents</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>msg_contents</parent>
+      </property>
+      <property>
+            <name>message_list</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>msg_list</parent>
+            <store>no</store>
+            <caption>Kirjad</caption>
+      </property>
+      <property>
+            <name>new_mail_toolbar</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <parent>msg_new</parent>
+            <submit>no</submit>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>uue maili tuulbar</caption>
+      </property>
+      <property>
+            <name>message_info</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_MAIL_MESSAGE</reltype>
+            <parent>msg_new</parent>
+            <props>
+                  <num_0>mfrom</num_0>
+                  <num_1>mto</num_1>
+                  <num_2>cc</num_2>
+                  <num_3>name</num_3>
+                  <num_4>message</num_4>
+                  <num_5>msgrid</num_5>
+            </props>
+            <caption>Maili andmed</caption>
+      </property>
+      <property>
+            <name>msg_new2_from</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <parent>msg_new2</parent>
+            <store>no</store>
+            <caption>Kellelt</caption>
+      </property>
+      <property>
+            <name>msg_new2_to</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>msg_new2</parent>
+            <store>no</store>
+            <caption>Kellele</caption>
+      </property>
+      <property>
+            <name>msg_new2_cc</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>msg_new2</parent>
+            <store>no</store>
+            <caption>Koopia</caption>
+      </property>
+      <property>
+            <name>msg_new2_subject</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>msg_new2</parent>
+            <store>no</store>
+            <caption>Teema</caption>
+      </property>
+      <property>
+            <name>msg_new2_msg</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <parent>msg_new2</parent>
+            <store>no</store>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>tmp</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>msg_search</parent>
+      </property>
+      <property>
+            <name>msg_ab_contents</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>msg_address_book</parent>
+            <caption>Aadressiraamat</caption>
+      </property>
+      <property>
+            <name>msg_calendar</name>
+            <table>objects</table>
+            <group>main_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>msg_calendar</parent>
+            <no_caption>1</no_caption>
+            <caption>Kalender</caption>
       </property>
       <property>
             <name>s_toolbar</name>
@@ -356,20 +435,6 @@
                   <caption>Kirjad</caption>
                   <submit>no</submit>
             </main_view>
-            <mess_list>
-                  <caption>Postkast</caption>
-                  <parent>main_view</parent>
-            </mess_list>
-            <new_mail>
-                  <caption>Uus kiri</caption>
-                  <parent>main_view</parent>
-                  <submit>no</submit>
-            </new_mail>
-            <mail_view>
-                  <caption>Kirja vaade</caption>
-                  <parent>main_view</parent>
-                  <submit>no</submit>
-            </mail_view>
             <settings>
                   <caption>Seaded</caption>
                   <parent>general</parent>
@@ -378,6 +443,10 @@
                   <caption>Lisaks</caption>
                   <parent>general</parent>
             </advanced>
+            <grouping>
+                  <caption>Grupeerimine</caption>
+                  <parent>general</parent>
+            </grouping>
             <imap>
                   <caption>IMAP</caption>
                   <parent>general</parent>
@@ -406,6 +475,7 @@
             </rules_settings>
             <a_book>
                   <caption>Aadressiraamat</caption>
+                  <submit>no</submit>
             </a_book>
             <book_add>
                   <caption>Lisa</caption>
@@ -475,18 +545,85 @@
             </MAIL_MESSAGE>
       </reltypes>
       <layout>
-            <message_view>
+            <pane_split>
                   <type>hbox</type>
-                  <width>15%:85%</width>
-                  <group>mess_list</group>
+                  <width>10%:70%:20%</width>
+                  <group>main_view</group>
                   <area_caption></area_caption>
-            </message_view>
-            <mail_view_split>
-                  <type>hbox</type>
-                  <width>15%:85%</width>
-                  <group>mail_view</group>
+            </pane_split>
+            <left_pane>
+                  <type>vbox</type>
+                  <parent>pane_split</parent>
+                  <group>main_view</group>
                   <area_caption></area_caption>
-            </mail_view_split>
+            </left_pane>
+            <msg_tree>
+                  <type>vbox</type>
+                  <parent>left_pane</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kaustad</area_caption>
+                  <group>main_view</group>
+            </msg_tree>
+            <middle_pane>
+                  <type>vbox</type>
+                  <parent>pane_split</parent>
+                  <group>main_view</group>
+                  <area_caption></area_caption>
+            </middle_pane>
+            <msg_contents>
+                  <type>vbox</type>
+                  <parent>middle_pane</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kiri</area_caption>
+                  <group>main_view</group>
+            </msg_contents>
+            <msg_list>
+                  <type>vbox</type>
+                  <parent>middle_pane</parent>
+                  <group>main_view</group>
+                  <area_caption></area_caption>
+            </msg_list>
+            <msg_new>
+                  <type>vbox</type>
+                  <parent>middle_pane</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kirja&amp;amp;nbsp;sisu</area_caption>
+                  <group>main_view</group>
+            </msg_new>
+            <msg_new2>
+                  <type>vbox</type>
+                  <parent>middle_pane</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Uus&amp;amp;nbsp;kiri</area_caption>
+                  <group>main_view</group>
+            </msg_new2>
+            <msg_search>
+                  <type>vbox</type>
+                  <parent>middle_pane</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>main_view</group>
+            </msg_search>
+            <right_pane>
+                  <type>vbox</type>
+                  <parent>pane_split</parent>
+                  <group>main_view</group>
+                  <area_caption></area_caption>
+            </right_pane>
+            <msg_address_book>
+                  <type>vbox</type>
+                  <parent>right_pane</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Aadressiraamat</area_caption>
+                  <group>main_view</group>
+            </msg_address_book>
+            <msg_calendar>
+                  <type>vbox</type>
+                  <parent>right_pane</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kalender</area_caption>
+                  <group>main_view</group>
+            </msg_calendar>
       </layout>
 </properties>
 
