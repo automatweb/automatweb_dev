@@ -162,7 +162,6 @@ class realestate_import extends class_base
 						"class_id" => CL_CRM_COMPANY,
 					)));
 					$prop["options"] = $prop["options"] + $list->names ();
-				//	$prop["options"] = $list->names ();
 				}
 				else
 				{
@@ -508,16 +507,9 @@ class realestate_import extends class_base
 					$property->save ();
 					if (1 != $quiet) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s."), $this->property_data["ID"], $property->id ()) . REALESTATE_NEWLINE; flush(); }
 
-					// if ($property_status === REALESTATE_IMPORT_OK)
-					// {
-						$property_id = $property->id ();
-						$imported_properties[] = $property_id;
-					// }
-
-					// unset ($property);
+					$property_id = $property->id ();
+					$imported_properties[] = $property_id;
 					$property = NULL; // v2idetavalt on m2lukasutus unsetiga v6rreldes nii efektiivsem
-					$GLOBALS["objects"][$property_id] = null;
-					unset($GLOBALS["objects"][$property_id]);
 				}
 				else
 				{
@@ -924,7 +916,7 @@ class realestate_import extends class_base
 					$address_text = $address->prop ("address_array");
 					unset($address_text[ADDRESS_COUNTRY_TYPE]);
 
-					if (!empty($arr["import_all"]) or ($address_text != $address_city24 and $maja_nr !== $address->prop("street_address") and $korteri_nr !== $address->prop("apartment") and $current_user === $maakler_user))
+					if (!empty($arr["import_all"]) or (($address_text != $address_city24 or $maja_nr !== $address->prop("street_address") or $korteri_nr !== $address->prop("apartment")) and $current_user === $maakler_user))
 					{
 						##### set address
 						$address->set_prop ("unit_name", array (
@@ -970,10 +962,7 @@ class realestate_import extends class_base
 						$property->set_name ($name);//!!! nime panemine yhte funktsiooni!
 					}
 
-					$tmp = $address->id ();
 					$address = null;
-					$GLOBALS["objects"][$tmp] = null;
-					unset($GLOBALS["objects"][$tmp]);
 
 					#### transaction_type
 					if ($this->changed_transaction_types)
@@ -1263,13 +1252,8 @@ class realestate_import extends class_base
 							"to" => $image,
 							"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
 						));
-						// unset ($imagedata);
-						// unset ($image);
 						$imagedata = NULL;
-						$tmp = $image->id ();
 						$image = null;
-						$GLOBALS["objects"][$tmp] = null;
-						unset($GLOBALS["objects"][$tmp]);
 					}
 
 					#### pictures
@@ -1337,13 +1321,8 @@ class realestate_import extends class_base
 								$property_status = REALESTATE_IMPORT_ERR17;
 							}
 
-							// unset ($imagedata);
-							// unset ($image);
 							$imagedata = NULL;
-							$tmp = $image->id ();
 							$image = null;
-							$GLOBALS["objects"][$tmp] = null;
-							unset($GLOBALS["objects"][$tmp]);
 						}
 						elseif ($key != $existing_pictures[$picture_url]->ord())
 						{ # change order
@@ -1357,7 +1336,6 @@ class realestate_import extends class_base
 						echo end ($status_messages);
 					}
 
-					// unset($existing_pictures);
 					$existing_pictures = NULL;
 
 
@@ -1834,11 +1812,6 @@ class realestate_import extends class_base
 						$property->save ();
 
 						if (1 != $quiet) echo sprintf (t("Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $lang_name, $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE;
-
-						// if ($property_status)
-						// {
-							// unset ($imported_properties[$property->id ()]);
-						// }
 					}
 					else
 					{
