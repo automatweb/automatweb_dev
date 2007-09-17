@@ -255,6 +255,18 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>s_feedback_p</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <size>15</size>
+            <store>no</store>
+            <parent>s_status_lay</parent>
+            <captionside>top</captionside>
+            <field>s_feedback_p</field>
+            <caption>Tagasiside kellelt</caption>
+      </property>
+      <property>
             <name>s_bug_priority</name>
             <table>objects</table>
             <group>search</group>

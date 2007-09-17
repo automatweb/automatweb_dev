@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.104 2007/07/18 09:55:51 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.104 2007/07/18 09:55:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.105 2007/09/17 14:11:12 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.105 2007/09/17 14:11:12 robert Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -105,6 +105,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property s_bug_status type=select store=no multiple=1 parent=s_status_lay size=3 captionside=top
 		@caption Staatus
+
+		@property s_feedback_p type=textbox size=15 store=no parent=s_status_lay captionside=top
+		@caption Tagasiside kellelt
 
 		@property s_bug_priority type=select store=no parent=s_status_lay captionside=top
 		@caption Prioriteet
@@ -2278,6 +2281,11 @@ class bug_tracker extends class_base
 			$res["CL_BUG.RELTYPE_MONITOR.name"] = $this->_get_string_filt($r["s_monitors"]);
 		}
 
+		if (trim($r["s_feedback_p"]) != "")
+		{
+			$res["CL_BUG.RELTYPE_FEEDBACK_P.name"] = $this->_get_string_filt($r["s_feedback_p"]);
+		}
+		
 		$cplx = array("who", "bug_type", "customer", "project");
 		foreach($cplx as $field)
 		{
