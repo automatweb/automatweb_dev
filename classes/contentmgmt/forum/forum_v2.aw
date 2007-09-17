@@ -658,7 +658,8 @@ class forum_v2 extends class_base
 		));
 
 		// get last posts
-		$last_posts_count = $this_o->prop("show_last_posts_count");
+		$last_posts_count = (int) $this_o->prop("show_last_posts_count");
+		$last_posts_count = 1 > $last_posts_count ? 3 : $last_posts_count;
 		$last_posts = array();
 		$parents = new object_tree(array(
 			"parent" => $this_o->prop("topic_folder"),
