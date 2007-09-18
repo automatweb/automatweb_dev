@@ -377,7 +377,7 @@ class country_administrative_structure_object extends _int_object
 			$sequence = array_merge ($sequence, $degree_divisions);
 		}
 
-		$sequence[] = ADDRESS_STREET_TYPE;var_dump($sequence);
+		$sequence[] = ADDRESS_STREET_TYPE;
 		$this->set_meta("as_division_hierarchy_sequence", $sequence);
 		return 0;
 	}
