@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.243 2007/09/10 08:21:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.244 2007/09/18 09:57:22 kristo Exp $
 
 /*
 
@@ -1708,7 +1708,7 @@ class site_show extends class_base
 			));
 
 			$show_always = false;
-			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() == CL_DOCUMENT) && $show)
+			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() == CL_DOCUMENT) && $show && $ref->class_id() != CL_DOCUMENT)
 			{
 				if ($this->is_template("YAH_LINK_BEGIN") && $ya == "")
 				{
