@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.173 2007/09/07 06:40:56 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.174 2007/09/18 07:34:02 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -413,7 +413,7 @@ class htmlclient extends aw_template
 		}
 		else
 		{
-			$this->vars($tpl_vars);
+			$this->vars_safe($tpl_vars);
 			$rv = $this->parse("LINE".$add);
 		}
 		return $rv;
@@ -441,7 +441,7 @@ class htmlclient extends aw_template
 		{
 			 $name .= strtoupper("_".$arr["capt_ord"]);
 		}
-		$this->vars($tpl_vars);
+		$this->vars_safe($tpl_vars);
 		$rv = $this->parse($name);
 		return $rv;
 	}
@@ -456,7 +456,7 @@ class htmlclient extends aw_template
 		// SUBITEM - element first, caption right next to it
 		// SUBITEM2 - caption first, element right next to it
 		$tpl = $args["type"] == "checkbox" ? "SUBITEM" : "SUBITEM2";
-		$this->vars($tpl_vars);
+		$this->vars_safe($tpl_vars);
 		$rv = $this->parse($tpl);
 		return $rv;
 	}
@@ -468,7 +468,7 @@ class htmlclient extends aw_template
 			"caption" => $args["caption"],
 			"webform_header" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
-		$this->vars($tpl_vars);
+		$this->vars_safe($tpl_vars);
 		$rv = $this->parse($name);
 		return $rv;
 	}
@@ -481,7 +481,7 @@ class htmlclient extends aw_template
 			"webform_subtitle" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 			"st_id" => $args["name"]
 		);
-		$this->vars($tpl_vars);
+		$this->vars_safe($tpl_vars);
 		$rv = $this->parse($name);
 		return $rv;
 	}
@@ -494,7 +494,7 @@ class htmlclient extends aw_template
 			"value" => $this->draw_element($args),
 			"webform_content" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
-		$this->vars($tpl_vars);
+		$this->vars_safe($tpl_vars);
 		$rv = $this->parse("CONTENT");
 		return $rv;
 	}
@@ -564,33 +564,33 @@ class htmlclient extends aw_template
 				"sbt_caption" => $sbt_caption != "" ? $sbt_caption : t("Salvesta"),
 			);
 			// I need to figure out whether I have a relation manager
-			$this->vars($tpl_vars);
+			$this->vars_safe($tpl_vars);
 
 			if (aw_global_get("changeform_target") != "_blank")
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"sbt_js" => $this->parse("SBT_JS")
 				));
 			}
 
 			if ($back_button != "")
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"back_button_caption" => t("&lt;&lt;&lt; Tagasi"),
 					"back_button_name" => t("submit_and_back"),
 				));
-				$this->vars(array(
+				$this->vars_safe(array(
 					"BACK_BUTTON" => $this->parse("BACK_BUTTON")
 				));
 			}
 
 			if ($forward_button != "")
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"forward_button_caption" => t("Edasi &gt;&gt;&gt;"),
 					"forward_button_name" => t("submit_and_forward"),
 				));
-				$this->vars(array(
+				$this->vars_safe(array(
 					"FORWARD_BUTTON" => $this->parse("FORWARD_BUTTON")
 				));
 			}
@@ -614,7 +614,7 @@ class htmlclient extends aw_template
 					continue;
 				};
 
-				$this->vars(array(
+				$this->vars_safe(array(
 					"property_name" => $item["name"],
 					"property_caption" => isset($item["caption"]) ? $item["caption"] : "",
 					"property_comment" => isset($item["comment"]) ? $item["comment"] : "",
@@ -624,7 +624,7 @@ class htmlclient extends aw_template
 				$item["html"] = $this->create_element($item);
 				if (!empty($item["error"]))
 				{
-					$this->vars(array(
+					$this->vars_safe(array(
 						"err_msg" => $item["error"],
 					));
 					$res .= $this->parse("PROP_ERR_MSG");
@@ -703,7 +703,7 @@ class htmlclient extends aw_template
 		{
 			$data["no_reforb"] = 1;
 		};
-		$this->vars(array(
+		$this->vars_safe(array(
 			"submit_handler" => $submit_handler,
 			"scripts" => $scripts,
 			"method" => !empty($method) ? $method : "POST",
@@ -723,7 +723,7 @@ class htmlclient extends aw_template
 			{
 				$ds[] = "<input type='hidden' name='$k' value='$v'>";
 			}
-			$this->vars(array(
+			$this->vars_safe(array(
 				"reforb" => join("\n", $ds)
 			));
 		}
@@ -741,7 +741,7 @@ class htmlclient extends aw_template
 
 		if(empty($this->no_form))
 		{
-			$this->vars(array(
+			$this->vars_safe(array(
 				"SHOW_CHANGEFORM" => $this->parse("SHOW_CHANGEFORM"),
 				"SHOW_CHANGEFORM2" => $this->parse("SHOW_CHANGEFORM2"),
 			));
@@ -749,10 +749,10 @@ class htmlclient extends aw_template
 
 		if ($arr["confirm_save_data"] == 1 && !($_GET["action"] == "check_leave_page" || $_GET["group"] == "relationmgr"))
 		{
-			$this->vars(array(
+			$this->vars_safe(array(
 				"confirm_unchanged_text" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?")
 			));
-			$this->vars(array(
+			$this->vars_safe(array(
 				"CHECK_LEAVE_PAGE" => $this->parse("CHECK_LEAVE_PAGE")
 			));
 		}
@@ -760,10 +760,10 @@ class htmlclient extends aw_template
 
 		if (!empty($arr["save_message"]))
 		{
-			$this->vars(array(
+			$this->vars_safe(array(
 				"message" => $arr["save_message"]
 			));
-			$this->vars(array(
+			$this->vars_safe(array(
 				"SAVE_MESSAGE" => $this->parse("SAVE_MESSAGE")
 			));
 		}
@@ -1059,7 +1059,7 @@ class htmlclient extends aw_template
 				};
 				//$arr["divcols"] = 8 * $arr["cols"];
 				//$arr["divrows"] = 12 * $arr["rows"];
-				$this->vars($arr);
+				$this->vars_safe($arr);
 				//$retval = $this->parse("my_textarea");
 				$retval = html::textarea($arr);
 				break;
@@ -1310,7 +1310,7 @@ class htmlclient extends aw_template
 			foreach($layout_items as $cell_nr => $layout_item)
 			{
 				$cell_width = isset($cell_widths[$cell_nr]) ? " width='" . $cell_widths[$cell_nr] . "'" : "";
-				$this->vars(array(
+				$this->vars_safe(array(
 					"item" => $layout_item,
 					"item_width" => $cell_width,
 				));
@@ -1322,7 +1322,7 @@ class htmlclient extends aw_template
 			{
 				$u = get_instance(CL_USER);
 				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
-				$this->vars(array(
+				$this->vars_safe(array(
 					"grid_name" => $layout_name,
 					"area_caption" => $ldata["area_caption"],
 					"open_layer_url" => $this->mk_my_orb("open_layer", array(
@@ -1344,16 +1344,16 @@ class htmlclient extends aw_template
 			/*
 			else
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"grid_name" => $layout_name,
 				));
-				$this->vars(array(
+				$this->vars_safe(array(
 					"GRID_NO_CLOSER" => $this->parse("GRID_NO_CLOSER"),
 					"GRID_NO_CLOSER_END" => $this->parse("GRID_NO_CLOSER_END"),
 				));
 			}*/
 
-			$this->vars(array(
+			$this->vars_safe(array(
 				"GRID_HBOX_ITEM" => $content,
 				"GRID_HAS_CLOSER" => $ghc,
 				"GRID_CLOSER_END" => $gce
@@ -1367,7 +1367,7 @@ class htmlclient extends aw_template
 			}
 			else
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"GRID_HBOX" => $_t,
 					"grid_outer_name" => $layout_name."_outer",
 				));
@@ -1379,13 +1379,13 @@ class htmlclient extends aw_template
 			$content = "";
 			foreach($layout_items as $cell_nr => $layout_item)
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"item" => $layout_item,
 				));
 				$content .= $this->parse(!empty($ldata["closeable"]) ? "GRID_VBOX_ITEM" : "GRID_VBOX_SUBITEM");
 			};
 
-			$this->vars(array(
+			$this->vars_safe(array(
 				"GRID_VBOX_ITEM" => $content,
 			));
 
@@ -1394,7 +1394,7 @@ class htmlclient extends aw_template
 			{
 				$u = get_instance(CL_USER);
 				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
-				$this->vars(array(
+				$this->vars_safe(array(
 					"grid_name" => $layout_name,
 					"area_caption" => $ldata["area_caption"],
 					"open_layer_url" => $this->mk_my_orb("open_layer", array(
@@ -1418,16 +1418,16 @@ class htmlclient extends aw_template
 			/*
 			else
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"grid_name" => $layout_name,
 				));
-				$this->vars(array(
+				$this->vars_safe(array(
 					"VGRID_NO_CLOSER" => $this->parse("VGRID_NO_CLOSER"),
 					"VGRID_NO_CLOSER_END" => $this->parse("VGRID_NO_CLOSER_END"),
 				));
 			}
 			*/
-			$this->vars(array(
+			$this->vars_safe(array(
 				"VGRID_HAS_CLOSER" => $ghc,
 				"VGRID_CLOSER_END" => $gce
 			));
@@ -1440,7 +1440,7 @@ class htmlclient extends aw_template
 			}
 			else
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"GRID_VBOX" => $_t,
 					"grid_outer_name" => $layout_name."_outer",
 				));
@@ -1465,7 +1465,7 @@ class htmlclient extends aw_template
 		$captionside = strtoupper($captionside);
 
 		// reset all captions
-		$this->vars(array(
+		$this->vars_safe(array(
 			"caption" => isset($arr["caption"]) ? $arr["caption"] : null,
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
@@ -1475,13 +1475,13 @@ class htmlclient extends aw_template
 		));
 		if (!empty($arr["error"]))
 		{
-			$this->vars(array(
+			$this->vars_safe(array(
 				"GRID_ERR_MSG" => $this->parse("GRID_ERR_MSG")
 			));
 		}
 		// name refers to a VAR inside the template
 		$caption_template = "CAPTION_${captionside}";
-		$this->vars(array(
+		$this->vars_safe(array(
 			$caption_template => $this->parse($caption_template),
 		));
 		$tpl = "GRIDITEM";
