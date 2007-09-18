@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.85 2007/09/06 10:27:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.86 2007/09/18 11:52:06 robert Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -189,7 +189,7 @@ define("BUG_STATUS_CLOSED", 5);
 @reltype FILE value=2 clid=CL_FILE
 @caption Fail
 
-@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY
 @caption Klient
 
 @reltype PROJECT value=4 clid=CL_PROJECT
@@ -1041,6 +1041,12 @@ class bug extends class_base
 			$rv++;
 		}
 
+		//if customer priority set, up the bug's priority
+		if($cust_priority = $bug->prop("customer.cust_priority"))
+		{
+			$cust_priority = ($cust_priority>99999)?99999:$cust_priority;
+			$rv += 1.0 - ((double)1.0/((double)100000.0 + (double)$cust_priority));
+		}
 
 		$rv += 1.0 - ((double)1.0/((double)1000000.0 - (double)$bug->id()));
 
