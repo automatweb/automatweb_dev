@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.129 2007/09/07 06:44:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.130 2007/09/18 15:14:39 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -119,8 +119,14 @@
 	@property subaction type=hidden store=no group=layout,avail
 	@caption Subaction (sys)
 
-	@property gen_submit_controllers type=callback callback=gen_controller_props group=set_controllers
-	@caption Kontrollerid
+	@property post_save_controllers type=relpicker multiple=1 size=3 group=set_controllers reltype=RELTYPE_CONTROLLER
+	@caption Salvestamisj&auml;rgne kontroller
+
+	@property prop_submit_controllers type=text subtitle=1 group=set_controllers
+	@caption Omaduste kontrollerid
+
+	@property gen_submit_controllers type=callback callback=gen_controller_props group=set_controllers no_caption=1
+
 
 	@property gen_view_controllers type=callback callback=gen_view_controller_props group=get_controllers
 	@caption Kontrollerid
@@ -265,6 +271,9 @@ class cfgform extends class_base
 
 		switch($data["name"])
 		{
+case "post_save_controllers":
+var_dump($arr["obj_inst"]->prop("post_save_controllers"));
+break;
 			case "edit_groups_tb":
 				$this->_edit_groups_tb($arr);
 				break;
@@ -3082,63 +3091,78 @@ class cfgform extends class_base
 	/// submenus from object interface methods
 	function make_menu_item($this_o, $level, $parent_o, $site_show_i)
 	{
-		if (empty($this->cfgview_vars))
-		{
-			$this->cfgview_vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
-		}
-
-		$this->_get_cfgview_params($this_o);
-
-		// no groups for new object form
-		if (!is_oid($this->cfgview_vars["id"]))
-		{
-			return false;
-		}
-
 		// init
 		if (!isset($this->grplist))
 		{
 			$this->_init_cfgform_data($this_o);
-			$this->cfgview_grps = safe_array($this_o->prop("cfgview_grps"));
 		}
 
-		// get next group
-		do
+		if (empty($this->awcb_request_vars))
 		{
-			if (!isset($this->make_menu_item_counter))
+			$this->awcb_request_vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
+		}
+
+		if (empty($this->awcb_request_vars["class"]))
+		{
+			$this->cfgview_grps = safe_array($this_o->prop("cfgview_grps"));
+			$this->_get_cfgview_params($this_o);
+
+			// no groups for new object form
+			if (!is_oid($this->awcb_request_vars["id"]))
 			{
-				$this->make_menu_item_counter = 0;
-				$grp_name = current($this->cfgview_grps);
+				return false;
+			}
+
+			// get next group
+			do
+			{
+				if (!isset($this->make_menu_item_counter))
+				{
+					$this->make_menu_item_counter = 0;
+					$grp_name = current($this->cfgview_grps);
+				}
+				else
+				{
+					$grp_name = next($this->cfgview_grps);
+				}
+			}
+			while (!empty($this->grplist[$grp_name]["grphide"]));
+
+			$this->make_menu_item_counter++;
+
+			// selected grp
+			if ($this->awcb_request_vars["group"] == $grp_name)
+			{
+			}
+
+			//
+			if (false === $grp_name)
+			{
+				$this->make_menu_item_counter = NULL;
+				return false;
 			}
 			else
 			{
-				$grp_name = next($this->cfgview_grps);
+				$vars = array (
+					"just_saved" => NULL,
+					"group" => $grp_name
+				);
+				$link = aw_url_change_var($vars);
+
+				return array(
+					"text" => $this->grplist[$grp_name]["caption"],
+					"link" => $link,
+					// "section" => $o_91_2->id(),
+					// "menu_edit" => $this->__helper_menu_edit($o_91_2),
+					// "parent_section" => is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
+					// "comment" => "komment",
+				);
 			}
-		}
-		while (!empty($this->grplist[$grp_name]["grphide"]));
-
-		$this->make_menu_item_counter++;
-
-		// selected grp
-		if ($this->cfgview_vars["group"] == $grp_name)
-		{
-		}
-
-		//
-		if (false === $grp_name)
-		{
-			$this->make_menu_item_counter = NULL;
-			return false;
-		}
-		elseif (!empty($this->cfgview_vars["class"]))
-		{
-			$this->make_menu_item_counter = NULL;
-			return false;
 		}
 		else
 		{
 			$vars = array (
-				"just_saved" => NULL,
+				// "just_saved" => NULL,
 				"group" => $grp_name
 			);
 			$link = aw_url_change_var($vars);
@@ -3151,6 +3175,8 @@ class cfgform extends class_base
 				// "parent_section" => is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
 				// "comment" => "komment",
 			);
+			// $this->make_menu_item_counter = NULL;
+			return false;
 		}
 	}
 

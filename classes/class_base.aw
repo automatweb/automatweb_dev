@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.559 2007/09/07 06:41:27 voldemar Exp $
+// $Id: class_base.aw,v 2.560 2007/09/18 15:14:39 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3755,16 +3755,16 @@ class class_base extends aw_template
 		$filter["group"] = $group;
 		$filter["rel"] = $this->is_rel;
 		$filter["ignore_layout"] = 1;
+
 		if ($args["cfgform"])
 		{
 			$filter["cfgform_id"] = $args["cfgform"];
 			$this->cfgform_id = $args["cfgform"];
-
 		}
 		else
 		{
 			$filter["cfgform_id"] = $this->obj_inst->meta("cfgform_id");
-		};
+		}
 
 		if ($args["cb_existing_props_only"] || $is_paste)
 		{
@@ -4341,6 +4341,26 @@ class class_base extends aw_template
 				"obj_inst" => &$this->obj_inst,
 				"new" => $new,
 			));
+
+			// call post save controller from cfgform object if defined
+			if (is_oid($filter["cfgform_id"]) and $this->can("view", $filter["cfgform_id"]))
+			{
+				$cfgform_o = new object($filter["cfgform_id"]);
+				$cfg_cntrl = (array) $cfgform_o->prop("post_save_controllers");
+
+				if (count($cfg_cntrl))
+				{
+					$controller_inst = get_instance(CL_CFGCONTROLLER);
+
+					foreach ($cfg_cntrl as $cfg_cntrl_id)
+					{
+						if (is_oid($cfg_cntrl_id))
+						{
+							$controller_inst->check_property($cfg_cntrl_id, $this->obj_inst->id(), array(), &$args, array(), &$this->obj_inst);
+						}
+					}
+				}
+			}
 		}
 
 		if ($_POST["pseh"] != "" && isset($_SESSION["ps_event_handlers"][$_POST["pseh"]]) && $_SESSION["ps_event_handlers"][$_POST["pseh"]][3] == $this->obj_inst->class_id())
