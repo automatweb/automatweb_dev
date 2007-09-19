@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.53 2007/09/17 23:25:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.54 2007/09/19 14:22:19 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -30,6 +30,9 @@
 
 @property do_pict_i type=checkbox ch_value=1
 @caption Teosta piltide import
+
+@property force_full_update type=checkbox ch_value=1 store=no
+@caption Uuenda k&otilde;ikide toodete piltide ja kategooriate v&auml;ljad
 
 property restart_pict_i type=checkbox ch_value=1
 caption Alusta piltide importi algusest
@@ -64,6 +67,9 @@ caption Uuenda ainult toote andmed
 
 			@property products_manager_pcode type=textbox store=no size=20 captionside=top group=products_manager parent=vbox_products_manager_search
 			@caption Tootekood
+
+			@property products_manager_prod_page type=textbox store=no size=20 captionside=top group=products_manager parent=vbox_products_manager_search
+			@caption Leht
 
 			@property products_search type=hidden store=no value=1 no_caption=1 group=products_manager parent=vbox_products_manager_search
 			@caption products_search
@@ -500,6 +506,7 @@ class otto_import extends class_base
 		if ($arr['request']['products_search'])
 		{
 			$arr['args']['products_manager_pcode'] = $arr['request']['products_manager_pcode'];
+			$arr['args']['products_manager_prod_page'] = $arr['request']['products_manager_prod_page'];
 			$arr['args']['products_search'] = $arr['request']['products_search'];
 		}
 		$product_id = (int)$arr['request']['products_manager_prod_id'];
@@ -563,19 +570,23 @@ class otto_import extends class_base
 			
 			$this->do_post_import_fixes($arr['obj_inst']);
 		}
-		
+
 		if ($arr["obj_inst"]->prop("do_i"))
 		{
 			echo "START IMPORT<br>";
 			if ($arr["obj_inst"]->prop("do_pict_i"))
 			{
 				echo "[ Tee piltide import ]<br>\n";
-				$this->doing_pict_i = true;
+			//	$this->doing_pict_i = true;
 			}
 			$arr["obj_inst"]->set_prop("do_i", 0);
 			$arr["obj_inst"]->set_prop("do_pict_i", 0);
 			
-			$this->do_prod_import($arr["obj_inst"]);
+			$this->do_prod_import(array(
+				'otto_import' => $arr["obj_inst"],
+				'doing_pict_i' => $arr['request']['do_pict_i'],
+				'force_full_update' => $arr['request']['force_full_update']
+			));
 		}
 
 	}
@@ -730,20 +741,8 @@ class otto_import extends class_base
 	function _get_products_manager_toolbar($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
-/*
-// i'll finish this deleting thing later ... lets focus on that category changing thing right now ...
-
-		$t->add_button(array(
-			'name' => 'delete_images_from_product',
-			'tooltip' => t('Kustuta pildid toote juurest'),
-			'img' => 'delete.gif',
-			'action' => 'delete_images_from_product',
-			'confirm' => t('Oled sa kindel, et soovid valitud pildid toote juurest kustutada?')
-		));
-*/
 		if ($this->can('view', $arr['request']['products_manager_prod_id']))
 		{
-
 			$t->add_button(array(
 				'name' => 'search',
 				'tooltip' => t('Otsing'),
@@ -774,6 +773,11 @@ class otto_import extends class_base
 		return PROP_OK;
 	}
 
+	function _get_products_manager_prod_page($arr)
+	{
+		$arr['prop']['value'] = $arr['request']['products_manager_prod_page'];
+		return PROP_OK;
+	}
 	
 	function _get_products_manager_search_results_table($arr)
 	{
@@ -809,6 +813,10 @@ class otto_import extends class_base
 			{
 				$filter['user6'] = '%'.$arr['request']['products_manager_pcode'].'%';
 			}
+			if (!empty($arr['request']['products_manager_prod_page']))
+			{
+				$filter['user18'] = '%'.$arr['request']['products_manager_prod_page'].'%';
+			}
 
 			$ol = new object_list();
 			if (count($filter) > 1)
@@ -831,6 +839,7 @@ class otto_import extends class_base
 					)),
 				));
 			}
+			$t->set_caption(sprintf(t('Leiti %s toodet'), $ol->count()));
 		}
 
 		return PROP_OK;
@@ -991,10 +1000,6 @@ class otto_import extends class_base
 				}
 			}
 
-			// save new categories list to product object as well:
-			$prod_obj->set_prop('user11', implode(',', $categories));
-		//	$prod_obj->save();
-			$save = true;
 
 			// delete this products data from products to sections look-up table:
 			$this->db_query("delete from otto_prod_to_section_lut where product=".$prod_id);
@@ -1022,6 +1027,12 @@ class otto_import extends class_base
 				');
 			}
 
+			// save new categories list to product object as well:
+			$prod_obj->set_prop('user11', implode(',', $categories));
+			// this products categories and pictures will ne be updated during import:
+			$prod_obj->set_prop('userch2', 1);
+
+			$save = true;
 		}
 
 		// product page:
@@ -1100,6 +1111,7 @@ class otto_import extends class_base
 		if ($pics_mod)
 		{
 			$prod_obj->set_prop('user3', implode(',', $pics));
+			$prod_obj->set_prop('userch2', 1);
 			$save = true;
 		}
 
@@ -2799,19 +2811,26 @@ class otto_import extends class_base
 
 	}
 
-	function do_prod_import($o)
+	function do_prod_import($arr)
 	{
+
+		$o = $arr['otto_import'];
+
 		$GLOBALS["no_cache_clear"] = 1;
 		
 		// unset the products list which was imported last time:
 		unset($_SESSION['otto_import_product_data']);
 
-		if ($this->doing_pict_i)
+	//	if ($this->doing_pict_i)
+		if ($arr['doing_pict_i'])
 		{
 			$this->pictimp($o);
 		}
 
-		$this->import_product_objects($o);
+		$this->import_product_objects(array(
+			'otto_import' => $o,
+			'force_full_update' => $arr['force_full_update']
+		));
 
 		// flush cache
 		$this->cache_files = array();
@@ -2846,8 +2865,10 @@ class otto_import extends class_base
 	}
 
 	// takes otto_import obj. instance as parameter
-	function import_product_objects($o)
+	function import_product_objects($arr)
 	{
+		$o = $arr['otto_import'];
+
 		set_time_limit(0);
 		$otto_import_lang_id = $o->lang_id();
 		$not_found_products_by_page = array();
@@ -2861,7 +2882,7 @@ class otto_import extends class_base
 		echo "<br><b>[!!]</b>  end reading data from the csv files <b>[!!]</b><br><br>\n";
 
 
-		// This should clean up the otto_prod_to_code_lut table from the those product object ids which are deleted from the system:
+		// This should clean up the otto_prod_to_code_lut table from those product object ids which are deleted from the system:
 		$this->clean_up_products_to_code_lut();
 
 
@@ -2959,7 +2980,6 @@ class otto_import extends class_base
 			$product_obj->set_name($product["title"]);
 			$product_obj->set_prop("userta2", $product["c"]);
 			$product_obj->set_prop("user18", $product["pg"]);
-			$product_obj->set_prop("user11", $product["extrafld"]);
 			$product_obj->set_prop("user19", $product["nr"]);
 			
 			// user6 - tootekoodid, komadega eraldatult
@@ -2968,13 +2988,17 @@ class otto_import extends class_base
 			// user7 - värvid, komadega eraldatult
 			$product_obj->set_prop('user7', implode(',', $colors));
 
-		/*
-			// deprecated
-			$product_obj->set_prop("user16", $product["full_code"]);
-			$product_obj->set_prop("user17", $product["color"]);
-			$product_obj->set_prop("user20", $product["code"]);
-		*/
+			// is categories and images update allowed for this product:
+			$categories_update_allowed = false;
+			$images_update_allowed = false;
+			if ($product_obj->prop('userch2') != 1 || $arr['force_full_update'])
+			{
+				$categories_update_allowed = true;
+				$images_update_allowed = true;
 
+				$product_obj->set_prop("user11", $product["extrafld"]);
+			}
+		
 			$product_obj->save();
 
 			////
@@ -3007,36 +3031,58 @@ class otto_import extends class_base
 			////
 			// categories
 			////
-			// ysnaag hakkab see asi siin siis nyyd niimoodi t88le, et on 1 tabel, kus on kirjas milliseid tooteid millise sektsiooni all n2idata on vaja
+			// ysnaga hakkab see asi siin siis nyyd niimoodi t88le, et on 1 tabel, kus on kirjas milliseid tooteid millise sektsiooni all n2idata on vaja
 			// nothing more, nothing less
 			// korjame need kategooriad toote juurest kokku k6igepealt:
-			$categories = array($product['pg']);
-			foreach (explode(',', $product['extrafld']) as $extrafld)
+			if ($categories_update_allowed)
 			{
-				$categories[] = $extrafld;
-			}
-			$this->db_query("delete from otto_prod_to_section_lut where product=".$product_obj->id());
-			$sections = $this->db_fetch_array("
-				select 
-					aw_folder
-				from 
-					otto_imp_t_aw_to_cat 
-				where 
-					category in (".implode(',', map("'%s'", $categories)).") and 
-					lang_id = ".aw_global_get('lang_id')."
-				group by 
-					aw_folder
-			");
+				$categories = array($product['pg']);
+				foreach (explode(',', $product['extrafld']) as $extrafld)
+				{
+					$categories[] = $extrafld;
+				}
+				$this->db_query("delete from otto_prod_to_section_lut where product=".$product_obj->id());
+				$sections = $this->db_fetch_array("
+					select 
+						aw_folder
+					from 
+						otto_imp_t_aw_to_cat 
+					where 
+						category in (".implode(',', map("'%s'", $categories)).") and 
+						lang_id = ".aw_global_get('lang_id')."
+					group by 
+						aw_folder
+				");
 
-			$product_sections = array();
-			foreach ($sections as $section)
+				$product_sections = array();
+				foreach ($sections as $section)
+				{
+					$this->db_query('insert into otto_prod_to_section_lut set 
+						product='.$product_obj->id().', 
+						section='.$section['aw_folder'].', 
+						lang_id='.aw_global_get('lang_id').'
+					');
+					$product_sections[$section['aw_folder']] = $section['aw_folder'];
+				}
+			}
+			else
 			{
-				$this->db_query('insert into otto_prod_to_section_lut set 
-					product='.$product_obj->id().', 
-					section='.$section['aw_folder'].', 
-					lang_id='.aw_global_get('lang_id').'
-				');
-				$product_sections[$section['aw_folder']] = $section['aw_folder'];
+				// if the categories will not be updated, then i need to get the sections for this product anyway:
+				$sections = $this->db_fetch_array("
+					select
+						section
+					from
+						otto_prod_to_section_lut
+					where
+						product = ".$product_obj->id()." and
+						lang_id = ".aw_global_get('lang_id')."
+				");
+
+				$product_sections = array();
+				foreach ($sections as $section)
+				{
+					$product_sections[$section['aw_folder']] = $section['aw_folder'];
+				}
 			}
 
 			////
@@ -3054,7 +3100,7 @@ class otto_import extends class_base
 
 			// here i need to check the flag, if the images should be updated on this object:
 
-			if (!empty($images) && $product_obj->prop('userch2') != 1)
+			if (!empty($images) && $images_update_allowed)
 			{
 
 				$images_arr = array();
@@ -3115,13 +3161,7 @@ class otto_import extends class_base
 							{
 								$product_ol_item_sections[$row['section']] = $row['section'];
 							}
-					/*
-							arr('======================');
-							arr($product_sections);
-							arr('----------------------');
-							arr($product_ol_item_sections);
-							arr('======================');
-					*/
+
 							if (count($product_sections) > count($product_ol_item_sections))
 							{
 								$array_diff_res = array_diff($product_sections, $product_ol_item_sections);
