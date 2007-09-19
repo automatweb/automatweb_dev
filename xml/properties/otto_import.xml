@@ -69,6 +69,17 @@
             <caption>Teosta piltide import</caption>
       </property>
       <property>
+            <name>force_full_update</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <caption>Uuenda k&amp;amp;otilde;ikide toodete piltide ja kategooriate v&amp;amp;auml;ljad</caption>
+      </property>
+      <property>
             <name>last_import_log</name>
             <table>objects</table>
             <group>general</group>
@@ -126,6 +137,19 @@
             <captionside>top</captionside>
             <parent>vbox_products_manager_search</parent>
             <caption>Tootekood</caption>
+      </property>
+      <property>
+            <name>products_manager_prod_page</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <size>20</size>
+            <captionside>top</captionside>
+            <parent>vbox_products_manager_search</parent>
+            <caption>Leht</caption>
       </property>
       <property>
             <name>products_search</name>
