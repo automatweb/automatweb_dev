@@ -3087,12 +3087,6 @@ class cfgform extends class_base
 	/// submenus from object interface methods
 	function make_menu_item($this_o, $level, $parent_o, $site_show_i)
 	{
-		// init
-		if (!isset($this->grplist))
-		{
-			$this->_init_cfgform_data($this_o);
-		}
-
 		if (empty($this->awcb_request_vars))
 		{
 			$this->awcb_request_vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
@@ -3100,8 +3094,13 @@ class cfgform extends class_base
 
 		if (empty($this->awcb_request_vars["class"]))
 		{
-			$this->cfgview_grps = safe_array($this_o->prop("cfgview_grps"));
-			$this->_get_cfgview_params($this_o);
+			// init
+			if (!isset($this->grplist))
+			{
+				$this->_init_cfgform_data($this_o);
+				$this->cfgview_grps = safe_array($this_o->prop("cfgview_grps"));
+				$this->_get_cfgview_params($this_o);
+			}
 
 			// no groups for new object form
 			if (!is_oid($this->awcb_request_vars["id"]))
@@ -3124,7 +3123,7 @@ class cfgform extends class_base
 			}
 			while (!empty($this->grplist[$grp_name]["grphide"]));
 
-			$this->make_menu_item_counter++;
+			++$this->make_menu_item_counter;
 
 			// selected grp
 			if ($this->awcb_request_vars["group"] == $grp_name)
@@ -3157,40 +3156,8 @@ class cfgform extends class_base
 		}
 		else
 		{
-			// if (!isset($this->make_menu_item_counter))
-			// {
-				// $this->make_menu_item_counter = 0;
-				// get_class_groups($this->awcb_request_vars["class"]);
-				// $this->tmp_cfgview_relclass_grps = null;
-				// $grp_name = current($this->tmp_cfgview_relclass_grps);
-			// }
-			// else
-			// {
-				// $grp_name = next($this->tmp_cfgview_relclass_grps);
-			// }
-
-			// if (false === $grp_name)
-			// {
-				// $this->tmp_cfgview_relclass_grps = null;
-				// $this->make_menu_item_counter = null;
-				return false;
-			// }
-			// else
-			// {
-				// $vars = array (
-					// "group" => $grp_name
-				// );
-				// $link = aw_url_change_var($vars);
-
-				// return array(
-					// "text" => $this->grplist[$grp_name]["caption"],
-					// "link" => $link,
-/* 					// "section" => $o_91_2->id(),
-					// "menu_edit" => $this->__helper_menu_edit($o_91_2),
-					// "parent_section" => is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
-					// "comment" => "komment",
- */				// );
-			// }
+			$this->make_menu_item_counter = null;
+			return false;
 		}
 	}
 
