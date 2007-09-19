@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.54 2007/09/19 14:22:19 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.55 2007/09/19 21:56:39 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -839,7 +839,8 @@ class otto_import extends class_base
 					)),
 				));
 			}
-			$t->set_caption(sprintf(t('Leiti %s toodet'), $ol->count()));
+			// xxx lets comment it out until all otto sites will be running on new code
+			// $t->set_caption(sprintf(t('Leiti %s toodet'), $ol->count()));
 		}
 
 		return PROP_OK;
@@ -865,7 +866,8 @@ class otto_import extends class_base
 		{
 
 			$t = &$arr['prop']['vcl_inst'];
-			$t->set_caption($prod_obj->name());
+			// xxx lets comment it out until all otto sites will be running on new code
+			// $t->set_caption($prod_obj->name());
 			$t->set_sortable(false);
 			$t->define_field(array(
 				'name' => 'caption',
@@ -875,6 +877,7 @@ class otto_import extends class_base
 				'name' => 'data',
 				'caption' => t('Andmed'),
 			));
+
 			$prod_id_hidden_element = html::hidden(array(
 				'name' => 'products_manager_prod_id',
 				'value' => $prod_id
@@ -890,7 +893,7 @@ class otto_import extends class_base
 
 			$t->define_data(array(
 				'caption' => t('Toote OID'),
-				'data' => $prod_link . $prod_id_hidden_element
+				'data' => $prod_link . $prod_id_hidden_element . ' - '.$prod_obj->name()
 			));
 
 			$t->define_data(array(
