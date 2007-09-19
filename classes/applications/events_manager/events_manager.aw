@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.12 2007/09/14 14:44:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.13 2007/09/19 14:40:58 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -506,6 +506,9 @@ class events_manager extends class_base
 		{
 			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
 		}
+
+		$filter["sort_by"] = "objects.created ASC";
+
 		return new object_list($filter);
 	}
 
@@ -1030,5 +1033,309 @@ class events_manager extends class_base
 		return $arr["post_ru"];
 	}
 
+
+	/**
+		@attrib name=events_xml is_public="1" all_args=1
+	**/
+	function events_xml($arr)
+	{
+		
+		$events = $this->get_xml_events($arr);
+
+		$ret = '<?xml version="1.0" encoding="UTF-8" ?>
+<!-- tase = (0->"Yleriigiline", 1->"Kohalik syndmus", 2->"Syndmus valismaal") -->
+<syndmused count="'.$events->count().'">';
+
+		foreach(array_reverse($events->arr()) as $o)
+		{
+			$ret.= $this->to_xml($o);
+		}
+
+		$ret.= '
+</syndmused>';
+
+		header ("Content-Type: text/xml");
+		die($ret);
+	}
+
+	function to_xml($o)
+	{
+		$sectors = $o->connections_from(array(
+			"type" => "SECTOR",
+		));
+		$n = 0;
+		$sa = array(); // valdkondade objektid
+		foreach($sectors as $c)
+		{
+			$s = $c->to();
+			$sa[$n]["name"] = $s->name();
+			$sa[$n]["id"] = $this->teemad[$s->name()];
+			$n ++;
+		}
+		$ret = '
+	<syndmus>
+		<id>'.$o->id().'</id>
+		<pealkiri><![CDATA[ '.$o->name().' ]]></pealkiri>
+		<sissejuhatus><![CDATA[ '.$o->prop("title").' ]]></sissejuhatus>
+		<kirjeldus><![CDATA[ '.$o->prop("description").' ]]></kirjeldus>
+		<koht id="'.$o->prop("location").'"><![CDATA[ '.$o->prop("location.name").' ]]></koht>
+		<maakond id="'.$o->prop("location.address.maakond").'">'.$o->prop("location.address.maakond.name").'</maakond>
+		<linn id="'.$o->prop("location.address.linn").'">'.$o->prop("location.address.linn.name").'</linn>
+		<riik id="'.$o->prop("location.address.riik").'">'.$o->prop("location.address.riik.name").'</riik>
+		<teema1 id="0">'.$sa[0]["name"].'</teema1>
+		<teema2 id="0">'.$sa[1]["name"].'</teema2>
+		<teema3 id="0">'.$sa[2]["name"].'</teema3>
+		<tase>'.$o->prop("level").'</tase>
+		<asukoht_vabatekst><![CDATA[  ]]></asukoht_vabatekst>
+		<kontakt_nimi><![CDATA[ Vana Baskini Teater ]]></kontakt_nimi>
+		<kontakt_email><![CDATA[ info@vanabaskiniteater.ee ]]></kontakt_email>
+		<kontakt_tel><![CDATA[ (+372) 6455444 ]]></kontakt_tel>
+		<kontakt_url><![CDATA[ www.vanabaskiniteater.ee ]]></kontakt_url>
+		<kontakt_aadress><![CDATA[ Tallinn 10115, Tartu mnt.55/59 ]]></kontakt_aadress>
+		<timestamp>'.date("Y-m-d H:i:s" , $o->modified()).'</timestamp>
+		<algallikas>TeatriliitXML</algallikas>
+ 		'.$this->times_xml($o).'
+	</syndmus>';
+
+		return $ret;	
+	}
+
+	function times_xml($o)
+	{
+		$times = $o->connections_from(array("type" => "RELTYPE_EVENT_TIME"));
+		$ret = '<ajad count="'.count($times).'">';
+		
+		foreach($times as $c)
+		{
+			$t = $c->to();
+			$ret.='
+			<aeg>
+				<id>'.$t->id().'</id>
+				<algus>'.date("Y-m-d H:i:s" , $t->prop("start")).'</algus>
+				<lopp>'.date("Y-m-d H:i:s" , $t->prop("end")).'</lopp>
+				<markus><![CDATA[ '.$t->prop("location.name").' ]]></markus>
+				<timestamp>'.date("Y-m-d H:i:s" , $t->modified()).'</timestamp>
+			</aeg>';
+		}
+		$ret.='
+		</ajad>';
+		return $ret;
+	}
+
+	function get_xml_events($arr)
+	{
+		extract($arr);
+		$filter = array(
+			"class_id" => array(CL_CALENDAR_EVENT),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"sort_by" => "objects.created ASC",
+			"limit" => 100,
+		);
+		if($starttimestamp)
+		{
+			$start = mktime(substr($starttimestamp, 8, 2),substr($starttimestamp, 10, 2),substr($starttimestamp, 12, 2),substr($starttimestamp, 4, 2),substr($starttimestamp, 6, 2),substr($starttimestamp, 0, 4));
+		}
+		else
+		{
+			$start = time() - 24*3600;
+		}
+
+		$filter[] = new object_list_filter(array(
+			"logic" => "OR",
+			"conditions" => array(
+				"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.modified" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
+				"modified" => new obj_predicate_compare(OBJ_COMP_GREATER, $start)
+			)
+		));
+
+		$countys = array(
+			1 => "Harjumaa",
+			2 => "Hiiumaa",
+			3 => "Ida-Virumaa",
+			4 => "Jõgevamaa",
+			5 => "Järvamaa",
+			6 => "Läänemaa",
+			7 => "Lääne-Virumaa",
+			8 => "Põlvamaa",
+			9 => "Pärnumaa",
+			10 => "Raplamaa",
+			11 => "Saaremaa",
+			12 => "Tartumaa",
+			13 => "Valgamaa",
+			14 => "Viljandimaa",
+			15 => "Võrumaa",
+		);
+
+		$citys = array(
+			1 => "Haapsalu",
+			2 => "Jõgeva",
+			3 => "Kuressaare",
+			4 => "Kärdla",
+			5 => "Narva",
+			6 => "Paide",
+			7 => "Põlva",
+			8 => "Pärnu",
+			9 => "Rakvere",
+			10 => "Rapla",
+			11 => "Tallinn",
+			12 => "Tartu",
+			13 => "Valga",
+			14 => "Viljandi",
+			15 => "Võru",
+			16 => "Jõhvi",
+			17 => "Kohtla-Järve",
+			18 => "Otepää",
+		);
+		
+		$this->teemad = array(
+			1 => "muusika", 
+			2 => "klassikaline muusika", 
+			88=> "vanamuusika" , 
+			3=> "pärimusmuusika" , 
+			102 => "orkestrimuusika",
+			100 => "koorimuusika",
+			4 => "jazzmuusika",
+			5 => "rock-/popmuusika",
+			29 => "alternatiivmuusika", 
+			32 => "festival",
+			6 => "teater", 
+			8 => "draama" , 
+			30 => "komöödia",
+			10 => "muusikal",
+			9 => "ooper",
+			95 => "operett",
+			12 => "lasteetendus",
+			98 => "koguperelavastus",
+			13 => "vabaõhuetendus",
+			33 => "alternatiivteater",
+			31 => "festival",
+			7 => "draama",
+			34 => "tants",
+			35 => "klassikaline ballett",
+			36 => "kaasaegne tants", 
+			84 => "rahvatants",
+			37 => "showtants",
+			38 => "tsirkus",
+			39 => "festival",
+			14 => "film ja foto",
+			46 => "dokumentaalfilm",
+			48 => "kunstiline film",
+			47 => "animafilm",
+			114 => "näitus", 
+			115 => "workshop",
+			49 => "festival",
+			15 => "kunst",
+			43 => "näitus",
+			45 => "performance",
+			90 => "workshop",
+			44 => "festival",
+			16 => "kirjandus",
+			135 => "raamatuesitlus",
+			105 => "pärimuskultuur",
+			109 => "rahvatants", 
+			110 => "pärimusmuusika",
+			111 => "käsitöö",
+			112 => "rahvakalender",
+			113 => "festival",
+			17 => "loengud", 
+			40 => "seminar",
+			42 => "konverents",
+			91 => "teadus",
+			134 => "vestlusõhtu",
+			41 => "kursused",
+			93 => "sport", 
+			106 => "näitused",
+			116 => "ajalugu",
+			117 => "fotograafia",
+			118 => "kirjandus", 
+			119 => "kunst ja arhitektuur",
+			120 => "loodus", 
+			121 => "teadus ja tehnika",
+			122 => "teater ja muusika",
+			22 => "varia",
+			18 => "meelelahutus",
+			136 => "laat",
+			85 => "muuseumid",
+			123 => "festivalid",
+		);
+
+//		if($maakond)
+//		{
+//			$filter["locaton.address.maakond.name"] = $countys[$maakond];
+//			$filter[] = new object_list_filter(array(
+//				"logic" => "OR",
+//				"conditions" => array(
+//					"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.location.address.maakond.name" =>  $countys[$maakond],
+//					"CL_CALENDAR_EVENT.location.address.maakond.name" =>  $countys[$maakond],
+//				)
+//			));
+//		}
+
+//		if($linn)
+//		{
+		//	$filter["locaton.address.linn.name"] = $citys[$linn];
+//			$filter[] = new object_list_filter(array(
+//				"logic" => "OR",
+//				"conditions" => array(
+//					"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.location.address.linn.name" =>  $citys[$linn],
+//					"CL_CALENDAR_EVENT.location.address.linn.name" =>  $citys[$linn],
+//				)
+//			));
+//		}
+
+
+		if($teema)
+		{
+			$filter["CL_CALENDAR_EVENT.RELTYPE_SECTOR.kood"] = $teema;
+			
+		}
+//keel? est (vaikimisi), eng. Kuvatakse vastavalt eesti või ingliskeelsed sündmused.
+
+		$ol =  new object_list($filter);
+
+		//kuna tuli probleeme, siis peab kirvemeetodil praakima valed linnad ja maakonnad välja
+		if($linn || $maakond)
+		{
+			
+			foreach($ol->arr() as $o)
+			{
+				$del = 1;
+				$adr = array();
+				if(is_oid($o->prop("location.address")))
+				{
+					$adr[] = obj($o->prop("location.address"));
+				}
+				foreach($o->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
+				{
+					$t = $c->to();
+					if(is_oid($t->prop("location.address")))
+					{
+						$adr[] = obj($t->prop("location.address"));
+					}
+				}
+
+				foreach($adr as $address)
+				{
+					if($linn && $address->prop("linn.name") == $citys[$linn])
+					{
+						$del = 0;
+						break;
+					}
+					
+					if($maakond && $address->prop("maakond.name") == $countys[$maakond])
+					{
+						$del = 0;
+						break;
+					}
+				}
+				if($del)
+				{
+					$ol->remove($o->id());
+				}
+			}
+		}
+		return $ol;
+	}
 }
 ?>

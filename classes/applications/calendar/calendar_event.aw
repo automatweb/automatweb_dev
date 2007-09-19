@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.29 2007/09/14 14:44:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.30 2007/09/19 14:40:57 markop Exp $
 // calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
@@ -207,7 +207,7 @@ class calendar_event extends class_base
 			"clid" => CL_CALENDAR_EVENT
 		));
 
-		$this->level_options = array("V&auml;lismaal toimuv", "&Uuml;leriikliku t&auml;htsusega", "Kohaliku t&auml;htsusega");
+		$this->level_options = array("&Uuml;leriikliku t&auml;htsusega", "Kohaliku t&auml;htsusega","V&auml;lismaal toimuv");
 		$this->trans_props = array(
 			"name", "title",  "short_description", "description"
 		);

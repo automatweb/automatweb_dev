@@ -57,5 +57,12 @@
 			</function>
 		</action>
 
+		<action name="events_xml" is_public="1" all_args="1">
+			<function name="events_xml">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
