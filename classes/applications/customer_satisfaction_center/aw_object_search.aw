@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.8 2006/10/26 12:12:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.9 2007/09/19 12:36:18 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -356,6 +356,7 @@ class aw_object_search extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["return_url"] = $_GET["return_url"];
 	}
 
 	function callback_mod_tab($arr)
