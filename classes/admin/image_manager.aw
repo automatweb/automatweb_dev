@@ -49,7 +49,7 @@ class image_manager extends aw_template
 			{
 				$parent = $doc->parent();
 			}
-			$image_url = html::get_new_url(CL_IMAGE, $parent, array("docid" => $doc->id(), "in_popup"=>1));
+			$image_url = html::get_new_url(CL_IMAGE, $parent, array("docid" => $doc->id(), "in_popup"=>"1"));
 		}
 		
 		$this->read_template("manage.tpl");
@@ -76,7 +76,7 @@ class image_manager extends aw_template
 			$parent = $doc->parent();
 		}
 		$this->vars(array(
-			"img_new" => html::get_new_url(CL_IMAGE, $parent),
+			"img_new" => html::get_new_url(CL_IMAGE, $parent, array("in_popup"=>"1")),
 			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id())),
 			"new_img_t" => t("Uus pilt"),
 			"existing_img_t" => t("Vali olemasolev pilt")
@@ -144,6 +144,7 @@ class image_manager extends aw_template
 				"url" => $this->mk_my_orb("change", array(
 					"id" => $o->id(),
 					"return_url" => get_ru(),
+					"in_popup" => 1,
 				), CL_IMAGE),
 			));
 			$t->define_data(array(
