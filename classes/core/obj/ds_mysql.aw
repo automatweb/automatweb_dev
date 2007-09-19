@@ -2155,6 +2155,26 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$cur_prop = array("name" => "parent", "table" => "objects", "field" => "parent");
 			}
 			else
+			if ($pp == "created")
+			{
+				$cur_prop = array("name" => "created", "table" => "objects", "field" => "created");
+			}
+			else
+			if ($pp == "createdby")
+			{
+				$cur_prop = array("name" => "createdby", "table" => "objects", "field" => "createdby");
+			}
+			else
+			if ($pp == "modified")
+			{
+				$cur_prop = array("name" => "modified", "table" => "objects", "field" => "modified");
+			}
+			else
+			if ($pp == "modifiedby")
+			{
+				$cur_prop = array("name" => "modifiedby", "table" => "objects", "field" => "modifiedby");
+			}
+			else
 			{
 				$cur_prop = $GLOBALS["properties"][$cur_clid][$pp];
 			}
