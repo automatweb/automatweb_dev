@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.130 2007/09/18 15:14:39 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -271,9 +270,6 @@ class cfgform extends class_base
 
 		switch($data["name"])
 		{
-case "post_save_controllers":
-var_dump($arr["obj_inst"]->prop("post_save_controllers"));
-break;
 			case "edit_groups_tb":
 				$this->_edit_groups_tb($arr);
 				break;
@@ -3161,22 +3157,40 @@ break;
 		}
 		else
 		{
-			$vars = array (
-				// "just_saved" => NULL,
-				"group" => $grp_name
-			);
-			$link = aw_url_change_var($vars);
+			// if (!isset($this->make_menu_item_counter))
+			// {
+				// $this->make_menu_item_counter = 0;
+				// get_class_groups($this->awcb_request_vars["class"]);
+				// $this->tmp_cfgview_relclass_grps = null;
+				// $grp_name = current($this->tmp_cfgview_relclass_grps);
+			// }
+			// else
+			// {
+				// $grp_name = next($this->tmp_cfgview_relclass_grps);
+			// }
 
-			return array(
-				"text" => $this->grplist[$grp_name]["caption"],
-				"link" => $link,
-				// "section" => $o_91_2->id(),
-				// "menu_edit" => $this->__helper_menu_edit($o_91_2),
-				// "parent_section" => is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
-				// "comment" => "komment",
-			);
-			// $this->make_menu_item_counter = NULL;
-			return false;
+			// if (false === $grp_name)
+			// {
+				// $this->tmp_cfgview_relclass_grps = null;
+				// $this->make_menu_item_counter = null;
+				return false;
+			// }
+			// else
+			// {
+				// $vars = array (
+					// "group" => $grp_name
+				// );
+				// $link = aw_url_change_var($vars);
+
+				// return array(
+					// "text" => $this->grplist[$grp_name]["caption"],
+					// "link" => $link,
+/* 					// "section" => $o_91_2->id(),
+					// "menu_edit" => $this->__helper_menu_edit($o_91_2),
+					// "parent_section" => is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
+					// "comment" => "komment",
+ */				// );
+			// }
 		}
 	}
 
