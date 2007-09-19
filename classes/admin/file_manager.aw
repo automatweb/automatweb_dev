@@ -51,7 +51,7 @@ class file_manager extends aw_template
 			{
 				$parent = $doc->parent();
 			}
-			$image_url = html::get_new_url(CL_FILE, $parent);
+			$image_url = html::get_new_url(CL_FILE, $parent, array("in_popup"=>1));
 		/*
 		}
 		*/
@@ -79,7 +79,7 @@ class file_manager extends aw_template
 			$parent = $doc->parent();
 		}
 		$this->vars(array(
-			"img_new" => html::get_new_url(CL_FILE, $parent),
+			"img_new" => html::get_new_url(CL_FILE, $parent, array("in_popup"=>1)),
 			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id())),
 			"new_file_t" => t("Uus fail"),
 			"existing_file_t" => t("Vali olemasolev fail")
@@ -135,8 +135,18 @@ class file_manager extends aw_template
 			$image_url = $ii->get_url($o->id(), $o->name());
 			$link_name = $o->name();
 			$location = $this->gen_location_for_obj($o);
+			
+			$name = html::href(array(
+				"caption" => $o->name(),
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $o->id(),
+					"return_url" => get_ru(),
+					"in_popup" => 1,
+				), CL_FILE),
+			));
+			
 			$t->define_data(array(
-				"name" => html::obj_change_url($o),
+				"name" => $name,
 				"location" => $location,
 				"sel" => html::href(array(
 					"url" => "javascript:void(0)",
