@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.560 2007/09/18 15:14:39 voldemar Exp $
+// $Id: class_base.aw,v 2.561 2007/09/19 11:39:22 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -794,6 +794,11 @@ class class_base extends aw_template
 			$argblock["pseh"] = $_GET["pseh"];
 		}
 
+		if (!empty($_GET["in_popup"]))
+		{
+			$argblock["in_popup"] = $_GET["in_popup"];
+		}
+
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
 			$this->inst->callback_mod_reforb(&$argblock,$this->request);
@@ -1136,6 +1141,10 @@ class class_base extends aw_template
 			{
 				$args["is_sa"] = 1;
 				$args["is_sa_changed"] = 1;
+			}
+			if ($request["in_popup"])
+			{
+				$args["in_popup"] = 1;
 			}
 			if (method_exists($this->inst,"callback_mod_retval"))
 			{
@@ -2415,6 +2424,10 @@ class class_base extends aw_template
 			if ($this->view == 1 && !$property["view_element"])
 			{
 				$property["value"] = create_email_links($this->obj_inst->prop_str($property["name"]));
+				if (strpos($property["value"], "\n") !== false && strpos($property["value"], "<br") === false)
+				{
+					$property["value"] = nl2br($property["value"]);
+				}
 			}
 			else
 			{
