@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.36 2007/09/12 15:03:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.37 2007/09/19 10:48:41 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -455,23 +455,8 @@ class ml_queue extends aw_template
 					$patch_size = 5000;
 				}
 			};
+//
 
-			//kontrollib, et 'kki vahepeal mõni teine queue on otsa jooksnud ja konkreetset maili juba saatma hakanud.... siis on admed muutunud ju... lukusatatud ju pole... ja alguses kõik ära lukustada pole ka hea mõte... 
-			$test_qid = $r["qid"];
-			$test_q = $this->db_fetch_row("SELECT * FROM ml_queue WHERE qid = '$test_qid'");
-			//arr($test_q);
-			$tm = time();
-			$old = time() - 1800;//kui nüüd 30 minutit möödas viimase maili saatmisest, siis võib suht kindel olla, et eelmine queue on pange pand
-			
-			if(
-			   !($test_q["status"] == 1)
-			&& !($test_q["status"] == 0)
-			&& !($test_q["status"] == 3
-				&& $test_q["position"] < $test_q["total"]
-				&& $test_q["last_sent"] < $old
-				)
-			)
-			continue;
 			$list = obj($lid);
 			$bounce = $list->prop("bounce");
 			if(!$bounce)
@@ -502,6 +487,28 @@ class ml_queue extends aw_template
 				flush();//dbg
 				$this->save_handle();
 				//lukusta queue item
+
+
+				//nüüd see siis täpselt enne lukustamist, võibolla aitab veidi
+					//kontrollib, et 'kki vahepeal mõni teine queue on otsa jooksnud ja konkreetset maili juba saatma hakanud.... siis on admed muutunud ju... lukusatatud ju pole... ja alguses kõik ära lukustada pole ka hea mõte... 
+					$test_qid = $r["qid"];
+					$test_q = $this->db_fetch_row("SELECT * FROM ml_queue WHERE qid = '$test_qid'");
+					//arr($test_q);
+					$tm = time();
+					$old = time() - 1800;//kui nüüd 30 minutit möödas viimase maili saatmisest, siis võib suht kindel olla, et eelmine queue on pange pand
+					
+					if(
+					!($test_q["status"] == 1)
+					&& !($test_q["status"] == 0)
+					&& !($test_q["status"] == 3
+						&& $test_q["position"] < $test_q["total"]
+						&& $test_q["last_sent"] < $old
+						)
+					)
+					{
+						arr("vahepeal teine queue ette jõudnud");
+						continue;
+					}
 				$this->mark_queue_locked($qid);
 				// okey. since there is a chance that, the processing is interrupted
 				// _after_ the queue has been locked, I need to minimize the time
@@ -564,7 +571,7 @@ class ml_queue extends aw_template
 				if (ML_QUEUE_READY != $stat)
 				{
 					// unlock it
-					$this->db_query("UPDATE ml_queue SET status = $stat WHERE qid = '$qid'");
+					$this->db_query("UPDATE ml_queue SET status = '$stat' WHERE qid = '$qid'");
 				//	echo "UPDATE ml_queue SET status = $stat WHERE qid = '$qid'";//$pos="";
 				};
 				$this->restore_handle();
@@ -720,7 +727,7 @@ class ml_queue extends aw_template
 		{
 			die("tundub, et miski eriline jama on taas juhtunud");
 		}
-//sleep(10);
+
 		$this->awm->gen_mail();
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
@@ -748,6 +755,7 @@ class ml_queue extends aw_template
 		}
 		$this->db_query("UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'");
 		$this->restore_handle();
+		return 2;
 //		echo "UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'";
 	}
 
