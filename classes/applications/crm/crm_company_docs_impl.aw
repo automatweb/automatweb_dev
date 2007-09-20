@@ -211,7 +211,7 @@ class crm_company_docs_impl extends class_base
 			);
 			if($o->class_id() == CL_FILE)
 			{
-				$d["url"] = $file_inst->get_url($o->id());
+				$d["url"] = $file_inst->get_url($o->id()).$o->name();
 				$d["url_target"] = "new window";
 			}
 			
