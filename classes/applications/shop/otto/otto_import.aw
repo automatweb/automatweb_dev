@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.55 2007/09/19 21:56:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.56 2007/09/20 08:11:34 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -33,6 +33,9 @@
 
 @property force_full_update type=checkbox ch_value=1 store=no
 @caption Uuenda k&otilde;ikide toodete piltide ja kategooriate v&auml;ljad
+
+@property do_safe_update type=checkbox ch_value=1 store=no
+@caption &Auml;ra uuenda kategooriaid ja pildikoode
 
 property restart_pict_i type=checkbox ch_value=1
 caption Alusta piltide importi algusest
@@ -585,7 +588,8 @@ class otto_import extends class_base
 			$this->do_prod_import(array(
 				'otto_import' => $arr["obj_inst"],
 				'doing_pict_i' => $arr['request']['do_pict_i'],
-				'force_full_update' => $arr['request']['force_full_update']
+				'force_full_update' => $arr['request']['force_full_update'],
+				'do_safe_update' => $arr['request']['do_safe_update']
 			));
 		}
 
@@ -2832,7 +2836,8 @@ class otto_import extends class_base
 
 		$this->import_product_objects(array(
 			'otto_import' => $o,
-			'force_full_update' => $arr['force_full_update']
+			'force_full_update' => $arr['force_full_update'],
+			'do_safe_update' => $arr['do_safe_update']
 		));
 
 		// flush cache
@@ -2994,7 +2999,12 @@ class otto_import extends class_base
 			// is categories and images update allowed for this product:
 			$categories_update_allowed = false;
 			$images_update_allowed = false;
-			if ($product_obj->prop('userch2') != 1 || $arr['force_full_update'])
+			/*
+				if userch2 prop value is 1, then this products categories and images shouldn be updated
+				this feature can be overrided with setting force_full_update parameter while doing import
+				if do_safe_update is set, then categories and pictures are not updated at all during this import --dragut
+			*/
+			if ( ( $product_obj->prop('userch2') != 1 || $arr['force_full_update'] ) && !$arr['do_safe_update'] )
 			{
 				$categories_update_allowed = true;
 				$images_update_allowed = true;
