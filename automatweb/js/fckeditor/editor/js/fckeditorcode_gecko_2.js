@@ -78,8 +78,8 @@ InsertAWLupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWLupCommand.Execute=function() {
 
 
-  window.open('/automatweb/orb.aw?class=link_manager&doc='+escape(window.parent.location.href)+'&link_url='+escape(FCK.Selection.MoveToAncestorNode( 'A' ).href), 
-					'InsertAWFupCommand', 'width=500,height=400,scrollbars=no,scrolling=no,location=no,toolbar=no');
+  window.open('/automatweb/orb.aw?class=link_manager&doc='+escape(window.parent.location.href)+'&no_popup=1&link_url='+escape(FCK.Selection.MoveToAncestorNode( 'A' ).href), 
+					'InsertAWFupCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 					
 }
 FCKCommands.RegisterCommand('awlup', InsertAWLupCommand ); 
@@ -98,8 +98,8 @@ InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Name='Image';
 InsertAWImageCommand.Execute=function() {
-  window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&imgsrc="+escape(FCK.Selection.GetSelectedElement().src), 
-					'InsertAWImageCommand', 'width=500,height=400,scrollbars=no,scrolling=no,location=no,toolbar=no');
+  window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&imgsrc="+escape(FCK.Selection.GetSelectedElement().src), 
+					'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awimageupload', InsertAWImageCommand ); 
 
