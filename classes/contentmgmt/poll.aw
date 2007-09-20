@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.40 2007/03/28 10:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.41 2007/09/20 11:24:00 robert Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -20,6 +20,9 @@ session_register("poll_clicked");
 
 @groupinfo translate caption=T&otilde;lgi
 @groupinfo activity caption=Aktiivsus
+@groupinfo data caption=Andmed parent=general
+@groupinfo settings caption=Seaded parent=general
+
 
 @property clicks type=text store=no group=clicks_detail
 @caption Klikid
@@ -29,8 +32,13 @@ session_register("poll_clicked");
 
 @default group=general
 
-@property in_archive type=checkbox ch_value=1 field=meta method=serialize table=objects
-@caption Arhiivis
+@default group=data
+
+@property name type=textbox rel=1 trans=1 table=objects
+@caption Nimi
+
+@property comment type=textbox table=objects
+@caption Kommentaar
 
 @property in_archive type=checkbox ch_value=1 field=meta method=serialize table=objects
 @caption Arhiivis
@@ -47,6 +55,13 @@ session_register("poll_clicked");
 @property translate type=callback group=translate callback=callback_get_translate store=no
 @caption T&otilde;lgi
 
+@default group=settings
+
+@property tpl_question type=select field=meta method=serialize table=objects
+@caption Kujunduspõhi kuvamiseks
+
+@property tpl_results type=select field=meta method=serialize table=objects
+@caption Kujunduspõhi tulemustele
 
 */
 
@@ -129,7 +144,8 @@ class poll extends class_base
 				return "";
 			}
 			$ap = obj($id);
-			$this->read_any_template("poll_embed.tpl");
+			$tplsrc = (strlen($ap->meta('tpl_question'))>1)?$ap->meta('tpl_question'):'poll_embed.tpl';
+			$this->read_any_template($tplsrc);
 		}
 		else
 		{
@@ -328,14 +344,15 @@ class poll extends class_base
 			$this->add_click($answer_id);
 		}
 
-		$this->read_template("show.tpl");
+		$poll = obj($id);
+
+		$tplsrc = (strlen($poll->meta('tpl_results'))>1)?$poll->meta('tpl_results'):'show.tpl';
+		$this->read_template($tplsrc);
 
 		if (!$this->can("view", $id))
 		{
 			return "";
 		}
-
-		$poll = obj($id);
 
 		$lang_id = aw_global_get("lang_id");
 		$this->vars(array(
@@ -707,6 +724,25 @@ class poll extends class_base
 		if ($prop["name"] == "activity")
 		{
 			$this->mk_activity_table($arr);
+		}
+		else
+		if ($prop["name"] == "tpl_question" || $prop["name"] == "tpl_results")
+		{
+			$dir_default = $this->site_template_dir;
+			$options_default = $this->get_directory(array("dir" => $dir_default));
+			if(count($options_default))
+			{
+				$options = $options_default;
+			}
+			else
+			{
+				$pos = strpos($dir_default, 'site/templates/');
+				$dir = substr($dir_default, 0, $pos).'automatweb_dev/templates/'.substr($dir_default, $pos+15);
+				$options = $this->get_directory(array("dir" => $dir));
+			}
+			$options['.'] = '';
+			ksort($options);
+			$prop["options"] = $options;
 		}
 
 		return PROP_OK;

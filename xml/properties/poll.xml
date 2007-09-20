@@ -17,8 +17,26 @@
             <caption>Statistika</caption>
       </property>
       <property>
+            <name>name</name>
+            <group>data</group>
+            <type>textbox</type>
+            <rel>1</rel>
+            <trans>1</trans>
+            <table>objects</table>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <group>data</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
             <name>in_archive</name>
-            <group>general</group>
+            <group>data</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -28,7 +46,7 @@
       </property>
       <property>
             <name>question</name>
-            <group>general</group>
+            <group>data</group>
             <type>textbox</type>
             <store>no</store>
             <field>question</field>
@@ -36,7 +54,7 @@
       </property>
       <property>
             <name>answers</name>
-            <group>general</group>
+            <group>data</group>
             <type>callback</type>
             <callback>callback_get_answers</callback>
             <store>no</store>
@@ -62,6 +80,24 @@
             <field>translate</field>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
+      <property>
+            <name>tpl_question</name>
+            <group>settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Kujundusp&amp;otilde;hi kuvamiseks</caption>
+      </property>
+      <property>
+            <name>tpl_results</name>
+            <group>settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Kujundusp&amp;otilde;hi tulemustele</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
@@ -85,6 +121,14 @@
             <activity>
                   <caption>Aktiivsus</caption>
             </activity>
+            <data>
+                  <caption>Andmed</caption>
+                  <parent>general</parent>
+            </data>
+            <settings>
+                  <caption>Seaded</caption>
+                  <parent>general</parent>
+            </settings>
       </groupinfo>
 </properties>
 
