@@ -134,7 +134,7 @@ class crm_company_docs_impl extends class_base
 			);
 			if($o->class_id() == CL_FILE)
 			{
-				$d["url"] = $file_inst->get_url($o->id());
+				$d["url"] = $file_inst->get_url($o->id()).$o->name();
 				$d["url_target"] = "new window";
 			}
 			
@@ -185,7 +185,6 @@ class crm_company_docs_impl extends class_base
 			"root_url" => "#",
 			//"open_path" => 
 		));
-		
 		$arr["prop"]["vcl_inst"]->add_item(0,array(
 			"id" => $fld->id(),
 			"name" => $fld->name(),
@@ -200,7 +199,6 @@ class crm_company_docs_impl extends class_base
 			"sort_by" => "objects.class_id ASC",
 			//"sortby" => "objects.class_id",
 		));
-		//arr($ol);
 		foreach($ol->arr() as $o)
 		{
 			$d = array(
@@ -217,22 +215,23 @@ class crm_company_docs_impl extends class_base
 			
 			$arr["prop"]["vcl_inst"]->add_item($fld->id(),$d);
 			
-		$ol2 = new object_list(array(
-			"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
-			"lang_id" => array(),	
-			"parent" => $o->id(),
-		));
-		foreach($ol2->arr() as $o2)
-		{
-			$arr["prop"]["vcl_inst"]->add_item($o->id(), array(
-				"id" => $o2->id(),
-				"name" => $o2->name(),
-				"url" => aw_url_change_var("tf", $o2->id()),
+			$ol2 = new object_list(array(
+				"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+				"lang_id" => array(),	
+				"parent" => $o->id(),
 			));
-		}
+			foreach($ol2->arr() as $o2)
+			{
+				$arr["prop"]["vcl_inst"]->add_item($o->id(), array(
+					"id" => $o2->id(),
+					"name" => $o2->name(),
+					"url" => aw_url_change_var("tf", $o2->id()),
+				));
+			}
 			
 			
 		}
+
 		if(false)
 		{
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
