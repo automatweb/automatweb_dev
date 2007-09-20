@@ -2103,7 +2103,7 @@ class site_template_compiler extends aw_template
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 
-		$ret .= $this->_gi()."if (\$parent_obj->prop(\"submenus_from_obj\") || !empty(".$parent_is_from_obj_name."[\$parent_obj->id()]))\n";
+		$ret .= $this->_gi()."if (\$this->can(\"view\", \$parent_obj->prop(\"submenus_from_obj\")) || !empty(".$parent_is_from_obj_name."[\$parent_obj->id()]))\n";
 
 		return $ret;
 	}
