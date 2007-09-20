@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.84 2007/09/12 10:30:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.85 2007/09/20 10:13:06 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1920,7 +1920,7 @@ flush();
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Nimi"),
+			"caption" => t("Nimi")."\n<br>(".t("Eesnimi")."/".t("Perenimi").")",
 			"align" => "center"
 		));
 		$t->define_field(array(
@@ -1958,7 +1958,10 @@ flush();
 		if ($this->disp)
 		{
 			$t->define_data(array(
-				"name" => html::textbox(array(
+				"name" =>  html::textbox(array(
+					"name" => "new[firstname]",
+					"size" => 15
+				)).html::textbox(array(
 					"name" => "new[name]",
 					"size" => 15
 				)),
@@ -1978,8 +1981,9 @@ flush();
 	{
 		if ($arr["request"]["new"]["name"] != "")
 		{
-			list($fn, $ln) = explode(" ", $arr["request"]["new"]["name"]);
-
+			//list($fn, $ln) = explode(" ", $arr["request"]["new"]["name"]);
+			$fn = $arr["request"]["new"]["firstname"];
+			$ln = $arr["request"]["new"]["name"];
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_PERSON,
 				"lang_id" => array(),
