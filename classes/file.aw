@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.156 2007/09/10 10:27:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.157 2007/09/20 09:27:11 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_PERSON, on_delete_person)
@@ -1449,6 +1449,7 @@ class file extends class_base
 		$o = obj($arr["id"]);
 		$i = $o->instance();
 		$s = $i->parse_alias(array("alias" => array("target" => $arr["id"]), "htmlentities" => true));
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die(str_replace(aw_ini_get("baseurl"), "", $s));
 	}
 
