@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.9 2006/09/25 14:39:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.10 2007/09/20 11:05:19 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -79,16 +79,25 @@ class interim_page extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				$prop["post_append_text"] = str_replace("&action=new", "&cfgform=".$arr["obj_inst"]->prop("cfg_form")."&action=new" ,$prop["post_append_text"]);
+
+			//	$prop["new_url_vars"] = array("asdas" => "dsfds");
+				//arr($prop);
+				//kui neid tuhandied on, siis miskipärast sureb ära
+/*				set_time_limit(0);
 				$register_list = new object_list(array(
 					"class_id" => CL_REGISTER_DATA,
+					"limit" => "5000",
 				));
+
 				foreach($register_list->arr() as $mem)
 				{
 					if($mem->meta("cfgform_id") == $arr["obj_inst"]->prop("cfg_form"))
 					{
 						$prop["options"][$mem->id()] = $mem->name();
 					}
-				}
+				}*/
+				
 				break;
 			case "cfg_form":
 				$mem_list = new object_list(array(
