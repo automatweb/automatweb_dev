@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.561 2007/09/19 11:39:22 kristo Exp $
+// $Id: class_base.aw,v 2.562 2007/09/20 08:08:10 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1655,6 +1655,11 @@ class class_base extends aw_template
 				if (!empty($val["set_link"]))
 				{
 					$link = $val["set_link"];
+				}
+
+				if (!empty($_GET["in_popup"]))
+				{
+					$link = aw_url_change_var("in_popup", 1, $link);
 				}
 
 				$tabinfo = array(
