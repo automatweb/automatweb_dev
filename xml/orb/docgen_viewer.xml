@@ -100,6 +100,27 @@
 			</function>
 		</action>
 
+		<action name="doc_search_form" all_args="1">
+			<function name="doc_search_form">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="doc_search_results" all_args="1">
+			<function name="doc_search_results">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="create_search">
+			<function name="doc_srch_create_tbl">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="proplist">
 			<function name="doc_proplist">
 				<arguments>

@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.12 2007/06/27 09:29:52 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.13 2007/09/21 10:55:08 robert Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -1128,6 +1128,12 @@ die(dbg::dump($data));
 		));
 
 		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("doc_search_form"),
+			"target" => "classlist",
+			"caption" => t("Otsing")
+		));
+
+		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("do_db_update",array('id'=>$arr['id'])),
 			"target" => "bott",
 			"caption" => t("Uuenda API andmebaas")
@@ -1153,8 +1159,161 @@ die(dbg::dump($data));
 		return $this->parse();
 	}
 
-	/**
+	/**	
+		@attrib name=doc_search_form all_args=1
+	**/
+	function doc_search_form($arr)
+	{
+		$search[] = t("Otsingus&otilde;na(d)").":";
+		$search[] = html::textbox(array("name"=>"search"));
+		$search[] = html::submit(array("value"=>t("Otsi")));
+		$search[] = '';
+		$search[] = html::href(array(
+			"url" => $this->mk_my_orb("create_search"),
+			"target" => "list",
+			"caption" => t("Loo otsingu andmebaas")
+		));
+		
+		$ret = html::form(array(
+			"action" => $this->mk_my_orb("doc_search_results"),
+			"method" => "post",
+			"content" => implode('<br />', $search),
+		));
+
+		$this->read_template("style.tpl");
+		$this->vars(array(
+			"content" => $ret,
+		));
+		return $this->parse();
+	}
+
+	/**	
+		@attrib name=doc_search_results all_args=1
+	**/
+	function doc_search_results($arr)
+	{
+		$ret[] = '<u>Tulemused</u>';
+		$words = explode(' ', $arr['search']);
+
+		$basedir = $this->cfg["basedir"]."/docs/tutorials";
+		$tut_ret = array();
+		$this->doc_srch_scan_files($basedir, $words, $tut_ret);
+		if(count($tut_ret))
+		{
+			$ret[] = '';
+			$ret[] = 'Tutorialides:';
+			$ret = array_merge($ret, $tut_ret);
+		}
+		
+		$classdir = $this->cfg["classdir"];
+		$cl_ret = array();
+		$this->doc_srch_class_info($classdir, $words, &$cl_ret);
+		if(count($cl_ret))
+		{
+			$ret[] = '';
+			$ret[] = 'Klasside infos:';
+			$ret = array_merge($ret, $cl_ret);
+		}
+
+		$this->read_template("style.tpl");
+		$this->vars(array(
+			"content" => implode('<br />', $ret),
+		));
+		return $this->parse();
+	}
 	
+	function doc_srch_scan_files($dir, $words, &$ret)
+	{
+		$dh = opendir($dir);
+		while(($file = readdir($dh)) !== false)
+		{
+			$fh = $dir."/".$file;
+			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
+			{
+				if(is_dir($fh))
+				{
+					$this->doc_srch_scan_files($fh, $words, $ret);
+				}
+				else
+				{
+					$fp = fopen($fh, 'r');
+					$data = fread($fp, filesize($fh));
+					fclose($fp);
+					$found = 1;
+					foreach($words as $word)
+					{
+						if(stristr($data, $word) === FALSE)
+						{
+							$found = 0;
+						}
+					}
+					if($found)
+					{
+						$basedir = $this->cfg["basedir"]."/docs/tutorials";
+						$filedir = substr($dir, strlen($basedir));
+						$ret[] = html::href(array(
+							"url" => $this->mk_my_orb("show_doc", array("file" =>$filedir."/".$file)),
+							"target" => "list",
+							"caption" => $file
+						));
+					}
+				}
+			}
+		}
+	}
+
+	function doc_srch_class_info($dir, $words, &$ret)
+	{
+		$wordsql = "`text` LIKE '%".implode("%' AND `text` LIKE '%", $words)."%'";
+		$results = $this->db_fetch_array("SELECT * FROM aw_da_func_data WHERE ".$wordsql);
+		foreach($results as $result)
+		{
+			$ret[] = html::href(array(
+				"url" => $this->mk_my_orb("class_info", array("file" =>$result['file'])),
+				"target" => "list",
+				"caption" => $result['file']
+			));
+		}
+	}
+
+	/**
+		@attrib name=create_search
+	**/
+	function doc_srch_create_tbl()
+	{
+		$this->db_query("CREATE TABLE IF NOT EXISTS aw_da_func_data (`id` INT NOT NULL AUTO_INCREMENT, `text` TEXT, `file` TEXT, PRIMARY KEY (`id`))");
+		$this->db_query("DELETE FROM aw_da_func_data");
+		$dir = $this->cfg["classdir"];
+		$this->doc_srch_create_rows($dir);
+		die("Done.");
+	}
+
+	function doc_srch_create_rows($dir)
+	{
+		$analyzer = get_instance("core/aw_code_analyzer/aw_code_analyzer");
+		$dh = opendir($dir);
+		while(($file = readdir($dh)) !== false)
+		{
+			$fh = $dir."/".$file;
+			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
+			{
+				if(is_dir($fh))
+				{
+					$this->doc_srch_create_rows($fh);
+				}
+				else
+				{
+					$basedir = $this->cfg["classdir"];
+					$filedir = substr($dir, strlen($basedir))."/".$file;
+					$data = $analyzer->analyze_file($filedir);
+					$text = dbg::dump($data);
+					echo "Writing info about ".$filedir."<br />";
+					$this->db_query("INSERT INTO aw_da_func_data(`id`, `text`, `file`) VALUES(0, '".htmlspecialchars($text, ENT_QUOTES)."', '".$filedir."')");
+				}
+			}
+		}
+	}
+	/**
 		@attrib name=proplist
 		@param id required
 	**/
