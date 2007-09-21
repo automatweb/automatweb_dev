@@ -19,6 +19,14 @@
 			</function>
 		</action>
 
+		<action name="undone_xls" all_args="1">
+			<function name="undone_xls">
+				<arguments>
+					<optional name="undone_xls" type="id" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="confirm_orders">
 			<function name="confirm_orders">
 				<arguments>

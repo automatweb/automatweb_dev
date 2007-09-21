@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.11 2007/09/10 10:27:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.12 2007/09/21 11:13:07 markop Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -75,7 +75,7 @@ class orders_manager extends class_base
 				$this->do_orders_toolbar($arr);
 				break;
 			case "order_undone_tb":
-//				$this->do_order_undone_tb($arr);
+				$this->do_order_undone_tb($arr);
 				break;
 			case "order_undone":
 				$this->do_order_undone_tbl($arr);
@@ -94,7 +94,7 @@ class orders_manager extends class_base
 			"url" => $this->mk_my_orb("undone_xls", array(
 				"id" => $arr["obj_inst"]->id(),
 				"return_url" => get_ru()
-			), CL_SHOP_WAREHOUSE)
+			), CL_ORDERS_MANAGER)
 		));
 	}
 	
@@ -103,7 +103,7 @@ class orders_manager extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$cl = $arr["cl"];
 		$this->_init_undone_tbl($t,$cl);
-
+		$xls = $arr["xls"];
 		// list orders from order folder
 		$filter = array(
 			"class_id" => CL_ORDERS_ORDER,
@@ -156,6 +156,7 @@ class orders_manager extends class_base
 				}
 				$undone_products[$id][$o->id()] = array(
 					"product_count" => $item->prop("product_count"),
+					"product_count_undone" => $item->prop("product_count_undone"),
 					"name" => $item->name(),
 					"product_code" => $item->prop("product_code"),
 					"product_color" => $item->prop("product_color"),
@@ -163,6 +164,15 @@ class orders_manager extends class_base
 					"product_price" => $item->prop("product_price"),
 					"product_page" => $item->prop("product_page"),
 					"product_image" => $item->prop("product_image"),
+					"product_unit" => $item->prop("product_unit"),
+					"product_duedate" => $item->prop("product_duedate"),
+					"udef_textbox1" => $item->prop("udef_textbox1"),
+					"udef_textbox2" => $item->prop("udef_textbox2"),
+					"udef_textbox3" => $item->prop("udef_textbox3"),
+					"udef_textbox4" => $item->prop("udef_textbox4"),
+					"udef_textbox5" => $item->prop("udef_textbox5"),
+					"udef_textbox6" => $item->prop("udef_textbox6"),
+					"udef_textbox7" => $item->prop("udef_textbox7"),
 				);
 			}
 		}
@@ -192,13 +202,13 @@ class orders_manager extends class_base
 				$o = reset($order);
 				$product_data["product"] = $o["name"];
 				$product_data["code"] = $o["product_code"];
-
 			}
 			$unit = "";
-			$t->define_data(array(
+			if(!$xls) $t->define_data(array(
 				"product" => $product_data["product"],
 				"code" => $product_data["code"],
 				"unit" => $unit,
+				"color" => "#DDDDDD",
 //				"packaging" => $product_obj->prop("user1"),
 			));
 			
@@ -210,26 +220,34 @@ class orders_manager extends class_base
 				$order = obj($key);
 				$client = "";
 				if($client_o = $order->get_first_obj_by_reltype(array("type" => "RELTYPE_PERSON")));
-				{
-					$client = html::get_change_url($client_o->id(), array("return_url" => get_ru()) , $client_o->name());
+ 				{
+					if(is_object($client_o))
+					{
+						$client = html::get_change_url($client_o->id(), array("return_url" => get_ru()) , $client_o->name());
+					}
 				}
-				
-		
 				$t->define_data(array(
+					"product" => (!$xls)?"":$amount["name"],
+					"code" => (!$xls)?"":($amount["product_code"]?$amount["product_code"] : " "),
+
 					"order" => $cl?html::href(array("url" => $key, "caption" => $key)):html::get_change_url($key, array("return_url" => get_ru() , "group" => "orderitems") , $key),
 					"client" => $client,
-					"amount" => $amount["product_count"],
+					"amount" => $amount["product_count_undone"],
 					"color" => $order->prop("confirmed")?"":"#CCFFCC",
-					
+					"unit" => $amount["product_unit"],
+					"packaging" => $amount["product_size"],
+					"duedate" => $amount["product_duedate"],
+					"date" => date("d/m/y" , $order->created()),
 		//			"packaging" => $ord_data[$order->id()][$product]["user1"],
-					"date" => $ord_data[$order->id()][$product]["duedate"],
+		//			"date" => $ord_data[$order->id()][$product]["duedate"],
 					"bill" => $ord_data[$order->id()][$product]["bill"],
 				));
-				$prod_count+=$amount["product_count"];
+				$prod_count+=$amount["product_count_undone"];
 			}
 			
+			
 
-			$t->define_data(array(
+			if(!$xls)$t->define_data(array(
 				"product" => t("Kokku:"),
 				"amount" => "<b>".$prod_count."</b>",
 
@@ -259,12 +277,40 @@ class orders_manager extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "unit",
+			"caption" => t("M&otilde;&otilde;t&uuml;hik"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+
+		$t->define_field(array(
+			"name" => "packaging",
+			"caption" => t("Pakend"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Tellitav Kogus"),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
 
+		$t->define_field(array(
+			"name" => "duedate",
+			"caption" => t("Soovitav tarne t&auml;itmine"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Tellimuse kuup&auml;ev"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
 		
 		if(!$cl)$t->define_field(array(
 			"name" => "client",
@@ -553,6 +599,25 @@ class orders_manager extends class_base
 
 		die(t("all done!"));
 	}
+
+	/**
+		@attrib name=undone_xls all_args=1
+		@param undone_xls optional type=id acl=view
+	**/
+	function undone_xls($arr)
+	{
+		classload("vcl/table");
+		$arr["prop"]["vcl_inst"] = new aw_table(array(
+			"layout" => "generic"
+		));
+		$arr["obj_inst"] = obj($arr["id"]);
+		$arr["xls"] = 1;
+		$this->do_order_undone_tbl($arr);
+		header("Content-type: application/csv");
+		header("Content-disposition: inline; filename=undone.csv;");
+		die($arr["prop"]["vcl_inst"]->get_csv_file());
+	}
+	
 
 	/**
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.27 2007/09/06 13:59:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.28 2007/09/21 11:13:07 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -177,12 +177,14 @@ class orders_order extends class_base
 			
 			case "orderer_info":
 				$oi_data = array();
+				if($person)
+				{
 				$oi_data[] = $person->name();
-				if($person->prop("personal_id")) $oi_data[] = $person->prop("personal_id");
-				if($person->prop("email")) $oi_data[] = $person->prop("email.mail");
-				if($person->prop("phone")) $oi_data[] = $person->prop("phone.name");
-				if($person->prop("comment")) $oi_data[] = $person->prop("comment");
-
+					if($person->prop("personal_id")) $oi_data[] = $person->prop("personal_id");
+					if($person->prop("email")) $oi_data[] = $person->prop("email.mail");
+					if($person->prop("phone")) $oi_data[] = $person->prop("phone.name");
+					if($person->prop("comment")) $oi_data[] = $person->prop("comment");
+				}	
 				$prop["value"] = join (", " , $oi_data);
 				break;
 			
@@ -227,10 +229,9 @@ class orders_order extends class_base
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_ORDER"
 				));
-
 				$ol = new object_list($conns);
 				$o = $ol->begin();
-				$cfgform = $o->meta("cfgform_id");
+				if(is_object($o)) $cfgform = $o->meta("cfgform_id");
 				$table = &$prop["vcl_inst"];
 				if(is_oid($cfgform) && $this->can("view", $cfgform))
 				{
@@ -320,6 +321,10 @@ class orders_order extends class_base
 				$data[$prop] = html::textbox(array(
 					"name" => "rows[".$obj->id()."][".$prop."]",
 					"value" => $val,
+					"size" => ($prop == "name") ? 30:9,
+				));				$data["product_unit"] = html::textbox(array(
+					"name" => "rows[".$obj->id()."][product_unit]",
+					"value" => $obj->prop("product_unit"),
 					"size" => ($prop == "name") ? 30:9,
 				));
 				if($prop == "product_duedate" || $prop == "product_bill")
@@ -488,6 +493,7 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 				$item->set_prop("product_color", $submit_data["product_color"]);
 				$item->set_prop("product_size", $submit_data["product_size"]);
 				$item->set_prop("product_count", $submit_data["product_count"]);
+				$item->set_prop("product_unit", $submit_data["product_unit"]);
 				$item->set_prop("comment", $submit_data["comment"]);
 				$item->set_prop("product_count_undone", $submit_data["product_count"]);
 				$item->set_prop("product_price", $submit_data["product_price"]);
@@ -495,6 +501,14 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 				$item->set_prop("product_page", $submit_data["product_page"]);
 				$item->set_prop("product_duedate", $submit_data["product_duedate"]);
 				$item->set_prop("product_bill", $submit_data["product_bill"]);
+				$item->set_prop("udef_textbox7", $submit_data["udef_textbox7"]);
+				$item->set_prop("udef_textbox6", $submit_data["udef_textbox6"]);
+				$item->set_prop("udef_textbox5", $submit_data["udef_textbox5"]);
+				$item->set_prop("udef_textbox4", $submit_data["udef_textbox4"]);
+				$item->set_prop("udef_textbox3", $submit_data["udef_textbox3"]);
+				$item->set_prop("udef_textbox2", $submit_data["udef_textbox2"]);
+				$item->set_prop("udef_textbox1", $submit_data["udef_textbox1"]);
+
 				$item->set_meta("cfgform_id" , $_SESSION["order_item_form_id"]);
 				$item->save();
 				$conn = new connection();
@@ -806,6 +820,14 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 			$name = "<a href='javascript:void(0)' alt='$str' title='$str'>$name</a>";
 		}
 		$this->vars(array(
+			"udef_textbox1" => $item->prop("udef_textbox1"),
+			"udef_textbox2" => $item->prop("udef_textbox2"),
+			"udef_textbox3" => $item->prop("udef_textbox3"),
+			"udef_textbox4" => $item->prop("udef_textbox4"),
+			"udef_textbox5" => $item->prop("udef_textbox5"),
+			"udef_textbox6" => $item->prop("udef_textbox6"),
+			"udef_textbox7" => $item->prop("udef_textbox7"),
+			"product_unit" => $item->prop("product_unit"),
 			"product_code" => $item->prop("product_code"),
 			"product_color" => $item->prop("product_color"),
 			"product_size" => $item->prop("product_size"),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.24 2007/09/06 13:59:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.25 2007/09/21 11:13:07 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -218,7 +218,8 @@ class orders_form extends class_base
 	
 	function parse_alias($arr)
 	{
-		$_SESSION["orders_section"] = $arr["alias"]["from"];
+		$_SESSION["orders_section"] = $arr["alias"]["from.parent"];
+		$_SESSION["order_form_id"] = $arr["alias"]["to"];
 		$arr["id"] = $arr["alias"]["target"];
 		$arr["group"] = "ordering";
 		$arr["cb_part"] = 1;
@@ -244,7 +245,6 @@ class orders_form extends class_base
 				return aw_ini_get("baseurl");
 			}
 		}
-		
 		if(!is_oid($_SESSION["order_cart_id"]) || !$this->can("view", $_SESSION["order_cart_id"]) || !$_SESSION["order_form_id"])
 		{
 			$order = new object();
@@ -672,7 +672,17 @@ class orders_form extends class_base
 			$values[0]["product_page"] = $obj->prop("product_page");
 			$values[0]["product_image"] = $obj->prop("product_image");
 			$values[0]["product_duedate"] = $obj->prop("product_duedate");
+			$values[0]["product_unit"] = $obj->prop("product_unit");
 			$values[0]["product_bill"] = $obj->prop("product_bill");
+
+			$values[0]["udef_textbox1"] = $obj->prop("udef_textbox1");
+			$values[0]["udef_textbox2"] = $obj->prop("udef_textbox2");
+			$values[0]["udef_textbox3"] = $obj->prop("udef_textbox3");
+			$values[0]["udef_textbox4"] = $obj->prop("udef_textbox4");
+			$values[0]["udef_textbox5"] = $obj->prop("udef_textbox5");
+			$values[0]["udef_textbox6"] = $obj->prop("udef_textbox6");
+			$values[0]["udef_textbox7"] = $obj->prop("udef_textbox7");
+
 			$add_change_caption = "Salvesta muudatused";
 		}
 		else 
@@ -703,6 +713,9 @@ class orders_form extends class_base
 				"num" => $i,
 				"product_code_error" => $errors["product_code"]["msg"],
 				"product_code_value" => $values["product_code"],
+
+				"product_unit_error" => $errors["product_unit"]["msg"],
+				"product_unit_value" => $values["product_unit"],
 				
 				"product_name_error" => $errors["name"]["msg"],
 				"product_name_value" => $values["name"],
@@ -724,6 +737,22 @@ class orders_form extends class_base
 				
 				"product_image_error" => $errors["product_image"]["msg"],
 				"product_image_value" => $values["product_image"],
+
+
+				"udef_textbox1_error" => $errors["udef_textbox1"]["msg"],
+				"udef_textbox1_value" => $values["udef_textbox1"],
+				"udef_textbox2_error" => $errors["udef_textbox2"]["msg"],
+				"udef_textbox2_value" => $values["udef_textbox2"],
+				"udef_textbox3_error" => $errors["udef_textbox3"]["msg"],
+				"udef_textbox3_value" => $values["udef_textbox3"],
+				"udef_textbox4_error" => $errors["udef_textbox4"]["msg"],
+				"udef_textbox4_value" => $values["udef_textbox4"],
+				"udef_textbox5_error" => $errors["udef_textbox5"]["msg"],
+				"udef_textbox5_value" => $values["udef_textbox5"],
+				"udef_textbox6_error" => $errors["udef_textbox6"]["msg"],
+				"udef_textbox6_value" => $values["udef_textbox6"],
+				"udef_textbox7_error" => $errors["udef_textbox7"]["msg"],
+				"udef_textbox7_value" => $values["udef_textbox7"],
 
 				"product_duedate_error" => $errors["product_duedate"]["msg"],
 				"product_duedate_value" => $values["product_duedate"],
@@ -912,7 +941,7 @@ class orders_form extends class_base
 				"delete_url" => $this->mk_my_orb("delete_from_order",array(
 						"id" => $item->id(),
 					), CL_ORDERS_FORM),	
-				
+				"product_unit" => $item->prop("product_unit"),
 				"product_code" => $item->prop("product_code"),
 				"product_color" => $item->prop("product_color"),
 				"product_size" => $item->prop("product_size"),
@@ -924,7 +953,14 @@ class orders_form extends class_base
 				"product_bill" => $item->prop("product_bill"),
 				"comment" => $item->prop("comment"),
 				"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
-				"product_status" => ""/*$this->prod_statuses[$_state]*/
+				"product_status" => "",/*$this->prod_statuses[$_state]*/
+				"udef_textbox7" => $item->prop("udef_textbox7"),
+				"udef_textbox6" => $item->prop("udef_textbox6"),
+				"udef_textbox5" => $item->prop("udef_textbox5"),
+				"udef_textbox4" => $item->prop("udef_textbox4"),
+				"udef_textbox3" => $item->prop("udef_textbox3"),
+				"udef_textbox2" => $item->prop("udef_textbox2"),
+				"udef_textbox1" => $item->prop("udef_textbox1"),
 			));
 			if(!$_SESSION["show_order"])
 			{
@@ -1080,6 +1116,14 @@ class orders_form extends class_base
 			$name = "<a href='javascript:void(0)' alt='$str' title='$str'>$name</a>";
 		}
 		$this->vars(array(
+			"udef_textbox1" => $item->prop("udef_textbox1"),
+			"udef_textbox2" => $item->prop("udef_textbox2"),
+			"udef_textbox3" => $item->prop("udef_textbox3"),
+			"udef_textbox4" => $item->prop("udef_textbox4"),
+			"udef_textbox5" => $item->prop("udef_textbox5"),
+			"udef_textbox6" => $item->prop("udef_textbox6"),
+			"udef_textbox7" => $item->prop("udef_textbox7"),
+
 			"product_code" => $item->prop("product_code"),
 			"product_color" => $item->prop("product_color"),
 			"product_size" => $item->prop("product_size"),

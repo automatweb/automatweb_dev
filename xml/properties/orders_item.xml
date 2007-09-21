@@ -17,6 +17,14 @@
             <caption>Kood</caption>
       </property>
       <property>
+            <name>product_unit</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>product_unit</field>
+            <caption>M&amp;amp;otilde;&amp;amp;otilde;t&amp;amp;uuml;hik</caption>
+      </property>
+      <property>
             <name>product_color</name>
             <table>aw_orders_item</table>
             <group>general</group>
@@ -87,6 +95,125 @@
             <type>textbox</type>
             <field>product_image</field>
             <caption>Pilt</caption>
+      </property>
+      <property>
+            <name>udef_textbox1</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>udef_textbox1</field>
+      </property>
+      <property>
+            <name>udef_textbox2</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>udef_textbox2</field>
+      </property>
+      <property>
+            <name>udef_textbox3</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>udef_textbox3</field>
+      </property>
+      <property>
+            <name>udef_textbox4</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>udef_textbox4</field>
+      </property>
+      <property>
+            <name>udef_textbox5</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>udef_textbox5</field>
+      </property>
+      <property>
+            <name>udef_textbox6</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>udef_textbox6</field>
+      </property>
+      <property>
+            <name>udef_textbox7</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>udef_textbox7</field>
+      </property>
+      <property>
+            <name>udef_textarea1</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>udef_textarea1</field>
+      </property>
+      <property>
+            <name>udef_textarea2</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>udef_textarea2</field>
+      </property>
+      <property>
+            <name>udef_textarea3</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>udef_textarea3</field>
+      </property>
+      <property>
+            <name>udef_textarea4</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>udef_textarea4</field>
+      </property>
+      <property>
+            <name>udef_textarea5</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>udef_textarea5</field>
+      </property>
+      <property>
+            <name>udef_picker1</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>udef_picker1</field>
+      </property>
+      <property>
+            <name>udef_picker2</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>udef_picker2</field>
+      </property>
+      <property>
+            <name>udef_picker3</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>udef_picker3</field>
+      </property>
+      <property>
+            <name>udef_picker4</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>udef_picker4</field>
+      </property>
+      <property>
+            <name>udef_picker5</name>
+            <table>aw_orders_item</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>udef_picker5</field>
       </property>
       <classinfo>
             <syslog_type>ST_ORDERS_ITEM</syslog_type>
