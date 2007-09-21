@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.563 2007/09/21 06:27:57 voldemar Exp $
+// $Id: class_base.aw,v 2.564 2007/09/21 06:32:03 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4377,7 +4377,8 @@ class class_base extends aw_template
 				{
 					if (is_oid($cfg_cntrl_id))
 					{
-						$controller_inst->check_property($cfg_cntrl_id, $this->obj_inst->id(), array(), &$args, array(), &$this->obj_inst);
+						$tmp = array();
+						$controller_inst->check_property($cfg_cntrl_id, $this->obj_inst->id(), $tmp, &$args, array(), &$this->obj_inst);
 					}
 				}
 			}
