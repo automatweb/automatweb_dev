@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.30 2007/09/19 14:40:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.31 2007/09/21 13:07:46 markop Exp $
 // calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
@@ -114,10 +114,10 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @property sector type=relpicker multiple=1 reltype=RELTYPE_SECTOR method=serialize field=meta table=objects automatic=1 size=10
 @caption Valdkonnad
 
-@property location type=popup_search d=aw_customer reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATION style=autocomplete field=ucheck5 no_edit=1
+@property location type=popup_search reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATION style=autocomplete field=ucheck5 no_edit=1
 @caption Toimumiskoht
 
-@property organizer type=popup_search d=aw_customer reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY style=autocomplete method=serialize field=meta table=objects no_edit=1
+@property organizer type=popup_search reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete method=serialize field=meta table=objects no_edit=1
 @caption Korraldaja
 
 @property make_copy store=no type=checkbox ch_value=1
@@ -183,7 +183,7 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @reltype SECTOR value=5 clid=CL_CRM_SECTOR
 @caption Tegevusala
 
-@reltype ORGANIZER value=6 clid=CL_CRM_COMPANY
+@reltype ORGANIZER value=6 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Korraldaja
 
 @reltype URL value=7 clid=CL_URL
@@ -244,6 +244,44 @@ class calendar_event extends class_base
 				break;
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
+				break;
+			case "organizer":
+		 		if(!is_oid($prop["value"]))
+ 				{
+ 					if(is_oid($arr["request"]["organizer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["organizer_awAutoCompleteTextbox"]))
+ 					{
+ 						$prop["value"] = $arr["request"]["organizer_awAutoCompleteTextbox"];
+ 					}
+ 					elseif($arr["request"]["organizer_awAutoCompleteTextbox"])
+ 					{
+ 						$ol = new object_list(array(
+ 							"name" => $arr["request"]["organizer_awAutoCompleteTextbox"],
+ 							"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+ 							"lang_id" => array(),
+ 						));
+ 						$cust_obj = $ol->begin();
+ 						if(is_object($cust_obj))$prop["value"] = $cust_obj->id();
+ 					}
+ 				}
+				break;
+			case "location":
+		 		if(!is_oid($prop["value"]))
+ 				{
+ 					if(is_oid($arr["request"]["location_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["location_awAutoCompleteTextbox"]))
+ 					{
+ 						$prop["value"] = $arr["request"]["location_awAutoCompleteTextbox"];
+ 					}
+ 					elseif($arr["request"]["location_awAutoCompleteTextbox"])
+ 					{
+ 						$ol = new object_list(array(
+ 							"name" => $arr["request"]["location_awAutoCompleteTextbox"],
+ 							"class_id" => CL_SCM_LOCATION,
+ 							"lang_id" => array(),
+ 						));
+ 						$cust_obj = $ol->begin();
+ 						if(is_object($cust_obj))$prop["value"] = $cust_obj->id();
+ 					}
+ 				}
 				break;
 		}
 		$meta = $arr["obj_inst"]->meta();

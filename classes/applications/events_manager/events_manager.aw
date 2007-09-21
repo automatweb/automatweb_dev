@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.13 2007/09/19 14:40:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.14 2007/09/21 13:07:47 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -1072,6 +1072,26 @@ class events_manager extends class_base
 			$sa[$n]["id"] = $this->teemad[$s->name()];
 			$n ++;
 		}
+		$mail = $phone = $url = $address = "";
+		if(is_oid($o->prop("organizer")) && $this->can("view" , $o->prop("organizer")))
+		{
+			$organiser = obj($o->prop("organizer"));
+			if($organiser->class_id() == CL_CRM_PERSON)
+			{
+				$email = $organiser->prop("email.mail");
+				$phone = $organiser->prop("phone.name");
+				$url = $organiser -> prop("url.name");
+				$address = $organiser->prop("address.name");
+			}
+			else
+			{
+				$email = $organiser->prop("email_id.mail");
+				$phone = $organiser->prop("phone_id.name");
+				$url = $organiser -> prop("url_id.name");
+				$address = $organiser->prop("contact.name");
+			}
+		}
+
 		$ret = '
 	<syndmus>
 		<id>'.$o->id().'</id>
@@ -1087,13 +1107,13 @@ class events_manager extends class_base
 		<teema3 id="0">'.$sa[2]["name"].'</teema3>
 		<tase>'.$o->prop("level").'</tase>
 		<asukoht_vabatekst><![CDATA[  ]]></asukoht_vabatekst>
-		<kontakt_nimi><![CDATA[ Vana Baskini Teater ]]></kontakt_nimi>
-		<kontakt_email><![CDATA[ info@vanabaskiniteater.ee ]]></kontakt_email>
-		<kontakt_tel><![CDATA[ (+372) 6455444 ]]></kontakt_tel>
-		<kontakt_url><![CDATA[ www.vanabaskiniteater.ee ]]></kontakt_url>
-		<kontakt_aadress><![CDATA[ Tallinn 10115, Tartu mnt.55/59 ]]></kontakt_aadress>
+		<kontakt_nimi><![CDATA[ '.$o->prop("organizer.name").' ]]></kontakt_nimi>
+		<kontakt_email><![CDATA[ '.$email.' ]]></kontakt_email>
+		<kontakt_tel><![CDATA[ '.$phone.' ]]></kontakt_tel>
+		<kontakt_url><![CDATA[ '.$url.' ]]></kontakt_url>
+		<kontakt_aadress><![CDATA[ '.$address.' ]]></kontakt_aadress>
 		<timestamp>'.date("Y-m-d H:i:s" , $o->modified()).'</timestamp>
-		<algallikas>TeatriliitXML</algallikas>
+		<algallikas>'.$o->prop("utextbox1").'</algallikas>
  		'.$this->times_xml($o).'
 	</syndmus>';
 
@@ -1113,7 +1133,7 @@ class events_manager extends class_base
 				<id>'.$t->id().'</id>
 				<algus>'.date("Y-m-d H:i:s" , $t->prop("start")).'</algus>
 				<lopp>'.date("Y-m-d H:i:s" , $t->prop("end")).'</lopp>
-				<markus><![CDATA[ '.$t->prop("location.name").' ]]></markus>
+				<markus><![CDATA[  ]]></markus>
 				<timestamp>'.date("Y-m-d H:i:s" , $t->modified()).'</timestamp>
 			</aeg>';
 		}

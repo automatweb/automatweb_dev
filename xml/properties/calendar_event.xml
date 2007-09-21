@@ -267,7 +267,6 @@
             <group>general</group>
             <table>planner</table>
             <type>popup_search</type>
-            <d>aw_customer</d>
             <reltype>RELTYPE_LOCATION</reltype>
             <clid>CL_SCM_LOCATION</clid>
             <style>autocomplete</style>
@@ -280,9 +279,11 @@
             <group>general</group>
             <table>objects</table>
             <type>popup_search</type>
-            <d>aw_customer</d>
             <reltype>RELTYPE_ORGANIZER</reltype>
-            <clid>CL_CRM_COMPANY</clid>
+            <clid>
+                  <num_0>CL_CRM_COMPANY</num_0>
+                  <num_1>CL_CRM_PERSON</num_1>
+            </clid>
             <style>autocomplete</style>
             <method>serialize</method>
             <field>meta</field>
@@ -456,7 +457,10 @@
             </SECTOR>
             <ORGANIZER>
                   <value>6</value>
-                  <clid>CL_CRM_COMPANY</clid>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>Korraldaja</caption>
             </ORGANIZER>
             <URL>
