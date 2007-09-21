@@ -46,6 +46,13 @@
 			</function>
 		</action>
 
+		<action name="del_file_rel" all_args="1">
+			<function name="del_file_rel">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="remove_parts" all_args="1">
 			<function name="remove_parts">
 				<arguments>

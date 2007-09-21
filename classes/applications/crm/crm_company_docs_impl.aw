@@ -170,7 +170,6 @@ class crm_company_docs_impl extends class_base
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);
 
 		classload("core/icons");
-		
 		$file_inst = get_instance(CL_FILE);
 		$arr["prop"]["vcl_inst"]->start_tree (array (
 			"type" => TREE_DHTML,
@@ -228,8 +227,6 @@ class crm_company_docs_impl extends class_base
 					"url" => aw_url_change_var("tf", $o2->id()),
 				));
 			}
-			
-			
 		}
 
 		if(false)
@@ -485,6 +482,43 @@ class crm_company_docs_impl extends class_base
 				"oid" => $o->id(),
 				"is_menu" => $o->class_id() == CL_MENU ? 1 : 0
 			));
+		}
+		if(!$arr["request"]["tf"] || $arr["request"]["tf"] == $fld->id())
+		{
+			$person = $arr["request"]["id"];
+			$c = new connection();
+			$results = $c->find(array(
+				"from.class_id" => CL_CRM_OFFER,
+				"to" => $person,
+				"type" => RELTYPE_ORDERER
+			));
+			foreach($results as $result)
+			{
+				$o2 = obj($result['from']);
+				$pm = get_instance("vcl/popup_menu");
+				$pm->begin_menu("sf".$o2->id());
+				foreach($o2->connections_from(array("class" => CL_FILE)) as $c)
+				{
+					$pm->add_item(array(
+						"text" => $c->prop("to.name"),
+						"link" => file::get_url($c->prop("to"), $c->prop("to.name")),
+						"target" => 1
+					));
+				}
+				$t->define_data(array(
+					"icon" => $pm->get_menu(array(
+						"icon" => icons::get_icon_url($o2)
+					)),
+					"name" => html::obj_change_url($o2),
+					"class_id" => $clss[$o2->class_id()]["name"],
+					"createdby" => $o2->createdby(),
+					"created" => $o2->created(),
+					"modifiedby" => $o2->modifiedby(),
+					"modified" => $o2->modified(),
+					"oid" => $o2->id(),
+					"is_menu" => $o2->class_id() == CL_MENU ? 1 : 0
+					));
+			}
 		}
 		/*$t->data_from_ol($ol, array(
 			"change_col" => "name"
