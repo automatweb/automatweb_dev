@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.55 2007/07/02 12:07:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.56 2007/09/21 11:49:26 robert Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -1359,6 +1359,18 @@ class crm_offer extends class_base
 			}
 		}
 		return $arr["post_ru"];
+	}
+	/**
+	@attrib name=del_file_rel all_args=1
+	**/
+	function del_file_rel($arr)
+	{
+		$offer = obj($arr["from"]);
+		$offer->disconnect(array(
+			"from" => $arr["fid"],
+		));
+
+		return $arr['return_url'];
 	}
 
 	function _req_get_folders($ot, &$folders, $parent)
