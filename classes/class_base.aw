@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.562 2007/09/20 08:08:10 kristo Exp $
+// $Id: class_base.aw,v 2.563 2007/09/21 06:27:57 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4359,23 +4359,25 @@ class class_base extends aw_template
 				"obj_inst" => &$this->obj_inst,
 				"new" => $new,
 			));
+		}
 
-			// call post save controller from cfgform object if defined
-			if (is_oid($filter["cfgform_id"]) and $this->can("view", $filter["cfgform_id"]))
+		// call post save controller from cfgform object if defined
+		$cfgform_id = $filter["cfgform_id"];
+
+		if (is_oid($cfgform_id) and $this->can("view", $cfgform_id))
+		{
+			$cfgform_o = new object($cfgform_id);
+			$cfg_cntrl = (array) $cfgform_o->prop("post_save_controllers");
+
+			if (count($cfg_cntrl))
 			{
-				$cfgform_o = new object($filter["cfgform_id"]);
-				$cfg_cntrl = (array) $cfgform_o->prop("post_save_controllers");
+				$controller_inst = get_instance(CL_CFGCONTROLLER);
 
-				if (count($cfg_cntrl))
+				foreach ($cfg_cntrl as $cfg_cntrl_id)
 				{
-					$controller_inst = get_instance(CL_CFGCONTROLLER);
-
-					foreach ($cfg_cntrl as $cfg_cntrl_id)
+					if (is_oid($cfg_cntrl_id))
 					{
-						if (is_oid($cfg_cntrl_id))
-						{
-							$controller_inst->check_property($cfg_cntrl_id, $this->obj_inst->id(), array(), &$args, array(), &$this->obj_inst);
-						}
+						$controller_inst->check_property($cfg_cntrl_id, $this->obj_inst->id(), array(), &$args, array(), &$this->obj_inst);
 					}
 				}
 			}
