@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.1 2007/09/17 12:20:31 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.2 2007/09/24 13:01:38 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -91,8 +91,86 @@ class ows_bron extends class_base
 	function show_booking_details($arr)
 	{
 		$this->read_template("view3.tpl");
+		
+
+		$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lanc_lc") : aw_global_get("LC");
+		$lang = $this->get_web_language_id($lc);
+
+		$checkindata = $arr["i_checkin"];
+		$checkindata2 = explode('.', $checkindata);
+		$arrival = mktime(0,0,0, $checkindata[1], $checkindata[0], $checkindata[2]);
+		$checkin = $checkindata2[2].'-'.$checkindata2[1].'-'.$checkindata2[0].'T00:00:00';
+		$checkoutdata = $arr["i_checkout"];
+		$departure = mktime(23,59,0, $checkoutdata[1], $checkoutdata[0], $checkoutdata[2]);
+		$checkoutdata2 = explode('.', $checkoutdata);
+		$checkout = $checkoutdata2[2].'-'.$checkoutdata2[1].'-'.$checkoutdata2[0].'T23:59:00';
+		$location = $arr["i_location"];
+		$rooms = (int)$arr["i_rooms"];
+		$currency = $arr["i_currency"]?$arr["request"]["i_currency"]:0;
+		$rateid= $arr["radio1"];
+		$nights = ceil(($departure-$arrival)/(60*60*24));
+
+		$parameters = array();
+		$parameters["hotelId"] = $location;
+		$parameters["rateId"] = $rateid;
+		$parameters["arrivalDate"] = $checkin;
+		$parameters["departureDate"] = $checkout;
+		$parameters["numberOfRooms"] = $rooms;
+		$parameters["numberOfAdultsPerRoom"] = (int)$arr["i_adult"];
+		$parameters["numberOfChildrenPerRoom"] = (int)$arr["i_child"];
+		$parameters["promotionCode"] = $promo;
+		$parameters["webLanguageId"] = $lang;
+		$parameters["customerId"] = 0;
+		if($currency)
+			$parameters["customCurrencyCode"] = $currency;
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetRateDetails",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => $parameters,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+		));
+
+		$rate = $return['GetRateDetailsResult'];
+		
+		if(!$rate["ResultCode"] != 'Success')
+			return $arr["r_url"];
+		$rate = $rate["RateDetails"];
+
+		$parameters = array();
+		$parameters["hotelId"] = $location;
+		$parameters["webLanguageId"] = $lang;
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetHotelDetails",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => $parameters,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+		));
+		$hotel = $return["GetHotelDetailsResult"]["HotelDetails"];
+
+		$this->vars(array(
+			"totalprice" => number_format($rate["TotalPriceInCustomCurrency"], 2),
+			"room" => $rooms,
+			"adults" => $arr["i_adult"],
+			"hotelname" => $hotel["HotelName"],
+			"arrival" => $arr["i_checkin"],
+			"departure" => $arr["i_checkout"],
+			"nights" => $nights,
+			"reforb" => $this->mk_reforb("show_confirm_view", array("no_reforb" => 1))
+		));
 
 		return $this->parse();
+	}
+
+	/**
+		@attrib name=show_confirm_view all_args="1"
+	**/
+	function show_confirm_view($arr)
+	{
+		$this->read_template("view4.tpl");
+		$a =  $this->parse();
+		return $a;
 	}
 
 	/**
@@ -107,14 +185,30 @@ class ows_bron extends class_base
 
 		$checkindata = $arr["i_checkin"];
 		$checkindata2 = explode('.', $checkindata);
-		$checkin = $checkindata2[2].'-'-$checkindata2[1].'-'.$checkindata2[0].'T00:00';
+		$checkin = $checkindata2[2].'-'.$checkindata2[1].'-'.$checkindata2[0].'T00:00:00';
 		$checkoutdata = $arr["i_checkout"];
 		$checkoutdata2 = explode('.', $checkoutdata);
-		$checkin = $checkoutdata2[2].'-'-$checkoutdata2[1].'-'.$checkoutdata2[0].'T00:00';
+		$checkout = $checkoutdata2[2].'-'.$checkoutdata2[1].'-'.$checkoutdata2[0].'T23:59:00';
 		$location = $arr["i_location"];
 		$rooms = (int)$arr["i_rooms"];
-		$childcount = (int)$arr["i_child"];
-		$adultcount = (int)$arr["i_adult"];
+		$rc_error = 0;
+		$arr["r_url"] = aw_url_change_var("rooms", $rooms, $arr["r_url"]);
+		for($i=1;$i<=$rooms;$i++)
+		{
+			$childcount[$i] = (int)$arr["i_child".$i];
+			$adultcount[$i] = (int)$arr["i_adult".$i];
+			$arr["r_url"] = aw_url_change_var("adults".$i, $arr["i_adult".$i], $arr["r_url"]);
+			$arr["r_url"] = aw_url_change_var("children".$i, $arr["i_child".$i], $arr["r_url"]);
+			if($childcount[$i] + $adultcount[$i] > 4)
+			{
+				$rc_error = 1;
+				$arr["r_url"] = aw_url_change_var("error".$i, 1, $arr["r_url"]);
+			}
+		}
+		if($rc_error)
+		{
+			return $arr["r_url"];
+		}
 		$promo = $arr["i_promo"];
 		$currency = $arr["i_currency"]?$arr["request"]["i_currency"]:0;
 
@@ -126,12 +220,12 @@ class ows_bron extends class_base
 			"class" => "http://markus.ee/RevalServices/Booking/",
 			"params" => $parameters,
 			"method" => "soap",
-			"server" => "http://domino.forumcinemas.ee/RevalServices/BookingService.asmx"
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
+
 		$hotel = $return["GetHotelDetailsResult"];
-		die(arr($hotel));
 		if($hotel["ResultCode"] != 'Success')
-			return $arr["request"]["r_url"];
+			return $arr["r_url"];
 
 		$hotel = $hotel["HotelDetails"];
 		$amenities = array();
@@ -175,50 +269,50 @@ class ows_bron extends class_base
 			"HotelUrl" => $hotel["InfoUrl"],
 			"HotelPic" => $hotel["PictureUrl"],
 		));
-
 		$parameters = array();
 		$parameters["hotelId"] = $location;
 		$parameters["arrivalDate"] = $checkin;
 		$parameters["departureDate"] = $checkout;
 		$parameters["numberOfRooms"] = $rooms;
-		$parameters["numberOfAdultsPerRoom"] = $adultcount;
-		$parameters["numberOfChildrenPerRoom"] = $childcount;
+		$parameters["numberOfAdultsPerRoom"] = $adultcount[1];
+		$parameters["numberOfChildrenPerRoom"] = $childcount[1];
 		$parameters["promotionCode"] = $promo;
 		$parameters["webLanguageId"] = $lang;
+		$parameters["customerId"] = 0;
 		if($currency)
+		{
 			$parameters["customCurrencyCode"] = $currency;
+		}
+
 		$return = $this->do_orb_method_call(array(
 			"action" => "GetAvailableRates",
 			"class" => "http://markus.ee/RevalServices/Booking/",
 			"params" => $parameters,
 			"method" => "soap",
-			"server" => "http://domino.forumcinemas.ee/RevalServices/BookingService.asmx"
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
 		$rates = $return["GetAvailableRatesResult"];
-		if($rates["ResultCode"] != 'Success')
-			return $arr["request"]["r_url"];
 
-		$rates = $rates["RateList"];
+		if(!$rates["RateList"])
+		{
+			return $arr["request"]["r_url"];
+		}
+		$rates = $rates["RateList"]["RateInfo"];
 		$tmp = '';
-		die(arr($rates));
+		$i=0;
 		foreach($rates as $rate)
 		{
-			$tmp2 = '';
-			/*foreach($rate['hotels'] as $id => $hotel)
-			{
-				$this->vars(array(
-					"Hotel" => $hotel["HotelInfo"]["HotelName"],
-					"HotelId" => $id
-				));
-				$tmp2 .= $this->parse("HotelList");
-			}*/
+			$i++;
+			if($i>5)continue;
 			$this->vars(array(
-				"Categories" => $tmp2,
+				"Id" => $rate["RateId"],
 				"Name" => $rate["Name"],
 				"Title" => $rate["Title"],
-				"Note" => $rate["ShortNote"],
+				"Note" => $rate["LongNote"],
 				"Pic" => $rate["PictureUrl"],
 				"Slideshow" => $rate["SlideshowUrl"],
+				"price1_avg" => $rate["AverageDailyRate"],
+				"price1_total" => $rate["TotalPrice"]
 			));
 			$tmp .= $this->parse("RateList");
 		}
@@ -238,16 +332,19 @@ class ows_bron extends class_base
 				array(
 					"section" => aw_global_get("section"),
 					"no_reforb" => 1,
+					"i_checkin" => $arr["i_checkin"],
+					"i_checkout" => $arr["i_checkout"],
+					"i_adult" => 1,
+					"i_child" => 0,
+					"i_rooms" => 1,
+					"i_promo" => $arr["i_promo"],
+					"i_location" => $arr["i_location"],
 					"r_url" => get_ru()
 				)
 			)
 		));
 		return $this->parse();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
@@ -258,9 +355,28 @@ class ows_bron extends class_base
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
-
+		$error1 = ' class="error"';
+		$error2 = '<p class="error">Maximum number of persons per room is 4. Please review</p>';
+		$rooms = $this->picker($_GET['rooms']?$_GET['rooms']:1, array(1=>1,2=>2,3=>3,4=>4));
+		for($i=1;$i<=4;$i++)
+		{
+			${'adults'.$i} = $this->picker($_GET['adults'.$i]?$_GET['adults'.$i]:1, array(1=>1,2=>2,3=>3,4=>4));
+			${'children'.$i} = $this->picker($_GET['children'.$i]?$_GET['children'.$i]:0, array(0=>0,1=>1,2=>2,3=>3,4=>4));
+			$this->vars(array(
+				"adults".$i => ${"adults".$i},
+				"children".$i => ${"children".$i},
+			));
+			if($_GET["error".$i])
+			{
+				$this->vars(array(
+					"error".$i."1" => $error1,
+					"error".$i."2" => $error2,
+				));
+			}
+		}
 		$this->vars(array(
 			"currentdate" => date('d.m.Y'),
+			"rooms" => $rooms,
 			"reforb" => $this->mk_reforb(
 				"show_available_rooms",
 				array(
@@ -272,7 +388,5 @@ class ows_bron extends class_base
 		));
 		return $this->parse();
 	}
-
-//-- methods --//
 }
 ?>
