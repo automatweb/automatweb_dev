@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.62 2007/06/06 12:34:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.63 2007/09/25 15:08:53 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -309,7 +309,15 @@ class crm_call extends class_base
 				{
 					$data["value"] = $this->mail_data["subject"];
 				}	
-				break;		
+				if($arr["request"]["title"] && $arr["new"])
+				{
+					$data["value"] = $arr["request"]["title"];
+				}
+				if($arr["request"]["participants"] && $arr["new"])
+				{
+					$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
+				}
+				break;	
 			case "content":
 				if($this->mail_data)
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.181 2007/09/10 10:27:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.182 2007/09/25 15:08:51 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1121,6 +1121,14 @@ class task extends class_base
 				if($this->mail_data)
 				{
 					$data["value"] = $this->mail_data["subject"];
+				}
+				if($arr["request"]["title"] && $arr["new"])
+				{
+					$data["value"] = $arr["request"]["title"];
+				}
+				if($arr["request"]["participants"] && $arr["new"])
+				{
+					$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
 				}
 				if (is_object($arr["obj_inst"]) && $data["value"] == "")
 				{
@@ -4260,6 +4268,30 @@ class task extends class_base
 		));
 	}
 
+	function fast_add_participants($arr,$types)
+	{
+		if(is_array($_SESSION["event"]["participants"]) && !$arr["new"])
+		{
+			foreach($_SESSION["event"]["participants"] as $pa)
+			{
+				if(!(is_oid($pa) && $this->can("view" , $pa)))
+				{
+					continue;
+				}
+				$p = obj($pa);
+				if(is_array($types))
+				{
+					$types = reset($types);
+				}
+				$p->connect(array(
+					"to" => $arr["obj_inst"]->id(),
+					"reltype" => $types
+				));
+			}
+			unset($_SESSION["event"]["participants"]);
+		}
+	}
+
 	function _parts_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -4279,6 +4311,10 @@ class task extends class_base
 		{
 			$types = 8;
 		}
+
+		//sündmuste kiirlisamiseks teeb sellise häki
+		$this->fast_add_participants($arr,$types);
+
 		foreach($arr["obj_inst"]->connections_to(array("type" => $types)) as $c)
 		{
 			$c = $c->from();

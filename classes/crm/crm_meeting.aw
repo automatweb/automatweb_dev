@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.88 2007/07/12 11:38:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.89 2007/09/25 15:08:53 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -384,6 +384,11 @@ class crm_meeting extends class_base
 					$data["value"] = $this->mail_data["subject"];
 				break;
 				}
+				if($arr["request"]["title"] && $arr["new"])
+				{
+					$data["value"] = $arr["request"]["title"];
+				}
+				break;
 			case "content":
 				if($this->mail_data)
 				{
@@ -524,7 +529,8 @@ class crm_meeting extends class_base
 				break;
 
 			case "participants":
-				if($arr["request"]["participants"])
+			
+				if($arr["request"]["participants"] && $arr["new"])
 				{
 					$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
 				}
@@ -745,18 +751,7 @@ class crm_meeting extends class_base
 				break;
 
 			case "participants":
-				if(is_array($_SESSION["event"]["participants"]))
-				{
-					$part = $arr["obj_inst"]->prop("participants");
-					foreach($_SESSION["event"]["participants"] as $pa)
-					{
-						$part[] = $pa;
-					}
-					$arr["obj_inst"]->set_prop("participants" , $part);
-					unset($_SESSION["event"]["participants"]);
-				}
-				$arr["obj_inst"]->save();
-			
+
 				return PROP_IGNORE;
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
