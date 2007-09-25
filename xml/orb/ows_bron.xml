@@ -22,5 +22,25 @@
 			</function>
 		</action>
 
+		<action name="get_roominfo" all_args="1">
+			<function name="get_roominfo">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="handle_pay_submit" all_args="1">
+			<function name="handle_pay_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="display_final_page" all_args="1">
+			<function name="display_final_page">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
