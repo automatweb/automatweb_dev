@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.65 2007/09/04 11:59:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.66 2007/09/25 12:28:44 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -42,6 +42,10 @@
 
 		@property test type=checkbox parent=general_right no_caption=1
 		@caption testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)
+
+		@property not_clickable_ref type=checkbox parent=general_right no_caption=1
+		@caption &Auml;ra kuva viitenumbrit lingina
+
 
 @groupinfo bank caption="Pankade info"
 
@@ -580,7 +584,7 @@ class bank_payment extends class_base
 					
 					//objektile klikitav viitenumber
 					$id = substr($log_data[$val["timestamp"]]["ref"], 0, -1);
-					if(is_oid($id) && $this->can("view" , $id))
+					if(!$o->prop("not_clickable_ref") && is_oid($id) && $this->can("view" , $id))
 					{
 						$log_data[$val["timestamp"]]["ref"] = html::obj_change_url($id , $log_data[$val["timestamp"]]["ref"]);
 					}
@@ -1770,18 +1774,19 @@ class bank_payment extends class_base
 		{
 			$bank_id = $this->merchant_id[$val["VK_SND_ID"]];
 			$ret["sum"] = $val["VK_AMOUNT"];
+			$ret["payer"] = $val["VK_SND_NAME"];
 		}
 		elseif($val["action"])
 		{
 			$bank_id = $this->merchant_id[$val["action"]];
 			$ret["sum"] = $val["eamount"]/100;
+			$ret["payer"] = $val["msgdata"];
 		}
 		else
 		{
 			$bank_id = $this->merchant_id[$val["SOLOPMT-RETURN-VERSION"]];
 		}
 		$ret["bank"] = $this->banks[$bank_id];
-		$ret["payer"] = $val["VK_SND_NAME"];
 		$ret["curr"] = $val["VK_CURR"];
 		return $ret;
 	}

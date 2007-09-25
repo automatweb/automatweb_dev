@@ -94,6 +94,17 @@
             <caption>testre&amp;amp;#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)</caption>
       </property>
       <property>
+            <name>not_clickable_ref</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <parent>general_right</parent>
+            <no_caption>1</no_caption>
+            <caption>&amp;amp;Auml;ra kuva viitenumbrit lingina</caption>
+      </property>
+      <property>
             <name>bank</name>
             <table>objects</table>
             <field>meta</field>
