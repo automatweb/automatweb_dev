@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.208 2007/09/07 12:27:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.209 2007/09/25 13:12:01 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1546,7 +1546,7 @@ class room extends class_base
 		while($x<20)
 		{
 			$url = aw_url_change_var("start",$weekstart,get_ru());
-			$options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
+			$options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604799));
 			if($arr["request"]["start"] == $weekstart) $selected = $url;
 			$weekstart = $weekstart + 604800;
 			$x++;
@@ -4718,7 +4718,7 @@ class room extends class_base
 					"bron" => $bron,
 				));
 			}
-			if(!$prod_discount)
+			if(!$prod_discount && is_object($bron))
 			{
 				$discount_array = $bron_inst->get_product_discount($bron->id());
 			}
@@ -4783,9 +4783,13 @@ class room extends class_base
 			$min = $room->meta("web_min_prod_prices");
 			if($sum < $min[$currency])
 			{
-				if(!$prod_discount)
+				if(!$prod_discount)//tegelt ei tea kas seda tahabki keegi näha...a teeb miski keskmise hinnasooduse arvutuse kui läheb käiku miinimumhind
 				{
 					$this->average_discount_for_products = ((($sum + $this->last_discount) - $min[$currency]) / $min[$currency]) * 100;
+					if(!($this->average_discount_for_products > 0))
+					{
+						$this->average_discount_for_products = 0;
+					}
 				}
 				$sum = $min[$currency];
 			}
