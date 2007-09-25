@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.56 2007/09/20 08:11:34 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.57 2007/09/25 21:58:36 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2362,7 +2362,7 @@ class otto_import extends class_base
 				flush();
 				// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
 
-				if (strpos($html,"Leider konnten wir im gesamten OTTO") !== false)
+				if (strpos($html,"Leider konnten wir") !== false)
 				{ 
 					// read from baur.de
 					echo "Can't find an product for <b>$pcode</b> from otto.de, so searching from baur.de<br>\n";
@@ -2424,7 +2424,8 @@ class otto_import extends class_base
 								$image_ok = $this->download_image(array(
 									'image' => 'http://image01.otto.de:80/pool/formatb/'.$connection_image.'.jpg',
 									'format' => 2,
-									'target_folder' => $import_obj->prop('images_folder')
+									'target_folder' => $import_obj->prop('images_folder'),
+									'debug' => true
 								));
 							}
 						}
@@ -2484,7 +2485,8 @@ class otto_import extends class_base
 									$image_ok = $this->download_image(array(
 										'image' => 'http://image01.otto.de:80/pool/formatb/'.$imnr.'.jpg',
 										'format' => 2,
-										'target_folder' => $import_obj->prop('images_folder')
+										'target_folder' => $import_obj->prop('images_folder'),
+										'debug' => true
 									));
 									if ($image_ok)
 									{
@@ -2492,7 +2494,8 @@ class otto_import extends class_base
 										$this->download_image(array(
 											'image' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
 											'format' => 1,
-											'target_folder' => $import_obj->prop('images_folder')
+											'target_folder' => $import_obj->prop('images_folder'),
+											'debug' => true
 										));
 
 									//	$this->add_image_to_product($pcode, $imnr);
@@ -2632,7 +2635,8 @@ class otto_import extends class_base
 							'image' => 'http://www.bonprix.ee/vv_bp_pl_img/'.$i.'/'.$filename.'_160.jpg',
 							'format' => 2,
 							'target_folder' => $import_obj->prop('images_folder'),
-							'filename' => $filename.'_var'.$i
+							'filename' => $filename.'_var'.$i,
+							'debug' => true
 						));
 						if ($image_ok)
 						{
@@ -2641,7 +2645,8 @@ class otto_import extends class_base
 								'image' => 'http://www.bonprix.ee/vv_bp_pl_img/'.$i.'/'.$filename.'_600.jpg',
 								'format' => 1,
 								'target_folder' => $import_obj->prop('images_folder'),
-								'filename' => $filename.'_var'.$i
+								'filename' => $filename.'_var'.$i,
+								'debug' => true
 							));
 						}
 						$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '".$ilename."_var".$i."' AND nr = '$i' AND pcode = '$pcode'", "pcode");
@@ -2716,7 +2721,8 @@ class otto_import extends class_base
 					'image' => 'http://image01.otto.de/bonprixbilder/shopposiklein/7er/gross/var'.$first_im_var.'/'.$first_im_name.'.jpg',
 					'format' => 2,
 					'target_folder' => $import_obj->prop('images_folder'),
-					'filename' => $first_im_name.'_var'.$first_im_var
+					'filename' => $first_im_name.'_var'.$first_im_var,
+					'debug' => true
 				));
 				if ($image_ok)
 				{
@@ -2725,7 +2731,8 @@ class otto_import extends class_base
 						'image' => 'http://image01.otto.de/bonprixbilder/shopposiklein/7er/gross/var'.$first_im_var.'/'.$first_im_name.'.jpg',
 						'format' => 1,
 						'target_folder' => $import_obj->prop('images_folder'),
-						'filename' => $first_im_name.'_var'.$first_im_var
+						'filename' => $first_im_name.'_var'.$first_im_var,
+						'debug' => true
 					));
 				}
 			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
@@ -2772,7 +2779,8 @@ class otto_import extends class_base
 					'image' => 'http://image01.otto.de/bonprixbilder/shopposiklein/7er/gross/var'.$nr.'/'.$r_i.'.jpg',
 					'format' => 2,
 					'target_folder' => $import_obj->prop('images_folder'),
-					'filename' => $im
+					'filename' => $im,
+					'debug' => true
 				));
 				if ($image_ok)
 				{
@@ -2781,7 +2789,8 @@ class otto_import extends class_base
 						'image' => 'http://image01.otto.de/bonprixbilder/shopposiklein/7er/gross/var'.$nr.'/'.$r_i.'.jpg',
 						'format' => 1,
 						'target_folder' => $import_obj->prop('images_folder'),
-						'filename' => $im
+						'filename' => $im,
+						'debug' => true
 					));
 				}
 
@@ -4082,12 +4091,6 @@ order by prices_nr,code,price
 		}
 		else
 		{
-/*
-if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
-{
-	arr($arr);
-}
-*/
 			$vars["order_data"] = array();
 			$vars["order_data"][$arr["add_to_cart"]]["color"] = ($arr["order_data_color"] != "" ? $arr["order_data_color"] : "---");
 			$vars["order_data"][$arr["add_to_cart"]]["size"] = $arr["size_name"];
@@ -4461,7 +4464,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 				$image_ok = $this->download_image(array(
 					'image' => 'http://image01.otto.de/pool/BaurDe/de_DE/images/formatb/'.$pn.'.jpg',
 					'format' => 2,
-					'target_folder' => $import_obj->prop('images_folder')
+					'target_folder' => $import_obj->prop('images_folder'),
+					'debug' => true
 				));
 				if ($image_ok)
 				{
@@ -4469,7 +4473,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 					$this->download_image(array(
 						'image' => 'http://image01.otto.de/pool/BaurDe/de_DE/images/formatb/'.$pn.'.jpg',
 						'format' => 1,
-						'target_folder' => $import_obj->prop('images_folder')
+						'target_folder' => $import_obj->prop('images_folder'),
+						'debug' => true
 					));
 				}
 
@@ -4553,7 +4558,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			$image_ok = $this->download_image(array(
 				'image' => 'http://image01.otto.de/pool/formatb/'.$first_im.'.jpg',
 				'format' => 2,
-				'target_folder' => $import_obj->prop('images_folder')
+				'target_folder' => $import_obj->prop('images_folder'),
+				'debug' => true
 			));
 			if ($image_ok)
 			{
@@ -4561,7 +4567,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 				$this->download_image(array(
 					'image' => 'http://image01.otto.de/pool/formata/'.$first_im.'.jpg',
 					'format' => 1,
-					'target_folder' => $import_obj->prop('images_folder')
+					'target_folder' => $import_obj->prop('images_folder'),
+					'debug' => true
 				));
 			}
 
@@ -4650,7 +4657,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			$image_ok = $this->download_image(array(
 				'image' => 'http://image01.otto.de:80/pool/AlbaModaDe/de_DE/images/albamoda_formatb/'.$first_im.'.jpg',
 				'format' => 2,
-				'target_folder' => $import_obj->prop('images_folder')
+				'target_folder' => $import_obj->prop('images_folder'),
+				'debug' => true
 			));
 			if ($image_ok)
 			{
@@ -4658,7 +4666,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 				$this->download_image(array(
 					'image' => 'http://image01.otto.de:80/pool/AlbaModaDe/de_DE/images/albamoda_formata//'.$first_im.'.jpg',
 					'format' => 1,
-					'target_folder' => $import_obj->prop('images_folder')
+					'target_folder' => $import_obj->prop('images_folder'),
+					'debug' => true
 				));
 			}
 
@@ -4690,6 +4699,15 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 
 		echo "[ HEINE ] Loading <a href=\"$url\">page</a> content ... ";
 		$fc = $this->file_get_contents($url);
+	
+		if (preg_match("/top\.location\.href\=\"(.*)\";/imsU", $fc, $mt))
+		{
+			$url = $mt[1];
+			echo "<br>[HEINE] redirecting to <a href='$url'>page</a><br>";
+
+			$fc = $this->file_get_contents($url);
+		}
+		
 		echo "[ok]<br />\n";
 
 		if (strpos($fc, "Diesen Artikel haben wir in unserem Online-Shop nicht gefunden.") !== false)
@@ -4711,7 +4729,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		$fc2 = $fc;
 
 		$patterns = array(
-			"/bild\[bildZahl\+\+\]=\"(\d+).jpg\";/imsU",
+			"/bild\[bildZahl\+\+\]\=\"(\d+).jpg\";/imsU",
 
 		);
 
@@ -4720,6 +4738,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		if (preg_match("/ImageBundle = (\d+).jpg/", $fc, $mt))
 		{
 			$connection_image = $mt[1];
+			echo "connimage $connection_image";
 		}
 
 		foreach ($patterns as $pattern)
@@ -4735,7 +4754,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		$image_ok = $this->download_image(array(
 			'image' => 'http://image01.otto.de/pool/format_hv_ds_b/'.$first_im.'.jpg',
 			'format' => 2,
-			'target_folder' => $import_obj->prop('images_folder')
+			'target_folder' => $import_obj->prop('images_folder'),
+			'debug' => true
 		));
 		if ($image_ok)
 		{
@@ -4743,7 +4763,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			$this->download_image(array(
 				'image' => 'http://image01.otto.de/pool/format_hv_ds_a/'.$first_im.'.jpg',
 				'format' => 1,
-				'target_folder' => $import_obj->prop('images_folder')
+				'target_folder' => $import_obj->prop('images_folder'),
+				'debug' => true
 			));
 		}
 
@@ -4773,7 +4794,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 					imnr = '".$first_im."' and
 					pcode = '".$pcode."'
 			");
-			echo "[ HEINE ] image ". $first_im ." for product ". $pcode ." is already in database<br />\n";
+			echo "[ HEINE ] imagee ". $first_im ." for product ". $pcode ." is already in database<br />\n";
 		}
 
 	// xxx
@@ -5312,7 +5333,10 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 	{
 		return $imnr{0}.'/'.$imnr{1}.'/'.$imnr;
 	}
-	
+/*
+////
+// XXX i think those functions are not used anywhere --dragut
+////	
 	function add_image_to_product($pcode, $imnr)
 	{
 		// lets get the product obj:
@@ -5382,7 +5406,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 				return false;
 			}
 		}
-	}		
+	}
+*/
 
 }
 
