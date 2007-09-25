@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.33 2007/09/04 14:25:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.34 2007/09/25 13:02:50 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -651,7 +651,6 @@ class spa_bookings_overview extends class_base
 	function show_cals_pop($arr)
 	{
 		classload("vcl/table");
- 		aw_global_set("title_action",$_GET["title"]);
 		$html = "";
 		$this->read_template("room_cals.tpl");
 		$cals = "";
@@ -861,7 +860,15 @@ class spa_bookings_overview extends class_base
 			$prev_ts = $ts;
 		}
 		exit_function("spa_bookings_owverview::draw_cals");
-
+		if(substr_count($_GET["title"],'$dates') > 0)
+		{
+			$d = array();
+			if($start) $d[] = date("d-m-Y" , $start);
+			if($end) $d[] = date("d-m-Y" , $end);
+			$dates = join (t("kuni") , $d);
+			$_GET["title"] = str_replace('$dates', $dates,$_GET["title"]);
+		}
+ 		aw_global_set("title_action",$_GET["title"]);
 		$this->vars(array(
 			"CAL" => $cals,
 			//"reforb" => $this->mk_reforb("do_add_reservation", array("id" => $arr["id"], "post_ru" => get_ru()), "room")
