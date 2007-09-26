@@ -215,46 +215,6 @@
             <store>no</store>
       </property>
       <property>
-            <name>event_menu</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_EVENT_MENU</reltype>
-            <caption>S&amp;amp;uuml;ndmuste kataloog</caption>
-      </property>
-      <property>
-            <name>places_menu</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PLACE_MENU</reltype>
-            <caption>Toimumiskohtade kataloog</caption>
-      </property>
-      <property>
-            <name>organiser_menu</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ORGANISER_MENU</reltype>
-            <caption>Korraldajate kataloog</caption>
-      </property>
-      <property>
-            <name>sector_menu</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SECTOR_MENU</reltype>
-            <caption>Valdkondade kataloog</caption>
-      </property>
-      <property>
             <name>sector</name>
             <table>objects</table>
             <group>settings</group>
@@ -287,6 +247,16 @@
             <caption>Sisu keeled</caption>
       </property>
       <property>
+            <name>editor</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <reltype>RELTYPE_EDITOR</reltype>
+            <caption>Toimetaja</caption>
+      </property>
+      <property>
             <name>mapserver_url</name>
             <table>objects</table>
             <group>settings</group>
@@ -303,6 +273,17 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Sarnaste s&amp;uuml;ndmuste kattumisaeg (tundides)</caption>
+      </property>
+      <property>
+            <name>forms_caption</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Vormid</caption>
       </property>
       <property>
             <name>event_form</name>
@@ -343,6 +324,98 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CFGFORM</reltype>
             <caption>Valdkondade vorm</caption>
+      </property>
+      <property>
+            <name>event_menu_source</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_EVENT_MENU</reltype>
+            <parent>menus_top_left</parent>
+            <caption>S&amp;amp;uuml;ndmuste kataloog</caption>
+      </property>
+      <property>
+            <name>places_menu_source</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_PLACE_MENU</reltype>
+            <parent>menus_top_left</parent>
+            <caption>Toimumiskohtade kataloog</caption>
+      </property>
+      <property>
+            <name>organiser_menu_source</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_ORGANISER_MENU</reltype>
+            <parent>menus_top_left</parent>
+            <caption>Korraldajate kataloog</caption>
+      </property>
+      <property>
+            <name>sector_menu_source</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_SECTOR_MENU</reltype>
+            <parent>menus_top_left</parent>
+            <caption>Valdkondade kataloog</caption>
+      </property>
+      <property>
+            <name>event_menu</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_MENU</reltype>
+            <parent>menus_top_right</parent>
+            <caption>S&amp;amp;uuml;ndmuste kataloog kirjutamiseks</caption>
+      </property>
+      <property>
+            <name>places_menu</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PLACE_MENU</reltype>
+            <parent>menus_top_right</parent>
+            <caption>Toimumiskohtade kataloog kirjutamiseks</caption>
+      </property>
+      <property>
+            <name>organiser_menu</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORGANISER_MENU</reltype>
+            <parent>menus_top_right</parent>
+            <caption>Korraldajate kataloog kirjutamiseks</caption>
+      </property>
+      <property>
+            <name>sector_menu</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTOR_MENU</reltype>
+            <parent>menus_top_right</parent>
+            <caption>Valdkondade kataloog kirjutamiseks</caption>
       </property>
       <classinfo>
             <syslog_type>ST_EVENTS_MANAGER</syslog_type>
@@ -421,6 +494,11 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Seadete vorm</caption>
             </CFGFORM>
+            <EDITOR>
+                  <value>9</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Toimetaja</caption>
+            </EDITOR>
       </reltypes>
       <layout>
             <events_top>
@@ -443,6 +521,25 @@
                   <group>events</group>
                   <area_caption></area_caption>
             </events_top_right>
+            <menus_top>
+                  <type>hbox</type>
+                  <closeable>1</closeable>
+                  <width>30%:70%</width>
+                  <area_caption>Kataloogid</area_caption>
+                  <group>settings</group>
+            </menus_top>
+            <menus_top_left>
+                  <type>vbox</type>
+                  <parent>menus_top</parent>
+                  <area_caption>Kataloogid&amp;amp;nbsp;lugemiseks</area_caption>
+                  <group>settings</group>
+            </menus_top_left>
+            <menus_top_right>
+                  <type>vbox</type>
+                  <parent>menus_top</parent>
+                  <area_caption>Kataloogid&amp;amp;nbsp;kirjutamiseks</area_caption>
+                  <group>settings</group>
+            </menus_top_right>
       </layout>
 </properties>
 
