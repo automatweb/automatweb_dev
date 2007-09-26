@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.6 2006/04/04 09:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.7 2007/09/26 13:44:48 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -30,13 +30,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 
 	@layout hbox_data type=hbox width=20%:80%
 
-	@layout vbox_users_tree type=vbox parent=hbox_data 
+		@layout left_bit type=vbox parent=hbox_data
 
-		@property search_txt type=textbox store=no parent=vbox_users_tree size=20
-		@caption Otsi gruppi
+			@layout vbox_users_tree type=vbox parent=left_bit closeable=1 area_caption=Kasutajate&nbsp;puu
 
-		@property groups_tree type=treeview no_caption=1 store=no parent=vbox_users_tree
-		@caption Puu
+				@property groups_tree type=treeview no_caption=1 store=no parent=vbox_users_tree
+				@caption Puu
+
+			@layout vbox_users_search type=vbox parent=left_bit closeable=1 area_caption=Otsing
+		
+				@property search_txt type=textbox store=no parent=vbox_users_search size=20 captionside=top
+				@caption Grupi nimi
+
+				@property search_sbt type=submit store=no parent=vbox_users_search size=20 captionside=top no_caption=1
+				@caption Otsi
+
 
 	@layout vbox_users_content type=vbox parent=hbox_data
 
@@ -48,9 +56,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 
 		@property table_users type=table store=no no_caption=1 parent=vbox_users_content
 		@caption Kasutajad 
-
-		@property submit_save type=submit store=no value=Salvesta parent=vbox_users_content no_caption=1
-		@caption Salvesta
 
 @groupinfo inactive_users caption="Mitteaktiivsed kasutajad"
 @default group=inactive_users
@@ -218,6 +223,30 @@ class user_manager extends class_base
 						}
 					}
 				}
+
+				foreach(safe_array($arr["request"]["old_can_admin_interface"]) as $g_oid => $val)
+				{
+					$go = obj($g_oid);
+					if ($arr["request"]["can_admin_interface"][$g_oid] != $go->prop("can_admin_interface"))
+					{
+						$go->set_prop("can_admin_interface", $arr["request"]["can_admin_interface"][$g_oid]);
+						$go->save();
+					}
+				}
+
+				foreach ($arr["request"] as $k => $v)
+				{
+					if (substr($k, 0, 9) == "rootmenu_" && is_oid($v))
+					{
+						list(, $g_oid) = explode("_", $k);
+						// set rootmenu for group
+						$o = obj($g_oid);
+						$rootmenus = $o->prop('admin_rootmenu2');
+						$rootmenus[aw_global_get("lang_id")][0] = $v;
+						$o->set_prop("admin_rootmenu2", $rootmenus);
+						$o->save();
+					}
+				}
 			break;
 
 		}
@@ -229,6 +258,10 @@ class user_manager extends class_base
 	{
 		$arr['last_parent'] = $this->parent;
 		$arr['ob_group'] = 'um';
+		foreach(safe_array($this->_add_vars) as $var)
+		{
+			$arr[$var] = "0";
+		}
 		$arr["post_ru"] = post_ru();
 	}
 
@@ -260,36 +293,9 @@ class user_manager extends class_base
 	{	
 		if(isset($this->parent))
 		{
-			$tb->add_menu_button(array(
-				'name'=>'add_item',
-				'tooltip'=> t('Uus')
-			));
-		
-		
-			$clss = aw_ini_get("classes");
-			foreach(array(CL_USER, CL_GROUP) as $clid)
-				{
-				$tb->add_menu_item(array(
-					'parent' => 'add_item',
-					'text' => $clss[$clid]['name'],
-					'disabled' => !$this->can('edit', $this->parent),
-					'link' =>$this->mk_my_orb("new", array(
-						'parent' => $this->parent,
-						'return_url' => get_ru(),
-					), $clid)
-				));
-			}
+			$tb->add_new_button(array(CL_USER, CL_GROUP), $this->parent);
 			$tb->add_separator();
 		}
-		
-		/* Import button - Pointless here, simpler to use through popup menu
-		$tb->add_button(array(
-			'name' => 'import',
-			'tooltip' => t("Impordi"),
-			'img' => 'import.gif',
-			'action' => $this->mk_my_orb('import', array("parent" => $this->parent)),
-		));	
-		*/
 
 
 		// Copypaste buttons
@@ -306,6 +312,8 @@ class user_manager extends class_base
 			'img' => 'delete.gif',
 			"url" => "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){submit_changeform('delete')};",
 		));	
+
+		$tb->add_save_button();	
 
 	}
 	
@@ -367,13 +375,16 @@ class user_manager extends class_base
 			$disabled = false;
 		}
 		
-		$tb->add_button(array(
-			'name' => 'paste',
-			'tooltip' => t("Aseta")."\n".' ('.$tooltip.')',
-			'img' => 'paste.gif',
-			'action' => $paste_action,
-			'disabled' => $disabled,
-		));	
+		if (!$disabled)
+		{
+			$tb->add_button(array(
+				'name' => 'paste',
+				'tooltip' => t("Aseta")."\n".' ('.$tooltip.')',
+				'img' => 'paste.gif',
+				'action' => $paste_action,
+			//	'disabled' => $disabled,
+			));	
+		}
 		
 	}
 	
@@ -579,6 +590,12 @@ class user_manager extends class_base
 		print '<script src="/automatweb/js/popup_menu.js" type="text/javascript"></script>';
 		$fields = array(
 			array(
+				'name' => 'action',
+				'caption' => t("Tegevus"),
+				'sortable' => false,
+				'align' => 'center',
+			),
+			array(
 				'name' => 'username',
 				'caption' => t("Kasutajanimi"),
 			),
@@ -606,12 +623,6 @@ class user_manager extends class_base
 			array(
 				'name' => 'groups',
 				'caption' => t("Grupid"),
-			),
-			array(
-				'name' => 'action',
-				'caption' => t("Tegevus"),
-				'sortable' => false,
-				'align' => 'center',
 			),
 		);	
 		foreach ($fields as $f)
@@ -787,6 +798,12 @@ class user_manager extends class_base
 		
 		$fields = array(
 			array(
+				'name' => 'action',
+				'caption' => t("Tegevus"),
+				'sortable' => false,
+				'align' => 'center',
+			),
+			array(
 				'name' => 'gid',
 				'caption' => t("Grupi ID"),
 				'numeric' => 1,
@@ -829,12 +846,6 @@ class user_manager extends class_base
 				'name' => 'loginmenu',
 				'caption' => t("Loginmen&uuml;&uuml;"),
 			),
-			array(
-				'name' => 'action',
-				'caption' => t("Tegevus"),
-				'sortable' => false,
-				'align' => 'center',
-			),
 		);	
 		foreach ($fields as $f)
 		{
@@ -852,7 +863,7 @@ class user_manager extends class_base
 
 		$g = obj($this->parent);
 		$title = isset($arr['title']) ? $arr['title'] : t("'%s' alamgrupid");
-		$table->set_header(sprintf($title, $g->name() ? $g->name() : '('.t("nimetu").' '.$g->id().')'));
+		$table->set_caption(sprintf($title, $g->name() ? $g->name() : '('.t("nimetu").' '.$g->id().')'));
 		$df = aw_ini_get('config.dateformats');
 
 
@@ -926,10 +937,13 @@ class user_manager extends class_base
 			$url_rootfolder = "javascript:aw_popup_scroll('".
 				$this->mk_my_orb("do_search", array(
 					"id" => $arr["obj_inst"]->id(),
-					"pn" => "table_groups",
+					"pn" => "rootmenu_".$o->id(),
+					"clid" => CL_MENU,
 					"append_html" => (str_replace(array("'","\n"),"",$html))
 				), 'popup_search')
 				."','Vali',550,500)";
+			$this->_add_vars[] = "rootmenu_".$o->id();
+
 			$html = $this->permissions_form . html::hidden(array(
 					'name' => 'oid_objects',
 					'value' => $o->id(),
@@ -940,6 +954,7 @@ class user_manager extends class_base
 						"clid" => 0, // Any class
 						"append_html" => (((str_replace("&","%26",str_replace(array("'","\n"),"",($html)))))),
 					), 'popup_search')."','".t("M&auml;&auml;ra &otilde;igused")."',550,500)";
+
 			
 			// Edit-menu items
 			$items = array( 
@@ -955,6 +970,7 @@ class user_manager extends class_base
 						'return_url' => get_ru()
 					), CL_GROUP) => t("Impordi"),
 				$url_rootfolder => t("Juurkaust"),
+			//	$url_loginmenu => t("Login men&uuml;&uuml;"),
 				$url_objects => t("Objektid"),
 			);
 
@@ -977,6 +993,7 @@ class user_manager extends class_base
 					$loginmenu = obj($lm[$gid]['menu']);
 					$loginmenu = $loginmenu->name();
 				}
+
 			}
 		
 			// Define a table row
@@ -994,7 +1011,14 @@ class user_manager extends class_base
 				)),
 				'modified' => date($df[2], $o->prop('modified')),
 				'modified_by' => $o->modifiedby(),
-				'aw' => $o->prop('can_admin_interface') ? t("Jah") : t("Ei"),
+				'aw' => html::checkbox(array(
+					"name" => "can_admin_interface[".$o->id()."]",
+					"value" => 1,
+					"checked" => $o->prop('can_admin_interface')
+				)).html::hidden(array(
+					"name" => "old_can_admin_interface[".$o->id()."]",
+					"value" => "0".$o->prop('can_admin_interface')
+				)),
 				'status' => $o->prop('status') == STAT_ACTIVE ? t("Jah") : t("Ei"),
 				'members' => $members, 
 				'rootfolders' => join(', ', $rootfolders),
