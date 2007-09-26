@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.182 2007/09/25 15:08:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.183 2007/09/26 13:21:48 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2852,15 +2852,38 @@ class task extends class_base
 			$rem_task = obj($_SESSION["task_rows"]["remove_conn"]);
 		}
 		$task = obj($arr["id"]);
-		foreach($_SESSION["task_rows"]["sel"] as $row)
+		if(is_object($rem_task))
 		{
-			$task->connect(array("to"=> $row, "type" => "RELTYPE_ROW"));
-			if(is_object($rem_task))
+			foreach($_SESSION["task_rows"]["sel"] as $row)
 			{
 				$rem_task->disconnect(array(
 					"from" => $row,
 					"reltype" => "RELTYPE_ROW",
 				));
+				$task->connect(array("to"=> $row, "type" => "RELTYPE_ROW"));
+			}
+		}
+		else
+		{
+			foreach($_SESSION["task_rows"]["sel"] as $row)
+			{
+				if(!$this->can("view" , $row)) continue;
+				$ro = obj($row);
+				$new_row = new object();
+				$new_row->set_class_id(CL_TASK_ROW);
+				$new_row->set_name($ro->name());
+				$new_row->set_parent($ro->parent());
+				$new_row->save();
+				foreach($ro->properties() as $prop => $val)
+				{
+					if($new_row->is_property($prop))
+					{
+						$new_row->set_prop($prop , $val);
+					}
+				}
+				$new_row->set_meta($ro->meta());
+				$new_row->save();
+				$task->connect(array("to"=> $new_row->id(), "type" => "RELTYPE_ROW"));
 			}
 		}
 		$_SESSION["task_rows"] = null;
