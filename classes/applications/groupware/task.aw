@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.183 2007/09/26 13:21:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.184 2007/09/26 13:38:20 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2865,6 +2865,7 @@ class task extends class_base
 		}
 		else
 		{
+			$nc_props = array("on_bill", "bill_id" , "to_bill_date");
 			foreach($_SESSION["task_rows"]["sel"] as $row)
 			{
 				if(!$this->can("view" , $row)) continue;
@@ -2876,13 +2877,14 @@ class task extends class_base
 				$new_row->save();
 				foreach($ro->properties() as $prop => $val)
 				{
-					if($new_row->is_property($prop))
+					if($new_row->is_property($prop) && !in_array($prop,$nc_props))
 					{
 						$new_row->set_prop($prop , $val);
 					}
 				}
-				$new_row->set_meta($ro->meta());
-				$new_row->save();
+				//metas ei näi miskit kasulikku olevat... loodetavasti ka ei tule
+//				$new_row->set_meta($ro->meta());
+//				$new_row->save();
 				$task->connect(array("to"=> $new_row->id(), "type" => "RELTYPE_ROW"));
 			}
 		}
