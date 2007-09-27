@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.86 2007/09/18 11:52:06 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.87 2007/09/27 10:56:26 robert Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -1822,7 +1822,34 @@ class bug extends class_base
 		$retval = PROP_OK;
 		if($new == BUG_STATUS_CLOSED && $old != BUG_STATUS_CLOSED)
 		{
-			if(aw_global_get("uid") != $bug->createdby())
+			$canclose = 0;
+			if(aw_global_get("uid") == $bug->createdby())
+			{
+				$canclose = 1;
+			}
+			else
+			{
+				$u = get_instance(CL_USER);
+				$user = obj($u->get_current_user());
+				$conn = $user->connections_from(array(
+					"type" => RELTYPE_GRP
+				));
+				$bugtrack = obj($bug->parent());
+				$agroups = $bugtrack->connections_from(array(
+					"type" => RELTYPE_AGROUP
+				));
+				foreach($conn as $c)
+				{
+					foreach($agroups as $agroup)
+					{
+						if($c->conn["to"] == $agroup->conn["to"])
+						{
+							$canclose = 1;
+						}
+					}
+				}
+			}
+			if(!$canclose)
 			{
 				$retval = PROP_FATAL_ERROR;
 				$prop["error"] = t("Puuduvad õigused bugi sulgeda!");

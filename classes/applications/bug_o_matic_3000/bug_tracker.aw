@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.105 2007/09/17 14:11:12 robert Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.105 2007/09/17 14:11:12 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.106 2007/09/27 10:56:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.106 2007/09/27 10:56:26 robert Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -187,6 +187,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Otsingu tulemused
 
 @default group=settings_g
+
+	@property agroup type=relpicker reltype=RELTYPE_AGROUP field=meta method=serialize multiple=1 store=connect
+	@caption Grupid, mis saavad buge sulgeda
 
 	@property def_notify_list type=textbox table=objects field=meta method=serialize
 	@caption Bugi kommentaaride CC
@@ -390,6 +393,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype MAIL_DEF_FOLDER value=7 clid=CL_BUG
 @caption Meilitud bugide kataloog
+
+@reltype AGROUP value=8 clid=CL_GROUP
+@caption Admin grupp
 */
 
 classload("applications/bug_o_matic_3000/bug");
