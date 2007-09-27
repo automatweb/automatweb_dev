@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.9 2007/09/19 12:36:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.10 2007/09/27 13:13:00 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -11,41 +11,82 @@
 
 	@property s_tb type=toolbar no_caption=1 
 
-	@property s_name type=textbox  size=50
-	@caption Nimi
+	@layout ver_split type=hbox 
 
-	@property s_comment type=textbox  size=50
-	@caption Kommentaar
+		@layout left_side type=vbox parent=ver_split closeable=1 area_caption=&Uuml;dandmed
 
-	@property s_clid type=select multiple=1 size=10
-	@caption T&uuml;&uuml;p
+			@property s_name type=textbox  size=50 parent=left_side
+			@caption Nimi
 
-	@property s_oid type=textbox  size=50
-	@caption OID
+			@property s_comment type=textbox  size=50 parent=left_side
+			@caption Kommentaar
 
-	@property s_creator type=textbox  size=50
-	@caption Looja
+			@property s_clid type=select multiple=1 size=10 parent=left_side
+			@caption T&uuml;&uuml;p
 
-	@property s_modifier type=textbox  size=50
-	@caption Muutja
+			@property s_oid type=textbox  size=50 parent=left_side
+			@caption OID
 
-	@property s_status type=chooser
-	@caption Aktiivsus
+			@property s_status type=chooser parent=left_side
+			@caption Aktiivsus
 
-	@property s_alias type=textbox  size=50
-	@caption Alias
+			@property s_alias type=textbox  size=50 parent=left_side
+			@caption Alias
 
-	@property s_language type=chooser
-	@caption Keel
+			@property s_language type=chooser parent=left_side
+			@caption Keel
 
-	@property s_period type=select
-	@caption Periood
+			@property s_period type=select parent=left_side
+			@caption Periood
 
-	@property s_site_id type=select
-	@caption Saidi ID
+			@property s_site_id type=select parent=left_side
+			@caption Saidi ID
 
-	@property s_find_bros type=checkbox ch_value=1
-	@caption Leia vendi
+			@property s_find_bros type=checkbox ch_value=1 parent=left_side
+			@caption Leia vendi
+
+		@layout right_side type=vbox parent=ver_split
+
+			@layout creamod type=vbox closeable=1 area_caption=Muutmine&nbsp;ja&nbsp;lisamine parent=right_side
+	
+				@property s_creator type=textbox  size=20 parent=creamod
+				@caption Looja
+
+				@property s_crea_from type=datetime_select parent=creamod default=-1
+				@caption Lisatud alates
+			
+				@property s_crea_to type=datetime_select parent=creamod default=-1
+				@caption Lisatud kuni
+			
+				@property s_modifier type=textbox  size=20 parent=creamod
+				@caption Muutja
+	
+				@property s_mod_from type=datetime_select parent=creamod default=-1
+				@caption Muudetud alates
+			
+				@property s_mod_to type=datetime_select parent=creamod default=-1
+				@caption Muudetud kuni
+
+			@layout keywords type=vbox closeable=1 area_caption=M&auml;rks&otilde;nad parent=right_side
+
+				@property s_kws type=textbox parent=keywords 
+				@caption M&auml;rks&otilde;nad
+
+			@layout l_timing type=vbox closeable=1 area_caption=Ajaline&nbsp;aktiivsus parent=right_side
+
+				@property s_tmg_activate_from type=datetime_select parent=l_timing default=-1
+				@caption Aktiveeri alates
+			
+				@property s_tmg_activate_to type=datetime_select parent=l_timing default=-1
+				@caption Aktiveeri kuni
+			
+				@property s_tmg_deactivate_from type=datetime_select parent=l_timing default=-1
+				@caption Deaktiveeri alates
+			
+				@property s_tmg_deactivate_to type=datetime_select parent=l_timing default=-1
+				@caption Deaktiveeri kuni
+			
+
 
 	@property s_sbt type=submit 
 	@caption Otsi
@@ -72,6 +113,20 @@ class aw_object_search extends class_base
 		$prop["value"] = $arr["request"][$prop["name"]];
 		switch($prop["name"])
 		{
+			case "s_crea_from":
+			case "s_crea_to":
+			case "s_mod_from":
+			case "s_mod_to":
+			case "s_tmg_activate_from":
+			case "s_tmg_activate_to":
+			case "s_tmg_deactivate_from":
+			case "s_tmg_deactivate_to":
+				if ($prop["value"] < 10)
+				{
+					$prop["value"] = -1;
+				}
+				break;
+
 			case "s_clid":
 				$prop["options"] = get_class_picker();
 				break;
@@ -340,6 +395,83 @@ class aw_object_search extends class_base
 		{
 			$filt["brother_of"] = new obj_predicate_prop("id");
 		}
+
+
+		$c_from = date_edit::get_timestamp($arr["request"]["s_crea_from"]);
+		$c_to = date_edit::get_timestamp($arr["request"]["s_crea_to"]);
+		$m_from = date_edit::get_timestamp($arr["request"]["s_mod_from"]);
+		$m_to = date_edit::get_timestamp($arr["request"]["s_mod_to"]);
+
+		if ($c_from > 1 && $c_to > 1)
+		{
+			$filt["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $c_from, $c_to);
+		}
+		else
+		if ($c_from > 1)
+		{
+			$filt["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $c_from);
+		}
+		else
+		if ($c_to > 1)
+		{
+			$filt["created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $c_to);
+		}
+
+		if ($m_from > 1 && $m_to > 1)
+		{
+			$filt["modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $m_from, $m_to);
+		}
+		else
+		if ($m_from > 1)
+		{
+			$filt["modified"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $m_from);
+		}
+		else
+		if ($m_to > 1)
+		{
+			$filt["modified"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $m_to);
+		}
+
+		if ($arr["request"]["s_kws"] != "")
+		{
+			$filt["CL_DOCUMENT.RELTYPE_KEYWORD.name"] = "%".$arr["request"]["s_kws"]."%";
+		}
+
+		$c_from = date_edit::get_timestamp($arr["request"]["s_tmg_activate_from"]);
+		$c_to = date_edit::get_timestamp($arr["request"]["s_tmg_activate_to"]);
+		$m_from = date_edit::get_timestamp($arr["request"]["s_tmg_deactivate_from"]);
+		$m_to = date_edit::get_timestamp($arr["request"]["s_tmg_deactivate_to"]);
+
+		if ($c_from > 1 && $c_to > 1)
+		{
+			$filt["CL_DOCUMENT.RELTYPE_TIMING.activate"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $c_from, $c_to);
+		}
+		else
+		if ($c_from > 1)
+		{
+			$filt["CL_DOCUMENT.RELTYPE_TIMING.activate"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $c_from);
+		}
+		else
+		if ($c_to > 1)
+		{
+			$filt["CL_DOCUMENT.RELTYPE_TIMING.activate"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $c_to);
+		}
+
+		if ($m_from > 1 && $m_to > 1)
+		{
+			$filt["CL_DOCUMENT.RELTYPE_TIMING.deactivate"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $m_from, $m_to);
+		}
+		else
+		if ($m_from > 1)
+		{
+			$filt["CL_DOCUMENT.RELTYPE_TIMING.deactivate"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $m_from);
+		}
+		else
+		if ($m_to > 1)
+		{
+			$filt["CL_DOCUMENT.RELTYPE_TIMING.deactivate"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $m_to);
+		}
+
 		return $filt;
 	}
 
