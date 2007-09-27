@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.123 2007/09/27 11:44:35 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.124 2007/09/27 12:46:45 robert Exp $
 // project.aw - Projekt
 /*
 
@@ -3450,6 +3450,12 @@ class project extends class_base
 		if ($this->do_create_task == 1)
 		{
 			$this->_create_task($arr);
+		}
+		
+		if($arr["request"]["participants"])
+		{
+			$ps = get_instance('vcl/popup_search');
+			$ps->do_create_rels($arr['obj_inst'], $arr["request"]["participants"], RELTYPE_PARTICIPANT);
 		}
 	}
 
