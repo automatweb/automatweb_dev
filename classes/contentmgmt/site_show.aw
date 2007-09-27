@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.244 2007/09/18 09:57:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.245 2007/09/27 13:19:36 kristo Exp $
 
 /*
 
@@ -606,13 +606,21 @@ class site_show extends class_base
 
 			if ($obj->prop("use_target_audience") == 1)
 			{
-				// get all current target audiences
-				$ta_list = new object_list(array(
-					"class_id" => CL_TARGET_AUDIENCE,
-					"lang_id" => array(),
-					"site_id" => array(),
-					"ugroup" => aw_global_get("gidlist_oid")
-				));
+				if (is_array($obj->prop("select_target_audience")) && count($obj->prop("select_target_audience")))
+				{
+					$ta_list = new object_list();
+					$ta_list->add($obj->prop("select_target_audience"));
+				}
+				else
+				{
+					// get all current target audiences
+					$ta_list = new object_list(array(
+						"class_id" => CL_TARGET_AUDIENCE,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"ugroup" => aw_global_get("gidlist_oid")
+					));
+				}
 				if ($ta_list->count() && count($docid))
 				{
 					$ol = new object_list(array(

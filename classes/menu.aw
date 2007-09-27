@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.205 2007/09/27 12:25:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.206 2007/09/27 13:19:35 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -248,6 +248,9 @@
 		@property use_target_audience type=checkbox ch_value=1 group=menus_sub field=meta method=serialize table=objects
 		@caption Kasuta sihtr&uuml;hmap&otilde;hist kuvamist
 
+		@property select_target_audience type=relpicker multiple=1 reltype=RELTYPE_TARGET_AUDIENCE group=menus_sub store=connect field=meta method=serialize table=objects
+		@caption Vali sihtr&uuml;hmad
+
 		@property content_all_langs type=checkbox ch_value=1 group=menus_sub field=meta method=serialize table=objects
 		@caption Sisu k&otilde;ikidest keeltest
 
@@ -452,6 +455,9 @@
 
 	@reltype DEFAULT_IMAGE_FOLDER value=25 clid=CL_MENU
 	@caption Vaikimisi piltide kataloog
+
+	@reltype TARGET_AUDIENCE value=26 clid=CL_TARGET_AUDIENCE
+	@caption Sihtr&uuml;hm
 */
 
 define("IP_ALLOWED", 1);

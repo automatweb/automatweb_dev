@@ -614,6 +614,18 @@
             <caption>Kasuta sihtr&amp;amp;uuml;hmap&amp;amp;otilde;hist kuvamist</caption>
       </property>
       <property>
+            <name>select_target_audience</name>
+            <table>objects</table>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_TARGET_AUDIENCE</reltype>
+            <group>menus_sub</group>
+            <store>connect</store>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali sihtr&amp;amp;uuml;hmad</caption>
+      </property>
+      <property>
             <name>content_all_langs</name>
             <table>objects</table>
             <type>checkbox</type>
@@ -1173,6 +1185,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Vaikimisi piltide kataloog</caption>
             </DEFAULT_IMAGE_FOLDER>
+            <TARGET_AUDIENCE>
+                  <value>26</value>
+                  <clid>CL_TARGET_AUDIENCE</clid>
+                  <caption>Sihtr&amp;amp;uuml;hm</caption>
+            </TARGET_AUDIENCE>
       </reltypes>
 </properties>
 
