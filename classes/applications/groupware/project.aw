@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.122 2007/09/10 10:27:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.123 2007/09/27 11:44:35 robert Exp $
 // project.aw - Projekt
 /*
 
@@ -5138,26 +5138,39 @@ class project extends class_base
 			"img" => "search.gif"
 		));
 
+		$cur = get_current_company();
+		$s = array("co" => array($cur->id() => $cur->id()));
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+			{
+				$s["co"][$c->prop("to")] = $c->prop("to");
+			}
+		}
+
 		$url = $this->mk_my_orb("do_search", array(
-				"pn" => "orderer",
-				"clid" => array(
-					CL_CRM_PERSON,
-					CL_CRM_COMPANY
-				)), "popup_search");
+			"pn" => "orderer",
+			"clid" => array(
+				CL_CRM_PERSON,
+				CL_CRM_COMPANY
+			),
+			"s" => $s
+		), "crm_participant_search");
 		$tb->add_menu_item(array(
 			"parent" => "search",
 			"text" => t("Tellija"),
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 		));
-
+		
 		$url = $this->mk_my_orb("do_search", array(
-				"pn" => "participants",
-				"clid" => array(
-					CL_CRM_PERSON,
-					CL_CRM_COMPANY,
-					CL_USER,
-				)), "popup_search");
-
+			"pn" => "participants",
+			"clid" => array(
+				CL_CRM_PERSON,
+				CL_CRM_COMPANY,
+				CL_USER,
+			),
+			"s" => $s
+		), "crm_participant_search");
 		$tb->add_menu_item(array(
 			"parent" => "search",
 			"text" => t("Osaleja"),
@@ -5166,10 +5179,12 @@ class project extends class_base
 
 		$url = $this->mk_my_orb("do_search", array(
 			"pn" => "implementor",
-			"clid" =>  array(
+			"clid" => array(
 				CL_CRM_PERSON,
 				CL_CRM_COMPANY
-			)), "popup_search");
+			),
+			"s" => $s
+		), "crm_participant_search");
 
 		$tb->add_menu_item(array(
 			"parent" => "search",
