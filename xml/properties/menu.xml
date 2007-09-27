@@ -573,6 +573,17 @@
             <caption>Sisu objektist</caption>
       </property>
       <property>
+            <name>submenus_from_cb</name>
+            <table>objects</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>menus_sub</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <default>0</default>
+            <caption>Alammen&amp;amp;uuml;&amp;amp;uuml;d objekti AW liidesest</caption>
+      </property>
+      <property>
             <name>submenus_from_menu</name>
             <table>objects</table>
             <type>relpicker</type>

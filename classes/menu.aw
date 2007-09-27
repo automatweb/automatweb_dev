@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.204 2007/07/19 09:13:04 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.205 2007/09/27 12:25:05 voldemar Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -235,6 +235,9 @@
 
 		@property get_content_from type=relpicker reltype=RELTYPE_CONTENT_FROM field=meta method=serialize group=menus_sub
 		@caption Sisu objektist
+
+		@property submenus_from_cb type=checkbox ch_value=1 group=menus_sub field=meta method=serialize default=0
+		@caption Alammen&uuml;&uuml;d objekti AW liidesest
 
 		@property submenus_from_menu type=relpicker reltype=RELTYPE_SHOW_SUBFOLDERS_MENU group=menus_sub table=objects field=meta method=serialize table=objects
 		@caption V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt
