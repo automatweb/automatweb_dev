@@ -39,6 +39,25 @@
             <reltype>RELTYPE_BROKER</reltype>
             <caption>Broker</caption>
       </property>
+      <property>
+            <name>insurance_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_INSURANCE_TYPE</reltype>
+            <caption>Insurance type</caption>
+      </property>
+      <property>
+            <name>insurance_sum</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Insurance sum</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_INSURANCE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -54,7 +73,10 @@
             </COMPANY>
             <BROKER>
                   <value>2</value>
-                  <clid>CL_CRM_PERSON</clid>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
                   <caption>Broker</caption>
             </BROKER>
             <FILE>
@@ -62,6 +84,11 @@
                   <clid>CL_FILE</clid>
                   <caption>File</caption>
             </FILE>
+            <INSURANCE_TYPE>
+                  <value>4</value>
+                  <clid>CL_CRM_INSURANCE_TYPE</clid>
+                  <caption>Type</caption>
+            </INSURANCE_TYPE>
       </reltypes>
 </properties>
 

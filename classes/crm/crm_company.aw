@@ -7714,6 +7714,14 @@ Bank accounts: üksteise all
 			"name" => "broker",
 			"caption" => t("Broker"),
 		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Sum"),
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Type"),
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid",
@@ -7733,6 +7741,8 @@ Bank accounts: üksteise all
 				)),
 				"company" => html::obj_change_url($insurance->prop("company")),
 				"broker" => html::obj_change_url($insurance->prop("broker")),
+				"sum" => $insurance->prop("insurance_sum"),
+				"type" => $insurance->prop("insurance_type.name"),
 				"oid" => $insurance->id(),
 			));
 		}

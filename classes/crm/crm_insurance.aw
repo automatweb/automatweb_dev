@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_insurance.aw,v 1.3 2007/09/13 14:30:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_insurance.aw,v 1.4 2007/09/27 10:22:11 markop Exp $
 // crm_insurance.aw - Kindlustus 
 /*
 
@@ -20,15 +20,23 @@
 @property broker type=relpicker field=meta method=serialize reltype=RELTYPE_BROKER
 @caption Broker
 
+@property insurance_type type=relpicker field=meta method=serialize reltype=RELTYPE_INSURANCE_TYPE
+@caption Insurance type
+
+@property insurance_sum type=textbox field=meta method=serialize
+@caption Insurance sum
+
 @reltype COMPANY value=1 clid=CL_CRM_COMPANY
 @caption Company
 
-@reltype BROKER value=2 clid=CL_CRM_PERSON
+@reltype BROKER value=2 clid=CL_CRM_PERSON,CL_CRM_COMPANY
 @caption Broker
 
 @reltype FILE value=3 clid=CL_FILE
 @caption File
 
+@reltype INSURANCE_TYPE value=4 clid=CL_CRM_INSURANCE_TYPE
+@caption Type
 
 */
 
@@ -51,6 +59,15 @@ class crm_insurance extends class_base
 			//-- get_property --//
 			case "insurance_status":
 				$prop["options"] = array("","");
+				break;
+			case "insurance_type":
+				$ol = new object_list(array(
+					"site_id" => array(),
+					"lang_id" => array(),
+					"class_id" => CL_CRM_INSURANCE_TYPE,
+				));
+				$prop["options"] = $prop["options"] + $ol->names();
+				break;
 		};
 		return $retval;
 	}
