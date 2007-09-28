@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.21 2007/06/19 10:46:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.22 2007/09/28 12:17:14 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -21,7 +21,19 @@
 			@property o_tbl type=table no_caption=1 store=no parent=o_bot_right
 
 
+@default group=fu
+
+	@property info_text type=text store=no 
+	@caption Info
+
+	@property zip_upload type=fileupload 
+	@caption Laadi ZIP fail
+
+	@property uploader type=text store=no
+	@caption Lae faile	
+
 @groupinfo o caption="Objektid" save=no submit=no
+@groupinfo fu caption="Failide &uuml;leslaadimine" 
 */
 
 class admin_if extends class_base
@@ -43,6 +55,18 @@ class admin_if extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "info_text":
+				if (!empty($_SESSION["fu_tm_text"]))
+				{
+					$prop["value"] = $_SESSION["fu_tm_text"];
+					unset($_SESSION["fu_tm_text"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "o_tb":
 				$this->_o_tb($arr);
 				break;
@@ -72,6 +96,11 @@ class admin_if extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["parent"] = $_GET["parent"];
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["parent"] = $arr["request"]["parent"];
 	}
 
 	function _o_tb($arr)
@@ -139,12 +168,29 @@ class admin_if extends class_base
 			"url" => "javascript:window.location.reload()",
 			"img" => "refresh.gif",
 		));
-	
-		$tb->add_button(array(
+
+		$tb->add_menu_button(array(
 			"name" => "import",
 			"tooltip" => t("Impordi"),
-			"url" => $this->mk_my_orb("import",array("parent" => $arr["request"]["parent"]), "admin_menus"),
-			"img" => "import.gif",
+			"img" => "import.gif"
+		));	
+
+		$tb->add_menu_item(array(
+			"parent" => "import",
+			"text" => t("Impordi kaustu"),
+			"title" => t("Impordi kaustu"),
+			"name" => "import_menus",
+			"tooltip" => t("Impordi kaustu"),
+			"link" => $this->mk_my_orb("import",array("parent" => $arr["request"]["parent"]), "admin_menus"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "import",
+			"text" => t("Impordi faile"),
+			"title" => t("Impordi faile"),
+			"name" => "import_files",
+			"tooltip" => t("Impordi faile"),
+			"link" => aw_url_change_var("group", "fu")
 		));
 
 		$tb->add_button(array(
@@ -1203,6 +1249,10 @@ class admin_if extends class_base
 
 	function callback_mod_tab($arr)
 	{
+		if ($arr["request"]["group"] == "fu" && $arr["id"] == "fu")
+		{
+			return true;
+		}
 		if ($arr["id"] != "o")
 		{
 			return false;
@@ -1219,6 +1269,117 @@ class admin_if extends class_base
 			"footer_l2" => t("Palun k&uuml;lasta meie kodulehek&uuml;lgi:"),
 			"st" => t("Seaded")
 		));
+	}
+
+	function _set_zip_upload($arr)
+	{
+		if (is_uploaded_file($_FILES["zip_upload"]["tmp_name"]))
+		{
+			$zip = $_FILES["zip_upload"]["tmp_name"];
+			// unzip the damn thing
+			if (extension_loaded("zip"))
+			{
+				$folder = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
+				mkdir($folder, 0777);
+				$tn = $folder;
+				$zip = zip_open($zip);
+				while ($zip_entry = zip_read($zip)) 
+				{
+					zip_entry_open($zip, $zip_entry, "r");
+					$fn = $folder."/".zip_entry_name($zip_entry);
+					$files[] = $fn;
+					$fc = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+					$this->put_file(array(
+						"file" => $fn,
+						"content" => $fc
+					));
+				}
+			}
+			else
+			{
+				$zf = escapeshellarg($zip);
+				$zip = aw_ini_get("server.unzip_path");
+				$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
+				mkdir($tn,0777);
+				$cmd = $zip." -d $tn $zf";
+				$op = shell_exec($cmd);
+
+
+				$files = array();
+				if ($dir = @opendir($tn)) 
+				{
+					while (($file = readdir($dir)) !== false) 
+					{
+						if (!($file == "." || $file == ".."))
+						{
+							$files[] = $tn."/".$file;
+						}
+					}  
+					closedir($dir);
+				}
+			}
+
+			foreach($files as $file)
+			{
+				$fuc = get_instance(CL_FILE_UPLOAD_CONFIG);
+				if (!$fuc->can_upload_file(array("folder" => $arr["request"]["parent"], "file_name" => $file, "file_size" => filesize($file))))
+				{
+					continue;
+				}
+				$fi = get_instance(CL_FILE);
+				$mt = get_instance("core/aw_mime_types");
+				$rv = $fi->save_file(array(
+					"name" => basename($file),
+					"type" => $mt->type_for_file($file),
+					"content" => file_get_contents($file),
+					"parent" => $arr["request"]["parent"]
+				));
+				$s = sprintf(t("Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"), basename($file), html::obj_change_url($rv));
+				echo $s;
+				$_SESSION["fu_tm_text"] .= $s;
+				flush();
+				@unlink($fp);
+			}
+			@rmdir($tn);
+			echo "<script language=javascript>window.location='".$arr["request"]["post_ru"]."'</script>";
+		}
+	}
+
+	function _get_uploader($arr)
+	{
+		$_SESSION["fu_parent"] = $arr["request"]["parent"];
+		$this->read_template("flash_uploader.tpl");
+		$this->vars(array(
+			"uploadurl" => urlencode($this->mk_my_orb("handle_upload", array("parent" => $arr["request"]["parent"]))),
+			"redir_to" =>  urlencode(get_ru()),
+		));
+		$arr["prop"]["value"] = $this->parse();
+	}
+
+	/**
+		@attrib name=handle_upload
+		@param parent required
+	**/
+	function handle_upload($arr)
+	{
+		if (is_uploaded_file($_FILES["Filedata"]["tmp_name"]))
+		{
+			$fuc = get_instance(CL_FILE_UPLOAD_CONFIG);
+			if (!$fuc->can_upload_file(array("folder" => $arr["parent"], "file_name" => $_FILES["Filedata"]["name"], "file_size" => $_FILES["Filedata"]["size"])))
+			{
+				continue;
+			}
+			$fi = get_instance(CL_FILE);
+			$mt = get_instance("core/aw_mime_types");
+			$rv = $fi->save_file(array(
+				"name" => $_FILES["Filedata"]["name"],
+				"type" => $_FILES["Filedata"]["type"],
+				"content" => file_get_contents($_FILES["Filedata"]["tmp_name"]),
+				"parent" => $arr["parent"]
+			));
+			$s = sprintf(t("Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"), $_FILES["Filedata"]["name"], html::obj_change_url($rv));
+			$_SESSION["fu_tm_text"] .= $s;
+		}
 	}
 }
 ?>

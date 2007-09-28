@@ -63,5 +63,13 @@
 			</function>
 		</action>
 
+		<action name="handle_upload">
+			<function name="handle_upload">
+				<arguments>
+					<required name="parent" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
