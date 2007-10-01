@@ -37,14 +37,14 @@ msgstr ""
 msgid "object_loader::save(%s): no object with oid $oid exists in the global list"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:341
+#: classes/core/obj/object_loader.aw:346
 msgid "object_loader::save_new(%s): no object with oid %s exists in the global list"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:419
+#: classes/core/obj/object_loader.aw:424
 msgid "object_loader::switch_db_connection(%s): could nto find root connection!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:542
+#: classes/core/obj/object_loader.aw:547
 msgid "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr ""

@@ -115,6 +115,6 @@ msgid "Seose Arve (RELTYPE_BILL) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:rel_RELTYPE_PEOPLE
-msgid "Seose Arve (RELTYPE_PEOPLE) tekst"
+msgid "Seose Isik (RELTYPE_PEOPLE) tekst"
 msgstr ""
 

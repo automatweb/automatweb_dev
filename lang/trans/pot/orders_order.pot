@@ -350,6 +350,54 @@ msgstr ""
 msgid "Omaduse Kinnita tellimus (submit2) help"
 msgstr ""
 
+#: classes/applications/orders/orders_order.aw:prop_orderer_info
+msgid "Omaduse Tellija (orderer_info) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_orderer_info_comment
+msgid "Omaduse Tellija (orderer_info) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_orderer_info_help
+msgid "Omaduse Tellija (orderer_info) help"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_orders_table
+msgid "Omaduse  (orders_table) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_orders_table_comment
+msgid "Omaduse  (orders_table) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_orders_table_help
+msgid "Omaduse  (orders_table) help"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_submit_rows
+msgid "Omaduse Salvesta (submit_rows) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_submit_rows_comment
+msgid "Omaduse Salvesta (submit_rows) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_submit_rows_help
+msgid "Omaduse Salvesta (submit_rows) help"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_childtitle1
+msgid "Omaduse Uus tellimuse rida (childtitle1) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_childtitle1_comment
+msgid "Omaduse Uus tellimuse rida (childtitle1) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_childtitle1_help
+msgid "Omaduse Uus tellimuse rida (childtitle1) help"
+msgstr ""
+
 #: classes/applications/orders/orders_order.aw:prop_orders
 msgid "Omaduse  (orders) caption"
 msgstr ""
@@ -372,18 +420,6 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_submit_help
 msgid "Omaduse Lisa tellimus (submit) help"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_orders_table
-msgid "Omaduse  (orders_table) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_orders_table_comment
-msgid "Omaduse  (orders_table) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_orders_table_help
-msgid "Omaduse  (orders_table) help"
 msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_forward
@@ -426,39 +462,51 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:205
+#: classes/applications/orders/orders_order.aw:249 classes/applications/orders/orders_order.aw:290
+msgid "Tarnimata kogus"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:257
+msgid "Artikli kood"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:262
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:209
-msgid "Toote kood"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:213
-msgid "Värv"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:217
-msgid "Suurus"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:221
+#: classes/applications/orders/orders_order.aw:268
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:225
-msgid "Hind"
+#: classes/applications/orders/orders_order.aw:274
+msgid "Tellitav_kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:468
+#: classes/applications/orders/orders_order.aw:279
+msgid "Soovitav tarne t&auml;itmine"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:284
+msgid "Tarne t&auml;itmine/arve nr"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:296
+msgid "V&auml;rvikaart"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:302
+msgid "Erihind"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:572
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:470
+#: classes/applications/orders/orders_order.aw:574
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:576
+#: classes/applications/orders/orders_order.aw:680
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr ""
 

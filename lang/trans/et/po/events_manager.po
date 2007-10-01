@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/applications/events_manager/events_manager.aw:class_1209_help
-msgid "Klassi Kuhu minna moodul help"
+msgid "Klassi S&uuml;ndmuste halduse keskkond help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_events_tb
@@ -25,16 +25,16 @@ msgstr ""
 msgid "Omaduse P&otilde;hitoolbar (events_tb) help"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_e_find_sections
-msgid "Omaduse Valdkonnad (e_find_sections) caption"
+#: classes/applications/events_manager/events_manager.aw:prop_e_find_sectors
+msgid "Omaduse Valdkonnad (e_find_sectors) caption"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_e_find_sections_comment
-msgid "Omaduse Valdkonnad (e_find_sections) kommentaar"
+#: classes/applications/events_manager/events_manager.aw:prop_e_find_sectors_comment
+msgid "Omaduse Valdkonnad (e_find_sectors) kommentaar"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_e_find_sections_help
-msgid "Omaduse Valdkonnad (e_find_sections) help"
+#: classes/applications/events_manager/events_manager.aw:prop_e_find_sectors_help
+msgid "Omaduse Valdkonnad (e_find_sectors) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_e_find_editor
@@ -193,28 +193,28 @@ msgstr ""
 msgid "Omaduse Korraldajate tabel (organiser_table) help"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_sections_tb
-msgid "Omaduse  toolbar (sections_tb) caption"
+#: classes/applications/events_manager/events_manager.aw:prop_sectors_tb
+msgid "Omaduse  toolbar (sectors_tb) caption"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_sections_tb_comment
-msgid "Omaduse  toolbar (sections_tb) kommentaar"
+#: classes/applications/events_manager/events_manager.aw:prop_sectors_tb_comment
+msgid "Omaduse  toolbar (sectors_tb) kommentaar"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_sections_tb_help
-msgid "Omaduse  toolbar (sections_tb) help"
+#: classes/applications/events_manager/events_manager.aw:prop_sectors_tb_help
+msgid "Omaduse  toolbar (sectors_tb) help"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_sections_table
-msgid "Omaduse Valdkondade tabel (sections_table) caption"
+#: classes/applications/events_manager/events_manager.aw:prop_sectors_table
+msgid "Omaduse Valdkondade tabel (sectors_table) caption"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_sections_table_comment
-msgid "Omaduse Valdkondade tabel (sections_table) kommentaar"
+#: classes/applications/events_manager/events_manager.aw:prop_sectors_table_comment
+msgid "Omaduse Valdkondade tabel (sectors_table) kommentaar"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_sections_table_help
-msgid "Omaduse Valdkondade tabel (sections_table) help"
+#: classes/applications/events_manager/events_manager.aw:prop_sectors_table_help
+msgid "Omaduse Valdkondade tabel (sectors_table) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_editor_tb
@@ -277,28 +277,28 @@ msgstr ""
 msgid "Omaduse Korraldajate kataloog (organiser_menu) help"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_section_menu
-msgid "Omaduse Valdkondade kataloog (section_menu) caption"
+#: classes/applications/events_manager/events_manager.aw:prop_sector_menu
+msgid "Omaduse Valdkondade kataloog (sector_menu) caption"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_section_menu_comment
-msgid "Omaduse Valdkondade kataloog (section_menu) kommentaar"
+#: classes/applications/events_manager/events_manager.aw:prop_sector_menu_comment
+msgid "Omaduse Valdkondade kataloog (sector_menu) kommentaar"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_section_menu_help
-msgid "Omaduse Valdkondade kataloog (section_menu) help"
+#: classes/applications/events_manager/events_manager.aw:prop_sector_menu_help
+msgid "Omaduse Valdkondade kataloog (sector_menu) help"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_section
-msgid "Omaduse Valdkonnad (section) caption"
+#: classes/applications/events_manager/events_manager.aw:prop_sector
+msgid "Omaduse Valdkonnad (sector) caption"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_section_comment
-msgid "Omaduse Valdkonnad (section) kommentaar"
+#: classes/applications/events_manager/events_manager.aw:prop_sector_comment
+msgid "Omaduse Valdkonnad (sector) kommentaar"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_section_help
-msgid "Omaduse Valdkonnad (section) help"
+#: classes/applications/events_manager/events_manager.aw:prop_sector_help
+msgid "Omaduse Valdkonnad (sector) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_owner
@@ -314,15 +314,15 @@ msgid "Omaduse Omanik (owner) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_languages
-msgid "Omaduse Sinu keeled (languages) caption"
+msgid "Omaduse Sisu keeled (languages) caption"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_languages_comment
-msgid "Omaduse Sinu keeled (languages) kommentaar"
+msgid "Omaduse Sisu keeled (languages) kommentaar"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_languages_help
-msgid "Omaduse Sinu keeled (languages) help"
+msgid "Omaduse Sisu keeled (languages) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_mapserver_url
@@ -335,6 +335,66 @@ msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_mapserver_url_help
 msgid "Omaduse Kaardiserveri url (mapserver_url) help"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_similar_time
+msgid "Omaduse Sarnaste sündmuste kattumisaeg (tundides) (similar_time) caption"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_similar_time_comment
+msgid "Omaduse Sarnaste sündmuste kattumisaeg (tundides) (similar_time) kommentaar"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_similar_time_help
+msgid "Omaduse Sarnaste sündmuste kattumisaeg (tundides) (similar_time) help"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_event_form
+msgid "Omaduse S&uuml;ndmuste vorm (event_form) caption"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_event_form_comment
+msgid "Omaduse S&uuml;ndmuste vorm (event_form) kommentaar"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_event_form_help
+msgid "Omaduse S&uuml;ndmuste vorm (event_form) help"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_places_form
+msgid "Omaduse Toimumiskohtade vorm (places_form) caption"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_places_form_comment
+msgid "Omaduse Toimumiskohtade vorm (places_form) kommentaar"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_places_form_help
+msgid "Omaduse Toimumiskohtade vorm (places_form) help"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_organiser_form
+msgid "Omaduse Korraldajate vorm (organiser_form) caption"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_organiser_form_comment
+msgid "Omaduse Korraldajate vorm (organiser_form) kommentaar"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_organiser_form_help
+msgid "Omaduse Korraldajate vorm (organiser_form) help"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_sector_form
+msgid "Omaduse Valdkondade vorm (sector_form) caption"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_sector_form_comment
+msgid "Omaduse Valdkondade vorm (sector_form) kommentaar"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_sector_form_help
+msgid "Omaduse Valdkondade vorm (sector_form) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:group_events
@@ -369,12 +429,12 @@ msgstr ""
 msgid "Grupi Korraldajad (organiser) help"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:group_sections
-msgid "Grupi Valdkonnad (sections) pealkiri"
+#: classes/applications/events_manager/events_manager.aw:group_sectors
+msgid "Grupi Valdkonnad (sectors) pealkiri"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:group_sections_help
-msgid "Grupi Valdkonnad (sections) help"
+#: classes/applications/events_manager/events_manager.aw:group_sectors_help
+msgid "Grupi Valdkonnad (sectors) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:group_editors
@@ -386,15 +446,15 @@ msgid "Grupi Toimetajad (editors) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:group_settings
-msgid "Grupi seaded (settings) pealkiri"
+msgid "Grupi Seaded (settings) pealkiri"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:group_settings_help
-msgid "Grupi seaded (settings) help"
+msgid "Grupi Seaded (settings) help"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:rel_RELTYPE_SECTION
-msgid "Seose Valdkond (RELTYPE_SECTION) tekst"
+#: classes/applications/events_manager/events_manager.aw:rel_RELTYPE_SECTOR
+msgid "Seose Valdkond (RELTYPE_SECTOR) tekst"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:rel_RELTYPE_EVENT_MENU
@@ -409,8 +469,8 @@ msgstr ""
 msgid "Seose Korraldajate kataloog (RELTYPE_ORGANISER_MENU) tekst"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:rel_RELTYPE_SECTION_MENU
-msgid "Seose Valdkondade kataloog (RELTYPE_SECTION_MENU) tekst"
+#: classes/applications/events_manager/events_manager.aw:rel_RELTYPE_SECTOR_MENU
+msgid "Seose Valdkondade kataloog (RELTYPE_SECTOR_MENU) tekst"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:rel_RELTYPE_OWNER
@@ -421,155 +481,172 @@ msgstr ""
 msgid "Seose Keel (RELTYPE_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:layout_events_top
-msgid "Kujundusosa Üldandmed (events_top) pealkiri"
+#: classes/applications/events_manager/events_manager.aw:rel_RELTYPE_CFGFORM
+msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:layout_events_top_left
-msgid "Kujundusosa Sündmuste Otsing (events_top_left) pealkiri"
+msgid "Kujundusosa S&uuml;ndmuste&nbsp;Otsing (events_top_left) pealkiri"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:191
+#: classes/applications/events_manager/events_manager.aw:218
 msgid "Toimetajad"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:191
+#: classes/applications/events_manager/events_manager.aw:218
 msgid "Veebikasutaja"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:195
+#: classes/applications/events_manager/events_manager.aw:222
 msgid "Arhiivist"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:195
+#: classes/applications/events_manager/events_manager.aw:222
+msgid "Kestvatest"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:222
 msgid "Uute hulgast"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:206
+#: classes/applications/events_manager/events_manager.aw:234
 msgid "N&auml;ita k&otilde;iki!"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:245
-#: classes/applications/events_manager/events_manager.aw:759
-#: classes/applications/events_manager/events_manager.aw:777
+#: classes/applications/events_manager/events_manager.aw:274
+#: classes/applications/events_manager/events_manager.aw:915
+#: classes/applications/events_manager/events_manager.aw:933
 msgid "Toimumiskohtade kataloog m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:269
+#: classes/applications/events_manager/events_manager.aw:298
 msgid "Korraldajate kataloog m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:293
-#: classes/applications/events_manager/events_manager.aw:795
+#: classes/applications/events_manager/events_manager.aw:322
+#: classes/applications/events_manager/events_manager.aw:951
 msgid "Valdkondade kataloog m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:344
-#: classes/applications/events_manager/events_manager.aw:361
-#: classes/applications/events_manager/events_manager.aw:371
-#: classes/applications/events_manager/events_manager.aw:388
-#: classes/applications/events_manager/events_manager.aw:546
+#: classes/applications/events_manager/events_manager.aw:374
+#: classes/applications/events_manager/events_manager.aw:391
+#: classes/applications/events_manager/events_manager.aw:401
+#: classes/applications/events_manager/events_manager.aw:418
+#: classes/applications/events_manager/events_manager.aw:687
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:350
-#: classes/applications/events_manager/events_manager.aw:552
-#: classes/applications/events_manager/events_manager.aw:584
+#: classes/applications/events_manager/events_manager.aw:380
+#: classes/applications/events_manager/events_manager.aw:693
+#: classes/applications/events_manager/events_manager.aw:734
 msgid "Kustuta m&auml;rgistatud s&uuml;ndmused"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:352
+#: classes/applications/events_manager/events_manager.aw:382
 msgid "Olete kindel, et soovite kustudada kõik valitud toimumiskohad?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:377
+#: classes/applications/events_manager/events_manager.aw:407
 msgid "Kustuta m&auml;rgistatud korraldajad"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:379
+#: classes/applications/events_manager/events_manager.aw:409
 msgid "Olete kindel, et soovite kustudada kõik valitud korraldajad?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:394
+#: classes/applications/events_manager/events_manager.aw:424
 msgid "Kustuta m&auml;rgistatud toimetajad"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:396
+#: classes/applications/events_manager/events_manager.aw:426
 msgid "Olete kindel, et soovite kustudada kõik valitud toimetajad?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:498
-#: classes/applications/events_manager/events_manager.aw:499
-#: classes/applications/events_manager/events_manager.aw:528
+#: classes/applications/events_manager/events_manager.aw:556
+#: classes/applications/events_manager/events_manager.aw:557
+#: classes/applications/events_manager/events_manager.aw:612
 msgid "Avalda"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:502
-#: classes/applications/events_manager/events_manager.aw:529
+#: classes/applications/events_manager/events_manager.aw:560
+#: classes/applications/events_manager/events_manager.aw:613
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:554
-#: classes/applications/events_manager/events_manager.aw:586
+#: classes/applications/events_manager/events_manager.aw:564
+#: classes/applications/events_manager/events_manager.aw:565
+msgid "Tee koopia"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:588
+msgid "(Nimetu)"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:695
+#: classes/applications/events_manager/events_manager.aw:736
 msgid "Olete kindel, et soovite kustudada kõik valitud s&uuml;ndmused?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:560
+#: classes/applications/events_manager/events_manager.aw:701
 msgid "S&uuml;ndmuste v&auml;ljatr&uuml;kk"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:567
+#: classes/applications/events_manager/events_manager.aw:708
 msgid "Uued"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:567
+#: classes/applications/events_manager/events_manager.aw:708
 msgid "Arhiiv"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:575
+#: classes/applications/events_manager/events_manager.aw:716
 msgid "J&auml;rjesta laekumise j&auml;rgi"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:594
-#: classes/applications/events_manager/events_manager.aw:612
-#: classes/applications/events_manager/events_manager.aw:630
-#: classes/applications/events_manager/events_manager.aw:644
+#: classes/applications/events_manager/events_manager.aw:744
+#: classes/applications/events_manager/events_manager.aw:762
+#: classes/applications/events_manager/events_manager.aw:780
+#: classes/applications/events_manager/events_manager.aw:795
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:599
+#: classes/applications/events_manager/events_manager.aw:749
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:617
-#: classes/applications/events_manager/events_manager.aw:635
+#: classes/applications/events_manager/events_manager.aw:767
+#: classes/applications/events_manager/events_manager.aw:786
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:649
+#: classes/applications/events_manager/events_manager.aw:800
 msgid "Kasutajanimi"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:662
+#: classes/applications/events_manager/events_manager.aw:813
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:667
+#: classes/applications/events_manager/events_manager.aw:818
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:673
+#: classes/applications/events_manager/events_manager.aw:824
 msgid "Valdkond"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:678
+#: classes/applications/events_manager/events_manager.aw:829
 msgid "Tase"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:683
+#: classes/applications/events_manager/events_manager.aw:834
 msgid "Regioon"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:690
+#: classes/applications/events_manager/events_manager.aw:841
 msgid "Tegevused"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:847
+msgid "T&otilde;lgitud"
 msgstr ""

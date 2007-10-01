@@ -37,32 +37,32 @@ msgstr ""
 msgid "adding scheduler ! <br />"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:489
+#: classes/applications/mailinglist/ml_queue.aw:488
 msgid "Sending"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:492
+#: classes/applications/mailinglist/ml_queue.aw:491
 msgid "Nothing to send..."
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:495
+#: classes/applications/mailinglist/ml_queue.aw:494
 msgid "Not sent:"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:500
+#: classes/applications/mailinglist/ml_queue.aw:499
 msgid "Now sending next"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:574
+#: classes/applications/mailinglist/ml_queue.aw:573
 msgid ""
 "done\n"
 "<br>"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:635
+#: classes/applications/mailinglist/ml_queue.aw:640
 msgid "couldn't send mail<br />\n"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:705
+#: classes/applications/mailinglist/ml_queue.aw:710
 msgid "sending mail to:"
 msgstr ""

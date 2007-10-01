@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/util/image_verification/image_verification.aw:class_1124_help
 msgid "Klassi Kontrollpilt help"
 msgstr ""
@@ -85,60 +84,3 @@ msgstr ""
 #: classes/core/util/image_verification/image_verification.aw:prop_image_preview_help
 msgid "Omaduse Eelvaade (image_preview) help"
 msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:153
-msgid "Sisesta vasakpoolsed neli numbrit"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:154
-msgid "Sisesta parempoolsed neli numbrit"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:171
-msgid "null"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:172
-msgid "üks"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:173
-msgid "kaks"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:174
-msgid "kolm"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:175
-msgid "neli"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:176
-msgid "viis"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:177
-msgid "kuus"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:178
-msgid "seitse"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:179
-msgid "kaheksa"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:180
-msgid "üheksa"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:185
-msgid "Lisa algusesse %s"
-msgstr ""
-
-#: classes/core/util/image_verification/image_verification.aw:186
-msgid "Lisa lõppu %s"
-msgstr ""
-

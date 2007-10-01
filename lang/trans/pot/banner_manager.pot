@@ -1,0 +1,204 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/banner/banner_manager.aw:class_1250_help
+msgid "Klassi Bannerite haldus help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_container_folder
+msgid "Omaduse Konteinerite kaust (container_folder) caption"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_container_folder_comment
+msgid "Omaduse Konteinerite kaust (container_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_container_folder_help
+msgid "Omaduse Konteinerite kaust (container_folder) help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_document_templates
+msgid "Omaduse Dokumendi mallid (document_templates) caption"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_document_templates_comment
+msgid "Omaduse Dokumendi mallid (document_templates) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_document_templates_help
+msgid "Omaduse Dokumendi mallid (document_templates) help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_container_places
+msgid "Omaduse Konteinerite paigad (container_places) caption"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_container_places_comment
+msgid "Omaduse Konteinerite paigad (container_places) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_container_places_help
+msgid "Omaduse Konteinerite paigad (container_places) help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tb
+msgid "Omaduse  (mgr_tb) caption"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tb_comment
+msgid "Omaduse  (mgr_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tb_help
+msgid "Omaduse  (mgr_tb) help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tree
+msgid "Omaduse  (mgr_tree) caption"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tree_comment
+msgid "Omaduse  (mgr_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tree_help
+msgid "Omaduse  (mgr_tree) help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tbl_bans
+msgid "Omaduse  (mgr_tbl_bans) caption"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tbl_bans_comment
+msgid "Omaduse  (mgr_tbl_bans) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tbl_bans_help
+msgid "Omaduse  (mgr_tbl_bans) help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tbl_locs
+msgid "Omaduse  (mgr_tbl_locs) caption"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tbl_locs_comment
+msgid "Omaduse  (mgr_tbl_locs) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:prop_mgr_tbl_locs_help
+msgid "Omaduse  (mgr_tbl_locs) help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:group_mgr
+msgid "Grupi Haldus (mgr) pealkiri"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:group_mgr_help
+msgid "Grupi Haldus (mgr) help"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:rel_RELTYPE_CONTAINER_FOLDER
+msgid "Seose Konteinerite kaust (RELTYPE_CONTAINER_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:rel_RELTYPE_DOC_TPL
+msgid "Seose Dokumendi mall (RELTYPE_DOC_TPL) tekst"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:layout_mgr_tree_l
+msgid "Kujundusosa Asukohad (mgr_tree_l) pealkiri"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:100
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:132
+msgid "Banner"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:175
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:257
+msgid "K&otilde;ik asukohad"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:295 classes/applications/banner/banner_manager.aw:434
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:300 classes/applications/banner/banner_manager.aw:439
+msgid "Aktiivne?"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:305
+msgid "Kus n&auml;idatakse"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:329
+msgid "Bannerite n&auml;itamise kohad"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:364
+msgid "Igal pool"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:380
+msgid "Mitte kuskil"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:394 classes/applications/banner/banner_manager.aw:533
+msgid "Muuda dokumenti"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:398 classes/applications/banner/banner_manager.aw:537
+msgid "Muuda asukohta"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:402 classes/applications/banner/banner_manager.aw:541
+msgid "Muuda konteinerit"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:415
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:444
+msgid "N&auml;itamise t&otilde;en&auml;osus"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:449
+msgid "Aktiivne kuni"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:454
+msgid "Sisu"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:459
+msgid "Kuhu suunab"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:493
+msgid "Bannerid, mida n&auml;idatakse asukohtades %s"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:499
+msgid "Bannerid, mida n&auml;idatakse asukohas %s"
+msgstr ""
+
+#: classes/applications/banner/banner_manager.aw:529
+msgid "Muuda bannerit"
+msgstr ""
+

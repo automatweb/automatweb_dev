@@ -70,35 +70,59 @@ msgstr ""
 msgid "Grupi Raha (m) help"
 msgstr ""
 
+#: classes/applications/budgeting/budget.aw:group_m1
+msgid "Grupi Voovaade (m1) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:group_m1_help
+msgid "Grupi Voovaade (m1) help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:group_m2
+msgid "Grupi Grupivaade (m2) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:group_m2_help
+msgid "Grupi Grupivaade (m2) help"
+msgstr ""
+
 #: classes/applications/budgeting/budget.aw:rel_RELTYPE_PROJECT
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:98
+#: classes/applications/budgeting/budget.aw:102
 msgid "Maksugrupp"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:103
+#: classes/applications/budgeting/budget.aw:108
 msgid "Maks"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:108
+#: classes/applications/budgeting/budget.aw:115
+msgid "Prioriteet"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:122
 msgid "Maksu protsent"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:113
+#: classes/applications/budgeting/budget.aw:129
 msgid "Muuda protsenti"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:118
+#: classes/applications/budgeting/budget.aw:134
 msgid "Maksu summa"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:123
+#: classes/applications/budgeting/budget.aw:141
 msgid "Edasi kandub"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:153
+#: classes/applications/budgeting/budget.aw:172
 msgid "<br>(Maksimaalne erinevus %s)"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:177 classes/applications/budgeting/budget.aw:207
+msgid "Muud maksud"
 msgstr ""
 

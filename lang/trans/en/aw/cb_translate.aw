@@ -7,7 +7,6 @@ $GLOBALS["TRANS"]["Selle klassil puudub abiinfo"] = "This class has no help";
 $GLOBALS["TRANS"]["Klassi '%s' abiinfo"] = "Class '%s' help";
 $GLOBALS["TRANS"]["AW abiinfo"] = "AW help";
 $GLOBALS["TRANS"]["Klassi"] = "Class";
-$GLOBALS["TRANS"]["tekstid."] = "texts";
 $GLOBALS["TRANS"]["seos"] = "relation";
 $GLOBALS["TRANS"]["Kaust"] = "Folder";
 $GLOBALS["TRANS"]["Klass"] = "Class";

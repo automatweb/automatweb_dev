@@ -98,7 +98,7 @@ msgstr ""
 msgid "M&auml;&auml;ra"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:209 classes/vcl/acl_manager.aw:298
+#: classes/vcl/acl_manager.aw:209 classes/vcl/acl_manager.aw:300
 msgid "no group for user %s!"
 msgstr ""
 

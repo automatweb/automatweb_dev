@@ -61,34 +61,39 @@ msgstr ""
 msgid "Seose Pangamakse (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:116
+#: classes/applications/spa_bookings/spa_customer_interface.aw:115
 msgid "Broneering %s / %s"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:156
+#: classes/applications/spa_bookings/spa_customer_interface.aw:155
 msgid "Lisa teenus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:167
+#: classes/applications/spa_bookings/spa_customer_interface.aw:166
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:168
+#: classes/applications/spa_bookings/spa_customer_interface.aw:167
 msgid "Maksa"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:176
+#: classes/applications/spa_bookings/spa_customer_interface.aw:175
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:360
+#: classes/applications/spa_bookings/spa_customer_interface.aw:359
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1003
+#: classes/applications/spa_bookings/spa_customer_interface.aw:887
+#: classes/applications/spa_bookings/spa_customer_interface.aw:969
+msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1039
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1003
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1039
 msgid "Naine"
 msgstr ""

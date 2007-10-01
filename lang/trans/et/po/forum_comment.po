@@ -29,19 +29,28 @@ msgstr ""
 msgid "Omaduse Pealkiri (name) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_comment.aw:prop_uname
 #: classes/contentmgmt/forum/forum_comment.aw:prop_uname
-msgid "Omaduse Nimi (uname) caption"
+msgid "Omaduse Kasutaja (uname) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_comment.aw:prop_uname_comment
 #: classes/contentmgmt/forum/forum_comment.aw:prop_uname_comment
-msgid "Omaduse Nimi (uname) kommentaar"
+msgid "Omaduse Kasutaja (uname) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_comment.aw:prop_uname_help
 #: classes/contentmgmt/forum/forum_comment.aw:prop_uname_help
-msgid "Omaduse Nimi (uname) help"
+msgid "Omaduse Kasutaja (uname) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_pname
+msgid "Omaduse Nimi (pname) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_pname_comment
+msgid "Omaduse Nimi (pname) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_pname_help
+msgid "Omaduse Nimi (pname) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_uemail

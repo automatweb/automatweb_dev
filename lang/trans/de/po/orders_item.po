@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/orders/orders_item.aw:class_840_help
 msgid "Klassi Tellimuse rida help"
 msgstr ""
@@ -74,6 +73,18 @@ msgstr ""
 msgid "Omaduse Kogus (product_count) help"
 msgstr ""
 
+#: classes/applications/orders/orders_item.aw:prop_product_count_undone
+msgid "Omaduse Tarnimata kogus (product_count_undone) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_count_undone_comment
+msgid "Omaduse Tarnimata kogus (product_count_undone) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_count_undone_help
+msgid "Omaduse Tarnimata kogus (product_count_undone) help"
+msgstr ""
+
 #: classes/applications/orders/orders_item.aw:prop_product_price
 msgid "Omaduse Hind (product_price) caption"
 msgstr ""
@@ -84,6 +95,30 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_price_help
 msgid "Omaduse Hind (product_price) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_duedate
+msgid "Omaduse Soovitav tarne t&auml;itmine (product_duedate) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_duedate_comment
+msgid "Omaduse Soovitav tarne t&auml;itmine (product_duedate) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_duedate_help
+msgid "Omaduse Soovitav tarne t&auml;itmine (product_duedate) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_bill
+msgid "Omaduse Tarne t&auml;itmine/arve nr (product_bill) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_bill_comment
+msgid "Omaduse Tarne t&auml;itmine/arve nr (product_bill) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_bill_help
+msgid "Omaduse Tarne t&auml;itmine/arve nr (product_bill) help"
 msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_page
@@ -109,4 +144,3 @@ msgstr ""
 #: classes/applications/orders/orders_item.aw:prop_product_image_help
 msgid "Omaduse Pilt (product_image) help"
 msgstr ""
-

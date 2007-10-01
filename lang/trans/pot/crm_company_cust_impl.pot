@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_company_cust_impl.aw:14 classes/applications/crm/crm_company_cust_impl.aw:350 classes/applications/crm/crm_company_cust_impl.aw:918 classes/applications/crm/crm_company_cust_impl.aw:1452
+#: classes/applications/crm/crm_company_cust_impl.aw:14 classes/applications/crm/crm_company_cust_impl.aw:350 classes/applications/crm/crm_company_cust_impl.aw:937 classes/applications/crm/crm_company_cust_impl.aw:1471
 msgid "Nimi"
 msgstr ""
 
@@ -50,7 +50,7 @@ msgstr ""
 msgid "%s projektid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:134 classes/applications/crm/crm_company_cust_impl.aw:1064
+#: classes/applications/crm/crm_company_cust_impl.aw:134 classes/applications/crm/crm_company_cust_impl.aw:1083
 msgid ", milles %s on osaline"
 msgstr ""
 
@@ -150,11 +150,11 @@ msgstr ""
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:556 classes/applications/crm/crm_company_cust_impl.aw:783 classes/applications/crm/crm_company_cust_impl.aw:1182
+#: classes/applications/crm/crm_company_cust_impl.aw:556 classes/applications/crm/crm_company_cust_impl.aw:802 classes/applications/crm/crm_company_cust_impl.aw:1201
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:586 classes/applications/crm/crm_company_cust_impl.aw:910 classes/applications/crm/crm_company_cust_impl.aw:1733
+#: classes/applications/crm/crm_company_cust_impl.aw:586 classes/applications/crm/crm_company_cust_impl.aw:929 classes/applications/crm/crm_company_cust_impl.aw:1752
 msgid "Organisatsioon"
 msgstr ""
 
@@ -182,7 +182,7 @@ msgstr ""
 msgid "Kategooria"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:658 classes/applications/crm/crm_company_cust_impl.aw:1240 classes/applications/crm/crm_company_cust_impl.aw:1247
+#: classes/applications/crm/crm_company_cust_impl.aw:658 classes/applications/crm/crm_company_cust_impl.aw:1259 classes/applications/crm/crm_company_cust_impl.aw:1266
 msgid "Toimetus"
 msgstr ""
 
@@ -198,139 +198,155 @@ msgstr ""
 msgid "Saada kiri"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:797
+#: classes/applications/crm/crm_company_cust_impl.aw:697
+msgid "T&uuml;hista"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cust_impl.aw:703
+msgid "(Valitud)"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cust_impl.aw:708
+msgid "Vali filter:"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cust_impl.aw:708
+msgid "Valitud:"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cust_impl.aw:816
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:805
+#: classes/applications/crm/crm_company_cust_impl.aw:824
 msgid "Kas oled kindel, et soovid valitud pakkumise(d) kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:806 classes/applications/crm/crm_company_cust_impl.aw:1284 classes/applications/crm/crm_company_cust_impl.aw:1418 classes/applications/crm/crm_company_cust_impl.aw:1524 classes/applications/crm/crm_company_cust_impl.aw:1545 classes/applications/crm/crm_company_cust_impl.aw:1566
+#: classes/applications/crm/crm_company_cust_impl.aw:825 classes/applications/crm/crm_company_cust_impl.aw:1303 classes/applications/crm/crm_company_cust_impl.aw:1437 classes/applications/crm/crm_company_cust_impl.aw:1543 classes/applications/crm/crm_company_cust_impl.aw:1564 classes/applications/crm/crm_company_cust_impl.aw:1585
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:853
+#: classes/applications/crm/crm_company_cust_impl.aw:872
 msgid "K&otilde;ik organisatsioonid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:925
+#: classes/applications/crm/crm_company_cust_impl.aw:944
 msgid "Koostaja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:932
+#: classes/applications/crm/crm_company_cust_impl.aw:951
 msgid "Lisatud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:942
+#: classes/applications/crm/crm_company_cust_impl.aw:961
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:949
+#: classes/applications/crm/crm_company_cust_impl.aw:968
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:957
+#: classes/applications/crm/crm_company_cust_impl.aw:976
 msgid "X"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1004
+#: classes/applications/crm/crm_company_cust_impl.aw:1023
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1005
+#: classes/applications/crm/crm_company_cust_impl.aw:1024
 msgid "Saadetud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1006
+#: classes/applications/crm/crm_company_cust_impl.aw:1025
 msgid "Esitletud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1007
+#: classes/applications/crm/crm_company_cust_impl.aw:1026
 msgid "Tagasil&uuml;katud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1008
+#: classes/applications/crm/crm_company_cust_impl.aw:1027
 msgid "Positiivelt l&otilde;ppenud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1060
+#: classes/applications/crm/crm_company_cust_impl.aw:1079
 msgid "%s projektide arhiiv"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1071
+#: classes/applications/crm/crm_company_cust_impl.aw:1090
 msgid "%s projektid milles %s on osaline"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1187
+#: classes/applications/crm/crm_company_cust_impl.aw:1206
 msgid "Projekt teostajana"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1201
+#: classes/applications/crm/crm_company_cust_impl.aw:1220
 msgid "Projekt tellijana"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1215
+#: classes/applications/crm/crm_company_cust_impl.aw:1234
 msgid "P&auml;eva raport"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1254
+#: classes/applications/crm/crm_company_cust_impl.aw:1273
 msgid "Lisa toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1263
+#: classes/applications/crm/crm_company_cust_impl.aw:1282
 msgid "M&auml;rgi tehtuks"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1272 classes/applications/crm/crm_company_cust_impl.aw:1408
+#: classes/applications/crm/crm_company_cust_impl.aw:1291 classes/applications/crm/crm_company_cust_impl.aw:1427
 msgid "Otsi projekte"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1285 classes/applications/crm/crm_company_cust_impl.aw:1420
+#: classes/applications/crm/crm_company_cust_impl.aw:1304 classes/applications/crm/crm_company_cust_impl.aw:1439
 msgid "Oled kindel et soovid valitud projekte kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1437
+#: classes/applications/crm/crm_company_cust_impl.aw:1456
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1446
+#: classes/applications/crm/crm_company_cust_impl.aw:1465
 msgid "Esitaja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1470
+#: classes/applications/crm/crm_company_cust_impl.aw:1489
 msgid "%s k&otilde;ik raportid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1483
+#: classes/applications/crm/crm_company_cust_impl.aw:1502
 msgid "%s raportid, milles on %s osaline"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1734
+#: classes/applications/crm/crm_company_cust_impl.aw:1753
 msgid "Eraisik"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1790
+#: classes/applications/crm/crm_company_cust_impl.aw:1809
 msgid "%s kliendid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1791
+#: classes/applications/crm/crm_company_cust_impl.aw:1810
 msgid "%s kliendid: %s"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1977
+#: classes/applications/crm/crm_company_cust_impl.aw:2006
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1981
+#: classes/applications/crm/crm_company_cust_impl.aw:2010
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1987
+#: classes/applications/crm/crm_company_cust_impl.aw:2016
 msgid "Eemalda kliendigrupist"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2047
+#: classes/applications/crm/crm_company_cust_impl.aw:2076
 msgid "Kontaktid"
 msgstr ""
 

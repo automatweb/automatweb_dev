@@ -229,75 +229,75 @@ msgstr ""
 msgid "Seose Meiliaadress (RELTYPE_MAIL_ADDRESS) tekst"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:176
+#: classes/applications/messenger/mail_message.aw:211
 msgid "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:315
-msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
+#: classes/applications/messenger/mail_message.aw:350
+msgid "Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:727
+#: classes/applications/messenger/mail_message.aw:762
 msgid "Saada"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:734
+#: classes/applications/messenger/mail_message.aw:769
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:757
+#: classes/applications/messenger/mail_message.aw:792
 msgid "Vasta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:764
-msgid "Vasta/kõigile"
+#: classes/applications/messenger/mail_message.aw:799
+msgid "Vasta/k&otilde;igile"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:771
+#: classes/applications/messenger/mail_message.aw:806
 msgid "Edasta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:779
+#: classes/applications/messenger/mail_message.aw:814
 msgid "Kustutada see kiri? (tagasi ei saa!)"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:780
+#: classes/applications/messenger/mail_message.aw:815
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:802
+#: classes/applications/messenger/mail_message.aw:837
 msgid "Lisa kalendrisse"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:834
-#: classes/applications/messenger/mail_message.aw:904
+#: classes/applications/messenger/mail_message.aw:869
+#: classes/applications/messenger/mail_message.aw:939
 msgid "Lisa bugiks"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:916
-msgid "Päised"
+#: classes/applications/messenger/mail_message.aw:951
+msgid "P&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:921
+#: classes/applications/messenger/mail_message.aw:956
 msgid "Tavaline"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:927
-msgid "Kõik päised"
+#: classes/applications/messenger/mail_message.aw:962
+msgid "K&otilde;ik p&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1271
+#: classes/applications/messenger/mail_message.aw:1307
 msgid "kustutatud!"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1273
+#: classes/applications/messenger/mail_message.aw:1309
 msgid "sulge aken"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1352
+#: classes/applications/messenger/mail_message.aw:1388
 msgid "saadetud<p>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1471
+#: classes/applications/messenger/mail_message.aw:1511
 msgid "----Forwarded message-----\n"
 msgstr ""

@@ -505,6 +505,30 @@ msgstr ""
 msgid "Omaduse Teemade s&uuml;gavus (topic_depth) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_last_author
+msgid "Omaduse Viimane autor (topic_last_author) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_last_author_comment
+msgid "Omaduse Viimane autor (topic_last_author) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_last_author_help
+msgid "Omaduse Viimane autor (topic_last_author) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_last_posts_count
+msgid "Omaduse Viimaseid postitusi kuva (show_last_posts_count) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_last_posts_count_comment
+msgid "Omaduse Viimaseid postitusi kuva (show_last_posts_count) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_last_posts_count_help
+msgid "Omaduse Viimaseid postitusi kuva (show_last_posts_count) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector
 msgid "Omaduse Teemade tasemed (topic_selector) caption"
 msgstr ""
@@ -613,6 +637,18 @@ msgstr ""
 msgid "Omaduse Foorumi sisu (show) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:prop_last_posts
+msgid "Omaduse Foorumi viimased postitused (last_posts) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_last_posts_comment
+msgid "Omaduse Foorumi viimased postitused (last_posts) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_last_posts_help
+msgid "Omaduse Foorumi viimased postitused (last_posts) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:group_general_sub
 msgid "Grupi &Uuml;ldine (general_sub) pealkiri"
 msgstr ""
@@ -693,12 +729,28 @@ msgstr ""
 msgid "Grupi Import (import) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:group_views
+msgid "Grupi Vaated (views) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:group_views_help
+msgid "Grupi Vaated (views) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:group_contents
 msgid "Grupi Eelvaade (contents) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_contents_help
 msgid "Grupi Eelvaade (contents) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:group_last_posts
+msgid "Grupi Viimased postitused (last_posts) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:group_last_posts_help
+msgid "Grupi Viimased postitused (last_posts) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_TOPIC_FOLDER
@@ -737,98 +789,114 @@ msgstr ""
 msgid "Seose Kontrollpilt (RELTYPE_IMAGE_VERIFICATION) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:270
+#: classes/contentmgmt/forum/forum_v2.aw:292
 msgid "Uuemad teemad eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:271
+#: classes/contentmgmt/forum/forum_v2.aw:293
 msgid "T&auml;hestikulises j&auml;rjekorras (A-Z)"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:272
+#: classes/contentmgmt/forum/forum_v2.aw:294
 msgid "Viimati kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:273
+#: classes/contentmgmt/forum/forum_v2.aw:295
 msgid "Enim kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:279
+#: classes/contentmgmt/forum/forum_v2.aw:296
+msgid "Objektide jrk. nr. j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:300
+msgid "vastus"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:301
+msgid "teema"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:307
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:280
+#: classes/contentmgmt/forum/forum_v2.aw:308
 msgid "Autor"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:281
+#: classes/contentmgmt/forum/forum_v2.aw:309
+msgid "Autori nimi"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:310
 msgid "Autori e-mail"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:282
+#: classes/contentmgmt/forum/forum_v2.aw:311
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:324
+#: classes/contentmgmt/forum/forum_v2.aw:358
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1496
+#: classes/contentmgmt/forum/forum_v2.aw:1590
 msgid "Sisestatud kontrollnumber on vale! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1500
+#: classes/contentmgmt/forum/forum_v2.aw:1594
 msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1504
+#: classes/contentmgmt/forum/forum_v2.aw:1598
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1508
+#: classes/contentmgmt/forum/forum_v2.aw:1602
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1512
+#: classes/contentmgmt/forum/forum_v2.aw:1606
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1516
+#: classes/contentmgmt/forum/forum_v2.aw:1610
 msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1731
+#: classes/contentmgmt/forum/forum_v2.aw:1838
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1736
+#: classes/contentmgmt/forum/forum_v2.aw:1843
 msgid "J&auml;ta v&auml;lja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1743
+#: classes/contentmgmt/forum/forum_v2.aw:1850
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1916
+#: classes/contentmgmt/forum/forum_v2.aw:2023
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1965
+#: classes/contentmgmt/forum/forum_v2.aw:2072
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1977
+#: classes/contentmgmt/forum/forum_v2.aw:2084
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2000
+#: classes/contentmgmt/forum/forum_v2.aw:2107
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2442
+#: classes/contentmgmt/forum/forum_v2.aw:2556
 msgid "teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2449
+#: classes/contentmgmt/forum/forum_v2.aw:2563
 msgid "aadresside kaust"
 msgstr ""

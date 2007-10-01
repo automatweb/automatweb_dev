@@ -2254,6 +2254,10 @@ msgstr ""
 msgid "Klassi Eelarvestamise t&ouml;&ouml;laud (1205) nimi"
 msgstr ""
 
+#: aw.ini:class_prodfamily_1205
+msgid "Klassi tooteperekonna Rahavoogude Juhtimine (1205) nimi"
+msgstr ""
+
 #: aw.ini:class_1206
 msgid "Klassi Eelarvestamise maks (1206) nimi"
 msgstr ""
@@ -2263,7 +2267,7 @@ msgid "Klassi OCSP p&auml;ring (1207) nimi"
 msgstr ""
 
 #: aw.ini:class_1209
-msgid "Klassi Kuhu minna moodul (1209) nimi"
+msgid "Klassi S&uuml;ndmuste halduse keskkond (1209) nimi"
 msgstr ""
 
 #: aw.ini:class_1210
@@ -2300,6 +2304,34 @@ msgstr ""
 
 #: aw.ini:class_1246
 msgid "Klassi Eelarvestamise maksu grupp (1246) nimi"
+msgstr ""
+
+#: aw.ini:class_1248
+msgid "Klassi Broneeringute toitlustuse haldus (1248) nimi"
+msgstr ""
+
+#: aw.ini:class_1249
+msgid "Klassi Teenuse liigi kategooria (1249) nimi"
+msgstr ""
+
+#: aw.ini:class_1250
+msgid "Klassi Bannerite haldus (1250) nimi"
+msgstr ""
+
+#: aw.ini:class_1251
+msgid "Klassi T&otilde;lkekeskkond (1251) nimi"
+msgstr ""
+
+#: aw.ini:class_1252
+msgid "Klassi XML V&auml;ljund (1252) nimi"
+msgstr ""
+
+#: aw.ini:class_1306
+msgid "Klassi Dokumentide kalendrivaade (1306) nimi"
+msgstr ""
+
+#: aw.ini:class_1319
+msgid "Klassi Eelarvestamise maksu kausta seos (1319) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29
@@ -4764,6 +4796,38 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1246
 msgid "syslog.type.ST_BUDGETING_TAX_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1248
+msgid "syslog.type.ST_SPA_PRODUCTS_OVERVIEW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1249
+msgid "syslog.type.ST_CRM_SERVICE_TYPE_CATEGORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1250
+msgid "syslog.type.ST_BANNER_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1252
+msgid "syslog.type.ST_XML_OUTPUT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1251
+msgid "syslog.type.ST_CB_TRANSLATE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1306
+msgid "syslog.type.ST_DOCUMENT_CALENDAR_VIEW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1314
+msgid "syslog.type.ST_KOOLITUSE_ANDMETE_KUVAMINE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1319
+msgid "syslog.type.ST_BUDGETING_TAX_FOLDER_RELATION"
 msgstr ""
 
 #: aw.ini:syslogactions_1

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/orders/orders_form.aw:class_841_help
 msgid "Klassi Tellimuse vorm help"
 msgstr ""
@@ -144,6 +143,30 @@ msgstr ""
 
 #: classes/applications/orders/orders_form.aw:prop_thankudoc_help
 msgid "Omaduse Dokument kuhu suunata peale esitamist (thankudoc) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_order_item_template
+msgid "Omaduse Tellimuse kujundusp&otilde;hi (order_item_template) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_order_item_template_comment
+msgid "Omaduse Tellimuse kujundusp&otilde;hi (order_item_template) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_order_item_template_help
+msgid "Omaduse Tellimuse kujundusp&otilde;hi (order_item_template) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_form_template
+msgid "Omaduse Tellija andmete kujundusp&otilde;hi (orders_form_template) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_form_template_comment
+msgid "Omaduse Tellija andmete kujundusp&otilde;hi (orders_form_template) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_form_template_help
+msgid "Omaduse Tellija andmete kujundusp&otilde;hi (orders_form_template) help"
 msgstr ""
 
 #: classes/applications/orders/orders_form.aw:prop_ordering
@@ -286,27 +309,31 @@ msgstr ""
 msgid "Seose Mail (RELTYPE_MAIL) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:828
+#: classes/applications/orders/orders_form.aw:911
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:878
+#: classes/applications/orders/orders_form.aw:963
+#: classes/applications/orders/orders_form.aw:973
+msgid "\n"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:984
 msgid "Kauba t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:884
+#: classes/applications/orders/orders_form.aw:990
 msgid "Min. Kuud"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:890
+#: classes/applications/orders/orders_form.aw:996
 msgid "Max. Kuud"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:896
+#: classes/applications/orders/orders_form.aw:1002
 msgid "Esmase sissemakse %"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:902
+#: classes/applications/orders/orders_form.aw:1008
 msgid "Intressi %"
 msgstr ""
-

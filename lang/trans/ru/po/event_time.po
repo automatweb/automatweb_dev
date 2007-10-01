@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/calendar/event_time.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_start
+msgid "Omaduse Algab (start) caption"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_start_comment
+msgid "Omaduse Algab (start) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_start_help
+msgid "Omaduse Algab (start) help"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_end
+msgid "Omaduse Lõpeb (end) caption"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_end_comment
+msgid "Omaduse Lõpeb (end) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_end_help
+msgid "Omaduse Lõpeb (end) help"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_location
+msgid "Omaduse Toimumiskoht (location) caption"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_location_comment
+msgid "Omaduse Toimumiskoht (location) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_location_help
+msgid "Omaduse Toimumiskoht (location) help"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:rel_RELTYPE_LOCATION
+msgid "Seose Toimumiskoht (RELTYPE_LOCATION) tekst"
+msgstr ""
+

@@ -329,6 +329,306 @@ msgstr ""
 msgid "Omaduse User-defined 20 (user20) help"
 msgstr ""
 
+# classes/applications/register/register_data.aw:prop_user21
+#: classes/applications/register/register_data.aw:prop_user21
+msgid "Omaduse User-defined 21 (user21) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user21_comment
+#: classes/applications/register/register_data.aw:prop_user21_comment
+msgid "Omaduse User-defined 21 (user21) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user21_help
+#: classes/applications/register/register_data.aw:prop_user21_help
+msgid "Omaduse User-defined 21 (user21) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user22
+#: classes/applications/register/register_data.aw:prop_user22
+msgid "Omaduse User-defined 22 (user22) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user22_comment
+#: classes/applications/register/register_data.aw:prop_user22_comment
+msgid "Omaduse User-defined 22 (user22) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user22_help
+#: classes/applications/register/register_data.aw:prop_user22_help
+msgid "Omaduse User-defined 22 (user22) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user23
+#: classes/applications/register/register_data.aw:prop_user23
+msgid "Omaduse User-defined 23 (user23) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user23_comment
+#: classes/applications/register/register_data.aw:prop_user23_comment
+msgid "Omaduse User-defined 23 (user23) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user23_help
+#: classes/applications/register/register_data.aw:prop_user23_help
+msgid "Omaduse User-defined 23 (user23) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user24
+#: classes/applications/register/register_data.aw:prop_user24
+msgid "Omaduse User-defined 24 (user24) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user24_comment
+#: classes/applications/register/register_data.aw:prop_user24_comment
+msgid "Omaduse User-defined 24 (user24) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user24_help
+#: classes/applications/register/register_data.aw:prop_user24_help
+msgid "Omaduse User-defined 24 (user24) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user25
+#: classes/applications/register/register_data.aw:prop_user25
+msgid "Omaduse User-defined 25 (user25) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user25_comment
+#: classes/applications/register/register_data.aw:prop_user25_comment
+msgid "Omaduse User-defined 25 (user25) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user25_help
+#: classes/applications/register/register_data.aw:prop_user25_help
+msgid "Omaduse User-defined 25 (user25) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user26
+#: classes/applications/register/register_data.aw:prop_user26
+msgid "Omaduse User-defined 26 (user26) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user26_comment
+#: classes/applications/register/register_data.aw:prop_user26_comment
+msgid "Omaduse User-defined 26 (user26) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user26_help
+#: classes/applications/register/register_data.aw:prop_user26_help
+msgid "Omaduse User-defined 26 (user26) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user27
+#: classes/applications/register/register_data.aw:prop_user27
+msgid "Omaduse User-defined 27 (user27) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user27_comment
+#: classes/applications/register/register_data.aw:prop_user27_comment
+msgid "Omaduse User-defined 27 (user27) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user27_help
+#: classes/applications/register/register_data.aw:prop_user27_help
+msgid "Omaduse User-defined 27 (user27) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user28
+#: classes/applications/register/register_data.aw:prop_user28
+msgid "Omaduse User-defined 28 (user28) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user28_comment
+#: classes/applications/register/register_data.aw:prop_user28_comment
+msgid "Omaduse User-defined 28 (user28) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user28_help
+#: classes/applications/register/register_data.aw:prop_user28_help
+msgid "Omaduse User-defined 28 (user28) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user29
+#: classes/applications/register/register_data.aw:prop_user29
+msgid "Omaduse User-defined 29 (user29) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user29_comment
+#: classes/applications/register/register_data.aw:prop_user29_comment
+msgid "Omaduse User-defined 29 (user29) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user29_help
+#: classes/applications/register/register_data.aw:prop_user29_help
+msgid "Omaduse User-defined 29 (user29) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user30
+#: classes/applications/register/register_data.aw:prop_user30
+msgid "Omaduse User-defined 30 (user30) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user30_comment
+#: classes/applications/register/register_data.aw:prop_user30_comment
+msgid "Omaduse User-defined 30 (user30) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user30_help
+#: classes/applications/register/register_data.aw:prop_user30_help
+msgid "Omaduse User-defined 30 (user30) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user31
+#: classes/applications/register/register_data.aw:prop_user31
+msgid "Omaduse User-defined 31 (user31) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user31_comment
+#: classes/applications/register/register_data.aw:prop_user31_comment
+msgid "Omaduse User-defined 31 (user31) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user31_help
+#: classes/applications/register/register_data.aw:prop_user31_help
+msgid "Omaduse User-defined 31 (user31) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user32
+#: classes/applications/register/register_data.aw:prop_user32
+msgid "Omaduse User-defined 32 (user32) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user32_comment
+#: classes/applications/register/register_data.aw:prop_user32_comment
+msgid "Omaduse User-defined 32 (user32) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user32_help
+#: classes/applications/register/register_data.aw:prop_user32_help
+msgid "Omaduse User-defined 32 (user32) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user33
+#: classes/applications/register/register_data.aw:prop_user33
+msgid "Omaduse User-defined 33 (user33) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user33_comment
+#: classes/applications/register/register_data.aw:prop_user33_comment
+msgid "Omaduse User-defined 33 (user33) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user33_help
+#: classes/applications/register/register_data.aw:prop_user33_help
+msgid "Omaduse User-defined 33 (user33) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user34
+#: classes/applications/register/register_data.aw:prop_user34
+msgid "Omaduse User-defined 34 (user34) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user34_comment
+#: classes/applications/register/register_data.aw:prop_user34_comment
+msgid "Omaduse User-defined 34 (user34) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user34_help
+#: classes/applications/register/register_data.aw:prop_user34_help
+msgid "Omaduse User-defined 34 (user34) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user35
+#: classes/applications/register/register_data.aw:prop_user35
+msgid "Omaduse User-defined 35 (user35) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user35_comment
+#: classes/applications/register/register_data.aw:prop_user35_comment
+msgid "Omaduse User-defined 35 (user35) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user35_help
+#: classes/applications/register/register_data.aw:prop_user35_help
+msgid "Omaduse User-defined 35 (user35) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user36
+#: classes/applications/register/register_data.aw:prop_user36
+msgid "Omaduse User-defined 36 (user36) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user36_comment
+#: classes/applications/register/register_data.aw:prop_user36_comment
+msgid "Omaduse User-defined 36 (user36) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user36_help
+#: classes/applications/register/register_data.aw:prop_user36_help
+msgid "Omaduse User-defined 36 (user36) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user37
+#: classes/applications/register/register_data.aw:prop_user37
+msgid "Omaduse User-defined 37 (user37) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user37_comment
+#: classes/applications/register/register_data.aw:prop_user37_comment
+msgid "Omaduse User-defined 37 (user37) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user37_help
+#: classes/applications/register/register_data.aw:prop_user37_help
+msgid "Omaduse User-defined 37 (user37) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user38
+#: classes/applications/register/register_data.aw:prop_user38
+msgid "Omaduse User-defined 28 (user38) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user38_comment
+#: classes/applications/register/register_data.aw:prop_user38_comment
+msgid "Omaduse User-defined 28 (user38) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user38_help
+#: classes/applications/register/register_data.aw:prop_user38_help
+msgid "Omaduse User-defined 28 (user38) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user39
+#: classes/applications/register/register_data.aw:prop_user39
+msgid "Omaduse User-defined 39 (user39) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user39_comment
+#: classes/applications/register/register_data.aw:prop_user39_comment
+msgid "Omaduse User-defined 39 (user39) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user39_help
+#: classes/applications/register/register_data.aw:prop_user39_help
+msgid "Omaduse User-defined 39 (user39) help"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user40
+#: classes/applications/register/register_data.aw:prop_user40
+msgid "Omaduse User-defined 40 (user40) caption"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user40_comment
+#: classes/applications/register/register_data.aw:prop_user40_comment
+msgid "Omaduse User-defined 40 (user40) kommentaar"
+msgstr ""
+
+# classes/applications/register/register_data.aw:prop_user40_help
+#: classes/applications/register/register_data.aw:prop_user40_help
+msgid "Omaduse User-defined 40 (user40) help"
+msgstr ""
+
 # classes/applications/register/register_data.aw:prop_userta1
 #: classes/applications/register/register_data.aw:prop_userta1
 msgid "Omaduse User-defined ta 1 (userta1) caption"
@@ -1302,306 +1602,6 @@ msgstr ""
 # classes/applications/register/register_data.aw:prop_udefhidden3_help
 #: classes/applications/register/register_data.aw:prop_udefhidden3_help
 msgid "Omaduse  (udefhidden3) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user21
-#: classes/applications/register/register_data.aw:prop_user21
-msgid "Omaduse User-defined 21 (user21) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user21_comment
-#: classes/applications/register/register_data.aw:prop_user21_comment
-msgid "Omaduse User-defined 21 (user21) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user21_help
-#: classes/applications/register/register_data.aw:prop_user21_help
-msgid "Omaduse User-defined 21 (user21) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user22
-#: classes/applications/register/register_data.aw:prop_user22
-msgid "Omaduse User-defined 22 (user22) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user22_comment
-#: classes/applications/register/register_data.aw:prop_user22_comment
-msgid "Omaduse User-defined 22 (user22) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user22_help
-#: classes/applications/register/register_data.aw:prop_user22_help
-msgid "Omaduse User-defined 22 (user22) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user23
-#: classes/applications/register/register_data.aw:prop_user23
-msgid "Omaduse User-defined 23 (user23) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user23_comment
-#: classes/applications/register/register_data.aw:prop_user23_comment
-msgid "Omaduse User-defined 23 (user23) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user23_help
-#: classes/applications/register/register_data.aw:prop_user23_help
-msgid "Omaduse User-defined 23 (user23) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user24
-#: classes/applications/register/register_data.aw:prop_user24
-msgid "Omaduse User-defined 24 (user24) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user24_comment
-#: classes/applications/register/register_data.aw:prop_user24_comment
-msgid "Omaduse User-defined 24 (user24) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user24_help
-#: classes/applications/register/register_data.aw:prop_user24_help
-msgid "Omaduse User-defined 24 (user24) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user25
-#: classes/applications/register/register_data.aw:prop_user25
-msgid "Omaduse User-defined 25 (user25) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user25_comment
-#: classes/applications/register/register_data.aw:prop_user25_comment
-msgid "Omaduse User-defined 25 (user25) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user25_help
-#: classes/applications/register/register_data.aw:prop_user25_help
-msgid "Omaduse User-defined 25 (user25) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user26
-#: classes/applications/register/register_data.aw:prop_user26
-msgid "Omaduse User-defined 26 (user26) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user26_comment
-#: classes/applications/register/register_data.aw:prop_user26_comment
-msgid "Omaduse User-defined 26 (user26) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user26_help
-#: classes/applications/register/register_data.aw:prop_user26_help
-msgid "Omaduse User-defined 26 (user26) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user27
-#: classes/applications/register/register_data.aw:prop_user27
-msgid "Omaduse User-defined 27 (user27) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user27_comment
-#: classes/applications/register/register_data.aw:prop_user27_comment
-msgid "Omaduse User-defined 27 (user27) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user27_help
-#: classes/applications/register/register_data.aw:prop_user27_help
-msgid "Omaduse User-defined 27 (user27) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user28
-#: classes/applications/register/register_data.aw:prop_user28
-msgid "Omaduse User-defined 28 (user28) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user28_comment
-#: classes/applications/register/register_data.aw:prop_user28_comment
-msgid "Omaduse User-defined 28 (user28) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user28_help
-#: classes/applications/register/register_data.aw:prop_user28_help
-msgid "Omaduse User-defined 28 (user28) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user29
-#: classes/applications/register/register_data.aw:prop_user29
-msgid "Omaduse User-defined 29 (user29) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user29_comment
-#: classes/applications/register/register_data.aw:prop_user29_comment
-msgid "Omaduse User-defined 29 (user29) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user29_help
-#: classes/applications/register/register_data.aw:prop_user29_help
-msgid "Omaduse User-defined 29 (user29) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user30
-#: classes/applications/register/register_data.aw:prop_user30
-msgid "Omaduse User-defined 30 (user30) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user30_comment
-#: classes/applications/register/register_data.aw:prop_user30_comment
-msgid "Omaduse User-defined 30 (user30) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user30_help
-#: classes/applications/register/register_data.aw:prop_user30_help
-msgid "Omaduse User-defined 30 (user30) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user31
-#: classes/applications/register/register_data.aw:prop_user31
-msgid "Omaduse User-defined 31 (user31) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user31_comment
-#: classes/applications/register/register_data.aw:prop_user31_comment
-msgid "Omaduse User-defined 31 (user31) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user31_help
-#: classes/applications/register/register_data.aw:prop_user31_help
-msgid "Omaduse User-defined 31 (user31) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user32
-#: classes/applications/register/register_data.aw:prop_user32
-msgid "Omaduse User-defined 32 (user32) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user32_comment
-#: classes/applications/register/register_data.aw:prop_user32_comment
-msgid "Omaduse User-defined 32 (user32) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user32_help
-#: classes/applications/register/register_data.aw:prop_user32_help
-msgid "Omaduse User-defined 32 (user32) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user33
-#: classes/applications/register/register_data.aw:prop_user33
-msgid "Omaduse User-defined 33 (user33) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user33_comment
-#: classes/applications/register/register_data.aw:prop_user33_comment
-msgid "Omaduse User-defined 33 (user33) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user33_help
-#: classes/applications/register/register_data.aw:prop_user33_help
-msgid "Omaduse User-defined 33 (user33) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user34
-#: classes/applications/register/register_data.aw:prop_user34
-msgid "Omaduse User-defined 34 (user34) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user34_comment
-#: classes/applications/register/register_data.aw:prop_user34_comment
-msgid "Omaduse User-defined 34 (user34) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user34_help
-#: classes/applications/register/register_data.aw:prop_user34_help
-msgid "Omaduse User-defined 34 (user34) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user35
-#: classes/applications/register/register_data.aw:prop_user35
-msgid "Omaduse User-defined 35 (user35) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user35_comment
-#: classes/applications/register/register_data.aw:prop_user35_comment
-msgid "Omaduse User-defined 35 (user35) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user35_help
-#: classes/applications/register/register_data.aw:prop_user35_help
-msgid "Omaduse User-defined 35 (user35) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user36
-#: classes/applications/register/register_data.aw:prop_user36
-msgid "Omaduse User-defined 36 (user36) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user36_comment
-#: classes/applications/register/register_data.aw:prop_user36_comment
-msgid "Omaduse User-defined 36 (user36) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user36_help
-#: classes/applications/register/register_data.aw:prop_user36_help
-msgid "Omaduse User-defined 36 (user36) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user37
-#: classes/applications/register/register_data.aw:prop_user37
-msgid "Omaduse User-defined 37 (user37) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user37_comment
-#: classes/applications/register/register_data.aw:prop_user37_comment
-msgid "Omaduse User-defined 37 (user37) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user37_help
-#: classes/applications/register/register_data.aw:prop_user37_help
-msgid "Omaduse User-defined 37 (user37) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user38
-#: classes/applications/register/register_data.aw:prop_user38
-msgid "Omaduse User-defined 28 (user38) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user38_comment
-#: classes/applications/register/register_data.aw:prop_user38_comment
-msgid "Omaduse User-defined 28 (user38) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user38_help
-#: classes/applications/register/register_data.aw:prop_user38_help
-msgid "Omaduse User-defined 28 (user38) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user39
-#: classes/applications/register/register_data.aw:prop_user39
-msgid "Omaduse User-defined 39 (user39) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user39_comment
-#: classes/applications/register/register_data.aw:prop_user39_comment
-msgid "Omaduse User-defined 39 (user39) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user39_help
-#: classes/applications/register/register_data.aw:prop_user39_help
-msgid "Omaduse User-defined 39 (user39) help"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user40
-#: classes/applications/register/register_data.aw:prop_user40
-msgid "Omaduse User-defined 40 (user40) caption"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user40_comment
-#: classes/applications/register/register_data.aw:prop_user40_comment
-msgid "Omaduse User-defined 40 (user40) kommentaar"
-msgstr ""
-
-# classes/applications/register/register_data.aw:prop_user40_help
-#: classes/applications/register/register_data.aw:prop_user40_help
-msgid "Omaduse User-defined 40 (user40) help"
 msgstr ""
 
 # classes/applications/register/register_data.aw:prop_user41

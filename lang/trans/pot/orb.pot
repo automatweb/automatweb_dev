@@ -10,15 +10,19 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/orb/orb.aw:737
+#: classes/core/orb/orb.aw:58
+msgid "Teil pole &otilde;igusi selle lehe vaatamiseks!"
+msgstr ""
+
+#: classes/core/orb/orb.aw:761
 msgid "Could not load request handler for request method '%s'"
 msgstr ""
 
-#: classes/core/orb/orb.aw:884
+#: classes/core/orb/orb.aw:908
 msgid "orb::handle_rpc_call - Could not load request handler for request method '%s'"
 msgstr ""
 
-#: classes/core/orb/orb.aw:1115
+#: classes/core/orb/orb.aw:1164
 msgid "orb::check_class_access(%s): no permissions to access the class! (denied by %s)"
 msgstr ""
 

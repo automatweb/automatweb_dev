@@ -409,16 +409,16 @@ msgstr ""
 msgid "Omaduse Kirjeldus (description) help"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:prop_section
-msgid "Omaduse Valdkonnad (section) caption"
+#: classes/applications/calendar/calendar_event.aw:prop_sector
+msgid "Omaduse Valdkonnad (sector) caption"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:prop_section_comment
-msgid "Omaduse Valdkonnad (section) kommentaar"
+#: classes/applications/calendar/calendar_event.aw:prop_sector_comment
+msgid "Omaduse Valdkonnad (sector) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:prop_section_help
-msgid "Omaduse Valdkonnad (section) help"
+#: classes/applications/calendar/calendar_event.aw:prop_sector_help
+msgid "Omaduse Valdkonnad (sector) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_location
@@ -493,6 +493,30 @@ msgstr ""
 msgid "Omaduse Esilehe s&uuml;ndmus (front_event) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:prop_event_time
+msgid "Omaduse Toimumisaeg (event_time) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_event_time_comment
+msgid "Omaduse Toimumisaeg (event_time) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_event_time_help
+msgid "Omaduse Toimumisaeg (event_time) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_event_time_table
+msgid "Omaduse Toimumisaegade tabel (event_time_table) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_event_time_table_comment
+msgid "Omaduse Toimumisaegade tabel (event_time_table) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_event_time_table_help
+msgid "Omaduse Toimumisaegade tabel (event_time_table) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:prop_aliasmgr
 msgid "Omaduse Aliastehaldur (aliasmgr) caption"
 msgstr ""
@@ -541,6 +565,18 @@ msgstr ""
 msgid "Omaduse Kordused (recurrence) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr ""
@@ -555,6 +591,14 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:group_recurrence_help
 msgid "Grupi Kordumine (recurrence) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:group_projects22
@@ -581,8 +625,8 @@ msgstr ""
 msgid "Seose RELTYPE_UTEXTVAR10 (RELTYPE_UTEXTVAR10) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_SECTION
-msgid "Seose Tegevusala (RELTYPE_SECTION) tekst"
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_SECTOR
+msgid "Seose Tegevusala (RELTYPE_SECTOR) tekst"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_ORGANIZER
@@ -595,4 +639,24 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_LOCATION
 msgid "Seose Toimumiskoht (RELTYPE_LOCATION) tekst"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_EVENT_TIME
+msgid "Seose Toimumisaeg (RELTYPE_EVENT_TIME) tekst"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:363
+msgid "Algus"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:367
+msgid "L&otilde;pp"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:371
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:401
+msgid "Kustuta"
 msgstr ""

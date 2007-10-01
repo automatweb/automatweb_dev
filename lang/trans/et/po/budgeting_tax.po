@@ -38,27 +38,39 @@ msgid "Omaduse Kontole (to_acct) help"
 msgstr ""
 
 #: classes/applications/budgeting/budgeting_tax.aw:prop_amount
-msgid "Omaduse Summa (amount) caption"
+msgid "Omaduse Summa (Kui l&otilde;peb % m&auml;rgiga, siis protsentides) (amount) caption"
 msgstr ""
 
 #: classes/applications/budgeting/budgeting_tax.aw:prop_amount_comment
-msgid "Omaduse Summa (amount) kommentaar"
+msgid "Omaduse Summa (Kui l&otilde;peb % m&auml;rgiga, siis protsentides) (amount) kommentaar"
 msgstr ""
 
 #: classes/applications/budgeting/budgeting_tax.aw:prop_amount_help
-msgid "Omaduse Summa (amount) help"
+msgid "Omaduse Summa (Kui l&otilde;peb % m&auml;rgiga, siis protsentides) (amount) help"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation
-msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus (max_deviation) caption"
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_minus
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus - (max_deviation_minus) caption"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_comment
-msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus (max_deviation) kommentaar"
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_minus_comment
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus - (max_deviation_minus) kommentaar"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_help
-msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus (max_deviation) help"
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_minus_help
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus - (max_deviation_minus) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_plus
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus + (max_deviation_plus) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_plus_comment
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus + (max_deviation_plus) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_max_deviation_plus_help
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus + (max_deviation_plus) help"
 msgstr ""
 
 #: classes/applications/budgeting/budgeting_tax.aw:prop_pri
@@ -133,10 +145,14 @@ msgstr ""
 msgid "Seose Maksugrupp (RELTYPE_TAX_GRP) tekst"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:134
+#: classes/applications/budgeting/budgeting_tax.aw:138
 msgid "&Uuml;hekordne"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:135
+#: classes/applications/budgeting/budgeting_tax.aw:139
 msgid "Korduv"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:154
+msgid "Seos maksu %s ja kausta %s vahel"
 msgstr ""
