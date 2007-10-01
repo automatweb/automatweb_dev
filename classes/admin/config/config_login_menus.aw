@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.15 2007/06/05 09:41:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.16 2007/10/01 11:27:45 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -312,6 +312,26 @@ class config_login_menus extends class_base
 			$res = $this->get_cval("login_menus");
 		}
 		return aw_unserialize($res);
+	}
+
+	/** Sets the login menu for the given group
+		@attrib api=1 params=pos
+	
+		@param group_id required type=int
+			The gid of the group to set menus for
+
+		@param menu_id required type=oid
+			The menu to set as the login menu for the group
+	**/
+	function set_login_menu_for_group($grp_id, $menu_id)
+	{
+		// get active settings
+		$lm = $this->_get_login_menus();
+		$lm[aw_global_get("lang_id")][$grp_id]["menu"] = $menu_id;
+
+		$str = aw_serialize($lm);
+		$this->quote(&$str);
+		$this->set_cval("login_menus_".aw_ini_get("site_id"),$str);
 	}
 }
 ?>

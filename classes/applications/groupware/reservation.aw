@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.85 2007/09/20 10:13:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.86 2007/10/01 11:27:45 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1804,12 +1804,11 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 				aw_special_discount double,
 				aw_client_arrived int,
 				aw_people int,
-				aw_sum text
+				aw_sum text,
 				aw_special_sum double,
-				aw_special_discount double,
 				aw_products_discount double,
 				resource_price varchar(13),
-				resource_discount varchar(13),
+				resource_discount varchar(13)
 			)");
 			echo "table <br>\n";
 		flush();

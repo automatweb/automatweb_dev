@@ -209,7 +209,6 @@ class C_SoapClient {
 		}
 
 		$data = $this->http_get($headers, $content, $host, $port);
-		
 		if ($this->debug==1) {
 			print("<hr>");
 			print_r($data);

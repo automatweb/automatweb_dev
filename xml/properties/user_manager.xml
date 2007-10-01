@@ -42,17 +42,6 @@
             <field>users_tb</field>
       </property>
       <property>
-            <name>search_txt</name>
-            <table>objects</table>
-            <group>users</group>
-            <type>textbox</type>
-            <store>no</store>
-            <parent>vbox_users_tree</parent>
-            <size>20</size>
-            <field>search_txt</field>
-            <caption>Otsi gruppi</caption>
-      </property>
-      <property>
             <name>groups_tree</name>
             <table>objects</table>
             <group>users</group>
@@ -62,6 +51,31 @@
             <parent>vbox_users_tree</parent>
             <field>groups_tree</field>
             <caption>Puu</caption>
+      </property>
+      <property>
+            <name>search_txt</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>vbox_users_search</parent>
+            <size>20</size>
+            <captionside>top</captionside>
+            <field>search_txt</field>
+            <caption>Grupi nimi</caption>
+      </property>
+      <property>
+            <name>search_sbt</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>vbox_users_search</parent>
+            <size>20</size>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>search_sbt</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>table_selected_groups</name>
@@ -95,18 +109,6 @@
             <parent>vbox_users_content</parent>
             <field>table_users</field>
             <caption>Kasutajad </caption>
-      </property>
-      <property>
-            <name>submit_save</name>
-            <table>objects</table>
-            <group>users</group>
-            <type>submit</type>
-            <store>no</store>
-            <value>Salvesta</value>
-            <parent>vbox_users_content</parent>
-            <no_caption>1</no_caption>
-            <field>submit_save</field>
-            <caption>Salvesta</caption>
       </property>
       <property>
             <name>inactive_tb</name>
@@ -174,12 +176,26 @@
                   <group>users</group>
                   <area_caption></area_caption>
             </hbox_data>
-            <vbox_users_tree>
+            <left_bit>
                   <type>vbox</type>
                   <parent>hbox_data</parent>
                   <group>users</group>
                   <area_caption></area_caption>
+            </left_bit>
+            <vbox_users_tree>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kasutajate&amp;amp;nbsp;puu</area_caption>
+                  <group>users</group>
             </vbox_users_tree>
+            <vbox_users_search>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>users</group>
+            </vbox_users_search>
             <vbox_users_content>
                   <type>vbox</type>
                   <parent>hbox_data</parent>

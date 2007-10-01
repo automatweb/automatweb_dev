@@ -39,7 +39,7 @@ class image_manager extends aw_template
 		if ($image_list->count())
 		{
 			$imgo = $image_list->begin();
-			$image_url = html::get_change_url($imgo->id());
+			$image_url = html::get_change_url($imgo->id(), array("in_popup" => $_GET["in_popup"]));
 		}
 		else
 		{

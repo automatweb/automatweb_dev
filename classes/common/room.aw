@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.209 2007/09/25 13:12:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.210 2007/10/01 11:27:46 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -4844,7 +4844,11 @@ class room extends class_base
 	
 	function check_from_table($arr)
 	{
-		$ret = true;
+		$ret = 1;
+		if($this->max_capacity && $this->allow_multiple)
+		{
+			$ret = $this->max_capacity - $this->check_for_people;
+		}
 		foreach($this->res_table as $key => $val)
 		{
 			if($key > $arr["end"])
@@ -4865,22 +4869,32 @@ class room extends class_base
 					{
 						$this->is_after_buffer = 0;
 					}
-					if($val["verified"] && !$this->is_after_buffer) // juhul kui pole järelpuhver ja on kinnitatud, siis pole vaja enam edasi otsida
+					if($this->allow_multiple)
 					{
-						return false;
+						$ret = $ret - $val["people"];
 					}
 					else
 					{
-						$ret = false;
+						if($val["verified"] && !$this->is_after_buffer) // juhul kui pole järelpuhver ja on kinnitatud, siis pole vaja enam edasi otsida
+						{
+							return false;
+						}
+						else
+						{
+							$ret = false;
+						}
 					}
 				}
 			}
+			if($ret < 0) $ret = false;
 		}
 		return $ret;
 	}
 
 	function generate_res_table($room, $start = 0, $end = 0)
 	{
+		$this->max_capacity = $room->prop("max_capacity");
+		$this->allow_multiple = $room->prop("allow_multiple");
 		if(!$this->start)
 		{
 			classload("core/date/date_calc");
@@ -4941,6 +4955,7 @@ class room extends class_base
 			$this->res_table[$start]["real_end"] = $res->prop("end");
 			$this->res_table[$start]["real_start"] = $res->prop("start1");
 			$this->res_table[$start]["id"] = $res->id();
+			$this->res_table[$start]["people"] = $res->prop("people_count");
 			$customers[] = $res->prop("customer");
 		}
 		ksort($this->res_table);//if(aw_global_get("uid") == "struktuur") arr($this->res_table);

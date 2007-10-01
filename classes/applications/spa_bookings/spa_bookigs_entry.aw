@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.68 2007/08/29 14:41:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.69 2007/10/01 11:27:46 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1225,7 +1225,8 @@ $t->set_sortable(false);
 				
 				$d_from = 24*3600;
 				$d_to = 0;
-
+				$for_people = 0;
+				$allow_multiple = 0;
 				$tmd = $h*$time_step;
 				$tmd2 = min(3600*24, $tmd + $reservation_length);
 				$cur_step_start = $range_from+($i*24*3600)+$h*$time_step;
@@ -1233,19 +1234,25 @@ $t->set_sortable(false);
 				$avail = false;
 				foreach($p_rooms as $room)
 				{
+					if($room->prop("allow_multiple")) // idee selles, et kui ühes ruumis on lubatud mitmele, siis loeb kõigil kokku palju vaba ruumi on... kui mõnel ruumil pole määratud, siis see annab juurde väärtuse 1
+					{
+						$allow_multiple = 1;
+					}
+					$room2inst[$room->id()]->check_for_people = 1;
 					if ($room2oh[$room->id()])
 					{
 						list($d_start, $d_end) = $oh_i->get_times_for_date($room2oh[$room->id()], $range_from+($i*24*3600)+$h*3600);
 						$d_from = min($d_from, $d_start);
 						$d_to = max($d_to, $d_end);
 					}
-					if ($room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => ($cur_step_end+$tmp2))) && !$room2inst[$room->id()]->is_buffer)
+					if ($cp = $room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => ($cur_step_end+$tmp2))) && !$room2inst[$room->id()]->is_buffer)
 					{
 						if ($room2inst[$room->id()]->group_can_do_bron($room2settings[$room->id()], $cur_step_start))
 						{
 							if (!$room2inst[$room->id()]->is_paused($cur_step_start, $cur_step_end))
 							{
 								$avail = true;
+								$for_people+= $cp;
 							}
 						}
 					}
@@ -1293,6 +1300,10 @@ $t->set_sortable(false);
 						"url" => $url,
 						"caption" => sprintf("%02d:%02d-%02d:%02d", $tmd_h, floor(($tmd - $tmd_h*3600) / 60), $tmd2_h, floor(($tmd2 - $tmd2_h*3600) / 60))
 					));
+					if($allow_multiple)
+					{
+						$d["aa".$i].=" (".$for_people.")";
+					}
 				}
 			}
 			if (count($d))

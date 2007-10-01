@@ -357,8 +357,8 @@ class project_teams_impl extends class_base
 				$t->define_data(array(
 					"person" => html::obj_change_url($o),
 					"rank" => html::obj_change_url($o->prop("rank")),
-					"phone" => $o->prop_str("phone"),
-					"mail" => $o->prop_str("email"),
+					"phone" => $o->prop("phone.name"),
+					"mail" => $o->prop("email.name"),
 					"co" => html::obj_change_url($o->get_first_obj_by_reltype("RELTYPE_WORK")),
 					"oid" => $o->id(),
 //					"roles" => join("<br>", $rs)."<br>".html::popup(array(

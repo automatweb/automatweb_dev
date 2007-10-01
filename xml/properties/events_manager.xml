@@ -252,7 +252,7 @@
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>hidden</type>
+            <type>relpicker</type>
             <reltype>RELTYPE_EDITOR</reltype>
             <caption>Toimetaja</caption>
       </property>

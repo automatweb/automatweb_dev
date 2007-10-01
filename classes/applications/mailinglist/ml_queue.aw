@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.37 2007/09/19 10:48:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.38 2007/10/01 11:27:46 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -596,7 +596,7 @@ class ml_queue extends aw_template
 			$this->db_query($qx);
 			$count = $this->db_next();
 			//10 oleks nagu selline mõttetu arv.... et sellise hälbe nullib lihtsalt ära
-			if((($q["total"] - $q["position"]) > 0) && (($q["total"] - $q["position"]) < 10) && (($q["last_sent"] + 80000) < time()))
+			if((($q["total"] - $q["position"]) > 0) && (($q["total"] - $q["position"]) < 10) && (($q["last_sent"] + 3000) < time()))
 			{
 				$qx = "UPDATE ml_queue SET status = 2, position=".$count["cnt"]." , total=".$count["cnt"]."  WHERE qid = ".$q["qid"];
 				$this->db_query($qx);

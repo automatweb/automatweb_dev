@@ -960,7 +960,7 @@ class core extends acl_base
 				$add = $name."=".$value.$sep;
 				if(strlen($res.$add) > 3000)
 				{
-					break;
+					$add = substr($add, 0, 2000);
 				}
 				$res .= $add;
 			}
