@@ -247,7 +247,7 @@ function init_config($arr)
 			$GLOBALS["cfg"] = unserialize($fc);
 			if (is_array($GLOBALS["cfg"]["classes"]) && $GLOBALS["cfg"]["frontpage"] > 0)
 			{
-				// $read_from_cache = true;
+				$read_from_cache = true;
 			}
 		}
 		else
