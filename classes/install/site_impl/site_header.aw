@@ -35,7 +35,8 @@ exit_function("site_header::aw_startup");
 if (!$section)
 {
 	$section = aw_ini_get("frontpage");
-};
+	aw_global_set("section", $section);
+}
 
 // yeah. need to get rid of this as well. no time for that now though :(
 ?>
