@@ -3013,21 +3013,35 @@ class cfgform extends class_base
 			}
 
 			$this->cfgview_vars["cfgform"] = $args["id"];
+			$this->cfgview_vars["class"] = $class;
+			$this->cfgview_vars["action"] = $action;
 			$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 			$_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
 
 			// make request
 			classload("core/orb/orb");
-			$orb = new orb();
-			$orb->process_request(array(
-				"class" => $class,
-				"action" => $action,
-				"reforb" => $this->cfgview_vars["reforb"],
-				"user"	=> 1,//!!! whats that for?
-				"vars" => $this->cfgview_vars,
-				"silent" => false,
-			));
-			$content = $orb->get_data();
+			$content = false;
+
+			do
+			{
+				if (false !== $content)
+				{
+					$tmp = parse_url($content);
+					parse_str($tmp["query"], $this->cfgview_vars);
+				}
+
+				$orb = new orb();
+				$orb->process_request(array(
+					"class" => $this->cfgview_vars["class"],
+					"action" => $this->cfgview_vars["action"],
+					"reforb" => $this->cfgview_vars["reforb"],
+					"user"	=> 1,//!!! whats that for?
+					"vars" => $this->cfgview_vars,
+					"silent" => false,
+				));
+				$content = $orb->get_data();
+			}
+			while (0 === strpos($content, "http://"));
 		}
 
 		exit_function("cfg_form::get_class_cfgview");
