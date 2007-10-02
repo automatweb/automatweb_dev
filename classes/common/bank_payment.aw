@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.66 2007/09/25 12:28:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.67 2007/10/02 11:09:57 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -130,7 +130,8 @@ class bank_payment extends class_base
 		"seb"			=> "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r",
 		"sampopank"		=> "https://www.sampo.ee/cgi-bin/pizza",
 		"krediidipank"		=> "https://i-pank.krediidipank.ee/teller/maksa",
-		"nordeapank"		=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
+		//"nordeapank"		=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
+		"nordeapank"		=> "https://netbank.nordea.com/pnbepay/epay.jsp",
 		"hansapank_lv"		=> "https://www.hanzanet.lv/banklink/",
 		"hansapank_lt"		=> "https://lt.hanza.net/banklink/bl-lt/",
 		"credit_card"		=> "https://pos.estcard.ee/webpos/servlet/iPAYServlet",
