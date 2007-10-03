@@ -5538,7 +5538,6 @@ class crm_company extends class_base
 
 	/**
 		@attrib name=create_new_monthly_bill
-
 		@param id required type=int acl=view
 		@param co required type=int acl=view
 		@param post_ru optional
@@ -5583,10 +5582,34 @@ class crm_company extends class_base
 			// connections
 			foreach($b->connections_from() as $con)
 			{
-				$n->connect(array(
-					"to" => $con->prop("to"),
-					"reltype" => $con->prop("reltype")
-				));
+				if($con->prop("reltype") == 5)
+				{
+					$br = $con->to();
+					$nbr = new object();
+					$nbr->set_name($br->name());
+					$nbr->set_class_id(CL_CRM_BILL_ROW);
+					$nbr->set_parent($n->id());
+					foreach($br->properties() as $prop => $val)
+					{
+						if($nbr->is_property($prop))
+						{
+							$nbr->set_prop($prop , $val);
+						}
+					}
+					$nbr->save();
+					$nbr->set_meta($br->meta());
+					$n->connect(array(
+						"to" => $nbr->id(),
+						"reltype" => $con->prop("reltype")
+					));
+				}
+				else
+				{
+					$n->connect(array(
+						"to" => $con->prop("to"),
+						"reltype" => $con->prop("reltype")
+					));
+				}
 			}
 		}
 
