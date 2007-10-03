@@ -106,6 +106,14 @@ class crm_company_docs_impl extends class_base
 	**/
 	function get_tree_stuff($arr)
 	{
+
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		$classes = array(CL_MENU);
+		if ($sts && $sts->prop("show_files_and_docs_in_tree"))
+		{
+			$classes = array(CL_MENU, CL_DOCUMENT,CL_FILE);
+		}
 		extract($_GET); extract($_POST); extract($arr);
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree(array (
@@ -116,7 +124,7 @@ class crm_company_docs_impl extends class_base
 		));
 
 		$ol = new object_list(array(
-			"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+			"class_id" => $classes,
 			"lang_id" => array(),	
 			"parent" => $parent,
 			"sort_by" => "objects.class_id ASC",
@@ -141,7 +149,7 @@ class crm_company_docs_impl extends class_base
 			$tree->add_item(0,$d);
 			
 			$ol2 = new object_list(array(
-				"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+				"class_id" => $classes,
 				"lang_id" => array(),	
 				"parent" => $o->id(),
 			));
@@ -163,6 +171,15 @@ class crm_company_docs_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
+
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		$classes = array(CL_MENU);
+		if ($sts && $sts->prop("show_files_and_docs_in_tree"))
+		{
+			$classes = array(CL_MENU, CL_DOCUMENT,CL_FILE);
+		}
+
 		if (!$arr["request"]["tf"] && $arr["request"]["files_from_fld"] == "")
 		{
 			$arr["request"]["files_from_fld"] = "/";
@@ -191,8 +208,11 @@ class crm_company_docs_impl extends class_base
 			"url" => aw_url_change_var("tf", $fld->id()),
 			"is_open" => 1,
 		));
+		
+
+
 		$ol = new object_list(array(
-			"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+			"class_id" => $classes,
 			"lang_id" => array(),	
 			"parent" => $fld->id(),
 			"sort_by" => "objects.class_id ASC",
@@ -215,7 +235,7 @@ class crm_company_docs_impl extends class_base
 			$arr["prop"]["vcl_inst"]->add_item($fld->id(),$d);
 			
 			$ol2 = new object_list(array(
-				"class_id" => array(CL_MENU, CL_DOCUMENT,CL_FILE),
+				"class_id" => $classes,
 				"lang_id" => array(),	
 				"parent" => $o->id(),
 			));

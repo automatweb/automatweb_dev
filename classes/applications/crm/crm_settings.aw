@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.21 2007/06/27 12:22:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.22 2007/10/03 11:37:02 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -51,6 +51,9 @@
 	@property send_mail_feature type=checkbox ch_value=1 table=objects field=meta
 	@caption V&otilde;imalus saata CRMis maile
 
+	@property show_files_and_docs_in_tree type=checkbox ch_value=1 table=objects field=meta
+	@caption N&auml;ita puus faile ja dokumente
+
 	@property default_task_rows_bills_filter type=select table=objects field=meta
 	@caption Toimetuse ridades valitud Arve tulba vaikimisi filter
 
@@ -62,6 +65,10 @@
 
   	@property org_link_menu type=relpicker table=objects field=meta reltype=RELTYPE_MENU
 	@caption Organisatsioonide linkide kataloog
+
+
+
+
 
 @default group=tables
 	@property tables_toolbar type=toolbar store=no no_caption=1
@@ -592,6 +599,7 @@ class crm_settings extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_SETTINGS,
 			"lang_id" => array(),
+			"site_id" => array(),
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(

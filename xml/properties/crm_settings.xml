@@ -123,7 +123,16 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <caption>V&amp;amp;otilde;imalus saata CRMis maile</caption>
+            <caption>V&amp;amp;otilde;imalus saata CRMis</caption>
+      </property>
+      <property>
+            <name>show_files_and_docs_in_tree</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <caption>N&amp;amp;auml;ita puus faile ja dokumente</caption>
       </property>
       <property>
             <name>default_task_rows_bills_filter</name>
