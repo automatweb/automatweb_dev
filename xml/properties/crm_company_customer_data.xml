@@ -209,6 +209,11 @@
                   <clid>CL_EXTERNAL_SYSTEM_ENTRY</clid>
                   <caption>Siduss&amp;amp;uuml;steemi sisestus</caption>
             </EXT_SYS_ENTRY>
+            <STATUS>
+                  <value>69</value>
+                  <clid>CL_CRM_COMPANY_STATUS</clid>
+                  <caption>Kliendikategooria</caption>
+            </STATUS>
       </reltypes>
 </properties>
 

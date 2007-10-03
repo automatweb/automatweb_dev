@@ -8,6 +8,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_ADDRESS, on_save_address)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create_customer)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 @classinfo syslog_type=ST_CRM_COMPANY confirm_save_data=1 versioned=1 prop_cb=1
 
@@ -261,6 +262,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property insurance_table type=table no_caption=1 store=no
 	@caption Insurance table
 
+------ Yldine - staatused grupp
+@default group=statuses
+
+	@property statuses_tb type=toolbar store=no no_caption=1
+
+	@layout statuses_split type=hbox width=30%:70%
+
+		@layout statuses_tree_box type=vbox parent=statuses_split closeable=1 area_caption=Staatused
+
+			@property statuses_tree parent=statuses_tree_box type=treeview store=no no_caption=1
+
+		@layout statuses_tbl_box type=vbox parent=statuses_split
+
+			@property statuses_set_tbl parent=statuses_tbl_box type=table store=no no_caption=1
+	
+			@property statuses_tbl parent=statuses_tbl_box type=table store=no no_caption=1
 ------ Yldine - kasutajate seaded grupp
 @default group=user_settings
 
@@ -1028,6 +1045,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 @groupinfo cedit caption="&Uuml;ldkontaktid" parent=general
 @groupinfo org_sections caption="Tegevus" parent=general
 @groupinfo add_info caption="Lisainfo" parent=general
+@groupinfo statuses caption="Staatused" parent=general submit=no
 @groupinfo special_offers caption="Eripakkumised" submit=no parent=general
 @groupinfo comments caption="Kommentaarid" parent=general
 
@@ -1540,6 +1558,48 @@ class crm_company extends class_base
 						'leafs' => $leafs,
 						"edit_mode" => $edit_mode
 			));
+		}
+		if($_GET['group'] == 'relorg_s')
+		{
+			unset($statuses);
+		}
+		if($statuses)
+		{
+			classload("core/icons");
+			$st = get_instance(CL_CRM_COMPANY_STATUS);
+			$categories = $st->categories(0);
+			$company = get_current_company();
+			foreach($categories as $id=>$cat)
+			{
+				$tree->add_item(0,array(
+					"id" => 'cat'.$id,
+					"name" => $cat,
+					"iconurl" => icons::get_icon_url(CL_MENU),
+					"url" => aw_url_change_var(array(
+						"tf"=> 'cat'.$id
+					))
+				));
+				
+				$ol = new object_list(array(
+					"class_id" => array(CL_CRM_COMPANY_STATUS),
+					"category" => $id,
+					"parent" => $company->id()
+
+				));
+				if(count($ol->list))
+				foreach($ol->arr() as $o)
+				{
+					$tree->add_item('cat'.$id, array(
+						"id" => 'cat'.$o->id(),
+						"name" => $o->name(),
+						"url" => aw_url_change_var(array(
+							"tf" => 'st'.$o->id(),
+							"category" => 'st_'.$o->id()
+						)),
+					));
+					$this->get_s_tree_stuff('cat'.$o->id(), $tree, 0);
+				}
+			}
 		}
 		//if leafs
 		if($leafs)
@@ -3311,6 +3371,10 @@ class crm_company extends class_base
 		$arr["sbt_data"] = 0;
 		$arr["sbt_data2"] = 0;
 		$arr["sector"] = $_GET["sector"];
+		if($_GET['set_buyer_status'] && $_GET['action'] == 'new')
+		{
+			$arr["set_buyer_status"] = $_GET['set_buyer_status'];
+		}
 	}
 
 	/**
@@ -5932,6 +5996,48 @@ class crm_company extends class_base
 			return $o;
 		}
 	}
+	
+	function on_delete_company($arr)
+	{
+		$company = obj($arr["oid"]);
+		$customer_data1 = new object_list(array(
+			"buyer" => $company->id(),
+			"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
+		));
+		$customer_data1->delete();
+		$customer_data2 = new object_list(array(
+			"seller" => $company->id(),
+			"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
+		));
+		$customer_data2->delete();
+	}
+
+	function callback_post_save($arr)
+	{
+		if ($arr["request"]["co_is_buyer"] == 1)
+		{
+			$company = $arr["obj_inst"];
+			$cur = get_current_company();
+			$crel = $this->get_cust_rel($company, true,$cur);
+			if($arr["request"]["set_buyer_status"])
+			{
+				$customer_data = new object_list(array(
+					"buyer" => $company->id(),
+					"seller" => $cur->id(),
+					"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
+				));
+				foreach($customer_data->list as $cust_data_id)
+				{
+					$cd = obj($cust_data_id);
+					$status = obj($arr["request"]["set_buyer_status"]);
+					$cd->connect(array(
+						"to" => $status,
+						"type" => RELTYPE_STATUS
+					));
+				}
+			}
+		}
+	}
 
 	function callback_mod_layout(&$arr)
 	{
@@ -6338,18 +6444,48 @@ class crm_company extends class_base
 	function save_as_customer($arr)
 	{
 		// add all custs in $check as cust to $cust_cat
-		$cat = obj($arr["cust_cat"]);
-		foreach(safe_array($arr["check"]) as $cust)
+		
+		$stchk = explode('_', $arr["cust_cat"]);
+		if($stchk[0] == 'status')
 		{
-			if (!$cat->is_connected_to(array("to" => $cust)))
+			$status = obj($stchk[1]);
+			$cur = get_current_company();
+			foreach(safe_array($arr["check"]) as $cust)
 			{
-				$cat->connect(array(
-					"to" => $cust,
-					"type" => "RELTYPE_CUSTOMER"
+				$company = obj($cust);
+				$crel = $this->get_cust_rel($company, true,$cur);
+				$customer_data = new object_list(array(
+					"buyer" => $cust,
+					"seller" => $cur->id(),
+					"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
 				));
+				foreach($customer_data->list as $cust_data_id)
+				{
+					$cd = obj($cust_data_id);
+					if (!$cd->is_connected_to(array("to" => $status->id())))
+					{
+						$cd->connect(array(
+							"to" => $status,
+							"type" => RELTYPE_STATUS
+						));
+					}
+				}
 			}
 		}
-
+		else
+		{
+			$cat = obj($arr["cust_cat"]);
+			foreach(safe_array($arr["check"]) as $cust)
+			{
+				if (!$cat->is_connected_to(array("to" => $cust)))
+				{
+					$cat->connect(array(
+						"to" => $cust,
+						"type" => "RELTYPE_CUSTOMER"
+					));
+				}
+			}
+		}
 		return $arr["post_ru"];
 	}
 
@@ -6976,6 +7112,7 @@ class crm_company extends class_base
 		if ($arr["prop"]["value"] == 1)
 		{
 			$crel = $this->get_cust_rel($cur, true,$arr["obj_inst"]);
+			
 		}
 		else
 		{
@@ -7796,6 +7933,379 @@ Bank accounts: üksteise all
 		));
 	}
 
+	/**
+	@attrib name=statuses_save all_args=1
+	**/
+	function statuses_save($arr)
+	{
+		$company2 = obj($arr["id"]);
+		$company = get_current_company();
+		$conn = new connection();
+		$customer_data = new object_list(array(
+			"buyer" => $company2->id(),
+			"seller" => $company->id(),
+			"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
+		));
+		foreach($customer_data->list as $cust_data_id)
+		{
+			$cd = obj($cust_data_id);
+			foreach($arr["sel2"] as $sid=>$set)
+			{
+				if($arr["sel"][$sid] && $set == 0)
+				{
+					$status = obj($sid);
+					$cd->connect(array(
+						"to" => $status,
+						"type" => RELTYPE_STATUS
+					));
+				}
+				elseif(!$arr["sel"][$sid] && $set == 1)
+				{
+					$status = obj($sid);
+					$cd->disconnect(array(
+						"from" => $status
+					));
+				}
+			}
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+	@attrib name=add_customer_buyer all_args=1
+	**/
+	function add_customer_buyer($arr)
+	{
+		$seller = get_current_company();
+		$buyer = obj($arr["id"]);
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"buyer" => $buyer->id(),
+			"seller" => $seller->id()
+		));
+
+		if (!$ol->count())
+		{
+			$o = obj();
+			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+			$o->set_name("Kliendisuhe ".$seller->name()." => ".$buyer->name());
+			$o->set_parent($seller->id());
+			$o->set_prop("seller", $seller->id()); // yes this is correct, cause I'm a lazy iduit
+			$o->set_prop("buyer", $buyer->id());
+			$o->save();
+		}
+
+		return $arr["post_ru"];
+	}
+
+	function _get_statuses_tb($arr)
+	{
+		$tb = &$arr["prop"]["toolbar"];
+		
+		$company = get_current_company();
+		$parent = (strlen($arr['request']['tf'])>1)?$arr['request']['tf']:$company->id();
+		$params = array();
+		if($arr["request"]["category"])
+		{
+			$params["category"] =  $arr["request"]["category"];
+		}
+		else
+		{
+			$params["category"] =  0;
+		}
+		$tb->add_new_button(array(CL_CRM_COMPANY_STATUS), $parent, '', $params);
+
+		$tb->add_delete_button();
+
+		$company2 = obj($arr["request"]["id"]);
+		$conn = new connection();
+		$customer_data = new object_list(array(
+			"buyer" => $company2->id(),
+			"seller" => $company->id(),
+			"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
+		));
+		if(count($customer_data->list))
+		{
+			$tb->add_button(array(
+				"name" => "save",
+				"img" => "save.gif",
+				"tooltip" => t("Salvesta staatused"),
+				"action" => "statuses_save"
+			));
+		}
+		else
+		{
+			$tb->add_button(array(
+				"name" => "save",
+				"img" => "save.gif",
+				"tooltip" => t("Lisa organisatsioon ostjaks"),
+				"action" => "add_customer_buyer"
+			));
+		}
+	}
+
+	function _get_statuses_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"has_root" => 0,
+			"tree_id" => "company_statuses",
+			"persist_state" => 1,
+		));
+
+		classload("core/icons");
+		$st = get_instance(CL_CRM_COMPANY_STATUS);
+		$categories = $st->categories(0);
+		$company = get_current_company();
+		foreach($categories as $id=>$cat)
+		{
+			$t->add_item(0,array(
+				"id" => $id,
+				"name" => $cat,
+				"iconurl" => icons::get_icon_url(CL_MENU),
+				"url" => aw_url_change_var(array(
+					"tf"=> $id,
+					"category" => $id
+				))
+			));
+			
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_COMPANY_STATUS),
+				"category" => $id,
+				"parent" => $company->id()
+
+			));
+			if(count($ol->list))
+			foreach($ol->arr() as $o)
+			{
+				$t->add_item($id, array(
+					"id" => $o->id(),
+					"name" => $o->name(),
+					"url" => aw_url_change_var(array(
+						"tf" => $o->id(),
+						"category" => $id
+					)),
+				));
+				$this->get_s_tree_stuff($o->id(), $t, $id);
+			}
+
+			
+		}
+	}
+
+	function get_s_tree_stuff($parent, &$t, $cat)
+	{
+		if(substr($parent,0,3) == 'cat')
+		{
+			$parent = substr($parent,3);
+			$add = 'cat';
+		}
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_COMPANY_STATUS),
+			"parent" => $parent
+		));
+		if(count($ol->list))
+		{
+			foreach($ol->list as $o)
+			{
+				$o = obj($o);
+				$url = array(
+					"tf" => $add.$o->id(),
+					"category" => 'st_'.$o->id()
+				);
+				if($cat)
+				{
+					$url["category"] = $cat;
+				}
+				$t->add_item($add.$parent, array(
+					"id" => $add.$o->id(),
+					"name" => $o->name(),
+					"url" => aw_url_change_var($url),
+				));
+				$this->get_s_tree_stuff($add.$o->id(), $t, $cat);
+			}
+		}
+
+	}
+	
+	function _get_statuses_set_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+	
+		$t->define_field(array(
+			"name" => "cat",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"align" => "center"
+		));
+
+		$st = get_instance(CL_CRM_COMPANY_STATUS);
+		$categories = $st->categories(0);
+
+		$company = get_current_company();
+		$company2 = obj($arr["request"]["id"]);
+		$customer_data = new object_list(array(
+			"buyer" => $company2->id(),
+			"seller" => $company->id(),
+			"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
+		));
+		foreach($customer_data->list as $cd)
+		{
+			$cd = obj($cd);
+			$conn = $cd->connections_from(array(
+				"type" => RELTYPE_STATUS
+			));
+		}
+		foreach($conn as $c)
+		{
+			$status = obj($c->conn["to"]);
+			$t->define_data(array(
+				"cat" => $categories[$status->prop("category")],
+				"name" => $c->conn["to.name"],
+			));
+		}
+	}
+
+	function _get_statuses_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$st = get_instance(CL_CRM_COMPANY_STATUS);
+		$categories = $st->categories(0);
+
+		if(!$arr["request"]["tf"])
+		{
+			$t->define_field(array(
+				"caption" => t("Nimi"),
+				"name" => "name",
+				"align" => "center",
+				"sortable" => 1,
+			));
+			$t->set_caption('Kategooriad');
+
+			foreach($categories as $id=>$cat)
+			{
+				$t->define_data(array(
+					"name" => html::href(array(
+						"url" => aw_url_change_var(array(
+							"tf" => $id,
+							"category" => $id
+						)),
+						"caption" => $cat,
+					)),
+					"sel" => $id,
+				));
+			}
+		}
+		elseif(strlen($arr["request"]["tf"]) < 2)
+		{
+			$t->set_caption($categories[$arr["request"]["category"]]);
+			
+			$t->define_field(array(
+				"caption" => t("Vali"),
+				"name" => "check",
+				"align" => "center",
+				"sortable" => 1,
+			));
+			$t->define_field(array(
+				"caption" => t("Nimi"),
+				"name" => "name",
+				"align" => "center",
+				"sortable" => 1,
+			));
+
+			$company = get_current_company();
+			$company2 = obj($arr["request"]["id"]);
+			$customer_data = new object_list(array(
+				"buyer" => $company2->id(),
+				"seller" => $company->id(),
+				"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
+			));
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_COMPANY_STATUS),
+				"category" => $arr["request"]["tf"],
+				"parent" => $company->id()
+			));
+			foreach($ol->arr() as $o)
+			{
+				$conn = new connection();
+				foreach($customer_data->list as $cdid)
+				{
+					$c = $conn->find(array(
+						"from" => $cdid,
+						"to" => $o->id()
+					));
+				}
+				$t->define_data(array(
+					"name" => html::obj_change_url($o),
+					"check" => html::checkbox(array(
+						"name" => "sel[".$o->id()."]",
+						"value" => $o->id(),
+						"checked" => (count($c))?1:0
+					)).html::hidden(array(
+						"name" => "sel2[".$o->id()."]",
+						"value" => (count($c))?1:0
+					))
+				));
+			}
+		}
+		else
+		{
+			$parent = obj($arr["request"]["tf"]);
+			$t->set_caption($parent->name());
+
+			$t->define_field(array(
+				"caption" => t("Vali"),
+				"name" => "check",
+				"align" => "center",
+				"sortable" => 1,
+			));
+			$t->define_field(array(
+				"caption" => t("Nimi"),
+				"name" => "name",
+				"align" => "center",
+				"sortable" => 1,
+			));
+
+			$company = get_current_company();
+			$company2 = obj($arr["request"]["id"]);
+			$customer_data = new object_list(array(
+				"buyer" => $company2->id(),
+				"seller" => $company->id(),
+				"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
+			));
+
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_COMPANY_STATUS),
+				"parent" => $arr["request"]["tf"],
+			));
+			foreach($ol->arr() as $o)
+			{
+				$conn = new connection();
+				foreach($customer_data->list as $cdid)
+				{
+					$c = $conn->find(array(
+						"from" => $cdid,
+						"to" => $o->id()
+					));
+				}
+				$t->define_data(array(
+					"name" => html::obj_change_url($o),
+					"check" => html::checkbox(array(
+						"name" => "sel[".$o->id()."]",
+						"value" => $o->id(),
+						"checked" => (count($c))?1:0
+					)).html::hidden(array(
+						"name" => "sel2[".$o->id()."]",
+						"value" => (count($c))?1:0
+					))
+				));
+			}
+		}
+	}
 }
 
 ?>

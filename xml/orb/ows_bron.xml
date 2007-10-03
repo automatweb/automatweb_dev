@@ -8,13 +8,6 @@
 			</function>
 		</action>
 
-		<action name="show_available_rooms" all_args="1">
-			<function name="show_available_rooms">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="show_confirm_view" all_args="1">
 			<function name="show_confirm_view">
 				<arguments>
@@ -22,14 +15,7 @@
 			</function>
 		</action>
 
-		<action name="get_roominfo" all_args="1">
-			<function name="get_roominfo">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="handle_pay_submit" all_args="1">
+		<action name="handle_pay_submit">
 			<function name="handle_pay_submit">
 				<arguments>
 				</arguments>
@@ -42,5 +28,20 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="show_available_rooms" all_args="1">
+			<function name="show_available_rooms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_roominfo" all_args="1">
+			<function name="get_roominfo">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

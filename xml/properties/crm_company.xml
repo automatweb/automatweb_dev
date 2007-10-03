@@ -724,6 +724,45 @@
             <caption>Insurance table</caption>
       </property>
       <property>
+            <name>statuses_tb</name>
+            <table>objects</table>
+            <group>statuses</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>statuses_tb</field>
+      </property>
+      <property>
+            <name>statuses_tree</name>
+            <table>objects</table>
+            <group>statuses</group>
+            <parent>statuses_tree_box</parent>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>statuses_tree</field>
+      </property>
+      <property>
+            <name>statuses_set_tbl</name>
+            <table>objects</table>
+            <group>statuses</group>
+            <parent>statuses_tbl_box</parent>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>statuses_set_tbl</field>
+      </property>
+      <property>
+            <name>statuses_tbl</name>
+            <table>objects</table>
+            <group>statuses</group>
+            <parent>statuses_tbl_box</parent>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>statuses_tbl</field>
+      </property>
+      <property>
             <name>do_create_users</name>
             <table>objects</table>
             <group>user_settings</group>
@@ -3199,6 +3238,11 @@
                   <caption>Lisainfo</caption>
                   <parent>general</parent>
             </add_info>
+            <statuses>
+                  <caption>Staatused</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </statuses>
             <special_offers>
                   <caption>Eripakkumised</caption>
                   <submit>no</submit>
@@ -3897,6 +3941,25 @@
                   <group>general_sub</group>
                   <area_caption></area_caption>
             </co_bottom_buyer_r>
+            <statuses_split>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>statuses</group>
+                  <area_caption></area_caption>
+            </statuses_split>
+            <statuses_tree_box>
+                  <type>vbox</type>
+                  <parent>statuses_split</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Staatused</area_caption>
+                  <group>statuses</group>
+            </statuses_tree_box>
+            <statuses_tbl_box>
+                  <type>vbox</type>
+                  <parent>statuses_split</parent>
+                  <group>statuses</group>
+                  <area_caption></area_caption>
+            </statuses_tbl_box>
             <hbox_toolbar>
                   <type>hbox</type>
                   <group>contacts2</group>

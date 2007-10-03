@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.10 2007/07/18 10:02:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.11 2007/10/03 12:30:03 robert Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -93,6 +93,9 @@ default method=serialize
 
 @reltype EXT_SYS_ENTRY value=35 clid=CL_EXTERNAL_SYSTEM_ENTRY
 @caption Siduss&uuml;steemi sisestus
+
+@reltype STATUS value=69 clid=CL_CRM_COMPANY_STATUS
+@caption Kliendikategooria
 */
 
 class crm_company_customer_data extends class_base
