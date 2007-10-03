@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.210 2007/10/01 11:27:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.211 2007/10/03 14:33:43 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -4842,12 +4842,14 @@ class room extends class_base
 		return $prod_discount;
 	}
 	
+//kui ruumile tekitada muurtuja check_for_people , siis annab tulemuseks arvu palju inimesi mahub, juhul kui on ruumile võimalik mitu broneeringut teha
 	function check_from_table($arr)
 	{
 		$ret = 1;
-		if($this->max_capacity && $this->allow_multiple)
+		if($this->max_capacity && $this->allow_multiple && $this->check_for_people)
 		{
-			$ret = $this->max_capacity - $this->check_for_people;
+			$calc_number = 1;
+			$ret = $this->max_capacity;
 		}
 		foreach($this->res_table as $key => $val)
 		{
@@ -4869,7 +4871,7 @@ class room extends class_base
 					{
 						$this->is_after_buffer = 0;
 					}
-					if($this->allow_multiple)
+					if($calc_number)
 					{
 						$ret = $ret - $val["people"];
 					}
@@ -4886,7 +4888,7 @@ class room extends class_base
 					}
 				}
 			}
-			if($ret < 0) $ret = false;
+			if($ret < 0 ||  $ret < $this->check_for_people) $ret = false;
 		}
 		return $ret;
 	}

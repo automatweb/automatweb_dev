@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.69 2007/10/01 11:27:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.70 2007/10/03 14:33:44 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1245,7 +1245,7 @@ $t->set_sortable(false);
 						$d_from = min($d_from, $d_start);
 						$d_to = max($d_to, $d_end);
 					}
-					if ($cp = $room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => ($cur_step_end+$tmp2))) && !$room2inst[$room->id()]->is_buffer)
+					if (($cp = $room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => ($cur_step_end+$tmp2)))) && !$room2inst[$room->id()]->is_buffer)
 					{
 						if ($room2inst[$room->id()]->group_can_do_bron($room2settings[$room->id()], $cur_step_start))
 						{
