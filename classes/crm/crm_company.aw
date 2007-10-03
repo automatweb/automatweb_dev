@@ -8306,6 +8306,25 @@ Bank accounts: üksteise all
 			}
 		}
 	}
+	
+	/**
+	@attrib name=save_contact_rels all_args=1
+	**/
+	function save_contact_rels($arr)
+	{
+		$company = obj($arr["id"]);
+		foreach($arr["sel"] as $pid)
+		{
+			if(!$company->is_connected_to(array("to" => $pid, "type" => RELTYPE_WORKERS)))
+			{
+				$company->connect(array(
+					"to" => $pid,
+					"type" => RELTYPE_WORKERS
+				));
+			}
+		}
+		return $arr["post_ru"];
+	}
 }
 
 ?>

@@ -495,5 +495,12 @@
 			</function>
 		</action>
 
+		<action name="save_contact_rels" all_args="1">
+			<function name="save_contact_rels">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

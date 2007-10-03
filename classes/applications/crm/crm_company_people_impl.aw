@@ -79,6 +79,16 @@ class crm_company_people_impl extends class_base
 			'link'=> "javascript:submit_changeform('search_for_contacts')"
 		));
 
+		if($arr["request"]["contacts_search_show_results"])
+		{
+			$tb->add_button(array(
+				'name' => 'Salvesta',
+				'img' => 'save.gif',
+				'tooltip' => t('Lisa isikud organisatisooni'),
+				'action' => 'save_contact_rels'
+			));
+		}
+
 		$tb->add_separator();
 
 		$tb->add_button(array(
@@ -566,6 +576,10 @@ class crm_company_people_impl extends class_base
 		}
 
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
 		$t->define_field(array(
 			'name' => 'name',
 			'caption' => t('Nimi'),
@@ -653,6 +667,7 @@ class crm_company_people_impl extends class_base
 				"phone" => $person_data['phone'],
 				"rank" => $person_data["rank"],
 				'section' => $person_data['section'],
+				"oid" => $o->id(),
 				"email" => html::href(array(
 					"url" => "mailto:" . $person_data['email'],
 					"caption" => $person_data['email'],
