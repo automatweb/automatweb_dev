@@ -348,15 +348,6 @@
             <caption>Laius</caption>
       </property>
       <property>
-            <name>ndocs</name>
-            <table>menu</table>
-            <type>textbox</type>
-            <size>3</size>
-            <group>doc_show</group>
-            <field>ndocs</field>
-            <caption>Mitu viimast dokumenti</caption>
-      </property>
-      <property>
             <name>show_lead</name>
             <table>objects</table>
             <type>checkbox</type>
@@ -732,6 +723,18 @@
             <no_caption>1</no_caption>
             <group>docs_from</group>
             <field>sss_tb</field>
+      </property>
+      <property>
+            <name>ndocs</name>
+            <table>menu</table>
+            <type>textbox</type>
+            <size>3</size>
+            <group>
+                  <num_0>doc_show</num_0>
+                  <num_1>docs_from</num_1>
+            </group>
+            <field>ndocs</field>
+            <caption>Mitu viimast dokumenti</caption>
       </property>
       <property>
             <name>sss</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.206 2007/09/27 13:19:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.207 2007/10/04 09:52:57 robert Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -144,9 +144,6 @@
 
 	@groupinfo doc_show caption="Dokumentide kuvamine" parent=show
 
-		@property ndocs type=textbox size=3 group=doc_show table=menu
-		@caption Mitu viimast dokumenti
-
 		@property show_lead type=checkbox field=meta method=serialize group=doc_show ch_value=1
 		@caption N&auml;ita ainult leadi
 
@@ -288,6 +285,9 @@
 	@groupinfo docs_from caption="Sisu asukoht" parent=menus
 
 		@property sss_tb type=toolbar store=no no_caption=1 group=docs_from
+
+		@property ndocs type=textbox size=3 group=doc_show,docs_from table=menu
+		@caption Mitu viimast dokumenti
 
 		@property sss type=table store=no group=docs_from no_caption=1
 		@caption Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse
