@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.9 2007/05/09 09:51:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.10 2007/10/04 12:13:49 robert Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -378,6 +378,42 @@ class obj_quick_add extends class_base
 			"text" => t("Toimeta kiirmen&uuml;&uuml;d"),
 			"link" => html::get_change_url($bm->id(), array("return_url" => $arr["url"], "group" => "bms"))
 		));
+		$url = parse_url($arr["url"]);
+		parse_str($url["query"], $urlvars);
+		if($urlvars["class"] = "admin_if" && $urlvars["parent"])
+		{
+			$ol = new object_list(array(
+				"parent" => $urlvars["parent"]
+			));
+			if(count($ol->list))
+			{
+				$pm->add_sub_menu(array(
+					"name" => "cur",
+					"text" => "Muu objekt"
+				));
+			}
+			$set_cls = array();
+			foreach($ol->list as $oid)
+			{
+				$o = obj($oid);
+				$class_id = $o->class_id();
+				if(!$set_cls[$class_id])
+				{
+					$set_cls[$class_id] = 1;
+					$cl_name = aw_ini_get('classes.'.$class_id.'.file');;
+					$cl_title = aw_ini_get('classes.'.$class_id.'.name');
+					$pm->add_item(array(
+						"text" => $cl_title,
+						"link" => html::get_new_url(
+							$cl_name,
+							$urlvars["parent"],
+							array("return_url" => $arr["url"])
+						),
+						"parent" => "cur"
+					));
+				}
+			}
+		}
 
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($pm->get_menu(array(
