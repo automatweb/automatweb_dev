@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.3 2007/09/25 13:43:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.4 2007/10/04 13:56:01 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -386,6 +386,7 @@ class ows_bron extends class_base
 		$parameters = array();
 		$parameters["hotelId"] = $location;
 		$parameters["webLanguageId"] = $lang;
+enter_function("ws:GetHotelDetails");
 		$return = $this->do_orb_method_call(array(
 			"action" => "GetHotelDetails",
 			"class" => "http://markus.ee/RevalServices/Booking/",
@@ -393,7 +394,7 @@ class ows_bron extends class_base
 			"method" => "soap",
 			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
-
+exit_function("ws:GetHotelDetails");
 		$hotel = $return["GetHotelDetailsResult"];
 		if($hotel["ResultCode"] != 'Success')
 		{
@@ -479,6 +480,7 @@ class ows_bron extends class_base
 			$parameters["customCurrencyCode"] = $currency;
 		}
 
+enter_function("ws:GetAvailableRates");
 		$return = $this->do_orb_method_call(array(
 			"action" => "GetAvailableRates",
 			"class" => "http://markus.ee/RevalServices/Booking/",
@@ -486,8 +488,13 @@ class ows_bron extends class_base
 			"method" => "soap",
 			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
-		$rates = $return["GetAvailableRatesResult"];
+exit_function("ws:GetAvailableRates");
 
+/*echo dbg::dump($parameters);
+echo dbg::dump($return);
+echo date("d.m.Y H:i:s");*/
+
+		$rates = $return["GetAvailableRatesResult"];
 		if(!$rates["RateList"])
 		{
 			die("webservice error ".dbg::dump($return));
@@ -498,8 +505,11 @@ class ows_bron extends class_base
 		$i=0;
 		foreach($rates as $rate)
 		{
-			$i++;
-			if($i>5)continue;
+			if ($rate["IsVisible"] == "false" || $rate["IsAvailableForBooking"] == "false")
+			{
+				continue;
+			}
+
 			$this->vars(array(
 				"Id" => $rate["RateId"],
 				"Name" => $rate["Name"],
@@ -507,8 +517,8 @@ class ows_bron extends class_base
 				"Note" => $rate["LongNote"],
 				"Pic" => $rate["PictureUrl"],
 				"Slideshow" => $rate["SlideshowUrl"],
-				"price1_avg" => $rate["AverageDailyRate"],
-				"price1_total" => $rate["TotalPrice"],
+				"price1_avg" => $rate["AverageDailyRateInCustomCurrency"],
+				"price1_total" => $rate["TotalPriceInCustomCurrency"],
 				"roominfo_url" => $this->mk_my_orb("get_roominfo", array(
 					"location" => $location,
 					"rateid" => $rate["RateId"],
