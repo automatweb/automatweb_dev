@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.57 2007/09/25 21:58:36 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.58 2007/10/04 18:11:23 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -51,8 +51,11 @@ caption Uuenda ainult toote andmed
 
 @groupinfo imported_products caption="Imporditud tooted"
 
-	@property imported_products_table type=table no_caption=1 group=imported_products
-	@caption Imporditud toodete tabel
+	@property import_log_list type=table no_caption=1 group=imported_products
+	@caption Impordi logide list
+
+	@property import_log_item type=table no_caption=1 group=imported_products
+	@caption Impordi logi vaatamine
 
 @groupinfo products_manager caption="Toodete haldus" 
 
@@ -659,9 +662,55 @@ class otto_import extends class_base
 		$t->set_sortable(false);
 	}
 
-
-	function _get_imported_products_table($arr)
+	function _get_import_log_list($arr)
 	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+		$t->define_field(array(
+			'name' => 'products_count',
+			'caption' => t('Toodete arv'),
+			'width' => '10%',
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'import_time',
+			'caption' => t('Impordi aeg'),
+		));
+		$t->define_field(array(
+			'name' => 'csv_files',
+			'caption' => t('csv failid')
+		));
+		$t->define_field(array(
+			'name' => 'view',
+			'caption' => t('Vaata'),
+		));
+
+		$this->db_query('select count(*) as count,csv_files,import_time from otto_import_log group by import_time order by import_time desc');
+		while ($row = $this->db_next())
+		{
+			$t->define_data(array(
+				'products_count' => $row['count'],
+				'import_time' => date('d.m.Y H:m:s', $row['import_time']),
+				'csv_files' => $row['csv_files'],
+				'view' => html::href(array(
+					'caption' => t('Vaata'),
+					'url' => aw_url_change_var('import_time',  $row['import_time'])
+
+				)),
+
+
+			));
+		}
+	}
+
+
+	function _get_import_log_item($arr)
+	{
+		if (empty($_GET['import_time']))
+		{
+			return PROP_IGNORE;
+		}
+
 		$t = &$arr['prop']['vcl_inst'];
 		$t->define_field(array(
 			'name' => 'oid',
@@ -676,10 +725,12 @@ class otto_import extends class_base
 			'caption' => t('Pildid'),
 		));
 
-		$products = safe_array($_SESSION['otto_import_product_data']);
+		$this->db_query('select * from otto_import_log where import_time = '.(int)$_GET['import_time']);
 
-		foreach ($products as $prod_id)
+		while ($row = $this->db_next())
 		{
+			$prod_id = $row['product_id'];
+
 			$prod_obj = new object($prod_id);
 
 			$data_str = '<strong>'.$prod_obj->name().'</strong><br />';
@@ -688,6 +739,15 @@ class otto_import extends class_base
 			$data_str .= '<br />Kategooriad: '.$prod_obj->prop('user11');
 			$data_str .= '<br />Leht: '.$prod_obj->prop('user18');
 			$data_str .= '<br />Tootekoodid: '.$prod_obj->prop('user6');
+			$data_str .= '<br />'.html::href(array(
+				'caption' => t('Muuda toodet'),
+				'url' => $this->mk_my_orb('change', array(
+					'id' => $arr['obj_inst']->id(),
+					'group' => 'products_manager',
+					'products_manager_prod_id' => $prod_obj->id(),
+					'return_url' => post_ru()
+				), CL_OTTO_IMPORT),
+			));
 
 			$images = explode(',', $prod_obj->prop('user3'));
 		
@@ -723,7 +783,7 @@ class otto_import extends class_base
 		return PROP_OK;
 	}
 
-	function _set_imported_products_table($arr)
+	function _set_import_log_item($arr)
 	{
 		foreach (safe_array($arr['request']['images']) as $prod_id => $images)
 		{
@@ -802,6 +862,10 @@ class otto_import extends class_base
 			'caption' => t('Nimetus'),
 		));
 		$t->define_field(array(
+			'name' => 'pcodes',
+			'caption' => t('Toote koodid'),
+		));
+		$t->define_field(array(
 			'name' => 'change',
 			'caption' => t('Muuda'),
 		));
@@ -833,6 +897,7 @@ class otto_import extends class_base
 				$t->define_data(array(
 					'oid' => $oid,
 					'name' => $o->name(),
+					'pcodes' => $o->prop('user6'),
 					'change' => html::href(array(
 						'caption' => t('Muuda'),
 						'url' => $this->mk_my_orb('change', array(
@@ -896,8 +961,8 @@ class otto_import extends class_base
 			));
 
 			$t->define_data(array(
-				'caption' => t('Toote OID'),
-				'data' => $prod_link . $prod_id_hidden_element . ' - '.$prod_obj->name()
+				'caption' => t('Toode'),
+				'data' => $prod_link . $prod_id_hidden_element . ' - <strong>'.$prod_obj->name().'</strong>'
 			));
 
 			$t->define_data(array(
@@ -932,6 +997,20 @@ class otto_import extends class_base
 					'name' => 'product_codes',
 					'value' => $prod_obj->prop('user6'),
 					'size' => 100
+				)),
+			));
+
+			$t->define_data(array(
+				'caption' => t('V&auml;rvid'),
+				'data' => $prod_obj->prop('user7')
+			));
+
+			$t->define_data(array(
+				'caption' => t('N&auml;idatakse toodete nimekirjas'),
+				'data' => html::checkbox(array(
+					'name' => 'show_in_products_list',
+					'value' => 1,
+					'checked' => ($prod_obj->prop('userch4') == 1) ? true : false
 				)),
 			));
 
@@ -1053,6 +1132,13 @@ class otto_import extends class_base
 		if ($prod_obj->prop('user6') != $arr['request']['product_codes'])
 		{
 			$prod_obj->set_prop('user6', $arr['request']['product_codes']);
+			$save = true;
+		}
+
+		// show this product in products list:
+		if ($prod_obj->prop('userch4') != $arr['request']['show_in_products_list'])
+		{
+			$prod_obj->set_prop('userch4', (int)$arr['request']['show_in_products_list']);
 			$save = true;
 		}
 
@@ -2837,7 +2923,6 @@ class otto_import extends class_base
 		// unset the products list which was imported last time:
 		unset($_SESSION['otto_import_product_data']);
 
-	//	if ($this->doing_pict_i)
 		if ($arr['doing_pict_i'])
 		{
 			$this->pictimp($o);
@@ -2884,6 +2969,9 @@ class otto_import extends class_base
 	// takes otto_import obj. instance as parameter
 	function import_product_objects($arr)
 	{
+
+		$import_time = time();
+
 		$o = $arr['otto_import'];
 
 		set_time_limit(0);
@@ -3036,9 +3124,12 @@ class otto_import extends class_base
 						color = '".$code_data['color']."'
 				");
 
+/*
 				// see siin on ajutine, selleks, et lingid vanadele objektidele t88le j22ks. 
 				// paari kuu p2rast v6ib selle siit ilmselt 2ra koristada et ta vett ei segaks:
 				// 22.03.2007 --dragut
+
+// lets take this out now ... and we'll see if anything gets b0rked or not --dragut 04.10.2007
 				$this->db_query("
 					update
 						otto_tmp_obj_lut
@@ -3048,6 +3139,7 @@ class otto_import extends class_base
 						pcode = '".$product_code."' and
 						lang_id = ".aw_global_get('lang_id')."
 				");
+*/
 			}
 
 			////
@@ -3247,37 +3339,39 @@ class otto_import extends class_base
 			$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = '$product[pg]' AND nr = '$product[nr]' AND type IN ($typestr) ");
 */
 		//	$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = '$product[pg]' AND nr = '$product[nr]' ");
-$this->db_query("
-select 
-	otto_imp_t_prices.pg as prices_pg,
-	otto_imp_t_prices.nr as prices_nr,
-	otto_imp_t_prices.type as prices_type,
-	otto_imp_t_prices.size as size,
-	otto_imp_t_prices.unit as unit,
-	otto_imp_t_prices.price as price,
-	otto_imp_t_prices.s_type as prices_s_type,
-	
-	otto_imp_t_codes.pg as codes_pg,
-	otto_imp_t_codes.nr as codes_nr,
-	otto_imp_t_codes.size as codes_size,
-	otto_imp_t_codes.color as color,
-	otto_imp_t_codes.code as code,
-	otto_imp_t_codes.s_type as codes_s_type,
-	otto_imp_t_codes.full_code as full_code
-from 
-	otto_imp_t_prices left join otto_imp_t_codes on (
-		otto_imp_t_prices.nr = otto_imp_t_codes.nr and 
-		otto_imp_t_prices.type = otto_imp_t_codes.size and 
-		otto_imp_t_prices.pg = otto_imp_t_codes.pg
-	)
-where
-	otto_imp_t_prices.pg = '".$product['pg']."' and
-	otto_imp_t_codes.pg = '".$product['pg']."' and
-	otto_imp_t_prices.nr = '".$product['nr']."' and
-	otto_imp_t_codes.nr = '".$product['nr']."' and 
-	otto_imp_t_prices.lang_id = ".aw_global_get('lang_id')."
-order by prices_nr,code,price
-");
+
+			$this->db_query("
+				select 
+					otto_imp_t_prices.pg as prices_pg,
+					otto_imp_t_prices.nr as prices_nr,
+					otto_imp_t_prices.type as prices_type,
+					otto_imp_t_prices.size as size,
+					otto_imp_t_prices.unit as unit,
+					otto_imp_t_prices.price as price,
+					otto_imp_t_prices.s_type as prices_s_type,
+					
+					otto_imp_t_codes.pg as codes_pg,
+					otto_imp_t_codes.nr as codes_nr,
+					otto_imp_t_codes.size as codes_size,
+					otto_imp_t_codes.color as color,
+					otto_imp_t_codes.code as code,
+					otto_imp_t_codes.s_type as codes_s_type,
+					otto_imp_t_codes.full_code as full_code
+				from 
+					otto_imp_t_prices left join otto_imp_t_codes on (
+						otto_imp_t_prices.nr = otto_imp_t_codes.nr and 
+						otto_imp_t_prices.type = otto_imp_t_codes.size and 
+						otto_imp_t_prices.pg = otto_imp_t_codes.pg
+					)
+				where
+					otto_imp_t_prices.pg = '".$product['pg']."' and
+					otto_imp_t_codes.pg = '".$product['pg']."' and
+					otto_imp_t_prices.nr = '".$product['nr']."' and
+					otto_imp_t_codes.nr = '".$product['nr']."' and 
+					otto_imp_t_prices.lang_id = ".aw_global_get('lang_id')."
+				order by prices_nr,code,price
+			");
+
 			$rows = array();
 			while ($row = $this->db_next())
 			{
@@ -3401,10 +3495,30 @@ order by prices_nr,code,price
 			// lets put the imported product id into the session, so i can show it after the import
 			////
 			$_SESSION['otto_import_product_data'][$product_obj->id()] = $product_obj->id();
+
+			// lets fill the otto_import_log table:
+			$this->db_query('
+				INSERT INTO 
+					otto_import_log 
+				SET 
+					import_time = '.$import_time.', 
+					product_id = '.$product_obj->id().',
+					csv_files = \''.str_replace( "\n", ",", trim($o->prop('fnames')) ).'\'
+			');
+
+			
 		}
 
 		echo "[!!] hear hear. prods done. Imporditi $items_done toodet [!!] <br>\n";
 
+		$this->db_query('select import_time from otto_import_log group by import_time order by import_time desc limit 20');
+		$latest_import_times = array();
+		while ($row = $this->db_next())
+		{
+			$latest_import_times[] = $row['import_time'];
+		}
+
+		$this->db_query('delete from otto_import_log where import_time not in('.implode(',', $latest_import_times).')');
 
 		////////////////
 		// clear cache
@@ -3425,51 +3539,9 @@ order by prices_nr,code,price
 			unlink($file);
 		}
 
-
-/*
-		// print out the conclusion
-		if (!empty($not_found_products_by_page))
-		{
-			$discount_folders = $o->prop('discount_products_parents');
-			if (!empty($discount_folders))
-			{
-				$this->db_query('
-					select 
-						product_code 
-					from 
-						otto_imp_t_prod_to_cat left join otto_imp_t_aw_to_cat on otto_imp_t_prod_to_cat.category = otto_imp_t_aw_to_cat.category 
-					where 
-						otto_imp_t_prod_to_cat.product_code in ('.implode(',', array_keys($this->not_found_products)).') and
-						otto_imp_t_aw_to_cat.aw_folder in ('.$discount_folders.')
-				');
-				$cat_data = array();
-				while ($row = $this->db_next())
-				{
-					$cat_data[] = $row['product_code'];
-				}
-			}
-			if (!empty($cat_data))
-			{
-				
-			}
-		//	arr($cat_data);
-			echo "<b>Kokkuv&otilde;te imporditud tootekoodidest, millele pilti ei &otilde;nnestunud leida</b><br />\n";
-			foreach ($not_found_products_by_page as $page => $products)
-			{
-				echo "Page $page, products ".count($products)."<br />\n";
-				foreach ($products as $product)
-				{
-					echo "-- Product ".$product[4]." / ".$product[5];
-					if (array_search($product[4], $cat_data))
-					{
-						echo " [ soodus toode ]";
-					}
-					echo "<br />\n";
-				}
-			}
-		}
-*/
-		die(t("all done! <br>"));
+		echo "all done! <br />\n";
+		return;
+	//	die(t("all done! <br>"));
 	}
 
 	function import_data_from_csv($o)
