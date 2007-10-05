@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.157 2007/09/20 09:27:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.158 2007/10/05 12:31:30 kristo Exp $
 /*
 
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_PERSON, on_delete_person)
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
 @tableinfo files index=id master_table=objects master_index=oid	
@@ -1524,13 +1523,5 @@ class file extends class_base
 		return false;
 	}
 
-	function on_delete_person($arr)
-	{
-		$list = new object_list(array(
-			"class_id" => CL_MIDAGI, 
-			"isik" => $arr["oid"]
-		));
-		$list->delete();
-	}
 };
 ?>
