@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.184 2007/09/26 13:38:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.185 2007/10/05 11:58:37 robert Exp $
 // task.aw - TODO item
 /*
 
@@ -4088,8 +4088,9 @@ class task extends class_base
 			"text" => t("Tellija"),
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 		));
-		
-		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1), "popup_search");
+
+
+		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1, "s" => $s), "crm_project_search");
 		$tb->add_sub_menu(array(
 			"parent" => "search",
 			"text" => t("Projekt"),
@@ -4106,6 +4107,7 @@ class task extends class_base
 				$s["co"][$c->prop("to")] = $c->prop("to");
 			}
 		}
+
 		$url = $this->mk_my_orb("do_search", array("pn" => "participants_h", "clid" => CL_CRM_PERSON,"multiple" => 1, "s" => $s), "crm_participant_search");
 		$tb->add_menu_item(array(
 			"parent" => "search",
@@ -4119,7 +4121,30 @@ class task extends class_base
 			"action" => "delete_rels"
 		));
 	
-		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1), "popup_search");
+		$s = array("co" => array($cur->id() => $cur->id()));
+		if (is_oid($cur->id()))
+		{
+			$cust_data = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"seller" => $cur->id()
+			));
+			foreach($cust_data->list as $cdid)
+			{
+				$cd = obj($cdid);
+				$s["co"][$cd->prop("buyer")] = $cd->prop("buyer");
+			}
+			$cust_data2 = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"buyer" => $cur->id()
+			));
+			foreach($cust_data2->list as $cdid)
+			{
+				$cd = obj($cdid);
+				$s["co"][$cd->prop("seller")] = $cd->prop("seller");
+			}
+		}
+
+		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1, "s" => $s), "crm_project_search");
 		$tb->add_menu_item(array(
 			"parent" => "project_search",
 			"text" => t("Otsi"),
