@@ -517,6 +517,16 @@
             <field>cedit_url_tbl</field>
       </property>
       <property>
+            <name>cedit_bank_account_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ceditbank</parent>
+            <field>cedit_bank_account_tbl</field>
+      </property>
+      <property>
             <name>cedit_adr_tbl</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
@@ -552,6 +562,14 @@
       </property>
       <property>
             <name>url</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>aw_bank_account</name>
             <table>objects</table>
             <group>contact</group>
             <type>hidden</type>
@@ -1936,6 +1954,11 @@
                   <clid>CL_META</clid>
                   <caption>sissetuleku meetod</caption>
             </BUYER_REFERAL_TYPE>
+            <BANK_ACCOUNT>
+                  <value>72</value>
+                  <clid>CL_CRM_BANK_ACCOUNT</clid>
+                  <caption>arveldusarve</caption>
+            </BANK_ACCOUNT>
       </reltypes>
       <layout>
             <co_bottom_seller>
@@ -2049,6 +2072,12 @@
                   <area_caption>URL</area_caption>
                   <group>contact</group>
             </cedit_url>
+            <ceditbank>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Pangaarved</area_caption>
+                  <group>contact</group>
+            </ceditbank>
             <ceditadr>
                   <type>vbox</type>
                   <closeable>1</closeable>

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.180 2007/08/29 08:27:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.181 2007/10/05 13:49:03 robert Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -222,6 +222,9 @@ caption Msn/yahoo/aol/icq
 			@layout cedit_url type=vbox parent=ceditemlurl closeable=1 area_caption=URL
 
 				@property cedit_url_tbl type=table store=no no_caption=1 parent=cedit_url store=no
+		@layout ceditbank type=vbox closeable=1 area_caption=Pangaarved
+
+			@property cedit_bank_account_tbl type=table store=no no_caption=1 parent=ceditbank
 
 		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
 
@@ -232,6 +235,7 @@ caption Msn/yahoo/aol/icq
 @property phone type=hidden table=objects field=meta method=serialize
 @property fax type=hidden table=objects field=meta method=serialize
 @property url type=hidden table=objects field=meta method=serialize
+@property aw_bank_account type=hidden table=objects field=meta method=serialize
 
 ------------------------------------------------------------------
 @groupinfo description caption="Kirjeldus" parent=general
@@ -786,6 +790,9 @@ caption S&otilde;bragrupid
 @reltype BUYER_REFERAL_TYPE value=71 clid=CL_META
 @caption sissetuleku meetod
 
+@reltype BANK_ACCOUNT value=72 clid=CL_CRM_BANK_ACCOUNT
+@caption arveldusarve
+
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
@@ -817,6 +824,7 @@ class crm_person extends class_base
 			case "fax":
 			case "url":
 			case "email":
+			case "aw_bank_account":
 				return PROP_IGNORE;
 
 			case "cedit_phone_tbl":
@@ -824,6 +832,7 @@ class crm_person extends class_base
 			case "cedit_url_tbl":
 			case "cedit_email_tbl":
 			case "cedit_adr_tbl":
+			case "cedit_bank_account_tbl":
 				static $i;
 				if (!$i)
 				{
@@ -1712,7 +1721,19 @@ class crm_person extends class_base
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_email_tbl($t, $arr);
 				break;
-
+			case "cedit_bank_account_tbl":
+				$i = get_instance("applications/crm/crm_company_cedit_impl");
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"name" => t("Arvenumbri nimetus"),
+					"account" => t("Arve number"),
+					"bank" => t("Pank"),
+					"office_code" => t("Kodukontori kood"),
+				);
+				$i->init_cedit_tables(&$t, $fields);
+				$i->_get_acct_tbl($t, $arr);
+				$t->table_caption = t("Pangaarved");
+				break;
 			case "cedit_adr_tbl":
 				$i = get_instance("applications/crm/crm_company_cedit_impl");
 				$t = &$data["vcl_inst"];
@@ -4289,6 +4310,21 @@ class crm_person extends class_base
 		if(strlen($emails))
 		{
 			$ret.=$emails;
+		}
+
+		$conns = $p->connections_from(array(
+			"type" => "RELTYPE_BANK_ACCOUNT",
+		));
+		if(sizeof($conns))
+		{
+			$aa = array();
+			foreach($conns as $c)
+			{
+				$a = $c->to();
+				$aa[] = $a->prop("acct_no");
+			}
+			$accounts = join($aa, ', ');
+			$ret .= ', '.$accounts;
 		}
 		return $ret;
 	}
