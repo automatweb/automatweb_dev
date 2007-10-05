@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.39 2007/07/20 09:19:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.40 2007/10/05 12:57:03 robert Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -7,7 +7,10 @@
 
 @default table=objects
 
-@default group=general
+@default group=data
+	
+	@property name type=textbox rel=1 trans=1 table=objects
+	@caption Nimi
 
 	@property folder type=relpicker multiple=1 reltype=RELTYPE_IMG_FOLDER field=meta method=serialize 
 	@caption Piltide kataloog
@@ -18,14 +21,22 @@
 	@property rows type=textbox size=5 field=meta method=serialize
 	@caption Ridu
 
+@default group=settings
+
 	@property comments type=checkbox field=flags method=bitmask ch_value=1
 	@caption Pildid kommenteeritavad
-
+	
 	@property style type=relpicker reltype=RELTYPE_STYLE field=meta method=serialize
 	@caption Piltide stiil
 
 	@property sorter type=select field=meta method=serialize
 	@caption Piltide j&auml;rjestamine
+
+	@property addheight type=textbox size=5 field=meta method=serialize default=0
+	@caption Pildi aknale lisatav kõrgus
+
+	@property addwidth type=textbox size=5 field=meta method=serialize default=0
+	@caption Pildi aknale lisatav laius
 
 @default group=import
 
@@ -50,6 +61,8 @@
 	@groupinfo manage_img caption="Halda pilte" submit=no parent=manage
 	@groupinfo manage_fld caption="Halda kaustu" parent=manage
 
+	@groupinfo data caption=Andmed parent=general
+	@groupinfo settings caption=Seaded parent=general
 
 @reltype IMG_FOLDER value=1 clid=CL_MENU
 @caption Piltide kataloog
@@ -346,6 +359,16 @@ class mini_gallery extends class_base
 							"count" => $numbr
 						)
 					);
+					$addheight = $ob->prop("addheight");
+					if($addheight)
+					{
+						$args['addheight'] = $addheight;
+					}
+					$addwidth = $ob->prop("addwidth");
+					if($addwidth)
+					{
+						$args['addwidth'] = $addwidth;
+					}
 					$tmp = $ii->parse_alias($args);
 					$this->vars(array(
 						"imgcontent" => $tmp["replacement"],
