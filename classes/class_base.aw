@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.565 2007/10/06 17:04:36 voldemar Exp $
+// $Id: class_base.aw,v 2.566 2007/10/06 17:10:47 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1204,7 +1204,7 @@ class class_base extends aw_template
 			}
 		}
 
-		if (!isset($retval))
+		if (empty($retval))
 		{
 			if (isset($this->id_only))
 			{
