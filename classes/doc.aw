@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.155 2007/08/28 09:55:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.156 2007/10/06 12:38:40 voldemar Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -28,7 +28,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 	@property alias_ch type=checkbox ch_value=1 default=1 field=meta method=serialize table=objects
 	@caption Genereeri alias automaatselt
-	
+
 	@property alias type=textbox size=60 table=objects field=alias
 	@caption Alias
 
@@ -87,7 +87,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@caption Esilehel keskel
 
 	@property esilehel type=checkbox ch_value=1 trans=1
-	@caption Esilehel 
+	@caption Esilehel
 
 	@property jrk1 type=textbox size=5 ch_value=1 trans=1
 	@caption Jrk1
@@ -101,9 +101,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property dcache type=checkbox store=no trans=1
 	@caption Cache otsingu jaoks
 
-	@property dcache_content type=hidden field=dcache 
-	@property rating type=hidden 
-	@property num_ratings type=hidden 
+	@property dcache_content type=hidden field=dcache
+	@property rating type=hidden
+	@property num_ratings type=hidden
 
 	@property show_title type=checkbox ch_value=1 default=1 trans=1
 	@caption N&auml;ita pealkirja
@@ -156,22 +156,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property userta6 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
 	@caption Kasutaja defineeritud textarea 6
 
-	@property ucheck1 type=checkbox ch_value=1 table=objects field=meta method=serialize 
+	@property ucheck1 type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Kasutaja defineeritud checkbox 1
 
-	@property ucheck2 type=checkbox ch_value=1 table=documents field=ucheck2 
+	@property ucheck2 type=checkbox ch_value=1 table=documents field=ucheck2
 	@caption Kasutaja defineeritud checkbox 2
 
-	@property ucheck3 type=checkbox ch_value=1 table=documents field=ucheck3 
+	@property ucheck3 type=checkbox ch_value=1 table=documents field=ucheck3
 	@caption Kasutaja defineeritud checkbox 3
 
-	@property ucheck4 type=checkbox ch_value=1 table=documents field=ucheck4 
+	@property ucheck4 type=checkbox ch_value=1 table=documents field=ucheck4
 	@caption Kasutaja defineeritud checkbox 4
 
-	@property ucheck5 type=checkbox ch_value=1 table=documents field=ucheck5 
+	@property ucheck5 type=checkbox ch_value=1 table=documents field=ucheck5
 	@caption Kasutaja defineeritud checkbox 5
-	
-	@property ucheck6 type=checkbox ch_value=1 table=documents field=ucheck6 
+
+	@property ucheck6 type=checkbox ch_value=1 table=documents field=ucheck6
 	@caption Kasutaja defineeritud checkbox 6
 
 	@property uservar1 type=classificator field=aw_varuser1 reltype=RELTYPE_VARUSER1 store=connect
@@ -207,6 +207,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 	@property edit_version type=select store=no
 	@caption Vali versioon, mida muuta
+
+	@property associated_file type=fileupload store=no
+	@caption Lisa fail
 
 @default group=settings
 
@@ -259,7 +262,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@caption Algab (kp)
 
 	@property start1 type=datetime_select field=start table=planner trans=1
-	@caption Algab 
+	@caption Algab
 
 	@property duration type=time_select field=end table=planner trans=1
 	@caption Kestab
@@ -285,20 +288,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @default group=transl
 
 	@property trans_tb type=toolbar no_caption=1 store=no
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
 @groupinfo settings caption=Seadistused icon=archive.gif
-@groupinfo kws caption="M&auml;rks&otilde;nad" 
-@groupinfo versions caption="Versioonid" 
+@groupinfo kws caption="M&auml;rks&otilde;nad"
+@groupinfo versions caption="Versioonid"
 @groupinfo transl caption=T&otilde;lgi
 @groupinfo relationmgr caption=Seostehaldur submit=no
 @groupinfo acl caption=&Otilde;igused
 @default group=acl
-	
+
 	@property acl type=acl_manager store=no
 	@caption &Otilde;igused
 
@@ -369,7 +372,7 @@ class doc extends class_base
 			case "brother_warning":
 				if ($arr["obj_inst"]->is_brother())
 				{
-					$data["value"] = sprintf(t("NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik! (%s)"), html::get_change_url($arr["obj_inst"]->brother_of(), array("return_url" => get_ru()), 
+					$data["value"] = sprintf(t("NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik! (%s)"), html::get_change_url($arr["obj_inst"]->brother_of(), array("return_url" => get_ru()),
 					t("Originaal")));
 				}
 				else
@@ -477,12 +480,12 @@ class doc extends class_base
 					"minute" => ($_tmp % 3600) / 60,
 				);
 				break;
-	
+
 			case "navtoolbar":
 				// I need a better way to do this!
 				if (!empty($arr["request"]["cb_part"]))
 				{
-					$retval = PROP_IGNORE;	
+					$retval = PROP_IGNORE;
 				}
 				else
 				{
@@ -533,7 +536,7 @@ class doc extends class_base
 				break;
 
 			case "create_new_version":
-				
+
 				break;
 
 			case "sections":
@@ -542,7 +545,7 @@ class doc extends class_base
 					"sections" => $args["request"]["sections"],
 				));
 				break;
-			
+
 			case "link_calendars":
 				$this->update_link_calendars($args);
 				break;
@@ -603,7 +606,7 @@ class doc extends class_base
 					if ($ts)
 					{
 						$modified = $ts;
-					}	
+					}
 					else
 					{
 						// 2kki on hoopis - 'ga eraldatud?
@@ -684,7 +687,7 @@ class doc extends class_base
 				if (isset($args["request"]["clear_styles"]))
 				{
 					$this->clear_styles = true;
-				};	
+				};
 				break;
 
 			case "duration":
@@ -698,7 +701,7 @@ class doc extends class_base
 				{
 					$args["obj_inst"]->set_prop("nobreaks",0);
 				};
-				// also, if the cfgform says that you are using fck editor, then 
+				// also, if the cfgform says that you are using fck editor, then
 				// set the nobreaker
 				if ($this->can("view", $args["request"]["cfgform"]))
 				{
@@ -714,7 +717,52 @@ class doc extends class_base
 				$this->_save_versions = true;
 				$args["obj_inst"]->set_no_modify(true);
 				break;
-		};
+
+			case "associated_file":
+				$file = $_FILES["associated_file"]["tmp_name"];
+				$file_name = $_FILES["associated_file"]["name"];
+				$file_type = $_FILES["associated_file"]["type"];
+
+				if (is_uploaded_file($file))
+				{
+					if ($this->cfg["upload_virus_scan"])
+					{
+						if (($vir = $this->_do_virus_scan($file)))
+						{
+							$data["error"] = "Uploaditud failis on viirus $vir!";
+							return PROP_FATAL_ERROR;
+						}
+					}
+
+					$pathinfo = pathinfo($file_name);
+
+					if (empty($file_type))
+					{
+						$mimeregistry = get_instance("core/aw_mime_types");
+						$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
+						$file_type = $realtype;
+					}
+
+					$content = file_get_contents($file);
+
+					$cl_file = get_instance(CL_FILE);
+					$file_oid = $cl_file->save_file(array(
+						"type" => $file_type,
+						"content" => $content,
+						"parent" => $args["obj_inst"]->parent(),
+						"name" => $file_name,
+					));
+
+					$args["obj_inst"]->connect(array(
+						"to" => $file_oid
+					));
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+		}
 		return $retval;
 	}
 
@@ -723,7 +771,7 @@ class doc extends class_base
 		// map title to name
 		$obj_inst = &$args["obj_inst"];
 		$obj_inst->set_name($obj_inst->prop("title"));
-		
+
 		if (isset($this->_preview))
 		{
 			$obj_inst->set_meta("dcache",$this->_preview);
@@ -738,7 +786,7 @@ class doc extends class_base
 			}
 			$obj_inst->set_prop("dcache_content", $res);
 		};
-		
+
 		if (isset($this->_modified))
 		{
 			$obj_inst->set_prop("doc_modified",$this->_modified);
@@ -747,9 +795,9 @@ class doc extends class_base
 		// RTE also has a button to clear styles
 		if ($this->clear_styles)
 		{
-			$obj_inst->set_prop("content",$this->_doc_strip_tags($obj_inst->prop("content")));	
-			$obj_inst->set_prop("lead",$this->_doc_strip_tags($obj_inst->prop("lead")));	
-			$obj_inst->set_prop("moreinfo",$this->_doc_strip_tags($obj_inst->prop("moreinfo")));	
+			$obj_inst->set_prop("content",$this->_doc_strip_tags($obj_inst->prop("content")));
+			$obj_inst->set_prop("lead",$this->_doc_strip_tags($obj_inst->prop("lead")));
+			$obj_inst->set_prop("moreinfo",$this->_doc_strip_tags($obj_inst->prop("moreinfo")));
 		};
 		if ($this->can("view", $args["request"]["cfgform"]))
 		{
@@ -802,7 +850,7 @@ class doc extends class_base
 				"docid" => $args["obj_inst"]->id()
 			));
 			$this->quote($preview);
-			
+
 			$res = trim(preg_replace("/<.*>/imsU", " ",$preview));
 			$len = strlen($res);
 			for($i = 0; $i < $len; $i++)
@@ -858,7 +906,7 @@ class doc extends class_base
 			"img" => "save.gif",
 		));
 
-	
+
 		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->id())
 		{
 			$dd = get_instance("doc_display");
@@ -879,15 +927,15 @@ class doc extends class_base
 		};
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=show params=name default="0"
-		
+
 		@param id required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1026,7 +1074,7 @@ class doc extends class_base
 			);
 		};
 
-		// can't use empty on function 
+		// can't use empty on function
 		$def_cfgform = aw_ini_get("document.default_cfgform");
 		if (empty($def_cfgform))
 		{
@@ -1081,7 +1129,7 @@ class doc extends class_base
 					$args["edit_version"] = $out["edit_version"];
 				}
 			};
-			
+
 			if ($request["create_new_version"] == 1 || $this->force_new_version)
 			{
 				// set edit version to new one
@@ -1109,15 +1157,15 @@ class doc extends class_base
 		}
 	}
 
-	/** Shows the pic1 element. Well, I think I could use a generic solution for displaying different 
-		
+	/** Shows the pic1 element. Well, I think I could use a generic solution for displaying different
+
 		@attrib name=show_pic1 params=name caption="N&auml;ita pilti" default="0"
-		
+
 		@param id required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 		values
 
@@ -1129,7 +1177,7 @@ class doc extends class_base
 		{
 			$q = sprintf("SELECT target FROM aliases WHERE source = %d AND type = %d AND pri = 1",
 					$args["id"],CL_IMAGE);
-		
+
 			$tgt = $this->db_fetch_field($q,"target");
 
 
@@ -1236,7 +1284,7 @@ class doc extends class_base
 		}
 	}
 
-	/** 
+	/**
 
 		@attrib name=upg nologin="1"
 
@@ -1318,7 +1366,7 @@ class doc extends class_base
 
 		// create reverse conn
 		$other = $arr["connection"]->to();
-		
+
 		$other->connect(array(
 			"to" => $arr["connection"]->prop("from"),
 			"type" => "RELTYPE_LANG_REL"
@@ -1366,7 +1414,7 @@ class doc extends class_base
 				$o = obj($p["request"]["id"]);
 				$o->load_version($out["edit_version"]);
 			}
-			
+
 		}
 	}
 
@@ -1546,7 +1594,7 @@ class doc extends class_base
 				$this->db_query($q);
 				$this->db_query("DELETE FROM documents_versions WHERE docid = '".$arr["obj_inst"]->id()."' AND version_id = '$sav'");
 
-				
+
 				$c = get_instance("cache");
 				$c->file_clear_pt("storage_object_data");
 				$c->file_clear_pt("storage_search");
@@ -1582,7 +1630,7 @@ class doc extends class_base
 				"id" => $arr["docid"],
 				"set_act_ver" => $arr["ver"]
 			)
-		));	
+		));
 		return $arr["retu"];
 	}
 
@@ -1673,7 +1721,7 @@ class doc extends class_base
 		$val .= '<script language="javascript">el=document.getElementById(\'floatlayerk\');if (el) {el.style.position=\'absolute\';el.style.left=800;el.style.top=200;}</script>';
 
 
-		
+
 		$rv = $this->trans_callback($arr, $this->trans_props, array("user1", "user3", "user5", "userta2", "userta3", "userta4", "userta5", "userta6"));
 		$rvv = array();
 		$nm = "origt";
@@ -1691,13 +1739,13 @@ class doc extends class_base
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 		$tb->add_menu_button(array(
-			"name" => "preview", 
+			"name" => "preview",
 			"tooltip" => t("Eelvaade"),
 			"img" => "preview.gif"
 		));
 		$l = get_instance("languages");
 		$ll = $l->get_list(array(/*"ignore_status" => true,*/ "all_data" => true));
-		
+
 		$dd = get_instance("doc_display");
 		foreach($ll as $lid => $lang)
 		{
@@ -1762,8 +1810,8 @@ class doc extends class_base
 			else
 			{
 				$this->db_query("INSERT INTO doc_ct_content(oid,parent,lang_id,site_id,title,lead,content,
-					tm,modified,user1,user4,author,photos,dcache,no_search) 
-					VALUES($id, 
+					tm,modified,user1,user4,author,photos,dcache,no_search)
+					VALUES($id,
 						'".$arr["obj_inst"]->parent()."',
 						$lid,
 						'".$arr["obj_inst"]->site_id()."',

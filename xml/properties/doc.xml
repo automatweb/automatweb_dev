@@ -689,6 +689,15 @@
             <caption>Vali versioon, mida muuta</caption>
       </property>
       <property>
+            <name>associated_file</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>fileupload</type>
+            <store>no</store>
+            <field>associated_file</field>
+            <caption>Lisa fail</caption>
+      </property>
+      <property>
             <name>no_right_pane</name>
             <table>documents</table>
             <group>settings</group>
@@ -832,7 +841,7 @@
             <type>datetime_select</type>
             <field>start</field>
             <trans>1</trans>
-            <caption>Algab </caption>
+            <caption>Algab</caption>
       </property>
       <property>
             <name>duration</name>
