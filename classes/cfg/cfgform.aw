@@ -120,6 +120,11 @@
 
 	@property post_save_controllers type=relpicker multiple=1 size=3 group=set_controllers reltype=RELTYPE_CONTROLLER
 	@caption Salvestamisj&auml;rgne kontroller
+	@comment callback_post_save
+
+	@property mod_retval_controllers type=relpicker multiple=1 size=3 group=set_controllers reltype=RELTYPE_CONTROLLER
+	@caption Tagastatava v&auml;&auml;rtuse kontroller
+	@comment callback_mod_retval. Calls check_property($cfg_controller_id, $obj_id, null, &$args, &$request, null). Expects return value type URL.
 
 	@property prop_submit_controllers type=text subtitle=1 group=set_controllers
 	@caption Omaduste kontrollerid

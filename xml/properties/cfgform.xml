@@ -213,6 +213,20 @@
             <size>3</size>
             <reltype>RELTYPE_CONTROLLER</reltype>
             <caption>Salvestamisj&amp;amp;auml;rgne kontroller</caption>
+            <comment>callback_post_save</comment>
+      </property>
+      <property>
+            <name>mod_retval_controllers</name>
+            <table>objects</table>
+            <group>set_controllers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <size>3</size>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>Tagastatava v&amp;amp;auml;&amp;amp;auml;rtuse kontroller</caption>
+            <comment>callback_mod_retval. Calls check_property($cfg_controller_id, $obj_id, null, &amp;amp;$args, &amp;amp;$request, null). Expects return value type URL.</comment>
       </property>
       <property>
             <name>prop_submit_controllers</name>

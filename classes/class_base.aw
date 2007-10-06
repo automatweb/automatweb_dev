@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.564 2007/09/21 06:32:03 voldemar Exp $
+// $Id: class_base.aw,v 2.565 2007/10/06 17:04:36 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1176,75 +1176,91 @@ class class_base extends aw_template
 					));
 				}
 			}
-		};
 
-		// and I need a workaround for this id_only thingie!!!
+			if ($this->can("view", $request["cfgform"]))
+			{
+				$cfgform_o = obj($request["cfgform"]);
+				if ($cfgform_o->prop("cfgview_ru") != "")
+				{
+					$retval = $cfgform_o->prop("cfgview_ru");
+				}
 
+				// call mod retval controller(s) from cfgform object if defined
+				$cfg_cntrl = (array) $cfgform_o->prop("mod_retval_controllers");
 
-		// rrrr, temporary hack
-		if (isset($this->id_only))
-		{
-			$retval = $this->id;
+				if (count($cfg_cntrl))
+				{
+					$controller_inst = get_instance(CL_CFGCONTROLLER);
+
+					foreach ($cfg_cntrl as $cfg_cntrl_id)
+					{
+						if (is_oid($cfg_cntrl_id))
+						{
+							$tmp = null;
+							$retval = $controller_inst->check_property($cfg_cntrl_id, $this->id, $tmp, &$args, &$request, $tmp);
+						}
+					}
+				}
+			}
 		}
-		else
+
+		if (!isset($retval))
 		{
-			//$use_orb = true;
-			if (!empty($request["section"]))
-			{
-				$args["section"] = $request["section"];
-				//$args["_alias"] = get_class($this);
-				$use_orb = false;
-			};
-			if (!empty($request["XUL"]))
-			{
-				$args["XUL"] = 1;
-			}
-
-			$args["return_url"] = $real_return_url;
-
-			if ($this->new && isset($_POST["cfgform"]))
-			{
-				$args["cfgform"] = $_POST["cfgform"];
-			}
-
-			//$retval = $this->mk_my_orb($action,$args,$orb_class);
-			$retval = $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
-
-			if (is_numeric($class))
-			{
-				$retval = aw_url_change_var("class",$class,$retval);
-			}
-
-			if ("cfg_embed" == $request["awcb_display_mode"])
-			{
-				$retval = aw_url_change_var(array(
-					"class" => NULL,
-					"action" => NULL,
-					"alias_to" => NULL,
-					"alias_to_prop" => NULL,
-				), false, $retval);
-			}
-
-			if ($request["return"] == "id")
+			if (isset($this->id_only))
 			{
 				$retval = $this->id;
 			}
-		}
+			else
+			{
+				//$use_orb = true;
+				if (!empty($request["section"]))
+				{
+					$args["section"] = $request["section"];
+					//$args["_alias"] = get_class($this);
+					$use_orb = false;
+				};
+				if (!empty($request["XUL"]))
+				{
+					$args["XUL"] = 1;
+				}
 
+				$args["return_url"] = $real_return_url;
+
+				if ($this->new && isset($_POST["cfgform"]))
+				{
+					$args["cfgform"] = $_POST["cfgform"];
+				}
+
+				//$retval = $this->mk_my_orb($action,$args,$orb_class);
+				$retval = $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
+
+				if (is_numeric($class))
+				{
+					$retval = aw_url_change_var("class",$class,$retval);
+				}
+
+				if ("cfg_embed" == $request["awcb_display_mode"])
+				{
+					$retval = aw_url_change_var(array(
+						"class" => NULL,
+						"action" => NULL,
+						"alias_to" => NULL,
+						"alias_to_prop" => NULL,
+					), false, $retval);
+				}
+
+				if ($request["return"] == "id")
+				{
+					$retval = $this->id;
+				}
+			}
+		}
 
 		if (!$save_ok)
 		{
 			return $this->abort_action($args);
 		}
 
-		if ($this->can("view", $request["cfgform"]))
-		{
-			$co = obj($request["cfgform"]);
-			if ($co->prop("cfgview_ru") != "")
-			{
-				return $co->prop("cfgview_ru");
-			}
-		}
 		return $retval;
 	}
 
