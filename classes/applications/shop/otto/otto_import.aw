@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.58 2007/10/04 18:11:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.59 2007/10/06 00:29:15 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -76,6 +76,9 @@ caption Uuenda ainult toote andmed
 
 			@property products_manager_prod_page type=textbox store=no size=20 captionside=top group=products_manager parent=vbox_products_manager_search
 			@caption Leht
+
+			@property products_manager_prod_image type=textbox store=no size=20 captionside=top group=products_manager parent=vbox_products_manager_search
+			@caption Pilt
 
 			@property products_search type=hidden store=no value=1 no_caption=1 group=products_manager parent=vbox_products_manager_search
 			@caption products_search
@@ -513,6 +516,7 @@ class otto_import extends class_base
 		{
 			$arr['args']['products_manager_pcode'] = $arr['request']['products_manager_pcode'];
 			$arr['args']['products_manager_prod_page'] = $arr['request']['products_manager_prod_page'];
+			$arr['args']['products_manager_prod_image'] = $arr['request']['products_manager_prod_image'];
 			$arr['args']['products_search'] = $arr['request']['products_search'];
 		}
 		$product_id = (int)$arr['request']['products_manager_prod_id'];
@@ -843,6 +847,12 @@ class otto_import extends class_base
 		return PROP_OK;
 	}
 	
+	function _get_products_manager_prod_image($arr)
+	{
+		$arr['prop']['value'] = $arr['request']['products_manager_prod_image'];
+		return PROP_OK;
+	}
+
 	function _get_products_manager_search_results_table($arr)
 	{
 		if ($this->can('view', $arr['request']['products_manager_prod_id']))
@@ -884,6 +894,10 @@ class otto_import extends class_base
 			if (!empty($arr['request']['products_manager_prod_page']))
 			{
 				$filter['user18'] = '%'.$arr['request']['products_manager_prod_page'].'%';
+			}
+			if (!empty($arr['request']['products_manager_prod_image']))
+			{
+				$filter['user3'] = '%'.$arr['request']['products_manager_prod_image'].'%';
 			}
 
 			$ol = new object_list();
@@ -1014,6 +1028,16 @@ class otto_import extends class_base
 				)),
 			));
 
+			// other products:
+			$t->define_data(array(
+				'caption' => t('Teised tooted'),
+				'data' => html::textbox(array(
+					'name' => 'other_products',
+					'value' => $prod_obj->prop('user4'),
+					'size' => 100
+				)),
+			));
+
 			$pics_str = '';
 			$pics = explode(',', $prod_obj->prop('user3'));
 
@@ -1140,6 +1164,27 @@ class otto_import extends class_base
 		{
 			$prod_obj->set_prop('userch4', (int)$arr['request']['show_in_products_list']);
 			$save = true;
+		}
+
+		// other products
+		if ($prod_obj->prop('user4') != $arr['request']['other_products'])
+		{
+			$other_products = array_merge(explode(',', $prod_obj->prop('user4')), explode(',', $arr['request']['other_products']));
+			$update_products = array();
+			foreach ($other_products as $other_product)
+			{
+				$other_product = (int)$other_product;
+				if ($this->can('view', $other_product))
+				{
+					$update_products[$other_product] = new object($other_product);
+					
+				}
+			}
+			foreach ($update_products as $other_product)
+			{
+				$other_product->set_prop('user4', $arr['request']['other_products']);
+				$other_product->save();
+			}
 		}
 
 		////
@@ -2460,18 +2505,13 @@ class otto_import extends class_base
 				}
 				else
 				{
-				//	echo "for product $pcode found multiple images! <br>\n";
-				//	flush();
-
 					$o_html = $html;
 
 
 					preg_match_all("/Javascript:gotoSearchArticle\(\'(.*)\'\);/imsU", $html, $mt, PREG_PATTERN_ORDER);
 					$urld = array();
-					// echo (dbg::dump($mt));
 					foreach($mt[1] as $url)
 					{
-					//	$url = $url."&SearchDetail=one&stype=N&Orengelet.sortPipelet.sortResultSetSize=15&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=".$pcode;
 						$urld[$url] = $url;
 					}
 
@@ -2480,20 +2520,16 @@ class otto_import extends class_base
 						echo "Searching pictures from <a href=\"$url\">url</a> <br>\n";
 						$html = $this->file_get_contents($url);
 
-						if (!preg_match_all("/Javascript:setImage\('(.*)\.jpg', '(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER))
+						if (!preg_match_all("/<img id=\"mainimage\" src=\"(.*)\.jpg\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
 						{
-							echo "-- setImage javascripti j2rgi pilti ei leitud<br>\n";
-							if (!preg_match_all("/<img id=\"mainimage\" src=\"(.*)\.jpg\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
-							{
-								echo "-- id=mainimage j2rgi pilti ei leitud .... <br>\n";
-								// if we can't find image from the product view, then this should try to search the image from the other sites:
-								echo "Let's try to search from the baur.de page: <br />\n";
-								$this->read_img_from_baur(array(
-									'pcode' => $pcode,
-									'import_obj' => $import_obj
-								));
-								break;
-							}
+							echo "-- id=mainimage j2rgi pilti ei leitud .... <br>\n";
+							// if we can't find image from the product view, then this should try to search the image from the other sites:
+							echo "Let's try to search from the baur.de page: <br />\n";
+							$this->read_img_from_baur(array(
+								'pcode' => $pcode,
+								'import_obj' => $import_obj
+							));
+							break;
 						}
 
 						$f_imnr = NULL;
@@ -2501,7 +2537,7 @@ class otto_import extends class_base
 
 						// we need that connecting picture:
 						$connection_image = '';
-						$pattern = "/<img src=\"http:\/\/image01\.otto\.de:80\/pool\/formatd\/(.*)\.jpg\"/imsU";
+						$pattern = "/<img width=.* title=.* src=\"http:\/\/image01\.otto\.de:80\/pool\/ov_formatg\/(.*)\.jpg\"/imsU";
 						if (preg_match($pattern, $html, $matches ))
 						{
 							$connection_image = $matches[1];
@@ -2509,10 +2545,22 @@ class otto_import extends class_base
 							{
 								$image_ok = $this->download_image(array(
 									'image' => 'http://image01.otto.de:80/pool/formatb/'.$connection_image.'.jpg',
-									'format' => 2,
+									'format' => SMALL_PICTURE,
 									'target_folder' => $import_obj->prop('images_folder'),
 									'debug' => true
 								));
+								if ($image_ok)
+								{
+
+									$image_ok = $this->download_image(array(
+										'image' => 'http://image01.otto.de:80/pool/formata/'.$connection_image.'.jpg',
+										'format' => BIG_PICTURE,
+										'target_folder' => $import_obj->prop('images_folder'),
+										'debug' => true
+									));
+								}
+								echo "Leidsin yhenduspildi: <a href=\"http://image01.otto.de:80/pool/formatb/".$connection_image.".jpg\">v&auml;ike pilt</a> / ";
+								echo "<a href=\"http://image01.otto.de:80/pool/formata/".$connection_image.".jpg\">suur pilt</a><br />\n";
 							}
 						}
 
@@ -2570,7 +2618,7 @@ class otto_import extends class_base
 
 									$image_ok = $this->download_image(array(
 										'image' => 'http://image01.otto.de:80/pool/formatb/'.$imnr.'.jpg',
-										'format' => 2,
+										'format' => SMALL_PICTURE,
 										'target_folder' => $import_obj->prop('images_folder'),
 										'debug' => true
 									));
@@ -2579,23 +2627,17 @@ class otto_import extends class_base
 										// download the big version of the image too:
 										$this->download_image(array(
 											'image' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
-											'format' => 1,
+											'format' => BIG_PICTURE,
 											'target_folder' => $import_obj->prop('images_folder'),
 											'debug' => true
 										));
-
-									//	$this->add_image_to_product($pcode, $imnr);
 									}
 									
-									
-									// here i probably have to download the image too
-								
 									$q = ("
 										INSERT INTO 
 											otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
 											values('$pcode','".$mt[2][$idx]."','$imnr', 1, '$connection_image')
 									");
-									//echo "q = $q <br>";
 									$this->db_query($q);
 									$this->added_images[] = $mt[2][$idx];
 								}
