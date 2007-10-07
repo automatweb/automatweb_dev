@@ -88,7 +88,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <caption>&amp;amp;Auml;ra uuenda kategooriaid ja pildikoode</caption>
+            <caption>&amp;amp;Auml;ra uuenda pilte ja kategooriaid</caption>
       </property>
       <property>
             <name>last_import_log</name>
@@ -172,6 +172,19 @@
             <captionside>top</captionside>
             <parent>vbox_products_manager_search</parent>
             <caption>Leht</caption>
+      </property>
+      <property>
+            <name>products_manager_prod_image</name>
+            <table>objects</table>
+            <group>products_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <size>20</size>
+            <captionside>top</captionside>
+            <parent>vbox_products_manager_search</parent>
+            <caption>Pilt</caption>
       </property>
       <property>
             <name>products_search</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.59 2007/10/06 00:29:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.60 2007/10/07 00:22:07 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -35,7 +35,7 @@
 @caption Uuenda k&otilde;ikide toodete piltide ja kategooriate v&auml;ljad
 
 @property do_safe_update type=checkbox ch_value=1 store=no
-@caption &Auml;ra uuenda kategooriaid ja pildikoode
+@caption &Auml;ra uuenda pilte ja kategooriaid
 
 property restart_pict_i type=checkbox ch_value=1
 caption Alusta piltide importi algusest
