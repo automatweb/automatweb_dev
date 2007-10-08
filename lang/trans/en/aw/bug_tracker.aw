@@ -6,4 +6,5 @@ $GLOBALS["TRANS"]["Lisa kategooria"] = "Add category";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Looja"] = "Createdby";
 $GLOBALS["TRANS"]["Loodud"] = "Created";
+$GLOBALS["TRANS"]["Grupi Kaardid (charts) pealkiri"] = "Charts";
 ?>

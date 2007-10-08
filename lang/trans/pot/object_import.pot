@@ -39,15 +39,15 @@ msgid "Omaduse Imporditava objekti t&uuml;&uuml;p (object_type) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id
-msgid "Omaduse Unikaalne omadus  (unique_id) caption"
+msgid "Omaduse Unikaalne omadus (unique_id) caption"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id_comment
-msgid "Omaduse Unikaalne omadus  (unique_id) kommentaar"
+msgid "Omaduse Unikaalne omadus (unique_id) kommentaar"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id_help
-msgid "Omaduse Unikaalne omadus  (unique_id) help"
+msgid "Omaduse Unikaalne omadus (unique_id) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_folder_field

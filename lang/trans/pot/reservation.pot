@@ -567,11 +567,11 @@ msgid "Seose Korduse originaal (RELTYPE_ORIGINAL_BRON) tekst"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:layout_general_up
-msgid "Kujundusosa Üldinfo (general_up) pealkiri"
+msgid "Kujundusosa &Uuml;ldinfo (general_up) pealkiri"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:layout_general_down
-msgid "Kujundusosa Aeg&#44; ja hind (general_down) pealkiri"
+msgid "Kujundusosa Aeg&#44;&nbsp;ja&nbsp;hind (general_down) pealkiri"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:277
@@ -614,7 +614,7 @@ msgstr ""
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:670 classes/applications/groupware/reservation.aw:907 classes/applications/groupware/reservation.aw:1897 classes/applications/groupware/reservation.aw:2027
+#: classes/applications/groupware/reservation.aw:670 classes/applications/groupware/reservation.aw:907 classes/applications/groupware/reservation.aw:1913 classes/applications/groupware/reservation.aw:2043
 msgid "Nimi"
 msgstr ""
 
@@ -646,7 +646,7 @@ msgstr ""
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:923 classes/applications/groupware/reservation.aw:1748
+#: classes/applications/groupware/reservation.aw:923 classes/applications/groupware/reservation.aw:1764
 msgid "Summa"
 msgstr ""
 
@@ -711,70 +711,74 @@ msgid "Loomine: %s %s / %s.<br>Muutmine: %s %s / %s"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:1584
+msgid "<br>Tasutud %s %s (%s) %s , maksja %s"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:1600
 msgid "Kinnituse eemaldamise p&otilde;hjus: %s"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1623
+#: classes/applications/groupware/reservation.aw:1639
 msgid "Klient: %s / %s / %s\n"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1628
+#: classes/applications/groupware/reservation.aw:1644
 msgid "Aeg: %s: %s-%s\n"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1633
+#: classes/applications/groupware/reservation.aw:1649
 msgid "Koht: %s\n"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1645
+#: classes/applications/groupware/reservation.aw:1661
 msgid "Toidud: %s\n"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1668
+#: classes/applications/groupware/reservation.aw:1684
 msgid "%s: %s tk / %s"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1711
+#: classes/applications/groupware/reservation.aw:1727
 msgid "Tooted"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1720 classes/applications/groupware/reservation.aw:2168
+#: classes/applications/groupware/reservation.aw:1736 classes/applications/groupware/reservation.aw:2184
 msgid "Ruum"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1729
+#: classes/applications/groupware/reservation.aw:1745
 msgid "Soodustus ruumilt (-%d %%)"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1738
+#: classes/applications/groupware/reservation.aw:1754
 msgid "Soodustus toodetelt (-%d %%)"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1902
+#: classes/applications/groupware/reservation.aw:1918
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1907
+#: classes/applications/groupware/reservation.aw:1923
 msgid "Meiliaadress"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2032
+#: classes/applications/groupware/reservation.aw:2048
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2053
+#: classes/applications/groupware/reservation.aw:2069
 msgid "Kinnituatud, kordused loodud"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2158
+#: classes/applications/groupware/reservation.aw:2174
 msgid "Alates"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2163
+#: classes/applications/groupware/reservation.aw:2179
 msgid "Kuni"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2204
+#: classes/applications/groupware/reservation.aw:2220
 msgid "Korratud reserveeringud"
 msgstr ""
 

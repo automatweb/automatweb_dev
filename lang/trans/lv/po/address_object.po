@@ -9,20 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/common/address/address_object.aw:127
+#: classes/common/address/address_object.aw:119
 msgid "address::save(): object (%s) couldn't be saved."
 msgstr ""
 
-#: classes/common/address/address_object.aw:166
+#: classes/common/address/address_object.aw:158
 msgid "Postkast"
 msgstr ""
 
-#: classes/common/address/address_object.aw:654
+#: classes/common/address/address_object.aw:616
 msgid "address::as_load_structure(): administrative_structure not defined for object (%s)!"
 msgstr ""
 
-#: classes/common/address/address_object.aw:668
+#: classes/common/address/address_object.aw:631
 msgid "address::as_load_country(): country not defined for administrative structure of object (%s)!"
 msgstr ""
-

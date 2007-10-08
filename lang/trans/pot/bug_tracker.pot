@@ -1251,7 +1251,7 @@ msgid "Seose Meilitud bugide kataloog (RELTYPE_MAIL_DEF_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_bug_tree
-msgid "Kujundusosa Arendusülesanded (bug_tree) pealkiri"
+msgid "Kujundusosa Arendus&uuml;lesanded (bug_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_s_name_lay
@@ -1275,7 +1275,7 @@ msgid "Kujundusosa Osalejad (s_who_l) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_reqs_tree
-msgid "Kujundusosa Nõuete kategooriad (reqs_tree) pealkiri"
+msgid "Kujundusosa N&otilde;uete&nbsp;kategooriad (reqs_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_reqs_p_tree
@@ -1283,7 +1283,7 @@ msgid "Kujundusosa Projektid (reqs_p_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_dev_orders_tree_v
-msgid "Kujundusosa Arendustellimuste kategooriad (dev_orders_tree_v) pealkiri"
+msgid "Kujundusosa Arendustellimuste&nbsp;kategooriad (dev_orders_tree_v) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_reqs_c_tree
@@ -1307,7 +1307,7 @@ msgid "Kujundusosa Projektid (pp_tree_b) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_pr_tree_b
-msgid "Kujundusosa Nõuded (pr_tree_b) pealkiri"
+msgid "Kujundusosa N&otilde;uded (pr_tree_b) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:555
@@ -1486,31 +1486,31 @@ msgstr ""
 msgid "bug_tracker::get_next_avail_time_from(): time is in loop!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3196
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3197
 msgid "Tere!\nMina olen AW Bugtrack. Sul (%s) on prognoositavad ajad m22ramata nendele bugidele, palun tee seda kohe!\n\n"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3204
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3205
 msgid "Bugtracki M22ramata ajad"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3258
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3259
 msgid "Bugtracki vastamata bugid"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3260
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3261
 msgid "all done"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3289
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3290
 msgid "Arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3294
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3295
 msgid "Prognoositud aeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3320
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3321
 msgid "Esimesed 10 ennustamata bugi"
 msgstr ""
 

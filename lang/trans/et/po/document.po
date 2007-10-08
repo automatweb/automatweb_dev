@@ -29,28 +29,28 @@ msgstr ""
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2394
+#: classes/document.aw:2395
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2401
+#: classes/document.aw:2402
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2409
+#: classes/document.aw:2410
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:2919
+#: classes/document.aw:2920
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
 msgstr ""
 
-#: classes/document.aw:2949
+#: classes/document.aw:2950
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:2951
+#: classes/document.aw:2952
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""

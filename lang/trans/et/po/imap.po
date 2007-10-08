@@ -112,3 +112,116 @@ msgstr ""
 #: classes/protocols/mail/imap.aw:group_test_help
 msgid "Grupi Testi (test) help"
 msgstr ""
+
+#: classes/protocols/mail/imap.aw:47 classes/protocols/mail/imap.aw:48
+msgid "Kellele"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:49 classes/protocols/mail/imap.aw:50
+msgid "Kellelt"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:51 classes/protocols/mail/imap.aw:52
+msgid "CC"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:53 classes/protocols/mail/imap.aw:54
+msgid "BCC"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:55 classes/protocols/mail/imap.aw:56
+msgid "Tagasi"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:57 classes/protocols/mail/imap.aw:58
+msgid "Saatja"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:59
+msgid "return_pathaddress"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:60
+msgid "return_path"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:61
+msgid "remail"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:62 classes/protocols/mail/imap.aw:63
+#: classes/protocols/mail/imap.aw:80
+msgid "Aeg"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:64 classes/protocols/mail/imap.aw:65
+msgid "Teema"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:66
+msgid "in_reply_to"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:67
+msgid "message_id"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:68
+msgid "newsgroups"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:69
+msgid "followup_to"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:70
+msgid "references"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:71
+msgid "Hijutine"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:72
+msgid "N&auml;gemata"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:73
+msgid "M&auml;rgitud"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:74
+msgid "Vastatud"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:75
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:76
+msgid "Draft"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:77
+msgid "Msgno"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:78
+msgid "MailDate"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:79
+msgid "Suurus"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:81
+msgid "fetchfrom"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:82
+msgid "fetchsubject"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:84
+msgid "Manused"
+msgstr ""

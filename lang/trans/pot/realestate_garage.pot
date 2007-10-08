@@ -866,11 +866,11 @@ msgstr ""
 msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:70
+#: classes/applications/realestate_management/realestate_garage.aw:68
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:91 classes/applications/realestate_management/realestate_garage.aw:99
+#: classes/applications/realestate_management/realestate_garage.aw:89 classes/applications/realestate_management/realestate_garage.aw:97
 msgid "Kohustuslik v&auml;li"
 msgstr ""
 

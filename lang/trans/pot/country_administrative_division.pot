@@ -78,15 +78,15 @@ msgstr ""
 msgid "Seose Kõrgem haldusüksus (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:85
+#: classes/common/country/country_administrative_division.aw:77
 msgid "Haldusüksus"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:86
+#: classes/common/country/country_administrative_division.aw:78
 msgid "Linna tüüpi haldusüksus"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:87
+#: classes/common/country/country_administrative_division.aw:79
 msgid "Linnaosa tüüpi haldusüksus"
 msgstr ""
 

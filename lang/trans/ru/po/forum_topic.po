@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_name
 msgid "Omaduse Pealkiri (name) caption"
-msgstr ""
+msgstr "Название"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_name_comment
 msgid "Omaduse Pealkiri (name) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_comment
 msgid "Omaduse Sisu (comment) caption"
-msgstr ""
+msgstr "Cодержание"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_comment_comment
 msgid "Omaduse Sisu (comment) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_name
 msgid "Omaduse Autori nimi (author_name) caption"
-msgstr ""
+msgstr "Aвтор"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_name_comment
 msgid "Omaduse Autori nimi (author_name) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_email
 msgid "Omaduse Autori meil (author_email) caption"
-msgstr ""
+msgstr "И-мэйл автора"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_email_comment
 msgid "Omaduse Autori meil (author_email) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail
 msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) caption"
-msgstr ""
+msgstr "Прoшy ответa к моему и-мэйлу"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail_comment
 msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) kommentaar"

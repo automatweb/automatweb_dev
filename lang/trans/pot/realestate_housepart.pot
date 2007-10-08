@@ -2182,11 +2182,11 @@ msgstr ""
 msgid "Sisaldub objekti hinnas"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:416
+#: classes/applications/realestate_management/realestate_housepart.aw:414
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:493 classes/applications/realestate_management/realestate_housepart.aw:501
+#: classes/applications/realestate_management/realestate_housepart.aw:491 classes/applications/realestate_management/realestate_housepart.aw:499
 msgid "Kohustuslik v&auml;li"
 msgstr ""
 

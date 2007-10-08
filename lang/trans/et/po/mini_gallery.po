@@ -206,13 +206,13 @@ msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:71
-#: classes/contentmgmt/gallery/mini_gallery.aw:596
+#: classes/contentmgmt/gallery/mini_gallery.aw:606
 msgid "Nimi"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:72
-#: classes/contentmgmt/gallery/mini_gallery.aw:602
-#: classes/contentmgmt/gallery/mini_gallery.aw:704
+#: classes/contentmgmt/gallery/mini_gallery.aw:612
+#: classes/contentmgmt/gallery/mini_gallery.aw:714
 msgid "J&auml;rjekord"
 msgstr ""
 
@@ -240,42 +240,42 @@ msgstr ""
 msgid "Pildistamise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:396
+#: classes/contentmgmt/gallery/mini_gallery.aw:406
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:560
+#: classes/contentmgmt/gallery/mini_gallery.aw:570
 msgid "Galerii"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:560
+#: classes/contentmgmt/gallery/mini_gallery.aw:570
 msgid "pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:574
+#: classes/contentmgmt/gallery/mini_gallery.aw:584
 msgid "Lisa uus pilt"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:580
+#: classes/contentmgmt/gallery/mini_gallery.aw:590
 msgid "Salvesta pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:586
+#: classes/contentmgmt/gallery/mini_gallery.aw:596
 msgid "Kustuta valitud pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:588
+#: classes/contentmgmt/gallery/mini_gallery.aw:598
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:608
+#: classes/contentmgmt/gallery/mini_gallery.aw:618
 msgid "Muutja"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:614
+#: classes/contentmgmt/gallery/mini_gallery.aw:624
 msgid "Muudetud"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:699
+#: classes/contentmgmt/gallery/mini_gallery.aw:709
 msgid "Kausta nimi"
 msgstr ""

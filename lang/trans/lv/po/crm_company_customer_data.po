@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_company_customer_data.aw:class_1028_help
 msgid "Klassi Kliendisuhe help"
 msgstr ""
@@ -270,7 +269,6 @@ msgstr ""
 msgid "Seose Siduss&uuml;steemi sisestus (RELTYPE_EXT_SYS_ENTRY) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:124
+#: classes/applications/crm/crm_company_customer_data.aw:128
 msgid "--vali--"
 msgstr ""
-

@@ -193,50 +193,62 @@ msgstr ""
 msgid "Omaduse Hinnad (prices_props) help"
 msgstr ""
 
+#: classes/common/room_price.aw:prop_priority
+msgid "Omaduse Prioriteet (priority) caption"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_priority_comment
+msgid "Omaduse Prioriteet (priority) kommentaar"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_priority_help
+msgid "Omaduse Prioriteet (priority) help"
+msgstr ""
+
 #: classes/common/room_price.aw:rel_RELTYPE_GROUP
 msgid "Seose Kehtib grupile (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/common/room_price.aw:72
+#: classes/common/room_price.aw:75
 msgid "E"
 msgstr ""
 
-#: classes/common/room_price.aw:73
+#: classes/common/room_price.aw:76
 msgid "T"
 msgstr ""
 
-#: classes/common/room_price.aw:74
+#: classes/common/room_price.aw:77
 msgid "K"
 msgstr ""
 
-#: classes/common/room_price.aw:75
+#: classes/common/room_price.aw:78
 msgid "N"
 msgstr ""
 
-#: classes/common/room_price.aw:76
+#: classes/common/room_price.aw:79
 msgid "R"
 msgstr ""
 
-#: classes/common/room_price.aw:77
+#: classes/common/room_price.aw:80
 msgid "L"
 msgstr ""
 
-#: classes/common/room_price.aw:78
+#: classes/common/room_price.aw:81
 msgid "P"
 msgstr ""
 
-#: classes/common/room_price.aw:117
+#: classes/common/room_price.aw:120
 msgid "Hind"
 msgstr ""
 
-#: classes/common/room_price.aw:118
+#: classes/common/room_price.aw:121
 msgid "Soodushind"
 msgstr ""
 
-#: classes/common/room_price.aw:237
+#: classes/common/room_price.aw:242
 msgid "Valuutad"
 msgstr ""
 
-#: classes/common/room_price.aw:238
+#: classes/common/room_price.aw:243
 msgid "Hind ei ole seotud &uuml;hegi ruumiga v&otilde;i on valuutad m&auml;&auml;ramata"
 msgstr ""

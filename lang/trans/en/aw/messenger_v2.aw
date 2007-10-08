@@ -26,17 +26,12 @@ $GLOBALS["TRANS"]["Seose adressaat (RELTYPE_ADDRESS) tekst"] = "recipient";
 $GLOBALS["TRANS"]["Seose maili ruul (RELTYPE_RULE) tekst"] = "mail rule";
 $GLOBALS["TRANS"]["kulla mees, sa pole omale default messengeri ju valinud?"] = "dear fellow, you have not selected a messenger!";
 $GLOBALS["TRANS"]["Kustutada?"] = "Delete?";
-$GLOBALS["TRANS"]["Kustuta märgitud kirjad"] = "Delete marked messages";
 $GLOBALS["TRANS"]["IMAP extension not available"] = "IMAP extension not available";
-$GLOBALS["TRANS"]["IMAP sissepääs on konfigureerimata"] = "IMAP login is not configured";
 $GLOBALS["TRANS"]["Login failed, check whether server name, user and password are correct.<br>"] = "Login failed, check whether server name, user and password are correct.<br />";
 $GLOBALS["TRANS"]["ei"] = "no";
 $GLOBALS["TRANS"]["jah"] = "yes";
 $GLOBALS["TRANS"]["Uus kiri"] = "New message";
 $GLOBALS["TRANS"]["Vii kirjad"] = "Move messages";
 $GLOBALS["TRANS"]["Vii valitud kirjad kataloogi"] = "Move messages to folder";
-$GLOBALS["TRANS"]["Kustutada märgitud kirjad?"] = "Delete marked messages?";
-$GLOBALS["TRANS"]["ükski kiri INBOXis ei matchinud ühegi ruuliga<br>"] = "no messages in INBOX matched any rule";
-$GLOBALS["TRANS"]["ühtegi ruuli pole seostatud"] = "no rule connected";
 $GLOBALS["TRANS"]["<strong>message with subject: %s</strong><br>"] = "<strong>message with subject: %s</strong><br />";
 ?>

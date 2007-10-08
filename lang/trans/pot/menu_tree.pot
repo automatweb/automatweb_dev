@@ -26,54 +26,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_menus
-msgid "Omaduse Men&uuml;&uuml;d (menus) caption"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_menus_comment
-msgid "Omaduse Men&uuml;&uuml;d (menus) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_menus_help
-msgid "Omaduse Men&uuml;&uuml;d (menus) help"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_menu_tb
-msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) caption"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_menu_tb_comment
-msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_menu_tb_help
-msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) help"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_root_menu
-msgid "Omaduse  (root_menu) caption"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_root_menu_comment
-msgid "Omaduse  (root_menu) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_root_menu_help
-msgid "Omaduse  (root_menu) help"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_menu_table
-msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) caption"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_menu_table_comment
-msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_menu_table_help
-msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) help"
-msgstr ""
-
 #: classes/contentmgmt/menu_tree.aw:prop_children_only
 msgid "Omaduse Ainult alammen&uuml;&uuml;d (children_only) caption"
 msgstr ""
@@ -122,31 +74,79 @@ msgstr ""
 msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) help"
 msgstr ""
 
+#: classes/contentmgmt/menu_tree.aw:prop_menus
+msgid "Omaduse Men&uuml;&uuml;d (menus) caption"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menus_comment
+msgid "Omaduse Men&uuml;&uuml;d (menus) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menus_help
+msgid "Omaduse Men&uuml;&uuml;d (menus) help"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_root_menu
+msgid "Omaduse  (root_menu) caption"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_root_menu_comment
+msgid "Omaduse  (root_menu) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_root_menu_help
+msgid "Omaduse  (root_menu) help"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_tb
+msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) caption"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_tb_comment
+msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_tb_help
+msgid "Omaduse Men&uuml;&uuml; toolbar (menu_tb) help"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_table
+msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) caption"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_table_comment
+msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_menu_table_help
+msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) help"
+msgstr ""
+
 #: classes/contentmgmt/menu_tree.aw:rel_RELTYPE_ROOT_MENU
 msgid "Seose Men&uuml;&uuml; (RELTYPE_ROOT_MENU) tekst"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:58
+#: classes/contentmgmt/menu_tree.aw:57
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:385
+#: classes/contentmgmt/menu_tree.aw:372
 msgid "Men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:419
+#: classes/contentmgmt/menu_tree.aw:406
 msgid "Lisa men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:422
+#: classes/contentmgmt/menu_tree.aw:409
 msgid "Otsi"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:426
+#: classes/contentmgmt/menu_tree.aw:413
 msgid "Eemalda men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:458
+#: classes/contentmgmt/menu_tree.aw:445
 msgid "Avamisaeg"
 msgstr ""
 

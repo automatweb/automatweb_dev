@@ -314,3 +314,7 @@ msgstr "Created"
 msgid "Kommentaare"
 msgstr ""
 
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:group_charts
+msgid "Grupi Kaardid (charts) pealkiri"
+msgstr "Charts"
+

@@ -109,6 +109,30 @@ msgstr ""
 msgid "Omaduse Arhiveeritud (is_archived) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_rowhouse.aw:prop_booked_until
+msgid "Omaduse  (booked_until) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_rowhouse.aw:prop_booked_until_comment
+msgid "Omaduse  (booked_until) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_rowhouse.aw:prop_booked_until_help
+msgid "Omaduse  (booked_until) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_rowhouse.aw:prop_is_booked
+msgid "Omaduse Broneeritud (is_booked) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_rowhouse.aw:prop_is_booked_comment
+msgid "Omaduse Broneeritud (is_booked) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_rowhouse.aw:prop_is_booked_help
+msgid "Omaduse Broneeritud (is_booked) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_expire
 msgid "Omaduse aegub (expire) caption"
 msgstr ""
@@ -2117,14 +2141,6 @@ msgstr ""
 msgid "Grupi Kuulutuse andmed (advertisement_data) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_rowhouse.aw:group_temp
-msgid "Grupi põhimõtteliselt prügikast (temp) pealkiri"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_rowhouse.aw:group_temp_help
-msgid "Grupi põhimõtteliselt prügikast (temp) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_rowhouse.aw:rel_RELTYPE_REALESTATE_ADDRESS
 msgid "Seose Aadress (RELTYPE_REALESTATE_ADDRESS) tekst"
 msgstr ""
@@ -2165,12 +2181,12 @@ msgstr "Äîáàâëÿåòñÿ ê öåíå îáúåêòà"
 msgid "Sisaldub objekti hinnas"
 msgstr "Â öåíå îáúåêòà"
 
-#: classes/applications/realestate_management/realestate_rowhouse.aw:414
+#: classes/applications/realestate_management/realestate_rowhouse.aw:412
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_rowhouse.aw:491
-#: classes/applications/realestate_management/realestate_rowhouse.aw:499
+#: classes/applications/realestate_management/realestate_rowhouse.aw:489
+#: classes/applications/realestate_management/realestate_rowhouse.aw:497
 msgid "Kohustuslik v&auml;li"
 msgstr ""
 

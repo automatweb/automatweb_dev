@@ -170,7 +170,7 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_MONITOR
 msgid "Seose J&auml;lgija (RELTYPE_MONITOR) tekst"
-msgstr ""
+msgstr "Jälgija"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_OBJECT_TYPE
 msgid "Seose Objekti t&amp;uuml;&amp;uuml;p (RELTYPE_OBJECT_TYPE) tekst"
@@ -317,4 +317,24 @@ msgstr ""
 # classes/applications/bug_o_matic_3000/bug_tracker.aw:group_search
 msgid "Omaduse JÃ¤lgijad (s_monitors) caption"
 msgstr "j2lgija"
+
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:group_charts
+msgid "Grupi Kaardid (charts) pealkiri"
+msgstr "Kaardid"
+
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:group_charts_comment
+msgid "Grupi Kaardid (charts) comment"
+msgstr "Erinevad statistilised ülevaated arendusülessannetest"
+
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_bug_tree
+msgid "Kujundusosa Arendus&uuml;lesanded (bug_tree) pealkiri"
+msgstr "Arendusülessanded"
+
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:group_bugs
+msgid "Grupi &Uuml;lesanded (bugs) pealkiri"
+msgstr "Ülesanded"
+
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:group_by_default
+msgid "Grupi &Uuml;lesanded (by_default) pealkiri"
+msgstr "Ülesanded"
 

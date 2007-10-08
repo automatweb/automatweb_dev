@@ -29,19 +29,19 @@ msgstr "See also"
 msgid "Samal teemal:"
 msgstr "On the same subject:"
 
-#: classes/document.aw:2394
+#: classes/document.aw:2395
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/document.aw:2401
+#: classes/document.aw:2402
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/document.aw:2409
+#: classes/document.aw:2410
 msgid "Autor"
 msgstr "Author"
 
-#: classes/document.aw:2919
+#: classes/document.aw:2920
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
@@ -49,11 +49,11 @@ msgstr ""
 "<font face='arial'>Static page generation is taking place, please wait!<br /><br />\n"
 "\n"
 
-#: classes/document.aw:2949
+#: classes/document.aw:2950
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr "Static pages created"
 
-#: classes/document.aw:2951
+#: classes/document.aw:2952
 msgid "tagasi dokumendi muutmise juurde"
 msgstr "back to document editing"
 

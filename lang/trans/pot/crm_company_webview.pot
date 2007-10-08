@@ -370,7 +370,7 @@ msgstr ""
 msgid "Veel lisainfot"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:686 classes/applications/crm/crm_company_webview.aw:1632 classes/applications/crm/crm_company_webview.aw:1640 classes/applications/crm/crm_company_webview.aw:1641
+#: classes/applications/crm/crm_company_webview.aw:686 classes/applications/crm/crm_company_webview.aw:1641 classes/applications/crm/crm_company_webview.aw:1649 classes/applications/crm/crm_company_webview.aw:1650
 msgid "-"
 msgstr ""
 
@@ -402,7 +402,7 @@ msgstr ""
 msgid "Koduleht"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:1380
+#: classes/applications/crm/crm_company_webview.aw:1389
 msgid "Muuda"
 msgstr ""
 

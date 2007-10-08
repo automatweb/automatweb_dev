@@ -406,31 +406,31 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/image.aw:338
+#: classes/image.aw:351
 msgid "kommentaar"
 msgstr ""
 
-#: classes/image.aw:338
+#: classes/image.aw:351
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:958
+#: classes/image.aw:972
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/image.aw:959
+#: classes/image.aw:973
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/image.aw:972
+#: classes/image.aw:986
 msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/image.aw:1578
+#: classes/image.aw:1594
 msgid "Lisa"
 msgstr ""
 
-#: classes/image.aw:2105
+#: classes/image.aw:2161
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 

@@ -2405,12 +2405,12 @@ msgstr "Will be added to the price of object"
 msgid "Sisaldub objekti hinnas"
 msgstr "Includes in the price of object"
 
-#: classes/applications/realestate_management/realestate_house.aw:510
+#: classes/applications/realestate_management/realestate_house.aw:508
 msgid "%s saj."
 msgstr "%s century"
 
-#: classes/applications/realestate_management/realestate_house.aw:587
-#: classes/applications/realestate_management/realestate_house.aw:595
+#: classes/applications/realestate_management/realestate_house.aw:585
+#: classes/applications/realestate_management/realestate_house.aw:593
 msgid "Kohustuslik v&auml;li"
 msgstr ""
 

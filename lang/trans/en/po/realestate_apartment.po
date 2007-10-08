@@ -709,16 +709,16 @@ msgstr ""
 msgid "Omaduse  (map_id) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_no
-msgid "Omaduse Näita korteri numbrit (show_apartment_no) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_number
+msgid "Omaduse Näita korteri numbrit (show_apartment_number) caption"
+msgstr "Show apartment number"
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_number_comment
+msgid "Omaduse Näita korteri numbrit (show_apartment_number) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_no_comment
-msgid "Omaduse Näita korteri numbrit (show_apartment_no) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_no_help
-msgid "Omaduse Näita korteri numbrit (show_apartment_no) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_number_help
+msgid "Omaduse Näita korteri numbrit (show_apartment_number) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_broker_fee
@@ -830,15 +830,15 @@ msgid "Omaduse Objekti vabastamine (available_from) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_floor
-msgid "Omaduse Korrus\t\t (floor) caption"
-msgstr ""
+msgid "Omaduse Korrus (floor) caption"
+msgstr "Floor"
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_floor_comment
-msgid "Omaduse Korrus\t\t (floor) kommentaar"
+msgid "Omaduse Korrus (floor) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_floor_help
-msgid "Omaduse Korrus\t\t (floor) help"
+msgid "Omaduse Korrus (floor) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_rooms
@@ -878,15 +878,15 @@ msgid "Omaduse K&ouml;etav pind (heatable_area) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type
-msgid "Omaduse Varaomand\t\t (ownership_type) caption"
-msgstr ""
+msgid "Omaduse Varaomand (ownership_type) caption"
+msgstr "Ownership type"
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type_comment
-msgid "Omaduse Varaomand\t\t (ownership_type) kommentaar"
+msgid "Omaduse Varaomand (ownership_type) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type_help
-msgid "Omaduse Varaomand\t\t (ownership_type) help"
+msgid "Omaduse Varaomand (ownership_type) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_condition
@@ -2229,16 +2229,16 @@ msgstr "Will be added to the price of object"
 msgid "Sisaldub objekti hinnas"
 msgstr "Includes in the price of object"
 
-#: classes/applications/realestate_management/realestate_apartment.aw:450
+#: classes/applications/realestate_management/realestate_apartment.aw:448
 msgid "%s saj."
 msgstr "%s century"
 
-#: classes/applications/realestate_management/realestate_apartment.aw:526
-#: classes/applications/realestate_management/realestate_apartment.aw:534
+#: classes/applications/realestate_management/realestate_apartment.aw:524
+#: classes/applications/realestate_management/realestate_apartment.aw:532
 msgid "Kohustuslik v&auml;li"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:560
+#: classes/applications/realestate_management/realestate_apartment.aw:558
 msgid "Viga andmetes: korruste arv korrusest v&auml;iksem."
 msgstr ""
 
@@ -2263,14 +2263,8 @@ msgstr ""
 #~ msgid "Omaduse Krunt ja maja (childtitle6) caption"
 #~ msgstr "Ground and house"
 
-#~ msgid "Omaduse Korrus (floor) caption"
-#~ msgstr "Floor"
-
 #~ msgid "Omaduse Korter (childtitle7) caption"
 #~ msgstr "Apartment"
-
-#~ msgid "Omaduse Varaomand (ownership_type) caption"
-#~ msgstr "Ownership type"
 
 #~ msgid "Omaduse Toad (childtitle1) caption"
 #~ msgstr "Rooms"
@@ -2331,9 +2325,6 @@ msgstr ""
 
 #~ msgid "Omaduse Kuuüür (transaction_rent_total) caption"
 #~ msgstr "Monthly rent"
-
-#~ msgid "Omaduse Näita korteri numbrit (show_apartment_number) caption"
-#~ msgstr "Show apartment number"
 
 #~ msgid "Omaduse Hoone tüüp (building_type) caption"
 #~ msgstr "Type of building"

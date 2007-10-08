@@ -230,23 +230,23 @@ msgstr ""
 msgid "Salvesta muudatused"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:413 classes/crm/crm_deal.aw:448
+#: classes/crm/crm_deal.aw:414 classes/crm/crm_deal.aw:449
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:432
+#: classes/crm/crm_deal.aw:433
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:436
+#: classes/crm/crm_deal.aw:437
 msgid "Fail"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:440
+#: classes/crm/crm_deal.aw:441
 msgid "Muudetud"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:444
+#: classes/crm/crm_deal.aw:445
 msgid "Muutja"
 msgstr ""
 

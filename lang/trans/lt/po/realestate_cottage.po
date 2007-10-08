@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_cottage.aw:class_978_help
 msgid "Klassi Suvila help"
 msgstr ""
@@ -2182,11 +2181,11 @@ msgstr ""
 msgid "Sisaldub objekti hinnas"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_cottage.aw:414
+#: classes/applications/realestate_management/realestate_cottage.aw:412
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_cottage.aw:491 classes/applications/realestate_management/realestate_cottage.aw:499
+#: classes/applications/realestate_management/realestate_cottage.aw:489
+#: classes/applications/realestate_management/realestate_cottage.aw:497
 msgid "Kohustuslik v&auml;li"
 msgstr ""
-

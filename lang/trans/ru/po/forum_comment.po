@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_name
 msgid "Omaduse Pealkiri (name) caption"
-msgstr ""
+msgstr "sdada"
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_name_comment
 msgid "Omaduse Pealkiri (name) kommentaar"

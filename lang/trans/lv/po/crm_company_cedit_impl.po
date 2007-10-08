@@ -9,8 +9,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_company_cedit_impl.aw:62 classes/applications/crm/crm_company_cedit_impl.aw:76 classes/applications/crm/crm_company_cedit_impl.aw:154 classes/applications/crm/crm_company_cedit_impl.aw:166 classes/applications/crm/crm_company_cedit_impl.aw:332 classes/applications/crm/crm_company_cedit_impl.aw:344 classes/applications/crm/crm_company_cedit_impl.aw:454 classes/applications/crm/crm_company_cedit_impl.aw:466 classes/applications/crm/crm_company_cedit_impl.aw:593 classes/applications/crm/crm_company_cedit_impl.aw:608 classes/applications/crm/crm_company_cedit_impl.aw:725 classes/applications/crm/crm_company_cedit_impl.aw:803 classes/applications/crm/crm_company_cedit_impl.aw:820
+#: classes/applications/crm/crm_company_cedit_impl.aw:62
+#: classes/applications/crm/crm_company_cedit_impl.aw:76
+#: classes/applications/crm/crm_company_cedit_impl.aw:154
+#: classes/applications/crm/crm_company_cedit_impl.aw:166
+#: classes/applications/crm/crm_company_cedit_impl.aw:335
+#: classes/applications/crm/crm_company_cedit_impl.aw:347
+#: classes/applications/crm/crm_company_cedit_impl.aw:471
+#: classes/applications/crm/crm_company_cedit_impl.aw:483
+#: classes/applications/crm/crm_company_cedit_impl.aw:610
+#: classes/applications/crm/crm_company_cedit_impl.aw:625
+#: classes/applications/crm/crm_company_cedit_impl.aw:742
+#: classes/applications/crm/crm_company_cedit_impl.aw:820
+#: classes/applications/crm/crm_company_cedit_impl.aw:837
 msgid "Muuda"
 msgstr ""
 
@@ -22,11 +33,10 @@ msgstr ""
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:556
+#: classes/applications/crm/crm_company_cedit_impl.aw:573
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:731
+#: classes/applications/crm/crm_company_cedit_impl.aw:748
 msgid "Vali &uuml;ks"
 msgstr ""
-

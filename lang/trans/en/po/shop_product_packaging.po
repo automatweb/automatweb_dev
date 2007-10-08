@@ -701,18 +701,18 @@ msgstr "variable4"
 msgid "Seose muutuja5 (RELTYPE_USERVAR5) tekst"
 msgstr "variable5"
 
-#: classes/applications/shop/shop_product_packaging.aw:204
+#: classes/applications/shop/shop_product_packaging.aw:206
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:205
+#: classes/applications/shop/shop_product_packaging.aw:207
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:504
+#: classes/applications/shop/shop_product_packaging.aw:506
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/shop/shop_product_packaging.aw:509
+#: classes/applications/shop/shop_product_packaging.aw:511
 msgid "Valuuta"
 msgstr "Currency"

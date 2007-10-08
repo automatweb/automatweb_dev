@@ -37,6 +37,6 @@ msgstr ""
 msgid "Call to undefined method '%s'."
 msgstr ""
 
-#: classes/core/obj/object.aw:142
+#: classes/core/obj/object.aw:143
 msgid "object loader is not object!!"
 msgstr "object loader is not object!!"

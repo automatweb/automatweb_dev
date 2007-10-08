@@ -134,27 +134,23 @@ msgstr ""
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr ""
 
-#: classes/common/address/address.aw:rel_RELTYPE_ADMINISTRATIVE_UNIT
-msgid "Seose Halduspiirkond (RELTYPE_ADMINISTRATIVE_UNIT) tekst"
-msgstr ""
-
-#: classes/common/address/address.aw:101
+#: classes/common/address/address.aw:90
 msgid "Haldusjaotus m‰‰ramata."
 msgstr ""
 
-#: classes/common/address/address.aw:120
+#: classes/common/address/address.aw:109
 msgid "Riik/haldusjaotus peab olema valitud!"
 msgstr ""
 
-#: classes/common/address/address.aw:243
+#: classes/common/address/address.aw:232
 msgid "Viga: k6rgem haldusjaotus m22ramata."
 msgstr ""
 
-#: classes/common/address/address.aw:265
+#: classes/common/address/address.aw:254
 msgid "Valikute taotleja-property m22ramata."
 msgstr ""
 
-#: classes/common/address/address.aw:359
+#: classes/common/address/address.aw:348
 msgid "T‰nav"
 msgstr ""
 

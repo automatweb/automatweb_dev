@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/country/country_citydistrict.aw:class_959_help
 msgid "Klassi Linnaosa v2 help"
 msgstr ""
@@ -74,6 +73,18 @@ msgstr ""
 msgid "Omaduse Vali kõrgem halduspiirkond (parent_select) help"
 msgstr ""
 
+#: classes/common/country/country_citydistrict.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/common/country/country_citydistrict.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_citydistrict.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/common/country/country_citydistrict.aw:prop_administrative_structure_oid
 msgid "Omaduse  (administrative_structure_oid) caption"
 msgstr ""
@@ -86,7 +97,14 @@ msgstr ""
 msgid "Omaduse  (administrative_structure_oid) help"
 msgstr ""
 
+#: classes/common/country/country_citydistrict.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/common/country/country_citydistrict.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/common/country/country_citydistrict.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_UNIT
 msgid "Seose Kõrgem halduspiirkond (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
 msgstr ""
-

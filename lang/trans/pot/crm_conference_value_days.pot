@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Hotelli kood (hotel_code) help"
 msgstr ""
 
+#: classes/applications/crm/crm_conference_value_days.aw:prop_months
+msgid "Omaduse Mitu kuud (months) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_conference_value_days.aw:prop_months_comment
+msgid "Omaduse Mitu kuud (months) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_conference_value_days.aw:prop_months_help
+msgid "Omaduse Mitu kuud (months) help"
+msgstr ""
+
 #: classes/applications/crm/crm_conference_value_days.aw:prop_show_codes
 msgid "Omaduse N&auml;ita koode (show_codes) caption"
 msgstr ""

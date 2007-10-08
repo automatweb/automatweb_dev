@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/aw_code_analyzer/parser.aw:174
+#: classes/core/aw_code_analyzer/parser.aw:178
 msgid ""
 "class count = %s <br />\n"
 "function count = %s <br />\n"
@@ -17,21 +17,19 @@ msgid ""
 "<br />max level in file %s on line %s <br />\n"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/parser.aw:327
+#: classes/core/aw_code_analyzer/parser.aw:331
 msgid "error - end of file after class in line %s <br />"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/parser.aw:584
-msgid ""
-"error in p_get_string (line: %s , pos = %s ) , called without string start "
-"<br />\n"
+#: classes/core/aw_code_analyzer/parser.aw:588
+msgid "error in p_get_string (line: %s , pos = %s ) , called without string start <br />\n"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/parser.aw:610
+#: classes/core/aw_code_analyzer/parser.aw:614
 msgid "error in line %s file ended with open string! <br />\n"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/parser.aw:661
-#: classes/core/aw_code_analyzer/parser.aw:715
+#: classes/core/aw_code_analyzer/parser.aw:665
+#: classes/core/aw_code_analyzer/parser.aw:719
 msgid "copy of %s to %s failed, stopping <br />\n"
 msgstr ""

@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Osakonnad (departments) help"
 msgstr ""
 
+#: classes/crm/persons_webview.aw:prop_show_only_public_phones
+msgid "Omaduse Näita ainult avalikke numbreid (show_only_public_phones) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_show_only_public_phones_comment
+msgid "Omaduse Näita ainult avalikke numbreid (show_only_public_phones) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_show_only_public_phones_help
+msgid "Omaduse Näita ainult avalikke numbreid (show_only_public_phones) help"
+msgstr ""
+
 #: classes/crm/persons_webview.aw:prop_persons_principe
 msgid "Omaduse Isikute järjestamisprintsiip (persons_principe) caption"
 msgstr ""
@@ -102,55 +114,55 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_DEPARTMENT) tekst"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:90
+#: classes/crm/persons_webview.aw:93
 msgid "perenimi"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:91
+#: classes/crm/persons_webview.aw:94
 msgid "ametinimetuse jrk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:92
+#: classes/crm/persons_webview.aw:95
 msgid "isiku jrk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:97
+#: classes/crm/persons_webview.aw:100
 msgid "osakonna jrk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:98
+#: classes/crm/persons_webview.aw:101
 msgid "osakonna nimi"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:102
+#: classes/crm/persons_webview.aw:105
 msgid "Kasvav"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:103
+#: classes/crm/persons_webview.aw:106
 msgid "Kahanev"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:107
+#: classes/crm/persons_webview.aw:110
 msgid "-- vali --"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:108
+#: classes/crm/persons_webview.aw:111
 msgid "põhi"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:109
+#: classes/crm/persons_webview.aw:112
 msgid "kesk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:110
+#: classes/crm/persons_webview.aw:113
 msgid "kesk-eri"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:111
+#: classes/crm/persons_webview.aw:114
 msgid "kõrgem"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:114
+#: classes/crm/persons_webview.aw:119
 msgid "Osakondade tasemed, mida näidataks, saab märkida kujul '1,2,3' või '1-2' või '3'
 			juhul , kui on vaja kuvada inimesi üksteise kõrval, siis teplates peaks olema subid umbes kujul:
 			<!-- SUB: DEPARTMENT -->
@@ -196,47 +208,47 @@ msgid "Osakondade tasemed, mida näidataks, saab märkida kujul '1,2,3' või '1-2' 
 			Template'ide tõlkimiseks kasutada faili persons_web_view.aw."
 msgstr ""
 
-#: classes/crm/persons_webview.aw:125
+#: classes/crm/persons_webview.aw:130
 msgid "ainult osakonnad"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:126
+#: classes/crm/persons_webview.aw:131
 msgid "koos isikutega"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:244
+#: classes/crm/persons_webview.aw:249
 msgid "Vaade"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:248
+#: classes/crm/persons_webview.aw:253
 msgid "Templeit"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:252
+#: classes/crm/persons_webview.aw:257
 msgid "Osakondade tasemeid"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:256
+#: classes/crm/persons_webview.aw:261
 msgid "Koos inimkoosseisuga"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:260
+#: classes/crm/persons_webview.aw:265
 msgid "Tulpade arv"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:264
+#: classes/crm/persons_webview.aw:269
 msgid "Read ametinimetuste alusel"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:268
+#: classes/crm/persons_webview.aw:273
 msgid "Minimaalne tulpade arv"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:563
+#: classes/crm/persons_webview.aw:568
 msgid "pole asutust valitud"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:993
+#: classes/crm/persons_webview.aw:996
 msgid "Palk"
 msgstr ""
 

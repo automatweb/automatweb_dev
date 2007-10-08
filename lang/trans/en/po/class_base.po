@@ -119,8 +119,8 @@ msgstr "New"
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1752 classes/class_base.aw:5103
-#: classes/class_base.aw:5114
+#: classes/class_base.aw:1752 classes/class_base.aw:5104
+#: classes/class_base.aw:5115
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
@@ -128,23 +128,23 @@ msgstr "Connection manager"
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3607
+#: classes/class_base.aw:3608
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3616
+#: classes/class_base.aw:3617
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:5000
+#: classes/class_base.aw:5001
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 
-#: classes/class_base.aw:5416
+#: classes/class_base.aw:5428
 msgid "T&otilde;lge aktiivne"
 msgstr "Translation is active"
 
-#: classes/class_base.aw:5424
+#: classes/class_base.aw:5436
 msgid "Salvesta"
 msgstr ""
 
