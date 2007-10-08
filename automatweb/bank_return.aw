@@ -75,6 +75,9 @@ $sf->tpl_init("automatweb");
 
 //lc_load("automatweb");
 
+//if(aw_global_get("uid") == "kix"){
+//	arr($_POST); arr($_GET);arr($_SESSION);
+//}
 
 //siit hakkab siis alles pangast tuleva infoga tegelemine
 $_SESSION["bank_return"]["data"] = null;
@@ -105,12 +108,17 @@ if($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"])
 	$id = substr($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"] ,0 , -1 );
 }
 
+
+
 //logimine
 $log = date("d/m/Y H:i : ",time());
 $bi = get_instance(CL_BANK_PAYMENT);
 $_SESSION["bank_return"]["data"]["timestamp"] = time();
 $_SESSION["bank_return"]["data"]["ip"] = $_SERVER['REMOTE_ADDR'];
 $_SESSION["bank_return"]["data"]["good"] = $bi->check_response();
+
+
+//	arr($_POST); arr($_GET);arr($_SESSION);
 
 //foreach($_SESSION["bank_return"]["data"] as $key => $val)
 //{

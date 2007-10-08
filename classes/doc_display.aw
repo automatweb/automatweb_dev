@@ -23,6 +23,7 @@ class doc_display extends aw_template
 	**/
 	function gen_preview($arr)
 	{
+		enter_function("doc_display::gen_preview::".$arr["docid"]);
 		$arr["leadonly"] = isset($arr["leadonly"]) ? $arr["leadonly"] : null;
 		$doc = obj($arr["docid"]);
 		if (aw_ini_get("config.object_versioning") == 1 && $_GET["docversion"] != "")
@@ -42,6 +43,7 @@ class doc_display extends aw_template
 		}
 
 		$text = $this->_get_text($arr, $doc);
+
 		$this->create_relative_links($text);
 		$text_no_aliases = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$text);
 
@@ -210,6 +212,7 @@ class doc_display extends aw_template
 
 		$str = $this->parse();
 		$this->vars(array("image_inplace" => ""));
+		exit_function("doc_display::gen_preview::".$arr["docid"]);
 		return $str;
 	}
 

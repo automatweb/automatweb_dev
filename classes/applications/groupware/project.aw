@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.124 2007/09/27 12:46:45 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.125 2007/10/08 10:25:46 kristo Exp $
 // project.aw - Projekt
 /*
 
@@ -1032,8 +1032,13 @@ class project extends class_base
 
 		// aga vaat siin on mingi jama ..
 		$ol = new object_list(array(
-//			"parent" => $parents,
-			"project" => $arr["obj_inst"]->id(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"parent" => $parents,
+					"project" => $arr["obj_inst"]->id(),
+				)
+			)),
 			"sort_by" => "planner.start",
 			"class_id" => $this->event_entry_classes,
 			"CL_STAGING.start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start),
@@ -1050,9 +1055,15 @@ class project extends class_base
 		$req = get_ru();
 		$clss = aw_ini_get("classes");
 
+		$disp = array();
 		foreach($ol->arr() as $o)
 		{
 			$id = $o->id();
+			if (isset($disp[$o->brother_of()]))
+			{
+				continue;			
+			}
+			$disp[$o->brother_of()] = 1;
 			//if ($id != $o->brother_of())
 			//{
 				// this will break things, but makes estonia work for now
@@ -3447,6 +3458,30 @@ class project extends class_base
 
 	function callback_post_save($arr)
 	{
+		// write implementor and orderer
+		if (!$this->can("view", $arr["obj_inst"]->prop("implementor")))
+		{
+			$imp = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_IMPLEMENTOR");
+			if ($imp)
+			{
+				$arr["obj_inst"]->set_prop("implementor", $imp->id());
+				$save = true;
+			}
+		}
+		if (!$this->can("view", $arr["obj_inst"]->prop("orderer")))
+		{
+			$imp = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_ORDERER");
+			if ($imp)
+			{
+				$arr["obj_inst"]->set_prop("orderer", $imp->id());
+				$save = true;
+			}
+		}
+
+		if ($save)
+		{
+			$arr["obj_inst"]->save();
+		}
 		if ($this->do_create_task == 1)
 		{
 			$this->_create_task($arr);

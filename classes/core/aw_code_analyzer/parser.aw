@@ -13,6 +13,10 @@ class parser extends aw_template
 
 	function _get_class_list(&$files, $classdir)
 	{
+		if (strpos($classdir, "lang/") !== false)
+		{
+			return;
+		}
 		if (($dir = opendir($classdir)))
 		{
 			while (($file = readdir($dir)) !== false)
@@ -217,11 +221,11 @@ class parser extends aw_template
 		// use the parser for this as well, because that has string handling built in
 		$this->p_init($fc);
 
-//		echo "stripping comments <br />";
+//		echo "stripping comments <br />\n";
 		while (!$this->p_eos())
 		{
 			$tok = $this->_p_get_token();
-//			echo "token = $tok <br />";
+//			echo "token = $tok <br />\n";
 			if (substr($tok,0,2) == "//")
 			{
 //				echo "onelinecomment <br />";
@@ -264,7 +268,7 @@ class parser extends aw_template
 //				echo "end of oneline2 <br />";
 			}
 			else
-			if ($tok == "/*")
+			if (substr($tok,0,2) == "/*")
 			{
 				$in_comment = true;
 				while ($in_comment)
@@ -584,7 +588,7 @@ class parser extends aw_template
 			die(sprintf(t("error in p_get_string (line: %s , pos = %s ) , called without string start <br />\n"), $this->p_get_line(), $this->p_pos));
 		}
 		$ret = $str_start;
-//		echo "str_start = $str_start <br />";
+//		echo "str_start = $str_start, line = ".$this->p_get_line()." \n";
 		while (($ch = $this->p_getch()) !== false)
 		{
 			if ($ch == "\\")
@@ -654,20 +658,20 @@ class parser extends aw_template
 		$fc_n = join("\n", $final);
 		if ($fc_n != $fc)
 		{
-			$backup_name = $file.".".time().".aw-backup";
+			/*$backup_name = $file.".".time().".aw-backup";
 			echo "creating back-up of old class: $file to $backup_name <br />\n";
 			if (!copy($file, $backup_name))
 			{
 				die(sprintf(t("copy of %s to %s failed, stopping <br />\n"), $file, $backup_name));
 			}
-			echo "saving new file as $file ....<br />\n";
+			echo "saving new file as $file ....<br />\n";*/
 			$this->put_file(array("file" => $file, "content" => $fc_n));
 			chmod($file,0666);
-			echo "all done. <br /><br />\n\n";
+			//echo "all done. <br /><br />\n\n";
 		}
 		else
 		{
-			echo "no changes made in class $file <br /><br />\n\n";
+			echo "no changes made in class $file\n";
 		}
 	}
 

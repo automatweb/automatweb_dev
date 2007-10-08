@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.38 2007/10/01 11:27:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.39 2007/10/08 10:25:48 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -457,6 +457,27 @@ class ml_queue extends aw_template
 			};
 //
 
+			//kontrollib, et 'kki vahepeal mõni teine queue on otsa jooksnud ja konkreetset maili juba saatma hakanud.... siis on admed muutunud ju... lukusatatud ju pole... ja alguses kõik ära lukustada pole ka hea mõte... 
+			$test_qid = $r["qid"];
+			$test_q = $this->db_fetch_row("SELECT * FROM ml_queue WHERE qid = '$test_qid'");
+			//arr($test_q);
+			
+			$tm = time();
+			$old = time() - 10 * 60;//kui nüüd 2 minutit möödas viimase maili saatmisest, siis võib suht kindel olla, et eelmine queue on pange pand
+			
+			if(
+			   !($test_q["status"] == 1)
+			&& !($test_q["status"] == 0)
+			&& !($test_q["status"] == 3
+				&& $test_q["position"] < $test_q["total"]
+				&& $test_q["last_sent"] < $old
+				)
+			)
+			continue;
+			if (!$this->can("view", $lid))
+			{
+				continue;
+			}
 			$list = obj($lid);
 			$bounce = $list->prop("bounce");
 			if(!$bounce)

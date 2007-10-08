@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.10 2007/09/27 13:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.11 2007/10/08 10:25:46 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -358,7 +358,7 @@ class aw_object_search extends class_base
 
 	function get_s_filt($arr)
 	{
-		$filt = array("limit" => 200, "lang_id" => array(), "site_id" => array());
+		$filt = array("limit" => 2000, "lang_id" => array(), "site_id" => array());
 		$props = array(
 			"s_name" => "name", 
 			"s_comment" => "comment", 

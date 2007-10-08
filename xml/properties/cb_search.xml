@@ -179,7 +179,10 @@
             </SYN>
             <PARENT>
                   <value>2</value>
-                  <clid>CL_MENU</clid>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
                   <caption>kataloog, kust otsida</caption>
             </PARENT>
             <RESULT_CONTROLLER>

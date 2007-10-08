@@ -10,7 +10,7 @@
 					Linn
 				</td>
 				<td>
-					<input type="text" name="city"/>
+					<input type="text" name="City"/>
 				</td>
 			</tr>
 			<tr>
@@ -18,7 +18,7 @@
 					Maakond
 				</td>
 				<td>
-					<input type="text" name="state"/>
+					<input type="text" name="State"/>
 				</td>
 			</tr>
 			<tr>
@@ -26,7 +26,7 @@
 					Postiindeks
 				</td>
 				<td>
-					<input type="text" name="postalcode"/>
+					<input type="text" name="PostalCode"/>
 				</td>
 			</tr>
 			<tr>
@@ -34,7 +34,7 @@
 					Riik
 				</td>
 				<td>
-					<input type="text" name="country"/>
+					<input type="text" name="Country"/>
 				</td>
 			</tr>
 			<tr>
@@ -42,7 +42,7 @@
 					Roll
 				</td>
 				<td>
-					<input type="text" name="role"/>
+					<input type="text" name="Role"/>
 				</td>
 			</tr>
 		</table>

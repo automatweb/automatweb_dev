@@ -57,6 +57,15 @@ remoting:
 		echo "Cmdline php not found, cannot create remoting proxy classes"; \
 	fi
 
+profile:
+	@echo "Generating profiling information into code"
+	@if test -e scripts/php; \
+		then \
+		./scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/mk_profiling.aw \
+	else \
+		echo "Cmdline php not found, cannot create profiling information"; \
+	fi
+
 class:
 	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 scripts/mk_class/mk_class.aw
 

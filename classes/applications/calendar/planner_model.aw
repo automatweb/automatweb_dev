@@ -136,14 +136,14 @@ class planner_model extends core
 		{
 			// fuck me. plenty of places expect different data from me .. until I'm
 			// sure that nothing breaks, I can't remove this
-			$awt->start("get-edit-link");
+			enter_function("get-edit-link");
 			if (!$this->can("view", $event["id"]))
 			{
 				continue;
 			}
 			$of = new object($event["id"]);
 			$row = $event + $of->properties();
-			$awt->stop("get-edit-link");
+			exit_function("get-edit-link");
 			$rec = array();
 			$gx = date("dmY",$event["start"]);
 			$row["link"] = $this->get_event_edit_link(array(

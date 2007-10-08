@@ -25,10 +25,10 @@
 			<table cellpadding=0 cellspacing=0>
 				<tr>
 					<td valign='bottom'>
-					<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" border="0"></a>
+					<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" alt="" border="0"></a>
 					</td>
 					<td valign='bottom'>
-						<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+						<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" alt="" border="0"></a></td>
 					</a>
 				</tr>
 			</table>
@@ -40,10 +40,10 @@
 			<table cellpadding=0 cellspacing=0>
 				<tr>
 					<td valign='bottom'>
-					<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"></a>
+					<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"  width="16" height="16" ></a>
 					</td>
 					<td valign='bottom'>
-						<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+						<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"  width="7" height="4" ></a></td>
 					</a>
 				</tr>
 			</table>

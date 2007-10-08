@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.67 2007/10/02 11:09:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.68 2007/10/08 10:25:51 kristo Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -187,7 +187,7 @@ class bank_payment extends class_base
 		"credit_card" => "ecuno",
 		"nordeapank" => "SOLOPMT-RETURN-REF",
 	);
-
+	
 	var $languages = array(
 		"hansa" => array(
 			"et" => "EST",
@@ -241,7 +241,7 @@ class bank_payment extends class_base
 		);
 	}
 	
-	/** 
+	/**
 		@attrib name=bank_forms api=1 default=1 nologin=1 is_public=1 all_args=1
 	@param id optional type=oid
 		bank_payment object ID 
@@ -677,38 +677,12 @@ class bank_payment extends class_base
 				$prop["value"] = 1;
 				break;
 			case "find_name":
+			case "find_date_start":
+			case "find_date_end":
 			case "find_ref":
 				if($search_data[$prop["name"]])
 				{
 					$prop["value"] = $search_data[$prop["name"]];
-				}
-				break;
-			case "find_date_start":
-				if(isset($_SESSION["bank_payment"]["find_date_start"]))
-				{
-					$prop["value"] = $_SESSION["bank_payment"]["find_date_start"];
-				}
-				else
-				{
-					$prop["value"] = array(
-						"day" => date("d" , (time()-(31 * 24 * 3600))),
-						"month" => date("m" , (time()-(31 * 24 * 3600))),
-						"year" => date("Y" , (time()-(31 * 24 * 3600))),
-					);
-				}
-				break;
-			case "find_date_end":
-				if(isset($_SESSION["bank_payment"]["find_date_end"]))
-				{
-					$prop["value"] = $_SESSION["bank_payment"]["find_date_end"];
-				}
-				else
-				{
-					$prop["value"] = array(
-						"day" => date("d" , time()) + 1,
-						"month" => date("m" , time()),
-						"year" => date("Y" , time()),
-					);
 				}
 				break;
 			case "test_priv_key":

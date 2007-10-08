@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.25 2007/07/25 10:10:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.26 2007/10/08 10:25:48 kristo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -1276,7 +1276,7 @@ class watercraft extends class_base
 		$vars["watercraft_id"] = $ob->id();
 		$vars['images_count'] = $images_count;
 		$vars['name'] = $ob->prop('name');
-		$vars['return_url'] = aw_url_change_var(array('watercraft_id' => NULL, 'return_url' => NULL), false, get_ru());
+		$vars['return_url'] = $_GET["return_url"]?$_GET["return_url"]:aw_url_change_var(array('watercraft_id' => NULL, 'return_url' => NULL), false, get_ru());
 
 		$vars["seller_name"] = $ob->prop("contact_name");
 		$vars["seller_email"] = $ob->prop("contact_email");

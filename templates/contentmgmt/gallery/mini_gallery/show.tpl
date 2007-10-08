@@ -22,7 +22,8 @@ Vali lehek&uuml;lg:
 
 <!-- END SUB: PAGESELECTOR -->
 
-<table border="0" cellpadding="0" cellspacing="10" width="100%" >
+
+<table border="0" cellpadding="0" cellspacing="10" >
 <!-- SUB: ROW -->
 	<tr>
 		<!-- SUB: COL -->
@@ -31,9 +32,5 @@ Vali lehek&uuml;lg:
 	</tr>
 <!-- END SUB: ROW -->
 
-<!-- SUB: FOLDER_CHANGE -->
-<tr>
-	<td colspan="100"><b>{VAR:folder_name}</b></td>
-</tr>
-<!-- END SUB: FOLDER_CHANGE -->
+
 </table>

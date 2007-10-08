@@ -256,12 +256,20 @@ function menuItemMouseover(event, menuId) {
     maxX = window.scrollX + window.innerWidth;
     maxY = window.scrollY + window.innerHeight;
   }
+  
   if (pp_browser.isIE) {
     maxX = (document.documentElement.scrollLeft   != 0 ? document.documentElement.scrollLeft    : document.body.scrollLeft)
          + (document.documentElement.clientWidth  != 0 ? document.documentElement.clientWidth   : document.body.clientWidth);
     maxY = (document.documentElement.scrollTop    != 0 ? document.documentElement.scrollTop    : document.body.scrollTop)
          + (document.documentElement.clientHeight != 0 ? document.documentElement.clientHeight : document.body.clientHeight);
   }
+  
+  if (window.opera)
+  {
+  	maxX = window.innerWidth;
+    maxY = window.innerHeight;
+  }
+  
   maxX -= item.subMenu.offsetWidth;
   maxY -= item.subMenu.offsetHeight;
 

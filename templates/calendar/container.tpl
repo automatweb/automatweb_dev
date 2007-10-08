@@ -125,9 +125,10 @@ function hilight_event(el,tgt)
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="aw04kalender02" style="padding-bottom: 5px;">
+		<td class="aw04kalender02" style="">
 			<div class="style4" style="float: left; margin-left: 15px;">
 			<a href="{VAR:prevlink}"><b>&laquo;</b></a> <b>{VAR:caption}</b>  <a href="{VAR:nextlink}"><b>&raquo;</b></a>			</div>
+			
 			<div>
 			<div class="aw04kalender01" align="right">
 <table border="0" cellpadding="0" cellspacing="0">

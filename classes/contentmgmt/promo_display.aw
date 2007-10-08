@@ -42,6 +42,7 @@ class promo_display
 
 		enter_function("promo_get_list");
 		$list = new object_list($filter);
+
 		$parr = $list->arr();
 		$list->sort_by(array("prop" => "ord"));
 		$parr = $list->arr();
@@ -58,6 +59,10 @@ class promo_display
 		$promo_areas = aw_ini_get("promo.areas");
 		foreach($parr as $o)
 		{
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." <br>";
+}
 			if ($o->lang_id() != $lang_id && !$o->prop("content_all_langs"))
 			{
 				continue;
@@ -100,6 +105,10 @@ class promo_display
 				}
 			}
 
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." <br>";
+}
 			$doc->doc_count = 0;
 
 			$show_promo = false;
@@ -142,6 +151,10 @@ class promo_display
 				}
 			}
 
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." <br>";
+}
 			// do ignore menus
 			$ign_subs = $o->meta("section_no_include_submenus");
 			foreach($o->connections_from(array("type" => "RELTYPE_NO_SHOW_MENU")) as $ignore_menu)
@@ -165,6 +178,10 @@ class promo_display
 				}
 			}
 
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
+}
 			if ($found == false)
 			{
 				$show_promo = false;
@@ -175,10 +192,19 @@ class promo_display
 				$show_promo = false;
 			}
 
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
+}
 			if (aw_ini_get("user_interface.hide_untranslated") && !$o->prop_is_translated("name"))
 			{
 				$show_promo = false;
 			}
+
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
+}
 			$so = obj(aw_global_get("section"));
 			if ($o->meta("not_in_doc_view") == 1 && ($so->class_id() == CL_DOCUMENT || $_GET["docid"]))
 			{
@@ -186,6 +212,11 @@ class promo_display
 			}
 			// this line decides, whether we should show this promo box here or not.
 			// now, how do I figure out whether the promo box is actually in my path?
+
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
+}
 			if ($show_promo)
 			{
 				enter_function("show_promo::".$o->name());
@@ -257,6 +288,10 @@ class promo_display
 				}
 				$awt->stop("def-doc");
 
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($docid)." <br>";
+}
 				if (!$docid)
 				{
 					continue;

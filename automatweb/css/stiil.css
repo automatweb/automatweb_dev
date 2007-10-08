@@ -487,9 +487,11 @@ a:hover {text-decoration: underline}
 }
 #toimingud .v {
 	float: left;
-	padding: 3px 0 0 2px
+/*	padding: 3px 0 0 2px; */
 	vertical-align: middle;
+	width: 99%;
 }
+
 #toimingud .tb_but {
 	border: solid 1px #e1e1e1;
 	float: left;
@@ -623,4 +625,206 @@ span.kast {
 	color: #05a6e9;
 	text-decoration: underline
 }
+
+/* opera fixid @ 01. august 2007 by hannes */
+#pais .top-right-menyy div {
+	float: left;
+}
+
+#pais .toiming div {float: left; }
+#pais .toiming div span {float: left;}
+
+
+/* KALENDER */
+
+
+
+.aw04kalender01 {
+margin: 0px;
+padding-top: 6px;
+padding-left: 6px;
+padding-right: 6px;
+padding-bottom: 0px;
+background-color: #E1E1E1;
+border-top: 1px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+}
+
+.aw04kalender02 {
+padding-bottom: 5px;
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 12px;
+font-weight: bold;
+color:#000000;
+vertical-align: middle;
+}
+
+.aw04kalender02 .style4{padding: 4px 0 0 0;}
+
+.aw04kalender02 a {
+color: #0017AF;
+text-decoration:none;
+}
+
+.aw04kalender02 a:hover {
+color: #0017AF;
+text-decoration:underline;
+}
+
+.aw04kalenderkast01 {
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+color: #000000;
+margin: 0px;
+padding: 4px;
+background-color: #EFEFEF;
+border-top: 1px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+}
+
+.aw04kalenderkast01today {
+margin: 0px;
+padding: 4px;
+background-color: #E1E1E1;
+border-top: 1px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+}
+
+.aw04kalenderkast02 {
+margin: 0px;
+padding: 2px;
+background-color: #FFFFFF;
+border-top: 1px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+}
+
+.aw04kalenderkast02today {
+margin: 0px;
+padding: 2px;
+background-color: #EFEFEF;
+border-top: 1px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+}
+
+.aw04kalenderkast03 {
+margin: 0px;
+padding: 5px;
+background-color: #FFFFFF;
+border-top: 0px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+}
+
+.aw04kalenderkast03today {
+margin: 0px;
+padding: 5px;
+background-color: #EFEFEF;
+border-top: 0px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+}
+
+.aw04kalenderkast04 {
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+color: #000000;
+margin: 0px;
+padding: 4px;
+background-color: #D0D0D0;
+border-top: 1px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+}
+
+
+.aw04kalendersubevent {
+padding: 2px;
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+color: #000000;
+/*background-color: #FFFFFF;*/
+border-bottom: 1px solid #DFDFDF;
+}
+
+.aw04kalendersubevent td {
+height: 22px;
+}
+
+.aw04kalendersubeventnobg {
+margin: 2px;
+padding: 2px;
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+color: #000000;
+}
+
+
+.aw04kalendersubevent a {
+color: #000000;
+text-decoration:none;
+}
+
+.aw04kalendersubevent a:hover {
+color: #0017AF;
+text-decoration:underline;
+}
+
+.aw04kalendermini {
+background-color:#BDBDBD;
+}
+
+.aw04kalendertext {
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+font-weight: normal;
+color:#000000;
+text-align: center;
+}
+
+.aw04kalendertextevent {
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+font-weight: normal;
+color:#000000;
+}
+
+.aw04kalendertextday {
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color:#000000;
+}
+
+.aw04kalendertask {
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+color: #000000;
+background: #FFFFFF;
+padding: 4px;
+}
+
+.aw04kalendertask a {
+color: #000000;
+text-decoration:none;
+}
+
+.aw04kalendertask a:hover {
+color: #0017AF;
+text-decoration:underline;
+}
+
+/* END KALENDER */
 

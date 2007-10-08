@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.243 2007/09/18 10:25:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.244 2007/10/08 10:25:43 kristo Exp $
 // defs.aw - common functions
 if (!defined("DEFS"))
 {
@@ -758,7 +758,7 @@ if (!defined("DEFS"))
 	// !Genereerib md5 hashi kas parameetrist voi suvalisest arvust.
 	function gen_uniq_id($param = "")
 	{
-		return md5(uniqid('',true));
+		return md5(uniqid('',true)); 
 	};
 
 	////
@@ -807,6 +807,21 @@ if (!defined("DEFS"))
 	{
 		arr($arg);
 	}
+
+        function ld($msg)
+        {
+                $core = new core();
+                $msg =  is_array($msg)?$msg:array("dbg" => $msg);
+                $msg["type"] = "REMOTE_DEBUG";
+                $msg["origin"] = $_SERVER["SERVER_NAME"];
+                $ret = $core->do_orb_method_call(array(
+                        "class" => "file",
+                        "action" => "handle_remote_dbg",
+                        "params" => $msg,
+                        "method" => "xmlrpc",
+                        "server" => "tarvo.dev.struktuur.ee"
+               ));
+        }
 
 	////
 	// !järgmine funktsioon on inspireeritud perlist ;)

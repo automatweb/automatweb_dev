@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.46 2007/08/29 08:27:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.47 2007/10/08 10:25:45 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -942,7 +942,7 @@ class cb_form_chain extends class_base
 				$forms = $this->_get_forms_for_page($o, $pg);
 				foreach($forms as $form_dat)
 				{
-					if ($form_dat["rep_cnt"] > 1)
+					if ($form_dat["rep_cnt"] > 1 || ($this->is_template("FORM_MUL") && $form_dat["rep"] == 1))
 					{
 						$form_str .= $this->_display_data_table($o, $form_dat);
 					}
@@ -1400,6 +1400,10 @@ class cb_form_chain extends class_base
 			"FORM_ENTRY" => $fe_str
 		));
 		$ret = $this->parse("FORM_MUL");
+
+		$ap = get_instance("alias_parser");
+		$ap->parse_oo_aliases($fd["form"], $ret);
+
 		$this->vars(array("FORM_MUL" => ""));
 		return $ret;
 	}

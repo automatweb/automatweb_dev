@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.44 2007/07/31 12:57:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.45 2007/10/08 10:25:49 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -68,7 +68,7 @@
 @reltype SYN value=1 clid=CL_CB_SEARCH_SYNONYMS
 @caption s&uuml;non&uuml;mid
 
-@reltype PARENT value=2 clid=CL_MENU
+@reltype PARENT value=2 clid=CL_MENU,CL_CRM_COMPANY
 @caption kataloog, kust otsida
 
 @reltype RESULT_CONTROLLER value=3 clid=CL_CFGCONTROLLER

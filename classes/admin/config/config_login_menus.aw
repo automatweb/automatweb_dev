@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.16 2007/10/01 11:27:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.17 2007/10/08 10:25:44 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -207,7 +207,7 @@ class config_login_menus extends class_base
 	function on_site_init(&$dbi, &$site, &$ini_opts, &$log, $vars)
 	{
 		// we are using the new db as the default, so we can create objects
-		$oid = $dbi->db_fetch_field("SELECT oid FROM objects WHERE site_id = '".$ini_opts["site_id"]."' AND class_id = ".CL_CONFIG_LOGIN_MENUS, "oid");
+		$oid = $dbi->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_CONFIG_LOGIN_MENUS, "oid");
 		$o = obj($oid);
 		$o->set_flag(OBJ_FLAG_IS_SELECTED, true);
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.207 2007/10/05 12:57:00 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.208 2007/10/08 10:25:43 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -303,6 +303,7 @@ class image extends class_base
 		{
 			$idata = $this->get_image_by_id($f["target"]);
 		}
+
 		// show commentlist and popup to if set in property or forced
 		$do_comments = (!empty($idata["can_comment"]) || $force_comments);
 
@@ -392,7 +393,7 @@ class image extends class_base
 			{
 				return "";
 			}
-			
+
 			if (!empty($args['link_prefix'])) // Override image link
 			{
 				$idata['link'] = $args['link_prefix'].$idata['oid'];
@@ -553,6 +554,7 @@ class image extends class_base
 				"replacement" => trim($replacement),
 				"inplace" => trim($inplace),
 		);
+
 		return str_replace("\n", "", $retval);
 	}
 

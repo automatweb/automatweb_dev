@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.106 2007/09/27 10:56:26 robert Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.106 2007/09/27 10:56:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.107 2007/10/08 10:25:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.107 2007/10/08 10:25:44 kristo Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -2707,7 +2707,7 @@ class bug_tracker extends class_base
 			$start = $this->get_next_avail_time_from($start, $day2wh);
 			if ($gt->prop("num_hrs_guess") > 0)
 			{
-				$length = $gt->prop("num_hrs_guess") * 3600;
+				$length = $gt->prop("num_hrs_guess") * 3600 - ($gt->prop("num_hrs_real") * 3600);
 			}
 			else
 			{
