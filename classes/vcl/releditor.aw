@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.96 2007/06/25 11:25:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.97 2007/10/08 12:27:20 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -690,6 +690,7 @@ class releditor extends core
 				"name" => "default",
 				"caption" => t("Vali üks"),
 				"align" => "center",
+				"sortable" => 1
 			));
 		};
 
@@ -698,6 +699,7 @@ class releditor extends core
 			$awt->define_field(array(
 				"name" => "id",
 				"caption" => t("ID"),
+				"sortable" => 1
 			));
 
 			foreach($ed_fields as $field)
@@ -710,6 +712,7 @@ class releditor extends core
 				$awt->define_field(array(
 					"name" => $field,
 					"caption" => $caption,
+					"sortable" => 1
 				));
 			}
 		}
@@ -738,6 +741,7 @@ class releditor extends core
 				$awt->define_field(array(
 					"name" => $table_field,
 					"caption" => $caption,
+					"sortable" => 1
 				));
 				//$fdata[$table_field] = $table_field;
 			};
@@ -747,11 +751,13 @@ class releditor extends core
 			$awt->define_field(array(
 				"name" => "id",
 				"caption" => t("ID"),
+				"sortable" => 1
 			));
 
 			$awt->define_field(array(
 				"name" => "name",
 				"caption" => t("Nimi"),
+				"sortable" => 1
 			));
 		};
 
@@ -777,6 +783,11 @@ class releditor extends core
 		{
 			$awt->table_header = '<input type="hidden" name="releditor_clones" id="releditor_clones" value="0" />';
 		}
+
+		$awt->set_sortable(true);
+		$awt->set_default_sortby(array("ord", "id"));
+		$awt->sort_by();
+		$awt->set_sortable(false);
 
 		$rv = array(
 			"name" => $this->elname . "_table",
