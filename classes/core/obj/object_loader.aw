@@ -555,6 +555,10 @@ class _int_object_loader extends core
 		if ($do_orig !== false)
 		{
 			$rv = $this->_calc_max_acl($do_orig);
+			if ($rv === false)
+			{
+				return false;   // if the original is deleted, then the brother is deleted as well
+			}
 			$rv["can_delete"] = $max_acl["can_delete"];
 			return $rv;
 		}
