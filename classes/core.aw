@@ -760,10 +760,20 @@ class core extends acl_base
 		{
 			$send_mail = false;
 		}
+		
+		// kui saidi kaustas on fail spam.txt, siis kontrollitakse enne saatmist kirja sisu failis olevate s6nade vastu; spam.txt sisu on yhes reas kujul: /viagra|v1agra|porn|foo/i
+		if ( file_exists(aw_ini_get("site_basedir") . "/spam.txt") && $send_mail)
+		{
+			$spam = file(aw_ini_get("site_basedir") . "/spam.txt");
+			if (preg_match($spam[0], $content))
+			{
+				$send_mail = false;
+			}
+		}
 
 		if ($send_mail)
 		{
-			send_mail("vead@struktuur.ee", $subj, $content,$head);
+			send_mail("vead@struktuur.ee", $subj, $content, $head);
 			if (aw_ini_get("errors.send_to") != "")
 			{
 				send_mail(aw_ini_get("errors.send_to"), $subj, $content,$head);
