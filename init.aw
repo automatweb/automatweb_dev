@@ -841,11 +841,11 @@ function aw_startup()
 	$l->request_startup();
 
 	// check multi-lang frontpage
-	if (is_array($GLOBALS["cfg"]["frontpage"]))
+	if (is_array(aw_ini_get("frontpage")))
 	{
-		$GLOBALS["cfg"]["frontpage"] = $GLOBALS["cfg"]["frontpage"][aw_global_get("lang_id")];
+		$tmp = aw_ini_get("frontpage");
+		$GLOBALS["cfg"]["frontpage"] = $tmp[aw_global_get("lang_id")];
 	}
-
 	$LC = aw_global_get("LC");
 
 	@include($GLOBALS["cfg"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["ext"]);
