@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.61 2007/10/09 09:20:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.62 2007/10/09 09:37:06 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -1606,7 +1606,7 @@ class shop_order extends class_base
 		$ud = $arr["obj_inst"]->meta("user_data");
 		foreach($els as $pn => $pd)
 		{
-			if ($pd["type"] == "classificator")
+			if ($pd["type"] == "classificator" || $pd["type"] == "chooser")
 			{
 				if ($this->can("view", $ud[$pn]))
 				{
