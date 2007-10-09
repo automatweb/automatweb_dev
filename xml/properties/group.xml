@@ -391,6 +391,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Pilt</caption>
             </PICTURE>
+            <CFG_FORM>
+                  <value>6</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Seadete vorm</caption>
+            </CFG_FORM>
       </reltypes>
 </properties>
 
