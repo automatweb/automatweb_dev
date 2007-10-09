@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.566 2007/10/06 17:10:47 voldemar Exp $
+// $Id: class_base.aw,v 2.567 2007/10/09 14:43:13 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1314,6 +1314,31 @@ class class_base extends aw_template
 				return $cgid;
 			};
 		};
+
+		//häkk vahele, et võtaks seadete vormi kasutajagrupist
+		if (($action == "change"))
+		{
+			$gl = aw_global_get("gidlist_pri_oid");
+			asort($gl);
+			foreach($gl as $id => $pri)
+			{
+				if($this->can("view" , $id))
+				{
+					$groupobj = obj($id);
+					foreach($groupobj->connections_from(array(
+						"type" => "RELTYPE_CFG_FORM",
+					)) as $c)
+					{
+						$cfgformobj = obj($c->to());
+						if($cfgformobj->prop("subclass") == $args["obj_inst"]->class_id())
+						{
+							return $cfgformobj->id();
+						}
+					}
+				}
+			}
+		};
+
 
 		// 2. failing that, if there is a config form specified in the object metainfo,
 		//  we will use it
