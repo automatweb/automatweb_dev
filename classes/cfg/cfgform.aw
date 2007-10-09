@@ -120,11 +120,6 @@
 
 	@property post_save_controllers type=relpicker multiple=1 size=3 group=set_controllers reltype=RELTYPE_CONTROLLER
 	@caption Salvestamisj&auml;rgne kontroller
-	@comment callback_post_save
-
-	@property mod_retval_controllers type=relpicker multiple=1 size=3 group=set_controllers reltype=RELTYPE_CONTROLLER
-	@caption Tagastatava v&auml;&auml;rtuse kontroller
-	@comment callback_mod_retval. Calls check_property($cfg_controller_id, $obj_id, null, &$args, &$request, null). Expects return value type URL.
 
 	@property prop_submit_controllers type=text subtitle=1 group=set_controllers
 	@caption Omaduste kontrollerid
@@ -3018,35 +3013,21 @@ class cfgform extends class_base
 			}
 
 			$this->cfgview_vars["cfgform"] = $args["id"];
-			$this->cfgview_vars["class"] = $class;
-			$this->cfgview_vars["action"] = $action;
 			$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 			$_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
 
 			// make request
 			classload("core/orb/orb");
-			$content = false;
-
-			do
-			{
-				if (false !== $content)
-				{
-					$tmp = parse_url($content);
-					parse_str($tmp["query"], $this->cfgview_vars);
-				}
-
-				$orb = new orb();
-				$orb->process_request(array(
-					"class" => $this->cfgview_vars["class"],
-					"action" => $this->cfgview_vars["action"],
-					"reforb" => $this->cfgview_vars["reforb"],
-					"user"	=> 1,//!!! whats that for?
-					"vars" => $this->cfgview_vars,
-					"silent" => false,
-				));
-				$content = $orb->get_data();
-			}
-			while (0 === strpos($content, "http://"));
+			$orb = new orb();
+			$orb->process_request(array(
+				"class" => $class,
+				"action" => $action,
+				"reforb" => $this->cfgview_vars["reforb"],
+				"user"	=> 1,//!!! whats that for?
+				"vars" => $this->cfgview_vars,
+				"silent" => false,
+			));
+			$content = $orb->get_data();
 		}
 
 		exit_function("cfg_form::get_class_cfgview");
@@ -3218,7 +3199,6 @@ class cfgform extends class_base
 		if($this->crap)
 		{
 			$item = next($this->crap_items);
-arr($item);
 			$vars = array (
 				"group" => $item["name"],
 			);
