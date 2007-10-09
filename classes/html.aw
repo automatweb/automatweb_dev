@@ -828,7 +828,7 @@ class html extends aw_template
 	@param month optional type=string
 		if month = "text" then month is shown as textbox, not selectbox
 	@param day optional type=string
-		if day = "text" then day is shown as textbox, not selectbox	
+		if day = "text" then day is shown as textbox, not selectbox
 	@returns string/html date selector
 
 	@comments
@@ -1036,6 +1036,12 @@ class html extends aw_template
 		$onMouseOut = isset($onmouseout)?" onMouseOut='".$onmouseout."'":"";
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$id = isset($id) ? " id='$id'" : "";
+
+		if (empty($caption))
+		{
+			$caption = $url;
+		}
+
 		return "<a href='{$url}'" . $target . $title . $onClick . $onMouseOver . $onMouseOut . $ti . $textsize . $class . $id . ">{$caption}</a>";
 	}
 
