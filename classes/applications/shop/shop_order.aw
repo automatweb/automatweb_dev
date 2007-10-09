@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.60 2007/09/10 10:27:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.61 2007/10/09 09:20:30 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -115,6 +115,9 @@ class shop_order extends class_base
 				break;
 		
 			case "items_orderer":
+				// use the ordering form for the cart 
+				$this->_disp_order_data($arr);
+				return PROP_OK;
 				$data["value"] = "";
 				if ($arr["obj_inst"]->prop("orderer_person"))
 				{
@@ -1591,6 +1594,29 @@ class shop_order extends class_base
 		$a = obj($a);
 		$b = obj($b);
 		return strcmp($a->prop($this->_sby_fld), $b->prop($this->_sby_fld));
+	}
+
+	function _disp_order_data($arr)
+	{
+		$swh = get_instance(CL_SHOP_WAREHOUSE);
+		$els = $swh->callback_get_order_current_form(array(
+			"obj_inst" => obj($arr["obj_inst"]->prop("warehouse"))
+		));
+		$str = "";
+		$ud = $arr["obj_inst"]->meta("user_data");
+		foreach($els as $pn => $pd)
+		{
+			if ($pd["type"] == "classificator")
+			{
+				if ($this->can("view", $ud[$pn]))
+				{
+					$tmp = obj($ud[$pn]);
+					$ud[$pn] = $tmp->name();
+				}
+			}
+			$str .= $pd["caption"].": ".$ud[$pn]."<br>";
+		}
+		$arr["prop"]["value"] = $str;
 	}
 }
 ?>
