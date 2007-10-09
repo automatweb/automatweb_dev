@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.207 2007/10/04 09:52:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.208 2007/10/09 13:14:45 markop Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -426,7 +426,7 @@
 	@reltype IMAGE value=14 clid=CL_IMAGE
 	@caption pilt
 
-	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE,CL_CRM_COMPANY_WEBVIEW,CL_PERSONS_WEBVIEW,CL_CFGFORM
+	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE,CL_CRM_COMPANY_WEBVIEW,CL_PERSONS_WEBVIEW,CL_CFGFORM,CL_TRADEMARK_ADD,CL_CFGOBJECT
 	@caption alammen&uuml;&uuml;d objektist
 
 	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
@@ -1170,6 +1170,23 @@ class menu extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "submenus_from_cb":
+				if($data["value"])
+				{
+					if($this->can("view" , $arr["obj_inst"]->prop("submenus_from_obj")))
+					{
+						$sub_obj = obj($arr["obj_inst"]->prop("submenus_from_obj"));
+						if($sub_obj->class_id() == CL_CFGFORM) break;
+					}
+					$cfgo = new object();
+					$cfgo->set_class_id(CL_CFGFORM);
+					$cfgo->set_name($arr["obj_inst"]->name()." ".t("konfi vorm"));
+					$cfgo->set_parent($arr["obj_inst"]->id());
+					$cfgo->save();
+					$arr["obj_inst"]->set_prop("submenus_from_obj" , $cfgo->id());
+					$arr["obj_inst"]->connect(array("to"=> $cfgo->id(), "type" => "RELTYPE_SUBMENUS"));
+				}
+				break;
 			case "transl":
 				$this->write_trans_aliases($arr);
 				$this->trans_save($arr, $this->trans_props);
