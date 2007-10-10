@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_insurance.aw,v 1.4 2007/09/27 10:22:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_insurance.aw,v 1.5 2007/10/10 10:55:10 kristo Exp $
 // crm_insurance.aw - Kindlustus 
 /*
 
@@ -66,6 +66,7 @@ class crm_insurance extends class_base
 					"lang_id" => array(),
 					"class_id" => CL_CRM_INSURANCE_TYPE,
 				));
+				if(!is_array($prop["options"])) $prop["options"] = array();
 				$prop["options"] = $prop["options"] + $ol->names();
 				break;
 		};

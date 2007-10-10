@@ -165,7 +165,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @reltype PICTURE value=6 clid=CL_IMAGE
 @caption Pilt
 
-@reltype CFG_FORM value=6 clid=CL_CFGFORM
+@reltype CFG_FORM value=7 clid=CL_CFGFORM
 @caption Seadete vorm
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.13 2005/04/05 13:52:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.14 2007/10/10 10:55:09 kristo Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -473,6 +473,119 @@ class cfgobject extends aw_template
 			$res[$data["file"]] = $id;
 		};
 		return $res;
+	}
+
+	//neid funktsioone hakkab tegelt kasutama selleks , et urlist lugeda klassi nime ja sellest võtta adminnitabid
+	function get_folders_as_object_list($o, $level, $parent)
+	{
+		extract($_GET);
+		$cfgform_i = get_instance(CL_CFGFORM);
+		if(is_oid($id) && $this->can("view" , $id))
+		{
+			$o = obj($id);
+			$cfgform = $o->meta("cfgform_id");
+			$cfgform_i->cff_init_from_class($o, $o->class_id(), false);
+			if(is_oid($cfgform) && $this->can("view", $cfgform))
+			{
+				
+				$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
+			}
+			else
+			{
+				$cfgx = get_instance("cfg/cfgutils");
+				$props2 = $cfgform_i->cfg_proplist;
+			}
+		}
+		$groups = array();
+		foreach($props2 as $prop)
+		{
+			$groups[$prop["group"]] = $cfgform_i->cfg_groups[$prop["group"]]["caption"];
+		}
+
+		$ol = new object_list();
+		$o1 = new object();
+		$o1->set_name("edfgf");
+		$o1->set_class_id(CL_CFGFORM);
+		$o1->set_parent($o->id());
+		$ol->add($o1);
+				
+		$o2 = new object();
+		$o2->set_name("dfgdfg");
+		$o2->set_class_id(CL_CFGFORM);
+		$o2->set_parent($o->id());
+		$ol->add($o2);
+
+		$ol = new object_list(array("class_id" => CL_CRM_PERSON, "site_id" => array(), "lang_id" => array()));
+		return $ol;
+	}
+
+	/// submenus from object interface methods
+	function make_menu_item($this_o, $level, $parent_o, $site_show_i)
+	{
+
+
+		arr($_GET);
+		if(! $this->crap)
+		{
+			extract($_GET);
+			$cfgform_i = get_instance(CL_CFGFORM);
+			if(is_oid($id) && $this->can("view" , $id))
+			{
+				$o = obj($id);
+				$cfgform = $o->meta("cfgform_id");
+				$cfgform_i->cff_init_from_class($o, $o->class_id(), false);
+				if(is_oid($cfgform) && $this->can("view", $cfgform))
+				{
+					
+					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
+				}
+				else
+				{
+					$cfgx = get_instance("cfg/cfgutils");
+					$props2 = $cfgform_i->cfg_proplist;
+				}
+			}
+			$groups = array();
+			foreach($props2 as $prop)
+			{
+				$cfgform_i->cfg_groups[$prop["group"]]["name"] = $prop["group"];
+				$groups[$prop["group"]] = $cfgform_i->cfg_groups[$prop["group"]];
+			}
+			$this->crap = sizeof($groups);
+			$this->crap_items = $groups;
+		}
+
+		$this->crap --;
+
+		if($this->crap)
+		{
+			$item = next($this->crap_items);
+
+			$vars = array (
+				"group" => $item["name"],
+			);
+			$link = aw_url_change_var($vars);
+
+			return array(
+				"text" => $item["caption"],
+				"link" => $link,
+//				 "section" => "aase",//$o_91_2->id(),
+//				 "menu_edit" => "asf" ,//$this->__helper_menu_edit($o_91_2),
+//				 "parent_section" => 1,//is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
+//				 "comment" => "komment",
+			);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
+	function make_menu_link($o, $ref = NULL)
+	{
+		$url = "asfdsda";
+		return $url;
 	}
 
 };

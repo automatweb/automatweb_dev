@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.25 2007/07/31 12:14:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.26 2007/10/10 10:55:09 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -446,7 +446,6 @@ class menu_tree extends class_base
 
 		));
         	$o = obj($arr["id"]);
-               arr($arr);
                 return $arr[""];
         }
 
