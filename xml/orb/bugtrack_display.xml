@@ -1,0 +1,40 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="bugtrack_display" folder="applications/bug_o_matic_3000" extends="class_base">
+		<action name="orders" all_args="1">
+			<function name="orders">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="sbugs" all_args="1">
+			<function name="solved_bugs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="apps" all_args="1">
+			<function name="manage_apps">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="groups" all_args="1">
+			<function name="manage_groups">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="bugs" all_args="1">
+			<function name="show">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
