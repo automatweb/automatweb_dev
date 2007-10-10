@@ -1,46 +1,47 @@
-omk!
+Storagel selline v6imalus, et saab extendida objektiklasse. Näiteks kasutaja klassi laiendamiseks tuleb classes.ini-s määrata:
 
-tegin storagele sellise v6imaluse, et saab extendida objektiklasse osade
-objektityypide jaoks.
-
-+ new option for storage - now you can extend the object class for
-specific classes with your own and override stuff like that, instead of
-messages. for instance, setting the password property on the cl_user
-object should encrypt it with md5, if it is so set in the ini file.
-currently you have to do that every time you call the set_prop yourself.
-now there is a way to make that happen automatically. like this:
-
-in the classes[] ini entry you say this:
 classes[197][object_override] = core/users/user_object
 
-and in the file you do this:
+luua klassikataloogis fail classes/core/users/user_object.aw, mille sisuks:
+
 <?php
 
 class user_object extends _int_object
 {
-        function set_prop($k, $v)
-        {
-                if ($prop == "password")
-                {
-                        if (aw_ini_get("auth.md5_passwords") == 1)
-                        {
-                                $v = md5($v);
-                        }
-                }
-                parent::set_prop($k,$v);
-        }
 }
+
 ?>
 
+Atribuutide get/set meetodid tuleb lisada vastavalt kujul awobj_get_{atribuudi nimi} / awobj_set_{atribuudi nimi}:
 
-and that's it. basically, you say in the ini file that ou want to
-override the object class for 
-this class and specify the file in which the override resides. the
-override must be derived from _int_object and then you can override any
-function in the _int_object class that you want. public methods only, of
-course. 
+class user_object extends _int_object
+{
+	public function awobj_get_password_expires()
+	{
+		return $this->prop("password_hash_timestamp") + $this->prop("password_change_interval");
+	}
 
-and now, whenver a CL_USER object is loaded by storage, your class is
-loaded instead.      
+	public function awobj_set_password_expires($value)
+	{
+		error::raise(array("msg" => "Password expiry modifiable via 'password_change_interval' property"));
+	}
+}
+
+Kui object klassil kutsutakse välja meetod, mida seal pole defineeritud, üritatakse seda spetsialiseeritud klassist kutsuda:
+
+class user_object extends _int_object
+{
+	public function password_valid()
+	{
+		return time() < $this->prop("password_expires");
+	}
+}
+
+$user_obj = new object($user_obj_id);
+$user_age = $user_obj->age();
+
+Teisisõnu, saab lisada klassispetsiifilisi meetodeid.
+
+
 
 
