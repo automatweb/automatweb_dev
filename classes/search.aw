@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.101 2006/09/04 10:41:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.102 2007/10/10 09:21:16 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -728,7 +728,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				));
 				if (!$args["clid"] || ($args["clid"] == "aliasmgr"))
 				{
-					$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $row["class_id"]) . "'>$row[name]</a>";
+					if (!$this->can("edit", $row["oid"]))
+					{
+						$row["name"] = "<a href='" . $this->mk_my_orb("view", array("id" => $row["oid"], "parent" => $row["parent"]), $row["class_id"]) . "'>$row[name]</a>";
+					}
+					else
+					{
+						$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $row["class_id"]) . "'>$row[name]</a>";
+					}
 				};
 
 				// trim the location to show only up to 3 levels
