@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.91 2007/09/13 10:04:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.92 2007/10/11 14:28:44 markop Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1195,8 +1195,10 @@ class vcalendar extends aw_template
 			$events_for_day = "";
 			if (is_array($this->items[$dstamp]))
 			{
+				$this->day = date("d-m-Y",$reals);
 				$events = $this->items[$dstamp];
-				uasort($events, array($this,"__asc_sort"));
+				uasort($events, array($this, '__sort_events_starting_today_first'));
+//					uasort($events,array($this,"__asc_sort"));
 				if(!$this->first_event)
 				{
 					$this->first_event = reset($events);
@@ -1843,11 +1845,13 @@ class vcalendar extends aw_template
 
 	function __sort_events_starting_today_first($el1, $el2)
 	{
-		if ($_GET['date'] == date('d-m-Y', $el1['start']) || $_GET['date'] == date('d-m-Y', $el2['start']))
+		$day = $_GET['date'];
+		if(!$day) $day = $this->day;
+		if ($day == date('d-m-Y', $el1['start']) || $day == date('d-m-Y', $el2['start']))
 		{
-			if ($_GET['date'] == date("d-m-Y", $el1["start"]) && $_GET['date'] != date("d-m-Y", $el2["start"])) { return -1; }
-			if ($_GET['date'] == date("d-m-Y", $el1["start"]) && $_GET['date'] == date("d-m-Y", $el2["start"])) { return 0; }
-			if ($_GET['date'] != date("d-m-Y", $el1["start"]) && $_GET['date'] == date("d-m-Y", $el2["start"])) { return 1; }
+			if ($day == date("d-m-Y", $el1["start"]) && $day != date("d-m-Y", $el2["start"])) { return -1; }
+			if ($day == date("d-m-Y", $el1["start"]) && $day == date("d-m-Y", $el2["start"])) { return (int)($el1['start'] - $el2['start']); }
+			if ($day != date("d-m-Y", $el1["start"]) && $day == date("d-m-Y", $el2["start"])) { return 1; }
 		}
 		else
 		{
