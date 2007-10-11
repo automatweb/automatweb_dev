@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.39 2007/10/08 10:25:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.40 2007/10/11 10:39:41 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -539,7 +539,10 @@ class ml_queue extends aw_template
 				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND (mail_sent IS NULL OR mail_sent = 0) LIMIT $patch_size";
 		//		echo "qx = $qx <br>";
 				flush();
+			echo "loeb maile baasist";
+			$stime=time();
 				$this->db_query($qx);
+			echo "...see vottis aega ".(time()-$stime)." sekundit...<br>\n";
 				$msg_data = true;
 				while ($c < $patch_size && $stat == ML_QUEUE_IN_PROGRESS && $msg_data)
 				{
@@ -604,6 +607,7 @@ class ml_queue extends aw_template
 
 	function check_queue_stats($q)
 	{
+		if($q["total"] - $q["position"] > 500) return $q["total"] - $q["position"];//see selleks, et ei hakkaks miski mitmekümnetuhandese mailiga igal hetkel kontrolli läbi tegema
 		$qx = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = ".$q["qid"]." AND (mail_sent IS NULL OR mail_sent = 0)";
 		$this->db_query($qx);
 		$count = $this->db_next();
@@ -673,7 +677,25 @@ class ml_queue extends aw_template
 		$is_html = $msg_obj->prop("html_mail") == 1024;
 		//$is_html=$msg["type"] & MSG_HTML;
 		$subject = $msg["subject"];
-		$message = $msg["message"];
+		if($msg["message"])
+		{
+			$message = $msg["message"];
+		}
+		else
+		{
+			$target = explode("<",$msg["target"]);
+			
+			$arr = array(
+				"mail_id" => $msg["mail"],
+				"vars" => $msg["vars"],
+				"member_id" => $msg["member"],
+				"name" => trim($target[0]),
+				"mail" => trim($template = str_replace(">", "", $target[1])),
+			);
+			$mlq = get_instance("applications/mailinglist/ml_mail_gen");
+			$message = $mlq->get_changed_message($arr);
+		}
+
 //		if($is_html) // && strpos("<br />" ,$message) !== true && strpos("<br>", $message) !== true)
 //		{
 //			$message = nl2br($message);

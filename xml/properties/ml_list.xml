@@ -124,6 +124,16 @@
             <caption>RTE</caption>
       </property>
       <property>
+            <name>no_mails_to_base</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Mitte kirjutada k&amp;amp;otilde;iki maile baasi</caption>
+      </property>
+      <property>
             <name>search_tb</name>
             <table>objects</table>
             <field>meta</field>

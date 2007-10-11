@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.105 2007/09/13 11:53:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.106 2007/10/11 10:39:41 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -48,6 +48,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property classinfo_allow_rte type=chooser field=meta method=serialize
 @caption RTE
+
+@property no_mails_to_base type=checkbox ch_value=1
+@caption Mitte kirjutada k&otilde;iki maile baasi
 
 @groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
@@ -1140,6 +1143,14 @@ class ml_list extends class_base
 				}
 				break;
 			*/
+
+			case "list_status_table":
+				foreach($arr["request"]["pach_sizes"] as $qid => $val);
+				if($val > 0)
+				{
+					$this->db_fetch_row("UPDATE ml_queue SET patch_size='$val' where qid='$qid'");
+				}
+				break;
 			case "no_fck":
 				if($prop["value"]) $this->set_classinfo(array("allow_rte" => 0));
 				else $this->set_classinfo(array("allow_rte" => $arr["obj_inst"]->prop("classinfo_allow_rte")));
@@ -1867,6 +1878,13 @@ class ml_list extends class_base
 		));
 
 		$toolbar->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"tooltip" => t("Salvesta"),
+			"action" => "submit",
+		));
+
+		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => t("Kustuta"),
 			"action" => "delete_queue_items",
@@ -1997,6 +2015,14 @@ class ml_list extends class_base
 			{
 				$row["patch_size"] = t("k&otilde;ik");
 			};
+			if($row["status"] != 2 && $row["patch_size"] > 1)
+			{
+				$row["patch_size"] = html::textbox(array(
+					"name" => "pach_sizes[".$row["qid"]."]",
+					"value" => $row["patch_size"],
+					"size" => 3,
+				));
+			}
 			$row["delay"]/=60;
 			$row["status"] = html::href(array(
 				"url" => $this->mk_my_orb("change", array(
