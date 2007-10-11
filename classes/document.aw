@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.375 2007/09/05 10:01:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.376 2007/10/11 11:26:51 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -856,6 +856,15 @@ class document extends aw_template
 		{
 			if (aw_global_get("uid") == "")
 			{
+				if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)
+				{
+					if (!$_SERVER["HTTPS"])
+					{
+						$bits = parse_url(aw_ini_get("baseurl"));
+						header("Location: https://".$bits["host"].":".$port.aw_global_get("REQUEST_URI"));
+						die();
+					}
+				}
 				$li = get_instance("aw_template");
 				$li->init();
 				$li->read_template("login.tpl");

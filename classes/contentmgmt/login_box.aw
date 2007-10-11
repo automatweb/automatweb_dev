@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/login_box.aw,v 1.1 2007/05/29 12:50:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/login_box.aw,v 1.2 2007/10/11 11:26:55 kristo Exp $
 // login_box.aw - Sisselogimiskast 
 /*
 
@@ -56,6 +56,16 @@ class login_box extends class_base
 
 	function show($arr)
 	{
+		if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)
+		{
+			if (!$_SERVER["HTTPS"])
+			{
+				$bits = parse_url(aw_ini_get("baseurl"));
+				header("Location: https://".$bits["host"].":".$port.aw_global_get("REQUEST_URI"));
+				die();
+			}
+		}
+
 		$o = obj($arr["id"]);
 		$tpl = $o->prop("template") != "" ? $o->prop("template") : "login.tpl";
 		$this->read_template($tpl);

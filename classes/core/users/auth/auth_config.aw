@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.23 2007/01/17 14:45:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.24 2007/10/11 11:26:56 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -366,6 +366,15 @@ class auth_config extends class_base
 	**/
 	function show_login($args = array())
 	{
+		if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)
+		{
+			if (!$_SERVER["HTTPS"])
+			{
+				$bits = parse_url(aw_ini_get("baseurl"));
+				header("Location: https://".$bits["host"].":".$port.aw_global_get("REQUEST_URI"));
+				die();
+			}
+		}
 		$tpl = "login.tpl";
 		if (aw_ini_get("user_interface.default_language") == "en")
 		{

@@ -309,6 +309,15 @@ class doc_display extends aw_template
                 {
                         if (aw_global_get("uid") == "")
                         {
+				if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)
+				{
+					if (!$_SERVER["HTTPS"])
+					{
+						$bits = parse_url(aw_ini_get("baseurl"));
+						header("Location: https://".$bits["host"].":".$port.aw_global_get("REQUEST_URI"));
+						die();
+					}
+				}
                                 $li = get_instance("aw_template");
                                 $li->init();
                                 $li->read_template("login.tpl");
