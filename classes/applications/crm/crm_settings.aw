@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.22 2007/10/03 11:37:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.23 2007/10/11 14:55:59 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -66,7 +66,8 @@
   	@property org_link_menu type=relpicker table=objects field=meta reltype=RELTYPE_MENU
 	@caption Organisatsioonide linkide kataloog
 
-
+  	@property insurance_link_menu type=relpicker table=objects field=meta reltype=RELTYPE_MENU
+	@caption Kindlustuse tüüpide kataloog
 
 
 

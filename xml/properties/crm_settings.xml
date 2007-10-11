@@ -123,7 +123,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <caption>V&amp;amp;otilde;imalus saata CRMis</caption>
+            <caption>V&amp;amp;otilde;imalus saata CRMis maile</caption>
       </property>
       <property>
             <name>show_files_and_docs_in_tree</name>
@@ -168,6 +168,15 @@
             <field>meta</field>
             <reltype>RELTYPE_MENU</reltype>
             <caption>Organisatsioonide linkide kataloog</caption>
+      </property>
+      <property>
+            <name>insurance_link_menu</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Kindlustuse t&amp;uuml;&amp;uuml;pide kataloog</caption>
       </property>
       <property>
             <name>tables_toolbar</name>

@@ -7913,6 +7913,15 @@ Bank accounts: üksteise all
 	{
 		$tb = &$arr["prop"]["toolbar"];
 
+		$parent = $arr["obj_inst"]->parent();
+
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		if ($sts && $this->can("view" , $sts->prop("insurance_link_menu")))
+		{
+			$parent = $sts->prop("insurance_link_menu");
+		}
+
 		$tb->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
@@ -7921,7 +7930,7 @@ Bank accounts: üksteise all
 				"alias_to" => $arr["obj_inst"]->id(),
 				"reltype" => 68,
 				"return_url" => get_ru(),
-				"parent" => $arr["obj_inst"]->parent(),
+				"parent" => $parent,
 			), "crm_insurance"),
 		));
 
