@@ -3924,6 +3924,7 @@ class crm_company extends class_base
 				"to" => $arr["profession"],
 				"reltype" => "RELTYPE_RANK"
 			));
+			$person->set_prop("rank", $arr["profession"]);
 		}
 
 		$work_contact = 0;
