@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.41 2007/10/11 13:10:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.42 2007/10/11 13:15:47 kristo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. &otilde;igemini ta tagastab need boxid kus seike kiri sees
@@ -359,7 +359,7 @@ class imap extends class_base
 		);
 		$to_fetch = $this->_gen_missing_msg_list($arg);
 
-		if (((($to_fetch || $last_check != $new_check) && !$src)))
+		if (/*((($to_fetch || $last_check != $new_check) && !$src))*/ true)
 		{
 			// update ovr
 			$ovr[$this->mboxspec] = $new_check;
