@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.31 2007/08/31 11:06:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.32 2007/10/11 12:32:36 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -626,7 +626,7 @@ class messenger_v2 extends class_base
 
 	function callback_mod_layout($arr)
 	{
-		$layouts_to_be_ignored = array("msg_contents", "msg_address_book", /*"msg_tree",*/ "msg_list", "msg_new", "msg_new2", "msg_search", "msg_calendar");
+		$layouts_to_be_ignored = array("msg_contents", "msg_address_book", /*"msg_tree", "msg_list",*/ "msg_new", "msg_new2", "msg_search", "msg_calendar");
 		foreach($layouts_to_be_ignored as $layout)
 		{
 			if($arr["name"] == $layout && $arr["request"]["view_layout"] != $layout)
@@ -663,7 +663,7 @@ class messenger_v2 extends class_base
 			// holds active folder
 			var active_folder = 'INBOX';
 			// to where the layout is being currently loaded
-			async_location = false;
+			var async_location = false;
 			// holds last loaded layouts name
 			last_loaded_layout = false;
 
@@ -785,7 +785,7 @@ class messenger_v2 extends class_base
 				}
 			}
 			
-			document.onLoad = msgr_onLoad();
+			//document.onLoad = msgr_onLoad();
 		";
 		return $js;
 	}
