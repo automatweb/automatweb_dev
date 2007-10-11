@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.211 2007/10/03 14:33:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.212 2007/10/11 13:43:31 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1546,7 +1546,8 @@ class room extends class_base
 		while($x<20)
 		{
 			$url = aw_url_change_var("start",$weekstart,get_ru());
-			$options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604799));
+			$options[$url] = date("W" , ($weekstart + 3600)) . ". " .date("d.m.Y", ($weekstart + 3600)) . " - " . date("d.m.Y", ($weekstart+604799));
+
 			if($arr["request"]["start"] == $weekstart) $selected = $url;
 			$weekstart = $weekstart + 604800;
 			$x++;
