@@ -1488,6 +1488,7 @@ class forum_v2 extends class_base
 			"active_page" => $pager,
 			"name" => $topic_obj->name(),
 			"createdby" => $topic_obj->prop("author_name"),
+			"author_email" => $topic_obj->prop("author_email"),
 			"date" => $this->time2date($topic_obj->created(),2),
 			"comment" => $this->_filter_output($topic_obj->comment()),
 			"topic_image1" => $this->get_image_tag(array("id" => $topic_obj->id())),
