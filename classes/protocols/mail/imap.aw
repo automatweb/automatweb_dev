@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.40 2007/08/31 10:39:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.41 2007/10/11 13:10:44 kristo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. &otilde;igemini ta tagastab need boxid kus seike kiri sees
@@ -298,10 +298,12 @@ class imap extends class_base
 
 		$awt->start("msgr::imap::get_folder_contents / imap_sort");
 		$fo = $this->_imap_sort();
+
 		$awt->stop("msgr::imap::get_folder_contents / imap_sort");
+		$fop = array();
 		foreach($fo as $k=>$v)
 		{
-			if($k >= ($arr["from"]-1) && $k < $arr["to"])
+			if($k >= ($arr["from"]-1) && ($k < $arr["to"] || $arr["to"] == "*"))
 			{
 				$fop[$k] = $v;
 			}
@@ -333,21 +335,16 @@ class imap extends class_base
 	function get_folder_contents($arr)
 	{
 		global $awt;
-		$awt->start("msgr::imap::get_folder_contents / before last&new check");
 		$cache = get_instance("cache");
-		//$mboxinf = imap_mailboxmsginfo($this->mbox);
-		$awt->start("msgr::imap::get_folder_contents / imap_status");
-		$mboxinf = imap_status($this->mbox, $this->use_mailbox, SA_ALL);
-		$awt->stop("msgr::imap::get_folder_contents / imap_status");
-		$awt->start("msgr::imap::get_folder_contents / get_overview");
-		$ovr = $this->_get_overview();
-		$awt->stop("msgr::imap::get_folder_contents / get_overview");
-		$last_check = $ovr[$this->mboxspec];
-		$awt->start("msgr::imap::get_folder_contents / get_ovr_chsum");
-		$new_check = $this->_get_ovr_checksum($mboxinf);
-		$awt->stop("msgr::imap::get_folder_contents / get_ovr_chsum");
 
-		$src = $cache->file_get($this->mbox_cache_id);
+		$mboxinf = imap_status($this->mbox, $this->use_mailbox, SA_ALL);
+
+		$ovr = $this->_get_overview();
+
+		$last_check = $ovr[$this->mboxspec];
+		$new_check = $this->_get_ovr_checksum($mboxinf);
+
+		$src = $cache->file_get_ts($this->mbox_cache_id, time()-60);
 		$mbox_over = aw_unserialize($src);
 
 		$count = $mboxinf->Nmsgs;
@@ -360,7 +357,9 @@ class imap extends class_base
 			"from" => $arr["from"],
 			"to" => $arr["to"]
 		);
-		if (($to_fetch = $this->_gen_missing_msg_list($arg)) || $last_check != $new_check)
+		$to_fetch = $this->_gen_missing_msg_list($arg);
+
+		if (((($to_fetch || $last_check != $new_check) && !$src)))
 		{
 			// update ovr
 			$ovr[$this->mboxspec] = $new_check;
@@ -417,10 +416,9 @@ class imap extends class_base
 			};
 			uasort($req_msgs,array($this,"__date_sort"));
 			$mbox_over["contents"] = $req_msgs;
-
+			$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
 		}
 
-		$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
 
 		if(is_array($mbox_over["contents"]))
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.32 2007/10/11 12:32:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.33 2007/10/11 13:10:45 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -937,7 +937,7 @@ class messenger_v2 extends class_base
 			"align" => "center",
 			"sortable" => 1,
 			"type" => "time",
-			"format" => "H:i d-M",
+			"format" => "H:i d-M-Y",
 			"smart" => "1",
 		));
 		$t->define_field(array(

@@ -882,13 +882,13 @@ function aw_startup()
 function aw_shutdown()
 {
 	// whotta fook, this messenger thingie goes here then?:S
-	/*
-	if($_SESSION["current_user_has_messenger"] && is_oid($_SESSION["uid_oid"]))
+	
+	$i = get_instance("file");
+	if($i->can("view", $_SESSION["current_user_has_messenger"]) && $i->can("view", $_SESSION["uid_oid"]))
 	{
-		$i = get_instance("file");
 		{
 		$cur_usr = new object($_SESSION["uid_oid"]);
-		if ((time() - $_SESSION["current_user_last_m_check"]) > (5 * 60) && $cur_usr->prop("notify") == 1)
+		if (((time() - $_SESSION["current_user_last_m_check"]) > (5 * 60) /*|| true*/) && $cur_usr->prop("notify") == 1)
 		{
 			$drv_inst = get_instance("protocols/mail/imap");
 			$drv_inst->set_opt("use_mailbox", "INBOX");
@@ -903,6 +903,7 @@ function aw_shutdown()
 				"from" => 0,
 				"to" => "*",
 			));
+
 			foreach($emails as $mail_id => $data)
 			{
 				if($data["seen"] == 0)
@@ -921,7 +922,6 @@ function aw_shutdown()
 		}
 		}
 	}
-	*/
 	// end of that messenger new mail notifiaction crap
 
 
