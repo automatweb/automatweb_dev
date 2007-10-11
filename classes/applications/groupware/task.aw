@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.185 2007/10/05 11:58:37 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.186 2007/10/11 13:17:37 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -3427,6 +3427,18 @@ class task extends class_base
 		$task = obj($arr["request"]["id"]);
 		$max_row = 0;
 		$max_ord = 0;
+		//paneb ikka ette maksimumi leidma juba, siis on lollikindlam
+		//käib küll topelt tsükli läbi, kuid savestamisel vaevalt see oluline ajakadu on
+		if(sizeof($_POST["rows"]) > 3)
+		{
+			foreach($_POST["rows"] as $row)
+			{
+				if($max_ord < $row["ord"])
+				{
+					$max_ord = $row["ord"];
+				}
+			}
+		}
 		foreach(safe_array($_POST["rows"]) as $_oid => $e)
 		{
 			if (!is_oid($_oid) || !$this->can("view", $_oid))
