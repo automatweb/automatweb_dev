@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.40 2007/08/31 10:36:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.41 2007/10/11 13:48:56 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -1036,9 +1036,11 @@ class mail_message extends class_base
 		$opts = $msgr->_get_identity_list(array(
 			"id" => $msgrid,
 		));
+
 		foreach($opts as $key => $item)
 		{
 			$rv["options"][$key] = $item;
+			$arr["prop"]["options"][$key] = $item;
 		};
 	}
 	
