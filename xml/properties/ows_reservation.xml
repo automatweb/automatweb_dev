@@ -298,7 +298,7 @@
       </groupinfo>
       <tableinfo>
             <aw_ows_reservations>
-                  <imdex>aw_oid</imdex>
+                  <index>aw_oid</index>
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </aw_ows_reservations>

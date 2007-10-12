@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.1 2007/10/12 08:45:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.2 2007/10/12 10:42:03 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
 @classinfo syslog_type=ST_OWS_RESERVATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
-@tableinfo aw_ows_reservations imdex=aw_oid master_table=objects master_index=brother_of
+@tableinfo aw_ows_reservations index=aw_oid master_table=objects master_index=brother_of
 
 @default table=aw_ows_reservations
 @default group=general
@@ -170,7 +170,7 @@ class ows_reservation extends class_base
 				aw_last_name varchar(255), aw_country varchar(255), aw_state varchar(255),
 				aw_city varchar(255), aw_postal_code varchar(255), aw_adr_1 varchar(255), 
 				aw_adr_2 varchar(255), aw_phone varchar(255), aw_email varchar(255),
-				aw_comments varchar(255), aw_guarantee_type varchar(255), aw_guarantee_cc_type varchar(255),
+				aw_comments varchar(255), aw_guarantee_type varchar(255), 
 				aw_guarantee_cc_type varchar(255), aw_guarantee_cc_holder_name varchar(255), aw_guarantee_cc_num varchar(255),
 				aw_guarantee_cc_exp_date int, aw_payment_type varchar(255),
 				aw_confirmation_code varchar(255), aw_booking_id int, aw_cancel_deadline int, 
