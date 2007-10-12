@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.106 2007/10/11 10:39:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.107 2007/10/12 10:57:51 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1145,10 +1145,12 @@ class ml_list extends class_base
 			*/
 
 			case "list_status_table":
-				foreach($arr["request"]["pach_sizes"] as $qid => $val);
-				if($val > 0)
+				foreach($arr["request"]["pach_sizes"] as $qid => $val)
 				{
-					$this->db_fetch_row("UPDATE ml_queue SET patch_size='$val' where qid='$qid'");
+					if($val > 0 && $val < 5001)
+					{
+						$this->db_fetch_row("UPDATE ml_queue SET patch_size='$val' where qid='$qid'");
+					}
 				}
 				break;
 			case "no_fck":
