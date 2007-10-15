@@ -39,7 +39,16 @@ else
 	$str = $sf->parse();
 }
 
-ob_start();
+
+if (aw_ini_get("content.compress") == 1)
+{
+	ob_start( 'ob_gzhandler' );
+	content_compress(& $str);
+}
+else
+{
+	ob_start();
+}
 echo $str;
 ob_end_flush();
 
@@ -54,4 +63,22 @@ if (filectime(aw_ini_get("cache.page_cache")."/temp/lmod") < (time() - 3600))
 	$m = get_instance("scheduler");
 	$m->static_sched(array());
 }
+
+function content_compress(& $str)
+{
+	$search = array(
+	'/\>[^\S ]+/s', //strip whitespaces after tags, except space
+	'/[^\S ]+\</s', //strip whitespaces before tags, except space
+	'/(\s)+/s',  // shorten multiple whitespace sequences
+	);
+	$replace = array(
+	'>',
+	'<',
+	'\\1',
+	);
+	
+	$str = preg_replace($search, $replace, $str); // html
+	$str = str_replace(array("\r", "\n", "\t", "\r\n"), " ", $str); // styles, javascript etc
+}
+
 ?>
