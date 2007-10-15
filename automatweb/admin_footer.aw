@@ -273,9 +273,16 @@ if (!empty($GLOBALS["__aw_op_handler"]))
 }
 else
 {
+	if (aw_ini_get("content.compress") == 1)
+	{
+		ob_start( 'ob_gzhandler' );
+	}
 	echo $str;
 }
-flush();
+if (aw_ini_get("content.compress") == 1)
+{
+	ob_end_flush();
+}
 aw_shutdown();
 
 
@@ -352,5 +359,4 @@ if ($_SESSION["user_history_count"] > 0)
 		}
 	}
 }
-
 ?>
