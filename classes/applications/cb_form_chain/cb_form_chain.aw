@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.47 2007/10/08 10:25:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.48 2007/10/15 13:35:31 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1762,6 +1762,7 @@ class cb_form_chain extends class_base
 
 				$nps[$k] = $v;
 			}
+
 			$props = $nps;
 			$rd = get_instance(CL_REGISTER_DATA);
 			$els = $rd->parse_properties(array(
@@ -1867,6 +1868,7 @@ class cb_form_chain extends class_base
 						$pd['rows'] = $pd['height'];
 					}
 				}
+
 				$htmlc->add_property($pd);
 			}
 			$htmlc->finish_output();
@@ -1875,6 +1877,10 @@ class cb_form_chain extends class_base
 				"raw_output" => 1
 			));
 		}
+
+		$ap = get_instance("alias_parser");
+		$ap->parse_oo_aliases($wf->id(), $html);
+
 		return $html;
 	}
 
@@ -1961,12 +1967,13 @@ class cb_form_chain extends class_base
 	function _get_titles($o)	
 	{
 		$hdrs = safe_array($o->meta("cfs_headers"));
+
 		$ret = array();
 		foreach($hdrs as $pg => $i)
 		{
 			$ret[$pg] = $i["name"];
 		}
-		asort($ret);
+		ksort($ret);
 		return $ret;
 	}
 	
@@ -1974,7 +1981,6 @@ class cb_form_chain extends class_base
 	{
 		$titles = $this->_get_titles($o);
 		$page = $this->_get_page($o);
-
 		$ts = array();
 		foreach($titles as $pg => $title)
 		{
