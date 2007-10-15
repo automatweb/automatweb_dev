@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.2 2007/10/12 10:42:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.3 2007/10/15 11:58:43 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -76,6 +76,21 @@
 
 @property guest_comments type=textbox field=aw_comments
 @caption Guest comments
+
+@property smoking type=checkbox ch_value=1 field=aw_smoking
+@caption Smoking
+
+@property high_floor type=checkbox ch_value=1 field=aw_high_floor
+@caption High floor
+
+@property low_floor type=checkbox ch_value=1 field=aw_low_floor
+@caption Low floor
+
+@property is_allergic type=checkbox ch_value=1 field=aw_is_allergic
+@caption Allergic
+
+@property is_handicapped type=checkbox ch_value=1 field=aw_is_handicapped
+@caption Handicapped
 
 @property guarantee_type type=textbox field=aw_guarantee_type
 @caption Cuarantee type
@@ -158,8 +173,18 @@ class ows_reservation extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function do_db_upgrage($t, $f)
+	function do_db_upgrade($t, $f)
 	{
+		switch($f)
+		{
+			case "aw_smoking":
+			case "aw_high_floor":
+			case "aw_low_floor":
+			case "aw_is_allergic":
+			case "aw_is_handicapped":
+				$this->db_add_col($t, array("name" => $f, "type" => "int"));
+				return true;
+		}
 		if ($f == "")
 		{
 			$this->db_query("CREATE TABLE aw_ows_reservations (aw_oid int primary key, 
@@ -179,6 +204,92 @@ class ows_reservation extends class_base
 			)");
 			return true;
 		}
+	}
+
+	function bank_return($arr)
+	{
+if (!is_oid($arr["id"]))
+{
+	die("you bafoon!");
+}
+			$o = obj($arr["id"]);
+
+			$checkin = date("Y", $o->prop("arrival_date")).'-'.date("m", $o->prop("arrival_date")).'-'.date("d", $o->prop("arrival_date")).'T00:00:00';
+
+			$checkout = date("Y", $o->prop("departure_date")).'-'.date("m", $o->prop("departure_date")).'-'.date("d", $o->prop("departure_date")).'T23:59:00';
+
+			$l = get_instance("languages");
+			$owb = get_instance(CL_OWS_BRON);
+			$lang = $owb->get_web_language_id($l->get_langid($o->lang_id()));
+
+			$params = array(
+   			"hotelId" => $o->prop("hotel_id"),
+      	"rateId" => $o->prop("rate_id"),
+      	"arrivalDate" => $checkin,
+      	"departureDate" => $checkout,
+      	"numberOfRooms" => $o->prop("num_rooms"),
+      	"numberOfAdultsPerRoom" => $o->prop("adults_per_room"),
+      	"numberOfChildrenPerRoom" => $o->prop("child_per_room"),
+      	"promotionCode" => $o->prop("promo_code")." ",
+      /*<partnerWebsiteGuid>string</partnerWebsiteGuid>
+      <partnerWebsiteDomain>string</partnerWebsiteDomain>
+      <corporateCode>string</corporateCode>
+      <iataCode>string</iataCode>*/
+      	"webLanguageId" => $lang,
+      	"customCurrencyCode" => $o->prop("currency"),
+				"guestTitle" => $o->prop("guest_title"),
+      	"guestFirstName" => $o->prop("guest_firstname"),
+      	"guestLastName" => $o->prop("guest_lastname"),
+      	"guestCountryCode" => $o->prop("guest_country"),
+      	"guestStateOrProvince" => $o->prop("guest_state"),
+      	"guestCity" => $o->prop("guest_city"),
+      	"guestPostalCode" => $o->prop("guest_postal_code"),
+      	"guestAddress1" => $o->prop("guest_adr_1"),
+      	"guestAddress2" => $o->prop("guest_adr_2"),
+      	"guestPhone" => $o->prop("guest_phone"),
+      	"guestEmail" => $o->prop("guest_email"),
+      	"guestComments" => urlencode($o->prop("guest_comments"))." ",
+      	"roomSmokingPreferenceId" => (bool)$o->prop("smoking")." ",
+      	"floorPreferenceId" => $o->prop("low_floor"),
+      	"isAllergic" => (bool)$o->prop("is_allergic"),
+      	"isHandicapped" => (bool)$o->prop("is_handicapped"),
+				"guaranteeType" => "NonGuaranteed",
+      	"paymentType" => "BankAccount"
+			);
+//die(dbg::dump($params));
+			$return = $this->do_orb_method_call(array(
+				"action" => "MakeBooking",
+				"class" => "http://markus.ee/RevalServices/Booking/",
+				"params" => $params,
+				"method" => "soap",
+				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+			));
+	
+			if ($return["MakeBookingResult"]["ResultCode"] != "Success")
+			{
+				die("webservice error: ".dbg::dump($return));
+			}
+			//echo "HOIATUS!!! Broneeringud kirjutatakse live systeemi, niiet kindlasti tuleb need 2ra tyhistada!!!! <br><br><br>";
+			//echo("makebooking with params: ".dbg::dump($params)." retval = ".dbg::dump($return));
+
+			//$o->set_parent(aw_ini_get("ows.bron_folder"));
+			//$o->set_class_id(CL_OWS_RESERVATION);
+			$o->set_prop("is_confirmed", 1);
+			$o->set_prop("payment_type", $params["paymentType"]);
+
+			$o->set_prop("confirmation_code", $return["MakeBookingResult"]["ConfirmationCode"]);
+			$o->set_prop("booking_id", $return["MakeBookingResult"]["BookingId"]);
+			$o->set_prop("cancel_deadline", $owb->parse_date_int($return["MakeBookingResult"]["CancellationDeadline"]));
+			$o->set_prop("total_room_charge", $return["MakeBookingResult"]["TotalRoomAndPackageCharges"]);
+			$o->set_prop("total_tax_charge", $return["MakeBookingResult"]["TotalTaxAndFeeCharges"]);
+			$o->set_prop("total_charge", $return["MakeBookingResult"]["TotalCharges"]);
+			$o->set_prop("charge_currency", $return["MakeBookingResult"]["ChargeCurrencyCode"]);
+
+			$o->set_meta("query", $params);
+			$o->set_meta("result", $return);
+			aw_disable_acl();
+			$o->save();
+			aw_restore_acl();
 	}
 }
 ?>

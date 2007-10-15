@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.5 2007/10/12 10:42:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.6 2007/10/15 11:58:43 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -193,6 +193,27 @@ class ows_bron extends class_base
 		));
 		$hotel = $return["GetHotelDetailsResult"]["HotelDetails"];
 		$adr = get_instance(CL_CRM_ADDRESS);
+
+		$r_url = aw_url_change_var(array(
+			"smoking" => null,
+			"baby_cot" => null,
+			"high_floor" => null,
+			"low_floor" => null,
+			"bath" => null,
+			"is_allergic" => null,
+			"is_handicapped" => null,
+			"ct_firstname" => null,
+			"ct_lastname" => null,
+			"ct_dob" => null,
+			"ct_adr1" => null,
+			"ct_adr2" => null,
+			"ct_postalcode" => null,
+			"ct_city" => null,
+			"ct_country" => null,
+			"ct_phone" => null,
+			"ct_email" => null
+		));
+
 		$this->vars(array(
 			"room_type" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Name"]),
 			"eur_url" => aw_url_change_var("set_currency", "EUR"),
@@ -221,7 +242,8 @@ class ows_bron extends class_base
 				"i_promo" => $arr["i_promo"],
 				"section" => aw_global_get("section"),
 				"no_reforb" => 1,
-				"set_currency" => $currency
+				"set_currency" => $currency,
+				"r_url" => aw_url_change_var("error", null, get_ru())
 			)),
 			"prev_url" => $this->mk_my_orb("show_available_rooms", array(
 				"i_location" => $arr["i_location"],
@@ -235,8 +257,31 @@ class ows_bron extends class_base
 				"no_reforb" => 1,
 				"set_currency" => $currency
 			)),
-			"country_list" => $this->picker("", $adr->get_country_list())
+			"country_list" => $this->picker($arr["ct_country"], $adr->get_country_list()),
+			"smoking" => checked($arr["smoking"]),
+			"baby_cot" => checked($arr["baby_cot"]),
+			"high_floor" => checked($arr["high_floor"]),
+			"low_floor" => checked($arr["low_floor"]),
+			"bath" => checked($arr["bath"]),
+			"is_allergic" => checked($arr["is_allergic"]),
+			"is_handicapped" => checked($arr["is_handicapped"]),
+			"ct_firstname" => $arr["ct_firstname"],
+			"ct_lastname" => $arr["ct_lastname"],
+			"ct_dob" => $arr["ct_dob"],
+			"ct_adr1" => $arr["ct_adr1"],
+			"ct_adr2" => $arr["ct_adr2"],
+			"ct_postalcode" => $arr["ct_postalcode"],
+			"ct_city" => $arr["ct_city"],
+			"ct_phone" => $arr["ct_phone"],
+			"ct_email" => $arr["ct_email"]
 		));
+
+		if ($_GET["error"] > 0)
+		{
+			$this->vars(array(
+				"ERR_".$_GET["error"] => $this->parse("ERR_".$_GET["error"])
+ 			));
+		}
 
 		return $this->parse();
 	}
@@ -263,6 +308,64 @@ class ows_bron extends class_base
 		$rateid= $arr["sel_room_type"];
 		$nights = ceil(($departure-$arrival)/(60*60*24))-1;
 		$currency = $arr["set_currency"];
+
+		$arr["r_url"] = aw_url_change_var(array(
+			"smoking" => $arr["smoking"],
+			"baby_cot" => $arr["baby_cot"],
+			"high_floor" => $arr["high_floor"],
+			"low_floor" => $arr["low_floor"],
+			"bath" => $arr["bath"],
+			"is_allergic" => $arr["is_allergic"],
+			"is_handicapped" => $arr["is_handicapped"],
+			"ct_firstname" => $arr["ct"]["firstname"],
+			"ct_lastname" => $arr["ct"]["lastname"],
+			"ct_dob" => $arr["ct"]["dob"],
+			"ct_adr1" => $arr["ct"]["adr1"],
+			"ct_adr2" => $arr["ct"]["adr2"],
+			"ct_postalcode" => $arr["ct"]["postalcode"],
+			"ct_city" => $arr["ct"]["city"],
+			"ct_country" => $arr["ct"]["country"],
+			"ct_phone" => $arr["ct"]["phone"],
+			"ct_email" => $arr["ct"]["email"]
+		), false, $arr["r_url"]);
+
+		if (empty($arr["ct"]["firstname"]))
+		{
+				return aw_url_change_var("error", 1, $arr["r_url"]);
+		}
+		if (empty($arr["ct"]["lastname"]))
+		{
+				return aw_url_change_var("error", 2, $arr["r_url"]);
+		}
+		list($dob_d, $dob_m, $dob_y) = explode("-", $arr["ct"]["dob"]);
+		if (empty($arr["ct"]["dob"]) || !$dob_y || !$dob_m || !$dob_d)
+		{
+				return aw_url_change_var("error", 3, $arr["r_url"]);
+		}
+		if (empty($arr["ct"]["adr1"]))
+		{
+				return aw_url_change_var("error", 4, $arr["r_url"]);
+		}
+		if (empty($arr["ct"]["postalcode"]))
+		{
+				return aw_url_change_var("error", 5, $arr["r_url"]);
+		}
+		if (empty($arr["ct"]["city"]))
+		{
+				return aw_url_change_var("error", 6, $arr["r_url"]);
+		}
+		if (empty($arr["ct"]["country"]))
+		{
+				return aw_url_change_var("error", 7, $arr["r_url"]);
+		}
+		if (empty($arr["ct"]["phone"]))
+		{
+				return aw_url_change_var("error", 8, $arr["r_url"]);
+		}
+		if (!empty($arr["ct"]["email"]) && !is_email($arr["ct"]["email"]))
+		{
+				return aw_url_change_var("error", 9, $arr["r_url"]);
+		}
 
 		$parameters = array();
 		$parameters["hotelId"] = $location;
@@ -315,6 +418,43 @@ class ows_bron extends class_base
 		$cl = $adr->get_country_list();
 
 		$bp = get_instance(CL_BANK_PAYMENT);
+
+		$o = obj();
+		$o->set_parent(aw_ini_get("ows.bron_folder"));
+		$o->set_class_id(CL_OWS_RESERVATION);
+		$o->set_name(sprintf(t("OWS Bron %s %s @ %s"), 
+			$arr["ct"]["firstname"], $arr["ct"]["lastname"], date("d.m.Y H:i")
+		));
+		$o->set_prop("is_confirmed", 0);
+		$o->set_prop("hotel_id", $arr["i_location"]);
+		$o->set_prop("rate_id", $rateid);
+		$o->set_prop("arrival_date", $arrival);
+		$o->set_prop("departure_date", $departure);
+		$o->set_prop("num_rooms", $rooms);
+		$o->set_prop("adults_per_room", (int)$arr["i_adults"]);
+		$o->set_prop("child_per_room", (int)$arr["i_children"]);
+		$o->set_prop("promo_code", $promo);
+		$o->set_prop("currency", $currency);
+		$o->set_prop("guest_title", "");
+		$o->set_prop("guest_firstname", $arr["ct"]["firstname"]);
+		$o->set_prop("guest_lastname", $arr["ct"]["lastname"]);
+		$o->set_prop("guest_country", $arr["ct"]["country"]);
+		$o->set_prop("guest_state", "");
+		$o->set_prop("guest_city", $arr["ct"]["city"]);
+		$o->set_prop("guest_postal_code", $arr["ct"]["postalcode"]);
+		$o->set_prop("guest_adr_1", $arr["ct"]["adr1"]);
+		$o->set_prop("guest_adr_2", $arr["ct"]["adr2"]);
+		$o->set_prop("guest_phone", $arr["ct"]["phone"]);
+		$o->set_prop("guest_email", $arr["ct"]["email"]);
+		$o->set_prop("guest_comments", $arr["bron_comment"]);
+		$o->set_prop("smoking", $arr["smoking"]);
+		$o->set_prop("high_floor", $arr["high_floor"]);
+		$o->set_prop("low_floor", $arr["low_floor"]);
+		$o->set_prop("is_allergic", $arr["is_allergic"]);
+		$o->set_prop("is_handicapped", $arr["is_handicapped"]);
+		$o->set_meta("bron_data", $arr);
+		$o->save();
+
 
 		$this->vars(array(
 			"room_type" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Name"]),
@@ -376,12 +516,12 @@ class ows_bron extends class_base
 			"accept_terms" => checked($arr["accept_terms"]),
 			"bank_forms" => $bp->bank_forms(array(
 				"id" => 12068,
-				"reference_nr" => 666,
+				"reference_nr" => $o->id(),
 				"amount" => $rate["TotalPriceInEur"]*16.0,
-				"expl" => "Booking confirmation 666",
+				"expl" => "Reval booking confirmation ".$o->id(),
 				"lang" => $lc
 			)),
-			"gotoccpayment" => aw_url_change_var("action", "go_to_cc_payment"),
+			"gotoccpayment" => aw_url_change_var("aw_rvs_id", $o->id(), aw_url_change_var("action", "go_to_cc_payment")),
 		));
 		if ($_GET["error"] > 0)
 		{
@@ -411,9 +551,11 @@ class ows_bron extends class_base
 				"section" => aw_global_get("section"),
 				"no_reforb" => 1,
 				"set_currency" => $arr["set_currency"],
+				"aw_rvs_id" => $o->id(),
 				"r_url" => get_ru()
 			))
 		));
+
 
 		return $this->parse();
 	}
@@ -536,7 +678,7 @@ class ows_bron extends class_base
 			//echo "HOIATUS!!! Broneeringud kirjutatakse live systeemi, niiet kindlasti tuleb need 2ra tyhistada!!!! <br><br><br>";
 			//echo("makebooking with params: ".dbg::dump($params)." retval = ".dbg::dump($return));
 
-			$o = obj();
+			$o = obj($arr["aw_rvs_id"]);
 			$o->set_parent(aw_ini_get("ows.bron_folder"));
 			$o->set_class_id(CL_OWS_RESERVATION);
 			$o->set_name(sprintf(t("OWS Bron %s %s @ %s"), 
