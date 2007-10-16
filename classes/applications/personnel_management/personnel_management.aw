@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.14 2006/04/04 11:44:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.15 2007/10/16 07:04:55 kristo Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -75,7 +75,9 @@
 
 @layout offers type=hbox width=15%:85%
 
-@property offers_tree type=treeview no_caption=1 parent=offers
+	@layout offers_tree type=vbox parent=offers closeable=1 area_caption=Kaustad
+
+		@property offers_tree type=treeview no_caption=1 parent=offers_tree
 
 @property offers_table type=table no_caption=1 parent=offers
 
@@ -194,6 +196,7 @@ class personnel_management extends class_base
 				break;
 
 			case "employee_list_tree":
+				return PROP_IGNORE;
 				$this->employee_list_tree($arr);
 				break;
 
@@ -258,7 +261,7 @@ class personnel_management extends class_base
 			$str = $cnt > 0 ? " ($cnt)" : "";
 			$t->add_item($ob->parent(), array(
 				"id" => $id,
-				"name" => $ob->name().$str,
+				"name" => $arr["request"]["fld_id"] == $id ? "<b>".$ob->name().$str."</b>" : $ob->name().$str,
 				"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "fld_id" => $id)),
 			));
 		}
@@ -298,29 +301,34 @@ class personnel_management extends class_base
 			"tooltip" => t("Uus"),
 		));
 
+		$pt = $arr["request"]["fld_id"] ? $arr["request"]["fld_id"] : $this->offers_fld;
 		$tb->add_menu_item(array(
 			"parent" => "add",
 			"text" => t("Tööpakkumine"),
-			"link" => html::get_new_url(CL_PERSONNEL_MANAGEMENT_JOB_OFFER, $this->offers_fld, array("return_url" => get_ru())),
+			"link" => html::get_new_url(CL_PERSONNEL_MANAGEMENT_JOB_OFFER, $pt, array("return_url" => get_ru())),
 			"href_id" => "add_bug_href"
 		));
 		$tb->add_menu_item(array(
 			"parent" => "add",
 			"text" => t("Kategooria"),
-			"link" => html::get_new_url(CL_MENU, $this->offers_fld, array("return_url" => get_ru())),
+			"link" => html::get_new_url(CL_MENU, $pt, array("return_url" => get_ru())),
 		));
 		$tb->add_button(array(
-			"name" => "copy",
-			"caption" => t("Alusta olemasoleva põhjal"),
-			"img" => "copy.gif",
-			"action" => "",
+			"name" => "cut",
+			"caption" => t("L&otilde;ika"),
+			"img" => "cut.gif",
+			"action" => "cut_offers",
 		));
-		$tb->add_button(array(
-			"name" => "delete",
-			"caption" => t("Kustuta tööpakkumised"),
-			"img" => "delete.gif",
-			"action" => "",
-		));
+		if (count($_SESSION["aw_jobs"]["cut_offers"]))
+		{
+			$tb->add_button(array(
+				"name" => "paste",
+				"caption" => t("Kleebi"),
+				"img" => "paste.gif",
+				"action" => "paste_offers",
+			));
+		}
+		$tb->add_delete_button();
 
 	}
 
@@ -331,9 +339,24 @@ class personnel_management extends class_base
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
-		$t->define_data(array(
-			"name" => "test",
+		$t->define_field(array(
+			"name" => "offer",
+			"caption" => t("T&ouml;&ouml;pakkumine"),
 		));
+
+		$ol = new object_list(array(
+			"class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE,
+			"lang_id" => array(),
+		));
+		foreach($ol->arr() as $cand)
+		{
+			$offer = obj($cand->parent());
+			$t->define_data(array(
+				"name" => html::obj_change_url($cand),
+				"offer" => html::obj_change_url($offer)
+			));
+		}
+		
 	}
 
 	function candidate_table($arr)
@@ -400,7 +423,8 @@ class personnel_management extends class_base
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"parent" => $fld_id,
 		));
-        foreach ($objs->arr() as $obj)
+
+		foreach ($objs->arr() as $obj)
 		{
 			if($obj->prop("end"))
 			{
@@ -465,6 +489,35 @@ class personnel_management extends class_base
 			"OFFER" => $offers,
 		));
 		return $this->parse();
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+		$arr["fld_id"] = $_GET["fld_id"];
+	}
+
+	/**
+		@attrib name=cut_offers
+	**/
+	function cut_offers($arr)
+	{
+		$_SESSION["aw_jobs"]["cut_offers"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=paste_offers
+	**/
+	function paste_offers($arr)
+	{
+		foreach(safe_array($_SESSION["aw_jobs"]["cut_offers"]) as $ofid)
+		{
+			$ofo = obj($ofid);
+			$ofo->set_parent($arr["fld_id"]);
+			$ofo->save();
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

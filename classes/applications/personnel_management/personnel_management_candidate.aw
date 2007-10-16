@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.2 2006/03/28 11:52:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.3 2007/10/16 07:04:55 kristo Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
@@ -43,6 +43,22 @@ class personnel_management_candidate extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
+			case "person":
+				if ($arr["new"])
+				{
+					$p = get_current_person();
+					$prop["options"] = array("" => t("--vali--"), $p->id() => parse_obj_name($p->name()));
+					$prop["value"] = $p->id();
+				}
+				break;
+
+			case "name":
+				if ($arr["new"])
+				{
+					$p = get_current_person();
+					$offer = obj($arr["request"]["parent"]);
+					$prop["value"] = sprintf(t("%s kandidatuur kohale %s"), $p->name(), $offer->name());
+				}
 		}
 		return $retval;
 	}

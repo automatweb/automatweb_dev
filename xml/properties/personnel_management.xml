@@ -164,7 +164,7 @@
             <method>serialize</method>
             <type>treeview</type>
             <no_caption>1</no_caption>
-            <parent>offers</parent>
+            <parent>offers_tree</parent>
             <store>no</store>
       </property>
       <property>
@@ -287,6 +287,13 @@
                   <group>offers</group>
                   <area_caption></area_caption>
             </offers>
+            <offers_tree>
+                  <type>vbox</type>
+                  <parent>offers</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kaustad</area_caption>
+                  <group>offers</group>
+            </offers_tree>
       </layout>
 </properties>
 

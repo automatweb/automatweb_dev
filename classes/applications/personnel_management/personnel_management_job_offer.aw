@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.12 2006/04/04 11:44:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.13 2007/10/16 07:04:55 kristo Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 
@@ -409,7 +409,7 @@ class personnel_management_job_offer extends class_base
 		
 		$this->vars(array(
 			"name" => @$ob->prop("name"),
-			"company" => $company_name,
+			"company" => $ob->prop("company.name"),
 			"location" => $location,
 			"sectors" => $tmp_sectors,
 			"deadline" => get_lc_date($ob->prop("deadline")),
@@ -418,7 +418,14 @@ class personnel_management_job_offer extends class_base
 			"start_date" => $ob->prop("job_from") > 100 ? get_lc_date($ob->prop("job_from")) : " - ",
 			"tookoormused" => join(",", $ks),
 			"contact_person" => $ob->prop("contact_person"),
-			"job_nr" => $ob->prop("job_nr")
+			"job_nr" => $ob->prop("job_nr"),
+			"profession" => $ob->prop("profession.name"),
+			"org_description_text" => $ob->prop("company.tegevuse_kirjeldus"),
+			"about_job" => $ob->prop("workinfo"),
+			"requirements" => $ob->prop("requirements"),
+			"we_offer" => $ob->prop("weoffer"),
+			"apply_link" => $this->mk_my_orb("new", array("alias_to" => $ob->id(), "reltype" => 1, "parent" => $ob->id(), "return_url" => get_ru()), "personnel_management_candidate", true)
+
 		));
 		
 		return $this->parse();
