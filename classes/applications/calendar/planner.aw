@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.133 2007/02/26 21:35:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.134 2007/10/17 11:23:38 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -313,6 +313,12 @@ class planner extends class_base
 		{
 			$uid = aw_global_get("uid");
 		};
+
+		static $cache;
+		if (isset($cache[$uid]))
+		{
+			return $cache[$uid];
+		}
 		$users = get_instance("users");
 		$user = new object($users->get_oid_for_uid($uid));
 
@@ -325,6 +331,7 @@ class planner extends class_base
 		};
 		list(,$conn) = each($conns);
 		$obj_id = $conn->prop("from");
+		$cache[$uid] = $obj_id;
 		return $obj_id;
 	}
 

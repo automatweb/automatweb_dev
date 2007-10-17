@@ -453,7 +453,7 @@ class planner_model extends core
 			$ol = new object_list(array(
 				"class_id" => CL_BUG,
 				"who" => $owner,
-				"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, 300),
+				"deadline" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $_start, $_end),
 				"lang_id" => array(),
 				"site_id" => array()
 			));
