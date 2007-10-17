@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.107 2007/10/08 10:25:44 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.107 2007/10/08 10:25:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.108 2007/10/17 09:48:50 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.108 2007/10/17 09:48:50 robert Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -56,6 +56,11 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property mail_default_folder type=relpicker reltype=RELTYPE_MAIL_DEF_FOLDER field=meta method=serialize
 	@caption Vaikimis kataloog meili bugidele
+
+@default group=bug_apps
+
+		@property apps_tb type=toolbar no_caption=1 store=no
+		@property apps_table type=table no_caption=1 store=no
 
 @default group=search
 
@@ -332,7 +337,7 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo unestimated_bugs caption="Ennustamata bugid" parent=general
 @groupinfo reminders caption="Teavitused" parent=general
 @groupinfo mail_settings caption="Meiliseaded" parent=general
-
+@groupinfo bug_apps caption="Rakendused" parent=general submit=no
 
 @groupinfo reqs_main caption="N&otilde;uded"
 
@@ -396,6 +401,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype AGROUP value=8 clid=CL_GROUP
 @caption Admin grupp
+
 */
 
 classload("applications/bug_o_matic_3000/bug");
@@ -2436,6 +2442,42 @@ class bug_tracker extends class_base
 		}
 	}
 
+	function _get_apps_tb($arr)
+	{
+		$parent = $arr["obj_inst"]->id();
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_BUG_APP_TYPE), $parent, '',array());
+		$tb->add_delete_button();
+	}
+
+	function _get_apps_table($arr)
+	{
+		$parent = $arr["obj_inst"]->id();
+		$t = &$arr["prop"]["vcl_inst"];
+		
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+		$t->set_caption(t("Rakendused"));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi")
+		));
+
+		$ol = new object_list(array(
+			"parent" => $parent,
+			"class_id" => array(CL_BUG_APP_TYPE)
+		));
+		foreach($ol->list as $oid)
+		{
+			$o = obj($oid);
+			$t->define_data(array(
+				"oid" => $oid,
+				"name" => $o->name()
+			));
+		}
+	}
 	/**
 		@attrib name=save_search all_args=1
 	**/

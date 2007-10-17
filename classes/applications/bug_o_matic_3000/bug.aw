@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.87 2007/09/27 10:56:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.88 2007/10/17 09:48:50 robert Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -40,11 +40,17 @@ define("BUG_STATUS_CLOSED", 5);
 		@property who type=crm_participant_search style=relpicker reltype=RELTYPE_MONITOR table=aw_bugs field=who parent=settings_col1 captionside=top
 		@caption Kellele
 
+		@property is_order type=checkbox ch_value=1 parent=settings_col1 no_caption=1
+		@caption Arendustellimus
+
 	@layout settings_col2 type=vbox parent=settings
 
 
 		@property bug_type type=classificator store=connect reltype=RELTYPE_BUGTYPE parent=settings_col2 captionside=top
 		@caption T&uuml;&uuml;p
+
+		@property bug_app type=select field=meta method=serialize captionside=top parent=settings_col2 table=objects
+		@caption Rakendus
 
 		@property bug_severity type=select parent=settings_col2 captionside=top
 		@caption T&otilde;sidus
@@ -231,6 +237,8 @@ define("BUG_STATUS_CLOSED", 5);
 @reltype FROM_PROBLEM value=16 clid=CL_CUSTOMER_PROBLEM_TICKET
 @caption Probleem
 
+@reltype DEV_ORDER value=17 clid=CL_DEVELOPMENT_ORDER
+@caption Arendustellimus
 */
 
 define("BUG_OPEN", 1);
@@ -330,6 +338,22 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "is_order":
+				if(!$arr["new"])
+				{
+					$pid = $arr["obj_inst"]->parent();
+				}
+				else
+				{
+					$pid = $arr["request"]["parent"];
+				}
+				$p = obj($pid);
+				if($p->class_id() == CL_DEVELOPMENT_ORDER)
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+
 			case "customer_unit":
 				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
@@ -476,6 +500,20 @@ class bug extends class_base
 
 			case "bug_status":
 				$prop["options"] = $this->bug_statuses;
+				break;
+
+			case "bug_app":
+				$ol = new object_list(array(
+					"parent" => $parent,
+					"class_id" => array(CL_BUG_APP_TYPE)
+				));
+				$options = array(0=>" ");
+				foreach($ol->list as $oid)
+				{
+					$o = obj($oid);
+					$options[$oid] = $o->name();
+				}
+				$prop["options"] = $options;
 				break;
 
 			case "bug_priority":
@@ -1230,7 +1268,7 @@ class bug extends class_base
 		}
 	}
 
-	function _get_comment_list($o, $so = "asc", $nl2br = true)
+	function _get_comment_list($o, $so = "asc", $nl2br = true, $base_com = 1)
 	{
 		$this->read_template("comment_list.tpl");
 
@@ -1267,8 +1305,18 @@ class bug extends class_base
 			));
 			$com_str .= $this->parse("COMMENT");
 		}
-
-		$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("bug_content")))));
+		if($base_com)
+		{
+			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("bug_content")))));
+		}
+		elseif($o->prop("com"))
+		{
+			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("com")))));
+		}
+		else
+		{
+			$main_c = '<b>'.$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br> Tellimus loodi";
+		}
 		$this->vars(array(
 			"main_text" => $so == "asc" ? $main_c : "",
 			"main_text_after" => $so == "asc" ? "" : $main_c,
@@ -1375,8 +1423,81 @@ class bug extends class_base
 				));
 			}
 		}
-	}
 
+		if($arr["request"]["is_order"])
+		{
+			$c = $arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_DEV_ORDER"
+			));
+			if(!count($c))
+			{
+				$this->create_dev_order($arr);
+			}
+		}
+	}
+	
+	function create_dev_order($arr)
+	{
+		$o = new object();
+		$o->set_parent($arr["obj_inst"]->parent());
+		$o->set_name($arr["obj_inst"]->name());
+		$o->set_class_id(CL_DEVELOPMENT_ORDER);
+		$o->set_prop("bug_status", $arr["obj_inst"]->prop("bug_status"));
+		$o->set_prop("bug_priority", $arr["obj_inst"]->prop("bug_priority"));
+		$o->set_prop("bug_app", $arr["obj_inst"]->prop("bug_app"));
+		$o->set_prop("deadline", $arr["obj_inst"]->prop("deadline"));
+		$o->set_prop("prognosis", time());
+
+		$u = get_instance(CL_USER);
+		$cur = obj($u->get_current_person());
+		$o->set_prop("contactperson", $cur->id());
+
+		$sections = $cur->connections_from(array(
+			"class_id" => CL_CRM_SECTION,
+			"type" => "RELTYPE_SECTION"
+		));
+		foreach($sections as $s)
+		{
+			$sc = obj($s->conn["to"]);
+			$profs = $sc->connections_from(array(
+				"class_id" => CL_CRM_PROFESSION,
+				"type" => "RELTYPE_PROFESSIONS"
+			));
+			foreach($profs as $p)
+			{
+				$professions[$p->conn["to"]] = $p->conn["to"];
+			}
+		}
+		$c = new connection();
+		$people = $c->find(array(
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_RANK",
+			"to" => $professions
+		));
+		foreach($people as $p)
+		{
+			$ob = obj($p["from"]);
+			if(!$highest)
+			{
+				$highest = $ob;
+			}
+			elseif($ob->prop("jrk") > $highest->prop("jrk"))
+			{
+				$highest = $ob;
+			}
+		}
+		$o->set_prop("orderer", array($highest->id()=>$highest->id()));
+		$o->save();
+		$o->connect(array(
+			"to" => $arr["obj_inst"]->id(),
+			"type" => "RELTYPE_MAIN_BUG"
+		));
+		$arr["obj_inst"]->connect(array(
+			"to" => $o->id(),
+			"type" => "RELTYPE_DEV_ORDER"
+		));
+	}
+	
 	function parse_commited_msg($msg)
 	{
 
@@ -1510,6 +1631,7 @@ class bug extends class_base
 			case "orderer_unit":
 			case "orderer_person":
 			case "fileupload":
+			case "is_order":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",

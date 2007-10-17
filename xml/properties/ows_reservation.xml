@@ -177,13 +177,12 @@
             <field>aw_comments</field>
             <caption>Guest comments</caption>
       </property>
-      
       <property>
             <name>smoking</name>
             <table>aw_ows_reservations</table>
             <group>cust_data</group>
             <type>checkbox</type>
-						<ch_value>1</ch_value>
+            <ch_value>1</ch_value>
             <field>aw_smoking</field>
             <caption>Smoking</caption>
       </property>
@@ -192,7 +191,7 @@
             <table>aw_ows_reservations</table>
             <group>cust_data</group>
             <type>checkbox</type>
-						<ch_value>1</ch_value>
+            <ch_value>1</ch_value>
             <field>aw_high_floor</field>
             <caption>High floor</caption>
       </property>
@@ -201,7 +200,7 @@
             <table>aw_ows_reservations</table>
             <group>cust_data</group>
             <type>checkbox</type>
-						<ch_value>1</ch_value>
+            <ch_value>1</ch_value>
             <field>aw_low_floor</field>
             <caption>Low floor</caption>
       </property>
@@ -210,7 +209,7 @@
             <table>aw_ows_reservations</table>
             <group>cust_data</group>
             <type>checkbox</type>
-						<ch_value>1</ch_value>
+            <ch_value>1</ch_value>
             <field>aw_is_allergic</field>
             <caption>Allergic</caption>
       </property>
@@ -219,12 +218,11 @@
             <table>aw_ows_reservations</table>
             <group>cust_data</group>
             <type>checkbox</type>
-						<ch_value>1</ch_value>
+            <ch_value>1</ch_value>
             <field>aw_is_handicapped</field>
             <caption>Handicapped</caption>
       </property>
-			
-			<property>
+      <property>
             <name>guarantee_type</name>
             <table>aw_ows_reservations</table>
             <group>cust_data</group>

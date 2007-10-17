@@ -127,6 +127,24 @@
             <caption>Vaikimis kataloog meili bugidele</caption>
       </property>
       <property>
+            <name>apps_tb</name>
+            <table>objects</table>
+            <group>bug_apps</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>apps_tb</field>
+      </property>
+      <property>
+            <name>apps_table</name>
+            <table>objects</table>
+            <group>bug_apps</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>apps_table</field>
+      </property>
+      <property>
             <name>search_tb</name>
             <table>objects</table>
             <group>search</group>
@@ -869,6 +887,11 @@
                   <caption>Meiliseaded</caption>
                   <parent>general</parent>
             </mail_settings>
+            <bug_apps>
+                  <caption>Rakendused</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </bug_apps>
             <reqs_main>
                   <caption>N&amp;amp;otilde;uded</caption>
             </reqs_main>

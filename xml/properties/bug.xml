@@ -69,6 +69,17 @@
             <caption>Kellele</caption>
       </property>
       <property>
+            <name>is_order</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>settings_col1</parent>
+            <no_caption>1</no_caption>
+            <field>is_order</field>
+            <caption>Arendustellimus</caption>
+      </property>
+      <property>
             <name>bug_type</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -79,6 +90,17 @@
             <captionside>top</captionside>
             <field>bug_type</field>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>bug_app</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <captionside>top</captionside>
+            <parent>settings_col2</parent>
+            <caption>Rakendus</caption>
       </property>
       <property>
             <name>bug_severity</name>
@@ -546,6 +568,11 @@
                   <clid>CL_CUSTOMER_PROBLEM_TICKET</clid>
                   <caption>Probleem</caption>
             </FROM_PROBLEM>
+            <DEV_ORDER>
+                  <value>17</value>
+                  <clid>CL_DEVELOPMENT_ORDER</clid>
+                  <caption>Arendustellimus</caption>
+            </DEV_ORDER>
       </reltypes>
       <layout>
             <name>

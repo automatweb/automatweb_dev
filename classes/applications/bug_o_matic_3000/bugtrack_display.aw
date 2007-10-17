@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.1 2007/10/10 12:47:07 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.2 2007/10/17 09:48:50 robert Exp $
 // bugtrack_display.aw - Ülesannete kuvamine 
 /*
 
@@ -8,6 +8,76 @@
 @default table=objects
 @default group=general
 
+	@groupinfo data caption=Andmed parent=general
+	@default group=data
+
+		@property name type=textbox rel=1 trans=1 table=objects
+		@caption Nimi
+
+		@property bugtrack type=relpicker reltype=RELTYPE_BUGTRACK field=meta method=serialize store=connect
+		@caption Bugtrack
+
+		@property type_var type=relpicker reltype=RELTYPE_BT_TYPE_VAR field=meta method=serialize store=connect
+		@caption Bugi t&uuml&uuml;bi muutuja
+
+		@property bug_doc type=relpicker reltype=RELTYPE_BUG_DOC field=meta method=serialize store=connect
+		@caption Bugi dokument
+
+		@property bug_cfgform type=relpicker reltype=RELTYPE_BUG_FORM field=meta method=serialize store=connect
+		@caption Bugi seadete vorm
+
+		@property order_doc type=relpicker reltype=RELTYPE_ORDER_DOC field=meta method=serialize store=connect
+		@caption Tellimuse dokument
+
+		@property order_cfgform type=relpicker reltype=RELTYPE_ORDER_FORM field=meta method=serialize store=connect
+		@caption Tellimuse seadete vorm
+
+	@groupinfo groups caption=Kasutajad submit=no parent=general
+	@default group=groups
+	
+		@property director type=relpicker reltype=RELTYPE_DIRECTOR field=meta method=serialize store=connect
+		@caption &Uuml;lemus
+		
+		@property type_var_table type=table store=no
+		@caption Peakasutajad
+	
+	@groupinfo tables caption=Tabelid
+		
+		@groupinfo task_settings caption=&Uuml;lesanded parent=tables
+			
+			@property table_settings_tb type=toolbar store=no no_caption=1 group=task_settings,solved_settings
+			@property table_settings_table type=table store=no no_caption=1 group=task_settings,solved_settings
+		
+		@groupinfo solved_settings caption=Lahendatud parent=tables
+
+	@groupinfo tasks caption=&Uuml;lesanded submit=no
+		
+		@property tasks_table type=table no_caption=1 store=no group=tasks,solved
+
+	@groupinfo solved caption=Lahendatud submit=no
+
+	
+	
+@reltype BUGTRACK value=1 clid=CL_BUG_TRACKER
+@caption Bugtrack
+
+@reltype BUG_DOC value=2 clid=CL_DOCUMENT
+@caption Bugi dokument
+
+@reltype ORDER_DOC value=3 clid=CL_DOCUMENT
+@caption Tellimuse dokument
+
+@reltype DIRECTOR value=4 clid=CL_CRM_PROFESSION
+@caption &Uuml;lemus
+
+@reltype BT_TYPE_VAR value=5 clid=CL_META
+@caption Bugi tüübi muutuja
+
+@reltype ORDER_FORM value=6 clid=CL_CFGFORM
+@caption Tellimuse vorm
+
+@reltype BUG_FORM value=7 clid=CL_CFGFORM
+@caption Bugi vorm
 */
 
 class bugtrack_display extends class_base
@@ -18,6 +88,409 @@ class bugtrack_display extends class_base
 			"tpldir" => "applications/bug_o_matic_3000/bugtrack_display",
 			"clid" => CL_BUGTRACK_DISPLAY
 		));
+	}
+
+	function _get_tasks_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_caption(t("&Uuml;lesanded"));
+		if($arr["request"]["group"] == "solved")
+		{
+			$data = $arr["obj_inst"]->meta("solved_settings");
+		}
+		else
+		{
+			$data = $arr["obj_inst"]->meta("task_settings");
+		}
+		foreach($data as $id=>$field)
+		{
+			if($field["in_table"] && $id>0)
+			{
+				$tfield = array(
+					"name" => "f".$id,
+					"caption" => $field["caption"],
+					"order" => $field["order"],
+					"sortable" => $field["sortable"]?1:0
+				);
+				switch($field["bugprop"])
+				{
+					case "created":
+					case "deadline":
+					case "pdeadline":
+					case "cust_live_date":
+					case "prognosis":
+						$tfield["type"] = "time";
+						$tfield["format"] = "d.m.Y";
+						$tfield["numeric"] = 1;
+					break;
+				}
+				$t->define_field($tfield);
+			}
+		}
+		if($data["default_sort"])
+		{
+			$t->set_default_sortby("f".$data["default_sort"]);
+		}
+		$cur = get_current_person();
+		$ol = new object_list(array(
+			"parent" => $arr["obj_inst"]->prop("bugtrack"),
+			"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"who" => $cur,
+					"monitors" => $cur,
+					"orderer" => $cur,
+					"bug_feedback_p" => $cur
+				)
+			)),
+		));
+		
+		foreach($ol->list as $oid)
+		{
+			$obj = obj($oid);
+			if($arr["request"]["group"] == "solved" && ($obj->prop("bug_status")!=5 && $obj->prop("bug_status")!=3 && $obj->prop("bug_status")!=9))
+			{
+				continue;
+			}
+			elseif($arr["request"]["group"] == "tasks" && ($obj->prop("bug_status")==5 || $obj->prop("bug_status")==3 || $obj->prop("bug_status")==9))
+			{
+				continue;
+			}
+			elseif($obj->class_id()==CL_BUG)
+			{
+				$c = $obj->connections_from(array(
+					"type" => "RELTYPE_DEV_ORDER"
+				));
+				if(count($c))
+				{
+					continue;
+				}
+			}
+			$fields = array();
+			foreach($data as $id=>$field)
+			{
+				if($field["in_table"] && $id>0)
+				{
+					if($obj->class_id()==CL_BUG)
+					{
+						$value = $obj->prop($field["bugprop"]);
+						if($field["bugprop"] == "bug_status")
+						{
+							$b = get_instance(CL_BUG);
+							$statuses = $b->get_status_list();
+							$value = $statuses[$value];
+						}
+						elseif($field["bugprop"] == "name")
+						{
+							$bug_doc = $arr["obj_inst"]->prop("bug_doc");
+							if($bug_doc)
+							{
+								$value = html::href(array(
+									"caption" => $value,
+									"url" => $this->mk_my_orb("change",array(
+										"section" => $bug_doc,
+										"id" => $oid
+									), CL_BUG)
+								));
+							}
+						}
+						elseif($field["bugprop"] == "type")
+						{
+							$value = "Ülesanne";
+						}
+					}
+					else
+					{
+						$value = $obj->prop($field["orderprop"]);
+						if($field["orderprop"] == "name")
+						{
+							$order_doc = $arr["obj_inst"]->prop("order_doc");
+							if($order_doc)
+							{
+								$value = html::href(array(
+									"caption" => $value,
+									"url" => $this->mk_my_orb("change",array(
+										"section" => $order_doc,
+										"id" => $oid
+									), CL_DEVELOPMENT_ORDER)
+								));
+							}
+						}
+						elseif($field["orderprop"] == "bug_status")
+						{
+							$o = get_instance(CL_DEVELOPMENT_ORDER);
+							$statuses = $o->get_status_list();
+							$value = $statuses[$value];
+						}
+						elseif($field["orderprop"] == "type")
+						{
+							$value = "Arendustellimus";
+						}
+					}
+					if($field["orderprop"] == "createdby")
+					{
+						$u = get_instance(CL_USER);
+						$user = $u->get_person_for_uid($obj->createdby());
+						$value = $user->name();
+					}
+					elseif($field["orderprop"] == "modifiedby")
+					{
+						$u = get_instance(CL_USER);
+						$user = $u->get_person_for_uid($obj->modifiedby());
+						$value = $user->name();
+					}
+					$fields["f".$id] = $value;
+				}
+			}
+			$t->define_data($fields);
+		}
+		
+	}
+	function _get_type_var_table($arr)
+	{
+		$cur = $arr["obj_inst"];
+		$type_var = $cur->prop("type_var");
+		if(is_oid($type_var))
+		{
+			
+			$t = &$arr["prop"]["vcl_inst"];
+			$t->set_caption(t("T&uuml;&uuml;bid"));
+			$t->define_field(array(
+				"name" => "name",
+				"caption" => t("Nimi")
+			));
+			$t->define_field(array(
+				"name" => "user",
+				"caption" => t("Peakasutaja")
+			));
+			$ol = new object_list(array(
+				"parent" => $type_var,
+				"class_id" => array(CL_META)
+			));
+			foreach($ol->list as $oid)
+			{
+				$o = obj($oid);
+				$u = $arr["obj_inst"]->meta("type".$oid);
+				$username = '';
+				if(is_oid($u))
+				{
+					$user = obj($u);
+					$username = html::get_change_url($user->id(), array(), $user->name());
+				}
+				$url = $this->mk_my_orb("do_search", array(
+					"pn" => "main_user".$oid,
+					"clid" => array(
+						CL_CRM_PERSON
+					),"multiple"=>0,
+				),"popup_search");
+				$url = "javascript:aw_popup_scroll(\"".$url."\",\"".t("Otsi")."\",550,500)";
+				$username=html::href(array(
+					"caption" => html::img(array(
+						"url" => "images/icons/search.gif",
+						"border" => 0
+					)),
+					"url" => $url
+				))." ".$username;
+				$t->define_data(array(
+					"name" => html::get_change_url($o->id(),array(),$o->name()),
+					"user" => $username
+				));
+			}
+		}
+	}
+
+	function _set_type_var_table($arr)
+	{
+		$cur = $arr["obj_inst"];
+		$type_var = $cur->prop("type_var");
+		if(is_oid($type_var))
+		{
+			$ol = new object_list(array(
+				"parent" => $type_var,
+				"class_id" => array(CL_META)
+			));
+			foreach($ol->list as $oid)
+			{
+				if($arr["request"]["main_user".$oid])
+				{
+					$arr["obj_inst"]->set_meta("type".$oid, $arr["request"]["main_user".$oid]);
+				}
+			}
+		}
+	}
+
+	function _get_table_settings_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "submit",
+			"img" => "save.gif",
+			"url" => "#",
+			"onClick" => "document.changeform.submit()"
+		));
+	}
+	
+	function _get_table_settings_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_caption(t("V&auml;ljad"));
+		$t->define_field(array(
+			"name" => "nr",
+			"caption" => t("Nr."),
+			"align" => "center",
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "bugprop",
+			"caption" => t("Bugi omadus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "orderprop",
+			"caption" => t("Tellimuse omadus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "in_table",
+			"caption" => t("Tabelis"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "sortable",
+			"caption" => t("Sorditav"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "default_sort",
+			"caption" => t("Vaikimisi sort"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Tulba pealkiri"),
+			"align" => "center"
+		));
+		$t->set_default_sortby("nr");
+		$bug_form = $arr["obj_inst"]->prop("bug_cfgform");
+		$order_form = $arr["obj_inst"]->prop("order_cfgform");
+		if($order_form && $bug_form)
+		{
+			if($arr["request"]["group"] == "solved_settings")
+			{
+				$data = $arr["obj_inst"]->meta("solved_settings");
+			}
+			else
+			{
+				$data = $arr["obj_inst"]->meta("task_settings");
+			}
+			$cff = get_instance(CL_CFGFORM);
+			$o_props = array(
+				"type" => "T&uuml;&uuml;p",
+				"created" => "Loomise kuup&auml;ev",
+				"createdby" => "Looja",
+				"modifiedby" => "Muutja"
+			);
+			$bug_props = $o_props;
+			foreach($cff->get_cfg_proplist($bug_form) as $pn => $pd)
+			{
+				if($pd["caption"])
+				{
+					$bug_props[$pn] = $pd["caption"];
+				}
+			}
+			$order_props = $o_props;
+			foreach($cff->get_cfg_proplist($order_form) as $pn => $pd)
+			{
+				if($pd["caption"])
+				{
+					$order_props[$pn] = $pd["caption"];
+				}
+			}
+			$end=0;
+			for($i=1;$end==0;$i++)
+			{
+				$t->define_data(array(
+					"nr" => $i,
+					"order" => html::textbox(array(
+						"name" => "order[".$i."]",
+						"value" => $data[$i]["order"],
+						"size" => 3
+					)),
+					"bugprop" => html::select(array(
+						"name" => "bugprop[".$i."]",
+						"options" => $bug_props,
+						"selected" => $data[$i]["bugprop"]
+					)),
+					"orderprop" => html::select(array(
+						"name" => "orderprop[".$i."]",
+						"options" => $order_props,
+						"selected" => $data[$i]["orderprop"]
+					)),
+					"in_table" => html::checkbox(array(
+						"name" => "in_table[".$i."]",
+						"value" => 1,
+						"checked" => ($data[$i]["in_table"]?1:0)
+					)),
+					"sortable" => html::checkbox(array(
+						"name" => "sortable[".$i."]",
+						"value" => 1,
+						"checked" => ($data[$i]["sortable"]?1:0)
+					)),
+					"default_sort" => html::radiobutton(array(
+						"name" => "default_sort",
+						"value" => $i,
+						"checked" => (($data["default_sort"]==$i)?1:0)
+					)),
+					"caption" => html::textbox(array(
+						"name" => "caption[".$i."]",
+						"value" => $data[$i]["caption"],
+						"size" => 15
+					)),
+				));
+				if($i%10==0)
+				{
+					if(!$data[$i]["in_table"])
+					{
+						$end = 1;
+					}
+				}
+			}
+		}
+	}
+	
+	function _set_table_settings_table($arr)
+	{
+		$data = $arr["request"];
+		$end = 0;
+		$savedata = array();
+		for($i=1;$end==0;$i++)
+		{
+			$savedata[$i]["order"] = $data["order"][$i];
+			$savedata[$i]["bugprop"] = $data["bugprop"][$i];
+			$savedata[$i]["orderprop"] = $data["orderprop"][$i];
+			$savedata[$i]["caption"] = $data["caption"][$i];
+			$savedata[$i]["in_table"] = $data["in_table"][$i];
+			$savedata[$i]["sortable"] = $data["sortable"][$i];
+			if(!$data["bugprop"][$i+1])
+			{
+				$end = 1;
+			}
+		}
+		$savedata["default_sort"] = $data["default_sort"];
+		if($arr["request"]["group"] == "solved_settings")
+		{
+			$arr["obj_inst"]->set_meta("solved_settings", $savedata);
+		}
+		else
+		{
+			$arr["obj_inst"]->set_meta("task_settings", $savedata);
+		}
 	}
 
 	function get_property($arr)
@@ -44,189 +517,30 @@ class bugtrack_display extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		$cur = obj($arr["id"]);
+		$type_var = $cur->prop("type_var");
+		if(is_oid($type_var) && $arr["request"]["group"] == "groups")
+		{
+			$ol = new object_list(array(
+				"parent" => $type_var,
+				"class_id" => array(CL_META)
+			));
+			foreach($ol->list as $oid)
+			{
+				$arr["main_user".$oid] = 0;
+			}
+		}
 		$arr["post_ru"] = post_ru();
 	}
 	
 
-	/**
-	@attrib name=orders all_args=1
-	**/
-	function orders($arr)
-	{
-		$this->read_template("show.tpl");
-		
-		$this->set_tabs($arr['id']);
-
-		classload("vcl/table");
-		$t = new aw_table();
-		$this->init_bug_table($t);
-		
-		$this->vars(array(
-			"content" => $t->draw()
-		));
-
-		return $this->parse();
-	}
-
-	/**
-	@attrib name=sbugs all_args=1
-	**/
-	function solved_bugs($arr)
-	{
-		$this->read_template("show.tpl");
-		
-		$this->set_tabs($arr['id']);
-
-		classload("vcl/table");
-		$t = new aw_table();
-		$this->init_bug_table($t);
-
-		$this->vars(array(
-			"content" => $t->draw()
-		));
-
-		return $this->parse();
-	}
-
-	/**
-	@attrib name=apps all_args=1
-	**/
-	function manage_apps($arr)
-	{
-		$this->read_template("show.tpl");
-		
-		$this->set_tabs($arr['id']);
-
-		return $this->parse();
-	}
-
-	/**
-	@attrib name=groups all_args=1
-	**/
-	function manage_groups($arr)
-	{
-		$this->read_template("show.tpl");
-		
-		$this->set_tabs($arr['id']);
-
-		return $this->parse();
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-	function set_tabs($id)
-	{
-		$tp = get_instance("vcl/tabpanel");
-		$tp->add_tab(array(
-			"caption" => t("Uus &uuml;lesanne"),
-			"link" => $this->mk_my_orb("new", array(
-				"parent" => $id,
-				"cfgform_id" => 777,
-				"section" => aw_global_get("section")
-			), CL_BUG)
-		));
-		$tp->add_tab(array(
-			"link" => $this->mk_my_orb("bugs",array(
-				"section" => aw_global_get("section"),
-				"id" => $id
-			)),
-			"caption" => t("&Uuml;lesanded"),
-		));
-		$tp->add_tab(array(
-			"caption" => t("Arendustellimused"),
-			"link" => $this->mk_my_orb("orders",array(
-				"section" => aw_global_get("section"),
-				"id" => $id
-			)),
-		));
-		$tp->add_tab(array(
-			"caption" => t("Lahendatud"),
-			"link" => $this->mk_my_orb("sbugs",array(
-				"section" => aw_global_get("section"),
-				"id" => $id
-			)),
-		));
-		$tp->add_tab(array(
-			"caption" => t("Rakendused"),
-			"link" => $this->mk_my_orb("apps",array(
-				"section" => aw_global_get("section"),
-				"id" => $id
-			)),
-		));
-		$tp->add_tab(array(
-			"caption" => t("Rakendused"),
-			"link" => $this->mk_my_orb("groups",array(
-				"section" => aw_global_get("section"),
-				"id" => $id
-			)),
-		));
-        	$this->vars(array(
-			"tabs" => $tp->get_tabpanel()
-		));
-	}
-
-	function init_bug_table(&$t)
-	{
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("L&uuml;hikirjeldus")
-		));
-		$t->define_field(array(
-			"name" => "type",
-			"caption" => t("T&uuml;&uuml;p")
-		));
-		$t->define_field(array(
-			"name" => "cdate",
-			"caption" => t("Loomise kuup&auml;ev")
-		));
-		$t->define_field(array(
-			"name" => "ddate",
-			"caption" => t("T&auml;htaeg")
-		));
-		$t->define_field(array(
-			"name" => "pdate",
-			"caption" => t("Prognoos")
-		));
-		$t->define_field(array(
-			"name" => "priority",
-			"caption" => t("Prioriteet")
-		));
-		$t->define_field(array(
-			"name" => "status",
-			"caption" => t("Staatus")
-		));
-		$t->define_field(array(
-			"name" => "creator",
-			"caption" => t("Looja")
-		));
-		$t->define_field(array(
-			"name" => "changer",
-			"caption" => t("Muutja")
-		));
-
-	}
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	/**
-	@attrib name=bugs all_args=1
-	**/
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
-		classload("vcl/table");
-		$t = new aw_table();
-		$this->init_bug_table($t);
-		$this->set_tabs($arr['id']);
-		$bugs = new object_list(array(
-			"class_id" => CL_BUG,
-			"parent" => $arr["id"]
-		));
 
 		$this->vars(array(
 			"name" => $ob->prop("name"),
-			"content" => $t->draw()
 		));
 		return $this->parse();
 	}

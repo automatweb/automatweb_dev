@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.5 2006/12/08 07:16:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.6 2007/10/17 09:48:51 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -8,29 +8,83 @@
 @default table=aw_dev_orders
 @default group=general
 
-	@property customer type=relpicker reltype=RELTYPE_CUSTOMER field=aw_customer
-	@caption Klient
+	@layout name type=vbox closeable=1 area_caption=L&uuml;hikirjeldus
 
-	@property project type=relpicker reltype=RELTYPE_PROJECT field=aw_project
-	@caption Projekt
+		@property name type=textbox table=objects no_caption=1 parent=name
+	
+	@layout settings_wrap type=vbox closeable=1 area_caption=M&auml;&auml;rangud
+	@layout settings type=hbox parent=settings_wrap
 
-	@property orderer_co type=relpicker reltype=ORDERER_CO field=aw_orderer_co
-	@caption Tellija organisatsioon
+		@layout settings_col1 type=vbox parent=settings
+		
+		@property bug_status type=select parent=settings_col1 captionside=top
+		@caption Staatus
 
-	@property orderer_unit type=relpicker reltype=UNIT field=aw_orderer_unit
-	@caption Tellija &uuml;ksus
+		@property bug_feedback_p type=relpicker reltype=RELTYPE_FEEDBACK_P parent=settings_col1 captionside=top field=aw_bug_feedback_p store=connect
+		@caption Tagasiside kellelt
 
-	@property content type=textarea rows=20 cols=50 field=aw_content
-	@caption Sisu
+		@property bug_priority type=select parent=settings_col1 captionside=top
+		@caption Prioriteet
+		
+		@property bug_type type=classificator store=connect reltype=RELTYPE_BUGTYPE parent=settings_col1 captionside=top
+		@caption T&uuml;&uuml;p
 
-	@property fileupload type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=aw_f1
-	@caption Fail1
+		@layout settings_col2 type=vbox parent=settings
 
-	@property fileupload2 type=releditor reltype=RELTYPE_FILE2 rel_id=first use_form=emb field=aw_f2
-	@caption Fail2
+		@property bug_app type=select field=meta method=serialize captionside=top parent=settings_col2 table=objects
+		@caption Rakendus
 
-	@property fileupload3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=aw_f3
-	@caption Fail3
+		@property deadline type=date_select default=-1 parent=settings_col2 captionside=top
+		@caption Soovitav aeg
+
+		@property prognosis type=date_select default=-1 parent=settings_col2 captionside=top
+		@caption Prognoos
+
+	@layout settings_col3 type=vbox parent=settings
+
+		@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 store=connect parent=settings_col3 captionside=top
+		@caption J&auml;lgijad	
+
+	@layout h_split type=hbox width=50%:50%
+	@layout comments type=vbox parent=h_split closeable=1 area_caption=Sisu
+		
+		@property reason type=textarea rows=3 cols=50 field=aw_content parent=comments captionside=top
+		@caption Tellimuse eesm&auml;rk
+
+		@property com type=textarea rows=23 cols=60 parent=comments captionside=top no_caption=1
+		@caption Sisu
+
+ 		@property add_comm type=textarea rows=10 cols=60 parent=comments store=no editonly=1 captionside=top
+		@caption Lisa kommentaar
+
+	@layout data type=vbox parent=h_split closeable=1 area_caption=Andmed
+
+		@property contactperson type=relpicker reltype=RELTYPE_CONTACT parent=data
+		@caption Esindaja
+
+		@property customer type=relpicker reltype=RELTYPE_CUSTOMER field=aw_customer parent=data
+		@caption Klient
+	
+		@property project type=relpicker reltype=RELTYPE_PROJECT field=aw_project parent=data
+		@caption Projekt
+
+		@property orderer type=relpicker reltype=ORDERER field=aw_orderer parent=data multiple=1 size=3 store=connect
+		@caption Tellija
+
+		@property orderer_co type=relpicker reltype=ORDERER_CO field=aw_orderer_co parent=data
+		@caption Tellija organisatsioon
+	
+		@property orderer_unit type=relpicker reltype=UNIT field=aw_orderer_unit parent=data
+		@caption Tellija &uuml;ksus
+	
+		@property fileupload type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=aw_f1 parent=data
+		@caption Fail1
+	
+		@property fileupload2 type=releditor reltype=RELTYPE_FILE2 rel_id=first use_form=emb field=aw_f2 parent=data
+		@caption Fail2
+	
+		@property fileupload3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=aw_f3 parent=data
+		@caption Fail3
 
 @default group=reqs
 
@@ -47,10 +101,15 @@
 	@property problems_tb type=toolbar no_caption=1 store=no
 	@property problems_table type=table store=no no_caption=1
 
+@default group=bugs
+	
+	@property bugs_tb type=toolbar no_caption=1 store=no
+	@property bugs_table type=table no_caption=1 store=no
+
 @groupinfo reqs caption="K&otilde;ik n&otilde;uded" submit=no
 @groupinfo reqs_cart caption="Tellimuste korv" submit=no
 @groupinfo problems caption="Probleemid"
-
+@groupinfo bugs caption="&Uuml;lesanded" submit=no
 
 @reltype CUSTOMER value=1 clid=CL_CRM_COMPANY
 @caption Klient
@@ -78,6 +137,30 @@
 
 @reltype PROBLEM value=14 clid=CL_CUSTOMER_PROBLEM_TICKET
 @caption Probleem
+
+@reltype MAIN_BUG value=15 clid=CL_BUG
+@caption Alus&uuml;lesanne
+
+@reltype MONITOR value=16 clid=CL_CRM_PERSON
+@caption J&auml;lgija
+
+@reltype BUGTYPE value=17 clid=CL_META
+@caption Tellimuse t&uuml;&uuml;p
+
+@reltype CONTACT value=18 clid=CL_CRM_PERSON
+@caption Esindaja
+
+@reltype COMMENT value=19 clid=CL_BUG_COMMENT
+@caption Kommentaar
+
+@reltype ORDERER value=20 clid=CL_CRM_PERSON
+@caption Tellija
+
+@reltype BUG value=21 clid=CL_BUG
+@caption &Uuml;lesanne
+
+@reltype FEEDBACK_P value=22 clid=CL_CRM_PERSON
+@caption Tagasiside isik
 */
 
 class development_order extends class_base
@@ -96,6 +179,182 @@ class development_order extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bug_feedback_p":
+				if ($arr["obj_inst"]->prop("bug_status") != 10)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "orderer":
+				$u = get_instance(CL_USER);
+				if($arr["new"])
+				{
+					$cur = obj($u->get_current_person());
+				}
+				else
+				{
+					$cur = $u->get_person_for_uid($arr["obj_inst"]->createdby());
+				}
+				$sections = $cur->connections_from(array(
+					"class_id" => CL_CRM_SECTION,
+					"type" => "RELTYPE_SECTION"
+				));
+				$ppl = array();
+				foreach($sections as $s)
+				{
+					$sc = obj($s->conn["to"]);
+					$profs = $sc->connections_from(array(
+						"class_id" => CL_CRM_PROFESSION,
+						"type" => "RELTYPE_PROFESSIONS"
+					));
+					foreach($profs as $p)
+					{
+						$professions[$p->conn["to"]] = $p->conn["to"];
+					}
+				}
+				$c = new connection();
+				$people = $c->find(array(
+					"from.class_id" => CL_CRM_PERSON,
+					"type" => "RELTYPE_RANK",
+					"to" => $professions
+				));
+				foreach($people as $person)
+				{
+					$ob = obj($person["from"]);
+					if(!$highest)
+					{
+						$highest = $ob;
+						
+					}
+					elseif($ob->prop("jrk") > $highest->prop("jrk"))
+					{
+						$highest = $ob;
+					}
+					$ppl[$ob->id()] = $ob->name();
+				}
+				$prop["options"] = array("" => t("--vali--"));
+				if($prop["value"])
+				{
+					foreach($prop["value"] as $val)
+					{
+						$cur = obj($val);
+						if(!strlen(array_search($cur->id(),$ppl)))
+						{
+							$prop["options"] += array($cur->id() => $cur->name());
+						}
+					}
+				}
+				else
+				{
+					$prop["value"] = array($highest->id() => $highest->id());
+				}
+				$prop["options"] += $ppl;
+				break;
+
+			case "monitors":
+				if ($arr["new"] || true)
+				{
+					foreach($this->parent_options[$prop["name"]] as $key => $val)
+					{
+						$key_o = obj($key);
+						if ($key_o->class_id() == CL_CRM_PERSON)
+						{
+							$tmp[$key] = $val;
+						}
+					}
+					// also, the current person
+					$u = get_instance(CL_USER);
+					$p = obj($u->get_current_person());
+					$tmp[$p->id()] = $p->name();
+
+					if ($prop["multiple"] == 1 && $arr["new"])
+					{
+					//	$prop["value"] = $this->make_keys(array_keys($tmp));
+						$prop["value"] = array($p->id(), $p->id());
+					}
+
+					// find tracker for the bug and get people list from that
+					$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+					$pt = $po->path();
+					foreach($pt as $pi)
+					{
+						if ($pi->class_id() == CL_BUG_TRACKER)
+						{
+							$bt = $pi->instance();
+							foreach($bt->get_people_list($pi) as $pid => $pnm)
+							{
+								$tmp[$pid] = $pnm;
+							}
+						}
+					}
+					$prop["options"] = array("" => t("--vali--")) + $tmp;
+				}
+				if ($this->can("view", $prop["value"]) && !isset($prop["options"][$prop["value"]]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+
+				if (is_array($prop["value"]))
+				{
+					foreach($prop["value"] as $val)
+					{
+						if ($this->can("view", $val))
+						{
+							$tmp = obj($val);
+							$prop["options"][$tmp->id()] = $tmp->name();
+						}
+					}
+				}
+				break;
+
+			case "prognosis":
+				if(!$prop["value"])
+				{
+					$prop["value"] = time();
+				}
+				break;
+
+			case "contactperson":
+				if(!$prop["value"])
+				{
+					$prop["value"] = $arr["obj_inst"]->createdby();
+				}
+				break;
+
+			case "com":
+				if (!$arr["new"])
+				{
+					$b = get_instance(CL_BUG);
+					$prop["value"] = "<br>".$b->_get_comment_list($arr["obj_inst"], "asc", true, 0)."<br>";
+					$prop["type"] = "text";
+				}
+				break;
+
+			case "bug_status":
+				$prop["options"] = $this->get_status_list();
+				break;
+
+			case "bug_app":
+				$ol = new object_list(array(
+					"parent" => $parent,
+					"class_id" => array(CL_BUG_APP_TYPE)
+				));
+				$options = array(0=>" ");
+				foreach($ol->list as $oid)
+				{
+					$o = obj($oid);
+					$options[$oid] = $o->name();
+				}
+				$prop["options"] = $options;
+				break;
+			
+			case "bug_priority":
+				$b = get_instance(CL_BUG);
+				$prop["options"] = $b->get_priority_list();
+				break;
+
 			case "orderer_co":
 				if ($arr["new"])
 				{
@@ -136,9 +395,121 @@ class development_order extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bug_feedback_p":
+				if ($arr["obj_inst"]->prop("bug_status") != 10)
+				{
+					return PROP_IGNORE;
+				}
+
+				if ($this->_set_feedback)
+				{
+					$prop["value"] = $this->_set_feedback;
+				}
+
+				$nv = "";
+				if ($this->can("view", $prop["value"]))
+				{
+					$nvo = obj($prop["value"]);
+					$nv = $nvo->name();
+				}
+				$old = $arr["obj_inst"]->prop_str($prop["name"]);
+				if ($old != $nv && !$arr["new"])
+				{
+					$com = sprintf(t("Tagaiside kellelt muudeti %s => %s"), $old, $nv);
+					$this->add_comments[] = $com;
+				}
+				break;
+
+			case "add_comm":
+				if (trim($prop["value"]) != "" && !$arr["new"])
+				{
+					$this->add_comments[] = $prop["value"];
+				}
+				break;
+
+			case "bug_priority":
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"] && !$arr["new"])
+				{
+					$com = sprintf(t("Prioriteet muudeti %s => %s"), $old, $prop["value"]);
+					//$this->_add_comment($arr["obj_inst"], $com);
+					$this->add_comments[] = $com;
+				}
+				break;
+
+			case "bug_status":
+				$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
+				$this->_ac_new_state = $prop["value"];
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"] && !$arr["new"])
+				{
+					$statuses = $this->get_status_list();
+					$com = sprintf(t("Staatus muudeti %s => %s"), $statuses[$old], $statuses[$prop["value"]]);
+					$this->add_comments[] = $com;
+				}
+				if ($prop["value"] == 10 && $this->_ac_old_state != 10)
+				{
+					$bug = $arr["obj_inst"];
+					$u = get_instance(CL_USER);
+					if(!$arr["new"])
+					{
+						// set the creator as the feedback from person
+						$p = $u->get_person_for_uid($bug->createdby());
+					}
+					else
+					{
+						$p = obj($u->get_current_person());
+					}
+					$bug->set_prop("bug_feedback_p", $p->id());
+					$this->_set_feedback = $p->id();
+				}
+				break;
 		}
 		return $retval;
 	}	
+	
+	function _get_bugs_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_BUG), $arr["obj_inst"]->id(), '',array());
+		$tb->add_delete_button();
+	}
+
+	function _get_bugs_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+			"parent" => $arr["obj_inst"]->id()
+		));
+		$t->table_from_ol($ol,array("name", "created", "createdby", "modifiedby"),CL_BUG);
+	}
+
+	function callback_post_save($arr)
+	{
+		if (is_array($this->add_comments) && count($this->add_comments))
+		{
+			$b = get_instance(CL_BUG);
+			$b->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh);
+		}
+	}
+
+	function get_status_list()
+	{
+		$statuses = array(
+			1 => "Kooskõlastamisel",
+			2 => "Tellitud",
+			3 => "Valmis",
+			4 => "Testitud",
+			5 => "Suletud",
+			6 => "Vale teade",
+			7 => "Kordamatu",
+			8 => "Parandamatu",
+			9 => "Ei paranda",
+			10 => "Vajab tagasisidet",
+			11 => "Fatal error"
+		);
+		return $statuses;
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -162,9 +533,22 @@ class development_order extends class_base
 			case "aw_f3":
 			case "aw_orderer_co":
 			case "aw_orderer_unit":
+			case "bug_status":
+			case "bug_priority":
+			case "deadline":
+			case "prognosis":
+			case "contactperson":
+			case "aw_orderer":
+			case "aw_bug_feedback_p":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
+				));
+				return true;
+			case "com":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "text",
 				));
 				return true;
 		}
