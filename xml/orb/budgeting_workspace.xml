@@ -31,5 +31,13 @@
 			</function>
 		</action>
 
+		<action name="select_tax_cat">
+			<function name="select_tax_cat">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

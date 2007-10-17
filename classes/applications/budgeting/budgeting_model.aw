@@ -334,6 +334,162 @@ echo "created transaction ".$to->id()." <br>";
 		}
 		return $o->id();
 	}
+
+	function get_cat_id_description($id)
+	{
+		if ($id == "area")
+		{
+			return t("K&otilde;ik valdkonnad");
+		}
+		if ($id == "funds")
+		{
+			return t("K&otilde;ik fondid");
+		}
+		if ($id == "worker")
+		{
+			return t("K&otilde;ik t&ouml;&ouml;tajad");
+		}
+		if ($id == "service_type")
+		{
+			return t("K&otilde;ik teenuse liigid");
+		}
+		if ($id == "prod_families")
+		{
+			return t("K&otilde;ik tooteperekonnad");
+		}
+		if ($id == "accts")
+		{
+			return t("K&otilde;ik kontod");
+		}
+		if ($id == "accts_families")
+		{
+			return t("K&otilde;ik kontod");
+		}
+		if ($id == "main")
+		{
+			return t("K&otilde;ik");
+		}
+		if ($id == "worker")
+		{
+			return t("K&otilde;ik t&ouml;&ouml;tajad");
+		}
+		if (substr($id, 0, 14)  == "projprodfamily")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $id);
+			$c = obj($cust_id);
+			$t = obj($cat_id);
+			return sprintf(t("Projekti %s toodete kategooria %s"), $c->name(), $t->name());
+		}
+		if (substr($id, 0, 14)  == "custprodfamily")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $id);
+			$c = obj($cust_id);
+			$t = obj($cat_id);
+			return sprintf(t("Kliendi %s toodete kategooria %s"), $c->name(), $t->name());
+		}
+		if (substr($id, 0, 12)  == "projprodcats")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Projekti %s toodete kategooriad"), $c->name());
+		}
+		if (substr($id, 0, 12)  == "projstypecat")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $id);
+			$c = obj($cust_id);
+			$t = obj($cat_id);
+			return sprintf(t("Projekti %s toodete kategooria %s"), $c->name(), $t->name());
+		}
+		if (substr($id, 0, 12)  == "custprodcats")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Kliendi %s toodete kategooriad"), $c->name());
+		}
+		if (substr($id, 0, 12)  == "custstypecat")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $id);
+			$c = obj($cust_id);
+			$t = obj($cat_id);
+			return sprintf(t("Kliendi %s teenuste t&uuml;&uuml;pide kategooria %s"), $c->name(), $t->name());
+		}
+		if (substr($id, 0, 10)  == "projstypes")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Projekti %s teenuste liigid"), $c->name());
+		}
+		if (substr($id, 0, 10)  == "custstypes")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Kliendi %s teenuse liigid"), $c->name());
+		}
+		if (substr($id, 0, 10)  == "prodfamily")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Toodete kategooria %s"), $c->name());
+		}
+		if (substr($id, 0, 8)  == "stypecat")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Teenuste liigi kategooria %s"), $c->name());
+		}
+		if (substr($id, 0, 8)  == "projprod")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $id);
+			$c = obj($cust_id);
+			$t = obj($cat_id);
+			return sprintf(t("Projekti %s toode %s"), $c->name(), $t->name());
+		}
+		if (substr($id, 0, 8)  == "projects")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Kliendi %s projektid"), $c->name());
+		}
+		if (substr($id, 0, 8)  == "custprod")
+		{
+			list(, $cust_id, $cat_id) = explode("_", $id);
+			$c = obj($cust_id);
+			$t = obj($cat_id);
+			return sprintf(t("Kliendi %s toode %s"), $c->name(), $t->name());
+		}
+		if (substr($id, 0, 4)  == "area")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Kliendikategooria %s"), $c->name());
+		}
+		if (substr($id, 0, 4)  == "cust")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Klient %s"), $c->name());
+		}
+
+		if (substr($id, 0, 4)  == "proj")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Projekt %s"), $c->name());
+		}
+		if (substr($id, 0, 4)  == "task")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Toimetus %s"), $c->name());
+		}
+		if (substr($id, 0, 4)  == "prod")
+		{
+			list(, $cust_id) = explode("_", $id);
+			$c = obj($cust_id);
+			return sprintf(t("Toode %s"), $c->name());
+		}
+		return $id;
+	}
 }
 
 ?>

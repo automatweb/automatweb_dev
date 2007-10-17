@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.5 2007/09/14 12:38:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.6 2007/10/17 13:41:18 kristo Exp $
 // budgeting_tax.aw - Eelarvestamise maks 
 /*
 
@@ -43,6 +43,16 @@
 	@property tax_scenario type=relpicker  field=aw_tax_scenario automatic=1 reltype=RELTYPE_SCENARIO
 	@caption Stsenaarium
 
+@groupinfo locs caption="Kust" submit=no
+@default group=locs
+
+	@property from_place_toolbar type=toolbar store=no no_caption=1
+	@caption Kust toolbar
+	
+	@property from_place_table type=table store=no no_caption=1
+	@caption Kust
+	
+
 @reltype FROM_ACCT value=1 clid=CL_BUDGETING_ACCOUNT
 @caption Kontolt
 
@@ -77,6 +87,20 @@ class budgeting_tax extends class_base
 				{
 					$prop["value"] = $arr["request"]["place"];
 				}
+				else
+				{
+					$prop["type"] = "text";
+					$m = get_instance("applications/budgeting/budgeting_model");
+					$prop["value"] = /*$prop["value"]." ".*/$m->get_cat_id_description($prop["value"]);
+					$prop["value"] .= " ".html::popup(array(
+						"url" => $this->mk_my_orb("select_tax_cat", array("id" => $arr["obj_inst"]->id()), "budgeting_workspace"),
+						"caption" => html::img(array(
+							"url" => aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif",
+							"border" => 0
+						)),
+						"scrollbars" => "auto"
+					));
+				}
 				break;
 		};
 		return $retval;
@@ -88,6 +112,13 @@ class budgeting_tax extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "from_place":
+				if (strlen($arr["request"]["set_tax_fld"]) < 2)
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = $arr["request"]["set_tax_fld"];
+				break;
 		}
 		return $retval;
 	}	
@@ -95,6 +126,11 @@ class budgeting_tax extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["set_tax_fld"] = "0";
+		foreach($this->_add_vars as $var)
+		{
+			$arr[$var] = "0";
+		}
 	}
 
 	function do_db_upgrade($t,$f)
@@ -169,6 +205,97 @@ class budgeting_tax extends class_base
 			$o->set_prop("folder", $arr["obj_inst"]->prop("from_place"));
 			$o->save();
 		}
+
+		foreach($arr["request"] as $k => $v)
+		{
+			if (substr($k, 0, 7) == "taxfld_" && strlen($v) > 1)
+			{
+				list(, $_id) = explode("_", $k);
+				$o = obj($_id);
+				$o->set_prop("folder", $v);
+				$o->save();
+			}
+		}
+	}
+
+	function _init_from_place_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "hfrom",
+			"caption" => t("Kust"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "hedit",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_from_place_table($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"tax" => $arr["obj_inst"]->id()
+		));
+		$t = new vcl_table();
+		$this->_init_from_place_table($t);
+
+		$m = get_instance("applications/budgeting/budgeting_model");
+		foreach($ol->arr() as $o)
+		{
+			$this->_add_vars[] = "taxfld_".$o->id();
+			$t->define_data(array(
+				"hfrom" => $m->get_cat_id_description($o->prop("folder")),
+				"hedit" => html::popup(array(
+					"url" => $this->mk_my_orb("select_tax_cat", array("id" => $arr["obj_inst"]->id(), "var" => "taxfld_".$o->id()), "budgeting_workspace"),
+					"caption" => html::img(array(
+						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif",
+						"border" => 0
+					)),
+					"scrollbars" => "auto"
+				)),
+				"oid" => $o->id()
+			));
+		}
+		$arr["prop"]["vcl_inst"] = $t;
+	}
+
+	function _get_from_place_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"action" => "create_new_rel"
+		));
+		$tb->add_delete_button();
+	}
+
+	/**
+		@attrib name=create_new_rel
+	**/
+	function create_new_rel($arr)
+	{
+		$f = obj($arr["id"]);
+
+		$o = obj();
+		$o->set_parent($arr["id"]);
+		$o->set_class_id(CL_BUDGETING_TAX_FOLDER_RELATION);
+		$o->set_name(sprintf(t("Seos maksu %s ja kausta %s vahel"), $f->name(), ""));
+		$o->set_prop("tax", $f->id());
+		$o->set_prop("folder", "");
+		$o->save();
+
+		return $arr["post_ru"];
 	}
 }
 ?>

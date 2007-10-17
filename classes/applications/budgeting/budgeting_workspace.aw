@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.6 2007/09/14 12:38:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.7 2007/10/17 13:41:18 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -20,6 +20,10 @@
 			@layout acct_tree parent=acct_left type=vbox closeable=1 area_caption=Kontode&nbsp;puu
 
 				@property acct_tree type=treeview parent=acct_tree store=no no_caption=1
+
+			@layout acct_tree_other parent=acct_left type=vbox closeable=1 area_caption=Aktiivsed&nbsp;kontod
+
+				@property acct_tree_other type=treeview parent=acct_tree_other store=no no_caption=1
 
 			@layout acct_group type=vbox parent=acct_left closeable=1 area_caption=Otsing
 
@@ -84,6 +88,7 @@
 
 			@property fund_tree type=treeview parent=fund_tree store=no no_caption=1
 
+	
 		@layout fund_table parent=fund_split type=vbox
 
 			@property fund_table type=table parent=fund_table store=no no_caption=1
@@ -208,6 +213,21 @@ class budgeting_workspace extends class_base
 		));
 	}
 
+	function _get_acct_tree_other($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$clids = array(CL_BUDGETING_ACCOUNT, CL_BUDGETING_FUND, CL_TASK, CL_PROJECT, CL_SHOP_PRODUCT, CL_CRM_COMPANY, CL_CRM_CATEGORY, CL_CRM_PERSON);
+		$clss = aw_ini_get("classes");
+		foreach($clids as $clid)
+		{
+			$t->add_item(0, array(
+				"id" => $clid,
+				"url" => aw_url_change_var("filter_clid", $clid),
+				"name" => $clss[$clid]["name"]
+			));
+		}
+	}
+
 	function _init_acct_t(&$t)
 	{
 		$t->define_field(array(
@@ -240,6 +260,10 @@ class budgeting_workspace extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
 	}
 
 	function _get_acct_table($arr)
@@ -250,6 +274,16 @@ class budgeting_workspace extends class_base
 			$ol = new object_list(array(
 				"class_id" => !empty($arr["request"]["acct_s_type"]) ? $arr["request"]["acct_s_type"] : $all_clids,
 				"name" => "%".$arr["request"]["acct_s_nm"]."%",
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
+		else
+		if (!empty($arr["request"]["filter_clid"]))
+		{
+			$ol = new object_list(array(
+				"class_id" => $arr["request"]["filter_clid"],
+				"balance" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
 				"lang_id" => array(),
 				"site_id" => array()
 			));
@@ -290,7 +324,8 @@ class budgeting_workspace extends class_base
 				"owner" => html::obj_change_url($o->prop("owner")),
 				"balance" => $o->prop("balance"),
 				"last_transfer" => $last_trans,
-				"last_transfer_amt" => $last_trans_amt
+				"last_transfer_amt" => $last_trans_amt,
+				"oid" => $o->id()
 			));
 		}
 	}
@@ -318,6 +353,8 @@ class budgeting_workspace extends class_base
 		$pt = $arr["request"]["acct_fld"] ? $arr["request"]["acct_fld"] : $this->get_acct_tree_parent($arr["obj_inst"]);
 		$arr["prop"]["vcl_inst"]->add_new_button(array(CL_MENU,CL_BUDGETING_ACCOUNT), $pt);
 		$arr["prop"]["vcl_inst"]->add_delete_button();
+		$arr["prop"]["vcl_inst"]->add_cut_button(array("var" => "budgeting_acct_cut"));
+		$arr["prop"]["vcl_inst"]->add_paste_button(array("var" => "budgeting_acct_cut", "folder_var" => $pt));
 	}
 
 	function _get_tax_tree($arr)
@@ -349,6 +386,20 @@ class budgeting_workspace extends class_base
 			"name" => $arr["request"]["tax_fld"] == "area" ? "<b>".$s."</b>" : $s,
 			"url" => aw_url_change_var("tax_fld", "area")
 		));
+
+		if ($arr["request"]["picker"] == 1)
+		{
+			foreach($tv->get_item_ids() as $id)
+			{
+				$item = $tv->get_item($id);
+				$bits = parse_url($item["url"]);
+				$b = array();
+				parse_str($bits["query"], $b);
+				$item["onClick"] = "el=aw_get_el('".$arr["request"]["var"]."', window.opener.document.changeform);el.value='".$b["tax_fld"]."';window.opener.document.changeform.submit();window.close();";
+				$item["url"] = "#";
+				$tv->set_item($item);
+			}
+		}
 	}
 
 	function _get_tax_table($arr)
@@ -386,6 +437,20 @@ class budgeting_workspace extends class_base
 			array("name", "comment", "to_acct", "amount", "pri", "max_deviation_minus", "max_deviation_plus", "tax_grp"),
 			CL_BUDGETING_TAX
 		);
+
+		$arr["prop"]["vcl_inst"]->update_field(array(
+			"name" => "max_deviation_minus",
+			"caption" => t("MPM-"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$arr["prop"]["vcl_inst"]->update_field(array(
+			"name" => "max_deviation_plus",
+			"caption" => t("MPM+"),
+			"align" => "center",
+			"sortable" => 1
+		));
 	}
 
 	function get_tax_tree_parent($o)
@@ -456,7 +521,7 @@ class budgeting_workspace extends class_base
 		}
 		$arr["prop"]["vcl_inst"]->table_from_ol(
 			$data,
-			array("name", "comment"),
+			array("from_acct", "to_acct", "in_project", "amount", "when"),
 			CL_BUDGETING_TRANSFER
 		);
 	}
@@ -526,6 +591,8 @@ class budgeting_workspace extends class_base
 		$pt = $arr["request"]["fund_fld"] ? $arr["request"]["fund_fld"] : $this->get_fund_tree_parent($arr["obj_inst"]);
 		$arr["prop"]["vcl_inst"]->add_new_button(array(CL_MENU,CL_BUDGETING_FUND), $pt);
 		$arr["prop"]["vcl_inst"]->add_delete_button();
+		$arr["prop"]["vcl_inst"]->add_cut_button(array("var" => "budgeting_fund_cut"));
+		$arr["prop"]["vcl_inst"]->add_paste_button(array("var" => "budgeting_fund_cut", "folder_var" => $pt));
 	}
 
 	/**
@@ -1093,6 +1160,19 @@ class budgeting_workspace extends class_base
 			}
 		}
 
+		if ($arr["r"]["picker"] == 1)
+		{
+			foreach($tv->get_item_ids() as $id)
+			{
+				$item = $tv->get_item($id);
+				$bits = parse_url($item["url"]);
+				$b = array();
+				parse_str($bits["query"], $b);
+				$item["onClick"] = "el=aw_get_el('".$arr["r"]["var"]."', window.opener.document.changeform);el.value='".$b["tax_fld"]."';window.opener.document.changeform.submit();window.close();";
+				$item["url"] = "#";
+				$tv->set_item($item);
+			}
+		}
 		die($tv->finalize_tree());
 	}
 
@@ -1228,6 +1308,31 @@ class budgeting_workspace extends class_base
 	function _get_tax_s_group($arr)
 	{
 		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	/**
+		@attrib name=select_tax_cat api=1
+		@param id required type=int
+		@param var optional type=int
+	**/
+	function select_tax_cat($arr)
+	{
+		if (!$arr["var"])
+		{
+			$arr["var"] = "set_tax_fld";
+		}
+		$t = get_instance("vcl/treeview");
+		$p = array(
+			"vcl_inst" => &$t
+		);
+		$r = $_GET;
+		$r["picker"] = 1;
+		$this->_get_tax_tree(array(
+			"prop" => &$p,
+			"request" => $r
+		));
+		echo $t->finalize_tree();
+		die();
 	}
 }
 ?>

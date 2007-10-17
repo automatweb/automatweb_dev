@@ -99,6 +99,26 @@
             <reltype>RELTYPE_SCENARIO</reltype>
             <caption>Stsenaarium</caption>
       </property>
+      <property>
+            <name>from_place_toolbar</name>
+            <table>aw_budgeting_tax</table>
+            <group>locs</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>from_place_toolbar</field>
+            <caption>Kust toolbar</caption>
+      </property>
+      <property>
+            <name>from_place_table</name>
+            <table>aw_budgeting_tax</table>
+            <group>locs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>from_place_table</field>
+            <caption>Kust</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUDGETING_TAX</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -106,6 +126,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <locs>
+                  <caption>Kust</caption>
+                  <submit>no</submit>
+            </locs>
+      </groupinfo>
       <tableinfo>
             <aw_budgeting_tax>
                   <master_table>objects</master_table>

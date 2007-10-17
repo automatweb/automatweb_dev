@@ -20,6 +20,16 @@
             <field>acct_tree</field>
       </property>
       <property>
+            <name>acct_tree_other</name>
+            <table>objects</table>
+            <group>accounts</group>
+            <type>treeview</type>
+            <parent>acct_tree_other</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>acct_tree_other</field>
+      </property>
+      <property>
             <name>acct_s_nm</name>
             <table>objects</table>
             <group>accounts</group>
@@ -390,6 +400,13 @@
                   <area_caption>Kontode&amp;amp;nbsp;puu</area_caption>
                   <group>accounts</group>
             </acct_tree>
+            <acct_tree_other>
+                  <parent>acct_left</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Aktiivsed&amp;amp;nbsp;kontod</area_caption>
+                  <group>accounts</group>
+            </acct_tree_other>
             <acct_group>
                   <type>vbox</type>
                   <parent>acct_left</parent>
