@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.23 2007/10/11 14:55:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.24 2007/10/17 09:46:59 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -143,7 +143,7 @@
 @caption Kontroller
 
 @reltype MENU value=10 clid=CL_MENU
-@caption Kontroller
+@caption Kataloog
 
 */
 
