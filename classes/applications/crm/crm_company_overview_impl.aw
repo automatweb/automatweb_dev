@@ -459,6 +459,7 @@ class crm_company_overview_impl extends class_base
 		$ol = $this->_get_task_list($arr);
 		if($arr["request"]["group"] != "ovrv_mails")
 		{
+			$ol->arr();
 			$ol->sort_by_cb(array(&$this, "__task_sorter"));
 		}
 		if ($arr["request"]["group"] == "ovrv_offers")
@@ -468,9 +469,9 @@ class crm_company_overview_impl extends class_base
 		$pm = get_instance("vcl/popup_menu");
 		// make task2person list
 		$task2person = $this->_get_participant_list_for_tasks($ol->ids());
-		
 		$task2recur = $this->_get_recur_list_for_tasks($ol->ids());
-
+		$this->_preload_customer_list_for_tasks($ol->arr());
+		
 		$task_nr = 0;
 		$table_data = array();
 		
@@ -493,14 +494,6 @@ class crm_company_overview_impl extends class_base
 			
 			if($group)
 			{
-/*				if($last_cust != $task->prop("customer"))
-				{
-					$table_data[] = array(
-						"name" => "<h3>".$cust->name()."</h3>",
-					);
-					$last_cust = $task->prop("customer");
-				}
-*/				
 				if($last_proj != $task->prop("project"))
 				{
 					if($this->can("view" , $task->prop("project")))
@@ -1897,5 +1890,38 @@ class crm_company_overview_impl extends class_base
 		
 		die(iconv(aw_global_get("charset"), "utf-8", $t->draw()));
 	}
+
+	function _preload_customer_list_for_tasks($tasks)
+	{
+		$custs = array();
+		foreach($tasks as $task_o)
+		{
+			$custs[$task_o->prop("customer")] = 1;
+		}
+		$projs = array();
+		foreach($tasks as $task_o)
+		{
+			$projs[$task_o->prop("project")] = 1;
+		}
+
+		if (count($custs))
+		{
+			$ol = new object_list(array(
+				"oid" => array_keys($custs),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$ol->arr();
+		}
+		if (count($projs))
+		{
+			$ol = new object_list(array(
+				"oid" => array_keys($projs),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$ol->arr();
+		}
 	}
+}
 ?>

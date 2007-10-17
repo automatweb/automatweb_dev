@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.24 2007/10/17 09:46:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.25 2007/10/17 09:48:34 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -590,6 +590,12 @@ class crm_settings extends class_base
 
 	function get_current_settings()
 	{
+		static $cache;
+		if ($cache != null)
+		{
+			return $cache;
+		}
+
 		$u = get_instance(CL_USER);
 		$curp = $u->get_current_person();
 		$curco = $u->get_current_company();
@@ -649,33 +655,41 @@ class crm_settings extends class_base
 
 			if ($has_u)
 			{
+				$cache = $has_u;
 				return $has_u;
 			}
 			if ($has_p)
 			{
+				$cache = $has_p;
 				return $has_p;
 			}
 			if ($has_prof)
 			{
+				$cache = $has_prof;
 				return $has_prof;
 			}
 			if ($has_sec)
 			{
+				$cache = $has_sec;
 				return $has_sec;
 			}
 			if ($has_co)
 			{
+				$cache = $has_co;
 				return $has_co;
 			}
 			if ($has_all)
 			{
+				$cache = $has_all;
 				return $has_all;
 			}
 		}
 
 		if ($ol->count())
 		{
-			return $ol->begin();
+			$rv = $ol->begin();
+			$cache = $rv;
+			return $rv;
 		}
 	}
 
