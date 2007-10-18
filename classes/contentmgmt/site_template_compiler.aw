@@ -1053,7 +1053,7 @@ class site_template_compiler extends aw_template
                                 $ret .= $this->_gi()."if (\$this->brother_level_from >= ".$arr["level"].")\n";
                                 $ret .= $this->_gi()."{\n";
                                 $this->brace_level++;
-                                        $ret .= $this->_gi()."\$this->brother_level_from = null;\n";
+                                $ret .= $this->_gi()."\$this->brother_level_from = null;\n";
                                 $this->brace_level--;
                                 $ret .= $this->_gi()."}\n";
                         $this->brace_level--;
@@ -1265,7 +1265,6 @@ class site_template_compiler extends aw_template
 		$dat = end($this->list_name_stack);
 		$content_name = $dat["content_name"];
 		$o_name = $dat["o_name"];
-
 		$ret = "";
 		// TODO: this could be optimized out for non - login menus
 		if (aw_ini_get("menuedit.no_show_users_only"))
@@ -1382,7 +1381,6 @@ class site_template_compiler extends aw_template
 		$ret = "";
 		$ret .= $this->_gi().$content_name." = \"\";\n";
 		$ret .= $this->_gi()."\$mmi_cnt = 0;\n";
-
 		$ret .= $this->_gi()."for(\n((\"make_menu_item\" == " . $fun_name . ") ? (\$mmi_cnt = 1) : (".$o_name." = ".$list_name."->begin())), ((\"make_menu_item\" == " . $fun_name . ") ? (\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this))  : (".$loop_counter_name." = 0)), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (\$prev_obj = NULL));\n ((\"make_menu_item\" == " . $fun_name . ") ? is_array(\$tmp_vars_array) : (!".$list_name."->end()));\n ((\"make_menu_item\" == " . $fun_name . ") ? (\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this)) : (\$prev_obj = ".$o_name.")), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$o_name." = ".$list_name."->next())), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$loop_counter_name."++))\n)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
@@ -1405,7 +1403,11 @@ class site_template_compiler extends aw_template
 
 			if (aw_ini_get("user_interface.full_content_trans"))
 			{
-				$ret .= $this->_gi()."if (!(".$o_name."->status() == STAT_ACTIVE || ".$o_name."->meta(\"trans_\".aw_global_get(\"ct_lang_id\").\"_status\")))\n";
+				//$ret .= $this->_gi()."if (!(".$o_name."->status() == STAT_ACTIVE || ".$o_name."->meta(\"trans_\".aw_global_get(\"ct_lang_id\").\"_status\")))\n";
+
+				$ret .= $this->_gi()."if ((aw_ini_get(\"languages.default\") == aw_global_get(\"ct_lang_id\") && ".$o_name."->status() != STAT_ACTIVE) || (aw_ini_get(\"languages.default\") != aw_global_get(\"ct_lang_id\") && !".$o_name."->meta(\"trans_\".aw_global_get(\"ct_lang_id\").\"_status\")))\n";
+
+
 				$ret .= $this->_gi()."{\n";
 				$this->brace_level++;
 					$ret .= $this->_gi()."continue;\n";
@@ -1966,7 +1968,6 @@ class site_template_compiler extends aw_template
 
 		// also set the area as visible, because if we get here in execution, it is visible.
 		$ret .= $this->_gi()."\$this->menu_levels_visible[".$arr["a_parent"]."][".$arr["level"]."] = 1;\n";
-
 		if ($arr["level"] == 1)
 		{
 			$ret .= $this->_gi()."if (\$this->can(\"view\", ".$arr["a_parent_p_fn"]."))\n";
@@ -2169,6 +2170,14 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi().$list_name." = \$o_obj_from->get_folders_as_object_list(\$tmp,".$arr["level"]." - ".$parent_is_from_obj_start_level.",\$parent_obj);\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n\n";
+
+		$ret .= $this->_gi()."if (\$parent_obj->prop(\"submenus_from_cb\"))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi().$fun_name."_cb = 1;\n";
+		$ret .= $this->_gi()."$fun_name = \"make_menu_item\";\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
 
 		$ret .= $this->_gi().$p_v_name." = true;\n";
 		$ret .= $this->_gi().$cache_name." = false;\n";
