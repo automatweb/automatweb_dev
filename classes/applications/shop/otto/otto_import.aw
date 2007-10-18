@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.61 2007/10/18 15:01:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.62 2007/10/18 15:07:18 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -5452,81 +5452,6 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 	{
 		return $imnr{0}.'/'.$imnr{1}.'/'.$imnr;
 	}
-/*
-////
-// XXX i think those functions are not used anywhere --dragut
-////	
-	function add_image_to_product($pcode, $imnr)
-	{
-		// lets get the product obj:
-		echo "[add image to product] <br>\n";
-		$product_obj_id = $this->db_fetch_field("
-			select
-				*
-			from
-				otto_prod_to_code_lut
-			where
-				product_code = '".$pcode."'
-		", "product_id");
-		echo "-- got product obj id: $product_obj_id <br>\n";
-		if ($this->can('view', $product_obj_id))
-		{
-			echo "-- product obj. is readable<br>\n";
-			$product_obj = new object($product_obj_id);
-			$images = explode(',', $product_obj->prop('user3'));
-			$x = array_search($imnr, $images);
-			if ($x !== false)
-			{
-				$images[$x] = $imnr;
-			}
-			else
-			{
-				$images[] = $imnr;
-			}
-			$product_obj->set_prop('user3', implode(',', $images));
-			$product_obj->save();
-			$this->db_query("delete from otto_prod_to_image_lut where product=".$product_obj->id()." and image='".$imnr."'");
-			$this->db_query("insert into otto_prod_to_image_lut set product=".$product_obj->id().", image='".$imnr."'");
-			echo "[/add image to product (saved) ]<br>\n";
-			return true;
-		}
-		return false;
-	}
-
-	function get_image_from_product($pcode, $imnr)
-	{
-		echo "[ get_image_from_product_object]<br>\n";
-		$product_obj_id = $this->db_fetch_field("
-			select
-				*
-			from
-				otto_prod_to_code_lut
-			where
-				product_code = '".$pcode."'
-		", "product_id");
-		echo "-- $product_obj_id <br>\n";
-		if ($this->can('view', $product_obj_id))
-		{
-			echo "-- obj is readable <br>\n";
-			$product_obj = new object($product_obj_id);
-			echo "-- obj name is ".$product_obj->name()."<br>\n";
-			$images = explode(',', $product_obj->prop('user3'));
-			$x = array_search($imnr, $images);
-			if ($x !== false)
-			{
-				echo "-- found image !!! <br>\n";
-				echo "[/ get_image_from_product_object]<br>\n";
-				return $images[$x];
-			}
-			else
-			{
-				echo "-- image not found !!! <br>\n";
-				echo "[/ get_image_from_product_object]<br>\n";
-				return false;
-			}
-		}
-	}
-*/
 
 }
 
