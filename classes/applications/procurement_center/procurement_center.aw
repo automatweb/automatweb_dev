@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.39 2007/07/26 11:56:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.40 2007/10/18 10:19:22 markop Exp $
 // procurement_center.aw - Hankekeskkond
 /*
 
@@ -498,6 +498,7 @@ class procurement_center extends class_base
 			case "buyings_find_name":
 			case "products_find_name":
 			case "procurements_find_product":
+				unset($arr["request"]["rawdata"]["rawdata"]);
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				break;
 		}
