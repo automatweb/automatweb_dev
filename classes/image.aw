@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.209 2007/10/18 11:10:54 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.210 2007/10/18 11:38:40 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -363,8 +363,8 @@ class image extends class_base
 				$size = array($flo->prop("width"), $flo->prop("height"));
 			}
 			$bi_show_link = $this->mk_my_orb("show_big", $show_link_arr);
-			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0));
-			$popup_height = max(5, $size[1]);// + ($do_comments ? 200 : 0);
+			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0)) + $args['addwidth'];
+			$popup_height = max(5, $size[1]) + $args['addheight'];// + ($do_comments ? 200 : 0);
 			$bi_link = "window.open('$bi_show_link','popup','width=".($popup_width).",height=".($popup_height)."');";
 
 			// for case if there is a big pic, a little one is missing. then usual text link is shown with images name
