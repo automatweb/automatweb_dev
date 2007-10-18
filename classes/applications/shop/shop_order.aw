@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.62 2007/10/09 09:37:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.63 2007/10/18 07:50:25 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -760,7 +760,7 @@ class shop_order extends class_base
 						"body" => "see on html kiri",
 					));
 					$awm->htmlbodyattach(array(
-						"data" => $html,
+						"data" => $this->_eval_buffer($html),
 					));
 					$awm->gen_mail();
 					//echo "sent to $_to , from $mail_from_addr <br>";
@@ -820,7 +820,7 @@ class shop_order extends class_base
 						"body" => "see on html kiri",
 					));
 					$awm->htmlbodyattach(array(
-						"data" => $html[0],
+						"data" => $this->_eval_buffer($html[0]),
 					));
 					if($at == 1)
 					{
@@ -867,7 +867,7 @@ class shop_order extends class_base
 						"body" => "see on html kiri",
 					));
 					$awm->htmlbodyattach(array(
-						"data" => $html,
+						"data" => $this->_eval_buffer($html),
 					));
 					if($at == 1)
 					{
@@ -927,7 +927,7 @@ class shop_order extends class_base
 				"body" => strip_tags(str_replace("<br>", "\n",$html)),
 			));
 			$awm->htmlbodyattach(array(
-				"data" => $html
+				"data" => $this->_eval_buffer($html)
 			));
 			$awm->gen_mail();
 		}
@@ -1617,6 +1617,24 @@ class shop_order extends class_base
 			$str .= $pd["caption"].": ".$ud[$pn]."<br>";
 		}
 		$arr["prop"]["value"] = $str;
+	}
+
+	function _eval_buffer($res)
+	{
+		if (strpos($res, "<?php") !== false)
+		{
+			ob_start();
+			$tres = $res;
+			$res = str_replace("<?xml", "&lt;?xml", $res);
+			eval("?>".$res);
+			$res = ob_get_contents();
+			ob_end_clean();
+			if (strpos($res, "syntax err") !== false)
+			{
+				return $res;
+			}
+		}
+		return $res;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.55 2007/09/10 10:57:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.56 2007/10/18 07:50:25 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -789,6 +789,7 @@ class shop_order_center extends class_base
 		foreach($pl as $o)
 		{
 			$i = $o->instance();
+			$tl_inst->cnt++;
 			if ($tl_inst->is_on_cur_page())
 			{
 				$oid = $o->id();
@@ -804,6 +805,7 @@ class shop_order_center extends class_base
 					"prod_link_cb" => $arr["prod_link_cb"],
 					"last_product_menu" => $last_menu,
 				)));
+				$tl_inst->cnt--;
 				$xi++;
 			}
 			$last_menu =  $o->parent();
