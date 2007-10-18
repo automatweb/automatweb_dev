@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.60 2007/10/07 00:22:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.61 2007/10/18 15:01:20 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -3288,6 +3288,7 @@ class otto_import extends class_base
 						'class_id' => CL_SHOP_PRODUCT,
 						'user2' => $connection_image,
 						'status' => array(STAT_ACTIVE, STAT_NOTACTIVE),
+						'oid' => new obj_predicate_not($product_obj->id())
 					));
 					
 					$product_obj->set_prop('user2', $connection_image);
@@ -3300,6 +3301,10 @@ class otto_import extends class_base
 						$product_obj->set_prop('user4', implode(',', $product_ol_ids));
 						$product_obj->set_prop('userch4', 1);
 						echo "selle yhenduspildiga olevate toodete id-d: ".implode(',', $products_ol_ids)."<br />\n";
+
+						// lets make sure, that the current product is not present in the object_list
+						// or it might be set unvisible in products list:
+					//	$products_ol->remove($product_obj->id());
 
 						$visible_product = false;
 						foreach ($products_ol->arr() as $products_ol_item_id => $products_ol_item)
