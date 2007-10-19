@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.134 2007/10/17 11:23:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.135 2007/10/19 13:21:21 robert Exp $
 // planner.aw - kalender
 /*
 
@@ -201,6 +201,11 @@ define("REP_YEAR",4);
 @reltype OTHER_CALENDAR value=9 clid=CL_PLANNER
 @caption Teised
 
+@reltype ICAL_EXPORT value=10 clid=CL_ICAL_EXPORT
+@caption Väline kalender (eksport)
+
+@reltype ICAL_IMPORT value=11 clid=CL_ICAL_IMPORT
+@caption Väline kalender (import)
 */
 
 define("CAL_SHOW_DAY",1);
@@ -1352,6 +1357,39 @@ class planner extends class_base
 				"img" => "qmarks.gif",
 				"class" => "menuButton",
 			));
+			$conn = $arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_ICAL_EXPORT"
+			));
+			foreach($conn as $c)
+			{
+				$export = obj($c->conn["to"]);
+			}
+			if($export)
+			{
+				$toolbar->add_menu_button(array(
+					"name" => "export",
+					"tooltip" => t("Ekspordi s&uuml;ndmused"),
+					"img" => "save.gif"
+				));
+				$toolbar->add_menu_item(array(
+					"parent" => "export",
+					"link" => $this->mk_my_orb("export",array(
+						"start" => 0,
+						"end" => 0,
+						"id" => $export->id(),
+					), CL_ICAL_EXPORT),
+					"text" => t("Vastavalt seadetele"),
+				));
+				$toolbar->add_menu_item(array(
+					"parent" => "export",
+					"link" => $this->mk_my_orb("export",array(
+						"start" => time(),
+						"end" => 0,
+						"id" => $export->id(),
+					), CL_ICAL_EXPORT),
+					"text" => t("Tuleviku s&uuml;ndmused"),
+				));
+			}
 		};
 	}
 
