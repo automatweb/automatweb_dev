@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.21 2007/07/12 11:38:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.22 2007/10/19 11:28:30 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -93,6 +93,11 @@ class crm_deal extends class_base
 		$prop = &$arr["prop"];
 		switch($prop["name"])
 		{
+			case "reg_date":
+				$prop["year_from"] = 1990;
+				$prop["year_to"] = date("Y")+10;
+				break;
+
 			case "files":
 				$this->_get_files_table($arr);
 				break;
