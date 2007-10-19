@@ -951,9 +951,30 @@ class site_template_compiler extends aw_template
 
 	function dbg_show_template_ops()
 	{
+		$tab = "&nbsp;&nbsp;&nbsp;";
+		$tabbing = "";
+		$level = 0;
+
 		foreach($this->ops as $num => $op)
 		{
-			echo "op $num: { op => ".$this->op_lut[$op["op"]]." , params = { ";
+			$tabbing = str_repeat($tab, $level);
+
+			if (OP_END_BLK === $op["op"])
+			{
+				--$level;
+				$tabbing = str_repeat($tab, $level);
+				echo $tabbing . "<b>}</b><br>\n";
+				continue;
+			}
+
+			if (OP_START_BLK === $op["op"])
+			{
+				echo $tabbing . "<b>{</b><br>\n";
+				++$level;
+				continue;
+			}
+
+			echo $tabbing . "op $num: { op => ".$this->op_lut[$op["op"]]." , params = { ";
 			foreach($op["params"] as $k => $v)
 			{
 				echo $k ." => ".$v.",";
