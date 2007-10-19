@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.17 2007/07/06 09:04:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.18 2007/10/19 08:44:56 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus
 /*
 
@@ -92,6 +92,7 @@ class cb_form_chain_entry extends class_base
 	**/
 	function show($arr)
 	{
+		error::view_check($arr["id"]);
 		$o = obj($arr["id"]);
 
 		$d = array();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.48 2007/10/15 13:35:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.49 2007/10/19 08:44:56 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1712,6 +1712,10 @@ class cb_form_chain extends class_base
 			// insert values as well
 			foreach($props as $k => $v)
 			{
+				if ($v["invisible"] == 1)
+				{
+					continue;
+				}
 				if (($_err = $_SESSION["cbfc_errors"][$wf->id()][$i][$k]) != "")
 				{
 					$nps[$k."_err"] = array(
@@ -1760,6 +1764,10 @@ class cb_form_chain extends class_base
 					$v["value"] = $v["defaultx"];
 				}
 
+				if ($v["invisible_name"] == 1)
+				{
+					$v["no_caption"] = 1;
+				}
 				$nps[$k] = $v;
 			}
 
