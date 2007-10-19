@@ -519,6 +519,16 @@
                   <clid>CL_PLANNER</clid>
                   <caption>Teised</caption>
             </OTHER_CALENDAR>
+            <ICAL_EXPORT>
+                  <value>10</value>
+                  <clid>CL_ICAL_EXPORT</clid>
+                  <caption>V&amp;auml;line kalender (eksport)</caption>
+            </ICAL_EXPORT>
+            <ICAL_IMPORT>
+                  <value>11</value>
+                  <clid>CL_ICAL_IMPORT</clid>
+                  <caption>V&amp;auml;line kalender (import)</caption>
+            </ICAL_IMPORT>
       </reltypes>
 </properties>
 

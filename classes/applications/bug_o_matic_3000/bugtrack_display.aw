@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.2 2007/10/17 09:48:50 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.3 2007/10/19 13:12:43 robert Exp $
 // bugtrack_display.aw - Ülesannete kuvamine 
 /*
 
@@ -34,13 +34,15 @@
 
 	@groupinfo groups caption=Kasutajad submit=no parent=general
 	@default group=groups
-	
-		@property director type=relpicker reltype=RELTYPE_DIRECTOR field=meta method=serialize store=connect
-		@caption &Uuml;lemus
 		
 		@property type_var_table type=table store=no
 		@caption Peakasutajad
 	
+	@groupinfo approvals caption=Koosk&otilde;lastamisel submit=no parent=general
+	@default group=approvals
+		
+		@property approvals_table type=table no_caption=1 store=no
+
 	@groupinfo tables caption=Tabelid
 		
 		@groupinfo task_settings caption=&Uuml;lesanded parent=tables
@@ -67,9 +69,6 @@
 @reltype ORDER_DOC value=3 clid=CL_DOCUMENT
 @caption Tellimuse dokument
 
-@reltype DIRECTOR value=4 clid=CL_CRM_PROFESSION
-@caption &Uuml;lemus
-
 @reltype BT_TYPE_VAR value=5 clid=CL_META
 @caption Bugi tüübi muutuja
 
@@ -88,6 +87,11 @@ class bugtrack_display extends class_base
 			"tpldir" => "applications/bug_o_matic_3000/bugtrack_display",
 			"clid" => CL_BUGTRACK_DISPLAY
 		));
+	}
+	
+	function _get_approvals_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
 	}
 
 	function _get_tasks_table($arr)
@@ -133,7 +137,6 @@ class bugtrack_display extends class_base
 		}
 		$cur = get_current_person();
 		$ol = new object_list(array(
-			"parent" => $arr["obj_inst"]->prop("bugtrack"),
 			"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
 			new object_list_filter(array(
 				"logic" => "OR",
@@ -141,7 +144,8 @@ class bugtrack_display extends class_base
 					"who" => $cur,
 					"monitors" => $cur,
 					"orderer" => $cur,
-					"bug_feedback_p" => $cur
+					"bug_feedback_p" => $cur,
+					"createdby" => get_current_user()
 				)
 			)),
 		));
@@ -163,6 +167,20 @@ class bugtrack_display extends class_base
 					"type" => "RELTYPE_DEV_ORDER"
 				));
 				if(count($c))
+				{
+					continue;
+				}
+				$objp = obj($obj->parent());
+				if($objp->class_id() == CL_DEVELOPMENT_ORDER)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				$bug = get_instance(CL_BUG);
+				$bt = $bug->_get_bt($obj);
+				if(!$bt || $bt->id() != $arr["obj_inst"]->prop("bugtrack"))
 				{
 					continue;
 				}
@@ -190,6 +208,7 @@ class bugtrack_display extends class_base
 									"caption" => $value,
 									"url" => $this->mk_my_orb("change",array(
 										"section" => $bug_doc,
+										"return_url" => get_ru(),
 										"id" => $oid
 									), CL_BUG)
 								));
@@ -212,6 +231,7 @@ class bugtrack_display extends class_base
 									"caption" => $value,
 									"url" => $this->mk_my_orb("change",array(
 										"section" => $order_doc,
+										"return_url" => get_ru(),
 										"id" => $oid
 									), CL_DEVELOPMENT_ORDER)
 								));
@@ -519,7 +539,7 @@ class bugtrack_display extends class_base
 	{
 		$cur = obj($arr["id"]);
 		$type_var = $cur->prop("type_var");
-		if(is_oid($type_var) && $arr["request"]["group"] == "groups")
+		if(is_oid($type_var) && $arr["group"] == "groups")
 		{
 			$ol = new object_list(array(
 				"parent" => $type_var,

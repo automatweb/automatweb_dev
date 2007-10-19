@@ -58,22 +58,61 @@ class bt_devo_impl extends core
 	function _get_dev_orders_tree($arr)
 	{
 		classload("core/icons");
-		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
-			"tree_opts" => array(
-				"type" => TREE_DHTML, 
-				"persist_state" => true,
-				"tree_id" => "bt_devos",
-			),
-			"root_item" => $arr["obj_inst"],
-			"ot" => new object_tree(array(
-				"parent" => $arr["obj_inst"]->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"class_id" => CL_DEVELOPMENT_ORDER_CAT
-			)),
-			"var" => "tf",
-			"icon" => icons::get_icon_url(CL_MENU)
-		));
+		if($arr["obj_inst"]->prop("order_tree_conf"))
+		{
+			$t = &$arr["prop"]["vcl_inst"];
+			$t->start_tree(array(
+				"type" => TREE_DHTML,
+				"has_root" => 1,
+				"tree_id" => "bt_devos_b",
+				"persist_state" => 1,
+				"root_name" => $arr["obj_inst"]->name(),
+				"root_icon" => icons::get_icon_url(CL_MENU),
+				"root_url" => aw_url_change_var(array("tf" => 0))
+			));
+			$ol = new object_list(array(
+				"class_id" => CL_BUG,
+				"parent" => $arr["obj_inst"]->id()
+			));
+			foreach($ol->list as $oid)
+			{
+				$ol2 = new object_list(array(
+					"class_id" => CL_DEVELOPMENT_ORDER,
+					"parent" => $oid
+				));
+				if(count($ol2->list))
+				{
+					$o = obj($oid);
+					$t->add_item(0,array(
+						"id" => $oid,
+						"name" => $o->name(),
+						"iconurl" => icons::get_icon_url(CL_MENU),
+						"url" => aw_url_change_var(array(
+							"tf"=> $oid,
+						))
+					));
+				}
+			}
+		}
+		else
+		{
+			$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+				"tree_opts" => array(
+					"type" => TREE_DHTML, 
+					"persist_state" => true,
+					"tree_id" => "bt_devos",
+				),
+				"root_item" => $arr["obj_inst"],
+				"ot" => new object_tree(array(
+					"parent" => $arr["obj_inst"]->id(),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"class_id" => CL_DEVELOPMENT_ORDER_CAT
+				)),
+				"var" => "tf",
+				"icon" => icons::get_icon_url(CL_MENU)
+			));
+		}
 	}
 
 	function _get_dev_orders_table($arr)

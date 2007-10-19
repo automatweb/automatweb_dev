@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.6 2007/10/17 09:48:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.7 2007/10/19 13:12:43 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -473,15 +473,198 @@ class development_order extends class_base
 		$tb->add_delete_button();
 	}
 
+	function _init_bugs_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t(""),
+		));
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("Id"),
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1
+		));
+		$bugi = get_instance(CL_BUG);
+		$t->define_field(array(
+			"name" => "bug_status",
+			"caption" => t("Staatus"),
+			"sortable" => 1,
+//			"callback" => array(&$this, "show_status"),
+//			"callb_pass_row" => 1,
+			"filter" => $bugi->get_status_list()
+		));
+		$t->define_field(array(
+			"name" => "who",
+			"caption" => t("Kellele"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "bug_priority",
+			"caption" => t("Prioriteet"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"callback" => array(&$this, "show_priority"),
+			"callb_pass_row" => 1,
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+			),
+		));
+		$t->define_field(array(
+			"name" => "bug_severity",
+			"caption" => t("T&otilde;sidus"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"callback" => array(&$this, "show_severity"),
+			"callb_pass_row" => 1,
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+			),
+		));
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "deadline",
+			"caption" => t("T&auml;htaeg"),
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y / H:i"
+		));
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("K"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"callback" => array(&$this,"comment_callback"),
+			"callb_pass_row" => 1,
+		));
+		$t->define_chooser(array(
+			"field" => "id",
+			"name" => "sel",
+		));
+	}
+
 	function _get_bugs_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_bugs_table($t);
 
 		$ol = new object_list(array(
 			"class_id" => CL_BUG,
 			"parent" => $arr["obj_inst"]->id()
 		));
-		$t->table_from_ol($ol,array("name", "created", "createdby", "modifiedby"),CL_BUG);
+		classload("core/icons");
+		$u = get_instance(CL_USER);
+		$us = get_instance("users");
+		$bug_i = get_instance(CL_BUG);
+		$states = $bug_i->get_status_list();
+		$bug_list = $ol->arr();
+		$user_list = array();
+		foreach($bug_list as $bug)
+		{
+			$user_list[] = $bug->createdby();
+		}
+		$u2p = array();
+		if (count($user_list))
+		{
+			$oid_list = array_flip($us->get_oid_for_uid_list($user_list));
+			$c = new connection();
+			$u2p_conns = $c->find(array(
+				"from.class_id" => CL_USER,
+				"from" => array_keys($oid_list),
+				"type" => "RELTYPE_PERSON"
+			));
+			$person_oids = array();
+			foreach($u2p_conns as $con)
+			{
+				$person_oids[] = $con["to"];
+				$u2p[$oid_list[$con["from"]]] = $con["to"];
+			}
+
+			$person_ol = new object_list(array("class_id" => CL_CRM_PERSON, "oid" => $person_oids, "lang_id" => array(), "site_id" => array()));
+			$person_ol->arr();
+		}
+
+		if (!$ol->count())
+		{
+			$comment_ol = new object_list();
+		}
+		else
+		{
+			$comment_ol = new object_list(array(
+				"parent" => $ol->ids(),
+				"class_id" => CL_BUG_COMMENT,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
+		$comments_by_bug = array();
+		foreach($comment_ol->arr() as $comm)
+		{
+			$comments_by_bug[$comm->parent()]++;
+		}
+		foreach($bug_list as $bug)
+		{
+			$crea = $bug->createdby();
+			$p = obj($u2p[$crea]);
+			$nl = html::obj_change_url($bug);
+			$opurl = aw_url_change_var("b_id", $bug->id());
+			if ($params["path"])
+			{
+				$nl = $bug->path_str(array(
+					"to" => $params["bt"]->id(),
+					"path_only" => true
+				))." / ".$nl;
+			}
+
+			$col = "";
+			$dl = $bug->prop("deadline");
+			if ($dl > 100 && time() > $dl)
+			{
+				$col = "#ff0000";
+			}
+			else
+			if ($dl > 100 && date("d.m.Y") == date("d.m.Y", $dl)) // today
+			{
+				$col = "#f3f27e";
+			}
+
+			$t->define_data(array(
+				"id" => $bug->id(),
+				"name" => $nl,
+				"bug_status" => $states[$bug->prop("bug_status")],
+				"who" => $bug->prop_str("who"),
+				"bug_priority" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_priority"),
+				"bug_severity" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_severity"),
+				"createdby" => $p->name(),
+				"created" => $bug->created(),
+				"deadline" => $bug->prop("deadline"),
+				"num_hrs_guess" => $bug->prop("num_hrs_guess"),
+				"id" => $bug->id(),
+				"oid" => $bug->id(),
+				"sort_priority" => $bug_i->get_sort_priority($bug),
+				"icon" => icons::get_icon($bug),
+				"obj" => $bug,
+				"comment_count" => (int)$comments_by_bug[$bug->id()],
+				"comment" => (int)$comments_by_bug[$bug->id()],
+				"col" => $col
+			));
+		}
 	}
 
 	function callback_post_save($arr)

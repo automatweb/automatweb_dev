@@ -77,17 +77,6 @@
             <caption>Tellimuse seadete vorm</caption>
       </property>
       <property>
-            <name>director</name>
-            <table>objects</table>
-            <group>groups</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_DIRECTOR</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>connect</store>
-            <caption>&amp;amp;Uuml;lemus</caption>
-      </property>
-      <property>
             <name>type_var_table</name>
             <table>objects</table>
             <group>groups</group>
@@ -185,11 +174,6 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Tellimuse dokument</caption>
             </ORDER_DOC>
-            <DIRECTOR>
-                  <value>4</value>
-                  <clid>CL_CRM_PROFESSION</clid>
-                  <caption>&amp;amp;Uuml;lemus</caption>
-            </DIRECTOR>
             <BT_TYPE_VAR>
                   <value>5</value>
                   <clid>CL_META</clid>

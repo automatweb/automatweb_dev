@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.88 2007/10/17 09:48:50 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.89 2007/10/19 13:12:43 robert Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -477,7 +477,7 @@ class bug extends class_base
 					"caption" => t("Link"),
 					"url" => obj_link($arr["obj_inst"]->id())
 				));
-				$prop["post_append_text"] = " #".$arr["obj_inst"]->id()." $link ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".$crea;
+				$prop["post_append_text"] = ' <span style="font-size:13px; font-weight:bold;">#'.$arr["obj_inst"]->id()."</span> $link ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".$crea;
 				break;
 
 			case "bug_content":
@@ -1447,6 +1447,9 @@ class bug extends class_base
 		$o->set_prop("bug_app", $arr["obj_inst"]->prop("bug_app"));
 		$o->set_prop("deadline", $arr["obj_inst"]->prop("deadline"));
 		$o->set_prop("prognosis", time());
+
+		$arr["obj_inst"]->set_prop("bug_status", 5);
+		$arr["obj_inst"]->save();
 
 		$u = get_instance(CL_USER);
 		$cur = obj($u->get_current_person());

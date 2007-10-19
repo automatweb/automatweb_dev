@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.108 2007/10/17 09:48:50 robert Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.108 2007/10/17 09:48:50 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.109 2007/10/19 13:12:43 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.109 2007/10/19 13:12:43 robert Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -26,6 +26,8 @@ define("BUG_STATUS_CLOSED", 5);
 	@property bug_by_class_parent type=relpicker reltype=RELTYPE_BUG table=objects field=meta method=serialize
 	@caption Klasside puusse lisatud bugide asukoht
 
+	@property order_tree_conf type=select field=meta method=serialize table=objects
+	@caption Tellimuste puus kuvatakse
 
 @default group=by_default,by_project,by_who,by_class,by_cust,by_monitor
 
@@ -331,7 +333,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@property stat_proj_detail type=table store=no no_caption=1
 	@property stat_proj_detail_b type=table store=no no_caption=1
 
-@groupinfo general_sub caption="&Uuml;ldine" submit=no parent=general
+@groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo settings_people caption="Isikud" submit=no parent=general
 @groupinfo settings_g caption="Muud seaded" parent=general
 @groupinfo unestimated_bugs caption="Ennustamata bugid" parent=general
@@ -485,6 +487,12 @@ class bug_tracker extends class_base
 
 		switch($prop["name"])
 		{
+			case "order_tree_conf":
+				$prop["options"] = array(
+					0 => 'Kategooriad',
+					1 => 'Alambugidega bugid'
+				);
+				break;
 			case "unset_table":
 				$this->_unestimated_table($arr);
 				break;
@@ -1287,7 +1295,7 @@ class bug_tracker extends class_base
 
 		$ol = new object_list(array(
 			"parent" => $arr["parent"],
-			"class_id" => array(CL_BUG, CL_MENU),
+			"class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER),
 			"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
 			"sort_by" => "objects.name"
 		));
@@ -1297,7 +1305,7 @@ class bug_tracker extends class_base
 		$objects = $ol->arr();
 		foreach($objects as $obj_id => $object)
 		{
-			$ol = new object_list(array("parent" => $obj_id, "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
+			$ol = new object_list(array("parent" => $obj_id, "class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
 			$ol_list = $ol->arr();
 			$subtree_count = (count($ol_list) > 0)?" (".count($ol_list).")":"";
 
@@ -1306,11 +1314,18 @@ class bug_tracker extends class_base
 			{
 				$nm = "<b>".$nm."</b>";
 			}
-
+			if($object->class_id()==CL_DEVELOPMENT_ORDER)
+			{
+				$icon_url = icons::get_icon_url(CL_MENU);
+			}
+			else
+			{
+				$icon_url = icons::get_icon_url($object->class_id());
+			}
 			$node_tree->add_item(0 ,array(
 				"id" => $obj_id,
 				"name" => $nm."  (".html::get_change_url($obj_id, array("return_url" => $arr["set_retu"]), t("<span style='font-size: 8px;'>Muuda</span>")).")",
-				"iconurl" => icons::get_icon_url($object->class_id()),
+				"iconurl" => $icon_url,
 				"url" => html::get_change_url($arr["inst_id"], array(
 					"group" => $arr["active_group"],
 					"b_id" => $obj_id,
@@ -1402,7 +1417,6 @@ class bug_tracker extends class_base
 				"parent" => " ",
 			)),
 		));
-
 		if($this->sort_type["name"] == "parent")
 		{
 			$this->generate_bug_tree(array(
@@ -1539,7 +1553,7 @@ class bug_tracker extends class_base
 
 	function generate_bug_tree($arr)
 	{
-		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
+		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
 		$objects = $ol->arr();
 
 		$nm = $this->tree_root_name." (".$ol->count().")";
@@ -1552,7 +1566,6 @@ class bug_tracker extends class_base
 				"name" => $nm,
 				"url" => aw_url_change_var("b_id", null)
 		));
-
 		foreach($objects as $obj_id => $object)
 		{
 			$nm = $object->name();
@@ -1654,7 +1667,10 @@ class bug_tracker extends class_base
 			"name" => "icon",
 			"caption" => t(""),
 		));
-
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("Id"),
+		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
@@ -2063,6 +2079,7 @@ class bug_tracker extends class_base
 			}
 
 			$t->define_data(array(
+				"id" => $bug->id(),
 				"name" => $nl." (".html::href(array(
 					"url" => $opurl,
 					"caption" => t("Sisene")

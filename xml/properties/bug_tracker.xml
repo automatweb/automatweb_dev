@@ -39,6 +39,15 @@
             <caption>Klasside puusse lisatud bugide asukoht</caption>
       </property>
       <property>
+            <name>order_tree_conf</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tellimuste puus kuvatakse</caption>
+      </property>
+      <property>
             <name>bug_tb</name>
             <table>objects</table>
             <group>
@@ -863,7 +872,6 @@
       <groupinfo>
             <general_sub>
                   <caption>&amp;amp;Uuml;ldine</caption>
-                  <submit>no</submit>
                   <parent>general</parent>
             </general_sub>
             <settings_people>
