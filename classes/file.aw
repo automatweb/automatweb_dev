@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.159 2007/10/08 10:25:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.160 2007/10/19 08:01:15 hannes Exp $
 /*
 
 
@@ -460,17 +460,17 @@ class file extends class_base
 				else
 				if (is_array($data["value"]) && $data["value"]["content"] != "")
 				{
+					$file_type = $file_type?$file_type:"text/html";
 					$final_name = $this->generate_file_path(array(
-						"type" => "text/html",
 						"file_name" => $file_name
 					));
 					$fc = fopen($final_name, "w");
 					fwrite($fc, $data["value"]["content"]);
 					fclose($f);
 					$arr["obj_inst"]->set_name($data["value"]["name"]);
-					$arr["obj_inst"]->set_prop("type", $data["value"]["type"]?$data["value"]["type"]:"text/html");
+					$arr["obj_inst"]->set_prop("type", $file_type);
 					$data["value"] = $final_name;
-					$this->file_type = "text/html";
+					$this->file_type = $file_type;
 					if (file_exists($arr["obj_inst"]->prop("file")))
 					{
 						unlink($arr["obj_inst"]->prop("file"));
