@@ -29,7 +29,8 @@ class bt_stat_impl extends core
 			"caption" => t("Summa"),
 			"align" => "center",
 			"sortable" => 1,
-			"type" => "int"
+			"type" => "int",
+			"numeric" => 1
 		));
 	}
 
