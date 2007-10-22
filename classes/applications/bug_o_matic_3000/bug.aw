@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.89 2007/10/19 13:12:43 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.90 2007/10/22 15:42:38 dragut Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -1195,6 +1195,9 @@ class bug extends class_base
 				"name" => "contents",
 				"type" => "textarea",
 				"caption" => t("Kommentaar"),
+				"captionside" => "top",
+				"cols" => "65",
+				"rows" => "5"
 			),
 			array(
 				"name" => "status",
