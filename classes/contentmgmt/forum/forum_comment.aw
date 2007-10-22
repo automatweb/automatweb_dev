@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.23 2007/09/06 13:06:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.24 2007/10/22 07:26:10 voldemar Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -180,6 +180,8 @@ class forum_comment extends class_base
 			$row = $comment->properties();
 			$row["created"] = $comment->created();
 			$row["createdby"] = $comment->createdby();
+			$row["modified"] = $comment->modified();
+			$row["modifiedby"] = $comment->modifiedby();
 			$row["pname"] = $pname;
 			$row["oid"] = $comment->id();
 			$retval[$comment->id()] = $row;

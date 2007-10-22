@@ -27,8 +27,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 @default field=meta
 @default method=serialize
-
-
 		@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
 		@caption Teemade kaust
 		@comment Sellest kaustast v&uuml;etakse foorumi teemad
@@ -1290,12 +1288,32 @@ class forum_v2 extends class_base
 		{
 			foreach($comments as $comment)
 			{
-
 				$cnt++;
 				if (!between($cnt,$from,$to))
 				{
 					continue;
-				};
+				}
+
+				$changed = "";
+				$change_link = "";
+
+				if ($comment["created"] < $comment["modified"])
+				{
+					$changed = $this->parse("CHANGED");
+				}
+
+				if (aw_global_get("uid") === $comment["createdby"])
+				{
+					$url = $this->mk_my_orb("change", array(
+						"id" => $comment["oid"],
+						"return_url" => get_ru(),
+					), "forum_comment");
+					$this->vars(array(
+						"change_url" => $url,
+					));
+					$change_link = $this->parse("CHANGE_LINK");
+				}
+
 				$this->vars(array(
 					"id" => $comment["oid"],
 					"name" => $comment["name"],
@@ -1311,7 +1329,8 @@ class forum_v2 extends class_base
 					"HAS_EMAIL" => "",
 					"HAS_NOT_EMAIL" => "",
 					"IMAGE" => '',
-
+					"CHANGED" => $changed,
+					"CHANGE_LINK" => $change_link,
 				));
 
 				// if there is set an email
@@ -1484,6 +1503,27 @@ class forum_v2 extends class_base
 			));
 		}
 
+		$changed = "";
+		$change_link = "";
+
+		if ($topic_obj->created() < $topic_obj->modified())
+		{
+			$changed = $this->parse("CHANGED");
+		}
+
+		if (aw_global_get("uid") === $topic_obj->createdby())
+		{
+			$url = $this->mk_my_orb("change", array(
+				"id" => $topic_obj->id(),
+				"return_url" => get_ru(),
+			), "forum_topic");
+			$this->vars(array(
+				"change_url" => $url,
+			));
+			$change_link = $this->parse("CHANGE_LINK");
+		}
+
+
 		$this->vars(array(
 			"active_page" => $pager,
 			"name" => $topic_obj->name(),
@@ -1494,6 +1534,8 @@ class forum_v2 extends class_base
 			"topic_image1" => $this->get_image_tag(array("id" => $topic_obj->id())),
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",$path),
+			"CHANGED" => $changed,
+			"CHANGE_LINK" => $change_link,
 		));
 
 		if ($num_pages > 1)
