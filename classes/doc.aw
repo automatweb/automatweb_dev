@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.156 2007/10/06 12:38:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.157 2007/10/22 09:40:03 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -577,6 +577,8 @@ class doc extends class_base
 				$modified = time();
 				list($_date, $_time) = explode(" ", $data["value"]);
 				list($hour, $min) = explode(":", $_time);
+				$hour = (int)$hour;
+				$min = (int)$min;
 
 				$try = explode("/",$_date);
 				if (count($try) < 3)
