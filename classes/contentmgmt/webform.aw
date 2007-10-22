@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.125 2007/08/07 13:56:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.126 2007/10/22 09:14:37 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2411,7 +2411,7 @@ class webform extends class_base
 			$name = "";
 			foreach(safe_array($obj_inst->prop("obj_name")) as $key => $val)
 			{
-				$name .= " ".$arr[$key];
+				$name .= " ".$o->prop_str($key); //$arr[$key];
 			}
 			$o->set_name(trim($name));
 			$o->set_prop("register_id", $register->id());
