@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.24 2007/10/23 09:10:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.25 2007/10/23 09:22:10 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1347,6 +1347,10 @@ class admin_if extends class_base
 
 	function _get_uploader($arr)
 	{
+		if (!$arr["request"]["parent"])
+		{
+			$arr["request"]["parent"] = aw_ini_get("rootmenu");
+		}
 		$_SESSION["fu_parent"] = $arr["request"]["parent"];
 		$this->read_template("flash_uploader.tpl");
 		$this->lc_load("menuedit", "lc_menuedit");
@@ -1363,6 +1367,10 @@ class admin_if extends class_base
 	**/
 	function handle_upload($arr)
 	{
+		if (!$arr["parent"])
+		{
+			$arr["parent"] = aw_ini_get("rootmenu");
+		}
 		if (is_uploaded_file($_FILES["Filedata"]["tmp_name"]))
 		{
 			$fuc = get_instance(CL_FILE_UPLOAD_CONFIG);
