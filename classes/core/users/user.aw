@@ -2123,6 +2123,30 @@ class user extends class_base
 				return false;
 			}
 		}
+
+		// if the user has acl set, then disable the tabs
+		$gl = aw_global_get("gidlist_oid");
+		foreach($gl as $g_oid)
+		{	
+			$o = obj($g_oid);
+			
+			if ($o->prop("type") == 1 || $o->prop("type") == 3)
+			{
+				continue;
+			}
+			if ($o->prop("priority") > $can_adm_max && $o->prop("if_acls_set"))
+			{
+				// all settings except can use admin depend on if_acls_set being true
+				$dyc = $o->prop("editable_settings");
+				$can_adm_max = $o->prop("priority");
+			}
+		}
+
+		if ($dyc && !$dyc[$arr["id"]])
+		{
+			return false;
+		}
+	
 		return true;
 	}
 
