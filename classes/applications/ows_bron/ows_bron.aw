@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.6 2007/10/15 11:58:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.7 2007/10/23 13:46:06 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -1029,19 +1029,46 @@ echo date("d.m.Y H:i:s");*/
 		$this->vars(array(
 			"short_currency" => $this->short_cur_lut[$currency]
 		));
+
+		$fetch_ows_codes = array();
 		foreach($rates as $rate)
 		{
 			if ($rate["IsVisible"] == "false" || $rate["IsAvailableForBooking"] == "false")
 			{
 				continue;
 			}
+			$fetch_ows_codes[] = $rate["OwsRoomTypeCode"];		
+		}
 
+		$room_desc_list = new object_list(array(
+			"class_id" => CL_DOCUMENT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"user4" => $fetch_ows_codes
+		));
+		$code2doc = array();
+		foreach($room_desc_list->arr() as $doc)
+		{
+			$code2doc[$doc->prop("user4")] = $doc;
+		}
+
+		foreach($rates as $rate)
+		{
+			if ($rate["IsVisible"] == "false" || $rate["IsAvailableForBooking"] == "false")
+			{
+				continue;
+			}
+			$doc = $code2doc[$rate["OwsRoomTypeCode"]];
+			if (!$doc)
+			{
+				$doc = obj();
+			}
 			$this->vars(array(
 				"short_note" => $rate["ShortNote"],
 				"Id" => $rate["RateId"],
-				"Name" => $rate["Name"],
+				"Name" => $rate["Title"],
 				"Title" => $rate["Title"],
-				"Note" => $rate["LongNote"],
+				"Note" => $doc->trans_get_val("lead"),//$rate["LongNote"],
 				"Pic" => $rate["PictureUrl"],
 				"Slideshow" => $rate["SlideshowUrl"],
 				"price1_avg" => $rate["AverageDailyRateInCustomCurrency"],
@@ -1246,16 +1273,28 @@ echo date("d.m.Y H:i:s");*/
 
 		$rate = $return['GetRateDetailsResult']["RateDetails"];
 
+		$room_desc_list = new object_list(array(
+			"class_id" => CL_DOCUMENT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"user4" => $rate["OwsRoomTypeCode"]
+		));
+		$doc = $room_desc_list->begin();
+		if (!$doc)
+		{
+			$doc = obj();
+
+		}
 		$this->vars(array(
 			"room_rate" => $rate["AverageDailyRate"],
 			"total_rate" => $rate["Total_price"],
 			"currency" => $currency,
 			"short_currency" => $this->short_cur_lut[$currency],
-			"description" => $rate["LongNote"],
+			"description" => $doc->trans_get_val("content"),//$rate["LongNote"],
 			"cancel_by" => $rate["CancellationDeadline"],
 			"start" => $checkin_date,
 			"room_name" => $rate["Title"],
-			"long_note" => $rate["LongNote"],
+			"long_note" => $doc->trans_get_val("content")//$rate["LongNote"],
 		));
 
 		die($this->parse());
