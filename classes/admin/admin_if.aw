@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.25 2007/10/23 09:22:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.26 2007/10/23 11:56:24 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1247,8 +1247,45 @@ class admin_if extends class_base
 		return  html::get_change_url($o->id(), array("group" => "o", "parent" => isset($arr["parent"]) ? $arr["parent"] : null));
 	}
 
+	/** returns the admin if id
+		@attrib api=1
+	**/
+	function find_admin_if_id()
+	{
+		if (!empty($_SESSION["cur_admin_if"]))
+		{
+			return $_SESSION["cur_admin_if"];
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_ADMIN_IF,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		if ($ol->count())
+		{
+			$o = $ol->begin();
+		}
+		else
+		{
+			$o = obj();
+			$o->set_parent(aw_ini_get("amenustart"));
+			$o->set_class_id(CL_ADMIN_IF);
+			$o->set_name(t("Administreerimisliides"));
+			aw_disable_acl();
+			$o->save();
+			aw_restore_acl();
+		}
+
+		$_SESSION["cur_admin_if"] = $o->id();
+		return $o->id();
+	}
+
 	function callback_mod_tab($arr)
 	{
+		if ($arr["request"]["integrated"] == 1 && $arr["id"] == "o")
+		{
+			return false;
+		}
 		if ($arr["request"]["group"] == "fu" && $arr["id"] == "fu")
 		{
 			return true;

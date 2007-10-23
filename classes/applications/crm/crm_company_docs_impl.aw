@@ -99,6 +99,17 @@ class crm_company_docs_impl extends class_base
 				'action' => 'submit_paste_docs',
 			));
 		}
+
+		$tb->add_separator();
+
+		$inst = get_instance(CL_ADMIN_IF);
+		$id = $inst->find_admin_if_id();
+		$tb->add_button(array(
+			"name" => "import",
+			"tooltip" => t("Impordi faile"),
+			"url" => $this->mk_my_orb("change", array("integrated" => 1, "id" => $id, "group" => "fu", "parent" => is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $fld->id(), "return_url" => get_ru()), CL_ADMIN_IF),
+			"img" => "import.gif",
+		));
 	}
 
 	/**
