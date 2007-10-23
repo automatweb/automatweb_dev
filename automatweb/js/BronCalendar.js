@@ -123,7 +123,7 @@ function drawBrons()
 		document.getElementById(strId).parentNode.firstChild.style.background = "red";
 		if (navigator.userAgent.indexOf("MSIE") > 0)
 		{
-			if (""+document.getElementById(strId).childNodes[0] != "[Object]")
+			if (""+document.getElementById(strId).childNodes[0] != "[Object]" && ""+document.getElementById(strId).childNodes[0] != "[object]")
 			{
 				continue;
 			}
