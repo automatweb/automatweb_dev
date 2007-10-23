@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.63 2007/10/18 07:50:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.64 2007/10/23 11:27:09 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -676,7 +676,8 @@ class shop_order extends class_base
 			}
 			$i_o = obj($iid);
 			$i_inst = $i_o->instance();
-			$price = $i_inst->get_price($i_o);
+			$price = $i_inst->get_calc_price($i_o);
+
 			$oi->connect(array(
 				"to" => $iid,
 				"reltype" => "RELTYPE_PRODUCT",
