@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.34 2007/10/11 13:48:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.35 2007/10/23 11:29:43 markop Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -1787,7 +1787,6 @@ class messenger_v2 extends class_base
 
 	function _get_identity_list($arr)
 	{
-echo "id = $arr[id] <br>";
 		if (!$this->can("view", $arr["id"]))
 		{
 			return array();
