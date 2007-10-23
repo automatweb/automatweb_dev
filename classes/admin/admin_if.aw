@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.23 2007/10/23 08:49:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.24 2007/10/23 09:10:05 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1349,7 +1349,7 @@ class admin_if extends class_base
 	{
 		$_SESSION["fu_parent"] = $arr["request"]["parent"];
 		$this->read_template("flash_uploader.tpl");
-		this->lc_load("menuedit", "lc_menuedit");
+		$this->lc_load("menuedit", "lc_menuedit");
 		$this->vars(array(
 			"uploadurl" => urlencode($this->mk_my_orb("handle_upload", array("parent" => $arr["request"]["parent"]))),
 			"redir_to" =>  urlencode(get_ru()),
