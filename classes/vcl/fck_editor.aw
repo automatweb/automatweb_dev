@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.15 2007/10/10 10:55:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.16 2007/10/23 13:14:53 markop Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor extends core
@@ -45,7 +45,7 @@ class fck_editor extends core
 	function draw_editor($arr)
 	{
 		$retval = '
-<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/fckeditor243/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/fckeditor/fckeditor.js"></script>
 <script type="text/javascript">
 <!--
 
