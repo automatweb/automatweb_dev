@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.68 2007/10/08 10:25:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.69 2007/10/24 14:37:32 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -1051,7 +1051,6 @@ class bank_payment extends class_base
 			$arr = $this->_add_object_data($payment , $arr);
 			$payment_data = $payment->meta("bank");
 		}
-		
 		if(!$arr["service"]) $arr["service"] = "1002";
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
@@ -1279,6 +1278,13 @@ class bank_payment extends class_base
 	function seb($args)
 	{
 		extract($args);
+		$link = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
+		if($test)
+		{
+			 $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
+			$sender_id = "testvpos";
+		}
+
 		$VK_message = sprintf("%03d",strlen($service)).$service;
 		$VK_message.= sprintf("%03d",strlen($version)).$version;
 		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
@@ -1298,12 +1304,6 @@ class bank_payment extends class_base
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode($VK_signature);
 		$http = get_instance("protocols/file/http");
-		$link = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
-		if($test)
-		{
-			 $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
-			$sender_id = "testvpos";
-		}
 		$handler = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
@@ -1523,7 +1523,6 @@ class bank_payment extends class_base
 	function credit_card($args)
 	{
 		extract($args);
-		
 		//test:
 		$action="$service";
 		$ver="$version";
@@ -1580,6 +1579,7 @@ class bank_payment extends class_base
 		);//		if(aw_global_get("uid") == "struktuur")
 		//{arr($params); die();
 		//}
+
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	}
 

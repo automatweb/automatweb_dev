@@ -1,5 +1,15 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>bank_payment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BANK_PAYMENT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pangamakse objekt</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OWS_BRON</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +17,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <BANK_PAYMENT>
+                  <value>1</value>
+                  <clid>CL_BANK_PAYMENT</clid>
+                  <caption>Pangamakse</caption>
+            </BANK_PAYMENT>
+      </reltypes>
 </properties>
 

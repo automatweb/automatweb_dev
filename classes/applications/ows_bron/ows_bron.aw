@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.8 2007/10/24 08:09:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.9 2007/10/24 14:37:28 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -7,6 +7,12 @@
 
 @default table=objects
 @default group=general
+
+@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT field=meta method=serialize
+@caption Pangamakse objekt
+
+@reltype BANK_PAYMENT value=1 clid=CL_BANK_PAYMENT
+@caption Pangamakse
 
 */
 
@@ -163,6 +169,7 @@ class ows_bron extends class_base
 		$parameters["promotionCode"] = $promo;
 		$parameters["webLanguageId"] = $lang;
 		$parameters["customerId"] = 0;
+$parameters["ow_bron"] = $arr["ow_bron"];
 		if($currency)
 		{
 			$parameters["customCurrencyCode"] = $currency;
@@ -244,7 +251,8 @@ class ows_bron extends class_base
 				"section" => aw_global_get("section"),
 				"no_reforb" => 1,
 				"set_currency" => $currency,
-				"r_url" => aw_url_change_var("error", null, get_ru())
+				"r_url" => aw_url_change_var("error", null, get_ru()),
+				"ow_bron" => $arr["ow_bron"],
 			)),
 			"prev_url" => $this->mk_my_orb("show_available_rooms", array(
 				"i_location" => $arr["i_location"],
@@ -369,6 +377,7 @@ class ows_bron extends class_base
 		}
 
 		$parameters = array();
+		$parameters["ow_bron"] = $arr["ow_bron"];
 		$parameters["hotelId"] = $location;
 		$parameters["rateId"] = $rateid;
 		$parameters["arrivalDate"] = $checkin;
@@ -403,6 +412,7 @@ class ows_bron extends class_base
 		$parameters = array();
 		$parameters["hotelId"] = $location;
 		$parameters["webLanguageId"] = $lang;
+		$parameters["ow_bron"] = $arr["ow_bron"];
 		$return = $this->do_orb_method_call(array(
 			"action" => "GetHotelDetails",
 			"class" => "http://markus.ee/RevalServices/Booking/",
@@ -421,7 +431,7 @@ class ows_bron extends class_base
 		$bp = get_instance(CL_BANK_PAYMENT);
 
 		$o = obj();
-		/*$o->set_parent(aw_ini_get("ows.bron_folder"));
+		$o->set_parent(aw_ini_get("ows.bron_folder"));
 		$o->set_class_id(CL_OWS_RESERVATION);
 		$o->set_name(sprintf(t("OWS Bron %s %s @ %s"), 
 			$arr["ct"]["firstname"], $arr["ct"]["lastname"], date("d.m.Y H:i")
@@ -454,9 +464,13 @@ class ows_bron extends class_base
 		$o->set_prop("is_allergic", $arr["is_allergic"]);
 		$o->set_prop("is_handicapped", $arr["is_handicapped"]);
 		$o->set_meta("bron_data", $arr);
-		$o->save();*/
+		$o->save();
 
-
+		if(is_oid($arr["ow_bron"]) && $this->can("view" , $arr["ow_bron"]))
+		{
+			$ow_bron = obj($arr["ow_bron"]);
+			$bpo = $ow_bron->prop("bank_payment");
+		}
 		$this->vars(array(
 			"room_type" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Name"]),
 			"eur_url" => aw_url_change_var("set_currency", "EUR"),
@@ -515,14 +529,15 @@ class ows_bron extends class_base
 			"display_main" => $arr["display_confirm"] ? "none" : "display",
 			"act_main" => $arr["display_confirm"] ? "" : "class=\"active\"",
 			"accept_terms" => checked($arr["accept_terms"]),
+			
 			"bank_forms" => $bp->bank_forms(array(
-				"id" => 12068,
+				"id" => $bpo,
 				"reference_nr" => $o->id(),
 				"amount" => $rate["TotalPriceInEur"]*16.0,
-				"expl" => "Reval booking confirmation ".$o->id(),
+				"expl" => $o->id(),
 				"lang" => $lc
 			)),
-			"gotoccpayment" => aw_url_change_var("aw_rvs_id", $o->id(), aw_url_change_var("action", "go_to_cc_payment")),
+			"gotoccpayment" => aw_url_change_var("aw_rvs_id", $o->id(), aw_url_change_var("action", "go_to_cc_payment", aw_url_change_var("bpo" , $bpo, aw_url_change_var("reservation" ,  $o->id())))),
 		));
 		if ($_GET["error"] > 0)
 		{
@@ -553,7 +568,8 @@ class ows_bron extends class_base
 				"no_reforb" => 1,
 				"set_currency" => $arr["set_currency"],
 				"aw_rvs_id" => $o->id(),
-				"r_url" => get_ru()
+				"r_url" => get_ru(),
+				"ow_bron" => $arr["ow_bron"],
 			))
 		));
 
@@ -630,6 +646,7 @@ class ows_bron extends class_base
 			$number = eregi_replace("-+", "", $number); 
 
 			$params = array(
+	"ow_bron" => $arr["ow_bron"],
    			"hotelId" => $arr["i_location"],
       	"rateId" => $arr["sel_room_type"],
       	"arrivalDate" => $checkin,
@@ -656,7 +673,7 @@ class ows_bron extends class_base
       	"guestPhone" => $arr["ct"]["phone"],
       	"guestEmail" => $arr["ct"]["email"],
       	"roomSmokingPreferenceId" => (bool)$arr["smoking"]." ",
-      	"floorPreferenceId" => $arr["low_floor"],
+      	"floorPreferenceId" => (int)$arr["low_floor"],
       	"isAllergic" => (bool)$arr["is_allergic"],
       	"isHandicapped" => (bool)$arr["is_handicapped"],
       	"guestComments" => urlencode($arr["bron_comment"])." ",
@@ -675,6 +692,11 @@ class ows_bron extends class_base
 				"method" => "soap",
 				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 			));
+
+			if ($return["MakeBookingResult"]["ResultCode"] == "OwsError" && $return["MakeBookingResult"]["ResultMessage"] == "INVALID CREDIT CARD")
+			{
+				return aw_url_change_var("error", 5, $arr["r_url"]);
+			}
 	
 			if ($return["MakeBookingResult"]["ResultCode"] != "Success")
 			{
@@ -799,6 +821,7 @@ class ows_bron extends class_base
 		$parameters["promotionCode"] = $o->prop("promo_code");
 		$parameters["webLanguageId"] = $this->get_web_language_id($lc);
 		$parameters["customerId"] = 0;
+		$parameters["ow_bron"] = $arr["ow_bron"];
 		if($currency)
 		{
 			$parameters["customCurrencyCode"] = $o->prop("currency");
@@ -921,6 +944,7 @@ class ows_bron extends class_base
 		$parameters = array();
 		$parameters["hotelId"] = $location;
 		$parameters["webLanguageId"] = $lang;
+		$parameters["ow_bron"] = $arr["ow_bron"];
 enter_function("ws:GetHotelDetails");
 		$return = $this->do_orb_method_call(array(
 			"action" => "GetHotelDetails",
@@ -968,7 +992,7 @@ exit_function("ws:GetHotelDetails");
 		$parameters["promotionCode"] = $promo;
 		$parameters["webLanguageId"] = $lang;
 		$parameters["customerId"] = 0;
-
+		$parameters["ow_bron"] = $arr["ow_bron"];
 		if($currency)
 		{
 			$parameters["customCurrencyCode"] = $currency;
@@ -1032,7 +1056,7 @@ echo date("d.m.Y H:i:s");*/
 			$doc = $code2doc[$rate["OwsRoomTypeCode"]];
 			if (!$doc)
 			{
-				$doc = obj();
+				continue;
 			}
 
 			$c1 = $c2 = null;
@@ -1062,7 +1086,7 @@ echo date("d.m.Y H:i:s");*/
 
 			$lead = preg_replace("/#pict(\d+?)(v|k|p|)#/i","",$doc->trans_get_val("lead"));
 			$lead = preg_replace("/#p(\d+?)(v|k|p|)#/i","",$lead);
-
+//echo "room = ".$rate["Title"]." doc = ".dbg::dump($doc)." <br>";
 			$this->vars(array(
 				"big_img_1_url" => $i1b_url,
 				"big_img_2_url" => $i2b_url,
@@ -1075,8 +1099,8 @@ echo date("d.m.Y H:i:s");*/
 				"Note" => $lead,//$rate["LongNote"],
 				"Pic" => $rate["PictureUrl"],
 				"Slideshow" => $rate["SlideshowUrl"],
-				"price1_avg" => $rate["AverageDailyRateInCustomCurrency"],
-				"price1_total" => $rate["TotalPriceInCustomCurrency"],
+				"price1_avg" => number_format($rate["AverageDailyRateInCustomCurrency"], 2),
+				"price1_total" => number_format($rate["TotalPriceInCustomCurrency"], 2),
 				"roominfo_url" => $this->mk_my_orb("get_roominfo", array(
 					"location" => $location,
 					"rateid" => $rate["RateId"],
@@ -1088,7 +1112,8 @@ echo date("d.m.Y H:i:s");*/
 					"i_child" => $childcount[1],
 					"promo" => $promo,
 					"lang" => $lang,
-					"currency" => $currency
+					"currency" => $currency,
+"ow_bron" => $arr["ow_bron"],
 				), "ows_bron", false, true),
 				"roomdesc_url" => $this->mk_my_orb("get_room_desc", array(
 					"location" => $location,
@@ -1101,7 +1126,8 @@ echo date("d.m.Y H:i:s");*/
 					"i_child" => $childcount[1],
 					"promo" => $promo,
 					"lang" => $lang,
-					"currency" => $currency
+					"currency" => $currency,
+"ow_bron" => $arr["ow_bron"],
 				), "ows_bron", false, true)
 			));
 			$tmp .= $this->parse("RateList");
@@ -1128,7 +1154,8 @@ echo date("d.m.Y H:i:s");*/
 				array(
 					"section" => aw_global_get("section"),
 					"no_reforb" => 1,
-					"r_url" => $arr["r_url"]
+					"r_url" => $arr["r_url"],
+					"ow_bron" => $arr["ow_bron"],
 				)
 			),
 			"reforb2" => $this->mk_reforb(
@@ -1143,7 +1170,8 @@ echo date("d.m.Y H:i:s");*/
 					"i_adults" => $adultcount[1],
 					"i_children" => $childcount[1],
 					"i_rooms" => $arr["i_rooms"],
-					"i_promo" => $arr["i_promo"]
+					"i_promo" => $arr["i_promo"],
+					"ow_bron" => $arr["ow_bron"],
 				)
 			)
 		));
@@ -1187,7 +1215,8 @@ echo date("d.m.Y H:i:s");*/
 				array(
 					"section" => aw_global_get("section"),
 					"no_reforb" => 1,
-					"r_url" => get_ru()
+					"r_url" => get_ru(),
+					"ow_bron" => $arr["id"],
 				)
 			)
 		));
@@ -1233,7 +1262,7 @@ echo date("d.m.Y H:i:s");*/
 
 		$rate = $return['GetRateDetailsResult']["RateDetails"];
 		$this->vars(array(
-			"room_rate" => $rate["AverageDailyRate"],
+			"room_rate" => number_format($rate["AverageDailyRate"], 2),
 			"total_rate" => $rate["TotalPrice"],
 			"currency" => $currency,
 			"description" => $rate["LongNote"],
@@ -1290,7 +1319,7 @@ echo date("d.m.Y H:i:s");*/
 
 		}
 		$this->vars(array(
-			"room_rate" => $rate["AverageDailyRate"],
+			"room_rate" => number_format($rate["AverageDailyRate"], 2),
 			"total_rate" => $rate["Total_price"],
 			"currency" => $currency,
 			"short_currency" => $this->short_cur_lut[$currency],
@@ -1360,11 +1389,11 @@ echo date("d.m.Y H:i:s");*/
 
 			$bp = get_instance(CL_BANK_PAYMENT);
 			die($bp->do_payment(array(
-				"payment_id" => 12068,
+				"payment_id" => $arr["bpo"],
 				"bank_id" => "credit_card",
 				"amount" => $rate["TotalPriceInEur"]*16.0,
-				"reference_nr" => 666,
-				"expl" => "Booking confirmation 666",
+				"reference_nr" => $arr["reservation"],
+				"expl" => $arr["reservation"],
 			)));
 	}
 
