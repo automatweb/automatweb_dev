@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.391 2007/10/09 06:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.392 2007/10/24 13:16:20 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -552,7 +552,8 @@ class menuedit extends aw_template
 					// do the same check for the translated aliases
 					$this->quote(&$last);
 					$lang_id = aw_global_get("ct_lang_id");
-					$this->db_query("SELECT menu_id FROM aw_alias_trans WHERE alias = '$last' AND lang_id = $lang_id");
+					$this->quote(&$lang_id);
+					$this->db_query("SELECT menu_id FROM aw_alias_trans WHERE alias = '$last' AND lang_id = '$lang_id'");
 					while ($row = $this->db_next())
 					{
 						if (!$this->can("view", $row["menu_id"]))

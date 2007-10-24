@@ -602,11 +602,11 @@ echo "fn = $fn <br>";
 	function get_simple_count_for_obj($oid, $from = null, $to = null)
 	{
 		$whb = array();
-		if ($from !== null)
+		if ($from !== null && $from > -1)
 		{
 			$whb[] = " tm >= $from ";
 		}
-		if ($to !== null)
+		if ($to !== null && $to > -1)
 		{
 			$whb[] = " tm <= $to ";
 		}
