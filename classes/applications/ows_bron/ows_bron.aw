@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.7 2007/10/23 13:46:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.8 2007/10/24 08:09:25 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -20,7 +20,8 @@ class ows_bron extends class_base
 		));
 
 		$this->hotel_list = array(
-			"27" => "Reval Hotel Ol&uuml;mpia",						"37" => "Reval Hotel Central",
+			"27" => "Reval Hotel Ol&uuml;mpia",
+			"37" => "Reval Hotel Central",
 			"39" => "Reval Park Hotel & Casino",
 			"38" => "Reval Inn Tallinn",
 			"40" => "Reval Hotel Latvija",
@@ -420,7 +421,7 @@ class ows_bron extends class_base
 		$bp = get_instance(CL_BANK_PAYMENT);
 
 		$o = obj();
-		$o->set_parent(aw_ini_get("ows.bron_folder"));
+		/*$o->set_parent(aw_ini_get("ows.bron_folder"));
 		$o->set_class_id(CL_OWS_RESERVATION);
 		$o->set_name(sprintf(t("OWS Bron %s %s @ %s"), 
 			$arr["ct"]["firstname"], $arr["ct"]["lastname"], date("d.m.Y H:i")
@@ -453,7 +454,7 @@ class ows_bron extends class_base
 		$o->set_prop("is_allergic", $arr["is_allergic"]);
 		$o->set_prop("is_handicapped", $arr["is_handicapped"]);
 		$o->set_meta("bron_data", $arr);
-		$o->save();
+		$o->save();*/
 
 
 		$this->vars(array(
@@ -624,6 +625,10 @@ class ows_bron extends class_base
 			$checkout = $checkoutdata2[2].'-'.$checkoutdata2[1].'-'.$checkoutdata2[0].'T23:59:00';
 			$checkout_ts = mktime(0,0,0,$checkoutdata2[1], $checkoutdata2[0], $checkoutdata2[2]);
 
+			$number = trim($arr["confirm_card_number"]); 
+			$number = eregi_replace("[[:space:]]+", "", $number); 
+			$number = eregi_replace("-+", "", $number); 
+
 			$params = array(
    			"hotelId" => $arr["i_location"],
       	"rateId" => $arr["sel_room_type"],
@@ -658,7 +663,7 @@ class ows_bron extends class_base
       	"guaranteeType" => "CreditCard",
       	"guaranteeCreditCardType" => $arr["confirm_card_type"],
       	"guaranteeCreditCardHolderName" => $arr["confirm_card_name"],
-				"guaranteeCreditCardNumber" => $arr["confirm_card_number"],
+				"guaranteeCreditCardNumber" => $number,
       	"guaranteeCreditCardExpirationDate" => $exp_date,
       	"paymentType" => "NoPayment"
 			);
@@ -678,7 +683,14 @@ class ows_bron extends class_base
 			//echo "HOIATUS!!! Broneeringud kirjutatakse live systeemi, niiet kindlasti tuleb need 2ra tyhistada!!!! <br><br><br>";
 			//echo("makebooking with params: ".dbg::dump($params)." retval = ".dbg::dump($return));
 
-			$o = obj($arr["aw_rvs_id"]);
+			if (is_oid($arr["aw_rvs_id"]))
+			{
+				$o = obj($arr["aw_rvs_id"]);
+			}
+			else
+			{
+				$o = obj();
+			}
 			$o->set_parent(aw_ini_get("ows.bron_folder"));
 			$o->set_class_id(CL_OWS_RESERVATION);
 			$o->set_name(sprintf(t("OWS Bron %s %s @ %s"), 
@@ -926,58 +938,17 @@ exit_function("ws:GetHotelDetails");
 		}
 
 		$hotel = $hotel["HotelDetails"];
-		$amenities = array();
-		if($hotel["IsBusinessCenter"])
-		{
-			$amenities[] = t('&Auml;rikeskus');
-		}
-		if($hotel["IsConferenceRoom"])
-		{
-			$amenities[] = t('Konverentsisaal');
-		}
-		if($hotel["IsGym"])
-		{
-			$amenities[] = t('J&otilde;usaal');
-		}
-		if($hotel["IsInternetAccess"])
-		{
-			$amenities[] = t('Tasuta Internet');
-		}
-		if($hotel["IsParking"])
-		{
-			$amenities[] = t('Parkla');
-		}
-		if($hotel["IsPets"])
-		{
-			$amenities[] = t('Lemmikloomad lubatud');
-		}
-		if($hotel["IsRestaurant"])
-		{
-			$amenities[] = t('Restoran');
-		}
-		if($hotel["IsRoomService"])
-		{
-			$amenities[] = t('Toateenindus');
-		}
-		if($hotel["IsSwimmingPool"])
-		{
-			$amenities[] = t('Bassein');
-		}
-		if($hotel["IsWheelchair"])
-		{
-			$amenities[] = t('Ratastooliga ligip&auml;&auml;setav');
-		}
-		$tmp = '';
+		$amenities = array("IsBusinessCenter","IsConferenceRoom","IsGym","IsInternetAccess","IsParking","IsPets","IsRestaurant","IsRoomService","IsSwimmingPool","IsWheelchair");
 		foreach($amenities as $amenity)
 		{
-			$this->vars(array(
-				"Item" => $amenity
-			));
-			$tmp .= $this->parse("HotelAmenities");
+			if($hotel[$amenity] == "true")
+			{
+				$this->vars(array(
+					$amenity => $this->parse($amenity)
+				));
+			}
 		}
-		$this->vars(array(
-			"HotelAmenities" => $tmp
-		));
+
 		$this->vars(array(
 			"HotelName" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $hotel["HotelName"]),
 			"HotelDesc" => iconv("utf-8", aw_global_get("charset")."//IGNORE",$hotel["ShortNote"]),
@@ -1063,12 +1034,45 @@ echo date("d.m.Y H:i:s");*/
 			{
 				$doc = obj();
 			}
+
+			$c1 = $c2 = null;
+			if (is_oid($doc->id()))
+			{
+				$conns = $doc->connections_from(array("to.class_id" => CL_IMAGE));
+				reset($conns);
+				list(,$c1) = each($conns);
+				list(,$c2) = each($conns);
+			}
+
+			$i1b_url = $i1s_url = $i2b_url = $i2s_url = "";
+			if ($c1)
+			{
+				$i1_inst = get_instance(CL_IMAGE);
+				$i1_data = $i1_inst->get_image_by_id($c1->prop("to"));
+				$i1b_url = $i1_data["big_url"];
+				$i1s_url = $i1_data["url"];
+			}
+			if ($c2)
+			{
+				$i2_inst = get_instance(CL_IMAGE);
+				$i2_data = $i2_inst->get_image_by_id($c2->prop("to"));
+				$i2b_url = $i2_data["big_url"];
+				$i2s_url = $i2_data["url"];
+			}
+
+			$lead = preg_replace("/#pict(\d+?)(v|k|p|)#/i","",$doc->trans_get_val("lead"));
+			$lead = preg_replace("/#p(\d+?)(v|k|p|)#/i","",$lead);
+
 			$this->vars(array(
+				"big_img_1_url" => $i1b_url,
+				"big_img_2_url" => $i2b_url,
+				"small_img_1_url" => $i1s_url,
+				"small_img_2_url" => $i2s_url,
 				"short_note" => $rate["ShortNote"],
 				"Id" => $rate["RateId"],
 				"Name" => $rate["Title"],
 				"Title" => $rate["Title"],
-				"Note" => $doc->trans_get_val("lead"),//$rate["LongNote"],
+				"Note" => $lead,//$rate["LongNote"],
 				"Pic" => $rate["PictureUrl"],
 				"Slideshow" => $rate["SlideshowUrl"],
 				"price1_avg" => $rate["AverageDailyRateInCustomCurrency"],
