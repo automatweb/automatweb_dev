@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.69 2007/10/24 14:37:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.70 2007/10/24 14:50:33 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -128,7 +128,8 @@ class bank_payment extends class_base
 	var $bank_link = array(
 		"hansapank"		=> "https://www.hanza.net/cgi-bin/hanza/pangalink.jsp",
 		"seb"			=> "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r",
-		"sampopank"		=> "https://www.sampo.ee/cgi-bin/pizza",
+		"sampopank"		=> "https://www2.sampopank.ee/ibank/pizza/pizza",
+		//"sampopank"		=> "https://www.sampo.ee/cgi-bin/pizza",
 		"krediidipank"		=> "https://i-pank.krediidipank.ee/teller/maksa",
 		//"nordeapank"		=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
 		"nordeapank"		=> "https://netbank.nordea.com/pnbepay/epay.jsp",
@@ -676,9 +677,35 @@ class bank_payment extends class_base
 			case "find_one":
 				$prop["value"] = 1;
 				break;
+                       case "find_date_start":
+                               if(isset($_SESSION["bank_payment"]["find_date_start"]))
+                               {
+                                       $prop["value"] = $_SESSION["bank_payment"]["find_date_start"];
+                               }
+                               else
+                               {
+                                       $prop["value"] = array(
+                                               "day" => date("d" , (time()-(31 * 24 * 3600))),
+                                               "month" => date("m" , (time()-(31 * 24 * 3600))),
+                                               "year" => date("Y" , (time()-(31 * 24 * 3600))),
+                                       );
+                               }
+                               break;
+                       case "find_date_end":
+                               if(isset($_SESSION["bank_payment"]["find_date_end"]))
+                               {
+                                       $prop["value"] = $_SESSION["bank_payment"]["find_date_end"];
+                               }
+                               else
+                               {
+                                       $prop["value"] = array(
+                                               "day" => date("d" , time()) + 1,
+                                               "month" => date("m" , time()),
+                                               "year" => date("Y" , time()),
+                                       );
+                               }
+                               break;
 			case "find_name":
-			case "find_date_start":
-			case "find_date_end":
 			case "find_ref":
 				if($search_data[$prop["name"]])
 				{

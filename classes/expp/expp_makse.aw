@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.7 2006/05/16 09:22:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.8 2007/10/24 14:55:24 markop Exp $
 // expp_makse.aw - Expp makse 
 /*
 
@@ -493,7 +493,7 @@ var $pangad = array(
 			'image'	=> "/img/logo_sampo.gif",
 			'alt'		=> $lc_expp['LC_EXPP_ALT_SAMPO'],
 			'pank'	=> $lc_expp['LC_EXPP_PANK_SAMPO'],
-			'link'	=> "https://www.sampo.ee/cgi-bin/pizza",
+			'link'	=> "https://www2.sampopank.ee/ibank/pizza/pizza",
 		));
 		return $this->parse();
 	}
