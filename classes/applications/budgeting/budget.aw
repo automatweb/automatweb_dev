@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.5 2007/09/14 12:38:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.6 2007/10/24 12:27:01 kristo Exp $
 // budget.aw - Eelarve 
 /*
 
@@ -16,7 +16,17 @@
 	@property scenario type=relpicker reltype=RELTYPE_SCENARIO field=aw_scenario
 	@caption Stsenaarium
 
-@default group=m1,m2
+	@property start type=date_select field=aw_date_start default=-1
+	@caption Alates
+
+	@property end type=date_select field=aw_date_end default=-1
+	@caption Kuni
+
+	@property owner type=relpicker reltype=RELTYPE_OWNER field=aw_owner 
+	@caption Vastutaja
+
+
+@default group=m1,m2,m3
 
 	@property total type=textbox size=5
 	@caption Kogusumma
@@ -29,7 +39,11 @@
 @groupinfo m caption="Raha"
 	@groupinfo m1 caption="Voovaade" parent=m
 	@groupinfo m2 caption="Grupivaade" parent=m
+	@groupinfo m3 caption="T&uuml;&uuml;bivaade" parent=m
 
+@groupinfo ex caption="V&auml;listamine"
+
+	@property ex_table type=table store=no no_caption=1 group=ex
 
 @reltype PROJECT value=1 clid=CL_PROJECT
 @caption Projekt
@@ -37,6 +51,8 @@
 @reltype SCENARIO value=2 clid=CL_BUDGETING_SCENARIO
 @caption Stsenaarium
 
+@reltype OWNER value=3 clid=CL_CRM_PERSON
+@caption Vastutaja
 */
 
 class budget extends class_base
@@ -93,6 +109,9 @@ class budget extends class_base
 				break;
 
 			case "aw_scenario":
+			case "aw_date_start":
+			case "aw_date_end":
+			case "aw_owner":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -120,7 +139,7 @@ class budget extends class_base
 		$t->define_field(array(
 			"name" => "tax",
 			"caption" => t("Maks"),
-			"align" => "center",
+			"align" => "left",
 			"sortable" => 1,
 			"numeric" => 1
 		));
@@ -171,8 +190,14 @@ class budget extends class_base
 		$above = $m->get_all_taxes_above_project(obj($arr["obj_inst"]->prop("project")));
 		$amt = $arr["obj_inst"]->prop("total");
 		$p = $arr["obj_inst"]->meta("mod_tax_pct");
+		$clss = aw_ini_get("classes");
+		$ex = $arr["obj_inst"]->meta("ex");
 		foreach($above as $tax)
 		{
+			if ($ex[$tax->id()] == 1)
+			{
+				continue;
+			}
 			$t_pct = $tax->prop("amount");
 			if (!empty($p[$tax->id()]))
 			{
@@ -192,7 +217,7 @@ class budget extends class_base
 			}
 			$t->define_data(array(
 				"tax_grp" => $gn,
-				"tax" => html::obj_change_url($tax),
+				"tax" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($tax),
 				"tax_pct" => $tax->prop("amount"),
 				"tot_amt" => number_format($tax_amt, 2),
 				"forward" => number_format($amt, 2),
@@ -202,6 +227,7 @@ class budget extends class_base
 					"size" => 5
 				)).$add,
 				"tax_pri" => $tax->prop("pri"),
+				"acct_type" => parse_obj_name($clss[$tax->prop("to_acct.class_id")]["name"]),
 				"rown" => ++$rown
 			));
 		}
@@ -215,14 +241,19 @@ class budget extends class_base
 		// divide the rest of the money between tasks until it runs uut
 		foreach($ol->arr() as $task)
 		{
+			if ($ex[$task->id()] == 1)
+			{
+				continue;
+			}
 			$tax_amt = $task->prop("num_hrs_guess") * $task->prop("hr_price");
 			$amt -= $tax_amt;
 			$t->define_data(array(
 				"tax_grp" => t("Muud maksud"),
-				"tax" => html::obj_change_url($task),
+				"tax" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($task),
 				"tax_pct" => "",
 				"tot_amt" => number_format($tax_amt, 2),
 				"forward" => number_format($amt, 2),
+				"acct_type" => parse_obj_name($clss[$task->class_id()]["name"]),
 				"rown" => ++$rown
 			));
 		}
@@ -230,6 +261,11 @@ class budget extends class_base
 		if ($arr["request"]["group"] == "m2")
 		{
 			$t->set_rgroupby(array("tax_grp" => "tax_grp"));
+		}
+		else
+		if ($arr["request"]["group"] == "m3")
+		{
+			$t->set_rgroupby(array("acct_type" => "acct_type"));
 		}
 		$t->set_default_sortby("rown");
 		$t->sort_by();
@@ -242,8 +278,13 @@ class budget extends class_base
 		$above = $m->get_all_taxes_above_project(obj($arr["obj_inst"]->prop("project")));
 		$amt = $arr["obj_inst"]->prop("total");
 		$p = $arr["obj_inst"]->meta("mod_tax_pct");
+		$ex = $arr["obj_inst"]->meta("ex");
 		foreach($above as $tax)
 		{
+			if ($ex[$tax->id()] == 1)
+			{
+				continue;
+			}
 			$t_pct = $tax->prop("amount");
 			if (!empty($p[$tax->id()]))
 			{
@@ -262,10 +303,58 @@ class budget extends class_base
 		// divide the rest of the money between tasks until it runs uut
 		foreach($ol->arr() as $task)
 		{
+			if ($ex[$task->id()] == 1)
+			{
+				continue;
+			}
 			$tax_amt = $task->prop("num_hrs_guess") * $task->prop("hr_price");
 			$amt -= $tax_amt;
 		}
 		$arr["prop"]["value"] = number_format($amt, 2);
+	}
+
+	function _get_ex_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$m = get_instance("applications/budgeting/budgeting_model");
+		$ol = new object_list(array(
+			"class_id" => array(CL_TASK),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_TASK.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		foreach($m->get_all_taxes_above_project(obj($arr["obj_inst"]->prop("project"))) as $tax)
+		{
+			$ol->add($tax);
+		}
+		
+		$t->table_from_ol(
+			$ol,
+			array("name", "comment", "to_acct", "amount", "pri", "max_deviation_minus", "max_deviation_plus", "tax_grp"),
+			CL_BUDGETING_TAX
+		);
+		$t->remove_chooser();
+
+		$t->define_field(array(
+			"name" => "ex",
+			"caption" => t("V&auml;lista"),
+			"align" => "center"
+		));
+		$ex = $arr["obj_inst"]->meta("ex");
+		foreach($t->get_data() as $idx => $row)
+		{
+			$row["ex"] = html::checkbox(array(
+				"name" => "ex[".$row["oid"]."]",
+				"value" => 1,
+				"checked" => $ex[$row["oid"]] == 1
+			));
+			$t->set_data($idx, $row);
+		}
+	}
+
+	function _set_ex_table($arr)
+	{
+		$arr["obj_inst"]->set_meta("ex", $arr["request"]["ex"]);
 	}
 }
 ?>

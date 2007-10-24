@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.7 2007/10/17 13:41:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.8 2007/10/24 12:27:01 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -78,6 +78,12 @@
 
 	@property tax_grp_table type=table store=no no_caption=1
 
+@default group=taxes_mtx
+
+	@property tax_mtx_tb type=toolbar no_caption=1 store=no
+
+	@property tax_mtx_table type=table store=no no_caption=1
+
 @default group=funds
 
 	@property fund_tb type=toolbar no_caption=1 store=no
@@ -129,6 +135,7 @@
 @groupinfo taxes_main caption="Maksud" submit=no save=no
 	@groupinfo taxes caption="Maksud" submit=no save=no parent=taxes_main
 	@groupinfo taxes_grps caption="Maksugrupid " submit=no save=no parent=taxes_main
+	@groupinfo taxes_mtx caption="Maksude maatriksid " submit=no save=no parent=taxes_main
 
 @groupinfo funds caption="Fondid" submit=no save=no
 @groupinfo transfers caption="&Uuml;lekanded" submit=no save=no submit_method=get
@@ -148,6 +155,9 @@
 
 @reltype TAX_GROUP value=5 clid=CL_BUDGETING_TAX_GROUP
 @caption Maksugrupp
+
+@reltype TAX_MATRIX value=6 clid=CL_BUDGETING_TAX_MATRIX
+@caption Maksumaatriks
 
 */
 
@@ -223,7 +233,7 @@ class budgeting_workspace extends class_base
 			$t->add_item(0, array(
 				"id" => $clid,
 				"url" => aw_url_change_var("filter_clid", $clid),
-				"name" => $clss[$clid]["name"]
+				"name" => $arr["request"]["filter_clid"] == $clid ? "<b>".$clss[$clid]["name"]."</b>" : $clss[$clid]["name"]
 			));
 		}
 	}
@@ -1188,7 +1198,7 @@ class budgeting_workspace extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->table_from_ol(
 			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BUDGET"))),
-			array("name"),
+			array("name", "project", "scenario", "start", "end", "owner"),
 			CL_BUDGET
 		);
 	}
@@ -1207,6 +1217,23 @@ class budgeting_workspace extends class_base
 			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TAX_GROUP"))),
 			array("name", "comment"),
 			CL_BUDGETING_TAX_GROUP
+		);
+	}
+
+	function _get_tax_mtx_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_BUDGETING_TAX_MATRIX), $arr["obj_inst"]->id(), 6 /* RELTYPE_TAX_MATRIX */);
+		$tb->add_delete_button();
+	}
+
+	function _get_tax_mtx_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TAX_MATRIX"))),
+			array("name", "comment"),
+			CL_BUDGETING_TAX_MATRIX
 		);
 	}
 

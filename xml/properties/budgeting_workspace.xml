@@ -172,6 +172,24 @@
             <field>tax_grp_table</field>
       </property>
       <property>
+            <name>tax_mtx_tb</name>
+            <table>objects</table>
+            <group>taxes_mtx</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>tax_mtx_tb</field>
+      </property>
+      <property>
+            <name>tax_mtx_table</name>
+            <table>objects</table>
+            <group>taxes_mtx</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>tax_mtx_table</field>
+      </property>
+      <property>
             <name>fund_tb</name>
             <table>objects</table>
             <group>funds</group>
@@ -336,6 +354,12 @@
                   <save>no</save>
                   <parent>taxes_main</parent>
             </taxes_grps>
+            <taxes_mtx>
+                  <caption>Maksude maatriksid </caption>
+                  <submit>no</submit>
+                  <save>no</save>
+                  <parent>taxes_main</parent>
+            </taxes_mtx>
             <funds>
                   <caption>Fondid</caption>
                   <submit>no</submit>
@@ -379,6 +403,11 @@
                   <clid>CL_BUDGETING_TAX_GROUP</clid>
                   <caption>Maksugrupp</caption>
             </TAX_GROUP>
+            <TAX_MATRIX>
+                  <value>6</value>
+                  <clid>CL_BUDGETING_TAX_MATRIX</clid>
+                  <caption>Maksumaatriks</caption>
+            </TAX_MATRIX>
       </reltypes>
       <layout>
             <acct_split>
