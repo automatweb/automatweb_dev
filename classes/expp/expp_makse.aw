@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.8 2007/10/24 14:55:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.9 2007/10/24 15:00:17 markop Exp $
 // expp_makse.aw - Expp makse 
 /*
 
@@ -511,7 +511,7 @@ var $pangad = array(
 				'text' => 'Nordea pank',
 			));
 
-		$SOLOPMT_VERSION  	= "0002";            // 1.    Payment Version   SOLOPMT_VERSION   "0002"   AN 4  M
+		$SOLOPMT_VERSION  	= "0003";            // 1.    Payment Version   SOLOPMT_VERSION   "0002"   AN 4  M
 		$SOLOPMT_STAMP    	= $row["arvenr"];    // 2.    Payment Specifier    SOLOPMT_STAMP  Code specifying the payment   N 20  M 
 		$SOLOPMT_RCV_ID    	= "10354213";          // 3.    Service Provider ID  SOLOPMT_RCV_ID    Customer ID (in Nordea's register)  AN 15    M 
 		$SOLOPMT_RCV_ACCOUNT	= "";               // 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
