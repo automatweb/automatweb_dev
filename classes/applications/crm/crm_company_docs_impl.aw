@@ -474,6 +474,11 @@ class crm_company_docs_impl extends class_base
 		}
 
 		classload("core/icons");
+			$ol->sort_by(array(
+                                "prop" => array("jrk","name"),
+                                "order" => array("asc","asc")
+                        ));
+
 		$clss = aw_ini_get("classes");
 		get_instance(CL_FILE);
 		foreach($ol->arr() as $o)
@@ -511,7 +516,10 @@ class crm_company_docs_impl extends class_base
 				"modifiedby" => $o->modifiedby(),
 				"modified" => $o->modified(),
 				"oid" => $o->id(),
-				"is_menu" => $o->class_id() == CL_MENU ? 1 : 0
+                                        "oname" => $o->name(),
+                                        "jrk" => $o->ord(),
+
+				"is_menu" => $o->class_id() == CL_MENU ? 0 : 1
 			));
 		}
 		if(!$arr["request"]["tf"] || $arr["request"]["tf"] == $fld->id())
@@ -547,7 +555,9 @@ class crm_company_docs_impl extends class_base
 					"modifiedby" => $o2->modifiedby(),
 					"modified" => $o2->modified(),
 					"oid" => $o2->id(),
-					"is_menu" => $o2->class_id() == CL_MENU ? 1 : 0
+					"oname" => $o2->name(),
+					"jrk" => $o2->ord(),
+					"is_menu" => $o2->class_id() == CL_MENU ? 0 : 1
 					));
 			}
 		}
@@ -555,8 +565,8 @@ class crm_company_docs_impl extends class_base
 			"change_col" => "name"
 		));*/
 
-		$t->set_default_sortby(array("is_menu", "created"));
-		$t->set_default_sorder("desc");
+		$t->set_default_sortby(array("is_menu","jrk","oname"));
+		$t->set_default_sorder("asc");
 	}
 
 	function _get_docs_s_type($arr)
