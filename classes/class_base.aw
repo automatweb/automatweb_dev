@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.567 2007/10/09 14:43:13 markop Exp $
+// $Id: class_base.aw,v 2.568 2007/10/25 10:58:42 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5734,5 +5734,119 @@ class class_base extends aw_template
 	{
 		return $this->trans_callback($arr, $this->trans_props);
 	}
+
+	/**
+		@attrib name=generic_cut
+	**/
+	function generic_cut($arr)
+	{
+		$_SESSION["tb_cuts"][$arr["tb_cut_var"]] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=generic_paste
+	**/
+	function generic_paste($arr)
+	{
+		foreach(safe_array($_SESSION["tb_cuts"][$arr["tb_cut_var"]]) as $oid)
+		{
+			$o = obj($oid);
+			$o->set_parent($arr["tb_paste_var"]);
+			$o->save();
+		}
+		$_SESSION["tb_cuts"][$arr["tb_cut_var"]] = null;
+		return $arr["post_ru"];
+	}
+
+	function make_menu_item_from_tabs($this_o, $level, $parent_o, $site_show_i,$cnt_menus)
+	{//arr(array("o" => $this_o, "parent" => $parent_o, "l" => $level));arr($this->crap_items);
+//		if($level > 2) return null;
+//		if($level == 1 && $this->count_items[2] && !$this->count_items[1])
+//		{
+//			return null;
+//		}
+		if($cnt_menus == 0) $_SESSION["menu_from_cb"] = null;
+
+		if(!$_SESSION["menu_from_cb"][$level]["items"] && !$_SESSION["menu_from_cb"][$level]["count"])
+		{
+			extract($_GET);
+			$cfgform_i = get_instance(CL_CFGFORM);
+			if(is_oid($id) && $this->can("view" , $id))
+			{
+				$this->object = $o = obj($id);
+				$cfgform = $o->meta("cfgform_id");
+				$cfgform_i->cff_init_from_class($o, $o->class_id(), false);
+				if(is_oid($cfgform) && $this->can("view", $cfgform) && false)
+				{
+					
+					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
+				}
+				else
+				{
+					$cfgx = get_instance("cfg/cfgutils");
+					$props2 = $cfgform_i->cfg_proplist;
+				}
+			}
+			$groups = array();
+			$sub_groups = array();
+			foreach($props2 as $prop)
+			{
+				$sub_groups[$prop["group"]] = $prop["group"];
+			}
+
+			foreach($cfgform_i->cfg_groups as $key => $val)
+			{
+				if(($level == 2 && !$val["parent"])|| ($level == 1 && $val["parent"]) || ($val["parent"] && ($val["parent"] != $_SESSION["menu_item_tab"]))) unset($cfgform_i->cfg_groups[$key]);
+				else $cfgform_i->cfg_groups[$key]["name"] = $key;
+			}
+			foreach($cfgform_i->cfg_groups as $key => $val)
+			{
+				$groups[] = $val;
+			}
+//			foreach($props2 as $prop)
+//			{
+//				$cfgform_i->cfg_groups[$prop["group"]]["name"] = $prop["group"];
+//
+//				$groups[$prop["group"]] = $cfgform_i->cfg_groups[$prop["group"]];
+//			}
+			$_SESSION["menu_from_cb"][$level]["count"] = 0;
+			$_SESSION["menu_from_cb"][$level]["items"] = sizeof($groups);
+			$_SESSION["menu_from_cb"][$level]["crap_items"] = $groups;
+		}
+
+		while (1)
+		{
+
+			if($_SESSION["menu_from_cb"][$level]["count"] < sizeof($_SESSION["menu_from_cb"][$level]["crap_items"]))
+			{
+				$item = $_SESSION["menu_from_cb"][$level]["crap_items"][$_SESSION["menu_from_cb"][$level]["count"]];
+				$_SESSION["menu_from_cb"][$level]["count"]++;
+				$_SESSION["menu_from_cb"][$level]["crap_item"][$item["name"]] = $_SESSION["menu_from_cb"][$level]["count"];
+				$vars = array (
+					"group" => $item["name"],
+				);
+				$link = aw_url_change_var($vars);
+				if(is_object($this->object)) $id = $this->object->id();
+
+				if($level == 1 && $item["parent"]) continue;
+				if($level == 2 && $_GET["group"] != $item["parent"]) continue;
+				if($level == 1) $_SESSION["menu_item_tab"] = $item["name"];
+
+				return array(
+					"text" => $item["caption"],
+					"link" => $link,
+					"section" => $id + $_SESSION["menu_from_cb"][$level]["count"],//$o_91_2->id(),
+					"parent_section" => $id + $_SESSION["menu_from_cb"][$level]["crap_item"][$item["parent"]],//is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
+				);
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+
 };
 ?>

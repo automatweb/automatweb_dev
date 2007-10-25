@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.25 2007/09/03 10:01:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.26 2007/10/25 10:58:38 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -616,6 +616,43 @@ class toolbar extends aw_template
 	{
 		$i = get_instance("vcl/popup_search");
 		$this->add_cdata($i->get_popup_search_link($arr));
+	}
+
+	function add_cut_button($ar)
+	{
+		$this->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"action" => "generic_cut",
+			"tooltip" => t("L&otilde;ika")
+		));
+		$GLOBALS["tb"]["_add_var"] = $ar["var"];
+	}
+
+	function add_paste_button($ar)
+	{
+		if (is_array($_SESSION["tb_cuts"][$ar["var"]]) && count($_SESSION["tb_cuts"][$ar["var"]]))
+		{
+			$this->add_button(array(
+				"name" => "paste",
+				"img" => "paste.gif",
+				"action" => "generic_paste",
+				"tooltip" => t("Kleebi")
+			));
+			$GLOBALS["tb"]["_paste_var"] = $ar["folder_var"];
+		}
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		if ($GLOBALS["tb"]["_add_var"])
+		{
+			$arr["tb_cut_var"] = $GLOBALS["tb"]["_add_var"];
+		}
+		if ($GLOBALS["tb"]["_paste_var"])
+		{
+			$arr["tb_paste_var"] = $GLOBALS["tb"]["_paste_var"];
+		}
 	}
 };
 ?>

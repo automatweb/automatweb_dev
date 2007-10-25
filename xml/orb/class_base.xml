@@ -115,5 +115,19 @@
 			</function>
 		</action>
 
+		<action name="generic_cut">
+			<function name="generic_cut">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="generic_paste">
+			<function name="generic_paste">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
