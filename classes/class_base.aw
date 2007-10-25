@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.568 2007/10/25 10:58:42 kristo Exp $
+// $Id: class_base.aw,v 2.569 2007/10/25 13:33:51 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5767,7 +5767,6 @@ class class_base extends aw_template
 //			return null;
 //		}
 		if($cnt_menus == 0) $_SESSION["menu_from_cb"] = null;
-
 		if(!$_SESSION["menu_from_cb"][$level]["items"] && !$_SESSION["menu_from_cb"][$level]["count"])
 		{
 			extract($_GET);
@@ -5817,7 +5816,6 @@ class class_base extends aw_template
 
 		while (1)
 		{
-
 			if($_SESSION["menu_from_cb"][$level]["count"] < sizeof($_SESSION["menu_from_cb"][$level]["crap_items"]))
 			{
 				$item = $_SESSION["menu_from_cb"][$level]["crap_items"][$_SESSION["menu_from_cb"][$level]["count"]];
@@ -5825,14 +5823,14 @@ class class_base extends aw_template
 				$_SESSION["menu_from_cb"][$level]["crap_item"][$item["name"]] = $_SESSION["menu_from_cb"][$level]["count"];
 				$vars = array (
 					"group" => $item["name"],
+					"openedtab" => ($level == 1)  ?$item["name"] :$item["parent"],
 				);
 				$link = aw_url_change_var($vars);
 				if(is_object($this->object)) $id = $this->object->id();
 
 				if($level == 1 && $item["parent"]) continue;
-				if($level == 2 && $_GET["group"] != $item["parent"]) continue;
+				if($level == 2 && $_GET["group"] != $item["parent"] && $item["parent"] !=$_GET["openedtab"]) continue;
 				if($level == 1) $_SESSION["menu_item_tab"] = $item["name"];
-
 				return array(
 					"text" => $item["caption"],
 					"link" => $link,

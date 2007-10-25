@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.208 2007/10/09 13:14:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.209 2007/10/25 13:33:51 markop Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1170,7 +1170,7 @@ class menu extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "submenus_from_cb":
+/*			case "submenus_from_cb":
 				if($data["value"])
 				{
 					if($this->can("view" , $arr["obj_inst"]->prop("submenus_from_obj")))
@@ -1186,7 +1186,7 @@ class menu extends class_base
 					$arr["obj_inst"]->set_prop("submenus_from_obj" , $cfgo->id());
 					$arr["obj_inst"]->connect(array("to"=> $cfgo->id(), "type" => "RELTYPE_SUBMENUS"));
 				}
-				break;
+				break;*/
 			case "transl":
 				$this->write_trans_aliases($arr);
 				$this->trans_save($arr, $this->trans_props);

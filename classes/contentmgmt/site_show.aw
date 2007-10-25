@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.245 2007/09/27 13:19:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.246 2007/10/25 13:33:49 markop Exp $
 
 /*
 
@@ -1974,6 +1974,11 @@ class site_show extends class_base
 		return array_search($oid, $this->path_ids) !== false;
 	}
 
+	function _helper_is_in_url($oid)
+	{
+		if($_GET["group"] != $_SESSION["menu_item_tab"] && $_SESSION["menu_item_tab"] != $_GET["openedtab"]) return false;
+		return true;
+	}
 	////
 	// !returns the number of levels that are in the path
 	// for the menu area beginning at $parent
