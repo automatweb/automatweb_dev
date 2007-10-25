@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.63 2007/10/25 20:55:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.64 2007/10/25 21:01:15 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2576,95 +2576,67 @@ class otto_import extends class_base
 							}
 						}
 
-						// ach! if only single image then no js!!!
-						if (count($mt[1]) == 0)
+						foreach($mt[1] as $idx => $img)
 						{
-							echo "ach! if only single image then no js!!!";
+							if (strpos($img, 'leer.gif') !== false)
+							{
+								echo "-- tundub, et sellele variandile pilti ei ole <br>\n";
+								continue;
+							}
+							$imnr = basename($img, ".jpg");
+							echo $imnr."<br>\n";
+							echo "image from product $pcode : ($t_imnr)<br />";
+							$q = "SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'";
+							$t_imnr = $this->db_fetch_field($q, "pcode");
 
-							preg_match("/pool\/formatb\/(\d+)\.jpg/imsU",$html, $mt2);
-							$t_imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '".$mt2[1]."' AND nr = '1' AND pcode = '$pcode'", "pcode");
 							if (!$f_imnr)
 							{
 								$f_imnr = $t_imnr.".jpg";
 							}
+
 							if (!$t_imnr)
 							{
-								echo "insert new image ".$mt2[1]." <br>\n";
+								echo "-- insert new image $imnr <br>\n";
 								flush();
-								$q = ("
-									INSERT INTO 
-										otto_prod_img(pcode, nr,imnr, server_id) 
-										values('$pcode','1','".$mt2[1]."', 1)
-								");
-						
-								$this->db_query($q);
-								$this->added_images[] = $mt2[1];
-							}
-						}
-						else
-						{
-							foreach($mt[1] as $idx => $img)
-							{
-								if (strpos($img, 'leer.gif') !== false)
-								{
-									echo "-- tundub, et sellele variandile pilti ei ole <br>\n";
-									continue;
-								}
-								$imnr = basename($img, ".jpg");
-								echo $imnr."<br>\n";
-								echo "image from product $pcode : ($t_imnr)<br />";
-								$q = "SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'";
-								$t_imnr = $this->db_fetch_field($q, "pcode");
 
-								if (!$f_imnr)
+								$image_ok = $this->get_image(array(
+									'source' => 'http://image01.otto.de:80/pool/formatb/'.$imnr.'.jpg',
+									'format' => SMALL_PICTURE,
+									'otto_import' => $import_obj,
+									'debug' => true
+								));
+								if ($image_ok)
 								{
-									$f_imnr = $t_imnr.".jpg";
-								}
-
-								if (!$t_imnr)
-								{
-									echo "-- insert new image $imnr <br>\n";
-									flush();
-
-									$image_ok = $this->get_image(array(
-										'source' => 'http://image01.otto.de:80/pool/formatb/'.$imnr.'.jpg',
-										'format' => SMALL_PICTURE,
+									// download the big version of the image too:
+									$this->get_image(array(
+										'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
+										'format' => BIG_PICTURE,
 										'otto_import' => $import_obj,
 										'debug' => true
 									));
-									if ($image_ok)
-									{
-										// download the big version of the image too:
-										$this->get_image(array(
-											'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
-											'format' => BIG_PICTURE,
-											'otto_import' => $import_obj,
-											'debug' => true
-										));
-									}
-									
-									$q = ("
-										INSERT INTO 
-											otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
-											values('$pcode','".$mt[2][$idx]."','$imnr', 1, '$connection_image')
-									");
-									$this->db_query($q);
-									$this->added_images[] = $mt[2][$idx];
 								}
-								else
-								{
-									$this->db_query("
-										update
-											otto_prod_img
-										set
-											conn_img = '".$connection_image."'
-										where
-											imnr = '".$imnr."' and
-											nr = '".$mt[2][$idx]."' and
-											pcode = '".$pcode."'
-									");
-									echo "-- image $imnr for product $pcode is already in db<br />\n";
-								}
+								
+								$q = ("
+									INSERT INTO 
+										otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
+										values('$pcode','".$mt[2][$idx]."','$imnr', 1, '$connection_image')
+								");
+								$this->db_query($q);
+								$this->added_images[] = $mt[2][$idx];
+							}
+							else
+							{
+								$this->db_query("
+									update
+										otto_prod_img
+									set
+										conn_img = '".$connection_image."'
+									where
+										imnr = '".$imnr."' and
+										nr = '".$mt[2][$idx]."' and
+										pcode = '".$pcode."'
+								");
+								echo "-- image $imnr for product $pcode is already in db<br />\n";
 							}
 						}
 
