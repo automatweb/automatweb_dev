@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.126 2007/10/22 09:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.127 2007/10/25 10:27:14 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2444,6 +2444,21 @@ class webform extends class_base
 						$arr[$key] = join(", ", $nsa);
 					}
 				}
+
+				if (substr($key, 0, 6) == "userim")
+				{
+					if ($_FILES[$key]["name"]["file"] != "")
+					{
+						$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).": ".$_FILES[$key]["name"]["file"]."\n";
+						$fo = $o->get_first_obj_by_reltype($relprops[$key]["reltype"]);
+						$attaches[] = array(
+							"content" => file_get_contents($fo->prop("file")),
+							"contenttype" => $_FILES[$key]["type"]["file"],
+							"name" => $_FILES[$key]["name"]["file"]
+						);
+					}
+				}
+				else
 				if (substr($key, 0, 8) == "userfile")
 				{
 					if ($_FILES[$key]["name"]["file"] != "")
