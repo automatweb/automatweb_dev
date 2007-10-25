@@ -72,11 +72,20 @@ function generic_loader()
 	// don't do anything. screw you.
 }
 
+function generic_loader2()
+{
+	// el bondo mondo
+}
+
 function check_generic_loader()
 {
 	if (generic_loader)
 	{
 		generic_loader();
+	}
+	if (generic_loader2)
+	{
+		generic_loader2();
 	}
 };
 

@@ -255,7 +255,7 @@ function set_changed()
 	changed = 1;
 }
 
-function generic_loader()
+function generic_loader2()
 {
 	// set onchange event handlers for all form elements
 	var els = document.changeform.elements;
