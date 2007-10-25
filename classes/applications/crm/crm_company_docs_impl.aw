@@ -206,7 +206,7 @@ class crm_company_docs_impl extends class_base
 				"active" => $_GET["tf"],
 				"parent" => " ",
 			)),
-			"has_root" => 1,
+//			"has_root" => 1,
 			"persist_state" => 1,
 			"root_name" => "",
 			"root_url" => "#",
