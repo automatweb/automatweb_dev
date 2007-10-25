@@ -501,7 +501,7 @@ class crm_company_docs_impl extends class_base
 				}
 			}
 			$t->define_data(array(
-				"icon" => $pm->get_menu(array(
+				"icon" => $o->class_id() == CL_MENU ? html::href(array("caption" => "<img src='".icons::get_icon_url($o->class_id())."'>" , "url" => aw_url_change_var("tf" , $o->id()))) : $pm->get_menu(array(
 					"icon" => icons::get_icon_url($o)
 				)),
 				"name" => html::obj_change_url($o),
@@ -537,7 +537,7 @@ class crm_company_docs_impl extends class_base
 					));
 				}
 				$t->define_data(array(
-					"icon" => $pm->get_menu(array(
+					"icon" => $o2->class_id() == CL_MENU ? 1 : $pm->get_menu(array(
 						"icon" => icons::get_icon_url($o2)
 					)),
 					"name" => html::obj_change_url($o2),
