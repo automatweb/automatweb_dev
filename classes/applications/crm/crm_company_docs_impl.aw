@@ -117,7 +117,6 @@ class crm_company_docs_impl extends class_base
 	**/
 	function get_tree_stuff($arr)
 	{
-
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
 		$classes = array(CL_MENU);
@@ -147,7 +146,7 @@ class crm_company_docs_impl extends class_base
 		{
 			$d = array(
 				"id" => $o->id(),
-				"name" => $o->name(),
+				"name" =>  ($arr["active"]==$o->id()) ? "<b>".$o->name()."</B>":$o->name(),
 				"iconurl" => icons::get_icon_url($o->class_id()),
 				"url" => aw_url_change_var("tf", $o->id() , $set_retu),
 			);
@@ -168,7 +167,7 @@ class crm_company_docs_impl extends class_base
 			{
 				$tree->add_item($o->id(), array(
 					"id" => $o2->id(),
-					"name" => $o2->name(),
+					"name" => ($arr["active"]==$o2->id()) ? "<b>".$o2->name()."</B>":$o2->name(),
 					"url" => aw_url_change_var("tf", $o2->id(),$set_retu),
 				));
 			}
@@ -204,6 +203,7 @@ class crm_company_docs_impl extends class_base
 			"tree_id" => "crm_docs_t",
 			"get_branch_func" => $this->mk_my_orb("get_tree_stuff",array(
 				"set_retu" => get_ru(),
+				"active" => $_GET["tf"],
 				"parent" => " ",
 			)),
 			"has_root" => 1,
@@ -214,7 +214,7 @@ class crm_company_docs_impl extends class_base
 		));
 		$arr["prop"]["vcl_inst"]->add_item(0,array(
 			"id" => $fld->id(),
-			"name" => $fld->name(),
+			"name" => ($_GET["tf"]==$fld->id()) ? "<b>".$fld->name()."</B>":$fld->name(),
 			"iconurl" => icons::get_icon_url(CL_MENU),
 			"url" => aw_url_change_var("tf", $fld->id()),
 			"is_open" => 1,
@@ -233,7 +233,7 @@ class crm_company_docs_impl extends class_base
 		{
 			$d = array(
 				"id" => $o->id(),
-				"name" => $o->name(),
+				"name" => ($_GET["tf"]==$o->id()) ? "<b>".$o->name()."</B>":$o->name(),
 				"iconurl" => icons::get_icon_url($o->class_id()),
 				"url" => aw_url_change_var("tf", $o->id() , $set_retu),
 			);
@@ -501,7 +501,7 @@ class crm_company_docs_impl extends class_base
 				}
 			}
 			$t->define_data(array(
-				"icon" => $o->class_id() == CL_MENU ? html::href(array("caption" => "<img src='".icons::get_icon_url($o->class_id())."'>" , "url" => aw_url_change_var("tf" , $o->id()))) : $pm->get_menu(array(
+				"icon" => $o->class_id() == CL_MENU ? html::href(array("caption" => "<img border=0 src='".icons::get_icon_url($o->class_id())."'>" , "url" => aw_url_change_var("tf" , $o->id()))) : $pm->get_menu(array(
 					"icon" => icons::get_icon_url($o)
 				)),
 				"name" => html::obj_change_url($o),
