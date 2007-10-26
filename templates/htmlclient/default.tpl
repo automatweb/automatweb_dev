@@ -122,7 +122,7 @@ this.disabled=true;self.disabled=true;
 			<div id="vbox">
 				<div class="pais">
 					<div class="caption">{VAR:area_caption}</div>
-					<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" title="{VAR:close_text}" alt="{VAR:close_text}" width="20" height="15" border="0" class="btn" id="{VAR:grid_name}_closer_img"/></a></div>
+					<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; im.alt=im.title="{VAR:close_text}"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; im.alt=im.title="{VAR:open_text}"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" title="{VAR:start_text}" alt="{VAR:start_text}" width="20" height="15" border="0" class="btn" id="{VAR:grid_name}_closer_img"/></a></div>
 				</div>
 				<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
 				<!-- END SUB: GRID_HAS_CLOSER -->
@@ -153,7 +153,7 @@ this.disabled=true;self.disabled=true;
 			<div id="vbox">
 				<div class="pais">
 					<div class="caption">{VAR:area_caption}</div>
-					<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" title="{VAR:close_text}" alt="{VAR:close_text}" width="20" height="15" border="0" class="btn"  id="{VAR:grid_name}_closer_img"/></a></div>
+					<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; im.alt=im.title="{VAR:close_text}"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; im.alt=im.title="{VAR:open_text}"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" title="{VAR:start_text}" alt="{VAR:start_text}" width="20" height="15" border="0" class="btn"  id="{VAR:grid_name}_closer_img"/></a></div>
 				</div>
 				<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
 				<!-- SUB: VGRID_HAS_PADDING -->
