@@ -952,7 +952,7 @@
             <name>roof_type</name>
             <table>realestate_property</table>
             <group>house</group>
-            <type>textbox</type>
+            <type>classificator</type>
             <field>roof_type</field>
             <caption>Katus</caption>
       </property>

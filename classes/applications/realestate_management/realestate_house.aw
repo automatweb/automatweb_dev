@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_house.aw,v 1.9 2007/09/02 07:21:29 voldemar Exp $
 // realestate_house.aw - Maja
 /*
 
@@ -160,7 +159,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 			@property foundation_type type=textbox table=realestate_property
 			@caption Vundament
 
-			@property roof_type type=textbox table=realestate_property
+			@property roof_type type=classificator table=realestate_property
 			@caption Katus
 
 			@property exterior_finishing type=textbox table=realestate_property
