@@ -2394,6 +2394,18 @@ exit_function("jigaboo");
 		{
 			$prop_ids = $result_list->ids ();
 			$addr_ids = array();
+			$administrative_structure = $this->realestate_manager->prop("administrative_structure");
+
+			if (!is_oid($administrative_structure))
+			{
+				error::raise(array(
+					"msg" => t("Haldusjaotuse struktuur defineerimata"),
+					"fatal" => false,
+					"show" => false,
+				));
+			}
+
+			$administrative_structure = new object($administrative_structure);
 
 			foreach ($search_admin_units as $unit_id)
 			{
