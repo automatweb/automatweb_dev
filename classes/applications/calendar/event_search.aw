@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.91 2007/06/05 10:13:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.92 2007/10/29 15:23:30 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1375,26 +1375,6 @@ class event_search extends class_base
 									{
 										continue;
 									}
-								//	$value = $tabledef[$nms]["props"];
-								//	if(!empty($value))
-								//	{
-								//		if(strpos($value, "#php#") !== false)
-								//		{
-								//			$value = str_replace("#php#", "", $value);
-								//			$value = str_replace("#/php#", "", $value);
-								//			// eval is evil and inherited from the satan himself,
-								//			// so i decided to use it here -- ahz
-								//			eval($value);
-								//		}
-								//		else
-								//		{
-								//			$v = date($value, $v);
-								//		}
-								//	}
-								//	else
-								//	{
-								//		$v = date("d-m-Y", $v);
-								//	}
 									// if there is no controller set for date:
 									$v = date("d-m-Y", $v);
 								}
@@ -1489,8 +1469,23 @@ class event_search extends class_base
 					{
 						$fulltext = "";
 					}
+
+					if ($this->is_template('DELETE_EVENT_LINK'))
+					{
+						$this->vars(array(
+							'delete_url' => $this->mk_my_orb("delete_event", array(
+								'event_id' => $id,
+								'return_url' => get_ru()
+							), CL_EVENT_SEARCH),
+							'col_count' => $col_count + 1 // I have to increase the col count, cause the delete link usually resides in extra column
+						));
+						$delete_url_str = $this->parse('DELETE_EVENT_LINK');
+						
+					}
+
 					$this->vars(array(
 						"FULLTEXT" => $fulltext,
+						"DELETE_EVENT_LINK" => $delete_url_str
 					));
 					$res .= $this->parse("EVENT");
 				}
@@ -1716,6 +1711,24 @@ class event_search extends class_base
 		return $ret;
 	}
 */
+
+	/**
+		@attrib name=delete_event params=name
+
+		@param event_id required type=int acl=view;edit
+		@param return_url optional type=string 
+	**/
+	function delete_event($arr)
+	{
+		if ($this->can('delete', $arr['event_id']))
+		{
+			$o = new object($arr['event_id']);
+			$o->delete(true);
+		}
+
+		return $arr['return_url'];
+	}
+
 	/**
 		@attrib name=convert_evx
 	**/
