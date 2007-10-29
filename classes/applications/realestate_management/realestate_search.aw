@@ -2409,11 +2409,15 @@ exit_function("jigaboo");
 
 			foreach ($search_admin_units as $unit_id)
 			{
-				$addrs = $administrative_structure->prop(array("prop" => "addresses_by_unit", "unit" => $unit_id));
-				$addr_ids = array_merge(
-					$addr_ids,
-					$addrs->ids()
-				);
+				if ($this->can("view", $unit_id))
+				{
+					$unit = new object($unit_id);
+					$addrs = $administrative_structure->prop(array("prop" => "addresses_by_unit", "unit" => $unit));
+					$addr_ids = array_merge(
+						$addr_ids,
+						$addrs->ids()
+					);
+				}
 			}
 
 			$address_connections = connection::find(array(
