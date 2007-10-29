@@ -2409,7 +2409,7 @@ exit_function("jigaboo");
 
 			foreach ($search_admin_units as $unit_id)
 			{
-				$addrs = $administrative_structure->prop(array("name" => "addresses_by_unit", "unit" => $unit_id));
+				$addrs = $administrative_structure->prop(array("prop" => "addresses_by_unit", "unit" => $unit_id));
 				$addr_ids = array_merge(
 					$addr_ids,
 					$addrs->ids()
