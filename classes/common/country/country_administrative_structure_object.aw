@@ -92,7 +92,7 @@ class country_administrative_structure_object extends _int_object
 			return false;
 		}
 
-		$index = (array) $this->prop("unit_hierarchy_index");
+		$index = (array) $this->meta("unit_hierarchy_index");
 		$parents = array($parent);
 		$descendants = array();
 
@@ -134,9 +134,9 @@ class country_administrative_structure_object extends _int_object
 
 	function as_index_unit($unit)
 	{
-		$unit_index = $this->prop("unit_hierarchy_index");
+		$unit_index = (array) $this->meta("unit_hierarchy_index");
 		$unit_index[$unit->id()] = $unit->parent();
-		$this->set_prop("unit_hierarchy_index", $unit_index);
+		$this->set_meta("unit_hierarchy_index", $unit_index);
 	}
 
     // @attrib name=as_get_structure
@@ -439,7 +439,25 @@ class country_administrative_structure_object extends _int_object
 
 		$sequence[] = ADDRESS_STREET_TYPE;
 		$this->set_meta("as_division_hierarchy_sequence", $sequence);
-		return 0;
+
+		// index current units
+		$unit_index =  array();
+		$units = new object_tree(array(
+			"parent" => $this->id(),
+			"class_id" => $this->as_address_classes,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$units =  $units->to_list();
+		$units->begin();
+
+		while ($unit = $units->next())
+		{
+			$unit_index[$unit->id()] = $unit->parent();
+		}
+
+		$this->set_meta("unit_hierarchy_index", $unit_index);
+		return $retval;
 	}
 }
 
