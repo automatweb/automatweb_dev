@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.3 2007/10/19 13:12:43 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.4 2007/10/29 11:37:36 kristo Exp $
 // bugtrack_display.aw - Ülesannete kuvamine 
 /*
 
@@ -56,6 +56,12 @@
 		
 		@property tasks_table type=table no_caption=1 store=no group=tasks,solved
 
+	@groupinfo devos caption="Koosk&otilde;lastamisel" submit=no
+		
+		@property devo_confirm_needed type=table no_caption=1 store=no group=devos
+		@property table_filter type=select store=no group=devos,tasks,solved
+		@caption Filtreeri
+
 	@groupinfo solved caption=Lahendatud submit=no
 
 	
@@ -94,18 +100,8 @@ class bugtrack_display extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 	}
 
-	function _get_tasks_table($arr)
+	function _define_table_from_settings($data, &$t)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
-		$t->set_caption(t("&Uuml;lesanded"));
-		if($arr["request"]["group"] == "solved")
-		{
-			$data = $arr["obj_inst"]->meta("solved_settings");
-		}
-		else
-		{
-			$data = $arr["obj_inst"]->meta("task_settings");
-		}
 		foreach($data as $id=>$field)
 		{
 			if($field["in_table"] && $id>0)
@@ -122,6 +118,7 @@ class bugtrack_display extends class_base
 					case "deadline":
 					case "pdeadline":
 					case "cust_live_date":
+					case "num_hrs_guess":
 					case "prognosis":
 						$tfield["type"] = "time";
 						$tfield["format"] = "d.m.Y";
@@ -135,24 +132,12 @@ class bugtrack_display extends class_base
 		{
 			$t->set_default_sortby("f".$data["default_sort"]);
 		}
-		$cur = get_current_person();
-		$ol = new object_list(array(
-			"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"who" => $cur,
-					"monitors" => $cur,
-					"orderer" => $cur,
-					"bug_feedback_p" => $cur,
-					"createdby" => get_current_user()
-				)
-			)),
-		));
-		
-		foreach($ol->list as $oid)
+	}
+
+	function _insert_data_to_table_from_settings($data, &$t, $ol, $arr)
+	{
+		foreach($ol->arr() as $oid => $obj)
 		{
-			$obj = obj($oid);
 			if($arr["request"]["group"] == "solved" && ($obj->prop("bug_status")!=5 && $obj->prop("bug_status")!=3 && $obj->prop("bug_status")!=9))
 			{
 				continue;
@@ -265,6 +250,39 @@ class bugtrack_display extends class_base
 			}
 			$t->define_data($fields);
 		}
+	}
+
+	function _get_tasks_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_caption(t("&Uuml;lesanded"));
+		if($arr["request"]["group"] == "solved")
+		{
+			$data = $arr["obj_inst"]->meta("solved_settings");
+		}
+		else
+		{
+			$data = $arr["obj_inst"]->meta("task_settings");
+		}
+
+		$this->_define_table_from_settings($data, $t);		
+
+		$cur = get_current_person();
+		$ol = new object_list(array(
+			"parent" => $arr["obj_inst"]->prop("bugtrack"),
+			"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"who" => $cur,
+					"monitors" => $cur,
+					"orderer" => $cur,
+					"bug_feedback_p" => $cur
+				)
+			)),
+			"orderer_unit" => $arr["request"]["sect_filter"] ? $arr["request"]["sect_filter"] : array()
+		));
+		$this->_insert_data_to_table_from_settings($data, $t, $ol, $arr);
 		
 	}
 	function _get_type_var_table($arr)
@@ -565,6 +583,61 @@ class bugtrack_display extends class_base
 		return $this->parse();
 	}
 
-//-- methods --//
+	function _get_devo_confirm_needed($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$data = $arr["obj_inst"]->meta("task_settings");
+		$this->_define_table_from_settings($data, $t);
+
+		$cur = get_current_person();
+		$ol = new object_list(array(
+			"class_id" => array(CL_DEVELOPMENT_ORDER),
+			"bug_status" => 1,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"who" => $cur,
+					"monitors" => $cur,
+					"orderer" => $cur,
+					"bug_feedback_p" => $cur
+				)
+			)),
+			"orderer_unit" => $arr["request"]["sect_filter"] ? $arr["request"]["sect_filter"] : array()
+		));
+
+		$this->_insert_data_to_table_from_settings($data, $t, $ol, $arr);
+	}
+
+	function _get_table_filter($arr)
+	{
+		$p = get_current_person();
+		$sect = $p->prop("org_section");
+		if (is_array($sect))
+		{
+			$sect = reset($sect);
+		}
+		if (!$this->can("view", $sect))
+		{
+			return PROP_IGNORE;
+		}
+		$so = obj($sect);
+		$sects = array(aw_url_change_var("sect_filter", null, get_ru()) => t("K&otilde;ik"));
+		$this->_recur_sect_list($sects, $so);
+
+		$arr["prop"]["options"] = $sects;
+		$arr["prop"]["value"] = get_ru();
+		$arr["prop"]["onchange"] = "window.location.href=this.options[this.selectedIndex].value";
+	}
+
+	function _recur_sect_list(&$data, $section)
+	{
+		$this->_sect_level++;
+		foreach($section->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
+		{
+			$data[aw_url_change_var("sect_filter", $c->prop("to"), get_ru())] = str_repeat("&nbsp;", ($this->_sect_level) * 4).$c->prop("to.name");
+			$this->_recur_sect_list($data, $c->to());
+		}
+		$this->_sect_level--;
+	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.90 2007/10/22 15:42:38 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.91 2007/10/29 11:37:35 kristo Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -671,10 +671,6 @@ class bug extends class_base
 						if ($nm == "")
 						{
 							$nm = $_co->name();
-							if (strlen($nm) > 15)
-							{
-								$nm = substr($nm, 0, 15)."...";
-							}
 						}
 						$opts[$_co->id()] = $nm;
 					}
@@ -711,6 +707,16 @@ class bug extends class_base
 				{
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->prop("req_co");
+				}
+	
+				$c = get_current_company();
+				$prop["options"][$c->id()] = $c->name();
+				foreach($prop["options"] as $_id => $_nm)
+				{
+					if (strlen($_nm) > 15)
+					{
+						$prop["options"][$_id] = substr($_nm, 0, 15)."...";
+					}
 				}
 				break;
 
@@ -976,7 +982,11 @@ class bug extends class_base
 		if (true || in_array($bug->prop("bug_status"), $states))
 		{
 			$crea = $bug->createdby();
-			$monitors[] = $u->get_person_for_user(obj($us->get_oid_for_uid($crea)));
+			$_oid = $us->get_oid_for_uid($crea);
+			if ($this->can("view", $_oid))
+			{
+				$monitors[] = $u->get_person_for_user(obj($_oid));
+			}
 		}
 
 		// add who to the list of mail recievers
@@ -1283,6 +1293,7 @@ class bug extends class_base
 			"sort_by" => "objects.created $so"
 		));
 		$com_str = "";
+		$u = get_instance(CL_USER);
 		foreach($ol->arr() as $com)
 		{
 			$comt = create_links(htmlspecialchars($com->comment()));
@@ -1301,8 +1312,10 @@ class bug extends class_base
 
 //			$comt = $this->parse_commited_msg($comt);
 
+			$p = $u->get_person_for_uid($com->createdby());
 			$this->vars(array(
 				"com_adder" => $com->createdby(),
+				"com_adder_person" => $p->name(),
 				"com_date" => date("d.m.Y H:i", $com->created()),
 				"com_text" => $comt
 			));
@@ -1492,7 +1505,10 @@ class bug extends class_base
 				$highest = $ob;
 			}
 		}
-		$o->set_prop("orderer", array($highest->id()=>$highest->id()));
+		if ($highest)
+		{
+			$o->set_prop("orderer", array($highest->id()=>$highest->id()));
+		}
 		$o->save();
 		$o->connect(array(
 			"to" => $arr["obj_inst"]->id(),
@@ -1686,8 +1702,13 @@ class bug extends class_base
 
 	function request_execute($o)
 	{
-		header("Location: ".$this->mk_my_orb("change", array("id" => $o->id()), "bug", true));
-		die();
+		if (!$this->read_template("show.tpl", true))
+		{
+			header("Location: ".$this->mk_my_orb("change", array("id" => $o->id()), "bug", true));
+			die();
+		}
+		
+		return $this->show(array("id" => $o->id()));
 	}
 
 	function _bug_tb($arr)
@@ -1802,6 +1823,14 @@ class bug extends class_base
 
 	function _get_bt($o)
 	{
+		if (!is_oid($o->id()) && !is_oid($o->parent()))
+		{
+			return null;
+		}
+		if (!is_oid($o->id()))
+		{
+			$o = obj($o->parent());
+		}
 		$pt = $o->path();
 		foreach($pt as $pt_o)
 		{
@@ -1841,6 +1870,21 @@ class bug extends class_base
 		{
 			$co = get_instance(CL_CRM_COMPANY);
 			$arr["prop"]["options"] = $co->get_employee_picker(obj($cust), true);
+		}
+
+		$p = get_current_person();
+		// add the current person and his boss
+		$arr["prop"]["options"][$p->id()] = $p->name();
+
+		$sect = get_instance(CL_CRM_SECTION);
+		$unit = reset($p->prop("org_section"));
+		if ($this->can("view", $unit))
+		{
+			$work_ol = $sect->get_section_workers($unit, true);
+			foreach($work_ol->names() as $id => $name)
+			{
+				$arr["prop"]["options"][$id] = $name;
+			}
 		}
 	}
 
@@ -2003,6 +2047,34 @@ class bug extends class_base
 			$o->set_prop("bug_status",  BUG_INPROGRESS);
 			$o->save();
 		}
+	}
+
+	function show($arr)
+	{
+		$o = obj($arr["id"]);
+		$this->read_template("show.tpl");
+
+		$this->vars($o->properties());
+		
+		$sl = $this->get_status_list();
+		$i = $o->instance();
+		$this->vars(array(
+			"fileupload" => "",
+			"comments" => $i->_get_comment_list($o),
+			"bug_status" => $sl[$o->prop("bug_status")]
+		));
+		$fo = $o->get_first_obj_by_reltype("RELTYPE_FILE");
+
+		if ($fo)
+		{
+			$i = $fo->instance();
+			$s = $i->parse_alias(array("alias" => array("target" => $fo->id()), "htmlentities" => true));
+			$this->vars(array(
+				"fileupload" => $s
+			));
+		}
+
+		return $this->parse();
 	}
 }
 ?>
