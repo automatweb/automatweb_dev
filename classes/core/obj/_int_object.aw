@@ -1595,7 +1595,7 @@ class _int_object
 		if ($trans)
 		{
 			$trs = $this->obj["meta"]["translations"];
-			if (!empty($trs[$cur_lid]) && $this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
+			if (/*!empty($trs[$cur_lid]) &&*/ $this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
 			{
 				return true;
 			}

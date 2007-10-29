@@ -307,9 +307,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if (count($conn_prop_fetch))
 		{
 			$cfp_dat = array();
-			if (isset($this->read_properties_data_cache_conn[$object_id]))
+			if (isset($GLOBALS["read_properties_data_cache_conn"][$object_id]))
 			{
-				$cfp_dat = $this->read_properties_data_cache_conn[$object_id];
+				$cfp_dat = array(); //$GLOBALS["read_properties_data_cache_conn"][$object_id];
+				foreach($GLOBALS["read_properties_data_cache_conn"][$object_id] as $_tmp => $d)
+				{
+					foreach($d as $_tmp2 => $d2)
+					{
+						$cfp_dat[] = $d2;
+					}
+				}
 			}
 			else
 			{
@@ -2779,9 +2786,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if (count($conn_prop_fetch))
 		{
 			$cpf_dat = array();
-			if (isset($this->read_properties_data_cache_conn[$object_id]))
+			if (isset($GLOBALS["read_properties_data_cache_conn"][$object_id]))
 			{
-				$cfp_dat = $this->read_properties_data_cache_conn[$object_id];
+				$cfp_dat = $GLOBALS["read_properties_data_cache_conn"][$object_id];
 			}
 			else
 			{
