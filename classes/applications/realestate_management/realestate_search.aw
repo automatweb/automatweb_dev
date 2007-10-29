@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.47 2007/07/27 09:52:41 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -2388,80 +2387,62 @@ exit_function("jigaboo");
 			$result_list = $tmp_list;
 		}
 		//kui saidilt tuleb otsing
-		if($_GET["per_page"]) $this->result_table_recordsperpage = ($_GET["per_page"]);
+		if($_GET["per_page"]) $this->result_table_recordsperpage = (int) ($_GET["per_page"]);
+
 		### search by address
-		if ($search_admin_units !== false and $result_list->count ())
+		if ($search_admin_units !== false and $result_list->count())
 		{
-			$unit_classes = array (
-				CL_COUNTRY_ADMINISTRATIVE_UNIT,
-				CL_COUNTRY_CITY,
-				CL_COUNTRY_CITYDISTRICT,
-			);
-			$result_list_ids = $result_list->ids ();
-			### get addresses for all properties found
-			$connection = new connection ();
-			$address_connections = $connection->find (array (
-					// "from" => array_keys ($result_list),
-					"from" => $result_list_ids,
-					"type" => 1,
-			));
+			$prop_ids = $result_list->ids ();
+			$addr_ids = array();
 
-			$address_ids = array ();
-			$property_index = array ();
-
-			foreach ($address_connections as $connection)
+			foreach ($search_admin_units as $unit_id)
 			{
-				$address_ids[$connection["from"]] = $connection["to"];
+				$addr_ids = array_merge(
+					$addr_ids,
+					$administrative_structure->prop(array("name" => "addresses_by_unit", "unit" => $unit_id))->ids()
+				);
 			}
 
+			$address_connections = connection::find(array(
+				"from" => $prop_ids,
+				"to" => $addr_ids,
+				"type" => 1,
+			));
+
 			### search by adminunit
-			$unit_connections = array ();
-
-			if (count ($address_ids))
+			if (count ($address_connections))
 			{
-				$connection = new connection ();
-				$unit_connections = $connection->find (array (
-						"from" => $address_ids,
-						"to" => $search_admin_units,
-						"type" => 2,
-				));
-				### filter out properties not under specified admin units
-				$applicable_address_ids = array ();
+				$applicable_prop_ids = array();
 
-				foreach ($unit_connections as $connection)
+				foreach ($address_connections as $connection)
 				{
-					$applicable_address_ids[] = $connection["from"];
+					$applicable_prop_ids[] = $connection["from"];
 				}
 
-				// foreach ($result_list as $property_oid => $property)
-				// {
-					// if (!in_array ($address_ids[$property_oid], $applicable_address_ids))
-					// {
-						// unset ($result_list[$property_oid]);
-					// }
-				// }
-
-				// $o = $result_list->begin ();
-
+				### filter out properties not under specified admin units
 				$start_offset = (int) $_GET["ft_page"] * $this->result_table_recordsperpage;
 				$end_offset = $start_offset + $this->result_table_recordsperpage;
 				$result_count = 0;
-				foreach ($result_list_ids as $oid)
-				{
-					$result_count++;
 
-					if (!in_array ($address_ids[$oid], $applicable_address_ids))
+				foreach ($prop_ids as $oid)
+				{
+					if (in_array ($oid, $applicable_prop_ids))
 					{
-						$result_list->remove ($oid);
-						$result_count--;
+						++$result_count;
+
+						if (($result_count <= $start_offset) or ($result_count > $end_offset))
+						{
+							$result_list->remove ($oid);
+						}
 					}
-					elseif (($result_count <= $start_offset) or ($result_count > $end_offset))
+					else
 					{
 						$result_list->remove ($oid);
 					}
 				}
+
 				$this->result_count = $result_count;
-			};
+			}
 		}
 		else
 		{

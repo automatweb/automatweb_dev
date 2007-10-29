@@ -55,6 +55,13 @@
             <group>grp_administrative_structure</group>
             <type>hidden</type>
       </property>
+      <property>
+            <name>unit_hierarchy_index</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
       <classinfo>
             <syslog_type>ST_COUNTRY_ADMINISTRATIVE_STRUCTURE</syslog_type>
             <relationmgr>yes</relationmgr>

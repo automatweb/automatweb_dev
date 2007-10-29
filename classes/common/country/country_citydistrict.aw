@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_citydistrict.aw,v 1.5 2007/07/27 09:52:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_citydistrict.aw,v 1.6 2007/10/29 08:19:45 voldemar Exp $
 // country_citydistrict.aw - Linnaosa
 /*
 
@@ -8,7 +8,7 @@
 
 @default table=objects
 @default group=general
-	@property administrative_structure_oid type=hidden
+	@property administrative_structure type=hidden
 
 	@property subclass type=text
 	@caption Tüüp

@@ -67,13 +67,6 @@
             <field>transl</field>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
-      <property>
-            <name>administrative_structure_oid</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>hidden</type>
-            <field>administrative_structure_oid</field>
-      </property>
       <classinfo>
             <syslog_type>ST_COUNTRY_CITY</syslog_type>
             <relationmgr>yes</relationmgr>

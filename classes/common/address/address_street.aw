@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.4 2007/07/27 09:52:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.5 2007/10/29 08:19:44 voldemar Exp $
 // address_street.aw - Tänav
 /*
 
@@ -9,7 +9,7 @@
 @default field=meta
 @default method=serialize
 @default group=general
-	@property administrative_structure_oid type=hidden
+	@property administrative_structure type=hidden
 
 */
 

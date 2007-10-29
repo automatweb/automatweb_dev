@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.5 2007/07/27 09:52:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.6 2007/10/29 08:19:44 voldemar Exp $
 // country_administrative_structure.aw - Riigi haldusjaotus
 /*
 
@@ -25,6 +25,9 @@
 	@caption Haldusjaotuse struktuur
 
 	@property administrative_structure_data type=hidden
+
+	@property unit_hierarchy_index type=hidden
+	// structure: array(unit_oid => parent_oid, ...)
 
 
 // --------------- RELATION TYPES ---------------------

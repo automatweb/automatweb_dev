@@ -35,6 +35,9 @@ class country_administrative_structure_object extends _int_object
 
 				case "units_by_division":
 					return $this->as_get_units_by_division ($param);
+
+				case "addresses_by_unit":
+					return $this->as_get_addresses_by_unit ($param["unit"]);
 			}
 		}
 		else
@@ -57,6 +60,9 @@ class country_administrative_structure_object extends _int_object
 			case "unit_by_name":
 				return $this->as_add_adminunit ($param);
 
+			case "unit_index":
+				return $this->as_index_unit ($param);
+
 			case "structure_array":
 			case "units_by_division":
 				return;
@@ -77,6 +83,60 @@ class country_administrative_structure_object extends _int_object
 		}
 
 		return parent::save();
+	}
+
+	function as_get_descendant_unit_ids($parent)
+	{
+		if (!is_oid($parent))
+		{
+			return false;
+		}
+
+		$index = (array) $this->prop("unit_hierarchy_index");
+		$parents = array($parent);
+		$descendants = array();
+
+		while (count($parents))
+		{
+			$children = array();
+
+			foreach ($parents as $parent)
+			{
+				$children = array_merge($children, array_keys($index, $parent));
+			}
+
+			$parents = $children;
+			$descendants = array_merge($descendants, $children);
+		}
+
+		return $descendants;
+	}
+
+	// returns object list of all addresses under $unit and its subunits
+	function as_get_addresses_by_unit($unit)
+	{
+		if (!is_object($unit))
+		{
+			error::raise(array(
+				"msg" => sprintf(t("administrative_structure::as_get_addresses_by_unit(): invalid unit parameter."))
+			));
+		}
+
+		$parent_unit_ids = $this->as_get_descendant_unit_ids($unit->id());
+		$list = new object_list(array(
+			"class_id" => CL_ADDRESS,
+			"parent" => $parent_unit_ids,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		return $list;
+	}
+
+	function as_index_unit($unit)
+	{
+		$unit_index = $this->prop("unit_hierarchy_index");
+		$unit_index[$unit->id()] = $unit->parent();
+		$this->set_prop("unit_hierarchy_index", $unit_index);
 	}
 
     // @attrib name=as_get_structure
