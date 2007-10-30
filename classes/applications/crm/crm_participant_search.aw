@@ -96,7 +96,7 @@ class crm_participant_search extends popup_search
 				$u = get_instance(CL_USER);
 				$filter["oid"] = array_keys($c->get_employee_picker(obj($u->get_current_company())));
 			}
-		
+
 			if ($arr["s"]["show_vals"]["my_cust"])
 			{
 				$i = get_instance(CL_CRM_COMPANY);
@@ -109,13 +109,19 @@ class crm_participant_search extends popup_search
 				if (count($my_c))
 				{
 					$ol = new object_list(array("oid" => $my_c, "class_id" => CL_CRM_PERSON, "lang_id" => array(), "site_id" => array()));
-					if (!is_array($filter["oid"]))
-					{
-						$filter["oid"] = array();
-					}
+					$tmp = array();
 					foreach($ol->ids() as $_id)
 					{
-						$filter["oid"][$_id] = $_id;
+						$tmp[$_id] = $_id;
+					}
+
+					if (!is_array($filter["oid"]))
+					{
+						$filter["oid"] = $tmp;
+					}
+					else
+					{
+						$filter["oid"] = array_intersect($filter["oid"], $tmp);
 					}
 				}
 			}
@@ -123,27 +129,40 @@ class crm_participant_search extends popup_search
 			if ($arr["s"]["show_vals"]["imp"])
 			{
 				$u = get_instance(CL_USER);
-				if (!is_array($filter["oid"]))
-				{
-					$filter["oid"] = array();
-				}
+
+				$tmp = array();
 				foreach(array_keys($c->get_employee_picker(obj($u->get_current_company()), false, true)) as $_id)
 				{
-					$filter["oid"][$_id] = $_id;
+					$tmp[$_id] = $_id;
+				}
+
+				if (!is_array($filter["oid"]))
+				{
+					$filter["oid"] = $tmp;
+				}
+				else
+				{
+					$filter["oid"] = array_intersect($filter["oid"], $tmp);
 				}
 			}
 
 			if ($arr["s"]["show_vals"]["def"])
 			{
-				if (!is_array($filter["oid"]))
-				{
-					$filter["oid"] = array();
-				}
 				$ol = new object_list(array("class_id" => CL_CRM_PERSON, "lang_id" => array(), "site_id" => array(), "limit" => 30));
-			
+
+				$tmp = array();			
 				foreach($ol->ids() as $_id)
 				{
-					$filter["oid"][$_id] = $_id;
+					$tmp[$_id] = $_id;
+				}
+
+				if (!is_array($filter["oid"]))
+				{
+					$filter["oid"] = $tmp;
+				}
+				else
+				{
+					$filter["oid"] = array_intersect($filter["oid"], $tmp);
 				}
 			}
 
@@ -153,14 +172,15 @@ class crm_participant_search extends popup_search
 				{
 					if (is_oid($k) && $v)
 					{
+						$tmp = array_keys($c->get_employee_picker(obj($k)));
+
 						if (!is_array($filter["oid"]))
 						{
-							$filter["oid"] = array();
+							$filter["oid"] = $tmp;
 						}
-						$tmp = $c->get_employee_picker(obj($k));
-						foreach(array_keys($tmp) as $_id)
+						else
 						{
-							$filter["oid"][$_id] = $_id;
+							$filter["oid"] = array_intersect($filter["oid"], $tmp);
 						}
 					}
 				}
