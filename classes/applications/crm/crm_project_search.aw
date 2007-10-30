@@ -91,6 +91,11 @@ class crm_project_search extends popup_search
 			}
 		}
 
+		if ($arr["s"]["search_co"] != "")
+		{
+			$filter["CL_PROJECT.RELTYPE_PARTICIPANT.name"] = "%".$arr["s"]["search_co"]."%";
+		}
+
 		if (is_array($filter["oid"]) && !count($filter["oid"]))
 		{
 			$filter["oid"] = -1;
