@@ -125,6 +125,53 @@
             <caption>V&amp;amp;auml;ljaminekud</caption>
       </property>
       <property>
+            <name>find_name</name>
+            <table>objects</table>
+            <group>
+                  <num_0>order_confirmed</num_0>
+                  <num_1>order_unconfirmed</num_1>
+            </group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>find_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>find_start</name>
+            <table>objects</table>
+            <group>
+                  <num_0>order_confirmed</num_0>
+                  <num_1>order_unconfirmed</num_1>
+            </group>
+            <type>date_select</type>
+            <field>find_start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>find_end</name>
+            <table>objects</table>
+            <group>
+                  <num_0>order_confirmed</num_0>
+                  <num_1>order_unconfirmed</num_1>
+            </group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>find_end</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>do_find</name>
+            <table>objects</table>
+            <group>
+                  <num_0>order_confirmed</num_0>
+                  <num_1>order_unconfirmed</num_1>
+            </group>
+            <type>submit</type>
+            <store>no</store>
+            <field>do_find</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>order_undone_tb</name>
             <table>objects</table>
             <group>order_undone</group>
@@ -528,7 +575,6 @@
             <hbox_oc>
                   <type>hbox</type>
                   <group>order_orderer_cos</group>
-                  <area_caption></area_caption>
             </hbox_oc>
       </layout>
 </properties>

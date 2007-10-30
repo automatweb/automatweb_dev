@@ -33,6 +33,12 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="print_orders" all_args="1">
+			<function name="print_orders">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 	</class>
 </orb>

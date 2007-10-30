@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.12 2007/09/21 11:13:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.13 2007/10/30 14:41:21 markop Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -12,7 +12,7 @@
 @property order_form type=relpicker reltype=RELTYPE_ORDERS_FORM field=meta method=serialize group=general
 @caption Tellimuse vorm
 
-@groupinfo ordermnager caption="Tellimused" submit=no
+@groupinfo ordermnager caption="Tellimused"
 
 	@groupinfo ordermnager_unc caption="Kinnitamata" submit=no parent=ordermnager
 
@@ -22,6 +22,20 @@
 	@groupinfo ordermnager_cf caption="Kinnitatud" submit=no parent=ordermnager
 
 @default group=ordermnager_unc,ordermnager_cf
+
+#otsing
+@property find_name type=textbox store=no
+@caption Nimi
+
+@property find_start type=date_select
+@caption Alates
+
+@property find_end type=date_select store=no
+@caption Kuni
+
+@property do_find type=submit store=no
+@caption Otsi
+
 
 @property orders_toolbar type=toolbar no_caption=1
 @caption Tellimuste toolbar
@@ -80,8 +94,28 @@ class orders_manager extends class_base
 			case "order_undone":
 				$this->do_order_undone_tbl($arr);
 				break;
+			case "find_name":
+			case "find_start":
+			case "find_end":
+				$search_data = $arr["obj_inst"]->meta("search_data");
+				$prop["value"] = $search_data[$prop["name"]];
+				break;
+
 		};
 		return $retval;
+	}
+
+	function set_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "find_name":
+				unset($arr["request"]["rawdata"]["rawdata"]);
+				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
+				break;
+		}
 	}
 	
 	function do_order_undone_tb(&$arr)
@@ -96,6 +130,18 @@ class orders_manager extends class_base
 				"return_url" => get_ru()
 			), CL_ORDERS_MANAGER)
 		));
+		
+/*		$tb->add_button(array(
+			"name" => "print",
+			"tooltip" => t("Prindi tellimused"),
+			"img" => "print.gif",
+			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
+//			"url" => $this->mk_my_orb("print_orders", array(
+//				"id" => $arr["obj_inst"]->id(),
+//				"return_url" => get_ru()
+//			), CL_ORDERS_MANAGER)
+		));*/
+
 	}
 	
 	function do_order_undone_tbl(&$arr)
@@ -347,6 +393,16 @@ class orders_manager extends class_base
 				"confirm" => t("Oled kindel, et soovid valitud tellimused kinnitada?"),
 			));
 		}
+		$tb->add_button(array(
+			"name" => "print",
+			"tooltip" => t("Prindi tellimused"),
+			"img" => "print.gif",
+			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
+	//			"url" => $this->mk_my_orb("print_orders", array(
+	//				"id" => $arr["obj_inst"]->id(),
+	//				"return_url" => get_ru()
+//			), CL_ORDERS_MANAGER)
+		));
 	}
 	
 	function do_orders_table($arr)
@@ -378,11 +434,56 @@ class orders_manager extends class_base
 			"field" => "oid",
 		));
 		
-		$ol = new object_list(array(
+		$filter = array(
 			"class_id" => CL_ORDERS_ORDER,
 			"order_completed" => 1,
 			"sort_by" => "objects.created DESC",
-		));
+		);
+
+		$search_data = $arr["obj_inst"]->meta("search_data");
+		if($search_data["find_name"])
+		{
+			$cond = array();
+			
+			foreach(explode(" " , $search_data["find_name"]) as $str)
+			{
+				$cond[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_ORDERS_ORDER.RELTYPE_PERSON.firstname" => "%".$str."%",
+					"CL_ORDERS_ORDER.RELTYPE_PERSON.lastname" => "%".$str."%",
+					"CL_ORDERS_ORDER.RELTYPE_PERSON.name" => "%".$str."%",
+				)));
+			}
+
+			$filter [] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => $cond
+			));
+		}
+
+		if((date_edit::get_timestamp($search_data["find_start"]) > 1)|| (date_edit::get_timestamp($search_data["find_end"]) > 1))
+		{
+			if(date_edit::get_timestamp($search_data["find_start"]) > 1)
+			{
+				$from = date_edit::get_timestamp($search_data["find_start"]);
+			}
+			else{
+				 $from = 0;
+			}
+			if(date_edit::get_timestamp($search_data["find_end"]) > 1)
+			{
+				$to = date_edit::get_timestamp($search_data["find_end"]);
+			}
+			else
+			{
+				$to = time()*666;
+			}
+			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 24*3600));
+		}
+
+//if(aw_global_get("uid") == "otto")arr($filter);
+		$ol = new object_list($filter);
 		
 		foreach ($ol->arr() as $order)
 		{
@@ -621,7 +722,7 @@ class orders_manager extends class_base
 
 	/**
 
-		@attrib name=confirm_orders
+		@attrib name=confirm_orders  all_args=1
 
 	**/
 	function confirm_orders($arr)
@@ -639,5 +740,48 @@ class orders_manager extends class_base
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]));
 	}
+
+	/**
+
+		@attrib name=print_orders all_args=1
+
+	**/
+	function print_orders($arr)
+	{
+		$res = "";
+//		fopen("http://games.swirve.com/utopia/login.htm");
+//		die();
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			foreach($arr["sel"] as $id)
+			{;
+				$link =  $this->mk_my_orb("print_orders", array("print_id" => $id));
+				$res.= '<script name= javascript>window.open("'.$link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")</script>';
+				//"<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
+			}
+				$res.= "<script name= javascript>setTimeout('window.close()',3000);</script>";
+		}
+		elseif($this->can("view", $arr["print_id"]))
+		{
+			$oo = get_instance(CL_ORDERS_ORDER);
+			$res .= $oo->request_execute(obj($arr["print_id"]));
+			$res .= "
+				<script language='javascript'>
+					setTimeout('window.close()',5000);
+					window.print();
+				//	if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }
+				</script>
+			";
+		}
+		else
+		{
+			$res .= t("Pole midagi printida");
+		}
+
+//		$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
+
+		die($res);
+	}
+
 }
 ?>

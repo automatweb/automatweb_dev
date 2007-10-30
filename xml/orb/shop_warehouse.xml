@@ -105,6 +105,18 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="confirm_orders">
+			<function name="confirm_orders">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		<action name="print_orders" all_args="1">
+			<function name="print_orders">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 	</class>
 </orb>

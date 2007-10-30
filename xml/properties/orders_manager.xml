@@ -38,6 +38,53 @@
             <field>order_undone</field>
       </property>
       <property>
+            <name>find_name</name>
+            <table>objects</table>
+            <group>
+                  <num_0>ordermnager_unc</num_0>
+                  <num_1>ordermnager_cf</num_1>
+            </group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>find_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>find_start</name>
+            <table>objects</table>
+            <group>
+                  <num_0>ordermnager_unc</num_0>
+                  <num_1>ordermnager_cf</num_1>
+            </group>
+            <type>date_select</type>
+            <field>find_start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>find_end</name>
+            <table>objects</table>
+            <group>
+                  <num_0>ordermnager_unc</num_0>
+                  <num_1>ordermnager_cf</num_1>
+            </group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>find_end</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>do_find</name>
+            <table>objects</table>
+            <group>
+                  <num_0>ordermnager_unc</num_0>
+                  <num_1>ordermnager_cf</num_1>
+            </group>
+            <type>submit</type>
+            <store>no</store>
+            <field>do_find</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>orders_toolbar</name>
             <table>objects</table>
             <group>
@@ -70,7 +117,6 @@
       <groupinfo>
             <ordermnager>
                   <caption>Tellimused</caption>
-                  <submit>no</submit>
             </ordermnager>
             <ordermnager_unc>
                   <caption>Kinnitamata</caption>

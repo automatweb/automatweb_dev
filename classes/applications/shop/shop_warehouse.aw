@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.56 2007/08/28 10:54:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.57 2007/10/30 14:41:19 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -62,6 +62,23 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @property storage_export type=table store=no group=storage_export no_caption=1
 @caption V&auml;ljaminekud
 ////////// ordering tab
+
+
+#otsing
+@property find_name type=textbox store=no group=order_confirmed,order_unconfirmed
+@caption Nimi
+
+@property find_start type=date_select group=order_confirmed,order_unconfirmed
+@caption Alates
+
+@property find_end type=date_select store=no group=order_confirmed,order_unconfirmed
+@caption Kuni
+
+@property do_find type=submit store=no group=order_confirmed,order_unconfirmed
+@caption Otsi
+
+
+
 @groupinfo order caption="Tellimused"
 @groupinfo order_unconfirmed parent=order caption="Kinnitamata"
 @groupinfo order_confirmed parent=order caption="Kinnitatud"
@@ -215,6 +232,13 @@ class shop_warehouse extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "find_name":
+			case "find_start":
+			case "find_end":
+				$search_data = $arr["obj_inst"]->meta("search_data");
+				$prop["value"] = $search_data[$prop["name"]];
+				break;
+
 			case "osearch_from":
 				$prop["options"] = array(
 					0 => t("k&otilde;ik"),
@@ -340,6 +364,10 @@ class shop_warehouse extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "find_name":
+				unset($arr["request"]["rawdata"]["rawdata"]);
+				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
+				break;
 			case "storage_income":
 				$this->save_storage_inc_tbl($arr);
 				break;
@@ -778,6 +806,16 @@ class shop_warehouse extends class_base
 				"return_url" => get_ru()
 			), CL_SHOP_WAREHOUSE)
 		));
+		if ($arr["request"]["group"] != "order_undone")
+		{
+			$tb->add_button(array(
+				"name" => "confirm",
+				"img" => "save.gif",
+				"tooltip" => t("Kinnita tellimused"),
+				"action" => "confirm_orders",
+				"confirm" => t("Oled kindel, et soovid valitud tellimused kinnitada?"),
+			));
+		}
 	}
 	
 	function do_order_undone_tbl(&$arr)
@@ -1896,6 +1934,23 @@ class shop_warehouse extends class_base
 				"return_url" => get_ru()
 			), CL_SHOP_ORDER)
 		));
+		$tb->add_button(array(
+			"name" => "confirm",
+			"img" => "save.gif",
+			"tooltip" => t("Kinnita tellimused"),
+			"action" => "confirm_orders",
+			"confirm" => t("Oled kindel, et soovid valitud tellimused kinnitada?"),
+		));
+		$tb->add_button(array(
+			"name" => "print",
+			"tooltip" => t("Prindi tellimused"),
+			"img" => "print.gif",
+			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
+//			"url" => $this->mk_my_orb("print_orders", array(
+//				"id" => $arr["obj_inst"]->id(),
+//				"return_url" => get_ru()
+//			), CL_ORDERS_MANAGER)
+		));
 	}
 
 	function do_order_unconfirmed_tbl(&$arr)
@@ -1904,10 +1959,45 @@ class shop_warehouse extends class_base
 		$this->_init_order_unconfirmed_tbl($t);
 
 		// list orders from order folder
-		$ol = new object_list(array(
+
+		$filter = array(
 			"class_id" => CL_SHOP_ORDER,
 			"confirmed" => 0
-		));
+		);
+		$search_data = $arr["obj_inst"]->meta("search_data");
+		if($search_data["find_name"])
+		{
+			$filter [] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_SHOP_ORDER.orderer_person.name" => "%".$search_data["find_name"]."%",
+					"CL_SHOP_ORDER.orderer_company.name" => "%".$search_data["find_name"]."%",
+			)));
+		}
+
+		if((date_edit::get_timestamp($search_data["find_start"]) > 1)|| (date_edit::get_timestamp($search_data["find_end"]) > 1))
+		{
+			if(date_edit::get_timestamp($search_data["find_start"]) > 1)
+			{
+				$from = date_edit::get_timestamp($search_data["find_start"]);
+			}
+			else
+			{
+				 $from = 0;
+			}
+			if(date_edit::get_timestamp($search_data["find_end"]) > 1)
+			{
+				$to = date_edit::get_timestamp($search_data["find_end"]);
+			}
+			else
+			{
+				$to = time()*666;
+			}
+			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 24*3600));
+		}
+
+		$ol = new object_list($filter);
+
 		foreach($ol->arr() as $o)
 		{
 			$mb = $o->modifiedby();
@@ -2003,14 +2093,14 @@ class shop_warehouse extends class_base
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
-
+/*
 		$t->define_field(array(
 			"name" => "confirm",
 			"caption" => t("Kinnita"),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
-
+*/
 		$t->define_field(array(
 			"name" => "modifiedby",
 			"caption" => t("Kes"),
@@ -2035,6 +2125,11 @@ class shop_warehouse extends class_base
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+
 	}
 
 	function mk_order_confirmed_toolbar(&$data)
@@ -2056,6 +2151,16 @@ class shop_warehouse extends class_base
 				"return_url" => get_ru()
 			), CL_SHOP_ORDER)
 		));
+		$tb->add_button(array(
+			"name" => "print",
+			"tooltip" => t("Prindi tellimused"),
+			"img" => "print.gif",
+			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
+//			"url" => $this->mk_my_orb("print_orders", array(
+//				"id" => $arr["obj_inst"]->id(),
+//				"return_url" => get_ru()
+//			), CL_ORDERS_MANAGER)
+		));
 	}
 
 	function do_order_confirmed_tbl(&$arr)
@@ -2064,10 +2169,46 @@ class shop_warehouse extends class_base
 		$this->_init_order_confirmed_tbl($t);
 
 		// list orders from order folder
-		$ol = new object_list(array(
+
+		$filter = array(
 			"class_id" => CL_SHOP_ORDER,
 			"confirmed" => 1
-		));
+		);
+		$search_data = $arr["obj_inst"]->meta("search_data");
+		if($search_data["find_name"])
+		{
+			$filter [] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_SHOP_ORDER.orderer_person.name" => "%".$search_data["find_name"]."%",
+					"CL_SHOP_ORDER.orderer_company.name" => "%".$search_data["find_name"]."%",
+			)));
+		}
+
+		if((date_edit::get_timestamp($search_data["find_start"]) > 1)|| (date_edit::get_timestamp($search_data["find_end"]) > 1))
+		{
+			if(date_edit::get_timestamp($search_data["find_start"]) > 1)
+			{
+				$from = date_edit::get_timestamp($search_data["find_start"]);
+			}
+			else
+			{
+				 $from = 0;
+			}
+			if(date_edit::get_timestamp($search_data["find_end"]) > 1)
+			{
+				$to = date_edit::get_timestamp($search_data["find_end"]);
+			}
+			else
+			{
+				$to = time()*666;
+			}
+			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 24*3600));
+		}
+
+		$ol = new object_list($filter);
+
+
 		foreach($ol->arr() as $o)
 		{
 			$mb = $o->modifiedby();
@@ -2163,6 +2304,11 @@ class shop_warehouse extends class_base
 			"caption" => t("Vaata"),
 			"align" => "center"
 		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+
 	}
 
 	function save_order_unconfirmed_tbl(&$arr)
@@ -3206,6 +3352,66 @@ class shop_warehouse extends class_base
 				$this->_req_get_prod_add_config_forms($o->id(), $ret, $prop);
 			}
 		}
+	}
+
+	/**
+
+		@attrib name=confirm_orders all_args=1
+
+	**/
+	function confirm_orders($arr)
+	{
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			$re = get_instance(CL_SHOP_ORDER);
+			foreach($arr["sel"] as $id => $one)
+			{
+				$re->do_confirm(obj($id));
+			}
+		}
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]));
+	}
+
+	/**
+
+		@attrib name=print_orders all_args=1
+
+	**/
+	function print_orders($arr)
+	{
+		$res = "";
+//		fopen("http://games.swirve.com/utopia/login.htm");
+//		die();
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			foreach($arr["sel"] as $id)
+			{;
+				$link =  $this->mk_my_orb("print_orders", array("print_id" => $id));
+				$res.= '<script name= javascript>window.open("'.$link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")</script>';
+				//"<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
+			}
+				$res.= "<script name= javascript>setTimeout('window.close()',3000);</script>";
+		}
+		elseif($this->can("view", $arr["print_id"]))
+		{
+			$oo = get_instance(CL_SHOP_ORDER);
+			$res .= $oo->request_execute(obj($arr["print_id"]));
+			$res .= "
+				<script language='javascript'>
+					setTimeout('window.close()',5000);
+					window.print();
+				//	if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }
+				</script>
+			";
+		}
+		else
+		{
+			$res .= t("Pole midagi printida");
+		}
+
+//		$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
+
+		die($res);
 	}
 }
 ?>

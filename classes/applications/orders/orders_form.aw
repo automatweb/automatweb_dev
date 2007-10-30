@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.25 2007/09/21 11:13:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.26 2007/10/30 14:41:21 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -23,7 +23,7 @@
 @property orders_to_mail type=checkbox ch_value=1
 @caption Saada e-mail tellijale
 
-@property orders_post_from type=textbox 
+@property orders_post_from type=relpicker reltype=RELTYPE_MAIL_ADDRESS
 @caption Kliendile saatja (e-mail)
 
 @property no_pdata_check type=checkbox ch_value=1
@@ -101,6 +101,9 @@
 
 @reltype MAIL value=5 clid=CL_MESSAGE
 @caption Mail
+
+@reltype MAIL_ADDRESS value=6 clid=CL_ML_MEMBER
+@caption Maili aadress
 
 //@reltype ORDER_CENTER value=6 clid=CL_SHOP_ORDER_CENTER
 //@caption Tellimiskeskkond
@@ -233,7 +236,7 @@ class orders_form extends class_base
 	function change($arr)
 	{
 		//If admin side then dont use templates
-		if(strstr($_SERVER['REQUEST_URI'], "/automatweb"))
+		if(strstr($_SERVER['REQUEST_URI'], "/automatweb") && !strstr($_SERVER['REQUEST_URI'], "action=print_orders"))
 		{
 			return parent::change($arr);
 		}
@@ -558,10 +561,10 @@ class orders_form extends class_base
 		}
 		
 		//XXX: temporary hack
-		if($_SESSION["LC"]=="lv")
+		if($_SESSION["LC"]=="fi")
 		{
-			$pysiklient = "pastàvïgais klients";	
-			$esmakordselt = "jauns klients";
+			$pysiklient = "Kanta-asiakas";	
+			$esmakordselt = "Ensimmäinen OTTO-tilaukseni";
 		}
 		else
 		{
