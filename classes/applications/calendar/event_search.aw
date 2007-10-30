@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.92 2007/10/29 15:23:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.93 2007/10/30 21:52:05 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -511,15 +511,12 @@ class event_search extends class_base
 					"size" => 2,
 				)),
 			);
-//			if($prop["type"] == "date_select" || $prop["type"] == "datetime_select" || $prop["type"] == "date_chooser")
-//			{
-				$prps["props"] = html::textarea(array(
-					"name" => "${pname}[${sname}][props]",
-					"value" => $oldvals[$sname]["props"],
-					"rows" => 5,
-					"cols" => 15,
-				));
-//			}
+			$prps["props"] = html::textarea(array(
+				"name" => "${pname}[${sname}][props]",
+				"value" => $oldvals[$sname]["props"],
+				"rows" => 5,
+				"cols" => 15,
+			));
 			$nums = count($oldvals[$sname]["fields"]);
 			foreach(safe_array($oldvals[$sname]["fields"]) as $k => $v)
 			{
@@ -1167,6 +1164,13 @@ class event_search extends class_base
 				$cdat = "";
 				$col_count = 0;
 				$clickable = false;
+				if ($this->is_template('DELETE_EVENT_LINK'))
+				{
+					$tabledef['delete_link'] = array(
+						'caption' => t('Kustuta'),
+						'active' => true
+					);
+				}
 				foreach($tabledef as $key => $propdef)
 				{
 					if(!$propdef["active"])
@@ -1298,7 +1302,7 @@ class event_search extends class_base
 					$cdat = "";
 					foreach($tabledef as $sname => $propdef)
 					{
-						if($sname == "content")
+						if($sname == "content" || $sname == "delete_link")
 						{
 							continue;
 						}
@@ -1477,7 +1481,6 @@ class event_search extends class_base
 								'event_id' => $id,
 								'return_url' => get_ru()
 							), CL_EVENT_SEARCH),
-							'col_count' => $col_count + 1 // I have to increase the col count, cause the delete link usually resides in extra column
 						));
 						$delete_url_str = $this->parse('DELETE_EVENT_LINK');
 						
