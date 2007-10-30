@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.125 2007/10/08 10:25:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.126 2007/10/30 14:59:53 kristo Exp $
 // project.aw - Projekt
 /*
 
@@ -5187,6 +5187,10 @@ class project extends class_base
 			{
 				$s["co"][$c->prop("to")] = $c->prop("to");
 			}
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ORDERER")) as $c)
+			{
+				$s["co"][$c->prop("to")] = $c->prop("to");
+			}
 		}
 
 		$url = $this->mk_my_orb("do_search", array(
@@ -5196,7 +5200,7 @@ class project extends class_base
 				CL_CRM_COMPANY
 			),
 			"s" => $s
-		), "crm_participant_search");
+		), "popup_search");
 		$tb->add_menu_item(array(
 			"parent" => "search",
 			"text" => t("Tellija"),

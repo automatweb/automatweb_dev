@@ -26,5 +26,19 @@ class project_obj extends _int_object
 
 		return parent::set_prop($pn, $pv);
 	}
+
+	function save()
+	{
+		$rv = parent::save();
+		if (!count($this->connections_from(array("type" => "RELTYPE_IMPLEMENTOR"))))
+		{
+			$c = get_current_company();
+			$this->connect(array(
+				"to" => $c->id(),
+				"type" => "RELTYPE_IMPLEMENTOR"
+			));
+		}
+		return $rv;
+	}
 }
 ?>
