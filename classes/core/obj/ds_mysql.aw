@@ -55,7 +55,40 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (isset($this->read_properties_data_cache[$oid]))
 		{
-			$ret = $this->_get_objdata_proc($this->read_properties_data_cache[$oid], $param, $oid);
+			$td = $this->read_properties_data_cache[$oid];
+			if (isset($GLOBALS["read_properties_data_cache_conn"][$oid]))
+			{
+				$ps = $GLOBALS["properties"][$td["class_id"]];
+				$rts = $GLOBALS["relinfo"][$td["class_id"]];
+
+				$cfp_dat = array(); 
+				foreach($GLOBALS["read_properties_data_cache_conn"][$oid] as $_tmp => $d)
+				{
+					foreach($d as $_tmp2 => $d2)
+					{
+						// find prop from reltype
+						// add to that
+						$pn = false;
+						foreach($ps as $pid => $pd)
+						{
+							if ($pd["store"] == "connect" && $rts[$pd["reltype"]]["value"] == $d2["reltype"])
+							{
+								$v = $d2["target"];
+								if ($pd["multiple"] == 1)
+								{
+									$td[$pid][] = $v;
+								}
+								else
+								{
+									$td[$pid] = $v;
+								}
+								continue;
+							}
+						}
+					}
+				}
+			}
+			$ret = $this->_get_objdata_proc($td, $param, $oid);
 		}
 		else
 		{

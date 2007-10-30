@@ -59,7 +59,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		// check if it is in the cache
 		if (isset($this->contained->read_properties_data_cache[$oid]))
 		{
-		//	return $this->contained->get_objdata($oid, $param);
+			return $this->contained->get_objdata($oid, $param);
 		}
 
 		if (!empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
