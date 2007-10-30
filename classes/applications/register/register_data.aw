@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.44 2007/09/04 09:06:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.45 2007/10/30 11:42:03 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1440,6 +1440,46 @@ class register_data extends class_base
 					$co = obj($arr["request"]["cfgform"]);
 					$arr["obj_inst"]->set_prop($rego->prop("cfgform_name_in_field"), $co->name());
 				}
+			}
+		}
+
+
+		// if there is a register attached, then see if that has a webform
+		// and then do the rename thingie
+		if ($this->can("view", $arr["obj_inst"]->prop("register_id")))
+		{
+			$ro = obj($arr["obj_inst"]->prop("register_id"));
+			$conns = $ro->connections_to(array("from.class_id" => CL_WEBFORM));
+			if (count($conns))
+			{
+				$c = reset($conns);
+				$wf = $c->from();
+
+				$name = "";
+				$prplist = $arr["obj_inst"]->get_property_list();
+				foreach(safe_array($wf->prop("obj_name")) as $key => $val)
+				{
+					if ($prplist[$key]["type"] == "date_select")
+					{
+						if ($arr["obj_inst"]->prop($key)  != -1)
+						{
+							$name .= " ".date("d.m.Y", $arr["obj_inst"]->prop($key));
+						}
+					}
+					else
+					if ($prplist[$key]["type"] == "datetime_select")
+					{
+						if ($arr["obj_inst"]->prop($key)  != -1)
+						{
+							$name .= " ".date("d.m.Y H:i", $arr["obj_inst"]->prop($key));
+						}
+					}
+					else
+					{
+						$name .= " ".$arr["obj_inst"]->prop_str($key); //$arr[$key];
+					}
+				}
+				$arr["obj_inst"]->set_name(trim($name));
 			}
 		}
 	}
