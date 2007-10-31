@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.569 2007/10/25 13:33:51 markop Exp $
+// $Id: class_base.aw,v 2.570 2007/10/31 14:55:17 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5422,7 +5422,7 @@ class class_base extends aw_template
 					}
 				}
 				$str = str_replace(chr(226).chr(128).chr(147), "-", $str);
-				$nv = iconv("UTF-8", $lang["charset"], $str);
+				$nv = iconv("UTF-8", $lang["charset"]."//IGNORE", $str);
 				if ($nv != $all_vals[$lid][$p])
 				{
 					$mod = true;
