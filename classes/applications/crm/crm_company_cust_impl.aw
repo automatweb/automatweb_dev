@@ -1933,18 +1933,7 @@ class crm_company_cust_impl extends class_base
 				# ceo
 				if ($default_cfg or in_array("ceo", $visible_fields))
 				{
-					if ($this->can("view", $o->prop("firmajuht")))
-					{
-						$tmp = obj($o->prop("firmajuht"));
-						$juht = $tmp->name();
-					}
-
-					$ceo = html::href(array(
-						"url" => $this->mk_my_orb("change",array(
-							"id" => $o->prop("firmajuht"),
-						),CL_CRM_PERSON),
-						"caption" => $juht,
-					));
+					$ceo = html::obj_change_url($o->prop("firmajuht"));
 				}
 
 				# email

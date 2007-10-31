@@ -1571,33 +1571,36 @@ class crm_company extends class_base
 			$company = get_current_company();
 			foreach($categories as $id=>$cat)
 			{
-				$tree->add_item(0,array(
-					"id" => 'cat'.$id,
-					"name" => $cat,
-					"iconurl" => icons::get_icon_url(CL_MENU),
-					"url" => aw_url_change_var(array(
-						"tf"=> 'cat'.$id
-					))
-				));
-				
 				$ol = new object_list(array(
 					"class_id" => array(CL_CRM_COMPANY_STATUS),
 					"category" => $id,
 					"parent" => $company->id()
 
 				));
+
 				if(count($ol->list))
-				foreach($ol->arr() as $o)
 				{
-					$tree->add_item('cat'.$id, array(
-						"id" => 'cat'.$o->id(),
-						"name" => $o->name(),
+					$tree->add_item(0,array(
+						"id" => 'cat'.$id,
+						"name" => $cat,
+						"iconurl" => icons::get_icon_url(CL_MENU),
 						"url" => aw_url_change_var(array(
-							"tf" => 'st'.$o->id(),
-							"category" => 'st_'.$o->id()
-						)),
+							"tf"=> 'cat'.$id
+						))
 					));
-					$this->get_s_tree_stuff('cat'.$o->id(), $tree, 0);
+				
+					foreach($ol->arr() as $o)
+					{
+						$tree->add_item('cat'.$id, array(
+							"id" => 'cat'.$o->id(),
+							"name" => $o->name(),
+							"url" => aw_url_change_var(array(
+								"tf" => 'st'.$o->id(),
+								"category" => 'st_'.$o->id()
+							)),
+						));
+						$this->get_s_tree_stuff('cat'.$o->id(), $tree, 0);
+					}
 				}
 			}
 		}
