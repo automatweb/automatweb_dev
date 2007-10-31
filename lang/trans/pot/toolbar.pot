@@ -70,3 +70,11 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
+#: classes/vcl/toolbar.aw:627
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:640
+msgid "Kleebi"
+msgstr ""
+

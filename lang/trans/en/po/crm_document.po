@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_acts
 msgid "Omaduse Tegevused (acts) caption"
-msgstr ""
+msgstr "Actions"
 
 #: classes/applications/crm/crm_document.aw:prop_acts_comment
 msgid "Omaduse Tegevused (acts) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_acl
 msgid "Omaduse &Otilde;igused (acl) caption"
-msgstr ""
+msgstr "Rights"
 
 #: classes/applications/crm/crm_document.aw:prop_acl_comment
 msgid "Omaduse &Otilde;igused (acl) kommentaar"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_sp_table
 msgid "Omaduse Valitud isikud (sp_table) caption"
-msgstr ""
+msgstr "Selected persons"
 
 #: classes/applications/crm/crm_document.aw:prop_sp_table_comment
 msgid "Omaduse Valitud isikud (sp_table) kommentaar"
@@ -208,7 +208,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_sp_p_name
 msgid "Omaduse Isik (sp_p_name) caption"
-msgstr ""
+msgstr "Person"
 
 #: classes/applications/crm/crm_document.aw:prop_sp_p_name_comment
 msgid "Omaduse Isik (sp_p_name) kommentaar"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_sp_p_co
 msgid "Omaduse Organisatsioon (sp_p_co) caption"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/crm/crm_document.aw:prop_sp_p_co_comment
 msgid "Omaduse Organisatsioon (sp_p_co) kommentaar"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_sp_sbt
 msgid "Omaduse Otsi (sp_sbt) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/crm/crm_document.aw:prop_sp_sbt_comment
 msgid "Omaduse Otsi (sp_sbt) kommentaar"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_sp_s_res
 msgid "Omaduse Otsingu tulemused (sp_s_res) caption"
-msgstr ""
+msgstr "Search results"
 
 #: classes/applications/crm/crm_document.aw:prop_sp_s_res_comment
 msgid "Omaduse Otsingu tulemused (sp_s_res) kommentaar"
@@ -256,7 +256,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:group_acl
 msgid "Grupi &Otilde;igused (acl) pealkiri"
-msgstr ""
+msgstr "Rights"
 
 #: classes/applications/crm/crm_document.aw:group_acl_help
 msgid "Grupi &Otilde;igused (acl) help"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:group_files
 msgid "Grupi Failid (files) pealkiri"
-msgstr ""
+msgstr "Files"
 
 #: classes/applications/crm/crm_document.aw:group_files_help
 msgid "Grupi Failid (files) help"
@@ -272,7 +272,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:group_parts_main
 msgid "Grupi Osalejad (parts_main) pealkiri"
-msgstr ""
+msgstr "Participants"
 
 #: classes/applications/crm/crm_document.aw:group_parts_main_help
 msgid "Grupi Osalejad (parts_main) help"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:group_notify
 msgid "Grupi Teavitamine (notify) pealkiri"
-msgstr ""
+msgstr "Notifications"
 
 #: classes/applications/crm/crm_document.aw:group_notify_help
 msgid "Grupi Teavitamine (notify) help"
@@ -296,58 +296,60 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:rel_RELTYPE_FILE
 msgid "Seose fail (RELTYPE_FILE) tekst"
-msgstr ""
+msgstr "file"
 
 #: classes/applications/crm/crm_document.aw:rel_RELTYPE_CREATOR
 msgid "Seose looja (RELTYPE_CREATOR) tekst"
-msgstr ""
+msgstr "created by"
 
 #: classes/applications/crm/crm_document.aw:rel_RELTYPE_READER
 msgid "Seose lugeja (RELTYPE_READER) tekst"
-msgstr ""
+msgstr "reader"
 
 #: classes/applications/crm/crm_document.aw:rel_RELTYPE_ACTION
 msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
-msgstr ""
+msgstr "Action"
 
 #: classes/applications/crm/crm_document.aw:181
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/crm/crm_document.aw:187
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/crm/crm_document.aw:194
 msgid "Saada teavitusmeil"
-msgstr ""
+msgstr "Send notification"
 
 #: classes/applications/crm/crm_document.aw:205
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/crm/crm_document.aw:210
 msgid "Organisatsioon"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/crm/crm_document.aw:215
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/crm/crm_document.aw:220
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/crm/crm_document.aw:380
 msgid "Teavitus muutunud dokumendist"
-msgstr ""
+msgstr "Notification about modified document"
 
 #: classes/applications/crm/crm_document.aw:381
 msgid ""
-"Uuendati dokumenti \"%s\". Palun kliki siia:\n"
+\"Uuendati dokumenti \"%s\". Palun kliki siia:\n"
 "%s\n"
 "et dokumenti näha!"
-msgstr ""
+msgstr "Document \"%s\" was changed. Please click here:\n"
+"%s\n"
+"to view this!"
 
 #~ msgid "Grupi Üldine (general) pealkiri"
 #~ msgstr "General"

@@ -21,27 +21,27 @@ msgstr "<br /><B>continue reading from the magazine!</b></font>"
 msgid "Loe edasi"
 msgstr "Read on"
 
-#: classes/document.aw:1138 classes/document.aw:1187
+#: classes/document.aw:1147 classes/document.aw:1196
 msgid "Vaata lisaks:"
 msgstr "See also"
 
-#: classes/document.aw:1143 classes/document.aw:1192
+#: classes/document.aw:1152 classes/document.aw:1201
 msgid "Samal teemal:"
 msgstr "On the same subject:"
 
-#: classes/document.aw:2395
+#: classes/document.aw:2401
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/document.aw:2402
+#: classes/document.aw:2408
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/document.aw:2410
+#: classes/document.aw:2416
 msgid "Autor"
 msgstr "Author"
 
-#: classes/document.aw:2920
+#: classes/document.aw:2926
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
@@ -49,11 +49,11 @@ msgstr ""
 "<font face='arial'>Static page generation is taking place, please wait!<br /><br />\n"
 "\n"
 
-#: classes/document.aw:2950
+#: classes/document.aw:2956
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr "Static pages created"
 
-#: classes/document.aw:2952
+#: classes/document.aw:2958
 msgid "tagasi dokumendi muutmise juurde"
 msgstr "back to document editing"
 

@@ -462,51 +462,51 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:249 classes/applications/orders/orders_order.aw:290
+#: classes/applications/orders/orders_order.aw:250 classes/applications/orders/orders_order.aw:291
 msgid "Tarnimata kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:257
+#: classes/applications/orders/orders_order.aw:258
 msgid "Artikli kood"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:262
+#: classes/applications/orders/orders_order.aw:263
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:268
+#: classes/applications/orders/orders_order.aw:269
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:274
+#: classes/applications/orders/orders_order.aw:275
 msgid "Tellitav_kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:279
+#: classes/applications/orders/orders_order.aw:280
 msgid "Soovitav tarne t&auml;itmine"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:284
+#: classes/applications/orders/orders_order.aw:285
 msgid "Tarne t&auml;itmine/arve nr"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:296
+#: classes/applications/orders/orders_order.aw:297
 msgid "V&auml;rvikaart"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:302
+#: classes/applications/orders/orders_order.aw:303
 msgid "Erihind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:572
+#: classes/applications/orders/orders_order.aw:586
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:574
+#: classes/applications/orders/orders_order.aw:588
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:680
+#: classes/applications/orders/orders_order.aw:694
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr ""
 

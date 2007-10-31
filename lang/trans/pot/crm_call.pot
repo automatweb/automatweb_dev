@@ -535,7 +535,7 @@ msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
 #: classes/crm/crm_call.aw:layout_top_bit
-msgid "Kujundusosa Põhiandmed (top_bit) pealkiri"
+msgid "Kujundusosa P&otilde;hiandmed (top_bit) pealkiri"
 msgstr ""
 
 #: classes/crm/crm_call.aw:layout_center_bit_left_ct
@@ -554,7 +554,7 @@ msgstr ""
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_call.aw:277 classes/crm/crm_call.aw:770
+#: classes/crm/crm_call.aw:277 classes/crm/crm_call.aw:778
 msgid "Tehtud"
 msgstr ""
 
@@ -562,59 +562,59 @@ msgstr ""
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_call.aw:279 classes/crm/crm_call.aw:777
+#: classes/crm/crm_call.aw:279 classes/crm/crm_call.aw:785
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_call.aw:461
+#: classes/crm/crm_call.aw:469
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_call.aw:470
+#: classes/crm/crm_call.aw:478
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_call.aw:479
+#: classes/crm/crm_call.aw:487
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_call.aw:554
+#: classes/crm/crm_call.aw:562
 msgid "Uee k&otilde;ne aeg ei tohi olla minevikus!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:692
+#: classes/crm/crm_call.aw:700
 msgid "Nimi, osaleja ja projekt peavad olema täidetud!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:888
+#: classes/crm/crm_call.aw:896
 msgid "Millal"
 msgstr ""
 
-#: classes/crm/crm_call.aw:895
+#: classes/crm/crm_call.aw:903
 msgid "Sisu"
 msgstr ""
 
-#: classes/crm/crm_call.aw:900
+#: classes/crm/crm_call.aw:908
 msgid "Vaata"
 msgstr ""
 
-#: classes/crm/crm_call.aw:979
+#: classes/crm/crm_call.aw:987
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:984
+#: classes/crm/crm_call.aw:992
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:989
+#: classes/crm/crm_call.aw:997
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_call.aw:994
+#: classes/crm/crm_call.aw:1002
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1028
+#: classes/crm/crm_call.aw:1036
 msgid "Loo uus arve"
 msgstr ""
 

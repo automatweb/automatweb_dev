@@ -30,23 +30,23 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/image_manager.aw:154
+#: classes/admin/image_manager.aw:155
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/image_manager.aw:193
+#: classes/admin/image_manager.aw:194
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/image_manager.aw:200
+#: classes/admin/image_manager.aw:201
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/image_manager.aw:206
+#: classes/admin/image_manager.aw:207
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/image_manager.aw:213
+#: classes/admin/image_manager.aw:214
 msgid "Viimased 30"
 msgstr ""
 

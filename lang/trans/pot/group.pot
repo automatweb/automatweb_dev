@@ -490,19 +490,23 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:199
+#: classes/core/users/group.aw:rel_RELTYPE_CFG_FORM
+msgid "Seose Seadete vorm (RELTYPE_CFG_FORM) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:200
 msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/group.aw:242
+#: classes/core/users/group.aw:243
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/group.aw:243
+#: classes/core/users/group.aw:244
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/group.aw:252
+#: classes/core/users/group.aw:253
 msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
 					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
@@ -513,51 +517,51 @@ msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />"
 msgstr ""
 
-#: classes/core/users/group.aw:308
+#: classes/core/users/group.aw:309
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:466
+#: classes/core/users/group.aw:467
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:495
+#: classes/core/users/group.aw:496
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:504
+#: classes/core/users/group.aw:505
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:513
+#: classes/core/users/group.aw:514
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:522
+#: classes/core/users/group.aw:523
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:542
+#: classes/core/users/group.aw:543
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:605
+#: classes/core/users/group.aw:606
 msgid "--vali--"
 msgstr ""
 
-#: classes/core/users/group.aw:626
+#: classes/core/users/group.aw:627
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:652
+#: classes/core/users/group.aw:653
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:843
+#: classes/core/users/group.aw:844
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:889
+#: classes/core/users/group.aw:890
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 

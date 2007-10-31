@@ -61,82 +61,82 @@ msgstr ""
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:304
-#: classes/applications/crm/crm_company_docs_impl.aw:615
-#: classes/applications/crm/crm_company_docs_impl.aw:739
+#: classes/applications/crm/crm_company_docs_impl.aw:320
+#: classes/applications/crm/crm_company_docs_impl.aw:668
+#: classes/applications/crm/crm_company_docs_impl.aw:792
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:313
+#: classes/applications/crm/crm_company_docs_impl.aw:329
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:321
-#: classes/applications/crm/crm_company_docs_impl.aw:629
+#: classes/applications/crm/crm_company_docs_impl.aw:337
+#: classes/applications/crm/crm_company_docs_impl.aw:682
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:328
-#: classes/applications/crm/crm_company_docs_impl.aw:636
+#: classes/applications/crm/crm_company_docs_impl.aw:344
+#: classes/applications/crm/crm_company_docs_impl.aw:689
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:340
-#: classes/applications/crm/crm_company_docs_impl.aw:646
-#: classes/applications/crm/crm_company_docs_impl.aw:760
+#: classes/applications/crm/crm_company_docs_impl.aw:356
+#: classes/applications/crm/crm_company_docs_impl.aw:699
+#: classes/applications/crm/crm_company_docs_impl.aw:813
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:348
-#: classes/applications/crm/crm_company_docs_impl.aw:653
+#: classes/applications/crm/crm_company_docs_impl.aw:364
+#: classes/applications/crm/crm_company_docs_impl.aw:706
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:377
+#: classes/applications/crm/crm_company_docs_impl.aw:393
 msgid "%s dokumendid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:378
+#: classes/applications/crm/crm_company_docs_impl.aw:394
 msgid ", kataloog: %s"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:398
+#: classes/applications/crm/crm_company_docs_impl.aw:414
 msgid "Ava internetist"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:402
+#: classes/applications/crm/crm_company_docs_impl.aw:418
 msgid "Ava serverist"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:406
+#: classes/applications/crm/crm_company_docs_impl.aw:422
 msgid "Laadi uus versioon"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:605
+#: classes/applications/crm/crm_company_docs_impl.aw:658
 msgid "Lisa dokument"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:622
+#: classes/applications/crm/crm_company_docs_impl.aw:675
 msgid "Lead"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:663
-#: classes/applications/crm/crm_company_docs_impl.aw:692
+#: classes/applications/crm/crm_company_docs_impl.aw:716
+#: classes/applications/crm/crm_company_docs_impl.aw:745
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:674
+#: classes/applications/crm/crm_company_docs_impl.aw:727
 msgid "%s siseuudised"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:746
+#: classes/applications/crm/crm_company_docs_impl.aw:799
 msgid "Failid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:753
+#: classes/applications/crm/crm_company_docs_impl.aw:806
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:767
+#: classes/applications/crm/crm_company_docs_impl.aw:820
 msgid "Muutmisaeg"
 msgstr ""

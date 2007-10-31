@@ -189,95 +189,95 @@ msgstr ""
 msgid "Oled kindel, et soovitud valitud tooted tellimusest eemaldada?"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:139
+#: classes/applications/shop/shop_order.aw:142
 msgid "Kliendi nr: %s<br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:140
+#: classes/applications/shop/shop_order.aw:143
 msgid "Eesnimi:<b> %s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:141
+#: classes/applications/shop/shop_order.aw:144
 msgid "Perekonnanimi:<b> %s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:143
+#: classes/applications/shop/shop_order.aw:146
 msgid "Aadress: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:144
+#: classes/applications/shop/shop_order.aw:147
 msgid "Postiindeks: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:145
+#: classes/applications/shop/shop_order.aw:148
 msgid "Linn: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:146
+#: classes/applications/shop/shop_order.aw:149
 msgid "E-mail: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:147
+#: classes/applications/shop/shop_order.aw:150
 msgid "Telefon kodus: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:148
+#: classes/applications/shop/shop_order.aw:151
 msgid "Telefon t&ouml;&ouml;l: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:149
+#: classes/applications/shop/shop_order.aw:152
 msgid "Mobiil: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:150
+#: classes/applications/shop/shop_order.aw:153
 msgid "Isikukood: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:152
+#: classes/applications/shop/shop_order.aw:155
 msgid "Tellimuse kuup&auml;ev: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:153
+#: classes/applications/shop/shop_order.aw:156
 msgid "Tellimuse number: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:225
+#: classes/applications/shop/shop_order.aw:228
 msgid "Artikli kood"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:234
+#: classes/applications/shop/shop_order.aw:237
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:239
+#: classes/applications/shop/shop_order.aw:242
 msgid "Tellitav kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:297
+#: classes/applications/shop/shop_order.aw:300
 msgid "Pakend:"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:297
+#: classes/applications/shop/shop_order.aw:300
 msgid "Toode:"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:372
+#: classes/applications/shop/shop_order.aw:375
 msgid "Tarne t&auml;itmine"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:372
+#: classes/applications/shop/shop_order.aw:375
 msgid "T&auml;idetud tellimus/arve number"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:453
+#: classes/applications/shop/shop_order.aw:456
 msgid "shop_order::do_confirm(): could not find parent folder for warehouse export!"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:460
+#: classes/applications/shop/shop_order.aw:463
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:549
-#: classes/applications/shop/shop_order.aw:698
+#: classes/applications/shop/shop_order.aw:552
+#: classes/applications/shop/shop_order.aw:701
 msgid "Tellimus laost %s"
 msgstr ""

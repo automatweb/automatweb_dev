@@ -254,14 +254,6 @@ msgstr ""
 msgid "Omaduse Konteineri sisu (msg_contener_content) help"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/messenger/mail_message.aw:group_add
 msgid "Grupi Lisa (add) pealkiri"
 msgstr ""
@@ -336,18 +328,18 @@ msgstr ""
 msgid "K&otilde;ik p&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1307
+#: classes/applications/messenger/mail_message.aw:1309
 msgid "kustutatud!"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1309
+#: classes/applications/messenger/mail_message.aw:1311
 msgid "sulge aken"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1388
+#: classes/applications/messenger/mail_message.aw:1390
 msgid "saadetud<p>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1511
+#: classes/applications/messenger/mail_message.aw:1513
 msgid "----Forwarded message-----\n"
 msgstr ""

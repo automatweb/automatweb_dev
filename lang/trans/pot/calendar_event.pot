@@ -646,19 +646,31 @@ msgstr ""
 msgid "Seose Toimumisaeg (RELTYPE_EVENT_TIME) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:363
+#: classes/applications/calendar/calendar_event.aw:356
+msgid "Algusaeg ei vasta formaadile"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:357
+msgid "L&otilde;puaeg ei vasta formaadile"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:402
+msgid "Sellist toimumiskohta pole"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:429
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:367
+#: classes/applications/calendar/calendar_event.aw:433
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:371
+#: classes/applications/calendar/calendar_event.aw:437
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:401
+#: classes/applications/calendar/calendar_event.aw:467
 msgid "Kustuta"
 msgstr ""
 

@@ -58,7 +58,7 @@ msgstr ""
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: classes/vcl/releditor.aw:567 classes/vcl/releditor.aw:762
+#: classes/vcl/releditor.aw:567 classes/vcl/releditor.aw:768
 msgid "Muuda"
 msgstr ""
 
@@ -66,11 +66,11 @@ msgstr ""
 msgid "Vali üks"
 msgstr ""
 
-#: classes/vcl/releditor.aw:700 classes/vcl/releditor.aw:749
+#: classes/vcl/releditor.aw:701 classes/vcl/releditor.aw:753
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:754
+#: classes/vcl/releditor.aw:759
 msgid "Nimi"
 msgstr ""
 

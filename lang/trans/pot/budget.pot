@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Project (project) help"
 msgstr ""
 
+#: classes/applications/budgeting/budget.aw:prop_scenario
+msgid "Omaduse Stsenaarium (scenario) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_scenario_comment
+msgid "Omaduse Stsenaarium (scenario) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_scenario_help
+msgid "Omaduse Stsenaarium (scenario) help"
+msgstr ""
+
 #: classes/applications/budgeting/budget.aw:prop_total
 msgid "Omaduse Kogusumma (total) caption"
 msgstr ""
@@ -90,39 +102,43 @@ msgstr ""
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:102
+#: classes/applications/budgeting/budget.aw:rel_RELTYPE_SCENARIO
+msgid "Seose Stsenaarium (RELTYPE_SCENARIO) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:116
 msgid "Maksugrupp"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:108
+#: classes/applications/budgeting/budget.aw:122
 msgid "Maks"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:115
+#: classes/applications/budgeting/budget.aw:129
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:122
+#: classes/applications/budgeting/budget.aw:136
 msgid "Maksu protsent"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:129
+#: classes/applications/budgeting/budget.aw:143
 msgid "Muuda protsenti"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:134
+#: classes/applications/budgeting/budget.aw:148
 msgid "Maksu summa"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:141
+#: classes/applications/budgeting/budget.aw:155
 msgid "Edasi kandub"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:172
+#: classes/applications/budgeting/budget.aw:186
 msgid "<br>(Maksimaalne erinevus %s)"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:177 classes/applications/budgeting/budget.aw:207
+#: classes/applications/budgeting/budget.aw:191 classes/applications/budgeting/budget.aw:221
 msgid "Muud maksud"
 msgstr ""
 

@@ -841,6 +841,18 @@ msgstr ""
 msgid "Omaduse Vali versioon, mida muuta (edit_version) help"
 msgstr ""
 
+#: classes/doc.aw:prop_associated_file
+msgid "Omaduse Lisa fail (associated_file) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_associated_file_comment
+msgid "Omaduse Lisa fail (associated_file) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_associated_file_help
+msgid "Omaduse Lisa fail (associated_file) help"
+msgstr ""
+
 #: classes/doc.aw:prop_no_right_pane
 msgid "Omaduse Ilma parema paanita (no_right_pane) caption"
 msgstr ""
@@ -998,15 +1010,15 @@ msgid "Omaduse Algab (kp) (start) help"
 msgstr ""
 
 #: classes/doc.aw:prop_start1
-msgid "Omaduse Algab  (start1) caption"
+msgid "Omaduse Algab (start1) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_start1_comment
-msgid "Omaduse Algab  (start1) kommentaar"
+msgid "Omaduse Algab (start1) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_start1_help
-msgid "Omaduse Algab  (start1) help"
+msgid "Omaduse Algab (start1) help"
 msgstr ""
 
 #: classes/doc.aw:prop_duration
@@ -1233,74 +1245,74 @@ msgstr ""
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/doc.aw:372
+#: classes/doc.aw:375
 msgid "NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik! (%s)"
 msgstr ""
 
-#: classes/doc.aw:373
+#: classes/doc.aw:376
 msgid "Originaal"
 msgstr ""
 
-#: classes/doc.aw:470
+#: classes/doc.aw:473
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:856
+#: classes/doc.aw:904
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:872 classes/doc.aw:1695
+#: classes/doc.aw:920 classes/doc.aw:1743
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:1034
+#: classes/doc.aw:1082
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:1047
+#: classes/doc.aw:1095
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/doc.aw:1330 classes/doc.aw:1425 classes/doc.aw:1429
+#: classes/doc.aw:1378 classes/doc.aw:1473 classes/doc.aw:1477
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/doc.aw:1377
+#: classes/doc.aw:1425
 msgid "Versioon"
 msgstr ""
 
-#: classes/doc.aw:1383 classes/doc.aw:1443 classes/doc.aw:1471
+#: classes/doc.aw:1431 classes/doc.aw:1491 classes/doc.aw:1519
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc.aw:1389
+#: classes/doc.aw:1437
 msgid "Hinne"
 msgstr ""
 
-#: classes/doc.aw:1395
+#: classes/doc.aw:1443
 msgid "Hinda"
 msgstr ""
 
-#: classes/doc.aw:1401
+#: classes/doc.aw:1449
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/doc.aw:1407
+#: classes/doc.aw:1455
 msgid "Vali"
 msgstr ""
 
-#: classes/doc.aw:1438 classes/doc.aw:1466
+#: classes/doc.aw:1486 classes/doc.aw:1514
 msgid "--Vali--"
 msgstr ""
 
-#: classes/doc.aw:1563
+#: classes/doc.aw:1611
 msgid "Kustuta"
 msgstr ""
 
-#: classes/doc.aw:1631
+#: classes/doc.aw:1679
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/doc.aw:1669 classes/doc.aw:1670 classes/doc.aw:1671
+#: classes/doc.aw:1717 classes/doc.aw:1718 classes/doc.aw:1719
 msgid "<b>"
 msgstr ""

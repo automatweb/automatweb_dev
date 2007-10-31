@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Kood (product_code) help"
 msgstr ""
 
+#: classes/applications/orders/orders_item.aw:prop_product_unit
+msgid "Omaduse M&otilde;&otilde;t&uuml;hik (product_unit) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_unit_comment
+msgid "Omaduse M&otilde;&otilde;t&uuml;hik (product_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_product_unit_help
+msgid "Omaduse M&otilde;&otilde;t&uuml;hik (product_unit) help"
+msgstr ""
+
 #: classes/applications/orders/orders_item.aw:prop_product_color
 msgid "Omaduse Värvus (product_color) caption"
 msgstr ""
@@ -144,5 +156,209 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_image_help
 msgid "Omaduse Pilt (product_image) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox1
+msgid "Omaduse  (udef_textbox1) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox1_comment
+msgid "Omaduse  (udef_textbox1) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox1_help
+msgid "Omaduse  (udef_textbox1) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox2
+msgid "Omaduse  (udef_textbox2) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox2_comment
+msgid "Omaduse  (udef_textbox2) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox2_help
+msgid "Omaduse  (udef_textbox2) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox3
+msgid "Omaduse  (udef_textbox3) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox3_comment
+msgid "Omaduse  (udef_textbox3) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox3_help
+msgid "Omaduse  (udef_textbox3) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox4
+msgid "Omaduse  (udef_textbox4) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox4_comment
+msgid "Omaduse  (udef_textbox4) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox4_help
+msgid "Omaduse  (udef_textbox4) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox5
+msgid "Omaduse  (udef_textbox5) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox5_comment
+msgid "Omaduse  (udef_textbox5) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox5_help
+msgid "Omaduse  (udef_textbox5) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox6
+msgid "Omaduse  (udef_textbox6) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox6_comment
+msgid "Omaduse  (udef_textbox6) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox6_help
+msgid "Omaduse  (udef_textbox6) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox7
+msgid "Omaduse  (udef_textbox7) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox7_comment
+msgid "Omaduse  (udef_textbox7) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textbox7_help
+msgid "Omaduse  (udef_textbox7) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea1
+msgid "Omaduse  (udef_textarea1) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea1_comment
+msgid "Omaduse  (udef_textarea1) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea1_help
+msgid "Omaduse  (udef_textarea1) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea2
+msgid "Omaduse  (udef_textarea2) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea2_comment
+msgid "Omaduse  (udef_textarea2) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea2_help
+msgid "Omaduse  (udef_textarea2) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea3
+msgid "Omaduse  (udef_textarea3) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea3_comment
+msgid "Omaduse  (udef_textarea3) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea3_help
+msgid "Omaduse  (udef_textarea3) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea4
+msgid "Omaduse  (udef_textarea4) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea4_comment
+msgid "Omaduse  (udef_textarea4) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea4_help
+msgid "Omaduse  (udef_textarea4) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea5
+msgid "Omaduse  (udef_textarea5) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea5_comment
+msgid "Omaduse  (udef_textarea5) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_textarea5_help
+msgid "Omaduse  (udef_textarea5) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker1
+msgid "Omaduse  (udef_picker1) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker1_comment
+msgid "Omaduse  (udef_picker1) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker1_help
+msgid "Omaduse  (udef_picker1) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker2
+msgid "Omaduse  (udef_picker2) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker2_comment
+msgid "Omaduse  (udef_picker2) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker2_help
+msgid "Omaduse  (udef_picker2) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker3
+msgid "Omaduse  (udef_picker3) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker3_comment
+msgid "Omaduse  (udef_picker3) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker3_help
+msgid "Omaduse  (udef_picker3) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker4
+msgid "Omaduse  (udef_picker4) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker4_comment
+msgid "Omaduse  (udef_picker4) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker4_help
+msgid "Omaduse  (udef_picker4) help"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker5
+msgid "Omaduse  (udef_picker5) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker5_comment
+msgid "Omaduse  (udef_picker5) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_item.aw:prop_udef_picker5_help
+msgid "Omaduse  (udef_picker5) help"
 msgstr ""
 

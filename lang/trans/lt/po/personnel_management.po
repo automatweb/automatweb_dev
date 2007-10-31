@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/personnel_management/personnel_management.aw:class_275_help
 msgid "Klassi Personalikeskkond help"
 msgstr ""
@@ -322,71 +321,82 @@ msgstr ""
 msgid "Seose Otsingu salvestus (RELTYPE_SEARCH_SAVE) tekst"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:216 classes/applications/personnel_management/personnel_management.aw:225
+#: classes/applications/personnel_management/personnel_management.aw:layout_offers_tree
+msgid "Kujundusosa Kaustad (offers_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:219
+#: classes/applications/personnel_management/personnel_management.aw:228
 msgid "Element"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:272 classes/applications/personnel_management/personnel_management.aw:282
+#: classes/applications/personnel_management/personnel_management.aw:275
+#: classes/applications/personnel_management/personnel_management.aw:285
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:288
+#: classes/applications/personnel_management/personnel_management.aw:291
 msgid "Kustuta kandidaadid"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:298
+#: classes/applications/personnel_management/personnel_management.aw:301
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:303
+#: classes/applications/personnel_management/personnel_management.aw:307
 msgid "Tööpakkumine"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:309
+#: classes/applications/personnel_management/personnel_management.aw:313
 msgid "Kategooria"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:314
-msgid "Alusta olemasoleva põhjal"
+#: classes/applications/personnel_management/personnel_management.aw:318
+msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:320
-msgid "Kustuta tööpakkumised"
+#: classes/applications/personnel_management/personnel_management.aw:326
+msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:332 classes/applications/personnel_management/personnel_management.aw:344 classes/applications/personnel_management/personnel_management.aw:355
+#: classes/applications/personnel_management/personnel_management.aw:340
+#: classes/applications/personnel_management/personnel_management.aw:367
+#: classes/applications/personnel_management/personnel_management.aw:378
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:360
+#: classes/applications/personnel_management/personnel_management.aw:344
+msgid "T&ouml;&ouml;pakkumine"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:383
 msgid "Ametikoht"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:365
+#: classes/applications/personnel_management/personnel_management.aw:388
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:370
+#: classes/applications/personnel_management/personnel_management.aw:393
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:375
+#: classes/applications/personnel_management/personnel_management.aw:398
 msgid "Tähtaeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:380
+#: classes/applications/personnel_management/personnel_management.aw:403
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:411
+#: classes/applications/personnel_management/personnel_management.aw:435
 msgid "Määramata"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:421
+#: classes/applications/personnel_management/personnel_management.aw:445
 msgid "aktiivne"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:421
+#: classes/applications/personnel_management/personnel_management.aw:445
 msgid "mitteaktiivne"
 msgstr ""
-

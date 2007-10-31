@@ -30,23 +30,23 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/file_manager.aw:143
+#: classes/admin/file_manager.aw:153
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/file_manager.aw:181
+#: classes/admin/file_manager.aw:191
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/file_manager.aw:188
+#: classes/admin/file_manager.aw:198
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/file_manager.aw:194
+#: classes/admin/file_manager.aw:204
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/file_manager.aw:201
+#: classes/admin/file_manager.aw:211
 msgid "Viimased 30"
 msgstr ""
 

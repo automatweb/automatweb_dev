@@ -10,13 +10,13 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/applications/crm/crm_company_people_impl.aw:19
-#: classes/applications/crm/crm_company_people_impl.aw:669
-#: classes/applications/crm/crm_company_people_impl.aw:969
+#: classes/applications/crm/crm_company_people_impl.aw:684
+#: classes/applications/crm/crm_company_people_impl.aw:984
 msgid "Uus"
 msgstr "New"
 
 #: classes/applications/crm/crm_company_people_impl.aw:31
-#: classes/applications/crm/crm_company_people_impl.aw:981
+#: classes/applications/crm/crm_company_people_impl.aw:996
 msgid "T&ouml;&ouml;taja"
 msgstr "Employee"
 
@@ -33,187 +33,191 @@ msgid "Uus toimetus"
 msgstr "New task"
 
 #: classes/applications/crm/crm_company_people_impl.aw:72
-#: classes/applications/crm/crm_company_people_impl.aw:1059
+#: classes/applications/crm/crm_company_people_impl.aw:1074
 msgid "Otsi"
 msgstr "Search"
 
 #: classes/applications/crm/crm_company_people_impl.aw:78
-#: classes/applications/crm/crm_company_people_impl.aw:1071
+#: classes/applications/crm/crm_company_people_impl.aw:1086
 msgid "Isikuid"
 msgstr "Persons"
 
 #: classes/applications/crm/crm_company_people_impl.aw:87
-#: classes/applications/crm/crm_company_people_impl.aw:1147
+msgid "Lisa isikud organisatisooni"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:97
+#: classes/applications/crm/crm_company_people_impl.aw:1162
 msgid "Oluliseks"
 msgstr "Mark as important"
 
-#: classes/applications/crm/crm_company_people_impl.aw:97
+#: classes/applications/crm/crm_company_people_impl.aw:107
 msgid "Saada kiri"
 msgstr "Send e-mail"
 
-#: classes/applications/crm/crm_company_people_impl.aw:109
+#: classes/applications/crm/crm_company_people_impl.aw:119
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/crm/crm_company_people_impl.aw:115
+#: classes/applications/crm/crm_company_people_impl.aw:125
 msgid "(Valitud)"
 msgstr ""
 
-#: classes/applications/crm/crm_company_people_impl.aw:120
+#: classes/applications/crm/crm_company_people_impl.aw:130
 msgid "Vali filter:"
 msgstr ""
 
-#: classes/applications/crm/crm_company_people_impl.aw:120
+#: classes/applications/crm/crm_company_people_impl.aw:130
 msgid "Valitud:"
 msgstr ""
 
-#: classes/applications/crm/crm_company_people_impl.aw:146
-#: classes/applications/crm/crm_company_people_impl.aw:1172
+#: classes/applications/crm/crm_company_people_impl.aw:156
+#: classes/applications/crm/crm_company_people_impl.aw:1187
 msgid "K&otilde;ik t&ouml;&ouml;tajad"
 msgstr "All employees"
 
-#: classes/applications/crm/crm_company_people_impl.aw:179
-#: classes/applications/crm/crm_company_people_impl.aw:185
+#: classes/applications/crm/crm_company_people_impl.aw:189
+#: classes/applications/crm/crm_company_people_impl.aw:195
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/applications/crm/crm_company_people_impl.aw:193
-#: classes/applications/crm/crm_company_people_impl.aw:571
+#: classes/applications/crm/crm_company_people_impl.aw:203
+#: classes/applications/crm/crm_company_people_impl.aw:585
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/crm/crm_company_people_impl.aw:202
-#: classes/applications/crm/crm_company_people_impl.aw:578
+#: classes/applications/crm/crm_company_people_impl.aw:212
+#: classes/applications/crm/crm_company_people_impl.aw:592
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/applications/crm/crm_company_people_impl.aw:208
-#: classes/applications/crm/crm_company_people_impl.aw:583
+#: classes/applications/crm/crm_company_people_impl.aw:218
+#: classes/applications/crm/crm_company_people_impl.aw:597
 msgid "E-post"
 msgstr "E-mail"
 
-#: classes/applications/crm/crm_company_people_impl.aw:214
-#: classes/applications/crm/crm_company_people_impl.aw:533
-#: classes/applications/crm/crm_company_people_impl.aw:588
-#: classes/applications/crm/crm_company_people_impl.aw:997
+#: classes/applications/crm/crm_company_people_impl.aw:224
+#: classes/applications/crm/crm_company_people_impl.aw:543
+#: classes/applications/crm/crm_company_people_impl.aw:602
+#: classes/applications/crm/crm_company_people_impl.aw:1012
 msgid "&Uuml;ksus"
 msgstr "Unit"
 
-#: classes/applications/crm/crm_company_people_impl.aw:220
-#: classes/applications/crm/crm_company_people_impl.aw:593
-#: classes/applications/crm/crm_company_people_impl.aw:1013
+#: classes/applications/crm/crm_company_people_impl.aw:230
+#: classes/applications/crm/crm_company_people_impl.aw:607
+#: classes/applications/crm/crm_company_people_impl.aw:1028
 msgid "Ametinimetus"
 msgstr "Occupation"
 
-#: classes/applications/crm/crm_company_people_impl.aw:243
+#: classes/applications/crm/crm_company_people_impl.aw:253
 msgid "%s t&ouml;&ouml;tajad"
 msgstr "%s employees"
 
-#: classes/applications/crm/crm_company_people_impl.aw:534
+#: classes/applications/crm/crm_company_people_impl.aw:544
 msgid "Amet"
 msgstr "Profession"
 
-#: classes/applications/crm/crm_company_people_impl.aw:601
+#: classes/applications/crm/crm_company_people_impl.aw:615
 msgid "%s t&ouml;&ouml;tajate otsingu tulemused"
 msgstr "%s employee search results"
 
-#: classes/applications/crm/crm_company_people_impl.aw:675
-#: classes/applications/crm/crm_company_people_impl.aw:838
+#: classes/applications/crm/crm_company_people_impl.aw:690
+#: classes/applications/crm/crm_company_people_impl.aw:853
 msgid "Kustuta valitud t&ouml;&ouml;pakkumised"
 msgstr "Delete selected job offers"
 
-#: classes/applications/crm/crm_company_people_impl.aw:677
+#: classes/applications/crm/crm_company_people_impl.aw:692
 msgid "Kas oled kindel et soovid valitud t&ouml;&ouml;pakkumised kustudada?"
 msgstr "Are You sure!"
 
-#: classes/applications/crm/crm_company_people_impl.aw:693
+#: classes/applications/crm/crm_company_people_impl.aw:708
 msgid "T&ouml;&ouml;pakkumine"
 msgstr "Job offer"
 
-#: classes/applications/crm/crm_company_people_impl.aw:730
-#: classes/applications/crm/crm_company_people_impl.aw:877
+#: classes/applications/crm/crm_company_people_impl.aw:745
+#: classes/applications/crm/crm_company_people_impl.aw:892
 msgid "Osakond"
 msgstr "Section"
 
-#: classes/applications/crm/crm_company_people_impl.aw:736
+#: classes/applications/crm/crm_company_people_impl.aw:751
 msgid "Ametinimi"
 msgstr "Occupation"
 
-#: classes/applications/crm/crm_company_people_impl.aw:742
+#: classes/applications/crm/crm_company_people_impl.aw:757
 msgid "Kommentaar"
 msgstr "Comment"
 
-#: classes/applications/crm/crm_company_people_impl.aw:748
+#: classes/applications/crm/crm_company_people_impl.aw:763
 msgid "Kehtiv alates"
 msgstr "Valid from"
 
-#: classes/applications/crm/crm_company_people_impl.aw:759
+#: classes/applications/crm/crm_company_people_impl.aw:774
 msgid "Kehtiv kuni"
 msgstr "Valid till"
 
-#: classes/applications/crm/crm_company_people_impl.aw:771
+#: classes/applications/crm/crm_company_people_impl.aw:786
 msgid "X"
 msgstr "X"
 
-#: classes/applications/crm/crm_company_people_impl.aw:776
+#: classes/applications/crm/crm_company_people_impl.aw:791
 msgid "%s t&ouml;&ouml;pakkumised"
 msgstr "%s job offers"
 
-#: classes/applications/crm/crm_company_people_impl.aw:811
+#: classes/applications/crm/crm_company_people_impl.aw:826
 msgid "M&auml;&auml;ramata"
 msgstr "Undetermined"
 
-#: classes/applications/crm/crm_company_people_impl.aw:865
+#: classes/applications/crm/crm_company_people_impl.aw:880
 msgid "Kandideerija nimi"
 msgstr "Candidates name"
 
-#: classes/applications/crm/crm_company_people_impl.aw:871
+#: classes/applications/crm/crm_company_people_impl.aw:886
 msgid "Ametikoht"
 msgstr "Occupation"
 
-#: classes/applications/crm/crm_company_people_impl.aw:881
+#: classes/applications/crm/crm_company_people_impl.aw:896
 msgid "%ssse t&ouml;&ouml;le kandideerijad"
 msgstr "%s candidates"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1028
+#: classes/applications/crm/crm_company_people_impl.aw:1043
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1034
+#: classes/applications/crm/crm_company_people_impl.aw:1049
 msgid "Eemalda isikud organisatsioonist"
 msgstr "Remove selected employees"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1037
-#: classes/applications/crm/crm_company_people_impl.aw:1047
+#: classes/applications/crm/crm_company_people_impl.aw:1052
+#: classes/applications/crm/crm_company_people_impl.aw:1062
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1038
-#: classes/applications/crm/crm_company_people_impl.aw:1048
+#: classes/applications/crm/crm_company_people_impl.aw:1053
+#: classes/applications/crm/crm_company_people_impl.aw:1063
 msgid "Oled kindel et soovid kustutada valitud t&ouml;&ouml;tajad?"
 msgstr "Are You sure!"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1044
+#: classes/applications/crm/crm_company_people_impl.aw:1059
 msgid "Kustuta isikud s&uuml;steemist"
 msgstr "Delete persons from system"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1092
+#: classes/applications/crm/crm_company_people_impl.aw:1107
 msgid "Ametinimetusi"
 msgstr "Occupations"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1111
+#: classes/applications/crm/crm_company_people_impl.aw:1126
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1121
+#: classes/applications/crm/crm_company_people_impl.aw:1136
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1128
+#: classes/applications/crm/crm_company_people_impl.aw:1143
 msgid "Kopeeri"
 msgstr "Copy"
 
-#: classes/applications/crm/crm_company_people_impl.aw:1137
+#: classes/applications/crm/crm_company_people_impl.aw:1152
 msgid "Kleebi"
 msgstr "Paste"
 

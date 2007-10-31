@@ -162,11 +162,11 @@ msgid "Seose foorum (RELTYPE_FORUM) tekst"
 msgstr "forum"
 
 #: classes/applications/docgen/docgen_viewer.aw:layout_tree
-msgid "Kujundusosa Klasside puu (tree) pealkiri"
+msgid "Kujundusosa Klasside&nbsp;puu (tree) pealkiri"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:layout_tbl
-msgid "Kujundusosa Klassi info (tbl) pealkiri"
+msgid "Kujundusosa Klassi&nbsp;info (tbl) pealkiri"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:90
@@ -174,8 +174,8 @@ msgstr ""
 #: classes/applications/docgen/docgen_viewer.aw:227
 #: classes/applications/docgen/docgen_viewer.aw:816
 #: classes/applications/docgen/docgen_viewer.aw:886
-#: classes/applications/docgen/docgen_viewer.aw:1170
-#: classes/applications/docgen/docgen_viewer.aw:1240
+#: classes/applications/docgen/docgen_viewer.aw:1329
+#: classes/applications/docgen/docgen_viewer.aw:1399
 msgid "Classes"
 msgstr "Classes"
 
@@ -217,12 +217,28 @@ msgid "Classbase tagid"
 msgstr "Classbase tags"
 
 #: classes/applications/docgen/docgen_viewer.aw:1133
+msgid "Otsing"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:1139
 msgid "Uuenda API andmebaas"
 msgstr "Renew API database"
 
-#: classes/applications/docgen/docgen_viewer.aw:1144
+#: classes/applications/docgen/docgen_viewer.aw:1150
 msgid "Foorum"
 msgstr "Forum"
+
+#: classes/applications/docgen/docgen_viewer.aw:1167
+msgid "Otsingus&otilde;na(d)"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:1169
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:1174
+msgid "Loo otsingu andmebaas"
+msgstr ""
 
 #~ msgid "Dokumenteeritud klassid"
 #~ msgstr "Documented classes"

@@ -59,7 +59,7 @@ msgstr "Submit and go forward"
 
 #: classes/cfg/htmlclient.aw:753
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
-msgstr ""
+msgstr "Data is not saved, do you wish to save before you continue?"
 
 #: classes/cfg/htmlclient.aw:849
 msgid "Tagasiside"
@@ -88,6 +88,14 @@ msgstr "History"
 #: classes/cfg/htmlclient.aw:864
 msgid "Lisa kiiresti"
 msgstr "Add quickly"
+
+#: classes/cfg/htmlclient.aw:1328
+msgid "Kinni"
+msgstr "Close"
+
+#: classes/cfg/htmlclient.aw:1329
+msgid "Lahti"
+msgstr "Open"
 
 #~ msgid "Toimetus"
 #~ msgstr "Task"

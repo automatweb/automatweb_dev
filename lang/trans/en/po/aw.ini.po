@@ -2544,6 +2544,10 @@ msgstr ""
 msgid "Klassi Trademark status (1195) nimi"
 msgstr ""
 
+#: aw.ini:class_1196
+msgid "Klassi Expp kampaania (1196) nimi"
+msgstr ""
+
 #: aw.ini:class_1197
 msgid "Klassi DOT (1197) nimi"
 msgstr ""
@@ -2654,6 +2658,70 @@ msgstr ""
 
 #: aw.ini:class_1319
 msgid "Klassi Eelarvestamise maksu kausta seos (1319) nimi"
+msgstr ""
+
+#: aw.ini:class_1322
+msgid "Klassi Toimumisaeg (1322) nimi"
+msgstr ""
+
+#: aw.ini:class_1323
+msgid "Klassi OWS Broneeringukeskus (1323) nimi"
+msgstr ""
+
+#: aw.ini:class_1324
+msgid "Klassi Kindlustus (1324) nimi"
+msgstr ""
+
+#: aw.ini:class_1325
+msgid "Klassi Eelarvestamise stsenaarium (1325) nimi"
+msgstr ""
+
+#: aw.ini:class_1326
+msgid "Klassi Kindlustuse t&uuml;&uuml;p (1326) nimi"
+msgstr ""
+
+#: aw.ini:class_1327
+msgid "Klassi Kliendikategooria (1327) nimi"
+msgstr ""
+
+#: aw.ini:class_1329
+msgid "Klassi Failide &uuml;leslaadimise seaded (1329) nimi"
+msgstr ""
+
+#: aw.ini:class_1332
+msgid "Klassi Sisuhalduse statistika (1332) nimi"
+msgstr ""
+
+#: aw.ini:class_1344
+msgid "Klassi OWS Broneering (1344) nimi"
+msgstr ""
+
+#: aw.ini:class_1341
+msgid "Klassi Ülesannete kuvamine (1341) nimi"
+msgstr ""
+
+#: aw.ini:class_1342
+msgid "Klassi Bugtracki rakendus (1342) nimi"
+msgstr ""
+
+#: aw.ini:class_1343
+msgid "Klassi Expp remote makse (1343) nimi"
+msgstr ""
+
+#: aw.ini:class_1346
+msgid "Klassi Expp meilid (1346) nimi"
+msgstr ""
+
+#: aw.ini:class_1347
+msgid "Klassi M&uuml;&uuml;gikeskkond (1347) nimi"
+msgstr ""
+
+#: aw.ini:class_1348
+msgid "Klassi Sündmuste eksport (iCal) (1348) nimi"
+msgstr ""
+
+#: aw.ini:class_1349
+msgid "Klassi Sündmuste import (iCal) (1349) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29
@@ -5208,6 +5276,54 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1319
 msgid "syslog.type.ST_BUDGETING_TAX_FOLDER_RELATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1324
+msgid "syslog.type.ST_CRM_INSURANCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1325
+msgid "syslog.type.ST_BUDGETING_SCENARIO"
+msgstr ""
+
+#: aw.ini:syslogtypes_1323
+msgid "syslog.type.ST_OWS_BRON"
+msgstr ""
+
+#: aw.ini:syslogtypes_1328
+msgid "syslog.type.ST_CRM_INSURANCE_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1329
+msgid "syslog.type.ST_FILE_UPLOAD_CONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_1327
+msgid "syslog.type.ST_CRM_COMPANY_STATUS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1332
+msgid "syslog.type.ST_CONTENTMGMT_STATISTICS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1341
+msgid "syslog.type.ST_BUGTRACK_DISPLAY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1342
+msgid "syslog.type.ST_BUG_APP_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1344
+msgid "syslog.type.ST_OWS_RESERVATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1348
+msgid "syslog.type.ST_ICAL_EXPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1349
+msgid "syslog.type.ST_ICAL_IMPORT"
 msgstr ""
 
 #: aw.ini:syslogactions_1

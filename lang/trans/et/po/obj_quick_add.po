@@ -130,10 +130,10 @@ msgstr ""
 msgid "Toimeta kiirmen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:384
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:420
 msgid "Lisa kiiresti"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:402
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:438
 msgid "%s kiirlisamine"
 msgstr ""

@@ -370,7 +370,7 @@ msgid "&nbsp;"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:209
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1277
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1284
 msgid "Ruum"
 msgstr "Tila"
 
@@ -403,7 +403,7 @@ msgid "Valige palun v&auml;hemalt &uuml;ks ruum!"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:491
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:704
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:703
 msgid "K&otilde;ik"
 msgstr ""
 
@@ -415,54 +415,58 @@ msgstr ""
 msgid "Naine"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:968
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:868
+msgid "kuni"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:975
 msgid "Klient saabus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:968
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:975
 msgid "Klient ei saabunud"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1008
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1015
 msgid "Eile"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1019
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1026
 msgid "T&auml;na"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1030
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1037
 msgid "Homme"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1055
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1062
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1198
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1205
 msgid "Reisib&uuml;roo"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1235
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1242
 msgid "%s tk"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1283
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1290
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1292
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1299
 msgid "Kellaajad"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1298
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1305
 msgid "Tunde"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1305
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1312
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1524
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1531
 msgid "<b>Summa:</b>"
 msgstr ""

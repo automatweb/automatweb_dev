@@ -6,7 +6,6 @@ $GLOBALS["TRANS"]["Seose Tegevusvaldkonnad (RELTYPE_SECTORS) tekst"] = "Activity
 $GLOBALS["TRANS"]["Kustuta kandidaadid"] = "Delete applicants";
 $GLOBALS["TRANS"]["Uus"] = "New";
 $GLOBALS["TRANS"]["Tööpakkumine"] = "Job offer";
-$GLOBALS["TRANS"]["Kustuta tööpakkumised"] = "Delete job offers";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Ametikoht"] = "Position";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Company";

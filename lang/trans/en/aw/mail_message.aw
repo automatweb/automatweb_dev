@@ -15,7 +15,6 @@ $GLOBALS["TRANS"]["Omaduse Mailbox (mailbox) caption"] = "Mailbox";
 $GLOBALS["TRANS"]["Omaduse Cb part (cb_part) caption"] = "Cb part";
 $GLOBALS["TRANS"]["Omaduse Konteineri pealkiri (msg_contener_title) caption"] = "Container title";
 $GLOBALS["TRANS"]["Omaduse Konteineri sisu (msg_contener_content) caption"] = "Container content";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Lisa (add) pealkiri"] = "Add";
 $GLOBALS["TRANS"]["Seose Manus (RELTYPE_ATTACHMENT) tekst"] = "Attachment";
 $GLOBALS["TRANS"]["couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"] = "couldn't retrieve message %s, perhaps it has been deleted or moved?<br />";

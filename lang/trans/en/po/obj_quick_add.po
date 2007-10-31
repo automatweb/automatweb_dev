@@ -130,10 +130,10 @@ msgstr "Remove from quick add"
 msgid "Toimeta kiirmen&uuml;&uuml;d"
 msgstr "Edit quick add"
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:384
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:420
 msgid "Lisa kiiresti"
 msgstr "Add quickly"
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:402
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:438
 msgid "%s kiirlisamine"
 msgstr "%s quick adding"

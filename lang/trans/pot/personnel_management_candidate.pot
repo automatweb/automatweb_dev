@@ -58,3 +58,11 @@ msgstr ""
 msgid "Seose Kaaskiri failina (RELTYPE_FILE) tekst"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_candidate.aw:50
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:60
+msgid "%s kandidatuur kohale %s"
+msgstr ""
+

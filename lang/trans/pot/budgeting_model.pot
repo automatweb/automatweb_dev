@@ -22,3 +22,99 @@ msgstr ""
 msgid "Kanne kontolt %s kontole %s %s"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_model.aw:342
+msgid "K&otilde;ik valdkonnad"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:346
+msgid "K&otilde;ik fondid"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:350 classes/applications/budgeting/budgeting_model.aw:374
+msgid "K&otilde;ik t&ouml;&ouml;tajad"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:354
+msgid "K&otilde;ik teenuse liigid"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:358
+msgid "K&otilde;ik tooteperekonnad"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:362 classes/applications/budgeting/budgeting_model.aw:366
+msgid "K&otilde;ik kontod"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:370
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:381 classes/applications/budgeting/budgeting_model.aw:401
+msgid "Projekti %s toodete kategooria %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:388
+msgid "Kliendi %s toodete kategooria %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:394
+msgid "Projekti %s toodete kategooriad"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:407
+msgid "Kliendi %s toodete kategooriad"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:414
+msgid "Kliendi %s teenuste t&uuml;&uuml;pide kategooria %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:420
+msgid "Projekti %s teenuste liigid"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:426
+msgid "Kliendi %s teenuse liigid"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:432
+msgid "Toodete kategooria %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:438
+msgid "Teenuste liigi kategooria %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:445
+msgid "Projekti %s toode %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:451
+msgid "Kliendi %s projektid"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:458
+msgid "Kliendi %s toode %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:464
+msgid "Kliendikategooria %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:470
+msgid "Klient %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:477
+msgid "Projekt %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:483
+msgid "Toimetus %s"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_model.aw:489
+msgid "Toode %s"
+msgstr ""
+

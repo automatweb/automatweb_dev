@@ -1,0 +1,72 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:class_1341_help
+msgid "Klassi Ülesannete kuvamine help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:122
+msgid "Uus &uuml;lesanne"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:134
+msgid "&Uuml;lesanded"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:137
+msgid "Arendustellimused"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:144
+msgid "Lahendatud"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:151 classes/applications/bug_o_matic_3000/bugtrack_display.aw:158
+msgid "Rakendused"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:173
+msgid "L&uuml;hikirjeldus"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:177
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:181
+msgid "Loomise kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:185
+msgid "T&auml;htaeg"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:189
+msgid "Prognoos"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:193
+msgid "Prioriteet"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:197
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:201
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:205
+msgid "Muutja"
+msgstr ""
+

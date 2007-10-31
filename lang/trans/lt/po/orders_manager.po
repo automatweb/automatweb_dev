@@ -129,144 +129,160 @@ msgstr ""
 msgid "Exceli-tabeli vormis"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:233
+#: classes/applications/orders/orders_manager.aw:251
 msgid "Kokku:"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:251
-#: classes/applications/orders/orders_manager.aw:472
+#: classes/applications/orders/orders_manager.aw:269
+#: classes/applications/orders/orders_manager.aw:518
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:257
+#: classes/applications/orders/orders_manager.aw:275
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:263
-msgid "Tellitav Kogus"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:271
-msgid "Klient"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:277
-msgid "Tellimuse nr."
+#: classes/applications/orders/orders_manager.aw:281
+msgid "M&otilde;&otilde;t&uuml;hik"
 msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:289
+msgid "Pakend"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:296
+msgid "Tellitav Kogus"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:303
+msgid "Soovitav tarne t&auml;itmine"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:310
+msgid "Tellimuse kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:317
+msgid "Klient"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:323
+msgid "Tellimuse nr."
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:335
 msgid "Kustuta tellimusi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:291
+#: classes/applications/orders/orders_manager.aw:337
 msgid "Oled kindel, et soovid valitud tellimused kustutada?"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:299
+#: classes/applications/orders/orders_manager.aw:345
 msgid "Kinnita tellimused"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:301
+#: classes/applications/orders/orders_manager.aw:347
 msgid "Oled kindel, et soovid valitud tellimused kinnitada?"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:311
+#: classes/applications/orders/orders_manager.aw:357
 msgid "Tellija"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:316
+#: classes/applications/orders/orders_manager.aw:362
 msgid "Kuupäev"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:326
-#: classes/applications/orders/orders_manager.aw:375
+#: classes/applications/orders/orders_manager.aw:372
+#: classes/applications/orders/orders_manager.aw:421
 msgid "Vaata tellimust"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:471
+#: classes/applications/orders/orders_manager.aw:517
 msgid "Toote nimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:473
+#: classes/applications/orders/orders_manager.aw:519
 msgid "V&auml;rvus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:474
+#: classes/applications/orders/orders_manager.aw:520
 msgid "Suurus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:475
+#: classes/applications/orders/orders_manager.aw:521
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:476
+#: classes/applications/orders/orders_manager.aw:522
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:477
+#: classes/applications/orders/orders_manager.aw:523
 msgid "Lehek&uuml;lg"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:478
+#: classes/applications/orders/orders_manager.aw:524
 msgid "Pilt"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:481
+#: classes/applications/orders/orders_manager.aw:527
 msgid "Eesnimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:482
+#: classes/applications/orders/orders_manager.aw:528
 msgid "Perekonnanimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:483
+#: classes/applications/orders/orders_manager.aw:529
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:484
+#: classes/applications/orders/orders_manager.aw:530
 msgid "S&uuml;nnip&auml;ev"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:485
+#: classes/applications/orders/orders_manager.aw:531
 msgid "E-mail"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:486
+#: classes/applications/orders/orders_manager.aw:532
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:489
+#: classes/applications/orders/orders_manager.aw:535
 msgid "Kliendi number"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:490
+#: classes/applications/orders/orders_manager.aw:536
 msgid "Postiindeks"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:491
+#: classes/applications/orders/orders_manager.aw:537
 msgid "Linn"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:492
+#: classes/applications/orders/orders_manager.aw:538
 msgid "Telefon t&ouml;&ouml;l"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:493
+#: classes/applications/orders/orders_manager.aw:539
 msgid "Mobiil"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:494
+#: classes/applications/orders/orders_manager.aw:540
 msgid "Kliendo t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:501
+#: classes/applications/orders/orders_manager.aw:547
 msgid "OID"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:501
+#: classes/applications/orders/orders_manager.aw:547
 msgid "Millal"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:554
+#: classes/applications/orders/orders_manager.aw:600
 msgid "all done!"
 msgstr ""

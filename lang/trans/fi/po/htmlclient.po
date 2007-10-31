@@ -88,3 +88,11 @@ msgstr ""
 #: classes/cfg/htmlclient.aw:864
 msgid "Lisa kiiresti"
 msgstr ""
+
+#: classes/cfg/htmlclient.aw:1328
+msgid "Kinni"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:1329
+msgid "Lahti"
+msgstr ""

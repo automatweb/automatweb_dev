@@ -309,31 +309,31 @@ msgstr ""
 msgid "Seose Mail (RELTYPE_MAIL) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:911
+#: classes/applications/orders/orders_form.aw:940
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:963
-#: classes/applications/orders/orders_form.aw:973
+#: classes/applications/orders/orders_form.aw:999
+#: classes/applications/orders/orders_form.aw:1009
 msgid "\n"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:984
+#: classes/applications/orders/orders_form.aw:1020
 msgid "Kauba t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:990
+#: classes/applications/orders/orders_form.aw:1026
 msgid "Min. Kuud"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:996
+#: classes/applications/orders/orders_form.aw:1032
 msgid "Max. Kuud"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1002
+#: classes/applications/orders/orders_form.aw:1038
 msgid "Esmase sissemakse %"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1008
+#: classes/applications/orders/orders_form.aw:1044
 msgid "Intressi %"
 msgstr ""

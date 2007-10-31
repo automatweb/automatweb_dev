@@ -51,15 +51,15 @@ msgid "Omaduse Autori nimi (author_name) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_email
-msgid "Omaduse Autori meil (author_email) caption"
+msgid "Omaduse Autori e-post (author_email) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_email_comment
-msgid "Omaduse Autori meil (author_email) kommentaar"
+msgid "Omaduse Autori e-post (author_email) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_email_help
-msgid "Omaduse Autori meil (author_email) help"
+msgid "Omaduse Autori e-post (author_email) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_locked
@@ -75,15 +75,15 @@ msgid "Omaduse Teema lukus (locked) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail
-msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) caption"
+msgid "Omaduse Soovin vastuseid e-postiga (answers_to_mail) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail_comment
-msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) kommentaar"
+msgid "Omaduse Soovin vastuseid e-postiga (answers_to_mail) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail_help
-msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) help"
+msgid "Omaduse Soovin vastuseid e-postiga (answers_to_mail) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_image

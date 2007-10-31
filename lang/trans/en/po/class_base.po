@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/class_base.aw:class__help
-#: classes/class_base.aw:class__help
+#: classes/class_base.aw:class_Array_help
 msgid "Klassi  help"
 msgstr ""
 
@@ -99,52 +99,52 @@ msgstr "Help"
 msgid "tab panel"
 msgstr "tab panel"
 
-#: classes/class_base.aw:885
+#: classes/class_base.aw:890
 msgid "Lisainfo grupi kohta puudub"
 msgstr "no additional info about group"
 
-#: classes/class_base.aw:983
+#: classes/class_base.aw:988
 msgid "Nimetu"
 msgstr ""
 
-#: classes/class_base.aw:1500
+#: classes/class_base.aw:1550
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/class_base.aw:1508
+#: classes/class_base.aw:1558
 msgid "Uus"
 msgstr "New"
 
-#: classes/class_base.aw:1545
+#: classes/class_base.aw:1595
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1752 classes/class_base.aw:5104
-#: classes/class_base.aw:5115
+#: classes/class_base.aw:1807 classes/class_base.aw:5193
+#: classes/class_base.aw:5204
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:1766
+#: classes/class_base.aw:1820
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3608
+#: classes/class_base.aw:3674
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3617
+#: classes/class_base.aw:3683
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:5001
+#: classes/class_base.aw:5090
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 
-#: classes/class_base.aw:5428
+#: classes/class_base.aw:5517
 msgid "T&otilde;lge aktiivne"
 msgstr "Translation is active"
 
-#: classes/class_base.aw:5436
+#: classes/class_base.aw:5525
 msgid "Salvesta"
 msgstr ""
 

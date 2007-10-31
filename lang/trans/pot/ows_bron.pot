@@ -1,0 +1,60 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/ows_bron/ows_bron.aw:class_1323_help
+msgid "Klassi OWS Broneeringukeskus help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:425 classes/applications/ows_bron/ows_bron.aw:684
+msgid "OWS Bron %s %s @ %s"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:932
+msgid "&Auml;rikeskus"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:936
+msgid "Konverentsisaal"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:940
+msgid "J&otilde;usaal"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:944
+msgid "Tasuta Internet"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:948
+msgid "Parkla"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:952
+msgid "Lemmikloomad lubatud"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:956
+msgid "Restoran"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:960
+msgid "Toateenindus"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:964
+msgid "Bassein"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:968
+msgid "Ratastooliga ligip&auml;&auml;setav"
+msgstr ""
+

@@ -2,8 +2,12 @@
 $GLOBALS["TRANS"]["Klassi Administreerimisliides help"] = "This view is for editing content objects. To edit folders, You have to select Change from action-button on the object row. To edit other objects You can click on the name of the object.<br /><br />To add a new object, use the green button on the left of the toolbar.<br /><br />You can move in site structure by clicking on the tree or on folder names.<br /><br />You can see preview of the current location on the web by clickin Preview button on the right of the toolbar";
 $GLOBALS["TRANS"]["Omaduse  (o_tree) caption"] = "Folders";
 $GLOBALS["TRANS"]["Omaduse  (o_tbl) caption"] = "Content objects";
+$GLOBALS["TRANS"]["Omaduse Info (info_text) caption"] = "Info";
+$GLOBALS["TRANS"]["Omaduse Laadi ZIP fail (zip_upload) caption"] = "Upload ZIP file";
+$GLOBALS["TRANS"]["Omaduse Lae faile\t (uploader) caption"] = "Upload files\t";
 $GLOBALS["TRANS"]["Grupi Objektid (o) pealkiri"] = "Objects";
 $GLOBALS["TRANS"]["Grupi Objektid (o) help"] = "This view is for editing content objects. To edit folders, You have to select Change from action-button on the object row. To edit other objects You can click on the name of the object.<br /><br />To add a new object, use the green button on the left of the toolbar.<br /><br />You can move in site structure by clicking on the tree or on folder names.<br /><br />You can see preview of the current location on the web by clickin Preview button on the right of the toolbar";
+$GLOBALS["TRANS"]["Grupi Failide &uuml;leslaadimine (fu) pealkiri"] = "File upload";
 $GLOBALS["TRANS"]["Kujundusosa Kataloogid (o_bot_left) pealkiri"] = "Layout folders";
 $GLOBALS["TRANS"]["Lisa"] = "Add";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
@@ -14,6 +18,8 @@ $GLOBALS["TRANS"]["Kustuta"] = "Delete";
 $GLOBALS["TRANS"]["Kustutada valitud objektid?"] = "Delete selected objects, are You sure?";
 $GLOBALS["TRANS"]["Uuenda"] = "Refresh";
 $GLOBALS["TRANS"]["Impordi"] = "Import";
+$GLOBALS["TRANS"]["Impordi kaustu"] = "Import folders";
+$GLOBALS["TRANS"]["Impordi faile"] = "Import files";
 $GLOBALS["TRANS"]["Eelvaade"] = "Preview";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Jrk"] = "Order";
@@ -32,4 +38,5 @@ $GLOBALS["TRANS"]["Asukoht:"] = "You are here:";
 $GLOBALS["TRANS"]["AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."] = "AutomatWeb&reg; is the registered trademark of Struktuur Meedia. All rights reserved, &copy; 1999-2006.";
 $GLOBALS["TRANS"]["Palun k&uuml;lasta meie kodulehek&uuml;lgi:"] = "Please visit our websites";
 $GLOBALS["TRANS"]["Seaded"] = "Settings";
+$GLOBALS["TRANS"]["Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"] = "File %s found and saved<br />\n";
 ?>

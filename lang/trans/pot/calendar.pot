@@ -34,7 +34,7 @@ msgstr ""
 msgid "Toimetused"
 msgstr ""
 
-#: classes/vcl/calendar.aw:1755
+#: classes/vcl/calendar.aw:1759
 msgid "Lisas [%s] %s /  Muutis [%s] %s"
 msgstr ""
 

@@ -134,6 +134,50 @@ msgstr ""
 msgid "Omaduse Maksugrupp (tax_grp) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_tax.aw:prop_tax_scenario
+msgid "Omaduse Stsenaarium (tax_scenario) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_tax_scenario_comment
+msgid "Omaduse Stsenaarium (tax_scenario) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_tax_scenario_help
+msgid "Omaduse Stsenaarium (tax_scenario) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place_toolbar
+msgid "Omaduse Kust toolbar (from_place_toolbar) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place_toolbar_comment
+msgid "Omaduse Kust toolbar (from_place_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place_toolbar_help
+msgid "Omaduse Kust toolbar (from_place_toolbar) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place_table
+msgid "Omaduse Kust (from_place_table) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place_table_comment
+msgid "Omaduse Kust (from_place_table) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place_table_help
+msgid "Omaduse Kust (from_place_table) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:group_locs
+msgid "Grupi Kust (locs) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:group_locs_help
+msgid "Grupi Kust (locs) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_tax.aw:rel_RELTYPE_FROM_ACCT
 msgid "Seose Kontolt (RELTYPE_FROM_ACCT) tekst"
 msgstr ""
@@ -146,15 +190,27 @@ msgstr ""
 msgid "Seose Maksugrupp (RELTYPE_TAX_GRP) tekst"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:138
+#: classes/applications/budgeting/budgeting_tax.aw:rel_RELTYPE_SCENARIO
+msgid "Seose Stsenaarium (RELTYPE_SCENARIO) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:181
 msgid "&Uuml;hekordne"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:139
+#: classes/applications/budgeting/budgeting_tax.aw:182
 msgid "Korduv"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:154
+#: classes/applications/budgeting/budgeting_tax.aw:197 classes/applications/budgeting/budgeting_tax.aw:293
 msgid "Seos maksu %s ja kausta %s vahel"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:225
+msgid "Kust"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:231
+msgid "Muuda"
 msgstr ""
 
