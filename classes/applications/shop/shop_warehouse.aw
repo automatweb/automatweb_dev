@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.57 2007/10/30 14:41:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.58 2007/10/31 12:22:25 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1972,6 +1972,7 @@ class shop_warehouse extends class_base
 				"conditions" => array(
 					"CL_SHOP_ORDER.orderer_person.name" => "%".$search_data["find_name"]."%",
 					"CL_SHOP_ORDER.orderer_company.name" => "%".$search_data["find_name"]."%",
+					"name" => "%".$search_data["find_name"]."%",
 			)));
 		}
 
@@ -3382,28 +3383,37 @@ class shop_warehouse extends class_base
 		$res = "";
 //		fopen("http://games.swirve.com/utopia/login.htm");
 //		die();
+$oo = get_instance(CL_SHOP_ORDER);
 		if (is_array($arr["sel"]) && count($arr["sel"]))
 		{
 			foreach($arr["sel"] as $id)
 			{;
-				$link =  $this->mk_my_orb("print_orders", array("print_id" => $id));
+
+				if($this->can("view", $id))
+				{
+					$res.='<DIV style="page-break-after:always">';
+					$res .= $oo->request_execute(obj($id));
+					$res.='</DIV>';
+				}
+
+/*				$link =  $this->mk_my_orb("print_orders", array("print_id" => $id));
 				$res.= '<script name= javascript>window.open("'.$link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")</script>';
 				//"<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
-			}
-				$res.= "<script name= javascript>setTimeout('window.close()',3000);</script>";
+*/			}
+				$res.= "<script name= javascript>setTimeout('window.close()',10000);window.print();</script>";
 		}
-		elseif($this->can("view", $arr["print_id"]))
-		{
-			$oo = get_instance(CL_SHOP_ORDER);
-			$res .= $oo->request_execute(obj($arr["print_id"]));
-			$res .= "
-				<script language='javascript'>
-					setTimeout('window.close()',5000);
-					window.print();
-				//	if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }
-				</script>
-			";
-		}
+//		elseif($this->can("view", $arr["print_id"]))
+//		{
+//			
+//			$res .= $oo->request_execute(obj($arr["print_id"]));
+//			$res .= "
+//				<script language='javascript'>
+//					setTimeout('window.close()',5000);
+//					window.print();
+//				//	if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }
+//				</script>
+//			";
+//		}
 		else
 		{
 			$res .= t("Pole midagi printida");

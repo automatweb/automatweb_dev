@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.13 2007/10/30 14:41:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.14 2007/10/31 12:22:23 markop Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -751,19 +751,28 @@ class orders_manager extends class_base
 		$res = "";
 //		fopen("http://games.swirve.com/utopia/login.htm");
 //		die();
+		$oo = get_instance(CL_ORDERS_ORDER);
 		if (is_array($arr["sel"]) && count($arr["sel"]))
 		{
 			foreach($arr["sel"] as $id)
 			{;
-				$link =  $this->mk_my_orb("print_orders", array("print_id" => $id));
+/*				$link =  $this->mk_my_orb("print_orders", array("print_id" => $id));
 				$res.= '<script name= javascript>window.open("'.$link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")</script>';
 				//"<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
+*/
+				if($this->can("view", $id))
+				{
+					$res.='<DIV style="page-break-after:always">';
+					$res .= $oo->request_execute(obj($id));
+					$res.='</DIV>';
+				}
+
 			}
-				$res.= "<script name= javascript>setTimeout('window.close()',3000);</script>";
+				$res.= "<script name= javascript>setTimeout('window.close()',10000);window.print();</script>";
 		}
-		elseif($this->can("view", $arr["print_id"]))
+/*		elseif($this->can("view", $arr["print_id"]))
 		{
-			$oo = get_instance(CL_ORDERS_ORDER);
+			
 			$res .= $oo->request_execute(obj($arr["print_id"]));
 			$res .= "
 				<script language='javascript'>
@@ -772,7 +781,7 @@ class orders_manager extends class_base
 				//	if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }
 				</script>
 			";
-		}
+		}*/
 		else
 		{
 			$res .= t("Pole midagi printida");

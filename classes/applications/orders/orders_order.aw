@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.29 2007/10/31 11:18:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.30 2007/10/31 12:22:23 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -203,14 +203,38 @@ class orders_order extends class_base
 			
 			case "info":
 				$oi_data = array();
+				$ordercfgform = $arr["obj_inst"]->meta("cfgform_id");
+				$cfgform_i = get_instance(CL_CFGFORM);
+				$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $ordercfgform));
+
 				if($person)
 				{
 					$oi_data[] = $person->prop("firstname") . " " .$person->prop("lastname");
-					if($person->prop("personal_id")) $oi_data[] = $person->prop("personal_id");
-					if($person->prop("email")) $oi_data[] = $person->prop("email.mail");
-					if($person->prop("phone")) $oi_data[] = $person->prop("phone.name");
-					if($person->prop("comment")) $oi_data[] = $person->prop("comment");
+					if($person->prop("personal_id")) $oi_data[] = (($props2["personal_id"]["caption"])?$props2["personal_id"]["caption"].": ":"").$person->prop("personal_id");
+					if($person->prop("email")) $oi_data[] = (($props2["person_email"]["caption"])?$props2["person_email"]["caption"].": ":"").$person->prop("email.mail");
+					if($person->prop("phone")) $oi_data[] = (($props2["person_phone"]["caption"])?$props2["person_phone"]["caption"].": ":"").$person->prop("phone.name");
+					if($person->prop("comment")) $oi_data[] = (($props2["person_contact"]["caption"])?$props2["person_contact"]["caption"].": ":"").$person->prop("comment");
 				}
+				$x = 0;
+				while($x < 8)
+				{
+					if($arr["obj_inst"]->prop("udef_textbox".$x))
+					{
+						$oi_data[] = (($props2["udef_textbox".$x]["caption"])?$props2["udef_textbox".$x]["caption"].": ":"").$arr["obj_inst"]->prop("udef_textbox".$x);
+					}
+					$x++;
+				}
+
+				$x = 0;
+				while($x < 5)
+				{
+					if($arr["obj_inst"]->prop("udef_textarea".$x))
+					{
+						$oi_data[] = (($props2["udef_textarea".$x]["caption"])?$props2["udef_textarea".$x]["caption"].": ":"").$arr["obj_inst"]->prop("udef_textarea".$x);
+					}
+					$x++;
+				}
+
 				$prop["value"] = join ("<br>\n" , $oi_data);
 
 				classload("vcl/table");
@@ -226,6 +250,7 @@ class orders_order extends class_base
 				$this->_init_product_table(&$table, $cfgform);
 				$this->define_table_data(&$table , $ol,1);
 				$prop["value"].=$table->draw();
+//arr($arr["obj_inst"]->meta());
 				break;
 
 			case "lastname":
@@ -440,7 +465,7 @@ class orders_order extends class_base
 				$person = obj();
 				$person->set_parent($arr["obj_inst"]->id());
 				$person->set_class_id(CL_CRM_PERSON);
-		
+						$person->set_name($props["firstname"]." ".$props["lastname"]);
 				$person->set_prop("firstname", $props["firstname"]);
 				$person->set_prop("lastname", $props["lastname"]);
 				$person->set_prop("personal_id", $props["personal_id"]);
