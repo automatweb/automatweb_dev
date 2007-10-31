@@ -314,17 +314,29 @@
             <field>forward</field>
             <caption>Edasi</caption>
       </property>
+      <property>
+            <name>info</name>
+            <table>orders_order</table>
+            <group>ordertext</group>
+            <type>text</type>
+            <store>no</store>
+            <field>info</field>
+            <caption>Tellimuse info</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ORDERS_ORDER</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
             <orderinfo>
-                  <caption>Tellimuse andmed</caption>
+                  <caption>Tellija andmed</caption>
             </orderinfo>
             <orderitems>
                   <caption>Tellitud tooted</caption>
             </orderitems>
+            <ordertext>
+                  <caption>Tellimus</caption>
+            </ordertext>
       </groupinfo>
       <tableinfo>
             <orders_order>

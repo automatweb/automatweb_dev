@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.28 2007/09/21 11:13:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.29 2007/10/31 11:18:58 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -77,6 +77,8 @@
 @property forward type=submit action=do_persondata_form group=orderitems store=no
 @caption Edasi
 
+@property info type=text store=no group=ordertext
+@caption Tellimuse info
 
 @reltype ORDER value=1 clid=CL_ORDERS_ITEM
 @caption Tellitud asi
@@ -87,8 +89,10 @@
 @reltype CFGMANAGER value=3 clid=CL_CFGMANAGER
 @caption Seadete haldur
 
-@groupinfo orderinfo caption="Tellimuse andmed"
+@groupinfo orderinfo caption="Tellija andmed"
 @groupinfo orderitems caption="Tellitud tooted"
+@groupinfo ordertext caption="Tellimus"
+
 */
 
 class orders_order extends class_base
@@ -153,6 +157,15 @@ class orders_order extends class_base
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them
 
+	function callback_get_default_group($arr)
+	{
+		if ($_GET["action"] != "new")
+		{
+			return "ordertext";
+		}
+		return "general";
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -188,6 +201,33 @@ class orders_order extends class_base
 				$prop["value"] = join (", " , $oi_data);
 				break;
 			
+			case "info":
+				$oi_data = array();
+				if($person)
+				{
+					$oi_data[] = $person->prop("firstname") . " " .$person->prop("lastname");
+					if($person->prop("personal_id")) $oi_data[] = $person->prop("personal_id");
+					if($person->prop("email")) $oi_data[] = $person->prop("email.mail");
+					if($person->prop("phone")) $oi_data[] = $person->prop("phone.name");
+					if($person->prop("comment")) $oi_data[] = $person->prop("comment");
+				}
+				$prop["value"] = join ("<br>\n" , $oi_data);
+
+				classload("vcl/table");
+				$table = new aw_table(array(
+					"layout" => "generic"
+				));
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_ORDER"
+				));
+				$ol = new object_list($conns);
+				$o = $ol->begin();
+				if(is_object($o)) $cfgform = $o->meta("cfgform_id");
+				$this->_init_product_table(&$table, $cfgform);
+				$this->define_table_data(&$table , $ol,1);
+				$prop["value"].=$table->draw();
+				break;
+
 			case "lastname":
 				if($person)
 				{
@@ -233,104 +273,108 @@ class orders_order extends class_base
 				$o = $ol->begin();
 				if(is_object($o)) $cfgform = $o->meta("cfgform_id");
 				$table = &$prop["vcl_inst"];
-				if(is_oid($cfgform) && $this->can("view", $cfgform))
-				{
-					$cfgform_i = get_instance(CL_CFGFORM);
-					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
-					foreach($props2 as $prop2)
-					{
-						$table->define_field(array(
-							"name" => $prop2["name"],
-							"caption" => $prop2["caption"],
-							"chgbgcolor"=>"color",
-						));
-					}
-					$table->define_field(array(
-						"name" => "product_count_undone",
-						"caption" => t("Tarnimata kogus"),
-						"chgbgcolor"=>"color",
-					));
-				}
-				else
-				{
-					$table->define_field(array(
-						"name" => "product_code",
-						"caption" => t("Artikli kood"),
-						"chgbgcolor"=>"color",
-					));
-					$table->define_field(array(
-						"name" => "name",
-						"caption" => t("Toode"),
-						"chgbgcolor"=>"color",
-					));
-
-					$table->define_field(array(
-						"name" => "product_count",
-						"caption" => t("Kogus"),
-						"chgbgcolor"=>"color",
-					));
-
-					$table->define_field(array(
-						"name" => "product_size",
-						"caption" => t("Tellitav_kogus"),
-						"chgbgcolor"=>"color",
-					));
-					$table->define_field(array(
-						"name" => "product_duedate",
-						"caption" => t("Soovitav tarne t&auml;itmine"),
-						"chgbgcolor"=>"color",
-					));
-					$table->define_field(array(
-						"name" => "product_bill",
-						"caption" => t("Tarne t&auml;itmine/arve nr"),
-						"chgbgcolor"=>"color",
-					));
-
-					$table->define_field(array(
-						"name" => "product_count_undone",
-						"caption" => t("Tarnimata kogus"),
-						"chgbgcolor"=>"color",
-					));
-
-					$table->define_field(array(
-						"name" => "product_color",
-						"caption" => t("V&auml;rvikaart"),
-						"chgbgcolor"=>"color",
-					));
-
-					$table->define_field(array(
-						"name" => "product_price",
-						"caption" => t("Erihind"),
-						"chgbgcolor"=>"color",
-					));
-
-				}
+				$this->_init_product_table(&$table, $cfgform);
 				$this->define_table_data(&$table , $ol);
 				break;
 		};
 		return $retval;
 	}
 
-	function define_table_data(&$table , $ol)
+	function _init_product_table(&$table, $cfgform)
+	{
+		if(is_oid($cfgform) && $this->can("view", $cfgform))
+		{
+			$cfgform_i = get_instance(CL_CFGFORM);
+			$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
+			foreach($props2 as $prop2)
+			{
+				$table->define_field(array(
+					"name" => $prop2["name"],
+					"caption" => $prop2["caption"],
+					"chgbgcolor"=>"color",
+				));
+			}
+			$table->define_field(array(
+				"name" => "product_count_undone",
+				"caption" => t("Tarnimata kogus"),
+				"chgbgcolor"=>"color",
+			));
+		}
+		else
+		{
+			$table->define_field(array(
+				"name" => "product_code",
+				"caption" => t("Artikli kood"),
+				"chgbgcolor"=>"color",
+			));
+			$table->define_field(array(
+				"name" => "name",
+				"caption" => t("Toode"),
+				"chgbgcolor"=>"color",
+			));
+			$table->define_field(array(
+				"name" => "product_count",
+				"caption" => t("Kogus"),
+				"chgbgcolor"=>"color",
+			));
+			$table->define_field(array(
+				"name" => "product_size",
+				"caption" => t("Tellitav_kogus"),
+				"chgbgcolor"=>"color",
+			));
+			$table->define_field(array(
+				"name" => "product_duedate",
+				"caption" => t("Soovitav tarne t&auml;itmine"),
+				"chgbgcolor"=>"color",
+			));
+			$table->define_field(array(
+				"name" => "product_bill",
+				"caption" => t("Tarne t&auml;itmine/arve nr"),
+				"chgbgcolor"=>"color",
+			));
+			$table->define_field(array(
+				"name" => "product_count_undone",
+				"caption" => t("Tarnimata kogus"),
+				"chgbgcolor"=>"color",
+			));
+			$table->define_field(array(
+				"name" => "product_color",
+				"caption" => t("V&auml;rvikaart"),
+				"chgbgcolor"=>"color",
+			));
+			$table->define_field(array(
+				"name" => "product_price",
+				"caption" => t("Erihind"),
+				"chgbgcolor"=>"color",
+			));
+		}
+	}
+
+	function define_table_data(&$table , $ol,$unchangable = 0)
 	{
 		foreach ($ol->arr() as $obj)
 		{
 			$data = array();
 			foreach($obj->properties() as $prop => $val)
 			{
-				$data[$prop] = html::textbox(array(
-					"name" => "rows[".$obj->id()."][".$prop."]",
-					"value" => $val,
-					"size" => ($prop == "name") ? 30:9,
-				));				$data["product_unit"] = html::textbox(array(
-					"name" => "rows[".$obj->id()."][product_unit]",
-					"value" => $obj->prop("product_unit"),
-					"size" => ($prop == "name") ? 30:9,
-				));
-				if($prop == "product_duedate" || $prop == "product_bill")
+				if($unchangable) $data[$prop] = $val;
+				else
 				{
-					$data[$prop].= '<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$obj->id().'" id="anchor'.$obj->id().'">vali</a>';
+					$data[$prop] = html::textbox(array(
+						"name" => "rows[".$obj->id()."][".$prop."]",
+						"value" => $val,
+						"size" => ($prop == "name") ? 30:9,
+					));
+					$data["product_unit"] = html::textbox(array(
+						"name" => "rows[".$obj->id()."][product_unit]",
+						"value" => $obj->prop("product_unit"),
+						"size" => ($prop == "name") ? 30:9,
+					));
+					if($prop == "product_duedate" || $prop == "product_bill")
+					{
+						$data[$prop].= '<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
+	cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$obj->id().'" id="anchor'.$obj->id().'">vali</a>';
+					}
 				}
 			}
 			if($obj->prop("product_count_undone"))
@@ -728,7 +772,6 @@ cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\
 		{
 			return;
 		}
-		
 		$email = &obj($person->prop("email"));
 		$mail_obj->set_prop("mto", $email->prop("mail"));
 		$mail_obj->set_prop("mfrom", $form->prop("orders_post_from"));
