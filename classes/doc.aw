@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.157 2007/10/22 09:40:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.158 2007/10/31 16:40:52 markop Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -140,6 +140,37 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 	@property user6 table=documents type=textbox trans=1
 	@caption Kasutaja defineeritud 6
+
+	@property user7 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 7
+
+	@property user8 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 8
+
+	@property user9 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 9
+
+	@property user10 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 10
+
+	@property user11 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 11
+
+	@property user12 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 12
+
+	@property user13 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 13
+
+	@property user14 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 14
+
+	@property user15 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 15
+
+	@property user16 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 16
+
 
 	@property userta2 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
 	@caption Kasutaja defineeritud textarea 2

@@ -455,6 +455,96 @@
             <caption>Kasutaja defineeritud 6</caption>
       </property>
       <property>
+            <name>user7</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user7</field>
+            <caption>Kasutaja defineeritud 7</caption>
+      </property>
+      <property>
+            <name>user8</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user8</field>
+            <caption>Kasutaja defineeritud 8</caption>
+      </property>
+      <property>
+            <name>user9</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user9</field>
+            <caption>Kasutaja defineeritud 9</caption>
+      </property>
+      <property>
+            <name>user10</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user10</field>
+            <caption>Kasutaja defineeritud 10</caption>
+      </property>
+      <property>
+            <name>user11</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user11</field>
+            <caption>Kasutaja defineeritud 11</caption>
+      </property>
+      <property>
+            <name>user12</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user12</field>
+            <caption>Kasutaja defineeritud 12</caption>
+      </property>
+      <property>
+            <name>user13</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user13</field>
+            <caption>Kasutaja defineeritud 13</caption>
+      </property>
+      <property>
+            <name>user14</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user14</field>
+            <caption>Kasutaja defineeritud 14</caption>
+      </property>
+      <property>
+            <name>user15</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user15</field>
+            <caption>Kasutaja defineeritud 15</caption>
+      </property>
+      <property>
+            <name>user16</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <trans>1</trans>
+            <field>user16</field>
+            <caption>Kasutaja defineeritud 16</caption>
+      </property>
+      <property>
             <name>userta2</name>
             <table>objects</table>
             <group>general</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.376 2007/10/11 11:26:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.377 2007/10/31 16:40:53 markop Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3369,6 +3369,17 @@ class document extends aw_template
 			case "user4":
 			case "user5":
 			case "user6":
+			case "user7":
+			case "user8":
+			case "user9":
+			case "user10":
+			case "user11":
+			case "user12":
+			case "user13":
+			case "user14":
+			case "user15":
+			case "user16":
+
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "text"
