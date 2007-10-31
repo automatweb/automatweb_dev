@@ -1594,7 +1594,7 @@ class site_template_compiler extends aw_template
 		{
 			if ($arr["value"] == "is_in_path")
 			{
-				$ret = "((empty(\$mmi_cnt) && is_object(\$o_name) && \$this->_helper_is_in_path(".$o_name."->".$this->id_func."())) || (\$mmi_cnt && !(".$fun_name."_cb)) || (\$mmi_cnt && \$this->_helper_is_in_url(".$o_name.") && !(".$arr["level"]." > 1))) && ";
+				$ret = "((empty(\$mmi_cnt) && \$this->_helper_is_in_path(".$o_name."->".$this->id_func."())) || (\$mmi_cnt && !(".$fun_name."_cb)) || (\$mmi_cnt && \$this->_helper_is_in_url(".$o_name.") && !(".$arr["level"]." > 1))) && ";
 				//else $ret = "(empty(\$mmi_cnt) && \$this->_helper_is_in_path(".$o_name."->".$this->id_func."())) && ";
 			}
 			else
