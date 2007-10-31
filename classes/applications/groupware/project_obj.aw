@@ -29,8 +29,9 @@ class project_obj extends _int_object
 
 	function save()
 	{
+		$new = !is_oid($this->id());
 		$rv = parent::save();
-		if (!count($this->connections_from(array("type" => "RELTYPE_IMPLEMENTOR"))))
+		if ($new && !count($this->connections_from(array("type" => "RELTYPE_IMPLEMENTOR"))))
 		{
 			$c = get_current_company();
 			$this->connect(array(
