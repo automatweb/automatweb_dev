@@ -1428,10 +1428,25 @@ class cfgform extends class_base
 							"no_edit_caption" => t("Nuppudeta"),
 							"no_edit_checked" => checked($property["no_edit"] == 1),
 							"no_edit" => $property["no_edit"],
+							// "display_caption" => t("V&auml;limus"),
+							// "display" => $property["display"],
+							"size_caption" => t("K&otilde;rgus"),
+							"size" => $property["size"],
 							"prp_key" => $property["name"],
 						));
 						$property["cfgform_additional_options"] = $this->parse("relpicker_options");
 						$this->vars(array("relpicker_options" => ""));
+						break;
+
+
+					case "select":
+						$this->vars(array(
+							"size_caption" => t("K&otilde;rgus"),
+							"size" => $property["size"],
+							"prp_key" => $property["name"],
+						));
+						$property["cfgform_additional_options"] = $this->parse("select_options");
+						$this->vars(array("select_options" => ""));
 						break;
 
 					default:
@@ -3158,6 +3173,63 @@ class cfgform extends class_base
 		else
 		{
 			$this->make_menu_item_counter = null;
+			return false;
+		}
+	}
+
+	function make_menu_item_from_tabs()
+	{
+		if(! $this->crap)
+		{
+			extract($_GET);
+			$cfgform_i = get_instance(CL_CFGFORM);
+			if(is_oid($id) && $this->can("view" , $id))
+			{
+				$o = obj($id);
+				$cfgform = $o->meta("cfgform_id");
+				$cfgform_i->cff_init_from_class($o, $o->class_id(), false);
+				if(is_oid($cfgform) && $this->can("view", $cfgform) && false)
+				{
+
+					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
+				}
+				else
+				{
+					$cfgx = get_instance("cfg/cfgutils");
+					$props2 = $cfgform_i->cfg_proplist;
+				}
+			}
+			$groups = array();
+			foreach($props2 as $prop)
+			{
+				$cfgform_i->cfg_groups[$prop["group"]]["name"] = $prop["group"];
+				$groups[$prop["group"]] = $cfgform_i->cfg_groups[$prop["group"]];
+			}
+			$this->crap = sizeof($groups);
+			$this->crap_items = array("" => "") + $groups;
+		}
+
+		$this->crap --;
+
+		if($this->crap)
+		{
+			$item = next($this->crap_items);
+			$vars = array (
+				"group" => $item["name"],
+			);
+			$link = aw_url_change_var($vars);
+
+			return array(
+				"text" => $item["caption"],
+				"link" => $link,
+				"section" => $item["name"],//$o_91_2->id(),
+//				 "menu_edit" => "asf" ,//$this->__helper_menu_edit($o_91_2),
+				"parent_section" => $item["parent"],//is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
+//				 "comment" => "komment",
+			);
+		}
+		else
+		{
 			return false;
 		}
 	}

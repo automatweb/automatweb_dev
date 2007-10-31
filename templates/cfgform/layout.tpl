@@ -111,4 +111,9 @@ function cfgformToggleSelectProps(grpId)
 <!-- SUB: relpicker_options -->
 			{VAR:no_edit_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_edit]" value="1" {VAR:no_edit_checked}>
 			<input type="hidden" name="xconfig[{VAR:prp_key}][no_edit]" value="{VAR:no_edit}"><br />
+			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"><br />
 <!-- END SUB: relpicker_options -->
+
+<!-- SUB: select_options -->
+			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"><br />
+<!-- END SUB: select_options -->
