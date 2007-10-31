@@ -187,7 +187,8 @@ class crm_role_manager extends class_base
 			"name" => "save",
 			"tooltip" => t("Anna rollid"),
 			"img" => "save.gif",
-			"url" => "javascript:rolf.submit()"
+			"onClick" => "document.rolf.submit()",
+			"url" => "#"
 		));
 
 		$this->vars(array(
