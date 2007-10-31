@@ -430,6 +430,47 @@ class connection
 		}
 		return $this->conn[$key];
 	}
+	
+	/** changes connection type to link and vice versa
+		@attrib api=1
+
+		@param o_connection required
+			- connection object that will be changed
+		@param b_set required
+			- boolean - true changes connection to link and false back to normal
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			$connection = get_instance("core/obj/connection");
+			$o = new object(396520);
+			foreach($o->connections_from() as $c)
+			{
+				if ($c->prop("type")==CL_DOCUMENT)
+				{
+					$connection -> alias_to_link($c, false);
+				}
+			}
+	**/
+	function alias_to_link($o_connection, $b_set)
+	{
+		$o_from = new object($o_connection->prop("from"));
+		$a_aliaslinks = $o_from->meta("aliaslinks");
+		
+		if ($b_set==true)
+		{
+			$a_aliaslinks[$o_connection->prop("to")] = 1;
+		} else
+		{
+			unset($a_aliaslinks[$o_connection->prop("to")]);
+		}
+		$o_from->set_meta("aliaslinks", $a_aliaslinks);
+		$o_from->save();
+	}
 
 	/** returns the object that the connection points to
 		@attrib api=1
