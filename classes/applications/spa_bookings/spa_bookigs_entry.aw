@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.70 2007/10/03 14:33:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.71 2007/10/31 13:31:09 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1115,7 +1115,6 @@ $t->set_sortable(false);
 		}
 
 		$p_rooms = $this->get_rooms_for_product($arr["prod"]);
-
 		if (is_array($arr["rooms"]) && count($arr["rooms"]))
 		{
 			$arr["rooms"] = $this->make_keys($arr["rooms"]);
@@ -1201,12 +1200,24 @@ $t->set_sortable(false);
 		$settings_inst = get_instance(CL_ROOM_SETTINGS);
 		$data = array();
 		$oh_i = get_instance(CL_OPENHOURS);
-
 		$room2oh = array();
 		foreach($p_rooms as $room)
 		{
-			$oh = $room_inst->get_current_openhours_for_room($room);
-			$oh = reset($oh);
+			$oharr = $room_inst->get_current_openhours_for_room($room);
+			$oh = null;
+			foreach($oharr as $oh)
+			{
+				if ($oh->prop("date_from") > 100 && $to < $oh->prop("date_from"))
+				{
+					$oh = null;
+					continue;
+				}
+				if ($oh->prop("date_to") > 100 && $from > $oh->prop("date_to"))
+				{
+					$oh = null;
+					continue;
+				}
+			}
 			if (is_object($oh))
 			{
 				$room2oh[$room->id()] = $oh;
@@ -1316,6 +1327,7 @@ $t->set_sortable(false);
 		foreach($p_rooms as $room)
 		{
 			$oh = $room_inst->get_current_openhours_for_room($room);
+
 			if (is_object($oh))
 			{
 				list($d_start, $d_end) = $oh_i->get_times_for_date($oh, $range_from+($i*24*3600)+$h*3600);
@@ -1805,11 +1817,15 @@ $t->set_sortable(false);
 		$ri = get_instance(CL_ROOM);
 		foreach($rooms->arr() as $room)
 		{
-			$pd = $ri->get_prod_data_for_room($room);
-			if ($pd[$prod]["active"])
+			$pd = $ri->get_active_items($room);
+			if(array_key_exists($prod , $pd->arr()))
 			{
 				$p_rooms[$room->id()] = $room;
 			}
+//			if ($pd[$prod]["active"])
+//			{
+//				$p_rooms[$room->id()] = $room;
+//			}
 		}
 		return $p_rooms;
 	}
