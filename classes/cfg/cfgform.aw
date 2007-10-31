@@ -1428,8 +1428,10 @@ class cfgform extends class_base
 							"no_edit_caption" => t("Nuppudeta"),
 							"no_edit_checked" => checked($property["no_edit"] == 1),
 							"no_edit" => $property["no_edit"],
-							// "display_caption" => t("V&auml;limus"),
-							// "display" => $property["display"],
+							"displayradio_caption" => t("Checkboxes"),
+							"displayradio_ch" =>  ("radio" === $property["display"]) ? ' checked="1"' : "",
+							"displayselect_caption" => t("Select"),
+							"displayselect_ch" =>  ("select" === $property["display"]) ? ' checked="1"' : "",
 							"size_caption" => t("K&otilde;rgus"),
 							"size" => $property["size"],
 							"prp_key" => $property["name"],
@@ -1447,6 +1449,18 @@ class cfgform extends class_base
 						));
 						$property["cfgform_additional_options"] = $this->parse("select_options");
 						$this->vars(array("select_options" => ""));
+						break;
+
+					case "chooser":
+						$this->vars(array(
+							"orienth_caption" => t("Horisontaalselt"),
+							"orienth_ch" => ("horizontal" === $property["orient"]) ? ' checked="1"' : "",
+							"orientv_caption" => t("Vertikaalselt"),
+							"orientv_ch" => ("vertical" === $property["orient"]) ? ' checked="1"' : "",
+							"prp_key" => $property["name"],
+						));
+						$property["cfgform_additional_options"] = $this->parse("chooser_options");
+						$this->vars(array("chooser_options" => ""));
 						break;
 
 					default:
@@ -3102,7 +3116,6 @@ class cfgform extends class_base
 	/// submenus from object interface methods
 	function make_menu_item($this_o, $level, $parent_o, $site_show_i,$cnt_menus)
 	{
-		//if($parent_o->prop("submenus_from_cb"))	return $this->make_menu_item_from_tabs($this_o, $level, $parent_o, $site_show_i,$cnt_menus);
 		if (empty($this->awcb_request_vars))
 		{
 			$this->awcb_request_vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
@@ -3173,63 +3186,6 @@ class cfgform extends class_base
 		else
 		{
 			$this->make_menu_item_counter = null;
-			return false;
-		}
-	}
-
-	function make_menu_item_from_tabs()
-	{
-		if(! $this->crap)
-		{
-			extract($_GET);
-			$cfgform_i = get_instance(CL_CFGFORM);
-			if(is_oid($id) && $this->can("view" , $id))
-			{
-				$o = obj($id);
-				$cfgform = $o->meta("cfgform_id");
-				$cfgform_i->cff_init_from_class($o, $o->class_id(), false);
-				if(is_oid($cfgform) && $this->can("view", $cfgform) && false)
-				{
-
-					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
-				}
-				else
-				{
-					$cfgx = get_instance("cfg/cfgutils");
-					$props2 = $cfgform_i->cfg_proplist;
-				}
-			}
-			$groups = array();
-			foreach($props2 as $prop)
-			{
-				$cfgform_i->cfg_groups[$prop["group"]]["name"] = $prop["group"];
-				$groups[$prop["group"]] = $cfgform_i->cfg_groups[$prop["group"]];
-			}
-			$this->crap = sizeof($groups);
-			$this->crap_items = array("" => "") + $groups;
-		}
-
-		$this->crap --;
-
-		if($this->crap)
-		{
-			$item = next($this->crap_items);
-			$vars = array (
-				"group" => $item["name"],
-			);
-			$link = aw_url_change_var($vars);
-
-			return array(
-				"text" => $item["caption"],
-				"link" => $link,
-				"section" => $item["name"],//$o_91_2->id(),
-//				 "menu_edit" => "asf" ,//$this->__helper_menu_edit($o_91_2),
-				"parent_section" => $item["parent"],//is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
-//				 "comment" => "komment",
-			);
-		}
-		else
-		{
 			return false;
 		}
 	}

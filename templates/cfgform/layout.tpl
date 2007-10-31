@@ -111,9 +111,17 @@ function cfgformToggleSelectProps(grpId)
 <!-- SUB: relpicker_options -->
 			{VAR:no_edit_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_edit]" value="1" {VAR:no_edit_checked}>
 			<input type="hidden" name="xconfig[{VAR:prp_key}][no_edit]" value="{VAR:no_edit}"><br />
+			{VAR:displayradio_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][display]" value="radio"{VAR:displayradio_ch}><br />
+			{VAR:displayselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][display]" value="select"{VAR:displayselect_ch}><br />
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"><br />
 <!-- END SUB: relpicker_options -->
 
 <!-- SUB: select_options -->
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"><br />
 <!-- END SUB: select_options -->
+
+<!-- SUB: chooser_options -->
+			{VAR:orienth_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][orient]" value="horizontal"{VAR:orienth_ch}><br />
+			{VAR:orientv_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][orient]" value="vertical"{VAR:orientv_ch}><br />
+<!-- END SUB: chooser_options -->
+
