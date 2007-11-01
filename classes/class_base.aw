@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.571 2007/11/01 11:45:45 markop Exp $
+// $Id: class_base.aw,v 2.572 2007/11/01 12:12:44 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1040,7 +1040,7 @@ class class_base extends aw_template
 
 	**/
 	function submit($args = array())
-	{arr($args);
+	{
 		$form_data = null;
 		// since submit should never change the return url, make sure we get at it later
 		$real_return_url = $args["return_url"];
@@ -1644,6 +1644,14 @@ class class_base extends aw_template
 		$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
 
 		$hide_tabs = isset($this->classinfo["hide_tabs"]);
+		if($this->can("view" , aw_global_get("section")))
+		{
+			$sec_obj = obj(aw_global_get("section"));
+			if($sec_obj->prop("submenus_from_cb"))
+			{
+				$hide_tabs = 1;
+			}
+		}
 
 		if ("cfg_embed" == $this->awcb_display_mode)
 		{
