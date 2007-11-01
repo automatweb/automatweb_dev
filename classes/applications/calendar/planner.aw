@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.135 2007/10/19 13:21:21 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.136 2007/11/01 10:24:38 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -1202,13 +1202,10 @@ class planner extends class_base
 			foreach($conns as $conn)
 			{
 				$conn_count++;
+				$cf = $conn->to();
 				$toolbar->add_menu_item(array(
 					"parent" => "create_event",
-					"link" => $this->mk_my_orb("change",array(
-						"id" => $id,
-						"group" => "add_event",
-						"cfgform_id" => $conn->prop("to"),
-					)),
+					"link" => html::get_new_url($cf->prop("subclass"), $id, array("return_url" => get_ru(), "add_to_cal" => $id, "cfgform" => $conn->prop("to"))),
 					"text" => $conn->prop("to.name"),
 				));
 			};
@@ -1221,28 +1218,16 @@ class planner extends class_base
 			{
 				foreach($clidlist as $clid)
 				{	//Show only if has configform
-				if(($clid == CL_CALENDAR_EVENT) && ($arr["obj_inst"]->get_first_conn_by_reltype("RELTYPE_EVENT_ENTRY") == false))
-				{
-					continue;
-				}
-				//Dont show at all
-				// this is bogus, you can turn it off from the settings
-				/*
-				if($clid == CL_CRM_OFFER)
-				{
-					continue;
-				}
-				*/
-				$toolbar->add_menu_item(array(
-					"parent" => "create_event",
-					"link" => html::get_new_url($clid, $id, array("return_url" => get_ru(), "add_to_cal" => $id)) /*$this->mk_my_orb("change",array(
-						"id" => $id,
-						"group" => "add_event",
-						"clid" => $clid,
-					))*/,
-					"text" => $tmp[$clid]["name"],
-				));
-			};
+					if(($clid == CL_CALENDAR_EVENT) && ($arr["obj_inst"]->get_first_conn_by_reltype("RELTYPE_EVENT_ENTRY") == false))
+					{
+						continue;
+					}
+					$toolbar->add_menu_item(array(
+						"parent" => "create_event",
+						"link" => html::get_new_url($clid, $id, array("return_url" => get_ru(), "add_to_cal" => $id)),
+						"text" => $tmp[$clid]["name"],
+					));
+				};
 			};
 
 			$dt = date("d-m-Y",time());
