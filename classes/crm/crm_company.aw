@@ -2109,6 +2109,8 @@ class crm_company extends class_base
 				{
 					$data['caption'] = t('Lihtne otsing');
 				}
+				$data['value'] = $data['caption'];
+				break;
 			case "customer_search_reg":
 			case "customer_search_name":
 			case "customer_search_submit":
