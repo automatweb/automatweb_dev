@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.572 2007/11/01 12:12:44 markop Exp $
+// $Id: class_base.aw,v 2.573 2007/11/01 12:25:16 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5833,6 +5833,7 @@ class class_base extends aw_template
 				$_SESSION["menu_from_cb"][$level]["count"]++;
 				$_SESSION["menu_from_cb"][$level]["crap_item"][$item["name"]] = $_SESSION["menu_from_cb"][$level]["count"];
 				$vars = array (
+					"section" => $_GET["section"],
 					"group" => $item["name"],
 					"openedtab" => ($level == 1)  ?$item["name"] :$item["parent"],
 				);
