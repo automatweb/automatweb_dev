@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.377 2007/10/31 16:40:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.378 2007/11/01 15:23:19 markop Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1449,6 +1449,16 @@ class document extends aw_template
 			"user4" => $doc["user4"],
 			"user5" => $doc["user5"],
 			"user6" => $doc["user6"],
+			"user7" => $doc["user7"],
+			"user8" => $doc["user8"],
+			"user9" => $doc["user9"],
+			"user10" => $doc["user10"],
+			"user11" => $doc["user11"],
+			"user12" => $doc["user12"],
+			"user13" => $doc["user13"],
+			"user14" => $doc["user14"],
+			"user15" => $doc["user15"],
+			"user16" => $doc["user16"],
 			"obj_modified" => (is_object($doc_o) ? $doc_o->modified() : ""),
 			"sel_menu_id" => $doc_o->parent(),
 			"document_link" => $document_link,
@@ -1798,8 +1808,8 @@ class document extends aw_template
 
 		$oob = obj($id);
 		$oob = $oob->fetch();
-
-		if ($oob["class_id"] == CL_BROTHER_DOCUMENT)
+		
+		if ($oob["class_id"] == CL_BROTHER_DOCUMENT && $oob["brother_of"])
 		{
 			$id = $oob["brother_of"];
 		}

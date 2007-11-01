@@ -34,9 +34,11 @@ class doc_display extends aw_template
 		$doc_parent = obj($doc->parent());
 		$this->tpl_reset();
 		$this->tpl_init("automatweb/documents");
-		$this->read_any_template($this->_get_template($arr));
+		$tpl_file = $this->_get_template($arr);
+		$this->read_any_template($tpl_file);
 
 		$si = __get_site_instance();
+
 		if ($si)
 		{
 			$si->parse_document_new($doc);
@@ -84,18 +86,38 @@ class doc_display extends aw_template
 		$orig = $doc->get_original();
 
 		$user1 = $doc->trans_get_val("user1");
-		$al->parse_oo_aliases($doc->id(), &$user1, array("templates" => $this->templates, "meta" => $mt));
+		$al->parse_oo_aliases($doc->id(), &$user1, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user1")));
 		$user2 = $doc->trans_get_val("user2");
-		$al->parse_oo_aliases($doc->id(), &$user2, array("templates" => $this->templates, "meta" => $mt));
+		$al->parse_oo_aliases($doc->id(), &$user2, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user2")));
 		$user3 = $doc->trans_get_val("user3");
-		$al->parse_oo_aliases($doc->id(), &$user3, array("templates" => $this->templates, "meta" => $mt));
+		$al->parse_oo_aliases($doc->id(), &$user3, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user3")));
 		$user4 = $doc->trans_get_val("user4");
-		$al->parse_oo_aliases($doc->id(), &$user4, array("templates" => $this->templates, "meta" => $mt));
+		$al->parse_oo_aliases($doc->id(), &$user4, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user4")));
 		$user5 = $doc->trans_get_val("user5");
-		$al->parse_oo_aliases($doc->id(), &$user5, array("templates" => $this->templates, "meta" => $mt));
+		$al->parse_oo_aliases($doc->id(), &$user5, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user5")));
 		$user6 = $doc->trans_get_val("user6");
-		$al->parse_oo_aliases($doc->id(), &$user6, array("templates" => $this->templates, "meta" => $mt));
-		
+		$al->parse_oo_aliases($doc->id(), &$user6, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user6")));
+		$user7 = $doc->trans_get_val("user7");
+		$al->parse_oo_aliases($doc->id(), &$user7, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user7")));
+		$user8 = $doc->trans_get_val("user8");
+		$al->parse_oo_aliases($doc->id(), &$user8, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user8")));
+		$user9 = $doc->trans_get_val("user9");
+		$al->parse_oo_aliases($doc->id(), &$user9, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user9")));
+		$user10 = $doc->trans_get_val("user10");
+		$al->parse_oo_aliases($doc->id(), &$user10, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user10")));
+		$user11 = $doc->trans_get_val("user11");
+		$al->parse_oo_aliases($doc->id(), &$user11, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user11")));
+		$user12 = $doc->trans_get_val("user12");
+		$al->parse_oo_aliases($doc->id(), &$user12, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user12")));
+		$user13 = $doc->trans_get_val("user13");
+		$al->parse_oo_aliases($doc->id(), &$user13, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user13")));
+		$user14 = $doc->trans_get_val("user14");
+		$al->parse_oo_aliases($doc->id(), &$user14, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user14")));
+		$user15 = $doc->trans_get_val("user15");
+		$al->parse_oo_aliases($doc->id(), &$user15, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user15")));
+		$user16 = $doc->trans_get_val("user16");
+		$al->parse_oo_aliases($doc->id(), &$user16, array("templates" => $this->templates, "meta" => $mt, "data" => array("prop" => "user16")));
+
 		$userta1 = $orig->trans_get_val("userta1");
 		$al->parse_oo_aliases($doc->id(), &$userta1, array("templates" => $this->templates, "meta" => $mt));
 		$userta2 = $orig->trans_get_val("userta2");
@@ -118,8 +140,10 @@ class doc_display extends aw_template
 	
 		$uinst = get_instance(CL_USER);
 		$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
-		
+		$this->vars($al->get_vars());
+
 		$title = $doc->trans_get_val("title");
+
 		$this->vars_safe(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
@@ -143,6 +167,16 @@ class doc_display extends aw_template
 			"user4" => $user4,
 			"user5" => $user5,
 			"user6" => $user6,
+			"user7" => $user7,
+			"user8" => $user8,
+			"user9" => $user9,
+			"user10" => $user10,
+			"user11" => $user11,
+			"user12" => $user12,
+			"user13" => $user13,
+			"user14" => $user14,
+			"user15" => $user15,
+			"user16" => $user16,
 			"userta1" => $userta1,
 			"userta2" => $userta2,
 			"userta3" => $userta3,
@@ -223,7 +257,6 @@ class doc_display extends aw_template
 		{
 			return aw_ini_get("document.print_tpl");
 		}
-
 		if (isset($arr["tpl"]))
 		{
 			return $arr["tpl"];
@@ -486,8 +519,103 @@ class doc_display extends aw_template
 		{
 			$u6s = $this->parse("user6_sub");
 		}
+		$u7s = "";
+		if ($doc->prop("user7") != "")
+		{
+			$u7s = $this->parse("user7_sub");
+		}
+		$u8s = "";
+		if ($doc->prop("user8") != "")
+		{
+			$u8s = $this->parse("user8_sub");
+		}
+		$u9s = "";
+		if ($doc->prop("user9") != "")
+		{
+			$u9s = $this->parse("user9_sub");
+		}
+		$u10s = "";
+		if ($doc->prop("user10") != "")
+		{
+			$u6s = $this->parse("user10_sub");
+		}
+		$u6s = "";
+		if ($doc->prop("user11") != "")
+		{
+			$u11s = $this->parse("user11_sub");
+		}
+		$u12s = "";
+		if ($doc->prop("user12") != "")
+		{
+			$u6s = $this->parse("user12_sub");
+		}
+		$u13s = "";
+		if ($doc->prop("user13") != "")
+		{
+			$u6s = $this->parse("user13_sub");
+		}
+		$u14s = "";
+		if ($doc->prop("user14") != "")
+		{
+			$u6s = $this->parse("user14_sub");
+		}
+		$u15s = "";
+		if ($doc->prop("user15") != "")
+		{
+			$u6s = $this->parse("user15_sub");
+		}
+		$u16s = "";
+		if ($doc->prop("user16") != "")
+		{
+			$u6s = $this->parse("user16_sub");
+		}
+		$ut2 = "";
+		if ($doc->prop("userta2") != "")
+		{
+			$ut2 = $this->parse("userta2_sub");
+		}
+		$ut3 = "";
+		if ($doc->prop("userta3") != "")
+		{
+			$ut3 = $this->parse("userta3_sub");
+		}
+		$ut4 = "";
+		if ($doc->prop("userta4") != "")
+		{
+			$ut4 = $this->parse("userta4_sub");
+		}
+		$ut5 = "";
+		if ($doc->prop("userta5") != "")
+		{
+			$ut5 = $this->parse("userta5_sub");
+		}
+		$ut6 = "";
+		if ($doc->prop("userta6") != "")
+		{
+			$ut6 = $this->parse("userta6_sub");
+		}
 		$this->vars(array(
-			"user1_sub" => $u1s
+			"user1_sub" => $u1s,
+			"user2_sub" => $u2s,
+			"user3_sub" => $u3s,
+			"user4_sub" => $u4s,
+			"user5_sub" => $u5s,
+			"user6_sub" => $u6s,
+			"user7_sub" => $u7s,
+			"user8_sub" => $u8s,
+			"user9_sub" => $u9s,
+			"user10_sub" => $u10s,
+			"user11_sub" => $u11s,
+			"user12_sub" => $u12s,
+			"user13_sub" => $u13s,
+			"user14_sub" => $u14s,
+			"user15_sub" => $u15s,
+			"user16_sub" => $u16s,
+			"userta2_sub" => $ut2,
+			"userta3_sub" => $ut3,
+			"userta4_sub" => $ut4,
+			"userta5_sub" => $ut5,
+			"userta6_sub" => $ut6
 		));
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.158 2007/10/31 16:40:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.159 2007/11/01 15:23:19 markop Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -380,7 +380,7 @@ class doc extends class_base
 			"tpldir" => "automatweb/documents",
 		));
 		$this->trans_props = array(
-			"title","lead","content"
+			"title","lead","content","user7"
 		);
 	}
 
@@ -1188,6 +1188,7 @@ class doc extends class_base
 		{
 			$args["edit_version"] = $_GET["edit_version"];
 		}
+		$args["temp_var1"] = " 0 ";
 	}
 
 	/** Shows the pic1 element. Well, I think I could use a generic solution for displaying different
