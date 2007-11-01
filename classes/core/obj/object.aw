@@ -1885,8 +1885,27 @@ class object
 		return $GLOBALS["object_loader"]->get_acl_groups_for_obj($this->oid);
 	}
 
+	/** removes an acl relation from the curtrent object
+		@attrib api=1 params=pos
+
+		@returns
+			nothing
+
+		@errors
+			error is thrown if no current object is loaded
+
+		@param g_oid required type=oid
+			The oid of the group to remove the relation with
+
+	**/
 	function acl_del($g_oid)
 	{
+		$group = obj($g_oid);
+		$GLOBALS["object_loader"]->remove_acl_group_from_obj($group->prop("gid"), $this->id());
+		$this->disconnect(array(
+			"from" => $group->id(),
+			"type" => RELTYPE_ACL
+		));
 	}
 
 	/** returns the object's data in xml

@@ -305,6 +305,11 @@ class acl_manager extends class_base
 			}
 			// if there is an acl relation for this group, then save the data
 			// if not and there are some thingies set, then create it
+			if (isset($acl[$o->id()]) && !$arr["set_acl"][$o->id()])
+			{
+				$obj->acl_del($o);
+			}
+			else
 			if (isset($acl[$o->id()]) || (isset($arr["acl_matrix"][$o->id()]) && count($arr["acl_matrix"][$o->id()])) || $arr["set_acl"][$o->id()] == 1)
 			{
 				$obj->acl_set($o, safe_array($arr["acl_matrix"][$o->id()]));
