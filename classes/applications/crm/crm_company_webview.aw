@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.44 2007/08/29 08:27:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.45 2007/11/01 15:45:29 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -841,7 +841,7 @@ class crm_company_webview extends class_base
 				case "userta3":
 				case "userta4":
 				case "userta5":
-					$value = $c->prop($item);
+					$value = $c->trans_get_val($item);
 					break;
 				case "email":
 					$rels = $c->connections_from(array(
