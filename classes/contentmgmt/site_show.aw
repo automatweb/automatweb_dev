@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.246 2007/10/25 13:33:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.247 2007/11/01 10:13:48 kristo Exp $
 
 /*
 
@@ -2553,11 +2553,11 @@ class site_show extends class_base
 				));
 
 				// check acl
-				if ($_act == "new" && !$this->can("add", aw_global_get("section")))
+				if ($_act == "new" && !$this->can("add", $meth["values"]["parent"]))
 				{
 					$this->skip = true;
 				}
-				if ($_act == "change" && !$this->can("edit", aw_global_get("section")))
+				if ($_act == "change" && !$this->can("edit", $meth["values"]["id"]))
 				{
 					$this->skip = true;
 				}
