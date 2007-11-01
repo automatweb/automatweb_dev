@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.247 2007/11/01 10:13:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.248 2007/11/01 11:45:42 markop Exp $
 
 /*
 
@@ -1961,6 +1961,15 @@ class site_show extends class_base
 			$a_parent = aw_ini_get("rootmenu");
 		}
 
+		if($this->can("view" , $a_parent))
+		{
+			$parent_obj = obj($a_parent);
+			if($parent_obj->class_id() == CL_MENU && $parent_obj->prop("submenus_from_cb"))
+			{
+				return $a_parent;
+			}
+		}
+
 		if ($level == 1)
 		{
 			return $a_parent;
@@ -1983,7 +1992,7 @@ class site_show extends class_base
 	// !returns the number of levels that are in the path
 	// for the menu area beginning at $parent
 	function _helper_get_levels_in_path_for_area($parent)
-	{
+	{//arr("_helper_get_levels_in_path_for_area");
 		// why is this here you ask? well, if the user has no access to the area rootmenu
 		// then the rootmenu will get rewritten to the group's rootmenu, therefore
 		// we need to rewrite it in the path checker functions as well
@@ -1993,6 +2002,17 @@ class site_show extends class_base
 		}
 
 		$pos = array_search($parent, $this->path_ids);
+
+		//umm... peab miski valusa häki vahele kirjutama selle jaoks, kui menüüst võetakse omadus, et tabid tuleks adminniliidese tabidest
+		if($this->can("view" , $parent))
+		{
+			$parent_obj = obj($parent);
+			if($parent_obj->class_id() == CL_MENU && $parent_obj->prop("submenus_from_cb"))
+			{
+				return 1;
+			}
+		}
+
 		if ($pos === NULL || $pos === false)
 		{
 			return 0;

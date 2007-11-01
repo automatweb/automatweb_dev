@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.570 2007/10/31 14:55:17 kristo Exp $
+// $Id: class_base.aw,v 2.571 2007/11/01 11:45:45 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1040,7 +1040,7 @@ class class_base extends aw_template
 
 	**/
 	function submit($args = array())
-	{
+	{arr($args);
 		$form_data = null;
 		// since submit should never change the return url, make sure we get at it later
 		$real_return_url = $args["return_url"];
@@ -5760,12 +5760,13 @@ class class_base extends aw_template
 	}
 
 	function make_menu_item_from_tabs($this_o, $level, $parent_o, $site_show_i,$cnt_menus)
-	{//arr(array("o" => $this_o, "parent" => $parent_o, "l" => $level));arr($this->crap_items);
+	{
 //		if($level > 2) return null;
 //		if($level == 1 && $this->count_items[2] && !$this->count_items[1])
 //		{
 //			return null;
 //		}
+
 		if($cnt_menus == 0) $_SESSION["menu_from_cb"] = null;
 		if(!$_SESSION["menu_from_cb"][$level]["items"] && !$_SESSION["menu_from_cb"][$level]["count"])
 		{
@@ -5787,6 +5788,7 @@ class class_base extends aw_template
 					$props2 = $cfgform_i->cfg_proplist;
 				}
 			}
+
 			$groups = array();
 			$sub_groups = array();
 			foreach($props2 as $prop)
@@ -5796,9 +5798,10 @@ class class_base extends aw_template
 
 			foreach($cfgform_i->cfg_groups as $key => $val)
 			{
-				if(($level == 2 && !$val["parent"])|| ($level == 1 && $val["parent"]) || ($val["parent"] && ($val["parent"] != $_SESSION["menu_item_tab"]))) unset($cfgform_i->cfg_groups[$key]);
+				if(($level == 2 && !$val["parent"])|| ($level == 1 && $val["parent"]) || ($val["parent"] && ($val["parent"] != $_SESSION["menu_item_tab"] && $val["parent"] != $_GET["group"] && $val["parent"] != $_GET["openedtab"]))) unset($cfgform_i->cfg_groups[$key]);
 				else $cfgform_i->cfg_groups[$key]["name"] = $key;
 			}
+
 			foreach($cfgform_i->cfg_groups as $key => $val)
 			{
 				$groups[] = $val;
