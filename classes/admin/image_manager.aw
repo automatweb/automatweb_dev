@@ -34,7 +34,15 @@ class image_manager extends aw_template
 		}
 
 		parse_str($arr["doc"], $params);
-		$doc = obj($params["id"]);
+		if (!$this->can("view", $params["id"]))
+		{
+			// use parent from url as doc
+			$doc = obj($params["parent"]);
+		}
+		else
+		{
+			$doc = obj($params["id"]);
+		}
 
 		if ($image_list->count())
 		{
