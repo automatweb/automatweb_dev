@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.2 2007/10/11 15:38:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.3 2007/11/01 11:51:25 dragut Exp $
 // expp_remote_makse.aw - expp remote makse 
 /*
 
@@ -839,5 +839,110 @@ var $pangad = array(
 		return $retHTML;
 	}
 */
+
+	function remoteTellimus() {
+		$tellimus = $this->cp->getPid( 2 );
+		if (empty($tellimus)) {
+			return false;
+		}
+		$expp_arve = get_instance( CL_EXPP_ARVE );
+		$_SESSION['tellnr'] = $expp_arve->getNextArve();
+
+		// 05edceff02
+		$tellimuste_url = "http://www.raamat24.ee/kasutaja.php?tellimus=".$tellimus."&eksport=csv&ak=1";
+		$tellimused_raw = file($tellimuste_url);
+
+		$v2ljade_nimed = explode("\t", $tellimused_raw[0]);
+		unset($tellimused_raw[0]);
+		
+		$tellimused = array();
+		foreach ($tellimused_raw as $nr => $rida)
+		{
+			$v2ljad = explode("\t", $rida);
+			foreach ($v2ljad as $k => $v)
+			{
+				$tellimused[$nr][$v2ljade_nimed[$k]] = $v;
+				$tell[str_replace('"', '', $v2ljade_nimed[$k])] = str_replace('"', '', $v);
+			}
+
+			$pindeks = $this->db_fetch_field("select pindeks from expp_valjaanne where valjaanne = '".$tell['VAINDEKS']."'", "pindeks");
+			if (!$pindeks)
+			{
+				$pindeks = "9999".str_repeat("0", 4 - strlen($tell['AK_TOOTEKOOD'])).$tell['AK_TOOTEKOOD'];
+				$sql = "
+					insert into
+						expp_valjaanne
+					set
+						pindeks = ".$pindeks.",
+						hinna_liik = 'TAVAHIND',
+						valjaanne = '".$tell['VAINDEKS']."',
+						valjaande_nimetus = '".$tell['AK_TOOTENIMI']."',
+						toote_nimetus = '".$tell['AK_TOOTENIMI']."',
+						toote_tyyp = '".ucfirst($tell['AK_TOOTETYYP'])."'
+				";
+				$this->db_query($sql);
+			}
+
+			// viitenumber:
+			$viitenumber = "10605".$_SESSION['tellnr'];
+
+			$sql = "
+				insert into
+					expp_arved
+				set
+					snimi = '".$tell['SNIMI']."',
+					senimi = '".$tell['SENIMI']."',
+					semail = '".$tell['SEMAIL']."',
+					stanav = '".$tell['STANAV']."',
+					smaja = '".$tell['SMAJA']."',
+					skorter = '".$tell['SKORTER']."',
+					stelefon = '".$tell['STELEFON']."',
+					smobiil = '".$tell['SMOBIIL']."',
+					sfax = '".$tell['SFAX']."',
+					sindeks = '".$tell['SINDEKS']."',
+					saadress = '".$tell['SAADRESS']."',
+					sisikukood = '".$tell['SISIKUKOOD']."',
+					
+					mnimi = '".$tell['MNIMI']."',
+					mtanav = '".$tell['MTANAV']."',
+					mmaja = '".$tell['MMAJA']."',
+					mkorter = '".$tell['MKORTER']."',
+					mtelefon = '".$tell['MTELEFON']."',
+					mmobiil = '".$tell['MMOBIIL']."',
+					mfax = '".$tell['MFAX']."',
+					mindeks = '".$tell['MINDEKS']."',
+					maadress = '".$tell['MAADRESS']."',
+					menimi = '".$tell['MENIMI']."',
+					misikukood = '".$tell['MISIKUKOOD']."',
+					memail = '".$tell['MEMAIL']."',
+
+					leping = 'tel',
+					vvotja = '".$tell['VVOTJA']."',
+					kanal = '".$tell['KANAL']."',
+					tlkood = '".$tell['TLKOOD']."',
+					arvenr = '".$_SESSION['tellnr']."',
+					vaindeks = '".$pindeks."',
+					algus = '".$tell['ALGUS']."',
+					lopp = '".$tell['LOPP']."',
+					eksempla = '".$tell['EKSEMPLA']."',
+					tellkpv = '".$tell['TELLKPV']."',
+					maksumus = '".$tell['MAKSUMUS']."',
+					
+					kampaania = '".$tell['RKMKOOD']."',
+					tyyp = '".$tell['TYYP']."',
+					trykiarve = ".(int)$tell['TRYKIARVE'].",
+					trykiokpakkumine = ".(int)$tell['TRYKIOKPAKKUMINE'].",
+					viitenumber = '".$viitenumber."',
+					session = '".session_id().'-'.$_SESSION['tellnr']."',
+
+					pank = ".(int)$tell['PANK'].",
+					time = NOW(),
+					staatus = 'uus'
+			";
+			$this->db_query($sql);
+		}
+		header("Location:".aw_ini_get("baseurl")."/tellimine/makse");
+		exit();
+	}
 }
 ?>
