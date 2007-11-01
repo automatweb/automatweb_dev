@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.209 2007/10/25 13:33:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.210 2007/11/01 13:47:24 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1939,6 +1939,10 @@ class menu extends class_base
 				if ($this->can("view", $docid) && $dat["submenus"] == $docid)
 				{
 					$tpl = isset($dat["tpl"]) ? $dat["tpl"] : "SEEALSO_DOCUMENT";
+					if ($dat["ovr_parent"])
+					{
+						$str[$tpl] = array();
+					}
 					$doco = obj($docid);
 					if ($doco->lang_id() == aw_global_get("lang_id"))
 					{
@@ -1999,6 +2003,12 @@ class menu extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "overwrite_parent_settings",
+			"caption" => t("&Auml;ra kasuta &uuml;lemiste men&uuml;&uuml;de dokumente"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "tpl",
 			"caption" => t("Vali asukoht"),
 			"align" => "center"
@@ -2027,6 +2037,11 @@ class menu extends class_base
 					"name" => "sad_opts[".$cto."][submenus]",
 					"value" => $cto,
 					"checked" => $sad_opts[$cto]["submenus"]
+				)),
+				"overwrite_parent_settings" => html::checkbox(array(
+					"name" => "sad_opts[".$cto."][ovr_parent]",
+					"value" => $cto,
+					"checked" => $sad_opts[$cto]["ovr_parent"]
 				)),
 				"tpl" => html::select(array(
 					"name" => "sad_opts[".$cto."][tpl]",
