@@ -330,7 +330,7 @@ class crm_company_docs_impl extends class_base
 		$t->define_field(array(
 			"caption" => t("Nimi"),
 			"name" => "name",
-			"align" => "center",
+			"align" => "left",
 			"sortable" => 1
 		));
 
@@ -440,7 +440,8 @@ class crm_company_docs_impl extends class_base
 						"created" => $dat["add_date"],
 						"modified" => $dat["mod_date"],
 						"createdby" => $dat["adder"],
-						"pop" => $pm->get_menu()
+						"pop" => $pm->get_menu(),
+
 					));
 				}
 				$t->set_default_sortby("name");
@@ -516,9 +517,8 @@ class crm_company_docs_impl extends class_base
 				"modifiedby" => $o->modifiedby(),
 				"modified" => $o->modified(),
 				"oid" => $o->id(),
-                                        "oname" => $o->name(),
-                                        "jrk" => $o->ord(),
-
+                                "oname" => $o->name(),
+                                "jrk" => $o->ord(),
 				"is_menu" => $o->class_id() == CL_MENU ? 0 : 1
 			));
 		}
@@ -564,7 +564,8 @@ class crm_company_docs_impl extends class_base
 		/*$t->data_from_ol($ol, array(
 			"change_col" => "name"
 		));*/
-
+//arr($t);
+		$t->set_numeric_field("jrk");
 		$t->set_default_sortby(array("is_menu","jrk","oname"));
 		$t->set_default_sorder("asc");
 	}
