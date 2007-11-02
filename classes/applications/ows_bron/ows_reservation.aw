@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.3 2007/10/15 11:58:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.4 2007/11/02 10:03:02 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -213,6 +213,10 @@ if (!is_oid($arr["id"]))
 	die("you bafoon!");
 }
 			$o = obj($arr["id"]);
+			if ($o->prop("is_confirmed") == 1)
+			{
+					return;
+			}
 
 			$checkin = date("Y", $o->prop("arrival_date")).'-'.date("m", $o->prop("arrival_date")).'-'.date("d", $o->prop("arrival_date")).'T00:00:00';
 
@@ -227,9 +231,9 @@ if (!is_oid($arr["id"]))
       	"rateId" => $o->prop("rate_id"),
       	"arrivalDate" => $checkin,
       	"departureDate" => $checkout,
-      	"numberOfRooms" => $o->prop("num_rooms"),
-      	"numberOfAdultsPerRoom" => $o->prop("adults_per_room"),
-      	"numberOfChildrenPerRoom" => $o->prop("child_per_room"),
+      	"numberOfRooms" => (int)$o->prop("num_rooms"),
+      	"numberOfAdultsPerRoom" => (int)$o->prop("adults_per_room"),
+      	"numberOfChildrenPerRoom" => (int)$o->prop("child_per_room"),
       	"promotionCode" => $o->prop("promo_code")." ",
       /*<partnerWebsiteGuid>string</partnerWebsiteGuid>
       <partnerWebsiteDomain>string</partnerWebsiteDomain>
@@ -249,8 +253,8 @@ if (!is_oid($arr["id"]))
       	"guestPhone" => $o->prop("guest_phone"),
       	"guestEmail" => $o->prop("guest_email"),
       	"guestComments" => urlencode($o->prop("guest_comments"))." ",
-      	"roomSmokingPreferenceId" => (bool)$o->prop("smoking")." ",
-      	"floorPreferenceId" => $o->prop("low_floor"),
+      	"roomSmokingPreferenceId" => (int)$o->prop("smoking"),
+      	"floorPreferenceId" => (int)$o->prop("low_floor"),
       	"isAllergic" => (bool)$o->prop("is_allergic"),
       	"isHandicapped" => (bool)$o->prop("is_handicapped"),
 				"guaranteeType" => "NonGuaranteed",
