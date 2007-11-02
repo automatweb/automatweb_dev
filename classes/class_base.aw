@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.573 2007/11/01 12:25:16 markop Exp $
+// $Id: class_base.aw,v 2.574 2007/11/02 13:11:13 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5679,17 +5679,76 @@ class class_base extends aw_template
 		foreach(safe_array($_SESSION["rel_cut"]) as $cut_item)
 		{
 			$c = new connection($cut_item);
+
+			$o = obj($arr["id"]);
+			$idx = $c->prop("idx");
+			$conns = $o->connections_from(array('reltype' => $c->prop("reltype")));
+			$idxs = array();
+			foreach($conns as $conn)
+			{
+				if($conn->prop("reltype") == $c->prop("reltype"))
+				{
+					$idxs[$conn->prop("idx")] = $conn;
+				}
+			}
+			if(array_key_exists($idx , $idxs))
+			{
+//				error::raise(array(
+//					"id" => "ERR_CONN_IDX_EXISTS",
+//					"msg" => t("aliase number oli juba olemas, seega uuendas"),
+//				));
+				$err_id = $idxs[$idx]->prop("to");
+				print sprintf(
+					t("Seoste l&otilde;ikamisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"),
+					$err_id,
+					$GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"].$idx,
+					$c->prop("to.name"),
+					$GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"].(max(array_keys($idxs)) + 1)
+				)."\n<br>";
+						
+				$idx = max(array_keys($idxs)) + 1;//fdgfdgfdgfdg
+			}
+
 			$c->change(array(
-				"from" => $arr["id"]
+				"from" => $arr["id"],
+				"idx" => $idx,
 			));
 		}
 		foreach(safe_array($_SESSION["rel_copied"]) as $c_item)
 		{
 			$c = new connection($c_item);
 			$o = obj($arr["id"]);
+			$idx = $c->prop("idx");
+			$conns = $o->connections_from(array('reltype' => $c->prop("reltype")));
+			$idxs = array();
+			foreach($conns as $conn)
+			{
+				if($conn->prop("reltype") == $c->prop("reltype"))
+				{
+					$idxs[$conn->prop("idx")] = $conn;
+				}
+			}
+			if(array_key_exists($idx , $idxs))
+			{
+//				error::raise(array(
+//					"id" => "ERR_CONN_IDX_EXISTS",
+//					"msg" => t("aliase number oli juba olemas, seega uuendas"),
+//				));
+				$err_id = $idxs[$idx]->prop("to");
+				print sprintf(
+					t("Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"),
+					$err_id,
+					$GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"].$idx,
+					$c->prop("to.name"),
+					$GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"].(max(array_keys($idxs)) + 1)
+				)."\n<br>";
+						
+				$idx = max(array_keys($idxs)) + 1;//fdgfdgfdgfdg
+			}
 			$o->connect(array(
 				"to" => $c->prop("to"),
-				"type" => $c->prop("reltype")
+				"type" => $c->prop("reltype"),
+				"idx" => $idx,
 			));
 		}
 		$_SESSION["rel_copied"] = null;
