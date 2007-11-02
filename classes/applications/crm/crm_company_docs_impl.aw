@@ -120,10 +120,7 @@ class crm_company_docs_impl extends class_base
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
 		$classes = array(CL_MENU);
-		if ($sts && $sts->prop("show_files_and_docs_in_tree"))
-		{
-			$classes = array(CL_MENU, CL_DOCUMENT,CL_FILE);
-		}
+
 		extract($_GET); extract($_POST); extract($arr);
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree(array (
@@ -137,9 +134,30 @@ class crm_company_docs_impl extends class_base
 			"class_id" => $classes,
 			"lang_id" => array(),	
 			"parent" => $parent,
-			"sort_by" => "objects.class_id ASC",
+			"sort_by" => "objects.name ASC",
 		));
-
+		$ol->sort_by(array(
+			"prop" => "ord",
+			"order" => "asc"
+		));
+		if ($sts && $sts->prop("show_files_and_docs_in_tree"))
+		{
+			$classes = array(CL_DOCUMENT,CL_FILE);
+			$ol3 = new object_list(array(
+				"class_id" => $classes,
+				"lang_id" => array(),	
+				"parent" => $parent,
+				"sort_by" => "objects.name ASC",
+			));
+			$ol3->sort_by(array(
+				"prop" => "ord",
+				"order" => "asc"
+			));
+			foreach($ol3->names() as $id => $name)	
+			{
+				$ol->add($id);
+			}
+		}
 		classload("core/icons");
 		$file_inst = get_instance(CL_FILE);
 		foreach($ol->arr() as $o)
@@ -159,10 +177,34 @@ class crm_company_docs_impl extends class_base
 			$tree->add_item(0,$d);
 			
 			$ol2 = new object_list(array(
-				"class_id" => $classes,
+				"class_id" => array(CL_MENU),
 				"lang_id" => array(),	
 				"parent" => $o->id(),
+				"sort_by" => "objects.name ASC",
 			));
+			$ol2->sort_by(array(
+				"prop" => "ord",
+				"order" => "asc"
+			));
+
+			if ($sts && $sts->prop("show_files_and_docs_in_tree"))
+			{
+				$classes = array(CL_DOCUMENT,CL_FILE);
+				$ol4 = new object_list(array(
+					"class_id" => $classes,
+					"lang_id" => array(),	
+					"parent" => $parent,
+					"sort_by" => "objects.name ASC",
+				));
+				$ol4->sort_by(array(
+					"prop" => "ord",
+					"order" => "asc"
+				));
+				foreach($ol4->names() as $id => $name)	
+				{
+					$ol2->add($id);
+				}
+			}
 			foreach($ol2->arr() as $o2)
 			{
 				$tree->add_item($o->id(), array(
@@ -185,10 +227,10 @@ class crm_company_docs_impl extends class_base
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
 		$classes = array(CL_MENU);
-		if ($sts && $sts->prop("show_files_and_docs_in_tree"))
-		{
-			$classes = array(CL_MENU, CL_DOCUMENT,CL_FILE);
-		}
+//		if ($sts && $sts->prop("show_files_and_docs_in_tree"))
+//		{
+//			$classes = array(CL_MENU, CL_DOCUMENT,CL_FILE);
+//		}
 
 		if (!$arr["request"]["tf"] && $arr["request"]["files_from_fld"] == "")
 		{
@@ -219,16 +261,37 @@ class crm_company_docs_impl extends class_base
 			"url" => aw_url_change_var("tf", $fld->id()),
 			"is_open" => 1,
 		));
-		
-
-
 		$ol = new object_list(array(
 			"class_id" => $classes,
 			"lang_id" => array(),	
 			"parent" => $fld->id(),
-			"sort_by" => "objects.class_id ASC",
+			"sort_by" => "objects.name ASC",
 			//"sortby" => "objects.class_id",
 		));
+		$ol->sort_by(array(
+			"prop" => "ord",
+			"order" => "asc"
+		));
+
+		if ($sts && $sts->prop("show_files_and_docs_in_tree"))
+		{
+			$classes = array(CL_DOCUMENT,CL_FILE);
+			$ol3 = new object_list(array(
+				"class_id" => $classes,
+				"lang_id" => array(),
+				"parent" => $fld->id(),
+				"sort_by" => "objects.name ASC",
+			));
+			$ol3->sort_by(array(
+				"prop" => "ord",
+				"order" => "asc"
+			));
+			foreach($ol3->names() as $id => $name)	
+			{
+				$ol->add($id);
+			}
+		}
+
 		foreach($ol->arr() as $o)
 		{
 			$d = array(
@@ -244,14 +307,38 @@ class crm_company_docs_impl extends class_base
 			}
 			
 			$arr["prop"]["vcl_inst"]->add_item($fld->id(),$d);
-			
 			$ol2 = new object_list(array(
-				"class_id" => $classes,
+				"class_id" => array(CL_MENU),
 				"lang_id" => array(),	
 				"parent" => $o->id(),
+				"sort_by" => "objects.name ASC",
 			));
-			foreach($ol2->arr() as $o2)
+			$ol2->sort_by(array(
+				"prop" => "ord",
+				"order" => "asc"
+			));
+			if ($sts && $sts->prop("show_files_and_docs_in_tree"))
 			{
+				$classes = array(CL_DOCUMENT,CL_FILE);
+				$ol4 = new object_list(array(
+					"class_id" => $classes,
+					"lang_id" => array(),	
+					"parent" => $o->id(),
+					"sort_by" => "objects.name ASC",
+				));
+				$ol4->sort_by(array(
+					"prop" => "ord",
+					"order" => "asc"
+				));
+		
+				foreach($ol4->names() as $id => $name)	
+				{
+					$ol2->add($id);
+				}
+			}
+			foreach($ol2->names() as $id => $name)
+			{
+				$o2 = obj($id);
 				$arr["prop"]["vcl_inst"]->add_item($o->id(), array(
 					"id" => $o2->id(),
 					"name" => $o2->name(),
