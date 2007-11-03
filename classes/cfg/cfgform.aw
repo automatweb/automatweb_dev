@@ -1350,8 +1350,9 @@ class cfgform extends class_base
 			"field" => "id",
 		));
 
-		$t->set_default_sortby ("ord");
-		$t->set_default_sorder ("asc");
+		$t->set_numeric_field("ordnr");
+		$t->set_default_sortby("ordnr");
+		$t->set_default_sorder("asc");
 	}
 
 	function _layout_tbl($arr)
@@ -1405,7 +1406,13 @@ class cfgform extends class_base
 
 			$t->define_data(array(
 				"id" => $name,
-				"ord" => ++$ord,
+				"ordnr" => ++$ord,
+				"ord" =>   html::textbox (array (
+					"name" => "cfglayoutinfo-ord[" . $name . "]",
+					"size" => "2",
+					"textsize" => "12px",
+					"value" => $ord,
+				)),
 				"name" => (0 === strpos($name, $this->default_new_layout_name)) ? html::textbox (array (
 					"name" => "cfglayoutinfo-name[" . $name . "]",
 					"size" => "15",
@@ -1438,37 +1445,26 @@ class cfgform extends class_base
 					"onchange" => "
 						tmp = this.name.split('[');
 						elname = tmp[1];
-						tmp = document.getElementsByName('cfglayoutinfo-width1[' + elname);
+						tmp = document.getElementsByName('cfglayoutinfo-width[' + elname);
 						w1el = tmp[0];
-						tmp = document.getElementsByName('cfglayoutinfo-width2[' + elname);
-						w2el = tmp[0];
 
 						if('hbox' == this.value)
 						{
 							w1el.disabled = false;
-							w2el.disabled = false;
 						}
 						else if('vbox' == this.value)
 						{
 							w1el.disabled = true;
-							w2el.disabled = true;
 						}
 					"// enable width elements when hbox selected, disable if vbox
 				)),
 				"width" => html::textbox (array (
-					"name" => "cfglayoutinfo-width1[" . $name . "]",
+					"name" => "cfglayoutinfo-width[" . $name . "]",
 					"size" => "2",
 					"textsize" => "12px",
 					"value" => $width1,
 					"disabled" => $data["type"] === "vbox"
-				)) . "%: " .
-				html::textbox (array (
-					"name" => "cfglayoutinfo-width2[" . $name . "]",
-					"size" => "2",
-					"textsize" => "12px",
-					"value" => $width2,
-					"disabled" => $data["type"] === "vbox"
-				)) . "%",
+				)) . "%" . (empty($width2) ? "" : ":" .  $width2 . "%"),
 				"closeable" => html::checkbox (array(
 					"name" => "cfglayoutinfo-closeable[" . $name . "]",
 					"checked" => $data["closeable"]
@@ -1531,12 +1527,11 @@ class cfgform extends class_base
 				$data["area_caption"] = $arr["request"]["cfglayoutinfo-area_caption"][$name];
 			}
 
-			if (!empty($arr["request"]["cfglayoutinfo-width1"][$name]) and !empty($arr["request"]["cfglayoutinfo-width2"][$name]) and "vbox" !== $arr["request"]["cfglayoutinfo-type"][$name])
+			if (!empty($arr["request"]["cfglayoutinfo-width"][$name]) and "vbox" !== $arr["request"]["cfglayoutinfo-type"][$name])
 			{
-				$w1 = abs((int) $arr["request"]["cfglayoutinfo-width1"][$name]);
-				$w2 = abs((int) $arr["request"]["cfglayoutinfo-width2"][$name]);
-				$w2 = (100 == $w1 + $w2) ? $w2 : (100 - $w1);
-
+				$w1 = abs((int) $arr["request"]["cfglayoutinfo-width"][$name]);
+				$w1 = 99 < $w1 ? 50 : $w1;
+				$w2 = 100 - $w1;
 				$data["width"] = $w1 . "%:" . $w2 . "%";
 			}
 			else
@@ -1546,16 +1541,26 @@ class cfgform extends class_base
 
 			$data["type"] = ("vbox" === $arr["request"]["cfglayoutinfo-type"][$name]) ? "vbox" : "hbox";
 
-			// finally change name for new user defined layout
+			// change name for new user defined layout
 			if (0 === strpos($name, $this->default_new_layout_name) and !empty($arr["request"]["cfglayoutinfo-name"][$name]))
 			{
 				unset($this->cfg_layout[$name]);
 				$name = $arr["request"]["cfglayoutinfo-name"][$name];
 			}
 
+			// set order
+			$data["ord"] = $arr["request"]["cfglayoutinfo-ord"][$name];
+
 			// set data
 			$this->cfg_layout[$name] = $data;
 		}
+
+		uasort($this->cfg_layout, array($this, "_sort_by_ord"));
+	}
+
+	function _sort_by_ord($a, $b)
+	{
+		return ($a["ord"] == $b["ord"]) ? 0 : (($a["ord"] < $b["ord"]) ? -1 : 1);
 	}
 
 	////
@@ -2183,6 +2188,10 @@ class cfgform extends class_base
 						if ($target_layout)
 						{
 							$prplist[$pkey]["parent"] = $target_layout;
+						}
+						else
+						{
+							unset($prplist[$pkey]["parent"]);
 						}
 					}
 
