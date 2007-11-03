@@ -11,5 +11,19 @@
 			</function>
 		</action>
 
+		<action name="delete_layouts">
+			<function name="delete_layouts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_new_layout">
+			<function name="add_new_layout">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

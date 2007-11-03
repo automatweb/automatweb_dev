@@ -15,6 +15,9 @@
 		@groupinfo groupdata_b caption=Liikumine parent=groupdata
 
 	@groupinfo layout caption=Layout
+		@groupinfo layout_props caption=Omadused parent=layout
+		@groupinfo layout_layouts caption=Layoudid parent=layout
+
 	@groupinfo avail caption="K&otilde;ik omadused"
 	@groupinfo controllers caption="Kontrollerid"
 
@@ -101,12 +104,20 @@
 		@caption Tabide vaheline liikumine
 
 
-	@default group=layout
+	@default group=layout_props
 		@property navtoolbar type=toolbar store=no no_caption=1 editonly=1
 		@caption Toolbar
 
 		@property layout type=callback callback=callback_gen_layout store=no no_caption=1
 		@caption Layout
+
+
+	@default group=layout_layouts
+		@property layouts_toolbar type=toolbar store=no no_caption=1 editonly=1
+		@caption Toolbar
+
+		@property layouts_table type=table store=no no_caption=1 editonly=1
+		@caption Layoudid
 
 
 	@property availtoolbar type=toolbar group=avail store=no no_caption=1 editonly=1
@@ -115,7 +126,7 @@
 	@property availprops type=table store=no group=avail no_caption=1
 	@caption K&otilde;ik omadused
 
-	@property subaction type=hidden store=no group=layout,avail
+	@property subaction type=hidden store=no group=layout_props,avail
 	@caption Subaction (sys)
 
 	@property post_save_controllers type=relpicker multiple=1 size=3 group=set_controllers reltype=RELTYPE_CONTROLLER
@@ -234,6 +245,7 @@
 class cfgform extends class_base
 {
 	var $cfgview_actions = array();
+	var $default_new_layout_name = "new_layout_temporary_name";
 
 	function cfgform($arr = array())
 	{
@@ -251,6 +263,7 @@ class cfgform extends class_base
 			"cfgview_change_new" => t("Muutmine (ka lisamine lubatud)"),
 			"cfgview_view_new" => t("Vaatamine (ka lisamine lubatud)"),
 		);
+		$this->default_new_layout_name = t("new_layout_temporary_name");
 	}
 
 	function get_property($arr)
@@ -364,6 +377,14 @@ class cfgform extends class_base
 
 			case "default_table":
 				$this->gen_default_table($arr);
+				break;
+
+			case "layouts_toolbar":
+				$this->_layout_tb($arr);
+				break;
+
+			case "layouts_table":
+				$this->_layout_tbl($arr);
 				break;
 
 			case "trans_tbl":
@@ -806,7 +827,7 @@ class cfgform extends class_base
 				)),
 				"name" => $o->name(),
 			));
-		};
+		}
 	}
 
 
@@ -984,6 +1005,10 @@ class cfgform extends class_base
 
 			case "layout":
 				$this->save_layout($arr);
+				break;
+
+			case "layouts_table":
+				$this->_save_layouts_table($arr);
 				break;
 
 			case "edit_groups":
@@ -1271,45 +1296,62 @@ class cfgform extends class_base
 
 	function _save_cfg_layout($o)
 	{
-		$o->set_meta("cfg_layout", $this->cfg_layout);
+		if (!empty($this->cfg_layout))
+		{
+			$o->set_meta("cfg_layout", $this->cfg_layout);
+		}
 	}
 
-	function _init_layout_tbl($t)
+	function _init_layout_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "ord",
-			"sortable" => false,
 			"caption" => t("Jrk."),
+			"numeric" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "name",
-			"sortable" => false,
 			"caption" => t("Nimi"),
 		));
 
 		$t->define_field(array(
-			"name" => "caption",
-			"sortable" => false,
+			"name" => "area_caption",
 			"caption" => t("Pealkiri"),
 		));
 
 		$t->define_field(array(
 			"name" => "type",
-			"sortable" => false,
 			"caption" => t("T&uuml;&uuml;p"),
 		));
 
 		$t->define_field(array(
-			"name" => "options",
-			"sortable" => false,
-			"caption" => t("Valikud"),
+			"name" => "group",
+			"caption" => t("Tab"),
 		));
 
 		$t->define_field(array(
-			"name" => "selection",
-			"sortable" => false,
+			"name" => "parent",
+			"caption" => t("Parent"),
 		));
+
+		$t->define_field(array(
+			"name" => "width",
+			"caption" => t("Laiusjaotus"),
+		));
+
+		$t->define_field(array(
+			"name" => "closeable",
+			"caption" => t("Suletav"),
+		));
+
+		$t->define_chooser(array(
+			"name" => "selection",
+			"field" => "id",
+		));
+
+		$t->set_default_sortby ("ord");
+		$t->set_default_sorder ("asc");
 	}
 
 	function _layout_tbl($arr)
@@ -1318,14 +1360,202 @@ class cfgform extends class_base
 		$this->_init_layout_tbl($t);
 		$this_o = $arr["obj_inst"];
 
-		$t->define_data(array(
-			// "ord" => ,
-			// "name" => ,
-			// "caption" => ,
-			// "type" => ,
-			// "options" => ,
-			// "selection" =>
+		// available groups
+		$groups = array();
+
+		foreach ($this->grplist as $name => $data)
+		{
+			$groups[$name] = $data["caption"] . " [" . $name . "]";
+		}
+
+		// available layout types
+		$types = array(
+			"hbox" => t("Horis."),
+			"vbox" => t("Vertik.")
+		);
+
+		// parent layouts
+		$parents = array();
+		$all_parents = array();
+
+		foreach ($this->layout as $name => $data)
+		{
+			$all_parents[$name] = $name;
+		}
+
+		// remove invalid parent options
+		foreach ($this->layout as $name => $data)
+		{
+			$parents[$name] = $all_parents;
+			unset($parents[$name][$name]);
+			$parent = $this->layout[$data["parent"]]["parent"];
+
+			while (!empty($parent))
+			{
+				unset($parents[$name][$parent]);
+				$parent = $this->layout[$parent]["parent"];
+			}
+		}
+
+		$ord = 0;
+
+		foreach ($this->layout as $name => $data)
+		{
+			list($width1, $width2) = sscanf($data["width"], "%d%%:%d");
+
+			$t->define_data(array(
+				"id" => $name,
+				"ord" => ++$ord,
+				"name" => (0 === strpos($name, $this->default_new_layout_name)) ? html::textbox (array (
+					"name" => "cfglayoutinfo-name[" . $name . "]",
+					"size" => "15",
+					"textsize" => "12px",
+					"value" => $name,
+				)) : $name,
+				"area_caption" =>  html::textbox (array (
+					"name" => "cfglayoutinfo-area_caption[" . $name . "]",
+					"size" => "25",
+					"textsize" => "12px",
+					"value" => $data["area_caption"],
+				)),
+				"group" => html::select(array(
+					"name" => "cfglayoutinfo-group[" . $name . "]",
+					"options" => $groups,
+					"textsize" => "12px",
+					"value" => $data["group"]
+				)),
+				"parent" => html::select(array(
+					"name" => "cfglayoutinfo-parent[" . $name . "]",
+					"options" => array("" => "") + $parents[$name],
+					"textsize" => "12px",
+					"value" => $data["parent"]
+				)),
+				"type" =>  html::select(array(
+					"name" => "cfglayoutinfo-type[" . $name . "]",
+					"options" => $types,
+					"textsize" => "12px",
+					"value" => $data["type"],
+					"onchange" => "
+						tmp = this.name.split('[');
+						elname = tmp[1];
+						tmp = document.getElementsByName('cfglayoutinfo-width1[' + elname);
+						w1el = tmp[0];
+						tmp = document.getElementsByName('cfglayoutinfo-width2[' + elname);
+						w2el = tmp[0];
+
+						if('hbox' == this.value)
+						{
+							w1el.disabled = false;
+							w2el.disabled = false;
+						}
+						else if('vbox' == this.value)
+						{
+							w1el.disabled = true;
+							w2el.disabled = true;
+						}
+					"// enable width elements when hbox selected, disable if vbox
+				)),
+				"width" => html::textbox (array (
+					"name" => "cfglayoutinfo-width1[" . $name . "]",
+					"size" => "2",
+					"textsize" => "12px",
+					"value" => $width1,
+					"disabled" => $data["type"] === "vbox"
+				)) . "%: " .
+				html::textbox (array (
+					"name" => "cfglayoutinfo-width2[" . $name . "]",
+					"size" => "2",
+					"textsize" => "12px",
+					"value" => $width2,
+					"disabled" => $data["type"] === "vbox"
+				)) . "%",
+				"closeable" => html::checkbox (array(
+					"name" => "cfglayoutinfo-closeable[" . $name . "]",
+					"checked" => $data["closeable"]
+				)),
+			));
+		}
+	}
+
+	function _layout_tb($arr)
+	{
+		$toolbar =& $arr["prop"]["toolbar"];
+		$toolbar->add_button(array(
+			"name" => "new",
+			"tooltip" => t("Lisa uus layout"),
+			"action" => "add_new_layout",
+			"img" => "new.gif",
 		));
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta valitud"),
+			"action" => "delete_layouts",
+			"confirm" => t("Kustutada valitud layoudid?"),
+			"img" => "delete.gif",
+		));
+	}
+
+	function _save_layouts_table($arr)
+	{
+		$this_o = $arr["obj_inst"];
+		$this->_init_cfgform_data($this_o);
+		$this->cfg_layout = $this->layout;
+
+		foreach ($this->cfg_layout as $name => $data)
+		{
+			if (!empty($arr["request"]["cfglayoutinfo-group"][$name]) and array_key_exists($arr["request"]["cfglayoutinfo-group"][$name], $this->grplist))
+			{
+				$data["group"] = $arr["request"]["cfglayoutinfo-group"][$name];
+			}
+
+			if (!empty($arr["request"]["cfglayoutinfo-parent"][$name]) and array_key_exists($arr["request"]["cfglayoutinfo-parent"][$name], $this->cfg_layout))
+			{
+				$data["parent"] = $arr["request"]["cfglayoutinfo-parent"][$name];
+			}
+			else
+			{
+				unset($data["parent"]);
+			}
+
+			if (!empty($arr["request"]["cfglayoutinfo-closeable"][$name]))
+			{
+				$data["closeable"] = 1;
+			}
+			elseif (!empty($data["closeable"]))
+			{
+				unset($data["closeable"]);
+			}
+
+			if (!empty($arr["request"]["cfglayoutinfo-area_caption"][$name]))
+			{
+				$data["area_caption"] = $arr["request"]["cfglayoutinfo-area_caption"][$name];
+			}
+
+			if (!empty($arr["request"]["cfglayoutinfo-width1"][$name]) and !empty($arr["request"]["cfglayoutinfo-width2"][$name]) and "vbox" !== $arr["request"]["cfglayoutinfo-type"][$name])
+			{
+				$w1 = abs((int) $arr["request"]["cfglayoutinfo-width1"][$name]);
+				$w2 = abs((int) $arr["request"]["cfglayoutinfo-width2"][$name]);
+				$w2 = (100 == $w1 + $w2) ? $w2 : (100 - $w1);
+
+				$data["width"] = $w1 . "%:" . $w2 . "%";
+			}
+			else
+			{
+				unset($data["width"]);
+			}
+
+			$data["type"] = ("vbox" === $arr["request"]["cfglayoutinfo-type"][$name]) ? "vbox" : "hbox";
+
+			// finally change name for new user defined layout
+			if (0 === strpos($name, $this->default_new_layout_name) and !empty($arr["request"]["cfglayoutinfo-name"][$name]))
+			{
+				unset($this->cfg_layout[$name]);
+				$name = $arr["request"]["cfglayoutinfo-name"][$name];
+			}
+
+			// set data
+			$this->cfg_layout[$name] = $data;
+		}
 	}
 
 	////
@@ -1333,7 +1563,7 @@ class cfgform extends class_base
 	function callback_gen_layout($arr = array())
 	{
 		$this->read_template("layout.tpl");
-		$used_props = $by_group = array();
+		$used_props = $by_group = $by_layout = $layouts_by_grp = array();
 
 		if (is_array($this->grplist))
 		{
@@ -1357,18 +1587,40 @@ class cfgform extends class_base
 			{
 				if (!empty($property["group"]))
 				{
-					if (!is_array($property["group"]))
+					$parent = $property["parent"];
+
+					if (array_key_exists($parent, $this->layout))
 					{
-						$by_group[$property["group"]][] = $property;
+						$by_layout[$parent][] = $property;
 					}
 					else
 					{
-						foreach($property["group"] as $gkey)
+						if (!is_array($property["group"]))
 						{
-							//list(,$first) = each($property["group"]);
-							$by_group[$gkey][] = $property;
+							$by_group[$property["group"]][] = $property;
+						}
+						else
+						{
+							foreach($property["group"] as $gkey)
+							{
+								//list(,$first) = each($property["group"]);
+								$by_group[$gkey][] = $property;
+							}
 						}
 					}
+				}
+			}
+		}
+
+		if (is_array($this->layout))
+		{
+			foreach ($this->layout as $name => $data)
+			{
+				$group = $data["group"];
+
+				if (array_key_exists($group, $this->grplist))
+				{
+					array_unshift($by_group[$group], $name);
 				}
 			}
 		}
@@ -1387,121 +1639,180 @@ class cfgform extends class_base
 
 			$sc = "";
 
-			foreach($proplist as $property)
+			foreach($proplist as $tmp)
 			{
-				$cnt++;
-				$prpdata = $this->all_props[$property["name"]];
-
-				if (!$prpdata)
+				if (is_array($tmp))
 				{
-					continue;
-				}
-				switch ($prpdata["type"])
-				{
-					case "textarea":
-						$this->vars(array(
-							"richtext_caption" => t("RTE"),
-							"richtext_checked" => checked($property["richtext"] == 1),
-							"richtext" => $property["richtext"],
-							"rows_caption" => t("Kõrgus"),
-							"rows" => $property["rows"],
-							"cols_caption" => t("Laius"),
-							"cols" => $property["cols"],
-							"prp_key" => $property["name"],
-						));
-						$property["cfgform_additional_options"] = $this->parse("textarea_options");
-						$this->vars(array("textarea_options" => ""));
-						break;
-
-					case "textbox":
-						$this->vars(array(
-							"size_caption" => t("Laius"),
-							"size" => $property["size"],
-							"prp_key" => $property["name"],
-						));
-						$property["cfgform_additional_options"] = $this->parse("textbox_options");
-						$this->vars(array("textbox_options" => ""));
-						break;
-
-					case "relpicker":
-						$this->vars(array(
-							"no_edit_caption" => t("Nuppudeta"),
-							"no_edit_checked" => checked($property["no_edit"] == 1),
-							"no_edit" => $property["no_edit"],
-							"displayradio_caption" => t("Checkboxes"),
-							"displayradio_ch" =>  ("radio" === $property["display"]) ? ' checked="1"' : "",
-							"displayselect_caption" => t("Select"),
-							"displayselect_ch" =>  ("select" === $property["display"]) ? ' checked="1"' : "",
-							"size_caption" => t("K&otilde;rgus"),
-							"size" => $property["size"],
-							"prp_key" => $property["name"],
-						));
-						$property["cfgform_additional_options"] = $this->parse("relpicker_options");
-						$this->vars(array("relpicker_options" => ""));
-						break;
-
-
-					case "select":
-						$this->vars(array(
-							"size_caption" => t("K&otilde;rgus"),
-							"size" => $property["size"],
-							"prp_key" => $property["name"],
-						));
-						$property["cfgform_additional_options"] = $this->parse("select_options");
-						$this->vars(array("select_options" => ""));
-						break;
-
-					case "chooser":
-						$this->vars(array(
-							"orienth_caption" => t("Horisontaalselt"),
-							"orienth_ch" => ("horizontal" === $property["orient"]) ? ' checked="1"' : "",
-							"orientv_caption" => t("Vertikaalselt"),
-							"orientv_ch" => ("vertical" === $property["orient"]) ? ' checked="1"' : "",
-							"prp_key" => $property["name"],
-						));
-						$property["cfgform_additional_options"] = $this->parse("chooser_options");
-						$this->vars(array("chooser_options" => ""));
-						break;
-
-					default:
-						$property["cfgform_additional_options"] = "";
-				}
-
-				if (!empty($property["cfgform_additional_options"]))
-				{
-					$this->vars(array(
-						"prp_options" => $property["cfgform_additional_options"] ,
-						"prp_opts_caption" => t("Lisavalikud"),
-						"tmp_id" => $cnt,
-					));
-					$options = $this->parse("options");
-					$this->vars(array("options" => ""));
+					$layout = false;
+					$properties = array($tmp);
 				}
 				else
 				{
-					$options = "";
-					$this->vars(array(
-						"prp_options" => "",
-						"prp_opts_caption" => "",
-						"tmp_id" => ""
-					));
+					$layout = $tmp;
+					$layout_props = "";
+					$properties = $by_layout[$layout];
 				}
 
-				$used_props[$property["name"]] = 1;
+				foreach ($properties as $property)
+				{
+					$cnt++;
+					$prpdata = $this->all_props[$property["name"]];
+
+					if (!$prpdata)
+					{
+						continue;
+					}
+					switch ($prpdata["type"])
+					{
+						case "textarea":
+							$this->vars(array(
+								"richtext_caption" => t("RTE"),
+								"richtext_checked" => checked($property["richtext"] == 1),
+								"richtext" => $property["richtext"],
+								"rows_caption" => t("Kõrgus"),
+								"rows" => $property["rows"],
+								"cols_caption" => t("Laius"),
+								"cols" => $property["cols"],
+								"prp_key" => $property["name"],
+							));
+							$property["cfgform_additional_options"] = $this->parse("textarea_options");
+							$this->vars(array("textarea_options" => ""));
+							break;
+
+						case "textbox":
+							$this->vars(array(
+								"size_caption" => t("Laius"),
+								"size" => $property["size"],
+								"prp_key" => $property["name"],
+							));
+							$property["cfgform_additional_options"] = $this->parse("textbox_options");
+							$this->vars(array("textbox_options" => ""));
+							break;
+
+						case "relpicker":
+							$this->vars(array(
+								"no_edit_caption" => t("Nuppudeta"),
+								"no_edit_checked" => checked($property["no_edit"] == 1),
+								"no_edit" => $property["no_edit"],
+								"displayradio_caption" => t("Checkboxes"),
+								"displayradio_ch" =>  ("radio" === $property["display"]) ? ' checked="1"' : "",
+								"displayselect_caption" => t("Select"),
+								"displayselect_ch" =>  ("select" === $property["display"]) ? ' checked="1"' : "",
+								"size_caption" => t("K&otilde;rgus"),
+								"size" => $property["size"],
+								"prp_key" => $property["name"],
+							));
+							$property["cfgform_additional_options"] = $this->parse("relpicker_options");
+							$this->vars(array("relpicker_options" => ""));
+							break;
+
+
+						case "select":
+							$this->vars(array(
+								"size_caption" => t("K&otilde;rgus"),
+								"size" => $property["size"],
+								"prp_key" => $property["name"],
+							));
+							$property["cfgform_additional_options"] = $this->parse("select_options");
+							$this->vars(array("select_options" => ""));
+							break;
+
+						case "chooser":
+							$this->vars(array(
+								"orienth_caption" => t("Horisontaalselt"),
+								"orienth_ch" => ("horizontal" === $property["orient"]) ? ' checked="1"' : "",
+								"orientv_caption" => t("Vertikaalselt"),
+								"orientv_ch" => ("vertical" === $property["orient"]) ? ' checked="1"' : "",
+								"prp_key" => $property["name"],
+							));
+							$property["cfgform_additional_options"] = $this->parse("chooser_options");
+							$this->vars(array("chooser_options" => ""));
+							break;
+
+						case "layout":
+							$this->vars(array(
+								"hbox_caption" => t("Horisontaalne"),
+								"hbox_ch" => ("hbox" === $property["type"]) ? ' checked="1"' : "",
+								"hbox_caption" => t("Vertikaalne"),
+								"hbox_ch" => ("vertical" === $property["type"]) ? ' checked="1"' : "",
+								"prp_key" => $property["name"],
+							));
+							$property["cfgform_additional_options"] = $this->parse("layout_options");
+							$this->vars(array("layout_options" => ""));
+							break;
+
+						default:
+							$property["cfgform_additional_options"] = "";
+					}
+
+					if (!empty($property["cfgform_additional_options"]))
+					{
+						$this->vars(array(
+							"prp_options" => $property["cfgform_additional_options"] ,
+							"prp_opts_caption" => t("Lisavalikud"),
+							"tmp_id" => $cnt,
+						));
+						$options = $this->parse("options");
+						$this->vars(array("options" => ""));
+					}
+					else
+					{
+						$options = "";
+						$this->vars(array(
+							"prp_options" => "",
+							"prp_opts_caption" => "",
+							"tmp_id" => ""
+						));
+					}
+
+					$used_props[$property["name"]] = 1;
+
+					$this->vars(array(
+						"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
+						"prp_caption" => $property["caption"],
+						"prp_type" => $prpdata["type"],
+						"prp_key" => $prpdata["name"],
+						"prp_order" => $property["ord"],
+						"options" => $options,
+						"grp_id" => $grp_id,
+					));
+
+					if ($layout)
+					{
+						$layout_props .= $this->parse("property");
+					}
+					else
+					{
+						$sc .= $this->parse("property");
+					}
+				}
+
+				if ($layout)
+				{
+					$this->vars(array(
+						"layout_name" => $layout,
+						"layout_props" => $layout_props,
+						"layout_type" => $this->layout[$layout]["type"],
+					));
+					$sc .= $this->parse("layout");
+				}
+			}
+
+			$select_toggle = "";
+
+			if ($sc)
+			{
 				$this->vars(array(
-					"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
-					"prp_caption" => $property["caption"],
-					"prp_type" => $prpdata["type"],
-					"prp_key" => $prpdata["name"],
-					"prp_order" => $property["ord"],
-					"options" => $options,
 					"grp_id" => $grp_id,
+					"capt_prp_mark" => t("Inverteeri valik")
 				));
-				$sc .= $this->parse("property");
+				$select_toggle = $this->parse("select_toggle");
 			}
 
 			$this->vars(array(
 				"property" => $sc,
+				"layout" => "",
+				"select_toggle" => $select_toggle,
 				"grp_id" => $grp_id,
 				"capt_prp_mark" => t("Inverteeri valik")
 			));
@@ -1649,19 +1960,30 @@ class cfgform extends class_base
 
 		$toolbar->add_separator();
 
-		$toolbar->add_cdata(t("<small>Liiguta omadused tabi:</small>"));
+		$toolbar->add_cdata(t("<small>Liiguta omadused:</small>"));
 		$opts = array();
 
 		if (is_array($this->grplist))
 		{
-			foreach($this->grplist as $key => $grpdata)
+			$layouts_by_grp = array();
+
+			if (is_array($this->layout))
 			{
-				$opts[$key] = $grpdata["caption"] . " [" . $key . "]";
+				foreach ($this->layout as $name => $data)
+				{
+					$layouts_by_grp[$data["group"]]["layout:" . $name] = t("&nbsp;&nbsp;&nbsp;Layouti: ") . $name;
+				}
+			}
+
+			foreach($this->grplist as $name => $grpdata)
+			{
+				$opts["group:" . $name] = t("Tabi: ") . $grpdata["caption"] . " [" . $name . "]";
+				$opts = array_merge($opts, $layouts_by_grp[$name]);
 			}
 		}
 		else
 		{
-			$opts["none"] = t("Ühtegi tabi pole veel!");
+			$opts[""] = t("Ühtegi tabi pole veel!");
 		}
 
 		$toolbar->add_cdata(html::select(array(
@@ -1727,7 +2049,7 @@ class cfgform extends class_base
 		}
 		else
 		{
-			$opts["none"] = t("&Uuml;htegi tabi pole veel!");
+			$opts[""] = t("&Uuml;htegi tabi pole veel!");
 		}
 
 		$toolbar->add_cdata(html::select(array(
@@ -1793,7 +2115,6 @@ class cfgform extends class_base
 				$this->cfg_proplist = $prplist;
 			}
 		}
-
 	}
 
 	function save_layout($arr)
@@ -1833,14 +2154,36 @@ class cfgform extends class_base
 
 			case "move":
 				$mark = $arr["request"]["mark"];
-				$target = $arr["request"]["target_grp"];
-				$prplist = $this->prplist;
 
 				if (is_array($mark))
 				{
+					$target = $arr["request"]["target_grp"];
+
+					if (0 === strpos($target, "group:"))
+					{
+						$target_grp = substr($target, 6);
+						$target_layout = false;
+					}
+					elseif (0 === strpos($target, "layout:"))
+					{
+						$target_layout = substr($target, 7);
+						$target_grp = $this->layout[$target_layout]["group"];
+
+						error::raise_if(empty($target_grp), array(
+							"msg" => t("Group not defined or layout info corrupt")
+						));
+					}
+
+					$prplist = $this->prplist;
+
 					foreach($mark as $pkey => $val)
 					{
-						$prplist[$pkey]["group"] = $target;
+						$prplist[$pkey]["group"] = $target_grp;
+
+						if ($target_layout)
+						{
+							$prplist[$pkey]["parent"] = $target_layout;
+						}
 					}
 
 					$this->cfg_proplist = $prplist;
@@ -1882,8 +2225,7 @@ class cfgform extends class_base
 
 			// järjekorranumbritega on muidugi natuke raskem, ma peaksin neile
 			// mingid default väärtused andma. Or it won't work. Or perhaps it will?
-
-		};
+		}
 	}
 
 	function callback_edit_groups($arr)
@@ -2445,6 +2787,11 @@ class cfgform extends class_base
 		$this->_save_cfg_props($o);
 	}
 
+	function get_cfg_layout($o)
+	{
+		return $o->meta("cfg_layout");
+	}
+
 	/** Returns the properties for the config form
 		@attrib api=1
 
@@ -2773,6 +3120,86 @@ class cfgform extends class_base
 		}
 
 		return aw_url_change_var("just_saved", "1", $arr["return_url"]);
+	}
+
+	/**
+		@attrib name=delete_layouts
+	**/
+	function delete_layouts ($arr)
+	{
+		$sel = (array) $arr["selection"];
+
+		if (count($sel))
+		{
+			error::raise_if((!$this->can("edit", $arr["id"])), array(
+				"msg" => t("no edit access"),
+				"fatal" => true
+			));
+
+			$this_o = new object($arr["id"]);
+			$this->_init_cfgform_data($this_o);
+			$this->cfg_layout = $this->layout;
+			$i = 0;
+
+			foreach ($sel as $deleted_layout_name)
+			{
+				unset($this->cfg_layout[$deleted_layout_name]);
+
+				// remove deleted layout where it's a parent
+				foreach ($this->cfg_layout as $name => $data)
+				{
+					if ($deleted_layout_name === $data["parent"])
+					{
+						$this->cfg_layout[$name]["parent"] = null;
+					}
+				}
+			}
+
+			$this->_save_cfg_layout($this_o);
+			$this_o->save();
+		}
+
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => $arr["return_url"],
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		));
+		return $return_url;
+	}
+
+	/**
+		@attrib name=add_new_layout
+	**/
+	function add_new_layout ($arr)
+	{
+		error::raise_if((!$this->can("edit", $arr["id"])), array(
+			"msg" => t("no edit access"),
+			"fatal" => true
+		));
+
+		$this_o = new object($arr["id"]);
+		$this->_init_cfgform_data($this_o);
+		$this->cfg_layout = $this->layout;
+		$i = 0;
+
+		do
+		{
+			$tmp_name = $this->default_new_layout_name . ++$i;
+		}
+		while (array_key_exists($tmp_name, $this->cfg_layout));
+
+		$this->cfg_layout[$tmp_name] = array("type" => "hbox");
+		$this->_save_cfg_layout($this_o);
+		$this_o->save();
+
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => $arr["return_url"],
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		));
+		return $return_url;
 	}
 
 	function _edit_groups_tb($arr)

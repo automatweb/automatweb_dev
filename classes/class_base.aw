@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.574 2007/11/02 13:11:13 markop Exp $
+// $Id: class_base.aw,v 2.575 2007/11/03 08:33:33 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4680,6 +4680,7 @@ class class_base extends aw_template
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
 			));
+
 			if ($this->cfg_debug)
 			{
 				print "loading from " . $arr["cfgform_id"] . "<br>";
@@ -5101,10 +5102,11 @@ class class_base extends aw_template
 			}
 
 			$ci = $cfgform_obj->instance();
+			$this->layoutinfo = $ci->get_cfg_layout($cfgform_obj);
 			$prps = $ci->get_cfg_proplist($cfgform_obj->id());
-
 			$rv = $prps;
 			$grps = $ci->get_cfg_groups($cfgform_obj->id());
+
 			foreach($cfg_flags as $key => $val)
 			{
 				$this->classinfo[$val] = $cfgform_obj->prop($key);
@@ -5846,7 +5848,7 @@ class class_base extends aw_template
 				$cfgform_i->cff_init_from_class($o, $o->class_id(), false);
 				if(is_oid($cfgform) && $this->can("view", $cfgform) && false)
 				{
-					
+
 					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
 				}
 				else
