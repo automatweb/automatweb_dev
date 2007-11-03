@@ -73,9 +73,23 @@ function cfgformToggleSelectProps(grpId)
 <fieldset style="border: 1px solid #AAA; -moz-border-radius: 0.5em;">
 <legend>{VAR:grp_caption}</legend>
 	<table cellpadding="2" class="cfgform_layout_tbl">
+	<!-- SUB: select_toggle -->
 	<tr>
 		<td colspan="6" style="text-align: right;"><a href="javascript:cfgformToggleSelectProps('{VAR:grp_id}')">{VAR:capt_prp_mark}</a></td>
 	</tr>
+	<!-- END SUB: select_toggle -->
+	<!-- SUB: layout -->
+	<tr>
+		<td colspan="6" style="color: green">Layout: {VAR:layout_name} [{VAR:layout_type}]</td>
+	</tr>
+	<tr>
+		<td colspan="6" style="background-color:#">
+			<table cellpadding="2" class="cfgform_layout_tbl" style="border: 1px solid green">
+				{VAR:layout_props}
+			</table>
+		</td>
+	</tr>
+	<!-- END SUB: layout -->
 	<!-- SUB: property -->
 	<tr>
 		<td width="50" bgcolor="{VAR:bgcolor}"><input type="text" name="prop_ord[{VAR:prp_key}]" value="{VAR:prp_order}" size="2"></td>
@@ -84,7 +98,7 @@ function cfgformToggleSelectProps(grpId)
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
 		<td width="200" bgcolor="{VAR:bgcolor}">
 		<!-- SUB: options -->
-			<div class="closer">{VAR:prp_opts_caption} <a href="#" onclick="javascript:cfgformToggleOpts({VAR:tmp_id})"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif" id="cfgformOptsBtn{VAR:tmp_id}" width="20" height="15" border="0"></a></div>
+			<div class="closer">{VAR:prp_opts_caption} <a href="javascript:cfgformToggleOpts({VAR:tmp_id})"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif" id="cfgformOptsBtn{VAR:tmp_id}" width="20" height="15" border="0"></a></div>
 			<div id="cfgformPrpOpts{VAR:tmp_id}" style="display: none;">
 {VAR:prp_options}
 			</div>
@@ -111,7 +125,7 @@ function cfgformToggleSelectProps(grpId)
 <!-- SUB: relpicker_options -->
 			{VAR:no_edit_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_edit]" value="1" {VAR:no_edit_checked}>
 			<input type="hidden" name="xconfig[{VAR:prp_key}][no_edit]" value="{VAR:no_edit}"><br />
-			{VAR:displayradio_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][display]" value="radio"{VAR:displayradio_ch}><br />
+			{VAR:displayradio_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][display]" value="radio"{VAR:displayradio_ch}>
 			{VAR:displayselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][display]" value="select"{VAR:displayselect_ch}><br />
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"><br />
 <!-- END SUB: relpicker_options -->
@@ -121,7 +135,7 @@ function cfgformToggleSelectProps(grpId)
 <!-- END SUB: select_options -->
 
 <!-- SUB: chooser_options -->
-			{VAR:orienth_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][orient]" value="horizontal"{VAR:orienth_ch}><br />
+			{VAR:orienth_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][orient]" value="horizontal"{VAR:orienth_ch}>
 			{VAR:orientv_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][orient]" value="vertical"{VAR:orientv_ch}><br />
 <!-- END SUB: chooser_options -->
 
