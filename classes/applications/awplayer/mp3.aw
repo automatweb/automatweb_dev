@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mp3.aw,v 1.1 2007/11/04 11:50:26 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mp3.aw,v 1.2 2007/11/04 20:30:39 hannes Exp $
 // mp3.aw - MP3 
 /*
 
@@ -195,18 +195,13 @@ class mp3 extends class_base
 	function log_play_statistics($arr)
 	{
 		extract($_POST, EXTR_PREFIX_SAME, "post_");
-
-		/*
-		$o = new object($id);
-		$i_play_count = (int)$o->prop("play_count");
-		$o->set_prop("play_count", $i_play_count+1);
-		$o->save();
-		*/
 		
-		$o = new object(404791);
-		$i_play_count = (int)$o->prop("lead");
-		$o->set_prop("lead", $i_play_count+1);
-		$o->save();
+		if ($state == "start")
+		{
+			$o = new object($id);
+			$o->set_prop("play_count", $o->prop("play_count")+1);
+			$o->save();
+		}
 		
 		die();
 	}
