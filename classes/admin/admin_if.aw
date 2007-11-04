@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.26 2007/10/23 11:56:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.27 2007/11/04 10:01:55 hannes Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -797,15 +797,34 @@ class admin_if extends class_base
 				}
 				if ($can_change)
 				{
-					$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
+					// make mp3 playable when clicked in admin
+					if ($row["class_id"] == CL_MP3)
+					{
+						$chlink = "JavaScript: void(0)";
+					}
+					else
+					{
+						$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
+					}
 				}
 				else
 				{
 					$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
 				}
 			}
-			$caption = parse_obj_name($row_o->trans_get_val("name"));
-			$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'">'.$caption."</a>";
+			// make mp3 playable when clicked in admin
+			if ($row["class_id"] == CL_MP3)
+			{
+				$s_play_url = str_replace("automatweb/","",$this->mk_my_orb("play", array("id" => $row["oid"]),"mp3", false,true,"/"))."/".str_replace("/","_","fail.mp3");
+				$s_mp3_onclick = 'myRef = window.open("'.$s_play_url.'","AW MP3 Mängija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")';
+				$caption = parse_obj_name($row_o->trans_get_val("name"));
+				$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'" onClick=\''.$s_mp3_onclick.'\'>'.$caption."</a>";
+			}
+			else
+			{
+				$caption = parse_obj_name($row_o->trans_get_val("name"));
+				$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'">'.$caption."</a>";
+			}
 
 			if (isset($sel_objs[$row["oid"]]))
 			{
