@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/awplayer.aw,v 1.3 2007/11/04 20:30:24 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/awplayer.aw,v 1.4 2007/11/04 21:34:31 hannes Exp $
 // awplayer.aw - AW Pleier 
 /*
 
@@ -161,7 +161,7 @@ class awplayer extends class_base
 		));
 	}
 	
-	/** N&auml;itab mp3'e. DUH. 
+	/** Playis mp3's that are listed in aw player
 		
 		@attrib name=play params=name nologin="1" default="0" is_public="1"
 		
@@ -175,105 +175,18 @@ class awplayer extends class_base
 	**/
 	function play($arr)
 	{
+		classload("applications/awplayer/mp3");
 		$o = new object($arr["id"]);
 		
-		$s_html = '
-		<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-		   "http://www.w3.org/TR/html4/loose.dtd">
+		$this->read_template("awplayer.tpl");
+			$this->vars(array(
+			"awplayer_oid" => $o->id(),
+			"file_name" => mp3::normalize_name($o->name()),
+		));
 		
-		<html>
-		<head>
-			<title>AW MP3 Mängija</title>
-			<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/jw_mp3_player/swfobject.js"></script>
-			
-			<script type="text/javascript">
-			
-			<script type="text/javascript">
-				// some variables to save
-				var currentPosition;
-				var currentVolume;
-				var currentItem;
-			
-				// these functions are caught by the JavascriptView object of the player.
-				function sendEvent(typ,prm) { thisMovie("mpl").sendEvent(typ,prm); };
-				function getUpdate(typ,pr1,pr2,pid) {
-					if(typ == "time") { currentPosition = pr1; }
-					else if(typ == "volume") { currentVolume = pr1; }
-					else if(typ == "item") { currentItem = pr1; setTimeout("getItemData(currentItem)",100); }
-					var id = document.getElementById(typ);
-					id.innerHTML = typ+ ": "+Math.round(pr1);
-					pr2 == undefined ? null: id.innerHTML += ", "+Math.round(pr2);
-					if(pid != "null") {
-						document.getElementById("pid").innerHTML = "(received from the player with id <i>"+pid+"</i>)";
-					}
-				};
-			
-				// These functions are caught by the feeder object of the player.
-				function loadFile(obj) { thisMovie("mpl").loadFile(obj); };
-				function addItem(obj,idx) { thisMovie("mpl").addItem(obj,idx); }
-				function removeItem(idx) { thisMovie("mpl").removeItem(idx); }
-				function getItemData(idx) {
-					var obj = thisMovie("mpl").itemData(idx);
-					var nodes = "";
-					for(var i in obj) { 
-						nodes += "<li>"+i+": "+obj[i]+"</li>"; 
-					}
-					document.getElementById("data").innerHTML = nodes;
-				};
-			
-				// This is a javascript handler for the player and is always needed.
-				function thisMovie(movieName) {
-				    if(navigator.appName.indexOf("Microsoft") != -1) {
-						return window[movieName];
-					} else {
-						return document[movieName];
-					}
-				};
-			
-			</script>
-			
-			
-			</script>
-			
-			<style>
-			body, p {margin: 0;padding: 0;}
-			</style>
-		</head>
-		<body>
+		echo $this->parse();
 		
-		<p id="player2"><a href="http://www.macromedia.com/go/getflashplayer">Sikuta</a> flash pleier.</p>
-		<script type="text/javascript">
-			var s2 = new SWFObject("'.aw_ini_get("baseurl").'/automatweb/js/jw_mp3_player/mp3player.swf", "mpl", "250", "450", "7");
-			s2.addVariable("file","'.aw_ini_get("baseurl").'/orb.aw/class=awplayer/action=playlist/id=404776/playlist.xml");
-			s2.addVariable("title","'.$o->name().'");
-			s2.addVariable("autostart", true);
-			s2.addVariable("overstretch", "fit"); // scretch image
-			s2.addVariable("repeat", "list");
-			s2.addVariable("autoscroll", false);
-			s2.addVariable("shownavigation", true);
-			s2.addVariable("enablejs", true);
-				s2.addVariable("javascriptid","mpl");
-			// for some strange reason this does not work when i use ? after orb.aw and & marks. only / works
-			s2.addVariable("callback", "'.aw_ini_get("baseurl").'/orb.aw/class=mp3/action=log_play_statistics/id=404776");
-			//s2.addVariable("callback", "http://hannes.dev.struktuur.ee/vv_files/statistics.php");
-			//s2.addVariable("displaywidth", 150);
-			//s2.addVariable("showeq", true);
-			s2.addVariable("backcolor","0x00000");
-			s2.addVariable("frontcolor","0xEECCDD");
-			s2.addVariable("lightcolor","0xCC0066");
-			s2.addVariable("displayheight","200");
-			s2.addVariable("width","250");
-			s2.addVariable("height","450");
-			s2.write("player2");
-		</script>
-		
-		
-		
-		</body>
-		</html>
-		';
-	echo $s_html;
-	die();
+		die();
 	}
 	
 	function get_playlist($s_search)
@@ -314,7 +227,7 @@ class awplayer extends class_base
 		return $ol;
 	}
 	
-	/** N&auml;itab mp3'e. DUH. 
+	/** Loob playlisti
 		
 		@attrib name=playlist params=name nologin="1" default="0" is_public="1"
 		
@@ -332,35 +245,28 @@ class awplayer extends class_base
 		$s_search = trim($o->prop("search"));
 		$ol = $this->get_playlist($s_search);
 		
-		$s_out = "<playlist version='1' xmlns='http://xspf.org/ns/0/'>\n";
-		$s_out .= "	<title>AW Pleieri playlist</title>\n";
-		$s_out .= "	<info>http://www.jeroenwijering.com/</info>\n";
-		$s_out .= "	<trackList>\n";
-		
-		// .. then we loop through the mysql array ..
+		$this->read_template("playlist.tpl");
+		$this->submerge=1;
+
+		$tmp='';
 		for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
         {
-			$s_out .= "		<track>\n";
-			$s_out .= "			<title>".utf8_encode($o->prop("title"))."</title>\n";
-			$s_out .= "			<creator>".utf8_encode($o->prop("artist"))."</creator>\n";
-			$s_out .= "			<location>".mp3::get_download_url($o->id(),"fail.mp3")."</location>\n";
-			$s_out .= "			<info>".mp3::get_lasering_url($o->prop("album"))."</info>\n";
-			$s_out .= "			<image>".$this->get_cover_url($o->prop("artist")." ".$o->prop("album"))."</image>\n";
-			$s_out .= "			<identifier>".$o->id()."</identifier>";
-			$s_out .= "		</track>\n";
+			$this->vars(array(
+				"id"=> $o->id(),
+				"title"=> $o->prop("title"),
+				"artist" => $o->prop("artist"),
+				"url_mp3" => mp3::get_download_url($o->id(),"fail.mp3"),
+				"url_info" => mp3::get_lasering_url($o->prop("album")),
+				"url_image" => $this->get_cover_url($o->prop("artist")." ".$o->prop("album")),
+			));
+			$tmp.= $this->parse("TRACK");
 		}
-		 
-		// .. and last we add the closing tags
-		$s_out .= "	</trackList>\n";
-		$s_out .= "</playlist>\n";
-		header("Accept-Ranges: bytes");
-		header("Content-Length: ".strlen($s_out));
-		header("content-type:text/xml;charset=utf-8");
-		header("Cache-control: public");
-		header("Content-Disposition: inline; filename=\"playlist.xml\"");
-		//header("Content-Length: ".strlen($fc["content"]));
-		//header("Pragma: no-cache");
-		die($s_out);
+		
+		$this->vars(array(
+				"TRACK" => $tmp,
+		));
+		
+		die(utf8_encode($this->parse()));
 	}
 
 	function get_property($arr)
