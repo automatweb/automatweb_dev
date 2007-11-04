@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/awplayer.aw,v 1.1 2007/11/04 11:53:09 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/awplayer.aw,v 1.2 2007/11/04 12:05:23 hannes Exp $
 // awplayer.aw - AW Pleier 
 /*
 
@@ -190,18 +190,16 @@ class awplayer extends class_base
 		</head>
 		<body>
 		
-		<p id="player2"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</p>
+		<p id="player2"><a href="http://www.macromedia.com/go/getflashplayer">Sikuta</a> flash pleier.</p>
 		<script type="text/javascript">
 			var s2 = new SWFObject("'.aw_ini_get("baseurl").'/automatweb/js/jw_mp3_player/mp3player.swf", "mpl", "250", "350", "7");
-			//s2.addVariable("file","http://hannes.dev.struktuur.ee/automatweb/orb.aw?class=mp3&action=preview&id=404771");
-			//s2.addVariable("file","http://hannes.dev.struktuur.ee/automatweb/orb.aw?class=awplayer&action=playlist&id=404776");
-			s2.addVariable("file","http://hannes.dev.struktuur.ee/orb.aw/class=awplayer/action=playlist/id=404776/playlist.xml");
+			s2.addVariable("file","'.aw_ini_get("baseurl").'/orb.aw/class=awplayer/action=playlist/id=404776/playlist.xml");
 			s2.addVariable("title","'.$o->name().'");
 			s2.addVariable("autostart", true);
 			s2.addVariable("overstretch", "fit");
 			s2.addVariable("autoscroll", false);
 			s2.addVariable("shownavigation", true);
-			s2.addVariable("callback", "http://hannes.dev.struktuur.ee/orb.aw?class=mp3&action=log_play_statistics&id=404776");
+			//s2.addVariable("callback", "'.aw_ini_get("baseurl").'/orb.aw?class=mp3&action=log_play_statistics&id=404776");
 			//s2.addVariable("displaywidth", 150);
 			//s2.addVariable("showeq", true);
 			s2.addVariable("backcolor","0x00000");
@@ -287,8 +285,8 @@ class awplayer extends class_base
 		for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
         {
 			$s_out .= "		<track>\n";
-			$s_out .= "			<title>".$o->prop("title")."</title>\n";
-			$s_out .= "			<creator>".$o->prop("artist")."</creator>\n";
+			$s_out .= "			<title>".utf8_encode($o->prop("title"))."</title>\n";
+			$s_out .= "			<creator>".utf8_encode($o->prop("artist"))."</creator>\n";
 			$s_out .= "			<location>".mp3::get_download_url($o->id(),"fail.mp3")."</location>\n";
 			$s_out .= "			<info>".mp3::get_lasering_url($o->prop("album"))."</info>\n";
 			$s_out .= "			<image>".$this->get_cover_url($o->prop("artist")." ".$o->prop("album"))."</image>\n";
