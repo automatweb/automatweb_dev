@@ -1983,7 +1983,11 @@ class cfgform extends class_base
 			foreach($this->grplist as $name => $grpdata)
 			{
 				$opts["group:" . $name] = t("Tabi: ") . $grpdata["caption"] . " [" . $name . "]";
-				$opts = array_merge($opts, $layouts_by_grp[$name]);
+
+				if (isset($layouts_by_grp[$name]))
+				{
+					$opts = array_merge($opts, $layouts_by_grp[$name]);
+				}
 			}
 		}
 		else
