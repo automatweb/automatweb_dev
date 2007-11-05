@@ -143,10 +143,12 @@ class doc_display extends aw_template
 		$this->vars($al->get_vars());
 
 		$title = $doc->trans_get_val("title");
-
+		$tmp = $arr;
+		$tmp["leadonly"] = -1;
 		$this->vars_safe(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
+			"fullcontent" => $this->_get_text($tmp, $doc),
 			"text_no_aliases" => $text_no_aliases,
 			"title" => $title,
 			"author" => $doc->prop("author"),
