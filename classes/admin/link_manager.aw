@@ -52,21 +52,22 @@ class link_manager extends aw_template
 			$image_list = new object_list();
 		}
 
+		$parent = aw_ini_get("links.default_folder");
+		parse_str($arr["doc"], $params);
+		$doc = obj($params["id"]);
+		if (!$parent)
+		{
+			$parent = $doc->parent();
+		}
+
 		if ($image_list->count())
 		{
 			$imgo = $image_list->begin();
-			$image_url = html::get_change_url($imgo->id(),  array("in_popup" => $_GET["in_popup"]));
+			$image_url = html::get_change_url($imgo->id(),  array("in_popup" => $_GET["in_popup"], "ldocid" => $doc->id()));
 		}
 		else
 		{
-			$parent = aw_ini_get("links.default_folder");
-			parse_str($arr["doc"], $params);
-			$doc = obj($params["id"]);
-			if (!$parent)
-			{
-				$parent = $doc->parent();
-			}
-			$image_url = html::get_new_url(CL_EXTLINK, $parent, array("docid" => $doc->id(), "in_popup"=>"1"));
+			$image_url = html::get_new_url(CL_EXTLINK, $parent, array("ldocid" => $doc->id(), "in_popup"=>"1"));
 		}
 		
 		$this->read_template("manage.tpl");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.210 2007/10/18 11:38:40 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.211 2007/11/06 11:18:15 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1123,6 +1123,13 @@ class image extends class_base
 			case "file2":
 				$src_file = $ftype = "";
 				$oldfile = $arr["obj_inst"]->prop($prop["name"]);
+				if (is_uploaded_file($_FILES[$prop["name"]]["tmp_name"]))
+				{
+					// this happens if file is uploaded from the image class directly
+					$src_file = $_FILES[$prop["name"]]["tmp_name"];
+					$ftype = $_FILES[$prop["name"]]["type"];
+				}
+				else
 				if (!empty($prop["value"]["tmp_name"]))
 				{
 					// this happens if for example releditor is used
@@ -1134,13 +1141,6 @@ class image extends class_base
 					{
 						$ftype = "image/jpg";
 					};
-				};
-
-				if (is_uploaded_file($_FILES[$prop["name"]]["tmp_name"]))
-				{
-					// this happens if file is uploaded from the image class directly
-					$src_file = $_FILES[$prop["name"]]["tmp_name"];
-					$ftype = $_FILES[$prop["name"]]["type"];
 				};
 
 				// if a file was found, then move it to wherever it should be located

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.160 2007/10/19 08:01:15 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.161 2007/11/06 11:18:15 kristo Exp $
 /*
 
 
@@ -504,6 +504,13 @@ class file extends class_base
 		{
 			$link_url = $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name());
 			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+			$i = get_instance(CL_IMAGE);
+			$i->gen_image_alias_for_doc(array(
+				"img_id" => $arr["obj_inst"]->id(),
+				"doc_id" => $arr["request"]["docid"] ? $arr["request"]["docid"] : $arr["request"]["id"],
+				"no_die" => 1
+			));
+
 			die("
 				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
 				<script language='javascript'>
@@ -1428,6 +1435,11 @@ class file extends class_base
 	function new_change($args)
 	{
 		return parent::change($args);
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["docid"] = $_GET["docid"];
 	}
 
 	function callback_mod_tab($arr)

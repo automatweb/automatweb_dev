@@ -42,7 +42,7 @@ class file_manager extends aw_template
 		{
 			$parent = $doc->parent();
 		}
-		$image_url = html::get_new_url(CL_FILE, $parent, array("in_popup"=>1));
+		$image_url = html::get_new_url(CL_FILE, $parent, array("in_popup"=>1, "docid" => $doc->id()));
 		$this->read_template("manage.tpl");
 
 		$this->vars(array(

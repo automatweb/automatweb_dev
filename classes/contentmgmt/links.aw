@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.36 2007/05/07 08:07:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.37 2007/11/06 11:18:25 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -428,6 +428,14 @@ class links extends class_base
 			}
 
 			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+
+			$i = get_instance(CL_IMAGE);
+			$i->gen_image_alias_for_doc(array(
+				"img_id" => $arr["obj_inst"]->id(),
+				"doc_id" => $arr["request"]["ldocid"] ? $arr["request"]["ldocid"] : $arr["request"]["id"],
+				"no_die" => 1
+			));
+
 			die("
 				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
 				<script language='javascript'>
@@ -471,6 +479,11 @@ class links extends class_base
 		if (window.parent.name == \"InsertAWFupCommand\")
 		{
 		nsbt = document.createElement('input');nsbt.name='save_and_doc';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja paiguta dokumenti")."'; el = document.getElementById('buttons');el.appendChild(nsbt);}";
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["ldocid"] = $_GET["ldocid"];
 	}
 
 	function callback_mod_tab($arr)
