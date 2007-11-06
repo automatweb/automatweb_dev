@@ -1411,8 +1411,6 @@ class cfgform extends class_base
 
 		foreach ($this->layout as $name => $data)
 		{
-			list($width1, $width2) = sscanf($data["width"], "%d%%:%d");
-
 			$t->define_data(array(
 				"id" => $name,
 				"ordnr" => ++$ord,
@@ -1465,15 +1463,15 @@ class cfgform extends class_base
 						{
 							w1el.disabled = true;
 						}
-					"// enable width elements when hbox selected, disable if vbox
+					"// enable width element when hbox selected, disable if vbox
 				)),
 				"width" => html::textbox (array (
 					"name" => "cfglayoutinfo-width[" . $name . "]",
-					"size" => "2",
+					"size" => "6",
 					"textsize" => "12px",
-					"value" => $width1,
+					"value" => $data["width"],
 					"disabled" => $data["type"] === "vbox"
-				)) . "%" . (empty($width2) ? "" : ":" .  $width2 . "%"),
+				)),
 				"closeable" => html::checkbox (array(
 					"name" => "cfglayoutinfo-closeable[" . $name . "]",
 					"checked" => $data["closeable"]
@@ -1538,10 +1536,33 @@ class cfgform extends class_base
 
 			if (!empty($arr["request"]["cfglayoutinfo-width"][$name]) and "vbox" !== $arr["request"]["cfglayoutinfo-type"][$name])
 			{
-				$w1 = abs((int) $arr["request"]["cfglayoutinfo-width"][$name]);
-				$w1 = 99 < $w1 ? 50 : $w1;
-				$w2 = 100 - $w1;
-				$data["width"] = $w1 . "%:" . $w2 . "%";
+				$w = explode("%:", substr(trim($arr["request"]["cfglayoutinfo-width"][$name]), 0, -1));
+				unset($data["width"]);
+
+				if (100 === array_sum($w))
+				{
+					$data["width"] = implode("%:", $w) . "%";
+				}
+				else
+				{
+					$pcount = 0;
+
+					// find children
+					foreach ($this->cfg_layout as $pname => $pdata)
+					{
+						if ($pdata["parent"] === $name)
+						{
+							++$pcount;
+						}
+					}
+
+					if ($pcount)
+					{
+						// divide width equally between children
+						$w = (int) 100/$pcount;
+						$data["width"] = implode("%:", array_fill(0, $pcount, $w)) . "%";
+					}
+				}
 			}
 			else
 			{
@@ -1708,9 +1729,9 @@ class cfgform extends class_base
 								"no_edit_caption" => t("Nuppudeta"),
 								"no_edit_checked" => checked($property["no_edit"] == 1),
 								"no_edit" => $property["no_edit"],
-								"displayradio_caption" => t("Checkboxes"),
+								"displayradio_caption" => t("Valikud"),
 								"displayradio_ch" =>  ("radio" === $property["display"]) ? ' checked="1"' : "",
-								"displayselect_caption" => t("Select"),
+								"displayselect_caption" => t("Selectbox"),
 								"displayselect_ch" =>  ("select" === $property["display"]) ? ' checked="1"' : "",
 								"size_caption" => t("K&otilde;rgus"),
 								"size" => $property["size"],
@@ -1759,25 +1780,21 @@ class cfgform extends class_base
 							$property["cfgform_additional_options"] = "";
 					}
 
-					if (!empty($property["cfgform_additional_options"]))
-					{
-						$this->vars(array(
-							"prp_options" => $property["cfgform_additional_options"] ,
-							"prp_opts_caption" => t("Lisavalikud"),
-							"tmp_id" => $cnt,
-						));
-						$options = $this->parse("options");
-						$this->vars(array("options" => ""));
-					}
-					else
-					{
-						$options = "";
-						$this->vars(array(
-							"prp_options" => "",
-							"prp_opts_caption" => "",
-							"tmp_id" => ""
-						));
-					}
+					$this->vars(array(
+						"prp_key" => $property["name"],
+						"no_caption_caption" => t("&Auml;ra n&auml;ita pealkirja"),
+						"no_caption_checked" => checked(!empty($property["no_caption"])),
+						"no_caption" => $property["no_caption"],
+						"captionside_l_caption" => t("Pealkiri vasakul"),
+						"captionside_l_ch" =>  ("left" === $property["captionside"]) ? ' checked="1"' : "",
+						"captionside_t_caption" => t("Pealkiri ylal"),
+						"captionside_t_ch" =>  ("top" === $property["captionside"]) ? ' checked="1"' : "",
+						"prp_options" => $property["cfgform_additional_options"],
+						"prp_opts_caption" => t("Lisavalikud"),
+						"tmp_id" => $cnt,
+					));
+					$options = $this->parse("options");
+					$this->vars(array("options" => ""));
 
 					$used_props[$property["name"]] = 1;
 
@@ -2320,40 +2337,29 @@ class cfgform extends class_base
 				break;
 
 			default:
-				// well, save the names then
-				//$grplist = $this->grplist;
-				$prplist = $this->prplist;
-
-				if (is_array($arr["request"]["prpnames"]))
+				foreach ($this->prplist as $name => $data)
 				{
-					foreach($arr["request"]["prpnames"] as $key => $val)
+					if (isset($arr["request"]["prpconfig"][$name]))
 					{
-						$prplist[$key]["caption"] = $val;
-						$prplist[$key]["ord"] = $arr["request"]["prop_ord"][$key];
+						$cfg_data = $arr["request"]["prpconfig"][$name];
+
+						if (isset($arr["request"]["xconfig"][$name]))
+						{
+							foreach ($arr["request"]["xconfig"][$name] as $ch_name => $value)
+							{
+								if (!empty($value) and !isset($cfg_data[$ch_name]))
+								{
+									unset($data[$ch_name]);
+								}
+							}
+						}
+
+						$this->prplist[$name] = $cfg_data + $data;
 					}
 				}
-				if (is_array($arr["request"]["prpconfig"]))
-				{
-					foreach($arr["request"]["prpconfig"] as $key => $val)
-					{
-						foreach($val as $key2 => $val2)
-						{
-							if (true || $val2 != $arr["request"]["prpconfig"][$key][$key2])
-							{
-								$prplist[$key][$key2] = $val2;
-							};
-						};
-					};
-				};
-				// if there's any additional properties concerning object, then save them too just in case..
 
-				//$this->cfg_groups = $grplist;
-				$this->cfg_proplist = $prplist;
-
+				$this->cfg_proplist = $this->prplist;
 				break;
-
-			// j‰rjekorranumbritega on muidugi natuke raskem, ma peaksin neile
-			// mingid default v‰‰rtused andma. Or it won't work. Or perhaps it will?
 		}
 	}
 

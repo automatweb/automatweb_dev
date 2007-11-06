@@ -92,14 +92,18 @@ function cfgformToggleSelectProps(grpId)
 	<!-- END SUB: layout -->
 	<!-- SUB: property -->
 	<tr>
-		<td width="50" bgcolor="{VAR:bgcolor}"><input type="text" name="prop_ord[{VAR:prp_key}]" value="{VAR:prp_order}" size="2"></td>
+		<td width="50" bgcolor="{VAR:bgcolor}"><input type="text" name="prpconfig[{VAR:prp_key}][ord]" value="{VAR:prp_order}" size="2"></td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_key}</td>
-		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}"></td>
+		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpconfig[{VAR:prp_key}][caption]" value="{VAR:prp_caption}"></td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
 		<td width="200" bgcolor="{VAR:bgcolor}">
 		<!-- SUB: options -->
 			<div class="closer">{VAR:prp_opts_caption} <a href="javascript:cfgformToggleOpts({VAR:tmp_id})"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif" id="cfgformOptsBtn{VAR:tmp_id}" width="20" height="15" border="0"></a></div>
 			<div id="cfgformPrpOpts{VAR:tmp_id}" style="display: none;">
+				{VAR:no_caption_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_caption]" value="1" {VAR:no_caption_checked}>
+				<input type="hidden" name="xconfig[{VAR:prp_key}][no_caption]" value="{VAR:no_caption}"><br />
+				{VAR:captionside_l_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][captionside]" value="left"{VAR:captionside_l_ch}><br />
+				{VAR:captionside_t_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][captionside]" value="top"{VAR:captionside_t_ch}><br />
 {VAR:prp_options}
 			</div>
 		<!-- END SUB: options -->
