@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.1 2007/10/19 13:21:21 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.2 2007/11/06 13:06:12 robert Exp $
 // ical_export.aw - Sündmuste eksport (iCal) 
 /*
 
@@ -43,7 +43,7 @@ class ical_export extends class_base
 	}
 
 	/**
-	@attrib name=export all_args=1
+	@attrib name=export all_args=1 nologin=1
 	**/
 	function export($arr)
 	{
@@ -72,7 +72,7 @@ class ical_export extends class_base
 				$c = new vcalendar();
 				$c->setConfig("lang" ,"ee");
 
-				foreach($events->list as $oid)
+				foreach($events->ids() as $oid)
 				{
 					if($obj->prop("personal_not") && $event->prop("is_personal"))
 					{
@@ -194,6 +194,7 @@ class ical_export extends class_base
 					"start"=>0,
 					"end"=>0
 				));
+				$url = str_replace("automatweb/", "", $url);
 				$prop["value"] = html::href(array(
 					"url" => $url,
 					"caption" => $url

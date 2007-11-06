@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_import.aw,v 1.1 2007/10/19 13:21:21 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_import.aw,v 1.2 2007/11/06 13:06:12 robert Exp $
 // ical_import.aw - Sündmuste import (iCal) 
 /*
 
@@ -7,6 +7,11 @@
 
 @default table=objects
 @default group=general
+
+	@property import_tb type=toolbar submit=no no_caption=1
+
+	@property name type=textbox table=objects
+	@caption Nimi
 
 	@property calendar type=relpicker reltype=RELTYPE_CALENDAR field=meta method=serialize store=connect
 	@caption Kalender
@@ -31,6 +36,20 @@ class ical_import extends class_base
 		$this->init(array(
 			"tpldir" => "applications/calendar/ical_import",
 			"clid" => CL_ICAL_IMPORT
+		));
+	}
+	
+	function _get_import_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "submit",
+			"img" => "save.gif",
+			"tooltip" => "Impordi URL-ist",
+			"url" => $this->mk_my_orb("import",array(
+				"id" => $arr["obj_inst"]->id(),
+				"ru" => $arr["request"]["post_ru"]
+			))
 		));
 	}
 
@@ -64,12 +83,15 @@ class ical_import extends class_base
 		{
 			case "file":
 				$file = $_FILES['file'];
-				$args = array(
-					"id" => $arr["obj_inst"]->id(),
-					"filename" => $file["tmp_name"],
-					"ru" => $arr["request"]["post_ru"]
-				);
-				$this->import($args);
+				if($file["tmp_name"])
+				{
+					$args = array(
+						"id" => $arr["obj_inst"]->id(),
+						"filename" => $file["tmp_name"],
+						"ru" => $arr["request"]["post_ru"]
+					);
+					$this->import($args);
+				}
 				break;
 		}
 		return $retval;
@@ -87,7 +109,7 @@ class ical_import extends class_base
 			if($cal)
 			{
 				require_once(aw_ini_get("basedir").'/addons/ical/iCalcreator.aw');
-				$vcalendar = new vcalendar();
+				$c = new vcalendar();
 				if($arr["filename"])
 				{
 					$filename = $arr["filename"];
@@ -98,15 +120,12 @@ class ical_import extends class_base
 				}
 				if($filename)
 				{
-					$ef = $cal->get_first_obj_by_reltype("RELTYPE_EVENT_FOLDER");
-					$c = new vcalendar();
-					$c->setConfig("filename", $filename);
 					$c->parse($filename);
+					$ef = $cal->get_first_obj_by_reltype("RELTYPE_EVENT_FOLDER");
 					while($e = $c->getComponent())
 					{
 						$this->create_event($e, $ef, $obj);
 					}
-					die();
 				}
 			}
 		}
@@ -137,6 +156,7 @@ class ical_import extends class_base
 				}
 				$deadline = mktime($d["hour"]+$add, $d["min"], $d["sec"], $d["month"], $d["day"], $d["year"]);
 				$e->set_prop("deadline",$deadline);
+				$e->set_prop("end", $deadline);
 				break;
 			case "vevent":
 				$vt = $obj->prop("vevent_type");
@@ -155,6 +175,8 @@ class ical_import extends class_base
 				$end= mktime($d["hour"]+$add, $d["min"], $d["sec"], $d["month"], $d["day"], $d["year"]);
 				$e->set_prop("end", $end);
 				break;
+			default:
+				return 0;
 		}
 		$d = $c->getProperty("dtstart");
 		if($d["tz"] == "Z")
@@ -162,6 +184,17 @@ class ical_import extends class_base
 			$add = 3;
 		}
 		$start = mktime($d["hour"]+$add, $d["min"], $d["sec"], $d["month"], $d["day"], $d["year"]);
+		if($start<1)
+		{
+			if($deadline)
+			{
+				$start = $deadline;
+			}
+			elseif($end)
+			{
+				$start = $end;
+			}
+		}
 		$e->set_prop("start1", $start);
 		$name = $c->getProperty("summary");
 		$name = iconv("UTF-8",aw_global_get("charset"), $name);
@@ -169,12 +202,65 @@ class ical_import extends class_base
 		{
 			$name = "Ülesanne";
 		}
+		$existlist = new object_list(array(
+			"name" => $name,
+			"class_id" => array(CL_CRM_MEETING, CL_TASK, CL_CRM_CALL, CL_CALENDAR_EVENT),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"parent" => $ef->id(),
+			"start1" => $start
+		));
+		foreach($existlist->ids() as $oid)
+		{
+			$exists = $oid;
+		}
+		if($exists)
+		{
+			return 0;
+		}
 		$e->set_name($name);
 		$comment = $c->getProperty("description");
 		$comment = iconv("UTF-8",aw_global_get("charset"), $comment);
 		$e->set_comment($comment);
-		$attendee = $c->getProperty("attendee");
-		arr($attendee);
+		$e->save();
+		$attendees = $c->attendee;
+		if(count($attendees) && $e->class_id()!=CL_CALENDAR_EVENT)
+		{
+			foreach($attendees as $at)
+			{
+				$value = $at["value"];
+				$params = $at["params"];
+				$name = $params["CN"];
+				if($name)
+				{
+					$persons = new object_list(array(
+						"class_id" => CL_CRM_PERSON,
+						"name" => $name,
+						"lang_id" => array(),
+						"site_id" => array()
+					));
+					foreach($persons->ids() as $person)
+					{
+						$p_exists = obj($person);
+					}
+					if($p_exists)
+					{
+						$person = $p_exists;
+					}
+					else
+					{
+						$cur = get_current_company();
+						$person = new object();
+						$person->set_class_id(CL_CRM_PERSON);
+						$person->set_name($name);
+						$person->set_parent($cur->id());
+						$person->save();
+					}
+					$inst = get_instance($e->class_id());
+					$inst->add_participant($e, $person);
+				}
+			}
+		}
 	}
 
 	function callback_post_save($arr)
