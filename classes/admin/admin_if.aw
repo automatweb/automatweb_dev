@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.27 2007/11/04 10:01:55 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.28 2007/11/06 14:06:03 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -997,6 +997,17 @@ class admin_if extends class_base
 	**/
 	function new_lod($arr)
 	{
+		// cache the damn thing
+		$c = get_instance("cache");
+		$ct = $c->file_get("lod_cache_".aw_global_get("uid"));
+		if ($ct)
+		{
+			$ct =  str_replace("--pt--", $arr["parent"], str_replace("--pr--", $arr["period"], $ct));
+			header("Content-type: text/html;charset=".aw_global_get("charset"));
+			die($ct);
+		}
+
+
 		$popup_menu = get_instance("vcl/popup_menu");
 		$popup_menu->begin_menu("new");
 
@@ -1005,8 +1016,8 @@ class admin_if extends class_base
 			"az" => 1,
 			"docforms" => 1,
 			// those are for docs menu only
-			"parent" => $arr["parent"],
-			"period" => $arr["period"],
+			"parent" => "--pt--",
+			"period" => "--pr--",
 		));
 
 
@@ -1020,7 +1031,7 @@ class admin_if extends class_base
 					$popup_menu->add_item(array(
 						"parent" => $parnt,
 						"text" => $el_data["name"],
-						"link" => $this->mk_my_orb("new",array("parent" => $arr["parent"]),$el_data["clid"]),
+						"link" => $this->mk_my_orb("new",array("parent" => "--pt--"),$el_data["clid"]),
 					));
 				}
 				else
@@ -1050,11 +1061,19 @@ class admin_if extends class_base
 			};
 		};
 
-		header("Content-type: text/html;charset=".aw_global_get("charset"));
-		die($popup_menu->get_menu(array(
+		$ct = $popup_menu->get_menu(array(
 			"icon" => "new.gif",
 			"is_toolbar" => 1
-		)));
+		));
+
+		// optimize the html a bit - strip out urls
+		$ct = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $ct);
+
+		$c->file_set("lod_cache_".aw_global_get("uid"), $ct);
+
+		$ct =  str_replace("--pt--", $arr["parent"], str_replace("--pr--", $arr["period"], $ct));
+		header("Content-type: text/html;charset=".aw_global_get("charset"));
+		die($ct);
 	}
 
 	/**
