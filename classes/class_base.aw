@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.576 2007/11/06 08:44:29 kristo Exp $
+// $Id: class_base.aw,v 2.577 2007/11/06 13:22:41 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5836,6 +5836,14 @@ class class_base extends aw_template
 //		{
 //			return null;
 //		}
+		
+		if($cnt_menus == 0)
+		{
+			$_SESSION["menu_from_cb"] = null;
+			$this->add_item_level = $level - 1;
+		}
+
+		$level = $level + $this->add_item_level;
 
 		if($cnt_menus == 0) $_SESSION["menu_from_cb"] = null;
 		if(!$_SESSION["menu_from_cb"][$level]["items"] && !$_SESSION["menu_from_cb"][$level]["count"])
