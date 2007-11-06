@@ -868,11 +868,12 @@ class user extends class_base
 		if ($arr["request"]["action"] == "new")
 		{
 			$po = obj($arr["request"]["parent"]);
-			$rm = aw_ini_get("users.rootmenu");
+			$rm = aw_ini_get("users.root_folder");
 			if (!$rm)
 			{
-				$rm = aw_ini_get("users.root_folder");
+				$rm = aw_ini_get("users.rootmenu");
 			}
+
 			if ($po->class_id() != CL_GROUP && $po->id() != $rm)
 			{
 				// redirect to main user folder
@@ -1405,7 +1406,10 @@ class user extends class_base
 			obj_set_opt("no_cache", $prev);
 			$mail = new object();
 			$mail->set_class_id(CL_ML_MEMBER);
-			$mail->set_parent($o->id());
+			
+			$p = $this->get_person_for_user($o);
+
+			$mail->set_parent($p->id());
 			$mail->set_prop("mail", $umail);
 			$mail->set_prop("name", $uname);
 			$mail->set_name($uname." &lt;".$umail."&gt;");
@@ -1502,7 +1506,7 @@ class user extends class_base
 			// create new person next to user
 			$p = obj();
 			$p->set_class_id(CL_CRM_PERSON);
-			$p->set_parent($u->parent());
+			$p->set_parent($u->id());
 
 			$rn = $u->prop("real_name");
 
