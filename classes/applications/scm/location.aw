@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.6 2007/01/30 11:54:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.7 2007/11/06 14:28:47 markop Exp $
 // location.aw - Asukoht 
 /*
 
@@ -150,7 +150,10 @@ class location extends class_base
 		};
 		return $retval;
 	}
-
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -158,6 +161,9 @@ class location extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 		}
 		return $retval;
 	}	
