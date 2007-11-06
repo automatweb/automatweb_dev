@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.178 2007/10/26 08:09:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.179 2007/11/06 12:23:18 voldemar Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1226,7 +1226,7 @@ class htmlclient extends aw_template
 			if (!empty($html))
 			{
 				$layout_items[] = $html;
-			};
+			}
 		}
 
 		$html = "";
@@ -1317,53 +1317,52 @@ class htmlclient extends aw_template
 				$content .= $this->parse("GRID_HBOX_ITEM");
 			};
 
-			$ghc = $gce = "";
-			if (!empty($ldata["closeable"]))
+			$closer = $ghc = $gce = "";
+			if (!empty($ldata["area_caption"]))
 			{
 				$u = get_instance(CL_USER);
 				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
+
+				if (!empty($ldata["closeable"]))
+				{
+					$this->vars_safe(array(
+						"grid_name" => $layout_name,
+						"close_text" => t("Kinni"),
+						"open_text" => t("Lahti"),
+						"start_text" => $state ? t("Kinni") : t("Lahti"),
+						"open_layer_url" => $this->mk_my_orb("open_layer", array(
+							"u_class" => $_GET["class"],
+							"u_group" => $_GET["group"],
+							"u_layout" => $layout_name
+						), "user"),
+						"close_layer_url" => $this->mk_my_orb("close_layer", array(
+							"u_class" => $_GET["class"],
+							"u_group" => $_GET["group"],
+							"u_layout" => $layout_name
+						), "user"),
+						"closer_state" => $state ? "up" : "down"
+					));
+					$closer = $this->parse("GRID_HAS_CLOSER");
+				}
+
 				$this->vars_safe(array(
 					"grid_name" => $layout_name,
 					"area_caption" => $ldata["area_caption"],
-					"close_text" => t("Kinni"),
-					"open_text" => t("Lahti"),
-					"start_text" => $state ? t("Kinni") : t("Lahti"),
-					"open_layer_url" => $this->mk_my_orb("open_layer", array(
-						"u_class" => $_GET["class"],
-						"u_group" => $_GET["group"],
-						"u_layout" => $layout_name
-					), "user"),
-					"close_layer_url" => $this->mk_my_orb("close_layer", array(
-						"u_class" => $_GET["class"],
-						"u_group" => $_GET["group"],
-						"u_layout" => $layout_name
-					), "user"),
 					"display" => $state ? "block" : "none",
-					"closer_state" => $state ? "up" : "down"
+					"GRID_HAS_CLOSER" => $closer,
 				));
-				$ghc = $this->parse("GRID_HAS_CLOSER");
-				$gce = $this->parse("GRID_CLOSER_END");
+				$ghc = $this->parse("GRID_HAS_CAPTION");
+				$gce = $this->parse("GRID_HAS_CAPTION_END");
 			}
-			/*
-			else
-			{
-				$this->vars_safe(array(
-					"grid_name" => $layout_name,
-				));
-				$this->vars_safe(array(
-					"GRID_NO_CLOSER" => $this->parse("GRID_NO_CLOSER"),
-					"GRID_NO_CLOSER_END" => $this->parse("GRID_NO_CLOSER_END"),
-				));
-			}*/
 
 			$this->vars_safe(array(
 				"GRID_HBOX_ITEM" => $content,
-				"GRID_HAS_CLOSER" => $ghc,
-				"GRID_CLOSER_END" => $gce
+				"GRID_HAS_CAPTION" => $ghc,
+				"GRID_HAS_CAPTION_END" => $gce
 			));
 
-			//$html .= $this->parse("GRID_HBOX");
 			$_t = $this->parse("GRID_HBOX");
+
 			if($this->view_layout && $this->view_layout == $layout_name && !$this->view_outer)
 			{
 				$html .= $_t;
@@ -1385,60 +1384,58 @@ class htmlclient extends aw_template
 				$this->vars_safe(array(
 					"item" => $layout_item,
 				));
-				$content .= $this->parse(!empty($ldata["closeable"]) ? "GRID_VBOX_ITEM" : "GRID_VBOX_SUBITEM");
+				$content .= $this->parse("GRID_VBOX_ITEM");
 			};
 
 			$this->vars_safe(array(
 				"GRID_VBOX_ITEM" => $content,
 			));
 
-			$ghc = $gce = "";
-			if (!empty($ldata["closeable"]))
+			$closer = $ghc = $gce = "";
+			if (!empty($ldata["area_caption"]))
 			{
 				$u = get_instance(CL_USER);
 				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
+
+				if (!empty($ldata["closeable"]))
+				{
+					$this->vars_safe(array(
+						"grid_name" => $layout_name,
+						"close_text" => t("Kinni"),
+						"open_text" => t("Lahti"),
+						"start_text" => $state ? t("Kinni") : t("Lahti"),
+						"open_layer_url" => $this->mk_my_orb("open_layer", array(
+							"u_class" => $_GET["class"],
+							"u_group" => $_GET["group"],
+							"u_layout" => $layout_name
+						), "user"),
+						"close_layer_url" => $this->mk_my_orb("close_layer", array(
+							"u_class" => $_GET["class"],
+							"u_group" => $_GET["group"],
+							"u_layout" => $layout_name
+						), "user"),
+						"closer_state" => $state ? "up" : "down"
+					));
+					$closer = $this->parse("VGRID_HAS_CLOSER");
+				}
+
 				$this->vars_safe(array(
 					"grid_name" => $layout_name,
 					"area_caption" => $ldata["area_caption"],
-					"close_text" => t("Kinni"),
-					"open_text" => t("Lahti"),
-					"start_text" => $state ? t("Kinni") : t("Lahti"),
-					"open_layer_url" => $this->mk_my_orb("open_layer", array(
-						"u_class" => $_GET["class"],
-						"u_group" => $_GET["group"],
-						"u_layout" => $layout_name
-					), "user"),
-					"close_layer_url" => $this->mk_my_orb("close_layer", array(
-						"u_class" => $_GET["class"],
-						"u_group" => $_GET["group"],
-						"u_layout" => $layout_name
-					), "user"),
 					"display" => $state ? "block" : "none",
-					"closer_state" => $state ? "up" : "down",
+					"VGRID_HAS_CLOSER" => $closer,
 					"VGRID_HAS_PADDING" => !empty($ldata["no_padding"]) ? "" : $this->parse("VGRID_HAS_PADDING"),
 					"VGRID_NO_PADDING" => !empty($ldata["no_padding"]) ? $this->parse("VGRID_NO_PADDING") : "",
 				));
-				$ghc = $this->parse("VGRID_HAS_CLOSER");
-				$gce = $this->parse("VGRID_CLOSER_END");
+				$ghc = $this->parse("VGRID_HAS_CAPTION");
+				$gce = $this->parse("VGRID_HAS_CAPTION_END");
 			}
-			/*
-			else
-			{
-				$this->vars_safe(array(
-					"grid_name" => $layout_name,
-				));
-				$this->vars_safe(array(
-					"VGRID_NO_CLOSER" => $this->parse("VGRID_NO_CLOSER"),
-					"VGRID_NO_CLOSER_END" => $this->parse("VGRID_NO_CLOSER_END"),
-				));
-			}
-			*/
+
 			$this->vars_safe(array(
-				"VGRID_HAS_CLOSER" => $ghc,
-				"VGRID_CLOSER_END" => $gce
+				"VGRID_HAS_CAPTION" => $ghc,
+				"VGRID_HAS_CAPTION_END" => $gce
 			));
 
-			//$html .= $this->parse("GRID_HBOX");
 			$_t = $this->parse("GRID_VBOX");
 			if($this->view_layout && $this->view_layout == $layout_name && !$this->view_outer)
 			{
@@ -1459,43 +1456,50 @@ class htmlclient extends aw_template
 
 	function put_griditem($arr)
 	{
-		$captionside = "left";
 		// support TOP and LEFT for now only
-		$sufix = "";
-		if (isset($arr["captionside"]) && $arr["captionside"] == "top")
-		{
-			$captionside = $arr["captionside"];
-		};
+		$captionside = "LEFT";
 
-		// subtemplate names are uper case:
-		$captionside = strtoupper($captionside);
+		if (isset($arr["captionside"]))
+		{
+			switch ($arr["captionside"])
+			{
+				case "top":
+					$captionside = "TOP";
+					break;
+			}
+		}
 
 		// reset all captions
 		$this->vars_safe(array(
-			"caption" => isset($arr["caption"]) ? $arr["caption"] : null,
+			"caption" => empty($arr["caption"]) ? null : $arr["caption"] . ":",
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
 			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
 			"GRID_ERR_MSG" => ""
 		));
+
 		if (!empty($arr["error"]))
 		{
 			$this->vars_safe(array(
 				"GRID_ERR_MSG" => $this->parse("GRID_ERR_MSG")
 			));
 		}
+
 		// name refers to a VAR inside the template
-		$caption_template = "CAPTION_${captionside}";
+		$caption_template = "CAPTION_" . $captionside;
 		$this->vars_safe(array(
 			$caption_template => $this->parse($caption_template),
 		));
 		$tpl = "GRIDITEM";
+
 		if (!empty($arr["no_caption"]))
 		{
 			$tpl = "GRIDITEM_NO_CAPTION";
-		};
+		}
+
 		return $this->parse($tpl);
 	}
-};
+}
+
 ?>
