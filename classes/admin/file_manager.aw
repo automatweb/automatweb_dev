@@ -35,26 +35,14 @@ class file_manager extends aw_template
 		}
 
 		// this disables the option to change file's properties with mouse right-click, a new file will be added always
-		/*
-		if ($image_list->count())
+		$parent = aw_ini_get("file.default_folder");
+		parse_str($arr["doc"], $params);
+		$doc = obj($params["id"]);
+		if (!$parent)
 		{
-			$imgo = $image_list->begin();
-			$image_url = html::get_change_url($imgo->id());
+			$parent = $doc->parent();
 		}
-		else
-		{
-		*/
-			$parent = aw_ini_get("file.default_folder");
-			parse_str($arr["doc"], $params);
-			$doc = obj($params["id"]);
-			if (!$parent)
-			{
-				$parent = $doc->parent();
-			}
-			$image_url = html::get_new_url(CL_FILE, $parent, array("in_popup"=>1));
-		/*
-		}
-		*/
+		$image_url = html::get_new_url(CL_FILE, $parent, array("in_popup"=>1));
 		$this->read_template("manage.tpl");
 
 		$this->vars(array(

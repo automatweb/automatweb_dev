@@ -17,7 +17,14 @@ class image_manager extends aw_template
 		$url = $arr["imgsrc"];
 		$parts = parse_url($url);
 		$path = $parts["path"];
-		$imgname = substr($path, strrpos($path, "=")+1);
+		if (substr($path, 0, 8) == "/vvfiles")
+		{
+			$imgname = basename($path);
+		}
+		else
+		{
+			$imgname = substr($path, strrpos($path, "=")+1);
+		}
 		if ($imgname != "")
 		{
 			// now get image by file name

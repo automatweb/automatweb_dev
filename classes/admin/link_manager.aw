@@ -55,7 +55,7 @@ class link_manager extends aw_template
 		if ($image_list->count())
 		{
 			$imgo = $image_list->begin();
-			$image_url = html::get_change_url($imgo->id());
+			$image_url = html::get_change_url($imgo->id(),  array("in_popup" => $_GET["in_popup"]));
 		}
 		else
 		{
@@ -66,7 +66,7 @@ class link_manager extends aw_template
 			{
 				$parent = $doc->parent();
 			}
-			$image_url = html::get_new_url(CL_EXTLINK, $parent);
+			$image_url = html::get_new_url(CL_EXTLINK, $parent, array("docid" => $doc->id(), "in_popup"=>"1"));
 		}
 		
 		$this->read_template("manage.tpl");
