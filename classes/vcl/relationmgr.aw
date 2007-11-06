@@ -30,7 +30,81 @@ class relationmgr extends aw_template
 			return $this->_show_relations($arr);
 		}
 	}
+
+	/**
+		@attrib name=disp_relmgr all_args=1
+	**/
+	function disp_relmgr($arr)
+	{
+		$arg = array(
+			"request" => $arr,
+			"obj_inst" => obj($arr["id"]),
+		);
+		$r = $this->init_vcl_property($arg);
+		$cli = get_instance("cfg/htmlclient");
+		foreach($r as $pn => $pd)
+		{
+			if ($pd["type"] == "toolbar")
+			{
+				$pd["value"] = $pd["vcl_inst"]->get_toolbar();
+			}
+			$cli->add_property($pd);
+		}
+		$cli->finish_output(array(
+			"method" => "GET",
+			"action" => $arr["srch"] == 1 ? "disp_relmgr" : "submit",
+			"submit" => "no",
+			"data" => array(
+				"orb_class" => "relationmgr",
+				"id" => $arr["id"],
+			)
+		));
+		return $cli->get_result();
+	}
 	
+	/**
+		@attrib name=submit all_args=1
+	**/
+	function submit($arr)	
+	{
+		$arg = array(
+			"request" => $arr,
+			"obj_inst" => obj($arr["id"]),
+		);
+		$this->process_vcl_property($arg);
+		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
+	}
+
+	/**
+		@attrib name=rel_cut all_args=1
+	**/
+	function rel_cut($arr)
+	{
+		$i = get_instance("doc");
+		$i->rel_cut($arr);
+		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
+	}
+		
+	/**
+		@attrib name=rel_copy all_args=1
+	**/
+	function rel_copy($arr)
+	{
+		$i = get_instance("doc");
+		$i->rel_copy($arr);
+		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
+	}
+		
+	/**
+		@attrib name=rel_paste all_args=1
+	**/
+	function rel_paste($arr)
+	{
+		$i = get_instance("doc");
+		$i->rel_paste($arr);
+		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
+	}
+		
 	function _init_relations($arr)
 	{
 		$this->clids = array();
@@ -983,7 +1057,8 @@ class relationmgr extends aw_template
 				$c->delete();
 			}
 		}
-		elseif($arr["request"]["alias"])
+		else
+		if($arr["request"]["alias"])
 		{
 			$alias = $arr["request"]["alias"];
 			$reltype = $arr["request"]["reltype"];

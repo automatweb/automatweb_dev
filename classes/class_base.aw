@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.575 2007/11/03 08:33:33 voldemar Exp $
+// $Id: class_base.aw,v 2.576 2007/11/06 08:44:29 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2374,12 +2374,13 @@ class class_base extends aw_template
 		if (empty($val["value"]) && ($val["type"] == "aliasmgr") && isset($this->id))
 		{
 			$link = $this->mk_my_orb(
-				"list_aliases",
+				"disp_relmgr",
 				array(
+					"group" => "relationmgr",
 					"id" => $this->obj_inst->brother_of(),
 					"no_op" => 1
 				),
-				get_class($this->orb_class),
+				"relationmgr", //get_class($this->orb_class),
 				false,
 				true
 			);
