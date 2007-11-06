@@ -25,5 +25,25 @@
 			</function>
 		</action>
 
+		<action name="merge">
+			<function name="merge_cfg_changes">
+				<arguments>
+					<required name="id" type="int" />
+					<required name="scope" type="string" />
+					<optional name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="reload">
+			<function name="reload_cfg">
+				<arguments>
+					<required name="id" type="int" />
+					<required name="scope" type="string" />
+					<optional name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

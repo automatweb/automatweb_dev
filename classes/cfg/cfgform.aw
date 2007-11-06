@@ -65,7 +65,6 @@
 
 	@default field=meta
 	@default method=serialize
-
 		@property use_output type=relpicker reltype=RELTYPE_OUTPUT
 		@caption V&auml;ljundvorm
 
@@ -246,6 +245,12 @@ class cfgform extends class_base
 {
 	var $cfgview_actions = array();
 	var $default_new_layout_name = "new_layout_temporary_name";
+	var $cfg_load_scope_index = array (
+		"all" => array("properties", "groups", "layouts"),
+		"properties" => array("properties"),
+		"groups" => array("groups"),
+		"layouts" => array("layouts"),
+	);
 
 	function cfgform($arr = array())
 	{
@@ -283,6 +288,10 @@ class cfgform extends class_base
 
 		switch($data["name"])
 		{
+			case "general_tb":
+				$this->_general_tb($arr);
+				break;
+
 			case "edit_groups_tb":
 				$this->_edit_groups_tb($arr);
 				break;
@@ -2047,7 +2056,114 @@ class cfgform extends class_base
 
 	function gen_availtoolbar($arr)
 	{
-		$toolbar = &$arr["prop"]["toolbar"];
+		$this_o = $arr["obj_inst"];
+		$toolbar =& $arr["prop"]["vcl_inst"];
+		$this_oid = $this_o->id();
+		$return_url = get_ru();
+
+		// merge
+		$toolbar->add_menu_button(array(
+			"name" => "merge",
+			"img" => "import.gif",
+			"tooltip" => t("Loe klassi uuendused seadetevormi"),
+		));
+
+			// merge all
+			$toolbar->add_menu_item(array(
+				"parent" => "merge",
+				"text" => t("Kõik"),
+				"link" => $this->mk_my_orb("merge", array(
+					"id" => $this_oid,
+					"scope" => "all",
+					"return_url" => $return_url,
+				))
+			));
+
+			// merge properties
+			$toolbar->add_menu_item(array(
+				"parent" => "merge",
+				"text" => t("Ainult omadused"),
+				"link" => $this->mk_my_orb("merge", array(
+					"id" => $this_oid,
+					"scope" => "properties",
+					"return_url" => $return_url,
+				))
+			));
+
+			// merge groups
+			$toolbar->add_menu_item(array(
+				"parent" => "merge",
+				"text" => t("Ainult tabid"),
+				"link" => $this->mk_my_orb("merge", array(
+					"id" => $this_oid,
+					"scope" => "groups",
+					"return_url" => $return_url,
+				))
+			));
+
+			// merge layouts
+			$toolbar->add_menu_item(array(
+				"parent" => "merge",
+				"text" => t("Ainult layoudid"),
+				"link" => $this->mk_my_orb("merge", array(
+					"id" => $this_oid,
+					"scope" => "layouts",
+					"return_url" => $return_url,
+				))
+			));
+
+		// reload
+		$toolbar->add_menu_button(array(
+			"name" => "reload",
+			"img" => "refresh.gif",
+			"tooltip" => t("Tee seadetele alglaadimine"),
+		));
+
+			// reload all
+			$toolbar->add_menu_item(array(
+				"parent" => "reload",
+				"text" => t("Kõik"),
+				"link" => $this->mk_my_orb("reload", array(
+					"id" => $this_oid,
+					"scope" => "all",
+					"return_url" => $return_url,
+				))
+			));
+
+			// reload properties
+			$toolbar->add_menu_item(array(
+				"parent" => "reload",
+				"text" => t("Ainult omadused"),
+				"link" => $this->mk_my_orb("reload", array(
+					"id" => $this_oid,
+					"scope" => "properties",
+					"return_url" => $return_url,
+				))
+			));
+
+			// reload groups
+			$toolbar->add_menu_item(array(
+				"parent" => "reload",
+				"text" => t("Ainult tabid"),
+				"link" => $this->mk_my_orb("reload", array(
+					"id" => $this_oid,
+					"scope" => "groups",
+					"return_url" => $return_url,
+				))
+			));
+
+			// reload layouts
+			$toolbar->add_menu_item(array(
+				"parent" => "reload",
+				"text" => t("Ainult layoudid"),
+				"link" => $this->mk_my_orb("reload", array(
+					"id" => $this_oid,
+					"scope" => "layouts",
+					"return_url" => $return_url,
+				))
+			));
+
+		// move props
 		$opts = array();
 		if (is_array($this->grplist))
 		{
@@ -3213,6 +3329,110 @@ class cfgform extends class_base
 			"subgroup" => $arr["subgroup"],
 		));
 		return $return_url;
+	}
+
+	/**
+		@attrib name=merge
+		@param id required type=int
+		@param scope required type=string
+		@param return_url optional type=string
+	**/
+	function merge_cfg_changes($arr)
+	{
+		error::raise_if((!$this->can("edit", $arr["id"])), array(
+			"msg" => t("no edit access"),
+			"fatal" => true
+		));
+
+		error::raise_if((!isset($this->cfg_load_scope_index[$arr["scope"]])), array(
+			"msg" => t("invalid action scope"),
+			"fatal" => true
+		));
+
+		$scopes = $this->cfg_load_scope_index[$arr["scope"]];
+		$this_o = new object($arr["id"]);
+		$this->_init_cfgform_data($this_o);
+		$this->cff_init_from_class($this_o, $this_o->subclass(), false);
+
+		foreach ($scopes as $scope)
+		{
+			switch ($scope)
+			{
+				case "properties":
+					foreach ($this->prplist as $name => $data)
+					{
+						if (array_key_exists($name, $this->cfg_proplist))
+						{ // add new options if any
+							$this->prplist[$name] = $data + $this->cfg_proplist[$name];
+						}
+						else
+						{ // remove property if removed in class definition (will conflict when/if cfgform-specific properties will be implemented)
+							unset($this->prplist[$name]);
+						}
+					}
+
+					$this->_save_cfg_props($this_o);
+					break;
+
+				// groups and layouts removed in cl. dfn. won't be removed from cfgform
+				case "groups":
+					$this->cfg_groups = $this->grplist + $this->cfg_groups;
+					$this->_save_cfg_groups($this_o);
+					break;
+				case "layouts":
+					$this->cfg_layout = $this->layout + $this->cfg_layout;
+					$this->_save_cfg_layout($this_o);
+					break;
+			}
+		}
+
+		$this_o->save();
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib name=reload
+		@param id required type=int
+		@param scope required type=string
+		@param return_url optional type=string
+	**/
+	function reload_cfg($arr)
+	{
+		error::raise_if((!$this->can("edit", $arr["id"])), array(
+			"msg" => t("no edit access"),
+			"fatal" => true
+		));
+
+		error::raise_if((!isset($this->cfg_load_scope_index[$arr["scope"]])), array(
+			"msg" => t("invalid action scope"),
+			"fatal" => true
+		));
+
+		$scopes = $this->cfg_load_scope_index[$arr["scope"]];
+		$this_o = new object($arr["id"]);
+		$this->_init_cfgform_data($this_o);
+		$this->cff_init_from_class($this_o, $this_o->subclass(), false);
+
+		foreach ($scopes as $scope)
+		{
+			switch ($scope)
+			{
+				case "properties":
+					$this->_save_cfg_props($this_o);
+					break;
+
+				case "groups":
+					$this->_save_cfg_groups($this_o);
+					break;
+
+				case "layouts":
+					$this->_save_cfg_layout($this_o);
+					break;
+			}
+		}
+
+		$this_o->save();
+		return $arr["return_url"];
 	}
 
 	function _edit_groups_tb($arr)
