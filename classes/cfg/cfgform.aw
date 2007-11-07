@@ -1789,6 +1789,8 @@ class cfgform extends class_base
 						"captionside_l_ch" =>  ("left" === $property["captionside"]) ? ' checked="1"' : "",
 						"captionside_t_caption" => t("Pealkiri ylal"),
 						"captionside_t_ch" =>  ("top" === $property["captionside"]) ? ' checked="1"' : "",
+						"textsize_caption" => '<span title="' . t("CSS formaadis:") . ' 12px, 0.7em, ..." style="cursor: help;">' . t("Tekstisuurus") . '</span>',
+						"textsize" => $property["textsize"],
 						"prp_options" => $property["cfgform_additional_options"],
 						"prp_opts_caption" => t("Lisavalikud"),
 						"tmp_id" => $cnt,

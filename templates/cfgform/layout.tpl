@@ -104,6 +104,7 @@ function cfgformToggleSelectProps(grpId)
 				<input type="hidden" name="xconfig[{VAR:prp_key}][no_caption]" value="{VAR:no_caption}"><br />
 				{VAR:captionside_l_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][captionside]" value="left"{VAR:captionside_l_ch}><br />
 				{VAR:captionside_t_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][captionside]" value="top"{VAR:captionside_t_ch}><br />
+				{VAR:textsize_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][textsize]" value="{VAR:textsize}"><br />
 {VAR:prp_options}
 			</div>
 		<!-- END SUB: options -->
