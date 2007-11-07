@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.577 2007/11/06 13:22:41 markop Exp $
+// $Id: class_base.aw,v 2.578 2007/11/07 12:05:50 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5105,6 +5105,7 @@ class class_base extends aw_template
 			$ci = $cfgform_obj->instance();
 			$this->layoutinfo = $ci->get_cfg_layout($cfgform_obj);
 			$prps = $ci->get_cfg_proplist($cfgform_obj->id());
+
 			$rv = $prps;
 			$grps = $ci->get_cfg_groups($cfgform_obj->id());
 
@@ -5738,12 +5739,15 @@ class class_base extends aw_template
 //					"msg" => t("aliase number oli juba olemas, seega uuendas"),
 //				));
 				$err_id = $idxs[$idx]->prop("to");
+				$lidxnum = $GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"];
+				$lidxnum .= (max(array_keys($idxs)) + 1);
+
 				print sprintf(
 					t("Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"),
 					$err_id,
 					$GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"].$idx,
 					$c->prop("to.name"),
-					$GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"].(max(array_keys($idxs)) + 1)
+					$lidxnum	
 				)."\n<br>";
 						
 				$idx = max(array_keys($idxs)) + 1;//fdgfdgfdgfdg
@@ -5761,6 +5765,17 @@ class class_base extends aw_template
 			"group" => $arr["group"],
 			"return_url" => $arr["return_url"]
 		), $arr["class"]);
+		if ($err_id)
+		{
+			if ($arr["silent"])
+			{
+				return "err";
+			}
+			die(html::href(array(
+				"url" => $url,
+				"caption" => t("Kliki siia j&auml;tkamiseks")
+			)));
+		}
 		return $url;
 	}
 
@@ -5926,7 +5941,5 @@ class class_base extends aw_template
 			}
 		}
 	}
-
-
 };
 ?>

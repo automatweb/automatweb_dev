@@ -36,10 +36,35 @@ class relationmgr extends aw_template
 	**/
 	function disp_relmgr($arr)
 	{
+		$oi = obj($arr["id"]);
 		$arg = array(
 			"request" => $arr,
-			"obj_inst" => obj($arr["id"]),
+			"obj_inst" => $oi,
+			"relinfo" => $oi->get_relinfo()
 		);
+
+		// filter by add tree conf
+		$atc = get_instance(CL_ADD_TREE_CONF);
+		$ccf = $atc->get_current_conf();
+		if ($ccf)
+		{
+			$filt = $atc->get_alias_filter($ccf);
+			foreach($arg["relinfo"] as $idx => $dat)
+			{
+				foreach($dat["clid"]  as $idx2 => $clid)
+				{
+					if (!isset($filt[$clid]))
+					{
+						unset($arg["relinfo"][$idx]["clid"][$idx2]);
+					}
+					if (count($arg["relinfo"][$idx]["clid"]) == 0)
+					{
+						unset($arg["relinfo"][$idx]);
+					}
+				}
+			}
+		}
+
 		$r = $this->init_vcl_property($arg);
 		$cli = get_instance("cfg/htmlclient");
 		foreach($r as $pn => $pd)
@@ -101,7 +126,14 @@ class relationmgr extends aw_template
 	function rel_paste($arr)
 	{
 		$i = get_instance("doc");
-		$i->rel_paste($arr);
+		$arr["silent"] = 1;
+		if ($i->rel_paste($arr) == "err")
+		{
+			die(html::href(array(
+                                "url" => $url,
+                                "caption" => t("Kliki siia j&auml;tkamiseks")
+                        )));
+		}
 		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
 	}
 		
@@ -168,7 +200,7 @@ class relationmgr extends aw_template
 		}
 		if($filt)
 		{
-			$this->true_rel_classes = $atc->can_access_classes($adc, $this->rel_classes);
+			$this->true_rel_classes = $atc->can_access_classes($adc, $this->rel_classes, true);
 			$tmp = array();
 			foreach($this->clids as $key => $val)
 			{
@@ -474,7 +506,7 @@ class relationmgr extends aw_template
 					"modifiedby" => $item["modifiedby"],
 					"modified" => $item["modified"],
 					"class_id" => $clinf[$item["class_id"]]["name"],
-					"location" => $item["path_str"],
+					"location" => html_entity_decode($item["path_str"]),
 					"change" => "<input type='checkbox' name='check' value='$id'>",
 				));
 			}

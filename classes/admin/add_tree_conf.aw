@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.39 2007/03/30 09:15:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.40 2007/11/07 12:05:52 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -422,14 +422,21 @@ class add_tree_conf extends class_base
 	}
 
 
-	function can_access_classes($atc, $classes)
+	function can_access_classes($atc, $classes, $for_aliasmgr = false)
 	{
 		$grps = $atc->meta("folder_structure");
 		if (!is_array($grps))
 		{
 			$grps = aw_ini_get("classfolders");
 		}
-		$us = $atc->meta("usable");
+		if ($for_aliasmgr)
+		{
+			$us = $atc->meta("alias_add");
+		}
+		else
+		{
+			$us = $atc->meta("usable");
+		}
 		$v = $atc->meta("visible");
 		$clss = $atc->meta("class_structure");
 		if (!is_array($clss))
