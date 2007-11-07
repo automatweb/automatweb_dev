@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.64 2007/10/25 21:01:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.65 2007/11/07 22:26:23 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2594,28 +2594,11 @@ class otto_import extends class_base
 								$f_imnr = $t_imnr.".jpg";
 							}
 
-							if (!$t_imnr)
+							if (!$t_imnr || true)
 							{
-								echo "-- insert new image $imnr <br>\n";
+								echo "-- insert new image $imnr <br />\n";
 								flush();
 
-								$image_ok = $this->get_image(array(
-									'source' => 'http://image01.otto.de:80/pool/formatb/'.$imnr.'.jpg',
-									'format' => SMALL_PICTURE,
-									'otto_import' => $import_obj,
-									'debug' => true
-								));
-								if ($image_ok)
-								{
-									// download the big version of the image too:
-									$this->get_image(array(
-										'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
-										'format' => BIG_PICTURE,
-										'otto_import' => $import_obj,
-										'debug' => true
-									));
-								}
-								
 								$q = ("
 									INSERT INTO 
 										otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
@@ -2637,6 +2620,24 @@ class otto_import extends class_base
 										pcode = '".$pcode."'
 								");
 								echo "-- image $imnr for product $pcode is already in db<br />\n";
+								flush();
+							}
+
+							$image_ok = $this->get_image(array(
+								'source' => 'http://image01.otto.de:80/pool/formatb/'.$imnr.'.jpg',
+								'format' => SMALL_PICTURE,
+								'otto_import' => $import_obj,
+								'debug' => true
+							));
+							if ($image_ok)
+							{
+								// download the big version of the image too:
+								$this->get_image(array(
+									'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
+									'format' => BIG_PICTURE,
+									'otto_import' => $import_obj,
+									'debug' => true
+								));
 							}
 						}
 
