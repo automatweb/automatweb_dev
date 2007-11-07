@@ -1585,7 +1585,10 @@ class crm_company extends class_base
 						"name" => $cat,
 						"iconurl" => icons::get_icon_url(CL_MENU),
 						"url" => aw_url_change_var(array(
-							"tf"=> 'cat'.$id
+							"tf"=> 'cat'.$id,
+							"name" => $_GET["tf"] == 'cat'.$id ? "<b>".$cat."</b>" : $cat,
+							"customer_search_submit" => null,
+							"customer_search_submit_and_change" => null,
 						))
 					));
 				
@@ -1593,10 +1596,12 @@ class crm_company extends class_base
 					{
 						$tree->add_item('cat'.$id, array(
 							"id" => 'cat'.$o->id(),
-							"name" => $o->name(),
+							"name" => $_GET["tf"] == 'st'.$o->id() ? "<b>".$o->name()."</b>" : $o->name(),
 							"url" => aw_url_change_var(array(
 								"tf" => 'st'.$o->id(),
-								"category" => 'st_'.$o->id()
+								"category" => 'st_'.$o->id(),
+								"customer_search_submit" => null,
+								"customer_search_submit_and_change" => null,
 							)),
 						));
 						$this->get_s_tree_stuff('cat'.$o->id(), $tree, 0);
@@ -1918,6 +1923,9 @@ class crm_company extends class_base
 
 			case "bill_due_days":
 			case "cust_contract_date":
+				$data["year_from"] = 1990;
+				$data["year_to"] = date("Y")+1;
+
 			case "referal_type":
 			case "priority":
 			case "bill_penalty_pct":
@@ -6450,7 +6458,7 @@ class crm_company extends class_base
 	function save_as_customer($arr)
 	{
 		// add all custs in $check as cust to $cust_cat
-		
+
 		$stchk = explode('_', $arr["cust_cat"]);
 		if($stchk[0] == 'status')
 		{
@@ -6460,21 +6468,12 @@ class crm_company extends class_base
 			{
 				$company = obj($cust);
 				$crel = $this->get_cust_rel($company, true,$cur);
-				$customer_data = new object_list(array(
-					"buyer" => $cust,
-					"seller" => $cur->id(),
-					"class_id" => array(CL_CRM_COMPANY_CUSTOMER_DATA)
-				));
-				foreach($customer_data->list as $cust_data_id)
+				if (!$crel->is_connected_to(array("to" => $status->id())))
 				{
-					$cd = obj($cust_data_id);
-					if (!$cd->is_connected_to(array("to" => $status->id())))
-					{
-						$cd->connect(array(
-							"to" => $status,
-							"type" => RELTYPE_STATUS
-						));
-					}
+					$crel->connect(array(
+						"to" => $status->id(),
+						"type" => RELTYPE_STATUS
+					));
 				}
 			}
 		}
@@ -7173,6 +7172,8 @@ class crm_company extends class_base
 		{
 			$arr["prop"]["value"] = $crel->prop("cust_contract_date");
 		}
+		$arr["prop"]["year_from"] = 1990;
+		$arr["prop"]["year_to"] = date("Y")+1;
 	}
 
 	function _set_cust_buyer_contract_date($arr)
