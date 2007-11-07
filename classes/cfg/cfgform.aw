@@ -359,8 +359,8 @@ class cfgform extends class_base
 
 				foreach($class_list->get() as $key => $val)
 				{
-					$data["options"][$key] = $val;
-				};
+					$data["options"][$key] = $val . " [" . substr(strtolower($cp[$key]), 3) . "]";
+				}
 				break;
 
 			case "ctype":
