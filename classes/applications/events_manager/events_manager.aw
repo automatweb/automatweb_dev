@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.15 2007/09/26 15:31:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.16 2007/11/07 08:30:07 voldemar Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -130,48 +130,48 @@
 
 	@property forms_caption type=text store=no subtitle=1
 	@caption Vormid
-	
+
 		@property event_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
 		@caption S&uuml;ndmuste vorm
-	
+
 		@property places_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
 		@caption Toimumiskohtade vorm
-	
+
 		@property organiser_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
 		@caption Korraldajate vorm
-	
+
 		@property sector_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
 		@caption Valdkondade vorm
 
 	@layout menus_top type=hbox closeable=1 width=30%:70% area_caption=Kataloogid
 		@layout menus_top_left type=vbox parent=menus_top area_caption=Kataloogid&nbsp;lugemiseks
-		
+
 			@property event_menu_source type=relpicker multiple=1 reltype=RELTYPE_EVENT_MENU parent=menus_top_left
 			@caption S&uuml;ndmuste kataloog
-	
+
 			@property places_menu_source type=relpicker multiple=1 reltype=RELTYPE_PLACE_MENU parent=menus_top_left
 			@caption Toimumiskohtade kataloog
-	
+
 			@property organiser_menu_source type=relpicker multiple=1 reltype=RELTYPE_ORGANISER_MENU parent=menus_top_left
 			@caption Korraldajate kataloog
-		
+
 			@property sector_menu_source type=relpicker multiple=1 reltype=RELTYPE_SECTOR_MENU parent=menus_top_left
 			@caption Valdkondade kataloog
-	
+
 		@layout menus_top_right type=vbox parent=menus_top area_caption=Kataloogid&nbsp;kirjutamiseks
-	
+
 			@property event_menu type=relpicker reltype=RELTYPE_EVENT_MENU parent=menus_top_right
 			@caption S&uuml;ndmuste kataloog kirjutamiseks
-	
+
 			@property places_menu type=relpicker reltype=RELTYPE_PLACE_MENU parent=menus_top_right
 			@caption Toimumiskohtade kataloog kirjutamiseks
-	
-			@property organiser_menu type=relpicker reltype=RELTYPE_ORGANISER_MENU parent=menus_top_right 
+
+			@property organiser_menu type=relpicker reltype=RELTYPE_ORGANISER_MENU parent=menus_top_right
 			@caption Korraldajate kataloog kirjutamiseks
-		
-			@property sector_menu type=relpicker reltype=RELTYPE_SECTOR_MENU parent=menus_top_right 
+
+			@property sector_menu type=relpicker reltype=RELTYPE_SECTOR_MENU parent=menus_top_right
 			@caption Valdkondade kataloog kirjutamiseks
-	
+
 
 
 #RELTYPES
@@ -313,7 +313,9 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("places_form")),$o->name()),//html::obj_change_url($o->id()),
+				"name" => (!$this->can("edit" , $o->id()))?$o->name():
+					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("places_form")),$o->name()),
+					html::obj_change_url($o->id()),
 				"comment" => $o->prop("comment"),
 				"oid" => $o->id(),
 			));
@@ -337,7 +339,9 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("organiser_form")),$o->name() ),//"name" => html::obj_change_url($o->id()),
+				"name" => (!$this->can("edit" , $o->id()))?$o->name():
+					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("organiser_form")),$o->name() ),
+					"name" => html::obj_change_url($o->id()),
 				"address" => $o->prop("contact.name"),
 				"oid" => $o->id(),
 			));
@@ -361,8 +365,9 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("sectors_form")),$o->name() ),
-				//"name" => html::obj_change_url($o->id()),
+				"name" => (!$this->can("edit" , $o->id()))?$o->name():
+					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("sectors_form")),$o->name() ),
+					html::obj_change_url($o->id()),
 				//"address" => $o->prop("contact.name"),
 			));
 		}
@@ -381,7 +386,7 @@ class events_manager extends class_base
 		foreach(
 			$arr["obj_inst"]->connections_from(array(
 				"type" => "RELTYPE_EDITOR",
-			)) 
+			))
 			as $c)
 		{
 			$ol->add($c->to());
@@ -397,13 +402,13 @@ class events_manager extends class_base
 			));
 			$org_c = reset($cons);
 			if($org_c) $org = $org_c->prop("to");
-			
+
 			if($this->can("view" , $org))
 			{
 				$co = obj($org);
 				$c = $this->can("edit" , $co->id()) ? html::obj_change_url($co) :  $co->name();
 			}
-			
+
 			$user_list = new object_list(array("class_id" => CL_USER, "lang_id" => array(), "CL_USER.RELTYPE_PERSON.id"=>$o->id()));
 			if(sizeof($user_list->arr()))
 			{
@@ -414,7 +419,7 @@ class events_manager extends class_base
 				 $gro = $u->get_highest_pri_grp_for_user($user->prop("uid"));
 			}
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():html::obj_change_url($o->id()),
+				"name" => (!$this->can("edit" , $o->id())) ? $o->name() : html::obj_change_url($o->id()),
 				"user" => is_object($user)?$user->prop("uid"):"",
 				"oid" => $o->id(),
 				"group" => is_object($gro)?$gro->name():"",
@@ -666,7 +671,9 @@ class events_manager extends class_base
 			}
 
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("event_form")),$o->name()?$o->name():t("(Nimetu)")),
+				"name" => (!$this->can("edit" , $o->id()))?$o->name():
+					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("event_form")),$o->name()?$o->name():t("(Nimetu)")),
+					html::obj_change_url($o->id()),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"sector" => (is_object($sec))?$sec->name():"",
 				"level" => $cal_event->level_options[$o->prop("level")],
@@ -1114,7 +1121,7 @@ class events_manager extends class_base
 			$nt->set_prop("end" , $t->prop("end"));
 			$nt->set_prop("location" , $t->prop("location"));
 			$nt->save();
-	
+
 			$nt->connect(array("to" => $t->prop("location") , "reltype" => 1));
 
 			$o->connect(array("to" => $nt->id() , "reltype" => 9));
@@ -1129,7 +1136,7 @@ class events_manager extends class_base
 	**/
 	function events_xml($arr)
 	{
-		
+
 		$events = $this->get_xml_events($arr);
 
 		$ret = '<?xml version="1.0" encoding="UTF-8" ?>
@@ -1207,14 +1214,14 @@ class events_manager extends class_base
  		'.$this->times_xml($o).'
 	</syndmus>';
 
-		return $ret;	
+		return $ret;
 	}
 
 	function times_xml($o)
 	{
 		$times = $o->connections_from(array("type" => "RELTYPE_EVENT_TIME"));
 		$ret = '<ajad count="'.count($times).'">';
-		
+
 		foreach($times as $c)
 		{
 			$t = $c->to();
@@ -1297,20 +1304,20 @@ class events_manager extends class_base
 			17 => "Kohtla-Järve",
 			18 => "Otepää",
 		);
-		
+
 		$this->teemad = array(
-			1 => "muusika", 
-			2 => "klassikaline muusika", 
-			88=> "vanamuusika" , 
-			3=> "pärimusmuusika" , 
+			1 => "muusika",
+			2 => "klassikaline muusika",
+			88=> "vanamuusika" ,
+			3=> "pärimusmuusika" ,
 			102 => "orkestrimuusika",
 			100 => "koorimuusika",
 			4 => "jazzmuusika",
 			5 => "rock-/popmuusika",
-			29 => "alternatiivmuusika", 
+			29 => "alternatiivmuusika",
 			32 => "festival",
-			6 => "teater", 
-			8 => "draama" , 
+			6 => "teater",
+			8 => "draama" ,
 			30 => "komöödia",
 			10 => "muusikal",
 			9 => "ooper",
@@ -1323,7 +1330,7 @@ class events_manager extends class_base
 			7 => "draama",
 			34 => "tants",
 			35 => "klassikaline ballett",
-			36 => "kaasaegne tants", 
+			36 => "kaasaegne tants",
 			84 => "rahvatants",
 			37 => "showtants",
 			38 => "tsirkus",
@@ -1332,7 +1339,7 @@ class events_manager extends class_base
 			46 => "dokumentaalfilm",
 			48 => "kunstiline film",
 			47 => "animafilm",
-			114 => "näitus", 
+			114 => "näitus",
 			115 => "workshop",
 			49 => "festival",
 			15 => "kunst",
@@ -1343,24 +1350,24 @@ class events_manager extends class_base
 			16 => "kirjandus",
 			135 => "raamatuesitlus",
 			105 => "pärimuskultuur",
-			109 => "rahvatants", 
+			109 => "rahvatants",
 			110 => "pärimusmuusika",
 			111 => "käsitöö",
 			112 => "rahvakalender",
 			113 => "festival",
-			17 => "loengud", 
+			17 => "loengud",
 			40 => "seminar",
 			42 => "konverents",
 			91 => "teadus",
 			134 => "vestlusõhtu",
 			41 => "kursused",
-			93 => "sport", 
+			93 => "sport",
 			106 => "näitused",
 			116 => "ajalugu",
 			117 => "fotograafia",
-			118 => "kirjandus", 
+			118 => "kirjandus",
 			119 => "kunst ja arhitektuur",
-			120 => "loodus", 
+			120 => "loodus",
 			121 => "teadus ja tehnika",
 			122 => "teater ja muusika",
 			22 => "varia",
@@ -1398,7 +1405,7 @@ class events_manager extends class_base
 		if($teema)
 		{
 			$filter["CL_CALENDAR_EVENT.RELTYPE_SECTOR.kood"] = $teema;
-			
+
 		}
 //keel? est (vaikimisi), eng. Kuvatakse vastavalt eesti või ingliskeelsed sündmused.
 
@@ -1407,7 +1414,7 @@ class events_manager extends class_base
 		//kuna tuli probleeme, siis peab kirvemeetodil praakima valed linnad ja maakonnad välja
 		if($linn || $maakond)
 		{
-			
+
 			foreach($ol->arr() as $o)
 			{
 				$del = 1;
@@ -1432,7 +1439,7 @@ class events_manager extends class_base
 						$del = 0;
 						break;
 					}
-					
+
 					if($maakond && $address->prop("maakond.name") == $countys[$maakond])
 					{
 						$del = 0;
