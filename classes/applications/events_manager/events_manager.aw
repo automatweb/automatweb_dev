@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.16 2007/11/07 08:30:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.17 2007/11/07 08:31:02 voldemar Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -341,7 +341,7 @@ class events_manager extends class_base
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():
 					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("organiser_form")),$o->name() ),
-					"name" => html::obj_change_url($o->id()),
+					html::obj_change_url($o->id()),
 				"address" => $o->prop("contact.name"),
 				"oid" => $o->id(),
 			));
