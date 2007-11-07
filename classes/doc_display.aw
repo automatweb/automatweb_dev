@@ -414,7 +414,7 @@ class doc_display extends aw_template
 		if ($this->template_has_var("charset"))
 		{
 			$_langs = get_instance("languages");
-			$_ld = $_langs->fetch(aw_global_get("lang_id"));
+			$_ld = $_langs->fetch(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id"));
 			$this->vars(array(
 				"charset" => $_ld["charset"]
 			));
