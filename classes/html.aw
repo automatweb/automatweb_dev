@@ -1267,8 +1267,10 @@ class html extends aw_template
 			}
 			return "";
 		}
+
 		$obj = obj($oid);
 		$params["id"] = $obj->id();
+
 		if ((!isset($_GET["action"]) || $_GET["action"] != "view") && $inst->can("edit", $oid))
 		{
 			$act = "change";
@@ -1277,7 +1279,14 @@ class html extends aw_template
 		{
 			$act = "view";
 		}
+
+		if (is_oid($_GET["section"]) and !isset($params["section"]))
+		{
+			$params["section"] = $_GET["section"];
+		}
+
 		$retval = $inst->mk_my_orb($act, $params, $obj->class_id());
+
 		if($caption || (is_integer($caption) && $caption == 0))
 		{
 			$retval = html::href(array(
@@ -1286,6 +1295,7 @@ class html extends aw_template
 				"title" => $title
 			));
 		}
+
 		return $retval;
 	}
 
@@ -1310,6 +1320,12 @@ class html extends aw_template
 	function get_new_url($class_id, $parent, $params = array(), $caption = false)
 	{
 		$params = array("parent" => $parent) + $params;
+
+		if (is_oid($_GET["section"]) and !isset($params["section"]))
+		{
+			$params["section"] = $_GET["section"];
+		}
+
 		$retval =  $this->mk_my_orb("new", $params, $class_id);
 		if($caption)
 		{
