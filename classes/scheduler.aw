@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.43 2007/03/28 10:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.44 2007/11/07 13:39:00 markop Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -273,6 +273,15 @@ class scheduler extends aw_template
 	function open_session()
 	{
 		$this->session_fp = fopen($this->cfg["sched_file"], "a+");
+
+		//kui juhtub ime ja samalajal keegi tegutseb selle failiga, siis on kahetsusväärne kui lihtsalt die tuleb... asjad võivad katki minna nii... see on paha... väga paha
+		$reading_start = time();
+		while(!$this->session_fp && ($reading_start + 15 > time()))
+		{
+			sleep(1);
+			$this->session_fp = fopen($this->cfg["sched_file"], "a+");
+		}
+
 		if (!$this->session_fp)
 		{
 			printf("cannot open %s for writing, please check permission",$this->cfg["sched_file"]);

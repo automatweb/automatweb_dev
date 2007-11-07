@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.40 2007/10/11 10:39:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.41 2007/11/07 13:34:38 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -387,6 +387,35 @@ class ml_queue extends aw_template
 		};
 		// kommentaar on selleks, et sorteerimine töötaks (hopefully)
 		return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
+	}
+
+	/**  
+		@attrib name=process_queue params=name nologin="1" 
+		@returns
+		@comment
+		kontrollib kas saatmine on ikka scheduleris
+	**/
+	function check_scheduler($arr)
+	{
+		$url = str_replace("automatweb/", "", $this->mk_my_orb("process_queue", array(), "", false, true));
+		$sc = get_instance("scheduler");
+		$exp = safe_array($sc->find(array(
+			"event" => $url
+		)));
+		if(sizeof($exp))
+		{
+			$exp = reset($exp);
+			print "next in ".date("d.m.Y H:i",$exp["time"]);
+		}
+		else
+		{
+			$sched = get_instance("scheduler");
+			$sched->add(array(
+				"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
+				"time" => time()+120,	// every 2 minutes
+			));
+			print "sched added!";
+		}
 	}
 
 	/**  

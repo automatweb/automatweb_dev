@@ -50,6 +50,13 @@
 			</function>
 		</action>
 
+		<action name="check_scheduler" nologin="1">
+			<function name="check_scheduler">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="process_queue" nologin="1">
 			<function name="process_queue">
 				<arguments>
