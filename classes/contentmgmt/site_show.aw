@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.248 2007/11/01 11:45:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.249 2007/11/07 16:47:22 markop Exp $
 
 /*
 
@@ -1712,7 +1712,8 @@ class site_show extends class_base
 				"link" => $link,
 				"text" => str_replace("&nbsp;"," ",strip_tags($ref->trans_get_val("name"))),
 				"comment" =>  str_replace("&nbsp;"," ",strip_tags($ref->comment())),
-				"ysection" => $ref->id()
+				"ysection" => $ref->id(),
+				"end" => $GLOBALS["yah_end"],
 			));
 
 			$show_always = false;

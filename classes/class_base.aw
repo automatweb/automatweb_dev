@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.578 2007/11/07 12:05:50 kristo Exp $
+// $Id: class_base.aw,v 2.579 2007/11/07 16:47:24 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1650,6 +1650,46 @@ class class_base extends aw_template
 			if($sec_obj->prop("submenus_from_cb"))
 			{
 				$hide_tabs = 1;
+				$subcb = obj($_GET["id"]);
+				if($subcb->meta("cfgform_id"))
+				{
+					$this->cfgform_id = $subcb->meta("cfgform_id");
+				}
+				if (!empty($this->request["return_url"]))
+				{
+					$GLOBALS["yah_end"] = " > ".html::href(array(
+							"url" => aw_url_change_var(array("group" => null)),
+							"caption" => $subcb->name(),
+					));
+					$parsed_url = parse_url($_GET["return_url"]);
+					parse_str($parsed_url["query"], $output);
+					if($output["group"] && is_oid($output["id"]) && $this->can("view" , $output["id"]))
+					{
+						$cfgform_i = get_instance(CL_CFGFORM);
+						$pa_obj = obj($output["id"]);
+						$cfgform = $pa_obj->meta("cfgform_id");
+						$cfgform_i->cff_init_from_class($pa_obj, $pa_obj->class_id(), false);
+						if(is_oid($cfgform) && $this->can("view", $cfgform))
+						{
+							$cfgform_i->get_cfg_groups($cfgform);
+						}
+						$GLOBALS["yah_end"].= " > ".html::href(array(
+							"url" => $_GET["return_url"],
+							"caption" => $cfgform_i->cfg_groups[$output["group"]]["caption"],
+						));
+					}
+					$GLOBALS["yah_end"].= " > ".html::href(array(
+						"url" => $_GET["return_url"],
+						"caption" => t("Tagasi"),
+					));	
+//					$this->cli->add_tab(array(
+//						"id" => "back",
+//		//				"link" => $link,
+//						"caption" => $GLOBALS["site_title"],
+//		//				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
+//		//				"disabled" => empty($this->id),
+//					));
+				}
 			}
 		}
 
@@ -5870,7 +5910,7 @@ class class_base extends aw_template
 				$this->object = $o = obj($id);
 				$cfgform = $o->meta("cfgform_id");
 				$cfgform_i->cff_init_from_class($o, $o->class_id(), false);
-				if(is_oid($cfgform) && $this->can("view", $cfgform) && false)
+				if(is_oid($cfgform) && $this->can("view", $cfgform))
 				{
 
 					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
@@ -5891,13 +5931,22 @@ class class_base extends aw_template
 
 			foreach($cfgform_i->cfg_groups as $key => $val)
 			{
-				if(($level == 2 && !$val["parent"])|| ($level == 1 && $val["parent"]) || ($val["parent"] && ($val["parent"] != $_SESSION["menu_item_tab"] && $val["parent"] != $_GET["group"] && $val["parent"] != $_GET["openedtab"]))) unset($cfgform_i->cfg_groups[$key]);
-				else $cfgform_i->cfg_groups[$key]["name"] = $key;
+				if(($level == 2 && !$val["parent"])|| ($level == 1 && $val["parent"]) || ($val["parent"] && ($val["parent"] != $_SESSION["menu_item_tab"] && $val["parent"] != $_GET["group"] && $val["parent"] != $_GET["openedtab"])))
+				{
+					unset($cfgform_i->cfg_groups[$key]);
+				}
+				else
+				{
+					$cfgform_i->cfg_groups[$key]["name"] = $key;
+				}
 			}
 
 			foreach($cfgform_i->cfg_groups as $key => $val)
 			{
-				$groups[] = $val;
+				if(!$val["grphide"])
+				{
+					$groups[] = $val;
+				}
 			}
 //			foreach($props2 as $prop)
 //			{
@@ -5941,5 +5990,4 @@ class class_base extends aw_template
 			}
 		}
 	}
-};
 ?>
