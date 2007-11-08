@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.7 2007/10/19 13:12:43 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.8 2007/11/08 12:53:58 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -470,6 +470,11 @@ class development_order extends class_base
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
 		$tb->add_new_button(array(CL_BUG), $arr["obj_inst"]->id(), '',array());
+		$tb->add_search_button(array(
+			"pn" => "add_bug",
+			"multiple" => 1,
+			"clid" => CL_BUG
+		));
 		$tb->add_delete_button();
 	}
 
@@ -667,6 +672,21 @@ class development_order extends class_base
 		}
 	}
 
+	function _set_bugs_table($arr)
+	{
+		if($arr["request"]["add_bug"])
+		{
+			$ids = explode(",",$arr["request"]["add_bug"]);
+			foreach($ids as $oid)
+			{
+				$bug = obj($oid);
+				$bug->set_parent($arr["obj_inst"]->id());
+				$bug->save();
+			}
+		}
+	}
+
+
 	function callback_post_save($arr)
 	{
 		if (is_array($this->add_comments) && count($this->add_comments))
@@ -680,8 +700,10 @@ class development_order extends class_base
 	{
 		$statuses = array(
 			1 => "Kooskõlastamisel",
+			13 => "Ülevaatamisel",
 			2 => "Tellitud",
 			3 => "Valmis",
+			12 => "Testimisel",
 			4 => "Testitud",
 			5 => "Suletud",
 			6 => "Vale teade",
@@ -699,6 +721,7 @@ class development_order extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["set_req"] = "0";
 		$arr["set_problems"] = "0";
+		$arr["add_bug"] = "0";
 	}
 
 	function do_db_upgrade($t, $f)
