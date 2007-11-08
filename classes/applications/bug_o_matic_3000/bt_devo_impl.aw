@@ -58,8 +58,12 @@ class bt_devo_impl extends core
 	function _get_dev_orders_tree($arr)
 	{
 		classload("core/icons");
-		if($arr["obj_inst"]->prop("order_tree_conf"))
+		if(true || $arr["obj_inst"]->prop("order_tree_conf"))
 		{
+			$i = get_instance(CL_BUG_TRACKER);
+			$arr["prop"]["name"] = "bug_tree";
+			$i->get_property($arr);
+			return;
 			$t = &$arr["prop"]["vcl_inst"];
 			$t->start_tree(array(
 				"type" => TREE_DHTML,
@@ -71,13 +75,13 @@ class bt_devo_impl extends core
 				"root_url" => aw_url_change_var(array("tf" => 0))
 			));
 			$ol = new object_list(array(
-				"class_id" => CL_BUG,
+				"class_id" => array(CL_DEVELOPMENT_ORDER_CAT, CL_DEVELOPMENT_ORDER, CL_BUG),
 				"parent" => $arr["obj_inst"]->id()
 			));
 			foreach($ol->list as $oid)
 			{
 				$ol2 = new object_list(array(
-					"class_id" => CL_DEVELOPMENT_ORDER,
+					"class_id" => array(CL_DEVELOPMENT_ORDER_CAT, CL_DEVELOPMENT_ORDER, CL_BUG),
 					"parent" => $oid
 				));
 				if(count($ol2->list))
@@ -117,6 +121,10 @@ class bt_devo_impl extends core
 
 	function _get_dev_orders_table($arr)
 	{
+		if (!$arr["request"]["tf"] && $arr["request"]["b_id"])
+		{
+			$arr["request"]["tf"] = $arr["request"]["b_id"];
+		}
 		$t =& $arr["prop"]["vcl_inst"];
 		$pt = $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
 		$pto = obj($pt);
