@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.579 2007/11/07 16:47:24 markop Exp $
+// $Id: class_base.aw,v 2.580 2007/11/08 09:33:54 hannes Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5990,4 +5990,5 @@ class class_base extends aw_template
 			}
 		}
 	}
+}
 ?>
