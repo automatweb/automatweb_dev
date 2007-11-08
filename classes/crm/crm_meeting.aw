@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.89 2007/09/25 15:08:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.90 2007/11/08 11:17:07 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -145,6 +145,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property udefta3 type=textarea user=1 field=meta method=serialize
 @caption User-defined textarea 3
 
+@property userfile1 type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=meta method=serialize
+@caption Failiupload 1
+
+@property userfile2 type=releditor reltype=RELTYPE_FILE2 rel_id=first use_form=emb field=meta method=serialize
+@caption Failiupload 2
+
+@property userfile3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=meta method=serialize
+@caption Failiupload 3
+
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
 @caption Saata arve
 
@@ -256,6 +265,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @reltype FILE value=2 clid=CL_FILE
 @caption Fail
+
+@reltype FILE1 value=86 clid=CL_FILE
+@caption fail1
+
+@reltype FILE2 value=87 clid=CL_FILE
+@caption fail2
+
+@reltype FILE3 value=88 clid=CL_FILE
+@caption fail3
+
 
 */
 
