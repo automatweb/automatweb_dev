@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.580 2007/11/08 09:33:54 hannes Exp $
+// $Id: class_base.aw,v 2.581 2007/11/08 13:00:04 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1651,37 +1651,36 @@ class class_base extends aw_template
 			{
 				$hide_tabs = 1;
 				$subcb = obj($_GET["id"]);
-				if($subcb->meta("cfgform_id"))
-				{
-					$this->cfgform_id = $subcb->meta("cfgform_id");
-				}
+				if($subcb->meta("cfgform_id"))$this->cfgform_id = $subcb->meta("cfgform_id");
+
 				if (!empty($this->request["return_url"]))
 				{
-					$GLOBALS["yah_end"] = " > ".html::href(array(
-							"url" => aw_url_change_var(array("group" => null)),
-							"caption" => $subcb->name(),
+					$GLOBALS["yah_end"]=$this->make_tabscb_yah($this->request["return_url"]).
+					" > ".html::href(array(
+						"url" => aw_url_change_var(array("group" => null)),
+						"caption" => $subcb->name()?$subcb->name():t("Nimetu"),
 					));
-					$parsed_url = parse_url($_GET["return_url"]);
-					parse_str($parsed_url["query"], $output);
-					if($output["group"] && is_oid($output["id"]) && $this->can("view" , $output["id"]))
-					{
-						$cfgform_i = get_instance(CL_CFGFORM);
-						$pa_obj = obj($output["id"]);
-						$cfgform = $pa_obj->meta("cfgform_id");
-						$cfgform_i->cff_init_from_class($pa_obj, $pa_obj->class_id(), false);
-						if(is_oid($cfgform) && $this->can("view", $cfgform))
-						{
-							$cfgform_i->get_cfg_groups($cfgform);
-						}
-						$GLOBALS["yah_end"].= " > ".html::href(array(
-							"url" => $_GET["return_url"],
-							"caption" => $cfgform_i->cfg_groups[$output["group"]]["caption"],
-						));
-					}
+				}
+				if($_GET["group"] && is_object($subcb))
+ 				{
+ 					$cfgform_i = get_instance(CL_CFGFORM);
+ 					$cfgform = $subcb->meta("cfgform_id");
+ 					$cfgform_i->cff_init_from_class($subcb, $subcb->class_id(), false);
+ 					if(is_oid($cfgform) && $this->can("view", $cfgform))
+ 					{
+ 						$cfgform_i->get_cfg_groups($cfgform);
+ 					}
+ 					$GLOBALS["yah_end"].= " > " .$cfgform_i->cfg_groups[$_GET["group"]]["caption"];
+ 				}
+				if (!empty($this->request["return_url"]))
+				{
 					$GLOBALS["yah_end"].= " > ".html::href(array(
 						"url" => $_GET["return_url"],
 						"caption" => t("Tagasi"),
-					));	
+					));
+				}
+
+
 //					$this->cli->add_tab(array(
 //						"id" => "back",
 //		//				"link" => $link,
@@ -1689,7 +1688,6 @@ class class_base extends aw_template
 //		//				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
 //		//				"disabled" => empty($this->id),
 //					));
-				}
 			}
 		}
 
@@ -1900,6 +1898,42 @@ class class_base extends aw_template
 		{
 			//return $this->tp->get_tabpanel($vars);
 		};
+	}
+
+	function make_tabscb_yah($ru)
+	{
+		$ret = "";
+		$parsed_url = parse_url($ru);
+		parse_str($parsed_url["query"], $output);
+		if(is_oid($output["id"]) && $this->can("view" , $output["id"]))
+		{
+			$pa_obj = obj($output["id"]);
+			$ret.= " > ".html::href(array(
+				"url" => $ru,
+				"caption" => $pa_obj->name(),
+			));
+			if($output["group"])
+			{
+				$cfgform_i = get_instance(CL_CFGFORM);
+				$cfgform = $pa_obj->meta("cfgform_id");
+				$cfgform_i->cff_init_from_class($pa_obj, $pa_obj->class_id(), false);
+				if(is_oid($cfgform) && $this->can("view", $cfgform))
+				{
+					$cfgform_i->get_cfg_groups($cfgform);
+				}
+	
+				$ret.= " > ".html::href(array(
+					"url" => $ru,
+					"caption" => $cfgform_i->cfg_groups[$output["group"]]["caption"],
+				));
+			}
+		}
+		if($output["return_url"])
+		{
+			$ret.=  $this->make_tabscb_yah($output["return_url"]).$ret;
+		}
+
+		return $ret;
 	}
 
 	////
