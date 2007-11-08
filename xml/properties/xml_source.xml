@@ -1,0 +1,125 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>url</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>URL</caption>
+            <comment>XML faili URL</comment>
+      </property>
+      <property>
+            <name>tag_lang</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <caption>Keel</caption>
+            <comment>XML v&amp;auml;li v&amp;otilde;i argument, kus on imporditava s&amp;uuml;ndmuse t&amp;otilde;lke keel</comment>
+      </property>
+      <property>
+            <name>tag_event</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <caption>S&amp;uuml;ndmus</caption>
+            <comment>XML v&amp;auml;li, kus on kogu imporditav s&amp;uuml;ndmus</comment>
+      </property>
+      <property>
+            <name>tag_id</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <caption>ID</caption>
+            <comment>XML v&amp;auml;li v&amp;otilde;i argument, kus on imporditava s&amp;uuml;ndmuse ID</comment>
+      </property>
+      <property>
+            <name>start_timestamp_unix</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>parameters</group>
+            <type>textbox</type>
+            <caption>Timestamp (UNIX)</caption>
+            <comment>UNIX t&amp;uuml;&amp;uuml;pi timestamp v&amp;amp;auml;li, mille j&amp;amp;auml;rgi s&amp;amp;uuml;ndmusi p&amp;amp;auml;ritakse</comment>
+      </property>
+      <property>
+            <name>start_timestamp</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>parameters</group>
+            <type>textbox</type>
+            <caption>Timestamp (YYYYMMDDHHMMSS)</caption>
+            <comment>Timestamp v&amp;amp;auml;li, mille j&amp;amp;auml;rgi s&amp;amp;uuml;ndmusi p&amp;amp;auml;ritakse</comment>
+      </property>
+      <property>
+            <name>language</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>parameters</group>
+            <type>textbox</type>
+            <caption>Keel</caption>
+            <comment>Mis keeles s&amp;uuml;ndmusi p&amp;amp;auml;ritakse?</comment>
+      </property>
+      <property>
+            <name>subtag_table</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>tags</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>arguement_table</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>arguements</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>language_table</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>languages</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <classinfo>
+            <syslog_type>ST_XML_SOURCE</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <groupinfo>
+            <parameters>
+                  <caption>Parameetrid</caption>
+            </parameters>
+            <tags>
+                  <caption>T&amp;amp;auml;&amp;amp;auml;gid</caption>
+            </tags>
+            <arguements>
+                  <caption>T&amp;amp;auml;&amp;amp;auml;gide atribuudid</caption>
+            </arguements>
+            <languages>
+                  <caption>Keeled</caption>
+            </languages>
+      </groupinfo>
+</properties>
+

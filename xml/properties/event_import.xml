@@ -1,0 +1,197 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>event_form</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_FORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>S&amp;amp;uuml;ndmuse vorm</caption>
+            <comment>Kultuuriakna s&amp;amp;uuml;ndmuse lisamise/muutmise vorm</comment>
+      </property>
+      <property>
+            <name>xml_sources</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_XML_SOURCE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <caption>XML allikad:</caption>
+            <comment>XML v&amp;amp;auml;ljundi allikad, mida kasutatakse importimisel</comment>
+      </property>
+      <property>
+            <name>json_sources</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_JSON_SOURCE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <caption>JSON allikad:</caption>
+            <comment>JSON v&amp;amp;auml;ljundi allikad, mida kasutatakse importimisel</comment>
+      </property>
+      <property>
+            <name>cb_log_changes</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <caption>Muudatuste tegemiseks k&amp;amp;uuml;sin luba?</caption>
+      </property>
+      <property>
+            <name>translatable_fields</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>V&amp;amp;auml;ljad, mida v&amp;amp;otilde;imalusel t&amp;amp;otilde;lgitakse</caption>
+      </property>
+      <property>
+            <name>last_import_text</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>last_import_text</field>
+            <caption>Viimane import</caption>
+            <comment>Viimase impordi l&amp;amp;otilde;ppemise aeg</comment>
+      </property>
+      <property>
+            <name>next_import_text</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>next_import_text</field>
+            <caption>J&amp;amp;auml;rgmine automaatne import</caption>
+            <comment>J&amp;amp;auml;rgmise automaatse alguse aeg</comment>
+      </property>
+      <property>
+            <name>import_events_all</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <caption>Impordi k&amp;amp;otilde;ik s&amp;amp;uuml;ndmused</caption>
+      </property>
+      <property>
+            <name>import_events</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>import_events</field>
+            <caption>Impordi s&amp;amp;uuml;ndmused</caption>
+            <comment>Link s&amp;amp;uuml;ndmuste importimiseks</comment>
+      </property>
+      <property>
+            <name>xml_config_table</name>
+            <table>objects</table>
+            <group>xml_config</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>xml_config_table</field>
+      </property>
+      <property>
+            <name>recurrence</name>
+            <table>objects</table>
+            <group>recurrence_config</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RECURRENCE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kordus</caption>
+      </property>
+      <property>
+            <name>auto_import_user</name>
+            <table>objects</table>
+            <group>recurrence_config</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutaja</caption>
+            <comment>Kasutajanimi, kelle &amp;amp;otilde;igustes automaatne import teostatakse</comment>
+      </property>
+      <property>
+            <name>auto_import_passwd</name>
+            <table>objects</table>
+            <group>recurrence_config</group>
+            <type>password</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parool</caption>
+            <comment>Kasutaja parool, kelle &amp;amp;otilde;igustes automaatne import teostatakse</comment>
+      </property>
+      <property>
+            <name>import_log_toolbar</name>
+            <table>objects</table>
+            <group>import_log</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>import_log_toolbar</field>
+      </property>
+      <property>
+            <name>import_log_table</name>
+            <table>objects</table>
+            <group>import_log</group>
+            <type>table</type>
+            <store>no</store>
+            <field>import_log_table</field>
+            <caption>Muudetud s&amp;amp;uuml;ndmuste logi</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_EVENT_IMPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <groupinfo>
+            <xml_config>
+                  <caption>XML seaded</caption>
+            </xml_config>
+            <recurrence_config>
+                  <caption>Automaatne import</caption>
+            </recurrence_config>
+            <import_log>
+                  <caption>Logi</caption>
+                  <submit>no</submit>
+            </import_log>
+      </groupinfo>
+      <reltypes>
+            <XML_SOURCE>
+                  <value>1</value>
+                  <clid>CL_XML_SOURCE</clid>
+                  <caption>XML allikas</caption>
+            </XML_SOURCE>
+            <RECURRENCE>
+                  <value>5</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Kordus</caption>
+            </RECURRENCE>
+            <EVENT_FORM>
+                  <value>10</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>S&amp;amp;uuml;ndmuse vorm</caption>
+            </EVENT_FORM>
+            <JSON_SOURCE>
+                  <value>15</value>
+                  <clid>CL_JSON_SOURCE</clid>
+                  <caption>JSON allikas</caption>
+            </JSON_SOURCE>
+      </reltypes>
+</properties>
+
