@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.91 2007/10/29 11:37:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.92 2007/11/08 10:18:26 hannes Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -135,9 +135,8 @@ define("BUG_STATUS_CLOSED", 5);
 			@property bug_component type=textbox parent=data_r_bot captionside=top
 			@caption Komponent
 
-
-			@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb parent=data_r_bot captionside=top
-			@caption Fail
+			@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot captionside=top store=no
+			@caption Fail 
 
 			@property bug_predicates type=textbox parent=data_r_bot captionside=top field=aw_bug_predicates
 			@caption Eeldusbugid
