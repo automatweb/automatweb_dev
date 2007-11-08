@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.123 2007/07/16 13:05:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.124 2007/11/08 13:11:34 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -560,7 +560,7 @@ class admin_menus extends aw_template
 		
 		@attrib name=copy_feedback params=name default="0"
 		
-		@param parent required
+		@param parent optional
 		@param period optional
 		@param sel optional
 		

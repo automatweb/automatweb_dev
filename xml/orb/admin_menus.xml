@@ -34,7 +34,7 @@
 		<action name="copy_feedback">
 			<function name="copy_feedback">
 				<arguments>
-					<required name="parent" />
+					<optional name="parent" />
 					<optional name="period" />
 					<optional name="sel" />
 				</arguments>
