@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.3 2007/11/01 11:51:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.4 2007/11/08 16:51:32 dragut Exp $
 // expp_remote_makse.aw - expp remote makse 
 /*
 
@@ -185,7 +185,7 @@ var $pangad = array(
 			));
 			$_okleping .= $this->parse( 'OTSEKORRALDUS' );
 		}
-		$sql = "SELECT a.arvenr, a.viitenumber, a.maksumus, a.algus, a.lopp, a.lisarida, t.toote_nimetus, t.valjaande_nimetus"
+		$sql = "SELECT a.arvenr, a.viitenumber, a.maksumus, a.algus, a.lopp, a.lisarida, a.vaindeks, t.toote_nimetus, t.valjaande_nimetus"
 			." FROM expp_arved a LEFT JOIN expp_valjaanne t ON a.vaindeks=t.pindeks"
 			." WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='tel'";
 		$this->db_query( $sql );
@@ -215,7 +215,8 @@ var $pangad = array(
 				}
 				$_summa	+= $row['maksumus'];
 				$this->vars(array(
-					'TOODE'	=> stripslashes($row["valjaande_nimetus"]),
+				//	'TOODE'	=> stripslashes($row["valjaande_nimetus"]),
+					'TOODE'	=> $_SESSION['expp_remote_valjaanded'][$row['vaindeks']],
 					'LEPING'	=> ( $row["algus"]==date("d.m.Y")?$row["lisarida"]:"<b>".$row["algus"]."</b> - <b>".$row["lopp"]."</b>"),
 					'HIND'	=> $row["maksumus"],
 				));
@@ -247,7 +248,7 @@ var $pangad = array(
 
 		$_aid = $this->cp->getPid( 2 );
 		$myURL = $this->cp->addYah( array(
-				'link' => 'makse',
+				'link' => 'remotemakse',
 				'text' => $lc_expp['LC_EXPP_TITLE_MAKSMINE'],
 			));
 
@@ -685,7 +686,7 @@ var $pangad = array(
 			));
 			$_okleping .= $this->parse( 'OTSEKORRALDUS' );
 		}
-		$sql = "SELECT a.arvenr, a.viitenumber, a.maksumus, a.algus, a.lopp, a.lisarida, t.toote_nimetus, t.valjaande_nimetus"
+		$sql = "SELECT a.arvenr, a.viitenumber, a.maksumus, a.algus, a.lopp, a.lisarida, a.vaindeks, t.toote_nimetus, t.valjaande_nimetus"
 			." FROM expp_arved a LEFT JOIN expp_valjaanne t ON a.vaindeks=t.pindeks"
 			." WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='tel'";
 		$this->db_query( $sql );
@@ -715,7 +716,8 @@ var $pangad = array(
 				}
 				$_summa	+= $row['maksumus'];
 				$this->vars(array(
-					'TOODE'	=> stripslashes($row["valjaande_nimetus"]),
+				//	'TOODE'	=> stripslashes($row["valjaande_nimetus"]),
+					'TOODE' => $_SESSION['expp_remote_valjaanded'][$row['vaindeks']],
 					'LEPING'	=> ( $row["algus"]==date("d.m.Y")?$row["lisarida"]:"<b>".$row["algus"]."</b> - <b>".$row["lopp"]."</b>"),
 					'HIND'	=> $row["maksumus"],
 				));
@@ -846,9 +848,12 @@ var $pangad = array(
 			return false;
 		}
 		$expp_arve = get_instance( CL_EXPP_ARVE );
-		$_SESSION['tellnr'] = $expp_arve->getNextArve();
+	//	$_SESSION['tellnr'] = $expp_arve->getNextArve();
+		$_SESSION['tellnr'] = $expp_arve->getNextTell();
+		$arvenr = $expp_arve->getNextArve();
 
-		// 05edceff02
+		$_SESSION['expp_remote_valjaanded'] = array(); 
+
 		$tellimuste_url = "http://www.raamat24.ee/kasutaja.php?tellimus=".$tellimus."&eksport=csv&ak=1";
 		$tellimused_raw = file($tellimuste_url);
 
@@ -865,26 +870,11 @@ var $pangad = array(
 				$tell[str_replace('"', '', $v2ljade_nimed[$k])] = str_replace('"', '', $v);
 			}
 
-			$pindeks = $this->db_fetch_field("select pindeks from expp_valjaanne where valjaanne = '".$tell['VAINDEKS']."'", "pindeks");
-			if (!$pindeks)
-			{
-				$pindeks = "9999".str_repeat("0", 4 - strlen($tell['AK_TOOTEKOOD'])).$tell['AK_TOOTEKOOD'];
-				$sql = "
-					insert into
-						expp_valjaanne
-					set
-						pindeks = ".$pindeks.",
-						hinna_liik = 'TAVAHIND',
-						valjaanne = '".$tell['VAINDEKS']."',
-						valjaande_nimetus = '".$tell['AK_TOOTENIMI']."',
-						toote_nimetus = '".$tell['AK_TOOTENIMI']."',
-						toote_tyyp = '".ucfirst($tell['AK_TOOTETYYP'])."'
-				";
-				$this->db_query($sql);
-			}
-
 			// viitenumber:
-			$viitenumber = "10605".$_SESSION['tellnr'];
+		//	$viitenumber = "10605".$_SESSION['tellnr'];
+			$viitenumber = "10605".$arvenr;
+
+			$_SESSION['expp_remote_valjaanded'][$tell['VAINDEKS']] = $tell['AK_TOOTENIMI'];
 
 			$sql = "
 				insert into
@@ -920,13 +910,14 @@ var $pangad = array(
 					vvotja = '".$tell['VVOTJA']."',
 					kanal = '".$tell['KANAL']."',
 					tlkood = '".$tell['TLKOOD']."',
-					arvenr = '".$_SESSION['tellnr']."',
-					vaindeks = '".$pindeks."',
+					arvenr = '".$arvenr."',
+					vaindeks = '".$tell['VAINDEKS']."',
 					algus = '".$tell['ALGUS']."',
 					lopp = '".$tell['LOPP']."',
 					eksempla = '".$tell['EKSEMPLA']."',
 					tellkpv = '".$tell['TELLKPV']."',
 					maksumus = '".$tell['MAKSUMUS']."',
+					rhkkood = '',
 					
 					kampaania = '".$tell['RKMKOOD']."',
 					tyyp = '".$tell['TYYP']."',
@@ -941,7 +932,7 @@ var $pangad = array(
 			";
 			$this->db_query($sql);
 		}
-		header("Location:".aw_ini_get("baseurl")."/tellimine/makse");
+		header("Location:".aw_ini_get("baseurl")."/tellimine/remotemakse");
 		exit();
 	}
 }
