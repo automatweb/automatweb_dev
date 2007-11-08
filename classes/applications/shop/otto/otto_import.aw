@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.65 2007/11/07 22:26:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.66 2007/11/08 16:54:28 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2594,7 +2594,7 @@ class otto_import extends class_base
 								$f_imnr = $t_imnr.".jpg";
 							}
 
-							if (!$t_imnr || true)
+							if (!$t_imnr)
 							{
 								echo "-- insert new image $imnr <br />\n";
 								flush();
