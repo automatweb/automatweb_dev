@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.18 2007/07/20 10:00:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.19 2007/11/08 10:35:34 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -989,9 +989,14 @@ class persons_webview extends class_base
 		{
 			if(!$this->view_obj->prop("show_only_public_phones") || $phone_obj->prop("is_public"))
 			{
-				$phone_array[$phone_obj->prop("type")."_phone"][] = $phone_obj->name(); //need siis muutujad vastavalt erinevate telefonityypidele
-				$phone_array["phone"][] = $phone_obj->name();
-				$this->phone_types[$phone_obj->prop("type")."_phone"] = "";
+				if(strlen($phone_obj->name()) > 2)
+				{
+					$phone_array[$phone_obj->prop("type")."_phones"][] = $phone_obj->name();
+					$phone_array[$phone_obj->prop("type")."_phone"][0] = $phone_obj->name(); //need siis muutujad vastavalt erinevate telefonityypidele
+					$phone_array["phone"][0] = $phone_obj->name();
+					$phone_array["phones"][] = $phone_obj->name();
+					$this->phone_types[$phone_obj->prop("type")."_phone"] = "";
+				}
 			}
 		}
 
