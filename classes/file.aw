@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.161 2007/11/06 11:18:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.162 2007/11/08 10:11:42 hannes Exp $
 /*
 
 
@@ -1201,7 +1201,44 @@ class file extends class_base
 		$url = str_replace("automatweb/", "", $url);
 		return aw_ini_get("baseurl").$url;
 	}
-
+	
+		// !saves a file that was uploaded in a form to the db
+	// $name - the name of the file input in form
+	// $parent - the parent object of the file
+	// $file_id - if not specified, file will be added, else changed
+	function add_upload_multifile($name,$parent,$file_id = 0, $fs_folder_to_save_to = null)
+	{
+		$output = Array();
+		
+		foreach ($_FILES[$name]["error"] as $key => $error)
+		{
+			if ($error == UPLOAD_ERR_OK)
+			{
+				$tmp_name = $_FILES[$name]["tmp_name"][$key];
+				if (is_uploaded_file($tmp_name))
+				{
+					$fname = $_FILES[$name]["name"][$key];
+					$type = $_FILES[$name]["type"][$key];
+					
+					$fc = $this->get_file(array("file" => $tmp_name));
+					
+					$id = $this->save_file(array(
+						"file_id" => $file_id,
+						"parent" => $parent,
+						"name" => $fname,
+						"content" => $fc,
+						"type" => $type,
+						"fs_folder_to_save_to" => $fs_folder_to_save_to
+					));
+					$output[] = array("id" => $id,"url" => $this->get_url($id,$fname), "orig_name" => $fname);
+				}
+			}
+			
+			
+		}
+		return $output;
+	}
+	
 	////
 	// !saves a file that was uploaded in a form to the db
 	// $name - the name of the file input in form
