@@ -1406,9 +1406,8 @@ class user extends class_base
 			obj_set_opt("no_cache", $prev);
 			$mail = new object();
 			$mail->set_class_id(CL_ML_MEMBER);
+			$p = obj($this->get_person_for_user($o));
 			
-			$p = $this->get_person_for_user($o);
-
 			$mail->set_parent($p->id());
 			$mail->set_prop("mail", $umail);
 			$mail->set_prop("name", $uname);
