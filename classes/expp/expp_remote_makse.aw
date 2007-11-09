@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.5 2007/11/09 01:19:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.6 2007/11/09 11:58:49 dragut Exp $
 // expp_remote_makse.aw - expp remote makse 
 /*
 
@@ -851,7 +851,11 @@ var $pangad = array(
 		$expp_arve = get_instance( CL_EXPP_ARVE );
 
 		$_SESSION['tellnr'] = $expp_arve->getNextTell();
+
 		$arvenr = $expp_arve->getNextArve();
+
+		$viitenumber = "10605".$arvenr;
+		$viitenumber .= $expp_arve->leia_731( $viitenumber );
 
 		$_SESSION['expp_remote_valjaanded'] = array(); 
 
@@ -883,7 +887,6 @@ var $pangad = array(
 		foreach ($tellimused as $tell)
 		{
 			// viitenumber:
-			$viitenumber = "10605".$arvenr;
 
 			$_SESSION['expp_remote_valjaanded'][$tell['VAINDEKS']] = $tell['AK_TOOTENIMI'];
 
