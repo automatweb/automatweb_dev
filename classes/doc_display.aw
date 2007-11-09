@@ -299,6 +299,8 @@ class doc_display extends aw_template
 		{
 			$content = $sps["content"];
 		}
+		$content = str_replace("<!--[", "<!-- [", $content);
+		$content = str_replace("]-->","] -->", $content);
 		if ($arr["leadonly"] > -1)
 		{
 			$text = $lead; //$doc->trans_get_val("lead");
