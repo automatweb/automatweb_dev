@@ -102,6 +102,8 @@ function cfgformToggleSelectProps(grpId)
 			<div id="cfgformPrpOpts{VAR:tmp_id}" style="display: none;">
 				{VAR:no_caption_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_caption]" value="1" {VAR:no_caption_checked}>
 				<input type="hidden" name="xconfig[{VAR:prp_key}][no_caption]" value="{VAR:no_caption}"><br />
+				{VAR:disabled_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][disabled]" value="1" {VAR:disabled_checked}>
+				<input type="hidden" name="xconfig[{VAR:prp_key}][disabled]" value="{VAR:disabled}"><br />
 				{VAR:captionside_l_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][captionside]" value="left"{VAR:captionside_l_ch}><br />
 				{VAR:captionside_t_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][captionside]" value="top"{VAR:captionside_t_ch}><br />
 				{VAR:textsize_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][textsize]" value="{VAR:textsize}"><br />
