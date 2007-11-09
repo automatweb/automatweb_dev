@@ -1533,6 +1533,10 @@ class cfgform extends class_base
 			{
 				$data["area_caption"] = $arr["request"]["cfglayoutinfo-area_caption"][$name];
 			}
+			else
+			{
+				unset($data["area_caption"]);
+			}
 
 			if (!empty($arr["request"]["cfglayoutinfo-width"][$name]) and "vbox" !== $arr["request"]["cfglayoutinfo-type"][$name])
 			{
