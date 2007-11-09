@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.4 2007/11/08 16:51:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.5 2007/11/09 01:19:39 dragut Exp $
 // expp_remote_makse.aw - expp remote makse 
 /*
 
@@ -847,31 +847,42 @@ var $pangad = array(
 		if (empty($tellimus)) {
 			return false;
 		}
+		
 		$expp_arve = get_instance( CL_EXPP_ARVE );
-	//	$_SESSION['tellnr'] = $expp_arve->getNextArve();
+
 		$_SESSION['tellnr'] = $expp_arve->getNextTell();
 		$arvenr = $expp_arve->getNextArve();
 
 		$_SESSION['expp_remote_valjaanded'] = array(); 
 
-		$tellimuste_url = "http://www.raamat24.ee/kasutaja.php?tellimus=".$tellimus."&eksport=csv&ak=1";
-		$tellimused_raw = file($tellimuste_url);
+		$tellimus_url_xml = "http://www.raamat24.ee/kasutaja.php?tellimus=".$tellimus."&eksport=xml&ak=1";
+		$tellimus_raw_xml = file_get_contents($tellimus_url_xml);
+		$xml_parser = xml_parser_create();
+		xml_parse_into_struct($xml_parser, $tellimus_raw_xml, $values, $index);
+		xml_parser_free($xml_parser);
 
-		$v2ljade_nimed = explode("\t", $tellimused_raw[0]);
-		unset($tellimused_raw[0]);
-		
 		$tellimused = array();
-		foreach ($tellimused_raw as $nr => $rida)
+		foreach ($values as $value)
 		{
-			$v2ljad = explode("\t", $rida);
-			foreach ($v2ljad as $k => $v)
+			if ( ($value['tag'] == 'TOODE') && ($value['type'] == 'open') )
 			{
-				$tellimused[$nr][$v2ljade_nimed[$k]] = $v;
-				$tell[str_replace('"', '', $v2ljade_nimed[$k])] = str_replace('"', '', $v);
+				$tellimus = array();
 			}
 
+			if ($value['type'] == 'complete')
+			{
+				$tellimus[$value['tag']] = $value['value'];
+			}
+
+			if ( ($value['tag'] == 'TOODE') && ($value['type'] == 'close') )
+			{
+				$tellimused[] = $tellimus;
+			}
+		}
+
+		foreach ($tellimused as $tell)
+		{
 			// viitenumber:
-		//	$viitenumber = "10605".$_SESSION['tellnr'];
 			$viitenumber = "10605".$arvenr;
 
 			$_SESSION['expp_remote_valjaanded'][$tell['VAINDEKS']] = $tell['AK_TOOTENIMI'];

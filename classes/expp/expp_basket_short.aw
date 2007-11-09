@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_basket_short.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_basket_short.aw,v 1.6 2007/11/09 01:19:40 dragut Exp $
 // expp_basket_short.aw - Expp short basket 
 /*
 
@@ -22,6 +22,11 @@ class expp_basket_short extends class_base
 	}
 	function show($arr) {
 		global $lc_expp;
+
+		if (strpos($_SERVER['REQUEST_URI'], 'remotemakse') !== false)
+		{
+			return '';
+		}
 
 		$retHTML = '';
 		$this->read_template("main.tpl");
