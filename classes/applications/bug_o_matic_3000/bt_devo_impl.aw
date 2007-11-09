@@ -78,13 +78,13 @@ class bt_devo_impl extends core
 				"class_id" => array(CL_DEVELOPMENT_ORDER_CAT, CL_DEVELOPMENT_ORDER, CL_BUG),
 				"parent" => $arr["obj_inst"]->id()
 			));
-			foreach($ol->list as $oid)
+			foreach($ol->ids() as $oid)
 			{
 				$ol2 = new object_list(array(
 					"class_id" => array(CL_DEVELOPMENT_ORDER_CAT, CL_DEVELOPMENT_ORDER, CL_BUG),
 					"parent" => $oid
 				));
-				if(count($ol2->list))
+				if(count($ol2->ids()))
 				{
 					$o = obj($oid);
 					$t->add_item(0,array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.92 2007/11/08 10:18:26 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.93 2007/11/09 09:50:48 robert Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -171,6 +171,12 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property cust_live_date type=date_select field=aw_cust_live_date
 	@caption Kasutusvalmis
+	
+	@property wish_live_date type=date_select field=meta method=serialize table=objects
+	@caption Soovitav Live kuupäev
+	
+	@property actual_live_date type=date_select field=meta method=serialize table=objects
+	@caption Tegelik Live kuupäev
 
 	@property cust_crit type=textarea rows=10 cols=50 field=aw_cust_crit
 	@caption Vastuv&otilde;tu kriteeriumid
@@ -251,6 +257,8 @@ define("BUG_NOTFIXABLE", 8);
 define("BUG_WONTFIX", 9);
 define("BUG_FEEDBACK", 10);
 define("BUG_FATALERROR", 11);
+define("BUG_TESTING", 12);
+define("BUG_VIEWING", 13);
 
 class bug extends class_base
 {
@@ -265,6 +273,8 @@ class bug extends class_base
 			BUG_OPEN => t("Lahtine"),
 			BUG_INPROGRESS => t("Tegemisel"),
 			BUG_DONE => t("Valmis"),
+			BUG_VIEWING => t("Ülevaatamisel"),
+			BUG_TESTING => t("Testimisel"),
 			BUG_TESTED => t("Testitud"),
 			BUG_CLOSED => t("Suletud"),
 			BUG_INCORRECT => t("Vale teade"),
@@ -760,8 +770,46 @@ class bug extends class_base
 			case "name":
 				if (!$this->can("view", $arr["request"]["who"]))
 				{
-					$prop["error"] = t("Kellele ei tohi olla t&uuml;hi!");
-					return PROP_FATAL_ERROR;
+					$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+					$pt = $po->path();
+					foreach($pt as $pi)
+					{
+						if ($pi->class_id() == CL_BUG_TRACKER)
+						{
+							$bt = $pi;
+						}
+					}
+					$conn = $bt->connections_to(array(
+						"from.class_id" => CL_BUGTRACK_DISPLAY,	
+						"type" => "RELTYPE_BUGTRACK"
+					 ));
+					foreach($conn as $c)
+					{
+						$bt_display = obj($c->prop("from"));
+					}
+					if($arr["request"]["bug_type"] && $bt_display)
+					{
+						$user = $bt_display->meta("type".$arr["request"]["bug_type"]);
+						if($user)
+						{
+							$arr["obj_inst"]->set_prop("who", $user);
+							$this->who_set = 1;
+							$err = 0;
+						}
+						else
+						{
+							$err = 1;
+						}
+					}
+					else
+					{
+						$err = 1;
+					}
+					if($err)
+					{
+						$prop["error"] = t("Kellele ei tohi olla t&uuml;hi!");
+						return PROP_FATAL_ERROR;
+					}
 				}
 
 				if ($arr["request"]["bug_status"] == BUG_FATAL_ERROR)
@@ -920,6 +968,10 @@ class bug extends class_base
 					$com = sprintf(t("Kellele muudeti %s => %s"), $old, $nv);
 					//$this->_add_comment($arr["obj_inst"], $com);
 					$this->add_comments[] = $com;
+				}
+				if($this->who_set)
+				{
+					return PROP_IGNORE;
 				}
 				break;
 
@@ -1640,7 +1692,7 @@ class bug extends class_base
 			case "aw_cust_responsible":
 			case "aw_cust_status":
 			case "aw_cust_tester":
-			case "aw_cust_live_date":
+			case "aw_actual_live_date":
 			case "aw_bug_feedback_p":
 			case "project":
 			case "who":

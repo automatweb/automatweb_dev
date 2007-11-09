@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.4 2007/10/29 11:37:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.5 2007/11/09 09:50:48 robert Exp $
 // bugtrack_display.aw - Ülesannete kuvamine 
 /*
 
@@ -268,6 +268,7 @@ class bugtrack_display extends class_base
 		$this->_define_table_from_settings($data, $t);		
 
 		$cur = get_current_person();
+		$cur_u = get_current_user();
 		$ol = new object_list(array(
 			"parent" => $arr["obj_inst"]->prop("bugtrack"),
 			"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
@@ -277,7 +278,8 @@ class bugtrack_display extends class_base
 					"who" => $cur,
 					"monitors" => $cur,
 					"orderer" => $cur,
-					"bug_feedback_p" => $cur
+					"bug_feedback_p" => $cur,
+					"createdby" => $cur_u
 				)
 			)),
 			"orderer_unit" => $arr["request"]["sect_filter"] ? $arr["request"]["sect_filter"] : array()
