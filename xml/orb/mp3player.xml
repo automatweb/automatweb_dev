@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="mp3player" folder="applications/mp3player" extends="class_base">
+		<action name="update_playlist" nologin="1" is_public="1">
+			<function name="update_playlist">
+				<arguments>
+					<required name="mp3player_oid" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="play" nologin="1" is_public="1">
 			<function name="play">
 				<arguments>
