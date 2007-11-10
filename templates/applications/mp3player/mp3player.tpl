@@ -4,58 +4,44 @@
 <html>
 <head>
 	<title>MP3 Pleier</title>
+	<link rel="stylesheet" type="text/css" href="{VAR:baseurl}/automatweb/js/jw_mp3_player/style.css"> 
+	
+	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery-1.2.1.pack.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jw_mp3_player/swfobject.js"></script>
-			
+	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jw_mp3_player/interaction.js"></script>
 	<script type="text/javascript">
-	// some variables to save
-	var currentPosition;
-	var currentVolume;
-	var currentItem;
 	
-	// these functions are caught by the JavascriptView object of the player.
-	function sendEvent(typ,prm) { thisMovie("mpl").sendEvent(typ,prm); };
-	function getUpdate(typ,pr1,pr2,pid) {
-		if(typ == "time") { currentPosition = pr1; }
-		else if(typ == "volume") { currentVolume = pr1; }
-		else if(typ == "item") { currentItem = pr1; setTimeout("getItemData(currentItem)",100); }
-		var id = document.getElementById(typ);
-		id.innerHTML = typ+ ": "+Math.round(pr1);
-		pr2 == undefined ? null: id.innerHTML += ", "+Math.round(pr2);
-		if(pid != "null") {
-			document.getElementById("pid").innerHTML = "(received from the player with id <i>"+pid+"</i>)";
-		}
-	};
-	
-	// These functions are caught by the feeder object of the player.
-	function loadFile(obj) { thisMovie("mpl").loadFile(obj); };
-	function addItem(obj,idx) { thisMovie("mpl").addItem(obj,idx); }
-	function removeItem(idx) { thisMovie("mpl").removeItem(idx); }
-	function getItemData(idx) {
-		var obj = thisMovie("mpl").itemData(idx);
-		var nodes = "";
-		for(var i in obj) { 
-			nodes += "<li>"+i+": "+obj[i]+"</li>"; 
-		}
-		document.getElementById("data").innerHTML = nodes;
-	};
-	
-	// This is a javascript handler for the player and is always needed.
-	function thisMovie(movieName) {
-	    if(navigator.appName.indexOf("Microsoft") != -1) {
-			return window[movieName];
-		} else {
-			return document[movieName];
-		}
-	};
+	 $(document).ready(function(){ 
+	 
+	 	// update playlist
+		$("#filter_playlist").keydown( function (e) { 
+			if (e.keyCode == 13)
+			{
+				data = $("#filter_playlist").serialize();
+				
+				 $.ajax({
+					type: "POST",
+					url: "{VAR:baseurl}/?class=mp3player&action=update_playlist&mp3player_oid={VAR:mp3player_oid}",
+					data: data,
+					async: true,
+					success: function(msg){
+						loadFile({file:'{VAR:baseurl}/orb.aw/class=mp3player/action=playlist/id={VAR:mp3player_oid}/playlist.xml'})
+					},
+					error: function(msg){
+					 alert( "Andmete salvestamine kahjuks ei õnn");
+					}
+
+				});
+			}
+		});
+	});
 	
 	</script>
-			
-	<style type="text/css">
-	body, p {margin: 0;padding: 0;}
-	</style>
 </head>
 <body>
-		
+
+<div id="data"></div>
+<input type="text" name="str" id="filter_playlist" value="{VAR:search_string}">
 <p id="awplayer"><a href="http://www.macromedia.com/go/getflashplayer">Sikuta</a> flash pleier.</p>
 <script type="text/javascript">
 	var s2 = new SWFObject("{VAR:baseurl}/automatweb/js/jw_mp3_player/mp3player.swf", "mpl", "250", "450", "7");
