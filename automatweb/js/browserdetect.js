@@ -77,7 +77,7 @@ function BrowserDetectLite() {
    this.isWin   = (ua.indexOf('win') != -1);
    this.isWin32 = (this.isWin && ( ua.indexOf('95') != -1 || ua.indexOf('98') != -1 || ua.indexOf('nt') != -1 || ua.indexOf('win32') != -1 || ua.indexOf('32bit') != -1 || ua.indexOf('xp') != -1) );
    this.isMac   = (ua.indexOf('mac') != -1);
-   this.isUnix  = (ua.indexOf('unix') != -1 || ua.indexOf('sunos') != -1 || ua.indexOf('bsd') != -1 || ua.indexOf('x11') != -1)
+   this.isUnix  = (ua.indexOf('unix') != -1 || ua.indexOf('sunos') != -1 || ua.indexOf('bsd') != -1 || ua.indexOf('x11') != -1);
    this.isLinux = (ua.indexOf('linux') != -1);
    
    // specific browser shortcuts
