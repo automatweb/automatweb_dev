@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.4 2007/11/10 20:27:43 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.5 2007/11/10 20:28:10 hannes Exp $
 // mp3player.aw - MP3 pleier 
 /*
 
@@ -226,7 +226,7 @@ class mp3player extends class_base
 		$fh = fopen($fn, 'r');
 		$s_data = fread($fh, 100);
 		fclose($fh);
-		preg_match ( "/$Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.4 2007/11/10 20:27:43 hannes Exp $s_data, $matches);
+		preg_match ( "/Header:.*aw,v\s(.*)\s/imsU", $s_data, $matches);
 		arr($matches);
 		return $matches[1];
 	}
