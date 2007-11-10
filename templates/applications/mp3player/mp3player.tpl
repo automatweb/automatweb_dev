@@ -40,7 +40,7 @@
 </head>
 <body>
 
-<div id="data"></div>
+Versioon {VAR:version}
 <input type="text" name="str" id="filter_playlist" value="{VAR:search_string}">
 <p id="awplayer"><a href="http://www.macromedia.com/go/getflashplayer">Sikuta</a> flash pleier.</p>
 <script type="text/javascript">
