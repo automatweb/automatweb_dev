@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.1 2007/11/09 13:54:16 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.2 2007/11/10 19:49:13 hannes Exp $
 // mp3player.aw - MP3 pleier 
 /*
 
@@ -73,7 +73,7 @@ class mp3player extends class_base
 		$o_player = & $arr["obj_inst"];
 		
 		$s_search = trim($o_player->prop("search"));
-		$ol = $this->get_playlist($s_search);
+		$a_list = $this->get_playlist($s_search);
 		
 		$table->define_field(array(
 			"name" => "title",
@@ -131,26 +131,31 @@ class mp3player extends class_base
 			"align" => "left"
 		));
 		
-		for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
+		$a_list_keys = array_keys($a_list);
+		for ($i=0;$i<count($a_list);$i++)
         {
+			$s_key = $a_list_keys[$i];
 			classload("applications/mp3player/mp3");
-			$s_link = mp3::get_play_url($o->id(),$o->name());
+			$s_link = mp3::get_play_url($a_list[$s_key]["id"],$a_list[$s_key]["file_name"]);
 		
 			$table->define_data(array(
 				"title" => html::href(array(
 					"url" => "JavaScript: void(0)",
-					"caption" => $o->prop("title"),
+					"caption" => $a_list[$s_key]["title"],
 					"onclick" => 'myRef = window.open("'.$s_link.'","AW MP3 Mängija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
 				)),
-				"time" => $o->prop("mpeg_info_playtime_string"),
-				 "artist" =>  $o->prop("artist"),
-				 "album" =>  $o->prop("album"),
- 				 "genre" =>  $o->prop("genre"),
-				 "play_count" => $o->prop("play_count"),
+				"time" => $a_list[$s_key]["time"],
+				 "artist" =>  $a_list[$s_key]["artist"],
+				 "album" =>  $a_list[$s_key]["album"],
+ 				 "genre" =>  $a_list[$s_key]["genre"],
+				 "play_count" => $a_list[$s_key]["play_count"],
+				"play" => "",
+				"time" => $a_list[$s_key]["time"],
 				"play" => html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $o->id()),"mp3", false,true),
+					"url" => $this->mk_my_orb("change", array("id" => $a_list[$s_key]["id"]),"mp3", false,true),
 					"caption" => "info",
 				)),
+				
 			));
         }
 		
@@ -159,6 +164,29 @@ class mp3player extends class_base
 				"records_per_page"=>100,
 				"position"=>"both",
 		));
+	}
+	
+		/** Playis mp3's that are listed in aw player
+		
+		@attrib name=update_playlist params=name nologin="1" default="0" is_public="1"
+		
+		@param mp3player_oid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function update_playlist($arr)
+	{
+		extract($_POST);
+		
+		$o = new object($arr["mp3player_oid"]);
+		$o->set_prop("search", $str);
+		$o->save();
+		
+		die();
 	}
 	
 	/** Playis mp3's that are listed in aw player
@@ -182,6 +210,7 @@ class mp3player extends class_base
 			$this->vars(array(
 			"mp3player_oid" => $o->id(),
 			"file_name" => mp3::normalize_name($o->name()),
+			"search_string" => $o->prop("search"),
 		));
 		
 		echo $this->parse();
@@ -191,40 +220,56 @@ class mp3player extends class_base
 	
 	function get_playlist($s_search)
 	{
+		$a_search_fields = array("title", "album", "genre", "artist");
+		$a_list = array();
 		if (strlen($s_search)>0)
 		{
-			$a_search_keys = explode( " ", $s_search);
+			$a_search_keys = "%$s_search%";
 			
-			for($i=0;$i<count($a_search_keys);$i++)
+			for ($i=0;$i<count($a_search_fields);$i++)
 			{
-				$a_search_keys[$i] = "%". $a_search_keys[$i] . "%";
+				$ol = new object_list(array(
+					"class_id" => CL_MP3,
+					"lang_id" => array(),
+					$a_search_fields[$i] => $a_search_keys,
+				));
+				for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
+				{
+					$a_list[$o->prop("md5")] = array(
+							"id" => $o->id(),
+							"title" => $o->prop("title"),
+							"album" => $o->prop("album"),
+							"artist" => $o->prop("artist"),
+							"file_name" => $o->name(),
+							"time" => $o->prop("mpeg_info_playtime_string"),
+							"genre" =>  $o->prop("genre"),
+							"play_count" => $o->prop("play_count"),
+					);
+				}
 			}
-			
-			$filt = array(
-			"class_id" => CL_MP3,
-			"lang_id" => array(),
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"title" => $a_search_keys,
-					"album" => $a_search_keys,
-					"artist" => $a_search_keys,
-					"genre" => $a_search_keys,
-					"year" => $a_search_keys,
-					)
-				))
-			);
 		}
 		else
 		{
-			$filt = array(
-				"class_id" => CL_MP3,
-				"lang_id" => array(),
-			);
+			$ol = new object_list(array(
+					"class_id" => CL_MP3,
+					"lang_id" => array(),
+			));
+			for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
+			{
+				$a_list[$o->prop("md5")] = array(
+						"id" => $o->id(),
+						"title" => $o->prop("title"),
+						"album" => $o->prop("album"),
+						"artist" => $o->prop("artist"),
+						"file_name" => $o->name(),
+						"time" => $o->prop("mpeg_info_playtime_string"),
+						"genre" =>  $o->prop("genre"),
+						"play_count" => $o->prop("play_count"),
+				);
+			}
 		}
 		
-		$ol = new object_list($filt);
-		return $ol;
+		return $a_list;
 	}
 	
 	/** Loob playlisti
@@ -243,21 +288,24 @@ class mp3player extends class_base
 		$o = new object($arr["id"]);
 		
 		$s_search = trim($o->prop("search"));
-		$ol = $this->get_playlist($s_search);
+		$a_list = $this->get_playlist($s_search);
 		
 		$this->read_template("playlist.tpl");
 		$this->submerge=1;
 
 		$tmp='';
-		for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
+		$a_list_keys = array_keys($a_list);
+		for ($i=0;$i<count($a_list_keys);$i++)
         {
+			$s_key = $a_list_keys[$i];
 			$this->vars(array(
-				"id"=> $o->id(),
-				"title"=> $o->prop("title"),
-				"artist" => $o->prop("artist"),
-				"url_mp3" => mp3::get_download_url($o->id(),"fail.mp3"),
-				"url_info" => mp3::get_lasering_url($o->prop("album")),
-				"url_image" => $this->get_cover_url($o->prop("artist")." ".$o->prop("album")),
+				"id"=> $a_list[$s_key]["id"],
+				"title"=> $a_list[$s_key]["title"],
+				"artist" => $a_list[$s_key]["artist"],
+				"album" => $a_list[$s_key]["album"],
+				"url_mp3" => mp3::get_download_url($a_list[$s_key]["id"],"fail.mp3"),
+				"url_info" => mp3::get_lasering_url($a_list[$s_key]["album"]),
+				"url_image" => $this->get_cover_url($a_list[$s_key]["artist"]." ".$a_list[$s_key]["album"]),
 			));
 			$tmp.= $this->parse("TRACK");
 		}
