@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 <title>{VAR:html_title} {VAR:title_action}</title>
 
+
 <!-- SUB: COMPRESS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
