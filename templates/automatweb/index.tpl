@@ -6,13 +6,12 @@
 
 
 
-
 <!-- SUB: COMPRESS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
 
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery-1.2.1.pack.js"></script>	
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery-1.2.1.min.js"></script>	
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>

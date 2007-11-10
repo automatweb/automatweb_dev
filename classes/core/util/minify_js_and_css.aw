@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.3 2007/11/10 16:11:33 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.4 2007/11/10 16:26:36 hannes Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 
@@ -27,13 +27,12 @@ class minify_js_and_css extends class_base
 		if ($use_javascriptpacker)
 		{
 			require_once("../addons/packer.php-1.0/class.JavaScriptPacker.php");
-		
+			
 			$packer = new JavaScriptPacker($script, 'Normal', true, false);
 			$packed = $packer->pack();
 		}
 		else
 		{
-			$packed = str_replace(array("\r\n", "\r", "\n", '  ', '    ', '    '), '', $script);
 			$packed = $this->remove_js_comments($packed);
 		}
 		
