@@ -118,3 +118,15 @@ window.onscroll = function ()
 		}
 	}
 }
+
+
+
+
+
+$(window).load(function () {
+	check_generic_loader();
+});
+
+$(window).unload( function () { 
+	check_generic_unloader();
+});
