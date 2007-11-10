@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.2 2007/11/10 15:01:19 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.3 2007/11/10 16:11:33 hannes Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 
@@ -33,10 +33,8 @@ class minify_js_and_css extends class_base
 		}
 		else
 		{
-			$packed = $this->remove_js_comments($script);
-			// remove tabs, spaces, newlines, etc.
-			$packed = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), ' ', $packed);
-			$packed = str_replace("  ", ' ', $packed);
+			$packed = str_replace(array("\r\n", "\r", "\n", '  ', '    ', '    '), '', $script);
+			$packed = $this->remove_js_comments($packed);
 		}
 		
 		return $packed;
