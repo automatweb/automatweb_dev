@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.2 2007/11/10 19:49:13 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.3 2007/11/10 20:24:31 hannes Exp $
 // mp3player.aw - MP3 pleier 
 /*
 
@@ -33,6 +33,7 @@ class mp3player extends class_base
 			"tpldir" => "applications/mp3player",
 			"clid" => CL_MP3PLAYER
 		));
+		
 	}
 	
 	function get_cover_url($s_keywords)
@@ -211,11 +212,22 @@ class mp3player extends class_base
 			"mp3player_oid" => $o->id(),
 			"file_name" => mp3::normalize_name($o->name()),
 			"search_string" => $o->prop("search"),
+			"version" => $this->get_version(),
 		));
 		
 		echo $this->parse();
 		
 		die();
+	}
+	
+	function get_version()
+	{
+		$fn = aw_ini_get("basedir")."/classes/applications/mp3player/mp3player.aw";
+		$fh = fopen($fn, 'r');
+		$s_data = fread($fh, 100);
+		fclose($fh);
+		preg_match ( "/$Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.3 2007/11/10 20:24:31 hannes Exp $s_data, $matches);
+		return $matches[1];
 	}
 	
 	function get_playlist($s_search)
