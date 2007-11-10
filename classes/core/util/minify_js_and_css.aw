@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.4 2007/11/10 16:26:36 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.5 2007/11/10 16:58:31 hannes Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 
@@ -33,7 +33,7 @@ class minify_js_and_css extends class_base
 		}
 		else
 		{
-			$packed = $this->remove_js_comments($packed);
+			$packed = $this->remove_js_comments($script);
 		}
 		
 		return $packed;
