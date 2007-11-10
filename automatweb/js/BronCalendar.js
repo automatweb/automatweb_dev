@@ -198,7 +198,7 @@ function isTimeBronned (strId)
 		if (navigator.userAgent.indexOf("MSIE") > 0)
 		{
 			if (document.getElementById(strId).childNodes[1].id)
-				return false
+				return false;
 			else
 				return true;
 		}
