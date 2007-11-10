@@ -4,13 +4,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 <title>{VAR:html_title} {VAR:title_action}</title>
 
-
 <!-- SUB: COMPRESS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
 
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery-1.2.1.pack.js"></script>	
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -23,13 +22,15 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <!-- END SUB: COMPRESS -->
 
+
+
 <!--[if lt IE 7]>
     <link rel="stylesheet" type="text/css" href="{VAR:baseurl}/automatweb/css/iefix.css" />
 <![endif]-->
 
 </head>
 <div style="padding:10px 20px; width:200px; left: 50%; margin-left: -100px; height:200; top:50%; margin-top:-100; background-color:white; border:1px solid silver; position:absolute; text-align:center; color:gray; font-size:12px; display:none;" id="ajax_loader_div"><img src="{VAR:baseurl}/automatweb/images/ajax-loader.gif"><br/><br/>Laadin...</div>
-<body  onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
+<body>
 <!-- päis -->
 		<!-- SUB: YAH -->
 <div id="pais">
