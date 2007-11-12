@@ -802,7 +802,7 @@ class html extends aw_template
 	@param name optional type=string
 		Date selector name
 	@param format optional type=array
-		Via this you can configure, which parts of dateselect will be shown and how it is drawed
+		Via this you can configure, which parts of dateselect will be shown and how it is drawn
 		Possible array elements are:
 			day, month, year, hour, minute (displayed as selects)
 			day_textbox, month_textbox, year_textbox, hour_textbox, minute_textbox (displayed as textbox)
@@ -845,6 +845,10 @@ class html extends aw_template
 		{
 			$buttons = true;
 		}
+		elseif (is_admin() and !isset($args['buttons']))
+		{
+			$buttons = true;
+		}
 		else
 		{
 			$buttons = false;
@@ -868,7 +872,6 @@ class html extends aw_template
 			$set["month"] = 1;
 		};
 		$set["year"] = 1;
-
 
 		if (!empty($args["format"]) && is_array($args["format"]) && count($args["format"]))
 		{
@@ -928,7 +931,7 @@ class html extends aw_template
 			$name = $args["name"];
 		}
 
-		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true, $buttons);
+		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true, $buttons, !$buttons);
 		$res .= $args["post_append_text"];
 		return $res;
 	}
