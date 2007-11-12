@@ -546,6 +546,16 @@
             <comment>Formaat: cvs_kasutaja=aw_kasutaja\ncvs_kasutaja=aw_kasutaja</comment>
       </property>
       <property>
+            <name>default_cfgmanager</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGMGR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi seadete haldur</caption>
+      </property>
+      <property>
             <name>reqs_tb</name>
             <table>objects</table>
             <group>reqs</group>
@@ -1071,6 +1081,11 @@
                   <clid>CL_GROUP</clid>
                   <caption>Admin grupp</caption>
             </AGROUP>
+            <CFGMGR>
+                  <value>9</value>
+                  <clid>CL_CFGMANAGER</clid>
+                  <caption>Seadete haldur</caption>
+            </CFGMGR>
       </reltypes>
       <layout>
             <bug>

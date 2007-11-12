@@ -21,9 +21,19 @@
             <group>general</group>
             <table>objects</table>
             <type>textbox</type>
-            <parent>name</parent>
+            <parent>name_way</parent>
             <no_caption>1</no_caption>
             <field>name</field>
+      </property>
+      <property>
+            <name>expl_txt</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>name_way</parent>
+            <field>expl_txt</field>
       </property>
       <property>
             <name>bug_status</name>
@@ -326,17 +336,16 @@
             <caption>Komponent</caption>
       </property>
       <property>
-            <name>fileupload</name>
+            <name>multifile_upload</name>
             <group>general</group>
             <table>aw_bugs</table>
-            <type>releditor</type>
+            <type>multifile_upload</type>
             <reltype>RELTYPE_FILE</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
             <parent>data_r_bot</parent>
             <captionside>top</captionside>
-            <field>fileupload</field>
-            <caption>Fail</caption>
+            <store>no</store>
+            <field>multifile_upload</field>
+            <caption>Fail </caption>
       </property>
       <property>
             <name>bug_predicates</name>
@@ -427,6 +436,24 @@
             <type>date_select</type>
             <field>aw_cust_live_date</field>
             <caption>Kasutusvalmis</caption>
+      </property>
+      <property>
+            <name>wish_live_date</name>
+            <group>cust</group>
+            <table>objects</table>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Soovitav Live kuup&amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>actual_live_date</name>
+            <group>cust</group>
+            <table>objects</table>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tegelik Live kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>cust_crit</name>
@@ -581,6 +608,12 @@
                   <area_caption>L&amp;amp;uuml;hikirjeldus</area_caption>
                   <group>general</group>
             </name>
+            <name_way>
+                  <type>hbox</type>
+                  <parent>name</parent>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </name_way>
             <settings_wrap>
                   <type>vbox</type>
                   <closeable>1</closeable>

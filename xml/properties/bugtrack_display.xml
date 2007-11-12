@@ -86,6 +86,15 @@
             <caption>Peakasutajad</caption>
       </property>
       <property>
+            <name>approvals_table</name>
+            <table>objects</table>
+            <group>approvals</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>approvals_table</field>
+      </property>
+      <property>
             <name>table_settings_tb</name>
             <table>objects</table>
             <group>
@@ -160,6 +169,11 @@
                   <submit>no</submit>
                   <parent>general</parent>
             </groups>
+            <approvals>
+                  <caption>Koosk&amp;amp;otilde;lastamisel</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </approvals>
             <tables>
                   <caption>Tabelid</caption>
             </tables>

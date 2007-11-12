@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.110 2007/10/24 08:33:21 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.110 2007/10/24 08:33:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.111 2007/11/12 12:11:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.111 2007/11/12 12:11:50 kristo Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -205,6 +205,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Kasutajanimede kaart
 	@comment Formaat: cvs_kasutaja=aw_kasutaja\ncvs_kasutaja=aw_kasutaja
 
+	@property default_cfgmanager type=relpicker reltype=RELTYPE_CFGMGR table=objects field=meta method=serialize
+	@caption Vaikimisi seadete haldur
+
 @default group=reqs
 
 	@property reqs_tb type=toolbar store=no no_caption=1
@@ -403,6 +406,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype AGROUP value=8 clid=CL_GROUP
 @caption Admin grupp
+
+@reltype CFGMGR value=9 clid=CL_CFGMANAGER
+@caption Seadete haldur
 
 */
 

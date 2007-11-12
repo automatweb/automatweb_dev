@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.581 2007/11/08 13:00:04 markop Exp $
+// $Id: class_base.aw,v 2.582 2007/11/12 12:11:49 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4677,6 +4677,13 @@ class class_base extends aw_template
 			exit_function("class_base::load_def_cfgmanager");
 		}
 		*/
+
+		if (method_exists($this->inst, "callback_get_cfgmanager"))
+		{
+			$this->inst->cfgmanager = $this->callback_get_cfgmanager(array(
+				"request" => $_REQUEST
+			));
+		}
 
 		// load defaults (from the generated properties XML file) first
 

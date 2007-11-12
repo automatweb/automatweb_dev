@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.93 2007/11/09 09:50:48 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.94 2007/11/12 12:11:50 kristo Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -21,8 +21,10 @@ define("BUG_STATUS_CLOSED", 5);
 
 @layout name type=vbox closeable=1 area_caption=L&uuml;hikirjeldus
 
-	
-	@property name type=textbox table=objects parent=name no_caption=1
+	@layout name_way type=hbox parent=name
+
+	@property name type=textbox table=objects parent=name_way no_caption=1
+	@property expl_txt type=text store=no no_caption=1 parent=name_way
 
 @layout settings_wrap type=vbox closeable=1 area_caption=M&auml;&auml;rangud
 @layout settings type=hbox parent=settings_wrap
@@ -481,12 +483,21 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_problem"]);
 					$prop["value"] = $r->name();
 				}
+				break;
+
+			case "expl_txt":
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					$u = get_instance(CL_USER);
+					$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
+					$crea = sprintf(t("Looja: %s / %s"), $p->name(), date("d.m.Y H:i", $arr["obj_inst"]->created()));
+				}
 
 				$link = html::href(array(
 					"caption" => t("Link"),
 					"url" => obj_link($arr["obj_inst"]->id())
 				));
-				$prop["post_append_text"] = ' <span style="font-size:13px; font-weight:bold;">#'.$arr["obj_inst"]->id()."</span> $link ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".$crea;
+				$prop["value"] = ' <span style="font-size:13px; font-weight:bold;">#'.$arr["obj_inst"]->id()."</span> $link ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".$crea;
 				break;
 
 			case "bug_content":
@@ -2126,6 +2137,23 @@ class bug extends class_base
 		}
 
 		return $this->parse();
+	}
+
+	function callback_get_cfgmanager($arr)
+	{
+		if ($arr["request"]["action"] == "change")
+		{
+			$o = obj($arr["request"]["id"]);
+		}
+		else
+		{
+			$o = obj($arr["request"]["parent"]);
+		}
+		$bt = $this->_get_bt($o);
+		if ($bt && $bt->prop("default_cfgmanager"))
+		{
+			return $bt->prop("default_cfgmanager");
+		}
 	}
 }
 ?>
