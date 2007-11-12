@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.66 2007/11/08 16:54:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.67 2007/11/12 18:16:13 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1144,7 +1144,7 @@ class otto_import extends class_base
 
 			// save new categories list to product object as well:
 			$prod_obj->set_prop('user11', implode(',', $categories));
-			// this products categories and pictures will ne be updated during import:
+			// this products categories and pictures will not be updated during import:
 			$prod_obj->set_prop('userch2', 1);
 
 			$save = true;
