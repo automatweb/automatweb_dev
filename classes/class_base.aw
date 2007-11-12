@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.582 2007/11/12 12:11:49 kristo Exp $
+// $Id: class_base.aw,v 2.583 2007/11/12 13:25:26 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1180,7 +1180,7 @@ class class_base extends aw_template
 			if ($this->can("view", $request["cfgform"]))
 			{
 				$cfgform_o = obj($request["cfgform"]);
-				if ($cfgform_o->prop("cfgview_ru") != "")
+				if (!is_admin() and $cfgform_o->prop("cfgview_ru") != "")
 				{
 					$retval = $cfgform_o->prop("cfgview_ru");
 				}
@@ -1921,7 +1921,7 @@ class class_base extends aw_template
 				{
 					$cfgform_i->get_cfg_groups($cfgform);
 				}
-	
+
 				$ret.= " > ".html::href(array(
 					"url" => $ru,
 					"caption" => $cfgform_i->cfg_groups[$output["group"]]["caption"],
@@ -5790,7 +5790,7 @@ class class_base extends aw_template
 					$c->prop("to.name"),
 					$GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"].(max(array_keys($idxs)) + 1)
 				)."\n<br>";
-						
+
 				$idx = max(array_keys($idxs)) + 1;//fdgfdgfdgfdg
 			}
 
@@ -5828,9 +5828,9 @@ class class_base extends aw_template
 					$err_id,
 					$GLOBALS["cfg"]["classes"][$idxs[$idx]->prop("to.class_id")]["alias"].$idx,
 					$c->prop("to.name"),
-					$lidxnum	
+					$lidxnum
 				)."\n<br>";
-						
+
 				$idx = max(array_keys($idxs)) + 1;//fdgfdgfdgfdg
 			}
 			$o->connect(array(
@@ -5932,7 +5932,7 @@ class class_base extends aw_template
 //		{
 //			return null;
 //		}
-		
+
 		if($cnt_menus == 0)
 		{
 			$_SESSION["menu_from_cb"] = null;
