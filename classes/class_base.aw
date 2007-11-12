@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.583 2007/11/12 13:25:26 voldemar Exp $
+// $Id: class_base.aw,v 2.584 2007/11/12 14:17:43 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5184,7 +5184,14 @@ class class_base extends aw_template
 			}
 
 			$ci = $cfgform_obj->instance();
-			$this->layoutinfo = $ci->get_cfg_layout($cfgform_obj);
+
+			$layoutinfo = $ci->get_cfg_layout($cfgform_obj);
+
+			if (is_array($layoutinfo))
+			{
+				$this->layoutinfo = $layoutinfo;
+			}
+
 			$prps = $ci->get_cfg_proplist($cfgform_obj->id());
 
 			$rv = $prps;
