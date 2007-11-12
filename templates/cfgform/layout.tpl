@@ -96,7 +96,7 @@ function cfgformToggleSelectProps(grpId)
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_key}</td>
 		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpconfig[{VAR:prp_key}][caption]" value="{VAR:prp_caption}"></td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
-		<td width="200" bgcolor="{VAR:bgcolor}">
+		<td width="250" bgcolor="{VAR:bgcolor}">
 		<!-- SUB: options -->
 			<div class="closer">{VAR:prp_opts_caption} <a href="javascript:cfgformToggleOpts({VAR:tmp_id})"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif" id="cfgformOptsBtn{VAR:tmp_id}" width="20" height="15" border="0"></a></div>
 			<div id="cfgformPrpOpts{VAR:tmp_id}" style="display: none;">
@@ -140,6 +140,36 @@ function cfgformToggleSelectProps(grpId)
 <!-- SUB: select_options -->
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"><br />
 <!-- END SUB: select_options -->
+
+<!-- SUB: date_select_options -->
+			{VAR:buttons_show_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][buttons]" value="1"{VAR:buttons_show_ch}>
+			{VAR:buttons_hide_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][buttons]" value="0"{VAR:buttons_hide_ch}>
+			{VAR:buttons_default_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][buttons]" value=""{VAR:buttons_default_ch}><br />
+			<b>{VAR:format_caption}</b>
+			<br />
+			{VAR:format_dayselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][day]" value="day"{VAR:format_dayselect_ch}>
+			{VAR:format_daytext_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][day]" value="day_textbox"{VAR:format_daytext_ch}>
+			{VAR:format_daynone_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][day]" value=""{VAR:format_daynone_ch}><br />
+			{VAR:format_monthselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][month]" value="month"{VAR:format_monthselect_ch}>
+			{VAR:format_monthtext_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][month]" value="month_textbox"{VAR:format_monthtext_ch}>
+			{VAR:format_monthnone_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][month]" value=""{VAR:format_monthnone_ch}><br />
+			{VAR:format_yearselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][year]" value="year"{VAR:format_yearselect_ch}>
+			{VAR:format_yeartext_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][year]" value="year_textbox"{VAR:format_yeartext_ch}>
+			{VAR:format_yearnone_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][year]" value=""{VAR:format_yearnone_ch}><br />
+			{VAR:format_hourselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][hour]" value="hour"{VAR:format_hourselect_ch}>
+			{VAR:format_hourtext_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][hour]" value="hour_textbox"{VAR:format_hourtext_ch}>
+			{VAR:format_hournone_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][hour]" value=""{VAR:format_hournone_ch}><br />
+			{VAR:format_minuteselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][minute]" value="minute"{VAR:format_minuteselect_ch}>
+			{VAR:format_minutetext_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][minute]" value="minute_textbox"{VAR:format_minutetext_ch}>
+			{VAR:format_minutenone_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][format][minute]" value=""{VAR:format_minutenone_ch}><br />
+<!-- END SUB: date_select_options -->
+
+<!-- SUB: datetime_select_options -->
+			{VAR:dayselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][day]" value="select"{VAR:dayselect_ch}>
+			{VAR:daytext_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][day]" value="text"{VAR:daytext_ch}><br />
+			{VAR:monthselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][month]" value="select"{VAR:monthselect_ch}>
+			{VAR:monthtext_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][month]" value="text"{VAR:monthtext_ch}><br />
+<!-- END SUB: datetime_select_options -->
 
 <!-- SUB: chooser_options -->
 			{VAR:orienth_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][orient]" value="horizontal"{VAR:orienth_ch}>
