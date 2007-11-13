@@ -537,6 +537,17 @@
             <field>cedit_adr_tbl</field>
       </property>
       <property>
+            <name>messenger</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>textbox</type>
+            <size>30</size>
+            <maxlength>200</maxlength>
+            <parent>ceditmsn</parent>
+            <no_caption>1</no_caption>
+            <field>messenger</field>
+      </property>
+      <property>
             <name>email</name>
             <table>objects</table>
             <group>contact</group>
@@ -2084,6 +2095,12 @@
                   <area_caption>Aadressid</area_caption>
                   <group>contact</group>
             </ceditadr>
+            <ceditmsn>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Msn/yahoo/aol/icq</area_caption>
+                  <group>contact</group>
+            </ceditmsn>
             <docs_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>
