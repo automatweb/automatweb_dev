@@ -2911,10 +2911,6 @@ class mrp_workspace extends class_base
 				if (CL_MRP_RESOURCE == $o->class_id() and MRP_STATUS_RESOURCE_INUSE != $o->prop("state"))
 				{
 					$unfinished_jobs = false;
-					$applicable_states = array(
-						MRP_STATUS_DONE
-					);
-
 					$c = new connection();
 					$c_data = $c->find(array(
 						"from.class_id" => CL_MRP_JOB,
@@ -2930,6 +2926,9 @@ class mrp_workspace extends class_base
 
 					if (count($resource_job_ids))
 					{
+						$applicable_states = array(
+							MRP_STATUS_DONE
+						);
 						$list = new object_list (array (
 							"oid" => $resource_job_ids,
 							"class_id" => CL_MRP_JOB,
