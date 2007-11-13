@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.181 2007/10/05 13:49:03 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.182 2007/11/13 13:09:45 hannes Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -74,9 +74,6 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 
 @property code type=textbox
 @caption Kood
-
-property messenger type=textbox size=30 maxlength=200
-caption Msn/yahoo/aol/icq
 
 @property username type=text store=no
 @comment Kasutajanimes on lubatud ladina t&auml;hestiku suur- ja v&auml;iket&auml;hed, numbrid 0-9 ning m&auml;rgid alakriips ja punkt
@@ -166,7 +163,6 @@ caption Msn/yahoo/aol/icq
 
 @property ct_rel_tb type=toolbar no_caption=1 store=no
 
-
 	@layout ct_super type=vbox  closeable=1 area_caption=Kontaktid
 
 		@layout contact_l type=hbox parent=ct_super width=30%:30%:30%
@@ -229,6 +225,10 @@ caption Msn/yahoo/aol/icq
 		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
 
 			@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
+		
+		@layout ceditmsn type=vbox closeable=1 area_caption=Msn/yahoo/aol/icq
+		
+			@property messenger type=textbox size=30 maxlength=200 parent=ceditmsn no_caption=1
 
 
 @property email type=hidden table=objects field=meta method=serialize
