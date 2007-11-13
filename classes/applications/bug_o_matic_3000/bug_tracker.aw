@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.111 2007/11/12 12:11:50 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.111 2007/11/12 12:11:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.112 2007/11/13 10:35:15 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.112 2007/11/13 10:35:15 robert Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -410,6 +410,8 @@ define("BUG_STATUS_CLOSED", 5);
 @reltype CFGMGR value=9 clid=CL_CFGMANAGER
 @caption Seadete haldur
 
+@reltype DEVO_FOLDER value=10 clid=CL_MENU,CL_DEVELOPMENT_ORDER_CAT
+@caption Tellimuste kataloog
 */
 
 classload("applications/bug_o_matic_3000/bug");
@@ -1559,7 +1561,7 @@ class bug_tracker extends class_base
 
 	function generate_bug_tree($arr)
 	{
-		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
+		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),"lang_id" => array(), "site_id" => array()));
 		$objects = $ol->arr();
 
 		$nm = $this->tree_root_name." (".$ol->count().")";

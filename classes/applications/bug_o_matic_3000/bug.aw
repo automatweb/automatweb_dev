@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.94 2007/11/12 12:11:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.95 2007/11/13 10:35:15 robert Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -615,6 +615,38 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_req"]);
 					$prop["options"][$r->prop("req_p")] = $r->prop("req_p.name");
 				}
+				
+				$u = get_instance(CL_USER);
+				$cur = obj($u->get_current_person());
+				$sections = $cur->connections_from(array(
+						"class_id" => CL_CRM_SECTION,
+      						"type" => "RELTYPE_SECTION"
+				));
+				$ppl = array();
+				foreach($sections as $s)
+				{
+					$sc = obj($s->conn["to"]);
+					$profs = $sc->connections_from(array(
+						"class_id" => CL_CRM_PROFESSION,
+       						"type" => "RELTYPE_PROFESSIONS"
+				  	));
+					foreach($profs as $p)
+					{
+						$professions[$p->conn["to"]] = $p->conn["to"];
+					}
+				}
+				$c = new connection();
+				$people = $c->find(array(
+					"from.class_id" => CL_CRM_PERSON,
+     					 "type" => "RELTYPE_RANK",
+    					  "to" => $professions
+				));
+				foreach($people as $person)
+				{
+					$ob = obj($person["from"]);
+					$ppl[$ob->id()] = $ob->name();
+				}
+				$prop["options"] += $ppl;
 				break;
 
 			case "bug_class":
@@ -790,13 +822,16 @@ class bug extends class_base
 							$bt = $pi;
 						}
 					}
-					$conn = $bt->connections_to(array(
-						"from.class_id" => CL_BUGTRACK_DISPLAY,	
-						"type" => "RELTYPE_BUGTRACK"
-					 ));
-					foreach($conn as $c)
+					if($bt)
 					{
-						$bt_display = obj($c->prop("from"));
+						$conn = $bt->connections_to(array(
+							"from.class_id" => CL_BUGTRACK_DISPLAY,	
+							"type" => "RELTYPE_BUGTRACK"
+						));
+						foreach($conn as $c)
+						{
+							$bt_display = obj($c->prop("from"));
+						}
 					}
 					if($arr["request"]["bug_type"] && $bt_display)
 					{
@@ -1517,9 +1552,12 @@ class bug extends class_base
 	function create_dev_order($arr)
 	{
 		$o = new object();
-		$o->set_parent($arr["obj_inst"]->parent());
+		$bt = $this->_get_bt($arr["obj_inst"]);
+		$parent = $arr["obj_inst"]->parent();
+		$o->set_parent($parent);
 		$o->set_name($arr["obj_inst"]->name());
 		$o->set_class_id(CL_DEVELOPMENT_ORDER);
+		$o->set_prop("bug_type",$arr["obj_inst"]->prop("bug_type"));
 		$o->set_prop("bug_status", $arr["obj_inst"]->prop("bug_status"));
 		$o->set_prop("bug_priority", $arr["obj_inst"]->prop("bug_priority"));
 		$o->set_prop("bug_app", $arr["obj_inst"]->prop("bug_app"));
@@ -1530,7 +1568,7 @@ class bug extends class_base
 		$arr["obj_inst"]->save();
 
 		$u = get_instance(CL_USER);
-		$cur = obj($u->get_current_person());
+		$cur = obj($u->get_person_for_uid($arr["obj_inst"]->createdby()));
 		$o->set_prop("contactperson", $cur->id());
 
 		$sections = $cur->connections_from(array(
@@ -1546,30 +1584,31 @@ class bug extends class_base
 			));
 			foreach($profs as $p)
 			{
-				$professions[$p->conn["to"]] = $p->conn["to"];
+				$prof = obj($p->conn["to"]);
+				if(!$highest)
+				{
+					$highest = $prof;
+				}
+				$jrk = $prof->prop("jrk");
+				if($highest->prop("jrk")<$jrk)
+				{
+					$highest = $prof;
+				}
 			}
 		}
 		$c = new connection();
 		$people = $c->find(array(
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => "RELTYPE_RANK",
-			"to" => $professions
+			"to" => $highest->id()
 		));
 		foreach($people as $p)
 		{
-			$ob = obj($p["from"]);
-			if(!$highest)
-			{
-				$highest = $ob;
-			}
-			elseif($ob->prop("jrk") > $highest->prop("jrk"))
-			{
-				$highest = $ob;
-			}
+			$person = obj($p["from"]);
 		}
-		if ($highest)
+		if ($person)
 		{
-			$o->set_prop("orderer", array($highest->id()=>$highest->id()));
+			$o->set_prop("orderer", array($person->id()=>$person->id()));
 		}
 		$o->save();
 		$o->connect(array(
@@ -1580,6 +1619,16 @@ class bug extends class_base
 			"to" => $o->id(),
 			"type" => "RELTYPE_DEV_ORDER"
 		));
+		$conn = $arr["obj_inst"]->connections_from(array(
+				"type"=>"RELTYPE_FILE"						
+								));
+		foreach($conn as $c)
+		{
+			$o->connect(array(
+				"to" => $c->prop("to"),
+				"type" => "RELTYPE_FILE"
+			));
+		}
 	}
 	
 	function parse_commited_msg($msg)

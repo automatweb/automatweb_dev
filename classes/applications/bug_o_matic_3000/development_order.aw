@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.8 2007/11/08 12:53:58 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.9 2007/11/13 10:35:15 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -28,6 +28,9 @@
 		
 		@property bug_type type=classificator store=connect reltype=RELTYPE_BUGTYPE parent=settings_col1 captionside=top
 		@caption T&uuml;&uuml;p
+	
+		@property approved type=checkbox ch_value=1 field=meta table=objects method=serialize parent=settings_col1 no_caption=1
+		@caption Kinnitatud
 
 		@layout settings_col2 type=vbox parent=settings
 
@@ -77,14 +80,8 @@
 		@property orderer_unit type=relpicker reltype=UNIT field=aw_orderer_unit parent=data
 		@caption Tellija &uuml;ksus
 	
-		@property fileupload type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=aw_f1 parent=data
-		@caption Fail1
-	
-		@property fileupload2 type=releditor reltype=RELTYPE_FILE2 rel_id=first use_form=emb field=aw_f2 parent=data
-		@caption Fail2
-	
-		@property fileupload3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=aw_f3 parent=data
-		@caption Fail3
+		@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data captionside=top store=no
+		@caption Fail 
 
 @default group=reqs
 
@@ -117,14 +114,8 @@
 @reltype PROJECT value=2 clid=CL_PROJECT
 @caption Projekt
 
-@reltype FILE1 value=3 clid=CL_FILE
-@caption Fail1
-
-@reltype FILE2 value=4 clid=CL_FILE
-@caption Fail2
-
-@reltype FILE3 value=5 clid=CL_FILE
-@caption Fail3
+@reltype FILE value=3 clid=CL_FILE
+@caption Fail
 
 @reltype ORDERER_CO value=11 clid=CL_CRM_COMPANY
 @caption Organisatsioon
@@ -210,6 +201,16 @@ class development_order extends class_base
 					));
 					foreach($profs as $p)
 					{
+						$prof = obj($p->conn["to"]);
+						if(!$highest)
+						{
+							$highest = $prof;
+						}
+						$jrk = $prof->prop("jrk");
+						if($highest->prop("jrk")<$jrk)
+						{
+							$highest = $prof;
+						}
 						$professions[$p->conn["to"]] = $p->conn["to"];
 					}
 				}
@@ -222,18 +223,10 @@ class development_order extends class_base
 				foreach($people as $person)
 				{
 					$ob = obj($person["from"]);
-					if(!$highest)
-					{
-						$highest = $ob;
-						
-					}
-					elseif($ob->prop("jrk") > $highest->prop("jrk"))
-					{
-						$highest = $ob;
-					}
 					$ppl[$ob->id()] = $ob->name();
 				}
 				$prop["options"] = array("" => t("--vali--"));
+				$prop["options"] += $ppl;
 				if($prop["value"])
 				{
 					foreach($prop["value"] as $val)
@@ -247,7 +240,19 @@ class development_order extends class_base
 				}
 				else
 				{
-					$prop["value"] = array($highest->id() => $highest->id());
+					$people = $c->find(array(
+						"from.class_id" => CL_CRM_PERSON,
+     						"type" => "RELTYPE_RANK",
+       						"to" => $highest->id()
+					));
+					foreach($people as $p)
+					{
+						$person = obj($p["from"]);
+					}
+					if($person)
+					{
+						$prop["value"] = array($person->id()=>$person->id());
+					}
 				}
 				$prop["options"] += $ppl;
 				break;
@@ -307,6 +312,37 @@ class development_order extends class_base
 						}
 					}
 				}
+				$u = get_instance(CL_USER);
+				$cur = obj($u->get_current_person());
+				$sections = $cur->connections_from(array(
+					"class_id" => CL_CRM_SECTION,
+     					 "type" => "RELTYPE_SECTION"
+				));
+				$ppl = array();
+				foreach($sections as $s)
+				{
+					$sc = obj($s->conn["to"]);
+					$profs = $sc->connections_from(array(
+						"class_id" => CL_CRM_PROFESSION,
+      						"type" => "RELTYPE_PROFESSIONS"
+					));
+					foreach($profs as $p)
+					{
+						$professions[$p->conn["to"]] = $p->conn["to"];
+					}
+				}
+				$c = new connection();
+				$people = $c->find(array(
+					"from.class_id" => CL_CRM_PERSON,
+      					"type" => "RELTYPE_RANK",
+     					"to" => $professions
+				));
+				foreach($people as $person)
+				{
+					$ob = obj($person["from"]);
+					$ppl[$ob->id()] = $ob->name();
+				}
+				$prop["options"] += $ppl;
 				break;
 
 			case "prognosis":
@@ -395,6 +431,12 @@ class development_order extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "approved":
+				if($arr["obj_inst"]->prop("approved")!=1 && $prop["value"]==1)
+				{
+					$arr["obj_inst"]->set_prop("bug_status", 2);
+				}
+				break;
 			case "bug_feedback_p":
 				if ($arr["obj_inst"]->prop("bug_status") != 10)
 				{
@@ -452,7 +494,15 @@ class development_order extends class_base
 					if(!$arr["new"])
 					{
 						// set the creator as the feedback from person
-						$p = $u->get_person_for_uid($bug->createdby());
+						$bbug = $bug->get_first_obj_by_reltype("RELTYPE_MAIN_BUG");
+						if($bbug)
+						{
+							$p = $u->get_person_for_uid($bbug->createdby());
+						}
+						else
+						{
+							$p = $u->get_person_for_uid($bug->createdby());
+						}
 					}
 					else
 					{

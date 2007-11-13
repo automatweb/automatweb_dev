@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.5 2007/11/09 09:50:48 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.6 2007/11/13 10:35:15 robert Exp $
 // bugtrack_display.aw - Ülesannete kuvamine 
 /*
 
@@ -270,7 +270,6 @@ class bugtrack_display extends class_base
 		$cur = get_current_person();
 		$cur_u = get_current_user();
 		$ol = new object_list(array(
-			"parent" => $arr["obj_inst"]->prop("bugtrack"),
 			"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
 			new object_list_filter(array(
 				"logic" => "OR",

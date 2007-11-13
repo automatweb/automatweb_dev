@@ -54,6 +54,18 @@
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
+            <name>approved</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>settings_col1</parent>
+            <no_caption>1</no_caption>
+            <caption>Kinnitatud</caption>
+      </property>
+      <property>
             <name>bug_app</name>
             <table>objects</table>
             <group>general</group>
@@ -203,40 +215,16 @@
             <caption>Tellija &amp;amp;uuml;ksus</caption>
       </property>
       <property>
-            <name>fileupload</name>
+            <name>multifile_upload</name>
             <table>aw_dev_orders</table>
             <group>general</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE1</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
-            <field>aw_f1</field>
+            <type>multifile_upload</type>
+            <reltype>RELTYPE_FILE</reltype>
             <parent>data</parent>
-            <caption>Fail1</caption>
-      </property>
-      <property>
-            <name>fileupload2</name>
-            <table>aw_dev_orders</table>
-            <group>general</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE2</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
-            <field>aw_f2</field>
-            <parent>data</parent>
-            <caption>Fail2</caption>
-      </property>
-      <property>
-            <name>fileupload3</name>
-            <table>aw_dev_orders</table>
-            <group>general</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE3</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
-            <field>aw_f3</field>
-            <parent>data</parent>
-            <caption>Fail3</caption>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>multifile_upload</field>
+            <caption>Fail </caption>
       </property>
       <property>
             <name>reqs_tb</name>
@@ -352,21 +340,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Projekt</caption>
             </PROJECT>
-            <FILE1>
+            <FILE>
                   <value>3</value>
                   <clid>CL_FILE</clid>
-                  <caption>Fail1</caption>
-            </FILE1>
-            <FILE2>
-                  <value>4</value>
-                  <clid>CL_FILE</clid>
-                  <caption>Fail2</caption>
-            </FILE2>
-            <FILE3>
-                  <value>5</value>
-                  <clid>CL_FILE</clid>
-                  <caption>Fail3</caption>
-            </FILE3>
+                  <caption>Fail</caption>
+            </FILE>
             <ORDERER_CO>
                   <value>11</value>
                   <clid>CL_CRM_COMPANY</clid>

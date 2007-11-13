@@ -1086,6 +1086,14 @@
                   <clid>CL_CFGMANAGER</clid>
                   <caption>Seadete haldur</caption>
             </CFGMGR>
+            <DEVO_FOLDER>
+                  <value>10</value>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_DEVELOPMENT_ORDER_CAT</num_1>
+                  </clid>
+                  <caption>Tellimuste kataloog</caption>
+            </DEVO_FOLDER>
       </reltypes>
       <layout>
             <bug>
