@@ -1,5 +1,5 @@
 <form action='reforb.{VAR:ext}' method=post>
-<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0 style="margin-top: 100px;">
 <tr>
 	<td class="fform">Nimi:</td>
 	<td class="fform"><input size="50" type='text' NAME='name' VALUE='{VAR:name}'></td>
