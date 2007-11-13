@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.26 2007/10/30 14:41:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.27 2007/11/13 17:01:01 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -236,7 +236,7 @@ class orders_form extends class_base
 	function change($arr)
 	{
 		//If admin side then dont use templates
-		if(strstr($_SERVER['REQUEST_URI'], "/automatweb") && !strstr($_SERVER['REQUEST_URI'], "action=print_orders"))
+		if(strstr($_SERVER['REQUEST_URI'], "/automatweb") && !strstr($_SERVER['REQUEST_URI'], "action=print_orders") && !($_POST["action"] == "print_orders"))
 		{
 			return parent::change($arr);
 		}
@@ -291,6 +291,10 @@ class orders_form extends class_base
 		{
 			$this->read_template($form_obj->prop("orders_form_template"));
 		}
+		elseif(file_exists($this->site_template_dir."/orders_form.tpl"))
+		{
+			$this->read_site_template("orders_form.tpl");
+		}
 		else
 		{
 			$this->read_template("orders_form.tpl");
@@ -339,6 +343,9 @@ class orders_form extends class_base
 				));
 			}
 		}
+		$this->vars(array(
+			"logged" => (aw_global_get("uid") == "" ? "" : $this->parse("logged")),
+		));
 		return $this->parse();
 	}
 	
@@ -369,7 +376,14 @@ class orders_form extends class_base
 		
 		if(!$person)
 		{
-			$this->read_template("orders_form.tpl");
+			if(file_exists($this->site_template_dir."/orders_form.tpl"))
+			{
+				$this->read_site_template("orders_form.tpl");
+			}
+			else
+			{
+				$this->read_template("orders_form.tpl");
+			}
 			return;
 		}
 		
@@ -477,6 +491,10 @@ class orders_form extends class_base
                 	{
                         	$this->read_template($o->prop("orders_form_template"));
                 	}
+			elseif(file_exists($this->site_template_dir."/orders_form.tpl"))
+			{
+				$this->read_site_template("orders_form.tpl");
+			}
                 	else
                 	{
                 	        $this->read_template("orders_form.tpl");
@@ -489,6 +507,10 @@ class orders_form extends class_base
                 	{
                         	$this->read_template($o->prop("orders_form_template"));
                 	}
+			elseif(file_exists($this->site_template_dir."/orders_form.tpl"))
+			{
+				$this->read_site_template("orders_form.tpl");
+			}
                 	else
                 	{
                 	        $this->read_template("orders_form.tpl");
@@ -496,7 +518,14 @@ class orders_form extends class_base
 		}
 		else
 		{
-			$this->read_template("orders_form.tpl");
+			if(file_exists($this->site_template_dir."/orders_form.tpl"))
+			{
+				$this->read_site_template("orders_form.tpl");
+			}
+			else
+			{
+				$this->read_template("orders_form.tpl");
+			}
 		}
 
 		return $retval;
@@ -636,6 +665,10 @@ class orders_form extends class_base
 		if($o->prop("orders_form_template"))
 		{
 			$this->read_template($o->prop("orders_form_template"));
+		}
+		elseif(file_exists($this->site_template_dir."/orders_form.tpl"))
+		{
+			$this->read_site_template("orders_form.tpl");
 		}
 		else
 		{
@@ -779,6 +812,10 @@ class orders_form extends class_base
 		if($obj_inst->prop("orders_form_template"))
 		{
 			$this->read_template($obj_inst->prop("orders_form_template"));
+		}
+		elseif(file_exists($this->site_template_dir."/orders_form.tpl"))
+		{
+			$this->read_site_template("orders_form.tpl");
 		}
 		else
 		{
