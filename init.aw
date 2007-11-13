@@ -68,20 +68,15 @@ function aw_ini_get($var)
 	{
 		return;
 	}
-	// elseif ("classes" === $path[0])
-	// {
-	// }
 	else
 	{
-		$val = array();
-
 		foreach ($path as $index)
 		{
 			if (isset($val[$index]))
 			{
 				$val = $val[$index];
 			}
-			elseif(isset($GLOBALS["cfg"][$index]))
+			elseif(!isset($val) and isset($GLOBALS["cfg"][$index]))
 			{
 				$val = $GLOBALS["cfg"][$index];
 			}
@@ -882,7 +877,7 @@ function aw_startup()
 function aw_shutdown()
 {
 	// whotta fook, this messenger thingie goes here then?:S
-	
+
 	$i = get_instance("file");
 	if($i->can("view", $_SESSION["current_user_has_messenger"]) && $i->can("view", $_SESSION["uid_oid"]))
 	{
