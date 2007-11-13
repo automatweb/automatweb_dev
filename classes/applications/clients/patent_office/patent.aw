@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.79 2007/06/14 08:29:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.80 2007/11/13 15:33:13 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1584,8 +1584,11 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			"value" => 0,
 			"checked" => (!$_SESSION["patent"]["applicant_type"]) ? 1 : 0,
 			"name" => "applicant_type",
-			"onclick" => 'document.getElementById("firstname_row").style.display = ""; document.getElementById("lastname_row").style.display = ""; document.getElementById("name_row").style.display = "none";
-			
+			"onclick" => 'document.getElementById("firstname_row").style.display = "";
+			document.getElementById("lastname_row").style.display = "";
+			document.getElementById("name_row").style.display = "none";
+			document.getElementById("name").value = "";
+			document.getElementById("code").value = "";
 			document.getElementById("reg_code").style.display="none";
 			document.getElementById("p_adr").style.display="";
 			document.getElementById("co_adr").style.display="none";
@@ -1597,6 +1600,8 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			"checked" => $_SESSION["patent"]["applicant_type"],
 			"name" => "applicant_type",
 			"onclick" => 'document.getElementById("firstname_row").style.display = "none"; document.getElementById("lastname_row").style.display = "none"; document.getElementById("name_row").style.display = "";
+			document.getElementById("firstname").value = "";
+			document.getElementById("lastname").value = "";
 			
 			document.getElementById("reg_code").style.display="";
 			document.getElementById("p_adr").style.display="none";
@@ -1625,6 +1630,8 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
 				document.getElementById("reproduction_row").style.display = "none";
 				document.getElementById("color_row").style.display = "none";
+			document.getElementById("colors").value = "";
+
 				document.getElementById("wordmark_caption").innerHTML = "* Kaubam&auml;rk";
 				document.getElementById("foreignlangelements_row").style.display = "";
 				 ',
@@ -1634,7 +1641,11 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"name" => "type",
 				"onclick" => '
 				document.getElementById("wordmark_row").style.display = "none";
+			document.getElementById("word_mark").value = "";
 				document.getElementById("foreignlangelements_row").style.display = "none";
+			document.getElementById("element_translation").value = "";
+
+
 				document.getElementById("reproduction_row").style.display = "";
 				document.getElementById("color_row").style.display = "";'
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Kombineeritud m&auml;rk ").html::radiobutton(array(
@@ -1645,6 +1656,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				document.getElementById("color_row").style.display = "";
 				document.getElementById("reproduction_row").style.display = "";
       				document.getElementById("wordmark_row").style.display = "none";
+			document.getElementById("word_mark").value = "";
 				document.getElementById("foreignlangelements_row").style.display = "";',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Ruumiline m&auml;rk ").html::radiobutton(array(
 				"value" => 3,
@@ -1654,6 +1666,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				document.getElementById("color_row").style.display = "";
 				document.getElementById("reproduction_row").style.display = "";
 				document.getElementById("wordmark_row").style.display = "none";
+			document.getElementById("word_mark").value = "";
 				document.getElementById("foreignlangelements_row").style.display = "";',
 			));
 		
