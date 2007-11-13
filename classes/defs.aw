@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.244 2007/10/08 10:25:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.245 2007/11/13 07:49:07 hannes Exp $
 // defs.aw - common functions
 if (!defined("DEFS"))
 {
@@ -836,7 +836,7 @@ if (!defined("DEFS"))
 		$retval = array();
 		if (is_array($array))
 		{
-			while(list(,$val) = each($array))
+			foreach($array as $val)
 			{
 				$retval[]= sprintf($format,$val,$val,$val);
 			};
