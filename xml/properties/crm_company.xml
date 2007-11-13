@@ -3480,7 +3480,6 @@
             <stats_s>
                   <parent>stats</parent>
                   <caption>Otsi</caption>
-                  <submit_method>get</submit_method>
                   <save>no</save>
             </stats_s>
             <stats_view>
@@ -3494,7 +3493,6 @@
                   <caption>Minu statistika</caption>
                   <submit>no</submit>
                   <save>no</save>
-                  <submit_method>get</submit_method>
             </stats_my>
             <quick_view>
                   <caption>Vaata</caption>

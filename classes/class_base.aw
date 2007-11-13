@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.585 2007/11/13 07:17:44 robert Exp $
+// $Id: class_base.aw,v 2.586 2007/11/13 14:21:01 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5240,7 +5240,10 @@ class class_base extends aw_template
 				{
 					$gval["tabgroup"] = $this->groupinfo[$gkey]["tabgroup"];
 				}
-
+				if ($this->groupinfo[$gkey]["submit_method"] || $gval["submit_method"])
+				{
+					$gval["submit_method"] = $this->groupinfo[$gkey]["submit_method"];
+				}
 				$tmp[$gkey] = $gval;
 			}
 

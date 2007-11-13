@@ -1119,9 +1119,9 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 
 @groupinfo stats caption="Aruanded" save=no
 
-	@groupinfo stats_s parent=stats caption="Otsi" submit_method=get save=no
+	@groupinfo stats_s parent=stats caption="Otsi" save=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
-	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no submit_method=get
+	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no
 
 groupinfo qv caption="Vaata"  submit=no save=no
 
@@ -3557,6 +3557,35 @@ class crm_company extends class_base
 
 	function callback_mod_retval($arr)
 	{
+		if($arr['args']["group"] == "stats_s")
+		{
+			$arr['args']['stats_s_cust_type'] = ($arr['request']['stats_s_cust_type']);
+			$arr['args']['stats_s_cust'] = ($arr['request']['stats_s_cust']);
+			$arr['args']['stats_s_area'] = ($arr['request']['stats_s_area']);
+			$arr['args']['stats_s_proj'] = ($arr['request']['stats_s_proj']);
+			$arr['args']['stats_s_state'] = ($arr['request']['stats_s_state']);
+			$arr['args']['stats_s_time_sel'] = ($arr['request']['stats_s_time_sel']);
+			$arr['args']['stats_s_from'] = ($arr['request']['stats_s_from']);
+			$arr['args']['stats_s_to'] = ($arr['request']['stats_s_to']);
+			$arr['args']['stats_s_worker'] = ($arr['request']['stats_s_worker']);
+			$arr['args']['stats_s_worker_sel'] = ($arr['request']['stats_s_worker_sel']);
+			$arr['args']['stats_s_res_type'] = ($arr['request']['stats_s_res_type']);
+			$arr['args']['stats_s_bill_state'] = $arr['request']['stats_s_bill_state'];
+			$arr['args']['stats_s_only_billable'] = ($arr['request']['stats_s_only_billable']);
+			$arr['args']['stats_s_group_by_client'] = ($arr['request']['stats_s_group_by_client']);
+			$arr['args']['stats_s_group_by_project'] = ($arr['request']['stats_s_group_by_project']);
+			$arr['args']['stats_s_group_by_task'] = ($arr['request']['stats_s_group_by_task']);
+			$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
+		}
+		if($arr['args']["group"] == "stats_my")
+		{
+			$arr['args']['my_stats_s_type'] = ($arr['request']['my_stats_s_type']);
+			$arr['args']['my_stats_s_from'] = ($arr['request']['my_stats_s_from']);
+			$arr['args']['my_stats_s_to'] = ($arr['request']['my_stats_s_to']);
+			$arr['args']['my_stats_s_time_sel'] = ($arr['request']['my_stats_s_time_sel']);
+			$arr['args']['my_stats_s_cust'] = ($arr['request']['my_stats_s_cust']);
+			$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
+		}
 		if($this->do_search)
 		{
 			$arr['args']['contact_search_firstname'] = ($arr['request']['contact_search_firstname']);
