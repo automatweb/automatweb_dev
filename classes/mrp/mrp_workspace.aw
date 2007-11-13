@@ -2910,17 +2910,39 @@ class mrp_workspace extends class_base
 			{
 				if (CL_MRP_RESOURCE == $o->class_id() and MRP_STATUS_RESOURCE_INUSE != $o->prop("state"))
 				{
+					$unfinished_jobs = false;
 					$applicable_states = array(
-						MRP_STATUS_DONE,
-						MRP_STATUS_ARCHIVED,
+						MRP_STATUS_DONE
 					);
-					$list = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"CL_MRP_CASE.RELTYPE_MRP_USED_RESOURCE" => $o->id(),
-						"state" => new obj_predicate_not($applicable_states),
-					));
 
-					if (0 < $list->count())
+					$c = new connection();
+					$c_data = $c->find(array(
+						"from.class_id" => CL_MRP_JOB,
+						"type" => RELTYPE_MRP_RESOURCE,
+						"to" => $o->id()
+					));
+					$resource_job_ids = array();
+
+					foreach ($c_data as $c_arr)
+					{
+						$resource_job_ids[] = $c_arr["from"];
+					}
+
+					if (count($resource_job_ids))
+					{
+						$list = new object_list (array (
+							"oid" => $resource_job_ids,
+							"class_id" => CL_MRP_JOB,
+							"state" => new obj_predicate_not($applicable_states)
+						));
+
+						if (0 < $list->count())
+						{
+							$unfinished_jobs = true;
+						}
+					}
+
+					if ($unfinished_jobs)
 					{
 						$res_e[] = $o->name();
 					}
@@ -2938,7 +2960,7 @@ class mrp_workspace extends class_base
 
 			if (count($res_e))
 			{
-				$errors .= sprintf(t("Ressurssi/ressursse <i>%s</i> arhiveerida ei saa, sest sellel/neil on lõpetamata projekte. "), implode(",", $res_e));
+				$errors .= sprintf(t("Ressurssi/ressursse <i>%s</i> arhiveerida ei saa, sest sellel/neil on lõpetamata t&ouml;id. "), implode(",", $res_e));
 				aw_session_set("mrp_errors", $errors);
 			}
 		}
