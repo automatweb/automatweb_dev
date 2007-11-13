@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.10 2007/11/02 10:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.11 2007/11/13 13:20:50 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -25,6 +25,46 @@ class ows_bron extends class_base
 			"clid" => CL_OWS_BRON
 		));
 
+		$this->country_lut = array();
+
+		$this->country_lut["en"] = array(
+			"EE" => "Estonia",
+			"LT" => "Lithuania",
+			"LV" => "Latvia"
+		);
+		$this->country_lut["et"] = array(
+			"EE" => "Eesti",
+			"LT" => "Leedu",
+			"LV" => "L&auml;ti"
+		);
+		$this->country_lut["fi"] = $this->country_lut["de"] = $this->country_lut["it"] = $this->country_lut["lv"] = $this->country_lut["lt"] = $this->country_lut["ru"] = $this->country_lut["es"] = $this->country_lut["sv"] = array(
+			"EE" => "Estonia",
+			"LT" => "Lithuania",
+			"LV" => "Latvia"
+		);
+
+		$this->city_lut = array();
+
+		$this->city_lut["en"] = array(
+			"Tallinn" => "Tallinn",
+			"Riga" => "Riga",
+			"Vilnius" => "Vilnius",
+			"Klaipeda" => "Klaipeda"
+		);
+		$this->city_lut["et"] = array(
+			"Tallinn" => "Tallinn",
+			"Riga" => "Riia",
+			"Vilnius" => "Vilnius",
+			"Klaipeda" => "Klaipeda"
+		);
+		$this->city_lut["fi"] = $this->city_lut["de"] = $this->city_lut["it"] = $this->city_lut["lv"] = $this->city_lut["lt"] = $this->city_lut["ru"] = $this->city_lut["es"] = $this->city_lut["sv"] = array(
+			"Tallinn" => "Tallinn",
+			"Riga" => "Riga",
+			"Vilnius" => "Vilnius",
+			"Klaipeda" => "Klaipeda"
+		);
+
+
 		$this->hotel_list = array(
 			"27" => "Reval Hotel Ol&uuml;mpia",
 			"37" => "Reval Hotel Central",
@@ -32,7 +72,6 @@ class ows_bron extends class_base
 			"38" => "Reval Inn Tallinn",
 			"40" => "Reval Hotel Latvija",
 			"41" => "Reval Hotel Ridzene",
-			"42" => "Reval Hotel Lietuva",
 			"42" => "Reval Hotel Lietuva",
 			"17969" => "Reval Inn Vilnius",
 			"17971" => "Reval Inn Klaipeda",
@@ -160,6 +199,23 @@ class ows_bron extends class_base
 		$nights = ceil(($departure-$arrival)/(60*60*24))-1;
 		$currency = $arr["set_currency"];
 
+		if (!$rateid)
+		{
+				$ru =  $this->mk_my_orb("show_available_rooms", array(
+					"i_location" => $arr["i_location"],
+					"i_checkin" => $arr["i_checkin"],
+					"i_checkout" => $arr["i_checkout"],
+					"i_rooms" => $arr["i_rooms"],
+					"i_adult1" => $arr["i_adults"],
+					"i_child1" => $arr["i_children"],
+					"i_promo" => $arr["i_promo"],
+					"section" => aw_global_get("section"),
+					"no_reforb" => 1,
+					"set_currency" => $currency
+				));
+				return aw_url_change_var("error", 1, $ru);
+		}
+
 		$parameters = array();
 		$parameters["hotelId"] = $location;
 		$parameters["rateId"] = $rateid;
@@ -254,6 +310,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"section" => aw_global_get("section"),
 				"no_reforb" => 1,
 				"set_currency" => $currency,
+				"api_departure_days" => $arr["api_departure_days"],
 				"r_url" => aw_url_change_var("error", null, get_ru()),
 				"ow_bron" => $arr["ow_bron"],
 			)),
@@ -266,6 +323,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"i_child1" => $arr["i_children"],
 				"i_promo" => $arr["i_promo"],
 				"section" => aw_global_get("section"),
+				"api_departure_days" => $arr["api_departure_days"],
 				"no_reforb" => 1,
 				"set_currency" => $currency
 			)),
@@ -295,6 +353,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"i_child1" => $arr["i_children"],
 				"i_promo" => $arr["i_promo"],
 				"section" => $arr["section"],
+				"api_departure_days" => $arr["api_departure_days"],
 				"no_reforb" => 1,
 				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"]
 			)),
@@ -491,6 +550,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			$bpo = $ow_bron->prop("bank_payment");
 		}
 		$this->vars(array(
+			"guest_comments" => nl2br($arr["bron_comment"]),
 			"room_type" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Name"]),
 			"eur_url" => aw_url_change_var("set_currency", "EUR"),
 			"pound_url" => aw_url_change_var("set_currency", "GBP"),
@@ -512,6 +572,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"i_location" => $arr["i_location"],
 				"i_checkin" => $arr["i_checkin"],
 				"i_checkout" => $arr["i_checkout"],
+				"api_departure_days" => $arr["api_departure_days"],
 				"i_rooms" => $arr["i_rooms"],
 				"i_adult1" => $arr["i_adults"],
 				"i_child1" => $arr["i_children"],
@@ -566,6 +627,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"i_checkin" => $arr["i_checkin"],
 				"i_checkout" => $arr["i_checkout"],
 				"i_adults" => $arr["i_adults"],
+				"api_departure_days" => $arr["api_departure_days"],
 				"i_children" => $arr["i_children"],
 				"i_rooms" => $arr["i_rooms"],
 				"i_promo" => $arr["i_promo"],
@@ -577,6 +639,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"i_checkout" => $arr["i_checkout"],
 				"i_rooms" => $arr["i_rooms"],
 				"i_adult1" => $arr["i_adults"],
+				"api_departure_days" => $arr["api_departure_days"],
 				"i_child1" => $arr["i_children"],
 				"i_promo" => $arr["i_promo"],
 				"section" => $arr["section"],
@@ -669,14 +732,18 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				return aw_url_change_var("error", 4, $arr["r_url"]);
 			}
 
-			if (!$this->validate_cc_num($arr["confirm_card_number"]))
+			$number = trim($arr["confirm_card_number"]); 
+			$number = eregi_replace("[[:space:]]+", "", $number); 
+			$number = eregi_replace("-+", "", $number); 
+
+			if (!$this->validate_cc_num($number))
 			{
 				return aw_url_change_var("error", 5, $arr["r_url"]);
 			}
 			// if everything is ok, then call MakeBooking
 
 			$_ts = mktime(1,1,1, $arr["confirm_exp_mon"], 5, $arr["confirm_exp_year"]);
-			$exp_date = $arr["confirm_exp_year"]."-".$arr["confirm_exp_mon"]."-".date("t", $_ts)."T00:00:00";
+			$exp_date = sprintf("%04d", $arr["confirm_exp_year"])."-".sprintf("%02d", $arr["confirm_exp_mon"])."-".date("t", $_ts)."T00:00:00";
 
 			$checkindata = $arr["i_checkin"];
 			$checkindata2 = explode('.', $checkindata);
@@ -687,12 +754,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			$checkout = $checkoutdata2[2].'-'.$checkoutdata2[1].'-'.$checkoutdata2[0].'T23:59:00';
 			$checkout_ts = mktime(0,0,0,$checkoutdata2[1], $checkoutdata2[0], $checkoutdata2[2]);
 
-			$number = trim($arr["confirm_card_number"]); 
-			$number = eregi_replace("[[:space:]]+", "", $number); 
-			$number = eregi_replace("-+", "", $number); 
-
 			$params = array(
-	"ow_bron" => $arr["ow_bron"],
    			"hotelId" => $arr["i_location"],
       	"rateId" => $arr["sel_room_type"],
       	"arrivalDate" => $checkin,
@@ -718,8 +780,8 @@ $parameters["ow_bron"] = $arr["ow_bron"];
       	"guestAddress2" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["ct"]["adr2"])),
       	"guestPhone" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["ct"]["phone"])),
       	"guestEmail" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["ct"]["email"])),
-      	"roomSmokingPreferenceId" => (int)$arr["smoking"],
-      	"floorPreferenceId" => (int)$arr["low_floor"],
+      	"roomSmokingPreferenceId" => (int)$arr["smoking"] ? 3 : 2,
+      	"floorPreferenceId" => $arr["high_floor"] ? 2 : ($arr["low_floor"] ? 3 : 1),
       	"isAllergic" => (bool)$arr["is_allergic"],
       	"isHandicapped" => (bool)$arr["is_handicapped"],
       	"guestComments" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["bron_comment"])),
@@ -775,21 +837,21 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			$o->set_prop("child_per_room", $params["numberOfChildrenPerRoom"]);
 			$o->set_prop("promo_code", $params["promotionCode"]);
 			$o->set_prop("currency", $params["customCurrencyCode"]);
-			$o->set_prop("guest_title", $params["guestTitle"]);
-			$o->set_prop("guest_firstname", $params["guestFirstName"]);
-			$o->set_prop("guest_lastname", $params["guestLastName"]);
-			$o->set_prop("guest_country", $params["guestCountryCode"]);
-			$o->set_prop("guest_state", $params["guestStateOrProvince"]);
-			$o->set_prop("guest_city", $params["guestCity"]);
-			$o->set_prop("guest_postal_code", $params["guestPostalCode"]);
-			$o->set_prop("guest_adr_1", $params["guestAddress1"]);
-			$o->set_prop("guest_adr_2", $params["guestAddress2"]);
-			$o->set_prop("guest_phone", $params["guestPhone"]);
-			$o->set_prop("guest_email", $params["guestEmail"]);
-			$o->set_prop("guest_comments", $params["guestComments"]);
+			$o->set_prop("guest_title", "");
+			$o->set_prop("guest_firstname", urldecode($arr["ct"]["firstname"]));
+			$o->set_prop("guest_lastname", urldecode($arr["ct"]["lastname"]));
+			$o->set_prop("guest_country", urldecode($arr["ct"]["country"]));
+			$o->set_prop("guest_state", "");
+			$o->set_prop("guest_city", urldecode($arr["ct"]["city"]));
+			$o->set_prop("guest_postal_code", urldecode($arr["ct"]["postalcode"]));
+			$o->set_prop("guest_adr_1", urldecode($arr["ct"]["adr1"]));
+			$o->set_prop("guest_adr_2", urldecode($arr["ct"]["adr2"]));
+			$o->set_prop("guest_phone", urldecode($arr["ct"]["phone"]));
+			$o->set_prop("guest_email", urldecode($arr["ct"]["email"]));
+			$o->set_prop("guest_comments", urldecode($arr["bron_comment"]));
 			$o->set_prop("guarantee_type", $params["guaranteeType"]);
 			$o->set_prop("guarantee_cc_type", $params["guaranteeCreditCardType"]);
-			$o->set_prop("guarantee_cc_holder_name", $params["guaranteeCreditCardHolderName"]);
+			$o->set_prop("guarantee_cc_holder_name", urldecode($arr["confirm_card_name"]));
 			$o->set_prop("guarantee_cc_num", "************".substr($params["guaranteeCreditCardNumber"], -4));
 			$o->set_prop("guarantee_cc_exp_date", $this->parse_date_int($params["guaranteeCreditCardExpirationDate"]));
 			$o->set_prop("payment_type", $params["paymentType"]);
@@ -818,6 +880,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 
 	function send_mail_from_bron($o)
 	{
+		$this->is_mail = 1;
 		$html = $this->display_final_page(array("rvs_id" => $o->id()));
 
 		$awm = get_instance("protocols/mail/aw_mail");
@@ -872,7 +935,14 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 	**/
 	function display_final_page($arr)
 	{
-		$this->read_template("final_confirm.tpl");
+		if (!$this->is_mail)
+		{
+			$this->read_template("final_confirm.tpl");
+		}
+		else
+		{
+			$this->read_template("mail_content.tpl");
+		}
 		lc_site_load("ows_bron", $this);
 		$o = obj($arr["rvs_id"]);
 
@@ -930,6 +1000,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		$this->vars($o->properties());
 		$this->vars(array(
 			"confirmation_number" => $o->prop("confirmation_code"),
+			"cancel_url" => $this->mk_my_orb("cancel_booking", array("confirmation_number" => $o->prop("confirmation_code"))),
 			"checkin" => date("d.m.Y", $o->prop("arrival_date")),
 			"checkout" => date("d.m.Y", $o->prop("departure_date")),
 			"nights" => (ceil(($o->prop("departure_date")-$o->prop("arrival_date"))/(60*60*24))-1),
@@ -977,12 +1048,22 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 
 		$checkindata = $arr["i_checkin"];
 		$checkindata2 = explode('.', $checkindata);
-		$checkin = $checkindata2[2].'-'.$checkindata2[1].'-'.$checkindata2[0].'T00:00:00';
+		$checkin = 
+			sprintf("%04d",$checkindata2[2]).'-'.
+			sprintf("%02d",$checkindata2[1]).'-'.
+			sprintf("%02d",$checkindata2[0]).'T00:00:00';
+
 		$checkin_ts = mktime(0,0,0,$checkindata2[1], $checkindata2[0], $checkindata2[2]);
 		$checkoutdata = $arr["i_checkout"];
 		$checkoutdata2 = explode('.', $checkoutdata);
-		$checkout = $checkoutdata2[2].'-'.$checkoutdata2[1].'-'.$checkoutdata2[0].'T23:59:00';
+		$checkout = sprintf("%04d", $checkoutdata2[2]).'-'.sprintf("%02d",$checkoutdata2[1]).'-'.sprintf("%02d",$checkoutdata2[0]).'T23:59:00';
 		$checkout_ts = mktime(0,0,0,$checkoutdata2[1], $checkoutdata2[0], $checkoutdata2[2]);
+
+		if ($checkoutdata2[2] < date("Y") || $checkindata2[2] < date("Y") || $checkindata2[2] > (date("Y")+5) || $checkoutdata2[2] > (date("Y")+5))
+		{
+			$arr["r_url"] = aw_url_change_var("error", 5, $arr["r_url"]);
+			return $arr["r_url"];
+		}
 
 		if ($checkout_ts <= $checkin_ts)
 		{
@@ -1095,6 +1176,7 @@ enter_function("ws:GetAvailableRates");
 			"method" => "soap",
 			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
+
 exit_function("ws:GetAvailableRates");
 
 /*echo dbg::dump($parameters);
@@ -1228,6 +1310,7 @@ echo date("d.m.Y H:i:s");*/
 					"lang" => $lang,
 					"currency" => $currency,
 					"ow_bron" => $arr["ow_bron"],
+					"doc_code" => $doc->id()
 				), "ows_bron", false, true),
 				"num_offers" => count($ratedata)
 			));
@@ -1283,6 +1366,8 @@ echo date("d.m.Y H:i:s");*/
 						"lang" => $lang,
 						"currency" => $currency,
 						"ow_bron" => $arr["ow_bron"],
+					"doc_code" => $doc->id()
+
 					), "ows_bron", false, true)
 				));
 				$inl .= $this->parse("type_in_rate");
@@ -1329,6 +1414,7 @@ echo date("d.m.Y H:i:s");*/
 					"lang" => $lang,
 					"currency" => $currency,
 					"ow_bron" => $arr["ow_bron"],
+					"doc_code" => $doc->id()
 				), "ows_bron", false, true),
 				"num_offers" => count($ratedata)
 			));
@@ -1337,6 +1423,7 @@ echo date("d.m.Y H:i:s");*/
 			));
 			$tmp .= $this->parse("RateList");
 		}
+		$this->_insert_hotel_list($arr["i_location"]);
 
 		$this->vars(array(
 			"i_rooms_".$arr["i_rooms"] => "SELECTED",
@@ -1344,6 +1431,7 @@ echo date("d.m.Y H:i:s");*/
 			"i_child1_".$arr["i_child1"] => "SELECTED",
 			"i_checkin" => htmlspecialchars($arr["i_checkin"]),
 			"i_checkout" => htmlspecialchars($arr["i_checkout"]),
+			"api_departure_days" => $arr["api_departure_days"],
 			"sel_hotel_".$arr["i_location"] => "SELECTED",
 			"eur_url" => aw_url_change_var("set_currency", "EUR"),
 			"pound_url" => aw_url_change_var("set_currency", "GBP"),
@@ -1377,9 +1465,18 @@ echo date("d.m.Y H:i:s");*/
 					"i_rooms" => $arr["i_rooms"],
 					"i_promo" => $arr["i_promo"],
 					"ow_bron" => $arr["ow_bron"],
+					"api_departure_days" => $arr["api_departure_days"],
 				)
 			)
 		));
+
+		if ($_GET["error"] > 0)
+		{
+			$this->vars(array(
+				"ERR_".$_GET["error"] => $this->parse("ERR_".$_GET["error"])
+ 			));
+		}
+
 		return $this->parse();
 	}
 
@@ -1389,10 +1486,17 @@ echo date("d.m.Y H:i:s");*/
 		$ob = new object($arr["id"]);
 
 		$this->read_template("bron_box.tpl");
+
+		$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
+		$lang = $this->get_web_language_id($lc);
+
 		lc_site_load("ows_bron", $this);
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
+
+		$this->_insert_hotel_list();
+
 		$error1 = ' class="error"';
 		$error2 = '<p class="error">Maximum number of persons per room is 4. Please review</p>';
 		$rooms = $this->picker($_GET['rooms']?$_GET['rooms']:1, array(1=>1,2=>2,3=>3,4=>4));
@@ -1488,6 +1592,19 @@ echo date("d.m.Y H:i:s");*/
 		$this->read_template("room_desc.tpl");
 		lc_site_load("ows_bron", $this);
 		extract($arr);
+
+		/*$parameters = array();
+		$parameters["hotelId"] = $location;
+		$parameters["webLanguageId"] = $lang;
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetHotelDetails",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => $parameters,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+		));
+		$hotel = $return["GetHotelDetailsResult"]["HotelDetails"];
+
 		$parameters = array();
 		$parameters["hotelId"] = $location;
 		$parameters["rateId"] = $rateid;
@@ -1513,28 +1630,25 @@ echo date("d.m.Y H:i:s");*/
 		));
 
 		$rate = $return['GetRateDetailsResult']["RateDetails"];
+*/
 
-		$room_desc_list = new object_list(array(
+/*		$room_desc_list = new object_list(array(
 			"class_id" => CL_DOCUMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"user4" => $rate["OwsRoomTypeCode"]
-		));
-		$doc = $room_desc_list->begin();
-		if (!$doc)
-		{
-			$doc = obj();
+			"user4" => $arr["doc_code"]//$hotel["OwsHotelCode"]."-".$rate["OwsRoomTypeCode"]
+		));*/
 
-		}
+		$doc = obj($arr["doc_code"]);
 		$this->vars(array(
-			"room_rate" => number_format($rate["AverageDailyRate"], 2),
-			"total_rate" => $rate["Total_price"],
-			"currency" => $currency,
-			"short_currency" => $this->short_cur_lut[$currency],
+//			"room_rate" => number_format($rate["AverageDailyRate"], 2),
+	//		"total_rate" => $rate["Total_price"],
+		//	"currency" => $currency,
+//			"short_currency" => $this->short_cur_lut[$currency],
 			"description" => $doc->trans_get_val("content"),//$rate["LongNote"],
-			"cancel_by" => $rate["CancellationDeadline"],
-			"start" => $checkin_date,
-			"room_name" => nl2br(iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Title"])),
+//			"cancel_by" => $rate["CancellationDeadline"],
+//			"start" => $checkin_date,
+//			"room_name" => nl2br(iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Title"])),
 			"doc_title" => $doc->trans_get_val("title"),
 			"long_note" => $doc->trans_get_val("content")//$rate["LongNote"],
 		));
@@ -1611,18 +1725,25 @@ echo date("d.m.Y H:i:s");*/
 	**/
 	function cancel_booking($arr)
 	{
+		$parameters = array(
+			"confirmationCode" => $arr["confirmation_number"],
+			"cancellationReasonCode" => 1,
+			"cancellationReasonText" => "Customer clicked on cancel link"
+		);
 		$return = $this->do_orb_method_call(array(
 			"action" => "CancelBooking",
 			"class" => "http://markus.ee/RevalServices/Booking/",
-			"params" => array(
-				"confirmationCode" => $arr["confirmation_number"],
-				"cancellationReasonCode" => 1,
-				"cancellationReasonText" => "web booking system test booking"
-			),
+			"params" => $parameters,
 			"method" => "soap",
 			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
-die(dbg::dump($return));
+		$rate = $return['CancelBookingResult'];
+		if($rate["ResultCode"] != 'Success')
+		{
+			$this->proc_ws_error($parameters, $return);
+		}
+
+		return t("Your reservation has been canceled!");
 	}
 
 	function parse_date_int($ds)
@@ -1642,6 +1763,71 @@ die(dbg::dump($return));
 			"msg" => "rv = ".dbg::dump($return)." params = ".dbg::dump($parameters)
 		));
 		die("ws error ".dbg::dump($return));
+	}
+
+	function _insert_hotel_list($sel_id = null)
+	{
+			$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
+		$lang = $this->get_web_language_id($lc);
+		// list hotels
+		$parameters = array();
+		$parameters["webLanguageId"] = $lang;
+		$parameters["arrivalDate"] = 
+			sprintf("%04d",date("Y")).'-'.
+			sprintf("%02d",date("m")).'-'.
+			sprintf("%02d",date("d")).'T00:00:00';
+		$tm = time() + 5*24*3600;
+		$parameters["departureDate"] = 
+			sprintf("%04d",date("Y", $tm)).'-'.
+			sprintf("%02d",date("m", $tm)).'-'.
+			sprintf("%02d",date("d", $tm)).'T00:00:00';
+		$parameters["numberOfRooms"] = 1;
+		$parameters["numberOfAdultsPerRoom"] = 1;
+
+
+enter_function("ws:GetAvailableRates");
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetAvailableHotels",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => $parameters,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+		));
+
+		$hotels = $return["GetAvailableHotelsResult"]["HotelList"]["HotelInfo"];
+		$hdata = array();
+		foreach($hotels as $hotel)
+		{
+				if ($hotel["OnlineBookingServiceProviderId"] != 3)
+				{
+					continue;
+				}
+				$hdata[$this->country_lut[$lc][$hotel["OwsCountryCode"]].", ".$this->city_lut[$lc][$hotel["OwsCityCode"]]][$hotel["HotelId"]] = iconv("utf-8", aw_global_get("charset")."//IGNORE", $hotel["HotelName"]);
+		}
+//die(dbg::dump($hdata));
+
+		$hs = "";
+		foreach($hdata as $loc => $hotels)
+		{
+				$hotel_list = "";
+				foreach($hotels as $hid => $hn)
+				{
+					$this->vars(array(
+						"hotel_id" => $hid,
+						"hotel_name" => $hn,
+						"hotel_selected" => selected($hid == $sel_id)
+					));
+					$hotel_list .= $this->parse("HOTEL_ENTRY");
+				}
+				$this->vars(array(
+					"loc" => $loc,
+					"HOTEL_ENTRY" => $hotel_list
+				));
+				$hs .= $this->parse("HOTEL_LOCATION");
+		}
+		$this->vars(array(
+			"HOTEL_LOCATION" => $hs
+		));
 	}
 }
 ?>
