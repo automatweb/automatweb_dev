@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.9 2007/11/13 10:35:15 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.10 2007/11/13 10:52:40 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -46,7 +46,13 @@
 	@layout settings_col3 type=vbox parent=settings
 
 		@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 store=connect parent=settings_col3 captionside=top
-		@caption J&auml;lgijad	
+		@caption J&auml;lgijad
+
+		@property wish_live_date type=date_select field=meta method=serialize table=objects parent=settings_col3 captionside=top
+		@caption Soovitav Live kuupäev
+
+		@property actual_live_date type=date_select field=meta method=serialize captionside=top table=objects parent=settings_col3
+		@caption Tegelik Live kuupäev	
 
 	@layout h_split type=hbox width=50%:50%
 	@layout comments type=vbox parent=h_split closeable=1 area_caption=Sisu

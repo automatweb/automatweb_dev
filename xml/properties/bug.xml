@@ -168,6 +168,17 @@
             <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
+            <name>actual_live_date</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>date_select</type>
+            <captionside>top</captionside>
+            <parent>settings_col3</parent>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tegelik Live kuup&amp;auml;ev</caption>
+      </property>
+      <property>
             <name>vb_d1</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -445,15 +456,6 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Soovitav Live kuup&amp;auml;ev</caption>
-      </property>
-      <property>
-            <name>actual_live_date</name>
-            <group>cust</group>
-            <table>objects</table>
-            <type>date_select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Tegelik Live kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>cust_crit</name>

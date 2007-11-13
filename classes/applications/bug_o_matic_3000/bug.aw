@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.95 2007/11/13 10:35:15 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.96 2007/11/13 10:52:40 robert Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -70,6 +70,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property deadline type=date_select default=-1 parent=settings_col3 captionside=top
 		@caption T&auml;htaeg
+
+		@property actual_live_date type=date_select captionside=top parent=settings_col3 field=meta method=serialize table=objects
+		@caption Tegelik Live kuupäev
 
 	@property vb_d1 type=hidden store=no no_caption=1 parent=settings
 
@@ -176,9 +179,6 @@ define("BUG_STATUS_CLOSED", 5);
 	
 	@property wish_live_date type=date_select field=meta method=serialize table=objects
 	@caption Soovitav Live kuupäev
-	
-	@property actual_live_date type=date_select field=meta method=serialize table=objects
-	@caption Tegelik Live kuupäev
 
 	@property cust_crit type=textarea rows=10 cols=50 field=aw_cust_crit
 	@caption Vastuv&otilde;tu kriteeriumid

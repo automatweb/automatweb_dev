@@ -110,7 +110,29 @@
             <parent>settings_col3</parent>
             <captionside>top</captionside>
             <field>monitors</field>
-            <caption>J&amp;amp;auml;lgijad	</caption>
+            <caption>J&amp;amp;auml;lgijad</caption>
+      </property>
+      <property>
+            <name>wish_live_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>settings_col3</parent>
+            <captionside>top</captionside>
+            <caption>Soovitav Live kuup&amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>actual_live_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <captionside>top</captionside>
+            <parent>settings_col3</parent>
+            <caption>Tegelik Live kuup&amp;auml;ev	</caption>
       </property>
       <property>
             <name>reason</name>
