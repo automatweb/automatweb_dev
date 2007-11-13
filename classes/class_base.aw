@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.584 2007/11/12 14:17:43 voldemar Exp $
+// $Id: class_base.aw,v 2.585 2007/11/13 07:17:44 robert Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1866,7 +1866,7 @@ class class_base extends aw_template
 				"save_message" => $this->just_saved ? t("Andmed salvestatud!") : null
 			);
 
-			if (is_oid($this->cfgform_id))
+			if ($this->can("view", $this->cfgform_id))
 			{
 				$cfgform_o = new object($this->cfgform_id);
 				$cli_args["awcb_cfgform"] = $cfgform_o;
@@ -5489,7 +5489,8 @@ class class_base extends aw_template
 			chr(195).chr(150) => "&Ouml;",
 			chr(195).chr(132) => "&Auml;",
 			chr(196).chr(171) => "&#299;",
-			chr(196).chr(129) => "&#257;"
+			chr(196).chr(129) => "&#257;",
+			chr(197).chr(171) => "&#363;"
 		);
 		$uo = obj(aw_global_get("uid_oid"));
 		$uo = $uo->prop("target_lang");
