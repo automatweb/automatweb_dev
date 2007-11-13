@@ -2967,7 +2967,7 @@ class mrp_workspace extends class_base
 
 			if (count($res_e))
 			{
-				$errors .= t("<i>%s</i> Ei saa arhiveerida, sest on lõpetamata t&ouml;id: "). implode(",", $res_e);
+				$errors .= t("Ei saa arhiveerida, sest on lõpetamata t&ouml;id: "). implode(",", $res_e);
 				aw_session_set("mrp_errors", $errors);
 			}
 		}
