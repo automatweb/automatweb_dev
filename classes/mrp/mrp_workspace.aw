@@ -2951,7 +2951,7 @@ class mrp_workspace extends class_base
 							$unfinished_jobs[] = html::get_change_url($job_id, array(), $job_id);
 						}
 
-						$res_e[] = $o->name() . " [l&otilde;petamata t&ouml;&ouml;d: " . implode(",", $unfinished_jobs);
+						$res_e[] = $o->name() . " [l&otilde;petamata t&ouml;&ouml;d: " . implode(",", $unfinished_jobs) . "]";
 					}
 					else
 					{
@@ -2967,7 +2967,7 @@ class mrp_workspace extends class_base
 
 			if (count($res_e))
 			{
-				$errors .= t("Ei saa arhiveerida, sest on lõpetamata t&ouml;id: "). implode(",", $res_e);
+				$errors .= t("Ei saa arhiveerida, sest on l&otilde;petamata t&ouml;id: "). implode(",", $res_e);
 				aw_session_set("mrp_errors", $errors);
 			}
 		}
