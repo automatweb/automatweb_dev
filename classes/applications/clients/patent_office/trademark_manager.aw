@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.31 2007/06/05 12:53:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.32 2007/11/13 15:39:05 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -355,11 +355,11 @@ class trademark_manager extends class_base
 
 			if($status->prop("sent_date"))
 			{
-				$date = date("j.m.Y" , $status->prop("sent_date"));
+				$date = $status->prop("sent_date");
 			}
 			else
 			{
-				$date = date("j.m.Y" , $o->created());
+				$date = $o->created();
 			}
 			
 			$retval = "";
@@ -443,7 +443,10 @@ class trademark_manager extends class_base
 			"name" => "date",
 			"caption" => t("Esitamise kuup&auml;ev"),
 			"align" => "center",
-			"sortable" => 1
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y",
 		));
 		
 		$t->define_field(array(
