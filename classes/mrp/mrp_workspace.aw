@@ -2905,6 +2905,7 @@ class mrp_workspace extends class_base
 			));
 			$errors = NULL;
 			$res_e = array();
+			$jobs_e = array();
 
 			for ($o = $ol->begin (); !$ol->end (); $o = $ol->next ())
 			{
@@ -2943,7 +2944,14 @@ class mrp_workspace extends class_base
 
 					if ($unfinished_jobs)
 					{
-						$res_e[] = $o->name();
+						$unfinished_jobs = array();
+
+						foreach ($list->ids() as $job_id)
+						{
+							$unfinished_jobs[] = html::get_change_url($job_id, array(), $job_id);
+						}
+
+						$res_e[] = $o->name() . " [l&otilde;petamata t&ouml;&ouml;d: " . implode(",", $unfinished_jobs);
 					}
 					else
 					{
@@ -2959,7 +2967,7 @@ class mrp_workspace extends class_base
 
 			if (count($res_e))
 			{
-				$errors .= sprintf(t("Ressurssi/ressursse <i>%s</i> arhiveerida ei saa, sest sellel/neil on lõpetamata t&ouml;id. "), implode(",", $res_e));
+				$errors .= t("<i>%s</i> Ei saa arhiveerida, sest on lõpetamata t&ouml;id: "). implode(",", $res_e);
 				aw_session_set("mrp_errors", $errors);
 			}
 		}
