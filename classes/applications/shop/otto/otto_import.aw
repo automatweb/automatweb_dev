@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.67 2007/11/12 18:16:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.68 2007/11/14 20:46:18 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1662,7 +1662,7 @@ class otto_import extends class_base
 		$valid_data = array();
 		foreach (safe_array($args['request']['files_order']) as $data)
 		{
-			if (!empty($data['file']) && !empty($data['order']))
+			if (!empty($data['file']))
 			{
 				$valid_data[$data['file']] = $data['order'];
 			}
@@ -1674,15 +1674,48 @@ class otto_import extends class_base
 		
 		foreach ($valid_data as $file => $order)
 		{
-			// i need the short version of the file name, aka. page (in otto_prod_img p_pg field)
-			list(, $cur_pg) = explode(".", $file);
-			$cur_pg = substr($cur_pg,1);
-			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
+
+			if (strlen($file) > 4)
 			{
-				$cur_pg = (int)$cur_pg;
+				// if file name is longer than 4 characters, then it is probably full file name, so lets make it shorter:
+				list(, $cur_pg) = explode(".", $file);
+				$cur_pg = substr($cur_pg,1);
+				if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
+				{
+					$cur_pg = (int)$cur_pg;
+				}
+				$cur_pg = trim($cur_pg);
+			} 
+			else if (strlen($file) < 4)
+			{
+				// if the file name is shorter than 4 characters, then it is probably a part of the needed file code/page code
+				$cur_pg = trim($file).'%';
 			}
-			$cur_pg = trim($cur_pg);
-			$this->db_query("UPDATE otto_prod_img set file_order='".(int)$order."' WHERE p_pg='$cur_pg'");
+			else
+			{
+				// in other cases it is probably the exact needed file code/page code
+				$cur_pg = $file;
+			}
+
+
+			// get all products which are imported from this file:
+			$prods = new object_list(array(
+				'class_id' => CL_SHOP_PRODUCT,
+				'status' => array(STAT_ACTIVE, STAT_NOTACTIVE),
+				'user18' => $cur_pg
+			));
+			foreach ($prods->arr() as $prod)
+			{
+				if ($prod->prop('user9') != $order)
+				{
+					$prod->set_prop('user9', $order);
+					$prod->save();
+				}
+			}
+
+		// i don't recall that it is in use anywhere, so I comment it out at first and let's see what happens --dragut (14.11.2007)
+		//	$this->db_query("UPDATE otto_prod_img set file_order='".(int)$order."' WHERE p_pg='$cur_pg'");
+		
 		}
 		return PROP_OK;
 	}
