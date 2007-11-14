@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.9 2007/02/27 13:33:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.10 2007/11/14 13:49:10 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -531,6 +531,75 @@ class user_bookmarks extends class_base
 			}
 		}
 		return $arr["url"];
+	}
+
+	function show($arr)
+	{
+		if (aw_global_get("uid") == "")
+		{
+			return "";
+		}
+
+		$this->read_template("show.tpl");
+		
+		$bm = $this->init_bm();
+
+		// now, add items from the bum
+		$ot = new object_tree(array(
+			"parent" => $bm->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
+		));
+		$mt = $bm->meta("grp_sets");
+
+		$this->_req_show($ot, $bm->id());
+		$this->vars(array(
+			"content" => $this->ct
+		));
+		return $this->parse();
+	}
+
+	function _req_show(&$ot, $parent)
+	{
+		$this->ct .= $this->parse("LEVEL_BEGIN");
+		foreach($ot->level($parent) as $li)
+		{
+			if ($li->class_id() == CL_MENU)
+			{
+				$this->vars(array(
+					"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name(),
+				));
+				$this->ct .= $this->parse("ITEM_TEXT");
+				$this->_req_show($ot, $li->id());
+			}
+			else
+			if ($li->class_id() == CL_EXTLINK)
+			{
+				$this->vars(array(
+					"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name(),
+					"item_link" => $li->prop("url")
+				));
+				$this->ct .= $this->parse("ITEM_LINK");
+			}
+			else
+			{
+				$grp = $mt[$li->id()];
+				$ga = "";
+				if ($grp != "")
+				{
+					$gl = $li->get_group_list();
+					$ga = " - ".$gl[$grp]["caption"];
+				}
+
+				$this->vars(array(
+					"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name().$ga,
+					"item_link" => html::get_change_url($li->id(), array("return_url" => $arr["url"], "group" => $grp))
+				));
+				$this->ct .= $this->parse("ITEM_LINK");
+			}
+		}
+		$this->ct .= $this->parse("LEVEL_END");
 	}
 }
 ?>
