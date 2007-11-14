@@ -649,7 +649,10 @@ class group extends class_base
 		$ll = $la->get_list();
 
 		$meta = $arr["obj_inst"]->meta();
-
+		if (!is_array($meta))
+		{
+			$meta = array();
+		}
 		foreach($ll as $lid => $lname)
 		{
 			$ret["grp_frontpage[$lid]"] = array(
