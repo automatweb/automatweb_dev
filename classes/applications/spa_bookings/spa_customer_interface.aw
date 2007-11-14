@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.30 2007/10/01 11:27:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.31 2007/11/14 14:23:30 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -953,6 +953,19 @@ class spa_customer_interface extends class_base
 					continue;
 				}
 				$b->set_prop("verified", 1);
+				if(!$b->meta("mail_sent"))//topelt mailide vältimiseks
+				{
+					$room_res_inst = get_instance(CL_ROOM_RESERVATION);
+					if($b->meta("tpl"))
+					{
+						$tpl = $b->meta("tpl");
+					}
+					$room_res_inst->send_affirmation_mail($b->id(),$tpl);
+					aw_disable_acl();
+					$b->set_meta("mail_sent",1);
+					aw_restore_acl();
+				}
+
 				$b->set_meta("payment_info" , $bank_inst->get_payment_info());
 				aw_disable_acl();
 				$b->save();
