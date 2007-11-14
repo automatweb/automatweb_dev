@@ -176,6 +176,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property comments_on_page type=textbox
 		@caption Kommentaare lehel
 
+		@property topics_editable type=hidden
+		@property comments_editable type=hidden
+		@property posts_editable type=chooser multiple=1 store=no
+		@caption Postitused muudetavad
+		@comment Kehtib ainult autori kohta
+
 		@property topic_depth type=select default=0
 		@caption Teemade s&uuml;gavus
 
@@ -334,8 +340,11 @@ class forum_v2 extends class_base
 				$data["options"] = $this->topic_last_author;
 				break;
 
-			case "last_posts":
-				$this->_last_posts_tbl($arr);
+			case "posts_editable":
+				$data["options"] = array(
+					"topics_editable" => t("teemad"),
+					"comments_editable" => t("vastused"),
+				);
 				break;
 
 			case "topic_depth":
@@ -381,10 +390,17 @@ class forum_v2 extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
+		$this_o = $arr["obj_inst"];
+
 		switch($data["name"])
 		{
 			case "topic_selector":
 				$this->update_topic_selector($arr);
+				break;
+
+			case "posts_editable":
+				$this_o->set_prop("topics_editable", (int)(bool) $data["value"]["topics_editable"]);
+				$this_o->set_prop("comments_editable", (int)(bool) $data["value"]["comments_editable"]);
 				break;
 
 			case "container":
@@ -1297,21 +1313,24 @@ class forum_v2 extends class_base
 				$changed = "";
 				$change_link = "";
 
-				if ($comment["created"] < $comment["modified"])
+				if ($args["obj_inst"]->prop("comments_editable"))
 				{
-					$changed = $this->parse("CHANGED");
-				}
+					if ($comment["created"] < $comment["modified"])
+					{
+						$changed = $this->parse("CHANGED");
+					}
 
-				if (aw_global_get("uid") === $comment["createdby"])
-				{
-					$url = $this->mk_my_orb("change", array(
-						"id" => $comment["oid"],
-						"return_url" => get_ru(),
-					), "forum_comment");
-					$this->vars(array(
-						"change_url" => $url,
-					));
-					$change_link = $this->parse("CHANGE_LINK");
+					if (aw_global_get("uid") === $comment["createdby"])
+					{
+						$url = $this->mk_my_orb("change", array(
+							"id" => $comment["oid"],
+							"return_url" => get_ru(),
+						), "forum_comment");
+						$this->vars(array(
+							"change_url" => $url,
+						));
+						$change_link = $this->parse("CHANGE_LINK");
+					}
 				}
 
 				$this->vars(array(
@@ -1506,23 +1525,25 @@ class forum_v2 extends class_base
 		$changed = "";
 		$change_link = "";
 
-		if ($topic_obj->created() < $topic_obj->modified())
+		if ($args["obj_inst"]->prop("topics_editable"))
 		{
-			$changed = $this->parse("CHANGED");
-		}
+			if ($topic_obj->created() < $topic_obj->modified())
+			{
+				$changed = $this->parse("CHANGED");
+			}
 
-		if (aw_global_get("uid") === $topic_obj->createdby())
-		{
-			$url = $this->mk_my_orb("change", array(
-				"id" => $topic_obj->id(),
-				"return_url" => get_ru(),
-			), "forum_topic");
-			$this->vars(array(
-				"change_url" => $url,
-			));
-			$change_link = $this->parse("CHANGE_LINK");
+			if (aw_global_get("uid") === $topic_obj->createdby())
+			{
+				$url = $this->mk_my_orb("change", array(
+					"id" => $topic_obj->id(),
+					"return_url" => get_ru(),
+				), "forum_topic");
+				$this->vars(array(
+					"change_url" => $url,
+				));
+				$change_link = $this->parse("CHANGE_LINK");
+			}
 		}
-
 
 		$this->vars(array(
 			"active_page" => $pager,

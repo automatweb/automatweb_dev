@@ -437,6 +437,34 @@
             <caption>Kommentaare lehel</caption>
       </property>
       <property>
+            <name>topics_editable</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
+            <name>comments_editable</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
+            <name>posts_editable</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <caption>Postitused muudetavad</caption>
+            <comment>Kehtib ainult autori kohta</comment>
+      </property>
+      <property>
             <name>topic_depth</name>
             <table>objects</table>
             <group>topic_selector</group>
