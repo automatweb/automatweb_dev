@@ -1317,6 +1317,9 @@ class forum_v2 extends class_base
 				{
 					if ($comment["created"] < $comment["modified"])
 					{
+						$this->vars(array(
+							"modified" => $this->time2date($comment["modified"], 2)
+						));
 						$changed = $this->parse("CHANGED");
 					}
 
@@ -1529,6 +1532,9 @@ class forum_v2 extends class_base
 		{
 			if ($topic_obj->created() < $topic_obj->modified())
 			{
+				$this->vars(array(
+					"modified" => $this->time2date($topic_obj->modified(), 2)
+				));
 				$changed = $this->parse("CHANGED");
 			}
 
