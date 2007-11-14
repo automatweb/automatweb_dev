@@ -160,8 +160,13 @@ class crm_company_docs_impl extends class_base
 		}
 		classload("core/icons");
 		$file_inst = get_instance(CL_FILE);
+//if(aw_global_get("uid") == "marko")arr(time() - $_SESSION["asdtime"]);
 		foreach($ol->arr() as $o)
 		{
+			if(sizeof($classes) > 1)
+			{
+				$classes = array(CL_MENU,CL_DOCUMENT,CL_FILE);
+			}
 			$d = array(
 				"id" => $o->id(),
 				"name" =>  ($arr["active"]==$o->id()) ? "<b>".$o->name()."</B>":$o->name(),
@@ -175,45 +180,58 @@ class crm_company_docs_impl extends class_base
 			}
 			
 			$tree->add_item(0,$d);
-			
 			$ol2 = new object_list(array(
-				"class_id" => array(CL_MENU),
+				"class_id" => $classes,
 				"lang_id" => array(),	
 				"parent" => $o->id(),
-				"sort_by" => "objects.name ASC",
-			));
-			$ol2->sort_by(array(
-				"prop" => "ord",
-				"order" => "asc"
 			));
 
-			if ($sts && $sts->prop("show_files_and_docs_in_tree"))
+//			$o4 = $ol2->begin();
+//			$ol2->sort_by(array(
+//				"prop" => "ord",
+//				"order" => "asc"
+//			));
+
+//			if ($sts && !$o4 &&  $sts->prop("show_files_and_docs_in_tree"))
+//			{
+//				$classes = array(CL_DOCUMENT,CL_FILE);
+//				$ol4 = new object_list(array(
+//					"class_id" => $classes,
+//					"lang_id" => array(),	
+//					"parent" => $parent,
+//					"sort_by" => "objects.name ASC",
+//				));
+//				$ol4->sort_by(array(
+//					"prop" => "ord",
+//					"order" => "asc"
+//				));
+//				$o4 = $ol4->begin();
+				
+//				foreach($ol4->names() as $id => $name)	
+//				{
+//					$ol2->add($id);
+//				}
+//			}
+			if($ol2->count())
 			{
-				$classes = array(CL_DOCUMENT,CL_FILE);
-				$ol4 = new object_list(array(
-					"class_id" => $classes,
-					"lang_id" => array(),	
-					"parent" => $parent,
-					"sort_by" => "objects.name ASC",
-				));
-				$ol4->sort_by(array(
-					"prop" => "ord",
-					"order" => "asc"
-				));
-				foreach($ol4->names() as $id => $name)	
-				{
-					$ol2->add($id);
-				}
-			}
-			foreach($ol2->arr() as $o2)
-			{
+				$id = reset($ol2->ids());
 				$tree->add_item($o->id(), array(
-					"id" => $o2->id(),
-					"name" => ($arr["active"]==$o2->id()) ? "<b>".$o2->name()."</B>":$o2->name(),
-					"url" => aw_url_change_var("tf", $o2->id(),$set_retu),
+					"id" => $id,
+					"name" => " ",
+					"url" => " ",
 				));
 			}
+
+//			foreach($ol2->arr() as $o2)
+//			{
+//				$tree->add_item($o->id(), array(
+//					"id" => $o2->id(),
+//					"name" => ($arr["active"]==$o2->id()) ? "<b>".$o2->name()."</B>":$o2->name(),
+//					"url" => aw_url_change_var("tf", $o2->id(),$set_retu),
+//				));
+//			}
 		}
+//if(aw_global_get("uid") == "marko"){arr(time() - $_SESSION["asdtime"]);}
 		die($tree->finalize_tree());
 	}
 	
