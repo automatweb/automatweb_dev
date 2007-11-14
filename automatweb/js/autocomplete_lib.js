@@ -63,42 +63,70 @@ function stopSelect(obj){
 /*    Caret Functions     */
 
 // Get the end position of the caret in the object. Note that the obj needs to be in focus first
-function getCaretEnd(obj){
-	if(typeof obj.selectionEnd != "undefined"){
+function getCaretEnd(obj)
+{
+	if(typeof obj.selectionEnd != "undefined")
+	{
 		return obj.selectionEnd;
-	}else if(document.selection&&document.selection.createRange){
+	}
+	else if(document.selection&&document.selection.createRange)
+	{
 		var M=document.selection.createRange();
-		try{
+
+		try
+		{
 			var Lp = M.duplicate();
 			Lp.moveToElementText(obj);
-		}catch(e){
+		}
+		catch(e)
+		{
 			var Lp=obj.createTextRange();
 		}
+
 		Lp.setEndPoint("EndToEnd",M);
 		var rb=Lp.text.length;
-		if(rb>obj.value.length){
+
+		if(rb>obj.value.length)
+		{
 			return -1;
 		}
 		return rb;
 	}
 }
+
 // Get the start position of the caret in the object
-function getCaretStart(obj){
-	if(typeof obj.selectionStart != "undefined"){
+function getCaretStart(obj)
+{
+	if(typeof obj.selectionStart != "undefined")
+	{
 		return obj.selectionStart;
-	}else if(document.selection&&document.selection.createRange){
+	}
+	else if(document.selection && document.selection.createRange)
+	{
 		var M=document.selection.createRange();
-		try{
+
+		try
+		{
 			var Lp = M.duplicate();
 			Lp.moveToElementText(obj);
-		}catch(e){
+		}
+		catch(e)
+		{
 			var Lp=obj.createTextRange();
 		}
-		Lp.setEndPoint("EndToStart",M);
+
+		if (M.moveToBookmark && M.moveToElementText)
+		{
+			Lp.setEndPoint("EndToStart", M);
+		}
+
 		var rb=Lp.text.length;
-		if(rb>obj.value.length){
+
+		if(rb>obj.value.length)
+		{
 			return -1;
 		}
+
 		return rb;
 	}
 }
