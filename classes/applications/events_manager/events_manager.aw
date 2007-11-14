@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.17 2007/11/07 08:31:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.18 2007/11/14 12:57:51 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -131,17 +131,17 @@
 	@property forms_caption type=text store=no subtitle=1
 	@caption Vormid
 
-		@property event_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
-		@caption S&uuml;ndmuste vorm
+		@property event_form type=relpicker reltype=RELTYPE_CFGMANAGER field=meta method=serialize table=objects
+		@caption S&uuml;ndmuste seadete haldur
 
-		@property places_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
-		@caption Toimumiskohtade vorm
+		@property places_form type=relpicker reltype=RELTYPE_CFGMANAGER field=meta method=serialize table=objects
+		@caption Toimumiskohtade seadete haldur
 
-		@property organiser_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
-		@caption Korraldajate vorm
+		@property organiser_form type=relpicker reltype=RELTYPE_CFGMANAGER field=meta method=serialize table=objects
+		@caption Korraldajate seadete haldur
 
-		@property sector_form type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize table=objects
-		@caption Valdkondade vorm
+		@property sector_form type=relpicker reltype=RELTYPE_CFGMANAGER field=meta method=serialize table=objects
+		@caption Valdkondade seadete haldur
 
 	@layout menus_top type=hbox closeable=1 width=30%:70% area_caption=Kataloogid
 		@layout menus_top_left type=vbox parent=menus_top area_caption=Kataloogid&nbsp;lugemiseks
@@ -202,6 +202,9 @@
 
 @reltype EDITOR value=9 clid=CL_CRM_PERSON
 @caption Toimetaja
+
+@reltype CFGMANAGER value=10 clid=CL_CFGMANAGER
+@caption Seadete haldur
 
 */
 
@@ -310,16 +313,47 @@ class events_manager extends class_base
 		));
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_places_table($t);
+	
+		$cfg = $this->get_cgf_from_manager("places" , CL_SCM_LOCATION);
+
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("places_form")),$o->name()),
-					html::obj_change_url($o->id()),
+					 html::get_change_url($o->id(), array("cfgform" => $cfg),($o->name()?$o->name():"(".t("Nimetu").")")),
+					//html::obj_change_url($o->id()),
 				"comment" => $o->prop("comment"),
 				"oid" => $o->id(),
 			));
 		}
+	}
+
+	function get_cgf_from_manager($type , $clid)
+	{
+		if(is_oid($this->obj_inst->prop($type."_form")))
+		{
+			$cfg_loader = new object($this->obj_inst->prop($type."_form"));
+			$mxt = $cfg_loader->meta("use_form");
+			$forms = $mxt[$clid];
+			$gx = aw_global_get("gidlist_pri_oid");
+			$found_form = false;
+			if (is_array($gx) && is_array($forms))
+			{
+				// start from group with highest priority
+				arsort($gx);
+				foreach($gx as $grp_oid => $grp_pri)
+				{
+					if ($forms[$grp_oid] && empty($found_form))
+					{
+						$found_form = $forms[$grp_oid];
+						$this->tmp_cfgform = $found_form;
+						//arr($found_form);
+					};
+				};
+			}
+			return $found_form;
+		}
+		else return null;
 	}
 
 	function _get_organiser_table($arr)
@@ -336,12 +370,14 @@ class events_manager extends class_base
 		));
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_organiser_table($t);
+		$cfg = $this->get_cgf_from_manager("organiser" , CL_CRM_COMPANY);
+
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("organiser_form")),$o->name() ),
-					html::obj_change_url($o->id()),
+					 html::get_change_url($o->id(), array("cfgform" => $cfg),($o->name()?$o->name():"(".t("Nimetu").")")),
+					//html::obj_change_url($o->id()),
 				"address" => $o->prop("contact.name"),
 				"oid" => $o->id(),
 			));
@@ -362,12 +398,13 @@ class events_manager extends class_base
 		));
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sectors_table($t);
+		$cfg = $this->get_cgf_from_manager("sector" , CL_CRM_SECTOR);
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("sectors_form")),$o->name() ),
-					html::obj_change_url($o->id()),
+					 html::get_change_url($o->id(), array("cfgform" => $cfg),($o->name()?$o->name():"(".t("Nimetu").")")),
+					//html::obj_change_url($o->id()),
 				//"address" => $o->prop("contact.name"),
 			));
 		}

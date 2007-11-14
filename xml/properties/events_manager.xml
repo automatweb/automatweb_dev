@@ -292,8 +292,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <caption>S&amp;amp;uuml;ndmuste vorm</caption>
+            <reltype>RELTYPE_CFGMANAGER</reltype>
+            <caption>S&amp;amp;uuml;ndmuste seadete haldur</caption>
       </property>
       <property>
             <name>places_form</name>
@@ -302,8 +302,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <caption>Toimumiskohtade vorm</caption>
+            <reltype>RELTYPE_CFGMANAGER</reltype>
+            <caption>Toimumiskohtade seadete haldur</caption>
       </property>
       <property>
             <name>organiser_form</name>
@@ -312,8 +312,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <caption>Korraldajate vorm</caption>
+            <reltype>RELTYPE_CFGMANAGER</reltype>
+            <caption>Korraldajate seadete haldur</caption>
       </property>
       <property>
             <name>sector_form</name>
@@ -322,8 +322,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <caption>Valdkondade vorm</caption>
+            <reltype>RELTYPE_CFGMANAGER</reltype>
+            <caption>Valdkondade seadete haldur</caption>
       </property>
       <property>
             <name>event_menu_source</name>
@@ -499,6 +499,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Toimetaja</caption>
             </EDITOR>
+            <CFGMANAGER>
+                  <value>10</value>
+                  <clid>CL_CFGMANAGER</clid>
+                  <caption>Seadete haldur</caption>
+            </CFGMANAGER>
       </reltypes>
       <layout>
             <events_top>
