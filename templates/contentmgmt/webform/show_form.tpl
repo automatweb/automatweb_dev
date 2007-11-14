@@ -7,8 +7,8 @@
 <!-- END SUB: SHOW_CONTENT -->
 <table class="{VAR:webform_form}">
 <form action="{VAR:url_spec}orb.{VAR:ext}" method="POST" name="changeform" {VAR:form_target} enctype='multipart/form-data'>
-{VAR:form}
 {VAR:reforb}
+{VAR:form}
 <script type="text/javascript">
 function submit_changeform(action)
 {
