@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.162 2007/11/08 10:11:42 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.163 2007/11/14 16:27:57 markop Exp $
 /*
 
 
@@ -75,6 +75,26 @@
 	@caption AW M&auml;rks&otilde;nad
 
 
+@default group=notify
+
+	@property sp_tb type=toolbar store=no no_caption=1
+
+	@property sp_table type=table store=no 
+	@caption Valitud isikud
+
+	@property sp_p_name type=textbox store=no
+	@caption Isik
+
+	@property sp_p_co type=textbox store=no
+	@caption Organisatsioon
+
+	@property sp_sbt type=submit
+	@caption Otsi
+
+	@property sp_s_res type=table store=no 
+	@caption Otsingu tulemused
+
+
 @groupinfo settings caption=Seadistused
 @groupinfo dates caption=Ajad
 @groupinfo transl caption=T&otilde;lgi
@@ -84,6 +104,7 @@
 	
 	@property acl type=acl_manager store=no
 	@caption &Otilde;igused
+@groupinfo notify caption="Teavitamine"
 
 @reltype KEYWORD value=2 clid=CL_KEYWORD
 @caption M&auml;rks&otilde;na
@@ -361,7 +382,24 @@ class file extends class_base
 			case "file":
 				$data["value"] = "";
 				break;
+			case "sp_tb":
+				$this->_sp_tb($arr);
+				break;
 
+			case "sp_table":
+				$this->_sp_table($arr);
+				break;
+
+			case "sp_s_res":
+				$this->_sp_s_res($arr);
+				break;
+		
+			case "sp_p_name":
+			case "sp_p_co":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				$prop["autocomplete_source"] = $this->mk_my_orb($prop["name"] == "sp_p_co" ? "co_autocomplete_source" : "p_autocomplete_source");
+				$prop["autocomplete_params"] = array($prop["name"]);
+				break;
 		}
 		return $retval;
 	}
@@ -1477,6 +1515,7 @@ class file extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["docid"] = $_GET["docid"];
+		$arr["post_ru"] = post_ru();
 	}
 
 	function callback_mod_tab($arr)
@@ -1577,5 +1616,220 @@ class file extends class_base
 		return false;
 	}
 
-};
+	function _sp_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "add_s_res_to_p_list",
+			"img" => "save.gif",
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta"),
+			"img" => "delete.gif",
+			"action" => "remove_p_from_l_list",
+		));
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "send_mail",
+			"tooltip" => t("Saada teavitusmeil"),
+			"img" => "",
+			"action" => "send_notify_mail",
+		));
+	}
+
+	function _init_p_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "co",
+			"caption" => t("Organisatsioon"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => t("E-mail"),
+			"align" => "center",
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _sp_table($arr)
+	{	
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_p_tbl($t);
+
+		foreach($this->get_people_list($arr["obj_inst"]) as $p_id => $p_nm)
+		{
+			$p = obj($p_id);
+			$t->define_data(array(
+				"name" => html::obj_change_url($p),
+				"co" => html::obj_change_url($p->prop("work_contact")),
+				"phone" => $p->prop("phone.name"),
+				"email" => $p->prop("email.name"),
+				"oid" => $p->id()
+			));
+		}
+	}
+
+	function get_people_list($bt)
+	{
+		$ret = array();
+		$persons = $bt->meta("imp_p");
+		$persons = safe_array($persons[aw_global_get("uid")]);
+
+		if (!count($persons))
+		{
+			return array();
+		}
+
+		$ol = new object_list(array(
+			"oid" => $persons,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		return $ol->names();
+	}
+
+	/**
+		@attrib name=co_autocomplete_source
+		@param sp_p_co optional
+	**/
+	function co_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => $arr["sp_p_co"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 100
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
+	/**
+		@attrib name=p_autocomplete_source
+		@param sp_p_p optional
+	**/
+	function p_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"name" => $arr["sp_p_p"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["sp_p_name"] = $arr["request"]["sp_p_name"];
+		$arr["args"]["sp_p_co"] = $arr["request"]["sp_p_co"];
+	}
+
+	function _sp_s_res($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_p_tbl($t);
+		if ($arr["request"]["sp_p_name"] != "" || $arr["request"]["sp_p_co"] != "")
+		{
+			$param = array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => "%".$arr["request"]["sp_p_name"]."%"
+			);
+			if ($arr["request"]["sp_p_co"] != "")
+			{
+				$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
+			}
+			$ol = new object_list($param);
+			foreach($ol->arr() as $p)
+			{
+				$t->define_data(array(
+					"name" => html::obj_change_url($p),
+					"co" => html::obj_change_url($p->prop("work_contact")),
+					"phone" => $p->prop("phone.name"),
+					"email" => html::href(array("url" => "mailto:".$p->prop("email.mail"),"caption" => $p->prop("email.mail"))),
+					"oid" => $p->id()
+				));
+			}
+		}
+	}
+
+	/**
+		@attrib name=add_s_res_to_p_list
+	**/
+	function add_s_res_to_p_list($arr)
+	{
+		$o = obj($arr["id"]);
+		$persons = $o->meta("imp_p");
+		foreach(safe_array($arr["sel"]) as $p_id)
+		{
+			$persons[aw_global_get("uid")][$p_id] = $p_id;
+		}
+		$o->set_meta("imp_p", $persons);
+		$o->save();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=remove_p_from_l_list
+	**/
+	function remove_p_from_l_list($arr)
+	{	
+		$o = obj($arr["id"]);
+		$persons = $o->meta("imp_p");
+		foreach(safe_array($arr["sel"]) as $p_id)
+		{
+			unset($persons[aw_global_get("uid")][$p_id]);
+		}
+		$o->set_meta("imp_p", $persons);
+		$o->save();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=send_notify_mail
+	**/
+	function send_notify_mail($arr)
+	{
+		$o = obj($arr["id"]);
+		$ppl = $this->get_people_list($o);
+		foreach($ppl as $oid => $nm)
+		{
+			$p = obj($oid);
+			$email = $p->prop("email.mail");
+			send_mail(
+				$email,
+				t("Teavitus muutunud dokumendist"),
+				sprintf(t("Uuendati faili \"%s\". Palun kliki siia:\n%s\net faili näha!"), $o->name(), html::get_change_url($o->id())),
+				"From: ".aw_ini_get("baseurl")
+			);
+		}
+		return $arr["post_ru"];
+	}	
+}
 ?>

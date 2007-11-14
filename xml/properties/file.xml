@@ -178,6 +178,66 @@
             <caption>AW M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
       <property>
+            <name>sp_tb</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>sp_table</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Valitud isikud</caption>
+      </property>
+      <property>
+            <name>sp_p_name</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Isik</caption>
+      </property>
+      <property>
+            <name>sp_p_co</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>sp_sbt</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>sp_s_res</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Otsingu tulemused</caption>
+      </property>
+      <property>
             <name>acl</name>
             <table>objects</table>
             <group>acl</group>
@@ -208,6 +268,9 @@
             <acl>
                   <caption>&amp;amp;Otilde;igused</caption>
             </acl>
+            <notify>
+                  <caption>Teavitamine</caption>
+            </notify>
       </groupinfo>
       <tableinfo>
             <files>
