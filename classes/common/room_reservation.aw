@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.73 2007/09/13 10:08:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.74 2007/11/14 14:11:47 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1652,9 +1652,9 @@ class room_reservation extends class_base
 		{
 			$_send_to.=",".$others;
 		}
-		$email_subj = $this->_get_order_mail_subject();//sprintf(t("Broneering: %s"), $id);
-		$mail_from_addr = $this->_get_order_mail_sender_addr();//"automatweb@automatweb.com";
-		$mail_from_name = $this->_get_order_mail_sender_name();//str_replace("http://", "", aw_ini_get("baseurl"));
+		$email_subj = $this->_get_order_mail_subject($bron);//sprintf(t("Broneering: %s"), $id);
+		$mail_from_addr = $this->_get_order_mail_sender_addr($bron);//"automatweb@automatweb.com";
+		$mail_from_name = $this->_get_order_mail_sender_name($bron);//str_replace("http://", "", aw_ini_get("baseurl"));
 		if(!$tpl)
 		{
 			$tpl = "preview.tpl";
