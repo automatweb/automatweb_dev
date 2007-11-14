@@ -249,6 +249,16 @@
             <caption>Fail </caption>
       </property>
       <property>
+            <name>submit</name>
+            <table>aw_dev_orders</table>
+            <group>general</group>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>submit</field>
+            <caption>Salvesta</caption>
+      </property>
+      <property>
             <name>reqs_tb</name>
             <table>aw_dev_orders</table>
             <group>reqs</group>

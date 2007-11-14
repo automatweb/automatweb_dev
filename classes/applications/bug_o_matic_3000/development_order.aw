@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.10 2007/11/13 10:52:40 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.11 2007/11/14 14:19:34 kristo Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -88,6 +88,9 @@
 	
 		@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data captionside=top store=no
 		@caption Fail 
+
+	@property submit type=submit no_caption=1 store=no
+	@caption Salvesta
 
 @default group=reqs
 
