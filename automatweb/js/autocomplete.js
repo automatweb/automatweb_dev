@@ -48,7 +48,7 @@ function awActb(obj, valueObj)
 	var actb_toid;
 	var actb_tomake = false;
 	var actb_getpre = "";
-	var actb_mouse_on_list = 1;
+	var actb_mouse_on_list = 0;
 	var actb_kwcount = 0;
 	var actb_caretmove = false;
 	var actb_form = obj.form;
