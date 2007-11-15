@@ -19,6 +19,48 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
       </property>
       <property>
+            <name>discount</name>
+            <table>aw_crm_customer_data</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_discount</field>
+            <caption>Vaikimisi soodustus</caption>
+      </property>
+      <property>
+            <name>order_frequency</name>
+            <table>aw_crm_customer_data</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_order_frequency</field>
+            <caption>Tellimuste sagedus p&amp;amp;auml;evades</caption>
+      </property>
+      <property>
+            <name>active_client</name>
+            <table>aw_crm_customer_data</table>
+            <group>general</group>
+            <field>aw_active_client</field>
+            <type>checkbox</type>
+            <caption>Aktiivne klient</caption>
+      </property>
+      <property>
+            <name>authorized_person_control</name>
+            <table>aw_crm_customer_data</table>
+            <group>general</group>
+            <field>aw_authorized_person_control</field>
+            <type>checkbox</type>
+            <caption>Volitatud isiku kontroll</caption>
+      </property>
+      <property>
+            <name>sell_alert</name>
+            <table>aw_crm_customer_data</table>
+            <group>general</group>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>5</rows>
+            <field>aw_sell_alert</field>
+            <caption>Hoiatus m&amp;amp;uuml;&amp;amp;uuml;gil</caption>
+      </property>
+      <property>
             <name>buyer_contract_creator</name>
             <table>aw_crm_customer_data</table>
             <group>buyer</group>
@@ -194,11 +236,16 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Kontaktisik</caption>
             </CONTACT_PERSON>
-            <REFERAL_TYPE>
-                  <value>41</value>
-                  <clid>CL_META</clid>
-                  <caption>Sissetuleku meetod</caption>
-            </REFERAL_TYPE>
+            <CONTACT_TRANSPORT>
+                  <value>5</value>
+                  <clid>CL_CRM_TAX_RATE</clid>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gi KM-kood</caption>
+            </CONTACT_TRANSPORT>
+            <ERRAND_COND>
+                  <value>6</value>
+                  <clid>CL_CRM_ERRAND_CONDITION</clid>
+                  <caption>L&amp;amp;auml;hetustingimus</caption>
+            </ERRAND_COND>
             <CLIENT_MANAGER>
                   <value>34</value>
                   <clid>CL_CRM_PERSON</clid>
@@ -209,6 +256,11 @@
                   <clid>CL_EXTERNAL_SYSTEM_ENTRY</clid>
                   <caption>Siduss&amp;amp;uuml;steemi sisestus</caption>
             </EXT_SYS_ENTRY>
+            <REFERAL_TYPE>
+                  <value>41</value>
+                  <clid>CL_META</clid>
+                  <caption>Sissetuleku meetod</caption>
+            </REFERAL_TYPE>
             <STATUS>
                   <value>69</value>
                   <clid>CL_CRM_COMPANY_STATUS</clid>

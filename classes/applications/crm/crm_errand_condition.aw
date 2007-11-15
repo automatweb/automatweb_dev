@@ -1,12 +1,20 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/Attic/crm_errand_condition.aw,v 1.1 2007/11/15 16:47:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/Attic/crm_errand_condition.aw,v 1.2 2007/11/15 16:57:04 markop Exp $
 // crm_errand_condition.aw - L&auml;hetustingimus 
 /*
 
 @classinfo syslog_type=ST_CRM_ERRAND_CONDITION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
+
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
+
+	@property whos_paying type=select
+	@caption Transpordi eest tasub (meie/klient)
+
+
 
 */
 
@@ -26,6 +34,9 @@ class crm_errand_condition extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "whos_paying":
+				$prop["options"] = array(0 => t("Meie"), 0 => t("Klient"));
+				break;
 			//-- get_property --//
 		};
 		return $retval;

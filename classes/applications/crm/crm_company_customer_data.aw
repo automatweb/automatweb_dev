@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.11 2007/10/03 12:30:03 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.12 2007/11/15 16:57:05 markop Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -18,6 +18,21 @@ default method=serialize
 
 	@property seller type=relpicker reltype=RELTYPE_SELLER table=aw_crm_customer_data field=aw_seller
 	@caption M&uuml;&uuml;ja
+
+	@property discount type=textbox table=aw_crm_customer_data field=aw_discount
+	@caption Vaikimisi soodustus
+
+	@property order_frequency type=textbox table=aw_crm_customer_data field=aw_order_frequency
+	@caption Tellimuste sagedus p&auml;evades
+
+	@property active_client table=aw_crm_customer_data field=aw_active_client type=checkbox 
+	@caption Aktiivne klient
+
+	@property authorized_person_control table=aw_crm_customer_data field=aw_authorized_person_control type=checkbox 
+	@caption Volitatud isiku kontroll
+
+	@property sell_alert type=textarea cols=40 rows=5 table=objects table=aw_crm_customer_data field=aw_sell_alert
+	@caption Hoiatus m&uuml;&uuml;gil
 
 @groupinfo buyer caption="Ostja"
 @default group=buyer
@@ -85,8 +100,14 @@ default method=serialize
 @reltype CONTACT_PERSON value=3 clid=CL_CRM_PERSON
 @caption Kontaktisik
 
-@reltype REFERAL_TYPE value=41 clid=CL_META
-@caption Sissetuleku meetod
+@reltype CONTACT_TRANSPORT value=4 clid=CL_TRANSPORT_TYPE
+@caption Transpordiliik
+
+@reltype CONTACT_TRANSPORT value=5 clid=CL_CRM_TAX_RATE
+@caption M&uuml;&uuml;gi KM-kood
+
+@reltype ERRAND_COND value=6 clid=CL_CRM_ERRAND_CONDITION
+@caption L&auml;hetustingimus
 
 @reltype CLIENT_MANAGER value=34 clid=CL_CRM_PERSON
 @caption Kliendihaldur
@@ -94,8 +115,12 @@ default method=serialize
 @reltype EXT_SYS_ENTRY value=35 clid=CL_EXTERNAL_SYSTEM_ENTRY
 @caption Siduss&uuml;steemi sisestus
 
+@reltype REFERAL_TYPE value=41 clid=CL_META
+@caption Sissetuleku meetod
+
 @reltype STATUS value=69 clid=CL_CRM_COMPANY_STATUS
 @caption Kliendikategooria
+
 */
 
 class crm_company_customer_data extends class_base
@@ -203,13 +228,24 @@ class crm_company_customer_data extends class_base
 			case "aw_buyer_contact_person2":
 			case "aw_buyer_contact_person3":
 			case "aw_buyer_priority":
+			case "aw_active_client":
+			case "aw_authorized_person_control":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"
 				));
 				return true;
 
+			case "aw_sell_alert":
+				$this->db_add_col($tbl, array(
+					"name" => $fld,
+					"type" => "text"
+				));
+				return true;
+
 			case "aw_bill_penalty_pct":
+			case "aw_discount":
+			case "aw_order_frequency":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "double"
