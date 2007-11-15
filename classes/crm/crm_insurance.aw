@@ -61,6 +61,16 @@ class crm_insurance extends class_base
 			case "insurance_status":
 				$prop["options"] = array("","");
 				break;
+			case "insurance_type":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_INSURANCE_TYPE,
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+
+				if(!is_array($prop["options"])) $prop["options"] = array();
+				$prop["options"] = $prop["options"] + $ol->names();
+				break;
 		}
 		return $retval;
 	}
