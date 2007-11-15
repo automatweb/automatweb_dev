@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.211 2007/11/06 11:18:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.212 2007/11/15 10:36:53 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -665,12 +665,12 @@ class image extends class_base
 				$img_obj->set_class_id(CL_IMAGE);
 				$img_obj->set_status(STAT_ACTIVE);
 				$img_obj->set_name($_FILES[$name]["name"]);
-				$img_obj->save();
-				$img_id = $img_obj->id();
 			}
-			$img_obj = obj($img_id);
-			$img_obj->set_name($_FILES[$name]["name"]);
-
+			else
+			{
+				$img_obj = obj($img_id);
+				$img_obj->set_name($_FILES[$name]["name"]);
+			}
 			if (is_uploaded_file($_FILES[$name]['tmp_name']))
 			{
 				$sz = getimagesize($_FILES[$name]['tmp_name']);
@@ -697,8 +697,9 @@ class image extends class_base
 
 					$img_obj->set_prop("file2", $f2);
 				}
-				$img_obj->save();
 			}
+			$img_obj->save();
+			$img_id = $img_obj->id();
 		}
 		else
 		{
