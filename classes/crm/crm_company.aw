@@ -3621,6 +3621,7 @@ class crm_company extends class_base
 			$arr['args']['customer_search_ev'] = ($arr['request']['customer_search_ev']);
 			$arr['args']['customer_search_cust_mgr'] = ($arr['request']['customer_search_cust_mgr']);
 			$arr['args']['customer_search_cust_grp'] = ($arr['request']['customer_search_cust_grp']);
+			$arr['args']['customer_search_insurance_exp'] = ($arr['request']['customer_search_insurance_exp']);
 			$arr['args']['customer_search_reg'] = ($arr['request']['customer_search_reg']);
 			$arr['args']['customer_search_address'] = ($arr['request']['customer_search_address']);
 			$arr['args']['customer_search_city'] = ($arr['request']['customer_search_city']);

@@ -1643,7 +1643,7 @@ class crm_company_cust_impl extends class_base
 
 		if ($r["customer_search_insurance_exp"] != "")
 		{
-			$ret["CL_CRM_COMPANY.RELTYPE_INSURANCE.insurance_type"] = $r["customer_search_insurance_exp"];
+			$ret["CL_CRM_COMPANY.RELTYPE_INSURANCE.insurance_type"] = (int) $r["customer_search_insurance_exp"];
 			$ret["CL_CRM_COMPANY.RELTYPE_INSURANCE.expires"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time());
 			$has_params = true;
 		}
