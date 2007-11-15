@@ -2,12 +2,21 @@
 <properties>
       <property>
             <name>expires</name>
-            <table>objects</table>
+            <table>crm_insurance</table>
             <group>general</group>
             <type>date_select</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>expires</field>
             <caption>Insurance expires</caption>
+      </property>
+      <property>
+            <name>insurance_type</name>
+            <table>crm_insurance</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_INSURANCE_TYPE</reltype>
+            <automatic>1</automatic>
+            <field>insurance_type</field>
+            <caption>Insurance type</caption>
       </property>
       <property>
             <name>certificate</name>
@@ -40,16 +49,6 @@
             <caption>Broker</caption>
       </property>
       <property>
-            <name>insurance_type</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_INSURANCE_TYPE</reltype>
-            <caption>Insurance type</caption>
-      </property>
-      <property>
             <name>insurance_sum</name>
             <table>objects</table>
             <group>general</group>
@@ -65,6 +64,13 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <tableinfo>
+            <crm_insurance>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </crm_insurance>
+      </tableinfo>
       <reltypes>
             <COMPANY>
                   <value>1</value>
