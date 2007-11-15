@@ -652,6 +652,18 @@
             <callback>callback_get_transl</callback>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
+      <property>
+            <name>aliasmgr</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>aliasmgr</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <trans>1</trans>
+            <caption>Aliastehaldur</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_MEETING</syslog_type>
             <confirm_save_data>1</confirm_save_data>

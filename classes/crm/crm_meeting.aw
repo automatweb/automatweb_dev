@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.90 2007/11/08 11:17:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.91 2007/11/15 10:19:09 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -231,6 +231,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 	
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
+
+	@property aliasmgr type=aliasmgr store=no editonly=1 trans=1
+	@caption Aliastehaldur
 
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid

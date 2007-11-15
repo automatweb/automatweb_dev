@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.93 2007/10/30 21:52:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.94 2007/11/15 10:19:56 kristo Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1328,7 +1328,7 @@ class event_search extends class_base
 							{
 								continue;
 							}
-							$v = create_links($eval[$nms]);
+							$v = create_links(isset($eval[$nms]) ? $eval[$nms] : $eval["meta"][$nms]);
 							if ($has_proc)
 							{
 								$v = $si->handle_parse_event_field($nms, $v);
