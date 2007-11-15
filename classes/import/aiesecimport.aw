@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.1 2007/11/07 12:31:24 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.2 2007/11/15 14:34:31 hannes Exp $
 // aiesecimport.aw - Aiesec import 
 /*
 
@@ -117,10 +117,363 @@ class aiesecimport extends class_base
 								"Rakvere"  => array("county" => "Lääne-Viru maakond", "country"=>"Eesti"),
 		);
 		
-		//echo ini_set ("max_execution_time", 600);
-		 
+		ini_set ("max_execution_time", 600);
 	}
+	
+	
+	/**
+	@attrib name=do_import_finish
+	
+	@param vars_ok required type=integer
+	@param import_parent required type=integer
+	
+	@comment
+		in order, it imports
+		companies
+		persons
+		
+	**/ 
+	function do_import_finish($arr)
+	{
+		$this->set_parents($arr["import_parent"]);
+		
+		// just a check for myself cuz i have to make sure arr all ids are set in code..
+		if ($arr["vars_ok"] != 1)
+		{
+			die ("var'id on paigas?");
+		}
+		
+		$this->i_aiesec_in_estonia_id = 406423;
+		
+		$this->a_members_group["Aiesec alumni"]["rank_oid"] = 421101; 
+		$this->a_members_group["Aiesec alumni"]["MC"] = 421100;
+		$this->a_members_group["Aiesec alumni"]["MC Estonia"] = 421099;
+		$this->a_members_group["Aiesec alumni"]["IG Pärnu"] = 421098;
+		$this->a_members_group["Aiesec alumni"]["LC Universities of Tallinn"] = 421097;
+		$this->a_members_group["Aiesec alumni"]["LC Tartu"] = 421096;
+		$this->a_members_group["AIESECi liikmed"]["rank_oid"] = 421093; // rank id
+		$this->a_members_group["AIESECi liikmed"]["MC"] = 421088;
+		$this->a_members_group["AIESECi liikmed"]["MC Estonia"] = 421089;
+		$this->a_members_group["AIESECi liikmed"]["IG Pärnu"] = 421090;
+		$this->a_members_group["AIESECi liikmed"]["LC Universities of Tallinn"] = 421091;
+		$this->a_members_group["AIESECi liikmed"]["LC Tartu"] = 421092;
+		
+		//$this->do_import_finish_get_members_and_alumni();
+		$this->do_import_finish_fix_tasks();
+		//$this->do_import_finish_fix_meetings();
 
+		die("k6ik valmis");
+	}
+	
+	function do_import_finish_get_members_and_alumni()
+	{
+		$q = "SELECT * FROM ".$this->db_prefix."members";
+        $this->db_query($q);
+		
+		$k=$l=1;
+		while ($w = $this->db_next() )
+		{
+			$ol = new object_list(array(
+				"user1" => $w["i_id"],
+				"class_id" => CL_CRM_PERSON,
+			));
+			if ($ol->count() == 1)
+			{
+				$i_person_oid = array_pop($ol->ids());
+			}
+			else
+			{
+				echo "Hoiatus. AW's ei ole isikut, kelle aie id on ".$w["i_id"]." Tõenäoliselt ei ole seda isikut ka aie baasis. Kontrollida võid <a href='http://db.aiesec.ee/db/inddetails.php?i_id=".$w["i_id"]."'>siit</a><br>\n";
+			}
+			
+			if ($w["status"] == "member" && isset($i_person_oid))
+			{
+				$this->do_import_finish_set_member("AIESECi liikmed", $w["lc"], $i_person_oid, $w);
+			}
+			else if ($w["status"] == "alumni" && isset($i_person_oid))
+			{
+				$this->do_import_finish_set_member("Aiesec alumni", $w["lc"], $i_person_oid, $w);
+			}
+			
+			if ($k%10==0)
+			{
+				echo "Liikmeid imporditud ".($l*10)."<br>\n";
+				ob_flush();
+				flush();
+				$l++;
+			}
+			
+			$k++;
+		}
+		$c = get_instance("cache");
+		$c->full_flush();
+		echo "kokku vaatasin l2bi "+($k-1) +" isikut";
+		echo "cache puhas";
+		ob_flush();
+		flush();
+
+	}
+	
+	function do_import_finish_set_member($s_type, $s_lc, $i_person_id, $w)
+	{
+		$s_lc = utf8_decode($s_lc);
+		$i_since = $w["since"];
+		$s_msn = trim($w["msn"]);
+		
+		$o_person = new object($i_person_id);
+		
+		$o_person -> connect(array(
+				"to" => $this->a_members_group[$s_type]["rank_oid"], 
+				"type"=> RELTYPE_RANK,
+		));
+		
+		$o_person -> connect(array(
+				"to" => $this->i_aiesec_in_estonia_id, 
+				"type"=> RELTYPE_WORK,
+		));
+		
+		$o_person -> connect(array(
+				"to" => $this->a_members_group[$s_type][$s_lc],
+				"type"=> RELTYPE_SECTION,
+		));
+		
+		if ($s_type == "AIESECi liikmed")
+		{
+			$s_workrelation_name = "Aiesec'i liige";
+		}
+		else
+		{
+			$s_workrelation_name = "Aiesec alumni";
+		}
+		
+		if (strlen($i_since) == 4 )
+		{
+			$o_workrelation = new object(array(
+				"name" => $s_workrelation_name,
+				"parent" => $o_person->id(),
+				"class_id" => CL_CRM_PERSON_WORK_RELATION,
+			));
+			$o_workrelation->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+			$o_workrelation->set_prop("start", mktime(0, 0, 0, 1, 1, $i_since));
+			$o_workrelation->save();
+			
+			$o_workrelation ->connect(array(
+				"to" => $this->i_aiesec_in_estonia_id,
+				"type" => RELTYPE_ORG,
+			));
+			$o_workrelation->set_prop("org", $this->i_aiesec_in_estonia_id);
+			
+			$o_workrelation ->connect(array(
+				"to" => $this->a_members_group[$s_type]["rank_oid"],
+				"type" => RELTYPE_PROFESSION,
+			));
+			$o_workrelation->set_prop("profession", $this->a_members_group[$s_type]["rank_oid"]);
+			$o_workrelation->save();
+			
+			$o_person -> connect(array(
+				"to" => $o_workrelation->id(),
+				"type" => RELTYPE_PREVIOUS_JOB,
+			));
+		}
+		
+		if ( strpos ( $s_msn, "@") > 0)
+		{
+			$o_person->set_prop("messenger", $s_msn);
+			$o_person->save();
+		}
+		
+		// and last but not least, new positions
+		{
+			$s_position_name = trim($w["pos"]);
+			$ol_positions = new object_list(array(
+					"name" => $s_position_name,
+					"parent" => $this->positions_parent,
+					"class_id" => CL_CRM_PROFESSION,
+			));
+			
+			if ($ol_positions->count()==0)
+			{
+				$o_position = new object(array(
+					"name" => $s_position_name,
+					"parent" => $this->positions_parent,
+					"class_id" => CL_CRM_PROFESSION,
+				));
+				$o_position ->save();
+				
+				$o_person -> connect(array(
+					"to" => $o_position->id(),
+					"type" => RELTYPE_RANK,
+				));
+				
+				if ($o_person->prop("rank") == "")
+				{
+					$o_person->set_prop("rank", $o_position->id());
+					$o_person->save();
+				}
+				
+				echo "lisasin uue ameti ja seostasin selle ".$o_person->name()." isikuga<br>";
+				ob_flush();
+				flush();
+			}
+			else if ($ol_positions->count()==1)
+			{
+				$cons_ranks = $o_person->connections_from(array(
+					"type" => RELTYPE_RANK,
+				));
+				
+				$a_person_ranks = array();
+				foreach($cons_ranks as $con)
+				{
+					$a_person_ranks[$con->conn["to.name"]] = $con->conn["to"];
+				}
+				
+				if ( !array_key_exists( $s_position_name, $a_person_ranks))
+				{
+					$i_rank_id = $ol_positions->ids();	
+					$o_person -> connect(array(
+						"to" => $i_rank_id[0],
+						"type" => RELTYPE_RANK,
+					));
+					
+					if ($o_person->prop("rank") == "")
+					{
+						$o_person->set_prop("rank", $o_position->id());
+						$o_person->save();
+					}
+					
+					echo "amet oli juba olemas ja seostasin selle  ".$o_person->name()." isikuga<br>";
+					ob_flush();
+					flush();
+				}
+				
+			}
+			else if ($ol_positions->count()>1)
+			{
+				die("baasis esineb samanimelisi t88kohti - $s_position_name. l6petan t88 ");
+			}
+		}
+		
+	}
+	
+	function do_import_finish_fix_tasks()
+	{
+		$ol = new object_list(array(
+				"parent" => $this->companies_parent,
+				"class_id" => CL_CRM_COMPANY,
+		));
+		
+		$k=$l=1;
+		for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
+		{
+			// move persons under tasks
+				$cons_task = $o->connections_from(array(
+					"type" => RELTYPE_TASK,
+				));
+				
+				foreach($cons_task as $con)
+				{
+					$i_task_oid = $con->conn["to"];
+					$o_task = new object($i_task_oid);
+					
+					// clients under tasks
+					$cons_customers = $o_task->connections_from(array(
+						"class" => CL_CRM_PERSON,
+						"type" => RELTYPE_CUSTOMER,
+					));
+					
+					// move persons to participants
+					foreach($cons_customers as $cons_custom)
+					{
+						$i_customer_oid = $cons_custom->conn["to"];
+						$o_person = new object($i_customer_oid);
+						$o_person -> connect(array(
+							"to" => $i_task_oid,
+							"type" => RELTYPE_PERSON_TASK,
+						));
+						
+						
+						$cons_custom->delete();
+						
+						if ($k%50==0)
+						{
+							echo "Inimesi taskide all ümber tõstetud ".($l*50)."<br>\n";
+							ob_flush();
+							flush();
+							$l++;
+						}
+						
+						$k++;
+						
+					}
+					
+					
+				}
+		}
+		echo "do_import_finish_fix_tasks ... done";
+	}
+	
+	function do_import_finish_fix_meetings()
+	{
+		$ol = new object_list(array(
+				"parent" => $this->companies_parent ,
+				"class_id" => CL_CRM_COMPANY,
+		));
+		
+		$k=$l=1;
+		for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
+		{
+				// move persons under meetings
+				$cons_meetings = $o->connections_from(array(
+					"type" => RELTYPE_KOHTUMINE,
+				));
+				
+				foreach($cons_meetings as $con)
+				{
+				
+					$i_meeting_oid = $con->conn["to"];
+					$o_meeting = new object($i_meeting_oid);
+					
+					// clients under meetings
+					$cons_customers = $o_meeting->connections_from(array(
+						"class" => CL_CRM_PERSON,
+						"type" => RELTYPE_CUSTOMER,
+					));
+					
+					// move persons to participants
+					foreach($cons_customers as $con_customer)
+					{
+						
+						$i_customer_oid = $con_customer->conn["to"];
+						$o_person = new object($i_customer_oid);
+						
+						$o_person -> connect(array(
+							"to" => $i_meeting_oid,
+							"type" => RELTYPE_PERSON_MEETING,
+						));
+						
+						$con_customer->delete();
+						
+						if ($k%50==0)
+						{
+							echo "Inimesi miitingute all ümber tõstetud ".($l*50)."<br>\n";
+							ob_flush();
+							flush();
+							$l++;
+						}
+						
+						$k++;
+					}
+					
+				}
+		}
+		$c = get_instance("cache");
+		$c->full_flush();
+		echo "cache puhas<br>";
+		echo "do_import_finish_fix_meetings ... done<br>";
+		ob_flush();
+		flush();
+	}
+	
 	/**
 	@attrib name=do_import
 	
@@ -2391,23 +2744,31 @@ class aiesecimport extends class_base
 	
 	function do_import_persons_connect_email($oPerson, $sMail)
 	{
-		if (strlen($sMail)>3)
+		$ol = new object_list(array(
+			"name" => $sMail,
+			"class_id"=>CL_ML_MEMBER,
+			"parent" => $oPerson->id(),
+		));
+		if ($ol->count()==0)
 		{
-			$email = new object(array(
-					"name" => $sMail,
-					"parent" => $oPerson->id(),
-					"class_id"=>CL_ML_MEMBER
-			));
-			$email->set_status(STAT_ACTIVE);
-			$email -> set_class_id(CL_ML_MEMBER);
-			$email -> set_prop("mail", $sMail);
-			$email->save();
-			$oPerson->connect(array(
-				"to" => $email->id(),
-				"type" => RELTYPE_EMAIL
-			));
-			$oPerson->set_prop("email", $email->id());
-			$oPerson->save();
+			if (strlen($sMail)>3)
+			{
+				$email = new object(array(
+						"name" => $sMail,
+						"parent" => $oPerson->id(),
+						"class_id"=>CL_ML_MEMBER
+				));
+				$email->set_status(STAT_ACTIVE);
+				$email -> set_class_id(CL_ML_MEMBER);
+				$email -> set_prop("mail", $sMail);
+				$email->save();
+				$oPerson->connect(array(
+					"to" => $email->id(),
+					"type" => RELTYPE_EMAIL
+				));
+				$oPerson->set_prop("email", $email->id());
+				$oPerson->save();
+			}
 		}
 	}
 	
