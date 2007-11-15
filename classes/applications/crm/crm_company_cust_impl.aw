@@ -560,7 +560,7 @@ class crm_company_cust_impl extends class_base
 				$cat = $cat->id();
 			}
 		}
-		
+
 		$add = 1;
 		$stchk = explode('_', $arr['request']['category']);
 		$lp = array(
@@ -597,7 +597,7 @@ class crm_company_cust_impl extends class_base
 				'crm_company'
 			)
 		));
-		
+
 		if($add == 1)
 		{
 			$tb->add_menu_button(array(
@@ -619,9 +619,9 @@ class crm_company_cust_impl extends class_base
 					CL_CRM_PERSON
 				)
 			));
-	
-	
-	
+
+
+
 			$tb->add_sub_menu(array(
 				"parent" => "add_item",
 				"name" => "add_proj",
@@ -637,24 +637,24 @@ class crm_company_cust_impl extends class_base
 				'text' => t('Tellijana'),
 				"action" => "add_proj_to_co_as_ord"
 			));
-	
+
 			$tb->add_menu_item(array(
 				'parent'=>'add_item',
 				'text' => t('Arve'),
 				"action" => "go_to_create_bill"
 			));
-	
+
 	// add category
 			$alias_to = $arr['obj_inst']->id();
 			$rt = 30;
-	
+
 			if((int)$arr['request']['category'])
 			{
 				$alias_to = $arr['request']['category'];
 				$parent = (int)$arr['request']['category'];
 				$rt = 2;
 			}
-	
+
 			$tb->add_menu_item(array(
 				'parent'=>'add_item',
 				'text' => t('Kategooria'),
@@ -1641,6 +1641,13 @@ class crm_company_cust_impl extends class_base
 			$has_params = true;
 		}
 
+		if ($r["customer_search_insurance_exp"] != "")
+		{
+			$ret["CL_CRM_COMPANY.RELTYPE_INSURANCE.insurance_type"] = $r["customer_search_insurance_exp"];
+			$ret["CL_CRM_COMPANY.RELTYPE_INSURANCE.expires"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time());
+			$has_params = true;
+		}
+
 		if ($r["customer_search_address"] != "")
 		{
 			$ret["CL_CRM_COMPANY.contact.name"] = "%".$r["customer_search_address"]."%";
@@ -2239,7 +2246,7 @@ class crm_company_cust_impl extends class_base
 				//if category is selected
 				$organization = &$arr['obj_inst'];
 				$org_old = $organization;
-	
+
 				if (!is_oid($arr['request']['category']))
 				{
 					$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
@@ -2252,7 +2259,7 @@ class crm_company_cust_impl extends class_base
 				{
 					$organization = new object($arr['request']['category']);
 				}
-	
+
 				$conn_filt = array(
 					"type" => "RELTYPE_CUSTOMER",
 					"class" => CL_CRM_COMPANY,
@@ -2263,7 +2270,7 @@ class crm_company_cust_impl extends class_base
 						"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
 						(($arr["request"]["group"] == "relorg_s")?"buyer":"seller") => $org_old->id(),
 					));
-	
+
 					if($ol2->count() == 0)
 					{
 						$conn_filt = array();
@@ -2282,7 +2289,7 @@ class crm_company_cust_impl extends class_base
 				{
 					$orglist[$org->prop("to")] = $org->prop("to");
 				}
-	
+
 				/*
 				//don't need categories in the table any more -- taiu
 				if ($arr["request"]["category"])
@@ -2338,7 +2345,7 @@ class crm_company_cust_impl extends class_base
 
 	function _do_cust_cat_tb_submenus2(&$tb, $p)
 	{
-		
+
 		$st = get_instance(CL_CRM_COMPANY_STATUS);
 		$categories = $st->categories(0);
 		$company = get_current_company();
@@ -2350,7 +2357,7 @@ class crm_company_cust_impl extends class_base
 				"name" => $id,
 				'text' => $cat,
 			));
-			
+
 			$ol = new object_list(array(
 				"class_id" => array(CL_CRM_COMPANY_STATUS),
 				"category" => $id,
@@ -2424,7 +2431,7 @@ class crm_company_cust_impl extends class_base
 			return 0;
 		}
 	}
-	
+
 	/**
 		@attrib name=get_offers_tree_branch all_args=1
 	**/
@@ -2446,6 +2453,19 @@ class crm_company_cust_impl extends class_base
 		$this->_req_get_sects($arr["obj_inst"], $dat);
 		$arr["prop"]["options"] = array("" => "") + $dat;
 		$arr["prop"]["value"] = $arr["request"]["customer_search_cust_grp"];
+	}
+
+	function _get_customer_search_insurance_exp($arr)
+	{
+		$dat = array();
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_INSURANCE_TYPE,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$dat = $ol->names();
+		$arr["prop"]["options"] = array("" => "") + $dat;
+		$arr["prop"]["value"] = $arr["request"]["customer_search_insurance_exp"];
 	}
 
 	function _req_get_sects($o, &$dat)

@@ -20,7 +20,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
-	
+
 	@property jrk field=jrk type=textbox display=none group=general_sub
 	@caption Jrk
 
@@ -31,44 +31,44 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 		@layout co_top_left type=vbox parent=co_top
 
-			@property name type=textbox size=30 maxlength=255 table=objects parent=co_top_left 
+			@property name type=textbox size=30 maxlength=255 table=objects parent=co_top_left
 			@caption Organisatsiooni nimi
 
-			@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name parent=co_top_left 
+			@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name parent=co_top_left
 			@caption Nime l&uuml;hend
 
-			@property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma parent=co_top_left 
+			@property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma parent=co_top_left
 			@caption Registri number
 
-			@property ettevotlusvorm type=relpicker table=kliendibaas_firma automatic=1 reltype=RELTYPE_ETTEVOTLUSVORM parent=co_top_left 
+			@property ettevotlusvorm type=relpicker table=kliendibaas_firma automatic=1 reltype=RELTYPE_ETTEVOTLUSVORM parent=co_top_left
 			@caption &Otilde;iguslik vorm
 
-			@property comment type=textarea cols=40 rows=2 table=objects parent=co_top_left 
+			@property comment type=textarea cols=40 rows=2 table=objects parent=co_top_left
 			@caption Kommentaar
 
 		@layout co_top_right type=vbox parent=co_top
 
-			@property code type=textbox table=kliendibaas_firma parent=co_top_right 
+			@property code type=textbox table=kliendibaas_firma parent=co_top_right
 			@caption Kood
 
-			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right 
+			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right
 			@caption KMKohuslase nr
 
 			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects parent=co_top_right captionside=top override_parent=this
 			@caption Organisatsiooni logo
 
-			@property firmajuht type=select table=kliendibaas_firma  editonly=1 parent=co_top_right 
+			@property firmajuht type=select table=kliendibaas_firma  editonly=1 parent=co_top_right
 			@caption Firmajuht
 
-			@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1 parent=co_top_right 
+			@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1 parent=co_top_right
 			@caption Asutatud
 
 			@property client_category type=text store=no  parent=co_top_right
 			@caption Kliendikategooria
-	
+
 
 	@layout co_bottom_seller area_caption="Kliendisuhe,&nbsp;tema_ostab_meilt" closeable=1 type=hbox width=50%:50%
-			
+
 		@layout co_bottom_seller_l type=vbox parent=co_bottom_seller
 
 			property cust type=relpicker reltype=RELTYPE_BUYER table=kliendibaas_firma parent=co_bottom_seller_l
@@ -118,7 +118,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 
 	@layout co_bottom_buyer area_caption="Kliendisuhe,&nbsp;meie_ostame_talt" closeable=1 type=hbox width=50%:50%
-			
+
 		@layout co_bottom_buyer_l type=vbox parent=co_bottom_buyer
 
 			@property co_is_buyer type=checkbox ch_value=1 store=no parent=co_bottom_buyer_l no_caption=1 prop_cb=1
@@ -276,7 +276,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 		@layout statuses_tbl_box type=vbox parent=statuses_split
 
 			@property statuses_set_tbl parent=statuses_tbl_box type=table store=no no_caption=1
-	
+
 			@property statuses_tbl parent=statuses_tbl_box type=table store=no no_caption=1
 ------ Yldine - kasutajate seaded grupp
 @default group=user_settings
@@ -347,12 +347,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 			@property cedit_tree type=treeview store=no parent=contacts_edit_tree no_caption=1
 
-		@layout contacts_edit_table type=hbox parent=contacts_edit 
+		@layout contacts_edit_table type=hbox parent=contacts_edit
 			@property cedit_table type=table store=no parent=contacts_edit_table no_caption=1
 
 
 @default group=cedit
-	@property cedit_toolbar type=toolbar store=no no_caption=1 
+	@property cedit_toolbar type=toolbar store=no no_caption=1
 	@property contact_desc_text type=text store=no no_caption=1
 	@caption Kontaktandmed
 		@layout ceditphf type=hbox width=50%:50%
@@ -386,12 +386,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 			@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
 
-	@layout cedit_layout_other type=vbox area_caption=Andmed closeable=1 
+	@layout cedit_layout_other type=vbox area_caption=Andmed closeable=1
 
 		@layout ce_oth_split type=hbox parent=cedit_layout_other
-		
+
 			@layout ce_other_top type=vbox parent=ce_oth_split
-	
+
 				@property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma parent=ce_other_top captionside=top
 				@caption Vaikimisi aadress
 
@@ -417,7 +417,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property aw_bank_account type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
 
 @property balance type=hidden table=aw_account_balances field=aw_balance
-	
+
 
 @default group=personal_offers
 -------------- PERSONALI PROPERTID ---------------
@@ -458,7 +458,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@layout my_cust_bot type=hbox width=20%:80%
 
 		@layout tree_search_split type=vbox parent=my_cust_bot
-			
+
 			@property tree_search_split_dummy type=hidden no_caption=1 parent=tree_search_split
 
 			@layout vvoc_customers_tree_left type=vbox parent=tree_search_split closeable=1 area_caption=Kliendigrupid
@@ -501,9 +501,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 					@property customer_search_cust_grp type=select store=no parent=vbox_customers_left_top captionside=top
 					@caption Kliendigrupp
 
+					@property customer_search_insurance_exp type=select store=no parent=vbox_customers_left_top captionside=top
+					@caption Kindlustus aegund
+
 					@property customer_search_print_view type=checkbox parent=vbox_customers_left_top store=no captionside=top ch_value=1 no_caption=1
 					@caption Printvaade
-				
+
 				@layout vbox_customers_left_search_btn type=hbox parent=vbox_customers_left
 
 					@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_left_search_btn no_caption=1
@@ -557,7 +560,7 @@ default group=org_objects
 		@layout projects_tree type=vbox parent=projects_main closeable=1 area_caption=Otsing
 			@property projects_listing_tree type=treeview no_caption=1 parent=projects_tree no_caption=1
 
-			@layout all_proj_search_b type=vbox parent=projects_tree 
+			@layout all_proj_search_b type=vbox parent=projects_tree
 
 				@layout all_proj_search_b_top type=vbox parent=all_proj_search_b
 
@@ -682,13 +685,13 @@ default group=org_objects
 	@layout docs_lt type=hbox width=20%:80%
 
 		@layout docs_left type=vbox parent=docs_lt
-			
+
 			@layout docs_left_tree type=vbox parent=docs_left closeable=1 area_caption=Dokumendid
 
 				@property docs_tree type=treeview parent=docs_left_tree no_caption=1
 
 			@layout docs_left_search type=vbox parent=docs_left closeable=1 area_caption=Otsing
-				
+
 				@layout docs_s_f type=vbox parent=docs_left_search
 
 					@property docs_s_name type=textbox size=30 store=no captionside=top parent=docs_s_f
@@ -713,7 +716,7 @@ default group=org_objects
 
 					@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
 					@caption T&uuml;hista otsing
-					
+
 				@property docs_empty2 type=hidden store=no no_caption=1 parent=docs_left_search
 
 			@property docs_empty type=hidden store=no no_caption=1 parent=docs_left
@@ -826,7 +829,7 @@ default group=org_objects
 
 			@property act_s_task_content type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Tegevuse sisu
-			
+
 			@property act_s_mail_name type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Maili subjekt
 
@@ -901,13 +904,13 @@ default group=org_objects
 
 	@property stats_s_res_type type=select store=no
 	@caption Tulemused
-	
+
 	@property stats_s_group_by type=checkbox store=no
 	@caption Grupeeri kliendi alusel
 
 	@property stats_s_group_by type=checkbox store=no
 	@caption Grupeeri projekti alusel
-	
+
 	@property stats_s_group_by type=checkbox store=no
 	@caption Grupeeri tegevuse alusel
 
@@ -916,7 +919,7 @@ default group=org_objects
 
 	@property stats_s_group_by_project type=checkbox ch_value=1 store=no
 	@caption Grupeeri projekti alusel
-	
+
 	@property stats_s_group_by_task type=checkbox ch_value=1 store=no
 	@caption Grupeeri tegevuse alusel
 
@@ -971,7 +974,7 @@ default group=org_objects
 		@layout res_lt_tree type=hbox parent=res_lt closeable=1 area_caption=Ressurssid
 			@property res_tree type=treeview no_caption=1 parent=res_lt_tree
 
-		@layout res_lt_tbl type=hbox parent=res_lt 
+		@layout res_lt_tbl type=hbox parent=res_lt
 			@property res_tbl type=table no_caption=1 parent=res_lt_tbl
 
 @default group=transl
@@ -1067,8 +1070,8 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no save=no
 	@groupinfo ovrv_mails caption="Meilid" parent=overview submit=no save=no
 
-@groupinfo projs caption="Projektid" 
-	@groupinfo my_projects caption="Projektid" parent=projs submit=no 
+@groupinfo projs caption="Projektid"
+	@groupinfo my_projects caption="Projektid" parent=projs submit=no
 	groupinfo org_projects caption="Projektid" submit=no parent=projs save=no
 	@groupinfo org_projects_archive caption="Projektide arhiiv" submit=no parent=projs save=no
 	@groupinfo my_reports caption="Minu raportid" submit=no parent=projs save=no
@@ -1132,7 +1135,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @groupinfo versions caption=Versioonid submit=no save=no parent=stats
 @groupinfo open_hrs caption="Avamisajad" parent=people
 @groupinfo user_settings caption="Seaded" parent=people
-@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all submit=no 
+@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all submit=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption &Otilde;iguslik vorm
@@ -1394,7 +1397,7 @@ class crm_company extends class_base
 		$this->trans_props = array(
 			"name", "tegevuse_kirjeldus", "userta1", "userta2", "userta3", "userta4", "userta5", "comment"
 		);
-		
+
 	}
 
 	function crm_company_init()
@@ -1591,7 +1594,7 @@ class crm_company extends class_base
 							"customer_search_submit_and_change" => null,
 						))
 					));
-				
+
 					foreach($ol->arr() as $o)
 					{
 						$tree->add_item('cat'.$id, array(
@@ -1722,11 +1725,11 @@ class crm_company extends class_base
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_url_tbl($t, $arr);
 				break;
-				
+
 			case "contact_desc_text":
 				$data["value"] = $this->get_short_description($arr["obj_inst"]->id());
 				break;
-				
+
 			case "cedit_email_tbl":
 				$i = get_instance("applications/crm/crm_company_cedit_impl");
 				$t = &$data["vcl_inst"];
@@ -2071,7 +2074,7 @@ class crm_company extends class_base
 				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_DETAIL )
 				{
 					return PROP_IGNORE;
-				}			
+				}
 				static $cust_impl;
 				if (!$cust_impl)
 				{
@@ -2080,6 +2083,20 @@ class crm_company extends class_base
 				$fn = "_get_".$data["name"];
 				return $cust_impl->$fn($arr);
 				break;
+
+			case "customer_search_insurance_exp":
+				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_DETAIL )
+				{
+					return PROP_IGNORE;
+				}
+				static $cust_impl;
+				if (!$cust_impl)
+				{
+					$cust_impl = get_instance("applications/crm/crm_company_cust_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $cust_impl->$fn($arr);
+
 			case "customer_search_print_view":
 				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_DETAIL )
 				{
@@ -2288,7 +2305,7 @@ class crm_company extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-				
+
 			/// OBJECTS TAB
 			case "objects_listing_toolbar":
 			case "objects_listing_tree":
@@ -2302,8 +2319,8 @@ class crm_company extends class_base
 				return $obj_impl->$fn($arr);
 
 			// ACTIONS TAB
-			
-			
+
+
 			case "my_tasks":
 			case "my_tasks_cal":
 				if(aw_global_get("crm_task_view") == null)
@@ -2469,7 +2486,7 @@ class crm_company extends class_base
 				{
 					$data["value"] = -1;
 				}
-				break;			
+				break;
 			case "bill_s_to":
 				$data =& $arr["prop"];
 				if (!isset($arr["request"][$data["name"]]))
@@ -2566,7 +2583,7 @@ class crm_company extends class_base
 					$stats_impl = get_instance("applications/crm/crm_company_stats_impl");
 				}
 				$fn = "_get_".$data["name"];
-				
+
 				return $stats_impl->$fn($arr);
 
 			case "qv_t":
@@ -2626,7 +2643,7 @@ class crm_company extends class_base
 				else
 				{
 					$data["value"] = mktime(0,0,0, date("m"), 1, date("Y"));
-				}	
+				}
 				break;
 			case "my_stats_s_to":
 				$data["value"] = mktime(0,0,0, date("m"), date("d"), date("Y"));
@@ -2699,7 +2716,7 @@ class crm_company extends class_base
 			case "sell_offers_prods":
 				$procurement_center = get_instance(CL_PROCUREMENT_CENTER);
 				$procurement_center->_sell_offers_prod_table($arr);
-				break;	
+				break;
 			case "see_all_link":
 			case "see_all_link2":
 				$procurement_center = get_instance(CL_PROCUREMENT_CENTER);
@@ -2875,7 +2892,7 @@ class crm_company extends class_base
 			"uid" => aw_global_get("uid"),
 		));
 	}
-	
+
 	function gen_cedit_tb($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
@@ -3664,7 +3681,7 @@ class crm_company extends class_base
 			{
 				$_SESSION['crm_customers_search_mode'] = CRM_CUSTOMERS_SEARCH_DETAIL;
 				$this->set_cval( aw_global_get('uid').'_crm_customers_search_mode', CRM_CUSTOMERS_SEARCH_DETAIL );
-			}		
+			}
 		}
 
 		if ($arr["request"]["all_proj_search_change_mode_sbt"])
@@ -3735,10 +3752,10 @@ class crm_company extends class_base
 			$arr["args"]["act_s_print_view"] = $arr["request"]["act_s_print_view"];
 			$arr["args"]["act_s_sbt"] = $arr["request"]["act_s_sbt"];
 			$arr["args"]["act_s_is_is"] = 1;
-				
+
 			$arr["args"]["act_s_mail_content"] = $arr["request"]["act_s_mail_content"];
 			$arr["args"]["act_s_mail_name"] = $arr["request"]["act_s_mail_name"];
-		
+
 		}
 		if ($arr["request"]["bill_s_search"] != "")
 		{
@@ -4806,7 +4823,7 @@ class crm_company extends class_base
 			$row->set_prop("time_to_cust" , str_replace(",", ".", $val));
 			$row->save();
 		}
-		
+
 		foreach($arr["rows"] as $key => $row)
 		{
 			if($row["time_to_cust"] != $row["time_to_cust_real"])
@@ -4821,7 +4838,7 @@ class crm_company extends class_base
 				//arr(str_replace("," , "." , $row["time_to_cust_real"])); arr($br->prop("time_to_cust"));
 			}
 		}
-		
+
 		return $_SESSION["create_bill_ru"];
 	}
 
@@ -4842,7 +4859,7 @@ class crm_company extends class_base
 			$bill = obj($_SESSION["bill_id"]);
 			$_SESSION["bill_id"] = null;
 		}
-		
+
 		$sel = array();
 		foreach($arr as $k => $v)
 		{
@@ -4874,14 +4891,14 @@ class crm_company extends class_base
 			$bill->set_class_id(CL_CRM_BILL);
 			$bill->set_parent($arr["id"]);
 			$bill->save();
-	
+
 			$ser = get_instance(CL_CRM_NUMBER_SERIES);
 			$bno = $ser->find_series_and_get_next(CL_CRM_BILL,0,time());
 			if (!$bno)
 			{
 				$bno = $bill->id();
 			}
-	
+
 			$bill->set_prop("bill_no", $bno);
 			$bill->set_prop("bill_trans_date", time());
 			$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
@@ -4907,12 +4924,12 @@ class crm_company extends class_base
 			$u = get_instance(CL_USER);
 			$bill->set_prop("impl", $u->get_current_company());
 		}
-	
+
 		if ($cust)
 		{
 			$bill->set_prop("customer", $cust->id());
 		}
-	
+
 		if (!$bill->prop("customer") && $arr["sel"])
 		{
 			$c_r_t = $arr["sel"];
@@ -4963,7 +4980,7 @@ class crm_company extends class_base
 				$cust_rel = $cust_rel_list->begin();
 				$bill->set_prop("bill_due_date_days", $cust_rel->prop("bill_due_date_days"));
 			}
-			
+
 			if(!$bill->prop("bill_due_date_days"))
 			{
 				$bill->set_prop("bill_due_date_days", $bill->prop("customer.bill_due_days"));
@@ -4974,7 +4991,7 @@ class crm_company extends class_base
 				mktime(3,3,3, date("m", $bt), date("d", $bt) + $bill->prop("bill_due_date_days"), date("Y", $bt))
 			);
 		}
-		
+
 
 		$bill->save();
 
@@ -4984,7 +5001,7 @@ class crm_company extends class_base
 		foreach(safe_array($arr["sel"]) as $task)
 		{
 			$to = obj($task);
-			
+
 			//kokkuleppehinna toimetuselt arvele pookimine
 			if($to->class_id() == CL_TASK && ($to->prop("deal_unit") || $to->prop("deal_price") || $to->prop("deal_amount")))
 			{
@@ -5000,7 +5017,7 @@ class crm_company extends class_base
 						$deal_name = $prod_obj->comment();
 					}
 				}
-				
+
 				//vaikimisi artikkel ka
 				$prod = "";
 				$seti = get_instance(CL_CRM_SETTINGS);
@@ -5009,7 +5026,7 @@ class crm_company extends class_base
 				{
 					$prod = $sts->prop("bill_def_prod");
 				}
-			
+
 				$agreement[] = array(
 					"unit" => $to->prop("deal_unit"),
 					"price" => $to->prop("deal_price"),
@@ -5023,7 +5040,7 @@ class crm_company extends class_base
 				$to->set_prop("send_bill" , 0);
 				$to->save();
 			}
-			
+
 			$filt_by_row = null;
 			if ($to->class_id() == CL_TASK_ROW)
 			{
@@ -5037,7 +5054,7 @@ class crm_company extends class_base
 					$task = $to->id();
 				}
 			}
-			
+
 			//kulud arveridadeks
 			if ($to->class_id() == CL_CRM_EXPENSE)
 			{
@@ -5051,7 +5068,7 @@ class crm_company extends class_base
 					$to = $c->from();
 					$task = $to->id();
 				}
-				
+
 				$task_o = obj($task);
 				$br = obj();
 				$br->set_class_id(CL_CRM_BILL_ROW);
@@ -5067,7 +5084,7 @@ class crm_company extends class_base
 				$br->set_prop("date", date("d.m.Y", mktime(0,0,0, $date["month"], $date["day"], $date["year"])));
 				$expense->set_prop("bill_id", $bill->id());
 				$expense->save();
-				
+
 				// get default prod
 				if ($sts)
 				{
@@ -5180,13 +5197,13 @@ class crm_company extends class_base
 		{
 			$create_bill_ru = $_SESSION["create_bill_ru"];
 		}
-		else 
+		else
 		{
 			$create_bill_ru = html::get_change_url($arr["id"], array("group" => "bills"));
 		}
 		return html::get_change_url($bill->id(),array("return_url" => $create_bill_ru,));
 	}
-	
+
 	/**
 		@attrib name=add_proj_to_co_as_ord
 	**/
@@ -5221,7 +5238,7 @@ class crm_company extends class_base
 
 	/**
 		@attrib name=submit_delete_docs
-		@param sel optional 
+		@param sel optional
 		@param post_ru optional
 	**/
 	function submit_delete_docs($arr)
@@ -5999,8 +6016,8 @@ class crm_company extends class_base
 		if (!is_object($my_co) || !is_oid($my_co->id()))
 		{
 			return;
-		}	
-	
+		}
+
 		if ($view_co->id() == $my_co)
 		{
 			return false;
@@ -6041,7 +6058,7 @@ class crm_company extends class_base
 			return $o;
 		}
 	}
-	
+
 	function on_delete_company($arr)
 	{
 		$company = obj($arr["oid"]);
@@ -6906,7 +6923,7 @@ class crm_company extends class_base
 			"class_id" => CL_EXTERNAL_SYSTEM,
 			"lang_id" => array(),
 			"site_id" => array()
-		));	
+		));
 		$data = array();
 		foreach($crel->connections_from(array("type" => "RELTYPE_EXT_SYS_ENTRY")) as $c)
 		{
@@ -6937,7 +6954,7 @@ class crm_company extends class_base
 				$ent->set_prop("value", $arr["request"]["ext"][$o->id()]);
 				$ent->save();
 			}
-		}	
+		}
 	}
 
 	/**
@@ -7001,7 +7018,7 @@ class crm_company extends class_base
 	{
 		if ($arr["cfgform"])
 		{
-			$cfg = get_instance(CL_CFGFORM); 
+			$cfg = get_instance(CL_CFGFORM);
 			$props = $cfg->get_props_from_cfgform(array("id" => $arr["cfgform"]));
 		}
 		else
@@ -7090,7 +7107,7 @@ class crm_company extends class_base
 		}
 		$send_to = join($mails , ", ");
 //		$user = aw_global_get("uid");
-		
+
 		$mfrom = aw_global_get("uid_oid");
 		$user_obj = obj($mfrom);
 		$person = $user_obj->get_first_obj_by_reltype("RELTYPE_PERSON");
@@ -7148,7 +7165,7 @@ class crm_company extends class_base
 		if ($arr["prop"]["value"] == 1)
 		{
 			$crel = $this->get_cust_rel($cur, true,$arr["obj_inst"]);
-			
+
 		}
 		else
 		{
@@ -7488,7 +7505,7 @@ class crm_company extends class_base
 			"class_id" => CL_CRM_SECTOR,
 			"sort_by" => "objects.name"
 		));
-		// parentize the list - move all items that have parents in the list 
+		// parentize the list - move all items that have parents in the list
 		// below them, so we can draw them with grouping
 		$list_by_parent = array();
 		foreach($ol->arr() as $o)
@@ -7523,7 +7540,7 @@ class crm_company extends class_base
 				$this->_add_0level_item_to_list($nitems, $id);
 			}
 		}
-		
+
 		$arr["prop"]["options"] = $nitems;
 		if ($arr["new"] && $arr["request"]["sector"])
 		{
@@ -7534,7 +7551,7 @@ class crm_company extends class_base
 	function _add_0level_item_to_list(&$nitems, $id)
 	{
 		$ot = new object_tree(array(
-			"parent" => $id, 
+			"parent" => $id,
 			"class_id" => CL_CRM_SECTOR,
 			"lang_id" => array(),
 			"site_id" => array()
@@ -7610,13 +7627,13 @@ class crm_company extends class_base
 			$crm_phone_object_oid = $org_inst->add_phone(array(
 				'organisation_object' => $org_obj,
 				'phone_number' => '+37 2503 7767'
-				
+
 			));
 	**/
 	function add_phone($arr)
 	{
 		$org_obj = $arr['organisation_object'];
-		
+
 		if (!empty($arr['phone_object']))
 		{
 			$phone_obj_id = $arr['phone_object']->id();
@@ -7630,7 +7647,7 @@ class crm_company extends class_base
 			$o->save();
 			$phone_obj_id = $o->id();
 		}
-		
+
 		$type = 17; // phone
 		if ($arr['type'] == 'fax')
 		{
@@ -7646,7 +7663,7 @@ class crm_company extends class_base
 			$org_obj->set_prop('phone_id', $phone_obj_id);
 			$org_obj->save();
 		}
-		
+
 		return $phone_obj_id;
 	}
 
@@ -7668,7 +7685,7 @@ class crm_company extends class_base
 	function add_web_address($arr)
 	{
 		$org_obj = $arr['organisation_object'];
-		
+
 		if (!empty($arr['web_address_object']))
 		{
 			$web_address_obj_id = $arr['web_address_object']->id();
@@ -7730,7 +7747,7 @@ Bank accounts: üksteise all
 		$t = new vcl_table();
 		$this->init_short_description_table(&$t);
 /*		$t->define_data(array("caption" => t("Aadress:")));
-*/		
+*/
 		$conns = $p->connections_from(array(
 			"type" => "RELTYPE_ADDRESS",
 		));
@@ -7807,11 +7824,11 @@ Bank accounts: üksteise all
 				"data" => join($aa, ", "),
 			));
 		}
-		
+
 		$conns = $p->connections_from(array(
 			"type" => "RELTYPE_URL",
 		));
-		
+
 		if(sizeof($conns))
 		{
 			$aa = array();
@@ -7825,11 +7842,11 @@ Bank accounts: üksteise all
 				"data" => join($aa, "\n<br>"),
 			));
 		}
-		
+
 		$conns = $p->connections_from(array(
 			"type" => "RELTYPE_BANK_ACCOUNT",
 		));
-		
+
 		if(sizeof($conns))
 		{
 			$aa = array();
@@ -7846,7 +7863,7 @@ Bank accounts: üksteise all
 		return $t->draw();
 	}
 
-	/** 
+	/**
 		@attrib name=set_project_to_mail nologin=1 is_public=1 all_args=1
  	**/
 	function set_project_to_mail($arr)
@@ -8048,7 +8065,7 @@ Bank accounts: üksteise all
 	function _get_statuses_tb($arr)
 	{
 		$tb = &$arr["prop"]["toolbar"];
-		
+
 		$company = get_current_company();
 		$parent = (strlen($arr['request']['tf'])>1)?$arr['request']['tf']:$company->id();
 		$params = array();
@@ -8116,7 +8133,7 @@ Bank accounts: üksteise all
 					"category" => $id
 				))
 			));
-			
+
 			$ol = new object_list(array(
 				"class_id" => array(CL_CRM_COMPANY_STATUS),
 				"category" => $id,
@@ -8137,7 +8154,7 @@ Bank accounts: üksteise all
 				$this->get_s_tree_stuff($o->id(), $t, $id);
 			}
 
-			
+
 		}
 	}
 
@@ -8175,11 +8192,11 @@ Bank accounts: üksteise all
 		}
 
 	}
-	
+
 	function _get_statuses_set_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-	
+
 		$t->define_field(array(
 			"name" => "cat",
 			"align" => "center"
@@ -8250,7 +8267,7 @@ Bank accounts: üksteise all
 		elseif(strlen($arr["request"]["tf"]) < 2)
 		{
 			$t->set_caption($categories[$arr["request"]["category"]]);
-			
+
 			$t->define_field(array(
 				"caption" => t("Vali"),
 				"name" => "check",
@@ -8353,7 +8370,7 @@ Bank accounts: üksteise all
 			}
 		}
 	}
-	
+
 	/**
 	@attrib name=save_contact_rels all_args=1
 	**/
