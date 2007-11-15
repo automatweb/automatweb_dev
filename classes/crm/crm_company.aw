@@ -5423,7 +5423,9 @@ class crm_company extends class_base
 	**/
 	function tasks_switch_to_table_view($arr)
 	{
-		aw_session_del("crm_task_view");
+//		aw_session_set("crm_task_view" , CRM_TASK_VIEW_TABLE);
+		$GLOBALS["crm_task_view"] = CRM_TASK_VIEW_TABLE;
+		$_SESSION["crm_task_view"] = CRM_TASK_VIEW_TABLE;
 		return $arr["post_ru"];
 	}
 

@@ -411,11 +411,13 @@ class crm_company_overview_impl extends class_base
 	}
 
 	function __task_sorter($a, $b)
-	{
+	{//return $a->id() > $b->id() ? -2 : ($a->id() < $b->id() ? 2 : 0);
+
 		$b_proj = $b->prop("project");
 		$a_proj = $a->prop("project");
 		$b_cust = $b->prop("customer");
-		$a_cust = $a->prop("customer");
+		$a_cust = $a->prop("customer");	
+
 		if(($a_cust - $b_cust) == 0)
 		{
 			if(($a_proj - $b_proj) == 0)
@@ -431,16 +433,19 @@ class crm_company_overview_impl extends class_base
 			}
 			else
 			{
-				return strcmp($a->prop("project.name"), $b->prop("project.name"));
+				$b_project_name = ($b_project)?$b->prop("project.name"):"";
+				$a_project_name = ($a_project)?$a->prop("project.name"):"";
+				return strcmp($a_project_name, $b_project_name);
 			}
 		}
 		else
 		{
-			return strcmp($a->prop("customer.name"), $b->prop("customer.name"));
+			$b_cust_name = ($b_cust)?$b->prop("customer.name"):"";
+			$a_cust_name = ($a_cust)?$a->prop("customer.name"):"";
+			return strcmp($a_cust_name, $b_cust_name);
 		}
 		return $a->prop("date") - $b->prop("date");
 	}
-
 
 	function _get_my_tasks($arr)
 	{
