@@ -27,6 +27,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
+            <year_from>1990</year_from>
             <caption>Suhte algus</caption>
       </property>
       <property>
