@@ -28,6 +28,7 @@
             <method>serialize</method>
             <type>date_select</type>
             <year_from>1990</year_from>
+            <year_to>2010</year_to>
             <caption>Suhte algus</caption>
       </property>
       <property>
