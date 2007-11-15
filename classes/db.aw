@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.27 2006/03/24 11:17:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.28 2007/11/15 12:23:58 voldemar Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -18,10 +18,10 @@ define("DB_TABLE_TYPE_TABLE", 2);
 
 	// but we can also create a second connection
 	$args = array(
-		"driver" => "mysql", 
+		"driver" => "mysql",
 		"server" => "localhost",
 		"base" => "persona",
-		"username" => "guest", 
+		"username" => "guest",
 		"password" => "guest",
 		"cid" => "persona"
 	);
@@ -31,7 +31,7 @@ define("DB_TABLE_TYPE_TABLE", 2);
 	{
 		print $row["id"];
 	};
-	
+
 	// of course, you can also use save_handle and restore_handle on both
 	// dc-s, you can even mix the queries. in one word, you can do anything you
 	// have been doing until now only with 1 + n (0..inf) database connections
@@ -40,7 +40,7 @@ define("DB_TABLE_TYPE_TABLE", 2);
 	// I think this notation is pretty good, since
 	// I want to be able to use 2 or more connections at once, without
 	// calling a method for switching connections or something, this class
-	// should and will take care of connecting to correct sources 
+	// should and will take care of connecting to correct sources
 */
 
 class db_connector
@@ -57,7 +57,7 @@ class db_connector
 			return;
 		};
 		$this->default_cid = "DBMAIN";
-		
+
 		// if no connection id is set, pretend that this is the primary data source
 		$id = "db::".$this->default_cid;
 		$dc = aw_global_get($id);
@@ -102,7 +102,7 @@ class db_connector
 	@errors
 		die(t("this driver is not supported")) - if that driver doesn't exist
 	@returns db connection object
-	@comment 
+	@comment
 		Creates a connection to a data source
 	@examples
 		$db->db_connect(array(
@@ -160,7 +160,7 @@ class db_connector
 		};
 		return $retval;
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
 	@param qtext required type=string
@@ -204,14 +204,14 @@ class db_connector
 	{
 		return $this->dc[$this->default_cid]->db_next($dec);
 	}
-	
+
 	/**
 	@attrib api=1
 	@returns oid
-	
+
 	@examples
 	$oid = $this->db_last_insert_id();
-	**/	
+	**/
 	function db_last_insert_id()
 	{
 		return $this->dc[$this->default_cid]->db_last_insert_id();
@@ -220,29 +220,29 @@ class db_connector
 	/**
 	@attrib params=pos api=1
 	@param sql optional type=string default=""
-		SQL query	
+		SQL query
 	@returns row of a query result
-	@comment 
+	@comment
 		makes a query and returns a row
-	
+
 	@examples
 		$row = $this->db_fetch_row("SELECT * FROM my_table WHERE status = "kopp ees");
-	**/	
+	**/
 	function db_fetch_row($sql = "")
 	{
 		return $this->dc[$this->default_cid]->db_fetch_row($sql);
 	}
-	
+
 	/**
 	@attrib params=pos api=1
-	
+
 	@param qtext optional type=string default=""
 		QSL query
 	@param field optional type=string default=""
 		field name
 	@returns field of a DB query row
-	
-	@comment 
+
+	@comment
 		makes a query and returns a field
 	@examples
 		$id = $this->db_fetch_field("SELECT id FROM forms WHERE id = '$row[oid]'", "id");
@@ -254,27 +254,27 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param $qtext optional type=string default=""
 		SQL query... if not set, tries to fetch from previous db_query
 	@returns array
-	
+
 	@comment fetch all rows from db_query result
 	@examples
 		$arr = $this->db_fetch_array('select id , name , parent from users');
 	**/
-	function db_fetch_array($qtext="") 
+	function db_fetch_array($qtext="")
 	{
 		return $this->dc[$this->default_cid]->db_fetch_array($qtext);
 	}
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param arr required type=string/array
 		string/array of strings , you want to quote
 	@returns string/array
-	
+
 	@comment
 		Quote string or stings in array with slashes
 	**/
@@ -285,11 +285,11 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param arr required type=string/array
 		string/array of strings , you want to unquote
 	@returns string/array
-	
+
 	@comment
 		Un-quote quoted string
 	**/
@@ -297,10 +297,10 @@ class db_connector
 	{
 		return $this->dc[$this->default_cid]->dequote($arr);
 	}
-	
+
 	/**
 	@attrib api=1
-	
+
 	@returns int , number of rows
 	**/
 	function num_rows()
@@ -310,7 +310,7 @@ class db_connector
 
 	/**
 	@attrib api=1
-	
+
 	@comment
 		Retrieves a list of table names from a database.($this->tID)
 		Retrieves the number of rows from a result set ($this->tablecount)
@@ -322,14 +322,14 @@ class db_connector
 	//------------------------------------------------------------------------------------
 	/**
 	@attrib api=1
-	
+
 	@returns String , table name of a field
 	**/
 	function db_next_table()
 	{
 		return $this->dc[$this->default_cid]->db_next_table();
 	}
-	
+
 	/**
 	@attrib api=1
 
@@ -342,7 +342,7 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param $name required type=string
 		table name
 	@returns array - the properties of table $name or false if it doesn't exist
@@ -350,7 +350,7 @@ class db_connector
 	where $tableprops is an array("name" => $table_name, "fields" => $fieldprops)
 	where $fieldprops is an array of $fieldname => $cur_props
 	where $cur_props is an array("name" => $field_name, "length" => $field_length, "type" => $field_type, "flags" => $field_flags)
-	
+
 	@examples
 	CREATE TABLE tbl (id int, content text)
 	db_get_table("tbl") returns:
@@ -363,14 +363,14 @@ class db_connector
 	{
 		return $this->dc[$this->default_cid]->db_get_table($name);
 	}
-	
+
 	/**
 	@attrib params=pos api=1
-	
+
 	@param $name required type=string
 		table name
 	@returns field "create table" of a query result
-	
+
 	@comment makes query SHOW CREATE TABLE $name and returns field "create table" of a result
 	**/
 	function db_show_create_table($name)
@@ -380,7 +380,7 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param $source required type=array
 		table array representation
 	@param $dest required type=string
@@ -395,14 +395,44 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
+	@param $name required type=string
+		table name to create
+	@param $field_data required type=array
+		initial field definitions. Format:
+		array(
+			"field_name1" => array(
+				"type" => "INT",
+				"null" => false,
+				"default" => 0
+			),
+			"field_name2" => array(
+				"type" => "CHAR",
+				"length" => 15,
+				"index" => true // whether to index column
+			),
+		);
+	@param $primary required type=string
+		primary key field name
+
+	@returns TRUE on success, FALSE on failure
+	@comment creates a new table.
+	**/
+	function db_create_table($name, $field_data, $primary)
+	{
+		return $this->dc[$this->default_cid]->db_create_table($name, $field_data, $primary);
+	}
+
+	/**
+	@attrib params=pos api=1
+
 	@param $type required type=string
 		type of field you want to qreate
 	@param $length required type=int
 		length of field you want to create
 	@comment this returns the sql for creating the field
 
-	@examples 
+	@examples
 		if driver is mysql
 		$str = $this->mk_field_len(varchar , 100);
 		($str = "VARCHAR(100)")
@@ -414,30 +444,30 @@ class db_connector
 
 	/**
 	@attrib params=name api=1
-	
+
 	@param name required type=string
 		table name
 	@param fields optional type=array
 		field info : array('name' = .. , 'type' = .. , 'length' => .. , flags => ..)
-	@returns string 
-	
+	@returns string
+
 	@comment
 	this creates a nice string from the results of db_get_table
-	**/	
+	**/
 	function db_print_table($args)
 	{
 		return $this->dc[$this->default_cid]->db_print_table($args);
 	}
-	
+
 	/**
 	@attrib api=1
-	
+
 	@returns array
-	
+
 	@comment
 	Reads and returns the structure of the database
-	
-	**/	
+
+	**/
 	function db_get_struct()
 	{
 		return $this->dc[$this->default_cid]->db_get_struct();
@@ -445,12 +475,12 @@ class db_connector
 
 	/**
 	@attrib api=1
-	
+
 	@comment
 	saves query handle in the internal stack
 	it's your task to make sure you call those functions in correct
-	order, otherwise weird things could happen	
-	
+	order, otherwise weird things could happen
+
 	@examples ${restore_handle}
 	**/
 	function save_handle()
@@ -462,9 +492,9 @@ class db_connector
 	// !Sets current query handle
 	/**
 	@attrib api=1
-	
+
 	@comment restores query handle from internal check
-	
+
 	@examples
 	function mark_queue_locked($qid)
 	{
@@ -482,7 +512,7 @@ class db_connector
 	// !fetchib kirje suvalisest tabelist
 	/**
 	@attrib params=pos api=1
-	
+
 	@param table required type=string
 		table name
 	@param field required type=string
@@ -491,11 +521,11 @@ class db_connector
 		field value - value , you are looking for
 	@param fields optional type=array default="*"
 		fields you want to see in query result
-	@returns array 
-	
+	@returns array
+
 	@comment
 		fetch record from table
-	**/	
+	**/
 	function get_record($table,$field,$selector,$fields = array())
 	{
 		if (sizeof($fields) > 0)
@@ -513,10 +543,10 @@ class db_connector
 
 	/**
 	@attrib api=1
-	
+
 	@comment
 	selects a list of databases from the server, the list can be retrieved by calling db_next_database()
-	
+
 	@examples
 	$dbi->db_list_databases();
 	while ($db = $dbi->db_next_database())
@@ -531,9 +561,9 @@ class db_connector
 
 	/**
 	@attrib api=1
-	
+
 	@return array - the next database from the list created by db_list_databases()
-	
+
 	@examples ${db_list_databases}
 	**/
 	function db_next_database()
@@ -543,7 +573,7 @@ class db_connector
 
 	/**
 	@attrib params=name api=1
-	
+
 	@param name required type=string
 		the name of the database
 	@param user required type=string
@@ -554,7 +584,7 @@ class db_connector
 		the password for the database
 	@comment
 		tries to create the database in the server
-	**/	
+	**/
 	function db_create_database($arr)
 	{
 		return $this->dc[$this->default_cid]->db_create_database($arr);
@@ -563,7 +593,7 @@ class db_connector
 	/**
 	@attrib api=1
 	@return array()
-	
+
 	@comment
 		returns a list of all available database drivers on the system
 	@examples
@@ -572,9 +602,9 @@ class db_connector
 	function list_db_drivers()
 	{
 		$ret = array();
-		if ($dir = @opendir($this->cfg["classdir"]."/db_drivers")) 
+		if ($dir = @opendir($this->cfg["classdir"]."/db_drivers"))
 		{
-			while (($file = readdir($dir)) !== false) 
+			while (($file = readdir($dir)) !== false)
 			{
 				if (substr($file, strlen($file) - (strlen($this->cfg["ext"])+1)) == ".".$this->cfg["ext"])
 				{
@@ -591,7 +621,7 @@ class db_connector
 	/**
 	@attrib api=1
 	@return array('Server_version' => .. , 'Protocol_version' => .. , 'Host_info' => .. , Variables => values , 'Queries_per_sec' => ..)
-	
+
 	@comment
 		returns server status - the fields returned are server-specific
 	@examples
@@ -604,11 +634,11 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the name of the table
 	@return array()
-	
+
 	@comment
 		returns information about the specified table - the fields returned are server specific
 	**/
@@ -620,9 +650,9 @@ class db_connector
 	/**
 	@attrib api=1
 	@return  array('' => '', 'AUTO_INCREMENT' => 'AUTO_INCREMENT');
-	
+
 	@comment
-		returns array of database flags	
+		returns array of database flags
 	**/
 	function db_list_flags()
 	{
@@ -631,9 +661,9 @@ class db_connector
 
 	/**
 	@attrib api=1
-	
+
 	@return array()
-	
+
 	@comment
 		returns array of database field types
 	**/
@@ -644,12 +674,12 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the table to add to
 	@param coldat required type=array
 		coldat - new column properties array(name, type, length, null, default, extra)
-	
+
 	@comment
 		adds a column to table $tbl
 	**/
@@ -660,7 +690,7 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the table where the column is
 	@param col required type=string
@@ -677,7 +707,7 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the table where the column is
 	@param col required type=string
@@ -692,7 +722,7 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the table name
 	@comment
@@ -705,7 +735,7 @@ class db_connector
 
 	/**
 	@attrib api=1
-	
+
 	@returns:array - index_name - the name of the index
 			col_name - the name of the column that the index is created on
 			unique - if true, values in index must be unique
@@ -719,11 +749,11 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the table name
 	@param $idx_dat required type=array
-		an array that defines index properties - 
+		an array that defines index properties -
 			name - the name of the index
 			col - the column on what to create the index
 	@comment
@@ -736,7 +766,7 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the table name
 	@param name required type=string
@@ -754,10 +784,10 @@ class db_connector
 	@returns false - if no error has occurred
 		otherwise - array -
 		error_cmd - the query that produced the error
-		error_code - the db-specific error code 
+		error_code - the db-specific error code
 		error_string - the error string returned by the database
 	@comment
-		returns last occurred error 
+		returns last occurred error
 	**/
 	function db_get_last_error()
 	{
@@ -766,11 +796,11 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the table name
 	@returns true if the specified table exists in the database
-	
+
 	@comment
 		checks if the table exists
 	**/
@@ -781,14 +811,14 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param fn required type=string
 		database table field name
 	@returns string
-	
+
 	@comment
 		escapes a database table field name based on the db driver
-	**/	
+	**/
 	function db_fn($fn)
 	{
 		return $this->dc[$this->default_cid]->db_fn($fn);
@@ -796,7 +826,7 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
+
 	@param tbl required type=string
 		the table name
 	@returns type of the table, as one of the DB_TABLE_TYPE constants

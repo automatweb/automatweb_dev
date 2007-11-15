@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.42 2007/07/19 09:13:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.43 2007/11/15 12:23:58 voldemar Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -516,9 +516,53 @@ class mysql
 
 				};
 				$this->restore_handle();
-			};
-		};
+			}
+		}
 		return $tables;
+	}
+
+	function db_create_table($name, $field_data, $primary)
+	{
+		$field_dfns = $indexed_fields = array();
+		$types = $this->db_list_field_types();
+
+		foreach ($field_data as $field_name => $data)
+		{
+			$length = $default = $null = "";
+			$type = strtoupper($data["type"]);
+
+			if (empty($data["type"]) or !in_array($type, $types))
+			{
+				return false;
+			}
+
+			if (false === $data["null"])
+			{
+				$null = 'NOT NULL';
+			}
+
+			if (!empty($data["length"]))
+			{
+				$type = $this->mk_field_len($type, ((int) $data["length"]));
+			}
+
+			if ($field_name === $primary)
+			{
+				$default = "DEFAULT '0'";
+			}
+
+			if (!empty($data["default"]))
+			{
+				$default = "DEFAULT '" . $data["default"] . "'";
+			}
+
+			$field_dfns[] = "`$field_name` $type $default $null";
+		}
+
+		$field_dfns = implode(",", $field_dfns);
+		$index = count($indexed_fields) ? ", (`" . implode("`,`", $indexed_fields) . "`)" : "";
+		$q = "CREATE TABLE `$name` ($field_dfns, PRIMARY KEY(`$primary`)" . $index . ")";
+		return $this->db_query($q);
 	}
 
 	function db_show_create_table($name)
