@@ -1039,6 +1039,11 @@ function exit_function($name,$ret = "")
 	$GLOBALS["exit_function_calls"]++;
 }
 
+function aw_set_exec_time($i_seconds)
+{
+	set_time_limit( $i_seconds);
+}
+
 function __init_aw_session_track()
 {
 	if ($_SERVER["REQUEST_METHOD"] != "GET")
