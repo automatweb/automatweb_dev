@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.1 2007/11/15 14:19:21 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.2 2007/11/16 10:51:56 robert Exp $
 // weather_report.aw - Ilmateade 
 /*
 
@@ -139,6 +139,12 @@ class weather_report extends class_base
 						$this->vars(array(
 							"imgsrc" => $imgsrc
 						));
+					}
+					elseif($prop == "Temperature")
+					{
+						preg_match_all("/^(\d+).+?(\d+).*?/", $val, $vals, PREG_PATTERN_ORDER);
+						$fields['fahr'] = $vals['1']['0'];
+						$fields['cels'] = $vals['2']['0'];	
 					}
 					
 					$fields[$prop] = $val;
