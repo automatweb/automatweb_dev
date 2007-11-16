@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.41 2007/11/07 13:34:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.42 2007/11/16 12:32:53 hannes Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -429,7 +429,7 @@ class ml_queue extends aw_template
 	**/
 	function process_queue($arr)
 	{
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$sched = get_instance("scheduler");
 		$sched->add(array(
 			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),

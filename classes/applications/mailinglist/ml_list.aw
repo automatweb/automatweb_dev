@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.107 2007/10/12 10:57:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.109 2007/11/16 12:35:55 hannes Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1334,7 +1334,7 @@ class ml_list extends class_base
 			$members = $this->get_all_members($fold);
 			$name = $fld_obj->name();
 			echo "Impordin kasutajaid kataloogi $fold / $name... <br />";
-			set_time_limit(0);
+			aw_set_exec_time(AW_LONG_PROCESS);
 			$ml_member = get_instance(CL_ML_MEMBER);
 			$cnt = 0;
 			if (sizeof($lines) > 0)
@@ -1470,7 +1470,7 @@ class ml_list extends class_base
 			
 			$name = $fld_obj->name();
 			echo "Kustutan kasutajaid kataloogist $fld / $name... <br />";
-			set_time_limit(0);
+			aw_set_exec_time(AW_LONG_PROCESS);
 			$ml_member = get_instance(CL_ML_MEMBER);
 			$cnt = 0;
 			if (sizeof($lines) > 0)
