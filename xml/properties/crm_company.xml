@@ -2041,6 +2041,20 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>docs_s_created_after</name>
+            <table>objects</table>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
+            <type>date_select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_s_f</parent>
+            <field>docs_s_created_after</field>
+            <caption>Loodud peale</caption>
+      </property>
+      <property>
             <name>docs_s_sbt</name>
             <table>objects</table>
             <group>

@@ -132,7 +132,7 @@ class crm_company_docs_impl extends class_base
 
 		$ol = new object_list(array(
 			"class_id" => $classes,
-			"lang_id" => array(),	
+			"lang_id" => array(),
 			"parent" => $parent,
 			"sort_by" => "objects.name ASC",
 		));
@@ -145,7 +145,7 @@ class crm_company_docs_impl extends class_base
 			$classes = array(CL_DOCUMENT,CL_FILE);
 			$ol3 = new object_list(array(
 				"class_id" => $classes,
-				"lang_id" => array(),	
+				"lang_id" => array(),
 				"parent" => $parent,
 				"sort_by" => "objects.name ASC",
 			));
@@ -153,7 +153,7 @@ class crm_company_docs_impl extends class_base
 				"prop" => "ord",
 				"order" => "asc"
 			));
-			foreach($ol3->names() as $id => $name)	
+			foreach($ol3->names() as $id => $name)
 			{
 				$ol->add($id);
 			}
@@ -178,11 +178,11 @@ class crm_company_docs_impl extends class_base
 				$d["url"] = $file_inst->get_url($o->id()).$o->name();
 				$d["url_target"] = "new window";
 			}
-			
+
 			$tree->add_item(0,$d);
 			$ol2 = new object_list(array(
 				"class_id" => $classes,
-				"lang_id" => array(),	
+				"lang_id" => array(),
 				"parent" => $o->id(),
 			));
 
@@ -197,7 +197,7 @@ class crm_company_docs_impl extends class_base
 //				$classes = array(CL_DOCUMENT,CL_FILE);
 //				$ol4 = new object_list(array(
 //					"class_id" => $classes,
-//					"lang_id" => array(),	
+//					"lang_id" => array(),
 //					"parent" => $parent,
 //					"sort_by" => "objects.name ASC",
 //				));
@@ -206,8 +206,8 @@ class crm_company_docs_impl extends class_base
 //					"order" => "asc"
 //				));
 //				$o4 = $ol4->begin();
-				
-//				foreach($ol4->names() as $id => $name)	
+
+//				foreach($ol4->names() as $id => $name)
 //				{
 //					$ol2->add($id);
 //				}
@@ -234,7 +234,7 @@ class crm_company_docs_impl extends class_base
 //if(aw_global_get("uid") == "marko"){arr(time() - $_SESSION["asdtime"]);}
 		die($tree->finalize_tree());
 	}
-	
+
 	function _get_docs_tree($arr)
 	{
 		if ($arr["request"]["do_doc_search"])
@@ -270,7 +270,7 @@ class crm_company_docs_impl extends class_base
 			"persist_state" => 1,
 			"root_name" => "",
 			"root_url" => "#",
-			//"open_path" => 
+			//"open_path" =>
 			"root_icon" => "images/transparent.gif",
 		));
 		$arr["prop"]["vcl_inst"]->add_item(0,array(
@@ -282,7 +282,7 @@ class crm_company_docs_impl extends class_base
 		));
 		$ol = new object_list(array(
 			"class_id" => $classes,
-			"lang_id" => array(),	
+			"lang_id" => array(),
 			"parent" => $fld->id(),
 			"sort_by" => "objects.name ASC",
 			//"sortby" => "objects.class_id",
@@ -305,7 +305,7 @@ class crm_company_docs_impl extends class_base
 				"prop" => "ord",
 				"order" => "asc"
 			));
-			foreach($ol3->names() as $id => $name)	
+			foreach($ol3->names() as $id => $name)
 			{
 				$ol->add($id);
 			}
@@ -324,11 +324,11 @@ class crm_company_docs_impl extends class_base
 				$d["url"] = $file_inst->get_url($o->id()).$o->name();
 				$d["url_target"] = "new window";
 			}
-			
+
 			$arr["prop"]["vcl_inst"]->add_item($fld->id(),$d);
 			$ol2 = new object_list(array(
 				"class_id" => array(CL_MENU),
-				"lang_id" => array(),	
+				"lang_id" => array(),
 				"parent" => $o->id(),
 				"sort_by" => "objects.name ASC",
 			));
@@ -341,7 +341,7 @@ class crm_company_docs_impl extends class_base
 				$classes = array(CL_DOCUMENT,CL_FILE);
 				$ol4 = new object_list(array(
 					"class_id" => $classes,
-					"lang_id" => array(),	
+					"lang_id" => array(),
 					"parent" => $o->id(),
 					"sort_by" => "objects.name ASC",
 				));
@@ -349,8 +349,8 @@ class crm_company_docs_impl extends class_base
 					"prop" => "ord",
 					"order" => "asc"
 				));
-		
-				foreach($ol4->names() as $id => $name)	
+
+				foreach($ol4->names() as $id => $name)
 				{
 					$ol2->add($id);
 				}
@@ -370,7 +370,7 @@ class crm_company_docs_impl extends class_base
 		{
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
-				"type" => TREE_DHTML, 
+				"type" => TREE_DHTML,
 				"persist_state" => true,
 				"tree_id" => "crm_docs_t",
 			),
@@ -385,7 +385,7 @@ class crm_company_docs_impl extends class_base
 			"persist_state" => 1,
 			"icon" => icons::get_icon_url(CL_MENU)
 		));
-		
+
 		}
 /*		foreach($arr["prop"]["vcl_inst"]->items as $id => $items)
 		{
@@ -559,7 +559,7 @@ class crm_company_docs_impl extends class_base
 
 		if ($arr["request"]["do_doc_search"] || $arr["request"]["docs_s_sbt"] != "")
 		{
-			// get all parents to search from 
+			// get all parents to search from
 			$parent_tree = new object_tree(array(
 				"parent" => $fld->id(),
 				"class_id" => CL_MENU
@@ -592,7 +592,7 @@ class crm_company_docs_impl extends class_base
 		{
 			$pm = get_instance("vcl/popup_menu");
 			$pm->begin_menu("sf".$o->id());
-			
+
 			if ($o->class_id() == CL_FILE)
 			{
 				$pm->add_item(array(
@@ -686,6 +686,11 @@ class crm_company_docs_impl extends class_base
 		$arr["prop"]["value"] = $arr["request"]["docs_s_type"];
 	}
 
+	function _get_docs_s_created_after($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["docs_s_created_after"];
+	}
+
 	function _get_doc_search_f($req, $parent)
 	{
 		$res = array(
@@ -703,6 +708,12 @@ class crm_company_docs_impl extends class_base
 		if ($req["docs_s_type"] != "")
 		{
 			$res["class_id"] = $req["docs_s_type"];
+			$has = true;
+		}
+
+		if ($req["docs_s_created_after"] != "")
+		{
+			$res["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, (int) $req["docs_s_created_after"]);
 			$has = true;
 		}
 
@@ -786,7 +797,7 @@ class crm_company_docs_impl extends class_base
 			'tooltip' => t('Lisa dokument'),
 			'url' => html::get_new_url(CL_DOCUMENT, $fldo->id(), array("return_url" => get_ru())),
 		));
-		
+
 	}
 
 	function _init_dn_res_t(&$t)

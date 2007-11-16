@@ -709,6 +709,9 @@ default group=org_objects
 					@property docs_s_customer type=textbox size=30 store=no captionside=top parent=docs_s_f
 					@caption Klient
 
+					@property docs_s_created_after type=date_select store=no captionside=top parent=docs_s_f
+					@caption Loodud peale
+
 				@layout docs_s_but_row type=hbox parent=docs_left_search
 
 					@property docs_s_sbt type=submit store=no no_caption=1 parent=docs_s_but_row
@@ -2438,6 +2441,7 @@ class crm_company extends class_base
 			case "docs_tree":
 			case "docs_tbl":
 			case 'docs_s_type':
+			case 'docs_s_created_after':
 			case "docs_news_tb":
 			case "dn_res":
 			case "documents_lmod":
@@ -3731,6 +3735,7 @@ class crm_company extends class_base
 		{
 			$arr["args"]["docs_s_name"] = $arr["request"]["docs_s_name"];
 			$arr["args"]["docs_s_type"] = $arr["request"]["docs_s_type"];
+			$arr["args"]["docs_s_created_after"] = mktime(0, 0, 0, $arr["request"]["docs_s_created_after"]["month"], $arr["request"]["docs_s_created_after"]["day"], $arr["request"]["docs_s_created_after"]["year"]);
 			$arr["args"]["docs_s_task"] = $arr["request"]["docs_s_task"];
 			$arr["args"]["docs_s_user"] = $arr["request"]["docs_s_user"];
 			$arr["args"]["docs_s_name"] = $arr["request"]["docs_s_name"];
