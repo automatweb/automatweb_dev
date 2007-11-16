@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.107 2007/05/07 08:07:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.108 2007/11/16 12:22:35 hannes Exp $
 if (false && $_SERVER["REMOTE_ADDR"] == "62.65.36.190")
 {
 	error_reporting(E_ALL | E_NOTICE);
@@ -10,10 +10,10 @@ else
 }
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
-if (!ini_get("safe_mode"))
-{
-	set_time_limit(200);
-}
+
+define ("AW_SHORT_PROCESS", 1);
+define ("AW_LONG_PROCESS", 2);
+
 ini_set("memory_limit", "300M");
 ini_set("display_errors", "1");
 if (get_magic_quotes_gpc() && !defined("GPC_HANDLER")) 

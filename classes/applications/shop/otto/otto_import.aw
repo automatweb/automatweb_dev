@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.68 2007/11/14 20:46:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.69 2007/11/16 12:29:26 hannes Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2475,7 +2475,7 @@ class otto_import extends class_base
 	{
 		$GLOBALS["no_cache_clear"] = 1;
 		$this->added_images = array();
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);	
 		$import_obj = $arr;
 
 		echo "-----------[ start of picture import ]------------------<br>";
@@ -3045,7 +3045,7 @@ class otto_import extends class_base
 
 		$o = $arr['otto_import'];
 
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$otto_import_lang_id = $o->lang_id();
 		$not_found_products_by_page = array();
 
@@ -5043,7 +5043,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 
 	function _do_del_prods($prods, $page_pattern = "")
 	{
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);	
 
 		// lets convert this stuff to direct sql	
 		$sql_params = "

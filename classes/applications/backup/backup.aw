@@ -60,7 +60,7 @@ class backup extends class_base
 			"msg" => t("backup::do_backup(): no server folder set for backup!")
 		));
 
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		// ookay. first, the database dump.
 		$tmpnam = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
 		mkdir($tmpnam,0777);

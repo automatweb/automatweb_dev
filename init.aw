@@ -1039,9 +1039,22 @@ function exit_function($name,$ret = "")
 	$GLOBALS["exit_function_calls"]++;
 }
 
-function aw_set_exec_time($i_seconds)
+function aw_set_exec_time($c_type)
 {
-	set_time_limit( $i_seconds);
+	if ($c_type == AW_LONG_PROCESS)
+	{
+		if ( aw_ini_get("core.long_process_exec_time") )
+		{
+			set_time_limit( aw_ini_get("core.long_process_exec_time") );
+		}
+	}
+	if ($c_type == AW_SHORT_PROCESS)
+	{
+		if ( aw_ini_get("core.default_exec_time") )
+		{
+			set_time_limit( aw_ini_get("core.default_exec_time") );
+		}
+	}
 }
 
 function __init_aw_session_track()

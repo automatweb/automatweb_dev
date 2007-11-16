@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.44 2007/11/07 13:39:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.45 2007/11/16 12:25:40 hannes Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -339,7 +339,7 @@ class scheduler extends aw_template
 	function do_events($arr)
 	{
 		extract($arr);
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		// read in all events
 		$this->open_session();
