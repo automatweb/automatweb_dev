@@ -30,7 +30,7 @@
 	@caption Tabeli navigatsiooni asukoht
 
 	@property searchform_select_size type=textbox datatype=int
-	@comment [0] - v&otilde;imalus valida parameetrile vaid üks v&auml;&auml;rtus, [1 - ...] - v&otilde;imalus valida mitu.
+	@comment [0] - v&otilde;imalus valida parameetrile vaid &uuml;ks v&auml;&auml;rtus, [1 - ...] - v&otilde;imalus valida mitu.
 	@caption Otsinguvormi valikuelementide suurus
 
 	@property searchform_columns type=textbox datatype=int default=2
@@ -1631,7 +1631,7 @@ exit_function("jigaboo");
 		}
 
 		natcasesort ($this->options_a2);
-		$this->options_a2 = array(REALESTATE_SEARCH_ALL => t("Kõik linnad")) + $this->options_a2;
+		$this->options_a2 = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik linnad")) + $this->options_a2;
 
 		### address3
 		if (!is_object ($this->division3))
@@ -1655,7 +1655,7 @@ exit_function("jigaboo");
 		}
 
 		natcasesort ($this->options_a3);
-		$this->options_a3 = array(REALESTATE_SEARCH_ALL => t("Kõik linnaosad")) + $this->options_a3;
+		$this->options_a3 = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik linnaosad")) + $this->options_a3;
 
 		### address4
 		$list =& $this->administrative_structure->prop (array (
@@ -1674,7 +1674,7 @@ exit_function("jigaboo");
 		}
 
 		natcasesort ($this->options_a4);
-		$this->options_a4 = array(REALESTATE_SEARCH_ALL => t("Kõik vallad")) + $this->options_a4;
+		$this->options_a4 = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik vallad")) + $this->options_a4;
 
 		### address5
 		if (!is_object ($this->division5))
@@ -1697,7 +1697,7 @@ exit_function("jigaboo");
 
 		}
 		natcasesort ($this->options_a5);
-		$this->options_a5 = array(REALESTATE_SEARCH_ALL => t("Kõik asulad")) + $this->options_a5;
+		$this->options_a5 = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik asulad")) + $this->options_a5;
 */
 		### condition
 		$prop_args = array (
@@ -2572,7 +2572,7 @@ exit_function("jigaboo");
 		// $table->define_field(array(
 			// "name" => "visible",
 			// "caption" => <a href='javascript:selall(\"realestatemgr-is_visible\")'>t("Näh&shy;tav")</a>,
-			// "tooltip" => t("Kõik read: vali/kaota valik"),
+			// "tooltip" => t("K&otilde;ik read: vali/kaota valik"),
 		// ));
 
 		$table->define_field(array(

@@ -445,7 +445,7 @@ class realestate_import extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-		$list = $list->begin();
+	 	$list->begin();
 
 		while ($property = $list->next())
 		{

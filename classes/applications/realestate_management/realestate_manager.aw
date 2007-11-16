@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.19 2007/08/09 09:31:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.20 2007/11/16 09:02:29 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -3489,8 +3489,9 @@ class realestate_manager extends class_base
 			}
 
 			### save & go to created object
+			aw_disable_acl();
 			$property->save ();
-
+			aw_restore_acl();
 			if ($arr["return_url"])
 			{
 				$property_uri = $this->mk_my_orb ("change", array (

@@ -1621,7 +1621,7 @@ class realestate_property extends class_base
 
 		if($this->is_template("additional_info"))
 		{
-			$this->vars (array("value" => $nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")))));
+			$this->vars (array("value" => nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")))));
 			$data["additional_info"] = $this->parse("additional_info");
 		}
 		else
@@ -2867,9 +2867,13 @@ class realestate_property extends class_base
 		if(!sizeof($agent_phones)>0)//äkki on tegu kasutaja objektiga... sellel telefon teisiti tuleb
 		{
 			$agent_person = $agent->get_first_obj_by_reltype ("RELTYPE_PERSON");
-			foreach($agent_person->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+
+			if (is_object($agent_person))
 			{
-				$agent_phones[] = $connection->prop ("to.name");
+				foreach($agent_person->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+				{
+					$agent_phones[] = $connection->prop ("to.name");
+				}
 			}
 		}
 
