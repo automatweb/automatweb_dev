@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.21 2007/01/10 11:45:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.22 2007/11/16 12:51:36 hannes Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -1257,7 +1257,7 @@ class persona_import extends class_base
 			die(t("You forgot to enter server data"));
 		};
 
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);	
 
 		$c = get_instance(CL_FTP_LOGIN);
 

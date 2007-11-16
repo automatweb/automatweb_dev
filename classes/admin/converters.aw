@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.73 2007/09/04 12:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.74 2007/11/16 12:48:18 hannes Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -386,7 +386,7 @@ class converters extends aw_template
 
 		// now, cycle over all the periods, and create an object for each one
 		// under .. what? 
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$map = array();
 		$q = "SELECT * FROM periods WHERE oid = '$pid'";
 		$this->db_query($q);
@@ -458,7 +458,7 @@ class converters extends aw_template
 	**/
 	function groups_convert()
 	{
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$uroot = aw_ini_get("users.root_folder");
 		if (!$uroot)
@@ -891,7 +891,7 @@ class converters extends aw_template
 	**/
 	function convert_active_documents_list()
 	{
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		echo "creating active document lists! <br>\n";
 		flush();
 		$ol = new object_list(array(
@@ -1013,7 +1013,7 @@ class converters extends aw_template
 	function convert_crm_relations2($arr)
 	{
 		// see annab mulle kõik aadressiobjektid, millel on seos URL objektiga
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);	
 		// 21 / 6 / 16 is URL
 		// 219 / 9 / 17 is phone (but really fax)
 		// 219 / 7,8 / 17 , is phone
@@ -1055,7 +1055,7 @@ class converters extends aw_template
 	**/
 	function convert_crm_relations($arr)
 	{
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);	
 		$q = "SELECT objects.oid,objects.name,aliases.reltype,aliases.target AS target FROM aliases,objects WHERE aliases.source = objects.oid AND aliases.type = 219;";
 		$this->db_query($q);
 		$oids = $targets = array();
@@ -1122,7 +1122,7 @@ class converters extends aw_template
 	function convert_person_org_relations($arr)
 	{
 		// list all connections from organizations to persons
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);	
 		$q = "SELECT aliases.source,aliases.target FROM aliases,objects WHERE type = 145 AND reltype = 8 AND aliases.source = objects.oid AND objects.class_id = 129 AND objects.status != 0";
 		$this->db_query($q);
 		$res = array();
@@ -1505,7 +1505,7 @@ class converters extends aw_template
 	**/
 	function test_acl()
 	{
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$aclids = aw_ini_get("acl.ids");
 		$this->db_query("SELECT oid FROM objects ");
 		while ($row = $this->db_next())

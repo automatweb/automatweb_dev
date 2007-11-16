@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.126 2007/10/30 14:59:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.127 2007/11/16 12:50:08 hannes Exp $
 // project.aw - Projekt
 /*
 
@@ -1893,7 +1893,7 @@ class project extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
 		));
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);	
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			/*

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.10 2007/06/05 10:13:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.11 2007/11/16 12:44:23 hannes Exp $
 /*
         @default table=objects
         @default group=general
@@ -34,7 +34,7 @@ class xml_import extends class_base
 			"import_oppevormid" => "import_oppevormid",
 			"import_oppeained" => "import_oppeained"
 		);
-		set_time_limit(90);
+		aw_set_exec_time(AW_SHORT_PROCESS);
 	}
 
 	function get_property($args)
