@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.245 2007/11/13 07:49:07 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.246 2007/11/16 09:31:36 kristo Exp $
 // defs.aw - common functions
 if (!defined("DEFS"))
 {
@@ -50,6 +50,11 @@ if (!defined("DEFS"))
 		if (!$curc)
 		{
 			$i = get_instance(CL_USER);
+			$tmp = $i->get_current_company();
+			if ($tmp == false)
+			{
+				return false;
+			}
 			$curc = obj($i->get_current_company());
 		}
 		return $curc;
