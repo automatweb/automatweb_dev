@@ -33,6 +33,24 @@ classload("core/error", "core/obj/object");
 $GLOBALS["__aw_cache"] = array();
 _aw_global_init();
 
+if (aw_ini_get("core.long_process_exec_time"))
+{
+	define("AWE_LONG_PROCESS", aw_ini_get("core.long_process_exec_time"));
+}
+else
+{
+	define("AWE_LONG_PROCESS", 10800); // 3h
+}
+if (aw_ini_get("core.default_exec_time"))
+{
+	define("AWE_SHORT_PROCESS", aw_ini_get("core.default_exec_time"));
+	aw_set_exec_time(AWE_SHORT_PROCESS);
+}
+else
+{
+	define("AWE_SHORT_PROCESS", 200);
+}
+
 check_pagecache_folders();
 
 $u = new users;
