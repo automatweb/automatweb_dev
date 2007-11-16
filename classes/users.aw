@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.183 2007/07/25 05:10:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.184 2007/11/16 13:00:20 hannes Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -238,7 +238,7 @@ class users extends users_user
 	function submit_user_site($arr)
 	{
 		extract($arr);
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		global $add_state;
 		$add_state["pass"] = $pass;

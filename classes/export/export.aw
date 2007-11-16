@@ -252,7 +252,7 @@ class export extends aw_template
 		}
 		// ok, this is the complicated bit.
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		ignore_user_abort(true);
 
 		echo "<font face='Arial'> Toimub staatiliste lehtede genereerimine, palun oodake!<br />\n";
@@ -1744,7 +1744,7 @@ class export extends aw_template
 			$c->set_simple_config("export::folder_counter", $this->get_cval("export::folder_counter")+1);
 			$this->init_settings();
 
-			set_time_limit(0);
+			aw_set_exec_time(AW_LONG_PROCESS);
 			$this->copy_contents($li, $this->folder);
 			die("<a href='".
 				$this->mk_my_orb("pick_active_version", array())."'>Tagasi</a>");
@@ -2014,7 +2014,7 @@ class export extends aw_template
 	function delete_version($arr)
 	{
 		extract($arr);
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$folder = $this->rep_dates($this->get_cval("export::folder"));
 		// add the counter to the folder as folder-cnt
 		$folder .= '/version-'.$id;

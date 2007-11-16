@@ -1043,17 +1043,11 @@ function aw_set_exec_time($c_type)
 {
 	if ($c_type == AW_LONG_PROCESS)
 	{
-		if ( aw_ini_get("core.long_process_exec_time") )
-		{
-			set_time_limit( aw_ini_get("core.long_process_exec_time") );
-		}
+		set_time_limit( aw_ini_get("core.long_process_exec_time") );
 	}
 	if ($c_type == AW_SHORT_PROCESS)
 	{
-		if ( aw_ini_get("core.default_exec_time") )
-		{
-			set_time_limit( aw_ini_get("core.default_exec_time") );
-		}
+		set_time_limit( aw_ini_get("core.default_exec_time") );
 	}
 }
 
