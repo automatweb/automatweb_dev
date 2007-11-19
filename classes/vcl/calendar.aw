@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.94 2007/11/08 12:10:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.95 2007/11/19 13:19:28 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1072,12 +1072,34 @@ class vcalendar extends aw_template
 			$w .= $this->parse("WEEK");
 		};
 		$this->last_event = $event;
+
+		$month_opts = array();
+		$cd = $_GET["date"];
+		if (!$cd)
+		{
+			$cd = date("d-m-Y");
+		}
+		list($c_d, $c_m, $c_y) = explode("-", $cd);
+		$u = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
+		for($i = 1; $i < 13; $i++)
+		{
+			$nd = $c_d."-".sprintf("%02d", $i)."-".$c_y;
+			$month_opts[aw_url_change_var("date", $nd, $u)] = locale::get_lc_month($i);
+		}
+		for($i = $c_y-5; $i < $c_y+5; $i++)
+		{
+			$nd = $c_d."-".$c_m."-".sprintf("%04d", $i);
+			$year_opts[aw_url_change_var("date", $nd, $u)] = $i;
+		}
 		$this->vars(array(
 			"HEADER" => $header,
 			"WEEK" => $w,
 			"month_name" => locale::get_lc_month($this->range["m"]),	
 			"year" => $this->range["y"],
+			"month_options" => $this->picker(get_ru(), $month_opts),
+			"year_options" => $this->picker(get_ru(), $year_opts),
 		));
+
 		$rv =  $this->parse();
 		return $rv;
 	}
