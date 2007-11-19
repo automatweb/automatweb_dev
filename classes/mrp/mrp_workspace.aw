@@ -404,6 +404,12 @@ class mrp_workspace extends class_base
 		"search_result" => "#a255ff"
 	);
 
+	var $active_resource_states = array(
+		MRP_STATUS_RESOURCE_AVAILABLE,
+		MRP_STATUS_RESOURCE_OUTOFSERVICE,
+		MRP_STATUS_RESOURCE_INUSE
+	);
+
 	function mrp_workspace()
 	{
 		$this->resource_states = array(
@@ -411,7 +417,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_RESOURCE_AVAILABLE => t("Vaba"),
 			MRP_STATUS_RESOURCE_INUSE => t("Kasutusel"),
 			MRP_STATUS_RESOURCE_OUTOFSERVICE => t("Suletud"),
-			MRP_STATUS_RESOURCE_INACTIVE => t("Arhiveeritud"),
+			MRP_STATUS_RESOURCE_INACTIVE => t("Arhiveeritud")
 		);
 
 		$this->states = array (
@@ -424,7 +430,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_PAUSED => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
-			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
+			MRP_STATUS_ARCHIVED => t("Arhiveeritud")
 		);
 
 		$this->state_colours = array (
@@ -435,7 +441,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_DONE => MRP_COLOUR_DONE,
 			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
 			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
-			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
+			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED
 		);
 
 		$this->init(array(
@@ -1163,7 +1169,7 @@ class mrp_workspace extends class_base
 				$res_ol = new object_list();
 				if (count($resids))
 				{
-					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
+					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name", "status" => $this->active_resource_states));
 				}
 				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
 				// $prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
@@ -1213,7 +1219,7 @@ class mrp_workspace extends class_base
 				));
 				if (count($resids))
 				{
-				$ol = new object_list(array("oid" => $resids));
+					$ol = new object_list(array("oid" => $resids, "status" => $this->active_resource_states));
 				}
 				else
 				{
@@ -1262,7 +1268,8 @@ class mrp_workspace extends class_base
 					$ol = new object_list(array(
 						"oid" => $res_list,
 						"site_id" => array(),
-						"lang_id" => array()
+						"lang_id" => array(),
+						"status" => $this->active_resource_states
 					));
 					$prop["options"] = $ol->names();
 				}
@@ -1916,6 +1923,12 @@ class mrp_workspace extends class_base
 			// "sortable" => 1,
 			"numeric" => 1
 		));
+		$table->define_field (array (
+			"name" => "title",
+			"caption" => t("Pro&shy;jekti nimi"),
+			"chgbgcolor" => "bgcolour_overdue",
+			"sortable" => 1,
+		));
 
 		$no_plan_lists = array (
 			"onhold",
@@ -2095,6 +2108,7 @@ class mrp_workspace extends class_base
 				"customer" => (is_object($customer) ? $customer->name () : ""),
 				"priority" => $priority,
 				"sales_priority" => $project->prop ("sales_priority"),
+				"title" => $project->comment(),
 				"starttime" => $project->prop ("starttime"),
 				"due_date" => $project->prop ("due_date"),
 				"planned_date" => $planned_date,
@@ -3838,7 +3852,8 @@ class mrp_workspace extends class_base
 		$this->_init_printer_jobs_t($t, $grp);
 
 		$res = $this->get_cur_printer_resources(array(
-			"ws" => $arr["obj_inst"]
+			"ws" => $arr["obj_inst"],
+			"status" => $this->active_resource_states
 		));
 
 		$per_page = $arr["obj_inst"]->prop("pv_per_page");
@@ -4264,7 +4279,11 @@ class mrp_workspace extends class_base
 			if ($this->can("view", $op->prop("resource")))
 			{
 				$reso = obj($op->prop("resource"));
-				$ret[] = $reso->name();
+
+				if (in_array($reso->prop("status"), $this->active_resource_states))
+				{
+					$ret[] = $reso->name();
+				}
 			}
 		}
 
