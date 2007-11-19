@@ -1169,7 +1169,7 @@ class mrp_workspace extends class_base
 				$res_ol = new object_list();
 				if (count($resids))
 				{
-					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name", "status" => $this->active_resource_states));
+					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name", "state" => $this->active_resource_states));
 				}
 				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
 				// $prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
@@ -1219,7 +1219,7 @@ class mrp_workspace extends class_base
 				));
 				if (count($resids))
 				{
-					$ol = new object_list(array("oid" => $resids, "status" => $this->active_resource_states));
+					$ol = new object_list(array("oid" => $resids, "state" => $this->active_resource_states));
 				}
 				else
 				{
@@ -3852,8 +3852,7 @@ class mrp_workspace extends class_base
 		$this->_init_printer_jobs_t($t, $grp);
 
 		$res = $this->get_cur_printer_resources(array(
-			"ws" => $arr["obj_inst"],
-			"status" => $this->active_resource_states
+			"ws" => $arr["obj_inst"]
 		));
 
 		$per_page = $arr["obj_inst"]->prop("pv_per_page");
@@ -4280,7 +4279,7 @@ class mrp_workspace extends class_base
 			{
 				$reso = obj($op->prop("resource"));
 
-				if (in_array($reso->prop("status"), $this->active_resource_states))
+				if (in_array($reso->prop("state"), $this->active_resource_states))
 				{
 					$ret[] = $reso->name();
 				}
