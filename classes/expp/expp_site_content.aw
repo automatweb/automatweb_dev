@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.7 2006/05/16 09:22:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.8 2007/11/19 14:09:54 dragut Exp $
 // expp_site_content.aw - expp_site_content (nimi) 
 /*
 
@@ -12,6 +12,8 @@
 
 class expp_site_content extends class_base
 {
+
+	var $expp_journal_management_id = 0;
 
 	var $image_tag = "";
 	var $main_color = "";
@@ -54,6 +56,9 @@ class expp_site_content extends class_base
 			if ($ol->count() > 0)
 			{
 				$o = $ol->begin();
+
+				$this->expp_journal_management_id = $o->id();
+				
 				$image_obj = $o->get_first_obj_by_reltype("RELTYPE_COVER_IMAGE");
 
 				if (!empty($image_obj))
@@ -154,7 +159,7 @@ class expp_site_content extends class_base
 					$this->main_color = $o->prop("main_color");
 					$this->text_color = $o->prop("text_color");
 					$this->frame_color = $o->prop("frame_color");
-					$this->order_composition_information = $this->trans_get_val($o, 'order_composition_information');
+					$this->order_composition_information = nl2br($this->trans_get_val($o, 'order_composition_information'));
 					// here i need to get the correct ordering form document according to the active language
 					$ordering_terms = $o->prop('ordering_terms');
 					$this->ordering_terms_document_id = $ordering_terms[aw_global_get('lang_id')];
@@ -362,23 +367,35 @@ class expp_site_content extends class_base
 			/* LINK HALDUSOBJEKTILE */
 			/* peab olema nähtav ainult adminnidele ja vastava haldusobjekti toimetajate grupile */
 			$link_to_management = "";
+			$show_link_to_management = false;
 			
 			// logged in users group ids:
 			$group_ids = aw_global_get("gidlist_oid");
-			foreach($this->connections_to_groups as $connection_to_group)
+			if (in_array(aw_ini_get('admin_group_id'), $group_ids))
 			{
-				if (in_array($connection_to_group->prop("to"), $group_ids) || in_array(aw_ini_get("admin_group_id"), $group_ids))
+				$show_link_to_management = true;
+			}
+			else
+			{
+
+				foreach($this->connections_to_groups as $connection_to_group)
 				{
-					$this->vars(array(
-						"LINK_TO_MANAGEMENT_URL" => $this->mk_my_orb("change", array(
-							"id" => $connection_to_group->prop("from"),
-							"group" => "publications",
-						), CL_EXPP_JOURNAL_MANAGEMENT, true, true),
-						"LINK_TO_MANAGEMENT_NAME" => t("Andmete muutmine"),
-					));
-					$link_to_management = $this->parse("LINK_TO_MANAGEMENT");
-					
+					if (in_array($connection_to_group->prop("to"), $group_ids))
+					{
+						$show_link_to_management = true;
+					}
 				}
+			}
+			if ($show_link_to_management === true)
+			{
+				$this->vars(array(
+					"LINK_TO_MANAGEMENT_URL" => $this->mk_my_orb("change", array(
+						"id" => $this->expp_journal_management_id,
+						"group" => "publications",
+					), CL_EXPP_JOURNAL_MANAGEMENT, true, true),
+					"LINK_TO_MANAGEMENT_NAME" => t("Andmete muutmine"),
+				));
+				$link_to_management = $this->parse("LINK_TO_MANAGEMENT");
 			}
 	
 			/* LINK FOORUMILE */
