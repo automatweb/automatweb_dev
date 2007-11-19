@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.6 2007/11/12 10:01:52 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.7 2007/11/19 11:13:38 hannes Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 class minify_js_and_css extends class_base
 {
@@ -202,7 +202,7 @@ class minify_js_and_css extends class_base
 		$s_salt = "this_is_a_salty_string_";
 		ob_start ("ob_gzhandler");
 		header ("Content-type: text/javascript; charset: UTF-8");
-		header("Expires: ".gmdate("D, d M Y H:i:s", time()+315360000)." GMT");
+		header("Expires: ".gmdate("D, d M Y H:i:s", time()+43200)." GMT");
 		header("Cache-Control: max-age=315360000");
 		
 		$cache = get_instance('cache');
@@ -210,7 +210,7 @@ class minify_js_and_css extends class_base
 		die();
 	}
 	
-			/** outputs file
+		/** outputs file
 		
 		@attrib name=get_css params=name nologin="1" default="0" is_public="1"
 		
@@ -226,7 +226,7 @@ class minify_js_and_css extends class_base
 		$s_salt = "this_is_a_salty_string_";
 		ob_start ("ob_gzhandler");
 		header ("content-type: text/css; charset: UTF-8");
-		header("Expires: ".gmdate("D, d M Y H:i:s", time()+315360000)." GMT");
+		header("Expires: ".gmdate("D, d M Y H:i:s", time()+43200)." GMT");
 		header("Cache-Control: max-age=315360000");
 		
 		$cache = get_instance('cache');
