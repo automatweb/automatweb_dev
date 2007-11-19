@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.60 2007/08/15 11:15:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.61 2007/11/19 08:49:07 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -432,6 +432,7 @@ class otv_ds_obj extends class_base
 		}
 
 		$ret["jrk"] = t("J&auml;rjekord");
+		$ret["id"] = t("OID");
 		foreach($ob->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
 		{
 			$tr = $c->to();
@@ -846,6 +847,7 @@ class otv_ds_obj extends class_base
 			}
 			$ret[$t->id()]["name"] = $_name;
 			$ret[$t->id()]["jrk"] = $t->ord();
+			$ret[$t->id()]["id"] = $t->id();
 		}
 		exit_function("otv_ds_obj::get_objects::loop");
 		enter_function("otv_ds_obj::transform");
