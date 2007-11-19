@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.11 2007/10/08 10:25:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.12 2007/11/19 13:42:24 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -382,7 +382,7 @@ class aw_object_search extends class_base
 			}
 		}
 
-		$nf = array("s_status" => "status", "s_oid" => "oid", "s_site_id" => "site_id", "s_period" => "period");
+		$nf = array("s_status" => "status", "s_oid" => "oid", "s_site_id" => "site_id", "s_period" => "period", "s_language" => "lang_id");
 		foreach($nf as $pn => $ofn)
 		{
 			if ($arr["request"][$pn] > 0)
