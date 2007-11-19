@@ -1169,7 +1169,7 @@ class mrp_workspace extends class_base
 				$res_ol = new object_list();
 				if (count($resids))
 				{
-					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name", "state" => $this->active_resource_states));
+					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
 				}
 				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
 				// $prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
@@ -1219,7 +1219,7 @@ class mrp_workspace extends class_base
 				));
 				if (count($resids))
 				{
-					$ol = new object_list(array("oid" => $resids, "state" => $this->active_resource_states));
+					$ol = new object_list(array("oid" => $resids));
 				}
 				else
 				{
@@ -1269,7 +1269,6 @@ class mrp_workspace extends class_base
 						"oid" => $res_list,
 						"site_id" => array(),
 						"lang_id" => array(),
-						"status" => $this->active_resource_states
 					));
 					$prop["options"] = $ol->names();
 				}
@@ -4393,6 +4392,16 @@ class mrp_workspace extends class_base
 						}
 					}
 				}
+			}
+		}
+
+		foreach ($ret as $res_oid)
+		{
+			$res_o = new object($res_oid);
+
+			if (!in_array($res_o->prop("state"), $this->active_resource_states))
+			{
+				unset($ret[$res_oid]);
 			}
 		}
 
