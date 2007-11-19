@@ -1992,7 +1992,8 @@ class mrp_workspace extends class_base
 
 		$table->define_field(array(
 			"name" => "sales_priority",
-			"caption" => t("Müü&shy;gi prio&shy;ri&shy;teet"),
+			"caption" => t("MP"),
+			"tooltip" => t("Müügi prioriteet"),
 			"chgbgcolor" => "bgcolour_overdue",
 			// "sortable" => 1,
 		));
