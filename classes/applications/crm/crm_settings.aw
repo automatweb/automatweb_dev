@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.25 2007/10/17 09:48:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.26 2007/11/20 16:37:33 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -71,6 +71,16 @@
 
 
 
+- Organisatsiooni Vaade Võtmesõnad, kus saab märkida süsteemis olevaid võtmesõnu, mis on süsteemis olemas ja mida õigused lubavad näha (ja ei salvesta üle neid võtmesõnu mida kasutaja "ei näe")
+
+
+- Töötajad vaatesse
+Võimalus määrata, kes on volitatud isikud ja volituse alus. Töötaja nime järele on võimalik panna märkeruut tulpa &#8220;Volitatud&#8221;. Selle märkimisel avaneb uus aken, kus küsitakse volituse alust (Objektitüüp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik). 
+
+- Kontaktandmetesse seos: Keel
+Vaikimisi eesti keel. Keelele peab saama määrata, milline on süsteemi default. Vaikimisi väärtus Arve-saatelehel
+
+
 @default group=tables
 	@property tables_toolbar type=toolbar store=no no_caption=1
 
@@ -108,11 +118,15 @@
 	@caption Isiku piltide seaded
 
 
+@default group=status_limits
+	@property status_limits type=table
+	@caption Staatuste piirangud
+
 
 @groupinfo tables caption="Tabelid"
 @groupinfo whom caption="Kellele kehtib"
 @groupinfo img caption="Pildid"
-
+@groupinfo status_limits caption="Staatuste piirangud"
 
 
 @reltype USER value=1 clid=CL_USER
@@ -228,11 +242,118 @@ class crm_settings extends class_base
 				);
 				break;
 
+			case "status_limits":
+				$this->_get_status_limits_table($arr);
+				break;
 			case "default_task_rows_bills_filter":
 				$prop["options"] = $this->bills_filter_options;
 				break;
 		}
 		return $retval;
+	}
+
+	function _get_status_limits_table($arr)
+	{
+		$t =&$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Staatus"),
+			"align" => "center",
+		));
+
+		$limit_types = array(
+			"no_sell_wo_cash" => "Sularahata m&uuml;&uuml;k keelatud",
+			"no_sell" => "M&uuml;&uuml;k keelatud",
+			"no_offers" => "Pakkumised keelatud",
+			"no_mission" => "L&auml;hetamine keelatud",
+		);
+		foreach($limit_types as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"align" => "center",
+			));
+		}
+
+		$t->define_field(array(
+			"name" => "ignore_groups",
+			"caption" => t("Grupid kellele piirang ei m&otilde;ju"),
+			"align" => "center",
+		));
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_STATUS,
+			"lang_id" => array(),
+			"site_id" => array(),
+
+		));
+		$gl = new object_list(array(
+			"class_id" => CL_GROUP,
+			"lang_id" => array(),
+			"site_id" => array(),
+
+		));
+		$groups = $gl->names();
+
+		$limits = $arr["obj_inst"]->meta("limits");
+		foreach($ol->arr() as $o)
+		{
+			$data = array(
+				"name" => $o->name(),
+			);
+			foreach($limit_types as $key => $val)
+			{
+				$data[$key] = html::checkbox(array(
+					"name" => "limits[".$o->id()."][".$key."]",
+					"value" => 1,
+					"checked" => $limits[$o->id()][$key],
+				));
+			}
+			$data["ignore_groups"] = html::select(array(
+					"name" => "limits[".$o->id()."][ignore_groups]",
+					"options" => $groups,
+					"multiple" => 1,
+					"value" => $limits[$o->id()]["ignore_groups"],
+					"size" => 5,
+	//				"checked" => $limits[$o->id()][$key],
+				));//"Grupp 1, Grupp2";
+			$t->define_data($data);
+		}
+/*- Kliendibaasi seadetesse vaade: Staatuste piirangud
+See võimaldab vastavusse viia mitmesuguseid piiranguid mingi kliendi staatusega (crm_company_status).
+Nt staatus Halb maksja seotakse piiranguga: Sularahata müük keelatud. Selliseid piiranguid võib olla veel (müük keelatud, pakkumised keelatud, lähetamine keelatud) ja lisaks saab määrata kasutajagruppe, kellel on õigus sellest piirangust üle minna, ehk defineerida erandid.
+*/
+	}
+
+	function check_limits($arr)
+	{
+		extract($arr);
+		if(!$this->can("view" , $settings))
+		{
+			return null;
+		}
+		$settings = obj($settings);
+		$limits = $settings->meta("limits");
+		$obj_limits = $limits[$id];
+		if(!is_array($obj_limits) || !($obj_limits["limit"]))
+		{
+			return null;
+		}
+
+		$ignore_groups = $obj_limits["ignore_groups"];
+		//nüüd tarvis veel kontroll, kas kasutaja kuskil antud grupis
+		$gl = aw_global_get("gidlist_pri_oid");
+		asort($gl);
+		$gl = array_keys($gl);
+		foreach($ignore_groups as $group)
+		{
+			if(in_array($group , $gl))
+			{
+				return null;
+			}
+		}
+		return true;
 	}
 
 	function _get_tables_toolbar($arr = array ())
@@ -542,8 +663,16 @@ class crm_settings extends class_base
 
 		switch($prop["name"])
 		{
+			case "status_limits":
+				$this->set_status_limits($arr);
+				break;
 		}
 		return $retval;
+	}
+
+	function set_status_limits($arr)
+	{
+		$arr["obj_inst"]->set_meta("limits" , $arr["request"]["limits"]);
 	}
 
 	function callback_mod_retval($arr)
