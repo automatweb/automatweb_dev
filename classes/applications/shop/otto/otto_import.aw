@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.69 2007/11/16 12:29:26 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.70 2007/11/20 14:03:07 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1034,13 +1034,29 @@ class otto_import extends class_base
 			));
 
 			// other products:
+			$other_prods_ids = $prod_obj->prop('user4');
+			$other_prods_links = array();
+			if (!empty($other_prods_ids))
+			{
+				foreach (explode(',', $other_prods_ids) as $other_prod_id)
+				{
+					if ($this->can('view', $other_prod_id))
+					{
+						$other_prod = new object($other_prod_id);
+						$other_prods_links[] = html::href(array(
+							'caption' => $other_prod->name().' ('.$other_prod_id.')',
+							'url' => aw_url_change_var('products_manager_prod_id', $other_prod_id)
+						));
+					}
+				}
+			}
 			$t->define_data(array(
 				'caption' => t('Teised tooted'),
 				'data' => html::textbox(array(
 					'name' => 'other_products',
 					'value' => $prod_obj->prop('user4'),
-					'size' => 100
-				)),
+					'size' => 40
+				)).implode(' | ', $other_prods_links),
 			));
 
 			$pics_str = '';
