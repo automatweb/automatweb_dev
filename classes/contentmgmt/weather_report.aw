@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.2 2007/11/16 10:51:56 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.3 2007/11/20 10:58:45 robert Exp $
 // weather_report.aw - Ilmateade 
 /*
 
@@ -16,6 +16,9 @@
 
 @property cache_time type=textbox field=meta method=serialize
 @caption Cache uuendusaeg (h)
+
+@property pic_list type=textarea cols=60 rows=4 field=meta method=serialize
+@caption Pildid (nt Light rain=rain.gif)
 */
 
 class weather_report extends class_base
@@ -41,13 +44,8 @@ class weather_report extends class_base
 				break;
 				
 			case "feed_url":
-				$retval = PROP_IGNORE;
-				if($arr["request"]["action"] != "new" || $arr["obj_inst"]->prop("report_type")== 1)
-				{
-					$retval = PROP_OK;
-				}
-				break;
 			case "cache_time":
+			case "pic_list":
 				$retval = PROP_IGNORE;
 				if($arr["request"]["action"] != "new" || $arr["obj_inst"]->prop("report_type")== 1)
 				{
@@ -132,9 +130,19 @@ class weather_report extends class_base
 					{
 						$src = strtolower(str_replace(" ","",$val));
 						$imgsrc = "http://icons-pe.wxug.com/graphics/conds/".$src.".GIF";
-						if(!fopen($imgsrc, "r"))
+						if(!@fopen($imgsrc, "r"))
 						{
-							$imgsrc = "unknown.gif";
+							$piclist = $ob->prop("pic_list");
+							$piclist = explode(chr(13).chr(10),$piclist);
+							$pics = array();
+							foreach($piclist as $pici)
+							{
+								$pic = explode("=", $pici);
+								$pics[str_replace(" ", "", trim(strtolower($pic[0])))] = $pic[1];
+							}
+							$imgsrc = "http://icons-pe.wxug.com/graphics/conds/".$pics[str_replace(" ", "", trim(strtolower($val)))];
+							if(!@fopen($imgsrc,"r"))
+							$imgsrc = "http://icons-pe.wxug.com/graphics/conds/unknown.gif";
 						}
 						$this->vars(array(
 							"imgsrc" => $imgsrc

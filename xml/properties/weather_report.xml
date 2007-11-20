@@ -27,6 +27,17 @@
             <method>serialize</method>
             <caption>Cache uuendusaeg (h)</caption>
       </property>
+      <property>
+            <name>pic_list</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>4</rows>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pildid (nt Light rain=rain.gif)</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_WEATHER_REPORT</syslog_type>
             <relationmgr>yes</relationmgr>
