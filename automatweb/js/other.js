@@ -1,31 +1,3 @@
-shortcut("Ctrl+Shift+A",function() {
-	desc = prompt("Kirjeldus", "nimetu");
-	if(desc){
-		aw_popup_scroll("{VAR:stop_pop_url_add}&name=" + desc, "quick_task_entry", 800,600);
-	}
-});
-
-shortcut("Ctrl+Shift+Q",function() {
-	aw_popup_scroll("{VAR:stop_pop_url_quick_add}", "quick_task_entry", 800,600);
-});
-
-shortcut("Ctrl+Shift+E", function() {
-	aw_popup_scroll("{VAR:stop_pop_url_qw}", "quick_task_entry", 800,600);
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function MM_swapImgRestore() { //v3.0
   var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
 }

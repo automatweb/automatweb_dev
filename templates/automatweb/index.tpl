@@ -4,8 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 <title>{VAR:html_title} {VAR:title_action}</title>
 
-
-
 <!-- SUB: COMPRESS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
@@ -23,6 +21,24 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/shortcuts.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <!-- END SUB: COMPRESS -->
+
+<script type="text/javascript">
+shortcut("Ctrl+Shift+A",function() {
+	desc = prompt("Kirjeldus", "nimetu");
+	if(desc){
+		aw_popup_scroll("{VAR:stop_pop_url_add}&name=" + desc, "quick_task_entry", 800,600);
+	}
+});
+
+shortcut("Ctrl+Shift+Q",function() {
+	aw_popup_scroll("{VAR:stop_pop_url_quick_add}", "quick_task_entry", 800,600);
+});
+
+shortcut("Ctrl+Shift+E", function() {
+	aw_popup_scroll("{VAR:stop_pop_url_qw}", "quick_task_entry", 800,600);
+});
+</script>
+
 
 <!--[if lt IE 7]>
     <link rel="stylesheet" type="text/css" href="{VAR:baseurl}/automatweb/css/iefix.css" />
