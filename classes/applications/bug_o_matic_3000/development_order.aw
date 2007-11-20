@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.11 2007/11/14 14:19:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.12 2007/11/20 13:35:08 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -351,6 +351,15 @@ class development_order extends class_base
 					$ob = obj($person["from"]);
 					$ppl[$ob->id()] = $ob->name();
 				}
+				
+				$orderers = $arr["obj_inst"]->prop("orderer");
+				foreach($orderers as $orderer)
+				{
+					$ob = obj($orderer);
+					$ppl[$orderer] = $ob->name();
+					$prop["value"][$orderer] = $orderer;
+				}
+				
 				$prop["options"] += $ppl;
 				break;
 
@@ -528,7 +537,14 @@ class development_order extends class_base
 	function _get_bugs_tb($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
-		$tb->add_new_button(array(CL_BUG), $arr["obj_inst"]->id(), '',array());
+		$tb->add_new_button(array(CL_BUG), $arr["obj_inst"]->id(), '',array(
+			"orderer" => $arr["obj_inst"]->prop("orderer_co"),
+			"bug_status" => $arr["obj_inst"]->prop("bug_status"),
+			"bug_type" => $arr["obj_inst"]->prop("bug_type"),
+			"bug_app" => $arr["obj_inst"]->prop("bug_app"),
+			"bug_priority" => $arr["obj_inst"]->prop("bug_priority"),
+			"project" => $arr["obj_inst"]->prop("project")
+		));
 		$tb->add_search_button(array(
 			"pn" => "add_bug",
 			"multiple" => 1,
