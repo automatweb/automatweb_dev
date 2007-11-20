@@ -30,7 +30,7 @@
 
 </head>
 <div style="padding:10px 20px; width:200px; left: 50%; margin-left: -100px; height:200; top:50%; margin-top:-100; background-color:white; border:1px solid silver; position:absolute; text-align:center; color:gray; font-size:12px; display:none;" id="ajax_loader_div"><img src="{VAR:baseurl}/automatweb/images/ajax-loader.gif"><br/><br/>Laadin...</div>
-<body>
+<body onLoad="check_generic_loader();">
 <!-- päis -->
 		<!-- SUB: YAH -->
 <div id="pais">
