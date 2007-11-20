@@ -249,13 +249,13 @@
             <caption>Fail </caption>
       </property>
       <property>
-            <name>submit</name>
+            <name>submit2</name>
             <table>aw_dev_orders</table>
             <group>general</group>
             <type>submit</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>submit</field>
+            <field>submit2</field>
             <caption>Salvesta</caption>
       </property>
       <property>
