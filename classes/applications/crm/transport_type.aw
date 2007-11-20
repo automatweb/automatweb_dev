@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_type.aw,v 1.2 2007/11/15 16:57:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_type.aw,v 1.3 2007/11/20 15:15:59 markop Exp $
 // transport_type.aw - Transportation type 
 /*
 
@@ -115,7 +115,7 @@ class transport_type extends class_base
 		$price_inst = get_instance(CL_PRICE);
 		$id = $price_inst->add(array(
 			"object" => $arr["id"],
-			"class_id" => CL_TRANSPORT_TYPE,
+			"type" => CL_TRANSPORT_TYPE,
 		));
 		$o = obj($arr["id"]);
 		$o->connect(array(
@@ -148,10 +148,10 @@ class transport_type extends class_base
 			));
 		}
 
-		$ol = $price_inst->get_prices(array("object" => $arr["obj_inst"]->id()));
+		$ol = $price_inst->get_price_objects(array("object" => $arr["obj_inst"]->id()));
 		foreach($ol->arr() as $price)
 		{
-			$prices = $price->meta("prices");
+			$prices = $price_inst->get_prices($price);
 			$data = array();
 			$data["start"] = html::date_select(array(
 				"name" => "prices[".$price->id()."][date_from]",
@@ -180,7 +180,7 @@ class transport_type extends class_base
 		$price_inst = get_instance(CL_PRICE);
 		foreach($arr["request"]["prices"] as $id => $val)
 		{
-			$price_inst->change(array("id" => $id, "data" => $val));
+			$price_inst->change_price(array("id" => $id, "data" => $val));
 		}
 	}
 

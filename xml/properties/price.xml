@@ -62,6 +62,11 @@
                   <clid>CL_TRANSPORT_TYPE</clid>
                   <caption>Objekt millele hind m&amp;amp;otilde;jub</caption>
             </OBJECT>
+            <GET_PROPERTIES_FROM>
+                  <value>2</value>
+                  <clid>CL_PRICE</clid>
+                  <caption>V&amp;amp;ouml;tab propertid selle objekti juurest</caption>
+            </GET_PROPERTIES_FROM>
       </reltypes>
 </properties>
 
