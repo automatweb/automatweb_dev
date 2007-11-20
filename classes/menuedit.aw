@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.392 2007/10/24 13:16:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.393 2007/11/20 10:21:38 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -520,6 +520,12 @@ class menuedit extends aw_template
 					"site_id" => aw_ini_get("site_id"),
 					"lang_id" => array(),
 				);
+				if (aw_ini_get("ini_rootmenu"))
+				{
+					$tmp = aw_ini_get("rootmenu");
+					aw_ini_set("rootmenu", aw_ini_get("ini_rootmenu"));
+				}
+
 				$clist = new object_list($flt);
 				for($check_obj = $clist->begin(); !$clist->end(); $check_obj = $clist->next())
 				{
@@ -546,6 +552,11 @@ class menuedit extends aw_template
 						};
 					};
 				};
+
+				if (aw_ini_get("ini_rootmenu"))
+				{
+					aw_ini_set("rootmenu", $tmp);
+				}
 
 				if (aw_ini_get("user_interface.full_content_trans") && !count($candidates))
 				{
