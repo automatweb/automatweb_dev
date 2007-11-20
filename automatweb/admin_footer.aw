@@ -279,7 +279,7 @@ else
 	}
 	echo $str;
 }
-if (aw_ini_get("content.compress") == 1)
+if (aw_ini_get("content.compress") != 1)
 {
 	ob_end_flush();
 }
