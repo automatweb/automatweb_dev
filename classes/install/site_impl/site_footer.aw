@@ -39,17 +39,17 @@ else
 	$str = $sf->parse();
 }
 
-
 if (aw_ini_get("content.compress") == 1)
 {
 	ob_start( 'ob_gzhandler' );
+	echo $str;
 }
 else
 {
 	ob_start();
+	echo $str;
+	ob_end_flush();
 }
-echo $str;
-ob_end_flush();
 
 aw_shutdown();
 
