@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.187 2007/11/15 13:20:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.188 2007/11/20 11:14:33 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1654,7 +1654,7 @@ class task extends class_base
 				if (!(strlen($arr["request"]["hr_price"])> 0))
 				{
 					$prop["error"] = t("Tunnihind sisestamata!");
-//					return PROP_ERROR;
+					//return PROP_ERROR;
 				}
 				break;
 

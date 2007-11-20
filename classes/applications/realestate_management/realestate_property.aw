@@ -388,7 +388,10 @@ class realestate_property extends class_base
 		{
 			return $o->prop("transaction_price") / $o->prop("total_floor_area");
 		}
-		else return 0;
+		else 
+		{
+			return 0;
+		}
 	}
 
 	function get_property($arr)

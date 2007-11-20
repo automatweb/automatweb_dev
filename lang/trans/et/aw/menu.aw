@@ -1,8 +1,11 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Genereeri alias automaatselt (alias_ch) help"] = "võimaldab genereerida lasta süsteemil automaatsel alias genereerida.";
+$GLOBALS["TRANS"]["Omaduse Alias (alias) caption"] = "Alias";
+$GLOBALS["TRANS"]["Omaduse Alias (alias) kommentaar"] = "Alias on kausta hüüdnimi aadressis kasutajasõbralikul kujul.";
 $GLOBALS["TRANS"]["Omaduse Alias (alias) help"] = "võimalus asendada kausta URL (numbriline aadress veebil) inimkeelse nimetusega. Alias ei tohi sisaldada täpitähti ega erisümboleid (@, § jne), soovituslikult ka tühikuid";
 $GLOBALS["TRANS"]["Omaduse Jrk (jrk) help"] = "järjekorranumber; võimaldab samal tasemel olevaid kaustu omavahel järjestada.";
-$GLOBALS["TRANS"]["Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"] = "kodulehe kausta tüübiks on sektsioon. Seda määrangut on vaja muuta vaid peataseme kaustade puhul.";
+$GLOBALS["TRANS"]["Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"] = "Kausta tüüp";
+$GLOBALS["TRANS"]["Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"] = "võimaldab kuvada ainult kindla sisutüübiga dokumente selle kausta all.";
 $GLOBALS["TRANS"]["Omaduse Objektitabeli konf (objtbl_conf) help"] = "võimaldab kujundada selle kausta all kuvatavate objektide tabelit.";
 $GLOBALS["TRANS"]["Omaduse Objekti lisamise puu konff (add_tree_conf) help"] = "võimaldab seadistada rohelise nupu alt avanevaid valikuid alates sellest kaustast ";
 $GLOBALS["TRANS"]["Omaduse Konfiguratsioonivorm (cfgmanager) help"] = "võimaldab valida dokumendile seadete vormi, mida selle kausta all dokumendi lisamiseks kasutatakse.";

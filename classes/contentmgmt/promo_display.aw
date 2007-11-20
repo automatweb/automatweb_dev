@@ -313,11 +313,19 @@ if ($_GET["PROMO_DBG"] == 1)
 
 				foreach($docid as $d)
 				{
+				if ($_GET["PROMO_DBG"] == 1)
+				{
+					echo "doc $d <br>";
+				}
 					$do = obj($d);
 					if (aw_ini_get("user_interface.hide_untranslated") && !$do->prop_is_translated("content"))
 					{
 						continue;
 					}
+				if ($_GET["PROMO_DBG"] == 1)
+				{
+					echo "doc2 $d <br>";
+				}
 					if (($d_cnt % 2)  == 1)
 					{
 						if (file_exists($tpldir."/automatweb/documents/".$tpl_filename."2"))
@@ -346,6 +354,10 @@ if ($_GET["PROMO_DBG"] == 1)
 						"vars" => array("doc_ord_num" => $d_cnt+1),
 						"not_last_in_list" => (($d_cnt+1) < $d_total)
 					));
+				if ($_GET["PROMO_DBG"] == 1)
+				{
+					echo "doc $d cont = ".htmlentities($cont)." <br>";
+				}
 					exit_function("promo-prev");
 					$pr_c .= $cont;
 					// X marks the spot

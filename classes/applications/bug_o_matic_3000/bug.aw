@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.96 2007/11/13 10:52:40 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.97 2007/11/20 11:14:31 kristo Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -1726,10 +1726,65 @@ class bug extends class_base
 		{
 			$bug->save();
 		}
-
 		$this->_add_comment($bug, $msg, $ostat, $nstat, $add_wh, $com);
+		print "test\n";
+
 		aw_restore_acl();
 		die(sprintf(t("Added comment to bug %s"), $arr["bugno"]));
+	}
+
+
+	/**
+		@attrib name=start_auto_test nologin=1 all_args=1
+	**/
+	function start_auto_test($arr)
+	{
+		ignore_user_abort(TRUE);
+		print "Test started...... \n";
+		extract($arr);
+		$email = "";
+ 		if($who = trim($who))
+ 		{
+ 			aw_disable_acl();
+ 			$ol = new object_list(array(
+ 				"class_id" => CL_BUG_TRACKER,
+				"site_id" => array(),
+ 				"lang_id" => array(),
+ 			));
+ 			$users = array();
+ 			foreach($ol->arr() as $o)
+ 			{
+ 				$rows = explode("\n" , $o->prop("cvs2uidmap"));
+ 				foreach($rows as $row)
+ 				{
+ 					$usr = explode("=" , $row);
+ 					if($usr[0] && $usr[1])
+ 					{
+ 						$users[trim($usr[0])] = trim($usr[1]);
+ 					}
+ 				}
+ 			}
+ 			if($users[$who])
+ 			{
+ 				$us = get_instance(CL_USER);
+				$u = $us->get_obj_for_uid($users[$who]);
+ 				$person = $us->get_person_for_user($u);
+ 				if(is_oid($person))
+ 				{
+ 					$p = obj($person);
+ 					$email = $p->prop("email.mail");
+ 				}
+ 			}
+ 	
+ 			aw_restore_acl();
+ 			$url = "http://autotest.struktuur.ee/?bug=1&email=".$email."&file=".$file;
+
+ 			print $url;
+			socket_shutdown(null, 1);
+ 	//		$a = file_get_contents($url);
+ 		}
+		print $a;
+		die();
 	}
 
 	function do_db_upgrade($tbl, $f)

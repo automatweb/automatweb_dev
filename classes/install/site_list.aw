@@ -628,7 +628,6 @@ class site_list extends class_base
 	{
 		extract($arr);
 
-		arr($arr);
 
 		$this->db_query("UPDATE aw_site_list SET name = '$name', url = '$url', server_id = '$server_id', site_used = '$site_used', code_branch = '$code_branch' where id = '$id'");
 

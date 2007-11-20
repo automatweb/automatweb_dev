@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.69 2007/06/05 09:41:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.70 2007/11/20 11:14:47 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -526,7 +526,6 @@ class treeview extends class_base
 	**/
 	function finalize_tree($arr = array())
 	{
-
 		$this->rootnode = empty($arr["rootnode"]) ? (int)$this->rootnode : $arr["rootnode"];
 
 		if ($this->tree_type == TREE_HTML)
@@ -633,7 +632,6 @@ class treeview extends class_base
 			};
 			$this->r_path = array_unique($r_path);
 		};
-
 		if (sizeof($this->open_nodes) > 0)
 		{
 			$this->r_path = $this->r_path + $this->open_nodes;

@@ -9,6 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 #: classes/menu.aw:class_1_help
 msgid "Klassi Kaust help"
 msgstr ""
@@ -39,7 +40,7 @@ msgstr "while saving the folder an user-friendly web address will be generated a
 
 #: classes/menu.aw:prop_alias
 msgid "Omaduse Alias (alias) caption"
-msgstr "Alias"
+msgstr "Alias 333"
 
 #: classes/menu.aw:prop_alias_comment
 msgid "Omaduse Alias (alias) kommentaar"
@@ -87,7 +88,7 @@ msgstr ""
 
 #: classes/menu.aw:prop_type
 msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
-msgstr "Folder type"
+msgstr "Set the type of content"
 
 #: classes/menu.aw:prop_type_comment
 msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) kommentaar"
@@ -95,7 +96,7 @@ msgstr ""
 
 #: classes/menu.aw:prop_type_help
 msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
-msgstr "home page´s folder type is section. It is necessary to change this setting only in case of main level folders."
+msgstr "makes it able to display only documents with a certain content type under this folder."
 
 #: classes/menu.aw:prop_objtbl_conf
 msgid "Omaduse Objektitabeli konf (objtbl_conf) caption"
@@ -419,11 +420,7 @@ msgstr ""
 
 #: classes/menu.aw:prop_ip_help
 msgid "Omaduse  (ip) help"
-msgstr "It is possible to limit the number of folder viewers by IP addresses. View by columns: 
-IP name- IP address-type name of the object in the system
-IP Address – the IP address from where access is allowed or denied 
-Allowed – if the mark by the IP address is in this folder, then it means that access from the web page to the certain folder is allowed only from this IP address (other IP addresses can not see this folder´s content) 
-Denied -   if the mark by the IP address is in this folder, then it means that this IP address does not have a right to see the folder´s content"
+msgstr "It is possible to limit the number of folder viewers by IP addresses. View by columns:P name- IP address-type name of the object in the systeP Address – the IP address from where access is allowed or deniedllowed – if the mark by the IP address is in this folder, then it means that access from the web page to the certain folder is allowed only from this IP address (other IP addresses can not see this folder´s content)enied -   if the mark by the IP address is in this folder, then it means that this IP address does not have a right to see the folder´s content"
 
 #: classes/menu.aw:prop_color
 msgid "Omaduse Men&uuml;&uuml; v&auml;rv (color) caption"
@@ -723,7 +720,7 @@ msgstr ""
 
 #: classes/menu.aw:prop_has_ctx_help
 msgid "Omaduse Kuva alamkaustu kontekstip&otilde;hiselt (has_ctx) help"
-msgstr option for sending the visitors directly to potentially interesting sub-folders for them.""
+msgstr "ption for sending the visitors directly to potentially interesting sub-folders for them."
 
 #: classes/menu.aw:prop_default_ctx
 msgid "Omaduse Default kontekst (default_ctx) caption"
@@ -1489,32 +1486,3 @@ msgstr "Select location"
 msgid "M&auml;rks&otilde;na"
 msgstr "Keyword"
 
-#~ msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-#~ msgstr "Translation confirmed"
-
-#~ msgid "Seose v&amp;otilde;ta pildid men&amp;uuml;&amp;uuml;lt (RELTYPE_PICTURES_MENU) tekst"
-#~ msgstr "get images from folder"
-
-#~ msgid "Seose v&amp;otilde;ta alamkasutad men&amp;uuml;&amp;uuml;lt (RELTYPE_SHOW_SUBFOLDERS_MENU) tekst"
-#~ msgstr "get subfolders from folder"
-
-#~ msgid "Seose v&amp;otilde;ta objekte kalendrist (RELTYPE_SHOW_AS_CALENDAR) tekst"
-#~ msgstr "get objects from calendar"
-
-#~ msgid "Seose kasuta saidi n&amp;auml;itamisel layouti (RELTYPE_SHOW_AS_LAYOUT) tekst"
-#~ msgstr "use layout for site display"
-
-#~ msgid "Seose IP aadress ligip&amp;auml;&amp;auml;su piiramiseks (RELTYPE_IP) tekst"
-#~ msgstr "IP Address for access control"
-
-#~ msgid "Seose v&amp;otilde;ta dokumente men&amp;uuml;&amp;uuml; alt (RELTYPE_DOCS_FROM_MENU) tekst"
-#~ msgstr "get documents from folder"
-
-#~ msgid "Seose v&amp;otilde;ta dokumente perioodi alt (RELTYPE_PERIOD) tekst"
-#~ msgstr "get documents from period"
-
-#~ msgid "Seose alammen&amp;uuml;&amp;uuml;d objektist (RELTYPE_SUBMENUS) tekst"
-#~ msgstr "subfolders from object"
-
-#~ msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
-#~ msgstr "Keyword"

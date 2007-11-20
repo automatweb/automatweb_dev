@@ -28,5 +28,12 @@
 			</function>
 		</action>
 
+		<action name="start_auto_test" nologin="1" all_args="1">
+			<function name="start_auto_test">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

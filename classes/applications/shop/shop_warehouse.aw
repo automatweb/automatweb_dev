@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.58 2007/10/31 12:22:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.59 2007/11/20 11:14:35 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2771,7 +2771,6 @@ class shop_warehouse extends class_base
 		}
 		$sf = obj($conf->prop("search_form"));
 		$sf_i = $sf->instance();
-
 		return $sf_i->get_callback_properties($sf);
 	}
 

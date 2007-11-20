@@ -3,4 +3,3 @@
 	<class name="bug_app_type" folder="applications/bug_o_matic_3000" extends="class_base">
 	</class>
 </orb>
-		

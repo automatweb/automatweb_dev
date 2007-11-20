@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.136 2007/11/01 10:24:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.137 2007/11/20 11:14:31 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -2183,13 +2183,6 @@ class planner extends class_base
 		{
 			$params["class_id"] = $this->event_entry_classes;
 		}
-		
-		//echo dbg::dump($params);
-		/*
-		if(aw_global_get("uid") == "svewwn")
-		{
-			arr($params);
-		}*/
 		
 		/*obj_set_opt("no_cache", 1);
 		$GLOBALS["DUKE"] = 1;

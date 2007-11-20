@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.127 2007/10/25 10:27:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.128 2007/11/20 11:14:39 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2411,7 +2411,25 @@ class webform extends class_base
 			$name = "";
 			foreach(safe_array($obj_inst->prop("obj_name")) as $key => $val)
 			{
-				$name .= " ".$o->prop_str($key); //$arr[$key];
+				if ($prplist[$key]["type"] == "date_select")
+				{
+					if ($o->prop($key)  != -1)
+					{
+						$name .= " ".date("d.m.Y", $o->prop($key));
+					}
+				}
+				else
+				if ($prplist[$key]["type"] == "datetime_select")
+				{
+					if ($o->prop($key)  != -1)
+					{
+						$name .= " ".date("d.m.Y H:i", $o->prop($key));
+					}
+				}
+				else
+				{
+					$name .= " ".$o->prop_str($key); //$arr[$key];
+				}
 			}
 			$o->set_name(trim($name));
 			$o->set_prop("register_id", $register->id());

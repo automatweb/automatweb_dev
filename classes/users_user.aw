@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.141 2007/07/25 05:10:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.142 2007/11/20 11:14:30 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1166,6 +1166,7 @@ $t = time();
 		if (!($ret = aw_cache_get("get_oid_for_uid", $uid)))
 		{
 			$ret = $this->db_fetch_field("SELECT oid FROM users WHERE uid = '$uid'", "oid");
+			//arr("SELECT oid FROM users WHERE uid = '$uid'", "oid");
 			aw_cache_set("get_oid_for_uid", $uid, $ret);
 		}
 		return $ret;

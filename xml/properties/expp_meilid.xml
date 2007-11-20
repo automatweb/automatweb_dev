@@ -1,5 +1,14 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>valjaanded_mailid_tabel</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <store>no</store>
+            <field>valjaanded_mailid_tabel</field>
+            <caption>V&amp;amp;auml;ljaanded - meilid tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_EXPP_MEILID</syslog_type>
             <relationmgr>yes</relationmgr>

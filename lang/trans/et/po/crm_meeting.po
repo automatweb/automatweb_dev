@@ -9,6 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 # classes/crm/crm_meeting.aw:class_224_help
 #: classes/crm/crm_meeting.aw:class_224_help
 msgid "Klassi Kohtumine help"
@@ -224,29 +225,29 @@ msgstr ""
 # classes/crm/crm_meeting.aw:prop_is_done
 #: classes/crm/crm_meeting.aw:prop_is_done
 msgid "Omaduse Tehtud (is_done) caption"
-msgstr ""
+msgstr "Tehtud"
 
 # classes/crm/crm_meeting.aw:prop_is_done_comment
 #: classes/crm/crm_meeting.aw:prop_is_done_comment
 msgid "Omaduse Tehtud (is_done) kommentaar"
-msgstr ""
+msgstr "Asi on toimunud."
 
 # classes/crm/crm_meeting.aw:prop_is_done_help
 #: classes/crm/crm_meeting.aw:prop_is_done_help
 msgid "Omaduse Tehtud (is_done) help"
-msgstr ""
+msgstr "Pikem jutt selle kohta, kuidas tehtud omadus mõjub."
 
 #: classes/crm/crm_meeting.aw:prop_is_personal
 msgid "Omaduse Isiklik (is_personal) caption"
-msgstr ""
+msgstr "Isiklik"
 
 #: classes/crm/crm_meeting.aw:prop_is_personal_comment
 msgid "Omaduse Isiklik (is_personal) kommentaar"
-msgstr ""
+msgstr "Kliki sündmus isiklikuks"
 
 #: classes/crm/crm_meeting.aw:prop_is_personal_help
 msgid "Omaduse Isiklik (is_personal) help"
-msgstr ""
+msgstr "Isiklikke sündmusi ei näidata teistele kasutajatele, isegi sündmuse pealkirja mitte."
 
 #: classes/crm/crm_meeting.aw:prop_whole_day
 msgid "Omaduse Kestab terve p&auml;eva (whole_day) caption"
@@ -997,3 +998,4 @@ msgstr ""
 #: classes/crm/crm_meeting.aw:1341
 msgid "Nimi, osaleja ja projekt peavad olema täidetud!"
 msgstr ""
+

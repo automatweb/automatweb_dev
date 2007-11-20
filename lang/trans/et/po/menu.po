@@ -9,6 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 #: classes/menu.aw:class_1_help
 msgid "Klassi Kaust help"
 msgstr ""
@@ -39,11 +40,11 @@ msgstr "võimaldab genereerida lasta süsteemil automaatsel alias genereerida."
 
 #: classes/menu.aw:prop_alias
 msgid "Omaduse Alias (alias) caption"
-msgstr ""
+msgstr "Alias"
 
 #: classes/menu.aw:prop_alias_comment
 msgid "Omaduse Alias (alias) kommentaar"
-msgstr ""
+msgstr "Alias on kausta hüüdnimi aadressis kasutajasõbralikul kujul."
 
 #: classes/menu.aw:prop_alias_help
 msgid "Omaduse Alias (alias) help"
@@ -63,7 +64,7 @@ msgstr "järjekorranumber; võimaldab samal tasemel olevaid kaustu omavahel järjes
 
 #: classes/menu.aw:prop_type
 msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
-msgstr ""
+msgstr "Kausta tüüp"
 
 #: classes/menu.aw:prop_type_comment
 msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) kommentaar"
@@ -71,7 +72,7 @@ msgstr ""
 
 #: classes/menu.aw:prop_type_help
 msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
-msgstr "kodulehe kausta tüübiks on sektsioon. Seda määrangut on vaja muuta vaid peataseme kaustade puhul."
+msgstr "võimaldab kuvada ainult kindla sisutüübiga dokumente selle kausta all."
 
 #: classes/menu.aw:prop_pmethod_properties
 msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) caption"
@@ -1757,3 +1758,4 @@ msgstr ""
 #: classes/menu.aw:2216
 msgid "Kasutajagrupp"
 msgstr ""
+

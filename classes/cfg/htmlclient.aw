@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.180 2007/11/08 13:28:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.181 2007/11/20 11:14:37 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -372,6 +372,11 @@ class htmlclient extends aw_template
 		$rv = "";
 		$caption = $args["caption"];
 		unset($args["caption"]);
+
+		if ($caption == "")
+		{
+			$caption = " ";
+		}
 
 		// give the first letter of a caption a tooltip
 		if (!empty($args["comment"]))

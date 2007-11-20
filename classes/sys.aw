@@ -252,6 +252,7 @@ class sys extends aw_template
 			"bbraun.struktuur.ee" => "bbraun.struktuur.ee",
 			"www.kalender.ee" => "www.kalender.ee",
 			"dragut.dev.struktuur.ee" => "dragut.dev.struktuur.ee",
+			"mail.prismaprint.ee" => "mail.prismaprint.ee",
 			"ee.struktuur.ee" => "ee.struktuur.ee"
 		);
 

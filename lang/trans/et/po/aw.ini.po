@@ -9,6 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 # aw.ini:class_1
 #: aw.ini:class_1
 msgid "Klassi Kaust (1) nimi"
@@ -636,7 +637,7 @@ msgstr ""
 # aw.ini:class_224
 #: aw.ini:class_224
 msgid "Klassi Kohtumine (224) nimi"
-msgstr ""
+msgstr "Kohtumine 22"
 
 # aw.ini:class_225
 #: aw.ini:class_225
@@ -5373,3 +5374,24 @@ msgstr ""
 #: aw.ini:syslogactions_26
 msgid "syslog.action.SA_FINAL_DELETE"
 msgstr ""
+
+#: aw.ini:class_224
+msgid "Klassi Kohtumine (224) comment"
+msgstr "See on kohtumise klassi abiteksti kommentaari väli 11"
+
+#: aw.ini:class_224
+msgid "Klassi Kohtumine (224) help"
+msgstr "Ja see on abiteksti pikem tekstiväli"
+
+#: aw.ini:class_224
+msgid "Klassi Kohtumine 22 (224) nimi"
+msgstr "Kohtumine 334"
+
+#: aw.ini:class_224
+msgid "Klassi Kohtumine 22 (224) comment"
+msgstr "334"
+
+#: aw.ini:class_224
+msgid "Klassi Kohtumine 22 (224) help"
+msgstr "444"
+

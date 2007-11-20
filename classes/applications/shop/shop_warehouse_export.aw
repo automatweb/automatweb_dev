@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.5 2005/05/23 12:32:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.6 2007/11/20 11:14:35 kristo Exp $
 // shop_warehouse_export.aw - Lao v&auml;ljaminek 
 /*
 
@@ -128,7 +128,7 @@ class shop_warehouse_export extends class_base
 			// make sure we don't re-confirm receptions
 			return;
 		}
-		$inf = new aw_array($o->meta("order_item_data"));
+		$inf = new aw_array($o->meta("exp_content"));
 		foreach($inf->get() as $id => $prod)
 		{
 			$to = obj($id);
@@ -138,7 +138,7 @@ class shop_warehouse_export extends class_base
 				$item_count = $to->prop("item_count");
 				foreach($prod->get() as $x => $val)
 				{
-					$item_count -= $val["items"];
+					$item_count -= is_numeric($val) ? $val : $val["items"];
 				}
 				$to->set_prop("item_count", $item_count);
 				$to->save();

@@ -245,6 +245,7 @@ class crm_company_overview_impl extends class_base
 
 			if ($date > ($start-(7*24*3600)))
 			{
+
 				$t->add_item(array(
 					"timestamp" => $date,
 					"item_start" => ($item->class_id() == CL_CRM_MEETING ? $item->prop("start1") : NULL),
@@ -455,13 +456,12 @@ class crm_company_overview_impl extends class_base
 		{
 			$group = 1;	
 		}
-		
 		if (aw_global_get("crm_task_view") != CRM_TASK_VIEW_TABLE)
 		{
 			return PROP_IGNORE;
 		}
 		classload("core/icons");
-		$ol = $this->_get_task_list($arr);
+		$ol = $this->_get_task_list($arr);//if(aw_global_get("uid") == "marko"){ arr($ol);}
 		if($arr["request"]["group"] != "ovrv_mails")
 		{
 			$ol->arr();
@@ -628,7 +628,7 @@ class crm_company_overview_impl extends class_base
 					"oncl" => "onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'"
 				));
 			}
-			
+
 			// if this thing has recurrences attached, then stick those in there
 			$recurs = array();
 			foreach(safe_array($task2recur[$task->id()]) as $recur_id)

@@ -2326,13 +2326,13 @@ class crm_company extends class_base
 
 			case "my_tasks":
 			case "my_tasks_cal":
-				if(aw_global_get("crm_task_view") == null)
+				if(aw_global_get("crm_task_view") === null)
 				{
 					$seti = get_instance(CL_CRM_SETTINGS);
 					$sts = $seti->get_current_settings();
-					if ($sts && $sts->prop("default_tasks_view"))
+					if ($sts && ($sts->prop("default_tasks_view")))
 					{
-						aw_global_set("crm_task_view" , $sts->prop("default_tasks_view"));
+						aw_session_set("crm_task_view" , $sts->prop("default_tasks_view"));
 					}
 				}
 			case "org_actions":

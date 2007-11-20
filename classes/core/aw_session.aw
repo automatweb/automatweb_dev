@@ -11,9 +11,13 @@ class aw_session
 		$mysql_db = @mysql_select_db ($db['base']);
 
 		if (!$mysql_connect || !$mysql_db)
+		{
             		return FALSE;
+		}
 		else
+		{
             		return TRUE;
+		}
 	}
 
 	function _close()

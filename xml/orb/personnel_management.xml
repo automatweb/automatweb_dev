@@ -1,5 +1,19 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="personnel_management" folder="applications/personnel_management" extends="class_base">
+		<action name="cut_offers">
+			<function name="cut_offers">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_offers">
+			<function name="paste_offers">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
