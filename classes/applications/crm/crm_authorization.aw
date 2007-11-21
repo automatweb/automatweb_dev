@@ -1,12 +1,42 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_authorization.aw,v 1.1 2007/11/21 15:52:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_authorization.aw,v 1.2 2007/11/21 17:53:57 markop Exp $
 // crm_authorization.aw - Volitus 
 /*
 
+@tableinfo aw_authorizations index=aw_oid master_table=objects master_index=brother_of
+
 @classinfo syslog_type=ST_CRM_AUTHORIZATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
-@default table=objects
+@default table=aw_authorizations
 @default group=general
+
+	@property our_company type=relpicker store=connect reltype=RELTYPE_OUR_COMPANY
+	@caption Meie firma
+
+	@property customer_company type=relpicker store=connect reltype=RELTYPE_CUSTOMER_COMPANY
+	@caption Klientfirma
+
+	@property authorized_person type=relpicker store=connect reltype=RELTYPE_PERSON
+	@caption Volitatav isik
+
+	@property start type=date_select
+	@caption Kehtib alates
+
+	@property end type=date_select
+	@caption Kehtib kuni
+
+	@property authorization_add type=submit store=no
+	@caption Lisa volitus
+
+@reltype PERSON value=1 clid=CL_CRM_PERSON
+@caption Isik
+
+@reltype OUR_COMPANY value=2 clid=CL_CRM_COMPANY
+@caption Organisatsioon
+
+@reltype CUSTOMER_COMPANY value=3 clid=CL_CRM_COMPANY
+@caption Organisatsioon
+
 
 */
 
@@ -26,6 +56,37 @@ class crm_authorization extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "our_company":
+			case "customer_company":
+				if($arr["new"])
+				{
+					if(is_oid($arr["request"][$prop["name"]]))
+					{
+						$o = obj($arr["request"][$prop["name"]]);
+						$prop["value"] = $arr["request"][$prop["name"]];
+						$prop["options"][ $arr["request"][$prop["name"]]] =  $o->name();
+					}
+				}
+				break;
+			case "authorized_person":
+				if($arr["new"])
+				{
+					if(is_oid($arr["request"]["person"]))
+					{
+						$o = obj($arr["request"]["person"]);
+						$prop["value"] = $arr["request"]["person"];
+						$prop["options"][ $arr["request"]["person"]] =  $o->name();
+					}
+				};
+				break;
+			case "authorization_add":
+				if(!$arr["request"]["return_after_save"])
+				{
+					return PROP_IGNORE;
+				}
+				//oleks vaja nüüd js siia propertile ümber manada, et eelmise vaare refreshiks ja selle akna kinni paneks
+				break;
+
 			//-- get_property --//
 		};
 		return $retval;
@@ -60,6 +121,22 @@ class crm_authorization extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "" && $t == "aw_authorizations")
+		{
+			$this->db_query("CREATE TABLE aw_authorizations(aw_oid int primary key,
+				our_company int,
+				customer_company int,
+				authorized_person int,
+				start int,
+				end int
+			)");
+			return true;
+		}
+		return false;
 	}
 
 //-- methods --//

@@ -1085,6 +1085,17 @@
             <caption>&amp;amp;Uuml;marda</caption>
       </property>
       <property>
+            <name>language</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <parent>ce_other_bot</parent>
+            <captionside>top</captionside>
+            <field>language</field>
+            <caption>Vaikimisi keel</caption>
+      </property>
+      <property>
             <name>phone_id</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
@@ -3909,6 +3920,11 @@
                   <clid>CL_CRM_INSURANCE</clid>
                   <caption>Insurance</caption>
             </INSURANCE>
+            <LANGUAGE>
+                  <value>69</value>
+                  <clid>CL_LANGUAGE</clid>
+                  <caption>Language</caption>
+            </LANGUAGE>
       </reltypes>
       <layout>
             <co_top>

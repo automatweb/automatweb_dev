@@ -230,7 +230,12 @@ class crm_company_people_impl extends class_base
 			'caption' => t('Ametinimetus'),
 			'sortable' => '1',
 		));
-
+		$t->define_field(array(
+			'name' => 'authorized',
+			"chgbgcolor" => "cutcopied",
+			'caption' => t('Volitatud'),
+			'sortable' => '1',
+		));
 		$t->define_chooser(array(
 			'name'=>'check',
 			'field'=>'id',
@@ -505,6 +510,18 @@ class crm_company_people_impl extends class_base
 			}
 
 			list($fn, $ln) = explode(" ", $person->prop('name'));
+
+			$aol = new object_list(array(
+				"class_id" => CL_CRM_AUTHORIZATION,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_CRM_AUTHORIZATION.RELTYPE_PERSON.id" => $person->id(),
+				"CL_CRM_AUTHORIZATION.RELTYPE_OUR_COMPANY.id" => $arr["obj_inst"]->id(),
+				"CL_CRM_AUTHORIZATION.RELTYPE_CUSTOMER_COMPANY.id" => $arr["obj_inst"]->id(),
+			));
+
+			$autohirization = reset($aol->arr());
+
 			$tdata = array(
 				"name" => $ln." ".$fn,
 				"image" => $img,
@@ -517,7 +534,30 @@ class crm_company_people_impl extends class_base
 					"url" => "mailto:" . $pdat["email"],
 					"caption" => $pdat["email"],
 				)),
-				"cutcopied" => $ccp
+				"cutcopied" => $ccp,
+				"authorized" => $autohirization ? 
+					html::href(array(
+						"url" => html::get_change_url($autohirization->id()),
+						"caption" => (strlen($autohirization->name() > 0))?$autohirization->name():t("(Nimetu)"),
+					)): 
+					html::checkbox(array(
+						"name" => "authorized[".$person->id()."]",
+						"value" => 1,
+						"checked" => 0,
+//						"onclick" => 'Javascript:window.open("'.$this->mk_my_orb("authorization", array("id" => $person->id())).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")',
+						"onclick" => 'Javascript:window.open("'.html::get_new_url(
+							CL_CRM_AUTHORIZATION,
+							$person->id(),
+							array(
+								"return_url" => get_ru(),
+								"person" => $person->id(),
+								"our_company" => $arr["obj_inst"]->id(),
+								"customer_company" => $arr["obj_inst"]->id(),
+								"return_after_save" => 1,
+							)
+						)
+						.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")',
+					)),
 			);
 			$t->define_data($tdata);
 		};
@@ -1198,6 +1238,25 @@ class crm_company_people_impl extends class_base
 		$tree_inst->set_root_name($arr["obj_inst"]->name());
 		$tree_inst->set_root_icon(icons::get_icon_url(CL_CRM_COMPANY));
 		$tree_inst->set_root_url(aw_url_change_var("cat", NULL, aw_url_change_var("unit", NULL)));
+	}
+
+	//see funktsioon tegelt vist ebaoluline, a äkki läheb vaja ikka kui seda volituse lisamist muuta
+	//niiet kui aasta on juba 2008 ja sa ikka veel seda kirja näed lugeda, siis kustuta see authorization funktsioon maha, kui tundub hea mõte
+	/**
+		@attrib name=authorization all_args=1
+	**/
+	function authorization($arr)
+	{
+//		if(!$arr["authorization"])
+//		{
+//		;	
+//		}
+//		else
+//		{
+			print "Jigaboo";
+			die();
+//		}
+		return $arr["post_ru"];
 	}
 
 	function _get_cedit_table($arr)

@@ -17,7 +17,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 @default table=objects
 
-
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
 
@@ -409,6 +408,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 				@property round type=textbox method=serialize field=meta parent=ce_other_bot captionside=top
 				@caption &Uuml;marda
 
+				@property language type=relpicker reltype=RELTYPE_LANGUAGE table=kliendibaas_firma parent=ce_other_bot captionside=top
+				@caption Vaikimisi keel
+
+- Töötajad vaatesse
+Võimalus määrata, kes on volitatud isikud ja volituse alus. Töötaja nime järele on võimalik panna märkeruut tulpa &#8220;Volitatud&#8221;. Selle märkimisel avaneb uus aken, kus küsitakse volituse alust (Objektitüüp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik). 
+
+- Kontaktandmetesse seos: Keel
+Vaikimisi eesti keel. Keelele peab saama määrata, milline on süsteemi default. Vaikimisi väärtus Arve-saatelehel
 
 	@property phone_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
 	@property telefax_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
@@ -1338,6 +1345,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype INSURANCE value=68 clid=CL_CRM_INSURANCE
 @caption Insurance
 
+@reltype LANGUAGE value=69 clid=CL_LANGUAGE
+@caption Language
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
@@ -1676,6 +1686,18 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+ 			case "language":
+ 				if(!$data["value"])
+ 				{
+ 					$ol = new object_list(array("class_id" => CL_LANGUAGE, "site_id" => array() , "lang_id" => array(), "name" => "Eesti"));
+ 					if(sizeof($ol->ids()))
+ 					{
+ 						$l = reset($ol->arr());
+ 						$data["value"] = $l->id();
+ 						$data["options"][$l->id()] = $l->name();
+ 					}
+ 				}
+ 				return true;
 			case "stypes_tb":
 			case "stypes_tbl":
 			case "stypes_tree":
@@ -6630,6 +6652,7 @@ class crm_company extends class_base
 				case "email_id":
 				case "aw_bank_account":
 				case "bill_due_date_days":
+				case "language":
 					$this->db_add_col($tbl, array(
 						"name" => $field,
 						"type" => "int",
