@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.97 2007/11/20 11:14:31 kristo Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -141,7 +140,7 @@ define("BUG_STATUS_CLOSED", 5);
 			@caption Komponent
 
 			@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot captionside=top store=no
-			@caption Fail 
+			@caption Fail
 
 			@property bug_predicates type=textbox parent=data_r_bot captionside=top field=aw_bug_predicates
 			@caption Eeldusbugid
@@ -176,7 +175,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property cust_live_date type=date_select field=aw_cust_live_date
 	@caption Kasutusvalmis
-	
+
 	@property wish_live_date type=date_select field=meta method=serialize table=objects
 	@caption Soovitav Live kuupäev
 
@@ -615,7 +614,7 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_req"]);
 					$prop["options"][$r->prop("req_p")] = $r->prop("req_p.name");
 				}
-				
+
 				$u = get_instance(CL_USER);
 				$cur = obj($u->get_current_person());
 				$sections = $cur->connections_from(array(
@@ -760,7 +759,7 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->prop("req_co");
 				}
-	
+
 				$c = get_current_company();
 				$prop["options"][$c->id()] = $c->name();
 				foreach($prop["options"] as $_id => $_nm)
@@ -784,7 +783,7 @@ class bug extends class_base
 				break;
 
 			case "bug_url":
-				$prop["post_append_text"] = " <a href='javascript:void(0)' onClick='window.location=document.changeform.bug_url.value'>Ava</a>";
+				$prop["post_append_text"] = ' <a href="' . $prop["value"] . '">Ava</a>';
 				break;
 
 			case "bug_property":
@@ -825,7 +824,7 @@ class bug extends class_base
 					if($bt)
 					{
 						$conn = $bt->connections_to(array(
-							"from.class_id" => CL_BUGTRACK_DISPLAY,	
+							"from.class_id" => CL_BUGTRACK_DISPLAY,
 							"type" => "RELTYPE_BUGTRACK"
 						));
 						foreach($conn as $c)
@@ -1209,7 +1208,7 @@ class bug extends class_base
 		$o->set_prop("bug_status", $arr["status"]);
 		die();
 	}
-	
+
 	/**
 		@attrib name=get_autocomplete
 		@comment
@@ -1262,7 +1261,7 @@ class bug extends class_base
 
 	function gen_stopper_addon($arr)
 	{
-		
+
 		$props = array(
 			array(
 				"name" => "name",
@@ -1329,7 +1328,7 @@ class bug extends class_base
 			monitors, ??
 			project,
 			customer,
-			
+
 			bug_class, ?????
 		*/
 		if(!$this->can("view", $inf["oid"]))
@@ -1548,7 +1547,7 @@ class bug extends class_base
 			}
 		}
 	}
-	
+
 	function create_dev_order($arr)
 	{
 		$o = new object();
@@ -1620,7 +1619,7 @@ class bug extends class_base
 			"type" => "RELTYPE_DEV_ORDER"
 		));
 		$conn = $arr["obj_inst"]->connections_from(array(
-				"type"=>"RELTYPE_FILE"						
+				"type"=>"RELTYPE_FILE"
 								));
 		foreach($conn as $c)
 		{
@@ -1630,7 +1629,7 @@ class bug extends class_base
 			));
 		}
 	}
-	
+
 	function parse_commited_msg($msg)
 	{
 
@@ -1775,7 +1774,7 @@ class bug extends class_base
  					$email = $p->prop("email.mail");
  				}
  			}
- 	
+
  			aw_restore_acl();
  			$url = "http://autotest.struktuur.ee/?bug=1&email=".$email."&file=".$file;
 
@@ -1873,7 +1872,7 @@ class bug extends class_base
 			header("Location: ".$this->mk_my_orb("change", array("id" => $o->id()), "bug", true));
 			die();
 		}
-		
+
 		return $this->show(array("id" => $o->id()));
 	}
 
@@ -2221,7 +2220,7 @@ class bug extends class_base
 		$this->read_template("show.tpl");
 
 		$this->vars($o->properties());
-		
+
 		$sl = $this->get_status_list();
 		$i = $o->instance();
 		$this->vars(array(
