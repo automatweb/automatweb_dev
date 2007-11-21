@@ -301,6 +301,7 @@ class bug extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["from_problem"] = $_GET["from_problem"];
+		$arr["do_split"] = "0";
 	}
 
 	function callback_on_load($arr)
@@ -805,6 +806,7 @@ class bug extends class_base
 
 	function set_property($arr = array())
 	{
+die(dbg::dump($arr["request"]));
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -1526,7 +1528,10 @@ class bug extends class_base
 		{
 			$this->notify_monitors($arr["obj_inst"], $arr["obj_inst"]->prop("bug_content"));
 			// if this is a new bug, then parse the content and create sub/subsub bugs from it
-			$this->_parse_add_bug_content($arr["obj_inst"]);
+			if ($arr["request"]["do_split"])
+			{
+				$this->_parse_add_bug_content($arr["obj_inst"]);
+			}
 			if ($arr["request"]["from_problem"])
 			{
 				$arr["obj_inst"]->connect(array(
@@ -2257,6 +2262,42 @@ class bug extends class_base
 		{
 			return $bt->prop("default_cfgmanager");
 		}
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		if (!$arr["new"])
+		{
+			return "";
+		}
+
+		return
+		"function aw_submit_handler() {".
+		"var url = '".$this->mk_my_orb("check_multiple_content")."';".
+		"url = url + '&bug_content=' + document.changeform.bug_content.value;".
+		"num= parseInt(aw_get_url_contents(url));".
+		"if (num >0)
+		{
+			var ansa = confirm('Kas jaotada alambugideks?');
+			if (ansa)
+			{
+				document.changeform.do_split.value=1;
+			}
+		}".
+		"return true;}";
+	}
+
+	/** 
+		@attrib name=check_multiple_content
+		@param bug_content optional
+	**/
+	function check_multiple_content($arr)
+	{
+		if (strpos($arr["bug_content"], "1)") === false)
+		{
+			die("0");
+		}
+		die("1");
 	}
 }
 ?>
