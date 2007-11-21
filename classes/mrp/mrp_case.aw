@@ -625,23 +625,24 @@ class mrp_case extends class_base
 		$workspace =& $this->get_current_workspace ($arr);
 
 		### get range start according to project state
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_JOB,
+			"parent" => $workspace->prop ("jobs_folder"),
+			"project" => $hilighted_project,
+			"exec_order" => 1,
+		));
+		$o = $ol->begin();
+
 		switch ($this_object->prop ("state"))
 		{
-			case MRP_STATUS_PLANNED:
-				$ol = new object_list(array(
-					"class_id" => CL_MRP_JOB,
-					"parent" => $workspace->prop ("jobs_folder"),
-					"project" => $hilighted_project,
-					"exec_order" => 1,
-				));
-				$o = $ol->begin();
-				$project_start = is_object($o) ? $o->prop("starttime") : $this_object->prop ("starttime");
-				break;
 			case MRP_STATUS_INPROGRESS:
 			case MRP_STATUS_DONE:
 			case MRP_STATUS_ARCHIVED:
-				$project_start = $this_object->prop ("started");
+				$project_start = is_object($o) ? $o->prop("started") : $this_object->prop ("starttime");
 				break;
+
+			default:
+				$project_start = (is_object($o) and 1 < $o->prop("starttime")) ? $o->prop("starttime") : $this_object->prop ("starttime");
 		}
 
 		$range_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
