@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.43 2007/11/20 11:14:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.44 2007/11/21 13:05:50 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -353,7 +353,14 @@ class site_cache extends aw_template
 
 	function ip_access($arr)
 	{
-		$so = obj(aw_global_get("section"));
+		if ($arr["force_sect"])
+		{
+			$so = obj($arr["force_sect"]);
+		}
+		else
+		{
+			$so = obj(aw_global_get("section"));
+		}
 		$p = $so->path();
 		$p[] = $so;
 		$p = array_reverse($p);

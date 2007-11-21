@@ -69,6 +69,11 @@ if (!$sf->prog_acl_auth("view", PRG_MENUEDIT))
 {
 	$sf->auth_error();
 }
+if ($_GET["id"] || $_GET["parent"])
+{
+	$sc = get_instance("contentmgmt/site_cache");
+	$sc->ip_access(array("force_sect" => $_GET["parent"] ? $_GET["parent"] : $_GET["id"]));
+}
 
 lc_load("automatweb");
 ?>
