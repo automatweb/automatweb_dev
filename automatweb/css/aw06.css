@@ -273,6 +273,8 @@ div.menu {
 }
 
 div.menu a.menuItem {
+font-family: verdana ! important;
+font-size: 11px ! important;
   background-color: #e1e1e1;
   border-top: solid 1px #ffffff;
   border-left: solid 1px #ffffff;
