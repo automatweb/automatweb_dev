@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.29 2007/11/21 09:00:25 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.30 2007/11/21 09:08:30 hannes Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1076,6 +1076,10 @@ class admin_if extends class_base
 		$c->file_set("lod_cache_".aw_global_get("uid"), $ct);
 
 		$ct =  str_replace("--pt--", $arr["parent"], str_replace("--pr--", $arr["period"], $ct));
+		if (aw_ini_get("content.compress") == 1)
+		{
+			ob_start( 'ob_gzhandler' );
+		}
 		header("Content-type: text/html;charset=".aw_global_get("charset"));
 		die($ct);
 	}
