@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.31 2007/11/21 12:52:02 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.32 2007/11/21 14:36:17 hannes Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -116,9 +116,8 @@ class admin_if extends class_base
 			$tb->add_menu_button(array(
 				"name" => "new",
 				"tooltip" => t("Lisa"),
+				"load_on_demand_url" => $this->mk_my_orb("new_lod", array("parent" => $arr["request"]["parent"]))
 			));
-			
-			$this->generate_new(& $tb, $arr["request"]["parent"]);
 		}
 
 		$tb->add_button(array(
@@ -991,78 +990,100 @@ class admin_if extends class_base
 
 		return $pm->get_menu();
 	}
-	
-	function generate_new($tb, $i_parent)
+
+	/**
+		@attrib name=new_lod
+		@param parent required
+	**/
+	function new_lod($arr)
 	{
-		$atc = get_instance(CL_ADD_TREE_CONF);
-		
-		// although fast enough allready .. caching makes it 3 times as fast
+		// cache the damn thing
 		$c = get_instance("cache");
-		$tree = $c->file_get("newbtn_tree_cache_".aw_global_get("uid"));
-		$tree = unserialize($tree);
-		
-		if(!is_array($tree))
+		$ct = $c->file_get("lod_cache_".aw_global_get("uid"));
+		if ($ct)
 		{
-			$tree = $atc->get_class_tree(array(
-				"az" => 1,
-				"docforms" => 1,
-				// those are for docs menu only
-				"parent" => "--pt--",
-				"period" => "--pr--",
-			));
-			$c->file_set("newbtn_tree_cache_".aw_global_get("uid"), serialize($tree));
+			$ct =  str_replace("--pt--", $arr["parent"], str_replace("--pr--", $arr["period"], $ct));
+			if (aw_ini_get("content.compress") == 1)
+			{
+				ob_start( 'ob_gzhandler' );
+			}
+			header("Content-type: text/html;charset=".aw_global_get("charset"));
+			die($ct);
 		}
-		
+
+
+		$popup_menu = get_instance("vcl/popup_menu");
+		$popup_menu->begin_menu("new");
+
+		$atc = get_instance(CL_ADD_TREE_CONF);
+		$tree = $atc->get_class_tree(array(
+			"az" => 1,
+			"docforms" => 1,
+			// those are for docs menu only
+			"parent" => "--pt--",
+			"period" => "--pr--",
+		));
+
+
 		foreach($tree as $item_id => $item_collection)
 		{
 			foreach($item_collection as $el_id => $el_data)
 			{
-				$parnt = $item_id == "root" ? "new" : $item_id;
-				
+				$parnt = $item_id == "root" ? null : $item_id;
 				if ($el_data["clid"])
 				{
-					$url = $this->mk_my_orb("new",array("parent" => $i_parent),$el_data["clid"]);
-					$url = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $url);
-					$tb->add_menu_item(array(
-						"name" => $el_data["id"],
+					$popup_menu->add_item(array(
 						"parent" => $parnt,
 						"text" => $el_data["name"],
-						//"url" => str_replace (aw_ini_get("baseurl"), "", $this->mk_my_orb("new",array("parent" => "--pt--"),$el_data["clid"])),
-						"url" => $url,
+						"link" => $this->mk_my_orb("new",array("parent" => "--pt--"),$el_data["clid"]),
 					));
 				}
 				else
 				if ($el_data["link"])
 				{
-					$url = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $el_data["link"]);
-					//$url = str_replace("--pt--", $arr["parent"], $el_data["link"]);
-					$url =  str_replace("--pt--", $i_parent, str_replace("--pr--", $arr["period"], $url));
 					// docs menu has links ..
-					$tb->add_menu_item(array(
-						"name" => $el_data["id"],
+					$popup_menu->add_item(array(
 						"parent" => $parnt,
 						"text" => $el_data["name"],
-						"url" => $url,
+						"link" => $el_data["link"],
 					));
 				}
 				else
 				{
-					$tb->add_sub_menu(array(
-						"name" => $el_data["id"],
+					$popup_menu->add_sub_menu(array(
 						"parent" => $parnt,
+						"name" => $el_data["id"],
 						"text" => $el_data["name"],
 					));
 					};
 				if ($el_data["separator"])
 				{
-					$tb->add_menu_separator(array(
+					$popup_menu->add_separator(array(
 						"parent" => $parnt,
 					));
 				}
 			};
 		};
+
+		$ct = $popup_menu->get_menu(array(
+			"icon" => "new.gif",
+			"is_toolbar" => 1
+		));
+
+		// optimize the html a bit - strip out urls
+		$ct = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $ct);
+
+		$c->file_set("lod_cache_".aw_global_get("uid"), $ct);
+
+		$ct =  str_replace("--pt--", $arr["parent"], str_replace("--pr--", $arr["period"], $ct));
+		if (aw_ini_get("content.compress") == 1)
+		{
+			ob_start( 'ob_gzhandler' );
+		}
+		header("Content-type: text/html;charset=".aw_global_get("charset"));
+		die($ct);
 	}
-	
+
 	/**
 		@attrib name=save_if
 	**/
