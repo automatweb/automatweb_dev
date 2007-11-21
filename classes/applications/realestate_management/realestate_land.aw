@@ -1,12 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_land.aw,v 1.5 2006/07/20 13:40:45 markop Exp $
 // realestate_land.aw - Maatükk
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_LAND, on_create)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
-@classinfo syslog_type=ST_REALESTATE_LAND relationmgr=yes no_comment=1 no_status=1 trans=1
+@classinfo syslog_type=ST_REALESTATE_LAND relationmgr=yes no_comment=1 no_status=1 trans=1 maintainer=voldemar
 @extends applications/realestate_management/realestate_property
 
 @tableinfo realestate_property index=oid master_table=objects master_index=oid

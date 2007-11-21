@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.7 2007/10/29 10:14:44 voldemar Exp $
 // country_administrative_structure.aw - Riigi haldusjaotus
 /*
 
-@classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_STRUCTURE relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_STRUCTURE relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @groupinfo grp_administrative_structure caption="Haldusjaotuse struktuur"
 

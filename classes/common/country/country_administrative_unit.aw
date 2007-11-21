@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_unit.aw,v 1.4 2007/07/27 09:52:41 voldemar Exp $
 // country_administrative_unit.aw - Halduspiirkond
 /*
 
-@classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_UNIT relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_UNIT relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @default table=objects
 @default group=general

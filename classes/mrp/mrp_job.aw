@@ -3,7 +3,7 @@
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
-@classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1 confirm_save_data=1
+@classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
 
 @tableinfo mrp_job index=oid master_table=objects master_index=oid
 @tableinfo mrp_schedule index=oid master_table=objects master_index=oid

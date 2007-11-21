@@ -98,6 +98,7 @@
             <syslog_type>ST_VASTUV6TT_AVALDUS</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <maintainer>voldemar</maintainer>
       </classinfo>
       <tableinfo>
             <vastuv6tt_avaldus>

@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_keskkond.aw,v 1.3 2006/06/09 13:57:42 kristo Exp $
 // vastuv6tt_keskkond.aw - Sisseastujate haldus
 /*
 
-@classinfo syslog_type=ST_VASTUV6TT_KESKKOND relationmgr=yes
+@classinfo syslog_type=ST_VASTUV6TT_KESKKOND relationmgr=yes maintainer=voldemar
 
 @groupinfo grp_sisseastuja caption="Sisseastujate lisamine"
 @groupinfo grp_katse caption="Katsetulemuste sisestus"

@@ -1,12 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_housepart.aw,v 1.7 2007/09/02 07:21:29 voldemar Exp $
 // realestate_housepart.aw - Majaosa
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_HOUSEPART, on_create)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
-@classinfo syslog_type=ST_REALESTATE_HOUSEPART relationmgr=yes no_comment=1 no_status=1 trans=1
+@classinfo syslog_type=ST_REALESTATE_HOUSEPART relationmgr=yes no_comment=1 no_status=1 trans=1 maintainer=voldemar
 @extends applications/realestate_management/realestate_property
 
 @tableinfo realestate_property index=oid master_table=objects master_index=oid

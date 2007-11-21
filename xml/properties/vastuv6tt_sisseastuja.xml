@@ -1436,6 +1436,7 @@
       <classinfo>
             <syslog_type>ST_VASTUV6TT_SISSEASTUJA</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
             <grp_sisseastuja_avaldused>

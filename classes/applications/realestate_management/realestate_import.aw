@@ -1,7 +1,7 @@
 <?php
 /*
 
-@classinfo syslog_type=ST_REALESTATE_IMPORT relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_REALESTATE_IMPORT relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @groupinfo grp_city24 caption="City24"
 @groupinfo grp_city24_general caption="Seaded" parent=grp_city24

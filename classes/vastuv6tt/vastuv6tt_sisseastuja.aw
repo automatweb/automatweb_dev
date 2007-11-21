@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_sisseastuja.aw,v 1.2 2006/06/09 13:57:42 kristo Exp $
 // vastuv6tt_sisseastuja.aw - Sisseastuja
 /*
 
-@classinfo syslog_type=ST_VASTUV6TT_SISSEASTUJA relationmgr=yes
+@classinfo syslog_type=ST_VASTUV6TT_SISSEASTUJA relationmgr=yes maintainer=voldemar
 @tableinfo vastuv6tt_sisseastuja index=oid master_table=objects master_index=oid
 
 @groupinfo grp_sisseastuja_avaldused caption="Avaldused ja hinded"

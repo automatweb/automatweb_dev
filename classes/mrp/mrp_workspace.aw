@@ -1,7 +1,7 @@
 <?php
 /*
 
-@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1 confirm_save_data=1
+@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
 
 @groupinfo grp_customers caption="Kliendid" submit=no
 @groupinfo grp_projects caption="Projektid"

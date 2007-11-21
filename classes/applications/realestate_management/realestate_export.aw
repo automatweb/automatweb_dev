@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_export.aw,v 1.4 2006/01/20 15:49:42 voldemar Exp $
 // realestate_export.aw - Kinnisvaraobjektide eksport
 /*
 
-@classinfo syslog_type=ST_REALESTATE_EXPORT relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_REALESTATE_EXPORT relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @groupinfo grp_settings caption="Seaded" parent=general
 @groupinfo grp_users caption="Kasutajanimed" parent=general

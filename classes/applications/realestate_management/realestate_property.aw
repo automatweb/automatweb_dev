@@ -4,7 +4,7 @@
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_PROPERTY, on_create)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
-@classinfo syslog_type=ST_REALESTATE_PROPERTY relationmgr=yes no_status=1 trans=1 confirm_save_data=1
+@classinfo syslog_type=ST_REALESTATE_PROPERTY relationmgr=yes no_status=1 trans=1 confirm_save_data=1 maintainer=voldemar
 
 @tableinfo realestate_property index=oid master_table=objects master_index=oid
 
@@ -388,7 +388,7 @@ class realestate_property extends class_base
 		{
 			return $o->prop("transaction_price") / $o->prop("total_floor_area");
 		}
-		else 
+		else
 		{
 			return 0;
 		}

@@ -1019,6 +1019,7 @@
             <syslog_type>ST_REALESTATE_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
             <prop_cb>1</prop_cb>
+            <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
             <grp_settings>

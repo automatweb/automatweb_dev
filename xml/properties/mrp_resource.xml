@@ -197,6 +197,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <confirm_save_data>1</confirm_save_data>
+            <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
             <grp_resource_schedule>

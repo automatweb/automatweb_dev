@@ -6,7 +6,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_change)
 
-@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 confirm_save_data=1
+@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
 
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 @tableinfo mrp_case_schedule index=oid master_table=objects master_index=oid

@@ -8,7 +8,7 @@
 // awcb -- automatweb class_base
 
 /*
-	@classinfo relationmgr=yes syslog_type=ST_CFGFORM
+	@classinfo relationmgr=yes syslog_type=ST_CFGFORM maintainer=voldemar
 
 	@groupinfo groupdata caption=Tabid
 		@groupinfo groupdata_a caption=Tabid parent=groupdata

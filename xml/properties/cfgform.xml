@@ -538,6 +538,7 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>
+            <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
             <groupdata>

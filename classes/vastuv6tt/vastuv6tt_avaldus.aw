@@ -1,10 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_avaldus.aw,v 1.2 2006/06/09 13:57:42 kristo Exp $
 // vastuv6tt_avaldus.aw - Avaldus
 /*
 
-@classinfo syslog_type=ST_VASTUV6TT_AVALDUS relationmgr=yes
-@classinfo no_status=1
+@classinfo syslog_type=ST_VASTUV6TT_AVALDUS relationmgr=yes no_status=1 maintainer=voldemar
 @tableinfo vastuv6tt_avaldus index=oid master_table=objects master_index=oid
 
 @default table=vastuv6tt_avaldus

@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure_encoding.aw,v 1.4 2007/07/27 09:52:41 voldemar Exp $
 // country_administrative_structure_encoding.aw - Haldusjaotuse kodeering
 /*
 
-@classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=voldemar
 
 @groupinfo grp_encodings caption="Vasted"
 

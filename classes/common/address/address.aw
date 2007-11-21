@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.11 2007/07/27 09:52:41 voldemar Exp $
 // address.aw - Aadress v2
 /*
 
-@classinfo syslog_type=ST_ADDRESS relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_ADDRESS relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @groupinfo grp_address caption="Aadress"
 

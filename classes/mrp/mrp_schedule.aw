@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.137 2007/07/11 21:29:09 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
-@classinfo syslog_type=ST_MRP_SCHEDULE relationmgr=yes
+@classinfo syslog_type=ST_MRP_SCHEDULE relationmgr=yes maintainer=voldemar
 
 @default table=objects
 @default group=general

@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_city.aw,v 1.7 2007/10/29 08:19:45 voldemar Exp $
 // country_city.aw - Linn
 /*
 
-@classinfo syslog_type=ST_COUNTRY_CITY relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_COUNTRY_CITY relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 @extends common/country/country_administrative_unit
 
 @default table=objects

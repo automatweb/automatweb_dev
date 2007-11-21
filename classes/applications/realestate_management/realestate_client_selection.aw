@@ -1,11 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_client_selection.aw,v 1.2 2005/12/07 16:58:12 voldemar Exp $
 // realestate_client_selection.aw - Klientide valim
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_CLIENT_SELECTION, on_create)
 
-@classinfo syslog_type=ST_REALESTATE_CLIENT_SELECTION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_REALESTATE_CLIENT_SELECTION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=voldemar
 
 @default table=objects
 @default group=general

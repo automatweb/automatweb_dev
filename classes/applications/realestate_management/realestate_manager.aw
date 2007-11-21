@@ -1,11 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.20 2007/11/16 09:02:29 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connect_to_profession)
 
-@classinfo syslog_type=ST_REALESTATE_MANAGER relationmgr=yes prop_cb=1
+@classinfo syslog_type=ST_REALESTATE_MANAGER relationmgr=yes prop_cb=1 maintainer=voldemar
 
 @groupinfo grp_settings caption="Seaded" parent=general
 @groupinfo grp_users_tree caption="Kasutajad" parent=general

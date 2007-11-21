@@ -3,7 +3,7 @@
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 
-@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1
+@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
 
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="T&ouml;&ouml;leht" submit=no

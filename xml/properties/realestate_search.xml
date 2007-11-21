@@ -58,7 +58,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <datatype>int</datatype>
-            <comment>[0] - v&amp;amp;otilde;imalus valida parameetrile vaid &amp;uuml;ks v&amp;amp;auml;&amp;amp;auml;rtus, [1 - ...] - v&amp;amp;otilde;imalus valida mitu.</comment>
+            <comment>[0] - v&amp;amp;otilde;imalus valida parameetrile vaid &amp;amp;uuml;ks v&amp;amp;auml;&amp;amp;auml;rtus, [1 - ...] - v&amp;amp;otilde;imalus valida mitu.</comment>
             <caption>Otsinguvormi valikuelementide suurus</caption>
       </property>
       <property>
@@ -457,6 +457,7 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
+            <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
             <grp_search>

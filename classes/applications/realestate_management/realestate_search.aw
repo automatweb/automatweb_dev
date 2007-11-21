@@ -2,7 +2,7 @@
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
-@classinfo syslog_type=ST_REALESTATE_SEARCH relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_REALESTATE_SEARCH relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @groupinfo grp_search caption="Otsing"
 @groupinfo grp_formdesign caption="Parameetrite valik"

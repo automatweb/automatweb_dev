@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.5 2007/10/29 08:19:44 voldemar Exp $
 // address_street.aw - Tänav
 /*
 
-@classinfo syslog_type=ST_ADDRESS_STREET relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_ADDRESS_STREET relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @default table=objects
 @default field=meta
