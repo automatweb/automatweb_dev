@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.128 2007/11/20 11:14:39 kristo Exp $
-// webform.aw - Veebivorm 
+// webform.aw - Veebivorm
 /*
 
 @classinfo syslog_type=ST_WEBFORM relationmgr=yes no_status=1
@@ -71,7 +70,7 @@
 
 
 ------------- form -------------
-@groupinfo form caption="Vorm" 
+@groupinfo form caption="Vorm"
 
 @property navtoolbar type=toolbar group=form no_caption=1
 @caption Toolbar
@@ -182,7 +181,7 @@
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -277,7 +276,7 @@ class webform extends class_base
 			"redirect"
 		);
 	}
-	
+
 	function callback_on_load($arr)
 	{
 		$this->cfgform_i = get_instance(CL_CFGFORM);
@@ -307,7 +306,7 @@ class webform extends class_base
 			}
 		}
 	}
-	
+
 	function callback_mod_tab($arr)
 	{
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
@@ -332,7 +331,7 @@ class webform extends class_base
 		return $this->trans_callback($arr, $this->trans_props);
 	}
 
-	
+
 	function callback_pre_save($arr)
 	{
 		if($this->cfgform)
@@ -362,11 +361,11 @@ class webform extends class_base
 			case "form_type_value":
 				$prop["value"] = $this->form_types[$arr["obj_inst"]->prop("form_type")];
 				break;
-				
+
 			case "form_type":
 				$prop["options"] = $this->form_types;
 				break;
-				
+
 			case "search":
 				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
 				$s = get_instance(CL_REGISTER_SEARCH);
@@ -376,7 +375,7 @@ class webform extends class_base
 					"no_form" => 1,
 				));
 				break;
-			
+
 			case "confirm_page_template":
 			//	$site_tpl_dir = $this->cfg['site_tpldir'];
 			//	$admin_tpl_dir = $this->cfg['tpldir'];
@@ -416,12 +415,12 @@ class webform extends class_base
 
 				$prop['options'] = $options;
 
-				break;	
+				break;
 
 			case "entries_toolbar":
 				$this->entries_toolbar($arr);
 				break;
-				
+
 			case "def_caption_style":
 			case "def_prop_style":
 			case "def_form_style":
@@ -431,7 +430,7 @@ class webform extends class_base
 				));
 				$prop["options"] = array(0 => "-- Vali --") + $this->all_rels;
 				break;
-				
+
 			case "obj_name":
 				$prop["options"] = array("-- vali --");
 				foreach(safe_array($this->cfgform_i->prplist) as $key => $val)
@@ -444,9 +443,9 @@ class webform extends class_base
 				if($arr["obj_inst"]->prop("form_type") != CL_REGISTER_DATA)
 				{
 					return PROP_IGNORE;
-				}	
+				}
 				break;
-				
+
 			case "entries":
 				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
 				$register_i = get_instance(CL_REGISTER);
@@ -456,7 +455,7 @@ class webform extends class_base
 					"request" => &$arr["request"],
 				));
 				break;
-				
+
 			case "search":
 				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
 				$s = get_instance(CL_REGISTER_SEARCH);
@@ -465,7 +464,7 @@ class webform extends class_base
 					"no_form" => 1,
 				));
 				break;
-				
+
 			case "navtoolbar":
 				$tb = &$prop["vcl_inst"];
 
@@ -475,7 +474,7 @@ class webform extends class_base
 					"action" => "",
 					"img" => "save.gif",
 				));
-				
+
 				$tb->add_button(array(
 					"name" => "delete",
 					"tooltip" => t("Kustuta valitud omadused"),
@@ -484,7 +483,7 @@ class webform extends class_base
 					"confirm" => t("Oled kindel, et tahad antud omadused kustutada?"),
 				));
 				break;
-				
+
 			case "availtoolbar":
 				$this->cfgform_i->gen_availtoolbar($arr);
 				break;
@@ -514,21 +513,21 @@ class webform extends class_base
 				}
 				$this->_on_init($arr);
 				break;
-				
+
 			case "view_controllers":
 				if($this->cfgform)
 				{
 					$this->cfgform->set_meta("view_controllers", $arr["request"]["view_controllers"]);
 				}
 				break;
-			
+
 			case "submit_controllers":
 				if($this->cfgform)
 				{
 					$this->cfgform->set_meta("controllers", $arr["request"]["controllers"]);
 				}
 				break;
-				
+
 			case "props":
 				if($this->cfgform)
 				{
@@ -554,7 +553,7 @@ class webform extends class_base
 					}
 				}
 				break;
-				
+
 			case "form":
 				if($this->cfgform)
 				{
@@ -580,7 +579,7 @@ class webform extends class_base
 		}
 		return $retval;
 	}
-	
+
 	function _save_form($arr)
 	{
 		if(!$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE"))
@@ -594,6 +593,7 @@ class webform extends class_base
 			"request" => &$arr["request"],
 		));
 		$prplist = $this->cfgform_i->cfg_proplist;
+
 		foreach(safe_array($arr["request"]["prp_opts"]) as $key => $val)
 		{
 			if($prplist[$key])
@@ -622,8 +622,19 @@ class webform extends class_base
 					}
 					$prplist[$key][$key2] = $val2;
 				}
+
+				if (!empty($arr["request"]["prpnames"][$key]))
+				{
+					$prplist[$key]["caption"] = (string) $arr["request"]["prpnames"][$key];
+				}
+
+				if (!empty($arr["request"]["prop_ord"][$key]))
+				{
+					$prplist[$key]["ord"] = (int) $arr["request"]["prop_ord"][$key];
+				}
 			}
 		}
+
 		if($arr["request"]["subaction"] == "delete")
 		{
 			$mark = $arr["request"]["mark"];
@@ -660,7 +671,7 @@ class webform extends class_base
 					$highest = 1;
 				}
 				$e_prps = $e_prp_list->names();
-				
+
 				foreach($prps as $prp)
 				{
 					$prp = trim($prp);
@@ -680,12 +691,13 @@ class webform extends class_base
 				}
 			}
 		}
+
 		$object_type->set_meta("clf_type", $clf_type);
 		$object_type->set_meta("classificator", $classificator);
 		$object_type->save();
 		$this->cfgform_i->cfg_proplist = $prplist;
 	}
-	
+
 	function _on_init($arr)
 	{
 		$arr["obj_inst"]->save();
@@ -717,7 +729,7 @@ class webform extends class_base
 			"to" => $cfgform->id(),
 			"reltype" => "RELTYPE_CFGFORM",
 		));
-		
+
 		$object_type = obj();
 		$object_type->set_parent($parent);
 		$object_type->set_class_id(CL_OBJECT_TYPE);
@@ -734,7 +746,7 @@ class webform extends class_base
 			"to" => $cfgform->id(),
 			"reltype" => "RELTYPE_OBJECT_CFGFORM",
 		));
-		
+
 		if($this->p_clid == CL_SHOP_PRODUCT)
 		{
 			return;
@@ -761,7 +773,7 @@ class webform extends class_base
 			$dir->save();
 			$dir->acl_set($group, array("can_add" => 1, "can_view" => 1));
 			$dir->save();
-			
+
 			$register = obj();
 			$register->set_parent($arr["obj_inst"]->parent());
 			$register->set_class_id(CL_REGISTER);
@@ -789,7 +801,7 @@ class webform extends class_base
 				"to" => $cfgform->id(),
 				"reltype" => "RELTYPE_CFGFORM",
 			));
-			
+
 			$register_search = obj();
 			$register_search->set_parent($register->id());
 			$register_search->set_class_id(CL_REGISTER_SEARCH);
@@ -810,7 +822,7 @@ class webform extends class_base
 				"to" => $register_search->id(),
 				"reltype" => "RELTYPE_SEARCH",
 			));
-			
+
 			$object_export = obj();
 			$object_export->set_class_id(CL_OBJECT_EXPORT);
 			$object_export->set_parent($arr["obj_inst"]->id());
@@ -843,7 +855,7 @@ class webform extends class_base
 			"email_address_not_correct" => t("%caption sisestatud e-mailiaadress pole korrektne"),
 		);
 		// now, lets get what language is used
-		$languages_inst = get_instance("languages"); 
+		$languages_inst = get_instance("languages");
 		$lang_data = $languages_inst->fetch(aw_global_get("lang_id"));
 // end of hopefully temporary
 
@@ -934,7 +946,7 @@ class webform extends class_base
 			$i++;
 		}
 	}
-	
+
 	function entries_toolbar($arr)
 	{
 		$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
@@ -978,7 +990,7 @@ class webform extends class_base
 			"img" => "ftype_xls.gif",
 		));
 	}
-	
+
 	function callback_props($arr)
 	{
 		$prplist = safe_array($this->cfgform_i->prplist);
@@ -1081,7 +1093,7 @@ class webform extends class_base
 				$cnt++;
 			}
 		}
-		$vrs["def_prop"] = $sc; 
+		$vrs["def_prop"] = $sc;
 		if($cnt > 0)
 		{
 			$vrs["d_prp"] = $this->parse("d_prp");
@@ -1153,7 +1165,7 @@ class webform extends class_base
 				{
 					$prop["type"] = "releditor_fl";
 				}
-				
+
 				$ext_count[$prop["type"]]++;
 			}
 			$mark = $arr["request"]["mark"];
@@ -1255,7 +1267,7 @@ class webform extends class_base
 		}
 		$c = "";
 		$cnt = 0;
-		
+
 		// lotsa needed options for various things
 		$capt_opts = array(
 			0 => "Vasakul",
@@ -1283,12 +1295,12 @@ class webform extends class_base
 		$prp_orient = array(0 => t("horisontaalne"), "vertical" => t("vertikaalne"));
 		$year_sels = $this->make_keys(range(1902, 2037));
 		$mon_fors = array(0 => "S&otilde;naline", 1 => "Numbriline");
-		
+
 		$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$metamgr = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_METAMGR");
 		$clf_type = $object_type->meta("clf_type");
 		$classificator = $object_type->meta("classificator");
-		
+
 		foreach($by_group as $key => $proplist)
 		{
 			$this->vars(array(
@@ -1536,7 +1548,7 @@ class webform extends class_base
 		$item["value"] = $this->parse();
 		return array($item);
 	}
-	
+
 	function get_rel_props($arr)
 	{
 		$prop = $arr["prop"];
@@ -1583,7 +1595,7 @@ class webform extends class_base
 			}
 		}
 	}
-	
+
 	function callback_styles($arr)
 	{
 		$sel_styles = safe_array($arr["obj_inst"]->meta("xstyles"));
@@ -1621,7 +1633,7 @@ class webform extends class_base
 		return $props;
 		//foreach($this->cfg_proplist
 	}
-	
+
 	function callback_preview($arr)
 	{
 		return array("prop1" => array(
@@ -1657,7 +1669,7 @@ class webform extends class_base
 		}
 		return  $retval;
 	}
-	
+
 	function callback_submit_controllers($arr)
 	{
 		$controllers = $this->cfgform->meta("controllers");
@@ -1680,14 +1692,14 @@ class webform extends class_base
 		}
 		return  $retval;
 	}
-	
+
 	function request_execute($o)
 	{
 		return $this->show(array(
 			"id" => $o->id(),
 		));
 	}
-	
+
 	function parse_alias($arr)
 	{
 		$id = $arr["alias"]["target"];
@@ -1753,11 +1765,11 @@ class webform extends class_base
 				if ($event)
 				{
 					$form_conf_i = $form_conf->instance();
-				
+
 					$form_conf_i->read_template("show.tpl");
-		
+
 					$form_conf_i->_insert_event_inf($event, $form_conf);
-		
+
 					if ($form_conf->prop("max_pers") && $form_conf_i->get_count_for_event($event) >= $form_conf->prop("max_pers"))
 					{
 						return $form_conf_i->parse();
@@ -1808,7 +1820,7 @@ class webform extends class_base
 		exit_function("webform::show");
 		return $rval;
 	}
-	
+
 	function draw_cfgform_from_ot($arr)
 	{
 		$object_type = obj($arr["ot"]);
@@ -1845,17 +1857,17 @@ class webform extends class_base
 		$no_sbt = true;
 		$nms = array();
 		$chk_prps = array(
-			"default" => "defaultx", 
-			"year_from" => "year_from", 
-			"year_to" => "year_to", 
+			"default" => "defaultx",
+			"year_from" => "year_from",
+			"year_to" => "year_to",
 			"mon_for" => "mon_for",
 			"buttons" => "buttons",
 			"format" => "format",
 			"default_value_today" => "default_value_today"
 		);
-		
+
 		$user_group_list = aw_global_get("gidlist_oid");//k&otilde;ik grupid kus kasutaja on
-		$hidden_stuff = $cfgform->meta("show_to_groups");//juhul kui omadusi on teatud gruppidele maha keeratud, n&auml;itab 
+		$hidden_stuff = $cfgform->meta("show_to_groups");//juhul kui omadusi on teatud gruppidele maha keeratud, n&auml;itab
 		foreach($els as $pn => $pd)
 		{
 			if($hidden_stuff[$pn])//see v&auml;rk siis kontrollib, kas miskile kasutajale on mingi omadus &auml;kki maha keeratud
@@ -1895,7 +1907,7 @@ class webform extends class_base
 					$pd["rows"] = $all_props[$pn]["height"];
 				}
 			}
-			
+
 			if ($pd["type"] != "text")
 			{
 				$pd["value"] = $values[$pn];
@@ -1983,10 +1995,10 @@ class webform extends class_base
 		$inst = empty($ftype) ? CL_REGISTER_DATA : $ftype;
 		$rd = get_instance($inst);
 
-		
+
 		$dummy = new object();
 		$dummy->set_class_id($ftype);
-		
+
 		$rd->cfgform_id = $cfgform->id();
 		$rd->load_defaults();
 		$els = $rd->parse_properties(array(
@@ -2244,7 +2256,7 @@ class webform extends class_base
 						$pd["onFocus"] = "if (this.value == '".$pd['value']."')this.value=''";
 						$pd["onBlur"] = "if (this.value == '')this.value='".$pd['value']."'";
 				}
-				
+
 			}
 			$htmlc->add_property($pd);
 		}
@@ -2268,11 +2280,11 @@ class webform extends class_base
 
 		return $this->parse();
 	}
-	
+
 	/**
 
 		@attrib name=save_form_data nologin=1 all_args=1
-		
+
 		@param id required type=int acl=view
 		@param return_url optional
 	**/
@@ -2315,11 +2327,11 @@ class webform extends class_base
 				return $arr['return_url'];
 			}
 		}
-		
+
 		$is_valid = $register_data_i->validate_data(array(
 			//"props" => $props,
 			"request" => &$arr,
-			"cfgform_id" => $cfgform->id(), 
+			"cfgform_id" => $cfgform->id(),
 		));
 		if(!empty($is_valid))
 		{
@@ -2382,7 +2394,7 @@ class webform extends class_base
 				{
 					// fuck, this sucks, it should simply use classbase, but since
 					// there are some groovy things going on - like for example with
-					// the checkbox, I'm a bit scared about converting it over .. 
+					// the checkbox, I'm a bit scared about converting it over ..
 					$tmp = $relprops[$key];
 					$tmp["value"] = $val;
 					$tmp["clid"] = $relinfo[$relprops[$key]["reltype"]]["clid"];
@@ -2531,7 +2543,7 @@ class webform extends class_base
 					"froma" => $obj_inst->prop("def_mail"),
 				);
 			}
-			
+
 			$awm = get_instance("protocols/mail/aw_mail");
 			foreach($attaches as $att)
 			{
@@ -2586,7 +2598,7 @@ class webform extends class_base
 		{
 			switch ($prop_data['type'])
 			{
-				case 'date_select':	
+				case 'date_select':
 					foreach ($form_data['value'] as $k => $v)
 					{
 						$vars[$name.'_'.$k] = $v;
@@ -2604,7 +2616,7 @@ class webform extends class_base
 					break;
 				default:
 					$vars[$name] = $form_data[$name];
-					
+
 			}
 
 			$vars[$name.'_caption'] = $prop_data['caption'];
@@ -2645,8 +2657,8 @@ class webform extends class_base
 		));
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=remove_entries
 		@param id required type=int acl=view
 		@param group optional
@@ -2671,13 +2683,13 @@ class webform extends class_base
 		}
 		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
 	}
-	
-	/**  
+
+	/**
 		@attrib name=show_form nologin=1
 		@param id required type=int acl=view
 		@param fid required type=int acl=view
 		@param url required
-		@param format optional 
+		@param format optional
 	**/
 	function show_form($arr)
 	{
@@ -2685,7 +2697,7 @@ class webform extends class_base
 		$wf = obj($arr["id"]);
 		if ($wf->prop("disp_after_entry") != "")
 		{
-			if (($arr["format"] == "print" || $arr["format"] == "pdf") && $wf->prop("disp_after_entry_print")) 
+			if (($arr["format"] == "print" || $arr["format"] == "pdf") && $wf->prop("disp_after_entry_print"))
 			{
 				$this->read_template("disp/".$wf->prop("disp_after_entry_print"));
 			}
@@ -2699,7 +2711,7 @@ class webform extends class_base
 			$els = $cfgform_i->get_props_from_ot(array(
 				"ot" => $object_type->id()
 			));
-		
+
 			foreach($obj->properties() as $pn => $pv)
 			{
 				$this->vars(array(
@@ -2716,7 +2728,7 @@ class webform extends class_base
 			{
 				die($this->parse());
 			}
-			if ($arr["format"] == "pdf") 
+			if ($arr["format"] == "pdf")
 			{
 				$conv = get_instance("core/converters/html2pdf");
 				$conv->gen_pdf(array("source" => $this->parse()));
@@ -2726,7 +2738,7 @@ class webform extends class_base
 
 		$form = $obj->instance();
 		$form->init_class_base();
-		
+
 		$rval = $form->view(array(
 			"id" => $arr["fid"],
 			"class" => CL_REGISTER_DATA ? "register_data" : "calendar_registration_form",
