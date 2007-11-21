@@ -806,7 +806,6 @@ class bug extends class_base
 
 	function set_property($arr = array())
 	{
-die(dbg::dump($arr["request"]));
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
