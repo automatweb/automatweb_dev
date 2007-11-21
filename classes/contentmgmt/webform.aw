@@ -623,10 +623,7 @@ class webform extends class_base
 					$prplist[$key][$key2] = $val2;
 				}
 
-				if (!empty($arr["request"]["prpnames"][$key]))
-				{
-					$prplist[$key]["caption"] = (string) $arr["request"]["prpnames"][$key];
-				}
+				$prplist[$key]["caption"] = (string) $arr["request"]["prpnames"][$key];
 
 				if (!empty($arr["request"]["prop_ord"][$key]))
 				{
