@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.393 2007/11/20 10:21:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.394 2007/11/21 11:58:21 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -365,6 +365,10 @@ class menuedit extends aw_template
 				)
 				{
 					$ls = $_obj->trans_get_val("link");
+					if ($ls[0] == "/")
+					{
+						$ls = aw_ini_get("baseurl").$ls;
+					}
 					if (strpos($ls, "://") === false)
 					{
 						$ls = "/".$ls;
