@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.31 2007/11/14 14:23:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.32 2007/11/22 12:01:19 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -334,7 +334,7 @@ class spa_customer_interface extends class_base
 						if ($date == "")
 						{
 							$prod_str[] = html::popup(array(
-								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "not_verified" => 1, "rooms" => $rooms)),
+								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "_not_verified" => 1, "rooms" => $rooms)),
 								"caption" => $prod->trans_get_val("name"),
 								"height" => 500,
 								"width" => 750,
@@ -649,7 +649,7 @@ class spa_customer_interface extends class_base
 			"bron" => $b->id(),
 			"wb" => $arr["id"],
 			"prod" => $arr["prod"],
-			"not_verified" => 1
+			"_not_verified" => 1
 		));
 
 		return $arr["r"];
@@ -748,7 +748,7 @@ class spa_customer_interface extends class_base
 	function fin_add_prod_to_bron($arr)
 	{
 		$i = get_instance(CL_SPA_BOOKIGS_ENTRY);
-		$arr["not_verified"] = 1;
+		$arr["_not_verified"] = 1;
 		$i->fin_add_prod_to_bron($arr);
 		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		$ct = obj($arr["id"]);
@@ -758,7 +758,7 @@ class spa_customer_interface extends class_base
 			"prod" => $arr["prod"], 
 			"prod_num" => 0, 
 			"section" => "3169", 
-			"not_verified" => 1, 
+			"_not_verified" => 1, 
 			"rooms" => $rooms,
 			"retf" => $arr["r"]
 		));
@@ -1120,7 +1120,7 @@ class spa_customer_interface extends class_base
 			"prod" => $arr["prod"], 
 			"prod_num" => 0, 
 			"section" => "3169", 
-			"not_verified" => 1, 
+			"_not_verified" => 1, 
 			"rooms" => $rooms,
 			"retf" => $arr["r"]
 		));

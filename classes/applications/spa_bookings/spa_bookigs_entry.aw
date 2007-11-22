@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.71 2007/10/31 13:31:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.72 2007/11/22 12:01:19 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1074,7 +1074,7 @@ $t->set_sortable(false);
 		@param prod required type=int
 		@param prod_num required type=int
 		@param pkt optional type=int
-		@param not_verified optional
+		@param _not_verified optional
 		@param rooms optional 
 		@param retf optional 
 	**/
@@ -1296,7 +1296,7 @@ $t->set_sortable(false);
 					"prod" => $arr["prod"],
 					"prod_num" => $arr["prod_num"],
 					"booking" => $arr["booking"],
-					"not_verified" => $arr["not_verified"],
+					"_not_verified" => $arr["_not_verified"],
 					"retf" => $arr["retf"]
 				), get_class($this), false, false, "&amp;");
 				if (!$avail)
@@ -1440,7 +1440,7 @@ $t->set_sortable(false);
 		@param prod required type=int
 		@param prod_num required type=int
 		@param booking required type=int
-		@param not_verified optional type=int
+		@param _not_verified optional type=int
 		@param retf optional 
 	**/
 	function make_reservation($arr)
@@ -1506,7 +1506,7 @@ $t->set_sortable(false);
 						"product_for_bron" => $arr["prod"],
 						"product_count_for_bron" => $arr["prod_num"]
 					),
-					"not_verified" => $arr["not_verified"]
+					"_not_verified" => $arr["_not_verified"]
 				));
 				$rvo = obj($rv_id);
 				$bron->connect(array(
@@ -2019,9 +2019,9 @@ $t->set_sortable(false);
 					"product_count_for_bron" => 0
 				)
 			);
-			if ($arr["not_verified"])
+			if ($arr["_not_verified"])
 			{
-				$p["not_verified"] = 1;
+				$p["_not_verified"] = 1;
 			}
 			$rv_id = $room_inst->make_reservation($p);
 			$bron->connect(array(
