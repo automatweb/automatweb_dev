@@ -245,7 +245,14 @@ function menuItemMouseover(event, menuId) {
 
   // Get position for submenu based on the menu item.
 
-  x = getPageOffsetLeft(item) + item.offsetWidth;
+  if ($.browser.opera)
+  {
+  	x = getPageOffsetLeft(item) + item.offsetWidth;
+  }
+  else
+  {
+  	x = getPageOffsetLeft(item) + item.offsetWidth+1;
+  }
   y = getPageOffsetTop(item);
 
   // Adjust position to fit in view.
@@ -347,27 +354,6 @@ function menuInit(menu) {
 	{
     return;
 	}
-
-  // For items with arrows, add padding to item text to make the
-  // arrows flush right.
-
-  for (i = 0; i < itemList.length; i++) 
-	{
-    spanList = itemList[i].getElementsByTagName("SPAN");
-    textEl  = null;
-    arrowEl = null;
-    for (j = 0; j < spanList.length; j++) 
-		{
-      if (hasClassName(spanList[j], "menuItemText"))
-        textEl = spanList[j];
-      if (hasClassName(spanList[j], "menuItemArrow"))
-        arrowEl = spanList[j];
-    }
-    if (textEl != null && arrowEl != null)
-		{
-      textEl.style.paddingRight = (itemWidth - (textEl.offsetWidth + arrowEl.offsetWidth)) + "px";
-		}
-  }
 
   // Fix IE hover problem by setting an explicit width on first item of
   // the menu.
