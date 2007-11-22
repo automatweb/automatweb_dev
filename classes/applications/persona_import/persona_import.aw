@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.23 2007/11/22 08:41:41 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.24 2007/11/22 11:35:49 kaarel Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -228,10 +228,10 @@ class persona_import extends class_base
 			"class_id" => array(),
 		));
 		$ol->delete();
-		*/
 		$cache = get_instance("cache");
 		$cache->full_flush();
 		exit;
+		*/
 		aw_disable_acl();
 		$obj = new object($arr["id"]);
 		
