@@ -99,7 +99,7 @@ shortcut("Ctrl+Shift+E", function() {
 <!--//jalus -->
 
 <!-- SUB: POPUP_MENUS -->
-<!-- END SUB: POPUP_MENSU -->
+<!-- END SUB: POPUP_MENUS -->
 
 </body>
 </html>
