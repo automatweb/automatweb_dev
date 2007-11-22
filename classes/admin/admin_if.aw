@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.32 2007/11/21 14:36:17 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.33 2007/11/22 12:06:57 hannes Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
