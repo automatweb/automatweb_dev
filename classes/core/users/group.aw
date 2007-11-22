@@ -241,7 +241,8 @@ class group extends class_base
 			case "type":
 				$prop['options'] = array(
 					GRP_REGULAR => t('Tavaline'),
-					GRP_DYNAMIC => t("D&uuml;naamiline")
+					GRP_DYNAMIC => t("D&uuml;naamiline"),
+					GRP_DEFAULT => t("Kasutaja")
 				);
 				break;
 
