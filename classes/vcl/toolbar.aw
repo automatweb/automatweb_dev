@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.27 2007/11/22 09:43:43 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.28 2007/11/22 10:35:22 hannes Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -199,11 +199,10 @@ class toolbar extends aw_template
 	{
 		$arr["sub_menu_id"] = $arr["name"];
 		$baseurl = $this->cfg["baseurl"];
-		$rv = '<a class="menuItem" href="" onclick="return false;"
+		$rv = '<a class="menuItem menuItem_sub" href="" onclick="return false;"
 			        onmouseover="menuItemMouseover(event, \''.$arr["sub_menu_id"].'\');">
 				<span class="menuItemText">'.$arr["text"].'</span>
-				<span class="menuItemArrow"><img style="border:0px" src="'.$baseurl.
-				'/automatweb/images/arr.gif" alt=""></span></a>';
+				</a>';
 
 		$this->menus[$arr["parent"]] .= $rv;
 	}
