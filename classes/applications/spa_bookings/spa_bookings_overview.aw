@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.35 2007/11/15 13:29:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.36 2007/11/22 16:14:58 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -864,7 +864,7 @@ class spa_bookings_overview extends class_base
 		{
 			$d = array();
 			if($start) $d[] = date("d-m-Y" , $start);
-			if($end) $d[] = date("d-m-Y" , $end);
+			if($end) $d[] = date("d-m-Y" , ($end-61));
 			$dates = join (t("kuni") , $d);
 			$_GET["title"] = str_replace('__dates__', $dates,$_GET["title"]);
 		}
