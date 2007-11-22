@@ -2466,92 +2466,6 @@ class cfgform extends class_base
 		}
 	}
 
-	function callback_edit_groups($arr)
-	{
-		// hua, here I have to generate the list of tha groups
-		$grps = new aw_array($arr["obj_inst"]->meta("cfg_groups"));
-		$rv = array();
-		$tps = array(
-			"" => t("vaikestiil"),
-			"stacked" => t("pealkiri yleval, sisu all"),
-		);
-		$order = array();
-		$grps_array = array();
-		foreach($grps->get() as $key => $item)
-		{
-			$grps_array[$key] = $item;
-			$order[$key] = $item["ord"];
-		}
-
-		asort($order);
-		foreach($order as $key => $val)
-		{
-			$grps_[$key] = $grps_array[$key];
-		}
-
-		$ctr_list = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VIEWCONTROLLER")));
-
-		foreach($grps_ as $key => $item)
-		{
-			$rv["grpcaption[$key]"] = array(
-				"name" => "grpcaption[".$key."]",
-				"type" => "textbox",
-				"size" => 30,
-				"caption" => t("Pealkiri"),
-				"value" => $item["caption"],
-				"parent" => "b".$key,
-			);
-			$rv["grpord[$key]"] = array(
-				"name" => "grpord[".$key."]",
-				"type" => "textbox",
-				"size" => 2,
-				"caption" => t("J&auml;rjekord"),
-				"value" => $item["ord"],
-				"parent" => "b".$key,
-			);
-			$rv["grpstyle[$key]"] = array(
-				"name" => "grpstyle[$key]",
-				"type" => "select",
-				"options" => $tps,
-				"caption" => t("Stiil"),
-				"selected" => $item["grpstyle"],
-				"parent" => "b".$key,
-			);
-			$rv["grpview[$key]"] = array(
-				"name" => "grpview[$key]",
-				"type" => "checkbox",
-				"no_caption" => 1,
-				"caption" => t("Vaikimisi view vaade"),
-				"value" => $item["grpview"],
-				"parent" => "b$key",
-			);
-			$rv["grpctl[$key]"] = array(
-				"name" => "grpctl[$key]",
-				"type" => "select",
-				"caption" => t("Sisu kontroller"),
-				"value" => $item["grpctl"],
-				"parent" => "b$key",
-				"options" => array("" => t("--vali--")) + $ctr_list->names()
-			);
-			$rv["grp_d_ctl[$key]"] = array(
-				"name" => "grp_d_ctl[$key]",
-				"type" => "select",
-				"caption" => t("N&auml;itamise kontroller"),
-				"value" => $item["grp_d_ctl"],
-				"parent" => "b$key",
-				"options" => array("" => t("--vali--")) + $ctr_list->names()
-			);
-			$rv["b".$key] = array(
-				"name" => "b".$key,
-				"type" => "layout",
-				"rtype" => "hbox",
-				"caption" => $key,
-			);
-		}
-
-		return $rv;
-	}
-
 	function update_groups($arr)
 	{
 		$grplist = $this->grplist;
@@ -2560,18 +2474,30 @@ class cfgform extends class_base
 		{
 			foreach($arr["request"]["grpcaption"] as $key => $val)
 			{
-				//$grplist[$key] = array("caption" => $val);
-				$grplist[$key]["caption"] = $val;
-				$grplist[$key]["grpview"] = $arr["request"]["grpview"][$key];
-				$grplist[$key]["grphide"] = (int) !$arr["request"]["grphide"][$key];
-				$grplist[$key]["grpctl"] = $arr["request"]["grpctl"][$key];
-				$grplist[$key]["grp_d_ctl"] = $arr["request"]["grp_d_ctl"][$key];
-				$grplist[$key]["ord"] = $arr["request"]["grpord"][$key];
-
-				$styl = $arr["request"]["grpstyle"][$key];
-				if (!empty($styl))
+				if (isset($grplist[$key]))
 				{
-					$grplist[$key]["grpstyle"] = $styl;
+					$grplist[$key]["caption"] = $val;
+					$grplist[$key]["grpview"] = $arr["request"]["grpview"][$key];
+					$grplist[$key]["grphide"] = (int) !$arr["request"]["grphide"][$key];
+					$grplist[$key]["grpctl"] = (int) $arr["request"]["grpctl"][$key];
+					$grplist[$key]["grp_d_ctl"] = (int) $arr["request"]["grp_d_ctl"][$key];
+					$grplist[$key]["ord"] = (int) $arr["request"]["grpord"][$key];
+
+					$styl = $arr["request"]["grpstyle"][$key];
+
+					if (!empty($styl))
+					{
+						$grplist[$key]["grpstyle"] = $styl;
+					}
+
+					if (array_key_exists($arr["request"]["grpfocus"][$key], $this->prplist))
+					{
+						$grplist[$key]["focus"] = $arr["request"]["grpfocus"][$key];
+					}
+					else
+					{
+						unset($grplist[$key]["focus"]);
+					}
 				}
 			}
 		}
@@ -3618,8 +3544,8 @@ class cfgform extends class_base
 			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
-			"name" => "style",
-			"caption" => t("Stiil"),
+			"name" => "focus",
+			"caption" => t("Fookus"),
 			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
@@ -3644,14 +3570,21 @@ class cfgform extends class_base
 			"tooltip" => t("Näita tabi"),
 			"chgbgcolor" => "bg_colour",
 		));
-	}
+/*  grpstyle to be deprecated
+		$t->define_field(array(
+			"name" => "style",
+			"caption" => t("Stiil"),
+			"chgbgcolor" => "bg_colour",
+		));
+ */
+	 }
 
 	function _edit_groups_tbl($arr)
 	{
 		$this_o = $arr["obj_inst"];
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_edit_groups_tbl($t);
-		$grps = new aw_array($this_o->meta("cfg_groups"));
+		$grps = $this->grplist;
 
 		$tps = array(
 			"" => t("vaikestiil"),
@@ -3659,7 +3592,21 @@ class cfgform extends class_base
 		);
 		$ctr_list = new object_list($this_o->connections_from(array("type" => "RELTYPE_VIEWCONTROLLER")));
 
-		foreach($grps->get() as $gn => $gd)
+		// distribute props by group for selectbox options
+		$props_by_grp = array();
+		$focusable_prop_types = array(
+			"textbox", "select", "password", "fileupload", "textarea", "checkbox"
+		);
+
+		foreach ($this->prplist as $name => $data)
+		{
+			if (in_array($data["type"], $focusable_prop_types))
+			{
+				$props_by_grp[$data["group"]][$name] = $data["caption"];
+			}
+		}
+
+		foreach($grps as $gn => $gd)
 		{
 			$bg_colour = empty($gd["parent"]) ? "silver" : false;
 			$t->define_data(array(
@@ -3678,6 +3625,11 @@ class cfgform extends class_base
 					"name" => "grpstyle[$gn]",
 					"options" => $tps,
 					"selected" => $gd["grpstyle"],
+				)),
+				"focus" => html::select(array(
+					"name" => "grpfocus[$gn]",
+					"options" => array("" => "") + $props_by_grp[$gn],
+					"selected" => $gd["focus"],
 				)),
 				"ctrl" => html::select(array(
 					"name" => "grpctl[$gn]",
