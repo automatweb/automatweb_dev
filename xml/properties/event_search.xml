@@ -73,17 +73,6 @@
             <caption>Vorm</caption>
       </property>
       <property>
-            <name>search_form</name>
-            <table>objects</table>
-            <group>ftsearch</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>callback</type>
-            <callback>callback_search_form</callback>
-            <store>no</store>
-            <caption>Otsinguvorm</caption>
-      </property>
-      <property>
             <name>month_navigator_style</name>
             <table>objects</table>
             <group>styles</group>

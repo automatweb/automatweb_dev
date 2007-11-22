@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.95 2007/11/22 08:26:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.96 2007/11/22 08:35:22 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -10,57 +10,58 @@
 @default field=meta
 @default method=serialize
 
-@property event_cfgform type=relpicker reltype=RELTYPE_EVENT_CFGFORM
-@caption Kasutatav vorm
+	@property event_cfgform type=relpicker reltype=RELTYPE_EVENT_CFGFORM
+	@caption Kasutatav vorm
 
-@property use_output type=relpicker reltype=RELTYPE_EVENT_SHOW
-@caption N&auml;itamise vorm
+	@property use_output type=relpicker reltype=RELTYPE_EVENT_SHOW
+	@caption N&auml;itamise vorm
 
-@property show_type type=select field=meta method=serialize
-@caption N&auml;ta vaikimisi s&uuml;ndmusi
+	@property show_type type=select field=meta method=serialize
+	@caption N&auml;ta vaikimisi s&uuml;ndmusi
+
 
 @groupinfo ftsearch caption="Otsinguvorm"
 @default group=ftsearch
 
-@property navigator_range type=chooser orient=vertical
-@caption Ajavahemiku navigaator
+	@property navigator_range type=chooser orient=vertical
+	@caption Ajavahemiku navigaator
 
-@property ftsearch_fields type=chooser multiple=1 orient=vertical
-@caption Vabateksti v&auml;jad
+	@property ftsearch_fields type=chooser multiple=1 orient=vertical
+	@caption Vabateksti v&auml;jad
 
-@property ftsearch_fields2 type=chooser multiple=1 orient=vertical
-@caption Vabateksti v&auml;jad 2
+	@property ftsearch_fields2 type=chooser multiple=1 orient=vertical
+	@caption Vabateksti v&auml;jad 2
+
 
 @groupinfo ftform caption="Otsinguvorm seadistamine"
 @default group=ftform
 
-@property ftform type=table no_caption=1
-@caption Vorm
+	@property ftform type=table no_caption=1
+	@caption Vorm
 
-@default group=ftsearch
-@property search_form type=callback callback=callback_search_form store=no
-@caption Otsinguvorm
 
 @groupinfo styles caption="Stiilid"
 @default group=styles
 
-@property month_navigator_style type=relpicker reltype=RELTYPE_STYLE
-@caption Kuu navigaatori stiil
+	@property month_navigator_style type=relpicker reltype=RELTYPE_STYLE
+	@caption Kuu navigaatori stiil
 
-@property week_navigator_style type=relpicker reltype=RELTYPE_STYLE
-@caption N&auml;dala navigaatori stiil
+	@property week_navigator_style type=relpicker reltype=RELTYPE_STYLE
+	@caption N&auml;dala navigaatori stiil
 
-@property sform_table_style type=relpicker reltype=RELTYPE_STYLE
-@caption Otsinguvormi tabeli stiil
+	@property sform_table_style type=relpicker reltype=RELTYPE_STYLE
+	@caption Otsinguvormi tabeli stiil
 
-@property sform_submit_style type=relpicker reltype=RELTYPE_STYLE
-@caption Otsinguvormi nupu stiil
+	@property sform_submit_style type=relpicker reltype=RELTYPE_STYLE
+	@caption Otsinguvormi nupu stiil
+
 
 @groupinfo ftresults caption="Tulemuste seadistamine"
 @default group=ftresults
 
-@property result_table type=table
-@caption Tulemuste tabel
+	@property result_table type=table
+	@caption Tulemuste tabel
+
 
 @reltype EVENT_CFGFORM value=1 clid=CL_CFGFORM
 @caption S&uuml;ndmuse vorm
@@ -88,12 +89,6 @@ class event_search extends class_base
 
 		$this->fields = array("fulltext","fulltext2", "start_date","end_date","project1","project2", "active", "format", "search_btn");
 		lc_site_load("event_search", &$this);
-	}
-
-	function callback_search_form($arr)
-	{
-		$rv = array();
-		return $rv;
 	}
 
 	function callback_pre_edit($arr)
