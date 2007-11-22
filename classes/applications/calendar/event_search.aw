@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.94 2007/11/15 10:19:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.95 2007/11/22 08:26:25 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -19,6 +19,7 @@
 @property show_type type=select field=meta method=serialize
 @caption N&auml;ta vaikimisi s&uuml;ndmusi
 
+@groupinfo ftsearch caption="Otsinguvorm"
 @default group=ftsearch
 
 @property navigator_range type=chooser orient=vertical
@@ -30,7 +31,9 @@
 @property ftsearch_fields2 type=chooser multiple=1 orient=vertical
 @caption Vabateksti v&auml;jad 2
 
+@groupinfo ftform caption="Otsinguvorm seadistamine"
 @default group=ftform
+
 @property ftform type=table no_caption=1
 @caption Vorm
 
@@ -38,6 +41,7 @@
 @property search_form type=callback callback=callback_search_form store=no
 @caption Otsinguvorm
 
+@groupinfo styles caption="Stiilid"
 @default group=styles
 
 @property month_navigator_style type=relpicker reltype=RELTYPE_STYLE
@@ -51,11 +55,6 @@
 
 @property sform_submit_style type=relpicker reltype=RELTYPE_STYLE
 @caption Otsinguvormi nupu stiil
-
-@groupinfo ftsearch caption="Vabateksti otsing"
-@groupinfo ftform caption="Otsinguvorm seadistamine"
-@groupinfo ftsearch caption="Otsinguvorm"
-@groupinfo styles caption="Stiilid"
 
 @groupinfo ftresults caption="Tulemuste seadistamine"
 @default group=ftresults
