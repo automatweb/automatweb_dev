@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.182 2007/11/13 13:09:45 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.183 2007/11/22 08:50:10 kaarel Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -218,9 +218,14 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 			@layout cedit_url type=vbox parent=ceditemlurl closeable=1 area_caption=URL
 
 				@property cedit_url_tbl type=table store=no no_caption=1 parent=cedit_url store=no
+
 		@layout ceditbank type=vbox closeable=1 area_caption=Pangaarved
 
 			@property cedit_bank_account_tbl type=table store=no no_caption=1 parent=ceditbank
+
+		@layout ceditprof type=vbox closeable=1 area_caption=Töösuhted
+
+			@property cedit_profession_tbl type=table store=no no_caption=1 parent=ceditprof
 
 		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
 
@@ -325,10 +330,7 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 @groupinfo education caption="Haridusk&auml;ik" parent=cv submit=no
 @default group=education
 
-@property edulevel type=select table=objects field=meta method=serialize
-@caption Haridustase
-
-@property education_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,field,speciality,start,end table_fields=school,field,speciality,start,end table=objects field=meta method=serialize
+@property education_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table_fields=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table=objects field=meta method=serialize
 
 ------------------------------------------------------------------
 
@@ -833,6 +835,7 @@ class crm_person extends class_base
 			case "cedit_email_tbl":
 			case "cedit_adr_tbl":
 			case "cedit_bank_account_tbl":
+			case "cedit_profession_tbl":
 				static $i;
 				if (!$i)
 				{
@@ -1721,6 +1724,20 @@ class crm_person extends class_base
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_email_tbl($t, $arr);
 				break;
+
+			case "cedit_profession_tbl":
+				$i = get_instance("applications/crm/crm_company_cedit_impl");
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"org" => t("Organisatsioon"),
+					"profession" => t("Amet"),
+					"start" => t("Suhte algus"),
+					"end" => t("Suhte l&otilde;pp"),
+				);
+				$i->init_cedit_tables(&$t, $fields);
+				$i->_get_profession_tbl($t, $arr);
+				break;
+
 			case "cedit_bank_account_tbl":
 				$i = get_instance("applications/crm/crm_company_cedit_impl");
 				$t = &$data["vcl_inst"];

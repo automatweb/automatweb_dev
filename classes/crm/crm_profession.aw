@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.15 2007/03/07 13:00:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.16 2007/11/22 08:50:10 kaarel Exp $
 // crm_profession.aw - Ametinimetus
 /*
 @classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes
@@ -18,6 +18,9 @@
 
 @property jrk type=textbox size=4
 @caption Järk
+
+@property directive_link type=textbox field=meta method=serialize 
+@caption Viit ametijuhendile
 
 @property directive type=relpicker reltype=RELTYPE_DESC_FILE field=meta method=serialize 
 @caption Ametijuhend
