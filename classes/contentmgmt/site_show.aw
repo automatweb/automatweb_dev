@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.249 2007/11/07 16:47:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.250 2007/11/22 15:10:48 markop Exp $
 
 /*
 
@@ -1707,13 +1707,12 @@ class site_show extends class_base
 				$ot_inst = get_instance(CL_OBJECT_TREE);
 				$ot_id = $ref->prop("show_object_tree");
 			}
-
 			$this->vars(array(
 				"link" => $link,
 				"text" => str_replace("&nbsp;"," ",strip_tags($ref->trans_get_val("name"))),
 				"comment" =>  str_replace("&nbsp;"," ",strip_tags($ref->comment())),
 				"ysection" => $ref->id(),
-				"end" => $GLOBALS["yah_end"],
+//				"end" => (!($i + 1 < $cnt)) ? $GLOBALS["yah_end"] : "",
 			));
 
 			$show_always = false;
@@ -1735,7 +1734,7 @@ class site_show extends class_base
 				}
 				else
 				{
-					$ya .= $this->parse("YAH_LINK");
+					$ya .= $this->parse("YAH_LINK");//.(!($i + 1 < $cnt)) ? $GLOBALS["yah_end"] : "";
 				}
 				$this->title_yah.=" / ".str_replace("&nbsp;"," ",strip_tags($ref->trans_get_val("name")));
 				$this->title_yah_arr[] = str_replace("&nbsp;"," ",strip_tags($ref->trans_get_val("name")));
@@ -1775,6 +1774,8 @@ class site_show extends class_base
 		{
 			$this->site_title = strip_tags($this->title_yah);
 		}
+
+		$ya.=$GLOBALS["yah_end"];
 
 		$this->vars(array(
 			"YAH_LINK" => $ya,
