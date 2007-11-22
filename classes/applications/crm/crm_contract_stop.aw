@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_contract_stop.aw,v 1.3 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_contract_stop.aw,v 1.4 2007/11/22 08:44:23 kaarel Exp $
 // crm_contract_stop.aw - Töölepingu peatamine 
 /*
 
@@ -20,11 +20,14 @@
 
 @default table=objects
 
-@property type type=relpicker reltype=RELTYPE_CONTRACT_STOP_TYPE automatic=1
+@property type type=relpicker reltype=RELTYPE_CONTRACT_STOP_TYPE field=meta method=serialize
 @caption Peatumise liik
 
 @reltype CONTRACT_STOP_TYPE value=1 clid=CL_META
 @caption Peatumise liik
+
+@reltype SUBSTITUTE value=2 clid=CL_CRM_PERSON
+@caption Asendaja
 
 @tableinfo planner index=id master_table=objects master_index=oid
 @tableinfo external_reference index=aw_id master_table=objects master_index=oid

@@ -506,6 +506,108 @@ class crm_company_cedit_impl extends core
 		$t->set_sortable(false);
 	}
 
+	function _get_profession_tbl(&$t, $arr)
+	{
+		$pn = "profession_id";
+		if ($arr["obj_inst"]->class_id() == CL_CRM_PERSON)
+		{
+			$pn = "profession";
+		}
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_PREVIOUS_JOB",
+		));
+		foreach($conns as $conn)
+		{
+			$obj = $conn->to();
+			$chooser = html::radiobutton(array(
+				"name" => "cedit[".$arr["prop"]["name"]."]",
+				"value" => $obj->id(),
+				"checked" => $arr["obj_inst"]->prop($pn) == $obj->id()?1:0,
+			));
+			$ch_url = aw_url_change_var("cedit_tbl_edit_e", $obj->id());
+
+			if ($arr["request"]["cedit_tbl_edit_e"] == $obj->id())
+			{
+				$t->define_data(array(
+					"sel" => $obj->id(),
+					"choose" => $chooser,
+					"email" => html::textbox(array(
+						"name" => "cedit_email[".$obj->id()."][email]",
+						"value" => $obj->prop("mail"),
+						"size" => 15
+					)),
+					"change" => html::href(array(
+						"caption" => t("Muuda"),
+						"url" => $ch_url,
+					)),
+				));
+			}
+			else
+			{
+				if(is_oid($obj->prop("org")))
+				{
+					$org_obj = new object($obj->prop("org"));
+					$org_data = $org_obj->name();
+				}
+				else
+				{
+					$org_data = "";
+				}
+				if(is_oid($obj->prop("profession")))
+				{
+					$profession_obj = new object($obj->prop("profession"));
+					$profession_data = $profession_obj->name();
+				}
+				else
+				{
+					$profession_data = "";
+				}
+				$start_data = $obj->prop("start");
+				$end_data = $obj->prop("end");
+				$ch_url_profession = $this->mk_my_orb(
+					"change",
+					array(
+						"id" => $obj->id(),
+						"return_url" => aw_ini_get("baseurl").aw_global_get("REQUEST_URI"),
+					),
+					"crm_person_work_relation"
+				);
+				$t->define_data(array(
+					"sel" => $obj->id(),
+					"choose" => $chooser,
+					"org" => $org_data,
+					"profession" => $profession_data,
+					"start" => (!empty($start_data)) ? date("d.m.Y", $start_data) : "",
+					"end" => (!empty($end_data)) ? date("d.m.Y", $end_end) : "",
+					"change" => html::href(array(
+						"caption" => t("Muuda"),
+						"url" => $ch_url_profession,
+					)),
+				));
+			}
+		}
+		if (!$arr["request"]["cedit_tbl_edit_e"])
+		{
+			/*
+			$chooser = html::radiobutton(array(
+				"name" => "cedit[".$arr["prop"]["name"]."]",
+				"value" => -1,
+				"checked" => $this->can("view", $arr["obj_inst"]->prop($pn)) ? 0 : 1,
+			));
+			$t->define_data(array(
+				"choose" => $chooser,
+				"org" => html::textbox(array(
+					"name" => "cedit_email[-1][email]",
+					"value" => "",
+					"size" => 15
+				)),
+				"change" => ""
+			));
+			*/
+		}
+		$t->set_sortable(false);
+	}
+
 	function _set_cedit_email_tbl($arr)
 	{
 		$pn = "email_id";

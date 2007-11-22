@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.3 2007/11/15 13:31:21 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.4 2007/11/22 08:44:23 kaarel Exp $
 // crm_person_work_relation.aw - Töösuhe 
 /*
 
@@ -25,6 +25,12 @@
 @property tasks type=textarea
 @caption Ülesanded
 
+@property directive_link type=textbox field=meta method=serialize 
+@caption Viit ametijuhendile
+
+@property directive type=relpicker reltype=RELTYPE_DESC_FILE field=meta method=serialize 
+@caption Ametijuhend
+
 @reltype ORG value=1 clid=CL_CRM_COMPANY
 @caption Organisatsioon
 
@@ -33,6 +39,15 @@
 
 @reltype PROFESSION value=3 clid=CL_CRM_PROFESSION
 @caption Amet
+
+@reltype SUBSITUTE value=4 clid=CL_CRM_PROFESSION
+@caption Asendaja
+
+@reltype DESC_FILE value=5 clid=CL_FILE
+@caption Ametijuhend
+
+@reltype CONTRACT_STOP value=6 clid=CL_CONTRACT_STOP
+@caption Töölepingu peatamine
 
 */
 

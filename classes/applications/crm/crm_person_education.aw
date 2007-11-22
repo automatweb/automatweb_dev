@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.4 2006/04/04 11:44:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.5 2007/11/22 08:44:23 kaarel Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -14,11 +14,20 @@
 @default field=meta
 @default method=serialize
 
+@property degree type=select
+@caption Akadeemiline kraad
+
 @property field type=classificator reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
 
 @property speciality type=textbox
 @caption Eriala
+
+@property main_speciality type=chooser
+@caption Põhieriala
+
+@property obtain_language type=textbox
+@caption Omandamise keel
 
 @layout time type=hbox
 
@@ -27,6 +36,12 @@
 
 @property end type=date_select format=month,year parent=time
 @caption Lõpp
+
+@property end_date type=date_select
+@caption Lõpetamise kuupäev
+
+@property diploma_nr type=textbox
+@caption Diplomi number
 
 @reltype FIELD value=1 clid=CL_META
 @caption Valdkond
@@ -40,6 +55,34 @@ class crm_person_education extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_PERSON_EDUCATION
 		));
+	}
+
+	function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "main_speciality":
+				$arr["prop"]["options"] = array(
+					1 => t("Jah"),
+					0 => t("Ei"),
+				);
+				break;
+
+			case "degree":
+				$arr["prop"]["options"] = array(
+					"pohiharidus" => t("Põhiharidus"),
+					"keskharidus" => t("Keskharidus"),
+					"keskeriharidus" => t("Kesk-eriharidus"),
+					"diplom" => t("Diplom"),
+					"bakalaureus" => t("Bakalaureus"),
+					"magister" => t("Magister"),
+					"doktor" => t("Doktor"),
+				);
+				break;
+		};
+		return $retval;
 	}
 };
 ?>
