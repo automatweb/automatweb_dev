@@ -1,5 +1,6 @@
+var XBrowserZindex = 1;
 function XBrowser() {
-
+	
   var ua, s, i;
 
   this.isIE    = false;  // Internet Explorer
@@ -102,6 +103,11 @@ function buttonClick(event, menuId) {
 
   if (button.menu == null) {
     button.menu = document.getElementById(menuId);
+	if (!button.menu.style.zIndex)
+	{
+		button.menu.style.zIndex = XBrowserZindex;
+		XBrowserZindex++;
+	}
     if (button.menu.isInitialized == null)
       menuInit(button.menu);
   }
@@ -237,10 +243,17 @@ function menuItemMouseover(event, menuId) {
 
   // Initialize the sub menu, if not already done.
 
+	
+  
   if (item.subMenu == null) {
     item.subMenu = document.getElementById(menuId);
+	if (!item.subMenu.style.zIndex)
+	{
+		item.subMenu.style.zIndex = XBrowserZindex;
+		XBrowserZindex++;
+	}
     if (item.subMenu && item.subMenu.isInitialized == null)
-      menuInit(item.subMenu);
+		menuInit(item.subMenu);
   }
 
   // Get position for submenu based on the menu item.
@@ -251,7 +264,7 @@ function menuItemMouseover(event, menuId) {
   }
   else
   {
-  	x = getPageOffsetLeft(item) + item.offsetWidth+1;
+  	x = getPageOffsetLeft(item) + item.offsetWidth-1;
   }
   y = getPageOffsetTop(item);
 
