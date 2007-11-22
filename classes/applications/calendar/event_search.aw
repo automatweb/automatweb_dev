@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.96 2007/11/22 08:35:22 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.97 2007/11/22 08:48:32 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -126,10 +126,6 @@ class event_search extends class_base
 		$o = &$arr["obj_inst"];
 		$t = &$prop["vcl_inst"];
 		$formconfig = $o->meta("formconfig");
-		$t->define_field(array(
-			"name" => "type",
-			"caption" => t("T&uuml;&uuml;p"),
-		));
 
 		$t->define_field(array(
 			"name" => "name",
@@ -142,8 +138,8 @@ class event_search extends class_base
 		));
 		
 		$t->define_field(array(
-			"name" => "data",
-			"caption" => t("Sisu"),
+			"name" => "settings",
+			"caption" => t("Seaded"),
 		));
 		
 		$t->define_field(array(
@@ -177,29 +173,21 @@ class event_search extends class_base
 				"checked" => $formconfig["fulltext2"]["active"],
 			)),
 		));
-		
-		$format_selector = html::select(array(
-			"options" => array(
-				0 => t("Ainult kuup&auml;ev"),
-				1 => t("Kuup&auml;ev, kellaajad"),
-			),
-			"name" => "start_date[format]",
-			"value" => $formconfig["start_date"]["format"],
-		));
-		
+
+		$date_display_options = array(
+			'select' => t('Kuvatakse valikkastid'),
+			'one_textbox' => t('Kuvatakse &uuml;ks tekstikast'),
+		);		
 		$t->define_data(array(
-			"type" => html::select(array(
-				'name' => 'start_date[type]',
-				'options' => array(
-					'select' => t('Valik'),
-					'one_textbox' => t('&Uuml;ks tekstikast'),
-				),
-				'selected' => $formconfig['start_date']['type']
-			)),
 			"name" => t("Alguskuup&auml;ev"),
 			"caption" => html::textbox(array(
 				"name" => "start_date[caption]",
 				"value" => $formconfig["start_date"]["caption"] ? $formconfig["start_date"]["caption"] : t("Alguskuup&auml;ev"),
+			)),
+			"settings" => html::select(array(
+				'name' => 'start_date[type]',
+				'options' => $date_display_options,
+				'selected' => $formconfig['start_date']['type']
 			)),
 			"active" => html::checkbox(array(
 				"name" => "start_date[active]",
@@ -210,20 +198,16 @@ class event_search extends class_base
 		));
 		
 		$t->define_data(array(
-			"type" => html::select(array(
-				'name' => 'end_date[type]',
-				'options' => array(
-					'select' => t('Valik'),
-					'one_textbox' => t('&Uuml;ks tekstikast'),
-				),
-				'selected' => $formconfig['end_date']['type']
-			)),
 			"name" => t("L&otilde;ppkuup&auml;ev"),
 			"caption" => html::textbox(array(
 				"name" => "end_date[caption]",
 				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : t("L&otilde;ppkuup&auml;ev"),
 			)),
-			
+			"settings" => html::select(array(
+				'name' => 'end_date[type]',
+				'options' => $date_display_options,
+				'selected' => $formconfig['end_date']['type']
+			)),
 			"active" => html::checkbox(array(
 				"name" => "end_date[active]",
 				"value" => $formconfig["end_date"]["active"],
@@ -249,16 +233,16 @@ class event_search extends class_base
 				"name" => "project1[caption]",
 				"value" => $formconfig["project1"]["caption"] ? $formconfig["project1"]["caption"] : t("Projekt 1"),
 			)),
-			"active" => html::checkbox(array(
-				"name" => "project1[active]",
-				"value" => $formconfig["project1"]["active"],
-				"checked" => $formconfig["project1"]["active"],
-			)),
-			"data" => html::select(array(
+			"settings" => html::select(array(
 				"name" => "project1[rootnode]",
 				"options" => $prj_opts,
 				"multiple" => 1,
 				"value" => $formconfig["project1"]["rootnode"],
+			)),
+			"active" => html::checkbox(array(
+				"name" => "project1[active]",
+				"value" => $formconfig["project1"]["active"],
+				"checked" => $formconfig["project1"]["active"],
 			)),
 		));
 		
@@ -268,7 +252,7 @@ class event_search extends class_base
 				"name" => "project2[caption]",
 				"value" => $formconfig["project2"]["caption"] ? $formconfig["project2"]["caption"] : t("Projekt 2"),
 			)),
-			"data" => html::select(array(
+			"settings" => html::select(array(
 				"name" => "project2[rootnode]",
 				"options" => $prj_opts,
 				"multiple" => 1,
@@ -286,7 +270,7 @@ class event_search extends class_base
 				"name" => "search_btn[caption]",
 				"value" => $formconfig["search_btn"]["caption"] ? $formconfig["search_btn"]["caption"] : t("Otsi nupp"),
 			)),
-			"data" => "",
+			"settings" => "",
 			"active" => html::checkbox(array(
 				"name" => "search_btn[active]",
 				"value" => $formconfig["search_btn"]["active"],
