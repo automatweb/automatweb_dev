@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.26 2007/10/25 10:58:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.27 2007/11/22 09:43:43 hannes Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -219,7 +219,9 @@ class toolbar extends aw_template
 				$init_done = true;
 			};
 			$cdata = '<div id="'.$parent.'" class="menu" onmouseover="menuMouseover(event)">'."\n${menudata}</div>\n";
-			$this->custom_data .= $cdata;
+			
+			$cache = get_instance("cache");
+			$cache->file_set("aw_toolbars",$cache->file_get("aw_toolbars").$cdata );
 		};
 	}
 
