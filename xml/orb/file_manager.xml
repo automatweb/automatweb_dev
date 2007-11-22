@@ -21,7 +21,16 @@
 		<action name="manager">
 			<function name="manager">
 				<arguments>
-					<required name="docid" />
+					<optional name="docid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="attach_to_message">
+			<function name="attach_to_message">
+				<arguments>
+					<optional name="message" />
+					<optional name="file" />
 				</arguments>
 			</function>
 		</action>

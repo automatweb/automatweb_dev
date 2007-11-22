@@ -95,7 +95,7 @@ class file_manager extends aw_template
 
 	/**
 		@attrib name=manager
-		@param docid required
+		@param docid optional
 	**/
 	function manager($arr)
 	{
@@ -112,6 +112,17 @@ class file_manager extends aw_template
 			"createdby" => ($_GET["s"]["my"])?aw_global_get("uid"):"%",
 			"sort_by" => "objects.created DESC",
 		));
+		
+		//kui lisada tahaks maili, siis parem attatchmentina
+		if(is_oid($arr["docid"]) && $this->can("view" , $arr["docid"]))
+		{
+			$doc = obj($arr["docid"]);
+			if($doc->class_id() == CL_MESSAGE)
+			{
+				$doctype = "mail";
+			}
+		}
+
 		$ii = get_instance(CL_FILE);
 		foreach($ol->arr() as $o)
 		{
@@ -132,14 +143,15 @@ class file_manager extends aw_template
 					"in_popup" => 1,
 				), CL_FILE),
 			));
-			
+		//	arr($this->mk_my_orb("attach_to_message", array("file" => $o->id() , "message" => $arr["docid"])));
 			$t->define_data(array(
 				"name" => $name,
 				"location" => $location,
 				"sel" => html::href(array(
-					"url" => "javascript:void(0)",
+//					"url" => "javascript:void(0)",
+					"url" => ($doctype == "mail") ? $this->mk_my_orb("attach_to_message", array("file" => $o->id() , "message" => $arr["docid"])): "javascript:void(0)",
 					"caption" => t("Vali see"),
-					"onClick" => "
+					"onClick" => ($doctype == "mail") ? null:"
 						FCK=window.parent.opener.FCK;
 						var eSelected = FCK.Selection.MoveToAncestorNode(\"A\") ; 
 						aw_get_url_contents(\"".$gen_alias_url."\");
@@ -162,6 +174,47 @@ class file_manager extends aw_template
 		$t->set_default_sortby("name");
 		$t->sort_by();
 		return "<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</script> ".$this->draw_form($arr).$t->draw();
+	}
+
+	/**
+		@attrib name=attach_to_message default=1
+		@param message optional
+		@param file optional
+	**/
+	function attach_to_message($arr)
+	{
+		extract($arr);
+		if(is_oid($message) && $this->can("view" , $message) && is_oid($file) && $this->can("view" , $file))
+		{
+			$message = obj($message);
+			$message->connect(array(
+				"to" => $file,
+				"type" => "RELTYPE_ATTACHMENT",
+			));
+			
+		}
+		$stuff = ".";
+		$stuff.= '<script type="text/javascript">
+			//alert(window.parent.opener);
+			//el = window.parent.opener.parent.document.changeform.submit();
+			//tmp = ""
+			//i=1
+			//for (key in el)
+			//{
+			//if (i%2==0)
+			//br = "\n";
+			//else
+			//br = " "
+			
+			//  tmp+=key+br
+			//i++
+			//}
+			//alert (tmp)
+			window.parent.opener.parent.document.changeform.submit();
+			//if (window.parent.opener) {window.parent.opener.document.getElementByName(\"changeform\").submit();}
+			window.parent.close();
+		</script>';
+		die($stuff);
 	}
 
 	function draw_form($arr)
