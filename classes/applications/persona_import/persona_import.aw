@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.22 2007/11/16 12:51:36 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.23 2007/11/22 08:41:41 kaarel Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -32,6 +32,12 @@
 
 @property xml_personnel_file type=textbox
 @caption Töötajate XML fail
+
+@property xml_education_file type=textbox
+@caption Hariduskäigu XML fail
+
+@property xml_work_relations_ending_file type=textbox
+@caption Töösuhete peatumise XML fail
 
 @property xml_structure_file type=textbox
 @caption Struktuuriüksuste XML fail
@@ -216,6 +222,16 @@ class persona_import extends class_base
 	**/
 	function invoke($arr)
 	{
+		/*
+		$ol = new object_list(array(
+			"parent" => 26366,
+			"class_id" => array(),
+		));
+		$ol->delete();
+		*/
+		$cache = get_instance("cache");
+		$cache->full_flush();
+		exit;
 		aw_disable_acl();
 		$obj = new object($arr["id"]);
 		
@@ -262,6 +278,12 @@ class persona_import extends class_base
 			die(t("Default kataloog valimata"));
 		};
 
+		$dir_company = $crm_db->prop("dir_firma");
+		if (!is_oid($dir_company))
+		{
+			$dir_company = $dir_default;
+		};
+
 		// figure out variable manager
 		$mt_conns = $crm_db->connections_from(array(
 			"type" => "RELTYPE_METAMGR",
@@ -282,7 +304,7 @@ class persona_import extends class_base
 
 		$meta1 = array_flip($meta1list->names());
 
-		print "creating variable categories, if any ...";
+		print "Creating variable categories, if any ...<br>";
 		flush();
 
 		// doing this by name sucks of course, but since this is a one-time application ..
@@ -330,27 +352,48 @@ class persona_import extends class_base
 		{	
 			$c = get_instance(CL_FTP_LOGIN);
 			$c->connect($config["ftp"]);
-	
+
+			$fdat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			$fdat .= "<XML_DATA>\n";
+
 			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
-			$fdat = $c->get_file($fqfn);
+			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+			print "<h5>" . $fqfn . "</h5>";
+	
+			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_personnel_file");
+			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+			print "<h5>" . $fqfn . "</h5>";
+	
+			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_education_file");
+			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+			print "<h5>" . $fqfn . "</h5>";
+	
+			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_work_relations_ending_file");
+			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+			print "<h5>" . $fqfn . "</h5>";
+
+			// THESE SHOULD BE DONE WITH preg_replace()
+
+			$fdat .= "</XML_DATA>\n";
+
 			$c->disconnect();
 		}
-		print "<h5>" . $fqfn . "</h5>";
 
-		if (strlen($fdat) == 0)
+		if (strlen($fdat) <= 62)
 		{
-			die(t("Not enough data to process<bR>"));
+			die(t("Not enough data to process<br>"));
 		};
 
 		print "<h6>";
-		print strlen($fdat) . " bytes of data to proess";
+		print strlen($fdat) . " bytes of data to process";
 		print "</h6>";
 
-		
-		/*print "<pre>";
+		/*
+		print "<pre>";
 		print htmlspecialchars($fdat);
 		print "</pre>";
-		die();*/
+		die();
+		*/
 
 		print t("got data<br>");
 	
@@ -363,6 +406,7 @@ class persona_import extends class_base
 		/*
 		print "<h1>vals</h1>";
 		arr($vals);
+		die();
 		*/
 
 		print "<h1>done</h1>";
@@ -378,7 +422,7 @@ class persona_import extends class_base
 		$obj->set_prop("last_import",time());
 		$obj->save();
 
-		$interesting_containers = array("TOOTAJAD","PEATUMISED","PUHKUSED","YKSUSED");
+		$interesting_containers = array("TOOTAJAD","PEATUMISED","PUHKUSED","YKSUSED","HARIDUSKAIGUD","TOOSUHTE_PEATUMISED");
 
 		$w_open = false;
 		$tmp = array();
@@ -416,7 +460,7 @@ class persona_import extends class_base
 			};
 
 
-			if ($target && "TOOTAJA" == $val["tag"])
+			if ($target && ("TOOTAJA" == $val["tag"] || "HARIDUSKAIK" == $val["tag"] || "TOOSUHTE_PEATUMINE" == $val["tag"]))
 			{
 				if ("open" == $val["type"])
 				{
@@ -432,10 +476,16 @@ class persona_import extends class_base
 			
 			if ($target && $w_open && "complete" == $val["type"])
 			{
-				$tmp[$val["tag"]] = $val["value"];
+				// iconv seemed to have a problem with õ character. Better safe than sorry.
+				$tmp[$val["tag"]] = str_replace("õ", "&otilde;", $val["value"]);
+				$tmp[$val["tag"]] = str_replace("ä", "&auml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("ö", "&ouml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("ü", "&uuml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("Õ", "&Otilde;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("Ä", "&Auml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("Ö", "&Ouml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("Ü", "&Uuml;", $tmp[$val["tag"]]);
 			};
-
-
 		};
 
 		$persona_import_started = aw_global_get("persona_import_started");
@@ -477,7 +527,8 @@ class persona_import extends class_base
 		
 		foreach($person_list->arr() as $person_obj)
 		{
-			$ext_id = $person_obj->prop("ext_id");
+//			$ext_id = $person_obj->prop("ext_id");
+			$ext_id = $person_obj->prop("ext_id_alphanumeric");
 			//$ext_id = $person_obj->subclass();
 			/*
 			var_dump($person_obj->id());
@@ -566,9 +617,11 @@ class persona_import extends class_base
 			$simple_data[$key] = array_flip($olist->names());
 
 		};
-
-
-		//arr($simple_data);
+		
+		/*
+		arr($simple_data);
+		exit;
+		*/
 
 		print t("creating yksused objects<br>");
 		/*
@@ -634,7 +687,7 @@ class persona_import extends class_base
 			}
 			else
 			{
-				print t("updating existing section");
+				print t("updating existing section<br>");
 				$yk = new object($sections[$ext_id]);
 				$yk->set_name($name);
 				$yk->save();
@@ -734,13 +787,18 @@ class persona_import extends class_base
 			{
 				$person_obj = new object($person_match[$ext_id]); 
 				unset($person_match[$ext_id]);
-				print t("updating existing person object");
+				print t("updating existing person object<br>");
 			};	
 
 			print "SA = " . $worker["SYNNIAEG"];
-			$bd_parts = explode(".",$worker["SYNNIAEG"]);
-			//$bd_parts = unpack("a2day/a2mon/a4year",$worker["SYNNIAEG"]);
-			$bday = mktime(0,0,0,$bd_parts[1],$bd_parts[0],$bd_parts[2]);
+//			$bd_parts = explode(".",$worker["SYNNIAEG"]);
+//			$bd_parts = unpack("a2day/a2mon/a4year",$worker["SYNNIAEG"]);
+//			$bday = mktime(0,0,0,$bd_parts[1],$bd_parts[0],$bd_parts[2]);
+			$bd_parts = unpack("a4year/a2mon/a2day",$worker["SYNNIAEG"]);
+			$bday = mktime(0,0,0,$bd_parts["mon"],$bd_parts["day"],$bd_parts["year"]);
+			
+			$wrds_parts = unpack("a4year/a2mon/a2day",$worker["ASUTUSSE_TULEK"]);
+			$work_relation_date_start = mktime(0, 0, 0, $wrds_parts["mon"], $wrds_parts["day"], $wrds_parts["year"]);
 
 			print "tm = " . $bday . "<br>";
 			;
@@ -755,6 +813,7 @@ class persona_import extends class_base
 			$person_obj->set_prop("firstname",$worker["EESNIMI"]);
 			$person_obj->set_prop("lastname",$worker["PEREKONNANIMI"]);
 			$person_obj->set_prop("ext_id",$ext_id);
+			$person_obj->set_prop("ext_id_alphanumeric", $worker["TOOTAJA_ID"]);
 			$person_obj->set_prop("birthday",date("Y-m-d", $bday));
 			$person_obj->set_ord($worker["PRIORITEET"]);
 			$person_obj->set_status(STAT_ACTIVE);
@@ -822,7 +881,7 @@ class persona_import extends class_base
 				{
 					print "creating e-mail object<br>";
 					print $worker["E_POST"];
-					print "<br>!";
+					print "<br>";
 					$ml = new object();
 					$ml->set_parent($dir_default);
 					$ml->set_class_id(CL_ML_MEMBER);
@@ -927,7 +986,7 @@ class persona_import extends class_base
 					$po->set_prop("type",$pval);
 					$po->save();
 
-					print "connecting to existing $pkey phone object" . $po->id() . "<br>";
+					print "connecting to existing $pkey phone object " . $po->id() . "<br>";
 
 					$person_obj->connect(array(
 						"to" => $po->id(),
@@ -956,6 +1015,177 @@ class persona_import extends class_base
 
 			$person_obj->save();
 
+			if(!empty($worker["AMETIKOHT_NIMETUS"]))
+			{
+
+				$ametikoht_nimetus = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKOHT_NIMETUS"]);
+				$prevjob_done = false;
+
+				if(!empty($worker["ASUTUS"]))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_COMPANY,
+						"parent" => array($dir_default, $dir_company),
+						"name" => $worker["ASUTUS"],
+					));
+					if($ol->count() > 0)
+					{
+						foreach($ol->arr() as $company_obj)
+						{
+							break;
+						}
+					}
+					else
+					{
+						print "creating company object ".$worker["ASUTUS"]."<br>";
+						flush();
+						$company_obj = new object;
+						$company_obj->set_class_id(CL_CRM_COMPANY);
+						$company_obj->set_parent($dir_company);
+						$company_obj->set_prop("name", $worker["ASUTUS"]);
+						$company_obj->save();
+					}
+					$company_id = $company_obj->id();
+				}
+
+				foreach($person_obj->connections_from(array("type" => 7)) as $conn)
+				{
+					$rank = $conn->to();
+					if($rank->name() == $ametikoht_nimetus)
+					{
+						$profession_id = $rank->id();
+						break;
+					}
+				}
+
+				foreach($person_obj->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn)
+				{
+					$ok_count = 0;
+
+					$prevjob = $conn->to();
+
+					foreach($prevjob->connections_from(array("type" => "RELTYPE_ORG")) as $conn_to_org)
+					{
+						$org_obj = $conn_to_org->to();						
+						if($org_obj->name() == $worker["ASUTUS"])
+						{
+							$ok_count++;
+							break;
+						}
+					}
+					foreach($prevjob->connections_from(array("type" => "RELTYPE_PROFESSION")) as $conn_to_profession)
+					{
+						$profession_obj = $conn_to_profession->to();
+						if($profession_obj->id() == $profession_id)
+						{
+							$ok_count++;
+							break;
+						}
+					}
+					if($prevjob->prop("start") == $work_relation_date_start)
+					{
+						$ok_count++;
+					}
+
+					if($ok_count == 3)
+					{
+						$prevjob_done = true;
+						break;
+					}
+				}
+
+				if(!$prevjob_done)
+				{
+					print "creating work relation object ".$ametikoht_nimetus."<br>";
+					flush();
+
+					$prevjob = new object;
+					$prevjob->set_parent($dir_default);
+					$prevjob->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+					$prevjob->set_status(STAT_ACTIVE);
+					$prevjob->set_prop("name", $ametikoht_nimetus);
+					$prevjob->set_prop("start", $work_relation_date_start);
+//					$prevjob->set_prop("end", );
+					$prevjob->set_prop("org", $company_id);
+					$prevjob->set_prop("profession", $profession_id);
+					$prevjob->save();
+					/*
+					$prevjob->connect(array(
+						"to" => ,
+						"reltype" => "RELTYPE_SUBSTITUTE");
+					*/
+
+					print "connecting to work relation object<br>";
+					flush();
+					$person_obj->connect(array(
+						"to" => $prevjob->id(),
+						"reltype" => "RELTYPE_PREVIOUS_JOB",
+					));
+				}
+			}
+
+			if($worker["ON_ASENDAJA"] == 1 && !empty($worker["ASENDAMINE_TOOKOHT"]))
+			{
+				$asendamine_tookoht = iconv("UTF-8", "ISO-8859-4", $worker["ASENDAMINE_TOOKOHT"]);
+				$subst_done = false;
+
+				foreach($prevjob->connections_from(array("type" => "RELTYPE_SUBSTITUTE")) as $conn)
+				{
+					$substitute_obj = $conn->to();
+					if($substitute_obj->name() == $asendamine_tookoht)
+					{
+						print "connected to existing profession object ".$asendamine_tookoht."<br>";
+						flush();
+						$subst_done = true;
+						break;
+					}
+				}
+
+				if(!$subst_done)
+				{
+					unset($substitute_id);
+
+					$subst_ol = new object_list(array(
+						"parent" => $dir_default,
+						"class_id" => CL_CRM_PROFESSION,
+					));
+					foreach($subst_ol->arr() as $subst_obj)
+					{
+						if($subst_obj->name() == $asendamine_tookoht)
+						{
+							$substitute_id = $subst_obj->id();
+							break;
+						}
+					}
+					if(!isset($substitute_id))
+					{
+						print "creating profession object".$asendamine_tookoht."<br>";
+						$subst = new object;
+						$subst->set_class_id(CL_CRM_PROFESSION);
+						$subst->set_parent($dir_default);
+						$subst->set_status(STAT_ACTIVE);
+						$subst->set_prop("name", $asendamine_tookoht);
+						$subst->save();
+						$substitute_id = $subst->id();
+					}
+
+					print "connecting to profession object ".$asendamine_tookoht."<br>";
+					$prevjob->connect(array(
+						"to" => $substitute_id,
+						"reltype" => 4,		//RELTYPE_SUBSTITUTE
+					));
+				}
+			}
+
+			if(!empty($worker["AMETIJUHEND_VIIT"]))
+			{
+				print "setting 'Viit ametijuhendile' property for work relation object ".$prevjob->name()."<br>";
+//				$ametijuhend_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIJUHEND_VIIT"]);
+//				$prevjob->set_prop("directive_link", $ametijuhend_viit);
+				$prevjob->set_prop("directive_link", $worker["AMETIJUHEND_VIIT"]);
+				$prevjob->save();
+			}
+
 			// let us keep track of all existing workers, so I can properly assign vacations and contract_stops
 			$persons[$ext_id] = $person_obj->id();
 
@@ -981,16 +1211,21 @@ class persona_import extends class_base
 				//print "aitab kah";
 				//exit;
 
+				/*
 				if ($aw_timer->get("personimport") >= $time_limit)
 				{
 					print "Getting too close to time limit, restarting import from beginning<br>";
 					$request_uri = aw_ini_get("baseurl") . "/" . aw_global_get("REQUEST_URI");
-					header("Location: $request_uri");
-					exit;
 					
-
-
+					// This one doesn't seem to work.
+//					header("Location: " . $request_uri);
+//s					exit;
+					
+					// Therefore using this instead					
+					print "<head><meta http-equiv=\"REFRESH\" content=\"1;url=".$request_uri."\"></head>";
+					exit;
 				};
+				*/
 			};
 
 
@@ -1014,29 +1249,14 @@ class persona_import extends class_base
 			#$person_obj->save();
 		};
 
-		print "Unlinking status file<br>";
-		unlink($stat_file);
-
-	
-		aw_session_del("persona_import_started");
-		aw_session_del("persona_persons_done");
-		
-		print "flushing cache";
-		flush();
-		$cache = get_instance("cache");
-		$cache->full_flush();
-
-		print "everything is done";
-
 		if(!$this->can("view" , $import_id))
 		{
 			$this->import_images($arr);		
 		}
-		exit;
 	
-		print "<h1>all done</h1>";
+		print "<h1>T&Ouml;&Ouml;TAJAD done</h1>";
 
-		print "teeme peatuste ja puhkuste objektid";
+		print "teeme peatuste ja puhkuste objektid<br><br>";
 
 		// lisaks on vaja siin tekitada mingid muutujad. Selleks on vaja muutujate haldurit ..
 		// ja seal omakorda on mul tarvis mingid oksad eraldada
@@ -1046,7 +1266,7 @@ class persona_import extends class_base
 		));
 
 		$mxlist = array_flip($mx->names());
-		arr($mxlist);
+//		arr($mxlist);
 
 		// ei, aga põhimõtteliselt, kui töötajal juba on puhkus või peatumine, siis teist me ei tee
 
@@ -1054,54 +1274,123 @@ class persona_import extends class_base
 		// add_or_update_vacation
 		// add_or_update_contract_stop
 
-		foreach($data["PEATUMISED"] as $peatumine)
+		foreach($data["TOOSUHTE_PEATUMISED"] as $peatumine)
 		{
-			print "pt = ";
-			arr($peatumine);
-			$a = $this->timestamp_from_xml($peatumine["ALGUS"]);
-			$b = $this->timestamp_from_xml($peatumine["LOPP"]);
-			$t = new object($persons[$peatumine["TOOTAJA_ID"]]);
-			$stop = new object();
-			$stop->set_class_id(CL_CRM_CONTRACT_STOP);
-			$stop->set_parent($dir_default);
-			$stop->set_status(STAT_ACTIVE);
-			$stop->set_prop("start1",$a);
-			$stop->set_prop("end",$b);
-			//$stop->set_name($t->name());
-			$stop->set_name($peatumine["LIIK"]);
-			$stop->save();
-
-		
-			$t->connect(array(
-				"to" => $stop->id(),
-				"reltype" => 42, //RELTYPE_CONTRACT_STOP,
-			));
-
-			arr($PEATUMINE);
-			if ($mxlist[$peatumine["LIIK"]])
+			$a = $this->timestamp_from_xml($peatumine["ALGUSKUUPAEV"]);
+			$b = $this->timestamp_from_xml($peatumine["LOPPKUUPAEV"]);
+			if(!is_oid($persons[$peatumine["TOOTAJA_ID"]]))
 			{
-				$xo = new object($mxlist[$peatumine["LIIK"]]);
-				print "using existing peatumine" . $xo->id();
+				print "<br>No worker with ID ".$persons[$peatumine["TOOTAJA_ID"]].", original ID ".$peatumine["TOOTAJA_ID"].". Ignoring contract stop.<br>";
+				flush();
+				continue;
 			}
-			else
+			$t = new object($persons[$peatumine["TOOTAJA_ID"]]);
+
+			print "<br><b>Person: ".$t->name()."</b><br>";
+			
+			$stop_done = false;
+			foreach($t->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn_t)
 			{
-				print "creating new<br>";
-				$xo = new object();
-				$xo->set_parent($meta_cat["peatumised"]);
-				$xo->set_class_id(CL_META);
-				$xo->set_status(STAT_ACTIVE);
-				$xo->set_name($peatumine["LIIK"]);
-				$xo->save();
-				$mxlist[$peatumine["LIIK"]] = $xo->id();
-			};
+				$t2 = $conn_t->to();
+				if(!$stop_done)
+				{
+					foreach($t2->connections_from(array("type" => "RELTYPE_CONTRACT_STOP")) as $conn_t2)
+					{
+						$t3 = $conn_t2->to();
+						if($t3->prop("type") == $mxlist[$peatumine["PEATUMISE_LIIK"]] && $t3->prop("start1") == $a)
+						{
+							$stop = $t3;
+							$stop->set_prop("end", $b);
+							$stop->save();
+							print "connected to existing contract stop object ".$stop->name()."<br>";
+							flush();
+							$stop_done = true;
+							//break;
+						}
+					}
+				}
+			}
 
-			$stop->connect(array(
-				"to" => $xo->id(),
-				"reltype" => 1,
-			));
+			if(!$stop_done)
+			{
+				$peatumise_liik = iconv("UTF-8", "ISO-8859-4", $peatumine["PEATUMISE_LIIK"]);
+				print "creating new contract stop object ".$peatumise_liik."<br>";
 
-			print "name = " . $t->name() . " ";
-			print "from $a to $b<br>";
+				if ($mxlist[$peatumise_liik])
+				{
+					$xo = new object($mxlist[$peatumise_liik]);
+					print "using existing peatumine ".$xo->id()."<br>";
+				}
+				else
+				{
+					print "creating new PEATUMISE LIIK variable: ".$peatumise_liik."<br>";
+					$xo = new object();
+					$xo->set_parent($meta_cat["peatumised"]);
+					$xo->set_class_id(CL_META);
+					$xo->set_status(STAT_ACTIVE);
+					$xo->set_name($peatumise_liik);
+					$xo->save();
+					$mxlist[$peatumise_liik] = $xo->id();
+				};
+
+				$stop = new object();
+				$stop->set_class_id(CL_CRM_CONTRACT_STOP);
+				$stop->set_parent($dir_default);
+				$stop->set_status(STAT_ACTIVE);
+				$stop->set_prop("start1",$a);
+				if($b > 0)
+				{
+					$stop->set_prop("end",$b);	
+				}
+				$stop->set_prop("type", $xo->id());
+				//$stop->set_name($t->name());
+				$stop->set_name($peatumise_liik);
+				$stop->save();
+				
+
+				// I was told to connect these to 'Töösuhe' object instead
+				/*
+				$t->connect(array(
+					"to" => $stop->id(),
+					"reltype" => 42, //RELTYPE_CONTRACT_STOP,
+				));
+				*/
+				// So here I go (again on my own. Goin' down the only road I've ever known...) Mkay. Back to work.
+				foreach($t->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn)
+				{
+					$t2 = $conn->to();
+					print "connecting ".$t->name()." -> ".$t2->name()." to new contract stop object ".$stop->name()."<br>";
+					$t2->connect(array(
+						"to" => $stop->id(),
+						"reltype" => 6, //RELTYPE_CONTRACT_STOP,
+					));
+				}
+
+				print "name = " . $t->name() . "<br>";
+				print "from $a to $b<br>";
+			}
+
+			/* There is currently no ASENDAJA_ID field in the xml
+			if(!empty($peatumine["ASENDAJA_ID"]))
+			{
+				print "Setting substitute...<br>";
+				if(!is_oid($persons[$peatumine["ASENDAJA_ID"]]))
+				{
+					print "No person with ID ".$persons[$peatumine["ASENDAJA_ID"]].", original ID ".$peatumine["ASENDAJA_ID"].". Ignoring.<br>";
+					flush();
+				}
+				else
+				{
+					$subst_pers = new object($persons[$peatumine["ASENDAJA_ID"]]);
+					print "name = ".$subst_pers->name()."<br>";
+
+					$stop->connect(array(
+						"to" => $persons[$peatumine["ASENDAJA_ID"]],
+						"reltype" => 2,		//RELTYPE_SUBSTITUTE
+					));
+				}
+			}
+			*/
 
 			// alright, so far, so good .. I have person object, now I need to create
 			// vacation object. and somehow I need to determine whether this person
@@ -1112,6 +1401,97 @@ class persona_import extends class_base
 
 			// also, whatever should I do with the variable manager?
 		};
+
+		print "<h1>T&Ouml;&Ouml;SUHTE PEATUMISED done!</h1>";
+
+		foreach($data["HARIDUSKAIGUD"] as $hariduskaik)
+		{
+//			arr($hariduskaik);
+			if(empty($hariduskaik["TOOTAJA_ID"]))
+			{
+				print "No person ID specified. Ignoring.<br>";
+				flush();
+				continue;
+			}
+			if(!is_oid($hariduskaik["TOOTAJA_ID"]))
+			{
+				print "No person with ID ".$persons[$hariduskaik["TOOTAJA_ID"]].", original ID ".$hariduskaik["TOOTAJA_ID"].". Ignoring.<br>";
+				flush();
+				continue;
+			}
+			$t = new object($persons[$hariduskaik["TOOTAJA_ID"]]);
+			print "<b>Person: ".$t->name()."</b><br>";
+
+			$edu_done = false;
+			foreach($t->connections_from(array("type" => "RELTYPE_EDUCATION")) as $edu_conn)
+			{
+				$education = $edu_conn->to();
+				$end_date = $education->prop("end_date");
+				
+				if($education->prop("name") == $hariduskaik["OPPEASUTUS"] && $education->prop("speciality") == $hariduskaik["ERIALA"] && (empty($end_date) || $education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
+				{
+					print "connected to existing education object ".$education->name()."<br>";					
+					$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
+					$education->set_prop("diploma_nr", $hariduskaik["DIPLOMI_NUMBER"]);
+					$education->set_prop("degree", $hariduskaik["AKADEEMILINE_KRAAD"]);
+					$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
+					if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
+					{
+						$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+						// Do ya think I should import the same value here as well?
+	//					$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+					}
+					$education->save();
+
+					$edu_done = true;
+					break;
+				}
+			}
+			
+			if(!$edu_done)
+			{
+				print "creating new education object ".$hariduskaik["OPPEASUTUS"]."<br>";
+				$education = new object;
+				$education->set_class_id(CL_CRM_PERSON_EDUCATION);
+				$education->set_parent($dir_default);
+				$education->set_prop("name", $hariduskaik["OPPEASUTUS"]);
+				$education->set_prop("speciality", $hariduskaik["ERIALA"]);
+				$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
+				$education->set_prop("diploma_nr", $hariduskaik["DIPLOMI_NUMBER"]);
+				$education->set_prop("degree", $hariduskaik["AKADEEMILINE_KRAAD"]);
+				$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
+				if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
+				{
+					$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+					// Do ya think I should import the same value here as well?
+//					$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+				}
+				$education->save();
+
+				print "connecting ".$t->name()." to new education object ".$hariduskaik["OPPEASUTUS"]."<br>";
+				$t->connect(array(
+					"to" => $education->id(),
+					"reltype" => 23,		//RELTYPE_EDUCATION
+				));
+			}
+		}
+
+		print "<h1>HARIDUSK&Auml;IGUD done</h1>";
+
+		print "Unlinking status file<br>";
+		unlink($stat_file);
+	
+		aw_session_del("persona_import_started");
+		aw_session_del("persona_persons_done");
+		
+		print "flushing cache<br>";
+		flush();
+		$cache = get_instance("cache");
+		$cache->full_flush();
+
+		print "everything is done<br>";
+
+		exit;
 
 		$mx = new object_list(array(
 			"parent" => $meta_cat["puhkused"],
@@ -1425,11 +1805,29 @@ class persona_import extends class_base
 
 	}
 
-	function timestamp_from_xml($xml_stamp)
+	function timestamp_from_xml($xml_stamp, $type = 0)
 	{
-		// 20060906T00:00:00
-		$p = unpack("a4year/a2mon/a2day/c1e/a2hour/a2min/a2sec",$xml_stamp);
-		return mktime($p["hour"],$p["min"],$p["sec"],$p["mon"],$p["day"],$p["year"]);
+		switch ($type)
+		{
+			case 0: 
+				// 20060906T00:00:00
+				$p = unpack("a4year/a2mon/a2day/c1e/a2hour/a2min/a2sec",$xml_stamp);
+				return mktime($p["hour"],$p["min"],$p["sec"],$p["mon"],$p["day"],$p["year"]);
+				break;
+			case 1: 
+				// 23.06.1966 OR 1989
+				$p = explode(".", $xml_stamp);
+				$mon = (sizeof($p) > 1) ? $p[1] : 1;
+				$day = (sizeof($p) > 1) ? $p[0] : 1;
+				$year = (sizeof($p) > 1) ? $p[2] : $p[0];
+				return mktime(0, 0, 0, $mon, $day, $year);
+				break;
+			default:
+				// 20060906T00:00:00
+				$p = unpack("a4year/a2mon/a2day/c1e/a2hour/a2min/a2sec",$xml_stamp);
+				return mktime($p["hour"],$p["min"],$p["sec"],$p["mon"],$p["day"],$p["year"]); 
+				break;
+		}
 	}
 
 	function _create_and_connect_phone($arr)
