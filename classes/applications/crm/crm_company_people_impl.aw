@@ -97,7 +97,7 @@ class crm_company_people_impl extends class_base
 			"tooltip" => t("Oluliseks"),
 			"action" => "mark_p_as_important",
 		));
-	
+
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
 		if ($sts && $sts->prop("send_mail_feature"))
@@ -535,11 +535,11 @@ class crm_company_people_impl extends class_base
 					"caption" => $pdat["email"],
 				)),
 				"cutcopied" => $ccp,
-				"authorized" => $autohirization ? 
+				"authorized" => $autohirization ?
 					html::href(array(
 						"url" => html::get_change_url($autohirization->id()),
 						"caption" => (strlen($autohirization->name() > 0))?$autohirization->name():t("(Nimetu)"),
-					)): 
+					)):
 					html::checkbox(array(
 						"name" => "authorized[".$person->id()."]",
 						"value" => 1,
@@ -651,10 +651,10 @@ class crm_company_people_impl extends class_base
 			'name'=>'check',
 			'field'=>'id',
 		));*/
-		
+
 		$format = t('%s t&ouml;&ouml;tajate otsingu tulemused');
 		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
-		
+
 
 		$search_params = array(
 			'class_id' => CL_CRM_PERSON,
@@ -663,6 +663,11 @@ class crm_company_people_impl extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		);
+
+		if($arr['request']['contact_search_name'])
+		{
+			$search_params['name'] = '%'.urldecode($arr['request']['contact_search_name']).'%';
+		}
 
 		if($arr['request']['contact_search_firstname'])
 		{
@@ -1249,7 +1254,7 @@ class crm_company_people_impl extends class_base
 	{
 //		if(!$arr["authorization"])
 //		{
-//		;	
+//		;
 //		}
 //		else
 //		{

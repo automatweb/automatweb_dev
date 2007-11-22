@@ -814,6 +814,18 @@
             <caption>Puu</caption>
       </property>
       <property>
+            <name>contact_search_name</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_left</parent>
+            <captionside>top</captionside>
+            <field>contact_search_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>contact_search_firstname</name>
             <table>objects</table>
             <group>contacts2</group>

@@ -305,6 +305,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@caption Puu
 
 			///////////// contact search
+			@property contact_search_name type=textbox size=30 store=no parent=vbox_contacts_left captionside=top
+			@caption Nimi
+
 			@property contact_search_firstname type=textbox size=30 store=no parent=vbox_contacts_left captionside=top
 			@caption Eesnimi
 
@@ -412,7 +415,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 				@caption Vaikimisi keel
 
 - Töötajad vaatesse
-Võimalus määrata, kes on volitatud isikud ja volituse alus. Töötaja nime järele on võimalik panna märkeruut tulpa &#8220;Volitatud&#8221;. Selle märkimisel avaneb uus aken, kus küsitakse volituse alust (Objektitüüp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik). 
+Võimalus määrata, kes on volitatud isikud ja volituse alus. Töötaja nime järele on võimalik panna märkeruut tulpa &#8220;Volitatud&#8221;. Selle märkimisel avaneb uus aken, kus küsitakse volituse alust (Objektitüüp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik).
 
 - Kontaktandmetesse seos: Keel
 Vaikimisi eesti keel. Keelele peab saama määrata, milline on süsteemi default. Vaikimisi väärtus Arve-saatelehel
@@ -2442,6 +2445,7 @@ class crm_company extends class_base
 				return $people_impl->$fn($arr);
 
 			// contacts search
+			case "contact_search_name":
 			case "contact_search_firstname":
 			case "contact_search_lastname":
 			case "contact_search_code":
@@ -3631,6 +3635,7 @@ class crm_company extends class_base
 		}
 		if($this->do_search)
 		{
+			$arr['args']['contact_search_name'] = ($arr['request']['contact_search_name']);
 			$arr['args']['contact_search_firstname'] = ($arr['request']['contact_search_firstname']);
 			$arr['args']['contact_search_lastname'] = ($arr['request']['contact_search_lastname']);
 			$arr['args']['contact_search_code'] = ($arr['request']['contact_search_code']);
