@@ -228,13 +228,17 @@ if (!empty($html_title_obj))
 	$html_title .=  ": " . $html_title_obj;
 }
 
+$cache = get_instance("cache");
+
 $sf->vars(array(
 	"content"	=> $content,
 	"charset" => $charset,
 	"title_action" => $ta,
 	"html_title" => $html_title,
 	"COMPRESS" => compress_header($sf->parse("COMPRESS")),
+	"POPUP_MENUS" => $cache->file_get("aw_toolbars"),
 ));
+$cache->file_set("aw_toolbars", "");
 
 if ($sf->is_template("aw_styles"))
 {
