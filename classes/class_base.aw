@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.586 2007/11/13 14:21:01 markop Exp $
+// $Id: class_base.aw,v 2.587 2007/11/22 12:24:57 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1610,7 +1610,14 @@ class class_base extends aw_template
 			{
 				$parent = $_GET["parent"];
 			}
-			$this->mk_path($parent,$title,aw_global_get("period"));
+			if ($this->obj_inst->class_id() == CL_MENU)
+			{
+				$this->mk_path($this->obj_inst->id(),$title,aw_global_get("period"));
+			}
+			else
+			{
+				$this->mk_path($parent,$title,aw_global_get("period"));
+			}
 		};
 
 
