@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.31 2007/09/21 13:07:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.32 2007/11/22 08:17:33 dragut Exp $
 // calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
@@ -321,7 +321,10 @@ class calendar_event extends class_base
 			case "event_time":
 				return PROP_IGNORE;
 			case "event_time_table":
-				$this->do_event_time_table($arr);
+				if (!$arr['new'])
+				{
+					$this->do_event_time_table($arr);
+				}
 				break;
 		}
 		if ($arr["obj_inst"])
