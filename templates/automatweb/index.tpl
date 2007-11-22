@@ -97,5 +97,9 @@ shortcut("Ctrl+Shift+E", function() {
 	</div>
 <!-- END SUB: YAH2 -->
 <!--//jalus -->
+
+<!-- SUB: POPUP_MENUS -->
+<!-- END SUB: POPUP_MENSU -->
+
 </body>
 </html>
