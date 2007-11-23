@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.124 2007/11/08 13:11:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.125 2007/11/23 12:46:28 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1285,15 +1285,8 @@ class admin_menus extends aw_template
 			$caption = parse_obj_name($row["name"]);
 
 			$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'">'.$caption."</a>";
+			$row["class_id"] = $clss[$row["class_id"]]["name"];
 
-			if ($row["class_id"] == CL_SHORTCUT)
-			{
-				$row["class_id"] = '(shortcut)';
-			}
-			else
-			{
-				$row["class_id"] = $clss[$row["class_id"]]["name"];
-			}
 			if ($row["oid"] != $row["brother_of"])
 			{
 				$row["class_id"] .= " (vend)";
