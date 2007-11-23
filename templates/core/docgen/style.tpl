@@ -8,5 +8,13 @@ text-decoration: none;
 }
 .text a {color: #058AC1; text-decoration:underline;}
 .text a:hover {color: #000000; text-decoration:underline;}
+
+body {
+background:#FFFFFF;
+font-family:Tahoma,Arial,Helvetica,sans-serif;
+margin:0px;
+padding:0px;
+}
+
 </style>
 <span class="text">{VAR:content}</span>
