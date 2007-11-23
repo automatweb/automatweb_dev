@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.19 2007/11/23 10:52:06 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
@@ -313,7 +312,7 @@ class events_manager extends class_base
 		));
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_places_table($t);
-	
+
 		$cfg = $this->get_cgf_from_manager("places" , CL_SCM_LOCATION);
 
 		foreach($ol->arr() as $o)
@@ -399,13 +398,22 @@ class events_manager extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sectors_table($t);
 		$cfg = $this->get_cgf_from_manager("sector" , CL_CRM_SECTOR);
+
 		foreach($ol->arr() as $o)
 		{
+			$parent = $o->parent();
+
+			if ($this->can("view", $parent))
+			{
+				$parent = new object($parent);
+				$parent = $parent->name();
+			}
+
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():
 					 html::get_change_url($o->id(), array("cfgform" => $cfg),($o->name()?$o->name():"(".t("Nimetu").")")),
 					//html::obj_change_url($o->id()),
-				//"address" => $o->prop("contact.name"),
+				"parent" => $parent,
 			));
 		}
 	}
@@ -903,14 +911,15 @@ class events_manager extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
-			"align" => "center",
-			"sortable" => 1,
+			"sortable" => 1
 		));
-// 		$t->define_field(array(
-// 			"name" => "address",
-// 			"caption" => t("Aadress"),
-// 			"align" => "center"
-// 		));
+		$t->define_field(array(
+			"name" => "parent",
+			"caption" => t("Kuulub valdkonda")
+			"sortable" => 1
+		));
+		$t->set_default_sortby("parent");
+		$t->set_default_sorder("asc");
 	}
 
 	function _init_editors_table(&$t)
