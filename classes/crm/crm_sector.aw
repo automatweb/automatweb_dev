@@ -127,7 +127,7 @@ class crm_sector extends class_base
 				{
 					if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
 					{
-						$prop["options"][$sector->id()] = $sector->name();
+						$prop["options"][$sector->id()] = $sector->prop("tegevusala");
 					}
 				}
 				while ($sector = $sectors->next());
