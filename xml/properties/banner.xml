@@ -159,6 +159,7 @@
       <classinfo>
             <syslog_type>ST_BANNER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <mantainer>kristo</mantainer>
       </classinfo>
       <groupinfo>
             <display>

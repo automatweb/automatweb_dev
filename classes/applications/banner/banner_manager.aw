@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_manager.aw,v 1.1 2007/07/18 13:05:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_manager.aw,v 1.2 2007/11/23 14:27:03 kristo Exp $
 // banner_manager.aw - Bannerite haldus 
 /*
 
-@classinfo syslog_type=ST_BANNER_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BANNER_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
 @default table=objects
 
 @default group=general

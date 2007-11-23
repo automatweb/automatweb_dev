@@ -31,6 +31,7 @@
       <classinfo>
             <syslog_type>ST_BANNER_LOCATION</syslog_type>
             <relationmgr>yes</relationmgr>
+            <mantainer>kristo</mantainer>
       </classinfo>
       <tableinfo>
             <banner_clients>

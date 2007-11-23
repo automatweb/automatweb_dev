@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.26 2007/07/18 13:05:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.27 2007/11/23 14:27:03 kristo Exp $
 
 /*
 
 @tableinfo banners index=id master_table=objects master_index=brother_of
 
-@classinfo syslog_type=ST_BANNER relationmgr=yes
+@classinfo syslog_type=ST_BANNER relationmgr=yes mantainer=kristo
 @default table=objects
 @default group=general
 
