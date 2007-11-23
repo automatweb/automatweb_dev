@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.23 2006/11/23 13:07:22 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.24 2007/11/23 07:01:22 dragut Exp $
 // staging.aw - Lavastus 
 /*
 
-@classinfo syslog_type=ST_STAGING relationmgr=yes
+@classinfo syslog_type=ST_STAGING relationmgr=yes maintainer=dragut
 
 @default table=objects
 @default group=general

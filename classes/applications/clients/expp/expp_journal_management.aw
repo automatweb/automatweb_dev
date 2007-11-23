@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.28 2006/05/08 13:22:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.29 2007/11/23 07:03:30 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
-@classinfo syslog_type=ST_EXPP_JOURNAL_MANAGEMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_EXPP_JOURNAL_MANAGEMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general
@@ -393,6 +393,7 @@ class expp_journal_management extends class_base
 			
 			
 		}
+
 	}
 
 
@@ -412,6 +413,11 @@ class expp_journal_management extends class_base
 		}
 	}
 
+	/**
+		If there is organisation object connected to this object, then check, if the
+		organisation object has logo set or not. If it does, then i save the organisations
+		logo image object id to meta field, so i can display it.
+	**/
 	function _get_organisation_link($arr)
 	{
 		$organisation_object = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_ORGANISATION");
@@ -473,7 +479,7 @@ class expp_journal_management extends class_base
 			"url" => $this->mk_my_orb("new", array(
 				"alias_to" => $arr['obj_inst']->id(),
 				"parent" => $arr['obj_inst']->id(),
-				"reltype" => 5, // expp_journam_management.publication
+				"reltype" => 5, // expp_journal_management.publication
 				"return_url" => get_ru(),
 			), CL_EXPP_PUBLICATION),
 		));

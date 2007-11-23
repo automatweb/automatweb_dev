@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.97 2007/11/22 08:48:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.98 2007/11/23 07:01:23 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
-@classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes
+@classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes maintainer=dragut
 
 @default table=objects
 @default group=general
@@ -87,7 +87,7 @@ class event_search extends class_base
 			"clid" => CL_EVENT_SEARCH,
 		));
 
-		$this->fields = array("fulltext","fulltext2", "start_date","end_date","project1","project2", "active", "format", "search_btn");
+		$this->fields = array("fulltext","fulltext2", "start_date","end_date","project1","project2", "active", "format", "location", "search_btn");
 		lc_site_load("event_search", &$this);
 	}
 
@@ -264,6 +264,21 @@ class event_search extends class_base
 				"checked" => $formconfig["project2"]["active"],
 			))
 		));
+
+		$t->define_data(array(
+			"name" => t("Asukoht"),
+			"caption" => html::textbox(array(
+				"name" => "location[caption]",
+				"value" => $formconfig["location"]["caption"] ? $formconfig["location"]["caption"] : t("Asukoht"),
+			)),
+			"settings" => "",
+			"active" => html::checkbox(array(
+				"name" => "location[active]",
+				"value" => $formconfig["location"]["active"],
+				"checked" => $formconfig["location"]["active"],
+			))
+		));
+
 		$t->define_data(array(
 			"name" => t("Otsi nupp"),
 			"caption" => html::textbox(array(
@@ -747,6 +762,15 @@ class event_search extends class_base
 					));
 			}
 		}
+		if($formconfig["end_date"]["active"])
+		{
+			$htmlc->add_property(array(
+				"name" => "location",
+				"caption" => $formconfig["location"]["caption"],
+				"type" => "textbox",
+				"value" => $arr["location"],
+			));
+		}
 		$search_p1 = false;
 		$search_p2 = false;
 		$p_rn1 = $formconfig["project1"]["rootnode"];
@@ -960,7 +984,18 @@ class event_search extends class_base
 		{
 			$search["parent"] = $parx2 = array();
 			$search["sort_by"] = "planner.start";
-			$search["class_id"] = array(CL_STAGING,CL_CALENDAR_EVENT, CL_CRM_MEETING, CL_TASK);
+
+			$event_cfgform = $ob->prop('event_cfgform');
+			if ($this->can('view', ($event_cfgform)))
+			{
+				$event_cfgform = new object($event_cfgform);
+				$search['class_id'] = $event_cfgform->prop('ctype');
+			}
+			else
+			{
+				$search["class_id"] = array(CL_STAGING,CL_CALENDAR_EVENT, CL_CRM_MEETING, CL_TASK);
+			}
+
 			$par1 = array();
 			$par2 = array();
 			if($search_p1 || $search_p2)
@@ -1070,6 +1105,18 @@ class event_search extends class_base
 					"logic" => "OR",
 					"conditions" => $or_parts,
 				));
+			}
+			if ($arr['location'] && $search['class_id'] == CL_CALENDAR_EVENT)
+			{
+
+				$search[] = new object_list_filter(array(
+					'logic' => 'OR',
+					'conditions' => array(
+						'CL_CALENDAR_EVENT.RELTYPE_LOCATION.RELTYPE_ADDRESS.RELTYPE_RIIK.name' => '%'.$arr['location'].'%',
+						'CL_CALENDAR_EVENT.RELTYPE_LOCATION.RELTYPE_ADDRESS.RELTYPE_MAAKOND.name' => '%'.$arr['location'].'%'
+					)
+				));
+
 			}
 			if(is_oid($arr["evt_id"]) && $this->can("view", $arr["evt_id"]))
 			{
