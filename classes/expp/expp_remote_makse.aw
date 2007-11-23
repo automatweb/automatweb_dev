@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.6 2007/11/09 11:58:49 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.7 2007/11/23 06:23:05 dragut Exp $
 // expp_remote_makse.aw - expp remote makse 
 /*
 
@@ -263,6 +263,7 @@ var $pangad = array(
 	}
 
 	function parsePost() {
+
 		$_maksan = $GLOBALS['HTTP_POST_VARS']['maksan'];
 		$sql1 = '';
 		$pid = '';
@@ -301,6 +302,9 @@ var $pangad = array(
 				." WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='tel'";
 		$this->db_query( $sql );
 		$_aid = $this->cp->getPid( 1 );
+
+		file_get_contents("http://www.raamat24.ee/kasutaja.php?tellimus=".$tellimus."&arve=".$_SESSION['arvenr']);
+
 		header( "Location: ".aw_ini_get("baseurl").'/tellimine/'.urlencode( $_aid ).'/'.urlencode( $pid ).'/' );
 		exit;
 	}
@@ -847,12 +851,20 @@ var $pangad = array(
 		if (empty($tellimus)) {
 			return false;
 		}
-		
+
+		$arved = $this->db_fetch_field("select count(*) as nr from expp_arved where tlkood='".$tellimus."' and staatus='".uus."'", 'nr');
+		if ($arved > 0)
+		{
+			header('Location:'.aw_url_change_var('ok', '0', $_SERVER['HTTP_REFERER']));
+			exit();
+		}
+
 		$expp_arve = get_instance( CL_EXPP_ARVE );
 
-		$_SESSION['tellnr'] = $expp_arve->getNextTell();
-
 		$arvenr = $expp_arve->getNextArve();
+
+		$_SESSION['tellnr'] = $expp_arve->getNextTell();
+		$_SESSION['arvenr'] = $arvenr;
 
 		$viitenumber = "10605".$arvenr;
 		$viitenumber .= $expp_arve->leia_731( $viitenumber );
@@ -889,6 +901,9 @@ var $pangad = array(
 			// viitenumber:
 
 			$_SESSION['expp_remote_valjaanded'][$tell['VAINDEKS']] = $tell['AK_TOOTENIMI'];
+
+			$tellkpv_osad = explode('-', $tell['TELLKPV']);
+			$tellkpv = $tellkpv_osad[2].'.'.$tellkpv_osad[1].'.'.$tellkpv_osad[0];
 
 			$sql = "
 				insert into
@@ -929,7 +944,7 @@ var $pangad = array(
 					algus = '".$tell['ALGUS']."',
 					lopp = '".$tell['LOPP']."',
 					eksempla = '".$tell['EKSEMPLA']."',
-					tellkpv = '".$tell['TELLKPV']."',
+					tellkpv = '".$tellkpv."',
 					maksumus = '".$tell['MAKSUMUS']."',
 					rhkkood = '',
 					
