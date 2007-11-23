@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_insurance_type.aw,v 1.1 2007/09/27 09:20:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_insurance_type.aw,v 1.2 2007/11/23 11:42:58 markop Exp $
 // crm_insurance_type.aw - Insurance type 
 /*
 
-@classinfo syslog_type=ST_CRM_INSURANCE_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_INSURANCE_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

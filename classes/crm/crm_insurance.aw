@@ -2,7 +2,7 @@
 // crm_insurance.aw - Kindlustus
 /*
 
-@classinfo syslog_type=ST_CRM_INSURANCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_INSURANCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @tableinfo crm_insurance index=oid master_table=objects master_index=oid
 
 @default table=crm_insurance

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.27 2007/03/07 13:00:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.28 2007/11/23 11:42:58 markop Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -31,6 +31,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @property link_document type=relpicker reltype=RELTYPE_LINK_DOCUMENT field=meta method=serialize
 @caption Dokument
+
+@property public type=checkbox ch_value=1 field=meta method=serialize
+@caption Avalik
 
 @default group=Kontaktid
 
