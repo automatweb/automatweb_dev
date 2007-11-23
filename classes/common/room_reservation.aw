@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.75 2007/11/23 10:10:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.76 2007/11/23 14:14:44 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1549,8 +1549,17 @@ class room_reservation extends class_base
 			{
 				$this->send_affirmation_mail($arr["id"],$tpl);
 			}
+
+			//no ilge idiootsus, kuid peab kindel olema et adminni lehele ei ürita minna
 			$GLOBALS["cfg"]["in_admin"] = 0;
-			header("Location:".$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"] , "tpl" => $tpl,)));
+			$GLOBALS["cfg"]["__default"]["in_admin"] = 0;
+//			header("Location:".$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"] , "tpl" => $tpl,)));
+			header("Location:".
+				str_replace("automatweb/orb.aw" , "" , $this->mk_my_orb(
+					"parse_alias", 
+					array("level" => 1, "preview" => 1, "id" => $arr["id"] , "tpl" => $tpl,)
+				))
+			);
 			die();
 			return $this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"] , "tpl" => $tpl,));
 		}
