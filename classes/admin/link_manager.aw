@@ -1,5 +1,9 @@
 <?php
 
+/*
+@classinfo mantainer=kristo
+*/
+
 class link_manager extends aw_template
 {
 	function link_manager()

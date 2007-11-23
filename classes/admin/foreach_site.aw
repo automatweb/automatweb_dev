@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.9 2005/12/21 19:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.10 2007/11/23 13:19:37 kristo Exp $
 // foreach_site.aw - foreach site 
+/*
+@classinfo mantainer=kristo
+*/
 
 class foreach_site extends class_base
 {

@@ -11,5 +11,8 @@
             <size>20</size>
             <caption>Root kataloogid</caption>
       </property>
+      <classinfo>
+            <maintainer>markop</maintainer>
+      </classinfo>
 </properties>
 

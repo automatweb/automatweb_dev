@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.40 2007/11/07 12:05:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.41 2007/11/23 13:19:37 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
 
-	@classinfo no_comment=1 no_status=1 syslog_type=ST_ADD_TREE_CONF
+	@classinfo no_comment=1 no_status=1 syslog_type=ST_ADD_TREE_CONF mantainer=kristo
 
 	@default table=objects
 	@default field=meta

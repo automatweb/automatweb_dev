@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.9 2007/11/23 12:40:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.10 2007/11/23 13:19:37 kristo Exp $
 // workbench.aw - Töölaud 
 /*
 
@@ -101,42 +101,5 @@ class workbench extends class_base
 		print "</pre>";
 		*/
 	}
-
-	/**  
-		
-		@attrib name=gen_folders params=name default="0"
-		
-		@param id optional type=int
-		@param parent optional type=int
-		@param period optional
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function gen_folders($arr)
-	{
-		$this->read_template("index_folders.tpl");
-		$t = get_instance("languages");
-		$afd = get_instance("admin/admin_folders");
-		$par = (int)$arr["parent"];
-		$afd->use_parent = $par;
-		global $awt;
-		$awt->start("ng-gen-folders");
-		$this->vars(array(
-			"charset" => $t->get_charset(),
-			"content" => $afd->gen_folders_new($arr["period"])
-		));
-		$awt->stop("ng-gen_folders");
-		print "<!--";
-		print_r($awt->summaries());
-		print "-->";
-		die($this->parse());
-	}
-
-	// here is the functionality that I need .. some kind of function that returns
-	// a list of properties .. which will then be sent to the user	
 }
 ?>

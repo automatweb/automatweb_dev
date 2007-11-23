@@ -87,16 +87,6 @@
             <caption>Vali programm</caption>
       </property>
       <property>
-            <name>objtbl_conf</name>
-            <table>objects</table>
-            <type>relpicker</type>
-            <reltype>RELTYPE_OBJ_TABLE_CONF</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>advanced_settings</group>
-            <caption>Objektitabeli konf</caption>
-      </property>
-      <property>
             <name>add_tree_conf</name>
             <table>objects</table>
             <type>relpicker</type>
@@ -1110,11 +1100,6 @@
                   <clid>CL_PERIOD</clid>
                   <caption>v&amp;amp;otilde;ta dokumente perioodi alt</caption>
             </PERIOD>
-            <OBJ_TABLE_CONF>
-                  <value>11</value>
-                  <clid>CL_OBJ_TABLE_CONF</clid>
-                  <caption>objektitabeli konfiguratsioon</caption>
-            </OBJ_TABLE_CONF>
             <ADD_TREE_CONF>
                   <value>12</value>
                   <clid>CL_ADD_TREE_CONF</clid>

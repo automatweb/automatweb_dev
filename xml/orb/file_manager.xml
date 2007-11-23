@@ -26,7 +26,7 @@
 			</function>
 		</action>
 
-		<action name="attach_to_message">
+		<action name="attach_to_message" default="1">
 			<function name="attach_to_message">
 				<arguments>
 					<optional name="message" />

@@ -5,6 +5,9 @@
 EMIT_MESSAGE(MSG_LANGUAGE_ADD)
 
 */
+/*
+@classinfo mantainer=kristo
+*/
 
 classload("languages");
 class admin_languages extends languages

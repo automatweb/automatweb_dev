@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.17 2007/10/08 10:25:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.18 2007/11/23 13:19:40 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
-@classinfo syslog_type=ST_CONFIG_LOGIN_MENUS relationmgr=yes
+@classinfo syslog_type=ST_CONFIG_LOGIN_MENUS relationmgr=yes mantainer=kristo
 @classinfo no_status=1
 
 @default table=objects

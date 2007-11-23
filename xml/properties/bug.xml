@@ -356,7 +356,7 @@
             <captionside>top</captionside>
             <store>no</store>
             <field>multifile_upload</field>
-            <caption>Fail </caption>
+            <caption>Fail</caption>
       </property>
       <property>
             <name>bug_predicates</name>

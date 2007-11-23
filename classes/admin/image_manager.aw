@@ -1,5 +1,9 @@
 <?php
 
+/*
+@classinfo mantainer=kristo
+*/
+
 class image_manager extends aw_template
 {
 	function image_manager()

@@ -27,6 +27,15 @@
             <caption>J&amp;auml;rk</caption>
       </property>
       <property>
+            <name>directive_link</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Viit ametijuhendile</caption>
+      </property>
+      <property>
             <name>directive</name>
             <table>objects</table>
             <group>general</group>

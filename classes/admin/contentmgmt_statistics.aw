@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/contentmgmt_statistics.aw,v 1.1 2007/10/01 13:04:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/contentmgmt_statistics.aw,v 1.2 2007/11/23 13:19:37 kristo Exp $
 // contentmgmt_statistics.aw - Sisuhalduse statistika 
 /*
 
-@classinfo syslog_type=ST_CONTENTMGMT_STATISTICS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CONTENTMGMT_STATISTICS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
 
 @default table=objects
 @default group=general

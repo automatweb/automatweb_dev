@@ -9,6 +9,15 @@
             <caption>Kool</caption>
       </property>
       <property>
+            <name>degree</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Akadeemiline kraad</caption>
+      </property>
+      <property>
             <name>field</name>
             <table>objects</table>
             <group>general</group>
@@ -27,6 +36,24 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Eriala</caption>
+      </property>
+      <property>
+            <name>main_speciality</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>P&amp;otilde;hieriala</caption>
+      </property>
+      <property>
+            <name>obtain_language</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Omandamise keel</caption>
       </property>
       <property>
             <name>start</name>
@@ -55,6 +82,24 @@
             </format>
             <parent>time</parent>
             <caption>L&amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>end_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <caption>L&amp;otilde;petamise kuup&amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>diploma_nr</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Diplomi number</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PERSON_EDUCATION</syslog_type>

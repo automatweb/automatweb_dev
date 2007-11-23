@@ -269,6 +269,7 @@
             <caption>Kuup&amp;amp;auml;ev 2</caption>
       </property>
       <classinfo>
+            <maintainer>markop</maintainer>
             <syslog_type>ST_MAILINGLIST_MEMBER</syslog_type>
             <no_status>1</no_status>
             <no_comment>1</no_comment>

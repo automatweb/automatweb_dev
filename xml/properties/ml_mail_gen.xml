@@ -16,5 +16,8 @@
             <group>general</group>
             <type>text</type>
       </property>
+      <classinfo>
+            <maintainer>markop</maintainer>
+      </classinfo>
 </properties>
 

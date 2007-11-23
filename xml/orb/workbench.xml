@@ -9,15 +9,5 @@
 			</function>
 		</action>
 
-		<action name="gen_folders">
-			<function name="gen_folders">
-				<arguments>
-					<optional name="id" type="int" />
-					<optional name="parent" type="int" />
-					<optional name="period" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

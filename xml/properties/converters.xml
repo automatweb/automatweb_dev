@@ -3,5 +3,8 @@
       <property>
             <comment>some e-mail addresses were originally created as link objects whereas</comment>
       </property>
+      <classinfo>
+            <mantainer>kristo</mantainer>
+      </classinfo>
 </properties>
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.5 2007/02/08 14:29:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.6 2007/11/23 13:19:37 kristo Exp $
 // object_import_exception.aw - Objektide impordi erand 
 /*
 
-@classinfo syslog_type=ST_OBJECT_IMPORT_EXCEPTION relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_OBJECT_IMPORT_EXCEPTION relationmgr=yes no_status=1 no_comment=1 mantainer=kristo
 
 @default table=objects
 @default group=general

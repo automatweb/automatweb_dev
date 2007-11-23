@@ -30,8 +30,8 @@
             <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTRACT_STOP_TYPE</reltype>
-            <automatic>1</automatic>
-            <field>type</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Peatumise liik</caption>
       </property>
       <classinfo>
@@ -56,6 +56,11 @@
                   <clid>CL_META</clid>
                   <caption>Peatumise liik</caption>
             </CONTRACT_STOP_TYPE>
+            <SUBSTITUTE>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Asendaja</caption>
+            </SUBSTITUTE>
       </reltypes>
 </properties>
 

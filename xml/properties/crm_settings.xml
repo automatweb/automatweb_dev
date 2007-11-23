@@ -287,6 +287,15 @@
             <method>serialize</method>
             <caption>Isiku piltide seaded</caption>
       </property>
+      <property>
+            <name>status_limits</name>
+            <table>objects</table>
+            <group>status_limits</group>
+            <type>table</type>
+            <store>no</store>
+            <field>status_limits</field>
+            <caption>Staatuste piirangud</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SETTINGS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -304,6 +313,9 @@
             <img>
                   <caption>Pildid</caption>
             </img>
+            <status_limits>
+                  <caption>Staatuste piirangud</caption>
+            </status_limits>
       </groupinfo>
       <reltypes>
             <USER>

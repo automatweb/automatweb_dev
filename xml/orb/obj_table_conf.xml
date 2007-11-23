@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="obj_table_conf" folder="admin" extends="class_base">
-	</class>
-</orb>

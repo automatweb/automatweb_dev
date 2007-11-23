@@ -935,7 +935,6 @@ class core extends acl_base
 
 		$in_admin = $GLOBALS["cfg"]["in_admin"];
 
-		// XXX: admin_folders sets use_empty directly, but shouldn't.
 		if (empty($this->use_empty))
 		{
 			$this->use_empty = false;

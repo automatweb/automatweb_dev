@@ -207,6 +207,7 @@
       <classinfo>
             <syslog_type>ST_ORDERS_FORM</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <config>

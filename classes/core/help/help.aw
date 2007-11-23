@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.9 2006/12/08 07:07:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.10 2007/11/23 13:19:40 kristo Exp $
 
 // more ideas --- I might want to keep the help open when switching between tabs... for this I need to 
 // set a cookie
@@ -211,15 +211,6 @@ class help extends aw_template
 
 		$clinf = aw_ini_get("classes");
 		$classdat = $clinf[$arr["clid"]];
-
-		/*
-		$am = get_instance("admin/admin_menus");
-		$am->get_add_menu(array(
-			"parent" => aw_ini_get("rootmenu"),
-			"ret_data" => true,
-		));
-		*/
-
 
 		$atc = get_instance("admin/add_tree_conf");
 		$tree = $atc->get_class_tree();

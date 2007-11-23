@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.18 2007/07/02 11:42:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.19 2007/11/23 13:19:37 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
-@classinfo syslog_type=ST_OBJECT_EXPORT relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_OBJECT_EXPORT relationmgr=yes no_comment=1 no_status=1 mantainer=kristo
 
 @default table=objects
 @default field=meta

@@ -113,6 +113,7 @@
       <classinfo>
             <syslog_type>ST_ORDERS_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <ordermnager>

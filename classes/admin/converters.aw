@@ -1,6 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.74 2007/11/16 12:48:18 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.75 2007/11/23 13:19:37 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
+/*
+@classinfo mantainer=kristo
+*/
+
 class converters extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited

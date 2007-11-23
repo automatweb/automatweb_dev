@@ -527,6 +527,16 @@
             <field>cedit_bank_account_tbl</field>
       </property>
       <property>
+            <name>cedit_profession_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ceditprof</parent>
+            <field>cedit_profession_tbl</field>
+      </property>
+      <property>
             <name>cedit_adr_tbl</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
@@ -792,15 +802,6 @@
             <comment>Formaat: 15.03.2007 - 18.03.2007</comment>
       </property>
       <property>
-            <name>edulevel</name>
-            <table>objects</table>
-            <group>education</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Haridustase</caption>
-      </property>
-      <property>
             <name>education_edit</name>
             <table>objects</table>
             <group>education</group>
@@ -809,18 +810,28 @@
             <mode>manager</mode>
             <reltype>RELTYPE_EDUCATION</reltype>
             <props>
-                  <num_0>school</num_0>
-                  <num_1>field</num_1>
-                  <num_2>speciality</num_2>
-                  <num_3>start</num_3>
-                  <num_4>end</num_4>
+                  <num_0>degree</num_0>
+                  <num_1>school</num_1>
+                  <num_2>field</num_2>
+                  <num_3>speciality</num_3>
+                  <num_4>main_speciality</num_4>
+                  <num_5>obtain_language</num_5>
+                  <num_6>start</num_6>
+                  <num_7>end</num_7>
+                  <num_8>end_date</num_8>
+                  <num_9>diploma_nr</num_9>
             </props>
             <table_fields>
-                  <num_0>school</num_0>
-                  <num_1>field</num_1>
-                  <num_2>speciality</num_2>
-                  <num_3>start</num_3>
-                  <num_4>end</num_4>
+                  <num_0>degree</num_0>
+                  <num_1>school</num_1>
+                  <num_2>field</num_2>
+                  <num_3>speciality</num_3>
+                  <num_4>main_speciality</num_4>
+                  <num_5>obtain_language</num_5>
+                  <num_6>start</num_6>
+                  <num_7>end</num_7>
+                  <num_8>end_date</num_8>
+                  <num_9>diploma_nr</num_9>
             </table_fields>
             <field>meta</field>
             <method>serialize</method>
@@ -2089,6 +2100,12 @@
                   <area_caption>Pangaarved</area_caption>
                   <group>contact</group>
             </ceditbank>
+            <ceditprof>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;ouml;&amp;ouml;suhted</area_caption>
+                  <group>contact</group>
+            </ceditprof>
             <ceditadr>
                   <type>vbox</type>
                   <closeable>1</closeable>

@@ -1,5 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.125 2007/11/23 12:46:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.126 2007/11/23 13:19:37 kristo Exp $
+/*
+
+@classinfo mantainer=kristo
+
+*/
+
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -895,51 +901,11 @@ class admin_menus extends aw_template
 			}
 		}
 	}
-	
-	//This returns config obj id for my group
-	function get_co_id(&$obj)
-	{
-		if (!is_oid($obj->meta("objtbl_conf")) || !$this->can("view", $obj->meta("objtbl_conf")))
-		{
-			return NULL; 
-		}
-		$conf_obj = &obj($obj->meta("objtbl_conf"));
-		$conn = new connection();
-		
-		$mygidlist = aw_global_get("gidlist_pri_oid");
-		$mygidlist = array_flip($mygidlist);
-		
-		
-		$all_conns = $conn->find(array(
-			"from" => $conf_obj->id(),
-			"type" => 1, 
-		));
-		if(!$all_conns)
-		{
-			return $conf_obj = &obj($obj->meta("objtbl_conf"));
-		}
-		
-		$conns = $conn->find(array(
-			"from" => $conf_obj->id(),
-			"to" => $mygidlist,
-			"type" => 1, 
-		));
-		if($conns)
-		{
-			return $conf_obj->id();
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	
+
 	function setup_rf_table($parent)
 	{
 		load_vcl("table");
 		$this->t = new aw_table(array("prefix" => "me_rf"));
-
-		$this->co_id = 0;
 
 		// check if any parent menus have config objects attached 
 		if (is_array($parent))
@@ -950,26 +916,8 @@ class admin_menus extends aw_template
 		
 		$ch = $p_o->path();
 		$ch[-1] = &obj(aw_ini_get("rootmenu"));
-		foreach($ch as $o)
-		{
-			if ($o->meta("objtbl_conf"))
-			{
-				$this->co_id = $this->get_co_id($o);
-				//This is for showing config objects per group
-				//$this->co_id = $o->meta("objtbl_conf");
-			}
-		}
 
-		if (!$this->co_id)
-		{
-			$this->_init_default_rf_table($this->t);
-		}
-		else
-		{
-			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-			$this->otc_inst = get_instance(CL_OBJ_TABLE_CONF);
-			$this->otc_inst->init_table($this->co_id, $this->t);
-		}
+		$this->_init_default_rf_table($this->t);
 	}
 
 	
@@ -1321,14 +1269,7 @@ class admin_menus extends aw_template
 
 			$row["change"] = $can_change ? "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>" : "";
 			
-			if ($this->co_id)
-			{
-				$this->otc_inst->table_row($row, &$this->t);
-			}
-			else
-			{
-				$this->t->define_data($row);
-			}
+			$this->t->define_data($row);
 
 			//axel h&auml;kkis,
 			$row['icon_url'] = $iu;

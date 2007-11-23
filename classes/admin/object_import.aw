@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.48 2007/07/19 09:13:03 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.49 2007/11/23 13:19:37 kristo Exp $
 // object_import.aw - Objektide Import
 /*
 
-@classinfo syslog_type=ST_OBJECT_IMPORT relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_OBJECT_IMPORT relationmgr=yes no_comment=1 no_status=1 mantainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.211 2007/11/19 13:30:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.212 2007/11/23 13:19:35 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -42,9 +42,6 @@
 
 		@property admin_feature warning=0 type=select group=advanced_settings table=menu field=admin_feature
 		@caption Vali programm
-
-		@property objtbl_conf type=relpicker reltype=RELTYPE_OBJ_TABLE_CONF field=meta method=serialize group=advanced_settings
-		@caption Objektitabeli konf
 
 		@property add_tree_conf type=relpicker reltype=RELTYPE_ADD_TREE_CONF field=meta method=serialize group=advanced_settings
 		@caption Objekti lisamise puu konff
@@ -413,9 +410,6 @@
 
 	@reltype PERIOD value=10 clid=CL_PERIOD
 	@caption v&otilde;ta dokumente perioodi alt
-
-	@reltype OBJ_TABLE_CONF value=11 clid=CL_OBJ_TABLE_CONF
-	@caption objektitabeli konfiguratsioon
 
 	@reltype ADD_TREE_CONF value=12 clid=CL_ADD_TREE_CONF
 	@caption lisamise puu konfiguratsioon

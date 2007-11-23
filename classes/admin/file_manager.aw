@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo mantainer=kristo
+*/
 
 class file_manager extends aw_template
 {

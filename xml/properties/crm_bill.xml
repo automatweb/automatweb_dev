@@ -346,6 +346,7 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
             <confirm_save_data>1</confirm_save_data>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <tasks>

@@ -28,7 +28,6 @@
             <method>serialize</method>
             <type>date_select</type>
             <year_from>1990</year_from>
-            <year_to>2010</year_to>
             <caption>Suhte algus</caption>
       </property>
       <property>
@@ -48,6 +47,25 @@
             <method>serialize</method>
             <type>textarea</type>
             <caption>&amp;Uuml;lesanded</caption>
+      </property>
+      <property>
+            <name>directive_link</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Viit ametijuhendile</caption>
+      </property>
+      <property>
+            <name>directive</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DESC_FILE</reltype>
+            <caption>Ametijuhend</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PERSON_WORK_RELATION</syslog_type>
@@ -73,6 +91,21 @@
                   <clid>CL_CRM_PROFESSION</clid>
                   <caption>Amet</caption>
             </PROFESSION>
+            <SUBSITUTE>
+                  <value>4</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Asendaja</caption>
+            </SUBSITUTE>
+            <DESC_FILE>
+                  <value>5</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Ametijuhend</caption>
+            </DESC_FILE>
+            <CONTRACT_STOP>
+                  <value>6</value>
+                  <clid>CL_CONTRACT_STOP</clid>
+                  <caption>T&amp;ouml;&amp;ouml;lepingu peatamine</caption>
+            </CONTRACT_STOP>
       </reltypes>
 </properties>
 

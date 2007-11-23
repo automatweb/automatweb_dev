@@ -677,6 +677,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <r2>yes</r2>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <membership>

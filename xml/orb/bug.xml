@@ -35,5 +35,13 @@
 			</function>
 		</action>
 
+		<action name="check_multiple_content">
+			<function name="check_multiple_content">
+				<arguments>
+					<optional name="bug_content" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
