@@ -410,8 +410,8 @@ class events_manager extends class_base
 			}
 
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					 html::get_change_url($o->id(), array("cfgform" => $cfg),($o->name()?$o->name():"(".t("Nimetu").")")),
+				"name" => (!$this->can("edit" , $o->id())) ? $o->prop("tegevusala") :
+					 html::get_change_url($o->id(), array("cfgform" => $cfg),($o->prop("tegevusala") ? $o->prop("tegevusala") : "(".t("Nimetu").")")),
 					//html::obj_change_url($o->id()),
 				"parent" => $parent,
 			));
