@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.9 2005/11/07 16:32:23 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.10 2007/11/23 12:40:44 kristo Exp $
 // config_aw_document_template.aw - Dokumendi Template
 /*
 
-@classinfo syslog_type=ST_CONFIG_AW_DOCUMENT_TEMPLATE no_status=1
+@classinfo syslog_type=ST_CONFIG_AW_DOCUMENT_TEMPLATE no_status=1 mantainer=kristo
 
 @groupinfo grp_source caption="L&auml;htekood"
 

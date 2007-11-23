@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/file_upload_config.aw,v 1.1 2007/09/28 12:17:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/file_upload_config.aw,v 1.2 2007/11/23 12:40:44 kristo Exp $
 // file_upload_config.aw - Failide &uuml;leslaadimise seaded 
 /*
 
-@classinfo syslog_type=ST_FILE_UPLOAD_CONFIG relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_FILE_UPLOAD_CONFIG relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
 
 @default table=objects
 @default group=general
