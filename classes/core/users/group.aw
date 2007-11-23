@@ -618,6 +618,10 @@ class group extends class_base
 		foreach($ll as $lid => $lname)
 		{
 			$opts = $oopts;
+			if (!is_array($meta["admin_rootmenu2"]))
+			{
+				$meta["admin_rootmenu2"] = array();
+			}
 			foreach((array)$meta["admin_rootmenu2"][$lid] as $k => $v)
 			{
 				if (!isset($opts[$v]) && $this->can("view", $v))
