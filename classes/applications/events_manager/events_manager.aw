@@ -915,7 +915,7 @@ class events_manager extends class_base
 		));
 		$t->define_field(array(
 			"name" => "parent",
-			"caption" => t("Kuulub valdkonda")
+			"caption" => t("Kuulub valdkonda"),
 			"sortable" => 1
 		));
 		$t->set_default_sortby("parent");
