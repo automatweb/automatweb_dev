@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.61 2007/06/05 09:41:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.62 2007/11/23 11:15:50 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -348,7 +348,7 @@ class object_list extends _int_obj_container_base
 		return $this->_int_get_at(end(array_keys($this->list)));
 	}
 
-	/** resets the internal iterator to the beginning of the list
+	/** resets the internal iterator to the beginning of the list, returns the first object and increments the position by one
 		@attrib api=1
 
 		@errors
