@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.212 2007/10/11 13:43:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.213 2007/11/23 10:10:02 markop Exp $
 // room.aw - Ruum 
 /*
 
-@classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default field=meta

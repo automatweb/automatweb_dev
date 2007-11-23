@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.70 2007/10/24 14:50:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.71 2007/11/23 10:10:02 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
-@classinfo syslog_type=ST_BANK_PAYMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BANK_PAYMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default field=meta

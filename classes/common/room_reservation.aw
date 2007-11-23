@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.74 2007/11/14 14:11:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.75 2007/11/23 10:10:02 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -7,7 +7,7 @@
 @default field=meta
 @default method=serialize
 
-@classinfo syslog_type=ST_ROOM_RESERVATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ROOM_RESERVATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @property rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM store=connect field=meta method=serialize
 @caption Ruumid
