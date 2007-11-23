@@ -17,10 +17,13 @@
 	@property ord type=textbox size=5 table=objects field=jrk
 	@caption J&auml;rjekord
 
+	@property parent_sector type=select store=no
+	@caption Parent
+
 
 	@property tegevusala_en type=textbox size=55 table=kliendibaas_tegevusala
-	@caption Inglise keelne nimetus
-		
+	@caption Inglisekeelne nimetus
+
 	@property comment type=textarea field=comment
 	@caption Kirjeldus
 
@@ -33,12 +36,12 @@
 	@property info_document type=relpicker reltype=RELTYPE_DOCUMENT field=meta method=serialize
 	@caption Tutvustus
 
-	@classinfo no_status=1 syslog_type=ST_CRM_SECTOR
+	@classinfo syslog_type=ST_CRM_SECTOR
 
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
@@ -78,24 +81,70 @@ class crm_sector extends class_base
 
 	function get_property($arr)
 	{
-		$data = &$arr['prop'];
+		$prop = &$arr['prop'];
 		$retval = PROP_OK;
-		switch($data["name"])
+		$this_o = $arr["obj_inst"];
+
+		switch($prop["name"])
 		{
 			case 'name':
 				$retval = PROP_IGNORE;
 				break;
-			
+
+			case 'parent_sector':
+				if (is_oid($this_o->id()))
+				{
+					$prop["value"] = $this_o->parent();
+					$parent = new object($this_o->parent());
+				}
+				elseif (is_oid($arr["request"]["parent"]))
+				{
+					$prop["value"] = $arr["request"]["parent"];
+					$parent = new object($arr["request"]["parent"]);
+				}
+				else
+				{
+					$retval = PROP_ERROR;
+				}
+
+				$prop["options"] = array($parent->id() => $parent->name());
+
+				while (CL_CRM_SECTOR === (int) $parent->class_id())
+				{
+					if ($this->can("view", $parent->parent()))
+					{
+						$parent = new object($parent->parent());
+					}
+				}
+
+				$sectors = new object_tree(array(
+					"parent" => $parent,
+				));
+				$sectors = $sectors->to_list();
+				$sector = $sectors->begin();
+
+				do
+				{
+					if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
+					{
+						$prop["options"][$sector->id()] = $sector->name();
+					}
+				}
+				while ($sector = $sectors->next());
+				break;
 		}
+
 		return  $retval;
 	}
-	
+
 	function set_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$form = &$arr["request"];
-		switch($data["name"])
+		$this_o = $arr["obj_inst"];
+
+		switch($prop["name"])
 		{
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
@@ -104,9 +153,17 @@ class crm_sector extends class_base
 			case 'kood':
 				$arr["obj_inst"]->set_name(($form['kood'] ? ''.$form['kood'].' ' : '').$form['tegevusala']);
 				break;
-		};
+
+			case 'parent_sector':
+				if (is_oid($prop["value"]))
+				{
+					$this_o->set_parent($prop["value"]);
+				}
+				break;
+		}
+
 		return $retval;
-	}	
+	}
 
 	function callback_get_transl($arr)
 	{

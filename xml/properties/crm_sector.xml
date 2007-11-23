@@ -38,13 +38,22 @@
             <caption>J&amp;amp;auml;rjekord</caption>
       </property>
       <property>
+            <name>parent_sector</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <store>no</store>
+            <field>parent_sector</field>
+            <caption>Parent</caption>
+      </property>
+      <property>
             <name>tegevusala_en</name>
             <table>kliendibaas_tegevusala</table>
             <group>general</group>
             <type>textbox</type>
             <size>55</size>
             <field>tegevusala_en</field>
-            <caption>Inglise keelne nimetus</caption>
+            <caption>Inglisekeelne nimetus</caption>
       </property>
       <property>
             <name>comment</name>
@@ -95,7 +104,6 @@
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <classinfo>
-            <no_status>1</no_status>
             <syslog_type>ST_CRM_SECTOR</syslog_type>
       </classinfo>
       <groupinfo>
