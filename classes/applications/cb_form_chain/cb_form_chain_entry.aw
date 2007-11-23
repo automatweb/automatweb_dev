@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.18 2007/10/19 08:44:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.19 2007/11/23 07:06:27 dragut Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus
 /*
 
-@classinfo syslog_type=ST_CB_FORM_CHAIN_ENTRY relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_CB_FORM_CHAIN_ENTRY relationmgr=yes no_comment=1 no_status=1 maintainer=dragut
 
 @tableinfo aw_cb_form_chain_entries index=aw_id
 
