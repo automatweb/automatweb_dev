@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.14 2007/10/31 12:22:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.15 2007/11/23 11:00:53 markop Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
-@classinfo syslog_type=ST_ORDERS_MANAGER relationmgr=yes
+@classinfo syslog_type=ST_ORDERS_MANAGER relationmgr=yes maintainer=markop
 @default table=objects
 
 @property export_folder type=textbox field=meta method=serialize group=general

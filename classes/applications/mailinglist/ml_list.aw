@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.108 2007/11/16 12:34:23 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.110 2007/11/23 10:58:51 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
-@classinfo syslog_type=ST_MAILINGLIST relationmgr=yes no_status=1 r2=yes
+@classinfo syslog_type=ST_MAILINGLIST relationmgr=yes no_status=1 r2=yes maintainer=markop
 
 @default table=objects
 @default field=meta
@@ -1156,7 +1156,7 @@ class ml_list extends class_base
 			case "no_fck":
 				if($prop["value"]) $this->set_classinfo(array("allow_rte" => 0));
 				else $this->set_classinfo(array("allow_rte" => $arr["obj_inst"]->prop("classinfo_allow_rte")));
-			
+				break;
 			case "import_textfile":
 				$imp = $_FILES["import_textfile"]["tmp_name"];
 				if (!is_uploaded_file($imp))
@@ -1470,7 +1470,7 @@ class ml_list extends class_base
 			
 			$name = $fld_obj->name();
 			echo "Kustutan kasutajaid kataloogist $fld / $name... <br />";
-			set_time_limit(0);
+			aw_set_exec_time(AW_LONG_PROCESS);
 			$ml_member = get_instance(CL_ML_MEMBER);
 			$cnt = 0;
 			if (sizeof($lines) > 0)

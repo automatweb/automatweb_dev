@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.27 2007/11/13 17:01:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.28 2007/11/23 11:00:53 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
-@classinfo syslog_type=ST_ORDERS_FORM relationmgr=yes
+@classinfo syslog_type=ST_ORDERS_FORM relationmgr=yes maintainer=markop
 
 @default table=objects
 @default group=general

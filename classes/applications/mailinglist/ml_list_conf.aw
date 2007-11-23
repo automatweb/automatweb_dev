@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list_conf.aw,v 1.2 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list_conf.aw,v 1.3 2007/11/23 10:58:51 markop Exp $
 // ml_list_conf.aw - List configuration
 // right now this is not used anywhere, but maybe we need something like this in the future,
 // so I'm leaving this in the tree -- duke
 
 /*
+@classinfo maintainer=markop
 	@default table=objects
 	@default field=meta
 	@default method=serialize

@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.42 2007/11/16 12:32:53 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.43 2007/11/23 10:58:51 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
+
+
 
 define("ML_QUEUE_NEW",0);
 define("ML_QUEUE_IN_PROGRESS",1);
@@ -10,6 +12,7 @@ define("ML_QUEUE_STOPPED",4);
 define("ML_QUEUE_PROCESSING",5);
 
 /*
+@classinfo maintainer=markop
 	@default field=meta
 	@default method=serialize
 

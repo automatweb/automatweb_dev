@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.9 2007/06/06 12:34:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.10 2007/11/23 10:54:27 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
-@classinfo syslog_type=ST_TASK_ROW relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_TASK_ROW relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo aw_task_rows index=aw_oid master_table=objects master_index=brother_of
 

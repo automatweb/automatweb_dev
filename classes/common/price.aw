@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/price.aw,v 1.3 2007/11/20 15:15:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/price.aw,v 1.4 2007/11/23 11:11:59 markop Exp $
 // price.aw - Hind 
 /*
 
 @tableinfo aw_prices index=aw_oid master_table=objects master_index=brother_of
 
-@classinfo syslog_type=ST_PRICE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PRICE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.188 2007/11/20 11:14:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.189 2007/11/23 10:54:27 markop Exp $
 // task.aw - TODO item
 /*
 
-@classinfo syslog_type=ST_TASK confirm_save_data=1
+@classinfo syslog_type=ST_TASK confirm_save_data=1 maintainer=markop
 
 @default table=objects
 

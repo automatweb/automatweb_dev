@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/unit.aw,v 1.1 2006/08/18 13:07:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/unit.aw,v 1.2 2007/11/23 11:11:59 markop Exp $
 // unit.aw - Unit 
 /*
 
-@classinfo syslog_type=ST_UNIT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_UNIT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

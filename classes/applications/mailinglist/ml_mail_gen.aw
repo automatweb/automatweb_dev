@@ -1,6 +1,6 @@
 <?php
 /*
-
+@classinfo maintainer=markop
 @default table=objects
 @default field=meta
 @default method=serialize
@@ -93,7 +93,7 @@ class ml_mail_gen extends run_in_background
 		arr($members);
 		$member_list = $members["objects"];
 		$from_file = $members["from_file"];
-		aw_set_exec_time(AW_LONG_PROCESS);
+		set_time_limit(0);
 	print 'already generated mails:';arr($this->made_mails);
 		
 		foreach($members as $member)

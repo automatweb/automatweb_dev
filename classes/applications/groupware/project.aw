@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.127 2007/11/16 12:50:08 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.128 2007/11/23 10:54:27 markop Exp $
 // project.aw - Projekt
 /*
 
 
-@classinfo syslog_type=ST_PROJECT relationmgr=yes
+@classinfo syslog_type=ST_PROJECT relationmgr=yes maintainer=markop
 
 @tableinfo aw_projects index=aw_oid master_table=objects master_index=brother_of
 @tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid

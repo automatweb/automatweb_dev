@@ -1,10 +1,10 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.23 2007/07/17 08:45:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.24 2007/11/23 11:05:33 markop Exp $
 // procurement.aw - Hange
 /*
 
-@classinfo syslog_type=ST_PROCUREMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROCUREMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo aw_procurements index=aw_oid master_index=brother_of master_table=objects
 @default table=objects

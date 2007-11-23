@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.30 2007/07/26 12:26:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.31 2007/11/23 11:05:13 markop Exp $
 // procurement_offer.aw - Pakkumine hankele
 /*
 
-@classinfo syslog_type=ST_PROCUREMENT_OFFER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROCUREMENT_OFFER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo aw_procurement_offers index=aw_oid master_table=objects master_index=brother_of
 

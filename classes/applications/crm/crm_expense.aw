@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.6 2007/09/03 13:57:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.7 2007/11/23 10:51:06 markop Exp $
 // crm_expense.aw - Kulu 
 /*
 
-@classinfo syslog_type=ST_CRM_EXPENSE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_EXPENSE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

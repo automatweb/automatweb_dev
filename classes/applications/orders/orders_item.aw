@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_item.aw,v 1.5 2007/09/21 11:13:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_item.aw,v 1.6 2007/11/23 11:00:53 markop Exp $
 // orders_item.aw - Tellimuse rida 
 /*
 
-@classinfo syslog_type=ST_ORDERS_ITEM relationmgr=yes
+@classinfo syslog_type=ST_ORDERS_ITEM relationmgr=yes maintainer=markop
 @tableinfo aw_orders_item index=oid master_table=objects master_index=brother_of
 
 @default table=aw_orders_item

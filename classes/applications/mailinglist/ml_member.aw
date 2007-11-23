@@ -1,8 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.20 2006/03/16 15:24:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.21 2007/11/23 10:58:51 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
+@classinfo maintainer=markop
 	@default table=objects
 	@default group=general
 

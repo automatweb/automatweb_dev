@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.7 2007/02/14 17:16:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.8 2007/11/23 10:48:41 markop Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
-@classinfo syslog_type=ST_CRM_BILL_ROW relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_BILL_ROW relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=aw_crm_bill_rows
 @default group=general

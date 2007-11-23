@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.30 2007/10/31 12:22:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.31 2007/11/23 11:01:20 markop Exp $
 // orders_order.aw - Tellimus 
 /*
-@classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
-@tableinfo orders_order index=oid master_table=objects master_index=brother_of
+@classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes maintainer=markop
+@tableinfo orders_order index=oid master_table=objects master_index=brother_of 
 
 @default table=orders_order
 @default group=orderinfo

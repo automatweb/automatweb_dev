@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.18 2007/11/14 12:57:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.19 2007/11/23 10:52:06 markop Exp $
 // events_manager.aw - Kuhu minna moodul
 /*
 
-@classinfo syslog_type=ST_EVENTS_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_EVENTS_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

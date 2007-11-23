@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.13 2006/10/19 07:43:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.14 2007/11/23 11:05:13 markop Exp $
 // purchase.aw - Ost 
 /*
 
-@tableinfo aw_purchase index=aw_oid master_index=brother_of master_table=objects
+@tableinfo aw_purchase index=aw_oid master_index=brother_of master_table=objects maintainer=markop
 
 @classinfo syslog_type=ST_PURCHASE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 

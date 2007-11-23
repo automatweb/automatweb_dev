@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.86 2007/10/01 11:27:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.87 2007/11/23 10:54:27 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -8,7 +8,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 @tableinfo aw_room_reservations index=aw_oid master_table=objects master_index=brother_of
 
 
-@classinfo syslog_type=ST_RESERVATION relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_RESERVATION relationmgr=yes no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general
