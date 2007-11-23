@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.9 2007/10/24 15:00:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.10 2007/11/23 07:18:28 dragut Exp $
 // expp_makse.aw - Expp makse 
 /*
 
-@classinfo syslog_type=ST_EXPP_MAKSE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_EXPP_MAKSE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general

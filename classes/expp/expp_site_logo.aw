@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_logo.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_logo.aw,v 1.5 2007/11/23 07:18:28 dragut Exp $
 // expp_site_logo.aw - Expp site_logo 
 /*
 
-@classinfo syslog_type=ST_EXPP_SITE_LOGO relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_EXPP_SITE_LOGO relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general

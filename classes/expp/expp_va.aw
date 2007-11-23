@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.14 2006/06/05 12:39:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.15 2007/11/23 07:18:28 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
-@classinfo syslog_type=ST_EXPP_VA relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_EXPP_VA relationmgr=yes no_comment=1 no_status=1 maintainer=dragut
 
 @default table=objects
 @default group=general

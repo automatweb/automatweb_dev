@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_basket_short.aw,v 1.6 2007/11/09 01:19:40 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_basket_short.aw,v 1.7 2007/11/23 07:18:28 dragut Exp $
 // expp_basket_short.aw - Expp short basket 
 /*
 
-@classinfo syslog_type=ST_EXPP_BASKET_SHORT relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_EXPP_BASKET_SHORT relationmgr=yes no_comment=1 no_status=1 maintainer=dragut
 
 @default table=objects
 @default group=general

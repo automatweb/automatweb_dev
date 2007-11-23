@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_kampaania.aw,v 1.1 2007/10/29 13:19:24 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_kampaania.aw,v 1.2 2007/11/23 07:18:28 dragut Exp $
 // expp_kampaania.aw - Expp kampaania 
 /*
 
-@classinfo syslog_type=ST_EXPP_KAMPAANIA relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_EXPP_KAMPAANIA relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general

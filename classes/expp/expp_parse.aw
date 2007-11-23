@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_parse.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_parse.aw,v 1.5 2007/11/23 07:18:28 dragut Exp $
 // expp_parse.aw - Expp URL parser 
 /*
 
-@classinfo syslog_type=ST_EXPP_PARSE relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_EXPP_PARSE relationmgr=yes no_comment=1 no_status=1 maintainer=dragut
 
 @default table=objects
 @default group=general

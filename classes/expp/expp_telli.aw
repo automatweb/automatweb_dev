@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_telli.aw,v 1.6 2006/05/16 09:22:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_telli.aw,v 1.7 2007/11/23 07:18:28 dragut Exp $
 // expp_telli.aw - Expp telli 
 /*
 
-@classinfo syslog_type=ST_EXPP_TELLI relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_EXPP_TELLI relationmgr=yes no_comment=1 no_status=1 maintainer=dragut
 
 @default table=objects
 @default group=general

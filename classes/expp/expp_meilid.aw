@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_meilid.aw,v 1.2 2007/10/18 14:21:38 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_meilid.aw,v 1.3 2007/11/23 07:18:28 dragut Exp $
 // expp_meilid.aw - expp meilid 
 /*
 
-@classinfo syslog_type=ST_EXPP_MEILID relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_EXPP_MEILID relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general
