@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.56 2007/09/21 11:49:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.57 2007/11/23 11:42:58 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -1399,6 +1399,32 @@ class crm_offer extends class_base
 		$this->_lv--;
 	}
 
+<<<<<<< crm_offer.aw
+	/**
+		@attrib name=remove_parts all_args=1
+	**/
+	function remove_parts($arr)
+	{
+		arr($arr);
+			/*	$arr["obj_inst"]->connect(array(
+				"type" => "RELTYPE_ACTION",
+				"to" => $o->id()
+			));*/
+	}
+	
+	/**
+		@attrib name=save_parts all_args=1
+	**/
+	function save_parts($arr)
+	{
+		arr($arr);
+			/*	$arr["obj_inst"]->connect(array(
+				"type" => "RELTYPE_ACTION",
+				"to" => $o->id()
+			));*/
+	}
+	
+=======
 	/**
 		@attrib name=remove_parts all_args=1
 	**/
@@ -1424,6 +1450,7 @@ class crm_offer extends class_base
 		return $arr["post_ru"];
 	}
 	
+>>>>>>> 1.55
 	function do_db_upgrade($table, $field, $query, $error)
 	{
 		if (empty($field))
