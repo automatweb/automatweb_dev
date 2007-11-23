@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/awplayer.aw,v 1.4 2007/11/04 21:34:31 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/awplayer.aw,v 1.5 2007/11/23 14:25:12 kristo Exp $
 // awplayer.aw - AW Pleier 
 /*
 
-@classinfo syslog_type=ST_AWPLAYER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_AWPLAYER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=hannes
 
 @default table=objects
 @default group=general

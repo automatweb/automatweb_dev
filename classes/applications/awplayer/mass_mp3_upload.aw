@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mass_mp3_upload.aw,v 1.1 2007/11/04 11:52:11 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mass_mp3_upload.aw,v 1.2 2007/11/23 14:25:12 kristo Exp $
 // mass_mp3_upload.aw - Impordi minu MP3d 
 /*
 
-@classinfo syslog_type=ST_MASS_MP3_UPLOAD relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_MASS_MP3_UPLOAD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=hannes
 
 @default table=objects
 @default group=general
