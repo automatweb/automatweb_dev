@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.80 2007/11/13 15:33:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.81 2007/11/23 10:41:56 markop Exp $
 // patent.aw - Patent 
 /*
 
-@classinfo syslog_type=ST_PATENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PATENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo aw_trademark index=aw_oid master_table=objects master_index=brother_of
 

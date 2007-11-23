@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.5 2007/03/14 12:33:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.6 2007/11/23 10:41:56 markop Exp $
 // trademark_status.aw - Trademark status 
 /*
 
-@classinfo syslog_type=ST_TRADEMARK_STATUS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_TRADEMARK_STATUS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @tableinfo aw_trademark_status index=aw_oid master_table=objects master_index=brother_of
 
 @default group=general

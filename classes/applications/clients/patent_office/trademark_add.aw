@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.10 2007/03/19 12:10:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.11 2007/11/23 10:41:56 markop Exp $
 // trademark_add.aw - Kaubam&auml;rgi veebist lisamine 
 /*
 
-@classinfo syslog_type=ST_TRADEMARK_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_TRADEMARK_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general
