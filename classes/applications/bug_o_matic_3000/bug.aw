@@ -616,37 +616,40 @@ class bug extends class_base
 					$prop["options"][$r->prop("req_p")] = $r->prop("req_p.name");
 				}
 
-				$u = get_instance(CL_USER);
-				$cur = obj($u->get_current_person());
-				$sections = $cur->connections_from(array(
-						"class_id" => CL_CRM_SECTION,
-      						"type" => "RELTYPE_SECTION"
-				));
-				$ppl = array();
-				foreach($sections as $s)
+				if ($prop["name"] == "monitors")
 				{
-					$sc = obj($s->conn["to"]);
-					$profs = $sc->connections_from(array(
-						"class_id" => CL_CRM_PROFESSION,
-       						"type" => "RELTYPE_PROFESSIONS"
-				  	));
-					foreach($profs as $p)
+					$u = get_instance(CL_USER);
+					$cur = obj($u->get_current_person());
+					$sections = $cur->connections_from(array(
+							"class_id" => CL_CRM_SECTION,
+      							"type" => "RELTYPE_SECTION"
+					));
+					$ppl = array();
+					foreach($sections as $s)
 					{
-						$professions[$p->conn["to"]] = $p->conn["to"];
+						$sc = obj($s->conn["to"]);
+						$profs = $sc->connections_from(array(
+							"class_id" => CL_CRM_PROFESSION,
+	       						"type" => "RELTYPE_PROFESSIONS"
+					  	));
+						foreach($profs as $p)
+						{
+							$professions[$p->conn["to"]] = $p->conn["to"];
+						}
 					}
+					$c = new connection();
+					$people = $c->find(array(
+						"from.class_id" => CL_CRM_PERSON,
+     						 "type" => "RELTYPE_RANK",
+    						  "to" => $professions
+					));
+					foreach($people as $person)
+					{
+						$ob = obj($person["from"]);
+						$ppl[$ob->id()] = $ob->name();
+					}
+					$prop["options"] += $ppl;
 				}
-				$c = new connection();
-				$people = $c->find(array(
-					"from.class_id" => CL_CRM_PERSON,
-     					 "type" => "RELTYPE_RANK",
-    					  "to" => $professions
-				));
-				foreach($people as $person)
-				{
-					$ob = obj($person["from"]);
-					$ppl[$ob->id()] = $ob->name();
-				}
-				$prop["options"] += $ppl;
 				break;
 
 			case "bug_class":
