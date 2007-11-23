@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.10 2007/09/20 11:05:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.11 2007/11/23 12:56:45 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
-@classinfo syslog_type=ST_INTERIM_PAGE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_INTERIM_PAGE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general
