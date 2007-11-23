@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.71 2007/11/23 12:31:06 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -271,9 +270,9 @@ class treeview extends class_base
 
 	/** Initializes tree
 
-		@attrib name=start_tree params=name api=1 
+		@attrib name=start_tree params=name api=1
 
-		@param root_name [optional|required] type=string 
+		@param root_name [optional|required] type=string
 			Root menu name
 
 		@param root_url [optional|required] type=string
@@ -297,7 +296,7 @@ class treeview extends class_base
 		@param separator optional type=string default=","
 			String separator to use for separating checked node id-s, applies when type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
 
-		@param checked_nodes optional type=array 
+		@param checked_nodes optional type=array
 			Tree node id-s that are checked initially, applies when type is TREE_DHTML_WITH_CHECKBOXES.
 
 		@param checkbox_data_var optional type=string default=$tree_id
@@ -313,8 +312,8 @@ class treeview extends class_base
 		@param branch optional type=bool default=false
 
 		@param item_name_length optional type=int default=false
-			Maximum length of the item name. 
-			
+			Maximum length of the item name.
+
 		@examples
 
 		classload('vcl/treeview');
@@ -325,7 +324,7 @@ class treeview extends class_base
 			'tree_id' => 'foobar',
 			'persist_state' => true,
 		));
-		
+
 		$t->add_item(0, array(
 			"id" => 2,
 			"name" => 'Foo',
@@ -333,7 +332,7 @@ class treeview extends class_base
 		));
 
 		$t->add_item(2, array(
-			"id" => 3, 
+			"id" => 3,
 			"name" => 'Foo',
 			"url" => $this->mk_my_orb("do_something",array())
 		));
@@ -404,9 +403,9 @@ class treeview extends class_base
 
 	/** Adds item to the tree
 
-		@attrib name=add_item params=pos api=1 
+		@attrib name=add_item params=pos api=1
 
-		@param parent required type=string 
+		@param parent required type=string
 			The parent of the item to be added
 
 		@param item required type=array
@@ -441,7 +440,7 @@ class treeview extends class_base
 
 	/** Returns the array with the item ids in tree
 		@attrib name=get_item_ids params=name api=1
-		@returns 
+		@returns
 			Array with item ids in tree
 
 	**/
@@ -454,7 +453,7 @@ class treeview extends class_base
 		@attrib name=get_item params=pos api=1
 		@param id required type=string
 			The key (id) of an item
-		@returns 
+		@returns
 			Array with item data
 
 	**/
@@ -499,12 +498,12 @@ class treeview extends class_base
 		$this->selected_item = $id;
 	}
 
-	
+
 	/** Checks if a node have children or not
 		@attrib name=node_has_children params=pos api=1
 		@param id required type=string
 			The key (id) of an item
-		@returns 
+		@returns
 			Boolean true if item exists
 			Boolean false if item doesn't exists
 
@@ -522,9 +521,9 @@ class treeview extends class_base
 		@attrib name=finalize_tree params=name api=1
 		@param rootnode optional type=string default=0
 			From which node should drawing start (defaults to 0)
-			
+
 		@returns
-			Parsed tree 
+			Parsed tree
 		@examples
 			#start_tree
 
@@ -694,7 +693,7 @@ class treeview extends class_base
 
 		// so, how do I figure out the path to the root node .. and if I do, then that's the
 		// same thing I'll have to give as an argument when using the on-demand feature
-		
+
 
 		$this->vars(array(
 			"TREE_NODE" => $rv,
@@ -888,7 +887,7 @@ class treeview extends class_base
 			$subres = $this->draw_dhtml_tree($item["id"]);
 			// subress will be empty string, if draw_dhtml_tree finds no
 			// elements under the requested node
-				
+
 			$in_path = in_array($item["id"],$this->r_path);
 
 			if (!empty($item["iconurl"]))
@@ -913,7 +912,7 @@ class treeview extends class_base
 			};
 
 			$url_target = !isset($item["url_target"]) ? (isset($this->tree_dat["url_target"]) ? $this->tree_dat["url_target"] : null) : $item["url_target"];
-			
+
 			$has_data = "0";
 			if($this->has_feature(DATA_IN_PLACE) == 1)
 			{
@@ -1316,7 +1315,7 @@ class treeview extends class_base
 
 	/** Takes an object_tree and returns a treeview
 		@attrib name=tree_from_objects param=name api=1
-		
+
 		@param tree_opts required type=array
 			Options to pass to the treeview constructor
 		@param root_item required type=object
@@ -1327,26 +1326,29 @@ class treeview extends class_base
 			If set, urls for nodes won't be generated
 		@param target_url optional type=string
 			Url for link of menu items
-		@param var required type=string 
+		@param var required type=string
 			Variable name. Links in the tree will be made with aw_url_change_var($var, $item->id(), $url) - the $var variable will contain the active tree item
 		@param node_actions optional type=array
 			This is for specifying different actions for different classes. ( array( clid => "action_name" ) )
 		@param checkbox_class_filter optional type=array
 			Array of class id-s, objects of these classes will have checkboxed/buttoned tree nodes. Applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
-		@param no_root_item optional type=bool 
+		@param no_root_item optional type=bool
 			If true, the single root item is not inserted into the tree
-		@returns 
+		@param item_name_props optional type=array
+			Property names by class to be used for tree item visible name. Format: array($clid => "property_name"). Default is object name.
+		@returns
 			Treeview object
 		@comment
-			
+
 		@examples
-			
+
 	**/
 	function tree_from_objects($arr)
 	{
 		extract($arr);
 		$tv = get_instance(CL_TREEVIEW);
 		$aw_classes = get_class_picker (array ("field" => "def"));
+		$item_name_props = (array) $arr["item_name_props"];
 
 		if (!isset($target_url))
 		{
@@ -1386,11 +1388,23 @@ class treeview extends class_base
 		$tv->start_tree($tree_opts);
 		if (!$arr["no_root_item"])
 		{
-			$nm = parse_obj_name($root_item->name());
+			if (array_key_exists($root_item->class_id(), $item_name_props))
+			{
+				if ($root_item->is_property($item_name_props[$root_item->class_id()]))
+				{
+					$nm = parse_obj_name($root_item->prop($item_name_props[$root_item->class_id()]));
+				}
+			}
+			else
+			{
+				$nm = parse_obj_name($root_item->name());
+			}
+
 			if ($var && $_GET[$var] == "")
 			{
 				$nm = "<b>".$nm."</b>";
 			}
+
 			$tv->add_item(0,array(
 				"name" => $nm,
 				"id" => $root_item->id(),
@@ -1403,7 +1417,18 @@ class treeview extends class_base
 		$ol = $ot->to_list();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$oname = parse_obj_name($o->name());
+			if (array_key_exists($o->class_id(), $item_name_props))
+			{
+				if ($o->is_property($item_name_props[$o->class_id()]))
+				{
+					$oname = parse_obj_name($o->prop($item_name_props[$o->class_id()]));
+				}
+			}
+			else
+			{
+				$oname = parse_obj_name($o->name());
+			}
+
 			if(isset($arr["tree_opts"]["item_name_length"]))
 			{
 				$oname = substr($oname, 0, $arr["tree_opts"]["item_name_length"]).(strlen($oname) > 20 ? "..." : "");
@@ -1455,7 +1480,7 @@ class treeview extends class_base
 			if (!$arr["icon"])
 			{
 				$icon = (($class_id == CL_MENU) ? NULL : $ic->get_icon_url($class_id,""));
-			}	
+			}
 			else
 			{
 				$icon = $arr["icon"];
