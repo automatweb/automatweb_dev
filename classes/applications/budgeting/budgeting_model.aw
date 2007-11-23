@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  mantainer=kristo
+*/
 
 class budgeting_model extends core
 {

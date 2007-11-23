@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_transfer.aw,v 1.1 2007/05/04 10:33:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_transfer.aw,v 1.2 2007/11/23 14:28:43 kristo Exp $
 // budgeting_transfer.aw - &Uuml;lekanne 
 /*
 
-@classinfo syslog_type=ST_BUDGETING_TRANSFER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BUDGETING_TRANSFER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
 
 @tableinfo aw_budgeting_transfers master_table=objects master_index=brother_of index=aw_oid
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_group.aw,v 1.1 2007/06/08 12:36:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_group.aw,v 1.2 2007/11/23 14:28:43 kristo Exp $
 // budgeting_tax_group.aw - Eelarvestamise maksu grupp 
 /*
 
-@classinfo syslog_type=ST_BUDGETING_TAX_GROUP relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BUDGETING_TAX_GROUP relationmgr=yes no_status=1 prop_cb=1 mantainer=kristo
 
 @default table=objects
 @default group=general

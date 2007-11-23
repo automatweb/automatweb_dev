@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_scenario.aw,v 1.1 2007/09/14 12:38:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_scenario.aw,v 1.2 2007/11/23 14:28:43 kristo Exp $
 // budgeting_scenario.aw - Eelarve stasenaarium 
 /*
 
-@classinfo syslog_type=ST_BUDGETING_SCENARIO relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BUDGETING_SCENARIO relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
 
 @default table=objects
 @default group=general

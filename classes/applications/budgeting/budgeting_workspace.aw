@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.9 2007/11/23 12:31:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.10 2007/11/23 14:28:43 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
-@classinfo syslog_type=ST_BUDGETING_WORKSPACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BUDGETING_WORKSPACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
 
 @default table=objects
 @default group=general
