@@ -6,8 +6,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>objpicker</type>
-            <clid>CL_DB_LOGIN</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DB_LOGIN</reltype>
             <caption>Vali andmebaas</caption>
       </property>
       <property>
@@ -29,5 +29,17 @@
             <editonly>1</editonly>
             <caption></caption>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+            <mantainer>kristo</mantainer>
+      </classinfo>
+      <reltypes>
+            <DB_LOGIN>
+                  <value>1</value>
+                  <clid>CL_DB_LOGIN</clid>
+                  <caption>DB Login</caption>
+            </DB_LOGIN>
+      </reltypes>
 </properties>
 

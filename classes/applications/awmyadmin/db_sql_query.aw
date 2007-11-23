@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.4 2005/11/03 13:24:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.5 2007/11/23 14:23:44 kristo Exp $
 /*
+
+	@classinfo no_status=1 no_comment=1 mantainer=kristo
 
 	@default table=objects
 	@default group=general

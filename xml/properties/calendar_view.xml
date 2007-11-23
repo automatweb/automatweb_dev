@@ -49,6 +49,16 @@
             <caption>S&amp;amp;uuml;ndmuse kujundusp&amp;amp;otilde;hi</caption>
       </property>
       <property>
+            <name>week_event_template</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>S&amp;amp;uuml;ndmuse n&amp;amp;auml;dala kujundusp&amp;amp;otilde;hi</caption>
+      </property>
+      <property>
             <name>show_days_with_events</name>
             <table>objects</table>
             <group>general</group>

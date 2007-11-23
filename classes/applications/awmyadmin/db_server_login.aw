@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_login.aw,v 1.3 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_login.aw,v 1.4 2007/11/23 14:23:44 kristo Exp $
 // db_server_login.aw - Andmebaasi serveri login
 
 /*
-	@classinfo syslog_type=ST_DB_SERVER_LOGIN relationmgr=yes no_status=1 no_comment=1
+	@classinfo syslog_type=ST_DB_SERVER_LOGIN relationmgr=yes no_status=1 no_comment=1 mantainer=kristo
 
 	@default table=objects
 	@default group=general

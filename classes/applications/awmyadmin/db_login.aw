@@ -1,7 +1,7 @@
 <?php
 
 /*
-	@classinfo syslog_type=ST_DB_LOGIN relationmgr=yes no_status=1 no_comment=1
+	@classinfo syslog_type=ST_DB_LOGIN relationmgr=yes no_status=1 no_comment=1 mantainer=kristo
 
 	@default table=objects
 	@default group=general

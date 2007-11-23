@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.11 2006/04/19 11:41:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.12 2007/11/23 14:23:44 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
-	@classinfo syslog_type=ST_DB_TABLE_CONTENTS relationmgr=yes no_status=1 no_comment=1
+	@classinfo syslog_type=ST_DB_TABLE_CONTENTS relationmgr=yes no_status=1 no_comment=1 mantainer=kristo
 
 	@default table=objects
 	@default group=general

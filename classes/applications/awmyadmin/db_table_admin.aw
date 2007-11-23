@@ -1,14 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.6 2006/03/21 13:23:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.7 2007/11/23 14:23:44 kristo Exp $
 
 /*
+
+	@classinfo no_status=1 no_comment=1 mantainer=kristo
 
 	@default table=objects
 	@default group=general
 	@default field=meta
 	@default method=serialize
 
-	@property db_base type=objpicker clid=CL_DB_LOGIN
+	@property db_base type=relpicker reltype=RELTYPE_DB_LOGIN
 	@caption Vali andmebaas
 
 	@property db_table type=select 
@@ -17,6 +19,8 @@
 	@property adminlink type=text editonly=1
 	@caption 
 
+@reltype DB_LOGIN value=1 clid=CL_DB_LOGIN
+@caption DB Login
 */
 
 class db_table_admin extends class_base
@@ -36,7 +40,7 @@ class db_table_admin extends class_base
 			case 'db_table':
 				$tbls = array(-1 => 'Lisa uus');
 				$base = get_instance(CL_DB_LOGIN);
-				if ($base->login_as($args['obj']['meta']['db_base']))
+				if ($base->login_as($args["obj_inst"]->meta('db_base')))
 				{
 					$base->db_list_tables();
 					while ($tbl = $base->db_next_table())
@@ -73,7 +77,7 @@ class db_table_admin extends class_base
 	{
 		extract($arr);
 		$ob = $this->_change_init($arr, 'Tabeli admin', 'admin.tpl');
-		$this->mk_path($ob['parent'], html::href(array(
+		$this->mk_path($ob->parent(), html::href(array(
 				'url' => $this->mk_my_orb('change', array('id' => $id)),
 				'caption' => 'Muuda'
 			)).' / '.html::href(array(
@@ -83,8 +87,8 @@ class db_table_admin extends class_base
 		);
 
 		return $this->do_table_admin(array(
-			'db_base' => $ob['meta']['db_base'],
-			'db_table' => $ob['meta']['db_table'],
+			'db_base' => $ob->meta('db_base'),
+			'db_table' => $ob->meta('db_table'),
 			'that' => &$this,
 			'id' => $id
 		));

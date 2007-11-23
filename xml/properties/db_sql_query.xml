@@ -21,5 +21,10 @@
             <rows>5</rows>
             <caption>SQL</caption>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+            <mantainer>kristo</mantainer>
+      </classinfo>
 </properties>
 
