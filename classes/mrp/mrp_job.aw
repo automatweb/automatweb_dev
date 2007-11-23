@@ -176,7 +176,7 @@ class mrp_job extends class_base
 			$project_id = $this_object->prop ("project");
 			$resource_id = $this_object->prop ("resource");
 
-			if ( is_oid($project_id) and is_oid($resource_id) )
+			if ( $this->can("view", $project_id) and $this->can("view", $resource_id) )
 			{
 				$this->project = obj ($project_id);
 				$this->resource = obj ($resource_id);
