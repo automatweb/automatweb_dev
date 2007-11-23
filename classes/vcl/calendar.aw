@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.96 2007/11/23 10:37:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.97 2007/11/23 12:49:46 markop Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1052,6 +1052,7 @@ class vcalendar extends aw_template
 				$this->vars(array(
 					"EVENT" => $calendar_blocks[$block_id],
 					"daynum" => date("j",$reals),
+					"monthnum" => date("m",$reals),
 					"dayname" => date("F d, Y",$reals),
 					"date" => locale::get_lc_date($reals,5),
 					"lc_weekday" => locale::get_lc_weekday(date("w",$reals)),
@@ -1192,7 +1193,14 @@ class vcalendar extends aw_template
 	
 	function draw_week()
 	{
-		$this->read_template("week_view.tpl");
+		if ($this->overview_func)
+		{
+			$o_inst = $this->overview_func[0];
+			$sub_tpl = $o_inst->obj_inst->prop("week_event_template");
+		}
+		$tpl = $sub_tpl ? $sub_tpl : "week_view.tpl";
+
+		$this->read_template($tpl);
 		$now = date("Ymd");
 		if ($this->skip_empty)
 		{
@@ -1260,6 +1268,7 @@ class vcalendar extends aw_template
 				"DCHECK" => $dcheck,
 				"EVENT" => $events_for_day,
 				"daynum" => date("j",$reals),
+				"monthnum" => date("m",$reals),
 				"dayname" => date("F d, Y",$reals),
 				"lc_weekday" => get_lc_weekday($wn,$reals),
 				"lc_month" => $mn,
@@ -1325,6 +1334,7 @@ class vcalendar extends aw_template
 			"DCHECK" => $dcheck,
 			"EVENT" => $events_for_day,
 			"daynum" => date("j",$this->range["start"]),
+			"monthnum" => date("m",$reals),
 			"dayname" => date("F d, Y",$this->range["start"]),
 			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
 			"date" => locale::get_lc_date($this->range["start"],5),
@@ -1797,6 +1807,8 @@ class vcalendar extends aw_template
 			"odd" => $this->event_counter % 2,
 			"time" => $time,
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
+			"monthnum" => date("m",$evt["timestamp"]),
+			"daynum" => date("j",$evt["timestamp"]),
 			"datestamp" => date("d.m.Y",$evt["timestamp"]),
 			"aw_date" => date("d-m-Y",$evt["timestamp"]),
 			"lc_date" => date("j",$evt["timestamp"]) . ". " . $lc_month . " " . date("Y H:i",$evt["timestamp"]),
