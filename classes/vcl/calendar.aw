@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.95 2007/11/19 13:19:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.96 2007/11/23 10:37:14 markop Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -76,7 +76,12 @@ class vcalendar extends aw_template
 	{
 		$this->evt_tpl = get_instance("aw_template");
 		$this->evt_tpl->tpl_init($this->cal_tpl_dir);
-		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" : "sub_event.tpl";
+		if ($this->overview_func)
+		{
+			$o_inst = $this->overview_func[0];
+			$sub_tpl = $o_inst->obj_inst->prop("sub_event_template");
+		}
+		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" :($sub_tpl ? $sub_tpl : "sub_event.tpl");
 		$better_template = "";
 		if ($arr["event_template"])
 		{

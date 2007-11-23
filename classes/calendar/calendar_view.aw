@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.55 2007/11/20 11:14:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.56 2007/11/23 10:37:15 markop Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -25,6 +25,9 @@
 
 @property search_form type=relpicker reltype=RELTYPE_SEARCH
 @caption Otsinguvorm
+
+@property sub_event_template type=textbox size=5
+@caption S&uuml;ndmuse kujundusp&otilde;hi
 
 @property show_days_with_events type=checkbox ch_value=1
 @caption Näita ainult sündmustega päevi
