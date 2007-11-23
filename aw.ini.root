@@ -58,7 +58,6 @@ include ${ini_dir}/manager.ini
 include ${ini_dir}/languages.ini
 include ${ini_dir}/extlinks.ini
 include ${ini_dir}/datasource.ini
-include ${ini_dir}/apache_alias.ini
 include ${ini_dir}/syslog.ini
 include ${ini_dir}/formgen.ini
 include ${ini_dir}/poll.ini
