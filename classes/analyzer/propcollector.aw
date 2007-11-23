@@ -1,5 +1,9 @@
 <?php
 // creates xml files out of property definitions
+/*
+@classinfo mantainer=kristo
+*/
+
 class propcollector extends aw_template
 {
 	function propcollector($args = array())
