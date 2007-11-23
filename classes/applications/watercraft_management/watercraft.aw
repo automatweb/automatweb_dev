@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.26 2007/10/08 10:25:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.27 2007/11/23 07:10:01 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
-@classinfo syslog_type=ST_WATERCRAFT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_WATERCRAFT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 @tableinfo watercraft index=oid master_table=objects master_index=oid
 
 @default table=objects

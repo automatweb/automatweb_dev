@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.29 2007/08/08 00:13:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.30 2007/11/23 07:10:01 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
-@classinfo syslog_type=ST_WATERCRAFT_SEARCH relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_WATERCRAFT_SEARCH relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 @tableinfo watercraft_search index=oid master_table=objects master_index=oid
 
 @default table=objects

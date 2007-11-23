@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.15 2007/07/26 05:51:08 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.16 2007/11/23 07:10:01 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
-@classinfo syslog_type=ST_WATERCRAFT_MANAGEMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_WATERCRAFT_MANAGEMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 @tableinfo watercraft_management index=oid master_table=objects master_index=oid
 
 @default table=objects
@@ -711,6 +711,24 @@ class watercraft_management extends class_base
 			$arr['obj_inst']->set_prop('locations', $locations_oid);
 
 			$arr['obj_inst']->save();
+		}
+	}
+
+	function get_expired_ads()
+	{
+		$wman = get_active(CL_WATERCRAFT_MANAGEMENT);
+		$days = (int)($wman->prop("expire_notification_time"));
+		if($days)
+		{
+			$sex_in_day = 60 * 60 * 24;
+			$to = time() - ($days * $sex_in_day);
+			$list = new object_list(array(
+				"class_id" => CL_WATERCRAFT,
+				"parent" => $wman->prop("data"),
+				"visible" => 1,
+				"status" => STAT_ACTIVE,
+				"modified" => new obj_predicate_compare(OBJ_COMP_LESS, mktime(0,0,0, date("n", $to), date("j", $to), date("Y", $to))), 
+			));
 		}
 	}
 

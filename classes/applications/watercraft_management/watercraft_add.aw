@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.16 2007/07/12 11:38:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.17 2007/11/23 07:10:01 dragut Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
-@classinfo syslog_type=ST_WATERCRAFT_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_WATERCRAFT_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 @tableinfo watercraft_add index=oid master_table=objects master_index=oid
 
 @default table=objects
