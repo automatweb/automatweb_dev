@@ -15,7 +15,7 @@
 			</function>
 		</action>
 
-		<action name="handle_pay_submit" nologin="1" >
+		<action name="handle_pay_submit" nologin="1">
 			<function name="handle_pay_submit">
 				<arguments>
 				</arguments>
@@ -49,19 +49,20 @@
 				</arguments>
 			</function>
 		</action>
-	
+
 		<action name="go_to_cc_payment" nologin="1" all_args="1">
 			<function name="go_to_cc_payment">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-	
-		<action name="cancel_booking" nologin="1" all_args="1">
+
+		<action name="cancel_booking" all_args="1">
 			<function name="cancel_booking">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.212 2007/11/15 10:36:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.213 2007/11/23 12:30:56 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1959,7 +1959,7 @@ class image extends class_base
 		{
 			if ($conf->prop("resize_before_crop"))
 			{
-				if ($i_width != $xyd["si_width"] || $i_height != $xyd["si_height"])
+				if ($i_width > $xyd["si_width"] && $i_height > $xyd["si_height"])
 				{
 					$img->resize_simple($xyd["width"], $xyd["height"]);
 				}
@@ -1986,7 +1986,7 @@ class image extends class_base
 			}
 		}
 		else
-		if ($xyd["width"] != $i_width || $xyd["height"] != $i_height)
+		if ($xyd["width"] < $i_width && $xyd["height"] < $i_height)
 		{
 			$img->resize_simple($xyd["width"], $xyd["height"]);
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.8 2007/10/24 12:27:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.9 2007/11/23 12:31:01 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -1340,7 +1340,7 @@ class budgeting_workspace extends class_base
 	/**
 		@attrib name=select_tax_cat api=1
 		@param id required type=int
-		@param var optional type=int
+		@param var optional 
 	**/
 	function select_tax_cat($arr)
 	{

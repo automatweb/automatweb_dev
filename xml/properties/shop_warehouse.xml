@@ -575,6 +575,7 @@
             <hbox_oc>
                   <type>hbox</type>
                   <group>order_orderer_cos</group>
+                  <area_caption></area_caption>
             </hbox_oc>
       </layout>
 </properties>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.17 2007/09/10 10:57:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.18 2007/11/23 12:31:03 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -119,7 +119,6 @@ class shop_product_table_layout extends class_base
 		{
 			$from = $this->per_page * (int)$_GET["sptlp"];
 			$to = $this->per_page * ((int)$_GET["sptlp"]+1);
-
 			if (!($this->cnt >= $from && $this->cnt < $to))
 			{
 				return false;

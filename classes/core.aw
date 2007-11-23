@@ -1159,6 +1159,16 @@ class core extends acl_base
 					"caption" => strip_tags($name),
 				)) . " / " . $path;
 			}
+			/*if ($current->class_id() == CL_MENU)
+			{
+				$path .= html::href(array(
+					"url" => $this->mk_my_orb("right_frame",array(
+						"parent" => $current->id(),
+						"period" => $period,
+					),"admin_menus"),
+					"caption" => strip_tags(parse_obj_name($current->name())),
+				));
+			}*/
 		}
 
 		if((aw_global_get("output_charset") != null) && (aw_global_get("charset") != aw_global_get("output_charset")))

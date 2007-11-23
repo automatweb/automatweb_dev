@@ -35,6 +35,7 @@
 			<function name="select_tax_cat">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="var" />
 				</arguments>
 			</function>
 		</action>
