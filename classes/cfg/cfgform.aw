@@ -1811,11 +1811,11 @@ class cfgform extends class_base
 						case "datetime_select":
 							$this->vars(array(
 								"prp_key" => $property["name"],
-								"dayselect_caption" => t("Kuup&auml;ev: select"),
+								"dayselect_caption" => t("P&auml;ev: select"),
 								"dayselect_ch" => ("select" === $property["day"] or empty($property["day"])) ? ' checked="1"' : "",
 								"daytext_caption" => t("textbox"),
 								"daytext_ch" => ("text" === $property["day"]) ? ' checked="1"' : "",
-								"monthselect_caption" => t("Kuup&auml;ev: select"),
+								"monthselect_caption" => t("Kuu: select"),
 								"monthselect_ch" => ("select" === $property["month"] or empty($property["month"])) ? ' checked="1"' : "",
 								"monthtext_caption" => t("textbox"),
 								"monthtext_ch" => ("text" === $property["month"]) ? ' checked="1"' : "",
@@ -3628,7 +3628,7 @@ class cfgform extends class_base
 				)),
 				"focus" => html::select(array(
 					"name" => "grpfocus[$gn]",
-					"options" => array("" => "") + $props_by_grp[$gn],
+					"options" => array("" => "") + (array) $props_by_grp[$gn],
 					"selected" => $gd["focus"],
 				)),
 				"ctrl" => html::select(array(
