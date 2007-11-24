@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.181 2007/11/20 11:14:37 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -49,16 +48,16 @@ class htmlclient extends aw_template
 			{
 				$this->use_template = $arr["template"] . ".tpl";
 			};
-		};
+		}
+
 		$this->group_style = "";
 		$this->layoutinfo = array();
 		$this->start_output();
+
 		if ($this->tabs)
 		{
 			$this->tp = get_instance("vcl/tabpanel");
-		};
-
-		// I even need those in the tabpanel
+		}
 	}
 
 	function set_layout($arr)
@@ -130,19 +129,22 @@ class htmlclient extends aw_template
 	function start_output($args = array())
 	{
 		$this->set_parse_method("eval");
-
-
 		$tpl = "default.tpl";
+
 		if (!empty($this->use_template))
 		{
 			$tpl = $this->use_template;
-		};
+		}
+
 		$this->read_template($tpl);
+
 		if(!empty($this->tpl_vars))
 		{
 			$this->vars($this->tpl_vars);
 		}
+
 		$script = aw_global_get("SCRIPT_NAME");
+
 		// siia vaja kirjutada see embedded case
 		if (empty($args["handler"]))
 		{
@@ -152,10 +154,12 @@ class htmlclient extends aw_template
 		{
 			$handler = $args["handler"];
 		}
+
 		if ($this->embedded)
 		{
 			$handler = "index";
-		};
+		}
+
 		$this->vars(array(
 			"handler" => $handler,
 		));
@@ -165,7 +169,13 @@ class htmlclient extends aw_template
 
 		// I need some handler code in the output form, if we have any RTE-s
 		$this->rte = false;
+	}
 
+	function set_handler($handler)
+	{
+		$this->vars(array(
+			"handler" => $handler,
+		));
 	}
 
 	function add_property($args = array())
