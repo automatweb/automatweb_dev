@@ -1,5 +1,4 @@
 <?php
-// $Id: class_base.aw,v 2.587 2007/11/22 12:24:57 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -460,7 +459,8 @@ class class_base extends aw_template
 		if (!empty($lm) && empty($args["cb_part"]))
 		{
 			$new_uri = aw_url_change_var(array("cb_part" => 1));
-			$cli = get_instance("cfg/" . $this->output_client,array("layout_mode" => "fixed_toolbar"));
+			$cli = get_instance("cfg/" . $this->output_client, array("layout_mode" => "fixed_toolbar"));
+
 			if ($args["no_rte"] == 1)
 			{
 				$new_uri .= "&no_rte=1";
@@ -831,16 +831,17 @@ class class_base extends aw_template
 		));
 
 		$method = "POST";
+
 		if (!empty($form_submit_method))
 		{
 			$method = "GET";
-		};
+		}
 
 		if (!empty($gdata["submit_method"]))
 		{
 			$method = "GET";
 			$submit_action = $args["action"];
-		};
+		}
 
 		if (!empty($gdata["submit_action"]))
 		{
@@ -849,8 +850,14 @@ class class_base extends aw_template
 
 		if ($method == "GET")
 		{
+			if (!is_admin() and method_exists($cli, "set_handler"))
+			{
+				$cli->set_handler("index");
+			}
+
 			$argblock["no_reforb"] = 1;
-		};
+		}
+
 		if (aw_global_get("changeform_target") != "")
 		{
 			$cli->set_form_target(aw_global_get("changeform_target"));
