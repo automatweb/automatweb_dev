@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.32 2007/11/22 08:17:33 dragut Exp $
 // calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
@@ -120,9 +119,6 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @property organizer type=popup_search reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete method=serialize field=meta table=objects no_edit=1
 @caption Korraldaja
 
-@property make_copy store=no type=checkbox ch_value=1
-@caption Tee koopia
-
 @property level type=select field=level field=ucheck4
 @caption Tase
 
@@ -163,7 +159,7 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -236,15 +232,17 @@ class calendar_event extends class_base
 		switch($prop["name"])
 		{
 			case "event_time":
-			case "make_copy":
 				return PROP_IGNORE;
+
 			case "event_time_table":
 				$this->id = $arr["obj_inst"]->id();
 				$this->save_event_times($arr["request"]["event_time"]);
 				break;
+
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
+
 			case "organizer":
 		 		if(!is_oid($prop["value"]))
  				{
@@ -404,7 +402,7 @@ class calendar_event extends class_base
 //				$location->set_parent($id);
 				$error[$id] = t("Sellist toimumiskohta pole");
 			}
-			
+
 			$start_dt = explode(" ", $val["start"]);
 			$end_dt = explode(" ", $val["end"]);
 			$start_d = explode(".", $start_dt[0]);

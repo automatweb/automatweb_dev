@@ -37,8 +37,9 @@
             <group>events</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
+            <type>relpicker</type>
             <multiple>1</multiple>
+            <reltype>RELTYPE_EDITOR</reltype>
             <parent>events_top_left</parent>
             <store>no</store>
             <caption>Toimetaja</caption>
@@ -235,8 +236,9 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
+            <multiple>1</multiple>
             <reltype>RELTYPE_EDITOR</reltype>
-            <caption>Toimetaja</caption>
+            <caption>Toimetajad</caption>
       </property>
       <property>
             <name>mapserver_url</name>

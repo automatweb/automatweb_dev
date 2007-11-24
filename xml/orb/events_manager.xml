@@ -1,36 +1,8 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="events_manager" folder="applications/events_manager" extends="class_base">
-		<action name="delete_events" is_public="1" caption="Change">
-			<function name="delete_events">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_new_event" is_public="1" caption="Change">
-			<function name="add_new_event">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_new_place" is_public="1" caption="Change">
-			<function name="add_new_place">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_new_organiser" is_public="1" caption="Change">
-			<function name="add_new_organiser">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_new_sector" is_public="1" caption="Change">
-			<function name="add_new_sector">
+		<action name="delete" is_public="1" caption="Change">
+			<function name="delete">
 				<arguments>
 				</arguments>
 			</function>

@@ -25,7 +25,7 @@
 			@property e_find_sectors type=select multiple=1 parent=events_top_left store=no
 			@caption Valdkonnad
 
-			@property e_find_editor type=select multiple=1 parent=events_top_left store=no
+			@property e_find_editor type=relpicker multiple=1 reltype=RELTYPE_EDITOR parent=events_top_left store=no
 			@caption Toimetaja
 
 			@property e_find_text type=textbox parent=events_top_left size=20 store=no
@@ -96,8 +96,8 @@
 	@property languages type=relpicker multiple=1 reltype=RELTYPE_LANGUAGE
 	@caption Sisu keeled
 
-	@property editor type=relpicker reltype=RELTYPE_EDITOR
-	@caption Toimetaja
+	@property editor type=relpicker multiple=1 reltype=RELTYPE_EDITOR
+	@caption Toimetajad
 
 	@property mapserver_url type=textbox
 	@caption Kaardiserveri url
@@ -345,9 +345,8 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					 html::get_change_url($o->id(), array("cfgform" => $cfg),($o->name()?$o->name():"(".t("Nimetu").")")),
-					//html::obj_change_url($o->id()),
+				"name" => (!$this->can("edit" , $o->id())) ? $o->name() :
+					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()), ($o->name() ? $o->name() : "(".t("Nimetu").")")),
 				"comment" => $o->prop("comment"),
 				"oid" => $o->id(),
 			));
@@ -407,8 +406,7 @@ class events_manager extends class_base
 		{
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					 html::get_change_url($o->id(), array("cfgform" => $cfg),($o->name()?$o->name():"(".t("Nimetu").")")),
-					//html::obj_change_url($o->id()),
+					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()), ($o->name()?$o->name():"(".t("Nimetu").")")),
 				"address" => $o->prop("contact.name"),
 				"oid" => $o->id(),
 			));
@@ -425,10 +423,11 @@ class events_manager extends class_base
 
 		$parent = new object($arr["obj_inst"]->prop("sector_menu"));
 		$ot = new object_tree(array(
+			"class_id" => CL_CRM_SECTOR,
 			"parent" => $parent,
 		));
 		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "sector");
-		$target_url = $this->mk_my_orb("change", array("cfgform" => $cfg), "crm_sector");
+		$target_url = $this->mk_my_orb("change", array("cfgform" => $cfg, "return_url" => get_ru()), "crm_sector");
 
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
@@ -520,6 +519,7 @@ class events_manager extends class_base
 			"url" => $this->mk_my_orb("new", array(
 				"parent" => $this_o->prop("places_menu"),
 				"cfgform" => $cfg,
+				"section" => $section,
 				"return_url" => get_ru()
 			), "scm_location")
 		));
@@ -695,26 +695,31 @@ class events_manager extends class_base
 		$this->_init_event_table($t,$arr);
 		$cal_event = get_instance(CL_CALENDAR_EVENT);
 		$ol =& $this->_get_event_list($arr["obj_inst"], $arr["request"]);
+		$post_ru = post_ru();
+		$get_ru = get_ru();
+		$t_publish = t("Avalda");
+		$t_mk_copy = t("Tee koopia");
 
 		foreach($ol->arr() as $o)
 		{
+			$oid = $o->id();
 			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTOR");
+			$can_edit = $this->can("edit" , $oid);
 
 			$publish = "";
 			if(!$o->prop("published"))
 			{
 				$publish = html::href(array(
-					"url" => $this->mk_my_orb("publish" , array("id" => $o->id(),"post_ru" => post_ru())),
-					"title" => t("Avalda"),
-					"caption" => t("Avalda"),
+					"url" => $this->mk_my_orb("publish" , array("id" => $oid, "post_ru" => $post_ru)),
+					"title" => $t_publish,
+					"caption" => $t_publish,
 				));
 			}
-			$change_url = (!$this->can("edit" , $o->id()))?"":html::obj_change_url($o , t("Muuda"));
 
 			$make_copy = html::href(array(
-				"url" => $this->mk_my_orb("make_copy" , array("id" => $o->id(),"post_ru" => post_ru())),
-				"title" => t("Tee koopia"),
-				"caption" => t("Tee koopia"),
+				"url" => $this->mk_my_orb("make_copy" , array("id" => $oid, "post_ru" => $post_ru)),
+				"title" => $t_mk_copy,
+				"caption" => $t_mk_copy,
 			));
 
 			$translated = "";
@@ -736,15 +741,15 @@ class events_manager extends class_base
 				$translated = join (", " ,$langs);
 			}
 
+			$name = parse_obj_name($o->name());
+
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					// html::get_change_url($o->id(), array("cfgform" => $arr["obj_inst"]->prop("event_form")),$o->name()?$o->name():t("(Nimetu)")),
-					html::obj_change_url($o->id()),
+				"name" => $can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru), $name) : $name,
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"sector" => (is_object($sec)) ? $sec->name() : "",
 				"level" => $cal_event->level_options[$o->prop("level")],
-				"tasks" => $make_copy . " " . $publish . " " . $change_url,
-				"oid" => $o->id(),
+				"tasks" => $make_copy . " " . $publish,
+				"oid" => $oid,
 				"region" => $o->prop("location.address.maakond.name") ." ".$o->prop("location.address.linn.name"),
 				"translated" => $translated,
 			));
@@ -1015,6 +1020,16 @@ class events_manager extends class_base
 	**/
 	function delete($arr)
 	{
+		if (!isset($arr["evmgr_objsel"]) and isset($_GET["evmgr_objsel"]))
+		{
+			$arr = $_GET;
+		}
+
+		if ("sectors" === $arr["group"])
+		{
+			$arr["evmgr_objsel"] = explode(",", $arr["evmgr_objsel"]);
+		}
+
 		object_list::iterate_list($arr["evmgr_objsel"], "delete");
 		return $arr["post_ru"];
 	}

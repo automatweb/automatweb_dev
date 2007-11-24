@@ -291,16 +291,6 @@
             <caption>Korraldaja</caption>
       </property>
       <property>
-            <name>make_copy</name>
-            <group>general</group>
-            <table>planner</table>
-            <store>no</store>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>make_copy</field>
-            <caption>Tee koopia</caption>
-      </property>
-      <property>
             <name>level</name>
             <group>general</group>
             <table>planner</table>
