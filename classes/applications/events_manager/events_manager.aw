@@ -346,7 +346,7 @@ class events_manager extends class_base
 		{
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id())) ? $o->name() :
-					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()), ($o->name() ? $o->name() : "(".t("Nimetu").")")),
+					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), ($o->name() ? $o->name() : "(".t("Nimetu").")")),
 				"comment" => $o->prop("comment"),
 				"oid" => $o->id(),
 			));
@@ -406,7 +406,7 @@ class events_manager extends class_base
 		{
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()), ($o->name()?$o->name():"(".t("Nimetu").")")),
+					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), ($o->name()?$o->name():"(".t("Nimetu").")")),
 				"address" => $o->prop("contact.name"),
 				"oid" => $o->id(),
 			));
@@ -427,7 +427,7 @@ class events_manager extends class_base
 			"parent" => $parent,
 		));
 		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "sector");
-		$target_url = $this->mk_my_orb("change", array("cfgform" => $cfg, "return_url" => get_ru()), "crm_sector");
+		$target_url = $this->mk_my_orb("change", array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), "crm_sector");
 
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
@@ -521,7 +521,7 @@ class events_manager extends class_base
 				"cfgform" => $cfg,
 				"section" => $section,
 				"return_url" => get_ru()
-			), "scm_location")
+			) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), "scm_location")
 		));
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "delete",
@@ -545,7 +545,7 @@ class events_manager extends class_base
 				"parent" => $this_o->prop("sector_menu"),
 				"cfgform" => $cfg,
 				"return_url" => get_ru()
-			), "crm_sector")
+			) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), "crm_sector")
 		));
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "delete",
@@ -574,7 +574,7 @@ class events_manager extends class_base
 				"parent" => $this_o->prop("organiser_menu"),
 				"cfgform" => $cfg,
 				"return_url" => get_ru()
-			), "crm_company")
+			) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), "crm_company")
 		));
 
 		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "organiser_person");
@@ -586,7 +586,7 @@ class events_manager extends class_base
 				"parent" => $this_o->prop("organiser_menu"),
 				"cfgform" => $cfg,
 				"return_url" => get_ru()
-			), "crm_person")
+			) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), "crm_person")
 		));
 
 		$arr["prop"]["vcl_inst"]->add_button(array(
@@ -744,7 +744,7 @@ class events_manager extends class_base
 			$name = parse_obj_name($o->name());
 
 			$t->define_data(array(
-				"name" => $can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru), $name) : $name,
+				"name" => $can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $name) : $name,
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"sector" => (is_object($sec)) ? $sec->name() : "",
 				"level" => $cal_event->level_options[$o->prop("level")],
@@ -850,7 +850,7 @@ class events_manager extends class_base
 				"parent" => $this_o->prop("event_menu"),
 				"cfgform" => $cfg,
 				"return_url" => get_ru()
-			), "calendar_event")
+			) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), "calendar_event")
 		));
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "delete",
@@ -1052,7 +1052,7 @@ class events_manager extends class_base
 		$editor->save();
 		$this_o->connect(array("to"=> $editor->id(), "type" => "RELTYPE_EDITOR"));
 		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "editor");
-		return html::get_change_url($editor->id(),array("return_url" => $arr["post_ru"], "cfgform" => $cfg));
+		return html::get_change_url($editor->id(),array("return_url" => $arr["post_ru"], "cfgform" => $cfg) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()));
 	}
 
 	/**
