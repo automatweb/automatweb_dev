@@ -191,6 +191,7 @@ class events_manager extends class_base
 	var $type_idx = array(
 		"event" => CL_CALENDAR_EVENT,
 		"organiser" => CL_CRM_COMPANY,
+		"organiser_person" => CL_CRM_PERSON,
 		"editor" => CL_CRM_PERSON,
 		"sector" => CL_CRM_SECTOR,
 		"places" => CL_SCM_LOCATION,
@@ -400,10 +401,12 @@ class events_manager extends class_base
 		));
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_organiser_table($t);
-		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "organiser");
+		$cfg_o = $this->get_cgf_from_manager($arr["obj_inst"], "organiser");
+		$cfg_p = $this->get_cgf_from_manager($arr["obj_inst"], "organiser_person");
 
 		foreach($ol->arr() as $o)
 		{
+			$cfg = (CL_CRM_COMPANY === (int) $o->class_id()) ? $cfg_o : $cfg_p;
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():
 					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), ($o->name()?$o->name():"(".t("Nimetu").")")),
