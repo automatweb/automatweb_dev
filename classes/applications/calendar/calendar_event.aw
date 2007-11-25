@@ -203,26 +203,14 @@ class calendar_event extends class_base
 			"clid" => CL_CALENDAR_EVENT
 		));
 
-		$this->level_options = array("&Uuml;leriikliku t&auml;htsusega", "Kohaliku t&auml;htsusega","V&auml;lismaal toimuv");
+		$this->level_options = array(
+			1 => "&Uuml;leriikliku t&auml;htsusega",
+			2 => "Kohaliku t&auml;htsusega",
+			3 => "V&auml;lismaal toimuv"
+		);
 		$this->trans_props = array(
 			"name", "title",  "short_description", "description"
 		);
-	}
-
-	function do_db_upgrade($tbl, $field, $q, $err)
-	{
-		if ("planner" == $tbl)
-		{
-			switch($field)
-			{
-				case "level":
-					$this->db_add_col($tbl, array(
-						"name" => $field,
-						"type" => "int",
-					));
-					return true;
-			}
-		}
 	}
 
 	function set_property($arr = array())
