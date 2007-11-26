@@ -141,6 +141,7 @@ class object_tree extends _int_obj_container_base
 				$ol->list_objdata[$oid] = $this->tree_objdata[$pt][$oid];
 			}
 		}
+		$ol->list_names = $this->tree_names;
 		return $ol;
 	}
 
@@ -602,6 +603,7 @@ class object_tree extends _int_obj_container_base
 			if ($GLOBALS["object_loader"]->ds->can("view", $oid) && $parentdata[$oid] != $objdata[$oid]["brother_of"])
 			{
 				$this->tree_objdata[$parentdata[$oid]][$oid] = $objdata[$oid];
+				$this->tree_names[$oid] = $oname;
 				if (count($meta_filter) > 0)
 				{
 					$o = new object($oid);
