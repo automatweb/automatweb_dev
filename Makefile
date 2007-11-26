@@ -72,6 +72,9 @@ class:
 pot:
 	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw
 
+pot.dbg:
+	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --dbg
+
 pot.warn:
 	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --warn-only
 

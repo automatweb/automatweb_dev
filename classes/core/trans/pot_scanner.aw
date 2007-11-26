@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.47 2007/04/09 11:27:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.48 2007/11/26 18:56:49 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -713,7 +713,15 @@ class pot_scanner extends core
 				{
 					case "unix":
 						// -U updates file in place, and real men do not need a backup
-						shell_exec("msgmerge --no-wrap -N -U --backup=off $fn $file_to 2>/dev/null");
+						if ($GLOBALS["mk_dbg"] == 1)
+						{
+							echo "msgmerge --no-wrap -N -U --backup=off $fn $file_to\n";
+							 shell_exec("msgmerge --no-wrap -N -U --backup=off $fn $file_to ");
+						}
+						else
+						{
+							shell_exec("msgmerge --no-wrap -N -U --backup=off $fn $file_to 2>/dev/null");
+						}
 						//shell_exec("msgmerge -U --backup=off $fn $file_to -o $fn");
 						break;
 
