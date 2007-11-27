@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.8 2007/11/23 07:18:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_remote_makse.aw,v 1.9 2007/11/27 12:30:57 dragut Exp $
 // expp_remote_makse.aw - expp remote makse 
 /*
 
@@ -902,8 +902,15 @@ var $pangad = array(
 
 			$_SESSION['expp_remote_valjaanded'][$tell['VAINDEKS']] = $tell['AK_TOOTENIMI'];
 
+			// I need change the date format for expp_arved db table:
 			$tellkpv_osad = explode('-', $tell['TELLKPV']);
 			$tellkpv = $tellkpv_osad[2].'.'.$tellkpv_osad[1].'.'.$tellkpv_osad[0];
+
+			$alguskpv_osad = explode('-', $tell['ALGUS']);
+			$alguskpv = $alguskpv_osad[2].'.'.$alguskpv_osad[1].'.'.$alguskpv_osad[0];
+
+			$loppkpv_osad = explode('-', $tell['LOPP']);
+			$loppkpv = $loppkpv_osad[2].'.'.$loppkpv_osad[1].'.'.$loppkpv_osad[0];
 
 			$sql = "
 				insert into
@@ -941,8 +948,8 @@ var $pangad = array(
 					tlkood = '".$tell['TLKOOD']."',
 					arvenr = '".$arvenr."',
 					vaindeks = '".$tell['VAINDEKS']."',
-					algus = '".$tell['ALGUS']."',
-					lopp = '".$tell['LOPP']."',
+					algus = '".$alguskpv."',
+					lopp = '".$loppkpv."',
 					eksempla = '".$tell['EKSEMPLA']."',
 					tellkpv = '".$tellkpv."',
 					maksumus = '".$tell['MAKSUMUS']."',
