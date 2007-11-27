@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.22 2007/11/27 09:28:28 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.23 2007/11/27 10:01:36 robert Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -382,6 +382,7 @@ class newsfeed extends class_base
 					"end_date" => "0000-00-00 00:00:00", // documents have no ending date
 					"author" => $o->prop("author"),
 					"source" => $source,
+     					"art_lead" => $art_lead,
 					"description" => $art_lead.'<br><br>'.$description,
 					"guid" => $baseurl . "/" . $oid,
 					"pubDate" => date("r",$mod_date),
