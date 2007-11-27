@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.112 2007/11/13 10:35:15 robert Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.112 2007/11/13 10:35:15 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.113 2007/11/27 15:47:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.113 2007/11/27 15:47:22 kristo Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -2776,6 +2776,10 @@ class bug_tracker extends class_base
 			if ($gt->prop("num_hrs_guess") > 0)
 			{
 				$length = $gt->prop("num_hrs_guess") * 3600 - ($gt->prop("num_hrs_real") * 3600);
+				if ($length < 0)
+				{
+					$length = 3600;
+				}
 			}
 			else
 			{
