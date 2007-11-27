@@ -1628,7 +1628,11 @@ class crm_company_cust_impl extends class_base
 			$ret["name"] = "%".$r["customer_search_name"]."%";
 			$has_params = true;
 		}
-
+		else
+		{
+			$ret["site_id"] = array();
+			$ret["lang_id"] = array();
+		}
 		if ($r["customer_search_reg"] != "")
 		{
 			$ret["reg_nr"] = "%".$r["customer_search_reg"]."%";
@@ -1765,7 +1769,7 @@ class crm_company_cust_impl extends class_base
 
 		if (!$has_params)
 		{
-			$ret["oid"] = -1;
+			//$ret["oid"] = -1;
 		}
 
 		return $ret;
