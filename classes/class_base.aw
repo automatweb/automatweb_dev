@@ -1588,14 +1588,23 @@ class class_base extends aw_template
 				$target = "_self";
 			};
 			$title = "";
-			if (is_oid($_GET["id"]))
+			if ($this->can("view", $this->id))
 			{
-				$tmp = obj($_GET["id"]);
+				$tmp = obj($this->id);
 				$title = html::href(array(
-					"url" => $this->mk_my_orb("right_frame", array("parent" => $_GET["id"]), "admin_menus"),
+					"url" => $this->mk_my_orb("right_frame", array("parent" => $this->id), "admin_menus"),
 					"caption" => $tmp->name(),
 					"target" => $target,
 				))." / ";
+				if ($is_container && $this->can("view", $tmp->parent()))
+				{
+					$po= obj($tmp->parent());
+					$title = html::href(array(
+						"url" => $this->mk_my_orb("right_frame", array("parent" => $tmp->parent()), "admin_menus"),
+						"caption" => $po->name(),
+						"target" => $target,
+					))." / " . $title;
+				}
 			}
 			$title .= html::href(array(
 				"url" => $_GET["return_url"],
