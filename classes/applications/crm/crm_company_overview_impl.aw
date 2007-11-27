@@ -306,7 +306,7 @@ class crm_company_overview_impl extends class_base
 		}
 
 		$t->define_field(array(
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"name" => "icon",
 			"align" => "center",
 //			"chgbgcolor" => "col",
@@ -317,7 +317,7 @@ class crm_company_overview_impl extends class_base
 		if ($r["act_s_print_view"] != 1)
 		{
 			$t->define_field(array(
-				"caption" => t(""),
+				"caption" => t("&nbsp;"),
 				"name" => "menu",
 				"align" => "center",
 	//			"chgbgcolor" => "col",

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.113 2007/11/27 15:47:22 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.113 2007/11/27 15:47:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.114 2007/11/27 18:14:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.114 2007/11/27 18:14:56 kristo Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -9,7 +9,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 /*
 
-@classinfo syslog_type=ST_BUG_TRACKER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BUG_TRACKER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=robert
 
 @default table=objects
 @default group=general_sub

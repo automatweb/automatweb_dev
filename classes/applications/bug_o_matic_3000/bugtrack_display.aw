@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.6 2007/11/13 10:35:15 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.7 2007/11/27 18:14:56 kristo Exp $
 // bugtrack_display.aw - Ülesannete kuvamine 
 /*
 
-@classinfo syslog_type=ST_BUGTRACK_DISPLAY relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BUGTRACK_DISPLAY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=robert
 
 @default table=objects
 @default group=general

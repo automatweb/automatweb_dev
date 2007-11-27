@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  mantainer=robert
+*/
 class bt_req_impl extends core
 {
 	function bt_req_impl()

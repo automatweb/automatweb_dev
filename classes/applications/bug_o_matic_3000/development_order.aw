@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.13 2007/11/20 15:00:07 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.14 2007/11/27 18:14:56 kristo Exp $
 // development_order.aw - Arendustellimus 
 /*
 
-@classinfo syslog_type=ST_DEVELOPMENT_ORDER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_DEVELOPMENT_ORDER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=robert
 @tableinfo aw_dev_orders master_table=objects master_index=brother_of index=aw_oid
 @default table=aw_dev_orders
 @default group=general

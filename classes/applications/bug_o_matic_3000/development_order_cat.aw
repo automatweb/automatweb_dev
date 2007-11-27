@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order_cat.aw,v 1.1 2006/11/16 15:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order_cat.aw,v 1.2 2007/11/27 18:14:56 kristo Exp $
 // development_order_cat.aw - Arendustellimuste kataloog 
 /*
 
-@classinfo syslog_type=ST_DEVELOPMENT_ORDER_CAT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_DEVELOPMENT_ORDER_CAT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=robert
 
 @default table=objects
 @default group=general

@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  mantainer=robert
+*/
 
 class bug_object extends _int_object
 {

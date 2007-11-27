@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_app_type.aw,v 1.1 2007/10/17 09:48:50 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_app_type.aw,v 1.2 2007/11/27 18:14:56 kristo Exp $
 // bug_app_type.aw - Bugtracki rakendus 
 /*
 
-@classinfo syslog_type=ST_BUG_APP_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BUG_APP_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=robert
 
 @default table=objects
 @default group=general

@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  mantainer=robert
+*/
 class bt_settings_people_impl extends core
 {
 	function bt_settings_people_impl()

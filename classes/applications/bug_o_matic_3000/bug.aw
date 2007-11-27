@@ -5,7 +5,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 /*
 
-@classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1 r2=yes
+@classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1 r2=yes mantainer=robert
 
 @tableinfo aw_bugs index=aw_id master_index=brother_of master_table=objects
 
