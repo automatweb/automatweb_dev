@@ -20,6 +20,15 @@
             <caption>URL</caption>
       </property>
       <property>
+            <name>alias</name>
+            <group>general</group>
+            <type>textbox</type>
+            <size>60</size>
+            <table>objects</table>
+            <field>alias</field>
+            <caption>Alias</caption>
+      </property>
+      <property>
             <name>docid</name>
             <group>general</group>
             <type>hidden</type>

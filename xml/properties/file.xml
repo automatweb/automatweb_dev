@@ -15,6 +15,15 @@
             <caption>Faili nimi</caption>
       </property>
       <property>
+            <name>alias</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>60</size>
+            <field>alias</field>
+            <caption>Alias</caption>
+      </property>
+      <property>
             <name>signed</name>
             <table>files</table>
             <group>general</group>

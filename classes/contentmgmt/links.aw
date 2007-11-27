@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.37 2007/11/06 11:18:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.38 2007/11/27 10:42:22 robert Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -12,6 +12,9 @@
 
 	@property url type=textbox table=extlinks default=http://
 	@caption URL
+
+	@property alias type=textbox size=60 table=objects field=alias
+	@caption Alias
 
 	@property docid type=hidden table=extlinks 
 

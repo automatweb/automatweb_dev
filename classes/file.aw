@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.163 2007/11/14 16:27:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.164 2007/11/27 10:42:21 robert Exp $
 /*
 
 
@@ -11,6 +11,9 @@
 
 	@property filename type=text store=no field=name form=+emb
 	@caption Faili nimi
+	
+	@property alias type=textbox size=60 table=objects field=alias
+	@caption Alias
 
 	@property signed type=text store=no editonly=1
 	@caption Allkirjastatud
