@@ -2176,11 +2176,11 @@ class bug extends class_base
 				$u = get_instance(CL_USER);
 				$user = obj($u->get_current_user());
 				$conn = $user->connections_from(array(
-					"type" => RELTYPE_GRP
+					"type" => "RELTYPE_GRP"
 				));
-				$bugtrack = obj($bug->parent());
+				$bugtrack = $this->_get_bt($bug);
 				$agroups = $bugtrack->connections_from(array(
-					"type" => RELTYPE_AGROUP
+					"type" => "RELTYPE_AGROUP"
 				));
 				foreach($conn as $c)
 				{
