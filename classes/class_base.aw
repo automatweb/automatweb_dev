@@ -5961,10 +5961,10 @@ class class_base extends aw_template
 		if($cnt_menus == 0)
 		{
 			$_SESSION["menu_from_cb"] = null;
-			$this->add_item_level = $level - 1;
+			$GLOBALS["add_item_level"] = $level - 1;
 		}
 
-		$level = $level + $this->add_item_level;
+		$level = $level - $GLOBALS["add_item_level"];
 
 		if($cnt_menus == 0) $_SESSION["menu_from_cb"] = null;
 		if(!$_SESSION["menu_from_cb"][$level]["items"] && !$_SESSION["menu_from_cb"][$level]["count"])
