@@ -127,7 +127,7 @@ class crm_company_people_impl extends class_base
 			));
 		}
 
-		$tb->add_cdata(t(" Vali filter: ").$c->get_menu().(!empty($arr["request"]["filt_p"]) ? t(" Valitud: ").$arr["request"]["filt_p"] : "" ));
+		$tb->add_cdata(t("Vali filter:").$c->get_menu().(!empty($arr["request"]["filt_p"]) ? t("Valitud:").$arr["request"]["filt_p"] : "" ));
 	}
 
 	function _get_unit_listing_tree($arr)
