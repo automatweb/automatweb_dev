@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:class_325_help
 msgid "Klassi Objektinimekirja AW andmeallikas help"
 msgstr ""
@@ -214,3 +213,6 @@ msgstr ""
 msgid "J&auml;rjekord"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:435
+msgid "OID"
+msgstr ""

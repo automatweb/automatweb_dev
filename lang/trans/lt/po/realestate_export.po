@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_export.aw:class_1002_help
 msgid "Klassi Kinnisvaraobjektide eksport help"
 msgstr ""
@@ -146,19 +145,20 @@ msgstr ""
 msgid "Seose Aadresside vastavuskoodid (RELTYPE_ENCODING) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:90
+#: classes/applications/realestate_management/realestate_export.aw:89
 msgid "Kinnisvarahalduskeskkond m22ramata v6i puudub juurdep22su6igus.\n"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:131
+#: classes/applications/realestate_management/realestate_export.aw:130
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:137
+#: classes/applications/realestate_management/realestate_export.aw:136
 msgid "Kasutajanimi City24 süsteemis"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:368
-msgid "Viga objekti ekspordil. AW id: %s.\n<blockquote>%s</blockquote>"
+#: classes/applications/realestate_management/realestate_export.aw:367
+msgid ""
+"Viga objekti ekspordil. AW id: %s.\n"
+"<blockquote>%s</blockquote>"
 msgstr ""
-

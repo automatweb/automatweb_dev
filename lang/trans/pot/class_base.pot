@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/class_base.aw:class_Array_help
+#: classes/class_base.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
@@ -90,51 +90,67 @@ msgstr ""
 msgid "tab panel"
 msgstr ""
 
-#: classes/class_base.aw:890
+#: classes/class_base.aw:897
 msgid "Lisainfo grupi kohta puudub"
 msgstr ""
 
-#: classes/class_base.aw:988
+#: classes/class_base.aw:995 classes/class_base.aw:1675
 msgid "Nimetu"
 msgstr ""
 
-#: classes/class_base.aw:1550
+#: classes/class_base.aw:1557
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1558
+#: classes/class_base.aw:1565
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1595
+#: classes/class_base.aw:1602 classes/class_base.aw:1693
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1807 classes/class_base.aw:5193 classes/class_base.aw:5204
+#: classes/class_base.aw:1867 classes/class_base.aw:5310 classes/class_base.aw:5321
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:1820
+#: classes/class_base.aw:1880
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3674
+#: classes/class_base.aw:3771
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/class_base.aw:3683
+#: classes/class_base.aw:3780
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:5090
+#: classes/class_base.aw:5195
 msgid "%s is not a valid configuration form!"
 msgstr ""
 
-#: classes/class_base.aw:5517
+#: classes/class_base.aw:5635
 msgid "T&otilde;lge aktiivne"
 msgstr ""
 
-#: classes/class_base.aw:5525
+#: classes/class_base.aw:5643
 msgid "Salvesta"
+msgstr ""
+
+#: classes/class_base.aw:5808 classes/class_base.aw:5845
+msgid "aliase number oli juba olemas, seega uuendas"
+msgstr ""
+
+#: classes/class_base.aw:5812
+msgid "Seoste l&otilde;ikamisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
+msgstr ""
+
+#: classes/class_base.aw:5852
+msgid "Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
+msgstr ""
+
+#: classes/class_base.aw:5882
+msgid "Kliki siia j&auml;tkamiseks"
 msgstr ""
 

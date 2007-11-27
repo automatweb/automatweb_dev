@@ -585,6 +585,42 @@ msgstr "võimalus määrata, mitut kommentaari korraga ühe teema juures kuvatakse"
 msgid "Omaduse Kommentaare lehel (comments_on_page) help"
 msgstr "võimalus määrata, mitut kommentaari korraga ühe teema juures kuvatakse"
 
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_editable
+msgid "Omaduse  (topics_editable) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_editable_comment
+msgid "Omaduse  (topics_editable) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_editable_help
+msgid "Omaduse  (topics_editable) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_comments_editable
+msgid "Omaduse  (comments_editable) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_comments_editable_comment
+msgid "Omaduse  (comments_editable) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_comments_editable_help
+msgid "Omaduse  (comments_editable) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_posts_editable
+msgid "Omaduse Postitused muudetavad (posts_editable) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_posts_editable_comment
+msgid "Omaduse Postitused muudetavad (posts_editable) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_posts_editable_help
+msgid "Omaduse Postitused muudetavad (posts_editable) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth
 msgid "Omaduse Teemade s&uuml;gavus (topic_depth) caption"
 msgstr ""
@@ -907,115 +943,123 @@ msgstr ""
 msgid "Seose Kontrollpilt (RELTYPE_IMAGE_VERIFICATION) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:292
+#: classes/contentmgmt/forum/forum_v2.aw:296
 msgid "Uuemad teemad eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:293
+#: classes/contentmgmt/forum/forum_v2.aw:297
 msgid "T&auml;hestikulises j&auml;rjekorras (A-Z)"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:294
+#: classes/contentmgmt/forum/forum_v2.aw:298
 msgid "Viimati kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:295
+#: classes/contentmgmt/forum/forum_v2.aw:299
 msgid "Enim kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:296
+#: classes/contentmgmt/forum/forum_v2.aw:300
 msgid "Objektide jrk. nr. j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:300
+#: classes/contentmgmt/forum/forum_v2.aw:304
 msgid "vastus"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:301
+#: classes/contentmgmt/forum/forum_v2.aw:305
 msgid "teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:307
+#: classes/contentmgmt/forum/forum_v2.aw:311
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:308
+#: classes/contentmgmt/forum/forum_v2.aw:312
 msgid "Autor"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:309
+#: classes/contentmgmt/forum/forum_v2.aw:313
 msgid "Autori nimi"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:310
+#: classes/contentmgmt/forum/forum_v2.aw:314
 msgid "Autori e-mail"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:311
+#: classes/contentmgmt/forum/forum_v2.aw:315
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:358
+#: classes/contentmgmt/forum/forum_v2.aw:345
+msgid "teemad"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:346
+msgid "vastused"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:365
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1597
+#: classes/contentmgmt/forum/forum_v2.aw:1666
 msgid "Sisestatud kontrollnumber on vale! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1601
+#: classes/contentmgmt/forum/forum_v2.aw:1670
 msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1605
+#: classes/contentmgmt/forum/forum_v2.aw:1674
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1609
+#: classes/contentmgmt/forum/forum_v2.aw:1678
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1613
+#: classes/contentmgmt/forum/forum_v2.aw:1682
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1617
+#: classes/contentmgmt/forum/forum_v2.aw:1686
 msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1845
+#: classes/contentmgmt/forum/forum_v2.aw:1914
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1850
+#: classes/contentmgmt/forum/forum_v2.aw:1919
 msgid "J&auml;ta v&auml;lja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1857
+#: classes/contentmgmt/forum/forum_v2.aw:1926
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2030
+#: classes/contentmgmt/forum/forum_v2.aw:2099
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2092
+#: classes/contentmgmt/forum/forum_v2.aw:2161
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2104
+#: classes/contentmgmt/forum/forum_v2.aw:2173
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2127
+#: classes/contentmgmt/forum/forum_v2.aw:2196
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2576
+#: classes/contentmgmt/forum/forum_v2.aw:2645
 msgid "teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2583
+#: classes/contentmgmt/forum/forum_v2.aw:2652
 msgid "aadresside kaust"
 msgstr ""
 

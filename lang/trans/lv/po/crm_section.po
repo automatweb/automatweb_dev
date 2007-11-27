@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_section.aw:class_321_help
 msgid "Klassi &Uuml;ksus help"
 msgstr ""
@@ -96,6 +95,18 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_link_document_help
 msgid "Omaduse Dokument (link_document) help"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_public
+msgid "Omaduse Avalik (public) caption"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_public_comment
+msgid "Omaduse Avalik (public) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_public_help
+msgid "Omaduse Avalik (public) help"
 msgstr ""
 
 #: classes/crm/crm_section.aw:prop_contact
@@ -217,4 +228,3 @@ msgstr ""
 #: classes/crm/crm_section.aw:rel_RELTYPE_WORKPLACE
 msgid "Seose T&ouml;&ouml;koht (RELTYPE_WORKPLACE) tekst"
 msgstr ""
-

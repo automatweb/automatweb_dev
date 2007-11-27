@@ -118,21 +118,6 @@ msgstr ""
 msgid "Omaduse Vorm (ftform) help"
 msgstr ""
 
-# classes/applications/calendar/event_search.aw:prop_search_form
-#: classes/applications/calendar/event_search.aw:prop_search_form
-msgid "Omaduse Otsinguvorm (search_form) caption"
-msgstr ""
-
-# classes/applications/calendar/event_search.aw:prop_search_form_comment
-#: classes/applications/calendar/event_search.aw:prop_search_form_comment
-msgid "Omaduse Otsinguvorm (search_form) kommentaar"
-msgstr ""
-
-# classes/applications/calendar/event_search.aw:prop_search_form_help
-#: classes/applications/calendar/event_search.aw:prop_search_form_help
-msgid "Omaduse Otsinguvorm (search_form) help"
-msgstr ""
-
 # classes/applications/calendar/event_search.aw:prop_month_navigator_style
 #: classes/applications/calendar/event_search.aw:prop_month_navigator_style
 msgid "Omaduse Kuu navigaatori stiil (month_navigator_style) caption"
@@ -265,152 +250,144 @@ msgstr ""
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:137
-msgid "T&uuml;&uuml;p"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:142
-#: classes/applications/calendar/event_search.aw:379
+#: classes/applications/calendar/event_search.aw:132
+#: classes/applications/calendar/event_search.aw:372
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:147
-#: classes/applications/calendar/event_search.aw:383
+#: classes/applications/calendar/event_search.aw:137
+#: classes/applications/calendar/event_search.aw:376
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:152
-msgid "Sisu"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:157
-#: classes/applications/calendar/event_search.aw:387
-msgid "Aktiivne"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:163
-msgid "Tekstiotsing"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:175
-msgid "Tekstiotsing 2"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:189
-msgid "Ainult kuup&auml;ev"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:190
-msgid "Kuup&auml;ev, kellaajad"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:200
-#: classes/applications/calendar/event_search.aw:222
-msgid "Valik"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:201
-#: classes/applications/calendar/event_search.aw:223
-msgid "&Uuml;ks tekstikast"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:205
-#: classes/applications/calendar/event_search.aw:208
-msgid "Alguskuup&auml;ev"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:227
-#: classes/applications/calendar/event_search.aw:230
-msgid "L&otilde;ppkuup&auml;ev"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:244
-msgid "--vali--"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:253
-#: classes/applications/calendar/event_search.aw:256
-msgid "Projekt 1"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:272
-#: classes/applications/calendar/event_search.aw:275
-msgid "Projekt 2"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:290
-#: classes/applications/calendar/event_search.aw:293
-msgid "Otsi nupp"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:313
-msgid "Kuu navigaator"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:314
-msgid "N&auml;dala navigaator"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:319
-msgid "Kuu j&auml;rgi"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:320
-msgid "P&auml;eva j&auml;rgi"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:321
-msgid "Kuu alates t&auml;nasest"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:392
-msgid "Klikitav"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:397
-msgid "T&auml;isvaates"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:402
-msgid "Reavahetused"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:407
-msgid "Eraldaja enne"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:412
-msgid "Eraldaja pärast"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:417
-msgid "Jrk"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:422
+#: classes/applications/calendar/event_search.aw:142
+#: classes/applications/calendar/event_search.aw:415
 msgid "Seaded"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:427
+#: classes/applications/calendar/event_search.aw:147
+#: classes/applications/calendar/event_search.aw:380
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:153
+msgid "Tekstiotsing"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:165
+msgid "Tekstiotsing 2"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:178
+msgid "Kuvatakse valikkastid"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:179
+msgid "Kuvatakse &uuml;ks tekstikast"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:182
+#: classes/applications/calendar/event_search.aw:185
+msgid "Alguskuup&auml;ev"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:201
+#: classes/applications/calendar/event_search.aw:204
+msgid "L&otilde;ppkuup&auml;ev"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:222
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:231
+#: classes/applications/calendar/event_search.aw:234
+msgid "Projekt 1"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:250
+#: classes/applications/calendar/event_search.aw:253
+msgid "Projekt 2"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:269
+#: classes/applications/calendar/event_search.aw:272
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:283
+#: classes/applications/calendar/event_search.aw:286
+msgid "Otsi nupp"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:306
+msgid "Kuu navigaator"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:307
+msgid "N&auml;dala navigaator"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:312
+msgid "Kuu j&auml;rgi"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:313
+msgid "P&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:314
+msgid "Kuu alates t&auml;nasest"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:385
+msgid "Klikitav"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:390
+msgid "T&auml;isvaates"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:395
+msgid "Reavahetused"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:400
+msgid "Eraldaja enne"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:405
+msgid "Eraldaja pärast"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:410
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:420
 msgid "V&auml;ljade eraldaja"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:432
+#: classes/applications/calendar/event_search.aw:425
 msgid "Lisav&auml;ljad"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:448
+#: classes/applications/calendar/event_search.aw:441
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:944
+#: classes/applications/calendar/event_search.aw:943
+#: classes/applications/calendar/event_search.aw:949
 #: classes/applications/calendar/event_search.aw:950
-#: classes/applications/calendar/event_search.aw:951
-#: classes/applications/calendar/event_search.aw:967
-#: classes/applications/calendar/event_search.aw:973
+#: classes/applications/calendar/event_search.aw:966
+#: classes/applications/calendar/event_search.aw:972
 msgid "kõik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:980
+#: classes/applications/calendar/event_search.aw:979
 msgid "Otsi"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:1195
+msgid "Kustuta"
 msgstr ""

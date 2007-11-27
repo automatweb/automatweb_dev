@@ -78,3 +78,7 @@ msgstr ""
 #: classes/applications/crm/crm_contract_stop.aw:rel_RELTYPE_CONTRACT_STOP_TYPE
 msgid "Seose Peatumise liik (RELTYPE_CONTRACT_STOP_TYPE) tekst"
 msgstr "type"
+
+#: classes/applications/crm/crm_contract_stop.aw:rel_RELTYPE_SUBSTITUTE
+msgid "Seose Asendaja (RELTYPE_SUBSTITUTE) tekst"
+msgstr ""

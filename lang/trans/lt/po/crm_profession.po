@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_profession.aw:class_220_help
 msgid "Klassi Ametinimetus help"
 msgstr ""
@@ -48,6 +47,18 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk_help
 msgid "Omaduse Järk (jrk) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_directive_link
+msgid "Omaduse Viit ametijuhendile (directive_link) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_directive_link_comment
+msgid "Omaduse Viit ametijuhendile (directive_link) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_directive_link_help
+msgid "Omaduse Viit ametijuhendile (directive_link) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_directive
@@ -121,4 +132,3 @@ msgstr ""
 #: classes/crm/crm_profession.aw:rel_RELTYPE_SKILL
 msgid "Seose Oskus (RELTYPE_SKILL) tekst"
 msgstr ""
-

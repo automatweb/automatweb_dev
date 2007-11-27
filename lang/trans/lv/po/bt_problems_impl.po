@@ -9,24 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:26
+#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:29
 msgid "Nimekiri probleemidest"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:113
+#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:116
 msgid "Probleemid organisatsioonil %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:143
+#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:146
 msgid "Muud t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:182
+#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:185
 msgid "Probleemid projektis %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:229
+#: classes/applications/bug_o_matic_3000/bt_problems_impl.aw:232
 msgid "Probleemid n&otilde;udel %s"
 msgstr ""
-

@@ -50,7 +50,11 @@ msgstr ""
 msgid "Omaduse  (adminlink) help"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_table_admin.aw:131 classes/applications/awmyadmin/db_table_admin.aw:395
+#: classes/applications/awmyadmin/db_table_admin.aw:rel_RELTYPE_DB_LOGIN
+msgid "Seose DB Login (RELTYPE_DB_LOGIN) tekst"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_table_admin.aw:135 classes/applications/awmyadmin/db_table_admin.aw:399
 msgid "Salvesta"
 msgstr ""
 

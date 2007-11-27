@@ -732,7 +732,7 @@ msgid "Paketi teise vaate kujundus"
 msgstr "Package other view layout"
 
 #: classes/applications/shop/shop_order_center.aw:403
-#: classes/applications/shop/shop_order_center.aw:1330
+#: classes/applications/shop/shop_order_center.aw:1332
 msgid "--vali--"
 msgstr "--select--"
 
@@ -748,18 +748,18 @@ msgstr "Ascending / Descending"
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/applications/shop/shop_order_center.aw:1159
+#: classes/applications/shop/shop_order_center.aw:1161
 msgid "&nbsp"
 msgstr "&nbsp;"
 
-#: classes/applications/shop/shop_order_center.aw:1174
+#: classes/applications/shop/shop_order_center.aw:1176
 msgid "Vali t&uuml;hjaks"
 msgstr "Select one"
 
-#: classes/applications/shop/shop_order_center.aw:1277
+#: classes/applications/shop/shop_order_center.aw:1279
 msgid "Tellija andmete vorm valimata!"
 msgstr "Orderer data form not selected!"
 
-#: classes/applications/shop/shop_order_center.aw:1304
+#: classes/applications/shop/shop_order_center.aw:1306
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"

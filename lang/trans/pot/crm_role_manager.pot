@@ -18,35 +18,35 @@ msgstr ""
 msgid "Anna rollid"
 msgstr ""
 
-#: classes/crm/crm_role_manager.aw:284
+#: classes/crm/crm_role_manager.aw:285
 msgid "Vali"
 msgstr ""
 
-#: classes/crm/crm_role_manager.aw:290
+#: classes/crm/crm_role_manager.aw:291
 msgid "Halda"
 msgstr ""
 
-#: classes/crm/crm_role_manager.aw:304
+#: classes/crm/crm_role_manager.aw:305
 msgid "Kustuta"
 msgstr ""
 
-#: classes/crm/crm_role_manager.aw:318
+#: classes/crm/crm_role_manager.aw:319
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_role_manager.aw:324
+#: classes/crm/crm_role_manager.aw:325
 msgid "Telefon"
 msgstr ""
 
-#: classes/crm/crm_role_manager.aw:330
+#: classes/crm/crm_role_manager.aw:331
 msgid "E-post"
 msgstr ""
 
-#: classes/crm/crm_role_manager.aw:336
+#: classes/crm/crm_role_manager.aw:337
 msgid "&Uuml;ksus"
 msgstr ""
 
-#: classes/crm/crm_role_manager.aw:342
+#: classes/crm/crm_role_manager.aw:343
 msgid "Ametinimetus"
 msgstr ""
 

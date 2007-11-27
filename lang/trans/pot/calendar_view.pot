@@ -62,6 +62,30 @@ msgstr ""
 msgid "Omaduse Otsinguvorm (search_form) help"
 msgstr ""
 
+#: classes/calendar/calendar_view.aw:prop_sub_event_template
+msgid "Omaduse S&uuml;ndmuse kujundusp&otilde;hi (sub_event_template) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_sub_event_template_comment
+msgid "Omaduse S&uuml;ndmuse kujundusp&otilde;hi (sub_event_template) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_sub_event_template_help
+msgid "Omaduse S&uuml;ndmuse kujundusp&otilde;hi (sub_event_template) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_week_event_template
+msgid "Omaduse S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi (week_event_template) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_week_event_template_comment
+msgid "Omaduse S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi (week_event_template) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_week_event_template_help
+msgid "Omaduse S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi (week_event_template) help"
+msgstr ""
+
 #: classes/calendar/calendar_view.aw:prop_show_days_with_events
 msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) caption"
 msgstr ""
@@ -322,87 +346,87 @@ msgstr ""
 msgid "Seose S&uuml;ndmuste n&auml;itamise kontroller (RELTYPE_EVENT_VALIDATOR) tekst"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:129
+#: classes/calendar/calendar_view.aw:135
 msgid "Kuuvaade & nädala sündmused"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:130
+#: classes/calendar/calendar_view.aw:136
 msgid "Kuukalender"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:131
+#: classes/calendar/calendar_view.aw:137
 msgid "Algavad sündmused"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:132
+#: classes/calendar/calendar_view.aw:138
 msgid "Nädala vaade"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:133
+#: classes/calendar/calendar_view.aw:139
 msgid "Järgmised sündmused"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:134
+#: classes/calendar/calendar_view.aw:140
 msgid "Grupeeri allika järgi"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:135 classes/calendar/calendar_view.aw:150
+#: classes/calendar/calendar_view.aw:141 classes/calendar/calendar_view.aw:156
 msgid "Ülevaade"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:146
+#: classes/calendar/calendar_view.aw:152
 msgid "päev"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:147
+#: classes/calendar/calendar_view.aw:153
 msgid "nädal"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:148
+#: classes/calendar/calendar_view.aw:154
 msgid "kuu"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:149
+#: classes/calendar/calendar_view.aw:155
 msgid "Järgmised"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:189
+#: classes/calendar/calendar_view.aw:195
 msgid "Nimi"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:194
+#: classes/calendar/calendar_view.aw:200
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:199
+#: classes/calendar/calendar_view.aw:205
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:205
+#: classes/calendar/calendar_view.aw:211
 msgid "Jrk"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:210
+#: classes/calendar/calendar_view.aw:216
 msgid "Seaded"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:215
+#: classes/calendar/calendar_view.aw:221
 msgid "Väljade eraldaja"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:220
+#: classes/calendar/calendar_view.aw:226
 msgid "Lisaväljad"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:236
+#: classes/calendar/calendar_view.aw:242
 msgid "Väljundvorm on valimata"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1041
+#: classes/calendar/calendar_view.aw:1047
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1048
+#: classes/calendar/calendar_view.aw:1054
 msgid "&gt;&gt;"
 msgstr ""
 

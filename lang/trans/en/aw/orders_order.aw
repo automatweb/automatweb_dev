@@ -9,7 +9,6 @@ $GLOBALS["TRANS"]["Omaduse Sünnipäev (person_birthday) caption"] = "Birthday";
 $GLOBALS["TRANS"]["Omaduse Kinnita tellimus (submit2) caption"] = "Confirm order";
 $GLOBALS["TRANS"]["Omaduse Lisa tellimus (submit) caption"] = "Add order";
 $GLOBALS["TRANS"]["Omaduse Edasi (forward) caption"] = "Forward";
-$GLOBALS["TRANS"]["Grupi Tellimuse andmed (orderinfo) pealkiri"] = "Order data";
 $GLOBALS["TRANS"]["Grupi Tellitud tooted (orderitems) pealkiri"] = "Ordered products";
 $GLOBALS["TRANS"]["Seose Tellitud asi (RELTYPE_ORDER) tekst"] = "ordered product";
 $GLOBALS["TRANS"]["Seose Tellija (RELTYPE_PERSON) tekst"] = "orderer";

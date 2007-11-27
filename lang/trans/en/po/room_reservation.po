@@ -271,11 +271,11 @@ msgstr ""
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1606
-#: classes/common/room_reservation.aw:1655
+#: classes/common/room_reservation.aw:1615
+#: classes/common/room_reservation.aw:1664
 msgid "Broneering: %s"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1709
+#: classes/common/room_reservation.aw:1721
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""

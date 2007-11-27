@@ -12,6 +12,7 @@ $GLOBALS["TRANS"]["Uus"] = "New";
 $GLOBALS["TRANS"]["Kustuta valitud"] = "Delete selected";
 $GLOBALS["TRANS"]["L&otilde;ika"] = "Cut";
 $GLOBALS["TRANS"]["Kleebi"] = "Paste";
+$GLOBALS["TRANS"]["Impordi faile"] = "Import files";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["T&uuml;&uuml;p"] = "Type";
 $GLOBALS["TRANS"]["Looja"] = "Creator";

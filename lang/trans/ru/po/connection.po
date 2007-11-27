@@ -33,18 +33,18 @@ msgstr ""
 msgid "connection::delete(): no view access for this connection (%s)!"
 msgstr ""
 
-#: classes/core/obj/connection.aw:454 classes/core/obj/connection.aw:481
+#: classes/core/obj/connection.aw:489 classes/core/obj/connection.aw:516
 msgid "connection::to(): no current connection!"
 msgstr ""
 
-#: classes/core/obj/connection.aw:520
+#: classes/core/obj/connection.aw:555
 msgid "connection::load(%s): no connection with id $id!"
 msgstr ""
 
-#: classes/core/obj/connection.aw:530 classes/core/obj/connection.aw:554
+#: classes/core/obj/connection.aw:565 classes/core/obj/connection.aw:589
 msgid "connection::load(%s): no view access for this connection!"
 msgstr ""
 
-#: classes/core/obj/connection.aw:542
+#: classes/core/obj/connection.aw:577
 msgid "connection::save(): connection must have both ends defined!"
 msgstr ""

@@ -254,3 +254,7 @@ msgstr "do not display root menu"
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:434
 msgid "J&auml;rjekord"
 msgstr "Order"
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:435
+msgid "OID"
+msgstr ""

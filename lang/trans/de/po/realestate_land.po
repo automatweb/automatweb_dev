@@ -973,14 +973,14 @@ msgstr ""
 msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_land.aw:94
+#: classes/applications/realestate_management/realestate_land.aw:93
 msgid "Lisandub objekti hinnale"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_land.aw:95
+#: classes/applications/realestate_management/realestate_land.aw:94
 msgid "Sisaldub objekti hinnas"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_land.aw:138
+#: classes/applications/realestate_management/realestate_land.aw:137
 msgid "Kohustuslik v&auml;li"
 msgstr ""

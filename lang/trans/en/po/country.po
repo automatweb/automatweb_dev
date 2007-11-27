@@ -49,11 +49,11 @@ msgstr ""
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr "Administrartive structure"
 
-#: classes/common/country/country.aw:63
+#: classes/common/country/country.aw:62
 msgid "%s aadressi kasutab hetkel valitud haldusjaotust! Muudatuste salvestamisel ..."
 msgstr "%s addresses using selected administrative structure"
 
-#: classes/common/country/country.aw:87
+#: classes/common/country/country.aw:86
 msgid "Riigi adminstratiivjaotuse objekt peab asuma riigiobjekti all"
 msgstr ""
 

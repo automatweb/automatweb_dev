@@ -9,64 +9,64 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/obj/ds_mysql.aw:84
+#: classes/core/obj/ds_mysql.aw:117
 msgid "object::load(%s): no such object!"
 msgstr "object::load(%s): no such object!"
 
-#: classes/core/obj/ds_mysql.aw:174 classes/core/obj/ds_mysql.aw:241
-#: classes/core/obj/ds_mysql.aw:2732
+#: classes/core/obj/ds_mysql.aw:207 classes/core/obj/ds_mysql.aw:274
+#: classes/core/obj/ds_mysql.aw:2772
 msgid "ds_mysql::read_properties(): no reltype for prop %s (%s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:342 classes/core/obj/ds_mysql.aw:2814
+#: classes/core/obj/ds_mysql.aw:382 classes/core/obj/ds_mysql.aw:2854
 msgid "ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch! q = %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1302
+#: classes/core/obj/ds_mysql.aw:1342
 msgid "ds_mysql::final_delete_object(%s): no suct object exists!"
 msgstr "ds_mysql::final_delete_object(%s): no suct object exists!"
 
-#: classes/core/obj/ds_mysql.aw:1403 classes/core/obj/ds_mysql.aw:3011
+#: classes/core/obj/ds_mysql.aw:1443 classes/core/obj/ds_mysql.aw:3051
 msgid "filter cannot contain properties (%s) that are in serialized fields other than metadata!"
 msgstr "filter cannot contain properties (%s) that are in serialized fields other than metadata!"
 
-#: classes/core/obj/ds_mysql.aw:1507 classes/core/obj/ds_mysql.aw:1674
+#: classes/core/obj/ds_mysql.aw:1547 classes/core/obj/ds_mysql.aw:1714
 msgid "obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ,OBJ_COMP_NULL,OBJ_COMP_IN_TIMESPAN. the value supplied, was: %s!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1543
+#: classes/core/obj/ds_mysql.aw:1583
 msgid "complex compares of this type (%s) are not yet supported on bitfields (%s)!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1738
+#: classes/core/obj/ds_mysql.aw:1778
 msgid "OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!"
 msgstr "OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!"
 
-#: classes/core/obj/ds_mysql.aw:1914
+#: classes/core/obj/ds_mysql.aw:1954
 msgid "ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!"
 msgstr "ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!"
 
-#: classes/core/obj/ds_mysql.aw:2112
+#: classes/core/obj/ds_mysql.aw:2152
 msgid "ds_mysql::_req_do_pcp(): no relation from class %s named %s"
 msgstr "ds_mysql::_req_do_pcp(): no relation from class %s named %s"
 
-#: classes/core/obj/ds_mysql.aw:2184
+#: classes/core/obj/ds_mysql.aw:2224
 msgid "ds_mysql::_req_do_pcp(): no property %s in class %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2196
+#: classes/core/obj/ds_mysql.aw:2236
 msgid "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"
 msgstr "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"
 
-#: classes/core/obj/ds_mysql.aw:2201
+#: classes/core/obj/ds_mysql.aw:2241
 msgid "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"
 msgstr "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"
 
-#: classes/core/obj/ds_mysql.aw:2209 classes/core/obj/ds_mysql.aw:2246
+#: classes/core/obj/ds_mysql.aw:2249 classes/core/obj/ds_mysql.aw:2286
 msgid "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"
 msgstr "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"
 
-#: classes/core/obj/ds_mysql.aw:2233
+#: classes/core/obj/ds_mysql.aw:2273
 msgid "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"
 msgstr "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"
 

@@ -30,15 +30,15 @@ msgstr ""
 msgid "Seose Valimi meililist (RELTYPE_MAILINGLIST) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_client_selection.aw:255
+#: classes/applications/realestate_management/realestate_client_selection.aw:254
 msgid "\"Kıik lubatud\" kasutaja keskkonna seadetes m‰‰ramata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_client_selection.aw:289
+#: classes/applications/realestate_management/realestate_client_selection.aw:288
 msgid "Uue kliendivalimi loomisel ei antud argumendina kaasa loodud objekti id-d."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_client_selection.aw:299
+#: classes/applications/realestate_management/realestate_client_selection.aw:298
 msgid "Kliendivalimi meilinglist"
 msgstr ""
 

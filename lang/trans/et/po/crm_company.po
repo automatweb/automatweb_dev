@@ -962,6 +962,18 @@ msgstr ""
 msgid "Omaduse Puu (unit_listing_tree) help"
 msgstr ""
 
+#: classes/crm/crm_company.aw:prop_contact_search_name
+msgid "Omaduse Nimi (contact_search_name) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_contact_search_name_comment
+msgid "Omaduse Nimi (contact_search_name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_contact_search_name_help
+msgid "Omaduse Nimi (contact_search_name) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:prop_contact_search_firstname
 #: classes/crm/crm_company.aw:prop_contact_search_firstname
 msgid "Omaduse Eesnimi (contact_search_firstname) caption"
@@ -1284,6 +1296,18 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_round_help
 msgid "Omaduse &Uuml;marda (round) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_language
+msgid "Omaduse Vaikimisi keel (language) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_language_comment
+msgid "Omaduse Vaikimisi keel (language) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_language_help
+msgid "Omaduse Vaikimisi keel (language) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_phone_id
@@ -1629,6 +1653,18 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_customer_search_cust_grp_help
 msgid "Omaduse Kliendigrupp (customer_search_cust_grp) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_customer_search_insurance_exp
+msgid "Omaduse Kindlustus aegund (customer_search_insurance_exp) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_customer_search_insurance_exp_comment
+msgid "Omaduse Kindlustus aegund (customer_search_insurance_exp) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_customer_search_insurance_exp_help
+msgid "Omaduse Kindlustus aegund (customer_search_insurance_exp) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_customer_search_print_view
@@ -2184,6 +2220,18 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_docs_s_customer_help
 msgid "Omaduse Klient (docs_s_customer) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_docs_s_created_after
+msgid "Omaduse Loodud peale (docs_s_created_after) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_docs_s_created_after_comment
+msgid "Omaduse Loodud peale (docs_s_created_after) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_docs_s_created_after_help
+msgid "Omaduse Loodud peale (docs_s_created_after) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_docs_s_sbt
@@ -4162,6 +4210,10 @@ msgstr ""
 msgid "Seose Insurance (RELTYPE_INSURANCE) tekst"
 msgstr ""
 
+#: classes/crm/crm_company.aw:rel_RELTYPE_LANGUAGE
+msgid "Seose Language (RELTYPE_LANGUAGE) tekst"
+msgstr ""
+
 #: classes/crm/crm_company.aw:layout_co_top
 msgid "Kujundusosa &Uuml;ldandmed (co_top) pealkiri"
 msgstr ""
@@ -4270,397 +4322,397 @@ msgstr ""
 msgid "Kujundusosa Teenuse&nbsp;liikide&nbsp;kategooriad (stypes_tree_box) pealkiri"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1502
+#: classes/crm/crm_company.aw:1521
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1506 classes/crm/crm_company.aw:2872
-#: classes/crm/crm_company.aw:7940
+#: classes/crm/crm_company.aw:1525 classes/crm/crm_company.aw:2932
+#: classes/crm/crm_company.aw:8028
 msgid "Kustuta"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1691
+#: classes/crm/crm_company.aw:1730
 msgid "Telefoninumber"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1692
+#: classes/crm/crm_company.aw:1731
 msgid "Telefoninumbri t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1702
+#: classes/crm/crm_company.aw:1741
 msgid "Faksi number"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1712
+#: classes/crm/crm_company.aw:1751
 msgid "Veebiaadress"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1726
+#: classes/crm/crm_company.aw:1765
 msgid "Emaili aadress"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1736
+#: classes/crm/crm_company.aw:1775
 msgid "Arvenumbri nimetus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1737
+#: classes/crm/crm_company.aw:1776
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1738
+#: classes/crm/crm_company.aw:1777
 msgid "Pank"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1739
+#: classes/crm/crm_company.aw:1778
 msgid "Kodukontori kood"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1743
+#: classes/crm/crm_company.aw:1782
 msgid "Pangaarved"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1750
+#: classes/crm/crm_company.aw:1789
 msgid "T&auml;nav"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1751
+#: classes/crm/crm_company.aw:1790
 msgid "Postiindeks"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1752
+#: classes/crm/crm_company.aw:1791
 msgid "Linn"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1753
+#: classes/crm/crm_company.aw:1792
 msgid "Maakond"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1754
+#: classes/crm/crm_company.aw:1793
 msgid "Piirkond"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1755
+#: classes/crm/crm_company.aw:1794
 msgid "Riik"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1759
+#: classes/crm/crm_company.aw:1798
 msgid "Aadressid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1776
+#: classes/crm/crm_company.aw:1815
 msgid "T&uuml;&uuml;p:"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1777 classes/crm/crm_company.aw:1778
+#: classes/crm/crm_company.aw:1816 classes/crm/crm_company.aw:1817
 msgid "Aeg:"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1779
+#: classes/crm/crm_company.aw:1818
 msgid "Autor:"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1791 classes/crm/crm_company.aw:1836
+#: classes/crm/crm_company.aw:1830 classes/crm/crm_company.aw:1875
 msgid "Kommentaare pole"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1832
+#: classes/crm/crm_company.aw:1871
 msgid "Kokku"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1847
+#: classes/crm/crm_company.aw:1886
 msgid "M&auml;&auml;ramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1852
+#: classes/crm/crm_company.aw:1891
 msgid "Aegunud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1857
+#: classes/crm/crm_company.aw:1896
 msgid "Kehtiv"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1868 classes/crm/crm_company.aw:6238
+#: classes/crm/crm_company.aw:1907 classes/crm/crm_company.aw:6332
 msgid "%s foorum"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2103 classes/crm/crm_company.aw:2197
+#: classes/crm/crm_company.aw:2159 classes/crm/crm_company.aw:2255
 msgid "Otsi ja t&auml;ienda"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2107 classes/crm/crm_company.aw:2201
+#: classes/crm/crm_company.aw:2163 classes/crm/crm_company.aw:2259
 msgid "Lihtne otsing"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2162 classes/crm/crm_company.aw:2336
+#: classes/crm/crm_company.aw:2220 classes/crm/crm_company.aw:2394
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2336
+#: classes/crm/crm_company.aw:2394
 msgid "T&ouml;&ouml;s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2336
+#: classes/crm/crm_company.aw:2394
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2479
+#: classes/crm/crm_company.aw:2539
 msgid "T&ouml;&ouml;d on teostatud erinevatele klientidele, palun kontrolli!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2585 classes/crm/crm_company.aw:5479
-#: classes/crm/crm_company.aw:5517
+#: classes/crm/crm_company.aw:2645 classes/crm/crm_company.aw:5573
+#: classes/crm/crm_company.aw:5611
 msgid "--vali--"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2586
+#: classes/crm/crm_company.aw:2646
 msgid "T&auml;na"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2587
+#: classes/crm/crm_company.aw:2647
 msgid "Eile"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2588
+#: classes/crm/crm_company.aw:2648
 msgid "Jooksev n&auml;dal"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2589
+#: classes/crm/crm_company.aw:2649
 msgid "Jooksev kuu"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2590
+#: classes/crm/crm_company.aw:2650
 msgid "Eelmine kuu"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2602 classes/crm/crm_company.aw:2631
+#: classes/crm/crm_company.aw:2662 classes/crm/crm_company.aw:2691
 msgid "Ridade kaupa"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2603 classes/crm/crm_company.aw:2630
+#: classes/crm/crm_company.aw:2663 classes/crm/crm_company.aw:2690
 msgid "Kokkuv&otilde;te"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2650 classes/crm/crm_company.aw:2879
+#: classes/crm/crm_company.aw:2710 classes/crm/crm_company.aw:2939
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2656
+#: classes/crm/crm_company.aw:2716
 msgid "Loo arve"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2818
+#: classes/crm/crm_company.aw:2878
 msgid "Nimi peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3323
+#: classes/crm/crm_company.aw:3383
 msgid "Positiivne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3324
+#: classes/crm/crm_company.aw:3384
 msgid "Neutraalne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3325
+#: classes/crm/crm_company.aw:3385
 msgid "Negatiivne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4292
+#: classes/crm/crm_company.aw:4384
 msgid "Uus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4332
+#: classes/crm/crm_company.aw:4424
 msgid "Kataloog m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4386
+#: classes/crm/crm_company.aw:4478
 msgid "Kalender v&otilde;i kalendri s&uuml;ndmuste kataloog m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4399 classes/crm/crm_company.aw:4400
-#: classes/crm/crm_company.aw:5261 classes/crm/crm_company.aw:5343
-#: classes/crm/crm_company.aw:6706 classes/crm/crm_company.aw:6733
+#: classes/crm/crm_company.aw:4491 classes/crm/crm_company.aw:4492
+#: classes/crm/crm_company.aw:5353 classes/crm/crm_company.aw:5435
+#: classes/crm/crm_company.aw:6792 classes/crm/crm_company.aw:6819
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4412
+#: classes/crm/crm_company.aw:4504
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4845 classes/crm/crm_company.aw:5628
+#: classes/crm/crm_company.aw:4937 classes/crm/crm_company.aw:5722
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5211 classes/crm/crm_company.aw:5285
-#: classes/crm/crm_company.aw:6659 classes/crm/crm_company.aw:6729
+#: classes/crm/crm_company.aw:5303 classes/crm/crm_company.aw:5377
+#: classes/crm/crm_company.aw:6745 classes/crm/crm_company.aw:6815
 msgid "Toimetus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5236 classes/crm/crm_company.aw:5314
-#: classes/crm/crm_company.aw:6687 classes/crm/crm_company.aw:6732
+#: classes/crm/crm_company.aw:5328 classes/crm/crm_company.aw:5406
+#: classes/crm/crm_company.aw:6773 classes/crm/crm_company.aw:6818
 msgid "Kohtumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5916
+#: classes/crm/crm_company.aw:6010
 msgid "crm_company::on_create_customer(): category %s has no parent company or category!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6052
+#: classes/crm/crm_company.aw:6146
 msgid "Kliendisuhe: %s ostab teenuseid ja/v&otilde;i tooteid firmalt %s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6057
+#: classes/crm/crm_company.aw:6151
 msgid "Kliendisuhe: %s m&uuml;&uuml;b teenuseid ja/v&otilde;i tooteid firmale %s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6162
+#: classes/crm/crm_company.aw:6256
 msgid "Konfliktsed projektid:<br>"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6279
+#: classes/crm/crm_company.aw:6373
 msgid "%s serveri failid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6677 classes/crm/crm_company.aw:6731
+#: classes/crm/crm_company.aw:6763 classes/crm/crm_company.aw:6817
 msgid "K&otilde;ne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6724
+#: classes/crm/crm_company.aw:6810
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6725
+#: classes/crm/crm_company.aw:6811
 msgid "T&ouml;&ouml;"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6726
+#: classes/crm/crm_company.aw:6812
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6727
+#: classes/crm/crm_company.aw:6813
 msgid "Eraisik"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6728
+#: classes/crm/crm_company.aw:6814
 msgid "Projekt"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6730
+#: classes/crm/crm_company.aw:6816
 msgid "Arve"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6734
+#: classes/crm/crm_company.aw:6820
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6815
+#: classes/crm/crm_company.aw:6901
 msgid "Siduss&uuml;steem"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6820
+#: classes/crm/crm_company.aw:6906
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6830
+#: classes/crm/crm_company.aw:6916
 msgid "%s siduss&uuml;steemid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:6887
+#: classes/crm/crm_company.aw:6973
 msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7481
+#: classes/crm/crm_company.aw:7569
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7695
+#: classes/crm/crm_company.aw:7783
 msgid "Aadress:"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7716
+#: classes/crm/crm_company.aw:7804
 msgid "Aadress"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7737
+#: classes/crm/crm_company.aw:7825
 msgid "Telefon"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7753
+#: classes/crm/crm_company.aw:7841
 msgid "Faks"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7769
+#: classes/crm/crm_company.aw:7857
 msgid "E-mail"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7787
+#: classes/crm/crm_company.aw:7875
 msgid "WWW"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7805
+#: classes/crm/crm_company.aw:7893
 msgid "Bank accounts"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7856
+#: classes/crm/crm_company.aw:7944
 msgid "Name"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7860
+#: classes/crm/crm_company.aw:7948
 msgid "Expires"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7864
+#: classes/crm/crm_company.aw:7952
 msgid "Status"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7868
+#: classes/crm/crm_company.aw:7956
 msgid "Certificate"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7872
+#: classes/crm/crm_company.aw:7960
 msgid "Company"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7876
+#: classes/crm/crm_company.aw:7964
 msgid "Broker"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7880
+#: classes/crm/crm_company.aw:7968
 msgid "Sum"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7884
+#: classes/crm/crm_company.aw:7972
 msgid "Type"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7897
+#: classes/crm/crm_company.aw:7985
 msgid "Valid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7897
+#: classes/crm/crm_company.aw:7985
 msgid "Expired"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7928
+#: classes/crm/crm_company.aw:8016
 msgid "Lisa uus kindlustus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:7942
+#: classes/crm/crm_company.aw:8030
 msgid "Oled kindel, et kustutada?"
 msgstr ""
 
-#: classes/crm/crm_company.aw:8042
+#: classes/crm/crm_company.aw:8130
 msgid "Salvesta staatused"
 msgstr ""
 
-#: classes/crm/crm_company.aw:8051
+#: classes/crm/crm_company.aw:8139
 msgid "Lisa organisatsioon ostjaks"
 msgstr ""
 
-#: classes/crm/crm_company.aw:8192 classes/crm/crm_company.aw:8224
-#: classes/crm/crm_company.aw:8277
+#: classes/crm/crm_company.aw:8280 classes/crm/crm_company.aw:8312
+#: classes/crm/crm_company.aw:8365
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_company.aw:8218 classes/crm/crm_company.aw:8271
+#: classes/crm/crm_company.aw:8306 classes/crm/crm_company.aw:8359
 msgid "Vali"
 msgstr ""

@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Kool (school) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_education.aw:prop_degree
+msgid "Omaduse Akadeemiline kraad (degree) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_degree_comment
+msgid "Omaduse Akadeemiline kraad (degree) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_degree_help
+msgid "Omaduse Akadeemiline kraad (degree) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_education.aw:prop_field
 msgid "Omaduse Valdkond (field) caption"
 msgstr ""
@@ -48,6 +60,30 @@ msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_speciality_help
 msgid "Omaduse Eriala (speciality) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_main_speciality
+msgid "Omaduse Põhieriala (main_speciality) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_main_speciality_comment
+msgid "Omaduse Põhieriala (main_speciality) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_main_speciality_help
+msgid "Omaduse Põhieriala (main_speciality) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_obtain_language
+msgid "Omaduse Omandamise keel (obtain_language) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_obtain_language_comment
+msgid "Omaduse Omandamise keel (obtain_language) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_obtain_language_help
+msgid "Omaduse Omandamise keel (obtain_language) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_start
@@ -74,7 +110,67 @@ msgstr ""
 msgid "Omaduse Lõpp (end) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_education.aw:prop_end_date
+msgid "Omaduse Lõpetamise kuupäev (end_date) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_end_date_comment
+msgid "Omaduse Lõpetamise kuupäev (end_date) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_end_date_help
+msgid "Omaduse Lõpetamise kuupäev (end_date) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_diploma_nr
+msgid "Omaduse Diplomi number (diploma_nr) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_diploma_nr_comment
+msgid "Omaduse Diplomi number (diploma_nr) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_diploma_nr_help
+msgid "Omaduse Diplomi number (diploma_nr) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_education.aw:rel_RELTYPE_FIELD
 msgid "Seose Valdkond (RELTYPE_FIELD) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:68
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:69
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:75
+msgid "Põhiharidus"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:76
+msgid "Keskharidus"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:77
+msgid "Kesk-eriharidus"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:78
+msgid "Diplom"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:79
+msgid "Bakalaureus"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:80
+msgid "Magister"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:81
+msgid "Doktor"
 msgstr ""
 

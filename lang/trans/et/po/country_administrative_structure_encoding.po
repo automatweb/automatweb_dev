@@ -61,14 +61,14 @@ msgstr ""
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr ""
 
-#: classes/common/country/country_administrative_structure_encoding.aw:98
+#: classes/common/country/country_administrative_structure_encoding.aw:97
 msgid "Haldusjaotus valimata"
 msgstr ""
 
-#: classes/common/country/country_administrative_structure_encoding.aw:174
+#: classes/common/country/country_administrative_structure_encoding.aw:173
 msgid "Nimi"
 msgstr ""
 
-#: classes/common/country/country_administrative_structure_encoding.aw:179
+#: classes/common/country/country_administrative_structure_encoding.aw:178
 msgid "V‰‰rtus/Vaste"
 msgstr ""

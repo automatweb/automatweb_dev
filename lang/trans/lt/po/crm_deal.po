@@ -213,38 +213,38 @@ msgstr ""
 msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:334
+#: classes/crm/crm_deal.aw:339
 msgid "Lisa fail"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:341
+#: classes/crm/crm_deal.aw:346
 msgid "Kustuta failid"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:342
+#: classes/crm/crm_deal.aw:347
 msgid "Oled kindel et soovid failid kustutada?"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:348
+#: classes/crm/crm_deal.aw:353
 msgid "Salvesta muudatused"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:414 classes/crm/crm_deal.aw:449
+#: classes/crm/crm_deal.aw:419 classes/crm/crm_deal.aw:454
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:433
+#: classes/crm/crm_deal.aw:438
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:437
+#: classes/crm/crm_deal.aw:442
 msgid "Fail"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:441
+#: classes/crm/crm_deal.aw:446
 msgid "Muudetud"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:445
+#: classes/crm/crm_deal.aw:450
 msgid "Muutja"
 msgstr ""

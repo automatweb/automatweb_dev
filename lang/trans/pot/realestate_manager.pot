@@ -1202,47 +1202,47 @@ msgstr ""
 msgid "Seose Väike pilt (RELTYPE_RELTYPE_DEFAULT_PICTURE8) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:373
+#: classes/applications/realestate_management/realestate_manager.aw:372
 msgid "Majad"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:374
+#: classes/applications/realestate_management/realestate_manager.aw:373
 msgid "Ridaelamud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:375
+#: classes/applications/realestate_management/realestate_manager.aw:374
 msgid "Suvilad"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:376
+#: classes/applications/realestate_management/realestate_manager.aw:375
 msgid "Majaosad"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:377
+#: classes/applications/realestate_management/realestate_manager.aw:376
 msgid "Korterid"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:378
+#: classes/applications/realestate_management/realestate_manager.aw:377
 msgid "Äripinnad"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:379
+#: classes/applications/realestate_management/realestate_manager.aw:378
 msgid "Garaazid"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:380
+#: classes/applications/realestate_management/realestate_manager.aw:379
 msgid "Maatükid"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:404
+#: classes/applications/realestate_management/realestate_manager.aw:403
 msgid "Haldusjaotus määramata või puudub juurdepääs!"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:427
+#: classes/applications/realestate_management/realestate_manager.aw:426
 msgid "Kasutajagrupp ameti jaoks määramata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:514
+#: classes/applications/realestate_management/realestate_manager.aw:513
 msgid "Kõik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <i>property_name_caption</i>.  <br />
 					Ostja, müüja ning maaklerite andmed kujul  <i>buyer_*</i>, <i>seller_*</i>, <i>agent_*</i> ja <i>agent2_*</i> (name, phone, email, picture_url, rank).  <br />
 					Pildid kujul <i>picture</i><b>n</b><i>_url</i> ning <i>picture</i><b>n</b><i>_city24_id</i> (n on 1 .. piltide arv). <br />
@@ -1253,411 +1253,411 @@ msgid "Kõik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <
 					class_name - kasutajale arusaadav klassi nimi <br />"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:671
+#: classes/applications/realestate_management/realestate_manager.aw:670
 msgid "Vali amet, mille õigusi muuta"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:684 classes/applications/realestate_management/realestate_manager.aw:719 classes/applications/realestate_management/realestate_manager.aw:766 classes/applications/realestate_management/realestate_manager.aw:940 classes/applications/realestate_management/realestate_manager.aw:1444
+#: classes/applications/realestate_management/realestate_manager.aw:683 classes/applications/realestate_management/realestate_manager.aw:718 classes/applications/realestate_management/realestate_manager.aw:765 classes/applications/realestate_management/realestate_manager.aw:939 classes/applications/realestate_management/realestate_manager.aw:1443
 msgid "Kasutajagrupp ametile määramata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:701 classes/applications/realestate_management/realestate_manager.aw:928
+#: classes/applications/realestate_management/realestate_manager.aw:700 classes/applications/realestate_management/realestate_manager.aw:927
 msgid "Amet määramata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:798 classes/applications/realestate_management/realestate_manager.aw:963
+#: classes/applications/realestate_management/realestate_manager.aw:797 classes/applications/realestate_management/realestate_manager.aw:962
 msgid "Ameti kasutajagrupiga seostatud haldusüksus on katkine objekt."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:845
+#: classes/applications/realestate_management/realestate_manager.aw:844
 msgid "Kohustuslik väli"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:969
+#: classes/applications/realestate_management/realestate_manager.aw:968
 msgid "Kasutajal puudub luba seostatud haldusüksuse õigusi määrata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1012
+#: classes/applications/realestate_management/realestate_manager.aw:1011
 msgid "Kasutajal puudub luba valitud haldusüksuse õigusi määrata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1094
+#: classes/applications/realestate_management/realestate_manager.aw:1093
 msgid "Seda tüüpi kinnisvaraobjektide kataloog määramata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1100
+#: classes/applications/realestate_management/realestate_manager.aw:1099
 msgid "Kasutajal puudub luba selle kinnisvaraobjekti tüübi õigusi määrata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1230
+#: classes/applications/realestate_management/realestate_manager.aw:1229
 msgid "(Kasutajaorganisatsioone pole)"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1394
+#: classes/applications/realestate_management/realestate_manager.aw:1393
 msgid "Objekti tüüp"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1399
+#: classes/applications/realestate_management/realestate_manager.aw:1398
 msgid "<a href='javascript:selall(\"re_usermgr_viewrights\")'>Vaatamine</a>"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1400
+#: classes/applications/realestate_management/realestate_manager.aw:1399
 msgid "Vaatamine"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1401 classes/applications/realestate_management/realestate_manager.aw:1409 classes/applications/realestate_management/realestate_manager.aw:1417 classes/applications/realestate_management/realestate_manager.aw:1425
+#: classes/applications/realestate_management/realestate_manager.aw:1400 classes/applications/realestate_management/realestate_manager.aw:1408 classes/applications/realestate_management/realestate_manager.aw:1416 classes/applications/realestate_management/realestate_manager.aw:1424
 msgid "Vali kõik/kaota valik"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1407
+#: classes/applications/realestate_management/realestate_manager.aw:1406
 msgid "<a href='javascript:selall(\"re_usermgr_addrights\")'>Lisamine</a>"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1408
+#: classes/applications/realestate_management/realestate_manager.aw:1407
 msgid "Lisamine"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1415
+#: classes/applications/realestate_management/realestate_manager.aw:1414
 msgid "<a href='javascript:selall(\"re_usermgr_editrights\")'>Muutmine</a>"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1416
+#: classes/applications/realestate_management/realestate_manager.aw:1415
 msgid "Muutmine"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1423
+#: classes/applications/realestate_management/realestate_manager.aw:1422
 msgid "<a href='javascript:selall(\"re_usermgr_deleterights\")'>Kustutamine</a>"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1424
+#: classes/applications/realestate_management/realestate_manager.aw:1423
 msgid "Kustutamine"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1492
+#: classes/applications/realestate_management/realestate_manager.aw:1491
 msgid "Kataloog määramata kinnisvaraobjektide tüübile %s."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1822 classes/applications/realestate_management/realestate_manager.aw:2266 classes/applications/realestate_management/realestate_manager.aw:2312
+#: classes/applications/realestate_management/realestate_manager.aw:1821 classes/applications/realestate_management/realestate_manager.aw:2265 classes/applications/realestate_management/realestate_manager.aw:2311
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1823 classes/applications/realestate_management/realestate_manager.aw:2266 classes/applications/realestate_management/realestate_manager.aw:2312 classes/applications/realestate_management/realestate_manager.aw:2314
+#: classes/applications/realestate_management/realestate_manager.aw:1822 classes/applications/realestate_management/realestate_manager.aw:2265 classes/applications/realestate_management/realestate_manager.aw:2311 classes/applications/realestate_management/realestate_manager.aw:2313
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1824
+#: classes/applications/realestate_management/realestate_manager.aw:1823
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1825
+#: classes/applications/realestate_management/realestate_manager.aw:1824
 msgid "Arhiveerida objekt?"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1826
+#: classes/applications/realestate_management/realestate_manager.aw:1825
 msgid "Arhiveeri"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1827
+#: classes/applications/realestate_management/realestate_manager.aw:1826
 msgid "Kustutada objekt?"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1828
+#: classes/applications/realestate_management/realestate_manager.aw:1827
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:1887 classes/applications/realestate_management/realestate_manager.aw:1904
+#: classes/applications/realestate_management/realestate_manager.aw:1886 classes/applications/realestate_management/realestate_manager.aw:1903
 msgid "Osakond:"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2084
+#: classes/applications/realestate_management/realestate_manager.aw:2083
 msgid "Kokku:"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2113
+#: classes/applications/realestate_management/realestate_manager.aw:2112
 msgid "Tüüp"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2164
+#: classes/applications/realestate_management/realestate_manager.aw:2163
 msgid "Maa&shy;kond"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2171
+#: classes/applications/realestate_management/realestate_manager.aw:2170
 msgid "Linn"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2178
+#: classes/applications/realestate_management/realestate_manager.aw:2177
 msgid "Linnaosa"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2185
+#: classes/applications/realestate_management/realestate_manager.aw:2184
 msgid "Vald"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2191 classes/applications/realestate_management/realestate_manager.aw:3012
+#: classes/applications/realestate_management/realestate_manager.aw:2190 classes/applications/realestate_management/realestate_manager.aw:3011
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2196
+#: classes/applications/realestate_management/realestate_manager.aw:2195
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2203
+#: classes/applications/realestate_management/realestate_manager.aw:2202
 msgid "Tehing"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2206
+#: classes/applications/realestate_management/realestate_manager.aw:2205
 msgid "Müük"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2207
+#: classes/applications/realestate_management/realestate_manager.aw:2206
 msgid "Ost"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2208
+#: classes/applications/realestate_management/realestate_manager.aw:2207
 msgid "Üürile anda"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2214
+#: classes/applications/realestate_management/realestate_manager.aw:2213
 msgid "Lisatud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2222 classes/applications/realestate_management/realestate_manager.aw:3132
+#: classes/applications/realestate_management/realestate_manager.aw:2221 classes/applications/realestate_management/realestate_manager.aw:3131
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2230
+#: classes/applications/realestate_management/realestate_manager.aw:2229
 msgid "Omanik"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2236
+#: classes/applications/realestate_management/realestate_manager.aw:2235
 msgid "Müüja"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2244 classes/applications/realestate_management/realestate_manager.aw:3028 classes/applications/realestate_management/realestate_manager.aw:3137
+#: classes/applications/realestate_management/realestate_manager.aw:2243 classes/applications/realestate_management/realestate_manager.aw:3027 classes/applications/realestate_management/realestate_manager.aw:3136
 msgid "Maakler"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2258
+#: classes/applications/realestate_management/realestate_manager.aw:2257
 msgid "Korrus"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2264
+#: classes/applications/realestate_management/realestate_manager.aw:2263
 msgid ">K<"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2265
+#: classes/applications/realestate_management/realestate_manager.aw:2264
 msgid "Pole esimene ega viimane korrus"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2283
+#: classes/applications/realestate_management/realestate_manager.aw:2282
 msgid "Tube"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2289
+#: classes/applications/realestate_management/realestate_manager.aw:2288
 msgid "m<sup><small>2</small></sup>"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2290
+#: classes/applications/realestate_management/realestate_manager.aw:2289
 msgid "m<sup>2</sup>"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2291
+#: classes/applications/realestate_management/realestate_manager.aw:2290
 msgid "Üldpind"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2296
+#: classes/applications/realestate_management/realestate_manager.aw:2295
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2303
+#: classes/applications/realestate_management/realestate_manager.aw:2302
 msgid "Näh&shy;tav"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2304
+#: classes/applications/realestate_management/realestate_manager.aw:2303
 msgid "<a href='javascript:selall(\"realestatemgr-is_visible\")'>N</a>"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2305
+#: classes/applications/realestate_management/realestate_manager.aw:2304
 msgid "Nähtav. Vali/kaota valik kõgil ridadel"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2310
+#: classes/applications/realestate_management/realestate_manager.aw:2309
 msgid "Arh."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2311
+#: classes/applications/realestate_management/realestate_manager.aw:2310
 msgid "Arhiveeritud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2320
+#: classes/applications/realestate_management/realestate_manager.aw:2319
 msgid ""
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2410
+#: classes/applications/realestate_management/realestate_manager.aw:2409
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2417
+#: classes/applications/realestate_management/realestate_manager.aw:2416
 msgid "Maja"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2426
+#: classes/applications/realestate_management/realestate_manager.aw:2425
 msgid "Ridaelamu"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2435
+#: classes/applications/realestate_management/realestate_manager.aw:2434
 msgid "Suvila"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2444
+#: classes/applications/realestate_management/realestate_manager.aw:2443
 msgid "Majaosa"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2453
+#: classes/applications/realestate_management/realestate_manager.aw:2452
 msgid "Korter"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2462
+#: classes/applications/realestate_management/realestate_manager.aw:2461
 msgid "Äripind"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2471
+#: classes/applications/realestate_management/realestate_manager.aw:2470
 msgid "Garaaz"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2480
+#: classes/applications/realestate_management/realestate_manager.aw:2479
 msgid "Maatükk"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2491
+#: classes/applications/realestate_management/realestate_manager.aw:2490
 msgid "Lisa uus maja"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2501
+#: classes/applications/realestate_management/realestate_manager.aw:2500
 msgid "Lisa uus ridaelamu"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2511
+#: classes/applications/realestate_management/realestate_manager.aw:2510
 msgid "Lisa uus suvila"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2521
+#: classes/applications/realestate_management/realestate_manager.aw:2520
 msgid "Lisa uus majaosa"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2531
+#: classes/applications/realestate_management/realestate_manager.aw:2530
 msgid "Lisa uus korter"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2541
+#: classes/applications/realestate_management/realestate_manager.aw:2540
 msgid "Lisa uus äripind"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2551
+#: classes/applications/realestate_management/realestate_manager.aw:2550
 msgid "Lisa uus garaaz"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2561
+#: classes/applications/realestate_management/realestate_manager.aw:2560
 msgid "Lisa uus maatükk"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2569
+#: classes/applications/realestate_management/realestate_manager.aw:2568
 msgid "Kustuta valitud objekt(id)"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2570
+#: classes/applications/realestate_management/realestate_manager.aw:2569
 msgid "Kustutada valitud objekt(id)?"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2577
+#: classes/applications/realestate_management/realestate_manager.aw:2576
 msgid "Salvesta muudatused"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2590
+#: classes/applications/realestate_management/realestate_manager.aw:2589
 msgid "Otsing"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2655
+#: classes/applications/realestate_management/realestate_manager.aw:2654
 msgid "Salvesta päring kliendivalimina"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2665
+#: classes/applications/realestate_management/realestate_manager.aw:2664
 msgid "Saada valimi(te) klientidele e-kiri"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2671
+#: classes/applications/realestate_management/realestate_manager.aw:2670
 msgid "Kustuta valitud kliendivalim(id)"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2796
+#: classes/applications/realestate_management/realestate_manager.aw:2795
 msgid "\"Kõik lubatud\" kasutaja keskkonna seadetes määramata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2935
+#: classes/applications/realestate_management/realestate_manager.aw:2934
 msgid "(nimetu)"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2990 classes/applications/realestate_management/realestate_manager.aw:3113
+#: classes/applications/realestate_management/realestate_manager.aw:2989 classes/applications/realestate_management/realestate_manager.aw:3112
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2995
+#: classes/applications/realestate_management/realestate_manager.aw:2994
 msgid "Obj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:2996
+#: classes/applications/realestate_management/realestate_manager.aw:2995
 msgid "Kliendiga seotud kinnisvaraobjektid (ostjana/müüjana)"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3000
+#: classes/applications/realestate_management/realestate_manager.aw:2999
 msgid "Isikukood"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3004
+#: classes/applications/realestate_management/realestate_manager.aw:3003
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3008
+#: classes/applications/realestate_management/realestate_manager.aw:3007
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3016
+#: classes/applications/realestate_management/realestate_manager.aw:3015
 msgid "Tänukirja kuupäev"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3023
+#: classes/applications/realestate_management/realestate_manager.aw:3022
 msgid "Tänukirja liik"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3118
+#: classes/applications/realestate_management/realestate_manager.aw:3117
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3125
+#: classes/applications/realestate_management/realestate_manager.aw:3124
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3328
+#: classes/applications/realestate_management/realestate_manager.aw:3327
 msgid "Halduskeskkond defineerimata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3416
+#: classes/applications/realestate_management/realestate_manager.aw:3415
 msgid "Klientide kaust kinnisvarahalduskeskkonnas määramata. Uut objekti ei loodud."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3421
+#: classes/applications/realestate_management/realestate_manager.aw:3420
 msgid "Kinnisvaraobjekti kaust defineerimata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3428
+#: classes/applications/realestate_management/realestate_manager.aw:3427
 msgid "Kinnisvaraobjekti kaust määramata. Objekt pannakse kinnisvarahalduskeskkonnaga samasse kausta."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3438
+#: classes/applications/realestate_management/realestate_manager.aw:3437
 msgid "..."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_manager.aw:3478
+#: classes/applications/realestate_management/realestate_manager.aw:3477
 msgid "Organisatsiooni üksus määramata."
 msgstr ""
 

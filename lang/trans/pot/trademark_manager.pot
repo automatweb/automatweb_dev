@@ -231,11 +231,11 @@ msgid "Seose Adminn (RELTYPE_ADMIN) tekst"
 msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:layout_trademark_tr_l
-msgid "Kujundusosa Taotluste puu (trademark_tr_l) pealkiri"
+msgid "Kujundusosa Taotluste&nbsp;puu (trademark_tr_l) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:layout_objects_find_params
-msgid "Kujundusosa Objektide otsing (objects_find_params) pealkiri"
+msgid "Kujundusosa Objektide&nbsp;otsing (objects_find_params) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:121
@@ -258,11 +258,11 @@ msgstr ""
 msgid "Number puudub"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:373 classes/applications/clients/patent_office/trademark_manager.aw:451
+#: classes/applications/clients/patent_office/trademark_manager.aw:373 classes/applications/clients/patent_office/trademark_manager.aw:454
 msgid "Allkirjad"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:389 classes/applications/clients/patent_office/trademark_manager.aw:466 classes/applications/clients/patent_office/trademark_manager.aw:519
+#: classes/applications/clients/patent_office/trademark_manager.aw:389 classes/applications/clients/patent_office/trademark_manager.aw:469 classes/applications/clients/patent_office/trademark_manager.aw:522
 msgid "Kinnita"
 msgstr ""
 
@@ -290,35 +290,35 @@ msgstr ""
 msgid "Esitamise kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:457
+#: classes/applications/clients/patent_office/trademark_manager.aw:460
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:486
+#: classes/applications/clients/patent_office/trademark_manager.aw:489
 msgid "Lisa taotlus"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:489 classes/applications/clients/patent_office/trademark_manager.aw:499 classes/applications/clients/patent_office/trademark_manager.aw:514 classes/applications/clients/patent_office/trademark_manager.aw:522
+#: classes/applications/clients/patent_office/trademark_manager.aw:492 classes/applications/clients/patent_office/trademark_manager.aw:502 classes/applications/clients/patent_office/trademark_manager.aw:517 classes/applications/clients/patent_office/trademark_manager.aw:525
 msgid ""
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:496
+#: classes/applications/clients/patent_office/trademark_manager.aw:499
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:504
+#: classes/applications/clients/patent_office/trademark_manager.aw:507
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:506
+#: classes/applications/clients/patent_office/trademark_manager.aw:509
 msgid "Kas oled kindel et soovid valitud taotlused kustudada?"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:511
+#: classes/applications/clients/patent_office/trademark_manager.aw:514
 msgid "V&auml;rskenda"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:553
+#: classes/applications/clients/patent_office/trademark_manager.aw:556
 msgid "Taotlus nr:"
 msgstr ""
 

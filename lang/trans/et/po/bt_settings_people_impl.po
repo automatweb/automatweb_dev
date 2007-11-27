@@ -9,28 +9,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:15
+#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:17
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:21
+#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:23
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:31
+#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:33
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:36
+#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:38
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:41
+#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:43
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:46
+#: classes/applications/bug_o_matic_3000/bt_settings_people_impl.aw:48
 msgid "E-mail"
 msgstr ""
-

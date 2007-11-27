@@ -109,124 +109,124 @@ msgstr ""
 msgid "Lisa"
 msgstr ""
 
-#: classes/admin/admin_if.aw:125
+#: classes/admin/admin_if.aw:126
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:134 classes/admin/admin_if.aw:952
+#: classes/admin/admin_if.aw:135 classes/admin/admin_if.aw:972
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_if.aw:141 classes/admin/admin_if.aw:958
+#: classes/admin/admin_if.aw:142 classes/admin/admin_if.aw:978
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/admin/admin_if.aw:150
+#: classes/admin/admin_if.aw:151
 msgid "Kleebi"
 msgstr ""
 
-#: classes/admin/admin_if.aw:158 classes/admin/admin_if.aw:968
+#: classes/admin/admin_if.aw:159 classes/admin/admin_if.aw:988
 msgid "Kustuta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:159 classes/admin/admin_if.aw:964
+#: classes/admin/admin_if.aw:160 classes/admin/admin_if.aw:984
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/admin/admin_if.aw:167
+#: classes/admin/admin_if.aw:168
 msgid "Uuenda"
 msgstr ""
 
-#: classes/admin/admin_if.aw:174
+#: classes/admin/admin_if.aw:175
 msgid "Impordi"
 msgstr ""
 
-#: classes/admin/admin_if.aw:180 classes/admin/admin_if.aw:181
-#: classes/admin/admin_if.aw:183
+#: classes/admin/admin_if.aw:181 classes/admin/admin_if.aw:182
+#: classes/admin/admin_if.aw:184
 msgid "Impordi kaustu"
 msgstr ""
 
-#: classes/admin/admin_if.aw:189 classes/admin/admin_if.aw:190
-#: classes/admin/admin_if.aw:192
+#: classes/admin/admin_if.aw:190 classes/admin/admin_if.aw:191
+#: classes/admin/admin_if.aw:193
 msgid "Impordi faile"
 msgstr ""
 
-#: classes/admin/admin_if.aw:198
+#: classes/admin/admin_if.aw:199
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/admin/admin_if.aw:241
+#: classes/admin/admin_if.aw:242
 msgid "<b>AutomatWeb</b>"
 msgstr ""
 
-#: classes/admin/admin_if.aw:549
+#: classes/admin/admin_if.aw:550
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/admin_if.aw:558
+#: classes/admin/admin_if.aw:559
 msgid "Jrk"
 msgstr ""
 
-#: classes/admin/admin_if.aw:565 classes/admin/admin_if.aw:849
+#: classes/admin/admin_if.aw:566 classes/admin/admin_if.aw:869
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/admin/admin_if.aw:575
+#: classes/admin/admin_if.aw:576
 msgid "Muutja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:585
+#: classes/admin/admin_if.aw:586
 msgid "Muudetud"
 msgstr ""
 
-#: classes/admin/admin_if.aw:598
+#: classes/admin/admin_if.aw:599
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/admin/admin_if.aw:608
+#: classes/admin/admin_if.aw:609
 msgid "Tegevus"
 msgstr ""
 
-#: classes/admin/admin_if.aw:617
+#: classes/admin/admin_if.aw:618
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/admin_if.aw:849
+#: classes/admin/admin_if.aw:869
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/admin/admin_if.aw:921
+#: classes/admin/admin_if.aw:941
 msgid "Ava"
 msgstr ""
 
-#: classes/admin/admin_if.aw:941
+#: classes/admin/admin_if.aw:961
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1240
+#: classes/admin/admin_if.aw:1265 classes/admin/admin_if.aw:1298
 msgid "Administreerimisliides"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1266
+#: classes/admin/admin_if.aw:1328
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1267
+#: classes/admin/admin_if.aw:1329
 msgid "Asukoht:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1268
+#: classes/admin/admin_if.aw:1330
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
 msgstr ""
 
-#: classes/admin/admin_if.aw:1269
+#: classes/admin/admin_if.aw:1331
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1270
+#: classes/admin/admin_if.aw:1332
 msgid "Seaded"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1337 classes/admin/admin_if.aw:1381
+#: classes/admin/admin_if.aw:1399 classes/admin/admin_if.aw:1451
 msgid "Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"
 msgstr ""

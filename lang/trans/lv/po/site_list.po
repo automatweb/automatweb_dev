@@ -9,16 +9,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/install/site_list.aw:25
 msgid "AW Saitide list"
 msgstr ""
 
-#: classes/install/site_list.aw:33 classes/install/site_list.aw:231 classes/install/site_list.aw:546
+#: classes/install/site_list.aw:33 classes/install/site_list.aw:231
+#: classes/install/site_list.aw:546
 msgid "ID"
 msgstr ""
 
-#: classes/install/site_list.aw:39 classes/install/site_list.aw:238 classes/install/site_list.aw:553
+#: classes/install/site_list.aw:39 classes/install/site_list.aw:238
+#: classes/install/site_list.aw:553
 msgid "Nimi"
 msgstr ""
 
@@ -26,7 +27,8 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-#: classes/install/site_list.aw:49 classes/install/site_list.aw:164 classes/install/site_list.aw:569
+#: classes/install/site_list.aw:49 classes/install/site_list.aw:164
+#: classes/install/site_list.aw:569
 msgid "Server"
 msgstr ""
 
@@ -46,7 +48,8 @@ msgstr ""
 msgid "Sünkroniseeri andmebaas"
 msgstr ""
 
-#: classes/install/site_list.aw:76 classes/install/site_list.aw:250 classes/install/site_list.aw:258
+#: classes/install/site_list.aw:76 classes/install/site_list.aw:250
+#: classes/install/site_list.aw:258
 msgid "Muuda"
 msgstr ""
 
@@ -86,7 +89,7 @@ msgstr ""
 msgid "Koodiversioon"
 msgstr ""
 
-#: classes/install/site_list.aw:223 classes/install/site_list.aw:649
+#: classes/install/site_list.aw:223 classes/install/site_list.aw:648
 msgid "AW Serverite list"
 msgstr ""
 
@@ -114,7 +117,6 @@ msgstr ""
 msgid "Last update"
 msgstr ""
 
-#: classes/install/site_list.aw:650
+#: classes/install/site_list.aw:649
 msgid "/ Muuda serverit"
 msgstr ""
-

@@ -1,7 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Number (sp_name) caption"] = "Number";
-$GLOBALS["TRANS"]["Omaduse Kirjeldus (sp_comment) caption"] = "Description";
-$GLOBALS["TRANS"]["Omaduse Alustamisaeg (meterjalide saabumine) (sp_starttime) caption"] = "Start date (materials arrive)";
 $GLOBALS["TRANS"]["Omaduse Klient (sp_customer) caption"] = "Customer";
 $GLOBALS["TRANS"]["Omaduse Staatus (sp_status) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Otsi (sp_submit) caption"] = "Search";
@@ -123,7 +121,6 @@ $GLOBALS["TRANS"]["Materjalide saabumine"] = "Materials arrive";
 $GLOBALS["TRANS"]["Planeeritud valmimine"] = "Planned date";
 $GLOBALS["TRANS"]["Tähtaeg"] = "Deadline";
 $GLOBALS["TRANS"]["Prio&shy;ri&shy;teet"] = "Priority";
-$GLOBALS["TRANS"]["Müü&shy;gi prio&shy;ri&shy;teet"] = "Sales priority";
 $GLOBALS["TRANS"]["Projekt"] = "Project";
 $GLOBALS["TRANS"]["Planeeritud algusaeg"] = "Planned start time";
 $GLOBALS["TRANS"]["Soovitav algusaeg"] = "Recommended start time";

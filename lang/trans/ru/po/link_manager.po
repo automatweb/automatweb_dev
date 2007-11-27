@@ -9,46 +9,50 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/admin/link_manager.aw:98
+#: classes/admin/link_manager.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/admin/link_manager.aw:103
 msgid "Uus link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:99
+#: classes/admin/link_manager.aw:104
 msgid "Vali olemasolev link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:108
+#: classes/admin/link_manager.aw:113
 msgid "Link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:113
+#: classes/admin/link_manager.aw:118
 msgid "Asukoht"
 msgstr ""
 
-#: classes/admin/link_manager.aw:118
+#: classes/admin/link_manager.aw:123
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/link_manager.aw:166
+#: classes/admin/link_manager.aw:171
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/link_manager.aw:204
+#: classes/admin/link_manager.aw:209
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/link_manager.aw:210
+#: classes/admin/link_manager.aw:215
 msgid "URL"
 msgstr ""
 
-#: classes/admin/link_manager.aw:217
+#: classes/admin/link_manager.aw:222
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/link_manager.aw:223
+#: classes/admin/link_manager.aw:228
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/link_manager.aw:230
+#: classes/admin/link_manager.aw:235
 msgid "Viimased 30"
 msgstr ""

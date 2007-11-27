@@ -116,6 +116,30 @@ msgstr ""
 msgid "Omaduse Töötajate XML fail (xml_personnel_file) help"
 msgstr ""
 
+#: classes/applications/persona_import/persona_import.aw:prop_xml_education_file
+msgid "Omaduse Hariduskäigu XML fail (xml_education_file) caption"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:prop_xml_education_file_comment
+msgid "Omaduse Hariduskäigu XML fail (xml_education_file) kommentaar"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:prop_xml_education_file_help
+msgid "Omaduse Hariduskäigu XML fail (xml_education_file) help"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:prop_xml_work_relations_ending_file
+msgid "Omaduse Töösuhete peatumise XML fail (xml_work_relations_ending_file) caption"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:prop_xml_work_relations_ending_file_comment
+msgid "Omaduse Töösuhete peatumise XML fail (xml_work_relations_ending_file) kommentaar"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:prop_xml_work_relations_ending_file_help
+msgid "Omaduse Töösuhete peatumise XML fail (xml_work_relations_ending_file) help"
+msgstr ""
+
 # classes/applications/persona_import/persona_import.aw:prop_xml_structure_file
 #: classes/applications/persona_import/persona_import.aw:prop_xml_structure_file
 msgid "Omaduse Struktuuriüksuste XML fail (xml_structure_file) caption"
@@ -145,14 +169,12 @@ msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_image_folder
 #: classes/applications/persona_import/persona_import.aw:prop_xml_image_folder
-msgid ""
-"Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) caption"
+msgid "Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) caption"
 msgstr "Images folder (if separate)"
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_image_folder_comment
 #: classes/applications/persona_import/persona_import.aw:prop_xml_image_folder_comment
-msgid ""
-"Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) kommentaar"
+msgid "Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_image_folder_help
@@ -254,100 +276,109 @@ msgstr "recurrence"
 msgid "Seose Impordi objekt (RELTYPE_LINK_REL) tekst"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:102
+#: classes/applications/persona_import/persona_import.aw:108
 msgid "Näita XMLi"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:109
+#: classes/applications/persona_import/persona_import.aw:115
 msgid "Käivita import"
 msgstr "Run import"
 
-#: classes/applications/persona_import/persona_import.aw:133
+#: classes/applications/persona_import/persona_import.aw:139
 msgid "Jätka poolikut importi"
 msgstr "Continue unfinished import"
 
-#: classes/applications/persona_import/persona_import.aw:139
+#: classes/applications/persona_import/persona_import.aw:145
 msgid "Impordi pildid"
 msgstr "Import images"
 
-#: classes/applications/persona_import/persona_import.aw:169
-#: classes/applications/persona_import/persona_import.aw:232
-#: classes/applications/persona_import/persona_import.aw:1257
+#: classes/applications/persona_import/persona_import.aw:175
+#: classes/applications/persona_import/persona_import.aw:248
+#: classes/applications/persona_import/persona_import.aw:1637
 msgid "You forgot to enter server data"
 msgstr "You forgot to enter server data"
 
-#: classes/applications/persona_import/persona_import.aw:239
+#: classes/applications/persona_import/persona_import.aw:255
 msgid "Nii ei saa ju rallit sõita!"
 msgstr "Ya cant drive the rally like this!"
 
-#: classes/applications/persona_import/persona_import.aw:250
+#: classes/applications/persona_import/persona_import.aw:266
 msgid "Isikute kataloog valimata"
 msgstr "Person folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:256
+#: classes/applications/persona_import/persona_import.aw:272
 msgid "Aadresside kataloog valimata"
 msgstr "Address folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:262
+#: classes/applications/persona_import/persona_import.aw:278
 msgid "Default kataloog valimata"
 msgstr "Default folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:271
+#: classes/applications/persona_import/persona_import.aw:293
 msgid "Kliendibaasil puudub muutujate haldur"
 msgstr "Client database has no configuration manager"
 
-#: classes/applications/persona_import/persona_import.aw:320
+#: classes/applications/persona_import/persona_import.aw:342
 msgid "Getting source data<br>"
 msgstr "Getting source data<br>"
 
-#: classes/applications/persona_import/persona_import.aw:342
-msgid "Not enough data to process<bR>"
-msgstr "Not enough data to process<bR>"
+#: classes/applications/persona_import/persona_import.aw:384
+msgid "Not enough data to process<br>"
+msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:355
+#: classes/applications/persona_import/persona_import.aw:398
 msgid "got data<br>"
 msgstr "got data<br>"
 
-#: classes/applications/persona_import/persona_import.aw:370
+#: classes/applications/persona_import/persona_import.aw:414
 msgid "parse finished, processing starts<br>"
 msgstr "parse finished, processing starts<br>"
 
-#: classes/applications/persona_import/persona_import.aw:573
+#: classes/applications/persona_import/persona_import.aw:626
 msgid "creating yksused objects<br>"
 msgstr "creating section objects<Br>"
 
-#: classes/applications/persona_import/persona_import.aw:624
+#: classes/applications/persona_import/persona_import.aw:677
 msgid "created new section<br>"
 msgstr "created new section<br>"
 
-#: classes/applications/persona_import/persona_import.aw:637
-msgid "updating existing section"
-msgstr "updating existing section"
+#: classes/applications/persona_import/persona_import.aw:690
+msgid "updating existing section<br>"
+msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:688
+#: classes/applications/persona_import/persona_import.aw:741
 msgid "<h1>sections</h1>"
 msgstr "<h1>sections</h1>"
 
-#: classes/applications/persona_import/persona_import.aw:690
+#: classes/applications/persona_import/persona_import.aw:743
 msgid "<h1>sections done</h1>"
 msgstr "<h1>sections done</h1>"
 
-#: classes/applications/persona_import/persona_import.aw:703
+#: classes/applications/persona_import/persona_import.aw:756
 msgid "creating person objects<br>"
 msgstr "creating person objects<br>"
 
-#: classes/applications/persona_import/persona_import.aw:731
+#: classes/applications/persona_import/persona_import.aw:784
 msgid "<br>creating new person object<br>"
 msgstr "<br>creating new person object<br>"
 
-#: classes/applications/persona_import/persona_import.aw:737
-msgid "updating existing person object"
-msgstr "updating existing person object"
+#: classes/applications/persona_import/persona_import.aw:790
+msgid "updating existing person object<br>"
+msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:751
-#: classes/applications/persona_import/persona_import.aw:879
+#: classes/applications/persona_import/persona_import.aw:809
+#: classes/applications/persona_import/persona_import.aw:938
 msgid "Vaata"
 msgstr ""
+
+#~ msgid "Not enough data to process<bR>"
+#~ msgstr "Not enough data to process<bR>"
+
+#~ msgid "updating existing section"
+#~ msgstr "updating existing section"
+
+#~ msgid "updating existing person object"
+#~ msgstr "updating existing person object"
 
 #~ msgid "creating person)objects<br>"
 #~ msgstr "creating person)objects<br>"

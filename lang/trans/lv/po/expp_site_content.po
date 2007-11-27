@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/expp/expp_site_content.aw:class_1021_help
 msgid "Klassi expp_site_content (nimi) help"
 msgstr ""
 
-#: classes/expp/expp_site_content.aw:377
+#: classes/expp/expp_site_content.aw:396
 msgid "Andmete muutmine"
 msgstr ""
-

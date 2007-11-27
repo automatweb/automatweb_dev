@@ -89,7 +89,7 @@ msgstr "How many"
 msgid "Koodiversioon"
 msgstr "Code version"
 
-#: classes/install/site_list.aw:223 classes/install/site_list.aw:649
+#: classes/install/site_list.aw:223 classes/install/site_list.aw:648
 msgid "AW Serverite list"
 msgstr "AW Server list"
 
@@ -117,7 +117,7 @@ msgstr "Updater"
 msgid "Last update"
 msgstr "Last update"
 
-#: classes/install/site_list.aw:650
+#: classes/install/site_list.aw:649
 msgid "/ Muuda serverit"
 msgstr ""
 

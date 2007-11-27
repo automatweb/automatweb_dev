@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Insurance expires (expires) help"
 msgstr ""
 
+#: classes/crm/crm_insurance.aw:prop_insurance_type
+msgid "Omaduse Insurance type (insurance_type) caption"
+msgstr ""
+
+#: classes/crm/crm_insurance.aw:prop_insurance_type_comment
+msgid "Omaduse Insurance type (insurance_type) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_insurance.aw:prop_insurance_type_help
+msgid "Omaduse Insurance type (insurance_type) help"
+msgstr ""
+
 #: classes/crm/crm_insurance.aw:prop_certificate
 msgid "Omaduse Upload insurance certificate (certificate) caption"
 msgstr ""
@@ -60,18 +72,6 @@ msgstr ""
 
 #: classes/crm/crm_insurance.aw:prop_broker_help
 msgid "Omaduse Broker (broker) help"
-msgstr ""
-
-#: classes/crm/crm_insurance.aw:prop_insurance_type
-msgid "Omaduse Insurance type (insurance_type) caption"
-msgstr ""
-
-#: classes/crm/crm_insurance.aw:prop_insurance_type_comment
-msgid "Omaduse Insurance type (insurance_type) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_insurance.aw:prop_insurance_type_help
-msgid "Omaduse Insurance type (insurance_type) help"
 msgstr ""
 
 #: classes/crm/crm_insurance.aw:prop_insurance_sum

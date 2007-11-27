@@ -9,42 +9,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/admin/image_manager.aw:81
+#: classes/admin/image_manager.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/admin/image_manager.aw:100
 msgid "Uus pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:82
+#: classes/admin/image_manager.aw:101
 msgid "Vali olemasolev pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:91
+#: classes/admin/image_manager.aw:110
 msgid "Pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:96
+#: classes/admin/image_manager.aw:115
 msgid "Asukoht"
 msgstr ""
 
-#: classes/admin/image_manager.aw:101
+#: classes/admin/image_manager.aw:120
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/image_manager.aw:155
+#: classes/admin/image_manager.aw:174
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/image_manager.aw:194
+#: classes/admin/image_manager.aw:213
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/image_manager.aw:201
+#: classes/admin/image_manager.aw:220
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/image_manager.aw:207
+#: classes/admin/image_manager.aw:226
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/image_manager.aw:214
+#: classes/admin/image_manager.aw:233
 msgid "Viimased 30"
 msgstr ""

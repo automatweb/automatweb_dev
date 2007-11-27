@@ -1869,55 +1869,55 @@ msgstr ""
 msgid "Seose Avaldus (RELTYPE_AVALDUS) tekst"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:996
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1014
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:995
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1013
 msgid "Lisa uus avaldus"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1021
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1020
 msgid "Kustutada?"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1022
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1021
 msgid "Kustuta valitud avaldus(ed)"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1037
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1036
 msgid "Vastuv&otilde;tukatse"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1042
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1041
 msgid "Prinditud"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1047
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1046
 msgid "Prindi"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1069
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1068
 msgid "Prindi konkursileht"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1080
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1079
 msgid "Valitud erialadel sisseastumiskatseid pole."
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1092
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1091
 msgid "Eriala"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1098
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1097
 msgid "&otilde;ppevorm"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1104
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1103
 msgid "Eelistus"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1110
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1109
 msgid "T&otilde;end"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1129
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1128
 msgid "Prindi kandideerimist&otilde;end"
 msgstr ""

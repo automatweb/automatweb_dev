@@ -361,6 +361,18 @@ msgstr ""
 msgid "Omaduse Isiku piltide seaded (person_img_settings) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_status_limits
+msgid "Omaduse Staatuste piirangud (status_limits) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_status_limits_comment
+msgid "Omaduse Staatuste piirangud (status_limits) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_status_limits_help
+msgid "Omaduse Staatuste piirangud (status_limits) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:group_tables
 msgid "Grupi Tabelid (tables) pealkiri"
 msgstr ""
@@ -383,6 +395,14 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:group_img_help
 msgid "Grupi Pildid (img) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:group_status_limits
+msgid "Grupi Staatuste piirangud (status_limits) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:group_status_limits_help
+msgid "Grupi Staatuste piirangud (status_limits) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_USER
@@ -425,74 +445,82 @@ msgstr ""
 msgid "Seose Kataloog (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:210
+#: classes/applications/crm/crm_settings.aw:224
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:211
+#: classes/applications/crm/crm_settings.aw:225
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:212
+#: classes/applications/crm/crm_settings.aw:226
 msgid "Arvel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:213
+#: classes/applications/crm/crm_settings.aw:227
 msgid "Arveta"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:226
+#: classes/applications/crm/crm_settings.aw:240
 msgid "Tabelvaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:227
+#: classes/applications/crm/crm_settings.aw:241
 msgid "Kalendervaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:247
-msgid "Salvesta tabeli seaded"
+#: classes/applications/crm/crm_settings.aw:260
+msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:268
-msgid "Taasta algseaded"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:269
-msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:282
-msgid "Minu t&ouml;&ouml;koht"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:289
-msgid "Klient"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:296
-msgid "Eraisikust klient"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:303
-msgid "T&ouml;&ouml;kaaslane"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:310
-msgid "Kliendi t&ouml;&ouml;taja"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:360
-msgid "Veeru nimi"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:364
-msgid "Järjekord"
+#: classes/applications/crm/crm_settings.aw:281
+msgid "Grupid kellele piirang ei m&otilde;ju"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:368
+msgid "Salvesta tabeli seaded"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:389
+msgid "Taasta algseaded"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:390
+msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:403
+msgid "Minu t&ouml;&ouml;koht"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:410
+msgid "Klient"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:417
+msgid "Eraisikust klient"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:424
+msgid "T&ouml;&ouml;kaaslane"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:431
+msgid "Kliendi t&ouml;&ouml;taja"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:481
+msgid "Veeru nimi"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:485
+msgid "Järjekord"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:489
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:372
+#: classes/applications/crm/crm_settings.aw:493
 msgid "Pealkiri"
 msgstr ""

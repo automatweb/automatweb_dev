@@ -14,47 +14,27 @@ msgstr ""
 msgid "Klassi OWS Broneeringukeskus help"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:425 classes/applications/ows_bron/ows_bron.aw:684
+#: classes/applications/ows_bron/ows_bron.aw:prop_bank_payment
+msgid "Omaduse Pangamakse objekt (bank_payment) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_bank_payment_comment
+msgid "Omaduse Pangamakse objekt (bank_payment) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_bank_payment_help
+msgid "Omaduse Pangamakse objekt (bank_payment) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:rel_RELTYPE_BANK_PAYMENT
+msgid "Seose Pangamakse (RELTYPE_BANK_PAYMENT) tekst"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:514 classes/applications/ows_bron/ows_bron.aw:827
 msgid "OWS Bron %s %s @ %s"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:932
-msgid "&Auml;rikeskus"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:936
-msgid "Konverentsisaal"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:940
-msgid "J&otilde;usaal"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:944
-msgid "Tasuta Internet"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:948
-msgid "Parkla"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:952
-msgid "Lemmikloomad lubatud"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:956
-msgid "Restoran"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:960
-msgid "Toateenindus"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:964
-msgid "Bassein"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:968
-msgid "Ratastooliga ligip&auml;&auml;setav"
+#: classes/applications/ows_bron/ows_bron.aw:1746
+msgid "Your reservation has been canceled!"
 msgstr ""
 

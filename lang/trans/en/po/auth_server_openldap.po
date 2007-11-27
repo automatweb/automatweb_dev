@@ -141,8 +141,7 @@ msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_ad_grp_txt_comment
 #: classes/core/users/auth/auth_server_openldap.aw:prop_ad_grp_txt_comment
-msgid ""
-"Omaduse Grupp, kus kasutajad peavad olema (tekst) (ad_grp_txt) kommentaar"
+msgid "Omaduse Grupp, kus kasutajad peavad olema (tekst) (ad_grp_txt) kommentaar"
 msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_ad_grp_txt_help
@@ -152,44 +151,32 @@ msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_no_user_grp
 #: classes/core/users/auth/auth_server_openldap.aw:prop_no_user_grp
-msgid ""
-"Omaduse Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole "
-"(no_user_grp) caption"
+msgid "Omaduse Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole (no_user_grp) caption"
 msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_no_user_grp_comment
 #: classes/core/users/auth/auth_server_openldap.aw:prop_no_user_grp_comment
-msgid ""
-"Omaduse Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole "
-"(no_user_grp) kommentaar"
+msgid "Omaduse Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole (no_user_grp) kommentaar"
 msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_no_user_grp_help
 #: classes/core/users/auth/auth_server_openldap.aw:prop_no_user_grp_help
-msgid ""
-"Omaduse Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole "
-"(no_user_grp) help"
+msgid "Omaduse Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole (no_user_grp) help"
 msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_auto_create_user
 #: classes/core/users/auth/auth_server_openldap.aw:prop_auto_create_user
-msgid ""
-"Omaduse Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis "
-"pole (auto_create_user) caption"
+msgid "Omaduse Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis pole (auto_create_user) caption"
 msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_auto_create_user_comment
 #: classes/core/users/auth/auth_server_openldap.aw:prop_auto_create_user_comment
-msgid ""
-"Omaduse Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis "
-"pole (auto_create_user) kommentaar"
+msgid "Omaduse Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis pole (auto_create_user) kommentaar"
 msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_auto_create_user_help
 #: classes/core/users/auth/auth_server_openldap.aw:prop_auto_create_user_help
-msgid ""
-"Omaduse Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis "
-"pole (auto_create_user) help"
+msgid "Omaduse Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis pole (auto_create_user) help"
 msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_break_chain
@@ -214,8 +201,7 @@ msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_no_save_pwd_comment
 #: classes/core/users/auth/auth_server_openldap.aw:prop_no_save_pwd_comment
-msgid ""
-"Omaduse &Auml;ra salvesta AW'sse kasutaja parooli (no_save_pwd) kommentaar"
+msgid "Omaduse &Auml;ra salvesta AW'sse kasutaja parooli (no_save_pwd) kommentaar"
 msgstr ""
 
 # classes/core/users/auth/auth_server_openldap.aw:prop_no_save_pwd_help
@@ -229,10 +215,7 @@ msgid "Seose grupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
 #: classes/core/users/auth/auth_server_openldap.aw:120
-msgid ""
-"auth_server_openldap::check_auth(): The LDAP module for PHP is not "
-"installed, but the auth configuration specifies a LDAP server to "
-"authenticate against!"
+msgid "auth_server_openldap::check_auth(): The LDAP module for PHP is not installed, but the auth configuration specifies a LDAP server to authenticate against!"
 msgstr ""
 
 #: classes/core/users/auth/auth_server_openldap.aw:124
@@ -243,10 +226,10 @@ msgstr ""
 msgid "Ei saanud &uuml;hendust LDAP serveriga %s"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:174
+#: classes/core/users/auth/auth_server_openldap.aw:178
 msgid "Sellist kasutajat pole v&otilde;i parool on vale!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:188
+#: classes/core/users/auth/auth_server_openldap.aw:192
 msgid "Ei saanud serveriga &uuml;hendust!"
 msgstr ""

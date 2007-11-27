@@ -350,7 +350,7 @@ msgstr ""
 msgid "Saidi sisene link"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:473
+#: classes/contentmgmt/links.aw:481
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 

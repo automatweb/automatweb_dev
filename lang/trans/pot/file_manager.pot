@@ -10,43 +10,47 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/admin/file_manager.aw:84
+#: classes/admin/file_manager.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/admin/file_manager.aw:75
 msgid "Uus fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:85
+#: classes/admin/file_manager.aw:76
 msgid "Vali olemasolev fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:94
+#: classes/admin/file_manager.aw:85
 msgid "Fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:99
+#: classes/admin/file_manager.aw:90
 msgid "Asukoht"
 msgstr ""
 
-#: classes/admin/file_manager.aw:104
+#: classes/admin/file_manager.aw:95
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/file_manager.aw:153
+#: classes/admin/file_manager.aw:156
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/file_manager.aw:191
+#: classes/admin/file_manager.aw:235
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/file_manager.aw:198
+#: classes/admin/file_manager.aw:242
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/file_manager.aw:204
+#: classes/admin/file_manager.aw:248
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/file_manager.aw:211
+#: classes/admin/file_manager.aw:255
 msgid "Viimased 30"
 msgstr ""
 

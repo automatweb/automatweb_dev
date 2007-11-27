@@ -378,31 +378,35 @@ msgstr "Order attachment"
 msgid "Seose Mail (RELTYPE_MAIL) tekst"
 msgstr "Mail"
 
-#: classes/applications/orders/orders_form.aw:940
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_MAIL_ADDRESS
+msgid "Seose Maili aadress (RELTYPE_MAIL_ADDRESS) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:980
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/applications/orders/orders_form.aw:999
-#: classes/applications/orders/orders_form.aw:1009
+#: classes/applications/orders/orders_form.aw:1039
+#: classes/applications/orders/orders_form.aw:1049
 msgid "\n"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1020
+#: classes/applications/orders/orders_form.aw:1060
 msgid "Kauba t&uuml;&uuml;p"
 msgstr "Product type"
 
-#: classes/applications/orders/orders_form.aw:1026
+#: classes/applications/orders/orders_form.aw:1066
 msgid "Min. Kuud"
 msgstr "Min. Months"
 
-#: classes/applications/orders/orders_form.aw:1032
+#: classes/applications/orders/orders_form.aw:1072
 msgid "Max. Kuud"
 msgstr "Max. Months"
 
-#: classes/applications/orders/orders_form.aw:1038
+#: classes/applications/orders/orders_form.aw:1078
 msgid "Esmase sissemakse %"
 msgstr "First payment %"
 
-#: classes/applications/orders/orders_form.aw:1044
+#: classes/applications/orders/orders_form.aw:1084
 msgid "Intressi %"
 msgstr "Interest %"

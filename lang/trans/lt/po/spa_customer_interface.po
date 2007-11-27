@@ -86,14 +86,14 @@ msgid "T&uuml;hista"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_customer_interface.aw:887
-#: classes/applications/spa_bookings/spa_customer_interface.aw:969
+#: classes/applications/spa_bookings/spa_customer_interface.aw:982
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1039
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1052
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1039
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1052
 msgid "Naine"
 msgstr ""

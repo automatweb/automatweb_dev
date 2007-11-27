@@ -446,18 +446,6 @@ msgstr ""
 msgid "Omaduse Korraldaja (organizer) help"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:prop_make_copy
-msgid "Omaduse Tee koopia (make_copy) caption"
-msgstr ""
-
-#: classes/applications/calendar/calendar_event.aw:prop_make_copy_comment
-msgid "Omaduse Tee koopia (make_copy) kommentaar"
-msgstr ""
-
-#: classes/applications/calendar/calendar_event.aw:prop_make_copy_help
-msgid "Omaduse Tee koopia (make_copy) help"
-msgstr ""
-
 #: classes/applications/calendar/calendar_event.aw:prop_level
 msgid "Omaduse Tase (level) caption"
 msgstr ""
@@ -646,31 +634,31 @@ msgstr ""
 msgid "Seose Toimumisaeg (RELTYPE_EVENT_TIME) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:356
+#: classes/applications/calendar/calendar_event.aw:357
 msgid "Algusaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:357
+#: classes/applications/calendar/calendar_event.aw:358
 msgid "L&otilde;puaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:402
+#: classes/applications/calendar/calendar_event.aw:403
 msgid "Sellist toimumiskohta pole"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:429
+#: classes/applications/calendar/calendar_event.aw:430
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:433
+#: classes/applications/calendar/calendar_event.aw:434
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:437
+#: classes/applications/calendar/calendar_event.aw:438
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:467
+#: classes/applications/calendar/calendar_event.aw:468
 msgid "Kustuta"
 msgstr ""
 

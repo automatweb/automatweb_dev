@@ -261,6 +261,78 @@ msgstr ""
 msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) help"
 msgstr ""
 
+#: classes/file.aw:prop_sp_tb
+msgid "Omaduse  (sp_tb) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_tb_comment
+msgid "Omaduse  (sp_tb) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_tb_help
+msgid "Omaduse  (sp_tb) help"
+msgstr ""
+
+#: classes/file.aw:prop_sp_table
+msgid "Omaduse Valitud isikud (sp_table) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_table_comment
+msgid "Omaduse Valitud isikud (sp_table) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_table_help
+msgid "Omaduse Valitud isikud (sp_table) help"
+msgstr ""
+
+#: classes/file.aw:prop_sp_p_name
+msgid "Omaduse Isik (sp_p_name) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_p_name_comment
+msgid "Omaduse Isik (sp_p_name) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_p_name_help
+msgid "Omaduse Isik (sp_p_name) help"
+msgstr ""
+
+#: classes/file.aw:prop_sp_p_co
+msgid "Omaduse Organisatsioon (sp_p_co) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_p_co_comment
+msgid "Omaduse Organisatsioon (sp_p_co) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_p_co_help
+msgid "Omaduse Organisatsioon (sp_p_co) help"
+msgstr ""
+
+#: classes/file.aw:prop_sp_sbt
+msgid "Omaduse Otsi (sp_sbt) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_sbt_comment
+msgid "Omaduse Otsi (sp_sbt) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_sbt_help
+msgid "Omaduse Otsi (sp_sbt) help"
+msgstr ""
+
+#: classes/file.aw:prop_sp_s_res
+msgid "Omaduse Otsingu tulemused (sp_s_res) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_s_res_comment
+msgid "Omaduse Otsingu tulemused (sp_s_res) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_s_res_help
+msgid "Omaduse Otsingu tulemused (sp_s_res) help"
+msgstr ""
+
 #: classes/file.aw:prop_acl
 msgid "Omaduse &Otilde;igused (acl) caption"
 msgstr ""
@@ -317,68 +389,115 @@ msgstr ""
 msgid "Grupi &Otilde;igused (acl) help"
 msgstr ""
 
+#: classes/file.aw:group_notify
+msgid "Grupi Teavitamine (notify) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_notify_help
+msgid "Grupi Teavitamine (notify) help"
+msgstr ""
+
 #: classes/file.aw:rel_RELTYPE_KEYWORD
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:150
+#: classes/file.aw:171
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/file.aw:170
+#: classes/file.aw:191
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/file.aw:171 classes/file.aw:190
+#: classes/file.aw:192 classes/file.aw:211
 msgid "Allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:178
+#: classes/file.aw:199
 msgid "DigiDoc konteinerisse"
 msgstr ""
 
-#: classes/file.aw:189
+#: classes/file.aw:210
 msgid "Allkirjasta"
 msgstr ""
 
-#: classes/file.aw:197
+#: classes/file.aw:218
 msgid "DigiDoc konteiner"
 msgstr ""
 
-#: classes/file.aw:208
+#: classes/file.aw:229
 msgid "Allkirjasta fail"
 msgstr ""
 
-#: classes/file.aw:209
+#: classes/file.aw:230
 msgid "Faili: %s, allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:258
+#: classes/file.aw:279
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:354
+#: classes/file.aw:375
 msgid "Paiguta dokumenti"
 msgstr ""
 
-#: classes/file.aw:420
+#: classes/file.aw:458
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr ""
 
-#: classes/file.aw:791
+#: classes/file.aw:836
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/file.aw:1383
+#: classes/file.aw:1465
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/file.aw:1494
+#: classes/file.aw:1582
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/file.aw:1502
+#: classes/file.aw:1590
 msgid "Salvesta ja paiguta dokumenti"
+msgstr ""
+
+#: classes/file.aw:1624
+msgid "Salvesta"
+msgstr ""
+
+#: classes/file.aw:1630
+msgid "Kustuta"
+msgstr ""
+
+#: classes/file.aw:1637
+msgid "Saada teavitusmeil"
+msgstr ""
+
+#: classes/file.aw:1647
+msgid "Nimi"
+msgstr ""
+
+#: classes/file.aw:1652
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/file.aw:1657
+msgid "Telefon"
+msgstr ""
+
+#: classes/file.aw:1662
+msgid "E-mail"
+msgstr ""
+
+#: classes/file.aw:1827
+msgid "Teavitus muutunud dokumendist"
+msgstr ""
+
+#: classes/file.aw:1828
+msgid ""
+"Uuendati faili \"%s\". Palun kliki siia:\n"
+"%s\n"
+"et faili nha!"
 msgstr ""
 
 # classes/file.aw:prop_showal_comment

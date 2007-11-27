@@ -2397,20 +2397,20 @@ msgstr ""
 msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_house.aw:491
+#: classes/applications/realestate_management/realestate_house.aw:490
 msgid "Lisandub objekti hinnale"
 msgstr "Will be added to the price of object"
 
-#: classes/applications/realestate_management/realestate_house.aw:492
+#: classes/applications/realestate_management/realestate_house.aw:491
 msgid "Sisaldub objekti hinnas"
 msgstr "Includes in the price of object"
 
-#: classes/applications/realestate_management/realestate_house.aw:508
+#: classes/applications/realestate_management/realestate_house.aw:507
 msgid "%s saj."
 msgstr "%s century"
 
-#: classes/applications/realestate_management/realestate_house.aw:585
-#: classes/applications/realestate_management/realestate_house.aw:593
+#: classes/applications/realestate_management/realestate_house.aw:584
+#: classes/applications/realestate_management/realestate_house.aw:592
 msgid "Kohustuslik v&auml;li"
 msgstr ""
 

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_person_work_relation.aw:class_1060_help
 msgid "Klassi T&ouml;&ouml;suhe help"
 msgstr ""
@@ -74,6 +73,30 @@ msgstr ""
 msgid "Omaduse Ülesanded (tasks) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_work_relation.aw:prop_directive_link
+msgid "Omaduse Viit ametijuhendile (directive_link) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_directive_link_comment
+msgid "Omaduse Viit ametijuhendile (directive_link) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_directive_link_help
+msgid "Omaduse Viit ametijuhendile (directive_link) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_directive
+msgid "Omaduse Ametijuhend (directive) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_directive_comment
+msgid "Omaduse Ametijuhend (directive) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_directive_help
+msgid "Omaduse Ametijuhend (directive) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_ORG
 msgid "Seose Organisatsioon (RELTYPE_ORG) tekst"
 msgstr ""
@@ -86,3 +109,14 @@ msgstr ""
 msgid "Seose Amet (RELTYPE_PROFESSION) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_SUBSITUTE
+msgid "Seose Asendaja (RELTYPE_SUBSITUTE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_DESC_FILE
+msgid "Seose Ametijuhend (RELTYPE_DESC_FILE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_CONTRACT_STOP
+msgid "Seose Töölepingu peatamine (RELTYPE_CONTRACT_STOP) tekst"
+msgstr ""

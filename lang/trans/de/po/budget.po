@@ -37,6 +37,42 @@ msgstr ""
 msgid "Omaduse Stsenaarium (scenario) help"
 msgstr ""
 
+#: classes/applications/budgeting/budget.aw:prop_start
+msgid "Omaduse Alates (start) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_start_comment
+msgid "Omaduse Alates (start) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_start_help
+msgid "Omaduse Alates (start) help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_end
+msgid "Omaduse Kuni (end) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_end_comment
+msgid "Omaduse Kuni (end) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_end_help
+msgid "Omaduse Kuni (end) help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_owner
+msgid "Omaduse Vastutaja (owner) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_owner_comment
+msgid "Omaduse Vastutaja (owner) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_owner_help
+msgid "Omaduse Vastutaja (owner) help"
+msgstr ""
+
 #: classes/applications/budgeting/budget.aw:prop_total
 msgid "Omaduse Kogusumma (total) caption"
 msgstr ""
@@ -73,6 +109,18 @@ msgstr ""
 msgid "Omaduse Hetkel projekti kasum (desc) help"
 msgstr ""
 
+#: classes/applications/budgeting/budget.aw:prop_ex_table
+msgid "Omaduse  (ex_table) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_ex_table_comment
+msgid "Omaduse  (ex_table) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_ex_table_help
+msgid "Omaduse  (ex_table) help"
+msgstr ""
+
 #: classes/applications/budgeting/budget.aw:group_m
 msgid "Grupi Raha (m) pealkiri"
 msgstr ""
@@ -97,6 +145,22 @@ msgstr ""
 msgid "Grupi Grupivaade (m2) help"
 msgstr ""
 
+#: classes/applications/budgeting/budget.aw:group_m3
+msgid "Grupi T&uuml;&uuml;bivaade (m3) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:group_m3_help
+msgid "Grupi T&uuml;&uuml;bivaade (m3) help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:group_ex
+msgid "Grupi V&auml;listamine (ex) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:group_ex_help
+msgid "Grupi V&auml;listamine (ex) help"
+msgstr ""
+
 #: classes/applications/budgeting/budget.aw:rel_RELTYPE_PROJECT
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
@@ -105,39 +169,47 @@ msgstr ""
 msgid "Seose Stsenaarium (RELTYPE_SCENARIO) tekst"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:116
+#: classes/applications/budgeting/budget.aw:rel_RELTYPE_OWNER
+msgid "Seose Vastutaja (RELTYPE_OWNER) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:135
 msgid "Maksugrupp"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:122
+#: classes/applications/budgeting/budget.aw:141
 msgid "Maks"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:129
+#: classes/applications/budgeting/budget.aw:148
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:136
+#: classes/applications/budgeting/budget.aw:155
 msgid "Maksu protsent"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:143
+#: classes/applications/budgeting/budget.aw:162
 msgid "Muuda protsenti"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:148
+#: classes/applications/budgeting/budget.aw:167
 msgid "Maksu summa"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:155
+#: classes/applications/budgeting/budget.aw:174
 msgid "Edasi kandub"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:186
+#: classes/applications/budgeting/budget.aw:211
 msgid "<br>(Maksimaalne erinevus %s)"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:191
-#: classes/applications/budgeting/budget.aw:221
+#: classes/applications/budgeting/budget.aw:216
+#: classes/applications/budgeting/budget.aw:251
 msgid "Muud maksud"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:340
+msgid "V&auml;lista"
 msgstr ""

@@ -320,6 +320,6 @@ msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
 #: classes/applications/shop/shop_order.aw:552
-#: classes/applications/shop/shop_order.aw:701
+#: classes/applications/shop/shop_order.aw:702
 msgid "Tellimus laost %s"
 msgstr ""

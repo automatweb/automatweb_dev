@@ -49,6 +49,18 @@ msgstr ""
 msgid "Omaduse Järk (jrk) help"
 msgstr ""
 
+#: classes/crm/crm_profession.aw:prop_directive_link
+msgid "Omaduse Viit ametijuhendile (directive_link) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_directive_link_comment
+msgid "Omaduse Viit ametijuhendile (directive_link) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_directive_link_help
+msgid "Omaduse Viit ametijuhendile (directive_link) help"
+msgstr ""
+
 #: classes/crm/crm_profession.aw:prop_directive
 msgid "Omaduse Ametijuhend (directive) caption"
 msgstr ""

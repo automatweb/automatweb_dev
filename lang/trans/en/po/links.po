@@ -402,6 +402,6 @@ msgstr "Scrollbars"
 msgid "Saidi sisene link"
 msgstr "Inner-site link"
 
-#: classes/contentmgmt/links.aw:473
+#: classes/contentmgmt/links.aw:481
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""

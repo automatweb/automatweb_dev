@@ -214,3 +214,7 @@ msgstr ""
 msgid "J&auml;rjekord"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:435
+msgid "OID"
+msgstr ""
+

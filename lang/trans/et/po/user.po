@@ -789,74 +789,74 @@ msgstr ""
 msgid "Muudetud"
 msgstr ""
 
-#: classes/core/users/user.aw:696 classes/core/users/user.aw:1113
+#: classes/core/users/user.aw:696 classes/core/users/user.aw:1114
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/core/users/user.aw:1090
+#: classes/core/users/user.aw:1091
 msgid "Nr"
 msgstr ""
 
-#: classes/core/users/user.aw:1094
+#: classes/core/users/user.aw:1095
 msgid "Millal"
 msgstr ""
 
-#: classes/core/users/user.aw:1103
+#: classes/core/users/user.aw:1104
 msgid "Kes"
 msgstr ""
 
-#: classes/core/users/user.aw:1108
+#: classes/core/users/user.aw:1109
 msgid "IP"
 msgstr ""
 
-#: classes/core/users/user.aw:1118
+#: classes/core/users/user.aw:1119
 msgid "Tegevus"
 msgstr ""
 
-#: classes/core/users/user.aw:1125
+#: classes/core/users/user.aw:1126
 msgid "Saidi ID"
 msgstr ""
 
-#: classes/core/users/user.aw:1131
+#: classes/core/users/user.aw:1132
 msgid "OID"
 msgstr ""
 
-#: classes/core/users/user.aw:1136
+#: classes/core/users/user.aw:1137
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1639
+#: classes/core/users/user.aw:1642
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1711
+#: classes/core/users/user.aw:1714
 msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
 msgstr ""
 
-#: classes/core/users/user.aw:1719
+#: classes/core/users/user.aw:1722
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1724
+#: classes/core/users/user.aw:1727
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1729
+#: classes/core/users/user.aw:1732
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1739
+#: classes/core/users/user.aw:1742
 msgid "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;igus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1775
+#: classes/core/users/user.aw:1778
 msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr ""
 
-#: classes/core/users/user.aw:2224
+#: classes/core/users/user.aw:2251
 msgid "Seaded"
 msgstr ""
 
-#: classes/core/users/user.aw:2271
+#: classes/core/users/user.aw:2298
 msgid "Ajalugu"
 msgstr ""

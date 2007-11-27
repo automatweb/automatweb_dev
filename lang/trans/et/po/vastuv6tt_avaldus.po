@@ -169,6 +169,6 @@ msgstr ""
 msgid "Omaduse Kas eelistuseks on antud eriala? (eelistus) help"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:87
+#: classes/vastuv6tt/vastuv6tt_avaldus.aw:85
 msgid "&Otilde;ppetase määramata."
 msgstr ""

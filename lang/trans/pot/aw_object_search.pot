@@ -311,7 +311,7 @@ msgid "Grupi Otsing (srch) help"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:layout_left_side
-msgid "Kujundusosa &Uuml;dandmed (left_side) pealkiri"
+msgid "Kujundusosa &Uuml;ldandmed (left_side) pealkiri"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:layout_creamod

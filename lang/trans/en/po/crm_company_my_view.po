@@ -9,44 +9,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_company_my_view.aw:36
-msgid ""
-msgstr ""
-
 #: classes/applications/crm/crm_company_my_view.aw:44
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/crm/crm_company_my_view.aw:51
 msgid "Kommentaar"
-msgstr ""
+msgstr "Comment"
 
 #: classes/applications/crm/crm_company_my_view.aw:58
 msgid "Aeg"
-msgstr ""
+msgstr "Time"
 
 #: classes/applications/crm/crm_company_my_view.aw:67
 msgid "Klient"
-msgstr ""
+msgstr "Client"
 
 #: classes/applications/crm/crm_company_my_view.aw:74
 msgid "Projekt"
-msgstr ""
+msgstr "Project"
 
 #: classes/applications/crm/crm_company_my_view.aw:81
 msgid "Osalejad"
-msgstr ""
+msgstr "Participants"
 
 #: classes/applications/crm/crm_company_my_view.aw:233
 msgid "Teema"
-msgstr ""
+msgstr "Subject"
 
 #: classes/applications/crm/crm_company_my_view.aw:239
 msgid "Kommentaare"
-msgstr ""
+msgstr "Comments"
 
 #: classes/applications/crm/crm_company_my_view.aw:245
 msgid "Viimane kommentaar"
-msgstr ""
+msgstr "Last comment"
 

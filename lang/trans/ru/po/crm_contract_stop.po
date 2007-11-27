@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_contract_stop.aw:class_877_help
 msgid "Klassi Töölepingu peatamine help"
 msgstr ""
@@ -66,3 +65,6 @@ msgstr ""
 msgid "Seose Peatumise liik (RELTYPE_CONTRACT_STOP_TYPE) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_contract_stop.aw:rel_RELTYPE_SUBSTITUTE
+msgid "Seose Asendaja (RELTYPE_SUBSTITUTE) tekst"
+msgstr ""

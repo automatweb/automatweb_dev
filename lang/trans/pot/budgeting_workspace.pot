@@ -206,6 +206,30 @@ msgstr ""
 msgid "Omaduse  (tax_grp_table) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_mtx_tb
+msgid "Omaduse  (tax_mtx_tb) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_mtx_tb_comment
+msgid "Omaduse  (tax_mtx_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_mtx_tb_help
+msgid "Omaduse  (tax_mtx_tb) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_mtx_table
+msgid "Omaduse  (tax_mtx_table) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_mtx_table_comment
+msgid "Omaduse  (tax_mtx_table) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_mtx_table_help
+msgid "Omaduse  (tax_mtx_table) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_tb
 msgid "Omaduse  (fund_tb) caption"
 msgstr ""
@@ -382,6 +406,14 @@ msgstr ""
 msgid "Grupi Maksugrupid  (taxes_grps) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_workspace.aw:group_taxes_mtx
+msgid "Grupi Maksude maatriksid  (taxes_mtx) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_taxes_mtx_help
+msgid "Grupi Maksude maatriksid  (taxes_mtx) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_workspace.aw:group_funds
 msgid "Grupi Fondid (funds) pealkiri"
 msgstr ""
@@ -426,6 +458,10 @@ msgstr ""
 msgid "Seose Maksugrupp (RELTYPE_TAX_GROUP) tekst"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_workspace.aw:rel_RELTYPE_TAX_MATRIX
+msgid "Seose Maksumaatriks (RELTYPE_TAX_MATRIX) tekst"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_workspace.aw:layout_acct_tree
 msgid "Kujundusosa Kontode&nbsp;puu (acct_tree) pealkiri"
 msgstr ""
@@ -454,83 +490,83 @@ msgstr ""
 msgid "Kujundusosa Otsi&nbsp;&uuml;lekandeid (transfer_search) pealkiri"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:235
+#: classes/applications/budgeting/budgeting_workspace.aw:245
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:241
+#: classes/applications/budgeting/budgeting_workspace.aw:251
 msgid "Omanik"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:247
+#: classes/applications/budgeting/budgeting_workspace.aw:257
 msgid "Saldo"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:253
+#: classes/applications/budgeting/budgeting_workspace.aw:263
 msgid "Viimane kanne"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:259
+#: classes/applications/budgeting/budgeting_workspace.aw:269
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:341
+#: classes/applications/budgeting/budgeting_workspace.aw:351
 msgid "%s kontode kataloog"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:377
+#: classes/applications/budgeting/budgeting_workspace.aw:387
 msgid "&Uuml;ldine"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:383 classes/applications/budgeting/budgeting_workspace.aw:617
+#: classes/applications/budgeting/budgeting_workspace.aw:393 classes/applications/budgeting/budgeting_workspace.aw:627
 msgid "Valdkonnad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:443
+#: classes/applications/budgeting/budgeting_workspace.aw:453
 msgid "MPM-"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:450
+#: classes/applications/budgeting/budgeting_workspace.aw:460
 msgid "MPM+"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:464
+#: classes/applications/budgeting/budgeting_workspace.aw:474
 msgid "%s maksude kataloog"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:579
+#: classes/applications/budgeting/budgeting_workspace.aw:589
 msgid "%s fondide kataloog"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:625
+#: classes/applications/budgeting/budgeting_workspace.aw:635
 msgid "Fondid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:634
+#: classes/applications/budgeting/budgeting_workspace.aw:644
 msgid "Tegija"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:643
+#: classes/applications/budgeting/budgeting_workspace.aw:653
 msgid "Teenuse liik"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:652 classes/applications/budgeting/budgeting_workspace.aw:853 classes/applications/budgeting/budgeting_workspace.aw:920
+#: classes/applications/budgeting/budgeting_workspace.aw:662 classes/applications/budgeting/budgeting_workspace.aw:863 classes/applications/budgeting/budgeting_workspace.aw:930
 msgid "Tooteperekonnad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:661
+#: classes/applications/budgeting/budgeting_workspace.aw:671
 msgid "Kontod"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:833
+#: classes/applications/budgeting/budgeting_workspace.aw:843
 msgid "Projektid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:843 classes/applications/budgeting/budgeting_workspace.aw:910
+#: classes/applications/budgeting/budgeting_workspace.aw:853 classes/applications/budgeting/budgeting_workspace.aw:920
 msgid "Teenuse liigid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:1268
+#: classes/applications/budgeting/budgeting_workspace.aw:1295
 msgid "K&otilde;ik"
 msgstr ""
 

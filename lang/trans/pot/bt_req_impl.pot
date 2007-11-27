@@ -10,71 +10,75 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:16
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:18
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:21
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:23
 msgid "Kategooria"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:28
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:30
 msgid "N&otilde;ue"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:35
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:37
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:38
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:40
 msgid "Oled kindel, et soovid n&otilde;udeid kustutada?"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:43
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:45
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:51
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:53
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:59
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:61
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:90
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:92
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:95
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:97
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:100
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:102
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:127
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:129
 msgid "N&otilde;uded kategoorias %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:161
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:163
 msgid "Muud t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:180
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:182
 msgid "Staatused"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:211
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:213
 msgid "Prioriteedid"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:273
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:275
 msgid "N&otilde;uded projektis %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:364
+#: classes/applications/bug_o_matic_3000/bt_req_impl.aw:366
 msgid "N&otilde;uded organisatsioonile %s"
 msgstr ""
 

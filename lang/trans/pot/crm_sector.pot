@@ -62,16 +62,28 @@ msgstr ""
 msgid "Omaduse J&auml;rjekord (ord) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_parent_sector
+msgid "Omaduse Parent (parent_sector) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_parent_sector_comment
+msgid "Omaduse Parent (parent_sector) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_parent_sector_help
+msgid "Omaduse Parent (parent_sector) help"
+msgstr ""
+
 #: classes/crm/crm_sector.aw:prop_tegevusala_en
-msgid "Omaduse Inglise keelne nimetus (tegevusala_en) caption"
+msgid "Omaduse Inglisekeelne nimetus (tegevusala_en) caption"
 msgstr ""
 
 #: classes/crm/crm_sector.aw:prop_tegevusala_en_comment
-msgid "Omaduse Inglise keelne nimetus (tegevusala_en) kommentaar"
+msgid "Omaduse Inglisekeelne nimetus (tegevusala_en) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_sector.aw:prop_tegevusala_en_help
-msgid "Omaduse Inglise keelne nimetus (tegevusala_en) help"
+msgid "Omaduse Inglisekeelne nimetus (tegevusala_en) help"
 msgstr ""
 
 #: classes/crm/crm_sector.aw:prop_comment

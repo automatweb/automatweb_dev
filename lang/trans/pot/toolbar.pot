@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/toolbar.aw:51 classes/vcl/toolbar.aw:96 classes/vcl/toolbar.aw:153 classes/vcl/toolbar.aw:178 classes/vcl/toolbar.aw:344
+#: classes/vcl/toolbar.aw:51 classes/vcl/toolbar.aw:96 classes/vcl/toolbar.aw:153 classes/vcl/toolbar.aw:178 classes/vcl/toolbar.aw:345
 msgid "Kustuta"
 msgstr ""
 
@@ -42,39 +42,39 @@ msgstr ""
 msgid "teine tiitel"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:251
+#: classes/vcl/toolbar.aw:252
 msgid "neti.ee"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:252
+#: classes/vcl/toolbar.aw:253
 msgid "Oled sa kindel et tahad ikka sinna saidile minna?"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:493
+#: classes/vcl/toolbar.aw:494
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:539 classes/vcl/toolbar.aw:547
+#: classes/vcl/toolbar.aw:540 classes/vcl/toolbar.aw:548
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:570
+#: classes/vcl/toolbar.aw:571
 msgid "Kustuta valitud objektid"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:584
+#: classes/vcl/toolbar.aw:585
 msgid "Kustuta valitud seosed"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:597
+#: classes/vcl/toolbar.aw:598
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:627
+#: classes/vcl/toolbar.aw:628
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:640
+#: classes/vcl/toolbar.aw:641
 msgid "Kleebi"
 msgstr ""
 

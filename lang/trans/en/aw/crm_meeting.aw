@@ -19,6 +19,7 @@ $GLOBALS["TRANS"]["Omaduse Perenimi (search_contact_lastname) caption"] = "Last 
 $GLOBALS["TRANS"]["Omaduse Isikukood (search_contact_code) caption"] = "Personal code";
 $GLOBALS["TRANS"]["Omaduse Otsi (search_contact_button) caption"] = "Search";
 $GLOBALS["TRANS"]["Omaduse Tulemuste tabel (search_contact_results) caption"] = "Result table";
+$GLOBALS["TRANS"]["Omaduse Aliastehaldur (aliasmgr) caption"] = "Connection manager";
 $GLOBALS["TRANS"]["Grupi Kordumine (recurrence) pealkiri"] = "Recurrence";
 $GLOBALS["TRANS"]["Grupi Kalendrid (calendars) pealkiri"] = "Calendars";
 $GLOBALS["TRANS"]["Grupi Teised (others) pealkiri"] = "Others";

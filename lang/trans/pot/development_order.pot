@@ -14,6 +14,198 @@ msgstr ""
 msgid "Klassi Arendustellimus help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_name
+msgid "Omaduse  (name) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_name_comment
+msgid "Omaduse  (name) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_name_help
+msgid "Omaduse  (name) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_status
+msgid "Omaduse Staatus (bug_status) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_status_comment
+msgid "Omaduse Staatus (bug_status) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_status_help
+msgid "Omaduse Staatus (bug_status) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_feedback_p
+msgid "Omaduse Tagasiside kellelt (bug_feedback_p) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_feedback_p_comment
+msgid "Omaduse Tagasiside kellelt (bug_feedback_p) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_feedback_p_help
+msgid "Omaduse Tagasiside kellelt (bug_feedback_p) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_priority
+msgid "Omaduse Prioriteet (bug_priority) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_priority_comment
+msgid "Omaduse Prioriteet (bug_priority) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_priority_help
+msgid "Omaduse Prioriteet (bug_priority) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_type
+msgid "Omaduse T&uuml;&uuml;p (bug_type) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_type_comment
+msgid "Omaduse T&uuml;&uuml;p (bug_type) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_type_help
+msgid "Omaduse T&uuml;&uuml;p (bug_type) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_approved
+msgid "Omaduse Kinnitatud (approved) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_approved_comment
+msgid "Omaduse Kinnitatud (approved) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_approved_help
+msgid "Omaduse Kinnitatud (approved) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_app
+msgid "Omaduse Rakendus (bug_app) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_app_comment
+msgid "Omaduse Rakendus (bug_app) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_app_help
+msgid "Omaduse Rakendus (bug_app) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_deadline
+msgid "Omaduse Soovitav aeg (deadline) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_deadline_comment
+msgid "Omaduse Soovitav aeg (deadline) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_deadline_help
+msgid "Omaduse Soovitav aeg (deadline) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_prognosis
+msgid "Omaduse Prognoos (prognosis) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_prognosis_comment
+msgid "Omaduse Prognoos (prognosis) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_prognosis_help
+msgid "Omaduse Prognoos (prognosis) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_monitors
+msgid "Omaduse J&auml;lgijad (monitors) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_monitors_comment
+msgid "Omaduse J&auml;lgijad (monitors) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_monitors_help
+msgid "Omaduse J&auml;lgijad (monitors) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_wish_live_date
+msgid "Omaduse Soovitav Live kuupäev (wish_live_date) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_wish_live_date_comment
+msgid "Omaduse Soovitav Live kuupäev (wish_live_date) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_wish_live_date_help
+msgid "Omaduse Soovitav Live kuupäev (wish_live_date) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_actual_live_date
+msgid "Omaduse Tegelik Live kuupäev	 (actual_live_date) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_actual_live_date_comment
+msgid "Omaduse Tegelik Live kuupäev	 (actual_live_date) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_actual_live_date_help
+msgid "Omaduse Tegelik Live kuupäev	 (actual_live_date) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reason
+msgid "Omaduse Tellimuse eesm&auml;rk (reason) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reason_comment
+msgid "Omaduse Tellimuse eesm&auml;rk (reason) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reason_help
+msgid "Omaduse Tellimuse eesm&auml;rk (reason) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_com
+msgid "Omaduse Sisu (com) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_com_comment
+msgid "Omaduse Sisu (com) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_com_help
+msgid "Omaduse Sisu (com) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_add_comm
+msgid "Omaduse Lisa kommentaar (add_comm) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_add_comm_comment
+msgid "Omaduse Lisa kommentaar (add_comm) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_add_comm_help
+msgid "Omaduse Lisa kommentaar (add_comm) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_contactperson
+msgid "Omaduse Esindaja (contactperson) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_contactperson_comment
+msgid "Omaduse Esindaja (contactperson) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_contactperson_help
+msgid "Omaduse Esindaja (contactperson) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
 msgstr ""
@@ -36,6 +228,18 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_project_help
 msgid "Omaduse Projekt (project) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_orderer
+msgid "Omaduse Tellija (orderer) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_orderer_comment
+msgid "Omaduse Tellija (orderer) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_orderer_help
+msgid "Omaduse Tellija (orderer) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_orderer_co
@@ -62,52 +266,28 @@ msgstr ""
 msgid "Omaduse Tellija &uuml;ksus (orderer_unit) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_content
-msgid "Omaduse Sisu (content) caption"
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_multifile_upload
+msgid "Omaduse Fail  (multifile_upload) caption"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_content_comment
-msgid "Omaduse Sisu (content) kommentaar"
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_multifile_upload_comment
+msgid "Omaduse Fail  (multifile_upload) kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_content_help
-msgid "Omaduse Sisu (content) help"
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_multifile_upload_help
+msgid "Omaduse Fail  (multifile_upload) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload
-msgid "Omaduse Fail1 (fileupload) caption"
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_submit2
+msgid "Omaduse Salvesta (submit2) caption"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload_comment
-msgid "Omaduse Fail1 (fileupload) kommentaar"
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_submit2_comment
+msgid "Omaduse Salvesta (submit2) kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload_help
-msgid "Omaduse Fail1 (fileupload) help"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload2
-msgid "Omaduse Fail2 (fileupload2) caption"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload2_comment
-msgid "Omaduse Fail2 (fileupload2) kommentaar"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload2_help
-msgid "Omaduse Fail2 (fileupload2) help"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload3
-msgid "Omaduse Fail3 (fileupload3) caption"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload3_comment
-msgid "Omaduse Fail3 (fileupload3) kommentaar"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload3_help
-msgid "Omaduse Fail3 (fileupload3) help"
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_submit2_help
+msgid "Omaduse Salvesta (submit2) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_reqs_tb
@@ -182,6 +362,30 @@ msgstr ""
 msgid "Omaduse  (problems_table) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bugs_tb
+msgid "Omaduse  (bugs_tb) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bugs_tb_comment
+msgid "Omaduse  (bugs_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bugs_tb_help
+msgid "Omaduse  (bugs_tb) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bugs_table
+msgid "Omaduse  (bugs_table) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bugs_table_comment
+msgid "Omaduse  (bugs_table) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bugs_table_help
+msgid "Omaduse  (bugs_table) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/development_order.aw:group_reqs
 msgid "Grupi K&otilde;ik n&otilde;uded (reqs) pealkiri"
 msgstr ""
@@ -206,6 +410,14 @@ msgstr ""
 msgid "Grupi Probleemid (problems) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/development_order.aw:group_bugs
+msgid "Grupi &Uuml;lesanded (bugs) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:group_bugs_help
+msgid "Grupi &Uuml;lesanded (bugs) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_CUSTOMER
 msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
 msgstr ""
@@ -214,16 +426,8 @@ msgstr ""
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_FILE1
-msgid "Seose Fail1 (RELTYPE_FILE1) tekst"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_FILE2
-msgid "Seose Fail2 (RELTYPE_FILE2) tekst"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_FILE3
-msgid "Seose Fail3 (RELTYPE_FILE3) tekst"
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_FILE
+msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_ORDERER_CO
@@ -242,31 +446,151 @@ msgstr ""
 msgid "Seose Probleem (RELTYPE_PROBLEM) tekst"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:103 classes/applications/bug_o_matic_3000/development_order.aw:117
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_MAIN_BUG
+msgid "Seose Alus&uuml;lesanne (RELTYPE_MAIN_BUG) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_MONITOR
+msgid "Seose J&auml;lgija (RELTYPE_MONITOR) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_BUGTYPE
+msgid "Seose Tellimuse t&uuml;&uuml;p (RELTYPE_BUGTYPE) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_CONTACT
+msgid "Seose Esindaja (RELTYPE_CONTACT) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_COMMENT
+msgid "Seose Kommentaar (RELTYPE_COMMENT) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_ORDERER
+msgid "Seose Tellija (RELTYPE_ORDERER) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_BUG
+msgid "Seose &Uuml;lesanne (RELTYPE_BUG) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_FEEDBACK_P
+msgid "Seose Tagasiside isik (RELTYPE_FEEDBACK_P) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:layout_name
+msgid "Kujundusosa L&uuml;hikirjeldus (name) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:layout_settings_wrap
+msgid "Kujundusosa M&auml;&auml;rangud (settings_wrap) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:layout_comments
+msgid "Kujundusosa Sisu (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:layout_data
+msgid "Kujundusosa Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:237 classes/applications/bug_o_matic_3000/development_order.aw:305 classes/applications/bug_o_matic_3000/development_order.aw:416 classes/applications/bug_o_matic_3000/development_order.aw:430
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:185
+#: classes/applications/bug_o_matic_3000/development_order.aw:478
+msgid "Tagaiside kellelt muudeti %s => %s"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:493
+msgid "Prioriteet muudeti %s => %s"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:505
+msgid "Staatus muudeti %s => %s"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:560
+msgid ""
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:564
+msgid "Id"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:568
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:574
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:582
+msgid "Kellele"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:587
+msgid "Prioriteet"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:593 classes/applications/bug_o_matic_3000/development_order.aw:608
+msgid "1"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:594 classes/applications/bug_o_matic_3000/development_order.aw:609
+msgid "2"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:595 classes/applications/bug_o_matic_3000/development_order.aw:610
+msgid "3"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:596 classes/applications/bug_o_matic_3000/development_order.aw:611
+msgid "4"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:597 classes/applications/bug_o_matic_3000/development_order.aw:612
+msgid "5"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:602
+msgid "T&otilde;sidus"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:617
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:622
+msgid "T&auml;htaeg"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:630
+msgid "K"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:850
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:192
+#: classes/applications/bug_o_matic_3000/development_order.aw:857
 msgid "Lisa korvi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:256
+#: classes/applications/bug_o_matic_3000/development_order.aw:921
 msgid "Eemalda korvist"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:284
+#: classes/applications/bug_o_matic_3000/development_order.aw:949
 msgid "T&ouml;&ouml;tunde"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:289
+#: classes/applications/bug_o_matic_3000/development_order.aw:954
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:294
+#: classes/applications/bug_o_matic_3000/development_order.aw:959
 msgid "L&otilde;ppt&auml;htaeg"
 msgstr ""
 

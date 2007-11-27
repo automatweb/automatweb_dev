@@ -248,7 +248,7 @@ msgstr ""
 msgid "pole asutust valitud"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:996
+#: classes/crm/persons_webview.aw:1001
 msgid "Palk"
 msgstr ""
 

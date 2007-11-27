@@ -605,111 +605,111 @@ msgstr ""
 msgid "Seose Sisseastuja (RELTYPE_SISSEASTUJA) tekst"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:284
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:283
 msgid "Vaata/Muuda"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:289
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:288
 msgid "Sisseastuja Nr."
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:295
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1229
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:294
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1228
 msgid "Nimi"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:301
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:300
 msgid "Isikukood"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:306
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:305
 msgid "Loodud"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:312
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:311
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:373
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:372
 msgid "Muuda4"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:403
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:422
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:402
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:421
 msgid "Kustuta valitud sisseastuja(d)"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:404
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:424
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:403
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:423
 msgid "Kustutada k&otilde;ik valitud sisseastuja(te) andmed ja avaldused?"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:413
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:412
 msgid "Uus otsing"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:705
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:704
 msgid "[Vaata]"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:713
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:712
 msgid "."
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:721
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:720
 msgid "sisseastuja nr."
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:730
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:796
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:729
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:795
 msgid "punkte"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:759
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:758
 msgid "[Muuda]"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1066
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1240
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1065
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1239
 msgid "Eriala"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1072
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1071
 msgid "&otilde;ppekohti"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1078
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1077
 msgid "Esitatud avaldusi"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1089
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1088
 msgid "Konkurss"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1236
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1235
 msgid "&otilde;ppevorm"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1361
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1360
 msgid "Jrk nr"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1367
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1366
 msgid "Sisseastuja kood"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1372
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1371
 msgid "Konkursipunktid"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1377
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1376
 msgid "Vastuv&otilde;tukomisjoni otsus"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1382
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1381
 msgid "Registreerus"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1387
+#: classes/vastuv6tt/vastuv6tt_keskkond.aw:1386
 msgid "Punkte"
 msgstr ""

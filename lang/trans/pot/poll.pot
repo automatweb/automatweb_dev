@@ -190,39 +190,39 @@ msgstr ""
 msgid "Grupi Seaded (settings) help"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:528
+#: classes/contentmgmt/poll.aw:529
 msgid "UID"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:535
+#: classes/contentmgmt/poll.aw:536
 msgid "IP"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:542
+#: classes/contentmgmt/poll.aw:543
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:552 classes/contentmgmt/poll.aw:582
+#: classes/contentmgmt/poll.aw:553 classes/contentmgmt/poll.aw:583
 msgid "Vastus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:589
+#: classes/contentmgmt/poll.aw:590
 msgid "Klikke"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:598
+#: classes/contentmgmt/poll.aw:599
 msgid "Protsent"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:607 classes/contentmgmt/poll.aw:880
+#: classes/contentmgmt/poll.aw:608 classes/contentmgmt/poll.aw:881
 msgid ""
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:685 classes/contentmgmt/poll.aw:697 classes/contentmgmt/poll.aw:898
+#: classes/contentmgmt/poll.aw:686 classes/contentmgmt/poll.aw:698 classes/contentmgmt/poll.aw:899
 msgid "Vastus nr %s"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:888
+#: classes/contentmgmt/poll.aw:889
 msgid "K&uuml;simus"
 msgstr ""
 

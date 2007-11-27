@@ -22,7 +22,6 @@ $GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Kleebi"] = "Paste";
 $GLOBALS["TRANS"]["Uuenda"] = "Refresh";
 $GLOBALS["TRANS"]["Suured ikoonid"] = "Big icons";
-$GLOBALS["TRANS"]["Väiksed ikoonid"] = "Small icons";
 $GLOBALS["TRANS"]["Detailne vaade"] = "Detail view";
 $GLOBALS["TRANS"]["Eelvaade"] = "Preview";
 $GLOBALS["TRANS"]["Valitud pole &uuml;htegi objekti!"] = "No objects selected!";

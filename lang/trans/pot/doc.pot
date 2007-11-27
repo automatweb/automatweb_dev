@@ -566,6 +566,126 @@ msgstr ""
 msgid "Omaduse Kasutaja defineeritud 6 (user6) help"
 msgstr ""
 
+#: classes/doc.aw:prop_user7
+msgid "Omaduse Kasutaja defineeritud 7 (user7) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user7_comment
+msgid "Omaduse Kasutaja defineeritud 7 (user7) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user7_help
+msgid "Omaduse Kasutaja defineeritud 7 (user7) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user8
+msgid "Omaduse Kasutaja defineeritud 8 (user8) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user8_comment
+msgid "Omaduse Kasutaja defineeritud 8 (user8) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user8_help
+msgid "Omaduse Kasutaja defineeritud 8 (user8) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user9
+msgid "Omaduse Kasutaja defineeritud 9 (user9) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user9_comment
+msgid "Omaduse Kasutaja defineeritud 9 (user9) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user9_help
+msgid "Omaduse Kasutaja defineeritud 9 (user9) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user10
+msgid "Omaduse Kasutaja defineeritud 10 (user10) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user10_comment
+msgid "Omaduse Kasutaja defineeritud 10 (user10) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user10_help
+msgid "Omaduse Kasutaja defineeritud 10 (user10) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user11
+msgid "Omaduse Kasutaja defineeritud 11 (user11) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user11_comment
+msgid "Omaduse Kasutaja defineeritud 11 (user11) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user11_help
+msgid "Omaduse Kasutaja defineeritud 11 (user11) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user12
+msgid "Omaduse Kasutaja defineeritud 12 (user12) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user12_comment
+msgid "Omaduse Kasutaja defineeritud 12 (user12) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user12_help
+msgid "Omaduse Kasutaja defineeritud 12 (user12) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user13
+msgid "Omaduse Kasutaja defineeritud 13 (user13) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user13_comment
+msgid "Omaduse Kasutaja defineeritud 13 (user13) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user13_help
+msgid "Omaduse Kasutaja defineeritud 13 (user13) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user14
+msgid "Omaduse Kasutaja defineeritud 14 (user14) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user14_comment
+msgid "Omaduse Kasutaja defineeritud 14 (user14) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user14_help
+msgid "Omaduse Kasutaja defineeritud 14 (user14) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user15
+msgid "Omaduse Kasutaja defineeritud 15 (user15) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user15_comment
+msgid "Omaduse Kasutaja defineeritud 15 (user15) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user15_help
+msgid "Omaduse Kasutaja defineeritud 15 (user15) help"
+msgstr ""
+
+#: classes/doc.aw:prop_user16
+msgid "Omaduse Kasutaja defineeritud 16 (user16) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_user16_comment
+msgid "Omaduse Kasutaja defineeritud 16 (user16) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_user16_help
+msgid "Omaduse Kasutaja defineeritud 16 (user16) help"
+msgstr ""
+
 #: classes/doc.aw:prop_userta2
 msgid "Omaduse Kasutaja defineeritud textarea 2 (userta2) caption"
 msgstr ""
@@ -1246,75 +1366,75 @@ msgstr ""
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/doc.aw:375
+#: classes/doc.aw:406
 msgid "NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik! (%s)"
 msgstr ""
 
-#: classes/doc.aw:376
+#: classes/doc.aw:407
 msgid "Originaal"
 msgstr ""
 
-#: classes/doc.aw:473
+#: classes/doc.aw:504
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:904
+#: classes/doc.aw:937
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:920 classes/doc.aw:1743
+#: classes/doc.aw:953 classes/doc.aw:1777
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:1082
+#: classes/doc.aw:1115
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:1095
+#: classes/doc.aw:1128
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/doc.aw:1378 classes/doc.aw:1473 classes/doc.aw:1477
+#: classes/doc.aw:1412 classes/doc.aw:1507 classes/doc.aw:1511
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/doc.aw:1425
+#: classes/doc.aw:1459
 msgid "Versioon"
 msgstr ""
 
-#: classes/doc.aw:1431 classes/doc.aw:1491 classes/doc.aw:1519
+#: classes/doc.aw:1465 classes/doc.aw:1525 classes/doc.aw:1553
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc.aw:1437
+#: classes/doc.aw:1471
 msgid "Hinne"
 msgstr ""
 
-#: classes/doc.aw:1443
+#: classes/doc.aw:1477
 msgid "Hinda"
 msgstr ""
 
-#: classes/doc.aw:1449
+#: classes/doc.aw:1483
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/doc.aw:1455
+#: classes/doc.aw:1489
 msgid "Vali"
 msgstr ""
 
-#: classes/doc.aw:1486 classes/doc.aw:1514
+#: classes/doc.aw:1520 classes/doc.aw:1548
 msgid "--Vali--"
 msgstr ""
 
-#: classes/doc.aw:1611
+#: classes/doc.aw:1645
 msgid "Kustuta"
 msgstr ""
 
-#: classes/doc.aw:1679
+#: classes/doc.aw:1713
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/doc.aw:1717 classes/doc.aw:1718 classes/doc.aw:1719
+#: classes/doc.aw:1751 classes/doc.aw:1752 classes/doc.aw:1753
 msgid "<b>"
 msgstr ""
 

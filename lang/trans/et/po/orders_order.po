@@ -530,14 +530,24 @@ msgstr ""
 msgid "Omaduse Edasi (forward) help"
 msgstr ""
 
-# classes/applications/orders/orders_order.aw:group_orderinfo
-#: classes/applications/orders/orders_order.aw:group_orderinfo
-msgid "Grupi Tellimuse andmed (orderinfo) pealkiri"
+#: classes/applications/orders/orders_order.aw:prop_info
+msgid "Omaduse Tellimuse info (info) caption"
 msgstr ""
 
-# classes/applications/orders/orders_order.aw:group_orderinfo_help
+#: classes/applications/orders/orders_order.aw:prop_info_comment
+msgid "Omaduse Tellimuse info (info) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:prop_info_help
+msgid "Omaduse Tellimuse info (info) help"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:group_orderinfo
+msgid "Grupi Tellija andmed (orderinfo) pealkiri"
+msgstr ""
+
 #: classes/applications/orders/orders_order.aw:group_orderinfo_help
-msgid "Grupi Tellimuse andmed (orderinfo) help"
+msgid "Grupi Tellija andmed (orderinfo) help"
 msgstr ""
 
 # classes/applications/orders/orders_order.aw:group_orderitems
@@ -548,6 +558,14 @@ msgstr ""
 # classes/applications/orders/orders_order.aw:group_orderitems_help
 #: classes/applications/orders/orders_order.aw:group_orderitems_help
 msgid "Grupi Tellitud tooted (orderitems) help"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:group_ordertext
+msgid "Grupi Tellimus (ordertext) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:group_ordertext_help
+msgid "Grupi Tellimus (ordertext) help"
 msgstr ""
 
 # classes/applications/orders/orders_order.aw:rel_RELTYPE_ORDER
@@ -565,51 +583,51 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:250
-#: classes/applications/orders/orders_order.aw:291
+#: classes/applications/orders/orders_order.aw:324
+#: classes/applications/orders/orders_order.aw:362
 msgid "Tarnimata kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:258
+#: classes/applications/orders/orders_order.aw:332
 msgid "Artikli kood"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:263
+#: classes/applications/orders/orders_order.aw:337
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:269
+#: classes/applications/orders/orders_order.aw:342
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:275
+#: classes/applications/orders/orders_order.aw:347
 msgid "Tellitav_kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:280
+#: classes/applications/orders/orders_order.aw:352
 msgid "Soovitav tarne t&auml;itmine"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:285
+#: classes/applications/orders/orders_order.aw:357
 msgid "Tarne t&auml;itmine/arve nr"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:297
+#: classes/applications/orders/orders_order.aw:367
 msgid "V&auml;rvikaart"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:303
+#: classes/applications/orders/orders_order.aw:372
 msgid "Erihind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:586
+#: classes/applications/orders/orders_order.aw:655
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:588
+#: classes/applications/orders/orders_order.aw:657
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:694
+#: classes/applications/orders/orders_order.aw:763
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr ""

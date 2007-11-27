@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:45 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,16 +9,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/admin/admin_languages.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/admin/admin_languages.aw:30 classes/admin/admin_languages.aw:85 classes/admin/admin_languages.aw:116
+#: classes/admin/admin_languages.aw:33 classes/admin/admin_languages.aw:88
+#: classes/admin/admin_languages.aw:119
 msgid "Keeled"
 msgstr "Languages"
 
-#: classes/admin/admin_languages.aw:85
+#: classes/admin/admin_languages.aw:88
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/admin/admin_languages.aw:116
+#: classes/admin/admin_languages.aw:119
 msgid "Muuda"
 msgstr "Change"
-

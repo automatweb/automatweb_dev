@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/expp/expp_remote_makse.aw:class_1343_help
 msgid "Klassi Expp remote makse help"
 msgstr ""
 
-#: classes/expp/expp_remote_makse.aw:164 classes/expp/expp_remote_makse.aw:664
+#: classes/expp/expp_remote_makse.aw:164 classes/expp/expp_remote_makse.aw:669
 msgid "alates"
 msgstr ""
-

@@ -37,6 +37,66 @@ msgstr ""
 msgid "Omaduse M&uuml;&uuml;ja (seller) help"
 msgstr ""
 
+#: classes/applications/crm/crm_company_customer_data.aw:prop_discount
+msgid "Omaduse Vaikimisi soodustus (discount) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_discount_comment
+msgid "Omaduse Vaikimisi soodustus (discount) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_discount_help
+msgid "Omaduse Vaikimisi soodustus (discount) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_order_frequency
+msgid "Omaduse Tellimuste sagedus p&auml;evades (order_frequency) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_order_frequency_comment
+msgid "Omaduse Tellimuste sagedus p&auml;evades (order_frequency) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_order_frequency_help
+msgid "Omaduse Tellimuste sagedus p&auml;evades (order_frequency) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_active_client
+msgid "Omaduse Aktiivne klient (active_client) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_active_client_comment
+msgid "Omaduse Aktiivne klient (active_client) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_active_client_help
+msgid "Omaduse Aktiivne klient (active_client) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_authorized_person_control
+msgid "Omaduse Volitatud isiku kontroll (authorized_person_control) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_authorized_person_control_comment
+msgid "Omaduse Volitatud isiku kontroll (authorized_person_control) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_authorized_person_control_help
+msgid "Omaduse Volitatud isiku kontroll (authorized_person_control) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sell_alert
+msgid "Omaduse Hoiatus m&uuml;&uuml;gil (sell_alert) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sell_alert_comment
+msgid "Omaduse Hoiatus m&uuml;&uuml;gil (sell_alert) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sell_alert_help
+msgid "Omaduse Hoiatus m&uuml;&uuml;gil (sell_alert) help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contract_creator
 msgid "Omaduse Hankijasuhte looja (buyer_contract_creator) caption"
 msgstr ""
@@ -257,8 +317,12 @@ msgstr ""
 msgid "Seose Kontaktisik (RELTYPE_CONTACT_PERSON) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_REFERAL_TYPE
-msgid "Seose Sissetuleku meetod (RELTYPE_REFERAL_TYPE) tekst"
+#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_CONTACT_TRANSPORT
+msgid "Seose M&uuml;&uuml;gi KM-kood (RELTYPE_CONTACT_TRANSPORT) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_ERRAND_COND
+msgid "Seose L&auml;hetustingimus (RELTYPE_ERRAND_COND) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_CLIENT_MANAGER
@@ -269,6 +333,14 @@ msgstr ""
 msgid "Seose Siduss&uuml;steemi sisestus (RELTYPE_EXT_SYS_ENTRY) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:128
+#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_REFERAL_TYPE
+msgid "Seose Sissetuleku meetod (RELTYPE_REFERAL_TYPE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_STATUS
+msgid "Seose Kliendikategooria (RELTYPE_STATUS) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:156
 msgid "--vali--"
 msgstr ""

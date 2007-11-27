@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/users/auth/auth_server_openldap.aw:class_955_help
 msgid "Klassi Autentimisserver OpenLDAP help"
 msgstr ""
@@ -186,11 +185,10 @@ msgstr ""
 msgid "Ei saanud &uuml;hendust LDAP serveriga %s"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:174
+#: classes/core/users/auth/auth_server_openldap.aw:178
 msgid "Sellist kasutajat pole v&otilde;i parool on vale!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:188
+#: classes/core/users/auth/auth_server_openldap.aw:192
 msgid "Ei saanud serveriga &uuml;hendust!"
 msgstr ""
-

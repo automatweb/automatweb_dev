@@ -9,20 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/address/address_street.aw:class_960_help
 msgid "Klassi T&auml;nav v2 help"
 msgstr ""
 
-#: classes/common/address/address_street.aw:prop_administrative_structure_oid
-msgid "Omaduse  (administrative_structure_oid) caption"
+#: classes/common/address/address_street.aw:prop_administrative_structure
+msgid "Omaduse  (administrative_structure) caption"
 msgstr ""
 
-#: classes/common/address/address_street.aw:prop_administrative_structure_oid_comment
-msgid "Omaduse  (administrative_structure_oid) kommentaar"
+#: classes/common/address/address_street.aw:prop_administrative_structure_comment
+msgid "Omaduse  (administrative_structure) kommentaar"
 msgstr ""
 
-#: classes/common/address/address_street.aw:prop_administrative_structure_oid_help
-msgid "Omaduse  (administrative_structure_oid) help"
+#: classes/common/address/address_street.aw:prop_administrative_structure_help
+msgid "Omaduse  (administrative_structure) help"
 msgstr ""
-
