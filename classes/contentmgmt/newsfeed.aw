@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.21 2007/07/12 11:38:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.22 2007/11/27 09:28:28 robert Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -36,6 +36,9 @@
 
 	@property parse_embed type=checkbox ch_value=1 default=1
 	@caption Näita ka lisatud objekte
+
+	@property folder_name type=checkbox ch_value=1
+	@caption Näita dokumendi kausta nime
 
 @default group=folders
 
@@ -342,6 +345,12 @@ class newsfeed extends class_base
 				$oid = $o->id();
 				$art_lead = $o->prop("lead");
 				$description = $o->prop("content");
+				$title = $o->name();
+				if($feedobj->prop("folder_name"))
+				{
+					$folder = obj($o->parent());
+					$title .= " - ".$folder->name();
+				}
 				if (1 == $parse_embed)
 				{
 					$si = __get_site_instance();
@@ -366,15 +375,14 @@ class newsfeed extends class_base
 				};
 				$items[] = array(
 					"item_id" => $oid,
-					"title" => $o->name(),
+					"title" => $title,
 					"link" => $baseurl . "/" . $oid,
 					"artdate" => date("Y-m-d",$mod_date),
 					"start_date" => date("Y-m-d H:i:s",$mod_date),
 					"end_date" => "0000-00-00 00:00:00", // documents have no ending date
 					"author" => $o->prop("author"),
 					"source" => $source,
-					"art_lead" => $art_lead,
-					"description" => $description,
+					"description" => $art_lead.'<br><br>'.$description,
 					"guid" => $baseurl . "/" . $oid,
 					"pubDate" => date("r",$mod_date),
 				);	
