@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.98 2007/11/23 07:01:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.99 2007/11/27 21:25:10 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1752,6 +1752,10 @@ class event_search extends class_base
 		{
 			$o = new object($arr['event_id']);
 			$o->delete(true);
+
+			// make the event go away in event_search list --dragut (27.11.2007)	
+			$cache = get_instance('cache');
+			$cache->file_clear_pt('storage_search');
 		}
 
 		return $arr['return_url'];
