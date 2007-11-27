@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.24 2007/11/22 11:35:49 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.25 2007/11/27 18:09:30 kaarel Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -541,6 +541,7 @@ class persona_import extends class_base
 			if ($ext_id)
 			{
 				$person_match[$ext_id] = $person_obj->id();
+				$person_match_[$ext_id] = $person_obj->id();
 			};
 		};
 		
@@ -588,11 +589,13 @@ class persona_import extends class_base
 		);
 
 		$simple_attribs = array(
+			/*
 			"HARIDUSTASE" => array(
 				"reltype" => 23, // RELTYPE_EDUCATION
 				"prop" => "education",
 				"clid" => CL_CRM_PERSON_EDUCATION,
 			),
+			/**/
 			"AADRESS" => array(
 				"reltype" => 1, // RELTYPE_ADDRESS
 				"prop" => "address",
@@ -1258,11 +1261,17 @@ class persona_import extends class_base
 
 		print "teeme peatuste ja puhkuste objektid<br><br>";
 
+		// There was a problem if the import was interrupted. The persons array was incomplete.
+		foreach($person_match_ as $person_match_element => $person_match_value)
+		{
+			$persons[$person_match_element] = $person_match_value;
+		}
+
 		// lisaks on vaja siin tekitada mingid muutujad. Selleks on vaja muutujate haldurit ..
 		// ja seal omakorda on mul tarvis mingid oksad eraldada
 		$mx = new object_list(array(
-			"parent" => $meta_cat["peatumised"],
 			"class_id" => CL_META,
+			"parent" => $meta_cat["peatumised"],
 		));
 
 		$mxlist = array_flip($mx->names());
@@ -1276,6 +1285,8 @@ class persona_import extends class_base
 
 		foreach($data["TOOSUHTE_PEATUMISED"] as $peatumine)
 		{
+			$peatumise_liik = iconv("UTF-8", "ISO-8859-4", $peatumine["PEATUMISE_LIIK"]);
+
 			$a = $this->timestamp_from_xml($peatumine["ALGUSKUUPAEV"]);
 			$b = $this->timestamp_from_xml($peatumine["LOPPKUUPAEV"]);
 			if(!is_oid($persons[$peatumine["TOOTAJA_ID"]]))
@@ -1297,7 +1308,23 @@ class persona_import extends class_base
 					foreach($t2->connections_from(array("type" => "RELTYPE_CONTRACT_STOP")) as $conn_t2)
 					{
 						$t3 = $conn_t2->to();
-						if($t3->prop("type") == $mxlist[$peatumine["PEATUMISE_LIIK"]] && $t3->prop("start1") == $a)
+						if(is_oid($t3->prop("type")))
+						{
+							$t33 = obj($t3->prop("type"));
+							if($t33->name() == $peatumise_liik && $t3->prop("start1") == $a)
+							{
+								$stop = $t3;
+								$stop->set_prop("end", $b);
+								$stop->save();
+								print "connected to existing contract stop object ".$stop->name()."<br>";
+								flush();
+								$stop_done = true;
+								//break;
+							}
+						}
+						// Somewhy the $mxlist array was empty. Anomaly.
+						/*
+						if($t3->prop("type") == $mxlist[$peatumise_liik] && $t3->prop("start1") == $a)
 						{
 							$stop = $t3;
 							$stop->set_prop("end", $b);
@@ -1307,13 +1334,13 @@ class persona_import extends class_base
 							$stop_done = true;
 							//break;
 						}
+						/**/
 					}
 				}
 			}
 
 			if(!$stop_done)
 			{
-				$peatumise_liik = iconv("UTF-8", "ISO-8859-4", $peatumine["PEATUMISE_LIIK"]);
 				print "creating new contract stop object ".$peatumise_liik."<br>";
 
 				if ($mxlist[$peatumise_liik])
@@ -1413,7 +1440,7 @@ class persona_import extends class_base
 				flush();
 				continue;
 			}
-			if(!is_oid($hariduskaik["TOOTAJA_ID"]))
+			if(!is_oid($persons[$hariduskaik["TOOTAJA_ID"]]))
 			{
 				print "No person with ID ".$persons[$hariduskaik["TOOTAJA_ID"]].", original ID ".$hariduskaik["TOOTAJA_ID"].". Ignoring.<br>";
 				flush();
@@ -1778,10 +1805,17 @@ class persona_import extends class_base
 						// re-save image from $pilt_data 
 						$img_o = obj($t->prop("picture"));
 						$fn = $img_o->prop("file");
-						$this->put_file(array(
-							"file" => $fn,
-							"content" => $pilt_data
-						));
+						if(!empty($fn) && !empty($pilt_data))
+						{
+							$this->put_file(array(
+								"file" => $fn,
+								"content" => $pilt_data
+							));
+						}
+						else
+						{
+							print "put_file failed. File name is empty.<br>";
+						}
 						$ti->do_apply_gal_conf($img_o);
 
 						// n
