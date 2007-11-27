@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.213 2007/11/23 10:10:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.214 2007/11/27 14:06:04 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3025,7 +3025,7 @@ class room extends class_base
                         date("H:i", $reservation->prop("end")),
                         $reservation->prop("resource.name")
 		));
-		if($arr["not_verified"])
+		if($arr["not_verified"] || $arr["_not_verified"])
 		{
 			$reservation->set_prop("verified", 0);
 		//	$reservation->save();
