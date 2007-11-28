@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.126 2006/09/20 11:16:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.127 2007/11/28 07:50:11 hannes Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1395,7 +1395,7 @@ class form extends form_base
 	**/
 	function gen_preview($arr)
 	{
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$arr["prefix"] = isset($arr["prefix"]) ? $arr["prefix"] : false;
 		$arr["elvalues"] = isset($arr["elvalues"]) ?  $arr["elvalues"] : (isset($GLOBALS["elvalues"]) ? $GLOBALS["elvalues"] : false) ;
 		$arr["no_submit"] = isset($arr["no_submit"]) ? $arr["no_submit"]  : false;
@@ -1789,7 +1789,7 @@ class form extends form_base
 		global $awt;
 		$awt->start("fg");
 
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		// values can be passed from the caller inside the $values argument, or..
 		if (is_array($values))
 		{
@@ -5943,7 +5943,7 @@ class form extends form_base
 	**/
 	function convformat()
 	{
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM." AND status != 0");
 		while ($row = $this->db_next())
 		{

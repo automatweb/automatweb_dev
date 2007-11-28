@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.10 2007/11/23 13:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.11 2007/11/28 07:45:03 hannes Exp $
 // foreach_site.aw - foreach site 
 /*
 @classinfo mantainer=kristo
@@ -50,7 +50,7 @@ class foreach_site extends class_base
 	{
 		extract($arr);
 
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		
 		// try remoting
 		$sl = get_instance("install/site_list");

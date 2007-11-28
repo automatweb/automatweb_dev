@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.30 2007/03/28 10:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.31 2007/11/28 07:51:57 hannes Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -969,7 +969,7 @@ class form_chain extends form_base
 	function convchainentries($arr)
 	{
 		// for each chain
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM_CHAIN." AND status != 0");
 		while ($row = $this->db_next())
 		{
@@ -1051,7 +1051,7 @@ class form_chain extends form_base
 
 	function delreplicas()
 	{
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		// for each form
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM);
 		while ($row = $this->db_next())

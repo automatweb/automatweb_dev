@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.19 2007/11/23 13:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.20 2007/11/28 07:48:31 hannes Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -333,7 +333,7 @@ class object_export extends class_base
 			$filt["limit"] = 10;
 		}
 		ini_set("memory_limit","1800M");
-		set_time_limit(1200);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$ol = new object_list($filt);
 //		echo "filtrd <br>\n";
 //		flush();

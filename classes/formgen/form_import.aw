@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.7 2007/03/28 10:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.8 2007/11/28 07:53:51 hannes Exp $
 classload("formgen/form_base");
 class form_import extends form_base
 {
@@ -405,7 +405,7 @@ class form_import extends form_base
 	{
 		extract($arr);
 
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$f = get_instance(CL_FORM_CHAIN);
 		$f->load_chain($id);
 
