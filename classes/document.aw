@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.384 2007/11/28 19:14:57 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.385 2007/11/28 19:29:20 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1439,12 +1439,12 @@ if (is_object($docobj))
 
 		if (aw_ini_get("content.doctype") == "html")
 		{
-			$s_content = str_replace("\r\n","<br>",$doc["content"]);
+			$s_content = str_replace("\r\n","<br>", $doc_o->prop("content"));
 			$s_lead_br = $doc["lead"] != "" ? "<br>" : "";	
 		}
 		else if (aw_ini_get("content.doctype") == "xhtml")
 		{
-			$s_content = str_replace("\r\n","<br />",$doc["content"]);
+			$s_content = str_replace("\r\n","<br />",$doc_o->prop("content"));
 			$s_lead_br = $doc["lead"] != "" ? "<br />" : "";
 		}
 
@@ -1515,7 +1515,7 @@ if (is_object($docobj))
 			"sel_menu_id" => $doc_o->parent(),
 			"document_link" => $document_link,
 			"lead" => $doc["lead"],
-			"content" => nl2br($s_content),
+			"content" => $s_content,
 		));
 
 		for($i = 1;  $i < 7; $i++)
