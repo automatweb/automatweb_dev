@@ -440,6 +440,15 @@
             <caption>Kokkuv&amp;amp;otilde;te</caption>
       </property>
       <property>
+            <name>complete_table</name>
+            <table>objects</table>
+            <group>complete</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>complete_table</field>
+      </property>
+      <property>
             <name>my_bugs_stat_p</name>
             <table>objects</table>
             <group>my_bugs_stat</group>
@@ -1028,6 +1037,11 @@
                   <parent>charts</parent>
                   <submit>no</submit>
             </gantt_chart>
+            <complete>
+                  <caption>Valmis (minu lisatud)</caption>
+                  <parent>charts</parent>
+                  <submit>no</submit>
+            </complete>
             <my_bugs_stat>
                   <caption>Minu Bugide stat</caption>
                   <parent>charts</parent>
