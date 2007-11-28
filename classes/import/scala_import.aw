@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.20 2007/04/23 10:13:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.21 2007/11/28 08:23:59 hannes Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -424,7 +424,7 @@ class scala_import extends class_base
         **/
 	function do_import($arr)
 	{
-		ini_set ("max_execution_time", "100000");
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$this->log_str = '';
 		$this->log_file_name = 'scala_import_log_'.date('d-m-Y-H-i-s').'.log';

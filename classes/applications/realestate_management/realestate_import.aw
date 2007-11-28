@@ -244,7 +244,6 @@ class realestate_import extends class_base
 		$this_object = obj ($arr["id"]);
 
 		$ignore_user_abort_prev_val = ini_get("ignore_user_abort");
-		$max_execution_time_prev_val = ini_get("max_execution_time");
 		$max_mem_prev_val = ini_get("memory_limit");
 		$memory_limit = $this_object->prop("city24_import_memlimit");
 		$memory_limit = (empty($memory_limit) ? "1024" : $memory_limit) . "M";
@@ -2051,7 +2050,7 @@ class realestate_import extends class_base
 		$cl_cache->full_flush ();
 
 		ini_set ("ignore_user_abort", $ignore_user_abort_prev_val);
-		ini_set ("max_execution_time", $max_execution_time_prev_val);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		ini_set ("memory_limit", $max_mem_prev_val);
 
 		if (1 != $quiet)

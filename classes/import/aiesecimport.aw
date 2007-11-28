@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.2 2007/11/15 14:34:31 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.3 2007/11/28 08:22:15 hannes Exp $
 // aiesecimport.aw - Aiesec import 
 /*
 
@@ -117,7 +117,7 @@ class aiesecimport extends class_base
 								"Rakvere"  => array("county" => "Lääne-Viru maakond", "country"=>"Eesti"),
 		);
 		
-		ini_set ("max_execution_time", 600);
+		aw_set_exec_time(AW_LONG_PROCESS);
 	}
 	
 	

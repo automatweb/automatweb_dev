@@ -11,7 +11,7 @@
 
 */
 
-ini_set ("max_execution_time", "60");
+aw_set_exec_time(AW_SHORT_PROCESS);
 classload("mrp/mrp_header");
 
 class mrp_schedule extends class_base
