@@ -57,7 +57,7 @@ class export_lite extends aw_template
 
 		// ok, this is the complicated bit.
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		ignore_user_abort(true);
 
 		echo "<font face='Arial'> Toimub staatiliste lehtede genereerimine, palun oodake!<br />\n";
