@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.25 2005/12/06 09:58:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.26 2007/11/28 08:03:01 hannes Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -248,7 +248,7 @@ class livelink_import extends class_base
 
 	function import_livelink_structure($args = array())
 	{
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$this->tmpdir = aw_ini_get("server.tmpdir");
 		$this->outdir = $args["outdir"];
 		$this->rootnode = $args["rootnode"];

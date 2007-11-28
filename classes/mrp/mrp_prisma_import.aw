@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.22 2007/03/28 10:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.23 2007/11/28 07:59:44 hannes Exp $
 // mrp_prisma_import.aw - Prisma import
 /*
 
@@ -82,7 +82,7 @@ class mrp_prisma_import extends class_base
 	function import($arr)
 	{
 		aw_disable_messages();
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		
 		$db = $this->_get_conn();
 

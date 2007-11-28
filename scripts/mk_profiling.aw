@@ -6,7 +6,7 @@ classload("defs");
 classload("aw_template");
 aw_global_set("no_db_connection", true);
 
-set_time_limit(36000);
+aw_set_exec_time(AW_LONG_PROCESS);
 $anal = get_instance("core/aw_code_analyzer/parser");
 
 // create a copy of the code tree and add enters to that

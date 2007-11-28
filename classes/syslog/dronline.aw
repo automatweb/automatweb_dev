@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.41 2007/03/28 10:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.42 2007/11/28 07:57:45 hannes Exp $
 
 /*
 
@@ -1636,7 +1636,7 @@ class dronline extends class_base
 	function run_bg_queries($arr)
 	{
 		extract($arr);
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$cache = array();
 

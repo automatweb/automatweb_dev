@@ -867,7 +867,7 @@ class vastuv6tt_keskkond extends class_base
 	function veebiv2ljund($arr)
 	{
 		aw_disable_acl();
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$keskkond = obj ($arr["id"]);
 		$arr["obj_inst"] = $keskkond;
 		$save_path = $keskkond->prop ("v2ljund_kaust");

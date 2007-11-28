@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.11 2007/11/23 12:56:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.12 2007/11/28 08:12:04 hannes Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -84,7 +84,7 @@ class interim_page extends class_base
 			//	$prop["new_url_vars"] = array("asdas" => "dsfds");
 				//arr($prop);
 				//kui neid tuhandied on, siis miskipärast sureb ära
-/*				set_time_limit(0);
+/*				aw_set_exec_time(AW_LONG_PROCESS);
 				$register_list = new object_list(array(
 					"class_id" => CL_REGISTER_DATA,
 					"limit" => "5000",
