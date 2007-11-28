@@ -1993,13 +1993,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->joins[] = $str;
 			}
 		}
+
 		// now make joins and for the final prop, query
 		foreach($this->join_data as $pos => $join)
 		{
 			if ($join["via"] == "rel")
 			{
 				// from prev to alias from alias to obj
-				$prev_t = $join["table"]."_".$join["from_class"];
+				if (!$join["table"])
+				{
+					$prev_t = "";
+				}
+				else
+				{
+					$prev_t = $join["table"]."_".$join["from_class"];
+				}
 				$prev_clid = $join["from_class"];
 
 				$str  = " LEFT JOIN aliases aliases_".$join["from_class"]."_".$join["reltype"]." ON aliases_".$join["from_class"]."_".$join["reltype"].".source = ";
@@ -2022,6 +2030,36 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$str .= " objects_".$join["to_class"]."_".$join["reltype"].".oid ";
 				$prev_clid = $join["to_class"];
 				$this->joins[] = $str;
+
+				$new_t = $GLOBALS["tableinfo"][$join["to_class"]];
+
+				if (is_array($new_t))
+				{
+					$objt_name = "objects_".$join["to_class"]."_".$join["reltype"];
+					$tbl = $tbl_r = reset(array_keys($new_t));
+					$field = $new_t[$tbl]["index"];
+					$tbl .= "_".$join["from_class"]."_".$join["field"];
+					if (!isset($done_ot_js[$tbl_r]))
+					{
+						$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
+						$this->joins[] = $str;
+						$done_ot_js[$tbl_r] = 1;
+						$prev_t = $tbl;
+					}
+
+					// now, if the next join is via rel, we are gonna need the objects table here as well, so add that
+					if ($this->join_data[$pos+1]["via"] == "rel")
+					{
+						$o_field = "oid";
+						$o_tbl = "objects_".$join["to_class"];
+						if (!isset($done_ot_js[$o_tbl]))
+						{
+							$str = " LEFT JOIN objects $o_tbl ON ".$o_tbl.".".$o_field." = ".$tbl.".".$field;
+							$this->joins[] = $str;
+						}
+					}
+				}
+
 
 				$ret = array(
 					"aliases_".$join["from_class"]."_".$join["reltype"],
@@ -2085,7 +2123,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// if the next stop is a property
 				// then join all the tables in that class
 				// first the objects table
-
 				if (!$prev_t)
 				{
 					$prev_t = $join["table"]."_".$join["from_class"];
