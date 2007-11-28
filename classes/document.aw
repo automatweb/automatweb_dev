@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.385 2007/11/28 19:29:20 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.386 2007/11/28 21:20:20 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -988,11 +988,11 @@ if (is_object($docobj))
 		{
 			if (aw_ini_get("content.doctype") == "xhtml")
 			{
-				$doc["content"] = str_replace("\r\n", "<br>" ,"<br />",$doc["content"]);
+				$doc["content"] = str_replace("\r\n", "<br />",$doc["content"]);
 			}
 			else if (aw_ini_get("content.doctype") == "html")
 			{
-				$doc["content"] = str_replace("\r\n", "<br />", "<br>",$doc["content"]);
+				$doc["content"] = str_replace("\r\n", "<br>",$doc["content"]);
 			}
 		};
 
