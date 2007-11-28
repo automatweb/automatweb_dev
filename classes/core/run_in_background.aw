@@ -466,7 +466,7 @@ class run_in_background extends class_base
 
 		flush();
 
-		set_time_limit(9999);
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$o = obj($arr["id"]);
 

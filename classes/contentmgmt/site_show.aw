@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.250 2007/11/22 15:10:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.251 2007/11/28 08:00:36 hannes Exp $
 
 /*
 
@@ -655,7 +655,7 @@ class site_show extends class_base
 			}
 		}
 
-		set_time_limit(14400);
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$skipfirst = 0;
 

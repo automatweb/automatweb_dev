@@ -119,7 +119,7 @@ class parser extends aw_template
 	function orb_parse($arr)
 	{
 		extract($arr);
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$pd = aw_unserialize($this->get_cval("parser::class_status"));
 		$co = get_instance("config");
 
