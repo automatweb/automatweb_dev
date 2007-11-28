@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.380 2007/11/28 16:44:15 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.381 2007/11/28 17:32:47 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1399,6 +1399,9 @@ class document extends aw_template
                         $document_link = aw_ini_get("baseurl")."/?section=".$doc_o->id()."&path=".join(",",$new_path).",".$doc_o->id();
 		}
 
+		$o_section = new object($GLOBALS["section"]);	
+		$s_section_name = $o_section->name();; 
+
 		$this->vars_safe(array(
 			"sel_lang_img_url" => $sel_lang_img_url,
 			"doc_modified" => $_date,
@@ -1417,6 +1420,7 @@ class document extends aw_template
 			"cite" => $doc["cite"],
 			"date"     => $this->time2date(time(),2),
 			"section"  => $GLOBALS["section"],
+			"section_name" => $s_section_name,
 			"lead_comments" => $lc,
 			"locale_date" => locale::get_lc_date($doc["doc_modified"],6),
 			"copyright" => isset($doc["copyright"]) ? $doc["copyright"] : null,
