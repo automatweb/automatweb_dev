@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.13 2007/09/21 10:55:08 robert Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.14 2007/11/28 07:27:30 hannes Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -510,7 +510,7 @@ die(dbg::dump($data));
 	**/
 	function search_method($arr)
 	{
-		set_time_limit(0);
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$method = $arr["method"];
 		$p = get_instance("core/aw_code_analyzer/parser");
 		$files = array();

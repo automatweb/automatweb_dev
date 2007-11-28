@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.49 2007/07/19 09:13:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.50 2007/11/28 07:28:30 hannes Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -337,7 +337,7 @@ class aw_site extends class_base
 		else
 		if ($ob->meta('gen_site') && ($arr["request"]["group"] == "general"  || $arr["request"]["group"] == ""))
 		{
-			set_time_limit(14400);
+			aw_set_exec_time(AW_LONG_PROCESS);
 			obj_set_opt("no_cache", 1);
 			aw_global_set("no_cache_flush", 1);
 			// clear objects list
