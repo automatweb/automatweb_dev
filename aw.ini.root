@@ -76,6 +76,7 @@ include ${ini_dir}/virus_scanner.ini
 include ${ini_dir}/newsfeed.ini
 include ${ini_dir}/contents.ini
 include ${ini_dir}/core.ini
+include ${ini_dir}/content.ini
 include ${ini_dir}/object_import.ini
 include ${ini_dir}/prisma.ini
 include ${ini_dir}/project.ini
