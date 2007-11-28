@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.379 2007/11/26 23:58:54 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.380 2007/11/28 16:44:15 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1426,8 +1426,8 @@ class document extends aw_template
 			"createdby" => $doc["createdby"],
 			"date2"	=> $this->time2date($doc["modified"],8),
 			"timestamp" => ($doc["modified"] > 1 ? $doc["modified"] : $doc["created"]),
-			"created_hr" => $this->get_date_human_readable($doc["created"]),
-			"created_human_readable" => $this->get_date_human_readable($doc["created"]),
+			"created_hr" => "<?php classload(\"document\"); echo document::get_date_human_readable(".$doc["created"]."); ?>",
+			"created_human_readable" => "<?php classload(\"document\"); echo document::get_date_human_readable(".$doc["created"]."); ?>",
 			"channel"		=> isset($doc["channel"]) ? $doc["channel"] : null,
 			"tm"				=> $doc["tm"],
 			"tm_only" => $orig_doc_tm,
@@ -3427,7 +3427,7 @@ class document extends aw_template
 		}
 		else if ($i_time_from_created_to_current_time < 60*60)
 		{
-			$i_minutes = $this->floor_to_int($i_time_from_created_to_current_time / 60);
+			$i_minutes = document::floor_to_int($i_time_from_created_to_current_time / 60);
 			if ($i_minutes == 1)
 			{
 				return t(sprintf("%s minut tagasi",$i_minutes));
@@ -3439,7 +3439,7 @@ class document extends aw_template
 		}
 		else if ($i_time_from_created_to_current_time < 60*60*24)
 		{
-			$i_hours = $this->floor_to_int($i_time_from_created_to_current_time / 60 / 60);
+			$i_hours = document::floor_to_int($i_time_from_created_to_current_time / 60 / 60);
 			if ($i_hours == 1)
 			{
 				return t(sprintf("%s tund tagasi",$i_hours));
@@ -3451,7 +3451,7 @@ class document extends aw_template
 		}
 		else if ($i_time_from_created_to_current_time < 60*60*24*31)
 		{
-			$i_days = $this->floor_to_int($i_time_from_created_to_current_time / 60 / 60 / 24);
+			$i_days = document::floor_to_int($i_time_from_created_to_current_time / 60 / 60 / 24);
 			if ($i_days == 1)
 			{
 				return t(sprintf("%s p&auml;ev tagasi",$i_days));
