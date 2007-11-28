@@ -530,9 +530,9 @@ class crm_company_people_impl extends class_base
 				"phone" => $pdat["phone"],
 				"rank" => $pdat["rank"],
 				'section' => $section,
-				"email" => html::href(array(
+				"email" => empty($pdat["email"]) ? "" : html::href(array(
 					"url" => "mailto:" . $pdat["email"],
-					"caption" => $pdat["email"],
+					"caption" => $pdat["email"]
 				)),
 				"cutcopied" => $ccp,
 				"authorized" => $autohirization ?
@@ -713,9 +713,9 @@ class crm_company_people_impl extends class_base
 				"rank" => $person_data["rank"],
 				'section' => $person_data['section'],
 				"oid" => $o->id(),
-				"email" => html::href(array(
+				"email" => empty($person_data['email']) ? "" : html::href(array(
 					"url" => "mailto:" . $person_data['email'],
-					"caption" => $person_data['email'],
+					"caption" => $person_data['email']
 				)),
 			));
 		}
