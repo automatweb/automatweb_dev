@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.383 2007/11/28 18:15:24 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.384 2007/11/28 19:14:57 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -29,279 +29,279 @@ class document extends aw_template
 		// mida voidakse muuta
 
 		$this->knownfields = array("title","subtitle","author","photos","keywords","names",
-			"lead","showlead","content","esilehel","jrk1","jrk2", "jrk3",
-			"esileht_yleval","esilehel_uudis","title_clickable","cite","channel","tm",
-			"is_forum","link_text","lead_comments","newwindow","yleval_paremal",
-			"show_title","copyright","long_title","nobreaks","no_left_pane","no_right_pane",
-			"no_search","show_modified","frontpage_left","frontpage_center","frontpage_center_bottom",
-			"frontpage_right","frontpage_left_jrk","frontpage_center_jrk","frontpage_center_bottom_jrk",
-			"frontpage_right_jrk","no_last","dcache","moreinfo",
-		);
+	"lead","showlead","content","esilehel","jrk1","jrk2", "jrk3",
+	"esileht_yleval","esilehel_uudis","title_clickable","cite","channel","tm",
+	"is_forum","link_text","lead_comments","newwindow","yleval_paremal",
+	"show_title","copyright","long_title","nobreaks","no_left_pane","no_right_pane",
+	"no_search","show_modified","frontpage_left","frontpage_center","frontpage_center_bottom",
+	"frontpage_right","frontpage_left_jrk","frontpage_center_jrk","frontpage_center_bottom_jrk",
+	"frontpage_right_jrk","no_last","dcache","moreinfo",
+);
 
-		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
-		$this->metafields = array("show_print","show_last_changed","show_real_pos","dcache");
+// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
+$this->metafields = array("show_print","show_last_changed","show_real_pos","dcache");
 
 
-		lc_site_load("document",&$this);
+lc_site_load("document",&$this);
 
-		if (isset($GLOBALS["lc_document"]) && is_array($GLOBALS["lc_document"]))
-		{
-			$this->vars($GLOBALS["lc_document"]);
-		}
+if (isset($GLOBALS["lc_document"]) && is_array($GLOBALS["lc_document"]))
+{
+	$this->vars($GLOBALS["lc_document"]);
+}
 
-		$this->subtpl_handlers["FILE"] = "_subtpl_file";
-	}
+$this->subtpl_handlers["FILE"] = "_subtpl_file";
+}
 
-	////
-	// !Sets period to use
-	function set_period($period)
+////
+// !Sets period to use
+function set_period($period)
+{
+$this->period = $period;	
+}
+
+////
+// !Listib dokud mingi menüü all
+function list_docs($parent,$period = -1,$status = -1,$visible = -1)
+{
+if ($period == -1)
+{
+	if ($this->period > 0)
 	{
-		$this->period = $period;	
+		$period = (int)$this->period;
 	}
-
-	////
-	// !Listib dokud mingi menüü all
-	function list_docs($parent,$period = -1,$status = -1,$visible = -1)
+	else
 	{
-		if ($period == -1)
-		{
-			if ($this->period > 0)
-			{
-				$period = (int)$this->period;
-			}
-			else
-			{
-				$period = (int)$this->get_cval("activeperiod");
-			};
-		};
-		$period = (int)$period;
-		$row = obj($parent);
-		$me = obj($parent);
-		$gm_subs = $me->meta("section_include_submenus");
-		$gm_c = $me->connections_from(array(
-			"type" => "RELTYPE_DOCS_FROM_MENU",
+		$period = (int)$this->get_cval("activeperiod");
+	};
+};
+$period = (int)$period;
+$row = obj($parent);
+$me = obj($parent);
+$gm_subs = $me->meta("section_include_submenus");
+$gm_c = $me->connections_from(array(
+	"type" => "RELTYPE_DOCS_FROM_MENU",
+));
+foreach($gm_c as $gm)
+{
+	$gm_id = $gm->prop("to");
+	$sections[$gm_id] = $gm_id;
+	if ($gm_subs[$gm_id])
+	{
+		$ot = new object_tree(array(
+			"class_id" => CL_MENU,
+			"parent" => $gm_id,
+			"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
+			"sort_by" => "objects.parent"
 		));
-		foreach($gm_c as $gm)
-		{
-			$gm_id = $gm->prop("to");
-			$sections[$gm_id] = $gm_id;
-			if ($gm_subs[$gm_id])
-			{
-				$ot = new object_tree(array(
-					"class_id" => CL_MENU,
-					"parent" => $gm_id,
-					"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
-					"sort_by" => "objects.parent"
-				));
-				$sections = $ot->ids();	
-			}
-		}
+		$sections = $ot->ids();	
+	}
+}
 
-		if ($row->meta("all_pers"))
-		{
-			$period_instance = get_instance(CL_PERIOD);
-			$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
-		}
-		else
-		{
-			$periods = $row->meta("pers");
-		}
+if ($row->meta("all_pers"))
+{
+	$period_instance = get_instance(CL_PERIOD);
+	$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
+}
+else
+{
+	$periods = $row->meta("pers");
+}
 
-		if (is_array($sections))
+if (is_array($sections))
+{
+	$pstr = join(",",$sections);
+	if ($pstr != "")
+	{
+		$pstr = "objects.parent IN ($pstr)";
+	}
+	else
+	{
+		$pstr = "objects.parent = '$parent'";
+	};
+}
+else
+{
+	$pstr = "objects.parent = '$parent'";
+};
+
+// _if_ we are showing documents from multiple periods, then we should not use
+// the period field in the document "fetch" function
+$this->ignore_periods = false;
+
+if (is_array($periods))
+{
+	$rstr = join(",",$periods);
+	if ($rstr != "")
+	{
+		$this->ignore_periods = true;
+		$rstr = "objects.period IN ($rstr)";
+	}
+	else
+	{
+		$rstr = "objects.period = '$period'";
+	}
+}
+else
+{
+	$rstr = "objects.period = '$period'";
+};
+
+// kui staatus on defineerimata, siis n?itame ainult aktiivseid dokumente
+$v.= " AND objects.status = " . (($status == -1) ? 2 : $status);
+
+if ($row->prop("ndocs") > 0)
+{
+	$lm = "LIMIT ".$row->prop("ndocs");
+};
+
+if ($ordby == "")
+{
+	$obj = obj($parent);
+	if ($obj->meta("sort_by") != "")
+	{
+		$ordby = $obj->meta("sort_by");
+		if ($obj->meta("sort_by") == "RAND()")
 		{
-			$pstr = join(",",$sections);
-			if ($pstr != "")
-			{
-				$pstr = "objects.parent IN ($pstr)";
-			}
-			else
-			{
-				$pstr = "objects.parent = '$parent'";
-			};
+			$has_rand = true;
 		}
-		else
+		if ($obj->meta("sort_ord") != "")
 		{
-			$pstr = "objects.parent = '$parent'";
+			$ordby .= " ".$obj->meta("sort_ord");
+		}
+		if ($obj->meta("sort_by") == "documents.modified")
+		{
+			$ordby .= ", objects.created DESC";
 		};
-
-		// _if_ we are showing documents from multiple periods, then we should not use
-		// the period field in the document "fetch" function
-		$this->ignore_periods = false;
-
-		if (is_array($periods))
-		{
-			$rstr = join(",",$periods);
-			if ($rstr != "")
-			{
-				$this->ignore_periods = true;
-				$rstr = "objects.period IN ($rstr)";
-			}
-			else
-			{
-				$rstr = "objects.period = '$period'";
-			}
-		}
-		else
-		{
-			$rstr = "objects.period = '$period'";
-		};
-	
-		// kui staatus on defineerimata, siis n?itame ainult aktiivseid dokumente
-		$v.= " AND objects.status = " . (($status == -1) ? 2 : $status);
-
-		if ($row->prop("ndocs") > 0)
-		{
-			$lm = "LIMIT ".$row->prop("ndocs");
-		};
-
-		if ($ordby == "")
-		{
-			$obj = obj($parent);
-			if ($obj->meta("sort_by") != "")
-			{
-				$ordby = $obj->meta("sort_by");
-				if ($obj->meta("sort_by") == "RAND()")
-				{
-					$has_rand = true;
-				}
-				if ($obj->meta("sort_ord") != "")
-				{
-					$ordby .= " ".$obj->meta("sort_ord");
-				}
-				if ($obj->meta("sort_by") == "documents.modified")
-				{
-					$ordby .= ", objects.created DESC";
-				};
-			}
-			else
-			{
-				$ordby = aw_ini_get("menuedit.document_list_order_by");
-			}
-
-			if ($obj->meta("sort_by2") != "")
-			{
-				if ($obj->meta("sort_by2") == "RAND()")
-				{
-					$has_rand = true;
-				}
-				$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by2");
-				if ($obj->meta("sort_ord2") != "")
-				{
-					$ordby .= " ".$obj->meta("sort_ord2");
-				}
-				if ($obj->meta("sort_by2") == "documents.modified")
-				{
-					$ordby .= ", objects.created DESC";
-				};
-			}
-
-			if ($obj->meta("sort_by3") != "")
-			{
-				if ($obj->meta("sort_by3") == "RAND()")
-				{
-					$has_rand = true;
-				}
-				$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by3");
-				if ($obj->meta("sort_ord3") != "")
-				{
-					$ordby .= " ".$obj->meta("sort_ord3");
-				}
-				if ($obj->meta("sort_by3") == "documents.modified")
-				{
-					$ordby .= ", objects.created DESC";
-				};
-			}
-		}
-
-		if ($ordby == "")
-		{
-			$ordby = "objects.period DESC, objects.jrk ASC, objects.modified DESC";
-		}
-		$q = "SELECT documents.lead AS lead,
-			documents.docid AS docid,
-			documents.title AS title,
-			documents.*,
-			objects.period AS period,
-			objects.class_id as class_id,
-			objects.parent as parent,
-			objects.period AS period
-			FROM documents
-			LEFT JOIN objects ON
-			(documents.docid = objects.brother_of)
-			WHERE $pstr && $rstr $v
-			ORDER BY $ordby $lm";
-		$this->db_query($q);
+	}
+	else
+	{
+		$ordby = aw_ini_get("menuedit.document_list_order_by");
 	}
 
-	/** Fetces a document from the database 
-		
-		@attrib name=fetch params=name default="0"
-		
-		@param docid required type=int
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function fetch($docid, $no_acl_checks = false) 
+	if ($obj->meta("sort_by2") != "")
 	{
-		if (is_array($docid))
+		if ($obj->meta("sort_by2") == "RAND()")
 		{
-			extract($docid);
+			$has_rand = true;
 		}
-
-		if (not($this->can("view",$docid)))
+		$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by2");
+		if ($obj->meta("sort_ord2") != "")
 		{
-			//	and why is this commented out?
-			$this->data = false;
-			return false;
+			$ordby .= " ".$obj->meta("sort_ord2");
 		}
-
-		if ($this->period > 0 && !$this->ignore_periods) 
+		if ($obj->meta("sort_by2") == "documents.modified")
 		{
-			$sufix = " && objects.period = " . $this->period;
-		} 
-		else 
-		{
-			$sufix = "";
+			$ordby .= ", objects.created DESC";
 		};
+	}
 
-		// I could really use some kind of check in the object constructor ... 
-		// so that the object is only loaded when it has a correct class id ...
-		// it is not a good idea to try to handle some random object as a document ...
-
-		// and right now it's too damn hot (32C) .. to implement this feature
-		// into the object loader.. -- duke
-		$docobj = new object($docid);
-
-		if ($this->period > 0 && !$this->ignore_periods)
+	if ($obj->meta("sort_by3") != "")
+	{
+		if ($obj->meta("sort_by3") == "RAND()")
 		{
-			if ($docobj->prop("period") != $this->period)
-			{
-				// maintain status quote .. e.g. do not return anything if 
-				// the document is not in the correct period or we are ignoring
-				// periods (which is the case if a menu is set to show documents
-				// from multiple periods
-				$docobj = false;
-			}
+			$has_rand = true;
 		}
-
-		if ($docobj->status() == STAT_DELETED)
+		$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by3");
+		if ($obj->meta("sort_ord3") != "")
 		{
-			$docobj = false;
+			$ordby .= " ".$obj->meta("sort_ord3");
+		}
+		if ($obj->meta("sort_by3") == "documents.modified")
+		{
+			$ordby .= ", objects.created DESC";
 		};
+	}
+}
 
-		$this->docobj = $docobj;
-		if (is_object($docobj))
-		{
-			$retval = $docobj->fetch();
-			$retval["docid"] = $retval["oid"];
-			
+if ($ordby == "")
+{
+	$ordby = "objects.period DESC, objects.jrk ASC, objects.modified DESC";
+}
+$q = "SELECT documents.lead AS lead,
+	documents.docid AS docid,
+	documents.title AS title,
+	documents.*,
+	objects.period AS period,
+	objects.class_id as class_id,
+	objects.parent as parent,
+	objects.period AS period
+	FROM documents
+	LEFT JOIN objects ON
+	(documents.docid = objects.brother_of)
+	WHERE $pstr && $rstr $v
+	ORDER BY $ordby $lm";
+$this->db_query($q);
+}
+
+/** Fetces a document from the database 
+
+@attrib name=fetch params=name default="0"
+
+@param docid required type=int
+
+@returns
+
+
+@comment
+
+**/
+function fetch($docid, $no_acl_checks = false) 
+{
+if (is_array($docid))
+{
+	extract($docid);
+}
+
+if (not($this->can("view",$docid)))
+{
+	//	and why is this commented out?
+	$this->data = false;
+	return false;
+}
+
+if ($this->period > 0 && !$this->ignore_periods) 
+{
+	$sufix = " && objects.period = " . $this->period;
+} 
+else 
+{
+	$sufix = "";
+};
+
+// I could really use some kind of check in the object constructor ... 
+// so that the object is only loaded when it has a correct class id ...
+// it is not a good idea to try to handle some random object as a document ...
+
+// and right now it's too damn hot (32C) .. to implement this feature
+// into the object loader.. -- duke
+$docobj = new object($docid);
+
+if ($this->period > 0 && !$this->ignore_periods)
+{
+	if ($docobj->prop("period") != $this->period)
+	{
+		// maintain status quote .. e.g. do not return anything if 
+		// the document is not in the correct period or we are ignoring
+		// periods (which is the case if a menu is set to show documents
+		// from multiple periods
+		$docobj = false;
+	}
+}
+
+if ($docobj->status() == STAT_DELETED)
+{
+	$docobj = false;
+};
+
+$this->docobj = $docobj;
+if (is_object($docobj))
+{
+	$retval = $docobj->fetch();
+	$retval["docid"] = $retval["oid"];
+	
 /*			print "<pre>";
-			print_r($retval);
-			print "------<br>";
+	print_r($retval);
+	print "------<br>";
 			print_r($docobj->arr());
 			print "</pre>";*/
 			
@@ -471,7 +471,7 @@ class document extends aw_template
 
 		$trimmed_lead = trim($doc["lead"]);
 		
-		if ($trimmed_lead == "<br>" || empty($trimmed_lead))
+		if ($trimmed_lead == "<br>" || $trimmed_lead == "<br />"  || empty($trimmed_lead))
 		{
 			$doc["lead"] = "";
 		}
@@ -800,7 +800,14 @@ class document extends aw_template
 					}
 					else
 					{
-						$txt .= $doc["lead"] . "<br />";
+						if (aw_ini_get("content.doctype") == "xhtml")
+						{
+							$txt .= $doc["lead"] . "<br />";
+						}
+						else if (aw_ini_get("content.doctype") == "html" )
+						{
+							$txt .= $doc["lead"] . "<br>";
+						}
 					}
 				}
 
@@ -815,8 +822,16 @@ class document extends aw_template
 					$txt .= "</b>";
 				};
 
-				$txt .= ($this->cfg["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br />" : "")."$doc[content]";
-				$doc["content"] = $txt;
+				if (aw_ini_get("content.doctype") == "xhtml")
+				{
+					$txt .= ($this->cfg["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br />" : "")."$doc[content]";
+					
+				}
+				else if (aw_ini_get("content.doctype") == "html" )
+				{
+					$txt .= ($this->cfg["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br>" : "")."$doc[content]";
+				}
+					$doc["content"] = $txt;
 			};
 		};
 		
@@ -952,13 +967,33 @@ class document extends aw_template
 		// where do I put that shit? that break conversion thingie?
 		if ($doc["nobreaks"] || $doc["meta"]["cb_nobreaks"]["content"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 		{
+			if (aw_ini_get("content.doctype") == "xhtml")
+			{
+				$doc["lead"] = str_replace("<br>", "<br />", $doc["lead"]);
+				$doc["content"] = str_replace("<br>" ,"<br />",$doc["content"]);
+			}
+			else if (aw_ini_get("content.doctype") == "html")
+			{
+				$doc["lead"] = str_replace("<br />", "<br>", $doc["lead"]);
+				$doc["content"] = str_replace("<br />", "<br>",$doc["content"]);
+			}
+
+
+
 			// fuckwits ... meeza thinks we should do the replacements when we are saving the
 			// document .. no? ... cause this nobreak thingie will cause me all kinds of 
 			// problems later on.
 		}
 		else
 		{
-			$doc["content"] = str_replace("\r\n","<br />",$doc["content"]);
+			if (aw_ini_get("content.doctype") == "xhtml")
+			{
+				$doc["content"] = str_replace("\r\n", "<br>" ,"<br />",$doc["content"]);
+			}
+			else if (aw_ini_get("content.doctype") == "html")
+			{
+				$doc["content"] = str_replace("\r\n", "<br />", "<br>",$doc["content"]);
+			}
 		};
 
 		$awt->start("almgr-parse-oo-aliases");
@@ -1400,7 +1435,18 @@ class document extends aw_template
 		}
 
 		$o_section = new object($doc_o->parent());	
-		$s_section_name = $o_section->name();; 
+		$s_section_name = $o_section->name();
+
+		if (aw_ini_get("content.doctype") == "html")
+		{
+			$s_content = str_replace("\r\n","<br>",$doc["content"]);
+			$s_lead_br = $doc["lead"] != "" ? "<br>" : "";	
+		}
+		else if (aw_ini_get("content.doctype") == "xhtml")
+		{
+			$s_content = str_replace("\r\n","<br />",$doc["content"]);
+			$s_lead_br = $doc["lead"] != "" ? "<br />" : "";
+		}
 
 		$this->vars_safe(array(
 			"sel_lang_img_url" => $sel_lang_img_url,
@@ -1443,7 +1489,7 @@ class document extends aw_template
 			"FORUM_ADD" => $fr,
 			"LANG" => $langs,
 			"SEL_LANG" => "",
-			"lead_br"	=> $doc["lead"] != "" ? "<br />" : "",
+			"lead_br"	=> $s_lead_br,
 			"doc_count" => $this->doc_count++,
 			"title_target" => !empty($doc["newwindow"]) ? "target=\"_blank\"" : "",
 			"title_link"  => (!empty($doc["link_text"]) ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
@@ -1469,7 +1515,7 @@ class document extends aw_template
 			"sel_menu_id" => $doc_o->parent(),
 			"document_link" => $document_link,
 			"lead" => $doc["lead"],
-			"content" => $doc_o->prop("content"),
+			"content" => nl2br($s_content),
 		));
 
 		for($i = 1;  $i < 7; $i++)
@@ -2160,7 +2206,14 @@ class document extends aw_template
 			}
 			else
 			{
-				$p1 = strpos($row["content"],"<br />");
+				if (aw_ini_get("content.doctype") == "xhtml")
+				{
+					$p1 = strpos($row["content"],"<br />");
+				}
+				else if (aw_ini_get("content.doctype") == "html")
+				{
+					$p1 = strpos($row["content"],"<br>");
+				}
 				$p2 = strpos($row["content"],"</p>");
 				$pos = min($p1,$p2);
 				$co = substr($row["content"],0,$pos);
@@ -2377,7 +2430,14 @@ class document extends aw_template
 				{
 					$this->darr[] = $v["last"];
 				}
-				dbg::p("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br />");
+				if (aw_ini_get("content.doctype") == "xhtml")
+				{
+					dbg::p("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br />");
+				}
+				else if (aw_ini_get("content.doctype") == "xhtml")
+				{
+					dbg::p("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br>");
+				}
 				$this->rec_list($v["oid"],$pref."/".$v["name"]);
 			}
 		}
