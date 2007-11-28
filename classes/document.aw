@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.381 2007/11/28 17:32:47 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.382 2007/11/28 17:37:27 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1399,7 +1399,7 @@ class document extends aw_template
                         $document_link = aw_ini_get("baseurl")."/?section=".$doc_o->id()."&path=".join(",",$new_path).",".$doc_o->id();
 		}
 
-		$o_section = new object($GLOBALS["section"]);	
+		$o_section = new object($doc_o->parent());	
 		$s_section_name = $o_section->name();; 
 
 		$this->vars_safe(array(
