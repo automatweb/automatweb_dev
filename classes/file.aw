@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.164 2007/11/27 10:42:21 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.165 2007/11/28 10:48:16 voldemar Exp $
 /*
 
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
-@tableinfo files index=id master_table=objects master_index=oid	
+@tableinfo files index=id master_table=objects master_index=oid
 @default table=files
 
 @default group=general
@@ -40,24 +40,24 @@
 
 @default group=settings
 
-	@property newwindow type=checkbox ch_value=1 
+	@property newwindow type=checkbox ch_value=1
 	@caption Uues aknas
-	
+
 	@default table=objects
 	@default field=meta
 	@default method=serialize
-	
-	@property show_framed type=checkbox ch_value=1 
+
+	@property show_framed type=checkbox ch_value=1
 	@caption N&auml;ita saidi raamis
 
 	@property show_icon type=checkbox ch_value=1 default=8
 	@caption N&auml;ita ikooni
 
 @default group=dates
-	@property j_time type=date_select 
+	@property j_time type=date_select
 	@caption J&otilde;ustumise kuup&auml;ev
 
-	@property act_date type=date_select 
+	@property act_date type=date_select
 	@caption Avaldamise kuup&auml;ev
 
 
@@ -68,7 +68,7 @@
 	@caption User-defined 2
 
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
@@ -82,7 +82,7 @@
 
 	@property sp_tb type=toolbar store=no no_caption=1
 
-	@property sp_table type=table store=no 
+	@property sp_table type=table store=no
 	@caption Valitud isikud
 
 	@property sp_p_name type=textbox store=no
@@ -94,7 +94,7 @@
 	@property sp_sbt type=submit
 	@caption Otsi
 
-	@property sp_s_res type=table store=no 
+	@property sp_s_res type=table store=no
 	@caption Otsingu tulemused
 
 
@@ -104,7 +104,7 @@
 @groupinfo keywords caption="M&auml;rks&otilde;nad"
 @groupinfo acl caption=&Otilde;igused
 @default group=acl
-	
+
 	@property acl type=acl_manager store=no
 	@caption &Otilde;igused
 @groupinfo notify caption="Teavitamine"
@@ -132,21 +132,21 @@ class file extends class_base
 			"comment"
 		);
 
-		
+
 		$this->type_whitelist = array(
 			"ez" , "hqx", "cpt", "doc", "bin", "dms", "lha", "lzh", "exe", "dll",
 			"oda", "pdf", "ai" , "eps", "ps" , "smi", "smil","mif", "xls", "ppt",
 			"wbxml", "wmlc", "wmlsc", "bcpio", "vcd", "pgn", "cpio", "dcr", "dir",
 			"dxr", "dvi", "spl", "gtar", "hdf", "js", "skp", "skd", "skt", "skm",
 			"latex", "nc", "cdf", "shar", "swf", "sit", "sv4cpio", "sv4crc", "tar",
-			"tcl", "tex", "texinfo", "texi", "roff", "man", "me", "ms", "ustar", 
+			"tcl", "tex", "texinfo", "texi", "roff", "man", "me", "ms", "ustar",
 			"xhtml", "zip", "au", "snd", "mid", "midi", "kar", "mpga", "mp2", "mp3",
 			"aif", "aiff", "aifc", "m3u", "ram", "rm", "rpm", "ra", "wav", "pdb", "xyz",
-			"bmp", "gif", "ief", "jpeg", "jpg", "jpe", "png", "tiff", "tif", "djvu", 
+			"bmp", "gif", "ief", "jpeg", "jpg", "jpe", "png", "tiff", "tif", "djvu",
 			"djv", "wbmp", "ras", "pnm", "pbm", "pgm", "ppm", "rgb", "xbm", "xpm",
 			"xwd", "igs", "iges", "msh", "mesh", "silo", "wrl", "vrml", "css", "html",
-			"htm", "asc", "txt", "rtx", "rtf", "sgml", "sgm", "tsv", "wml", "wmls", 
-			"etx", "xml", "xsl", "mpeg", "mpg", "mpe", "qt", "mov", "mxu", "avi", 
+			"htm", "asc", "txt", "rtx", "rtf", "sgml", "sgm", "tsv", "wml", "wmls",
+			"etx", "xml", "xsl", "mpeg", "mpg", "mpe", "qt", "mov", "mxu", "avi",
 			"movie", "ice", "sxw", "sxc"
 		);
 	}
@@ -379,7 +379,7 @@ class file extends class_base
 						}
 					</script>
 					";
-				}	
+				}
 				break;
 
 			case "file":
@@ -396,7 +396,7 @@ class file extends class_base
 			case "sp_s_res":
 				$this->_sp_s_res($arr);
 				break;
-		
+
 			case "sp_p_name":
 			case "sp_p_co":
 				$prop["value"] = $arr["request"][$prop["name"]];
@@ -413,7 +413,7 @@ class file extends class_base
 		$request = &$arr["request"];
 		$retval = PROP_OK;
 		switch($data["name"])
-		{	
+		{
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -473,7 +473,7 @@ class file extends class_base
 						}
 					}
 
-					
+
 					$pathinfo = pathinfo($file_name);
 					if (empty($file_type))
 					{
@@ -481,18 +481,18 @@ class file extends class_base
 						$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
 						$file_type = $realtype;
 					};
-					
+
 					$final_name = $this->generate_file_path(array(
 						"type" => $file_type,
 						"file_name" => $file_name
 					));
-						
+
 					move_uploaded_file($file, $final_name);
 					$data["value"] = $final_name;
 					$arr["obj_inst"]->set_name($file_name);
 					$arr["obj_inst"]->set_prop("type", $file_type);
 					$this->file_type = $file_type;
-	
+
 					if (file_exists($arr["obj_inst"]->prop("file")))
 					{
 						unlink($arr["obj_inst"]->prop("file"));
@@ -522,7 +522,7 @@ class file extends class_base
 					$retval = PROP_IGNORE;
 				};
 				break;
-				
+
 			case "type":
 				if ($this->file_type)
 				{
@@ -557,29 +557,29 @@ class file extends class_base
 				<script language='javascript'>
 
 
-				function SetAttribute( element, attName, attValue ) 
-				{ 
-					if ( attValue == null || attValue.length == 0 ) 
+				function SetAttribute( element, attName, attValue )
+				{
+					if ( attValue == null || attValue.length == 0 )
 					{
 						element.removeAttribute( attName, 0 ) ;
 					}
-					else 
+					else
 					{
 						element.setAttribute( attName, attValue, 0 ) ;
 					}
 				}
-	
+
 				FCK=window.parent.opener.FCK;
 				var eSelected = FCK.Selection.MoveToAncestorNode(\"A\");
-				if (eSelected) 
-				{ 
+				if (eSelected)
+				{
 					eSelected.href=\"".$link_url."\";
-					eSelected.innerHTML=\"".$arr["obj_inst"]->prop("name")."\"; 
-					SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ; 
-				} 
-				else 
-				{ 
-					FCK.InsertHtml(aw_get_url_contents(\"$url\")); 
+					eSelected.innerHTML=\"".$arr["obj_inst"]->prop("name")."\";
+					SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ;
+				}
+				else
+				{
+					FCK.InsertHtml(aw_get_url_contents(\"$url\"));
 				}
 
 				window.parent.close();
@@ -629,7 +629,7 @@ class file extends class_base
 				{
 					header("Content-type: text/html");
 				};
-    
+
 				// so what if we have it twice?
 				$this->dequote(&$fi["content"]);
 				if (strpos(strtolower($fi["content"]),"<body>"))
@@ -665,13 +665,13 @@ class file extends class_base
 			{
 				$ss = "target=\"_blank\"";
 			}
-			
+
 			$comment = $fi["comment"];
 			if ($comment == "")
 			{
 				$comment = $fi["name"];
 			}
-		
+
 			if ($fi["meta"]["show_framed"])
 			{
 				$url = $this->cfg["baseurl"]."/section=".aw_global_get("section")."/oid=$alias[target]";
@@ -870,7 +870,7 @@ class file extends class_base
 	// $type - file MIME type
 	// $content - file content
 	// $newwindow - if one, file link will open in new window
-	// $parent - where to save the file in aw 
+	// $parent - where to save the file in aw
 	// $comment - comment
 	// returns the id if the file
 	function save_file($arr)
@@ -881,8 +881,8 @@ class file extends class_base
 		{
 			// stick the file in the filesystem
 			$fs = $this->_put_fs(array(
-				"type" => $type, 
-				"content" => $content, 
+				"type" => $type,
+				"content" => $content,
 				"fs_folder_to_save_to" => $arr["fs_folder_to_save_to"],
 				"name" => $arr["name"]
 			));
@@ -999,7 +999,7 @@ class file extends class_base
 
 		return $success;
 	}
-	
+
 	function get_special_file($args = array())
 	{
 		if ($args["sys"])
@@ -1039,7 +1039,7 @@ class file extends class_base
 
 	////
 	// !returns file by id
-	function get_file_by_id($id, $fetch_file = true) 
+	function get_file_by_id($id, $fetch_file = true)
 	{
 		$tmpo = obj($id);
 		if ($tmpo->class_id() != CL_FILE)
@@ -1103,15 +1103,15 @@ class file extends class_base
 		return $ret;
 	}
 
-	/** N&auml;itab faili. DUH. 
-		
+	/** N&auml;itab faili. DUH.
+
 		@attrib name=preview params=name nologin="1" default="0"
-		
+
 		@param id required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1137,7 +1137,7 @@ class file extends class_base
 			// get the last folder
 			$slash1 = strrpos($f1, "/");
 			$f2 = substr($f1, $slash1+1);
-			$fn = aw_ini_get("baseurl").aw_ini_get("image.imgbaseurl")."/".$f2."/".substr($fname, $slash+1);	
+			$fn = aw_ini_get("baseurl").aw_ini_get("image.imgbaseurl")."/".$f2."/".substr($fname, $slash+1);
 			$pi = pathinfo($fn);
 			$mimeregistry = get_instance("core/aw_mime_types");
 			$tmp = $mimeregistry->type_for_ext($pi["extension"]);
@@ -1165,15 +1165,15 @@ class file extends class_base
 		die($fc["content"]);
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=view params=name nologin="1" default="0"
-		
+
 		@param id required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1203,7 +1203,7 @@ class file extends class_base
 
 	}
 
-	function get_url($id,$name)	
+	function get_url($id,$name)
 	{
 		$retval = str_replace("automatweb/","",$this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/"))."/".urlencode(str_replace("/","_",$name));
 //		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true);
@@ -1242,7 +1242,7 @@ class file extends class_base
 		$url = str_replace("automatweb/", "", $url);
 		return aw_ini_get("baseurl").$url;
 	}
-	
+
 		// !saves a file that was uploaded in a form to the db
 	// $name - the name of the file input in form
 	// $parent - the parent object of the file
@@ -1250,7 +1250,7 @@ class file extends class_base
 	function add_upload_multifile($name,$parent,$file_id = 0, $fs_folder_to_save_to = null)
 	{
 		$output = Array();
-		
+
 		foreach ($_FILES[$name]["error"] as $key => $error)
 		{
 			if ($error == UPLOAD_ERR_OK)
@@ -1260,9 +1260,9 @@ class file extends class_base
 				{
 					$fname = $_FILES[$name]["name"][$key];
 					$type = $_FILES[$name]["type"][$key];
-					
+
 					$fc = $this->get_file(array("file" => $tmp_name));
-					
+
 					$id = $this->save_file(array(
 						"file_id" => $file_id,
 						"parent" => $parent,
@@ -1274,12 +1274,12 @@ class file extends class_base
 					$output[] = array("id" => $id,"url" => $this->get_url($id,$fname), "orig_name" => $fname);
 				}
 			}
-			
-			
+
+
 		}
 		return $output;
 	}
-	
+
 	////
 	// !saves a file that was uploaded in a form to the db
 	// $name - the name of the file input in form
@@ -1301,7 +1301,7 @@ class file extends class_base
 			$type = $_FILES[$name]['type'];
 			$fname = $_FILES[$name]["name"];
 
-			// if a new file was uploaded, we can forget about the previous one 
+			// if a new file was uploaded, we can forget about the previous one
 			if ($fd->class_id() != CL_FILE)
 			{
 				$file_id = 0;
@@ -1437,9 +1437,7 @@ class file extends class_base
 	// static
 	function get_file_size($fn)
 	{
-		$fn = basename($fn);
-		$path = aw_ini_get("site_basedir")."/files/".$fn{0}."/".$fn;
-		return @filesize($path);
+		return @filesize($fn);
 	}
 
 	/** creates/updates a file object from the arguments
@@ -1483,7 +1481,7 @@ class file extends class_base
 
 		@attrib api=1
 
-		
+
 	**/
 	function update_object($ef, $id, $data)
 	{
@@ -1498,8 +1496,8 @@ class file extends class_base
 	}
 
 
-	/** Generate a form for adding or changing an object 
-		
+	/** Generate a form for adding or changing an object
+
 		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa"
 
 		@param parent optional type=int acl="add"
@@ -1672,7 +1670,7 @@ class file extends class_base
 	}
 
 	function _sp_table($arr)
-	{	
+	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_p_tbl($t);
 
@@ -1802,7 +1800,7 @@ class file extends class_base
 		@attrib name=remove_p_from_l_list
 	**/
 	function remove_p_from_l_list($arr)
-	{	
+	{
 		$o = obj($arr["id"]);
 		$persons = $o->meta("imp_p");
 		foreach(safe_array($arr["sel"]) as $p_id)
@@ -1833,6 +1831,6 @@ class file extends class_base
 			);
 		}
 		return $arr["post_ru"];
-	}	
+	}
 }
 ?>
