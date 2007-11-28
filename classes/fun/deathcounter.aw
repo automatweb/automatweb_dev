@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/fun/deathcounter.aw,v 1.1 2007/11/28 23:16:26 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/fun/deathcounter.aw,v 1.2 2007/11/28 23:51:35 hannes Exp $
 // deathcounter.aw - Surmakaunter 
 /*
 
@@ -35,15 +35,10 @@ class deathcounter extends class_base
 			"tpldir" => "fun",
 			"clid" => CL_DEATHCOUNTER
 		));
-		include_once(aw_ini_get("basedir")."/addons//ADOdb_Date_Time_Library/adodb-time.inc.php");
+		include_once(aw_ini_get("basedir")."/addons/ADOdb_Date_Time_Library/adodb-time.inc.php");
 	}
 
-	function _get_days_to_live($arr)
-	{
-		//$arr["prop"]["value"] = $this->days_to_live($arr);
-	}
-
-	function _set_days_to_live($arr)
+	function callback_post_save($arr)
 	{
 		$o =& $arr["obj_inst"];
 		$o-> set_prop("days_to_live", $this->days_to_live($arr) );
@@ -53,7 +48,7 @@ class deathcounter extends class_base
 	function days_to_live($arr)
 	{
 		$obj = $arr["obj_inst"];
-		$i_death_stamp = adodb_mktime (0, 0, 0, $obj->prop("death_day"), $obj->prop("death_month"), $obj->prop("death_year"));
+		$i_death_stamp = adodb_mktime (0, 0, 0, $obj->prop("death_month"), $obj->prop("death_day"), $obj->prop("death_year"));
 		$i_time_to_live_stamp = $i_death_stamp  - time(); 
 		return round ($i_time_to_live_stamp/(60*60*24));
 	}
