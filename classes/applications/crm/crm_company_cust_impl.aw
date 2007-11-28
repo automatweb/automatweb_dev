@@ -1951,9 +1951,10 @@ class crm_company_cust_impl extends class_base
 				if (($default_cfg or in_array("email", $visible_fields)) and ($this->can("view", $o->prop("email_id"))))
 				{
 					$mail_obj = new object($o->prop("email_id"));
-					$mail = empty($mail_obj->prop("mail")) ? "" : html::href(array(
-						"url" => "mailto:" . $mail_obj->prop("mail"),
-						"caption" => $mail_obj->prop("mail"),
+					$mail = $mail_obj->prop("mail");
+					$mail = empty($mail) ? "" : html::href(array(
+						"url" => "mailto:" . $mail,
+						"caption" => $mail
 					));
 				}
 
