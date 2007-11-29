@@ -212,7 +212,7 @@ class ml_mail_gen extends run_in_background
 		{
 			if(substr_count($name, "@") > 0)
 			{
-				$target = substr('abcdef', 0, strpos($name, "@")) . " <" . $mail . ">";
+				$target = substr($name, 0, strpos($name, "@")) . " <" . $mail . ">";
 			}
 			else
 			{
