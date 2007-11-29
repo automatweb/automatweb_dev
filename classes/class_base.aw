@@ -6051,12 +6051,18 @@ class class_base extends aw_template
 
 				if($level == 1 && $item["parent"]) continue;
 				if($level == 2 && $_GET["group"] != $item["parent"] && $item["parent"] !=$_GET["openedtab"]) continue;
-				if($level == 1) $_SESSION["menu_item_tab"] = $item["name"];
+			//	$_SESSION["menu_item_tab"] = $item["name"];
+
+				$selected = 0;
+				if($_GET["group"] == $item["name"] || $item["name"] == $_GET["openedtab"]) $selected = 1;
+	
 				return array(
 					"text" => $item["caption"],
 					"link" => $link,
 					"section" => $id + $_SESSION["menu_from_cb"][$level]["count"],//$o_91_2->id(),
 					"parent_section" => $id + $_SESSION["menu_from_cb"][$level]["crap_item"][$item["parent"]],//is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
+					"is_end" => ($_SESSION["menu_from_cb"][$level]["count"] == sizeof($_SESSION["menu_from_cb"][$level]["crap_items"])) ? 1 : 0,
+					"is_selected" => $selected,
 				);
 			}
 			else

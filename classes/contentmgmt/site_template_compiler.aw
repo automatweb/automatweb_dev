@@ -1583,7 +1583,7 @@ class site_template_compiler extends aw_template
 		{
 			if ($arr["value"] == "list_end")
 			{
-				$ret = "(empty(\$mmi_cnt) && (".$loop_counter_name." == (".$list_name."->count()-1))) && ";
+				$ret = "((empty(\$mmi_cnt) && (".$loop_counter_name." == (".$list_name."->count()-1))) ||  (\$mmi_cnt && \$tmp_vars_array['is_end'])) && ";
 			}
 			else
 			{
@@ -1591,10 +1591,14 @@ class site_template_compiler extends aw_template
 			}
 		}
 		elseif ($arr["prop"] == "oid")
-		{
+ 		{
 			if ($arr["value"] == "is_in_path")
 			{
-				$ret = "((empty(\$mmi_cnt) && \$this->_helper_is_in_path(".$o_name."->".$this->id_func."())) || (\$mmi_cnt && !(".$fun_name."_cb)) || (\$mmi_cnt && \$this->_helper_is_in_url(".$o_name."))) && ";
+				$ret = "((empty(\$mmi_cnt) && \$this->_helper_is_in_path(".$o_name."->".$this->id_func."())) 
+				|| (\$mmi_cnt && \$tmp_vars_array['is_selected'])) && ";
+
+
+//|| (\$mmi_cnt && !(".$dat["fun_name"]."_cb)) || (\$mmi_cnt && \$this->_helper_is_in_url(".$o_name."))) && ";
 				//else $ret = "(empty(\$mmi_cnt) && \$this->_helper_is_in_path(".$o_name."->".$this->id_func."())) && ";
 			}
 			else
