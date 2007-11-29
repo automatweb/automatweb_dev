@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.41 2007/11/23 13:19:37 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -137,7 +136,7 @@ class add_tree_conf extends class_base
 					}
 
 					$t->define_data(array(
-						"name" => str_repeat("&nbsp;", ($this->level+1) * 10).$cld["name"],
+						"name" => str_repeat("&nbsp;", ($this->level+1) * 10) . $cld["name"] . " [" . substr(strrchr($cld["file"], "/"), 1) . "]",
 						"visible" => html::checkbox(array(
 							"name" => "visible[obj][$cl_id]",
 							"value" => 1,
