@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_chooser.aw,v 1.2 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_chooser.aw,v 1.3 2007/11/29 09:36:56 kristo Exp $
 // property_chooser.aw - Element - valik 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_CHOOSER no_comment=1
+@classinfo syslog_type=ST_PROPERTY_CHOOSER no_comment=1 mantainer=kristo
 
 @default table=objects
 @default group=general

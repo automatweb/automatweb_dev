@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.7 2005/05/27 12:26:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.8 2007/11/29 09:36:56 kristo Exp $
 // property_toolbar.aw - Toolbar 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_TOOLBAR relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_PROPERTY_TOOLBAR relationmgr=yes no_status=1 no_comment=1 mantainer=kristo
 
 @default table=objects
 @default group=general

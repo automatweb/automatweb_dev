@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/multi_calendar.aw,v 1.4 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/multi_calendar.aw,v 1.5 2007/11/29 09:36:48 kristo Exp $
+/*
+@classinfo mantainer=kristo
+*/
 class multi_calendar extends aw_template
 {
 	function multi_calendar()

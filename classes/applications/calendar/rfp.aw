@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.18 2007/07/02 08:48:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.19 2007/11/29 09:36:37 kristo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
-@classinfo syslog_type=ST_RFP relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_RFP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=tarvo
 
 @default table=objects
 @default group=general

@@ -1,8 +1,8 @@
 <?php
 /*
-HANDLE_MESSAGE(MSG_STORAGE_SAVE, foobar)
+H ANDLE_MESSAGE(MSG_STORAGE_SAVE, foobar)
 
-
+@classinfo  mantainer=kristo
 */
 /*
 	this calls monitors name changes in property objects and alters all tables 

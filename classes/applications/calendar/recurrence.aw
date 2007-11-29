@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.11 2005/08/25 07:41:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.12 2007/11/29 09:36:37 kristo Exp $
 // recurrence.aw - Kordus
 /*
 
-@classinfo syslog_type=ST_RECURRENCE relationmgr=yes no_status=1
+@classinfo syslog_type=ST_RECURRENCE relationmgr=yes no_status=1 mantainer=kristo
 
 @default table=objects
 @default group=general

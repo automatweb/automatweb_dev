@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.8 2007/01/25 15:07:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.9 2007/11/29 09:36:36 kristo Exp $
 // conference.aw - Konverents 
 /*
 
-@classinfo syslog_type=ST_CONFERENCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CONFERENCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=tarvo
 
 @default table=objects
 @default group=general

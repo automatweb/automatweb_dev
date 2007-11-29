@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.5 2005/04/01 11:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.6 2007/11/29 09:37:16 kristo Exp $
 // rate_moderation.aw - Hindamise modereerimine 
 /*
 
-@classinfo syslog_type=ST_RATE_MODERATION relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_RATE_MODERATION relationmgr=yes no_status=1 no_comment=1 mantainer=kristo
 
 @default table=objects
 @default group=general

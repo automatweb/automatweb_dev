@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.8 2005/04/01 11:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.9 2007/11/29 09:37:16 kristo Exp $
 // community.aw - Kogukond 
 /*
 
-@classinfo syslog_type=ST_COMMUNITY relationmgr=yes
+@classinfo syslog_type=ST_COMMUNITY relationmgr=yes mantainer=kristo
 
 @default table=objects
 @default group=general

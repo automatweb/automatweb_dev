@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_history.aw,v 1.1 2007/01/22 14:38:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_history.aw,v 1.2 2007/11/29 09:36:37 kristo Exp $
 // rfp_history.aw - RFP Ajalugu veebis 
 /*
 
-@classinfo syslog_type=ST_RFP_HISTORY relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_RFP_HISTORY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=tarvo
 
 @default table=objects
 @default group=general

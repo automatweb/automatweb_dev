@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property.aw,v 1.1 2005/05/18 15:34:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property.aw,v 1.2 2007/11/29 09:36:56 kristo Exp $
 // property.aw - Omadus 
 /*
 
-@classinfo syslog_type=ST_PROPERTY relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_PROPERTY relationmgr=yes no_comment=1 no_status=1 mantainer=kristo
 
 @default table=objects
 @default group=general

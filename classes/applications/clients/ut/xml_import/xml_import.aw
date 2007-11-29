@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.11 2007/11/16 12:44:23 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.12 2007/11/29 09:37:10 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -13,7 +13,7 @@
 	@property run_import type=text editonly=1 store=no
         @caption Käivita import
 
-	@classinfo no_status=1 syslog_type=ST_UT_XML_IMPORT
+	@classinfo no_status=1 syslog_type=ST_UT_XML_IMPORT mantainer=kristo
                                                                                                                             
 */
 class xml_import extends class_base

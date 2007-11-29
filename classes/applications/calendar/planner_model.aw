@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo mantainer=kristo
+*/
 
 class planner_model extends core
 {

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.45 2007/11/01 15:45:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.46 2007/11/29 09:37:21 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -369,7 +369,7 @@ class crm_company_webview extends class_base
 		classload("crm/crm_company");
 
 		$images_conns = null; // Variable for connections to image objects, if this is set before parsing images, allows overriding image selection
-
+echo dbg::dump($datafields);
 		foreach ($datafields as $item => $mapped)
 		{
 
@@ -442,6 +442,7 @@ class crm_company_webview extends class_base
 							}
 						}
 					}
+					echo dbg::dump($value);
 				break;
 				case 'openhours':
 					$inst = get_instance(CL_OPENHOURS);

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_group.aw,v 1.3 2005/05/19 14:36:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_group.aw,v 1.4 2007/11/29 09:36:56 kristo Exp $
 // property_group.aw - Vormi grupp 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_GROUP relationmgr=yes
+@classinfo syslog_type=ST_PROPERTY_GROUP relationmgr=yes mantainer=kristo
 
 @default table=objects
 @default group=general

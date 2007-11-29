@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo mantainer=kristo
+*/
 class class_visualizer extends class_base
 {
 	function class_visualizer()

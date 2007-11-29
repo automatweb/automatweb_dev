@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.6 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.7 2007/11/29 09:36:36 kristo Exp $
 // calendar_vacancy.aw - Vakants 
 /*
 
-@classinfo syslog_type=ST_CALENDAR_VACANCY relationmgr=yes
+@classinfo syslog_type=ST_CALENDAR_VACANCY relationmgr=yes mantainer=kristo
 
 @default table=objects
 @default group=general

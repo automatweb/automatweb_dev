@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ipt/ipt_file_convert.aw,v 1.3 2006/04/10 12:33:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ipt/ipt_file_convert.aw,v 1.4 2007/11/29 09:37:02 kristo Exp $
 // ipt_file_convert.aw - IPT Failide konvertimine 
 /*
 
-@classinfo syslog_type=ST_IPT_FILE_CONVERT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_IPT_FILE_CONVERT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
 
 @default table=objects
 @default field=meta

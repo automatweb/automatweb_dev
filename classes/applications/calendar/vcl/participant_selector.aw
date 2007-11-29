@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.5 2006/03/08 15:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.6 2007/11/29 09:36:48 kristo Exp $
+/*
+@classinfo mantainer=kristo
+*/
 class participant_selector extends core
 {
 	function participant_selector()

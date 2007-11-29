@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.6 2005/10/21 22:02:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.7 2007/11/29 09:36:37 kristo Exp $
 // flyer.aw - Flaier 
 /*
 
-@classinfo syslog_type=ST_FLYER no_comment=1 no_status=1
+@classinfo syslog_type=ST_FLYER no_comment=1 no_status=1 mantainer=kristo
 
 @tableinfo images index=id master_table=objects master_index=oid
 

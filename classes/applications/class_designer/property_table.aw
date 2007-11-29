@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.8 2005/05/12 11:28:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.9 2007/11/29 09:36:56 kristo Exp $
 // property_table.aw - Tabel 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_TABLE relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_PROPERTY_TABLE relationmgr=yes no_comment=1 no_status=1 mantainer=kristo
 
 @default table=objects
 @default field=meta

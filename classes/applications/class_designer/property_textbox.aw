@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_textbox.aw,v 1.2 2005/04/21 08:39:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_textbox.aw,v 1.3 2007/11/29 09:36:56 kristo Exp $
 // property_textbox.aw - Element - tekstikast 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_TEXTBOX no_comment=1
+@classinfo syslog_type=ST_PROPERTY_TEXTBOX no_comment=1 mantainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.2 2007/09/10 12:29:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.3 2007/11/29 09:36:37 kristo Exp $
 // event_time.aw - Toimumisaeg 
 /*
 
-@tableinfo aw_event_time index=aw_oid master_table=objects master_index=brother_of
+@tableinfo aw_event_time index=aw_oid master_table=objects master_index=brother_of mantainer=kristo
 
 @classinfo syslog_type=ST_EVENT_TIME relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/Attic/patent_manager.aw,v 1.1 2006/12/12 16:48:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/Attic/patent_manager.aw,v 1.2 2007/11/29 09:37:03 kristo Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
-@classinfo syslog_type=ST_PATENT_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PATENT_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=markop
 
 @default table=objects
 @default group=general

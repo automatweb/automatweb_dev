@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.8 2005/06/02 11:47:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.9 2007/11/29 09:36:56 kristo Exp $
 // property_tree.aw - Puu komponent 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_TREE relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_PROPERTY_TREE relationmgr=yes no_status=1 no_comment=1 mantainer=kristo
 
 @default table=objects
 @default group=general

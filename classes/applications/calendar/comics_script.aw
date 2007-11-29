@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/comics_script.aw,v 1.1 2005/04/14 09:56:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/comics_script.aw,v 1.2 2007/11/29 09:36:36 kristo Exp $
 // comics_script.aw - Koomiksi skript 
 /*
 
-@classinfo syslog_type=ST_COMICS_SCRIPT no_status=1
+@classinfo syslog_type=ST_COMICS_SCRIPT no_status=1 mantainer=kristo
 
 @default table=objects
 @default group=general

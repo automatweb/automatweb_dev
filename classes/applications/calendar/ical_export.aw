@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.2 2007/11/06 13:06:12 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.3 2007/11/29 09:36:37 kristo Exp $
 // ical_export.aw - Sündmuste eksport (iCal) 
 /*
 
-@classinfo syslog_type=ST_ICAL_EXPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ICAL_EXPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=robert
 
 @default table=objects
 @default group=general

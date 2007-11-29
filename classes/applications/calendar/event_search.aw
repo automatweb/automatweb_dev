@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.99 2007/11/27 21:25:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.100 2007/11/29 09:36:37 kristo Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
-@classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes maintainer=dragut
+@classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes maintainer=dragut mantainer=kristo
 
 @default table=objects
 @default group=general
