@@ -186,7 +186,9 @@ class ml_mail_gen extends run_in_background
 		$member_id = $arr["member_id"];
 		$lid = $arr["list_id"];
 		$qid = $this->qid;
-		$target = $arr["name"] . " <" . $arr["mail"] . ">";
+//		$target = $arr["name"] . " <" . $arr["mail"] . ">";
+		$target = $this->_get_target(array("name" => $arr["name"] , "mail" => $arr["mail"]));
+		
 		
 		$this->quote($message);
 		$this->quote($subject);
@@ -202,6 +204,28 @@ class ml_mail_gen extends run_in_background
 		//set to 0
 	}
 	
+	//name, mail
+	function _get_target($arr)
+	{
+		extract($arr);
+		if(strlen(trim($name)))
+		{
+			if(substr_count($name, "@") > 0)
+			{
+				$target = substr('abcdef', 0, strpos($name, "@")) . " <" . $mail . ">";
+			}
+			else
+			{
+				$target = $name . " <" . $mail . ">";
+			}
+		}
+		else
+		{
+			$target = $mail;
+		}
+		return $target;
+	}
+
 	//mail_id, vars, name , mail, member_id, - esimene on nagu olulisim, teised tulevad kas baasist valmis maili juurest või kui asi alles tegemisel, siis lambist
 	function get_changed_message($arr)
 	{
