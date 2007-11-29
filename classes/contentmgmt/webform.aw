@@ -2048,6 +2048,10 @@ class webform extends class_base
 					$els[$key]["value"] = nl2br($all_props[$key]["value"]);
 				}
 				$aliasmgr->parse_oo_aliases($id, &$els[$key]["value"]);
+				$els[$key]['value'] .= html::hidden(array(
+					'name' => $key,
+					'value' => $els[$key]['value']
+				));
 			}
 			// some goddamn thing messes up the element captions, reorder them
 			//$els[$key]["caption"] = $all_props[$key]["caption"];
