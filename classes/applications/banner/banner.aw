@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.28 2007/11/29 11:36:00 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.29 2007/11/29 12:26:19 robert Exp $
 
 /*
 
@@ -159,6 +159,10 @@ class banner extends class_base
 			"name" => "name",
 			"caption" => " "
 		));
+		$t->define_field(array(
+			"name" => "total",
+			"caption" => t("Kokku")
+		));
 		foreach($langs as $l)
 		{
 			if($l["langid"])
@@ -180,11 +184,15 @@ class banner extends class_base
 				}
 			}
 		}
+		
 		$cthrough["name"] = t("Click-through ratio");
+		$cthrough["total"] = $this->click_through."%";
 		$t->define_data($cthrough);
 		$views["name"] = t("Vaatamisi");
+		$views["total"] = $this->views;
 		$t->define_data($views);
 		$clicks["name"] = t("Klikke");
+		$clicks["total"] = $this->clicks;
 		$t->define_data($clicks);
 
 		
