@@ -139,6 +139,15 @@
             <caption>Click-through ratio</caption>
       </property>
       <property>
+            <name>stats_table</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>stats_table</field>
+      </property>
+      <property>
             <name>timing</name>
             <table>objects</table>
             <group>timing</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.27 2007/11/23 14:27:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.28 2007/11/29 11:36:00 robert Exp $
 
 /*
 
@@ -58,6 +58,8 @@
 
 	@property click_through type=text group=stats
 	@caption Click-through ratio
+
+	@property stats_table type=table no_caption=1 store=no group=stats
 
 @groupinfo timing caption="Ajaline aktiivsus"
 @default group=timing
@@ -121,7 +123,10 @@ class banner extends class_base
 				break;
 			case 'general_toolbar':
 				$this->do_general_toolbar(&$prop['toolbar'], $arr);
-				break;	
+				break;
+			case 'stats_table':
+				$this->stats_table($arr);
+				break;
 		}
 
 		return PROP_OK;
@@ -142,6 +147,47 @@ class banner extends class_base
 				break;
 		}
 		return PROP_OK;
+	}
+
+	function stats_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$langs = $this->db_fetch_array("SELECT DISTINCT langid FROM banner_views");
+		$lng = get_instance("languages");
+		$langnames = $lng->get_list();
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => " "
+		));
+		foreach($langs as $l)
+		{
+			if($l["langid"])
+			{
+				$t->define_field(array(
+					"name" => "lang".$l["langid"],
+					"caption" => t($langnames[$l["langid"]])
+				));
+				$clicks["lang".$l["langid"]] = $this->db_fetch_field("SELECT count(*) as cnt FROM banner_clicks WHERE bid = '".$arr["obj_inst"]->id()."' AND langid='".$l["langid"]."'", "cnt");
+				$views["lang".$l["langid"]] = $this->db_fetch_field("SELECT count(*) as cnt FROM banner_views WHERE bid = '".$arr["obj_inst"]->id()."' 
+				AND langid='".$l["langid"]."'", "cnt");
+				if ($views["lang".$l["langid"]] > 0)
+				{
+					$cthrough["lang".$l["langid"]] = (($clicks["lang".$l["langid"]] / $views["lang".$l["langid"]]) * 100.0)."%";
+				}
+				else
+				{
+					$cthrough["lang".$l["langid"]] = "0%";
+				}
+			}
+		}
+		$cthrough["name"] = t("Click-through ratio");
+		$t->define_data($cthrough);
+		$views["name"] = t("Vaatamisi");
+		$t->define_data($views);
+		$clicks["name"] = t("Klikke");
+		$t->define_data($clicks);
+
+		
 	}
 
 	function do_save_prob_tbl(&$arr)
@@ -366,20 +412,21 @@ class banner extends class_base
 
 	function add_click($bid)
 	{
+		$langid = $this->get_lang_id();
 		$this->quote(&$ss);
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if ($ip == "" || !(strpos($ip,"unknown") === false))
 		{
 			$ip = aw_global_get("REMOTE_ADDR");
 		}
-
-		$this->db_query("INSERT INTO banner_clicks(tm,bid,ip) values('".time()."','$bid','$ip')");
+		$this->db_query("INSERT INTO banner_clicks (tm,bid,ip,langid) values('".time()."','$bid','$ip','$langid')");
 	}
 
 	////
 	// !adds a record to the banner_ids table to identify shown banners l8r
 	function add_view($bid,$ss,$noview,$clid)
 	{
+		$langid = $this->get_lang_id();
 		$this->quote(&$ss);
 		$this->db_query("INSERT INTO banner_ids(ss,bid,tm,clid) values('$ss','$bid',".time().",'$clid')");
 		if (!$noview)
@@ -391,13 +438,14 @@ class banner extends class_base
 			}
 			// ok. a prize for anybody (except terryf and duke) who figures out why the next line is like it is :)
 			$day = mktime(8,42,17,date("n"),date("d"),date("Y"));
-			$this->db_query("INSERT INTO banner_views(tm,bid,ip,clid) VALUES(".time().",$bid,'$ip','$clid')");
+			$this->db_query("INSERT INTO banner_views (tm,bid,ip,clid,langid) VALUES(".time().",$bid,'$ip','$clid','$langid')");
 			$this->db_query("UPDATE banners SET views=views+1 WHERE id = $bid");
 		}
 	}
 
 	function add_simple_view($bid, $clid)
 	{
+		$langid = $this->get_lang_id();
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if ($ip == "" || !(strpos($ip,"unknown") === false))
 		{
@@ -405,8 +453,22 @@ class banner extends class_base
 		}
 		// ok. a prize for anybody (except terryf and duke) who figures out why the next line is like it is :)
 		$day = mktime(8,42,17,date("n"),date("d"),date("Y"));
-		$this->db_query("INSERT INTO banner_views(tm,bid,ip,clid) VALUES(".time().",$bid,'$ip','$clid')");
+		$this->db_query("INSERT INTO banner_views (tm,bid,ip,clid,langid) VALUES(".time().",$bid,'$ip','$clid','$langid')");
 		$this->db_query("UPDATE banners SET views=views+1 WHERE id = $bid");
+	}
+
+	function get_lang_id()
+	{
+		$type = aw_ini_get("user_interface.content_trans");
+		if($type == 1)
+		{
+			$langid = aw_global_get("ct_lang_id");
+		}
+		else
+		{
+			$langid = aw_global_get("lang_id");
+		}
+		return $langid;
 	}
 
 	/** called when user clicks on banner, finds the correct banner according to the session id 
@@ -416,6 +478,7 @@ class banner extends class_base
 	**/
 	function find_url($ss,$clid)
 	{
+		$langid = $this->get_lang_id();
 		$bid = $this->db_fetch_field("SELECT bid FROM banner_ids WHERE ss = '$ss' AND clid = '$clid'","bid");
 		if (!$bid)
 		{
@@ -435,7 +498,7 @@ class banner extends class_base
 			$ip = aw_global_get("REMOTE_ADDR");
 		}
 
-		$this->db_query("INSERT INTO banner_clicks(tm,bid,ip,clid,refferer) VALUES(".time().",$bid,'$ip','$clid','".aw_global_get("HTTP_REFERER")."')");
+		$this->db_query("INSERT INTO banner_clicks (tm,bid,ip,clid,langid,refferer) VALUES(".time().",$bid,'$ip','$clid','$langid','".aw_global_get("HTTP_REFERER")."')");
 		$this->db_query("UPDATE banners SET clicks=clicks+1 WHERE id = $bid");
 
 		return obj($bid);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.75 2007/11/23 13:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.76 2007/11/29 11:36:04 robert Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo mantainer=kristo
@@ -1871,6 +1871,24 @@ echo "mod ".$con["to.name"]."<br>";
 	{
 		switch($t)
 		{
+			case "banner_views":
+				switch($f)
+				{
+					case "langid":
+						$this->db_query("ALTER TABLE banner_views ADD langid INT");
+						return true;
+				}
+				break;
+			
+			case "banner_clicks":
+				switch($f)
+				{
+					case "langid":
+						$this->db_query("ALTER TABLE banner_clicks ADD langid INT");
+						return true;
+				}
+				break;
+
 			case "syslog":
 				switch($f)
 				{
