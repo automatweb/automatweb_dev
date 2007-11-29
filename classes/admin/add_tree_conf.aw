@@ -191,7 +191,7 @@ class add_tree_conf extends class_base
 						}
 
 						$t->define_data(array(
-							"name" => str_repeat("&nbsp;", ($this->level+1) * 10).$cld["name"],
+							"name" => str_repeat("&nbsp;", ($this->level+1) * 10).$cld["name"] . " [" . substr(strrchr($cld["file"], "/"), 1) . "]",
 							"visible" => html::checkbox(array(
 								"name" => "visible[obj][$cl_id]",
 								"value" => 1,
