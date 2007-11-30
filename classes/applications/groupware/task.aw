@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.189 2007/11/23 10:54:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.190 2007/11/30 10:40:06 robert Exp $
 // task.aw - TODO item
 /*
 
@@ -95,6 +95,8 @@
 
 @property in_budget type=checkbox ch_value=1 table=planner field=aw_in_budget
 @caption Eelarvesse
+
+@property is_work type=checkbox ch_value=1 table=planner field=aw_is_work
 
 @property service_type type=relpicker store=connect reltype=RELTYPE_SERVICE_TYPE
 @caption Teenuse liik
@@ -1021,6 +1023,7 @@ class task extends class_base
 					"is_personal" => t("Isiklik"),
 					"send_bill" => t("Arvele"),
 					"in_budget" => t("Eelarvesse"),
+					"is_work" => t("T&ouml;&ouml;aeg")
 				);
 				$data["value"] = array(
 //					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
@@ -1030,6 +1033,7 @@ class task extends class_base
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
 					"in_budget" => $arr["obj_inst"]->prop("in_budget") ? 1 : 0,
+					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
 				);
 				break;
 			case "priority":
@@ -1049,6 +1053,7 @@ class task extends class_base
 			case "hr_price_currency":
 			case "in_budget":
 			case "service_type":
+			case "is_work":
 				return PROP_IGNORE;
 
 			case "controller_disp":
@@ -1464,6 +1469,7 @@ class task extends class_base
 				$arr["obj_inst"]->set_prop("is_personal", $prop["value"]["is_personal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("send_bill", $prop["value"]["send_bill"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("in_budget", $prop["value"]["in_budget"] ? 1 : 0);
+				$arr["obj_inst"]->set_prop("is_work", $prop["value"]["is_work"] ? 1 : 0);
 				break;
 
 			case "is_done":
@@ -1474,6 +1480,7 @@ class task extends class_base
 			case "send_bill":
 			case "in_budget":
 			case "service_type":
+			case "is_work":
 				return PROP_IGNORE;
 
 			case "sel_resources":

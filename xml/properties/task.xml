@@ -237,6 +237,14 @@
             <caption>Eelarvesse</caption>
       </property>
       <property>
+            <name>is_work</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_is_work</field>
+      </property>
+      <property>
             <name>service_type</name>
             <table>objects</table>
             <group>general</group>

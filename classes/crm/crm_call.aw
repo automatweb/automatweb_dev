@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.63 2007/09/25 15:08:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.64 2007/11/30 10:39:58 robert Exp $
 // crm_call.aw - phone call
 /*
 
@@ -91,6 +91,9 @@
 
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
 @caption Saata arve
+
+@property is_work type=checkbox ch_value=1 table=planner field=aw_is_work
+@caption T&ouml;&ouml;aeg
 
 @property bill_no type=text table=planner 
 @caption Arve number
@@ -277,12 +280,14 @@ class crm_call extends class_base
 					"is_done" => t("Tehtud"),
 					"is_personal" => t("Isiklik"),
 					"send_bill" => t("Arvele"),
+					"is_work" => t("T&ouml;&ouml;aeg"),
 				);
 				$data["value"] = array(
 					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
 					"is_done" => $arr["obj_inst"]->prop("is_done") ? 1 : 0,
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
+					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
 				);
 				break;
 
@@ -294,6 +299,7 @@ class crm_call extends class_base
 			case "time_real":
 			case "time_to_cust":
 			case "bill_no":
+			case "is_work":
 				return PROP_IGNORE;
 
 			case "new_call_date":
@@ -529,12 +535,14 @@ class crm_call extends class_base
 				$arr["obj_inst"]->set_prop("is_done", $data["value"]["is_done"] ? 8 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $data["value"]["is_personal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
+				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
 				break;
 
 			case "is_done":
 			case "status":
 			case "is_personal":
 			case "send_bill":
+			case "is_work":
 				return PROP_IGNORE;
 
 			case "new_call_date":

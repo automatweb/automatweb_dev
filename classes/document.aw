@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.387 2007/11/30 01:59:01 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.388 2007/11/30 10:40:03 robert Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3414,6 +3414,14 @@ if (is_object($docobj))
 				$o->save();
 				aw_restore_acl();
 			}
+		}
+
+		if($table == "planner" && $field == "aw_is_work")
+		{
+			$this->db_add_col($table, array(
+				"name" => $field,
+				"type" => "int"
+			));
 		}
 
 		switch($field)

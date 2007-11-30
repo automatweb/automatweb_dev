@@ -865,6 +865,58 @@
             <caption>Kuni</caption>
       </property>
       <property>
+            <name>stat_hr_bugs</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <no_caption>1</no_caption>
+            <parent>stat_hrs_s</parent>
+            <field>stat_hr_bugs</field>
+            <caption>&amp;amp;Uuml;lesanded</caption>
+      </property>
+      <property>
+            <name>stat_hr_meetings</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <no_caption>1</no_caption>
+            <parent>stat_hrs_s</parent>
+            <field>stat_hr_meetings</field>
+            <caption>Kohtumised</caption>
+      </property>
+      <property>
+            <name>stat_hr_tasks</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <no_caption>1</no_caption>
+            <parent>stat_hrs_s</parent>
+            <field>stat_hr_tasks</field>
+            <caption>Toimetused</caption>
+      </property>
+      <property>
+            <name>stat_hr_calls</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <no_caption>1</no_caption>
+            <parent>stat_hrs_s</parent>
+            <field>stat_hr_calls</field>
+            <caption>K&amp;amp;otilde;ned</caption>
+      </property>
+      <property>
             <name>stat_hrs_submit</name>
             <table>objects</table>
             <group>stat_hrs_overview</group>
@@ -1323,11 +1375,23 @@
                   <area_caption>N&amp;amp;otilde;uded</area_caption>
                   <group>problems_req</group>
             </pr_tree_b>
+            <stat_hrs_o>
+                  <type>vbox</type>
+                  <group>stat_hrs_overview</group>
+                  <area_caption></area_caption>
+            </stat_hrs_o>
             <stat_hrs_range>
                   <type>hbox</type>
+                  <parent>stat_hrs_o</parent>
                   <group>stat_hrs_overview</group>
                   <area_caption></area_caption>
             </stat_hrs_range>
+            <stat_hrs_s>
+                  <type>vbox</type>
+                  <parent>stat_hrs_o</parent>
+                  <group>stat_hrs_overview</group>
+                  <area_caption></area_caption>
+            </stat_hrs_s>
       </layout>
 </properties>
 

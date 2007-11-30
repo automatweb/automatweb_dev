@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.91 2007/11/15 10:19:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.92 2007/11/30 10:39:58 robert Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -90,6 +90,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property is_personal type=checkbox ch_value=1 field=meta method=serialize 
 @caption Isiklik
+
+@property is_work type=checkbox ch_value=1 field=aw_is_work table=planner
+@caption T&ouml;&ouml;aeg
 
 @property start1 type=datetime_select field=start table=planner 
 @caption Algab 
@@ -363,6 +366,7 @@ class crm_meeting extends class_base
 					"whole_day" => t("Terve p&auml;ev"),
 					"is_personal" => t("Isiklik"),
 					"send_bill" => t("Arvele"),
+					"is_work" => t("T&ouml;&ouml;aeg"),
 				);
 				$data["value"] = array(
 					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
@@ -370,6 +374,7 @@ class crm_meeting extends class_base
 					"whole_day" => $arr["obj_inst"]->prop("whole_day") ? 1 : 0,
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
+					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
 				);
 				break;
 
@@ -383,6 +388,7 @@ class crm_meeting extends class_base
 			case "time_to_cust":
 			case "hr_price":
 			case "bill_no":
+			case "is_work":
 				return PROP_IGNORE;
 
 			case "controller_disp":
@@ -733,6 +739,7 @@ class crm_meeting extends class_base
 				$arr["obj_inst"]->set_prop("whole_day", $data["value"]["whole_day"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $data["value"]["is_personal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
+				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
 				break;
 
 			case "is_done":
@@ -740,6 +747,7 @@ class crm_meeting extends class_base
 			case "whole_day":
 			case "is_personal":
 			case "send_bill":
+			case "is_work":
 				return PROP_IGNORE;
 
 			case "transl":

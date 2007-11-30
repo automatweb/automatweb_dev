@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.116 2007/11/30 10:00:23 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.116 2007/11/30 10:00:23 kristo Exp $
+
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.117 2007/11/30 10:39:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.117 2007/11/30 10:39:57 robert Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -327,12 +328,27 @@ define("BUG_STATUS_CLOSED", 5);
 	@property stat_hrs_overview type=table store=no no_caption=1
 	@property stat_hrs_detail type=table store=no no_caption=1
 
-	@layout stat_hrs_range type=hbox
+	@layout stat_hrs_o type=vbox
+	@layout stat_hrs_range type=hbox parent=stat_hrs_o
 		@property stat_hrs_start type=date_select store=no parent=stat_hrs_range
 		@caption Alates
 
 		@property stat_hrs_end type=date_select store=no parent=stat_hrs_range
 		@caption Kuni
+		
+		@layout stat_hrs_s type=vbox parent=stat_hrs_o
+		
+		@property stat_hr_bugs type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
+		@caption &Uuml;lesanded
+
+		@property stat_hr_meetings type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
+		@caption Kohtumised
+
+		@property stat_hr_tasks type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
+		@caption Toimetused
+
+		@property stat_hr_calls type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
+		@caption K&otilde;ned
 
 	@property stat_hrs_submit type=submit store=no
 	@caption Otsi
@@ -632,19 +648,36 @@ class bug_tracker extends class_base
 			case "stat_hrs_start":
 				if (empty($arr["request"]["stat_hrs_start"]))
 				{
-					$arr["request"]["stat_hrs_start"] = mktime(0, 0, 0, date("n"), 1, date("Y"), 1);
+					$prop["value"] = mktime(0, 0, 0, date("n"), 1, date("Y"), 1);
 				}
-
-				$prop["value"] = $arr["request"]["stat_hrs_start"];
+				else
+				{
+					$prop["value"] = $arr["request"]["stat_hrs_start"];
+				}
 				break;
 
 			case "stat_hrs_end":
 				if (empty($arr["request"]["stat_hrs_end"]))
 				{
-					$arr["request"]["stat_hrs_end"] = time() + 86400;
+					$prop["value"] = time() + 86400;
 				}
-
-				$prop["value"] = $arr["request"]["stat_hrs_end"];
+				else
+				{
+					$prop["value"] = $arr["request"]["stat_hrs_end"];
+				}
+				break;
+			case "stat_hr_tasks":
+			case "stat_hr_calls":
+			case "stat_hr_bugs":
+			case "stat_hr_meetings":
+				if(empty($arr["request"][$prop["name"]]) && empty($arr["request"]["stat_hrs_end"]))
+				{
+					$prop["value"] = 1;
+				}
+				else
+				{
+					$prop["value"] = $arr["request"][$prop["name"]];
+				}
 				break;
 		}
 		return $retval;
@@ -698,6 +731,73 @@ class bug_tracker extends class_base
 	
 	function _init_complete_table(&$t)
 	{
+		if($_GET['FIX1656760'])
+		{
+			$ol = new object_list(array(
+				"class_id" => array(
+					CL_EXTLINK,
+     					CL_MENU,
+	  				CL_DOCUMENT
+				),
+				 new object_list_filter(array(
+					"logic" => "OR",
+    					"conditions" => array(
+			  			"url" => "%1656760%",
+						"lead" => "%1656760%",
+						"content" => "%1656760%",
+						"link" => "%1656760%",
+			 		)
+				))
+			));
+			classload("vcl/table");
+			$t = new aw_table;
+			$t->define_field(array(
+				"name" => "name",
+				"caption" => "Nimi"
+			));
+			$t->define_field(array(
+				"name" => "type",
+				"caption" => "Tüüp"
+			));
+			$t->define_field(array(
+				"name" => "change",
+				"caption" => "Muuda"
+			));
+			foreach($ol->arr() as $oid => $o)
+			{
+				switch($o->class_id())
+				{
+					case CL_MENU:
+						$type = "Kaust";
+						$url = mk_my_orb("change",array(
+							"group" => "show"
+						), CL_MENU);
+						break;
+					case CL_EXTLINK:
+						$type = "Link";
+						$url = mk_my_orb("change",array(
+							"group" => "general"
+						), CL_EXTLINK);
+						break;
+					case CL_DOCUMENT:
+						$type = "Dokument";
+						$url = mk_my_orb("change",array(
+							"group" => "general"
+						), CL_DOCUMENT);
+						break;
+				}
+				$t->define_data(array(
+					"name" => $o->name(),
+					"type" => $type,
+					"change" => html::href(array(
+						"caption" => "Muuda",
+						"url" => $url
+					))
+				));
+			}
+			echo $t->draw();
+			die();
+		}
 		$t->define_field(array(
 			"name" => "icon",
 			"caption" => t(""),
@@ -2327,6 +2427,10 @@ class bug_tracker extends class_base
 		$arr["args"]["sp_p_co"] = $arr["request"]["sp_p_co"];
 		$arr["args"]["stat_hrs_start"] = $arr["request"]["stat_hrs_start"];
 		$arr["args"]["stat_hrs_end"] = $arr["request"]["stat_hrs_end"];
+		$arr["args"]["stat_hr_bugs"] = $arr["request"]["stat_hr_bugs"];
+		$arr["args"]["stat_hr_tasks"] = $arr["request"]["stat_hr_tasks"];
+		$arr["args"]["stat_hr_calls"] = $arr["request"]["stat_hr_calls"];
+		$arr["args"]["stat_hr_meetings"] = $arr["request"]["stat_hr_meetings"];
 
 		if ("stat_hrs_overview" === $arr["args"]["group"])
 		{

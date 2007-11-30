@@ -210,6 +210,15 @@
             <caption>Isiklik</caption>
       </property>
       <property>
+            <name>is_work</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_is_work</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;aeg</caption>
+      </property>
+      <property>
             <name>whole_day</name>
             <table>objects</table>
             <group>general</group>

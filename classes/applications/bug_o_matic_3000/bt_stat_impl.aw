@@ -49,34 +49,80 @@ class bt_stat_impl extends core
 		{
 			$time_constraint = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $req_start, $req_end);
 		}
-
-		$ol = new object_list(array(
-			"class_id" => CL_BUG_COMMENT,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"add_wh" => new obj_predicate_not(0),
-			"created" => $time_constraint
-		));
 		$stat_hrs = array();
-
-		foreach($ol->arr() as $o)
+		if($arr["request"]["stat_hr_bugs"] || !$arr["request"]["stat_hrs_end"])
 		{
-			$stat_hrs[$o->createdby()][] = $o;
+			$ol = new object_list(array(
+				"class_id" => CL_BUG_COMMENT,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"add_wh" => new obj_predicate_not(0),
+				"created" => $time_constraint
+			));
+			
+	
+			foreach($ol->arr() as $o)
+			{
+				$stat_hrs[$o->createdby()][] = $o;
+			}
+		}
+		$types = $this->get_event_types();
+		foreach($types as $type)
+		{
+			if($arr["request"]["stat_hr_".$type["rname"]] || !$arr["request"]["stat_hrs_end"])
+			{
+				$ol = new object_list(array(
+					"class_id" => $type["class_id"],
+					"lang_id" => array(),
+					"site_id" => array(),
+					"is_work" => 1,
+					"start1" => $time_constraint,
+					"brother_of" => new obj_predicate_prop("id")
+				));
+				foreach($ol->arr() as $o)
+				{
+					if(!$o->prop($type["timevar"]))
+					{
+						continue;
+					}
+					$tp = $type["types"];
+					foreach($o->connections_to(array("type" => $tp)) as $co)
+					{
+						$pi = get_instance(CL_CRM_PERSON);
+						$po = obj($co->conn["from"]);
+						$u = $pi->has_user($po);
+						if($p !== false)
+						{
+							$uname = $u->name();
+							$stat_hrs[$uname][] = $o;
+						}
+					}
+				}
+			}
 		}
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stat_hrs_ov_t($t);
-
 		foreach($stat_hrs as $uid => $coms)
 		{
 			$u = get_instance(CL_USER);
 			$p = $u->get_person_for_uid($uid);
-
 			$dmz = array();
 
 			foreach($coms as $com)
 			{
-				$dmz[date("Y", $com->created())]["m".date("m", $com->created())] += $com->prop("add_wh");
+				if($com->class_id() == CL_BUG_COMMENT)
+				{
+					$dmz[date("Y", $com->created())]["m".date("m", $com->created())] += $com->prop("add_wh");
+				}
+				elseif($com->class_id() == CL_TASK)
+				{
+					$dmz[date("Y", $com->prop("start1"))]["m".date("m",$com->prop("start1"))] += $com->prop("num_hrs_real");
+				}
+				elseif($com->class_id() == CL_CRM_MEETING || $com->class_id() == CL_CRM_CALL)
+				{
+					$dmz[date("Y", $com->prop("start1"))]["m".date("m",$com->prop("start1"))] += $com->prop("time_real");
+				}
 			}
 
 			foreach($dmz as $year => $mons)
@@ -116,15 +162,33 @@ class bt_stat_impl extends core
 	function _init_stat_det_t(&$t)
 	{
 		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "bug",
 			"caption" => t("Bugi"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Kuup&auml;ev"),
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y / H:i",
+			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "wh",
 			"caption" => t("Aeg"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1
 		));
+		$t->sort_by();
+		$t->set_default_sortby("time");
 	}
 
 	function _get_stat_hrs_detail($arr)
@@ -138,31 +202,68 @@ class bt_stat_impl extends core
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stat_det_t($t);
 
-		$ol = new object_list(array(
-			"class_id" => CL_BUG_COMMENT,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"created" => new obj_predicate_compare(
-				OBJ_COMP_BETWEEN_INCLUDING,
-				mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"]),
-				mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"])
-			),
-			"createdby" => $arr["request"]["det_uid"]
-		));
+		$fancy_filter = new obj_predicate_compare(
+			OBJ_COMP_BETWEEN_INCLUDING,
+			mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"]),
+			mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"])
+		);
 
-		$bugs = array();
-		foreach($ol->arr() as $com)
+		if($arr["request"]["stat_hr_bugs"] || !$arr["request"]["stat_hrs_end"])
 		{
-			$bugs[$com->parent()] += $com->prop("add_wh");
+			$ol = new object_list(array(
+				"class_id" => CL_BUG_COMMENT,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"created" => $fancy_filter,
+				"createdby" => $arr["request"]["det_uid"]
+			));
+	
+			$bugs = array();
+			foreach($ol->arr() as $com)
+			{
+				$bugs[$com->parent()]["hrs"] += $com->prop("add_wh");
+				if(!$bugs[$com->parent()]["lastdate"] || $bugs[$com->parent()]["lastdate"] > $com->created())
+				$bugs[$com->parent()]["lastdate"] = $com->created();
+			}
+		}
+		$types = $this->get_event_types();
+		
+		$ui = get_instance(CL_USER);
+		$p = $ui->get_person_for_uid($arr["request"]["det_uid"]);
+		foreach($types as $type)
+		{
+			if($arr["request"]["stat_hr_".$type["rname"]] || !$arr["request"]["stat_hrs_end"])
+			{
+				$c = new connection();
+				$list = $c->find(array(
+					"to.class_id" => $type["class_id"],
+					"from.class_id" => CL_CRM_PERSON,
+					"type" => $type["types"],
+					"from" => $p->id()
+				));
+				foreach($list as $item)
+				{
+					$o = obj($item["to"]);
+					if($o->prop("is_work"))
+					{
+						$bugs[$item["to"]]["hrs"] += $o->prop($type["timevar"]);
+						$bugs[$item["to"]]["lastdate"] = $o->modified();
+					}
+				}
+			}
 		}
 
-		foreach($bugs as $bug => $wh)
+		foreach($bugs as $bug => $data)
 		{
-			if ($wh > 0)
+			$o = obj($bug);
+			classload("core/icons");
+			if ($data["hrs"] > 0)
 			{
 				$t->define_data(array(
+					"icon" => html::img(array("url" =>icons::get_icon_url($o->class_id()))),
+					"time" => $data["lastdate"],
 					"bug" => html::obj_change_url($bug),
-					"wh" => $wh
+					"wh" => $data["hrs"]
 				));
 			}
 		}
@@ -175,6 +276,31 @@ class bt_stat_impl extends core
 			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"])),
 			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"]))
 		));
+	}
+
+	function get_event_types()
+	{
+		$types = array(
+			0 => array(
+				"rname" => "tasks",
+				"class_id" => CL_TASK,
+				"timevar" => "num_hrs_real",
+				"types" => array(10,8)
+			),
+			1 => array(
+				"rname" => "calls",
+				"class_id" => CL_CRM_CALL,
+				"timevar" => "time_real",
+				"types" => 9
+			),
+			2 => array(
+				"rname" => "meetings",
+				"class_id" => CL_CRM_MEETING,
+				"timevar" => "time_real",
+				"types" => 8
+			),
+		);
+		return $types;
 	}
 
 	function _init_errs_t(&$t)
