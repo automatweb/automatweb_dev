@@ -565,6 +565,16 @@
             <caption>Vaikimisi seadete haldur</caption>
       </property>
       <property>
+            <name>bug_only_bt_ppl</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>J&amp;amp;auml;lgijateks ainult valitud inimesed</caption>
+      </property>
+      <property>
             <name>reqs_tb</name>
             <table>objects</table>
             <group>reqs</group>

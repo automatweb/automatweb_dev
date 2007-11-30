@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.115 2007/11/28 13:00:44 robert Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.115 2007/11/28 13:00:44 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.116 2007/11/30 10:00:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.116 2007/11/30 10:00:23 kristo Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -211,6 +211,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property default_cfgmanager type=relpicker reltype=RELTYPE_CFGMGR table=objects field=meta method=serialize
 	@caption Vaikimisi seadete haldur
+
+	@property bug_only_bt_ppl type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption J&auml;lgijateks ainult valitud inimesed
 
 @default group=reqs
 

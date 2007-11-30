@@ -579,10 +579,12 @@ class bug extends class_base
 					// find tracker for the bug and get people list from that
 					$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
 					$pt = $po->path();
+					$bt_obj = null;
 					foreach($pt as $pi)
 					{
 						if ($pi->class_id() == CL_BUG_TRACKER)
 						{
+							$bt_obj = $pi;
 							$bt = $pi->instance();
 							foreach($bt->get_people_list($pi) as $pid => $pnm)
 							{
@@ -616,7 +618,7 @@ class bug extends class_base
 					$prop["options"][$r->prop("req_p")] = $r->prop("req_p.name");
 				}
 
-				if ($prop["name"] == "monitors")
+				if ($prop["name"] == "monitors" && (!$bt_obj || !$bt_obj->prop("bug_only_bt_ppl")))
 				{
 					$u = get_instance(CL_USER);
 					$cur = obj($u->get_current_person());
