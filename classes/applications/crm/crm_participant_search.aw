@@ -55,6 +55,49 @@ class crm_participant_search extends popup_search
 			"orient" => "vertical",
 			"options" => $opts
 		));
+		if($arr["s"]["show_vals"])
+		{
+			$tmp = $arr["s"]["show_vals"];
+			if($tmp["my_cust"])
+			{
+				$my_cust = 1;
+				unset($tmp["my_cust"]);
+			}
+			if($tmp["imp"])
+			{
+				$imp = 1;
+				unset($tmp["imp"]);
+			}
+			if(count($tmp))
+			{
+				$cos = array();
+				foreach($tmp as $co)
+				{
+					$o = obj($co);
+					$cos[] = $o->name();
+				}
+			}
+			$text = array();
+			if(count($cos))
+			{
+				$text[] = implode(' või ', $cos)." töötajaid";
+			}
+			if($my_cust)
+			{
+				$text[] = "minu kliente";
+			}
+			if($imp)
+			{
+				$text[] = "olulisi";
+			}
+			$text = "Otsitakse ".implode(' ja ', $text);
+			$htmlc->add_property(array(
+				"name" => "info",
+				"type" => "text",
+				"caption" => t("Info"),
+				"value" => $text
+			));
+		}
 	}
 
 	function _process_reforb_args(&$data)
@@ -180,7 +223,7 @@ class crm_participant_search extends popup_search
 						}
 						else
 						{
-							$filter["oid"] = array_intersect($filter["oid"], $tmp);
+							$filter["oid"] = array_merge($filter["oid"], $tmp);
 						}
 					}
 				}
