@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.214 2007/11/27 14:06:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.215 2007/11/30 14:36:34 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2502,7 +2502,7 @@ class room extends class_base
 		}
 		$start_hour = 24;
 		$start_minute = 60;
-		/*foreach($this->openhours as $oh)
+		foreach($this->openhours as $oh)
 		{
 			if ($oh->prop("date_from") > 100 && $oh->prop("date_from") > $end)
 			{
@@ -2514,10 +2514,10 @@ class room extends class_base
 			}
 			$opens = $this->open_inst->get_opening_time($oh);
 			$start_hour = min($opens["hour"], $start_hour);
-			$start_minute = max($opens["minute"], $start_minute);
-		}*/
-		$opens = $this->open_inst->get_opening_time(reset($this->openhours));
-		return array("start_hour" => $opens["hour"] /*$start_hour*/, "start_minute" => $opens["minute"]/*$start_minute*/);
+			$start_minute = min($opens["minute"], $start_minute);
+		}
+//		$opens = $this->open_inst->get_opening_time(reset($this->openhours));
+		return array("start_hour" => /*$opens["hour"]*/ $start_hour, "start_minute" => /*$opens["minute"]*/$start_minute);
 	}
 
 	function is_paused($start, $end)
