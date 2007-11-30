@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.214 2007/11/27 18:09:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.215 2007/11/30 09:39:07 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -2198,10 +2198,9 @@ class image extends class_base
 		$from = obj($arr["doc_id"]);
 		$from->connect(array("to" => $arr["img_id"]));
 
-		$out = $arr["close"]?$close:$c->id();
 		if (!$arr["no_die"])
 		{
-			die($out);
+			die($arr["img_id"]);
 		}
 	}
 
