@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.386 2007/11/28 21:20:20 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.387 2007/11/30 01:59:01 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3491,7 +3491,7 @@ if (is_object($docobj))
 		}
 		else if ($i_time_from_created_to_current_time < 60*60)
 		{
-			$i_minutes = document::floor_to_int($i_time_from_created_to_current_time / 60);
+			$i_minutes = floor($i_time_from_created_to_current_time / 60);
 			if ($i_minutes == 1)
 			{
 				return t(sprintf("%s minut tagasi",$i_minutes));
@@ -3503,7 +3503,7 @@ if (is_object($docobj))
 		}
 		else if ($i_time_from_created_to_current_time < 60*60*24)
 		{
-			$i_hours = document::floor_to_int($i_time_from_created_to_current_time / 60 / 60);
+			$i_hours = floor($i_time_from_created_to_current_time / 60 / 60);
 			if ($i_hours == 1)
 			{
 				return t(sprintf("%s tund tagasi",$i_hours));
@@ -3515,7 +3515,7 @@ if (is_object($docobj))
 		}
 		else if ($i_time_from_created_to_current_time < 60*60*24*31)
 		{
-			$i_days = document::floor_to_int($i_time_from_created_to_current_time / 60 / 60 / 24);
+			$i_days = floor($i_time_from_created_to_current_time / 60 / 60 / 24);
 			if ($i_days == 1)
 			{
 				return t(sprintf("%s p&auml;ev tagasi",$i_days));
@@ -3535,24 +3535,5 @@ if (is_object($docobj))
 		}
 	}
 	
-	function floor_to_int($float)
-	{
-		$i=0;
-		$i_tmp = $float;
-		while (true)
-		{
-			$i++;
-			$i_tmp = floor($i_tmp);
-			if ($i_tmp != $float)
-			{
-				$float = $i_tmp;
-			}
-			else
-			{
-				return $float;
-			}
-		}
-		
-	}
 };
 ?>
