@@ -1,0 +1,20 @@
+--- const.aw_apache1	2007-11-30 14:01:51.194566539 +0200
++++ const.aw	2007-11-30 14:02:21.425207956 +0200
+@@ -57,7 +57,7 @@
+ }
+ 
+ 
+-if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
++if (false && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
+ {
+ 	// apache 2 fix
+ 	$QUERY_STRING = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $QUERY_STRING))));
+@@ -74,7 +74,7 @@
+ };
+ 
+ $_SERVER["REQUEST_URI"] = isset($_SERVER['REQUEST_URI']) ? preg_replace("/\?automatweb=[^&]*/","", $_SERVER["REQUEST_URI"]) : "";
+-if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
++if (false && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
+ {
+ 	if ($_SERVER["REQUEST_URI"] != "")
+ 	{
