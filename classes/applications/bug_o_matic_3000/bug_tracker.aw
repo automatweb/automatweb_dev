@@ -1,7 +1,7 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.117 2007/11/30 10:39:57 robert Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.117 2007/11/30 10:39:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.118 2007/11/30 11:15:46 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.118 2007/11/30 11:15:46 robert Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -2175,8 +2175,17 @@ class bug_tracker extends class_base
 				$filt = array(
 					"parent" => $pt,
 					"class_id" => array(CL_BUG,CL_MENU),
-					"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
 				);
+				$closed = 0;
+				foreach($arr["request"] as $r)
+				{
+					if($r == "1,6,Suletud")
+						$closed = 1;
+				}
+				if(!$closed)
+				{
+					$filt["bug_status"] = new obj_predicate_not(BUG_STATUS_CLOSED);
+				}
 
 				if(strlen($arr["request"]["p_id"]))
 				{
