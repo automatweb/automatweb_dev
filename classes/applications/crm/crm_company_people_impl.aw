@@ -612,7 +612,7 @@ class crm_company_people_impl extends class_base
 	{
 		if(!($arr['request']['contact_search'] && $arr['request']['contacts_search_show_results']))
 		{
-			return IGNORE_PROP;
+			return PROP_IGNORE;
 		}
 
 		$t = &$arr["prop"]["vcl_inst"];
