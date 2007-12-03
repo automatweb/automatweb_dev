@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.70 2007/11/20 14:03:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.71 2007/12/03 17:23:12 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -5062,21 +5062,28 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		aw_set_exec_time(AW_LONG_PROCESS);	
 
 		// lets convert this stuff to direct sql	
+/*
 		$sql_params = "
 			objects.status > 0 AND
+			objects.site_id = ".aw_ini_get('site_id')." AND
+			objects.lang_id = ".aw_global_get('lang_id')."
+		";
+*/
+		$sql_params = "
 			objects.site_id = ".aw_ini_get('site_id')." AND
 			objects.lang_id = ".aw_global_get('lang_id')."
 		";
 		if (!empty($prods))
 		{
 			$product_codes_str = implode(',', map("'%s'", $prods ));
-			$sql_params .= " AND user20 IN ($product_codes_str)";
+		//	$sql_params .= " AND user20 IN ($product_codes_str)";
 		}
 		if (!empty($page_pattern))
 		{
-			$sql_params .= " AND user18 LIKE '$page_pattern'";
+		//	$sql_params .= " AND user18 LIKE '$page_pattern'";
 		}
 		
+/*
 		$this->db_query("
 			select 
 				*
@@ -5086,8 +5093,23 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			where
 				$sql_params 
 		");
+*/
+		$sql = "
+			select 
+				otto_prod_to_code_lut.product_code as product_code,
+				otto_prod_to_code_lut.product_id as product_id,
+				objects.name as product_name,
+				aw_shop_products.user4 as connected_products
+			from 
+				otto_prod_to_code_lut 
+				left join objects on objects.brother_of = otto_prod_to_code_lut.product_id
+				left join aw_shop_products on objects.brother_of = aw_shop_products.aw_oid
+			where 
+				otto_prod_to_code_lut.product_code in ($product_codes_str) AND
+				$sql_params
 
-	
+		";
+		$this->db_query($sql);
 		echo "Leidsin tooted: <br />\n";
 		flush();
 		$found_any_products = false;
@@ -5095,8 +5117,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		while ($row = $this->db_next())
 		{
 			$found_any_products = true;
-			$product_ids[$row['oid']] = $row['oid'];
-			echo $row['oid']." -- ".$row['name']." -- ".$row['user20']."<br />\n";
+			$product_ids[$row['product_id']] = $row['product_id'];
+			echo $row['product_id']." -- ".$row['product_name']."<br />\n";
 			flush();
 		}
 
@@ -5107,7 +5129,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			arr($page_pattern);
 			return;
 		}
-		
+
 		$product_ids_str = implode(',', $product_ids);
 		$this->db_query("
 			select
@@ -5123,7 +5145,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			$packaging_ids[$row['target']] = $row['target'];
 		}
 		$packaging_ids_str = implode(',', $packaging_ids);
-
+	/*
+	// no packets anymore --dragut 03.12.2007 
 		// now i will find the packets too
 		$this->db_query("
 			select
@@ -5140,8 +5163,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		{
 			$packet_ids[$row['id']] = $row['id'];	
 		}
-		
-
+	*/	
 		/**
 			DELETING
 				-- products (colors)
@@ -5152,6 +5174,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			$this->db_query("delete from objects where oid in ($product_ids_str)");
 			$this->db_query("delete from aw_shop_products where aw_oid in ($product_ids_str)");
 			$this->db_query("delete from aliases where source in ($product_ids_str)");
+			$this->db_query("delete from otto_prod_to_code_lut where product_id in ($product_ids_str)");
 			echo "Kustutasin <strong>".count($product_ids)."</strong> toodet (v&auml;rvid)<br />\n";
 		}
 		if (!empty($packaging_ids_str))
@@ -5166,6 +5189,8 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		/**
 			PACKETS SCANNING:
 		**/
+/*
+// no packets scanning is required anymore
 		$packets_to_del = array();
 		foreach (safe_array($packet_ids) as $packet_id)
 		{
@@ -5198,6 +5223,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			echo "Kustutasin <strong>".count($packets_to_del_str)."</strong> paketti (tooteid (v&auml;rve) koondav obj)<br />\n";
 	
 		}
+*/
 		flush();
 
 		echo "valmis! <br>";
