@@ -1200,7 +1200,7 @@ class core extends acl_base
 		{
 			$this->raise_error(ERR_CORE_NOFILE,LC_CORE_GET_FILE_NO_NAME,true);
 		}
-		else if (parse_url($arr["file"], PHP_URL_SCHEME) == "http")
+		else if (strpos($arr["file"], "http") === 0)
 		{
 			$url_parsed = parse_url($arr["file"]);
 		    $host = $url_parsed["host"];
