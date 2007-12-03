@@ -1185,7 +1185,7 @@ class core extends acl_base
 		@attrib api=1
 
 		@param file required type=string
-			The full path of the file whose contents must be returned.
+			The full path of the file whose contents must be returned. Can be http or local.
 
 		@errors
 			none
@@ -1199,25 +1199,64 @@ class core extends acl_base
 		if (!$arr["file"])
 		{
 			$this->raise_error(ERR_CORE_NOFILE,LC_CORE_GET_FILE_NO_NAME,true);
-		};
-		if ( not(is_file($arr["file"])) || not(is_readable($arr["file"])) )
-		{
-			$retval = false;
 		}
-		else
-		if (!($fh = @fopen($arr["file"],"r")))
+		else if (parse_url($arr["file"], PHP_URL_SCHEME) == "http")
 		{
-			$retval = false;
-			#$this->raise_error("Couldn't open file '$arr[file]'",true);
-		}
-		else
-		{
-			if (($fs = filesize($arr["file"])) > 0)
+			$url_parsed = parse_url($arr["file"]);
+		    $host = $url_parsed["host"];
+		    $port = $url_parsed["port"];
+		    if ($port==0)
 			{
-				$retval = fread($fh,$fs); // SLURP
+		        $port = 80;
 			}
-			fclose($fh);
-		};
+		    $path = $url_parsed["path"];
+		    if ($url_parsed["query"] != "")
+			{
+		        $path .= "?".$url_parsed["query"];
+			}
+			
+		    $out = "GET $path HTTP/1.0\r\nHost: $host\r\n\r\n";
+			
+		    $fp = fsockopen($host, $port, $errno, $errstr, 30);
+			
+		    fwrite($fp, $out);
+		    $body = false;
+		    while (!feof($fp))
+			{
+		        $s = fgets($fp, 1024);
+		        if ( $body )
+				{
+		            $retval .= $s;
+				}
+		        if ( $s == "\r\n" )
+				{
+		            $body = true;
+				}
+		    }
+			
+		    fclose($fp);
+		}
+		else
+		{
+			if ( not(is_file($arr["file"])) || not(is_readable($arr["file"])) )
+			{
+				$retval = false;
+			}
+			else
+			if (!($fh = @fopen($arr["file"],"r")))
+			{
+				$retval = false;
+				#$this->raise_error("Couldn't open file '$arr[file]'",true);
+			}
+			else
+			{
+				if (($fs = filesize($arr["file"])) > 0)
+				{
+					$retval = fread($fh,$fs); // SLURP
+				}
+				fclose($fh);
+			};
+		}
 		return $retval;
 	}
 
