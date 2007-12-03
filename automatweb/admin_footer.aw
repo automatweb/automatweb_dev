@@ -253,11 +253,12 @@ if ($sf->is_template("aw_styles"))
 //else
 //{
 $str= $sf->parse();
+classload("core");
 if ($_SESSION["last_cache_clear"] < (time() - 3600))
 {
 	$str .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&action=cache_update' alt='' height='1' width='1'>";
 	$_SESSION["last_cache_clear"] = time();
-	file_get_contents(aw_ini_get("baseurl")."/orb.aw?class=scheduler&action=static_sched");
+	core::get_file(array ("file"=>aw_ini_get("baseurl")."/orb.aw?class=scheduler&action=static_sched"));
 }
 //};
 
@@ -379,7 +380,7 @@ function compress_header($str)
 		{
 			for ($i=0;$i<count($matches[1]);$i++)
 			{
-				$s_js_contents .= file_get_contents($matches[1][$i]);
+				$s_js_contents .= core::get_file(array("file"=>$matches[1][$i]));
 			}
 		}
 		
@@ -387,7 +388,7 @@ function compress_header($str)
 		{
 			for ($i=0;$i<count($matches[1]);$i++)
 			{
-				$s_css_contents .= file_get_contents($matches[1][$i]);
+				$s_css_contents .= core::get_file(array ("file" => $matches[1][$i]));
 			}
 		}
 		
