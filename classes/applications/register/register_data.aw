@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.45 2007/10/30 11:42:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.46 2007/12/04 13:03:39 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -430,6 +430,66 @@
 
 @property user50 type=textbox
 @caption User-defined 50
+
+@property user51 type=textbox
+@caption User-defined 51
+
+@property user52 type=textbox
+@caption User-defined 52
+
+@property user53 type=textbox
+@caption User-defined 53
+
+@property user54 type=textbox
+@caption User-defined 54
+
+@property user55 type=textbox
+@caption User-defined 55
+
+@property user56 type=textbox
+@caption User-defined 56
+
+@property user57 type=textbox
+@caption User-defined 57
+
+@property user58 type=textbox
+@caption User-defined 58
+
+@property user59 type=textbox
+@caption User-defined 59
+
+@property user60 type=textbox
+@caption User-defined 60
+
+@property user61 type=textbox
+@caption User-defined 61
+
+@property user62 type=textbox
+@caption User-defined 62
+
+@property user63 type=textbox
+@caption User-defined 63
+
+@property user64 type=textbox
+@caption User-defined 64
+
+@property user65 type=textbox
+@caption User-defined 65
+
+@property user66 type=textbox
+@caption User-defined 66
+
+@property user67 type=textbox
+@caption User-defined 67
+
+@property user68 type=textbox
+@caption User-defined 68
+
+@property user69 type=textbox
+@caption User-defined 69
+
+@property user70 type=textbox
+@caption User-defined 70
 
 ---------------- textarea ----------------
 

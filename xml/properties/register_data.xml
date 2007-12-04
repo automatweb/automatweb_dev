@@ -1084,6 +1084,186 @@
             <caption>User-defined 50</caption>
       </property>
       <property>
+            <name>user51</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 51</caption>
+      </property>
+      <property>
+            <name>user52</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 52</caption>
+      </property>
+      <property>
+            <name>user53</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 53</caption>
+      </property>
+      <property>
+            <name>user54</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 54</caption>
+      </property>
+      <property>
+            <name>user55</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 55</caption>
+      </property>
+      <property>
+            <name>user56</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 56</caption>
+      </property>
+      <property>
+            <name>user57</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 57</caption>
+      </property>
+      <property>
+            <name>user58</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 58</caption>
+      </property>
+      <property>
+            <name>user59</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 59</caption>
+      </property>
+      <property>
+            <name>user60</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 60</caption>
+      </property>
+      <property>
+            <name>user61</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 61</caption>
+      </property>
+      <property>
+            <name>user62</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 62</caption>
+      </property>
+      <property>
+            <name>user63</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 63</caption>
+      </property>
+      <property>
+            <name>user64</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 64</caption>
+      </property>
+      <property>
+            <name>user65</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 65</caption>
+      </property>
+      <property>
+            <name>user66</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 66</caption>
+      </property>
+      <property>
+            <name>user67</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 67</caption>
+      </property>
+      <property>
+            <name>user68</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 68</caption>
+      </property>
+      <property>
+            <name>user69</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 69</caption>
+      </property>
+      <property>
+            <name>user70</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 70</caption>
+      </property>
+      <property>
             <name>userta11</name>
             <group>textareas</group>
             <table>objects</table>

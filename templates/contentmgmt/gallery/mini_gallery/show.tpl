@@ -22,8 +22,7 @@ Vali lehek&uuml;lg:
 
 <!-- END SUB: PAGESELECTOR -->
 
-
-<table border="0" cellpadding="0" cellspacing="10" >
+<table border="0" cellpadding="0" cellspacing="10" width="100%" >
 <!-- SUB: ROW -->
 	<tr>
 		<!-- SUB: COL -->

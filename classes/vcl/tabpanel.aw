@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.21 2007/06/05 09:41:36 kristo Exp $
+// $Id: tabpanel.aw,v 1.22 2007/12/04 13:03:48 kristo Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -258,10 +258,10 @@ class tabpanel extends aw_template
 					$prefix = substr($level,0,strpos($level,"_") + 1);
 					$lnr = substr($level,$px);
 				};
-				$this->vars(array(
+				$this->vars_safe(array(
 					$prefix . "tab_L" . $lnr  => $this->tabs[$level],
 				));
-				$this->vars(array(
+				$this->vars_safe(array(
 					$prefix . "tabs_L" . $lnr => $this->parse($prefix . "tabs_L" . $lnr),
 				));
 
@@ -284,7 +284,7 @@ class tabpanel extends aw_template
 
 		// how do I return different subtemplates?
 
-		$this->vars(array(
+		$this->vars_safe(array(
 			//"tabs" => $tabs,
 			"toolbar" => $toolbar,
 //                        "toolbar2" => $toolbar2,

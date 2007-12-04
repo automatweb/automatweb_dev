@@ -614,6 +614,7 @@ function classload($args)
 		}
 		else
 		{
+			classload("core/error");
 			error::raise(array(
 				"id" => "ERR_NO_CLASS",
 				"msg" => sprintf(t("classload(): class %s not found!"), $lib)

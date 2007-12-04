@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.252 2007/11/29 17:00:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.253 2007/12/04 13:03:42 kristo Exp $
 
 /*
 
@@ -539,7 +539,6 @@ class site_show extends class_base
 		{
 			$obj = $obj->get_original();
 		}
-
 		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
 		if ($obj->class_id() != CL_PROMO && ($obj->meta("has_kwd_rels") || !empty($_GET["set_kw"])))
 		{

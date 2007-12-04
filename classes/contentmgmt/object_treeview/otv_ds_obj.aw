@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.61 2007/11/19 08:49:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.62 2007/12/04 13:03:44 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -489,7 +489,7 @@ class otv_ds_obj extends class_base
 						"parent" => $c->prop("to"),
 						"lang_id" => array(),
 						"site_id" => array(),
-						"class_id" => CL_MENU
+						//"class_id" => CL_MENU
 					));
 					foreach($ot->ids() as $p_id)
 					{

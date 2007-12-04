@@ -2606,20 +2606,22 @@ class webform extends class_base
 					}
 					break;
 				case 'classificator':
-					if ($this->can('view', $form_data['value']))
+					$vars[$name] = '';
+					if ($this->can('view', $form_data[$name]))
 					{
-						$classificator_obj = obj($form_data['value']);
+						$classificator_obj = obj($form_data[$name]);
 						$vars[$name] = $classificator_obj->name();
 					}
 					break;
 				case 'text':
 					$vars[$name] = $prop_data['value'];
 					break;
+				case 'textarea':
+					$vars[$name] = nl2br($form_data[$name]);
+					break;
 				default:
 					$vars[$name] = $form_data[$name];
-
 			}
-
 			$vars[$name.'_caption'] = $prop_data['caption'];
 		}
 		$vars['reforb'] = $this->mk_reforb('save_form_data', array(

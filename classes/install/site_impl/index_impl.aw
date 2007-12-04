@@ -5,7 +5,6 @@ if (empty($class) && !empty($alias))
 	//$class = $alias;
 }
 */
-
 // nii, kuidas ma saan selle asja tööle niimoodi et klass ka vormi sees töötaks?
 // võti on selles alias argumendis ... mille tõttu ma dokumendist välja satun.
 // mille tõttu kutsutakse välja orb_impl_exec ja mitte site_header

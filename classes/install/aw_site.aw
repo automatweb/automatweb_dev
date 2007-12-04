@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.50 2007/11/28 07:28:30 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.51 2007/12/04 13:03:47 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -785,8 +785,8 @@ class aw_site extends class_base
 
 	function create_site_name($site, &$ini_opts, &$log)
 	{
-		//echo "Muudan nimeserveri konfiguratsiooni...<br />\n";
-		//flush();
+		echo "Muudan nimeserveri konfiguratsiooni...<br />\n";
+		flush();
 
 		$mgr_server = $this->get_dns_manager_for_url($site["url"]);
 		//echo "mgr_server = $mgr_server <br />";
@@ -807,7 +807,7 @@ class aw_site extends class_base
 		$ini_opts["baseurl"] = "http://".$site['url'];
 		$ini_opts["stitle"] = $site['url'];
 		$log->add_line(array(
-			"uid" => "System",
+		"uid" => "System",
 			"msg" => t("Konfigureeris nimeserveri"),
 			"comment" => aw_ini_get("install.default_ip"),
 			"result" => t("OK")
@@ -816,6 +816,8 @@ class aw_site extends class_base
 
 	function create_site_database($site, &$ini_opts, &$log)
 	{
+echo "create db <br>\n";
+flush();
 		if ($site['site_obj']['use_existing_database'])
 		{
 			//echo "reading database access data from the existing site<br />\n";
@@ -843,9 +845,9 @@ class aw_site extends class_base
 		}
 		else
 		{
-			//echo "Loon andmebaasi...<br />\n";
+			echo "Loon andmebaasi...<br />\n";
 			flush();
-			//echo "creating database .. <br />";
+			echo "creating database .. <br />";
 			$dbi = get_instance("class_base");
 			$dbi->db_connect(array(
 				'driver' => 'mysql',
@@ -857,7 +859,7 @@ class aw_site extends class_base
 
 			// create database
 			$q = "CREATE DATABASE $site[db_name]";
-			//echo "exec $q <br />";
+			echo "exec $q <br />";
 			$dbi->db_query($q);
 
 			// grant permission
@@ -867,7 +869,7 @@ class aw_site extends class_base
 					TO $site[db_user]@".aw_ini_get("install.mysql_client")."
 					IDENTIFIED BY '$site[db_pwd]'
 			";
-			//echo "exec $q <br />";
+			echo "exec $q <br />";
 			$dbi->db_query($q);
 
 			$ini_opts['db.user'] = $site['db_user'];
@@ -882,6 +884,8 @@ class aw_site extends class_base
 				"result" => t("OK")
 			));
 		}
+echo "db done <br>\n";
+flush();
 	}
 
 
@@ -959,7 +963,8 @@ class aw_site extends class_base
 		{
 			// check if the database exists
 			$dbi = get_instance("class_base");
-			$dbi->db_connect(array(
+	//die(aw_ini_get('install.mysql_user'));		
+$dbi->db_connect(array(
 				'driver' => 'mysql',
 				'server' => aw_ini_get('install.mysql_host'),
 				'base' => 'mysql',
@@ -967,7 +972,6 @@ class aw_site extends class_base
 				'password' => aw_ini_get('install.mysql_pass')
 			));
 			$dbi->db_list_databases();
-
 			$found = false;
 			while ($db = $dbi->db_next_database())
 			{
@@ -1158,7 +1162,8 @@ class aw_site extends class_base
 			"method" => "xmlrpc",
 			"server" => "register.automatweb.com"
 		));
-		//echo "got server_id = $server_id <br />";
+		echo "got server_id = $server_id <br />\n";
+		flush();
 
 		$site_id = $this->do_orb_method_call(array(
 			"class" => "site_list",
@@ -1174,7 +1179,7 @@ class aw_site extends class_base
 			"method" => "xmlrpc",
 			"server" => "register.automatweb.com"
 		));
-		//echo "got site id $site_id <br />";
+		echo "got site id $site_id <br />";
 		$ini_opts["site_id"] = $site_id;
 		$log->add_line(array(
 			"uid" => aw_global_get("uid"),

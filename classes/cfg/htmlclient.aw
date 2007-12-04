@@ -842,10 +842,10 @@ class htmlclient extends aw_template
 			$bm_h = get_instance("vcl/popup_menu");
 			$bm_h->begin_menu("history_pop");
 
-			$tp->vars(array(
+			$tp->vars_safe(array(
 				"warn" => $this->config["warn"],
 			));
-			$tp->vars(array(
+			$tp->vars_safe(array(
 				"help" => $this->vars["help"],
 				"help_url" => $this->config["help_url"],
 				"translate_url" => $this->config["translate_url"],
@@ -884,19 +884,19 @@ class htmlclient extends aw_template
 
 			if ($this->prog_acl("view", "can_search"))
 			{
-				$tp->vars(array(
+				$tp->vars_safe(array(
 					"HAS_SEARCH" => $tp->parse("HAS_SEARCH")
 				));
 			}
 			if (empty($_GET["in_popup"]))
 			{
-				$tp->vars(array(
+				$tp->vars_safe(array(
 					"NOT_POPUP" => $tp->parse("NOT_POPUP")
 				));
 			}
 			if (aw_ini_get("site_id") == 155)
 			{
-				$tp->vars(array(
+				$tp->vars_safe(array(
 					"NEWIF" => $tp->parse("NEWIF"),
 				));
 			}
@@ -966,7 +966,7 @@ class htmlclient extends aw_template
 		if ($this->form_layout == "boxed")
 		{
 			$this->read_template("boxed.tpl");
-			$this->vars(array(
+			$this->vars_safe(array(
 				"top_content" => $this->additional_content["top"],
 				"left_content" => $this->additional_content["left"],
 				"right_content" => $this->additional_content["right"],

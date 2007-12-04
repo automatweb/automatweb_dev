@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.7 2007/11/27 18:14:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.8 2007/12/04 13:03:36 kristo Exp $
 // bugtrack_display.aw - Ülesannete kuvamine 
 /*
 
@@ -269,6 +269,9 @@ class bugtrack_display extends class_base
 
 		$cur = get_current_person();
 		$cur_u = get_current_user();
+	
+			
+
 		$ol = new object_list(array(
 			"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
 			new object_list_filter(array(
@@ -281,7 +284,7 @@ class bugtrack_display extends class_base
 					"createdby" => $cur_u
 				)
 			)),
-			"orderer_unit" => $arr["request"]["sect_filter"] ? $arr["request"]["sect_filter"] : array()
+			"orderer_unit" => $arr["request"]["_sect_filter"] ? $arr["request"]["_sect_filter"] : array()
 		));
 		$this->_insert_data_to_table_from_settings($data, $t, $ol, $arr);
 		
@@ -590,40 +593,75 @@ class bugtrack_display extends class_base
 		$data = $arr["obj_inst"]->meta("task_settings");
 		$this->_define_table_from_settings($data, $t);
 
-		$cur = get_current_person();
+		$cur_p = get_current_person();
+		$cur = array($cur_p->id() => $cur_p->id());
+
+		// list all ppl on the same level as me and if I have highest pri, then I get to see lots more
+		foreach(safe_array($cur_p->prop("org_section")) as $sect_id)
+		{
+			if (!$this->can("view", $sect_id))
+			{
+				continue;
+			}
+			$my_sect = obj($sect_id);
+			$hi = null;
+			foreach($my_sect->connections_from(array("type" => "RELTYPE_PROFESSIONS")) as $c)
+			{
+				$prof = $c->to();
+				if ($hi == null || $prof->prop("jrk") > $hi->prop("jrk"))
+				{
+					$hi = $prof;
+				}
+			}
+			if ($hi && $hi->id() == $cur_p->prop("rank"))
+			{
+				// I'm the boss in this section, show all ppl from it
+				$co_i = get_instance(CL_CRM_COMPANY);
+				foreach($co_i->get_employee_picker($my_sect) as $_id => $nm)
+				{
+					$cur[$_id] = $_id;
+				}
+			}
+		}
+
+		if ($this->can("view", $arr["request"]["_sect_filter"]) && count($cur))
+		{
+			$cur = array();
+			$co_i = get_instance(CL_CRM_COMPANY);
+			foreach($co_i->get_employee_picker(obj($arr["request"]["_sect_filter"])) as $_id => $nm)
+			{
+				$cur[$_id] = $_id;
+			}
+		}
+
 		$ol = new object_list(array(
 			"class_id" => array(CL_DEVELOPMENT_ORDER),
 			"bug_status" => 1,
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					"who" => $cur,
+					"contactperson" => $cur,
 					"monitors" => $cur,
 					"orderer" => $cur,
 					"bug_feedback_p" => $cur
 				)
 			)),
-			"orderer_unit" => $arr["request"]["sect_filter"] ? $arr["request"]["sect_filter"] : array()
 		));
-
 		$this->_insert_data_to_table_from_settings($data, $t, $ol, $arr);
 	}
 
 	function _get_table_filter($arr)
 	{
 		$p = get_current_person();
-		$sect = $p->prop("org_section");
-		if (is_array($sect))
+		$sects = array(aw_url_change_var("_sect_filter", null, get_ru()) => t("K&otilde;ik"));
+		foreach(safe_array($p->prop("org_section")) as $sect_id)
 		{
-			$sect = reset($sect);
+			if (!$this->can("view", $sect_id))
+			{
+				continue;
+			}
+			$this->_recur_sect_list($sects, obj($sect_id));
 		}
-		if (!$this->can("view", $sect))
-		{
-			return PROP_IGNORE;
-		}
-		$so = obj($sect);
-		$sects = array(aw_url_change_var("sect_filter", null, get_ru()) => t("K&otilde;ik"));
-		$this->_recur_sect_list($sects, $so);
 
 		$arr["prop"]["options"] = $sects;
 		$arr["prop"]["value"] = get_ru();
@@ -635,7 +673,7 @@ class bugtrack_display extends class_base
 		$this->_sect_level++;
 		foreach($section->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
 		{
-			$data[aw_url_change_var("sect_filter", $c->prop("to"), get_ru())] = str_repeat("&nbsp;", ($this->_sect_level) * 4).$c->prop("to.name");
+			$data[aw_url_change_var("_sect_filter", $c->prop("to"), get_ru())] = str_repeat("&nbsp;", ($this->_sect_level) * 4).$c->prop("to.name");
 			$this->_recur_sect_list($data, $c->to());
 		}
 		$this->_sect_level--;

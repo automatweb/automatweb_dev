@@ -150,6 +150,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 
 
+	@property submit type=submit store=no no_caption=1
+	@caption Salvesta
+
 @default group=cust
 
 	@property team type=relpicker reltype=RELTYPE_TEAM field=aw_team
@@ -1519,6 +1522,46 @@ class bug extends class_base
 
 	function callback_pre_save($arr)
 	{
+                                        $po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["i
+d"]);
+if (!is_oid($po->id()))
+{
+	return;
+}
+                                        $pt = $po->path();
+                                        foreach($pt as $pi)
+                                        {
+                                                if ($pi->class_id() == CL_BUG_TRACKER)
+                                                {
+                                                        $bt = $pi;
+                                                }
+                                        }
+                                        if($bt)
+                                        {
+                                                $conn = $bt->connections_to(array(
+                                                        "from.class_id" => CL_BUGTRACK_DISPLAY,
+                                                        "type" => "RELTYPE_BUGTRACK"
+                                                ));
+                                                foreach($conn as $c)
+                                                {
+                                                        $bt_display = obj($c->prop("from"));
+                                                }
+                                        }
+                                        if($arr["request"]["bug_type"] && $bt_display)
+                                        {
+                                                $user = $bt_display->meta("type".$arr["request"]["bug_type"]);
+                                                if($user)
+                                                {
+                                                        $arr["obj_inst"]->set_prop("who", $user);
+                                                        $this->who_set = 1;
+                                                        $err = 0;
+                                                }
+                                                else
+                                                {
+                                                        $err = 1;
+                                                }
+                                        }
+//die(dbg::dump($arr["obj_inst"]->prop("who")));
 	}
 
 	function callback_post_save($arr)
@@ -2083,7 +2126,7 @@ class bug extends class_base
 			$arr["prop"]["options"] = array("" => t("--vali--"));
 		}
 
-		if (!isset($arr["prop"]["options"][$arr["prop"]["value"]]))
+		if (!isset($arr["prop"]["options"][$arr["prop"]["value"]]) && $this->can("view", $arr["prop"]["value"]))
 		{
 			$tmp = obj($arr["prop"]["value"]);
 			$arr["prop"]["options"][$arr["prop"]["value"]] = $tmp->name();

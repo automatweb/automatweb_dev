@@ -726,7 +726,7 @@ class sys extends aw_template
 		for($i = 0; $i < 30; $i++)
 		{
 			$date = mktime(0,0,0, date("m"), date("d")-$i, date("Y"));
-			$fn = aw_ini_get("basedir")."/files/logs/".date("Y-m-d", $date).".log";
+			$fn = "/www/automatweb_new/files/logs/".date("Y-m-d", $date).".log";
 			if (!file_exists($fn))
 			{
 				continue;

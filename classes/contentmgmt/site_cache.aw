@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.44 2007/11/21 13:05:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.45 2007/12/04 13:03:42 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -356,6 +356,10 @@ class site_cache extends aw_template
 		if ($arr["force_sect"])
 		{
 			$so = obj($arr["force_sect"]);
+		}
+		if (!$this->can("view", aw_global_get("section")))
+		{
+			return;
 		}
 		else
 		{

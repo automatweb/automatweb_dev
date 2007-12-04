@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.9 2007/05/16 14:02:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.10 2007/12/04 13:03:45 kristo Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 
@@ -50,7 +50,6 @@ class auth_server_local extends class_base
 
 		$udata = NULL;
 		$_uid = $credentials["uid"];
-
 		if (!is_valid("password",$credentials["password"]))
 		{
 			return array(false, t("Vigane v&otilde;i vale parool"));

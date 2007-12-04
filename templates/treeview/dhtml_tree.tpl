@@ -15,7 +15,7 @@ from_click = false;
 function generic_loader()
 {
 	// on page load
-	if(window.onload && load_auto && level < open_nodes.length)
+	if(/*window.onload &&*/ load_auto && level < open_nodes.length)
 	{
 		load_tree_state();
 	}

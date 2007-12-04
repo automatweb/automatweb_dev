@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.14 2007/11/28 07:27:30 hannes Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.15 2007/12/04 13:03:38 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -500,7 +500,6 @@ die(dbg::dump($data));
 				));
 			}
 		}
-
 		return $this->finish_with_style($op);
 	}
 

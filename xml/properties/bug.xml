@@ -379,6 +379,16 @@
             <field>bug_mail</field>
             <caption>Bugmail CC</caption>
       </property>
+	<property>
+		<name>submit</name>
+		<group>general</group>
+		<table>objects</table>
+		<field>meta</field>
+		<store>no</store>
+		<type>submit</type>
+		<caption>Salvesta</caption>
+		<no_caption>1</no_caption>
+	</property>
       <property>
             <name>team</name>
             <group>cust</group>

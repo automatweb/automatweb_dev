@@ -1,4 +1,10 @@
 <style type="text/css">
+body {
+        background: #ffffff;
+        font-family: Tahoma, Arial, Helvetica, sans-serif;
+        margin: 0px;
+        padding: 0px;
+}
 .text {
 font-family:  Verdana, Arial, sans-serif;
 font-size: 11px;

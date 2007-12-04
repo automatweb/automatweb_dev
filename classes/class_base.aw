@@ -245,7 +245,6 @@ class class_base extends aw_template
 		{
 			$args["action"] = "view";
 		}
-
 		if(!empty($args["no_buttons"]))
 		{
 			$this->no_buttons = true;
@@ -329,7 +328,7 @@ class class_base extends aw_template
 			$this->layout_mode = "fixed_toolbar";
 			$filter["layout_mode"] == "fixed_toolbar";
 		}
-		$properties = $this->get_property_group($filter);
+		$properties = $this->get_property_group($filter, $args);
 
 		/////////////////////
 
@@ -4676,7 +4675,7 @@ class class_base extends aw_template
 	}
 
 	// needs either clid or clfile
-	function get_property_group($arr)
+	function get_property_group($arr, $args = array())
 	{
 		/* well, fuck that
 		// if the cfgmanager hasn't been defined, then try to load a default one --
@@ -4701,10 +4700,12 @@ class class_base extends aw_template
 		}
 		*/
 
+		$force_mgr = false;
 		if (method_exists($this->inst, "callback_get_cfgmanager"))
 		{
+			$force_mgr = true;
 			$this->inst->cfgmanager = $this->callback_get_cfgmanager(array(
-				"request" => $_REQUEST
+				"request" => $args,
 			));
 		}
 
@@ -4780,7 +4781,8 @@ class class_base extends aw_template
 				"class_id" => $cls_id
 			));
 		}
-		elseif ($this->can("view", $arr["cfgform_id"]))
+		else
+		if ($this->can("view", $arr["cfgform_id"]) && !$force_mgr)
 		{
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
@@ -4796,7 +4798,7 @@ class class_base extends aw_template
 		else
 		{
 			// no config form? alright, load the default one then!
-			if ($arr["clid"] == CL_DOCUMENT )
+			if ($arr["clid"] == CL_DOCUMENT && !$force_mgr)
 			{
 				$def_cfgform = aw_ini_get("document.default_cfgform");
 				if ($this->can("view",$def_cfgform))
@@ -4825,7 +4827,8 @@ class class_base extends aw_template
 					}
 				}
 			}
-			elseif (is_oid($this->inst->cfgmanager))
+			else
+			if (is_oid($this->inst->cfgmanager))
 			{
 				// load a configuration manager if a class uses it
 				$cfg_loader = new object($this->inst->cfgmanager);

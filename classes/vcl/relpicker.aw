@@ -108,7 +108,7 @@ class relpicker extends  core
 				"pn" => $arr["property"]["name"],
 				"clid" => $clid,
 				"multiple" => $arr["property"]["multiple"]
-			), "popup_search");
+			), "popup_search", false, true);
 
 			if (/*is_oid($this->obj->id()) &&*/ !$val["no_edit"])
 			{
