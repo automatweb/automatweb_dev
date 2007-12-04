@@ -23,7 +23,6 @@ if ($ta != "")
 $apd = get_instance("layout/active_page_data");
 $styles = $apd->on_shutdown_get_styles();
 $styles_done = false;
-
 // check the url for classes and if any of those are in a prod family, then set that
 $pf = "";
 $clss = aw_ini_get("classes");
@@ -53,7 +52,6 @@ while (!empty($ru))
 	}
 	$ru = $vals["return_url"];
 }
-
 aw_disable_acl();
 $p = get_current_person();
 $co = get_current_company();
@@ -92,7 +90,6 @@ $class_names = array(
 	"config" => t("Seaded"),
 );
 $cur_class = empty($clss[clid_for_name($_GET["class"])]["name"]) ? $class_names[$_GET["class"]] : $clss[clid_for_name($_GET["class"])]["name"];
-
 $sf->vars(array(
 	"prod_family" => $pf,
 	"prod_family_href" => $pf_url,
@@ -245,7 +242,6 @@ if ($sf->is_template("aw_styles"))
 	$sf->vars(array("aw_styles" => $styles));
 	$styles_done = true;
 };
-
 //if (!empty($output_charset))
 //{
 //	echo iconv($page_charset,$output_charset . "//TRANSLIT",$sf->parse());
@@ -258,10 +254,9 @@ if ($_SESSION["last_cache_clear"] < (time() - 3600))
 {
 	$str .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&action=cache_update' alt='' height='1' width='1'>";
 	$_SESSION["last_cache_clear"] = time();
-	core::get_file(array ("file"=>aw_ini_get("baseurl")."/orb.aw?class=scheduler&action=static_sched"));
+	$str .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=scheduler&action=static_sched' alt='' height='1' width='1'>";
 }
 //};
-
 if (!$styles_done)
 {
 	$str .= $styles;
