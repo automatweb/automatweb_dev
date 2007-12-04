@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.20 2007/11/23 11:42:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.21 2007/12/04 14:52:16 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1068,6 +1068,35 @@ class persons_webview extends class_base
 				$key => join(" ," , $val),
 			));
 		}
+
+		$education = "";
+		if($this->is_template("EDUCATION_SUB"))
+		{
+			$this->education_options = array(
+				"pohiharidus" => t("Põhiharidus"),
+				"keskharidus" => t("Keskharidus"),
+				"keskeriharidus" => t("Kesk-eriharidus"),
+				"diplom" => t("Diplom"),
+				"bakalaureus" => t("Bakalaureus"),
+				"magister" => t("Magister"),
+				"doktor" => t("Doktor"),
+			);
+
+			$ed_inst = get_instance(CL_CRM_PERSON_EDUCATION);
+			$education_list = new object_list($worker->connections_from (array (
+				"type" => "RELTYPE_EDUCATION",
+			)));
+			foreach($education_list->arr() as $edu)
+			{
+				$this->vars_safe(array(
+					"degree" => $this->education_options[$edu->prop("degree")],
+					"field" => $edu->prop("field.name"),
+					"school" => $edu->prop("school"),
+				));
+				$education.= $this->parse("EDUCATION_SUB");
+			}
+		}
+
 		$this->vars_safe(array(
 		//	"profession" => $profession,
 			"name" => $worker->name(),
@@ -1096,6 +1125,7 @@ class persons_webview extends class_base
 			"ta4" => $worker->prop("udef_ta4"),
 			"ta5" => $worker->prop("udef_ta5"),
 			"EDU_SUB" => $edu_sub,
+			"EDUCATION_SUB" => $education,
 		));
 	
 		$asdasd.= $this->parse("EDU_SUB");
