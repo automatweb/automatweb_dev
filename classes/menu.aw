@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.213 2007/12/04 14:16:50 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.214 2007/12/04 17:44:35 hannes Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1053,162 +1053,78 @@ class menu extends class_base
 		$t->sort_by();
 	}
 	
-		function callback_generate_scripts ()
+	function callback_generate_scripts ()
 	{
 		$id = $_GET["id"];
+		$menu_images_cnt = $this->menu_images_get_cnt(array("id"=>$id));
 		$output = '
-		window.onresize = function () {return false;} 
-		var menu_images_cnt = aw_get_url_contents ("'.aw_ini_get("baseurl").'/automatweb/orb.aw?class=menu&action=ajax_menu_images_get_cnt&id='.$id.'");
-		menu_images_cnt = menu_images_cnt*1.0;
+
+		var menu_images_cnt = '.$menu_images_cnt.'
 		// get imgrels array for making select menu
-		eval (aw_get_url_contents ("'.aw_ini_get("baseurl").'/automatweb/orb.aw?class=menu&action=ajax_menu_images_get_imgrels&id='.$id.'&cnt="+menu_images_cnt));
+		'.$this->menu_images_get_imgrels(array(
+				"id"=>$id
+		)).'
+		
 		// get connected images as js array into menu_images
-		eval (aw_get_url_contents ("'.aw_ini_get("baseurl").'/automatweb/orb.aw?class=menu&action=ajax_menu_images_get&id='.$id.'&cnt="+menu_images_cnt));
+		'.$this->menu_images_get(array(
+				"id"=>$id,
+				"cnt"=>'.$menu_images_cnt.'
+		)).'
+		
 		function menu_images_add_row (that)
 		{
 			row_clicked = that.parentNode.parentNode.childNodes[0].innerHTML*1.0;
 			if ((menu_images_cnt*1.0+1) <'.aw_ini_get("menu.num_menu_images").' && row_clicked == (menu_images_cnt*1.0)  )
 			{
 				menu_images_cnt++;
-				// new table line
-				new_tr = document.createElement("tr");
-				new_tr.className = "awmenuedittablerow";
 				
-				// first column
-				td_nr = document.createElement("td");
-				td_nr.className = "awmenuedittabletext";
-				td_nr.align = "center";
-				td_nr_text = document.createTextNode (menu_images_cnt);
-				td_nr.appendChild (td_nr_text);
-				
-				// second column
-				td_preview = document.createElement("td");
-				td_preview.className = "awmenuedittabletext";
-				td_preview.align = "center";
-				td_preview_div = document.createElement ("div");
-				td_preview_div.id = "preview_div_"+menu_images_cnt;
-				td_preview.appendChild (td_preview_div);
-				//td_preview.appendChild (td_preview_br);
-				//td_preview.appendChild (td_preview_a);
-				
-				// third column
-				td_rel = document.createElement("td");
-				td_rel.className = "awmenuedittabletext";
-				td_rel.align = "center";
-				td_rel_select = create_select ("img["+(menu_images_cnt*1.0)+"]", imgrels);
-				td_rel_select.onchange = function ()
-				{
-					row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;
-					menu_images_add_row (this);
-					menu_images_update_image (this, row_nr);
-					
-				};
-				td_rel.appendChild (td_rel_select);
-				
-				// fourth column
-				td_up = document.createElement("td");
-				td_up.className = "awmenuedittabletext";
-				td_up.align = "center";
-				td_up_input = document.createElement ("input");
-				td_up_input.type = "file";
-				td_up_input.name = "mimg_"+(menu_images_cnt*1.0);
-				td_up_input.onchange = function ()
-				{
-					row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;
-					menu_images_add_row (this);
-				}
-				td_up.appendChild (td_up_input);
-				
-				// add those four columns to tr
-				new_tr.appendChild (td_nr);
-				new_tr.appendChild (td_preview);
-				new_tr.appendChild (td_rel);
-				new_tr.appendChild (td_up);
-				var tbody = that.parentNode.parentNode.parentNode;
-				tbody.appendChild ( new_tr );
+				$("<tr class=awmenuedittablerow>"+
+					"<td align=center class=awmenuedittabletext>"+menu_images_cnt+"</td>"+
+					"<td align=center><div id=preview_div_"+menu_images_cnt+"></div></td>"+
+					"<td align=center class=awmenuedittabletext>"+create_select ("img["+(menu_images_cnt*1.0)+"]", imgrels)+"</td>"+
+					"<td align=center><input type=file name=mimg_"+(menu_images_cnt*1.0)+" onchange=\'row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;menu_images_add_row (this);\'></td>"+
+				"</tr>").appendTo(that.parentNode.parentNode.parentNode);
 			}
 		}
 		
 		function create_select (name, options)
 		{
-			var select = document.createElement("select");
-			select.name = name;
+			s_html = "<select  name=\'"+name+"\' onchange=\'row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;menu_images_add_row (this);	menu_images_update_image (this, row_nr); ;\'>";
+			
 			for (key in options)
 			{
 				if (options[key].length > 0)
 				{
-					option = document.createElement("option");
-					option.innerHTML = options[key];
-					option.value = key;
-					select.appendChild (option);
+					s_html += "<option value="+key+">"+options[key]+"</option>";
 				}
 			}
-			return select;
+			s_html += "</select>";
+			return s_html;
 		}
-
-
+		
 		function menu_images_update_image (that, row_nr)
 		{
-				parent = document.getElementById("preview_div_"+row_nr);
-				parent.style.display = "none";
 				sel_img_id = that.value;
 				if ( document.getElementById("preview_img_"+row_nr) )
 				{
-					img = document.getElementById("preview_img_"+row_nr)
-					img_change_url = document.getElementById("preview_url_"+row_nr);
 					if (sel_img_id>0)
 					{
-						img.src = menu_images[sel_img_id]["img"].src;
-						img_change_url.href = menu_images[sel_img_id]["change_url"];
-						setTimeout ("parent.style.display = \"block\";", 1);
+						$("#preview_div_"+row_nr).css("display", "block");
+						$("#preview_img_"+row_nr).attr("src", menu_images[sel_img_id]["img"].src);
+						$("#preview_url_"+row_nr).attr("href", menu_images[sel_img_id]["change_url"]);
+						$("#preview_div_"+row_nr).css("height", $("#preview_img_"+row_nr).height()+20);
 					}
 					else if (sel_img_id == 0)
 					{
-						document.getElementById("preview_div_"+row_nr).style.display = "none";
+						$("#preview_div_"+row_nr).css("display", "none");
 					}
+				}else
+					{
+					$("#preview_div_"+row_nr).html("");
+					$("<img src="+menu_images[sel_img_id]["img"].src+" id=preview_img_"+row_nr+"><br><a id=preview_url_"+row_nr+" href="+menu_images[sel_img_id]["change_url"]+" target=_blank>'.t("Muuda").'</a>").appendTo("#preview_div_"+row_nr);
+					$("#preview_div_"+row_nr).css("height", $("#preview_img_"+row_nr).height()+20);
 				}
-				else
-				{
-					img = document.createElement("img");
-					br = document.createElement("br");
-					img_change_url = document.createElement ("a");
-					img.src = menu_images[sel_img_id]["img"].src;
-					img.id = "preview_img_"+row_nr;
-					parent.style.display = "none";
-					img_change_url.id = "preview_url_"+row_nr;
-					img_change_url.href = menu_images[sel_img_id]["change_url"];
-					img_change_url.target = "_blank";
-					img_change_url.innerHTML = "Muuda";
-					parent.appendChild (img);
-					parent.appendChild (br);
-					parent.appendChild (img_change_url);
-					setTimeout ("parent.style.display = \"block\";", 1);
-				}
-					
-			//td_preview = that.parentNode.parentNode.childNodes[1];
-			//td_preview.appendChild (menu_images[imgid])
-		}
-		
-		/*
-	    Written by Jonathan Snook, http://www.snook.ca/jonathan
-	    Add-ons by Robert Nyman, http://www.robertnyman.com
-		*/
-		function getElementsByClassName(oElm, strTagName, strClassName){
-		    var arrElements = (strTagName == "*" && oElm.all)? oElm.all : oElm.getElementsByTagName(strTagName);
-		    var arrReturnElements = new Array();
-		    strClassName = strClassName.replace(/\-/g, "\\-");
-		    var oRegExp = new RegExp("(^|\\s)" + strClassName + "(\\s|$)");
-		    var oElement;
-		    for(var i=0; i<arrElements.length; i++){
-		        oElement = arrElements[i];      
-		        if(oRegExp.test(oElement.className)){
-		            arrReturnElements.push(oElement);
-		        }   
-		    }
-		    return (arrReturnElements)
-		}
-		
-		';
+		}';
 		return $output;
 	}
 	
@@ -1240,13 +1156,7 @@ class menu extends class_base
 		die($output);
 	}
 
-		/**  
-	@attrib name=ajax_menu_images_get_cnt
-	@param id required type=int menu id
-	
-	@comment
-	**/
-	function ajax_menu_images_get_cnt ($arr)
+	function menu_images_get_cnt ($arr)
 	{
 		classload("vcl/table");
 		$t =  new aw_table();
@@ -1262,18 +1172,10 @@ class menu extends class_base
 				$i++;
 		}
 		
-		die ((string) $i);
-		
+		return $i;
 	}
 
-	/**  
-	@attrib name=ajax_menu_images_get_imgrels
-	@param id required type=int menu id
-	
-	@comment
-		get id and name relations for selectbox
-	**/
-	function ajax_menu_images_get_imgrels ($arr)
+	function menu_images_get_imgrels ($arr)
 	{
 		classload("vcl/table");
 		$t =  new aw_table();
@@ -1294,16 +1196,10 @@ class menu extends class_base
 			$output .= 'imgrels['.$key.'] = "'.$value.'";';
 		}
 		
-		die ($output);
+		return $output;
 	}
 
-	/**  
-	@attrib name=ajax_menu_images_get
-	@param id required type=int menu id
-	
-	@comment gets all connected images as js array
-	**/
-	function ajax_menu_images_get ($arr)
+	function menu_images_get ($arr)
 	{
 		classload("vcl/table");
 		$t =  new aw_table();
@@ -1337,7 +1233,7 @@ class menu extends class_base
 			}
 		}
 		
-		die ($output);
+		return  $output;
 	}
 
 
