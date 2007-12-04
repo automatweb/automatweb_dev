@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.118 2007/11/23 10:48:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.119 2007/12/04 13:40:11 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1573,10 +1573,12 @@ class crm_bill extends class_base
 		}
 		
 		$tax_rows_str = "";
+		$there_is_tax_rate = 0;
 		foreach($tax_rows as $tax_rate => $tax_amt)
 		{
-			if ($tax_rate > 0 )
+			if ($tax_rate > 0)
 			{
+				$there_is_tax_rate = $tax_rate;
 				$this->vars(array(
 					"tax_rate" => floor($tax_rate*100.0),
 					"tax" => number_format($tax_amt, 2)
@@ -1584,7 +1586,7 @@ class crm_bill extends class_base
 				$tax_rows_str .= $this->parse("TAX_ROW");
 			}
 		}
-
+		$tax_rate = $there_is_tax_rate;
 		$sigs = "";
 		
 		foreach((array)$b->prop("signers") as $signer)
