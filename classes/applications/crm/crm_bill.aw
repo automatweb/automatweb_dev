@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.119 2007/12/04 13:40:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.120 2007/12/04 14:16:51 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -2184,17 +2184,21 @@ class crm_bill extends class_base
 		{
 			foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
 			{
+				//comment on see mis nagu näitama hakkab... et paneb selle samaks mis nimi
+				
 				$arr["request"]["agreement_price"][$key]["comment"] = $agreement_price["name"];
 				//vaikimisi artikkel ka
 				$seti = get_instance(CL_CRM_SETTINGS);
 				$sts = $seti->get_current_settings();
-				if ($sts && !$arr["request"]["agreement_price"]["prod"])
+				if ($sts && !$arr["request"]["agreement_price"][$key]["prod"])
 				{
 					$arr["request"]["agreement_price"][$key]["prod"] = $sts->prop("bill_def_prod");
 				}
-			
-				$arr["request"]["agreement_price"][$key]["sum"] = $arr["request"]["agreement_price"][$key]["price"]*$arr["request"]["agreement_price"][$key]["amt"];
-				if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) unset($arr["request"]["agreement_price"][$key]);
+				$arr["request"]["agreement_price"][$key]["sum"] = str_replace("," , "." , $arr["request"]["agreement_price"][$key]["price"])*str_replace("," , "." , $arr["request"]["agreement_price"][$key]["amt"]);
+				if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) 
+				{
+					unset($arr["request"]["agreement_price"][$key]);
+				}
 			}
 		}
 		$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);
