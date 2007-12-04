@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 <title>{VAR:html_title} {VAR:title_action}</title>
-<link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico">
+<link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
 
 <!-- SUB: COMPRESS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
