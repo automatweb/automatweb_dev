@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.389 2007/12/05 00:37:35 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.390 2007/12/05 00:51:12 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1410,11 +1410,25 @@ if (is_object($docobj))
 						$als[] = $pt_o->alias();
 					}
 				}
-				$document_link = aw_ini_get("baseurl")."/".join("/", $als);
+				if (aw_ini_get("menuedit.language_in_url"))
+				{
+					$document_link = aw_ini_get("baseurl")."/".aw_global_get("ct_lang_lc")."/".join("/", $als);
+				}
+				else
+				{
+					$document_link = aw_ini_get("baseurl")."/".join("/", $als);
+				}
 			}
 			else
 			{
-				$document_link = aw_ini_get("baseurl")."/".$doc_o->alias();
+				if (aw_ini_get("menuedit.language_in_url"))
+				{
+					$document_link = aw_ini_get("baseurl")."/".aw_global_get("ct_lang_lc")."/".$doc_o->alias();
+				}
+				else
+				{
+					$document_link = aw_ini_get("baseurl")."/".$doc_o->alias();
+				}
 			}
 		}
 
