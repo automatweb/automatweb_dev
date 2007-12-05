@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/fun/deathcounter.aw,v 1.2 2007/11/28 23:51:35 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/fun/deathcounter.aw,v 1.3 2007/12/05 12:13:11 hannes Exp $
 // deathcounter.aw - Surmakaunter 
 /*
 
@@ -47,7 +47,18 @@ class deathcounter extends class_base
 
 	function days_to_live($arr)
 	{
-		$obj = $arr["obj_inst"];
+		if (isset($arr["obj_inst"]))
+		{
+			$obj =& $arr["obj_inst"];
+		}
+		else if (isset($arr["id"]))
+		{
+			$obj = new object($arr["id"]);
+		}
+		else
+		{
+			return false;
+		}
 		$i_death_stamp = adodb_mktime (0, 0, 0, $obj->prop("death_month"), $obj->prop("death_day"), $obj->prop("death_year"));
 		$i_time_to_live_stamp = $i_death_stamp  - time(); 
 		return round ($i_time_to_live_stamp/(60*60*24));
@@ -134,9 +145,16 @@ class deathcounter extends class_base
 	{
 		$ob = new object($arr["id"]);
 		$this->read_template("deathcounter.tpl");
+		$days_to_live_old = $ob -> prop("days_to_live");
+		$days_to_live_new = $this -> days_to_live($arr);
+		if ($days_to_live_new > $days_to_live_old )
+		{
+			$ob->set_prop("days_to_live", $days_to_live_new);
+			$days_to_live_old = $days_to_live_new;
+		}
 		$this->vars(array(
 			"name" => $ob->prop("name"),
-			"days_to_live" => $ob->prop("days_to_live"),
+			"days_to_live" => $days_to_live_old,
 		));
 		return $this->parse();
 	}
