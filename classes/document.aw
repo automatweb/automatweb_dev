@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.388 2007/11/30 10:40:03 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.389 2007/12/05 00:37:35 hannes Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1511,6 +1511,7 @@ if (is_object($docobj))
 			"user14" => $doc["user14"],
 			"user15" => $doc["user15"],
 			"user16" => $doc["user16"],
+			"alias" => $doc["alias"],
 			"obj_modified" => (is_object($doc_o) ? $doc_o->modified() : ""),
 			"sel_menu_id" => $doc_o->parent(),
 			"document_link" => $document_link,
