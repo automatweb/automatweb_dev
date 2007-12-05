@@ -155,6 +155,16 @@
             <caption>N&amp;amp;auml;ita t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
       </property>
       <property>
+            <name>show_search_btn</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;amp;auml;ita otsingulinki t&amp;amp;ouml;&amp;amp;ouml;riistaribal</caption>
+      </property>
+      <property>
             <name>show_link_new_win</name>
             <table>objects</table>
             <group>showing</group>
@@ -201,6 +211,20 @@
             <type>chooser</type>
             <default>TREE_DHTML</default>
             <caption>Puu n&amp;amp;auml;itamise meetod</caption>
+      </property>
+      <property>
+            <name>show_tpl</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <options>
+                  <num_0>show</num_0>
+                  <num_1>show_search</num_1>
+            </options>
+            <default>show</default>
+            <caption>Layout</caption>
       </property>
       <property>
             <name>folders_table_column_count</name>
@@ -297,7 +321,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>T&amp;amp;auml;hestiku kuvamisel kasutada v&amp;amp;auml;iket&amp;amp;auml;hti </caption>
+            <caption>T&amp;amp;auml;hestiku kuvamisel kasutada v&amp;amp;auml;iket&amp;amp;auml;hti</caption>
       </property>
       <property>
             <name>add_table_anchor_to_url</name>

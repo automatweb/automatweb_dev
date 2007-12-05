@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.110 2007/07/12 10:53:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.111 2007/12/05 09:14:15 voldemar Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -51,7 +51,7 @@
 @groupinfo showing caption="N&auml;itamine"
 @default group=showing
 
-@property inherit_view_props_from type=select 
+@property inherit_view_props_from type=select
 @caption P&auml;ri n&auml;itamise omadused objektist
 
 @property show_folders type=checkbox ch_value=1
@@ -59,6 +59,9 @@
 
 @property show_add type=checkbox ch_value=1
 @caption N&auml;ita t&ouml;&ouml;riistariba
+
+@property show_search_btn type=checkbox ch_value=1
+@caption N&auml;ita otsingulinki t&ouml;&ouml;riistaribal
 
 @property show_link_new_win type=checkbox ch_value=1
 @caption Vaata link uues aknas
@@ -75,7 +78,10 @@
 @property tree_type type=chooser default=TREE_DHTML
 @caption Puu n&auml;itamise meetod
 
-@property folders_table_column_count type=textbox size=5 
+@property show_tpl type=chooser
+@caption Layout
+
+@property folders_table_column_count type=textbox size=5
 @caption Mitu tulpa n&auml;idata kaustade tabelis
 
 @property per_page type=textbox size=5
@@ -96,14 +102,14 @@
 @property group_in_table type=select
 @caption Millise v&auml;lja j&auml;rgi tabel grupeerida
 
-@property filter_by_char_field type=select 
+@property filter_by_char_field type=select
 @caption Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse
 
 @property filter_by_char_order type=select
 @caption Kuidas sorteerida
 
-@property alphabet_in_lower_case type=checkbox ch_value=1 
-@caption T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti 
+@property alphabet_in_lower_case type=checkbox ch_value=1
+@caption T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti
 
 @property add_table_anchor_to_url type=checkbox ch_value=1
 @caption Lisa #table URL-i l&otilde;ppu
@@ -200,6 +206,11 @@ class object_treeview_v2 extends class_base
 			"select" => t("Vali")
 		);
 
+		$this->tpls = array(
+			"show" => t("default"),
+			"show_search" => t("otsing ja puu vasakul")
+		);
+
 		$this->init(array(
 			"tpldir" => "contentmgmt/object_treeview/object_treeview_v2",
 			"clid" => CL_OBJECT_TREEVIEW_V2
@@ -214,7 +225,7 @@ class object_treeview_v2 extends class_base
 		$retval = PROP_OK;
 
 		$ob = $arr["obj_inst"];
-	
+
 		// $inherited gets set to true the first time if_check is done and the value is later
 		// used to determine whether some properties will be shown or not
 		static $inherited = false;
@@ -276,6 +287,10 @@ class object_treeview_v2 extends class_base
 				$prop['options'] = $col_list;
 				break;
 
+			case "show_tpl":
+				$prop['options'] = $this->tpls;
+				break;
+
 			case "url_field":
 				if ($inherited)
 				{
@@ -295,7 +310,7 @@ class object_treeview_v2 extends class_base
 					TREE_TABLE => t("Tabel"),
 					TREE_COMBINED => t("Kombineeritud")
 				);
-				// if tree_type isn't set, TREE_DHTML will be used 
+				// if tree_type isn't set, TREE_DHTML will be used
 				// eh, i definitely need a better solution to handle existing objects
 				// cause right i now there are at least 2 more checks to make sure, that DHTML
 				// will be used when nothing is set
@@ -304,7 +319,7 @@ class object_treeview_v2 extends class_base
 				{
 					$prop['value'] = TREE_DHTML;
 				}
-		
+
 				break;
 
 			case "sortbl":
@@ -356,7 +371,7 @@ class object_treeview_v2 extends class_base
 					return PROP_IGNORE;
 				}
 				$prop['options'] = array(
-					"" => "", 
+					"" => "",
 					"asc" => "A - Z",
 					"desc" => "Z - A",
 				);
@@ -480,7 +495,7 @@ class object_treeview_v2 extends class_base
 			case "columns_modify":
 				$arr["obj_inst"]->set_meta("transform_cols", $arr["request"]["transform_cols"]);
 				break;
-		
+
 			case "add_new_ds_type":
 				if ($prop["value"] != "")
 				{
@@ -489,7 +504,7 @@ class object_treeview_v2 extends class_base
 					$o->set_name(sprintf(t("%s andmeallikas"), $arr["request"]["name"]));
 					$o->set_parent($arr["request"]["parent"]);
 					$o->save();
-	
+
 					$arr["obj_inst"]->set_prop("ds", $o->id());
 				}
 				break;
@@ -501,7 +516,7 @@ class object_treeview_v2 extends class_base
 					$o->set_name(sprintf(t("%s andmeallikas"), $arr["request"]["name"]));
 					$o->set_parent($arr["request"]["parent"]);
 					$o->save_new();
-				
+
 					// also rels
 					$old = obj($prop["value"]);
 					foreach($old->connections_from() as $c)
@@ -511,7 +526,7 @@ class object_treeview_v2 extends class_base
 							"reltype" => $c->prop("reltype")
 						));
 					}
-			
+
 					$arr["obj_inst"]->set_prop("ds", $o->id());
 				}
 				break;
@@ -555,6 +570,28 @@ class object_treeview_v2 extends class_base
 		}
 		enter_function("otv2::show");
 		$ob = obj($id);
+		$search_i = false;
+
+		if ("1" === $_GET["otv2srch"] and $ob->prop("show_search_btn") and $this->can("view", $ob->prop("search")))
+		{// show search form and table instead
+			// toolbar
+			$tb = get_instance("vcl/toolbar");
+			$url = aw_url_change_var("otv2srch", null);
+			$tb->add_button(array(
+				"name" => "browse",
+				"tooltip" => t("Sirvi"),
+				"url" => $url,
+				"img" => "archive.gif",
+				"class" => "menuButton",
+			));
+			$res = $tb->get_toolbar();
+
+			// search
+			$res .= $search_i->show(array("id" => $ob->prop("search"), "extra_args" => array("otv2srch" => "1")));
+			exit_function("otv2::show");
+			return $res;
+		}
+
 		$this->set_parse_method("eval");
 		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
 		{
@@ -570,7 +607,18 @@ class object_treeview_v2 extends class_base
 			aw_global_set("no_cache", 1);
 		}
 
-		$this->read_template('show.tpl');
+		$tpl = $ob->prop("show_tpl") . ".tpl";
+		$this->read_template($tpl);
+
+		if ("show_search.tpl" === $tpl and $this->can("view", $ob->prop("search")))
+		{ // search form
+			$search_i = get_instance(CL_OBJECT_TREEVIEW_V2_SEARCH);
+			$search_form = $search_i->show(array("id" => $ob->prop("search"), "show_table" => false));
+			$this->vars(array(
+				"SEARCH" => $search_form
+			));
+		}
+
 		// init driver
 		$d_o = obj($ih_ob->prop("ds"));
 		$d_inst = $d_o->instance();
@@ -604,9 +652,9 @@ class object_treeview_v2 extends class_base
 			///
 			// here i have to check, if datasource can filter the data
 			// if it can, then i pass filter to datasource via get_objects method
-			// if it cannot, i will filter the data here, in otv class (which is 
-			// going to be pretty slow when there is a lot of data to deal with - 
-			// and it takes place in memory, and everytime, ALL objects will be 
+			// if it cannot, i will filter the data here, in otv class (which is
+			// going to be pretty slow when there is a lot of data to deal with -
+			// and it takes place in memory, and everytime, ALL objects will be
 			// queried from datasource, no matter how much of it passes the filtering
 			if ($d_inst->has_feature("filter"))
 			{
@@ -623,7 +671,7 @@ class object_treeview_v2 extends class_base
 				{
 					$sc[$item['element']] = 1;
 				}
-				// and we need to mark this field also selected, which is used to create groups in table 
+				// and we need to mark this field also selected, which is used to create groups in table
 				$sc[$ih_ob->prop("group_in_table")] = 1;
 
 				$params = array(
@@ -631,7 +679,7 @@ class object_treeview_v2 extends class_base
 						"saved_filters" => new aw_array($ob->meta("saved_filters")),
 						"group_by_folder" => $ob->prop("group_by_folder"),
 						"filter_by_char_field" => $ih_ob->prop("filter_by_char_field"),
-						"char" =>  ($_GET['char'] == "all") ? $_GET['char'] : $_GET['char']{0}, 	
+						"char" =>  ($_GET['char'] == "all") ? $_GET['char'] : $_GET['char']{0},
 					),
 					"sproc_params" => $ob->prop("sproc_params"),
 					"sel_cols" => $sc,
@@ -664,321 +712,362 @@ class object_treeview_v2 extends class_base
 			$fld_str = $this->_draw_folders($ob, $ol, $fld, $oid, $ih_ob, $tree_type);
 		}
 
-		// make folders
-		$this->vars(array(
-			"FOLDERS" => $fld_str
-		));
-
-		// get all related object types
-		// and their cfgforms
-		// and make a nice little lut from them.
-		$class2cfgform = array();
-		foreach($ob->connections_from(array("type" => "RELTYPE_ADD_TYPE")) as $c)
-		{
-			$addtype = $c->to();
-			if ($addtype->prop("use_cfgform"))
-			{
-				$class2cfgform[$addtype->prop("type")] = $addtype->prop("use_cfgform");
-			}
-		}
-
-		// XXX
-
-		// ok, lets get those fields - aw datasource object seems to give me full prop info too
-		if (method_exists($d_inst, "get_fields"))
-		{
-			$sel_columns_full_prop_info = $d_inst->get_fields($d_o, true);
-		}
-
-		// if there are set some datasource fields to be displayed in one table field
-
-		$sel_columns_fields = new aw_array($ih_ob->meta("sel_columns_fields"));
-		if ($sel_columns_fields->count() != 0)
-		{
-			$ol_result = array();
-			foreach($ol as $ol_item)
-			{
-				foreach($sel_columns_fields->get() as $sel_columns_fields_key => $sel_columns_fields_value)
-				{
-					if ($sel_columns_fields_key == "modifiedby")
-					{
-						$sel_columns_fields_key = "modder";
-					}
-					if ($sel_columns_fields_key == "createdby")
-					{
-						$sel_columns_fields_key = "adder";
-					}
-					foreach($sel_columns_fields_value as $key => $value)
-					{
-						if ($value["field"] == "modified")
-						{
-							$value["field"] = "mod_date";
-						}
-						if ($value["field"] == "created")
-						{
-							$value["field"] = "add_date";
-						}
-
-						if (empty($ol_item[$value['field']]))
-						{
-							$ol_item[$sel_columns_fields_key] .= "";
-						}
-						else
-						{
-							$ol_item[$sel_columns_fields_key] .= $value['sep'];
-						}
-						$ol_item[$sel_columns_fields_key] .= $value['left_encloser'];
-						if ($value["field"] == "mod_date")
-						{
-							$scf_val = date("d.m.Y H:i", $ol_item[$value['field']]);
-						}
-						else
-						if ($value["field"] == "add_date")
-						{
-							$scf_val = date("d.m.Y H:i", $ol_item[$value['field']]);
-						}
-						else
-						if ($sel_columns_full_prop_info[$value['field']]["type"] == "date_select")
-						{
-							$scf_val = date("d.m.Y", $ol_item[$value['field']]);
-						}
-						else
-						{
-							$scf_val = $ol_item[$value['field']];
-						}
-						if ($value["field"] == "name")
-						{
-							// make link from name field
-							$scf_val = $this->_get_link($scf_val, $ol_item["url"], $ih_ob);
-						}
-						
-						$ol_item[$sel_columns_fields_key] .= $scf_val;
-						$ol_item[$sel_columns_fields_key] .= $value['right_encloser'];
-
-					}
-				}
-				array_push($ol_result, $ol_item);
-			}
-			$ol = $ol_result;
-		}
-
-		$this->cnt = 0;
-		$c = "";
-		$sel_cols = $ih_ob->meta("sel_columns");
-
-		// if the controller sets $retval to PROP_IGNORE then this column will not
-		// be shown in table
-		// later, if some other data will be needed in controller, then use the first or
-		// third param of the check_property fn.
-		$controllers = $ih_ob->meta("sel_columns_controller");
-		$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
-		foreach ($controllers as $controller_key => $controller_value)
-		{
-			// the controller have to be connected 
-			if (!empty($controller_value) && $ih_ob->is_connected_to(array("to" => $controller_value)))
-			{
-				$null = null;
-				if ($view_controller_inst->check_property($null, $controller_value, array()) == PROP_IGNORE)
-				{
-					unset($sel_cols[$controller_key]);
-				}
-			}	
-		}
-		$col_list = $this->_get_col_list(array(
-			"o" => $ih_ob,
-			"hidden_cols" => true,
-		));
-// well, if char is present in the url, then sort only by 
-// the field which is set to be filtered according to char
-
-		$tmp_order = $ih_ob->prop("filter_by_char_order");
-		if(!empty($_GET['char']) && !empty($tmp_order))
-		{
-			$itemsorts = new aw_array(array(
-				array(
-					"element" => $ih_ob->prop("filter_by_char_field"),
-					"ord" => $tmp_order,
-				),
-			));
-		}
-		else 
-		if (array_key_exists($_GET['sort_by'], $col_list))
-		{
-
-			$tmp = new aw_array($ih_ob->meta("itemsorts"));
-
-			$tmp_group_field = $ih_ob->prop("group_in_table");
-			$itemsorts = new aw_array();
-			foreach ($tmp->get() as $tmp_key => $tmp_value)
-			{
-
-				if ($tmp_value['element'] == $tmp_group_field)
-				{
-					$itemsorts->set($tmp_value);
-				}
-			}
-			$itemsorts->set(array(
-				"element" => $_GET['sort_by'],
-				"ord" => ($_GET['sort_order'] == "asc") ? "asc" : "desc",	
-			));
+		if (!empty($_GET["s"]) and is_object($search_i))
+		{ // search result table
+			$table = $search_i->show(array("id" => $ob->prop("search"), "show_form" => false));
 		}
 		else
 		{
-			$tmp = new aw_array($ih_ob->meta("itemsorts"));
-			$first_itemsort = $tmp->first();
-			$tmp_group_field = $ih_ob->prop("group_in_table");
-			$itemsorts = new aw_array();
-			if ($first_itemsort['value']['element'] != $tmp_group_field)
+			// get all related object types
+			// and their cfgforms
+			// and make a nice little lut from them.
+			$class2cfgform = array();
+			foreach($ob->connections_from(array("type" => "RELTYPE_ADD_TYPE")) as $c)
 			{
+				$addtype = $c->to();
+				if ($addtype->prop("use_cfgform"))
+				{
+					$class2cfgform[$addtype->prop("type")] = $addtype->prop("use_cfgform");
+				}
+			}
+
+			// XXX
+
+			// ok, lets get those fields - aw datasource object seems to give me full prop info too
+			if (method_exists($d_inst, "get_fields"))
+			{
+				$sel_columns_full_prop_info = $d_inst->get_fields($d_o, true);
+			}
+
+			// if there are set some datasource fields to be displayed in one table field
+
+			$sel_columns_fields = new aw_array($ih_ob->meta("sel_columns_fields"));
+			if ($sel_columns_fields->count() != 0)
+			{
+				$ol_result = array();
+				foreach($ol as $ol_item)
+				{
+					foreach($sel_columns_fields->get() as $sel_columns_fields_key => $sel_columns_fields_value)
+					{
+						if ($sel_columns_fields_key == "modifiedby")
+						{
+							$sel_columns_fields_key = "modder";
+						}
+						if ($sel_columns_fields_key == "createdby")
+						{
+							$sel_columns_fields_key = "adder";
+						}
+						foreach($sel_columns_fields_value as $key => $value)
+						{
+							if ($value["field"] == "modified")
+							{
+								$value["field"] = "mod_date";
+							}
+							if ($value["field"] == "created")
+							{
+								$value["field"] = "add_date";
+							}
+
+							if (empty($ol_item[$value['field']]))
+							{
+								$ol_item[$sel_columns_fields_key] .= "";
+							}
+							else
+							{
+								$ol_item[$sel_columns_fields_key] .= $value['sep'];
+							}
+							$ol_item[$sel_columns_fields_key] .= $value['left_encloser'];
+							if ($value["field"] == "mod_date")
+							{
+								$scf_val = date("d.m.Y H:i", $ol_item[$value['field']]);
+							}
+							else
+							if ($value["field"] == "add_date")
+							{
+								$scf_val = date("d.m.Y H:i", $ol_item[$value['field']]);
+							}
+							else
+							if ($sel_columns_full_prop_info[$value['field']]["type"] == "date_select")
+							{
+								$scf_val = date("d.m.Y", $ol_item[$value['field']]);
+							}
+							else
+							{
+								$scf_val = $ol_item[$value['field']];
+							}
+							if ($value["field"] == "name")
+							{
+								// make link from name field
+								$scf_val = $this->_get_link($scf_val, $ol_item["url"], $ih_ob);
+							}
+
+							$ol_item[$sel_columns_fields_key] .= $scf_val;
+							$ol_item[$sel_columns_fields_key] .= $value['right_encloser'];
+
+						}
+					}
+					array_push($ol_result, $ol_item);
+				}
+				$ol = $ol_result;
+			}
+
+			$this->cnt = 0;
+			$c = "";
+			$sel_cols = $ih_ob->meta("sel_columns");
+
+			// if the controller sets $retval to PROP_IGNORE then this column will not
+			// be shown in table
+			// later, if some other data will be needed in controller, then use the first or
+			// third param of the check_property fn.
+			$controllers = $ih_ob->meta("sel_columns_controller");
+			$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
+			foreach ($controllers as $controller_key => $controller_value)
+			{
+				// the controller have to be connected
+				if (!empty($controller_value) && $ih_ob->is_connected_to(array("to" => $controller_value)))
+				{
+					$null = null;
+					if ($view_controller_inst->check_property($null, $controller_value, array()) == PROP_IGNORE)
+					{
+						unset($sel_cols[$controller_key]);
+					}
+				}
+			}
+			$col_list = $this->_get_col_list(array(
+				"o" => $ih_ob,
+				"hidden_cols" => true,
+			));
+	// well, if char is present in the url, then sort only by
+	// the field which is set to be filtered according to char
+
+			$tmp_order = $ih_ob->prop("filter_by_char_order");
+			if(!empty($_GET['char']) && !empty($tmp_order))
+			{
+				$itemsorts = new aw_array(array(
+					array(
+						"element" => $ih_ob->prop("filter_by_char_field"),
+						"ord" => $tmp_order,
+					),
+				));
+			}
+			else
+			if (array_key_exists($_GET['sort_by'], $col_list))
+			{
+
+				$tmp = new aw_array($ih_ob->meta("itemsorts"));
+
+				$tmp_group_field = $ih_ob->prop("group_in_table");
+				$itemsorts = new aw_array();
+				foreach ($tmp->get() as $tmp_key => $tmp_value)
+				{
+
+					if ($tmp_value['element'] == $tmp_group_field)
+					{
+						$itemsorts->set($tmp_value);
+					}
+				}
 				$itemsorts->set(array(
-					"element" => $tmp_group_field,
-					"ord" => "asc",
+					"element" => $_GET['sort_by'],
+					"ord" => ($_GET['sort_order'] == "asc") ? "asc" : "desc",
 				));
-				foreach ($tmp->get() as $value)
+			}
+			else
+			{
+				$tmp = new aw_array($ih_ob->meta("itemsorts"));
+				$first_itemsort = $tmp->first();
+				$tmp_group_field = $ih_ob->prop("group_in_table");
+				$itemsorts = new aw_array();
+				if ($first_itemsort['value']['element'] != $tmp_group_field)
 				{
-					$itemsorts->set($value);
+					$itemsorts->set(array(
+						"element" => $tmp_group_field,
+						"ord" => "asc",
+					));
+					foreach ($tmp->get() as $value)
+					{
+						$itemsorts->set($value);
+					}
+				}
+				else
+				{
+					$itemsorts = $tmp;
+				}
+			}
+			$this->__is = $itemsorts->get();
+			if (count($this->__is))
+			{
+				usort($ol, array(&$this, "__is_sorter"));
+			}
+
+			// now do pages
+			if ($ih_ob->prop("per_page"))
+			{
+				$this->do_pageselector($ol, $ih_ob->prop("per_page"));
+			}
+
+			$has_access_to = false;
+			$has_add_access = false;
+
+			foreach($ol as $okey => $odata)
+			{
+				if ($d_inst->check_acl("edit", $d_o, $odata["id"]))
+				{
+					$has_access_to = true;
+				}
+				else
+				{
+					// if there is no edit permission to an object, then don't show the edit link eather
+					$ol[$okey]['change'] = $odata['change'] = "";
+
+				}
+				$last_o = $odata;
+			}
+		// moved it at the beginning of function, cause i need to pass it to datasource
+		// when requesting objects --dragut
+		//	$edit_columns = safe_array($ih_ob->meta("sel_columns_editable"));
+
+			if (!$has_access_to)
+			{
+				unset($col_list["change"]);
+				unset($col_list["select"]);
+
+				// also unset all edit columns
+				foreach($edit_columns as $coln => $_tmp)
+				{
+					unset($col_list[$coln]);
+				}
+				$edit_columns = array();
+			}
+
+			if ($last_o)
+			{
+				if (!$d_inst->check_acl("add", $d_o, ($last_o["parent"] ? $last_o["parent"] : $last_o["id"])))
+				{
+					$ih_ob->set_prop("show_add", false);
+				}
+
+				if (!$d_inst->check_acl("delete", $d_o, $last_o["id"]))
+				{
+					$ih_ob->set_meta("no_delete", true);
 				}
 			}
 			else
+			if ($_GET["tv_sel"])
 			{
-				$itemsorts = $tmp;
+				if (!$d_inst->check_acl("add", $d_o, $_GET["tv_sel"]))
+				{
+					$ih_ob->set_prop("show_add", false);
+				}
+				if (!$d_inst->check_acl("delete", $d_o, $_GET["tv_sel"]))
+				{
+					$ih_ob->set_meta("no_delete", true);
+				}
 			}
-		}
-		$this->__is = $itemsorts->get();
-		if (count($this->__is))
-		{
-			usort($ol, array(&$this, "__is_sorter"));
-		}
 
-		// now do pages
-		if ($ih_ob->prop("per_page"))
-		{
-			$this->do_pageselector($ol, $ih_ob->prop("per_page"));
-		}
+			$style_obj = $ih_ob;
 
-		$has_access_to = false;
-		$has_add_access = false;
-
-		foreach($ol as $okey => $odata)
-		{
-			if ($d_inst->check_acl("edit", $d_o, $odata["id"]))
+			$group_field = $ih_ob->prop("group_in_table");
+			$group_name = "";
+			$sel_cols_count = count($sel_cols);
+	// parsing table rows - if the field value, which is used to make table groups
+	// changes, i'll create group header line and put it in the table
+	// groups are not made, if char param is present in url
+			foreach($ol as $odata)
 			{
-				$has_access_to = true;
+				if(($group_name != $odata[$group_field]) && empty($_GET['char']))
+				{
+					$this->vars(array(
+						"content" => "<a name=\"".$this->_mk_anch($odata[$ih_ob->prop("group_in_table")])."\" ></a>".$odata[$ih_ob->prop("group_in_table")],
+						"cols_count" => $sel_cols_count,
+	//					"group_bgcolor" => $group_header_color_code,
+					));
+					$c .= $this->parse("FILE_GROUP");
+				}
+
+				if (0)
+				{
+					// get file size
+					$fname = $this->check_file_path($arr["obj_inst"]->prop("file"));
+
+					if (is_file($fname))
+					{
+						$size = @filesize($file);
+
+						if ($size > 1024)
+						{
+							$filesize = number_format($size / 1024, 2)."kb";
+						}
+						elseif ($size > (1024*1024))
+						{
+							$filesize = number_format($size / (1024*1024), 2)."mb";
+						}
+						else
+						{
+							$filesize = $size." b";
+						}
+					}
+				}
+
+				$c .= $this->_do_parse_file_line($odata, $d_inst, $d_o, array(
+					"tree_obj" => $ob,
+					"tree_obj_ih" => $ih_ob,
+					"sel_cols" => $sel_cols,
+					"col_list" => $col_list,
+					"edit_columns" => $edit_columns,
+					"pfk" => $ob,
+					"style_obj" => $style_obj,
+					"sel_columns_full_prop_info" => $sel_columns_full_prop_info,
+				));
+				$group_name = $odata[$group_field];
+
+			}
+			$tb = "";
+			$no_tb = "";
+			if ($ih_ob->prop("show_add"))
+			{
+				$tb = $this->parse("HEADER_HAS_TOOLBAR");
 			}
 			else
 			{
-				// if there is no edit permission to an object, then don't show the edit link eather
-				$ol[$okey]['change'] = $odata['change'] = "";
-				
-			}
-			$last_o = $odata;
-		}
- 	// moved it at the beginning of function, cause i need to pass it to datasource
-	// when requesting objects --dragut
-	//	$edit_columns = safe_array($ih_ob->meta("sel_columns_editable"));
-
-		if (!$has_access_to)
-		{
-			unset($col_list["change"]);
-			unset($col_list["select"]);
-
-			// also unset all edit columns
-			foreach($edit_columns as $coln => $_tmp)
-			{
-				unset($col_list[$coln]);
-			}
-			$edit_columns = array();
-		}
-
-		if ($last_o)
-		{
-			if (!$d_inst->check_acl("add", $d_o, ($last_o["parent"] ? $last_o["parent"] : $last_o["id"])))
-			{
-				$ih_ob->set_prop("show_add", false);
+				$no_tb = $this->parse("HEADER_NO_TOOLBAR");
 			}
 
-			if (!$d_inst->check_acl("delete", $d_o, $last_o["id"]))
+			// if table anchor should be added at the end of the url
+			$anchor = "";
+			if ($ih_ob->prop("add_table_anchor_to_url"))
 			{
-				$ih_ob->set_meta("no_delete", true);
+				$anchor = "#table";
 			}
-		}
-		else
-		if ($_GET["tv_sel"])
-		{
-			if (!$d_inst->check_acl("add", $d_o, $_GET["tv_sel"]))
-			{
-				$ih_ob->set_prop("show_add", false);
-			}
-			if (!$d_inst->check_acl("delete", $d_o, $_GET["tv_sel"]))
-			{
-				$ih_ob->set_meta("no_delete", true);
-			}
-		}
 
-		$style_obj = $ih_ob;
-
-		$group_field = $ih_ob->prop("group_in_table");
-		$group_name = "";
-		$sel_cols_count = count($sel_cols);
-// parsing table rows - if the field value, which is used to make table groups
-// changes, i'll create group header line and put it in the table
-// groups are not made, if char param is present in url
-		foreach($ol as $odata)
-		{
-			if(($group_name != $odata[$group_field]) && empty($_GET['char']))
+			// checking, if there is set a field, which values should be use to filter by first character
+			// and according to this i'm showing or not showing the alphabet list
+			$filter_by_char_field = $ih_ob->meta("filter_by_char_field");
+			if(!empty($filter_by_char_field))
 			{
+				$alphabet_parsed = "";
+				foreach($this->alphabet as $character)
+				{
+					$this->vars(array(
+						"char" => ($ih_ob->prop("alphabet_in_lower_case")) ? strtolower($character) : $character,
+						"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character.$anchor,
+					));
+					if ($character == htmlentities(urldecode($_GET['char'])))
+					{
+						$alphabet_parsed .= $this->parse("ALPHABET_SEL");
+					}
+					else
+					{
+						$alphabet_parsed .= $this->parse("ALPHABET");
+					}
+				}
+
+				// lets put a link at the end of the alphabet to make all fields to show
 				$this->vars(array(
-					"content" => "<a name=\"".$this->_mk_anch($odata[$ih_ob->prop("group_in_table")])."\" ></a>".$odata[$ih_ob->prop("group_in_table")],
-					"cols_count" => $sel_cols_count,
-//					"group_bgcolor" => $group_header_color_code,
+					"char" => t("K&otilde;ik"),
+					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=all".$anchor,
 				));
-				$c .= $this->parse("FILE_GROUP");
-			}
-
-			$c .= $this->_do_parse_file_line($odata, $d_inst, $d_o, array(
-				"tree_obj" => $ob,
-				"tree_obj_ih" => $ih_ob,
-				"sel_cols" => $sel_cols,
-				"col_list" => $col_list,
-				"edit_columns" => $edit_columns,
-				"pfk" => $ob,
-				"style_obj" => $style_obj,
-				"sel_columns_full_prop_info" => $sel_columns_full_prop_info,
-			));
-			$group_name = $odata[$group_field];
-
-		}
-		$tb = "";
-		$no_tb = "";
-		if ($ih_ob->prop("show_add"))
-		{
-			$tb = $this->parse("HEADER_HAS_TOOLBAR");
-		}
-		else
-		{
-			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
-		}
-			
-		// if table anchor should be added at the end of the url
-		$anchor = "";
-		if ($ih_ob->prop("add_table_anchor_to_url"))
-		{
-			$anchor = "#table";
-		}
-
-		// checking, if there is set a field, which values should be use to filter by first character
-		// and according to this i'm showing or not showing the alphabet list
-		$filter_by_char_field = $ih_ob->meta("filter_by_char_field");
-		if(!empty($filter_by_char_field))
-		{
-			$alphabet_parsed = "";
-			foreach($this->alphabet as $character)
-			{
-				$this->vars(array(
-					"char" => ($ih_ob->prop("alphabet_in_lower_case")) ? strtolower($character) : $character, 
-					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character.$anchor,
-				));
-				if ($character == htmlentities(urldecode($_GET['char'])))
+				// and of course we need to make it selected if is selected
+				if ($_GET['char'] == "all")
 				{
 					$alphabet_parsed .= $this->parse("ALPHABET_SEL");
 				}
@@ -988,121 +1077,113 @@ class object_treeview_v2 extends class_base
 				}
 			}
 
-			// lets put a link at the end of the alphabet to make all fields to show
 			$this->vars(array(
-				"char" => t("K&otilde;ik"),
-				"char_url" => aw_ini_get("baseurl")."/".$oid."?char=all".$anchor,
+				"ALPHABET" => $alphabet_parsed,
+				"FILE" => $c,
+				"HEADER_HAS_TOOLBAR" => $tb,
+				"HEADER_NO_TOOLBAR" => $no_tb,
+				"reforb" => $this->mk_reforb("submit_show", array(
+					"return_url" => aw_global_get("REQUEST_URI"),
+					"subact" => "0",
+					"id" => $ob->id(),
+					"edit_mode" => count($edit_columns),
+					"tv_sel" => $_GET["tv_sel"]
+				))
 			));
-			// and of course we need to make it selected if is selected
-			if ($_GET['char'] == "all")
+
+			$udef_cols = $ih_ob->meta("sel_columns_text");
+			$sortable_cols = $ih_ob->meta("sel_columns_sortable");
+			if (!is_array($udef_cols))
 			{
-				$alphabet_parsed .= $this->parse("ALPHABET_SEL");
+				$udef_cols = $col_list;
+			}
+			if ((($ih_ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char'])) || empty($ol))
+			{
+
 			}
 			else
 			{
-				$alphabet_parsed .= $this->parse("ALPHABET");
-			}
-		}
-
-		$this->vars(array(
-			"ALPHABET" => $alphabet_parsed,
-			"FILE" => $c,
-			"HEADER_HAS_TOOLBAR" => $tb,
-			"HEADER_NO_TOOLBAR" => $no_tb,
-			"reforb" => $this->mk_reforb("submit_show", array(
-				"return_url" => aw_global_get("REQUEST_URI"),
-				"subact" => "0",
-				"id" => $ob->id(),
-				"edit_mode" => count($edit_columns),
-				"tv_sel" => $_GET["tv_sel"]
-			))
-		));
-
-		$udef_cols = $ih_ob->meta("sel_columns_text");
-		$sortable_cols = $ih_ob->meta("sel_columns_sortable");
-		if (!is_array($udef_cols))
-		{
-			$udef_cols = $col_list;
-		}
-		if ((($ih_ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char'])) || empty($ol))
-		{
-
-		}
-		else
-		{
-			// columns
-			$h_str = "";
-			foreach($col_list as $colid => $coln)
-			{
-				$str = "";
-				if ($sel_cols[$colid] == 1)
+				// columns
+				$h_str = "";
+				foreach($col_list as $colid => $coln)
 				{
-					if ($sortable_cols[$colid] == 1) 
+					$str = "";
+					if ($sel_cols[$colid] == 1)
 					{
-						$tmp_url = aw_global_get("REQUEST_URI");
-						if ($_GET['sort_order'] == "asc" && $_GET['sort_by'] == $colid)
+						if ($sortable_cols[$colid] == 1)
 						{
-							$tmp_sort_order = "desc";
+							$tmp_url = aw_global_get("REQUEST_URI");
+							if ($_GET['sort_order'] == "asc" && $_GET['sort_by'] == $colid)
+							{
+								$tmp_sort_order = "desc";
+							}
+							else
+							{
+								$tmp_sort_order = "asc";
+							}
+	//						$tmp_sort_order = ($_GET['sort_order'] == "asc") ? "desc" : "asc";
+							if (!empty($_GET))
+							{
+								$tmp_url = aw_url_change_var("char", $_GET['char'], $tmp_url);
+								$tmp_url = aw_url_change_var("tv_sel", $_GET['tv_sel'], $tmp_url);
+							//	$tmp_url .= "&sort_by=".$colid."&sort_order=".$tmp_sort_order;
+
+							}
+
+							$tmp_url = aw_url_change_var("sort_by", $colid, $tmp_url);
+							$tmp_url = aw_url_change_var("sort_order", $tmp_sort_order, $tmp_url);
+
+							$this->vars(array(
+								"h_text" => html::href(array(
+							//		"url" => $arr['oid'].$tmp_url.$anchor,
+									"url" => $tmp_url.$anchor,
+									"caption" => $udef_cols[$colid],
+								)),
+							));
 						}
 						else
 						{
-							$tmp_sort_order = "asc";
-						}
-//						$tmp_sort_order = ($_GET['sort_order'] == "asc") ? "desc" : "asc";
-						if (!empty($_GET))
-						{
-							$tmp_url = aw_url_change_var("char", $_GET['char'], $tmp_url);
-							$tmp_url = aw_url_change_var("tv_sel", $_GET['tv_sel'], $tmp_url);
-						//	$tmp_url .= "&sort_by=".$colid."&sort_order=".$tmp_sort_order;
-
+							$this->vars(array(
+								"h_text" => ($udef_cols[$colid])
+							));
 						}
 
-						$tmp_url = aw_url_change_var("sort_by", $colid, $tmp_url);
-						$tmp_url = aw_url_change_var("sort_order", $tmp_sort_order, $tmp_url);
+						$str = $this->parse("HEADER");
 
 						$this->vars(array(
-							"h_text" => html::href(array(
-						//		"url" => $arr['oid'].$tmp_url.$anchor,
-								"url" => $tmp_url.$anchor,
-								"caption" => $udef_cols[$colid],
-							)),
+							"HEADER" => $str
 						));
+						$h_str .= $this->parse("HEADER");
 					}
-					else
-					{
-						$this->vars(array(
-							"h_text" => ($udef_cols[$colid])
-						));
-					}
-
-					$str = $this->parse("HEADER");
-					
-					$this->vars(array(
-						"HEADER" => $str
-					));
-					$h_str .= $this->parse("HEADER");
 				}
+
+				$this->vars(array(
+					"HEADER" => $h_str
+				));
 			}
 
-			$this->vars(array(
-				"HEADER" => $h_str
-			));
+			$table = $this->parse("TABLE");
 		}
+
+		$this->vars(array(
+			"FOLDERS" => $fld_str,
+			"TABLE" => $table
+		));
 		$res = $this->parse();
+
 		if ($ih_ob->prop("show_add"))
 		{
 			$res = $this->_get_add_toolbar($ih_ob).$res;
 		}
-	
-		exit_function("otv2::show");
+
 		if (strpos($res, "<a") !== false || strpos($res, "< a") !== false || strpos($res, "<A") !== false)
 		{
+			exit_function("otv2::show");
 			return $res;
 		}
+
 		exit_function("otv2::show");
 		return create_email_links($res);
-
-		return $res;
 	}
 
 	function _init_cols_tbl(&$t, $o)
@@ -1164,7 +1245,7 @@ class object_treeview_v2 extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sortable",
-			"caption" => t("Sorteeritav"),	
+			"caption" => t("Sorteeritav"),
 			"sortable" => 1,
 			"align" => "center",
 		));
@@ -1209,7 +1290,7 @@ class object_treeview_v2 extends class_base
 		$conns_to_controllers = $ih_ob->connections_from(array(
 			"type" => "RELTYPE_VIEW_CONTROLLER",
 		));
-		
+
 		$controller_list = array("" => "");
 		foreach ($conns_to_controllers as $conn_to_controller)
 		{
@@ -1257,7 +1338,7 @@ class object_treeview_v2 extends class_base
 				$controller = html::select(array(
 					"name" => "column_view_controller[".$colid."]",
 					"options" => $controller_list,
-					"selected" => $cols_view_controllers[$colid],	
+					"selected" => $cols_view_controllers[$colid],
 				));
 				$max_id = 0;
 				$fields = "";
@@ -1463,7 +1544,7 @@ class object_treeview_v2 extends class_base
 		{
 			$tree_type = TREE_DHTML;
 		}
-		
+
 		// if #table anchor should be added to url
 		$anchor = "";
 		if ($ob->prop("add_table_anchor_to_url"))
@@ -1502,9 +1583,9 @@ class object_treeview_v2 extends class_base
 							"caption" => $tmp_fld[$j][$i]['name'],
 							"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$tmp_fld[$j][$i]['id'].$anchor,
 						));
-					}	
+					}
 					$table->define_data($row);
-				}		
+				}
 				exit_function("object_treeview_v2::_draw_folders");
 				return $table->draw();
 				break;
@@ -1524,7 +1605,7 @@ class object_treeview_v2 extends class_base
 				// now, insert all folders defined
 				foreach($folders as $fld)
 				{
-	
+
 					$tv->add_item($fld["parent"], array(
 						"id" => $fld["id"],
 						"name" => $fld["name"],
@@ -1537,10 +1618,10 @@ class object_treeview_v2 extends class_base
 					));
 				}
 				$tv->set_selected_item($_GET["tv_sel"]);
-	
+
 				$pms = array();
 
-// this one here needs to be commented out ... maybe ... at least it was commented out - until return 
+// this one here needs to be commented out ... maybe ... at least it was commented out - until return
 		/*if (isset($GLOBALS["class"]))
 		{
 			$pms["rootnode"] = aw_global_get("section");
@@ -1561,8 +1642,8 @@ class object_treeview_v2 extends class_base
 		list($parent, $types) = $ds_i->get_add_types($ds_o);
 
 		$tb = get_instance("vcl/toolbar");
-
 		$has_b = false;
+
 		if ($parent && count($types) && $ds_i->check_acl("add", $ds_o, $parent))
 		{
 			$menu = "";
@@ -1573,7 +1654,6 @@ class object_treeview_v2 extends class_base
 				"tooltip" => t("Uus"),
 				"img" => "new.gif",
 			));
-
 
 			$ot = get_instance(CL_OBJECT_TYPE);
 			foreach($types as $c_o)
@@ -1613,6 +1693,20 @@ class object_treeview_v2 extends class_base
 				"onClick" => "document.objlist.submit();return true;",
 				"img" => "save.gif"
 			));
+			$has_b = true;
+		}
+
+		if ($ob->prop("show_search_btn") and !$_GET["otv2srch"])
+		{
+			$url = aw_url_change_var("otv2srch", "1");
+			$tb->add_button(array(
+				"name" => "search",
+				"tooltip" => t("Otsi"),
+				"url" => $url,
+				"img" => "search.gif",
+				"class" => "menuButton",
+			));
+			$has_b = true;
 		}
 
 		exit_function("object_treeview_v2::_get_add_toolbar");
@@ -1727,7 +1821,7 @@ class object_treeview_v2 extends class_base
 									'name' => $colid,
 									"clid" => $sel_columns_full_prop_info[$colid]["class_id"],
 									"object_type" => $sel_columns_full_prop_info[$colid]["object_type"],
-								
+
 								));
 								$clsf_opts = $classificator_choices[4]['list_names'];
 
@@ -1759,8 +1853,8 @@ class object_treeview_v2 extends class_base
 						// well, actually i don't like this hack, but if it is needed to select
 						// that show link won't appear in any columns, then this is the only way
 						// i can come out right now. The best way should be, that if no show_link_field
-						// are selected, THEN it won't appear in any column, but it will also break 
-						// existing objects so this is out of question. 
+						// are selected, THEN it won't appear in any column, but it will also break
+						// existing objects so this is out of question.
 
 						if ($show_link_field != "---")
 						{
@@ -1785,7 +1879,7 @@ class object_treeview_v2 extends class_base
 						$content = $this->_get_link($content, $url, $parms['tree_obj_ih'], !empty($arr["target"]));
 					}
 				}
-				$image_obj = "";	
+				$image_obj = "";
 				if (strstr($colid, "userim"))
 				{
 					if (is_oid($arr[$colid]) && $this->can("view", $arr[$colid]))
@@ -1906,12 +2000,12 @@ class object_treeview_v2 extends class_base
 
 		$d_o = obj($this->tree_ob_ih->prop("ds"));
 		$d_inst = $d_o->instance();
-	
+
 		$folders = $d_inst->get_folders($d_o);
 		foreach($folders as $fld)
 		{
 			$i_o = obj($fld["id"]);
-			
+
 			if ($level == 0)
 			{
 				$parent = 0;
@@ -2007,8 +2101,8 @@ class object_treeview_v2 extends class_base
 				}
 			}
 		}
-		
-*/		
+
+*/
 		$maxi = 0;
 		$is = new aw_array($arr["obj_inst"]->meta("itemsorts"));
 		foreach($is->get() as $idx => $sd)
@@ -2323,11 +2417,11 @@ class object_treeview_v2 extends class_base
 		@param id required type=int acl=view
 		@param subact required
 		@param sel optional
-		@param return_url required		
-		
+		@param return_url required
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2367,7 +2461,7 @@ class object_treeview_v2 extends class_base
 			$ef = safe_array($ih_ob->meta("sel_columns_editable"));
 
 			$fld = $d_inst->get_folders($d_o);
-			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]); 
+			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]);
 
 			foreach($ol as $oid => $o)
 			{

@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2_search.aw,v 1.2 2005/03/23 11:45:07 kristo Exp $
-// object_treeview_v2_search.aw - Objektinimekirja otsing 
+// object_treeview_v2_search.aw - Objektinimekirja otsing
 /*
 
 @classinfo syslog_type=ST_OBJECT_TREEVIEW_V2_SEARCH relationmgr=yes no_comment=1 no_status=1
@@ -13,13 +12,13 @@
 @property tv type=relpicker reltype=RELTYPE_OTV
 @caption Objektinimekiri
 
-@groupinfo search_form caption="Koosta vorm" 
+@groupinfo search_form caption="Koosta vorm"
 @default group=search_form
 
 	@property search_fields type=table store=no no_caption=1
 	@caption Otsingu v&auml;ljad
 
-@groupinfo search_table caption="Koosta tulemuste tabel" 
+@groupinfo search_table caption="Koosta tulemuste tabel"
 @default group=search_table
 
 	@property search_tbl_fields type=table store=no no_caption=1
@@ -88,7 +87,7 @@ class object_treeview_v2_search extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -102,40 +101,62 @@ class object_treeview_v2_search extends class_base
 
 	function show($arr)
 	{
+		$table = $html = "";
+		$show_table = isset($arr["show_table"]) ? (bool) $arr["show_table"] : true;
+		$show_form = isset($arr["show_form"]) ? (bool) $arr["show_form"] : true;
 		$ob = new object($arr["id"]);
 		$request = array("s" => $GLOBALS["s"]);
 
-		$props =  $this->search_gen_els(array(
-			"obj_inst" => $ob, 
-			"request" => $request
-		));
-
-		$htmlc = get_instance("cfg/htmlclient");
-		$htmlc->start_output();
-		foreach($props as $pn => $pd)
+		if ($show_form)
 		{
-			$htmlc->add_property($pd);
+			$props =  $this->search_gen_els(array(
+				"obj_inst" => $ob,
+				"request" => $request
+			));
+
+			$htmlc = get_instance("cfg/htmlclient");
+			$htmlc->start_output();
+
+			if (!empty($arr["extra_args"]))
+			{
+				foreach($arr["extra_args"] as $name => $value)
+				{
+					$htmlc->add_property(array(
+						"name" => $name,
+						"type" => "hidden",
+						"value" => $value
+					));
+				}
+			}
+
+			foreach($props as $pn => $pd)
+			{
+				$htmlc->add_property($pd);
+			}
+
+			$htmlc->finish_output();
+			$html = $htmlc->get_result(array(
+				"raw_output" => 1
+			));
 		}
-		$htmlc->finish_output();
 
-		$html = $htmlc->get_result(array(
-			"raw_output" => 1
-		));
+		if ($show_table)
+		{
+			classload("vcl/table");
+			$t = new aw_table(array(
+				"layout" => "generic"
+			));
 
-		classload("vcl/table");
-		$t = new aw_table(array(
-			"layout" => "generic"
-		));
+			$this->_search_res(array(
+				"prop" => array(
+					"vcl_inst" => &$t
+				),
+				"obj_inst" => &$ob,
+				"request" => $request,
+			));
 
-		$this->_search_res(array(
-			"prop" => array(
-				"vcl_inst" => &$t
-			),
-			"obj_inst" => &$ob,
-			"request" => $request,
-		));
-
-		$table = $t->draw();
+			$table = $t->draw();
+		}
 
 		$this->read_template("show.tpl");
 		$this->vars(array(
@@ -283,7 +304,7 @@ class object_treeview_v2_search extends class_base
 				"name" => "dat[$pn][ctr]",
 				"value" => $dat[$pn]["ctr"],
 				"options" => $ctrs
-			));	
+			));
 
 			$t->define_data(array(
 				"jrk" => html::textbox(array(
@@ -319,7 +340,7 @@ class object_treeview_v2_search extends class_base
 	function search_gen_els($arr)
 	{
 		$ret = array();
-		
+
 		$form_inf = safe_array($arr["obj_inst"]->meta("search_fields"));
 
 		foreach($form_inf as $eln => $eld)
@@ -351,7 +372,7 @@ class object_treeview_v2_search extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->init_search_res_t($t, $arr["obj_inst"]);
-		
+
 		$res = $this->get_search_results($arr["obj_inst"], $arr["request"]);
 		foreach($res as $row)
 		{
