@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.215 2007/11/30 14:36:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.216 2007/12/05 14:53:33 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -45,6 +45,9 @@
 		@property inherit_prods_from type=relpicker reltype=RELTYPE_ROOM parent=general_up
 		@caption P&auml;ri tooted ruumist
 	
+		@property inherit_oh_from type=relpicker reltype=RELTYPE_ROOM parent=general_up
+		@caption P&auml;ri avamisajad ruumist
+
 		property reservation_template type=select parent=general_up
 		caption Broneeringu template
 
@@ -5632,6 +5635,10 @@ class room extends class_base
 	{
 		$rv = array();
 		$gl = aw_global_get("gidlist_oid");
+		if(is_oid($room->prop("inherit_oh_from")) && this->can("view" , $room->prop("inherit_oh_from")))
+		{
+			$room = obj($room->prop("inherit_oh_from"));
+		}
 		foreach($room->connections_from(array("type" => "RELTYPE_OPENHOURS")) as $c)
 		{
 			$oh = $c->to();

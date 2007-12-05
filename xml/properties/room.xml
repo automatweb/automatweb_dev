@@ -100,6 +100,17 @@
             <caption>P&amp;amp;auml;ri tooted ruumist</caption>
       </property>
       <property>
+            <name>inherit_oh_from</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOM</reltype>
+            <parent>general_up</parent>
+            <caption>P&amp;amp;auml;ri avamisajad ruumist</caption>
+      </property>
+      <property>
             <name>conditions</name>
             <table>objects</table>
             <field>meta</field>
