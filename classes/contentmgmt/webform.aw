@@ -2259,6 +2259,11 @@ class webform extends class_base
 				}
 
 			}
+			// strip tags because of hidden values
+			if ($pd["type"] == "text" && $pd["subtitle"] == 1 && trim(strip_tags($pd["value"])) == "")
+			{
+				$pd["value"] = $pd["caption"];
+			}
 			$htmlc->add_property($pd);
 		}
 		$htmlc->finish_output();
