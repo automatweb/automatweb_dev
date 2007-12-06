@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.17 2007/12/06 14:34:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.18 2007/12/06 14:54:15 dragut Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -517,10 +517,18 @@ class otto_prod_search extends class_base
 		$ps = '';
 		foreach ($ol->arr() as $product_oid => $product_obj)
 		{
+			if (!$sections_lut[$product_oid])
+			{
+				$_s = reset($sections_lut);
+			}
+			else
+			{
+				$_s = $sections_lut[$product_oid];
+			}
 			$prod_inst = $product_obj->instance();
 
 			$viewlink = $this->mk_my_orb('show_items', array(
-				'section' => $sections_lut[$product_oid],
+				'section' => $_s,
 				'id' => aw_ini_get('shop.prod_fld_path_oc'),
 				'oview' => 2,
 				'apid' => $product_oid
