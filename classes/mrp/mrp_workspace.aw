@@ -4372,6 +4372,15 @@ class mrp_workspace extends class_base
 						"lang_id" => array(),
 						"site_id" => array()
 					));
+
+					foreach ($ol->arr() as $res_o)
+					{
+						if (!in_array($res_o->prop("state"), $this->active_resource_states))
+						{
+							unset($ret[$res_oid]);
+						}
+					}
+
 					return $this->make_keys($ol->ids());
 				}
 				else
