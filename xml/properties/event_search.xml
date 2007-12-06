@@ -126,6 +126,7 @@
             <syslog_type>ST_EVENT_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>
             <maintainer>dragut</maintainer>
+            <mantainer>kristo</mantainer>
       </classinfo>
       <groupinfo>
             <ftsearch>

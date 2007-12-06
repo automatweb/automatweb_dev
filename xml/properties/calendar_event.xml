@@ -252,14 +252,14 @@
       <property>
             <name>sector</name>
             <group>general</group>
-            <table>objects</table>
+            <table>planner</table>
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_SECTOR</reltype>
-            <method>serialize</method>
-            <field>meta</field>
+            <store>connect</store>
             <automatic>1</automatic>
             <size>10</size>
+            <field>sector</field>
             <caption>Valdkonnad</caption>
       </property>
       <property>
@@ -400,6 +400,7 @@
       <classinfo>
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <mantainer>kristo</mantainer>
       </classinfo>
       <groupinfo>
             <projects>

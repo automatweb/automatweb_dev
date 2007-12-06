@@ -10,49 +10,44 @@
       </property>
       <property>
             <name>loc_path</name>
-            <table>objects</table>
+            <table>scm_location</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textarea</type>
+            <field>location_path</field>
             <caption>Kohale saab</caption>
       </property>
       <property>
             <name>address</name>
-            <table>objects</table>
+            <table>scm_location</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
+            <field>address</field>
             <reltype>RELTYPE_ADDRESS</reltype>
             <caption>Aadress</caption>
       </property>
       <property>
             <name>map_url</name>
-            <table>objects</table>
+            <table>scm_location</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>map_url</field>
             <caption>Kaart</caption>
       </property>
       <property>
             <name>map</name>
-            <table>objects</table>
+            <table>scm_location</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
+            <field>map</field>
             <reltype>RELTYPE_MAP</reltype>
             <caption>Kaardi pilt</caption>
       </property>
       <property>
             <name>photo</name>
-            <table>objects</table>
+            <table>scm_location</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
+            <field>photo</field>
             <reltype>RELTYPE_PHOTO</reltype>
             <caption>Foto kohast</caption>
       </property>
@@ -60,21 +55,20 @@
             <name>make_copy</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>choose</type>
             <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Tee koopia</caption>
       </property>
       <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>callback</type>
             <callback>callback_get_transl</callback>
             <store>no</store>
+            <field>transl</field>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <classinfo>
@@ -88,6 +82,13 @@
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
       </groupinfo>
+      <tableinfo>
+            <scm_location>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </scm_location>
+      </tableinfo>
       <reltypes>
             <MAP>
                   <value>1</value>
