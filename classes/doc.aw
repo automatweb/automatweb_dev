@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.160 2007/11/23 12:30:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.161 2007/12/06 02:25:49 markop Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1893,5 +1893,31 @@ class doc extends class_base
 			die('/automatweb/js/fckeditor/fckstyles.xml');
 		}
 	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "user7":
+			case "user8":
+			case "user9":
+			case "user10":
+			case "user11":
+			case "user12":
+			case "user13":
+			case "user14":
+			case "user15":
+			case "user16":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(255)"
+				));
+			return true;
+		}
+	}
+
+
 }
+
+
 ?>
