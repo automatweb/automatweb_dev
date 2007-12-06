@@ -64,7 +64,6 @@ class relationmgr extends aw_template
 				}
 			}
 		}
-
 		$r = $this->init_vcl_property($arg);
 		$cli = get_instance("cfg/htmlclient");
 		foreach($r as $pn => $pd)
@@ -195,11 +194,13 @@ class relationmgr extends aw_template
 		if (($adc_id = $atc->get_current_conf()))
 		{
 			$adc = obj($adc_id);
-			$filt = $atc->get_alias_filter($adc_id);
+			$filt = $atc->get_usable_filter($adc_id);
 		}
 		if($filt)
 		{
-			$this->true_rel_classes = $atc->can_access_classes($adc, $this->rel_classes, true);
+			$this->true_rel_classes = $atc->can_access_classes($adc, $this->rel_classes, false);
+			$al_tmp = $atc->can_access_classes($adc, array(0 => $this->true_rel_classes[0]), true);
+			$this->true_rel_classes[0] = $al_tmp[0];
 			$tmp = array();
 			foreach($this->clids as $key => $val)
 			{
