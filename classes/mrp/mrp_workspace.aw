@@ -4377,7 +4377,7 @@ class mrp_workspace extends class_base
 					{
 						if (!in_array($res_o->prop("state"), $this->active_resource_states))
 						{
-							unset($ret[$res_oid]);
+							$ol->remove($res_o);
 						}
 					}
 
