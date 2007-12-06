@@ -717,6 +717,13 @@ class crm_company_docs_impl extends class_base
 			$has = true;
 		}
 
+		if ($req["docs_s_comment"] != "")
+		{
+			$res["comment"] = "%".$req["docs_s_comment"]."%";
+			$has = true;
+		}
+
+
 		if ($req["docs_s_task"] != "")
 		{
 			$res[] = new object_list_filter(array(
