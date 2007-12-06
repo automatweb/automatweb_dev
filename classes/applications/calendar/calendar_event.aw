@@ -110,7 +110,7 @@
 property url type=releditor table=objects field=meta method=serialize reltype=RELTYPE_URL use_form=emb rel_id=first
 caption S&uuml;ndmuse kodulehek&uuml;lg
 
-@property sector type=relpicker multiple=1 reltype=RELTYPE_SECTOR method=serialize field=meta table=objects automatic=1 size=10
+@property sector type=relpicker multiple=1 reltype=RELTYPE_SECTOR store=connect automatic=1 size=10
 @caption Valdkonnad
 
 @property location type=popup_search reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATION style=autocomplete field=ucheck5 no_edit=1

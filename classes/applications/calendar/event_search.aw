@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.100 2007/11/29 09:36:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.101 2007/12/06 01:42:40 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -87,7 +87,20 @@ class event_search extends class_base
 			"clid" => CL_EVENT_SEARCH,
 		));
 
-		$this->fields = array("fulltext","fulltext2", "start_date","end_date","project1","project2", "active", "format", "location", "search_btn");
+		$this->fields = array(
+			"fulltext",
+			"fulltext2", 
+			"start_date",
+			"end_date",
+			"project1",
+			"project2", 
+			"active", 
+			"format", 
+			"location", 
+			"level", 
+			"sector",
+			"search_btn"
+		);
 		lc_site_load("event_search", &$this);
 	}
 
@@ -126,6 +139,12 @@ class event_search extends class_base
 		$o = &$arr["obj_inst"];
 		$t = &$prop["vcl_inst"];
 		$formconfig = $o->meta("formconfig");
+		$event_cfgform = $o->prop('event_cfgform');
+		if ($this->can('view', $event_cfgform))
+		{
+			$event_cfgform = new object($event_cfgform);
+			$event_class_id = $event_cfgform->prop('ctype');
+		}
 
 		$t->define_field(array(
 			"name" => "name",
@@ -265,20 +284,49 @@ class event_search extends class_base
 			))
 		));
 
-		$t->define_data(array(
-			"name" => t("Asukoht"),
-			"caption" => html::textbox(array(
-				"name" => "location[caption]",
-				"value" => $formconfig["location"]["caption"] ? $formconfig["location"]["caption"] : t("Asukoht"),
-			)),
-			"settings" => "",
-			"active" => html::checkbox(array(
-				"name" => "location[active]",
-				"value" => $formconfig["location"]["active"],
-				"checked" => $formconfig["location"]["active"],
-			))
-		));
+		if ($event_class_id == CL_CALENDAR_EVENT)
+		{
+			$t->define_data(array(
+				"name" => t("Asukoht"),
+				"caption" => html::textbox(array(
+					"name" => "location[caption]",
+					"value" => $formconfig["location"]["caption"] ? $formconfig["location"]["caption"] : t("Asukoht"),
+				)),
+				"settings" => "",
+				"active" => html::checkbox(array(
+					"name" => "location[active]",
+					"value" => $formconfig["location"]["active"],
+					"checked" => $formconfig["location"]["active"],
+				))
+			));
+			$t->define_data(array(
+				"name" => t("Tase"),
+				"caption" => html::textbox(array(
+					"name" => "level[caption]",
+					"value" => $formconfig["level"]["caption"] ? $formconfig["level"]["caption"] : t("Tase"),
+				)),
+				"settings" => "",
+				"active" => html::checkbox(array(
+					"name" => "level[active]",
+					"value" => $formconfig["level"]["active"],
+					"checked" => $formconfig["level"]["active"],
+				))
+			));
 
+			$t->define_data(array(
+				"name" => t("Valdkonnad"),
+				"caption" => html::textbox(array(
+					"name" => "sector[caption]",
+					"value" => $formconfig["sector"]["caption"] ? $formconfig["sector"]["caption"] : t("Valdkonnad"),
+				)),
+				"settings" => "",
+				"active" => html::checkbox(array(
+					"name" => "sector[active]",
+					"value" => $formconfig["sector"]["active"],
+					"checked" => $formconfig["sector"]["active"],
+				))
+			));
+		}
 		$t->define_data(array(
 			"name" => t("Otsi nupp"),
 			"caption" => html::textbox(array(
@@ -623,6 +671,14 @@ class event_search extends class_base
 	{
 		enter_function("event_search::show");
 		$ob = new object($arr["id"]);
+
+		$event_cfgform = $ob->prop('event_cfgform');
+		if ($this->can('view', ($event_cfgform)))
+		{
+			$event_cfgform = new object($event_cfgform);
+			$event_class_id = $event_cfgform->prop('ctype');
+		}
+
 		$htmlc = get_instance("cfg/htmlclient", array("template" => "webform.tpl"));
 		$htmlc->start_output();
 
@@ -762,14 +818,38 @@ class event_search extends class_base
 					));
 			}
 		}
-		if($formconfig["end_date"]["active"])
+		if ($event_class_id == CL_CALENDAR_EVENT)
 		{
-			$htmlc->add_property(array(
-				"name" => "location",
-				"caption" => $formconfig["location"]["caption"],
-				"type" => "textbox",
-				"value" => $arr["location"],
-			));
+			if($formconfig["location"]["active"])
+			{
+				$htmlc->add_property(array(
+					"name" => "location",
+					"caption" => $formconfig["location"]["caption"],
+					"type" => "textbox",
+					"value" => $arr["location"],
+				));
+			}
+			if($formconfig["level"]["active"])
+			{
+				$cl_calendar_event = get_instance(CL_CALENDAR_EVENT);
+				$htmlc->add_property(array(
+					"name" => "level",
+					"caption" => $formconfig["level"]["caption"],
+					"type" => "select",
+					"value" => $arr["level"],
+					"options" => array('0' => t('Vali')) + $cl_calendar_event->level_options,
+				));
+			}
+			if($formconfig["sector"]["active"])
+			{
+				$cl_calendar_event = get_instance(CL_CALENDAR_EVENT);
+				$htmlc->add_property(array(
+					"name" => "sector",
+					"caption" => $formconfig["sector"]["caption"],
+					"type" => "textbox",
+					"value" => $arr["sector"],
+				));
+			}
 		}
 		$search_p1 = false;
 		$search_p2 = false;
@@ -985,11 +1065,9 @@ class event_search extends class_base
 			$search["parent"] = $parx2 = array();
 			$search["sort_by"] = "planner.start";
 
-			$event_cfgform = $ob->prop('event_cfgform');
-			if ($this->can('view', ($event_cfgform)))
+			if ($event_class_id == CL_CALENDAR_EVENT)
 			{
-				$event_cfgform = new object($event_cfgform);
-				$search['class_id'] = $event_cfgform->prop('ctype');
+				$search['class_id'] = CL_CALENDAR_EVENT;
 			}
 			else
 			{
@@ -1052,31 +1130,6 @@ class event_search extends class_base
 					}
 				}
 			}
-			$search[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array(
-							"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
-							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 86399)),
-						),
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array(
-							"end" => -1,
-							"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
-						),
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array(
-							"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
-						),
-					)),
-				),
-			));
 			$search["lang_id"] = array();
 			$search["site_id"] = array();
 
@@ -1106,17 +1159,102 @@ class event_search extends class_base
 					"conditions" => $or_parts,
 				));
 			}
-			if ($arr['location'] && $search['class_id'] == CL_CALENDAR_EVENT)
+			if ($search['class_id'] == CL_CALENDAR_EVENT)
 			{
+				if (!empty($arr['sector']))
+				{
+					$search['CL_CALENDAR_EVENT.RELTYPE_SECTOR.name'] = '%'.$arr['sector'].'%';
+				}
+				if (!empty($arr['level']))
+				{
+					$search['CL_CALENDAR_EVENT.level'] = (int)$arr['level'];
+				}
+				if (!empty($arr['location']))
+				{
+					$search[] = new object_list_filter(array(
+						'logic' => 'OR',
+						'conditions' => array(
+							"CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.riik.name" => '%'.$arr['location'].'%',
+							"CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.maakond.name" => '%'.$arr['location'].'%',
+							"CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.linn.name" => '%'.$arr['location'].'%',
+						)
+					));
+				}
 
 				$search[] = new object_list_filter(array(
-					'logic' => 'OR',
-					'conditions' => array(
-						'CL_CALENDAR_EVENT.RELTYPE_LOCATION.RELTYPE_ADDRESS.RELTYPE_RIIK.name' => '%'.$arr['location'].'%',
-						'CL_CALENDAR_EVENT.RELTYPE_LOCATION.RELTYPE_ADDRESS.RELTYPE_MAAKOND.name' => '%'.$arr['location'].'%'
-					)
+					"logic" => "OR",
+					"conditions" => array(
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+								"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 86399)),
+							),
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"end" => -1,
+								"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
+							),
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
+							),
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+								"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 86399)),
+							),
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => -1,
+								"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.start" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
+							),
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.start" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
+							),
+						)),
+					),
 				));
 
+			}
+			else
+			{
+				$search[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+								"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 86399)),
+							),
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"end" => -1,
+								"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
+							),
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
+							),
+						)),
+					),
+				));
 			}
 			if(is_oid($arr["evt_id"]) && $this->can("view", $arr["evt_id"]))
 			{
