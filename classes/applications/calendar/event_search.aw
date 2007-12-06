@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.102 2007/12/06 02:23:10 dragut Exp $
-// event_search.aw - Sndmuste otsing 
+// event_search.aw - Sndmuste otsing
 /*
 
 @classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes maintainer=dragut
@@ -89,15 +88,15 @@ class event_search extends class_base
 
 		$this->fields = array(
 			"fulltext",
-			"fulltext2", 
+			"fulltext2",
 			"start_date",
 			"end_date",
 			"project1",
-			"project2", 
-			"active", 
-			"format", 
-			"location", 
-			"level", 
+			"project2",
+			"active",
+			"format",
+			"location",
+			"level",
 			"sector",
 			"search_btn"
 		);
@@ -110,18 +109,18 @@ class event_search extends class_base
 		$cfgform_id = $o->prop("event_cfgform");
 		if (is_oid($cfgform_id) && $this->can("view", $cfgform_id))
 		{
-			$this->cfgform_id = $cfgform_id;
+			$this->evt_cfgform_id = $cfgform_id;
 		};
 	}
 
 	function gen_ftsearch_fields($arr)
 	{
-		if (!$this->cfgform_id)
+		if (!$this->evt_cfgform_id)
 		{
 			return PROP_IGNORE;
 		};
 		$t = get_instance(CL_CFGFORM);
-		$props = $t->get_props_from_cfgform(array("id" => $this->cfgform_id));
+		$props = $t->get_props_from_cfgform(array("id" => $this->evt_cfgform_id));
 		foreach($props as $propname => $propdata)
 		{
 			if ($propdata["type"] == "textbox" || $propdata["type"] == "textarea")
@@ -130,7 +129,7 @@ class event_search extends class_base
 			};
 		};
 		$arr["prop"]["options"] = $opts;
-		
+
 	}
 
 	function gen_ftform($arr)
@@ -150,24 +149,24 @@ class event_search extends class_base
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
-		
+
 		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Pealkiri"),
 		));
-		
+
 		$t->define_field(array(
 			"name" => "settings",
 			"caption" => t("Seaded"),
 		));
-		
+
 		$t->define_field(array(
 			"name" => "active",
 			"caption" => t("Aktiivne"),
 		));
-		
+
 		$t->set_sortable(false);
-		
+
 		$t->define_data(array(
 			"name" => t("Tekstiotsing"),
 			"caption" => html::textbox(array(
@@ -196,7 +195,7 @@ class event_search extends class_base
 		$date_display_options = array(
 			'select' => t('Kuvatakse valikkastid'),
 			'one_textbox' => t('Kuvatakse &uuml;ks tekstikast'),
-		);		
+		);
 		$t->define_data(array(
 			"name" => t("Alguskuup&auml;ev"),
 			"caption" => html::textbox(array(
@@ -212,10 +211,10 @@ class event_search extends class_base
 				"name" => "start_date[active]",
 				"value" => $formconfig["start_date"]["active"],
 				"checked" => $formconfig["start_date"]["active"],
-	
+
 			)),
 		));
-		
+
 		$t->define_data(array(
 			"name" => t("L&otilde;ppkuup&auml;ev"),
 			"caption" => html::textbox(array(
@@ -233,7 +232,7 @@ class event_search extends class_base
 				"checked" => $formconfig["end_date"]["active"],
 			)),
 		));
-		
+
 		$prj_conns = $o->connections_from(array(
 			"type" => "RELTYPE_EVENT_SOURCE",
 		));
@@ -264,7 +263,7 @@ class event_search extends class_base
 				"checked" => $formconfig["project1"]["active"],
 			)),
 		));
-		
+
 		$t->define_data(array(
 			"name" => t("Projekt 2"),
 			"caption" => html::textbox(array(
@@ -370,7 +369,7 @@ class event_search extends class_base
 			case "ftform":
 				$this->gen_ftform($arr);
 				break;
-				
+
 			case "result_table":
 				$retval = $this->gen_result_table($arr);
 				break;
@@ -472,11 +471,11 @@ class event_search extends class_base
 			"name" => "fields",
 			"caption" => t("Lisav&auml;ljad"),
 		));
-		
+
 		$oldvals = $o->meta("result_table");
 
 		$tc = get_instance(CL_CFGFORM);
-		$cform_obj = new object($this->cfgform_id);
+		$cform_obj = new object($this->evt_cfgform_id);
 		$use_output = $cform_obj->prop("use_output");
 
 		$prop_output = $arr["obj_inst"]->prop("use_output");
@@ -603,7 +602,7 @@ class event_search extends class_base
 		};
 		$t->set_sortable(false);
 	}
-	
+
 	function get_search_results($arr)
 	{
 		// 1. pane kokku object list
@@ -623,7 +622,7 @@ class event_search extends class_base
 
 		$search = array();
 		$search["parent"] = array_merge($par1,$par2);
-			
+
 	       $ft_fields = $ob->meta("ftsearch_fields");
 	       $or_parts = array("name" => "%" . $arr["str"] . "%");
 	       foreach($ft_fields as $ft_field)
@@ -660,7 +659,7 @@ class event_search extends class_base
 		// 2. tagasta tulemused
 
 	}
-	
+
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
@@ -775,7 +774,7 @@ class event_search extends class_base
 				"value" => $arr["fulltext2"],
 			));
 		}
-		
+
 		if($formconfig["start_date"]["active"])
 		{
 			switch ($formconfig["start_date"]["type"])
@@ -919,7 +918,7 @@ class event_search extends class_base
 						$rn1[] = $r;
 					}
 				//	$search_p1 = true;
-					// this goddamn calendar has to manage the 
+					// this goddamn calendar has to manage the
 					// events from other calendars and projects aswell.. oh hell..
 					$sources = $tmp->connections_from(array(
 						"type" => "RELTYPE_EVENT_SOURCE",
@@ -1031,7 +1030,7 @@ class event_search extends class_base
 			}
 			$htmlc->add_property($vars);
 		}
-		
+
 		if($search_p2 && $formconfig["project2"]["active"])
 		{
 
@@ -1053,7 +1052,7 @@ class event_search extends class_base
 			}
 			$htmlc->add_property($vars);
 		}
-		
+
 		$htmlc->add_property(array(
 			"name" => "sbt",
 			"caption" => $formconfig["search_btn"]["caption"] != "" ? $formconfig["search_btn"]["caption"] : t("Otsi"),
@@ -1348,13 +1347,13 @@ class event_search extends class_base
 					{
 						$clickable = true;
 					}
-					
+
 					$this->vars(array(
 						"colcaption" => $propdef["caption"],
 					));
 					$cdat .= $this->parse("COLHEADER");
 					$col_count++;
-					
+
 					$this->vars(array(
 						"COLHEADER" => $cdat,
 						"col_count" => $col_count,
@@ -1421,7 +1420,7 @@ class event_search extends class_base
 						$z = 0;
 						foreach($cval as $key => $xz)
 						{
-							$cval[$key] = $z; 
+							$cval[$key] = $z;
 							$z++;
 						}
 						foreach(safe_array($eval["projs"]) as $dkey)
@@ -1528,7 +1527,7 @@ class event_search extends class_base
 								}
 							}
 							else
-							{	
+							{
 								if($nms == "image")
 								{
 									if(is_oid($v) && $this->can("view", $v))
@@ -1574,9 +1573,9 @@ class event_search extends class_base
 								{
 									$v = nl2br($v);
 								}
-							
+
 								// this seems to be the right place to execute controller (props)
-								
+
 
 								if(strpos($v, "#") !== false)
 								{
@@ -1584,7 +1583,7 @@ class event_search extends class_base
 								}
 							}
 							$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
-							
+
 						}
 						$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
 						$this->vars(array(
@@ -1646,7 +1645,7 @@ class event_search extends class_base
 							), CL_EVENT_SEARCH),
 						));
 						$delete_url_str = $this->parse('DELETE_EVENT_LINK');
-						
+
 					}
 
 					$this->vars(array(
@@ -1660,12 +1659,12 @@ class event_search extends class_base
 			$arr = $arr + array("section" => aw_global_get("section"));
 			$next_month_args = $arr;
 			$prev_month_args = $arr;
-			
+
 			if($next_month_args["start_date"]["month"] == 12)
 			{
 				$next_month_args["start_date"]["month"] = 1;
 				$next_month_args["end_date"]["month"] = 1;
-				
+
 				$next_month_args["start_date"]["year"]++;
 				$next_month_args["end_date"]["year"]++;
 			}
@@ -1681,7 +1680,7 @@ class event_search extends class_base
 			{
 				$prev_month_args["start_date"]["month"] = 12;
 				$prev_month_args["start_date"]["year"]--;
-				
+
 				$prev_month_args["end_date"]["month"] = 12;
 				$prev_month_args["end_date"]["year"]--;
 			}
@@ -1690,7 +1689,7 @@ class event_search extends class_base
 				$prev_month_args["start_date"]["month"]--;
 				$prev_month_args["end_date"]["month"] = $prev_month_args["start_date"]["month"];
 			}
-			
+
 			$prev_month_args["start_date"]["day"] = 1;
 			$prev_month_args["end_date"]["day"] = cal_days_in_month(CAL_GREGORIAN, $prev_month_args["end_date"]["month"], $prev_month_args["end_date"]["year"]);
 			$prev_month_args["sbt"] = "Otsi";
@@ -1748,11 +1747,11 @@ class event_search extends class_base
 					"week_url" => str_replace("event_search", "", $this->mk_my_orb("search", $week_args, "event_search")),
 					"week_nr" => $i,
 				));
-				
+
 				$nx = ($i == $weeks ? "next_weeks_end": "next_weeks").($start_day == $arr["start_date"]["day"] && $end_day == $arr["end_date"]["day"] ? "_b" : "");
 				$res_weeks .= $this->parse($nx);
 			}
-			
+
 			$this->vars(array(
 				"begin_month_name" => locale::get_lc_month($arr["start_date"]["month"]),
 				"begin_year" => $arr["start_date"]["year"],
@@ -1760,7 +1759,7 @@ class event_search extends class_base
 				"next_month_url" => str_replace("event_search", "", $this->mk_my_orb("search", $next_month_args)),
 				"next_weeks" => $res_weeks,
 			));
-			
+
 			$this->vars(array(
 				"EVENT" => $res,
 			));
@@ -1812,7 +1811,7 @@ class event_search extends class_base
 	{
 		return (int)($el1["ord"] - $el2["ord"]);
 	}
-	
+
 	function __sort_props_by_proj($el1, $el2)
 	{
 		if((int)($el1["ord"] - $el2["ord"]) == 0)
@@ -1882,7 +1881,7 @@ class event_search extends class_base
 		@attrib name=delete_event params=name
 
 		@param event_id required type=int acl=view;edit
-		@param return_url optional type=string 
+		@param return_url optional type=string
 	**/
 	function delete_event($arr)
 	{
@@ -1891,7 +1890,7 @@ class event_search extends class_base
 			$o = new object($arr['event_id']);
 			$o->delete(true);
 
-			// make the event go away in event_search list --dragut (27.11.2007)	
+			// make the event go away in event_search list --dragut (27.11.2007)
 			$cache = get_instance('cache');
 			$cache->file_clear_pt('storage_search');
 		}
