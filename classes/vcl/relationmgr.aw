@@ -48,7 +48,7 @@ class relationmgr extends aw_template
 		$ccf = $atc->get_current_conf();
 		if ($ccf)
 		{
-			$filt = $atc->get_alias_filter($ccf);
+			$filt = $atc->get_usable_filter($ccf);
 			foreach($arg["relinfo"] as $idx => $dat)
 			{
 				foreach($dat["clid"]  as $idx2 => $clid)
@@ -171,10 +171,9 @@ class relationmgr extends aw_template
 			CL_SHOP_PACKET => $classes[CL_SHOP_PACKET]['name'],
 			CL_SHOP_PRODUCT_PACKAGING => $classes[CL_SHOP_PRODUCT_PACKAGING]['name'],
 		);
-
 		foreach($arr["relinfo"] as $key => $rel)
 		{
-			if(!$this->reltypes[$rel["value"]])
+			if(!$this->reltypes[$rel["value"]] && !$rel["hidden"])
 			{
 				$this->reltypes[$rel["value"]] = $rel["caption"];
 				$tmp = array();
@@ -278,6 +277,14 @@ class relationmgr extends aw_template
 			"value" => $arr["request"]["class_id"],
 		);
 		*/
+		$o = obj($arr["request"]["id"]);
+		if($arr["request"]["return_url"] && $o->class_id() == CL_DOCUMENT)
+		$rval["link"] = array(
+			"name" => "link",
+			"type" => "text",
+			"caption" => "",
+			"value" => html::href(array("target" => "aliasmgr", "url" => urldecode($arr["request"]["return_url"]), "caption" => t("Tagasi")))
+		);
 		$rval["name"] = array(
 			"name" => "name",
 			"type" => "textbox",
@@ -681,6 +688,8 @@ class relationmgr extends aw_template
 			))
 		);
 		$tb->add_cdata('<select NAME="aselect" style="width:200px"><script LANGUAGE="JavaScript">listB.printOptions()</SCRIPT></select>');
+		$ru_var = urlencode(get_ru());
+		$tb->add_cdata('<input TYPE="hidden" VALUE="'.$ru_var.'" NAME="return_url" />');
 		$tb->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",

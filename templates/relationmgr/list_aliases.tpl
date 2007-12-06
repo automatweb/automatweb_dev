@@ -23,8 +23,9 @@ function search_for_object()
 	var search_url = "{VAR:search_url}";
 	reltype = document.changeform.reltype.options[document.changeform.reltype.selectedIndex].value;
 	objtype = document.changeform.aselect.value;
+	rurl = document.changeform.return_url.value
 
-	window.location.href=search_url + "&reltype=" + reltype + "&aselect=" + objtype;
+	window.location.href=search_url + "&reltype=" + reltype + "&aselect=" + objtype + "&return_url=" + rurl;
 }
 
 function awdelete()

@@ -263,15 +263,21 @@ class add_tree_conf extends class_base
 		return $ret;
 	}
 
-	/** returns the list of alias-addable classes for tree conf $id
+	/** returns the list of usable classes for tree conf $id
 	**/
-	function get_alias_filter($id)
+	function get_usable_filter($id)
 	{
 		$o = obj($id);
-		$r = $o->meta("alias_add");
+		$r = $o->meta("usable");
 		$v = $o->meta("visible");
 		$ret = array();
 
+		$this->get_meta_classes($o, $r, $v, &$ret);
+		return $ret;	
+	}
+
+	function get_meta_classes($o, $r, $v, $ret)
+	{
 		$clss = $o->meta("class_structure");
 		if (!is_array($clss))
 		{
@@ -326,6 +332,18 @@ class add_tree_conf extends class_base
 				}
 			}
 		}
+	}
+
+	/** returns the list of alias-addable classes for tree conf $id
+	**/
+	function get_alias_filter($id)
+	{
+		$o = obj($id);
+		$r = $o->meta("alias_add");
+		$v = $o->meta("visible");
+		$ret = array();
+
+		$this->get_meta_classes($o, $r, $v, &$ret);
 		return $ret;
 	}
 
