@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.19 2007/12/06 14:55:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.20 2007/12/06 16:20:09 dragut Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -189,7 +189,7 @@ class otto_prod_search extends class_base
 					"userta2" => "%".$arr["str"]."%",
 				)
 			)),
-			"price" => new obj_predicate_not(10000000),
+		//	"price" => new obj_predicate_not(10000000), // is it really needed here ? --dragut 06.12.2007
 			"user3" => new obj_predicate_not(''), // don't show products, which don't have images --dragut
 			"userch3" => new obj_predicate_not(1), // this is for bonprix, don't show sold out products, i guess it won't affect otto ... --dragut
 		);
@@ -601,32 +601,41 @@ class otto_prod_search extends class_base
 		if ($_GET["dos"])
 		{
 			$filter = array(
-				"class_id" => CL_SHOP_PRODUCT
+				"class_id" => CL_SHOP_PRODUCT,
+				"user3" => new obj_predicate_not(''), // don't show products, which don't have images --dragut
+				"userch3" => new obj_predicate_not(1), // this is for bonprix, don't show sold out products, i guess it won't affect otto ... --dragut
 			);
 			if ($_GET["prod_name"] != "")
 			{
-				$filter["name"] = "%".$_GET["prod_name"]."%";
+				$product_name = strip_tags($_GET["prod_name"]);
+
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"name" => "%".$product_name."%",
+						"user6" => "%".substr($product_name, 0,7)."%",
+						"user6" => "%".substr($product_name, 0,6)."%",
+						"userta2" => "%".$product_name."%",
+					)
+				));
 			}
 			if ($_GET["prod_color"] != "")
 			{
-				$filter["user17"] = "%".$_GET["prod_color"]."%";
+				$filter["user7"] = "%".$_GET["prod_color"]."%";
 			}
 
 			if ($_GET["price_from"] > 0 && $_GET["price_to"] > 0)
 			{
-			//	$filter["price"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $_GET["price_from"], $_GET["price_to"]);
 				$filter["user14"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $_GET["price_from"], $_GET["price_to"]);
 			}
 			else
 			if ($_GET["price_from"] > 0)
 			{
-			//	$filter["price"] = new obj_predicate_compare(OBJ_COMP_GREATER, $_GET["price_from"]);
 				$filter["user14"] = new obj_predicate_compare(OBJ_COMP_GREATER, $_GET["price_from"]);
 			}
 			else
 			if ($_GET["price_to"] > 0)
 			{
-			//	$filter["price"] = new obj_predicate_compare(OBJ_COMP_LESS, $_GET["price_to"]);
 				$filter["user14"] = new obj_predicate_compare(OBJ_COMP_LESS, $_GET["price_to"]);
 			}
 			$parents = array();
