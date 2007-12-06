@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 class crm_company_objects_impl extends class_base
 {
 	function crm_company_objects_impl()

@@ -39,39 +39,39 @@ msgid "Omaduse Number (s_ord_num) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_date_from
-msgid "Omaduse Kuupäev alates (s_date_from) caption"
+msgid "Omaduse Kuup&auml;ev alates (s_date_from) caption"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_date_from_comment
-msgid "Omaduse Kuupäev alates (s_date_from) kommentaar"
+msgid "Omaduse Kuup&auml;ev alates (s_date_from) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_date_from_help
-msgid "Omaduse Kuupäev alates (s_date_from) help"
+msgid "Omaduse Kuup&auml;ev alates (s_date_from) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_date_to
-msgid "Omaduse Kuupäev kuni (s_date_to) caption"
+msgid "Omaduse Kuup&auml;ev kuni (s_date_to) caption"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_date_to_comment
-msgid "Omaduse Kuupäev kuni (s_date_to) kommentaar"
+msgid "Omaduse Kuup&auml;ev kuni (s_date_to) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_date_to_help
-msgid "Omaduse Kuupäev kuni (s_date_to) help"
+msgid "Omaduse Kuup&auml;ev kuni (s_date_to) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_salesp_name
-msgid "Omaduse Müügimehe nimi (s_salesp_name) caption"
+msgid "Omaduse M&uuml;&uuml;gimehe nimi (s_salesp_name) caption"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_salesp_name_comment
-msgid "Omaduse Müügimehe nimi (s_salesp_name) kommentaar"
+msgid "Omaduse M&uuml;&uuml;gimehe nimi (s_salesp_name) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_salesp_name_help
-msgid "Omaduse Müügimehe nimi (s_salesp_name) help"
+msgid "Omaduse M&uuml;&uuml;gimehe nimi (s_salesp_name) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_s_btn
@@ -123,39 +123,39 @@ msgid "Omaduse Number (ts_ord_num) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_date_from
-msgid "Omaduse Kuupäev alates (ts_date_from) caption"
+msgid "Omaduse Kuup&auml;ev alates (ts_date_from) caption"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_date_from_comment
-msgid "Omaduse Kuupäev alates (ts_date_from) kommentaar"
+msgid "Omaduse Kuup&auml;ev alates (ts_date_from) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_date_from_help
-msgid "Omaduse Kuupäev alates (ts_date_from) help"
+msgid "Omaduse Kuup&auml;ev alates (ts_date_from) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_date_to
-msgid "Omaduse Kuupäev kuni (ts_date_to) caption"
+msgid "Omaduse Kuup&auml;ev kuni (ts_date_to) caption"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_date_to_comment
-msgid "Omaduse Kuupäev kuni (ts_date_to) kommentaar"
+msgid "Omaduse Kuup&auml;ev kuni (ts_date_to) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_date_to_help
-msgid "Omaduse Kuupäev kuni (ts_date_to) help"
+msgid "Omaduse Kuup&auml;ev kuni (ts_date_to) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_salesp_name
-msgid "Omaduse Müügimehe nimi (ts_salesp_name) caption"
+msgid "Omaduse M&uuml;&uuml;gimehe nimi (ts_salesp_name) caption"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_salesp_name_comment
-msgid "Omaduse Müügimehe nimi (ts_salesp_name) kommentaar"
+msgid "Omaduse M&uuml;&uuml;gimehe nimi (ts_salesp_name) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_salesp_name_help
-msgid "Omaduse Müügimehe nimi (ts_salesp_name) help"
+msgid "Omaduse M&uuml;&uuml;gimehe nimi (ts_salesp_name) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_browser.aw:prop_ts_btn

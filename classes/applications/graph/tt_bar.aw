@@ -1,4 +1,7 @@
-<?
+<?php
+/*
+@classinfo maintainer=kristo
+*/
 classload("applications/graph/tt");
 class BarGraph extends TTGraph
 {

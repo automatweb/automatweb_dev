@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/spa_bookings/spa_products_overview.aw:class_1248_help
 msgid "Klassi Broneeringute toitlustuse haldus help"
 msgstr ""
@@ -67,7 +66,7 @@ msgid "Kujundusosa Ruumid (left) pealkiri"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_products_overview.aw:layout_right
-msgid "Kujundusosa Broneeringud ja toitlustus (right) pealkiri"
+msgid "Kujundusosa Broneeringud&nbsp;ja&nbsp;toitlustus (right) pealkiri"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_products_overview.aw:109
@@ -93,4 +92,3 @@ msgstr ""
 #: classes/applications/spa_bookings/spa_products_overview.aw:201
 msgid "Ruum"
 msgstr ""
-

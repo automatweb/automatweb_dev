@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.26 2007/01/17 10:22:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.27 2007/12/06 14:33:32 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
-@classinfo syslog_type=ST_TASK_QUICK_ENTRY no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_TASK_QUICK_ENTRY no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @groupinfo general caption=&Uuml;ldine default=1 icon=edit focus=customer
 

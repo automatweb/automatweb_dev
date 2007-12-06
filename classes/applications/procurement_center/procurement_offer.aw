@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.31 2007/11/23 11:05:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.32 2007/12/06 14:33:50 kristo Exp $
 // procurement_offer.aw - Pakkumine hankele
 /*
 

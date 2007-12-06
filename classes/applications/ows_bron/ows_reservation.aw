@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.4 2007/11/02 10:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.5 2007/12/06 14:33:44 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
-@classinfo syslog_type=ST_OWS_RESERVATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_OWS_RESERVATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_ows_reservations index=aw_oid master_table=objects master_index=brother_of
 
 @default table=aw_ows_reservations

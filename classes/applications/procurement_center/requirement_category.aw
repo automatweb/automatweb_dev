@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/requirement_category.aw,v 1.1 2006/11/13 10:29:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/requirement_category.aw,v 1.2 2007/12/06 14:33:50 kristo Exp $
 // requirement_category.aw - N&otilde;ude kategooria 
 /*
 
-@classinfo syslog_type=ST_REQUIREMENT_CATEGORY relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_REQUIREMENT_CATEGORY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

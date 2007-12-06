@@ -10,31 +10,31 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/calendar.aw:699
+#: classes/vcl/calendar.aw:702
 msgid "Täna"
 msgstr ""
 
-#: classes/vcl/calendar.aw:700
+#: classes/vcl/calendar.aw:703
 msgid "Päev"
 msgstr ""
 
-#: classes/vcl/calendar.aw:701
+#: classes/vcl/calendar.aw:704
 msgid "Nädal"
 msgstr ""
 
-#: classes/vcl/calendar.aw:702
+#: classes/vcl/calendar.aw:705
 msgid "Kuu"
 msgstr ""
 
-#: classes/vcl/calendar.aw:703
+#: classes/vcl/calendar.aw:706
 msgid "Ülevaade"
 msgstr ""
 
-#: classes/vcl/calendar.aw:764
+#: classes/vcl/calendar.aw:767
 msgid "Toimetused"
 msgstr ""
 
-#: classes/vcl/calendar.aw:1802
+#: classes/vcl/calendar.aw:1808
 msgid "Lisas [%s] %s /  Muutis [%s] %s"
 msgstr ""
 

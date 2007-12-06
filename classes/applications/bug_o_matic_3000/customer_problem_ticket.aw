@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/customer_problem_ticket.aw,v 1.4 2007/11/27 18:14:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/customer_problem_ticket.aw,v 1.5 2007/12/06 14:32:52 kristo Exp $
 // customer_problem_ticket.aw - Probleem 
 /*
 
-@classinfo syslog_type=ST_CUSTOMER_PROBLEM_TICKET relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=robert
+@classinfo syslog_type=ST_CUSTOMER_PROBLEM_TICKET relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
 @tableinfo aw_problem_tickets index=aw_oid master_table=objects master_index=brother_of
 @default table=aw_problem_tickets
 @default group=general

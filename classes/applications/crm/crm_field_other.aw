@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_other.aw,v 1.2 2006/07/12 13:36:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_other.aw,v 1.3 2007/12/06 14:33:17 kristo Exp $
 // crm_field_other.aw - Muu (valdkond) 
 /*
 
-@classinfo syslog_type=ST_CRM_FIELD_OTHER relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_FIELD_OTHER relationmgr=yes no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

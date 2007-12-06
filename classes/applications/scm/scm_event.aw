@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.8 2006/08/23 12:22:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.9 2007/12/06 14:34:06 kristo Exp $
 // scm_event.aw - Spordiala 
 /*
 
-@classinfo syslog_type=ST_SCM_EVENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SCM_EVENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
 @default group=general

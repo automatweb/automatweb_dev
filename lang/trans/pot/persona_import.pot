@@ -250,7 +250,7 @@ msgstr ""
 msgid "Impordi pildid"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:175 classes/applications/persona_import/persona_import.aw:248 classes/applications/persona_import/persona_import.aw:1637
+#: classes/applications/persona_import/persona_import.aw:175 classes/applications/persona_import/persona_import.aw:248 classes/applications/persona_import/persona_import.aw:1664
 msgid "You forgot to enter server data"
 msgstr ""
 
@@ -290,39 +290,39 @@ msgstr ""
 msgid "parse finished, processing starts<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:626
+#: classes/applications/persona_import/persona_import.aw:629
 msgid "creating yksused objects<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:677
+#: classes/applications/persona_import/persona_import.aw:680
 msgid "created new section<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:690
+#: classes/applications/persona_import/persona_import.aw:693
 msgid "updating existing section<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:741
+#: classes/applications/persona_import/persona_import.aw:744
 msgid "<h1>sections</h1>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:743
+#: classes/applications/persona_import/persona_import.aw:746
 msgid "<h1>sections done</h1>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:756
+#: classes/applications/persona_import/persona_import.aw:759
 msgid "creating person objects<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:784
+#: classes/applications/persona_import/persona_import.aw:787
 msgid "<br>creating new person object<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:790
+#: classes/applications/persona_import/persona_import.aw:793
 msgid "updating existing person object<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:809 classes/applications/persona_import/persona_import.aw:938
+#: classes/applications/persona_import/persona_import.aw:812 classes/applications/persona_import/persona_import.aw:941
 msgid "Vaata"
 msgstr ""
 

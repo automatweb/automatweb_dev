@@ -2,7 +2,7 @@
 // event_search.aw - Sndmuste otsing
 /*
 
-@classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes maintainer=dragut
+@classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes maintainer=dragut 
 
 @default table=objects
 @default group=general

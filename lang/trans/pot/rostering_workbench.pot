@@ -495,11 +495,11 @@ msgid "Kujundusosa Struktuur (contacts_edit_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/rostering/rostering_workbench.aw:layout_sk_tree
-msgid "Kujundusosa Pädevuste puu (sk_tree) pealkiri"
+msgid "Kujundusosa P&auml;devuste&nbsp;puu (sk_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/rostering/rostering_workbench.aw:layout_skl_tree
-msgid "Kujundusosa Organisatsiooni struktuur (skl_tree) pealkiri"
+msgid "Kujundusosa Organisatsiooni&nbsp;struktuur (skl_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/rostering/rostering_workbench.aw:layout_graph_tree

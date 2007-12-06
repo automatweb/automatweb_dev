@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.7 2007/11/23 13:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.8 2007/12/06 14:32:43 kristo Exp $
 // scheduler.aw - Scheduler
 
 // okey, objektid mida käima tõmmatakse, defineeritakse seostega. Metainfos salvestatud
@@ -11,7 +11,7 @@
 // login_uid ja login_pass kahh
 
 /*
-@classinfo relationmgr=yes syslog_type=ST_SCHEDULER_OBJ mantainer=kristo
+@classinfo relationmgr=yes syslog_type=ST_SCHEDULER_OBJ maintainer=kristo
 @default table=objects
 @default field=meta
 @default method=serialize

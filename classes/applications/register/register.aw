@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.24 2006/03/22 11:31:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.25 2007/12/06 14:34:00 kristo Exp $
 // register.aw - Register 
 /*
  
-@classinfo syslog_type=ST_REGISTER relationmgr=yes no_status=1 
+@classinfo syslog_type=ST_REGISTER relationmgr=yes no_status=1  maintainer=kristo
 
 @default table=objects
 @default group=general

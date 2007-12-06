@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_identity.aw,v 1.3 2005/12/08 16:53:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_identity.aw,v 1.4 2007/12/06 14:33:40 kristo Exp $
 // messenger_identity.aw - Messengeri identiteet 
 /*
 
-@classinfo syslog_type=ST_MESSENGER_IDENTITY 
+@classinfo syslog_type=ST_MESSENGER_IDENTITY  maintainer=markop
 
 @default table=objects
 @default group=general

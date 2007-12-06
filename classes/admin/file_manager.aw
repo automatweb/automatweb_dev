@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 
 class file_manager extends aw_template

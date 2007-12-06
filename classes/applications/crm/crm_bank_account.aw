@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank_account.aw,v 1.4 2006/11/29 11:56:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank_account.aw,v 1.5 2007/12/06 14:33:17 kristo Exp $
 // crm_bank_account.aw - CRM Pangakonto
 /*
 
 @classinfo syslog_type=ST_CRM_BANK_ACCOUNT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
-@tableinfo aw_crm_bank_account index=aw_oid master_index=brother_of master_table=objects
+@tableinfo aw_crm_bank_account index=aw_oid master_index=brother_of master_table=objects maintainer=markop
 
 @default table=objects
 @default group=general

@@ -2,7 +2,7 @@
 /*
 H ANDLE_MESSAGE(MSG_STORAGE_SAVE, foobar)
 
-@classinfo  mantainer=kristo
+@classinfo  maintainer=kristo
 */
 /*
 	this calls monitors name changes in property objects and alters all tables 

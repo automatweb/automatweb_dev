@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.8 2006/05/10 14:16:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.9 2007/12/06 14:33:54 kristo Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
-@classinfo syslog_type=ST_CONTACT_LIST relationmgr=yes 
+@classinfo syslog_type=ST_CONTACT_LIST relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

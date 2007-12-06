@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/answerer.aw,v 1.3 2006/10/22 20:57:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/answerer.aw,v 1.4 2007/12/06 14:33:53 kristo Exp $
 // answerer.aw - Vastaja 
 /*
 
-@classinfo syslog_type=ST_ANSWERER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ANSWERER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
 @default group=general

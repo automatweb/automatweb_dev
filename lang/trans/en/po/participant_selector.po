@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:38 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,24 +9,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/calendar/vcl/participant_selector.aw:34
+#: classes/applications/calendar/vcl/participant_selector.aw:37
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/calendar/vcl/participant_selector.aw:42
+#: classes/applications/calendar/vcl/participant_selector.aw:45
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/applications/calendar/vcl/participant_selector.aw:48
+#: classes/applications/calendar/vcl/participant_selector.aw:51
 msgid "E-post"
 msgstr "E-mail"
 
-#: classes/applications/calendar/vcl/participant_selector.aw:54
+#: classes/applications/calendar/vcl/participant_selector.aw:57
 msgid "Ametinimetus"
 msgstr "Profession"
 
-#: classes/applications/calendar/vcl/participant_selector.aw:95
+#: classes/applications/calendar/vcl/participant_selector.aw:98
 msgid "osalejad.xls"
 msgstr "participants.xls"
-

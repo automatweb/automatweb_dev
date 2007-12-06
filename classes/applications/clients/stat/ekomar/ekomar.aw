@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  mantainer=kristo
+@classinfo  maintainer=kristo
 */
 
 class ekomar extends aw_template

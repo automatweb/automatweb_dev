@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_risk.aw,v 1.3 2006/07/05 10:06:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_risk.aw,v 1.4 2007/12/06 14:33:32 kristo Exp $
 // project_risk.aw - Projekti risk 
 /*
 
-@classinfo syslog_type=ST_PROJECT_RISK relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROJECT_RISK relationmgr=yes no_status=1 prop_cb=1 maintainer=markop
 @tableinfo aw_project_risks index=aw_oid master_index=brother_of master_table=objects
 @default group=general
 

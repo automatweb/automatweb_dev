@@ -534,8 +534,8 @@ msgid "Seose Aruanne (RELTYPE_HTML) tekst"
 msgstr "Statement"
 
 #: classes/applications/stats/stats_viewer.aw:layout_dates
-msgid "Kujundusosa Kuupäevad (dates) pealkiri"
-msgstr "Dates"
+msgid "Kujundusosa Kuup&auml;evad (dates) pealkiri"
+msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:layout_us
 msgid "Kujundusosa Kasutajad (us) pealkiri"
@@ -554,16 +554,16 @@ msgid "Kujundusosa Maa (act_right) pealkiri"
 msgstr "Country"
 
 #: classes/applications/stats/stats_viewer.aw:layout_s_left
-msgid "Kujundusosa Sessioon & IP (s_left) pealkiri"
-msgstr "Session and IP"
+msgid "Kujundusosa Sessioon&nbsp;&&nbsp;IP (s_left) pealkiri"
+msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:layout_s_right
 msgid "Kujundusosa Tulemused (s_right) pealkiri"
 msgstr "Results"
 
 #: classes/applications/stats/stats_viewer.aw:layout_browser_tree
-msgid "Kujundusosa Kuupäevad (browser_tree) pealkiri"
-msgstr "Dates"
+msgid "Kujundusosa Kuup&auml;evad (browser_tree) pealkiri"
+msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:196
 msgid "Detailselt"
@@ -870,3 +870,12 @@ msgstr "Created by"
 #: classes/applications/stats/stats_viewer.aw:2450
 msgid "Vaata"
 msgstr "View"
+
+#~ msgid "Kujundusosa Kuupäevad (dates) pealkiri"
+#~ msgstr "Dates"
+
+#~ msgid "Kujundusosa Sessioon & IP (s_left) pealkiri"
+#~ msgstr "Session and IP"
+
+#~ msgid "Kujundusosa Kuupäevad (browser_tree) pealkiri"
+#~ msgstr "Dates"

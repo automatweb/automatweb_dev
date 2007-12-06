@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_priority.aw,v 1.1 2006/06/01 15:10:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_priority.aw,v 1.2 2007/12/06 14:33:50 kristo Exp $
 // procurement_priority.aw - Hanke prioriteet 
 /*
 
-@classinfo syslog_type=ST_PROCUREMENT_PRIORITY relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROCUREMENT_PRIORITY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo aw_procurement_priorities index=aw_oid master_index=brother_of master_table=objects
 

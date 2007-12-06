@@ -10,23 +10,23 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:62 classes/applications/crm/crm_company_cedit_impl.aw:76 classes/applications/crm/crm_company_cedit_impl.aw:154 classes/applications/crm/crm_company_cedit_impl.aw:166 classes/applications/crm/crm_company_cedit_impl.aw:335 classes/applications/crm/crm_company_cedit_impl.aw:347 classes/applications/crm/crm_company_cedit_impl.aw:471 classes/applications/crm/crm_company_cedit_impl.aw:483 classes/applications/crm/crm_company_cedit_impl.aw:540 classes/applications/crm/crm_company_cedit_impl.aw:583 classes/applications/crm/crm_company_cedit_impl.aw:712 classes/applications/crm/crm_company_cedit_impl.aw:727 classes/applications/crm/crm_company_cedit_impl.aw:844 classes/applications/crm/crm_company_cedit_impl.aw:922 classes/applications/crm/crm_company_cedit_impl.aw:939
+#: classes/applications/crm/crm_company_cedit_impl.aw:64 classes/applications/crm/crm_company_cedit_impl.aw:78 classes/applications/crm/crm_company_cedit_impl.aw:156 classes/applications/crm/crm_company_cedit_impl.aw:168 classes/applications/crm/crm_company_cedit_impl.aw:337 classes/applications/crm/crm_company_cedit_impl.aw:349 classes/applications/crm/crm_company_cedit_impl.aw:473 classes/applications/crm/crm_company_cedit_impl.aw:485 classes/applications/crm/crm_company_cedit_impl.aw:542 classes/applications/crm/crm_company_cedit_impl.aw:585 classes/applications/crm/crm_company_cedit_impl.aw:714 classes/applications/crm/crm_company_cedit_impl.aw:729 classes/applications/crm/crm_company_cedit_impl.aw:846 classes/applications/crm/crm_company_cedit_impl.aw:924 classes/applications/crm/crm_company_cedit_impl.aw:941
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:73
+#: classes/applications/crm/crm_company_cedit_impl.aw:75
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:73
+#: classes/applications/crm/crm_company_cedit_impl.aw:75
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:675
+#: classes/applications/crm/crm_company_cedit_impl.aw:677
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:850
+#: classes/applications/crm/crm_company_cedit_impl.aw:852
 msgid "Vali &uuml;ks"
 msgstr ""
 

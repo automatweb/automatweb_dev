@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.4 2007/11/27 18:14:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.5 2007/12/06 14:32:52 kristo Exp $
 // bug_comment.aw - Bugi kommentaar 
 /*
 
-@classinfo syslog_type=ST_BUG_COMMENT relationmgr=yes no_status=1 prop_cb=1 mantainer=robert
+@classinfo syslog_type=ST_BUG_COMMENT relationmgr=yes no_status=1 prop_cb=1 maintainer=robert
 
 @tableinfo aw_bug_comments index=aw_oid master_index=brother_of master_table=objects
 

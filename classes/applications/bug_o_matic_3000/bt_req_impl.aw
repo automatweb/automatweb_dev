@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  mantainer=robert
+@classinfo  maintainer=robert
 */
 class bt_req_impl extends core
 {

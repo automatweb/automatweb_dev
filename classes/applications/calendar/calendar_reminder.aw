@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_reminder.aw,v 1.4 2007/11/29 09:36:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_reminder.aw,v 1.5 2007/12/06 14:32:55 kristo Exp $
 // calendar_reminder.aw - Kalendri meeldetuletus 
 /*
 
-@classinfo syslog_type=ST_CALENDAR_REMINDER relationmgr=yes mantainer=kristo
+@classinfo syslog_type=ST_CALENDAR_REMINDER relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

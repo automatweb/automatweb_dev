@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_textarea.aw,v 1.3 2007/11/29 09:36:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_textarea.aw,v 1.4 2007/12/06 14:33:04 kristo Exp $
 // property_textarea.aw - Tekstikast 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_TEXTAREA relationmgr=yes mantainer=kristo
+@classinfo syslog_type=ST_PROPERTY_TEXTAREA relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

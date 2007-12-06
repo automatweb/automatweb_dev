@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ecard/ecard_manager.aw,v 1.4 2005/12/29 22:08:35 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ecard/ecard_manager.aw,v 1.5 2007/12/06 14:33:28 kristo Exp $
 // ecard_manager.aw - E-kaardi haldur 
 // Use this class as alias in a document. CL_ECARD is for internal use
 // Make sure you attach the folders and a mini_gallery object
 //
 // 
 /*
-@classinfo syslog_type=ST_ECARD_MANAGER relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_ECARD_MANAGER relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -21,36 +21,88 @@ msgstr ""
 msgid "Loe edasi"
 msgstr ""
 
-#: classes/document.aw:1147 classes/document.aw:1196
+#: classes/document.aw:1182 classes/document.aw:1231
 msgid "Vaata lisaks:"
 msgstr ""
 
-#: classes/document.aw:1152 classes/document.aw:1201
+#: classes/document.aw:1187 classes/document.aw:1236
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2411
+#: classes/document.aw:2477
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2418
+#: classes/document.aw:2484
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2426
+#: classes/document.aw:2492
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:2936
+#: classes/document.aw:3002
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
 msgstr ""
 
-#: classes/document.aw:2966
+#: classes/document.aw:3032
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:2968
+#: classes/document.aw:3034
 msgid "tagasi dokumendi muutmise juurde"
+msgstr ""
+
+#: classes/document.aw:3472
+msgid "jaanuar"
+msgstr ""
+
+#: classes/document.aw:3473
+msgid "veebruar"
+msgstr ""
+
+#: classes/document.aw:3474
+msgid "märts"
+msgstr ""
+
+#: classes/document.aw:3475
+msgid "aprill"
+msgstr ""
+
+#: classes/document.aw:3476
+msgid "mai"
+msgstr ""
+
+#: classes/document.aw:3477
+msgid "juuni"
+msgstr ""
+
+#: classes/document.aw:3478
+msgid "juuli"
+msgstr ""
+
+#: classes/document.aw:3479
+msgid "august"
+msgstr ""
+
+#: classes/document.aw:3480
+msgid "september"
+msgstr ""
+
+#: classes/document.aw:3481
+msgid "oktoober"
+msgstr ""
+
+#: classes/document.aw:3482
+msgid "november"
+msgstr ""
+
+#: classes/document.aw:3483
+msgid "detsember"
+msgstr ""
+
+#: classes/document.aw:3490
+msgid "Just postitatud"
 msgstr ""

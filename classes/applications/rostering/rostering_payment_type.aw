@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_payment_type.aw,v 1.2 2007/03/16 12:34:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_payment_type.aw,v 1.3 2007/12/06 14:34:03 kristo Exp $
 // rostering_payment_type.aw - Tasu liik 
 /*
 
-@classinfo syslog_type=ST_ROSTERING_PAYMENT_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ROSTERING_PAYMENT_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_rostering_payment_type index=aw_oid master_index=brother_of master_table=objects
 @default table=aw_rostering_payment_type
 @default group=general

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar_button.aw,v 1.8 2007/11/29 09:36:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar_button.aw,v 1.9 2007/12/06 14:33:04 kristo Exp $
 // property_toolbar_button.aw - Taoolbari nupp 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_TOOLBAR_BUTTON relationmgr=yes no_comment=1 no_status=1 mantainer=kristo
+@classinfo syslog_type=ST_PROPERTY_TOOLBAR_BUTTON relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

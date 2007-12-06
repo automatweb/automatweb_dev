@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.9 2006/09/19 11:40:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.10 2007/12/06 14:34:06 kristo Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
-@classinfo syslog_type=ST_SCM_ORGANIZER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SCM_ORGANIZER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
 @default group=general

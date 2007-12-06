@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_strat_goal_eval_ws.aw,v 1.3 2006/10/06 15:14:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_strat_goal_eval_ws.aw,v 1.4 2007/12/06 14:33:32 kristo Exp $
 // project_strat_goal_eval_ws.aw - Projekti eesm&auml;rkide hindamislaud 
 /*
 
-@classinfo syslog_type=ST_PROJECT_STRAT_GOAL_EVAL_WS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROJECT_STRAT_GOAL_EVAL_WS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @tableinfo aw_project_strat_goal_eval_ws index=aw_oid master_index=brother_of master_table=objects
 
 @default table=objects

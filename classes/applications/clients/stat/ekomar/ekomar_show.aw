@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/stat/ekomar/Attic/ekomar_show.aw,v 1.5 2007/11/29 09:37:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/stat/ekomar/Attic/ekomar_show.aw,v 1.6 2007/12/06 14:33:10 kristo Exp $
 // ekomar_show.aw - Ekomar 
 /*
 
-@classinfo syslog_type=ST_EKOMAR relationmgr=yes mantainer=kristo
+@classinfo syslog_type=ST_EKOMAR relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

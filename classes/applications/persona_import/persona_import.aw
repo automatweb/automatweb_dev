@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.25 2007/11/27 18:09:30 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.26 2007/12/06 14:33:47 kristo Exp $
 // persona_import.aw - Persona import 
 /*
 
-@classinfo syslog_type=ST_PERSONA_IMPORT relationmgr=yes
+@classinfo syslog_type=ST_PERSONA_IMPORT relationmgr=yes maintainer=knummert
 
 @default table=objects
 @default group=general

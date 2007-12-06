@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=markop
+*/
 class crm_company_bills_impl extends class_base
 {
 	function crm_company_bills_impl()

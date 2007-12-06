@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.13 2007/11/29 09:37:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.14 2007/12/06 14:33:14 kristo Exp $
 // commune.aw - Kommuun
 /*
 
-@classinfo syslog_type=ST_COMMUNE relationmgr=yes layout=boxed mantainer=kristo
+@classinfo syslog_type=ST_COMMUNE relationmgr=yes layout=boxed maintainer=kristo
 -------------------------------------------------------------------------------------
 
 @default group=general

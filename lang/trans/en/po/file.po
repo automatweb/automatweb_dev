@@ -42,6 +42,18 @@ msgstr ""
 msgid "Omaduse Faili nimi (filename) help"
 msgstr "will be automatically displayed after adding the file."
 
+#: classes/file.aw:prop_alias
+msgid "Omaduse Alias (alias) caption"
+msgstr ""
+
+#: classes/file.aw:prop_alias_comment
+msgid "Omaduse Alias (alias) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_alias_help
+msgid "Omaduse Alias (alias) help"
+msgstr ""
+
 #: classes/file.aw:prop_signed
 msgid "Omaduse Allkirjastatud (signed) caption"
 msgstr "Signed"
@@ -401,104 +413,107 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr "Keyword"
 
-#: classes/file.aw:171
+#: classes/file.aw:174
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/file.aw:191
+#: classes/file.aw:194
 msgid "Lisa allkiri"
 msgstr "Add signature"
 
-#: classes/file.aw:192 classes/file.aw:211
+#: classes/file.aw:195 classes/file.aw:214
 msgid "Allkirjastamine"
 msgstr "Sign"
 
-#: classes/file.aw:199
+#: classes/file.aw:202
 msgid "DigiDoc konteinerisse"
 msgstr "Into Digidoc container"
 
-#: classes/file.aw:210
+#: classes/file.aw:213
 msgid "Allkirjasta"
 msgstr "Sign"
 
-#: classes/file.aw:218
+#: classes/file.aw:221
 msgid "DigiDoc konteiner"
 msgstr "Digidoc container"
 
-#: classes/file.aw:229
+#: classes/file.aw:232
 msgid "Allkirjasta fail"
 msgstr "Sign file"
 
-#: classes/file.aw:230
+#: classes/file.aw:233
 msgid "Faili: %s, allkirjastamine"
 msgstr "Signing of file %s"
 
-#: classes/file.aw:279
+#: classes/file.aw:282
 msgid "fail puudub"
 msgstr "file missing"
 
-#: classes/file.aw:375
+#: classes/file.aw:378
 msgid "Paiguta dokumenti"
 msgstr "Insert into document"
 
-#: classes/file.aw:458
+#: classes/file.aw:461
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr "File type is not allowed"
 
-#: classes/file.aw:836
+#: classes/file.aw:839
 msgid "Vale objekti id!"
 msgstr "Wrong object ID"
 
-#: classes/file.aw:1465
+#: classes/file.aw:1466
 msgid "Need either id or parent"
 msgstr "Need either id or parent"
 
-#: classes/file.aw:1582
+#: classes/file.aw:1583
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr "Save and index for search"
 
-#: classes/file.aw:1590
+#: classes/file.aw:1591
 msgid "Salvesta ja paiguta dokumenti"
 msgstr "Save and insert into document"
 
-#: classes/file.aw:1624
+#: classes/file.aw:1625
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/file.aw:1630
+#: classes/file.aw:1631
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/file.aw:1637
+#: classes/file.aw:1638
 msgid "Saada teavitusmeil"
 msgstr "Send notification e-mail"
 
-#: classes/file.aw:1647
+#: classes/file.aw:1648
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/file.aw:1652
+#: classes/file.aw:1653
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/file.aw:1657
+#: classes/file.aw:1658
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/file.aw:1662
+#: classes/file.aw:1663
 msgid "E-mail"
 msgstr "E-mail"
 
-#: classes/file.aw:1827
+#: classes/file.aw:1828
 msgid "Teavitus muutunud dokumendist"
 msgstr "Notification about modified document"
 
-#: classes/file.aw:1828
+#: classes/file.aw:1829
 msgid ""
 "Uuendati faili \"%s\". Palun kliki siia:\n"
 "%s\n"
 "et faili näha!"
-msgstr "File \"%s\" was updated. Please click here:\n %s\n to read the file!"
+msgstr ""
+"File \"%s\" was updated. Please click here:\n"
+" %s\n"
+" to read the file!"
 
 #~ msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 #~ msgstr "Translation confirmed"

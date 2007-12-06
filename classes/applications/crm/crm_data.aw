@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=markop
+*/
 class crm_data extends class_base
 {
 	function crm_data()

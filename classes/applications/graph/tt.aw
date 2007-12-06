@@ -1,10 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/graph/tt.aw,v 1.1 2005/09/11 07:56:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/graph/tt.aw,v 1.2 2007/12/06 14:33:30 kristo Exp $
 /*
 
 	QOTD: Real programmers do not comment their code - it was hard to write,
 		it should also be hard to understand.
 
+*/
+/*
+@classinfo maintainer=kristo
 */
 class TTGraph
 {

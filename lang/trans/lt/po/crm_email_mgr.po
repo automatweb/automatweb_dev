@@ -9,8 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_email_mgr.aw:37
+#: classes/applications/crm/crm_email_mgr.aw:39
 msgid "booyaa!"
 msgstr ""
-

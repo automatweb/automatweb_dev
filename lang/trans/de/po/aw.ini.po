@@ -2437,6 +2437,10 @@ msgstr ""
 msgid "Klassi Volitus (1368) nimi"
 msgstr ""
 
+#: aw.ini:class_1369
+msgid "Klassi Surmakaunter (1369) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""
@@ -2691,6 +2695,10 @@ msgstr ""
 
 #: aw.ini:classfolder_66
 msgid "Klassi kataloogi Pleier (66) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_67
+msgid "Klassi kataloogi Fun (67) nimi"
 msgstr ""
 
 #: aw.ini:acl_can_edit
@@ -5003,6 +5011,10 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1361
 msgid "syslog.type.ST_EVENT_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_1369
+msgid "syslog.type.ST_DEATHCOUNTER"
 msgstr ""
 
 #: aw.ini:syslogactions_1

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.139 2007/11/29 09:36:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.140 2007/12/06 14:32:55 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -7,7 +7,7 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 @default table=objects
-@classinfo relationmgr=yes syslog_type=ST_PLANNER mantainer=kristo
+@classinfo relationmgr=yes syslog_type=ST_PLANNER maintainer=kristo
 
 @default group=general2
 

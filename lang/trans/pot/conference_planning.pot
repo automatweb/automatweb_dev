@@ -467,7 +467,7 @@ msgid "Kujundusosa Vaated (treeview) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:layout_trans
-msgid "Kujundusosa Tõlked (trans) pealkiri"
+msgid "Kujundusosa T&otilde;lked (trans) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:layout_controller

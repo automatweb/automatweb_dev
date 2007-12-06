@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/procurement_center/procurement_offer_search.aw:25
+#: classes/applications/procurement_center/procurement_offer_search.aw:27
 msgid "Pakkuja"
 msgstr ""
 

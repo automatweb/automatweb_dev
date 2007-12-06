@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.13 2007/11/19 13:43:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.14 2007/12/06 14:33:26 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
-@classinfo syslog_type=ST_AW_OBJECT_SEARCH no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_AW_OBJECT_SEARCH no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=srch

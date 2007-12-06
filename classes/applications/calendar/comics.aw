@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/comics.aw,v 1.4 2007/11/29 09:36:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/comics.aw,v 1.5 2007/12/06 14:32:55 kristo Exp $
 // comics.aw - Koomiks
 /*
 
-@classinfo syslog_type=ST_COMICS relationmgr=yes no_comment=1 r2=yes mantainer=kristo
+@classinfo syslog_type=ST_COMICS relationmgr=yes no_comment=1 r2=yes maintainer=kristo
 
 @default table=objects
 @default group=general

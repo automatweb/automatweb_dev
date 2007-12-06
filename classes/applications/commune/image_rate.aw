@@ -2,7 +2,7 @@
 // selle me teeme täpselt nii nagu kliendibaasi otsingu. ehk, see lihtsalt genereerib ühe vormi
 // and that's it. and that's that!
 /*
-@classinfo  mantainer=kristo
+@classinfo  maintainer=kristo
 @default table=objects
 @default field=meta
 @default method=serialize

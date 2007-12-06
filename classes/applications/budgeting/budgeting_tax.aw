@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.7 2007/11/23 14:28:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.8 2007/12/06 14:32:51 kristo Exp $
 // budgeting_tax.aw - Eelarvestamise maks 
 /*
 
-@classinfo syslog_type=ST_BUDGETING_TAX relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
+@classinfo syslog_type=ST_BUDGETING_TAX relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo aw_budgeting_tax master_table=objects master_index=brother_of index=aw_oid
 

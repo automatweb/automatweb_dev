@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.19 2007/01/10 11:45:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.20 2007/12/06 14:34:06 kristo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
-@classinfo syslog_type=ST_SCM_COMPETITION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SCM_COMPETITION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
 @default group=general

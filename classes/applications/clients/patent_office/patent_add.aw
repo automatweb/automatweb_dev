@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent_add.aw,v 1.2 2007/11/29 09:37:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent_add.aw,v 1.3 2007/12/06 14:33:08 kristo Exp $
 // patent_add.aw - Kaubam&auml;rgi veebist lisamine 
 /*
 
-@classinfo syslog_type=ST_PATENT_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=markop
+@classinfo syslog_type=ST_PATENT_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_authorization.aw,v 1.2 2007/11/21 17:53:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_authorization.aw,v 1.3 2007/12/06 14:33:17 kristo Exp $
 // crm_authorization.aw - Volitus 
 /*
 
-@tableinfo aw_authorizations index=aw_oid master_table=objects master_index=brother_of
+@tableinfo aw_authorizations index=aw_oid master_table=objects master_index=brother_of maintainer=markop
 
 @classinfo syslog_type=ST_CRM_AUTHORIZATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 

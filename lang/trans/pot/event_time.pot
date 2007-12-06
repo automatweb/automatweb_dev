@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/calendar/event_time.aw:class__help
-msgid "Klassi  help"
+#: classes/applications/calendar/event_time.aw:class_1322_help
+msgid "Klassi Toimumisaeg help"
 msgstr ""
 
 #: classes/applications/calendar/event_time.aw:prop_start

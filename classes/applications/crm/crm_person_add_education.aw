@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_add_education.aw,v 1.1 2006/03/28 11:54:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_add_education.aw,v 1.2 2007/12/06 14:33:17 kristo Exp $
 // crm_person_education.aw - Haridus 
 /*
 
-@classinfo syslog_type=ST_CRM_PERSON_ADD_EDUCATION no_name=1 no_comment=1 no_status=1
+@classinfo syslog_type=ST_CRM_PERSON_ADD_EDUCATION no_name=1 no_comment=1 no_status=1 maintainer=markop
 
 @default table=objects
 @default group=general

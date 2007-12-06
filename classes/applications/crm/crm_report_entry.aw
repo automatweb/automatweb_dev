@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_report_entry.aw,v 1.1 2006/01/26 09:56:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_report_entry.aw,v 1.2 2007/12/06 14:33:17 kristo Exp $
 // crm_report_entry.aw - Aruanne 
 /*
 
-@classinfo syslog_type=ST_CRM_REPORT_ENTRY relationmgr=yes no_comment=1 no_status=1 
+@classinfo syslog_type=ST_CRM_REPORT_ENTRY relationmgr=yes no_comment=1 no_status=1  maintainer=markop
 
 
 @default group=general

@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.35 2007/10/23 11:29:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.36 2007/12/06 14:33:40 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
 
-@classinfo syslog_type=ST_MESSENGER relationmgr=yes
+@classinfo syslog_type=ST_MESSENGER relationmgr=yes maintainer=tarvo
 
 @default table=objects
 @default group=settings

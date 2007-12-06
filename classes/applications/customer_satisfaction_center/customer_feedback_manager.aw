@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.5 2006/11/15 12:58:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.6 2007/12/06 14:33:26 kristo Exp $
 // customer_feedback_manager.aw - Kliendi tagasiside 
 /*
 
-@classinfo syslog_type=ST_CUSTOMER_FEEDBACK_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CUSTOMER_FEEDBACK_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

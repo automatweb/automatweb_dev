@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/question_group.aw,v 1.6 2006/11/03 14:13:58 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/question_group.aw,v 1.7 2007/12/06 14:33:53 kristo Exp $
 // question_group.aw - K&uml;simustegrupp 
 /*
 
-@classinfo syslog_type=ST_QUESTION_GROUP relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_QUESTION_GROUP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
 @default group=general

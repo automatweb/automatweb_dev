@@ -1067,7 +1067,7 @@ msgid "Seose Ruumi broneering (RELTYPE_RESERVATION) tekst"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:layout_cat_left
-msgid "Kujundusosa Ruumid ja reserveeringud (cat_left) pealkiri"
+msgid "Kujundusosa Ruumid&nbsp;ja&nbsp;reserveeringud (cat_left) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:layout_cat_right
@@ -1075,7 +1075,7 @@ msgid "Kujundusosa Tooted (cat_right) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:layout_res_left
-msgid "Kujundusosa Ruumid ja reserveeringud (res_left) pealkiri"
+msgid "Kujundusosa Ruumid&nbsp;ja&nbsp;reserveeringud (res_left) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:layout_res_right
@@ -1083,7 +1083,7 @@ msgid "Kujundusosa Ressursid (res_right) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:layout_prs_left
-msgid "Kujundusosa Ruumid ja reserveeringud (prs_left) pealkiri"
+msgid "Kujundusosa Ruumid&nbsp;ja&nbsp;reserveeringud (prs_left) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:layout_prs_right

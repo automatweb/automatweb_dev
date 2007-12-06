@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.4 2007/12/06 02:25:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.5 2007/12/06 14:32:55 kristo Exp $
 // event_time.aw - Toimumisaeg 
 /*
 
-@classinfo syslog_type=ST_EVENT_TIME relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_event_time index=aw_oid master_table=objects master_index=brother_of 
+@classinfo syslog_type=ST_EVENT_TIME relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default group=general
 @default table=aw_event_time

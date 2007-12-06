@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.1 2007/06/08 10:15:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.2 2007/12/06 14:33:46 kristo Exp $
 // package_server.aw - Pakiserver 
 /*
 
-@classinfo syslog_type=ST_PACKAGE_SERVER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PACKAGE_SERVER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general

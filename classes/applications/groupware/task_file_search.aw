@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 classload("vcl/popup_search");
 class task_file_search extends popup_search
 {

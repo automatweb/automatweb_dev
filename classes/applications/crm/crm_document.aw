@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.13 2006/12/07 10:16:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.14 2007/12/06 14:33:17 kristo Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
-@classinfo syslog_type=ST_CRM_DOCUMENT relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_DOCUMENT relationmgr=yes no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @tableinfo aw_crm_document index=aw_oid master_index=brother_of master_table=objects

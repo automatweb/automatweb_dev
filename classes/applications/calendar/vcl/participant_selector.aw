@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.6 2007/11/29 09:36:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.7 2007/12/06 14:33:00 kristo Exp $
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 class participant_selector extends core
 {

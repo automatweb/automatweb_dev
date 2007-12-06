@@ -3,7 +3,7 @@
 
 /*
 
-	@classinfo no_comment=1 no_status=1 syslog_type=ST_ADD_TREE_CONF mantainer=kristo
+	@classinfo no_comment=1 no_status=1 syslog_type=ST_ADD_TREE_CONF maintainer=kristo
 
 	@default table=objects
 	@default field=meta

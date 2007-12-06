@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 class crm_email_mgr extends aw_template
 {
 	function crm_email_mgr($arr)

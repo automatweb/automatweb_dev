@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=markop
+*/
 class crm_bill_row_object extends _int_object
 {
 	function set_name($name)

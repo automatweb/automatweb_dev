@@ -1,6 +1,7 @@
 <?php
-
-
+/*
+@classinfo maintainer=markop
+*/
 define("CRM_ALL_PERSONS_CAT", 999999);
 
 class crm_company_people_impl extends class_base

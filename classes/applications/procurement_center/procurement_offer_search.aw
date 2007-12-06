@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 classload("vcl/popup_search");
 class procurement_offer_search extends popup_search
 {

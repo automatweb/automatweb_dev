@@ -37,6 +37,18 @@ msgstr ""
 msgid "Omaduse URL (url) help"
 msgstr ""
 
+#: classes/contentmgmt/links.aw:prop_alias
+msgid "Omaduse Alias (alias) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_alias_comment
+msgid "Omaduse Alias (alias) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_alias_help
+msgid "Omaduse Alias (alias) help"
+msgstr ""
+
 #: classes/contentmgmt/links.aw:prop_docid
 msgid "Omaduse  (docid) caption"
 msgstr ""
@@ -309,46 +321,46 @@ msgstr ""
 msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:133 classes/contentmgmt/links.aw:181
+#: classes/contentmgmt/links.aw:136 classes/contentmgmt/links.aw:184
 msgid "Vali see"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:137
+#: classes/contentmgmt/links.aw:140
 msgid "Nimetus"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:142
+#: classes/contentmgmt/links.aw:145
 msgid "Asukoht"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:147
+#: classes/contentmgmt/links.aw:150
 msgid "Looja"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:152
+#: classes/contentmgmt/links.aw:155
 msgid "Viimati muudetud"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:280
+#: classes/contentmgmt/links.aw:283
 msgid "T&ouml;&ouml;riistariba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:281
+#: classes/contentmgmt/links.aw:284
 msgid "Aadressi riba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:282
+#: classes/contentmgmt/links.aw:285
 msgid "Men&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:283
+#: classes/contentmgmt/links.aw:286
 msgid "Kerimisriba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:315
+#: classes/contentmgmt/links.aw:318
 msgid "Saidi sisene link"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:481
+#: classes/contentmgmt/links.aw:484
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""

@@ -10,91 +10,91 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/groupware/project_files_impl.aw:17
+#: classes/applications/groupware/project_files_impl.aw:19
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:18 classes/applications/groupware/project_files_impl.aw:174
+#: classes/applications/groupware/project_files_impl.aw:20 classes/applications/groupware/project_files_impl.aw:176
 msgid "Fail"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:19 classes/applications/groupware/project_files_impl.aw:175
+#: classes/applications/groupware/project_files_impl.aw:21 classes/applications/groupware/project_files_impl.aw:177
 msgid "Memo"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:20 classes/applications/groupware/project_files_impl.aw:176
+#: classes/applications/groupware/project_files_impl.aw:22 classes/applications/groupware/project_files_impl.aw:178
 msgid "CRM Dokument"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:21 classes/applications/groupware/project_files_impl.aw:177
+#: classes/applications/groupware/project_files_impl.aw:23 classes/applications/groupware/project_files_impl.aw:179
 msgid "Leping"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:22 classes/applications/groupware/project_files_impl.aw:178
+#: classes/applications/groupware/project_files_impl.aw:24 classes/applications/groupware/project_files_impl.aw:180
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:23 classes/applications/groupware/project_files_impl.aw:179
+#: classes/applications/groupware/project_files_impl.aw:25 classes/applications/groupware/project_files_impl.aw:181
 msgid "Eesm&auml;rkide hindamise t&ouml;&ouml;laud"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:24 classes/applications/groupware/project_files_impl.aw:180
+#: classes/applications/groupware/project_files_impl.aw:26 classes/applications/groupware/project_files_impl.aw:182
 msgid "Riskide hindamise t&ouml;&ouml;laud"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:25 classes/applications/groupware/project_files_impl.aw:181
+#: classes/applications/groupware/project_files_impl.aw:27 classes/applications/groupware/project_files_impl.aw:183
 msgid "Anal&uuml;&uuml;si t&ouml;&ouml;laud"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:26 classes/applications/groupware/project_files_impl.aw:182
+#: classes/applications/groupware/project_files_impl.aw:28 classes/applications/groupware/project_files_impl.aw:184
 msgid "Arendustellimus"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:32
+#: classes/applications/groupware/project_files_impl.aw:34
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:60
+#: classes/applications/groupware/project_files_impl.aw:62
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:68
+#: classes/applications/groupware/project_files_impl.aw:70
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:77
+#: classes/applications/groupware/project_files_impl.aw:79
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:94
+#: classes/applications/groupware/project_files_impl.aw:96
 msgid "%s failid"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:151
+#: classes/applications/groupware/project_files_impl.aw:153
 msgid "Sorteerimata"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:162
+#: classes/applications/groupware/project_files_impl.aw:164
 msgid "T&uuml;&uuml;bi j&auml;rgi"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:218 classes/applications/groupware/project_files_impl.aw:260
+#: classes/applications/groupware/project_files_impl.aw:220 classes/applications/groupware/project_files_impl.aw:262
 msgid ""
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:226
+#: classes/applications/groupware/project_files_impl.aw:228
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:233
+#: classes/applications/groupware/project_files_impl.aw:235
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:240
+#: classes/applications/groupware/project_files_impl.aw:242
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/groupware/project_files_impl.aw:250
+#: classes/applications/groupware/project_files_impl.aw:252
 msgid "Muudetud"
 msgstr ""
 

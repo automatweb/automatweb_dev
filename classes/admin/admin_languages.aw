@@ -6,7 +6,7 @@ EMIT_MESSAGE(MSG_LANGUAGE_ADD)
 
 */
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 
 classload("languages");

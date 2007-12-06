@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/Attic/crm_errand_condition.aw,v 1.2 2007/11/15 16:57:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/Attic/crm_errand_condition.aw,v 1.3 2007/12/06 14:33:17 kristo Exp $
 // crm_errand_condition.aw - L&auml;hetustingimus 
 /*
 
-@classinfo syslog_type=ST_CRM_ERRAND_CONDITION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_ERRAND_CONDITION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 
 @default table=objects

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_fund.aw,v 1.2 2007/11/23 14:28:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_fund.aw,v 1.3 2007/12/06 14:32:51 kristo Exp $
 // budgeting_fund.aw - Eelarvestamise fond 
 /*
 
-@classinfo syslog_type=ST_BUDGETING_FUND relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
+@classinfo syslog_type=ST_BUDGETING_FUND relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo aw_budgeting_fund master_table=objects master_index=brother_of index=aw_oid
 @tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid

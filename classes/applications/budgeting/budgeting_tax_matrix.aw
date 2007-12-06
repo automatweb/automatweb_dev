@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_matrix.aw,v 1.2 2007/11/23 14:28:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_matrix.aw,v 1.3 2007/12/06 14:32:51 kristo Exp $
 // budgeting_tax_matrix.aw - Eelarvestamise maksumaatriks 
 /*
 
-@classinfo syslog_type=ST_BUDGETING_TAX_MATRIX relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
+@classinfo syslog_type=ST_BUDGETING_TAX_MATRIX relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

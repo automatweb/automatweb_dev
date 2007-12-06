@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_import.aw,v 1.3 2007/11/29 09:36:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_import.aw,v 1.4 2007/12/06 14:32:55 kristo Exp $
 // ical_import.aw - Sündmuste import (iCal) 
 /*
 
-@classinfo syslog_type=ST_ICAL_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=robert
+@classinfo syslog_type=ST_ICAL_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
 
 @default table=objects
 @default group=general

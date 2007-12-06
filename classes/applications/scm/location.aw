@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.7 2007/11/06 14:28:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.8 2007/12/06 14:34:06 kristo Exp $
 // location.aw - Asukoht 
 /*
 
-@classinfo syslog_type=ST_LOCATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_LOCATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
 @default group=general

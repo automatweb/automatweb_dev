@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.45 2007/02/06 12:36:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.46 2007/12/06 14:34:00 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
-@classinfo syslog_type=ST_REGISTER_SEARCH relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_REGISTER_SEARCH relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
 @default table=objects
 @default field=meta 

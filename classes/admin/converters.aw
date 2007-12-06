@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.76 2007/11/29 11:36:04 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.77 2007/12/06 14:32:43 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 
 class converters extends aw_template

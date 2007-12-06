@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.6 2007/12/06 01:47:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.7 2007/12/06 14:34:06 kristo Exp $
 // scm_location.aw - Toimumiskoht 
 /*
 
-@classinfo syslog_type=ST_SCM_LOCATION relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SCM_LOCATION relationmgr=yes no_status=1 prop_cb=1 maintainer=tarvo
 @tableinfo scm_location index=oid master_table=objects master_index=oid
 
 @default table=objects

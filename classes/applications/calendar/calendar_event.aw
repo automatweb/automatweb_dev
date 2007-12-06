@@ -1,7 +1,7 @@
 <?php
 // calendar_event.aw - Kalendri sündmus
 /*
-@classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes mantainer=kristo
+@classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes maintainer=kristo
 
 @default group=general
 @default table=planner

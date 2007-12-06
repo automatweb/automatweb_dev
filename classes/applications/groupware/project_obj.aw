@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 class project_obj extends _int_object
 {
 	function set_prop($pn, $pv)

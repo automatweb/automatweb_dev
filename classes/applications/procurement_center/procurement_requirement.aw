@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.8 2006/11/30 16:18:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.9 2007/12/06 14:33:50 kristo Exp $
 // procurement_requirement.aw - N&otilde;ue 
 /*
 
-@classinfo syslog_type=ST_PROCUREMENT_REQUIREMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROCUREMENT_REQUIREMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo procuremnent_requirements index=aw_oid master_index=brother_of master_table=objects
 

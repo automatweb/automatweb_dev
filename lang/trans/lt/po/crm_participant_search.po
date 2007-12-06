@@ -9,28 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_participant_search.aw:18
+#: classes/applications/crm/crm_participant_search.aw:20
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:42
+#: classes/applications/crm/crm_participant_search.aw:44
 msgid "Meie firma"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:44
+#: classes/applications/crm/crm_participant_search.aw:46
 msgid "Minu kliendid"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:45
+#: classes/applications/crm/crm_participant_search.aw:47
 msgid "Olulised"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:46
+#: classes/applications/crm/crm_participant_search.aw:48
 msgid "Esimesed kolmkümmend"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:53
+#: classes/applications/crm/crm_participant_search.aw:55
 msgid "N&auml;ita"
 msgstr ""
-

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/person_has_skill.aw,v 1.1 2006/09/14 09:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/person_has_skill.aw,v 1.2 2007/12/06 14:34:03 kristo Exp $
 // person_has_skill.aw - Oskuse kehtivus 
 /*
 
-@classinfo syslog_type=ST_PERSON_HAS_SKILL relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PERSON_HAS_SKILL relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo aw_person_has_skill index=aw_oid master_table=objects master_index=brother_of
 

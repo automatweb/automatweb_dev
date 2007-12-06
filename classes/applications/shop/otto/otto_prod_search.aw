@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.16 2007/07/30 08:36:22 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.17 2007/12/06 14:34:09 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
-@classinfo syslog_type=ST_OTTO_PROD_SEARCH relationmgr=yes
+@classinfo syslog_type=ST_OTTO_PROD_SEARCH relationmgr=yes maintainer=dragut
 
 @default table=objects
 @default group=general

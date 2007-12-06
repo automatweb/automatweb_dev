@@ -10,43 +10,43 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_document_base.aw:37 classes/applications/crm/crm_document_base.aw:238
+#: classes/applications/crm/crm_document_base.aw:39 classes/applications/crm/crm_document_base.aw:240
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:163
+#: classes/applications/crm/crm_document_base.aw:165
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:169
+#: classes/applications/crm/crm_document_base.aw:171
 msgid "Kustuta eeldustedevused"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:178
+#: classes/applications/crm/crm_document_base.aw:180
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:184
+#: classes/applications/crm/crm_document_base.aw:186
 msgid "Eeldustegevus(ed)"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:190
+#: classes/applications/crm/crm_document_base.aw:192
 msgid "Tehtud"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:196
+#: classes/applications/crm/crm_document_base.aw:198
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:202
+#: classes/applications/crm/crm_document_base.aw:204
 msgid "Tegija"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:208
+#: classes/applications/crm/crm_document_base.aw:210
 msgid "Tegevus"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:307
+#: classes/applications/crm/crm_document_base.aw:309
 msgid "Otsi"
 msgstr ""
 

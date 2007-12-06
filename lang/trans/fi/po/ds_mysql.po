@@ -14,11 +14,11 @@ msgid "object::load(%s): no such object!"
 msgstr ""
 
 #: classes/core/obj/ds_mysql.aw:207 classes/core/obj/ds_mysql.aw:274
-#: classes/core/obj/ds_mysql.aw:2772
+#: classes/core/obj/ds_mysql.aw:2809
 msgid "ds_mysql::read_properties(): no reltype for prop %s (%s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:382 classes/core/obj/ds_mysql.aw:2854
+#: classes/core/obj/ds_mysql.aw:382 classes/core/obj/ds_mysql.aw:2891
 msgid "ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch! q = %s"
 msgstr ""
 
@@ -26,7 +26,7 @@ msgstr ""
 msgid "ds_mysql::final_delete_object(%s): no suct object exists!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1443 classes/core/obj/ds_mysql.aw:3051
+#: classes/core/obj/ds_mysql.aw:1443 classes/core/obj/ds_mysql.aw:3088
 msgid "filter cannot contain properties (%s) that are in serialized fields other than metadata!"
 msgstr ""
 
@@ -46,26 +46,26 @@ msgstr ""
 msgid "ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2152
+#: classes/core/obj/ds_mysql.aw:2189
 msgid "ds_mysql::_req_do_pcp(): no relation from class %s named %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2224
+#: classes/core/obj/ds_mysql.aw:2261
 msgid "ds_mysql::_req_do_pcp(): no property %s in class %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2236
+#: classes/core/obj/ds_mysql.aw:2273
 msgid "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2241
+#: classes/core/obj/ds_mysql.aw:2278
 msgid "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2249 classes/core/obj/ds_mysql.aw:2286
+#: classes/core/obj/ds_mysql.aw:2286 classes/core/obj/ds_mysql.aw:2323
 msgid "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2273
+#: classes/core/obj/ds_mysql.aw:2310
 msgid "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"
 msgstr ""

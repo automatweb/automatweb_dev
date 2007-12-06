@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=markop
+*/
 
 define("PROCUREMENT_NEW", 0);
 define("PROCUREMENT_PUBLIC", 1);

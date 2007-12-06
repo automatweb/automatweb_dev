@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.10 2007/11/23 13:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.11 2007/12/06 14:32:43 kristo Exp $
 // workbench.aw - Töölaud 
 /*
 
-@classinfo syslog_type=ST_WORKBENCH relationmgr=yes  mantainer=kristo
+@classinfo syslog_type=ST_WORKBENCH relationmgr=yes  maintainer=kristo
 
 @default table=objects
 @default group=general

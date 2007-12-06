@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.5 2006/09/19 07:42:52 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.6 2007/12/06 14:34:11 kristo Exp $
 // shop_price_modifier_window.aw - Akna hinnakujundus 
 /*
 
-@classinfo syslog_type=ST_SHOP_PRICE_MODIFIER_WINDOW relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_SHOP_PRICE_MODIFIER_WINDOW relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

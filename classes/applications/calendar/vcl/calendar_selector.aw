@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/calendar_selector.aw,v 1.7 2007/11/29 09:36:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/calendar_selector.aw,v 1.8 2007/12/06 14:32:59 kristo Exp $
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 class calendar_selector extends core
 {

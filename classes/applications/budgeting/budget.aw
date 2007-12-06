@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.7 2007/11/23 14:28:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.8 2007/12/06 14:32:51 kristo Exp $
 // budget.aw - Eelarve 
 /*
 
-@classinfo syslog_type=ST_BUDGET relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
+@classinfo syslog_type=ST_BUDGET relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo aw_budgets index=aw_oid master_table=objects master_index=brother_of
 

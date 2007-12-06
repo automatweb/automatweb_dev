@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.10 2007/11/29 09:37:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.11 2007/12/06 14:33:14 kristo Exp $
 // profile.aw - Profiil 
 /*
-@classinfo syslog_type=ST_PROFILE relationmgr=yes mantainer=kristo
+@classinfo syslog_type=ST_PROFILE relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

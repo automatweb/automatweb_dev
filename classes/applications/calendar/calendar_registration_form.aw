@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration_form.aw,v 1.5 2007/11/29 09:36:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration_form.aw,v 1.6 2007/12/06 14:32:55 kristo Exp $
 // calendar_registration_form.aw - Kalendri s&uuml;ndmusele registreerimise vorm 
 /*
 
-@classinfo syslog_type=ST_CALENDAR_REGISTRATION_FORM relationmgr=yes no_comment=1 no_status=1 mantainer=kristo
+@classinfo syslog_type=ST_CALENDAR_REGISTRATION_FORM relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

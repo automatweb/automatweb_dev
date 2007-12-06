@@ -5,6 +5,9 @@
 		it should also be hard to understand.
 
 */
+/*
+@classinfo maintainer=kristo
+*/
 classload("applications/graph/tt");
 class LineGraph extends TTGraph
 {

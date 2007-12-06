@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3.aw,v 1.1 2007/11/09 13:54:16 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3.aw,v 1.2 2007/12/06 14:33:42 kristo Exp $
 // mp3.aw - MP3 
 /*
 
-@classinfo syslog_type=ST_MP3 no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_MP3 no_comment=1 no_status=1 prop_cb=1 maintainer=hannes
 
 @tableinfo mp3 index=aw_oid  master_index=brother_of master_table=objects
 

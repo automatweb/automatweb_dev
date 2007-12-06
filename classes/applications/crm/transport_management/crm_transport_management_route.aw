@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_route.aw,v 1.3 2006/06/29 11:11:34 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_route.aw,v 1.4 2007/12/06 14:33:24 kristo Exp $
 // route.aw - Marsruut 
 /*
 
-@classinfo syslog_type=ST_ROUTE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ROUTE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @tableinfo crm_transport_management_route index=oid master_table=objects master_index=oid
 

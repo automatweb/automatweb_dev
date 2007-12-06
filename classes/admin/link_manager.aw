@@ -1,7 +1,7 @@
 <?php
 
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 
 class link_manager extends aw_template

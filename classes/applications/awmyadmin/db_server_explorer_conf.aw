@@ -1,7 +1,7 @@
 <?php
 
 /*
-	@classinfo syslog_type=ST_DB_SERVER_EXPLORER_CONF relationmgr=yes no_status=1 no_comment=1 mantainer=kristo
+	@classinfo syslog_type=ST_DB_SERVER_EXPLORER_CONF relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
 	@default table=objects
 	@default group=general

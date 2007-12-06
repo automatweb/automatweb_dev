@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.7 2007/11/23 14:23:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.8 2007/12/06 14:32:46 kristo Exp $
 
 /*
 
-	@classinfo no_status=1 no_comment=1 mantainer=kristo
+	@classinfo no_status=1 no_comment=1 maintainer=kristo
 
 	@default table=objects
 	@default group=general

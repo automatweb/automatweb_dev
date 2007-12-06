@@ -9,60 +9,60 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/crm/crm_company_res_impl.aw:16
+#: classes/applications/crm/crm_company_res_impl.aw:18
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:22
+#: classes/applications/crm/crm_company_res_impl.aw:24
 msgid "Kategooria"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:28
+#: classes/applications/crm/crm_company_res_impl.aw:30
 msgid "Ressurss"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:45
+#: classes/applications/crm/crm_company_res_impl.aw:47
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:54
+#: classes/applications/crm/crm_company_res_impl.aw:56
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:64
+#: classes/applications/crm/crm_company_res_impl.aw:66
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:93
+#: classes/applications/crm/crm_company_res_impl.aw:95
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:100
-#: classes/applications/crm/crm_company_res_impl.aw:163
+#: classes/applications/crm/crm_company_res_impl.aw:102
+#: classes/applications/crm/crm_company_res_impl.aw:165
 msgid "Kalender"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:106
+#: classes/applications/crm/crm_company_res_impl.aw:108
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:113
+#: classes/applications/crm/crm_company_res_impl.aw:115
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:123
+#: classes/applications/crm/crm_company_res_impl.aw:125
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:130
+#: classes/applications/crm/crm_company_res_impl.aw:132
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:149
-#: classes/applications/crm/crm_company_res_impl.aw:181
+#: classes/applications/crm/crm_company_res_impl.aw:151
+#: classes/applications/crm/crm_company_res_impl.aw:183
 msgid "%s ressursid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:199
+#: classes/applications/crm/crm_company_res_impl.aw:201
 msgid "%s ressursihalduskeskkond"
 msgstr ""

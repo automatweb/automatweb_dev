@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_reminder_rule.aw,v 1.3 2007/11/29 09:36:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_reminder_rule.aw,v 1.4 2007/12/06 14:32:55 kristo Exp $
 // calendar_reminder_rule.aw - Meeldetuletuse reegel 
 /*
 
-@classinfo syslog_type=ST_CALENDAR_REMINDER_RULE relationmgr=yes mantainer=kristo
+@classinfo syslog_type=ST_CALENDAR_REMINDER_RULE relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -9,8 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/groupware/task_object.aw:14 classes/applications/groupware/task_object.aw:23 classes/applications/groupware/task_object.aw:40
+#: classes/applications/groupware/task_object.aw:16
+#: classes/applications/groupware/task_object.aw:25
+#: classes/applications/groupware/task_object.aw:42
 msgid "Isiklik"
 msgstr ""
-

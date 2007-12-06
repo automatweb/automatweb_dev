@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=markop
+*/
 class project_teams_impl extends class_base
 {
 	function project_teams_impl()

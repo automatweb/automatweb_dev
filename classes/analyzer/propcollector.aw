@@ -1,7 +1,7 @@
 <?php
 // creates xml files out of property definitions
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 
 class propcollector extends aw_template

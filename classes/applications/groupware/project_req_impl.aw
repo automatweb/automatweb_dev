@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 class project_req_impl extends class_base
 {
 	function project_req_impl($arr)

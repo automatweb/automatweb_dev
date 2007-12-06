@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/datasource.aw,v 1.4 2007/11/29 09:37:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/datasource.aw,v 1.5 2007/12/06 14:33:12 kristo Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -23,7 +23,7 @@ define("DS_XML",1);
 	@property url type=textbox editonly=1 size=60
 	@caption Faili url
 
-	@classinfo no_status=1 syslog_type=ST_DATASOURCE mantainer=kristo
+	@classinfo no_status=1 syslog_type=ST_DATASOURCE maintainer=kristo
 */
 
 class datasource extends class_base

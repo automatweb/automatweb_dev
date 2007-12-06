@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.10 2007/10/04 12:13:49 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.11 2007/12/06 14:33:26 kristo Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
-@classinfo syslog_type=ST_OBJ_QUICK_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_OBJ_QUICK_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=bms

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_old_redirect.aw,v 1.3 2007/11/23 13:19:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_old_redirect.aw,v 1.4 2007/12/06 14:32:45 kristo Exp $
 // config_old_redirect.aw - Vanade aadresside suunamine 
 /*
 
-@classinfo syslog_type=ST_CONFIG_OLD_REDIRECT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
+@classinfo syslog_type=ST_CONFIG_OLD_REDIRECT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

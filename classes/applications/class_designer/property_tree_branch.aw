@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree_branch.aw,v 1.5 2007/11/29 09:36:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree_branch.aw,v 1.6 2007/12/06 14:33:04 kristo Exp $
 // property_tree_branch.aw - Puu oks 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_TREE_BRANCH relationmgr=yes no_comment=1 no_status=1 mantainer=kristo
+@classinfo syslog_type=ST_PROPERTY_TREE_BRANCH relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

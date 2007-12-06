@@ -9,32 +9,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_company_objects_impl.aw:45
+#: classes/applications/crm/crm_company_objects_impl.aw:47
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_objects_impl.aw:82
+#: classes/applications/crm/crm_company_objects_impl.aw:84
 msgid "Kustuta valitud objektid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_objects_impl.aw:89
+#: classes/applications/crm/crm_company_objects_impl.aw:91
 msgid "Cut"
 msgstr ""
 
-#: classes/applications/crm/crm_company_objects_impl.aw:98
+#: classes/applications/crm/crm_company_objects_impl.aw:100
 msgid "Paste"
 msgstr ""
 
-#: classes/applications/crm/crm_company_objects_impl.aw:118
+#: classes/applications/crm/crm_company_objects_impl.aw:120
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_objects_impl.aw:124
+#: classes/applications/crm/crm_company_objects_impl.aw:126
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_objects_impl.aw:134
+#: classes/applications/crm/crm_company_objects_impl.aw:136
 msgid "Tüüp"
 msgstr ""
-

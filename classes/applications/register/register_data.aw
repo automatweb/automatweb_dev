@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.46 2007/12/04 13:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.47 2007/12/06 14:34:00 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
-@classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
+@classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1 maintainer=kristo
 @default group=general
 @default table=aw_register_data
 

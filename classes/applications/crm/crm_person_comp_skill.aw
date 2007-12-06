@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_comp_skill.aw,v 1.1 2006/04/19 11:58:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_comp_skill.aw,v 1.2 2007/12/06 14:33:17 kristo Exp $
 // crm_person_comp_skill.aw - Arvutioskus 
 /*
 
-@classinfo syslog_type=ST_CRM_PERSON_COMP_SKILL no_name=1 no_comment=1 no_status=1
+@classinfo syslog_type=ST_CRM_PERSON_COMP_SKILL no_name=1 no_comment=1 no_status=1 maintainer=markop
 
 @default table=objects
 @default group=general

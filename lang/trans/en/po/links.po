@@ -44,6 +44,18 @@ msgstr ""
 msgid "Omaduse URL (url) help"
 msgstr "the address where the link refers. It is written in following form: http://www.struktuur.ee or in case of inner site references the document's or folder´s ID."
 
+#: classes/contentmgmt/links.aw:prop_alias
+msgid "Omaduse Alias (alias) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_alias_comment
+msgid "Omaduse Alias (alias) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_alias_help
+msgid "Omaduse Alias (alias) help"
+msgstr ""
+
 # classes/contentmgmt/links.aw:prop_docid
 #: classes/contentmgmt/links.aw:prop_docid
 msgid "Omaduse  (docid) caption"
@@ -362,46 +374,46 @@ msgstr "Keywords"
 msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:133 classes/contentmgmt/links.aw:181
+#: classes/contentmgmt/links.aw:136 classes/contentmgmt/links.aw:184
 msgid "Vali see"
 msgstr "Select this"
 
-#: classes/contentmgmt/links.aw:137
+#: classes/contentmgmt/links.aw:140
 msgid "Nimetus"
 msgstr "Name"
 
-#: classes/contentmgmt/links.aw:142
+#: classes/contentmgmt/links.aw:145
 msgid "Asukoht"
 msgstr "Location"
 
-#: classes/contentmgmt/links.aw:147
+#: classes/contentmgmt/links.aw:150
 msgid "Looja"
 msgstr "Createdby"
 
-#: classes/contentmgmt/links.aw:152
+#: classes/contentmgmt/links.aw:155
 msgid "Viimati muudetud"
 msgstr "Last modified"
 
-#: classes/contentmgmt/links.aw:280
+#: classes/contentmgmt/links.aw:283
 msgid "T&ouml;&ouml;riistariba"
 msgstr "Toolbar"
 
-#: classes/contentmgmt/links.aw:281
+#: classes/contentmgmt/links.aw:284
 msgid "Aadressi riba"
 msgstr "Address bar"
 
-#: classes/contentmgmt/links.aw:282
+#: classes/contentmgmt/links.aw:285
 msgid "Men&uuml;&uuml;d"
 msgstr "Menus"
 
-#: classes/contentmgmt/links.aw:283
+#: classes/contentmgmt/links.aw:286
 msgid "Kerimisriba"
 msgstr "Scrollbars"
 
-#: classes/contentmgmt/links.aw:315
+#: classes/contentmgmt/links.aw:318
 msgid "Saidi sisene link"
 msgstr "Inner-site link"
 
-#: classes/contentmgmt/links.aw:481
+#: classes/contentmgmt/links.aw:484
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""

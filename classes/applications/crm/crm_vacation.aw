@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_vacation.aw,v 1.3 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_vacation.aw,v 1.4 2007/12/06 14:33:17 kristo Exp $
 // crm_vacation.aw - Puhkus 
 /*
 
-@classinfo syslog_type=ST_CRM_VACATION relationmgr=yes
+@classinfo syslog_type=ST_CRM_VACATION relationmgr=yes maintainer=markop
 
 @default group=general
 

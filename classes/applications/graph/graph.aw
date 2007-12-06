@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/graph/graph.aw,v 1.1 2005/09/11 07:56:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/graph/graph.aw,v 1.2 2007/12/06 14:33:30 kristo Exp $
 // graph.aw - graafikute haldamine
 
 /* 
 
-@classinfo no_status=1 relationmgr=yes syslog_type=ST_GRAPH
+@classinfo no_status=1 relationmgr=yes syslog_type=ST_GRAPH maintainer=kristo
 
 @tableinfo graphs index=id
 

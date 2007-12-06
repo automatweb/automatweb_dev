@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_implementor_center.aw,v 1.4 2006/09/27 14:37:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_implementor_center.aw,v 1.5 2007/12/06 14:33:50 kristo Exp $
 // procurement_implementor_center.aw - Hanngete keskkond pakkujale 
 /*
 
-@classinfo syslog_type=ST_PROCUREMENT_IMPLEMENTOR_CENTER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROCUREMENT_IMPLEMENTOR_CENTER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo aw_procurement_implementor_centers index=aw_oid master_index=brother_of master_table=objects
 

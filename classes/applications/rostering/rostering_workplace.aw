@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workplace.aw,v 1.3 2007/03/07 13:00:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workplace.aw,v 1.4 2007/12/06 14:34:03 kristo Exp $
 // rostering_workplace.aw - T&ouml;&ouml;koht 
 /*
 
-@classinfo syslog_type=ST_ROSTERING_WORKPLACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ROSTERING_WORKPLACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo aw_rostering_workplace index=aw_oid master_index=brother_of master_table=objects
 

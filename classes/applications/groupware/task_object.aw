@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 class task_object extends _int_object
 {
 	function task_object()

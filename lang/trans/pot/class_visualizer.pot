@@ -10,11 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/class_designer/class_visualizer.aw:27
+#: classes/applications/class_designer/class_visualizer.aw:30
 msgid "I'm so depessed"
 msgstr ""
 
-#: classes/applications/class_designer/class_visualizer.aw:279
+#: classes/applications/class_designer/class_visualizer.aw:282
 msgid "Seostehaldur"
 msgstr ""
 

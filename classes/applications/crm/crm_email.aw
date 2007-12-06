@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_email.aw,v 1.1 2006/03/03 15:06:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_email.aw,v 1.2 2007/12/06 14:33:17 kristo Exp $
 // crm_email.aw - CRM Meil 
 /*
 
-@classinfo syslog_type=ST_CRM_EMAIL relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_EMAIL relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @default table=objects
 @tableinfo aw_crm_mails index=aw_oid master_table=objects master_index=brother_of
 

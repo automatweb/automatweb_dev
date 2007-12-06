@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.11 2007/06/05 10:13:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.12 2007/12/06 14:33:37 kristo Exp $
+/*
+@classinfo maintainer=kristo
+*/
 class project_selector extends core
 {
 	function project_selector()

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.4 2006/09/05 09:40:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.5 2007/12/06 14:33:26 kristo Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
-@classinfo syslog_type=ST_CUSTOMER_FEEDBACK_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CUSTOMER_FEEDBACK_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo aw_customer_feedback index=aw_oid master_index=brother_of master_table=objects
 

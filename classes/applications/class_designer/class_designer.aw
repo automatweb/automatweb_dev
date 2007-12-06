@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.33 2007/11/29 09:36:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.34 2007/12/06 14:33:03 kristo Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
 // nõude number, ext_id
 /*
 
-@classinfo syslog_type=ST_CLASS_DESIGNER relationmgr=yes mantainer=kristo
+@classinfo syslog_type=ST_CLASS_DESIGNER relationmgr=yes maintainer=kristo
 @classinfo no_status=1
 
 @default table=objects

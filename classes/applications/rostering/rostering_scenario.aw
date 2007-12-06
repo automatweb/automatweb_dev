@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_scenario.aw,v 1.2 2007/03/07 13:00:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_scenario.aw,v 1.3 2007/12/06 14:34:03 kristo Exp $
 // rostering_scenario.aw - Planeerimise stsenaarium 
 /*
 
-@classinfo syslog_type=ST_ROSTERING_SCENARIO relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ROSTERING_SCENARIO relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo aw_rostering_scenario master_table=objects master_index=brother_of index=aw_oid
 

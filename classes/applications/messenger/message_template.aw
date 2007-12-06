@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/message_template.aw,v 1.4 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/message_template.aw,v 1.5 2007/12/06 14:33:40 kristo Exp $
 // message_template.aw - Kirja template 
 /*
 
-@classinfo syslog_type=ST_MESSAGE_TEMPLATE relationmgr=yes
+@classinfo syslog_type=ST_MESSAGE_TEMPLATE relationmgr=yes maintainer=markop
 
 @default table=objects
 @default group=general

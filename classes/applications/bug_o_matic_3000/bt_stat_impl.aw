@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  mantainer=robert
+@classinfo  maintainer=robert
 */
 
 class bt_stat_impl extends core

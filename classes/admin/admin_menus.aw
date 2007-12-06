@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.126 2007/11/23 13:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.127 2007/12/06 14:32:43 kristo Exp $
 /*
 
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 
 */
 

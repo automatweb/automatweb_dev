@@ -94,7 +94,7 @@ msgstr ""
 msgid "Lisainfo grupi kohta puudub"
 msgstr ""
 
-#: classes/class_base.aw:995 classes/class_base.aw:1675
+#: classes/class_base.aw:995 classes/class_base.aw:1684
 msgid "Nimetu"
 msgstr ""
 
@@ -106,51 +106,51 @@ msgstr ""
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1602 classes/class_base.aw:1693
+#: classes/class_base.aw:1611 classes/class_base.aw:1702
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1867 classes/class_base.aw:5310 classes/class_base.aw:5321
+#: classes/class_base.aw:1876 classes/class_base.aw:5319 classes/class_base.aw:5330
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:1880
+#: classes/class_base.aw:1889
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3771
+#: classes/class_base.aw:3780
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/class_base.aw:3780
+#: classes/class_base.aw:3789
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:5195
+#: classes/class_base.aw:5204
 msgid "%s is not a valid configuration form!"
 msgstr ""
 
-#: classes/class_base.aw:5635
+#: classes/class_base.aw:5644
 msgid "T&otilde;lge aktiivne"
 msgstr ""
 
-#: classes/class_base.aw:5643
+#: classes/class_base.aw:5652
 msgid "Salvesta"
 msgstr ""
 
-#: classes/class_base.aw:5808 classes/class_base.aw:5845
+#: classes/class_base.aw:5817 classes/class_base.aw:5854
 msgid "aliase number oli juba olemas, seega uuendas"
 msgstr ""
 
-#: classes/class_base.aw:5812
+#: classes/class_base.aw:5821
 msgid "Seoste l&otilde;ikamisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr ""
 
-#: classes/class_base.aw:5852
+#: classes/class_base.aw:5861
 msgid "Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr ""
 
-#: classes/class_base.aw:5882
+#: classes/class_base.aw:5891
 msgid "Kliki siia j&auml;tkamiseks"
 msgstr ""
 

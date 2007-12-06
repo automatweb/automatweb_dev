@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_admin.aw,v 1.4 2006/09/19 11:39:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_admin.aw,v 1.5 2007/12/06 14:34:06 kristo Exp $
 // scm_admin.aw - Spordiv&otilde;istluste haldus 
 /*
 
-@classinfo syslog_type=ST_SCM_ADMIN relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SCM_ADMIN relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
 @default group=general

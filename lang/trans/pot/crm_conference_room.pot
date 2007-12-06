@@ -111,7 +111,7 @@ msgid "Omaduse Ainult toolid diagonaalis (type_chair_diag) help"
 msgstr ""
 
 #: classes/crm/crm_conference_room.aw:layout_left
-msgid "Kujundusosa Üldine (left) pealkiri"
+msgid "Kujundusosa &Uuml;ldine (left) pealkiri"
 msgstr ""
 
 #: classes/crm/crm_conference_room.aw:layout_right

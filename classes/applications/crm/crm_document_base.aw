@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 class crm_document_base extends class_base
 {
 	function crm_document_base()

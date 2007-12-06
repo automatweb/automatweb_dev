@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_col.aw,v 1.1 2006/07/12 11:56:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_col.aw,v 1.2 2007/12/06 14:33:32 kristo Exp $
 // project_analysis_col.aw - Projekti anal&uuml;&uuml;si tulp 
 /*
 
-@classinfo syslog_type=ST_PROJECT_ANALYSIS_COL relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROJECT_ANALYSIS_COL relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

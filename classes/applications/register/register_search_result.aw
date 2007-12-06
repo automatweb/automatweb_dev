@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search_result.aw,v 1.2 2005/04/21 08:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search_result.aw,v 1.3 2007/12/06 14:34:00 kristo Exp $
 // register_search_result.aw - Registri otsingu tulemused 
 /*
 
-@classinfo syslog_type=ST_REGISTER_SEARCH_RESULT relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_REGISTER_SEARCH_RESULT relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
 @default table=objects
 @default group=general

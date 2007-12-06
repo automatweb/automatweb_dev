@@ -1,7 +1,7 @@
 <?php
 
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 
 class image_manager extends aw_template

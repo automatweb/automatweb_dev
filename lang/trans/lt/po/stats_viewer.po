@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/stats/stats_viewer.aw:class_1145_help
 msgid "Klassi Statistika help"
 msgstr ""
@@ -535,7 +534,7 @@ msgid "Seose Aruanne (RELTYPE_HTML) tekst"
 msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:layout_dates
-msgid "Kujundusosa Kuupäevad (dates) pealkiri"
+msgid "Kujundusosa Kuup&auml;evad (dates) pealkiri"
 msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:layout_us
@@ -555,7 +554,7 @@ msgid "Kujundusosa Maa (act_right) pealkiri"
 msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:layout_s_left
-msgid "Kujundusosa Sessioon & IP (s_left) pealkiri"
+msgid "Kujundusosa Sessioon&nbsp;&&nbsp;IP (s_left) pealkiri"
 msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:layout_s_right
@@ -563,7 +562,7 @@ msgid "Kujundusosa Tulemused (s_right) pealkiri"
 msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:layout_browser_tree
-msgid "Kujundusosa Kuupäevad (browser_tree) pealkiri"
+msgid "Kujundusosa Kuup&auml;evad (browser_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:196
@@ -678,7 +677,9 @@ msgstr ""
 msgid "Arhiveeritud"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:447 classes/applications/stats/stats_viewer.aw:485 classes/applications/stats/stats_viewer.aw:512
+#: classes/applications/stats/stats_viewer.aw:447
+#: classes/applications/stats/stats_viewer.aw:485
+#: classes/applications/stats/stats_viewer.aw:512
 msgid "Objekti nimi"
 msgstr ""
 
@@ -686,7 +687,8 @@ msgstr ""
 msgid "Ka alamobjektid"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:459 classes/applications/stats/stats_viewer.aw:548
+#: classes/applications/stats/stats_viewer.aw:459
+#: classes/applications/stats/stats_viewer.aw:548
 msgid "Juurobjekt"
 msgstr ""
 
@@ -694,27 +696,37 @@ msgstr ""
 msgid "Kasutajad"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:532 classes/applications/stats/stats_viewer.aw:561 classes/applications/stats/stats_viewer.aw:686
+#: classes/applications/stats/stats_viewer.aw:532
+#: classes/applications/stats/stats_viewer.aw:561
+#: classes/applications/stats/stats_viewer.aw:686
 msgid "Kasutajagrupp"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:540 classes/applications/stats/stats_viewer.aw:549 classes/applications/stats/stats_viewer.aw:556 classes/applications/stats/stats_viewer.aw:562
+#: classes/applications/stats/stats_viewer.aw:540
+#: classes/applications/stats/stats_viewer.aw:549
+#: classes/applications/stats/stats_viewer.aw:556
+#: classes/applications/stats/stats_viewer.aw:562
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:555 classes/applications/stats/stats_viewer.aw:681 classes/applications/stats/stats_viewer.aw:1475
+#: classes/applications/stats/stats_viewer.aw:555
+#: classes/applications/stats/stats_viewer.aw:681
+#: classes/applications/stats/stats_viewer.aw:1475
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:567 classes/applications/stats/stats_viewer.aw:2335
+#: classes/applications/stats/stats_viewer.aw:567
+#: classes/applications/stats/stats_viewer.aw:2335
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:657 classes/applications/stats/stats_viewer.aw:1366
+#: classes/applications/stats/stats_viewer.aw:657
+#: classes/applications/stats/stats_viewer.aw:1366
 msgid "Objekt"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:662 classes/applications/stats/stats_viewer.aw:1688
+#: classes/applications/stats/stats_viewer.aw:662
+#: classes/applications/stats/stats_viewer.aw:1688
 msgid "Tegevus"
 msgstr ""
 
@@ -722,7 +734,8 @@ msgstr ""
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:676 classes/applications/stats/stats_viewer.aw:1900
+#: classes/applications/stats/stats_viewer.aw:676
+#: classes/applications/stats/stats_viewer.aw:1900
 msgid "IP Aadress"
 msgstr ""
 
@@ -734,7 +747,8 @@ msgstr ""
 msgid "Riik"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:701 classes/applications/stats/stats_viewer.aw:930
+#: classes/applications/stats/stats_viewer.aw:701
+#: classes/applications/stats/stats_viewer.aw:930
 msgid "Referer"
 msgstr ""
 
@@ -746,15 +760,56 @@ msgstr ""
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:952 classes/applications/stats/stats_viewer.aw:1059 classes/applications/stats/stats_viewer.aw:1165 classes/applications/stats/stats_viewer.aw:1269 classes/applications/stats/stats_viewer.aw:1373 classes/applications/stats/stats_viewer.aw:1482 classes/applications/stats/stats_viewer.aw:1587 classes/applications/stats/stats_viewer.aw:1695 classes/applications/stats/stats_viewer.aw:1801 classes/applications/stats/stats_viewer.aw:1907 classes/applications/stats/stats_viewer.aw:2014
+#: classes/applications/stats/stats_viewer.aw:952
+#: classes/applications/stats/stats_viewer.aw:1059
+#: classes/applications/stats/stats_viewer.aw:1165
+#: classes/applications/stats/stats_viewer.aw:1269
+#: classes/applications/stats/stats_viewer.aw:1373
+#: classes/applications/stats/stats_viewer.aw:1482
+#: classes/applications/stats/stats_viewer.aw:1587
+#: classes/applications/stats/stats_viewer.aw:1695
+#: classes/applications/stats/stats_viewer.aw:1801
+#: classes/applications/stats/stats_viewer.aw:1907
+#: classes/applications/stats/stats_viewer.aw:2014
 msgid "Vaatamisi"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:960 classes/applications/stats/stats_viewer.aw:976 classes/applications/stats/stats_viewer.aw:1067 classes/applications/stats/stats_viewer.aw:1083 classes/applications/stats/stats_viewer.aw:1173 classes/applications/stats/stats_viewer.aw:1189 classes/applications/stats/stats_viewer.aw:1277 classes/applications/stats/stats_viewer.aw:1293 classes/applications/stats/stats_viewer.aw:1381 classes/applications/stats/stats_viewer.aw:1397 classes/applications/stats/stats_viewer.aw:1490 classes/applications/stats/stats_viewer.aw:1506 classes/applications/stats/stats_viewer.aw:1595 classes/applications/stats/stats_viewer.aw:1611 classes/applications/stats/stats_viewer.aw:1703 classes/applications/stats/stats_viewer.aw:1719 classes/applications/stats/stats_viewer.aw:1809 classes/applications/stats/stats_viewer.aw:1825 classes/applications/stats/stats_viewer.aw:1915 classes/applications/stats/stats_viewer.aw:1931 classes/applications/stats/stats_viewer.aw:2022 classes/applications/stats/stats_viewer.aw:2038
+#: classes/applications/stats/stats_viewer.aw:960
+#: classes/applications/stats/stats_viewer.aw:976
+#: classes/applications/stats/stats_viewer.aw:1067
+#: classes/applications/stats/stats_viewer.aw:1083
+#: classes/applications/stats/stats_viewer.aw:1173
+#: classes/applications/stats/stats_viewer.aw:1189
+#: classes/applications/stats/stats_viewer.aw:1277
+#: classes/applications/stats/stats_viewer.aw:1293
+#: classes/applications/stats/stats_viewer.aw:1381
+#: classes/applications/stats/stats_viewer.aw:1397
+#: classes/applications/stats/stats_viewer.aw:1490
+#: classes/applications/stats/stats_viewer.aw:1506
+#: classes/applications/stats/stats_viewer.aw:1595
+#: classes/applications/stats/stats_viewer.aw:1611
+#: classes/applications/stats/stats_viewer.aw:1703
+#: classes/applications/stats/stats_viewer.aw:1719
+#: classes/applications/stats/stats_viewer.aw:1809
+#: classes/applications/stats/stats_viewer.aw:1825
+#: classes/applications/stats/stats_viewer.aw:1915
+#: classes/applications/stats/stats_viewer.aw:1931
+#: classes/applications/stats/stats_viewer.aw:2022
+#: classes/applications/stats/stats_viewer.aw:2038
 msgid "%"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:968 classes/applications/stats/stats_viewer.aw:1075 classes/applications/stats/stats_viewer.aw:1181 classes/applications/stats/stats_viewer.aw:1285 classes/applications/stats/stats_viewer.aw:1389 classes/applications/stats/stats_viewer.aw:1498 classes/applications/stats/stats_viewer.aw:1603 classes/applications/stats/stats_viewer.aw:1711 classes/applications/stats/stats_viewer.aw:1817 classes/applications/stats/stats_viewer.aw:1923 classes/applications/stats/stats_viewer.aw:2030
+#: classes/applications/stats/stats_viewer.aw:968
+#: classes/applications/stats/stats_viewer.aw:1075
+#: classes/applications/stats/stats_viewer.aw:1181
+#: classes/applications/stats/stats_viewer.aw:1285
+#: classes/applications/stats/stats_viewer.aw:1389
+#: classes/applications/stats/stats_viewer.aw:1498
+#: classes/applications/stats/stats_viewer.aw:1603
+#: classes/applications/stats/stats_viewer.aw:1711
+#: classes/applications/stats/stats_viewer.aw:1817
+#: classes/applications/stats/stats_viewer.aw:1923
+#: classes/applications/stats/stats_viewer.aw:2030
 msgid "K&uuml;lastusi"
 msgstr ""
 
@@ -790,7 +845,8 @@ msgstr ""
 msgid "Salvesta HTML"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:2137 classes/applications/stats/stats_viewer.aw:2220
+#: classes/applications/stats/stats_viewer.aw:2137
+#: classes/applications/stats/stats_viewer.aw:2220
 msgid "Lehek&uuml;lg"
 msgstr ""
 
@@ -810,7 +866,7 @@ msgstr ""
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/stats/stats_viewer.aw:2415 classes/applications/stats/stats_viewer.aw:2450
+#: classes/applications/stats/stats_viewer.aw:2415
+#: classes/applications/stats/stats_viewer.aw:2450
 msgid "Vaata"
 msgstr ""
-

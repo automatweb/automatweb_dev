@@ -14,26 +14,26 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/commune/image_rate.aw:229
+#: classes/applications/commune/image_rate.aw:230
 msgid "Saada sõnum"
 msgstr ""
 
-#: classes/applications/commune/image_rate.aw:239
+#: classes/applications/commune/image_rate.aw:240
 msgid "lisa sõprade hulka"
 msgstr ""
 
-#: classes/applications/commune/image_rate.aw:249
+#: classes/applications/commune/image_rate.aw:250
 msgid "Ignoreeri"
 msgstr ""
 
-#: classes/applications/commune/image_rate.aw:259
+#: classes/applications/commune/image_rate.aw:260
 msgid "Blokeeri"
 msgstr ""
 
-#: classes/applications/commune/image_rate.aw:269
+#: classes/applications/commune/image_rate.aw:270
 msgid "Lisa kontaktidesse"
 msgstr ""
 
-#: classes/applications/commune/image_rate.aw:321
+#: classes/applications/commune/image_rate.aw:322
 msgid "pildi"
 msgstr ""

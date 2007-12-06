@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.5 2006/04/05 13:06:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.6 2007/12/06 14:33:47 kristo Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_WANTED relationmgr=yes r2=yes no_comment=1
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_WANTED relationmgr=yes r2=yes no_comment=1 maintainer=kristo
 
 @tableinfo personnel_management_job_wanted master_table=objects master_index=oid index=oid
 

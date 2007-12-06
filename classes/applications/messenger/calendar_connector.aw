@@ -2,6 +2,7 @@
 // the purpose of this class is to provide form definition for creating events from
 // incoming messages
 /*
+@classinfo maintainer=tarvo
 @default group=general
 @default form=connector
 

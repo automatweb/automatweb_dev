@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_shift.aw,v 1.3 2006/10/20 11:19:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_shift.aw,v 1.4 2007/12/06 14:34:03 kristo Exp $
 // rostering_shift.aw - Vahetus 
 /*
 
-@classinfo syslog_type=ST_ROSTERING_SHIFT relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ROSTERING_SHIFT relationmgr=yes no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo aw_rostering_shift master_index=brother_of master_table=objects index=aw_oid
 

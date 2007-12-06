@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_accommodation.aw,v 1.5 2006/08/23 14:15:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_accommodation.aw,v 1.6 2007/12/06 14:33:17 kristo Exp $
 // crm_field_accommodation.aw - Majutusettev&otilde;te (valdkond) 
 /*
 
@@ -18,7 +18,7 @@ Modifing classes:
 
 
 
-@classinfo syslog_type=ST_CRM_FIELD_ACCOMMODATION no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_FIELD_ACCOMMODATION no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default field=meta

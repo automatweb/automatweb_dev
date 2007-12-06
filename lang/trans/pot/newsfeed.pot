@@ -110,6 +110,18 @@ msgstr ""
 msgid "Omaduse Näita ka lisatud objekte (parse_embed) help"
 msgstr ""
 
+#: classes/contentmgmt/newsfeed.aw:prop_folder_name
+msgid "Omaduse Näita dokumendi kausta nime (folder_name) caption"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_folder_name_comment
+msgid "Omaduse Näita dokumendi kausta nime (folder_name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_folder_name_help
+msgid "Omaduse Näita dokumendi kausta nime (folder_name) help"
+msgstr ""
+
 #: classes/contentmgmt/newsfeed.aw:prop_folders
 msgid "Omaduse Kaustade seaded (folders) caption"
 msgstr ""
@@ -154,67 +166,67 @@ msgstr ""
 msgid "Seose Materjalide kaust (RELTYPE_FEED_SOURCE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:79
+#: classes/contentmgmt/newsfeed.aw:82
 msgid "Suurem (uuem) enne"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:80
+#: classes/contentmgmt/newsfeed.aw:83
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:86
+#: classes/contentmgmt/newsfeed.aw:89
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:87
+#: classes/contentmgmt/newsfeed.aw:90
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:88
+#: classes/contentmgmt/newsfeed.aw:91
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:89
+#: classes/contentmgmt/newsfeed.aw:92
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:90
+#: classes/contentmgmt/newsfeed.aw:93
 msgid "Objekti nime j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:91
+#: classes/contentmgmt/newsfeed.aw:94
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:92
+#: classes/contentmgmt/newsfeed.aw:95
 msgid "Random"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:102
+#: classes/contentmgmt/newsfeed.aw:105
 msgid "RSS 2.0"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:103
+#: classes/contentmgmt/newsfeed.aw:106
 msgid "Atom (implementeerimata)"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:128
+#: classes/contentmgmt/newsfeed.aw:131
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:132
+#: classes/contentmgmt/newsfeed.aw:135
 msgid "Name"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:136
+#: classes/contentmgmt/newsfeed.aw:139
 msgid "Võta alamkaustadest ka"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:456
+#: classes/contentmgmt/newsfeed.aw:465
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:462
+#: classes/contentmgmt/newsfeed.aw:471
 msgid "Vali"
 msgstr ""
 

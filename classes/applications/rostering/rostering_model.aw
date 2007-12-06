@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=voldemar
+*/
 class rostering_model extends core
 {
 	function rostering_model()

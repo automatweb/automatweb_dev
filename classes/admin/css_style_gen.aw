@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/css_style_gen.aw,v 1.3 2007/11/23 13:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/css_style_gen.aw,v 1.4 2007/12/06 14:32:43 kristo Exp $
 // css_style_gen.aw - CSS Stiilide generaator 
 /*
 
-@classinfo syslog_type=ST_CSS_STYLE_GEN relationmgr=yes no_comment=1 no_status=1 mantainer=kristo
+@classinfo syslog_type=ST_CSS_STYLE_GEN relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

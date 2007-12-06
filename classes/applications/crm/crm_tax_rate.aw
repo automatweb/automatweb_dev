@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_tax_rate.aw,v 1.4 2006/02/22 15:18:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_tax_rate.aw,v 1.5 2007/12/06 14:33:17 kristo Exp $
 // crm_tax_rate.aw - Maksum&auml;&auml;r 
 /*
 
-@classinfo syslog_type=ST_CRM_TAX_RATE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_TAX_RATE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @tableinfo aw_crm_tax_rate index=aw_oid master_table=objects master_index=brother_of
 @default table=aw_crm_tax_rate
 

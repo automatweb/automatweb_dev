@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_service_type.aw,v 1.1 2007/06/05 09:41:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_service_type.aw,v 1.2 2007/12/06 14:33:17 kristo Exp $
 // crm_service_type.aw - CRM Teenuse liik 
 /*
 
-@classinfo syslog_type=ST_CRM_SERVICE_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_SERVICE_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

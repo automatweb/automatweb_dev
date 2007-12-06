@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.6 2007/11/23 12:46:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.7 2007/12/06 14:32:43 kristo Exp $
 // site_template_trans.aw - Saidi templatede t&otilde;lkimine 
 /*
 
-@classinfo syslog_type=ST_SITE_TEMPLATE_TRANS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=kristo
+@classinfo syslog_type=ST_SITE_TEMPLATE_TRANS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

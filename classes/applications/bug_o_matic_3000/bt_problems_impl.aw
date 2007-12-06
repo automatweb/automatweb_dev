@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  mantainer=robert
+@classinfo  maintainer=robert
 */
 
 class bt_problems_impl extends core

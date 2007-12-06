@@ -67,7 +67,7 @@ msgid "Kujundusosa Ruumid (left) pealkiri"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_products_overview.aw:layout_right
-msgid "Kujundusosa Broneeringud ja toitlustus (right) pealkiri"
+msgid "Kujundusosa Broneeringud&nbsp;ja&nbsp;toitlustus (right) pealkiri"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_products_overview.aw:109

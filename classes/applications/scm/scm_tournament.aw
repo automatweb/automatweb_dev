@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.8 2006/08/23 12:22:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.9 2007/12/06 14:34:07 kristo Exp $
 // scm_tournament.aw - V&otilde;istlussari
 /*
 
-@classinfo syslog_type=ST_SCM_TOURNAMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SCM_TOURNAMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1  maintainer=tarvo
 
 @default table=objects
 @default group=general

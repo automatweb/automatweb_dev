@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=markop
+*/
 class project_files_impl extends class_base
 {
 	function project_files_impl()

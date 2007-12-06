@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_contract_stop.aw,v 1.4 2007/11/22 08:44:23 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_contract_stop.aw,v 1.5 2007/12/06 14:33:17 kristo Exp $
 // crm_contract_stop.aw - Töölepingu peatamine 
 /*
 
-@classinfo syslog_type=ST_CRM_CONTRACT_STOP relationmgr=yes
+@classinfo syslog_type=ST_CRM_CONTRACT_STOP relationmgr=yes maintainer=markop
 
 @default group=general
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_config.aw,v 1.3 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_config.aw,v 1.4 2007/12/06 14:33:40 kristo Exp $
 // messenger_config.aw - Messengeri config 
 /*
 
-@classinfo syslog_type=ST_MESSENGER_CONFIG relationmgr=yes
+@classinfo syslog_type=ST_MESSENGER_CONFIG relationmgr=yes maintainer=markop
 
 @default table=objects
 @default group=general

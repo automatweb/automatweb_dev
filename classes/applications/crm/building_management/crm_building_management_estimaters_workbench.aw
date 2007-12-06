@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/building_management/crm_building_management_estimaters_workbench.aw,v 1.3 2007/11/29 09:37:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/building_management/crm_building_management_estimaters_workbench.aw,v 1.4 2007/12/06 14:33:21 kristo Exp $
 // crm_building_management_estimaters_workbench.aw - Eelarvestaja t&ouml;&ouml;laud 
 /*
 
-@classinfo syslog_type=ST_CRM_BUILDING_MANAGEMENT_ESTIMATERS_WORKBENCH relationmgr=yes no_comment=1 no_status=1 prop_cb=1 mantainer=dragut
+@classinfo syslog_type=ST_CRM_BUILDING_MANAGEMENT_ESTIMATERS_WORKBENCH relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @tableinfo crm_building_management_management_estimaters_workbench index=oid master_table=objects master_index=oid
 

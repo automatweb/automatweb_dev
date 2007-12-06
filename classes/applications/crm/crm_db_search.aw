@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.7 2007/07/18 10:34:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.8 2007/12/06 14:33:17 kristo Exp $
 // crm_db_search.aw - Kliendibaasi otsingu grupp 
 /*
 
-@classinfo syslog_type=ST_CRM_DB_SEARCH relationmgr=yes no_comment=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_DB_SEARCH relationmgr=yes no_comment=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

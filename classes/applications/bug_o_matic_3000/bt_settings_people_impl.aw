@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  mantainer=robert
+@classinfo  maintainer=robert
 */
 class bt_settings_people_impl extends core
 {

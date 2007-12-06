@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.8 2006/03/08 15:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.9 2007/12/06 14:33:54 kristo Exp $
 // quickmessagebox.aw - Kiirsõnumite haldus 
 /*
 
-@classinfo syslog_type=ST_QUICKMESSAGEBOX relationmgr=yes no_status=1
+@classinfo syslog_type=ST_QUICKMESSAGEBOX relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

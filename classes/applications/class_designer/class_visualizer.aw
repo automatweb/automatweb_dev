@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo mantainer=kristo
+@classinfo maintainer=kristo
 */
 class class_visualizer extends class_base
 {

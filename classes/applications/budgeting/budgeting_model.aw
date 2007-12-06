@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  mantainer=kristo
+@classinfo  maintainer=kristo
 */
 
 class budgeting_model extends core

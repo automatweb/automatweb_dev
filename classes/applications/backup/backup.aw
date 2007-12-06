@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo no_comment=1 no_status=1 syslog_type=ST_BACKUP mantainer=kristo
+@classinfo no_comment=1 no_status=1 syslog_type=ST_BACKUP maintainer=kristo
 
 @default table=objects
 @default group=general

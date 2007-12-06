@@ -63,15 +63,15 @@ msgid "Omaduse T&auml;itmist&auml;htaeg (deadline) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_selling_order.aw:prop_create_selling_sheet
-msgid "Omaduse Mooduste m&uuml;&uuml;gi-saateleht (create_selling_sheet) caption"
+msgid "Omaduse Moodusta m&uuml;&uuml;gi-saateleht (create_selling_sheet) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_selling_order.aw:prop_create_selling_sheet_comment
-msgid "Omaduse Mooduste m&uuml;&uuml;gi-saateleht (create_selling_sheet) kommentaar"
+msgid "Omaduse Moodusta m&uuml;&uuml;gi-saateleht (create_selling_sheet) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_selling_order.aw:prop_create_selling_sheet_help
-msgid "Omaduse Mooduste m&uuml;&uuml;gi-saateleht (create_selling_sheet) help"
+msgid "Omaduse Moodusta m&uuml;&uuml;gi-saateleht (create_selling_sheet) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_selling_order.aw:prop_append_to_selling_sheet

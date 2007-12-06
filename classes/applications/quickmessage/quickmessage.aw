@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.9 2005/04/21 08:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.10 2007/12/06 14:33:54 kristo Exp $
 // quickmessage.aw - Kiirteade  
 /*
 
-@classinfo syslog_type=ST_QUICKMESSAGE relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_QUICKMESSAGE relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 @tableinfo quickmessages index=id master_table=objects master_index=brother_of
 
 @default table=quickmessages
