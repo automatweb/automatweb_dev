@@ -2752,7 +2752,7 @@ class mrp_workspace extends class_base
 			"columns" => $columns,
 			"subdivisions" => $subdivisions,
 			"timespans" => $subdivisions,
-			"width" => 950,
+			"width" => 850,
 			"row_height" => 10,
 		));
 
