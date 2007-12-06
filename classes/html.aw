@@ -191,7 +191,7 @@ class html extends aw_template
 		$style = isset($style)?" style=\"".$style."\"":"";
 
 		### compose autocompletes source url
-		if (is_admin() && ($autocomplete_source or is_array($options) or $autocomplete_source_method))
+		if ($autocomplete_source or is_array($options) or $autocomplete_source_method)
 		{
 			if (!defined("AW_AUTOCOMPLETE_INITIALIZED"))
 			{
