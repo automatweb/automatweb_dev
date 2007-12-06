@@ -2354,7 +2354,7 @@ class crm_company extends class_base
 
 			case "my_tasks":
 			case "my_tasks_cal":
-				if(aw_global_get("crm_task_view") === null)
+				if(!(aw_global_get("crm_task_view") > -1))
 				{
 					$seti = get_instance(CL_CRM_SETTINGS);
 					$sts = $seti->get_current_settings();
