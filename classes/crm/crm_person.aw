@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.183 2007/11/22 08:50:10 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.184 2007/12/06 11:15:40 kaarel Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -225,7 +225,7 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 
 		@layout ceditprof type=vbox closeable=1 area_caption=Töösuhted
 
-			@property cedit_profession_tbl type=table store=no no_caption=1 parent=ceditprof
+			@property cedit_profession_tbl type=table store=no no_caption=1 parent=ceditprof store=no
 
 		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
 
@@ -829,13 +829,17 @@ class crm_person extends class_base
 			case "aw_bank_account":
 				return PROP_IGNORE;
 
+			case "rank":
+				$arr["obj_inst"]->set_prop("rank", $arr["request"]["rank"]);
+				return PROP_IGNORE;
+
 			case "cedit_phone_tbl":
 			case "cedit_telefax_tbl":
 			case "cedit_url_tbl":
 			case "cedit_email_tbl":
 			case "cedit_adr_tbl":
 			case "cedit_bank_account_tbl":
-			case "cedit_profession_tbl":
+//			case "cedit_profession_tbl":
 				static $i;
 				if (!$i)
 				{
