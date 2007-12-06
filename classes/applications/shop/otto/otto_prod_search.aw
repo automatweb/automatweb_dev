@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.18 2007/12/06 14:54:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.19 2007/12/06 14:55:03 dragut Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -177,21 +177,21 @@ class otto_prod_search extends class_base
 		$arr["str"] = trim(str_replace(" ", "", $arr["str"]));
 
 		// fulltext search - fields are 
+		
 		$filter = array(
 			"class_id" => CL_SHOP_PRODUCT,
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
 					"name" => "%".$arr["str"]."%",
-				//	"user3" => "%".$arr["str"]."%", // I think that there is no point of searching by images names --dragut
+					"user6" => "%".substr($arr["str"], 0,7)."%",
 					"user6" => "%".substr($arr["str"], 0,6)."%",
 					"userta2" => "%".$arr["str"]."%",
-				//	"user20" => "%".substr($arr["str"], 0,6)."%",
 				)
 			)),
 			"price" => new obj_predicate_not(10000000),
 			"user3" => new obj_predicate_not(''), // don't show products, which don't have images --dragut
-//			"user18" => $this->_get_pgs()
+			"userch3" => new obj_predicate_not(1), // this is for bonprix, don't show sold out products, i guess it won't affect otto ... --dragut
 		);
 
 		// lets add the category support for minisearch
@@ -420,13 +420,10 @@ class otto_prod_search extends class_base
 				$image_data[$prod_data['imnr']] = $data;
 			}
 		}
-
-
 		exit_function('otto_prod_search::do_draw_res::get_products_to_show');
 */
 		
 		enter_function('otto_prod_search::do_draw_res::gen_page_list');
-	//	$total = count($image_data);
 		$total = $ol_cnt->count();
 
 		$per_page = 10;
@@ -526,7 +523,10 @@ class otto_prod_search extends class_base
 				$_s = $sections_lut[$product_oid];
 			}
 			$prod_inst = $product_obj->instance();
-
+			if (!$sections_lut[$product_oid])
+			{
+				continue;
+			}
 			$viewlink = $this->mk_my_orb('show_items', array(
 				'section' => $_s,
 				'id' => aw_ini_get('shop.prod_fld_path_oc'),
@@ -535,6 +535,10 @@ class otto_prod_search extends class_base
 			), 'shop_order_center');
 
 			$images = explode(',', $product_obj->prop('user3'));
+			if ($images[0] == "")
+			{
+				unset($images[0]);
+			}
 			$image = html::img(array(
 				'url' => $this->get_image_url(reset($images), 2),
 				'width' => 80,
