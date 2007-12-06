@@ -573,6 +573,7 @@ class mrp_case extends class_base
 		}
 
 		if (is_string ($arr["request"]["mrp_resourcetree_data"]))
+		//!!! data_var argument changed in treeview. this here not to be updated until treeview updated in mail.prismaprint.ee
 		{
 			### create new jobs based on resources chosen from tree
 			$added_resources = explode (",", $arr["request"]["mrp_resourcetree_data"]);
