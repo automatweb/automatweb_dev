@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.5 2007/09/11 13:52:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.6 2007/12/06 01:47:25 dragut Exp $
 // scm_location.aw - Toimumiskoht 
 /*
 
 @classinfo syslog_type=ST_SCM_LOCATION relationmgr=yes no_status=1 prop_cb=1
+@tableinfo scm_location index=oid master_table=objects master_index=oid
 
 @default table=objects
 @default group=general
@@ -11,26 +12,23 @@
 @property comment type=textarea
 @caption Kirjeldus
 
-@default field=meta
-@default method=serialize
-
-@property loc_path type=textarea
+@property loc_path type=textarea table=scm_location field=location_path
 @caption Kohale saab
 
-@property address type=relpicker reltype=RELTYPE_ADDRESS
+@property address type=relpicker table=scm_location field=address reltype=RELTYPE_ADDRESS
 @caption Aadress
 
-@property map_url type=textbox
+@property map_url type=textbox table=scm_location field=map_url
 @caption Kaart
 
 //seda peab veel palju muutma
-@property map type=relpicker reltype=RELTYPE_MAP
+@property map type=relpicker table=scm_location field=map reltype=RELTYPE_MAP
 @caption Kaardi pilt
 
-@property photo type=relpicker reltype=RELTYPE_PHOTO
+@property photo type=relpicker table=scm_location field=photo reltype=RELTYPE_PHOTO
 @caption Foto kohast
 
-@property make_copy type=choose multiple=1
+@property make_copy type=choose multiple=1 field=meta method=serialize
 @caption Tee koopia
 
 @groupinfo transl caption=T&otilde;lgi
@@ -134,6 +132,42 @@ class scm_location extends class_base
 		return $this->parse();
 	}
 
-//-- methods --//
+	function do_db_upgrade($table, $field, $query, $error)
+	{
+		if (empty($field))
+		{
+			$this->db_query('CREATE TABLE '.$table.' (
+				oid INT PRIMARY KEY NOT NULL, 
+				address int
+			)');
+			return true;
+		}
+
+		
+		switch ($field)
+		{
+			case 'address':
+			case 'map':
+			case 'photo':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'int'
+				));
+                                return true;
+			case 'map_url':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'text'
+				));
+                                return true;
+			case 'location_path':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'text'
+				));
+                                return true;
+		}
+		return false;
+	}
 }
 ?>
