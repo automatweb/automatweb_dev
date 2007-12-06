@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.97 2007/10/08 12:27:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.98 2007/12/06 15:45:15 kaarel Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -623,6 +623,11 @@ class releditor extends core
 							continue;
 						};
 					}
+					// I don't want to display the value of the chooser, but the caption of the value. ;) - Kaarel
+					if ($_pd["type"] == "chooser" && is_array($prop["options"]))
+					{
+						$prop["value"] = $prop["options"][$prop["value"]];
+					}
 					if ($_pd["type"] == "date_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
@@ -680,6 +685,7 @@ class releditor extends core
 					);
 
 				};
+				// This one defines the display table data. Just a reminder for myself. - Kaarel
 				$awt->define_data($rowdata);
 			}
 		}
