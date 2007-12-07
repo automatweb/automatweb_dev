@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/fun/deathcounter.aw,v 1.3 2007/12/05 12:13:11 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/fun/deathcounter.aw,v 1.4 2007/12/07 11:50:58 hannes Exp $
 // deathcounter.aw - Surmakaunter 
 /*
 
-@classinfo syslog_type=ST_DEATHCOUNTER no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_DEATHCOUNTER no_comment=1 no_status=1 prop_cb=1 maintainer=hannes
 
 @default table=objects
 @default group=general
