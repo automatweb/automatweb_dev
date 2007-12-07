@@ -2748,6 +2748,69 @@
             <field>my_tasks_cal</field>
       </property>
       <property>
+            <name>mail_tb</name>
+            <table>objects</table>
+            <group>ovrv_email</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>mail_tb</field>
+      </property>
+      <property>
+            <name>mail_s_subj</name>
+            <table>objects</table>
+            <group>ovrv_email</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>mail_search</parent>
+            <size>24</size>
+            <field>mail_s_subj</field>
+            <caption>Kirja teema</caption>
+      </property>
+      <property>
+            <name>mail_s_body</name>
+            <table>objects</table>
+            <group>ovrv_email</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>mail_search</parent>
+            <size>24</size>
+            <field>mail_s_body</field>
+            <caption>Kirja sisu</caption>
+      </property>
+      <property>
+            <name>mail_s_to</name>
+            <table>objects</table>
+            <group>ovrv_email</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>mail_search</parent>
+            <size>24</size>
+            <field>mail_s_to</field>
+            <caption>Kellele</caption>
+      </property>
+      <property>
+            <name>mail_s_submit</name>
+            <table>objects</table>
+            <group>ovrv_email</group>
+            <type>submit</type>
+            <parent>mail_search</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mail_s_submit</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>mail_tbl</name>
+            <table>objects</table>
+            <group>ovrv_email</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>mail_tbl_box</parent>
+            <field>mail_tbl</field>
+      </property>
+      <property>
             <name>stats_s_toolbar</name>
             <table>objects</table>
             <group>stats_s</group>
@@ -3389,8 +3452,14 @@
                   <submit>no</submit>
                   <save>no</save>
             </ovrv_offers>
-            <ovrv_mails>
+            <ovrv_email>
                   <caption>Meilid</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </ovrv_email>
+            <ovrv_mails>
+                  <caption>Meilikast</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
                   <save>no</save>
@@ -4496,6 +4565,25 @@
                   </group>
                   <area_caption></area_caption>
             </act_s_dl_layout>
+            <mail_main>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>ovrv_email</group>
+                  <area_caption></area_caption>
+            </mail_main>
+            <mail_search>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <parent>mail_main</parent>
+                  <group>ovrv_email</group>
+            </mail_search>
+            <mail_tbl_box>
+                  <type>vbox</type>
+                  <parent>mail_main</parent>
+                  <group>ovrv_email</group>
+                  <area_caption></area_caption>
+            </mail_tbl_box>
             <res_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>

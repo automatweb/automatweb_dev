@@ -1,7 +1,5 @@
 <?php
-/*
-@classinfo maintainer=markop
-*/
+
 class crm_company_overview_impl extends class_base
 {
 	function crm_company_overview_impl()
@@ -287,6 +285,75 @@ class crm_company_overview_impl extends class_base
 			};
 		};
 		$prop["value"] = $rv;
+	}
+
+	function _get_mail_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "subject",
+			"caption" => t("Teema"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "to",
+			"caption" => t("Kellele"),
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+		$t->set_caption("Kirjad");
+		
+		$cur = get_current_company();
+		$filt = array(
+			"parent" => $cur->id(),
+			"class_id" => CL_MESSAGE,
+		);
+		if($arr["request"]["id"] != $cur->id())
+		{
+			$c = $arr["obj_inst"];
+			$mails = $c->connections_from(array(
+				"type" => "RELTYPE_EMAIL"
+			));
+			$emails = array();
+			foreach($mails as $mail)
+			{
+				$emails[] = $mail->prop("to.name");
+			}
+			$filt["mto"] = $emails;
+		}
+		if($arr["request"]["mail_s_subj"])
+		{
+			$filt["name"] = '%'.$arr["request"]["mail_s_subj"].'%';
+		}
+		if($arr["request"]["mail_s_body"])
+		{
+			$filt["message"] = '%'.$arr["request"]["mail_s_body"].'%';
+		}
+		if($arr["request"]["mail_s_to"])
+		{
+			if($filt["mto"])
+				$filt["mto"][] = '%'.$arr["request"]["mail_s_to"].'%';
+			else
+				$filt["mto"] = '%'.$arr["request"]["mail_s_to"].'%';
+		}
+		$ol = new object_list($filt);
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"oid" => $o->id(),
+				"subject" => html::obj_change_url($o->id(),$o->name()),
+				"to" => $o->prop("mto"),
+			));
+		}
+	}
+
+	function _get_mail_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_delete_button();
 	}
 
 	function _init_my_tasks_t(&$t, $data = false, $r = array() , $group = 0)

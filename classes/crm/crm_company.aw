@@ -878,6 +878,30 @@ default group=org_objects
 		@property my_tasks type=table store=no no_caption=1 parent=my_tasks group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails,documents_all_manage
 		@property my_tasks_cal type=calendar store=no no_caption=1 parent=my_tasks
 
+@default group=ovrv_email
+
+	@layout mail_main type=hbox width=20%:80%
+		
+		@property mail_tb type=toolbar store=no no_caption=1
+
+		@layout mail_search type=vbox closeable=1 area_caption=Otsing parent=mail_main
+
+			@property mail_s_subj type=textbox store=no parent=mail_search size=24
+			@caption Kirja teema
+
+			@property mail_s_body type=textbox store=no parent=mail_search size=24
+			@caption Kirja sisu
+
+			@property mail_s_to type=textbox store=no parent=mail_search size=24
+			@caption Kellele
+
+			@property mail_s_submit type=submit parent=mail_search no_caption=1
+			@caption Otsi
+		
+		@layout mail_tbl_box type=vbox parent=mail_main
+
+			@property mail_tbl type=table store=no no_caption=1 parent=mail_tbl_box
+
 @default group=stats_s
 
 	@property stats_s_toolbar type=toolbar store=no no_caption=1
@@ -1084,7 +1108,8 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo meetings caption="Kohtumised" parent=overview submit=no save=no
 	@groupinfo calls caption="K&otilde;ned" parent=overview submit=no save=no
 	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no save=no
-	@groupinfo ovrv_mails caption="Meilid" parent=overview submit=no save=no
+	@groupinfo ovrv_email caption="Meilid" parent=overview submit=no save=no
+	@groupinfo ovrv_mails caption="Meilikast" parent=overview submit=no save=no
 
 @groupinfo projs caption="Projektid"
 	@groupinfo my_projects caption="Projektid" parent=projs submit=no
@@ -2371,6 +2396,8 @@ class crm_company extends class_base
 			case "my_tasks_tb":
 			case "act_s_part":
 			case "act_s_cal_name":
+			case "mail_tbl":
+			case "mail_tb":
 				static $overview_impl;
 				if (!$overview_impl)
 				{
@@ -2446,6 +2473,13 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $people_impl->$fn($arr);
+
+			//mail search
+			case "mail_s_to":
+			case "mail_s_body":
+			case "mail_s_subj":
+				$data['value'] = $arr['request'][$data["name"]];
+				break;
 
 			// contacts search
 			case "contact_search_name":
@@ -3627,6 +3661,12 @@ class crm_company extends class_base
 			$arr['args']['stats_s_group_by_project'] = ($arr['request']['stats_s_group_by_project']);
 			$arr['args']['stats_s_group_by_task'] = ($arr['request']['stats_s_group_by_task']);
 			$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
+		}
+		if($arr["args"]["group"] == "ovrv_email")
+		{
+			$arr['args']['mail_s_subj'] = ($arr['request']['mail_s_subj']);
+			$arr['args']['mail_s_body'] = ($arr['request']['mail_s_body']);
+			$arr['args']['mail_s_to'] = ($arr['request']['mail_s_to']);
 		}
 		if($arr['args']["group"] == "stats_my")
 		{
@@ -6201,6 +6241,17 @@ class crm_company extends class_base
 				$arr["link"] = html::get_change_url($msg, array("return_url" => get_ru(), "group" => "main_view"));
 			}
 		}
+
+		if($arr["id"] == "ovrv_email")
+		{
+			$seti = get_instance(CL_CRM_SETTINGS);
+			$sts = $seti->get_current_settings();
+			if (!$sts || !$sts->prop("send_mail_feature"))
+			{
+				return false;
+			}
+		}
+
 		return true;
 	}
 
