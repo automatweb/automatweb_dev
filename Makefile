@@ -16,7 +16,7 @@ ini:
 	@echo "Generating AW ini file"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -f ./scripts/ini/mk_ini.aw aw.ini.root > aw.ini; \
+		`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -f ./scripts/ini/mk_ini.aw aw.ini.root > aw.ini; \
 	else \
 		echo "Cmdline php not found, cannot compile ini file"; \
 	fi
@@ -25,7 +25,7 @@ properties:
 	@echo "Generating property definitions"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -f ./scripts/prop/collect.aw \
+		`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -f ./scripts/prop/collect.aw \
 	else \
 		echo "Cmdline php not found, cannot collect properties"; \
 	fi
@@ -34,7 +34,7 @@ msg:
 	@echo "Generating message maps"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/msg_scan.aw \
+		`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/msg_scan.aw \
 	else \
 		echo "Cmdline php not found, cannot create message maps"; \
 	fi
@@ -43,7 +43,7 @@ orb:
 	@echo "Generating orb definitions"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/mk_orb.aw \
+		`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/mk_orb.aw \
 	else \
 		echo "Cmdline php not found, cannot create orb definitions"; \
 	fi
@@ -52,7 +52,7 @@ remoting:
 	@echo "Generating remoting proxy classes"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/mk_remoting.aw \
+		`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/mk_remoting.aw \
 	else \
 		echo "Cmdline php not found, cannot create remoting proxy classes"; \
 	fi
@@ -61,28 +61,28 @@ profile:
 	@echo "Generating profiling information into code"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/mk_profiling.aw \
+		`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/mk_profiling.aw \
 	else \
 		echo "Cmdline php not found, cannot create profiling information"; \
 	fi
 
 class:
-	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 scripts/mk_class/mk_class.aw
+	@`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 scripts/mk_class/mk_class.aw
 
 pot:
-	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw
+	@`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw
 
 pot.dbg:
-	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --dbg
+	@`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --dbg
 
 pot.warn:
-	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --warn-only
+	@`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --warn-only
 
 trans.aw:
-	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --make-aw
+	@`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --make-aw
 
 trans.untrans:
-	@scripts/php -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --list-untranslated-strings
+	@`which php` -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw --list-untranslated-strings
 
 trans: pot trans.aw
 
