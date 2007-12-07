@@ -26,7 +26,7 @@ class task_object extends _int_object
 		}
 		return parent::comment();
 	}
-  
+   
 	function prop($pn)
 	{
 		$show_props = array(
