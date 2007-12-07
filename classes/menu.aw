@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.214 2007/12/04 17:44:35 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.215 2007/12/07 12:15:53 hannes Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1055,76 +1055,82 @@ class menu extends class_base
 	
 	function callback_generate_scripts ()
 	{
-		$id = $_GET["id"];
-		$menu_images_cnt = $this->menu_images_get_cnt(array("id"=>$id));
-		$output = '
-
-		var menu_images_cnt = '.$menu_images_cnt.'
-		// get imgrels array for making select menu
-		'.$this->menu_images_get_imgrels(array(
-				"id"=>$id
-		)).'
-		
-		// get connected images as js array into menu_images
-		'.$this->menu_images_get(array(
-				"id"=>$id,
-				"cnt"=>'.$menu_images_cnt.'
-		)).'
-		
-		function menu_images_add_row (that)
+		$output = "";
+		if ($_GET["group"] == "presentation")
 		{
-			row_clicked = that.parentNode.parentNode.childNodes[0].innerHTML*1.0;
-			if ((menu_images_cnt*1.0+1) <'.aw_ini_get("menu.num_menu_images").' && row_clicked == (menu_images_cnt*1.0)  )
-			{
-				menu_images_cnt++;
-				
-				$("<tr class=awmenuedittablerow>"+
-					"<td align=center class=awmenuedittabletext>"+menu_images_cnt+"</td>"+
-					"<td align=center><div id=preview_div_"+menu_images_cnt+"></div></td>"+
-					"<td align=center class=awmenuedittabletext>"+create_select ("img["+(menu_images_cnt*1.0)+"]", imgrels)+"</td>"+
-					"<td align=center><input type=file name=mimg_"+(menu_images_cnt*1.0)+" onchange=\'row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;menu_images_add_row (this);\'></td>"+
-				"</tr>").appendTo(that.parentNode.parentNode.parentNode);
-			}
-		}
-		
-		function create_select (name, options)
-		{
-			s_html = "<select  name=\'"+name+"\' onchange=\'row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;menu_images_add_row (this);	menu_images_update_image (this, row_nr); ;\'>";
+			$id = $_GET["id"];
+			$menu_images_cnt = $this->menu_images_get_cnt(array("id"=>$id));
 			
-			for (key in options)
+			$output = '
+			
+			var menu_images_cnt = '.$menu_images_cnt.'
+			// get imgrels array for making select menu
+			'.$this->menu_images_get_imgrels(array(
+					"id"=>$id
+			)).'
+			
+			// get connected images as js array into menu_images
+			'.$this->menu_images_get(array(
+					"id"=>$id,
+					"cnt"=>'.$menu_images_cnt.'
+			)).'
+			
+			function menu_images_add_row (that)
 			{
-				if (options[key].length > 0)
+				row_clicked = that.parentNode.parentNode.childNodes[0].innerHTML*1.0;
+				if ((menu_images_cnt*1.0+1) <'.aw_ini_get("menu.num_menu_images").' && row_clicked == (menu_images_cnt*1.0)  )
 				{
-					s_html += "<option value="+key+">"+options[key]+"</option>";
+					menu_images_cnt++;
+					
+					$("<tr class=awmenuedittablerow>"+
+						"<td align=center class=awmenuedittabletext>"+menu_images_cnt+"</td>"+
+						"<td align=center><div id=preview_div_"+menu_images_cnt+"></div></td>"+
+						"<td align=center class=awmenuedittabletext>"+create_select ("img["+(menu_images_cnt*1.0)+"]", imgrels)+"</td>"+
+						"<td align=center><input type=file name=mimg_"+(menu_images_cnt*1.0)+" onchange=\'row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;menu_images_add_row (this);\'></td>"+
+					"</tr>").appendTo(that.parentNode.parentNode.parentNode);
 				}
 			}
-			s_html += "</select>";
-			return s_html;
-		}
-		
-		function menu_images_update_image (that, row_nr)
-		{
-				sel_img_id = that.value;
-				if ( document.getElementById("preview_img_"+row_nr) )
+			
+			function create_select (name, options)
+			{
+				s_html = "<select  name=\'"+name+"\' onchange=\'row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;menu_images_add_row (this);	menu_images_update_image (this, row_nr); ;\'>";
+				
+				for (key in options)
 				{
-					if (sel_img_id>0)
+					if (options[key].length > 0)
 					{
-						$("#preview_div_"+row_nr).css("display", "block");
-						$("#preview_img_"+row_nr).attr("src", menu_images[sel_img_id]["img"].src);
-						$("#preview_url_"+row_nr).attr("href", menu_images[sel_img_id]["change_url"]);
+						s_html += "<option value="+key+">"+options[key]+"</option>";
+					}
+				}
+				s_html += "</select>";
+				return s_html;
+			}
+			
+			function menu_images_update_image (that, row_nr)
+			{
+					sel_img_id = that.value;
+					if ( document.getElementById("preview_img_"+row_nr) )
+					{
+						if (sel_img_id>0)
+						{
+							$("#preview_div_"+row_nr).css("display", "block");
+							$("#preview_img_"+row_nr).attr("src", menu_images[sel_img_id]["img"].src);
+							$("#preview_url_"+row_nr).attr("href", menu_images[sel_img_id]["change_url"]);
+							$("#preview_div_"+row_nr).css("height", $("#preview_img_"+row_nr).height()+20);
+						}
+						else if (sel_img_id == 0)
+						{
+							$("#preview_div_"+row_nr).css("display", "none");
+						}
+					}else
+						{
+						$("#preview_div_"+row_nr).html("");
+						$("<img src="+menu_images[sel_img_id]["img"].src+" id=preview_img_"+row_nr+"><br><a id=preview_url_"+row_nr+" href="+menu_images[sel_img_id]["change_url"]+" target=_blank>'.t("Muuda").'</a>").appendTo("#preview_div_"+row_nr);
 						$("#preview_div_"+row_nr).css("height", $("#preview_img_"+row_nr).height()+20);
 					}
-					else if (sel_img_id == 0)
-					{
-						$("#preview_div_"+row_nr).css("display", "none");
-					}
-				}else
-					{
-					$("#preview_div_"+row_nr).html("");
-					$("<img src="+menu_images[sel_img_id]["img"].src+" id=preview_img_"+row_nr+"><br><a id=preview_url_"+row_nr+" href="+menu_images[sel_img_id]["change_url"]+" target=_blank>'.t("Muuda").'</a>").appendTo("#preview_div_"+row_nr);
-					$("#preview_div_"+row_nr).css("height", $("#preview_img_"+row_nr).height()+20);
-				}
-		}';
+			}';
+		}
+		
 		return $output;
 	}
 	
