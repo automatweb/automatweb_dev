@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/fun/deathcounter.aw,v 1.4 2007/12/07 11:50:58 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/fun/deathcounter.aw,v 1.5 2007/12/08 19:25:25 hannes Exp $
 // deathcounter.aw - Surmakaunter 
 /*
 
@@ -147,7 +147,7 @@ class deathcounter extends class_base
 		$this->read_template("deathcounter.tpl");
 		$days_to_live_old = $ob -> prop("days_to_live");
 		$days_to_live_new = $this -> days_to_live($arr);
-		if ($days_to_live_new > $days_to_live_old )
+		if ($days_to_live_new < $days_to_live_old )
 		{
 			$ob->set_prop("days_to_live", $days_to_live_new);
 			$days_to_live_old = $days_to_live_new;
