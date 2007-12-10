@@ -21,6 +21,8 @@
 	@property target_section type=textbox field=meta method=serialize
 	@caption Tulemuste target section
 
+	@property hide_search_form type=checkbox ch_value=1 field=meta method=serialize
+	@caption Peida otsinguvorm
 
 @groupinfo ftsearch caption="Otsinguvorm"
 @default group=ftsearch
@@ -681,10 +683,17 @@ class event_search extends class_base
 			$event_class_id = $event_cfgform->prop('ctype');
 		}
 
+		$show_search_form = true;
+		if ($ob->prop('hide_search_form') == 1)
+		{
+			$show_search_form = false;
+		}
+
 		$htmlc = get_instance("cfg/htmlclient", array("template" => "webform.tpl"));
 		$htmlc->start_output();
-
+		
 		$formconfig = $ob->meta("formconfig");
+
 		$do_search = false;
 		$search = array();
 
@@ -754,7 +763,7 @@ class event_search extends class_base
 			$arr["end_date"]["year"] = $yd;
 			$arr["end_date"]["day"] = $cur_days;
 		}
-		if($formconfig["fulltext"]["active"])
+		if($formconfig["fulltext"]["active"] && $show_search_form)
 		{
 			$htmlc->add_property(array(
 				"name" => "fulltext",
@@ -763,7 +772,7 @@ class event_search extends class_base
 				"value" => $arr["fulltext"],
 			));
 		}
-		if($formconfig["fulltext2"]["active"])
+		if($formconfig["fulltext2"]["active"] && $show_search_form)
 		{
 			$htmlc->add_property(array(
 				"name" => "fulltext2",
@@ -773,7 +782,7 @@ class event_search extends class_base
 			));
 		}
 
-		if($formconfig["start_date"]["active"])
+		if($formconfig["start_date"]["active"] && $show_search_form)
 		{
 			switch ($formconfig["start_date"]["type"])
 			{
@@ -794,7 +803,7 @@ class event_search extends class_base
 					));
 			}
 		}
-		if($formconfig["end_date"]["active"])
+		if($formconfig["end_date"]["active"] && $show_search_form)
 		{
 			switch ($formconfig["end_date"]["type"])
 			{
@@ -817,7 +826,7 @@ class event_search extends class_base
 		}
 		if ($event_class_id == CL_CALENDAR_EVENT)
 		{
-			if($formconfig["location"]["active"])
+			if($formconfig["location"]["active"] && $show_search_form)
 			{
 				$htmlc->add_property(array(
 					"name" => "location",
@@ -826,7 +835,7 @@ class event_search extends class_base
 					"value" => $arr["location"],
 				));
 			}
-			if($formconfig["level"]["active"])
+			if($formconfig["level"]["active"] && $show_search_form)
 			{
 				$cl_calendar_event = get_instance(CL_CALENDAR_EVENT);
 				$htmlc->add_property(array(
@@ -837,7 +846,7 @@ class event_search extends class_base
 					"options" => array('0' => t('Vali')) + $cl_calendar_event->level_options,
 				));
 			}
-			if($formconfig["sector"]["active"])
+			if($formconfig["sector"]["active"] && $show_search_form)
 			{
 				$cl_calendar_event = get_instance(CL_CALENDAR_EVENT);
 				$htmlc->add_property(array(
@@ -1007,7 +1016,7 @@ class event_search extends class_base
 				}
 			}
 		}
-		if($search_p1 && $formconfig["project1"]["active"])
+		if($search_p1 && $formconfig["project1"]["active"] && $show_search_form)
 		{
 			$vars = array(
 				"name" => "project1",
@@ -1029,7 +1038,7 @@ class event_search extends class_base
 			$htmlc->add_property($vars);
 		}
 
-		if($search_p2 && $formconfig["project2"]["active"])
+		if($search_p2 && $formconfig["project2"]["active"] && $show_search_form)
 		{
 
 			$vars = array(
@@ -1050,12 +1059,14 @@ class event_search extends class_base
 			}
 			$htmlc->add_property($vars);
 		}
-
-		$htmlc->add_property(array(
-			"name" => "sbt",
-			"caption" => $formconfig["search_btn"]["caption"] != "" ? $formconfig["search_btn"]["caption"] : t("Otsi"),
-			"type" => "submit",
-		));
+		if ($show_search_form)
+		{
+			$htmlc->add_property(array(
+				"name" => "sbt",
+				"caption" => $formconfig["search_btn"]["caption"] != "" ? $formconfig["search_btn"]["caption"] : t("Otsi"),
+				"type" => "submit",
+			));
+		}
 		$do_search = true;
 		if ($do_search)
 		{
