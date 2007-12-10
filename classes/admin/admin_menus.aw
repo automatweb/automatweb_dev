@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.128 2007/12/10 16:59:41 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.129 2007/12/10 18:47:50 hannes Exp $
 /*
 
 @classinfo maintainer=kristo
@@ -810,6 +810,10 @@ class admin_menus extends aw_template
 			$levels = array("" => $parent); // here we keep the info about the numbering of the levels => menu id's
 			foreach($c as $row)
 			{
+				if (substr($row, 0, 1) == "#")
+				{
+					continue;
+				}
 				$cnt++;
 				// parse row and create menu.
 				if (!preg_match("/([0-9\.]+)(.*)\[(.*)\]/",$row,$mt))
@@ -871,6 +875,16 @@ class admin_menus extends aw_template
 						{
 							$mopts["fn"] = $mmt[1];
 						}
+						if (preg_match_all("/\+prop=\"(.*)\"/U",$opts, $mmt))
+						{
+							$mopts["props"] = $mmt[1];
+						}
+
+						if (preg_match_all("/\+meta=\"(.*)\"/U",$opts, $mmt))
+						{
+							$mopts["metas"] = $mmt[1];
+						}
+						
 					}
 
 					// now create the damn thing.
@@ -894,6 +908,26 @@ class admin_menus extends aw_template
 					$o->set_prop("width", $mopts["width"]);
 					$o->set_prop("right_pane", !$mopts["rp"]);
 					$o->set_prop("left_pane", !$mopts["lp"]);
+
+					foreach($mopts["props"] as $s_prop)
+					{
+						preg_match("/(.*)\|/",$s_prop,$a_match);
+						$s_prop_name = $a_match[1];
+						preg_match("/\|(.*)/",$s_prop,$a_match);
+						$s_prop_value = $a_match[1];
+
+						$o->set_prop($s_prop_name, $s_prop_value);
+					}
+
+					foreach($mopts["metas"] as $s_meta)
+					{
+						preg_match("/(.*)\|/",$s_meta,$a_match);
+						$s_meta_name = $a_match[1];
+						preg_match("/\|(.*)/",$s_meta,$a_match);
+						$s_meta_value = $a_match[1];
+
+						$o->set_meta($s_meta_name, $s_meta_value);
+					}
 
 					$id = $o->save();
 					$levels[$mt[1]] = $id;
