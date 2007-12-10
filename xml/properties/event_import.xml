@@ -1,15 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>event_form</name>
+            <name>events_manager</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_EVENT_FORM</reltype>
+            <reltype>RELTYPE_EVENTS_MANAGER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>S&amp;amp;uuml;ndmuse vorm</caption>
-            <comment>Kultuuriakna s&amp;amp;uuml;ndmuse lisamise/muutmise vorm</comment>
+            <caption>S&amp;amp;uuml;ndmuste halduse keskkond</caption>
+            <comment>S&amp;amp;uuml;ndmuste halduse keskkond, kus kirjeldatakse s&amp;amp;uuml;ndmuste, valdkondade, toimumiskohtade, korraldajate lugemis- ja kirjutamiskaustad jmt</comment>
       </property>
       <property>
             <name>xml_sources</name>
@@ -135,22 +135,40 @@
             <comment>Kasutaja parool, kelle &amp;amp;otilde;igustes automaatne import teostatakse</comment>
       </property>
       <property>
-            <name>import_log_toolbar</name>
+            <name>import_log_conf_table</name>
             <table>objects</table>
-            <group>import_log</group>
-            <type>toolbar</type>
+            <group>import_log_conf</group>
+            <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>import_log_toolbar</field>
+            <field>import_log_conf_table</field>
       </property>
       <property>
-            <name>import_log_table</name>
+            <name>import_log_conf_time_table</name>
             <table>objects</table>
-            <group>import_log</group>
+            <group>import_log_conf</group>
             <type>table</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <field>import_log_table</field>
-            <caption>Muudetud s&amp;amp;uuml;ndmuste logi</caption>
+            <field>import_log_conf_time_table</field>
+      </property>
+      <property>
+            <name>import_log_conf_location_table</name>
+            <table>objects</table>
+            <group>import_log_conf</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>import_log_conf_location_table</field>
+      </property>
+      <property>
+            <name>import_log_conf_sector_table</name>
+            <table>objects</table>
+            <group>import_log_conf</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>import_log_conf_sector_table</field>
       </property>
       <classinfo>
             <syslog_type>ST_EVENT_IMPORT</syslog_type>
@@ -166,10 +184,9 @@
             <recurrence_config>
                   <caption>Automaatne import</caption>
             </recurrence_config>
-            <import_log>
-                  <caption>Logi</caption>
-                  <submit>no</submit>
-            </import_log>
+            <import_log_conf>
+                  <caption>Muudatused</caption>
+            </import_log_conf>
       </groupinfo>
       <reltypes>
             <XML_SOURCE>
@@ -192,6 +209,11 @@
                   <clid>CL_JSON_SOURCE</clid>
                   <caption>JSON allikas</caption>
             </JSON_SOURCE>
+            <EVENTS_MANAGER>
+                  <value>20</value>
+                  <clid>CL_EVENTS_MANAGER</clid>
+                  <caption>S&amp;amp;uuml;ndmuste halduse keskkond</caption>
+            </EVENTS_MANAGER>
       </reltypes>
 </properties>
 
