@@ -1,5 +1,6 @@
 <?php
-// xml_source.aw - XML source
+// $Header: /home/cvs/automatweb_dev/classes/common/external/xml_source.aw,v 1.2 2007/12/10 12:02:22 kaarel Exp $
+// xml_source.aw - XML source 
 /*
 
 @classinfo syslog_type=ST_XML_SOURCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -14,6 +15,18 @@
 	@caption URL
 	@comment XML faili URL
 
+	@property external_system_event type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_EVENT
+	@caption S&uuml;ndmuste siduss&uuml;steem
+
+	@property external_system_event_time type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_EVENT_TIME
+	@caption Toimumisaegade siduss&uuml;steem
+
+	@property external_system_location type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_LOCATION
+	@caption Toimumiskohtade siduss&uuml;steem
+
+	@property external_system_sector type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_SECTOR
+	@caption Valdkondade siduss&uuml;steem
+
 	@property tag_lang type=select
 	@caption Keel
 	@comment XML väli või argument, kus on imporditava sündmuse tõlke keel
@@ -25,6 +38,30 @@
 	@property tag_id type=select
 	@caption ID
 	@comment XML väli või argument, kus on imporditava sündmuse ID
+
+	@property tag_public_event type=select multiple=1 size=4
+	@caption Sündmus avaldatud
+	@comment XML väli või argument, mis näitab, kas sündmus on avalik.
+
+	@property val_public_event type=textbox
+	@caption "Jah"-väärtus
+	@comment Väärtus, mille korral sündmus on avalik.
+
+	@property tag_delete_event type=select multiple=1 size=4
+	@caption Sündmus kustutatud
+	@comment XML väli või argument, mis näitab, kas sündmus on kustutatud.
+
+	@property val_delete_event type=textbox
+	@caption "Jah"-väärtus
+	@comment Väärtus, mille korral sündmus on kustutatud.
+
+	@property tag_delete_time type=select multiple=1 size=4
+	@caption Toimumisaeg kustutatud
+	@comment XML väli või argument, mis näitab, kas toimumisaeg on kustutatud.
+
+	@property val_delete_time type=textbox
+	@caption "Jah"-väärtus
+	@comment Väärtus, mille korral toimumisaeg on kustutatud.
 
 @groupinfo parameters caption="Parameetrid"
 @default group=parameters
@@ -51,10 +88,29 @@
 
 	@property arguement_table type=table no_caption=1
 
-@groupinfo languages caption="Keeled"
-@default group=languages
+@groupinfo values caption="V&auml;&auml;rtused"
 
-	@property language_table type=table no_caption=1
+	@groupinfo languages caption="Keeled" parent=values
+	@default group=languages
+
+		@property language_table type=table no_caption=1
+
+	@groupinfo levels caption="Tasemed" parent=values
+	@default group=levels
+
+		@property level_table type=table no_caption=1
+
+@reltype EXTERNAL_SYSTEM_EVENT value=1 clid=CL_EXTERNAL_SYSTEM
+@caption Sündmuste sidussüsteem
+
+@reltype EXTERNAL_SYSTEM_SECTOR value=2 clid=CL_EXTERNAL_SYSTEM
+@caption Valdkondade sidussüsteem
+
+@reltype EXTERNAL_SYSTEM_LOCATION value=3 clid=CL_EXTERNAL_SYSTEM
+@caption Toimumiskohtade sidussüsteem
+
+@reltype EXTERNAL_SYSTEM_EVENT_TIME value=4 clid=CL_EXTERNAL_SYSTEM
+@caption Toimumisaegade sidussüsteem
 
 */
 
@@ -62,10 +118,10 @@ class xml_source extends class_base
 {
 	function xml_source()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be,
+		// change this to the folder under the templates folder, where this classes templates will be, 
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
-			"tpldir" => "common/external/xml_source",
+			"tpldir" => "datasource/xml_source",
 			"clid" => CL_XML_SOURCE
 		));
 	}
@@ -82,7 +138,7 @@ class xml_source extends class_base
 		};
 		return $retval;
 	}
-
+	
 	function _get_tag_lang($arr)
 	{
 		// There is just one language and that is Estonian
@@ -96,7 +152,7 @@ class xml_source extends class_base
 
 		$saved_subtag_table = $arr['obj_inst']->meta("subtag_table");
 		$saved_arguement_table = $arr['obj_inst']->meta("arguement_table");
-
+		
 		if(!isset($arr["parent_tag_name"]))
 		{
 			$arr["parent_tag_name"] = "root";
@@ -106,7 +162,7 @@ class xml_source extends class_base
 		$subtags = str_replace(" ", "", $subtags);
 		$subtags = explode(",", $subtags);
 		foreach($subtags as $subtag)
-		{
+		{		
 			if(!empty($subtag))
 			{
 				$t_ptn = $arr["parent_tag_name"];
@@ -131,11 +187,11 @@ class xml_source extends class_base
 				foreach($subt_args as $subt_arg)
 				{
 					if(!empty($subt_arg))
-					{
+					{						
 						$arr["prop"]["options"][$arr["parent_tag_name"]."_args".$subt_arg] = $arr["parent_tag_caption"]." (".$subt_arg.")";
 					}
 				}
-
+				
 				$this->_get_tag_id($arr);
 				$arr["parent_tag_name"] = $t_ptn;
 				$arr["parent_tag_caption"] = $t_ptc;
@@ -143,11 +199,29 @@ class xml_source extends class_base
 		}
 	}
 
+	function _get_tag_public_event($arr)
+	{
+		// Events that are not public are not displayed.
+		$this->_get_tag_id($arr);
+	}
+
+	function _get_tag_delete_event($arr)
+	{
+		// Deleted events are not displayed.
+		$this->_get_tag_id($arr);
+	}
+
+	function _get_tag_delete_time($arr)
+	{
+		// Deleted event times are not displayed.
+		$this->_get_tag_id($arr);
+	}
+	
 	function _get_tag_id($arr)
 	{
 		$saved_subtag_table = $arr['obj_inst']->meta("subtag_table");
 		$saved_arguement_table = $arr['obj_inst']->meta("arguement_table");
-
+		
 		if(!isset($arr["parent_tag_name"]))
 		{
 			$arr["parent_tag_name"] = "root";
@@ -157,7 +231,7 @@ class xml_source extends class_base
 		$subtags = str_replace(" ", "", $subtags);
 		$subtags = explode(",", $subtags);
 		foreach($subtags as $subtag)
-		{
+		{		
 			if(!empty($subtag))
 			{
 				$t_ptn = $arr["parent_tag_name"];
@@ -182,11 +256,11 @@ class xml_source extends class_base
 				foreach($subt_args as $subt_arg)
 				{
 					if(!empty($subt_arg))
-					{
+					{						
 						$arr["prop"]["options"][$arr["parent_tag_name"]."_args".$subt_arg] = $arr["parent_tag_caption"]." (".$subt_arg.")";
 					}
 				}
-
+				
 				$this->_get_tag_id($arr);
 				$arr["parent_tag_name"] = $t_ptn;
 				$arr["parent_tag_caption"] = $t_ptc;
@@ -225,10 +299,48 @@ class xml_source extends class_base
 		));
 	}
 
+	function _get_level_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable("false");
+		$t->define_field(array(
+			"name" => "level",
+			"caption" => t("Tase"),
+		));
+		$t->define_field(array(
+			"name" => "param_value",
+			"caption" => t("Väärtused allikas (komaga eraldatud)"),
+		));
+
+		$saved_lvl_conf = $arr["obj_inst"]->meta("level_table");
+
+		$t->define_data(array(
+			"level" => t("&Uuml;leriikliku t&auml;htsusega"),
+			"param_value" => html::textbox(array(
+				"name" => "level_table[1]",
+				"value" => $saved_lvl_conf[1],
+			)),
+		));
+		$t->define_data(array(
+			"level" => t("Kohaliku t&auml;htsusega"),
+			"param_value" => html::textbox(array(
+				"name" => "level_table[2]",
+				"value" => $saved_lvl_conf[2],
+			)),
+		));
+		$t->define_data(array(
+			"level" => t("V&auml;lismaal toimuv"),
+			"param_value" => html::textbox(array(
+				"name" => "level_table[3]",
+				"value" => $saved_lvl_conf[3],
+			)),
+		));
+	}
+
 	function _get_tag_event($arr)
 	{
 		$saved_subtag_table = $arr['obj_inst']->meta("subtag_table");
-
+		
 		if(!isset($arr["parent_tag_name"]))
 		{
 			$arr["parent_tag_name"] = "root";
@@ -238,7 +350,7 @@ class xml_source extends class_base
 		$subtags = str_replace(" ", "", $subtags);
 		$subtags = explode(",", $subtags);
 		foreach($subtags as $subtag)
-		{
+		{		
 			if(!empty($subtag))
 			{
 				$t_ptn = $arr["parent_tag_name"];
@@ -255,25 +367,25 @@ class xml_source extends class_base
 				}
 
 				$arr["prop"]["options"][$arr["parent_tag_name"]] = $arr["parent_tag_caption"];
-
+				
 				$this->_get_tag_event($arr);
 				$arr["parent_tag_name"] = $t_ptn;
 				$arr["parent_tag_caption"] = $t_ptc;
 			}
 		}
 	}
-
+	
 	function subt_subt($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$saved_table["subtag"] = $arr["obj_inst"]->meta("subtag_table");
 		$saved_table["arguement"] = $arr["obj_inst"]->meta("arguement_table");
-
+		
 		$subtags = $saved_table["subtag"][$arr["parent_tag_name"]];
 		$subtags = str_replace(" ", "", $subtags);
 		$subtags = explode(",", $subtags);
 		foreach($subtags as $subtag)
-		{
+		{		
 			if(!empty($subtag))
 			{
 				$t_ptn = $arr["parent_tag_name"];
@@ -295,7 +407,7 @@ class xml_source extends class_base
 						"value" => $saved_table[$arr["table_type"]][$arr["parent_tag_name"]],
 					)),
 				));
-
+				
 				$this->subt_subt($arr);
 				$arr["parent_tag_name"] = $t_ptn;
 				$arr["parent_tag_caption"] = $t_ptc;
@@ -305,7 +417,7 @@ class xml_source extends class_base
 
 	function _get_subtag_table($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
+		$t = &$arr["prop"]["vcl_inst"];		
 		$t->set_sortable(false);
 		$t->define_field(array(
 			"name" => "tag",
@@ -340,7 +452,7 @@ class xml_source extends class_base
 
 	function _get_arguement_table($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
+		$t = &$arr["prop"]["vcl_inst"];		
 		$t->set_sortable(false);
 		$t->define_field(array(
 			"name" => "tag",
@@ -369,28 +481,61 @@ class xml_source extends class_base
 					$arr['obj_inst']->set_meta("subtag_table", $arr['request']['subtag_table']);
 				}
 				break;
-
+				
 			case "arguement_table":
 				if (!empty($arr['request']["arguement_table"]))
 				{
 					$arr['obj_inst']->set_meta("arguement_table", $arr['request']['arguement_table']);
 				}
 				break;
-
+				
 			case "language_table":
 				if (!empty($arr['request']["language_table"]))
 				{
 					$arr['obj_inst']->set_meta("language_table", $arr['request']['language_table']);
 				}
 				break;
+				
+			case "level_table":
+				if (!empty($arr['request']["level_table"]))
+				{
+					$arr['obj_inst']->set_meta("level_table", $arr['request']['level_table']);
+				}
+				break;
 		}
 		return $retval;
-	}
+	}	
 
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
-}
 
+	////////////////////////////////////
+	// the next functions are optional - delete them if not needed
+	////////////////////////////////////
+
+	////
+	// !this will be called if the object is put in a document by an alias and the document is being shown
+	// parameters
+	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
+	function parse_alias($arr)
+	{
+		return $this->show(array("id" => $arr["alias"]["target"]));
+	}
+
+	////
+	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	function show($arr)
+	{
+		$ob = new object($arr["id"]);
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"name" => $ob->prop("name"),
+		));
+		return $this->parse();
+	}
+
+//-- methods --//
+}
 ?>
