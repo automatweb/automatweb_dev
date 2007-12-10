@@ -11,6 +11,46 @@
             <comment>XML faili URL</comment>
       </property>
       <property>
+            <name>external_system_event</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EXTERNAL_SYSTEM_EVENT</reltype>
+            <caption>S&amp;amp;uuml;ndmuste siduss&amp;amp;uuml;steem</caption>
+      </property>
+      <property>
+            <name>external_system_event_time</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EXTERNAL_SYSTEM_EVENT_TIME</reltype>
+            <caption>Toimumisaegade siduss&amp;amp;uuml;steem</caption>
+      </property>
+      <property>
+            <name>external_system_location</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EXTERNAL_SYSTEM_LOCATION</reltype>
+            <caption>Toimumiskohtade siduss&amp;amp;uuml;steem</caption>
+      </property>
+      <property>
+            <name>external_system_sector</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EXTERNAL_SYSTEM_SECTOR</reltype>
+            <caption>Valdkondade siduss&amp;amp;uuml;steem</caption>
+      </property>
+      <property>
             <name>tag_lang</name>
             <field>meta</field>
             <method>serialize</method>
@@ -39,6 +79,72 @@
             <type>select</type>
             <caption>ID</caption>
             <comment>XML v&amp;auml;li v&amp;otilde;i argument, kus on imporditava s&amp;uuml;ndmuse ID</comment>
+      </property>
+      <property>
+            <name>tag_public_event</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>4</size>
+            <caption>S&amp;uuml;ndmus avaldatud</caption>
+            <comment>XML v&amp;auml;li v&amp;otilde;i argument, mis n&amp;auml;itab, kas s&amp;uuml;ndmus on avalik.</comment>
+      </property>
+      <property>
+            <name>val_public_event</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>&amp;quot;Jah&amp;quot;-v&amp;auml;&amp;auml;rtus</caption>
+            <comment>V&amp;auml;&amp;auml;rtus, mille korral s&amp;uuml;ndmus on avalik.</comment>
+      </property>
+      <property>
+            <name>tag_delete_event</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>4</size>
+            <caption>S&amp;uuml;ndmus kustutatud</caption>
+            <comment>XML v&amp;auml;li v&amp;otilde;i argument, mis n&amp;auml;itab, kas s&amp;uuml;ndmus on kustutatud.</comment>
+      </property>
+      <property>
+            <name>val_delete_event</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>&amp;quot;Jah&amp;quot;-v&amp;auml;&amp;auml;rtus</caption>
+            <comment>V&amp;auml;&amp;auml;rtus, mille korral s&amp;uuml;ndmus on kustutatud.</comment>
+      </property>
+      <property>
+            <name>tag_delete_time</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>4</size>
+            <caption>Toimumisaeg kustutatud</caption>
+            <comment>XML v&amp;auml;li v&amp;otilde;i argument, mis n&amp;auml;itab, kas toimumisaeg on kustutatud.</comment>
+      </property>
+      <property>
+            <name>val_delete_time</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>&amp;quot;Jah&amp;quot;-v&amp;auml;&amp;auml;rtus</caption>
+            <comment>V&amp;auml;&amp;auml;rtus, mille korral toimumisaeg on kustutatud.</comment>
       </property>
       <property>
             <name>start_timestamp_unix</name>
@@ -100,6 +206,16 @@
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
+      <property>
+            <name>level_table</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>levels</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_XML_SOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -117,9 +233,39 @@
             <arguements>
                   <caption>T&amp;amp;auml;&amp;amp;auml;gide atribuudid</caption>
             </arguements>
+            <values>
+                  <caption>V&amp;amp;auml;&amp;amp;auml;rtused</caption>
+            </values>
             <languages>
                   <caption>Keeled</caption>
+                  <parent>values</parent>
             </languages>
+            <levels>
+                  <caption>Tasemed</caption>
+                  <parent>values</parent>
+            </levels>
       </groupinfo>
+      <reltypes>
+            <EXTERNAL_SYSTEM_EVENT>
+                  <value>1</value>
+                  <clid>CL_EXTERNAL_SYSTEM</clid>
+                  <caption>S&amp;uuml;ndmuste siduss&amp;uuml;steem</caption>
+            </EXTERNAL_SYSTEM_EVENT>
+            <EXTERNAL_SYSTEM_SECTOR>
+                  <value>2</value>
+                  <clid>CL_EXTERNAL_SYSTEM</clid>
+                  <caption>Valdkondade siduss&amp;uuml;steem</caption>
+            </EXTERNAL_SYSTEM_SECTOR>
+            <EXTERNAL_SYSTEM_LOCATION>
+                  <value>3</value>
+                  <clid>CL_EXTERNAL_SYSTEM</clid>
+                  <caption>Toimumiskohtade siduss&amp;uuml;steem</caption>
+            </EXTERNAL_SYSTEM_LOCATION>
+            <EXTERNAL_SYSTEM_EVENT_TIME>
+                  <value>4</value>
+                  <clid>CL_EXTERNAL_SYSTEM</clid>
+                  <caption>Toimumisaegade siduss&amp;uuml;steem</caption>
+            </EXTERNAL_SYSTEM_EVENT_TIME>
+      </reltypes>
 </properties>
 
