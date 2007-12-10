@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.127 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.128 2007/12/10 16:59:41 hannes Exp $
 /*
 
 @classinfo maintainer=kristo
@@ -802,7 +802,7 @@ class admin_menus extends aw_template
 	// !imports menus from text file. file format description is at http://aw.struktuur.ee/index.aw?section=38624
 	function do_text_import($arr)
 	{
-		global $fail;
+		$fail = $_FILES["fail"]["tmp_name"];
 		if (is_uploaded_file($fail))
 		{
 			$c = file($fail);
