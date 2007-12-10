@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.190 2007/11/30 10:40:06 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.191 2007/12/10 10:29:18 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -4482,7 +4482,7 @@ class task extends class_base
 	function _add_fa(&$tb, $pt_n, $pt)
 	{
 		$types = array(
-			CL_FILE => t(""),
+			CL_FILE => t("Fail"),
 			CL_CRM_MEMO => t("Memo"),
 			CL_CRM_DOCUMENT => t("CRM Dokument"),
 			CL_CRM_DEAL => t("Leping"),
