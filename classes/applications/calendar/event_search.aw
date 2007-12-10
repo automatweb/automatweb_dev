@@ -1,8 +1,8 @@
 <?php
-// event_search.aw - Sndmuste otsing
+// event_search.aw - Syndmuste otsing
 /*
 
-@classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes maintainer=dragut 
+@classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes maintainer=dragut
 
 @default table=objects
 @default group=general
@@ -17,6 +17,9 @@
 
 	@property show_type type=select field=meta method=serialize
 	@caption N&auml;ta vaikimisi s&uuml;ndmusi
+
+	@property target_section type=textbox field=meta method=serialize
+	@caption Tulemuste target section
 
 
 @groupinfo ftsearch caption="Otsinguvorm"
@@ -711,20 +714,15 @@ class event_search extends class_base
 		$start_tm = $dt->get_timestamp($arr["start_date"]);
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 
-                // if date is set in the url, then try to use that to specify our range.
+		// if date is set in the url, then try to use that to specify our range.
 		// last condition in this if is probably temporary --dragut
-                if (isset($arr["date"]) && substr_count($arr["date"],"-") == 2 && empty($arr['sbt']) )
-                {
-                        list($_d,$_m,$_y) = explode("-",$arr["date"]);
-                        $start_tm = mktime(0,0,0,$_m,$_d,$_y);
-                        $end_tm = mktime(23,59,59,$_m,$_d,$_y);
+		if (isset($arr["date"]) && substr_count($arr["date"],"-") == 2 && empty($arr['sbt']) )
+		{
+			list($_d,$_m,$_y) = explode("-",$arr["date"]);
+			$start_tm = mktime(0,0,0,$_m,$_d,$_y);
+			$end_tm = mktime(23,59,59,$_m,$_d,$_y);
 			$arr["start_date"] = array("day" => $_d, "month" => $_m, "year" => $_y);
-
-                };
-
-
-
-
+		}
 
 		$cur_days = cal_days_in_month(CAL_GREGORIAN, date("m"), date("Y"));
 		$show_type = $ob->prop("show_type");
@@ -1770,12 +1768,12 @@ class event_search extends class_base
 				"no_caption" => 1,
 				"value" => $result,
 			));
-		};
+		}
 
 		$htmlc->finish_output(array(
 			"data" => array(
 				"class" => "",
-				"section" => aw_global_get("section"),
+				"section" => $this->can('view', $ob->prop("target_section")) ? $ob->prop("target_section") : aw_global_get("section"),
 				"action" => "search",
 				"id" => $ob->id(),
 				"alias" => "event_search",
@@ -1789,7 +1787,7 @@ class event_search extends class_base
 			"form_only" => 1
 		));
 		exit_function("event_search::show");
-		return $search["oid"] ? $result : $html;
+		return empty($search["oid"]) ? $html : $result;
 	}
 
 	function _get_project_choices($parent)
