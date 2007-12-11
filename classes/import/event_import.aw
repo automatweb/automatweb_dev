@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.2 2007/12/10 12:18:49 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.3 2007/12/11 16:40:39 kaarel Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -2322,6 +2322,15 @@ class event_import extends class_base
 		}
 
 		$o = obj($arr['id']);
+
+		/*
+		// This seems to be the easiest way to export the objects.
+		$o = obj($arr['id']);
+		print "<pre>";
+		print htmlentities($o->get_xml());
+		print "</pre>";
+		exit;
+		/**/
 		
 		$events_manager_id = $o->prop("events_manager");
 
