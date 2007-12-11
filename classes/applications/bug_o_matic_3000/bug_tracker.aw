@@ -1,7 +1,7 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.119 2007/12/06 14:32:52 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.119 2007/12/06 14:32:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.120 2007/12/11 09:02:31 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.120 2007/12/11 09:02:31 robert Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -3482,7 +3482,7 @@ class bug_tracker extends class_base
 		// get all goals/tasks
 		$ft = array(
 			"class_id" => CL_BUG,
-			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS,BUG_FATALERROR),
+			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS,BUG_FATALERROR,BUG_TESTING,BUG_VIEWING),
 			"CL_BUG.who.name" => $p->name(),
 			"lang_id" => array(),
 			"site_id" => array()
