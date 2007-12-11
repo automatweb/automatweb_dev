@@ -11,6 +11,15 @@
             <caption>Objektinimekiri</caption>
       </property>
       <property>
+            <name>predicate</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>Otsinguloogika</caption>
+      </property>
+      <property>
             <name>search_fields</name>
             <table>objects</table>
             <group>search_form</group>

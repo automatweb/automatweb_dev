@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.62 2007/12/04 13:03:44 kristo Exp $
-// otv_ds_obj.aw - Objektinimekirja AW datasource 
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.63 2007/12/11 12:21:10 voldemar Exp $
+// otv_ds_obj.aw - Objektinimekirja AW datasource
 /*
 
 @classinfo syslog_type=ST_OTV_DS_OBJ relationmgr=yes no_status=1 no_comment=1
@@ -35,7 +35,7 @@
 
 @default group=folders
 
-	@property folders type=table store=no callback=callback_get_menus editonly=1 
+	@property folders type=table store=no callback=callback_get_menus editonly=1
 	@caption Kataloogid
 
 @default group=types
@@ -441,7 +441,7 @@ class otv_ds_obj extends class_base
 		}
 		return $ret;
 	}
-	
+
 	function has_feature($str)
 	{
 		if ($str == "filter")
@@ -531,7 +531,7 @@ class otv_ds_obj extends class_base
 		{
 			$c_o = $c->to();
 			$clids[] = $c_o->subclass();
-			
+
 			$_tmp = obj();
 			$_tmp->set_class_id($c_o->subclass());
 			$pl = $_tmp->get_property_list();
@@ -577,7 +577,7 @@ class otv_ds_obj extends class_base
 				{
 					$filter["group"] = "";
 				}
-				
+
 				if ($filter["field"] == "status")
 				{
 					unset($_ft["status"]);
@@ -616,7 +616,7 @@ class otv_ds_obj extends class_base
 							$cond[$_fn] = "%".$filter["value"]."%";
 						}
 						$cur_filt[] = new object_list_filter(array(
-							"logic" => "OR",
+							"logic" => $params["predicate"],
 							"conditions" => $cond
 						));
 					}
@@ -632,7 +632,7 @@ class otv_ds_obj extends class_base
 							}
 							else
 							{
-								$cur_filt[$clss[$p["clid"]]["def"].".".$filter['field'].".name"] = $filter_value;	
+								$cur_filt[$clss[$p["clid"]]["def"].".".$filter['field'].".name"] = $filter_value;
 
 							}
 						}
@@ -656,7 +656,7 @@ class otv_ds_obj extends class_base
 				}
 
 				$_ft[] = new object_list_filter(array(
-					"logic" => "OR",
+					"logic" => $params["predicate"],
 					"conditions" => $cur_filt
 				));
 			}
@@ -687,12 +687,12 @@ class otv_ds_obj extends class_base
 		//$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
 		exit_function("otv_ds_obj::get_objects::list");
 
-		
+
 		enter_function("otv_ds_obj::get_objects::get_fields");
 		$classlist = aw_ini_get("classes");
 		$fields = $this->get_fields($ob, true);
 		exit_function("otv_ds_obj::get_objects::get_fields");
-	
+
 
 		$ret = array();
 		classload("core/icons", "image");
@@ -700,7 +700,7 @@ class otv_ds_obj extends class_base
 		enter_function("otv_ds_obj::get_objects::arr");
 		$ar = $ol->arr();
 		exit_function("otv_ds_obj::get_objects::arr");
-		
+
 		enter_function("otv_ds_obj::get_objects::loop");
 
 		foreach($ar as $t)
@@ -803,7 +803,7 @@ class otv_ds_obj extends class_base
 								}
 								else
 								{
-									$ret[$t->id()][$ff_n] = nl2br($t->trans_get_val_str($ff_n)); 
+									$ret[$t->id()][$ff_n] = nl2br($t->trans_get_val_str($ff_n));
 								}
 							}
 						}
@@ -815,8 +815,8 @@ class otv_ds_obj extends class_base
 							}
 							else
 							{
-	
-								$ret[$t->id()][$ff_n] = $t->trans_get_val_str($ff_n); 
+
+								$ret[$t->id()][$ff_n] = $t->trans_get_val_str($ff_n);
 								if ($proplist[$ff_n]["type"] == "textarea")
 								{
 									$ret[$t->id()][$ff_n] = nl2br($ret[$t->id()][$ff_n]);
@@ -832,7 +832,7 @@ class otv_ds_obj extends class_base
 				if (strstr($ff_n, "userim"))
 				{
 					$img_obj = $t->get_first_obj_by_reltype($ff_d['reltype']);
-					
+
 					$ret[$t->id()][$ff_n] = (empty($img_obj)) ? "" : $img_obj->id();
 				}
 			}

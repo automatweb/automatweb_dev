@@ -12,6 +12,9 @@
 @property tv type=relpicker reltype=RELTYPE_OTV
 @caption Objektinimekiri
 
+@property predicate type=chooser
+@caption Otsinguloogika
+
 @groupinfo search_form caption="Koosta vorm"
 @default group=search_form
 
@@ -49,6 +52,11 @@ class object_treeview_v2_search extends class_base
 			"tpldir" => "contentmgmt/object_treeview/object_treeview_v2_search",
 			"clid" => CL_OBJECT_TREEVIEW_V2_SEARCH
 		));
+
+		$this->predicates = array(
+			"OR" => t("V&Otilde;I"),
+			"AND" => t("JA")
+		);
 	}
 
 	function get_property($arr)
@@ -57,6 +65,10 @@ class object_treeview_v2_search extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "predicate":
+				$prop["options"] = $this->predicates;
+				break;
+
 			case "search_fields":
 				$this->_search_fields($arr);
 				break;
@@ -418,8 +430,8 @@ class object_treeview_v2_search extends class_base
 
 	function get_search_results($o, $req)
 	{
-		$o = $this->_get_otv($o);
-		$d_o = obj($o->prop("ds"));
+		$otv2_o = $this->_get_otv($o);
+		$d_o = obj($otv2_o->prop("ds"));
 		$d_inst = $d_o->instance();
 
 		$flt = array();
@@ -440,14 +452,15 @@ class object_treeview_v2_search extends class_base
 			"filters" => array(
 				"saved_filters" => new aw_array($flt),
 			),
-			"sproc_params" => $o->prop("sproc_params")
+			"sproc_params" => $o->prop("sproc_params"),
+			"predicate" => array_key_exists($o->prop("predicate"), $this->predicates) ? $o->prop("predicate") : "OR"
 		);
 		return $d_inst->get_objects($d_o, NULL, NULL, $params);
 	}
 
 	function _get_otv($o)
 	{
-		if (is_oid($o->prop("tv")) && $this->can("view", $o->prop("tv")))
+		if ($this->can("view", $o->prop("tv")))
 		{
 			return obj($o->prop("tv"));
 		}
