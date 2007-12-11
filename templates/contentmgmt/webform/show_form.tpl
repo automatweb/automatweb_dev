@@ -5,7 +5,7 @@
 <br>{VAR:ev_content}
 <br><br>
 <!-- END SUB: SHOW_CONTENT -->
-<table class="{VAR:webform_form}">
+<table class="{VAR:webform_form}"{VAR:spacing}>
 <form action="{VAR:url_spec}orb.{VAR:ext}" method="POST" name="changeform" {VAR:form_target} enctype='multipart/form-data'>
 {VAR:reforb}
 {VAR:form}

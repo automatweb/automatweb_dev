@@ -2276,10 +2276,20 @@ class webform extends class_base
 		{
 			$arr['reforb']['show_confirm_page'] = 1;
 		}
-
+		
+		$spacing = '';
+		if($mst = $arr["obj_inst"]->prop("def_form_style"))
+		{
+			$sto = obj($mst);
+			if($spval = $sto->prop("padding"))
+			{
+				$spacing = ' cellspacing="'.$spval.'"';
+			}
+		}
 		$this->vars(array(
 			"faction" => $arr["action"],
 			"form" => $html,
+			"spacing" => $spacing,
 			"webform_form" => "st".$arr["obj_inst"]->prop("def_form_style"),
 			"reforb" => $this->mk_reforb($arr["action"], $arr["reforb"]),
 		));
