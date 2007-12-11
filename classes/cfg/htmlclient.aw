@@ -1486,7 +1486,7 @@ class htmlclient extends aw_template
 
 		// reset all captions
 		$this->vars_safe(array(
-			"caption" => empty($arr["caption"]) ? null : $arr["caption"] . ":",
+			"caption" => empty($arr["caption"]) ? null : $arr["caption"],
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
