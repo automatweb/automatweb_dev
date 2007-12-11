@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.27 2007/10/31 08:14:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.28 2007/12/11 09:27:45 robert Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -650,6 +650,11 @@ class menu_tree extends class_base
 			}
 		};
 		$this->rec_level--;
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["root_menu"] = "0";
 	}
 }
 ?>
