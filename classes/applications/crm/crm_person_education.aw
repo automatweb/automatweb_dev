@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.6 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.7 2007/12/11 15:20:29 kaarel Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -79,6 +79,7 @@ class crm_person_education extends class_base
 					"bakalaureus" => t("Bakalaureus"),
 					"magister" => t("Magister"),
 					"doktor" => t("Doktor"),
+					"teadustekandidaat" => t("Teaduste kandidaat"),
 				);
 				break;
 		};
