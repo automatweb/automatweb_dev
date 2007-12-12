@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.108 2007/09/12 12:38:25 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.109 2007/12/12 12:49:03 robert Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -2350,6 +2350,8 @@ class aw_table extends aw_template
 				{
 					$url = aw_global_get("REQUEST_URI");
 				}
+				$baseurl = aw_ini_get("baseurl");
+				$url = $baseurl.$url;
 				$url = preg_replace("/sortby=[^&$]*/","",$url);
 				$url = preg_replace("/sort_order=[^&$]*/","",$url);
 				$url = preg_replace("/&{2,}/","&",$url);
