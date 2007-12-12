@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_telli.aw,v 1.7 2007/11/23 07:18:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_telli.aw,v 1.8 2007/12/12 10:28:15 dragut Exp $
 // expp_telli.aw - Expp telli 
 /*
 
@@ -65,7 +65,6 @@ class expp_telli extends class_base {
 //		$_pikkus = intval( $this->cp->getVal('pikkus'));
 		$_pikkus = $this->cp->getVal('pikkus');
 		$_leping = $this->cp->getVal( 'leping' );
-
 		$_temp = explode( '_', $_pikkus );
 		$_p = intval( $_temp[0] );
 // KIRJELDUS
@@ -120,7 +119,7 @@ class expp_telli extends class_base {
 					." AND (h.lopp+0 = 0 OR h.lopp >= now())"
 					." AND h.hinna_liik in ( 'SALAJANE_OKHIND', 'SALAJANE_TAVAHIND' )"
 					." AND v.valjaande_nimetus='{$_aid}'";
-			$this->db_query( $sql );					
+			$this->db_query( $sql );
 			if( $this->num_rows() > 0 ) $_pari_veel = 0;
 		}
 		if( $_pari_veel == 1 ) {
@@ -128,7 +127,7 @@ class expp_telli extends class_base {
 					." expp_hind h, expp_valjaanne v"
 					.( $_p > 0 ? ", expp_hind hh " : '' )
 					." WHERE h.pindeks=v.pindeks"
-					.( $_p > 0 ? " AND hh.hinna_liik = h.hinna_liik AND hh.pindeks = h.pindeks AND hh.id = '{$_p}'" : '' )
+					.( $_p > 0 ? " AND hh.hinna_liik = h.hinna_liik AND hh.pindeks = h.pindeks AND h.id = '{$_p}'" : '' )
 					." AND h.lubatud = 'jah'"
 					." AND (h.algus+0 = 0 OR h.algus <= now())"
 					." AND (h.lopp+0 = 0 OR h.lopp >= now())"
@@ -144,6 +143,7 @@ class expp_telli extends class_base {
 		$my_tavah	= array();
 		$_kampaania = '';
 		while ( $row = $this->db_next()) {
+			$_pindeks	= $row['pindeks'];
 			if( !empty( $row['hinna_kirjeldus'] ) && empty( $_kampaania ) ) {
 				$_kampaania = $row['hinna_kirjeldus'];
 			}
@@ -202,11 +202,27 @@ class expp_telli extends class_base {
 		$_kuup_options = array(
 			'' => '-------------------------'
 		);
-		if ( strncmp ( $_aid, 'Postimees', 9 ) != 0 )
-			$_kuup_options['ASAP'] = $lc_expp['LC_EXPP_ASAP'];
+		if ( strncmp ( $_aid, 'Postimees', 9 ) != 0 ) {
+		
+			// Vastvaalt v2ljaande koodile kontrollin ilmumisgraafikust, kas j2rgmine number ilmub v2hem kui 25 p2eva
+			// p2rast
+			$valjaande_kood = $this->db_fetch_field("select * from expp_valjaanne where pindeks = ".$_pindeks, "valjaanne");
+			$kaks_numbrit = $this->db_fetch_array("select * from expp_ilmumisgraafik where valjaanne = '$valjaande_kood' order by ilmumiskpv desc limit 2");
+			if (strtotime($kaks_numbrit[0]['ilmumiskpv']) < (strtotime($kaks_numbrit[1]['ilmumiskpv']) + (25 * 24 * 60 * 60)) )
+			{
+				$_kuup_options['ASAP'] = $lc_expp['LC_EXPP_ASAP'];
+			}
+
+		}
+
 		$_kuup_options['CONT'] = $lc_expp['LC_EXPP_CONT'];
-		if ( date("d",mktime(0,0,0,date("m"),date("d")+14,date("Y")))< 15 ) $jn = 1;
-		else	$jn = 0;
+		if ( date("d",mktime(0,0,0,date("m"),date("d")+14,date("Y")))< 15 ) { 
+			$jn = 1;
+		}
+		else {
+			$jn = 0;
+		}
+
 		for ( $in=1;$in<13;$in++ ) {
 			$ajut = mktime(0,0,0,date("m")+$in+$jn,1,date("Y"));
 			$year = date("Y",$ajut);
@@ -215,52 +231,47 @@ class expp_telli extends class_base {
 			$_text = locale::get_lc_month(intval($month))." $year";
 			$_kuup_options[$_value] = $_text;
 		}	// for
+// KAMPAANIA
+// dragut h2kib
+		if (!empty($_SESSION['expp_kampaania']))
+		{
+
+			$kampaaniad_sql = "
+				select 
+					* 
+				from 
+					expp_kampaania 
+				where 
+					nimetus = '".$_SESSION['expp_kampaania']."' 
+			";
+
+			$kampaania_info = $this->db_fetch_array($kampaaniad_sql);
+			if (!empty($kampaania_info))
+			{
+				$kampaania_info = reset($kampaania_info);
+				$algus_aeg = $kampaania_info['tellimine_algus'];
+				if ($algus_aeg != -1)
+				{
+					$_kuup_options = array(date('Ymd', $algus_aeg) => date('d.m.Y', $algus_aeg));
+				}
+				$_SESSION['expp_kampaania_email_noutud'] = $kampaania_info['email_noutud'];
+			}
+			
+			
+		
+		}
+	/*
+		if ($_pikkus == "218372")
+		{
+			$_kuup_options = array('20070402' =>  "02.04.2007");
+		}
+	*/	
 		$_kuupaev = html::select( array(
 			'name' => 'algus',
 			'options' => $_kuup_options,
 			'selected' => $this->cp->getVal('algus'),
 			'class' => 'formElement',
 		));
-
-/*
-		$_kuupaev = "";
-		if ( strncmp ( $_aid, 'Postimees', 9 ) != 0 ) {
-			$_value = 'ASAP';
-			$_checked = ($_algus == $_value?'selected':'');
-			$_text = $lc_expp['LC_EXPP_ASAP'];
-			$this->vars(array(
-				'VALUE'	=> $_value,
-				'CHECKED'=> $_checked,
-				'TEXT'   => $_text,
-			));
-			$_kuupaev .= $this->parse( 'KUUPAEV' );
-		}
-		if ( date("d",mktime(0,0,0,date("m"),date("d")+14,date("Y")))< 15 ) $jn = 1;
-		else	$jn = 0;
-		for ( $in=1;$in<13;$in++ ) {
-			$ajut = mktime(0,0,0,date("m")+$in+$jn,1,date("Y"));
-			$year = date("Y",$ajut);
-			$month = date("m",$ajut);
-
-			$_value = date("Ym",$ajut);
-			$_checked = ($_algus == $_value?'selected':'');
-			$_text = get_lc_month(intval($month))." $year";
-
-			$this->vars(array(
-				'VALUE'	=> $_value,
-				'CHECKED'=> $_checked,
-				'TEXT'   => $_text,
-			));
-			$_kuupaev .= $this->parse( 'KUUPAEV' );
-		}	// for
-		$this->vars(array(
-			'VALUE'	=> $_value,
-			'CHECKED'=> $_checked,
-			'TEXT'   => $_text,
-		));
-		$_kuupaev      = $this->parse( 'KUUPAEV' );
-*/
-
 
 //	kui on olemas otsekorraldusega hinnad
 // OTSEKORRALDUS
@@ -282,11 +293,13 @@ class expp_telli extends class_base {
 
 			$_checked = ( $_leping == "ok" || !count($my_tavah) || $my_otsek[0]["id"] == $_pikkus ?"checked":"");
 			$_okpikkus= $my_otsek[0]["id"];
+			$_oktekst = (isset( $lc_expp['LC_EXPP_OKTEKST_'.$_toimetus] )? 'LC_EXPP_OKTEKST_'.$_toimetus : 'LC_EXPP_OKTEKST' );
 			$this->vars(array(
 				'CHECKED' => $_checked,
 				'OKPIKKUS'=> $_okpikkus,
 				'PERIOOD' => $_periood,
 				'HIND'    => $_hind,
+				'OKTEKST' => sprintf( $lc_expp[$_oktekst], $_periood, $_hind ),
 			));
 			$_otsekorraldus= $this->parse( 'OTSEKORRALDUS' );
 		} else {
@@ -461,8 +474,8 @@ class expp_telli extends class_base {
 		if ( $_kogus == 0 ) {
 			$this->post_errors[] = "viga:".$lc_expp['LC_EXPP_KOGUS'];
 		}
-
-		if( !empty( $this->post_errors )) return;
+		if( !empty( $this->post_errors )) 
+		return;
 
 		$sql = "INSERT INTO expp_korv SET session='".session_id()."'"
 			.", pindeks='{$_rid}'"
@@ -475,6 +488,10 @@ class expp_telli extends class_base {
 		$this->db_query( $sql );
 
 		$this->cp->log( get_class($this), "lisa_korvi", $_rid, $_tt, $_va );
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+if ($_SERVER['REMOTE_ADDR'] == '62.65.36.186')
+{
+
 /*
 //	Eesti Ekspress special
 //	if (( $rid == 69830 ) and ( $leping == "tel" )) {
@@ -487,7 +504,7 @@ WHERE
 	ok_tava_hind='2'
 query;
 	$result	= @mysql_db_query( $db_base, $query, $dbh );
-	if ( @mysql_num_rows( $result ) > 0 ) {
+if ( @mysql_num_rows( $result ) > 0 ) {
 		$row = @mysql_fetch_array( $result );
 		switch ( $algus ) {
 			case "ASAP":
@@ -495,9 +512,18 @@ query;
 				$my_end		= mktime( 0,0,0,date("m")+$pikkus,date("d")+14,date("Y"));
 				break;
 			default:
-				$my_begin	= mktime( 0,0,0,(int)substr($algus,4,2),1,(int)substr($algus,0,4));
-				$my_end		= mktime( 0,0,0,$pikkus+(int)substr($algus,4,2),0,(int)substr($algus,0,4));
+				if (strlen($algus) == 8)
+				{
+					$my_begin       = mktime( 0,0,0,(int)substr($algus,4,2),(int)substr($algus,6,2),(int)substr($algus,0,4));
+					$my_end         = mktime( 0,0,0,$pikkus+(int)substr($algus,4,2),0,(int)substr($algus,0,4));
+				}
+				else
+				{
+					$my_begin	= mktime( 0,0,0,(int)substr($algus,4,2),1,(int)substr($algus,0,4));
+					$my_end		= mktime( 0,0,0,$pikkus+(int)substr($algus,4,2),0,(int)substr($algus,0,4));
+				}
 		}
+		//die(dbg::dump(date("d.m.Y", $my_begin)));
 		$first_day	= (date( "w",$my_begin)>4)?date( "w",$my_begin)-7:date( "w",$my_begin);
 		$kogus = ($my_end - $my_begin)/60/60/24+1;
 		$kogus = floor(($kogus+$first_day+2) / 7);
@@ -509,13 +535,26 @@ query;
 	}
 }	//	Eesti Ekspress special
 */
+
+} 
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
 		header( "Location: ".aw_ini_get("baseurl")."/tellimine/korv/" );
 		exit;
 	}
 	
 	function returnPost() {
 		$_aid = $this->cp->getPid( 2 );
-		header( "Location: ".aw_ini_get("baseurl")."/tellimine/{$_aid}" );
+		$sql = "SELECT v.toote_nimetus"
+				." FROM expp_valjaanne v"
+				." WHERE v.valjaande_nimetus='{$_aid}'";
+		$row = $this->db_fetch_row( $sql );
+		if( $this->num_rows() > 0 ) {
+			header( "Location: ".aw_ini_get("baseurl").'/tellimine/'.urlencode( $row['toote_nimetus'] ).'/' );
+		} else {
+			header( "Location: ".aw_ini_get("baseurl").'/tellimine/' );
+		}
 		exit;
 	}
 }
