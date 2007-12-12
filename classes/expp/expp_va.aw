@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.15 2007/11/23 07:18:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.16 2007/12/12 09:03:50 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -16,6 +16,7 @@ class expp_va extends class_base {
 	var $cp;
 	var $ch;
 	var $lang;
+	var $clURL;
 
 	function expp_va() {
 		$this->lang = aw_global_get("admin_lang_lc");
@@ -48,8 +49,10 @@ class expp_va extends class_base {
 			exit;
 		}
 
+		$this->clURL = '/tellimine/';
+
 		$this->cp->pidpos = 1;
-		$retHTML =& $this->showTyypList();
+		$retHTML =& $this->showValjaanne();
 		if ( !empty( $retHTML )) return $retHTML;
 
 		$this->cp->pidpos = 1;
@@ -57,8 +60,9 @@ class expp_va extends class_base {
 		if ( !empty( $retHTML )) return $retHTML;
 
 		$this->cp->pidpos = 1;
-		$retHTML =& $this->showValjaanne();
+		$retHTML =& $this->showTyypList();
 		if ( !empty( $retHTML )) return $retHTML;
+
 
 // viimne valik
 		$this->cp->pidpos = 1;
@@ -90,17 +94,19 @@ class expp_va extends class_base {
 		$_lc_key = 'LC_EXPP_DB_'.strtoupper($_tyyp_nimi);
 		$_tyyp_wnimi = ( isset( $lc_expp[$_lc_key] ) ? $lc_expp[$_lc_key] : $_tyyp_nimi );
 		$_tyyp_id = $row['id'];
+//		$this->clURL .= urlencode( $_tyyp_nimi ).'/';
 		$myURL = $this->cp->addYah( array(
 				'link' => urlencode( $_tyyp_nimi ),
 				'text' => $_tyyp_wnimi
 			));
 
 		$_tmp = $this->cp->pidpos;
-		$retHTML =& $this->showLiikList();
+
+		$retHTML =& $this->showValjaanne();
 		if ( !empty( $retHTML )) return $retHTML;
 		$this->cp->pidpos = $_tmp;
 
-		$retHTML =& $this->showValjaanne();
+		$retHTML =& $this->showLiikList();
 		if ( !empty( $retHTML )) return $retHTML;
 		$this->cp->pidpos = $_tmp;
 
@@ -218,6 +224,7 @@ class expp_va extends class_base {
 		$retHTML = '';
 
 		$_liik = $this->cp->nextPid();
+
 		if( empty( $_liik )) return $retHTML;
 
 		if( is_numeric( $_liik )) {
@@ -231,12 +238,27 @@ class expp_va extends class_base {
 		} else {
 			$_liik = addslashes(urldecode( $_liik ));
 //			$sql = "SELECT id,tyyp_id,liik FROM expp_liigid WHERE liik = '{$_liik}' ORDER BY sort asc";
+
+// kommenteeris v2lja Rain Viigipuu 03.08.2007 parandamaks liikide kattumise probleem erinevate tyypide all
+/*
 			$sql = "SELECT DISTINCT l.id, l.liik, l.tyyp_id FROM expp_liigid l"
 				." LEFT JOIN expp_va_liik vl ON vl.liik_id = l.id"
 				." left join expp_valjaanne v ON v.toote_nimetus = vl.toote_nimetus"
 				." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
 				." WHERE vl.liik_id is not null and v.toote_nimetus is not null and h.pindeks is not null and"
 				." l.esilehel = 1 AND l.liik = '{$_liik}' ORDER BY l.sort ASC, l.id";
+*/
+
+			// lisas Rain Viigipuu 03.08.2007, parandamaks liikide kattumise probleem erinevate tyypide all:
+			$_tyyp = addslashes(urldecode( $this->cp->pids[2] )); 
+			$sql = "SELECT DISTINCT l.id, l.liik, l.tyyp_id, expp_tyybid.nimi FROM expp_liigid l"
+				." LEFT JOIN expp_va_liik vl ON vl.liik_id = l.id"
+				." left join expp_valjaanne v ON v.toote_nimetus = vl.toote_nimetus"
+				." left join expp_tyybid on expp_tyybid.id = l.tyyp_id"
+				." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
+				." WHERE vl.liik_id is not null and v.toote_nimetus is not null and h.pindeks is not null and"
+				." l.esilehel = 1 AND l.liik = '{$_liik}' AND expp_tyybid.nimi = '{$_tyyp}' ORDER BY l.sort ASC, l.id";
+
 		}
 
 		$row = $this->db_fetch_row($sql);
@@ -251,6 +273,7 @@ class expp_va extends class_base {
 		$_liik_id = $row['id'];
 		$_tyyp_id = $row['tyyp_id'];
 
+//		$this->clURL .= urlencode( $_liik_nimi ).'/';
 		$myURL = $this->cp->addYah( array(
 				'link' => urlencode( $_liik_nimi ),
 				'text' => $_liik_wnimi
@@ -262,7 +285,8 @@ class expp_va extends class_base {
 
 		$this->cp->log( get_class($this), "show" );
 
-		$_cache_name = urlencode( $this->lang.'_va_liiklist_'.$_liik_nimi );
+		// lisas Rain Viigipuu 03.08.2007 et cache faili nime kokku panemisel peetaks meeles ka tyypi:
+		$_cache_name = urlencode( $this->lang.'_va_liiklist_'.$_tyyp_id.'_'.$_liik_nimi );
 		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
 			return $retHTML;
@@ -390,19 +414,23 @@ class expp_va extends class_base {
 		} else {
 			$_laid = $__aid;
 		}
-		$myURL = $this->cp->addYah( array(
-				'link' => urlencode( $__aid ),
-				'text' => $_laid
-			));
-
 		$this->cp->log( get_class($this), "show", '', '', $__aid );
 
 		$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$__aid );
 		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
-
+//			$this->clURL .= urlencode( $__aid ).'/';
+			$myURL = $this->cp->addYah( array(
+					'link' => urlencode( $__aid ),
+					'text' => $_laid
+				));
 			return $retHTML;
 		}
+
+
+		////
+		// added h.algus DESC sorting rule to this query, it should fix the problem, when there are multiple prices and the wrong one is showed
+		// in prices view. --dragut 12.12.2007
 		$sql = "SELECT v.pindeks, h.id, h.hinna_tyyp, h.kestus, h.baashind, h.juurdekasv, h.hinna_liik, h.hinna_kirjeldus"
 			." FROM expp_valjaanne v, expp_hind h"
 			." WHERE v.pindeks = h.pindeks"
@@ -412,10 +440,15 @@ class expp_va extends class_base {
 			." AND (h.lopp+0 = 0 OR h.lopp >= now())"
 //			." AND h.hinna_liik not like '%SALAJANE%'"
 			." AND h.hinna_liik in ( 'OKHIND', 'AVALIK_OKHIND', 'TAVAHIND', 'AVALIK_TAVAHIND' )"
-			." ORDER BY v.valjaande_nimetus ASC, h.hinna_liik ASC, h.kestus ASC";
+			." ORDER BY v.valjaande_nimetus ASC, h.hinna_liik ASC, h.kestus ASC, h.algus DESC";
 		$this->db_query( $sql );
 
 		if( $this->num_rows() == 0 ) return $retHTML;
+//		$this->clURL .= urlencode( $__aid ).'/';
+		$myURL = $this->cp->addYah( array(
+				'link' => urlencode( $__aid ),
+				'text' => $_laid
+			));
 /*
 		if( $this->lang != 'et' ) {
 			$_laid = reset( $_vanne );
@@ -550,7 +583,7 @@ class expp_va extends class_base {
 				if( !empty( $_kirjeldus )) {
 					$_kirjeldus .= '<br />';
 				}
-				$_kirjeldus .= stripslashes( $val['hinna_kirjeldus'] );
+				$_kirjeldus .= stripslashes( nl2br( $val['hinna_kirjeldus'] ) );
 			}
 
 			$this->vars(array(
@@ -638,7 +671,7 @@ class expp_va extends class_base {
 		$retHTML = '';
 
 		$cy = get_instance( CL_EXPP_JAH );
-		$myURL = $cy->getURL();
+//		$myURL = $cy->getURL();
 
 		$this->cp->log( get_class($this), "show" );
 
@@ -697,7 +730,7 @@ class expp_va extends class_base {
 				$_liik_wnimi = $row['liik'];
 			}
 			$this->vars(array(
-				'url' => $myURL.urlencode($row['tyyp']).'/'.urlencode($row['liik']),
+				'url' => $this->clURL.urlencode($row['tyyp']).'/'.urlencode($row['liik']),
 			//	'text' => $row['liik']
 				'text' => $_liik_wnimi
 			));
@@ -789,7 +822,7 @@ class expp_va extends class_base {
 		$this->cp->log( get_class($this), "show_{$_kampaania}", '', '', $__aid );
 
 		$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$_kampaania );
-		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+//		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
 			return $retHTML;
 		}
@@ -827,6 +860,10 @@ class expp_va extends class_base {
 				case 0:
 						$_text = t('kuu');
 						$_textn = t('kuud');
+					break;
+				case 1:
+						$_text = t(' n&auml;dal');
+						$_textn = t(' n&auml;dalat');
 					break;
 				case 3:
 						$_text = ' numbri hind';
@@ -899,15 +936,29 @@ class expp_va extends class_base {
 			$_cell .= $this->parse($_kamp.'CELL');
 		}
 		$_desc = '';
+	
+		////
+		// kampaania kohta k2iv lisainfo, lisatakse expp_kampaania objekti kaudu --dragut
+		$kampaania_info = $this->db_fetch_row("select * from expp_kampaania where nimetus = '".$_kampaania."'");
+
+		if (!empty($kampaania_info))
+		{
+			$this->vars(array(
+				'kampaania_kirjeldus' => $kampaania_info['kirjeldus'],
+				'kampaania_pilt_url' => $kampaania_info['pilt']
+			));
+			$kampaania_str = $this->parse('KAMPAANIA');
+		}
 ////
 // lõpuks viimane jupats
-
+	
 		$this->vars(array(
 			'colspan' => $_colspan,
 			'toode' => $_GET['id'],
 			'REKLAAM' => $_reklaam,
 			'CELL' => $_cell,
 			'DESC' => $_desc,
+			'KAMPAANIA' => $kampaania_str,
 		));
 		$preview = $this->parse();
 		if( empty( $preview )) return $preview;
