@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -2020,7 +2020,7 @@ msgstr "Aborted jobs"
 
 #: classes/mrp/mrp_workspace.aw:1914 classes/mrp/mrp_workspace.aw:2160
 #: classes/mrp/mrp_workspace.aw:2265 classes/mrp/mrp_workspace.aw:3803
-#: classes/mrp/mrp_workspace.aw:5087
+#: classes/mrp/mrp_workspace.aw:5096
 msgid "Klient"
 msgstr "Customer"
 
@@ -2227,35 +2227,35 @@ msgstr "All resources"
 msgid "Osakonna ressursid"
 msgstr "Departement resources"
 
-#: classes/mrp/mrp_workspace.aw:4530
+#: classes/mrp/mrp_workspace.aw:4539
 msgid "Salvesta kommentaar"
 msgstr "Save comment"
 
-#: classes/mrp/mrp_workspace.aw:4532
+#: classes/mrp/mrp_workspace.aw:4541
 msgid "Oled kindel et soovid kommentaari salvestada?"
 msgstr "Are you sure you want to enter a comment?"
 
-#: classes/mrp/mrp_workspace.aw:4887
+#: classes/mrp/mrp_workspace.aw:4896
 msgid "Logi v&auml;lja"
 msgstr "Log out"
 
-#: classes/mrp/mrp_workspace.aw:4994 classes/mrp/mrp_workspace.aw:5079
+#: classes/mrp/mrp_workspace.aw:5003 classes/mrp/mrp_workspace.aw:5088
 msgid "Valitud projekt"
 msgstr "Selected project"
 
-#: classes/mrp/mrp_workspace.aw:4995
+#: classes/mrp/mrp_workspace.aw:5004
 msgid "Kinnine aeg"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5120
+#: classes/mrp/mrp_workspace.aw:5129
 msgid "Nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5125 classes/mrp/mrp_workspace.aw:5140
+#: classes/mrp/mrp_workspace.aw:5134 classes/mrp/mrp_workspace.aw:5149
 msgid "Vali see"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5216
+#: classes/mrp/mrp_workspace.aw:5225
 msgid "Resurss"
 msgstr ""
 

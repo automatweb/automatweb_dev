@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -270,59 +270,59 @@ msgstr ""
 msgid "&Uuml;lesanded"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:297
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:300
 msgid "T&uuml;&uuml;bid"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:300
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:303
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:304
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:307
 msgid "Peakasutaja"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:326
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:329
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:376
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:379
 msgid "V&auml;ljad"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:379
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:382
 msgid "Nr."
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:385
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:388
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:390
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:393
 msgid "Bugi omadus"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:395
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:398
 msgid "Tellimuse omadus"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:400
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:403
 msgid "Tabelis"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:405
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:408
 msgid "Sorditav"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:410
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:413
 msgid "Vaikimisi sort"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:415
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:418
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:625
+#: classes/applications/bug_o_matic_3000/bugtrack_display.aw:656
 msgid "K&otilde;ik"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 19:21+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
 "Language-Team: \n"
@@ -585,7 +585,7 @@ msgid "&Uuml;hik"
 msgstr "Unit"
 
 #: classes/applications/crm/crm_bill.aw:676
-#: classes/applications/crm/crm_bill.aw:2480
+#: classes/applications/crm/crm_bill.aw:2486
 msgid "Hind"
 msgstr "Price"
 
@@ -623,54 +623,54 @@ msgstr ""
 msgid "Kokkuleppehind"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1619
-#: classes/applications/crm/crm_bill.aw:2029
+#: classes/applications/crm/crm_bill.aw:1621
+#: classes/applications/crm/crm_bill.aw:2031
 msgid "Prinditav arve"
 msgstr "Printable version"
 
-#: classes/applications/crm/crm_bill.aw:2380
+#: classes/applications/crm/crm_bill.aw:2386
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2387
+#: classes/applications/crm/crm_bill.aw:2393
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2392
-#: classes/applications/crm/crm_bill.aw:2404
-#: classes/applications/crm/crm_bill.aw:2417
+#: classes/applications/crm/crm_bill.aw:2398
+#: classes/applications/crm/crm_bill.aw:2410
+#: classes/applications/crm/crm_bill.aw:2423
 msgid "Arvel on ridu, mille v‰‰rtus on 0 krooni"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2400
+#: classes/applications/crm/crm_bill.aw:2406
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2413
+#: classes/applications/crm/crm_bill.aw:2419
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2425
+#: classes/applications/crm/crm_bill.aw:2431
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2430
+#: classes/applications/crm/crm_bill.aw:2436
 msgid "Koonda read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2439
+#: classes/applications/crm/crm_bill.aw:2445
 msgid "Kustuta read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2440
+#: classes/applications/crm/crm_bill.aw:2446
 msgid "Oled kindel et soovid read kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2469
+#: classes/applications/crm/crm_bill.aw:2475
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2474
+#: classes/applications/crm/crm_bill.aw:2480
 msgid "Tunde"
 msgstr ""
 

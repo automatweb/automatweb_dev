@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2015-06-01 21:28+0200\n"
 "Last-Translator: ergo\n"
 "Language-Team: \n"
@@ -1016,14 +1016,14 @@ msgstr ""
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2628
+#: classes/contentmgmt/webform.aw:2639
 msgid "Kinnita"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2633
+#: classes/contentmgmt/webform.aw:2644
 msgid "Tagasi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2755
+#: classes/contentmgmt/webform.aw:2766
 msgid "Liigu edasi &raquo;"
 msgstr ""

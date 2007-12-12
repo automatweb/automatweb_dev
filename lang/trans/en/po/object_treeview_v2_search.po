@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -129,56 +129,56 @@ msgstr "object list"
 msgid "Seose kontroller (RELTYPE_CTR) tekst"
 msgstr "controller"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:153
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:174
 msgid "Omadus"
 msgstr "Property"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:159
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:180
 msgid "N&auml;ita vormis"
 msgstr "Display in form"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:165
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:186
 msgid "Tekst"
 msgstr "Text"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:171
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:219
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:192
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:240
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:190
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:211
 msgid "T&auml;istekstiotsing"
 msgstr "Fulltext search"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:226
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:247
 msgid "Element"
 msgstr "Element"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:232
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:253
 msgid "Tabelis"
 msgstr "In table"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:238
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:259
 msgid "Sorditav"
 msgstr "Sortable"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:244
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:265
 msgid "Vaata tulp"
 msgstr "View column"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:250
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:271
 msgid "Tulba pealkiri"
 msgstr "Column caption"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:256
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:277
 msgid "Kontroller"
 msgstr "Controller"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:271
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:292
 msgid "--Vali--"
 msgstr "--Select--"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:344
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:345
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:365
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:366
 msgid "Otsi"
 msgstr "Search"

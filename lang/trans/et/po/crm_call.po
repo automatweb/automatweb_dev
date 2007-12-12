@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -249,6 +249,18 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_send_bill_help
 msgid "Omaduse Saata arve (send_bill) help"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_is_work
+msgid "Omaduse T&ouml;&ouml;aeg (is_work) caption"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_is_work_comment
+msgid "Omaduse T&ouml;&ouml;aeg (is_work) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_is_work_help
+msgid "Omaduse T&ouml;&ouml;aeg (is_work) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_bill_no
@@ -606,70 +618,74 @@ msgstr ""
 msgid "Kujundusosa Manused (center_bit_right_bottom) pealkiri"
 msgstr ""
 
-#: classes/crm/crm_call.aw:276
+#: classes/crm/crm_call.aw:279
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_call.aw:277 classes/crm/crm_call.aw:778
+#: classes/crm/crm_call.aw:280 classes/crm/crm_call.aw:786
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_call.aw:278
+#: classes/crm/crm_call.aw:281
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_call.aw:279 classes/crm/crm_call.aw:785
+#: classes/crm/crm_call.aw:282 classes/crm/crm_call.aw:793
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_call.aw:469
+#: classes/crm/crm_call.aw:283
+msgid "T&ouml;&ouml;aeg"
+msgstr ""
+
+#: classes/crm/crm_call.aw:475
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_call.aw:478
+#: classes/crm/crm_call.aw:484
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_call.aw:487
+#: classes/crm/crm_call.aw:493
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_call.aw:562
+#: classes/crm/crm_call.aw:570
 msgid "Uee k&otilde;ne aeg ei tohi olla minevikus!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:700
+#: classes/crm/crm_call.aw:708
 msgid "Nimi, osaleja ja projekt peavad olema täidetud!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:896
+#: classes/crm/crm_call.aw:904
 msgid "Millal"
 msgstr ""
 
-#: classes/crm/crm_call.aw:903
+#: classes/crm/crm_call.aw:911
 msgid "Sisu"
 msgstr ""
 
-#: classes/crm/crm_call.aw:908
+#: classes/crm/crm_call.aw:916
 msgid "Vaata"
 msgstr ""
 
-#: classes/crm/crm_call.aw:987
+#: classes/crm/crm_call.aw:995
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:992
+#: classes/crm/crm_call.aw:1000
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:997
+#: classes/crm/crm_call.aw:1005
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1002
+#: classes/crm/crm_call.aw:1010
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1036
+#: classes/crm/crm_call.aw:1044
 msgid "Loo uus arve"
 msgstr ""

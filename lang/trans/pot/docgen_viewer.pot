@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -154,7 +154,7 @@ msgstr ""
 msgid "Kujundusosa Klassi&nbsp;info (tbl) pealkiri"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:90 classes/applications/docgen/docgen_viewer.aw:97 classes/applications/docgen/docgen_viewer.aw:227 classes/applications/docgen/docgen_viewer.aw:816 classes/applications/docgen/docgen_viewer.aw:886 classes/applications/docgen/docgen_viewer.aw:1329 classes/applications/docgen/docgen_viewer.aw:1399
+#: classes/applications/docgen/docgen_viewer.aw:90 classes/applications/docgen/docgen_viewer.aw:97 classes/applications/docgen/docgen_viewer.aw:227 classes/applications/docgen/docgen_viewer.aw:815 classes/applications/docgen/docgen_viewer.aw:885 classes/applications/docgen/docgen_viewer.aw:1328 classes/applications/docgen/docgen_viewer.aw:1398
 msgid "Classes"
 msgstr ""
 
@@ -170,51 +170,51 @@ msgstr ""
 msgid "none"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1040
+#: classes/applications/docgen/docgen_viewer.aw:1039
 msgid "ALL DONE"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1102
+#: classes/applications/docgen/docgen_viewer.aw:1101
 msgid "Klasside &uuml;levaade"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1108
+#: classes/applications/docgen/docgen_viewer.aw:1107
 msgid "K&otilde;ik klassid"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1114
+#: classes/applications/docgen/docgen_viewer.aw:1113
 msgid "API klassid"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1120
+#: classes/applications/docgen/docgen_viewer.aw:1119
 msgid "Eraldi dokumentatsioon"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1127
+#: classes/applications/docgen/docgen_viewer.aw:1126
 msgid "Classbase tagid"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1133
+#: classes/applications/docgen/docgen_viewer.aw:1132
 msgid "Otsing"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1139
+#: classes/applications/docgen/docgen_viewer.aw:1138
 msgid "Uuenda API andmebaas"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1150
+#: classes/applications/docgen/docgen_viewer.aw:1149
 msgid "Foorum"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1167
+#: classes/applications/docgen/docgen_viewer.aw:1166
 msgid "Otsingus&otilde;na(d)"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1169
+#: classes/applications/docgen/docgen_viewer.aw:1168
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1174
+#: classes/applications/docgen/docgen_viewer.aw:1173
 msgid "Loo otsingu andmebaas"
 msgstr ""
 

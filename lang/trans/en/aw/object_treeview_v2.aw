@@ -27,7 +27,6 @@ $GLOBALS["TRANS"]["Omaduse Kaustade j&auml;rgi grupeeritav v&auml;li (group_by_f
 $GLOBALS["TRANS"]["Omaduse Millise v&auml;lja j&auml;rgi tabel grupeerida (group_in_table) caption"] = "Field to group by in table";
 $GLOBALS["TRANS"]["Omaduse Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse (filter_by_char_field) caption"] = "Filter by char field";
 $GLOBALS["TRANS"]["Omaduse Kuidas sorteerida (filter_by_char_order) caption"] = "Sort by";
-$GLOBALS["TRANS"]["Omaduse T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti  (alphabet_in_lower_case) caption"] = "Alphabet in lower case";
 $GLOBALS["TRANS"]["Omaduse Andmeallika parameetrid (sproc_params) caption"] = "Data source parameters";
 $GLOBALS["TRANS"]["Omaduse Pealkirja taustav&auml;rv (title_bgcolor) caption"] = "Title background colour";
 $GLOBALS["TRANS"]["Omaduse Paaris rea taustav&auml;rv (even_bgcolor) caption"] = "Even row background colour";

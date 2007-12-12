@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -29,81 +29,81 @@ msgstr ""
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2477
+#: classes/document.aw:2492
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2484
+#: classes/document.aw:2499
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2492
+#: classes/document.aw:2507
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:3002
+#: classes/document.aw:3017
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
 msgstr ""
 
-#: classes/document.aw:3032
+#: classes/document.aw:3047
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:3034
+#: classes/document.aw:3049
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
 
-#: classes/document.aw:3472
+#: classes/document.aw:3495
 msgid "jaanuar"
 msgstr ""
 
-#: classes/document.aw:3473
+#: classes/document.aw:3496
 msgid "veebruar"
 msgstr ""
 
-#: classes/document.aw:3474
+#: classes/document.aw:3497
 msgid "märts"
 msgstr ""
 
-#: classes/document.aw:3475
+#: classes/document.aw:3498
 msgid "aprill"
 msgstr ""
 
-#: classes/document.aw:3476
+#: classes/document.aw:3499
 msgid "mai"
 msgstr ""
 
-#: classes/document.aw:3477
+#: classes/document.aw:3500
 msgid "juuni"
 msgstr ""
 
-#: classes/document.aw:3478
+#: classes/document.aw:3501
 msgid "juuli"
 msgstr ""
 
-#: classes/document.aw:3479
+#: classes/document.aw:3502
 msgid "august"
 msgstr ""
 
-#: classes/document.aw:3480
+#: classes/document.aw:3503
 msgid "september"
 msgstr ""
 
-#: classes/document.aw:3481
+#: classes/document.aw:3504
 msgid "oktoober"
 msgstr ""
 
-#: classes/document.aw:3482
+#: classes/document.aw:3505
 msgid "november"
 msgstr ""
 
-#: classes/document.aw:3483
+#: classes/document.aw:3506
 msgid "detsember"
 msgstr ""
 
-#: classes/document.aw:3490
+#: classes/document.aw:3513
 msgid "Just postitatud"
 msgstr ""
 
