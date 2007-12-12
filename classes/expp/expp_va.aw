@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.16 2007/12/12 09:03:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.17 2007/12/12 10:30:22 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -440,7 +440,7 @@ class expp_va extends class_base {
 			." AND (h.lopp+0 = 0 OR h.lopp >= now())"
 //			." AND h.hinna_liik not like '%SALAJANE%'"
 			." AND h.hinna_liik in ( 'OKHIND', 'AVALIK_OKHIND', 'TAVAHIND', 'AVALIK_TAVAHIND' )"
-			." ORDER BY v.valjaande_nimetus ASC, h.hinna_liik ASC, h.kestus ASC, h.algus DESC";
+			." ORDER BY v.valjaande_nimetus ASC, h.hinna_liik ASC, h.kestus ASC";
 		$this->db_query( $sql );
 
 		if( $this->num_rows() == 0 ) return $retHTML;
