@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.140 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.141 2007/12/12 12:37:21 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -1437,7 +1437,7 @@ class planner extends class_base
 			"day_end" => $o->prop("day_end"),
 			"filt_views" => $o->prop("tab_views"),
 		));
-		
+
 		$prp = safe_array($arr["obj_inst"]->prop("del_views"));
 		$view = $_REQUEST["viewtype"] ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
 		$views = array("week");

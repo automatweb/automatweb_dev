@@ -135,6 +135,9 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @caption Toimumisaegade tabel
 
 
+@property ufupload1 type=fileupload table=objects field=meta method=serialize
+@caption Faili upload 1
+
 @property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
 
@@ -219,6 +222,20 @@ class calendar_event extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "ufupload1":
+                                if (is_uploaded_file($_FILES["ufupload1"]["tmp_name"]))
+                                {
+                                        $f = get_instance(CL_FILE);
+					$prop["value"] = $f->create_file_from_string(array(
+						"id" => $prop["value"],
+						"parent" => $_POST["parent"],
+						"content" => file_get_contents($_FILES["ufupload1"]["tmp_name"]),
+						"name" => $_FILES["ufupload1"]["name"],
+						"type" => $_FILES["ufupload1"]["type"]
+					));
+				}
+				break;
+			
 			case "event_time":
 				return PROP_IGNORE;
 
@@ -299,11 +316,33 @@ class calendar_event extends class_base
 	{
 		$retval = PROP_OK;
 		$prop = &$arr["prop"];
+                if ($arr["obj_inst"])
+                {
+                        $meta = $arr["obj_inst"]->meta();
+                        if (substr($prop["name"],0,1) == "u")
+                        {
+                                if (!empty($meta[$prop["name"]]))
+                                {
+                                        $prop["value"] = $meta[$prop["name"]];
+                                };
+                        };
+                };
+ 
 		switch($prop["name"])
 		{
 			case "level":
 				$prop["options"] = $this->level_options;
 				break;
+
+			case "ufupload1":
+				if ($this->can("view", $prop["value"]))
+				{
+					$fo = obj($prop["value"]);
+					$fi = $fo->instance();
+					$prop["value"] = $fi->parse_alias(array("alias" => array("target" => $fo->id())));
+				}
+				break;
+
 			case "event_time":
 				return PROP_IGNORE;
 			case "event_time_table":
@@ -313,17 +352,6 @@ class calendar_event extends class_base
 				}
 				break;
 		}
-		if ($arr["obj_inst"])
-		{
-			$meta = $arr["obj_inst"]->meta();
-			if (substr($prop["name"],0,1) == "u")
-			{
-				if (!empty($meta[$prop["name"]]))
-				{
-					$prop["value"] = $meta[$prop["name"]];
-				};
-			};
-		};
 		return $retval;
 	}
 

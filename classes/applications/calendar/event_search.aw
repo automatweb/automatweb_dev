@@ -861,7 +861,7 @@ class event_search extends class_base
 		$search_p2 = false;
 		$p_rn1 = $formconfig["project1"]["rootnode"];
 		$p_rn2 = $formconfig["project2"]["rootnode"];
-
+		
 		// dragut starts hacking:
 		// so, if $p_rn1 and $p_rn2 are empty, then maybe there are no root node set
 		// but maybe still there are some event_sources set, so then we try to use them
@@ -924,8 +924,8 @@ class event_search extends class_base
 					{
 						$rn1[] = $r;
 					}
-				//	$search_p1 = true;
-					// this goddamn calendar has to manage the
+					$search_p1 = true;
+					// this goddamn calendar has to manage the 
 					// events from other calendars and projects aswell.. oh hell..
 					$sources = $tmp->connections_from(array(
 						"type" => "RELTYPE_EVENT_SOURCE",
@@ -941,6 +941,7 @@ class event_search extends class_base
 						{
 							$rn1[] = $source->prop("to");
 						}
+						$prj_ch1[0][$source->prop("to")] = $source->prop("to.name");
 					}
 				}
 				elseif($clid == CL_PROJECT)
@@ -1032,7 +1033,7 @@ class event_search extends class_base
 			}
 			else
 			{
-				$vars["options"] = array(0 => t("kõik")) + reset($prj_ch1);
+				$vars["options"] = array(0 => t("K&otilde;ik")) + reset($prj_ch1);
 				//$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
 			}
 			$htmlc->add_property($vars);
@@ -1089,11 +1090,15 @@ class event_search extends class_base
 				$all_projects1 = new object_list(array(
 					"parent" => $p_rn1,
 					"class_id" => array(CL_PROJECT, CL_PLANNER),
+					"lang_id" => array(),
+					"site_id" => array()
 				));
 				$par1 = $all_projects1->ids();
 				$all_projects2 = new object_list(array(
 					"parent" => $p_rn2,
 					"class_id" => array(CL_PROJECT, CL_PLANNER),
+					"lang_id" => array(),
+					"site_id" => array()
 				));
 				$par2 = $all_projects2->ids();
 				if (is_oid($arr["project1"]))
@@ -1454,7 +1459,7 @@ class event_search extends class_base
 			$res = "";
 			$si = __get_site_instance();
 			$has_proc = method_exists($si, "handle_parse_event_field");
-
+			
 			$aliasmrg = get_instance("aliasmgr");
 			foreach($groups as $gkey => $edata)
 			{
@@ -1483,7 +1488,7 @@ class event_search extends class_base
 						}
 						if($search["oid"] && (empty($eval[$sname]) || $eval[$sname] == -1))
 						{
-							continue;
+						//	continue;
 						}
 						elseif(!$propdef["active"] && !$search["oid"])
 						{
@@ -1503,6 +1508,12 @@ class event_search extends class_base
 							if ($has_proc)
 							{
 								$v = $si->handle_parse_event_field($nms, $v);
+							}
+
+							if($search["oid"] && (empty($v) || $v == -1))
+							{
+								$skip = true;
+								continue;
 							}
 							$value = $tabledef[$nms]["props"];
 							// if there is something in the controller field set, then lets see what it is
@@ -1594,13 +1605,17 @@ class event_search extends class_base
 							$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
 
 						}
-						$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
-						$this->vars(array(
-							"cell" => $val,
-							"colcaption" => $propdef["caption"],
-						));
-						$cdat .= $this->parse("CELL");
-						$this->vars(array("CELL" => $cdat));
+
+						if (!$skip)
+						{
+							$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
+							$this->vars(array(
+								"cell" => $val,
+								"colcaption" => $propdef["caption"],
+							));
+							$cdat .= $this->parse("CELL");
+							$this->vars(array("CELL" => $cdat));
+						}
 					}
 					$nmx = "content";
 					$use = false;
@@ -1811,6 +1826,8 @@ class event_search extends class_base
 			"parent" => $parent,
 			"class_id" => array(CL_PROJECT, CL_PLANNER),
 			"sort_by" => "objects.jrk",
+			"site_id" => array(),
+			"lang_id" => array()
 		));
 		return $ol->names();
 

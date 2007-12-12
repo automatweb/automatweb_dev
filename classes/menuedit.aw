@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.395 2007/11/21 12:21:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.396 2007/12/12 12:37:21 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -373,15 +373,18 @@ class menuedit extends aw_template
 					{
 						$ls = "/".$ls;
 					}
-					header("Location: ".$ls);
-					die();
+					if (get_ru() != $ls)
+					{
+						header("Location: ".$ls);
+						die();
+					}
 				}
 			}
 
 			$class_id = $_obj->class_id();
 			if ($class_id == CL_MENU)
 			{
-				if (!($_obj->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id)
+				if (!($_obj->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id && !aw_ini_get("menuedit.do_not_set_lang_id_by_section"))
 				{
 					$set_lang_id = $_obj->lang_id();
 				};
@@ -389,16 +392,16 @@ class menuedit extends aw_template
 			else
 			if ($class_id != CL_EXTLINK)
 			{
-				if ($class_id == CL_DOCUMENT)
+				if ($class_id == CL_DOCUMENT && $this->can("view", $_obj->parent()))
 				{
 					$pt = obj($_obj->parent());
-					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id)
+					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id && !aw_ini_get("menuedit.do_not_set_lang_id_by_section"))
 					{
 						$set_lang_id = $_obj->lang_id();
 					}
 				}
 				else
-				if (!$set_ct_lang_id)
+				if (!$set_ct_lang_id && !aw_ini_get("menuedit.do_not_set_lang_id_by_section"))
 				{
 					$set_lang_id = $_obj->lang_id();
 				}
@@ -831,7 +834,6 @@ class menuedit extends aw_template
 			header("Location: ".aw_ini_get("baseurl")."/".$repl_gr);
 			die();
 		}
-
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si, "handle_error_redir"))
 		{
@@ -842,7 +844,6 @@ class menuedit extends aw_template
 				die();
 			}
 		}
-
 		$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$_SERVER["REQUEST_URI"]), $section);
 		// neat :), kui objekti ei leita, siis saadame 404 koodi
 		$r404 = $this->cfg["404redir"];

@@ -109,18 +109,18 @@ class languages extends aw_template
 			if ($row["site_id"] != 0)
 			{
 				// get site name from site server
-				/*
+				
 				$sd = $this->do_orb_method_call(array(
 					"class" => "site_list", 
 					"action" => "get_site_data", 
 					"params" => array(
 						"site_id" => $row["site_id"]
 					),
-					"method" => "xmlrpc",
-					"server" => "register.automatweb.com"
+					//"method" => "xmlrpc",
+					//"server" => "register.automatweb.com"
 				));
-				*/
-				$ret[$row["site_id"]] = $sd["name"]."( ".$row["site_id"]." )";
+				
+				$ret[$row["site_id"]] = $sd["url"]."( ".$row["site_id"]." )";
 			}
 		}
 		return $ret;
@@ -401,6 +401,10 @@ class languages extends aw_template
 
 		// assign the correct language so we can find translations
 		$LC=$la["acceptlang"];
+		if ($_GET["LC_DBG"] == 1)
+		{
+			echo dbg::dump($la);
+		}
 		if ($LC == "")
 		{
 			$LC = "et";
@@ -408,7 +412,7 @@ class languages extends aw_template
 		aw_global_set("LC", $LC);
 		aw_global_set("charset",$la["charset"]);
 		// oh yeah, we should only overwrite admin_lang_lc if it is not set already!
-		if (aw_global_get("admin_lang_lc") == "")
+		if (true || aw_global_get("admin_lang_lc") == "")
 		{
 			aw_global_set("admin_lang_lc",$LC);
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.184 2007/11/16 13:00:20 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.185 2007/12/12 12:37:21 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1387,60 +1387,6 @@ class users extends users_user
 	}
 
 	/**
-		@comment
-			converts certificates subject value to ISO-8859-1
-	**/
-	function certstr2utf8($str) {
-		$result="";
-		$encoding=mb_detect_encoding($str,"ASCII, UTF-8");
-		if ($encoding=="ASCII")
-		{
-			$result=mb_convert_encoding($str, "ISO-8859-1", "ASCII");
-		}
-		else
-		{
-			if (substr_count($str,chr(0))>0)
-			{
-				$result=mb_convert_encoding($str, "ISO-8859-1", "UCS2");
-			}
-			else
-			{
-				$result=$str;
-			}
-		}
-		return $result;
-	}
-
-	/**
-		@comment
-			Returns certificate info as an array in ISO-8859-1 charset
-		@returns
-			array(
-				f_name => firstname,
-				l_name => lastname,
-				pid => personal id,
-	**/
-	function returncertdata($cert)
-	{
-		$data = array();
-		$certstructure=openssl_x509_parse($cert);
-
-		if (strpos($_SERVER["SSL_VERSION_LIBRARY"],"0.9.6")===false)
-		{
-			$data['f_name'] = $this->certstr2utf8($certstructure["subject"]["GN"]);
-			$data['l_name'] = $this->certstr2utf8($certstructure["subject"]["SN"]);
-			$data['pid'] = $certstructure["subject"]["serialNumber"];
-		}
-		else
-		{
-			$data['f_name'] = $certstructure["subject"]["SN"];
-			$data['l_name'] = $this->certstr2utf8($certstructure["subject"]["G"]);
-			$data['pid'] = $this->certstr2utf8($certstructure["subject"]["S"]);
-		}
-		return $data;
-	}
-
-	/**
 		@attrib name=id_pre_login params=name nologin=1
 		@comment
 		Logs user in with id-card over ssl.
@@ -1645,7 +1591,7 @@ class users extends users_user
 					hash_time > ".time()." AND
 					uid = '$arr[uid]'
 			";
-			//echo "q =- $q <br>\n\n";
+	//		echo "q =- $q <br>\n\n";
 		//	flush();
 			$row = $this->db_fetch_row($q);
 		//	echo "row = ".dbg::dump($row)."\n\n\n";
@@ -1654,6 +1600,7 @@ class users extends users_user
 			{
 				// do quick login
 				$_SESSION["uid"] = $arr["uid"];
+				$_SESSION["login_hash_data"] = $row;
 				aw_global_set("uid", $arr["uid"]);
 				$oid = $this->get_oid_for_uid($arr["uid"]);
 				aw_session_set("uid_oid", $oid);
@@ -1673,6 +1620,10 @@ class users extends users_user
 				//flush();
 
 				$url = ($t = urldecode(aw_global_get("request_uri_before_auth")))?$t:aw_ini_get("baseurl");
+				if ($url == aw_ini_get("baseurl")."/login.aw")
+				{
+					$url = aw_ini_get("baseurl");
+				}
 				return $url;
 			}
 		}
@@ -1766,5 +1717,60 @@ class users extends users_user
 
 		return $this->mk_my_orb("udata", array("fid" => $fid,"section" => $section));
 	}
+
+	/**
+		@comment
+			converts certificates subject value to ISO-8859-1
+	**/
+	function certstr2utf8($str) {
+		$result="";
+		$encoding=mb_detect_encoding($str,"ASCII, UTF-8");
+		if ($encoding=="ASCII")
+		{
+			$result=mb_convert_encoding($str, "ISO-8859-1", "ASCII");
+		}
+		else
+		{
+			if (substr_count($str,chr(0))>0)
+			{
+				$result=mb_convert_encoding($str, "ISO-8859-1", "UCS2");
+			}
+			else
+			{
+				$result=$str;
+			}
+		}
+		return $result;
+	}
+
+	/**
+		@comment
+			Returns certificate info as an array in ISO-8859-1 charset
+		@returns
+			array(
+				f_name => firstname,
+				l_name => lastname,
+				pid => personal id,
+	**/
+	function returncertdata($cert)
+	{
+		$data = array();
+		$certstructure=openssl_x509_parse($cert);
+
+		if (strpos($_SERVER["SSL_VERSION_LIBRARY"],"0.9.6")===false)
+		{
+			$data['f_name'] = $this->certstr2utf8($certstructure["subject"]["GN"]);
+			$data['l_name'] = $this->certstr2utf8($certstructure["subject"]["SN"]);
+			$data['pid'] = $certstructure["subject"]["serialNumber"];
+		}
+		else
+		{
+			$data['f_name'] = $certstructure["subject"]["SN"];
+			$data['l_name'] = $this->certstr2utf8($certstructure["subject"]["G"]);
+			$data['pid'] = $this->certstr2utf8($certstructure["subject"]["S"]);
+		}
+		return $data;
+	}
+
 }
 ?>
