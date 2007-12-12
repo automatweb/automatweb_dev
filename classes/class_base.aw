@@ -4492,6 +4492,31 @@ class class_base extends aw_template
 			};
 		};
 
+		// callback_post_save for multifile_upload vcl component
+		// @ todo: should work on all vcl components
+		{
+			$callback_post_save_done = false;
+			foreach ($properties as $prop)
+			{
+				// load callback_post_save in multifile upload if not done allready
+				if ($prop["type"] == "multifile_upload" && $callback_post_save_done == false)
+				{
+					$reginst = $this->vcl_register["multifile_upload"];
+					$ot = get_instance($reginst);
+					//if (method_exists($ot,"callback_post_save"))
+					//{
+				        $ot->callback_post_save(array(
+				                "id" => $this->obj_inst->id(),
+								"request" => &$args,
+								"obj_inst" => &$this->obj_inst,
+								"new" => $new,
+				        ));
+					//}
+					
+					$callback_post_save_done = true;
+				}
+			}
+		}
 
 		if (method_exists($this->inst,"callback_post_save"))
 		{
