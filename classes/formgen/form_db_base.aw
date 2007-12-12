@@ -533,7 +533,7 @@ class form_db_base extends class_base
 
 		$this->db_query($sql);
 		$row = $this->db_next();
-
+		$this->dequote(&$row);
 		// we gather the el_id => el_value pairs here
 		$ret = array();
 		$this->read_elements_from_q_result($row, &$ret);
@@ -753,7 +753,6 @@ class form_db_base extends class_base
 				$forms_queried[$fid] = $fid;
 			}
 		}
-
 		foreach($forms_queried as $fid)
 		{
 			if ($fid != $start_relations_from)
@@ -770,7 +769,7 @@ class form_db_base extends class_base
 		$first = true;
 		$this->join_sql_used = array($tn => $tn);
 		$this->join_sql_used_forms_from = array();
-//						echo "rrjoins = <pre>", var_dump($this->_joins),"</pre> <br />";
+						//echo "rrjoins = <pre>", var_dump($this->_joins),"</pre> <br />";
 		foreach($this->_joins as $jdata)
 		{
 			if ($first)
@@ -1401,6 +1400,10 @@ class form_db_base extends class_base
 								{
 									$sep = " LIKE ";
 								}
+								if ($elname2 == "ut_struktuurid_364.3taseme_ylem_id" && $value == "" || $value == "%%")
+								{
+									$value = -1;
+								}
 								$qstr = " $elname2 $sep '$value' ";
 							}
 						}
@@ -1604,7 +1607,7 @@ class form_db_base extends class_base
 		$frfo = aw_global_get("_fr_forms_used::".((int)$f_root)."::".((int)$no_reverse_rels));
 		$frt = aw_global_get("form_rel_tree::".((int)$f_root)."::".((int)$no_reverse_rels));
 		// REMOVE THIS $ffc = aw_global_get("form2first_form_in_chain::".((int)$f_root)."::".((int)$no_reverse_rels));
-		if (is_array($frfo) && is_array($frt))
+		if (is_array($frfo) && is_array($frt) && false)
 		{
 			$this->_fr_forms_used = $frfo;
 			$this->form_rel_tree = $frt;

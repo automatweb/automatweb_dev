@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/datasource.aw,v 1.5 2007/12/06 14:33:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/datasource.aw,v 1.6 2007/12/12 12:50:47 kristo Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -80,6 +80,13 @@ class datasource extends class_base
 	{
 		extract($args);
 		$obj = new object($id);
+		$c = get_instance("cache");
+                classload("core/date/date_calc");
+                if ($ct = $c->file_get_ts("xml_datasource_$id", mktime(date("H"), 0, 0, date("m"), date("d"), date("Y"))))
+                {
+			return $ct;
+                }
+	
 		$type = $obj->prop("type");
 		$url = escapeshellarg($obj->prop("url"));
 		if (($type == 2) || ($type == 1))
@@ -101,6 +108,7 @@ class datasource extends class_base
 				$read.= fread($fp,16384);
 			}
 			pclose($fp);
+			$c->file_set("xml_datasource_$id", $read);
 			return $read;
 		}
 	}

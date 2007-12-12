@@ -5,7 +5,6 @@ $sf->tpl_init();
 $sf->read_template(!empty($index_template) ? $index_template : "index.tpl");
 
 $_t = aw_global_get("act_period");
-
 $sf->vars(array(
 	"content" => $content,
 	"per_string" => $_t["description"],

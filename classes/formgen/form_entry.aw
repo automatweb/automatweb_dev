@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.10 2005/11/03 13:29:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.11 2007/12/12 12:51:26 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -45,6 +45,15 @@ class form_entry extends aw_template
 
 		$f = get_instance(CL_FORM);
 		return $f->gen_preview(array("id" => $fid, "entry_id" => $id));
+	}
+
+	/**
+		@attrib name=new all_args=1
+	**/
+	function orb_new($arr)
+	{
+		$i = get_instance("formgen/form_alias");
+		return $i->do_new($arr);
 	}
 
 	////

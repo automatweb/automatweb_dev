@@ -26,7 +26,7 @@ class run_in_background extends class_base
 
 		$this->bg_checkpoint_steps = 100 ;
 
-		$this->bg_log_steps = 5;
+		$this->bg_log_steps = 10;
 
 	}
 
@@ -358,7 +358,9 @@ class run_in_background extends class_base
 					$o->save();
 
 					aw_restore_acl();
+					// since scheduler is not runnung, go for it right away
 
+					$this->bg_run(array("id" => $o->id()));
 					continue;
 
 				}

@@ -28,7 +28,6 @@ else
 enter_function("index_impl::after_init");
 // get an instance if the site class
 $si =&__get_site_instance();
-
 // if we are drawing the site's front page
 if ((!aw_global_get("section") || aw_global_get("section") == aw_ini_get("frontpage")) && empty($class)) 
 {

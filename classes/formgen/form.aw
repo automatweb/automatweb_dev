@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.127 2007/11/28 07:50:11 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.128 2007/12/12 12:51:22 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -2301,7 +2301,6 @@ class form extends form_base
 		{
 			$entry_id = $this->entry_id;
 		}
-
 		if (isset($no_html) && $no_html)
 		{
 			$this->read_template("show_user_nohtml.tpl");
@@ -3023,7 +3022,7 @@ class form extends form_base
 			$this->load_entry($entry_id);
 			$this->_do_value_controllers();
 		}
-
+		
 		if (is_array($restrict_search_el))
 		{
 			// alter the loaded search entry with the data
@@ -3065,7 +3064,6 @@ class form extends form_base
 
 			$used_els = $form_table->get_used_elements();
 //			echo "used_els = <pre>", print_r($used_els),"</pre> <br />";
-
 			$group_els = $form_table->get_group_by_elements();
 //			echo "group_els = <pre>", var_dump($group_els),"</pre> <br />";
 
@@ -3223,6 +3221,10 @@ class form extends form_base
 		));
 //		echo "sql = $sql <br />";
 		$result = "";
+		if (strpos($sql, "WHERE") === false)
+		{
+			$sql .= " WHERE 1=0";
+		}
 		$this->db_query($sql,false);
 		$cur_row = 0;
 		$total_rows = $this->num_rows();
@@ -3237,7 +3239,6 @@ class form extends form_base
 			print_r($row);
 			print "</pre>";
 			*/
-
 			if ($this->arr["show_s_res_as_forms"])
 			{
 				$show_form->reset();
@@ -3263,7 +3264,7 @@ class form extends form_base
 					$cid = $this->get_chain_for_chain_entry($row["chain_entry_id"]);
 					$this->restore_handle();
 				};
-
+				
 				//print "processing entry $row[entry_id]<br />";
 				if ($has_calendar)
 				{
@@ -3313,7 +3314,6 @@ class form extends form_base
 			$cur_row++;
 		}
 
-		
 		// now if we are showing table, finish the table 
 		if ($this->arr["show_table"] && !$this->arr["show_s_res_as_forms"])
 		{
@@ -3330,7 +3330,6 @@ class form extends form_base
 				die($form_table->t->get_csv_file(";"));
 			}
 		}
-
 		return $result;
 	}
 
@@ -6920,7 +6919,6 @@ class form extends form_base
 				$search_res = "<form action='reforb.".$this->cfg["ext"]."' method='POST' name='tb_".$this->arr["table"]."'>".$search_res;
 			}
 		}
-
 		if ($this->arr["sql_writer"] && $this->arr["sql_writer_form"])
 		{
 			$tf = get_instance(CL_FORM);
@@ -6929,7 +6927,6 @@ class form extends form_base
 				"tpl" => "show_noform.tpl",
 			));
 		}
-
 		if ($this->arr["show_s_res_as_forms"])
 		{
 			$search_res.= $this->mk_reforb("submit_sr", array(
@@ -6954,12 +6951,20 @@ class form extends form_base
 
 		if ($this->arr["show_form_with_results"])
 		{
+			// also, since here we can change content without the url changing
+			// let squid know this
+			if ( aw_ini_get("config.use_squid"))
+			{
+				$ma = aw_ini_get("config.http_cache_max_age");
+				session_cache_limiter("must-revalidate, max-age=".$ma);
+				header("Cache-Control: must-revalidate, max-age=".$ma);
+				header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
+			}
 			$search_res = $this->gen_preview(array(
 				"id" => $id,
 				"entry_id" => $entry_id,
 			)).$search_res;
 		}
-
 		return $search_res;
 	}
 
@@ -6990,7 +6995,7 @@ class form extends form_base
 				}
 			}
 		}
-
+		
 		$this->load($id);
 //		echo "load $id <br />";
 
@@ -7013,7 +7018,7 @@ class form extends form_base
 
 		$wrf->ef = get_instance(CL_FORM);
 		$wrf->ef->load($wrf->arr["sql_writer_writer_form"]);
-
+		
 		// now we must load all selected entries
 		// and for each
 		// calculate the value in the writer form based on the entered elements value and let controllers process it
@@ -7047,7 +7052,6 @@ class form extends form_base
 					$changeset[$wrt_to_el] = $wrt_el_val;
 				}
 			}
-
 			foreach($changeset as $ch_el => $ch_el_val)
 			{
 				$wrf->ef->set_element_value($ch_el, $ch_el_val, true);

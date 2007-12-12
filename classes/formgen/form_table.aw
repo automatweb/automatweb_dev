@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.84 2006/09/27 15:03:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.85 2007/12/12 12:51:26 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -575,18 +575,17 @@ class form_table extends form_base
 						$str = "<a href='mailto:".$str."'>".$str."</a>";
 					}
 				}
-
+				
 				$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$str);
 				if (trim($_a) != "")
 				{
 					$this->table_not_empty_cols[$col] = true;
 				}
-
+				
 				if ($this->table["defs"][$col]["val_controller"])
 				{
 					$str = $this->controller_instance->eval_controller($this->table["defs"][$col]["val_controller"], $str, false, $dat);
 				}
-
 				if (!$this->table["defs"][$col]["link"])
 				{
 					$dat["ev_col_".$col] = $this->create_email_links($str);
@@ -597,7 +596,7 @@ class form_table extends form_base
 				}
 			}
 		}
-
+		
 		foreach($reset_aliases as $col => $adat)
 		{
 			foreach($adat as $aidx => $aval)
@@ -2701,8 +2700,20 @@ class form_table extends form_base
 	// $textvalue - text value of column before images and links are applied to it
 	function get_ftable_alias_url($elval, $alias_target, $row_data, $col, $cc, $form_id, $textvalue)
 	{
+if ($_GET["HJ"] == 1)
+{
+	echo dbg::short_backtrace()." <br>";
+}
 		// request uri, set in constructor
 		$ru = $this->ru;
+		if (strpos($ru, "?") !== false)
+		{
+			$ru = obj_link($GLOBALS["cur_process_alias"])."?".substr($ru, strpos($ru, "?"));
+		}
+		else
+		{
+			$ru = obj_link($GLOBALS["cur_process_alias"]);
+		}
 		// new approach - restrict_* are now arrays - so that they remember previous levels as well
 		$ru = preg_replace("/use_table=[^&$]*/","",$ru);
 		$ru = preg_replace("/tbl_sk=[^&$]*/","",$ru);
@@ -2722,7 +2733,7 @@ class form_table extends form_base
 		{
 			$sep = "&";
 		}
-
+		
 		$new_sk = gen_uniq_id();
 		if ($this->table["has_ftbl_extlinks"])
 		{
@@ -2759,7 +2770,7 @@ class form_table extends form_base
 		{
 			$url .= "&restrict_search_yah[]=".urlencode($textvalue);
 		}
-
+		
 		$url.="&tbl_sk=".$new_sk."&old_sk=";
 		if (isset($GLOBALS["tbl_sk"]))
 		{
@@ -2790,7 +2801,7 @@ class form_table extends form_base
 				$this->last_table_alias_url = $url;
 			}
 		}
-
+		
 		$cc = $this->table["defs"][$col];
 		if (isset($cc["link_popup"]) && $cc["link_popup"])
 		{
@@ -2916,6 +2927,7 @@ class form_table extends form_base
 				}
 			}
 		}
+		
 		return $str;
 	}
 

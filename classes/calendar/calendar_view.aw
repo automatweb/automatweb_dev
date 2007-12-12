@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.57 2007/11/23 12:50:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.58 2007/12/12 12:50:48 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -34,6 +34,9 @@
 
 @property show_days_with_events type=checkbox ch_value=1
 @caption Näita ainult sündmustega päevi
+
+@property sort_day_events_before type=checkbox ch_value=1
+@caption Sorteeri &uuml;he p&auml;evased ettepoole
 
 @property show_event_content type=checkbox ch_value=1
 @caption Näita kalendrivaates kohe sündmuse sisu
@@ -553,6 +556,42 @@ class calendar_view extends class_base
 		return (int)($el1["start1"] - $el2["start1"]);
 	}
 
+	function __sort_events_by_jrk($el1, $el2)
+	{
+		//if(aw_global_get("uid") == "kix") {arr($el1["start1"]); arr($el2["start1"]); arr($this->day_start);arr();}
+		if(!($this->can("view" , $el1) && $this->can("view" , $el2)))
+		{
+			return $el1 - $el2;
+		}
+		
+		if(aw_global_get("uid") == "kix"){
+		
+		$e1 = obj($el1);
+		$e2 = obj($el2);
+		$e1_len = $e1->prop("end") - $e1->prop("start1");
+		$e2_len = $e2->prop("end") - $e2->prop("start1");
+		arr($e2->prop("end"));arr($e2->prop("start1"));arr($e2);
+		if($e1_len > 86400 && $e2_len <= 86400) return -1;
+		if($e1_len <= 86400 && $e2_len > 86400) return 1;
+		if($e1_len <= 86400 && $e2_len <= 86400)
+		{
+			return $e1->prop("start1") - $e2->prop("start1");
+		}
+		
+		$p1 = obj($e1->parent());
+		$p2 = obj($e2->parent());
+		return $p1->prop("jrk") - $p2->prop("jrk");
+
+		//arr($day);
+// 		if()
+// 		
+// 		if()
+		}
+		
+		
+		return (int)($el1 - $el2);
+	}
+
 	// common interface for getting events out of any class that can contain events
 	// probably should not even be in this class
 	function get_events_from_object($arr)
@@ -583,7 +622,10 @@ class calendar_view extends class_base
 						};
 					};
 				};
+				$this->day_start = $arr["range"]["start"];
+			//	if(aw_global_get("uid") == "kix") {arr($events);}
 				uasort($events, array($this, "__sort_events_by_time"));
+			//	if(aw_global_get("uid") == "kix") {arr($events);arr($num);}
 				if (is_numeric($range["limit_events"]))
 				{
 					$num = $range["limit_events"];
@@ -953,6 +995,7 @@ class calendar_view extends class_base
 				$sources = $sources + $this->get_event_sources($to_o);
 			}
 		}
+		
 		$vcal->event_entry_classes = $this->event_entry_classes;
 		$vcal->event_sources = $sources;
 		if ($arr["start_from"])

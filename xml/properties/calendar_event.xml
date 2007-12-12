@@ -335,6 +335,15 @@
             <caption>Toimumisaegade tabel</caption>
       </property>
       <property>
+            <name>ufupload1</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>fileupload</type>
+            <field>meta</field>
+	<method>serialize</method>
+            <caption>Faili upload 1</caption>
+      </property>
+      <property>
             <name>aliasmgr</name>
             <group>general</group>
             <table>planner</table>

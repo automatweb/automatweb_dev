@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.94 2007/09/06 11:27:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.95 2007/12/12 12:50:52 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1131,7 +1131,8 @@ class site_search_content extends class_base
 				"user1" => $row["user1"],
 				"user4" => $row["user4"],
 				"docid" => $row["docid"],
-				"target" => ($row["site_id"] != $this->site_id ? "target=\"_blank\"" : "")
+				"target" => ($row["site_id"] != $this->site_id ? "target=\"_blank\"" : ""),
+				"site_id" => $row["site_id"]
 			);
 		}
 		if($arr["obj"]->prop("do_keyword_search"))
@@ -1336,7 +1337,7 @@ class site_search_content extends class_base
 		$_ret = array();
 		foreach($ret as $d)
 		{
-			$_ret[$d["title"]] = $d;
+			$_ret[mb_strtoupper($d["title"], aw_global_get("charset"))] = $d;
 		}
 
 		exit_function("site_search_content::fetch_search_results");
@@ -1618,6 +1619,35 @@ class site_search_content extends class_base
 				$si->parse_document($results[$i]);
 			}
 			$results[$i]["url"] = preg_replace("/\&set_lang_id=\d+/imsU", "", str_replace("/index.aw?section=", "/", $results[$i]["url"]));
+
+			if ($results[$i]["site_id"] > 0 && $results[$i]["site_id"] != aw_ini_get("site_id") && $this->can("view", $results[$i]["docid"]))
+			{
+				$do = obj($results[$i]["docid"]);
+				$parent = $do->parent();
+				$sp = array();
+				$sp[] = $do->id();
+				while ($parent)
+				{
+					// list all brothers that are with the correct site id and if found then 
+					// make path from that
+					$ol = new object_list(array(
+						"brother_of" => $parent,
+					));
+					if ($ol->count())
+					{
+						$bo = obj($ol->begin());
+						foreach(array_reverse($bo->path()) as $pi)
+						{
+							$sp[] = $pi->id();
+						}
+						$url = aw_ini_get("baseurl")."/?section=".$results[$i]["docid"]."&path=".join(",", array_reverse($sp));
+						$results[$i]["url"] = $url;
+					}
+					$sp[] = $parent;
+					$do = obj($parent);
+					$parent = $do->parent();
+				}
+			}
 			$tm = ($results[$i]["doc_modified"] ? $results[$i]["doc_modified"] : $results[$i]["modified"]);
 			if ($tm > 300)
 			{

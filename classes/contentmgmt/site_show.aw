@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.253 2007/12/04 13:03:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.254 2007/12/12 12:50:49 kristo Exp $
 
 /*
 
@@ -3197,6 +3197,68 @@ class site_show extends class_base
 		}
 		return $pm->get_menu();
 
+	}
+
+	function get_folder_document_sort_by($obj)
+	{
+		if ($obj->meta("sort_by") != "")
+		{
+			$ordby = $obj->meta("sort_by");
+			if ($obj->meta("sort_by") == "RAND()")
+			{
+				$has_rand = true;
+			}
+			if ($obj->meta("sort_ord") != "")
+			{
+				$ordby .= " ".$obj->meta("sort_ord");
+			}
+			if ($obj->meta("sort_by") == "documents.modified")
+			{
+				$ordby .= ", objects.created DESC";
+			};
+		}
+		else
+		{
+			$ordby = aw_ini_get("menuedit.document_list_order_by");
+		}
+		if ($obj->meta("sort_by2") != "")
+		{
+			if ($obj->meta("sort_by2") == "RAND()")
+			{
+				$has_rand = true;
+			}
+			$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by2");
+			if ($obj->meta("sort_ord2") != "")
+			{
+				$ordby .= " ".$obj->meta("sort_ord2");
+			}
+			if ($obj->meta("sort_by2") == "documents.modified")
+			{
+				$ordby .= ", objects.created DESC";
+			};
+		}
+		if ($obj->meta("sort_by3") != "")
+		{
+			if ($obj->meta("sort_by3") == "RAND()")
+			{
+				$has_rand = true;
+			}
+			$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by3");
+			if ($obj->meta("sort_ord3") != "")
+			{
+				$ordby .= " ".$obj->meta("sort_ord3");
+			}
+			if ($obj->meta("sort_by3") == "documents.modified")
+			{
+				$ordby .= ", objects.created DESC";
+			};
+		}
+		if ($ordby == "")
+		{
+			$ordby = "objects.jrk";
+		}
+
+		return $ordby;
 	}
 }
 ?>

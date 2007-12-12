@@ -50,10 +50,9 @@ class acl_manager extends class_base
 				"align" => "center"
 			));
 		}
-
 		foreach($o->acl_get() as $gid => $inf)
 		{
-			$dat = array("grp" => html::obj_change_url($gid));
+			$dat = array("grp" => html::obj_change_url($inf["oid"]));
 			foreach(aw_ini_get("acl.names") as $id => $name)
 			{
 				$dat[$id] = ($inf[$id] ? t("Jah") : t("Ei"));
@@ -106,7 +105,7 @@ class acl_manager extends class_base
 			),
 			"root_item" => obj(aw_ini_get("groups.tree_root")),
 			"ot" => new object_tree(array(
-				"class_id" => array(CL_GROUP),
+				"class_id" => array(CL_GROUP,CL_MENU),
 				"parent" => aw_ini_get("groups.tree_root"),
 				"lang_id" => array(),
 				"site_id" => array()
@@ -231,7 +230,7 @@ class acl_manager extends class_base
 				$dat[$id] = html::checkbox(array(
 					"name" => "acl_matrix[$oid][$id]",
 					"value" => 1,
-					"checked" => $acls[$oid][$id] == 1
+					"checked" => $acls[$o->prop("gid")][$id] == 1
 				));
 			}
 			$t->define_data($dat);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.44 2005/10/03 07:00:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.45 2007/12/12 12:51:25 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -582,7 +582,7 @@ class form_actions extends form_base
 				{
 					$fname = "do_email_action";
 				}
-
+				
 				if ($fname != "" && method_exists($this, $fname))
 				{
 					$this->$fname($form, $data, $entry_id);
@@ -767,6 +767,7 @@ class form_actions extends form_base
 	{
 		if ($data["no_mail_on_change"] && !$form->is_new_entry)
 		{
+//		echo "nmlch <br>";
 			return;
 		}
 
@@ -886,6 +887,7 @@ class form_actions extends form_base
 				"to" => $data['email'],
 				"body" => $msg.$app.$link_url,
 			));
+//			echo "froma = $froma , fromn = $fromn , to = $data[email] <br>";
 			$app = $msg_html.'<br />'.$app_html.'<br />'.html::href(array(
 				'url' => $link_url,
 				'caption' => $data['link_caption']
@@ -1040,7 +1042,7 @@ class form_actions extends form_base
 
 			$msg = html_entity_decode($msg);
 			$app = html_entity_decode($app);
-
+//echo "sendmer $data[email] $subj froma = $froma <br>";
 			send_mail($data["email"],$subj, $msg.$app,"From: $froma\nContent-type: text/plain; charset=".$ll->get_charset()."\n");
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
 			{

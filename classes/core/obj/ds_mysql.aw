@@ -41,6 +41,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function get_objdata($oid, $param = array())
 	{
+		$oid = (int)$oid;
 		if (!empty($GLOBALS["object2version"][$oid]) && $GLOBALS["object2version"][$oid] != "_act")
 		{
 			$v = $GLOBALS["object2version"][$oid];
@@ -297,10 +298,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (isset($this->read_properties_data_cache[$object_id]))
 				{
 					$data = $this->read_properties_data_cache[$object_id];
+					$this->dequote(&$data);
 				}
 				else
 				{
 					$data = $this->db_fetch_row($q);
+					$this->dequote(&$data);
 				}
 				if (is_array($data))
 				{
@@ -1902,8 +1905,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objdata["createdby"] = $objdata["modifiedby"] = aw_global_get("uid");
 		$objdata["created"] = $objdata["modified"] = time();
 
-		$objdata["lang_id"] = aw_global_get("lang_id");
-		$objdata["site_id"] = aw_ini_get("site_id");
+		$objdata["lang_id"] = aw_global_get("lang_id");	
+
+		// fetch site id from the parent
+		$od = $this->get_objdata($parent);
+		$objdata["site_id"] = $od["site_id"];//aw_ini_get("site_id");		
 
 		// create oid
 		$q = "

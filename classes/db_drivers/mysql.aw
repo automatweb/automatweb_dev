@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.43 2007/11/15 12:23:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.44 2007/12/12 12:51:05 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -35,6 +35,7 @@ class mysql
 			$err .= '<br />';
 			$err .= mysql_error();
 			call_fatal_handler($err);
+			echo $err;
 			exit;
 		};
 		if (not(@mysql_select_db($base,$this->dbh)))

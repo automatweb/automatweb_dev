@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.46 2007/12/06 14:34:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.47 2007/12/12 12:50:48 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -907,6 +907,13 @@ class register_search extends class_base
 		{
 			$filter["sort_by"] = "objects.name ASC ";
 		}
+
+		$si = __get_site_instance();
+		if (method_exists($si, "refine_register_search_filter"))
+		{
+			$si->refine_register_search_filter($o, $filter);
+		}
+
 		if ((!empty($request["search_butt"]) || !empty($request["MAX_FILE_SIZE"])) || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);

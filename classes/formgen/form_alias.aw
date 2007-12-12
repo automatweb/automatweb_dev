@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.10 2006/01/13 11:12:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.11 2007/12/12 12:51:25 kristo Exp $
 
 classload("formgen/form");
 class form_alias extends form_base
@@ -190,6 +190,7 @@ class form_alias extends form_base
 	function parse_alias($args = array())
 	{
 		extract($args);
+		$GLOBALS["cur_process_alias"] = $alias["from"];
 		$alias_data = unserialize($alias["data"]);
 		$fo = get_instance(CL_FORM);
 
@@ -214,7 +215,14 @@ class form_alias extends form_base
 				"entry_id" => $alias["target"],
 			));
 		}
-
+		if (is_object($args["oid"]))
+		{
+			$args["oid"] = $args["oid"]->id();
+		}
+		if (aw_global_get("section") != $args["oid"])
+		{
+			$replacement = str_replace(aw_global_get("section"),$args["oid"], $replacement);
+		}
 		return $replacement;
 	}
 

@@ -1328,7 +1328,7 @@ class site_template_compiler extends aw_template
 			$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
 		}
 
-		$ret .= $this->_gi()."new object_list_filter(array(\n";
+		$ret .= $this->_gi()."\$parent_obj->prop(\"content_all_langs\") ? null : new object_list_filter(array(\n";
 
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"logic\" => \"OR\",\n";
@@ -1336,7 +1336,7 @@ class site_template_compiler extends aw_template
 
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"lang_id\" => aw_global_get(\"lang_id\"),\n";
-		$ret .= $this->_gi()."\"type\" => array(MN_CLIENT,MN_PMETHOD)\n";
+		$ret .= $this->_gi()."\"type\" => array(MN_CLIENT,MN_PMETHOD),\n";
 		$this->brace_level--;
 
 		$ret .= $this->_gi().")\n";
@@ -2063,7 +2063,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
 		$ret .= $this->_gi()."\"period\" => aw_global_get(\"act_per_id\"),\n";
 		$ret .= $this->_gi()."\"class_id\" => array(CL_PERIODIC_SECTION, CL_DOCUMENT),\n";
-		$ret .= $this->_gi()."\"sort_by\" => \"objects.jrk\",\n";
+		$ret .= $this->_gi()."\"sort_by\" => \$this->get_folder_document_sort_by(".$o_name."),\n";
 		$ret .= $this->_gi()."\"limit\" => (int)aw_ini_get(\"menuedit.show_lead_in_menu_count\")\n";
 		$this->brace_level--;
 		$ret .= $this->_gi().");\n";

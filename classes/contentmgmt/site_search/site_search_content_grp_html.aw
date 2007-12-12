@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.11 2007/07/10 10:21:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.12 2007/12/12 12:50:52 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -195,6 +195,18 @@ echo "baseurl = ".$this->baseurl." <br>";
 		ob_end_clean();
 	}
 
+	function is_ignored($url)
+	{
+		foreach($this->ignore_pages as $ign_url)
+		{
+			if (strstr($url, trim($ign_url)))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	function bg_run_step($o)
 	{
 		$url = $this->queue->get();
@@ -206,7 +218,7 @@ echo "url = ".htmlentities($url)." <br>";
 		$cont = true;
 		foreach($this->ignore_pages as $ign_url)
 		{
-			if (strstr($url, $ign_url))
+			if (strstr($url, trim($ign_url)))
 			{
 				$cont = false;
 			}
@@ -230,7 +242,7 @@ echo "url = ".htmlentities($url)." <br>";
 		$urls = $page->get_links();
 		foreach($urls as $url)
 		{
-			if (!$this->is_external($url) && !isset($this->pages[$url]) && !$this->queue->contains($url))
+			if (!$this->is_ignored($url) && !$this->is_external($url) && !isset($this->pages[$url]) && !$this->queue->contains($url))
 			{
 				$this->queue->push($url);
 			}

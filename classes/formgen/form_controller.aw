@@ -281,17 +281,21 @@ class form_controller extends form_base
 		dbg::p2("controller id $id: evaling $eq <br />");
 		if (aw_ini_get("site_id") == 139)
 		{
-			eval($eq);
+			@eval($eq);
 		}
 		else
 		{
-			eval($eq);
+			if ($_GET["ffo"] == 1)
+			{
+				echo "eq = $eq <br>";
+			}
+			@eval($eq);
 		}
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br />");
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
-			eval($eq);
+			@eval($eq);
 		}
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
@@ -337,14 +341,14 @@ class form_controller extends form_base
 		}
 		else
 		{
-			eval($eq);
+			@eval($eq);
 		}
 
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br /><br />");
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
-			eval($eq);
+			@eval($eq);
 		}
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
@@ -368,7 +372,7 @@ class form_controller extends form_base
 
 		if ($co['meta']['no_var_replace'] == 1)
 		{
-			return $eq;
+			//return $eq;
 		}
 		// now do element metadata as well
 		if (is_object($el_ref) && method_exists($el_ref, "get_metadata"))

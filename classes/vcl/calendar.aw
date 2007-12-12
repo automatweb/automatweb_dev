@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.98 2007/11/27 12:20:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.99 2007/12/12 12:51:17 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -94,7 +94,7 @@ class vcalendar extends aw_template
 		if ($this->range["viewtype"] == "week")
 		{
 			$better_template = "week_event.tpl";
-		};
+		};//if(aw_global_get("uid") == "kix") arr($tpl);
 		$got_it = false;
 		if ($better_template)
 		{
@@ -611,7 +611,39 @@ class vcalendar extends aw_template
 		}
 		else
 		{
-			$content = "";
+			switch($this->range["viewtype"])
+			{
+				case "month":
+					$awt->start("draw-month");
+					$content = $this->draw_month();
+					$awt->stop("draw-month");
+					$caption = locale::get_lc_month(date("m",$this->range["timestamp"]));
+					$caption .= " ";
+					$caption .= date("Y",$this->range["timestamp"]);
+					break;
+
+				case "week":
+				case "last_events":
+					$content = $this->draw_week();
+					$ms = locale::get_lc_month(date("m",$this->range["start"]));
+					$me = locale::get_lc_month(date("m",$this->range["end"]));
+					$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
+					break;
+
+				case "relative":
+					$content = $this->draw_relative();
+					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
+					break;
+
+				case "year":
+					$content = $this->draw_year();
+					$caption = "";
+					break;
+					
+				default:
+					$content = $this->draw_day($arr);
+					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
+			};
 		}
 		exit_function("draw_calendar_content");
 		//$awt->stop("load-properties");
@@ -911,7 +943,6 @@ class vcalendar extends aw_template
 			"today_date" => date("d.m.Y"),
 			"act_day_tm" => $this->range["timestamp"],
 		));
-
 		$awt->stop("gen-calendar-html");
 
 		$rv = $this->parse();
@@ -1273,6 +1304,7 @@ class vcalendar extends aw_template
 			$this->vars(array(
 				"DCHECK" => $dcheck,
 				"EVENT" => $events_for_day,
+				"monthnum" => date("m",$reals),
 				"daynum" => date("j",$reals),
 				"monthnum" => date("m",$reals),
 				"dayname" => date("F d, Y",$reals),
@@ -1296,6 +1328,12 @@ class vcalendar extends aw_template
 	
 	function draw_day($arr = array())
 	{
+	//	if ($this->overview_func)
+	//	{
+	//		$o_inst = $this->overview_func[0];
+	//		$sub_tpl = $o_inst->obj_inst->prop("sub_event_template");
+	//	}
+	//	$ct_template = !empty($arr["container_template"]) ? $arr["container_template"] : ($sub_tpl ? $sub_tpl : "day_view.tpl");
 		$ct_template = !empty($arr["container_template"]) ? $arr["container_template"] : "day_view.tpl";
 		$this->vars(array(
 			"EVENT" => "",
@@ -1339,6 +1377,7 @@ class vcalendar extends aw_template
 		$this->vars(array(
 			"DCHECK" => $dcheck,
 			"EVENT" => $events_for_day,
+			"monthnum" => date("m",$reals),
 			"daynum" => date("j",$this->range["start"]),
 			"monthnum" => date("m",$reals),
 			"dayname" => date("F d, Y",$this->range["start"]),
@@ -1760,7 +1799,6 @@ class vcalendar extends aw_template
 			$evt["content"] = nl2br($evt["content"]);
 			$this->aliasmgr->parse_oo_aliases($evt["id"], $evt["content"]);
 		}
-		
 		$this->evt_tpl->vars($evt);
 
 		$dt = date("d",$evt["start1"]);
@@ -1801,7 +1839,7 @@ class vcalendar extends aw_template
 			$time = $evt["time"];
 		}
 		
-		if ($evt["hide_times"])
+		if ($evt["hide_times"] || $time == "00:00")
 		{
 			$time = "";
 		};

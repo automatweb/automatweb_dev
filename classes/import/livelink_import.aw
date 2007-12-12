@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.26 2007/11/28 08:03:01 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.27 2007/12/12 12:51:07 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -190,6 +190,10 @@ class livelink_import extends class_base
 	**/
 	function invoke($args = array())
 	{
+if (aw_global_get("uid") == "")
+{
+die("ajutiselt suletud");
+}
 		$this->put_file(array(
 			"file" => "/export/aw/automatweb/new/files/livelink_import_".date("d.m.Y H:i:s").".invoked",
 			"content" => aw_global_get("uid")
@@ -281,7 +285,7 @@ class livelink_import extends class_base
 
                 # parse the structure
                 $xml_parser = xml_parser_create();
-                xml_parser_set_option($xml_parser,XML_OPTION_CASE_FOLDING,0);
+		xml_parser_set_option($xml_parser,XML_OPTION_CASE_FOLDING,0);
                 xml_set_object($xml_parser,&$this);
                 xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
                 $xml_data = join("",file($outf));
@@ -293,8 +297,8 @@ class livelink_import extends class_base
 			$xs = get_instance("xml/xml_parser");
 			$xs->bitch_and_die(&$xml_parser,&$xml_data);
                 };
-
-                foreach($this->docs_to_retrieve as $node_id)
+                
+		foreach($this->docs_to_retrieve as $node_id)
                 {
                         $this->fetch_node($node_id);
                 };
@@ -312,6 +316,7 @@ class livelink_import extends class_base
 			};
 
 			$q = "DELETE FROM livelink_files WHERE id IN ($flist)";
+			echo "delete $q <br>";
 			$this->db_query($q);
 		};
 
@@ -362,7 +367,7 @@ class livelink_import extends class_base
 				$this->db_query($q);
 			}
 			else
-			//if ($modified > $old["modified"])
+			if ($modified > $old["modified"])
 			{
 				# update existing one
 				$this->log_progress("renewing $name");
@@ -371,6 +376,7 @@ class livelink_import extends class_base
 				$this->quote($realname);
 			
 				$q = "SELECT id FROM livelink_files WHERE parent = '$id' AND rootnode = '$rootnode'";
+				echo "q = $q <br>";
 				$this->db_query($q);
 				while($row = $this->db_next())
 				{
@@ -426,7 +432,8 @@ class livelink_import extends class_base
 		{
 			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
 		};
-		$cmdline = "wget --no-check-certificate -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' --no-check-certificate 2>&1";
+		// 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}' 
+		$cmdline = "wget --no-check-certificate -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}' 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' --no-check-certificate 2>&1";
 		$this->log_progress("executing $cmdline");
 		passthru($cmdline,$retval);
 		//var_dump($retval);
@@ -535,7 +542,7 @@ class livelink_import extends class_base
 			}
 			else
 			//if ($modified > $old["modified"])
-			if (($modified > $old["modified"]) || ($parent != $old["parent"]))
+			if (($modified > $old["modified"]) || ($parent != $old["parent"]) || strlen(base64_decode(trim($this->content))) != filesize($this->outdir . "/" . $this->filename))
 			{
 				$this->log_progress("updating file $filename");
 				// wah, wah
@@ -566,7 +573,8 @@ class livelink_import extends class_base
 	{
 		$outfile = $this->outdir . "/" . $this->filename;
 		$this->log_progress("writing $outfile");
-		$fh = @fopen($outfile,"w");
+		error_reporting(E_ALL ^ E_NOTICE);
+		$fh = fopen($outfile,"w");
 		if ($fh)
 		{
 			fwrite($fh,base64_decode(trim($this->content)));

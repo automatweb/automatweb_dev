@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.111 2007/12/05 09:14:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.112 2007/12/12 12:50:50 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1965,6 +1965,7 @@ class object_treeview_v2 extends class_base
 			}
 		}
 
+		$cold["status"] = t("Staatus");
 		// sort
 		$this->__sby = $o->meta("sel_columns_ord");
 		uksort($cold, array(&$this, "__sby"));

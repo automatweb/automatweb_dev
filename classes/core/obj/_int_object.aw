@@ -912,7 +912,14 @@ class _int_object
 		$cv = $GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]);
 		if ($ib && $cv)
 		{
-			return new object($this->obj["brother_of"]);
+			aw_global_set("__from_raise_error", 1);
+			$rv =  new object($this->obj["brother_of"]);
+			aw_global_set("__from_raise_error", 0);
+			if ($GLOBALS["aw_is_error"] == 1)
+			{
+				return $this;
+			}
+			return $rv;
 		}
 		return $this;
 	}
