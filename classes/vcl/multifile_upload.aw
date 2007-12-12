@@ -55,6 +55,11 @@ class multifile_upload extends class_base
 
 	function process_vcl_property($arr)
 	{
+		
+	}
+	
+	function callback_post_save($arr)
+	{
 		$fi = get_instance(CL_FILE);
 		$parent = $arr["obj_inst"]->parent();
 		$oid = $arr["obj_inst"]->id();
