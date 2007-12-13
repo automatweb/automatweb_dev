@@ -94,20 +94,36 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		// after creating a new object, we need to clear storage search cache and html cache
 		// but html cache clear is done in ds_mysql, not here
-		$this->cache->file_clear_pt("storage_search");
+		$this->create_new_object_cache_update(null);
 
 		return $id;
+	}
+
+	function create_new_object_cache_update($oid, $propagate = false)
+	{
+		$this->cache->file_clear_pt("storage_search");
+		if ($propagate)
+		{
+			$this->contained->create_new_object_cache_update($oid);
+		}
 	}
 
 	function create_brother($arr)
 	{
 		$id =  $this->contained->create_brother($arr);
+		$this->create_brother_cache_update(null);
+		return $id;
+	}
 
+	function create_brother_cache_update($oid, $propagate = false)
+	{
 		// after creating a new object, we need to clear storage search cache and html cache
 		// but html cache clear is done in ds_mysql, not here
 		$this->cache->file_clear_pt("storage_search");
-
-		return $id;
+		if ($propagate)
+		{
+			$this->contained->create_brother_object_cache_update($oid);
+		}
 	}
 
 	function save_properties($arr)
@@ -115,11 +131,17 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$ret = $this->contained->save_properties($arr);
 		// fetch brothers and clear cache for all of them
 
+		$this->on_save_properties_cache_update($arr["objdata"]["brother_of"]);
+		return $ret;
+	}
+
+	function save_properties_cache_update($oid, $propagate = false)
+	{
 		list($tarr) = $this->contained->search(array(
-			"brother_of" => $arr["objdata"]["brother_of"],
+			"brother_of" => $oid,
 		));
 
-		$tarr[$arr["objdata"]["oid"]] = 1;
+		$tarr[$oid] = 1;
 		$char = array_keys($tarr);
 		foreach($char as $obj_id)
 		{
@@ -128,8 +150,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		}
 
 		$this->cache->file_clear_pt("storage_search");
-
-		return $ret;
+		if ($propagate)
+		{
+			$this->contained->save_properties_cache_update($oid);
+		}
 	}
 
 	function read_connection($id)
@@ -165,17 +189,24 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function save_connection($data)
 	{
 		$ret =  $this->contained->save_connection($data);
+		$this->save_connection_cache_update($data["id"]);
+		return $ret;
+	}
 
+	function save_connection_cache_update($oid, $propagate = false)
+	{
 		// here we must clear storage search, because it can contain searches by conn and that connection's cache
 		// also html cache, but that gets done one level deeper
-		if ($data["id"])
+		if ($oid)
 		{
-			$this->cache->file_clear_pt_oid_fn("storage_object_data", $data["id"], "connection-".$data["id"]);
+			$this->cache->file_clear_pt_oid_fn("storage_object_data", $data["id"], "connection-".$oid);
 		}
 		
 		$this->cache->file_clear_pt("storage_search");
-
-		return $ret;
+		if ($propagate)
+		{
+			$this->contained->save_connection_cache_update($oid);
+		}
 	}
 
 	////
@@ -183,15 +214,21 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function delete_connection($id)
 	{
 		$ret = $this->contained->delete_connection($id);
-
-		// here we must clear storage search, because it can contain searches by conn and that connection's cache
-		// also html cache, but that gets done one level deeper
-		$this->cache->file_clear_pt_oid_fn("storage_object_data", $id, "connection-".$id);
-		$this->cache->file_clear_pt("storage_search");
-
+		$this->delete_connection_cache_update($id)
 		return $ret;
 	}
 
+	function delete_connection_cache_update($oid, $propagate = false)
+	{
+		// here we must clear storage search, because it can contain searches by conn and that connection's cache
+		// also html cache, but that gets done one level deeper
+		$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
+		$this->cache->file_clear_pt("storage_search");
+		if ($propagate)
+		{
+			$this->contained->delete_connection_cache_update($oid);
+		}
+	}
 	
 	////
 	// !returns all connections that match filter
@@ -230,14 +267,21 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		$ret = $this->contained->delete_object($oid);
 		aw_cache_flush("__aw_acl_cache");
+		$this->delete_object_cache_update($oid);
+		return $ret;
+	}
 
+	function delete_object_cache_update($oid, $propagate = false)
+	{
 		// clear lots of caches here: html, acl for oid, storage_search, storage_objdata for $oid
 		$this->cache->file_clear_pt_oid("acl", $oid);
 		$this->cache->file_clear_pt("storage_search");
 		$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-$oid");
 		$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "properties-$oid");
-		
-		return $ret;
+		if ($propagate)
+		{
+			$this->contained->delete_object_cache_update($oid);
+		}
 	}
 
 	function search($params, $to_fetch = NULL)
@@ -323,9 +367,18 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function originalize($oid)
 	{
 		$rv =  $this->contained->originalize($oid);
+		$this->originalize_cache_update($oid);
+		return $rv;
+	}
+
+	function originalize_cache_update($oid, $propagate = false)
+	{
 		$this->cache->file_clear_pt("storage_search");
 		$this->cache->file_clear_pt("storage_object_data");
-		return $rv;
+		if ($propagate)
+		{
+			$this->contained->originalize_cache_update($oid);
+		}
 	}
 }
 ?>
