@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.184 2007/12/06 11:15:40 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.185 2007/12/13 16:12:19 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -99,6 +99,9 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 
 @property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
 @caption Palga dokument
+
+@property nationality type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_NATIONALITY
+@caption Rahvus
 ------------------------------------------------------------------
 
 @groupinfo cust_rel caption="Kliendisuhe" parent=general
