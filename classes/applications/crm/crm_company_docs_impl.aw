@@ -501,6 +501,29 @@ class crm_company_docs_impl extends class_base
 		));
 	}
 
+	function get_docs_table_header($o,$id)
+	{
+		$path = html::href(array(
+			"url" => $this->mk_my_orb("change", array(
+				"id" => $id,
+				"return_url" => get_ru(),
+				"group" => "documents_all",
+				"docs_s_sbt" => $_GET["docs_s_sbt"],
+				"docs_s_created_after" => $_GET["docs_s_created_after"],
+				"tf" => $o->id(),
+			),
+			 CL_CRM_COMPANY),
+			"caption" => $o->name()?$o->name():"",
+		));
+
+
+		if($this->can("view" , $o->parent()) && $o->parent() != $id)
+		{
+			$path = $this->get_docs_table_header(obj($o->parent()),$id).  " > " .$path;
+		}
+		return $path;
+	}
+
 	function _get_docs_tbl($arr)
 	{
 		/*if (!$arr["request"]["tf"] && !$arr["request"]["files_from_fld"])
@@ -509,10 +532,13 @@ class crm_company_docs_impl extends class_base
 		}*/
 
 		$t =& $arr["prop"]["vcl_inst"];
-		$format = t("%s dokumendid");
-		$format = strlen($arr["request"]["tf"])?$format.t(", kataloog: %s"):$format;
+//		$format = t("%s dokumendid");
+//		$format = strlen($arr["request"]["tf"])?$format.t(", kataloog: %s"):$format;
 		$o = obj($arr["request"]["tf"]);
-		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $o->name()));
+//		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $o->name()));
+		$path = $this->get_docs_table_header($o,$arr['obj_inst']->id());
+	
+		$t->set_caption($path);
 		$this->_init_docs_tbl($t, $arr["request"]);
 		if ($arr["request"]["files_from_fld"] != "")
 		{
@@ -559,8 +585,7 @@ class crm_company_docs_impl extends class_base
 
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);
 
-		if ($arr["request"]["do_doc_search"] || $arr["request"]["docs_s_sbt"] != "")
-		{
+		if (($arr["request"]["do_doc_search"] || $arr["request"]["docs_s_sbt"] != "") && !$arr["request"]["tf"])
 			// get all parents to search from
 			$parent_tree = new object_tree(array(
 				"parent" => $fld->id(),

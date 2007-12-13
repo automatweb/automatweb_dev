@@ -1729,6 +1729,15 @@ class crm_company extends class_base
  					}
  				}
  				return true;
+			case "tax_clearance_certificate_view":
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_TAX_CLEARANCE_FILE",
+				));
+				if(!sizeof($conns))
+				{
+					return PROP_IGNORE;
+				}
+				break;
 			case "stypes_tb":
 			case "stypes_tbl":
 			case "stypes_tree":
