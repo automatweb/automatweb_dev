@@ -870,7 +870,7 @@ class events_manager extends class_base
 		));
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "archive",
-			"img" => "archive.gif",
+			"img" => "archive_small.gif",
 			"url" => aw_url_change_var("archived",($arr["request"]["archived"] == 1 ? -1 : 1)),
 			"tooltip" => $arr["request"]["archived"] == 1 ? t("Uued"):t("Arhiiv"),
 		));
@@ -878,7 +878,7 @@ class events_manager extends class_base
 		//kui uuest vajutada mis juhtub?
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "sort",
-			"img" => "down_r_arr.png",
+			"img" => "check_red.gif",
 			"url" => aw_url_change_var("sort_by_created",($arr["request"]["sort_by_created"] == 1 ? 1 : 1)),
 			"tooltip" => ($arr["request"]["sort_by_created"] == 1 ? t("J&auml;rjesta laekumise j&auml;rgi") : t("J&auml;rjesta laekumise j&auml;rgi")),
 		));
