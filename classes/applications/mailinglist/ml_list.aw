@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.111 2007/12/13 11:03:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.112 2007/12/13 11:18:52 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -889,6 +889,7 @@ class ml_list extends class_base
 				break;
 			
 			case "db_mail_count":
+				return PROP_IGNORE;//see teeb paljudes saitides aeglaseks nimekirja näitamise... kui miski mahakeeramine variant teha, siis võib seda jälle näidata
 				$list_id = $arr["obj_inst"]->id();
 				$time = time()-3*30*3600;
 				$row = $this->db_fetch_row("SELECT count(*) as cnt FROM ml_sent_mails WHERE lid = '$list_id' AND mail_sent = 1 and tm < '$time'");
