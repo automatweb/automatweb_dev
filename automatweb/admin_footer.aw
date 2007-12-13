@@ -227,12 +227,14 @@ if (!empty($html_title_obj))
 
 $cache = get_instance("cache");
 
+classload("core/util/minify_js_and_css");
+
 $sf->vars(array(
 	"content"	=> $content,
 	"charset" => $charset,
 	"title_action" => $ta,
 	"html_title" => $html_title,
-	"COMPRESS" => compress_header($sf->parse("COMPRESS")),
+	"MINIFY_JS_AND_CSS" => minify_js_and_css::parse_admin_header($sf->parse("MINIFY_JS_AND_CSS")),
 	"POPUP_MENUS" => $cache->file_get("aw_toolbars"),
 ));
 $cache->file_set("aw_toolbars", "");
@@ -359,46 +361,4 @@ if ($_SESSION["user_history_count"] > 0)
 		}
 	}
 }
-
-function compress_header($str)
-{
-	$s_out ="";
-	$s_salt = "this_is_a_salty_string_";
-	$f_cache_filename_js = 'aw_admin.js';
-	$f_cache_filename_css = 'aw_admin.css';
-
-	$cache = get_instance('cache');
-	if (strlen($cache->file_get($s_salt.$f_cache_filename_js))==0 && 
-		strlen($cache->file_get($s_salt.$f_cache_filename_css))==0 )
-	{
-		if (preg_match_all ( "/<script.*src=['\"\s](.*)['\"\s]>/imsU", $str, $matches) )
-		{
-			for ($i=0;$i<count($matches[1]);$i++)
-			{
-				$s_js_contents .= core::get_file(array("file"=>$matches[1][$i]));
-			}
-		}
-		
-		if (preg_match_all ( "/<link.*href=['\"\s](.*)['\"\s].*>/imsU", $str, $matches) )
-		{
-			for ($i=0;$i<count($matches[1]);$i++)
-			{
-				$s_css_contents .= core::get_file(array ("file" => $matches[1][$i]));
-			}
-		}
-		
-		$minify = get_instance(CL_MINIFY_JS_AND_CSS);
-		$s_js_contents = $minify->compress_js($s_js_contents);
-		$s_css_contents = $minify->compress_css($s_css_contents);
-		
-		$cache->file_set($s_salt.$f_cache_filename_js, $s_js_contents);
-		$cache->file_set($s_salt.$f_cache_filename_css, $s_css_contents);
-		
-	}
-	$s_out = '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_css&name=aw_admin.css">'."\n";
-	$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_js&name=aw_admin.js" type="text/javascript"></script>';
-	
-	return $s_out;
-}
-
 ?>
