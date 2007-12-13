@@ -246,6 +246,16 @@
             <caption>Palga dokument</caption>
       </property>
       <property>
+            <name>nationality</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_NATIONALITY</reltype>
+            <caption>Rahvus</caption>
+      </property>
+      <property>
             <name>co_is_cust</name>
             <table>kliendibaas_isik</table>
             <group>cust_rel</group>
