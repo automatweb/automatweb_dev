@@ -197,6 +197,46 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>sp_text</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Sisu m&amp;amp;otilde;imalike asenduste tekst</caption>
+      </property>
+      <property>
+            <name>sp_subject</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Teema</caption>
+      </property>
+      <property>
+            <name>sp_from</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kellelt</caption>
+      </property>
+      <property>
+            <name>sp_content</name>
+            <table>objects</table>
+            <group>notify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>2</rows>
+            <caption>Sisu</caption>
+      </property>
+      <property>
             <name>sp_table</name>
             <table>objects</table>
             <group>notify</group>
@@ -285,7 +325,7 @@
             <files>
                   <index>id</index>
                   <master_table>objects</master_table>
-                  <master_index>oid	</master_index>
+                  <master_index>oid</master_index>
             </files>
       </tableinfo>
       <reltypes>

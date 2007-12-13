@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.165 2007/11/28 10:48:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.166 2007/12/13 12:21:54 markop Exp $
 /*
 
 
@@ -82,6 +82,18 @@
 
 	@property sp_tb type=toolbar store=no no_caption=1
 
+	@property sp_text type=text store=no no_caption=1
+	@caption Sisu v&otilde;imalike asenduste tekst
+
+	@property sp_subject type=textbox
+	@caption Teema
+
+	@property sp_from type=textbox
+	@caption Kellelt
+
+	@property sp_content type=textarea cols=40 rows=2
+	@caption Sisu
+
 	@property sp_table type=table store=no
 	@caption Valitud isikud
 
@@ -96,7 +108,6 @@
 
 	@property sp_s_res type=table store=no
 	@caption Otsingu tulemused
-
 
 @groupinfo settings caption=Seadistused
 @groupinfo dates caption=Ajad
@@ -396,7 +407,9 @@ class file extends class_base
 			case "sp_s_res":
 				$this->_sp_s_res($arr);
 				break;
-
+			case "sp_text":
+				$prop["value"] = t("V&otilde;imalikud asendused\n<br>#file# - faili nimi \n<br>#faili url#");
+				break;
 			case "sp_p_name":
 			case "sp_p_co":
 				$prop["value"] = $arr["request"][$prop["name"]];
@@ -1681,7 +1694,7 @@ class file extends class_base
 				"name" => html::obj_change_url($p),
 				"co" => html::obj_change_url($p->prop("work_contact")),
 				"phone" => $p->prop("phone.name"),
-				"email" => $p->prop("email.name"),
+				"email" => $p->prop("email.mail"),
 				"oid" => $p->id()
 			));
 		}
@@ -1821,13 +1834,48 @@ class file extends class_base
 		$ppl = $this->get_people_list($o);
 		foreach($ppl as $oid => $nm)
 		{
+			if(!$o->prop("sp_content"))
+			{
+				$message = sprintf(t("Uuendati faili \"%s\". Palun kliki siia:\n%s\net faili näha!"), $o->name(), html::get_change_url($o->id()));
+			}
+			else
+			{
+				$message = $o->prop("sp_content");
+				$replace_vars = array(
+					"#file#" => $o->name(),
+					"#file_change_url#" => html::get_change_url($o->id()),
+				);
+				foreach($replace_vars as $var => $val)
+				{
+					$message = str_replace($var, $val , $message);
+				}
+			}
+
+			if(!$o->prop("sp_subject"))
+			{
+				$subject = t("Teavitus muutunud dokumendist");
+			}
+			else
+			{
+				$subject = $o->prop("sp_subject");
+			}
+
+			if(!$o->prop("sp_from"))
+			{
+				$from = "From: ".aw_ini_get("baseurl");
+			}
+			else
+			{
+				$from = $o->prop("sp_from");
+			}
+
 			$p = obj($oid);
 			$email = $p->prop("email.mail");
 			send_mail(
 				$email,
-				t("Teavitus muutunud dokumendist"),
-				sprintf(t("Uuendati faili \"%s\". Palun kliki siia:\n%s\net faili näha!"), $o->name(), html::get_change_url($o->id())),
-				"From: ".aw_ini_get("baseurl")
+				$subject,
+				$message,
+				$from
 			);
 		}
 		return $arr["post_ru"];
