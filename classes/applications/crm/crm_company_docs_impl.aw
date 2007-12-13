@@ -516,7 +516,6 @@ class crm_company_docs_impl extends class_base
 			"caption" => $o->name()?$o->name():"",
 		));
 
-
 		if($this->can("view" , $o->parent()) && $o->parent() != $id)
 		{
 			$path = $this->get_docs_table_header(obj($o->parent()),$id).  " > " .$path;
@@ -532,11 +531,17 @@ class crm_company_docs_impl extends class_base
 		}*/
 
 		$t =& $arr["prop"]["vcl_inst"];
-//		$format = t("%s dokumendid");
-//		$format = strlen($arr["request"]["tf"])?$format.t(", kataloog: %s"):$format;
 		$o = obj($arr["request"]["tf"]);
-//		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $o->name()));
-		$path = $this->get_docs_table_header($o,$arr['obj_inst']->id());
+		if(!$arr["request"]["tf"])
+		{
+			$format = t("%s dokumendid");
+			$format = strlen($arr["request"]["tf"])?$format.t(", kataloog: %s"):$format;
+			$path =  sprintf($format, $arr['obj_inst']->name(), $o->name());
+		}
+		else
+		{
+			$path = $this->get_docs_table_header($o,$arr['obj_inst']->id());
+		}
 	
 		$t->set_caption($path);
 		$this->_init_docs_tbl($t, $arr["request"]);
