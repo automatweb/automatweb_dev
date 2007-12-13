@@ -5,7 +5,7 @@
 <title>{VAR:html_title} {VAR:title_action}</title>
 <link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
 
-<!-- SUB: COMPRESS -->
+<!-- SUB: MINIFY_JS_AND_CSS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
@@ -21,7 +21,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/url.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/shortcuts.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
-<!-- END SUB: COMPRESS -->
+<!-- END SUB: MINIFY_JS_AND_CSS -->
 
 <script type="text/javascript">
 shortcut("Ctrl+Shift+A",function() {
