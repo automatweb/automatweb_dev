@@ -6017,6 +6017,7 @@ class class_base extends aw_template
 				{
 
 					$props2 = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
+					$cfgform_i->get_cfg_groups($cfgform);
 				}
 				else
 				{
@@ -6026,6 +6027,7 @@ class class_base extends aw_template
 			}
 
 			$groups = array();
+			$prop_count = array();
 			$sub_groups = array();
 			foreach($props2 as $prop)
 			{
@@ -6044,19 +6046,23 @@ class class_base extends aw_template
 				}
 			}
 
+			foreach($props2 as $prop)
+			{
+//				$cfgform_i->cfg_groups[$prop["group"]]["name"] = $prop["group"];
+				if(!$cfgform_i->cfg_groups[$prop["group"]]["grphide"])
+				{
+					$prop_count[$prop["group"]]++;
+				}
+			}
+
 			foreach($cfgform_i->cfg_groups as $key => $val)
 			{
-				if(!$val["grphide"])
+				if(!$val["grphide"] && $prop_count[$key])
 				{
 					$groups[] = $val;
 				}
 			}
-//			foreach($props2 as $prop)
-//			{
-//				$cfgform_i->cfg_groups[$prop["group"]]["name"] = $prop["group"];
-//
-//				$groups[$prop["group"]] = $cfgform_i->cfg_groups[$prop["group"]];
-//			}
+
 			$_SESSION["menu_from_cb"][$level]["count"] = 0;
 			$_SESSION["menu_from_cb"][$level]["items"] = sizeof($groups);
 			$_SESSION["menu_from_cb"][$level]["crap_items"] = $groups;
