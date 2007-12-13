@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.110 2007/11/23 10:58:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.111 2007/12/13 11:03:03 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -978,6 +978,11 @@ class ml_list extends class_base
 				break;
 			
 			case "bounce":
+				if(is_oid($arr["request"]["msg_id"]) && $this->can("view" , $arr["request"]["msg_id"]))
+				{
+					$message_object = obj($arr["request"]["msg_id"]);
+					$prop["value"] = $message_object->meta("bounce");
+				}
 				if(!$prop["value"])
 				{
 					$prop["value"] = $arr["obj_inst"]->prop("default_bounce");
@@ -1270,6 +1275,15 @@ class ml_list extends class_base
 				$this->do_export = true;
 				$this->export_type = $arr["request"]["export_type"];
 				break;
+
+			case "bounce":
+				if(is_oid($arr["request"]["emb"]["id"]) && $this->can("view" , $arr["request"]["emb"]["id"]))
+				{
+					$mail_object = obj($arr["request"]["emb"]["id"]);
+					$mail_object -> set_meta("bounce" , $prop["value"]);
+				}
+				return PROP_IGNORE;
+
 		}
 		return $retval;
 	}
