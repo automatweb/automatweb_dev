@@ -131,7 +131,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$ret = $this->contained->save_properties($arr);
 		// fetch brothers and clear cache for all of them
 
-		$this->on_save_properties_cache_update($arr["objdata"]["brother_of"]);
+		$this->save_properties_cache_update($arr["objdata"]["brother_of"]);
 		return $ret;
 	}
 
