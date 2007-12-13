@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.44 2007/12/13 11:03:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.45 2007/12/13 11:46:05 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 
@@ -511,17 +511,20 @@ class ml_queue extends aw_template
 			{
 				continue;
 			}
+
+			//bounce ja charseti leidmine, neid if'e on seepärast, et queue listis võib miskeid vanu asju olla, mida enam ei eksisteeri
+
 			$list = obj($lid);
-			$mail_object = obj($mid);
 			$bounce = $list->prop("default_bounce");
-
-			if($mail_object->meta("bounce"))
+			if(is_oid($mid) && $this->can("view" , $mid))
 			{
-				$bounce = $mail_object->meta("bounce");
+				$mail_object = obj($mid);
+				$charset = $mail_object->meta("charset");
+				if($mail_object->meta("bounce"))
+				{
+					$bounce = $mail_object->meta("bounce");
+				}
 			}
-
-			$mo = obj((int)$r["mid"]);
-			$charset = $mo->meta("charset");
 			
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
