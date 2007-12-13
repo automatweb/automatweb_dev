@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.22 2007/12/13 09:39:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.23 2007/12/13 10:01:47 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1098,6 +1098,7 @@ class persons_webview extends class_base
 					"degree" => $this->education_options[$edu->prop("degree")],
 					"field" => $edu->prop("field.name"),
 					"school" => $edu->prop("school"),
+					"speciality" => $edu->prop("speciality")
 				));
 				$education.= $this->parse("EDUCATION_SUB");
 			}
