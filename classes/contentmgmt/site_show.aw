@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.255 2007/12/12 17:08:49 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.256 2007/12/13 15:15:24 hannes Exp $
 
 /*
 
@@ -1609,62 +1609,6 @@ class site_show extends class_base
 		}
 	}
 	
-	// this will compress all js and css in main.tpl when it's between MINIFY_JS_AND_CSS sub
-	function minify_js_and_css()
-	{
-		if ($this->is_template("MINIFY_JS_AND_CSS") )
-		{
-			$str = $this->parse("MINIFY_JS_AND_CSS");
-			$s_out ="";
-			$s_prefix = "this_is_a_salty_string_";
-			
-			// create filenames
-			$s_hash  = md5($this->template_filename);
-			$f_cache_filename_js = $s_hash.".js";
-			$f_cache_filename_css =  $s_hash.".css";
-			
-			$cache = get_instance('cache');
-			
-			if (strlen($cache->file_get($s_prefix.$f_cache_filename_js))==0 && 
-				strlen($cache->file_get($s_prefix.$f_cache_filename_css))==0 )
-			{
-				if (preg_match_all ( "/<script.*src=['\"\s](.*)['\"\s]>/imsU", $str, $matches) )
-				{
-					for ($i=0;$i<count($matches[1]);$i++)
-					{
-						$s_js_contents .= core::get_file(array("file"=>$matches[1][$i]));
-					}
-				}
-				
-				if (preg_match_all ( "/<link.*href=['\"\s](.*)['\"\s].*>/imsU", $str, $matches) )
-				{
-					for ($i=0;$i<count($matches[1]);$i++)
-					{
-						$s_css_contents .= core::get_file(array ("file" => $matches[1][$i]));
-					}
-				}
-				
-				$minify = get_instance(CL_MINIFY_JS_AND_CSS);
-				$s_js_contents = $minify->compress_js($s_js_contents);
-				$s_css_contents = $minify->compress_css($s_css_contents);
-				
-				$cache->file_set($s_prefix.$f_cache_filename_js, $s_js_contents);
-				$cache->file_set($s_prefix.$f_cache_filename_css, $s_css_contents);
-			}
-			
-			if (strlen($cache->file_get($s_prefix.$f_cache_filename_css))>0)
-			{
-				$s_out .= '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_css&name='.$f_cache_filename_css.'">'."\n";
-			}
-			if (strlen($cache->file_get($s_prefix.$f_cache_filename_js))>0)
-			{
-				$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_js&name='.$f_cache_filename_js.'" type="text/javascript"></script>';
-			}
-			
-			$this->vars(array("MINIFY_JS_AND_CSS" => $s_out ));
-		}
-	}
-
 	////
 	// !build "you are here" links from the path
 	function make_yah()
@@ -2900,7 +2844,8 @@ class site_show extends class_base
 
 		$this->make_langs();
 		
-		$this->minify_js_and_css();
+		classload("core/util/minify_js_and_css");
+		minify_js_and_css::parse_site_header(& $this);
 
 		// execute menu drawing code
 		$awt->start("part2");
