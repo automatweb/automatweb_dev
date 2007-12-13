@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.166 2007/12/13 12:21:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.167 2007/12/13 15:43:14 markop Exp $
 /*
 
 
@@ -108,6 +108,7 @@
 
 	@property sp_s_res type=table store=no
 	@caption Otsingu tulemused
+
 
 @groupinfo settings caption=Seadistused
 @groupinfo dates caption=Ajad
@@ -408,9 +409,30 @@ class file extends class_base
 				$this->_sp_s_res($arr);
 				break;
 			case "sp_text":
-				$prop["value"] = t("V&otilde;imalikud asendused\n<br>#file# - faili nimi \n<br>#faili url#");
+				$data["value"] = t("V&otilde;imalikud asendused\n<br>
+					#file# - faili nimi \n<br>
+					#file_url# - link failile \n<br>
+					#user_name# - muutja nimi
+					");
 				break;
-			case "sp_p_name":
+			case "sp_content":
+				if(!$data["value"])
+				{
+					$data["value"] = sprintf(t("User %s has added/changed the following file (%s) Please click the link below to view the document %s"), "#user_name#", "#file#" , "#file_url#");
+				}
+				break;
+			case "sp_subject":
+				if(!$data["value"])
+				{
+					$data["value"] = t("Teavitus muutunud dokumendist");
+				}
+				break;
+			case "sp_from":
+				if(!$data["value"])
+				{
+					$data["value"] = aw_ini_get("baseurl");
+				}
+				break;
 			case "sp_p_co":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				$prop["autocomplete_source"] = $this->mk_my_orb($prop["name"] == "sp_p_co" ? "co_autocomplete_source" : "p_autocomplete_source");
@@ -1156,6 +1178,7 @@ class file extends class_base
 			$tmp = $mimeregistry->type_for_ext($pi["extension"]);
 			if ($tmp != "")
 			{
+exit("1");
 				header("Location: ".aw_ini_get("baseurl").aw_ini_get("image.imgbaseurl")."/".$f2."/".substr($fname, $slash+1));
 				die();
 			}
@@ -1841,9 +1864,17 @@ class file extends class_base
 			else
 			{
 				$message = $o->prop("sp_content");
+				$u = get_instance(CL_USER);
+				$person = $u->get_person_for_uid(aw_global_get("uid"));
+				$user_name = "";
+				if(is_object($person))
+				{
+					$user_name = $person->name();
+				}
 				$replace_vars = array(
 					"#file#" => $o->name(),
-					"#file_change_url#" => html::get_change_url($o->id()),
+					"#file_url#" => html::get_change_url($o->id()),
+					"#user_name#" => $user_name,
 				);
 				foreach($replace_vars as $var => $val)
 				{
@@ -1851,7 +1882,7 @@ class file extends class_base
 				}
 			}
 
-			if(!$o->prop("sp_subject"))
+			if(!$o->prop("sst"))
 			{
 				$subject = t("Teavitus muutunud dokumendist");
 			}
