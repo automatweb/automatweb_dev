@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.26 2007/12/06 14:33:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.27 2007/12/13 12:08:21 kaarel Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -527,8 +527,7 @@ class persona_import extends class_base
 		
 		foreach($person_list->arr() as $person_obj)
 		{
-//			$ext_id = $person_obj->prop("ext_id");
-			$ext_id = $person_obj->prop("ext_id_alphanumeric");
+			$ext_id = $person_obj->prop("ext_id");
 			//$ext_id = $person_obj->subclass();
 			/*
 			var_dump($person_obj->id());
@@ -542,6 +541,22 @@ class persona_import extends class_base
 			{
 				$person_match[$ext_id] = $person_obj->id();
 				$person_match_[$ext_id] = $person_obj->id();
+			};
+			// After updating the import, we save the TOOTAJA_ID into ext_id_alphanumeric.
+			$ext_id = $person_obj->prop("ext_id_alphanumeric");
+			if ($ext_id)
+			{
+				if(is_oid($person_match[$ext_id]) && $person_match[$ext_id] != $person_obj->id())
+				{
+					// If we have multiple objects with the same external ID, we delete 'em. Only need one.
+					print "worker object with external id (TOOTAJA_ID) ".$ext_id." already exists. deleting object with id ".$person_obj->id()."<br>";
+					$person_obj->delete(true);
+				}
+				else
+				{
+					$person_match[$ext_id] = $person_obj->id();
+					$person_match_[$ext_id] = $person_obj->id();
+				}
 			};
 		};
 		
@@ -852,7 +867,7 @@ class persona_import extends class_base
 				$yk->set_class_id(CL_CRM_SECTION);
 				$yk->set_prop("ext_id",$worker["YKSUS_ID"]);
 				$yk->set_subclass($worker["YKSUS_ID"]);
-				$yk->set_name(iconv("UTF-8", "ISO-8859-4",$worker["YKSUS_NIMETUS"]));
+				$yk->set_name(iconv("UTF-8", "ISO-8859-4",$worker["YKSUS"]));
 				$yk->save();
 
 				$ykid = $yk->id();
@@ -1020,16 +1035,18 @@ class persona_import extends class_base
 
 			if(!empty($worker["AMETIKOHT_NIMETUS"]))
 			{
-
 				$ametikoht_nimetus = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKOHT_NIMETUS"]);
+				$asutus =  iconv("UTF-8", "ISO-8859-4", $worker["ASUTUS"]);
+				if(empty($asutus))
+					$asutus = $worker["ASUTUS"];
 				$prevjob_done = false;
 
-				if(!empty($worker["ASUTUS"]))
+				if(!empty($asutus))
 				{
 					$ol = new object_list(array(
 						"class_id" => CL_CRM_COMPANY,
 						"parent" => array($dir_default, $dir_company),
-						"name" => $worker["ASUTUS"],
+						"name" => $asutus,
 					));
 					if($ol->count() > 0)
 					{
@@ -1040,25 +1057,53 @@ class persona_import extends class_base
 					}
 					else
 					{
-						print "creating company object ".$worker["ASUTUS"]."<br>";
+						print "creating company object ".$asutus."<br>";
 						flush();
 						$company_obj = new object;
 						$company_obj->set_class_id(CL_CRM_COMPANY);
 						$company_obj->set_parent($dir_company);
-						$company_obj->set_prop("name", $worker["ASUTUS"]);
+						$company_obj->set_prop("name", $asutus);
 						$company_obj->save();
 					}
+					print "connecting section ".iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"])." to company object ".$asutus."<br>";
+					$company_obj->connect(array(
+						"to" => $sections[$worker["YKSUS_ID"]],
+						"reltype" => "RELTYPE_SECTION",
+					));
 					$company_id = $company_obj->id();
 				}
 
+				unset($profession_id);
 				foreach($person_obj->connections_from(array("type" => 7)) as $conn)
 				{
 					$rank = $conn->to();
-					if($rank->name() == $ametikoht_nimetus)
+//					print $rank->meta("external_id")." == ".$worker["TOOTAJA_ID"]."<br>";
+//					print $rank->name()." == ".$ametikoht_nimetus."<br>";
+					if($rank->meta("external_id") == $worker["TOOTAJA_ID"] && $rank->name() == $ametikoht_nimetus)
 					{
 						$profession_id = $rank->id();
-						break;
 					}
+					else
+					{
+						$conn->delete();
+					}
+				}
+				if(!isset($profession_id))
+				{					
+					print "creating profession object ".$ametikoht_nimetus."<br>";
+					$rank = new object;
+					$rank->set_class_id(CL_CRM_PROFESSION);
+					$rank->set_parent($dir_default);
+					$rank->set_status(STAT_ACTIVE);
+					$rank->set_prop("name", $ametikoht_nimetus);
+					$rank->set_meta("external_id", $worker["TOOTAJA_ID"]);
+					$rank->save();
+					$profession_id = $rank->id();
+					print "connecting profession object<br>";
+					$person_obj->connect(array(
+						"to" => $rank->id(),
+						"type" => 7,
+					));
 				}
 
 				foreach($person_obj->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn)
@@ -1070,7 +1115,7 @@ class persona_import extends class_base
 					foreach($prevjob->connections_from(array("type" => "RELTYPE_ORG")) as $conn_to_org)
 					{
 						$org_obj = $conn_to_org->to();						
-						if($org_obj->name() == $worker["ASUTUS"])
+						if($org_obj->name() == $asutus)
 						{
 							$ok_count++;
 							break;
@@ -1135,12 +1180,19 @@ class persona_import extends class_base
 				foreach($prevjob->connections_from(array("type" => "RELTYPE_SUBSTITUTE")) as $conn)
 				{
 					$substitute_obj = $conn->to();
-					if($substitute_obj->name() == $asendamine_tookoht)
+//					print $substitute_obj->name()." == ".$asendamine_tookoht."<br>";
+//					print $substitute_obj->meta("external_id")." == ".$worker["TOOTAJA_ID"]."<br>";
+					if($substitute_obj->name() == $asendamine_tookoht && $substitute_obj->meta("external_id") == $worker["TOOTAJA_ID"])
 					{
 						print "connected to existing profession object ".$asendamine_tookoht."<br>";
 						flush();
 						$subst_done = true;
 						break;
+					}
+					else
+					{
+						print "DEL<br>";
+						$conn->delete();
 					}
 				}
 
@@ -1154,7 +1206,9 @@ class persona_import extends class_base
 					));
 					foreach($subst_ol->arr() as $subst_obj)
 					{
-						if($subst_obj->name() == $asendamine_tookoht)
+//						print $subst_obj->meta("external_id")." == ".$worker["TOOTAJA_ID"]."<br>";
+//						print $subst_obj->name()." == ".$asendamine_tookoht."<br>";
+						if($subst_obj->meta("external_id") == $worker["TOOTAJA_ID"] && $subst_obj->name() == $asendamine_tookoht)
 						{
 							$substitute_id = $subst_obj->id();
 							break;
@@ -1162,12 +1216,13 @@ class persona_import extends class_base
 					}
 					if(!isset($substitute_id))
 					{
-						print "creating profession object".$asendamine_tookoht."<br>";
+						print "creating profession object ".$asendamine_tookoht."<br>";
 						$subst = new object;
 						$subst->set_class_id(CL_CRM_PROFESSION);
 						$subst->set_parent($dir_default);
 						$subst->set_status(STAT_ACTIVE);
 						$subst->set_prop("name", $asendamine_tookoht);
+						$subst->set_meta("external_id", $worker["TOOTAJA_ID"]);
 						$subst->save();
 						$substitute_id = $subst->id();
 					}
@@ -1180,12 +1235,13 @@ class persona_import extends class_base
 				}
 			}
 
-			if(!empty($worker["AMETIJUHEND_VIIT"]))
+			if(!empty($worker["AMETIKIRJELDUS_VIIT"]))
 			{
+				$ametikirjeldus_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKIRJELDUS_VIIT"]);
 				print "setting 'Viit ametijuhendile' property for work relation object ".$prevjob->name()."<br>";
 //				$ametijuhend_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIJUHEND_VIIT"]);
 //				$prevjob->set_prop("directive_link", $ametijuhend_viit);
-				$prevjob->set_prop("directive_link", $worker["AMETIJUHEND_VIIT"]);
+				$prevjob->set_prop("directive_link", $ametikirjeldus_viit);
 				$prevjob->save();
 			}
 
@@ -1431,8 +1487,24 @@ class persona_import extends class_base
 
 		print "<h1>T&Ouml;&Ouml;SUHTE PEATUMISED done!</h1>";
 
+		$degree = array(
+			"pohiharidus" => "Pohiharidus",
+			"keskharidus" => "Keskharidus",
+			"keskeriharidus" => "Kesk-eriharidus",
+			"diplom" => "Diplom",
+			"bakalaureus" => "Bakalaureus",
+			"magister" => "Magister",
+			"doktor" => "Doktor",
+			"teadustekandidaat" => "Teaduste kandidaat",
+		);
+		$degree = array_flip($degree);
+
 		foreach($data["HARIDUSKAIGUD"] as $hariduskaik)
 		{
+			$hariduskaik["AKADEEMILINE_KRAAD"] = iconv("UTF-8", "ISO-8859-4", $hariduskaik["AKADEEMILINE_KRAAD"]);
+			$oppeasutus = iconv("UTF-8", "ISO-8859-4", $hariduskaik["OPPEASUTUS"]);
+			if(empty($oppeasutus))
+				$oppeasutus = $hariduskaik["OPPEASUTUS"];
 //			arr($hariduskaik);
 			if(empty($hariduskaik["TOOTAJA_ID"]))
 			{
@@ -1455,12 +1527,13 @@ class persona_import extends class_base
 				$education = $edu_conn->to();
 				$end_date = $education->prop("end_date");
 				
-				if($education->prop("name") == $hariduskaik["OPPEASUTUS"] && $education->prop("speciality") == $hariduskaik["ERIALA"] && (empty($end_date) || $education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
+				if($education->prop("name") == $oppeasutus && $education->prop("speciality") == $hariduskaik["ERIALA"] && (empty($end_date) || $education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
 				{
 					print "connected to existing education object ".$education->name()."<br>";					
 					$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
 					$education->set_prop("diploma_nr", $hariduskaik["DIPLOMI_NUMBER"]);
-					$education->set_prop("degree", $hariduskaik["AKADEEMILINE_KRAAD"]);
+					// Põhiharidus might cause some drama. We wanna avoid that.
+					$education->set_prop("degree", $degree[str_replace("õ", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
 					$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
 					if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
 					{
@@ -1477,15 +1550,16 @@ class persona_import extends class_base
 			
 			if(!$edu_done)
 			{
-				print "creating new education object ".$hariduskaik["OPPEASUTUS"]."<br>";
+				print "creating new education object ".$oppeasutus."<br>";
 				$education = new object;
 				$education->set_class_id(CL_CRM_PERSON_EDUCATION);
 				$education->set_parent($dir_default);
-				$education->set_prop("name", $hariduskaik["OPPEASUTUS"]);
+				$education->set_prop("name", $oppeasutus);
 				$education->set_prop("speciality", $hariduskaik["ERIALA"]);
 				$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
 				$education->set_prop("diploma_nr", $hariduskaik["DIPLOMI_NUMBER"]);
-				$education->set_prop("degree", $hariduskaik["AKADEEMILINE_KRAAD"]);
+				// Põhiharidus might cause some drama. We wanna avoid that.
+				$education->set_prop("degree", $degree[str_replace("õ", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
 				$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
 				if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
 				{
@@ -1495,7 +1569,7 @@ class persona_import extends class_base
 				}
 				$education->save();
 
-				print "connecting ".$t->name()." to new education object ".$hariduskaik["OPPEASUTUS"]."<br>";
+				print "connecting ".$t->name()." to new education object ".$oppeasutus."<br>";
 				$t->connect(array(
 					"to" => $education->id(),
 					"reltype" => 23,		//RELTYPE_EDUCATION
