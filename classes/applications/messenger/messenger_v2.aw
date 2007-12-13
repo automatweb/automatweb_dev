@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.36 2007/12/06 14:33:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.37 2007/12/13 10:19:57 robert Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -1842,7 +1842,7 @@ class messenger_v2 extends class_base
 	function do_search($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		$this->_mk_mb_table($t);
+		$this->_mk_mb_table($t, $arr["obj_inst"]);
 		$from = $arr["request"]["s_from"];
 		$subj = $arr["request"]["s_subject"];
 		$this->_connect_server(array(
@@ -1873,7 +1873,6 @@ class messenger_v2 extends class_base
 					"force_reconnect" => true,
 				));
 				$matches = $this->drv_inst->search_folder(join(" ",$str));
-
 				if (is_array($matches))
 				{
 					foreach($matches as $msg_uid)
