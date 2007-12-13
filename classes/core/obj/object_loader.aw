@@ -649,17 +649,21 @@ class _int_object_loader extends core
 		$f = fopen(aw_ini_get("site_basedir")."/files/updlog.txt", "a");
 		foreach($this->cache_handlers as $site_id => $data)
 		{
-			fwrite($f, "call $site_id => ".dbg::dump($data)." from site ".$sl->get_url_for_site($site_id)."\n\n");
+			$url = $sl->get_url_for_site($site_id);
+			fwrite($f, "call $site_id => ".dbg::dump($data)." from site ".$url."\n\n");
 			fflush($f);
-			$this->do_orb_method_call(array(
-				"server" => $sl->get_url_for_site($site_id),
-				"method" => "xmlrpc",
-				"class" => "object_cache_updater",
-				"action" => "handle_remote_update",
-				"params" => array(
-					"data" => $data
-				)
-			));
+			if ($url != "")
+			{
+				$this->do_orb_method_call(array(
+					"server" => $url,
+					"method" => "xmlrpc",
+					"class" => "object_cache_updater",
+					"action" => "handle_remote_update",
+					"params" => array(
+						"data" => $data
+					)
+				));
+			}	
 		}
 		fclose($f);
 	}
