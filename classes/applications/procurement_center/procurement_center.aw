@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.41 2007/11/23 11:05:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.42 2007/12/13 15:46:49 hannes Exp $
 // procurement_center.aw - Hankekeskkond
 /*
 
@@ -3353,10 +3353,12 @@ class procurement_center extends class_base
 		$sf->tpl_init("automatweb");
 		$sf->read_template("index.tpl");
 
+		classload("core/util/minify_js_and_css");
 		$sf->vars(array(
 			"content"	=> $ret,
 			"uid" => aw_global_get("uid"),
-			"charset" => aw_global_get("charset")
+			"charset" => aw_global_get("charset"),
+			"MINIFY_JS_AND_CSS" => minify_js_and_css::parse_admin_header($sf->parse("MINIFY_JS_AND_CSS"))
 		));
 //		die($ret);
 		die($sf->parse());
