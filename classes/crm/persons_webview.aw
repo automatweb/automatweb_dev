@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.21 2007/12/04 14:52:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.22 2007/12/13 09:39:46 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -795,6 +795,7 @@ class persons_webview extends class_base
 		if(is_object($profession_obj))
 		{
 			$profession = $profession_obj->name();
+			$directive_link = $profession_obj->prop("directive_link");
 			if(is_oid($profession_obj->prop("directive")) && $this->can("view", $profession_obj->prop("directive")))
 			{
 				$directive = $profession_obj->prop("directive");
@@ -812,6 +813,11 @@ class persons_webview extends class_base
 			$directive_obj = obj($directive);
 			$directive_obj->prop("name");
 			$profession_with_directive = '<a href ="'.$file_inst->get_url($directive , $directive_obj->prop("name")).'"  target=_new> '. $profession_with_directive.' </a>';
+		}
+		//kirjutab üle kõik juhendi muutujad, kui on viide olemas
+		if($directive_link)
+		{
+			$profession_with_directive = '<a href ="'.$directive_link.'"  target=_new> '. $profession.' </a>';
 		}
 		$this->vars_safe(array(
 			"profession" => $profession,
