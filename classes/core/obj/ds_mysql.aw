@@ -758,6 +758,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->db_query($q);
 		}
 
+		$this->create_new_object_cache_update(null);
+
+		return $oid;
+	}
+
+	function create_new_object_cache_update($oid)
+	{
 		// we need to clear the html cache here, not in ds_cache, because ds_cache can be not loaded
 		// even when html caching is turned on
 		// now. there are two ways of doing this:
@@ -766,8 +773,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// now, previously 1) would have been pretty slow
 		// but now it should no longer be, so we do 1)
 		$this->cache->file_clear_pt("html");
-
-		return $oid;
 	}
 
 	// saves object properties, including all object table fields,
@@ -953,7 +958,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		unset($this->read_properties_data_cache[$objdata["oid"]]);
 		unset($this->read_properties_data_cache[$objdata["brother_of"]]);
+		$this->save_properties_cache_update($objdata["oid"]);
+	}
 
+	function save_properties_cache_update($oid)
+	{
 		$this->cache->file_clear_pt("html");
 	}
 
@@ -1012,15 +1021,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->db_query($q);
 			$data['id'] = $this->db_last_insert_id();
 		}
-
-		$this->cache->file_clear_pt("html");
+		$this->save_connection_cache_update(null);
 
 		return $data['id'];
+	}
+
+	function save_connection_cache_update($oid)
+	{
+		$this->cache->file_clear_pt("html");
 	}
 
 	function delete_connection($id)
 	{
 		$this->db_query("DELETE FROM aliases WHERE id = '$id'");
+		$this->delete_connection_cache_update($id);
+	}
+
+	function delete_connection_cache_update($oid)
+	{
 		$this->cache->file_clear_pt("html");
 	}
 
@@ -1325,6 +1343,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid = '$oid'");
 		//$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
 		//$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
+		$this->delete_object_cache_update($oid);
+	}
+
+	function delete_object_cache_update($oid)
+	{
 		$this->cache->file_clear_pt("html");
 	}
 
@@ -1938,9 +1961,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// hits
 		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
 
-		$this->cache->file_clear_pt("html");
+		$this->create_brother_cache_update(null);
 
 		return $oid;
+	}
+
+	function create_brother_cache_update($oid)
+	{
+		$this->cache->file_clear_pt("html");
 	}
 
 	// $key, $val
@@ -3056,6 +3084,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("UPDATE objects SET brother_of = '$oid' WHERE brother_of = '$brof'");
 		$this->db_query("UPDATE aliases SET source = '$oid' WHERE source = '$brof'");
 		$this->db_query("UPDATE aliases SET target = '$oid' WHERE target = '$brof'");
+		$this->originalize_cache_update($oid);
+	}
+
+	function originalize_cache_update($oid)
+	{
+	
 	}
 
 	/** returns table.field, for the given prop **/

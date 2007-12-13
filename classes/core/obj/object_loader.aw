@@ -627,6 +627,42 @@ class _int_object_loader extends core
 		}
 		return $GLOBALS["relinfo"][$class_id][$type]["value"];
 	}
+
+	function handle_cache_update($oid, $site_id, $type)
+	{
+		if (!$this->registered)
+		{
+			register_shutdown_function(array(&$this, "on_shutdown_update_cache"));
+			$this->cache_handlers = array();
+			$this->registered = 1;
+		}
+		if ($site_id != aw_ini_get("site_id"))
+		{
+			$this->cache_handlers[$site_id][$oid][$type] = $type;
+		}
+	}
+
+	function on_shutdown_update_cache()
+	{
+		// go over all the registered cache updates and if they are for another site, then propagate them to that one
+		$sl = get_instance("install/site_list");
+		$f = fopen(aw_ini_get("site_basedir")."/files/updlog.txt", "a");
+		foreach($this->cache_handlers as $site_id => $data)
+		{
+			fwrite($f, "call $site_id => ".dbg::dump($data)." from site ".$sl->get_url_for_site($site_id)."\n\n");
+			fflush($f);
+			$this->do_orb_method_call(array(
+				"server" => $sl->get_url_for_site($site_id),
+				"method" => "xmlrpc",
+				"class" => "object_cache_updater",
+				"action" => "handle_remote_update",
+				"params" => array(
+					"data" => $data
+				)
+			));
+		}
+		fclose($f);
+	}
 }
 
 $GLOBALS["object_loader"] = new _int_object_loader();

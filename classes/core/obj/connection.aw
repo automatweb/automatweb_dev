@@ -369,6 +369,13 @@ class connection
 			)
 		);
 
+		// need to read both from and to site_ids to know if cache needs to be propagated
+		$from_objdata = $GLOBALS["object_loader"]->ds->get_objdata($this->prop("from"));
+		$GLOBALS["object_loader"]->handle_cache_update($from_objdata["oid"], $from_objdata["site_id"], "delete_connection");
+
+		$to_objdata = $GLOBALS["object_loader"]->ds->get_objdata($this->prop("to"));
+		$GLOBALS["object_loader"]->handle_cache_update($to_objdata["oid"], $to_objdata["site_id"], "delete_connection");
+
 		$GLOBALS["object_loader"]->ds->delete_connection($this->conn["id"]);
 		return $this->conn["id"];
 	}
@@ -656,6 +663,13 @@ class connection
 
 		// load all connection parameters
 		$this->_int_load($this->conn["id"]);
+
+		// need to read both from and to site_ids to know if cache needs to be propagated
+		$from_objdata = $GLOBALS["object_loader"]->ds->get_objdata($this->prop("from"));
+		$GLOBALS["object_loader"]->handle_cache_update($from_objdata["oid"], $from_objdata["site_id"], "save_connection");
+
+		$to_objdata = $GLOBALS["object_loader"]->ds->get_objdata($this->prop("to"));
+		$GLOBALS["object_loader"]->handle_cache_update($to_objdata["oid"], $to_objdata["site_id"], "save_connection");
 
 		if ($new)
 		{

@@ -8,11 +8,13 @@
 				</arguments>
 			</function>
 		</action>
+
 		<action name="new" all_args="1">
 			<function name="orb_new">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>

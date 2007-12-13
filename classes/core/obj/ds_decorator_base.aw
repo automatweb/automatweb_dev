@@ -149,6 +149,62 @@ class _int_obj_ds_decorator
 	{
 		return $this->contained->originalize($oid);
 	}
+
+	function save_properties_cache_update($oid, $propagate = false)
+	{
+		if ($propagate)
+		{
+			return $this->contained->save_properties_cache_update($oid);
+		}
+	}
+
+	function create_new_object_cache_update($oid, $propagate = false)
+	{
+		if ($propagate)
+		{
+			$this->contained->create_new_object_cache_update($oid);
+		}
+	}
+
+	function create_brother_cache_update($oid, $propagate = false)
+	{
+		if ($propagate)
+		{
+			$this->contained->create_brother_object_cache_update($oid);
+		}
+	}
+
+	function save_connection_cache_update($oid, $propagate = false)
+	{
+		if ($propagate)
+		{
+			$this->contained->save_connection_cache_update($oid);
+		}
+	}
+
+	function delete_connection_cache_update($oid, $propagate = false)
+	{
+		if ($propagate)
+		{
+			$this->contained->delete_connection_cache_update($oid);
+		}
+	}
+
+	function delete_object_cache_update($oid, $propagate = false)
+	{
+		if ($propagate)
+		{
+			$this->contained->delete_object_cache_update($oid);
+		}
+	}
+
+	function originalize_cache_update($oid, $propagate = false)
+	{
+		if ($propagate)
+		{
+			$this->contained->originalize_cache_update($oid);
+		}
+	}
 }
 
 ?>

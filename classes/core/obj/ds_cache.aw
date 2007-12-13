@@ -214,7 +214,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function delete_connection($id)
 	{
 		$ret = $this->contained->delete_connection($id);
-		$this->delete_connection_cache_update($id)
+		$this->delete_connection_cache_update($id);
 		return $ret;
 	}
 

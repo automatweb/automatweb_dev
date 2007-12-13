@@ -1522,6 +1522,7 @@ class _int_object
 			return;
 		}
 		$GLOBALS["object_loader"]->ds->originalize($this->obj["oid"]);
+		$GLOBALS["object_loader"]->handle_cache_update($this->id(), $this->site_id(), "originalize");
 	}
 
 	function trans_get_val($prop)
@@ -1908,6 +1909,7 @@ class _int_object
 			{
 				$this->obj["brother_of"] = $this->obj["oid"];
 			}
+			$GLOBALS["object_loader"]->handle_cache_update($this->id(), $this->site_id(), "create_new_object");
 			$_is_new = true;
 		}
 		else
@@ -1935,6 +1937,7 @@ class _int_object
 				"props_modified" => $this->props_modified,
 				"create_new_version" => $this->_create_new_version
 			));
+			$GLOBALS["object_loader"]->handle_cache_update($this->brother_of(), $this->site_id(), "save_properties");
 
 			$this->ot_modified = array("modified" => 1);
 			$this->props_modified = array();
@@ -2292,6 +2295,7 @@ class _int_object
 			{
 				$GLOBALS["object_loader"]->ds->delete_object($oid);
 				$GLOBALS["object_loader"]->cache->_log($type, SA_DELETE, $nm, $oid, false);
+				$GLOBALS["object_loader"]->handle_cache_update($tmpo->id(), $tmpo->site_id(), "delete_object");
 			}
 		}
 
@@ -2318,6 +2322,7 @@ class _int_object
 			"objdata" => $this->obj,
 			"parent" => $parent
 		));
+		$GLOBALS["object_loader"]->handle_cache_update($this->id(), $this->site_id(), "create_brother");
 		// this here makes sure that the site_id setting is correct for the brother
 		$o = obj($rv);
 		$o->set_parent($o->parent());

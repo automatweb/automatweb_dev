@@ -99,6 +99,7 @@
 					<optional name="node_actions" type="array" />
 					<optional name="checkbox_class_filter" type="array" />
 					<optional name="no_root_item" type="bool" />
+					<optional name="item_name_props" type="array" />
 				</arguments>
 			</function>
 		</action>
