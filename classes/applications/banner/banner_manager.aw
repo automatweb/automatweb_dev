@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_manager.aw,v 1.3 2007/12/06 14:32:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_manager.aw,v 1.4 2007/12/13 12:27:21 robert Exp $
 // banner_manager.aw - Bannerite haldus 
 /*
 
@@ -245,44 +245,135 @@ EOT;
 		));
 	}
 
+	function get_cont_locs($cont, &$t, $parent, $arr)
+	{
+		classload("core/icons");
+		// get document under promo and list all connections from that to bannerplaces
+		$ol = new object_list(array("class_id" => CL_DOCUMENT, "parent" => $cont->id()));
+		$doc = $ol->begin();
+		if ($doc)
+		{
+			$c = new connection();
+			$conns = $c->find(array("from" => $doc->id(), "to.class_id" => CL_BANNER_CLIENT));
+			if (count($conns) > 0)
+			{
+				foreach($conns as $con)
+				{
+					$o = obj($con["to"]);
+					$url = html::get_change_url( $arr["obj_id"], array(
+						"group" => $arr["active_group"],
+						"container" => $cont->id(),
+						"tf" => $con["to"]
+					));
+					$t->add_item($parent,array(
+						"id" => $con["to"],
+						"iconurl" => icons::get_icon_url($o->class_id()),
+						"name" => $arr["tf"] == $con["to"] ? "<b>".$con["to.name"]."</b>" : $con["to.name"],
+						"url" => $url
+					));
+				}
+			}
+		}
+	}
+
+	/**
+	@attrib name=mgr_tree_func all_args=1
+	**/
+	function mgr_tree_func($arr)
+	{
+		classload("core/icons");
+		$t = get_instance("vcl/treeview");
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"get_branch_func" => $this->mk_my_orb(array(
+				"inst_id" => $arr["inst_id"],
+				"active_group" => $arr["active_group"],
+				"obj_id" => $arr["obj_id"],
+				"tf" => $arr["tf"],
+				"parent" => "0",
+			))
+		));
+		$o = obj((int)$arr["parent"]);
+		if($o->class_id() == CL_PROMO)
+		{
+			$this->get_cont_locs($o, $t, 0, $arr);
+		}
+		else
+		{
+			$cont_list = new object_list(array(
+				"class_id" => array(CL_PROMO, CL_MENU),
+				"parent" => (int)$arr["parent"]
+			));
+			foreach($cont_list->arr() as $cont)
+			{
+				$url = html::get_change_url( $arr["obj_id"], array(
+					"group" => $arr["active_group"],
+					"container" => $cont->id(),
+					"tf" => $cont->id()
+				));
+				$t->add_item(0, array(
+					"id" => $cont->id(),
+					"iconurl" => icons::get_icon_url($cont->class_id()),
+					"name" => $arr["tf"] == $cont->id() ? "<b>".$cont->name()."</b>" : $cont->name(),
+					"url" => $url,
+				));
+				if($cont->class_id()==CL_PROMO)
+				{
+					$this->get_cont_locs($cont, $t, $cont->id(), $arr);
+				}
+			}
+		}
+		die($t->finalize_tree());
+	}
+
 	function _get_mgr_tree($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		// list all containers in the selected folder 
-		$cont_list = new object_list(array(
-			"class_id" => CL_PROMO,
-			"parent" => $arr["obj_inst"]->prop("container_folder") 
-		));
 		classload("core/icons");
 		$t->set_root_name(t("K&otilde;ik asukohad"));
 		$t->set_root_url(aw_url_change_var(array("tf" => null, "container" => null)));
 		$t->set_root_icon(icons::get_icon_url(CL_MENU));
-	
+		$oid = $arr["obj_inst"]->id();
+		$t->set_branch_func($this->mk_my_orb("mgr_tree_func", array(
+			"active_group" => $arr["request"]["group"],
+			"obj_id" => $oid,
+			"tf" => $arr["request"]["tf"],
+			"parent" => "0",
+		)));
+		// list all containers in the selected folder 
+		$cont_list = new object_list(array(
+			"class_id" => array(CL_PROMO, CL_MENU),
+			"parent" => $arr["obj_inst"]->prop("container_folder") 
+		));
 		foreach($cont_list->arr() as $cont)
 		{
 			$t->add_item(0, array(
 				"id" => $cont->id(),
+				"iconurl" => icons::get_icon_url($cont->class_id()),
 				"name" => $arr["request"]["tf"] == $cont->id() ? "<b>".$cont->name()."</b>" : $cont->name(),
 				"url" => aw_url_change_var(array("tf" => $cont->id(), "container" => $cont->id()))
 			));
-			// get document under promo and list all connections from that to bannerplaces
-			$ol = new object_list(array("class_id" => CL_DOCUMENT, "parent" => $cont->id()));
-			$doc = $ol->begin();
-
-			if ($doc)
+			if($cont->class_id()==CL_PROMO)
 			{
-				$c = new connection();
-				$conns = $c->find(array("from" => $doc->id(), "to.class_id" => CL_BANNER_CLIENT));
-				if (count($conns) > 1)
+				$this->get_cont_locs($cont, &$t, $cont->id(), array(
+					"active_group"  => $arr["request"]["group"],
+					"tf" => $arr["request"]["tf"],
+					"obj_id" => $oid
+				));
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"class_id" => array(CL_PROMO, CL_MENU),
+					"parent" => $cont->id()
+				));
+				foreach($ol->arr() as $o)
 				{
-					foreach($conns as $con)
-					{
-						$t->add_item($cont->id(),array(
-							"id" => $con["to"],
-							"name" => $arr["request"]["tf"] == $con["to"] ? "<b>".$con["to.name"]."</b>" : $con["to.name"],
-							"url" => aw_url_change_var(array("tf" => $con["to"], "container" => $cont->id()))
-						));
-					}
+					$t->add_item($cont->id(), array(
+						"id" => $o->id(),
+						"name" => $arr["request"]["tf"] == $o->id() ? "<b>".$o->name()."</b>" : $cont->name(),
+						"url" => aw_url_change_var(array("tf" => $o->id(), "container" => $o->id()))
+					));
 				}
 			}
 		}
@@ -500,6 +591,7 @@ EOT;
 		}
 
 		$c = new connection();
+		if(count($places))
 		$conns = $c->find(array(
 			"from.class_id" => CL_BANNER,
 			"type" => "RELTYPE_LOCATION",
@@ -573,17 +665,21 @@ EOT;
 
 	function _get_places_for_container($ct_id)
 	{
+		$o = obj($ct_id);
 		$rv = array();
-		$ol = new object_list(array("class_id" => CL_DOCUMENT, "parent" => $ct_id));
-		$doc = $ol->begin();
-
-		if ($doc)
+		if($o->class_id()==CL_PROMO)
 		{
-			$c = new connection();
-			$conns = $c->find(array("from" => $doc->id(), "to.class_id" => CL_BANNER_CLIENT));
-			foreach($conns as $con)
+			$ol = new object_list(array("class_id" => CL_DOCUMENT, "parent" => $ct_id));
+			$doc = $ol->begin();
+	
+			if ($doc)
 			{
-				$rv[] = $con["to"];
+				$c = new connection();
+				$conns = $c->find(array("from" => $doc->id(), "to.class_id" => CL_BANNER_CLIENT));
+				foreach($conns as $con)
+				{
+					$rv[] = $con["to"];
+				}
 			}
 		}
 		return $rv;
