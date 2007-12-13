@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.7 2007/11/19 11:13:38 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.8 2007/12/13 15:16:12 hannes Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 class minify_js_and_css extends class_base
 {
@@ -16,7 +16,7 @@ class minify_js_and_css extends class_base
 		}
 		else
 		{
-			$packed = $this->remove_js_comments($script);
+			$packed = minify_js_and_css::remove_js_comments($script);
 		}
 		
 		return $packed;
@@ -232,6 +232,101 @@ class minify_js_and_css extends class_base
 		$cache = get_instance('cache');
 		echo $cache->file_get($s_salt.$arr["name"]);
 		die();
+	}
+	
+	function parse_admin_header($str)
+	{
+		$s_out ="";
+		$s_salt = "this_is_a_salty_string_";
+		$f_cache_filename_js = 'aw_admin.js';
+		$f_cache_filename_css = 'aw_admin.css';
+	
+		$cache = get_instance('cache');
+		if (strlen($cache->file_get($s_salt.$f_cache_filename_js))==0 && 
+			strlen($cache->file_get($s_salt.$f_cache_filename_css))==0 )
+		{
+			if (preg_match_all ( "/<script.*src=['\"\s](.*)['\"\s]>/imsU", $str, $matches) )
+			{
+				for ($i=0;$i<count($matches[1]);$i++)
+				{
+					$s_js_contents .= core::get_file(array("file"=>$matches[1][$i]));
+				}
+			}
+			
+			if (preg_match_all ( "/<link.*href=['\"\s](.*)['\"\s].*>/imsU", $str, $matches) )
+			{
+				for ($i=0;$i<count($matches[1]);$i++)
+				{
+					$s_css_contents .= core::get_file(array ("file" => $matches[1][$i]));
+				}
+			}
+			
+			$s_js_contents = minify_js_and_css::compress_js($s_js_contents);
+			$s_css_contents = minify_js_and_css::compress_css($s_css_contents);
+			
+			$cache->file_set($s_salt.$f_cache_filename_js, $s_js_contents);
+			$cache->file_set($s_salt.$f_cache_filename_css, $s_css_contents);
+			
+		}
+		$s_out = '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_css&name=aw_admin.css">'."\n";
+		$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_js&name=aw_admin.js" type="text/javascript"></script>';
+		
+		return $s_out;
+	}
+	
+	function parse_site_header($that)
+	{
+		if ($that->is_template("MINIFY_JS_AND_CSS") )
+		{
+			$str = $that->parse("MINIFY_JS_AND_CSS");
+			$s_out ="";
+			$s_prefix = "this_is_a_salty_string_";
+			
+			// create filenames
+			$s_hash  = md5($that->template_filename);
+			$f_cache_filename_js = $s_hash.".js";
+			$f_cache_filename_css =  $s_hash.".css";
+			
+			$cache = get_instance('cache');
+			
+			if (strlen($cache->file_get($s_prefix.$f_cache_filename_js))==0 && 
+				strlen($cache->file_get($s_prefix.$f_cache_filename_css))==0 )
+			{
+				if (preg_match_all ( "/<script.*src=['\"\s](.*)['\"\s]>/imsU", $str, $matches) )
+				{
+					for ($i=0;$i<count($matches[1]);$i++)
+					{
+						$s_js_contents .= core::get_file(array("file"=>$matches[1][$i]));
+					}
+				}
+				
+				if (preg_match_all ( "/<link.*href=['\"\s](.*)['\"\s].*>/imsU", $str, $matches) )
+				{
+					for ($i=0;$i<count($matches[1]);$i++)
+					{
+						$s_css_contents .= core::get_file(array ("file" => $matches[1][$i]));
+					}
+				}
+				
+				$minify = get_instance(CL_MINIFY_JS_AND_CSS);
+				$s_js_contents = $minify->compress_js($s_js_contents);
+				$s_css_contents = $minify->compress_css($s_css_contents);
+				
+				$cache->file_set($s_prefix.$f_cache_filename_js, $s_js_contents);
+				$cache->file_set($s_prefix.$f_cache_filename_css, $s_css_contents);
+			}
+			
+			if (strlen($cache->file_get($s_prefix.$f_cache_filename_css))>0)
+			{
+				$s_out .= '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_css&name='.$f_cache_filename_css.'">'."\n";
+			}
+			if (strlen($cache->file_get($s_prefix.$f_cache_filename_js))>0)
+			{
+				$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_js&name='.$f_cache_filename_js.'" type="text/javascript"></script>';
+			}
+			
+			$that->vars(array("MINIFY_JS_AND_CSS" => $s_out ));
+		}
 	}
 }
 ?>
