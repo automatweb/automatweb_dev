@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.185 2007/12/13 16:12:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.186 2007/12/13 16:22:26 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -798,6 +798,9 @@ caption S&otilde;bragrupid
 @reltype BANK_ACCOUNT value=72 clid=CL_CRM_BANK_ACCOUNT
 @caption arveldusarve
 
+@reltype NATIONALITY value=73 clid=CL_NATIONALITY
+@caption rahvus
+
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
@@ -1081,6 +1084,14 @@ class crm_person extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "nationality":
+				$ol = new object_list(array(
+					"site_id" => array(),
+					"lang_id" => array(),
+					"class_id" => CL_NATIONALITY,
+				));
+				$data["options"] = array("" => " ")  + $ol->names();
+				break;
 			case "org_section":
 				if(!is_array($data["value"]) && is_array(unserialize($data["value"])))
 				{

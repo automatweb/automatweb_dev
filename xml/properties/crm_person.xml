@@ -1991,6 +1991,11 @@
                   <clid>CL_CRM_BANK_ACCOUNT</clid>
                   <caption>arveldusarve</caption>
             </BANK_ACCOUNT>
+            <NATIONALITY>
+                  <value>73</value>
+                  <clid>CL_NATIONALITY</clid>
+                  <caption>rahvus</caption>
+            </NATIONALITY>
       </reltypes>
       <layout>
             <co_bottom_seller>
