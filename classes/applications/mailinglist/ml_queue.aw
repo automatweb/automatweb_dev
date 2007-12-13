@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.43 2007/11/23 10:58:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.44 2007/12/13 11:03:31 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 
@@ -464,6 +464,7 @@ class ml_queue extends aw_template
 	//		flush();
 			$qid = (int)$r["qid"];
 			$lid = (int)$r["lid"];
+			$mid = (int)$r["mid"];
 	//		echo("doing item $qid<br />");
 			flush();//dbg
 			// vaata kas see item on ikka lahti (ntx seda skripti võib kogemata 2 tk korraga joosta)
@@ -511,11 +512,14 @@ class ml_queue extends aw_template
 				continue;
 			}
 			$list = obj($lid);
-			$bounce = $list->prop("bounce");
-			if(!$bounce)
+			$mail_object = obj($mid);
+			$bounce = $list->prop("default_bounce");
+
+			if($mail_object->meta("bounce"))
 			{
-				$bounce = $list->prop("default_bounce");
+				$bounce = $mail_object->meta("bounce");
 			}
+
 			$mo = obj((int)$r["mid"]);
 			$charset = $mo->meta("charset");
 			
@@ -791,7 +795,7 @@ class ml_queue extends aw_template
 		};
 		echo t("sending mail to: ").$msg["target"]." ....";
 		flush();
-		$this->awm->headers["Bcc"] = $msg["bounce"];
+		if(strlen($msg["bounce"]) > 3) $this->awm->bounce = $msg["bounce"];
 		$this->awm->set_header("Content-Type","text/plain; charset=\"".$msg["charset"]."\"");
 		
 		//see on viimane kaitseliin, et topelt kuhugi maile minna ei saaks
