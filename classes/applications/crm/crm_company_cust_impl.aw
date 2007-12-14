@@ -720,12 +720,12 @@ class crm_company_cust_impl extends class_base
 		for($i = ord('A'); $i < ord("Z"); $i++)
 		{
 			$c->add_item(array(
-				"text" => chr($i).($arr["request"]["filt_p"] == chr($i) ? t(" (Valitud)") : "" ),
+				"text" => chr($i).($arr["request"]["filt_p"] == chr($i) ? " ".t("(Valitud)") : "" ),
 				"link" => aw_url_change_var("filt_p", chr($i))
 			));
 		}
 
-		$tb->add_cdata(t(" Vali filter: ").$c->get_menu().(!empty($arr["request"]["filt_p"]) ? t(" Valitud: ").$arr["request"]["filt_p"] : "" ));
+		$tb->add_cdata(" ".t("Vali filter:")." ".$c->get_menu().(!empty($arr["request"]["filt_p"]) ? t(" Valitud: ").$arr["request"]["filt_p"] : "" ));
 	}
 
 	function _get_my_customers_listing_tree($arr)
