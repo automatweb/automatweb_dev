@@ -270,6 +270,10 @@ class mrp_resource extends class_base
 		{
 			return array(MRP_STATUS_RESOURCE_OUTOFSERVICE, 0);
 		}
+		if ($resource->prop("state") == MRP_STATUS_RESOURCE_INACTIVE)
+		{
+			return array(MRP_STATUS_RESOURCE_INACTIVE, 0);
+		}
 		$max_jobs = max(1, count($resource->prop("thread_data")));
 		$cur_jobs = $this->db_fetch_field("
 			SELECT
