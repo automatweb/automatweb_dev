@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.99 2007/12/12 12:51:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.100 2007/12/14 15:27:10 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1392,6 +1392,10 @@ class vcalendar extends aw_template
 	function draw_relative()
 	{
 		$this->read_template("relative_view.tpl");
+		$this->vars(array(
+			"last_text" => t("Viimased"),
+			"next_text" => t("J&auml;rgmised")
+		));
 		$ok = false;
 		//$events = $this->past;
 

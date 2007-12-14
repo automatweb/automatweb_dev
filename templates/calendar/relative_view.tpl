@@ -1,5 +1,5 @@
 <div class="aw04kalenderkast01">
-<b>Viimased {VAR:PAST_LIMIT}</b>
+<b>{VAR:last_text} {VAR:PAST_LIMIT}</b>
 </div>
 <!-- SUB: PAST -->
 <div class="aw04kalenderkast03">
@@ -9,7 +9,7 @@
 </div>
 <!-- END SUB: PAST -->
 <div class="aw04kalenderkast01">
-<b>Järgmised {VAR:FUTURE_LIMIT}</b>
+<b>{VAR:next_text} {VAR:FUTURE_LIMIT}</b>
 </div>
 <!-- SUB: FUTURE -->
 <div class="aw04kalenderkast03">
