@@ -360,8 +360,6 @@ class class_base extends aw_template
 		}
 
 		$use_form = isset($args["form"]) ? $args["form"] : "";
-
-
 		$this->use_form = $use_form;
 
 		if (method_exists($this->inst,"callback_on_load"))
@@ -627,9 +625,10 @@ class class_base extends aw_template
 				{
 					$tmp[$key] = $val;
 				};
-			};
+			}
+
 			$cli->set_layout($tmp);
-		};
+		}
 
 		// cb_parts is again used by fixed_toolbar mode
 		if (!empty($args["cb_part"]))
@@ -637,7 +636,7 @@ class class_base extends aw_template
 			// tabs and YAH are in the upper frame, so we don't show them below
 			$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
 			$this->set_classinfo(array("name" => "no_yah","value" => 1));
-		};
+		}
 
 
 		// parse the properties - resolve generated properties and
@@ -1321,7 +1320,7 @@ class class_base extends aw_template
 			};
 		};
 
-		//häkk vahele, et võtaks seadete vormi kasutajagrupist
+		// 2. seadete vorm kasutajagrupist, seostatud cfgform
 		if (($action == "change"))
 		{
 			$gl = aw_global_get("gidlist_pri_oid");
@@ -1346,7 +1345,7 @@ class class_base extends aw_template
 		};
 
 
-		// 2. failing that, if there is a config form specified in the object metainfo,
+		// 3. failing that, if there is a config form specified in the object metainfo,
 		//  we will use it
 		if (($action == "change") && $args["obj_inst"]->meta("cfgform_id") != "")
 		{
@@ -1357,7 +1356,7 @@ class class_base extends aw_template
 			};
 		};
 
-		// 3. failing that too, we will check whether this class has a default cfgform
+		// 4. failing that too, we will check whether this class has a default cfgform
 		// and if so, use it
 		if ($this->clid == CL_DOCUMENT)
 		{
@@ -4699,6 +4698,7 @@ class class_base extends aw_template
 		return $rv;
 	}
 
+	// returns array of configured properties in $group
 	// needs either clid or clfile
 	function get_property_group($arr, $args = array())
 	{
@@ -4766,9 +4766,7 @@ class class_base extends aw_template
 		// only the properties that should be saved should be returned. or not?
 
 		$this->features["has_rte"] = false;
-
 		$cfg_props = $all_properties;
-
 		$tmp = array();
 
 		if ($this->can("view", $cls_id))
@@ -5103,15 +5101,14 @@ class class_base extends aw_template
 			if ($propdata["type"] == "checkbox" && empty($val["default"]))
 			{
 				unset($propdata["default"]);
-			};
-
+			}
 
 			$propgroups = $property_groups[$key];
 
 			if (!is_array($propgroups))
 			{
 				continue;
-			};
+			}
 
 			// skip anything that is not in the active group
 			if (empty($this->cb_no_groups) && !in_array($use_group,$propgroups))
@@ -5124,7 +5121,7 @@ class class_base extends aw_template
 				{
 					continue;
 				}
-			};
+			}
 
 			if (!empty($propdata["richtext"]) && 0 == $this->classinfo["allow_rte"])
 			{
