@@ -6,7 +6,7 @@ class task_object extends _int_object
 	{
 		parent::_int_object();
 	}
-
+ 
 	function name()
 	{
 		if ($this->_no_display)
