@@ -1,6 +1,7 @@
 <?php
 
 //maintainer=markop
+//miski muutus...
 class task_object extends _int_object
 {
 	function task_object()
