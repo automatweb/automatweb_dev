@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.88 2007/08/28 09:02:01 voldemar Exp $
+// $Id: cfgutils.aw,v 1.89 2007/12/14 15:05:22 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -133,6 +133,7 @@ class cfgutils extends aw_template
 	// load_trans - whater to load translated props or not
 	function load_class_properties($args = array())
 	{
+//echo "lcp = ".dbg::dump($args); 
 		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
 		enter_function("load_class_properties");
 		extract($args);
@@ -450,7 +451,7 @@ class cfgutils extends aw_template
 			{
 				foreach($layout as $k => $dat)
 				{
-					$tmp = "Kujundusosa ".htmlentities($dat["area_caption"])." (".$k.") pealkiri";
+					$tmp = "Kujundusosa ".$dat["area_caption"]." (".$k.") pealkiri";
 					$tmp = t2($tmp);
 					if($tmp !== NULL)
 					{
@@ -631,6 +632,7 @@ class cfgutils extends aw_template
 	**/
 	function load_properties($args = array())
 	{
+//echo dbg::dump($args);
 		$clid = $args["clid"];
 		$file = isset($args["file"]) ? $args["file"] : null;
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
@@ -663,7 +665,7 @@ class cfgutils extends aw_template
 			$cache_d = aw_unserialize($res);
 		}
 
-		if (is_array($cache_d))
+		if (false && is_array($cache_d))
 		{
 			foreach($cache_d as $k => $v)
 			{
