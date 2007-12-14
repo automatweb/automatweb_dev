@@ -135,7 +135,7 @@ function hilight_event(el,tgt)
 		<tr>
 			<!-- SUB: TODAY -->
 		  <td>&nbsp;</td>
-		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:today_url}" class="style1">Täna</a></td>
+		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:today_url}" class="style1">{VAR:text}</a></td>
 		  
 		  <!-- END SUB: TODAY -->
 

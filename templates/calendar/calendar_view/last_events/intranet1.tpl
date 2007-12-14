@@ -82,7 +82,7 @@ function mini_navigate()
 </script>
 </form></small></div>
 <div class="minical_table">
-<a href="{VAR:today_url}">Täna: {VAR:today_date}</a> <br>
+<a href="{VAR:today_url}">T&auml;na: {VAR:today_date}</a> <br>
 			<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {DATE:act_day_tm|d.m.Y}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
 </div>
 <table width="100%" cellpadding="0" cellspacing="0">
