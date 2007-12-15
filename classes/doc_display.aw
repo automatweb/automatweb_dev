@@ -137,7 +137,7 @@ class doc_display extends aw_template
                         $title = aw_global_get("set_doc_title");
                         aw_global_set("set_doc_title","");
                 }
-	
+		
 		$uinst = get_instance(CL_USER);
 		$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
 		$this->vars($al->get_vars());
@@ -160,6 +160,8 @@ class doc_display extends aw_template
 			"print_date_est" => locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
 			"modified" => date("d.m.Y", $doc->modified()),
 			"created_tm" => $doc->created(),
+			"created_hr" => "<?php classload(\"document\"); echo document::get_date_human_readable(".$doc->created()."); ?>",
+			"created_human_readable" => "<?php classload(\"document\"); echo document::get_date_human_readable(".$doc->created()."); ?>",
 			"created" => date("d.m.Y", $doc->modified()),
 			"modifiedby" => $modf,
 			"modifiedby_email" => $modf_eml,
