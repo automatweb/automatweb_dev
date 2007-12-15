@@ -1272,10 +1272,7 @@ class htmlclient extends aw_template
 						// set no_caption, if layout has no caption, otherwise the output
 						// will contain a property with an empty caption, which will look
 						// ugly in htmlclient at least
-						if (empty($this->proplist[$pkey]["caption"]))
-						{
-							$this->proplist[$pkey]["no_caption"] = 1;
-						};
+						$this->proplist[$pkey]["no_caption"] = 1; // assumed here that layouts never have the type of captions properties do
 						unset($this->proplist[$pkey]["__ignore"]);
 						unset($sub_layouts[$gx]);
 					}
