@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/deliciousimport.aw,v 1.2 2007/12/16 22:21:07 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/deliciousimport.aw,v 1.3 2007/12/16 22:22:19 hannes Exp $
 // deliciousimport.aw - del.icio.us import 
 /*
 
-@classinfo syslog_type=ST_DELICIOUSIMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_DELICIOUSIMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=hannes
 
 @default table=objects
 @default group=general
