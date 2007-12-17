@@ -160,8 +160,8 @@ class doc_display extends aw_template
 			"print_date_est" => locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
 			"modified" => date("d.m.Y", $doc->modified()),
 			"created_tm" => $doc->created(),
-			"created_hr" => "<?php classload(\"document\"); echo document::get_date_human_readable(".$doc->created()."); ?>",
-			"created_human_readable" => "<?php classload(\"document\"); echo document::get_date_human_readable(".$doc->created()."); ?>",
+			"created_hr" => "<?php classload(\"doc_display\"); echo doc_display::get_date_human_readable(".$doc->created()."); ?>",
+			"created_human_readable" => "<?php classload(\"doc_display\"); echo doc_display::get_date_human_readable(".$doc->created()."); ?>",
 			"created" => date("d.m.Y", $doc->modified()),
 			"modifiedby" => $modf,
 			"modifiedby_email" => $modf_eml,
@@ -666,5 +666,75 @@ class doc_display extends aw_template
                 }
 
 		return $doc_link;
+	}
+	
+	// todo 2 viimast if'i
+	function get_date_human_readable($i_timestamp_created)
+	{
+		$a_months = array(
+			1=>t("jaanuar"),
+			2=>t("veebruar"),
+			3=>t("märts"),
+			4=>t("aprill"),
+			5=>t("mai"),
+			6=>t("juuni"),
+			7=>t("juuli"),
+			8=>t("august"),
+			9=>t("september"),
+			10=>t("oktoober"),
+			11=>t("november"),
+			12=>t("detsember")
+		);
+	
+		$i_time_from_created_to_current_time = time() - $i_timestamp_created;
+		
+		if ($i_time_from_created_to_current_time < 60)
+		{
+			return t("Just postitatud");
+		}
+		else if ($i_time_from_created_to_current_time < 60*60)
+		{
+			$i_minutes = floor($i_time_from_created_to_current_time / 60);
+			if ($i_minutes == 1)
+			{
+				return t(sprintf("%s minut tagasi",$i_minutes));
+			}
+			else
+			{
+				return t(sprintf("%s minutit tagasi",$i_minutes));
+			}
+		}
+		else if ($i_time_from_created_to_current_time < 60*60*24)
+		{
+			$i_hours = floor($i_time_from_created_to_current_time / 60 / 60);
+			if ($i_hours == 1)
+			{
+				return t(sprintf("%s tund tagasi",$i_hours));
+			}
+			else
+			{
+				return t(sprintf("%s tundi tagasi",$i_hours));
+			}
+		}
+		else if ($i_time_from_created_to_current_time < 60*60*24*31)
+		{
+			$i_days = floor($i_time_from_created_to_current_time / 60 / 60 / 24);
+			if ($i_days == 1)
+			{
+				return t(sprintf("%s p&auml;ev tagasi",$i_days));
+			}
+			else
+			{
+				return t(sprintf("%s p&auml;eva tagasi",$i_days));
+			}
+		}
+		else if (date("Y", $i_timestamp_created) == date("Y", time() ))
+		{
+			return date("j", $i_timestamp_created).". ".$a_months[date("n", $i_timestamp_created)];
+		}
+		else 
+		{
+			return date("j", $i_timestamp_created).". ".$a_months[date("n", $i_timestamp_created)]." ".date("Y", $i_timestamp_created);
+		}
 	}
 }
