@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.89 2007/12/14 15:05:22 kristo Exp $
+// $Id: cfgutils.aw,v 1.90 2007/12/17 07:55:36 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -665,7 +665,7 @@ class cfgutils extends aw_template
 			$cache_d = aw_unserialize($res);
 		}
 
-		if (false && is_array($cache_d))
+		if (is_array($cache_d))
 		{
 			foreach($cache_d as $k => $v)
 			{
