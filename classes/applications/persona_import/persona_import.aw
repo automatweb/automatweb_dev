@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.27 2007/12/13 12:08:21 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.28 2007/12/17 14:18:28 kaarel Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -1238,11 +1238,16 @@ class persona_import extends class_base
 			if(!empty($worker["AMETIKIRJELDUS_VIIT"]))
 			{
 				$ametikirjeldus_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKIRJELDUS_VIIT"]);
+				/*
 				print "setting 'Viit ametijuhendile' property for work relation object ".$prevjob->name()."<br>";
 //				$ametijuhend_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIJUHEND_VIIT"]);
 //				$prevjob->set_prop("directive_link", $ametijuhend_viit);
 				$prevjob->set_prop("directive_link", $ametikirjeldus_viit);
 				$prevjob->save();
+				*/
+				print "setting 'Viit ametijuhendile' property for crm_profession object ".$ametikoht_nimetus."<br>";
+				$rank->set_prop("directive_link", $ametikirjeldus_viit);
+				$rank->save();
 			}
 
 			// let us keep track of all existing workers, so I can properly assign vacations and contract_stops
@@ -1453,7 +1458,6 @@ class persona_import extends class_base
 				print "from $a to $b<br>";
 			}
 
-			/* There is currently no ASENDAJA_ID field in the xml
 			if(!empty($peatumine["ASENDAJA_ID"]))
 			{
 				print "Setting substitute...<br>";
@@ -1471,9 +1475,10 @@ class persona_import extends class_base
 						"to" => $persons[$peatumine["ASENDAJA_ID"]],
 						"reltype" => 2,		//RELTYPE_SUBSTITUTE
 					));
+					print "Connected.<br>";
 				}
 			}
-			*/
+			/**/
 
 			// alright, so far, so good .. I have person object, now I need to create
 			// vacation object. and somehow I need to determine whether this person
