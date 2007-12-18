@@ -222,10 +222,6 @@ msgstr ""
 msgid "Seose Admin grupp (RELTYPE_ADM_GRP) tekst"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:150
-msgid ""
-msgstr ""
-
 #: classes/applications/recycle_bin/recycle_bin.aw:156
 msgid "Nimi"
 msgstr ""

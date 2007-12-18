@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1243,14 +1243,7 @@ msgid "Kasutajagrupp ameti jaoks määramata."
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_manager.aw:513
-msgid "Kõik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <i>property_name_caption</i>.  <br />
-					Ostja, müüja ning maaklerite andmed kujul  <i>buyer_*</i>, <i>seller_*</i>, <i>agent_*</i> ja <i>agent2_*</i> (name, phone, email, picture_url, rank).  <br />
-					Pildid kujul <i>picture</i><b>n</b><i>_url</i> ning <i>picture</i><b>n</b><i>_city24_id</i> (n on 1 .. piltide arv). <br />
-					Piltide arv: picture_count<br />
-					Lisaks: <br />
-					link_return_url -  tagasilink, kui on määratud <br />
-					link_open - objekti veebis avamise url <br />
-					class_name - kasutajale arusaadav klassi nimi <br />"
+msgid "Kõik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <i>property_name_caption</i>.  <br />					Ostja, müüja ning maaklerite andmed kujul  <i>buyer_*</i>, <i>seller_*</i>, <i>agent_*</i> ja <i>agent2_*</i> (name, phone, email, picture_url, rank).  <br />					Pildid kujul <i>picture</i><b>n</b><i>_url</i> ning <i>picture</i><b>n</b><i>_city24_id</i> (n on 1 .. piltide arv). <br />					Piltide arv: picture_count<br />					Lisaks: <br />					link_return_url -  tagasilink, kui on määratud <br />					link_open - objekti veebis avamise url <br />					class_name - kasutajale arusaadav klassi nimi <br />"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_manager.aw:670
@@ -1487,10 +1480,6 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_manager.aw:2310
 msgid "Arhiveeritud"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_manager.aw:2319
-msgid ""
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_manager.aw:2409

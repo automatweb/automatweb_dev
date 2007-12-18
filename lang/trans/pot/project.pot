@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1548,10 +1548,6 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:3896
 msgid "E-post"
-msgstr ""
-
-#: classes/applications/groupware/project.aw:4048 classes/applications/groupware/project.aw:4190
-msgid ""
 msgstr ""
 
 #: classes/applications/groupware/project.aw:4185

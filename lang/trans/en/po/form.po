@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -13,27 +13,27 @@ msgstr ""
 msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s"
 msgstr ""
 
-#: classes/formgen/form.aw:3055
+#: classes/formgen/form.aw:3054
 msgid "No table selected for showing search results for form %s!"
 msgstr "No table selected for showing search results for form %s!"
 
-#: classes/formgen/form.aw:3404
+#: classes/formgen/form.aw:3403
 msgid "form->search(%s): no forms selected as search targets!"
 msgstr "form->search(%s): no forms selected as search targets!"
 
-#: classes/formgen/form.aw:3592
+#: classes/formgen/form.aw:3591
 msgid "No forms selected as search targets!"
 msgstr "No forms selected as search targets!"
 
-#: classes/formgen/form.aw:3798
+#: classes/formgen/form.aw:3797
 msgid "No table selected for showing data!"
 msgstr "No table selected for showing data!"
 
-#: classes/formgen/form.aw:3846
+#: classes/formgen/form.aw:3845
 msgid "Tulemuste kuvamise tabelis pole yhtegi elementi!"
 msgstr "No elements in result table!"
 
-#: classes/formgen/form.aw:4753
+#: classes/formgen/form.aw:4752
 msgid "form->metainfo(): weird error!"
 msgstr "form->metainfo(): weird error!"
 

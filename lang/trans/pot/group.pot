@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -511,14 +511,7 @@ msgid "Kasutaja"
 msgstr ""
 
 #: classes/core/users/group.aw:254
-msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />
-					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
-					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
-					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">siin</a> <br />
-					n&auml;ide: <br />
-					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
-					<br />
-					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />"
+msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">siin</a> <br />					n&auml;ide: <br />					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />					<br />					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />"
 msgstr ""
 
 #: classes/core/users/group.aw:310

@@ -634,10 +634,6 @@ msgstr "Name"
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/groupware/task.aw:803 classes/applications/groupware/task.aw:916
-msgid ""
-msgstr ""
-
 #: classes/applications/groupware/task.aw:804
 msgid "Memo"
 msgstr "Memo"

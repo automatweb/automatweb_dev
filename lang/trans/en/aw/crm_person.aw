@@ -119,6 +119,7 @@ $GLOBALS["TRANS"]["mees"] = "man";
 $GLOBALS["TRANS"]["naine"] = "woman";
 $GLOBALS["TRANS"]["Muuda"] = "Change";
 $GLOBALS["TRANS"]["Telefoninumber"] = "Phone";
+$GLOBALS["TRANS"]["Avalik"] = "Public";
 $GLOBALS["TRANS"]["Faksi number"] = "Fax";
 $GLOBALS["TRANS"]["Veebiaadress"] = "WWW";
 $GLOBALS["TRANS"]["Emaili aadress"] = "E-mail";

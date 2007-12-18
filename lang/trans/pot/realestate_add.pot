@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -152,10 +152,6 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_add.aw:rel_RELTYPE_MANEGER
 msgid "Seose Saatja (RELTYPE_MANEGER) tekst"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_add.aw:102
-msgid ""
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_add.aw:103 classes/applications/realestate_management/realestate_add.aw:1748

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,96 +9,360 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_company_stats_impl.aw:13 classes/applications/crm/crm_company_stats_impl.aw:105 classes/applications/crm/crm_company_stats_impl.aw:120
+#: classes/applications/crm/crm_company_stats_impl.aw:15
+#: classes/applications/crm/crm_company_stats_impl.aw:118
+#: classes/applications/crm/crm_company_stats_impl.aw:133
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:14
+#: classes/applications/crm/crm_company_stats_impl.aw:16
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:22 classes/applications/crm/crm_company_stats_impl.aw:32
+#: classes/applications/crm/crm_company_stats_impl.aw:24
+#: classes/applications/crm/crm_company_stats_impl.aw:34
+#: classes/applications/crm/crm_company_stats_impl.aw:1606
+#: classes/applications/crm/crm_company_stats_impl.aw:1614
+#: classes/applications/crm/crm_company_stats_impl.aw:2258
+#: classes/applications/crm/crm_company_stats_impl.aw:2266
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:23
+#: classes/applications/crm/crm_company_stats_impl.aw:25
+#: classes/applications/crm/crm_company_stats_impl.aw:1301
+#: classes/applications/crm/crm_company_stats_impl.aw:1884
 msgid "Tehtud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:24
+#: classes/applications/crm/crm_company_stats_impl.aw:26
+#: classes/applications/crm/crm_company_stats_impl.aw:1301
 msgid "Tegemata"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:32
+#: classes/applications/crm/crm_company_stats_impl.aw:34
+#: classes/applications/crm/crm_company_stats_impl.aw:1149
+msgid "Arve puudub"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:34
 msgid "Arve tehtud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:39
+#: classes/applications/crm/crm_company_stats_impl.aw:48
+#: classes/applications/crm/crm_company_stats_impl.aw:2454
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:49
+#: classes/applications/crm/crm_company_stats_impl.aw:58
 msgid "Kliendid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:50
+#: classes/applications/crm/crm_company_stats_impl.aw:59
 msgid "Projektid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:51
-msgid "Isikud"
+#: classes/applications/crm/crm_company_stats_impl.aw:60
+msgid "T&ouml;&ouml;tajad"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:52
+#: classes/applications/crm/crm_company_stats_impl.aw:61
 msgid "Toimetused"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:63 classes/applications/crm/crm_company_stats_impl.aw:72 classes/applications/crm/crm_company_stats_impl.aw:87
+#: classes/applications/crm/crm_company_stats_impl.aw:62
+msgid "Kliendid - detailvaade"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:63
+msgid "T&ouml;&ouml;tajad - detailvaade"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:64
+msgid "Read"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:65
+msgid "Arendus&uuml;lesanded"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:76
+#: classes/applications/crm/crm_company_stats_impl.aw:85
+#: classes/applications/crm/crm_company_stats_impl.aw:100
+#: classes/applications/crm/crm_company_stats_impl.aw:313
+#: classes/applications/crm/crm_company_stats_impl.aw:910
+#: classes/applications/crm/crm_company_stats_impl.aw:1672
+#: classes/applications/crm/crm_company_stats_impl.aw:2497
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:78 classes/applications/crm/crm_company_stats_impl.aw:93
+#: classes/applications/crm/crm_company_stats_impl.aw:91
+#: classes/applications/crm/crm_company_stats_impl.aw:106
+#: classes/applications/crm/crm_company_stats_impl.aw:318
+#: classes/applications/crm/crm_company_stats_impl.aw:921
+#: classes/applications/crm/crm_company_stats_impl.aw:2503
 msgid "Projekt"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:99
+#: classes/applications/crm/crm_company_stats_impl.aw:112
+#: classes/applications/crm/crm_company_stats_impl.aw:932
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:111
+#: classes/applications/crm/crm_company_stats_impl.aw:124
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:127
+#: classes/applications/crm/crm_company_stats_impl.aw:140
 msgid "<a href='javascript:void(0)' alt='Prognoositud tunde' title='Prognoositud tunde'>PT</a>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:133
+#: classes/applications/crm/crm_company_stats_impl.aw:146
 msgid "<a href='javascript:void(0)' alt='Tegelikult tunde' title='Tegelikult tunde'>TT</a>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:139
+#: classes/applications/crm/crm_company_stats_impl.aw:152
 msgid "<a href='javascript:void(0)' alt='Tunde Kliendile' title='Tunde Kliendile'>KT</a>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:145
+#: classes/applications/crm/crm_company_stats_impl.aw:158
 msgid "Vahe (+)"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:151
+#: classes/applications/crm/crm_company_stats_impl.aw:164
 msgid "Vahe (-)"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:157 classes/applications/crm/crm_company_stats_impl.aw:237
+#: classes/applications/crm/crm_company_stats_impl.aw:170
+#: classes/applications/crm/crm_company_stats_impl.aw:271
+#: classes/applications/crm/crm_company_stats_impl.aw:343
+#: classes/applications/crm/crm_company_stats_impl.aw:970
+#: classes/applications/crm/crm_company_stats_impl.aw:1696
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:165
+#: classes/applications/crm/crm_company_stats_impl.aw:178
 msgid "<a href='javascript:void(0)' alt='Maksega hilinenud p&auml;evade arv' title='Maksega hilinenud p&auml;evade arv'>MHPA</a>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_stats_impl.aw:174
+#: classes/applications/crm/crm_company_stats_impl.aw:187
 msgid "Muud kulud"
 msgstr ""
 
+#: classes/applications/crm/crm_company_stats_impl.aw:299
+msgid "Arendus&uuml;lesanne"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:304
+#: classes/applications/crm/crm_company_stats_impl.aw:899
+#: classes/applications/crm/crm_company_stats_impl.aw:1660
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:323
+#: classes/applications/crm/crm_company_stats_impl.aw:941
+msgid "Teostaja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:328
+#: classes/applications/crm/crm_company_stats_impl.aw:954
+msgid "Kestvus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:333
+msgid "Tunde kliendile"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:333
+msgid "TK"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:338
+#: classes/applications/crm/crm_company_stats_impl.aw:964
+#: classes/applications/crm/crm_company_stats_impl.aw:1684
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:419
+#: classes/applications/crm/crm_company_stats_impl.aw:1338
+msgid "Summa:"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:947
+msgid "Rea sisu"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:959
+msgid "Kestvus kliendile"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:976
+msgid "Arve nr."
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:982
+msgid "Arve staatus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:988
+msgid "<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Vali</a>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1027
+msgid "Loo arve"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1034
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1133
+msgid "Arve nr %s"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1141
+msgid "Arvele"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1621
+#: classes/applications/crm/crm_company_stats_impl.aw:2278
+msgid "Ajavahemikul"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1622
+#: classes/applications/crm/crm_company_stats_impl.aw:2279
+msgid "T&ouml;&ouml;tunde kokku"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1623
+#: classes/applications/crm/crm_company_stats_impl.aw:2280
+msgid "Arvele l&auml;inud t&ouml;&ouml;tunde"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1624
+#: classes/applications/crm/crm_company_stats_impl.aw:2281
+msgid "Tehtud t&ouml;id summas"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1625
+#: classes/applications/crm/crm_company_stats_impl.aw:2282
+msgid "Esitatud arveid summas"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1626
+#: classes/applications/crm/crm_company_stats_impl.aw:2283
+msgid "Tasutud arveid summas"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1635
+#: classes/applications/crm/crm_company_stats_impl.aw:1705
+#: classes/applications/crm/crm_company_stats_impl.aw:1928
+msgid "<b>Valitud perioodis ei ole &uuml;htegi s&uuml;ndmust!</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1666
+msgid "Nimetus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1678
+msgid "Osalejad"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1690
+msgid "Tunde"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1734
+msgid "Valitud filtriga s&uuml;ndmusi pole!"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1775
+msgid "<b>Valitud perioodis ei ole &uuml;htegi s&uuml;ndmust!</b><br><br><br>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1821
+msgid "<b>Tegevused</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1884
+msgid "T&ouml;&ouml;s"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1918
+#: classes/applications/crm/crm_company_stats_impl.aw:2018
+#: classes/applications/crm/crm_company_stats_impl.aw:2191
+#: classes/applications/crm/crm_company_stats_impl.aw:2244
+msgid "<b>Summa:</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:1948
+msgid "<b>Projektid</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2035
+msgid "<span style='font-size: 0px;'>y</span><b>Arved</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2225
+#: classes/applications/crm/crm_company_stats_impl.aw:2242
+msgid "<span style='font-size: 0px;'>y</span><b>Arendus&uuml;lesanded</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2281
+#: classes/applications/crm/crm_company_stats_impl.aw:2282
+#: classes/applications/crm/crm_company_stats_impl.aw:2283
+msgid "sh kulud"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2281
+#: classes/applications/crm/crm_company_stats_impl.aw:2282
+#: classes/applications/crm/crm_company_stats_impl.aw:2283
+msgid "neto"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2455
+msgid "T&auml;na"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2456
+msgid "Eile"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2457
+msgid "Jooksev n&auml;dal"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2458
+msgid "Jooksev kuu"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2459
+msgid "Eelmine kuu"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2470
+msgid "Salvesta aruanne"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2481
+msgid "Kustuta aruandeid"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2482
+msgid "Olete kindel et soovite valitud aruanded kustutada?"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2491
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2509
+msgid "T&ouml;&ouml;taja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2515
+msgid "Vaata"
+msgstr ""
+
+#: classes/applications/crm/crm_company_stats_impl.aw:2529
+msgid "%s salvestatud aruanded"
+msgstr ""

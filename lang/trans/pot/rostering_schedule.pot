@@ -319,11 +319,11 @@ msgid "Eelmine"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:551
-msgid "Täna"
+msgid "T&auml;na"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:555
-msgid "Järgmine"
+msgid "J&auml;rgmine"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:559

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -5013,8 +5013,8 @@ msgstr ""
 msgid "syslog.type.ST_EVENT_SEARCH"
 msgstr ""
 
-#: aw.ini:syslogtypes_1369
-msgid "syslog.type.ST_DEATHCOUNTER"
+#: aw.ini:syslogtypes_1364
+msgid "syslog.type.ST_WEATHER_REPORT"
 msgstr ""
 
 #: aw.ini:syslogactions_1

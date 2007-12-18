@@ -574,10 +574,6 @@ msgstr ""
 msgid "Tee t&uuml;&uuml;pkomponendiks"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1125 classes/crm/crm_offer.aw:1266
-msgid ""
-msgstr ""
-
 #: classes/crm/crm_offer.aw:1126
 msgid "Memo"
 msgstr ""

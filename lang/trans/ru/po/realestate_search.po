@@ -626,10 +626,6 @@ msgstr ""
 msgid "Omanik"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2037
-msgid ""
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_search.aw:2044
 msgid "<a href='javascript:selall(\\"realestatemgr-is_visible\\")'>N?&shy;tav</a>"
 msgstr ""

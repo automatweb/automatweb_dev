@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -493,7 +493,7 @@ msgid "Vaikimisi sorteeritakse"
 msgstr "Default sort-by"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:339
-#: classes/contentmgmt/site_search/site_search_content.aw:2177
+#: classes/contentmgmt/site_search/site_search_content.aw:2207
 msgid "Pealkiri"
 msgstr "Title"
 
@@ -509,40 +509,40 @@ msgstr "By date (newest first)"
 msgid "Kuupäeva järgi (vanem enne)"
 msgstr "By date (oldest first)"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2157
-#: classes/contentmgmt/site_search/site_search_content.aw:2163
+#: classes/contentmgmt/site_search/site_search_content.aw:2187
+#: classes/contentmgmt/site_search/site_search_content.aw:2193
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2169
+#: classes/contentmgmt/site_search/site_search_content.aw:2199
 msgid "Mitu korda sisaldab"
 msgstr "How many in results"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2184
+#: classes/contentmgmt/site_search/site_search_content.aw:2214
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2194
+#: classes/contentmgmt/site_search/site_search_content.aw:2224
 msgid "Sisu"
 msgstr "Content"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2345
+#: classes/contentmgmt/site_search/site_search_content.aw:2375
 msgid "t&auml;psuse"
 msgstr "by accuracy"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2346
+#: classes/contentmgmt/site_search/site_search_content.aw:2376
 msgid "kuup&auml;eva alusel"
 msgstr "by date"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2347
+#: classes/contentmgmt/site_search/site_search_content.aw:2377
 msgid "pealkirja alusel"
 msgstr "by title"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2643
+#: classes/contentmgmt/site_search/site_search_content.aw:2673
 msgid "Lihtne otsing"
 msgstr "Simple search"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2648
+#: classes/contentmgmt/site_search/site_search_content.aw:2678
 msgid "Detailotsing"
 msgstr "Advanced search"
 

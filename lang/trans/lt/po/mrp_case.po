@@ -778,10 +778,6 @@ msgstr ""
 msgid "Katkesta projekt?"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1116
-msgid "Projekt on töös. Olete kindel, et soovite määrata projekti staatuseks \'valmis\' ?"
-msgstr ""
-
 #: classes/mrp/mrp_case.aw:1137
 msgid "Arhiveeri"
 msgstr ""

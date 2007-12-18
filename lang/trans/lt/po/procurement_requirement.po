@@ -294,10 +294,6 @@ msgstr ""
 msgid "X"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:296
-msgid ""
-msgstr ""
-
 #: classes/applications/procurement_center/procurement_requirement.aw:324
 msgid "<b>Keskmine:</b>"
 msgstr ""

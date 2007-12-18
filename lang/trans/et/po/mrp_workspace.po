@@ -2101,11 +2101,11 @@ msgid "Eelmine"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2815
-msgid "Täna"
+msgid "T&auml;na"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2819
-msgid "Järgmine"
+msgid "J&auml;rgmine"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2823

@@ -1478,10 +1478,6 @@ msgstr ""
 msgid "Sinu staatus"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1377 classes/applications/commune/commune.aw:1384 classes/applications/commune/commune.aw:1391 classes/applications/commune/commune.aw:1398
-msgid ""
-msgstr ""
-
 #: classes/applications/commune/commune.aw:1408
 msgid "lisa sõbraks"
 msgstr ""

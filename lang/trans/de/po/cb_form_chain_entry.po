@@ -62,7 +62,3 @@ msgstr ""
 msgid "Seose andmed (RELTYPE_ENTRY) tekst"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:144 classes/applications/cb_form_chain/cb_form_chain_entry.aw:151
-msgid ""
-msgstr ""
-

@@ -1,4 +1,8 @@
 <?php
+$GLOBALS["TRANS"]["%s s&uuml;nnip&auml;ev!"] = "%s birthday!";
+$GLOBALS["TRANS"]["Teema"] = "Subject";
+$GLOBALS["TRANS"]["Kellele"] = "To";
+$GLOBALS["TRANS"]["&nbsp;"] = "&nbsp;";
 $GLOBALS["TRANS"]["Toimumisaeg"] = "Time";
 $GLOBALS["TRANS"]["Klient"] = "Customer";
 $GLOBALS["TRANS"]["Projekt"] = "Project";

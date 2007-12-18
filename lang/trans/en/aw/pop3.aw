@@ -1,5 +1,5 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Server (server) caption"] = "\"Serve";
+$GLOBALS["TRANS"]["Omaduse Server (server) caption"] = "Server";
 $GLOBALS["TRANS"]["Omaduse Kasutaja (user) caption"] = "Username";
 $GLOBALS["TRANS"]["Omaduse Parool (password) caption"] = "Password";
 $GLOBALS["TRANS"]["pop3: error connecting, %s , %s"] = "pop3: error connecting, %s , %s";

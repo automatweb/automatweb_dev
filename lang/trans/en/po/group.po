@@ -290,30 +290,9 @@ msgstr "Regular"
 msgid "D&uuml;naamiline"
 msgstr "Dynamic"
 
-#: classes/core/users/group.aw:176
-msgid "
-					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
-					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
-					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
-					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href="http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html">siin</a> <br />
-					n&auml;ide: <br />
-					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
-					<br />
-					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
-				"
-msgstr ""
-"User import file format is following:<br>"
-"Username,password,name,e-mail,active from, active until<br>"
-"fields are separated by commas, each user is on a separate line<br>"
-"date format description is <a href="http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html">here</a><br>"
-"example:<br>"
-"kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />"
-"<br>"
-"the fields name,e-mail,active from,active until can be omitted<br>"
-
 #: classes/core/users/group.aw:214
 msgid "Impordin kasutajaid ... <br />"
-msgstr "Importing users...<br>""
+msgstr "Importing users...<br>"
 
 #: classes/core/users/group.aw:372
 msgid "Muuda"

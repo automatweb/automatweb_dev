@@ -1,10 +1,8 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Kataloog, kuhu pannakse objektid (folder) caption"] = "Folder to place objects to";
 $GLOBALS["TRANS"]["Omaduse Imporditava objekti t&uuml;&uuml;p (object_type) caption"] = "Importable object type";
-$GLOBALS["TRANS"]["Omaduse Unikaalne omadus  (unique_id) caption"] = "Unique property";
 $GLOBALS["TRANS"]["Omaduse Tulp, mille j&auml;rgi jagatakse kataloogidesse (folder_field) caption"] = "Column by which objects are separated to folders";
 $GLOBALS["TRANS"]["Omaduse Objektid samsse kataloogi, kus imporditavad (folder_is_parent) caption"] = "Object folder is parent object";
-$GLOBALS["TRANS"]["Omaduse Andmeallikas (ds) caption"] = "Datasource";
 $GLOBALS["TRANS"]["Omaduse Teosta import (do_import) caption"] = "Do import";
 $GLOBALS["TRANS"]["Omaduse Impordi staatus (import_status) caption"] = "Import status";
 $GLOBALS["TRANS"]["Omaduse J&auml;rgmine automaatne import (auto_import_status) caption"] = "Next automatic import";
@@ -55,5 +53,4 @@ $GLOBALS["TRANS"]["VIGA: leitud kustutamisele minevate objektide hulk %s on suur
 $GLOBALS["TRANS"]["delete object %s <br>\n"] = "delete object %s <br />\n";
 $GLOBALS["TRANS"]["delete done. <br>\n"] = "delete done. <br />\n";
 $GLOBALS["TRANS"]["Edukalt kustutatud %s objekti!"] = "Successfully deleted %s objects!";
-$GLOBALS["TRANS"]["Importi alustati "] = "Import started";
 ?>

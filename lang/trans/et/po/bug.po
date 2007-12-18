@@ -422,18 +422,6 @@ msgid "Added comment to bug %s"
 msgstr ""
 
 # classes/applications/bug_o_matic_3000/bug.aw:group_general
-msgid "Omaduse Jälgijad (monitors) caption"
-msgstr "j�lg"
-
-# classes/applications/bug_o_matic_3000/bug.aw:group_general
-msgid "Omaduse Jälgijad (monitors) caption"
-msgstr "j�lg"
-
-# classes/applications/bug_o_matic_3000/bug.aw:group_general
-msgid "Omaduse Tüüp (bug_type) caption"
-msgstr "tere"
-
-# classes/applications/bug_o_matic_3000/bug.aw:group_general
 msgid "Omaduse Kommentaar (comment) caption"
 msgstr ""
 

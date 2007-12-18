@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 # classes/crm/crm_meeting.aw:class_224_help
 #: classes/crm/crm_meeting.aw:class_224_help
@@ -249,6 +248,18 @@ msgstr "Kliki sündmus isiklikuks"
 msgid "Omaduse Isiklik (is_personal) help"
 msgstr "Isiklikke sündmusi ei näidata teistele kasutajatele, isegi sündmuse pealkirja mitte."
 
+#: classes/crm/crm_meeting.aw:prop_is_work
+msgid "Omaduse T&ouml;&ouml;aeg (is_work) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_work_comment
+msgid "Omaduse T&ouml;&ouml;aeg (is_work) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_work_help
+msgid "Omaduse T&ouml;&ouml;aeg (is_work) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_whole_day
 msgid "Omaduse Kestab terve p&auml;eva (whole_day) caption"
 msgstr ""
@@ -481,6 +492,42 @@ msgstr ""
 # classes/crm/crm_meeting.aw:prop_udefta3_help
 #: classes/crm/crm_meeting.aw:prop_udefta3_help
 msgid "Omaduse User-defined textarea 3 (udefta3) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile1
+msgid "Omaduse Failiupload 1 (userfile1) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile1_comment
+msgid "Omaduse Failiupload 1 (userfile1) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile1_help
+msgid "Omaduse Failiupload 1 (userfile1) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile2
+msgid "Omaduse Failiupload 2 (userfile2) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile2_comment
+msgid "Omaduse Failiupload 2 (userfile2) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile2_help
+msgid "Omaduse Failiupload 2 (userfile2) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile3
+msgid "Omaduse Failiupload 3 (userfile3) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile3_comment
+msgid "Omaduse Failiupload 3 (userfile3) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile3_help
+msgid "Omaduse Failiupload 3 (userfile3) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_send_bill
@@ -798,6 +845,18 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_aliasmgr
+msgid "Omaduse Aliastehaldur (aliasmgr) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_aliasmgr_comment
+msgid "Omaduse Aliastehaldur (aliasmgr) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_aliasmgr_help
+msgid "Omaduse Aliastehaldur (aliasmgr) help"
+msgstr ""
+
 # classes/crm/crm_meeting.aw:group_recurrence
 #: classes/crm/crm_meeting.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
@@ -911,6 +970,18 @@ msgstr ""
 msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_FILE1
+msgid "Seose fail1 (RELTYPE_FILE1) tekst"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_FILE2
+msgid "Seose fail2 (RELTYPE_FILE2) tekst"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_FILE3
+msgid "Seose fail3 (RELTYPE_FILE3) tekst"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:layout_top_bit
 msgid "Kujundusosa P&otilde;hiandmed (top_bit) pealkiri"
 msgstr ""
@@ -931,71 +1002,74 @@ msgstr ""
 msgid "Kujundusosa Kokkuv&otilde;te (center_bit_bottom) pealkiri"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:339
+#: classes/crm/crm_meeting.aw:364
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:340 classes/crm/crm_meeting.aw:1469
+#: classes/crm/crm_meeting.aw:365 classes/crm/crm_meeting.aw:1494
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:341
+#: classes/crm/crm_meeting.aw:366
 msgid "Terve p&auml;ev"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:342
+#: classes/crm/crm_meeting.aw:367
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:343 classes/crm/crm_meeting.aw:1476
+#: classes/crm/crm_meeting.aw:368 classes/crm/crm_meeting.aw:1501
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:570
+#: classes/crm/crm_meeting.aw:369
+msgid "T&ouml;&ouml;aeg"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:604
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:581
+#: classes/crm/crm_meeting.aw:615
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:583
+#: classes/crm/crm_meeting.aw:617
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:591
+#: classes/crm/crm_meeting.aw:625
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:600
+#: classes/crm/crm_meeting.aw:634
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1164
+#: classes/crm/crm_meeting.aw:1189
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1169
+#: classes/crm/crm_meeting.aw:1194
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1174
+#: classes/crm/crm_meeting.aw:1199
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1179
+#: classes/crm/crm_meeting.aw:1204
 msgid "Tunnihind"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1184
+#: classes/crm/crm_meeting.aw:1209
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1218
+#: classes/crm/crm_meeting.aw:1243
 msgid "Loo uus arve"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1341
+#: classes/crm/crm_meeting.aw:1366
 msgid "Nimi, osaleja ja projekt peavad olema täidetud!"
 msgstr ""
-

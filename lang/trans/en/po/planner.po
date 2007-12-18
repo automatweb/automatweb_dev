@@ -415,7 +415,7 @@ msgstr "Events"
 # classes/applications/calendar/planner.aw:group_vacancies
 msgid "Grupi Vabad ajad (vacancies) pealkiri"
 msgstr "Vacancies"
-msgstr "Vacancies
+msgstr "Vacancies"
 
 # classes/applications/calendar/planner.aw:group_create_events
 msgid "Grupi S&uuml;ndmuste lisamine (create_events) pealkiri"

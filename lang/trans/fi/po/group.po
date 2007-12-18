@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/core/users/group.aw:class_37_help
 msgid "Klassi Kasutajagrupp help"
@@ -120,18 +119,6 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_grp_frontpage_help
 msgid "Omaduse Esileht (grp_frontpage) help"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_can_admin_interface
-msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) caption"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_can_admin_interface_comment
-msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) kommentaar"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_can_admin_interface_help
-msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) help"
 msgstr ""
 
 #: classes/core/users/group.aw:prop_require_change_pass
@@ -278,6 +265,162 @@ msgstr ""
 msgid "Omaduse Pilt/foto (picture) help"
 msgstr ""
 
+#: classes/core/users/group.aw:prop_can_admin_interface
+msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_admin_interface_comment
+msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_admin_interface_help
+msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_if_acls_set
+msgid "Omaduse Liidese &otilde;igused on piiratud (if_acls_set) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_if_acls_set_comment
+msgid "Omaduse Liidese &otilde;igused on piiratud (if_acls_set) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_if_acls_set_help
+msgid "Omaduse Liidese &otilde;igused on piiratud (if_acls_set) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_quick_add
+msgid "Omaduse Kas saab kasutada kiirlisamist (can_quick_add) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_quick_add_comment
+msgid "Omaduse Kas saab kasutada kiirlisamist (can_quick_add) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_quick_add_help
+msgid "Omaduse Kas saab kasutada kiirlisamist (can_quick_add) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_bm
+msgid "Omaduse Kas saab kasutada j&auml;rjehoidjat (can_bm) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_bm_comment
+msgid "Omaduse Kas saab kasutada j&auml;rjehoidjat (can_bm) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_bm_help
+msgid "Omaduse Kas saab kasutada j&auml;rjehoidjat (can_bm) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_history
+msgid "Omaduse Kas saab kasutada ajalugu (can_history) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_history_comment
+msgid "Omaduse Kas saab kasutada ajalugu (can_history) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_history_help
+msgid "Omaduse Kas saab kasutada ajalugu (can_history) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_search
+msgid "Omaduse Kas saab kasutada otsingut (can_search) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_search_comment
+msgid "Omaduse Kas saab kasutada otsingut (can_search) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_search_help
+msgid "Omaduse Kas saab kasutada otsingut (can_search) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_default_yah_ct
+msgid "Omaduse Vaikimisi asukohariba (default_yah_ct) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_default_yah_ct_comment
+msgid "Omaduse Vaikimisi asukohariba (default_yah_ct) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_default_yah_ct_help
+msgid "Omaduse Vaikimisi asukohariba (default_yah_ct) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_person
+msgid "Omaduse Kuva isikut (disp_person) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_person_comment
+msgid "Omaduse Kuva isikut (disp_person) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_person_help
+msgid "Omaduse Kuva isikut (disp_person) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_co_edit
+msgid "Omaduse Kuva organisatsiooni muutmisvaadet (disp_co_edit) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_co_edit_comment
+msgid "Omaduse Kuva organisatsiooni muutmisvaadet (disp_co_edit) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_co_edit_help
+msgid "Omaduse Kuva organisatsiooni muutmisvaadet (disp_co_edit) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_co_view
+msgid "Omaduse Kuva organisatsiooni vaatamisvaadet (disp_co_view) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_co_view_comment
+msgid "Omaduse Kuva organisatsiooni vaatamisvaadet (disp_co_view) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_co_view_help
+msgid "Omaduse Kuva organisatsiooni vaatamisvaadet (disp_co_view) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_object_type
+msgid "Omaduse Kuva objektit&uuml;&uuml;pi (disp_object_type) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_object_type_comment
+msgid "Omaduse Kuva objektit&uuml;&uuml;pi (disp_object_type) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_object_type_help
+msgid "Omaduse Kuva objektit&uuml;&uuml;pi (disp_object_type) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_object_link
+msgid "Omaduse Kuva objekti muutmislinki (disp_object_link) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_object_link_comment
+msgid "Omaduse Kuva objekti muutmislinki (disp_object_link) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_disp_object_link_help
+msgid "Omaduse Kuva objekti muutmislinki (disp_object_link) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_editable_settings
+msgid "Omaduse Vali muudetavad seaded (editable_settings) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_editable_settings_comment
+msgid "Omaduse Vali muudetavad seaded (editable_settings) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_editable_settings_help
+msgid "Omaduse Vali muudetavad seaded (editable_settings) help"
+msgstr ""
+
 #: classes/core/users/group.aw:group_dyn_search
 msgid "Grupi Otsing (dyn_search) pealkiri"
 msgstr ""
@@ -318,6 +461,14 @@ msgstr ""
 msgid "Grupi Pilt (img) help"
 msgstr ""
 
+#: classes/core/users/group.aw:group_if_acl
+msgid "Grupi Liidese &otilde;igused (if_acl) pealkiri"
+msgstr ""
+
+#: classes/core/users/group.aw:group_if_acl_help
+msgid "Grupi Liidese &otilde;igused (if_acl) help"
+msgstr ""
+
 #: classes/core/users/group.aw:rel_RELTYPE_SEARCHFORM
 msgid "Seose Otsinguvorm (RELTYPE_SEARCHFORM) tekst"
 msgstr ""
@@ -338,76 +489,74 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:155
+#: classes/core/users/group.aw:rel_RELTYPE_CFG_FORM
+msgid "Seose Seadete vorm (RELTYPE_CFG_FORM) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:200
 msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/group.aw:198
+#: classes/core/users/group.aw:243
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/group.aw:199
+#: classes/core/users/group.aw:244
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/group.aw:208
-msgid "
-					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
-					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
-					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
-					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">siin</a> <br />
-					n&auml;ide: <br />
-					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
-					<br />
-					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
-				"
+#: classes/core/users/group.aw:245
+msgid "Kasutaja"
 msgstr ""
 
-#: classes/core/users/group.aw:255
+#: classes/core/users/group.aw:254
+msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />\t\t\t\t\tkasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />\t\t\t\t\tv&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />\t\t\t\t\tkuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">siin</a> <br />\t\t\t\t\tn&auml;ide: <br />\t\t\t\t\tkix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />\t\t\t\t\t<br />\t\t\t\t\tv&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />"
+msgstr ""
+
+#: classes/core/users/group.aw:310
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:409
+#: classes/core/users/group.aw:468
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:438
+#: classes/core/users/group.aw:497
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:447
+#: classes/core/users/group.aw:506
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:456
+#: classes/core/users/group.aw:515
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:465
+#: classes/core/users/group.aw:524
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:485
+#: classes/core/users/group.aw:544
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:548
+#: classes/core/users/group.aw:607
 msgid "--vali--"
 msgstr ""
 
-#: classes/core/users/group.aw:569
+#: classes/core/users/group.aw:632
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:595
+#: classes/core/users/group.aw:661
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:786
+#: classes/core/users/group.aw:852
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:832
+#: classes/core/users/group.aw:898
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
-

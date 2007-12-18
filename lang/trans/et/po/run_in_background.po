@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -57,18 +57,18 @@ msgstr ""
 msgid "<br>Protsess j&auml;tkab hiljemalt kahe minuti p&auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:384
+#: classes/core/run_in_background.aw:386
 msgid "<br>Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:414
+#: classes/core/run_in_background.aw:416
 msgid "<br>Protsess k&auml;ivitub j&auml;rgmisel kordusel"
 msgstr ""
 
-#: classes/core/run_in_background.aw:689
+#: classes/core/run_in_background.aw:691
 msgid "all done"
 msgstr ""
 
-#: classes/core/run_in_background.aw:778
+#: classes/core/run_in_background.aw:780
 msgid "Halt"
 msgstr ""

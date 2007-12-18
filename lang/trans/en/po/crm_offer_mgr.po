@@ -103,4 +103,4 @@ msgstr "Delete selected offers"
 
 #: classes/crm/crm_offer_mgr.aw:251
 msgid "Oled kindel et soovid valitud tellimused kustutada?"
-msgstr "Are you sure you want to delete selected offers?
+msgstr "Are you sure you want to delete selected offers?"

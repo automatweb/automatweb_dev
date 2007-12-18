@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/calendar.aw:702
-msgid "Täna"
+#: classes/vcl/calendar.aw:734
+msgid "T&auml;na"
 msgstr ""
 
-#: classes/vcl/calendar.aw:703
-msgid "Päev"
+#: classes/vcl/calendar.aw:735
+msgid "P&auml;ev"
 msgstr ""
 
-#: classes/vcl/calendar.aw:704
-msgid "Nädal"
+#: classes/vcl/calendar.aw:736
+msgid "N&auml;dal"
 msgstr ""
 
-#: classes/vcl/calendar.aw:705
+#: classes/vcl/calendar.aw:737
 msgid "Kuu"
 msgstr ""
 
-#: classes/vcl/calendar.aw:706
-msgid "Ülevaade"
+#: classes/vcl/calendar.aw:738
+msgid "&Uuml;levaade"
 msgstr ""
 
-#: classes/vcl/calendar.aw:767
+#: classes/vcl/calendar.aw:799
 msgid "Toimetused"
 msgstr ""
 
-#: classes/vcl/calendar.aw:1808
+#: classes/vcl/calendar.aw:1396
+msgid "Viimased"
+msgstr ""
+
+#: classes/vcl/calendar.aw:1397
+msgid "J&auml;rgmised"
+msgstr ""
+
+#: classes/vcl/calendar.aw:1850
 msgid "Lisas [%s] %s /  Muutis [%s] %s"
 msgstr ""

@@ -15,5 +15,5 @@ $GLOBALS["TRANS"]["Lisa"] = "Add";
 $GLOBALS["TRANS"]["Lisa pakkumine"] = "Add offer";
 $GLOBALS["TRANS"]["T&uuml;ppakkumised"] = "Typical offers";
 $GLOBALS["TRANS"]["Kustuta valitud tellimused"] = "Delete selected offers";
-$GLOBALS["TRANS"]["Oled kindel et soovid valitud tellimused kustutada?"] = "Are you sure you want to delete selected offer";
+$GLOBALS["TRANS"]["Oled kindel et soovid valitud tellimused kustutada?"] = "Are you sure you want to delete selected offers?";
 ?>

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -614,12 +614,10 @@ msgid "Seose Väline kalender (import) (RELTYPE_ICAL_IMPORT) tekst"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:239
-#: classes/applications/calendar/planner.aw:390
 msgid "Päev"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:240
-#: classes/applications/calendar/planner.aw:391
 msgid "Nädal"
 msgstr ""
 
@@ -629,7 +627,6 @@ msgid "Kuu"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:242
-#: classes/applications/calendar/planner.aw:393
 msgid "Ülevaade"
 msgstr ""
 
@@ -643,7 +640,19 @@ msgstr ""
 
 #: classes/applications/calendar/planner.aw:389
 #: classes/applications/calendar/planner.aw:1246
-msgid "Täna"
+msgid "T&auml;na"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:390
+msgid "P&auml;ev"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:391
+msgid "N&auml;dal"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:393
+msgid "&Uuml;levaade"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:469

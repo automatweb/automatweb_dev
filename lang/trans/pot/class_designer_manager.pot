@@ -126,10 +126,6 @@ msgstr ""
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:189
-msgid ""
-msgstr ""
-
 #: classes/applications/class_designer/class_designer_manager.aw:196
 msgid "Nimi"
 msgstr ""

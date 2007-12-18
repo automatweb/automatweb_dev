@@ -134,10 +134,6 @@ msgstr ""
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:242
-msgid ""
-msgstr ""
-
 #: classes/applications/quickmessage/contact_list.aw:287
 msgid "Saada sõnum"
 msgstr ""

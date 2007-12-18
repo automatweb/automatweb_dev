@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -54,6 +54,30 @@ msgstr ""
 # classes/crm/crm_offer.aw:prop_start1_help
 #: classes/crm/crm_offer.aw:prop_start1_help
 msgid "Omaduse Algus (start1) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_accept_deadline
+msgid "Omaduse Aktsepteerimistähtaeg (accept_deadline) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_accept_deadline_comment
+msgid "Omaduse Aktsepteerimistähtaeg (accept_deadline) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_accept_deadline_help
+msgid "Omaduse Aktsepteerimistähtaeg (accept_deadline) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_shipment_deadline
+msgid "Omaduse Tarne t&auml;htaeg (shipment_deadline) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_shipment_deadline_comment
+msgid "Omaduse Tarne t&auml;htaeg (shipment_deadline) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_shipment_deadline_help
+msgid "Omaduse Tarne t&auml;htaeg (shipment_deadline) help"
 msgstr ""
 
 # classes/crm/crm_offer.aw:prop_preformer
@@ -221,6 +245,18 @@ msgstr ""
 msgid "Omaduse Pakkumised (content_list) help"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:prop_products_table
+msgid "Omaduse Toodete tabel (products_table) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_products_table_comment
+msgid "Omaduse Toodete tabel (products_table) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_products_table_help
+msgid "Omaduse Toodete tabel (products_table) help"
+msgstr ""
+
 # classes/crm/crm_offer.aw:prop_calendar_selector
 #: classes/crm/crm_offer.aw:prop_calendar_selector
 msgid "Omaduse Kalendrid (calendar_selector) caption"
@@ -305,6 +341,30 @@ msgstr ""
 msgid "Omaduse Tegevused (acts) help"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:prop_files
+msgid "Omaduse Manused (files) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_files_comment
+msgid "Omaduse Manused (files) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_files_help
+msgid "Omaduse Manused (files) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_acl
+msgid "Omaduse &Otilde;igused (acl) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_acl_comment
+msgid "Omaduse &Otilde;igused (acl) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_acl_help
+msgid "Omaduse &Otilde;igused (acl) help"
+msgstr ""
+
 # classes/crm/crm_offer.aw:group_content
 #: classes/crm/crm_offer.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
@@ -313,6 +373,22 @@ msgstr ""
 # classes/crm/crm_offer.aw:group_content_help
 #: classes/crm/crm_offer.aw:group_content_help
 msgid "Grupi Sisu (content) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_products
+msgid "Grupi Tooted (products) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_products_help
+msgid "Grupi Tooted (products) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_files
+msgid "Grupi Failid (files) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_files_help
+msgid "Grupi Failid (files) help"
 msgstr ""
 
 # classes/crm/crm_offer.aw:group_recurrence
@@ -383,6 +459,14 @@ msgstr ""
 msgid "Grupi Osalejad (parts) help"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
+msgstr ""
+
 # classes/crm/crm_offer.aw:rel_RELTYPE_RECURRENCE
 #: classes/crm/crm_offer.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
@@ -394,7 +478,7 @@ msgid "Seose Tellija (RELTYPE_ORDERER) tekst"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:rel_RELTYPE_PREFORMER
-msgid "Seose T&auml;itja (RELTYPE_PREFORMER) tekst"
+msgid "Seose Täitja (RELTYPE_PREFORMER) tekst"
 msgstr ""
 
 # classes/crm/crm_offer.aw:rel_RELTYPE_SALESMAN
@@ -420,110 +504,170 @@ msgstr ""
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:157
+#: classes/crm/crm_offer.aw:rel_RELTYPE_FILE
+msgid "Seose File (RELTYPE_FILE) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:183
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:158
+#: classes/crm/crm_offer.aw:184
 msgid "Saadetud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:159
+#: classes/crm/crm_offer.aw:185
 msgid "Esitletud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:160
+#: classes/crm/crm_offer.aw:186
 msgid "Tagasilükatud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:161
+#: classes/crm/crm_offer.aw:187
 msgid "Positiivelt lõppenud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:165
+#: classes/crm/crm_offer.aw:191
 msgid "Peat&uuml;kk"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:166
+#: classes/crm/crm_offer.aw:192
 msgid "Eesm&auml;rk"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:167
+#: classes/crm/crm_offer.aw:193
 msgid "Maksetingimused"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:168
+#: classes/crm/crm_offer.aw:194
 msgid "Toodete nimekiri"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:169
+#: classes/crm/crm_offer.aw:195
 msgid "V&otilde;rdlustabel"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:170
+#: classes/crm/crm_offer.aw:196
 msgid "Projekt"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:208
+#: classes/crm/crm_offer.aw:240
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:433
+#: classes/crm/crm_offer.aw:419
+msgid "Toode"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:423
+msgid "Kogus"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:427
+msgid "&Uuml;hik"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:431
+msgid "Hind"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:436
+msgid "Valuuta"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:440
+msgid "Tarneaeg"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:444
+msgid "Aktsept"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:592
 msgid "Algstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:439
+#: classes/crm/crm_offer.aw:598
 msgid "Lõppstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:445
+#: classes/crm/crm_offer.aw:604
 msgid "Muutuse aeg"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:451
+#: classes/crm/crm_offer.aw:610
 msgid "Muutja"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:483
+#: classes/crm/crm_offer.aw:642
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:509
+#: classes/crm/crm_offer.aw:668
 msgid "T&uuml;&uuml;pkomponendid"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:531
+#: classes/crm/crm_offer.aw:690
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:538
+#: classes/crm/crm_offer.aw:697
 msgid "Kustuta valitud osad"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:539
+#: classes/crm/crm_offer.aw:698
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:597
+#: classes/crm/crm_offer.aw:756
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:605
+#: classes/crm/crm_offer.aw:764 classes/crm/crm_offer.aw:1246
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:611
+#: classes/crm/crm_offer.aw:770 classes/crm/crm_offer.aw:1256
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:617
+#: classes/crm/crm_offer.aw:776
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:660
+#: classes/crm/crm_offer.aw:819
 msgid "Eemalda t&uuml;&uuml;pkomonentide nimekirjast"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:671
+#: classes/crm/crm_offer.aw:830
 msgid "Tee t&uuml;&uuml;pkomponendiks"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:1126
+msgid "Memo"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:1127
+msgid "CRM Dokument"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:1128
+msgid "Leping"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:1129
+msgid "Pakkumine"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:1209
+msgid "Kustuta"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:1251
+msgid "Fail"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:1261
+msgid "Kataloog"
 msgstr ""

@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/register/register_search.aw:class_343_help
 msgid "Klassi Registri otsing help"
@@ -202,11 +201,13 @@ msgstr ""
 msgid "Seose kaust millest otsida (RELTYPE_SEARCH_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:141 classes/applications/register/register_search.aw:240
+#: classes/applications/register/register_search.aw:141
+#: classes/applications/register/register_search.aw:240
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:148 classes/applications/register/register_search.aw:247
+#: classes/applications/register/register_search.aw:148
+#: classes/applications/register/register_search.aw:247
 msgid "Element"
 msgstr ""
 
@@ -230,19 +231,23 @@ msgstr ""
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:190 classes/applications/register/register_search.aw:485
+#: classes/applications/register/register_search.aw:190
+#: classes/applications/register/register_search.aw:485
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:191 classes/applications/register/register_search.aw:495
+#: classes/applications/register/register_search.aw:191
+#: classes/applications/register/register_search.aw:495
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:192 classes/applications/register/register_search.aw:490
+#: classes/applications/register/register_search.aw:192
+#: classes/applications/register/register_search.aw:490
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:193 classes/applications/register/register_search.aw:500
+#: classes/applications/register/register_search.aw:193
+#: classes/applications/register/register_search.aw:500
 msgid "Muutja"
 msgstr ""
 
@@ -266,19 +271,18 @@ msgstr ""
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:994
+#: classes/applications/register/register_search.aw:1001
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1008
+#: classes/applications/register/register_search.aw:1015
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1019
+#: classes/applications/register/register_search.aw:1026
 msgid "Kustutada objekt?"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1020
+#: classes/applications/register/register_search.aw:1027
 msgid "Kustuta"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:45 +0300\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/admin/object_import.aw:class_329_help
+msgid "Klassi Objektide Import help"
+msgstr ""
 
 #: classes/admin/object_import.aw:prop_folder
 msgid "Omaduse Kataloog, kuhu pannakse objektid (folder) caption"
@@ -35,15 +38,15 @@ msgid "Omaduse Imporditava objekti t&uuml;&uuml;p (object_type) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id
-msgid "Omaduse Unikaalne omadus  (unique_id) caption"
-msgstr "Unique property"
+msgid "Omaduse Unikaalne omadus (unique_id) caption"
+msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id_comment
-msgid "Omaduse Unikaalne omadus  (unique_id) kommentaar"
+msgid "Omaduse Unikaalne omadus (unique_id) kommentaar"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id_help
-msgid "Omaduse Unikaalne omadus  (unique_id) help"
+msgid "Omaduse Unikaalne omadus (unique_id) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_folder_field
@@ -71,15 +74,27 @@ msgid "Omaduse Objektid samsse kataloogi, kus imporditavad (folder_is_parent) he
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_ds
-msgid "Omaduse Andmeallikas (ds) caption"
-msgstr "Datasource"
+msgid "Omaduse  (ds) caption"
+msgstr ""
 
 #: classes/admin/object_import.aw:prop_ds_comment
-msgid "Omaduse Andmeallikas (ds) kommentaar"
+msgid "Omaduse  (ds) kommentaar"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_ds_help
-msgid "Omaduse Andmeallikas (ds) help"
+msgid "Omaduse  (ds) help"
+msgstr ""
+
+#: classes/admin/object_import.aw:prop_ds_file
+msgid "Omaduse Fail andmeallikast (ds_file) caption"
+msgstr ""
+
+#: classes/admin/object_import.aw:prop_ds_file_comment
+msgid "Omaduse Fail andmeallikast (ds_file) kommentaar"
+msgstr ""
+
+#: classes/admin/object_import.aw:prop_ds_file_help
+msgid "Omaduse Fail andmeallikast (ds_file) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_do_import
@@ -230,21 +245,41 @@ msgstr ""
 msgid "Grupi Omadused (props) pealkiri"
 msgstr "Properties"
 
+#: classes/admin/object_import.aw:group_props_help
+msgid "Grupi Omadused (props) help"
+msgstr ""
+
 #: classes/admin/object_import.aw:group_connect
 msgid "Grupi Seosta tulbad (connect) pealkiri"
 msgstr "Connect columns"
+
+#: classes/admin/object_import.aw:group_connect_help
+msgid "Grupi Seosta tulbad (connect) help"
+msgstr ""
 
 #: classes/admin/object_import.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
 msgstr "Folders"
 
+#: classes/admin/object_import.aw:group_folders_help
+msgid "Grupi Kataloogid (folders) help"
+msgstr ""
+
 #: classes/admin/object_import.aw:group_sched
 msgid "Grupi Automaatne import (sched) pealkiri"
 msgstr "Automatic import"
 
+#: classes/admin/object_import.aw:group_sched_help
+msgid "Grupi Automaatne import (sched) help"
+msgstr ""
+
 #: classes/admin/object_import.aw:group_del
 msgid "Grupi Kustutamine (del) pealkiri"
 msgstr "Deleting"
+
+#: classes/admin/object_import.aw:group_del_help
+msgid "Grupi Kustutamine (del) help"
+msgstr ""
 
 #: classes/admin/object_import.aw:rel_RELTYPE_OBJECT_TYPE
 msgid "Seose imporditav klass (RELTYPE_OBJECT_TYPE) tekst"
@@ -266,135 +301,139 @@ msgstr "exception"
 msgid "Seose kordus (RELTYPE_RECURRENCE) tekst"
 msgstr "recurrence"
 
-#: classes/admin/object_import.aw:128
+#: classes/admin/object_import.aw:133
 msgid "%s, kell %s, kasutaja %s &otilde;igustes."
 msgstr "%s, at %s, as user %s"
 
-#: classes/admin/object_import.aw:145
+#: classes/admin/object_import.aw:150
 msgid "Import k&auml;ivitati %s."
 msgstr "Import started at %s."
 
-#: classes/admin/object_import.aw:146
+#: classes/admin/object_import.aw:151
 msgid "Hetkel on imporditud %s rida. <br>"
 msgstr "Currently imported %s lines.<br>"
 
-#: classes/admin/object_import.aw:147
+#: classes/admin/object_import.aw:152
 msgid "Viimane muudatus toimis kell %s <br>"
 msgstr "Last change took place at %s <br>"
 
-#: classes/admin/object_import.aw:150
+#: classes/admin/object_import.aw:155
 msgid "J&auml;tka importi kohe"
 msgstr "Continue import now"
 
-#: classes/admin/object_import.aw:246
+#: classes/admin/object_import.aw:293
 msgid "Kataloog"
 msgstr "Folder"
 
-#: classes/admin/object_import.aw:252
+#: classes/admin/object_import.aw:299
 msgid "V&auml;&auml;rtus, mille puhul pannakse sellesse kataloogi"
 msgstr "Value for folder"
 
-#: classes/admin/object_import.aw:304
+#: classes/admin/object_import.aw:351
 msgid "Omadus"
 msgstr "Property"
 
-#: classes/admin/object_import.aw:310
+#: classes/admin/object_import.aw:357
 msgid "Imporditav?"
 msgstr "Importable?"
 
-#: classes/admin/object_import.aw:316
+#: classes/admin/object_import.aw:363
 msgid "V&auml;&auml;rtus k&auml;sitsi"
 msgstr "Entered value"
 
-#: classes/admin/object_import.aw:322
+#: classes/admin/object_import.aw:369
 msgid "Oman erandeid?"
 msgstr "Has exceptions?"
 
-#: classes/admin/object_import.aw:328
+#: classes/admin/object_import.aw:375
 msgid "Erandid"
 msgstr "Exceptions"
 
-#: classes/admin/object_import.aw:334
+#: classes/admin/object_import.aw:381
 msgid "Kuup&auml;eva formaat"
 msgstr "Date format"
 
-#: classes/admin/object_import.aw:351
+#: classes/admin/object_import.aw:398
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/admin/object_import.aw:439
-msgid ""
-msgstr ""
-
-#: classes/admin/object_import.aw:456
+#: classes/admin/object_import.aw:503
 msgid "&Auml;ra impordi"
 msgstr "Do not import"
 
-#: classes/admin/object_import.aw:553
+#: classes/admin/object_import.aw:611
 msgid "Importi alustati uuesti realt %s"
 msgstr "Import restarted at line %s"
 
-#: classes/admin/object_import.aw:621
+#: classes/admin/object_import.aw:713
 msgid "created uniqueness filter for %s objects. <br>\n"
 msgstr "created uniqueness filter for %s objects. <br>\n"
 
-#: classes/admin/object_import.aw:634
+#: classes/admin/object_import.aw:726
 msgid "impordin rida %s... <br>\n"
 msgstr "importing line %s... <br>\n"
 
-#: classes/admin/object_import.aw:653
+#: classes/admin/object_import.aw:743
 msgid "leidsin juba olemasoleva objekti %s, kasutan olemasolevat objekti <br>"
 msgstr "found existing object %s, using it<br>"
 
-#: classes/admin/object_import.aw:764
+#: classes/admin/object_import.aw:856
 msgid "importisin objekti %s (%s) kataloogi %s <br>\n"
 msgstr "imported object %s (%s) to folder %s <br>\n"
 
-#: classes/admin/object_import.aw:776
+#: classes/admin/object_import.aw:866
 msgid "Imporditud %s objekti"
 msgstr "%s objects have been imported"
 
-#: classes/admin/object_import.aw:783
+#: classes/admin/object_import.aw:875
 msgid "Valmis! <br>\n"
 msgstr "All done! <br>\n"
 
-#: classes/admin/object_import.aw:799
+#: classes/admin/object_import.aw:891
 msgid "Import edukalt l&otilde;ppenud"
 msgstr "Import successfully completed"
 
-#: classes/admin/object_import.aw:916
+#: classes/admin/object_import.aw:1009
 msgid "create uniq filter for delete <br>\n"
 msgstr "create uniq filter for delete <br>\n"
 
-#: classes/admin/object_import.aw:922
+#: classes/admin/object_import.aw:1015
 msgid "got filter <Br>\n"
 msgstr "got filter <Br>\n"
 
-#: classes/admin/object_import.aw:933
+#: classes/admin/object_import.aw:1026
 msgid "unset keys <br>\n"
 msgstr "unset keys <br>\n"
 
-#: classes/admin/object_import.aw:954
+#: classes/admin/object_import.aw:1055
 msgid "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 msgstr "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 
-#: classes/admin/object_import.aw:955
+#: classes/admin/object_import.aw:1056
 msgid "VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"
 msgstr "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 
-#: classes/admin/object_import.aw:961
+#: classes/admin/object_import.aw:1066
 msgid "delete object %s <br>\n"
 msgstr "delete object %s <br>\n"
 
-#: classes/admin/object_import.aw:967
+#: classes/admin/object_import.aw:1072
 msgid "delete done. <br>\n"
 msgstr "delete done. <br>\n"
 
-#: classes/admin/object_import.aw:969
+#: classes/admin/object_import.aw:1074
 msgid "Edukalt kustutatud %s objekti!"
 msgstr "Successfully deleted %s objects!"
 
-#: classes/admin/object_import.aw:1007
-msgid "Importi alustati "
-msgstr "Import started"
+#: classes/admin/object_import.aw:1112
+msgid "Importi alustati"
+msgstr ""
 
+#~ msgid "Omaduse Unikaalne omadus  (unique_id) caption"
+#~ msgstr "Unique property"
+
+#~ msgid "Omaduse Andmeallikas (ds) caption"
+#~ msgstr "Datasource"
+
+#~ msgid "Importi alustati "
+#~ msgstr "Import started"

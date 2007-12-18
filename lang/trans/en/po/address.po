@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -150,8 +150,11 @@ msgid "Valikute taotleja-property m22ramata."
 msgstr ""
 
 #: classes/common/address/address.aw:347
-msgid "Tänav"
-msgstr "Street"
+msgid "T&auml;nav"
+msgstr ""
+
+#~ msgid "Tänav"
+#~ msgstr "Street"
 
 #~ msgid "Seose Halduspiirkond (RELTYPE_ADMINISTRATIVE_UNIT) tekst"
 #~ msgstr "Administrative unit"

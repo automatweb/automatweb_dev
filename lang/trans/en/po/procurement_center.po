@@ -994,7 +994,7 @@ msgstr "Are You sure you want to delete selected procurements?"
 
 #: classes/applications/procurement_center/procurement_center.aw:550
 msgid "Lisa valitud hanked prinditavate hangete hulka"
-msgstr "Add chosen procurements to printables procurements"
+msgstr "Add selected to print view"
 
 #: classes/applications/procurement_center/procurement_center.aw:676
 msgid "Asukoht"
@@ -1179,7 +1179,7 @@ msgstr "Are you sure you want to delete selected offerers?"
 
 #: classes/applications/procurement_center/procurement_center.aw:2631
 msgid "Saada kiri"
-msgstr ""
+msgstr "Send message"
 
 #: classes/applications/procurement_center/procurement_center.aw:2638
 msgid "Print"
@@ -1318,7 +1318,7 @@ msgstr "offer %s"
 
 #: classes/applications/procurement_center/procurement_center.aw:3735
 msgid "ost:"
-msgstr ""
+msgstr "purchase:"
 
 #: classes/applications/procurement_center/procurement_center.aw:3913
 #: classes/applications/procurement_center/procurement_center.aw:3984
@@ -1331,21 +1331,21 @@ msgstr ""
 #: classes/applications/procurement_center/procurement_center.aw:4473
 #: classes/applications/procurement_center/procurement_center.aw:4523
 msgid "Hange:"
-msgstr ""
+msgstr "Procurement"
 
 #: classes/applications/procurement_center/procurement_center.aw:4085
 msgid "Liik"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/procurement_center/procurement_center.aw:4093
 #: classes/applications/procurement_center/procurement_center.aw:4354
 msgid "Pakkumise/ostu nimetus"
-msgstr ""
+msgstr "Offer/purchase name"
 
 #: classes/applications/procurement_center/procurement_center.aw:4101
 #: classes/applications/procurement_center/procurement_center.aw:4362
 msgid "Leping"
-msgstr ""
+msgstr "Contract"
 
 #: classes/applications/procurement_center/procurement_center.aw:4129
 #: classes/applications/procurement_center/procurement_center.aw:4460
@@ -1355,7 +1355,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:4566
 msgid "Hange M&auml;&auml;ramata"
-msgstr ""
+msgstr "No procurement"
 
 #: classes/applications/procurement_center/procurement_center.aw:4600
 msgid "Show all"

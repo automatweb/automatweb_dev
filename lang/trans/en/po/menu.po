@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/menu.aw:class_1_help
 msgid "Klassi Kaust help"
@@ -62,6 +61,18 @@ msgstr ""
 msgid "Omaduse Jrk (jrk) help"
 msgstr "order of the objects. Makes it able to order folders that are at the same level."
 
+#: classes/menu.aw:prop_type
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
+msgstr "Set the type of content"
+
+#: classes/menu.aw:prop_type_comment
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_type_help
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
+msgstr "makes it able to display only documents with a certain content type under this folder."
+
 #: classes/menu.aw:prop_pmethod_properties
 msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) caption"
 msgstr "Public method settings"
@@ -86,30 +97,6 @@ msgstr ""
 msgid "Omaduse Vali programm (admin_feature) help"
 msgstr ""
 
-#: classes/menu.aw:prop_type
-msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
-msgstr "Set the type of content"
-
-#: classes/menu.aw:prop_type_comment
-msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_type_help
-msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
-msgstr "makes it able to display only documents with a certain content type under this folder."
-
-#: classes/menu.aw:prop_objtbl_conf
-msgid "Omaduse Objektitabeli konf (objtbl_conf) caption"
-msgstr "Configuration of object table"
-
-#: classes/menu.aw:prop_objtbl_conf_comment
-msgid "Omaduse Objektitabeli konf (objtbl_conf) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_objtbl_conf_help
-msgid "Omaduse Objektitabeli konf (objtbl_conf) help"
-msgstr "makes it able to design the table about the folder´s objects."
-
 #: classes/menu.aw:prop_add_tree_conf
 msgid "Omaduse Objekti lisamise puu konff (add_tree_conf) caption"
 msgstr "Configuration of object adding tree"
@@ -133,6 +120,30 @@ msgstr ""
 #: classes/menu.aw:prop_cfgmanager_help
 msgid "Omaduse Konfiguratsioonivorm (cfgmanager) help"
 msgstr "makes it able to select the documents configuration form, which would be used to add a document under that folder."
+
+#: classes/menu.aw:prop_default_image_folder
+msgid "Omaduse Vaikimisi piltide kataloog (default_image_folder) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_default_image_folder_comment
+msgid "Omaduse Vaikimisi piltide kataloog (default_image_folder) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_default_image_folder_help
+msgid "Omaduse Vaikimisi piltide kataloog (default_image_folder) help"
+msgstr ""
+
+#: classes/menu.aw:prop_default_image_folder_is_inherited
+msgid "Omaduse Vaikimisi piltide kataloog p&auml;ritav (default_image_folder_is_inherited) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_default_image_folder_is_inherited_comment
+msgid "Omaduse Vaikimisi piltide kataloog p&auml;ritav (default_image_folder_is_inherited) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_default_image_folder_is_inherited_help
+msgid "Omaduse Vaikimisi piltide kataloog p&auml;ritav (default_image_folder_is_inherited) help"
+msgstr ""
 
 #: classes/menu.aw:prop_change_time
 msgid "Omaduse Sisu uuendamise sagedus (change_time) caption"
@@ -193,6 +204,42 @@ msgstr ""
 #: classes/menu.aw:prop_users_only_help
 msgid "Omaduse Ainult sisselogitud kasutajatele (users_only) help"
 msgstr "the content of the folder is hidden from the users who are not logged in."
+
+#: classes/menu.aw:prop_stats_from
+msgid "Omaduse Alates (stats_from) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_stats_from_comment
+msgid "Omaduse Alates (stats_from) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_stats_from_help
+msgid "Omaduse Alates (stats_from) help"
+msgstr ""
+
+#: classes/menu.aw:prop_stats_to
+msgid "Omaduse Kuni (stats_to) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_stats_to_comment
+msgid "Omaduse Kuni (stats_to) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_stats_to_help
+msgid "Omaduse Kuni (stats_to) help"
+msgstr ""
+
+#: classes/menu.aw:prop_stats_disp
+msgid "Omaduse Vaatamisi ja muutmisi (stats_disp) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_stats_disp_comment
+msgid "Omaduse Vaatamisi ja muutmisi (stats_disp) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_stats_disp_help
+msgid "Omaduse Vaatamisi ja muutmisi (stats_disp) help"
+msgstr ""
 
 #: classes/menu.aw:prop_link_behaviour
 msgid "Omaduse Lingi iseloom (link_behaviour) caption"
@@ -361,18 +408,6 @@ msgstr ""
 #: classes/menu.aw:prop_width_help
 msgid "Omaduse Laius (width) help"
 msgstr "adjustable to the folder-based changing in case of scroll menus width."
-
-#: classes/menu.aw:prop_ndocs
-msgid "Omaduse Mitu viimast dokumenti (ndocs) caption"
-msgstr "Number of last documents"
-
-#: classes/menu.aw:prop_ndocs_comment
-msgid "Omaduse Mitu viimast dokumenti (ndocs) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_ndocs_help
-msgid "Omaduse Mitu viimast dokumenti (ndocs) help"
-msgstr "makes it able to set the number of how many newest documents are displayed under the folder."
 
 #: classes/menu.aw:prop_show_lead
 msgid "Omaduse N&auml;ita ainult leadi (show_lead) caption"
@@ -650,6 +685,18 @@ msgstr ""
 msgid "Omaduse Sisu objektist (get_content_from) help"
 msgstr "makes it able to display some other objects content with a certain folder."
 
+#: classes/menu.aw:prop_submenus_from_cb
+msgid "Omaduse Alammen&uuml;&uuml;d objekti AW liidesest (submenus_from_cb) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_submenus_from_cb_comment
+msgid "Omaduse Alammen&uuml;&uuml;d objekti AW liidesest (submenus_from_cb) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_submenus_from_cb_help
+msgid "Omaduse Alammen&uuml;&uuml;d objekti AW liidesest (submenus_from_cb) help"
+msgstr ""
+
 #: classes/menu.aw:prop_submenus_from_menu
 msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) caption"
 msgstr "Get subfolders from the folder"
@@ -685,6 +732,18 @@ msgstr ""
 #: classes/menu.aw:prop_use_target_audience_help
 msgid "Omaduse Kasuta sihtr&uuml;hmap&otilde;hist kuvamist (use_target_audience) help"
 msgstr "makes it able to display the inner folder target groups documents to the certain target group."
+
+#: classes/menu.aw:prop_select_target_audience
+msgid "Omaduse Vali sihtr&uuml;hmad (select_target_audience) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_select_target_audience_comment
+msgid "Omaduse Vali sihtr&uuml;hmad (select_target_audience) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_select_target_audience_help
+msgid "Omaduse Vali sihtr&uuml;hmad (select_target_audience) help"
+msgstr ""
 
 #: classes/menu.aw:prop_content_all_langs
 msgid "Omaduse Sisu k&otilde;ikidest keeltest (content_all_langs) caption"
@@ -794,6 +853,30 @@ msgstr ""
 msgid "Omaduse Vennad (sections) help"
 msgstr "folders that are displayed at the same time under some other folder´s."
 
+#: classes/menu.aw:prop_sss_tb
+msgid "Omaduse  (sss_tb) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_sss_tb_comment
+msgid "Omaduse  (sss_tb) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_sss_tb_help
+msgid "Omaduse  (sss_tb) help"
+msgstr ""
+
+#: classes/menu.aw:prop_ndocs
+msgid "Omaduse Mitu viimast dokumenti (ndocs) caption"
+msgstr "Number of last documents"
+
+#: classes/menu.aw:prop_ndocs_comment
+msgid "Omaduse Mitu viimast dokumenti (ndocs) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_ndocs_help
+msgid "Omaduse Mitu viimast dokumenti (ndocs) help"
+msgstr "makes it able to set the number of how many newest documents are displayed under the folder."
+
 #: classes/menu.aw:prop_sss
 msgid "Omaduse Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse (sss) caption"
 msgstr "Folders, from where the last documents are taken"
@@ -805,6 +888,30 @@ msgstr ""
 #: classes/menu.aw:prop_sss_help
 msgid "Omaduse Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse (sss) help"
 msgstr "Folders, from where the last documents are taken."
+
+#: classes/menu.aw:prop_sss_exclude
+msgid "Omaduse &Auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt (sss_exclude) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_sss_exclude_comment
+msgid "Omaduse &Auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt (sss_exclude) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_sss_exclude_help
+msgid "Omaduse &Auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt (sss_exclude) help"
+msgstr ""
+
+#: classes/menu.aw:prop_seealso_docs_tb
+msgid "Omaduse Vaatalisaks dokumendid toolbar (seealso_docs_tb) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_seealso_docs_tb_comment
+msgid "Omaduse Vaatalisaks dokumendid toolbar (seealso_docs_tb) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_seealso_docs_tb_help
+msgid "Omaduse Vaatalisaks dokumendid toolbar (seealso_docs_tb) help"
+msgstr ""
 
 #: classes/menu.aw:prop_seealso_docs_t
 msgid "Omaduse Vaatalisaks dokumendid (seealso_docs_t) caption"
@@ -938,6 +1045,18 @@ msgstr ""
 msgid "Omaduse META description (description) help"
 msgstr "description  in HTML displayed for search engines."
 
+#: classes/menu.aw:prop_page_title
+msgid "Omaduse Lehe pealkiri (page_title) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_page_title_comment
+msgid "Omaduse Lehe pealkiri (page_title) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_page_title_help
+msgid "Omaduse Lehe pealkiri (page_title) help"
+msgstr ""
+
 #: classes/menu.aw:prop_acl
 msgid "Omaduse &Otilde;igused (acl) caption"
 msgstr "Permissions"
@@ -949,6 +1068,42 @@ msgstr ""
 #: classes/menu.aw:prop_acl_help
 msgid "Omaduse &Otilde;igused (acl) help"
 msgstr "Option for setting the user rights for the user groups and users."
+
+#: classes/menu.aw:prop_acl_views
+msgid "Omaduse  (acl_views) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_acl_views_comment
+msgid "Omaduse  (acl_views) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_acl_views_help
+msgid "Omaduse  (acl_views) help"
+msgstr ""
+
+#: classes/menu.aw:prop_acl_edits
+msgid "Omaduse  (acl_edits) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_acl_edits_comment
+msgid "Omaduse  (acl_edits) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_acl_edits_help
+msgid "Omaduse  (acl_edits) help"
+msgstr ""
+
+#: classes/menu.aw:prop_timing
+msgid "Omaduse Ajaline aktiivsus (timing) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_timing_comment
+msgid "Omaduse Ajaline aktiivsus (timing) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_timing_help
+msgid "Omaduse Ajaline aktiivsus (timing) help"
+msgstr ""
 
 #: classes/menu.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
@@ -992,6 +1147,14 @@ msgstr "Users"
 
 #: classes/menu.aw:group_users_help
 msgid "Grupi Kasutajad (users) help"
+msgstr ""
+
+#: classes/menu.aw:group_stats
+msgid "Grupi Statistika (stats) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_stats_help
+msgid "Grupi Statistika (stats) help"
 msgstr ""
 
 #: classes/menu.aw:group_show
@@ -1146,6 +1309,38 @@ msgstr "Permissions"
 msgid "Grupi &Otilde;igused (acl) help"
 msgstr ""
 
+#: classes/menu.aw:group_acl_main
+msgid "Grupi &Otilde;igused (acl_main) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_acl_main_help
+msgid "Grupi &Otilde;igused (acl_main) help"
+msgstr ""
+
+#: classes/menu.aw:group_acl_views
+msgid "Grupi Vaatamised (acl_views) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_acl_views_help
+msgid "Grupi Vaatamised (acl_views) help"
+msgstr ""
+
+#: classes/menu.aw:group_acl_edits
+msgid "Grupi Muutmised (acl_edits) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_acl_edits_help
+msgid "Grupi Muutmised (acl_edits) help"
+msgstr ""
+
+#: classes/menu.aw:group_timing
+msgid "Grupi Ajaline aktiivsus (timing) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_timing_help
+msgid "Grupi Ajaline aktiivsus (timing) help"
+msgstr ""
+
 #: classes/menu.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
 msgstr "Translate"
@@ -1194,10 +1389,6 @@ msgstr ""
 msgid "Seose v&otilde;ta dokumente perioodi alt (RELTYPE_PERIOD) tekst"
 msgstr ""
 
-#: classes/menu.aw:rel_RELTYPE_OBJ_TABLE_CONF
-msgid "Seose objektitabeli konfiguratsioon (RELTYPE_OBJ_TABLE_CONF) tekst"
-msgstr "configuration of object table"
-
 #: classes/menu.aw:rel_RELTYPE_ADD_TREE_CONF
 msgid "Seose lisamise puu konfiguratsioon (RELTYPE_ADD_TREE_CONF) tekst"
 msgstr "configuration of adding tree"
@@ -1242,247 +1433,325 @@ msgstr "Language connection"
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/menu.aw:473
+#: classes/menu.aw:rel_RELTYPE_NO_DOCS_FROM_MENU
+msgid "Seose &auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt (RELTYPE_NO_DOCS_FROM_MENU) tekst"
+msgstr ""
+
+#: classes/menu.aw:rel_RELTYPE_DEFAULT_IMAGE_FOLDER
+msgid "Seose Vaikimisi piltide kataloog (RELTYPE_DEFAULT_IMAGE_FOLDER) tekst"
+msgstr ""
+
+#: classes/menu.aw:rel_RELTYPE_TARGET_AUDIENCE
+msgid "Seose Sihtr&uuml;hm (RELTYPE_TARGET_AUDIENCE) tekst"
+msgstr ""
+
+#: classes/menu.aw:547
 msgid "Alati muutuv"
 msgstr ""
 
-#: classes/menu.aw:474
+#: classes/menu.aw:548
 msgid "Tunnis korra"
 msgstr ""
 
-#: classes/menu.aw:475
+#: classes/menu.aw:549
 msgid "P&auml;evas korra"
 msgstr ""
 
-#: classes/menu.aw:476
+#: classes/menu.aw:550
 msgid "N&auml;dalas korra"
 msgstr ""
 
-#: classes/menu.aw:477
+#: classes/menu.aw:551
 msgid "Kuus korra"
 msgstr ""
 
-#: classes/menu.aw:478
+#: classes/menu.aw:552
 msgid "Aastas korra"
 msgstr ""
 
-#: classes/menu.aw:479
+#: classes/menu.aw:553
 msgid "Ei muudeta (arhiveeritud)"
 msgstr ""
 
-#: classes/menu.aw:485
+#: classes/menu.aw:559
 msgid "Vali t&uuml;hjaks"
 msgstr "Select blank"
 
-#: classes/menu.aw:528
+#: classes/menu.aw:602
 msgid "Vasak"
 msgstr "Left"
 
-#: classes/menu.aw:529
+#: classes/menu.aw:603
 msgid "Parem"
 msgstr "Right"
 
-#: classes/menu.aw:543
+#: classes/menu.aw:617
 msgid "Uues aknas"
 msgstr "In new window"
 
-#: classes/menu.aw:544
+#: classes/menu.aw:618
 msgid "Klikitav"
 msgstr "Clickable"
 
-#: classes/menu.aw:558
+#: classes/menu.aw:632
 msgid "Esilehel"
 msgstr "On the frontpage"
 
-#: classes/menu.aw:559
+#: classes/menu.aw:633
 msgid "Paremal"
 msgstr "On the right"
 
-#: classes/menu.aw:573
+#: classes/menu.aw:647
 msgid "Peida &auml;ra, kui selle kausta all aktiivseid dokumente ei ole"
 msgstr "Hide, when there are no active documents beneath"
 
-#: classes/menu.aw:574
+#: classes/menu.aw:648
 msgid "Ilma men&uuml;&uuml;deta"
 msgstr "No folders"
 
-#: classes/menu.aw:599
+#: classes/menu.aw:673
 msgid "kasuta parenti valikut"
 msgstr "use parent's settings"
 
-#: classes/menu.aw:635
+#: classes/menu.aw:713
 msgid "(no icon set)"
 msgstr "(no icon set)"
 
-#: classes/menu.aw:665
+#: classes/menu.aw:743
 msgid "V&auml;li"
 msgstr "Field"
 
-#: classes/menu.aw:669 classes/menu.aw:936
+#: classes/menu.aw:747 classes/menu.aw:1256
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/menu.aw:674 classes/menu.aw:727
+#: classes/menu.aw:752 classes/menu.aw:805
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr "By order"
 
-#: classes/menu.aw:675 classes/menu.aw:728
+#: classes/menu.aw:753 classes/menu.aw:806
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr "By creation date"
 
-#: classes/menu.aw:676 classes/menu.aw:729
+#: classes/menu.aw:754 classes/menu.aw:807
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr "By modification date"
 
-#: classes/menu.aw:677 classes/menu.aw:730
+#: classes/menu.aw:755 classes/menu.aw:808
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr "By document date"
 
-#: classes/menu.aw:678 classes/menu.aw:731
+#: classes/menu.aw:756 classes/menu.aw:809
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr "By time selected in calendar"
 
-#: classes/menu.aw:679
+#: classes/menu.aw:757
 msgid "Nime j&auml;rgi"
 msgstr "By name"
 
-#: classes/menu.aw:683 classes/menu.aw:738
+#: classes/menu.aw:761 classes/menu.aw:816
 msgid "Suurem (uuem) enne"
 msgstr "Bigger (newer) first"
 
-#: classes/menu.aw:684 classes/menu.aw:739
+#: classes/menu.aw:762 classes/menu.aw:817
 msgid "V&auml;iksem (vanem) enne"
 msgstr "Smaller (older) first"
 
-#: classes/menu.aw:732
+#: classes/menu.aw:810
 msgid "Random"
 msgstr "Random"
 
-#: classes/menu.aw:747
+#: classes/menu.aw:825
 msgid "OID"
 msgstr "OID"
 
-#: classes/menu.aw:754 classes/menu.aw:1565 classes/menu.aw:1617
+#: classes/menu.aw:832 classes/menu.aw:1933 classes/menu.aw:1985
+#: classes/menu.aw:2042
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/menu.aw:774
+#: classes/menu.aw:852
 msgid "IP Nimi"
 msgstr "IP Name"
 
-#: classes/menu.aw:780
+#: classes/menu.aw:858
 msgid "IP Aadress"
 msgstr "IP Address"
 
-#: classes/menu.aw:786
+#: classes/menu.aw:864
 msgid "Lubatud"
 msgstr "Allowed"
 
-#: classes/menu.aw:792
+#: classes/menu.aw:870
 msgid "Keelatud"
 msgstr "Denied"
 
-#: classes/menu.aw:874
+#: classes/menu.aw:964 classes/menu.aw:1152 classes/menu.aw:1193
+#: classes/menu.aw:1217
 msgid "Vali pilt.."
 msgstr "Select image.."
 
-#: classes/menu.aw:893
+#: classes/menu.aw:988 classes/menu.aw:1128
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/menu.aw:930
+#: classes/menu.aw:1250
 msgid "Pildi number"
 msgstr "Image number"
 
-#: classes/menu.aw:942
+#: classes/menu.aw:1262
 msgid "Eelvaade"
 msgstr "Preview"
 
-#: classes/menu.aw:948
+#: classes/menu.aw:1268
 msgid "Vali Pilt"
 msgstr "Select image"
 
-#: classes/menu.aw:954
+#: classes/menu.aw:1274
 msgid "Uploadi Pilt"
 msgstr "Upload image"
 
-#: classes/menu.aw:960
+#: classes/menu.aw:1280
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/menu.aw:975
+#: classes/menu.aw:1295
 msgid "Vali men&uuml;&uuml;d"
 msgstr "Select folders"
 
-#: classes/menu.aw:985
+#: classes/menu.aw:1305
 msgid "M&auml;rgi k&otilde;ik men&uuml;&uuml;d aktiivseks"
 msgstr "Activate all folders"
 
-#: classes/menu.aw:992
+#: classes/menu.aw:1312
 msgid "Ekspordi ikoonid"
 msgstr "Export icons"
 
-#: classes/menu.aw:997
+#: classes/menu.aw:1317
 msgid "Ekspordi"
 msgstr "Export"
 
-#: classes/menu.aw:1016
+#: classes/menu.aw:1336
 msgid "Vali meetod"
 msgstr "Select method"
 
-#: classes/menu.aw:1029
+#: classes/menu.aw:1349
 msgid "Vali meetodiga seotud objekt"
 msgstr "Select object connected to method"
 
-#: classes/menu.aw:1039
+#: classes/menu.aw:1359
 msgid "Vali meetodiga seotud grupp"
 msgstr "Select group connected to method"
 
-#: classes/menu.aw:1048
+#: classes/menu.aw:1368
 msgid "Meetod viitab adminni"
 msgstr "Method refers to admin"
 
-#: classes/menu.aw:1056
+#: classes/menu.aw:1376
 msgid "Meetodi v&auml;ljundi kuvamisel n&auml;idatakse men&uuml;&uuml;sid"
 msgstr "Folders are shown on method's output display"
 
-#: classes/menu.aw:1248
+#: classes/menu.aw:1384
+msgid "Meetodi lisaparameetrid"
+msgstr ""
+
+#: classes/menu.aw:1407
+msgid "konfi vorm"
+msgstr ""
+
+#: classes/menu.aw:1599
 msgid "Selline alias on juba olemas!"
 msgstr "This alias already exists!"
 
-#: classes/menu.aw:1281
+#: classes/menu.aw:1632
 msgid "-- vali --"
 msgstr "-- select --"
 
-#: classes/menu.aw:1410 classes/menu.aw:1430
+#: classes/menu.aw:1778 classes/menu.aw:1798
 msgid "--vali--"
 msgstr "-- select --"
 
-#: classes/menu.aw:1557 classes/menu.aw:1609
+#: classes/menu.aw:1925 classes/menu.aw:1977 classes/menu.aw:2034
 msgid "ID"
 msgstr "ID"
 
-#: classes/menu.aw:1570
+#: classes/menu.aw:1938
 msgid "kustuta"
 msgstr "delete"
 
-#: classes/menu.aw:1622
+#: classes/menu.aw:1990 classes/menu.aw:2047
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr "incl. submenus"
 
-#: classes/menu.aw:1774
+#: classes/menu.aw:2001
+msgid "Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse"
+msgstr ""
+
+#: classes/menu.aw:2058
+msgid "&Auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt"
+msgstr ""
+
+#: classes/menu.aw:2218
 msgid "Dokument"
 msgstr "Document"
 
-#: classes/menu.aw:1781
+#: classes/menu.aw:2225
 msgid "ka alammen&uuml;&uuml;de juures"
 msgstr "incl. submenus"
 
-#: classes/menu.aw:1787
+#: classes/menu.aw:2231
+msgid "&Auml;ra kasuta &uuml;lemiste men&uuml;&uuml;de dokumente"
+msgstr ""
+
+#: classes/menu.aw:2237
 msgid "Vali asukoht"
 msgstr "Select location"
 
-#: classes/menu.aw:1839
+#: classes/menu.aw:2300
 msgid "M&auml;rks&otilde;na"
 msgstr "Keyword"
 
+#: classes/menu.aw:2383
+msgid "V&otilde;ta viimaseid dokumente"
+msgstr ""
+
+#: classes/menu.aw:2384 classes/menu.aw:2389
+msgid "Otsi"
+msgstr ""
+
+#: classes/menu.aw:2388
+msgid "&Auml;ra v&otilde;ta viimaseid dokumente"
+msgstr ""
+
+#: classes/menu.aw:2417
+msgid "Valitud objekt: %s /"
+msgstr ""
+
+#: classes/menu.aw:2423
+msgid "Otsi uus objekt:"
+msgstr ""
+
+#: classes/menu.aw:2434
+msgid "Aeg"
+msgstr ""
+
+#: classes/menu.aw:2443
+msgid "Isik"
+msgstr ""
+
+#: classes/menu.aw:2449
+msgid "Kasutaja"
+msgstr ""
+
+#: classes/menu.aw:2455
+msgid "Kasutajagrupp"
+msgstr ""
+
+#~ msgid "Omaduse Objektitabeli konf (objtbl_conf) caption"
+#~ msgstr "Configuration of object table"
+
+#~ msgid "Omaduse Objektitabeli konf (objtbl_conf) help"
+#~ msgstr "makes it able to design the table about the folder´s objects."
+
+#~ msgid "Seose objektitabeli konfiguratsioon (RELTYPE_OBJ_TABLE_CONF) tekst"
+#~ msgstr "configuration of object table"

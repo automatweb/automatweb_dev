@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/admin/object_import.aw:class_329_help
 msgid "Klassi Objektide Import help"
@@ -39,15 +38,15 @@ msgid "Omaduse Imporditava objekti t&uuml;&uuml;p (object_type) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id
-msgid "Omaduse Unikaalne omadus  (unique_id) caption"
+msgid "Omaduse Unikaalne omadus (unique_id) caption"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id_comment
-msgid "Omaduse Unikaalne omadus  (unique_id) kommentaar"
+msgid "Omaduse Unikaalne omadus (unique_id) kommentaar"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id_help
-msgid "Omaduse Unikaalne omadus  (unique_id) help"
+msgid "Omaduse Unikaalne omadus (unique_id) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_folder_field
@@ -358,10 +357,6 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/admin/object_import.aw:486
-msgid ""
-msgstr ""
-
 #: classes/admin/object_import.aw:503
 msgid "&Auml;ra impordi"
 msgstr ""
@@ -370,67 +365,66 @@ msgstr ""
 msgid "Importi alustati uuesti realt %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:692
+#: classes/admin/object_import.aw:713
 msgid "created uniqueness filter for %s objects. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:705
+#: classes/admin/object_import.aw:726
 msgid "impordin rida %s... <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:722
+#: classes/admin/object_import.aw:743
 msgid "leidsin juba olemasoleva objekti %s, kasutan olemasolevat objekti <br>"
 msgstr ""
 
-#: classes/admin/object_import.aw:834
+#: classes/admin/object_import.aw:856
 msgid "importisin objekti %s (%s) kataloogi %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:844
+#: classes/admin/object_import.aw:866
 msgid "Imporditud %s objekti"
 msgstr ""
 
-#: classes/admin/object_import.aw:853
+#: classes/admin/object_import.aw:875
 msgid "Valmis! <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:869
+#: classes/admin/object_import.aw:891
 msgid "Import edukalt l&otilde;ppenud"
 msgstr ""
 
-#: classes/admin/object_import.aw:986
+#: classes/admin/object_import.aw:1009
 msgid "create uniq filter for delete <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:992
+#: classes/admin/object_import.aw:1015
 msgid "got filter <Br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1003
+#: classes/admin/object_import.aw:1026
 msgid "unset keys <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1032
+#: classes/admin/object_import.aw:1055
 msgid "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1033
+#: classes/admin/object_import.aw:1056
 msgid "VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:1043
+#: classes/admin/object_import.aw:1066
 msgid "delete object %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1049
+#: classes/admin/object_import.aw:1072
 msgid "delete done. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1051
+#: classes/admin/object_import.aw:1074
 msgid "Edukalt kustutatud %s objekti!"
 msgstr ""
 
-#: classes/admin/object_import.aw:1089
-msgid "Importi alustati "
+#: classes/admin/object_import.aw:1112
+msgid "Importi alustati"
 msgstr ""
-

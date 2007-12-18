@@ -510,10 +510,6 @@ msgstr ""
 msgid "Staatus muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:560
-msgid ""
-msgstr ""
-
 #: classes/applications/bug_o_matic_3000/development_order.aw:564
 msgid "Id"
 msgstr ""

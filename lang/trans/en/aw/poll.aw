@@ -1,8 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Vajab tõlget (needs_translation) caption"] = "Needs translation";
-$GLOBALS["TRANS"]["Omaduse Vajab tõlget (needs_translation) kommentaar"] = "Needs translation";
-$GLOBALS["TRANS"]["Omaduse Tõlge kinnitatud (is_translated) caption"] = "Translation confirmed";
-$GLOBALS["TRANS"]["Omaduse Tõlge kinnitatud (is_translated) help"] = "Translation confirmed";
 $GLOBALS["TRANS"]["Omaduse Klikid (clicks) caption"] = "Clicks";
 $GLOBALS["TRANS"]["Omaduse Statistika (clicks_stats) caption"] = "Statistics";
 $GLOBALS["TRANS"]["Omaduse Statistika (clicks_stats) help"] = "Statistics – displays the answers in a table, clicks that was made on the poll, the results as a percentage and a trend-line for visual overview.";
@@ -28,5 +24,4 @@ $GLOBALS["TRANS"]["Klikke"] = "Clicks";
 $GLOBALS["TRANS"]["Protsent"] = "Percent";
 $GLOBALS["TRANS"]["Vastus nr %s"] = "Answer nr %s";
 $GLOBALS["TRANS"]["K&uuml;simus"] = "Question";
-$GLOBALS["TRANS"]["Vastus nr %s "] = "Answer nr %s";
 ?>

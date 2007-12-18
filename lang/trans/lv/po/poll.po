@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/contentmgmt/poll.aw:class_33_help
 msgid "Klassi Kiirk&uuml;sitlus help"
@@ -110,6 +109,30 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (translate) help"
 msgstr ""
 
+#: classes/contentmgmt/poll.aw:prop_tpl_question
+msgid "Omaduse Kujunduspõhi kuvamiseks (tpl_question) caption"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_question_comment
+msgid "Omaduse Kujunduspõhi kuvamiseks (tpl_question) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_question_help
+msgid "Omaduse Kujunduspõhi kuvamiseks (tpl_question) help"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_results
+msgid "Omaduse Kujunduspõhi tulemustele (tpl_results) caption"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_results_comment
+msgid "Omaduse Kujunduspõhi tulemustele (tpl_results) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_results_help
+msgid "Omaduse Kujunduspõhi tulemustele (tpl_results) help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:group_clicks
 msgid "Grupi Klikke (clicks) pealkiri"
 msgstr ""
@@ -150,39 +173,51 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:511
+#: classes/contentmgmt/poll.aw:group_data
+msgid "Grupi Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:528
 msgid "UID"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:518
+#: classes/contentmgmt/poll.aw:535
 msgid "IP"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:525
+#: classes/contentmgmt/poll.aw:542
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:535 classes/contentmgmt/poll.aw:565
+#: classes/contentmgmt/poll.aw:552 classes/contentmgmt/poll.aw:582
 msgid "Vastus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:572
+#: classes/contentmgmt/poll.aw:589
 msgid "Klikke"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:581
+#: classes/contentmgmt/poll.aw:598
 msgid "Protsent"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:590 classes/contentmgmt/poll.aw:844
-msgid ""
-msgstr ""
-
-#: classes/contentmgmt/poll.aw:668 classes/contentmgmt/poll.aw:680 classes/contentmgmt/poll.aw:862
+#: classes/contentmgmt/poll.aw:685 classes/contentmgmt/poll.aw:697
+#: classes/contentmgmt/poll.aw:898
 msgid "Vastus nr %s"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:852
+#: classes/contentmgmt/poll.aw:888
 msgid "K&uuml;simus"
 msgstr ""
-

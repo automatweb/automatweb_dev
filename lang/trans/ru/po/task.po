@@ -678,10 +678,6 @@ msgstr ""
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1017 classes/applications/groupware/task.aw:1157
-msgid ""
-msgstr ""
-
 #: classes/applications/groupware/task.aw:1018
 msgid "Memo"
 msgstr ""

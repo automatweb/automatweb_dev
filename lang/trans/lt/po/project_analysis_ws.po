@@ -254,10 +254,6 @@ msgstr ""
 msgid "Rea kirjeldus"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:417 classes/applications/groupware/project_analysis_ws.aw:422 classes/applications/groupware/project_analysis_ws.aw:461 classes/applications/groupware/project_analysis_ws.aw:466 classes/applications/groupware/project_analysis_ws.aw:728 classes/applications/groupware/project_analysis_ws.aw:733
-msgid ""
-msgstr ""
-
 #: classes/applications/groupware/project_analysis_ws.aw:502
 msgid "Summa"
 msgstr ""

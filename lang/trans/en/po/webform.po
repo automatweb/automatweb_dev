@@ -1016,15 +1016,15 @@ msgstr "Register"
 msgid "Saada"
 msgstr "Send"
 
-#: classes/contentmgmt/webform.aw:2639
+#: classes/contentmgmt/webform.aw:2649
 msgid "Kinnita"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2644
+#: classes/contentmgmt/webform.aw:2654
 msgid "Tagasi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2766
+#: classes/contentmgmt/webform.aw:2776
 msgid "Liigu edasi &raquo;"
 msgstr "Go on &raquo;"
 

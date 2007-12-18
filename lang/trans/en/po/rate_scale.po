@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:01 +0300\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/contentmgmt/rate/rate_scale.aw:class_188_help
+msgid "Klassi H&auml;&auml;letuse skaala help"
+msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid
 msgid "Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) caption"
@@ -32,18 +35,6 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_rate_folders_help
 msgid "Omaduse Mis kataloogidele skaala kehtib (rate_folders) help"
-msgstr ""
-
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr
-msgid "Omaduse Numbriline skaala (type_nr) caption"
-msgstr "Numeric scale"
-
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr_comment
-msgid "Omaduse Numbriline skaala (type_nr) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr_help
-msgid "Omaduse Numbriline skaala (type_nr) help"
 msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_nr_from
@@ -82,21 +73,21 @@ msgstr ""
 msgid "Omaduse Aste (nr_step) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud
-msgid "Omaduse Kasutaja defineeritud skaala (type_ud) caption"
-msgstr "User defined scale"
-
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud_comment
-msgid "Omaduse Kasutaja defineeritud skaala (type_ud) kommentaar"
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_descs
+msgid "Omaduse Tekst hindele (nr_descs) caption"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud_help
-msgid "Omaduse Kasutaja defineeritud skaala (type_ud) help"
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_descs_comment
+msgid "Omaduse Tekst hindele (nr_descs) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_descs_help
+msgid "Omaduse Tekst hindele (nr_descs) help"
 msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_no_rate
 msgid "Omaduse Lisa \"ei hinda\" valik (no_rate) caption"
-msgstr "Add "no rate" option"
+msgstr "Add \"no rate\" option"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_no_rate_comment
 msgid "Omaduse Lisa \"ei hinda\" valik (no_rate) kommentaar"
@@ -110,11 +101,20 @@ msgstr ""
 msgid "Grupi Skaala (scale) pealkiri"
 msgstr "Scale"
 
+#: classes/contentmgmt/rate/rate_scale.aw:group_scale_help
+msgid "Grupi Skaala (scale) help"
+msgstr ""
+
 #: classes/contentmgmt/rate/rate_scale.aw:rel_RELTYPE_FOLDER
 msgid "Seose Kehtiv kataloog (RELTYPE_FOLDER) tekst"
 msgstr "folder"
 
-#: classes/contentmgmt/rate/rate_scale.aw:195
+#: classes/contentmgmt/rate/rate_scale.aw:185
 msgid "ei hinda"
 msgstr "no rating"
 
+#~ msgid "Omaduse Numbriline skaala (type_nr) caption"
+#~ msgstr "Numeric scale"
+
+#~ msgid "Omaduse Kasutaja defineeritud skaala (type_ud) caption"
+#~ msgstr "User defined scale"

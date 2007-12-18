@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -318,11 +318,11 @@ msgid "Eelmine"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:551
-msgid "Täna"
+msgid "T&auml;na"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:555
-msgid "Järgmine"
+msgid "J&auml;rgmine"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:559

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:04 +0300\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/contentmgmt/poll.aw:class_33_help
+msgid "Klassi Kiirk&uuml;sitlus help"
+msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation
-msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr "Needs translation"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
+msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
-msgstr "Needs translation"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
+msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
-
-#: classes/contentmgmt/poll.aw:prop_is_translated
-msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr "Translation confirmed"
-
-#: classes/contentmgmt/poll.aw:prop_is_translated_comment
-msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/poll.aw:prop_is_translated_help
-msgid "Omaduse Tõlge kinnitatud (is_translated) help"
-msgstr "Translation confirmed"
 
 #: classes/contentmgmt/poll.aw:prop_clicks
 msgid "Omaduse Klikid (clicks) caption"
@@ -118,63 +109,130 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (translate) help"
 msgstr "Text fields for translating the questions and the answers to the web-site´s active language."
 
+#: classes/contentmgmt/poll.aw:prop_tpl_question
+msgid "Omaduse Kujunduspõhi kuvamiseks (tpl_question) caption"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_question_comment
+msgid "Omaduse Kujunduspõhi kuvamiseks (tpl_question) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_question_help
+msgid "Omaduse Kujunduspõhi kuvamiseks (tpl_question) help"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_results
+msgid "Omaduse Kujunduspõhi tulemustele (tpl_results) caption"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_results_comment
+msgid "Omaduse Kujunduspõhi tulemustele (tpl_results) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:prop_tpl_results_help
+msgid "Omaduse Kujunduspõhi tulemustele (tpl_results) help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:group_clicks
 msgid "Grupi Klikke (clicks) pealkiri"
 msgstr "Clicks"
+
+#: classes/contentmgmt/poll.aw:group_clicks_help
+msgid "Grupi Klikke (clicks) help"
+msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_clicks_stats
 msgid "Grupi Statistika (clicks_stats) pealkiri"
 msgstr "Statistics"
 
+#: classes/contentmgmt/poll.aw:group_clicks_stats_help
+msgid "Grupi Statistika (clicks_stats) help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:group_clicks_detail
 msgid "Grupi Vastajad (clicks_detail) pealkiri"
 msgstr "Answerers"
+
+#: classes/contentmgmt/poll.aw:group_clicks_detail_help
+msgid "Grupi Vastajad (clicks_detail) help"
+msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_translate
 msgid "Grupi T&otilde;lgi (translate) pealkiri"
 msgstr "Translate"
 
+#: classes/contentmgmt/poll.aw:group_translate_help
+msgid "Grupi T&otilde;lgi (translate) help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
 msgstr "Activity"
 
-#: classes/contentmgmt/poll.aw:470
+#: classes/contentmgmt/poll.aw:group_activity_help
+msgid "Grupi Aktiivsus (activity) help"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_data
+msgid "Grupi Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:528
 msgid "UID"
 msgstr "UID"
 
-#: classes/contentmgmt/poll.aw:477
+#: classes/contentmgmt/poll.aw:535
 msgid "IP"
 msgstr "IP"
 
-#: classes/contentmgmt/poll.aw:484
+#: classes/contentmgmt/poll.aw:542
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/contentmgmt/poll.aw:494 classes/contentmgmt/poll.aw:524
+#: classes/contentmgmt/poll.aw:552 classes/contentmgmt/poll.aw:582
 msgid "Vastus"
 msgstr "Answer"
 
-#: classes/contentmgmt/poll.aw:531
+#: classes/contentmgmt/poll.aw:589
 msgid "Klikke"
 msgstr "Clicks"
 
-#: classes/contentmgmt/poll.aw:540
+#: classes/contentmgmt/poll.aw:598
 msgid "Protsent"
 msgstr "Percent"
 
-#: classes/contentmgmt/poll.aw:549 classes/contentmgmt/poll.aw:800
-msgid ""
-msgstr ""
-
-#: classes/contentmgmt/poll.aw:627 classes/contentmgmt/poll.aw:639
+#: classes/contentmgmt/poll.aw:685 classes/contentmgmt/poll.aw:697
+#: classes/contentmgmt/poll.aw:898
 msgid "Vastus nr %s"
 msgstr "Answer nr %s"
 
-#: classes/contentmgmt/poll.aw:808
+#: classes/contentmgmt/poll.aw:888
 msgid "K&uuml;simus"
 msgstr "Question"
 
-#: classes/contentmgmt/poll.aw:818
-msgid "Vastus nr %s "
-msgstr "Answer nr %s"
+#~ msgid "Omaduse Vajab tõlget (needs_translation) caption"
+#~ msgstr "Needs translation"
 
+#~ msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+#~ msgstr "Needs translation"
+
+#~ msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+#~ msgstr "Translation confirmed"
+
+#~ msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+#~ msgstr "Translation confirmed"
+
+#~ msgid "Vastus nr %s "
+#~ msgstr "Answer nr %s"

@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:class_867_help
 msgid "Klassi BugTrack help"
@@ -48,6 +47,18 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_by_class_parent_help
 msgid "Omaduse Klasside puusse lisatud bugide asukoht (bug_by_class_parent) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_order_tree_conf
+msgid "Omaduse Tellimuste puus kuvatakse (order_tree_conf) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_order_tree_conf_comment
+msgid "Omaduse Tellimuste puus kuvatakse (order_tree_conf) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_order_tree_conf_help
+msgid "Omaduse Tellimuste puus kuvatakse (order_tree_conf) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tb
@@ -108,6 +119,54 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_unset_table_help
 msgid "Omaduse  (unset_table) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_mail_identity
+msgid "Omaduse Meili identiteet (mail_identity) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_mail_identity_comment
+msgid "Omaduse Meili identiteet (mail_identity) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_mail_identity_help
+msgid "Omaduse Meili identiteet (mail_identity) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_mail_default_folder
+msgid "Omaduse Vaikimis kataloog meili bugidele (mail_default_folder) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_mail_default_folder_comment
+msgid "Omaduse Vaikimis kataloog meili bugidele (mail_default_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_mail_default_folder_help
+msgid "Omaduse Vaikimis kataloog meili bugidele (mail_default_folder) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_apps_tb
+msgid "Omaduse  (apps_tb) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_apps_tb_comment
+msgid "Omaduse  (apps_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_apps_tb_help
+msgid "Omaduse  (apps_tb) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_apps_table
+msgid "Omaduse  (apps_table) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_apps_table_comment
+msgid "Omaduse  (apps_table) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_apps_table_help
+msgid "Omaduse  (apps_table) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_search_tb
@@ -240,6 +299,18 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_s_bug_status_help
 msgid "Omaduse Staatus (s_bug_status) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_s_feedback_p
+msgid "Omaduse Tagasiside kellelt (s_feedback_p) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_s_feedback_p_comment
+msgid "Omaduse Tagasiside kellelt (s_feedback_p) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_s_feedback_p_help
+msgid "Omaduse Tagasiside kellelt (s_feedback_p) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_s_bug_priority
@@ -410,6 +481,18 @@ msgstr ""
 msgid "Omaduse Kokkuv&otilde;te (gantt_summary) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_complete_table
+msgid "Omaduse  (complete_table) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_complete_table_comment
+msgid "Omaduse  (complete_table) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_complete_table_help
+msgid "Omaduse  (complete_table) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_my_bugs_stat_p
 msgid "Omaduse Kelle buge n&auml;idata (my_bugs_stat_p) caption"
 msgstr ""
@@ -506,6 +589,18 @@ msgstr ""
 msgid "Omaduse Otsingu tulemused (sp_s_res) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_agroup
+msgid "Omaduse Grupid, mis saavad buge sulgeda (agroup) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_agroup_comment
+msgid "Omaduse Grupid, mis saavad buge sulgeda (agroup) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_agroup_help
+msgid "Omaduse Grupid, mis saavad buge sulgeda (agroup) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_def_notify_list
 msgid "Omaduse Bugi kommentaaride CC (def_notify_list) caption"
 msgstr ""
@@ -528,6 +623,30 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_cvs2uidmap_help
 msgid "Omaduse Kasutajanimede kaart (cvs2uidmap) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_default_cfgmanager
+msgid "Omaduse Vaikimisi seadete haldur (default_cfgmanager) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_default_cfgmanager_comment
+msgid "Omaduse Vaikimisi seadete haldur (default_cfgmanager) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_default_cfgmanager_help
+msgid "Omaduse Vaikimisi seadete haldur (default_cfgmanager) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_only_bt_ppl
+msgid "Omaduse J&auml;lgijateks ainult valitud inimesed (bug_only_bt_ppl) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_only_bt_ppl_comment
+msgid "Omaduse J&auml;lgijateks ainult valitud inimesed (bug_only_bt_ppl) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_only_bt_ppl_help
+msgid "Omaduse J&auml;lgijateks ainult valitud inimesed (bug_only_bt_ppl) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_reqs_tb
@@ -866,6 +985,90 @@ msgstr ""
 msgid "Omaduse  (stat_hrs_detail) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_start
+msgid "Omaduse Alates (stat_hrs_start) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_start_comment
+msgid "Omaduse Alates (stat_hrs_start) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_start_help
+msgid "Omaduse Alates (stat_hrs_start) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_end
+msgid "Omaduse Kuni (stat_hrs_end) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_end_comment
+msgid "Omaduse Kuni (stat_hrs_end) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_end_help
+msgid "Omaduse Kuni (stat_hrs_end) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_bugs
+msgid "Omaduse &Uuml;lesanded (stat_hr_bugs) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_bugs_comment
+msgid "Omaduse &Uuml;lesanded (stat_hr_bugs) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_bugs_help
+msgid "Omaduse &Uuml;lesanded (stat_hr_bugs) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_meetings
+msgid "Omaduse Kohtumised (stat_hr_meetings) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_meetings_comment
+msgid "Omaduse Kohtumised (stat_hr_meetings) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_meetings_help
+msgid "Omaduse Kohtumised (stat_hr_meetings) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_tasks
+msgid "Omaduse Toimetused (stat_hr_tasks) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_tasks_comment
+msgid "Omaduse Toimetused (stat_hr_tasks) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_tasks_help
+msgid "Omaduse Toimetused (stat_hr_tasks) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_calls
+msgid "Omaduse K&otilde;ned (stat_hr_calls) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_calls_comment
+msgid "Omaduse K&otilde;ned (stat_hr_calls) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hr_calls_help
+msgid "Omaduse K&otilde;ned (stat_hr_calls) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_submit
+msgid "Omaduse Otsi (stat_hrs_submit) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_submit_comment
+msgid "Omaduse Otsi (stat_hrs_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_hrs_submit_help
+msgid "Omaduse Otsi (stat_hrs_submit) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_stat_proj_detail
 msgid "Omaduse  (stat_proj_detail) caption"
 msgstr ""
@@ -928,6 +1131,22 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_reminders_help
 msgid "Grupi Teavitused (reminders) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_mail_settings
+msgid "Grupi Meiliseaded (mail_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_mail_settings_help
+msgid "Grupi Meiliseaded (mail_settings) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_bug_apps
+msgid "Grupi Rakendused (bug_apps) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_bug_apps_help
+msgid "Grupi Rakendused (bug_apps) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_reqs_main
@@ -1130,6 +1349,14 @@ msgstr ""
 msgid "Grupi Gantti diagramm (gantt_chart) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_complete
+msgid "Grupi Valmis (minu lisatud) (complete) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_complete_help
+msgid "Grupi Valmis (minu lisatud) (complete) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_my_bugs_stat
 msgid "Grupi Minu Bugide stat (my_bugs_stat) pealkiri"
 msgstr ""
@@ -1174,8 +1401,28 @@ msgstr ""
 msgid "Seose Bugi (RELTYPE_BUG) tekst"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_IMAP
+msgid "Seose Imap (RELTYPE_IMAP) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_MAIL_DEF_FOLDER
+msgid "Seose Meilitud bugide kataloog (RELTYPE_MAIL_DEF_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_AGROUP
+msgid "Seose Admin grupp (RELTYPE_AGROUP) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_CFGMGR
+msgid "Seose Seadete haldur (RELTYPE_CFGMGR) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_DEVO_FOLDER
+msgid "Seose Tellimuste kataloog (RELTYPE_DEVO_FOLDER) tekst"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_bug_tree
-msgid "Kujundusosa Arendusülesanded (bug_tree) pealkiri"
+msgid "Kujundusosa Arendus&uuml;lesanded (bug_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_s_name_lay
@@ -1199,7 +1446,7 @@ msgid "Kujundusosa Osalejad (s_who_l) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_reqs_tree
-msgid "Kujundusosa Nõuete kategooriad (reqs_tree) pealkiri"
+msgid "Kujundusosa N&otilde;uete&nbsp;kategooriad (reqs_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_reqs_p_tree
@@ -1207,7 +1454,7 @@ msgid "Kujundusosa Projektid (reqs_p_tree) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_dev_orders_tree_v
-msgid "Kujundusosa Arendustellimuste kategooriad (dev_orders_tree_v) pealkiri"
+msgid "Kujundusosa Arendustellimuste&nbsp;kategooriad (dev_orders_tree_v) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_reqs_c_tree
@@ -1231,198 +1478,250 @@ msgid "Kujundusosa Projektid (pp_tree_b) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:layout_pr_tree_b
-msgid "Kujundusosa Nõuded (pr_tree_b) pealkiri"
+msgid "Kujundusosa N&otilde;uded (pr_tree_b) pealkiri"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:530
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:610
 msgid "T&ouml;id kokku: %s, tunde %s.<Br>Viimase t&ouml;&ouml; l&otilde;ppt&auml;htaeg %s."
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:625 classes/applications/bug_o_matic_3000/bug_tracker.aw:1596 classes/applications/bug_o_matic_3000/bug_tracker.aw:1685 classes/applications/bug_o_matic_3000/bug_tracker.aw:2406
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:807
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1969
+msgid "Id"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:811
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:988
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1973
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2062
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2792
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2846
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:629
-msgid "Kommentaaride arv"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:635
-msgid "T&ouml;&ouml;tunnid"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:708
-msgid "Summa"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:730
-msgid "Lisa"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:740
-msgid "Salvesta"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:746
-msgid "Kustuta"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:749
-msgid "Oled kindel, et soovid bugi kustutada?"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:785
-msgid "L&otilde;ika"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:797
-msgid "Kleebi"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:812 classes/applications/bug_o_matic_3000/bug_tracker.aw:2351
-msgid "M&auml;&auml;ra"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:831 classes/applications/bug_o_matic_3000/bug_tracker.aw:1602 classes/applications/bug_o_matic_3000/bug_tracker.aw:1692
-msgid "Staatus"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:851
-msgid "Bookmarkimise url"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1253 classes/applications/bug_o_matic_3000/bug_tracker.aw:1267
-msgid "<span style='font-size: 8px;'>Muuda</span>"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1315
-msgid "Tavaline"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1316
-msgid "Projektid"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1317
-msgid "Teostajad"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1318
-msgid "Klassid"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1319
-msgid "Kliendid"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1320
-msgid "J&auml;lgijad"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1506
-msgid "Muuda"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1591 classes/applications/bug_o_matic_3000/bug_tracker.aw:1680
-msgid ""
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1611 classes/applications/bug_o_matic_3000/bug_tracker.aw:1701
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:816
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1988
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2078
 msgid "Kellele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1617 classes/applications/bug_o_matic_3000/bug_tracker.aw:1713
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:821
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1994
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2094
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1623 classes/applications/bug_o_matic_3000/bug_tracker.aw:1638 classes/applications/bug_o_matic_3000/bug_tracker.aw:1717 classes/applications/bug_o_matic_3000/bug_tracker.aw:1730
-msgid "1"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1624 classes/applications/bug_o_matic_3000/bug_tracker.aw:1639 classes/applications/bug_o_matic_3000/bug_tracker.aw:1718 classes/applications/bug_o_matic_3000/bug_tracker.aw:1731
-msgid "2"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1625 classes/applications/bug_o_matic_3000/bug_tracker.aw:1640 classes/applications/bug_o_matic_3000/bug_tracker.aw:1719 classes/applications/bug_o_matic_3000/bug_tracker.aw:1732
-msgid "3"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1626 classes/applications/bug_o_matic_3000/bug_tracker.aw:1641 classes/applications/bug_o_matic_3000/bug_tracker.aw:1720 classes/applications/bug_o_matic_3000/bug_tracker.aw:1733
-msgid "4"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1627 classes/applications/bug_o_matic_3000/bug_tracker.aw:1642 classes/applications/bug_o_matic_3000/bug_tracker.aw:1721 classes/applications/bug_o_matic_3000/bug_tracker.aw:1734
-msgid "5"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1632 classes/applications/bug_o_matic_3000/bug_tracker.aw:1726
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:827
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2009
 msgid "T&otilde;sidus"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1648 classes/applications/bug_o_matic_3000/bug_tracker.aw:1740
-msgid "Looja"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1654 classes/applications/bug_o_matic_3000/bug_tracker.aw:1746
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:833
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2031
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2122
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1663 classes/applications/bug_o_matic_3000/bug_tracker.aw:1756
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:841
+msgid "Viimane kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:849
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2040
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2132
 msgid "K"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1707
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:992
+msgid "Kommentaaride arv"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:998
+msgid "T&ouml;&ouml;tunnid"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1071
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1093
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1103
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1109
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1112
+msgid "Oled kindel, et soovid bugi kustutada?"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1148
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1160
+msgid "Kleebi"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1175
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2754
+msgid "M&auml;&auml;ra"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1194
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1979
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2069
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1214
+msgid "Bookmarkimise url"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1623
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1637
+msgid "<span style='font-size: 8px;'>Muuda</span>"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1685
+msgid "Tavaline"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1686
+msgid "Projektid"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1687
+msgid "Teostajad"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1688
+msgid "Klassid"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1689
+msgid "Kliendid"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1690
+msgid "J&auml;lgijad"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1874
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2000
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2015
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2098
+msgid "1"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2001
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2016
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2099
+msgid "2"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2002
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2017
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2100
+msgid "3"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2003
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2018
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2101
+msgid "4"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2004
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2019
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2102
+msgid "5"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2025
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2116
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2084
 msgid "SP"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:1896
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2085
+msgid "Kombineeritud prioriteet"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2108
+msgid "P"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2109
+msgid "Prognoositud tunde"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2281
 msgid "Nimekiri arendus&uuml;lesannetest"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2005
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2391
 msgid "Sisene"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2316
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2719
 msgid "Salvesta otsing"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2400
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2789
+msgid "Rakendused"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2840
 msgid "Kelle otsing"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2412
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:2852
 msgid "Otsingu parameetrid"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3010
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3455
 msgid "bug_tracker::get_next_avail_time_from(): time is in loop!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3129
-msgid "Tere!\nMina olen AW Bugtrack. Sul (%s) on prognoositavad ajad m22ramata nendele bugidele, palun tee seda kohe!\n\n"
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3584
+msgid ""
+"Tere!\n"
+"Mina olen AW Bugtrack. Sul (%s) on prognoositavad ajad m22ramata nendele bugidele, palun tee seda kohe!\n"
+"\n"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3137
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3592
 msgid "Bugtracki M22ramata ajad"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3191
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3646
 msgid "Bugtracki vastamata bugid"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3193
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3648
 msgid "all done"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3222
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3677
 msgid "Arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3227
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3682
 msgid "Prognoositud aeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3253
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3708
 msgid "Esimesed 10 ennustamata bugi"
 msgstr ""
-

@@ -2108,12 +2108,12 @@ msgid "Eelmine"
 msgstr "Previous"
 
 #: classes/mrp/mrp_workspace.aw:2815
-msgid "Täna"
-msgstr "Today"
+msgid "T&auml;na"
+msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2819
-msgid "Järgmine"
-msgstr "Next"
+msgid "J&auml;rgmine"
+msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2823
 msgid ">>"
@@ -2258,6 +2258,12 @@ msgstr ""
 #: classes/mrp/mrp_workspace.aw:5225
 msgid "Resurss"
 msgstr ""
+
+#~ msgid "Täna"
+#~ msgstr "Today"
+
+#~ msgid "Järgmine"
+#~ msgstr "Next"
 
 # classes/mrp/mrp_workspace.aw:prop_sp_comment
 #~ msgid "Omaduse Kirjeldus (sp_comment) caption"

@@ -150,52 +150,6 @@ msgstr ""
 msgid "kõrgem"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:114
-msgid "Osakondade tasemed, mida näidataks, saab märkida kujul '1,2,3' või '1-2' või '3'
-			juhul , kui on vaja kuvada inimesi üksteise kõrval, siis teplates peaks olema subid umbes kujul:
-			<!-- SUB: DEPARTMENT -->
-			{VAR:department_name}
-			<table>
-			<!-- SUB: LINE -->
-				<tr>
-				<!-- SUB: WORKER -->
-					<td>
-					<p align=bottom><center>
-						{VAR:photo} <br>
-						<b>{VAR:name} </b><br>
-						{VAR:rank} <br>
-					</center></p>
-					</td>
-				<!-- END SUB: WORKER -->
-				</tr>
-			<!-- END SUB: LINE -->
-			</table>
-			<!-- SUB: DEPARTMENT -->
-			
-			kui igal real on 1 inimene, siis võib SUB: LINE vahelt ära jätta
-			
-			Kui viimaseks vaateks on üks konkreetne isik, siis template sees ühtegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
-			
-			endine variant ka igaks juhuks töötab veel
-			
-			juhul kui miski taseme osakonda oleks vaja teistmoodi näidata, siis tuleks <!-- SUB: DEPARTMENT --> sisse teha <!-- SUB: LEVEL4DEPARTMENT --> (vastavalt taseme numbrile) , mis oleks muidu sama struktuuriga nagu DEPARTMENT
-
-			muutujad mida saab kasutada:
-			DEPARTMENT sub'is: department_name, address , phone , fax , email , next_level_link (link nägemas antud osakonda uues vaates).
-			sub'is worker :
-			name , name_with_email , email , emails, photo, contact,
-			profession , profession_with_directive , professions , directive (ametijuhend), wage_doc , wage_doc_exist (palgaandmete dokument, kui on olemas),
-			education (haridustase) , school , subject_field(valdkond) , speciality ,
-			phone, phones , home_phone, home_phones, mobile_phone, mobile_phones, skype_phone, skype_phones, short_phone, short_phones, work_phone, work_phones, extension_phone, extension_phones,
-			next_level_link (link j'gmise taseme vaatesse... kui tegu siis antud inimesega),
-			company, section,
-			url, urls,
-			ta1 - ta5 (kasutajadefineeritud muutujad).
-
-			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev.
-			Template'ide tõlkimiseks kasutada faili persons_web_view.aw."
-msgstr ""
-
 #: classes/crm/persons_webview.aw:125
 msgid "ainult osakonnad"
 msgstr ""

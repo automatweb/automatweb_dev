@@ -105,7 +105,7 @@ msgstr "no additional info about group"
 
 #: classes/class_base.aw:994 classes/class_base.aw:1683
 msgid "Nimetu"
-msgstr ""
+msgstr "No name"
 
 #: classes/class_base.aw:1556
 msgid "Muuda"
@@ -126,7 +126,7 @@ msgstr "Connection manager"
 
 #: classes/class_base.aw:1888
 msgid "Andmed salvestatud!"
-msgstr ""
+msgstr "Data saved!"
 
 #: classes/class_base.aw:3779
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
@@ -146,23 +146,23 @@ msgstr "Translation is active"
 
 #: classes/class_base.aw:5655
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/class_base.aw:5820 classes/class_base.aw:5857
 msgid "aliase number oli juba olemas, seega uuendas"
-msgstr ""
+msgstr "alias number already existed, therefore updated"
 
 #: classes/class_base.aw:5824
 msgid "Seoste l&otilde;ikamisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
-msgstr ""
+msgstr "There appeared an error while cutting relations: object with id %s already had relation #%s# therefore the object %s has relation #%s#"
 
 #: classes/class_base.aw:5864
 msgid "Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
-msgstr ""
+msgstr "There appeared an error while copying relations: object with id %s already had relation #%s# therefore the object %s has relation #%s#"
 
 #: classes/class_base.aw:5894
 msgid "Kliki siia j&auml;tkamiseks"
-msgstr ""
+msgstr "Click here to continue"
 
 #~ msgid "Tõlgi"
 #~ msgstr "Translate"

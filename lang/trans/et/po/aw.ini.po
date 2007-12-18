@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 # aw.ini:class_1
 #: aw.ini:class_1
@@ -257,16 +256,6 @@ msgstr ""
 msgid "Klassi Scheduler (108) nimi"
 msgstr ""
 
-# aw.ini:class_110
-#: aw.ini:class_110
-msgid "Klassi Apache alias (110) nimi"
-msgstr ""
-
-# aw.ini:class_113
-#: aw.ini:class_113
-msgid "Klassi Objektitabeli seaded (113) nimi"
-msgstr ""
-
 # aw.ini:class_114
 #: aw.ini:class_114
 msgid "Klassi Prioriteet (114) nimi"
@@ -274,10 +263,6 @@ msgstr ""
 
 #: aw.ini:class_115
 msgid "Klassi Objekti t&uuml;&uuml;p (115) nimi"
-msgstr ""
-
-#: aw.ini:class_116
-msgid "Klassi Puu rootmen&uuml;&uuml; (116) nimi"
 msgstr ""
 
 # aw.ini:class_118
@@ -595,15 +580,6 @@ msgstr ""
 # aw.ini:class_212
 #: aw.ini:class_212
 msgid "Klassi Ekomar (212) nimi"
-msgstr ""
-
-#: aw.ini:class_214
-msgid "Klassi Men&uuml;&uuml; eraldusjoon (214) nimi"
-msgstr ""
-
-# aw.ini:class_215
-#: aw.ini:class_215
-msgid "Klassi Shortcut (215) nimi"
 msgstr ""
 
 # aw.ini:class_218
@@ -2680,6 +2656,66 @@ msgstr ""
 msgid "Klassi Sündmuste import (iCal) (1349) nimi"
 msgstr ""
 
+#: aw.ini:class_1350
+msgid "Klassi Eelarvestamise maksumaatriks (1350) nimi"
+msgstr ""
+
+#: aw.ini:class_1351
+msgid "Klassi Impordi minu MP3d (1351) nimi"
+msgstr ""
+
+#: aw.ini:class_1352
+msgid "Klassi MP3 (1352) nimi"
+msgstr ""
+
+#: aw.ini:class_1353
+msgid "Klassi MP3 pleier (1353) nimi"
+msgstr ""
+
+#: aw.ini:class_1354
+msgid "Klassi XML andmeallikas (1354) nimi"
+msgstr ""
+
+#: aw.ini:class_1355
+msgid "Klassi JSON andmeallikas (1355) nimi"
+msgstr ""
+
+#: aw.ini:class_1356
+msgid "Klassi S&uuml;ndmuste import (1356) nimi"
+msgstr ""
+
+#: aw.ini:class_1357
+msgid "Klassi Aiesec import (1357) nimi"
+msgstr ""
+
+#: aw.ini:class_1362
+msgid "Klassi Paki css ja javascript (1362) nimi"
+msgstr ""
+
+#: aw.ini:class_1364
+msgid "Klassi Ilmateade (1364) nimi"
+msgstr ""
+
+#: aw.ini:class_1365
+msgid "Klassi Transportation type (1365) nimi"
+msgstr ""
+
+#: aw.ini:class_1366
+msgid "Klassi Hind (1366) nimi"
+msgstr ""
+
+#: aw.ini:class_1367
+msgid "Klassi L&auml;hetustingimus (1367) nimi"
+msgstr ""
+
+#: aw.ini:class_1368
+msgid "Klassi Volitus (1368) nimi"
+msgstr ""
+
+#: aw.ini:class_1369
+msgid "Klassi Surmakaunter (1369) nimi"
+msgstr ""
+
 # aw.ini:classfolder_29
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
@@ -2977,6 +3013,14 @@ msgstr ""
 
 #: aw.ini:classfolder_65
 msgid "Klassi kataloogi Eelarvestamine (65) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_66
+msgid "Klassi kataloogi Pleier (66) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_67
+msgid "Klassi kataloogi Fun (67) nimi"
 msgstr ""
 
 #: aw.ini:acl_can_edit
@@ -5271,6 +5315,30 @@ msgstr ""
 msgid "syslog.type.ST_ICAL_IMPORT"
 msgstr ""
 
+#: aw.ini:syslogtypes_1350
+msgid "syslog.type.ST_BUDGETING_TAX_MATRIX"
+msgstr ""
+
+#: aw.ini:syslogtypes_1354
+msgid "syslog.type.ST_XML_SOURCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1355
+msgid "syslog.type.ST_JSON_SOURCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1356
+msgid "syslog.type.ST_EVENT_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1361
+msgid "syslog.type.ST_EVENT_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_1364
+msgid "syslog.type.ST_WEATHER_REPORT"
+msgstr ""
+
 #: aw.ini:syslogactions_1
 msgid "syslog.action.SA_CHANGE"
 msgstr ""
@@ -5375,23 +5443,17 @@ msgstr ""
 msgid "syslog.action.SA_FINAL_DELETE"
 msgstr ""
 
-#: aw.ini:class_224
-msgid "Klassi Kohtumine (224) comment"
-msgstr "See on kohtumise klassi abiteksti kommentaari väli 11"
+#~ msgid "Klassi Kohtumine (224) comment"
+#~ msgstr "See on kohtumise klassi abiteksti kommentaari väli 11"
 
-#: aw.ini:class_224
-msgid "Klassi Kohtumine (224) help"
-msgstr "Ja see on abiteksti pikem tekstiväli"
+#~ msgid "Klassi Kohtumine (224) help"
+#~ msgstr "Ja see on abiteksti pikem tekstiväli"
 
-#: aw.ini:class_224
-msgid "Klassi Kohtumine 22 (224) nimi"
-msgstr "Kohtumine 334"
+#~ msgid "Klassi Kohtumine 22 (224) nimi"
+#~ msgstr "Kohtumine 334"
 
-#: aw.ini:class_224
-msgid "Klassi Kohtumine 22 (224) comment"
-msgstr "334"
+#~ msgid "Klassi Kohtumine 22 (224) comment"
+#~ msgstr "334"
 
-#: aw.ini:class_224
-msgid "Klassi Kohtumine 22 (224) help"
-msgstr "444"
-
+#~ msgid "Klassi Kohtumine 22 (224) help"
+#~ msgstr "444"

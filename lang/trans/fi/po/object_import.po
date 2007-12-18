@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/admin/object_import.aw:class_329_help
 msgid "Klassi Objektide Import help"
@@ -39,15 +38,15 @@ msgid "Omaduse Imporditava objekti t&uuml;&uuml;p (object_type) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id
-msgid "Omaduse Unikaalne omadus  (unique_id) caption"
+msgid "Omaduse Unikaalne omadus (unique_id) caption"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id_comment
-msgid "Omaduse Unikaalne omadus  (unique_id) kommentaar"
+msgid "Omaduse Unikaalne omadus (unique_id) kommentaar"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_unique_id_help
-msgid "Omaduse Unikaalne omadus  (unique_id) help"
+msgid "Omaduse Unikaalne omadus (unique_id) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:prop_folder_field
@@ -358,10 +357,6 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/admin/object_import.aw:486
-msgid ""
-msgstr ""
-
 #: classes/admin/object_import.aw:503
 msgid "&Auml;ra impordi"
 msgstr ""
@@ -433,4 +428,3 @@ msgstr ""
 #: classes/admin/object_import.aw:1112
 msgid "Importi alustati"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -135,6 +135,18 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_auto_period_help
 #: classes/contentmgmt/promo.aw:prop_auto_period_help
 msgid "Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) help"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_sss_tb
+msgid "Omaduse  (sss_tb) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_sss_tb_comment
+msgid "Omaduse  (sss_tb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_sss_tb_help
+msgid "Omaduse  (sss_tb) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_all_menus
@@ -323,6 +335,30 @@ msgstr ""
 msgid "Omaduse Template n&auml;itamiseks (tpl_lead) help"
 msgstr "template for the document's that are into the container. Differs from the setting in General view by the container´s frame design. In General view is the the container´s frame design set."
 
+#: classes/contentmgmt/promo.aw:prop_tpl_lead_last
+msgid "Omaduse Template viimaste dokumentide n&auml;itamiseks (tpl_lead_last) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_tpl_lead_last_comment
+msgid "Omaduse Template viimaste dokumentide n&auml;itamiseks (tpl_lead_last) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_tpl_lead_last_help
+msgid "Omaduse Template viimaste dokumentide n&auml;itamiseks (tpl_lead_last) help"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_tpl_lead_last_count
+msgid "Omaduse Viimane template alates dokumendist (tpl_lead_last_count) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_tpl_lead_last_count_comment
+msgid "Omaduse Viimane template alates dokumendist (tpl_lead_last_count) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_tpl_lead_last_count_help
+msgid "Omaduse Viimane template alates dokumendist (tpl_lead_last_count) help"
+msgstr ""
+
 # classes/contentmgmt/promo.aw:prop_use_fld_tpl
 #: classes/contentmgmt/promo.aw:prop_use_fld_tpl
 msgid "Omaduse Kasuta dokumendi asukoha templatet (use_fld_tpl) caption"
@@ -353,6 +389,18 @@ msgstr ""
 msgid "Omaduse Template (dokumendi sees) (promo_tpl) help"
 msgstr "setting that makes it able to choose a special design for the container´s that are placed in a document."
 
+#: classes/contentmgmt/promo.aw:prop_lm_tb
+msgid "Omaduse  (lm_tb) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_lm_tb_comment
+msgid "Omaduse  (lm_tb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_lm_tb_help
+msgid "Omaduse  (lm_tb) help"
+msgstr ""
+
 #: classes/contentmgmt/promo.aw:prop_last_menus
 msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) caption"
 msgstr "Select folders, from where the last documents are taken"
@@ -363,7 +411,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_last_menus_help
 msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) help"
-msgstr option for choosing folders, from where documents are taken to display in the Container. The column “Set as title” changes the folders name to the container´s headline. The column “incl. Sub-menus ” makes it able to choose if the documents are taken also from the folder´s sub-folders or not. It needs a previous connection in the Connection manager with the type Get documents form this folder."
+msgstr "option for choosing folders, from where documents are taken to display in the Container. The column “Set as title” changes the folders name to the container´s headline. The column “incl. Sub-menus ” makes it able to choose if the documents are taken also from the folder´s sub-folders or not. It needs a previous connection in the Connection manager with the type Get documents form this folder."
 
 # classes/contentmgmt/promo.aw:prop_ndocs
 #: classes/contentmgmt/promo.aw:prop_ndocs
@@ -453,6 +501,18 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type_help
 msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) help"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_general_sub
@@ -551,6 +611,14 @@ msgstr "Keywords"
 msgid "Grupi M&auml;rks&otilde;nad (kws) help"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU
 msgid "Seose n&auml;ita men&uuml;&uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
 msgstr "Display next to folder"
@@ -576,88 +644,96 @@ msgstr "Keyword"
 msgid "Seose ignoreeri dokumente selle men&uuml;&uuml; alt (RELTYPE_DOC_IGNORE) tekst"
 msgstr "Ignore documents of this folder"
 
-#: classes/contentmgmt/promo.aw:222
+#: classes/contentmgmt/promo.aw:248
 msgid "Vali template"
 msgstr "Select template"
 
-#: classes/contentmgmt/promo.aw:239
+#: classes/contentmgmt/promo.aw:265
 msgid "Vasakul"
 msgstr "Left"
 
-#: classes/contentmgmt/promo.aw:240
+#: classes/contentmgmt/promo.aw:266
 msgid "Paremal"
 msgstr "Right"
 
-#: classes/contentmgmt/promo.aw:241
+#: classes/contentmgmt/promo.aw:267
 msgid "&Uuml;leval"
 msgstr "Top"
 
-#: classes/contentmgmt/promo.aw:242
+#: classes/contentmgmt/promo.aw:268
 msgid "All"
 msgstr "Bottom"
 
-#: classes/contentmgmt/promo.aw:243
+#: classes/contentmgmt/promo.aw:269
 msgid "Skrolliv"
 msgstr "Scrollable"
 
-#: classes/contentmgmt/promo.aw:261
+#: classes/contentmgmt/promo.aw:287
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr "Order"
 
-#: classes/contentmgmt/promo.aw:262
+#: classes/contentmgmt/promo.aw:288
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr "Creation date"
 
-#: classes/contentmgmt/promo.aw:263
+#: classes/contentmgmt/promo.aw:289
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr "Modification date"
 
-#: classes/contentmgmt/promo.aw:264
+#: classes/contentmgmt/promo.aw:290
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr "Date written in document"
 
-#: classes/contentmgmt/promo.aw:265
+#: classes/contentmgmt/promo.aw:291
 msgid "Objekti nime j&auml;rgi"
 msgstr "Name of object"
 
-#: classes/contentmgmt/promo.aw:266
+#: classes/contentmgmt/promo.aw:292
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr "Date selected in calendar"
 
-#: classes/contentmgmt/promo.aw:267
+#: classes/contentmgmt/promo.aw:293
 msgid "Random"
 msgstr "Random"
 
-#: classes/contentmgmt/promo.aw:275
+#: classes/contentmgmt/promo.aw:301
 msgid "Suurem (uuem) enne"
 msgstr "Bigger (newer) first"
 
-#: classes/contentmgmt/promo.aw:276
+#: classes/contentmgmt/promo.aw:302
 msgid "V&auml;iksem (vanem) enne"
 msgstr "Smaller (older) first"
 
-#: classes/contentmgmt/promo.aw:330 classes/contentmgmt/promo.aw:379
-#: classes/contentmgmt/promo.aw:426
+#: classes/contentmgmt/promo.aw:364 classes/contentmgmt/promo.aw:413
+#: classes/contentmgmt/promo.aw:460
 msgid "ID"
 msgstr "ID"
 
-#: classes/contentmgmt/promo.aw:338 classes/contentmgmt/promo.aw:387
-#: classes/contentmgmt/promo.aw:435
+#: classes/contentmgmt/promo.aw:372 classes/contentmgmt/promo.aw:421
+#: classes/contentmgmt/promo.aw:469
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/promo.aw:343 classes/contentmgmt/promo.aw:392
-#: classes/contentmgmt/promo.aw:449
+#: classes/contentmgmt/promo.aw:377 classes/contentmgmt/promo.aw:426
+#: classes/contentmgmt/promo.aw:483
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr "incl. submenus"
 
-#: classes/contentmgmt/promo.aw:442
+#: classes/contentmgmt/promo.aw:476
 msgid "Pane pealkirjaks"
 msgstr "Set as title"
 
-#: classes/contentmgmt/promo.aw:1072
+#: classes/contentmgmt/promo.aw:1135
 msgid "M&auml;rks&otilde;na"
 msgstr "Keyword"
+
+#: classes/contentmgmt/promo.aw:1189
+msgid "Valitud objekt: %s /"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:1195
+msgid "Otsi uus objekt:"
+msgstr ""
 
 #~ msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 #~ msgstr "Translation confirmed"

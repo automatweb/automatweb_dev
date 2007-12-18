@@ -26,7 +26,3 @@ msgstr ""
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/vcl/comments.aw:108
-msgid ""
-msgstr ""
-

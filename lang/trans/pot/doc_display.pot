@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,23 +10,23 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/doc_display.aw:454
+#: classes/doc_display.aw:456
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/doc_display.aw:460
+#: classes/doc_display.aw:462
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc_display.aw:465
+#: classes/doc_display.aw:467
 msgid "Peida"
 msgstr ""
 
-#: classes/doc_display.aw:469
+#: classes/doc_display.aw:471
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/doc_display.aw:475
+#: classes/doc_display.aw:477
 msgid "Kleebi"
 msgstr ""
 

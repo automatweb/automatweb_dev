@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -16,10 +16,6 @@ msgstr ""
 
 #: classes/vcl/releditor.aw:46
 msgid "Klass"
-msgstr ""
-
-#: classes/vcl/releditor.aw:63 classes/vcl/releditor.aw:73 classes/vcl/releditor.aw:109
-msgid ""
 msgstr ""
 
 #: classes/vcl/releditor.aw:64
@@ -58,19 +54,19 @@ msgstr ""
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: classes/vcl/releditor.aw:567 classes/vcl/releditor.aw:768
+#: classes/vcl/releditor.aw:567 classes/vcl/releditor.aw:774
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/releditor.aw:691
+#: classes/vcl/releditor.aw:697
 msgid "Vali üks"
 msgstr ""
 
-#: classes/vcl/releditor.aw:701 classes/vcl/releditor.aw:753
+#: classes/vcl/releditor.aw:707 classes/vcl/releditor.aw:759
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:759
+#: classes/vcl/releditor.aw:765
 msgid "Nimi"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,64 +9,58 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/groupware/project_req_impl.aw:16
+#: classes/applications/groupware/project_req_impl.aw:18
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:31
+#: classes/applications/groupware/project_req_impl.aw:33
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:46
+#: classes/applications/groupware/project_req_impl.aw:48
 msgid "K&otilde;ne"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:61
+#: classes/applications/groupware/project_req_impl.aw:63
 msgid "Kohtumine"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:76
+#: classes/applications/groupware/project_req_impl.aw:78
 msgid "Arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:92
+#: classes/applications/groupware/project_req_impl.aw:94
 msgid "N&otilde;ue"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:107
+#: classes/applications/groupware/project_req_impl.aw:109
 msgid "Kategooria"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:114
+#: classes/applications/groupware/project_req_impl.aw:116
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:120
+#: classes/applications/groupware/project_req_impl.aw:122
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:204
+#: classes/applications/groupware/project_req_impl.aw:206
 msgid "N&otilde;uded"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:208
-msgid ""
-msgstr ""
-
-#: classes/applications/groupware/project_req_impl.aw:212
+#: classes/applications/groupware/project_req_impl.aw:214
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:218
+#: classes/applications/groupware/project_req_impl.aw:220
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:224
+#: classes/applications/groupware/project_req_impl.aw:226
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:233
+#: classes/applications/groupware/project_req_impl.aw:235
 msgid "Osalejad"
 msgstr ""
-

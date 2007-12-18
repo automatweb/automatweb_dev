@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:08:59 +0300\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,24 +9,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/vcl/comments.aw:56
+msgid "kommentaari<br><br>"
+msgstr ""
 
-#: classes/vcl/comments.aw:48
-msgid " kommentaari<br><br>"
-msgstr " comments<br><br>"
-
-#: classes/vcl/comments.aw:80
+#: classes/vcl/comments.aw:90
 msgid "Lisa kommentaar"
 msgstr "Add comment"
 
-#: classes/vcl/comments.aw:85
+#: classes/vcl/comments.aw:95
 msgid "Kasutaja"
 msgstr "User"
 
-#: classes/vcl/comments.aw:91
+#: classes/vcl/comments.aw:101
 msgid "Kommentaar"
 msgstr "Comment"
 
-#: classes/vcl/comments.aw:96
-msgid ""
-msgstr ""
-
+#~ msgid " kommentaari<br><br>"
+#~ msgstr " comments<br><br>"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/class_designer/class_designer_manager.aw:class_929_help
+msgid "Klassi Klasside brauser help"
+msgstr ""
 
 #: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tb
 msgid "Omaduse  (mgr_tb) caption"
@@ -98,39 +101,93 @@ msgstr "Relations"
 msgid "Grupi Seosed (rels) help"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:101 classes/applications/class_designer/class_designer_manager.aw:144 classes/applications/class_designer/class_designer_manager.aw:215
-msgid "Lisa"
-msgstr "Add"
+#: classes/applications/class_designer/class_designer_manager.aw:109
+msgid "Lisa klass"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:122
+msgid "Lisa perekond"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:130
+#: classes/applications/class_designer/class_designer_manager.aw:726
+#: classes/applications/class_designer/class_designer_manager.aw:754
+msgid "Kustuta"
+msgstr ""
 
 #: classes/applications/class_designer/class_designer_manager.aw:138
+#: classes/applications/class_designer/class_designer_manager.aw:724
+#: classes/applications/class_designer/class_designer_manager.aw:752
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:145
+#: classes/applications/class_designer/class_designer_manager.aw:725
+#: classes/applications/class_designer/class_designer_manager.aw:753
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:158
+msgid "Kleebi"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:196
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/class_designer/class_designer_manager.aw:150
-msgid "Disaini"
-msgstr "Design"
-
 #: classes/applications/class_designer/class_designer_manager.aw:202
-msgid "Lisa objekt"
-msgstr "Add object"
+msgid "ID"
+msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:231
-msgid "Klassi nimi"
-msgstr "Class name"
+#: classes/applications/class_designer/class_designer_manager.aw:208
+msgid "Suurus"
+msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:237
-msgid "Seose nimi"
-msgstr "Relation name"
+#: classes/applications/class_designer/class_designer_manager.aw:214
+msgid "Tegevus"
+msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:243
-msgid "Seos klassiga"
-msgstr "Relation to class"
-
-#: classes/applications/class_designer/class_designer_manager.aw:249
+#: classes/applications/class_designer/class_designer_manager.aw:220
+#: classes/applications/class_designer/class_designer_manager.aw:361
 msgid "Vali"
 msgstr "Select"
 
-#: classes/applications/class_designer/class_designer_manager.aw:303
+#: classes/applications/class_designer/class_designer_manager.aw:327
+msgid "Lisa"
+msgstr "Add"
+
+#: classes/applications/class_designer/class_designer_manager.aw:343
+msgid "Klassi nimi"
+msgstr "Class name"
+
+#: classes/applications/class_designer/class_designer_manager.aw:349
+msgid "Seose nimi"
+msgstr "Relation name"
+
+#: classes/applications/class_designer/class_designer_manager.aw:355
+msgid "Seos klassiga"
+msgstr "Relation to class"
+
+#: classes/applications/class_designer/class_designer_manager.aw:415
 msgid "Lisa seos"
 msgstr "Add relation"
 
+#: classes/applications/class_designer/class_designer_manager.aw:723
+#: classes/applications/class_designer/class_designer_manager.aw:742
+msgid "Muuda nime"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:741
+msgid "Demo objekt"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:746
+msgid "Disaini"
+msgstr "Design"
+
+#: classes/applications/class_designer/class_designer_manager.aw:750
+msgid "Loo disainer"
+msgstr ""
+
+#~ msgid "Lisa objekt"
+#~ msgstr "Add object"

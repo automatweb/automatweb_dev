@@ -350,10 +350,6 @@ msgstr "Site ID"
 msgid "Leia vendi"
 msgstr "Find brothers"
 
-#: classes/search.aw:1312
-msgid ""
-msgstr ""
-
 #: classes/search.aw:1357
 msgid "Loodud"
 msgstr "Created"

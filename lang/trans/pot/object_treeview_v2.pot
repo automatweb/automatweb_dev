@@ -790,55 +790,59 @@ msgstr ""
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2117 classes/contentmgmt/object_treeview/object_treeview_v2.aw:2138
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1968
+msgid "Staatus"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2118 classes/contentmgmt/object_treeview/object_treeview_v2.aw:2139
 msgid "Kasvav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2117 classes/contentmgmt/object_treeview/object_treeview_v2.aw:2138
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2118 classes/contentmgmt/object_treeview/object_treeview_v2.aw:2139
 msgid "Kahanev"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2167
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2168
 msgid "Sorditav v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2173
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2174
 msgid "Kasvav / kahanev"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2179
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2180
 msgid "Kuup&auml;ev tekstina?"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2244
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2245
 msgid "Grupp"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2250
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2251
 msgid "Filtreeritav v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2256
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2257
 msgid "Filtreeritav v&auml;&auml;rtus"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2262
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2263
 msgid "V&auml;listav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2268
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2269
 msgid "Kas t&auml;pne?"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2294
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2295
 msgid "Asukoht"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2625
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2626
 msgid "Tulp"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2631
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2632
 msgid "Muundaja"
 msgstr ""
 

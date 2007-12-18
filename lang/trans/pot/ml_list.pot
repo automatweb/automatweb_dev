@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1243,17 +1243,7 @@ msgid "Asenduste legend"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:2943
-msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />
-							#username# - AutomatWebi kasutajanimi<br />
-							#name# - Listi liikme nimi<br />
-							#e-mail# - Listi liikme e-mail<br/>
-							#subject# - Kirja teema<br />
-							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
-							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br />
-							#lahkumine# - link, millel klikkides inimene saab listist lahkuda<br />
-							<br />
-							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi l&otilde;ppu #traceid#
-							N&auml;iteks: http://www.struktuur.ee/aw#traceid#"
+msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />							#username# - AutomatWebi kasutajanimi<br />							#name# - Listi liikme nimi<br />							#e-mail# - Listi liikme e-mail<br/>							#subject# - Kirja teema<br />							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br />							#lahkumine# - link, millel klikkides inimene saab listist lahkuda<br />							<br />							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi l&otilde;ppu #traceid#							N&auml;iteks: http://www.struktuur.ee/aw#traceid#"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:2959

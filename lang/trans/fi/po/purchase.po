@@ -226,10 +226,6 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:270 classes/applications/procurement_center/purchase.aw:312
-msgid ""
-msgstr ""
-
 #: classes/applications/procurement_center/purchase.aw:285
 msgid "Looja"
 msgstr ""

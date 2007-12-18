@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-06 12:41+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
 "Language-Team: \n"
@@ -18,11 +18,6 @@ msgstr "Class ID"
 msgid "Klass"
 msgstr "Class"
 
-#: classes/vcl/releditor.aw:63 classes/vcl/releditor.aw:73
-#: classes/vcl/releditor.aw:109
-msgid " "
-msgstr " "
-
 #: classes/vcl/releditor.aw:64
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr "Error in the definition of %s (properties not defined!)"
@@ -35,47 +30,49 @@ msgstr "Error in the definition of %s (connection type undefined!)"
 msgid "Seda seost ei saa redigeerida!"
 msgstr "This connection can not be edited"
 
-#: classes/vcl/releditor.aw:239 classes/vcl/releditor.aw:435
-#: classes/vcl/releditor.aw:454
+#: classes/vcl/releditor.aw:239 classes/vcl/releditor.aw:438
+#: classes/vcl/releditor.aw:446 classes/vcl/releditor.aw:457
 msgid "Uus"
 msgstr "New"
 
-#: classes/vcl/releditor.aw:317 classes/vcl/releditor.aw:479
+#: classes/vcl/releditor.aw:317 classes/vcl/releditor.aw:488
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/vcl/releditor.aw:443
-msgid "Uus "
-msgstr "New"
-
-#: classes/vcl/releditor.aw:444
+#: classes/vcl/releditor.aw:447
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/vcl/releditor.aw:459
+#: classes/vcl/releditor.aw:462
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/vcl/releditor.aw:462
+#: classes/vcl/releditor.aw:465
 msgid "Kustutada valitud seosed?"
 msgstr "Delete selected relations?"
 
-#: classes/vcl/releditor.aw:488
+#: classes/vcl/releditor.aw:497
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:558 classes/vcl/releditor.aw:753
+#: classes/vcl/releditor.aw:567 classes/vcl/releditor.aw:774
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/releditor.aw:682
+#: classes/vcl/releditor.aw:697
 msgid "Vali üks"
 msgstr "Pick one"
 
-#: classes/vcl/releditor.aw:691 classes/vcl/releditor.aw:740
+#: classes/vcl/releditor.aw:707 classes/vcl/releditor.aw:759
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:745
+#: classes/vcl/releditor.aw:765
 msgid "Nimi"
 msgstr "Name"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "Uus "
+#~ msgstr "New"

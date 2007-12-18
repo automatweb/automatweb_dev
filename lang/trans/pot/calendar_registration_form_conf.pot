@@ -219,10 +219,7 @@ msgid "Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:158
-msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<br>
-					#date# - kohtumise kuup&auml;ev<br>
-					#time_from# - kohtumise alguskellaaeg<br>
-					#time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult"
+msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<br>					#date# - kohtumise kuup&auml;ev<br>					#time_from# - kohtumise alguskellaaeg<br>					#time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:163

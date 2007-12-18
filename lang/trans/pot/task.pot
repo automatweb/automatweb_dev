@@ -1050,10 +1050,6 @@ msgstr ""
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1839 classes/applications/groupware/task.aw:4485
-msgid ""
-msgstr ""
-
 #: classes/applications/groupware/task.aw:1844
 msgid "Arve nr."
 msgstr ""
@@ -1272,6 +1268,10 @@ msgstr ""
 
 #: classes/applications/groupware/task.aw:4328
 msgid "Ametinimetus"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4485
+msgid "Fail"
 msgstr ""
 
 #: classes/applications/groupware/task.aw:4486

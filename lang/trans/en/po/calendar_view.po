@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -113,6 +113,18 @@ msgstr ""
 msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) help"
 msgstr ""
 
+#: classes/calendar/calendar_view.aw:prop_sort_day_events_before
+msgid "Omaduse Sorteeri &uuml;he p&auml;evased ettepoole (sort_day_events_before) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_sort_day_events_before_comment
+msgid "Omaduse Sorteeri &uuml;he p&auml;evased ettepoole (sort_day_events_before) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_sort_day_events_before_help
+msgid "Omaduse Sorteeri &uuml;he p&auml;evased ettepoole (sort_day_events_before) help"
+msgstr ""
+
 # classes/calendar/calendar_view.aw:prop_show_event_content
 #: classes/calendar/calendar_view.aw:prop_show_event_content
 msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
@@ -158,94 +170,76 @@ msgstr ""
 msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_fix_links
 #: classes/calendar/calendar_view.aw:prop_fix_links
-msgid "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) caption"
-msgstr "\"Previous\"-\"Next\" links move to days with events "
+msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad sündmusega päevale (fix_links) caption"
+msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_fix_links_comment
 #: classes/calendar/calendar_view.aw:prop_fix_links_comment
-msgid "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) kommentaar"
+msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad sündmusega päevale (fix_links) kommentaar"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_fix_links_help
 #: classes/calendar/calendar_view.aw:prop_fix_links_help
-msgid "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) help"
+msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad sündmusega päevale (fix_links) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_with_events
 #: classes/calendar/calendar_view.aw:prop_minical_day_with_events
-msgid "Omaduse Sündmustega päev (minical_day_with_events) caption"
-msgstr "Day with events"
+msgid "Omaduse S&uuml;ndmustega p&auml;ev (minical_day_with_events) caption"
+msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_with_events_comment
 #: classes/calendar/calendar_view.aw:prop_minical_day_with_events_comment
-msgid "Omaduse Sündmustega päev (minical_day_with_events) kommentaar"
+msgid "Omaduse S&uuml;ndmustega p&auml;ev (minical_day_with_events) kommentaar"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_with_events_help
 #: classes/calendar/calendar_view.aw:prop_minical_day_with_events_help
-msgid "Omaduse Sündmustega päev (minical_day_with_events) help"
+msgid "Omaduse S&uuml;ndmustega p&auml;ev (minical_day_with_events) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_without_events
 #: classes/calendar/calendar_view.aw:prop_minical_day_without_events
-msgid "Omaduse Ilma sündmusteta päev (minical_day_without_events) caption"
-msgstr "Day without events"
+msgid "Omaduse Ilma sündmusteta p&auml;ev (minical_day_without_events) caption"
+msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_without_events_comment
 #: classes/calendar/calendar_view.aw:prop_minical_day_without_events_comment
-msgid "Omaduse Ilma sündmusteta päev (minical_day_without_events) kommentaar"
+msgid "Omaduse Ilma sündmusteta p&auml;ev (minical_day_without_events) kommentaar"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_without_events_help
 #: classes/calendar/calendar_view.aw:prop_minical_day_without_events_help
-msgid "Omaduse Ilma sündmusteta päev (minical_day_without_events) help"
+msgid "Omaduse Ilma sündmusteta p&auml;ev (minical_day_without_events) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_today
 #: classes/calendar/calendar_view.aw:prop_minical_day_today
-msgid "Omaduse Tänane päev (minical_day_today) caption"
-msgstr "Today"
+msgid "Omaduse T&auml;nane p&auml;ev (minical_day_today) caption"
+msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_today_comment
 #: classes/calendar/calendar_view.aw:prop_minical_day_today_comment
-msgid "Omaduse Tänane päev (minical_day_today) kommentaar"
+msgid "Omaduse T&auml;nane p&auml;ev (minical_day_today) kommentaar"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_today_help
 #: classes/calendar/calendar_view.aw:prop_minical_day_today_help
-msgid "Omaduse Tänane päev (minical_day_today) help"
+msgid "Omaduse T&auml;nane p&auml;ev (minical_day_today) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_active
 #: classes/calendar/calendar_view.aw:prop_minical_day_active
-msgid "Omaduse Aktiivne päev (minical_day_active) caption"
-msgstr "Active day"
+msgid "Omaduse Aktiivne p&auml;ev (minical_day_active) caption"
+msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_active_comment
 #: classes/calendar/calendar_view.aw:prop_minical_day_active_comment
-msgid "Omaduse Aktiivne päev (minical_day_active) kommentaar"
+msgid "Omaduse Aktiivne p&auml;ev (minical_day_active) kommentaar"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_active_help
 #: classes/calendar/calendar_view.aw:prop_minical_day_active_help
-msgid "Omaduse Aktiivne päev (minical_day_active) help"
+msgid "Omaduse Aktiivne p&auml;ev (minical_day_active) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_deactive
 #: classes/calendar/calendar_view.aw:prop_minical_day_deactive
-msgid "Omaduse Deaktiivne päev (minical_day_deactive) caption"
-msgstr "Deactive day"
-
-# classes/calendar/calendar_view.aw:prop_minical_day_deactive_comment
-#: classes/calendar/calendar_view.aw:prop_minical_day_deactive_comment
-msgid "Omaduse Deaktiivne päev (minical_day_deactive) kommentaar"
+msgid "Omaduse Deaktiivne p&auml;ev (minical_day_deactive) caption"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_minical_day_deactive_help
+#: classes/calendar/calendar_view.aw:prop_minical_day_deactive_comment
+msgid "Omaduse Deaktiivne p&auml;ev (minical_day_deactive) kommentaar"
+msgstr ""
+
 #: classes/calendar/calendar_view.aw:prop_minical_day_deactive_help
-msgid "Omaduse Deaktiivne päev (minical_day_deactive) help"
+msgid "Omaduse Deaktiivne p&auml;ev (minical_day_deactive) help"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_minical_title
@@ -422,86 +416,110 @@ msgstr "Search"
 msgid "Seose S&uuml;ndmuste n&auml;itamise kontroller (RELTYPE_EVENT_VALIDATOR) tekst"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:135
+#: classes/calendar/calendar_view.aw:138
 msgid "Kuuvaade & nädala sündmused"
 msgstr "Month view & week's events"
 
-#: classes/calendar/calendar_view.aw:136
+#: classes/calendar/calendar_view.aw:139
 msgid "Kuukalender"
 msgstr "Month calendat"
 
-#: classes/calendar/calendar_view.aw:137
+#: classes/calendar/calendar_view.aw:140
 msgid "Algavad sündmused"
 msgstr "Starting events"
 
-#: classes/calendar/calendar_view.aw:138
+#: classes/calendar/calendar_view.aw:141
 msgid "Nädala vaade"
 msgstr "Week view"
 
-#: classes/calendar/calendar_view.aw:139
+#: classes/calendar/calendar_view.aw:142
 msgid "Järgmised sündmused"
 msgstr "Next events"
 
-#: classes/calendar/calendar_view.aw:140
+#: classes/calendar/calendar_view.aw:143
 msgid "Grupeeri allika järgi"
 msgstr "Group by source"
 
-#: classes/calendar/calendar_view.aw:141 classes/calendar/calendar_view.aw:156
+#: classes/calendar/calendar_view.aw:144 classes/calendar/calendar_view.aw:159
 msgid "Ülevaade"
 msgstr "Overview"
 
-#: classes/calendar/calendar_view.aw:152
+#: classes/calendar/calendar_view.aw:155
 msgid "päev"
 msgstr "day"
 
-#: classes/calendar/calendar_view.aw:153
+#: classes/calendar/calendar_view.aw:156
 msgid "nädal"
 msgstr "week"
 
-#: classes/calendar/calendar_view.aw:154
+#: classes/calendar/calendar_view.aw:157
 msgid "kuu"
 msgstr "month"
 
-#: classes/calendar/calendar_view.aw:155
+#: classes/calendar/calendar_view.aw:158
 msgid "Järgmised"
 msgstr "Next"
 
-#: classes/calendar/calendar_view.aw:195
+#: classes/calendar/calendar_view.aw:198
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/calendar/calendar_view.aw:200
+#: classes/calendar/calendar_view.aw:203
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/calendar/calendar_view.aw:205
+#: classes/calendar/calendar_view.aw:208
 msgid "Aktiivne"
 msgstr "Active"
 
-#: classes/calendar/calendar_view.aw:211
+#: classes/calendar/calendar_view.aw:214
 msgid "Jrk"
 msgstr "Ord"
 
-#: classes/calendar/calendar_view.aw:216
+#: classes/calendar/calendar_view.aw:219
 msgid "Seaded"
 msgstr "Settings"
 
-#: classes/calendar/calendar_view.aw:221
+#: classes/calendar/calendar_view.aw:224
 msgid "Väljade eraldaja"
 msgstr "Field separator"
 
-#: classes/calendar/calendar_view.aw:226
+#: classes/calendar/calendar_view.aw:229
 msgid "Lisaväljad"
 msgstr "Additional fields"
 
-#: classes/calendar/calendar_view.aw:242
+#: classes/calendar/calendar_view.aw:245
 msgid "Väljundvorm on valimata"
 msgstr "Output form is not selected"
 
-#: classes/calendar/calendar_view.aw:1047
+#: classes/calendar/calendar_view.aw:1090
 msgid "&lt;&lt;"
 msgstr "&lt;&lt;"
 
-#: classes/calendar/calendar_view.aw:1054
+#: classes/calendar/calendar_view.aw:1097
 msgid "&gt;&gt;"
 msgstr "&gt;&gt;"
+
+# classes/calendar/calendar_view.aw:prop_fix_links
+#~ msgid "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) caption"
+#~ msgstr "\"Previous\"-\"Next\" links move to days with events "
+
+# classes/calendar/calendar_view.aw:prop_minical_day_with_events
+#~ msgid "Omaduse Sündmustega päev (minical_day_with_events) caption"
+#~ msgstr "Day with events"
+
+# classes/calendar/calendar_view.aw:prop_minical_day_without_events
+#~ msgid "Omaduse Ilma sündmusteta päev (minical_day_without_events) caption"
+#~ msgstr "Day without events"
+
+# classes/calendar/calendar_view.aw:prop_minical_day_today
+#~ msgid "Omaduse Tänane päev (minical_day_today) caption"
+#~ msgstr "Today"
+
+# classes/calendar/calendar_view.aw:prop_minical_day_active
+#~ msgid "Omaduse Aktiivne päev (minical_day_active) caption"
+#~ msgstr "Active day"
+
+# classes/calendar/calendar_view.aw:prop_minical_day_deactive
+#~ msgid "Omaduse Deaktiivne päev (minical_day_deactive) caption"
+#~ msgstr "Deactive day"

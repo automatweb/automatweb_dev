@@ -6,7 +6,6 @@ $GLOBALS["TRANS"]["Omaduse Alias (alias) help"] = "võimalus asendada kausta URL 
 $GLOBALS["TRANS"]["Omaduse Jrk (jrk) help"] = "järjekorranumber; võimaldab samal tasemel olevaid kaustu omavahel järjestada.";
 $GLOBALS["TRANS"]["Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"] = "Kausta tüüp";
 $GLOBALS["TRANS"]["Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"] = "võimaldab kuvada ainult kindla sisutüübiga dokumente selle kausta all.";
-$GLOBALS["TRANS"]["Omaduse Objektitabeli konf (objtbl_conf) help"] = "võimaldab kujundada selle kausta all kuvatavate objektide tabelit.";
 $GLOBALS["TRANS"]["Omaduse Objekti lisamise puu konff (add_tree_conf) help"] = "võimaldab seadistada rohelise nupu alt avanevaid valikuid alates sellest kaustast ";
 $GLOBALS["TRANS"]["Omaduse Konfiguratsioonivorm (cfgmanager) help"] = "võimaldab valida dokumendile seadete vormi, mida selle kausta all dokumendi lisamiseks kasutatakse.";
 $GLOBALS["TRANS"]["Omaduse Sisu uuendamise sagedus (change_time) help"] = "Google sitemapile informatsiooni andev määrang sisu uuenemise kohta.";

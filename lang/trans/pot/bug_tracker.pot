@@ -1486,10 +1486,6 @@ msgstr ""
 msgid "T&ouml;id kokku: %s, tunde %s.<Br>Viimase t&ouml;&ouml; l&otilde;ppt&auml;htaeg %s."
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:803 classes/applications/bug_o_matic_3000/bug_tracker.aw:1965 classes/applications/bug_o_matic_3000/bug_tracker.aw:2057
-msgid ""
-msgstr ""
-
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:807 classes/applications/bug_o_matic_3000/bug_tracker.aw:1969
 msgid "Id"
 msgstr ""

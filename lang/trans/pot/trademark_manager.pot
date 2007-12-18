@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -296,10 +296,6 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:489
 msgid "Lisa taotlus"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:492 classes/applications/clients/patent_office/trademark_manager.aw:502 classes/applications/clients/patent_office/trademark_manager.aw:517 classes/applications/clients/patent_office/trademark_manager.aw:525
-msgid ""
 msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:499

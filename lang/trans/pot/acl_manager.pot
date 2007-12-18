@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -18,95 +18,91 @@ msgstr ""
 msgid "Grupp"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:59
+#: classes/vcl/acl_manager.aw:58
 msgid "Jah"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:59
+#: classes/vcl/acl_manager.aw:58
 msgid "Ei"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:85
+#: classes/vcl/acl_manager.aw:84
 msgid "Tabeli legend:<Br>M - %s<br>L - %s<Br>ACL - %s<br>K - %s<br>V - %s<br>Alam - %s<br>J - %s"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:86
+#: classes/vcl/acl_manager.aw:85
 msgid "Muutmine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:87
+#: classes/vcl/acl_manager.aw:86
 msgid "Lisamine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:88
+#: classes/vcl/acl_manager.aw:87
 msgid "ACL Muutmine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:89
+#: classes/vcl/acl_manager.aw:88
 msgid "Kustutamine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:90
+#: classes/vcl/acl_manager.aw:89
 msgid "Vaatamine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:91
+#: classes/vcl/acl_manager.aw:90
 msgid "Kehtib alamobjektidele"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:92 classes/vcl/acl_manager.aw:159
+#: classes/vcl/acl_manager.aw:91 classes/vcl/acl_manager.aw:158
 msgid "Juurkaust"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:127
-msgid ""
-msgstr ""
-
-#: classes/vcl/acl_manager.aw:131
+#: classes/vcl/acl_manager.aw:130
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:135
+#: classes/vcl/acl_manager.aw:134
 msgid "M"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:136
+#: classes/vcl/acl_manager.aw:135
 msgid "L"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:137
+#: classes/vcl/acl_manager.aw:136
 msgid "ACL"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:138
+#: classes/vcl/acl_manager.aw:137
 msgid "K"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:139
+#: classes/vcl/acl_manager.aw:138
 msgid "V"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:140
+#: classes/vcl/acl_manager.aw:139
 msgid "ALAM"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:158
+#: classes/vcl/acl_manager.aw:157
 msgid "J"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:165
+#: classes/vcl/acl_manager.aw:164
 msgid "M&auml;&auml;ra"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:209 classes/vcl/acl_manager.aw:300
+#: classes/vcl/acl_manager.aw:208 classes/vcl/acl_manager.aw:299
 msgid "no group for user %s!"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:249
+#: classes/vcl/acl_manager.aw:248
 msgid "Salvesta &otilde;igused"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:271
+#: classes/vcl/acl_manager.aw:270
 msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
 msgstr ""
 

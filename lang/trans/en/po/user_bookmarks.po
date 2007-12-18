@@ -59,7 +59,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:layout_bm_tree
 msgid "Kujundusosa Puu (bm_tree) pealkiri"
-msgstr ""
+msgstr "Tree"
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:91
 msgid "%s j&auml;rjehoidja"
@@ -112,11 +112,11 @@ msgstr "Group"
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:312
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:317
 msgid "Kasutaja tekst"
-msgstr ""
+msgstr "User-defined text"
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:452
 msgid "Pane j&auml;rjehoidjasse"

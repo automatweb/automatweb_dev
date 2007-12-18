@@ -362,10 +362,6 @@ msgstr ""
 msgid "OID"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:249
-msgid ""
-msgstr ""
-
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:254
 msgid "Nimi"
 msgstr ""

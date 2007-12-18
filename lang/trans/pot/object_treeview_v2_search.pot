@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Objektinimekiri (tv) help"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_predicate
+msgid "Omaduse Otsinguloogika (predicate) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_predicate_comment
+msgid "Omaduse Otsinguloogika (predicate) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_predicate_help
+msgid "Omaduse Otsinguloogika (predicate) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_search_fields
 msgid "Omaduse Otsingu v&auml;ljad (search_fields) caption"
 msgstr ""
@@ -106,55 +118,63 @@ msgstr ""
 msgid "Seose kontroller (RELTYPE_CTR) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:174
-msgid "Omadus"
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:57
+msgid "V&Otilde;I"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:180
-msgid "N&auml;ita vormis"
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:58
+msgid "JA"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:186
+msgid "Omadus"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:192
+msgid "N&auml;ita vormis"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:198
 msgid "Tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:192 classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:240
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:204 classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:252
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:211
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:223
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:247
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:259
 msgid "Element"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:253
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:265
 msgid "Tabelis"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:259
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:271
 msgid "Sorditav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:265
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:277
 msgid "Vaata tulp"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:271
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:283
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:277
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:289
 msgid "Kontroller"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:292
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:304
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:365 classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:366
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:377 classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:378
 msgid "Otsi"
 msgstr ""
 

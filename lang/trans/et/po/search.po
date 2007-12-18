@@ -350,10 +350,6 @@ msgstr ""
 msgid "Leia vendi"
 msgstr ""
 
-#: classes/search.aw:1312
-msgid ""
-msgstr ""
-
 #: classes/search.aw:1357
 msgid "Loodud"
 msgstr ""

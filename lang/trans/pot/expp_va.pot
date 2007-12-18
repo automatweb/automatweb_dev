@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -14,11 +14,19 @@ msgstr ""
 msgid "Klassi Expp v&auml;ljaanne help"
 msgstr ""
 
-#: classes/expp/expp_va.aw:828
+#: classes/expp/expp_va.aw:861
 msgid "kuu"
 msgstr ""
 
-#: classes/expp/expp_va.aw:829
+#: classes/expp/expp_va.aw:862
 msgid "kuud"
+msgstr ""
+
+#: classes/expp/expp_va.aw:865
+msgid "n&auml;dal"
+msgstr ""
+
+#: classes/expp/expp_va.aw:866
+msgid "n&auml;dalat"
 msgstr ""
 

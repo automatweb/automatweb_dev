@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -216,10 +216,6 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_stats_impl.aw:1635 classes/applications/crm/crm_company_stats_impl.aw:1705 classes/applications/crm/crm_company_stats_impl.aw:1928
 msgid "<b>Valitud perioodis ei ole &uuml;htegi s&uuml;ndmust!</b>"
-msgstr ""
-
-#: classes/applications/crm/crm_company_stats_impl.aw:1654
-msgid ""
 msgstr ""
 
 #: classes/applications/crm/crm_company_stats_impl.aw:1666

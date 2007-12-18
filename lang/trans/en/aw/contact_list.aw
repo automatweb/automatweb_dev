@@ -8,8 +8,8 @@ $GLOBALS["TRANS"]["Lisa aadressiraamatusse"] = "Add to addressbook";
 $GLOBALS["TRANS"]["Otsi kontakte"] = "Search contacts";
 $GLOBALS["TRANS"]["Kustuta kontakte"] = "Delete contacts";
 $GLOBALS["TRANS"]["Oled kindel, et tahad valitud eemaldada?"] = "Are you sure you want to delete selected?";
-$GLOBALS["TRANS"]["ID"] = "ID";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
+$GLOBALS["TRANS"]["ID"] = "ID";
 $GLOBALS["TRANS"]["E-post"] = "E-mail";
 $GLOBALS["TRANS"]["Saada sõnum"] = "Send message";
 ?>

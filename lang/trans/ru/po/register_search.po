@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -271,18 +271,18 @@ msgstr ""
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:994
+#: classes/applications/register/register_search.aw:1001
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1008
+#: classes/applications/register/register_search.aw:1015
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1019
+#: classes/applications/register/register_search.aw:1026
 msgid "Kustutada objekt?"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1020
+#: classes/applications/register/register_search.aw:1027
 msgid "Kustuta"
 msgstr ""

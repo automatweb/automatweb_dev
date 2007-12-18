@@ -19,7 +19,6 @@ $GLOBALS["TRANS"]["Seose S&uuml;ndmus (RELTYPE_EVENT) tekst"] = "Event";
 $GLOBALS["TRANS"]["Seose Sisestus (RELTYPE_REG_ENTRY) tekst"] = "Entry";
 $GLOBALS["TRANS"]["Seose Isikute kaust (RELTYPE_FOLDER) tekst"] = "Person folder";
 $GLOBALS["TRANS"]["Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"] = "Event form";
-$GLOBALS["TRANS"]["Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<brdate# - kohtumise kuup&auml;ev<br>time_from# - kohtumise alguskellaaeg<br>time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult\""] = "Mail the following tags can be used in the mail content:<br /><br />#reg_data# - event content<br />					#date# - event date<br />					#time_from# - event time<br />					#time_to# - event end time<br />also, you can use elements from the registration form, surrounded by # signs";
 $GLOBALS["TRANS"]["&Auml;ra kuva"] = "Do not display";
 $GLOBALS["TRANS"]["Kuva dokumendis s&uuml;ndmuse infot"] = "Display event info in document";
 $GLOBALS["TRANS"]["Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"] = "Webform with event registration form can only be used via event registration";

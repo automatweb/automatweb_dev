@@ -7,12 +7,6 @@ $GLOBALS["TRANS"]["Omaduse Näita ainult sündmustega päevi (show_days_with_events
 $GLOBALS["TRANS"]["Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"] = "Display event content in calendar view";
 $GLOBALS["TRANS"]["Omaduse Näita sündmust kõikidel päevadel (show_event_days) caption"] = "Show event on all days";
 $GLOBALS["TRANS"]["Omaduse Näita ainult aktiivseid sündmusi (actives_only) caption"] = "Display only active events";
-$GLOBALS["TRANS"]["Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) caption"] = "\"Previous\"-\"Next\" links move to days with events ";
-$GLOBALS["TRANS"]["Omaduse Sündmustega päev (minical_day_with_events) caption"] = "Day with events";
-$GLOBALS["TRANS"]["Omaduse Ilma sündmusteta päev (minical_day_without_events) caption"] = "Day without events";
-$GLOBALS["TRANS"]["Omaduse Tänane päev (minical_day_today) caption"] = "Today";
-$GLOBALS["TRANS"]["Omaduse Aktiivne päev (minical_day_active) caption"] = "Active day";
-$GLOBALS["TRANS"]["Omaduse Deaktiivne päev (minical_day_deactive) caption"] = "Deactive day";
 $GLOBALS["TRANS"]["Omaduse Pealkiri (minical_title) caption"] = "Title";
 $GLOBALS["TRANS"]["Omaduse Taust (minical_background) caption"] = "Background";
 $GLOBALS["TRANS"]["Omaduse Tulemuste tabeli pealkiri (table_header) caption"] = "Result table title";

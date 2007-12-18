@@ -210,17 +210,6 @@ msgstr "Person folder"
 msgid "Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"
 msgstr "Event form"
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:143
-msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<br>
-					#date# - kohtumise kuup&auml;ev<br>
-					#time_from# - kohtumise alguskellaaeg<br>
-					#time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult"
-msgstr ""
-"Mail the following tags can be used in the mail content:<br><br>#reg_data# - event content<br>"
-"					#date# - event date<br>"
-"					#time_from# - event time<br>"
-"					#time_to# - event end time<br>also, you can use elements from the registration form, surrounded by # signs"
-
 #: classes/applications/calendar/calendar_registration_form_conf.aw:148
 msgid "&Auml;ra kuva"
 msgstr "Do not display"

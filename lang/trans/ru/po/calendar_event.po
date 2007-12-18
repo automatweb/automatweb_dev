@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -633,30 +633,30 @@ msgstr ""
 msgid "Seose Toimumisaeg (RELTYPE_EVENT_TIME) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:345
+#: classes/applications/calendar/calendar_event.aw:373
 msgid "Algusaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:346
+#: classes/applications/calendar/calendar_event.aw:374
 msgid "L&otilde;puaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:391
+#: classes/applications/calendar/calendar_event.aw:419
 msgid "Sellist toimumiskohta pole"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:418
+#: classes/applications/calendar/calendar_event.aw:446
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:422
+#: classes/applications/calendar/calendar_event.aw:450
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:426
+#: classes/applications/calendar/calendar_event.aw:454
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:456
+#: classes/applications/calendar/calendar_event.aw:484
 msgid "Kustuta"
 msgstr ""
