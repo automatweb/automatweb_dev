@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.191 2007/12/10 10:29:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.192 2007/12/18 14:47:39 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -4147,19 +4147,25 @@ class task extends class_base
 				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
 				"seller" => $cur->id()
 			));
-			foreach($cust_data->list as $cdid)
+			if($cust_data->count() < 30)
 			{
-				$cd = obj($cdid);
-				$s["co"][$cd->prop("buyer")] = $cd->prop("buyer");
+				foreach($cust_data->list as $cdid)
+				{
+					$cd = obj($cdid);
+					$s["co"][$cd->prop("buyer")] = $cd->prop("buyer");
+				}
 			}
 			$cust_data2 = new object_list(array(
 				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
 				"buyer" => $cur->id()
 			));
-			foreach($cust_data2->list as $cdid)
+			if($cust_data2->count() < 30)
 			{
-				$cd = obj($cdid);
-				$s["co"][$cd->prop("seller")] = $cd->prop("seller");
+				foreach($cust_data2->list as $cdid)
+				{
+					$cd = obj($cdid);
+					$s["co"][$cd->prop("seller")] = $cd->prop("seller");
+				}
 			}
 		}
 
@@ -4403,6 +4409,58 @@ class task extends class_base
 			));
 		}
 	}
+	/**
+		@attrib name=new_files_on_demand all_args=1
+	**/
+	function new_files_on_demand($arr)
+	{
+
+		$tb = get_instance("vcl/popup_menu");
+		$tb->begin_menu("new_pop");
+
+		$u = get_instance(CL_USER);
+		$arr["obj_inst"] = obj($arr["obj_inst"]);
+ 		if ($arr["obj_inst"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
+ 		{
+ 			$impl = $arr["obj_inst"]->prop("customer");
+ 			$impl_o = obj($impl);
+ 			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+ 			{
+ 				$impl = $u->get_current_company();
+ 			}
+ 		}
+ 		else
+ 		{
+ 			$impl = $u->get_current_company();
+ 		}
+ 		if ($this->can("view", $impl))
+ 		{
+ 			$implo = obj($impl);
+ 			$f = get_instance("applications/crm/crm_company_docs_impl");
+ 			$fldo = $f->_init_docs_fld($implo);
+ 			$ot = new object_tree(array(
+ 				"parent" => $fldo->id(),
+ 				"class_id" => CL_MENU
+ 			));
+ 			$folders = array($fldo->id() => $fldo->name());
+ 			$tb->add_sub_menu(array(
+ 	//			"parent" => "nemw",
+ 				"name" => "mainf",
+ 				"text" => $fldo->name(),
+ 			));
+ 			$this->_add_fa($tb, "mainf", $fldo->id());
+ 			$this->_req_level = 0;
+ 			$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf");
+ 		}
+
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		//arr($tb);
+		die($tb->get_menu(array(
+			"text" => '<img src="/automatweb/images/icons/new.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />
+			<img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
+		)));
+
+	}
 
 	function _files_tb($arr)
 	{
@@ -4410,42 +4468,43 @@ class task extends class_base
 		$tb->add_menu_button(array(
 			"name" => "nemw",
 			"tooltip" => t("Uus"),
+			"load_on_demand_url" => $this->mk_my_orb("new_files_on_demand", array("obj_inst" => $arr["obj_inst"] -> id())),
 		));
 
 		// insert folders where to add
-		$u = get_instance(CL_USER);
-		if ($arr["obj_inst"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
-		{
-			$impl = $arr["obj_inst"]->prop("customer");
-			$impl_o = obj($impl);
-			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
-			{
-				$impl = $u->get_current_company();
-			}
-		}
-		else
-		{
-			$impl = $u->get_current_company();
-		}
-		if ($this->can("view", $impl))
-		{
-			$implo = obj($impl);
-			$f = get_instance("applications/crm/crm_company_docs_impl");
-			$fldo = $f->_init_docs_fld($implo);
-			$ot = new object_tree(array(
-				"parent" => $fldo->id(),
-				"class_id" => CL_MENU
-			));
-			$folders = array($fldo->id() => $fldo->name());
-			$tb->add_sub_menu(array(
-				"parent" => "nemw",
-				"name" => "mainf",
-				"text" => $fldo->name(),
-			));
-			$this->_add_fa($tb, "mainf", $fldo->id());
-			$this->_req_level = 0;
-			$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf");
-		}
+// 		$u = get_instance(CL_USER);
+// 		if ($arr["obj_inst"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
+// 		{
+// 			$impl = $arr["obj_inst"]->prop("customer");
+// 			$impl_o = obj($impl);
+// 			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+// 			{
+// 				$impl = $u->get_current_company();
+// 			}
+// 		}
+// 		else
+// 		{
+// 			$impl = $u->get_current_company();
+// 		}
+// 		if ($this->can("view", $impl))
+// 		{
+// 			$implo = obj($impl);
+// 			$f = get_instance("applications/crm/crm_company_docs_impl");
+// 			$fldo = $f->_init_docs_fld($implo);
+// 			$ot = new object_tree(array(
+// 				"parent" => $fldo->id(),
+// 				"class_id" => CL_MENU
+// 			));
+// 			$folders = array($fldo->id() => $fldo->name());
+// 			$tb->add_sub_menu(array(
+// 				"parent" => "nemw",
+// 				"name" => "mainf",
+// 				"text" => $fldo->name(),
+// 			));
+// 			$this->_add_fa($tb, "mainf", $fldo->id());
+// 			$this->_req_level = 0;
+// 		$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf");
+// 		}
 
 		$url = $this->mk_my_orb("do_search", array("pn" => "files_h", "clid" => array(
 			CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_MENU
@@ -4490,7 +4549,7 @@ class task extends class_base
 		);
 		foreach($types as $clid => $nm)
 		{
-			$tb->add_menu_item(array(
+			$tb->add_item(array(
 				"parent" => $pt_n,
 				"text" => $nm,
 				"link" => html::get_new_url($clid, $pt, array(

@@ -591,6 +591,7 @@ class crm_company_docs_impl extends class_base
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);
 
 		if (($arr["request"]["do_doc_search"] || $arr["request"]["docs_s_sbt"] != "") && !$arr["request"]["tf"])
+		{
 			// get all parents to search from
 			$parent_tree = new object_tree(array(
 				"parent" => $fld->id(),
