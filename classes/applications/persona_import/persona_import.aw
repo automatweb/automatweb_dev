@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.28 2007/12/17 14:18:28 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.29 2007/12/18 14:20:40 kristo Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -523,12 +523,20 @@ class persona_import extends class_base
 			"parent" => $folder_person,
 			"class_id" => CL_CRM_PERSON,
 			"site_id" => array(),
+			"lang_id" => array(),
 		));
 		
 		foreach($person_list->arr() as $person_obj)
 		{
 			$ext_id = $person_obj->prop("ext_id");
-			//$ext_id = $person_obj->subclass();
+			/*if ($person_obj->id() == 196855)
+			{
+				echo "got ext id as $ext_id <br>".dbg::dump($person_obj->subclass());
+			}*/
+			if (!$ext_id)
+			{
+				$ext_id = $person_obj->subclass();
+			}
 			/*
 			var_dump($person_obj->id());
 			print " = ";
@@ -537,6 +545,7 @@ class persona_import extends class_base
 			print "<br>";
 			arr($person_obj->properties());
 			*/
+
 			if ($ext_id)
 			{
 				$person_match[$ext_id] = $person_obj->id();
@@ -559,11 +568,12 @@ class persona_import extends class_base
 				}
 			};
 		};
-		
+
 		// list of addresses
 		$addr_list = new object_list(array(
 			"class_id" => CL_CRM_ADDRESS,
 			"site_id" => array(),
+			"lang_id" => array()
 		));
 
 		$addr = $addr_list->names();
@@ -631,6 +641,7 @@ class persona_import extends class_base
 				"class_id" => $sdata["clid"],
 				"parent" => $dir_default,
 				"site_id" => array(),
+				"lang_id" => array()
 			));
 			$simple_data[$key] = array_flip($olist->names());
 
@@ -734,6 +745,15 @@ class persona_import extends class_base
 			{
 				$o1 = new object($sections[$parent_section]);
 				$o2 = new object($sections[$child_section]);
+
+				// check, that if the one to connect to is crm_company
+				// and the section already is connected to some other section, then don't do it
+				/*if ($o1->class_id() == CL_CRM_COMPANY && count($o2->connections_to(array("type" => 1))))
+				{
+					echo "do not connect section ".$o2->name()." to company, because it already is on a deeper level <br>";
+					continue;
+				}*/
+		
 				print "connecting ";
 				//print $sections[$parent_section];
 				print $o1->name();
@@ -1550,6 +1570,12 @@ class persona_import extends class_base
 
 					$edu_done = true;
 					break;
+				}
+				else
+				{
+					// delete I guess
+					echo "DELETE existing education ".$education->id()." <br>";
+					$education->delete();
 				}
 			}
 			
