@@ -945,6 +945,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->quote($str);
 				$seta[$field] = $str;
 			}
+
+			// actually, this is a bit mopre complicated here - if this is a brother
+			// and the table is the objects table, then we must ONLY write the metadata field
+			// to the original object. because if we write all, then ot fields will be the same for the brother and the original 
+			// always. and that's not good. 
+			if ($tbl == "objects" && $objdata["brother_of"] != $objdata["oid"])
+			{
+				$seta = array("metadata" => $seta["metadata"]);
+			}
 			$sets = join(",",map2("`%s` = '%s'",$seta,0,true));
 			if ($sets != "")
 			{
