@@ -1494,7 +1494,7 @@ class event_search extends class_base
 						{
 							continue;
 						}
-						$names = array_merge($sname, safe_array($tabledef[$sname]["fields"]));
+						$names = array_merge((array)$sname, safe_array($tabledef[$sname]["fields"]));
 						$names = $this->make_keys($names);
 						$val = array();
 						$skip = false;
