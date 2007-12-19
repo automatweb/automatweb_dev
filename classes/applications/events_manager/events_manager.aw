@@ -227,11 +227,10 @@ class events_manager extends class_base
 
 			case "e_find_sectors":
 				$prop["value"] = $arr["request"][$prop["name"]];
-				$parents = array();
 
-				if ($this->can("view", $this_o->prop("event_menu")))
+				if ($this->can("view", $this_o->prop("sector_menu")))
 				{
-					$parent = $this_o->prop("event_menu");
+					$parent = $this_o->prop("sector_menu");
 					$sectors = new object_tree(array(
 						"parent" => $parent,
 					));
@@ -248,7 +247,7 @@ class events_manager extends class_base
 					while ($sector = $sectors->next());
 				}
 
-				foreach ($this_o->prop("event_menu_source") as $parent)
+				foreach ($this_o->prop("sector_menu_source") as $parent)
 				{
 					if ($this->can("view", $parent))
 					{
@@ -658,6 +657,16 @@ class events_manager extends class_base
 			}
 		}
 
+		if(!empty($args["sort_by_created"]))
+		{
+			$filter["sort_by"] = "created DESC";
+		}
+
+		if(!empty($args["archived"]))
+		{
+			//!!!?
+		}
+
 		if(!empty($args["e_find_text"]))
 		{
 			$filter[] = new object_list_filter(array(
@@ -875,7 +884,6 @@ class events_manager extends class_base
 			"tooltip" => $arr["request"]["archived"] == 1 ? t("Uued"):t("Arhiiv"),
 		));
 
-		//kui uuest vajutada mis juhtub?
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "sort",
 			"img" => "check_red.gif",
@@ -886,7 +894,7 @@ class events_manager extends class_base
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "see_all",
 			"img" => "class_31.gif",
-			"url" => $this->mk_my_orb("change" , array("group" => "events" , "id" => $arr["obj_inst"]->id())),
+			"url" => $this->mk_my_orb("change" , array("group" => "events" , "id" => $arr["obj_inst"]->id(), "section" => $arr["request"]["section"])),
 			"tooltip" => t("Algseis (kestvad ja tulekul s&uuml;ndmused)"),
 		));
 	}
@@ -1054,7 +1062,7 @@ class events_manager extends class_base
 		$editor->set_parent($arr["id"]);
 		$editor->save();
 		$this_o->connect(array("to"=> $editor->id(), "type" => "RELTYPE_EDITOR"));
-		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "editor");
+		$cfg = $this->get_cgf_from_manager($this_o, "editor");
 		return html::get_change_url($editor->id(),array("return_url" => $arr["post_ru"], "cfgform" => $cfg) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()));
 	}
 
