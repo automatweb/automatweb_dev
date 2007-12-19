@@ -40,6 +40,7 @@
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_EDITOR</reltype>
+            <clid>CL_CRM_PERSON</clid>
             <parent>events_top_left</parent>
             <store>no</store>
             <caption>Toimetaja</caption>
@@ -228,17 +229,6 @@
             <multiple>1</multiple>
             <reltype>RELTYPE_LANGUAGE</reltype>
             <caption>Sisu keeled</caption>
-      </property>
-      <property>
-            <name>editor</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <reltype>RELTYPE_EDITOR</reltype>
-            <caption>Toimetajad</caption>
       </property>
       <property>
             <name>mapserver_url</name>
