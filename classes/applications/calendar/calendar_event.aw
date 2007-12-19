@@ -235,7 +235,32 @@ class calendar_event extends class_base
 					));
 				}
 				break;
-			
+
+			case "end":
+				if ("---" === $prop["value"]["year"])
+				{
+					$prop["value"]["day"] = $arr["request"]["start1"]["day"];
+					$prop["value"]["month"] = $arr["request"]["start1"]["month"];
+					$prop["value"]["year"] = $arr["request"]["start1"]["year"];
+					$prop["value"]["hour"] = $arr["request"]["start1"]["hour"];
+					$prop["value"]["minute"] = $arr["request"]["start1"]["minute"];
+				}
+				else
+				{
+					$start = mktime($arr["request"]["start1"]["hour"], $arr["request"]["start1"]["minute"], 0, $arr["request"]["start1"]["month"], $arr["request"]["start1"]["day"], $arr["request"]["start1"]["year"]);
+					$end = mktime($prop["value"]["hour"], $prop["value"]["minute"], 0, $prop["value"]["month"], $prop["value"]["day"], $prop["value"]["year"]);
+
+					if ($start > $end)
+					{
+						$prop["value"]["day"] = $arr["request"]["start1"]["day"];
+						$prop["value"]["month"] = $arr["request"]["start1"]["month"];
+						$prop["value"]["year"] = $arr["request"]["start1"]["year"];
+						$prop["value"]["hour"] = $arr["request"]["start1"]["hour"];
+						$prop["value"]["minute"] = $arr["request"]["start1"]["minute"];
+					}
+				}
+				break;
+
 			case "event_time":
 				return PROP_IGNORE;
 
@@ -300,10 +325,6 @@ class calendar_event extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
-		{
-	//		return false;
-		}
 		return true;
 	}
 
@@ -327,7 +348,7 @@ class calendar_event extends class_base
                                 };
                         };
                 };
- 
+
 		switch($prop["name"])
 		{
 			case "level":
@@ -345,6 +366,7 @@ class calendar_event extends class_base
 
 			case "event_time":
 				return PROP_IGNORE;
+
 			case "event_time_table":
 				if (!$arr['new'])
 				{
@@ -412,10 +434,6 @@ class calendar_event extends class_base
 			}
 			else
 			{
-//				$location = new object();
-//				$location->set_name($val["location"]);
-//				$location->set_class_id(CL_SCM_LOCATION);
-//				$location->set_parent($id);
 				$error[$id] = t("Sellist toimumiskohta pole");
 			}
 
@@ -428,8 +446,10 @@ class calendar_event extends class_base
 
 			if(!$error[$id])
 			{
-				$o->set_prop("start" , mktime($start_t[0] , $start_t[1] , 0  , $start_d[1],$start_d[0],$start_d[2]));
-				$o->set_prop("end" , mktime($end_t[0] , $end_t[1] , 0 ,$end_d[1],$end_d[0],$end_d[2]));
+				$start = mktime($start_t[0] , $start_t[1] , 0  , $start_d[1],$start_d[0],$start_d[2]);
+				$end = mktime($end_t[0] , $end_t[1] , 0 ,$end_d[1],$end_d[0],$end_d[2]);
+				$o->set_prop("start" , $start);
+				$o->set_prop("end" , ($end > 1) ? $end : $start);
 				$o->set_prop("location" , $location->id());
 				$o->save();
 				$event->connect(array("to" => $o->id(), "reltype" => 9));
