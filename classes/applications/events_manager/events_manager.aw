@@ -102,6 +102,9 @@
 	@property similar_time type=textbox
 	@caption Sarnaste sündmuste kattumisaeg (tundides)
 
+	@property editors_groups type=relpicker multiple=1 reltype=RELTYPE_GROUP automatic=1
+	@caption Toimetajate kasutajagrupid
+
 	@property forms_caption type=text store=no subtitle=1
 	@caption Vormid
 
@@ -180,6 +183,9 @@
 
 @reltype CFGMANAGER value=10 clid=CL_CFGMANAGER
 @caption Seadete haldur
+
+@reltype GROUP value=11 clid=CL_GROUP
+@caption Kasutajagrupp
 
 */
 
@@ -634,6 +640,8 @@ class events_manager extends class_base
 			"parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $time)
 		);
+		$groups = aw_global_get("gidlist_oid");
+		$editors_groups = $this_o->prop("editors_groups");
 
 		if(!empty($args["e_find_sectors"]))
 		{
@@ -643,7 +651,11 @@ class events_manager extends class_base
 			}
 		}
 
-		if(!empty($args["e_find_editor"]))
+		if (count(array_intersect($groups, $editors_groups)))
+		{
+			$filter["createdby"] = aw_global_get("uid");
+		}
+		elseif(!empty($args["e_find_editor"]))
 		{
 			foreach ((array) $args["e_find_editor"] as $uid)
 			{

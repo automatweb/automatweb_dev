@@ -37,10 +37,8 @@
             <group>events</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
+            <type>select</type>
             <multiple>1</multiple>
-            <reltype>RELTYPE_EDITOR</reltype>
-            <clid>CL_CRM_PERSON</clid>
             <parent>events_top_left</parent>
             <store>no</store>
             <caption>Toimetaja</caption>
@@ -247,6 +245,18 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Sarnaste s&amp;uuml;ndmuste kattumisaeg (tundides)</caption>
+      </property>
+      <property>
+            <name>editors_groups</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_GROUP</reltype>
+            <automatic>1</automatic>
+            <caption>Toimetajate kasutajagrupid</caption>
       </property>
       <property>
             <name>forms_caption</name>
@@ -494,6 +504,11 @@
                   <clid>CL_CFGMANAGER</clid>
                   <caption>Seadete haldur</caption>
             </CFGMANAGER>
+            <GROUP>
+                  <value>11</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Kasutajagrupp</caption>
+            </GROUP>
       </reltypes>
       <layout>
             <events_top>
