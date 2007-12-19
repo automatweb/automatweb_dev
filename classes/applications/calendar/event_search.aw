@@ -24,6 +24,12 @@
 	@property hide_search_form type=checkbox ch_value=1 field=meta method=serialize
 	@caption Peida otsinguvorm
 
+	@property dont_search_from_all_sites type=checkbox ch_value=1 field=meta method=serialize
+	@caption &Auml;ra otsi k&otilde;igist saitidest
+
+	@property dont_search_from_all_languages type=checkbox ch_value=1 field=meta method=serialize
+	@caption &Auml;ra otsi k&otilde;igist keeltest
+
 @groupinfo ftsearch caption="Otsinguvorm"
 @default group=ftsearch
 
@@ -1087,20 +1093,36 @@ class event_search extends class_base
 			$par2 = array();
 			if($search_p1 || $search_p2)
 			{
-				$all_projects1 = new object_list(array(
+				$all_projects1_filter = array(
 					"parent" => $p_rn1,
 					"class_id" => array(CL_PROJECT, CL_PLANNER),
-					"lang_id" => array(),
-					"site_id" => array()
-				));
+				);
+				if ($ob->prop('dont_search_from_all_languages') != 1)
+				{
+					$all_projects1_filter['lang_id'] = array();
+				}
+				if ($ob->prop('dont_search_from_all_sites') != 1)
+				{
+					$all_projects1_filter['site_id'] = array();
+				}
+				$all_projects1 = new object_list($all_projets1_filter);
 				$par1 = $all_projects1->ids();
-				$all_projects2 = new object_list(array(
+
+				$all_projects2_filter  =array(
 					"parent" => $p_rn2,
 					"class_id" => array(CL_PROJECT, CL_PLANNER),
-					"lang_id" => array(),
-					"site_id" => array()
-				));
+				);
+				if ($ob->prop('dont_search_from_all_languages') != 1)
+				{
+					$all_projects2_filter['lang_id'] = array();
+				}
+				if ($ob->prop('dont_search_from_all_sites') != 1)
+				{
+					$all_projects2_filter['site_id'] = array();
+				}
+				$all_projects2 = new object_list($all_projects2_filter);
 				$par2 = $all_projects2->ids();
+
 				if (is_oid($arr["project1"]))
 				{
 					$search["parent"][] = $arr["project1"];
@@ -1143,8 +1165,16 @@ class event_search extends class_base
 					}
 				}
 			}
-			$search["lang_id"] = array();
-			$search["site_id"] = array();
+
+			if ($ob->prop('dont_search_from_all_languages') != 1)
+			{
+				$search["lang_id"] = array();
+			}
+
+			if ($ob->prop('dont_search_from_all_sites'))
+			{
+				$search["site_id"] = array();
+			}
 
 			$ft_fields = $ob->prop("ftsearch_fields");
 			$ft_fields2 = $ob->prop("ftsearch_fields2");
@@ -1275,9 +1305,15 @@ class event_search extends class_base
 				$orig = $obj->get_original();
 				$search = array(
 					"oid" => $orig->id(),
-					"lang_id" => array(),
-					"site_id" => array(),
 				);
+				if ($ob->prop('dont_search_from_all_sites') != 1)
+				{
+					$search['site_id'] = array();
+				}
+				if ($ob->prop('dont_search_from_all_languages') != 1)
+				{
+					$search['lang_id'] = array();
+				}
 			}
 			$clinf = aw_ini_get("classes");
 			$edata = array();
@@ -1306,14 +1342,21 @@ class event_search extends class_base
 					}
 					if(!empty($ids))
 					{
-						$ol = new object_list(array(
+						$ol_params = array(
 							"oid" => $ids,
 							"class_id" => array(CL_STAGING,CL_CRM_MEETING, CL_CALENDAR_EVENT, CL_TASK),
 							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
 							"sort_by" => "planner.start",
-							"lang_id" => array(),
-							"site_id" => array(),
-						));
+						);
+						if ($ob->prop('dont_search_from_all_sites') != 1)
+						{
+							$ol_params['site_id'] = array();
+						}
+						if ($ob->prop('dont_search_from_all_languages') != 1)
+						{
+							$ol_params['lang_id'] = array();
+						}
+						$ol = new object_list($ol_params);
 					}
 					else
 					{

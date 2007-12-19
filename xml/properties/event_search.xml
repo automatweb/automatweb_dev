@@ -49,6 +49,26 @@
             <caption>Peida otsinguvorm</caption>
       </property>
       <property>
+            <name>dont_search_from_all_sites</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>&amp;amp;Auml;ra otsi k&amp;amp;otilde;igist saitidest</caption>
+      </property>
+      <property>
+            <name>dont_search_from_all_languages</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>&amp;amp;Auml;ra otsi k&amp;amp;otilde;igist keeltest</caption>
+      </property>
+      <property>
             <name>navigator_range</name>
             <table>objects</table>
             <group>ftsearch</group>
