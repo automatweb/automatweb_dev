@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.23 2007/12/13 10:01:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.24 2007/12/19 15:55:49 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1104,6 +1104,42 @@ class persons_webview extends class_base
 			}
 		}
 
+		if($this->is_template("STOPPED"))
+		{
+			$stopped_reason = $subsitute = $stopped = "";
+			$prev_list = new object_list($worker->connections_from (array (
+				"type" => "RELTYPE_PREVIOUS_JOB",
+			)));
+			foreach($prev_list->arr() as $prev)
+			{
+//				if($prev->prop("end") > 1 && $prev->prop("end") < time())
+//				{
+
+					$stops = new object_list($prev->connections_from (array (
+						"type" => "RELTYPE_CONTRACT_STOP",
+					)));
+
+					$sub_o = $prev->get_first_obj_by_reltype("RELTYPE_SUBSITUTE");
+					if(is_object($sub_o))
+					{
+						$subsitute = $sub_o->name();
+					}
+					if(sizeof($stops->ids()))
+					{
+						foreach($stops->arr() as $stop)
+						{
+							$stopped_reasons.=" ".$stop->name();
+						}
+						$this->vars_safe(array(
+							"stopped_reason" => $stopped_reasons,
+							"subsitute" => $subsitute,
+						));
+						$stopped = $this->parse("STOPPED");
+					}
+//				}
+			}
+		}
+
 		$this->vars_safe(array(
 		//	"profession" => $profession,
 			"name" => $worker->name(),
@@ -1133,6 +1169,7 @@ class persons_webview extends class_base
 			"ta5" => $worker->prop("udef_ta5"),
 			"EDU_SUB" => $edu_sub,
 			"EDUCATION_SUB" => $education,
+			"STOPPED" => $stopped,
 		));
 	
 		$asdasd.= $this->parse("EDU_SUB");
