@@ -1573,6 +1573,10 @@ class _int_object
 		if ($trans)
 		{
 			$trs = $this->obj["meta"]["translations"];
+			if ($prop == "status") // check transl status
+			{
+				return $this->obj["meta"]["trans_".$cur_lid."_status"] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE;
+			}
 			if (isset($trs[$cur_lid]) && $this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
 			{
 				if ($trs[$cur_lid][$prop] == "")

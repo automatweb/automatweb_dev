@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.30 2007/12/06 14:32:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.31 2007/12/19 13:03:42 kristo Exp $
 
 /*
 
@@ -356,6 +356,11 @@ class banner extends class_base
 			$this->error_banner($die);
 		}
 
+		if (!aw_ini_get("user_interface.full_content_trans"))
+		{
+			$stat = "AND objects.status = 2";
+		}
+
 		$q = "
 			SELECT 
 				banners.id as id,
@@ -364,7 +369,7 @@ class banner extends class_base
 			LEFT JOIN objects ON objects.oid = banners.id
 			WHERE 
 				banners.id IN ($bbs) 
-				AND objects.status = 2 
+				$stat
 				AND (clicks <= max_clicks OR (max_clicks is null OR max_clicks = 0) OR clicks is null) 
 				AND (views <= max_views OR (max_views is null OR max_views = 0) or views is null) 
 			ORDER BY RAND()
@@ -374,6 +379,19 @@ class banner extends class_base
 		$sum = 0;
 		while ($row = $this->db_next())
 		{
+			if (!$this->can("view", $row["id"]))
+			{
+				continue;
+			}
+			if (aw_ini_get("user_interface.full_content_trans"))
+			{
+				$bo = obj($row["id"]);
+				if ($bo->trans_get_val("status") != STAT_ACTIVE)
+				{
+					continue;
+				}
+			}
+
 			$baids[$cnt++] = $row;
 			$sum += $row["pb"];
 		}
