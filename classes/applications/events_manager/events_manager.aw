@@ -659,7 +659,7 @@ class events_manager extends class_base
 
 		if(!empty($args["sort_by_created"]))
 		{
-			$filter["sort_by"] = "created DESC";
+			$filter["sort_by"] = "created ASC";
 		}
 
 		if(!empty($args["archived"]))
