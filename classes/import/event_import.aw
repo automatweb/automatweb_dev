@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.3 2007/12/11 16:40:39 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.4 2007/12/20 15:26:53 kaarel Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -12,6 +12,9 @@
 	@caption S&uuml;ndmuste halduse keskkond
 	@comment S&uuml;ndmuste halduse keskkond, kus kirjeldatakse s&uuml;ndmuste, valdkondade, toimumiskohtade, korraldajate lugemis- ja kirjutamiskaustad jmt
 
+	@property event_form type=relpicker reltype=RELTYPE_EVENT_FORM field=meta method=serialize
+	@caption S&uuml;ndmuse vorm
+
 	@property xml_sources type=relpicker reltype=RELTYPE_XML_SOURCE field=meta method=serialize multiple=1
 	@caption XML allikad:
 	@comment XML v&auml;ljundi allikad, mida kasutatakse importimisel
@@ -20,8 +23,12 @@
 	@caption JSON allikad:
 	@comment JSON v&auml;ljundi allikad, mida kasutatakse importimisel
 
-	@property cb_log_changes type=checkbox ch_value=1 field=meta mehtod=serialize
-	@caption Muudatuste tegemiseks k&uuml;sin luba?
+#	@property cb_log_changes type=checkbox ch_value=1 field=meta mehtod=serialize
+#	@caption Muudatuste tegemiseks k&uuml;sin luba?
+
+	@property original_lang type=select field=meta mehtod=serialize
+	@caption Keel
+	@comment Imporditavate objektide keel
 
 	@property translatable_fields type=select multiple=1 field=meta method=serialize
 	@caption V&auml;ljad, mida v&otilde;imalusel t&otilde;lgitakse
@@ -35,7 +42,11 @@
 	@comment J&auml;rgmise automaatse alguse aeg
 
 	@property import_events_all type=checkbox ch_value=1 field=meta mehtod=serialize
-	@caption Impordi k&otilde;ik s&uuml;ndmused
+	@caption Impordi s&uuml;ndmused algusest
+
+	@property future_length type=textbox field=meta mehtod=serialize size=5
+	@caption Imporditavate p&auml;evade arv
+	@comment Mitu p&auml;eva alates tänasest edasi imporditakse
 
 	@property import_events type=text store=no
 	@caption Impordi s&uuml;ndmused
@@ -132,6 +143,11 @@ class event_import extends class_base
 				));
 				$prop['value'] = (empty($next_import)) ? "0" : date("d-M-y / H:i", $next_import);
 				break;
+
+			case "original_lang":				
+				$lg = get_instance("languages");
+				$prop["options"] = $lg->get_list();
+				break;
 				
 			case "import_events":
 				$message = t("Alates viimasest impordist");
@@ -179,8 +195,7 @@ class event_import extends class_base
 	{
 
 		// getting properties from cfgform
-		$events_manager = obj($arr["obj_inst"]->prop("events_manager"));
-		$event_form_oid = $events_manager->prop("event_form");
+		$event_form_oid = $arr["obj_inst"]->prop("event_form");
 		if (!is_oid($event_form_oid))
 		{
 			return;
@@ -204,6 +219,7 @@ class event_import extends class_base
 
 	function _get_import_log_table($arr)
 	{
+		// NOT IN USE
 		$t = &$arr["prop"]["vcl_inst"];
 
 		// Let's describe the table
@@ -246,7 +262,7 @@ class event_import extends class_base
 			$t->define_data(array(
 				"obj" => $log_parent_obj->name(),
 				"field" => $log->prop("field") . (($log->meta("trans_lang") != "") ? " (" . $log->meta("trans_lang") . ")" : ""),
-				"content_old" => ($log->meta("trans_lang") == "") ? $log_parent_obj->prop($log->prop("field")) : $all_vals[2][$log->prop("field")],
+				"content_old" => ($log->meta("trans_lang") == "") ? $log_parent_obj->prop($log->prop("field")) : $all_vals[$imp_lang_id][$log->prop("field")],
 				"content_new" => $log->prop("content"),
 				"timestamp" => date("d-M-y / H:i:s", $log->prop("timestamp")),
 				"oid" => $log->id(),
@@ -473,8 +489,7 @@ class event_import extends class_base
 		));
 
 		// getting properties from cfgform
-		$events_manager = obj($arr["obj_inst"]->prop("events_manager"));
-		$event_form_oid = $events_manager->prop("event_form");
+		$event_form_oid = $arr["obj_inst"]->prop("event_form");
 		if (!is_oid($event_form_oid))
 		{
 			return;
@@ -540,8 +555,7 @@ class event_import extends class_base
 			"align" => "center"
 		));
 
-		$events_manager = obj($arr["obj_inst"]->prop("events_manager"));
-		$event_form = obj($events_manager->prop("event_form"));		
+		$event_form = obj($arr["obj_inst"]->prop("event_form"));		
 		$event_form_inst = $event_form->instance();
 		$props = $event_form_inst->get_props_from_cfgform(array(
 			"id" => $event_form->id(),
@@ -875,6 +889,18 @@ class event_import extends class_base
 		return $this->parse();
 	}
 
+	function it_is_int($s)
+	{
+		for($a = 0; $a < strlen($s); $a++)
+		{
+			if($s[$a] != "0" && $s[$a] != "1" && $s[$a] != "2" && $s[$a] != "3" && $s[$a] != "4" && $s[$a] != "5" && $s[$a] != "6" && $s[$a] != "7" && $s[$a] != "8" && $s[$a] != "9")
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/////////////
 	// Parameters:
 	// - UD_xml_source_id: (int) the id of an XML source
@@ -899,9 +925,22 @@ class event_import extends class_base
 
 		$start_timestamp = $source->prop("start_timestamp");
 		$start_timestamp_unix = $source->prop("start_timestamp_unix");
+		$end_timestamp = $source->prop("end_timestamp");
+		$end_timestamp_unix = $source->prop("end_timestamp_unix");
+		
+		// Language
+		$url_params .= (!empty($arr["UD_lang_param"]) && !empty($arr["UD_lang_value"])) ? $arr["UD_lang_param"] . "=" . $arr["UD_lang_value"] . "&" : "";
+		
+		// Start timestamp
 		$url_params .= (!empty($start_timestamp) && !empty($arr["UD_start_timestamp"])) ? $start_timestamp . "=" . $arr["UD_start_timestamp"] . "&" : "";
 		$url_params .= (!empty($start_timestamp_unix) && !empty($arr["UD_start_timestamp_unix"])) ? $start_timestamp_unix . "=" . $arr["UD_start_timestamp_unix"] . "&" : "";
-		$url_params .= (!empty($arr["UD_lang_param"]) && !empty($arr["UD_lang_value"])) ? $arr["UD_lang_param"] . "=" . $arr["UD_lang_value"] . "&" : "";
+//		$url_params .= (!empty($start_timestamp_unix) && !empty($arr["UD_start_timestamp_unix"])) ? $start_timestamp_unix . "=" . mktime(15, 0, 0, 12, 14, 2007) . "&" : "";
+		
+		// End timestamp
+		$url_params .= (!empty($end_timestamp)) ? $end_timestamp . "=" . date("YmdHis", strtotime("+".$arr["UD_future_length"]." days")) . "&" : "";
+		$url_params .= (!empty($end_timestamp_unix)) ? $end_timestamp_unix . "=" . (time() + (3600*24*$arr["UD_future_length"])) . "&" : "";
+//		$url_params .= (!empty($end_timestamp_unix)) ? $end_timestamp_unix . "=" . mktime(1, 0, 0, 12, 14, 2007) . "&" : "";
+
 		$category = $source->prop("category");
 		$url_params .= (!empty($category) && !empty($arr["UD_category"])) ? $category . "=" . $arr["UD_category"] . "&" : "";
 		
@@ -916,6 +955,9 @@ class event_import extends class_base
 			$xml_file_content .= fread($f, 4096);
 		}
 		fclose($f);
+
+		$xml_file_content = str_replace("&", "&amp;", $xml_file_content);
+		$xml_file_content = str_replace("", "'", $xml_file_content);
 
 		return parse_xml_def(array(
 			"xml" => $xml_file_content,
@@ -969,7 +1011,7 @@ class event_import extends class_base
 			if($obj->meta("trans_lang") == "en")
 			{
 				$all_vals = $event->meta("translations");
-				$all_vals[2][$obj->prop("field")] = $obj->prop("content");
+				$all_vals[$imp_lang_id][$obj->prop("field")] = $obj->prop("content");
 				$event->set_meta("translations", $all_vals);
 			}
 			else
@@ -1002,7 +1044,7 @@ class event_import extends class_base
 			if($obj->meta("trans_lang") == "en")
 			{
 				$all_vals = $event->meta("translations");
-				$all_vals[2][$obj->prop("field")] = $obj->prop("content");
+				$all_vals[$imp_lang_id][$obj->prop("field")] = $obj->prop("content");
 				$event->set_meta("translations", $all_vals);
 			}
 			else
@@ -1016,10 +1058,145 @@ class event_import extends class_base
 		return  $arr["post_ru"];
 	}
 
-	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $import_lang = true)
+	function parse_part_of_date($format, $attr_value, $event_time_data, $time_i, $mode)
 	{
+		$prefix = ($mode < 4) ? "start_" : "end_";
+		if(empty($format))
+		{
+			if($mode % 3 != 2)
+			{
+				$event_time_data[$time_i][$prefix."hour"] = date("H", $attr_value);
+				$event_time_data[$time_i][$prefix."min"] = date("i", $attr_value);
+				$event_time_data[$time_i][$prefix."sec"] = date("s", $attr_value);
+			}
+			
+			if($mode % 3 != 0)
+			{
+				$event_time_data[$time_i][$prefix."year"] = date("Y", $attr_value);
+				$event_time_data[$time_i][$prefix."mon"] = date("m", $attr_value);
+				$event_time_data[$time_i][$prefix."day"] = date("d", $attr_value);
+			}
+		}
+		else
+		{
+			if($mode % 3 != 2)
+			{
+				if(!(substr($attr_value, strpos($format, "hh")) === false || strpos($format, "hh") === false))
+				{
+					$event_time_data[$time_i][$prefix."hour"] = substr($attr_value, strpos($format, "hh"), 2);
+				}
+				if(!(substr($attr_value, strpos($format, "mm")) === false || strpos($format, "mm") === false))
+				{
+					$event_time_data[$time_i][$prefix."min"] = substr($attr_value, strpos($format, "mm"), 2);
+				}
+				if(!(substr($attr_value, strpos($format, "ss")) === false || strpos($format, "ss") === false))
+				{
+					$event_time_data[$time_i][$prefix."sec"] = substr($attr_value, strpos($format, "ss"), 2);
+				}
+			}
+			
+			if($mode % 3 != 0)
+			{
+				if(!(substr($attr_value, strpos($format, "aaaa")) === false || strpos($format, "aaaa") === false))
+				{
+					$event_time_data[$time_i][$prefix."year"] = substr($attr_value, strpos($format, "aaaa"), 4);
+				}
+				if(!(substr($attr_value, strpos($format, "kk")) === false || strpos($format, "kk") === false))
+				{
+					$event_time_data[$time_i][$prefix."mon"] = substr($attr_value, strpos($format, "kk"), 2);
+				}
+				if(!(substr($attr_value, strpos($format, "pp")) === false || strpos($format, "pp") === false))
+				{
+					$event_time_data[$time_i][$prefix."day"] = substr($attr_value, strpos($format, "pp"), 2);
+				}	
+			}
+		}
+	}
 
-		$orig_val = (!$import_lang) ? "EN_orig_val_" : "orig_val_";
+	function handle_date($event_time_data, $time_i, $saved_xml_conf_time, $saved_xml_conf_time_format, $xml_source, $curtag, $attr, $attr_value)
+	{
+		/*
+		arr($event_time_data);
+		arr($time_i);
+		arr($saved_xml_conf_time);
+		arr($xml_source);
+		arr($curtag);
+		arr($attr);
+		arr($attr_value);
+		/**/
+		if(strlen($attr) > 0)
+			$postfix = "_args".$attr;
+		else
+			$postfix = "";
+
+		if(!empty($event_time_data[$time_i][$saved_xml_conf_time[$xml_source->id()."_".$curtag.$postfix]]))
+		{
+			$time_i++;
+			$event_time_data[$time_i] = array(
+				"start_hour" => 0,
+				"start_min" => 0,
+				"start_sec" => 0,
+				"start_year" => 0,
+				"start_mon" => 0,
+				"start_day" => 0,
+				"end_hour" => 0,
+				"end_min" => 0,
+				"end_sec" => 0,
+				"end_year" => 0,
+				"end_mon" => 0,
+				"end_day" => 0,
+			);
+		}
+		
+		$format = $saved_xml_conf_time_format[$xml_source->id()."_".$curtag.$postfix];
+//		arr($format);
+		
+		switch($saved_xml_conf_time[$xml_source->id()."_".$curtag.$postfix])
+		{
+			case "start": 	
+				$this->parse_part_of_date(&$format, &$attr_value, &$event_time_data, &$time_i, 1);
+				break;
+
+			case "start_date":
+				$this->parse_part_of_date(&$format, &$attr_value, &$event_time_data, &$time_i, 2);
+				break;
+
+			case "start_time":
+				// Not a nice way to handle this problem.
+				$vl = str_replace(", ", ",", $attr_value);
+				$vl = explode(",", $vl);
+				$c = 0;
+				foreach($vl as $attr_value)
+				{
+					$this->parse_part_of_date(&$format, &$attr_value, &$event_time_data, $time_i + $c, 3);
+					$c++;
+				}
+				break;
+
+			case "end":
+				$this->parse_part_of_date(&$format, &$attr_value, &$event_time_data, &$time_i, 4);
+				break;
+
+			case "end_date":
+				$this->parse_part_of_date(&$format, &$attr_value, &$event_time_data, &$time_i, 5);
+				break;
+
+			case "end_time":
+				$this->parse_part_of_date(&$format, &$attr_value, &$event_time_data, &$time_i, 6);
+				break;
+		}
+		$event_time_data[$time_i][$saved_xml_conf_time[$xml_source->id()."_".$curtag.$postfix]] = trim($attr_value, " \t\n\r\0");
+	}
+
+//	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $import_orig = true)
+	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $imp_lang_id)
+	{
+		$li = $o->prop("original_lang");
+		$import_orig = ($li == $imp_lang_id);
+		$lg = get_instance("languages");
+		$lg = $lg->get_list();
+
+		$orig_val = (!$import_orig) ? $imp_lang_id."_orig_val_" : "orig_val_";
 
 		$saved_xml_conf = $o->meta("xml_conf");
 		$saved_xml_conf_time = $o->meta("xml_conf_time");
@@ -1037,10 +1214,10 @@ class event_import extends class_base
 		$saved_conf_aw_sector = $o->meta("log_conf_aw");
 
 		$xml_source = obj($xml_source_id);
-		if("tlidbup" != $xml_source->prop("tag_lang") && !$import_lang)
+		if("tlidbup" != $xml_source->prop("tag_lang") && !$import_orig)
 			return false;
 
-		print " &nbsp; - <strong>[STARTED]</strong> " . $xml_source->name() . (($import_lang) ? "" : " [ENGLISH]") . "<br>";
+		print " &nbsp; - <strong>[STARTED]</strong> " . $xml_source->name() . " [".t(strtoupper($lg[$imp_lang_id]))."]" . "<br>";
 		flush();		
 
 		if(!is_oid($xml_source->prop("external_system_event")))
@@ -1138,18 +1315,19 @@ class event_import extends class_base
 			"UD_xml_source_id" => $xml_source->id(),
 			"UD_start_timestamp" => "".date("YmdHis", $o->meta("last_import")),
 			"UD_start_timestamp_unix" => $o->meta("last_import"),
+			"UD_future_length" => $o->prop("future_length"),
 		);
-		if(!$import_lang)
-		{
+//		if(!$import_orig)
+//		{
 			$load_xml_content_params["UD_lang_param"] = $param_lang;
-			$load_xml_content_params["UD_lang_value"] = $saved_language_table["en"];
-		}
+			$load_xml_content_params["UD_lang_value"] = $saved_language_table[$imp_lang_id];
+//		}
 
 		// In case we have to import all the events, we unset the date.
 		if($o->prop("import_events_all"))
 		{
 			$load_xml_content_params["UD_start_timestamp"] = "19700101000000";
-			$load_xml_content_params["UD_start_timestamp_unix"] = 0;
+			$load_xml_content_params["UD_start_timestamp_unix"] = 1;
 		}
 		$xml_content = $this->load_xml_content($load_xml_content_params);
 
@@ -1157,9 +1335,32 @@ class event_import extends class_base
 		{
 			print " &nbsp; &nbsp; - <strong>Could not get XML data!</strong><br>";
 		}
-
+		
 		foreach($xml_content[0] as $v)
 		{
+			// I have to solve this problem. What if someone uses <event_0>, <event_1> and so on..
+			// Start hacking.
+			if(strlen(str_replace("#", "", $tag_event)) != strlen($tag_event))
+			{				
+				$curtag = "";
+				for($a = 0; $a <= $v["level"] - 1; $a++)
+				{
+					if(!empty($curtag))
+					{
+						$curtag .= "_";
+					}
+					$curtag .= $xml_tag_levels[$a];
+				}
+				if(strlen($curtag."_".$v["tag"]) > strpos($tag_event, "#"))
+				{
+					if($this->it_is_int(substr($curtag."_".$v["tag"], strpos($tag_event, "#"))) || substr($curtag."_".$v["tag"], strpos($tag_event, "#")) == "0")
+					{
+						$v["tag"] = substr($curtag."_".$v["tag"], strlen($curtag."_"), strpos($tag_event, "#") - strlen($curtag."_"))."#";
+					}
+				}
+			}
+			// End on hacking.
+
 			$xml_tag_levels[$v["level"]] = $v["tag"];
 
 			// We put together the name for the current tag, including its parent tags
@@ -1227,208 +1428,7 @@ class event_import extends class_base
 				}
 				if(!empty($cft) && $cft != "do_not_save_into_db")
 				{
-					if(!empty($event_time_data[$time_i][$cft]))
-					{
-						$time_i++;
-						$event_time_data[$time_i] = array(
-							"start_hour" => 0,
-							"start_min" => 0,
-							"start_sec" => 0,
-							"start_year" => 0,
-							"start_mon" => 0,
-							"start_day" => 0,
-							"end_hour" => 0,
-							"end_min" => 0,
-							"end_sec" => 0,
-							"end_year" => 0,
-							"end_mon" => 0,
-							"end_day" => 0,
-						);
-					}
-					
-					$format = $saved_xml_conf_time_format[$xml_source->id()."_".$curtag];
-					
-					switch($cft)
-					{
-						case "start": 								
-							if(empty($format))
-							{
-								$event_time_data[$time_i]["start_hour"] = date("H", $v["value"]);
-								$event_time_data[$time_i]["start_min"] = date("i", $v["value"]);
-								$event_time_data[$time_i]["start_sec"] = date("s", $v["value"]);
-								
-								$event_time_data[$time_i]["start_year"] = date("Y", $v["value"]);
-								$event_time_data[$time_i]["start_mon"] = date("m", $v["value"]);
-								$event_time_data[$time_i]["start_day"] = date("d", $v["value"]);
-							}
-							else
-							{
-								if(!(strpos($format, "hh") === false))
-								{
-									$event_time_data[$time_i]["start_hour"] = substr($v["value"], strpos($format, "hh"), 2);
-								}
-								if(!(strpos($format, "mm") === false))
-								{
-									$event_time_data[$time_i]["start_min"] = substr($v["value"], strpos($format, "mm"), 2);
-								}
-								if(!(strpos($format, "ss") === false))
-								{
-									$event_time_data[$time_i]["start_sec"] = substr($v["value"], strpos($format, "ss"), 2);
-								}
-								
-								if(!(strpos($format, "aaaa") === false))
-								{
-									$event_time_data[$time_i]["start_year"] = substr($v["value"], strpos($format, "aaaa"), 4);
-								}
-								if(!(strpos($format, "kk") === false))
-								{
-									$event_time_data[$time_i]["start_mon"] = substr($v["value"], strpos($format, "kk"), 2);
-								}
-								if(!(strpos($format, "pp") === false))
-								{
-									$event_time_data[$time_i]["start_day"] = substr($v["value"], strpos($format, "pp"), 2);
-								}
-							}
-							break;
-
-						case "start_date":
-							if(empty($format))
-							{
-								$event_time_data[$time_i]["start_year"] = date("Y", $v["value"]);
-								$event_time_data[$time_i]["start_mon"] = date("m", $v["value"]);
-								$event_time_data[$time_i]["start_day"] = date("d", $v["value"]);
-							}
-							else
-							{
-								if(!(strpos($format, "aaaa") === false))
-								{
-									$event_time_data[$time_i]["start_year"] = substr($v["value"], strpos($format, "aaaa"), 4);
-								}
-								if(!(strpos($format, "kk") === false))
-								{
-									$event_time_data[$time_i]["start_mon"] = substr($v["value"], strpos($format, "kk"), 2);
-								}
-								if(!(strpos($format, "pp") === false))
-								{
-									$event_time_data[$time_i]["start_day"] = substr($v["value"], strpos($format, "pp"), 2);
-								}
-							}
-							break;
-
-						case "start_time":
-							if(empty($format))
-							{
-								$event_time_data[$time_i]["start_hour"] = date("H", $v["value"]);
-								$event_time_data[$time_i]["start_min"] = date("i", $v["value"]);
-								$event_time_data[$time_i]["start_sec"] = date("s", $v["value"]);
-							}
-							else
-							{
-								if(!(strpos($format, "hh") === false))
-								{
-									$event_time_data[$time_i]["start_hour"] = substr($v["value"], strpos($format, "hh"), 2);
-								}
-								if(!(strpos($format, "mm") === false))
-								{
-									$event_time_data[$time_i]["start_min"] = substr($v["value"], strpos($format, "mm"), 2);
-								}
-								if(!(strpos($format, "ss") === false))
-								{
-									$event_time_data[$time_i]["start_sec"] = substr($v["value"], strpos($format, "ss"), 2);
-								}
-							}
-							break;
-
-						case "end":
-							if(empty($format))
-							{
-								$event_time_data[$time_i]["end_hour"] = date("H", $v["value"]);
-								$event_time_data[$time_i]["end_min"] = date("i", $v["value"]);
-								$event_time_data[$time_i]["end_sec"] = date("s", $v["value"]);
-								
-								$event_time_data[$time_i]["end_year"] = date("Y", $v["value"]);
-								$event_time_data[$time_i]["end_mon"] = date("m", $v["value"]);
-								$event_time_data[$time_i]["end_day"] = date("d", $v["value"]);
-							}
-							else
-							{
-								if(!(strpos($format, "hh") === false))
-								{
-									$event_time_data[$time_i]["end_hour"] = substr($v["value"], strpos($format, "hh"), 2);
-								}
-								if(!(strpos($format, "mm") === false))
-								{
-									$event_time_data[$time_i]["end_min"] = substr($v["value"], strpos($format, "mm"), 2);
-								}
-								if(!(strpos($format, "ss") === false))
-								{
-									$event_time_data[$time_i]["end_sec"] = substr($v["value"], strpos($format, "ss"), 2);
-								}
-								
-								if(!(strpos($format, "aaaa") === false))
-								{
-									$event_time_data[$time_i]["end_year"] = substr($v["value"], strpos($format, "aaaa"), 4);
-								}
-								if(!(strpos($format, "kk") === false))
-								{
-									$event_time_data[$time_i]["end_mon"] = substr($v["value"], strpos($format, "kk"), 2);
-								}
-								if(!(strpos($format, "pp") === false))
-								{
-									$event_time_data[$time_i]["end_day"] = substr($v["value"], strpos($format, "pp"), 2);
-								}
-							}
-							break;
-
-						case "end_date":
-							if(empty($format))
-							{
-								$event_time_data[$time_i]["end_year"] = date("Y", $v["value"]);
-								$event_time_data[$time_i]["end_mon"] = date("m", $v["value"]);
-								$event_time_data[$time_i]["end_day"] = date("d", $v["value"]);
-							}
-							else
-							{
-								if(!(strpos($format, "aaaa") === false))
-								{
-									$event_time_data[$time_i]["end_year"] = substr($v["value"], strpos($format, "aaaa"), 4);
-								}
-								if(!(strpos($format, "kk") === false))
-								{
-									$event_time_data[$time_i]["end_mon"] = substr($v["value"], strpos($format, "kk"), 2);
-								}
-								if(!(strpos($format, "pp") === false))
-								{
-									$event_time_data[$time_i]["end_day"] = substr($v["value"], strpos($format, "pp"), 2);
-								}
-							}
-							break;
-
-						case "end_time":
-							if(empty($format))
-							{
-								$event_time_data[$time_i]["end_hour"] = date("H", $v["value"]);
-								$event_time_data[$time_i]["end_min"] = date("i", $v["value"]);
-								$event_time_data[$time_i]["end_sec"] = date("s", $v["value"]);
-							}
-							else
-							{
-								if(!(strpos($format, "hh") === false))
-								{
-									$event_time_data[$time_i]["end_hour"] = substr($v["value"], strpos($format, "hh"), 2);
-								}
-								if(!(strpos($format, "mm") === false))
-								{
-									$event_time_data[$time_i]["end_min"] = substr($v["value"], strpos($format, "mm"), 2);
-								}
-								if(!(strpos($format, "ss") === false))
-								{
-									$event_time_data[$time_i]["end_sec"] = substr($v["value"], strpos($format, "ss"), 2);
-								}
-							}
-							break;
-					}
-					$event_time_data[$time_i][$cft] = trim($v["value"], " \t\n\r\0");
+					$this->handle_date(&$event_time_data, &$time_i, &$saved_xml_conf_time, &$saved_xml_conf_time_format, &$xml_source, &$curtag, "", &$v["value"]);
 				}
 				if($curtag == $tag_id)
 				{
@@ -1440,232 +1440,31 @@ class event_import extends class_base
 					{
 						$attr_value = trim($attr_value, " \t\n\r\0");
 
-						if(!empty($saved_xml_conf[$xml_source->id()."_".$curtag."_args".$attr]) && $saved_xml_conf[$xml_source->id()."_".$curtag."_args".$attr] != "do_not_save_into_db")
+						if(!empty($saved_xml_conf[$xml_source->id()."_".$curtag.$postfix]) && $saved_xml_conf[$xml_source->id()."_".$curtag.$postfix] != "do_not_save_into_db")
 						{
-							$event_data[$saved_xml_conf[$xml_source->id()."_".$curtag."_args".$attr]] = $attr_value;
+							$event_data[$saved_xml_conf[$xml_source->id()."_".$curtag.$postfix]] = $attr_value;
 						}
-						if(!empty($saved_xml_conf_place[$xml_source->id()."_".$curtag."_args".$attr]) && $saved_xml_conf_place[$xml_source->id()."_".$curtag."_args".$attr] != "do_not_save_into_db")
+						if(!empty($saved_xml_conf_place[$xml_source->id()."_".$curtag.$postfix]) && $saved_xml_conf_place[$xml_source->id()."_".$curtag.$postfix] != "do_not_save_into_db")
 						{
-							if(!empty($event_place_data[$place_i][$saved_xml_conf_place[$xml_source->id()."_".$curtag."_args".$attr]]))
+							if(!empty($event_place_data[$place_i][$saved_xml_conf_place[$xml_source->id()."_".$curtag.$postfix]]))
 							{									
 								$place_i++;
 							}
-							$event_place_data[$place_i][$saved_xml_conf_place[$xml_source->id()."_".$curtag."_args".$attr]] = $attr_value;
+							$event_place_data[$place_i][$saved_xml_conf_place[$xml_source->id()."_".$curtag.$postfix]] = $attr_value;
 						}
-						if(!empty($saved_xml_conf_category[$xml_source->id()."_".$curtag."_args".$attr]) && $saved_xml_conf_category[$xml_source->id()."_".$curtag."_args".$attr] != "do_not_save_into_db")
+						if(!empty($saved_xml_conf_category[$xml_source->id()."_".$curtag.$postfix]) && $saved_xml_conf_category[$xml_source->id()."_".$curtag.$postfix] != "do_not_save_into_db")
 						{
-							if(!empty($event_category_data[$category_i][$saved_xml_conf_category[$xml_source->id()."_".$curtag."_args".$attr]]))
+							if(!empty($event_category_data[$category_i][$saved_xml_conf_category[$xml_source->id()."_".$curtag.$postfix]]))
 							{
 								$category_i++;
 							}
-							$event_category_data[$category_i][$saved_xml_conf_category[$xml_source->id()."_".$curtag."_args".$attr]] = $attr_value;
+							$event_category_data[$category_i][$saved_xml_conf_category[$xml_source->id()."_".$curtag.$postfix]] = $attr_value;
 						}
-						if(!empty($saved_xml_conf_time[$xml_source->id()."_".$curtag."_args".$attr]) && $saved_xml_conf_time[$xml_source->id()."_".$curtag."_args".$attr] != "do_not_save_into_db")
+						if(!empty($saved_xml_conf_time[$xml_source->id()."_".$curtag.$postfix]) && $saved_xml_conf_time[$xml_source->id()."_".$curtag.$postfix] != "do_not_save_into_db")
 						{
-							if(!empty($event_time_data[$time_i][$saved_xml_conf_time[$xml_source->id()."_".$curtag."_args".$attr]]))
-							{
-								$time_i++;
-								$event_time_data[$time_i] = array(
-									"start_hour" => 0,
-									"start_min" => 0,
-									"start_sec" => 0,
-									"start_year" => 0,
-									"start_mon" => 0,
-									"start_day" => 0,
-									"end_hour" => 0,
-									"end_min" => 0,
-									"end_sec" => 0,
-									"end_year" => 0,
-									"end_mon" => 0,
-									"end_day" => 0,
-								);
-							}
-							
-							$format = $saved_xml_conf_time_format[$xml_source->id()."_".$curtag."_args".$attr];
-							
-							switch($saved_xml_conf_time[$xml_source->id()."_".$curtag."_args".$attr])
-							{
-								case "start": 								
-									if(empty($format))
-									{
-										$event_time_data[$time_i]["start_hour"] = date("H", $attr_value);
-										$event_time_data[$time_i]["start_min"] = date("i", $attr_value);
-										$event_time_data[$time_i]["start_sec"] = date("s", $attr_value);
-										
-										$event_time_data[$time_i]["start_year"] = date("Y", $attr_value);
-										$event_time_data[$time_i]["start_mon"] = date("m", $attr_value);
-										$event_time_data[$time_i]["start_day"] = date("d", $attr_value);
-									}
-									else
-									{
-										if(!(substr($attr_value, strpos($format, "hh")) === false))
-										{
-											$event_time_data[$time_i]["start_hour"] = substr($attr_value, strpos($format, "hh"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "mm")) === false))
-										{
-											$event_time_data[$time_i]["start_min"] = substr($attr_value, strpos($format, "mm"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "ss")) === false))
-										{
-											$event_time_data[$time_i]["start_sec"] = substr($attr_value, strpos($format, "ss"), 2);
-										}
-										
-										if(!(substr($attr_value, strpos($format, "aaaa")) === false))
-										{
-											$event_time_data[$time_i]["start_year"] = substr($attr_value, strpos($format, "aaaa"), 4);
-										}
-										if(!(substr($attr_value, strpos($format, "kk")) === false))
-										{
-											$event_time_data[$time_i]["start_mon"] = substr($attr_value, strpos($format, "kk"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "pp")) === false))
-										{
-											$event_time_data[$time_i]["start_day"] = substr($attr_value, strpos($format, "pp"), 2);
-										}
-									}
-									break;
-
-								case "start_date":
-									if(empty($format))
-									{
-										$event_time_data[$time_i]["start_year"] = date("Y", $attr_value);
-										$event_time_data[$time_i]["start_mon"] = date("m", $attr_value);
-										$event_time_data[$time_i]["start_day"] = date("d", $attr_value);
-									}
-									else
-									{
-										if(!(substr($attr_value, strpos($format, "aaaa")) === false))
-										{
-											$event_time_data[$time_i]["start_year"] = substr($attr_value, strpos($format, "aaaa"), 4);
-										}
-										if(!(substr($attr_value, strpos($format, "kk")) === false))
-										{
-											$event_time_data[$time_i]["start_mon"] = substr($attr_value, strpos($format, "kk"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "pp")) === false))
-										{
-											$event_time_data[$time_i]["start_day"] = substr($attr_value, strpos($format, "pp"), 2);
-										}
-									}
-									break;
-
-								case "start_time":
-									if(empty($format))
-									{
-										$event_time_data[$time_i]["start_hour"] = date("H", $attr_value);
-										$event_time_data[$time_i]["start_min"] = date("i", $attr_value);
-										$event_time_data[$time_i]["start_sec"] = date("s", $attr_value);
-									}
-									else
-									{
-										if(!(substr($attr_value, strpos($format, "hh")) === false))
-										{
-											$event_time_data[$time_i]["start_hour"] = substr($attr_value, strpos($format, "hh"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "mm")) === false))
-										{
-											$event_time_data[$time_i]["start_min"] = substr($attr_value, strpos($format, "mm"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "ss")) === false))
-										{
-											$event_time_data[$time_i]["start_sec"] = substr($attr_value, strpos($format, "ss"), 2);
-										}
-									}
-									break;
-
-								case "end":
-									if(empty($format))
-									{
-										$event_time_data[$time_i]["end_hour"] = date("H", $attr_value);
-										$event_time_data[$time_i]["end_min"] = date("i", $attr_value);
-										$event_time_data[$time_i]["end_sec"] = date("s", $attr_value);
-										
-										$event_time_data[$time_i]["end_year"] = date("Y", $attr_value);
-										$event_time_data[$time_i]["end_mon"] = date("m", $attr_value);
-										$event_time_data[$time_i]["end_day"] = date("d", $attr_value);
-									}
-									else
-									{
-										if(!(substr($attr_value, strpos($format, "hh")) === false))
-										{
-											$event_time_data[$time_i]["end_hour"] = substr($attr_value, strpos($format, "hh"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "mm")) === false))
-										{
-											$event_time_data[$time_i]["end_min"] = substr($attr_value, strpos($format, "mm"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "ss")) === false))
-										{
-											$event_time_data[$time_i]["end_sec"] = substr($attr_value, strpos($format, "ss"), 2);
-										}
-										
-										if(!(substr($attr_value, strpos($format, "aaaa")) === false))
-										{
-											$event_time_data[$time_i]["end_year"] = substr($attr_value, strpos($format, "aaaa"), 4);
-										}
-										if(!(substr($attr_value, strpos($format, "kk")) === false))
-										{
-											$event_time_data[$time_i]["end_mon"] = substr($attr_value, strpos($format, "kk"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "pp")) === false))
-										{
-											$event_time_data[$time_i]["end_day"] = substr($attr_value, strpos($format, "pp"), 2);
-										}
-									}
-									break;
-
-								case "end_date":
-									if(empty($format))
-									{
-										$event_time_data[$time_i]["end_year"] = date("Y", $attr_value);
-										$event_time_data[$time_i]["end_mon"] = date("m", $attr_value);
-										$event_time_data[$time_i]["end_day"] = date("d", $attr_value);
-									}
-									else
-									{
-										if(!(substr($attr_value, strpos($format, "aaaa")) === false))
-										{
-											$event_time_data[$time_i]["end_year"] = substr($attr_value, strpos($format, "aaaa"), 4);
-										}
-										if(!(substr($attr_value, strpos($format, "kk")) === false))
-										{
-											$event_time_data[$time_i]["end_mon"] = substr($attr_value, strpos($format, "kk"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "pp")) === false))
-										{
-											$event_time_data[$time_i]["end_day"] = substr($attr_value, strpos($format, "pp"), 2);
-										}
-									}
-									break;
-
-								case "end_time":
-									if(empty($format))
-									{
-										$event_time_data[$time_i]["end_hour"] = date("H", $attr_value);
-										$event_time_data[$time_i]["end_min"] = date("i", $attr_value);
-										$event_time_data[$time_i]["end_sec"] = date("s", $attr_value);
-									}
-									else
-									{
-										if(!(substr($attr_value, strpos($format, "hh")) === false))
-										{
-											$event_time_data[$time_i]["end_hour"] = substr($attr_value, strpos($format, "hh"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "mm")) === false))
-										{
-											$event_time_data[$time_i]["end_min"] = substr($attr_value, strpos($format, "mm"), 2);
-										}
-										if(!(substr($attr_value, strpos($format, "ss")) === false))
-										{
-											$event_time_data[$time_i]["end_sec"] = substr($attr_value, strpos($format, "ss"), 2);
-										}
-									}
-									break;
-							}
-							$event_time_data[$time_i][$saved_xml_conf_time[$xml_source->id()."_".$curtag."_args".$attr]] = trim($attr_value, " \t\n\r\0");
+							$this->handle_date(&$event_time_data, &$time_i, &$saved_xml_conf_time, &$saved_xml_conf_time_format, &$xml_source, &$curtag, &$attr, &$attr_value);
 						}
-						if($curtag."_args".$attr == $tag_id)
+						if($curtag.$postfix == $tag_id)
 						{
 							$event_id = trim($attr_value, " \t\n\r\0");
 						}
@@ -1674,6 +1473,11 @@ class event_import extends class_base
 			}
 			else
 			{
+				if(empty($event_id))
+				{
+					print " &nbsp; &nbsp; - ";
+					print " - No ID. Skipped.<br>";
+				}
 				print " &nbsp; &nbsp; - ";
 				// If the event is not public, we skip it.
 				$not_published = false;
@@ -1727,23 +1531,27 @@ class event_import extends class_base
 						continue;
 					}
 				}
-				if($event_data["tamtolawseh"] == $saved_language_table["en"])
+				if(isset($event_data["tamtolawseh"]))
 				{
-					$import_lang = false;
+					if($event_data["tamtolawseh"] == $saved_language_table[$imp_lang_id])
+					{
+						$import_orig = false;
+					}
+					else
+					{
+						$import_orig = true;
+					}
+					unset($event_data["tamtolawseh"]);
 				}
-				else
-				{
-					$import_lang = true;
-				}
-				unset($event_data["tamtolawseh"]);
 
 				// saving the event data
 				if(!array_key_exists($event_id, $imps["event"][$ext_sys_event]))
 				{ // new event
-					$all_vals[2] = array();
+					$all_vals[$imp_lang_id] = array();
 
-					print "<strong>[ new ]".((!$import_lang) ? "[EN]" : "[ET]")." </strong>";
+					print "<strong>[ new ][".$lg[$imp_lang_id]."] </strong>";
 					$event_obj = new object;
+					$event_obj->set_lang_id($li);
 					$event_obj->set_class_id($class_id);
 					$event_obj->set_parent($dirs["event"]);		// Kaust, kuhu sündmusi kirjutatakse (event_manager)
 					// By default new events are not public.
@@ -1760,26 +1568,29 @@ class event_import extends class_base
 					{
 						if(!empty($key) && !empty($value))
 						{
-							if($import_lang)
+							if($import_orig)
 							{
 								// Importing the original content
+//								print "Importing the original content -> ".$key."<br>";
 								$event_obj->set_prop($key, $value);
-								$event_obj->set_meta("EN_orig_val_".$key, "EN_orig_val_");
+								$event_obj->set_meta($imp_lang_id."_orig_val_".$key, $imp_lang_id."_orig_val_");
 							}
 							else
 							{
 								// Importing translated content
+//								print "Importing translated content -> ".$key."<br>";
 								if(in_array($key, $translatable_fields))
 								{
-									$all_vals[2][$key] = $value;
+									$all_vals[$imp_lang_id][$key] = $value;
 								}
 								$event_obj->set_meta("orig_val_".$key, "orig_val_");
 							}
 							$event_obj->set_meta($orig_val.$key, $value);
 						}
 					}
-					if(!$import_lang)
+					if(!$import_orig)
 					{
+//						print "Saving translations<br>";
 						$event_obj->set_meta("translations", $all_vals);
 					}
 					$event_obj->save();
@@ -1787,6 +1598,7 @@ class event_import extends class_base
 					flush();
 					// We make a record of the event we just imported so we won't make a duplicate.
 					$extent_obj = new object;
+					$extent_obj->set_lang_id($li);
 					$extent_obj->set_class_id(CL_EXTERNAL_SYSTEM_ENTRY);
 					$extent_obj->set_parent($ext_sys_event);
 					$extent_obj->set_name(sprintf(t("Siduss&uuml;steemi %s sisestus objektile %s"), $ext_sys_event_name, $event_obj->name()));
@@ -1806,7 +1618,7 @@ class event_import extends class_base
 				}
 				else
 				{ // excisting event
-					print "[ --- ]".((!$import_lang) ? "[EN]" : "[ET]")." ".$event_data["name"]."<br>";
+					print "[ --- ][".$lg[$imp_lang_id]."] ".$event_data["name"]."<br>";
 					$event_obj = new object($imps["event"][$ext_sys_event][$event_id]);
 					
 					// Don't wanna lose any translations alreay imported or entered.
@@ -1822,6 +1634,15 @@ class event_import extends class_base
 					
 					foreach($event_data as $key => $value)
 					{
+						/*
+						$value1 = $value;
+						$value = iconv("UTF-8", "ISO-8859-4", $value);
+						if($value1 != $value)
+						{
+							print $key." = ".$value1.", ";
+							print $key." = ".$value."<br>";
+						}
+						/**/
 						if(!empty($key))
 						{
 							// If the content of the field has been modified manually, we use the $saved_conf_aw array.
@@ -1853,6 +1674,7 @@ class event_import extends class_base
 									else
 									{
 										$log = new object;
+										$log->set_lang_id($li);
 										$log->set_parent($event_obj->id());
 										$log->set_class_id(CL_IMPORT_LOG);
 										$log->set_prop("name", "");
@@ -1866,15 +1688,16 @@ class event_import extends class_base
 								}
 								elseif($jumper[$key] == "aut")
 								{
-									if($import_lang)
+									if($import_orig)
 									{
+//										print "Importing original content -> ".$key."<br>";
 										$event_obj->set_prop($key, $value);
 									}
 									else
 									{
 										if(in_array($key, $translatable_fields))
 										{	
-											$all_vals[2][$key] = $value;
+											$all_vals[$imp_lang_id][$key] = $value;
 											$event_obj->set_meta("translations", $all_vals);
 										}
 										
@@ -1895,6 +1718,7 @@ class event_import extends class_base
 					}
 				}
 				flush();
+//				arr($event_obj->meta("translations"));
 
 				//saving the event place data					
 				foreach($event_place_data as $event_place)
@@ -1912,6 +1736,7 @@ class event_import extends class_base
 						else
 						{
 							$place_obj = new object;
+							$place_obj->set_lang_id($li);
 							$place_obj->set_class_id(CL_SCM_LOCATION);
 							$place_obj->set_parent($dirs["location"]);
 							print "<b>";
@@ -1934,22 +1759,22 @@ class event_import extends class_base
 								if($jumper[$place_prop] == "ign" && !$new)
 									continue;
 
-								if($import_lang)
+								if($import_orig)
 								{
 									$place_obj->set_prop($place_prop, $event_place[$place_prop]);
 									if($new)
-										$place_obj->set_meta("EN_orig_val_".$place_prop, "EN_orig_val_");
+										$place_obj->set_meta($imp_lang_id."_orig_val_".$place_prop, $imp_lang_id."_orig_val_");
 								}
 								else
 								{
-									$all_vals[2][$place_prop] = $event_place[$place_prop];
+									$all_vals[$imp_lang_id][$place_prop] = $event_place[$place_prop];
 									if($new)
 										$place_obj->set_meta("orig_val_".$place_prop, "orig_val_");
 								}
 								$place_obj->set_meta($orig_val.$place_prop, $event_place[$place_prop]);
 							}
 						}
-						if(!$import_lang)
+						if(!$import_orig)
 						{							
 							$place_obj->set_meta("translations", $all_vals);
 						}
@@ -1960,6 +1785,7 @@ class event_import extends class_base
 						{								
 							// We make a record of the location we just imported so we won't make a duplicate.
 							$extent_obj = new object;
+							$extend_obj->set_lang_id($li);
 							$extent_obj->set_class_id(CL_EXTERNAL_SYSTEM_ENTRY);
 							$extent_obj->set_parent($ext_sys_location);
 							$extent_obj->set_name(sprintf(t("Siduss&uuml;steemi %s sisestus objektile %s"), $ext_sys_location_name, $place_obj->name()));
@@ -2001,10 +1827,11 @@ class event_import extends class_base
 							else
 							{
 								$category_obj = new object;
+								$category_obj->set_lang_id($li);
 								$category_obj->set_class_id(CL_CRM_SECTOR);
 								$category_obj->set_parent($dirs["sector"]);
 								$category_obj->set_status(STAT_ACTIVE);
-								$category_obj->set_meta("EN_orig_val_sector", "EN_orig_val_");
+								$category_obj->set_meta("EN_orig_val_sector", $imp_lang_id."_orig_val_");
 								$category_obj->set_meta("orig_val_sector", "orig_val_");
 								print "<b>";
 								$new = true;
@@ -2031,7 +1858,7 @@ class event_import extends class_base
 									if($jumper[$cat_prop] == "ign" && !$new)
 										continue;
 
-									if($import_lang)
+									if($import_orig)
 									{
 										if($cat_prop == "name")
 										{
@@ -2042,18 +1869,18 @@ class event_import extends class_base
 											$category_obj->set_prop($cat_prop, $event_category[$cat_prop]);
 										}
 										if($new)
-											$category_obj->meta("EN_orig_val_".$cat_prop, "EN_orig_val_");
+											$category_obj->meta($imp_lang_id."_orig_val_".$cat_prop, $imp_lang_id."_orig_val_");
 									}
 									else
 									{
-										$all_vals[2][$cat_prop] = $event_category[$cat_prop];
+										$all_vals[$imp_lang_id][$cat_prop] = $event_category[$cat_prop];
 										if($new)
 											$category_obj->meta("orig_val_".$cat_prop, "orig_val_");
 									}
 									$category_obj->set_meta($orig_val.$cat_prop, $event_category[$cat_prop]);
 								}
 							}
-							if($import_lang)
+							if($import_orig)
 								$category_obj->set_meta("translations", $all_vals);
 							$category_obj->save();		
 							print " &nbsp; &nbsp; &nbsp; -";
@@ -2085,6 +1912,7 @@ class event_import extends class_base
 							{								
 								// We make a record of the category (aka sector) we just imported so we won't make a duplicate.
 								$extent_obj = new object;
+								$extent_obj->set_lang_id($li);
 								$extent_obj->set_class_id(CL_EXTERNAL_SYSTEM_ENTRY);
 								$extent_obj->set_parent($ext_sys_sector);
 								$extent_obj->set_name(sprintf(t("Siduss&uuml;steemi %s sisestus objektile %s"), $ext_sys_sector_name, $category_obj->name()));
@@ -2105,7 +1933,8 @@ class event_import extends class_base
 						}
 					}
 				}
-
+				
+				$times_done = array();
 				foreach($event_time_data as $event_time)
 				{
 					$deleted = false;
@@ -2132,6 +1961,14 @@ class event_import extends class_base
 						}
 						continue;
 					}
+					$start_postfixes = array("start_mon", "start_day", "start_year");
+					foreach($start_postfixes as $start_postfix)
+					{
+						if(empty($event_time[$start_postfix]))
+							$event_time[$start_postfix] = $tmp[$start_postfix];
+						else
+							$tmp[$start_postfix] = $event_time[$start_postfix];
+					}
 
 					if($event_time["start_day"] != 0 && $event_time["start_mon"] != 0)
 					{
@@ -2145,6 +1982,7 @@ class event_import extends class_base
 						else
 						{
 							$time_obj = new object;
+							$time_obj->set_lang_id($li);
 							$time_obj->set_class_id(CL_EVENT_TIME);
 							$time_obj->set_parent($dirs["event"]);
 							print "<b>";
@@ -2163,10 +2001,10 @@ class event_import extends class_base
 
 							if($key == "comment" && $value != "")
 							{
-								if($import_lang)
+								if($import_orig)
 									$time_obj->set_comment($value);
 								else
-									$all_vals[2]["comment"] = $value;
+									$all_vals[$imp_lang_id]["comment"] = $value;
 							}
 							
 							if($key == "location_id" && $value != "")
@@ -2223,18 +2061,24 @@ class event_import extends class_base
 							$event_time["start_year"]
 						);
 
+						if(in_array($tmp["start"], $times_done))
+						{
+							print " &nbsp; &nbsp; &nbsp; -";
+							print "- event time: ".date("d-m-Y / H:i", $tmp["start"])." already imported <b>[SKIPPED]<br></b>";
+							continue;
+						}
 
 						$tmp["end"] = ($tmp["end"] > $tmp["start"]) ? $tmp["end"] : $tmp["start"];
 
-						if($import_lang)
+						if($import_orig)
 							$time_obj->set_prop("name", $tmp["name"]);
 						else
-							$all_vals[2]["name"] = $tmp["name"];
+							$all_vals[$imp_lang_id]["name"] = $tmp["name"];
 
 						$time_obj->set_prop("start", $tmp["start"]);
 						$time_obj->set_prop("end", $tmp["end"]);
 
-						if(!$import_lang)
+						if(!$import_orig)
 							$time_obj->set_meta("translations", $all_vals);
 
 						$time_obj->save();						
@@ -2243,6 +2087,7 @@ class event_import extends class_base
 						{
 							// We make a record of the event time we just imported so we won't make a duplicate.
 							$extent_obj = new object;
+							$extent_obj->set_lang_id($li);
 							$extent_obj->set_class_id(CL_EXTERNAL_SYSTEM_ENTRY);
 							$extent_obj->set_parent($ext_sys_event_time);
 							$extent_obj->set_name(sprintf(t("Siduss&uuml;steemi %s sisestus objektile %s"), $ext_sys_event_time_name, $time_obj->name()));
@@ -2266,6 +2111,7 @@ class event_import extends class_base
 							"to" => $time_obj->id(),
 							"type" => "RELTYPE_EVENT_TIME",
 						));
+						$times_done[sizeof($times_done)] = $tmp["start"];
 					}
 				}
 				$tmp = array();
@@ -2283,29 +2129,36 @@ class event_import extends class_base
 	function import_events($arr)
 	{
 		/*
+		$o = obj($arr['id']);
+
 		$ol = new object_list(array(
 			"class_id" => CL_CALENDAR_EVENT,
-//			"limit" => "0,100",
+//			"limit" => "0,1000",
+			"lang_id" => $o->prop("original_lang"),
 		));
 		$ol->delete(true);
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_SECTOR,
 //			"limit" => "0,100",
+			"lang_id" => $o->prop("original_lang"),
 		));
 		$ol->delete(true);
 		$ol = new object_list(array(
 			"class_id" => CL_SCM_LOCATION,
 //			"limit" => "0,100",
+			"lang_id" => $o->prop("original_lang"),
 		));
 		$ol->delete(true);
 		$ol = new object_list(array(
 			"class_id" => CL_EVENT_TIME,
 //			"limit" => "0,100",
+			"lang_id" => $o->prop("original_lang"),
 		));
 		$ol->delete(true);
 		$ol = new object_list(array(
 			"class_id" => CL_EXTERNAL_SYSTEM_ENTRY,
 //			"limit" => "0,100",
+			"lang_id" => $o->prop("original_lang"),
 		));
 		$ol->delete(true);
 		exit;
@@ -2322,6 +2175,7 @@ class event_import extends class_base
 		}
 
 		$o = obj($arr['id']);
+		$li = $o->prop("original_lang");
 
 		/*
 		// This seems to be the easiest way to export the objects.
@@ -2383,10 +2237,10 @@ class event_import extends class_base
 			"sector" => &$dir_category,
 		);
 		
-		$event_form_id = $events_manager_obj->prop("event_form");
+		$event_form_id = $o->prop("event_form");
 		if(!is_oid($event_form_id))
 		{
-			die(t("Events manager: Event form not set!"));
+			die(t("Event form not set!"));
 		}
 
 		if (!$this->can("view", $event_form_id))
@@ -2444,6 +2298,7 @@ class event_import extends class_base
 		foreach($impd_objs_arr as $impd_objs)
 		{
 			$ol = new object_list(array(
+				"lang_id" => $li,
 				"parent" => $impd_objs["parent"],
 				"class_id" => $impd_objs["class_id"],
 			));
@@ -2479,22 +2334,30 @@ class event_import extends class_base
 			"type" => "RELTYPE_XML_SOURCE",
 		));
 
-		print "<strong>..:: KULTUUR.INFO EVENTS IMPORT STARTED ::..<br><br></strong>";
+		print "<strong>..:: ".strtoupper($o->name())." EVENTS IMPORT STARTED ::..<br><br></strong>";
 		flush();
 
 		foreach($conns_to_xl_sources as $conn_to_xl_source)
 		{
-			$xml_source_id = $conn_to_xl_source->prop("to");			
+			$xml_source_id = $conn_to_xl_source->prop("to");
+			$xml_source = obj($xml_source_id);
 
+			$imp_langs = $xml_source->prop("available_langs");
+			foreach($imp_langs as $imp_lang_id)
+			{
+				$this->process_import_data(&$arr, &$imps, &$o, &$xml_source_id, &$class_id, &$dirs, $imp_lang_id);
+			}
+			/*
 			// We try to import the Estonian data of events.
 			$this->process_import_data(&$arr, &$imps, &$o, &$xml_source_id, &$class_id, &$dirs);
 			// We try to import the English translations.
 			$this->process_import_data(&$arr, &$imps, &$o, &$xml_source_id, &$class_id, &$dirs, false);
+			*/
 		}
 
 		
 
-		print "<strong>..:: KULTUUR.INFO EVENTS IMPORT ENDED ::..<br><br></strong>";
+		print "<strong>..:: ".strtoupper($o->name())." EVENTS IMPORT ENDED ::..<br><br></strong>";
 		flush();		
 
 		$o->set_meta("last_import", time());
