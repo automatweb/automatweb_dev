@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.186 2007/12/13 16:22:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.187 2007/12/20 16:24:35 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -4372,7 +4372,8 @@ class crm_person extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"action" => "delete_objects"
+			"action" => "delete_objects",
+			"tooltip" => t("Kustuta"),
 		));
 	}
 
@@ -4531,9 +4532,9 @@ class crm_person extends class_base
 		$bill_inst = get_instance(CL_CRM_BILL);
 		$company_curr = $stat_inst->get_company_currency();
 		$bi = get_instance(CL_BUG);
-		
+
 		$l_cus_s = 0;
-		
+
 		foreach($ol->arr() as $o)
 		{
 			$impl = $check = $bs = $bn = "";
@@ -4541,7 +4542,7 @@ class crm_person extends class_base
 			if ($this->can("view", $o->prop("bill_id")))
 			{
 				$b = obj($o->prop("bill_id"));
-				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
+				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no"));
 				$bn = $b->prop("bill_no");
 				$bs = $bill_inst->states[$b->prop("state")];
 				$agreement = $b->meta("agreement_price");
@@ -4559,7 +4560,7 @@ class crm_person extends class_base
 			{
 				$bs = t("Arve puudub");
 			}
-			
+
 			$task = obj($row2task[$o->id()]);
 			if (!is_oid($task->id()))
 			{
@@ -4568,20 +4569,20 @@ class crm_person extends class_base
 
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
-			
+
 			//kui on kokkuleppehind kas arvel, või kui arvet ei ole, siis toimetusel... tuleb vähe arvutada
 			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
 				$sum = $row_inst->get_row_ageement_price($o);
 			}
-			
+
 			//õigesse valuutasse
 			$sum = $stat_inst->convert_to_company_currency(array(
 				"sum"=>$sum,
 				"o"=>$task,
 				"company_curr" => $company_curr,
 			));
-			
+
 			$t->define_data(array(
 				"date" => $o->prop("date"),
 				"cust" => html::obj_change_url($task->prop("customer")),

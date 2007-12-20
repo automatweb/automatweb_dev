@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.167 2007/12/13 15:43:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.168 2007/12/20 16:24:31 markop Exp $
 /*
 
 
@@ -416,9 +416,21 @@ class file extends class_base
 					");
 				break;
 			case "sp_content":
-				if(!$data["value"])
+				if(!strlen($data["value"]))
 				{
-					$data["value"] = sprintf(t("User %s has added/changed the following file (%s) Please click the link below to view the document %s"), "#user_name#", "#file#" , "#file_url#");
+					$u = get_instance(CL_USER);
+					$person = $u->get_person_for_uid(aw_global_get("uid"));
+					$user_name = "";
+					if(is_object($person))
+					{
+						$user_name = $person->name();
+					}
+					$data["value"] = sprintf(
+							t("User %s has added/changed the following file %s. Please click the link below to view the document \n %s") ,
+							$user_name ,
+							$arr["obj_inst"]->name() ,
+							html::get_change_url($arr["obj_inst"]->id())
+					);
 				}
 				break;
 			case "sp_subject":
@@ -1828,6 +1840,9 @@ exit("1");
 			$persons[aw_global_get("uid")][$p_id] = $p_id;
 		}
 		$o->set_meta("imp_p", $persons);
+		$o->set_prop("sp_from" , $arr["sp_from"]);
+		$o->set_prop("sp_subject" , $arr["sp_subject"]);
+		$o->set_prop("sp_content" , $arr["sp_content"]);
 		$o->save();
 		return $arr["post_ru"];
 	}
@@ -1857,20 +1872,22 @@ exit("1");
 		$ppl = $this->get_people_list($o);
 		foreach($ppl as $oid => $nm)
 		{
+			$u = get_instance(CL_USER);
+			$person = $u->get_person_for_uid(aw_global_get("uid"));
+			$user_name = "";
+			if(is_object($person))
+			{
+				$user_name = $person->name();
+			}
+			
 			if(!$o->prop("sp_content"))
 			{
-				$message = sprintf(t("Uuendati faili \"%s\". Palun kliki siia:\n%s\net faili näha!"), $o->name(), html::get_change_url($o->id()));
+				$message = sprintf(t("User %s has added/changed the following file %s. Please click the link below to view the document \n %s"), $user_name , $o->name(), html::get_change_url($o->id()));
 			}
 			else
 			{
 				$message = $o->prop("sp_content");
-				$u = get_instance(CL_USER);
-				$person = $u->get_person_for_uid(aw_global_get("uid"));
-				$user_name = "";
-				if(is_object($person))
-				{
-					$user_name = $person->name();
-				}
+
 				$replace_vars = array(
 					"#file#" => $o->name(),
 					"#file_url#" => html::get_change_url($o->id()),
