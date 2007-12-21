@@ -22,7 +22,10 @@
       <property>
             <name>mail_templates</name>
             <table>objects</table>
-            <group>mail_settings</group>
+            <group>
+                  <num_0>mail_settings_confirm</num_0>
+                  <num_1>mail_settings_cancel</num_1>
+            </group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -40,6 +43,14 @@
             <mail_settings>
                   <caption>Meiliseaded</caption>
             </mail_settings>
+            <mail_settings_confirm>
+                  <caption>Kinnitusmeil</caption>
+                  <parent>mail_settings</parent>
+            </mail_settings_confirm>
+            <mail_settings_cancel>
+                  <caption>T&amp;amp;uuml;histusmeil</caption>
+                  <parent>mail_settings</parent>
+            </mail_settings_cancel>
       </groupinfo>
       <reltypes>
             <BANK_PAYMENT>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.15 2007/12/21 11:56:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.16 2007/12/21 11:59:00 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -14,11 +14,13 @@
 @property template type=textbox field=meta method=serialize
 @caption Template (Vaikimis bron_box.tpl)
 
-@default group=mail_settings
+@default group=mail_settings_confirm,mail_settings_cancel
 
 	@property mail_templates type=table store=no no_caption=1
 
 @groupinfo mail_settings caption="Meiliseaded"
+	@groupinfo mail_settings_confirm caption="Kinnitusmeil" parent=mail_settings
+	@groupinfo mail_settings_cancel caption="T&uuml;histusmeil" parent=mail_settings
 
 @reltype BANK_PAYMENT value=1 clid=CL_BANK_PAYMENT
 @caption Pangamakse
@@ -2283,7 +2285,7 @@ echo dbg::dump($parameters);
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_mail_templates_t($t);
 
-		$h = $arr["obj_inst"]->meta("mail_templates");
+		$h = $arr["obj_inst"]->meta($arr["request"]["group"]);
 		foreach($this->hotel_list as $hotel_id => $hotel_name)
 		{
 			$t->define_data(array(
@@ -2298,7 +2300,7 @@ echo dbg::dump($parameters);
 
 	function _set_mail_templates($arr)
 	{
-		$arr["obj_inst"]->set_meta("mail_templates", $arr["request"]["mail_templates"]);
+		$arr["obj_inst"]->set_meta($arr["request"]["group"], $arr["request"]["mail_templates"]);
 	}
 }
 ?>
