@@ -707,6 +707,8 @@ class htmlclient extends aw_template
 		$fn = basename($_SERVER["SCRIPT_FILENAME"],".aw");
 		$data["ret_to_orb"] = $fn == "orb" ? 1 : 0;
 
+		$data["charset"] = aw_global_get("charset");
+
 		// let's hope that nobody uses that vbox and hbox spagetti with grouptemplates -- ahz
 		// groupboxes where implemented for rateme .. the code is not exactly elegant .. can I kill it?
 		// please-please-please?
