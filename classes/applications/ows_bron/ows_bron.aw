@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.14 2007/12/21 11:42:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.15 2007/12/21 11:56:39 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -565,6 +565,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		$o->set_name(sprintf(t("OWS Bron %s %s @ %s"), 
 			$arr["ct"]["firstname"], $arr["ct"]["lastname"], date("d.m.Y H:i")
 		));
+		$o->set_prop("ows_bron", $arr["ow_bron"]);
 		$o->set_prop("is_confirmed", 0);
 		$o->set_prop("hotel_id", $arr["i_location"]);
 		$o->set_prop("rate_id", $rateid);
@@ -1003,16 +1004,26 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 	**/
 	function display_final_page($arr)
 	{
+		$o = obj($arr["rvs_id"]);
 		if (!$this->is_mail)
 		{
 			$this->read_template("final_confirm.tpl");
 		}
 		else
 		{
-			$this->read_template("mail_content.tpl");
+			$tpl = "mail_content.tpl";
+			if ($this->can("view", $o->prop("ows_bron")))
+			{
+				$ob = obj($o->prop("ows_bron"));
+				$h = $ob->meta("mail_templates");
+				if ($h[$o->prop("hotel_id")] != "")
+				{
+					$tpl = $h[$o->prop("hotel_id")];
+				}
+			}
+			$this->read_template($tpl);
 		}
 		lc_site_load("ows_bron", $this);
-		$o = obj($arr["rvs_id"]);
 
 		$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
 
