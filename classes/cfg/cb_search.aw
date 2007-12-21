@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.45 2007/10/08 10:25:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.46 2007/12/21 09:44:54 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -388,7 +388,6 @@ class cb_search extends class_base
 				"multiple" => 1,
 			),
 		);
-
 		foreach($this->in_form as $iname => $item)
 		{
 			$name = $item["name"];
@@ -832,7 +831,6 @@ class cb_search extends class_base
 			$this->in_form[$pn] = safe_array($prop_cfg[$pn]) + $this->in_form[$pn];
 			$this->in_form[$pn]["caption"] = $pd["caption"];
 		};
-
 		$this->__tdata = $o->meta("form_dat");
 		uksort($this->in_form, array(&$this, "__proptbl_srt"));
 
@@ -1186,7 +1184,6 @@ class cb_search extends class_base
 			));
 			$table = $t->draw();
 		}
-		
 		$this->read_template("show.tpl");
 		$this->vars(array(
 			"form" => $html,
@@ -1196,7 +1193,7 @@ class cb_search extends class_base
 		));
 
 		// if there is a submit handler controller, then show submit button with text
-		if ($ob->prop("show_submit") && $request["s"])
+		if ($ob->prop("show_submit") /*&& $request["s"]*/)
 		{
 			$this->_do_submit($ob);
 		}
@@ -1529,8 +1526,13 @@ class cb_search extends class_base
 			"SUBMIT_BUTTON" => $this->parse("SUBMIT_BUTTON"),
 			"reforb" => $this->mk_reforb("handle_submit", array(
 				"id" => $o->id(),
-				"ret" => post_ru(),
-				"s" => $_REQUEST["s"]
+				"ret" => aw_url_change_var("ret", null, post_ru()),
+				//"s" => $_REQUEST["s"]
+			)),
+			"reforb2" => $this->mk_reforb("handle_submit", array(
+				"id" => $o->id(),
+				"ret" => aw_url_change_var("ret", null, post_ru()),
+				"second_form" => 1
 			))
 		));
 	}
@@ -1543,7 +1545,6 @@ class cb_search extends class_base
 	function handle_submit($arr)
 	{
 		$o = obj($arr["id"]);
-
 		$c = get_instance(CL_CFGCONTROLLER);
 		return $c->check_property(
 			$o->prop("submit_handler_controller"), 
