@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="geoinfo_manager" folder="applications/geoinfo" extends="class_base">
+		<action name="import" all_args="1">
+			<function name="import_from_xml">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
