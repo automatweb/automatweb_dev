@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.396 2007/12/12 12:37:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.397 2007/12/21 11:19:34 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -319,7 +319,16 @@ class menuedit extends aw_template
 				$tmp = $l->get_langid_for_code($section);
 				if ($tmp)
 				{
-					$section = $section."/".aw_ini_get("frontpage");
+					$fp = aw_ini_get("ini_frontpage");
+					if (is_array($fp))
+					{
+						$fp = $fp[$tmp];
+					}
+					if (!$fp)
+					{
+						$fp = aw_ini_get("frontpage");
+					}
+					$section = $section."/".$fp;
 				}
 			}
 			$tmp = explode("/", $section, 2);
@@ -347,11 +356,17 @@ class menuedit extends aw_template
 			{
 				// switch to lang
 				$l = get_instance("languages");
-				$set_ct_lang_id = $l->get_langid_for_code($lc);
+				if (aw_ini_get("user_interface.full_content_trans"))
+				{
+					$set_ct_lang_id = $l->get_langid_for_code($lc);
+				}
+				else
+				{
+					$set_lang_id = $l->get_langid_for_code($lc);
+				}
 			}
 			$section = $section_a;
 		}
-
 		$realsect = $this->check_section($section);
 		if ($this->can("view",$realsect))
 		{
@@ -415,7 +430,6 @@ class menuedit extends aw_template
 				}
 			};
 		};
-
 		if ($set_ct_lang_id)
 		{
 			$_SESSION["ct_lang_id"] = $set_ct_lang_id;
@@ -428,7 +442,7 @@ class menuedit extends aw_template
 			setcookie("ct_lang_id", $set_ct_lang_id, time() + 3600, "/");
 			setcookie("ct_lang_lc", $_SESSION["ct_lang_lc"], time() + 3600, "/");
 		}
-
+		
 		if ($set_lang_id)
 		{
 			$la = get_instance("languages");
@@ -448,8 +462,12 @@ class menuedit extends aw_template
 				// anyway, tyhis does not add much overhead,
 				// because here we should only have the section object loaded
 			}
+			if (is_array(aw_ini_get("ini_frontpage")))
+        		{
+				$tmp = aw_ini_get("ini_frontpage");
+				$GLOBALS["cfg"]["frontpage"] = $tmp[aw_global_get("lang_id")];
+			}
 		};
-
 		aw_global_set("section",$realsect);
 	}
 

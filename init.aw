@@ -1,8 +1,8 @@
 <?php
-
 // this should be here, url parsing and variable initialization
 // should be the first thing that is done
-
+ini_set("display_errors", 1);
+error_reporting(E_ALL);
 // apparently __FILE__ does not work with Zend Encoder. But since
 // don't use that anyway, it's of no concern. At least now.
 
@@ -833,6 +833,10 @@ function aw_startup()
 
 	classload("defs", "core/error", "core/obj/object");
 	_aw_global_init();
+
+	//$m = get_instance("menuedit");
+	//$m->request_startup();
+
 	$l = get_instance("languages");
 	$l->request_startup();
 
@@ -840,6 +844,7 @@ function aw_startup()
 	if (is_array(aw_ini_get("frontpage")))
 	{
 		$tmp = aw_ini_get("frontpage");
+		$GLOBALS["cfg"]["ini_frontpage"] = $tmp;
 		$GLOBALS["cfg"]["frontpage"] = $tmp[aw_global_get("lang_id")];
 	}
 	$LC = aw_global_get("LC");
@@ -871,6 +876,7 @@ function aw_startup()
 //	$ts_e = $sec + $micro;
 	// the following breaks reforb
 	#echo("<!-- aw_startup() took ".($ts_e - $ts_s)." seconds -->\n");
+//die("lid = ".aw_global_get("lang_id")." fp = ".aw_ini_get("frontpage")." <br>");
 }
 
 ////
