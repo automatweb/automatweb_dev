@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_data.aw,v 1.1 2007/12/21 08:49:17 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_data.aw,v 1.2 2007/12/21 09:26:09 robert Exp $
 // geoinfo_data.aw - Geoinfo andmed 
 /*
 
@@ -148,6 +148,9 @@
 	@groupinfo pm_styles caption=Stiilid parent=placemark
 	@groupinfo pm_desc caption=Kirjeldus parent=placemark
 	@groupinfo pm_view caption=Vaade parent=placemark
+
+@reltype ICON value=1 clid=CL_IMAGE
+@caption Ikooni stiil
 
 */
 

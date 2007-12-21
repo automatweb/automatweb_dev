@@ -448,5 +448,12 @@
                   <parent>placemark</parent>
             </pm_view>
       </groupinfo>
+      <reltypes>
+            <ICON>
+                  <value>1</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Ikooni stiil</caption>
+            </ICON>
+      </reltypes>
 </properties>
 
