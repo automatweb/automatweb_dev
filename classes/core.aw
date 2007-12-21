@@ -773,7 +773,14 @@ class core extends acl_base
 
 		if ($send_mail)
 		{
-			send_mail("vead@struktuur.ee", $subj, $content, $head);
+			if (aw_ini_get("client.high_priority") == 1)
+			{
+				send_mail("vead-top@struktuur.ee", $subj, $content, $head);
+			}
+			else
+			{
+				send_mail("vead@struktuur.ee", $subj, $content, $head);
+			}
 			if (aw_ini_get("errors.send_to") != "")
 			{
 				send_mail(aw_ini_get("errors.send_to"), $subj, $content,$head);
