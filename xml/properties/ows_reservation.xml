@@ -10,6 +10,16 @@
             <caption>Kinnitatud</caption>
       </property>
       <property>
+            <name>ows_bron</name>
+            <table>aw_ows_reservations</table>
+            <group>cust_data</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_OWS_BRON</reltype>
+            <caption>Broneeringukeskus</caption>
+      </property>
+      <property>
             <name>hotel_id</name>
             <table>aw_ows_reservations</table>
             <group>cust_data</group>
@@ -332,6 +342,7 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <cust_data>
@@ -348,5 +359,12 @@
                   <master_index>brother_of</master_index>
             </aw_ows_reservations>
       </tableinfo>
+      <reltypes>
+            <OWS_BRON>
+                  <value>1</value>
+                  <clid>CL_OWS_BRON</clid>
+                  <caption>Reserveeringukeskus</caption>
+            </OWS_BRON>
+      </reltypes>
 </properties>
 

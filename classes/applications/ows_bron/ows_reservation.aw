@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.6 2007/12/21 11:34:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.7 2007/12/21 11:50:03 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -13,6 +13,9 @@
 @caption Kinnitatud
 
 @default group=cust_data
+
+@property ows_bron type=relpicker field=meta method=serialize reltype=RELTYPE_OWS_BRON
+@caption Broneeringukeskus
 
 @property hotel_id type=textbox field=aw_hotel_id
 @caption Hotell
@@ -135,6 +138,9 @@
 
 @groupinfo cust_data caption="Sisestatud andmed"
 @groupinfo bron_data caption="Reserveeringu andmed"
+
+@reltype OWS_BRON value=1 clid=CL_OWS_BRON
+@caption Reserveeringukeskus
 
 */
 
