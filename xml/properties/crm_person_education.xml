@@ -47,6 +47,15 @@
             <caption>P&amp;otilde;hieriala</caption>
       </property>
       <property>
+            <name>in_progress</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>Omandamisel</caption>
+      </property>
+      <property>
             <name>obtain_language</name>
             <table>objects</table>
             <group>general</group>
