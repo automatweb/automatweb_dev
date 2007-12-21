@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.13 2007/12/21 11:34:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.14 2007/12/21 11:42:07 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -13,6 +13,12 @@
 
 @property template type=textbox field=meta method=serialize
 @caption Template (Vaikimis bron_box.tpl)
+
+@default group=mail_settings
+
+	@property mail_templates type=table store=no no_caption=1
+
+@groupinfo mail_settings caption="Meiliseaded"
 
 @reltype BANK_PAYMENT value=1 clid=CL_BANK_PAYMENT
 @caption Pangamakse
@@ -2245,6 +2251,43 @@ echo dbg::dump($parameters);
 			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
 		die(dbg::dump($return));
+	}
+
+	function _init_mail_templates_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "hotel",
+			"caption" => t("Hotell"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "template",
+			"caption" => t("Template"),
+			"align" => "center"
+		));
+	}
+
+	function _get_mail_templates($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_mail_templates_t($t);
+
+		$h = $arr["obj_inst"]->meta("mail_templates");
+		foreach($this->hotel_list as $hotel_id => $hotel_name)
+		{
+			$t->define_data(array(
+				"hotel" => $hotel_name,
+				"template" => html::textbox(array(
+					"name" => "mail_templates[$hotel_id]",
+					"value" => $h[$hotel_id]
+				))
+			));
+		}
+	}
+
+	function _set_mail_templates($arr)
+	{
+		$arr["obj_inst"]->set_meta("mail_templates", $arr["request"]["mail_templates"]);
 	}
 }
 ?>

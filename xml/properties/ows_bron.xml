@@ -10,22 +10,37 @@
             <method>serialize</method>
             <caption>Pangamakse objekt</caption>
       </property>
-<property>
-	<name>template</name>
-	<table>objects</table>
-	<group>general</group>
-	<type>textbox</type>
-	<field>meta</field>
-	<method>serialize</method>
-	<caption>Template (vaikimisi bron_box.tpl)</caption>
-</property>
-<classinfo>
+      <property>
+            <name>template</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Template (Vaikimis bron_box.tpl)</caption>
+      </property>
+      <property>
+            <name>mail_templates</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>mail_templates</field>
+      </property>
+      <classinfo>
             <syslog_type>ST_OWS_BRON</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
+            <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <mail_settings>
+                  <caption>Meiliseaded</caption>
+            </mail_settings>
+      </groupinfo>
       <reltypes>
             <BANK_PAYMENT>
                   <value>1</value>
