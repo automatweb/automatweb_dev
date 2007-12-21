@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.7 2007/12/11 15:20:29 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.8 2007/12/21 16:29:35 kaarel Exp $
 // crm_person_education.aw - Haridus 
 /*
 
-@classinfo syslog_type=ST_CRM_PERSON_EDUCATION no_name=1 no_comment=1 no_status=1 maintainer=markop
+@classinfo syslog_type=ST_CRM_PERSON_EDUCATION no_name=1 no_comment=1 no_status=1
 
 @default table=objects
 @default group=general
@@ -25,6 +25,9 @@
 
 @property main_speciality type=chooser
 @caption Põhieriala
+
+@property in_progress type=chooser
+@caption Omandamisel
 
 @property obtain_language type=textbox
 @caption Omandamise keel
@@ -64,6 +67,13 @@ class crm_person_education extends class_base
 		switch($prop["name"])
 		{
 			case "main_speciality":
+				$arr["prop"]["options"] = array(
+					1 => t("Jah"),
+					0 => t("Ei"),
+				);
+				break;
+
+			case "in_progress":
 				$arr["prop"]["options"] = array(
 					1 => t("Jah"),
 					0 => t("Ei"),
