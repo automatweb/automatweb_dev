@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL);
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_GROUP, on_save_grp)
@@ -33,7 +33,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 
 
 @default group=general
-	
+
 	@property gid field=gid type=text
 	@caption Grupi ID
 
@@ -74,22 +74,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 	@caption Default ACL
 
 @default group=dyn_search
-	
+
 	@property data type=text no_caption=1
 
 @default group=import
 
-	@property import type=fileupload store=no 
+	@property import type=fileupload store=no
 	@caption Impordi kasutajaid
 
-	@property import_desc type=text store=no 
+	@property import_desc type=text store=no
 
 @default group=objects
 
 	@property objects type=text store=no no_caption=1
 	@caption Objektid
 
-	@property obj_acl type=callback callback=get_acls store=no 
+	@property obj_acl type=callback callback=get_acls store=no
 
 	@property gp_parent type=hidden field=parent table=groups
 	@property gp_gid type=hidden field=gid table=groups
@@ -183,7 +183,7 @@ class group extends class_base
 	function get_property(&$arr)
 	{
 		$prop =& $arr["prop"];
-	
+
 		switch($prop['name'])
 		{
 			case "name":
@@ -212,12 +212,12 @@ class group extends class_base
 				$f = get_instance(CL_FORM);
 				$prop['value'] = $f->gen_preview(array(
 					"id" => $arr["obj_inst"]->prop("search_form"),
-					"entry_id" => $prop['value'], 
+					"entry_id" => $prop['value'],
 					"extraids" => array(
 						"group_id" => $arr["obj_inst"]->id(),
 					),
 					"tpl" => "show_noform.tpl"
-				));				
+				));
 				break;
 
 			case "modified";
@@ -232,12 +232,12 @@ class group extends class_base
 				$o = $arr["obj_inst"];
 				$prop['value'] = $o->createdby();
 				break;
-				
+
 			case "mmodifiedby":
 				$o = $arr["obj_inst"];
 				$prop['value'] = $o->modifiedby();
 				break;
-				
+
 			case "type":
 				$prop['options'] = array(
 					GRP_REGULAR => t('Tavaline'),
@@ -249,7 +249,7 @@ class group extends class_base
 			case "objects":
 				$prop["value"] = $this->_get_objects($this->db_fetch_field("SELECT gid FROM groups WHERE oid = ".$arr["obj_inst"]->id(),"gid"));
 				break;
-		
+
 			case "import_desc":
 				$prop['value'] = t("
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
@@ -289,19 +289,19 @@ class group extends class_base
 			else
 			{
 				$gid = $this->users->get_gid_for_oid($arr["request"]["group_id"]);
-			}	
+			}
 			$pg = $this->users->fetchgroup($gid);
 			if (isset($pg["search_form"]))
 			{
 				$f = get_instance(CL_FORM);
 				$f->process_entry(array(
-					"id" => $pg["search_form"], 
+					"id" => $pg["search_form"],
 					"entry_id" => $arr["entry_id"]
 				));
 				$eid = $f->entry_id;
 
 				$this->db_query("UPDATE groups SET data = '$eid' WHERE gid = '$gid'");
-			
+
 				$this->users->update_dyn_group($gid);
 			}
 		}
@@ -411,7 +411,7 @@ class group extends class_base
 
 		if ($arr["obj_inst"]->class_id() == CL_RELATION)
 		{
-			// FIXME: classbase will automatically give the connection as a parameter, but 
+			// FIXME: classbase will automatically give the connection as a parameter, but
 			// currently we do this ourselves
 
 			/*
@@ -451,12 +451,12 @@ class group extends class_base
 	{
 		// now, get all the folders that have access set for these groups
 		$dat = $this->acl_get_acls_for_groups(array("grps" => array($gid)));
-		
+
 		$t =& $this->_init_obj_table(array(
 			"exclude" => array("grp_name")
 		));
 
-		$ml = $this->get_menu_list();		
+		$ml = $this->get_menu_list();
 
 		foreach($dat as $row)
 		{
@@ -472,7 +472,7 @@ class group extends class_base
 				), $o->class_id()),
 				'caption' => $row['obj_name'],
 			));
-			$row['obj_parent'] = $ml[$row['obj_parent']];	
+			$row['obj_parent'] = $ml[$row['obj_parent']];
 			$row["acl"] = html::href(array(
 				"caption" => t("Muuda"),
 				"url" => aw_url_change_var("edit_acl", $row["oid"])
@@ -541,9 +541,10 @@ class group extends class_base
 	function get_acls($arr)
 	{
 		$acls = array();
-		$ea = $arr["request"]["edit_acl"];
-		if ($ea)
+
+		if (!empty($arr["request"]["edit_acl"]))
 		{
+			$ea = $arr["request"]["edit_acl"];
 			$o = obj($ea);
 			$acls["acl_desc"] = array(
 				'name' => "acl_desc",
@@ -559,7 +560,7 @@ class group extends class_base
 				'value' => $ea
 			);
 
-			// get active acl 
+			// get active acl
 			$act_acl = $this->get_acl_for_oid_gid($ea, $this->users->get_gid_for_oid($arr["request"]["id"]));
 
 			$a = $this->acl_list_acls();
@@ -577,6 +578,7 @@ class group extends class_base
 				);
 			}
 		}
+
 		return $acls;
 	}
 
@@ -594,7 +596,8 @@ class group extends class_base
 		if ($id == 'dyn_search')
 		{
 			$od = $this->users->fetchgroup($this->users->get_gid_for_oid($parm['obj_inst']->id()));
-			if ($od["type"] != GRP_DYNAMIC)
+
+			if (!isset($od["type"]) or $od["type"] != GRP_DYNAMIC)
 			{
 				return false;
 			}
@@ -618,11 +621,13 @@ class group extends class_base
 		foreach($ll as $lid => $lname)
 		{
 			$opts = $oopts;
+
 			if (!is_array($meta["admin_rootmenu2"]))
 			{
 				$meta["admin_rootmenu2"] = array();
 			}
-			foreach((array)$meta["admin_rootmenu2"][$lid] as $k => $v)
+
+			foreach((array) $meta["admin_rootmenu2"][$lid] as $k => $v)
 			{
 				if (!isset($opts[$v]) && $this->can("view", $v))
 				{
@@ -630,6 +635,7 @@ class group extends class_base
 					$opts[$v] = $o->name();
 				}
 			}
+
 			$ret["admin_rootmenu2[$lid]"] = array(
 				"name" => "admin_rootmenu2[$lid]",
 				"type" => "relpicker",
@@ -652,12 +658,13 @@ class group extends class_base
 		$ret = array();
 		$la = get_instance("languages");
 		$ll = $la->get_list();
-
 		$meta = $arr["obj_inst"]->meta();
+
 		if (!is_array($meta))
 		{
 			$meta = array();
 		}
+
 		foreach($ll as $lid => $lname)
 		{
 			$ret["grp_frontpage[$lid]"] = array(
@@ -668,7 +675,7 @@ class group extends class_base
 				"field" => "meta",
 				"method" => "serialize",
 				"caption" => sprintf(t("Esileht (%s)"), $lname),
-				"value" => $meta["grp_frontpage"][$lid],
+				"value" => isset($meta["grp_frontpage"]) ? (is_array($meta["grp_frontpage"]) ? $meta["grp_frontpage"][$lid] : $meta["grp_frontpage"]) : null,
 				"reltype" => "RELTYPE_ADMIN_ROOT"
 			);
 		}
@@ -712,11 +719,11 @@ class group extends class_base
 		{
 			// this of course means we get to update user membership as well.
 			// what we gotta do is get all users from this group and add them to the parent group
-			
+
 			unset($this->users->grpcache);
 			unset($this->users->grpcache2);
 
-			// this will also trigger alias creation and other magic that syncs back from 
+			// this will also trigger alias creation and other magic that syncs back from
 			// user tables to object table
 			$members = $this->users->getgroupmembers2($this->users->get_gid_for_oid($o->id()));
 			if (count($members) > 0)
@@ -879,14 +886,14 @@ class group extends class_base
 		else
 		{
 			// handle relation objects
-			// FIXME: classbase will automatically give the connection as a parameter, but 
+			// FIXME: classbase will automatically give the connection as a parameter, but
 			// currently we do this ourselves
-			
+
 			$c = new connection();
 			$tmp = $c->find(array("relobj_id" => $arr["obj_inst"]->id()));
 			list(, $c_d) = each($tmp);
 			$c = new connection($c_d["id"]);
-			
+
 
 			// now get the real acl from the connection
 			$grp = $c->to();
@@ -932,7 +939,7 @@ class group extends class_base
 			$from = $arr["connection"]->from();
 			$grp = $arr["connection"]->to();
 			$gid = $grp->prop("gp_gid");
-			
+
 			$this->add_acl_group_to_obj($gid, $from->id());
 			$this->save_acl($from->id(), $gid, $grp->meta("default_acl"));
 		}
@@ -946,13 +953,13 @@ class group extends class_base
 			$from = $arr["connection"]->from();
 			$grp = $arr["connection"]->to();
 			$gid = $grp->prop("gp_gid");
-			
+
 			$this->remove_acl_group_from_obj($gid, $from->id());
 		}
 	}
 
 	/** adds the user $user to group $group (storage objects)
-		
+
 		@attrib params=pos api=1
 		@param user required type=object
 		User object to be added into group

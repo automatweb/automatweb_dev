@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.44 2007/12/12 12:51:05 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -82,7 +81,7 @@ class mysql
 			$ts_s = $sec + $micro;
 		}
 
-		if ($GLOBALS["cfg"]["debug"]["query_profile"] && $_GET["QD"] == 1)
+		if (!empty($GLOBALS["cfg"]["debug"]["query_profile"]) && $_GET["QD"] == 1)
 		{
 			// collect queries by function name
 			// go over functions in the backtrace and add query counts for each of them
