@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_GROUP, on_save_grp)
