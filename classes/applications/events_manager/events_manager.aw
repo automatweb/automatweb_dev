@@ -348,7 +348,7 @@ class events_manager extends class_base
 
 		// to editors show only their own objects
 		$groups = aw_global_get("gidlist_oid");
-		$editors_groups = $this_o->prop("editors_groups");
+		$editors_groups = $arr["obj_inst"]->prop("editors_groups");
 
 		if (count(array_intersect($groups, $editors_groups)))
 		{
@@ -420,7 +420,7 @@ class events_manager extends class_base
 
 		// to editors show only their own objects
 		$groups = aw_global_get("gidlist_oid");
-		$editors_groups = $this_o->prop("editors_groups");
+		$editors_groups = $arr["obj_inst"]->prop("editors_groups");
 
 		if (count(array_intersect($groups, $editors_groups)))
 		{
