@@ -341,10 +341,21 @@ class events_manager extends class_base
 			return PROP_ERROR;
 		}
 
-		$ol = new object_list(array(
+		$filter = array(
 			"class_id" => array(CL_SCM_LOCATION),
 			"parent" => $arr["obj_inst"]->prop("places_menu")
-		));
+		);
+
+		// to editors show only their own objects
+		$groups = aw_global_get("gidlist_oid");
+		$editors_groups = $this_o->prop("editors_groups");
+
+		if (count(array_intersect($groups, $editors_groups)))
+		{
+			$filter["createdby"] = aw_global_get("uid");
+		}
+
+		$ol = new object_list($filter);
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_places_table($t);
 
@@ -402,10 +413,21 @@ class events_manager extends class_base
 			return PROP_ERROR;
 		}
 
-		$ol = new object_list(array(
+		$filter = array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
 			"parent" => $arr["obj_inst"]->prop("organiser_menu")
-		));
+		);
+
+		// to editors show only their own objects
+		$groups = aw_global_get("gidlist_oid");
+		$editors_groups = $this_o->prop("editors_groups");
+
+		if (count(array_intersect($groups, $editors_groups)))
+		{
+			$filter["createdby"] = aw_global_get("uid");
+		}
+
+		$ol = new object_list($filter);
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_organiser_table($t);
 		$cfg_o = $this->get_cgf_from_manager($arr["obj_inst"], "organiser");
@@ -463,7 +485,6 @@ class events_manager extends class_base
 
 	function _get_editors_table($arr)
 	{
-	//kasutaja vaja
 		$u = get_instance(CL_USER);
 		$ol = new object_list(array(
 			"site_id" => array(),
