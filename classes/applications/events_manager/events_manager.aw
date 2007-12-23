@@ -233,26 +233,9 @@ class events_manager extends class_base
 					$sectors = new object_tree(array(
 						"parent" => $parent,
 					));
-					$sectors = $sectors->to_list();
-					$sector = $sectors->begin();
 
-					do
+					if (count($sectors->ids()))
 					{
-						if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
-						{
-							$prop["options"][$sector->id()] = $sector->prop("tegevusala");
-						}
-					}
-					while ($sector = $sectors->next());
-				}
-
-				foreach ($this_o->prop("sector_menu_source") as $parent)
-				{
-					if ($this->can("view", $parent))
-					{
-						$sectors = new object_tree(array(
-							"parent" => $parent,
-						));
 						$sectors = $sectors->to_list();
 						$sector = $sectors->begin();
 
@@ -264,6 +247,31 @@ class events_manager extends class_base
 							}
 						}
 						while ($sector = $sectors->next());
+					}
+				}
+
+				foreach ($this_o->prop("sector_menu_source") as $parent)
+				{
+					if ($this->can("view", $parent))
+					{
+						$sectors = new object_tree(array(
+							"parent" => $parent,
+						));
+
+						if (count($sectors->ids()))
+						{
+							$sectors = $sectors->to_list();
+							$sector = $sectors->begin();
+
+							do
+							{
+								if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
+								{
+									$prop["options"][$sector->id()] = $sector->prop("tegevusala");
+								}
+							}
+							while ($sector = $sectors->next());
+						}
 					}
 				}
 				break;
