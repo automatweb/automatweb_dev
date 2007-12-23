@@ -1,77 +1,105 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/external/xml_source.aw,v 1.2 2007/12/10 12:02:22 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/external/xml_source.aw,v 1.3 2007/12/23 15:49:02 kaarel Exp $
 // xml_source.aw - XML source 
 /*
 
 @classinfo syslog_type=ST_XML_SOURCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
-@default field=meta
-@default method=serialize
-
 @default table=objects
 @default group=general
 
-	@property url type=textbox
-	@caption URL
-	@comment XML faili URL
+	@groupinfo sub_general caption="&Uuml;ldine" parent=general
+	@default group=sub_general
 
-	@property external_system_event type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_EVENT
-	@caption S&uuml;ndmuste siduss&uuml;steem
+		@property name type=textbox field=name
+		@caption Nimi
+		@comment Objekti nimi
 
-	@property external_system_event_time type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_EVENT_TIME
-	@caption Toimumisaegade siduss&uuml;steem
+@default field=meta
+@default method=serialize
 
-	@property external_system_location type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_LOCATION
-	@caption Toimumiskohtade siduss&uuml;steem
+		@property url type=textbox
+		@caption URL
+		@comment XML faili URL
 
-	@property external_system_sector type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_SECTOR
-	@caption Valdkondade siduss&uuml;steem
+		@property tag_event type=select
+		@caption Sündmus
+		@comment XML väli, kus on kogu imporditav sündmus
 
-	@property tag_lang type=select
-	@caption Keel
-	@comment XML väli või argument, kus on imporditava sündmuse tõlke keel
+		@property tag_id type=select
+		@caption ID
+		@comment XML väli või argument, kus on imporditava sündmuse ID
 
-	@property tag_event type=select
-	@caption Sündmus
-	@comment XML väli, kus on kogu imporditav sündmus
+	@groupinfo sub_extsys caption="Siduss&uuml;steemid" parent=general
+	@default group=sub_extsys
 
-	@property tag_id type=select
-	@caption ID
-	@comment XML väli või argument, kus on imporditava sündmuse ID
+		@property external_system_event type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_EVENT
+		@caption S&uuml;ndmuste siduss&uuml;steem
 
-	@property tag_public_event type=select multiple=1 size=4
-	@caption Sündmus avaldatud
-	@comment XML väli või argument, mis näitab, kas sündmus on avalik.
+		@property external_system_event_time type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_EVENT_TIME
+		@caption Toimumisaegade siduss&uuml;steem
 
-	@property val_public_event type=textbox
-	@caption "Jah"-väärtus
-	@comment Väärtus, mille korral sündmus on avalik.
+		@property external_system_location type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_LOCATION
+		@caption Toimumiskohtade siduss&uuml;steem
 
-	@property tag_delete_event type=select multiple=1 size=4
-	@caption Sündmus kustutatud
-	@comment XML väli või argument, mis näitab, kas sündmus on kustutatud.
+		@property external_system_sector type=relpicker reltype=RELTYPE_EXTERNAL_SYSTEM_SECTOR
+		@caption Valdkondade siduss&uuml;steem
 
-	@property val_delete_event type=textbox
-	@caption "Jah"-väärtus
-	@comment Väärtus, mille korral sündmus on kustutatud.
+	@groupinfo sub_lang caption="Keeled" parent=general
+	@default group=sub_lang
 
-	@property tag_delete_time type=select multiple=1 size=4
-	@caption Toimumisaeg kustutatud
-	@comment XML väli või argument, mis näitab, kas toimumisaeg on kustutatud.
+		@property tag_lang type=select
+		@caption Keel
+		@comment XML väli või argument, kus on imporditava sündmuse tõlke keel
 
-	@property val_delete_time type=textbox
-	@caption "Jah"-väärtus
-	@comment Väärtus, mille korral toimumisaeg on kustutatud.
+		@property available_langs type=select multiple=1
+		@caption Keeled
+		@comment XML väljundi võimalikud keeled
+
+	@groupinfo sub_public caption="Kehtivus" parent=general
+	@default group=sub_public
+
+		@property tag_public_event type=select multiple=1 size=4
+		@caption Sündmus avaldatud
+		@comment XML väli või argument, mis näitab, kas sündmus on avalik.
+
+		@property val_public_event type=textbox
+		@caption "Jah"-väärtus
+		@comment Väärtus, mille korral sündmus on avalik.
+
+		@property tag_delete_event type=select multiple=1 size=4
+		@caption Sündmus kustutatud
+		@comment XML väli või argument, mis näitab, kas sündmus on kustutatud.
+
+		@property val_delete_event type=textbox
+		@caption "Jah"-väärtus
+		@comment Väärtus, mille korral sündmus on kustutatud.
+
+		@property tag_delete_time type=select multiple=1 size=4
+		@caption Toimumisaeg kustutatud
+		@comment XML väli või argument, mis näitab, kas toimumisaeg on kustutatud.
+
+		@property val_delete_time type=textbox
+		@caption "Jah"-väärtus
+		@comment Väärtus, mille korral toimumisaeg on kustutatud.
 
 @groupinfo parameters caption="Parameetrid"
 @default group=parameters
 
 	@property start_timestamp_unix type=textbox
-	@caption Timestamp (UNIX)
+	@caption Alguse timestamp (UNIX)
 	@comment UNIX tüüpi timestamp v&auml;li, mille j&auml;rgi s&uuml;ndmusi p&auml;ritakse
 
 	@property start_timestamp type=textbox
-	@caption Timestamp (YYYYMMDDHHMMSS)
+	@caption Alguse timestamp (YYYYMMDDHHMMSS)
+	@comment Timestamp v&auml;li, mille j&auml;rgi s&uuml;ndmusi p&auml;ritakse
+
+	@property end_timestamp_unix type=textbox
+	@caption Lõpu timestamp (UNIX)
+	@comment UNIX tüüpi timestamp v&auml;li, mille j&auml;rgi s&uuml;ndmusi p&auml;ritakse
+
+	@property end_timestamp type=textbox
+	@caption Lõpu timestamp (YYYYMMDDHHMMSS)
 	@comment Timestamp v&auml;li, mille j&auml;rgi s&uuml;ndmusi p&auml;ritakse
 
 	@property language type=textbox
@@ -137,6 +165,12 @@ class xml_source extends class_base
 			//-- get_property --//
 		};
 		return $retval;
+	}
+
+	function _get_available_langs($arr)
+	{			
+		$lg = get_instance("languages");
+		$arr["prop"]["options"] = $lg->get_list();
 	}
 	
 	function _get_tag_lang($arr)
@@ -283,20 +317,17 @@ class xml_source extends class_base
 
 		$saved_lang_conf = $arr["obj_inst"]->meta("language_table");
 
-		$t->define_data(array(
-			"lang" => t("Inglise keel"),
-			"param_value" => html::textbox(array(
-				"name" => "language_table[en]",
-				"value" => $saved_lang_conf["en"],
-			)),
-		));
-		$t->define_data(array(
-			"lang" => t("Eesti keel"),
-			"param_value" => html::textbox(array(
-				"name" => "language_table[et]",
-				"value" => $saved_lang_conf["et"],
-			)),
-		));
+		$lg = get_instance("languages");
+		foreach($lg->get_list() as $id => $caption)
+		{
+			$t->define_data(array(
+				"lang" => t($caption),
+				"param_value" => html::textbox(array(
+					"name" => "language_table[".$id."]",
+					"value" => $saved_lang_conf[$id],
+				)),
+			));
+		}
 	}
 
 	function _get_level_table($arr)
