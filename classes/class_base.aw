@@ -4511,7 +4511,7 @@ class class_base extends aw_template
 								"new" => $new,
 				        ));
 					//}
-					
+
 					$callback_post_save_done = true;
 				}
 			}
@@ -5609,14 +5609,17 @@ class class_base extends aw_template
 			"obj_inst" => $arr["obj_inst"],
 			"args" => $arr["request"],
 		));
+		$ppl = $pl;
+
 		if ($this->can("view", $cfgform_id))
 		{
 			$cf = get_instance(CL_CFGFORM);
 			$pl = $cf->get_props_from_cfgform(array("id" => $cfgform_id));
-
 			$ppl = $cf->get_cfg_proplist($cfgform_id);
+
 			// also, get group list and then throw out all the props that are not in visible groups
 			$gps = $cf->get_cfg_groups($cfgform_id);
+
 			foreach($pl as $k => $v)
 			{
 				if ($gps[$ppl[$k]["group"]]["grphide"] == 1)
@@ -5624,7 +5627,13 @@ class class_base extends aw_template
 					unset($pl[$k]);
 				}
 			}
+
+			if (!count($ppl))
+			{
+				$ppl = $pl;
+			}
 		}
+
 		$o = $arr["obj_inst"];
 		$o = $o->get_original();
 		$all_vals = $o->meta("translations");
@@ -5649,20 +5658,15 @@ class class_base extends aw_template
 				"subtitle" => 1,
 			);
 			$vals = $all_vals[$lid];
+
 			foreach($props as $p)
 			{
 				$nm = "trans_".$lid."_".$p;
-				$ret[$nm] = array(
-					"name" => $nm,
-					"caption" => t($pl[$p]["caption"]),
-					"type" => $pl[$p]["type"],
-					"value" => iconv($lang["charset"], "UTF-8", $vals[$p])
-				);
-				if ($pl[$p]["richtext"] == 1)
-				{
-					$ret[$nm]["richtext"] = 1;
-				}
+				$ret[$nm] = $ppl[$p];
+				$ret[$nm]["name"] = $nm;
+				$ret[$nm]["value"] = iconv($lang["charset"], "UTF-8", $vals[$p]);
 			}
+
 			$nm = "act_".$lid;
 			$ret[$nm] = array(
 				"name" => $nm,
@@ -6086,7 +6090,7 @@ class class_base extends aw_template
 
 				$selected = 0;
 				if($_GET["group"] == $item["name"] || $item["name"] == $_GET["openedtab"]) $selected = 1;
-	
+
 				return array(
 					"text" => $item["caption"],
 					"link" => $link,
