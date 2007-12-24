@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.4 2007/12/20 15:26:53 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.5 2007/12/24 13:17:43 kaarel Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -1195,6 +1195,8 @@ class event_import extends class_base
 		$import_orig = ($li == $imp_lang_id);
 		$lg = get_instance("languages");
 		$lg = $lg->get_list();
+		$lg_cfg = $lg->cfg;
+		$lg_list = $lg_cfg["list"];
 
 		$orig_val = (!$import_orig) ? $imp_lang_id."_orig_val_" : "orig_val_";
 
@@ -1636,7 +1638,7 @@ class event_import extends class_base
 					{
 						/*
 						$value1 = $value;
-						$value = iconv("UTF-8", "ISO-8859-4", $value);
+						$value = iconv("UTF-8", $lg_all[$imp_lang_id]["charset"], $value);
 						if($value1 != $value)
 						{
 							print $key." = ".$value1.", ";
@@ -1705,6 +1707,7 @@ class event_import extends class_base
 									// We update the original value field so next time it's changed we'll know, if it was changed in the source or in AW.
 									$event_obj->set_meta($orig_val.$key, $value);
 									$event_obj->save();
+//									print $event_obj->name()."<br>";
 									print " &nbsp; &nbsp; &nbsp; -";
 									print "- property: ".$key." [changed]<br>";
 								}
@@ -2128,6 +2131,9 @@ class event_import extends class_base
 	**/
 	function import_events($arr)
 	{
+		$o = new object(73682);
+		arr($o->meta("translations"));
+		exit;
 		/*
 		$o = obj($arr['id']);
 
