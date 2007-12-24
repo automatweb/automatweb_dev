@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.5 2007/12/24 13:17:43 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.6 2007/12/24 13:18:28 kaarel Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -2131,6 +2131,7 @@ class event_import extends class_base
 	**/
 	function import_events($arr)
 	{
+		/*
 		$o = new object(73682);
 		arr($o->meta("translations"));
 		exit;
