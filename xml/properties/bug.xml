@@ -379,16 +379,16 @@
             <field>bug_mail</field>
             <caption>Bugmail CC</caption>
       </property>
-	<property>
-		<name>submit</name>
-		<group>general</group>
-		<table>objects</table>
-		<field>meta</field>
-		<store>no</store>
-		<type>submit</type>
-		<caption>Salvesta</caption>
-		<no_caption>1</no_caption>
-	</property>
+      <property>
+            <name>submit</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>submit</field>
+            <caption>Salvesta</caption>
+      </property>
       <property>
             <name>team</name>
             <group>cust</group>
@@ -510,7 +510,7 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <r2>yes</r2>
-            <mantainer>robert</mantainer>
+            <maintainer>robert</maintainer>
       </classinfo>
       <groupinfo>
             <cust>

@@ -1,8 +1,4 @@
 <?php
-
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.120 2007/12/11 09:02:31 robert Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.120 2007/12/11 09:02:31 robert Exp $
-
 // bug_tracker.aw - BugTrack
 
 define("MENU_ITEM_LENGTH", 20);
@@ -216,6 +212,10 @@ define("BUG_STATUS_CLOSED", 5);
 	@property bug_only_bt_ppl type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption J&auml;lgijateks ainult valitud inimesed
 
+	@property combined_priority_formula type=textarea rows=7 cols=40 table=objects field=meta method=serialize
+	@caption Prioriteedivalem
+	@comment Valem mida kasutatakse kombineeritud prioriteedi arvutamiseks. Formaat: php, tagastatav prioriteet muutujas $p. Muutujad: $sp_lut - staatustele vastavad prioriteedid (default array(BUG_OPEN => 100,BUG_INPROGRESS => 110,BUG_DONE => 70,BUG_TESTED => 60,BUG_CLOSED => 50,BUG_INCORRECT => 40,BUG_NOTREPEATABLE => 40,BUG_NOTFIXABLE => 40,BUG_FATALERROR => 200,BUG_FEEDBACK => 130)), $bs - ylesande staatus, $cp - kliendi prioriteet, $pp - projekti prioriteet, $bp - ylesande prioriteet, $bi - ylesande t6sidus, $dd - t2htaeg. N2ide: $p = $cp + $pp + $bp;
+
 @default group=reqs
 
 	@property reqs_tb type=toolbar store=no no_caption=1
@@ -335,9 +335,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property stat_hrs_end type=date_select store=no parent=stat_hrs_range
 		@caption Kuni
-		
+
 		@layout stat_hrs_s type=vbox parent=stat_hrs_o
-		
+
 		@property stat_hr_bugs type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
 		@caption &Uuml;lesanded
 
@@ -441,6 +441,8 @@ define("BUG_STATUS_CLOSED", 5);
 classload("applications/bug_o_matic_3000/bug");
 class bug_tracker extends class_base
 {
+	var $combined_priority_formula;
+
 	function bug_tracker()
 	{
 		$this->init(array(
@@ -693,6 +695,16 @@ class bug_tracker extends class_base
 				$this->_save_estimates($arr);
 				break;
 
+			case "combined_priority_formula":
+				$errors = $this->validate_cp_formula($prop["value"]);
+
+				if (count($errors))
+				{
+					$prop["error"] = implode(". ", $errors);
+					$retval = PROP_FATAL_ERROR;
+				}
+				break;
+
 			case "bug_list":
 				foreach($arr["request"]["bug_priority"] as $bug_id => $bug_val)
 				{
@@ -728,7 +740,7 @@ class bug_tracker extends class_base
 		}
 		return $retval;
 	}
-	
+
 	function _init_complete_table(&$t)
 	{
 		if($_GET['FIX1656760'])
@@ -855,7 +867,7 @@ class bug_tracker extends class_base
 		$t->sort_by();
 		$t->set_default_sortby("last_comment");
 	}
-	
+
 	function _get_complete_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -930,6 +942,9 @@ class bug_tracker extends class_base
 				$lastdates[$comm->parent()] = $created;
 			}
 		}
+
+		$formula = $arr["obj_inst"]->prop("combined_priority_formula");
+
 		foreach($bug_list as $bug)
 		{
 			$crea = $bug->createdby();
@@ -966,7 +981,7 @@ class bug_tracker extends class_base
 				"num_hrs_guess" => $bug->prop("num_hrs_guess"),
 				"id" => $bug->id(),
 				"oid" => $bug->id(),
-				"sort_priority" => $bug_i->get_sort_priority($bug),
+				"sort_priority" => $bug_i->get_sort_priority($bug, $formula),
 				"icon" => icons::get_icon($bug),
 				"obj" => $bug,
     				"last_comment" => (int)$lastdates[$bug->id()],
@@ -976,6 +991,7 @@ class bug_tracker extends class_base
 			));
 		}
 	}
+
 	function _get_my_bugs_stat_table($arr)
 	{
 		classload("core/date/date_calc");
@@ -2344,6 +2360,8 @@ class bug_tracker extends class_base
 			$t->set_request_uri($this->mk_my_orb("change", array("id" => $params["bt"]->id(), "group" => "by_default", "b_id" => $_GET["b_id"]), "bug_tracker"));
 		}
 
+		$formula = $params["bt"]->prop("combined_priority_formula");
+
 		foreach($bug_list as $bug)
 		{
 			$crea = $bug->createdby();
@@ -2400,7 +2418,7 @@ class bug_tracker extends class_base
 				"num_hrs_guess" => $bug->prop("num_hrs_guess"),
 				"id" => $bug->id(),
 				"oid" => $bug->id(),
-				"sort_priority" => $bug_i->get_sort_priority($bug),
+				"sort_priority" => $bug_i->get_sort_priority($bug, $formula),
 				"icon" => icons::get_icon($bug),
 				"obj" => $bug,
 				"comment_count" => (int)$comments_by_bug[$bug->id()],
@@ -2624,7 +2642,7 @@ class bug_tracker extends class_base
 		{
 			$res["CL_BUG.RELTYPE_FEEDBACK_P.name"] = $this->_get_string_filt($r["s_feedback_p"]);
 		}
-		
+
 		$cplx = array("who", "bug_type", "customer", "project");
 		foreach($cplx as $field)
 		{
@@ -2781,7 +2799,7 @@ class bug_tracker extends class_base
 	{
 		$parent = $arr["obj_inst"]->id();
 		$t = &$arr["prop"]["vcl_inst"];
-		
+
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -2993,8 +3011,8 @@ class bug_tracker extends class_base
 
 	function __gantt_sort($a, $b)
 	{
-		$a_pri = $this->bug_i->get_sort_priority($a);
-		$b_pri = $this->bug_i->get_sort_priority($b);
+		$a_pri = $this->bug_i->get_sort_priority($a, $this->combined_priority_formula);
+		$b_pri = $this->bug_i->get_sort_priority($b, $this->combined_priority_formula);
 		return $a_pri == $b_pri ? 0 : ($a_pri > $b_pri ? -1 : 1);
 	}
 
@@ -3003,7 +3021,7 @@ class bug_tracker extends class_base
 		return $this->over_deadline;
 	}
 
-	function get_estimated_end_time_for_bug($bug)
+	function get_estimated_end_time_for_bug($bug, $this_o = false)
 	{
 		$this->over_deadline = array();
 		$p = $bug->prop("who");
@@ -3016,14 +3034,14 @@ class bug_tracker extends class_base
 				"filt_p" => $p,
 			),
 			"ret_b_time" => $bug->id(),
-			"ret_b" => $bug
+			"ret_b" => $bug,
+			"obj_inst" => $this_o
 		));
 	}
 
 	function _gantt($arr)
 	{
 		$chart = get_instance ("vcl/gantt_chart");
-
 		$columns = 7;
 
 		if ($this->can("view", $arr["request"]["filt_p"]))
@@ -3034,6 +3052,11 @@ class bug_tracker extends class_base
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
+		}
+
+		if (is_object($arr["obj_inst"]))
+		{
+			$this->combined_priority_formula = $arr["obj_inst"]->prop("combined_priority_formula"); // required by get_undone_bugs_by_p(), __gantt_sort()
 		}
 
 		classload("core/date/date_calc");
@@ -3190,7 +3213,70 @@ class bug_tracker extends class_base
 		}
 
 		$arr["prop"]["value"] = $chart->draw_chart ();
+	}
 
+	function validate_cp_formula($formula)
+	{
+		$errors = array();
+		$allowed_words = array(
+			// array functions
+			"array_ change_ key_ case", "array_ chunk", "array_ combine", "array_ count_ values", "array_ diff_ assoc", "array_ diff_ key", "array_ diff_ uassoc", "array_ diff_ ukey", "array_ diff", "array_ fill_ keys", "array_ fill", "array_ filter", "array_ flip", "array_ intersect_ assoc", "array_ intersect_ key", "array_ intersect_ uassoc", "array_ intersect_ ukey", "array_ intersect", "array_ key_ exists", "array_ keys", "array_ map", "array_ merge_ recursive", "array_ merge", "array_ multisort", "array_ pad", "array_ pop", "array_ product", "array_ push", "array_ rand", "array_ reduce", "array_ reverse", "array_ search", "array_ shift", "array_ slice", "array_ splice", "array_ sum", "array_ udiff_ assoc", "array_ udiff_ uassoc", "array_ udiff", "array_ uintersect_ assoc", "array_ uintersect_ uassoc", "array_ uintersect", "array_ unique", "array_ unshift", "array_ values", "array_ walk_ recursive", "array_ walk", "array", "arsort", "asort", "compact", "count", "current", "each", "end", "extract", "in_ array", "key", "krsort", "ksort", "list", "natcasesort", "natsort", "next", "pos", "prev", "range", "reset", "rsort", "shuffle", "sizeof", "sort", "uasort", "uksort", "usort",
+
+			// math functions
+			"abs", "acos", "acosh", "asin", "asinh", "atan2", "atan", "atanh", "base_ convert", "bindec", "ceil", "cos", "cosh", "decbin", "dechex", "decoct", "deg2rad", "exp", "expm1", "floor", "fmod", "getrandmax", "hexdec", "hypot", "is_ finite", "is_ infinite", "is_ nan", "lcg_ value", "log10", "log1p", "log", "max", "min", "mt_ getrandmax", "mt_ rand", "mt_ srand", "octdec", "pi", "pow", "rad2deg", "rand", "round", "sin", "sinh", "sqrt", "srand", "tan", "tanh",
+
+			// string functions
+			"addcslashes", "addslashes", "bin2hex", "chop", "chr", "chunk_ split", "convert_ cyr_ string", "convert_ uudecode", "convert_ uuencode", "count_ chars", "crc32", "crypt", "explode", "get_ html_ translation_ table", "hebrev", "hebrevc", "html_ entity_ decode", "htmlentities", "htmlspecialchars_ decode", "htmlspecialchars", "implode", "join", "levenshtein", "localeconv", "ltrim", "md5", "metaphone", "ord", "parse_ str", "quoted_ printable_ decode", "quotemeta", "rtrim", "sha1", "similar_ text", "soundex", "sscanf", "str_ getcsv", "str_ ireplace", "str_ pad", "str_ repeat", "str_ replace", "str_ rot13", "str_ shuffle", "str_ split", "str_ word_ count", "strcasecmp", "strchr", "strcmp", "strcoll", "strcspn", "strip_ tags", "stripcslashes", "stripos", "stripslashes", "stristr", "strlen", "strnatcasecmp", "strnatcmp", "strncasecmp", "strncmp", "strpbrk", "strpos", "strrchr", "strrev", "strripos", "strrpos", "strspn", "strstr", "strtok", "strtolower", "strtoupper", "strtr", "substr_ compare", "substr_ count", "substr_ replace", "substr", "trim", "ucfirst", "ucwords", "wordwrap",
+
+			// date&time functions
+			"checkdate", "date_ create", "date_ date_ set", "date_ default_ timezone_ get", "date_ default_ timezone_ set", "date_ format", "date_ isodate_ set", "date_ modify", "date_ offset_ get", "date_ parse", "date_ sun_ info", "date_ sunrise", "date_ sunset", "date_ time_ set", "date_ timezone_ get", "date_ timezone_ set", "date", "getdate", "gettimeofday", "gmdate", "gmmktime", "gmstrftime", "idate", "localtime", "microtime", "mktime", "strftime", "strptime", "strtotime", "time", "timezone_ abbreviations_ list", "timezone_ identifiers_ list", "timezone_ name_ from_ abbr", "timezone_ name_ get", "timezone_ offset_ get", "timezone_ open", "timezone_ transitions_ get"
+		);
+		$global_vars = array("$_SERVER", "$HTTP_SERVER_VARS", "$_SESSION", "$HTTP_SESSION_VARS", "$_COOKIE", "$HTTP_COOKIE_VARS", "$_ENV", "$HTTP_ENV_VARS", "$GLOBALS", "$_FILES", "$HTTP_POST_FILES");
+		$tokenized_formula = token_get_all("<?php " . $formula . "?>");
+
+		foreach ($tokenized_formula as $token_data)
+		{
+			if (is_array($token_data))
+			{
+				switch ($token_data[0])
+				{
+					case T_STRING:
+						if (!in_array($token_data[1], $allowed_words))
+						{
+							$errors[] = sprintf(t("keelatud nimi: %s"), $token_data[1]);
+						}
+						break;
+
+					case T_EVAL:
+						$errors[] = t("eval() keelatud.");
+						break;
+
+					case T_GLOBAL:
+						$errors[] = t("global keelatud.");
+						break;
+
+					case T_VARIABLE:
+						if (in_array($token_data[1], $global_vars))
+						{
+							$errors[] = t("globaalsed muutujad keelatud.");
+						}
+						break;
+
+					case T_INCLUDE:
+					case T_INCLUDE_ONCE:
+					case T_REQUIRE:
+					case T_REQUIRE_ONCE:
+						$errors[] = t("include() keelatud.");
+						break;
+				}
+			}
+			elseif ("`" === $token_data)
+			{
+				$errors[] = t("'backtick' operaator keelatud.");
+			}
+		}
+
+		return $errors;
 	}
 
 	/**
@@ -3514,6 +3600,7 @@ class bug_tracker extends class_base
 		{
 			unset($bugs[$sub_bug->parent()]);
 		}
+
 		$gt_list = new object_list();
 		$gt_list->add(array_keys($bugs));
 		$gt_list->sort_by_cb(array(
@@ -3592,7 +3679,9 @@ class bug_tracker extends class_base
 				send_mail($p->prop("email.mail"), t("Bugtracki M22ramata ajad"), $mail);
 			}
 		}
-echo "<hr>";
+
+		echo "<hr>";
+
 		get_instance(CL_BUG);
 		// get all bugs that are needs feedback and send mail to their creators
 		$ol = new object_list(array(
@@ -3693,6 +3782,8 @@ echo "<hr>";
 		{
 			$p = obj($arr["request"]["filt_p"]);
 		}
+
+		$this->combined_priority_formula = $arr["obj_inst"]->prop("combined_priority_formula"); // required by get_unestimated_bugs_by_p()
 
 		foreach($this->get_unestimated_bugs_by_p($p) as $bug)
 		{
@@ -3891,7 +3982,7 @@ echo "<div style='font-size: 10px;'>";
 
 			echo "tested conns <br>\n";
 			flush();
-			// now we need to figure out which emails to scan. preferably new ones only. 
+			// now we need to figure out which emails to scan. preferably new ones only.
 			$fld_c = $imap_i->get_folder_contents(array("from" => 0, "to" => 100000));
 			echo "got cont <br>\n";
 			flush();
@@ -3927,7 +4018,7 @@ echo "<div style='font-size: 10px;'>";
 				aw_disable_acl();
 				$b->save();
 				aw_restore_acl();
-			}		
+			}
 			$imap_i->delete_msgs_from_folder(array_keys($fld_c));
 		}
 		die("all done");

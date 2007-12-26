@@ -1,5 +1,5 @@
 <?php
-//  bug.aw - Bugi
+//  bug.aw - Ylesanne
 
 define("BUG_STATUS_CLOSED", 5);
 
@@ -266,6 +266,19 @@ define("BUG_VIEWING", 13);
 
 class bug extends class_base
 {
+	var $sp_lut = array(
+		BUG_OPEN => 100,
+		BUG_INPROGRESS => 110,
+		BUG_DONE => 70,
+		BUG_TESTED => 60,
+		BUG_CLOSED => 50,
+		BUG_INCORRECT => 40,
+		BUG_NOTREPEATABLE => 40,
+		BUG_NOTFIXABLE => 40,
+		BUG_FATALERROR => 200,
+		BUG_FEEDBACK => 130
+	);
+
 	function bug()
 	{
 		$this->init(array(
@@ -870,8 +883,10 @@ class bug extends class_base
 				{
 					return PROP_OK;
 				}
+
 				classload("core/date/date_calc");
 				$ev = date_edit::get_timestamp($arr["request"]["deadline"]);
+
 				if ($ev == $arr["obj_inst"]->prop("deadline"))
 				{
 					return PROP_OK;
@@ -882,10 +897,11 @@ class bug extends class_base
 					$prop["error"] = t("T&auml;htaeg ei tohi olla minevikus!");
 					return PROP_FATAL_ERROR;
 				}
-				$bt = get_instance(CL_BUG_TRACKER);
+
+				$bt_i = get_instance(CL_BUG_TRACKER);
 				$arr["obj_inst"]->set_prop("who", $arr["request"]["who"]);
-				$estend = $bt->get_estimated_end_time_for_bug($arr["obj_inst"]);
-				$ovr1 = $bt->get_last_estimation_over_deadline_bugs();
+				$estend = $bt_i->get_estimated_end_time_for_bug($arr["obj_inst"], $bt);
+				$ovr1 = $bt_i->get_last_estimation_over_deadline_bugs();
 
 				$opv = $arr["obj_inst"]->prop("deadline");
 				$opri = $arr["obj_inst"]->prop("bug_priority");
@@ -894,8 +910,8 @@ class bug extends class_base
 				$arr["obj_inst"]->set_prop("bug_priority", $arr["request"]["bug_priority"]);
 				$arr["obj_inst"]->set_prop("bug_severity", $arr["request"]["bug_severity"]);
 				$arr["obj_inst"]->set_prop("bug_status", $arr["request"]["bug_status"]);
-				$estend = $bt->get_estimated_end_time_for_bug($arr["obj_inst"]);
-				$ovr2 = $bt->get_last_estimation_over_deadline_bugs();
+				$estend = $bt_i->get_estimated_end_time_for_bug($arr["obj_inst"], $bt);
+				$ovr2 = $bt_i->get_last_estimation_over_deadline_bugs();
 
 				$arr["obj_inst"]->set_prop("deadline", $opv);
 				$arr["obj_inst"]->set_prop("bug_priority", $opri);
@@ -1161,47 +1177,50 @@ class bug extends class_base
 		}
 	}
 
-	function get_sort_priority($bug)
+	function get_sort_priority($bug, $formula = "")
 	{
-		$sp_lut = array(
-			BUG_OPEN => 100,
-			BUG_INPROGRESS => 110,
-			BUG_DONE => 70,
-			BUG_TESTED => 60,
-			BUG_CLOSED => 50,
-			BUG_INCORRECT => 40,
-			BUG_NOTREPEATABLE => 40,
-			BUG_NOTFIXABLE => 40,
-			BUG_FATALERROR => 200,
-			BUG_FEEDBACK => 130
-		);
-		$rv = $sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
-		// also, if the bug has a deadline, then we need to up the priority as the deadline comes closer
-		if (($dl = $bug->prop("deadline")) > 200)
+		if (empty($formula))
 		{
-
-			// deadline in the next 24 hrs = +3
-			if ($dl < (time() - 24*3600))
+			$rv = $this->sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
+			// also, if the bug has a deadline, then we need to up the priority as the deadline comes closer
+			if (($dl = $bug->prop("deadline")) > 200)
 			{
+				// deadline in the next 24 hrs = +3
+				if ($dl < (time() - 24*3600))
+				{
+					$rv++;
+				}
+				// deadline in the next 48 hrs +2
+				if ($dl < (time() - 48*3600))
+				{
+					$rv++;
+				}
+				// has deadline = +1
 				$rv++;
 			}
-			// deadline in the next 48 hrs +2
-			if ($dl < (time() - 48*3600))
+
+			//if customer priority set, up the bug's priority
+			if($cust_priority = $bug->prop("customer.cust_priority"))
 			{
-				$rv++;
+				$cust_priority = ($cust_priority>99999)?99999:$cust_priority;
+				$rv += 1.0 - ((double)1.0/((double)100000.0 + (double)$cust_priority));
 			}
-			// has deadline = +1
-			$rv++;
-		}
 
-		//if customer priority set, up the bug's priority
-		if($cust_priority = $bug->prop("customer.cust_priority"))
+			$rv += 1.0 - ((double)1.0/((double)1000000.0 - (double)$bug->id()));
+		}
+		else
 		{
-			$cust_priority = ($cust_priority>99999)?99999:$cust_priority;
-			$rv += 1.0 - ((double)1.0/((double)100000.0 + (double)$cust_priority));
+			$sp_lut = $this->sp_lut;
+			$bs = $bug->prop("bug_status");
+			$bp = $bug->prop("bug_priority");
+			$cp = $bug->prop("customer.cust_priority");
+			$pp = $bug->prop("project.priority");
+			$bi = $bug->prop("bug_severity");
+			$dd = $bug->prop("deadline");
+			$p = 0;
+			eval($formula);
+			$rv = $p;
 		}
-
-		$rv += 1.0 - ((double)1.0/((double)1000000.0 - (double)$bug->id()));
 
 		return $rv;
 	}
@@ -2334,7 +2353,7 @@ if (!is_oid($po->id()))
 		"return true;}";
 	}
 
-	/** 
+	/**
 		@attrib name=check_multiple_content
 		@param bug_content optional
 	**/
