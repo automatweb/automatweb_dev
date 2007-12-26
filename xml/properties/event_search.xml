@@ -69,6 +69,17 @@
             <caption>&amp;amp;Auml;ra otsi k&amp;amp;otilde;igist keeltest</caption>
       </property>
       <property>
+            <name>sort_by_groups</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Sorteeri gruppide j&amp;amp;auml;rgi</caption>
+            <comment>Gruppideks v&amp;amp;otilde;ivad olla n&amp;amp;auml;iteks Projektid</comment>
+      </property>
+      <property>
             <name>navigator_range</name>
             <table>objects</table>
             <group>ftsearch</group>

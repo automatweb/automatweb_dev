@@ -30,6 +30,10 @@
 	@property dont_search_from_all_languages type=checkbox ch_value=1 field=meta method=serialize
 	@caption &Auml;ra otsi k&otilde;igist keeltest
 
+	@property sort_by_groups type=checkbox ch_value=1 field=meta method=serialize
+	@caption Sorteeri gruppide j&auml;rgi
+	@comment Gruppideks v&otilde;ivad olla n&auml;iteks Projektid
+
 @groupinfo ftsearch caption="Otsinguvorm"
 @default group=ftsearch
 
@@ -1039,7 +1043,7 @@ class event_search extends class_base
 			}
 			else
 			{
-				$vars["options"] = array(0 => t("K&otilde;ik")) + reset($prj_ch1);
+				$vars["options"] = array(0 => t("K&otilde;ik")) + (array)reset($prj_ch1);
 				//$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
 			}
 			$htmlc->add_property($vars);
@@ -1512,7 +1516,10 @@ class event_search extends class_base
 						"block_caption" => $grps[$gkey],
 					));
 					$res .= $this->parse("BLOCK");
-					uasort($edata, array($this, "__sort_props_by_proj"));
+					if ($ob->prop('sort_by_groups') == 1)
+					{
+						uasort($edata, array($this, "__sort_props_by_proj"));
+					}
 				}
 				foreach($edata as $ekey => $eval)
 				{
