@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.24 2006/04/07 10:57:32 kristo Exp $
-// __classname.aw - __name 
+// __classname.aw - __name
 /*
 
 @classinfo syslog_type=__syslog_type relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -24,10 +23,11 @@ class __classname extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+
 		switch($prop["name"])
 		{
-			//-- get_property --//
-		};
+		}
+
 		return $retval;
 	}
 
@@ -35,23 +35,19 @@ class __classname extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+
 		switch($prop["name"])
 		{
-			//-- set_property --//
 		}
+
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
@@ -61,7 +57,6 @@ class __classname extends class_base
 		));
 		return $this->parse();
 	}
-
-//-- methods --//
 }
+
 ?>

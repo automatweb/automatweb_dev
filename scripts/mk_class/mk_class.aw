@@ -118,11 +118,18 @@ if ($class['is_remoted'])
 ////////////////////////////////////////////////////////////////////
 
 $clnf = ($class['folder'] == "" ? $class['file'].".aw" : $class['folder']."/".$class['file'].".aw");
+$clnf_oo = ($class['folder'] == "" ? $class['file']."_obj.aw" : $class['folder']."/".$class['file']."_obj.aw");
 $tpnf = ($class['folder'] == "" ? $class['file'] : $class['folder']."/".$class['file']);
 
 if (file_exists("classes/$clnf"))
 {
 	echo "\nERROR: file classes/$clnf already exists!\n\n";
+	exit(1);
+}
+
+if (file_exists("classes/$clnf_oo"))
+{
+	echo "\nERROR: file classes/$clnf_oo already exists!\n\n";
 	exit(1);
 }
 
@@ -253,7 +260,7 @@ foreach($syslines as $sl)
 	$new_sysini[] = $sl;
 }
 
-_file_put_contents('config/ini/syslog.ini',join("\n",$new_sysini)); 
+_file_put_contents('config/ini/syslog.ini',join("\n",$new_sysini));
 
 echo "\n";
 
@@ -289,8 +296,14 @@ $fc = str_replace("__classdef", $class['def'], _file_get_contents("install/class
 $fc = str_replace("__tplfolder", $tpnf, $fc);
 $fc = str_replace("__syslog_type", $class['syslog.type'], $fc);
 $fc = str_replace("__name", $class['name'], $fc);
-_file_put_contents("classes/$clnf",str_replace("__classname", $class['file'], $fc));
+$fc = str_replace("__classname", $class['file'], $fc);
+_file_put_contents("classes/$clnf",$fc);
 echo "created classes/$clnf...\n";
+
+$fc = _file_get_contents("install/class_template/classes/class.aw");
+$fc = str_replace("__classname", $class['file'] . "_obj", $fc);
+_file_put_contents("classes/$clnf_oo",$fc);
+echo "created classes/$clnf_oo...\n";
 
 $folder = $class['folder'] != "" ? "folder=\"".$class['folder']."\"" : "";
 $fc = str_replace("__classname", $class['file'], _file_get_contents("install/class_template/xml/orb/base.xml"));
