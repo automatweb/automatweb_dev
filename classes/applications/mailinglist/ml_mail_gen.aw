@@ -305,6 +305,8 @@ class ml_mail_gen extends run_in_background
 		$parser->parse_oo_aliases($arr["mail_id"], $message);
 		
 		$message = $this->replace_tags($message, $data);
+		$message = str_replace("a href='/", "a href='".aw_ini_get("baseurl")."/" , $message);
+
 		return $message;
 	}
 
