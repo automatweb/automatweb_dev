@@ -146,7 +146,7 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @default table=objects
 
 @property uimage1 type=releditor reltype=RELTYPE_PICTURE rel_id=first use_form=emb
-@caption
+@caption Pilt
 
 @property seealso type=relpicker reltype=RELTYPE_SEEALSO
 @caption
