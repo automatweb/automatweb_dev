@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.72 2007/12/06 14:34:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.73 2007/12/27 14:52:03 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -48,6 +48,9 @@ caption Uuenda ainult toote andmed
 
 @property last_import_log type=text store=no
 @caption Viimase impordi logi
+
+@property products_count type=text store=no
+@caption Toodete arv
 
 @groupinfo imported_products caption="Imporditud tooted"
 
@@ -272,7 +275,12 @@ class otto_import extends class_base
 				}
 				$prop["value"] = join("<br>\n", @file(aw_ini_get("site_basedir")."/files/import_last_log.txt"));
 				break;
-
+			case "products_count":
+				$ol = new object_list(array(
+					'class_id' => CL_SHOP_PRODUCT,
+				));
+				$prop['value'] = $ol->count();
+				break;
 			case "folders":
 				$this->do_folders_tbl($arr);
 				break;
