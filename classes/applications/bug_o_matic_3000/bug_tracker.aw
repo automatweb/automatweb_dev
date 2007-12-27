@@ -3219,6 +3219,9 @@ class bug_tracker extends class_base
 	{
 		$errors = array();
 		$allowed_words = array(
+			// bug status constants
+			"BUG_OPEN", "BUG_INPROGRESS",	"BUG_DONE", "BUG_TESTED", "BUG_CLOSED", "BUG_INCORRECT", "BUG_NOTREPEATABLE", "BUG_NOTFIXABLE", "BUG_FATALERROR", "BUG_FEEDBACK",
+
 			// array functions
 			"array_ change_ key_ case", "array_ chunk", "array_ combine", "array_ count_ values", "array_ diff_ assoc", "array_ diff_ key", "array_ diff_ uassoc", "array_ diff_ ukey", "array_ diff", "array_ fill_ keys", "array_ fill", "array_ filter", "array_ flip", "array_ intersect_ assoc", "array_ intersect_ key", "array_ intersect_ uassoc", "array_ intersect_ ukey", "array_ intersect", "array_ key_ exists", "array_ keys", "array_ map", "array_ merge_ recursive", "array_ merge", "array_ multisort", "array_ pad", "array_ pop", "array_ product", "array_ push", "array_ rand", "array_ reduce", "array_ reverse", "array_ search", "array_ shift", "array_ slice", "array_ splice", "array_ sum", "array_ udiff_ assoc", "array_ udiff_ uassoc", "array_ udiff", "array_ uintersect_ assoc", "array_ uintersect_ uassoc", "array_ uintersect", "array_ unique", "array_ unshift", "array_ values", "array_ walk_ recursive", "array_ walk", "array", "arsort", "asort", "compact", "count", "current", "each", "end", "extract", "in_ array", "key", "krsort", "ksort", "list", "natcasesort", "natsort", "next", "pos", "prev", "range", "reset", "rsort", "shuffle", "sizeof", "sort", "uasort", "uksort", "usort",
 
