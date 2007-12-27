@@ -171,17 +171,21 @@ echo "...got new class_id = $new_clid ... \nwriting to classes.ini:...\n";
 
 $new_clini  = "\nclasses[$new_clid][def] = ".$class['def']."\n";
 $new_clini .= "classes[$new_clid][name] = ".$class['name']."\n";
+
 if ($class['folder'] != '')
 {
 	$cl_fname = $class['folder']."/".$class['file'];
+	$cl_fname_oo = $class['folder']."/".$class['file']."_obj";
 }
 else
 {
 	$cl_fname = $class['file'];
+	$cl_fname_oo = $class['file']."_obj";
 }
 
 $new_clini .= "classes[$new_clid][file] = ".$cl_fname."\n";
 $new_clini .= "classes[$new_clid][can_add] = ".$class['can_add']."\n";
+$new_clini .= "classes[$new_clid][object_override] = ".$cl_fname_oo."\n";
 if ($class['parents'] != '')
 {
 	$new_clini .= "classes[$new_clid][parents] = ".$class['parents']."\n";
