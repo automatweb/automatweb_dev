@@ -584,7 +584,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Prioriteedivalem</caption>
-            <comment>Valem mida kasutatakse kombineeritud prioriteedi arvutamiseks. Formaat: php, tagastatav prioriteet muutujas $p. Muutujad: $sp_lut - staatustele vastavad prioriteedid (default array(BUG_OPEN =&amp;gt; 100,BUG_INPROGRESS =&amp;gt; 110,BUG_DONE =&amp;gt; 70,BUG_TESTED =&amp;gt; 60,BUG_CLOSED =&amp;gt; 50,BUG_INCORRECT =&amp;gt; 40,BUG_NOTREPEATABLE =&amp;gt; 40,BUG_NOTFIXABLE =&amp;gt; 40,BUG_FATALERROR =&amp;gt; 200,BUG_FEEDBACK =&amp;gt; 130)), $bs - ylesande staatus, $cp - kliendi prioriteet, $pp - projekti prioriteet, $bp - ylesande prioriteet, $bi - ylesande t6sidus, $dd - t2htaeg. N2ide: $p = $cp + $pp + $bp;</comment>
+            <comment>Valem mida kasutatakse kombineeritud prioriteedi arvutamiseks. Formaat: php, tagastatav prioriteet muutujas $p. Muutujad: $sp_lut - staatustele vastavad prioriteedid (default array(BUG_OPEN =&amp;gt; 100,BUG_INPROGRESS =&amp;gt; 110,BUG_DONE =&amp;gt; 70,BUG_TESTED =&amp;gt; 60,BUG_CLOSED =&amp;gt; 50,BUG_INCORRECT =&amp;gt; 40,BUG_NOTREPEATABLE =&amp;gt; 40,BUG_NOTFIXABLE =&amp;gt; 40,BUG_FATALERROR =&amp;gt; 200,BUG_FEEDBACK =&amp;gt; 130)), $bs - ylesande staatus, $cp - kliendi prioriteet, $pp - projekti prioriteet, $bp - ylesande prioriteet, $bl - ylesande prognoositud tunde, $bi - ylesande t6sidus, $dd - t2htaeg. N2ide: $p = $cp + $pp + $bp;</comment>
       </property>
       <property>
             <name>reqs_tb</name>

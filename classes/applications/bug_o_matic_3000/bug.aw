@@ -266,19 +266,6 @@ define("BUG_VIEWING", 13);
 
 class bug extends class_base
 {
-	var $sp_lut = array(
-		BUG_OPEN => 100,
-		BUG_INPROGRESS => 110,
-		BUG_DONE => 70,
-		BUG_TESTED => 60,
-		BUG_CLOSED => 50,
-		BUG_INCORRECT => 40,
-		BUG_NOTREPEATABLE => 40,
-		BUG_NOTFIXABLE => 40,
-		BUG_FATALERROR => 200,
-		BUG_FEEDBACK => 130
-	);
-
 	function bug()
 	{
 		$this->init(array(
@@ -1179,9 +1166,22 @@ class bug extends class_base
 
 	function get_sort_priority($bug, $formula = "")
 	{
+		$sp_lut = array(
+			BUG_OPEN => 100,
+			BUG_INPROGRESS => 110,
+			BUG_DONE => 70,
+			BUG_TESTED => 60,
+			BUG_CLOSED => 50,
+			BUG_INCORRECT => 40,
+			BUG_NOTREPEATABLE => 40,
+			BUG_NOTFIXABLE => 40,
+			BUG_FATALERROR => 200,
+			BUG_FEEDBACK => 130
+		);
+
 		if (empty($formula))
 		{
-			$rv = $this->sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
+			$rv = $sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
 			// also, if the bug has a deadline, then we need to up the priority as the deadline comes closer
 			if (($dl = $bug->prop("deadline")) > 200)
 			{
@@ -1210,13 +1210,13 @@ class bug extends class_base
 		}
 		else
 		{
-			$sp_lut = $this->sp_lut;
 			$bs = $bug->prop("bug_status");
 			$bp = $bug->prop("bug_priority");
 			$cp = $bug->prop("customer.cust_priority");
 			$pp = $bug->prop("project.priority");
 			$bi = $bug->prop("bug_severity");
 			$dd = $bug->prop("deadline");
+			$bl = $bug->prop("num_hrs_guess");
 			$p = 0;
 			eval($formula);
 			$rv = $p;
@@ -1541,46 +1541,49 @@ class bug extends class_base
 
 	function callback_pre_save($arr)
 	{
-                                        $po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["i
-d"]);
-if (!is_oid($po->id()))
-{
-	return;
-}
-                                        $pt = $po->path();
-                                        foreach($pt as $pi)
-                                        {
-                                                if ($pi->class_id() == CL_BUG_TRACKER)
-                                                {
-                                                        $bt = $pi;
-                                                }
-                                        }
-                                        if($bt)
-                                        {
-                                                $conn = $bt->connections_to(array(
-                                                        "from.class_id" => CL_BUGTRACK_DISPLAY,
-                                                        "type" => "RELTYPE_BUGTRACK"
-                                                ));
-                                                foreach($conn as $c)
-                                                {
-                                                        $bt_display = obj($c->prop("from"));
-                                                }
-                                        }
-                                        if($arr["request"]["bug_type"] && $bt_display)
-                                        {
-                                                $user = $bt_display->meta("type".$arr["request"]["bug_type"]);
-                                                if($user)
-                                                {
-                                                        $arr["obj_inst"]->set_prop("who", $user);
-                                                        $this->who_set = 1;
-                                                        $err = 0;
-                                                }
-                                                else
-                                                {
-                                                        $err = 1;
-                                                }
-                                        }
-//die(dbg::dump($arr["obj_inst"]->prop("who")));
+		$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+
+		if (!is_oid($po->id()))
+		{
+			return;
+		}
+
+		$pt = $po->path();
+
+		foreach($pt as $pi)
+		{
+			if ($pi->class_id() == CL_BUG_TRACKER)
+			{
+				$bt = $pi;
+			}
+		}
+
+		if($bt)
+		{
+			$conn = $bt->connections_to(array(
+				"from.class_id" => CL_BUGTRACK_DISPLAY,
+				"type" => "RELTYPE_BUGTRACK"
+			));
+			foreach($conn as $c)
+			{
+				$bt_display = obj($c->prop("from"));
+			}
+		}
+
+		if($arr["request"]["bug_type"] && $bt_display)
+		{
+			$user = $bt_display->meta("type".$arr["request"]["bug_type"]);
+			if($user)
+			{
+				$arr["obj_inst"]->set_prop("who", $user);
+				$this->who_set = 1;
+				$err = 0;
+			}
+			else
+			{
+				$err = 1;
+			}
+		}
 	}
 
 	function callback_post_save($arr)
