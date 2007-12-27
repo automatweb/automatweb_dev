@@ -501,7 +501,7 @@ class crm_company_docs_impl extends class_base
 		));
 	}
 
-	function get_docs_table_header($o,$id)
+	function get_docs_table_header($o,$id,$level)
 	{
 		$path = html::href(array(
 			"url" => $this->mk_my_orb("change", array(
@@ -516,9 +516,28 @@ class crm_company_docs_impl extends class_base
 			"caption" => $o->name()?$o->name():"",
 		));
 
-		if($this->can("view" , $o->parent()) && $o->parent() != $id)
+		if($this->can("view" , $o->parent()) && $o->parent() != $id && $level < 3)
 		{
-			$path = $this->get_docs_table_header(obj($o->parent()),$id).  " > " .$path;
+			$path = $this->get_docs_table_header(obj($o->parent()),$id,$level+1).$path.  " / " ;
+		}
+		elseif($this->can("view" , $o->parent()) && $o->parent() != $id)
+		{
+			$path = $this->get_docs_table_header(obj($o->parent()),$id,$level+1);
+		}
+		elseif($o->parent() == $id)
+		{
+		$path = html::href(array(
+			"url" => $this->mk_my_orb("change", array(
+					"id" => $id,
+					"return_url" => get_ru(),
+					"group" => "documents_all",
+					"docs_s_sbt" => $_GET["docs_s_sbt"],
+					"docs_s_created_after" => $_GET["docs_s_created_after"],
+					"tf" => $o->id(),
+				),
+				 CL_CRM_COMPANY),
+				"caption" => $o->name()?$o->name():"",
+			)).", ".t("folder").": ";
 		}
 		return $path;
 	}
@@ -540,7 +559,7 @@ class crm_company_docs_impl extends class_base
 		}
 		else
 		{
-			$path = $this->get_docs_table_header($o,$arr['obj_inst']->id());
+			$path = $this->get_docs_table_header($o,$arr['obj_inst']->id(),0);
 		}
 	
 		$t->set_caption($path);
