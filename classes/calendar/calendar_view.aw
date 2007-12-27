@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.59 2007/12/27 14:47:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.60 2007/12/27 18:54:04 dragut Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -15,7 +15,7 @@
 @default method=serialize
 
 @property use_template type=select
-@caption Välimus
+@caption V&auml;limus
 
 @property num_next_events type=textbox size=5 
 @caption Mitu j&auml;rgmist
@@ -33,22 +33,22 @@
 @caption S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi
 
 @property show_days_with_events type=checkbox ch_value=1
-@caption Näita ainult sündmustega päevi
+@caption N&auml;ita ainult s&uuml;ndmustega päevi
 
 @property sort_day_events_before type=checkbox ch_value=1
 @caption Sorteeri &uuml;he p&auml;evased ettepoole
 
 @property show_event_content type=checkbox ch_value=1
-@caption Näita kalendrivaates kohe sündmuse sisu
+@caption N&auml;ita kalendrivaates kohe sündmuse sisu
 
 @property show_event_days type=checkbox ch_value=1
-@caption Näita sündmust kõikidel päevadel
+@caption N&auml;ita s&uuml;ndmust k&otilde;ikidel p&auml;evadel
 
 @property actives_only type=checkbox ch_value=1
-@caption Näita ainult aktiivseid sündmusi
+@caption N&auml;ita ainult aktiivseid s&uuml;ndmusi
 
 @property fix_links type=checkbox ch_value=1
-@caption "Eelmine"-"J&auml;rgmine" lingid viivad sündmusega päevale
+@caption "Eelmine"-"J&auml;rgmine" lingid viivad s&uuml;ndmusega p&auml;evale
 
 @groupinfo style caption=Stiilid
 @default group=style
@@ -57,7 +57,7 @@
 @caption S&uuml;ndmustega p&auml;ev
 
 @property minical_day_without_events type=relpicker reltype=RELTYPE_STYLE
-@caption Ilma sündmusteta p&auml;ev
+@caption Ilma s&uuml;ndmusteta p&auml;ev
 
 @property minical_day_today type=relpicker reltype=RELTYPE_STYLE
 @caption T&auml;nane p&auml;ev
@@ -96,13 +96,13 @@
 @default group=show_events
 
 @property show_events type=calendar no_caption=1
-@caption Sündmused
+@caption S&uuml;ndmused
 
 @reltype EVENT_SOURCE value=1 clid=CL_PLANNER,CL_DOCUMENT_ARCHIVE,CL_PROJECT
-@caption Võta sündmusi
+@caption V&otilde;ta s&uuml;ndmusi
 
 @reltype OUTPUT value=2 clid=CL_RELATION,CL_DOCUMENT
-@caption väljund
+@caption v&auml;ljund
 	
 @reltype STYLE value=3 clid=CL_CSS
 @caption Stiil

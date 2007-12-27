@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>V&amp;auml;limus</caption>
+            <caption>V&amp;amp;auml;limus</caption>
       </property>
       <property>
             <name>num_next_events</name>
@@ -66,7 +66,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita ainult s&amp;uuml;ndmustega p&amp;auml;evi</caption>
+            <caption>N&amp;amp;auml;ita ainult s&amp;amp;uuml;ndmustega p&amp;auml;evi</caption>
       </property>
       <property>
             <name>sort_day_events_before</name>
@@ -86,7 +86,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita kalendrivaates kohe s&amp;uuml;ndmuse sisu</caption>
+            <caption>N&amp;amp;auml;ita kalendrivaates kohe s&amp;uuml;ndmuse sisu</caption>
       </property>
       <property>
             <name>show_event_days</name>
@@ -96,7 +96,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita s&amp;uuml;ndmust k&amp;otilde;ikidel p&amp;auml;evadel</caption>
+            <caption>N&amp;amp;auml;ita s&amp;amp;uuml;ndmust k&amp;amp;otilde;ikidel p&amp;amp;auml;evadel</caption>
       </property>
       <property>
             <name>actives_only</name>
@@ -106,7 +106,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita ainult aktiivseid s&amp;uuml;ndmusi</caption>
+            <caption>N&amp;amp;auml;ita ainult aktiivseid s&amp;amp;uuml;ndmusi</caption>
       </property>
       <property>
             <name>fix_links</name>
@@ -116,7 +116,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;quot;Eelmine&amp;quot;-&amp;quot;J&amp;amp;auml;rgmine&amp;quot; lingid viivad s&amp;uuml;ndmusega p&amp;auml;evale</caption>
+            <caption>&amp;quot;Eelmine&amp;quot;-&amp;quot;J&amp;amp;auml;rgmine&amp;quot; lingid viivad s&amp;amp;uuml;ndmusega p&amp;amp;auml;evale</caption>
       </property>
       <property>
             <name>minical_day_with_events</name>
@@ -136,7 +136,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Ilma s&amp;uuml;ndmusteta p&amp;amp;auml;ev</caption>
+            <caption>Ilma s&amp;amp;uuml;ndmusteta p&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_today</name>
@@ -248,7 +248,7 @@
             <type>calendar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>S&amp;uuml;ndmused</caption>
+            <caption>S&amp;amp;uuml;ndmused</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CALENDAR_VIEW</syslog_type>
@@ -275,7 +275,7 @@
                         <num_1>CL_DOCUMENT_ARCHIVE</num_1>
                         <num_2>CL_PROJECT</num_2>
                   </clid>
-                  <caption>V&amp;otilde;ta s&amp;uuml;ndmusi</caption>
+                  <caption>V&amp;amp;otilde;ta s&amp;amp;uuml;ndmusi</caption>
             </EVENT_SOURCE>
             <OUTPUT>
                   <value>2</value>
@@ -283,7 +283,7 @@
                         <num_0>CL_RELATION</num_0>
                         <num_1>CL_DOCUMENT</num_1>
                   </clid>
-                  <caption>v&amp;auml;ljund</caption>
+                  <caption>v&amp;amp;auml;ljund</caption>
             </OUTPUT>
             <STYLE>
                   <value>3</value>
