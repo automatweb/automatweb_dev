@@ -6012,7 +6012,16 @@ class class_base extends aw_template
 			if(is_oid($id) && $this->can("view" , $id))
 			{
 				$this->object = $o = obj($id);
-				$cfgform = $o->meta("cfgform_id");
+
+				$cfgform = $this->get_cfgform_for_object(array(
+					"obj_inst" => $this->object,
+					"args" => $_GET,
+				));
+				if (empty($cfgform) && is_object($this->object))
+				{
+					$cfgform = $this->object->meta("cfgform_id");
+				}
+//arr($cfgform);
 				$cfgform_i->cff_init_from_class($o, $o->class_id(), false);
 				if(is_oid($cfgform) && $this->can("view", $cfgform))
 				{
