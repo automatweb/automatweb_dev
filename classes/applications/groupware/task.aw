@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.192 2007/12/18 14:47:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.193 2007/12/27 12:21:54 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -4128,11 +4128,71 @@ class task extends class_base
 		}
 
 		$url = $this->mk_my_orb("do_search", array("pn" => "participants_h", "clid" => CL_CRM_PERSON,"multiple" => 1, "s" => $s), "crm_participant_search");
-		$tb->add_menu_item(array(
+		$tb->add_sub_menu(array(
 			"parent" => "search",
 			"text" => t("Osaleja"),
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+			"name" => "part_search",
 		));
+
+		$tb->add_menu_item(array(
+			"parent" => "part_search",
+			"text" => t("Otsi"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+//			"name" => "",
+		));
+
+		//otsib enda ja kliendi töötajate hulgast osalejaid
+		if (is_oid($cur->id()))
+		{
+			$our_workers = $cur->connections_from(array("type" => "RELTYPE_WORKERS"));
+			if(sizeof($our_workers))
+			{
+				$tb->add_sub_menu(array(
+					"parent" => "part_search",
+					"text" => $cur->name(),
+					"name" => "part_our",
+				));
+				foreach($our_workers as $c)
+				{
+					$worker = $c->to();
+					$url = $this->mk_my_orb("add_part_popup", array("part" => $worker->id(), "task" => $arr["obj_inst"]->id()), "task");
+					$tb->add_menu_item(array(
+						"parent" => "part_our",
+						"text" => $worker->name(),
+						"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+					));
+				}
+			}
+		}
+
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+			{
+				$customer = $c->to();
+				$cust_workers = $customer->connections_from(array("type" => "RELTYPE_WORKERS"));
+				if(sizeof($cust_workers))
+				{
+					$tb->add_sub_menu(array(
+						"parent" => "part_search",
+						"text" => $customer->name(),
+						"name" => "part_cust",
+					));
+					foreach($cust_workers as $c)
+					{
+						$worker = $c->to();
+						$url = $this->mk_my_orb("add_part_popup", array("part" => $worker->id(), "task" => $arr["obj_inst"]->id()), "task");
+						$tb->add_menu_item(array(
+							"parent" => "part_cust",
+							"text" => $worker->name(),
+							"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+						));
+					}
+				}
+			}
+		}
+
 
 		$tb->add_button(array(
 			"name" => "delete",
@@ -4189,7 +4249,7 @@ class task extends class_base
 			"class_id" => CL_PROJECT,
 			"lang_id" => array(),
 			"CL_PROJECT.RELTYPE_ORDERER.id" => $customers,
-			
+			"site_id" => array(),
 		));
 
 		foreach($ol->arr() as $project)
@@ -4202,7 +4262,38 @@ class task extends class_base
 			));
 		}
 	}
-	
+
+	/**
+		@attrib name=add_part_popup all_args=1
+	**/
+	function add_part_popup($arr)
+	{
+		extract($arr);
+		$task = obj($task);
+		$p = obj($part);
+		$types = 10;
+		if ($task->class_id() == CL_CRM_CALL)
+		{
+			$types = 9;
+		}
+		if ($task->class_id() == CL_CRM_MEETING)
+		{
+			$types = 8;
+		}
+		$p->connect(array(
+			"to" => $task->id(),
+			"reltype" => $types
+		));
+
+		$task->connect(array("to" => $part, "reltype" => 4));
+		die('<script type="text/javascript">
+			window.opener.location.reload();
+			window.close();
+			</script>'
+		);
+		//die($arr["error"]."\n<br>"."<input type=button value='OK' onClick='javascript:window.close();'>");
+	}
+
 	/**
 		@attrib name=add_project_popup all_args=1
 	**/

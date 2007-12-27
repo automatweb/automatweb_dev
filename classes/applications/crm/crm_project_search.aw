@@ -75,7 +75,8 @@ class crm_project_search extends popup_search
 			
 			$ol = new object_list(array(
 				"class_id" => CL_PROJECT,
-				"parent" => $arr["s"]["show_vals"]
+				"parent" => $arr["s"]["show_vals"],
+				"site_id" => array(),
 			));
 			foreach($ol->list as $oid)
 			{
@@ -85,7 +86,8 @@ class crm_project_search extends popup_search
 		else
 		{
 			$ol = new object_list(array(
-				"class_id" => CL_PROJECT
+				"class_id" => CL_PROJECT,
+				"site_id" => array(),
 			));
 			foreach($ol->list as $oid)
 			{

@@ -124,8 +124,22 @@
 			</function>
 		</action>
 
+		<action name="add_part_popup" all_args="1">
+			<function name="add_part_popup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="add_project_popup" all_args="1">
 			<function name="add_project_popup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_files_on_demand" all_args="1">
+			<function name="new_files_on_demand">
 				<arguments>
 				</arguments>
 			</function>
