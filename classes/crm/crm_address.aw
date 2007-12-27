@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.29 2007/12/27 12:35:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.30 2007/12/27 12:36:26 kristo Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -992,7 +992,7 @@ class crm_address extends class_base
 			"CX" => "+61-8",
 			"CY" => "+357",
 			"CZ" => "+420",
-			"DE" => "+49,
+			"DE" => "+49",
 			"DJ" => "+253",
 			"DK" => "+45",
 			"DM" => "+1-767",
