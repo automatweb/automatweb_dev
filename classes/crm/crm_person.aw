@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.187 2007/12/20 16:24:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.188 2007/12/27 15:07:36 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -800,6 +800,9 @@ caption S&otilde;bragrupid
 
 @reltype NATIONALITY value=73 clid=CL_NATIONALITY
 @caption rahvus
+
+@reltype CL_CITIZENSHIP value=74 clid=CL_CITIZENSHIP
+@caption kodakondsus
 
 */
 

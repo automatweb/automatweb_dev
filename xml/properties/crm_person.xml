@@ -1996,6 +1996,11 @@
                   <clid>CL_NATIONALITY</clid>
                   <caption>rahvus</caption>
             </NATIONALITY>
+            <CL_CITIZENSHIP>
+                  <value>74</value>
+                  <clid>CL_CITIZENSHIP</clid>
+                  <caption>kodakondsus</caption>
+            </CL_CITIZENSHIP>
       </reltypes>
       <layout>
             <co_bottom_seller>

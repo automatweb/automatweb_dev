@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/Attic/citizenship.aw,v 1.1 2007/12/27 14:48:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/Attic/citizenship.aw,v 1.2 2007/12/27 15:07:31 markop Exp $
 // citizenship.aw - Citizenship 
 /*
 
@@ -7,6 +7,19 @@
 
 @default table=objects
 @default group=general
+
+@property start type=date_select field=meta method=serialize
+@caption Alguskuup&auml;ev
+
+@property end type=date_select field=meta method=serialize
+@caption L&otilde;ppkuup&auml;ev
+
+@property country type=relpicker store=connect reltype=RELTYPE_COUNTRY
+@caption Riik
+
+@reltype COUNTRY value=1 clid=CL_CRM_COUNTRY
+@caption Riik
+
 
 */
 
