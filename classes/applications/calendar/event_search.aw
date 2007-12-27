@@ -1090,7 +1090,7 @@ class event_search extends class_base
 			}
 			else
 			{
-				$search["class_id"] = array(CL_STAGING,CL_CALENDAR_EVENT, CL_CRM_MEETING, CL_TASK);
+				$search["class_id"] = array(CL_STAGING, CL_CRM_MEETING, CL_TASK);
 			}
 
 			$par1 = array();
@@ -1598,11 +1598,14 @@ class event_search extends class_base
 							}
 							else
 							{
-								if($nms == "image")
+								if(strpos($nms, "image") !== false)
 								{
 									if(is_oid($v) && $this->can("view", $v))
 									{
-										$asd = obj($v);
+										$image_inst = get_instance(CL_IMAGE);
+										$v = html::img(array(
+											'url' => $image_inst->get_url_by_id($v)
+										));
 									}
 								}
 								if ($nms == "start1" || $nms == "end")
