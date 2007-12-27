@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.193 2007/12/27 12:21:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.194 2007/12/27 12:37:49 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -4285,7 +4285,7 @@ class task extends class_base
 			"reltype" => $types
 		));
 
-		$task->connect(array("to" => $part, "reltype" => 4));
+	//	$task->connect(array("to" => $part, "reltype" => 4));
 		die('<script type="text/javascript">
 			window.opener.location.reload();
 			window.close();
