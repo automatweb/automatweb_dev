@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.141 2007/12/12 12:37:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.142 2007/12/27 14:47:24 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -386,11 +386,11 @@ class planner extends class_base
 		{
 			case "tab_views":
 				$data["options"] = array(
-					"today" => t("Täna"),
-					"day" => t("Päev"),
-					"week" => t("Nädal"),
+					"today" => t("T&auml;na"),
+					"day" => t("P&auml;ev"),
+					"week" => t("N&auml;dal"),
 					"month" => t("Kuu"),
-					"relative" => t("Ülevaade"),
+					"relative" => t("&Uuml;levaade"),
 				);
 				break;
 				
@@ -1243,7 +1243,7 @@ class planner extends class_base
 			
 			$toolbar->add_button(array(
 				"name" => "today",
-				"tooltip" => t("Täna"),
+				"tooltip" => t("T&auml;na"),
 				"url" => $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day","date" => $dt)) . "#today",
 				"img" => "icon_cal_today.gif",
 				"class" => "menuButton",

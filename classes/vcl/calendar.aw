@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.100 2007/12/14 15:27:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.101 2007/12/27 14:47:43 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -730,12 +730,12 @@ class vcalendar extends aw_template
 
 
 		$this->read_template($this->container_template);
-		$types = array(
-			"today" => t("Täna"),
-			"day" => t("Päev"),
-			"week" => t("Nädal"),
+		$types = array( 
+			"today" => t("T&auml;na"),
+			"day" => t("P&auml;ev"),
+			"week" => t("N&auml;dal"),
 			"month" => t("Kuu"),
-			"relative" => t("Ülevaade"),
+			"relative" => t("&Uuml;levaade"),
 		);
 		$ts = "";
 		if(count($this->filt_views) > 0)

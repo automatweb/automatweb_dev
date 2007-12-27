@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.84 2007/12/11 15:06:26 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.85 2007/12/27 14:47:23 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -519,11 +519,7 @@ class aw_template extends core
 	**/
 	function template_has_var_full($varname)
 	{
-		static $tmp = "";
-		if (empty($tmp))
-		{
-			$tmp = join("\n", $this->v2_arr);
-		};
+		$tmp = join("\n", $this->v2_arr);
 		return strpos($tmp,"{VAR:" . $varname . "}") !== false; 
 	}
 
@@ -726,10 +722,6 @@ class aw_template extends core
 	{
 		foreach($params as $k => $v)
 		{
-			/*if (strpos($v, "?php") !== false)
-			{
-				echo "$k => ".dbg::short_backtrace()." <br>";
-			}*/
 			$this->vars[$k] = str_replace("<?php", "&lt;?php", $v);
 		}
 	}

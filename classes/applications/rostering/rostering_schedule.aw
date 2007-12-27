@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.6 2007/12/06 14:34:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.7 2007/12/27 14:47:27 kristo Exp $
 // rostering_schedule.aw - Rostering graafik 
 /*
 
@@ -548,11 +548,11 @@ class rostering_schedule extends class_base
 			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away ($columns, $start, -1))),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => t("Täna"),
+			"caption" => t("T&auml;na"),
 			"url" => aw_url_change_var ("rostering_chart_start", $this->get_week_start ()),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => t("Järgmine"),
+			"caption" => t("J&auml;rgmine"),
 			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away ($columns, $start))),
 		));
 		$start_nav[] = html::href (array (

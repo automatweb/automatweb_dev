@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.58 2007/12/12 12:50:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.59 2007/12/27 14:47:30 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -48,25 +48,25 @@
 @caption Näita ainult aktiivseid sündmusi
 
 @property fix_links type=checkbox ch_value=1
-@caption "Eelmine"-"Järgmine" lingid viivad sündmusega päevale
+@caption "Eelmine"-"J&auml;rgmine" lingid viivad sündmusega päevale
 
 @groupinfo style caption=Stiilid
 @default group=style
 
 @property minical_day_with_events type=relpicker reltype=RELTYPE_STYLE
-@caption Sündmustega päev
+@caption S&uuml;ndmustega p&auml;ev
 
 @property minical_day_without_events type=relpicker reltype=RELTYPE_STYLE
-@caption Ilma sündmusteta päev
+@caption Ilma sündmusteta p&auml;ev
 
 @property minical_day_today type=relpicker reltype=RELTYPE_STYLE
-@caption Tänane päev
+@caption T&auml;nane p&auml;ev
 
 @property minical_day_active type=relpicker reltype=RELTYPE_STYLE
-@caption Aktiivne päev
+@caption Aktiivne p&auml;ev
 
 @property minical_day_deactive type=relpicker reltype=RELTYPE_STYLE
-@caption Deaktiivne päev
+@caption Deaktiivne p&auml;ev
 
 @property minical_title type=relpicker reltype=RELTYPE_STYLE
 @caption Pealkiri

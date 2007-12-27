@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.48 2007/11/26 18:56:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.49 2007/12/27 14:47:37 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -130,11 +130,13 @@ class pot_scanner extends core
 						$param .= $fc{$i};
 						$i++;
 					}
-
-					$strings[] = array(
-						"line" => $line,
-						"str" => trim($param),
-					);
+					if (trim($param) != "")
+					{
+						$strings[] = array(
+							"line" => $line,
+							"str" => trim(str_replace("\n", "", str_replace("\r", "", $param))),
+						);
+					}
 				}
 			}
 
@@ -581,7 +583,7 @@ class pot_scanner extends core
 		foreach($strings as $string)
 		{
 			$str = $string["str"];
-			$str = str_replace('"','\"',$str);
+			$str = str_replace('"','\"',str_replace("\\\"", "\"", $str));
 
 			if (isset($res[$str]))
 			{

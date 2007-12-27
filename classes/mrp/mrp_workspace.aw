@@ -2812,11 +2812,11 @@ class mrp_workspace extends class_base
 			"url" => aw_url_change_var ("mrp_chart_start", ($this->get_time_days_away ($columns, $start, -1))),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => t("Täna"),
+			"caption" => t("T&auml;na"),
 			"url" => aw_url_change_var ("mrp_chart_start", $this->get_week_start ()),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => t("Järgmine"),
+			"caption" => t("J&auml;rgmine"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($this->get_time_days_away ($columns, $start))),
 		));
 		$start_nav[] = html::href (array (

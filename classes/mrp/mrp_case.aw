@@ -1116,7 +1116,7 @@ class mrp_case extends class_base
 			// "img" => "finish.gif",
 			"tooltip" => t("Valmis"),
 			"action" => "finish",
-			"confirm" => t("Projekt on töös. Olete kindel, et soovite määrata projekti staatuseks \'valmis\' ?"),
+			"confirm" => t("Projekt on töös. Olete kindel, et soovite määrata projekti staatuseks 'valmis' ?"),
 			"disabled" => $disabled,
 		));
 

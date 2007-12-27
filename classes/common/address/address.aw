@@ -344,7 +344,7 @@ class address extends class_base
 			"option_is_tuple" => true,
 			"type" => "textbox",
 			"name" => "location_street",
-			"caption" => t("Tänav"),
+			"caption" => t("T&auml;nav"),
 			"value" => $current_values[CL_ADDRESS_STREET]["value"],
 			"content" => $current_values[CL_ADDRESS_STREET]["name"],
 		);
