@@ -1316,6 +1316,7 @@ function check_pagecache_folders()
 		{
 			if (!mkdir($fq, 0777))
 			{
+				classload("core/error");
 				error::raise(array(
 					"id" => "ERR_NO_FOLD",
 					"msg" => sprintf(t("check_pagecache_folders(): could not create folder %s"), $fq)
