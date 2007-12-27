@@ -579,8 +579,8 @@
             <table>objects</table>
             <group>settings_g</group>
             <type>textarea</type>
-            <rows>7</rows>
-            <cols>40</cols>
+            <rows>30</rows>
+            <cols>60</cols>
             <field>meta</field>
             <method>serialize</method>
             <caption>Prioriteedivalem</caption>

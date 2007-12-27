@@ -212,7 +212,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@property bug_only_bt_ppl type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption J&auml;lgijateks ainult valitud inimesed
 
-	@property combined_priority_formula type=textarea rows=7 cols=40 table=objects field=meta method=serialize
+	@property combined_priority_formula type=textarea rows=30 cols=60 table=objects field=meta method=serialize
 	@caption Prioriteedivalem
 	@comment Valem mida kasutatakse kombineeritud prioriteedi arvutamiseks. Formaat: php, tagastatav prioriteet muutujas $p. Muutujad: $sp_lut - staatustele vastavad prioriteedid (default array(BUG_OPEN => 100,BUG_INPROGRESS => 110,BUG_DONE => 70,BUG_TESTED => 60,BUG_CLOSED => 50,BUG_INCORRECT => 40,BUG_NOTREPEATABLE => 40,BUG_NOTFIXABLE => 40,BUG_FATALERROR => 200,BUG_FEEDBACK => 130)), $bs - ylesande staatus, $cp - kliendi prioriteet, $pp - projekti prioriteet, $bp - ylesande prioriteet, $bl - ylesande prognoositud tunde, $bi - ylesande t6sidus, $dd - t2htaeg. N2ide: $p = $cp + $pp + $bp;
 
