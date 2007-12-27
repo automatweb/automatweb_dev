@@ -58,6 +58,15 @@
             <caption>XML-i skeem</caption>
       </property>
       <property>
+            <name>xml_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>XML-i t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>xml_unique</name>
             <table>objects</table>
             <group>general</group>
@@ -124,7 +133,7 @@
                   <caption>XML sisend</caption>
             </XML>
             <SCHEMA>
-                  <value>1</value>
+                  <value>2</value>
                   <clid>CL_FILE</clid>
                   <caption>XML skeem</caption>
             </SCHEMA>

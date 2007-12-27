@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.1 2007/12/21 08:49:17 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.3 2007/12/27 13:03:13 robert Exp $
 // geoinfo_manager.aw - Geoinfo haldus 
 /*
 
@@ -25,6 +25,9 @@
 	@property xml_schema type=relpicker reltype=RELTYPE_SCHEMA field=meta method=serialize store=connect
 	@caption XML-i skeem
 
+	@property xml_type type=chooser field=meta method=serialize
+	@caption XML-i t&uuml;&uuml;p
+
 	@property xml_unique type=select field=meta method=serialize
 	@caption XML-i unikaalne väli
 
@@ -46,7 +49,7 @@
 @reltype XML value=1 clid=CL_FILE
 @caption XML sisend
 
-@reltype SCHEMA value=1 clid=CL_FILE
+@reltype SCHEMA value=2 clid=CL_FILE
 @caption XML skeem
 */
 
@@ -55,7 +58,7 @@ class geoinfo_manager extends class_base
 	function geoinfo_manager()
 	{
 		$this->init(array(
-			"tpldir" => "applications/geoinfo/geoinfo_manager",
+			"tpldir" => "applications/geoinfo",
 			"clid" => CL_GEOINFO_MANAGER
 		));
 	}
@@ -112,12 +115,191 @@ class geoinfo_manager extends class_base
 	}
 
 	/**
+	@attrib name=export all_args=1 nologin=1
+	**/
+	function export_kmz($arr)
+	{
+		$arr["obj_inst"] = obj($arr["id"]);
+		$args["tmp"] = "";
+		$args["sttmp"] = "";
+		$this->read_template('kml.tpl');
+		if(count($arr["sel"]))
+		{
+			foreach($arr["sel"] as $oid)
+			{
+				$args["oid"] = $oid;
+				$args = $this->parse_data_to_kml($args);
+			}
+			
+		}
+		elseif($arr["url"])
+		{
+			$oids = $this->import_from_xml($arr);
+			foreach($oids as $oid)
+			{
+				$args["oid"] = $oid;
+				$args = $this->parse_data_to_kml($args);
+			}
+		}
+		else
+		{
+			die();
+		}
+		extract($args);
+		$this->vars(array(
+			"styles" => $sttmp,
+			"placemarks" => $tmp,
+			"filename" => "data.kmz",
+		));
+		//header('Content-type: application/vnd.google-earth.kml+xml; charset=UTF-8');
+		//header('Content-Disposition: attachment; filename="data.kml"');
+		$fc = iconv(aw_global_get("charset"), "UTF-8", $this->parse());
+		//die($fc);
+		$fld = aw_ini_get("server.tmpdir")."/kmz_".gen_uniq_id();
+		mkdir($fld);
+		$fn = $fld."/data.kml";
+		$f = fopen($fn ,"w");
+		fwrite($f, $fc);
+		fclose($f);	
+		// zip
+		chdir($fld);
+		$cmd = aw_ini_get("server.zip_path")." -r data.kmz *";
+		$res = `$cmd`;
+		$fc = $this->get_file(array("file" => "data.kmz"));
+		// clean up
+		unlink($fn);	
+		unlink("ipt.zip");
+		rmdir($fld);
+		header("Content-type: application/zip");
+		header("Content-Disposition: filename=data.kmz");
+		die($fc);
+	}
+
+	function parse_data_to_kml($arr)
+	{
+		extract($arr);
+		$o = obj($oid);
+		if($obj_oid = $o->prop("obj_oid"))
+		{
+			$prop_list = $o->get_property_list();
+			foreach($prop_list as $prop)
+			{
+				$p = obj($o->parent());
+				if($p->class_id() == CL_GEOINFO_MANAGER && is_oid($obj_oid))
+				{
+					$o2 = obj($obj_oid);
+					$clid = $o2->class_id();
+					$rels = $p->meta("rels");
+
+					if($field = $rels["cl".$clid]["props"][$prop["name"]])
+					{
+						$pr_list = $o2->get_property_list();
+						$ptype = $pr_list[$field]["type"];
+						$objprop = $o2->prop($field);
+						if($ptype == "chooser" || $ptype == "select")
+						{
+							$i = get_instance($o->class_id());
+							$pr = array("name" => $field);
+							$i->get_property(array("request" => array(), "obj_inst" => $o2, "prop" => &$pr));
+							$objprop = $pr["options"][$objprop];
+						}
+						elseif(is_oid($objprop) && !strlen(strpos($ptype,"text")))
+						{
+							$propobj = obj($objprop);
+							$objprop = $propobj->name();
+						}
+						$o->set_prop($prop["name"], $objprop);
+					}
+				}
+			}
+		}
+		$style = false;
+		$i_style = $o->prop("icon_style");
+		$i_color = $o->prop("icon_color");
+		$i_size = $o->prop("icon_size");
+		$l_color = $o->prop("label_color");
+		$l_size = $o->prop("label_size");
+		$i_transp = $o->prop("icon_transp");
+		$l_transp = $o->prop("label_transp");
+		if($i_style || $i_color!="ffffff" || $i_size!="1" || $l_color!="ffffff" || $l_size!="1" || $l_transp != "255" || $i_transp != "255")
+		{
+			if($i_style)
+			{
+				$ii = get_instance(CL_IMAGE);
+				$i_style = $ii->get_url_by_id($i_style);
+			}
+			else
+			{
+				$i_style = "http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png";
+			}
+			$this->vars(array(
+				"icon_url" => $i_style,
+				"icon_color" => $this->colorfix($i_color),
+				"icon_size" => $i_size,
+				"icon_transp" => dechex($i_transp),
+				"label_color" => $this->colorfix($l_color),
+				"label_size" => $l_size,
+				"label_transp" => dechex($l_transp),
+				"id" => "style".$oid
+			));
+			$sttmp .= $this->parse("styles");
+			$style = true;
+		}
+		$this->vars(array(
+			"name" => $o->name(),
+			"coord_x" => $o->prop("coord_x"),
+			"coord_y" => $o->prop("coord_y"),
+			"address" => $o->prop("address"),
+			"desc1" => $o->prop("desc1"),
+			"desc2" => $o->prop("desc2"),
+			"view_range" => strlen($o->prop("view_range"))?$o->prop("view_range"):0,
+			"view_heading" => strlen($o->prop("view_heading"))?$o->prop("view_heading"):0,
+			"view_tilt" => strlen($o->prop("view_tilt"))?$o->prop("view_tilt"):0,
+			"icon_height" => strlen($o->prop("icon_height"))?$o->prop("icon_height"):0,
+		));
+		if($style)
+		{
+			$this->vars(array(
+				"style" => "style".$oid
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"style" => "",
+			));
+		}
+		for($i=1;$i<=10;$i++)
+		{
+			$this->vars(array(
+				"userta".$i => $o->prop("userta".$i),
+				"usertf".$i => $o->prop("usertf".$i),
+			));
+		}
+		$tmp .= $this->parse("placemarks");
+		$arr["tmp"] = $tmp;
+		$arr["sttmp"] = $sttmp;
+		return $arr;
+	}
+
+	function colorfix($c)
+	{
+		$fixed = strtolower(substr($c,4,2).substr($c,2,2).substr($c,0,2));
+		return $fixed;
+	}
+
+	/**
 	@attrib name=import all_args=1
 	**/
 	function import_from_xml($arr)
 	{
 		$arr["obj_inst"] = obj($arr["id"]);
-		if($arr["obj_inst"]->prop("xml_source") == "url")
+		$oids = array();
+		if($arr["url"])
+		{
+			$xmldata = @file_get_contents($arr["url"]);
+		}
+		elseif($fname = $arr["obj_inst"]->prop("xml_source") == "url")
 		{
 			$xmldata = @file_get_contents($fname);
 		}
@@ -132,28 +314,147 @@ class geoinfo_manager extends class_base
 		}
 		if($xmldata)
 		{
+			$xt = $arr["obj_inst"]->prop("xml_type");
 			$x = xml_parser_create();
 			xml_parse_into_struct($x, $xmldata, $vals, $index);
 			xml_parser_free($x);
 			$allvars = array();
 			$rels = $arr["obj_inst"]->meta("rels");
 			$arr["t"] = "xml";
-			$pfv = $this->props_for_var($arr);
+			$curvars = array();
 			foreach($vals as $val)
 			{
-				$curvars = array();
-				if($val["level"] == 2 && $val["complete"] == "complete")
+				if($xt == "tags")
 				{
+					if($val["level"] == 2 && $val["type"] == "complete")
+					{
+						if($tmpvar = $rels["xml"]["fields"][$val["tag"]])
+						{
+							foreach($tmpvar as $tmp)
+							{
+								$allvars[$tmp] = $val["value"];
+							}
+						}
+					}
+					elseif($val["level"] == 3 && $val["type"] == "complete")
+					{
+						if($tmpvar = $rels["xml"]["fields"][$val["tag"]])
+						{
+							foreach($tmpvar as $tmp)
+							{
+								$curvars[$tmp] = $val["value"];
+							}
+						}
+					}
+					elseif($val["level"] == 2 && $val["type"] == "close")
+					{
+						$unique = $arr["obj_inst"]->prop("xml_unique");
+						$uprops = $rels["xml"]["fields"][$unique];
+						$c = 0;
+						foreach($uprops as $uprop)
+						{
+							$ol = new object_list(array(
+								"class_id" => CL_GEOINFO_DATA,
+								$uprop => $curvars[$uprop]
+							));
+							if(count($ol->arr()))
+							{
+								foreach($ol->ids() as $oid)
+								{
+									$oids[$oid] = $oid;
+								}
+								$curvars = array();
+								$c = 1;
+							}
+						}
+						if($c)
+						{
+							continue;
+						}
+						$o = obj();
+						$o->set_class_id(CL_GEOINFO_DATA);
+						$o->set_parent($arr["obj_inst"]->id());
+						foreach($allvars as $avr => $avl)
+						{
+							$o->set_prop($avr, $avl);
+						}
+						foreach($curvars as $cvr => $cvl)
+						{
+							$o->set_prop($cvr, $cvl);
+						}
+						$o->save();
+						$oids[$o->id()] = $o->id();
+						unset($o);
+						$curvars = array();
+					}
+				}
+				else
+				{
+					if($val["level"] == 3 && count($val["attributes"]))
+					{
+						$curvars = array();
+						foreach($val["attributes"] as $attrib => $v)
+						{
+							if($tmpvar = $rels["xml"]["fields"][$attrib])
+							{
+								foreach($tmpvar as $tmp)
+								{
+									$curvars[$tmp] = $v;
+								}
+							}
+						}
+						$unique = $arr["obj_inst"]->prop("xml_unique");
+						$uprops = $rels["xml"]["fields"][$unique];
+						$c = 0;
+						foreach($uprops as $uprop)
+						{
+							$ol = new object_list(array(
+								"class_id" => CL_GEOINFO_DATA,
+								$uprop => $curvars[$uprop]
+							));
+							if(count($ol->arr()))
+							{
+								foreach($ol->ids() as $oid)
+								{
+									$oids[$oid] = $oid;
+								}
+								$curvars = array();
+								$c = 1;
+							}
+						}
+						if($c)
+						{
+							continue;
+						}
+						$o = obj();
+						$o->set_class_id(CL_GEOINFO_DATA);
+						$o->set_parent($arr["obj_inst"]->id());
+						foreach($curvars as $cvr=>$cvl)
+						{
+							$o->set_prop($cvr, $cvl);
+						}
+						$o->save();
+						$oids[$o->id()] = $o->id();
+						unset($o);
+					}
 				}
 			}
 		}
-		return $arr["ru"];
+		if($arr["url"])
+		{
+			return $oids;
+		}
+		else
+		{
+			return $arr["ru"];
+		}
 	}
 
 	function xml_get_fields($arr)
 	{
 		if($fid = $arr["obj_inst"]->prop("xml_schema"))
 		{
+			$xt = $arr["obj_inst"]->prop("xml_type");
 			$fo = obj($fid);
 			$tmp = $this->get_file(array("file" => $fo->prop("file")));
 			if ($tmp !== false)
@@ -166,9 +467,22 @@ class geoinfo_manager extends class_base
 			$fields = array(0=>"");
 			foreach($vals as $val)
 			{
-				if($val["type"] == "complete")
+				if($xt == "tags")
 				{
-					$fields[$val["tag"]] = $val["tag"];
+					if($val["type"] == "complete")
+					{
+						$fields[$val["tag"]] = $val["tag"];
+					}
+				}
+				else
+				{
+					if($val["level"] == 3 && count($val["attributes"]))
+					{
+						foreach($val["attributes"] as $attrib=>$v)
+						{
+							$fields[$attrib] = $attrib;
+						}
+					}
 				}
 			}
 			return $fields;
@@ -191,8 +505,8 @@ class geoinfo_manager extends class_base
 		$tb = &$arr["prop"]["vcl_inst"];
 		$tb->add_button(array(
 			"name" => "submit",
-			"img" => "save.gif",
-			"tooltip" => "Impordi XML-ist",
+			"img" => "nool1.gif",
+			"tooltip" => t("Impordi XML-ist"),
 			"url" => $this->mk_my_orb("import",array(
 				"id" => $arr["obj_inst"]->id(),
 				"ru" => get_ru()
@@ -312,28 +626,37 @@ class geoinfo_manager extends class_base
 		));
 		$tb->add_delete_button();
 		$tb->add_save_button();
+		$tb->add_button(array(
+			"name" => "export",
+			"img" => "nool1.gif",
+			"tooltip" => t("Ekspordi KMZ"),
+			"url" => "#",
+			"onClick" => "document.forms.changeform.action = '".$this->mk_my_orb("export",array(
+				"id" => $arr["obj_inst"]->id(),
+			))."';document.forms.changeform.submit()",
+		));
 	}
 
 	function init_data_mgr_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "coord_x",
-			"caption" => "X koordinaat",
+			"caption" => t("X koordinaat"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "coord_y",
-			"caption" => "Y koordinaat",
+			"caption" => t("Y koordinaat"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "address",
-			"caption" => "Aadress",
+			"caption" => t("Aadress"),
 			"align" => "center",
 		));
 		$t->define_chooser(array(
@@ -341,6 +664,8 @@ class geoinfo_manager extends class_base
 			"name" => "sel"
 		));
 		$t->set_caption(t("Andmeobjektid"));
+		$t->sort_by();
+		$t->set_default_sortby("name");
 	}
 
 	function _get_data_mgr_table($arr)
@@ -413,6 +738,14 @@ class geoinfo_manager extends class_base
 				break;
 			case "xml_unique":
 				$prop["options"] = $this->xml_get_fields($arr);
+				break;
+			case "xml_type":
+				$prop["options"] = array(
+					"tags" => t('V&auml;&auml;rtused on tagides &lt;coord_x&gt;23.409&lt;/coord_x&gt;')."<br />",
+					"props" => t('V&auml;&auml;rtused on omadustes &lt;item coord_x="23.409" /&gt;')
+				);
+				if(!$prop["value"])
+					$prop["value"] = "tags";
 				break;
 		};
 		return $retval;

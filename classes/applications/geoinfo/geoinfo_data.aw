@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_data.aw,v 1.2 2007/12/21 09:26:09 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_data.aw,v 1.3 2007/12/27 13:00:20 robert Exp $
 // geoinfo_data.aw - Geoinfo andmed 
 /*
 
@@ -22,9 +22,6 @@
 
 	@property address type=textbox field=meta method=serialize
 	@caption Aadress
-
-	@property open_show type=chooser field=meta method=serialize
-	@caption N&auml;idatakse avamisel
 
 @default group=usert
 
@@ -98,22 +95,25 @@
 	@property icon_style type=relpicker reltype=RELTYPE_ICON store=connect field=meta method=serialize
 	@caption Ikooni stiil
 	
-	@property icon_color type=colorpicker field=meta method=serialize
+	@property icon_color type=colorpicker field=meta method=serialize default=ffffff
 	@caption Ikooni värv
 
-	@property icon_size type=textbox field=meta method=serialize size=3
-	@caption Ikooni suurus (0-100%)
-	
-	@property icon_transp type=textbox field=meta method=serialize size=3
-	@caption Ikooni l&auml;bipaistvus (0-100%)
+	@property icon_transp type=textbox size=3 field=meta method=serialize default=255
+	@caption Ikooni l&auml;bipaistvus (0-255)
+
+	@property icon_size type=textbox field=meta method=serialize size=3 default=1
+	@caption Ikooni suurus
 
 	@property label_t type=text store=no
 
-	@property label_color type=colorpicker field=meta method=serialize
+	@property label_color type=colorpicker field=meta method=serialize default=ffffff
 	@caption Sildi värv
 
-	@property label_transp type=textbox field=meta method=serialize size=3
-	@caption Sildi l&auml;bipaistvus (0-100%)
+	@property label_transp type=textbox size=3 field=meta method=serialize default=255
+	@caption Sildi l&auml;bipaistvus (0-255)
+
+	@property label_size type=textbox field=meta method=serialize default=1
+	@caption Sildi suurus
 
 @default group=pm_desc
 
@@ -127,18 +127,18 @@
 
 	@property view_t type=text store=no
 
-	@property view_range type=textbox field=meta method=serialize size=3
+	@property view_range type=textbox field=meta method=serialize size=3 default=0
 	@caption Vaataja kaugus maapinnast (m)
 
-	@property view_heading type=textbox field=meta method=serialize size=3
+	@property view_heading type=textbox field=meta method=serialize size=3 default=0
 	@caption Suund (0-360 kraadi)
 
-	@property view_tilt type=textbox field=meta method=serialize size=3
+	@property view_tilt type=textbox field=meta method=serialize size=3 default=0
 	@caption Vaatenurk maapinna suhtes (0-360 kraadi)
 
 	@property height_t type=text store=no
 	
-	@property icon_height type=textbox field=meta method=serialize size=3
+	@property icon_height type=textbox field=meta method=serialize size=3 default=0
 	@caption Ikooni k&otilde;rgus maapinnast (m)
 
 @groupinfo data caption=Andmed parent=general
@@ -170,30 +170,6 @@ class geoinfo_data extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "userta1":
-			case "usertf1":
-			case "userta2":
-			case "usertf2":
-			case "userta3":
-			case "usertf3":
-			case "userta4":
-			case "usertf4":
-			case "userta5":
-			case "usertf5":
-			case "userta6":
-			case "usertf6":
-			case "userta7":
-			case "usertf7":
-			case "userta8":
-			case "usertf8":
-			case "userta9":
-			case "usertf9":
-			case "userta10":
-			case "usertf10":
-				$p = obj($arr["obj_inst"]->parent());
-				if($p->class_id() == CL_GEOINFO_MANAGER && is_oid($arr["obj_inst"]->prop("obj_oid")))
-					$prop["type"] = "text";
-				break;
 			case "icon_t":
 				$prop["value"] = t("Ikoon");
 				break;
@@ -207,6 +183,34 @@ class geoinfo_data extends class_base
 				$prop["value"] = t("Vaade");
 				break;
 		};
+		$p = obj($arr["obj_inst"]->parent());
+		$oid = $arr["obj_inst"]->prop("obj_oid");
+		if($p->class_id() == CL_GEOINFO_MANAGER && is_oid($oid))
+		{
+			$o = obj($oid);
+			$clid = $o->class_id();
+			$rels = $p->meta("rels");
+			if($field = $rels["cl".$clid]["props"][$prop["name"]])
+			{
+				$prop_list = $o->get_property_list();
+				$ptype = $prop_list[$field]["type"];
+				$objprop = $o->prop($field);
+				if($ptype == "chooser" || $ptype == "select")
+				{
+					$i = get_instance($o->class_id());
+					$pr = array("name" => $field);
+					$i->get_property(array("request" => array(), "obj_inst" => $o, "prop" => &$pr));
+					$objprop = $pr["options"][$objprop];
+				}
+				elseif(is_oid($objprop) && !strlen(strpos($ptype,"text")))
+				{
+					$propobj = obj($objprop);
+					$objprop = $propobj->name();
+				}
+				$prop["value"] = $objprop;
+				$prop["type"] = "text";
+			}
+		}
 		return $retval;
 	}
 
