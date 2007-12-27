@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.3 2007/12/27 13:03:13 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.2 2007/12/27 13:00:20 robert Exp $
 // geoinfo_manager.aw - Geoinfo haldus 
 /*
 
@@ -506,7 +506,7 @@ class geoinfo_manager extends class_base
 		$tb->add_button(array(
 			"name" => "submit",
 			"img" => "nool1.gif",
-			"tooltip" => t("Impordi XML-ist"),
+			"tooltip" => "Impordi XML-ist",
 			"url" => $this->mk_my_orb("import",array(
 				"id" => $arr["obj_inst"]->id(),
 				"ru" => get_ru()
@@ -629,7 +629,7 @@ class geoinfo_manager extends class_base
 		$tb->add_button(array(
 			"name" => "export",
 			"img" => "nool1.gif",
-			"tooltip" => t("Ekspordi KMZ"),
+			"tooltip" => "Ekspordi KMZ",
 			"url" => "#",
 			"onClick" => "document.forms.changeform.action = '".$this->mk_my_orb("export",array(
 				"id" => $arr["obj_inst"]->id(),
