@@ -429,6 +429,7 @@
       <classinfo>
             <syslog_type>ST_MESSENGER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>tarvo</maintainer>
       </classinfo>
       <groupinfo>
             <main_view>

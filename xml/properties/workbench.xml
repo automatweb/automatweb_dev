@@ -12,7 +12,7 @@
       <classinfo>
             <syslog_type>ST_WORKBENCH</syslog_type>
             <relationmgr>yes</relationmgr>
-            <mantainer>kristo</mantainer>
+            <maintainer>kristo</maintainer>
       </classinfo>
 </properties>
 

@@ -204,6 +204,7 @@
             <no_status>1</no_status>
             <syslog_type>ST_MAIL_MESSAGE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <general>

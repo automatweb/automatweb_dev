@@ -58,6 +58,7 @@
                   <index>aw_oid</index>
                   <master_index>brother_of</master_index>
                   <master_table>objects</master_table>
+                  <maintainer>markop</maintainer>
             </aw_crm_bank_account>
       </tableinfo>
       <reltypes>

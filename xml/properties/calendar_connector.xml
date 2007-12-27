@@ -72,6 +72,9 @@
             <field>sbt</field>
             <caption>Loo s&amp;uuml;ndmus</caption>
       </property>
+      <classinfo>
+            <maintainer>tarvo</maintainer>
+      </classinfo>
       <forminfo>
             <connector>
                   <onsubmit>process_message</onsubmit>

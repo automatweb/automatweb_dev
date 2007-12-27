@@ -132,6 +132,7 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <view>

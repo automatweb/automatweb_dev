@@ -41,6 +41,7 @@
       <classinfo>
             <no_status>1</no_status>
             <syslog_type>ST_DATASOURCE</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
 </properties>
 

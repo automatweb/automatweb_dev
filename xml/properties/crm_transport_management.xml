@@ -360,6 +360,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
+            <maintainer>dragut</maintainer>
       </classinfo>
       <groupinfo>
             <orders>

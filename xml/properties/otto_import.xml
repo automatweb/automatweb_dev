@@ -537,6 +537,7 @@
             <no_status>1</no_status>
             <no_comment>1</no_comment>
             <prop_cb>1</prop_cb>
+            <maintainer>dragut</maintainer>
       </classinfo>
       <groupinfo>
             <imported_products>

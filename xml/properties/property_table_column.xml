@@ -61,6 +61,7 @@
       <classinfo>
             <syslog_type>ST_PROPERTY_TABLE_COLUMN</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <PARENT>

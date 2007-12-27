@@ -179,6 +179,9 @@
             <type>hidden</type>
             <caption>Pildi id</caption>
       </property>
+      <classinfo>
+            <maintainer>kristo</maintainer>
+      </classinfo>
       <forminfo>
             <rate>
                   <onload>init_rate</onload>

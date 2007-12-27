@@ -53,7 +53,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
-            <mantainer>kristo</mantainer>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <SERVER_LOGIN>

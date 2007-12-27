@@ -33,7 +33,7 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_SCHEDULER_OBJ</syslog_type>
-            <mantainer>kristo</mantainer>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <recurrence>

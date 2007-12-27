@@ -131,6 +131,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_RECYCLE_BIN</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <recycle>

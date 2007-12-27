@@ -42,6 +42,7 @@
       <classinfo>
             <syslog_type>ST_MESSAGE_TEMPLATE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>markop</maintainer>
             <no_comment>1</no_comment>
       </classinfo>
 </properties>

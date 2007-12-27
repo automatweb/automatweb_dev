@@ -22,7 +22,7 @@
       <classinfo>
             <syslog_type>ST_CONFIG_LOGIN_MENUS</syslog_type>
             <relationmgr>yes</relationmgr>
-            <mantainer>kristo</mantainer>
+            <maintainer>kristo</maintainer>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>

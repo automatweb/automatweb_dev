@@ -219,11 +219,6 @@
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
-            <options>
-                  <num_0>show</num_0>
-                  <num_1>show_search</num_1>
-            </options>
-            <default>show</default>
             <caption>Layout</caption>
       </property>
       <property>

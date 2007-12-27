@@ -411,6 +411,7 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_PLANNER</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <general>

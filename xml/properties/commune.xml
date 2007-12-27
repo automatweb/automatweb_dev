@@ -746,6 +746,7 @@
             <syslog_type>ST_COMMUNE</syslog_type>
             <relationmgr>yes</relationmgr>
             <layout>boxed</layout>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <me>

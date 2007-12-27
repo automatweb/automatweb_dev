@@ -67,6 +67,7 @@
                   <index>aw_oid</index>
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
+                  <maintainer>markop</maintainer>
             </aw_authorizations>
       </tableinfo>
       <reltypes>

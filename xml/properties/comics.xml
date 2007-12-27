@@ -103,6 +103,7 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <r2>yes</r2>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <calendars>

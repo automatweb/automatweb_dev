@@ -299,6 +299,7 @@
             <no_status>1</no_status>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_GRAPH</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <data>

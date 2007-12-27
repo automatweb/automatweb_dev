@@ -69,14 +69,14 @@
             <caption>N&amp;auml;ita ainult s&amp;uuml;ndmustega p&amp;auml;evi</caption>
       </property>
       <property>
-	      <name>sort_day_events_before</name>
-	      <table>objects</table>
-	      <group>general</group>
-	      <field>meta</field>
-	      <method>serialize</method>
-	      <type>checkbox</type>
-	      <ch_value>1</ch_value>
-	      <caption>Sorteeri &amp;amp;uuml;he p&amp;amp;auml;evased ettepoole</caption>
+            <name>sort_day_events_before</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Sorteeri &amp;amp;uuml;he p&amp;amp;auml;evased ettepoole</caption>
       </property>
       <property>
             <name>show_event_content</name>
@@ -116,7 +116,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;quot;Eelmine&amp;quot;-&amp;quot;J&amp;auml;rgmine&amp;quot; lingid viivad s&amp;uuml;ndmusega p&amp;auml;evale</caption>
+            <caption>&amp;quot;Eelmine&amp;quot;-&amp;quot;J&amp;amp;auml;rgmine&amp;quot; lingid viivad s&amp;uuml;ndmusega p&amp;auml;evale</caption>
       </property>
       <property>
             <name>minical_day_with_events</name>
@@ -126,7 +126,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>S&amp;uuml;ndmustega p&amp;auml;ev</caption>
+            <caption>S&amp;amp;uuml;ndmustega p&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_without_events</name>
@@ -136,7 +136,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Ilma s&amp;uuml;ndmusteta p&amp;auml;ev</caption>
+            <caption>Ilma s&amp;uuml;ndmusteta p&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_today</name>
@@ -146,7 +146,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>T&amp;auml;nane p&amp;auml;ev</caption>
+            <caption>T&amp;amp;auml;nane p&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_active</name>
@@ -156,7 +156,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Aktiivne p&amp;auml;ev</caption>
+            <caption>Aktiivne p&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_deactive</name>
@@ -166,7 +166,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Deaktiivne p&amp;auml;ev</caption>
+            <caption>Deaktiivne p&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_title</name>

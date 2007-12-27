@@ -218,9 +218,10 @@
       <property>
             <name>ufupload1</name>
             <group>general</group>
-            <table>planner</table>
+            <table>objects</table>
             <type>fileupload</type>
-            <field>ufupload1</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Faili upload 1</caption>
       </property>
       <property>
@@ -335,15 +336,6 @@
             <caption>Toimumisaegade tabel</caption>
       </property>
       <property>
-            <name>ufupload1</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>fileupload</type>
-            <field>meta</field>
-	<method>serialize</method>
-            <caption>Faili upload 1</caption>
-      </property>
-      <property>
             <name>aliasmgr</name>
             <group>general</group>
             <table>planner</table>
@@ -409,7 +401,7 @@
       <classinfo>
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
-            <mantainer>kristo</mantainer>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <projects>
