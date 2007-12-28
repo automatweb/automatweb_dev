@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.246 2007/11/16 09:31:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.247 2007/12/28 12:55:41 kristo Exp $
 // defs.aw - common functions
 if (!defined("DEFS"))
 {
@@ -471,6 +471,7 @@ if (!defined("DEFS"))
 		{
 			$url = substr($url, 0, strlen($url)-1);
 		}
+		$url = str_replace("?&", "?", $url);
 		return $url;
 	}
 
