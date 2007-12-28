@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.31 2007/12/28 11:46:04 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.32 2007/12/28 13:21:59 kaarel Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -1043,6 +1043,19 @@ die($fdat);
 
 			$person_obj->save();
 
+			/*
+			// I accidentally generated quite a few of aliases. Need to get rid of 'em.
+			$conns_alias = $person_obj->connections_from(array());
+			foreach($conns_alias as $conn_alias)
+			{
+				$conn_alias_arr = $conn_alias->conn;
+				if($conn_alias_arr["to.class_id"] == 487 && $conn_alias_arr["reltype"] != 23)
+				{
+					$conn_alias->delete(true);
+				}
+			}
+			/**/
+
 			if(!empty($worker["AMETIKOHT_NIMETUS"]))
 			{
 				$ametikoht_nimetus = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKOHT_NIMETUS"]);
@@ -1290,7 +1303,7 @@ die($fdat);
 
 				if(is_oid($sections[$worker["YKSUS_ID"]]))
 				{
-					print "connecting to section<br>";
+					print "connecting to section ".$worker["YKSUS"]." (using ID) - ".$sections[$worker["YKSUS_ID"]]."<br>";
 					$person_obj->connect(array(
 						"to" => $sections[$worker["YKSUS_ID"]],
 						"reltype" => 21, //RELTYPE_SECTION,
@@ -1301,13 +1314,13 @@ die($fdat);
 				}
 				elseif(is_oid($sections_byname[$worker["YKSUS"]]))
 				{
-					print "connectiong to section<br>";
+					print "connecting to section ".$worker["YKSUS"]." (using name) - ".$sections_byname[$worker["YKSUS"]]."<br>";
 					$person_obj->connect(array(
 						"to" => $sections_byname[$worker["YKSUS"]],
 						"reltype" => 21, //RELTYPE_SECTION,
 					));
 
-					$person_obj->set_prop("org_section", $sections[$worker["YKSUS"]]);
+					$person_obj->set_prop("org_section", $sections_byname[$worker["YKSUS"]]);
 					print "sect connect done<br>";
 				}
 				else
@@ -1326,7 +1339,7 @@ die($fdat);
 					$sections[$worker["YKSUS_ID"]] = $ykid;
 					$sections_byname[$worker["YKSUS"]] = $ykid;
 
-					print "connectiong to section<br>";
+					print "connectiong to section ".$worker["YKSUS"]."<br>";
 					$person_obj->connect(array(
 						"to" => $ykid,
 						"reltype" => 21, //RELTYPE_SECTION,
@@ -1726,10 +1739,19 @@ die($fdat);
 				$education->save();
 
 				print "connecting ".$t->name()." to new education object ".$oppeasutus."<br>";
+				/*
 				$t->connect(array(
 					"to" => $education->id(),
 					"reltype" => 23,		//RELTYPE_EDUCATION
 				));
+				*/
+				$c = new connection();
+				$c->change(array(
+					"from" => $t->id(),
+					"to" => $education->id(),
+					"reltype" => 23,		//RELTYPE_EDUCATION
+				));
+				$haridus_conns[$t->id()][$c->prop("id")] = 2;
 			}
 		}
 
