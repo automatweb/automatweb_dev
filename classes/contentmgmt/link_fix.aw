@@ -11,8 +11,8 @@ class link_fix extends _int_object
 		if($var == "url")
 		{
 			$this->url = $url;
-			parent::set_prop($var, $val);
 		}
+		return parent::set_prop($var, $val);
 	}
 
 	function save()
