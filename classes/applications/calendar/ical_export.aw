@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.4 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.5 2007/12/28 19:05:45 hannes Exp $
 // ical_export.aw - Sündmuste eksport (iCal) 
 /*
 
@@ -47,6 +47,7 @@ class ical_export extends class_base
 	**/
 	function export($arr)
 	{
+		aw_disable_acl();
 		if(is_oid($arr["id"]))
 		{
 			$obj = obj($arr["id"]);
@@ -174,6 +175,7 @@ class ical_export extends class_base
 
 	function get_property($arr)
 	{
+		$obj = $arr["obj_inst"];
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -191,10 +193,10 @@ class ical_export extends class_base
 			case "url":
 				$url = $this->mk_my_orb("export", array(
 					"id" => $arr["obj_inst"]->id(),
-					"start"=>0,
-					"end"=>0
+					"start" => $obj->prop("startdate"), 
+					"end"=> $obj->prop("enddate"),
 				));
-				$url = str_replace("automatweb/", "", $url);
+				$url = str_replace(array ("automatweb/", "?", "&"), array("", "/", "/"), $url)."/export.ics";
 				$prop["value"] = html::href(array(
 					"url" => $url,
 					"caption" => $url
