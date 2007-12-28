@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.29 2007/12/18 14:20:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.30 2007/12/28 11:23:58 kaarel Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -105,14 +105,14 @@ class persona_import extends class_base
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("show_xml",array("id" => 
 						$arr["obj_inst"]->id())),
-					"caption" => t("Näita XMLi"),
+					"caption" => t("N&auml;ita XMLi"),
 				));
 				break;
 
 			case "invk":
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("invoke",array("id" => $arr["obj_inst"]->id())),
-					"caption" => t("Käivita import"),
+					"caption" => t("K&auml;ivita import"),
 				));
 				// now check whether we have a half completed status file
 				$status_file_content = $this->get_file(array(
@@ -136,7 +136,7 @@ class persona_import extends class_base
 						"url" => $this->mk_my_orb("invoke",array(
 							"id" => $arr["obj_inst"]->id(),
 						)),
-						"caption" => t("Jätka poolikut importi") . $capt,
+						"caption" => t("J&auml;tka poolikut importi") . $capt,
 					));
 				};
 				$prop["value"] .= " | ";
@@ -203,13 +203,16 @@ class persona_import extends class_base
 		$import_id = $obj->prop("xml_link");
 		if(!!$this->can("view" , $import_id))
 		{
+die("a");
 			$config = $this->get_config($arr);
 		}
 
 		$c = get_instance(CL_FTP_LOGIN);
+die(dbg::dump($config["ftp"]));
 		$c->connect($config["ftp"]);
-		$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
+		$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_work_relations_ending_file");
 		$fdat = $c->get_file($fqfn);
+die($fdat);
 		$c->disconnect();
 		header("Content-type: text/xml");
 		print $fdat;
@@ -252,7 +255,7 @@ class persona_import extends class_base
 
 		if (!is_oid($crm_db_id))
 		{
-			die(t("Nii ei saa ju rallit sõita!"));
+			die(t("Nii ei saa ju rallit s&otilde;ita!"));
 		};
 
 		$crm_db = new object($crm_db_id);
@@ -367,18 +370,19 @@ class persona_import extends class_base
 			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_education_file");
 			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
 			print "<h5>" . $fqfn . "</h5>";
-	
+//	die("<pre>".htmlentities($c->get_file($fqfn)));
 			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_work_relations_ending_file");
 			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
 			print "<h5>" . $fqfn . "</h5>";
 
+//die("<pre>".htmlspecialchars($c->get_file($fqfn)));
 			// THESE SHOULD BE DONE WITH preg_replace()
 
 			$fdat .= "</XML_DATA>\n";
 
 			$c->disconnect();
 		}
-
+//die("a");
 		if (strlen($fdat) <= 62)
 		{
 			die(t("Not enough data to process<br>"));
@@ -523,11 +527,19 @@ class persona_import extends class_base
 			"parent" => $folder_person,
 			"class_id" => CL_CRM_PERSON,
 			"site_id" => array(),
-			"lang_id" => array(),
+//			"lang_id" => array(),
 		));
 		
 		foreach($person_list->arr() as $person_obj)
 		{
+			/*
+			print "ID = ".$person_obj->id()."<br>";
+			print "ext_id = ".$person_obj->prop("ext_id")."<br>";
+			print "ext_id_alphanumeric = ".$person_obj->prop("ext_id_alphanumeric")."<br>";
+			print "subclass = ".$person_obj->subclass()."<br>";
+			arr($person_match);
+			print "<br>";
+			*/
 			$ext_id = $person_obj->prop("ext_id");
 			/*if ($person_obj->id() == 196855)
 			{
@@ -546,20 +558,32 @@ class persona_import extends class_base
 			arr($person_obj->properties());
 			*/
 
-			if ($ext_id)
-			{
-				$person_match[$ext_id] = $person_obj->id();
-				$person_match_[$ext_id] = $person_obj->id();
-			};
 			// After updating the import, we save the TOOTAJA_ID into ext_id_alphanumeric.
-			$ext_id = $person_obj->prop("ext_id_alphanumeric");
+			if (!$ext_id)
+			{
+				$ext_id = $person_obj->prop("ext_id_alphanumeric");
+			}
+
 			if ($ext_id)
 			{
 				if(is_oid($person_match[$ext_id]) && $person_match[$ext_id] != $person_obj->id())
-				{
+				{					
 					// If we have multiple objects with the same external ID, we delete 'em. Only need one.
-					print "worker object with external id (TOOTAJA_ID) ".$ext_id." already exists. deleting object with id ".$person_obj->id()."<br>";
-					$person_obj->delete(true);
+					// We keep the object with the smaller ID.
+					if($person_match[$ext_id] > $person_obj->id())
+					{
+						$doomed_person_obj = obj($person_match[$ext_id]);
+						$person_match[$ext_id] = $person_obj->id();
+						$person_match_[$ext_id] = $person_obj->id();
+
+						print "worker object with external id (TOOTAJA_ID) ".$ext_id." already exists. deleting object with id ".$doomed_person_obj->id()."<br>";
+						$doomed_person_obj->delete(true);
+					}
+					else
+					{
+						print "worker object with external id (TOOTAJA_ID) ".$ext_id." already exists. deleting object with id ".$person_obj->id()."<br>";
+						$person_obj->delete(true);
+					}
 				}
 				else
 				{
@@ -573,7 +597,7 @@ class persona_import extends class_base
 		$addr_list = new object_list(array(
 			"class_id" => CL_CRM_ADDRESS,
 			"site_id" => array(),
-			"lang_id" => array()
+//			"lang_id" => array()
 		));
 
 		$addr = $addr_list->names();
@@ -599,7 +623,7 @@ class persona_import extends class_base
 			"class_id" => CL_CRM_PHONE,
 			"parent" => $dir_default,
 			"site_id" => array(),
-			"lang_id" => array()
+//			"lang_id" => array()
 		));
 
 		$phones = array_flip($phone_list->names());
@@ -641,7 +665,7 @@ class persona_import extends class_base
 				"class_id" => $sdata["clid"],
 				"parent" => $dir_default,
 				"site_id" => array(),
-				"lang_id" => array()
+//				"lang_id" => array()
 			));
 			$simple_data[$key] = array_flip($olist->names());
 
@@ -672,10 +696,12 @@ class persona_import extends class_base
 		));
 
 		$sections = array();
+		$sections_byname = array();
 		foreach($seco->arr() as $sec_obj)
 		{
 			//$sections[$sec_obj->prop("ext_id")] = $sec_obj->id();
 			$sections[$sec_obj->subclass()] = $sec_obj->id();
+			$sections_byname[$sec_obj->name()] = $sec_obj->id();
 		};
 
 		//arr($data["YKSUSED"]);
@@ -867,42 +893,6 @@ class persona_import extends class_base
 			// ametikoht_nimetus
 			// eriala - aga see käib vist haridusega kokku?
 
-			if (!empty($worker["YKSUS_ID"]) && $sections[$worker["YKSUS_ID"]])
-			{
-				print "connectiong to section<br>";
-				$person_obj->connect(array(
-					"to" => $sections[$worker["YKSUS_ID"]],
-					"reltype" => 21, //RELTYPE_SECTION,
-				));
-
-				$person_obj->set_prop("org_section",$sections[$worker["YKSUS_ID"]]);
-				print "sect connect done<br>";
-			}
-			else
-			if (!empty($worker["YKSUS_ID"]) && !$sections[$worker["YKSUS_ID"]])
-			{
-				// create yksus
-				$yk = new object();
-				$yk->set_parent($dir_default);
-				$yk->set_class_id(CL_CRM_SECTION);
-				$yk->set_prop("ext_id",$worker["YKSUS_ID"]);
-				$yk->set_subclass($worker["YKSUS_ID"]);
-				$yk->set_name(iconv("UTF-8", "ISO-8859-4",$worker["YKSUS"]));
-				$yk->save();
-
-				$ykid = $yk->id();
-				$sections[$worker["YKSUS_ID"]] = $ykid;
-
-				$person_obj->connect(array(
-					"to" => $ykid,
-					"reltype" => 21, //RELTYPE_SECTION,
-				));
-
-				$person_obj->set_prop("org_section",$ykid);
-				print "sect connect done<br>";
-			}
-
-
  			if (!empty($worker["E_POST"]))
 			{
 				// I need to replace e-mail address, not create a new one
@@ -1085,11 +1075,13 @@ class persona_import extends class_base
 						$company_obj->set_prop("name", $asutus);
 						$company_obj->save();
 					}
+					/*
 					print "connecting section ".iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"])." to company object ".$asutus."<br>";
 					$company_obj->connect(array(
 						"to" => $sections[$worker["YKSUS_ID"]],
 						"reltype" => "RELTYPE_SECTION",
 					));
+					/**/
 					$company_id = $company_obj->id();
 				}
 
@@ -1255,25 +1247,144 @@ class persona_import extends class_base
 				}
 			}
 
-			if(!empty($worker["AMETIKIRJELDUS_VIIT"]))
+			unset($ylem_ykid);
+			if(!empty($worker["ALLASUTUS"]))
 			{
-				$ametikirjeldus_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKIRJELDUS_VIIT"]);
-				/*
-				print "setting 'Viit ametijuhendile' property for work relation object ".$prevjob->name()."<br>";
+				$worker["ALLASUTUS"] = iconv("UTF-8", "ISO-8859-4", $worker["ALLASUTUS"]);
+
+				if(is_oid($sections_byname[$worker["ALLASUTUS"]]))
+				{
+					print "using existing section ".$worker["ALLASUTUS"]."<br>";
+					$ylem_yksus = new object($sections_byname[$worker["ALLASUTUS"]]);
+					$ylem_ykid = $sections_byname[$worker["ALLASUTUS"]];
+				}
+				else
+				{
+					print "creating new section ".$worker["ALLASUTUS"]."<br>";
+					$ylem_yksus = new object;
+					$ylem_yksus->set_class_id(CL_CRM_SECTION);
+					$ylem_yksus->set_parent($dir_default);
+					$ylem_yksus->set_name($worker["ALLASUTUS"]);
+					$ylem_yksus->save();
+					$ylem_ykid = $ylem_yksus->id();
+					$sections_byname[$worker["ALLASUTUS"]] = $ylem_ykid;
+				}
+				$company_obj->connect(array(
+					"to" => $ylem_ykid,
+					"reltype" => 28, //RELTYPE_SECTION,
+				));
+				print "connected section ".$worker["ALLASUTUS"]." to company ".$worker["ASUTUS"]."<br>";
+				if($worker["ALLASUTUS"] == iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"]))
+				{
+					$ylem_yksus->set_prop("ext_id",$worker["YKSUS_ID"]);
+					$ylem_yksus->set_subclass($worker["YKSUS_ID"]);
+					$ylem_yksus->save();
+					$sections[$worker["YKSUS_ID"]] = $ylem_ykid;
+				}
+			}
+
+			if (!empty($worker["YKSUS_ID"]))
+			{
+				$worker["YKSUS"] = iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"]);
+
+				if(is_oid($sections[$worker["YKSUS_ID"]]))
+				{
+					print "connecting to section<br>";
+					$person_obj->connect(array(
+						"to" => $sections[$worker["YKSUS_ID"]],
+						"reltype" => 21, //RELTYPE_SECTION,
+					));
+
+					$person_obj->set_prop("org_section",$sections[$worker["YKSUS_ID"]]);
+					print "sect connect done<br>";
+				}
+				elseif(is_oid($sections_byname[$worker["YKSUS"]]))
+				{
+					print "connectiong to section<br>";
+					$person_obj->connect(array(
+						"to" => $sections_byname[$worker["YKSUS"]],
+						"reltype" => 21, //RELTYPE_SECTION,
+					));
+
+					$person_obj->set_prop("org_section",$sections[$worker["YKSUS_ID"]]);
+					print "sect connect done<br>";
+				}
+				else
+				{					
+					// create yksus
+					print "creating new section ".$worker["YKSUS"]."<br>";
+					$yk = new object();
+					$yk->set_parent($dir_default);
+					$yk->set_class_id(CL_CRM_SECTION);
+					$yk->set_prop("ext_id", $worker["YKSUS_ID"]);
+					$yk->set_subclass($worker["YKSUS_ID"]);
+					$yk->set_name($worker["YKSUS"]);
+					$yk->save();
+
+					$ykid = $yk->id();
+					$sections[$worker["YKSUS_ID"]] = $ykid;
+					$sections_byname[$worker["YKSUS"]] = $ykid;
+
+					print "connectiong to section<br>";
+					$person_obj->connect(array(
+						"to" => $ykid,
+						"reltype" => 21, //RELTYPE_SECTION,
+					));
+
+					$person_obj->set_prop("org_section",$ykid);
+					print "sect connect done<br>";
+				}
+				if($worker["YKSUS"] != iconv("UTF-8", "ISO-8859-4", $worker["ALLASUTUS"]) && isset($ylem_ykid) && !empty($worker["YKSUS_ID"]))
+				{
+					if($this->can("view", $sections[$worker["YKSUS_ID"]]) && $ylem_yksus->id() != $sections[$worker["YKSUS_ID"]])
+					{
+						$ylem_yksus->connect(array(
+							"to" => $sections[$worker["YKSUS_ID"]],
+							"reltype" => 1,		//RELTYPE_SECTION
+						));
+					}
+					$doomed_conns = $ylem_yksus->connections_from(array(
+						"type" => "RELTYPE_SECTION",
+					));
+					foreach($doomed_conns as $doomed_conn)
+					{
+						$doomed_conn_to = $doomed_conn->to();
+						if($doomed_conn_to->id() == $ylem_yksus->id())
+						{
+							$doomed_conn->delete(true);						
+						}
+					}
+					$doomed_conns = $company_obj->connections_from(array(
+						"type" => "RELTYPE_SECTION",
+					));
+					foreach($doomed_conns as $doomed_conn)
+					{
+						$doomed_conn_to = $doomed_conn->to();
+						if($doomed_conn_to->id() == $sections[$worker["YKSUS_ID"]])
+						{
+							$doomed_conn->delete(true);						
+						}
+					}
+					print "section ".$worker["YKSUS"]." connected to parent section ".$worker["ALLASUTUS"]."<br>";
+				}
+			}
+
+			$ametikirjeldus_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKIRJELDUS_VIIT"]);
+			print "setting 'Viit ametijuhendile' property for crm_profession object ".$ametikoht_nimetus."<br>";
+			$rank->set_prop("directive_link", $ametikirjeldus_viit);
+			$rank->save();
+			/*
+			print "setting 'Viit ametijuhendile' property for work relation object ".$prevjob->name()."<br>";
 //				$ametijuhend_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIJUHEND_VIIT"]);
 //				$prevjob->set_prop("directive_link", $ametijuhend_viit);
-				$prevjob->set_prop("directive_link", $ametikirjeldus_viit);
-				$prevjob->save();
-				*/
-				print "setting 'Viit ametijuhendile' property for crm_profession object ".$ametikoht_nimetus."<br>";
-				$rank->set_prop("directive_link", $ametikirjeldus_viit);
-				$rank->save();
-			}
+			$prevjob->set_prop("directive_link", $ametikirjeldus_viit);
+			$prevjob->save();
+			*/
 
 			// let us keep track of all existing workers, so I can properly assign vacations and contract_stops
 			$persons[$ext_id] = $person_obj->id();
 
-			print "person done<br>";
+			print "person done<br><br>";
 			flush();
 
 			//arr($worker);
@@ -1523,7 +1634,7 @@ class persona_import extends class_base
 			"teadustekandidaat" => "Teaduste kandidaat",
 		);
 		$degree = array_flip($degree);
-
+	
 		foreach($data["HARIDUSKAIGUD"] as $hariduskaik)
 		{
 			$hariduskaik["AKADEEMILINE_KRAAD"] = iconv("UTF-8", "ISO-8859-4", $hariduskaik["AKADEEMILINE_KRAAD"]);
@@ -1549,33 +1660,36 @@ class persona_import extends class_base
 			$edu_done = false;
 			foreach($t->connections_from(array("type" => "RELTYPE_EDUCATION")) as $edu_conn)
 			{
+				if($haridus_conns[$t->id()][$edu_conn->id()] != 2 || !isset($haridus_conns[$t->id()][$edu_conn->id()]))
+				{
+					$haridus_conns[$t->id()][$edu_conn->id()] = 1;
+				}
 				$education = $edu_conn->to();
 				$end_date = $education->prop("end_date");
 				
-				if($education->prop("name") == $oppeasutus && $education->prop("speciality") == $hariduskaik["ERIALA"] && (empty($end_date) || $education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
+				if($education->prop("name") == $oppeasutus && $education->prop("speciality") == iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"]) && (empty($end_date) || //$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
+				$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KUUPAEV"])))
 				{
+					$haridus_conns[$t->id()][$edu_conn->id()] = 2;
 					print "connected to existing education object ".$education->name()."<br>";					
-					$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
-					$education->set_prop("diploma_nr", $hariduskaik["DIPLOMI_NUMBER"]);
+					$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);					
+					$education->set_prop("in_progress", $hariduskaik["ON_OPILANE"]);
+					$education->set_prop("diploma_nr", $hariduskaik["DIPLOM_NUMBER"]);
 					// Põhiharidus might cause some drama. We wanna avoid that.
 					$education->set_prop("degree", $degree[str_replace("õ", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
 					$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
-					if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
+//					if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
+					if(!empty($hariduskaik["DIPLOM_KUUPAEV"]))
 					{
-						$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+//						$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+						$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KUUPAEV"]));
 						// Do ya think I should import the same value here as well?
-	//					$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+//						$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
 					}
 					$education->save();
 
 					$edu_done = true;
-					break;
-				}
-				else
-				{
-					// delete I guess
-					echo "DELETE existing education ".$education->id()." <br>";
-					$education->delete();
+//					break;
 				}
 			}
 			
@@ -1586,15 +1700,18 @@ class persona_import extends class_base
 				$education->set_class_id(CL_CRM_PERSON_EDUCATION);
 				$education->set_parent($dir_default);
 				$education->set_prop("name", $oppeasutus);
-				$education->set_prop("speciality", $hariduskaik["ERIALA"]);
+				$education->set_prop("speciality", iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"]));
 				$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
-				$education->set_prop("diploma_nr", $hariduskaik["DIPLOMI_NUMBER"]);
+				$education->set_prop("in_progress", $hariduskaik["ON_OPILANE"]);
+				$education->set_prop("diploma_nr", $hariduskaik["DIPLOM_NUMBER"]);
 				// Põhiharidus might cause some drama. We wanna avoid that.
 				$education->set_prop("degree", $degree[str_replace("õ", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
-				$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
-				if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
+				$education->set_prop("obtain_language", iconv("UTF-8", "ISO-8859-4", $hariduskaik["KEEL"]));
+//				if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
+				if(!empty($hariduskaik["DIPLOM_KUUPAEV"]))
 				{
-					$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+//					$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
+					$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KUUPAEV"]));
 					// Do ya think I should import the same value here as well?
 //					$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
 				}
@@ -1605,6 +1722,23 @@ class persona_import extends class_base
 					"to" => $education->id(),
 					"reltype" => 23,		//RELTYPE_EDUCATION
 				));
+			}
+		}
+
+		print "<br>deleting non-existing connections<br>";
+		flush();
+
+		foreach($haridus_conns as $hc_t => $hc_a)
+		{
+			foreach($hc_a as $hc_id => $hc_val)
+			{
+				if($hc_val == 1)
+				{
+					print "TOOTAJA_ID: ".$hc_t."<br>";
+					print "CONNECTION: ".$hc_id."<br>";
+					$hc_doomed_conn = new connection($hc_id);
+					$hc_doomed_conn->delete(true);
+				}
 			}
 		}
 
