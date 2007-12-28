@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.9 2007/12/06 14:32:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.10 2007/12/28 11:55:55 robert Exp $
 // bugtrack_display.aw - Ülesannete kuvamine 
 /*
 
@@ -233,6 +233,22 @@ class bugtrack_display extends class_base
 							$value = "Arendustellimus";
 						}
 					}
+					if($field["orderprop"]=="bug_type")
+					{
+						if(is_oid($value))
+						{
+							$o = obj($value);
+							$value = $o->name();
+						}
+					}
+					if($field["orderprop"]=="bug_app")
+					{
+						if(is_oid($value))
+						{
+							$o = obj($value);
+							$value = $o->name();
+						}
+					}
 					if($field["orderprop"] == "createdby")
 					{
 						$u = get_instance(CL_USER);
@@ -267,25 +283,37 @@ class bugtrack_display extends class_base
 
 		$this->_define_table_from_settings($data, $t);		
 
-		$cur = get_current_person();
-		$cur_u = get_current_user();
+		$u = get_instance(CL_USER);
+		$cur_p = get_current_person();
+		$uo = obj($u->get_current_user());
+		$cur_u = $uo->name();
+		$cur = array($cur_p->id() => $cur_p->id());
+		if($arr["request"]["sect_filter"]!="me")
+		{
+			$filt = array(
+				"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"who" => $cur,
+						"monitors" => $cur,
+						"orderer" => $cur,
+						"bug_feedback_p" => $cur,
+						"createdby" => $cur_u
+					)
+				)),
+				"orderer_unit" => ($arr["request"]["sect_filter"]) ? $arr["request"]["sect_filter"] : array()
 	
-			
-
-		$ol = new object_list(array(
-			"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"who" => $cur,
-					"monitors" => $cur,
-					"orderer" => $cur,
-					"bug_feedback_p" => $cur,
-					"createdby" => $cur_u
-				)
-			)),
-			"orderer_unit" => $arr["request"]["_sect_filter"] ? $arr["request"]["_sect_filter"] : array()
-		));
+			);
+		}
+		else
+		{
+			$filt = array(
+				"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
+				"createdby" => $cur_u
+			);
+		}
+		$ol = new object_list($filt);
 		$this->_insert_data_to_table_from_settings($data, $t, $ol, $arr);
 		
 	}
@@ -633,27 +661,55 @@ class bugtrack_display extends class_base
 				$cur[$_id] = $_id;
 			}
 		}
-
-		$ol = new object_list(array(
-			"class_id" => array(CL_DEVELOPMENT_ORDER),
-			"bug_status" => 1,
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"contactperson" => $cur,
-					"monitors" => $cur,
-					"orderer" => $cur,
-					"bug_feedback_p" => $cur
-				)
-			)),
-		));
+		$cur_u = array();
+		$p = get_instance(CL_CRM_PERSON);
+		foreach($cur as $c)
+		{
+			$po = obj($c);
+			if($u = $p->has_user($po))
+			{
+				$uid = $u->name();
+				$cur_u[] = $uid;
+			}
+		}
+		if($arr["request"]["sect_filter"]!="me")
+		{
+			$filt = array(
+				"class_id" => array(CL_DEVELOPMENT_ORDER),
+				"bug_status" => 1,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"contactperson" => $cur,
+						"monitors" => $cur,
+						"orderer" => $cur,
+						"bug_feedback_p" => $cur,
+						"monitors" => $cur,
+						"orderer" => $cur,
+						"bug_feedback_p" => $cur,
+						"createdby" => $cur_u,
+					)
+				)),
+				"orderer_unit" => ($arr["request"]["sect_filter"]) ? $arr["request"]["sect_filter"] : array()
+			);
+		}
+		else
+		{
+			$filt = array(
+				"bug_status" => 1,
+				"class_id" => array(CL_DEVELOPMENT_ORDER),
+				"createdby" => $cur_u
+			);
+		}
+		$ol = new object_list($filt);
 		$this->_insert_data_to_table_from_settings($data, $t, $ol, $arr);
 	}
 
 	function _get_table_filter($arr)
 	{
 		$p = get_current_person();
-		$sects = array(aw_url_change_var("_sect_filter", null, get_ru()) => t("K&otilde;ik"));
+		$sects = array(aw_url_change_var("sect_filter", null, get_ru()) => t("K&otilde;ik"),
+			aw_url_change_var("sect_filter", "me", get_ru()) => t("Minu lisatud"));
 		foreach(safe_array($p->prop("org_section")) as $sect_id)
 		{
 			if (!$this->can("view", $sect_id))
@@ -662,7 +718,6 @@ class bugtrack_display extends class_base
 			}
 			$this->_recur_sect_list($sects, obj($sect_id));
 		}
-
 		$arr["prop"]["options"] = $sects;
 		$arr["prop"]["value"] = get_ru();
 		$arr["prop"]["onchange"] = "window.location.href=this.options[this.selectedIndex].value";
@@ -673,7 +728,7 @@ class bugtrack_display extends class_base
 		$this->_sect_level++;
 		foreach($section->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
 		{
-			$data[aw_url_change_var("_sect_filter", $c->prop("to"), get_ru())] = str_repeat("&nbsp;", ($this->_sect_level) * 4).$c->prop("to.name");
+			$data[aw_url_change_var("sect_filter", $c->prop("to"), get_ru())] = str_repeat("&nbsp;", ($this->_sect_level) * 4).$c->prop("to.name");
 			$this->_recur_sect_list($data, $c->to());
 		}
 		$this->_sect_level--;
