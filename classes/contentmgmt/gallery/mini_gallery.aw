@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.40 2007/10/05 12:57:03 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.41 2007/12/28 09:37:24 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -438,7 +438,7 @@ class mini_gallery extends class_base
 			while ($zip_entry = zip_read($zip)) 
 			{
 				zip_entry_open($zip, $zip_entry, "r");
-				$fn = $folder."/".zip_entry_name($zip_entry);
+				$fn = $folder."/".basename(zip_entry_name($zip_entry));
 				$files[] = basename($fn);
 				$fc = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
 				$this->put_file(array(
