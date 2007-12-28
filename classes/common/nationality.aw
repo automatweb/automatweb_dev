@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/Attic/nationality.aw,v 1.1 2007/12/13 15:54:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/nationality.aw,v 1.1 2007/12/28 13:01:55 markop Exp $
 // nationality.aw - Rahvus 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/Attic/citizenship.aw,v 1.2 2007/12/27 15:07:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/citizenship.aw,v 1.1 2007/12/28 13:01:55 markop Exp $
 // citizenship.aw - Citizenship 
 /*
 

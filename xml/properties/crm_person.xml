@@ -1,6 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>person_tb</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>toolbar</type>
+            <submit>no</submit>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>person_tb</field>
+            <caption>Isiku toolbar</caption>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general2</group>
@@ -254,6 +265,17 @@
             <method>serialize</method>
             <reltype>RELTYPE_NATIONALITY</reltype>
             <caption>Rahvus</caption>
+      </property>
+      <property>
+            <name>citizenship_table</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>table</type>
+            <submit>no</submit>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>citizenship_table</field>
+            <caption>Kodakondsuse tabel</caption>
       </property>
       <property>
             <name>co_is_cust</name>
@@ -1996,11 +2018,11 @@
                   <clid>CL_NATIONALITY</clid>
                   <caption>rahvus</caption>
             </NATIONALITY>
-            <CL_CITIZENSHIP>
+            <CITIZENSHIP>
                   <value>74</value>
                   <clid>CL_CITIZENSHIP</clid>
                   <caption>kodakondsus</caption>
-            </CL_CITIZENSHIP>
+            </CITIZENSHIP>
       </reltypes>
       <layout>
             <co_bottom_seller>

@@ -3,4 +3,3 @@
 	<class name="citizenship" folder="applications/crm" extends="class_base">
 	</class>
 </orb>
-		

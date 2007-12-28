@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.188 2007/12/27 15:07:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.189 2007/12/28 13:01:56 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -18,6 +18,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 @groupinfo general2 caption="&Uuml;ldine" parent=general
 @default group=general2
+
+@property person_tb type=toolbar submit=no no_caption=1
+@caption Isiku toolbar
 
 @property name type=text
 @caption Nimi
@@ -102,6 +105,10 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 
 @property nationality type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_NATIONALITY
 @caption Rahvus
+
+@property citizenship_table type=table submit=no no_caption=1
+@caption Kodakondsuse tabel
+
 ------------------------------------------------------------------
 
 @groupinfo cust_rel caption="Kliendisuhe" parent=general
@@ -801,7 +808,7 @@ caption S&otilde;bragrupid
 @reltype NATIONALITY value=73 clid=CL_NATIONALITY
 @caption rahvus
 
-@reltype CL_CITIZENSHIP value=74 clid=CL_CITIZENSHIP
+@reltype CITIZENSHIP value=74 clid=CL_CITIZENSHIP
 @caption kodakondsus
 
 */
@@ -831,6 +838,9 @@ class crm_person extends class_base
 		$form = &$arr["request"];
 		switch($prop["name"])
 		{
+			case "citizenship_table":
+				$this->_save_citizenship_table($arr);
+				break;
 			case "phone":
 			case "fax":
 			case "url":
@@ -1217,7 +1227,18 @@ class crm_person extends class_base
 					4 => t("k&otilde;rgem"),
 				);
 				break;
+			case "citizenship_table":
+				$cit = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CITIZENSHIP"));
+				if(!sizeof($cit))
+				{
+					return PROP_IGNORE;
+				}
+				$this->_get_citizenship_table(&$arr);
+				break;
 
+			case "person_tb":
+				$this->_get_person_tb(&$arr);
+				break;
 			case "cv_view_tb":
 				/*
 				$arr["prop"]["toolbar"]->add_button(array(
@@ -2919,6 +2940,19 @@ class crm_person extends class_base
 		return  $arr["post_ru"];
 	}
 
+	/**
+		@attrib name=delete_obj
+	**/
+	function delete_obj($arr)
+	{
+		foreach ($arr["sel"] as $o)
+		{
+			$o = obj($o);
+			$o->delete();
+		}
+		return  $arr["post_ru"];
+	}
+
 	function has_current_job_relation($oid)
 	{
 		$c = new connection();
@@ -4375,8 +4409,7 @@ class crm_person extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"action" => "delete_objects",
-			"tooltip" => t("Kustuta"),
+			"action" => "delete_objects"
 		));
 	}
 
@@ -4535,9 +4568,9 @@ class crm_person extends class_base
 		$bill_inst = get_instance(CL_CRM_BILL);
 		$company_curr = $stat_inst->get_company_currency();
 		$bi = get_instance(CL_BUG);
-
+		
 		$l_cus_s = 0;
-
+		
 		foreach($ol->arr() as $o)
 		{
 			$impl = $check = $bs = $bn = "";
@@ -4545,7 +4578,7 @@ class crm_person extends class_base
 			if ($this->can("view", $o->prop("bill_id")))
 			{
 				$b = obj($o->prop("bill_id"));
-				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no"));
+				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
 				$bn = $b->prop("bill_no");
 				$bs = $bill_inst->states[$b->prop("state")];
 				$agreement = $b->meta("agreement_price");
@@ -4563,7 +4596,7 @@ class crm_person extends class_base
 			{
 				$bs = t("Arve puudub");
 			}
-
+			
 			$task = obj($row2task[$o->id()]);
 			if (!is_oid($task->id()))
 			{
@@ -4572,20 +4605,20 @@ class crm_person extends class_base
 
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
-
+			
 			//kui on kokkuleppehind kas arvel, või kui arvet ei ole, siis toimetusel... tuleb vähe arvutada
 			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
 				$sum = $row_inst->get_row_ageement_price($o);
 			}
-
+			
 			//õigesse valuutasse
 			$sum = $stat_inst->convert_to_company_currency(array(
 				"sum"=>$sum,
 				"o"=>$task,
 				"company_curr" => $company_curr,
 			));
-
+			
 			$t->define_data(array(
 				"date" => $o->prop("date"),
 				"cust" => html::obj_change_url($task->prop("customer")),
@@ -4892,5 +4925,128 @@ class crm_person extends class_base
 			$crel->save();
 		}
 	}
+
+	function _get_person_tb($arr)
+	{
+		$tb = &$arr["prop"]["toolbar"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus"),
+		));
+
+		$tb->add_menu_item(array(
+			'parent'=>'new',
+			'text'=>t('Kodakondsus'),
+			"tooltip" => t("Lisa uus kodakondsus"),
+			"action" => "add_new_citizenship",
+			"confirm" => t("Lisan uue kodakondsuse?"),
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_obj",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
+
+	}
+
+	/**
+		@attrib name=add_new_citizenship all_args=1
+	**/
+	function add_new_citizenship($arr)
+	{
+		$person = obj($arr["id"]);
+		$c = new object();
+		$c->set_class_id(CL_CITIZENSHIP);
+		$c->set_name($person->name()." ".t("kodakondsus"));
+		$c->set_parent($person->id());
+		if($person->prop("birthday"))
+		{
+			$c->set_prop("start" , $person->prop("birthday"));
+		}
+		$c->save();
+ 		$person->connect(array(
+			"to" => $c->id(),
+			"reltype"=> "RELTYPE_CITIZENSHIP",
+		));
+		return $arr["post_ru"];
+	}
+
+	function _get_citizenship_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->set_caption(t("Kodakondsused"));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "country",
+			"caption" => t("Riik"),
+		));
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => t("Algus"),
+		));
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => t("L&otilde;pp"),
+		));
+
+		$country_options = new object_list(array(
+			"class_id" => CL_CRM_COUNTRY,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CITIZENSHIP")) as $conn)
+		{
+			$c = $conn->to();
+			$data = array();
+			$data["oid"] = $c->id();
+			$data["start"] = html::date_select(array(
+				"name" => "citizenship[".$c->id()."][start]",
+				"value" => $c->prop("start"),
+				"year_from" => 1900,
+				"year_to" => date("Y" , time()) + 5,
+				"default" => -1
+			));
+			$data["end"] = html::date_select(array(
+				"name" => "citizenship[".$c->id()."][end]",
+				"value" => $c->prop("end"),
+				"year_from" => 1900,
+				"year_to" => date("Y" , time()) + 5,
+				"default" => -1
+			));
+			$data["country"] = html::select(array(
+				"name" => "citizenship[".$c->id()."][country]",
+				"value" => $c->prop("country"),
+				"options" => $country_options->names(),
+			));
+
+			$t->define_data($data);
+		}
+	}
+	
+	function _save_citizenship_table($arr)
+	{
+		foreach($arr["request"]["citizenship"] as $id => $val)
+		{
+			$c = obj($id);
+			foreach($val as $prop => $v)
+			{
+				if(($prop == "end" || $prop == "start") && !($v["year"] > 0))
+				{
+					$v = -1;
+				}
+				$c->set_prop($prop , $v);
+			}
+			$c->save();
+		}
+	}
+
 }
 ?>
