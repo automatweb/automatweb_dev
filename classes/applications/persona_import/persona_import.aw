@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.30 2007/12/28 11:23:58 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.31 2007/12/28 11:46:04 kaarel Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -1274,16 +1274,17 @@ die($fdat);
 					"reltype" => 28, //RELTYPE_SECTION,
 				));
 				print "connected section ".$worker["ALLASUTUS"]." to company ".$worker["ASUTUS"]."<br>";
+				
 				if($worker["ALLASUTUS"] == iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"]))
 				{
-					$ylem_yksus->set_prop("ext_id",$worker["YKSUS_ID"]);
+					$ylem_yksus->set_prop("ext_id", $worker["YKSUS_ID"]);
 					$ylem_yksus->set_subclass($worker["YKSUS_ID"]);
 					$ylem_yksus->save();
 					$sections[$worker["YKSUS_ID"]] = $ylem_ykid;
 				}
 			}
 
-			if (!empty($worker["YKSUS_ID"]))
+			if (!empty($worker["YKSUS_ID"]) || !empty($worker["YKSUS"]))
 			{
 				$worker["YKSUS"] = iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"]);
 
@@ -1306,7 +1307,7 @@ die($fdat);
 						"reltype" => 21, //RELTYPE_SECTION,
 					));
 
-					$person_obj->set_prop("org_section",$sections[$worker["YKSUS_ID"]]);
+					$person_obj->set_prop("org_section", $sections[$worker["YKSUS"]]);
 					print "sect connect done<br>";
 				}
 				else
@@ -1343,6 +1344,13 @@ die($fdat);
 							"reltype" => 1,		//RELTYPE_SECTION
 						));
 					}
+					elseif($this->can("view", $sections_byname[$worker["YKSUS"]]) && $ylem_yksus->id() != $sections_byname[$worker["YKSUS"]])
+					{
+						$ylem_yksus->connect(array(
+							"to" => $sections_byname[$worker["YKSUS"]],
+							"reltype" => 1,		//RELTYPE_SECTION
+						));
+					}
 					$doomed_conns = $ylem_yksus->connections_from(array(
 						"type" => "RELTYPE_SECTION",
 					));
@@ -1360,7 +1368,7 @@ die($fdat);
 					foreach($doomed_conns as $doomed_conn)
 					{
 						$doomed_conn_to = $doomed_conn->to();
-						if($doomed_conn_to->id() == $sections[$worker["YKSUS_ID"]])
+						if($doomed_conn_to->id() == $sections[$worker["YKSUS_ID"]] || $doomed_conn_to->id() == $sections_byname[$worker["YKSUS"]])
 						{
 							$doomed_conn->delete(true);						
 						}
