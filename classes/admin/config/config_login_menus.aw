@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.19 2007/12/06 14:32:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.20 2007/12/28 09:15:25 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -57,6 +57,16 @@ class config_login_menus extends class_base
 				if ($arr["obj_inst"]->flag(OBJ_FLAG_IS_SELECTED))
 				{
 					$this->_set_active_menus($arr["obj_inst"]);
+				}
+				foreach(safe_array($arr["request"]["lm"]) as $d)
+				{
+					if ($this->can("view", $d["menu"]))
+					{
+						$arr["obj_inst"]->connect(array(
+							"type" => "RELTYPE_FOLDER",
+							"to" => $d["menu"]
+						));
+					}
 				}
 				break;
 
