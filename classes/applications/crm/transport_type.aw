@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_type.aw,v 1.4 2007/11/23 10:51:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_type.aw,v 1.5 2007/12/28 16:09:15 markop Exp $
 // transport_type.aw - Transportation type 
 /*
 
@@ -105,6 +105,26 @@ class transport_type extends class_base
 			"action" => "add_new_price",
 			"confirm" => t("Lisan uue hinna?"),
 		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_obj",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
+	}
+
+	/**
+		@attrib name=delete_obj
+	**/
+	function delete_obj($arr)
+	{
+		foreach ($arr["sel"] as $o)
+		{
+			$o = obj($o);
+			$o->delete();
+		}
+		return  $arr["post_ru"];
 	}
 
 	/**
@@ -112,8 +132,8 @@ class transport_type extends class_base
 	**/
 	function add_new_price($arr)
 	{
-		$price_inst = get_instance(CL_PRICE);
-		$id = $price_inst->add(array(
+		classload("common/price_object");
+		$id = price_object::add(array(
 			"object" => $arr["id"],
 			"type" => CL_TRANSPORT_TYPE,
 		));
@@ -128,6 +148,7 @@ class transport_type extends class_base
 
 	function _get_prices_table($arr)
 	{
+		classload("common/price_object");
 		$t = &$arr["prop"]["vcl_inst"];
 		$price_inst = get_instance(CL_PRICE);
 
@@ -139,6 +160,11 @@ class transport_type extends class_base
 			"name" => "end",
 			"caption" => t("L&otilde;pp"),
 		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CURRENCY")) as $conn)
 		{
 			$curr = $conn->to();
@@ -148,11 +174,13 @@ class transport_type extends class_base
 			));
 		}
 
-		$ol = $price_inst->get_price_objects(array("object" => $arr["obj_inst"]->id()));
+		$ol = price_object::get_price_objects($arr["obj_inst"]->id());
+
 		foreach($ol->arr() as $price)
 		{
-			$prices = $price_inst->get_prices($price);
+			$prices = $price->get_prices();
 			$data = array();
+			$data["start_st"] = $price->prop("date_from");
 			$data["start"] = html::date_select(array(
 				"name" => "prices[".$price->id()."][date_from]",
 				"value" => $price->prop("date_from"),
@@ -161,7 +189,7 @@ class transport_type extends class_base
 				"name" => "prices[".$price->id()."][date_to]",
 				"value" => $price->prop("date_to"),
 			));	
-		
+			$data["oid"] = $price->id();
 			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CURRENCY")) as $conn)
 			{
 				$curr = $conn->to();
@@ -173,14 +201,16 @@ class transport_type extends class_base
 			}
 			$t->define_data($data);
 		}
+		$t->set_default_sortby("start_st");
+		$t->sort_by();
 	}
 	
 	function _save_prices_table($arr)
 	{
-		$price_inst = get_instance(CL_PRICE);
 		foreach($arr["request"]["prices"] as $id => $val)
 		{
-			$price_inst->change_price(array("id" => $id, "data" => $val));
+			$price = obj($id);
+			$price->set_data($val);
 		}
 	}
 
