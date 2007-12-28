@@ -67,6 +67,15 @@
             <field>url</field>
             <caption>Faili url</caption>
       </property>
+      <property>
+            <name>url_google</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>url_google</field>
+            <caption>Faili url Google kalendri jaoks</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ICAL_EXPORT</syslog_type>
             <relationmgr>yes</relationmgr>
