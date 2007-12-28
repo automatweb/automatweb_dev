@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.168 2007/12/20 16:24:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.169 2007/12/28 10:02:02 kristo Exp $
 /*
 
 
@@ -1190,7 +1190,6 @@ class file extends class_base
 			$tmp = $mimeregistry->type_for_ext($pi["extension"]);
 			if ($tmp != "")
 			{
-exit("1");
 				header("Location: ".aw_ini_get("baseurl").aw_ini_get("image.imgbaseurl")."/".$f2."/".substr($fname, $slash+1));
 				die();
 			}
