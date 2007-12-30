@@ -97,6 +97,7 @@ class aw_mime_types
 		"video/vnd.mpegurl" => "mxu",
 		"video/x-msvideo" => "avi",
 		"video/x-sgi-movie" => "movie",
+		"video/flv" => "flv",
 		"x-conference/x-cooltalk" => "ice",
 		"application/vnd.sun.xml.writer" => "sxw",
 		"application/vnd.sun.xml.calc" => "sxc"
