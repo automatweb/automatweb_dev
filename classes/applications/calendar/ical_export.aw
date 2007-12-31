@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.6 2007/12/28 20:24:02 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.7 2007/12/31 12:25:13 hannes Exp $
 // ical_export.aw - Sündmuste eksport (iCal) 
 /*
 
@@ -50,7 +50,7 @@ class ical_export extends class_base
 	**/
 	function export_to_google_calendar($arr)
 	{
-		aw_disable_acl();
+		//aw_disable_acl();
 
 		$obj = new object($arr["id"]);
 		$cal_id = $obj->prop("calendar");
@@ -130,7 +130,7 @@ class ical_export extends class_base
 		header( 'Content-Length: '.mb_strlen  ( $s_out, "UTF-8" ));
 		header( 'Content-Disposition: attachment; filename="export.ics"' );
 		header( 'Cache-Control: max-age=10' );
-		aw_restore_acl();
+		//aw_restore_acl();
 		die  (iconv(aw_global_get("charset"), "UTF-8", $s_out));
 	}
 
@@ -139,7 +139,6 @@ class ical_export extends class_base
 	**/
 	function export($arr)
 	{
-		aw_disable_acl();
 		if(is_oid($arr["id"]))
 		{
 			$obj = obj($arr["id"]);
@@ -181,7 +180,6 @@ class ical_export extends class_base
 				die(iconv(aw_global_get("charset"), "UTF-8", $str));
 			}
 		}
-		aw_restore_acl();
 		return $this->mk_my_orb("change", array("id" => $arr["id"]));
 	}
 
