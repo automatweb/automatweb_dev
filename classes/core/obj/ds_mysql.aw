@@ -1358,6 +1358,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function delete_object_cache_update($oid)
 	{
 		$this->cache->file_clear_pt("html");
+		$this->cache->file_clear_pt("menu_area_cache");
 	}
 
 	function delete_multiple_objects($oid_list)
