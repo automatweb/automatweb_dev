@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.2 2007/12/27 13:00:20 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.4 2008/01/02 10:03:03 robert Exp $
 // geoinfo_manager.aw - Geoinfo haldus 
 /*
 
@@ -450,6 +450,18 @@ class geoinfo_manager extends class_base
 		}
 	}
 
+	/**
+	@attrib name=get_address all_args=1 nologin=1
+	**/
+	function ajax_get_address($arr)
+	{
+		$url = "http://maps.google.com/maps/geo?q=";
+		$url .= str_replace(" ", "+", $arr["adr"]);
+		$url .= "&output=csv&key=ABQIAAAADTjnybLqawGMIE6x59CllBSx4X0DfXMRq8wFp_lyFFw5FRz33BTLfotmWEiUFWfMheqe3OIbITzp2A";
+		$data = @file_get_contents($url);
+		die($data.",".$arr["num"]);
+	}
+
 	function xml_get_fields($arr)
 	{
 		if($fid = $arr["obj_inst"]->prop("xml_schema"))
@@ -505,8 +517,8 @@ class geoinfo_manager extends class_base
 		$tb = &$arr["prop"]["vcl_inst"];
 		$tb->add_button(array(
 			"name" => "submit",
-			"img" => "nool1.gif",
-			"tooltip" => "Impordi XML-ist",
+			"img" => "import.gif",
+			"tooltip" => t("Impordi XML-ist"),
 			"url" => $this->mk_my_orb("import",array(
 				"id" => $arr["obj_inst"]->id(),
 				"ru" => get_ru()
@@ -629,11 +641,17 @@ class geoinfo_manager extends class_base
 		$tb->add_button(array(
 			"name" => "export",
 			"img" => "nool1.gif",
-			"tooltip" => "Ekspordi KMZ",
+			"tooltip" => t("Ekspordi KMZ"),
 			"url" => "#",
 			"onClick" => "document.forms.changeform.action = '".$this->mk_my_orb("export",array(
 				"id" => $arr["obj_inst"]->id(),
 			))."';document.forms.changeform.submit()",
+		));
+		$tb->add_button(array(
+			"name" => "getcoords",
+			"img" => "import.gif",
+			"tooltip" => t("Impordi koordinaadid"),
+			"url" => "javascript:getcoords()"
 		));
 	}
 
@@ -678,6 +696,8 @@ class geoinfo_manager extends class_base
 		));
 		foreach($ol->arr() as $o)
 		{
+			$address = $o->prop("address");
+			$fixedaddr = str_replace(".","",str_replace(" ","+",str_replace(",","",$address)));
 			$t->define_data(array(
 				"oid" => $o->id(),
 				"name" => html::obj_change_url($o->id()),
@@ -691,7 +711,7 @@ class geoinfo_manager extends class_base
 					"value" => $o->prop("coord_y"),
 					"size" => 20
 				)),
-				"address" => $o->prop("address"),
+				"address" => '<div id="adr'.$o->id().'" style="display:none">'.$fixedaddr.'</div>'.$address,
 			));
 		}
 	}
@@ -766,6 +786,16 @@ class geoinfo_manager extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["add_data"] = "0";
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$this->read_template("scripts.tpl");
+		$this->vars(array(
+			"obj_id" => $arr["obj_inst"]->id(),
+			"query_url" => aw_ini_get("baseurl")
+		));
+		return $this->parse();
 	}
 
 	////////////////////////////////////
