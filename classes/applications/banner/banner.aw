@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.31 2007/12/19 13:03:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.32 2008/01/02 12:29:18 robert Exp $
 
 /*
 
@@ -115,7 +115,7 @@ class banner extends class_base
 
 			case "click_through":
 				$this->_init_stats($arr["obj_inst"]);
-				$prop["value"] = $this->click_through." %";
+				$prop["value"] = round($this->click_through,4)." %";
 				break;
 
 			case "probability_tbl":
@@ -163,30 +163,44 @@ class banner extends class_base
 			"name" => "total",
 			"caption" => t("Kokku")
 		));
-		foreach($langs as $l)
+		$clickdata = $this->db_fetch_array("SELECT COUNT(*) as cnt, langid FROM banner_clicks WHERE bid = '".$arr["obj_inst"]->id()."' GROUP BY langid");
+		$viewdata = $this->db_fetch_array("SELECT COUNT(*) as cnt, langid FROM banner_views WHERE bid = '".$arr["obj_inst"]->id()."' GROUP BY langid");
+		foreach($clickdata as $click)
 		{
-			if($l["langid"])
+			if($click["langid"])
+			{
+				$clicks["lang".$click["langid"]] = (int)$click["cnt"];
+			}
+		}
+		foreach($viewdata as $view)
+		{
+			if($view["langid"])
 			{
 				$t->define_field(array(
-					"name" => "lang".$l["langid"],
-					"caption" => t($langnames[$l["langid"]])
+					"name" => "lang".$view["langid"],
+					"caption" => t($langnames[$view["langid"]])
 				));
-				$clicks["lang".$l["langid"]] = $this->db_fetch_field("SELECT count(*) as cnt FROM banner_clicks WHERE bid = '".$arr["obj_inst"]->id()."' AND langid='".$l["langid"]."'", "cnt");
-				$views["lang".$l["langid"]] = $this->db_fetch_field("SELECT count(*) as cnt FROM banner_views WHERE bid = '".$arr["obj_inst"]->id()."' 
-				AND langid='".$l["langid"]."'", "cnt");
-				if ($views["lang".$l["langid"]] > 0)
+				$views["lang".$view["langid"]] = (int)$view["cnt"];
+				if(!$clicks["lang".$view["langid"]])
 				{
-					$cthrough["lang".$l["langid"]] = (($clicks["lang".$l["langid"]] / $views["lang".$l["langid"]]) * 100.0)."%";
+					$clicks["lang".$view["langid"]] = 0;
 				}
-				else
-				{
-					$cthrough["lang".$l["langid"]] = "0%";
-				}
+			}
+		}
+		foreach($views as  $langid => $v)
+		{
+			if ($v > 0)
+			{
+				$cthrough[$langid] = round(($clicks[$langid] / $v) * 100.0, 4)."%";
+			}
+			else
+			{
+				$cthrough[$langid] = "0%";
 			}
 		}
 		
 		$cthrough["name"] = t("Click-through ratio");
-		$cthrough["total"] = $this->click_through."%";
+		$cthrough["total"] = round($this->click_through,4)."%";
 		$t->define_data($cthrough);
 		$views["name"] = t("Vaatamisi");
 		$views["total"] = $this->views;
