@@ -26,15 +26,75 @@ msgstr ""
 msgid "Omaduse Pangamakse objekt (bank_payment) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_bron.aw:prop_template
+msgid "Omaduse Template (Vaikimis bron_box.tpl) (template) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_template_comment
+msgid "Omaduse Template (Vaikimis bron_box.tpl) (template) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_template_help
+msgid "Omaduse Template (Vaikimis bron_box.tpl) (template) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_templates
+msgid "Omaduse  (mail_templates) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_templates_comment
+msgid "Omaduse  (mail_templates) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_templates_help
+msgid "Omaduse  (mail_templates) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_settings
+msgid "Grupi Meiliseaded (mail_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_settings_help
+msgid "Grupi Meiliseaded (mail_settings) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_settings_confirm
+msgid "Grupi Kinnitusmeil (mail_settings_confirm) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_settings_confirm_help
+msgid "Grupi Kinnitusmeil (mail_settings_confirm) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_settings_cancel
+msgid "Grupi T&uuml;histusmeil (mail_settings_cancel) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_settings_cancel_help
+msgid "Grupi T&uuml;histusmeil (mail_settings_cancel) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_bron.aw:rel_RELTYPE_BANK_PAYMENT
 msgid "Seose Pangamakse (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:514 classes/applications/ows_bron/ows_bron.aw:827
+#: classes/applications/ows_bron/ows_bron.aw:567 classes/applications/ows_bron/ows_bron.aw:882
 msgid "OWS Bron %s %s @ %s"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:1746
-msgid "Your reservation has been canceled!"
+#: classes/applications/ows_bron/ows_bron.aw:2026
+msgid "The booking you requested does not exist!"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2031
+msgid "The booking you requested has already been cancelled!"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2273
+msgid "Hotell"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2278
+msgid "Template"
 msgstr ""
 

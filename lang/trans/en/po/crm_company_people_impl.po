@@ -161,7 +161,7 @@ msgstr "Valid from"
 
 #: classes/applications/crm/crm_company_people_impl.aw:820
 msgid "Kehtiv kuni"
-msgstr "Valid till"
+msgstr "Valid to"
 
 #: classes/applications/crm/crm_company_people_impl.aw:832
 msgid "X"

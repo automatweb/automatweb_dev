@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_crea_to
 msgid "Omaduse Lisatud kuni (s_crea_to) caption"
-msgstr "Created till"
+msgstr "Created to"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_crea_to_comment
 msgid "Omaduse Lisatud kuni (s_crea_to) kommentaar"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_mod_to
 msgid "Omaduse Muudetud kuni (s_mod_to) caption"
-msgstr "Modified till"
+msgstr "Modified to"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_mod_to_comment
 msgid "Omaduse Muudetud kuni (s_mod_to) kommentaar"
@@ -243,7 +243,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_tmg_activate_to
 msgid "Omaduse Aktiveeri kuni (s_tmg_activate_to) caption"
-msgstr "Activated till"
+msgstr "Activated to"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_tmg_activate_to_comment
 msgid "Omaduse Aktiveeri kuni (s_tmg_activate_to) kommentaar"
@@ -267,7 +267,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_tmg_deactivate_to
 msgid "Omaduse Deaktiveeri kuni (s_tmg_deactivate_to) caption"
-msgstr "Deactivated till"
+msgstr "Deactivated to"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_tmg_deactivate_to_comment
 msgid "Omaduse Deaktiveeri kuni (s_tmg_deactivate_to) kommentaar"

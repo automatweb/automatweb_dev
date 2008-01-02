@@ -18,51 +18,51 @@ msgstr ""
 msgid "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2376
+#: classes/contentmgmt/site_show.aw:2377
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2879
+#: classes/contentmgmt/site_show.aw:2883
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress:"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2915
+#: classes/contentmgmt/site_show.aw:2919
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2920
+#: classes/contentmgmt/site_show.aw:2924
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3111
+#: classes/contentmgmt/site_show.aw:3115
 msgid "Lisa uus k&otilde;rvale"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3121
+#: classes/contentmgmt/site_show.aw:3125
 msgid "Lisa uus alamkaust"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3131
+#: classes/contentmgmt/site_show.aw:3135
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3141
+#: classes/contentmgmt/site_show.aw:3145
 msgid "Muuda &otilde;igusi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3150
+#: classes/contentmgmt/site_show.aw:3154
 msgid "Peida"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3154
+#: classes/contentmgmt/site_show.aw:3158
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3162 classes/contentmgmt/site_show.aw:3194
+#: classes/contentmgmt/site_show.aw:3166 classes/contentmgmt/site_show.aw:3198
 msgid "Kleebi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3182
+#: classes/contentmgmt/site_show.aw:3186
 msgid "Lisa uus"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -452,31 +452,31 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/image.aw:350
+#: classes/image.aw:349
 msgid "kommentaar"
 msgstr "comment"
 
-#: classes/image.aw:350
+#: classes/image.aw:349
 msgid "kommentaari"
 msgstr "comments"
 
-#: classes/image.aw:971
+#: classes/image.aw:970
 msgid "Uues aknas"
 msgstr "In a new window"
 
-#: classes/image.aw:972
+#: classes/image.aw:971
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr "Don't show in print view"
 
-#: classes/image.aw:985
+#: classes/image.aw:984
 msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/image.aw:1593
+#: classes/image.aw:1592
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/image.aw:2160
+#: classes/image.aw:2159
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 

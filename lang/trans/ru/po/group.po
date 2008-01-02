@@ -537,26 +537,26 @@ msgstr ""
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:544
+#: classes/core/users/group.aw:545
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:607
+#: classes/core/users/group.aw:610
 msgid "--vali--"
 msgstr ""
 
-#: classes/core/users/group.aw:632
+#: classes/core/users/group.aw:638
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:661
+#: classes/core/users/group.aw:668
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:852
+#: classes/core/users/group.aw:859
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:898
+#: classes/core/users/group.aw:905
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""

@@ -1,6 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Kuvatav hooaeg alates (show_season_from) caption"] = "Show season from";
-$GLOBALS["TRANS"]["Omaduse Kuvatav hooaeg kuni (show_season_to) caption"] = "Show season till";
+$GLOBALS["TRANS"]["Omaduse Kuvatav hooaeg kuni (show_season_to) caption"] = "Show season to";
 $GLOBALS["TRANS"]["Omaduse Keeled (languages) caption"] = "Languages";
 $GLOBALS["TRANS"]["Omaduse Keelte seosed kaustadega (languages_to_folders) caption"] = "Languages related to folders";
 $GLOBALS["TRANS"]["Omaduse Organisatsioonide kaust (organisations_folder) caption"] = "Folder for organisations";

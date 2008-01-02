@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -315,7 +315,7 @@ msgstr "Closed"
 msgid "Arhiveeritud"
 msgstr "Archived"
 
-#: classes/mrp/mrp_resource.aw:111 classes/mrp/mrp_resource.aw:1413
+#: classes/mrp/mrp_resource.aw:111 classes/mrp/mrp_resource.aw:1417
 msgid "Uus"
 msgstr "New"
 
@@ -379,71 +379,71 @@ msgstr "Resource usage is not planned"
 msgid "Ressurss on allhange"
 msgstr "Resource is sub-contract"
 
-#: classes/mrp/mrp_resource.aw:414
+#: classes/mrp/mrp_resource.aw:418
 msgid "Seda t&uuml;&uuml;pi kordust ei saa kasutada."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:430
+#: classes/mrp/mrp_resource.aw:434
 msgid "Viga kellaaja m&auml;&auml;rangus."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:443
+#: classes/mrp/mrp_resource.aw:447
 msgid "Pikkus ei saa olla suurem kui korduse periood."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:448
+#: classes/mrp/mrp_resource.aw:452
 msgid "Pikkus ei saa olla null."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:456
+#: classes/mrp/mrp_resource.aw:460
 msgid "'Alates' peab olema varasem aeg kui 'Kuni'."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:474
+#: classes/mrp/mrp_resource.aw:478
 msgid "Ressurss on kasutusel. Ei saa hooldusse panna."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:532 classes/mrp/mrp_resource.aw:669
+#: classes/mrp/mrp_resource.aw:536 classes/mrp/mrp_resource.aw:673
 msgid "Ava"
 msgstr "Open"
 
-#: classes/mrp/mrp_resource.aw:537
+#: classes/mrp/mrp_resource.aw:541
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/mrp/mrp_resource.aw:543
+#: classes/mrp/mrp_resource.aw:547
 msgid "Projekti nr."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:550
+#: classes/mrp/mrp_resource.aw:554
 msgid "Klient"
 msgstr "Customer"
 
-#: classes/mrp/mrp_resource.aw:557
+#: classes/mrp/mrp_resource.aw:561
 msgid "Projekti nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:564
+#: classes/mrp/mrp_resource.aw:568
 msgid "Tr&uuml;kitud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:574
+#: classes/mrp/mrp_resource.aw:578
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:584
+#: classes/mrp/mrp_resource.aw:588
 msgid "Tr&uuml;kiarv"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:593
+#: classes/mrp/mrp_resource.aw:597
 msgid "Tr&uuml;kiarv Notes"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1354
+#: classes/mrp/mrp_resource.aw:1358
 msgid "Ressurss on valitud aegadel kasutuses:<br>"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1373 classes/mrp/mrp_resource.aw:1392
+#: classes/mrp/mrp_resource.aw:1377 classes/mrp/mrp_resource.aw:1396
 msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""
 

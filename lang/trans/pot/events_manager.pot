@@ -254,18 +254,6 @@ msgstr ""
 msgid "Omaduse Sisu keeled (languages) help"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:prop_editor
-msgid "Omaduse Toimetajad (editor) caption"
-msgstr ""
-
-#: classes/applications/events_manager/events_manager.aw:prop_editor_comment
-msgid "Omaduse Toimetajad (editor) kommentaar"
-msgstr ""
-
-#: classes/applications/events_manager/events_manager.aw:prop_editor_help
-msgid "Omaduse Toimetajad (editor) help"
-msgstr ""
-
 #: classes/applications/events_manager/events_manager.aw:prop_mapserver_url
 msgid "Omaduse Kaardiserveri url (mapserver_url) caption"
 msgstr ""
@@ -288,6 +276,18 @@ msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_similar_time_help
 msgid "Omaduse Sarnaste sündmuste kattumisaeg (tundides) (similar_time) help"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_editors_groups
+msgid "Omaduse Toimetajate kasutajagrupid (editors_groups) caption"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_editors_groups_comment
+msgid "Omaduse Toimetajate kasutajagrupid (editors_groups) kommentaar"
+msgstr ""
+
+#: classes/applications/events_manager/events_manager.aw:prop_editors_groups_help
+msgid "Omaduse Toimetajate kasutajagrupid (editors_groups) help"
 msgstr ""
 
 #: classes/applications/events_manager/events_manager.aw:prop_forms_caption
@@ -562,6 +562,10 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
+#: classes/applications/events_manager/events_manager.aw:rel_RELTYPE_GROUP
+msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
 #: classes/applications/events_manager/events_manager.aw:layout_events_top_left
 msgid "Kujundusosa S&uuml;ndmuste&nbsp;Otsing (events_top_left) pealkiri"
 msgstr ""
@@ -578,175 +582,175 @@ msgstr ""
 msgid "Kujundusosa Kataloogid&nbsp;kirjutamiseks (menus_top_right) pealkiri"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:287
+#: classes/applications/events_manager/events_manager.aw:294
 msgid "Arhiivist"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:288
+#: classes/applications/events_manager/events_manager.aw:295
 msgid "Kestvatest"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:289
+#: classes/applications/events_manager/events_manager.aw:296
 msgid "Uute hulgast"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:333
+#: classes/applications/events_manager/events_manager.aw:340
 msgid "Toimumiskohtade kataloog m&auml;&auml;ramata v&otilde;i puudub ligip&auml;&auml;s."
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:350 classes/applications/events_manager/events_manager.aw:412
+#: classes/applications/events_manager/events_manager.aw:368 classes/applications/events_manager/events_manager.aw:441
 msgid "Nimetu"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:394
+#: classes/applications/events_manager/events_manager.aw:412
 msgid "Korraldajate kataloog m&auml;&auml;ramata v&otilde;i puudub ligip&auml;&auml;s."
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:423
+#: classes/applications/events_manager/events_manager.aw:452
 msgid "Valdkondade kataloog m&auml;&auml;ramata v&otilde;i puudub ligip&auml;&auml;s."
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:521 classes/applications/events_manager/events_manager.aw:546 classes/applications/events_manager/events_manager.aw:568 classes/applications/events_manager/events_manager.aw:609 classes/applications/events_manager/events_manager.aw:851
+#: classes/applications/events_manager/events_manager.aw:549 classes/applications/events_manager/events_manager.aw:574 classes/applications/events_manager/events_manager.aw:596 classes/applications/events_manager/events_manager.aw:637 classes/applications/events_manager/events_manager.aw:895
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:532 classes/applications/events_manager/events_manager.aw:861 classes/applications/events_manager/events_manager.aw:899
+#: classes/applications/events_manager/events_manager.aw:560 classes/applications/events_manager/events_manager.aw:905 classes/applications/events_manager/events_manager.aw:942
 msgid "Kustuta m&auml;rgistatud s&uuml;ndmused"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:534
+#: classes/applications/events_manager/events_manager.aw:562
 msgid "Olete kindel, et soovite kustudada kõik valitud toimumiskohad?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:556
+#: classes/applications/events_manager/events_manager.aw:584
 msgid "Kustuta m&auml;rgistatud valdkonnad"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:558
+#: classes/applications/events_manager/events_manager.aw:586
 msgid "Olete kindel, et soovite kustudada kõik valitud valdkonnad?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:574
+#: classes/applications/events_manager/events_manager.aw:602
 msgid "Korraldaja (organisatsioon)"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:586
+#: classes/applications/events_manager/events_manager.aw:614
 msgid "Korraldaja (isik)"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:598
+#: classes/applications/events_manager/events_manager.aw:626
 msgid "Kustuta m&auml;rgistatud korraldajad"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:600
+#: classes/applications/events_manager/events_manager.aw:628
 msgid "Olete kindel, et soovite kustudada kõik valitud korraldajad?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:615
+#: classes/applications/events_manager/events_manager.aw:643
 msgid "Kustuta m&auml;rgistatud toimetajad"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:617
+#: classes/applications/events_manager/events_manager.aw:645
 msgid "Olete kindel, et soovite kustudada kõik valitud toimetajad?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:629 classes/applications/events_manager/events_manager.aw:632
+#: classes/applications/events_manager/events_manager.aw:657 classes/applications/events_manager/events_manager.aw:660
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:703 classes/applications/events_manager/events_manager.aw:774 classes/applications/events_manager/events_manager.aw:774
+#: classes/applications/events_manager/events_manager.aw:747 classes/applications/events_manager/events_manager.aw:818 classes/applications/events_manager/events_manager.aw:818
 msgid "Avalda"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:704
+#: classes/applications/events_manager/events_manager.aw:748
 msgid "Tee koopia"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:775
+#: classes/applications/events_manager/events_manager.aw:819
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:863 classes/applications/events_manager/events_manager.aw:901
+#: classes/applications/events_manager/events_manager.aw:907 classes/applications/events_manager/events_manager.aw:944
 msgid "Olete kindel, et soovite kustudada kõik valitud s&uuml;ndmused?"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:869
+#: classes/applications/events_manager/events_manager.aw:913
 msgid "S&uuml;ndmuste v&auml;ljatr&uuml;kk"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:875
+#: classes/applications/events_manager/events_manager.aw:919
 msgid "Uued"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:875
+#: classes/applications/events_manager/events_manager.aw:919
 msgid "Arhiiv"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:883 classes/applications/events_manager/events_manager.aw:883
+#: classes/applications/events_manager/events_manager.aw:926 classes/applications/events_manager/events_manager.aw:926
 msgid "J&auml;rjesta laekumise j&auml;rgi"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:890
+#: classes/applications/events_manager/events_manager.aw:933
 msgid "Algseis (kestvad ja tulekul s&uuml;ndmused)"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:909 classes/applications/events_manager/events_manager.aw:927 classes/applications/events_manager/events_manager.aw:945
+#: classes/applications/events_manager/events_manager.aw:952 classes/applications/events_manager/events_manager.aw:970 classes/applications/events_manager/events_manager.aw:988
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:914
+#: classes/applications/events_manager/events_manager.aw:957
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:932
+#: classes/applications/events_manager/events_manager.aw:975
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:950
+#: classes/applications/events_manager/events_manager.aw:993
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:955
+#: classes/applications/events_manager/events_manager.aw:998
 msgid "Kasutajanimi"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:960
+#: classes/applications/events_manager/events_manager.aw:1003
 msgid "Kasutajagrupp"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:973
+#: classes/applications/events_manager/events_manager.aw:1016
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:978
+#: classes/applications/events_manager/events_manager.aw:1021
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:984
+#: classes/applications/events_manager/events_manager.aw:1027
 msgid "Valdkond"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:989
+#: classes/applications/events_manager/events_manager.aw:1032
 msgid "Tase"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:994
+#: classes/applications/events_manager/events_manager.aw:1037
 msgid "Regioon"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:1001
+#: classes/applications/events_manager/events_manager.aw:1044
 msgid "Tegevused"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:1007
+#: classes/applications/events_manager/events_manager.aw:1050
 msgid "T&otilde;lgitud"
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:1047 classes/applications/events_manager/events_manager.aw:1068
+#: classes/applications/events_manager/events_manager.aw:1090 classes/applications/events_manager/events_manager.aw:1111
 msgid "Parameeter vale."
 msgstr ""
 
-#: classes/applications/events_manager/events_manager.aw:1112
+#: classes/applications/events_manager/events_manager.aw:1155
 msgid "toimumisaeg"
 msgstr ""
 

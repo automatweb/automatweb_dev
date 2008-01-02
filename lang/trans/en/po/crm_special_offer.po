@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/crm/crm_special_offer.aw:prop_valid_to
 msgid "Omaduse Kehtivuse lõpp (valid_to) caption"
-msgstr "Valid till"
+msgstr "Valid to"
 
 #: classes/crm/crm_special_offer.aw:prop_valid_to_comment
 msgid "Omaduse Kehtivuse lõpp (valid_to) kommentaar"

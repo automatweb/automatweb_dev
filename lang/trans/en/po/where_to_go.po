@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_show_season_to
 msgid "Omaduse Kuvatav hooaeg kuni (show_season_to) caption"
-msgstr "Show season till"
+msgstr "Show season to"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_show_season_to_comment
 msgid "Omaduse Kuvatav hooaeg kuni (show_season_to) kommentaar"

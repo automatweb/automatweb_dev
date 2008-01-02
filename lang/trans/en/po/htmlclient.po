@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -57,45 +57,45 @@ msgstr "Forward &gt;&gt;&gt;"
 msgid "submit_and_forward"
 msgstr "Submit and go forward"
 
-#: classes/cfg/htmlclient.aw:768
+#: classes/cfg/htmlclient.aw:770
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr "Data is not saved, do you wish to save before you continue?"
 
-#: classes/cfg/htmlclient.aw:864
+#: classes/cfg/htmlclient.aw:866
 msgid "Tagasiside"
 msgstr "Feedback"
 
-#: classes/cfg/htmlclient.aw:866
+#: classes/cfg/htmlclient.aw:868
 msgid "Kasutajatugi"
 msgstr "Support"
 
-#: classes/cfg/htmlclient.aw:867
+#: classes/cfg/htmlclient.aw:869
 msgid "Abi"
 msgstr "Help"
 
-#: classes/cfg/htmlclient.aw:868
+#: classes/cfg/htmlclient.aw:870
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/cfg/htmlclient.aw:871
+#: classes/cfg/htmlclient.aw:873
 msgid "J&auml;rjehoidja"
 msgstr "Bookmarks"
 
-#: classes/cfg/htmlclient.aw:875
+#: classes/cfg/htmlclient.aw:877
 msgid "Ajalugu"
 msgstr "History"
 
-#: classes/cfg/htmlclient.aw:879
+#: classes/cfg/htmlclient.aw:881
 msgid "Lisa kiiresti"
 msgstr "Add quickly"
 
-#: classes/cfg/htmlclient.aw:1345 classes/cfg/htmlclient.aw:1347
-#: classes/cfg/htmlclient.aw:1419 classes/cfg/htmlclient.aw:1421
+#: classes/cfg/htmlclient.aw:1349 classes/cfg/htmlclient.aw:1351
+#: classes/cfg/htmlclient.aw:1423 classes/cfg/htmlclient.aw:1425
 msgid "Kinni"
 msgstr "Close"
 
-#: classes/cfg/htmlclient.aw:1346 classes/cfg/htmlclient.aw:1347
-#: classes/cfg/htmlclient.aw:1420 classes/cfg/htmlclient.aw:1421
+#: classes/cfg/htmlclient.aw:1350 classes/cfg/htmlclient.aw:1351
+#: classes/cfg/htmlclient.aw:1424 classes/cfg/htmlclient.aw:1425
 msgid "Lahti"
 msgstr "Open"
 

@@ -26,10 +26,10 @@ $GLOBALS["TRANS"]["Omaduse Toodete fikseeritud allahindlus (prod_web_discount) c
 $GLOBALS["TRANS"]["Omaduse Lisanduv hind inimestele &uuml;le normaalmahutavuse (add_price_per_face) caption"] = "Additional price per person, when over normal capacity";
 $GLOBALS["TRANS"]["Omaduse Aja&uuml;hik (time_unit) caption"] = "Time unit";
 $GLOBALS["TRANS"]["Omaduse Aja samm: alates (time_from) caption"] = "Time step: from";
-$GLOBALS["TRANS"]["Omaduse kuni (time_to) caption"] = "Till";
+$GLOBALS["TRANS"]["Omaduse kuni (time_to) caption"] = "To";
 $GLOBALS["TRANS"]["Omaduse ,sammuga (time_step) caption"] = ", with stepping";
 $GLOBALS["TRANS"]["Omaduse Valiku aja samm: alates (selectbox_time_from) caption"] = "Selection time step: from";
-$GLOBALS["TRANS"]["Omaduse kuni (selectbox_time_to) caption"] = "Till";
+$GLOBALS["TRANS"]["Omaduse kuni (selectbox_time_to) caption"] = "To";
 $GLOBALS["TRANS"]["Omaduse , sammuga (selectbox_time_step) caption"] = ", with stepping";
 $GLOBALS["TRANS"]["Omaduse T&otilde;lgi (transl) caption"] = "Translate";
 $GLOBALS["TRANS"]["Grupi Kalender (calendar) pealkiri"] = "Calendar";

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -265,6 +265,54 @@ msgstr ""
 msgid "Omaduse  (sp_tb) help"
 msgstr ""
 
+#: classes/file.aw:prop_sp_text
+msgid "Omaduse Sisu m&otilde;imalike asenduste tekst (sp_text) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_text_comment
+msgid "Omaduse Sisu m&otilde;imalike asenduste tekst (sp_text) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_text_help
+msgid "Omaduse Sisu m&otilde;imalike asenduste tekst (sp_text) help"
+msgstr ""
+
+#: classes/file.aw:prop_sp_subject
+msgid "Omaduse Teema (sp_subject) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_subject_comment
+msgid "Omaduse Teema (sp_subject) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_subject_help
+msgid "Omaduse Teema (sp_subject) help"
+msgstr ""
+
+#: classes/file.aw:prop_sp_from
+msgid "Omaduse Kellelt (sp_from) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_from_comment
+msgid "Omaduse Kellelt (sp_from) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_from_help
+msgid "Omaduse Kellelt (sp_from) help"
+msgstr ""
+
+#: classes/file.aw:prop_sp_content
+msgid "Omaduse Sisu (sp_content) caption"
+msgstr ""
+
+#: classes/file.aw:prop_sp_content_comment
+msgid "Omaduse Sisu (sp_content) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_sp_content_help
+msgid "Omaduse Sisu (sp_content) help"
+msgstr ""
+
 #: classes/file.aw:prop_sp_table
 msgid "Omaduse Valitud isikud (sp_table) caption"
 msgstr ""
@@ -389,101 +437,108 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:174
+#: classes/file.aw:186
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/file.aw:194
+#: classes/file.aw:206
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/file.aw:195 classes/file.aw:214
+#: classes/file.aw:207 classes/file.aw:226
 msgid "Allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:202
+#: classes/file.aw:214
 msgid "DigiDoc konteinerisse"
 msgstr ""
 
-#: classes/file.aw:213
+#: classes/file.aw:225
 msgid "Allkirjasta"
 msgstr ""
 
-#: classes/file.aw:221
+#: classes/file.aw:233
 msgid "DigiDoc konteiner"
 msgstr ""
 
-#: classes/file.aw:232
+#: classes/file.aw:244
 msgid "Allkirjasta fail"
 msgstr ""
 
-#: classes/file.aw:233
+#: classes/file.aw:245
 msgid "Faili: %s, allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:282
+#: classes/file.aw:294
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:378
+#: classes/file.aw:390
 msgid "Paiguta dokumenti"
 msgstr ""
 
-#: classes/file.aw:461
-msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
+#: classes/file.aw:412
+msgid ""
+"V&otilde;imalikud asendused\n"
+"<br>\t\t\t\t\t#file# - faili nimi \n"
+"<br>\t\t\t\t\t#file_url# - link failile \n"
+"<br>\t\t\t\t\t#user_name# - muutja nimi"
 msgstr ""
 
-#: classes/file.aw:839
-msgid "Vale objekti id!"
+#: classes/file.aw:425 classes/file.aw:1880
+msgid ""
+"User %s has added/changed the following file %s. Please click the link below to view the document \n"
+" %s"
 msgstr ""
 
-#: classes/file.aw:1466
-msgid "Need either id or parent"
-msgstr ""
-
-#: classes/file.aw:1583
-msgid "Salvesta ja indekseeri otsingusse"
-msgstr ""
-
-#: classes/file.aw:1591
-msgid "Salvesta ja paiguta dokumenti"
-msgstr ""
-
-#: classes/file.aw:1625
-msgid "Salvesta"
-msgstr ""
-
-#: classes/file.aw:1631
-msgid "Kustuta"
-msgstr ""
-
-#: classes/file.aw:1638
-msgid "Saada teavitusmeil"
-msgstr ""
-
-#: classes/file.aw:1648
-msgid "Nimi"
-msgstr ""
-
-#: classes/file.aw:1653
-msgid "Organisatsioon"
-msgstr ""
-
-#: classes/file.aw:1658
-msgid "Telefon"
-msgstr ""
-
-#: classes/file.aw:1663
-msgid "E-mail"
-msgstr ""
-
-#: classes/file.aw:1828
+#: classes/file.aw:435 classes/file.aw:1899
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 
-#: classes/file.aw:1829
-msgid ""
-"Uuendati faili \"%s\". Palun kliki siia:\n"
-"%s\n"
-"et faili näha!"
+#: classes/file.aw:504
+msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
+msgstr ""
+
+#: classes/file.aw:882
+msgid "Vale objekti id!"
+msgstr ""
+
+#: classes/file.aw:1509
+msgid "Need either id or parent"
+msgstr ""
+
+#: classes/file.aw:1626
+msgid "Salvesta ja indekseeri otsingusse"
+msgstr ""
+
+#: classes/file.aw:1634
+msgid "Salvesta ja paiguta dokumenti"
+msgstr ""
+
+#: classes/file.aw:1668
+msgid "Salvesta"
+msgstr ""
+
+#: classes/file.aw:1674
+msgid "Kustuta"
+msgstr ""
+
+#: classes/file.aw:1681
+msgid "Saada teavitusmeil"
+msgstr ""
+
+#: classes/file.aw:1691
+msgid "Nimi"
+msgstr ""
+
+#: classes/file.aw:1696
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/file.aw:1701
+msgid "Telefon"
+msgstr ""
+
+#: classes/file.aw:1706
+msgid "E-mail"
 msgstr ""

@@ -133,7 +133,7 @@ msgstr "From"
 
 #: classes/formgen/currency.aw:188
 msgid "Lõppkuupäev"
-msgstr "Till"
+msgstr "To"
 
 #: classes/formgen/currency.aw:192
 msgid "Valuuta"

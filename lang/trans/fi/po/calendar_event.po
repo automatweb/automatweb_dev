@@ -518,15 +518,15 @@ msgid "Omaduse Aliastehaldur (aliasmgr) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_uimage1
-msgid "Omaduse  (uimage1) caption"
+msgid "Omaduse Pilt (uimage1) caption"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_uimage1_comment
-msgid "Omaduse  (uimage1) kommentaar"
+msgid "Omaduse Pilt (uimage1) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_uimage1_help
-msgid "Omaduse  (uimage1) help"
+msgid "Omaduse Pilt (uimage1) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_seealso
@@ -633,30 +633,30 @@ msgstr ""
 msgid "Seose Toimumisaeg (RELTYPE_EVENT_TIME) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:373
+#: classes/applications/calendar/calendar_event.aw:395
 msgid "Algusaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:374
+#: classes/applications/calendar/calendar_event.aw:396
 msgid "L&otilde;puaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:419
+#: classes/applications/calendar/calendar_event.aw:437
 msgid "Sellist toimumiskohta pole"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:446
+#: classes/applications/calendar/calendar_event.aw:466
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:450
+#: classes/applications/calendar/calendar_event.aw:470
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:454
+#: classes/applications/calendar/calendar_event.aw:474
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:484
+#: classes/applications/calendar/calendar_event.aw:504
 msgid "Kustuta"
 msgstr ""

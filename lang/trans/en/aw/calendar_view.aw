@@ -1,12 +1,7 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Välimus (use_template) caption"] = "Template";
 $GLOBALS["TRANS"]["Omaduse Mitu j&auml;rgmist (num_next_events) caption"] = "Number of next events";
 $GLOBALS["TRANS"]["Omaduse Vaade (default_view) caption"] = "View";
 $GLOBALS["TRANS"]["Omaduse Otsinguvorm (search_form) caption"] = "Search form";
-$GLOBALS["TRANS"]["Omaduse Näita ainult sündmustega päevi (show_days_with_events) caption"] = "Display only days with events";
-$GLOBALS["TRANS"]["Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"] = "Display event content in calendar view";
-$GLOBALS["TRANS"]["Omaduse Näita sündmust kõikidel päevadel (show_event_days) caption"] = "Show event on all days";
-$GLOBALS["TRANS"]["Omaduse Näita ainult aktiivseid sündmusi (actives_only) caption"] = "Display only active events";
 $GLOBALS["TRANS"]["Omaduse Pealkiri (minical_title) caption"] = "Title";
 $GLOBALS["TRANS"]["Omaduse Taust (minical_background) caption"] = "Background";
 $GLOBALS["TRANS"]["Omaduse Tulemuste tabeli pealkiri (table_header) caption"] = "Result table title";
@@ -14,12 +9,9 @@ $GLOBALS["TRANS"]["Omaduse Tulemuste tabeli esimene rida (table_frow) caption"] 
 $GLOBALS["TRANS"]["Omaduse Tulemuste tabeli teine rida (table_srow) caption"] = "Result table second row";
 $GLOBALS["TRANS"]["Omaduse Kuu navigaator (month_navigator) caption"] = "Month navigator";
 $GLOBALS["TRANS"]["Omaduse Tulemuste tabel (result_table) caption"] = "Result table";
-$GLOBALS["TRANS"]["Omaduse Sündmused (show_events) caption"] = "Events";
 $GLOBALS["TRANS"]["Grupi Stiilid (style) pealkiri"] = "Styles";
 $GLOBALS["TRANS"]["Grupi Tulemuste seadistamine (ftresults) pealkiri"] = "Result settings";
 $GLOBALS["TRANS"]["Grupi Sündmused (show_events) pealkiri"] = "Events";
-$GLOBALS["TRANS"]["Seose Võta sündmusi (RELTYPE_EVENT_SOURCE) tekst"] = "Get events";
-$GLOBALS["TRANS"]["Seose väljund (RELTYPE_OUTPUT) tekst"] = "output";
 $GLOBALS["TRANS"]["Seose Stiil (RELTYPE_STYLE) tekst"] = "Style";
 $GLOBALS["TRANS"]["Seose Otsing (RELTYPE_SEARCH) tekst"] = "Search";
 $GLOBALS["TRANS"]["Kuuvaade & nädala sündmused"] = "Month view & week's events";

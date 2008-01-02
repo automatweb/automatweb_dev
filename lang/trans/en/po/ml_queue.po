@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -43,23 +43,23 @@ msgstr ""
 msgid "adding scheduler ! <br />"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:526
+#: classes/applications/mailinglist/ml_queue.aw:533
 msgid "Sending"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:529
+#: classes/applications/mailinglist/ml_queue.aw:536
 msgid "Nothing to send..."
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:532
+#: classes/applications/mailinglist/ml_queue.aw:539
 msgid "Not sent:"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:537
+#: classes/applications/mailinglist/ml_queue.aw:544
 msgid "Now sending next"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:636
+#: classes/applications/mailinglist/ml_queue.aw:643
 msgid ""
 "done\n"
 "<br>"
@@ -67,10 +67,10 @@ msgstr ""
 "done\n"
 "<br>"
 
-#: classes/applications/mailinglist/ml_queue.aw:704
+#: classes/applications/mailinglist/ml_queue.aw:711
 msgid "couldn't send mail<br />\n"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:792
+#: classes/applications/mailinglist/ml_queue.aw:799
 msgid "sending mail to:"
 msgstr ""

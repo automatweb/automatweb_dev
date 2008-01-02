@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -147,6 +147,18 @@ msgstr ""
 # classes/applications/shop/otto/otto_import.aw:prop_last_import_log_help
 #: classes/applications/shop/otto/otto_import.aw:prop_last_import_log_help
 msgid "Omaduse Viimase impordi logi (last_import_log) help"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_products_count
+msgid "Omaduse Toodete arv (products_count) caption"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_products_count_comment
+msgid "Omaduse Toodete arv (products_count) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_products_count_help
+msgid "Omaduse Toodete arv (products_count) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_import_log_list
@@ -781,271 +793,271 @@ msgid "Seose Lao toote seadete vorm (RELTYPE_SHOP_PRODUCT_CONFIG_FORM) tekst"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:layout_vbox_products_manager_search
-msgid "Kujundusosa Toodete&nbsp;otsing (vbox_products_manager_search) pealkiri"
+msgid "Kujundusosa Toodete otsing (vbox_products_manager_search) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:308
+#: classes/applications/shop/otto/otto_import.aw:316
 msgid "Impordi soodustooted"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:317
+#: classes/applications/shop/otto/otto_import.aw:325
 msgid "T&uuml;hjenda soodustoodete tabel ( aktiivse keele alt:"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:326
+#: classes/applications/shop/otto/otto_import.aw:334
 msgid "T&uuml;hjenda soodustoodete tabel ( olenemata keelest! )"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:346
+#: classes/applications/shop/otto/otto_import.aw:354
 msgid "Failikood moodustub failinimest j&auml;rgmiselt: faili nimi: EST.TT010, selle faili kood: T010. Toodete otsimisel arvestatakse aktiivse keele ja saidi id-ga.<br />"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:347
+#: classes/applications/shop/otto/otto_import.aw:355
 msgid "Failikoodist v&otilde;ib kirjutada ka ainult alguse v&otilde;i l&otilde;pu, puuduvat osa t&auml;histab sel juhul '%' m&auml;rk <br />"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:348
+#: classes/applications/shop/otto/otto_import.aw:356
 msgid "N&auml;iteks k&otilde;ik 'G'-ga algavad t&auml;hised oleks: 'G%'. K&otilde;ik 'H0' algusega oleks 'H0%'. '%' m&auml;rgi v&otilde;ib ka &auml;ra j&auml;tta, sel juhul otsitakse t&auml;pselt selle j&auml;rgi, mis tekstikastis on."
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:350
+#: classes/applications/shop/otto/otto_import.aw:358
 msgid "Peale salvestamist kuvatakse teile tekstikastis olevale stringile vastavad lehed, mille alusel hakatakse tooteid kustutama. Muutes stringi tekstikastis ja uuesti salvastades, saate veenduda, et &otilde;igete t&auml;histe j&rgi hakatakse tooteid otsima."
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:351
+#: classes/applications/shop/otto/otto_import.aw:359
 msgid "Selleks, et tooted kustutataks, m&auml;rkige &auml;ra l&otilde;ppu tekkiv m&auml;rkeruut ja salvestage. Peale seda kustutakse k&auml;ik tooted ja sellega seonduvad hinnad/suurused, mille juures on vastavalt tekstikasti sisestatud otsingustringile vastav t&auml;his (lehe nimetus)."
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:352
+#: classes/applications/shop/otto/otto_import.aw:360
 msgid "Tooted ja nendega seonduv info kustutatakse s&uuml;steemist l&otilde;plikult!!!"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:359
+#: classes/applications/shop/otto/otto_import.aw:367
 msgid "Kustutan j&auml;rgnevate t&auml;histega failides olevad tooted:"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:381
-#: classes/applications/shop/otto/otto_import.aw:769
+#: classes/applications/shop/otto/otto_import.aw:389
+#: classes/applications/shop/otto/otto_import.aw:777
 msgid "Kustuta?"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:614
+#: classes/applications/shop/otto/otto_import.aw:622
 msgid "Kategooria nimi"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:619
-#: classes/applications/shop/otto/otto_import.aw:1815
-#: classes/applications/shop/otto/otto_import.aw:4503
+#: classes/applications/shop/otto/otto_import.aw:627
+#: classes/applications/shop/otto/otto_import.aw:1823
+#: classes/applications/shop/otto/otto_import.aw:4511
 msgid "AW Kataloogi ID"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:675
+#: classes/applications/shop/otto/otto_import.aw:683
 msgid "Toodete arv"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:681
+#: classes/applications/shop/otto/otto_import.aw:689
 msgid "Impordi aeg"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:685
+#: classes/applications/shop/otto/otto_import.aw:693
 msgid "csv failid"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:689
-#: classes/applications/shop/otto/otto_import.aw:700
+#: classes/applications/shop/otto/otto_import.aw:697
+#: classes/applications/shop/otto/otto_import.aw:708
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:721
+#: classes/applications/shop/otto/otto_import.aw:729
 msgid "OID"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:725
-#: classes/applications/shop/otto/otto_import.aw:966
+#: classes/applications/shop/otto/otto_import.aw:733
+#: classes/applications/shop/otto/otto_import.aw:974
 msgid "Andmed"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:729
-#: classes/applications/shop/otto/otto_import.aw:1089
+#: classes/applications/shop/otto/otto_import.aw:737
+#: classes/applications/shop/otto/otto_import.aw:1097
 msgid "Pildid"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:747
+#: classes/applications/shop/otto/otto_import.aw:755
 msgid "Muuda toodet"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:816
+#: classes/applications/shop/otto/otto_import.aw:824
 msgid "Otsing"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:868
+#: classes/applications/shop/otto/otto_import.aw:876
 msgid "Toote OID"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:872
-#: classes/applications/shop/otto/otto_import.aw:2133
-#: classes/applications/shop/otto/otto_import.aw:2286
+#: classes/applications/shop/otto/otto_import.aw:880
+#: classes/applications/shop/otto/otto_import.aw:2141
+#: classes/applications/shop/otto/otto_import.aw:2294
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:876
-#: classes/applications/shop/otto/otto_import.aw:1014
+#: classes/applications/shop/otto/otto_import.aw:884
+#: classes/applications/shop/otto/otto_import.aw:1022
 msgid "Toote koodid"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:880
+#: classes/applications/shop/otto/otto_import.aw:888
 msgid "Video"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:884
-#: classes/applications/shop/otto/otto_import.aw:921
+#: classes/applications/shop/otto/otto_import.aw:892
+#: classes/applications/shop/otto/otto_import.aw:929
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:931
+#: classes/applications/shop/otto/otto_import.aw:939
 msgid "Leiti %s toodet"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:983
+#: classes/applications/shop/otto/otto_import.aw:991
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:988
+#: classes/applications/shop/otto/otto_import.aw:996
 msgid "Toote kirjeldus"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:994
-#: classes/applications/shop/otto/otto_import.aw:1427
-#: classes/applications/shop/otto/otto_import.aw:1821
+#: classes/applications/shop/otto/otto_import.aw:1002
+#: classes/applications/shop/otto/otto_import.aw:1435
+#: classes/applications/shop/otto/otto_import.aw:1829
 msgid "Kategooriad"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1004
+#: classes/applications/shop/otto/otto_import.aw:1012
 msgid "Leht"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1023
+#: classes/applications/shop/otto/otto_import.aw:1031
 msgid "V&auml;rvid"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1028
+#: classes/applications/shop/otto/otto_import.aw:1036
 msgid "N&auml;idatakse toodete nimekirjas"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1054
+#: classes/applications/shop/otto/otto_import.aw:1062
 msgid "Teised tooted"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1076
-#: classes/applications/shop/otto/otto_import.aw:1354
-#: classes/applications/shop/otto/otto_import.aw:1572
+#: classes/applications/shop/otto/otto_import.aw:1084
+#: classes/applications/shop/otto/otto_import.aw:1362
+#: classes/applications/shop/otto/otto_import.aw:1580
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1081
+#: classes/applications/shop/otto/otto_import.aw:1089
 msgid "Esimeseks pildiks"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1093
+#: classes/applications/shop/otto/otto_import.aw:1101
 msgid "Uus pilt"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1302
+#: classes/applications/shop/otto/otto_import.aw:1310
 msgid "Uus konteiner"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1314
+#: classes/applications/shop/otto/otto_import.aw:1322
 msgid "Konteinerite nimekiri"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1337
+#: classes/applications/shop/otto/otto_import.aw:1345
 msgid "ID"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1343
-#: classes/applications/shop/otto/otto_import.aw:1641
+#: classes/applications/shop/otto/otto_import.aw:1351
+#: classes/applications/shop/otto/otto_import.aw:1649
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1349
+#: classes/applications/shop/otto/otto_import.aw:1357
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1423
+#: classes/applications/shop/otto/otto_import.aw:1431
 msgid "Nimi/J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1431
+#: classes/applications/shop/otto/otto_import.aw:1439
 msgid "N&auml;ita k&otilde;igis kategooriates"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1445
+#: classes/applications/shop/otto/otto_import.aw:1453
 msgid "Nimi:"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1451
+#: classes/applications/shop/otto/otto_import.aw:1459
 msgid "J&auml;rjekord:"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1555
+#: classes/applications/shop/otto/otto_import.aw:1563
 msgid "Pildi URL"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1559
+#: classes/applications/shop/otto/otto_import.aw:1567
 msgid "Lingi tekst"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1563
+#: classes/applications/shop/otto/otto_import.aw:1571
 msgid "Lingi URL"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1567
+#: classes/applications/shop/otto/otto_import.aw:1575
 msgid "Ilma reavahetusteta"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1636
+#: classes/applications/shop/otto/otto_import.aw:1644
 msgid "Fail"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1746
+#: classes/applications/shop/otto/otto_import.aw:1754
 msgid "Faili t&auml;ht"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1751
+#: classes/applications/shop/otto/otto_import.aw:1759
 msgid "Suffiks"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1809
+#: classes/applications/shop/otto/otto_import.aw:1817
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1826
-#: classes/applications/shop/otto/otto_import.aw:1882
-#: classes/applications/shop/otto/otto_import.aw:2139
-#: classes/applications/shop/otto/otto_import.aw:2173
-#: classes/applications/shop/otto/otto_import.aw:2291
-#: classes/applications/shop/otto/otto_import.aw:2327
+#: classes/applications/shop/otto/otto_import.aw:1834
+#: classes/applications/shop/otto/otto_import.aw:1890
+#: classes/applications/shop/otto/otto_import.aw:2147
+#: classes/applications/shop/otto/otto_import.aw:2181
+#: classes/applications/shop/otto/otto_import.aw:2299
+#: classes/applications/shop/otto/otto_import.aw:2335
 msgid "Filtreeri"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1869
+#: classes/applications/shop/otto/otto_import.aw:1877
 msgid "Filter"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:2122
-#: classes/applications/shop/otto/otto_import.aw:2276
+#: classes/applications/shop/otto/otto_import.aw:2130
+#: classes/applications/shop/otto/otto_import.aw:2284
 msgid "Kategooria"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:2127
-#: classes/applications/shop/otto/otto_import.aw:2281
+#: classes/applications/shop/otto/otto_import.aw:2135
+#: classes/applications/shop/otto/otto_import.aw:2289
 msgid "Pildi aadress"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:3637
+#: classes/applications/shop/otto/otto_import.aw:3645
 msgid "all done! <br>"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:4497
+#: classes/applications/shop/otto/otto_import.aw:4505
 msgid "Lehed komaga eraldatult"
 msgstr ""

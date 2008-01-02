@@ -14,19 +14,16 @@ msgstr ""
 msgid "Klassi Kalendrivaade help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_use_template
 #: classes/calendar/calendar_view.aw:prop_use_template
-msgid "Omaduse Välimus (use_template) caption"
-msgstr "Template"
-
-# classes/calendar/calendar_view.aw:prop_use_template_comment
-#: classes/calendar/calendar_view.aw:prop_use_template_comment
-msgid "Omaduse Välimus (use_template) kommentaar"
+msgid "Omaduse V&auml;limus (use_template) caption"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_use_template_help
+#: classes/calendar/calendar_view.aw:prop_use_template_comment
+msgid "Omaduse V&auml;limus (use_template) kommentaar"
+msgstr ""
+
 #: classes/calendar/calendar_view.aw:prop_use_template_help
-msgid "Omaduse Välimus (use_template) help"
+msgid "Omaduse V&auml;limus (use_template) help"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_num_next_events
@@ -98,19 +95,16 @@ msgstr ""
 msgid "Omaduse S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi (week_event_template) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_days_with_events
 #: classes/calendar/calendar_view.aw:prop_show_days_with_events
-msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) caption"
-msgstr "Display only days with events"
-
-# classes/calendar/calendar_view.aw:prop_show_days_with_events_comment
-#: classes/calendar/calendar_view.aw:prop_show_days_with_events_comment
-msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) kommentaar"
+msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega päevi (show_days_with_events) caption"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_days_with_events_help
+#: classes/calendar/calendar_view.aw:prop_show_days_with_events_comment
+msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega päevi (show_days_with_events) kommentaar"
+msgstr ""
+
 #: classes/calendar/calendar_view.aw:prop_show_days_with_events_help
-msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) help"
+msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega päevi (show_days_with_events) help"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_sort_day_events_before
@@ -125,61 +119,52 @@ msgstr ""
 msgid "Omaduse Sorteeri &uuml;he p&auml;evased ettepoole (sort_day_events_before) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_event_content
 #: classes/calendar/calendar_view.aw:prop_show_event_content
-msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
-msgstr "Display event content in calendar view"
+msgid "Omaduse N&auml;ita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
+msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_event_content_comment
 #: classes/calendar/calendar_view.aw:prop_show_event_content_comment
-msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) kommentaar"
+msgid "Omaduse N&auml;ita kalendrivaates kohe sündmuse sisu (show_event_content) kommentaar"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_event_content_help
 #: classes/calendar/calendar_view.aw:prop_show_event_content_help
-msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) help"
+msgid "Omaduse N&auml;ita kalendrivaates kohe sündmuse sisu (show_event_content) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_event_days
 #: classes/calendar/calendar_view.aw:prop_show_event_days
-msgid "Omaduse Näita sündmust kõikidel päevadel (show_event_days) caption"
-msgstr "Show event on all days"
+msgid "Omaduse N&auml;ita s&uuml;ndmust k&otilde;ikidel p&auml;evadel (show_event_days) caption"
+msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_event_days_comment
 #: classes/calendar/calendar_view.aw:prop_show_event_days_comment
-msgid "Omaduse Näita sündmust kõikidel päevadel (show_event_days) kommentaar"
+msgid "Omaduse N&auml;ita s&uuml;ndmust k&otilde;ikidel p&auml;evadel (show_event_days) kommentaar"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_event_days_help
 #: classes/calendar/calendar_view.aw:prop_show_event_days_help
-msgid "Omaduse Näita sündmust kõikidel päevadel (show_event_days) help"
+msgid "Omaduse N&auml;ita s&uuml;ndmust k&otilde;ikidel p&auml;evadel (show_event_days) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_actives_only
 #: classes/calendar/calendar_view.aw:prop_actives_only
-msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) caption"
-msgstr "Display only active events"
-
-# classes/calendar/calendar_view.aw:prop_actives_only_comment
-#: classes/calendar/calendar_view.aw:prop_actives_only_comment
-msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) kommentaar"
+msgid "Omaduse N&auml;ita ainult aktiivseid s&uuml;ndmusi (actives_only) caption"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_actives_only_help
+#: classes/calendar/calendar_view.aw:prop_actives_only_comment
+msgid "Omaduse N&auml;ita ainult aktiivseid s&uuml;ndmusi (actives_only) kommentaar"
+msgstr ""
+
 #: classes/calendar/calendar_view.aw:prop_actives_only_help
-msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) help"
+msgid "Omaduse N&auml;ita ainult aktiivseid s&uuml;ndmusi (actives_only) help"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_fix_links
-msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad sündmusega päevale (fix_links) caption"
+msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad s&uuml;ndmusega p&auml;evale (fix_links) caption"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_fix_links_comment
-msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad sündmusega päevale (fix_links) kommentaar"
+msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad s&uuml;ndmusega p&auml;evale (fix_links) kommentaar"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_fix_links_help
-msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad sündmusega päevale (fix_links) help"
+msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad s&uuml;ndmusega p&auml;evale (fix_links) help"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_minical_day_with_events
@@ -195,15 +180,15 @@ msgid "Omaduse S&uuml;ndmustega p&auml;ev (minical_day_with_events) help"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_minical_day_without_events
-msgid "Omaduse Ilma sündmusteta p&auml;ev (minical_day_without_events) caption"
+msgid "Omaduse Ilma s&uuml;ndmusteta p&auml;ev (minical_day_without_events) caption"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_minical_day_without_events_comment
-msgid "Omaduse Ilma sündmusteta p&auml;ev (minical_day_without_events) kommentaar"
+msgid "Omaduse Ilma s&uuml;ndmusteta p&auml;ev (minical_day_without_events) kommentaar"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_minical_day_without_events_help
-msgid "Omaduse Ilma sündmusteta p&auml;ev (minical_day_without_events) help"
+msgid "Omaduse Ilma s&uuml;ndmusteta p&auml;ev (minical_day_without_events) help"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_minical_day_today
@@ -347,19 +332,16 @@ msgstr ""
 msgid "Omaduse Tulemuste tabel (result_table) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_events
 #: classes/calendar/calendar_view.aw:prop_show_events
-msgid "Omaduse Sündmused (show_events) caption"
-msgstr "Events"
-
-# classes/calendar/calendar_view.aw:prop_show_events_comment
-#: classes/calendar/calendar_view.aw:prop_show_events_comment
-msgid "Omaduse Sündmused (show_events) kommentaar"
+msgid "Omaduse S&uuml;ndmused (show_events) caption"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:prop_show_events_help
+#: classes/calendar/calendar_view.aw:prop_show_events_comment
+msgid "Omaduse S&uuml;ndmused (show_events) kommentaar"
+msgstr ""
+
 #: classes/calendar/calendar_view.aw:prop_show_events_help
-msgid "Omaduse Sündmused (show_events) help"
+msgid "Omaduse S&uuml;ndmused (show_events) help"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:group_style
@@ -392,15 +374,13 @@ msgstr "Events"
 msgid "Grupi Sündmused (show_events) help"
 msgstr ""
 
-# classes/calendar/calendar_view.aw:rel_RELTYPE_EVENT_SOURCE
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_EVENT_SOURCE
-msgid "Seose Võta sündmusi (RELTYPE_EVENT_SOURCE) tekst"
-msgstr "Get events"
+msgid "Seose V&otilde;ta s&uuml;ndmusi (RELTYPE_EVENT_SOURCE) tekst"
+msgstr ""
 
-# classes/calendar/calendar_view.aw:rel_RELTYPE_OUTPUT
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_OUTPUT
-msgid "Seose väljund (RELTYPE_OUTPUT) tekst"
-msgstr "output"
+msgid "Seose v&auml;ljund (RELTYPE_OUTPUT) tekst"
+msgstr ""
 
 # classes/calendar/calendar_view.aw:rel_RELTYPE_STYLE
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_STYLE
@@ -499,6 +479,38 @@ msgstr "&lt;&lt;"
 #: classes/calendar/calendar_view.aw:1097
 msgid "&gt;&gt;"
 msgstr "&gt;&gt;"
+
+# classes/calendar/calendar_view.aw:prop_use_template
+#~ msgid "Omaduse Välimus (use_template) caption"
+#~ msgstr "Template"
+
+# classes/calendar/calendar_view.aw:prop_show_days_with_events
+#~ msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) caption"
+#~ msgstr "Display only days with events"
+
+# classes/calendar/calendar_view.aw:prop_show_event_content
+#~ msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
+#~ msgstr "Display event content in calendar view"
+
+# classes/calendar/calendar_view.aw:prop_show_event_days
+#~ msgid "Omaduse Näita sündmust kõikidel päevadel (show_event_days) caption"
+#~ msgstr "Show event on all days"
+
+# classes/calendar/calendar_view.aw:prop_actives_only
+#~ msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) caption"
+#~ msgstr "Display only active events"
+
+# classes/calendar/calendar_view.aw:prop_show_events
+#~ msgid "Omaduse Sündmused (show_events) caption"
+#~ msgstr "Events"
+
+# classes/calendar/calendar_view.aw:rel_RELTYPE_EVENT_SOURCE
+#~ msgid "Seose Võta sündmusi (RELTYPE_EVENT_SOURCE) tekst"
+#~ msgstr "Get events"
+
+# classes/calendar/calendar_view.aw:rel_RELTYPE_OUTPUT
+#~ msgid "Seose väljund (RELTYPE_OUTPUT) tekst"
+#~ msgstr "output"
 
 # classes/calendar/calendar_view.aw:prop_fix_links
 #~ msgid "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) caption"

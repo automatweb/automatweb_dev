@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_date_to
 msgid "Omaduse Kuni (s_date_to) caption"
-msgstr "Till"
+msgstr "To"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_date_to_comment
 msgid "Omaduse Kuni (s_date_to) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_hr_to
 msgid "Omaduse Kellaaeg kuni (s_hr_to) caption"
-msgstr "Time till"
+msgstr "Time to"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_hr_to_comment
 msgid "Omaduse Kellaaeg kuni (s_hr_to) kommentaar"
@@ -387,7 +387,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_eex_to
 msgid "Omaduse Kuni (eex_to) caption"
-msgstr "Till"
+msgstr "To"
 
 #: classes/applications/stats/stats_viewer.aw:prop_eex_to_comment
 msgid "Omaduse Kuni (eex_to) kommentaar"

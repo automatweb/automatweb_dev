@@ -805,7 +805,7 @@ msgstr "From"
 
 #: classes/applications/groupware/reservation.aw:2192
 msgid "Kuni"
-msgstr "Till"
+msgstr "To"
 
 #: classes/applications/groupware/reservation.aw:2233
 msgid "Korratud reserveeringud"

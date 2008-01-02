@@ -85,6 +85,6 @@ $GLOBALS["TRANS"]["Meiliaadress"] = "E-mails";
 $GLOBALS["TRANS"]["Kinnita"] = "Confirm";
 $GLOBALS["TRANS"]["Kinnituatud, kordused loodud"] = "Confirmed, recurrences created";
 $GLOBALS["TRANS"]["Alates"] = "From";
-$GLOBALS["TRANS"]["Kuni"] = "Till";
+$GLOBALS["TRANS"]["Kuni"] = "To";
 $GLOBALS["TRANS"]["Korratud reserveeringud"] = "Recurred reservations";
 ?>

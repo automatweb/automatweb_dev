@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Kinnitatud (is_confirmed) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_reservation.aw:prop_ows_bron
+msgid "Omaduse Broneeringukeskus (ows_bron) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_ows_bron_comment
+msgid "Omaduse Broneeringukeskus (ows_bron) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_ows_bron_help
+msgid "Omaduse Broneeringukeskus (ows_bron) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_reservation.aw:prop_hotel_id
 msgid "Omaduse Hotell (hotel_id) caption"
 msgstr ""
@@ -508,5 +520,9 @@ msgstr ""
 
 #: classes/applications/ows_bron/ows_reservation.aw:group_bron_data_help
 msgid "Grupi Reserveeringu andmed (bron_data) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:rel_RELTYPE_OWS_BRON
+msgid "Seose Reserveeringukeskus (RELTYPE_OWS_BRON) tekst"
 msgstr ""
 

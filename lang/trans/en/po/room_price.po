@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_date_to
 msgid "Omaduse Kuni (date_to) caption"
-msgstr "Till"
+msgstr "To"
 
 #: classes/common/room_price.aw:prop_date_to_comment
 msgid "Omaduse Kuni (date_to) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_time_to
 msgid "Omaduse Kuni (time_to) caption"
-msgstr "Till"
+msgstr "To"
 
 #: classes/common/room_price.aw:prop_time_to_comment
 msgid "Omaduse Kuni (time_to) kommentaar"

@@ -9,22 +9,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/doc_display.aw:456
+#: classes/doc_display.aw:458
 msgid "Lisa uus"
 msgstr "Add new"
 
-#: classes/doc_display.aw:462
+#: classes/doc_display.aw:464
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/doc_display.aw:467
+#: classes/doc_display.aw:469
 msgid "Peida"
 msgstr "Hide"
 
-#: classes/doc_display.aw:471
+#: classes/doc_display.aw:473
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/doc_display.aw:477
+#: classes/doc_display.aw:479
 msgid "Kleebi"
 msgstr "Paste"
+
+#: classes/doc_display.aw:675
+msgid "jaanuar"
+msgstr ""
+
+#: classes/doc_display.aw:676
+msgid "veebruar"
+msgstr ""
+
+#: classes/doc_display.aw:677
+msgid "märts"
+msgstr ""
+
+#: classes/doc_display.aw:678
+msgid "aprill"
+msgstr ""
+
+#: classes/doc_display.aw:679
+msgid "mai"
+msgstr ""
+
+#: classes/doc_display.aw:680
+msgid "juuni"
+msgstr ""
+
+#: classes/doc_display.aw:681
+msgid "juuli"
+msgstr ""
+
+#: classes/doc_display.aw:682
+msgid "august"
+msgstr ""
+
+#: classes/doc_display.aw:683
+msgid "september"
+msgstr ""
+
+#: classes/doc_display.aw:684
+msgid "oktoober"
+msgstr ""
+
+#: classes/doc_display.aw:685
+msgid "november"
+msgstr ""
+
+#: classes/doc_display.aw:686
+msgid "detsember"
+msgstr ""
+
+#: classes/doc_display.aw:693
+msgid "Just postitatud"
+msgstr ""

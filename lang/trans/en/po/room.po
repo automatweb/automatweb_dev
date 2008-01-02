@@ -519,7 +519,7 @@ msgstr ""
 
 #: classes/common/room.aw:prop_time_to
 msgid "Omaduse kuni (time_to) caption"
-msgstr "Till"
+msgstr "To"
 
 #: classes/common/room.aw:prop_time_to_comment
 msgid "Omaduse kuni (time_to) kommentaar"
@@ -555,7 +555,7 @@ msgstr ""
 
 #: classes/common/room.aw:prop_selectbox_time_to
 msgid "Omaduse kuni (selectbox_time_to) caption"
-msgstr "Till"
+msgstr "To"
 
 #: classes/common/room.aw:prop_selectbox_time_to_comment
 msgid "Omaduse kuni (selectbox_time_to) kommentaar"

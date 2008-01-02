@@ -43,6 +43,7 @@ $GLOBALS["TRANS"]["Allkirjasta fail"] = "Sign file";
 $GLOBALS["TRANS"]["Faili: %s, allkirjastamine"] = "Signing of file %s";
 $GLOBALS["TRANS"]["fail puudub"] = "file missing";
 $GLOBALS["TRANS"]["Paiguta dokumenti"] = "Insert into document";
+$GLOBALS["TRANS"]["Teavitus muutunud dokumendist"] = "Notification about modified document";
 $GLOBALS["TRANS"]["Faili t&uuml;&uuml;p ei ole lubatud!"] = "File type is not allowed";
 $GLOBALS["TRANS"]["Vale objekti id!"] = "Wrong object ID";
 $GLOBALS["TRANS"]["Need either id or parent"] = "Need either id or parent";
@@ -55,6 +56,4 @@ $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Organisation";
 $GLOBALS["TRANS"]["Telefon"] = "Phone";
 $GLOBALS["TRANS"]["E-mail"] = "E-mail";
-$GLOBALS["TRANS"]["Teavitus muutunud dokumendist"] = "Notification about modified document";
-$GLOBALS["TRANS"]["Uuendati faili \"%s\". Palun kliki siia:\n%s\net faili näha!"] = "File \"%s\" was updated. Please click here:\n %s\n to read the file!";
 ?>

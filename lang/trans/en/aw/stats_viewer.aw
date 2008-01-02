@@ -1,8 +1,8 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Alates (s_date_from) caption"] = "From";
-$GLOBALS["TRANS"]["Omaduse Kuni (s_date_to) caption"] = "Till";
+$GLOBALS["TRANS"]["Omaduse Kuni (s_date_to) caption"] = "To";
 $GLOBALS["TRANS"]["Omaduse Kellaaeg alates (s_hr_from) caption"] = "Time from";
-$GLOBALS["TRANS"]["Omaduse Kellaaeg kuni (s_hr_to) caption"] = "Time till";
+$GLOBALS["TRANS"]["Omaduse Kellaaeg kuni (s_hr_to) caption"] = "Time to";
 $GLOBALS["TRANS"]["Omaduse N&auml;dalap&auml;ev (s_wd) caption"] = "Weekday";
 $GLOBALS["TRANS"]["Omaduse Kasutajanimi (s_username) caption"] = "Username";
 $GLOBALS["TRANS"]["Omaduse Kasutajanimi v&auml;ljaarvatud (s_username_except) caption"] = "Except username";
@@ -22,7 +22,7 @@ $GLOBALS["TRANS"]["Omaduse Tulemused kuva (s_res_type) caption"] = "Show results
 $GLOBALS["TRANS"]["Omaduse Lisaks kuva (s_add_res_type) caption"] = "Show additionally";
 $GLOBALS["TRANS"]["Omaduse Mitu rida (s_limit) caption"] = "How many rows";
 $GLOBALS["TRANS"]["Omaduse Alates (eex_from) caption"] = "From";
-$GLOBALS["TRANS"]["Omaduse Kuni (eex_to) caption"] = "Till";
+$GLOBALS["TRANS"]["Omaduse Kuni (eex_to) caption"] = "To";
 $GLOBALS["TRANS"]["Omaduse Unikaalseid k&uuml;lastusi (stats_eex_inf) caption"] = "Unique visits";
 $GLOBALS["TRANS"]["Grupi Andmed (data) pealkiri"] = "Data";
 $GLOBALS["TRANS"]["Grupi Statistika (stats) pealkiri"] = "Statistics";

@@ -2441,6 +2441,30 @@ msgstr ""
 msgid "Klassi Surmakaunter (1369) nimi"
 msgstr ""
 
+#: aw.ini:class_1372
+msgid "Klassi Rahvus (1372) nimi"
+msgstr ""
+
+#: aw.ini:class_1373
+msgid "Klassi Geoinfo haldus (1373) nimi"
+msgstr ""
+
+#: aw.ini:class_1374
+msgid "Klassi Geoinfo andmed (1374) nimi"
+msgstr ""
+
+#: aw.ini:class_1376
+msgid "Klassi del.icio.us import (1376) nimi"
+msgstr ""
+
+#: aw.ini:class_1377
+msgid "Klassi Citizenship (1377) nimi"
+msgstr ""
+
+#: aw.ini:class_1378
+msgid "Klassi RSS voog (1378) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""
@@ -2699,6 +2723,10 @@ msgstr ""
 
 #: aw.ini:classfolder_67
 msgid "Klassi kataloogi Fun (67) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_68
+msgid "Klassi kataloogi Geoinfo (68) nimi"
 msgstr ""
 
 #: aw.ini:acl_can_edit
@@ -5013,8 +5041,8 @@ msgstr ""
 msgid "syslog.type.ST_EVENT_SEARCH"
 msgstr ""
 
-#: aw.ini:syslogtypes_1364
-msgid "syslog.type.ST_WEATHER_REPORT"
+#: aw.ini:syslogtypes_1378
+msgid "syslog.type.ST_RSS_FEED"
 msgstr ""
 
 #: aw.ini:syslogactions_1
