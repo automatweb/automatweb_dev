@@ -1020,6 +1020,7 @@ class htmlclient extends aw_template
 							"checked" => ($arr["value"][$key]),
 							"value" => $key,
 							"disabled" => $arr["disabled"][$key],
+							"onclick" => $arr["onclick"],
 						));
 					}
 					else
