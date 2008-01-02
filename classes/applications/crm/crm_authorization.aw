@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_authorization.aw,v 1.3 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_authorization.aw,v 1.4 2008/01/02 11:57:33 markop Exp $
 // crm_authorization.aw - Volitus 
 /*
 
@@ -106,7 +106,30 @@ class crm_authorization extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["return_after_save"] = $_GET["return_after_save"];
 	}
+
+	function callback_mod_retval($arr)
+	{
+		if($arr['request']['return_after_save'])
+		{
+			$arr['args']['return_after_save'] = ($arr['request']['return_after_save']);
+		}
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$sc = "";
+		if($arr["request"]["return_after_save"] && $arr["request"]["just_saved"])
+		{
+			$sc = "
+				window.opener.document.changeform.submit();
+				window.close();";
+		}
+
+		return $sc;
+	}
+
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed

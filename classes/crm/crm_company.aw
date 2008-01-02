@@ -1728,7 +1728,7 @@ class crm_company extends class_base
  						$data["options"][$l->id()] = $l->name();
  					}
  				}
- 				return true;
+ 				break;
 			case "tax_clearance_certificate_view":
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_TAX_CLEARANCE_FILE",

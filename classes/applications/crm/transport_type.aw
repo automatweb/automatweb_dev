@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_type.aw,v 1.5 2007/12/28 16:09:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_type.aw,v 1.6 2008/01/02 11:57:33 markop Exp $
 // transport_type.aw - Transportation type 
 /*
 
@@ -48,6 +48,10 @@ class transport_type extends class_base
 		switch($prop["name"])
 		{
 			case "prices_table":
+				if($arr["request"]["action"] == "new")
+				{
+					return PROP_IGNORE;
+				}
 				$this->_get_prices_table(&$arr);
 				break;
 
@@ -148,6 +152,10 @@ class transport_type extends class_base
 
 	function _get_prices_table($arr)
 	{
+		if(!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		classload("common/price_object");
 		$t = &$arr["prop"]["vcl_inst"];
 		$price_inst = get_instance(CL_PRICE);

@@ -24,7 +24,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_discount</field>
-            <caption>Vaikimisi soodustus</caption>
+            <caption>Vaikimisi soodustus %</caption>
       </property>
       <property>
             <name>order_frequency</name>
@@ -59,6 +59,16 @@
             <rows>5</rows>
             <field>aw_sell_alert</field>
             <caption>Hoiatus m&amp;amp;uuml;&amp;amp;uuml;gil</caption>
+      </property>
+      <property>
+            <name>tax_rate</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TAX_RATE</reltype>
+            <store>connect</store>
+            <field>tax_rate</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi KM-kood</caption>
       </property>
       <property>
             <name>buyer_contract_creator</name>
@@ -238,15 +248,20 @@
                   <caption>Kontaktisik</caption>
             </CONTACT_PERSON>
             <CONTACT_TRANSPORT>
+                  <value>4</value>
+                  <clid>CL_TRANSPORT_TYPE</clid>
+                  <caption>Transpordiliik</caption>
+            </CONTACT_TRANSPORT>
+            <TAX_RATE>
                   <value>5</value>
                   <clid>CL_CRM_TAX_RATE</clid>
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;gi KM-kood</caption>
-            </CONTACT_TRANSPORT>
-            <ERRAND_COND>
+            </TAX_RATE>
+            <SHIPMENT_CONDITION>
                   <value>6</value>
-                  <clid>CL_CRM_ERRAND_CONDITION</clid>
+                  <clid>CL_CRM_SHIPMENT_CONDITION</clid>
                   <caption>L&amp;amp;auml;hetustingimus</caption>
-            </ERRAND_COND>
+            </SHIPMENT_CONDITION>
             <CLIENT_MANAGER>
                   <value>34</value>
                   <clid>CL_CRM_PERSON</clid>

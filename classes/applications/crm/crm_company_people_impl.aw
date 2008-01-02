@@ -251,7 +251,7 @@ class crm_company_people_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
-
+		$u = get_instance(CL_USER);
 		classload("core/icons");
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_human_resources_table($t);
@@ -327,7 +327,6 @@ class crm_company_people_impl extends class_base
 		}
 		else
 		{
-			$u = get_instance(CL_USER);
 			$cur_p = obj($u->get_current_person());
 			$conns = $cur_p->connections_from(array(
 				"type" => "RELTYPE_IMPORTANT_PERSON",
@@ -511,18 +510,27 @@ class crm_company_people_impl extends class_base
 			}
 
 			list($fn, $ln) = explode(" ", $person->prop('name'));
-
 			$aol = new object_list(array(
 				"class_id" => CL_CRM_AUTHORIZATION,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"CL_CRM_AUTHORIZATION.RELTYPE_PERSON.id" => $person->id(),
-				"CL_CRM_AUTHORIZATION.RELTYPE_OUR_COMPANY.id" => $arr["obj_inst"]->id(),
-				"CL_CRM_AUTHORIZATION.RELTYPE_CUSTOMER_COMPANY.id" => $arr["obj_inst"]->id(),
+				"our_company" => $u->get_current_company(),
+				"customer_company" => $arr["obj_inst"]->id(),
+				"authorized_person" => $person->id(),
+
+	//			"CL_CRM_AUTHORIZATION.RELTYPE_PERSON.id" => $person->id(),
+	//			"CL_CRM_AUTHORIZATION.RELTYPE_OUR_COMPANY.id" => $arr["obj_inst"]->id(),
+	//			"CL_CRM_AUTHORIZATION.RELTYPE_CUSTOMER_COMPANY.id" => $arr["obj_inst"]->id(),
 			));
-
-			$autohirization = reset($aol->arr());
-
+			$a_links = array();
+			foreach($aol->arr() as $aut)
+			{
+				$a_links[] = html::href(array(
+						"url" => html::get_change_url($aut->id()),
+						"caption" => (strlen($aut->name()) > 0)?$aut->name():t("(Nimetu)"),
+					));
+			}
+			$authoirization = join(", " , $a_links);
 			$tdata = array(
 				"name" => $ln." ".$fn,
 				"image" => $img,
@@ -536,12 +544,7 @@ class crm_company_people_impl extends class_base
 					"caption" => $pdat["email"]
 				)),
 				"cutcopied" => $ccp,
-				"authorized" => $autohirization ?
-					html::href(array(
-						"url" => html::get_change_url($autohirization->id()),
-						"caption" => (strlen($autohirization->name() > 0))?$autohirization->name():t("(Nimetu)"),
-					)):
-					html::checkbox(array(
+				"authorized" => html::checkbox(array(
 						"name" => "authorized[".$person->id()."]",
 						"value" => 1,
 						"checked" => 0,
@@ -552,13 +555,13 @@ class crm_company_people_impl extends class_base
 							array(
 								"return_url" => get_ru(),
 								"person" => $person->id(),
-								"our_company" => $arr["obj_inst"]->id(),
+								"our_company" => $u->get_current_company(),
 								"customer_company" => $arr["obj_inst"]->id(),
 								"return_after_save" => 1,
 							)
 						)
 						.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")',
-					)),
+					))." " .$authoirization,
 			);
 			$t->define_data($tdata);
 		};

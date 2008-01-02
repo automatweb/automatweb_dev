@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.13 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.14 2008/01/02 11:57:33 markop Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -20,7 +20,7 @@ default method=serialize
 	@caption M&uuml;&uuml;ja
 
 	@property discount type=textbox table=aw_crm_customer_data field=aw_discount
-	@caption Vaikimisi soodustus
+	@caption Vaikimisi soodustus %
 
 	@property order_frequency type=textbox table=aw_crm_customer_data field=aw_order_frequency
 	@caption Tellimuste sagedus p&auml;evades
@@ -33,6 +33,10 @@ default method=serialize
 
 	@property sell_alert type=textarea cols=40 rows=5 table=objects table=aw_crm_customer_data field=aw_sell_alert
 	@caption Hoiatus m&uuml;&uuml;gil
+
+	@property tax_rate type=relpicker reltype=RELTYPE_TAX_RATE store=connect
+	@caption M&uuml;&uuml;gi KM-kood
+
 
 @groupinfo buyer caption="Ostja"
 @default group=buyer
@@ -103,10 +107,10 @@ default method=serialize
 @reltype CONTACT_TRANSPORT value=4 clid=CL_TRANSPORT_TYPE
 @caption Transpordiliik
 
-@reltype CONTACT_TRANSPORT value=5 clid=CL_CRM_TAX_RATE
+@reltype TAX_RATE value=5 clid=CL_CRM_TAX_RATE
 @caption M&uuml;&uuml;gi KM-kood
 
-@reltype ERRAND_COND value=6 clid=CL_CRM_ERRAND_CONDITION
+@reltype SHIPMENT_CONDITION value=6 clid=CL_CRM_SHIPMENT_CONDITION
 @caption L&auml;hetustingimus
 
 @reltype CLIENT_MANAGER value=34 clid=CL_CRM_PERSON

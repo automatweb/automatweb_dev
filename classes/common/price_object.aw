@@ -48,13 +48,13 @@ class price_object extends _int_object
 		Returns main price objects connected to object
 	**/
 	function get_price_objects($object)
-	{arr($object);
-		extract($arr);
+	{
 		$filter = array(
 			"class_id" => array(CL_PRICE),
 			"site_id" => array(),
 			"lang_id" => array(),
-			"CL_PRICE.RELTYPE_OBJECT.id" => $object,
+			"CL_PRICE.RELTYPE_PR_OBJECT.id" => $object,
+//			"CL_PRICE.RELTYPE_.id" => $object,
 //			"parent.class_id" => new obj_predicate_not(CL_PRICE),
 		);
 		$ol = new object_list($filter);
