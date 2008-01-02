@@ -2101,14 +2101,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$objt_name = "objects_".$join["to_class"]."_".$join["reltype"];
 					$tbl = $tbl_r = reset(array_keys($new_t));
-					$field = $new_t[$tbl]["index"];
-					$tbl .= "_".$join["from_class"]."_".$join["field"];
-					if (!isset($done_ot_js[$tbl_r]))
+					if ($tbl != "")
 					{
-						$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
-						$this->joins[] = $str;
-						$done_ot_js[$tbl_r] = 1;
-						$prev_t = $tbl;
+						$field = $new_t[$tbl]["index"];
+						$tbl .= "_".$join["from_class"]."_".$join["field"];
+						if (!isset($done_ot_js[$tbl_r]))
+						{
+							$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
+							$this->joins[] = $str;
+							$done_ot_js[$tbl_r] = 1;
+							$prev_t = $tbl;
+						}
 					}
 
 					// now, if the next join is via rel, we are gonna need the objects table here as well, so add that

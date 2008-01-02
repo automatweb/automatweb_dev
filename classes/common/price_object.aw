@@ -53,7 +53,7 @@ class price_object extends _int_object
 			"class_id" => array(CL_PRICE),
 			"site_id" => array(),
 			"lang_id" => array(),
-			"CL_PRICE.RELTYPE_PR_OBJECT.id" => $object,
+			"CL_PRICE.RELTYPE_PR_OBJECT" => $object,
 //			"CL_PRICE.RELTYPE_.id" => $object,
 //			"parent.class_id" => new obj_predicate_not(CL_PRICE),
 		);
