@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.6 2007/07/09 12:25:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.7 2008/01/02 14:58:30 robert Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -10,8 +10,12 @@
 
 	@property basket_type type=chooser field=meta method=serialize multiple=1
 	@caption Korvi t&uuml;&uuml;p
-	
 
+	@property export type=relpicker field=meta method=serialize reltype=RELTYPE_EXPORT store=connect
+	@Ekspordiobjekt
+	
+@reltype EXPORT clid=CL_ICAL_EXPORT value=1
+@caption iCal eksport
 */
 
 define("OBJ_BASKET_SESSION", 1);
@@ -39,6 +43,13 @@ class object_basket extends class_base
 		{
 		};
 		return $retval;
+	}
+
+	function _get_export($arr)
+	{
+		$bt = $arr["obj_inst"]->prop("basket_type");
+		if($bt[OBJ_BASKET_SESSION])
+			return PROP_IGNORE;
 	}
 
 	function _get_basket_type($arr)
@@ -78,14 +89,19 @@ class object_basket extends class_base
 
 		$ls = "";
 		$counter = 0;
+		$cal = 0;
 		foreach($objs as $dat)
 		{
-			if ($counter > $cur_page_from && $counter <= $cur_page_to)
+			if ($counter >= $cur_page_from && $counter < $cur_page_to)
 			{
 				$v = array(
 					"remove_single_url" => $this->mk_my_orb("remove_single", array("basket" => $basket->id(), "item" => $dat["oid"], "ru" => get_ru()))
 				);
 				$o = obj($dat["oid"]);
+				if($o->class_id()==CL_CALENDAR_EVENT)
+				{
+					$cal = 1;
+				}
 				foreach($mt[1] as $var_name)
 				{
 					list($clid, $prop) = explode(".", $var_name, 2);
@@ -133,6 +149,12 @@ class object_basket extends class_base
 			"remove_all_url" => $this->mk_my_orb("remove_all", array("basket" => $basket->id(),"ru" => get_ru())),
 			"print_url" => aw_url_change_var("print", 1)
 		));
+		if($cal && $export = $basket->prop("export"))
+		{
+			$this->vars_safe(array(
+				"ical_url" => $this->mk_my_orb("export", array("id" => $export, "basket" => $basket->id()), CL_ICAL_EXPORT),
+			));
+		}
 		return $this->parse();
 	}
 

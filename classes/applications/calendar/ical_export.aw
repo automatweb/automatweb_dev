@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.7 2007/12/31 12:25:13 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.8 2008/01/02 14:58:31 robert Exp $
 // ical_export.aw - Sündmuste eksport (iCal) 
 /*
 
@@ -142,7 +142,22 @@ class ical_export extends class_base
 		if(is_oid($arr["id"]))
 		{
 			$obj = obj($arr["id"]);
-			if($calid = $obj->prop("calendar"))
+			$events = 0;
+			if($arr["basket"])
+			{
+				$basket = obj($arr["basket"]);
+				$bi = get_instance(CL_OBJECT_BASKET);
+				$objs = $bi->get_basket_content($basket);
+				$oids = array();
+				foreach($objs as $o)
+				{
+					$oids[$o["oid"]] = $o["oid"];
+				}
+				$events = new object_list(array(
+					"oid" => $oids
+				));
+			}
+			elseif($calid = $obj->prop("calendar"))
 			{
 				$cal = obj($calid);
 				$ef = $cal->get_first_obj_by_reltype("RELTYPE_EVENT_FOLDER");
@@ -159,6 +174,9 @@ class ical_export extends class_base
 					$filters["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["end"]);
 				}
 				$events = new object_list($filters);
+			}
+			if($events)
+			{
 				require_once(aw_ini_get("basedir").'/addons/ical/iCalcreator.aw');
 
 				$c = new vcalendar();

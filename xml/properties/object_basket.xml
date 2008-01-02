@@ -10,6 +10,16 @@
             <multiple>1</multiple>
             <caption>Korvi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
+      <property>
+            <name>export</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_EXPORT</reltype>
+            <store>connect</store>
+      </property>
       <classinfo>
             <syslog_type>ST_OBJECT_BASKET</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -17,5 +27,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <EXPORT>
+                  <clid>CL_ICAL_EXPORT</clid>
+                  <value>1</value>
+                  <caption>iCal eksport</caption>
+            </EXPORT>
+      </reltypes>
 </properties>
 
