@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.14 2007/12/06 14:33:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.15 2008/01/02 13:30:48 robert Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -128,7 +128,23 @@ class aw_object_search extends class_base
 				break;
 
 			case "s_clid":
-				$prop["options"] = get_class_picker();
+				$odl = new object_data_list(
+					array(
+						"lang_id" => array(),
+						"site_id" => array()
+					),
+					array(
+						"" => array(new obj_sql_func(OBJ_SQL_UNIQUE, "clid", "class_id"))
+					)
+				);
+				$cls = array();
+				$cldata = aw_ini_get("classes");
+				foreach($odl->arr() as $od)
+				{
+					$cls[$od["clid"]] = html_entity_decode($cldata[$od["clid"]]["name"]);
+				}
+				sort($cls);
+				$prop["options"] = $cls;
 				break;
 
 			case "s_status":
