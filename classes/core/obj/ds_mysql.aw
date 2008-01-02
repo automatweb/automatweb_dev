@@ -1232,7 +1232,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->joins = array();
 
 		$this->has_data_table_filter = false;
-		list($fetch_sql, $fetch_props, $fetch_metafields) = $this->_get_search_fetch($to_fetch);
+		list($fetch_sql, $fetch_props, $fetch_metafields, $has_sql_func) = $this->_get_search_fetch($to_fetch);
 
 		$where = $this->req_make_sql($params);
 
@@ -1307,7 +1307,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			if ($datafetch)
 			{
-				$ret = array();
+				$ret2 = array();
 				while($row = $this->db_next())
 				{
 					// process metafields
@@ -1320,9 +1320,29 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						}
 						unset($row[$f_mf]);
 					}
-					$ret[] = $row;
+					if ($has_sql_func)
+					{
+						$ret2[] = $row;
+					}
+					else
+					{
+						$ret2[$row["oid"]] = $row;
+					}
+
+					$ret[$row["oid"]] = $row["name"];
+					$parentdata[$row["oid"]] = $row["parent"];
+					$objdata[$row["oid"]] = array(
+						"brother_of" => $row["brother_of"],
+						"status" => $row["status"],
+						"class_id" => $row["class_id"]
+					);
+					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+					{
+						$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
+						$acldata[$row["oid"]] = $row;
+					}
 				}
-				return $ret;
+				return array($ret, $this->meta_filter, $acldata, $parentdata, $objdata, $ret2, $has_sql_func);
 			}
 			else
 			{
@@ -2555,6 +2575,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			return array(0 => "", 1 => array(), 2 => array());
 		}
+		$has_func = false;
 		$ret = array();
 		$serialized_fields = array();
 		foreach($to_fetch as $clid => $props)
@@ -2564,6 +2585,43 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			foreach($props as $pn => $resn)
 			{
+				if (is_object($resn) && get_class($resn) == "obj_sql_func")
+				{
+					$has_func = true;
+					$param = $resn->params;
+					if (isset($p[$param]))
+					{
+						$param = $p[$param]["table"].".`".$p[$param]["field"]."`";
+					}
+					switch($resn->sql_func)
+					{
+						case OBJ_SQL_UNIQUE:
+							$ret[$pn] = " DISTINCT(".$param.") AS `".$resn->name."` ";
+							break;
+
+						case OBJ_SQL_COUNT:
+							$ret[$pn] = " COUNT(".$param.") AS `".$resn->name."` ";
+							break;
+
+						case OBJ_SQL_MAX:
+							$ret[$pn] = " MAX(".$param.") AS `".$resn->name."` ";
+							break;
+
+						case OBJ_SQL_MIN:
+							$ret[$pn] = " MIN(".$param.") AS `".$resn->name."` ";
+							break;
+
+						default:
+							error::raise(array(
+								"id" => "MSG_WRONG_FUNC",
+								"msg" => sprintf(t("ds_mysql::_get_search_fetch() was called with incorrect sql func %s"), $resn->sql)
+							));
+					}
+				}
+				if (is_numeric($pn))
+				{
+					$pn = $resn;
+				}
 				if (substr($pn, 0, 5) == "meta.")
 				{
 					$serialized_fields["objects.metadata"][] = substr($pn, 5);
@@ -2601,8 +2659,31 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$sf[$fldn] = $stuff;
 		}
 
-		$res =  join(",", $ret);
-		return array($res, array_keys($ret), $sf);
+		$acld = "";
+		if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+		{
+			$acld = " objects.acldata as acldata, objects.parent as parent,";
+		}
+
+		if ($has_func)
+		{
+			$fetch_sql = "";
+		}
+		else
+		{
+			$fetch_sql = "
+				objects.oid as oid,
+				objects.name as name,
+				objects.parent as parent,
+				objects.brother_of as brother_of,
+				objects.status as status,
+				objects.class_id as class_id,
+				$acld
+			";
+		}
+	
+		$res =  $fetch_sql.join(",", $ret);
+		return array($res, array_keys($ret), $sf, $has_func);
 	}
 
 	function save_properties_new_version($arr)
