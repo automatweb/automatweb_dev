@@ -380,13 +380,13 @@
             <caption>Bugmail CC</caption>
       </property>
       <property>
-            <name>submit</name>
+            <name>submit2</name>
             <group>general</group>
             <table>aw_bugs</table>
             <type>submit</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>submit</field>
+            <field>submit2</field>
             <caption>Salvesta</caption>
       </property>
       <property>
