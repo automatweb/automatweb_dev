@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/price.aw,v 1.6 2008/01/02 11:57:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/price.aw,v 1.7 2008/01/03 11:49:15 markop Exp $
 // price.aw - Hind 
 /*
 
@@ -26,7 +26,7 @@
 	@caption Kuni
 
 //idee oleks selles, et kui uuele klassile tahaks hinda külge panna, siis siia lisada lihtsalt klassi id
-@reltype PR_OBJECT value=1 clid=CL_TRANSPORT_TYPE
+@reltype OBJECT value=1 clid=CL_TRANSPORT_TYPE
 @caption Objekt millele hind m&otilde;jub
 
 */

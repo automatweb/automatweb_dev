@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_type.aw,v 1.6 2008/01/02 11:57:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_type.aw,v 1.7 2008/01/03 11:49:14 markop Exp $
 // transport_type.aw - Transportation type 
 /*
 
@@ -139,13 +139,13 @@ class transport_type extends class_base
 		classload("common/price_object");
 		$id = price_object::add(array(
 			"object" => $arr["id"],
-			"type" => CL_TRANSPORT_TYPE,
+//			"type" => CL_TRANSPORT_TYPE,
 		));
-		$o = obj($arr["id"]);
-		$o->connect(array(
-			"to" => $id,
-			"type" => RELTYPE_PRICE
-		));
+//		$o = obj($arr["id"]);
+//		$o->connect(array(
+//			"to" => $id,
+//			"type" => RELTYPE_PRICE
+//		));
 		
 		return $arr["post_ru"];
 	}

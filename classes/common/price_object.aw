@@ -53,7 +53,7 @@ class price_object extends _int_object
 			"class_id" => array(CL_PRICE),
 			"site_id" => array(),
 			"lang_id" => array(),
-			"CL_PRICE.RELTYPE_PR_OBJECT" => $object,
+			"CL_PRICE.RELTYPE_OBJECT.id" => $object,
 //			"CL_PRICE.RELTYPE_.id" => $object,
 //			"parent.class_id" => new obj_predicate_not(CL_PRICE),
 		);
@@ -125,6 +125,15 @@ class price_object extends _int_object
 		$price->set_name($arr["name"] ? $arr["name"] : $o->name()." ".t("hind"));
 		$price->set_parent($arr["parent"] ? $arr["parent"] : $arr["object"]);
 		$price->set_prop("type" , $o->class_id());
+		foreach($arr as $key => $val)
+		{
+			if($price->is_property($key) && $val)
+			{
+				$price->set_prop($key , $val);
+			}
+
+		}
+/*
 		if($arr["currency"])
 		{
 			$price->set_prop("currency" , $arr["currency"]);
@@ -132,13 +141,14 @@ class price_object extends _int_object
 		if($arr["sum"])
 		{
 			$price->set_prop("sum" , $arr["sum"]);
-		}
+		}*/
+
 		$price->save();
 		if(is_oid($arr["object"]))
 		{
 			$price->connect(array(
 				"to" => $arr["object"],
-				"type" => RELTYPE_OBJECT,
+				"type" => "RELTYPE_OBJECT",
 			));
 		}
 		return $price->id();
