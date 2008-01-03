@@ -150,7 +150,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 
 
-	@property submit type=submit store=no no_caption=1
+	@property submit2 type=submit store=no no_caption=1
 	@caption Salvesta
 
 @default group=cust
