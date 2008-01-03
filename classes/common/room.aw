@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.218 2008/01/03 12:41:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.219 2008/01/03 12:51:30 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2714,7 +2714,7 @@ class room extends class_base
 				$op_len++;
 			}
 		}
-		$pct = floor(100 / ($op_len+1));
+		$pct = floor(100 / ($op_len));
 
 		//kui ruume tuleb vaates palju, siis oleks targem väiksemaks teha, kuigi noh, juhul kui neid nagu väga palju, siis ei kujuta ettegi kuda välja hakkab nägema
 		if($this->room_count > 1)
@@ -2725,7 +2725,7 @@ class room extends class_base
 		$t->define_field(array(
 			"name" => "time",
 			"caption" => t("Aeg"),
-			"width" => $pct."%",
+//			"width" => $pct."%",
 			"chgbgcolor" => "time_col"
 		));
 		
