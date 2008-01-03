@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.24 2007/12/19 15:55:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.25 2008/01/03 11:14:12 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1086,6 +1086,7 @@ class persons_webview extends class_base
 				"bakalaureus" => t("Bakalaureus"),
 				"magister" => t("Magister"),
 				"doktor" => t("Doktor"),
+				"teadustekandidaat" => t("Teaduste kandidaat"),
 			);
 
 			$ed_inst = get_instance(CL_CRM_PERSON_EDUCATION);
@@ -1094,11 +1095,17 @@ class persons_webview extends class_base
 			)));
 			foreach($education_list->arr() as $edu)
 			{
+				$ip = "";
+				if($edu->prop("in_progress"))
+				{
+					$ip = $this->parse("IN_PROGRESS");
+				}
 				$this->vars_safe(array(
 					"degree" => $this->education_options[$edu->prop("degree")],
 					"field" => $edu->prop("field.name"),
 					"school" => $edu->prop("school"),
-					"speciality" => $edu->prop("speciality")
+					"speciality" => $edu->prop("speciality"),
+					"IN_PROGRESS" => $ip,
 				));
 				$education.= $this->parse("EDUCATION_SUB");
 			}
