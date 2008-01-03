@@ -1514,6 +1514,7 @@ class realestate_property extends class_base
 					"name",
 					"number_of_rooms",
 					"city24_object_id",
+					"is_booked"
 				);
 				$properties = $this->get_property_data (array (
 					"this" => $this_object,
