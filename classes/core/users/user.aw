@@ -1528,6 +1528,18 @@ class user extends class_base
 
 			aw_disable_acl();
 			$p->save();
+
+			if ($uid == aw_global_get("uid"))
+			{
+				// set acl to the given user
+				$us = get_instance("users");
+				$g = obj($us->get_oid_for_gid($us->get_gid_by_uid($uid)));
+				$p->acl_set(
+					$g,
+					array("can_edit" => 1, "can_add" => 1, "can_view" => 1, "can_delete" => 1)
+				);
+			}
+
 			aw_restore_acl();
 			// now, connect user to person
 			$u->connect(array(
@@ -1540,6 +1552,18 @@ class user extends class_base
 		else
 		{
 			aw_restore_acl();
+			if (aw_global_get("uid") == $u->prop("uid") && !$this->can("edit", $person_c->prop("to")))
+			{
+				aw_disable_acl();
+				$us = get_instance("users");
+				$g = obj($us->get_oid_for_gid($us->get_gid_by_uid($u->prop("uid"))));
+				$p = obj($person_c->prop("to"));
+				$p->acl_set(
+					$g,
+					array("can_edit" => 1, "can_add" => 1, "can_view" => 1, "can_delete" => 1)
+				);
+				aw_restore_acl();
+			}
 			return $person_c->prop("to");
 		}
 	}
