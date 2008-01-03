@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.16 2008/01/02 13:46:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.17 2008/01/03 09:00:06 robert Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -141,7 +141,10 @@ class aw_object_search extends class_base
 				$cldata = aw_ini_get("classes");
 				foreach($odl->arr() as $od)
 				{
-					$cls[$od["clid"]] = html_entity_decode($cldata[$od["clid"]]["name"]);
+					if($cldata[$od["clid"]]["name"])
+					{
+						$cls[$od["clid"]] = html_entity_decode($cldata[$od["clid"]]["name"]);
+					}
 				}
 				natsort($cls);
 				$prop["options"] = $cls;
