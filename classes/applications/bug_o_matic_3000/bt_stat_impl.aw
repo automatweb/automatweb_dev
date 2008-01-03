@@ -230,6 +230,8 @@ class bt_stat_impl extends core
 		
 		$ui = get_instance(CL_USER);
 		$p = $ui->get_person_for_uid($arr["request"]["det_uid"]);
+		$startd = mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"]);
+		$endd = mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"]);
 		foreach($types as $type)
 		{
 			if($arr["request"]["stat_hr_".$type["rname"]] || !$arr["request"]["stat_hrs_end"])
@@ -244,7 +246,7 @@ class bt_stat_impl extends core
 				foreach($list as $item)
 				{
 					$o = obj($item["to"]);
-					if($o->prop("is_work"))
+					if($o->prop("is_work") && $o->prop("start1") > $startd && $o->prop("start1")<$endd)
 					{
 						$bugs[$item["to"]]["hrs"] += $o->prop($type["timevar"]);
 						$bugs[$item["to"]]["lastdate"] = $o->modified();
