@@ -1,8 +1,7 @@
 <?php
 // this should be here, url parsing and variable initialization
 // should be the first thing that is done
-ini_set("display_errors", 1);
-error_reporting(E_ALL);
+error_reporting(E_PARSE | E_ERROR);
 // apparently __FILE__ does not work with Zend Encoder. But since
 // don't use that anyway, it's of no concern. At least now.
 
