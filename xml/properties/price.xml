@@ -58,11 +58,11 @@
             </aw_prices>
       </tableinfo>
       <reltypes>
-            <OBJECT>
+            <PR_OBJECT>
                   <value>1</value>
                   <clid>CL_TRANSPORT_TYPE</clid>
                   <caption>Objekt millele hind m&amp;amp;otilde;jub</caption>
-            </OBJECT>
+            </PR_OBJECT>
       </reltypes>
 </properties>
 

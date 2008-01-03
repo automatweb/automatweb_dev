@@ -1,7 +1,7 @@
 <?php
 /*
 
-@classinfo syslog_type=ST_FTP_LOGIN
+@classinfo syslog_type=ST_FTP_LOGIN mantainer=kristo prop_cb=1
 
 @default table=objects
 @default group=general
@@ -16,6 +16,22 @@
 
 @property password type=password 
 @caption Parool
+
+@property default_folder type=textbox
+@caption Vaikimisi kataloog
+
+@default group=browser
+
+	@layout split type=hbox width=30%:70%
+
+		@layout tree_layout type=vbox closeable=1 area_caption="Kataloogid" parent=split
+
+			@property ftp_tree type=treeview no_caption=1 store=no parent=tree_layout
+
+		@property ftp_table type=table no_caption=1 store=no parent=split
+
+@groupinfo browser caption="Brauser" submit=no save=no
+
 
 */
 
@@ -142,17 +158,41 @@ class ftp extends class_base
 
 	@examples ${connect}
 	**/
-	function dir_list($folder)
+	function dir_list($folder, $full_info = false)
 	{
 		if (!$this->handle)
 		{
 			echo "notkonnekted! <br />";
 			return FTP_ERR_NOTCONNECTED;
 		}
-		$_t = ftp_nlist($this->handle, $folder);
-		$arr = new aw_array($_t);
-		echo "ret ".dbg::dump($_t)." folder = $folder <br />";
-		return $arr->get();
+		if ($full_info)
+		{
+			$_t = ftp_rawlist($this->handle, $folder);
+			$ret = array();
+			foreach($_t as $folder)
+			{
+				$current = preg_split("/[\s]+/",$folder,9);
+           
+				$struc['perms']    = $current[0];
+				$struc['number']= $current[1];
+				$struc['owner']    = $current[2];
+				$struc['group']    = $current[3];
+				$struc['size']    = $current[4];
+				$struc['month']    = $current[5];
+				$struc['day']    = $current[6];
+				$struc['time']    = $current[7];
+				$struc['name']    = str_replace('//','',$current[8]);
+				$struc["type"] = $struc["perms"][0] == "d" ? "dir" : "file";
+				$ret[] = $struc;
+			}
+			return $ret;
+		}
+		else
+		{
+			$_t = ftp_nlist($this->handle, $folder);
+			$arr = new aw_array($_t);
+			return $arr->get();
+		}
 	}
 
 	/**
@@ -312,6 +352,274 @@ class ftp extends class_base
 	{
 		$mt = get_instance("core/aw_mime_types");
 		return $mt->type_for_file($this->last_url);
+	}
+
+	function _get_ftp_tree($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"has_root" => 1,
+			"tree_id" => "ftp_tree",
+			"persist_state" => 1,
+			"root_name" => $arr["obj_inst"]->prop("server"),
+			"root_url" => aw_url_change_var("b_id", null),
+			"get_branch_func" => $this->mk_my_orb("fetch_tree_node", array(
+				"oid" => $arr["obj_inst"]->id(),
+				"parent" => " ",
+			))
+		));
+
+		$this->connect(array(
+			"host" => $arr["obj_inst"]->prop("server"),
+			"user" => $arr["obj_inst"]->prop("username"),
+			"pass" => $arr["obj_inst"]->prop("password"),
+		));
+		$files = $this->dir_list("/", true);
+		foreach($files as $file)
+		{
+			if ($file["type"] == "dir")
+			{
+				$t->add_item(0, array(
+					"id" => $file["name"],
+					"name" => $file["name"],
+					"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "browser", "folder" => $p."/".$file["name"]))
+				));
+				$t->add_item($file["name"], array(
+					"id" => $file["name"]."1",
+					"name" => $file["name"]
+				));
+			}
+		}
+	}
+
+	/**
+		@attrib name=fetch_tree_node
+		@param oid required
+		@param parent optional
+	**/
+	function fetch_tree_node($arr)
+	{
+		$o = obj($arr["oid"]);
+		$t = get_instance("vcl/treeview");
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "ftp_tree",
+			"persist_state" => 1,
+			"get_branch_func" => $this->mk_my_orb("fetch_tree_node", array(
+				"oid" => $o->id(),
+				"parent" => " ",
+			))
+		));
+
+		$this->connect(array(
+			"host" => $o->prop("server"),
+			"user" => $o->prop("username"),
+			"pass" => $o->prop("password"),
+		));
+		$p = trim($arr["parent"]);
+		if ($p[0] != "/")
+		{
+			$p = "/".$p;
+		}
+		$files = $this->dir_list($p, true);
+		foreach($files as $file)
+		{
+			if ($file["type"] == "dir")
+			{
+				$t->add_item(0, array(
+					"id" => $p."/".$file["name"],
+					"name" => $file["name"],
+					"url" => $this->mk_my_orb("change", array("id" => $o->id(), "group" => "browser", "folder" => $p."/".$file["name"]))
+				));
+				$t->add_item($p."/".$file["name"], array(
+					"id" => $p."/".$file["name"]."1",
+					"name" => $file["name"]
+				));
+			}
+		}
+		die($t->finalize_tree());
+	}
+
+	function _init_ftp_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Fail"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "perms",
+			"caption" => t("&Otilde;igused"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "owner",
+			"caption" => t("Omanik"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "group",
+			"caption" => t("Grupp"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "size",
+			"caption" => t("Suurus"),
+			"align" => "left",
+			"numeric" => 1,
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+		));
+	}
+
+	function _get_ftp_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_ftp_table($t);
+
+		$this->connect(array(
+			"host" => $arr["obj_inst"]->prop("server"),
+			"user" => $arr["obj_inst"]->prop("username"),
+			"pass" => $arr["obj_inst"]->prop("password"),
+		));
+
+		$p = $arr["request"]["folder"] == "" ? "/" : $arr["request"]["folder"];
+		$files = $this->dir_list($p, true);
+		foreach($files as $file)
+		{
+			if ($file["type"] != "dir")
+			{
+				$file["name"] = html::href(array(
+					"url" => $this->mk_my_orb("get_file", array("id" => $arr["obj_inst"]->id(), "file" => $p."/".$file["name"])),
+					"caption" => $file["name"]
+				));
+				$file["date"] = $file["day"]." ".$file["month"]." ".$file["time"];
+				$t->define_data($file);
+			}
+		}
+		$t->set_caption(sprintf(t("Failid kataloogis %s"), $p));
+		$this->disconnect();
+	}
+
+	/**
+		@attrib name=get_file
+		@param id required type=int acl=view
+		@param file optional
+	**/
+	function orb_get_file($arr)
+	{
+		$o = obj($arr["id"]);
+		$this->connect(array(
+			"host" => $o->prop("server"),
+			"user" => $o->prop("username"),
+			"pass" => $o->prop("password"),
+		));
+		$m = get_instance("core/aw_mime_types");
+		header("Content-type: ".$m->type_for_file($arr["file"]));
+		die($this->get_file($arr["file"]));
+	}
+
+	// otv interface
+	function get_folders($ob, $tree_type = NULL)
+	{
+		$this->connect(array(
+			"host" => $ob->prop("server"),
+			"user" => $ob->prop("username"),
+			"pass" => $ob->prop("password"),
+		));
+		$d = array();
+		$this->_req_folders($d, $ob, $ob->prop("default_folder") == "" ? "~" : $ob->prop("default_folder"));
+		$this->disconnect();
+		return $d;
+	}
+
+	function _req_folders(&$d, $ob, $folder)
+	{
+		$files = $this->dir_list($folder, true);
+		foreach($files as $file)
+		{
+			if ($file["type"] == "dir")
+			{
+				$f = $folder."/".$file["name"];
+				$d[$f] = array(
+					"id" => $f,
+					"parent" => $folder,
+					"name" => $file["name"],
+				);
+				$this->_req_folders($d, $ob, $f);
+			}
+		}
+	}
+
+	function get_fields($ob, $full_props = false)
+	{
+		return array(
+			"name" => t("Nimi"),
+			"date" => t("Kuup&auml;ev"),
+			"perms" => t("&Otilde;igused"),
+			"owner" => t("Omanik"),
+			"group" => t("Grupp"),
+			"size" => t("Suurus")
+		);
+	}
+	
+	function has_feature($str)
+	{
+		return false;
+	}
+
+	function get_objects($ob, $fld = NULL, $tv_sel = NULL, $params = array())
+	{
+		$this->connect(array(
+			"host" => $ob->prop("server"),
+			"user" => $ob->prop("username"),
+			"pass" => $ob->prop("password"),
+		));
+		if ($fld == NULL)
+		{
+			$p = $ob->prop("default_folder");
+		}
+		else
+		{
+			$p = reset($fld);
+			$p = $p["parent"];
+		}
+
+		$files = $this->dir_list($p, true);
+		$r = array();
+		foreach($files as $file)
+		{
+			if ($file["type"] != "dir")
+			{
+				$file["date"] = $file["day"]." ".$file["month"]." ".$file["time"];
+				$id = $p."/".$file["name"];
+				$file["url"] = $this->mk_my_orb("get_file", array("id" => $ob->id(), "file" => $p."/".$file["name"]));
+				$file["id"] = $id;
+				$file["parent"] = $p;
+				$file["adder"] = $file["owner"];
+				$file["modder"] = $file["owner"];
+				$file["fileSizeBytes"] = $file["size"];
+				$file["fileSizeKBytes"] = floor($file["size"]/1024);
+				$file["fileSizeMBytes"] = floor($file["size"]/(1024*1024));
+				$r[$id] = $file;
+			}
+		}
+		$this->disconnect();
+
+		return $r;
+	}
+
+	function check_acl($acl, $o, $id)
+	{
+		return true;
 	}
 }
 ?>

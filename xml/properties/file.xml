@@ -205,7 +205,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Sisu m&amp;amp;otilde;imalike asenduste tekst</caption>
+            <caption>Sisu v&amp;amp;otilde;imalike asenduste tekst</caption>
       </property>
       <property>
             <name>sp_subject</name>

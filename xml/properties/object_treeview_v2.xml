@@ -515,6 +515,7 @@
                         <num_2>CL_OTV_DS_ROADINFO</num_2>
                         <num_3>CL_DB_TABLE_CONTENTS</num_3>
                         <num_4>CL_SERVER_FOLDER</num_4>
+                        <num_5>CL_FTP_LOGIN</num_5>
                   </clid>
                   <caption>andmed</caption>
             </DATASOURCE>

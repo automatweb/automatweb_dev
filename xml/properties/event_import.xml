@@ -12,6 +12,16 @@
             <comment>S&amp;amp;uuml;ndmuste halduse keskkond, kus kirjeldatakse s&amp;amp;uuml;ndmuste, valdkondade, toimumiskohtade, korraldajate lugemis- ja kirjutamiskaustad jmt</comment>
       </property>
       <property>
+            <name>event_form</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_FORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>S&amp;amp;uuml;ndmuse vorm</caption>
+      </property>
+      <property>
             <name>xml_sources</name>
             <table>objects</table>
             <group>general</group>
@@ -36,14 +46,14 @@
             <comment>JSON v&amp;amp;auml;ljundi allikad, mida kasutatakse importimisel</comment>
       </property>
       <property>
-            <name>cb_log_changes</name>
+            <name>original_lang</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>select</type>
             <field>meta</field>
             <mehtod>serialize</mehtod>
-            <caption>Muudatuste tegemiseks k&amp;amp;uuml;sin luba?</caption>
+            <caption>Keel</caption>
+            <comment>Imporditavate objektide keel</comment>
       </property>
       <property>
             <name>translatable_fields</name>
@@ -83,7 +93,18 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <mehtod>serialize</mehtod>
-            <caption>Impordi k&amp;amp;otilde;ik s&amp;amp;uuml;ndmused</caption>
+            <caption>Impordi s&amp;amp;uuml;ndmused algusest</caption>
+      </property>
+      <property>
+            <name>future_length</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <size>5</size>
+            <caption>Imporditavate p&amp;amp;auml;evade arv</caption>
+            <comment>Mitu p&amp;amp;auml;eva alates t&amp;Atilde;&amp;curren;nasest edasi imporditakse</comment>
       </property>
       <property>
             <name>import_events</name>
