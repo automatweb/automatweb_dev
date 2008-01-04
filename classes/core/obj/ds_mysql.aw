@@ -3231,6 +3231,138 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		return $tbl.".`".$fld."`";
 	}
+
+	function compile_oql_query($oql)
+	{
+		// parse into bits
+		preg_match("/SELECT(.*)FROM(.*)WHERE(.*?)/imsU", $oql, $mt);
+		
+		// now turn it into sql 
+		$main_clid = constant(trim($mt[2]));
+		error::raise_if(!is_class_id($main_clid), array(
+			"id" => "ERR_NO_MAIN_CLID",
+			"msg" => sprintf(t("object_complex_query::compile_oql_query(): FROM clause has an error, unrecognized clid %s"), $main_clid)
+		));
+
+		$this->properties = array();
+		$this->tableinfo = array();
+		$this->used_tables = array();
+		$this->_do_add_class_id($main_clid);
+
+		$fetch = $this->_parse_fetch($mt[1], $main_clid);
+		list($joins, $where) = $this->_parse_where($mt[3], $main_clid);
+		$from = $this->_parse_from($main_clid);
+
+		$q =  "SELECT $fetch FROM $from $joins WHERE $where";
+		return $q;
+	}
+
+	function execute_oql_query($sql)
+	{
+		$this->db_query($sql);
+		$rv = array();
+		while ($row = $this->db_next()) 
+		{
+			$rv[$row["oid"]] = $row;
+		}
+		return $rv;
+	}
+
+	function _parse_from($main_clid)
+	{
+		$str = "";
+		foreach($GLOBALS["tableinfo"][$main_clid] as $tbl => $dat)
+		{
+			$str .= " LEFT JOIN $tbl ON $tbl.".$dat["index"]." = ".$dat["master_table"].".".$dat["master_index"]." ";
+		}
+		return " objects ".$str;
+	}
+
+	function _parse_where($str, $main_clid)
+	{
+		// we have to tokenize things here. 
+		$p = get_instance("core/aw_code_analyzer/parser");
+		$p->p_init(trim($str));
+		$new_str = " objects.status > 0 AND ";
+		$props = $GLOBALS["properties"][$main_clid];
+		while (!$p->p_eos())
+		{
+			$tok = $p->_p_get_token();
+			if (substr($tok, 0, 2) == "CL")
+			{
+				list($t, $f) = $this->_do_proc_complex_param(array(
+					"key" => &$tok,
+					"val" => $val,
+					"params" => $p_tmp,
+				));
+				// resolve prop
+				//list($clid, $p2) = explode(".", $tok, 2);
+				$tf = $t.".`".$f."`";//$props[$p2]["table"].".`".$props[$p2]["field"]."`";
+				$new_str .= $tf;
+			}
+			else
+			if (isset($props[$tok]))
+			{
+				// also prop
+				$tf = $props[$tok]["table"].".`".$props[$tok]["field"]."`";
+				$new_str .= $tf;
+			}
+			else
+			if ($tok == "?")
+			{
+				$new_str .= "%s";
+			}
+			else
+			{
+				$new_str .= $tok;
+			}
+		}
+		return array(join(" ", $this->joins), $new_str);
+	}
+
+	function _parse_fetch($str, $main_clid)
+	{
+		$props = $GLOBALS["properties"][$main_clid];
+		$fetch = array();
+		foreach(explode(",", trim($str)) as $prop_fetch)
+		{
+			if (preg_match("/(.*)AS(.*)/imsU", $prop_fetch, $pf))
+			{
+				$fetch[trim($pf[1])] = trim($pf[2]);
+			}
+			else
+			{
+				$fetch[trim($prop_fetch)] = trim($prop_fetch);
+			}
+		}
+
+		$nf = array();
+		foreach($fetch as $prop => $as)
+		{
+			if ($prop == "id")
+			{
+				$tf = "objects.oid";
+			}
+			else
+			{
+				if (!isset($props[$prop]))
+				{
+					error::raise(array(
+						"id" => "ERR_NO_PROP",
+						"msg" => sprintf(t("ds_mysql::_parse_fetch(): no property %s in class %s"), $prop, $main_clid)
+					));
+				}
+				$tf = $props[$prop]["table"].".`".$props[$prop]["field"]."`";
+			}
+			$nf[$tf] = $as;
+		}
+		$str = array();
+		foreach($nf as $tf => $as)
+		{
+			$str[] = " $tf AS `$as` ";
+		}
+		return "objects.oid AS oid, objects.parent AS parent, objects.acldata AS acldata, ".join(",", $str);
+	}
 }
 
 ?>

@@ -205,6 +205,16 @@ class _int_obj_ds_decorator
 			$this->contained->originalize_cache_update($oid);
 		}
 	}
+
+	function compile_oql_query($oql)
+	{
+		return $this->contained->compile_oql_query($oql);
+	}
+
+	function execute_oql_query($oql)
+	{
+		return $this->contained->execute_oql_query($oql);
+	}
 }
 
 ?>

@@ -10,6 +10,7 @@ class object_complex_query extends core
 		$this->init();
 	}
 
+
 	/** compiles a search by result set, figures out all the joins and crap by itself, or at least tries to
 
 		@comment
