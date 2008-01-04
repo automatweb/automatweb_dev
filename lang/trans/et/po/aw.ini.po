@@ -613,7 +613,7 @@ msgstr ""
 # aw.ini:class_224
 #: aw.ini:class_224
 msgid "Klassi Kohtumine (224) nimi"
-msgstr "Kohtumine 22"
+msgstr "Kohtumine"
 
 # aw.ini:class_225
 #: aw.ini:class_225
