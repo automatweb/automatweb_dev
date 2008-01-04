@@ -167,23 +167,50 @@ class ftp extends class_base
 		}
 		if ($full_info)
 		{
+			$syst = ftp_systype($this->handle);
 			$_t = ftp_rawlist($this->handle, $folder);
 			$ret = array();
 			foreach($_t as $folder)
 			{
-				$current = preg_split("/[\s]+/",$folder,9);
+				switch($syst)
+				{
+					case "NETWARE":
+						$current = preg_split("/[\s]+/",$folder,8);
+						if (trim($current[0]) == "total")
+						{
+							continue;
+						}
            
-				$struc['perms']    = $current[0];
-				$struc['number']= $current[1];
-				$struc['owner']    = $current[2];
-				$struc['group']    = $current[3];
-				$struc['size']    = $current[4];
-				$struc['month']    = $current[5];
-				$struc['day']    = $current[6];
-				$struc['time']    = $current[7];
-				$struc['name']    = str_replace('//','',$current[8]);
-				$struc["type"] = $struc["perms"][0] == "d" ? "dir" : "file";
-				$ret[] = $struc;
+						$narr= explode("/", $current[7]);
+	
+						$struc['perms']    = $current[1];
+						$struc['owner']    = $current[2];
+						$struc['group']    = $current[2];
+						$struc['size']    = $current[3];
+						$struc['month']    = $current[4];
+						$struc['day']    = $current[5];
+						$struc['time']    = $current[6];
+						$struc['name']    = $narr[count($narr)-1];
+						$struc["type"] = $current[0] == "d" ? "dir" : "file";
+						$ret[] = $struc;
+						break;
+				
+					default:
+						$current = preg_split("/[\s]+/",$folder,9);
+           
+						$struc['perms']    = $current[0];
+						$struc['number']= $current[1];
+						$struc['owner']    = $current[2];
+						$struc['group']    = $current[3];
+						$struc['size']    = $current[4];
+						$struc['month']    = $current[5];
+						$struc['day']    = $current[6];
+						$struc['time']    = $current[7];
+						$struc['name']    = str_replace('//','',$current[8]);
+						$struc["type"] = $struc["perms"][0] == "d" ? "dir" : "file";
+						$ret[] = $struc;
+						break;
+				}
 			}
 			return $ret;
 		}
