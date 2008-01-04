@@ -180,7 +180,7 @@ class file_manager extends aw_template
 	}
 
 	/**
-		@attrib name=attach_to_message default=1
+		@attrib name=attach_to_message 
 		@param message optional
 		@param file optional
 	**/
