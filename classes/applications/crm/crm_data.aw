@@ -103,8 +103,22 @@ class crm_data extends class_base
 
 			if (isset($filter["customer"]))
 			{
-				$of["CL_CRM_BILL.customer(CL_CRM_COMPANY).name"] = "%".$filter["customer"]."%";
-				$of2["CL_CRM_BILL.customer(CL_CRM_PERSON).name"] = "%".$filter["customer"]."%";
+//				$of["CL_CRM_BILL.customer(CL_CRM_COMPANY).name"] = "%".$filter["customer"]."%";
+//				$of2["CL_CRM_BILL.customer(CL_CRM_PERSON).name"] = "%".$filter["customer"]."%";
+
+
+				$ft = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_BILL.customer(CL_CRM_COMPANY).name" => "%".$filter["customer"]."%",
+						"CL_CRM_BILL.customer(CL_CRM_PERSON).name" => "%".$filter["customer"]."%",
+						"CL_CRM_BILL.customer_name" => "%".$filter["customer"]."%",
+					)
+				));
+
+				$of[] = $ft;
+				$of2[] = $ft;
+
 			}
 		}
 		$ret =  new object_list($of);
