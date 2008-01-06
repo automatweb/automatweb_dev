@@ -34,6 +34,9 @@
 	@caption Sorteeri gruppide j&auml;rgi
 	@comment Gruppideks v&otilde;ivad olla n&auml;iteks Projektid
 
+	@property items_per_page type=textbox size=5 field=meta method=serialize
+	@caption Mitu s&uuml;ndmust lehel
+
 @groupinfo ftsearch caption="Otsinguvorm"
 @default group=ftsearch
 
@@ -1084,6 +1087,7 @@ class event_search extends class_base
 			$search["parent"] = $parx2 = array();
 			$search["sort_by"] = "planner.start";
 
+
 			if ($event_class_id == CL_CALENDAR_EVENT)
 			{
 				$search['class_id'] = CL_CALENDAR_EVENT;
@@ -1361,11 +1365,27 @@ class event_search extends class_base
 							$ol_params['lang_id'] = array();
 						}
 						$ol = new object_list($ol_params);
+
+						// if the results are divided into pages, then ask only showing results --dragut
+						if ( (int)$ob->prop('items_per_page') > 0 )
+						{
+							// parameteres for pager drawing function:
+							$pager_params = array(
+								'current_page' => empty($_GET['page']) ? 1 : (int)$_GET['page'],
+								'items_per_page' => (int)$ob->prop('items_per_page'),
+								'items_count' => $ol->count()
+							);
+
+							$current_page = empty($_GET['page']) ? 0 : (int)$_GET['page'] - 1;
+							$ol_params['limit'] = ( $current_page * (int)$ob->prop('items_per_page') ).', '.(int)$ob->prop('items_per_page');
+							$ol = new object_list($ol_params);
+						}
 					}
 					else
 					{
 						$ol = new object_list();
 					}
+
 				}
 				$origs = array();
 				foreach($ol->arr() as $res)
@@ -1667,7 +1687,10 @@ class event_search extends class_base
 								"colcaption" => $propdef["caption"],
 							));
 							$cdat .= $this->parse("CELL");
-							$this->vars(array("CELL" => $cdat));
+							$this->vars(array(
+								"CELL" => $cdat,
+								$sname => $val
+							));
 						}
 					}
 					$nmx = "content";
@@ -1724,7 +1747,6 @@ class event_search extends class_base
 						$delete_url_str = $this->parse('DELETE_EVENT_LINK');
 
 					}
-
 					$this->vars(array(
 						"FULLTEXT" => $fulltext,
 						"DELETE_EVENT_LINK" => $delete_url_str
@@ -1839,6 +1861,7 @@ class event_search extends class_base
 
 			$this->vars(array(
 				"EVENT" => $res,
+				"PAGE" => $this->_compose_pager($pager_params),
 			));
 			$result = $this->parse();
 			$htmlc->add_property(array(
@@ -1867,6 +1890,38 @@ class event_search extends class_base
 		));
 		exit_function("event_search::show");
 		return empty($search["oid"]) ? $html : $result;
+	}
+
+
+	////
+	// items_count
+	// items_per_page
+	// current_page
+	//
+	// returns the pages string
+	function _compose_pager($arr)
+	{
+		$pages = array();
+		// how many pages:
+		$page_count = ceil($arr['items_count'] / $arr['items_per_page']);
+		for ($page = 1; $page <= $page_count; $page++)
+		{
+			$this->vars(array(
+				'page_num' => $page,
+				'page_url' => aw_url_change_var('page', $page),
+				'next_page_url' => aw_url_change_var('page', $page + 1),
+				'prev_page_url' => aw_url_change_var('page', $page - 1)
+			));
+			if ($page == $arr['current_page'])
+			{
+				$pages[] = $this->parse('ACTIVE_PAGE');
+			}
+			else
+			{
+				$pages[] = $this->parse('PAGE');
+			}
+		}
+		return implode($this->parse('PAGE_SEPARATOR'), $pages);
 	}
 
 	function _get_project_choices($parent)
