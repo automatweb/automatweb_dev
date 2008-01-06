@@ -50,3 +50,12 @@
 	<!-- END SUB: EVENT -->
 <tbody>
 </table>
+<!-- SUB: PAGE -->
+<a href="{VAR:page_url}">{VAR:page_num}</a> 
+<!-- END SUB: PAGE -->
+<!-- SUB: ACTIVE_PAGE -->
+<a href="{VAR:page_url}"><strong>{VAR:page_num}</strong></a>
+<!-- END SUB: ACTIVE_PAGE -->
+<!-- SUB: PAGE_SEPARATOR -->
+ | 
+<!-- END SUB: PAGE_SEPARATOR -->
