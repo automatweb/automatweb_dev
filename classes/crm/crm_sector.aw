@@ -121,16 +121,20 @@ class crm_sector extends class_base
 					"parent" => $parent,
 				));
 				$sectors = $sectors->to_list();
-				$sector = $sectors->begin();
 
-				do
+				if ($sectors->count() > 0)
 				{
-					if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
+					$sector = $sectors->begin();
+
+					do
 					{
-						$prop["options"][$sector->id()] = $sector->prop("tegevusala");
+						if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
+						{
+							$prop["options"][$sector->id()] = $sector->prop("tegevusala");
+						}
 					}
+					while ($sector = $sectors->next());
 				}
-				while ($sector = $sectors->next());
 				break;
 		}
 
