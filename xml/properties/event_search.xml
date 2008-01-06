@@ -80,6 +80,16 @@
             <comment>Gruppideks v&amp;amp;otilde;ivad olla n&amp;amp;auml;iteks Projektid</comment>
       </property>
       <property>
+            <name>items_per_page</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Mitu s&amp;amp;uuml;ndmust lehel</caption>
+      </property>
+      <property>
             <name>navigator_range</name>
             <table>objects</table>
             <group>ftsearch</group>
