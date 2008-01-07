@@ -3651,6 +3651,7 @@ class crm_company extends class_base
 
 	function callback_mod_retval($arr)
 	{
+		$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
 		if($arr['args']["group"] == "stats_s")
 		{
 			$arr['args']['stats_s_cust_type'] = ($arr['request']['stats_s_cust_type']);
@@ -3669,7 +3670,6 @@ class crm_company extends class_base
 			$arr['args']['stats_s_group_by_client'] = ($arr['request']['stats_s_group_by_client']);
 			$arr['args']['stats_s_group_by_project'] = ($arr['request']['stats_s_group_by_project']);
 			$arr['args']['stats_s_group_by_task'] = ($arr['request']['stats_s_group_by_task']);
-			$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
 		}
 		if($arr["args"]["group"] == "ovrv_email")
 		{
