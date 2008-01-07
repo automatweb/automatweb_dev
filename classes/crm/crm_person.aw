@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.189 2007/12/28 13:01:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.190 2008/01/07 11:11:38 kaarel Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -197,8 +197,8 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 			@property rank type=relpicker reltype=RELTYPE_RANK automatic=1 parent=work captionside=top
 			@caption Ametinimetus
 
-			@property comment type=textarea cols=40 rows=3 table=objects field=comment parent=work captionside=top
-			@caption Kontakt
+#			@property comment type=textarea cols=40 rows=3 table=objects field=comment parent=work captionside=top
+#			@caption Kontakt
 
 		@layout work_down type=hbox parent=work_super width=20%:80%
 
