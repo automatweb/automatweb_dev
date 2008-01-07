@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.25 2007/07/16 12:30:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.26 2008/01/07 14:09:33 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -535,6 +535,10 @@ class room_settings extends class_base
 		$req = $arr["obj_inst"]->meta("bron_req_fields");
 		foreach($props as $pn => $pd)
 		{
+			if (!is_array($req[$pn]))
+			{
+				$req[$pn] = array(); 
+			}
 			$t->define_data(array(
 				"prop" => $pd["caption"]." ($pn)",
 				"req" => html::checkbox(array(
