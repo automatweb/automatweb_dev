@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.121 2008/01/07 15:26:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.122 2008/01/07 16:11:16 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -175,10 +175,12 @@ class crm_bill extends class_base
 		));
 
 		$this->states = array(
+			-5 => t("Tühistatud"),
 			0 => t("Koostamisel"),
 			1 => t("Saadetud"),
 			2 => t("Makstud"),
 			3 => t("Laekunud"),
+			4 => t("Kreeditarve"),
 		);
 	}
 
