@@ -993,7 +993,30 @@ class crm_company_bills_impl extends class_base
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
-			$v = $p->name();
+
+			$col = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"CL_CRM_COMPANY.client_manager.name" => "%".$p->name()."%",
+			));
+			if($col->count())
+			{
+				$v = $p->name();
+			}
+			else
+			{
+				$col = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"CL_CRM_COMPANY.client_manager.name" => "%".$p->name()."%",
+				));
+				if($col->count())
+				{
+					$v = $p->name();
+				}
+			}
 		}
 		else
 		{

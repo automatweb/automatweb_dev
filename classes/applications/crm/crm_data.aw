@@ -88,12 +88,12 @@ class crm_data extends class_base
 				$ft = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"CL_CRM_BILL.customer(CL_CRM_COMPANY).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
-						"CL_CRM_BILL.customer(CL_CRM_COMPANY).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
+						"CL_CRM_BILL.customer.client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
+//						"CL_CRM_BILL.customer(CL_CRM_COMPANY).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
 						"oid" => $rs,
-						"CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
-						"CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
-						"oid" => $rs
+//						"CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
+//						"CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
+//						"oid" => $rs
 					)
 				));
 
