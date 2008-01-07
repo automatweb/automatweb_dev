@@ -45,6 +45,7 @@ class doc_display extends aw_template
 		}
 
 		$text = $this->_get_text($arr, $doc);
+		$content = $this->_get_content($arr, $doc);
 
 		$this->create_relative_links($text);
 		$text_no_aliases = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$text);
@@ -59,7 +60,16 @@ class doc_display extends aw_template
 				"meta" => &$mt
 			)
 		);
-
+		
+		$al->parse_oo_aliases(
+			$doc->id(),
+			&$content,
+			array(
+				"templates" => &$this->templates,
+				"meta" => &$mt
+			)
+		);
+		
 		lc_site_load("document",$this);
 		
 		$this->vars(array("image_inplace" => ""));
@@ -196,7 +206,9 @@ class doc_display extends aw_template
 			"doc_link" => $doc_link,
 			"document_link" => $doc_link,
 			"print_link" => aw_url_change_var("print", 1),
-			"trans_lc" => aw_global_get("ct_lang_lc")
+			"trans_lc" => aw_global_get("ct_lang_lc"),
+			"lead" => "lead",
+			"content" => $content,
 		));
 
 		$ablock = "";
@@ -378,6 +390,27 @@ class doc_display extends aw_template
 			));
 			return $this->parse("IFRAME");
 		}
+		return $text;
+	}
+	
+	function _get_content($arr, $doc)
+	{
+		$content = $doc->trans_get_val("content");
+		$content = str_replace("<!--[", "<!-- [", $content);
+		$content = str_replace("]-->","] -->", $content);
+		
+		$text = $content; //$doc->trans_get_val("content");
+		
+		// line break conversion between wysiwyg and not
+		$cb_nb = $doc->meta("cb_nobreaks");
+		if (!($doc->prop("nobreaks") || $cb_nb["content"]))	
+		{
+			$text = str_replace("\r\n","<br />",$text);
+			$text = str_replace("</li><br />", "</li>", $text);
+			$text = str_replace("<br /><ul><br />", "<ul>", $text);
+			$text = str_replace("</ul><br />", "</ul>", $text);
+		}
+		
 		return $text;
 	}
 
