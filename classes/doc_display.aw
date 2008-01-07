@@ -207,7 +207,6 @@ class doc_display extends aw_template
 			"document_link" => $doc_link,
 			"print_link" => aw_url_change_var("print", 1),
 			"trans_lc" => aw_global_get("ct_lang_lc"),
-			"lead" => "lead",
 			"content" => $content,
 		));
 
