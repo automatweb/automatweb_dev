@@ -1704,6 +1704,7 @@ class bug extends class_base
 		}
 	}
 
+
 	function parse_commited_msg($msg)
 	{
 
@@ -1724,6 +1725,12 @@ class bug extends class_base
 
 		$msg = $result["bug"]." ".$result["diff"]."\n".t("Failid: ").$result["files"];
 		if($result["time"]) $msg.="\n".t("Aeg:").$result["time"];
+		$n = 10;
+		while($row[$n])
+		{
+			$msg.= "\n".$row[$n];
+			$n++;
+		}
 		return $msg;
 	}
 
@@ -1807,12 +1814,102 @@ class bug extends class_base
 	}
 
 
+	function get_cvs_user_email($who)
+	{
+		$email = "";
+		if($who)
+		{
+		 	aw_disable_acl();
+ 			$ol = new object_list(array(
+ 			"class_id" => CL_BUG_TRACKER,
+				"site_id" => array(),
+ 				"lang_id" => array(),
+ 			));
+ 			$users = array();
+ 			foreach($ol->arr() as $o)
+ 			{
+ 				$rows = explode("\n" , $o->prop("cvs2uidmap"));
+ 				foreach($rows as $row)
+ 				{
+ 					$usr = explode("=" , $row);
+ 					if($usr[0] && $usr[1])
+ 					{
+ 						$users[trim($usr[0])] = trim($usr[1]);
+ 					}
+ 				}
+ 			}
+ 			if($users[$who])
+ 			{
+ 				$us = get_instance(CL_USER);
+				$u = $us->get_obj_for_uid($users[$who]);
+ 				$person = $us->get_person_for_user($u);
+ 				if(is_oid($person))
+ 				{
+ 					$p = obj($person);
+					if(is_oid($p->prop("email")))
+					{
+						$emailo = obj($p->prop("email"));
+						$email = $emailo->prop("mail");
+					}
+				}
+ 			}
+			aw_restore_acl();
+		}
+		return $email;
+	}
+
+	/**
+		@attrib name=send_commit_mail_to_maintainer nologin=1 all_args=1
+	**/
+	function send_commit_mail_to_maintainer($arr)
+	{
+		extract($arr);
+		$who = "";
+
+		$path = str_replace("1234567890" , "automatweb" , $path);
+		$aw_loc = str_replace("automatweb_dev" , "" , $GLOBALS["awd"]);
+		$myFile = $aw_loc.$path."/".$file;
+		$fh = fopen($myFile, 'r');
+		$theData = fread($fh, filesize($myFile));
+		fclose($fh);
+
+		ereg (".*maintainer=([^[:space:]]*)", $theData, $regs);
+		foreach($regs as $reg)
+		{
+			$who = $reg;
+		}
+
+		if($who)
+		{
+			$email = $this->get_cvs_user_email($who);
+		}
+die($email);
+		if($email)
+		{
+			$text= "Class ".$file." changed\n\n".$this->hexbin($msg);
+		
+			send_mail(
+				$email,
+				$file." new commit",
+				$text,
+				"From: ".aw_ini_get("baseurl")
+			);
+
+			die("\nMail sent to class maintainer - ".$who." (".$email.")\n");
+		}
+		else
+		{
+			die("\n".$file." maintainer not found");
+		}
+	}
+
 	/**
 		@attrib name=start_auto_test nologin=1 all_args=1
 	**/
 	function start_auto_test($arr)
 	{
-		ignore_user_abort(TRUE);
+		ignore_user_abort();
+		//socket_shutdown(null, 1);
 		print "Test started...... \n";
 		extract($arr);
 		$email = "";
@@ -1845,17 +1942,25 @@ class bug extends class_base
  				if(is_oid($person))
  				{
  					$p = obj($person);
- 					$email = $p->prop("email.mail");
- 				}
+					if(is_oid($p->prop("email")))
+					{
+						$emailo = obj($p->prop("email"));
+						$email = $emailo->prop("mail");
+					}
+				}
  			}
-
  			aw_restore_acl();
  			$url = "http://autotest.struktuur.ee/?bug=1&email=".$email."&file=".$file;
-
  			print $url;
-			socket_shutdown(null, 1);
- 	//		$a = file_get_contents($url);
- 		}
+			if($file && !(substr_count($file, '.aw') || substr_count($file, '.php')|| substr_count($file, '.xml')))
+			{
+ 				$a = file_get_contents($url);
+			}
+			else
+			{
+				$a = t("seda faili ei testi");
+			}
+		}
 		print $a;
 		die();
 	}
