@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.216 2007/12/27 20:10:27 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.217 2008/01/07 10:22:14 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1
@@ -275,6 +275,24 @@ class image extends class_base
 		return $retval;
 	}
 
+	function _get_fs_path($path)
+	{
+		if (file_exists($path))
+		{
+			return $path;
+		}
+		$tmp = basename($path);
+		$tmp = aw_ini_get("site_basedir")."/files/".$tmp[0]."/".$tmp;
+		if (file_exists($tmp))
+		{
+			return $tmp;
+		}
+		$tmp = dirname($path);
+		$slp = strrpos($tmp, "/");
+		$tmp = aw_ini_get("site_basedir")."/files/".substr($tmp, $slp)."/".basename($path);
+		return $tmp;
+	}
+
 	///
 	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse v&auml;lja callbackina
 	//  force_comments - shows comment count and links to comment window even if not set in images prop
@@ -381,7 +399,7 @@ class image extends class_base
 
 			if ($idata["file"] != "")
 			{
-				$i_size = @getimagesize($idata["file"]);
+				$i_size = @getimagesize($this->_get_fs_path($idata["file"]));
 				if (empty($idata['meta']['file2']) && $do_comments)
 				{
 					$size = $i_size;
@@ -521,7 +539,7 @@ class image extends class_base
 					{
 						$replacement .= "<a href=\"javascript:void(0)\" onClick=\"$bi_link\">";
 					};
-					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\" class=\"$use_style\"/ width='".$i_size[0]."' height='".$i_size[1]."'>";
+					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\" class=\"$use_style\" width='".$i_size[0]."' height='".$i_size[1]."'>";
 					if (!empty($idata["big_url"]) || $do_comments)
 					{
 						$replacement .= "</a>";
