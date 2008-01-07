@@ -1228,7 +1228,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		$this->meta_filter = array();
 		$this->alias_joins = array();
-
+		$this->done_ot_js = array();
 		$this->joins = array();
 
 		$this->has_data_table_filter = false;
@@ -2058,6 +2058,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
+		$done_ot_js = $this->done_ot_js;
+
 		// now make joins and for the final prop, query
 		foreach($this->join_data as $pos => $join)
 		{
@@ -2233,6 +2235,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 		}
+
+		$this->done_ot_js = $done_ot_js;
 
 		$arr["key"] = $filt[count($filt)-1];
 		$this->joins = array_unique($this->joins);
@@ -3247,6 +3251,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->properties = array();
 		$this->tableinfo = array();
 		$this->used_tables = array();
+		$this->done_ot_js = array();
 		$this->_do_add_class_id($main_clid);
 
 		$fetch = $this->_parse_fetch($mt[1], $main_clid);
