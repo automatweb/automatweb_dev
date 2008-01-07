@@ -1,16 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.120 2007/12/04 14:16:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.121 2008/01/07 15:26:08 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
+@tableinfo aw_crm_bill index=aw_oid master_index=brother_of master_table=objects
 
 @classinfo syslog_type=ST_CRM_BILL relationmgr=yes no_status=1 prop_cb=1 confirm_save_data=1 maintainer=markop
 
 @default table=objects
-
-@tableinfo aw_crm_bill index=aw_oid master_index=brother_of master_table=objects
 
 @default group=general
 
@@ -183,13 +182,44 @@ class crm_bill extends class_base
 		);
 	}
 
+	function get_bill_cust_data_object($bill)
+	{
+		if(!is_object($bill))
+		{
+			return "";
+		}
+		if($this->cust_data_object)
+		{
+			return $this->cust_data_object;
+		}
+		$cust_rel_list = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"buyer" => $bill->prop("customer"),
+			"seller" => $bill->prop("impl")
+		));
+		$this->cust_data_object = reset($cust_rel_list->arr());
+		return $this->cust_data_object;
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "payment_mode":
+		/*	case "language":
+				if(!$prop["value"])
+				{
+					$cdo = $this->get_bill_cust_data_object($arr["obj_inst"]);
+					if($cdo->prop("language"))
+					{
+						$prop["value"] = $cdo->prop("language");
+					}
+				}
+				break;
+		*/	case "payment_mode":
 				$prop["options"] = array("" , t("&Uuml;lekandega") , t("Sularahas"));
 				break;
 			case "billp_tb":
@@ -2060,10 +2090,18 @@ class crm_bill extends class_base
 		$sum = 0;
 		
 		$agreement_price = $b->meta("agreement_price");
-		if($agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0) $rows = $agreement_price;
-		elseif($agreement_price["price"] && strlen($agreement_price["name"]) > 0) $rows = array($agreement_price);
-		
-		else $rows = $this->get_bill_rows($b);
+		if($agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
+		{
+			$rows = $agreement_price;
+		}
+		elseif($agreement_price["price"] && strlen($agreement_price["name"]) > 0)
+		{
+			$rows = array($agreement_price);
+		}
+		else
+		{
+			$rows = $this->get_bill_rows($b);
+		}
 		foreach($rows as $row)
 		{
 			$cur_tax = 0;

@@ -842,6 +842,16 @@ class crm_company_bills_impl extends class_base
 		$this->_init_bills_list_t($t, $arr["request"]);
 
 		$d = get_instance("applications/crm/crm_data");
+		if(!$arr["request"]["bill_s_with_tax"])
+		{
+			$tax_add = 2;
+		}
+		else
+		{
+			$tax_add = $arr["request"]["bill_s_with_tax"];
+		}
+		
+
 		if ($arr["request"]["group"] == "bills_monthly")
 		{
 			$bills = $d->get_bills_by_co($arr["obj_inst"], array("monthly" => 1));
@@ -901,6 +911,8 @@ class crm_company_bills_impl extends class_base
 		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
 		$bill_i = get_instance(CL_CRM_BILL);
+		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
+		$company_curr = $co_stat_inst->get_company_currency();
 
 		if ($arr["request"]["export_hr"] > 0)
 		{
@@ -934,7 +946,18 @@ class crm_company_bills_impl extends class_base
 					"name" => "bill_states[".$bill->id()."]"
 				));
 			}
-			$cursum = $bill_i->get_sum($bill);
+			$cursum = $bill_i->get_bill_sum($bill,$tax_add);
+
+			//paneme ikka oma valuutasse ümber asja
+			$curid = $bill->prop("customer.currency");
+			if($company_curr && $curid && ($company_curr != $curid))
+			{
+				$cursum  = $co_stat_inst->convert_to_company_currency(array(
+					"sum" =>  $cursum,
+					"o" => $bill,
+				));
+			}
+
 			$pop = get_instance("vcl/popup_menu");
 			$pop->begin_menu("bill_".$bill->id());
 			$pop->add_item(Array(
@@ -985,6 +1008,23 @@ class crm_company_bills_impl extends class_base
 			"sum" => "<b>".number_format($sum, 2)."</b>",
 			"bill_no" => t("<b>Summa</b>")
 		));
+	}
+
+	function _get_bill_s_with_tax($arr)
+	{
+		$arr["prop"]["options"] = array(
+			0 => t("K&auml;ibemaksuta"),
+			1 => t("K&auml;ibemaksuga"),
+		);
+		if($arr["request"]["bill_s_with_tax"] == "")
+		{
+			$arr["prop"]["value"] = 1;
+		}
+		else
+		{
+			$arr["prop"]["value"] = $arr["request"]["bill_s_with_tax"];
+		}
+		return PROP_OK;
 	}
 
 	function _get_bill_s_client_mgr($arr)
