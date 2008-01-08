@@ -37,7 +37,7 @@
 		<rows>20</rows>
 	</property>
 	<property>
-		<name>sbt</name> 
+		<name>sbt</name>
 		<value>Salvesta</value>
 		<group>general</group>
 	</property>
@@ -45,11 +45,11 @@
 		<name>aliasmgr</name>
 		<group>general</group>
 		<caption>Aliastehaldur</caption>
-	</property>	
+	</property>
 	<property>
 		<name>showlead</name>
 		<group>settings</group>
-		<caption>Näita leadi</caption>
+		<caption>N&amp;auml;ita leadi</caption>
 	</property>
 	<property>
 		<name>title_clickable</name>
@@ -61,10 +61,9 @@
 		<group>settings</group>
 		<caption>Esilehel</caption>
 	</property>
-
 	<groupinfo>
 		<general>
-			<caption>Üldine</caption>
+			<caption>&amp;Uuml;ldine</caption>
 			<icon>edit</icon>
 		</general>
 		<settings>
@@ -76,10 +75,8 @@
 			<icon>connectionmanager</icon>
 		</relationmgr>
 	</groupinfo>
-
 	<classinfo>
 		<fixed_toolbar>1</fixed_toolbar>
 		<allow_rte>0</allow_rte>
 	</classinfo>
-
 </properties>
