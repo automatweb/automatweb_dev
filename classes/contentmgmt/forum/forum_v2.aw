@@ -1817,12 +1817,11 @@ class forum_v2 extends class_base
 				"class_id" => CL_MSGBOARD_TOPIC,
 				"status" => STAT_ACTIVE,
 			));
-			foreach ($topic_list->arr() as $topic)
+			$tlist = $topic_list->get_parentdata();
+			foreach ($tlist as $parent => $oids)
 			{
-				$parent = $topic->parent();
-				$topic_count[$parent]++;
-				$tlist[$parent][] = $topic->id();
-			};
+				$topic_count[$parent] += count($oids);
+			}
 		};
 		return array($topic_count,$tlist);
 	}

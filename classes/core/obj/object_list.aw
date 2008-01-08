@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.62 2007/11/23 11:15:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.63 2008/01/08 09:40:23 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -805,6 +805,11 @@ class object_list extends _int_obj_container_base
 		}
 	}
 
+	function get_parentdata()
+	{
+		return $this->list_parentdata;
+	}
+
 	///////////////////////////////////////
 	// internal private functions. call these directly and die.
 
@@ -891,6 +896,14 @@ class object_list extends _int_obj_container_base
 			exit_function("object_list::acl_check");
 		}
 
+		// go over parentdata and list that as well
+		foreach($parentdata as $obj_id => $parent_id)
+		{
+			if (isset($this->list[$obj_id]))
+			{
+				$this->list_parentdata[$parent_id][] = $obj_id;
+			}
+		}
 	}
 
 
@@ -899,6 +912,7 @@ class object_list extends _int_obj_container_base
 		$this->list = array();
 		$this->list_names = array();
 		$this->list_objdata = array();
+		$this->list_parentdata = array();
 	}
 
 	function _int_sort_list($prop, $order)
