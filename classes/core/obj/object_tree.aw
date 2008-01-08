@@ -13,7 +13,7 @@ class object_tree extends _int_obj_container_base
 		@attrib api=1
 
 		@param param optional type=array
-			array of properties that are used as a filter when creating the tree. the parent 
+			array of properties that are used as a filter when creating the tree. the parent
 			  member is required in the filter, if it is not present, tree will not be initialized.
 
 		@comment
@@ -26,11 +26,11 @@ class object_tree extends _int_obj_container_base
 			none
 
 		@examples
-			// creates a tree that contains all folders below object 666, the tree will contain 
+			// creates a tree that contains all folders below object 666, the tree will contain
 			// all folders below it
 			// and all objects in those folders
 			$ot = new object_tree(array(
-				"parent" => 666, 
+				"parent" => 666,
 				"class_id" => CL_FILE
 			));
 	**/
@@ -44,7 +44,7 @@ class object_tree extends _int_obj_container_base
 			));
 		}
 
-		$this->_int_init_empty();		
+		$this->_int_init_empty();
 
 		if (is_array($param))
 		{
@@ -107,7 +107,7 @@ class object_tree extends _int_obj_container_base
 
 	/** returns an object_list instance that contains all the objects in the current tree
 		@attrib api=1 params=name
-	
+
 		@param add_root optional type=bool
 			wheather to add root item to list or not
 		@errors
@@ -150,8 +150,8 @@ class object_tree extends _int_obj_container_base
 
 		@param func required type=text
 			object class function name to call for each object in the tree
-			
-		@param params optional 
+
+		@param params optional
 			array of parameters to pass to the member function
 
 		@param save optional type=bool
@@ -191,11 +191,13 @@ class object_tree extends _int_obj_container_base
 			$param["save"] = true;
 		}
 
-		if (!$GLOBALS["object_loader"]->is_object_member_fun($param["func"]))
+		$func = $param["func"];
+
+		if (!$GLOBALS["object_loader"]->is_object_member_fun($func))
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => sprintf(t("object_tree::foreach_o(): %s is not a member function of the object class!"), $param["func"])
+				"msg" => sprintf(t("object_tree::foreach_o(): %s is not a member function of the object class!"), $func)
 			));
 		}
 
@@ -205,7 +207,7 @@ class object_tree extends _int_obj_container_base
 			foreach($level as $_oid => $o)
 			{
 				$cnt++;
-	
+
 				$tmp = obj($_oid);
 				if (isset($param["params"]))
 				{
@@ -229,7 +231,7 @@ class object_tree extends _int_obj_container_base
 	/** iterates over the tree, calling the specified user function with each object as the parameter
 		@attrib api=1 params=name
 
-		@param func required 
+		@param func required
 			 the name of the function to call, the function gets the object reference as the parameter
 			type: text (global function name) , array (array(&$this, "func") - class member function name)
 
@@ -361,10 +363,10 @@ class object_tree extends _int_obj_container_base
 	/** returns an instance of the object tree class that contains a subtree of the current tree, starting at the specified level
 		@attrib api=1
 
-		@param param required 
+		@param param required
 			- parent object oid, to start the tree from
 			type: oid / string / object instance
-	
+
 		@errors
 			none
 
@@ -386,7 +388,7 @@ class object_tree extends _int_obj_container_base
 	/** adds an object or objects to the tree.
 		@attrib api=1
 
-		@param param required 
+		@param param required
 			object to add, required.
 			type: integer (object id), string (object alias), object instance, object_list instance, object_tree instance
 
@@ -442,7 +444,7 @@ class object_tree extends _int_obj_container_base
 	/** removes the specified object(s) from the tree and all objects under those
 		@attrib api=1
 
-		@param param required 
+		@param param required
 			object to remove
 			type: integer (object id), string (object alias), object instance, object_list instance, object_tree instance
 
@@ -461,7 +463,7 @@ class object_tree extends _int_obj_container_base
 				"status" => STAT_ACTIVE
 			)));
 
-			//now the tree contains all objects that are under folder 90 are named "tunafish" and are not active 
+			//now the tree contains all objects that are under folder 90 are named "tunafish" and are not active
 	**/
 	function remove($param)
 	{
@@ -647,7 +649,7 @@ class object_tree extends _int_obj_container_base
 		$ol = new object_tree();
 		$this->_int_req_subtree($parent, $ol);
 		return $ol;
-	}	
+	}
 
 	function _int_req_subtree($parent, &$ol)
 	{
