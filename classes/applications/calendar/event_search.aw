@@ -1030,6 +1030,7 @@ class event_search extends class_base
 				}
 			}
 		}
+
 		if($search_p1 && $formconfig["project1"]["active"] && $show_search_form)
 		{
 			$vars = array(
@@ -1113,7 +1114,7 @@ class event_search extends class_base
 				{
 					$all_projects1_filter['site_id'] = array();
 				}
-				$all_projects1 = new object_list($all_projets1_filter);
+				$all_projects1 = new object_list($all_projects1_filter);
 				$par1 = $all_projects1->ids();
 
 				$all_projects2_filter  =array(
@@ -1365,7 +1366,6 @@ class event_search extends class_base
 							$ol_params['lang_id'] = array();
 						}
 						$ol = new object_list($ol_params);
-
 						// if the results are divided into pages, then ask only showing results --dragut
 						if ( (int)$ob->prop('items_per_page') > 0 )
 						{
