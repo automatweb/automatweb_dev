@@ -191,14 +191,17 @@
 
 class events_manager extends class_base
 {
-	var $type_idx = array(
+	const INDENT_STRING = "&nbsp;&nbsp;";
+	public $type_idx = array(
 		"event" => CL_CALENDAR_EVENT,
 		"organiser" => CL_CRM_COMPANY,
 		"organiser_person" => CL_CRM_PERSON,
 		"editor" => CL_CRM_PERSON,
 		"sector" => CL_CRM_SECTOR,
-		"places" => CL_SCM_LOCATION,
+		"places" => CL_SCM_LOCATION
 	);
+
+	private $sectors_tree_array = array();
 
 	function events_manager()
 	{
@@ -236,17 +239,7 @@ class events_manager extends class_base
 
 					if (count($sectors->ids()))
 					{
-						$sectors = $sectors->to_list();
-						$sector = $sectors->begin();
-
-						do
-						{
-							if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
-							{
-								$prop["options"][$sector->id()] = $sector->prop("tegevusala");
-							}
-						}
-						while ($sector = $sectors->next());
+						$this->add_sectors_to_tree_array($sectors, $parent);
 					}
 				}
 
@@ -260,18 +253,20 @@ class events_manager extends class_base
 
 						if (count($sectors->ids()))
 						{
-							$sectors = $sectors->to_list();
-							$sector = $sectors->begin();
-
-							do
-							{
-								if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
-								{
-									$prop["options"][$sector->id()] = $sector->prop("tegevusala");
-								}
-							}
-							while ($sector = $sectors->next());
+							$this->add_sectors_to_tree_array($sectors, $parent);
 						}
+					}
+				}
+
+				foreach ($this->sectors_tree_array as $sector_data)
+				{
+					$sector = $sector_data["sector"];
+					$level = $sector_data["level"];
+
+					if (CL_CRM_SECTOR === ((int) $sector->class_id()) and $sector->id() !== $this_o->id())
+					{
+						$indent = str_repeat(self::INDENT_STRING, $level);
+						$prop["options"][$sector->id()] = $indent . $sector->prop("tegevusala");
 					}
 				}
 				break;
@@ -316,6 +311,24 @@ class events_manager extends class_base
 		}
 
 		return $retval;
+	}
+
+	private function add_sectors_to_tree_array($tree, $parent, $level_count = 0)
+	{
+		$level = $tree->level($parent);
+
+		foreach ($level as $o)
+		{
+			if ($o->parent() === $parent)
+			{
+				$this->sectors_tree_array[] = array(
+					"sector" => $o,
+					"level" => $level_count
+				);
+			}
+
+			$this->add_sectors_to_tree_array($tree, $o->id(), ($level_count + 1));
+		}
 	}
 
 	function set_property($arr = array())
