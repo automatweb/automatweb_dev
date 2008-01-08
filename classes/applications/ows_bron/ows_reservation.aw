@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.7 2007/12/21 11:50:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.8 2008/01/08 14:14:18 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -14,7 +14,7 @@
 
 @default group=cust_data
 
-@property ows_bron type=relpicker field=meta method=serialize reltype=RELTYPE_OWS_BRON
+@property ows_bron type=relpicker field=meta method=serialize reltype=RELTYPE_OWS_BRON table=objects
 @caption Broneeringukeskus
 
 @property hotel_id type=textbox field=aw_hotel_id
@@ -216,7 +216,7 @@ class ows_reservation extends class_base
 	{
 if (!is_oid($arr["id"]))
 {
-	die("you bafoon!");
+	die("error!");
 }
 			$o = obj($arr["id"]);
 			if ($o->prop("is_confirmed") == 1)

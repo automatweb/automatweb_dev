@@ -14,6 +14,12 @@
 				</arguments>
 			</function>
 		</action>
+                <action name="show_cancel_page" nologin="1" all_args="1">
+                        <function name="show_cancel_page">
+                                <arguments>
+                                </arguments>
+                        </function>
+                </action>
 
 		<action name="show_confirm_view" nologin="1" all_args="1">
 			<function name="show_confirm_view">
@@ -64,8 +70,15 @@
 			</function>
 		</action>
 
-		<action name="cancel_booking" all_args="1">
+		<action name="cancel_booking" all_args="1" nologin="1">
 			<function name="cancel_booking">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="fetch_currency_prices" nologin="1" all_args="1">
+			<function name="fetch_currency_prices">
 				<arguments>
 				</arguments>
 			</function>
