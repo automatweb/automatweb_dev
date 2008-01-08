@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.73 2007/12/27 14:52:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.74 2008/01/08 15:49:43 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -5069,14 +5069,6 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 	{
 		aw_set_exec_time(AW_LONG_PROCESS);	
 
-		// lets convert this stuff to direct sql	
-/*
-		$sql_params = "
-			objects.status > 0 AND
-			objects.site_id = ".aw_ini_get('site_id')." AND
-			objects.lang_id = ".aw_global_get('lang_id')."
-		";
-*/
 		$sql_params = "
 			objects.site_id = ".aw_ini_get('site_id')." AND
 			objects.lang_id = ".aw_global_get('lang_id')."
@@ -5084,36 +5076,25 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		if (!empty($prods))
 		{
 			$product_codes_str = implode(',', map("'%s'", $prods ));
-		//	$sql_params .= " AND user20 IN ($product_codes_str)";
+			$sql_params .=	" AND otto_prod_to_code_lut.product_code in ($product_codes_str) ";
 		}
 		if (!empty($page_pattern))
 		{
-		//	$sql_params .= " AND user18 LIKE '$page_pattern'";
+			$sql_params .= " AND user18 LIKE '$page_pattern'";
 		}
 		
-/*
-		$this->db_query("
-			select 
-				*
-			from 
-				aw_shop_products
-				left join objects on objects.brother_of = aw_shop_products.aw_oid
-			where
-				$sql_params 
-		");
-*/
 		$sql = "
 			select 
 				otto_prod_to_code_lut.product_code as product_code,
 				otto_prod_to_code_lut.product_id as product_id,
 				objects.name as product_name,
-				aw_shop_products.user4 as connected_products
+				aw_shop_products.user4 as connected_products,
+				aw_shop_products.user18 as page
 			from 
 				otto_prod_to_code_lut 
 				left join objects on objects.brother_of = otto_prod_to_code_lut.product_id
 				left join aw_shop_products on objects.brother_of = aw_shop_products.aw_oid
 			where 
-				otto_prod_to_code_lut.product_code in ($product_codes_str) AND
 				$sql_params
 
 		";
@@ -5126,7 +5107,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		{
 			$found_any_products = true;
 			$product_ids[$row['product_id']] = $row['product_id'];
-			echo $row['product_id']." -- ".$row['product_name']."<br />\n";
+			echo $row['product_id']." (".$row['page'].") -- ".$row['product_name']."<br />\n";
 			flush();
 		}
 
@@ -5153,25 +5134,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			$packaging_ids[$row['target']] = $row['target'];
 		}
 		$packaging_ids_str = implode(',', $packaging_ids);
-	/*
-	// no packets anymore --dragut 03.12.2007 
-		// now i will find the packets too
-		$this->db_query("
-			select
-				objects.oid as id
-			from
-				aliases
-				left join objects on objects.oid = aliases.source
-			where
-				objects.class_id = ".CL_SHOP_PACKET." AND
-				aliases.reltype = 1 AND
-				aliases.target IN ($product_ids_str)
-		");
-		while ($row = $this->db_next())
-		{
-			$packet_ids[$row['id']] = $row['id'];	
-		}
-	*/	
+
 		/**
 			DELETING
 				-- products (colors)
@@ -5194,44 +5157,6 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 
 		}
 
-		/**
-			PACKETS SCANNING:
-		**/
-/*
-// no packets scanning is required anymore
-		$packets_to_del = array();
-		foreach (safe_array($packet_ids) as $packet_id)
-		{
-			$conns = $this->db_fetch_array("
-				select
-					*
-				from
-					aliases
-				where 
-					source = $packet_id AND
-					reltype = 1
-					
-			");
-			if (empty($conns))
-			{
-				$packets_to_del[$packet_id] = $packet_id;
-			}
-			
-		}
-		
-		
-		if (!empty($packets_to_del))
-		{
-			echo "Paketid mis l&auml;hevad kustutamisele: <br /> \n";
-			arr($packets_to_del);
-			$packets_to_del_str = implode(',', $packets_to_del);
-			$this->db_query("delete from objects where oid in ($packets_to_del_str)");
-			$this->db_query("delete from aw_shop_packets where aw_oid in ($packets_to_del_str)");
-			$this->db_query("delete from aliases where source in ($packets_to_del_str)");
-			echo "Kustutasin <strong>".count($packets_to_del_str)."</strong> paketti (tooteid (v&auml;rve) koondav obj)<br />\n";
-	
-		}
-*/
 		flush();
 
 		echo "valmis! <br>";
