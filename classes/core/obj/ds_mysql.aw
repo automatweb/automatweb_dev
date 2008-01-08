@@ -2589,7 +2589,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$p = $GLOBALS["properties"][$clid];
 			$this->_do_add_class_id($clid, true);
-
 			foreach($props as $pn => $resn)
 			{
 				if (is_object($resn) && get_class($resn) == "obj_sql_func")
@@ -2625,10 +2624,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							));
 					}
 				}
+				else
 				if (is_numeric($pn))
 				{
 					$pn = $resn;
 				}
+				else
 				if (substr($pn, 0, 5) == "meta.")
 				{
 					$serialized_fields["objects.metadata"][] = substr($pn, 5);
