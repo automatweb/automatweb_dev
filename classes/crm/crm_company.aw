@@ -1447,7 +1447,7 @@ class crm_company extends class_base
 		);
 
 	}
-
+	
 	function crm_company_init()
 	{
 		$us = get_instance(CL_USER);
