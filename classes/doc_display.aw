@@ -45,6 +45,7 @@ class doc_display extends aw_template
 		}
 
 		$text = $this->_get_text($arr, $doc);
+		$lead = $this->_get_lead($arr, $doc);
 		$content = $this->_get_content($arr, $doc);
 
 		$this->create_relative_links($text);
@@ -64,6 +65,15 @@ class doc_display extends aw_template
 		$al->parse_oo_aliases(
 			$doc->id(),
 			&$content,
+			array(
+				"templates" => &$this->templates,
+				"meta" => &$mt
+			)
+		);
+		
+		$al->parse_oo_aliases(
+			$doc->id(),
+			&$lead,
 			array(
 				"templates" => &$this->templates,
 				"meta" => &$mt
@@ -207,6 +217,7 @@ class doc_display extends aw_template
 			"document_link" => $doc_link,
 			"print_link" => aw_url_change_var("print", 1),
 			"trans_lc" => aw_global_get("ct_lang_lc"),
+			"lead" => $lead,
 			"content" => $content,
 		));
 
@@ -389,6 +400,40 @@ class doc_display extends aw_template
 			));
 			return $this->parse("IFRAME");
 		}
+		return $text;
+	}
+	
+	function _get_lead($arr, $doc)
+	{
+		$lead = $doc->trans_get_val("lead");
+		if (!$arr["no_strip_lead"])
+		{
+			$lead = preg_replace("/#pict(\d+?)(v|k|p|)#/i","",$lead);
+			$lead = preg_replace("/#p(\d+?)(v|k|p|)#/i","",$lead);
+		}
+
+		if ($sps["lead"])
+		{
+			$lead = $sps["lead"];
+		}
+		
+		if (trim(strtolower($lead)) == "<br>")
+		{
+			$lead = "";
+		}
+		
+		$text = $lead; //$doc->trans_get_val("lead");
+		
+		// line break conversion between wysiwyg and not
+		$cb_nb = $doc->meta("cb_nobreaks");
+		if (!($doc->prop("nobreaks") || $cb_nb["content"]))	
+		{
+			$text = str_replace("\r\n","<br />",$text);
+			$text = str_replace("</li><br />", "</li>", $text);
+			$text = str_replace("<br /><ul><br />", "<ul>", $text);
+			$text = str_replace("</ul><br />", "</ul>", $text);
+		}
+		
 		return $text;
 	}
 	
