@@ -130,6 +130,16 @@
             <field>wpls</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SECTION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -138,6 +148,9 @@
             <wpls>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
             </wpls>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <SECTION>

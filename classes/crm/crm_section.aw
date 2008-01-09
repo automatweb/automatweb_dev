@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.28 2007/11/23 11:42:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.29 2008/01/09 11:36:33 kristo Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -55,6 +55,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 	@property wpls type=relpicker reltype=RELTYPE_WORKPLACE multiple=1 store=connect automatic=1
 	@caption T&ouml;&ouml;kohad
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 @reltype SECTION value=1 clid=CL_CRM_SECTION
 @caption Alamüksus
 
@@ -97,6 +103,9 @@ class crm_section extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_SECTION
 		));
+		$this->trans_props = array(
+			"name"
+		);
 	}
 
 	function get_folders_as_object_list($o, $level, $parent)
@@ -162,6 +171,10 @@ class crm_section extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "has_group":
 			case "has_group_subs":
 			case "has_group_subs_prof":
@@ -385,5 +398,20 @@ class crm_section extends class_base
 		}
 	}
 
+	function callback_mod_tab($arr)
+	{
+		$trc = aw_ini_get("user_interface.trans_classes");
+		
+		if ($arr["id"] == "transl" && (aw_ini_get("user_interface.content_trans") != 1 && !$trc[$this->clid]))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
 }
 ?>

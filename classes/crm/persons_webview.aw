@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.25 2008/01/03 11:14:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.26 2008/01/09 11:36:33 kristo Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -183,7 +183,7 @@ class persons_webview extends class_base
 					foreach($comp->get_all_org_sections($company) as $section_id)
 					{
 						$section = obj($section_id);
-						$prop["options"][$section_id] = $section->name();
+						$prop["options"][$section_id] = $section->trans_get_val("name");
 					}
 				}
 				break;
@@ -504,7 +504,7 @@ class persons_webview extends class_base
 			case "name":
  				foreach($sections as $section)
  				{
- 					$sections_tmp[] = array("sort" => $section->name(), "data" => $section);
+ 					$sections_tmp[] = array("sort" => $section->trans_get_val("name"), "data" => $section);
  				}
  				break;
 			case "jrk":
@@ -708,7 +708,7 @@ class persons_webview extends class_base
 			$address = $address_obj->name();
 		}		
 		$this->vars_safe(array(
-			"department_name" => $section->name(),
+			"department_name" => $section->trans_get_val("name"),
 			"phone"	=> $phone,
 			"email" => $email,
 			"fax" => $fax,
@@ -1163,7 +1163,7 @@ class persons_webview extends class_base
 			"wage_doc_exist" => $wage_doc_exist,
 			"next_level_link" => $next_level_link,
 			"company" => $company,
-			"section" => $this->section->name(),
+			"section" => $this->section->trans_get_val("name"),
 			"url"	=> $url,
 			"urls"	=> $urls,
 			"school" => $school,

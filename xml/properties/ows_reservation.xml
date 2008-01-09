@@ -11,7 +11,7 @@
       </property>
       <property>
             <name>ows_bron</name>
-            <table>aw_ows_reservations</table>
+            <table>objects</table>
             <group>cust_data</group>
             <type>relpicker</type>
             <field>meta</field>

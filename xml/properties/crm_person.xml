@@ -483,18 +483,6 @@
             <caption>Ametinimetus</caption>
       </property>
       <property>
-            <name>comment</name>
-            <table>objects</table>
-            <group>contact</group>
-            <type>textarea</type>
-            <cols>40</cols>
-            <rows>3</rows>
-            <field>comment</field>
-            <parent>work</parent>
-            <captionside>top</captionside>
-            <caption>Kontakt</caption>
-      </property>
-      <property>
             <name>work_contact_start</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
