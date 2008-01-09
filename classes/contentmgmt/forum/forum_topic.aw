@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.23 2007/09/13 10:03:26 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.24 2008/01/09 10:42:17 robert Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1
@@ -9,6 +9,9 @@
 
 	@property name type=textbox
 	@caption Pealkiri
+
+	@property active type=chooser field=meta method=serialize
+	@caption Aktiivne
 
 	@property comment type=textarea
 	@caption Sisu
@@ -75,6 +78,18 @@ class forum_topic extends class_base
 				"to" => $mail_addres->id(),
 				"reltype" => "RELTYPE_SUBSCRIBER",
 			));
+		}
+	}
+
+	function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "active":
+				$prop["options"] = array(1 => "Jah", 0 => "Ei");
+				break;
 		}
 	}
 

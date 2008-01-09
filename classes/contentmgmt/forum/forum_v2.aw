@@ -173,6 +173,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property topics_sort_order type=select
 		@caption Teemade j&auml;rjekord
 
+		@property activation type=checkbox ch_value=1
+		@caption Teemade aktiveerimine
+
 		@property comments_on_page type=textbox
 		@caption Kommentaare lehel
 
@@ -219,6 +222,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property import_xml_file type=fileupload store=no
 		@caption Vali XML fail
+
+	@groupinfo actv_settings caption=Aktiiverimine parent=settings
+	@default group=actv_settings
+
+		@property add_admin_mail type=checkbox ch_value=1
+		@caption Uued teemad adminile meiliga
+
+		@property a_mail_from type=textbox
+		@caption E-mail kellelt
+
+		@property a_mail_address type=textbox
+		@caption E-maili aadress kellelt
+
+		@property a_mail_subject type=textbox
+		@caption Maili subject
+
+		@property mail_vars type=text
+		@caption Maili sisu muutujad
+
+		@property a_mail_body type=textarea cols=50 rows=10
+		@caption Maili sisu
 
 	@groupinfo views caption="Vaated" submit=no
 	@groupinfo contents caption="Eelvaade" submit=no parent=views
@@ -345,6 +369,10 @@ class forum_v2 extends class_base
 					"topics_editable" => t("teemad"),
 					"comments_editable" => t("vastused"),
 				);
+				$data["value"] = array(
+					"topics_editable" => $arr["obj_inst"]->prop("topics_editable")?1:0,
+					"comments_editable" => $arr["obj_inst"]->prop("comments_editable")?1:0,
+				);
 				break;
 
 			case "topic_depth":
@@ -380,7 +408,9 @@ class forum_v2 extends class_base
 					$retval = PROP_IGNORE;
 				};
 				break;
-
+			case "mail_vars":
+				$data["value"] = "Link teemale: [link]<br /> Teema nimi: [name]<br />Teema autor: [author]";
+				break;
 
 		};
 		return $retval;
@@ -1018,6 +1048,10 @@ class forum_v2 extends class_base
 			'class_id' => CL_MSGBOARD_TOPIC,
 			'status' => STAT_ACTIVE,
 		);
+		if($args["obj_inst"]->prop("activation"))
+		{
+			$topics_list_params["active"] = 1;
+		}
 		$is_sorted = true;
 
 		if ( !empty($topics_sort_order) )
@@ -1074,7 +1108,10 @@ class forum_v2 extends class_base
 		{
 			$topic_oid = $topic->id();
 			$topic_name = $topic->name();
-
+			/*if($args["obj_inst"]->prop("activation") && !$topic->prop("active"))
+			{
+				continue;
+			}*/
 			// data of latest comment:
 			$last_comment = $this->get_last_comments(array('parents' => array($topic_oid)));
 			if ( $age_check === true && $last_comment['created'] < $c_date )
@@ -1312,8 +1349,11 @@ class forum_v2 extends class_base
 
 				$changed = "";
 				$change_link = "";
-
-				if ($args["obj_inst"]->prop("comments_editable"))
+				$ca = $this->_can_admin(array(
+					"forum_id" => $oid,
+					"uid" => aw_global_get("uid")
+				));
+				if ($args["obj_inst"]->prop("comments_editable") || $ca)
 				{
 					if ($comment["created"] < $comment["modified"])
 					{
@@ -1323,12 +1363,13 @@ class forum_v2 extends class_base
 						$changed = $this->parse("CHANGED");
 					}
 
-					if (aw_global_get("uid") === $comment["createdby"])
+					if (aw_global_get("uid") === $comment["createdby"] || $ca)
 					{
-						$url = $this->mk_my_orb("change", array(
-							"id" => $comment["oid"],
-							"return_url" => get_ru(),
-						), "forum_comment");
+						$url = $this->mk_my_orb("edit_post", array(
+							"id" => $oid,
+							"post" => $comment["oid"],
+							"ru" => get_ru(),
+						));
 						$this->vars(array(
 							"change_url" => $url,
 						));
@@ -1528,7 +1569,12 @@ class forum_v2 extends class_base
 		$changed = "";
 		$change_link = "";
 
-		if ($args["obj_inst"]->prop("topics_editable"))
+		$ca = $this->_can_admin(array(
+			"forum_id" => $oid,
+			"uid" => aw_global_get("uid")
+		));
+
+		if ($args["obj_inst"]->prop("topics_editable") || $ca)
 		{
 			if ($topic_obj->created() < $topic_obj->modified())
 			{
@@ -1538,12 +1584,13 @@ class forum_v2 extends class_base
 				$changed = $this->parse("CHANGED");
 			}
 
-			if (aw_global_get("uid") === $topic_obj->createdby())
+			if (aw_global_get("uid") === $topic_obj->createdby() || $ca)
 			{
-				$url = $this->mk_my_orb("change", array(
-					"id" => $topic_obj->id(),
-					"return_url" => get_ru(),
-				), "forum_topic");
+				$url = $this->mk_my_orb("edit_post", array(
+					"post" => $topic_obj->id(),
+					"id" => $oid,
+					"ru" => get_ru(),
+				));
 				$this->vars(array(
 					"change_url" => $url,
 				));
@@ -1807,6 +1854,15 @@ class forum_v2 extends class_base
 		};
 	}
 
+	function callback_mod_tab(&$arr)
+	{
+		if($arr["id"] == "actv_settings" && !$arr["obj_inst"]->prop("activation"))
+		{
+			return false;
+		}
+		return true;
+	}
+
 	function get_topic_list($args = array())
 	{
 		$topic_count = $tlist = array();
@@ -1817,11 +1873,12 @@ class forum_v2 extends class_base
 				"class_id" => CL_MSGBOARD_TOPIC,
 				"status" => STAT_ACTIVE,
 			));
-			$tlist = $topic_list->get_parentdata();
-			foreach ($tlist as $parent => $oids)
+			foreach ($topic_list->arr() as $topic)
 			{
-				$topic_count[$parent] += count($oids);
-			}
+				$parent = $topic->parent();
+				$topic_count[$parent]++;
+				$tlist[$parent][] = $topic->id();
+			};
 		};
 		return array($topic_count,$tlist);
 	}
@@ -2062,6 +2119,131 @@ class forum_v2 extends class_base
 		return $this->parse();
 	}
 
+
+	/**
+	@attrib name=edit_post all_args=1 nologin=1
+	**/
+	function edit_post($arr)
+	{
+		$uid = aw_global_get("uid");
+		if(is_oid($arr["id"]) && is_oid($arr["post"]) && $uid)
+		{
+			$this->obj_inst = obj($arr["id"]);
+			$topic = obj($arr["post"]);
+			$t_edit = ($topic->class_id()==CL_MSGBOARD_TOPIC)? $this->obj_inst->prop("topics_editable"): $this->obj_inst->prop("comments_editable");
+			$ca = $this->_can_admin(array("uid" => $uid, "forum_id" => $arr["id"]));
+			if(($t_edit && aw_global_get("uid") == $topic->createdby()) || $ca)
+			{
+				$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+				$htmlc->start_output();
+		
+				$htmlc->add_property(array(
+					"name" => "caption",
+					"caption" => ($topic->class_id()==CL_MSGBOARD_TOPIC)?t("Teema muutmine"):t("Kommentaari muutmine"),
+					"type" => "text",
+					"subtitle" => 1,
+				));
+		
+				$cfgu = get_instance("cfg/cfgutils");
+				$props = $cfgu->load_class_properties(array(
+					"clid" => ($topic->class_id()==CL_MSGBOARD_TOPIC)?CL_MSGBOARD_TOPIC:CL_COMMENT,
+				));
+				if($topic->class_id()==CL_MSGBOARD_TOPIC)
+				{
+					$use_props[0] = "name";
+					if($ca)
+					{
+						$use_props[] = "active";
+						$props['active']["options"] = array(1 => "Jah", 0 => "Ei");
+						$props['active']["value"] = $topic->prop("active");
+					}
+					
+					$use_props[] = "author_name";
+					$use_props[] = "author_email";
+					$use_props[] = "comment";
+					$use_props[] = "answers_to_mail";
+					$props['author_email']['value'] = $topic->prop("author_email");
+		
+					$props['author_name']['value'] = $topic->prop("author_name");
+					$props['author_name']['type'] = "text";
+					$props['author_email']['type'] = "text";
+		
+					$props["name"]["value"] = $topic->name();
+					$props["answers_to_mail"]["value"] = $topic->prop("answers_to_mail");
+					$props["comment"]["value"] = $topic->comment();
+				}
+				else
+				{
+					$use_props = array("name","uname","uemail","commtext");
+					$props["commtext"]["value"] = $topic->prop("commtext");
+					$props["name"]["value"] = $topic->name();
+					$props["uemail"]["value"] = $topic->prop("uemail");
+					$props["uemail"]["type"] = "text";
+					$props["uname"]["value"] = $topic->prop("uname");
+					$props["uname"]["type"] = "text";
+				}
+				$cb_values = aw_global_get("cb_values");
+				aw_session_del("cb_values");
+		
+				foreach($use_props as $key)
+				{
+					$propdata = $props[$key];
+					if (isset($cb_values[$key]["error"]))
+					{
+						$propdata["error"] = $cb_values[$key]["error"];
+					};
+					if (isset($cb_values[$key]["value"]))
+					{
+						$propdata["value"] = $cb_values[$key]["value"];
+					};
+					$htmlc->add_property($propdata);
+				};
+		
+				if ($this->obj_inst->prop("show_image_upload_in_add_topic_form"))
+				{
+					$htmlc->add_property(array(
+						"name" => "uimage",
+						"caption" => t("Pilt"),
+						"type" => "fileupload",
+					));
+				}
+				aw_session_set('no_cache', 1);
+		
+				$htmlc->add_property(array(
+					"name" => "sbt",
+					"caption" => t("Muuda"),
+					"type" => "submit",
+				));
+		
+				$class = aw_global_get("class");
+				// XXX: are we embedded? I know, this sucks :(
+				$form_handler = "";
+				if (empty($_GET["class"]))
+				{
+					$form_handler = aw_ini_get("baseurl") . "/" . aw_global_get("section");
+				};
+		
+				$htmlc->finish_output(array("data" => array(
+						"class" => get_class($this),
+						"section" => aw_global_get("section"),
+						"action" =>"submit_post_edit",
+						"id" => $arr["id"],
+						"post" => $arr["post"],
+						"ru" => $arr["ru"],
+					),
+					"form_handler" => $form_handler,
+				));
+		
+				$html = $htmlc->get_result(array(
+					"form_only" => 1
+				));
+		
+				return $html;
+			}
+		}
+	}
+
+
 	/**
 
 		@attrib name=add_topic params=name all_args="1" nologin="1"
@@ -2203,13 +2385,14 @@ class forum_v2 extends class_base
 		{
 			$form_handler = aw_ini_get("baseurl") . "/" . aw_global_get("section");
 		};
-
 		$htmlc->finish_output(array("data" => array(
 				"class" => get_class($this),
 				"section" => aw_global_get("section"),
 				"action" => "submit_topic",
 				"folder" => $arr["folder"],
 				"id" => $arr["id"],
+				"edit" => 1,
+				"section" => aw_global_get("section"),
 			),
 			"form_handler" => $form_handler,
                 ));
@@ -2242,6 +2425,74 @@ class forum_v2 extends class_base
 	}
 
 	/**
+	@attrib name=submit_post_edit all_args=1 nologin=1
+	**/
+	function submit_post_edit($arr)
+	{
+		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
+		{
+			$obj_inst = obj($arr["id"]);
+		}
+		else
+		{
+			return $arr["ru"];
+		}
+		if(is_oid($arr["post"]) && $this->can("view", $arr["post"]))
+		{
+			$topic = obj($arr["post"]);
+			if($topic->class_id()==CL_MSGBOARD_TOPIC)
+			{
+				$topic->set_name($arr["name"]);
+				$topic->set_comment($arr["comment"]);
+				$topic->set_prop("answers_to_mail",$arr["answers_to_mail"]);
+				if($arr["active"])
+				{
+					$topic->set_prop("active", $arr["active"]);
+				}
+			}
+			else
+			{
+				$topic->set_name($arr["name"]);
+				$topic->set_prop("commtext", $arr["commtext"]);
+			}
+			$image_inst = get_instance(CL_IMAGE);
+			// figure out the images parent:
+			$images_folder_id = $obj_inst->prop("images_folder");
+	
+			if (!empty($images_folder_id))
+			{
+				// if there is images_folder set, then put images there:
+				$image_parent = $images_folder_id;
+			}
+			else
+			{
+				// else lets put it under the object where the image is added:
+				$image_parent = $topic->id();
+			}
+	
+			// if there is image uploaded:
+			$upload_image = $image_inst->add_upload_image("uimage", $image_parent);
+	
+			if ($upload_image !== false && is_oid($topic->id()))
+			{
+				$con = $topic->connections_from(array("type" => "RELTYPE_FORUM_IMAGE"));
+				foreach($con as $c)
+				{
+					$topic->disconnect(array("from" => $c->prop("to")));
+				}
+				$topic->connect(array(
+					"to" => $upload_image['id'],
+					"reltype" => "RELTYPE_FORUM_IMAGE",
+				));
+				$image_inst->do_apply_gal_conf(obj($upload_image['id']));
+			}
+			$topic->save();
+		}
+		return $arr["ru"];
+	}
+
+
+	/**
 
 		@attrib name=submit_topic params=name all_args="1" nologin="1"
 
@@ -2254,7 +2505,6 @@ class forum_v2 extends class_base
 	function submit_topic($arr)
 	{
 		$t = get_instance(CL_MSGBOARD_TOPIC);
-
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$obj_inst = obj($arr["id"]);
@@ -2332,6 +2582,15 @@ class forum_v2 extends class_base
 				'id' => $arr['id'],
 				'message' => $arr['comment'],
 				'topic_url' => $topic_url
+			));
+		}
+
+		if($obj_inst->prop("activation") && $obj_inst->prop("add_admin_mail"))
+		{
+			$this->send_admin_mail(array(
+				"forum_id" => $obj_inst->id(),
+				"id" => $this->topic_id,
+				"section" => $arr["section"]
 			));
 		}
 
@@ -2541,6 +2800,63 @@ class forum_v2 extends class_base
 			$arr["group"] = "contents";
 		}
 		return parent::change($arr);
+	}
+
+	function send_admin_mail($arr)
+	{
+		$forum_obj = &obj($arr["forum_id"]);
+		$topic_obj = &obj($arr["id"]);
+
+		if($forum_obj->prop("a_mail_subject"))
+		{
+			$subject = $forum_obj->prop("a_mail_subject");
+		}
+		else
+		{
+			$subject = $topic_obj->name();
+		}
+
+		if($forum_obj->prop("a_mail_address") || $forum_obj->prop("a_mail_from"))
+		{
+			$from = "From:".$forum_obj->prop("a_mail_from")."<".$forum_obj->prop("a_mail_address").">\n";
+		}
+		else
+		{
+			$from = "From: automatweb@automatweb.com\n";
+		}
+
+		// composing the message:
+		$message = $forum_obj->prop("a_mail_body");
+		$message = str_replace("[link]", $this->mk_my_orb("edit_post", array(
+			"id" => $arr["forum_id"],
+			"post" => $arr["id"],
+			"ru" => aw_ini_get("baseurl")."/section=".$arr["section"]."&alias=forum_v2&action=change&id=".$arr["forum_id"]."&group=contents",
+		)),$message);
+		$message = str_replace("[name]", $topic_obj->name(),$message);
+		$message = str_replace("[author]", $topic_obj->prop("author_name"),$message);
+		$targets = array();
+		$c = new connection();
+		$conns = $c->find(array(
+			"from" => $arr['forum_id'],
+			"type" => 5
+		));
+		foreach($conns as $c)
+		{
+			$adm_obj = obj($c["to"]);
+			if($adm_obj->class_id()==CL_USER)
+			{
+				$targets[] = $adm_obj;
+			}
+			else
+			{
+				$gi = get_instance(CL_GROUP);
+				$targets = $gi->get_group_members($adm_obj);
+			}
+		}
+		foreach($targets as $target)
+		{
+			send_mail($target->prop("email"),$subject,$message,$from);
+		};
 	}
 
 

@@ -9,6 +9,15 @@
             <caption>Pealkiri</caption>
       </property>
       <property>
+            <name>active</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Aktiivne</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>

@@ -33,7 +33,11 @@
 <!-- END SUB: IMAGE -->
 
 </td>
-	<td valign="top" class="{VAR:style_comment_count}"><strong>{VAR:name}</strong><p>{VAR:comment}{VAR:topic_image1}</td>
+	<td valign="top" class="{VAR:style_comment_count}"><strong>{VAR:name}</strong>
+		<!-- SUB: CHANGE_LINK -->
+		<a href="{VAR:change_url}">Muuda</a>
+		<!-- END SUB: CHANGE_LINK -->
+<p>{VAR:comment}{VAR:topic_image1}</td>
 </tr>
 <!-- SUB: COMMENT -->
 <tr>
@@ -53,7 +57,11 @@
 		<input type="checkbox" name="del[]" value="{VAR:id}" />
 		</div>
 		<!-- END SUB: ADMIN_BLOCK -->
-	<strong>{VAR:name}</strong><p>{VAR:commtext}{VAR:comment_image1}
+	<strong>{VAR:name}</strong> 
+		<!-- SUB: CHANGE_LINK -->
+		<a href="{VAR:change_url}">Muuda</a>
+		<!-- END SUB: CHANGE_LINK -->
+	<p>{VAR:commtext}{VAR:comment_image1}
 	</td>
 </tr>
 <!-- END SUB: COMMENT -->

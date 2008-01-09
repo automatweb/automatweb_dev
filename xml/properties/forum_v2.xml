@@ -428,6 +428,16 @@
             <caption>Teemade j&amp;amp;auml;rjekord</caption>
       </property>
       <property>
+            <name>activation</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Teemade aktiveerimine</caption>
+      </property>
+      <property>
             <name>comments_on_page</name>
             <table>objects</table>
             <group>topic_selector</group>
@@ -571,6 +581,63 @@
             <caption>Vali XML fail</caption>
       </property>
       <property>
+            <name>add_admin_mail</name>
+            <table>objects</table>
+            <group>actv_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Uued teemad adminile meiliga</caption>
+      </property>
+      <property>
+            <name>a_mail_from</name>
+            <table>objects</table>
+            <group>actv_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>E-mail kellelt</caption>
+      </property>
+      <property>
+            <name>a_mail_address</name>
+            <table>objects</table>
+            <group>actv_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>E-maili aadress kellelt</caption>
+      </property>
+      <property>
+            <name>a_mail_subject</name>
+            <table>objects</table>
+            <group>actv_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Maili subject</caption>
+      </property>
+      <property>
+            <name>mail_vars</name>
+            <table>objects</table>
+            <group>actv_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Maili sisu muutujad</caption>
+      </property>
+      <property>
+            <name>a_mail_body</name>
+            <table>objects</table>
+            <group>actv_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <cols>50</cols>
+            <rows>10</rows>
+            <caption>Maili sisu</caption>
+      </property>
+      <property>
             <name>topic</name>
             <table>objects</table>
             <group>contents</group>
@@ -646,6 +713,10 @@
                   <caption>Import</caption>
                   <parent>settings</parent>
             </import>
+            <actv_settings>
+                  <caption>Aktiiverimine</caption>
+                  <parent>settings</parent>
+            </actv_settings>
             <views>
                   <caption>Vaated</caption>
                   <submit>no</submit>
