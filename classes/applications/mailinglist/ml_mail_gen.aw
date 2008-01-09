@@ -306,6 +306,7 @@ class ml_mail_gen extends run_in_background
 		
 		$message = $this->replace_tags($message, $data);
 		$message = str_replace("a href='/", "a href='".aw_ini_get("baseurl")."/" , $message);
+		$message = str_replace('a href="/', 'a href="'.aw_ini_get("baseurl").'/' , $message);
 
 		return $message;
 	}
