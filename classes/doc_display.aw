@@ -400,6 +400,10 @@ class doc_display extends aw_template
 			));
 			return $this->parse("IFRAME");
 		}
+		if (aw_ini_get("document.use_wiki_parser") == 1)
+		{
+			$this->_parse_wiki(& $text);
+		}
 		return $text;
 	}
 	
@@ -434,6 +438,11 @@ class doc_display extends aw_template
 			$text = str_replace("</ul><br />", "</ul>", $text);
 		}
 		
+		if (aw_ini_get("document.use_wiki_parser") == 1)
+		{
+			$this->_parse_wiki(& $text);
+		}
+		
 		return $text;
 	}
 	
@@ -445,17 +454,120 @@ class doc_display extends aw_template
 		
 		$text = $content; //$doc->trans_get_val("content");
 		
+		if (aw_ini_get("document.use_wiki_parser") == 1)
+		{
+			$this->_parse_wiki(& $text);
+		}
+		
 		// line break conversion between wysiwyg and not
 		$cb_nb = $doc->meta("cb_nobreaks");
 		if (!($doc->prop("nobreaks") || $cb_nb["content"]))	
 		{
-			$text = str_replace("\r\n","<br />",$text);
-			$text = str_replace("</li><br />", "</li>", $text);
-			$text = str_replace("<br /><ul><br />", "<ul>", $text);
-			$text = str_replace("</ul><br />", "</ul>", $text);
+			if (aw_ini_get("document.use_wiki_parser") == "xhtml")
+			{
+				$text = str_replace("\r\n","<br />",$text);
+			}
+			else
+			{
+				$text = str_replace("\r\n","<br>",$text);
+			}
+				$text = str_replace("</li><br />", "</li>", $text);
+				$text = str_replace("<br /><ul><br />", "<ul>", $text);
+				$text = str_replace("</ul><br />", "</ul>", $text);
+
 		}
 		
+
+		
 		return $text;
+	}
+	
+	function _parse_wiki($str)
+	{
+		$str = trim($str);
+		$this->_parse_wiki_lists(& $str);
+		$this->_parse_wiki_titles(& $str);
+	}
+	
+	function _parse_wiki_titles($str)
+	{
+		$a_pattern[0] = "/\r\n======([a-zA-Z0-9\s,\/]+)======\r\n/mU";
+		$a_replacement[0] = "<h6>\\1</h6>";
+		$a_pattern[1] = "/^======([a-zA-Z0-9\s,\/]+)======\r\n/mU";
+		$a_replacement[1] = "<h6>\\1</h6>";
+		$a_pattern[2] = "/\r\n=====([a-zA-Z0-9\s,\/]+)=====\r\n/mU";
+		$a_replacement[2] = "<h5>\\1</h5>";
+		$a_pattern[3] = "/^=====([a-zA-Z0-9\s,\/]+)=====\r\n/mU";
+		$a_replacement[3] = "<h5>\\1</h5>";
+		$a_pattern[4] = "/\r\n====([a-zA-Z0-9\s,\/]+)====\r\n/mU";
+		$a_replacement[4] = "<h4>\\1</h4>";
+		$a_pattern[5] = "/^====([a-zA-Z0-9\s,\/]+)====\r\n/mU";
+		$a_replacement[5] = "<h4>\\1</h4>";
+		$a_pattern[6] = "/\r\n===([a-zA-Z0-9\s,\/]+)===\r\n/mU";
+		$a_replacement[6] = "<h3>\\1</h3>";
+		$a_pattern[7] = "/^===([a-zA-Z0-9\s,\/]+)===\r\n/mU";
+		$a_replacement[7] = "<h3>\\1</h3>";
+		$a_pattern[8] = "/\r\n==([a-zA-Z0-9\s,\/]+)==\r\n/mU";
+		$a_replacement[8] = "<h2>\\1</h2>";
+		$a_pattern[9] = "/^==([a-zA-Z0-9\s,\/]+)==\r\n/mU";
+		$a_replacement[9] = "<h2>\\1</h2>";
+		$a_pattern[10] = "/\r\n=([a-zA-Z0-9\s,\/]+)=\r\n/mU";
+		$a_replacement[10] = "<h1>\\1</h1>";
+		$a_pattern[11] = "/^=([a-zA-Z0-9\s,\/]+)=\r\n/mU";
+		$a_replacement[11] = "<h1>\\1</h1>";
+		
+		
+		$str = preg_replace  ( $a_pattern  , $a_replacement  , $str );
+	}
+	
+	function _parse_wiki_lists($str)
+	{
+		$tmp = $str;
+		$a_text = array();
+		
+		$i=0;
+		while ( preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt) )
+		{
+			$a_text[] = $mt[1];
+			$tmp = preg_replace  ( "/^(.*)\r\n/U"  , "" , $tmp );
+		}
+		
+		$tmp = "";
+		
+		$working_on_list = false;
+		for ($i=0;$i<count($a_text);$i++)
+		{
+			if ( preg_match  ( "/\*(.*)/U" , $a_text[$i], &$mt)  )
+			{
+				$a_text[$i] = substr  ($a_text[$i], 2);
+				if ($working_on_list == false)
+				{
+					$tmp .= "<ul>";
+					$tmp .= "<li>".$a_text[$i]."</li>";
+					$working_on_list = true;
+				}
+				else
+				{
+					$tmp .= "<li>".$a_text[$i]."</li>";
+				}
+			}
+			else
+			{
+				if ($working_on_list == true)
+				{
+					$tmp .= "</ul>";
+					$tmp .= $a_text[$i]."\r\n";
+					$working_on_list = false;
+				}
+				else
+				{
+					$tmp .=  $a_text[$i]."\r\n";
+					
+				}
+			}
+		}
+		
+		$str = $tmp;
 	}
 
 	function _do_forum($doc)
