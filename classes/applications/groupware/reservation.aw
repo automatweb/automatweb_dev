@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.87 2007/11/23 10:54:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.88 2008/01/09 09:13:18 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -289,9 +289,9 @@ class reservation extends class_base
 				break;	
 
 			case "people":
-				if(is_oid($arr["obj_inst"]->meta("resource")))
+				if(is_oid($arr["obj_inst"]->prop("resource")))
 				{
-					$room = obj($arr["obj_inst"]->meta("resource"));
+					$room = obj($arr["obj_inst"]->prop("resource"));
 				}
 				else
 				{
@@ -313,6 +313,7 @@ class reservation extends class_base
 						$prop["options"] = array("") + $ol->names();
 					}
 				}
+				break;
 				
 //			case "sum":
 //				break;
