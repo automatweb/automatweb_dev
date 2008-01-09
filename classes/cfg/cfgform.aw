@@ -243,9 +243,9 @@
 */
 class cfgform extends class_base
 {
-	var $cfgview_actions = array();
-	var $default_new_layout_name = "new_layout_temporary_name";
-	var $cfg_load_scope_index = array (
+	private $cfgview_actions = array();
+	private $default_new_layout_name = "new_layout_temporary_name";
+	private $cfg_load_scope_index = array (
 		"all" => array("properties", "groups", "layouts"),
 		"properties" => array("properties"),
 		"groups" => array("groups"),
@@ -844,9 +844,9 @@ class cfgform extends class_base
 	{
 		$this->_init_properties($obj->prop("subclass"));
 
-		$this->grplist = safe_array($obj->meta("cfg_groups"));
-		$this->prplist = safe_array($obj->meta("cfg_proplist"));
-		$this->layout = safe_array($obj->meta("cfg_layout"));
+		$this->grplist = $this->cfg_groups = safe_array($obj->meta("cfg_groups"));
+		$this->prplist = $this->cfg_proplist = safe_array($obj->meta("cfg_proplist"));
+		$this->layout = $this->cfg_layout = safe_array($obj->meta("cfg_layout"));
 	}
 
 	function _init_properties($class_id)
@@ -1253,62 +1253,53 @@ class cfgform extends class_base
 
 	function _save_cfg_groups($o)
 	{
-		if (!empty($this->cfg_groups))
-		{
-			$this->_sort_groups();
-			$o->set_meta("cfg_groups", $this->cfg_groups);
-			$o->set_meta("cfg_groups_sorted", 1);
-		}
+		$this->_sort_groups();
+		$o->set_meta("cfg_groups", $this->cfg_groups);
+		$o->set_meta("cfg_groups_sorted", 1);
 	}
 
 	function _save_cfg_props($o)
 	{
-		if (!empty($this->cfg_proplist))
+		$tmp = array();
+		$cnt = 0;
+		foreach($this->cfg_proplist as $key => $val)
 		{
-			$tmp = array();
-			$cnt = 0;
-			foreach($this->cfg_proplist as $key => $val)
+			if (empty($val["ord"]))
 			{
-				if (empty($val["ord"]))
-				{
-					$cnt++;
-					$val["tmp_ord"] = $cnt;
-				}
-
-				$tmp[$key] = $val;
+				$cnt++;
+				$val["tmp_ord"] = $cnt;
 			}
 
-			uasort($tmp, array($this, "__sort_props_by_ord"));
-
-			$cnt = 0;
-			$this->cfg_proplist = array();
-
-			foreach($tmp as $key => $val)
-			{
-				unset($val["tmp_ord"]);
-
-				if ($this->default_values[$key])
-				{
-					$val["default"] = $this->default_values[$key];
-				}
-				else
-				{
-					unset($val["default"]);
-				}
-
-				$this->cfg_proplist[$key] = $val;
-			}
-
-			$o->set_meta("cfg_proplist",$this->cfg_proplist);
+			$tmp[$key] = $val;
 		}
+
+		uasort($tmp, array($this, "__sort_props_by_ord"));
+
+		$cnt = 0;
+		$this->cfg_proplist = array();
+
+		foreach($tmp as $key => $val)
+		{
+			unset($val["tmp_ord"]);
+
+			if ($this->default_values[$key])
+			{
+				$val["default"] = $this->default_values[$key];
+			}
+			else
+			{
+				unset($val["default"]);
+			}
+
+			$this->cfg_proplist[$key] = $val;
+		}
+
+		$o->set_meta("cfg_proplist",$this->cfg_proplist);
 	}
 
 	function _save_cfg_layout($o)
 	{
-		if (!empty($this->cfg_layout))
-		{
-			$o->set_meta("cfg_layout", $this->cfg_layout);
-		}
+		$o->set_meta("cfg_layout", $this->cfg_layout);
 	}
 
 	function _init_layout_tbl(&$t)
@@ -1489,6 +1480,15 @@ class cfgform extends class_base
 			"action" => "add_new_layout",
 			"img" => "new.gif",
 		));
+
+		// save
+		$toolbar->add_button(array(
+			"name" => "save",
+			"url" => "javascript:submit_changeform()",
+			"img" => "save.gif",
+			"tooltip" => t("Salvesta"),
+		));
+
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => t("Kustuta valitud"),
@@ -1502,7 +1502,6 @@ class cfgform extends class_base
 	{
 		$this_o = $arr["obj_inst"];
 		$this->_init_cfgform_data($this_o);
-		$this->cfg_layout = $this->layout;
 
 		foreach ($this->cfg_layout as $name => $data)
 		{
@@ -2876,7 +2875,6 @@ class cfgform extends class_base
 		else
 		{
 			$tmp = aw_ini_get("classes");
-
 			$fname = $tmp[$clid]["file"];
 			$def = join("",file(aw_ini_get("basedir") . "/xml/properties/class_base.xml"));
 			list($proplist,$grplist, $layout) = $cfgu->parse_cfgform(array("xml_definition" => $def), true);
@@ -2887,7 +2885,6 @@ class cfgform extends class_base
 			$fname = basename($fname);
 			$def = join("",file(aw_ini_get("basedir") . "/xml/properties/$fname.xml"));
 			list($proplist,$grplist, $layout) = $cfgu->parse_cfgform(array("xml_definition" => $def), true);
-			// nono. It needs to fucking merge those things with classbase
 			$this->cfg_proplist = $this->cfg_proplist + $proplist;
 			$this->cfg_groups = $this->cfg_groups + $grplist;
 			$this->cfg_layout = $this->cfg_layout + $layout;
@@ -3236,58 +3233,54 @@ class cfgform extends class_base
 	}
 
 
-/** Deletes user defined group.
-	@attrib name=delete_userdfn_grp
+/** Deletes a group (tab).
+	@attrib name=delete_grp
 	@param id required type=int acl=view
 	@param name required
 	@param return_url optional
 **/
-	function delete_userdfn_grp($arr)
+	function delete_grp($arr)
 	{
 		$this_o = obj ($arr["id"]);
 		$name = $arr["name"];
 		$this->cfg_groups = $this_o->meta("cfg_groups");
+		$this->cfg_proplist = $this_o->meta("cfg_proplist");
+		$deleted_groups = array($name);
 
-		if (!empty($this->cfg_groups[$name]["user_defined"]))
+		// delete group
+		unset($this->cfg_groups[$name]);
+
+		// delete children if any
+		foreach($this->cfg_groups as $key => $data)
 		{
-			$this->cfg_proplist = $this_o->meta("cfg_proplist");
-			$deleted_groups = array($name);
-
-			// delete group
-			unset($this->cfg_groups[$name]);
-
-			// delete children if any
-			foreach($this->cfg_groups as $key => $data)
+			if ($name === $data["parent"])
 			{
-				if ($name === $data["parent"])
-				{
-					$deleted_groups[] = $key;
-					unset($this->cfg_groups[$key]);
-				}
+				$deleted_groups[] = $key;
+				unset($this->cfg_groups[$key]);
 			}
-
-			// remove properties from deleted groups
-			foreach ($this->cfg_proplist as $key => $data)
-			{
-				if (in_array($data["group"], $deleted_groups))
-				{
-					unset($this->cfg_proplist[$key]);
-				}
-			}
-
-			// save
-			$this->_save_cfg_groups($this_o);
-			$this->_save_cfg_props($this_o);
-			$this->_save_cfg_layout($this_o);
-
-			$this_o->save();
 		}
+
+		// remove properties from deleted groups
+		foreach ($this->cfg_proplist as $key => $data)
+		{
+			if (in_array($data["group"], $deleted_groups))
+			{
+				unset($this->cfg_proplist[$key]);
+			}
+		}
+
+		// save
+		$this->_save_cfg_groups($this_o);
+		$this->_save_cfg_props($this_o);
+		$this_o->save();
 
 		return aw_url_change_var("just_saved", "1", $arr["return_url"]);
 	}
 
 	/**
 		@attrib name=delete_layouts
+		@param id required type=int
+		@param selection required type=array
 	**/
 	function delete_layouts ($arr)
 	{
@@ -3302,7 +3295,6 @@ class cfgform extends class_base
 
 			$this_o = new object($arr["id"]);
 			$this->_init_cfgform_data($this_o);
-			$this->cfg_layout = $this->layout;
 			$i = 0;
 
 			foreach ($sel as $deleted_layout_name)
@@ -3334,6 +3326,7 @@ class cfgform extends class_base
 
 	/**
 		@attrib name=add_new_layout
+		@param id required type=int
 	**/
 	function add_new_layout ($arr)
 	{
@@ -3344,7 +3337,6 @@ class cfgform extends class_base
 
 		$this_o = new object($arr["id"]);
 		$this->_init_cfgform_data($this_o);
-		$this->cfg_layout = $this->layout;
 		$i = 0;
 
 		do
@@ -3414,6 +3406,7 @@ class cfgform extends class_base
 					$this->cfg_groups = $this->grplist + $this->cfg_groups;
 					$this->_save_cfg_groups($this_o);
 					break;
+
 				case "layouts":
 					$this->cfg_layout = $this->layout + $this->cfg_layout;
 					$this->_save_cfg_layout($this_o);
@@ -3492,37 +3485,25 @@ class cfgform extends class_base
 		));
 
 		// delete for user defined groups
-		$user_dfn_grps = array();
-		$delete_url = $this->mk_my_orb("delete_userdfn_grp", array(
+		$delete_url = $this->mk_my_orb("delete_grp", array(
 			"id" => $this_o->id (),
 			"name" => "cfgform_delete_grp_name",
 			"return_url" => get_ru(),
 		));
 
+		$toolbar->add_menu_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta tab"),
+		));
+
 		foreach ($this->grplist as $name => $data)
 		{
-			if (!empty($data["user_defined"]))
-			{
-				$user_dfn_grps[$name] = $data;
-			}
-		}
-
-		if (count($user_dfn_grps))
-		{
-			$toolbar->add_menu_button(array(
-				"name" => "delete",
-				"img" => "delete.gif",
-				"tooltip" => t("Kustuta kasutajaloodud tab"),
+			$toolbar->add_menu_item(array(
+				"parent" => "delete",
+				"text" => t("Kustuta ") . $data["caption"] . " ($name)",
+				"link" => str_replace("cfgform_delete_grp_name", $name, $delete_url),
 			));
-
-			foreach ($user_dfn_grps as $name => $data)
-			{
-				$toolbar->add_menu_item(array(
-					"parent" => "delete",
-					"text" => t("Kustuta ") . $data["caption"] . " ($name)",
-					"link" => str_replace("cfgform_delete_grp_name", $name, $delete_url),
-				));
-			}
 		}
 	}
 
@@ -3560,23 +3541,16 @@ class cfgform extends class_base
 		));
 		$t->define_field(array(
 			"name" => "opt_view",
-			"caption" => t("V"),
+			"caption" => '<a href="javascript:selall(\'grpview\')">' . t("V") . '</a>',
 			"tooltip" => t("Vaikimisi view vaade"),
 			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "opt_show",
-			"caption" => t("N"),
+			"caption" => '<a href="javascript:selall(\'grphide\')">' . t("N") . '</a>',
 			"tooltip" => t("Näita tabi"),
 			"chgbgcolor" => "bg_colour",
 		));
-/*  grpstyle to be deprecated
-		$t->define_field(array(
-			"name" => "style",
-			"caption" => t("Stiil"),
-			"chgbgcolor" => "bg_colour",
-		));
- */
 	 }
 
 	function _edit_groups_tbl($arr)
