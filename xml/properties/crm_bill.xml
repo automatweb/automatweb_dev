@@ -24,8 +24,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>comment</field>
-            <caption>Kommentaar lisale
-</caption>
+            <caption>Kommentaar lisale</caption>
       </property>
       <property>
             <name>time_spent_desc</name>
@@ -163,7 +162,7 @@
             <name>partial_recieved</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>text</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Osaline laekumine</caption>
@@ -409,10 +408,15 @@
                   <caption>Toode</caption>
             </PROD>
             <SIGNER>
-                  <value>6</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>Allkirjastaja</caption>
+                    <value>7</value>
+                    <clid>CL_CRM_PERSON</clid>
+                    <caption>Allkirjastaja</caption>
             </SIGNER>
+            <PAYMENT>
+                    <value>8</value>
+                    <clid>CL_CRM_BILL_PAYMENT</clid>
+                    <caption>Laekumine</caption>
+            </PAYMENT>
       </reltypes>
 </properties>
 

@@ -2283,6 +2283,26 @@
             <field>bs_tb</field>
       </property>
       <property>
+            <name>bill_payments_tb</name>
+            <table>objects</table>
+            <group>bill_payments</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bill_payments_tb</field>
+            <caption>Laekumiste toolbar</caption>
+      </property>
+      <property>
+            <name>bill_payments_table</name>
+            <table>objects</table>
+            <group>bill_payments</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bill_payments_table</field>
+            <caption>Laekumiste tabel</caption>
+      </property>
+      <property>
             <name>bills_tb</name>
             <table>objects</table>
             <group>bills_list</group>
@@ -3621,6 +3641,12 @@
                   <submit>no</submit>
                   <save>no</save>
             </bills_create>
+            <bill_payments>
+                  <parent>bills</parent>
+                  <caption>Laekumised</caption>
+                  <submit>no</submit>
+                  <save>no</save>
+            </bill_payments>
             <stats>
                   <caption>Aruanded</caption>
                   <save>no</save>

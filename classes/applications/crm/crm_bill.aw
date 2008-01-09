@@ -1,14 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.122 2008/01/07 16:11:16 markop Exp $
-// crm_bill.aw - Arve 
 /*
-
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
-
 @tableinfo aw_crm_bill index=aw_oid master_index=brother_of master_table=objects
-
 @classinfo syslog_type=ST_CRM_BILL relationmgr=yes no_status=1 prop_cb=1 confirm_save_data=1 maintainer=markop
-
 @default table=objects
 
 @default group=general
@@ -67,7 +61,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property state type=select table=aw_crm_bill field=aw_state
 	@caption Staatus
 
-	@property partial_recieved type=textbox field=meta method=serialize
+	@property partial_recieved type=text field=meta method=serialize
 	@caption Osaline laekumine
 
 	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
@@ -86,7 +80,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@caption Read erinevatel lehekülgedel
 
 	@property bill_rows type=text store=no no_caption=1
-	@caption Arveread 
+	@caption Arveread
 
 	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 table=objects field=meta method=serialize style=relpicker
 	@caption Allkirjastajad
@@ -109,31 +103,23 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property udef5 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kasutajadefineeritud muutuja 5
 
-
 @default group=preview
-
 	@property preview type=text store=no no_caption=1
 
 @default group=preview_add
-
 	@property preview_add type=text store=no no_caption=1
 
 @default group=preview_w_rows
-
 	@property preview_w_rows type=text store=no no_caption=1
 
 @default group=tasks
-
 	@property bill_tb type=toolbar store=no no_caption=1
-
 	@property bill_task_list type=table store=no no_caption=1
-
 
 @groupinfo tasks caption="Toimetused" submit=no
 @groupinfo preview caption="Eelvaade"
 @groupinfo preview_add caption="Arve Lisa"
 @groupinfo preview_w_rows caption="Eelvaade ridadega"
-
 
 
 @reltype TASK value=1 clid=CL_TASK
@@ -154,10 +140,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 @reltype PROD value=6 clid=CL_SHOP_PRODUCT
 @caption Toode
 
-@reltype SIGNER value=6 clid=CL_CRM_PERSON
+@reltype SIGNER value=7 clid=CL_CRM_PERSON
 @caption Allkirjastaja
 
-
+@reltype PAYMENT value=8 clid=CL_CRM_BILL_PAYMENT
+@caption Laekumine
 */
 
 define("BILL_SUM", 1);
@@ -211,17 +198,41 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-		/*	case "language":
-				if(!$prop["value"])
+			//case "language":
+			//	if(!$prop["value"])
+			//	{
+			//		$cdo = $this->get_bill_cust_data_object($arr["obj_inst"]);
+			//		if($cdo->prop("language"))
+			//		{
+			//			$prop["value"] = $cdo->prop("language");
+			//		}
+			//	}
+			//	break;
+			case 'partial_recieved':
+				$sum = $prop["value"];
+				$prop["value"] = number_format($prop["value"], 2);
+				$curn = $arr["obj_inst"]->prop("customer.currency.name");
+				$prop["value"] .= " ".($curn == "" ? "EEK" : $curn);
+				$url = $this->mk_my_orb("do_search", array(
+					"pn" => "new_payment",
+					"clid" => CL_CRM_BILL_PAYMENT,
+				), "popup_search", false, true);
+
+				if(!($sum >= $this->get_bill_sum($arr["obj_inst"])))
 				{
-					$cdo = $this->get_bill_cust_data_object($arr["obj_inst"]);
-					if($cdo->prop("language"))
-					{
-						$prop["value"] = $cdo->prop("language");
-					}
+					$prop["value"].= " ".html::href(array(
+						"url" => $this->mk_my_orb("add_payment", array("id" => $arr["obj_inst"]->id(), "ru" => get_ru())),
+						"caption" => t("Lisa laekumine!"),
+					)).
+					" ".html::href(array(
+						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+						"title" => t("Otsi")
+					))."<br>";
+					
 				}
 				break;
-		*/	case "payment_mode":
+			case "payment_mode":
 				$prop["options"] = array("" , t("&Uuml;lekandega") , t("Sularahas"));
 				break;
 			case "billp_tb":
@@ -347,7 +358,7 @@ class crm_bill extends class_base
 
 			case "sum":
 				$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
-				if($agreement_prices[0]["price"] && strlen($agreement_prices[0]["name"]) > 0)
+				if(is_array($agreement_price) && $agreement_prices[0]["price"] && strlen($agreement_prices[0]["name"]) > 0)
 				{
 					$sum = 0;
 					foreach($agreement_prices as $agreement_price)
@@ -401,6 +412,25 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case 'partial_recieved':
+				arr($arr["request"]["new_payment"]);
+				$pa = array();
+				if(is_oid($arr["request"]["new_payment"]))
+				{
+					$pa[] = $arr["request"]["new_payment"];
+				}
+				else
+				{
+					$pa = explode(",",$arr["request"]["new_payment"]);
+				}
+				foreach($pa as $p)
+				{
+					if(is_oid($p) && $this->can("view" , $p))
+					{
+						$this->add_payment(array("o" => $arr["obj_inst"], "p" => $p));
+					}
+				}
+				break;
 			case "bill_no":
 				if ($prop["value"] != $arr["obj_inst"]->prop("bill_no"))
 				{
@@ -444,6 +474,15 @@ class crm_bill extends class_base
 				)
 				{
 					$this->_set_recv_date = time();
+				}
+				if($prop["value"] == 3)
+				{
+					$payments = $arr["obj_inst"]->connections_from(array('type' => 'RELTYPE_PAYMENT'));
+					if(!(is_array($payments) && sizeof($payments)))
+					{
+						$this->add_payment(array("o "=> $arr["obj_inst"]));
+					}
+
 				}
 				break;
 			case "customer_name":
@@ -565,6 +604,62 @@ class crm_bill extends class_base
 		}
 		return $retval;
 	}
+
+
+	/**
+		@attrib name=add_payment all_args=1
+	**/
+	function add_payment($arr)
+	{
+		extract($arr);
+		if(!is_object($o) && is_oid($id) && $this->can("view", $id))
+		{
+			$o = obj($id);
+		}
+		if(is_oid($p) && $this->can("view" , $p))
+		{
+			$p = obj($p);
+			$sum = $o->prop("partial_recieved");
+			$sum = $sum + $p->get_free_sum();
+		}
+		if(!is_object($p))
+		{
+			$p = new object();
+			$p-> set_parent($o->id());
+			$p-> set_name($o->name() . " " . t("laekumine"));
+			$p-> set_class_id(CL_CRM_BILL_PAYMENT);
+			$p-> set_prop("date", time());
+			$p-> set_prop("sum", $this->get_bill_sum($o,BILL_SUM));
+			$curr = $this->get_bill_currency_id($o);
+			if($curr)
+			{
+				$ci = get_instance(CL_CURRENCY);
+				$p -> set_prop("currency", $curr);
+				$rate = 1;
+				if(($default_c = $ci->get_default_currency) != $curr)
+				{
+					$rate = $ci->convert(array(
+						"sum" => 1,
+						"from" => $curr,
+						"to" => $default_c,
+						"date" => time(),
+					));
+				}
+				$p -> set_prop("currency_rate", $rate);
+			}
+			$p-> save();
+		}
+		$o->connect(array(
+			"to" => $p->id(),
+			"type" => "RELTYPE_PAYMENT"
+		));
+		return $this->mk_my_orb("change", array("id" => $p->id()), CL_CRM_BILL_PAYMENT);
+		if($ru)
+		{
+			return $ru;
+		}
+	}
+
 	function get_customer_name($b)
 	{
 		if(is_oid($b))
@@ -679,6 +774,7 @@ class crm_bill extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["reconcile_price"] = -1;
+		$arr["new_payment"] = "";
 	}
 
 	function _init_bill_rows_t(&$t)
@@ -688,7 +784,8 @@ class crm_bill extends class_base
 			"caption" => t("Nimetus"),
 		));
 
-		/*$t->define_field(array(
+		/*
+		$t->define_field(array(
 			"name" => "code",
 			"caption" => t("Kood")
 		));*/
@@ -2084,6 +2181,13 @@ class crm_bill extends class_base
 		return $b->prop("customer.currency.name") == "" ? "EEK" : $b->prop("customer.currency.name");
 	}
 
+	function get_bill_currency_id($b)
+	{
+		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
+		$company_curr = $co_stat_inst->get_company_currency();
+		return $b->prop("customer.currency.id") == "" ? $company_curr : $b->prop("customer.currency.id");
+	}
+
 	function get_bill_sum($b, $type = BILL_SUM)
 	{
 		$rs = "";
@@ -2092,11 +2196,11 @@ class crm_bill extends class_base
 		$sum = 0;
 		
 		$agreement_price = $b->meta("agreement_price");
-		if($agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
+		if(is_array($agreement_price) && $agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
 		{
 			$rows = $agreement_price;
 		}
-		elseif($agreement_price["price"] && strlen($agreement_price["name"]) > 0)
+		elseif(is_array($agreement_price) && $agreement_price["price"] && strlen($agreement_price["name"]) > 0)
 		{
 			$rows = array($agreement_price);
 		}
@@ -2645,3 +2749,4 @@ class crm_bill extends class_base
 	}
 }
 ?>
+

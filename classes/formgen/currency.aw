@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.14 2007/06/21 12:41:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.15 2008/01/09 12:53:40 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -294,7 +294,7 @@ class currency extends class_base
 	function convert($args)
 	{
 		extract($args);
-		if($sum)
+		if(!$sum)
 		{
 			return 0;
 		}
@@ -304,11 +304,11 @@ class currency extends class_base
 		}
 		if(!$from)
 		{
-			$from = $this->get_company_currency();
+			$from = $this->get_default_currency();
 		}
 		if(!$to)
 		{
-			$to = $this->get_company_currency();
+			$to = $this->get_default_currency();
 		}
 		if($from == $to)
 		{
@@ -378,7 +378,7 @@ class currency extends class_base
 		}
 		if($this->get_company_currency())
 		{
-			$curr = get_company_currency();
+			$curr = $this->get_company_currency();
 		}
 		else
 		{

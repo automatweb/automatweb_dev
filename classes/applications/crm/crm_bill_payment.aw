@@ -61,15 +61,18 @@ class crm_bill_payment extends class_base
 		switch($prop["name"])
 		{
 			case "bills":
-				$ol = new object_list(array(
-					"class_id" => CL_CRM_BILL,
-					"lang_id" => array(),
-					"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $arr["obj_inst"]->id(),
-				));
-				$bi = get_instance(CL_CRM_BILL);
-				foreach($ol -> arr() as $o)
+				if($arr["obj_inst"]->id())
 				{
-					 $prop["value"] .= "\n".t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ".$bi->get_bill_sum($o)." ".$bi->get_bill_currency($o);
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_BILL,
+						"lang_id" => array(),
+						"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $arr["obj_inst"]->id(),
+					));
+					$bi = get_instance(CL_CRM_BILL);
+					foreach($ol -> arr() as $o)
+					{
+						$prop["value"] .= "\n".t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ".$bi->get_bill_sum($o)." ".$bi->get_bill_currency($o);
+					}
 				}
 				break;
 			case "payment_type":
@@ -100,26 +103,23 @@ class crm_bill_payment extends class_base
 		$tb->add_button(array(
 			'name' => 'new',
 			'img' => 'new.gif',
-			'tooltip' => t('Lisa'),
-			'url' => html::get_new_url(CL_CRM_BILL, $arr["obj_inst"]->id(), array("return_url" => get_ru()))
+			'tooltip' => t('Lisa uus laekumine'),
+			'url' => html::get_new_url(CL_CRM_BILL_PAYMENT, $arr["obj_inst"]->id(), array("return_url" => get_ru()))
 		));
-
-		//if ($arr["request"]["proj"])
-		//{
-			$tb->add_button(array(
-				"name" => "create_bill",
-				"img" => "save.gif",
-				"tooltip" => t("Koosta arve"),
-				"action" => "create_bill"
-			));
-		//}
 		$tb->add_button(array(
-			"name" => "search_bill",
-			"img" => "search.gif",
-			"tooltip" => t("Otsi"),
-	//		"action" => "search_bill"
-			"url" => "javascript:aw_popup_scroll('".$this->mk_my_orb("search_bill", array("openprintdialog" => 1,))."','Otsing',550,500)",
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta valitud laekumised'),
+			"confirm" => t("Oled kindel et soovid valitud laekumised kustutada?"),
+			'action' => 'submit_delete_docs',
 		));
+// 		$tb->add_button(array(
+// 			"name" => "search_bill",
+// 			"img" => "search.gif",
+// 			"tooltip" => t("Otsi"),
+// 	//		"action" => "search_bill"
+// 			"url" => "javascript:aw_popup_scroll('".$this->mk_my_orb("search_bill", array("openprintdialog" => 1,))."','Otsing',550,500)",
+// 		));
 	}
 
 	function _init_bills_list_t(&$t, $r)
@@ -132,10 +132,31 @@ class crm_bill_payment extends class_base
 			"numeric" => 1,
 			"sortable" => 1
 		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "bills_list",
+			"caption" => t("Arved"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "cust",
+			"caption" => t("Klient"),
+			"sortable" => 1
+		));
 
 		$t->define_field(array(
 			"name" => "type",
 			"caption" => t("Tasumisviis"),
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
 			"sortable" => 1
 		));
 
@@ -169,17 +190,43 @@ class crm_bill_payment extends class_base
 		));
 
 		$sum = 0;
-
+		$inst = get_instance("applications/crm/crm_company_stats_impl");
+		
 		foreach($ol->arr() as $o)
 		{
-//			$sum = $sum + 
-			
+			$cust_name = $bill = $bills_list = "";
+			$sum = $sum + $inst->convert_to_company_currency(array(
+				"o" => $o,
+				"sum" => $o->prop("sum"),
+			));
+			$bills = new object_list(array(
+				"class_id" => CL_CRM_BILL,
+				"lang_id" => array(),
+				"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $o->id(),
+			));
+			$bills_array = array();
+			$bill = obj(reset($bills->ids()));
+			if(is_oid($bill->id()))
+			{
+				$cust_name = html::get_change_url($bill->prop("customer"), array("return_url" => get_ru()),$bill->prop("customer.name")?$bill->prop("customer.name"):t("nimetu"));
+			}
+			foreach($bills->arr() as $b)
+			{
+				$bills_array[]= html::get_change_url($b->id(), array("return_url" => get_ru()),$b->name()?$b->name():t("nimetu"));
+				
+			}
+			$bills_list = join(" ," ,$bills_array);
+
 			$t->define_data(array(
+				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()),$o->name()?$o->name():t("nimetu")),
 				"date" => $o->prop("date"),
 				"oid" => $o->id(),
 				"type" => $o->prop("type") ? t("Sularahas") : t("&Uuml;lekandega"),
 				"currency" => $o->prop("currency.name"),
 				"currency_rate" => $o->prop("currency_rate"),
+				"sum" => $o->prop("sum"),
+				"cust" => $cust_name,
+				"bills_list" => $bills_list,
 			));
 			$sum+= $cursum;
 		}

@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_bill" folder="applications/crm" extends="class_base">
+		<action name="add_payment" all_args="1">
+			<function name="add_payment">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="_preview_popup">
 			<function name="_preview_popup">
 				<arguments>
