@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.71 2007/11/23 10:10:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.72 2008/01/09 14:14:08 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -110,6 +110,7 @@ class bank_payment extends class_base
 		"hansapank_lv"		=> "L&auml;ti Hansapank",
 		"hansapank_lt"		=> "Leedu Hansapank",
 		"credit_card"		=> "Kaardikeskus (krediitkaart)",
+		"snoras"		=> "AB bankas SNORAS"
 	);
 	
 	//kõikidele pankadele ühine info
@@ -136,6 +137,7 @@ class bank_payment extends class_base
 		"hansapank_lv"		=> "https://www.hanzanet.lv/banklink/",
 		"hansapank_lt"		=> "https://lt.hanza.net/banklink/bl-lt/",
 		"credit_card"		=> "https://pos.estcard.ee/webpos/servlet/iPAYServlet",
+		"snoras" 		=> "https://ib.snoras.com/cgi/ib01/ib100.pl?service=PAY"
 	);
 
 	var $merchant_id = array(
@@ -144,6 +146,7 @@ class bank_payment extends class_base
 		"afb" => "credit_card",
 		"SAMPOPANK" => "sampopank",
 		"0002" => "nordeapank",
+		"SNORLT22" => "snoras",
 	);
 	
 	var $public_key_files = array(
@@ -153,6 +156,7 @@ class bank_payment extends class_base
 		"sampopank" => "SAMPOPANK_pub.pem",
 		"hansapank_lv" => "HP_lv_pub.pem",
 		"hansapank_lt" => "HP_lt_pub.pem",
+		"snoras" => "SNORLT22_pub.pem",
 	);
 	
 	var $default_banks = array(
@@ -178,6 +182,7 @@ class bank_payment extends class_base
 		"seb" => "VK_SND_NAME",
 		"hansapank" => "VK_SND_NAME",
 		"sampopank" => "VK_SND_NAME",
+		"snoras" => "VK_SND_NAME",
 		"credit_card" => "msgdata",
 	);
 
@@ -187,6 +192,7 @@ class bank_payment extends class_base
 		"sampopank" => "VK_REF",
 		"credit_card" => "ecuno",
 		"nordeapank" => "SOLOPMT-RETURN-REF",
+		"snoras" => "VK_REF",
 	);
 	
 	var $languages = array(
@@ -196,6 +202,15 @@ class bank_payment extends class_base
 			"" => "EST",
 			"en" => "ENG",
 			"ENG" => "ENG",
+		),
+		"snoras" => array(
+			"lt" => "LIT",
+			"LIT" => "LIT",
+			"" => "ENG",
+			"en" => "ENG",
+			"ENG" => "ENG",
+			"en" => "RUS",
+			"ru" => "RUS",
 		),
 		"nordea" => array(
 			"et" => 4,
@@ -1066,6 +1081,10 @@ class bank_payment extends class_base
 				$arr = $this->check_cc_args($arr);
 				return $this->credit_card($arr);
 				break;
+			case "snoras":
+				$arr = $this->check_snoras_args($arr);
+				return $this->snoras($arr);
+				break;
 		}
 	}
 	
@@ -1152,6 +1171,57 @@ class bank_payment extends class_base
 		die();	
 	}
 	
+	function snoras($args)
+	{
+		extract($args);
+		$VK_message = sprintf("%03d",strlen($service)).$service;
+		$VK_message.= sprintf("%03d",strlen($version)).$version;
+		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
+//		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
+		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
+		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+//		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
+		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
+		$VK_signature = "";
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($VK_message, $VK_signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$VK_MAC = base64_encode( $VK_signature);
+
+		$link = $this->bank_link["snoras"];
+		$params = array(
+			"VK_SERVICE"	=> $service,	//"1001"
+			"VK_VERSION"	=> $version,	//"008"
+			"VK_SND_ID"	=> $sender_id,
+//			"VK_STAMP"	=> $stamp,	//row["arvenr"]
+			"VK_AMOUNT"	=> $amount,	//$row["summa"];
+			"VK_CURR"	=> $curr,	//"EEK"
+			"VK_REF"	=> $reference_nr,
+			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
+			"VK_MAC" 	=> $VK_MAC,
+			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
+//			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_LANG" 	=> $lang,	//"EST"
+		);
+		$optional = array(
+			"VK_ACC" => "acc",
+			"VK_NAME" => "name",
+			"VK_STAMP" => "stamp",
+		);
+
+		foreach($optional as $key => $val)
+		{
+			if($$val)
+			{
+				$params[$key] = $$val;
+			}
+		}
+		$optional = array("VK_ACC" => "acc");
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
+	//	return $http->post_request($link, $handler, $params, $port = 80);
+	}
+
+
 	function hansa($args) 
 	{
 		extract($args);
@@ -1489,16 +1559,47 @@ class bank_payment extends class_base
 			$arr["lang"] = "3";
 		}
 
-	/*	if($arr["lang"] == "et" || $arr["lang"] == "EST")
+		return($arr);
+	}
+
+	function check_snoras_args($arr)
+	{
+		if(is_oid($arr["payment_id"]))
 		{
-			$arr["lang"] = 4;
+			$payment = obj($arr["payment_id"]);
+			$arr = $this->_add_object_data($payment , $arr);
+			$payment_data = $payment->meta("bank");
 		}
-		if($arr["lang"] == "en" || $arr["lang"] == "ENG")
+		if(!$arr["service"]) $arr["service"] = "1001";
+		if(!$arr["version"]) $arr["version"] = "008";
+		if(!$arr["curr"]) $arr["curr"] = "EUR";
+		if(array_key_exists($arr["lang"] , $this->languages["snoras"]))
 		{
-			$arr["lang"] = 3;
+			$arr["lang"] = $this->languages["snoras"][$arr["lang"]];
 		}
-		if(!($arr["lang"] > 0)) $arr["lang"] = "3";
-		*/
+		else
+		{
+			$arr["lang"] = "ENG";
+		}
+
+		if(!$arr["stamp"]) $arr["stamp"] = "666";
+		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["priv_key"])
+		{
+			if($arr["test"] && $this->test_priv_keys[$arr["bank_id"]])
+			{
+				$file = $this->test_priv_keys[$arr["bank_id"]];
+			}
+			else
+			{
+				$file = "privkey.pem";
+			}
+			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
+			$arr["priv_key"] = fread($fp, 8192);
+			fclose($fp);
+		}
+		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
 		return($arr);
 	}
 
@@ -1510,18 +1611,7 @@ class bank_payment extends class_base
 			$arr = $this->_add_object_data($payment , $arr);
 		}
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
-	/*	if($arr["lang"] == "EST")
-		{
-			$arr["lang"] = "et";
-		}
-		if($arr["lang"] == "ENG")
-		{
-			$arr["lang"] = "en";
-		}
-		if($arr["lang"] && $arr["lang"] != "et") $arr["lang"] = "en";
-		if(!$arr["lang"]) $arr["lang"] = "et";*/
-		
-		
+
 		if(array_key_exists($arr["lang"] , $this->languages["cc"]))
 		{
 			$arr["lang"] = $this->languages["cc"][$arr["lang"]];
