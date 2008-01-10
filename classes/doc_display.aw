@@ -358,6 +358,12 @@ class doc_display extends aw_template
 				$text = $content; //$doc->trans_get_val("content");
 			}
 		}
+		
+		if (aw_ini_get("document.use_wiki_parser") == 1)
+		{
+			$this->_parse_wiki(& $text);
+		}
+		
 		// line break conversion between wysiwyg and not
 		$cb_nb = $doc->meta("cb_nobreaks");
 		if (!($doc->prop("nobreaks") || $cb_nb["content"]))	
@@ -400,10 +406,7 @@ class doc_display extends aw_template
 			));
 			return $this->parse("IFRAME");
 		}
-		if (aw_ini_get("document.use_wiki_parser") == 1)
-		{
-			$this->_parse_wiki(& $text);
-		}
+		
 		return $text;
 	}
 	
@@ -428,6 +431,11 @@ class doc_display extends aw_template
 		
 		$text = $lead; //$doc->trans_get_val("lead");
 		
+		if (aw_ini_get("document.use_wiki_parser") == 1)
+		{
+			$this->_parse_wiki(& $text);
+		}
+		
 		// line break conversion between wysiwyg and not
 		$cb_nb = $doc->meta("cb_nobreaks");
 		if (!($doc->prop("nobreaks") || $cb_nb["content"]))	
@@ -436,11 +444,6 @@ class doc_display extends aw_template
 			$text = str_replace("</li><br />", "</li>", $text);
 			$text = str_replace("<br /><ul><br />", "<ul>", $text);
 			$text = str_replace("</ul><br />", "</ul>", $text);
-		}
-		
-		if (aw_ini_get("document.use_wiki_parser") == 1)
-		{
-			$this->_parse_wiki(& $text);
 		}
 		
 		return $text;
@@ -463,7 +466,7 @@ class doc_display extends aw_template
 		$cb_nb = $doc->meta("cb_nobreaks");
 		if (!($doc->prop("nobreaks") || $cb_nb["content"]))	
 		{
-			if (aw_ini_get("document.use_wiki_parser") == "xhtml")
+			if (aw_ini_get("content.doctype") == "xhtml")
 			{
 				$text = str_replace("\r\n","<br />",$text);
 			}
@@ -474,10 +477,7 @@ class doc_display extends aw_template
 				$text = str_replace("</li><br />", "</li>", $text);
 				$text = str_replace("<br /><ul><br />", "<ul>", $text);
 				$text = str_replace("</ul><br />", "</ul>", $text);
-
 		}
-		
-
 		
 		return $text;
 	}
