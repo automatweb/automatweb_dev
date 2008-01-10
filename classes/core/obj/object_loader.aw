@@ -636,7 +636,8 @@ class _int_object_loader extends core
 			$this->cache_handlers = array();
 			$this->registered = 1;
 		}
-		if ($site_id != aw_ini_get("site_id"))
+		$repl = aw_ini_get("object_cache.replicate_sites");
+		if (is_array($repl) || $site_id != aw_ini_get("site_id"))
 		{
 			$this->cache_handlers[$site_id][$oid][$type] = $type;
 		}
@@ -647,25 +648,49 @@ class _int_object_loader extends core
 		// go over all the registered cache updates and if they are for another site, then propagate them to that one
 		$sl = get_instance("install/site_list");
 		$f = fopen(aw_ini_get("site_basedir")."/files/updlog.txt", "a");
+		$repl = aw_ini_get("object_cache.replicate_sites");
+		$cur_sid = aw_ini_get("site_id");
+
 		foreach($this->cache_handlers as $site_id => $data)
 		{
-			$url = $sl->get_url_for_site($site_id);
-			fwrite($f, "call $site_id => ".dbg::dump($data)." from site ".$url."\n\n");
-			fflush($f);
-			if ($url != "")
+			if (is_array($repl))
 			{
-				$this->do_orb_method_call(array(
-					"server" => $url,
-					"method" => "xmlrpc",
-					"class" => "object_cache_updater",
-					"action" => "handle_remote_update",
-					"params" => array(
-						"data" => $data
-					)
-				));
-			}	
+				foreach($repl as $url)
+				{
+					$this->_do_repl_call($url, $data, $f);
+				}
+				continue;
+			}
+			else
+			if ($site_id == $cur_sid)
+			{
+				continue;
+			}
+			else
+			{
+				$url = $sl->get_url_for_site($site_id);
+			}
+			$this->_do_repl_call($url, $data, $f);
 		}
 		fclose($f);
+	}
+
+	function _do_repl_call($url, $data, $f)
+	{
+		fwrite($f, "call $site_id => ".dbg::dump($data)." from site ".$url."\n\n");
+		fflush($f);
+		if ($url != "")
+		{
+			$this->do_orb_method_call(array(
+				"server" => $url,
+				"method" => "xmlrpc",
+				"class" => "object_cache_updater",
+				"action" => "handle_remote_update",
+				"params" => array(
+					"data" => $data
+				)
+			));
+		}	
 	}
 }
 
