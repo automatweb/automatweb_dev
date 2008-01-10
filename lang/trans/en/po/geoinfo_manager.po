@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_source
 msgid "Omaduse XML-i allikas (xml_source) caption"
-msgstr ""
+msgstr "XML source"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_source_comment
 msgid "Omaduse XML-i allikas (xml_source) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_url
 msgid "Omaduse XML faili url (xml_url) caption"
-msgstr ""
+msgstr "XML file URL"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_url_comment
 msgid "Omaduse XML faili url (xml_url) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_file
 msgid "Omaduse XML fail (xml_file) caption"
-msgstr ""
+msgstr "XML file"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_file_comment
 msgid "Omaduse XML fail (xml_file) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_schema
 msgid "Omaduse XML-i skeem (xml_schema) caption"
-msgstr ""
+msgstr "XML schema"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_schema_comment
 msgid "Omaduse XML-i skeem (xml_schema) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_type
 msgid "Omaduse XML-i t&uuml;&uuml;p (xml_type) caption"
-msgstr ""
+msgstr "XML type"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_type_comment
 msgid "Omaduse XML-i t&uuml;&uuml;p (xml_type) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_unique
 msgid "Omaduse XML-i unikaalne väli (xml_unique) caption"
-msgstr ""
+msgstr "Unique XML field"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:prop_xml_unique_comment
 msgid "Omaduse XML-i unikaalne väli (xml_unique) kommentaar"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:group_rels_mgr
 msgid "Grupi V&auml;ljad (rels_mgr) pealkiri"
-msgstr ""
+msgstr "Fields"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:group_rels_mgr_help
 msgid "Grupi V&auml;ljad (rels_mgr) help"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:group_data_mgr
 msgid "Grupi Andmed (data_mgr) pealkiri"
-msgstr ""
+msgstr "Data"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:group_data_mgr_help
 msgid "Grupi Andmed (data_mgr) help"
@@ -172,45 +172,45 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:509
 msgid "Impordi XML-ist"
-msgstr ""
+msgstr "Import from XML"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:539
 msgid "Väljade seostamine"
-msgstr ""
+msgstr "Conjuction of fields"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:548
 msgid "Väli"
-msgstr ""
+msgstr "Field"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:632
 msgid "Ekspordi KMZ"
-msgstr ""
+msgstr "Export KMZ"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:644
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:649
 msgid "X koordinaat"
-msgstr ""
+msgstr "X cordinate"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:654
 msgid "Y koordinaat"
-msgstr ""
+msgstr "Y cordinate"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:659
 msgid "Aadress"
-msgstr ""
+msgstr "Address"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:666
 msgid "Andmeobjektid"
-msgstr ""
+msgstr "Objects of Data"
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:744
 msgid "V&auml;&auml;rtused on tagides &lt;coord_x&gt;23.409&lt;/coord_x&gt;"
-msgstr ""
+msgstr "Values are in tags.."
 
 #: classes/applications/geoinfo/geoinfo_manager.aw:745
 msgid "V&auml;&auml;rtused on omadustes &lt;item coord_x=\"23.409\" /&gt;"
-msgstr ""
+msgstr "Values are in qualities.."
 

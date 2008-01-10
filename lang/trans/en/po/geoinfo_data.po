@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_obj_oid
 msgid "Omaduse Objekti ID (obj_oid) caption"
-msgstr ""
+msgstr "Object ID"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_obj_oid_comment
 msgid "Omaduse Objekti ID (obj_oid) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_coord_y
 msgid "Omaduse Pikkuskoordinaat (coord_y) caption"
-msgstr ""
+msgstr "Longitude"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_coord_y_comment
 msgid "Omaduse Pikkuskoordinaat (coord_y) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_coord_x
 msgid "Omaduse Laiuskoordinaat (coord_x) caption"
-msgstr ""
+msgstr "Latitude"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_coord_x_comment
 msgid "Omaduse Laiuskoordinaat (coord_x) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_address
 msgid "Omaduse Aadress (address) caption"
-msgstr ""
+msgstr "Address"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_address_comment
 msgid "Omaduse Aadress (address) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf1
 msgid "Omaduse Kasutaja defineeritud 1 (usertf1) caption"
-msgstr ""
+msgstr "User Defined 1"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf1_comment
 msgid "Omaduse Kasutaja defineeritud 1 (usertf1) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta1
 msgid "Omaduse Kasutaja defineeritud 2 (userta1) caption"
-msgstr ""
+msgstr "User Defined 2"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta1_comment
 msgid "Omaduse Kasutaja defineeritud 2 (userta1) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf2
 msgid "Omaduse Kasutaja defineeritud 3 (usertf2) caption"
-msgstr ""
+msgstr "User Defined 3"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf2_comment
 msgid "Omaduse Kasutaja defineeritud 3 (usertf2) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta2
 msgid "Omaduse Kasutaja defineeritud 4 (userta2) caption"
-msgstr ""
+msgstr "User Defined 4"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta2_comment
 msgid "Omaduse Kasutaja defineeritud 4 (userta2) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf3
 msgid "Omaduse Kasutaja defineeritud 5 (usertf3) caption"
-msgstr ""
+msgstr "User Defined 5"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf3_comment
 msgid "Omaduse Kasutaja defineeritud 5 (usertf3) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta3
 msgid "Omaduse Kasutaja defineeritud 6 (userta3) caption"
-msgstr ""
+msgstr "User Defined 6"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta3_comment
 msgid "Omaduse Kasutaja defineeritud 6 (userta3) kommentaar"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf4
 msgid "Omaduse Kasutaja defineeritud 7 (usertf4) caption"
-msgstr ""
+msgstr "User Defined 7"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf4_comment
 msgid "Omaduse Kasutaja defineeritud 7 (usertf4) kommentaar"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta4
 msgid "Omaduse Kasutaja defineeritud 8 (userta4) caption"
-msgstr ""
+msgstr "User Defined 8"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta4_comment
 msgid "Omaduse Kasutaja defineeritud 8 (userta4) kommentaar"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf5
 msgid "Omaduse Kasutaja defineeritud 9 (usertf5) caption"
-msgstr ""
+msgstr "User Defined 9"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf5_comment
 msgid "Omaduse Kasutaja defineeritud 9 (usertf5) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta5
 msgid "Omaduse Kasutaja defineeritud 10 (userta5) caption"
-msgstr ""
+msgstr "User Defined 10"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta5_comment
 msgid "Omaduse Kasutaja defineeritud 10 (userta5) kommentaar"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf6
 msgid "Omaduse Kasutaja defineeritud 11 (usertf6) caption"
-msgstr ""
+msgstr "User Defined 11"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf6_comment
 msgid "Omaduse Kasutaja defineeritud 11 (usertf6) kommentaar"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta6
 msgid "Omaduse Kasutaja defineeritud 12 (userta6) caption"
-msgstr ""
+msgstr "User Defined 12"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta6_comment
 msgid "Omaduse Kasutaja defineeritud 12 (userta6) kommentaar"
@@ -208,7 +208,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf7
 msgid "Omaduse Kasutaja defineeritud 13 (usertf7) caption"
-msgstr ""
+msgstr "User Defined 13"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf7_comment
 msgid "Omaduse Kasutaja defineeritud 13 (usertf7) kommentaar"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta7
 msgid "Omaduse Kasutaja defineeritud 14 (userta7) caption"
-msgstr ""
+msgstr "User Defined 14"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta7_comment
 msgid "Omaduse Kasutaja defineeritud 14 (userta7) kommentaar"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf8
 msgid "Omaduse Kasutaja defineeritud 15 (usertf8) caption"
-msgstr ""
+msgstr "User Defined 15"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf8_comment
 msgid "Omaduse Kasutaja defineeritud 15 (usertf8) kommentaar"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta8
 msgid "Omaduse Kasutaja defineeritud 16 (userta8) caption"
-msgstr ""
+msgstr "User Defined 16"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta8_comment
 msgid "Omaduse Kasutaja defineeritud 16 (userta8) kommentaar"
@@ -256,7 +256,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf9
 msgid "Omaduse Kasutaja defineeritud 17 (usertf9) caption"
-msgstr ""
+msgstr "User Defined 17"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf9_comment
 msgid "Omaduse Kasutaja defineeritud 17 (usertf9) kommentaar"
@@ -268,7 +268,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta9
 msgid "Omaduse Kasutaja defineeritud 18 (userta9) caption"
-msgstr ""
+msgstr "User Defined 18"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta9_comment
 msgid "Omaduse Kasutaja defineeritud 18 (userta9) kommentaar"
@@ -280,7 +280,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf10
 msgid "Omaduse Kasutaja defineeritud 19 (usertf10) caption"
-msgstr ""
+msgstr "User Defined 19"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf10_comment
 msgid "Omaduse Kasutaja defineeritud 19 (usertf10) kommentaar"
@@ -292,7 +292,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta10
 msgid "Omaduse Kasutaja defineeritud 20 (userta10) caption"
-msgstr ""
+msgstr "User Defined 20"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta10_comment
 msgid "Omaduse Kasutaja defineeritud 20 (userta10) kommentaar"
@@ -316,7 +316,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_noicon
 msgid "Omaduse Ikooni ei kuvata (noicon) caption"
-msgstr ""
+msgstr "No Icon"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_noicon_comment
 msgid "Omaduse Ikooni ei kuvata (noicon) kommentaar"
@@ -328,7 +328,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_style
 msgid "Omaduse Ikooni stiil (icon_style) caption"
-msgstr ""
+msgstr "Style of the Icon"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_style_comment
 msgid "Omaduse Ikooni stiil (icon_style) kommentaar"
@@ -340,7 +340,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_color
 msgid "Omaduse Ikooni värv (icon_color) caption"
-msgstr ""
+msgstr "Colour of the Icon"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_color_comment
 msgid "Omaduse Ikooni värv (icon_color) kommentaar"
@@ -352,7 +352,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_transp
 msgid "Omaduse Ikooni l&auml;bipaistvus (0-255) (icon_transp) caption"
-msgstr ""
+msgstr "Opacity of the Icon"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_transp_comment
 msgid "Omaduse Ikooni l&auml;bipaistvus (0-255) (icon_transp) kommentaar"
@@ -364,7 +364,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_size
 msgid "Omaduse Ikooni suurus (icon_size) caption"
-msgstr ""
+msgstr "Size of the Icon"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_size_comment
 msgid "Omaduse Ikooni suurus (icon_size) kommentaar"
@@ -388,7 +388,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_label_color
 msgid "Omaduse Sildi värv (label_color) caption"
-msgstr ""
+msgstr "Colour of the Label"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_label_color_comment
 msgid "Omaduse Sildi värv (label_color) kommentaar"
@@ -400,7 +400,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_label_transp
 msgid "Omaduse Sildi l&auml;bipaistvus (0-255) (label_transp) caption"
-msgstr ""
+msgstr "Opacity of the Label"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_label_transp_comment
 msgid "Omaduse Sildi l&auml;bipaistvus (0-255) (label_transp) kommentaar"
@@ -412,7 +412,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_label_size
 msgid "Omaduse Sildi suurus (label_size) caption"
-msgstr ""
+msgstr "Size of the Label"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_label_size_comment
 msgid "Omaduse Sildi suurus (label_size) kommentaar"
@@ -424,7 +424,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_desc1
 msgid "Omaduse Kirjeldus 1 (desc1) caption"
-msgstr ""
+msgstr "Description 1"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_desc1_comment
 msgid "Omaduse Kirjeldus 1 (desc1) kommentaar"
@@ -436,7 +436,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_desc2
 msgid "Omaduse Kirjeldus 2 (desc2) caption"
-msgstr ""
+msgstr "Description 2"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_desc2_comment
 msgid "Omaduse Kirjeldus 2 (desc2) kommentaar"
@@ -460,7 +460,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_view_range
 msgid "Omaduse Vaataja kaugus maapinnast (m) (view_range) caption"
-msgstr ""
+msgstr "Range"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_view_range_comment
 msgid "Omaduse Vaataja kaugus maapinnast (m) (view_range) kommentaar"
@@ -472,7 +472,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_view_heading
 msgid "Omaduse Suund (0-360 kraadi) (view_heading) caption"
-msgstr ""
+msgstr "Heading"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_view_heading_comment
 msgid "Omaduse Suund (0-360 kraadi) (view_heading) kommentaar"
@@ -484,7 +484,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_view_tilt
 msgid "Omaduse Vaatenurk maapinna suhtes (0-360 kraadi) (view_tilt) caption"
-msgstr ""
+msgstr "Altitude"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_view_tilt_comment
 msgid "Omaduse Vaatenurk maapinna suhtes (0-360 kraadi) (view_tilt) kommentaar"
@@ -508,7 +508,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_height
 msgid "Omaduse Ikooni k&otilde;rgus maapinnast (m) (icon_height) caption"
-msgstr ""
+msgstr "Icons height from the ground"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_height_comment
 msgid "Omaduse Ikooni k&otilde;rgus maapinnast (m) (icon_height) kommentaar"
@@ -520,7 +520,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
-msgstr ""
+msgstr "Data"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_data_help
 msgid "Grupi Andmed (data) help"
@@ -572,17 +572,17 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:174
 msgid "Ikoon"
-msgstr ""
+msgstr "Icon"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:177
 msgid "Silt"
-msgstr ""
+msgstr "Label"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:180
 msgid "K&otilde;rgus"
-msgstr ""
+msgstr "Height"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:183
 msgid "Vaade"
-msgstr ""
+msgstr "View"
 
