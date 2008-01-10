@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.14 2007/05/25 12:05:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.15 2008/01/10 12:17:47 dragut Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -511,16 +511,24 @@ topic");
 		$this->quote($args);
 		extract($args);
 
-		aw_disable_acl();
-		$o = obj();
-		$o->set_parent($id);
-		$o->set_name($topic);
-		$o->set_comment(($text) ? $text : $comment);
-		$o->set_class_id(CL_MSGBOARD_TOPIC);
-		$o->set_status(STAT_ACTIVE);
-		$o->set_meta("author_email", $email);
-		$tid = $o->save();
-		aw_restore_acl();
+		if ($this->can('view', $id))
+		{
+			$parent_obj = new object($id);
+			if ($parent_obj->class_id() ==CL_FORUM)
+			{
+			
+				aw_disable_acl();
+				$o = obj();
+				$o->set_parent($id);
+				$o->set_name($topic);
+				$o->set_comment(($text) ? $text : $comment);
+				$o->set_class_id(CL_MSGBOARD_TOPIC);
+				$o->set_status(STAT_ACTIVE);
+				$o->set_meta("author_email", $email);
+				$tid = $o->save();
+				aw_restore_acl();
+			}
+		}
 
 		if ($section)
 		{
