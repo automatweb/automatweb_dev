@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.27 2008/01/10 13:17:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.28 2008/01/10 13:18:07 kristo Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -729,7 +729,7 @@ class persons_webview extends class_base
 		foreach($workers_list->arr() as $worker)
 		{
 			$jrk = 0;
-			if(this->can("view", $worker->prop("rank")))
+			if($this->can("view", $worker->prop("rank")))
 			{
 				$profession_obj = obj($worker->prop("rank"));
 				$jrk = $profession_obj->prop("jrk");
