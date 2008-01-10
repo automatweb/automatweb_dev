@@ -1599,13 +1599,18 @@ class realestate_property extends class_base
 			}
 			else
 			{
-				if ("checkbox" === $prop_data["type"] and $prop_data["value"])
+				$sub_value = "";
+
+				if ("checkbox" === $prop_data["type"])
 				{
-					$prop_vars = array ();
-					$prop_vars["value"] = $prop_data["strvalue"];
-					$prop_vars["caption"] = $prop_data["caption"];
-					$this->vars ($prop_vars);
-					$data[$name] = $this->parse ($name);// main time consumer in this loop
+					if ($prop_data["value"])
+					{
+						$prop_vars = array ();
+						$prop_vars["value"] = $prop_data["strvalue"];
+						$prop_vars["caption"] = $prop_data["caption"];
+						$this->vars ($prop_vars);
+						$sub_value = $this->parse ($name);// main time consumer in this loop
+					}
 				}
 				elseif (trim ($prop_data["strvalue"]))
 				{
@@ -1613,9 +1618,10 @@ class realestate_property extends class_base
 					$prop_vars["value"] = $prop_data["strvalue"];
 					$prop_vars["caption"] = $prop_data["caption"];
 					$this->vars ($prop_vars);
-					$data[$name] = $this->parse ($name);// main time consumer in this loop
+					$sub_value = $this->parse ($name);// main time consumer in this loop
 				}
 
+				$data[$name] = $sub_value;
 				$data[$name . "_value"] = $prop_data["strvalue"];
 				$data[$name . "_caption"] = $prop_data["caption"];
 			}
