@@ -525,10 +525,8 @@ class doc_display extends aw_template
 		$tmp = $str;
 		$a_text = array();
 		
-		$i=0;
-		while ( preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt) || preg_match  ( "/^(.*)$/U" , $tmp, &$mt))
+		while ( strlen(trim( $tmp)) > 0 )
 		{
-			$a_text[] = $mt[1];
 			if (preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt))
 			{
 				$tmp = preg_replace  ( "/^(.*)\r\n/U"  , "" , $tmp );
@@ -537,11 +535,7 @@ class doc_display extends aw_template
 			{
 				$tmp = preg_replace  ( "/^(.*)$/U"  , "" , $tmp );
 			}
-			$i++;
-			if ($i>300)
-			{
-				return true;
-			}
+			$a_text[] = $mt[1];
 		}
 		
 		
