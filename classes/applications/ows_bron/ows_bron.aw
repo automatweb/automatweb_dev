@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.17 2008/01/08 14:14:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.18 2008/01/10 10:16:24 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -41,17 +41,20 @@ class ows_bron extends class_base
 		$this->country_lut["en"] = array(
 			"EE" => "Estonia",
 			"LT" => "Lithuania",
-			"LV" => "Latvia"
+			"LV" => "Latvia",
+			"LT" => "Lithuania"
 		);
 		$this->country_lut["et"] = array(
 			"EE" => "Eesti",
 			"LT" => "Leedu",
-			"LV" => "L&auml;ti"
+			"LV" => "L&auml;ti",
+			"LT" => "Lithuania"
 		);
 		$this->country_lut["fi"] = $this->country_lut["de"] = $this->country_lut["it"] = $this->country_lut["lv"] = $this->country_lut["lt"] = $this->country_lut["ru"] = $this->country_lut["es"] = $this->country_lut["sv"] = array(
 			"EE" => "Estonia",
 			"LT" => "Lithuania",
-			"LV" => "Latvia"
+			"LV" => "Latvia",
+			"LT" => "Lithuania"
 		);
 
 		$this->city_lut = array();
@@ -60,19 +63,22 @@ class ows_bron extends class_base
 			"Tallinn" => "Tallinn",
 			"Riga" => "Riga",
 			"Vilnius" => "Vilnius",
-			"Klaipeda" => "Klaipeda"
+			"Klaipeda" => "Klaipeda",
+			"Kaunas" => "Kaunas"
 		);
 		$this->city_lut["et"] = array(
 			"Tallinn" => "Tallinn",
 			"Riga" => "Riia",
 			"Vilnius" => "Vilnius",
-			"Klaipeda" => "Klaipeda"
+			"Klaipeda" => "Klaipeda",
+			"Kaunas" => "Kaunas"
 		);
 		$this->city_lut["fi"] = $this->city_lut["de"] = $this->city_lut["it"] = $this->city_lut["lv"] = $this->city_lut["lt"] = $this->city_lut["ru"] = $this->city_lut["es"] = $this->city_lut["sv"] = array(
 			"Tallinn" => "Tallinn",
 			"Riga" => "Riga",
 			"Vilnius" => "Vilnius",
-			"Klaipeda" => "Klaipeda"
+			"Klaipeda" => "Klaipeda",
+			"Kaunas" => "Kaunas"
 		);
 
 
@@ -635,6 +641,8 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		$o->set_prop("low_floor", $arr["low_floor"]);
 		$o->set_prop("is_allergic", $arr["is_allergic"]);
 		$o->set_prop("is_handicapped", $arr["is_handicapped"]);
+		$o->set_prop("rate_title", $rate["Title"]);
+		$o->set_prop("rate_long_note", $rate["LongNote"]);
 		$o->set_meta("bron_data", $arr);
 		$o->save();
 
@@ -1088,7 +1096,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 
 		$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
 
-		$parameters = array();
+		/*$parameters = array();
 		$parameters["hotelId"] = $o->prop("hotel_id");
 		$parameters["rateId"] = $o->prop("rate_id");
 		$parameters["arrivalDate"] = date("Y-m-d", $o->prop("arrival_date"))."T".date("H:i:s", $o->prop("arrival_date"));
@@ -1119,7 +1127,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			//die(dbg::dump($parameters).dbg::dump($return));
 			$this->proc_ws_error($parameters, $return);
 		}
-		$rate = $rate["RateDetails"];
+		$rate = $rate["RateDetails"];*/
 
 		$parameters = array();
 		$parameters["hotelId"] = $o->prop("hotel_id");
@@ -1146,8 +1154,8 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			"nights" => max(1,(ceil(($o->prop("departure_date")-$o->prop("arrival_date"))/(60*60*24)))),
 			"num_rooms" => $o->prop("num_rooms"),
 			"num_adults" => $o->prop("adults_per_room"),
-			"room_type" => iconv("utf-8", aw_global_get("charset"), $rate["Title"]),
-			"room_details" => nl2br(iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["LongNote"])),
+			"room_type" => iconv("utf-8", aw_global_get("charset"), $o->prop("rate_title")),
+			"room_details" => nl2br(iconv("utf-8", aw_global_get("charset")."//IGNORE", $o->prop("rate_long_note"))),
 			"hotel_name" => iconv("utf-8", aw_global_get("charset"), $hotel["HotelName"]),
 			"hotel_contact" => iconv("utf-8", aw_global_get("charset"), $hotel["AddressLine1"]." ".$hotel["AddressLine1"]." ".$hotel["Phone"]." ".$hotel["Fax"]." ".$hotel["Email"]),
 			"tot_price" => $o->prop("total_charge"),
@@ -1322,7 +1330,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			return $arr["r_url"];
 		}
 
-		if (($checkin_ts > (time() + 24*3600*200)) || ($checkout_ts > (time() + 24*3600*200)))
+		if (($checkin_ts > (time() + 24*3600*370)) || ($checkout_ts > (time() + 24*3600*370)))
 		{
 			$arr["r_url"] = aw_url_change_var("error", 10, $arr["r_url"]);
 			return $arr["r_url"];
@@ -2065,7 +2073,7 @@ $rate_ids = array();
 	}
 
 	/**
-		@attrib name=cancel_booking all_args="1" nologin="1"
+		@attrib name=cancel_booking all_args="1"
 	**/
 	function cancel_booking($arr)
 	{
@@ -2162,7 +2170,7 @@ $rate_ids = array();
 
 		$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
 
-		$parameters = array();
+		/*$parameters = array();
 		$parameters["hotelId"] = $o->prop("hotel_id");
 		$parameters["rateId"] = $o->prop("rate_id");
 		$parameters["arrivalDate"] = date("Y-m-d", $o->prop("arrival_date"))."T".date("H:i:s", $o->prop("arrival_date"));
@@ -2192,7 +2200,7 @@ $rate_ids = array();
 			//die(dbg::dump($parameters).dbg::dump($return));
 			//$this->proc_ws_error($parameters, $return);
 		}
-		$rate = $rate["RateDetails"];
+		$rate = $rate["RateDetails"];*/
 
 		$this->vars($o->properties());
 		$this->vars(array(
@@ -2202,8 +2210,8 @@ $rate_ids = array();
 			"nights" => max(1,(ceil(($o->prop("departure_date")-$o->prop("arrival_date"))/(60*60*24)))),
 			"num_rooms" => $o->prop("num_rooms"),
 			"num_adults" => $o->prop("adults_per_room"),
-			"room_type" => iconv("utf-8", aw_global_get("charset"), $rate["Title"]),
-			"room_details" => iconv("utf-8", aw_global_get("charset"), $rate["LongNote"]),
+			"room_type" => iconv("utf-8", aw_global_get("charset"), $o->prop("rate_title")),
+			"room_details" => iconv("utf-8", aw_global_get("charset"), $o->prop("rate_long_note")),
 			"hotel_name" => iconv("utf-8", aw_global_get("charset"), $hotel["HotelName"]),
 			"hotel_contact" => iconv("utf-8", aw_global_get("charset"), $hotel["AddressLine1"]." ".$hotel["AddressLine1"]." ".$hotel["Phone"]." ".$hotel["Fax"]." ".$hotel["Email"]),
 			"tot_price" => $o->prop("total_charge"),
