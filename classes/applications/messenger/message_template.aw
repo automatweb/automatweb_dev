@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/message_template.aw,v 1.5 2007/12/06 14:33:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/message_template.aw,v 1.6 2008/01/10 14:11:09 markop Exp $
 // message_template.aw - Kirja template 
 /*
 
@@ -21,7 +21,7 @@
 @property legend type=text
 @caption Legend
 
-@property content type=textarea cols=50 rows=20
+@property content type=textarea cols=150 rows=40
 @caption Sisu
 
 

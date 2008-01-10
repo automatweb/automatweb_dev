@@ -35,8 +35,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <cols>50</cols>
-            <rows>20</rows>
+            <cols>150</cols>
+            <rows>40</rows>
             <caption>Sisu</caption>
       </property>
       <classinfo>
