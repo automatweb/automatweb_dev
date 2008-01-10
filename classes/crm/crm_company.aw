@@ -8507,4 +8507,53 @@ Bank accounts: üksteise all
 	}
 }
 
+	/**
+		@attrib name=remove_from_category all_args=1
+	**/
+	function remove_from_category($arr)
+	{
+		
+		if (is_array($arr["check"]) && is_oid($arr["category"]) && $this->can("view" , $arr["category"]))
+		{
+			$c = obj($arr["category"]);
+			foreach($arr['check'] as $key => $value)
+			{
+				$c->disconnect(array('from' => $value));
+			}
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=remove_cust_relations all_args=1
+	**/
+	function remove_cust_relations($arr)
+	{
+		if (is_array($arr["check"]))
+		{
+			$id1 = reset($arr["check"]);
+			if(!(is_oid($id1) && $this->can("view" , $id1)))
+			{
+				return $arr["post_ru"];
+			}
+			$cust_rel_list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"buyer" => $arr["check"],
+				"seller" => $arr["id"],
+			));
+			$cust_rel_list->delete();
+			$cust_rel_list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"buyer" => $arr["id"],
+				"seller" => $arr["check"],
+			));
+			$cust_rel_list->delete();
+		}
+		return $arr["post_ru"];
+	}
+
 ?>

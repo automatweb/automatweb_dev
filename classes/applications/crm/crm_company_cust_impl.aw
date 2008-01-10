@@ -681,13 +681,39 @@ class crm_company_cust_impl extends class_base
 		$tb->add_separator();
 
 		//delete button
-		$tb->add_button(array(
+/*		$tb->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
 			'tooltip' => t('Kustuta valitud'),
 			'action' => 'submit_delete_my_customers_relations',
 		));
+*/
+		$tb->add_menu_button(array(
+			'name'=>'delete',
+			'tooltip'=> t('Kustuta'),
+			"img" => "delete.gif"
+		));
 
+		$tb->add_menu_item(array(
+			'parent'=> "delete",
+			'text' => t("Eemalda grupist"),
+			"action" => "remove_from_category"
+		));
+
+		$tb->add_menu_item(array(
+			'parent'=> "delete",
+			'text' => t("L&otilde;peta klinedisuhe"),
+			"action" => "remove_cust_relations"
+		));
+
+
+		$tb->add_menu_item(array(
+			'parent'=> "delete",
+			'text' => t("Kustuta l&otilde;plikult"),
+			"action" => "submit_delete_ppl"
+		));
+
+		//save
 		$tb->add_menu_button(array(
 			'name'=>'save_as_cust',
 			'tooltip'=> t('Salvesta kliendina'),
