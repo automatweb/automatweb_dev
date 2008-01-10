@@ -91,14 +91,32 @@ class object_treeview_v2_search extends class_base
 		switch($prop["name"])
 		{
 			case "search_fields":
+				uasort($arr["request"]["dat"], array($this, "_sort_by_ord"));
 				$arr["obj_inst"]->set_meta("search_fields", $arr["request"]["dat"]);
 				break;
 
 			case "search_tbl_fields":
+				uasort($arr["request"]["dat"], array($this, "_sort_by_ord"));
 				$arr["obj_inst"]->set_meta("search_tbl_fields", $arr["request"]["dat"]);
 				break;
 		}
 		return $retval;
+	}
+
+	function _sort_by_ord($a, $b)
+	{
+		if (empty($a["ord"]) and !empty($b["ord"]))
+		{
+			return 1;
+		}
+		elseif (!empty($a["ord"]) and empty($b["ord"]))
+		{
+			return -1;
+		}
+		else
+		{
+			return ($a["ord"] == $b["ord"]) ? 0 : (($a["ord"] > $b["ord"]) ? 1 : -1);
+		}
 	}
 
 	function callback_mod_reforb($arr)
