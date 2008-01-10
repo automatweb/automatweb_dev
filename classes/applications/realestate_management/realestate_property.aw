@@ -1599,7 +1599,15 @@ class realestate_property extends class_base
 			}
 			else
 			{
-				if (trim ($prop_data["strvalue"]))
+				if ("checkbox" === $prop_data["type"] and $prop_data["value"])
+				{
+					$prop_vars = array ();
+					$prop_vars["value"] = $prop_data["strvalue"];
+					$prop_vars["caption"] = $prop_data["caption"];
+					$this->vars ($prop_vars);
+					$data[$name] = $this->parse ($name);// main time consumer in this loop
+				}
+				elseif (trim ($prop_data["strvalue"]))
 				{
 					$prop_vars = array ();
 					$prop_vars["value"] = $prop_data["strvalue"];
