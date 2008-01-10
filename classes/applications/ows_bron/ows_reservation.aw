@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.8 2008/01/08 14:14:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.9 2008/01/10 09:40:49 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -113,6 +113,12 @@
 @property payment_type type=textbox field=aw_payment_type
 @caption Payment type
 
+@property rate_title type=textbox field=aw_rate_title
+@caption Rate title
+
+@property rate_long_note type=textarea rows=10 cols=80 field=aw_rate_long_note
+@caption Rate long note
+
 @default group=bron_data
 
 	@property confirmation_code type=textbox field=aw_confirmation_code
@@ -189,6 +195,11 @@ class ows_reservation extends class_base
 			case "aw_is_allergic":
 			case "aw_is_handicapped":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
+				return true;
+
+			case "aw_rate_title":
+			case "aw_rate_long_note":
+				$this->db_add_col($t, array("name" => $f, "type" => "text"));
 				return true;
 		}
 		if ($f == "")

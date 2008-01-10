@@ -281,6 +281,24 @@
             <caption>Payment type</caption>
       </property>
       <property>
+            <name>rate_title</name>
+            <table>aw_ows_reservations</table>
+            <group>cust_data</group>
+            <type>textbox</type>
+            <field>aw_rate_title</field>
+            <caption>Rate title</caption>
+      </property>
+      <property>
+            <name>rate_long_note</name>
+            <table>aw_ows_reservations</table>
+            <group>cust_data</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>80</cols>
+            <field>aw_rate_long_note</field>
+            <caption>Rate long note</caption>
+      </property>
+      <property>
             <name>confirmation_code</name>
             <table>aw_ows_reservations</table>
             <group>bron_data</group>
