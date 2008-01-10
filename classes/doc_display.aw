@@ -526,11 +526,24 @@ class doc_display extends aw_template
 		$a_text = array();
 		
 		$i=0;
-		while ( preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt) )
+		while ( preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt) || preg_match  ( "/^(.*)$/U" , $tmp, &$mt))
 		{
 			$a_text[] = $mt[1];
-			$tmp = preg_replace  ( "/^(.*)\r\n/U"  , "" , $tmp );
+			if (preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt))
+			{
+				$tmp = preg_replace  ( "/^(.*)\r\n/U"  , "" , $tmp );
+			}
+			else if (preg_match  ( "/^(.*)$/U" , $tmp, &$mt))
+			{
+				$tmp = preg_replace  ( "/^(.*)$/U"  , "" , $tmp );
+			}
+			$i++;
+			if ($i>300)
+			{
+				return true;
+			}
 		}
+		
 		
 		$tmp = "";
 		
