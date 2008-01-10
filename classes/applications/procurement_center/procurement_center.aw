@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.42 2007/12/13 15:46:49 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.43 2008/01/10 11:26:30 markop Exp $
 // procurement_center.aw - Hankekeskkond
 /*
 
@@ -97,6 +97,8 @@ default group=offerers_tree
 				@caption Nimi
 				@property offerers_find_address type=textbox store=no parent=offerers_find_params captionside=top
 				@caption Aadress
+				@property offerers_find_keyword type=textbox store=no parent=offerers_find_params captionside=top
+				@caption Keyword
 				@property offerers_find_groups type=select store=no parent=offerers_find_params captionside=top
 				@caption Hankijagruppid
 				@property offerers_find_done type=checkbox store=no parent=offerers_find_params captionside=top no_caption=1
@@ -390,6 +392,7 @@ class procurement_center extends class_base
 
 			case "offerers_find_name":
 			case "offerers_find_address":
+			case "offerers_find_keyword":
 			case "offerers_find_done":
 
 			case "offerers_find_only_buy":
@@ -449,6 +452,10 @@ class procurement_center extends class_base
 				}
 				break;
 
+			case "do_find_products":
+				$prop["action"] = "submit";
+
+				break;
 			case "offers_find_groups":
 			case "offerers_find_groups":
 			case "buyings_find_groups":
@@ -2220,6 +2227,20 @@ class procurement_center extends class_base
 		$filter = array("class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON));
 		$data = $this_obj->meta("search_data");
 		if($data["offerers_find_name"]) $filter["name"] = "%".$data["offerers_find_name"]."%";
+		if($data["offerers_find_keyword"])
+		{
+			$filter["class_id"] = array(CL_CRM_COMPANY);
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"activity_keywords" => "%".$data["offerers_find_keyword"]."%",
+					"CL_CRM_COMPANY.RELTYPE_KEYWORD.keyword" => "%".$data["offerers_find_keyword"]."%",
+				)
+			));
+			
+		}
+		 ;//siia uus filter
+
 		if($data["offerers_find_address"]) $filter[] = new object_list_filter(array(
 			"logic" => "OR",
 			"conditions" => array(
@@ -3271,9 +3292,11 @@ class procurement_center extends class_base
 			"img" => "rte_table.gif",
 			"tooltip" => t("Lisa v&otilde;rdlusesse"),
 //			"action" => "add_to_compare",
-			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('add_to_compare')",
-//			"onClick" => "javascridocument.changeform.target='_blank';submit_changeform('add_to_compare')"
+//			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('add_to_compare');javascript:document.changeform.target='_self';",
+			"url" => "javascript: void(0)",
+			"onClick" => "document.changeform.target='_blank';submit_changeform('add_to_compare');document.changeform.target='_self'",
 		//	"target" => "New window",
+
 		));
 	}
 

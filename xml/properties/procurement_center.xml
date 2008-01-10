@@ -246,6 +246,17 @@
             <caption>Aadress</caption>
       </property>
       <property>
+            <name>offerers_find_keyword</name>
+            <table>objects</table>
+            <group>offerers</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
+            <field>offerers_find_keyword</field>
+            <caption>Keyword</caption>
+      </property>
+      <property>
             <name>offerers_find_groups</name>
             <table>objects</table>
             <group>offerers</group>
