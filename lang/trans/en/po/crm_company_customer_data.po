@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 19:37+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
 "Language-Team: \n"
@@ -39,15 +39,15 @@ msgid "Omaduse M&uuml;&uuml;ja (seller) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_discount
-msgid "Omaduse Vaikimisi soodustus (discount) caption"
+msgid "Omaduse Vaikimisi soodustus % (discount) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_discount_comment
-msgid "Omaduse Vaikimisi soodustus (discount) kommentaar"
+msgid "Omaduse Vaikimisi soodustus % (discount) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_discount_help
-msgid "Omaduse Vaikimisi soodustus (discount) help"
+msgid "Omaduse Vaikimisi soodustus % (discount) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_order_frequency
@@ -96,6 +96,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_sell_alert_help
 msgid "Omaduse Hoiatus m&uuml;&uuml;gil (sell_alert) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_tax_rate
+msgid "Omaduse M&uuml;&uuml;gi KM-kood (tax_rate) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_tax_rate_comment
+msgid "Omaduse M&uuml;&uuml;gi KM-kood (tax_rate) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_tax_rate_help
+msgid "Omaduse M&uuml;&uuml;gi KM-kood (tax_rate) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contract_creator
@@ -319,11 +331,15 @@ msgid "Seose Kontaktisik (RELTYPE_CONTACT_PERSON) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_CONTACT_TRANSPORT
-msgid "Seose M&uuml;&uuml;gi KM-kood (RELTYPE_CONTACT_TRANSPORT) tekst"
+msgid "Seose Transpordiliik (RELTYPE_CONTACT_TRANSPORT) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_ERRAND_COND
-msgid "Seose L&auml;hetustingimus (RELTYPE_ERRAND_COND) tekst"
+#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_TAX_RATE
+msgid "Seose M&uuml;&uuml;gi KM-kood (RELTYPE_TAX_RATE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_SHIPMENT_CONDITION
+msgid "Seose L&auml;hetustingimus (RELTYPE_SHIPMENT_CONDITION) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_CLIENT_MANAGER
@@ -342,7 +358,7 @@ msgstr ""
 msgid "Seose Kliendikategooria (RELTYPE_STATUS) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:156
+#: classes/applications/crm/crm_company_customer_data.aw:160
 msgid "--vali--"
 msgstr ""
 

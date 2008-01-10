@@ -34,11 +34,11 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/core/obj/object_complex_query.aw:34
+#: classes/core/obj/object_complex_query.aw:35
 msgid "object_complex_query::compile_search_by_result_set(): start_from class has no fields in the fields array!"
 msgstr ""
 
-#: classes/core/obj/object_complex_query.aw:97
+#: classes/core/obj/object_complex_query.aw:98
 msgid "object_complex_query::compile_search_by_param(): start_from class has no fields in the fields array!"
 msgstr ""
 

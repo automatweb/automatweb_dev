@@ -79,88 +79,88 @@ msgstr "General"
 msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
-#: classes/class_base.aw:561
+#: classes/class_base.aw:564
 msgid "T&otilde;lgi"
 msgstr "Translate"
 
-#: classes/class_base.aw:584
+#: classes/class_base.aw:587
 msgid "Rohkem infot"
 msgstr "More info"
 
-#: classes/class_base.aw:585
+#: classes/class_base.aw:588
 msgid "Peida &auml;ra"
 msgstr "Hide"
 
-#: classes/class_base.aw:586
+#: classes/class_base.aw:589
 msgid "Abiinfo"
 msgstr "Help"
 
-#: classes/class_base.aw:651
+#: classes/class_base.aw:653
 msgid "tab panel"
 msgstr "tab panel"
 
-#: classes/class_base.aw:895
+#: classes/class_base.aw:859
 msgid "Lisainfo grupi kohta puudub"
 msgstr "no additional info about group"
 
-#: classes/class_base.aw:993 classes/class_base.aw:1682
+#: classes/class_base.aw:957 classes/class_base.aw:1652
 msgid "Nimetu"
 msgstr "No name"
 
-#: classes/class_base.aw:1555
+#: classes/class_base.aw:1525
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/class_base.aw:1563
+#: classes/class_base.aw:1533
 msgid "Uus"
 msgstr "New"
 
-#: classes/class_base.aw:1609 classes/class_base.aw:1700
+#: classes/class_base.aw:1579 classes/class_base.aw:1670
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1874 classes/class_base.aw:5344
-#: classes/class_base.aw:5355
+#: classes/class_base.aw:1844 classes/class_base.aw:5313
+#: classes/class_base.aw:5324
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:1887
+#: classes/class_base.aw:1857
 msgid "Andmed salvestatud!"
 msgstr "Data saved!"
 
-#: classes/class_base.aw:3778
+#: classes/class_base.aw:3748
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3787
+#: classes/class_base.aw:3757
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:5229
+#: classes/class_base.aw:5198
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 
-#: classes/class_base.aw:5673
+#: classes/class_base.aw:5738 classes/class_base.aw:5789
 msgid "T&otilde;lge aktiivne"
 msgstr "Translation is active"
 
-#: classes/class_base.aw:5681
+#: classes/class_base.aw:5747 classes/class_base.aw:5797
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/class_base.aw:5846 classes/class_base.aw:5883
+#: classes/class_base.aw:5963 classes/class_base.aw:6000
 msgid "aliase number oli juba olemas, seega uuendas"
 msgstr "alias number already existed, therefore updated"
 
-#: classes/class_base.aw:5850
+#: classes/class_base.aw:5967
 msgid "Seoste l&otilde;ikamisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr "There appeared an error while cutting relations: object with id %s already had relation #%s# therefore the object %s has relation #%s#"
 
-#: classes/class_base.aw:5890
+#: classes/class_base.aw:6007
 msgid "Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr "There appeared an error while copying relations: object with id %s already had relation #%s# therefore the object %s has relation #%s#"
 
-#: classes/class_base.aw:5920
+#: classes/class_base.aw:6037
 msgid "Kliki siia j&auml;tkamiseks"
 msgstr "Click here to continue"
 

@@ -222,23 +222,23 @@ msgstr ""
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:297 classes/applications/crm/crm_company_webview.aw:298 classes/applications/crm/crm_company_webview.aw:1302
+#: classes/applications/crm/crm_company_webview.aw:297 classes/applications/crm/crm_company_webview.aw:298 classes/applications/crm/crm_company_webview.aw:1300
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:299 classes/applications/crm/crm_company_webview.aw:354 classes/applications/crm/crm_company_webview.aw:1303
+#: classes/applications/crm/crm_company_webview.aw:299 classes/applications/crm/crm_company_webview.aw:354 classes/applications/crm/crm_company_webview.aw:1301
 msgid "Tel"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:300 classes/applications/crm/crm_company_webview.aw:1304
+#: classes/applications/crm/crm_company_webview.aw:300 classes/applications/crm/crm_company_webview.aw:1302
 msgid "Faks"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:301 classes/applications/crm/crm_company_webview.aw:1305
+#: classes/applications/crm/crm_company_webview.aw:301 classes/applications/crm/crm_company_webview.aw:1303
 msgid "Avatud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:302 classes/applications/crm/crm_company_webview.aw:356 classes/applications/crm/crm_company_webview.aw:1306
+#: classes/applications/crm/crm_company_webview.aw:302 classes/applications/crm/crm_company_webview.aw:356 classes/applications/crm/crm_company_webview.aw:1304
 msgid "E-post"
 msgstr ""
 
@@ -366,43 +366,43 @@ msgstr ""
 msgid "Fax"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:471
+#: classes/applications/crm/crm_company_webview.aw:469
 msgid "Veel lisainfot"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:687 classes/applications/crm/crm_company_webview.aw:1642 classes/applications/crm/crm_company_webview.aw:1650 classes/applications/crm/crm_company_webview.aw:1651
+#: classes/applications/crm/crm_company_webview.aw:685 classes/applications/crm/crm_company_webview.aw:1640 classes/applications/crm/crm_company_webview.aw:1648 classes/applications/crm/crm_company_webview.aw:1649
 msgid "-"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:727
+#: classes/applications/crm/crm_company_webview.aw:725
 msgid "Ruum"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:729
+#: classes/applications/crm/crm_company_webview.aw:727
 msgid "pind"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:789
+#: classes/applications/crm/crm_company_webview.aw:787
 msgid "Teised tegevusalad"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:790
+#: classes/applications/crm/crm_company_webview.aw:788
 msgid "N&auml;ita k&otilde;iki tegevusalasid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:1024
+#: classes/applications/crm/crm_company_webview.aw:1022
 msgid "Asutusele antud hinnangud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:1047 classes/applications/crm/crm_company_webview.aw:1048
+#: classes/applications/crm/crm_company_webview.aw:1045 classes/applications/crm/crm_company_webview.aw:1046
 msgid "Hinda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:1307
+#: classes/applications/crm/crm_company_webview.aw:1305
 msgid "Koduleht"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:1390
+#: classes/applications/crm/crm_company_webview.aw:1388
 msgid "Muuda"
 msgstr ""
 

@@ -26,11 +26,27 @@ msgstr ""
 msgid "Omaduse Korvi t&uuml;&uuml;p (basket_type) help"
 msgstr ""
 
-#: classes/contentmgmt/object_basket.aw:29
+#: classes/contentmgmt/object_basket.aw:prop_export
+msgid "Omaduse  (export) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_basket.aw:prop_export_comment
+msgid "Omaduse  (export) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_basket.aw:prop_export_help
+msgid "Omaduse  (export) help"
+msgstr ""
+
+#: classes/contentmgmt/object_basket.aw:rel_RELTYPE_EXPORT
+msgid "Seose iCal eksport (RELTYPE_EXPORT) tekst"
+msgstr ""
+
+#: classes/contentmgmt/object_basket.aw:33
 msgid "Sessioonip&otilde;hine"
 msgstr ""
 
-#: classes/contentmgmt/object_basket.aw:30
+#: classes/contentmgmt/object_basket.aw:34
 msgid "Kasutajap&otilde;hine"
 msgstr ""
 

@@ -77,23 +77,23 @@ msgstr ""
 msgid "Seose Pangamakse (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:567
-#: classes/applications/ows_bron/ows_bron.aw:882
+#: classes/applications/ows_bron/ows_bron.aw:613
+#: classes/applications/ows_bron/ows_bron.aw:949
 msgid "OWS Bron %s %s @ %s"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2026
+#: classes/applications/ows_bron/ows_bron.aw:2138
 msgid "The booking you requested does not exist!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2031
+#: classes/applications/ows_bron/ows_bron.aw:2143
 msgid "The booking you requested has already been cancelled!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2273
+#: classes/applications/ows_bron/ows_bron.aw:2401
 msgid "Hotell"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2278
+#: classes/applications/ows_bron/ows_bron.aw:2406
 msgid "Template"
 msgstr ""

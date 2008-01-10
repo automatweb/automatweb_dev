@@ -1,4 +1,8 @@
 <?php
+$GLOBALS["TRANS"]["Kliendid"] = "Customers";
+$GLOBALS["TRANS"]["Projektid"] = "Projects";
+$GLOBALS["TRANS"]["Toimetused"] = "Tasks";
+$GLOBALS["TRANS"]["Kliendid - detailvaade"] = "Customers - detailed view";
 $GLOBALS["TRANS"]["Isik"] = "Person";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Company";
 $GLOBALS["TRANS"]["K&otilde;ik"] = "All";
@@ -6,10 +10,6 @@ $GLOBALS["TRANS"]["Tehtud"] = "Done";
 $GLOBALS["TRANS"]["Tegemata"] = "In progress";
 $GLOBALS["TRANS"]["Arve tehtud"] = "Invoice sent";
 $GLOBALS["TRANS"]["--vali--"] = "--select--";
-$GLOBALS["TRANS"]["Kliendid"] = "Customers";
-$GLOBALS["TRANS"]["Projektid"] = "Projects";
-$GLOBALS["TRANS"]["Toimetused"] = "Tasks";
-$GLOBALS["TRANS"]["Kliendid - detailvaade"] = "Customers - detailed view";
 $GLOBALS["TRANS"]["Klient"] = "Customer";
 $GLOBALS["TRANS"]["Projekt"] = "Project";
 $GLOBALS["TRANS"]["Toimetus"] = "Task";

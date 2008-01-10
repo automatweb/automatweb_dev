@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -761,50 +761,50 @@ msgstr ""
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:558
+#: classes/common/room_settings.aw:562
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:563
+#: classes/common/room_settings.aw:567
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:569
+#: classes/common/room_settings.aw:573
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:575 classes/common/room_settings.aw:587
+#: classes/common/room_settings.aw:579 classes/common/room_settings.aw:591
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:581
+#: classes/common/room_settings.aw:585
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:594
+#: classes/common/room_settings.aw:598
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:600
+#: classes/common/room_settings.aw:604
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:606
+#: classes/common/room_settings.aw:610
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:617
+#: classes/common/room_settings.aw:621
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:618
+#: classes/common/room_settings.aw:622
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:619
+#: classes/common/room_settings.aw:623
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:659
+#: classes/common/room_settings.aw:663
 msgid "Vali"
 msgstr ""

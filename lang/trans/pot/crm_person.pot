@@ -578,18 +578,6 @@ msgstr ""
 msgid "Omaduse Ametinimetus (rank) help"
 msgstr ""
 
-#: classes/crm/crm_person.aw:prop_comment
-msgid "Omaduse Kontakt (comment) caption"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_comment_comment
-msgid "Omaduse Kontakt (comment) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_comment_help
-msgid "Omaduse Kontakt (comment) help"
-msgstr ""
-
 #: classes/crm/crm_person.aw:prop_work_contact_start
 msgid "Omaduse T&ouml;&ouml;le asumise aeg (work_contact_start) caption"
 msgstr ""

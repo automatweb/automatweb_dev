@@ -251,7 +251,7 @@ msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:175
 #: classes/applications/persona_import/persona_import.aw:251
-#: classes/applications/persona_import/persona_import.aw:1911
+#: classes/applications/persona_import/persona_import.aw:1942
 msgid "You forgot to enter server data"
 msgstr ""
 

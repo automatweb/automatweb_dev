@@ -9,74 +9,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/doc_display.aw:458
+#: classes/doc_display.aw:654
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/doc_display.aw:464
+#: classes/doc_display.aw:660
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc_display.aw:469
+#: classes/doc_display.aw:665
 msgid "Peida"
 msgstr ""
 
-#: classes/doc_display.aw:473
+#: classes/doc_display.aw:669
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/doc_display.aw:479
+#: classes/doc_display.aw:675
 msgid "Kleebi"
 msgstr ""
 
-#: classes/doc_display.aw:675
+#: classes/doc_display.aw:871
 msgid "jaanuar"
 msgstr ""
 
-#: classes/doc_display.aw:676
+#: classes/doc_display.aw:872
 msgid "veebruar"
 msgstr ""
 
-#: classes/doc_display.aw:677
+#: classes/doc_display.aw:873
 msgid "märts"
 msgstr ""
 
-#: classes/doc_display.aw:678
+#: classes/doc_display.aw:874
 msgid "aprill"
 msgstr ""
 
-#: classes/doc_display.aw:679
+#: classes/doc_display.aw:875
 msgid "mai"
 msgstr ""
 
-#: classes/doc_display.aw:680
+#: classes/doc_display.aw:876
 msgid "juuni"
 msgstr ""
 
-#: classes/doc_display.aw:681
+#: classes/doc_display.aw:877
 msgid "juuli"
 msgstr ""
 
-#: classes/doc_display.aw:682
+#: classes/doc_display.aw:878
 msgid "august"
 msgstr ""
 
-#: classes/doc_display.aw:683
+#: classes/doc_display.aw:879
 msgid "september"
 msgstr ""
 
-#: classes/doc_display.aw:684
+#: classes/doc_display.aw:880
 msgid "oktoober"
 msgstr ""
 
-#: classes/doc_display.aw:685
+#: classes/doc_display.aw:881
 msgid "november"
 msgstr ""
 
-#: classes/doc_display.aw:686
+#: classes/doc_display.aw:882
 msgid "detsember"
 msgstr ""
 
-#: classes/doc_display.aw:693
+#: classes/doc_display.aw:889
 msgid "Just postitatud"
 msgstr ""

@@ -14,12 +14,12 @@ msgid "Klassi  help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:17
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:374
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:376
 msgid "Isik"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:32
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:389
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:391
 msgid "Summa"
 msgstr ""
 
@@ -43,30 +43,30 @@ msgstr ""
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:274
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:276
 msgid "%s t&ouml;&ouml;tunnid ajavahemikul %s - %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:310
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:312
 msgid "Bug"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:315
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:317
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:320
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:322
 msgid "T&ouml;&ouml;tunde"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:476
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:478
 msgid "T&ouml;&ouml;tundide statistika projektide ja kuude kaupa"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:481
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:483
 msgid "<b>Summa</b>"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:532
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:534
 msgid "%s t&ouml;&ouml;tunnid projektis %s ajavahemikul %s - %s"
 msgstr ""

@@ -78,7 +78,3 @@ msgstr ""
 msgid "Seose Objekt millele hind m&otilde;jub (RELTYPE_OBJECT) tekst"
 msgstr ""
 
-#: classes/common/price.aw:189
-msgid "hind"
-msgstr ""
-

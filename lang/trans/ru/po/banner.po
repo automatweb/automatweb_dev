@@ -265,30 +265,30 @@ msgstr ""
 msgid "Kokku"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:188
+#: classes/applications/banner/banner.aw:202
 msgid "Click-through ratio"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:191
+#: classes/applications/banner/banner.aw:205
 msgid "Vaatamisi"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:194
+#: classes/applications/banner/banner.aw:208
 msgid "Klikke"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:225
+#: classes/applications/banner/banner.aw:239
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:272
+#: classes/applications/banner/banner.aw:286
 msgid "Banner"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:278
+#: classes/applications/banner/banner.aw:292
 msgid "N&auml;itamise t&otilde;en&auml;osus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:553
+#: classes/applications/banner/banner.aw:567
 msgid "No banner location id given"
 msgstr ""

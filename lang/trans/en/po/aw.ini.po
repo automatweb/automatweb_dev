@@ -2783,10 +2783,13 @@ msgstr ""
 msgid "Klassi RSS voog (1378) nimi"
 msgstr ""
 
-# aw.ini:classfolder_29
-#: aw.ini:classfolder_29
-msgid "Klassi kataloogi Dokumendid (29) nimi"
-msgstr "Documents"
+#: aw.ini:class_1381
+msgid "Klassi OWS Kliendiprofiil (1381) nimi"
+msgstr ""
+
+#: aw.ini:class_1382
+msgid "Klassi FLV video (1382) nimi"
+msgstr ""
 
 # aw.ini:classfolder_1
 #: aw.ini:classfolder_1
@@ -2887,6 +2890,11 @@ msgstr "Statistics"
 #: aw.ini:classfolder_28
 msgid "Klassi kataloogi Töövoogude juhtimine (28) nimi"
 msgstr "Workflow management"
+
+# aw.ini:classfolder_29
+#: aw.ini:classfolder_29
+msgid "Klassi kataloogi Dokumendid (29) nimi"
+msgstr "Documents"
 
 # aw.ini:classfolder_31
 #: aw.ini:classfolder_31
@@ -5417,8 +5425,24 @@ msgstr ""
 msgid "syslog.type.ST_EVENT_SEARCH"
 msgstr ""
 
+#: aw.ini:syslogtypes_1364
+msgid "syslog.type.ST_WEATHER_REPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1373
+msgid "syslog.type.ST_GEOINFO_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1374
+msgid "syslog.type.ST_GEOINFO_DATA"
+msgstr ""
+
 #: aw.ini:syslogtypes_1378
 msgid "syslog.type.ST_RSS_FEED"
+msgstr ""
+
+#: aw.ini:syslogtypes_1381
+msgid "syslog.type.ST_OWS_PROFILE"
 msgstr ""
 
 #: aw.ini:syslogactions_1

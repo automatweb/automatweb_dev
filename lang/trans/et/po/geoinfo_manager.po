@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/geoinfo/geoinfo_manager.aw:class_1373_help
 msgid "Klassi Geoinfo haldus help"
 msgstr ""
@@ -170,47 +169,50 @@ msgstr ""
 msgid "Seose XML skeem (RELTYPE_SCHEMA) tekst"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:509
+#: classes/applications/geoinfo/geoinfo_manager.aw:521
 msgid "Impordi XML-ist"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:539
+#: classes/applications/geoinfo/geoinfo_manager.aw:551
 msgid "Väljade seostamine"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:548
+#: classes/applications/geoinfo/geoinfo_manager.aw:560
 msgid "Väli"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:632
+#: classes/applications/geoinfo/geoinfo_manager.aw:644
 msgid "Ekspordi KMZ"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:644
+#: classes/applications/geoinfo/geoinfo_manager.aw:653
+msgid "Impordi koordinaadid"
+msgstr ""
+
+#: classes/applications/geoinfo/geoinfo_manager.aw:662
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:649
+#: classes/applications/geoinfo/geoinfo_manager.aw:667
 msgid "X koordinaat"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:654
+#: classes/applications/geoinfo/geoinfo_manager.aw:672
 msgid "Y koordinaat"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:659
+#: classes/applications/geoinfo/geoinfo_manager.aw:677
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:666
+#: classes/applications/geoinfo/geoinfo_manager.aw:684
 msgid "Andmeobjektid"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:744
+#: classes/applications/geoinfo/geoinfo_manager.aw:764
 msgid "V&auml;&auml;rtused on tagides &lt;coord_x&gt;23.409&lt;/coord_x&gt;"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:745
+#: classes/applications/geoinfo/geoinfo_manager.aw:765
 msgid "V&auml;&auml;rtused on omadustes &lt;item coord_x=\"23.409\" /&gt;"
 msgstr ""
-

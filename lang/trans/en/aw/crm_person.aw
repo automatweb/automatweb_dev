@@ -24,7 +24,6 @@ $GLOBALS["TRANS"]["Omaduse Aadress (address) caption"] = "Address";
 $GLOBALS["TRANS"]["Omaduse Organisatsioon (work_contact) caption"] = "Organisation";
 $GLOBALS["TRANS"]["Omaduse Osakond (org_section) caption"] = "Section";
 $GLOBALS["TRANS"]["Omaduse Ametinimetus (rank) caption"] = "Rank";
-$GLOBALS["TRANS"]["Omaduse Kontakt (comment) caption"] = "Contact";
 $GLOBALS["TRANS"]["Omaduse Vabas vormis tekst (notes) caption"] = "Information";
 $GLOBALS["TRANS"]["Omaduse Seostehaldur (aliasmgr) caption"] = "Connection manager";
 $GLOBALS["TRANS"]["Omaduse Nimetus (docs_s_name) caption"] = "Name";

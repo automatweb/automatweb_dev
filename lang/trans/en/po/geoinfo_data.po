@@ -528,7 +528,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_usert
 msgid "Grupi Kasutaja defineeritud (usert) pealkiri"
-msgstr ""
+msgstr "Userdefined data"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_usert_help
 msgid "Grupi Kasutaja defineeritud (usert) help"
@@ -536,7 +536,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_placemark
 msgid "Grupi Kohapunkt (placemark) pealkiri"
-msgstr ""
+msgstr "Placemark"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_placemark_help
 msgid "Grupi Kohapunkt (placemark) help"
@@ -544,7 +544,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_pm_styles
 msgid "Grupi Stiilid (pm_styles) pealkiri"
-msgstr ""
+msgstr "Styles"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_pm_styles_help
 msgid "Grupi Stiilid (pm_styles) help"
@@ -552,7 +552,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_pm_desc
 msgid "Grupi Kirjeldus (pm_desc) pealkiri"
-msgstr ""
+msgstr "Description"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_pm_desc_help
 msgid "Grupi Kirjeldus (pm_desc) help"
@@ -560,7 +560,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_pm_view
 msgid "Grupi Vaade (pm_view) pealkiri"
-msgstr ""
+msgstr "View"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:group_pm_view_help
 msgid "Grupi Vaade (pm_view) help"
@@ -568,7 +568,7 @@ msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:rel_RELTYPE_ICON
 msgid "Seose Ikooni stiil (RELTYPE_ICON) tekst"
-msgstr ""
+msgstr "Icon style"
 
 #: classes/applications/geoinfo/geoinfo_data.aw:174
 msgid "Ikoon"

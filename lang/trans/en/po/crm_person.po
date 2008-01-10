@@ -627,21 +627,6 @@ msgstr ""
 msgid "Omaduse Ametinimetus (rank) help"
 msgstr ""
 
-# classes/crm/crm_person.aw:prop_comment
-#: classes/crm/crm_person.aw:prop_comment
-msgid "Omaduse Kontakt (comment) caption"
-msgstr "Contact"
-
-# classes/crm/crm_person.aw:prop_comment_comment
-#: classes/crm/crm_person.aw:prop_comment_comment
-msgid "Omaduse Kontakt (comment) kommentaar"
-msgstr ""
-
-# classes/crm/crm_person.aw:prop_comment_help
-#: classes/crm/crm_person.aw:prop_comment_help
-msgid "Omaduse Kontakt (comment) help"
-msgstr ""
-
 #: classes/crm/crm_person.aw:prop_work_contact_start
 msgid "Omaduse T&ouml;&ouml;le asumise aeg (work_contact_start) caption"
 msgstr ""
@@ -2893,6 +2878,10 @@ msgstr ""
 #: classes/crm/crm_person.aw:4996
 msgid "L&otilde;pp"
 msgstr ""
+
+# classes/crm/crm_person.aw:prop_comment
+#~ msgid "Omaduse Kontakt (comment) caption"
+#~ msgstr "Contact"
 
 #~ msgid "Omaduse Haridustase (edulevel) caption"
 #~ msgstr "Educational level"

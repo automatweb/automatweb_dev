@@ -422,6 +422,30 @@ msgstr ""
 msgid "Omaduse Payment type (payment_type) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_title
+msgid "Omaduse Rate title (rate_title) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_title_comment
+msgid "Omaduse Rate title (rate_title) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_title_help
+msgid "Omaduse Rate title (rate_title) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_long_note
+msgid "Omaduse Rate long note (rate_long_note) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_long_note_comment
+msgid "Omaduse Rate long note (rate_long_note) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_long_note_help
+msgid "Omaduse Rate long note (rate_long_note) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_reservation.aw:prop_confirmation_code
 msgid "Omaduse Confirmation code (confirmation_code) caption"
 msgstr ""

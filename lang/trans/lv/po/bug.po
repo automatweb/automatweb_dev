@@ -433,16 +433,16 @@ msgstr ""
 msgid "Omaduse Bugmail CC (bug_mail) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_submit
-msgid "Omaduse Salvesta (submit) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_submit2
+msgid "Omaduse Salvesta (submit2) caption"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_submit_comment
-msgid "Omaduse Salvesta (submit) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_submit2_comment
+msgid "Omaduse Salvesta (submit2) kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_submit_help
-msgid "Omaduse Salvesta (submit) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_submit2_help
+msgid "Omaduse Salvesta (submit2) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_team
@@ -804,10 +804,10 @@ msgstr ""
 #: classes/applications/bug_o_matic_3000/bug.aw:689
 #: classes/applications/bug_o_matic_3000/bug.aw:722
 #: classes/applications/bug_o_matic_3000/bug.aw:737
-#: classes/applications/bug_o_matic_3000/bug.aw:2105
-#: classes/applications/bug_o_matic_3000/bug.aw:2148
-#: classes/applications/bug_o_matic_3000/bug.aw:2171
-#: classes/applications/bug_o_matic_3000/bug.aw:2214
+#: classes/applications/bug_o_matic_3000/bug.aw:2210
+#: classes/applications/bug_o_matic_3000/bug.aw:2253
+#: classes/applications/bug_o_matic_3000/bug.aw:2276
+#: classes/applications/bug_o_matic_3000/bug.aw:2319
 msgid "--vali--"
 msgstr ""
 
@@ -922,36 +922,40 @@ msgid "Nimi, vanem-bugi ja t&auml;htaeg peavad olema seatud!"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:1394
-#: classes/applications/bug_o_matic_3000/bug.aw:1772
+#: classes/applications/bug_o_matic_3000/bug.aw:1779
 msgid ""
 "\n"
 "Tegelik tundide arv muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1725
+#: classes/applications/bug_o_matic_3000/bug.aw:1726
 msgid "Failid:"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1726
+#: classes/applications/bug_o_matic_3000/bug.aw:1727
 msgid "Aeg:"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1806
+#: classes/applications/bug_o_matic_3000/bug.aw:1813
 msgid "Added comment to bug %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1963
+#: classes/applications/bug_o_matic_3000/bug.aw:1961
+msgid "seda faili ei testi"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:2068
 msgid "Uus arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1968
+#: classes/applications/bug_o_matic_3000/bug.aw:2073
 msgid "Samale tasemele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1974
+#: classes/applications/bug_o_matic_3000/bug.aw:2079
 msgid "Sisse"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2266
+#: classes/applications/bug_o_matic_3000/bug.aw:2371
 msgid "Puuduvad õigused bugi sulgeda!"
 msgstr ""

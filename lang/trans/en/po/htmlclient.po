@@ -89,13 +89,13 @@ msgstr "History"
 msgid "Lisa kiiresti"
 msgstr "Add quickly"
 
-#: classes/cfg/htmlclient.aw:1349 classes/cfg/htmlclient.aw:1351
-#: classes/cfg/htmlclient.aw:1423 classes/cfg/htmlclient.aw:1425
+#: classes/cfg/htmlclient.aw:1350 classes/cfg/htmlclient.aw:1352
+#: classes/cfg/htmlclient.aw:1424 classes/cfg/htmlclient.aw:1426
 msgid "Kinni"
 msgstr "Close"
 
-#: classes/cfg/htmlclient.aw:1350 classes/cfg/htmlclient.aw:1351
-#: classes/cfg/htmlclient.aw:1424 classes/cfg/htmlclient.aw:1425
+#: classes/cfg/htmlclient.aw:1351 classes/cfg/htmlclient.aw:1352
+#: classes/cfg/htmlclient.aw:1425 classes/cfg/htmlclient.aw:1426
 msgid "Lahti"
 msgstr "Open"
 

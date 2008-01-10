@@ -238,3 +238,7 @@ msgstr ""
 msgid "Doktor"
 msgstr ""
 
+#: classes/crm/persons_webview.aw:1045
+msgid "Teaduste kandidaat"
+msgstr ""
+

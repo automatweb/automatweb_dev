@@ -74,19 +74,27 @@ msgstr ""
 msgid "Seose Transpordi hind (RELTYPE_PRICE) tekst"
 msgstr ""
 
-#: classes/applications/crm/transport_type.aw:104
+#: classes/applications/crm/transport_type.aw:108
 msgid "Lisa uus hind"
 msgstr ""
 
-#: classes/applications/crm/transport_type.aw:106
+#: classes/applications/crm/transport_type.aw:110
 msgid "Lisan uue hinna?"
 msgstr ""
 
-#: classes/applications/crm/transport_type.aw:136
+#: classes/applications/crm/transport_type.aw:115
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/crm/transport_type.aw:117
+msgid "Oled kindel, et kustutada?"
+msgstr ""
+
+#: classes/applications/crm/transport_type.aw:165
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/crm/transport_type.aw:140
+#: classes/applications/crm/transport_type.aw:169
 msgid "L&otilde;pp"
 msgstr ""
 

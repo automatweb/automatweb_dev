@@ -86,7 +86,35 @@ msgstr ""
 msgid "Omaduse Faili url (url) help"
 msgstr ""
 
+#: classes/applications/calendar/ical_export.aw:prop_url_google
+msgid "Omaduse Faili url Google kalendri jaoks (url_google) caption"
+msgstr ""
+
+#: classes/applications/calendar/ical_export.aw:prop_url_google_comment
+msgid "Omaduse Faili url Google kalendri jaoks (url_google) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/ical_export.aw:prop_url_google_help
+msgid "Omaduse Faili url Google kalendri jaoks (url_google) help"
+msgstr ""
+
 #: classes/applications/calendar/ical_export.aw:rel_RELTYPE_CALENDAR
 msgid "Seose Kalender (RELTYPE_CALENDAR) tekst"
+msgstr ""
+
+#: classes/applications/calendar/ical_export.aw:91
+msgid "toimetus"
+msgstr ""
+
+#: classes/applications/calendar/ical_export.aw:97
+msgid "kalendrisündus"
+msgstr ""
+
+#: classes/applications/calendar/ical_export.aw:103
+msgid "kõne"
+msgstr ""
+
+#: classes/applications/calendar/ical_export.aw:109
+msgid "kohtumine"
 msgstr ""
 

@@ -325,81 +325,81 @@ msgstr ""
 msgid "Kujundusosa Ajaline&nbsp;aktiivsus (l_timing) pealkiri"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:136
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:154
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:155
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:173
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:137
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:156
 msgid "Aktiivsed"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:138
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:157
 msgid "Deaktiivsed"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:173
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:186
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:192
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:205
 msgid "Igalt poolt"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:212
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:231
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:213
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:232
 msgid "Oled kindel et soovid valitud objektid kustutada?"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:219
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:238
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:225
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:244
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:242
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:261
 msgid "OID"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:254
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:273
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:260
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:279
 msgid "Keel"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:266
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:285
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:272
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:291
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:278
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:297
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:287
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:306
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:293
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:312
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:302
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:321
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:308
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:352
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:327
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:371
 msgid "Ava"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:516
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:535
 msgid "AW Objektide otsing"
 msgstr ""
