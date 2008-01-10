@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.74 2008/01/08 15:49:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.75 2008/01/10 14:22:25 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -5076,7 +5076,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		if (!empty($prods))
 		{
 			$product_codes_str = implode(',', map("'%s'", $prods ));
-			$sql_params .=	" AND otto_prod_to_code_lut.product_code in ($product_codes_str) ";
+			$sql_params .= " AND otto_prod_to_code_lut.product_code in ($product_codes_str) ";
 		}
 		if (!empty($page_pattern))
 		{
@@ -5098,6 +5098,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 				$sql_params
 
 		";
+
 		$this->db_query($sql);
 		echo "Leidsin tooted: <br />\n";
 		flush();
@@ -5109,6 +5110,16 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			$product_ids[$row['product_id']] = $row['product_id'];
 			echo $row['product_id']." (".$row['page'].") -- ".$row['product_name']."<br />\n";
 			flush();
+		}
+
+		// so maybe the product obj. is not present in otto_prod_to_code_lut, lets find it by aw_shop_products.user6 value then (comma separated product codes)
+		foreach ($prods as $prod)
+		{
+			$this->db_query("select aw_oid,user6 from aw_shop_products where user6 like '%".$prod."%'");
+			while ($row = $this->db_next())
+			{
+				$product_ids[$row['aw_oid']] = $row['aw_oid'];
+			}
 		}
 
 		if ($found_any_products === false)
@@ -5154,7 +5165,6 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			$this->db_query("delete from aw_shop_packaging where id in ($packaging_ids_str)");
 			$this->db_query("delete from aliases where source in ($packaging_ids_str)");
 			echo "Kustutasin <strong>".count($packaging_ids)."</strong> pakendit (suurused/hinnad)<br />\n";
-
 		}
 
 		flush();
