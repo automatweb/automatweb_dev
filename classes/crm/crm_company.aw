@@ -7215,7 +7215,7 @@ class crm_company extends class_base
 				{
 					$email = $customer->get_first_obj_by_reltype("RELTYPE_EMAIL");
 				}
-				if(is_object($email))
+				if(is_object($email) && is_email($email->prop("mail")))
 				{
 					$mails[] = $email->prop("mail");
 				}
