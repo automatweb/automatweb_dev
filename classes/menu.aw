@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.215 2007/12/07 12:15:53 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.216 2008/01/11 11:14:18 hannes Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1737,6 +1737,23 @@ class menu extends class_base
 		$name = strtolower($name);
 		$name = trim($name);
 		$to_replace = array("&auml;","&ouml;","&uuml;","&otilde;", " ", "&Auml;","&Ouml;","&Uuml;","&Otilde;");
+		$tmp ="";
+		for($i = 0; $i < strlen($name); $i++)
+		{
+			if ( ord($name{$i}) == 184 ||ord($name{$i}) == 180 ) // zcaron or Zcaron
+			{
+				$tmp .= "z";
+			}
+			else if (ord($name{$i}) == 168 ||ord($name{$i}) == 166) // scaron or Zcaron
+			{
+				$tmp .= "s";
+			}
+			else
+			{
+				$tmp .= $name[$i];
+			}
+		}
+		$name = $tmp;
 		$replace_with = array("a","o","u","o","-","a","o","u","o");
 		$str = "!\"@#.¤$%&/()[]={}?\+-`'|,;";
 		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);
