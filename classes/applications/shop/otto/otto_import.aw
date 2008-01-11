@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.76 2008/01/11 09:12:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.77 2008/01/11 11:01:34 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -5014,84 +5014,6 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			");
 			echo "[ HEINE ] imagee ". $first_im ." for product ". $pcode ." is already in database<br />\n";
 		}
-
-	// xxx
-
-/*
-
-		// get prods
-		preg_match_all("/ProductRef=([^\"].*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
-		$pcs = array_unique($mt[1]);
-		foreach($pcs as $prodref)
-		{
-			if ($prodref == "")
-			{
-				continue;
-			}
-			$prod_url = "http://www.neu.heine.de/is-bin/INTERSHOP.enfinity/WFS/HeineDe/de_DE/-/EUR/SH_ViewProduct-ProductRef;sid=YtPBfo9Zn47Dfs1V6VzvXpT13mqu32H0mc0eO27a?ProductRef=".$prodref."&Source=Search";
-			echo "[ HEINE ] Searching images from this page: <a href=\"".$prod_url."\">prod url</a><br />\n";
-			$fc2 = $this->file_get_contents($prod_url);
-			if (strpos($fc2, "Ihrer Anforderung sind technische Probleme aufgetreten.") !== false)
-			{
-				$fc2 = $fc;
-			}
-
-			$patterns = array(
-			//	"/http:\/\/image01\.otto\.de:80\/pool\/HeineDe\/de_DE\/images\/format_hv_ds_a\/(\d+).jpg/imsU",
-			//	"/http:\/\/image01.otto.de\/pool\/images\/format_hv_ds_a\/(\d+).jpg/imsU",
-			//	"/http:\/\/image01.otto.de:80\/pool\/images\/format_hv_ds_a\/(\d+).jpg/imsU",
-				"/bild\[bildZahl\+\+\]=\"(\d+).jpg\";/imsU",
-
-			);
-
-			foreach ($patterns as $pattern)
-			{
-				if (preg_match($pattern, $fc2, $mt))
-				{
-					break;
-				}
-			}
-
-			$first_im = $mt[1];
-
-			$image_ok = $this->download_image(array(
-				'image' => 'http://image01.otto.de/pool/format_hv_ds_b/'.$first_im.'.jpg',
-				'format' => 2,
-				'target_folder' => $import_obj->prop('images_folder')
-			));
-			if ($image_ok)
-			{
-				// download the big version of the image too:
-				$this->download_image(array(
-					'image' => 'http://image01.otto.de/pool/format_hv_ds_a/'.$first_im.'.jpg',
-					'format' => 1,
-					'target_folder' => $import_obj->prop('images_folder')
-				));
-			}
-
-			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
-			if (!$imnr)
-			{
-				echo "[ HEINE ] insert new image $first_im <br>\n";
-				flush();
-
-				$q = ("
-					INSERT INTO 
-						otto_prod_img(pcode, nr,imnr, server_id) 
-						values('$pcode','1','$first_im', 5)
-				");
-
-				$this->db_query($q);
-				$this->added_images[] = $first_im;
-			}
-			else
-			{
-				echo "[ HEINE ] image ". $first_im ." for product ". $pcode ." is already in database<br />\n";
-			}
-
-
-		}
-*/
 
 	}
 
