@@ -30,12 +30,16 @@
 </tr>
 <!-- SUB: SUBTOPIC -->
 <tr>
-	<td class="{VAR:style_topic_caption}"><center><img src="{VAR:baseurl}/automatweb/images/forum_arrow_sm.gif"></center></td>
+	<td class="{VAR:style_topic_caption}"><center>
+	<!-- SUB: ICON -->
+	<img src="{VAR:icon_url}">
+	<!-- END SUB: ICON -->
+	</center></td>
 	<td class="{VAR:style_topic_caption}">
 	<!-- SUB: ADMIN_BLOCK -->
-	<input type="checkbox" name="sel_topic[{VAR:topic_id}]" value="1" /><a href="{VAR:add_faq_url}">[ lisa KKK ]</a>
+	<input type="checkbox" name="sel_topic[{VAR:topic_id}]" value="1" /> <input type="text" name="jrk[{VAR:topic_id}]" value="{VAR:jrk}" size="2" /> <a href="{VAR:add_faq_url}">[ lisa KKK ]</a>
 	<!-- END SUB: ADMIN_BLOCK -->
-	<a href="{VAR:open_topic_url}">{VAR:name}</a>
+	{VAR:jrk_text} <a href="{VAR:open_topic_url}">{VAR:name}</a>
 	</td>
 	<td align="center" class="{VAR:style_topic_replies}">{VAR:comment_count}</td>
 	<td align="center" class="{VAR:style_topic_author}">{VAR:author}</td>
@@ -44,5 +48,6 @@
 <!-- END SUB: SUBTOPIC -->
 </table>
 <!-- SUB: DELETE_ACTION -->
-<input type="submit" name="delete_selected_topics" value="Kustuta valitud teemad">
+<input type="submit" name="delete_selected_topics" value="Kustuta valitud">
+<input type="submit" name="save_jrk" value="Salvesta">
 <!-- END SUB: DELETE_ACTION -->

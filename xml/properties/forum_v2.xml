@@ -410,6 +410,16 @@
             <caption>Sisestusvormi elemendi stiil</caption>
       </property>
       <property>
+            <name>jrks</name>
+            <table>objects</table>
+            <group>jrks</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_gen_jrks</callback>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>topics_on_page</name>
             <table>objects</table>
             <group>topic_selector</group>
@@ -670,6 +680,18 @@
             <no_caption>1</no_caption>
             <caption>Foorumi viimased postitused</caption>
       </property>
+      <property>
+            <name>show2</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_gen_search</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Otsing</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -698,6 +720,10 @@
                   <caption>Stiilid</caption>
                   <parent>look</parent>
             </styles>
+            <jrks>
+                  <caption>J&amp;amp;auml;rjekorrad</caption>
+                  <parent>look</parent>
+            </jrks>
             <settings>
                   <caption>Sisu seaded</caption>
             </settings>
@@ -731,6 +757,10 @@
                   <submit>no</submit>
                   <parent>views</parent>
             </last_posts>
+            <search>
+                  <caption>Otsing</caption>
+                  <submit>no</submit>
+            </search>
       </groupinfo>
       <reltypes>
             <TOPIC_FOLDER>
@@ -781,6 +811,11 @@
                   <clid>CL_IMAGE_VERIFICATION</clid>
                   <caption>Kontrollpilt</caption>
             </IMAGE_VERIFICATION>
+            <ICON>
+                  <value>10</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Teema ikoon</caption>
+            </ICON>
       </reltypes>
 </properties>
 

@@ -10,12 +10,21 @@
       </property>
       <property>
             <name>active</name>
-            <table>objects</table>
+            <table>forum_topics</table>
             <group>general</group>
             <type>chooser</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>active</field>
             <caption>Aktiivne</caption>
+      </property>
+      <property>
+            <name>jrk</name>
+            <table>forum_topics</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>jrk</field>
+            <size>3</size>
+            <default>0</default>
+            <caption>J&amp;amp;auml;rjekord</caption>
       </property>
       <property>
             <name>comment</name>
@@ -27,36 +36,33 @@
       </property>
       <property>
             <name>author_name</name>
-            <table>objects</table>
+            <table>forum_topics</table>
             <group>general</group>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>author_name</field>
             <caption>Autori nimi</caption>
       </property>
       <property>
             <name>author_email</name>
-            <table>objects</table>
+            <table>forum_topics</table>
             <group>general</group>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>author_email</field>
             <caption>Autori e-post</caption>
       </property>
       <property>
             <name>locked</name>
-            <table>objects</table>
+            <table>forum_topics</table>
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>locked</field>
             <caption>Teema lukus</caption>
             <comment>Lukus teemale uusi kommentaare lisada ei saa</comment>
       </property>
       <property>
             <name>answers_to_mail</name>
-            <table>objects</table>
+            <table>forum_topics</table>
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -66,14 +72,13 @@
       </property>
       <property>
             <name>image</name>
-            <table>objects</table>
+            <table>forum_topics</table>
             <group>general</group>
             <type>releditor</type>
             <reltype>RELTYPE_FORUM_IMAGE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>image</field>
             <caption>Pilt</caption>
       </property>
       <property>
@@ -81,7 +86,7 @@
             <table>objects</table>
             <group>general</group>
             <type>text</type>
-            <stoer>no</stoer>
+            <store>no</store>
             <field>image_verification</field>
             <caption>Kontrollkood</caption>
       </property>
@@ -110,6 +115,13 @@
                   <caption>Mailinglist</caption>
             </subscribers>
       </groupinfo>
+      <tableinfo>
+            <forum_topics>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </forum_topics>
+      </tableinfo>
       <reltypes>
             <SUBSCRIBER>
                   <value>1</value>

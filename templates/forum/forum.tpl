@@ -1,3 +1,4 @@
+<a href="{VAR:search_url}">Otsing</a>
 <table border="0" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
 <tr>
 	<td colspan="3" class="{VAR:style_caption}" align="center">Foorum</td>
@@ -8,7 +9,8 @@
 {VAR:forum_contents}
 <!-- SUB: FOLDER -->
 <tr>
-<td colspan="6" class="{VAR:style_l1_folder}">{VAR:spacer}<a href="{VAR:open_l1_url}">{VAR:name}</a></td>
+<td colspan="6" class="{VAR:style_l1_folder}">{VAR:spacer}<a href="{VAR:open_l1_url}">{VAR:name}</a>
+<br />{VAR:comment}</td>
 </tr>
 <!-- END SUB: FOLDER -->
 

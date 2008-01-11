@@ -23,7 +23,17 @@
 
 <table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
 <tr>
-	<td align="center" width="20%" class="{VAR:style_comment_creator}"><div class="{VAR:style_comment_user}">{VAR:createdby}</div>{VAR:date}
+	<td align="center" width="20%" class="{VAR:style_comment_creator}"><div class="{VAR:style_comment_user}">{VAR:createdby}</div>
+<!-- SUB: AVATAR -->
+<img src="{VAR:avatar}" />
+<!-- END SUB: AVATAR -->
+<!-- SUB: AGE -->
+<br />Vanus:<br />{VAR:age}
+<!-- END SUB: AGE -->
+<!-- SUB: LOCATION -->
+<br />Asukoht:<br />{VAR:location}
+<!-- END SUB: LOCATION -->
+{VAR:date}
 <!-- SUB: ADMIN_TOPIC -->
 (admin)
 <!-- END SUB: ADMIN_TOPIC -->

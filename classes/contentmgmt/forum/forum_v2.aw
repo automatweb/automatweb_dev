@@ -162,6 +162,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 			@property style_form_element type=relpicker group=styles reltype=RELTYPE_STYLE
 			@caption Sisestusvormi elemendi stiil
 
+	@groupinfo jrks caption=J&auml;rjekorrad parent=look
+	@default group=jrks
+		
+		@property jrks type=callback callback=callback_gen_jrks no_caption=1
+
 @groupinfo settings caption="Sisu seaded"
 
 	@groupinfo topic_selector caption=Teemad parent=settings
@@ -258,6 +263,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property last_posts type=table store=no no_caption=1
 		@caption Foorumi viimased postitused
 
+	@groupinfo search caption="Otsing" submit=no
+	@default group=search
+
+		@property show2 type=callback callback=callback_gen_search store=no no_caption=1
+		@caption Otsing
 
 // ---------------- RELTYPES ------------------
 
@@ -287,6 +297,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 	@reltype IMAGE_VERIFICATION value=9 clid=CL_IMAGE_VERIFICATION
 	@caption Kontrollpilt
+
+	@reltype ICON value=10 clid=CL_IMAGE
+	@caption Teema ikoon
 
 */
 
@@ -411,9 +424,16 @@ class forum_v2 extends class_base
 			case "mail_vars":
 				$data["value"] = "Link teemale: [link]<br /> Teema nimi: [name]<br />Teema autor: [author]";
 				break;
-
+			default:
+				$tmp = explode("_", $data["name"]);
+				if($tmp[0] == "text" || $tmp[0] == "icon")
+				{
+					$data["value"] = $arr["obj_inst"]->meta($data["name"]);
+				}
+				break;
 		};
 		return $retval;
+
 	}
 
 	function set_property($arr)
@@ -456,6 +476,17 @@ class forum_v2 extends class_base
 			case "show":
 				$this->process_contents($arr);
 				break;
+
+			case "jrks":
+				foreach($arr["request"] as $var => $val)
+				{
+					$tmp = explode("_", $var);
+					if($tmp[0] == "text" || $tmp[0] == "icon")
+					{
+						$arr["obj_inst"]->set_meta($var, $val);
+					}
+				}
+				break;
 		}
 		return $retval;
 	}
@@ -474,6 +505,16 @@ class forum_v2 extends class_base
 				};
 			};
 		};
+		if(isset($arr["request"]["save_jrk"]))
+		{
+			$data = new aw_array($arr["request"]["jrk"]);
+			foreach($data->get() as $topic_id => $jrk)
+			{
+				$to = obj($topic_id);
+				$to->set_prop("jrk", $jrk);
+				$to->save();
+			}
+		}
 		if (isset($arr["request"]["locktoggle_selected_topics"]))
 		{
 			$topic_list = new aw_array($arr["request"]["sel_topic"]);
@@ -646,6 +687,65 @@ class forum_v2 extends class_base
 		$this->rel_id = aw_global_get("section");
 	}
 
+	function callback_gen_jrks($arr)
+	{
+		$folders = $this->get_search_folders($arr);
+		$fids = array();
+		foreach($folders as $fid=>$foo)
+		{
+			$fids[] = $fid;
+		}
+		$odl = new object_data_list(array(
+				"lang_id" => array(),
+				"site_id" => array(),
+			),
+			array(CL_MSGBOARD_TOPIC => array(new obj_sql_func(OBJ_SQL_UNIQUE, "jrk", "forum_topics.jrk")))
+		);
+		$jrks = array();
+		foreach($odl->arr() as $od)
+		{
+			if($od["jrk"] == "")
+			{
+				$od["jrk"] = 0;
+			}
+			$jrks[$od["jrk"]] = $od["jrk"];
+		}
+		$props = array();
+		foreach($jrks as $jrk)
+		{
+			$props["icon_".$jrk] = array(
+				"name" => "icon_".$jrk,
+				"type" => "relpicker",
+				"reltype" => "RELTYPE_ICON",
+				"caption" => "Ikoon (".$jrk.")",
+			);
+			$props["text_".$jrk] = array(
+				"name" => "text_".$jrk,
+				"type" => "textbox",
+				"caption" => "Tekst (".$jrk.")",
+			);
+		}
+		return $props;
+	}
+
+	function callback_gen_search($arr)
+	{
+		if ($arr["request"]["searchv"])
+		{
+			$rv["contents"] = array(
+				"type" => "text",
+				"name" => "contents",
+				"value" => $this->search_results($arr),
+				"no_caption" => 1,
+			);
+		}
+		else
+		{
+			$rv = $this->get_search_form($arr);
+		};
+		return $rv;
+	}
+
 	function callback_gen_contents($arr)
 	{
 		classload("layout/active_page_data");
@@ -800,6 +900,11 @@ class forum_v2 extends class_base
 
 		$this->vars(array(
 			"forum_contents" => $c,
+			"search_url" => $this->mk_my_orb("search",array(
+				"id" => $args["obj_inst"]->id(),
+				"group" => $arr["group"],
+				"section" => aw_global_get("section"),
+			)),
 		));
 
 		$rv = $this->parse();
@@ -839,7 +944,6 @@ class forum_v2 extends class_base
 						"_alias" => get_class($this),
 					)),
 				));
-
 //				$tplname = "L" . $this->level . "_FOLDER";
 
 				$tplname = "FOLDER";
@@ -856,6 +960,7 @@ class forum_v2 extends class_base
 				$c .= $this->_draw_one_level(array(
 					"parent" => $folder_obj->id(),
 					"id" => $arr["id"],
+					"obj_inst" => $arr["obj_inst"],
 				));
 				$this->level--;
 			}
@@ -878,6 +983,7 @@ class forum_v2 extends class_base
 		// and posts
 		list($topic_counts,$topic_list) = $this->get_topic_list(array(
 			"parents" => $sub_folder_list->ids(),
+			"obj_inst" => $arr["obj_inst"],
 		));
 
 		// ja iga alamtopicu jaoks on mul vaja teada, mitu
@@ -903,6 +1009,7 @@ class forum_v2 extends class_base
 
 			$this->vars(array(
 				"name" => $sub_folder_obj->name(),
+				"comment" => $sub_folder_obj->comment(),
 				"topic_count" => (int)$topic_counts[$sub_folder_obj->id()],
 				"comment_count" => (int)$comment_count,
 				"last_createdby" => $last["createdby"],
@@ -1080,7 +1187,10 @@ class forum_v2 extends class_base
 		}
 
 		$topics_ol = new object_list($topics_list_params);
-
+		$topics_ol->sort_by(array(
+			"prop" => "jrk",
+			"order" => "asc"
+		));
 		$topics_list_ids = $topics_ol->ids();
 
 		list($comment_counts, ) = $this->get_comment_counts(array('parents' => $topics_list_ids));
@@ -1118,7 +1228,11 @@ class forum_v2 extends class_base
 			{
 				continue;
 			}
-
+			$jrk = $topic->prop("jrk");
+			$text = $args["obj_inst"]->meta("text_".$jrk);
+			$icon = $args["obj_inst"]->meta("icon_".$jrk);
+			$ii = get_instance(CL_IMAGE);
+			$icon = $ii->get_url_by_id($icon);
 			$topics_list[$topic_oid] = array(
 				'name' => ( 1 == $topic->prop('locked') ) ? '[L] '.$topic->name() : $topic->name(),
 				'author' => $topic->prop('author_name'),
@@ -1126,6 +1240,9 @@ class forum_v2 extends class_base
 				'last_date' => ( empty($last_comment['created']) ) ? $topic->created() : $last_comment['created'],
 				'last_createdby' => $last_comment['uname'],
 				'topic_id' => $topic_oid,
+				'jrk' => $jrk,
+				'jrk_text' => $text,
+				'icon_url' => $icon,
 			);
 		}
 
@@ -1190,6 +1307,8 @@ class forum_v2 extends class_base
 			));
 
 			$this->vars($topic);
+			$tmp = $this->parse("ICON");
+			$this->vars(array("ICON" => $tmp));
 
 			$del = "";
 			if ($can_admin && $this->can("delete", $topic['topic_id']))
@@ -1597,7 +1716,20 @@ class forum_v2 extends class_base
 				$change_link = $this->parse("CHANGE_LINK");
 			}
 		}
-
+		
+		$pdata = $this->get_user_data($topic_obj->createdby());
+		if($pdata)
+		{
+			foreach($pdata as $var => $val)
+			{
+				if($val)
+				{
+					$this->vars(array($var => $val));
+					$tmp = $this->parse(strtoupper($var));
+					$this->vars(array(strtoupper($var) => $tmp));
+				}
+			}
+		}
 		$this->vars(array(
 			"active_page" => $pager,
 			"name" => $topic_obj->name(),
@@ -1778,6 +1910,33 @@ class forum_v2 extends class_base
 
 	}
 
+	function get_user_data($uid)
+	{
+		$ui = get_instance(CL_USER);
+		$pid = $ui->get_person_for_uid($uid);
+		$p = obj($pid);
+		$adrid = $p->prop("address");
+		if(is_oid($adrid) && $this->can("view", $adrid))
+		{
+			$adro = obj($adrid);
+			if($t = $adro->prop("linn"))
+			{
+				$to = obj($t);
+				$result["location"] = $to->name();
+			}
+		}
+		if(($bd = $p->prop("birthday")) > 10)
+		{
+			$result["age"] = floor((time() - strtotime($bd))/31556926);
+		}
+		if($pic = $p->prop("picture"))
+		{
+			$ii = get_instance(CL_IMAGE);
+			$result["avatar"] = $ii->get_url_by_id($pic);
+		}
+		return $result;
+	}
+
 	function callback_gen_add_topic($args = array())
 	{
 		$t = get_instance(CL_MSGBOARD_TOPIC);
@@ -1852,6 +2011,17 @@ class forum_v2 extends class_base
 				$rv_args["_alias"] = get_class($this);
 			};
 		};
+		if($args['args']["group"] == "search")
+		{
+			$args['args']['word'] = ($args['request']['word']);
+			$args['args']['start'] = ($args['request']['start']);
+			$args['args']['end'] = ($args['request']['end']);
+			$args['args']['folder'] = ($args['request']['folder']);
+			$args['args']['author'] = ($args['request']['author']);
+			$args['args']['com_once'] = ($args['request']['com_once']);
+			$args['args']['topcom'] = ($args['request']['topcom']);
+			$args['args']['searchv'] = ($args['request']['searchv']);
+		}
 	}
 
 	function callback_mod_tab(&$arr)
@@ -1868,11 +2038,16 @@ class forum_v2 extends class_base
 		$topic_count = $tlist = array();
 		if (sizeof($args["parents"]) != 0)
 		{
-			$topic_list = new object_list(array(
+			$params = array(
 				"parent" => $args["parents"],
 				"class_id" => CL_MSGBOARD_TOPIC,
 				"status" => STAT_ACTIVE,
-			));
+			);
+			if($args["obj_inst"]->prop("activation"))
+			{
+				$params["active"] = 1;
+			}
+			$topic_list = new object_list($params);
 			foreach ($topic_list->arr() as $topic)
 			{
 				$parent = $topic->parent();
@@ -2156,8 +2331,9 @@ class forum_v2 extends class_base
 						$use_props[] = "active";
 						$props['active']["options"] = array(1 => "Jah", 0 => "Ei");
 						$props['active']["value"] = $topic->prop("active");
+						$use_props[] = "jrk";
+						$props['jrk']['value'] = $topic->prop("jrk");
 					}
-					
 					$use_props[] = "author_name";
 					$use_props[] = "author_email";
 					$use_props[] = "comment";
@@ -2243,6 +2419,324 @@ class forum_v2 extends class_base
 		}
 	}
 
+	/**
+	@attrib name=search all_args=1 nologin=1
+	**/
+	function forum_search($arr)
+	{
+		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
+		{
+			$arr["obj_inst"] = obj($arr["id"]);
+			$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+			$htmlc->start_output();
+	
+			$props = $this->get_search_form($arr);
+			foreach($props as $prop)
+			{
+				$htmlc->add_property($prop);
+			}
+
+			$htmlc->finish_output(array("data" => array(
+					"class" => get_class($this),
+					"section" => aw_global_get("section"),
+					"action" =>"search_results",
+					"id" => $arr["id"],
+					"post" => $arr["post"],
+					"ru" => $arr["ru"],
+				),
+				"method" => "GET",
+				"form_handler" => "index.aw",
+			));
+	
+			$html = $htmlc->get_result(array(
+				"form_only" => 1
+			));
+			return $html;
+		}
+	}
+
+	/**
+	@attrib name=search_results all_args=1 nologin=1
+	**/
+	function search_results($arr)
+	{
+		$arr["obj_inst"] = $arr["obj_inst"]?$arr["obj_inst"]:obj($arr["id"]);
+
+		classload("vcl/table");
+		$t = new vcl_table;
+
+		$t->define_field(array(
+			"name" => "name",	
+			"caption" => t("Pealkiri"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "user",
+			"caption" => t("Autor"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Aeg"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.y H:i"
+		));
+		if($arr["request"])
+		{
+			extract($arr["request"]);
+		}
+		else
+		{
+			extract($arr);
+		}
+		if($topcom == "topics")
+		{
+			$params["class_id"] = array(CL_MSGBOARD_TOPIC);
+		}
+		elseif($topcom == "comms")
+		{
+			$params["class_id"] = array(CL_COMMENT); 
+		}
+		else
+		{
+			$params["class_id"] = array(CL_MSGBOARD_TOPIC, CL_COMMENT);
+		}
+		if($word)
+		{
+			$params["name"] = "%".$word."%";
+		}
+		$start = mktime($start["hour"], $start["minute"], 0, $start["month"], $start["day"], $start["year"]);
+		$end = mktime($end["hour"], $end["minute"], 0, $end["month"], $end["day"], $end["year"]);
+		if($start && $end)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end);
+		}
+		elseif($start)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_GREATER,$start);
+		}
+		elseif($end)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_LESS,$end);
+		}
+		if($folder)
+		{
+			foreach($folder as $f)
+			{
+				$folders[$f] = $f;
+			}
+		}
+		if($arr["obj_inst"]->prop("activation"))
+		{
+			$params[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"active" => 1,
+					"class_id" => CL_COMMENT,
+				),
+			));
+		}
+		if($author)
+		{
+			$params[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"author_name" => $author,
+					"uname" => $author,
+				),
+			));
+		}
+//obj_set_opt("no_cache", 1);
+//$GLOBALS["DUKE"] = 1;
+		$ol = new object_list($params);
+		foreach($ol->arr() as $o)
+		{
+			if($folder)
+			{
+				$ok = 0;
+				$path = $o->path();
+				foreach($path as $po)
+				{
+					if($folders[$po->id()])
+						$ok = 1;
+				}
+				if(!$ok)
+				{
+					continue;
+				}
+			}
+			if($o->class_id() == CL_COMMENT)
+			{
+				$tp = obj($o->parent());
+				if($com_once)
+				{
+					if($usedcoms[$tp->id()])
+					{
+						continue;
+					}
+					else
+					{
+						$usedcoms[$tp->id()] = $o->id();
+					}
+				}
+				if($arr["obj_inst"]->prop("activation") && !$tp->prop("active"))
+				{
+					continue;
+				}
+				$data["user"] = $o->prop("uname");
+				$data["type"] = t("Kommentaar");
+			}
+			else
+			{
+				$data["user"] = $o->prop("author_name");
+				$data["type"] = t("Teema");
+			}
+			$data["name"] = html::href(array(
+				"url" => $this->mk_my_orb("change",array(
+					"topic" => ($tp)?$tp->id():$o->id(),
+					"id" => $arr["obj_inst"]->id(),
+					"folder" => ($tp)?$tp->parent():$o->parent(),
+					"section" => aw_global_get("section"),
+					"_alias" => get_class($this),
+					"group" => "contents",
+				)),
+				"caption" => $o->name()
+			));
+			$data["date"] = $o->created();
+			$t->define_data($data);
+		}
+		$t->set_default_sortby("date");
+		$t->set_default_sorder("desc");
+		$t->sort_by();
+		$t->define_pageselector(array(
+			"type" => "lb",
+			"records_per_page" => 20,
+			"position" => "bottom"
+		));
+		$html = "Otsingu tulemused: ".$t->get_html();
+		return $html;
+	}
+
+	function get_search_form($arr)
+	{
+		$props["title"] = array(
+			"type" => "text",
+			"name" => "title",
+			"caption" => t("Otsing"),
+			"value" => "",
+			"store" => "no",
+		);
+		$props["word"] = array(
+			"type" => "textbox",	
+			"name" => "word",
+			"caption" => t("Otsingus&otilde;na"),
+			"store" => "no",
+		);
+		$props["start"] = array(
+			"type" => "datetime_select",
+			"name" => "start",
+			"caption" => t("Kuup&auml;ev alates"),
+			"store" => "no",
+			"value" => -1
+		);
+		$props["end"] = array(
+			"type" => "datetime_select",
+			"name" => "end",
+			"caption" => t("Kuup&auml;ev kuni"),
+			"store" => "no",
+			"value" => -1
+		);
+		$props["folder"] = array(
+			"type" => "select",
+			"multiple" => 1,
+			"size" => 4,
+			"name" => "folder",
+			"caption" => t("Teema"),
+			"store" => "no",
+		);
+		$props["folder"]["options"] = $this->get_search_folders($arr);
+		$props["author"] = array(
+			"type" => "textbox",
+			"name" => "author",
+			"caption" => t("Autor"),
+			"store" => "no",
+		);
+		$props["com_once"] = array(
+			"type" => "checkbox",
+			"name" => "com_once",
+			"caption" => t("&Uuml;he teema postitusi ei korrata"),
+			"store" => "no",
+		);
+		$props["topcom"] = array(
+			"type" => "select",
+			"name" => "topcom",
+			"caption" => t("Otsitakse"),
+			"options" => array(
+				"all" => t("K&otilde;iki"),
+				"topics" => t("Teemasid"),
+				"comms" => t("Kommentaare"),
+			),
+			"store" => "no",
+		);
+		$props["button"] = array(
+			"type" => "submit",
+			"name" => "button",
+			"caption" => t("Otsi"),
+			"store" => "no",
+		);
+		$props["searchv"] = array(
+			"type" => "hidden",
+			"name" => "searchv",
+			"value" => 1,
+			"store" => "no",
+		);
+		return $props;
+	}
+
+	function get_search_folders($arr)
+	{
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_TOPIC_FOLDER",
+		));
+		$this->search_folders = array();
+		foreach($conns as $conn)
+		{
+			$flevel = 0;
+			$folder = $conn->prop("to");
+			$fo = obj($folder);
+			$this->search_folders_recur($folder, $flevel);
+		}
+		return $this->search_folders;
+	}
+
+	function search_folders_recur($f, $flevel)
+	{
+		$fo = obj($f);
+		for($i=0;$i<$flevel;$i++)
+		{
+			$slashes .= "--";
+		}
+		$nflevel = $flevel+1;
+		$this->search_folders[$fo->id()] = $slashes.$fo->name();
+		
+		$folder_list = new object_list(array(
+			"parent" => $f,
+			"class_id" => CL_MENU,
+			"status" => STAT_ACTIVE,
+			"sort_by" => "objects.jrk ASC"
+		));
+		foreach($folder_list->arr() as $fo)
+		{
+			$this->search_folders_recur($fo->id(), $nflevel);
+		}
+	}
 
 	/**
 
@@ -2361,7 +2855,7 @@ class forum_v2 extends class_base
 						'name' => 'ver_code',
 						'size' => 20
 					)),
-					'error' => $cb_values['image_verification']['error']
+					'error' => ($cb_values['image_verification'])? $cb_values['image_verification']['error']:''
 				));
 			}
 		}
@@ -2445,9 +2939,10 @@ class forum_v2 extends class_base
 				$topic->set_name($arr["name"]);
 				$topic->set_comment($arr["comment"]);
 				$topic->set_prop("answers_to_mail",$arr["answers_to_mail"]);
-				if($arr["active"])
+				if(isset($arr["active"]))
 				{
 					$topic->set_prop("active", $arr["active"]);
+					$topic->set_prop("jrk", $arr["jrk"]);
 				}
 			}
 			else
