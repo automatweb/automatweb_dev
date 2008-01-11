@@ -18,14 +18,12 @@ if (is_array($_SESSION["auth_redir_post"]))
 	$REQUEST_METHOD = "POST";
 }
 
-
 if ($_GET["set_ui_lang"] != "")
 {
 	$_SESSION["user_adm_ui_lc"] = $_GET["set_ui_lang"];
 }
 
 lc_init();
-
 classload("core/util/timer");
 classload("aw_template");
 classload("defs");
@@ -58,7 +56,6 @@ $LC = aw_global_get("LC");
 
 @include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
 @include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
-
 
 $awt = new aw_timer;
 register_shutdown_function("log_pv", $GLOBALS["awt"]->timers["__global"]["started"]);
@@ -108,8 +105,6 @@ if($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"])
 	$id = substr($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"] ,0 , -1 );
 }
 
-
-
 //logimine
 $log = date("d/m/Y H:i : ",time());
 $bi = get_instance(CL_BANK_PAYMENT);
@@ -117,9 +112,7 @@ $_SESSION["bank_return"]["data"]["timestamp"] = time();
 $_SESSION["bank_return"]["data"]["ip"] = $_SERVER['REMOTE_ADDR'];
 $_SESSION["bank_return"]["data"]["good"] = $bi->check_response();
 
-
 //	arr($_POST); arr($_GET);arr($_SESSION);
-
 //foreach($_SESSION["bank_return"]["data"] as $key => $val)
 //{
 //	$log.= $key." = ".$val.", ";
