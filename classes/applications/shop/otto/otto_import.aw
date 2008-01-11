@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.75 2008/01/10 14:22:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.76 2008/01/11 09:12:26 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2635,12 +2635,19 @@ class otto_import extends class_base
 
 						foreach($mt[1] as $idx => $img)
 						{
-							if (strpos($img, 'leer.gif') !== false)
+							if (strpos($img, 'leer.gif') !== false )
 							{
 								echo "-- tundub, et sellele variandile pilti ei ole <br>\n";
 								continue;
 							}
 							$imnr = basename($img, ".jpg");
+
+							if (file_get_contents(str_replace($imnr, $imnr.'.jpg', $img)) === false)
+							{
+								echo "-- selle variandi pilti ei &otilde;nnestu k&auml;tte saada<br />\n";
+								continue;
+							}
+
 							echo $imnr."<br>\n";
 							echo "image from product $pcode : ($t_imnr)<br />";
 							$q = "SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'";
@@ -2686,6 +2693,13 @@ class otto_import extends class_base
 								'otto_import' => $import_obj,
 								'debug' => true
 							));
+							// download the big version of the image too:
+							$this->get_image(array(
+								'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
+								'format' => BIG_PICTURE,
+								'otto_import' => $import_obj,
+								'debug' => true
+							));
 							if ($image_ok)
 							{
 								// download the big version of the image too:
@@ -2696,9 +2710,38 @@ class otto_import extends class_base
 									'debug' => true
 								));
 							}
+							else
+							{
+								/////
+								// some pictures are coming from different URL-s, so if we get 0 sized image ($image_ok === false)
+								// lets try some other places to get the image:
+								$image_ok = $this->get_image(array(
+								//	'source' => 'http://image01.otto.de:80/pool/ov_formatd/'.$imnr.'.jpg',
+									'source' => 'http://image01.otto.de/pool/ov_formatd/'.$imnr.'.jpg',
+									'format' => SMALL_PICTURE,
+									'otto_import' => $import_obj,
+									'debug' => true
+								));
+
+arr('---------------------------------------------------------------');
+var_dump($image_ok);
+echo '<br />http://image01.otto.de/pool/ov_formatd/'.$imnr.'.jpg';
+arr('---------------------------------------------------------------');
+
+								if ($image_ok)
+								{
+									// download the big version of the image too:
+									$this->get_image(array(
+										'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
+										'format' => BIG_PICTURE,
+										'otto_import' => $import_obj,
+										'debug' => true
+									));
+								}
+							}
 						}
 
-						// check for rundumanshiftph
+						// check for rundumanshiftph (flash)
 						if (strpos($html, "rundum_ansicht") !== false)
 						{
 							echo "[video import]";
@@ -3997,7 +4040,8 @@ class otto_import extends class_base
 			$url = aw_ini_get('baseurl').'/vv_product_images/'.$imnr{0}.'/'.$imnr{1}.'/'.$imnr.'_2.jpg';
 			$file = aw_ini_get('site_basedir').'/product_images/'.$imnr{0}.'/'.$imnr{1}.'/'.$imnr.'_2.jpg';
 		//	if (getimagesize($url) !== false)
-			if (is_readable($file))
+		//	if (is_readable($file))
+			if (filesize($file) > 0)
 			{
 				echo "[".$imnr."] ".$file." [ok]<br />\n";
 				flush();
@@ -4011,6 +4055,7 @@ class otto_import extends class_base
 		}
 		arr($delete_images);
 		arr(count($delete_images));
+		
 		if (!empty($delete_images))
 		{
 			$this->db_query("delete from otto_prod_img where imnr in (".implode(',', map("'%s'", $delete_images)).")");
@@ -5379,23 +5424,21 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 			'filename' => $filename,
 			'otto_import' => $arr['otto_import']
 		));
-
 		if ($folder)
 		{
 			// new image file
 			$new_file = $folder.'/'.$filename.'_'.$arr['format'].'.jpg';
-			if (!file_exists($new_file))
+			if (!file_exists($new_file) || filesize($new_file) == 0)
 			{
 				$this->copy_file(array(
 					'source' => $arr['source'],
 					'target' => $new_file
 				));
 			}
-			else
+			if (filesize($new_file) > 0)
 			{
 				return true;
 			}
-			
 		}
 		return false;
 	}
