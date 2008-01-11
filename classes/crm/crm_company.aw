@@ -781,12 +781,6 @@ default group=org_objects
 
 	@property bs_tb type=toolbar no_caption=1
 
-@default group=bill_payments
-	@property bill_payments_tb type=toolbar store=no no_caption=1
-	@caption Laekumiste toolbar
-	@property bill_payments_table type=table no_caption=1 store=no
-	@caption Laekumiste tabel
-
 @default group=bills_list
 
 	@property bills_tb type=toolbar no_caption=1 store=no
@@ -819,10 +813,6 @@ default group=org_objects
 
 			@property bill_s_status type=select store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Staatus
-
-			@property bill_s_with_tax type=chooser store=no parent=bills_list_s captionside=top no_caption=1
-			@caption K&auml;ibemaksuta/K&auml;ibemaksuga
-
 
 			@property bill_s_search type=submit store=no parent=bills_list_s captionside=top no_caption=1 group=bills_list
 			@caption Otsi
@@ -1170,7 +1160,6 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no save=no
 	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no save=no
 	@groupinfo bills_create parent=bills caption="Maksmata t&ouml;&ouml;d" submit=no save=no
-	@groupinfo bill_payments parent=bills caption="Laekumised" submit=no save=no
 
 @groupinfo stats caption="Aruanded" save=no
 
@@ -2604,7 +2593,6 @@ class crm_company extends class_base
 			case 'bills_mon_tb':
 			case "bill_s_client_mgr":
 			case "bill_s_status":
-			case "bill_s_with_tax":
 			case "bs_tb":
 				static $bills_impl;
 				if (!$bills_impl)
@@ -2613,11 +2601,7 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $bills_impl->$fn($arr);
-			case 'bill_payments_tb':
-			case 'bill_payments_table':
-				$bills_p_impl = get_instance("applications/crm/crm_bill_payment");
-				$fn = "_get_".$data["name"];
-				return $bills_p_impl->$fn($arr);
+
 			case "stats_s_to":
 				if ($arr["request"][$data["name"]]["year"] > 1)
 				{
@@ -3500,6 +3484,119 @@ class crm_company extends class_base
 		}
 	}
 
+	function get_cust_bds()
+	{
+		if(date('w') == 5)
+		{
+			$e_add = 2;
+		}
+		elseif(date('w') == 6)
+		{
+			$e_add = 1;
+		}
+		else
+		{
+			$e_add = 0;
+		}
+		$s_d = mktime(0,0,0,date('m'),date('d'),date('Y'));
+		$e_d = mktime(23,59,59, date('m'),date('d')+1+$e_add,date('Y'));
+		$pred = $s_m > $e_m ? "OR" : "AND";
+		$q = "
+			SELECT 
+				objects.name as name,
+				objects.oid as oid,
+				kliendibaas_isik.birthday as bd
+			FROM 
+				objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
+			WHERE	
+				objects.class_id = '145' AND 
+				objects.status > 0  AND
+				kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
+		";
+		$bds = array();
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
+			//$m = date("m", $row["bd"]);
+			list($y, $m, $d) = explode("-", $row["bd"]);
+			$bd = mktime(12,0,0,$m,$d,date('Y'));
+			if ($bd > $s_d && $bd < $e_d)
+			{
+				$bds[mktime(0,0,0,$m,$d,date('Y'))][] = $row["oid"];
+			}
+		}
+		return $bds;
+	}
+
+	/**
+	@attrib name=cust_bds
+	**/
+	function cust_bds($arr)
+	{
+		if(date('w') == 5)
+		{
+			$e_add = 2;
+		}
+		elseif(date('w') == 6)
+		{
+			$e_add = 1;
+		}
+		else
+		{
+			$e_add = 0;
+		}
+		$s_d = mktime(0,0,0,date('m'),date('d'),date('Y'));
+		$e_d = mktime(23,59,59, date('m'),date('d')+1+$e_add,date('Y'));
+		$bds = $this->get_cust_bds();
+		$dc = 0;
+		$this->read_template("bds.tpl");
+		$this->vars(array(
+			"title" => t("S&uuml;nnip&auml;evad"),
+		));
+		$tmp = '';
+		for($i = $s_d;$i<=$e_d;$i+=24*60*60)
+		{
+			$dc++;
+			$tmp2 = '';
+			foreach($bds[$i] as $oid)
+			{
+				$p = obj($oid);
+				$this->vars(array(
+					"name" => html::obj_change_url($p->id(),$p->name()),
+					"company" => ", ".$p->prop("work_contact.name"),
+					"phone" => $p->prop("phone.name")?", ".$p->prop("phone.name"):"",
+					"email" => $p->prop("email.mail")?", ".$p->prop("email.mail"):"",
+				)); 
+				$tmp2 .= $this->parse("bds");
+			}
+			if($dc == 1)
+			{
+				$day = t("T&auml;na");
+			}
+			elseif($dc == 2)
+			{
+				$day = t("Homme");
+			}
+			elseif(date('w',$i) == 0)
+			{
+				$day = t("P&uuml;hap&auml;ev");
+			}
+			elseif(date('w',$i) == 1)
+			{
+				$day = t("Esmasp&auml;ev");
+			}
+			$this->vars(array(
+				"bds" => $tmp2,
+				"day" => $day,
+			));
+			$tmp .= $this->parse("days");
+		}
+		$this->vars(array(
+			"days" => $tmp
+		));
+		return $this->parse();
+	}
+
 	/**
 		@attrib name=create_new_company all_args="1"
 	**/
@@ -3667,7 +3764,6 @@ class crm_company extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
 		if($arr['args']["group"] == "stats_s")
 		{
 			$arr['args']['stats_s_cust_type'] = ($arr['request']['stats_s_cust_type']);
@@ -3686,6 +3782,7 @@ class crm_company extends class_base
 			$arr['args']['stats_s_group_by_client'] = ($arr['request']['stats_s_group_by_client']);
 			$arr['args']['stats_s_group_by_project'] = ($arr['request']['stats_s_group_by_project']);
 			$arr['args']['stats_s_group_by_task'] = ($arr['request']['stats_s_group_by_task']);
+			$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
 		}
 		if($arr["args"]["group"] == "ovrv_email")
 		{
@@ -3867,7 +3964,6 @@ class crm_company extends class_base
 			$arr["args"]["bill_s_from"] = $arr["request"]["bill_s_from"];
 			$arr["args"]["bill_s_to"] = $arr["request"]["bill_s_to"];
 			$arr["args"]["bill_s_client_mgr"] = $arr["request"]["bill_s_client_mgr"];
-			$arr["args"]["bill_s_with_tax"] = $arr["request"]["bill_s_with_tax"];
 			$arr["args"]["bill_s_status"] = $arr["request"]["bill_s_status"];
 			$arr["args"]["bill_s_search"] = $arr["request"]["bill_s_search"];
 		}
@@ -6381,6 +6477,24 @@ class crm_company extends class_base
 					return "aw_popup_scroll('$link','confl','200','200');".$sc;
 				}
 			}
+			if(!$_SESSION['company_bds'])
+			{
+				$ci = get_instance(CL_PLANNER);
+				$cp = get_current_person();
+				$cal = $ci->get_calendar_for_person($cp);
+				if(is_oid($cal))
+				{
+					$calo = obj($cal);
+					$show_bds = $calo->prop("show_bdays");
+				}
+				$bds = $this->get_cust_bds();
+				if(count($bds) && $show_bds)
+				{
+					$_SESSION['company_bds'] = 1;
+					$url = $this->mk_my_orb("cust_bds",array());
+					$sc .= "window.open('".$url."','popup','width=300,height=500')";
+				}
+			}
 			return $sc;
 		}
 		return
@@ -7215,7 +7329,7 @@ class crm_company extends class_base
 				{
 					$email = $customer->get_first_obj_by_reltype("RELTYPE_EMAIL");
 				}
-				if(is_object($email) && is_email($email->prop("mail")))
+				if(is_object($email))
 				{
 					$mails[] = $email->prop("mail");
 				}
@@ -8506,54 +8620,5 @@ Bank accounts: üksteise all
 		return $arr["post_ru"];
 	}
 }
-
-	/**
-		@attrib name=remove_from_category all_args=1
-	**/
-	function remove_from_category($arr)
-	{
-		
-		if (is_array($arr["check"]) && is_oid($arr["category"]) && $this->can("view" , $arr["category"]))
-		{
-			$c = obj($arr["category"]);
-			foreach($arr['check'] as $key => $value)
-			{
-				$c->disconnect(array('from' => $value));
-			}
-		}
-		return $arr["post_ru"];
-	}
-
-	/**
-		@attrib name=remove_cust_relations all_args=1
-	**/
-	function remove_cust_relations($arr)
-	{
-		if (is_array($arr["check"]))
-		{
-			$id1 = reset($arr["check"]);
-			if(!(is_oid($id1) && $this->can("view" , $id1)))
-			{
-				return $arr["post_ru"];
-			}
-			$cust_rel_list = new object_list(array(
-				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"buyer" => $arr["check"],
-				"seller" => $arr["id"],
-			));
-			$cust_rel_list->delete();
-			$cust_rel_list = new object_list(array(
-				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"buyer" => $arr["id"],
-				"seller" => $arr["check"],
-			));
-			$cust_rel_list->delete();
-		}
-		return $arr["post_ru"];
-	}
 
 ?>

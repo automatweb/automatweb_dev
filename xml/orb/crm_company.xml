@@ -76,6 +76,13 @@
 			</function>
 		</action>
 
+		<action name="cust_bds">
+			<function name="cust_bds">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="create_new_company" all_args="1">
 			<function name="create_new_company">
 				<arguments>
