@@ -105,7 +105,7 @@ if($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"])
 	$id = substr($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"] ,0 , -1 );
 }
 
-//logimine 
+//logimine
 $log = date("d/m/Y H:i : ",time());
 $bi = get_instance(CL_BANK_PAYMENT);
 $_SESSION["bank_return"]["data"]["timestamp"] = time();
