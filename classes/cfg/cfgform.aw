@@ -839,17 +839,15 @@ class cfgform extends class_base
 		}
 	}
 
-
-	function _init_cfgform_data($obj)
+	private function _init_cfgform_data($obj)
 	{
 		$this->_init_properties($obj->prop("subclass"));
-
 		$this->grplist = $this->cfg_groups = safe_array($obj->meta("cfg_groups"));
 		$this->prplist = $this->cfg_proplist = safe_array($obj->meta("cfg_proplist"));
 		$this->layout = $this->cfg_layout = safe_array($obj->meta("cfg_layout"));
 	}
 
-	function _init_properties($class_id)
+	private function _init_properties($class_id)
 	{
 		error::raise_if(empty($class_id),(array(
 			"id" => ERR_ABSTRACT,
@@ -1048,14 +1046,15 @@ class cfgform extends class_base
 				}
 				$arr["obj_inst"]->set_meta("grp_translations", $trans);
 				break;
+
 			case "props_list":
-				$this->submit_meta(&$arr);
+				$this->save_show_to_groups($arr);
 				break;
 		}
 		return $retval;
 	}
 
-	function submit_meta($arr = array())
+	private function save_show_to_groups($arr = array())
 	{
 		$show_to_groups = $arr["obj_inst"]->meta("show_to_groups");
 		foreach($arr["request"]["show_to_groups"] as $key => $val)
@@ -1065,7 +1064,7 @@ class cfgform extends class_base
 		$arr["obj_inst"]->set_meta("show_to_groups" , $show_to_groups);
 	}
 
-	function _load_xml_definition($contents)
+	private function _load_xml_definition($contents)
 	{
 		// right now I can load whatever I want, but I really should validate that stuff
 		// first .. and keep in mind that I want to have as many relation pickers
@@ -1078,7 +1077,7 @@ class cfgform extends class_base
 
 	function callback_pre_save($arr)
 	{
-		$obj_inst = &$arr["obj_inst"];
+		$obj_inst = $arr["obj_inst"];
 		// if we are unzerializing the object, then we need to set the
 		// subclass as well.
 		if (isset($arr["request"]["subclass"]))
@@ -1162,7 +1161,7 @@ class cfgform extends class_base
 	// Sorts meta cfg_groups grplist by ord, retains original order where ord not defined.
 	// Places unordered subgroups after their parents
 	// Separately handles 2-level structure -- parent groups and subgroups.
-	function _sort_groups()
+	private function _sort_groups()
 	{
 		// separate unordered, parent and subgroups
 		$pg = $sg = $pgo = $sgo = array(); // (unordered parent groups, unordered subgroups, ordered parent groups, ordered subgroups)
@@ -1251,58 +1250,67 @@ class cfgform extends class_base
 		$this->cfg_groups = $grplist_tmp_sorted;
 	}
 
-	function _save_cfg_groups($o)
+	private function _save_cfg_groups($o)
 	{
-		$this->_sort_groups();
-		$o->set_meta("cfg_groups", $this->cfg_groups);
-		$o->set_meta("cfg_groups_sorted", 1);
-	}
-
-	function _save_cfg_props($o)
-	{
-		$tmp = array();
-		$cnt = 0;
-		foreach($this->cfg_proplist as $key => $val)
+		if (isset($this->cfg_groups))
 		{
-			if (empty($val["ord"]))
-			{
-				$cnt++;
-				$val["tmp_ord"] = $cnt;
-			}
-
-			$tmp[$key] = $val;
+			$this->_sort_groups();
+			$o->set_meta("cfg_groups", $this->cfg_groups);
+			$o->set_meta("cfg_groups_sorted", 1);
 		}
-
-		uasort($tmp, array($this, "__sort_props_by_ord"));
-
-		$cnt = 0;
-		$this->cfg_proplist = array();
-
-		foreach($tmp as $key => $val)
-		{
-			unset($val["tmp_ord"]);
-
-			if ($this->default_values[$key])
-			{
-				$val["default"] = $this->default_values[$key];
-			}
-			else
-			{
-				unset($val["default"]);
-			}
-
-			$this->cfg_proplist[$key] = $val;
-		}
-
-		$o->set_meta("cfg_proplist",$this->cfg_proplist);
 	}
 
-	function _save_cfg_layout($o)
+	private function _save_cfg_props($o)
 	{
-		$o->set_meta("cfg_layout", $this->cfg_layout);
+		if (isset($this->cfg_proplist))
+		{
+			$tmp = array();
+			$cnt = 0;
+			foreach($this->cfg_proplist as $key => $val)
+			{
+				if (empty($val["ord"]))
+				{
+					$cnt++;
+					$val["tmp_ord"] = $cnt;
+				}
+
+				$tmp[$key] = $val;
+			}
+
+			uasort($tmp, array($this, "__sort_props_by_ord"));
+
+			$cnt = 0;
+			$this->cfg_proplist = array();
+
+			foreach($tmp as $key => $val)
+			{
+				unset($val["tmp_ord"]);
+
+				if ($this->default_values[$key])
+				{
+					$val["default"] = $this->default_values[$key];
+				}
+				else
+				{
+					unset($val["default"]);
+				}
+
+				$this->cfg_proplist[$key] = $val;
+			}
+
+			$o->set_meta("cfg_proplist",$this->cfg_proplist);
+		}
 	}
 
-	function _init_layout_tbl(&$t)
+	private function _save_cfg_layout($o)
+	{
+		if (isset($this->cfg_layout))
+		{
+			$o->set_meta("cfg_layout", $this->cfg_layout);
+		}
+	}
+
+	private function _init_layout_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "ord",
