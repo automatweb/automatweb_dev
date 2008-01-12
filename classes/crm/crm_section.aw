@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.29 2008/01/09 11:36:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.30 2008/01/12 22:48:41 kaarel Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -10,6 +10,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @default table=objects
 @default group=general
+
+@property code type=textbox size=4 field=meta method=serialize
+@caption Kood
 
 @property jrk type=textbox size=4
 @caption Järk
@@ -48,6 +51,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 	@property email_id type=relpicker reltype=RELTYPE_EMAIL field=meta method=serialize
 	@caption E-posti aadress
+
+	@property url type=relpicker reltype=RELTYPE_URL field=meta method=serialize
+	@caption Veebiaadress
 
 @groupinfo wpls caption="T&ouml;&ouml;kohad"
 @default group=wpls
@@ -93,6 +99,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @reltype WORKPLACE value=11 clid=CL_ROSTERING_WORKPLACE
 @caption T&ouml;&ouml;koht
+
+@reltype URL value=12 clid=CL_EXTLINK
+@caption Veebiaadress
 
 */
 
