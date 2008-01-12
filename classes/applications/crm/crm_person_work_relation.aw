@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.5 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.6 2008/01/12 22:38:04 kaarel Exp $
 // crm_person_work_relation.aw - Töösuhe 
 /*
 
@@ -13,6 +13,9 @@
 @property org type=relpicker reltype=RELTYPE_ORG
 @caption Organisatsioon
 
+@property section type=relpicker reltype=RELTYPE_SECTION
+@caption &Uuml;ksus
+
 @property profession type=relpicker reltype=RELTYPE_PROFESSION
 @caption Amet
 
@@ -20,16 +23,22 @@
 @caption Suhte algus
 
 @property end type=date_select
-@caption Suhte lõpp
+@caption Suhte l&otilde;pp
 
 @property tasks type=textarea
-@caption Ülesanded
+@caption &Uuml;lesanded
+
+@property load type=textbox
+@caption Koormus
 
 @property directive_link type=textbox field=meta method=serialize 
 @caption Viit ametijuhendile
 
 @property directive type=relpicker reltype=RELTYPE_DESC_FILE field=meta method=serialize 
 @caption Ametijuhend
+
+@property contract_stop type=relpicker reltype=RELTYPE_CONTRACT_STOP field=meta method=serialize 
+@caption T&ouml;&ouml;lepingu peatumine
 
 @reltype ORG value=1 clid=CL_CRM_COMPANY
 @caption Organisatsioon
@@ -46,8 +55,11 @@
 @reltype DESC_FILE value=5 clid=CL_FILE
 @caption Ametijuhend
 
-@reltype CONTRACT_STOP value=6 clid=CL_CONTRACT_STOP
-@caption Töölepingu peatamine
+@reltype CONTRACT_STOP value=6 clid=CL_CRM_CONTRACT_STOP
+@caption T&ouml;&ouml;lepingu peatamine
+
+@reltype SECTION value=7 clid=CL_CRM_SECTION
+@caption &Uuml;ksus
 
 */
 
