@@ -1346,7 +1346,6 @@ function check_pagecache_folders()
 	}
 }
 
-/*
 function __autoload($class_name)
 {
 	$dir = aw_ini_get("site_basedir");
@@ -1383,7 +1382,6 @@ function __autoload($class_name)
 		}
 
 		// load aw class
-		// $GLOBALS["class_index"][$class_name] = $class_dfn; //!!! laadida siin kogu dfn globalsisse?
 		$class_file = $class_dir . $class_dfn["file"] . "." . aw_ini_get("ext");
 	}
 
@@ -1396,6 +1394,7 @@ function aw_update_class_index($class_dir, $index_dir, $path = "")
 	if (!isset($GLOBALS["aw_update_class_index_exec_time"]))
 	{
 		$GLOBALS["aw_update_class_index_exec_time"] = time();
+		set_time_limit(300);
 	}
 
 	// make index directory if not found
@@ -1483,5 +1482,5 @@ function aw_update_class_index($class_dir, $index_dir, $path = "")
 		}
 	}
 }
-*/
+
 ?>
