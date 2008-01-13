@@ -1,4 +1,5 @@
 <?php
+
 classload(
 	"core/obj/ds_decorator_base",
 	"core/obj/_int_obj_container_base",
@@ -106,11 +107,7 @@ class object
 		}
 		else
 		{
-			error::raise(array(
-				"id" => "ERR_OBJ_METHOD",
-				"msg" => sprintf(t("Call to undefined method '%s'."), $method)
-			));
-			// throw new awex_invalid_arg("Call to undefined method.");
+			throw new awex_awobj_method("Call to undefined method '" . $method . "'.");
 		}
 	}
 
@@ -1513,7 +1510,16 @@ class object
 	**/
 	function prop($param)
 	{
-		return $GLOBALS["objects"][$this->oid]->prop($param);
+		$method = "awobj_get_" . $param;
+
+		if (method_exists($GLOBALS["objects"][$this->oid], $method))
+		{
+			return $GLOBALS["objects"][$this->oid]->$method($value);
+		}
+		else
+		{
+			return $GLOBALS["objects"][$this->oid]->prop($param);
+		}
 	}
 
 	/** returns the value for the specified property for the current object, suitable for displaying to the user
@@ -1664,7 +1670,16 @@ class object
 	**/
 	function set_prop($key, $value)
 	{
-		return $GLOBALS["objects"][$this->oid]->set_prop($key, $value);
+		$method = "awobj_set_" . $key;
+
+		if (method_exists($GLOBALS["objects"][$this->oid], $method))
+		{
+			return $GLOBALS["objects"][$this->oid]->$method($value);
+		}
+		else
+		{
+			return $GLOBALS["objects"][$this->oid]->set_prop($key, $value);
+		}
 	}
 
 	/** returns an array of all the properties and their values for the object
@@ -2060,4 +2075,8 @@ function dump_obj_table($pre = "")
 	echo "++++++++++<br />\n";
 	flush();
 }
+
+class awex_awobj extends aw_exception {}
+class awex_awobj_method extends awex_awobj {}
+
 ?>
