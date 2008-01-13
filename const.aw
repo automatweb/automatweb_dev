@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.109 2008/01/03 12:04:45 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.110 2008/01/13 15:37:01 voldemar Exp $
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
 
@@ -7,9 +7,8 @@ define ("AW_SHORT_PROCESS", 1);
 define ("AW_LONG_PROCESS", 2);
 
 ini_set("memory_limit", "300M");
-if (get_magic_quotes_gpc() && !defined("GPC_HANDLER")) 
+if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
 {
-	
 	function stripslashes_deep($value)
 	{
 		$value = is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
@@ -20,23 +19,11 @@ if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
 	$_GET = array_map('stripslashes_deep', $_GET);
 	$_COOKIE = array_map('stripslashes_deep', $_COOKIE);
 	define("GPC_HANDLER", 1);
-	extract($_POST);
-	extract($_GET);
-
 }
 
 $pi = "";
 
 global $section;
-// register_globals should be off!
-if (is_array($_SERVER))
-{
-	// alltho we only need PATH_INFO and QUERY_STRING
-	extract($_SERVER);
-};
-
-extract($_POST);
-extract($_GET);
 
 $PATH_INFO = isset($PATH_INFO) ? preg_replace("/\?automatweb=[^&]*/","", $PATH_INFO) : "";
 $QUERY_STRING = isset($QUERY_STRING) ? preg_replace("/\?automatweb=[^&]*/","", $QUERY_STRING) : "";
@@ -73,11 +60,13 @@ if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "A
 		$pi = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $pi))));
 	}
 }
+
 $pi = preg_replace("/\?automatweb=[^&]*/ims", "", $pi);
-if ($pi) 
+
+if ($pi)
 {
-	// if $pi contains & or = 
-	if (preg_match("/[&|=]/",$pi)) 
+	// if $pi contains & or =
+	if (preg_match("/[&|=]/",$pi))
 	{
 		// expand and import PATH_INFO
 		// replace ? and / with & in $pi and output the result to HTTP_GET_VARS
@@ -87,11 +76,11 @@ if ($pi)
 		extract($HTTP_GET_VARS);
 		$AW_GET_VARS = $HTTP_GET_VARS;
 		$GLOBALS["fastcall"] = array_key_exists("fastcall", $HTTP_GET_VARS) ? $HTTP_GET_VARS["fastcall"] : null;
-	} 
+	}
 
 	if (($_pos = strpos($pi, "section=")) === false)
 	{
-		// ok, we need to check if section is followed by = then it is not really the section but 
+		// ok, we need to check if section is followed by = then it is not really the section but
 		// for instance index.aw/set_lang_id=1
 		// we check for that like this:
 		// if there are no / or ? chars before = then we don't prepend
@@ -155,31 +144,18 @@ if ($pi)
 			$section = $t_pi;
 		}
 	}
-};
+}
 
-// siin oli aw_global_set("section",$section); mida EI TOHI siin olla
-
-$ext = "aw"; 		          	// filename extension
-
-// veateadete tekstid
+$ext = "aw";  // filename extension
 
 if (empty($LC))
 {
 	$LC="et";
 }
 
-// other stuff
-
 // stat function fields
 define("FILE_SIZE",7);
 define("FILE_MODIFIED",9);
-
-// kliendid. 
-// hierarhia esimene element on root
-//  teisel tasemel on kliendid
-//  naiteks "Ajakirjade Kirjastus"
-//  voi "StruktuurMeedia"
-// menyyd
 
 // please use $row[OID] instead of row["oid"] everywhere you can,
 // because "oid" is a reserved word in postgres (and probably others)
@@ -232,7 +208,7 @@ define("FSUBTYPE_CAL_CONF",8);
 // läbi kalendri?
 define("FSUBTYPE_CAL_SEARCH",16);
 
-// like CAL_CONF, but data is entered directly 
+// like CAL_CONF, but data is entered directly
 define("FSUBTYPE_CAL_CONF2",32);
 
 // sum of all form & calendar settings, used to figure out
@@ -258,7 +234,7 @@ define("OBJ_WAS_VACANCY", 1 << 6);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 
-// for CL_BROTHER_DOCUMENT 
+// for CL_BROTHER_DOCUMENT
 define("SC_BROTHER_DOC_KEYWORD", 1);	// kui dokumendi vend on tehtud t2nu menuu keywordile
 
 // always-defined reltypes
@@ -266,7 +242,7 @@ define("RELTYPE_BROTHER", 10000);
 define("RELTYPE_ACL", 10001);
 
 //Date formats
-define("LC_DATE_FORMAT_SHORT", 1); // For example: 20.06.88 or 05.12.98 
+define("LC_DATE_FORMAT_SHORT", 1); // For example: 20.06.88 or 05.12.98
 define("LC_DATE_FORMAT_SHORT_FULLYEAR", 2); // For example: 20.06.1999 or 05.12.1998
 define("LC_DATE_FORMAT_LONG", 3); // For example: 20. juuni 99
 define("LC_DATE_FORMAT_LONG_FULLYEAR", 4); // For example: 20. juuni 1999
