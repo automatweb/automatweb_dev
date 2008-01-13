@@ -27,13 +27,13 @@ class class_index
 
 			if (!$ret)
 			{
-				throw new Exception("Failed to create index directory.");
+				throw new awex_clidx("Failed to create index directory.");
 			}
 		}
 
 		if (!is_dir($class_dir))
 		{
-			throw new Exception("Class directory doesn't exist.");
+			throw new awex_clidx("Class directory doesn't exist.");
 		}
 
 		// scan all files in given class directory for php class definitions
@@ -97,7 +97,7 @@ class class_index
 								}
 								else
 								{
-									throw new Exception("Unable to update class index for '" . $file . "'.");
+									throw new awex_clidx("Unable to update class index for '" . $file . "'.");
 								}
 							}
 
@@ -115,7 +115,7 @@ class class_index
 		}
 		else
 		{
-			throw new Exception("Couldn't open class directory.");
+			throw new awex_clidx("Couldn't open class directory.");
 		}
 
 		if ($max_execution_time_prev_val !== self::UPDATE_EXEC_TIMELIMIT)
@@ -136,7 +136,7 @@ class class_index
 
 			if (!is_readable($class_dfn_file))
 			{
-				throw new Exception("Local class definition not found.");
+				throw new awex_clidx("Local class definition not found.");
 			}
 		}
 		else
@@ -152,7 +152,7 @@ class class_index
 
 				if (!is_readable($class_dfn_file))
 				{
-					throw new Exception("Class definition not found.");
+					throw new awex_clidx("Class definition not found.");
 				}
 			}
 
@@ -165,7 +165,6 @@ class class_index
 			}
 
 			// load aw class dfn
-			// $GLOBALS["class_index"][$name] = $class_dfn; //!!! laadida siin kogu dfn globalsisse?
 			$class_file = $class_dir . $class_dfn["file"] . "." . aw_ini_get("ext");
 
 			if (!is_readable($class_file))
@@ -175,7 +174,7 @@ class class_index
 
 				if (!is_readable($class_dfn_file))
 				{
-					throw new Exception("Class definition not found.");
+					throw new awex_clidx("Class definition not found.");
 				}
 
 				$class_dfn = unserialize(file_get_contents($class_dfn_file));
@@ -183,7 +182,7 @@ class class_index
 
 				if (!is_readable($class_file))
 				{
-					throw new Exception("Class file not found.");
+					throw new awex_clidx("Class file not found.");
 				}
 			}
 		}
@@ -191,5 +190,7 @@ class class_index
 		return $class_file;
 	}
 }
+
+class awex_clidx extends aw_exception {}
 
 ?>
