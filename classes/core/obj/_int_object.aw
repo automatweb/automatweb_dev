@@ -552,13 +552,9 @@ class _int_object
 
 	function is_property($param)
 	{
-		if (!is_string($param))
+		if (!is_string($param) or empty($param))
 		{
-			error::raise(array(
-				"err" => "ERR_PARAM",
-				"msg" => sprintf(t("object::is_property(%s): parameter must be a string!"), $param)
-			));
-			return;
+			return false;
 		}
 
 		if (!is_class_id($this->obj["class_id"]))
