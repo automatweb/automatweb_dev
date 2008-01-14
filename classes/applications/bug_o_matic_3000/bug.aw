@@ -424,6 +424,15 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->prop("planned_time");
 				}
+				if($arr["new"] && is_oid($arr["request"]["parent"]))
+				{
+					$bt = obj($arr["request"]["parent"]);
+					$bdd = $bt->prop("bug_def_deadline");
+					if($bdd>0)
+					{
+						$prop["value"] = time() + $bdd*24*60*60;
+					}
+				}
 				break;
 
 			case "team":
@@ -1066,6 +1075,15 @@ class bug extends class_base
 				{
 					$com = sprintf(t("Tagaiside kellelt muudeti %s => %s"), $old, $nv);
 					$this->add_comments[] = $com;
+				}
+				break;
+			case "deadline":
+				$bt = $this->_get_bt($arr["obj_inst"]);
+				$bdd = $bt->prop("bug_def_deadline");
+				if($arr["new"] && ((int)$bdd)>0)
+				{
+					$date = time() + $bdd*24*60*60;
+					$arr["obj_inst"]->set_prop("wish_live_date", $date);
 				}
 				break;
 		}

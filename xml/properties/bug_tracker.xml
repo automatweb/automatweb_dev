@@ -543,6 +543,16 @@
             <caption>Bugi kommentaaride CC</caption>
       </property>
       <property>
+            <name>bug_def_deadline</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>textbox</type>
+            <size>3</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Bugi default t&amp;amp;auml;htaeg (p&amp;amp;auml;eva)</caption>
+      </property>
+      <property>
             <name>cvs2uidmap</name>
             <table>objects</table>
             <group>settings_g</group>

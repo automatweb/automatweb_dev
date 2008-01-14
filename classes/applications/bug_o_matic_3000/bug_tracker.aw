@@ -202,6 +202,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property def_notify_list type=textbox table=objects field=meta method=serialize
 	@caption Bugi kommentaaride CC
 
+	@property bug_def_deadline type=textbox size=3 table=objects field=meta method=serialize
+	@caption Bugi default t&auml;htaeg (p&auml;eva)
+
 	@property cvs2uidmap type=textarea rows=7 cols=20 table=objects field=meta method=serialize
 	@caption Kasutajanimede kaart
 	@comment Formaat: cvs_kasutaja=aw_kasutaja\ncvs_kasutaja=aw_kasutaja
