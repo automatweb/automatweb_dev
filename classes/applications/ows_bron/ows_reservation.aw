@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.9 2008/01/10 09:40:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.10 2008/01/14 14:57:31 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -79,6 +79,9 @@
 
 @property guest_comments type=textbox field=aw_comments
 @caption Guest comments
+
+@property guest_bd type=date_select field=aw_bd
+@caption S&uuml;nnip&auml;ev
 
 @property smoking type=checkbox ch_value=1 field=aw_smoking
 @caption Smoking

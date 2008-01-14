@@ -188,6 +188,14 @@
             <caption>Guest comments</caption>
       </property>
       <property>
+            <name>guest_bd</name>
+            <table>aw_ows_reservations</table>
+            <group>cust_data</group>
+            <type>date_select</type>
+            <field>aw_bd</field>
+            <caption>S&amp;amp;uuml;nnip&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>smoking</name>
             <table>aw_ows_reservations</table>
             <group>cust_data</group>
