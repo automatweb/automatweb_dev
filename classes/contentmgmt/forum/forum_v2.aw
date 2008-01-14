@@ -1004,9 +1004,8 @@ class forum_v2 extends class_base
 			list(,$comment_count) = $this->get_comment_counts(array(
 				"parents" => $topic_list[$sub_folder_obj->id()],
 			));
-
-			$last = (TOPICS_LAST_REPLY_AUTHOR === $topic_last_author) ? $this->get_last_comments(array('parents' => $topic_list[$sub_folder_obj->id()])) :  $this->get_last_topic($sub_folder_obj->id());
-
+			$last = (TOPICS_LAST_REPLY_AUTHOR == $topic_last_author) ? $this->get_last_comments(array('parents' => $topic_list[$sub_folder_obj->id()])) :  $this->get_last_topic($sub_folder_obj->id());
+			
 
 			$mdate = $last["created"];
 			$datestr = empty($date) ? "" : $this->time2date($mdate,2);
@@ -1022,7 +1021,7 @@ class forum_v2 extends class_base
 				"comment" => $sub_folder_obj->comment(),
 				"topic_count" => (int)$topic_counts[$sub_folder_obj->id()],
 				"comment_count" => (int)$comment_count,
-				"last_createdby" => $last["createdby"],
+				"last_createdby" => $last["uname"],
 				"last_date" => $datestr,
 				"spacer" => str_repeat("&nbsp;",6*($lv)),
 				"open_topic_url" => $this->mk_my_orb("change",array(
@@ -2110,7 +2109,7 @@ class forum_v2 extends class_base
 		if (sizeof($args["parents"]) != 0)
 		{
 			// hm, but this does not work at all with multiple parents
-			$q = sprintf("SELECT parent,created,createdby,forum_comments.uname FROM objects LEFT JOIN forum_comments ON (objects.oid = forum_comments.id) WHERE parent IN (%s) AND class_id = '%d'
+			$q = sprintf("SELECT parent,created,createdby,forum_comments.uname as uname FROM objects LEFT JOIN forum_comments ON (objects.oid = forum_comments.id) WHERE parent IN (%s) AND class_id = '%d'
 				AND status != 0 ORDER BY created DESC",join(",",$args["parents"]),CL_COMMENT);
 			$this->db_query($q);
 			$retval = $this->db_next();
@@ -2123,7 +2122,7 @@ class forum_v2 extends class_base
 		$retval = array();
 		if (is_oid($parent))
 		{
-			$q = "SELECT created,createdby FROM objects WHERE parent=" . $parent . " AND class_id = " . CL_MSGBOARD_TOPIC . " AND status != 0 ORDER BY created DESC LIMIT 1";
+			$q = "SELECT forum_topics.author_name as uname,created,createdby FROM objects LEFT JOIN forum_topics ON (objects.oid = forum_topics.aw_oid) WHERE parent=" . $parent . " AND class_id = " . CL_MSGBOARD_TOPIC . " AND status != 0 ORDER BY created DESC LIMIT 1";
 			$this->db_query($q);
 			$retval = $this->db_next();
 		}
