@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.17 2008/01/03 09:00:06 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.18 2008/01/14 12:03:02 robert Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -226,9 +226,10 @@ class aw_object_search extends class_base
 		$tb =& $arr["prop"]["vcl_inst"];
 		$tb->add_button(array(
 			"name" => "delb",
-			"action" => "delete_bms",
+			"url" => "#",
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta"),
+			"onClick" => "check_delete()",
 			"confirm" => t("Oled kindel et soovid valitud objektid kustutada?")
 		));
 		$tb->add_button(array(
@@ -347,6 +348,10 @@ class aw_object_search extends class_base
 		$clss = aw_ini_get("classes");
 		foreach($ol->arr() as $o)
 		{
+			if($o->class_id() == CL_USER)
+			{
+				$this->u_oids[] = $o->id();
+			}
 			if (!$this->can("view", $o->parent()))
 			{
 				$po = obj();
@@ -517,6 +522,18 @@ class aw_object_search extends class_base
 			return false;
 		}
 		return true;
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$ret = "var oids = Array()".chr(13).chr(10);
+		foreach($this->u_oids as $oid)
+		{
+			$ret .= "oids[".$oid."] = ".$oid.chr(13).chr(10);
+		}
+		$this->read_template("scripts.tpl");
+		$ret .= $this->parse();
+		return $ret;
 	}
 
 	function init_search()
