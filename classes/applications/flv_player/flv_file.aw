@@ -267,7 +267,7 @@ class flv_file extends class_base
 			"id" => $o->id(),
 			"action" => "view",
 		));
-		$s_url = str_replace(array ("?", "&"), array( "", "/"), $s_url)."/video.flv";
+		$s_url = str_replace("&", "/", $s_url)."/video.flv";
 		
 		$this->read_template("show.tpl");
 		$this->vars(array(
