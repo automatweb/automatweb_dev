@@ -145,6 +145,15 @@
             <caption>Anon&amp;amp;uuml;&amp;amp;uuml;mse postitamise piiramine</caption>
       </property>
       <property>
+            <name>post_name</name>
+            <table>objects</table>
+            <group>users</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>Postituste autori nimi</caption>
+      </property>
+      <property>
             <name>style_general_subtitle</name>
             <table>objects</table>
             <group>styles</group>

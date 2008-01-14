@@ -25,7 +25,7 @@
 <tr>
 	<td align="center" width="20%" class="{VAR:style_comment_creator}"><div class="{VAR:style_comment_user}">{VAR:createdby}</div>
 <!-- SUB: AVATAR -->
-<img src="{VAR:avatar}" />
+<img src="{VAR:avatar}" /><br />
 <!-- END SUB: AVATAR -->
 <!-- SUB: AGE -->
 <br />Vanus:<br />{VAR:age}
@@ -51,7 +51,17 @@
 </tr>
 <!-- SUB: COMMENT -->
 <tr>
-	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:uname} -- {VAR:uemail}</div><div class="">{VAR:date}</div>
+	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:uname} -- {VAR:uemail}</div>
+<!-- SUB: CAVATAR -->
+<img src="{VAR:avatar}" />
+<!-- END SUB: CAVATAR -->
+<!-- SUB: CAGE -->
+<br />Vanus:<br />{VAR:age}
+<!-- END SUB: CAGE -->
+<!-- SUB: CLOCATION -->
+<br />Asukoht:<br />{VAR:location}
+<!-- END SUB: CLOCATION -->
+<div class="">{VAR:date}</div>
 <!-- SUB: ADMIN_POST -->
 (admin)
 <!-- END SUB: ADMIN_POST -->

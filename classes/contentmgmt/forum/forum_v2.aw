@@ -79,6 +79,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property limit_anonymous_posting type=checkbox ch_value=1
 		@caption Anon&uuml;&uuml;mse postitamise piiramine
 
+		@property post_name type=chooser
+		@caption Postituste autori nimi
+
 @groupinfo look caption="V&auml;limus"
 
 	@groupinfo styles caption="Stiilid" parent=look
@@ -180,6 +183,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property activation type=checkbox ch_value=1
 		@caption Teemade aktiveerimine
+
+		
 
 		@property comments_on_page type=textbox
 		@caption Kommentaare lehel
@@ -364,7 +369,12 @@ class forum_v2 extends class_base
 		//	case "comments_on_page":
 		//		$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
 		//		break;
-
+			case "post_name":
+				$data["options"] = array(
+					0 => "Kasutaja nimi",
+					1 => "Isiku nimi",
+				);
+				break;
 			case "required_fields":
 				$data["options"] = $this->comment_fields;
 				break;
@@ -1495,7 +1505,19 @@ class forum_v2 extends class_base
 						$change_link = $this->parse("CHANGE_LINK");
 					}
 				}
-
+				$pdata = $this->get_user_data($comment["createdby"]);
+				if($pdata)
+				{
+					foreach($pdata as $var => $val)
+					{
+						if($val)
+						{
+							$this->vars(array($var => $val));
+							$tmp = $this->parse("C".strtoupper($var));
+							$this->vars(array("C".strtoupper($var) => $tmp));
+						}
+					}
+				}
 				$this->vars(array(
 					"id" => $comment["oid"],
 					"name" => $comment["name"],
@@ -1807,9 +1829,15 @@ class forum_v2 extends class_base
 				{
 					$pname = $uid;
 				}
-
+				if($args["obj_inst"]->prop("post_name"))
+				{
+					$this->vars(array("author" => $pname));
+				}
+				else
+				{
+					$this->vars(array("author" => $uid));
+				}
 				$this->vars(array(
-					"author" => $uid,
 					"author_pname" => $pname,
 					"author_email" => $user_obj->prop("email"),
 				));
@@ -3008,7 +3036,16 @@ class forum_v2 extends class_base
 			if($obj_inst->prop("show_logged") != 1 && !empty($uid))
 			{
 				$user = obj(aw_global_get("uid_oid"));
-				$arr["author_name"] = $uid;
+				if($obj_inst->prop("post_name"))
+				{
+					$ui = get_instance("CL_USER");
+					$p = obj($ui->get_current_person());
+					$arr["author_name"] = $p->name();
+				}
+				else
+				{
+					$arr["author_name"] = $uid;
+				}
 				$arr["author_email"] = $user->prop("email");
 				// if the logged in user hasn't set his/her email
 				// and it is set, that user can't change his/her data
@@ -3133,8 +3170,17 @@ class forum_v2 extends class_base
 				$uid_oid = users::get_oid_for_uid($uid);
 				$user_obj = new object($uid_oid);
 
-				$arr["uname"] = $uid;
 				$arr["pname"] = $user_obj->name();
+				if($obj_inst->prop("post_name"))
+				{
+					$ui = get_instance("CL_USER");
+					$p = obj($ui->get_current_person());
+					$arr["uname"] = $p->name();
+				}
+				else
+				{
+					$arr["uname"] = $uid;
+				}
 				$arr["uemail"] = $user_obj->prop("email");
 			}
 		}
