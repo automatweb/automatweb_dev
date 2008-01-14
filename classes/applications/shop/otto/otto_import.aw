@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.78 2008/01/11 11:45:36 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.79 2008/01/14 11:24:54 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1014,7 +1014,7 @@ class otto_import extends class_base
 					'name' => 'product_page',
 					'value' => $prod_obj->prop('user18'),
 					'size' => 10
-				)). ' J&auml;rjekord: '.$prod_obj->prop('user9'),
+				)). ' J&auml;rjekord: '.$prod_obj->ord(),
 			));
 
 			// product codes:
