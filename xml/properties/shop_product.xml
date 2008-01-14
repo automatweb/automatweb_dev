@@ -678,23 +678,24 @@
             <type>releditor</type>
             <reltype>RELTYPE_PACKAGING</reltype>
             <props>
-                  <num_0>name</num_0>
-                  <num_1>price</num_1>
-                  <num_2>user1</num_2>
-                  <num_3>user2</num_3>
-                  <num_4>user3</num_4>
-                  <num_5>user4</num_5>
-                  <num_6>user5</num_6>
-                  <num_7>userta1</num_7>
-                  <num_8>userta2</num_8>
-                  <num_9>userta3</num_9>
-                  <num_10>userta4</num_10>
-                  <num_11>userta5</num_11>
-                  <num_12>uservar1</num_12>
-                  <num_13>uservar2</num_13>
-                  <num_14>uservar3</num_14>
-                  <num_15>uservar4</num_15>
-                  <num_16>uservar5</num_16>
+                  <num_0>jrk</num_0>
+                  <num_1>name</num_1>
+                  <num_2>price</num_2>
+                  <num_3>user1</num_3>
+                  <num_4>user2</num_4>
+                  <num_5>user3</num_5>
+                  <num_6>user4</num_6>
+                  <num_7>user5</num_7>
+                  <num_8>userta1</num_8>
+                  <num_9>userta2</num_9>
+                  <num_10>userta3</num_10>
+                  <num_11>userta4</num_11>
+                  <num_12>userta5</num_12>
+                  <num_13>uservar1</num_13>
+                  <num_14>uservar2</num_14>
+                  <num_15>uservar3</num_15>
+                  <num_16>uservar4</num_16>
+                  <num_17>uservar5</num_17>
             </props>
             <mode>manager</mode>
             <field>meta</field>
