@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.24 2007/10/11 11:26:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.25 2008/01/14 11:58:30 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -288,8 +288,13 @@ class auth_config extends class_base
 		@attrib api=1
 
 	**/
-	function check_local_user($auth_id, $cred)
+	function check_local_user($auth_id, &$cred)
 	{
+		$confo = obj($auth_id);
+		if ($confo->prop("aw_user_prefix") != "")
+		{
+			$cred["uid"] = $confo->prop("aw_user_prefix").".".$cred["uid"];
+		}
 		if ($cred["server"] != "")
 		{
 			$cred["uid"] .= ".".$cred["server"];
@@ -321,7 +326,7 @@ class auth_config extends class_base
 		if ($has)
 		{
 			// check e-mail and name if present in $cred
-			if (!empty($cred["mail"]) || !empty($cred["name"]))
+			if (true || !empty($cred["mail"]) || !empty($cred["name"]))
 			{
 				$this->_upd_udata($obo, $cred, $confo);
 			}
@@ -446,7 +451,6 @@ class auth_config extends class_base
 		$u->set_prop("email", $cred["mail"]);
 		$u->set_prop("real_name", $cred["name"]);
 		$u->save();
-
 		// get group from auth conf
 		if (($grp = $confo->prop("no_user_grp")))
 		{

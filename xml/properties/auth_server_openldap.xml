@@ -122,6 +122,15 @@
             <ch_value>1</ch_value>
             <caption>&amp;amp;Auml;ra salvesta AW'sse kasutaja parooli</caption>
       </property>
+      <property>
+            <name>aw_user_prefix</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kasutajanime prefiks</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_AUTH_SERVER_OPENLDAP</syslog_type>
             <relationmgr>yes</relationmgr>

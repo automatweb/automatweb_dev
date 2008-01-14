@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.3 2007/10/31 10:02:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.4 2008/01/14 11:58:30 kristo Exp $
 // auth_server_openldap.aw - Autentimisserver OpenLDAP 
 /*
 
@@ -48,6 +48,9 @@
 
 @property no_save_pwd type=checkbox ch_value=1
 @caption &Auml;ra salvesta AW'sse kasutaja parooli
+
+@property aw_user_prefix type=textbox 
+@caption Kasutajanime prefiks
 
 @reltype GROUP value=2 clid=CL_GROUP
 @caption grupp
@@ -111,7 +114,7 @@ class auth_server_openldap extends class_base
 		return $retval;
 	}	
 
-	function check_auth($server, $credentials, &$conf)
+	function check_auth($server, &$credentials, &$conf)
 	{
 		if (!extension_loaded("ldap"))
 		{
@@ -130,7 +133,14 @@ class auth_server_openldap extends class_base
 			$srv = "ldaps://".$srv;
 		}
 
-		$res = ldap_connect($srv, $server->prop("server_port"));
+		if ($server->prop("server_port"))
+		{
+			$res = ldap_connect($srv, $server->prop("server_port"));
+		}
+		else
+		{
+			$res = ldap_connect($srv);
+		}
 		if (!$res)
 		{
 			return array(false, sprintf(t("Ei saanud &uuml;hendust LDAP serveriga %s"), $server->prop("server")));
@@ -140,12 +150,11 @@ class auth_server_openldap extends class_base
 		$uid = $credentials["uid"];
 
 		$break = false;
-		$bind = @ldap_bind($res, "uid=".$uid.",".$server->prop("ad_base_dn"), md5($credentials["password"]));
+		$bind = ldap_bind($res, "uid=".$uid.",".$server->prop("ad_base_dn"), md5($credentials["password"]));
 		if (!$bind)
 		{
-			$bind = @ldap_bind($res, "uid=".$uid.",".$server->prop("ad_base_dn"), $credentials["password"]);
+			$bind = ldap_bind($res, "uid=".$uid.",".$server->prop("ad_base_dn"), $credentials["password"]);
 		}
-		
 		if ($bind)
 		{
 			$grp = $server->prop("ad_grp_txt");
@@ -185,8 +194,14 @@ class auth_server_openldap extends class_base
 		{
 			$srv = "ldaps://".$srv;
 		}
-		$res = ldap_connect($srv, $o->prop("server_port"));
-		
+		if ($o->prop("server_port"))
+		{
+			$res = ldap_connect($srv, $o->prop("server_port"));
+		}
+		else
+		{
+			$res = ldap_connect($srv);
+		}
 		if (!$res)
 		{
 			$this->last_error = t("Ei saanud serveriga &uuml;hendust!");
@@ -232,12 +247,11 @@ class auth_server_openldap extends class_base
 		// check members
 		for($a = 0; $a < $info[0]["memberuid"]["count"]; $a++)
 		{
-			if ($un == $info[0]["memberuid"][$a])
+			if ($cred["uid"] == $info[0]["memberuid"][$a])
 			{
 				return true;
 			}
 		}
-
 		return $ret;
 	}
 
