@@ -766,6 +766,14 @@ class class_base extends aw_template
 			$this->inst->callback_mod_reforb(&$argblock,$this->request);
 		};
 
+		if(is_array($GLOBALS["add_mod_reforb"])) // et saaks mõnest x kohast veel välju juurde, näiteks mingist komponendist
+		{
+			foreach($GLOBALS["add_mod_reforb"] as $key => $val)
+			{
+				$argblock[$key] = $val;
+			}
+		}
+
 		if (is_array($this->_do_call_vcl_mod_reforbs))
 		{
 			foreach($this->_do_call_vcl_mod_reforbs as $vcl_mro)
@@ -6232,5 +6240,180 @@ class class_base extends aw_template
 			}
 		}
 	}
+
+//--------------- mailiga teavitamise komponentide orb funktsuoonid------------
+//tõenäoliselt koristab need ära kui parema mooduse leiab kuda neid hoida
+	/**
+		@attrib name=co_autocomplete_source
+		@param sp_p_co optional
+	**/
+	function co_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => $arr["sp_p_co"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 100
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
+	/**
+		@attrib name=p_autocomplete_source
+		@param sp_p_p optional
+	**/
+	function p_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"name" => $arr["sp_p_p"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
+	/**
+		@attrib name=add_s_res_to_p_list
+	**/
+	function add_s_res_to_p_list($arr)
+	{
+		$o = obj($arr["id"]);
+		$persons = $o->meta("imp_p");
+		foreach(safe_array($arr["sel"]) as $p_id)
+		{
+			$persons[aw_global_get("uid")][$p_id] = $p_id;
+		}
+		$o->set_meta("imp_p", $persons);
+		$o->set_meta("sp_from" , $arr["mail_notify_from"]);
+		$o->set_meta("sp_subject" , $arr["mail_notify_subject"]);
+		$o->set_meta("sp_content" , $arr["mail_notify_content"]);
+		$o->save();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=remove_p_from_l_list
+	**/
+	function remove_p_from_l_list($arr)
+	{
+		$o = obj($arr["id"]);
+		$persons = $o->meta("imp_p");
+		foreach(safe_array($arr["sel"]) as $p_id)
+		{
+			unset($persons[aw_global_get("uid")][$p_id]);
+		}
+		$o->set_meta("imp_p", $persons);
+		$o->save();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=send_notify_mail
+	**/
+	function send_notify_mail($arr)
+	{
+		$o = obj($arr["id"]);
+		$ppl = $this->get_people_list($o);
+		foreach($ppl as $oid => $nm)
+		{
+			$u = get_instance(CL_USER);
+			$person = $u->get_person_for_uid(aw_global_get("uid"));
+			$user_name = "";
+			if(is_object($person))
+			{
+				$user_name = $person->name();
+			}
+			
+			if(!$o->prop("sp_content"))
+			{
+				$message = sprintf(t("User %s has added/changed the following file %s. Please click the link below to view the document \n %s"), $user_name , $o->name(), html::get_change_url($o->id()));
+			}
+			else
+			{
+				$message = $o->prop("sp_content");
+
+				$replace_vars = array(
+					"#file#" => $o->name(),
+					"#file_url#" => html::get_change_url($o->id()),
+					"#user_name#" => $user_name,
+				);
+				foreach($replace_vars as $var => $val)
+				{
+					$message = str_replace($var, $val , $message);
+				}
+			}
+
+			if(!$o->prop("sst"))
+			{
+				$subject = t("Teavitus muutunud dokumendist");
+			}
+			else
+			{
+				$subject = $o->prop("sp_subject");
+			}
+
+			if(!$o->prop("sp_from"))
+			{
+				$from = "From: ".aw_ini_get("baseurl");
+			}
+			else
+			{
+				$from = $o->prop("sp_from");
+			}
+
+			$p = obj($oid);
+			$email = $p->prop("email.mail");
+			send_mail(
+				$email,
+				$subject,
+				$message,
+				$from
+			);
+		}
+		return $arr["post_ru"];
+	}
+
+	function _sp_s_res($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_p_tbl($t);
+		if ($arr["request"]["sp_p_name"] != "" || $arr["request"]["sp_p_co"] != "")
+		{
+			$param = array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => "%".$arr["request"]["sp_p_name"]."%"
+			);
+			if ($arr["request"]["sp_p_co"] != "")
+			{
+				$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
+			}
+			$ol = new object_list($param);
+			foreach($ol->arr() as $p)
+			{
+				$t->define_data(array(
+					"name" => html::obj_change_url($p),
+					"co" => html::obj_change_url($p->prop("work_contact")),
+					"phone" => $p->prop("phone.name"),
+					"email" => html::href(array("url" => "mailto:".$p->prop("email.mail"),"caption" => $p->prop("email.mail"))),
+					"oid" => $p->id()
+				));
+			}
+		}
+	}
+
+//----------------- END mailiga teavitamise komponentide orb funktsuoonid----------
+
+
 }
 ?>
