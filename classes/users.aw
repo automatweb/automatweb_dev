@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.185 2007/12/12 12:37:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.186 2008/01/16 08:51:10 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1039,7 +1039,12 @@ class users extends users_user
 					if (is_array($ar2) && $ar2[$lang_id])
 					{
 						aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
-						aw_ini_set("ini_rootmenu", aw_ini_get("rootmenu"));
+						$inrm = aw_ini_get("ini_rootmenu");
+						if (!$inrm)
+						{
+							$inrm = aw_ini_get("rootmenu");
+						}
+						aw_ini_set("ini_rootmenu", $inrm);
 						aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
 					}
 					if (is_array($gf) && $gf[$lang_id])
@@ -1063,7 +1068,12 @@ class users extends users_user
 					if (is_array($ar2) && $ar2[$lang_id])
 					{
 						aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
-						aw_ini_set("ini_rootmenu", aw_ini_get("rootmenu"));
+						$inrm = aw_ini_get("ini_rootmenu");
+						if (!$inrm)
+						{
+							$inrm = aw_ini_get("rootmenu");
+						}
+						aw_ini_set("ini_rootmenu", $inrm);
 						aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
 					}
 					if (is_array($gf) && $gf[$lang_id])
