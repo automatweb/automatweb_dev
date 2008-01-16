@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.76 2007/11/23 14:14:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.77 2008/01/16 14:24:53 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -82,6 +82,8 @@ class room_reservation extends class_base
 			"hansapanklt" => "LT-Hansasabankas",
 		);
 		$this->banks = $this->banks + $this->bank_inst->banks;
+
+		$this->obligatory = array("name","phone","email");
 
 		$this->trans_props = array(
 			"revoke_url"
@@ -379,6 +381,23 @@ class room_reservation extends class_base
 		}
 		$levels = $targ->meta("levels");
 		$this->vars($this->get_level_urls($levels));
+
+		//teeb viimasel vaatel testi, et kas kõik kohustulslikud on täidetud
+		$last_l = max(array_keys($levels));
+		if($last_l - 1 == $level)
+		{
+			foreach($this->obligatory as $obl)
+			if(!array_key_exists($obl , $_SESSION["room_reservation"][$room->id()]))
+			{
+				$_SESSION["room_reservation"][$room->id()][$obl] = "";
+			}//keegi võis tark olla ja mööda hiilida viimasele lehele, et kui mõndasi muutujaid ei ole siis täidab kohustulsikud väljad tühjade väärtustega enne kontrolli
+			if($err = $this->check_fields($_SESSION["room_reservation"][$room->id()]))
+			{
+				$_SESSION["room_reservation"][$room->id()]["stay"] = 1;
+				$_SESSION["room_reservation"][$room->id()]["errors"] = $err;
+			}
+		}
+
 		if(!$_SESSION["room_reservation"][$room->id()]["stay"])
 		{
 			if(!isset($level))
@@ -1021,11 +1040,12 @@ class room_reservation extends class_base
 		foreach($_POST as $key=>$val)
 		{
 			$_SESSION["room_reservation"][$room][$key] = $val;
-			if($err = $this->check_fields($_POST))
-			{
-				$_SESSION["room_reservation"][$room]["stay"] = 1;
-				$_SESSION["room_reservation"][$room]["errors"] = $err;
-			}
+		}
+
+		if($err = $this->check_fields($_POST))
+		{
+			$_SESSION["room_reservation"][$room]["stay"] = 1;
+			$_SESSION["room_reservation"][$room]["errors"] = $err;
 		}
 	}
 
