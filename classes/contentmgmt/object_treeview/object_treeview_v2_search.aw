@@ -406,6 +406,12 @@ class object_treeview_v2_search extends class_base
 		$res = $this->get_search_results($arr["obj_inst"], $arr["request"]);
 		foreach($res as $row)
 		{
+			$row["modifiedby"] = $row["modder"];
+			$row["createdby"] = $row["adder"];
+			$row["modified"] = date("d.m.Y H:i", $row["mod_date"]);
+			$row["created"] = date("d.m.Y H:i", $row["add_date"]);
+			$row["size"] = $row["fileSizeKBytes"] . " kb";
+
 			$t->define_data($row);
 		}
 	}
