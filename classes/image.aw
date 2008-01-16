@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.217 2008/01/07 10:22:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.218 2008/01/16 09:10:20 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1
@@ -491,16 +491,16 @@ class image extends class_base
 					}
 					if ($idata["comment"] != "" || $authortxt != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'/></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
 					}
 					else
 					if ($vars["align"] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'/></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
 					}
 					else
 					{
-						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'/></a>", $idata["link"], $vars["target"], $idata["url"]);
+						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a>", $idata["link"], $vars["target"], $idata["url"]);
 					}
 				};
 			}
