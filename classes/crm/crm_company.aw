@@ -821,7 +821,7 @@ default group=org_objects
 
 
 
-@default group=my_tasks,meetings,calls,ovrv_offers,all_actions,ovrv_mails,documents_all_manage
+@default group=my_tasks,meetings,calls,ovrv_offers,all_actions,ovrv_mails,documents_all_manage,bugs
 
 	@property my_tasks_tb type=toolbar store=no no_caption=1
 
@@ -831,10 +831,10 @@ default group=org_objects
 
 			@layout act_s_dl_layout_top type=vbox parent=all_act_search
 
-			@property act_s_cust type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage
+			@property act_s_cust type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
 			@caption Klient
 
-			@property act_s_part type=text size=30 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage
+			@property act_s_part type=text size=30 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
 			@caption Osaleja
 
 			@property act_s_cal_name type=text size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage
@@ -855,15 +855,15 @@ default group=org_objects
 			@property act_s_code type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,documents_all_manage
 			@caption Toimetuse kood
 
-			@property act_s_proj_name type=textbox size=18 parent=all_act_search store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage
+			@property act_s_proj_name type=textbox size=18 parent=all_act_search store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
 			@caption Projekti nimi
 
 			@layout act_s_dl_layout type=vbox parent=all_act_search
 
-				@property act_s_dl_from type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage
+				@property act_s_dl_from type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
 				@caption T&auml;htaeg alates
 
-				@property act_s_dl_to type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage
+				@property act_s_dl_to type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
 				@caption T&auml;htaeg kuni
 
 			@property act_s_status type=chooser parent=all_act_search store=no captionside=top
@@ -872,10 +872,10 @@ default group=org_objects
 			@property act_s_print_view type=checkbox parent=all_act_search store=no captionside=top ch_value=1 no_caption=1
 			@caption Printvaade
 
-			@property act_s_sbt type=submit  parent=all_act_search no_caption=1 group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails,documents_all_manage
+			@property act_s_sbt type=submit  parent=all_act_search no_caption=1 group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails,documents_all_manage,bugs
 			@caption Otsi
 
-		@property my_tasks type=table store=no no_caption=1 parent=my_tasks group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails,documents_all_manage
+		@property my_tasks type=table store=no no_caption=1 parent=my_tasks group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails,documents_all_manage,bugs
 		@property my_tasks_cal type=calendar store=no no_caption=1 parent=my_tasks
 
 @default group=ovrv_email
@@ -1107,6 +1107,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo my_tasks caption="Toimetused" parent=overview submit=no save=no
 	@groupinfo meetings caption="Kohtumised" parent=overview submit=no save=no
 	@groupinfo calls caption="K&otilde;ned" parent=overview submit=no save=no
+	@groupinfo bugs caption="Bugid" parent=overview submit=no save=no
 	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no save=no
 	@groupinfo ovrv_email caption="Meilid" parent=overview submit=no save=no
 	@groupinfo ovrv_mails caption="Meilikast" parent=overview submit=no save=no
@@ -2401,6 +2402,7 @@ class crm_company extends class_base
 			case "org_calls":
 			case "org_meetings":
 			case "org_tasks":
+			case "org_bugs":
 			case "tasks_call":
 			case "my_tasks_tb":
 			case "act_s_part":
@@ -4898,6 +4900,23 @@ class crm_company extends class_base
 		return $ret;
 	}
 
+	function get_my_bugs()
+	{
+		$u = get_instance(CL_USER);
+		$c = new connection();
+		$cs = $c->find(array(
+			"to" => $u->get_current_person(),
+			"from.class_id" => CL_BUG,
+			"type" => "RELTYPE_MONITOR",
+		));
+		$ret = array();
+		foreach($cs as $c)
+		{
+			$ret[] = $c["from"];
+		}
+		return $ret;
+	}
+
 	function get_my_offers()
 	{
 		$u = get_instance(CL_USER);
@@ -4930,6 +4949,19 @@ class crm_company extends class_base
 			if ($this->can("view", $c["to"]))
 			{
 				$ret[] = $c["to"];
+			}
+		}
+		$c = new connection();
+		$cs2 = $c->find(array(
+			"to" => $u->get_current_person(),
+			"from.class_id" => CL_BUG,
+			"type" => "RELTYPE_MONITOR",
+		));
+		foreach($cs2 as $c2)
+		{
+			if ($this->can("view", $c2["from"]))
+			{
+				$ret[] = $c2["from"];
 			}
 		}
 		foreach($this->get_my_offers() as $ofid)

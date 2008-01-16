@@ -148,6 +148,10 @@ class crm_company_overview_impl extends class_base
 
 		foreach($evts as $obj_id)
 		{
+			if(!$this->can("view", $obj_id))
+			{
+				continue;
+			}
 			$item = new object($obj_id);
 			// relative needs last n and next m items, those might be 
 			// outside of the current range
@@ -163,6 +167,11 @@ class crm_company_overview_impl extends class_base
 				$bd = $item->prop("birthday");
 				list($y, $m, $d) = explode("-", $bd);
 				$date = mktime($ds["hour"], $ds["minute"], 0, $m, $d, date("Y"));
+			}
+			else
+			if($item->class_id() == CL_BUG)
+			{
+				$date  = $item->prop("deadline");
 			}
 
 			// if this thing has recurrences attached, then stick those in there
@@ -207,6 +216,13 @@ class crm_company_overview_impl extends class_base
 					"id" => $item->id(),
 					"return_url" => $return_url,
 				),CL_CRM_PERSON);
+			}
+			if($item->class_id() == CL_BUG)
+			{
+				$link = $this->mk_my_orb("change", array(
+					"id" => $item->id(),
+					"return_url" => $return_url,
+				), CL_BUG);
 			}
 			else
 			{
@@ -789,7 +805,7 @@ class crm_company_overview_impl extends class_base
 				"deadline" => $dl,
 				"end" => $task->prop("end"),
 				"oid" => $task->id(),
-				"priority" => $task->prop("priority"),
+				"priority" => ($task->class_id()==CL_BUG)? $task->prop("bug_priority"): $task->prop("priority"),
 				"col" => $col,
 				"parts" => join(", ", $ns),
 				"menu" => $pm->get_menu(),
@@ -862,7 +878,6 @@ class crm_company_overview_impl extends class_base
 		{
 			$def = $clss[$clid]["def"];
 		}
-	
 		if ($r["act_s_cust"] != "")
 		{
 			$str_filt = $this->_get_string_filt($r["act_s_cust"]);
@@ -873,6 +888,16 @@ class crm_company_overview_impl extends class_base
 					"conditions" => array(
 						$def.".document(CL_CRM_DEAL).customer.name" => $str_filt,
 						$def.".document(CL_CRM_MEMO).customer.name" => $str_filt	
+					)
+				));
+			}
+			elseif(is_array($clid))
+			{
+				$res[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_BUG.customer(CL_CRM_COMPANY).name" => $str_filt,	
+						$def.".customer(CL_CRM_COMPANY).name" => $str_filt	
 					)
 				));
 			}
@@ -939,6 +964,11 @@ class crm_company_overview_impl extends class_base
 				$res["CL_CRM_OFFER.RELTYPE_SALESMAN.name"] = $str_filt; //map("%%%s%%", explode(",", $r["act_s_part"]));
 			}
 			else
+			if($clid == CL_BUG)
+			{
+				$res["CL_BUG.RELTYPE_MONITOR.name"] = $str_filt;
+			}
+			else
 			{
 				// since someone stupidly decided that task participant relations are FROM person TO task, not the other way around (duh)
 				// we need to select all tasks here and the pass the oids to the rest of the filter
@@ -971,7 +1001,19 @@ class crm_company_overview_impl extends class_base
 							$oids[] = $con["to"];
 						}
 					}
-
+					$conns2 = $c->find(array(
+						"to" => $persons->ids(),
+						"to.class_id" => CL_CRM_PERSON,
+						"type" => "RELTYPE_MONITOR",
+						"from.class_id" => CL_BUG,
+					));
+					foreach($conns2 as $con)
+					{
+						if (!isset($res["oid"]) || !isset($res["oid"][$con["from"]]))
+						{
+							$oids[] = $con["from"];
+						}
+					}
 					if (count($oids))
 					{
 						$_res["oid"] = $oids;
@@ -999,7 +1041,6 @@ class crm_company_overview_impl extends class_base
 				}
 			}
 		}
-
 		if ($r["act_s_task_name"] != "")
 		{
 			$str_filt = $this->_get_string_filt($r["act_s_task_name"]);
@@ -1033,7 +1074,8 @@ class crm_company_overview_impl extends class_base
 						"content" => $str_filt, //"%".$r["act_s_task_content"]."%",
 						"summary" => $str_filt, //"%".$r["act_s_task_content"]."%",
 						"CL_TASK.RELTYPE_ROW.content" => $str_filt, //"%".$r["act_s_task_content"]."%",
-						"CL_CRM_MEETING.content" => $str_filt
+						"CL_CRM_MEETING.content" => $str_filt,
+						"CL_BUG.bug_content" => $str_filt
 					)
 				));
 			}
@@ -1061,6 +1103,16 @@ class crm_company_overview_impl extends class_base
 			{
 				$res[$def.".document.project.name"] = $str_filt; //"%".$r["act_s_proj_name"]."%";
 			}
+			elseif(is_array($clid))
+			{
+				$res[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_BUG.project(CL_PROJECT).name" => $str_filt,	
+						$def.".project(CL_PROJECT).name" => $str_filt	
+					)
+				));
+			}
 			else
 			{
 				$res[$def.".project(CL_PROJECT).name"] = $str_filt;  //"%".$r["act_s_proj_name"]."%";
@@ -1080,7 +1132,7 @@ class crm_company_overview_impl extends class_base
 
 		if (is_array($clid))
 		{
-			$dls = array("deadline", "start1");
+			$dls = array("deadline", "start1", "CL_BUG.deadline");
 			$cond = array();
 			foreach($dls as $dl)
 			{
@@ -1121,7 +1173,6 @@ class crm_company_overview_impl extends class_base
 				$res[$dl] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["act_s_dl_to"]);
 			}
 		}
-
 		if ($r["act_s_status"] > 0 && $r["act_s_status"] < 3)
 		{
 			if ($clid == CL_CRM_DOCUMENT_ACTION)
@@ -1382,6 +1433,27 @@ class crm_company_overview_impl extends class_base
 					}
 				}
 				break;
+
+			case "bugs":
+				$clid = CL_BUG;
+				if ($co == $arr["obj_inst"]->id())
+				{
+					$tasks = $i->get_my_bugs(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
+					
+				}
+				else
+				{
+					$ol = new object_list($arr["obj_inst"]->connections_to(array(
+						"type" => "RELTYPE_CUSTOMER",
+						"from.class_id" => CL_BUG,
+					)));
+					$tasks = $this->make_keys($ol->ids());
+					if (!count($tasks))
+					{
+						$tasks = array(-1);
+					}
+				}
+				break;
 			case "meetings":
 				
 				$clid = CL_CRM_MEETING;
@@ -1509,7 +1581,7 @@ class crm_company_overview_impl extends class_base
 				break;
 
 			default:
-				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER, CL_BUG);
 
 				if ($co == $arr["obj_inst"]->id())
 				{
@@ -1872,6 +1944,16 @@ class crm_company_overview_impl extends class_base
 		{
 			$ol = new object_list(array("oid" => $plist, "site_id" => array(), "lang_id" => array()));
 			$ol->arr();
+		}
+		$conns = $c->find(array(
+			"from.class_id" => CL_BUG,
+			"from" => $tasks,
+			"type" => "RELTYPE_MONITOR",
+			"to.class_id" => CL_CRM_PERSON
+		));
+		foreach($conns as $conn)
+		{
+			$ret[$conn["from"]][$conn["to"]] = $conn["to"];
 		}
 		return $ret;
 	}

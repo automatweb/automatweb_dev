@@ -2283,26 +2283,6 @@
             <field>bs_tb</field>
       </property>
       <property>
-            <name>bill_payments_tb</name>
-            <table>objects</table>
-            <group>bill_payments</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>bill_payments_tb</field>
-            <caption>Laekumiste toolbar</caption>
-      </property>
-      <property>
-            <name>bill_payments_table</name>
-            <table>objects</table>
-            <group>bill_payments</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>bill_payments_table</field>
-            <caption>Laekumiste tabel</caption>
-      </property>
-      <property>
             <name>bills_tb</name>
             <table>objects</table>
             <group>bills_list</group>
@@ -2402,18 +2382,6 @@
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>bill_s_with_tax</name>
-            <table>objects</table>
-            <group>bills_list</group>
-            <type>chooser</type>
-            <store>no</store>
-            <parent>bills_list_s</parent>
-            <captionside>top</captionside>
-            <no_caption>1</no_caption>
-            <field>bill_s_with_tax</field>
-            <caption>K&amp;amp;auml;ibemaksuta/K&amp;amp;auml;ibemaksuga</caption>
-      </property>
-      <property>
             <name>bill_s_search</name>
             <table>objects</table>
             <group>bills_list</group>
@@ -2449,6 +2417,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>toolbar</type>
             <store>no</store>
@@ -2466,6 +2435,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2486,6 +2456,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>text</type>
             <size>30</size>
@@ -2526,6 +2497,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2546,6 +2518,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2566,6 +2539,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2586,6 +2560,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2625,6 +2600,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2645,6 +2621,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>date_select</type>
             <store>no</store>
@@ -2669,6 +2646,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>date_select</type>
             <store>no</store>
@@ -2693,6 +2671,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>chooser</type>
             <parent>all_act_search</parent>
@@ -2712,6 +2691,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>checkbox</type>
             <parent>all_act_search</parent>
@@ -2734,6 +2714,7 @@
                   <num_5>bills_search</num_5>
                   <num_6>ovrv_mails</num_6>
                   <num_7>documents_all_manage</num_7>
+                  <num_8>bugs</num_8>
             </group>
             <type>submit</type>
             <parent>all_act_search</parent>
@@ -2754,6 +2735,7 @@
                   <num_5>bills_search</num_5>
                   <num_6>ovrv_mails</num_6>
                   <num_7>documents_all_manage</num_7>
+                  <num_8>bugs</num_8>
             </group>
             <type>table</type>
             <store>no</store>
@@ -2772,6 +2754,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
                   <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
             </group>
             <type>calendar</type>
             <store>no</store>
@@ -3478,6 +3461,12 @@
                   <submit>no</submit>
                   <save>no</save>
             </calls>
+            <bugs>
+                  <caption>Bugid</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </bugs>
             <ovrv_offers>
                   <caption>Dokumendihaldus</caption>
                   <parent>overview</parent>
@@ -3641,12 +3630,6 @@
                   <submit>no</submit>
                   <save>no</save>
             </bills_create>
-            <bill_payments>
-                  <parent>bills</parent>
-                  <caption>Laekumised</caption>
-                  <submit>no</submit>
-                  <save>no</save>
-            </bill_payments>
             <stats>
                   <caption>Aruanded</caption>
                   <save>no</save>
@@ -4557,6 +4540,7 @@
                         <num_4>all_actions</num_4>
                         <num_5>ovrv_mails</num_5>
                         <num_6>documents_all_manage</num_6>
+                        <num_7>bugs</num_7>
                   </group>
                   <area_caption></area_caption>
             </my_tasks>
@@ -4573,6 +4557,7 @@
                         <num_4>all_actions</num_4>
                         <num_5>ovrv_mails</num_5>
                         <num_6>documents_all_manage</num_6>
+                        <num_7>bugs</num_7>
                   </group>
             </all_act_search>
             <act_s_dl_layout_top>
@@ -4586,6 +4571,7 @@
                         <num_4>all_actions</num_4>
                         <num_5>ovrv_mails</num_5>
                         <num_6>documents_all_manage</num_6>
+                        <num_7>bugs</num_7>
                   </group>
                   <area_caption></area_caption>
             </act_s_dl_layout_top>
@@ -4600,6 +4586,7 @@
                         <num_4>all_actions</num_4>
                         <num_5>ovrv_mails</num_5>
                         <num_6>documents_all_manage</num_6>
+                        <num_7>bugs</num_7>
                   </group>
                   <area_caption></area_caption>
             </act_s_dl_layout>
