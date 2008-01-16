@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.114 2008/01/16 19:05:29 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.115 2008/01/16 19:19:27 voldemar Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -74,6 +74,9 @@
 
 @property hide_content_table_by_default type=checkbox ch_value=1
 @caption Vaikimisi &auml;ra n&auml;ita sisu tabelit
+
+@property show_empty_table_header type=checkbox ch_value=1
+@caption N&auml;ita t&uuml;hja tabeli p&auml;ist
 
 @property tree_type type=chooser default=TREE_DHTML
 @caption Puu n&auml;itamise meetod
@@ -1109,7 +1112,7 @@ class object_treeview_v2 extends class_base
 			{
 				$udef_cols = $col_list;
 			}
-			if ((($ih_ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char'])) || empty($ol))
+			if (!$ob->prop("show_empty_table_header") and ((($ih_ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char'])) || empty($ol)))
 			{
 
 			}
