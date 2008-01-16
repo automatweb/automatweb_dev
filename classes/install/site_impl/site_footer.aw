@@ -38,6 +38,15 @@ else
 	$str = $sf->parse();
 }
 
+if (aw_ini_get("content.doctype") == "html" )
+{
+	$str = str_replace  ( "<br />", "<br>", $str);
+}
+else if (aw_ini_get("content.doctype") == "xhtml" )
+{
+	$str = str_replace  ( "<br>", "<br />", $str);
+}
+
 if (aw_ini_get("content.compress") == 1)
 {
 	ob_start( 'ob_gzhandler' );
