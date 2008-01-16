@@ -83,6 +83,8 @@ class smtp extends aw_template
 	function read_response()
 	{
 		$line = fgets($this->fp, 512);
+echo "read <pre>$line</pre> <br>\n";
+flush();
 		return $line;
 	}
 
@@ -99,6 +101,8 @@ class smtp extends aw_template
 
 	function send_command($cmdstr)
 	{
+echo "send <pre>$cmdstr</pre> <br>\n";
+flush();
 		fputs($this->fp, $cmdstr."\n");
 	}
 };

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.247 2007/12/28 12:55:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.248 2008/01/16 10:23:19 kristo Exp $
 // defs.aw - common functions
 if (!defined("DEFS"))
 {
@@ -337,26 +337,38 @@ if (!defined("DEFS"))
 	**/
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")
 	{
-		
 		if (!is_email($to))
 		{
 			return;
 		}
-		if (empty($arguments))
+		if (aw_ini_get("mail.use_smtp"))
 		{
-			$arguments = aw_ini_get("mail.arguments");
-		};
-		// from the PHP manual: Since PHP 4.2.3 this parameter is disabled in safe_mode  and the mail()
-		// function will expose a warning message and return FALSE if you're trying to use it.
-		if ((bool)ini_get("safe_mode"))
-		{
-			mail($to,$subject,$msg,$headers);
+			preg_match("/From\: (.*)/im", $headers, $mt);
+			$smtp = get_instance("protocols/mail/smtp");
+			$smtp->send_message(
+				aw_ini_get("mail.smtp_server"),
+				$mt[1],
+				$to,
+				$headers."\nX-Mailer: AutomatWeb\nTo: $to\nSubject: ".$subject."\n\n".$msg
+			);
 		}
 		else
 		{
-			mail($to,$subject,$msg,$headers,$arguments);
-
-		};
+			if (empty($arguments))
+			{
+				$arguments = aw_ini_get("mail.arguments");
+			};
+			// from the PHP manual: Since PHP 4.2.3 this parameter is disabled in safe_mode  and the mail()
+			// function will expose a warning message and return FALSE if you're trying to use it.
+			if ((bool)ini_get("safe_mode"))
+			{
+				mail($to,$subject,$msg,$headers);
+			}
+			else
+			{
+				mail($to,$subject,$msg,$headers,$arguments);
+			};
+		}
 	}
 
 	/** returns an array of all classes defined in the system
