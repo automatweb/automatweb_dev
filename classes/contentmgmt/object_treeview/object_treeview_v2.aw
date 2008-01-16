@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.113 2008/01/03 09:22:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.114 2008/01/16 19:05:29 voldemar Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -700,6 +700,44 @@ class object_treeview_v2 extends class_base
 			}
 		}
 
+		// get folders parent for folders section caption
+		$folders_parent_caption = "";
+
+		foreach ($fld as $id => $data)
+		{
+			if (!array_key_exists($data["parent"], $fld))
+			{
+				$tmp = obj($id);
+				$tmp = obj($tmp->parent());
+				$folders_parent_caption = $tmp->name();
+				break;
+			}
+		}
+
+		// make yah -- top parent in tree to current selection
+		$yah = t("");
+
+		if (is_oid($_GET["tv_sel"]) and array_key_exists($_GET["tv_sel"], $fld))
+		{
+			$yah_data = array();
+			$current = obj($_GET["tv_sel"]);
+
+			do
+			{
+				$yah_data[] = $current->name();
+				$current = obj($current->parent());
+			}
+			while (array_key_exists($current->id(), $fld));
+
+			$yah_data = array_reverse($yah_data);
+			$yah = implode(" / ", $yah_data);
+		}
+		elseif (!empty($_GET["s"]))
+		{
+			$yah = t("Search results");
+		}
+
+		//
 		$fld_str = "";
 		if ($tree_type == 'TREE_COMBINED')
 		{
@@ -730,8 +768,6 @@ class object_treeview_v2 extends class_base
 					$class2cfgform[$addtype->prop("type")] = $addtype->prop("use_cfgform");
 				}
 			}
-
-			// XXX
 
 			// ok, lets get those fields - aw datasource object seems to give me full prop info too
 			if (method_exists($d_inst, "get_fields"))
@@ -984,30 +1020,6 @@ class object_treeview_v2 extends class_base
 					$c .= $this->parse("FILE_GROUP");
 				}
 
-				if (0)
-				{
-					// get file size
-					$fname = $this->check_file_path($arr["obj_inst"]->prop("file"));
-
-					if (is_file($fname))
-					{
-						$size = @filesize($file);
-
-						if ($size > 1024)
-						{
-							$filesize = number_format($size / 1024, 2)."kb";
-						}
-						elseif ($size > (1024*1024))
-						{
-							$filesize = number_format($size / (1024*1024), 2)."mb";
-						}
-						else
-						{
-							$filesize = $size." b";
-						}
-					}
-				}
-
 				$c .= $this->_do_parse_file_line($odata, $d_inst, $d_o, array(
 					"tree_obj" => $ob,
 					"tree_obj_ih" => $ih_ob,
@@ -1019,8 +1031,8 @@ class object_treeview_v2 extends class_base
 					"sel_columns_full_prop_info" => $sel_columns_full_prop_info,
 				));
 				$group_name = $odata[$group_field];
-
 			}
+
 			$tb = "";
 			$no_tb = "";
 			if ($ih_ob->prop("show_add"))
@@ -1166,6 +1178,8 @@ class object_treeview_v2 extends class_base
 		}
 
 		$this->vars(array(
+			"yah" => $yah,
+			"folders_parent_caption" => $folders_parent_caption,
 			"FOLDERS" => $fld_str,
 			"TABLE" => $table
 		));
@@ -1554,17 +1568,17 @@ class object_treeview_v2 extends class_base
 		switch ($tree_type)
 		{
 			case "TREE_TABLE":
-
 				classload("vcl/table");
-
 				$table = new vcl_table();
 				$cols_count = $ih_ob->prop("folders_table_column_count");
 				if (empty($cols_count))
 				{
 					$cols_count = 2;
 				}
+
 				$folders_count = count($folders);
 				$folders_count_in_col = ceil($folders_count / $cols_count);
+
 				for ($i = 0; $i < $cols_count; $i++)
 				{
 					$table->define_field(array(
@@ -1572,8 +1586,10 @@ class object_treeview_v2 extends class_base
 						"caption" => t("&nbsp;"),
 					));
 				}
+
 				$folders[$_GET['tv_sel']]['name'] = "<strong>".$folders[$_GET['tv_sel']]['name']."</strong>";
 				$tmp_fld = array_chunk($folders, $folders_count_in_col);
+
 				for ($i = 0; $i < $folders_count_in_col; $i++)
 				{
 					$row = array();
@@ -1586,9 +1602,10 @@ class object_treeview_v2 extends class_base
 					}
 					$table->define_data($row);
 				}
+
 				exit_function("object_treeview_v2::_draw_folders");
 				return $table->draw();
-				break;
+
 			case "TREE_DHTML":
 				classload("core/icons");
 				// use treeview widget
@@ -1605,7 +1622,6 @@ class object_treeview_v2 extends class_base
 				// now, insert all folders defined
 				foreach($folders as $fld)
 				{
-
 					$tv->add_item($fld["parent"], array(
 						"id" => $fld["id"],
 						"name" => $fld["name"],
@@ -1617,20 +1633,12 @@ class object_treeview_v2 extends class_base
 						)
 					));
 				}
+
 				$tv->set_selected_item($_GET["tv_sel"]);
-
 				$pms = array();
-
-// this one here needs to be commented out ... maybe ... at least it was commented out - until return
-		/*if (isset($GLOBALS["class"]))
-		{
-			$pms["rootnode"] = aw_global_get("section");
-		}*/
-
 				exit_function("object_treeview_v2::_draw_folders");
 				return $tv->finalize_tree($pms);
-				break;
-			}
+		}
 	}
 
 	function _get_add_toolbar($ob, $drv = NULL)
