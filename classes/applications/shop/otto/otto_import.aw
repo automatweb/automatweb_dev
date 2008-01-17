@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.79 2008/01/14 11:24:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.80 2008/01/17 02:19:42 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1103,6 +1103,19 @@ class otto_import extends class_base
 					'name' => 'new_picture',
 				)),
 			));
+
+
+			// pakendid:
+			/*
+			foreach($prod_obj->connections_from(array("type" => "RELTYPE_PACKAGING", "sort_by" => "to.user6")) as $c)
+			{
+				$p = $c->to();
+				$t->define_data(array(
+					'caption' => $p->name(),
+					'data' => $p->prop('user6').' / '.$p->prop('user7').' / '.$p->prop('user8').' / '.$p->prop('user5').' / '.$p->prop('price'),
+				));
+			}
+			*/
 		}
 		return PROP_OK;
 	}
@@ -3157,7 +3170,8 @@ arr('---------------------------------------------------------------');
 				$colors[] = $value['color'];
 				
 				// add some information into otto_prod_img table (refactor: see tuleks liigutada piltide impordi juurde imo):
-				echo "UPDATE otto_prod_img table, set page code and product number in file: pcode = [".$value['code']."] page = [".$product['pg']."] nr = [".$product['nr']."]<br />\n";
+			// and this output isn't needed in regular basis --dragut 17.01.2008
+			//	echo "UPDATE otto_prod_img table, set page code and product number in file: pcode = [".$value['code']."] page = [".$product['pg']."] nr = [".$product['nr']."]<br />\n";
 				$this->db_query("UPDATE otto_prod_img SET p_pg='".$product['pg']."', p_nr='".$product['nr']."' WHERE pcode='".$value['code']."'");
 
 			}
@@ -3468,21 +3482,15 @@ arr('---------------------------------------------------------------');
 			foreach($product_obj->connections_from(array("type" => "RELTYPE_PACKAGING")) as $c)
 			{
 				$t = $c->to();
-				$pkgs[$t->prop('user6')][$t->prop("price")][$t->prop("user5")] = $t->id();
+				$pkgs[$t->prop('user6')][$t->prop("user8")][$t->prop("price")][$t->prop("user5")] = $t->id();
 				$pak_sl[] = $t->id();
 			}
-
 			$found = array();
 
 			$lowest = 10000000;
 
 			// now, for each price, create packaging objects
-			echo "---- [Iga hinna jaoks tekita packaging objekt]<br>\n";
-/*
-			echo "---- q = "."SELECT * FROM otto_imp_t_prices WHERE pg = '$product[pg]' AND nr = '$product[nr]' AND type IN ($typestr) <br>";
-			$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = '$product[pg]' AND nr = '$product[nr]' AND type IN ($typestr) ");
-*/
-		//	$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = '$product[pg]' AND nr = '$product[nr]' ");
+			echo "---- [Iga hinna jaoks tekita pakendi objekt (packaging)]<br>\n";
 
 			$this->db_query("
 				select 
@@ -3504,7 +3512,7 @@ arr('---------------------------------------------------------------');
 				from 
 					otto_imp_t_prices left join otto_imp_t_codes on (
 						otto_imp_t_prices.nr = otto_imp_t_codes.nr and 
-						otto_imp_t_prices.type = otto_imp_t_codes.size and 
+						otto_imp_t_prices.s_type = otto_imp_t_codes.s_type and 
 						otto_imp_t_prices.pg = otto_imp_t_codes.pg
 					)
 				where
@@ -3512,27 +3520,18 @@ arr('---------------------------------------------------------------');
 					otto_imp_t_codes.pg = '".$product['pg']."' and
 					otto_imp_t_prices.nr = '".$product['nr']."' and
 					otto_imp_t_codes.nr = '".$product['nr']."' and 
-					otto_imp_t_prices.lang_id = ".aw_global_get('lang_id')."
+					otto_imp_t_prices.lang_id = ".aw_global_get('lang_id')." and
+					otto_imp_t_codes.lang_id = ".aw_global_get('lang_id')."
 				order by prices_nr,code,price
 			");
 
 			$rows = array();
 			while ($row = $this->db_next())
 			{
-				echo "XXX ".$row['prices_nr']." - ".$row['code']." - ".$row['color']." ".$row['price']." - ".$row['size']." - ".$row['prices_s_type']."<br>\n";
+			//	echo "XXX (csv tabelitest) ".$row['prices_nr']." - ".$row['code']." - ".$row['color']." ".$row['price']." - ".$row['size']." - ".$row['prices_s_type']."<br>\n";
 				$rows[] = $row;
 			}
-// no kuskil siin tuleb sellest $code_lut-ist siis vajalikud värvif/tootekoodid välja võtta ja vastavate suuruste juurde kirja panna i guess
-/*
-			if (count($rows) == 0)
-			{
-				$tmp = $this->db_fetch_row("SELECT * FROM otto_imp_t_prices WHERE pg = '$product[pg]' AND nr = '$product[nr]' ");
-				if ($tmp)
-				{
-					$rows[] = $tmp;
-				}
-			}
-*/
+
 			$sizes = false;
 			$min_price = 0;
 			$max_price = 0;
@@ -3540,7 +3539,6 @@ arr('---------------------------------------------------------------');
 			{
 				// gotta split the sizes and do one packaging for each
 				$s_tmpc = explode(",", $row["size"]);
-				//echo "got price row , s_tmpc = ".dbg::dump($s_tmpc)." <br>";
 				$s_tmp = array();
 				foreach($s_tmpc as $tmpcc)
 				{
@@ -3575,14 +3573,27 @@ arr('---------------------------------------------------------------');
 				{
 					$sizes = true;
 					$row["size"] = $tmpcc;
-					if (is_oid($pkgs[$row['code']][$row["price"]][$row["size"]]))
+					if (is_oid($pkgs[$row['code']][$row["codes_s_type"]][$row["price"]][$row["size"]]))
 					{
-						$pk = obj($pkgs[$row['code']][$row["price"]][$row["size"]]);
-						echo "------ for prod ".$product_obj->name()." got (".$pk->id().") packaging ".$row["price"]." for type ".$product_code_data["s_type"]." <br>";
+						$pk = obj($pkgs[$row['code']][$row["codes_s_type"]][$row["price"]][$row["size"]]);
+//						echo "------ for prod ".$product_obj->name()." got (".$pk->id().") packaging ".$row["price"]." for type :: prices/codes: ".$row["prices_s_type"]."/".$row["codes_s_type"]."<br>";
+						echo "------ [OLEMAS] Pakend: ";
+						echo " Tootekood: ".$row['code']." / ";
+						echo " V&auml;rv: ".$row['color']." / ";
+						echo " s. liik: ".$row['prices_s_type']." / ";
+						echo " Suurus: ".$row['size']." / ";
+						echo " Hind: ".$row['price']." / <br />\n";
 					}
 					else
 					{
-						echo "------ for prod ".$product_obj->name()." got NEW packaging ".$row["price"]." for type ".$product_code_data["s_type"]." <br>";
+					//	echo "------ for prod ".$product_obj->name()." got NEW packaging ".$row["price"]." for type :: prices/codes: ".$row["prices_s_type"]."/".$row["codes_s_type"]."<br>";
+						echo "------ [UUS] Pakend: ";
+						echo " Tootekood: ".$row['code']." / ";
+						echo " V&auml;rv: ".$row['color']." / ";
+						echo " s. liik: ".$row['prices_s_type']." / ";
+						echo " Suurus: ".$row['size']." / ";
+						echo " Hind: ".$row['price']." / <br />\n";
+
 						$pk = obj();
 						$pk->set_class_id(CL_SHOP_PRODUCT_PACKAGING);
 						$pk->set_parent($product_obj->id());
@@ -3609,6 +3620,7 @@ arr('---------------------------------------------------------------');
 					$pk->set_prop("user5", $row["size"]);
 					$pk->set_prop("user6", $row["code"]);
 					$pk->set_prop("user7", $row["color"]);
+					$pk->set_prop("user8", $row["codes_s_type"]);
 					$pk->set_name($product_obj->name());
 					$pk->save();
 
@@ -3863,7 +3875,7 @@ arr('---------------------------------------------------------------');
 				$set_f_img = trim($row[5]);
 
 				$this->db_query("
-					INSERT INTO otto_imp_t_codes(pg,nr,size,color,code, full_code, set_f_img, lang_id)
+					INSERT INTO otto_imp_t_codes(pg,nr,s_type,color,code, full_code, set_f_img, lang_id)
 					VALUES('$cur_pg','$row[1]','$row[2]','$color','$row[4]','$full_code', '$set_f_img', ".aw_global_get('lang_id').")
 				");
 				$num++;
@@ -3970,7 +3982,7 @@ arr('---------------------------------------------------------------');
 					$row[4] = "tk";
 				}
 				$this->db_query("
-					INSERT INTO otto_imp_t_prices(pg,nr,type,size,unit,price, lang_id)
+					INSERT INTO otto_imp_t_prices(pg,nr,s_type,size,unit,price, lang_id)
 					VALUES('$cur_pg','$row[1]','$row[2]','$row[3]','$row[4]','$row[5]', ".aw_global_get('lang_id').")
 				");
 
