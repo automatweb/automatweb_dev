@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.27 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.28 2008/01/18 10:20:41 voldemar Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -59,7 +59,7 @@
 
 	@property task_rows_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
   	@caption Toimetuse ridade kontroller
-  	
+
   	@property task_save_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
 	@caption Toimetuse salvestamise kontroller
 
@@ -75,7 +75,7 @@
 
 
 - Töötajad vaatesse
-Võimalus määrata, kes on volitatud isikud ja volituse alus. Töötaja nime järele on võimalik panna märkeruut tulpa &#8220;Volitatud&#8221;. Selle märkimisel avaneb uus aken, kus küsitakse volituse alust (Objektitüüp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik). 
+Võimalus määrata, kes on volitatud isikud ja volituse alus. Töötaja nime järele on võimalik panna märkeruut tulpa &#8220;Volitatud&#8221;. Selle märkimisel avaneb uus aken, kus küsitakse volituse alust (Objektitüüp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik).
 
 - Kontaktandmetesse seos: Keel
 Vaikimisi eesti keel. Keelele peab saama määrata, milline on süsteemi default. Vaikimisi väärtus Arve-saatelehel
@@ -184,20 +184,23 @@ class crm_settings extends class_base
 				// "personal_candidates_table",
 				"my_customers_table" => array(
 					"fields_class" => "applications/crm/crm_company_cust_impl",
-					"fields_method" => "_org_table_header",
+					"fields_method" => "_org_table_header"
 				),
 				"customer_t" => array(
 					"fields_class" => "applications/crm/crm_company_cust_impl",
-					"fields_method" => "_org_table_header",
+					"fields_method" => "_org_table_header"
 				),
 				// "projects_listing_table",
 				// "my_projects",
 				"impl_projects" => array(
 					"fields_class" => "applications/crm/crm_company_cust_impl",
-					"fields_method" => "get_impl_projects_header",
+					"fields_method" => "get_impl_projects_header"
 				),
 				// "report_list",
-				// "docs_tbl",
+				"docs_tbl" => array(
+					"fields_class" => "applications/crm/crm_company_docs_impl",
+					"fields_method" => "_init_docs_tbl"
+				),
 				// "dn_res",
 				// "documents_lmod",
 				// "bill_proj_list",

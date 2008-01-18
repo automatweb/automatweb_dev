@@ -425,7 +425,7 @@ class crm_company_docs_impl extends class_base
 
 	}
 
-	function _init_docs_tbl(&$t, $r)
+	function _init_docs_tbl(&$t, $r = array())
 	{
 		$t->define_field(array(
 			"caption" => "",
@@ -438,6 +438,13 @@ class crm_company_docs_impl extends class_base
 		$t->define_field(array(
 			"caption" => t("Nimi"),
 			"name" => "name",
+			"align" => "left",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Kommentaar"),
+			"name" => "comment",
 			"align" => "left",
 			"sortable" => 1
 		));
@@ -561,9 +568,27 @@ class crm_company_docs_impl extends class_base
 		{
 			$path = $this->get_docs_table_header($o,$arr['obj_inst']->id(),0);
 		}
-	
+
 		$t->set_caption($path);
 		$this->_init_docs_tbl($t, $arr["request"]);
+
+		// load & apply table configuration if defined
+		$default_cfg = true;
+		$cl_crm_settings = get_instance(CL_CRM_SETTINGS);
+
+		if ($o = $cl_crm_settings->get_current_settings())
+		{
+			$cl_crm_company = get_instance(CL_CRM_COMPANY);
+			$usecase = $cl_crm_company->get_current_usecase($arr); //$arr["obj_inst"] peab olemas olema.
+			$cl_crm_settings->apply_table_cfg($o, $usecase, $arr["prop"]["name"], &$t);
+			$visible_fields = $cl_crm_settings->get_visible_fields($o, $usecase, $arr["prop"]["name"]);
+
+			if (!empty($visible_fields))
+			{
+				$default_cfg = false;
+			}
+		}
+
 		if ($arr["request"]["files_from_fld"] != "")
 		{
 			$sf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
@@ -672,6 +697,7 @@ class crm_company_docs_impl extends class_base
 				"class_id" => $clss[$o->class_id()]["name"],
 				"createdby" => $o->createdby(),
 				"created" => $o->created(),
+				"comment" => $o->comment(),
 				"modifiedby" => $o->modifiedby(),
 				"modified" => $o->modified(),
 				"oid" => $o->id(),
