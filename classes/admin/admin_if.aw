@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.36 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.37 2008/01/18 13:51:23 robert Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -144,7 +144,7 @@ class admin_if extends class_base
 			"img" => "copy.gif",
 		));
 
-		if (count($this->get_cutcopied_objects()))
+		if (count($this->get_cutcopied_objects()) && $this->can("add", $arr["request"]["parent"]))
 		{
 			$tb->add_button(array(
 				"name" => "paste",
