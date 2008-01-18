@@ -504,6 +504,15 @@
             <store>no</store>
             <field>problems_table</field>
       </property>
+      <property>
+            <name>comments_table</name>
+            <group>comments</group>
+            <table>aw_bugs</table>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>comments_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -519,6 +528,9 @@
             <problems>
                   <caption>Probleemid</caption>
             </problems>
+            <comments>
+                  <caption>Kommentaarid</caption>
+            </comments>
       </groupinfo>
       <tableinfo>
             <aw_bugs>

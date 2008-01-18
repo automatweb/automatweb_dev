@@ -195,8 +195,13 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property problems_table type=table no_caption=1 store=no
 
+@default group=comments
+
+	@property comments_table type=table no_caption=1 store=no
+
 @groupinfo cust caption="Kliendi andmed"
 @groupinfo problems caption="Probleemid"
+@groupinfo comments caption="Kommentaarid"
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption J&auml;lgija
@@ -817,6 +822,10 @@ class bug extends class_base
 
 			case "problems_table":
 				return $this->_get_problems_table($arr);
+				break;
+
+			case "comments_table":
+				return $this->_comments_table($arr);
 		};
 		return $retval;
 	}
@@ -1085,6 +1094,19 @@ class bug extends class_base
 					$date = time() + $bdd*24*60*60;
 					$arr["obj_inst"]->set_prop("wish_live_date", $date);
 				}
+				break;
+			case "comments_table":
+				$total = 0;
+				foreach($arr["request"]["add_wh"] as $oid=>$hrs)
+				{
+					$com = obj($oid);
+					$com->set_prop("add_wh", $hrs);
+					$com->set_comment($arr["request"]["comment"][$oid]);
+					$com->save();
+					$total += $hrs;
+				}
+				$arr["obj_inst"]->set_prop("num_hrs_real", $total);
+				$arr["obj_inst"]->save();
 				break;
 		}
 		return $retval;
@@ -1534,6 +1556,59 @@ class bug extends class_base
 			"to" => $o->id(),
 			"type" => "RELTYPE_COMMENT"
 		));
+	}
+
+	function _comments_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "user",
+			"caption" => t("Kasutaja"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kommentaar"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "add_wh",
+			"caption" => t("Tunnid"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i",
+			"caption" => t("Aeg"),
+			"sortable" => 1,
+		));
+		$t->sort_by();
+		$t->set_default_sortby("date");
+		$comments = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_COMMENT",
+		));
+		foreach($comments as $c)
+		{
+			$comm = obj($c->prop("to"));
+			$t->define_data(array(
+				"comment" => html::textarea(array(
+					"value" => $comm->comment(),
+					"name" => "comment[".$comm->id()."]",
+					"rows" => 3,
+					"cols" => 60,
+				)),
+				"user" => $comm->createdby(),
+				"add_wh" => html::textbox(array(
+					"name" => "add_wh[".$comm->id()."]",
+					"value" => $comm->prop("add_wh"),
+					"size" => "4",
+				)),
+				"date" => $comm->created(),
+			));
+		}
+		
 	}
 
 	function get_priority_list()
