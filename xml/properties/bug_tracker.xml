@@ -154,6 +154,15 @@
             <field>apps_table</field>
       </property>
       <property>
+            <name>commits_table</name>
+            <table>objects</table>
+            <group>commits</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>commits_table</field>
+      </property>
+      <property>
             <name>search_tb</name>
             <table>objects</table>
             <group>search</group>
@@ -1074,6 +1083,11 @@
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_monitor>
+            <commits>
+                  <caption>Commitid</caption>
+                  <parent>bugs</parent>
+                  <submit>no</submit>
+            </commits>
             <search>
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>

@@ -61,6 +61,10 @@ define("BUG_STATUS_CLOSED", 5);
 		@property apps_tb type=toolbar no_caption=1 store=no
 		@property apps_table type=table no_caption=1 store=no
 
+@default group=commits
+
+	@property commits_table type=table store=no no_caption=1
+
 @default group=search
 
 	@property search_tb type=toolbar store=no no_caption=1
@@ -390,6 +394,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
 	@groupinfo by_cust caption="Kliendid" parent=bugs submit=no
 	@groupinfo by_monitor caption="J&auml;lgijad" parent=bugs submit=no
+	@groupinfo commits caption="Commitid" parent=bugs submit=no
 	@groupinfo search caption="Otsing" submit_method=get save=no parent=bugs
 	@groupinfo search_list caption="Salvestatud otsingud" parent=bugs
 	@groupinfo archive caption="Arhiiv" submit=no parent=bugs
@@ -744,75 +749,30 @@ class bug_tracker extends class_base
 		return $retval;
 	}
 
+	function _get_commits_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_complete_table($t);
+		$prevm = time()-30*24*60*60;
+		$c_ol = new object_list(array(
+			"class_id" => CL_BUG_COMMENT,
+			"comment" => "%http://dev.struktuur.ee/cgi-bin/viewcvs.cgi%",
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $prevm),
+		));
+		$bug_oids = array();
+		foreach($c_ol->arr() as $c_o)
+		{
+			$bug_oids[$c_o->parent()] = $c_o->parent();
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+			"oid" => $bug_oids,
+		));
+		$this->get_table_from_ol($ol, $t, $arr);
+	}
+
 	function _init_complete_table(&$t)
 	{
-		if($_GET['FIX1656760'])
-		{
-			$ol = new object_list(array(
-				"class_id" => array(
-					CL_EXTLINK,
-     					CL_MENU,
-	  				CL_DOCUMENT
-				),
-				 new object_list_filter(array(
-					"logic" => "OR",
-    					"conditions" => array(
-			  			"url" => "%1656760%",
-						"lead" => "%1656760%",
-						"content" => "%1656760%",
-						"link" => "%1656760%",
-			 		)
-				))
-			));
-			classload("vcl/table");
-			$t = new aw_table;
-			$t->define_field(array(
-				"name" => "name",
-				"caption" => "Nimi"
-			));
-			$t->define_field(array(
-				"name" => "type",
-				"caption" => "Tüüp"
-			));
-			$t->define_field(array(
-				"name" => "change",
-				"caption" => "Muuda"
-			));
-			foreach($ol->arr() as $oid => $o)
-			{
-				switch($o->class_id())
-				{
-					case CL_MENU:
-						$type = "Kaust";
-						$url = mk_my_orb("change",array(
-							"group" => "show"
-						), CL_MENU);
-						break;
-					case CL_EXTLINK:
-						$type = "Link";
-						$url = mk_my_orb("change",array(
-							"group" => "general"
-						), CL_EXTLINK);
-						break;
-					case CL_DOCUMENT:
-						$type = "Dokument";
-						$url = mk_my_orb("change",array(
-							"group" => "general"
-						), CL_DOCUMENT);
-						break;
-				}
-				$t->define_data(array(
-					"name" => $o->name(),
-					"type" => $type,
-					"change" => html::href(array(
-						"caption" => "Muuda",
-						"url" => $url
-					))
-				));
-			}
-			echo $t->draw();
-			die();
-		}
 		$t->define_field(array(
 			"name" => "icon",
 			"caption" => t(""),
@@ -881,6 +841,12 @@ class bug_tracker extends class_base
 			"bug_status" => 3,
    			"createdby" => $cur_u
 		));
+		$this->get_table_from_ol($ol, $t, $arr);
+		
+	}
+
+	function get_table_from_ol($ol, &$t, $arr)
+	{
 		classload("core/icons");
 		$u = get_instance(CL_USER);
 		$us = get_instance("users");
