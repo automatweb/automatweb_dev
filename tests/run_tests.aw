@@ -110,7 +110,8 @@ else
 	print " , " ;
 	print html::href(array("caption" => "25" , "url" => "?show=25"));
 	print " tulemust" ;
-	get_instance("vcl/table");
+	classload("vcl/table");
+//	get_instance("vcl/table");
 	$t = new vcl_table(array(
 		"layout" => "generic",
 	));

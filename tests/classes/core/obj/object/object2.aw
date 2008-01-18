@@ -24,7 +24,7 @@ class object_test2 extends UnitTestCase
 
 	function _get_temp_o()
 	{
-		aw_disable_acl();
+		aw_disable_acl();__disable_err();
 		// create new object
 		$o = obj();
 		$o->set_parent(aw_ini_get("site_rootmenu"));
