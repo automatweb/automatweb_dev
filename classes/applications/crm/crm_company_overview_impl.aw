@@ -623,14 +623,30 @@ class crm_company_overview_impl extends class_base
 
 			if ($task->class_id() != CL_CRM_EMAIL)
 			{
-				if ($dl > 100 && time() > $dl)
+				$color = 0;
+				if($task->class_id() == CL_BUG)
 				{
-					$col = "#ff0000";
+					$s = $task->prop("bug_status");
+					if($s != 5 && $s != 3)
+					{
+						$color = 1;
+					}
 				}
-				else
-				if ($dl > 100 && date("d.m.Y") == date("d.m.Y", $dl)) // today
+				elseif($task->prop("flags") != OBJ_IS_DONE)
 				{
-					$col = "#f3f27e";
+					$color = 1;
+				}
+				if($color)
+				{
+					if ($dl > 100 && time() > $dl)
+					{
+						$col = "#ff0000";
+					}
+					else
+					if ($dl > 100 && date("d.m.Y") == date("d.m.Y", $dl)) // today
+					{
+						$col = "#f3f27e";
+					}
 				}
 			}
 
