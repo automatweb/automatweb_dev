@@ -3,7 +3,7 @@
      *	base include file for SimpleTest
      *	@package	SimpleTest
      *	@subpackage	UnitTester
-     *	@version	$Id: reporter.php,v 1.1 2005/11/03 13:09:39 duke Exp $
+     *	@version	$Id: reporter.php,v 1.2 2008/01/18 14:19:48 markop Exp $
      */
 
     /**#@+
@@ -40,6 +40,7 @@
          */
         function paintHeader($test_name) {
             $this->sendNoCacheHeaders();
+            global $log;
             print "<html>\n<head>\n<title>$test_name</title>\n";
             print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
                     $this->_character_set . "\">\n";
@@ -89,12 +90,13 @@
             print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
             print "\">";
             print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
-            print " test cases complete:\n";
+            print " test cases complete:\n<br>";
             print "<strong>" . $this->getPassCount() . "</strong> passes, ";
             print "<strong>" . $this->getFailCount() . "</strong> fails and ";
             print "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
             print "</div>\n";
             print "</body>\n</html>\n";
+            var_dump($log);
         }
         
         /**
@@ -107,11 +109,11 @@
          */
         function paintFail($message) {
             parent::paintFail($message);
-            print "<span class=\"fail\">Fail</span>: ";
+            print "<br /><span class=\"fail\">Fail</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
             print implode(" -&gt; ", $breadcrumb);
-            print " -&gt; " . $this->_htmlEntities($message) . "<br />\n";
+            print " -&gt; <br /><br />" . $this->_htmlEntities($message) . "<br />\n";
         }
         
         /**
@@ -126,7 +128,7 @@
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
             print implode(" -&gt; ", $breadcrumb);
-            print " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
+            print " -&gt; <br /><strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
         }
         
         /**
@@ -178,7 +180,7 @@
             if (! SimpleReporter::inCli()) {
                 header('Content-type: text/plain');
             }
-            print "$test_name\n";
+            print "$test_name\n<br>";
             flush();
         }
         
@@ -189,17 +191,24 @@
          *    @access public
          */
         function paintFooter($test_name) {
+            global $log;
+            
+           $log["stuff"]["conc"] = "";
             if ($this->getFailCount() + $this->getExceptionCount() == 0) {
-                print "OK\n";
+                print  $log["stuff"]["conc"].="<br>OK\n<br>";
             } else {
-                print "FAILURES!!!\n";
+                print $log["stuff"]["conc"].="<br>FAILURES!!!\n<br>";
             }
-            print "Test cases run: " . $this->getTestCaseProgress() .
+            print $log["stuff"]["conc"].="<br>Test cases run: " . $this->getTestCaseProgress() .
                     "/" . $this->getTestCaseCount() .
-                    ", Passes: " . $this->getPassCount() .
-                    ", Failures: " . $this->getFailCount() .
-                    ", Exceptions: " . $this->getExceptionCount() . "\n";
-                    
+                    ", <br>Passes: " . $this->getPassCount() .
+                    ", <br>Failures: " . $this->getFailCount() .
+                    ", <br>Exceptions: " . $this->getExceptionCount() . "\n<br>";
+            $log["tested"] = $this->getTestCaseCount();
+            $log["passed"] = $this->getPassCount();
+            $log["fail"] = $this->getFailCount();
+            $log["exc"] = $this->getExceptionCount();
+              $log["stuff"]["conc"] = str_replace("\n" , "<br>" , $log["stuff"]["conc"]);
         }
         
         /**
@@ -209,12 +218,16 @@
          *    @access public
          */
         function paintFail($message) {
+		global $log, $run;
+        	
             parent::paintFail($message);
-            print $this->getFailCount() . ") $message\n";
+            print $log["stuff"]["case"][$run] = $this->getFailCount() . ") $message\n<br>";
+            
+           $log["stuff"]["case"][$run] =  str_replace("\n" , "<br>" , $log["stuff"]["case"][$run]);
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            print "\tin " . implode("\n\tin ", array_reverse($breadcrumb));
-            print "\n";
+            print "\tin " . implode("\n<br>\tin ", array_reverse($breadcrumb));
+            print "\n<br>";
         }
         
         /**
@@ -225,7 +238,7 @@
          */
         function paintException($message) {
             parent::paintException($message);
-            print "Exception " . $this->getExceptionCount() . "!\n$message\n";
+            print "<br>Exception " . $this->getExceptionCount() . "!\n<br>$message\n<br>";
         }
         
         /**
@@ -234,7 +247,7 @@
          *    @access public
          */
         function paintFormattedMessage($message) {
-            print "$message\n";
+            print "$message\n<br>";
             flush();
         }
     }

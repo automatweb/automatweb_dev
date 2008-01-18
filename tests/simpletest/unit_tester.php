@@ -3,7 +3,7 @@
      *	base include file for SimpleTest
      *	@package	SimpleTest
      *	@subpackage	UnitTester
-     *	@version	$Id: unit_tester.php,v 1.1 2005/11/03 13:09:39 duke Exp $
+     *	@version	$Id: unit_tester.php,v 1.2 2008/01/18 14:19:48 markop Exp $
      */
 
     /**#@+
@@ -48,7 +48,7 @@
             $dumper = &new SimpleDumper();
             $message = sprintf(
                     $message,
-                    "[" . $dumper->describeValue($value) . "] should be null");
+                    "[" . $dumper->describeValue($value) . "] should be null<br>");
             return $this->assertTrue(! isset($value), $message);
         }
         
@@ -63,7 +63,7 @@
             $dumper = &new SimpleDumper();
             $message = sprintf(
                     $message,
-                    "[" . $dumper->describeValue($value) . "] should not be null");
+                    "[" . $dumper->describeValue($value) . "] should not be null<br>");
             return $this->assertTrue(isset($value), $message);
         }
         
@@ -214,7 +214,7 @@
                     $message,
                     "[" . $dumper->describeValue($first) .
                             "] and [" . $dumper->describeValue($second) .
-                            "] should reference the same object");
+                            "] should reference the same object<br>");
             return $this->assertTrue(
                     SimpleTestCompatibility::isReference($first, $second),
                     $message);
@@ -235,7 +235,7 @@
                     $message,
                     "[" . $dumper->describeValue($first) .
                             "] and [" . $dumper->describeValue($second) .
-                            "] should not be the same object");
+                            "] should not be the same object<br>");
             return $this->assertFalse(
                     SimpleTestCompatibility::isReference($first, $second),
                     $message);
@@ -300,7 +300,7 @@
             $queue = &SimpleErrorQueue::instance();
             return $this->assertTrue(
                     $queue->isEmpty(),
-                    sprintf($message, "Should be no errors"));
+                    sprintf($message, "Should be no errors<br>"));
         }
         
         /**
@@ -315,20 +315,20 @@
         function assertError($expected = false, $message = "%s") {
             $queue = &SimpleErrorQueue::instance();
             if ($queue->isEmpty()) {
-                $this->fail(sprintf($message, "Expected error not found"));
+                $this->fail(sprintf($message, "Expected error not found<br>"));
                 return;
             }
             list($severity, $content, $file, $line, $globals) = $queue->extract();
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
             if (! $expected) {
                 return $this->pass(
-                        "Captured a PHP error of [$content] severity [$severity] in [$file] line [$line] -> %s");
+                        "Captured a PHP error of [$content] severity [$severity] in [$file] line [$line] -> %s<br>");
             }
             $expected = $this->_coerceToExpectation($expected);
             return $this->assert(
                     $expected,
                     $content,
-                    "Expected PHP error [$content] severity [$severity] in [$file] line [$line] -> %s");
+                    "Expected PHP error [$content] severity [$severity] in [$file] line [$line] -> %s<br>");
         }
         
         /**
