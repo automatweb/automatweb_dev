@@ -917,7 +917,7 @@ class webform extends class_base
 			$controller = obj();
 			$controller->set_class_id(CL_CFGCONTROLLER);
 			$controller->set_parent($arr["obj_inst"]->id());
-			$controller->set_name($val["name"]);
+			$controller->set_name($val["name"]." (".$arr["obj_inst"]->name().")");
 			$controller->set_prop("formula", $val["formula"]);
 			$controller->set_prop("errmsg", $val["errmsg"]);
 			$controller->save();
@@ -933,7 +933,7 @@ class webform extends class_base
 			$controller = obj();
 			$controller->set_class_id(CL_CFG_VIEW_CONTROLLER);
 			$controller->set_parent($arr["obj_inst"]->id());
-			$controller->set_name($val["name"]);
+			$controller->set_name($val["name"]." (".$arr["obj_inst"]->name().")");
 			$controller->set_prop("formula", $val["formula"]);
 			$controller->save();
 			$arr["obj_inst"]->connect(array(
