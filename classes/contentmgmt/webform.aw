@@ -1863,22 +1863,12 @@ class webform extends class_base
 			"default_value_today" => "default_value_today"
 		);
 
-		$user_group_list = aw_global_get("gidlist_oid");//k&otilde;ik grupid kus kasutaja on
-		$hidden_stuff = $cfgform->meta("show_to_groups");//juhul kui omadusi on teatud gruppidele maha keeratud, n&auml;itab
+		$cfg_proplist = $cfgform_i->get_cfg_proplist($cfgform->id());//juhul kui omadusi on teatud gruppidele maha keeratud, n&auml;itab
 		foreach($els as $pn => $pd)
 		{
-			if($hidden_stuff[$pn])//see v&auml;rk siis kontrollib, kas miskile kasutajale on mingi omadus &auml;kki maha keeratud
+			if(empty($cfg_proplist[$pn]))//see v&auml;rk siis kontrollib, kas miskile kasutajale on mingi omadus &auml;kki maha keeratud
 			{
-				$allowed_to_see = 0;
-				foreach($user_group_list as $user_group)
-				{
-					if($hidden_stuff[$pn][$user_group])
-					{
-						$allowed_to_see = 1;
-						break;
-					}
-				}
-				if(!$allowed_to_see) continue;
+				continue;
 			}
 			if($pd["invisible"]) continue;
 			if($pd["invisible_name"]) $pd["caption"] = null;
@@ -2276,7 +2266,7 @@ class webform extends class_base
 		{
 			$arr['reforb']['show_confirm_page'] = 1;
 		}
-		
+
 		$spacing = '';
 		if($mst = $arr["obj_inst"]->prop("def_form_style"))
 		{

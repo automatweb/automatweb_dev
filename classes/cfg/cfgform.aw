@@ -44,7 +44,7 @@
 		@groupinfo lang_10 caption="lang" parent=translate
 		@groupinfo lang_11 caption="lang" parent=translate
 		@groupinfo lang_12 caption="lang" parent=translate
-	@groupinfo show_props caption="Omaduste maha keeramine"
+	@groupinfo show_props caption="Omadused grupiti"
 	@groupinfo transl caption="T&otilde;lgi nime"
 
 
@@ -566,12 +566,12 @@ class cfgform extends class_base
 			};
 		}
 
-		$meta = $arr["obj_inst"]->meta("show_to_groups");
+		$show_to_groups = $arr["obj_inst"]->meta("show_to_groups");
 		$html = get_instance("html");
 
 		if(!$arr["request"]["meta"]) $arr["request"]["meta"] = $arr["obj_inst"]->meta("group_to_show");
 
-		if (!is_array($meta))
+		if (!is_array($show_to_groups))
 		{ // no backward compatibility needed
 			$arr["obj_inst"]->set_meta("has_show_to_groups_by_rel", true);
 		}
@@ -581,21 +581,31 @@ class cfgform extends class_base
 
 		foreach($by_group[$arr["request"]["meta"]] as $property)
 		{
+			$prop_name = $property["name"];
 			$row = array(
-				"id" => $property["name"],
+				"id" => $prop_name,
 				"name" => $property["caption"],
 			);
 
-			foreach($groups_list->ids() as  $gid)
+			foreach($groups_list->ids() as $gid)
 			{
 				$checked = 1;
-				if($meta[$property["name"]] && !array_key_exists($gid , $meta[$property["name"]])) $checked = null;
-				$row[$gid] = $html->checkbox($args = array(
-					"name" => "show_to_groups[".$property["name"]."][".$gid."]",
+
+				if(isset($show_to_groups[$prop_name]))
+				{
+					if(empty($show_to_groups[$prop_name][$gid]))
+					{
+						$checked = null;
+					}
+				}
+
+				$row[$gid] = $html->hidden(array("name" => "show_to_groups_chk[".$prop_name."][".$gid."]", "value" => 1)) . $html->checkbox(array(
+					"name" => "show_to_groups[".$prop_name."][".$gid."]",
 					"value" => 1,
-					"checked" => $checked ,
+					"checked" => $checked,
 				));
 			}
+
 			$t ->define_data($row);
 		}
 
@@ -1057,9 +1067,9 @@ class cfgform extends class_base
 	private function save_show_to_groups($arr = array())
 	{
 		$show_to_groups = $arr["obj_inst"]->meta("show_to_groups");
-		foreach($arr["request"]["show_to_groups"] as $key => $val)
+		foreach($arr["request"]["show_to_groups_chk"] as $key => $val)
 		{
-			$show_to_groups[$key] = $val;
+			$show_to_groups[$key] = $arr["request"]["show_to_groups"][$key];
 		}
 		$arr["obj_inst"]->set_meta("show_to_groups" , $show_to_groups);
 	}
@@ -2980,8 +2990,6 @@ class cfgform extends class_base
 	function get_cfg_proplist($id)
 	{
 		$o = obj($id);
-		$show_to_groups = $o->meta("show_to_groups");
-
 		$ret = $o->meta("cfg_proplist");
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("translations");
@@ -3043,23 +3051,28 @@ class cfgform extends class_base
 		}
 
 		//see värk siis kontrollib, kas miskile kasutajale on mingi omadus äkki maha keeratud
+		$show_to_groups = $o->meta("show_to_groups");
 		$user_group_list = aw_global_get("gidlist_oid");
-		foreach($ret as $key=>$val)
+
+		foreach($ret as $key => $val)
 		{
-			if($show_to_groups[$key])
+			if(isset($show_to_groups[$key]))
 			{
 				$allowed_to_see = 0;
+
 				foreach($user_group_list as $user_group)
 				{
-					if($show_to_groups[$key][$user_group])
+					if(!empty($show_to_groups[$key][$user_group]))
 					{
 						$allowed_to_see = 1;
 						break;
 					}
 				}
-				if(!$allowed_to_see) $ret[$key] = null;
+
+				if(!$allowed_to_see) unset($ret[$key]);
 			}
 		}
+
 		return $ret;
 	}
 
