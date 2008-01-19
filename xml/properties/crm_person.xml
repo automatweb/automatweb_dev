@@ -76,6 +76,7 @@
             <default>-1</default>
             <save_format>iso8601</save_format>
             <field>birthday</field>
+            <caption>S&amp;amp;uuml;nniaeg</caption>
       </property>
       <property>
             <name>gender</name>
@@ -273,6 +274,7 @@
             <type>table</type>
             <submit>no</submit>
             <no_caption>1</no_caption>
+            <editonly>1</editonly>
             <store>no</store>
             <field>citizenship_table</field>
             <caption>Kodakondsuse tabel</caption>

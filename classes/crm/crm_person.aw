@@ -1,6 +1,5 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.190 2008/01/07 11:11:38 kaarel Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -42,8 +41,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @caption Isikukood
 
 @property birthday type=date_select year_from=1930 year_to=2010 default=-1 save_format=iso8601
-
-property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
+@caption S&uuml;nniaeg
 
 @property gender type=chooser
 @caption Sugu
@@ -106,7 +104,7 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 @property nationality type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_NATIONALITY
 @caption Rahvus
 
-@property citizenship_table type=table submit=no no_caption=1
+@property citizenship_table type=table submit=no no_caption=1 editonly=1
 @caption Kodakondsuse tabel
 
 ------------------------------------------------------------------
@@ -115,7 +113,7 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 @default group=cust_rel
 
 	@layout co_bottom_seller area_caption=Kliendisuhe&#44;&nbsp;tema_ostab_meilt closeable=1 type=hbox width=50%:50%
-			
+
 		@layout co_bottom_seller_l type=vbox parent=co_bottom_seller
 
 			@property co_is_cust type=checkbox ch_value=1 store=no parent=co_bottom_seller_l no_caption=1 prop_cb=1
@@ -126,12 +124,12 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 
 			@property cust_contract_date type=date_select table=kliendibaas_isik parent=co_bottom_seller_l
 			@caption Kliendisuhte alguskuup&auml;ev
-			
+
 			@property contact_person type=text store=no parent=co_bottom_seller_l
 			@caption Kliendpoolne kontaktisik
-		
+
 		@layout co_bottom_seller_r type=vbox parent=co_bottom_seller
-			
+
 			@property priority type=textbox table=kliendibaas_isik  parent=co_bottom_seller_r
 			@caption Kliendi prioriteet
 
@@ -153,7 +151,7 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 			@property co_is_buyer type=checkbox ch_value=1 store=no parent=co_bottom_buyer_l no_caption=1 prop_cb=1
 			@caption Kehtib
 
-			@property buyer_contract_creator type=select store=no parent=co_bottom_buyer_l 
+			@property buyer_contract_creator type=select store=no parent=co_bottom_buyer_l
 			@caption Hankijasuhte looja
 
 			@property buyer_contract_date type=date_select store=no parent=co_bottom_buyer_l prop_cb=1
@@ -240,9 +238,9 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
 
 			@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
-		
+
 		@layout ceditmsn type=vbox closeable=1 area_caption=Msn/yahoo/aol/icq
-		
+
 			@property messenger type=textbox size=30 maxlength=200 parent=ceditmsn no_caption=1
 
 
@@ -936,7 +934,7 @@ class crm_person extends class_base
 
 			case "address":
 				return PROP_IGNORE;
-				
+
 			//kliendisuhte teema
 			case "contact_person":
 				$arr["prop"]["value"] = $arr["obj_inst"]->id();
@@ -945,11 +943,11 @@ class crm_person extends class_base
 			case "bill_penalty_pct":
 			case "referal_type":
 			case "client_manager":
-			
+
 				if($prop["name"] == "bill_penalty_pct") $prop["value"] = str_replace(",", ".", $prop["value"]);
 				$this->set_cust_rel_data($arr);
 				break;
-			
+
 			case "cust_contract_date":
 			// save to rel
 				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
@@ -958,7 +956,7 @@ class crm_person extends class_base
 					$rel->save();
 				}
 				break;
-				
+
 			case "buyer_contract_date":
 				$co = get_current_company();
 				if (($rel = $this->get_cust_rel($co , 0 , $arr["obj_inst"])))
@@ -973,7 +971,7 @@ class crm_person extends class_base
 			case "buyer_contract_creator":
 				$this->set_buyer_rel_data($arr);
 				break;
-				
+
 			case "cust_contract_creator":
 			case "bill_due_days":
 				// save to rel
@@ -983,7 +981,7 @@ class crm_person extends class_base
 					$rel->save();
 				}
 				break;
-				
+
 			case "co_is_cust":
 			case "co_is_buyer":
 				$fn = "_set_".$prop["name"];
@@ -1227,6 +1225,7 @@ class crm_person extends class_base
 					4 => t("k&otilde;rgem"),
 				);
 				break;
+
 			case "citizenship_table":
 				$cit = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CITIZENSHIP"));
 				if(!sizeof($cit))
@@ -1239,6 +1238,7 @@ class crm_person extends class_base
 			case "person_tb":
 				$this->_get_person_tb(&$arr);
 				break;
+
 			case "cv_view_tb":
 				/*
 				$arr["prop"]["toolbar"]->add_button(array(
@@ -1816,7 +1816,7 @@ class crm_person extends class_base
 					"clid" => CL_CRM_COMPANY
 				));
 				break;
-				
+
 			case "bill_due_days":
 			case "cust_contract_date":
 			case "priority":
@@ -1857,7 +1857,7 @@ class crm_person extends class_base
 					$tmp = obj($data["value"]);
 					$data["options"][$data["value"]] = $tmp->name();
 				}
-				
+
 				break;
 			case "buyer_contract_creator":
 				$this->_get_buyer_contract_creator($arr);
@@ -1873,7 +1873,7 @@ class crm_person extends class_base
 					"caption" => $arr["obj_inst"]->name(),
 				));
 				break;
-				
+
 			case "co_is_cust":
 			case "bill_penalty_pct":
 			case "co_is_buyer":
@@ -4568,9 +4568,9 @@ class crm_person extends class_base
 		$bill_inst = get_instance(CL_CRM_BILL);
 		$company_curr = $stat_inst->get_company_currency();
 		$bi = get_instance(CL_BUG);
-		
+
 		$l_cus_s = 0;
-		
+
 		foreach($ol->arr() as $o)
 		{
 			$impl = $check = $bs = $bn = "";
@@ -4578,7 +4578,7 @@ class crm_person extends class_base
 			if ($this->can("view", $o->prop("bill_id")))
 			{
 				$b = obj($o->prop("bill_id"));
-				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
+				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no"));
 				$bn = $b->prop("bill_no");
 				$bs = $bill_inst->states[$b->prop("state")];
 				$agreement = $b->meta("agreement_price");
@@ -4596,7 +4596,7 @@ class crm_person extends class_base
 			{
 				$bs = t("Arve puudub");
 			}
-			
+
 			$task = obj($row2task[$o->id()]);
 			if (!is_oid($task->id()))
 			{
@@ -4605,20 +4605,20 @@ class crm_person extends class_base
 
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
-			
+
 			//kui on kokkuleppehind kas arvel, või kui arvet ei ole, siis toimetusel... tuleb vähe arvutada
 			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
 				$sum = $row_inst->get_row_ageement_price($o);
 			}
-			
+
 			//õigesse valuutasse
 			$sum = $stat_inst->convert_to_company_currency(array(
 				"sum"=>$sum,
 				"o"=>$task,
 				"company_curr" => $company_curr,
 			));
-			
+
 			$t->define_data(array(
 				"date" => $o->prop("date"),
 				"cust" => html::obj_change_url($task->prop("customer")),
@@ -4635,7 +4635,7 @@ class crm_person extends class_base
 					"name" => "rows[".$o->id()."][time_to_cust_real]",
 					"value" => number_format($o->prop("time_to_cust"), 2, ',', ''),
 				)):number_format($o->prop("time_to_cust"), 2, ',', ''),
-				
+
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
 				"check" => $check,
@@ -4835,8 +4835,8 @@ class crm_person extends class_base
 		));
 		return $ol->arr();
 	}
-	
-//----------------------- kliendisuhte funktsioonid-----------------------	
+
+//----------------------- kliendisuhte funktsioonid-----------------------
 	function get_cust_rel($o,$crea_if_not_exists,$my_co)
 	{
 		$co_inst = get_instance(CL_CRM_COMPANY);
@@ -4910,7 +4910,7 @@ class crm_person extends class_base
 			$crel->save();
 		}
 	}
-	
+
 	function set_buyer_rel_data($arr)
 	{
 		if (!$arr["request"]["co_is_buyer"])
@@ -5030,7 +5030,7 @@ class crm_person extends class_base
 			$t->define_data($data);
 		}
 	}
-	
+
 	function _save_citizenship_table($arr)
 	{
 		foreach($arr["request"]["citizenship"] as $id => $val)
