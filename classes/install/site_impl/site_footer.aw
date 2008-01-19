@@ -47,6 +47,17 @@ else if (aw_ini_get("content.doctype") == "xhtml" )
 	$str = str_replace  ( "<br>", "<br />", $str);
 }
 
+// this will add google analytics code to html if id is set in ini
+if (aw_ini_get("ga_id"))
+{
+	$sf->read_template("applications/google_analytics/tracking_code.tpl");
+	$sf->vars(array(
+		"ga_id" => aw_ini_get("ga_id"),
+	));
+	$s_code = $sf->parse();
+	$str = preg_replace  ( "/<\/body>.*<\/html>/imsU", $s_code."</body>\n</html>" , $str);
+}
+
 if (aw_ini_get("content.compress") == 1)
 {
 	ob_start( 'ob_gzhandler' );
