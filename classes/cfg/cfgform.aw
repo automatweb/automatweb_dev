@@ -214,6 +214,9 @@
 	@property awcb_form_only type=checkbox ch_value=1 default=0
 	@caption N&auml;ita ainult vormi
 
+	@property awcb_confirm_save_data type=checkbox ch_value=1 default=0
+	@caption Salvestamise kontroll lehelt lahkumisel
+
 
 
 // ---------- RELATIONS -------------
@@ -243,6 +246,88 @@
 */
 class cfgform extends class_base
 {
+	private $cfg_proplist = array();
+	/*
+	Format: array(
+		prop_name => array(
+			[ord] =>
+			[caption] => Nimi
+			[type] => textbox
+			[group] => general // parent group
+            [group] => array( // property is in multiple groups
+				[0] => grp_customers
+				[1] => grp_projects
+			)
+			[parent] => co_bottom_seller_r // parent layout
+			[textsize] =>
+			[size] =>
+			[rows] =>
+			[cols] =>
+			[store] =>
+			[method] =>
+			[table] => objects
+			[field] => name
+			[ch_value] => 2
+			[name] => name
+			[rel] => 1
+			[trans] => 1
+			[comment] => Objekti nimi
+			[orig_caption] => Nimi
+			[maxlength] => 11
+			[form] =>
+			[year_from] => 1930
+			[year_to] => 2010
+			[save_format] => iso8601
+			[reltype] => RELTYPE_CLIENT_MANAGER
+			[multiple] => 1
+			[rel_id] => first
+			[mode] => manager
+			[props] => start
+			[props] => array(
+				[0] => org
+				[1] => profession
+				[2] => start
+				[3] => end
+			)
+			[table_fields] => array(
+				[0] => org
+				[1] => profession
+				[2] => start
+				[3] => end
+			)
+		), ...
+	)
+	*/
+
+	private $cfg_groups = array();
+	/*
+	Format: array(
+		group_name => array(
+            [caption] => Üldine
+            [default] => 1 // exclusive 1 or null
+            [icon] => edit
+            [focus] => name // name of property to get focus on page load. default null
+            [orig_caption] => Üldine
+            [parent] => work // parent group. optional
+            [submit] => no // don't show submit button. default null
+		), ...
+	)
+	*/
+
+	private $cfg_layout = array();
+	/*
+	Format: array(
+		layout_name => array(
+			[area_caption] => Kliendisuhe
+			[closeable] => 1
+			[type] => hbox // vbox|hbox
+			[width] => 50%:50% // width ratio of child layouts. applicable only when type is hbox
+			[group] => cust_rel // parent group
+			[caption] => // not used?
+		), ...
+	)
+	*/
+
 	private $cfgview_actions = array();
 	private $default_new_layout_name = "new_layout_temporary_name";
 	private $cfg_load_scope_index = array (
@@ -488,6 +573,7 @@ class cfgform extends class_base
 
 	function do_table(&$arr)
 	{
+		// get connected user groups
 		$groups_list = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VIEW_DFN_GRP")));
 
 		if (!$groups_list->count())
@@ -506,17 +592,23 @@ class cfgform extends class_base
 			}
 		}
 
+		// table caption
+		unset($arr["prop"]["no_caption"]);
+		$arr["prop"]["caption"] = t("Omadused: ") . aw_ini_get("classes." . $arr["obj_inst"]->subclass() . ".name") . " > " . $this->grplist[$arr["request"]["meta"]]["caption"];
+		$arr["prop"]["captionside"] = "top";
+
+		// table layout
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->define_field(array(
-			"name" => "id",
-			"caption" => t("ID"),
-			"sortable" => 1,
-		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 			"callback" => array(&$this, "callb_name"),
 			"callb_pass_row" => true,
+		));
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"sortable" => 1,
 		));
 
 		foreach($groups_list->arr() as  $group_obj)
@@ -531,6 +623,7 @@ class cfgform extends class_base
 			));
 		}
 
+		// distribute props by group
 		$by_group = array();
 
 		if (is_array($this->grplist))
@@ -559,13 +652,13 @@ class cfgform extends class_base
 						foreach($property["group"] as $gkey)
 						{
 							$by_group[$gkey][] = $property;
-						};
-					};
-
-				};
-			};
+						}
+					}
+				}
+			}
 		}
 
+		// bc for when all groups were always shown instead of only those selected by connection
 		$show_to_groups = $arr["obj_inst"]->meta("show_to_groups");
 		$html = get_instance("html");
 
@@ -579,6 +672,7 @@ class cfgform extends class_base
 		$arr["obj_inst"]->set_meta("group_to_show",$arr["request"]["meta"]);
 		$arr["obj_inst"]->save();
 
+		// data
 		foreach($by_group[$arr["request"]["meta"]] as $property)
 		{
 			$prop_name = $property["name"];
@@ -892,34 +986,12 @@ class cfgform extends class_base
 			case "add_grp_parent":
 				if (!empty($arr["request"]["cfgform_add_grp"]))
 				{
-					$this->cfg_groups = $o->meta("cfg_groups");
-					$name = strtolower($arr["request"]["add_grp_name"]);
-					$parent = $data["value"];
-					$caption = $arr["request"]["add_grp_caption"];
+					$this->cfgform_add_grp_ok = $this->add_group($arr["obj_inst"], $arr["request"]["add_grp_name"], $data["value"], $arr["request"]["add_grp_caption"]);
 
-					if ((strlen($name) < 2) or preg_match("/[^a-z_]/", $name))
+					if (true !== $this->cfgform_add_grp_ok)
 					{
-						$data["error"] = t("Ebasobiv tabi nimi.");
+						$data["error"] = $this->cfgform_add_grp_ok;
 						$retval = PROP_ERROR;
-					}
-					elseif (array_key_exists($name, $this->cfg_groups))
-					{
-						$data["error"] = t("Selle nimega tab juba olemas.");
-						$retval = PROP_ERROR;
-					}
-					elseif ($parent and (!array_key_exists($parent, $this->cfg_groups) or !empty($this->cfg_groups[$parent]["parent"])))
-					{
-						$data["error"] = t("Selle tabi alla pole võimalik luua.");
-						$retval = PROP_ERROR;
-					}
-					else
-					{
-						$this->cfg_groups[$name] = array(
-							"caption" => $caption,
-							"parent"  => $parent ? $parent : "",
-							"user_defined"  => 1,
-						);
-						$this->cfgform_add_grp_ok = true;
 					}
 				}
 				break;
@@ -1144,9 +1216,17 @@ class cfgform extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		if (!empty($this->cfgform_add_grp_ok))
+		if ($arr["request"]["cfgform_add_grp"])
 		{
-			unset($arr["args"]["cfgform_add_grp"]);
+			if (true === $this->cfgform_add_grp_ok)
+			{
+				unset($arr["args"]["cfgform_add_grp"]);
+				unset($arr["request"]["cfgform_add_grp"]);
+			}
+			else
+			{
+				$arr["args"]["cfgform_add_grp"] = $arr["request"]["cfgform_add_grp"];
+			}
 		}
 	}
 
@@ -1523,20 +1603,44 @@ class cfgform extends class_base
 
 		foreach ($this->cfg_layout as $name => $data)
 		{
-			if (!empty($arr["request"]["cfglayoutinfo-group"][$name]) and array_key_exists($arr["request"]["cfglayoutinfo-group"][$name], $this->grplist))
+			// set parent group
+			$group = $arr["request"]["cfglayoutinfo-group"][$name];
+
+			if (!empty($group) and array_key_exists($group, $this->grplist))
 			{
-				$data["group"] = $arr["request"]["cfglayoutinfo-group"][$name];
+				$data["group"] = $group;
+
+				// if layout has properties, set their parent. neccessary because cb doesn't process props and layouts together.
+				$this->change_layout_props_grp($name, $group);
+
+				// if layout has child layouts, set their parent group
+				foreach ($this->cfg_layout as $child_name => $child_data)
+				{
+					if ($name === $child_data["parent"])
+					{
+						$this->cfg_layout[$child_name]["group"] = $group;
+					}
+				}
 			}
 
-			if (!empty($arr["request"]["cfglayoutinfo-parent"][$name]) and array_key_exists($arr["request"]["cfglayoutinfo-parent"][$name], $this->cfg_layout))
+			// set parent layout
+			$parent = $arr["request"]["cfglayoutinfo-parent"][$name];
+			if (!empty($parent) and array_key_exists($parent, $this->cfg_layout))
 			{
-				$data["parent"] = $arr["request"]["cfglayoutinfo-parent"][$name];
+				$data["parent"] = $parent;
+
+				// change group to new parent layout's one
+				$data["group"] = $this->cfg_layout[$parent]["group"];
+
+				// if layout has properties, change their parent group. neccessary because cb doesn't process props and layouts together.
+				$this->change_layout_props_grp($name, $this->cfg_layout[$parent]["group"]);
 			}
 			else
 			{
 				unset($data["parent"]);
 			}
 
+			//
 			if (!empty($arr["request"]["cfglayoutinfo-closeable"][$name]))
 			{
 				$data["closeable"] = 1;
@@ -1609,7 +1713,39 @@ class cfgform extends class_base
 		uasort($this->cfg_layout, array($this, "_sort_by_ord"));
 	}
 
-	function _sort_by_ord($a, $b)
+	private function change_layout_props_grp($layout, $group)
+	{
+		foreach ($this->cfg_proplist as $prop_name => $prop_data)
+		{
+			if ($layout === $prop_data["parent"])
+			{
+				if (is_array($prop_data["group"]))
+				{
+					if (in_array($this->cfg_layout[$layout]["group"], $prop_data["group"]))
+					{ // layout's current parent among prop parents. replace with new.
+						foreach ($prop_data["group"] as $key => $prop_grp_name)
+						{
+							if ($this->cfg_layout[$layout]["group"] === $prop_grp_name)
+							{
+								$this->cfg_proplist[$prop_name]["group"][$key] = $group;
+								break;
+							}
+						}
+					}
+					else
+					{ // just add parent group
+						$this->cfg_proplist[$prop_name]["group"][] = $group;
+					}
+				}
+				else
+				{
+					$this->cfg_proplist[$prop_name]["group"] = $group;
+				}
+			}
+		}
+	}
+
+	private function _sort_by_ord($a, $b)
 	{
 		return ($a["ord"] == $b["ord"]) ? 0 : (($a["ord"] < $b["ord"]) ? -1 : 1);
 	}
@@ -1718,7 +1854,9 @@ class cfgform extends class_base
 					{
 						continue;
 					}
-					switch ($prpdata["type"])
+
+					// additional options
+					switch ($property["type"])
 					{
 						case "textarea":
 							$this->vars(array(
@@ -1754,6 +1892,10 @@ class cfgform extends class_base
 								"displayradio_ch" => ("radio" === $property["display"]) ? ' checked="1"' : "",
 								"displayselect_caption" => t("Selectbox"),
 								"displayselect_ch" => ("select" === $property["display"]) ? ' checked="1"' : "",
+								"stylenormal_caption" => t("Tavaline"),
+								"stylenormal_ch" => (empty($property["display"])) ? ' checked="1"' : "",
+								"styleac_caption" => t("Autocomplete"),
+								"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
 								"size_caption" => t("K&otilde;rgus"),
 								"size" => $property["size"],
 								"prp_key" => $property["name"],
@@ -1890,16 +2032,66 @@ class cfgform extends class_base
 					$options = $this->parse("options");
 					$this->vars(array("options" => ""));
 
+					// type selector
+					$type_options = array();
+
+					switch ($property["type"])
+					{ /// get type options
+						case "textbox":
+							$type_options = array(
+								"textbox" => "textbox",
+								"textarea" => "textarea"
+							);
+							break;
+
+						case "textarea":
+							$type_options = array(
+								"textarea" => "textarea",
+								"textbox" => "textbox"
+							);
+							break;
+
+						case "date_select":
+							$type_options = array(
+								"date_select" => "date_select",
+								"datetime_select" => "datetime_select"
+							);
+							break;
+
+						case "datetime_select":
+							$type_options = array(
+								"datetime_select" => "datetime_select",
+								"date_select" => "date_select"
+							);
+							break;
+					}
+
+					/// some elements' type not alterable. those also form elements and in POST request
+					$disabled = !count($type_options);
+					if ($disabled)
+					{
+						$type_options = array($property["type"] => $property["type"]);
+					}
+
+					///
+					$type_selector = html::select(array(
+						"name" => "prpconfig[" . $prpdata["name"] . "][type]",
+						"options" => $type_options,
+						"disabled" => $disabled,
+						"value" => $property["type"]
+					));
+
+					//
 					$used_props[$property["name"]] = 1;
 
 					$this->vars(array(
 						"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
 						"prp_caption" => $property["caption"],
-						"prp_type" => $prpdata["type"],
+						"prp_type" => $type_selector,
 						"prp_key" => $prpdata["name"],
 						"prp_order" => $property["ord"],
 						"options" => $options,
-						"grp_id" => $grp_id,
+						"grp_id" => $grp_id
 					));
 
 					if ($layout)
@@ -2357,35 +2549,29 @@ class cfgform extends class_base
 	{
 		$subaction = $arr["request"]["subaction"];
 		$this->_init_cfgform_data($arr["obj_inst"]);
+
 		switch($subaction)
 		{
-			// aww .. I need to fix that!
 			case "addgrp":
-				$newgrpname =$arr["request"]["newgrpname"];
-				$grpid = strtolower(preg_replace("/\W/","",$newgrpname));
-				if ((strlen($grpid) > 2) && empty($this->grplist[$grpid]))
+				$ret = $this->add_group($arr["obj_inst"], false, $arr["request"]["target"], $arr["request"]["newgrpname"]);
+
+				if (true !== $ret)
 				{
-					$grplist = $this->grplist;
-					$grplist[$grpid] = array(
-						"caption" => $newgrpname,
-						"parent"  => $arr["request"]["target"],
-						"user_defined"  => 1,
-					);
-					$this->cfg_groups = $grplist;
+					$arr["prop"]["error"] = $ret;
+					return PROP_ERROR;
 				}
 				break;
 
 			case "delete":
 				$mark = $arr["request"]["mark"];
-				$prplist = $this->prplist;
+
 				if (is_array($mark))
 				{
 					foreach($mark as $pkey => $val)
 					{
-						unset($prplist[$pkey]);
-					};
-					$this->cfg_proplist = $prplist;
-				};
+						unset($this->cfg_proplist[$pkey]);
+					}
+				}
 				break;
 
 			case "move":
@@ -2405,33 +2591,45 @@ class cfgform extends class_base
 						$target_layout = substr($target, 7);
 						$target_grp = $this->layout[$target_layout]["group"];
 
-						error::raise_if(empty($target_grp), array(
-							"msg" => t("Group not defined or layout info corrupt")
-						));
+						if(empty($target_grp))
+						{
+							$arr["prop"]["error"] = t("Layoudil puudub tab");
+							return PROP_ERROR;
+						}
 					}
-
-					$prplist = $this->prplist;
+					else
+					{
+						$arr["prop"]["error"] = t("Viga päringu formaadis");
+						return PROP_ERROR;
+					}
 
 					foreach($mark as $pkey => $val)
 					{
-						$prplist[$pkey]["group"] = $target_grp;
-
-						if ($target_layout)
+						// set parent group
+						if (is_array($this->cfg_proplist[$pkey]["group"]))
 						{
-							$prplist[$pkey]["parent"] = $target_layout;
+							$this->cfg_proplist[$pkey]["group"][] = $target_grp;
 						}
 						else
 						{
-							unset($prplist[$pkey]["parent"]);
+							$this->cfg_proplist[$pkey]["group"] = $target_grp;
+						}
+
+						// set parent layout
+						if ($target_layout)
+						{
+							$this->cfg_proplist[$pkey]["parent"] = $target_layout;
+						}
+						else
+						{
+							unset($this->cfg_proplist[$pkey]["parent"]);
 						}
 					}
-
-					$this->cfg_proplist = $prplist;
 				}
 				break;
 
 			default:
-				foreach ($this->prplist as $name => $data)
+				foreach ($this->cfg_proplist as $name => $data)
 				{
 					if (isset($arr["request"]["prpconfig"][$name]))
 					{
@@ -2474,11 +2672,9 @@ class cfgform extends class_base
 							}
 						}
 
-						$this->prplist[$name] = $cfg_data + $data;
+						$this->cfg_proplist[$name] = $cfg_data + $data;
 					}
 				}
-
-				$this->cfg_proplist = $this->prplist;
 				break;
 		}
 	}
@@ -3993,6 +4189,58 @@ class cfgform extends class_base
 		{
 			return false;
 		}
+		return true;
+	}
+
+	private function add_group($o, $name = false, $parent = false, $caption = "")
+	{
+		if (!isset($this->cfg_groups))
+		{
+			$this->_init_cfgform_data($o);
+		}
+
+		if (false === $name)
+		{
+			$name = "userdefined_group_";
+			$i = 1;
+
+			while (array_key_exists($name . $i, $this->cfg_groups))
+			{
+				$i++;
+			}
+
+			$name .= $i;
+		}
+		else
+		{
+			$name = strtolower($name);
+
+			if ((strlen($name) < 2) or preg_match("/[^a-z_]/", $name))
+			{
+				return t("Ebasobiv tabi nimi.");
+			}
+
+			if (array_key_exists($name, $this->cfg_groups))
+			{
+				return t("Selle nimega tab juba olemas.");
+			}
+		}
+
+		if (!empty($parent) and (!array_key_exists($parent, $this->cfg_groups) or !empty($this->cfg_groups[$parent]["parent"])))
+		{
+			return t("Selle tabi alla pole võimalik luua.");
+		}
+
+		$this->cfg_groups[$name] = array(
+			"caption" => empty($caption) ? sprintf(t("Uus tab %s"), $i) : $caption,
+			"user_defined"  => 1
+		);
+
+		if ($parent)
+		{
+			$this->cfg_groups[$name]["parent"] = $parent;
+		}
+
 		return true;
 	}
 }
