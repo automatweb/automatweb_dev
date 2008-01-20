@@ -1619,13 +1619,11 @@ class class_base extends aw_template
 		if (empty($this->group))
 		{
 			$this->group = "";
-		};
+		}
 
 		$activegroup = isset($this->activegroup) ? $this->activegroup : $this->group;
 		$activegroup = isset($this->action) ? $this->action : $activegroup;
-
 		$activegroup = $this->use_group;
-
 
 		$orb_action = isset($args["orb_action"]) ? $args["orb_action"] : "";
 		if (!isset($orb_action))
@@ -1841,47 +1839,23 @@ class class_base extends aw_template
 					),
 					$_GET["class"] ? $_GET["class"] : get_class($this->orb_class)
 				);
-			};
-
-			// experimental hook for new relationmgr
-			if (empty($this->classinfo["r2"]) && false && empty($this->view))
-			{
-				$this->cli->add_tab(array(
-					"id" => "list_aliases",
-					"link" => $link,
-					"caption" => t("Seostehaldur"),
-					"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
-					"disabled" => empty($this->id),
-				));
 			}
 		}
 
-		//if (empty($args["content"]))
-		//{
-			$cli_args = array(
-				"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
-				"content" => $args["content"],
-				"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]),
-				"save_message" => $this->just_saved ? t("Andmed salvestatud!") : null
-			);
+		$cli_args = array(
+			"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
+			"content" => $args["content"],
+			"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]),
+			"save_message" => $this->just_saved ? t("Andmed salvestatud!") : null
+		);
 
-			if ($this->can("view", $this->cfgform_id))
-			{
-				$cfgform_o = new object($this->cfgform_id);
-				$cli_args["awcb_cfgform"] = $cfgform_o;
-			}
+		if ($this->can("view", $this->cfgform_id))
+		{
+			$cfgform_o = new object($this->cfgform_id);
+			$cli_args["awcb_cfgform"] = $cfgform_o;
+		}
 
-			$content = $this->cli->get_result($cli_args);
-		//}
-		//else
-		//{
-		//	$content = $args["content"];
-		//};
-
-		/*$vars = array();
-
-		$vars["content"] = $args["content"];
-		*/
+		$content = $this->cli->get_result($cli_args);
 		return $content;
 
 		if ($this->orb_class == "auth")
@@ -1893,10 +1867,6 @@ class class_base extends aw_template
 		{
 			return $content;
 		}
-		else
-		{
-			//return $this->tp->get_tabpanel($vars);
-		};
 	}
 
 	function make_tabscb_yah($ru)
@@ -5186,19 +5156,23 @@ class class_base extends aw_template
 	// !id - config form id
 	function load_from_storage($arr)
 	{
-		extract($arr);
+		$id = $arr["id"];
+
 		if (!is_array($this->classinfo))
 		{
 			$this->classinfo = array();
-		};
+		}
+
 		$cfg_flags = array(
 			"classinfo_fixed_toolbar" => "fixed_toolbar",
 			"classinfo_allow_rte" => "allow_rte",
 			"classinfo_disable_relationmgr" => "disable_relationmgr",
 		);
 		$rv = false;
+
 		if (is_oid($id) && $this->can("view", $id))
 		{
+			// load cfgform class&obj
 			$cfgform_obj = new object($id);
 			if ($cfgform_obj->class_id() != CL_CFGFORM)
 			{
@@ -5210,6 +5184,10 @@ class class_base extends aw_template
 
 			$ci = $cfgform_obj->instance();
 
+			// get property cfg
+			$rv = $ci->get_cfg_proplist($cfgform_obj->id());
+
+			// get layout cfg
 			$layoutinfo = $ci->get_cfg_layout($cfgform_obj);
 
 			if (is_array($layoutinfo))
@@ -5217,9 +5195,7 @@ class class_base extends aw_template
 				$this->layoutinfo = $layoutinfo;
 			}
 
-			$prps = $ci->get_cfg_proplist($cfgform_obj->id());
-
-			$rv = $prps;
+			// get group cfg
 			$grps = $ci->get_cfg_groups($cfgform_obj->id());
 
 			foreach($cfg_flags as $key => $val)
@@ -6332,7 +6308,7 @@ class class_base extends aw_template
 			{
 				$user_name = $person->name();
 			}
-			
+
 			if(!$o->prop("sp_content"))
 			{
 				$message = sprintf(t("User %s has added/changed the following file %s. Please click the link below to view the document \n %s"), $user_name , $o->name(), html::get_change_url($o->id()));
