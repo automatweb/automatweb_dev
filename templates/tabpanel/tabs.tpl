@@ -134,21 +134,20 @@ function close_help(layer)
 
 function show_property_help(propname)
 {
-        prophelp_layerv = document.getElementById('property_' + propname + '_help');
-        if (prophelp_layerv)
-        {
-                helptext_layerv = document.getElementById('helptext_layer');
-                helptext_layerv.innerHTML = prophelp_layerv.innerHTML;
-                if (help_layerv.style.display == 'none')
-                {
-                        show_help();
-                }
-                else
-                {
-                        close_help();
-                }
-        }
+	prophelp_layer = document.getElementById('property_' + propname + '_help');
+	prophelp_layer.style.position = 'absolute';
+	prophelp_layer.style.width = '40em';
+	prophelp_layer.style.backgroundColor = 'white';
+	prophelp_layer.style.border = '1px solid black';
 
+	if (prophelp_layer.style.display == 'none')
+	{
+		prophelp_layer.style.display = 'block';
+	}
+	else
+	{
+		prophelp_layer.style.display = 'none';
+	}
 }
 </script>
 
