@@ -764,17 +764,6 @@ class htmlclient extends aw_template
 			));
 		}
 
-		if ($arr["confirm_save_data"] == 1 && !($_GET["action"] == "check_leave_page" || $_GET["group"] == "relationmgr"))
-		{
-			$this->vars_safe(array(
-				"confirm_unchanged_text" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?")
-			));
-			$this->vars_safe(array(
-				"CHECK_LEAVE_PAGE" => $this->parse("CHECK_LEAVE_PAGE")
-			));
-		}
-
-
 		if (!empty($arr["save_message"]))
 		{
 			$this->vars_safe(array(
@@ -785,11 +774,12 @@ class htmlclient extends aw_template
 			));
 		}
 
-		// elem. id for all aw interface container tables
+		// options from cfgform
 		if (is_object($arr["awcb_cfgform"]))
 		{ // load misc options from given cfgform
 			$cfgform_o = $arr["awcb_cfgform"];
 
+			// elem. id for all aw interface container tables
 			if ($cfgform_o->prop("awcb_add_id"))
 			{// add cfgform object id to main container element id
 				$this->vars["contenttbl_id"] = "awcbContentTbl" . $cfgform_o->id();
@@ -799,14 +789,32 @@ class htmlclient extends aw_template
 				$this->vars["contenttbl_id"] = "awcbContentTblDefault";
 			}
 
-			if ($cfgform_o->prop("awcb_form_only") and !is_admin())
+			// show only form. no tabs, header
+			if ($cfgform_o->prop("awcb_form_only"))
 			{
 				$arr["form_only"] = 1;
+			}
+
+			// confirm save
+			if ($cfgform_o->prop("awcb_confirm_save_data"))
+			{
+				$arr["confirm_save_data"] = 1;
 			}
 		}
 		else
 		{
 			$this->vars["contenttbl_id"] = "awcbContentTblDefault";
+		}
+
+		// confirm save/discard on leave page
+		if ($arr["confirm_save_data"] == 1 && !($_GET["action"] == "check_leave_page" || $_GET["group"] == "relationmgr"))
+		{
+			$this->vars_safe(array(
+				"confirm_unchanged_text" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?")
+			));
+			$this->vars_safe(array(
+				"CHECK_LEAVE_PAGE" => $this->parse("CHECK_LEAVE_PAGE")
+			));
 		}
 
 		if (!empty($arr["raw_output"]))
