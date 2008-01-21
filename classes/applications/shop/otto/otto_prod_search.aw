@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.21 2007/12/12 14:40:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.22 2008/01/21 14:53:29 dragut Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -336,13 +336,12 @@ class otto_prod_search extends class_base
 		foreach ($sections as $value)
 		{
 			// XXX see sektsioonide raalimine tuleb p6hjalikumalt yle vaadata !!! --dragut
-			if (!array_key_exists($value['product_oid'], $sections_lut))
+			if (!array_key_exists($value['product_oid'], $sections_lut) && $this->can('view', $value['section']))
 			{
 				$sections_lut[$value['product_oid']] = $value['section'];
 			}
 		
 		}
-
 		exit_function('otto_prod_search::do_draw_res::slice_out_current_page');
 
 		enter_function('otto_prod_search::do_draw_res::draw_current_page');
@@ -646,6 +645,14 @@ class otto_prod_search extends class_base
 		$section = $this->db_fetch_field("select aw_folder from otto_imp_t_aw_to_cat where category='$cat' and lang_id=$lang_id", "aw_folder");
 		return $section;
 
+	}
+
+	function my_debug($str)
+	{
+		if ($_SERVER['REMOTE_ADDR'] == '89.219.147.106')
+		{
+			arr($str);
+		}
 	}
 }
 ?>
