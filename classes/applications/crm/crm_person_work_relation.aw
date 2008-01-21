@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.6 2008/01/12 22:38:04 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.7 2008/01/21 14:12:22 kaarel Exp $
 // crm_person_work_relation.aw - Töösuhe 
 /*
 
@@ -18,6 +18,9 @@
 
 @property profession type=relpicker reltype=RELTYPE_PROFESSION
 @caption Amet
+
+@property room type=textbox
+@caption T&ouml;&ouml;ruum
 
 @property start type=date_select year_from=1990
 @caption Suhte algus
