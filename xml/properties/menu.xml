@@ -367,6 +367,15 @@
             <caption>Dokumentide j&amp;amp;auml;rjestamine</caption>
       </property>
       <property>
+            <name>doc_ord_apply_to_admin</name>
+            <table>objects</table>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>doc_ord</group>
+            <caption>Kehtib ka adminis</caption>
+      </property>
+      <property>
             <name>ip</name>
             <table>objects</table>
             <type>table</type>

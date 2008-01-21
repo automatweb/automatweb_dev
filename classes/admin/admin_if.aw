@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.37 2008/01/18 13:51:23 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.38 2008/01/21 12:33:39 hannes Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -918,10 +918,39 @@ class admin_if extends class_base
 		}
 		else
 		{
-			$t->sort_by(array(
-				"field" => array("is_menu", $sortby, "name"),
-				"sorder" => array("is_menu" => "desc", $sortby => $GLOBALS["sort_order"],"name" => "asc")
-			));
+			// if document order is set from folder then use it
+			if ($menu_obj->prop("doc_ord_apply_to_admin")==1 && !isset($_GET["sort_order"])  )
+			{
+				$a_sort_fields = new aw_array($menu_obj->meta("sort_fields"));
+				$a_sort_order = new aw_array($menu_obj->meta("sort_order"));
+				
+				$a_fields = array("is_menu");
+				foreach($a_sort_fields->get() as $key => $val)
+				{
+					$a_field = split  ( "\.", $val);
+					$a_fields[] = $a_field[1];
+				}
+				
+				$a_sorder = array("is_menu" => "desc");
+				$i=1;
+				foreach($a_sort_order->get() as $key => $val)
+				{
+					$a_sorder[$a_fields[$i]] = strtolower($val);
+					$i++;	
+				}
+				
+				$t->sort_by(array(
+					"field" => $a_fields,
+					"sorder" => $a_sorder
+				));
+			}
+			else
+			{
+				$t->sort_by(array(
+					"field" => array("is_menu", $sortby, "name"),
+					"sorder" => array("is_menu" => "desc", $sortby => $GLOBALS["sort_order"],"name" => "asc")
+				));
+			}
 		}
 		$t->set_sortable(false);
 	}

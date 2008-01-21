@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.216 2008/01/11 11:14:18 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.217 2008/01/21 12:33:44 hannes Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -156,6 +156,9 @@
 		caption Dokumente j&auml;rjestatakse
 
 		property sort_ord type=select table=objects field=meta method=serialize group=doc_ord
+		
+		@property doc_ord_apply_to_admin type=checkbox table=objects field=meta method=serialize group=doc_ord
+		@caption Kehtib ka adminis
 
 	@groupinfo ip caption="IP piirangud" parent=show
 
