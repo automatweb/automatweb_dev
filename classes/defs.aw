@@ -1,6 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.248 2008/01/16 10:23:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.249 2008/01/21 12:46:20 kristo Exp $
 // defs.aw - common functions
+
+/*
+EMIT_MESSAGE(MSG_MAIL_SENT)
+*/
+
 if (!defined("DEFS"))
 {
 	define("DEFS",1);
@@ -341,13 +346,15 @@ if (!defined("DEFS"))
 		{
 			return;
 		}
+		preg_match("/From\: (.*)/im", $headers, $mt);
+		$from = $mt[1];
+
 		if (aw_ini_get("mail.use_smtp"))
 		{
-			preg_match("/From\: (.*)/im", $headers, $mt);
 			$smtp = get_instance("protocols/mail/smtp");
 			$smtp->send_message(
 				aw_ini_get("mail.smtp_server"),
-				$mt[1],
+				$from,
 				$to,
 				$headers."\nX-Mailer: AutomatWeb\nTo: $to\nSubject: ".$subject."\n\n".$msg
 			);
@@ -369,6 +376,20 @@ if (!defined("DEFS"))
 				mail($to,$subject,$msg,$headers,$arguments);
 			};
 		}
+
+		$bt = debug_backtrace();
+		// find the sender app from the backtrace
+		$app = $bt[1]["class"];
+
+		post_message(MSG_MAIL_SENT, array(
+			"from" => $from,
+			"to" => $to,
+			"subject" => $subject,
+			"headers" => $headers,
+			"arguments" => $arguments,
+			"content" => $msg,
+			"app" => $app
+		));
 	}
 
 	/** returns an array of all classes defined in the system
@@ -1602,7 +1623,19 @@ if (!defined("DEFS"))
 				$msg .= $fnm2." with arguments ";
 
 				$awa = new aw_array($bt[$i]["args"]);
-				$msg .= "<font size=\"-1\">(".htmlentities(join(",", $awa->get())).") file = ".$bt[$i]["file"]."</font>";
+				$str = array();
+				foreach($awa->get() as $e)
+				{
+					if (is_object($e))
+					{
+						$str[] = "Object ".get_class($e);
+					}
+					else
+					{
+						$str[] = "".$e;
+					}
+				}
+				$msg .= "<font size=\"-1\">(".htmlentities(join(",", $str)).") file = ".$bt[$i]["file"]."</font>";
 
 				$msg .= " <br><br>\n\n";
 			}

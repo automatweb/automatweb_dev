@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.10 2006/09/20 10:28:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.11 2008/01/21 12:46:35 kristo Exp $
 // now I have to figure out a way to execute this from site directory.
 // so that I can actually parse an INI file
 
@@ -7,7 +7,7 @@
 $cwd = getcwd();
 if (!extension_loaded("readline"))
 {
-	die(t("readline extension not available and AW shell needs it\n"));
+	die(("readline extension not available and AW shell needs it\n"));
 };
 $inifile = $cwd . "/aw.ini";
 $use_timer = true;

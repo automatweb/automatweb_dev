@@ -289,6 +289,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property all_action_rows type=checkbox ch_value=1  table=objects field=meta method=serialize
 	@caption Kuva Tegevused vaates k&otilde;iki ridu
 
+	@property document_source_toolbar type=table store=no no_caption=1
+	@caption Organisatsiooni dokumentide toolbar
+
+	@property document_source_list type=table store=no
+	@caption Organisatsiooni dokumentide asukohad
+
 --------------------------------------
 @default group=contacts2
 
