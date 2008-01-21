@@ -43,6 +43,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property birthday type=date_select year_from=1930 year_to=2010 default=-1 save_format=iso8601
 @caption S&uuml;nniaeg
 
+@property birthday_hidden type=checkbox ch_value=1 field=meta method=serialize
+@caption Peida s&uuml;nniaeg
+
 @property gender type=chooser
 @caption Sugu
 
@@ -808,6 +811,9 @@ caption S&otilde;bragrupid
 
 @reltype CITIZENSHIP value=74 clid=CL_CITIZENSHIP
 @caption kodakondsus
+
+@reltype DEGREE value=75 clid=CL_CRM_DEGREE
+@caption Kraad
 
 */
 
