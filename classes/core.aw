@@ -619,49 +619,32 @@ class core extends acl_base
 			}
 		}
 		// meilime veateate listi ka
-		$subj = $v."Viga saidil ".$this->cfg["baseurl"];
+		$subj = $v. str_replace("http://", "", $this->cfg["baseurl"]);
 
 		if (!$is_rpc_call && !headers_sent())
 		{
 			header("X-AW-Error: 1");
 		}
-		$content = "\nVeateade: ".$msg;
+		$content = "\nVeateade: " . htmlspecialchars_decode(strip_tags($msg));
 		$content.= "\nKood: ".$err_type;
-		$content.= "\nfatal = ".($fatal ? "Jah" : "Ei" )."\n";
-		$content.= "PHP_SELF = ".aw_global_get("PHP_SELF")."\n";
-		$content.= "lang_id = ".aw_global_get("lang_id")."\n";
-		$content.= "uid = ".aw_global_get("uid")."\n";
-		$content.= "section = ".$_REQUEST["section"]."\n";
-		$content.= "url = ".$this->cfg["baseurl"].aw_global_get("REQUEST_URI")."\n-----------------------\n";
-		$content.= "is_rpc_call = $is_rpc_call\n";
-		$content.= "rpc_call_type = $rpc_call_type\n";
-		$content .= "\n\nCookie vars\n";
-		foreach($_COOKIE as $k => $v)
-		{
-			$content.="$k = $v \n";
-		}
-		$content .= "\n\nGet vars\n";
-		foreach($_GET as $k => $v)
-		{
-			$content.="$k = $v \n";
-		}
-		$content .= "\n\nPost vars\n";
-		foreach($_POST as $k => $v)
-		{
-			$content.="$k = $v \n";
-		}
-		$keys = array("DOCUMENT_ROOT","HTTP_ACCEPT_LANGUAGE","HTTP_HOST","HTTP_REFERER","HTTP_USER_AGENT","REMOTE_ADDR",
-			"SCRIPT_FILENAME","SCRIPT_URI","SCRIPT_URL","REQUEST_METHOD","QUERY_STRING");
-		$content.="\n\nHelpful server vars:\n\n";
-		foreach($_SERVER as $k => $v)
-		{
-		//	if (in_array($k,$keys))
-			{
-				$content.="$k = $v \n";
-			};
-		}
+		$content.= "\nFatal: " . (int) $fatal;
+		$content.= "\nPHP_SELF: ".aw_global_get("PHP_SELF");
+		$content.= "\nlang_id: ".aw_global_get("lang_id");
+		$content.= "\nuid: ".aw_global_get("uid");
+		$content.= "\nsection: ".$_REQUEST["section"];
+		$content.= "\nurl: " . $this->cfg["baseurl"] . aw_global_get("REQUEST_URI");
+		$content.= "\nreferer: " . $_SERVER["HTTP_REFERER"];
+		$content.= "\nis_rpc_call: " . (int) $is_rpc_call;
+		$content.= "\nrpc_call_type: " . $rpc_call_type;
 
-
+		$content .= "\n\n\$_GET:\n";
+		$content .= print_r($_GET, true);
+		$content .= "\n\n\$_POST:\n";
+		$content .= print_r($_POST, true);
+		$content .= "\n\n\$_COOKIE:\n";
+		$content .= print_r($_COOKIE, true);
+		$content .= "\n\n\$_SERVER:\n\n";
+		$content .= print_r($_SERVER, true);
 
 		// try to find the user's email;
 		$head = "";
@@ -674,12 +657,12 @@ class core extends acl_base
 			{
 				$eml = "automatweb@automatweb.com";
 			}
-			$head="From: $uid<".$eml.">\n";
+			$head="From: $uid <".$eml.">\n";
 		}
 		else
 		{
 			$head="From: automatweb@automatweb.com\n";
-		};
+		}
 
 
 		if ($err_type == 30 && strpos($_SERVER["HTTP_USER_AGENT"], "Microsoft-WebDAV-MiniRedir") !== false)
@@ -760,7 +743,7 @@ class core extends acl_base
 		{
 			$send_mail = false;
 		}
-		
+
 		// kui saidi kaustas on fail spam.txt, siis kontrollitakse enne saatmist kirja sisu failis olevate s6nade vastu; spam.txt sisu on yhes reas kujul: /viagra|v1agra|porn|foo/i
 		if ( file_exists(aw_ini_get("site_basedir") . "/spam.txt") && $send_mail)
 		{
@@ -1221,11 +1204,11 @@ class core extends acl_base
 			{
 		        $path .= "?".$url_parsed["query"];
 			}
-			
+
 		    $out = "GET $path HTTP/1.0\r\nHost: $host\r\n\r\n";
-			
+
 		    $fp = fsockopen($host, $port, $errno, $errstr, 30);
-			
+
 		    fwrite($fp, $out);
 		    $body = false;
 		    while (!feof($fp))
@@ -1240,7 +1223,7 @@ class core extends acl_base
 		            $body = true;
 				}
 		    }
-			
+
 		    fclose($fp);
 		}
 		else
