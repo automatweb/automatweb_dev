@@ -792,6 +792,25 @@
             <caption>Kuva Tegevused vaates k&amp;amp;otilde;iki ridu</caption>
       </property>
       <property>
+            <name>document_source_toolbar</name>
+            <table>objects</table>
+            <group>user_settings</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>document_source_toolbar</field>
+            <caption>Organisatsiooni dokumentide toolbar</caption>
+      </property>
+      <property>
+            <name>document_source_list</name>
+            <table>objects</table>
+            <group>user_settings</group>
+            <type>table</type>
+            <store>no</store>
+            <field>document_source_list</field>
+            <caption>Organisatsiooni dokumentide asukohad</caption>
+      </property>
+      <property>
             <name>contact_toolbar</name>
             <table>objects</table>
             <group>contacts2</group>

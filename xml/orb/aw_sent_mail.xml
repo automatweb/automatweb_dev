@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="aw_sent_mail" folder="admin" extends="class_base">
+	</class>
+</orb>
+		
