@@ -43,7 +43,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property birthday type=date_select year_from=1930 year_to=2010 default=-1 save_format=iso8601
 @caption S&uuml;nniaeg
 
-@property birthday_hidden type=checkbox ch_value=1 field=meta method=serialize
+@property birthday_hidden type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption Peida s&uuml;nniaeg
 
 @property gender type=chooser
