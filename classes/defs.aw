@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.249 2008/01/21 12:46:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.250 2008/01/22 10:02:05 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -380,6 +380,15 @@ if (!defined("DEFS"))
 		$bt = debug_backtrace();
 		// find the sender app from the backtrace
 		$app = $bt[1]["class"];
+		if ($app == "aw_mail")
+		{
+			$app = $bt[2]["class"];
+		}
+
+		if ($app == "")
+		{
+			$app = $bt[1]["file"].":".$bt[1]["line"];
+		}
 
 		post_message(MSG_MAIL_SENT, array(
 			"from" => $from,
