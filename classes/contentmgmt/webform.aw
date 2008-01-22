@@ -1973,7 +1973,7 @@ class webform extends class_base
 		if($no_sbt)
 		{
 			$els["submit"] = array(
-				"name" => "submit",
+				"name" => "submit2",
 				"type" => "submit",
 				"caption" => t("Saada"),
 			);
