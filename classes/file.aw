@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.170 2008/01/15 14:16:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.171 2008/01/22 09:18:39 hannes Exp $
 /*
 
 
@@ -767,7 +767,7 @@ class file extends class_base
 				{
 					$replacement = html::img(array(
 						"url" => $icon,
-						'border' => 0,
+						"alt" => t("faili ikoon"),
 					));
 				}
 				$replacement .= " <a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
