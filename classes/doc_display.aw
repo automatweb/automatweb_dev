@@ -47,6 +47,9 @@ class doc_display extends aw_template
 		$text = $this->_get_text($arr, $doc);
 		$lead = $this->_get_lead($arr, $doc);
 		$content = $this->_get_content($arr, $doc);
+		
+		// parse keyword subs
+		$this->parse_keywords($doc);
 
 		$this->create_relative_links($text);
 		$text_no_aliases = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$text);
@@ -228,7 +231,7 @@ class doc_display extends aw_template
 				"ablock" => $this->parse("ablock")
 			));
 		}
-
+		
 		$nll = "";
 		if (!empty($arr["not_last_in_list"]))
 		{
@@ -932,5 +935,82 @@ class doc_display extends aw_template
 		{
 			return date("j", $i_timestamp_created).". ".$a_months[date("n", $i_timestamp_created)]." ".date("Y", $i_timestamp_created);
 		}
+	}
+	
+	function parse_keywords($doc)
+	{
+		// parse subs KEYWORD_BEGIN, KEYWORD and KEYWORD_END
+		if ($doc->prop("keywords") != "")
+		{
+			// if commas are not used then ake spaces as separators
+			if (strpos($doc->prop("keywords"), ",")===false)
+			{
+				$a_keywords = explode(" ", $doc->prop("keywords"));
+			}
+			else
+			{
+				$a_keywords = explode(",", $doc->prop("keywords"));
+			}
+			
+			$tmp = "";
+			for ($i=0;$i<count($a_keywords);$i++)
+			{
+				if ($i==0 && $this->is_template("KEYWORD_BEGIN"))
+				{
+					$this->vars(array(
+						"text" => $a_keywords[$i],
+						"link" => "link",
+					));
+					
+					$tmp .= trim($this->parse("KEYWORD_BEGIN"));
+					continue;
+				}
+				
+				if ($i<count($a_keywords)-1 && $this->is_template("KEYWORD"))
+				{
+					$this->vars(array(
+						"text" =>  $a_keywords[$i],
+						"link" => "link",
+					));
+					
+					$tmp .= trim($this->parse("KEYWORD"));
+					continue;
+				}
+				
+				if ($i==count($a_keywords)-1 && $this->is_template("KEYWORD_END"))
+				{
+					$this->vars(array(
+						"text" =>  $a_keywords[$i],
+						"link" => "link",
+					));
+					
+					$tmp .= trim($this->parse("KEYWORD_END"));
+					continue;
+				}
+				
+				$this->vars(array(
+						"text" =>  $a_keywords[$i],
+						"link" => "link",
+					));
+				
+				$tmp .= trim($this->parse("KEYWORD"));
+			}
+			// now try to put the keywords to template
+			if ($this->is_template("KEYWORD_BEGIN"))
+			{
+				$this->vars(array(
+						"KEYWORD_BEGIN" => $tmp,
+				));
+			}
+			else if ($this->is_template("KEYWORD"))
+			{
+				$this->vars(array(
+						"KEYWORD" => $tmp,
+				));
+			}
+			
+			
+		}
+
 	}
 }
