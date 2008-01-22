@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.161 2007/12/06 02:25:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.162 2008/01/22 10:14:47 robert Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -944,6 +944,11 @@ class doc extends class_base
 		{
 			$dd = get_instance("doc_display");
 			$url = $dd->get_doc_link($arr["obj_inst"]);
+			if($arr["obj_inst"]->prop("alias"))
+			{
+				$ss = get_instance("contentmgmt/site_show");
+				$url = $ss->make_menu_link($arr["obj_inst"]);
+			}
 			if ($arr["request"]["edit_version"] != "")
 			{
 				$url = aw_url_change_var("docversion", $arr["request"]["edit_version"], $url);
