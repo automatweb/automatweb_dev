@@ -21,15 +21,14 @@
 @property subject type=textbox field=aw_subject
 @caption Teema
 
+@property content type=textarea field=aw_content rows=50 cols=80
+@caption Sisu
+
 @property headers type=textarea field=aw_headers rows=3 cols=80
 @caption Headerid
 
 @property arguments type=textarea field=aw_arguments rows=3 cols=80
 @caption Argumendid
-
-@property content type=textarea field=aw_content rows=50 cols=80
-@caption Sisu
-
 
 */
 
@@ -50,6 +49,89 @@ class aw_sent_mail extends class_base
 
 		switch($prop["name"])
 		{
+			case "name":
+				if ($arr["request"]["action"] == "view")
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "from":
+			case "to":
+				if ($arr["request"]["action"] == "view")
+				{
+					$arr["prop"]["value"] = htmlspecialchars($arr["prop"]["value"]);
+				}
+				break;
+
+			case "app":
+				if ($arr["request"]["action"] == "view")
+				{
+					$clss = aw_ini_get("classes");
+					$app = clid_for_name($prop["value"]);
+					$prop["value"] = $clss[$app]["name"];
+				}
+				break;
+
+			case "headers":
+			case "arguments":
+				if ($arr["request"]["action"] == "view")
+				{
+					$arr["prop"]["value"] = "<pre>".htmlspecialchars($arr["prop"]["value"])."</pre>";
+				}
+				break;
+
+			case "content":
+				if ($arr["request"]["action"] == "view")
+				{
+					/*if (preg_match(
+						"/Content\-Type\: multipart\/mixed\;(\s+)boundary\=\"(.*?)\"/imsU", 
+						$arr["obj_inst"]->prop("headers"),
+						$mt))
+					{
+							$pv = $prop["value"];
+							$arr["prop"]["value"] = "";
+							// split body by boundary
+
+							foreach(explode($mt[2], $pv) as $part)
+							{
+								// this 
+								list($headers, $content) = explode("\n\n", $part, 2);
+								if ($content == "")
+								{
+									$content = $headers;
+									$headers = "";
+									$ct = "text/plain";
+echo "content = $scontent  / headers = $headers <br>";
+								}
+								else
+								{
+echo "content = $scontent  / headers = $headers <br>";
+									preg_match(
+										"/Content\-Type\: multipart\/mixed\;(\s+)boundary\=\"(.*?)\"/imsU", 
+										$headers,
+										$mt2);
+									echo (dbg::dump($mt2));
+								}
+	
+								if (strpos($part, "text/html") !== false)
+								{
+									$arr["prop"]["value"] .= $part;
+								}
+								else
+								{
+									$arr["prop"]["value"] .= "<pre>".htmlentities($part)."</pre>";
+								}
+							}
+die();
+					}
+					else*/
+					if (strpos($arr["prop"]["value"], "<body") === false)
+					{
+						$arr["prop"]["value"] = "<pre>".htmlspecialchars($arr["prop"]["value"])."</pre>";
+					}
+				}			
+				break;
 		}
 
 		return $retval;
@@ -89,6 +171,10 @@ class aw_sent_mail extends class_base
 			$this->db_query("CREATE TABLE aw_sent_mails(aw_oid int primary key, aw_app varchar(255), aw_from varchar(255), aw_to varchar(255), aw_subject varchar(255), aw_headers text, aw_arguments text, aw_content mediumtext)");
 			return true;
 		}
+	}
+
+	function get_from($arr)
+	{
 	}
 }
 

@@ -33,6 +33,16 @@
             <caption>Teema</caption>
       </property>
       <property>
+            <name>content</name>
+            <table>aw_sent_mails</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>aw_content</field>
+            <rows>50</rows>
+            <cols>80</cols>
+            <caption>Sisu</caption>
+      </property>
+      <property>
             <name>headers</name>
             <table>aw_sent_mails</table>
             <group>general</group>
@@ -51,16 +61,6 @@
             <rows>3</rows>
             <cols>80</cols>
             <caption>Argumendid</caption>
-      </property>
-      <property>
-            <name>content</name>
-            <table>aw_sent_mails</table>
-            <group>general</group>
-            <type>textarea</type>
-            <field>aw_content</field>
-            <rows>50</rows>
-            <cols>80</cols>
-            <caption>Sisu</caption>
       </property>
       <classinfo>
             <syslog_type>ST_AW_SENT_MAIL</syslog_type>

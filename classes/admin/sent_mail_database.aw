@@ -125,6 +125,12 @@ class sent_mail_database extends class_base
 	function _init_mail_table(&$t)
 	{
 		$t->define_field(array(
+			"name" => "app",
+			"caption" => t("Programm"),
+			"sortable" => 1,
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "created",
 			"caption" => t("Millal"),
 			"sortable" => 1,
@@ -158,26 +164,83 @@ class sent_mail_database extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_mail_table($t);
 
-		$ol = new object_list(array(
+		$filt = array(
 			"class_id" => CL_AW_SENT_MAIL,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"parent" => $arr["obj_inst"]->id()
-		));
+		);
+		
+		$df = date_edit::get_timestamp($arr["request"]["date_from"]);
+		$dt = date_edit::get_timestamp($arr["request"]["date_to"]);
+		if ($df != -1 && $dt != -1)
+		{
+				$filt["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $df, $dt);
+		}
+		else
+		if ($df != -1)
+		{
+				$filt["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $df);
+		}
+		else
+		if ($dt != -1)
+		{
+				$filt["created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $dt);
+		}
+		else
+		{
+				// default to last 24 hrs
+				$filt["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time() - 24*3600);
+		}
+
+		$ol = new object_list($filt);
+		$clss = aw_ini_get("classes");
 		foreach($ol->arr() as $o)
 		{
+			$app = clid_for_name($o->prop("app"));
 			$t->define_data(array(
+				"app" => $clss[$app]["name"],
 				"created" => $o->created(),
-				"from" => $o->prop("from"),
-				"to" => $o->prop("to"),
+				"from" => str_replace(",", ", ", htmlspecialchars($o->prop("from"))),
+				"to" => str_replace(",", ", ", htmlspecialchars($o->prop("to"))),
 				"subject" => html::href(array(
 					"url" => $this->mk_my_orb("view", array("id" => $o->id(), "return_url" => get_ru()), $o->class_id()),
-					"caption" => $o->prop("from")
+					"caption" => $o->prop("subject")
 				))
 			));
 		}
 		$t->set_default_sortby("created");
 		$t->set_default_sorder("desc");
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["date_from"] = $arr["request"]["date_from"];
+		$arr["args"]["date_to"] = $arr["request"]["date_to"];
+	}
+
+	function _get_date_from($arr)
+	{
+		if (!is_array($arr["request"]["date_from"]))
+		{
+			$arr["prop"]["value"] = -1;
+		}
+		else
+		{
+			$arr["prop"]["value"] = date_edit::get_timestamp($arr["request"]["date_from"]);
+		}
+	}
+
+	function _get_date_to($arr)
+	{
+		if (!is_array($arr["request"]["date_to"]))
+		{
+			$arr["prop"]["value"] = -1;
+		}
+		else
+		{
+			$arr["prop"]["value"] = date_edit::get_timestamp($arr["request"]["date_to"]);
+		}
 	}
 }
 
