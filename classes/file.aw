@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.171 2008/01/22 09:18:39 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.172 2008/01/22 10:43:48 kristo Exp $
 /*
 
 
@@ -1173,6 +1173,15 @@ class file extends class_base
 		// allow only integer id-s
 		$id = (int)$id;
 		error::view_check($id);
+
+		$si = __get_site_instance();
+		if (method_exists($si, "can_view_file"))
+		{
+			if (!$si->can_view_file($id))
+			{
+				die("access denied&");
+			}
+		}
 
 		// if the user has access and imgbaseurl is set, then we can redirect the user to that
 		// and let apache do the serving the file, that can take quite some time, if the file is large
