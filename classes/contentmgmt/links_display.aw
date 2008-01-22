@@ -41,11 +41,11 @@ class links_display
 			if ($this->img)
 			{
 
-				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$alt,$alt,$this->img,$alt);
+				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s'></a>",$url,$target,$alt,$this->img,$alt);
 			}
 			else
 			{
-				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'>%s</a>",$url,$target,$alt,$alt,$caption);
+				$replacement = sprintf("<a href='%s' %s title='%s'>%s</a>",$url,$target,$alt,$caption);
 			}
 		};
 		$this->img = "";
