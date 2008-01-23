@@ -641,6 +641,16 @@ class personnel_import extends class_base
 			$soid = $so->id();
 			$persons[$person["PID"]] = $soid;
 
+			$pers_to_sec = array();
+			foreach($so->connections_from(array("type" => 11)) as $conn)
+			{
+				if(!isset($doomed_conns[$conn->id()]))
+				{
+					$doomed_conns[$conn->id()] = 0;
+					$pers_to_sec[$conn->conn["to"]] = $conn->id();
+				}
+			}
+
 			foreach($person["EMAILS"] as $email)
 			{
 				$ml_done = false;
@@ -728,6 +738,23 @@ class personnel_import extends class_base
 //			arr($person["PROFESSIONS"]);
 			foreach($person["PROFESSIONS"] as $profession)
 			{
+				if($pers_to_sec[$sections[$profession["SECTION"]]] > 0)
+				{
+					$doomed_conns[$pers_to_sec[$sections[$profession["SECTION"]]]] = 1;
+					print "CL_CRM_PERSON ".$soid." object is connected to CL_CRM_SECTION object ".$sections[$profession["SECTION"]].".<br>";
+				}
+				else
+				{
+					if(is_oid($sections[$profession["SECTION"]]))
+					{
+						$so->connect(array(
+							"to" => $sections[$profession["SECTION"]],
+							"reltype" => 21,		// RELTYPE_SECTION
+						));
+					}
+					print "Connecting CL_CRM_PERSON ".$soid." object to CL_CRM_SECTION object ".$sections[$profession["SECTION"]].".<br>";
+				}
+
 				$prof_done = false;
 				foreach($so->connections_from(array("type" => 67)) as $conn)
 				{
