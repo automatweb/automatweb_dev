@@ -752,7 +752,7 @@ class personnel_import extends class_base
 
 								foreach($prof->connections_from(array("type" => 6)) as $conn2)
 								{
-									if(!isset($doomed_conns[$conn->id()]))
+									if(!isset($doomed_conns[$conn2->id()]))
 									{
 										$doomed_conns[$conn2->id()] = 0;
 									}
@@ -854,11 +854,11 @@ class personnel_import extends class_base
 						));
 						print "Connected CL_CRM_CONTRACT_STOP object to CL_CRM_WORK_RELATION object.<br>";
 						flush();
+						$prof->set_prop("contract_stop", $contract_stop_id);
 					}
 					
 					$prof->set_prop("section", $sections[$profession["SECTION"]]);
 					$prof->set_prop("profession", $prof_rank_id);
-					$prof->set_prop("contract_stop", $contract_stop_id);
 					$prof->save();
 				}
 			}
