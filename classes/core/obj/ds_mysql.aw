@@ -2092,16 +2092,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				$this->joins[] = $str;
 
-				$str  = " LEFT JOIN objects objects_".$join["to_class"]."_".$join["reltype"]." ON aliases_".$join["from_class"]."_".$join["reltype"].".target = ";
+				$str  = " LEFT JOIN objects objects_".$join["from_class"]."_".$join["to_class"]."_".$join["reltype"]." ON aliases_".$join["from_class"]."_".$join["reltype"].".target = ";
 				$str .= " objects_".$join["to_class"]."_".$join["reltype"].".oid ";
 				$prev_clid = $join["to_class"];
+
 				$this->joins[] = $str;
 
 				$new_t = $GLOBALS["tableinfo"][$join["to_class"]];
 
 				if (is_array($new_t))
 				{
-					$objt_name = "objects_".$join["to_class"]."_".$join["reltype"];
+					$objt_name = "objects_".$join["from_class"]."_".$join["to_class"]."_".$join["reltype"];
 					$tbl = $tbl_r = reset(array_keys($new_t));
 					if ($tbl != "")
 					{
