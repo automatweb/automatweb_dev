@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.24 2007/11/23 11:05:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.25 2008/01/23 09:12:11 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -321,6 +321,11 @@ class procurement extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "applications/procurement_center"
+				));
+
 				if($this->can("view" , $arr["obj_inst"]->prop("orderer")))
 				{
 					$center = $this->model->get_proc_center_for_co(obj($arr["obj_inst"]->prop("orderer")));
@@ -1430,9 +1435,20 @@ class procurement extends class_base
 			"name" => $o->prop("name"),
 			"o" => $o,
 		));
-		$template_obj = obj($template);
-		$this->use_template($template_obj->prop("content"));
-
+		if($this->can("view" , $template))
+		{
+			$template_obj = obj($template);
+			if($template_obj->class_id() == CL_MESSAGE_TEMPLATE)
+			{
+				$template_isoid = 1;
+				$this->use_template($template_obj->prop("content"));
+			}
+		}
+		
+		if(!$template_isoid)
+		{
+			$this->read_template($template);
+		}
 		$conv = get_instance("core/converters/html2pdf");
 		$fi = get_instance(CL_FILE);
 
