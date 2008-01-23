@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>code</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kood</caption>
+      </property>
+      <property>
             <name>jrk</name>
             <table>objects</table>
             <group>general</group>
@@ -119,6 +129,16 @@
             <caption>E-posti aadress</caption>
       </property>
       <property>
+            <name>url</name>
+            <table>objects</table>
+            <group>Kontaktid</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_URL</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Veebiaadress</caption>
+      </property>
+      <property>
             <name>wpls</name>
             <table>objects</table>
             <group>wpls</group>
@@ -208,6 +228,11 @@
                   <clid>CL_ROSTERING_WORKPLACE</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;koht</caption>
             </WORKPLACE>
+            <URL>
+                  <value>12</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>Veebiaadress</caption>
+            </URL>
       </reltypes>
 </properties>
 

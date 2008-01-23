@@ -11,6 +11,16 @@
             <caption>Organisatsioon</caption>
       </property>
       <property>
+            <name>section</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTION</reltype>
+            <caption>&amp;amp;Uuml;ksus</caption>
+      </property>
+      <property>
             <name>profession</name>
             <table>objects</table>
             <group>general</group>
@@ -19,6 +29,15 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PROFESSION</reltype>
             <caption>Amet</caption>
+      </property>
+      <property>
+            <name>room</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;ruum</caption>
       </property>
       <property>
             <name>start</name>
@@ -37,7 +56,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Suhte l&amp;otilde;pp</caption>
+            <caption>Suhte l&amp;amp;otilde;pp</caption>
       </property>
       <property>
             <name>tasks</name>
@@ -46,7 +65,16 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <caption>&amp;Uuml;lesanded</caption>
+            <caption>&amp;amp;Uuml;lesanded</caption>
+      </property>
+      <property>
+            <name>load</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Koormus</caption>
       </property>
       <property>
             <name>directive_link</name>
@@ -66,6 +94,16 @@
             <type>relpicker</type>
             <reltype>RELTYPE_DESC_FILE</reltype>
             <caption>Ametijuhend</caption>
+      </property>
+      <property>
+            <name>contract_stop</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTRACT_STOP</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;lepingu peatumine</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PERSON_WORK_RELATION</syslog_type>
@@ -104,9 +142,14 @@
             </DESC_FILE>
             <CONTRACT_STOP>
                   <value>6</value>
-                  <clid>CL_CONTRACT_STOP</clid>
-                  <caption>T&amp;ouml;&amp;ouml;lepingu peatamine</caption>
+                  <clid>CL_CRM_CONTRACT_STOP</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;lepingu peatamine</caption>
             </CONTRACT_STOP>
+            <SECTION>
+                  <value>7</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>&amp;amp;Uuml;ksus</caption>
+            </SECTION>
       </reltypes>
 </properties>
 

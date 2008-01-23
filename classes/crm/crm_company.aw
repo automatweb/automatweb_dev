@@ -289,7 +289,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property all_action_rows type=checkbox ch_value=1  table=objects field=meta method=serialize
 	@caption Kuva Tegevused vaates k&otilde;iki ridu
 
-	@property document_source_toolbar type=table store=no no_caption=1
+	@property document_source_toolbar type=toolbar store=no no_caption=1
 	@caption Organisatsiooni dokumentide toolbar
 
 	@property document_source_list type=table store=no
@@ -1293,8 +1293,8 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype DAY_REPORT value=39 clid=CL_CRM_DAY_REPORT
 @caption p&auml;eva raport
 
-@reltype DOCS_FOLDER value=40 clid=CL_MENU
-@caption dokumentide kataloog
+@reltype DOCS_FOLDER value=40 clid=CL_MENU,CL_SERVER_FOLDER,CL_FTP_LOGIN
+@caption Dokumentide allikas
 
 @reltype REFERAL_TYPE value=41 clid=CL_META
 @caption sissetuleku meetod
@@ -1385,6 +1385,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype LANGUAGE value=69 clid=CL_LANGUAGE
 @caption Language
+
 
 */
 /*
@@ -2525,6 +2526,8 @@ class crm_company extends class_base
 			case "docs_news_tb":
 			case "dn_res":
 			case "documents_lmod":
+			case "document_source_toolbar":
+			case "document_source_list":
 				static $docs_impl;
 				if (!$docs_impl)
 				{
@@ -3485,6 +3488,7 @@ class crm_company extends class_base
 		$arr["cust_cat"] = 1;
 		$arr["sbt_data"] = 0;
 		$arr["sbt_data2"] = 0;
+		$arr["search_tbl"] = 0;
 		$arr["sector"] = $_GET["sector"];
 		if($_GET['set_buyer_status'] && $_GET['action'] == 'new')
 		{
@@ -6337,6 +6341,8 @@ class crm_company extends class_base
 				}
 			}
 		}
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["search_tbl"], "RELTYPE_DOCS_FOLDER");
 	}
 
 	function callback_mod_layout(&$arr)

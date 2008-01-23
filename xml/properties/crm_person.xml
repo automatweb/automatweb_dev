@@ -79,6 +79,16 @@
             <caption>S&amp;amp;uuml;nniaeg</caption>
       </property>
       <property>
+            <name>birthday_hidden</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Peida s&amp;amp;uuml;nniaeg</caption>
+      </property>
+      <property>
             <name>gender</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -2013,6 +2023,11 @@
                   <clid>CL_CITIZENSHIP</clid>
                   <caption>kodakondsus</caption>
             </CITIZENSHIP>
+            <DEGREE>
+                  <value>75</value>
+                  <clid>CL_CRM_DEGREE</clid>
+                  <caption>Kraad</caption>
+            </DEGREE>
       </reltypes>
       <layout>
             <co_bottom_seller>

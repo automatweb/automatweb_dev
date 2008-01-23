@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.10 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.11 2008/01/23 12:56:18 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -73,6 +73,7 @@ class server_folder extends class_base
 		));
 		$o = obj($oid);
 		$fname = urldecode($fname);
+		$fname = str_replace($o->prop("folder"), "", $fname);
 		$fqfn = $o->prop("folder")."/".str_replace("..", "", $fname);
 		if (!file_exists($fqfn))
 		{
