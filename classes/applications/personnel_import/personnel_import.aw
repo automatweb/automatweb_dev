@@ -91,6 +91,7 @@ class personnel_import extends class_base
 	function invoke($arr)
 	{
 		aw_set_exec_time(AW_LONG_PROCESS);
+		ini_set("memory_limit", "800M");
 		/*
 		$cache = get_instance("cache");
 		$cache->full_flush();
@@ -349,16 +350,27 @@ class personnel_import extends class_base
 			$so->save();
 			$soid = $so->id();
 			$sections[$ext_id] = $soid;
-			if(is_oid($sections[$section["PARENT"]]))
+			if(is_oid($organizations[$section["PARENT_ORG"]]))
 			{
-				print "Connecting to parent section -> ".$sections[$section["PARENT"]]."<br>";
+				print "Connecting to organization -> ".$organizations[$section["PARENT_ORG"]]."<br>";
 				flush();
-				$yl_o = obj($sections[$section["PARENT"]]);
+				$yl_o = obj($organizations[$section["PARENT_ORG"]]);
+				$yl_o->connect(array(
+					"to" => $soid,
+					"reltype" => 28,		// RELTYPE_SECTION
+				));
+//				$doomed_sec_conns[$sections[$section["PARENT"]]][$soid] = 1;
+			}
+			elseif(is_oid($sections[$section["PARENT_SEC"]]))
+			{
+				print "Connecting to parent section -> ".$sections[$section["PARENT_SEC"]]."<br>";
+				flush();
+				$yl_o = obj($sections[$section["PARENT_SEC"]]);
 				$yl_o->connect(array(
 					"to" => $soid,
 					"reltype" => 1,		// RELTYPE_SECTION
 				));
-				$doomed_sec_conns[$sections[$section["PARENT"]]][$soid] = 1;
+				$doomed_sec_conns[$sections[$section["PARENT_SEC"]]][$soid] = 1;
 			}
 
 			if(!empty($section["ADDRESS"]))
@@ -570,6 +582,7 @@ class personnel_import extends class_base
 
 		print "Deleting non-existing sections.<br>";
 		var_dump($doomed_sections);
+		print "<br>";
 		flush();
 		foreach($doomed_sections as $doomed_section_id => $val)
 		{
@@ -911,6 +924,7 @@ class personnel_import extends class_base
 
 		print "Deleting non-existing persons.<br>";
 		var_dump($doomed_persons);
+		print "<br>";
 		flush();
 		foreach($doomed_persons as $doomed_person_id => $val)
 		{
