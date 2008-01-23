@@ -833,6 +833,21 @@ class crm_person extends class_base
 		$this->trans_props = array(
 			"udef_ta1", "udef_ta2", "udef_ta3", "udef_ta4", "udef_ta5"
 		);
+		$this->edulevel_options = array(
+			0 => t("-- Vali üks --"),
+			"pohiharidus" => t("P&otilde;hiharidus"),
+			"keskharidus" => t("Keskharidus"),
+			"keskeriharidus" => t("Kesk-eriharidus"),
+			"kutsekeskharidus" => t("Kutsekeskharidus"),
+			"kutsekorgharidus" => t("Kutsek&otilde;rgharidus"),
+			"rakenduskorgharidus" => t("Rakenduskõrgharidus"),
+			"korgharidus" => t("K&otilde;rgharidus"),
+			"diplom" => t("Diplom"),
+			"bakalaureus" => t("Bakalaureus"),
+			"magister" => t("Magister"),
+			"doktor" => t("Doktor"),
+			"teadustekandidaat" => t("Teaduste kandidaat"),
+		);
 	}
 
 	function set_property($arr)

@@ -1,5 +1,15 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>webview</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WEBVIEW</reltype>
+            <store>connect</store>
+            <field>webview</field>
+            <caption>Isikud veebis</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_PEOPLE_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +17,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <WEBVIEW>
+                  <value>1</value>
+                  <clid>CL_PERSONS_WEBVIEW</clid>
+                  <caption>Isikud veebis</caption>
+            </WEBVIEW>
+      </reltypes>
 </properties>
 

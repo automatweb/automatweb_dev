@@ -7,6 +7,12 @@
 @default table=objects
 @default group=general
 
+@property webview type=relpicker reltype=RELTYPE_WEBVIEW store=connect
+@caption Isikud veebis
+
+@reltype WEBVIEW value=1 clid=CL_PERSONS_WEBVIEW
+@caption Isikud veebis
+
 */
 
 class crm_people_search extends class_base
@@ -46,6 +52,17 @@ class crm_people_search extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	/** parse alias 
+		@attrib name=parse_alias is_public="1"
+	**/
+	function parse_alias($arr)
+	{
+		$this->search_obj = obj($arr["alias"]["to"]); // dokumendis aliasena
+		return "jogaboo";	
+
+
 	}
 
 	function show($arr)

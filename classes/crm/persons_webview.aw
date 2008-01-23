@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.29 2008/01/18 14:10:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.30 2008/01/23 15:57:26 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1156,7 +1156,7 @@ class persons_webview extends class_base
 			"contact" => $contact,
 			"email" => $email,
 			"emails" => $emails,
-			"education" => $worker->prop("edulevel"),
+			"education" => $person_inst->edulevel_options[$worker->prop("edulevel")],
 			"speciality" => $speciality,
 			"name_with_email" => $name_with_email,
 			"wage_doc"	=> $worker->prop("wage_doc"),
