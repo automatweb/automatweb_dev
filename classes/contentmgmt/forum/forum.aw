@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.15 2008/01/10 12:17:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.16 2008/01/23 15:36:18 dragut Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -939,7 +939,7 @@ topic");
 
 		if (!$args["no_add_comment"])
 		{
-			$retval .= $this->add_comment(array_merge(array("board" => $board,"parent" => $parent,"section" => $this->section,"act" => "show_threaded","no_comments" => $no_comments),$add_params));
+			$retval .= $this->add_comment(array_merge(array("board" => $board,"parent" => $parent,"section" => $this->section,"act" => "show_threaded","no_comments" => $no_comments),(array)$add_params));
 		};
 
 		return $retval;
