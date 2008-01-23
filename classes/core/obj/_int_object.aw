@@ -1562,7 +1562,7 @@ class _int_object
 		}
 
 		if ((!empty($GLOBALS["cfg"]["user_interface"]["full_content_trans"]) || !empty($GLOBALS["cfg"]["user_interface"]["trans_classes"][$this->class_id()])) && 
-			($cl = aw_global_get("ct_lang_id")) != $this->lang_id())
+			($cl = aw_global_get($GLOBALS["cfg"]["user_interface"]["full_content_trans"] ? "ct_lang_id" : "lang_id")) != $this->lang_id())
 		{
 			$trans = true;
 			$cur_lid = $cl;
