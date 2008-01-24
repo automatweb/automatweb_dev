@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.172 2008/01/22 10:43:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.173 2008/01/24 09:58:58 kristo Exp $
 /*
 
 
@@ -1612,6 +1612,10 @@ class file extends class_base
 	**/
 	function gen_file_alias_for_doc($arr)
 	{
+		if (!is_oid($arr["doc_id"]))
+		{
+			die();
+		}
 		$c = new connection();
 		$c->load(array(
 			"from" => $arr["doc_id"],

@@ -139,7 +139,7 @@ class file_manager extends aw_template
 			$location = $this->gen_location_for_obj($o);
 			
 			$name = html::href(array(
-				"caption" => $o->name(),
+				"caption" => parse_obj_name($o->name()),
 				"url" => $this->mk_my_orb("change", array(
 					"id" => $o->id(),
 					"return_url" => get_ru(),
