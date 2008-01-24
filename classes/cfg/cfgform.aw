@@ -246,7 +246,7 @@
 */
 class cfgform extends class_base
 {
-	public $cfg_proplist = array();
+	public $cfg_proplist;
 	/*
 	Format: array(
 		prop_name => array(
@@ -299,7 +299,7 @@ class cfgform extends class_base
 	)
 	*/
 
-	public $cfg_groups = array();
+	public $cfg_groups;
 	/*
 	Format: array(
 		group_name => array(
@@ -314,7 +314,7 @@ class cfgform extends class_base
 	)
 	*/
 
-	public $cfg_layout = array();
+	public $cfg_layout;
 	/*
 	Format: array(
 		layout_name => array(
