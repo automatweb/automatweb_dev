@@ -225,6 +225,41 @@
             <caption>Faili upload 1</caption>
       </property>
       <property>
+            <name>ucheckbox1</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>checkbox</type>
+            <field>ucheckbox1</field>
+      </property>
+      <property>
+            <name>ucheckbox2</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>checkbox</type>
+            <field>ucheckbox2</field>
+      </property>
+      <property>
+            <name>ucheckbox3</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>checkbox</type>
+            <field>ucheckbox3</field>
+      </property>
+      <property>
+            <name>ucheckbox4</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>checkbox</type>
+            <field>ucheckbox4</field>
+      </property>
+      <property>
+            <name>ucheckbox5</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>checkbox</type>
+            <field>ucheckbox5</field>
+      </property>
+      <property>
             <name>title</name>
             <group>general</group>
             <table>planner</table>

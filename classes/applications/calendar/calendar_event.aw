@@ -96,6 +96,21 @@
 @property ufupload1 type=fileupload
 @caption Faili upload 1
 
+@property ucheckbox1 type=checkbox
+@caption
+
+@property ucheckbox2 type=checkbox
+@caption
+
+@property ucheckbox3 type=checkbox
+@caption
+
+@property ucheckbox4 type=checkbox
+@caption
+
+@property ucheckbox5 type=checkbox
+@caption
+
 @property title type=textarea field=title
 @caption Sissejuhatus
 
@@ -697,6 +712,28 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 		}
 		$this->vars($data);
 		return $this->parse();
+	}
+
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		if ($table == "planner")
+		{
+			ini_set("ignore_user_abort", "1");
+
+			switch($field)
+			{
+				case "ucheckbox1":
+				case "ucheckbox2":
+				case "ucheckbox3":
+				case "ucheckbox4":
+				case "ucheckbox5":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(1) UNSIGNED"
+					));
+					return true;
+			}
+		}
 	}
 }
 ?>
