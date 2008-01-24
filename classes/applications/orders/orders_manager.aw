@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.15 2007/11/23 11:00:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.16 2008/01/24 15:13:03 dragut Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -46,7 +46,7 @@
 @reltype CFGMANAGER value=1 clid=CL_CFGMANAGER
 @caption Seadete haldur
 
-@reltype ORDERS_FORM value=1 clid=CL_ORDERS_FORM
+@reltype ORDERS_FORM value=2 clid=CL_ORDERS_FORM
 @caption Tellimuse vorm
 
 */
@@ -116,6 +116,7 @@ class orders_manager extends class_base
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				break;
 		}
+		return $retval;
 	}
 	
 	function do_order_undone_tb(&$arr)
@@ -462,6 +463,11 @@ class orders_manager extends class_base
 			));
 		}
 
+		if (!is_array($search_data))
+		{
+			$ts = mktime(0, 0, 0, date("m"), date("d")-7, date("Y"));
+			$search_data["find_start"] = array("year" => date("Y", $ts), "month" => date("m", $ts), "day" => date("d", $ts));
+		}
 		if((date_edit::get_timestamp($search_data["find_start"]) > 1)|| (date_edit::get_timestamp($search_data["find_end"]) > 1))
 		{
 			if(date_edit::get_timestamp($search_data["find_start"]) > 1)
@@ -477,17 +483,20 @@ class orders_manager extends class_base
 			}
 			else
 			{
-				$to = time()*666;
+				$to = time();
 			}
 			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 24*3600));
 		}
-
 //if(aw_global_get("uid") == "otto")arr($filter);
 		$ol = new object_list($filter);
+		$cff_id = $arr["obj_inst"]->prop("order_form.orderform");
 		
 		foreach ($ol->arr() as $order)
 		{
-			if($arr["obj_inst"]->prop("order_form") && $arr["obj_inst"]->prop("order_form") != $order->meta("orders_form"))
+			if($arr["obj_inst"]->prop("order_form") && !(
+				$arr["obj_inst"]->prop("order_form") == $order->meta("orders_form") ||
+				$cff_id == $order->meta("cfgform_id")	
+			))
 			{
 				continue;
 			}
