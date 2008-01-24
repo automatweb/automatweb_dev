@@ -224,13 +224,12 @@ class acl_manager extends class_base
 				"value" => 1,
 				"checked" => isset($acls[$oid])
 			));
-
 			foreach(aw_ini_get("acl.names") as $id => $name)
 			{
 				$dat[$id] = html::checkbox(array(
 					"name" => "acl_matrix[$oid][$id]",
 					"value" => 1,
-					"checked" => $acls[$o->prop("gid")][$id] == 1
+					"checked" => $acls[$o->id()][$id] == 1
 				));
 			}
 			$t->define_data($dat);
