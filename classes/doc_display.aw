@@ -215,11 +215,12 @@ class doc_display extends aw_template
 			"link_text" => $doc->prop("link_text"),
 			"page_title" => strip_tags($title),			
 			"date" => $_date,
-			"doc_modified" => $_date,
+			"doc_modified" => $_date, // backward compability
 			"edit_doc" => $em,
 			"doc_link" => $doc_link,
 			"document_link" => $doc_link,
 			"print_link" => aw_url_change_var("print", 1),
+			"printlink" => aw_url_change_var("print", 1), // backward compability
 			"trans_lc" => aw_global_get("ct_lang_lc"),
 			"lead" => $lead,
 			"content" => $content,
