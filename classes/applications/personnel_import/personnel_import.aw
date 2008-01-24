@@ -806,7 +806,7 @@ class personnel_import extends class_base
 						$prof_id = $prof->id();
 
 						$prof_rank_done = false;
-						if(is_oid($prof->prop("profession")) && $this->can("view", $prof->prop("profession")))
+						if(is_oid($prof->prop("profession")) && $this->can("view", $prof->prop("profession")) && in_array($prof->prop("profession"), $professions))
 						{
 							$prof_rank = new object($prof->prop("profession"));
 							if($prof_rank->name() == $profession["NAME"])
@@ -835,7 +835,7 @@ class personnel_import extends class_base
 
 						if(!$prof_rank_done)
 						{
-							if(is_oid($professions[$profession["NAME"]]))
+							if(is_oid($professions[$profession["NAME"]]) && $this->can("view", $prof->prop("profession")) && in_array($prof->prop("profession"), $professions))
 							{
 								print "Using existing CL_CRM_PROFESSION object, ID - ".$professions[$profession["NAME"]].". ".$profession["NAME"]."<br>";
 		//						$prof_rank = new object($professions[$profession["NAME"]]);
@@ -885,7 +885,7 @@ class personnel_import extends class_base
 				}
 				if(!$prof_done && !empty($profession["NAME"]))
 				{
-					if(is_oid($professions[$profession["NAME"]]))
+					if(is_oid($professions[$profession["NAME"]]) && $this->can("view", $prof->prop("profession")) && in_array($prof->prop("profession"), $professions))
 					{
 						print "Using existing CL_CRM_PROFESSION object, ID - ".$professions[$profession["NAME"]].". ".$profession["NAME"]."<br>";
 //						$prof_rank = new object($professions[$profession["NAME"]]);
