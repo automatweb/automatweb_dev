@@ -158,6 +158,38 @@ class personnel_import extends class_base
 //		arr($organizations);
 
 
+		print "Gathering data of existing CL_CRM_PROFESSION objects...<br>";
+		flush();
+		$professions_arr = new object_data_list(
+			array(
+				"class_id" => CL_CRM_PROFESSION,
+				"parent" => $dir_default
+			),
+			array
+			(
+				CL_CRM_PROFESSION => array("oid" => "oid", "name" => "name")
+			)
+		);
+//		arr($professions_arr->list_data);
+		foreach($professions_arr->list_data as $lde)
+		{
+			if(empty($lde["name"]))
+				continue;
+			if(is_oid($professions[$lde["name"]]))
+			{
+				print "SKIPPED! We already have an object (".$professions[$lde["name"]].") with name (".$lde["name"]."). Why do we have this here? -> ".$lde["oid"]." Delete, of course!<br>";
+				flush();
+				$doomed_profession_obj = obj($lde["oid"]);
+				$doomed_profession_obj->delete();
+				continue;
+			}
+			$professions[$lde["name"]] = $lde["oid"];
+//			$doomed_professions[$lde["oid"]] = 1;
+		}
+//		arr($professions);
+//		exit;
+
+
 		print "Gathering data of existing CL_CRM_SECTION objects...<br>";
 		flush();
 		$sections_arr = new object_data_list(
@@ -765,15 +797,21 @@ class personnel_import extends class_base
 					$prof = $conn->to();
 					if($prof->name() == $profession["NAME"] && $prof->prop("section") == $sections[$profession["SECTION"]] && !$prof_done)
 					{
+						print "Using existing CL_CRM_PERSON_WORK_RELATION object. ID - ".$prof->id().".<br>";
+
 						$prof->set_comment($profession["COMMENT"]);
 						$prof->set_prop("room", $profession["ROOM"]);
 						$prof->set_prop("load", $profession["LOAD"]);
 						$prof->save();
-						if(is_oid($prof->prop("profession")))
+						$prof_id = $prof->id();
+
+						$prof_rank_done = false;
+						if(is_oid($prof->prop("profession")) && $this->can("view", $prof->prop("profession")))
 						{
 							$prof_rank = new object($prof->prop("profession"));
 							if($prof_rank->name() == $profession["NAME"])
 							{
+								print "Using existing CL_CRM_PROFESSION object. ID - ".$prof_rank->id().".<br>";
 								$prof_rank->set_prop("jrk", $profession["QUEUE_NR"]);
 								$prof_rank->save();
 
@@ -791,39 +829,80 @@ class personnel_import extends class_base
 										$contract_stop_done = true;
 									}
 								}
-								if($profession["CONTRACT_STOPPED"] == 1 && !$contract_stop_done)
-								{
-									print "Creating new CL_CRM_CONTRACT_STOP object. ".$profession["NAME"]."<br>";
-									$contract_stop = new object;
-									$contract_stop->set_class_id(CL_CRM_CONTRACT_STOP);
-									$contract_stop->set_parent($dir_default);
-									$contract_stop->set_name($profession["NAME"]);
-									$contract_stop->save();
-									$prof->connect(array(
-										"to" => $contract_stop->id(),
-										"reltype" => 6,		// RELTYPE_CONTRACT_STOP
-									));
-								}
-
-								$doomed_conns[$conn->id()] = 1;
-								print "Using existing CL_CRM_PERSON_WORK_RELATION object. ID - ".$prof->id().".<br>";
-								print "Using existing CL_CRM_PROFESSION object. ID - ".$prof_rank->id().".<br>";
-								flush();
-								$prof_done = true;
+								$prof_rank_done = true;
 							}
 						}
+
+						if(!$prof_rank_done)
+						{
+							if(is_oid($professions[$profession["NAME"]]))
+							{
+								print "Using existing CL_CRM_PROFESSION object, ID - ".$professions[$profession["NAME"]].". ".$profession["NAME"]."<br>";
+		//						$prof_rank = new object($professions[$profession["NAME"]]);
+								$prof_rank_id = $professions[$profession["NAME"]];
+							}
+							else
+							{
+								print "Creating new CL_CRM_PROFESSION object. ".$profession["NAME"]."<br>";
+								$prof_rank = new object;
+								$prof_rank->set_class_id(CL_CRM_PROFESSION);
+								$prof_rank->set_parent($dir_default);
+								$prof_rank->set_name($profession["NAME"]);
+								$prof_rank->set_prop("jrk", $profession["QUEUE_NR"]);
+								$prof_rank->save();
+								$prof_rank_id = $prof_rank->id();
+								$professions[$profession["NAME"]] = $prof_rank_id;
+							}
+							
+							$c = new connection();
+							$c->change(array(
+								"from" => $prof_id,
+								"to" => $prof_rank_id,
+								"reltype" => 3,		//RELTYPE_PROFESSION
+							));
+							$doomed_conns[$c->prop("id")] = 1;
+							print "Connected CL_CRM_PROFESSION object to CL_CRM_WORK_RELATION object.<br>";
+						}
+
+						if($profession["CONTRACT_STOPPED"] == 1 && !$contract_stop_done)
+						{
+							print "Creating new CL_CRM_CONTRACT_STOP object. ".$profession["NAME"]."<br>";
+							$contract_stop = new object;
+							$contract_stop->set_class_id(CL_CRM_CONTRACT_STOP);
+							$contract_stop->set_parent($dir_default);
+							$contract_stop->set_name($profession["NAME"]);
+							$contract_stop->save();
+							$prof->connect(array(
+								"to" => $contract_stop->id(),
+								"reltype" => 6,		// RELTYPE_CONTRACT_STOP
+							));
+						}
+
+						$doomed_conns[$conn->id()] = 1;
+						flush();
+						$prof_done = true;
 					}
 				}
 				if(!$prof_done && !empty($profession["NAME"]))
 				{
-					print "Creating new CL_CRM_PROFESSION object. ".$profession["NAME"]."<br>";
-					$prof_rank = new object;
-					$prof_rank->set_class_id(CL_CRM_PROFESSION);
-					$prof_rank->set_parent($dir_default);
-					$prof_rank->set_name($profession["NAME"]);
-					$prof_rank->set_prop("jrk", $profession["QUEUE_NR"]);
-					$prof_rank->save();
-					$prof_rank_id = $prof_rank->id();
+					if(is_oid($professions[$profession["NAME"]]))
+					{
+						print "Using existing CL_CRM_PROFESSION object, ID - ".$professions[$profession["NAME"]].". ".$profession["NAME"]."<br>";
+//						$prof_rank = new object($professions[$profession["NAME"]]);
+						$prof_rank_id = $professions[$profession["NAME"]];
+					}
+					else
+					{
+						print "Creating new CL_CRM_PROFESSION object. ".$profession["NAME"]."<br>";
+						$prof_rank = new object;
+						$prof_rank->set_class_id(CL_CRM_PROFESSION);
+						$prof_rank->set_parent($dir_default);
+						$prof_rank->set_name($profession["NAME"]);
+						$prof_rank->set_prop("jrk", $profession["QUEUE_NR"]);
+						$prof_rank->save();
+						$prof_rank_id = $prof_rank->id();
+						$professions[$profession["NAME"]] = $prof_rank_id;
+					}
 
 					print "Creating new CL_CRM_PERSON_WORK_RELATION object. ".$profession["NAME"]."<br>";
 					$prof = new object;
