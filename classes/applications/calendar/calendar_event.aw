@@ -714,12 +714,10 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 		return $this->parse();
 	}
 
-	function do_db_upgrade($table, $field, $q, $err)
+	public function do_db_upgrade($table, $field, $q, $err)
 	{
-		if ($table == "planner")
+		if ("planner" === $table)
 		{
-			ini_set("ignore_user_abort", "1");
-
 			switch($field)
 			{
 				case "ucheckbox1":
@@ -729,11 +727,13 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 				case "ucheckbox5":
 					$this->db_add_col($table, array(
 						"name" => $field,
-						"type" => "INT(1) UNSIGNED"
+						"type" => "INT(1) UNSIGNED DEFAULT '0' NOT NULL"
 					));
 					return true;
 			}
 		}
+
+		return false;
 	}
 }
 ?>
