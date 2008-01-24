@@ -1564,7 +1564,7 @@ class class_base extends aw_template
 				$target = "_self";
 			};
 			$title = "";
-			if ($this->can("view", $this->id))
+			if (false && $this->can("view", $this->id))
 			{
 				$tmp = obj($this->id);
 				$title = html::href(array(
