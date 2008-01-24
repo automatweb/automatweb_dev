@@ -88,7 +88,6 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 
 				$add_tree_conf = obj { class_id=CL_ADD_TREE_CONF, parent=${mn_conf}, name="Lisamise puu seaded", status=STAT_NOTACTIVE }
 
-
 				$rss_o = obj { class_id=CL_NEWSFEED, parent=${mn_conf}, name="Uudisvoog", alias="rss" feedtype="rss20", limittype="last", count="20"  }
 		$aw_obj_priv = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="Piiratud ligip&auml;&auml;suga AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
 

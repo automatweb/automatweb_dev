@@ -213,6 +213,8 @@ class object_script_interpreter extends class_base
 	function _replace_syms($line)
 	{
 		$this->lineno++;
+		// unquoted syms are !{name}
+		$line = preg_replace('/\!\{(.*)\}/Ue',"\"\".\$this->_get_sym(\"\\1\").\"\"",$line);
 		return preg_replace('/\$\{(.*)\}/Ue',"\"\\\"\".\$this->_get_sym(\"\\1\").\"\\\"\"",$line);
 	}
 
@@ -432,6 +434,15 @@ class object_script_interpreter extends class_base
 			$cnt = $start+1;
 			while ($toks[$cnt]["tok"] != OSI_TOK_CMD_END)
 			{
+				if ($toks[$cnt]["params"]["name"] == "metadata")
+				{
+					$v = aw_unserialize($this->_get_value($toks[$cnt]["params"]["value"]));
+					foreach(safe_array($v) as $k => $v)
+					{
+						$o->set_meta($k, $v);
+					}
+				}
+				else
 				if (substr($toks[$cnt]["params"]["name"], 0, 5) == "meta.")
 				{
 					$mn = substr($toks[$cnt]["params"]["name"], 5);

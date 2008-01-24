@@ -102,3 +102,18 @@ $do = obj { class_id=CL_MENU, parent=${parent}, name="N&auml;idisobjektid", stat
 		$wf_doc = obj { class_id=CL_DOCUMENT, parent=${wf}, name="Veebivorm", title="Veebivorm", status=STAT_ACTIVE, lead="Demo veebivorm", content="#webform1#" }
 		rel { from=${wf_doc}, to=${wf_o} }
 
+
+	#autentimise seaded
+		$auth_folder = obj { class_id=CL_MENU, parent=${mn_conf} name="Autentimine", status=STAT_ACTIVE, type=MN_CLIENT }
+
+			$auth_local = obj { class_id=CL_AUTH_SERVER_LOCAL, parent=${auth_folder}, name="AutomatWebi kasutajad", status=STAT_ACTIVE }
+
+			$auth_kirke = obj { class_id=CL_AUTH_SERVER_OPENLDAP, parent=${auth_folder}, name="Struktuur Meedia LDAP", status=STAT_ACTIVE, server="kirke.automatweb.com", ad_base_dn="ou=People,dc=automatweb,dc=com", grp_base_dn="dc=automatweb,dc=com", ad_grp="site_access", auto_create_user=1, break_chain=1, no_save_pwd=1, aw_user_prefix="struktuur", no_user_grp=${groups.admins} }
+
+				rel { from=${auth_kirke}, to=${groups.admins}, reltype=2 }
+
+			# server rels
+			$auth_config = obj { class_id=CL_AUTH_CONFIG, parent=${auth_folder}, name="!{url} autentimise seaded", status=STAT_ACTIVE, flags=16, metadata="$arr = array('auth'=>array('!{auth_kirke}'=>array('use'=>'1','jrk'=>'1','int_name'=>''),'!{auth_local}'=>array('use'=>'1','jrk'=>'2','int_name'=>'')));" }
+
+				rel { from=${auth_config}, to=${auth_local}, reltype=1 }
+				rel { from=${auth_config}, to=${auth_kirke}, reltype=1 }
