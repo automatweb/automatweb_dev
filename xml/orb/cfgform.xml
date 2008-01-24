@@ -14,6 +14,8 @@
 		<action name="delete_layouts">
 			<function name="delete_layouts">
 				<arguments>
+					<required name="id" type="int" />
+					<required name="selection" type="array" />
 				</arguments>
 			</function>
 		</action>
@@ -21,6 +23,7 @@
 		<action name="add_new_layout">
 			<function name="add_new_layout">
 				<arguments>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

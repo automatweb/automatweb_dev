@@ -1,13 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="doc" folder="" extends="class_base">
-		<action name="allah">
-			<function name="allah">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="show">
 			<function name="show">
 				<arguments>

@@ -3,4 +3,3 @@
 	<class name="sent_mail_database" folder="admin" extends="class_base">
 	</class>
 </orb>
-		
