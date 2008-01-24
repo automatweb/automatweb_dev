@@ -179,9 +179,33 @@ function depressButton(button) {
     x += button.offsetParent.clientLeft;
     y += button.offsetParent.clientTop;
 }
-  button.menu.style.left = x + "px";
-  button.menu.style.top  = y + "px";
-  button.menu.style.visibility = "visible";
+
+	// Adjust position to fit in view.
+	var maxX;
+	
+	if (pp_browser.isNS)
+	{
+		maxX = window.scrollX + window.innerWidth;
+	}
+	
+	if (pp_browser.isIE) {
+		maxX = (document.documentElement.scrollLeft   != 0 ? document.documentElement.scrollLeft    : document.body.scrollLeft)
+		+ (document.documentElement.clientWidth  != 0 ? document.documentElement.clientWidth   : document.body.clientWidth);
+	}
+	
+	if (window.opera)
+	{
+		maxX = window.innerWidth;
+	}
+	
+	maxX -= button.menu.offsetWidth;
+	
+	if (x > maxX)
+	x = maxX;
+
+	button.menu.style.left = x + "px";
+	button.menu.style.top  = y + "px";
+	button.menu.style.visibility = "visible";
 }
 
 function resetButton(button) {
