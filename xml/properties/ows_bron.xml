@@ -31,6 +31,15 @@
             <no_caption>1</no_caption>
             <field>mail_templates</field>
       </property>
+      <property>
+            <name>bank_settings_table</name>
+            <table>objects</table>
+            <group>bank_settings</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bank_settings_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_OWS_BRON</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -51,6 +60,9 @@
                   <caption>T&amp;amp;uuml;histusmeil</caption>
                   <parent>mail_settings</parent>
             </mail_settings_cancel>
+            <bank_settings>
+                  <caption>Panga seaded</caption>
+            </bank_settings>
       </groupinfo>
       <reltypes>
             <BANK_PAYMENT>
