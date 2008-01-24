@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.25 2008/01/14 11:58:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.26 2008/01/24 12:37:32 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -183,6 +183,7 @@ class auth_config extends class_base
 	**/
 	function has_config()
 	{
+		aw_disable_acl();
 		$ol = new object_list(array(
 			"class_id" => CL_AUTH_CONFIG,
 			"flags" => array(
@@ -195,8 +196,10 @@ class auth_config extends class_base
 		if ($ol->count())
 		{
 			$tmp = $ol->begin();
+			aw_restore_acl();
 			return $tmp->id();
 		}
+		aw_restore_acl();
 		return false;
 	}
 
@@ -215,7 +218,6 @@ class auth_config extends class_base
 
 		$settings = obj($auth_id);
 		$dat = $settings->meta("auth");
-
 		foreach($servers as $server)
 		{
 			if ($credentials["server"] != "")
@@ -250,10 +252,11 @@ class auth_config extends class_base
 	**/
 	function _get_auth_servers($id)
 	{
-		if (!is_oid($id) || !$this->can("view", $id))
+		if (!is_oid($id))
 		{
 			return array();
 		}
+		aw_disable_acl();
 		$o = obj($id);
 		$s = $this->_get_server_list($o);
 		asort($s);
@@ -263,6 +266,7 @@ class auth_config extends class_base
 		{
 			$ret[] = obj($sid);
 		}
+		aw_restore_acl();
 		return $ret;
 	}
 
@@ -272,6 +276,7 @@ class auth_config extends class_base
 	{
 		$ret = array();
 		$s = $o->meta("auth");
+		aw_disable_acl();
 		foreach($o->connections_from(array("type" => "RELTYPE_AUTH_SERVER")) as $c)
 		{
 			$to_id = $c->prop("to");
@@ -280,6 +285,8 @@ class auth_config extends class_base
 				$ret[$to_id] = $s[$to_id]["jrk"];
 			}
 		}
+
+		aw_restore_acl();
 		return $ret;
 	}
 

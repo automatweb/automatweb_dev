@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.51 2007/12/04 13:03:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.52 2008/01/24 12:37:27 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -1868,12 +1868,13 @@ $dbi->db_connect(array(
 
 	function _create_demo_objects($parent, $osi_vars, &$dbi)
 	{
+		$tmp = $osi_vars;
+		$tmp["parent"] = $parent->id();
+
 		$osi = get_instance("install/object_script_interpreter");
 		$osi->exec_file(array(
 			"file" => aw_ini_get("basedir")."/scripts/install/object_scripts/demo_objects.ojs",
-			"vars" => array(
-				"parent" => $parent->id(),
-			)
+			"vars" => $tmp
 		));
 		$vars = $osi->_get_sym_table();
 

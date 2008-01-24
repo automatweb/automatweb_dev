@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.4 2008/01/14 11:58:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.5 2008/01/24 12:37:32 kristo Exp $
 // auth_server_openldap.aw - Autentimisserver OpenLDAP 
 /*
 
@@ -151,10 +151,12 @@ class auth_server_openldap extends class_base
 
 		$break = false;
 		$bind = ldap_bind($res, "uid=".$uid.",".$server->prop("ad_base_dn"), md5($credentials["password"]));
+
 		if (!$bind)
 		{
 			$bind = ldap_bind($res, "uid=".$uid.",".$server->prop("ad_base_dn"), $credentials["password"]);
 		}
+
 		if ($bind)
 		{
 			$grp = $server->prop("ad_grp_txt");

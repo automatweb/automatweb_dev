@@ -943,7 +943,7 @@ class cfgform extends class_base
 		}
 	}
 
-	private function _init_cfgform_data($obj)
+	public function _init_cfgform_data($obj)
 	{
 		$this->_init_properties($obj->prop("subclass"));
 		$this->grplist = $this->cfg_groups = safe_array($obj->meta("cfg_groups"));
