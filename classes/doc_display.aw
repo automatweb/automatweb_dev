@@ -215,6 +215,7 @@ class doc_display extends aw_template
 			"link_text" => $doc->prop("link_text"),
 			"page_title" => strip_tags($title),			
 			"date" => $_date,
+			"doc_modified" => $_date,
 			"edit_doc" => $em,
 			"doc_link" => $doc_link,
 			"document_link" => $doc_link,
