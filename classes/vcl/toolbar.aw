@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.29 2008/01/24 14:18:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.30 2008/01/24 20:31:27 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -569,6 +569,7 @@ class toolbar extends aw_template
 			"img" => "delete.gif",
 			"action" => "delete_objects",
 			"tooltip" => t("Kustuta valitud objektid")
+			"confirm" => t("Oled kindel et soovit valitud objektid kustutada?")
 		));
 		
 	}
@@ -582,7 +583,8 @@ class toolbar extends aw_template
 			"name" => "delete",
 			"img" => "delete.gif",
 			"action" => "delete_rels",
-			"tooltip" => t("Kustuta valitud seosed")
+			"tooltip" => t("Kustuta valitud seosed"),
+			"confirm" => t("Oled kindel et soovid valitud seosed kustutada?")
 		));
 	}
 	
