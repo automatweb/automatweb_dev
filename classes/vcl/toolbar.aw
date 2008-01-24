@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.28 2007/11/22 10:35:22 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.29 2008/01/24 14:18:38 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -491,7 +491,7 @@ class toolbar extends aw_template
 			$clss = $this->picker("", $clp);
 
 			$url = $this->mk_my_orb("redir_search", array("url" => get_ru(), "MAX_FILE_SIZE" => 100000), "aw_object_search");
-			$sb = "<input type=text size=10 name=tb_quicksearch> <select name=tb_qs_clid>".$clss."</select> <input type=button onClick='window.location=\"".$url."&s_name=\"+document.changeform.tb_quicksearch.value+\"&s_clid=\"+document.changeform.tb_qs_clid.options[document.changeform.tb_qs_clid.selectedIndex].value' value='".t("Otsi")."'>";
+			$sb = "<input type=text size=10 name=tb_quicksearch> <select name=tb_qs_clid>".$clss."</select> <input type=button onClick='changed=0;window.location=\"".$url."&s_name=\"+document.changeform.tb_quicksearch.value+\"&s_clid=\"+document.changeform.tb_qs_clid.options[document.changeform.tb_qs_clid.selectedIndex].value' value='".t("Otsi")."'>";
 
 			$sb = '<div nowrap class="tb_but" onMouseOver="this.className=\'tb_but_ov\'" onMouseOut="this.className=\'tb_but\'" onMouseDown="this.className=\'tb_but_ov\'" onMouseUp="this.className=\'tb_but\'">'.$sb.'</div>';
 
