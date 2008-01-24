@@ -167,6 +167,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 
 @reltype CFG_FORM value=7 clid=CL_CFGFORM
 @caption Seadete vorm
+
+@reltype BOOKMARK value=8 clid=CL_EXTLINK,CL_MENU
+@caption Kohustuslik j&auml;rjehoidja
 */
 
 class group extends class_base

@@ -396,6 +396,14 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Seadete vorm</caption>
             </CFG_FORM>
+            <BOOKMARK>
+                  <value>8</value>
+                  <clid>
+                        <num_0>CL_EXTLINK</num_0>
+                        <num_1>CL_MENU</num_1>
+                  </clid>
+                  <caption>Kohustuslik j&amp;amp;auml;rjehoidja</caption>
+            </BOOKMARK>
       </reltypes>
 </properties>
 
