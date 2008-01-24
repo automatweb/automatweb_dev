@@ -106,9 +106,10 @@ class mysql
 			{
 				$eri = new class_base;
 				$eri->init();
-				$eri->raise_error(ERR_DB_NOTCONNECTED, "I'm not connected to the database, cannot perform the requested query. Please report this to site administratorimmediately", true, false);
+				$eri->raise_error(ERR_DB_NOTCONNECTED, "I'm not connected to the database, cannot perform the requested query. Please report this to site administrator immediately", true, false);
 			}
-		};
+		}
+
 		$this->qID = @mysql_query($qtext, $this->dbh);
 		$e_cnt = 0;
 		while (!$this->qID && $this->_proc_error($qtext, $errstr = mysql_error($this->dbh)) && $e_cnt < 200)
@@ -815,14 +816,18 @@ class mysql
 			{
 				return false; // if we get the same error as last time, the upgrader did not create the correct field, so error out
 			}
+
 			$this->db_proc_error_last_fn = $mt[2];
 			// find the table from property list. oh this is gonna be slooooooow
 			$clss = aw_ini_get("classes");
+			$upgrade_result = null;
+
 			foreach($clss as $clid => $inf)
 			{
 				$o = obj();
 				$o->set_class_id($clid);
 				$ti = $o->get_tableinfo();
+
 				foreach($ti as $tn => $td)
 				{
 					if ($mt[1] == $tn)
@@ -831,15 +836,20 @@ class mysql
 						$i = $o->instance();
 						if (method_exists($i, "do_db_upgrade"))
 						{
-							return $i->do_db_upgrade($tn, $mt[2], $q, $errstr);
+							$upgrade_result = $upgrade_result | $i->do_db_upgrade($tn, $mt[2], $q, $errstr);// classes exist that use same db table. collect upgrades from all of them.
 						}
 					}
 				}
 			}
 
-			// if not found, then call the static upgrader
-			$cv = get_instance("admin/converters");
-			return $cv->do_db_upgrade($mt[1], $mt[2], $q, $errstr);
+			if (!isset($upgrade_result))
+			{
+				// if not found, then call the static upgrader
+				$cv = get_instance("admin/converters");
+				$upgrade_result = $cv->do_db_upgrade($mt[1], $mt[2], $q, $errstr);
+			}
+
+			return $upgrade_result;
 		}
 
 		if (strpos($errstr, "doesn't exist") !== false)
