@@ -860,6 +860,8 @@ class personnel_import extends class_base
 								"to" => $prof_rank_id,
 								"reltype" => 3,		//RELTYPE_PROFESSION
 							));
+							$prof->set_prop("profession", $prof_rank_id);
+							$prof->save();
 							$doomed_conns[$c->prop("id")] = 1;
 							print "Connected CL_CRM_PROFESSION object to CL_CRM_WORK_RELATION object.<br>";
 						}
@@ -920,6 +922,7 @@ class personnel_import extends class_base
 						"to" => $prof_rank_id,
 						"reltype" => 3,		//RELTYPE_PROFESSION
 					));
+
 					$doomed_conns[$c->prop("id")] = 1;
 					print "Connected CL_CRM_PROFESSION object to CL_CRM_WORK_RELATION object.<br>";
 					flush();
