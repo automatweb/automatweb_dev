@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.194 2007/12/27 12:37:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.195 2008/01/24 20:28:16 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1794,6 +1794,32 @@ class task extends class_base
 		{
 			$this->add_participant($arr["obj_inst"], get_current_person());
 		}
+
+		$save = false;
+		// check if customer and project are set and if not, set first conns
+		if (!is_oid($arr["obj_inst"]->prop("customer")))
+		{
+			$ro = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CUSTOMER");
+			if ($ro)
+			{
+				$arr["obj_inst"]->set_prop("customer", $ro->id());
+				$save = true;
+			}
+		}
+		if (!is_oid($arr["obj_inst"]->prop("project")))
+		{
+			$ro = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PROJECT");
+			if ($ro)
+			{
+				$arr["obj_inst"]->set_prop("project", $ro->id());
+				$save = true;
+			}
+		}
+		if ($save)
+		{
+			$arr["obj_inst"]->save();
+		}
+
 		$pl = get_instance(CL_PLANNER);
 		$pl->post_submit_event($arr["obj_inst"]);
 	}
