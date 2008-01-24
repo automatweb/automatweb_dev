@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.31 2007/11/23 11:01:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.32 2008/01/24 15:10:11 dragut Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes maintainer=markop
@@ -290,6 +290,13 @@ class orders_order extends class_base
 				}
 				break;
 			
+			case "person_birthday":
+				if ($person)
+				{
+					$birthday_parts = explode('-', $person->prop('birthday'));
+					$prop["value"] = mktime(0, 0, 0, $birthday_parts[1], $birthday_parts[2], $birthday_parts[0]);
+				}
+				break;
 			case "orders_table":
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_ORDER"

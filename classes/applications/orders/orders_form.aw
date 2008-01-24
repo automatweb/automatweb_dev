@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.28 2007/11/23 11:00:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.29 2008/01/24 15:11:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.29 2008/01/24 15:11:15 dragut Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -399,6 +400,9 @@ class orders_form extends class_base
 			$phonenr = $phone_obj->name();
 		}
 
+		$birthday_parts = explode('-', $person->prop("birthday"));
+		$birthday_timestamp = mktime(0, 0, 0, $birthday_parts[1], $birthday_parts[2], $birthday_parts[0]);
+
 		$this->vars(array(
 			"person_name" => $person->name(),
 			"firstname" => $person->prop("firstname"),
@@ -415,7 +419,7 @@ class orders_form extends class_base
 			"udef_textbox6" => $order->prop("udef_textbox6"),
 			"udef_textbox7" => $order->prop("udef_textbox7"),
 			"person_contact" => $person->prop("comment"),
-			"birthday" => get_lc_date($person->prop("birthday"), 1),
+			"birthday" => get_lc_date($birthday_timestamp, 1),
 			"payment_type" => ($_SESSION["orders_form"]["payment"]["type"] == "cod" ? "Lunamaks" : "J&auml;relmaks"),
 		));
 		$add_props = array();
