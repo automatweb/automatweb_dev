@@ -19,7 +19,7 @@ chdir("/www/dev/autotest/automatweb_dev/classes");
 classload("defs");
 classload("aw_template","core/util/timer");
 classload("core/obj/object", "core/error");
-if($do_test)
+if($do_test || !$autotest)
 {
 	require_once('simpletest/unit_tester.php');
 	require_once('simpletest/reporter.php');
