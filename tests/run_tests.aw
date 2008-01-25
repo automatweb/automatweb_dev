@@ -78,7 +78,8 @@ elseif($_GET["test"])
 				print "Tested : ".date("d.m.Y H:i" , $val["time"]);
 				print "<br>result : <br>";
 				
-				get_instance("vcl/table");
+					classload("vcl/table");
+				//	get_instance("vcl/table");
 				$t = new vcl_table(array(
 					"layout" => "generic",
 				));
