@@ -1,5 +1,5 @@
 <?php
-
+ 
 classload("document");
 class document_periodic extends document
 {
