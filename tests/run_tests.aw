@@ -4,9 +4,14 @@ if ($argc < 2)
 	die(
 		"Usage:\n\tphp ${argv[0]} /path/to/site/aw.ini [folder folder folder to run tests in]\n\n");
 }
-//print getcwd(); 
+
+
+if(!$autotest)
+{
+	chdir("..");
+}
+$site_dir = str_replace("/aw.ini", "", $argv[1]);
 $aw_dir = getcwd();//"/www/dev/autotest/automatweb_dev";
-$site_dir = str_replace("/automatweb_dev", "", $aw_dir);//"/www/dev/autotest";
 $basedir =$aw_dir;// realpath("..")."/automatweb_dev";
 
 include("$basedir/init.aw");
