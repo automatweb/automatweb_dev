@@ -4,17 +4,18 @@ if ($argc < 2)
 	die(
 		"Usage:\n\tphp ${argv[0]} /path/to/site/aw.ini [folder folder folder to run tests in]\n\n");
 }
-
-$aw_dir = "/www/dev/autotest/automatweb_dev";
-$site_dir = "/www/dev/autotest";
+//print getcwd(); 
+$aw_dir = getcwd();//"/www/dev/autotest/automatweb_dev";
+$site_dir = str_replace("/automatweb_dev", "", $aw_dir);//"/www/dev/autotest";
 $basedir =$aw_dir;// realpath("..")."/automatweb_dev";
+
 include("$basedir/init.aw");
 //init_config(array("ini_files" => array("$basedir/aw.ini", $argv[1])));
 init_config(array(
 	"cache_file" => $site_dir."/pagecache/ini.cache",
  	"ini_files" => array($aw_dir."/aw.ini",$site_dir."/aw.ini")
  ));
-chdir("/www/dev/autotest/automatweb_dev/classes");
+chdir("classes");
 //echo getcwd() . "\n<br>";
 classload("defs");
 classload("aw_template","core/util/timer");
@@ -35,7 +36,7 @@ if($do_test || !$autotest)
 	}
 	for($i = 2; $i < $argc; $i++)
 	{
-		$path = "/www/dev/autotest/automatweb_dev/tests/".$argv[$i];
+		$path = $aw_dir."/tests/".$argv[$i];//"/www/dev/autotest/automatweb_dev/tests/".$argv[$i];
 	
 		echo "running tests in ".$argv[$i]."... \n\n<br><br>";
 	
