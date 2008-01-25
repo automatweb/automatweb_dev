@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.110 2008/01/13 15:37:01 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.111 2008/01/25 08:18:46 kristo Exp $
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
 
@@ -24,6 +24,9 @@ if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
 $pi = "";
 
 global $section;
+
+$PATH_INFO = $_SERVER["PATH_INFO"];
+$QUERY_STRING = $_SERVER["QUERY_STRING"];
 
 $PATH_INFO = isset($PATH_INFO) ? preg_replace("/\?automatweb=[^&]*/","", $PATH_INFO) : "";
 $QUERY_STRING = isset($QUERY_STRING) ? preg_replace("/\?automatweb=[^&]*/","", $QUERY_STRING) : "";
