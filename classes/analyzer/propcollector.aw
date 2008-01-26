@@ -70,7 +70,7 @@ class propcollector extends aw_template
 		}
 	}
 
-	function run($args = array())
+	public function run($args = array())
 	{
 		$cdir = $this->cfg["basedir"] . "/classes";
 		$sdir = $this->cfg["basedir"] . "/scripts";
@@ -95,6 +95,20 @@ class propcollector extends aw_template
 		}
 
 		printf("Updated %d files out of %d\nAll done.\n", $this->count_modified, $this->count_total);
+	}
+
+	public function parse_class($name)
+	{
+		if (!class_index::is_extension_of($name, "class_base"))
+		{
+			throw new awex_propcollector("Given class '" . $name . "' has no property generation option");
+		}
+
+		$file = class_index::get_file_by_name($name);
+		$this->cl_start($name);
+		$this->_parse_file($file);
+		$success = $this->cl_end();
+		return $success;
 	}
 
 	////
@@ -531,7 +545,7 @@ class propcollector extends aw_template
 		return $fields;
 	}
 
-	function _parse_file ($name)
+	private function _parse_file ($name)
 	{
 		$cname = substr(basename($name),0,-3);
 		$targetfile = $this->cfg["basedir"] . "/xml/properties/$cname" . ".xml";
@@ -675,4 +689,7 @@ class propcollector extends aw_template
 		}
 	}
 }
+
+class awex_propcollector extends aw_exception {}
+
 ?>
