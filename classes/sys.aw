@@ -997,25 +997,60 @@ class sys extends aw_template
 
 /**
 	@attrib name=make_prop
+	@param classes optional type=string
+		comma separated list of classes to make properties for.
 **/
-	function make_property_definitions()
+	public function make_property_definitions($arr)
 	{
+		aw_set_exec_time(AW_LONG_PROCESS);
 
-		if (!headers_sent())
-		{
-			header ("Content-Type: text/plain");
-		}
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
 			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
-		$this->_make_property_definitions();
+
+		if (preg_match("/[^a-z,_0-9]/Ui", $arr["classes"]))
+		{
+			throw new awex_sys("Invalid argument");
+		}
+
+		$classes = explode(",", $arr["classes"]);
+		$this->_make_property_definitions($classes);
 	}
 
-	private function _make_property_definitions()
+	private function _make_property_definitions($classes = array())
 	{
 		$collector = get_instance("analyzer/propcollector");
-		$collector->run();
+
+		if (count($classes))
+		{
+			$failed = array();
+
+			foreach ($classes as $name)
+			{
+				try
+				{
+					$collector->parse_class($name);
+				}
+				catch (awex_propcollector $e)
+				{
+					$failed[] = $name;
+				}
+			}
+
+			if (count($failed))
+			{
+				$e = new awex_sys_mkprop_cl("Couldn't make properties for '" . explode("','", $failed) . "'");
+				$e->failed_classes = $failed;
+				throw $e;
+			}
+		}
+		else
+		{
+			echo "<pre>";
+			$collector->run();
+			echo "</pre>";
+		}
 	}
 
 /**
@@ -1023,10 +1058,7 @@ class sys extends aw_template
 **/
 	function make_orb_definitions()
 	{
-		if (!headers_sent())
-		{
-			header ("Content-Type: text/plain");
-		}
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
@@ -1039,7 +1071,9 @@ class sys extends aw_template
 	{
 		aw_global_set("no_db_connection", 1);
 		$scanner = get_instance("core/orb/orb_gen");
+		echo "<pre>";
 		$scanner->make_orb_defs_from_doc_comments();
+		echo "</pre>";
 	}
 
 /**
@@ -1047,15 +1081,13 @@ class sys extends aw_template
 **/
 	function make_message_maps()
 	{
-		if (!headers_sent())
-		{
-			header ("Content-Type: text/plain");
-		}
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
 			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
+
 		$this->_make_message_maps();
 	}
 
@@ -1063,7 +1095,10 @@ class sys extends aw_template
 	{
 		aw_global_set("no_db_connection", 1);
 		$scanner = get_instance("core/msg/msg_scanner");
+
+		echo "<pre>";
 		$scanner->scan();
+		echo "</pre>";
 	}
 
 /**
@@ -1071,11 +1106,6 @@ class sys extends aw_template
 **/
 	function make_ini_file()
 	{
-		if (!headers_sent())
-		{
-			header ("Content-Type: text/plain");
-		}
-
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
 			throw new awex_sys_webmaintenance("Web maintenance is turned off");
@@ -1107,29 +1137,10 @@ class sys extends aw_template
 			$fp = fopen ($output_file, "w");
 			fwrite ($fp, $res, strlen($res));
 			fclose ($fp);
+			echo "<pre>";
 			echo "aw.ini successfully written.";
+			echo "</pre>";
 		}
-	}
-
-/**
-	@attrib name=make_all
-**/
-	function make_all()
-	{
-		if (!headers_sent())
-		{
-			header ("Content-Type: text/plain");
-		}
-
-		if (!aw_ini_get("enable_web_maintenance"))
-		{
-			throw new awex_sys_webmaintenance("Web maintenance is turned off");
-		}
-
-		$this->_make_ini_file();
-		$this->_make_property_definitions();
-		$this->_make_message_maps();
-		$this->_make_orb_definitions();
 	}
 
 /**
@@ -1137,6 +1148,8 @@ class sys extends aw_template
 **/
 	function make_translations()
 	{
+		aw_set_exec_time(AW_LONG_PROCESS);
+
 		if (!headers_sent())
 		{
 			header ("Content-Type: text/plain");
@@ -1164,6 +1177,8 @@ class sys extends aw_template
 **/
 	function list_missing_translations($arr = array())
 	{
+		aw_set_exec_time(AW_LONG_PROCESS);
+
 		if (!headers_sent())
 		{
 			header ("Content-Type: text/plain");
@@ -1205,12 +1220,8 @@ class sys extends aw_template
 			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
 
-		if (!headers_sent())
-		{
-			header ("Content-Type: text/plain");
-		}
-
 		$this->_save_class($arr);
+		exit;
 	}
 
 	private function show_class_form()
@@ -1268,12 +1279,18 @@ ENDCLASSFORM;
 
 	private function _save_class($args)
 	{
+		echo "<pre>";
 		include(aw_ini_get("basedir") . "/scripts/mk_class/mk_class.aw");
+		echo "</pre>";
 	}
 }
 
 class awex_sys extends aw_exception {}
 class awex_sys_ini extends awex_sys {}
 class awex_sys_webmaintenance extends awex_sys {}
+class awex_sys_mkprop_cl extends awex_sys
+{
+	public $failed_classes = array();
+}
 
 ?>

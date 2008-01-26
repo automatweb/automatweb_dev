@@ -111,6 +111,7 @@
 		<action name="make_prop">
 			<function name="make_property_definitions">
 				<arguments>
+					<optional name="classes" type="string" />
 				</arguments>
 			</function>
 		</action>
