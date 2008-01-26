@@ -1352,6 +1352,12 @@ function check_pagecache_folders()
 function __autoload($class_name)
 {
 	require_once("class_index.aw");
+
+	if ("class_index" === $class_name)
+	{
+		return;
+	}
+
 	$class_file = class_index::get_file_by_name($class_name);
 	require($class_file);
 
