@@ -1210,7 +1210,7 @@ class sys extends aw_template
 			header ("Content-Type: text/plain");
 		}
 
-		$this->save_class($arr);
+		$this->_save_class($arr);
 	}
 
 	private function show_class_form()
@@ -1266,7 +1266,7 @@ Default server to remote to (http://www.foo.ee) (fill only if is remoted):<br/>
 ENDCLASSFORM;
 	}
 
-	private function save_class($args)
+	private function _save_class($args)
 	{
 		include(aw_ini_get("basedir") . "/scripts/mk_class/mk_class.aw");
 	}
