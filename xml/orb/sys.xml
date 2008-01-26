@@ -159,5 +159,18 @@
 			</function>
 		</action>
 
+		<action name="make_class">
+			<function name="make_class">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_class">
+			<function name="save_class">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>

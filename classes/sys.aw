@@ -1007,13 +1007,12 @@ class sys extends aw_template
 		}
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
-			exit;
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
 		$this->_make_property_definitions();
-		exit;
 	}
 
-	function _make_property_definitions()
+	private function _make_property_definitions()
 	{
 		$collector = get_instance("analyzer/propcollector");
 		$collector->run();
@@ -1031,13 +1030,12 @@ class sys extends aw_template
 
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
-			exit;
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
 		$this->_make_orb_definitions();
-		exit;
 	}
 
-	function _make_orb_definitions()
+	private function _make_orb_definitions()
 	{
 		aw_global_set("no_db_connection", 1);
 		$scanner = get_instance("core/orb/orb_gen");
@@ -1056,13 +1054,12 @@ class sys extends aw_template
 
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
-			exit;
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
 		$this->_make_message_maps();
-		exit;
 	}
 
-	function _make_message_maps()
+	private function _make_message_maps()
 	{
 		aw_global_set("no_db_connection", 1);
 		$scanner = get_instance("core/msg/msg_scanner");
@@ -1081,10 +1078,10 @@ class sys extends aw_template
 
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
-			exit;
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
+
 		$this->_make_ini_file();
-		exit;
 	}
 
 	function _make_ini_file()
@@ -1095,7 +1092,7 @@ class sys extends aw_template
 
 		if (!file_exists($input_file))
 		{
-			exit ("File not found.");
+			throw new awex_sys_ini("File not found.");
 		}
 
 		require($basedir . "/scripts/ini/parse_config_to_ini.aw");
@@ -1103,14 +1100,14 @@ class sys extends aw_template
 
 		if ($res === false)
 		{
-			exit ("No config data returned from parser.");
+			throw new awex_sys_ini("No config data returned from parser");
 		}
 		else
 		{
 			$fp = fopen ($output_file, "w");
 			fwrite ($fp, $res, strlen($res));
 			fclose ($fp);
-			exit ("aw.ini successfully written.");
+			echo "aw.ini successfully written.";
 		}
 	}
 
@@ -1126,15 +1123,13 @@ class sys extends aw_template
 
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
-			exit;
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
 
 		$this->_make_ini_file();
 		$this->_make_property_definitions();
 		$this->_make_message_maps();
 		$this->_make_orb_definitions();
-
-		exit;
 	}
 
 /**
@@ -1149,13 +1144,12 @@ class sys extends aw_template
 
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
-			exit;
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
 		$this->_make_translations();
-		exit;
 	}
 
-	function _make_translations()
+	private function _make_translations()
 	{
 		$i = get_instance("core/trans/pot_scanner");
 		$i->full_scan();
@@ -1177,17 +1171,109 @@ class sys extends aw_template
 
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
-			exit;
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
 		$this->_list_missing_translations($arr["lang"], $arr["in_class"]);
-		exit;
 	}
 
-	function _list_missing_translations($lang = "", $class = "")
+	private function _list_missing_translations($lang = "", $class = "")
 	{
 		$i = get_instance("core/trans/pot_scanner");
 		$i->list_untrans_strings($lang, $class);
 	}
+
+/**
+	@attrib name=make_class
+**/
+	public function make_class()
+	{
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
+		}
+
+		$this->show_class_form();
+	}
+
+/**
+	@attrib name=save_class
+**/
+	public function save_class($arr)
+	{
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			throw new awex_sys_webmaintenance("Web maintenance is turned off");
+		}
+
+		if (!headers_sent())
+		{
+			header ("Content-Type: text/plain");
+		}
+
+		$this->save_class($arr);
+	}
+
+	private function show_class_form()
+	{
+		echo <<<ENDCLASSFORM
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Make class</title>
+</head>
+<body>
+
+<form method="POST" action="orb.aw">
+Folder where the class file is (created under AWROOT/classes):<br/>
+<input type="text" name="mkcl_folder" size="50"/><br/>
+
+Class file (foo_bar):<br/>
+<input type="text" name="mkcl_file" size="50"/><br/>
+
+Class name, users see this, so be nice (Foo bar):<br/>
+<input type="text" name="mkcl_name" size="50"/><br/>
+
+Can the user add this class? (1/0):<br/>
+<select name="mkcl_can_add">
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select><br/>
+
+Class parent folder id(s) (from classfolders.ini):<br/>
+<input type="text" name="mkcl_parents" size="50"/><br/>
+
+Alias (if you leave this empty, then the class can"t be added as an alias. Multiple aliases comma separated.):<br/>
+<input type="text" name="mkcl_alias" size="50"/><br/>
+
+Class is remoted? (1/0):<br/>
+<select name="mkcl_is_remoted">
+<option value="0">No</option>
+<option value="1">Yes</option>
+</select><br/>
+
+Default server to remote to (http://www.foo.ee) (fill only if is remoted):<br/>
+<input type="text" name="mkcl_default_remote_server" size="50"/><br/>
+
+<input type="hidden" name="class" value="sys" />
+<input type="hidden" name="action" value="save_class" />
+<input type="hidden" name="reforb" value="1" />
+<input type="hidden" name="ret_to_orb" value="1" />
+<input type="submit">
+</form>
+
+</body>
+</html>
+ENDCLASSFORM;
+	}
+
+	private function save_class($args)
+	{
+		include(aw_ini_get("basedir") . "/scripts/mk_class/mk_class.aw");
+	}
 }
+
+class awex_sys extends aw_exception {}
+class awex_sys_ini extends awex_sys {}
+class awex_sys_webmaintenance extends awex_sys {}
 
 ?>

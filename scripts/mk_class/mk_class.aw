@@ -53,8 +53,10 @@ function make_keys($arr)
 
 #chdir("../..");
 
+$args_from_caller = isset($args["mkcl_file"]);
 $stdin = fopen("php://stdin", "r");
-$stdo = fopen("php://stdout", "w");
+$class = array();
+$aw_basedir = aw_ini_get("basedir");
 
 ///////////////////////////////////////////////////////////////////
 // ask the user the needed info
@@ -66,52 +68,51 @@ echo "You will answer these questions:\n\n";
 $continue = false;
 while(!$continue)
 {
-	echo "Folder where the class file is (created under AWROOT/classes): ";
-	$class['folder'] = trim(fgets($stdin));
-	if (is_dir("classes/" . $class["folder"]))
+	echo "Folder where the class file is (created under AWROOT/classes): " . ($args_from_caller ? $args["mkcl_folder"] : "");
+	$class['folder'] = $args_from_caller ? trim($args["mkcl_folder"]) : trim(fgets($stdin));
+	if (is_dir(($args_from_caller ? $aw_basedir . "/" : "") . "classes/" . $class["folder"]))
 	{
 		$continue = true;
 	}
 	else
 	{
-		echo "Folder does not exist, create it (1/0): ? ";
-		$answer = fgets($stdin);
+		echo "Folder does not exist, create it (1/0): ? " . ($args_from_caller ? "yes" : "");
+		$answer = $args_from_caller ? 1 : fgets($stdin);
 		echo "\n";
 		if ($answer == 1)
 		{
 			$continue = true;
-		};
-	};
-};
+		}
+	}
+}
 
-echo "Class file (foo_bar): ";
-$class['file'] = trim(fgets($stdin));
+echo "Class file (foo_bar): " . ($args_from_caller ? $args["mkcl_file"] : "");
+$class['file'] = $args_from_caller ? trim($args["mkcl_file"]) : trim(fgets($stdin));
 
 // make these automatically, then we can be sure they foillow standard and are unique
 $class['def'] = "CL_".strtoupper($class['file']);
 $class['syslog.type'] = "ST_".strtoupper($class['file']);
 
-echo "Class name, users see this, so be nice (Foo bar): ";
-$class['name'] = trim(fgets($stdin));
+echo "Class name, users see this, so be nice (Foo bar): " . ($args_from_caller ? $args["mkcl_name"] : "");
+$class['name'] = $args_from_caller ? trim($args["mkcl_name"]) : trim(fgets($stdin));
 
-echo "Can the user add this class? (1/0): ";
-$class['can_add'] = trim(fgets($stdin));
+echo "Can the user add this class? (1/0): " . ($args_from_caller ? $args["mkcl_can_add"] : "");
+$class['can_add'] = $args_from_caller ? trim($args["mkcl_can_add"]) : trim(fgets($stdin));
 
-echo "Class parent folder id(s) (from classfolders.ini): ";
-$class['parents'] = trim(fgets($stdin));
+echo "Class parent folder id(s) (from classfolders.ini): " . ($args_from_caller ? $args["mkcl_parents"] : "");
+$class['parents'] = $args_from_caller ? trim($args["mkcl_parents"]) : trim(fgets($stdin));
 
-echo "Alias (if you leave this empty, then the class can't be added as an alias): ";
-$class['alias'] = trim(fgets($stdin));
+echo "Alias (if you leave this empty, then the class can't be added as an alias): " . ($args_from_caller ? $args["mkcl_alias"] : "");
+$class['alias'] = $args_from_caller ? trim($args["mkcl_alias"]) : trim(fgets($stdin));
 
-echo "Class is remoted? (1/0): ";
-$class['is_remoted'] = trim(fgets($stdin));
+echo "Class is remoted? (1/0): " . ($args_from_caller ? $args["mkcl_is_remoted"] : "");
+$class['is_remoted'] = $args_from_caller ? trim($args["mkcl_is_remoted"]) : trim(fgets($stdin));
 
 if ($class['is_remoted'])
 {
-	echo "Default server to remote to (http://www.foo.ee): ";
-	$class['default_remote_server'] = trim(fgets($stdin));
+	echo "Default server to remote to (http://www.foo.ee): " . ($args_from_caller ? $args["mkcl_default_remote_server"] : "");
+	$class['default_remote_server'] = $args_from_caller ? trim($args["mkcl_default_remote_server"]) : trim(fgets($stdin));
 }
-
 
 ////////////////////////////////////////////////////////////////////
 // check if a class by this name does not already exist!
@@ -121,19 +122,19 @@ $clnf = ($class['folder'] == "" ? $class['file'].".aw" : $class['folder']."/".$c
 $clnf_oo = ($class['folder'] == "" ? $class['file']."_obj.aw" : $class['folder']."/".$class['file']."_obj.aw");
 $tpnf = ($class['folder'] == "" ? $class['file'] : $class['folder']."/".$class['file']);
 
-if (file_exists("classes/$clnf"))
+if (file_exists(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf"))
 {
 	echo "\nERROR: file classes/$clnf already exists!\n\n";
 	exit(1);
 }
 
-if (file_exists("classes/$clnf_oo"))
+if (file_exists(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf_oo"))
 {
 	echo "\nERROR: file classes/$clnf_oo already exists!\n\n";
 	exit(1);
 }
 
-if (file_exists("xml/orb/$class.xml"))
+if (file_exists(($args_from_caller ? $aw_basedir . "/" : "") . "xml/orb/$class.xml"))
 {
 	echo "\nERROR: file xml/orb/$class.xml already exists!\n\n";
 	exit(1);
@@ -148,19 +149,22 @@ if (file_exists("xml/orb/$class.xml"))
 ////////////////////
 
 // read config/ini/classes.ini and find the largest class number in it
-$clsini = _file_get_contents('config/ini/classes.ini');
+$clsini = _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . 'config/ini/classes.ini');
 /*preg_match_all("/classes\[(\d+)\]\[def\]/",$clsini, $clid_mt);
 $clids = make_keys($clid_mt[1]);
 $new_clid = max($clids)+1;*/
 
 echo "\n\nRequesting new class id...\n";
 
-$basedir = realpath(".");
-include("$basedir/init.aw");
-init_config(array("ini_files" => array("$basedir/aw.ini")));
-classload("defs");
-classload("aw_template");
-aw_global_set("no_db_connection", true);
+if (!$args_from_caller)
+{
+	$basedir = realpath(".");
+	include("$basedir/init.aw");
+	init_config(array("ini_files" => array("$basedir/aw.ini")));
+	classload("defs");
+	classload("aw_template");
+	aw_global_set("no_db_connection", true);
+}
 
 $classlist = get_instance("core/class_list");
 $new_clid = $classlist->register_new_class_id(array(
@@ -200,7 +204,7 @@ if ($class['is_remoted'] == 1)
 	$new_clini .= "classes[$new_clid][is_remoted] = ".$class['default_remote_server']."\n";
 }
 
-$fp = fopen('config/ini/classes.ini','a');
+$fp = fopen(($args_from_caller ? $aw_basedir . "/" : "") . 'config/ini/classes.ini','a');
 fputs($fp, $new_clini);
 fclose($fp);
 
@@ -214,7 +218,7 @@ echo "\n";
 echo "parsing and adding to config/ini/syslog.ini..\n";
 
 // read and find the biggest number
-$sysini = _file_get_contents('config/ini/syslog.ini');
+$sysini = _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . 'config/ini/syslog.ini');
 preg_match_all("/syslog\.types\[(\d+)\]\[def\]/",$sysini, $sys_mt);
 $sysids = make_keys($sys_mt[1]);
 //$new_sysid = max($sysids)+1;
@@ -264,7 +268,7 @@ foreach($syslines as $sl)
 	$new_sysini[] = $sl;
 }
 
-_file_put_contents('config/ini/syslog.ini',join("\n",$new_sysini));
+_file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . 'config/ini/syslog.ini',join("\n",$new_sysini));
 
 echo "\n";
 
@@ -278,11 +282,11 @@ echo "\nmaking class $clnf...\n\n";
 if ($class['folder'] != "")
 {
 	// check if the directory exists
-	if (!is_dir("classes/".$class['folder']))
+	if (!is_dir(($args_from_caller ? $aw_basedir . "/" : "") . "classes/".$class['folder']))
 	{
 		// mkdir can only create one level of directories at a time
 		// so if the folders has several levels, we need to create all of them.
-		$dir = "classes";
+		$dir = $args_from_caller ? $aw_basedir . "/classes" : "classes";
 		$dirs = explode("/", $class['folder']);
 		foreach($dirs as $fld)
 		{
@@ -296,30 +300,50 @@ if ($class['folder'] != "")
 	}
 }
 
-$fc = str_replace("__classdef", $class['def'], _file_get_contents("install/class_template/classes/base.aw"));
+$fc = str_replace("__classdef", $class['def'], _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . "install/class_template/classes/base.aw"));
 $fc = str_replace("__tplfolder", $tpnf, $fc);
 $fc = str_replace("__syslog_type", $class['syslog.type'], $fc);
 $fc = str_replace("__name", $class['name'], $fc);
 $fc = str_replace("__classname", $class['file'], $fc);
-_file_put_contents("classes/$clnf",$fc);
+_file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf",$fc);
 echo "created classes/$clnf...\n";
 
-$fc = _file_get_contents("install/class_template/classes/class.aw");
+$fc = _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . "install/class_template/classes/class.aw");
 $fc = str_replace("__classname", $class['file'] . "_obj", $fc);
-_file_put_contents("classes/$clnf_oo",$fc);
+_file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf_oo",$fc);
 echo "created classes/$clnf_oo...\n";
 
 $folder = $class['folder'] != "" ? "folder=\"".$class['folder']."\"" : "";
-$fc = str_replace("__classname", $class['file'], _file_get_contents("install/class_template/xml/orb/base.xml"));
-_file_put_contents("xml/orb/".$class['file'].".xml",str_replace("__classfolder", $folder, $fc));
+$fc = str_replace("__classname", $class['file'], _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . "install/class_template/xml/orb/base.xml"));
+_file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . "xml/orb/".$class['file'].".xml",str_replace("__classfolder", $folder, $fc));
 echo "created xml/orb/".$class['file'].".xml...\n";
 
 
 echo "\n\nmaking ini file...\n\n";
-passthru('make ini');
+if ($args_from_caller)
+{
+	$this->do_orb_method_call(array(
+		"class" => "sys",
+		"action" => "make_ini"
+	));
+}
+else
+{
+	passthru('make ini');
+}
 
 echo "\n\nmaking properties...\n\n";
-passthru('make properties');
+if ($args_from_caller)
+{
+	$this->do_orb_method_call(array(
+		"class" => "sys",
+		"action" => "make_prop"
+	));
+}
+else
+{
+	passthru('make properties');
+}
 
 echo "\n\nall done! \n\n";
 ?>
