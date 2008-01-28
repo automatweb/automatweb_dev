@@ -943,7 +943,7 @@ class cfgform extends class_base
 		}
 	}
 
-	public function _init_cfgform_data($obj)
+	function _init_cfgform_data($obj)
 	{
 		$this->_init_properties($obj->prop("subclass"));
 		$this->grplist = $this->cfg_groups = safe_array($obj->meta("cfg_groups"));
@@ -951,7 +951,7 @@ class cfgform extends class_base
 		$this->layout = $this->cfg_layout = safe_array($obj->meta("cfg_layout"));
 	}
 
-	private function _init_properties($class_id)
+	function _init_properties($class_id)
 	{
 		error::raise_if(empty($class_id),(array(
 			"id" => ERR_ABSTRACT,
@@ -1757,9 +1757,9 @@ class cfgform extends class_base
 		$this->read_template("layout.tpl");
 		$used_props = $by_group = $by_layout = $layouts_by_grp = array();
 
-		if (is_array($this->grplist))
+		if (isset($this->cfg_groups))
 		{
-			foreach($this->grplist as $key => $val)
+			foreach($this->cfg_groups as $key => $val)
 			{
 				// we should not have numeric group id-s
 				// actually it's more about a few ghosts I had lying
@@ -1773,46 +1773,38 @@ class cfgform extends class_base
 			}
 		}
 
-		if (is_array($this->prplist))
+		if (isset($this->cfg_proplist))
 		{
-			foreach($this->prplist as $property)
+			foreach($this->cfg_proplist as $property)
 			{
 				if (!empty($property["group"]))
 				{
-					$parent = $property["parent"];
+					$layout_grp = "";
 
-					if (array_key_exists($parent, $this->layout))
+					if (array_key_exists($property["parent"], $this->cfg_layout))
 					{
-						$by_layout[$parent][] = $property;
+						$by_layout[$property["parent"]][] = $property;
+						$layout_grp = $this->cfg_layout[$property["parent"]]["group"];
 					}
-					else
+
+					foreach((array) $property["group"] as $gkey)
 					{
-						if (!is_array($property["group"]))
+						if ($gkey !== $layout_grp)
 						{
-							$by_group[$property["group"]][] = $property;
-						}
-						else
-						{
-							foreach($property["group"] as $gkey)
-							{
-								//list(,$first) = each($property["group"]);
-								$by_group[$gkey][] = $property;
-							}
+							$by_group[$gkey][] = $property;
 						}
 					}
 				}
 			}
 		}
 
-		if (is_array($this->layout))
+		if (isset($this->cfg_layout))
 		{
-			foreach ($this->layout as $name => $data)
+			foreach ($this->cfg_layout as $name => $data)
 			{
-				$group = $data["group"];
-
-				if (array_key_exists($group, $this->grplist))
+				if (array_key_exists($data["group"], $this->cfg_groups))
 				{
-					array_unshift($by_group[$group], $name);
+					array_unshift($by_group[$data["group"]], $name);
 				}
 			}
 		}
@@ -1822,10 +1814,10 @@ class cfgform extends class_base
 		foreach($by_group as $key => $proplist)
 		{
 			$grp_id = str_replace("_", "-", $key);
-			$caption = $this->grplist[$key]["caption"]." ($key)";
+			$caption = $this->cfg_groups[$key]["caption"]." ($key)";
 
 			$this->vars(array(
-				"grp_caption" => empty($this->grplist[$key]["parent"]) ? "<b>" . $caption . "</b>" : $caption,
+				"grp_caption" => empty($this->cfg_groups[$key]["parent"]) ? "<b>" . $caption . "</b>" : $caption,
 				"grpid" => $key,
 			));
 
@@ -2109,7 +2101,7 @@ class cfgform extends class_base
 					$this->vars(array(
 						"layout_name" => $layout,
 						"layout_props" => $layout_props,
-						"layout_type" => $this->layout[$layout]["type"],
+						"layout_type" => $this->cfg_layout[$layout]["type"],
 					));
 					$sc .= $this->parse("layout");
 				}
