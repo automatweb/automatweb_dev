@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.20 2008/01/24 19:36:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.21 2008/01/28 11:10:29 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -736,7 +736,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"id" => $bpo,
 				"reference_nr" => $o->id(),
 				"amount" => $rate["TotalPriceInEur"]*16.0,
-				"expl" => $o->id(),
+				"expl" => "webID:".$o->id()." ".$arr["i_checkin"]."-".$arr["i_checkout"]." ".iconv("utf-8", aw_global_get("charset")."//IGNORE", $hotel["HotelName"])." ".$arr["ct"]["firstname"]." ".$arr["ct"]["lastname"],
 				"lang" => $lc
 			)),
 			"gotoccpayment" => aw_url_change_var("aw_rvs_id", $o->id(), aw_url_change_var("action", "go_to_cc_payment", aw_url_change_var("bpo" , $bpo, aw_url_change_var("reservation" ,  $o->id())))),
@@ -2120,15 +2120,33 @@ $rate_ids = array();
 		{
 			die(dbg::dump($parameters).dbg::dump($return));
 		}
+
 		$rate = $rate["RateDetails"];
 
+		$parameters = array();
+		$parameters["hotelId"] = $location;
+		$parameters["webLanguageId"] = $lang;
+		$parameters["ow_bron"] = $arr["ow_bron"];
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetHotelDetails",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => $parameters,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+		));
+		if (!is_array($return["GetHotelDetailsResult"]))
+		{
+			//die("webservice error: ".dbg::dump($return));
+			$this->proc_ws_error($parameters, $return);
+		}
+		$hotel = $return["GetHotelDetailsResult"]["HotelDetails"];
 			$bp = get_instance(CL_BANK_PAYMENT);
 			die($bp->do_payment(array(
 				"payment_id" => $arr["bpo"],
 				"bank_id" => "credit_card",
 				"amount" => $rate["TotalPriceInEur"]*16.0,
 				"reference_nr" => $arr["reservation"],
-				"expl" => $arr["reservation"],
+				"expl" => "webID:".$arr["aw_rvs_id"]." ".$arr["i_checkin"]."-".$arr["i_checkout"]." ".iconv("utf-8", aw_global_get("charset")."//IGNORE", $hotel["HotelName"])." ".$arr["ct"]["firstname"]." ".$arr["ct"]["lastname"],
 				"lang" => $lc
 			)));
 	}

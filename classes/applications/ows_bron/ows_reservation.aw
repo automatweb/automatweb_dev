@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.10 2008/01/14 14:57:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.11 2008/01/28 11:10:29 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -197,6 +197,7 @@ class ows_reservation extends class_base
 			case "aw_low_floor":
 			case "aw_is_allergic":
 			case "aw_is_handicapped":
+			case "aw_bd":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
 
@@ -246,6 +247,8 @@ if (!is_oid($arr["id"]))
 			$owb = get_instance(CL_OWS_BRON);
 			$lang = $owb->get_web_language_id($l->get_langid($o->lang_id()));
 
+			$bd = date("Y-m-d", $o->prop("guest_bd"))."T00:00:00";
+
 			$params = array(
    			"hotelId" => $o->prop("hotel_id"),
       	"rateId" => $o->prop("rate_id"),
@@ -277,19 +280,20 @@ if (!is_oid($arr["id"]))
       	"floorPreferenceId" => (int)$o->prop("low_floor"),
       	"isAllergic" => (bool)$o->prop("is_allergic"),
       	"isHandicapped" => (bool)$o->prop("is_handicapped"),
-				"guaranteeType" => "NonGuaranteed",
-      	"paymentType" => "BankAccount"
+				"guaranteeType" => "Deposit",
+      	"paymentType" => "NoPayment",
+				"guestBirthday" => $bd
 			);
 //die(dbg::dump($params));
 			$return = $this->do_orb_method_call(array(
-				"action" => "MakeBooking",
+				"action" => "MakeBookingExWithBirthday",
 				"class" => "http://markus.ee/RevalServices/Booking/",
 				"params" => $params,
 				"method" => "soap",
 				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 			));
-	
-			if ($return["MakeBookingResult"]["ResultCode"] != "Success")
+	//echo dbg::dump($return);
+			if ($return["MakeBookingExWithBirthdayResult"]["ResultCode"] != "Success")
 			{
 				die("webservice error: ".dbg::dump($return));
 			}
@@ -301,13 +305,13 @@ if (!is_oid($arr["id"]))
 			$o->set_prop("is_confirmed", 1);
 			$o->set_prop("payment_type", $params["paymentType"]);
 
-			$o->set_prop("confirmation_code", $return["MakeBookingResult"]["ConfirmationCode"]);
-			$o->set_prop("booking_id", $return["MakeBookingResult"]["BookingId"]);
-			$o->set_prop("cancel_deadline", $owb->parse_date_int($return["MakeBookingResult"]["CancellationDeadline"]));
-			$o->set_prop("total_room_charge", $return["MakeBookingResult"]["TotalRoomAndPackageCharges"]);
-			$o->set_prop("total_tax_charge", $return["MakeBookingResult"]["TotalTaxAndFeeCharges"]);
-			$o->set_prop("total_charge", $return["MakeBookingResult"]["TotalCharges"]);
-			$o->set_prop("charge_currency", $return["MakeBookingResult"]["ChargeCurrencyCode"]);
+			$o->set_prop("confirmation_code", $return["MakeBookingExWithBirthdayResult"]["ConfirmationCode"]);
+			$o->set_prop("booking_id", $return["MakeBookingExWithBirthdayResult"]["BookingId"]);
+			$o->set_prop("cancel_deadline", $owb->parse_date_int($return["MakeBookingExWithBirthdayResult"]["CancellationDeadline"]));
+			$o->set_prop("total_room_charge", $return["MakeBookingExWithBirthdayResult"]["TotalRoomAndPackageCharges"]);
+			$o->set_prop("total_tax_charge", $return["MakeBookingExWithBirthdayResult"]["TotalTaxAndFeeCharges"]);
+			$o->set_prop("total_charge", $return["MakeBookingExWithBirthdayResult"]["TotalCharges"]);
+			$o->set_prop("charge_currency", $return["MakeBookingExWithBirthdayResult"]["ChargeCurrencyCode"]);
 
 			$o->set_meta("query", $params);
 			$o->set_meta("result", $return);
