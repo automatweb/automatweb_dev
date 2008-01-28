@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.46 2007/12/21 09:44:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.47 2008/01/28 12:41:04 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -491,7 +491,8 @@ class cb_search extends class_base
 		$this->search_prepared = 1;
 		foreach($this->in_form as $iname => $item)
 		{
-			if ($arr["request"]["s"][$item["clid"]][$item["name"]])
+			if (is_array($arr["request"]["s"]) && is_array($arr["request"]["s"][$item["clid"]]) &&
+				$arr["request"]["s"][$item["clid"]][$item["name"]])
 			{
 				$val = $arr["request"]["s"][$item["clid"]][$item["name"]];
 				$this->search_data[$item["clid"]][$item["name"]] = $val;
@@ -1546,7 +1547,7 @@ class cb_search extends class_base
 	{
 		$o = obj($arr["id"]);
 		$c = get_instance(CL_CFGCONTROLLER);
-		return $c->check_property(
+		$rv = $c->check_property(
 			$o->prop("submit_handler_controller"), 
 			$o,
 			$o,
@@ -1554,6 +1555,7 @@ class cb_search extends class_base
 			array(),
 			$o
 		);
+		return $rv;
 	}
 
 	function add_additional_object_types($o, &$sdata)

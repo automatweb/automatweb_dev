@@ -122,7 +122,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$this->cache->file_clear_pt("storage_search");
 		if ($propagate)
 		{
-			$this->contained->create_brother_object_cache_update($oid);
+			$this->contained->create_brother_cache_update($oid);
 		}
 	}
 

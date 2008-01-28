@@ -4179,7 +4179,7 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-
+			
 			// XXX: create a VCL component out of this
 			// would be nice if one VCL component could handle multiple property types
 			if (($type == "date_select") || ($type == "datetime_select"))
@@ -4238,7 +4238,6 @@ class class_base extends aw_template
 					$pvalues[$name] += $property["ch_value"];
 				};
 			};
-
 			if ($this->is_rel)
 			{
 				if ($name == "name")

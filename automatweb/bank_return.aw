@@ -131,6 +131,10 @@ fclose($fh);
 	$url = $_SESSION["bank_payment"]["url"];
 	if(!$url)
 	{
+		if(!$this->can("view" , $id))
+		{
+			die("Kui sa seda n&auml;ed, siis l&auml;ks midagi pahasti");
+		}
 		$obj = obj($id);
 		$inst = $obj->instance();
 		$inst->bank_return(array("id" => $obj->id()));
