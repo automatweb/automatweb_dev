@@ -4,11 +4,31 @@
             <name>webview</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_WEBVIEW</reltype>
             <store>connect</store>
-            <field>webview</field>
             <caption>Isikud veebis</caption>
+      </property>
+      <property>
+            <name>people_search_template</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Isikute otsinguvormi template</caption>
+      </property>
+      <property>
+            <name>search_properties</name>
+            <table>objects</table>
+            <group>sel_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Otsingus kasutatavad v&amp;amp;auml;ljad</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PEOPLE_SEARCH</syslog_type>
@@ -17,6 +37,11 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <sel_props>
+                  <caption>Vali elemendid</caption>
+            </sel_props>
+      </groupinfo>
       <reltypes>
             <WEBVIEW>
                   <value>1</value>

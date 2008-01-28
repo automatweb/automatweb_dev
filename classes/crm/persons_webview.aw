@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.30 2008/01/23 15:57:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.31 2008/01/28 11:37:55 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -581,7 +581,6 @@ class persons_webview extends class_base
 		{
 			$this->view_obj = obj($arr["alias"]["to"]); // dokumendis aliasena
 		}
-		
 		if(is_oid($company_id)) $this->company = obj($company_id);
 		if(is_oid($section_id)) $this->section = obj($section_id);
 
@@ -618,6 +617,12 @@ class persons_webview extends class_base
 		if(!$level)$level = 0;
 		$this->level = $level;
 		$this->set_levels($level);//teeb siis erinevatest tasemetest massiivi, mida üldse kuvada ja paneb selle muutujasse $this->levels
+
+		if($arr["search_results"]) //sel juhul tuleb otsingust
+		{
+			$this->sw = $arr["search_results"];
+		}
+
 		return $this->parse_company($company);
 	}
 	
@@ -728,6 +733,10 @@ class persons_webview extends class_base
 		//------------------------sorteerib kõvemad vennad ette;
 		foreach($workers_list->arr() as $worker)
 		{
+			if($this->sw && !in_array($worker->id() , $this->sw))//kui on otsing, kuid tulemustes pole
+			{
+				continue;
+			}
 			$jrk = 0;
 			if($this->can("view", $worker->prop("rank")))
 			{
@@ -736,13 +745,17 @@ class persons_webview extends class_base
 			}
 			$workers[] = array("worker" => $worker, "jrk" => $jrk);
 		}
-		foreach ($workers as $key => $row) {
+		foreach ($workers as $key => $row)
+		{
 			$person[$key]  = $row['worker'];
 			$jrk_[$key] = $row['jrk'];
 		}
 		array_multisort($jrk_, SORT_DESC, $person, SORT_DESC, $workers);
 		$principe = $this->view_obj->prop("persons_principe");
-		if($principe[0]["principe"]) $workers = $this->person_sort($workers);
+		if($principe[0]["principe"])
+		{
+			$workers = $this->person_sort($workers);
+		}
 		exit_function("person_webview::get_workers");
 		return $workers;
 	}
