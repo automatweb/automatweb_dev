@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.258 2008/01/02 09:52:11 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.259 2008/01/28 10:56:40 kristo Exp $
 
 /*
 
@@ -2709,7 +2709,7 @@ class site_show extends class_base
 						{
 							if (($use_trans ? $p_o->trans_get_val("alias") : $p_o->alias()) != "")
 							{
-								$alp[] = urlencode(($use_trans ? $p_o->trans_get_val("alias") : $p_o->alias()));
+								$alp[] = str_replace("%2F", "/", urlencode(($use_trans ? $p_o->trans_get_val("alias") : $p_o->alias())));
 							}
 						}
 
@@ -2729,7 +2729,7 @@ class site_show extends class_base
 						}
 						else
 						{
-							$link .= urlencode(($use_trans ? $o->trans_get_val("alias") : $o->alias()));
+							$link .= str_replace("%2F", "/", urlencode(($use_trans ? $o->trans_get_val("alias") : $o->alias())));
 						}
 					}
 				}
