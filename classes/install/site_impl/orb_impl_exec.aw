@@ -2,6 +2,7 @@
 //$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
 // _GET, _POST and friends were implemented in php 4.1.0
 // right now, heaven is on 4.0.6, so I have to implement an workaround
+
 if (!is_array($_GET) || (sizeof($_GET) == 0))
 {
 	$_GET = $HTTP_GET_VARS;

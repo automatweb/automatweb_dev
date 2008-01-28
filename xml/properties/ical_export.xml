@@ -68,13 +68,99 @@
             <caption>Faili url</caption>
       </property>
       <property>
-            <name>url_google</name>
+            <name>google_calendar_url</name>
             <table>objects</table>
-            <group>general</group>
-            <type>text</type>
+            <group>google_calendar_settings</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>google_calendar_settings_title</name>
+            <table>objects</table>
+            <group>google_calendar_settings</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kalendri pealkiri</caption>
+      </property>
+      <property>
+            <name>google_calendar_settings_summary</name>
+            <table>objects</table>
+            <group>google_calendar_settings</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <cols>60</cols>
+            <rows>10</rows>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>google_calendar_settings_location</name>
+            <table>objects</table>
+            <group>google_calendar_settings</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Asukoht</caption>
+      </property>
+      <property>
+            <name>google_calendar_settings_color</name>
+            <table>objects</table>
+            <group>google_calendar_settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <cols>60</cols>
+            <rows>10</rows>
+            <caption>V&amp;amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>automatic_sync</name>
+            <table>objects</table>
+            <group>google_calendar_settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Automaatne s&amp;uuml;nkroniseerimine (15 min intervalliga)... hetkel ei toimi</caption>
+      </property>
+      <property>
+            <name>do_import</name>
+            <table>objects</table>
+            <group>google_calendar_settings</group>
+            <type>checkbox</type>
             <store>no</store>
-            <field>url_google</field>
-            <caption>Faili url Google kalendri jaoks</caption>
+            <ch_value>1</ch_value>
+            <field>do_import</field>
+            <caption>Impordi praegu</caption>
+      </property>
+      <property>
+            <name>google_calendar_uid</name>
+            <table>objects</table>
+            <group>google_calendar_user</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutaja</caption>
+      </property>
+      <property>
+            <name>google_calendar_password_1</name>
+            <table>objects</table>
+            <group>google_calendar_user</group>
+            <type>password</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parool</caption>
+      </property>
+      <property>
+            <name>google_calendar_password_2</name>
+            <table>objects</table>
+            <group>google_calendar_user</group>
+            <type>password</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parool uuesti</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ICAL_EXPORT</syslog_type>
@@ -84,6 +170,19 @@
             <prop_cb>1</prop_cb>
             <maintainer>robert</maintainer>
       </classinfo>
+      <groupinfo>
+            <google_calendar>
+                  <caption>Google kalender</caption>
+            </google_calendar>
+            <google_calendar_settings>
+                  <caption>Seaded</caption>
+                  <parent>google_calendar</parent>
+            </google_calendar_settings>
+            <google_calendar_user>
+                  <caption>Kasutaja</caption>
+                  <parent>google_calendar</parent>
+            </google_calendar_user>
+      </groupinfo>
       <reltypes>
             <CALENDAR>
                   <value>1</value>

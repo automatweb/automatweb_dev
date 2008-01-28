@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.10 2007/12/04 13:03:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.11 2008/01/28 11:54:50 kristo Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 
@@ -47,7 +47,6 @@ class auth_server_local extends class_base
 		// by default eeldame, et kasutaja on jobu ja ei saa
 		// sisse logida
 		$success = false;
-
 		$udata = NULL;
 		$_uid = $credentials["uid"];
 		if (!is_valid("password",$credentials["password"]))

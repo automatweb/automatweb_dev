@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.26 2008/01/24 12:37:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.27 2008/01/28 11:54:50 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -196,7 +196,13 @@ class auth_config extends class_base
 		if ($ol->count())
 		{
 			$tmp = $ol->begin();
+			// also check if there are any servers in it. if not, then it is not valid. 
+			$servers = self::_get_auth_servers($tmp->id());
 			aw_restore_acl();
+			if (!count($servers))
+			{
+				return false;
+			}
 			return $tmp->id();
 		}
 		aw_restore_acl();
@@ -215,7 +221,6 @@ class auth_config extends class_base
 	{
 		// get list of servers, sort by order and try each one
 		$servers = $this->_get_auth_servers($auth_id);
-
 		$settings = obj($auth_id);
 		$dat = $settings->meta("auth");
 		foreach($servers as $server)
@@ -258,7 +263,7 @@ class auth_config extends class_base
 		}
 		aw_disable_acl();
 		$o = obj($id);
-		$s = $this->_get_server_list($o);
+		$s = self::_get_server_list($o);
 		asort($s);
 		$tmp = array_keys($s);
 		$ret = array();

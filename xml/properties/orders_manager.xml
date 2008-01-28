@@ -142,7 +142,7 @@
                   <caption>Seadete haldur</caption>
             </CFGMANAGER>
             <ORDERS_FORM>
-                  <value>1</value>
+                  <value>2</value>
                   <clid>CL_ORDERS_FORM</clid>
                   <caption>Tellimuse vorm</caption>
             </ORDERS_FORM>
