@@ -108,12 +108,26 @@ class crm_people_search extends class_base
 
 		$data = array();
 		$props = $this->search_obj->get_visible_props();
+		$pi = get_instance(CL_CRM_PERSON);
 
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
+
+		$good_prop_types = array("select" , "chooser" , "classificator");
+
 		foreach($props as $prop)
-		{
+		{arr($person_props[$prop]);
+
+
+			if(in_array($person_props[$prop]["type"] , $good_prop_types))
+			{
+				$pi->get_property(array("prop" => &$person_props[$prop]));
+			}
 			if($person_props[$prop]["type"] == "text")
+			{
+				$person_props[$prop]["type"] = "textbox";
+			}
+			if($person_props[$prop]["type"] == "relpicker")
 			{
 				$person_props[$prop]["type"] = "textbox";
 			}
@@ -159,6 +173,10 @@ class crm_people_search extends class_base
 				{
 					$filter[$key] = "%".$val."%";
 				}
+				if($property["type"] == "relpicker")
+				{
+					$filter[$key.".name"] = "%".$val."%";
+				}
 				else
 				{
 					$filter[$key] = $val;
@@ -183,6 +201,8 @@ class crm_people_search extends class_base
 			"file" => $cln,
 			"clid" => $clid
 		));
+
+
 		return $props;
 	}
 

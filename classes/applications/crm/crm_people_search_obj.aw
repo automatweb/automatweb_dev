@@ -27,8 +27,7 @@ class crm_people_search_obj extends _int_object
 
 		}
 		asort($ret);
-	return array_keys($ret);
-		
+		return array_keys($ret);
 	}
 
 }
