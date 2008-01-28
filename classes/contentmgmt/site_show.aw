@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.259 2008/01/28 10:56:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.260 2008/01/28 11:07:11 kristo Exp $
 
 /*
 
@@ -1627,6 +1627,12 @@ class site_show extends class_base
 		$prev = false;
 		$show_obj_tree = false;
 
+		$rootmenu = $this->cfg["rootmenu"];
+		if (aw_ini_get("ini_rootmenu"))
+		{
+			$rootmenu = aw_ini_get("ini_rootmenu");
+		}
+
 		$sfo = NULL;
 		for ($i=0; $i < $cnt; $i++)
 		{
@@ -1739,7 +1745,7 @@ class site_show extends class_base
 				$this->title_yah_arr[] = str_replace("&nbsp;"," ",strip_tags($ref->trans_get_val("name")));
 			}
 
-			if ($prev && $prev->id() == $this->cfg["rootmenu"])
+			if ($prev && $prev->id() == $rootmenu)
 			{
 				$show = true;
 			}
