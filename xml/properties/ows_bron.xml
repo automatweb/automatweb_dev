@@ -11,6 +11,16 @@
             <caption>Pangamakse objekt</caption>
       </property>
       <property>
+            <name>confirmed_rvs_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONFIRMED_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kinnitatud tellimuste kataloog</caption>
+      </property>
+      <property>
             <name>template</name>
             <table>objects</table>
             <group>general</group>
@@ -70,6 +80,11 @@
                   <clid>CL_BANK_PAYMENT</clid>
                   <caption>Pangamakse</caption>
             </BANK_PAYMENT>
+            <CONFIRMED_FOLDER>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kinnitatud tellimuste kaust</caption>
+            </CONFIRMED_FOLDER>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.21 2008/01/28 11:10:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.22 2008/01/28 11:17:05 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -10,6 +10,9 @@
 
 @property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT field=meta method=serialize
 @caption Pangamakse objekt
+
+@property confirmed_rvs_folder type=relpicker reltype=RELTYPE_CONFIRMED_FOLDER field=meta method=serialize
+@caption Kinnitatud tellimuste kataloog
 
 @property template type=textbox field=meta method=serialize
 @caption Template (Vaikimis bron_box.tpl)
@@ -31,6 +34,8 @@
 @reltype BANK_PAYMENT value=1 clid=CL_BANK_PAYMENT
 @caption Pangamakse
 
+@reltype CONFIRMED_FOLDER value=2 clid=CL_MENU
+@caption Kinnitatud tellimuste kaust
 */
 
 class ows_bron extends class_base
