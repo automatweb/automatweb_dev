@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.195 2008/01/24 20:28:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.196 2008/01/28 10:59:13 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -129,7 +129,7 @@ caption Kokkuleppehind
 	@caption &Uuml;hik
 
 	@property deal_amount type=textbox size=5 field=meta method=serialize parent=hr_price_layout
-	@caption Koogus
+	@caption Kogus
 
 	@property deal_price type=textbox size=5 field=meta method=serialize parent=hr_price_layout
 	@caption Kokkuleppehind

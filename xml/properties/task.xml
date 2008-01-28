@@ -334,7 +334,7 @@
             <field>meta</field>
             <method>serialize</method>
             <parent>hr_price_layout</parent>
-            <caption>Koogus</caption>
+            <caption>Kogus</caption>
       </property>
       <property>
             <name>deal_price</name>
