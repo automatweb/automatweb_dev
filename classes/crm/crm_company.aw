@@ -4029,6 +4029,15 @@ class crm_company extends class_base
 			$arr["args"]["bill_s_status"] = $arr["request"]["bill_s_status"];
 			$arr["args"]["bill_s_search"] = $arr["request"]["bill_s_search"];
 		}
+		if ($arr["request"]["bill_payments_search"] != "")
+		{
+			$arr["args"]["bill_payments_cust"] = $arr["request"]["bill_payments_cust"];
+			$arr["args"]["bill_payments_bill_no"] = $arr["request"]["bill_payments_bill_no"];
+			$arr["args"]["bill_payments_from"] = $arr["request"]["bill_payments_from"];
+			$arr["args"]["bill_payments_to"] = $arr["request"]["bill_payments_to"];
+			$arr["args"]["bill_payments_client_mgr"] = $arr["request"]["bill_payments_client_mgr"];
+			$arr["args"]["bill_payments_search"] = $arr["request"]["bill_payments_search"];
+		}
 
 		if($arr['request']['unit'])
 		{
