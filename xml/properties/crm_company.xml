@@ -2350,7 +2350,7 @@
       <property>
             <name>bill_payments_from</name>
             <table>objects</table>
-            <group>bills_list</group>
+            <group>bill_payments</group>
             <type>date_select</type>
             <store>no</store>
             <parent>bills_payments_s</parent>
@@ -2393,7 +2393,7 @@
       <property>
             <name>bill_payments_search</name>
             <table>objects</table>
-            <group>bills_list</group>
+            <group>bill_payments</group>
             <type>submit</type>
             <store>no</store>
             <parent>bills_payments_s</parent>

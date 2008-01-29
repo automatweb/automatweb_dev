@@ -807,7 +807,7 @@ default group=org_objects
 			@property bill_payments_bill_to type=textbox size=15 store=no parent=bills_payments_s captionside=top
 			@caption Arve nr kuni
 
-			@property bill_payments_from type=date_select store=no parent=bills_payments_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox
+			@property bill_payments_from type=date_select store=no parent=bills_payments_s captionside=top format=day_textbox,month_textbox,year_textbox
 			@caption Esitatud alates
 
 			@property bill_payments_to type=date_select store=no parent=bills_payments_s captionside=top format=day_textbox,month_textbox,year_textbox
@@ -816,7 +816,7 @@ default group=org_objects
 			@property bill_payments_client_mgr type=text store=no parent=bills_payments_s captionside=top
 			@caption Kliendihaldur
 
-			@property bill_payments_search type=submit store=no parent=bills_payments_s captionside=top no_caption=1 group=bills_list
+			@property bill_payments_search type=submit store=no parent=bills_payments_s captionside=top no_caption=1
 			@caption Otsi
 
 	@property bill_payments_table type=table no_caption=1 store=no parent=bills_payments_box
