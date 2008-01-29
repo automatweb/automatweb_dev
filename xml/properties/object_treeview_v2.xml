@@ -549,6 +549,11 @@
                   <clid>CL_CFG_VIEW_CONTROLLER</clid>
                   <caption>Tulpade n&amp;amp;auml;itamise kontroller</caption>
             </VIEW_CONTROLLER>
+            <ROW_CONTROLLER>
+                  <value>6</value>
+                  <clid>CL_CFG_VIEW_CONTROLLER</clid>
+                  <caption>Rea kontroller</caption>
+            </ROW_CONTROLLER>
       </reltypes>
 </properties>
 

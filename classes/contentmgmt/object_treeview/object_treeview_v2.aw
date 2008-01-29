@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.115 2008/01/16 19:19:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.116 2008/01/29 10:12:22 robert Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -188,6 +188,8 @@
 @reltype VIEW_CONTROLLER value=5 clid=CL_CFG_VIEW_CONTROLLER
 @caption Tulpade n&auml;itamise kontroller
 
+@reltype ROW_CONTROLLER value=6 clid=CL_CFG_VIEW_CONTROLLER
+@caption Rea kontroller
 */
 
 class object_treeview_v2 extends class_base
@@ -1013,6 +1015,26 @@ class object_treeview_v2 extends class_base
 	// groups are not made, if char param is present in url
 			foreach($ol as $odata)
 			{
+				$controllers = array();
+				$conn = $ob->connections_from(array(
+					"type" => "RELTYPE_ROW_CONTROLLER",
+				));
+				foreach($conn as $cn)
+				{
+					$controllers[] = $cn->prop("to");
+				}				
+				$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
+				foreach ($controllers as $controller)
+				{
+					if ($view_controller_inst->check_property(&$odata, $controller, array()) == PROP_IGNORE)
+					{
+						$cont = 1;
+					}
+				}
+				if($cont)
+				{
+					continue;
+				}
 				if(($group_name != $odata[$group_field]) && empty($_GET['char']))
 				{
 					$this->vars(array(
