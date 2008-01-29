@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.67 2007/10/11 10:37:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.68 2008/01/29 14:40:38 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -370,7 +370,6 @@ class shop_order_cart extends class_base
 		$layout = obj($cart_o->prop("prod_layout"));
 
 		$order_ok = true;
-		
 		if (!empty($arr["add_to_cart_id"]))
 		{
 			$arr["add_to_cart"] = $add_to_cart = array(
@@ -431,7 +430,7 @@ class shop_order_cart extends class_base
 
 		if (($arr["from"] != "confirm" && $arr["from"] != "") || (is_array($GLOBALS["user_data"]) && count($GLOBALS["user_data"])))
 		{
-			$cart["user_data"] = $GLOBALS["user_data"];
+			$cart["user_data"] = $_REQUEST["user_data"];
 		}
 		
 		if (isset($arr["payment_method"]))
