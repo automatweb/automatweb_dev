@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.59 2007/11/20 11:14:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.60 2008/01/29 12:01:39 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -3042,7 +3042,7 @@ class shop_warehouse extends class_base
 	{
 		error::raise_if(!$w->prop("conf"), array(
 			"id" => ERR_FATAL,
-			"msg" => sprintf(t("shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"), $w)
+			"msg" => sprintf(t("shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"), $w->id())
 		));
 
 		$conf = obj($w->prop("conf"));
@@ -3050,7 +3050,7 @@ class shop_warehouse extends class_base
 
 		error::raise_if(empty($tmp), array(
 			"id" => ERR_FATAL,
-			"msg" => sprintf(t("shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"), $w)
+			"msg" => sprintf(t("shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"), $w->id())
 		));
 
 		return $tmp;
