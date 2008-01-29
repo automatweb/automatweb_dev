@@ -8736,6 +8736,32 @@ Bank accounts: üksteise all
 		}
 		return $arr["post_ru"];
 	}
+
+	function callback_get_default_group($arr)
+	{
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		$co = get_current_company();
+		if ($sts && ($_GET["action"] != "new"))
+		{
+			if(is_object($co) && $arr["request"]["id"] == $co->id())
+			{
+				if($sts->prop("default_my_company_tab"))
+				{
+					return $sts->prop("default_my_company_tab");
+				}
+			}
+			else
+			{
+				if($sts->prop("default_client_company_tab"))
+				{
+					return $sts->prop("default_client_company_tab");
+				}
+			}
+		}
+		return "general";
+	}
+
 }
 
 ?>
