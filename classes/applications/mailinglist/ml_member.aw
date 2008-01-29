@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.21 2007/11/23 10:58:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.22 2008/01/29 16:46:39 kaarel Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -102,6 +102,9 @@
 	@groupinfo udef_fields caption="Muud väljad"
 	
 	@tableinfo ml_users index=id master_table=objects master_index=oid
+
+@reltype BELONGTO value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON,CL_CRM_PERSON_WORK_RELATION
+@caption E-postiaadressiga seotud objekt
 */
 
 class ml_member extends class_base
