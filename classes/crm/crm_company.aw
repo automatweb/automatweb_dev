@@ -787,6 +787,12 @@ default group=org_objects
 
 	@property bs_tb type=toolbar no_caption=1
 
+@default group=bill_payments
+	@property bill_payments_tb type=toolbar store=no no_caption=1
+	@caption Laekumiste toolbar
+	@property bill_payments_table type=table no_caption=1 store=no
+	@caption Laekumiste tabel
+
 @default group=bills_list
 
 	@property bills_tb type=toolbar no_caption=1 store=no
@@ -1167,6 +1173,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no save=no
 	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no save=no
 	@groupinfo bills_create parent=bills caption="Maksmata t&ouml;&ouml;d" submit=no save=no
+       @groupinfo bill_payments parent=bills caption="Laekumised" submit=no save=no
 
 @groupinfo stats caption="Aruanded" save=no
 
@@ -2612,7 +2619,11 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $bills_impl->$fn($arr);
-
+	                case 'bill_payments_tb':
+  	                case 'bill_payments_table':
+  	                          $bills_p_impl = get_instance("applications/crm/crm_bill_payment");
+  	                          $fn = "_get_".$data["name"];
+  	                        return $bills_p_impl->$fn($arr);
 			case "stats_s_to":
 				if ($arr["request"][$data["name"]]["year"] > 1)
 				{
