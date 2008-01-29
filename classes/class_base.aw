@@ -4999,7 +4999,14 @@ class class_base extends aw_template
 
 			// defaults from class, cfgform can override things
 			// XXX: should I implement some kind of safety checks here?
-			$propdata = array_merge($all_properties[$key],$val);
+			if (isset($all_properties[$key]))
+			{
+				$propdata = array_merge($all_properties[$key],$val);
+			}
+			else
+			{
+				$propdata = $val;
+			}
 
 			// deal with properties belonging to multiple groups
 			$propgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
@@ -5038,7 +5045,14 @@ class class_base extends aw_template
 				continue;
 			};
 
-			$propdata = array_merge($all_properties[$key],$val);
+			if (isset($all_properties[$key]))
+			{
+				$propdata = array_merge($all_properties[$key],$val);
+			}
+			else
+			{
+				$propdata = $val;
+			}
 			if ($propdata["type"] == "submit")
 			{
 				$propdata["value"] = $propdata["caption"];
