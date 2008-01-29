@@ -179,6 +179,22 @@
             <caption>Kindlustuse t&amp;uuml;&amp;uuml;pide kataloog</caption>
       </property>
       <property>
+            <name>default_my_company_tab</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <caption>Minu organisatsiooni avanev tab</caption>
+      </property>
+      <property>
+            <name>default_client_company_tab</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <caption>Kliendi organisatsiooni avanev tab</caption>
+      </property>
+      <property>
             <name>tables_toolbar</name>
             <table>objects</table>
             <group>tables</group>

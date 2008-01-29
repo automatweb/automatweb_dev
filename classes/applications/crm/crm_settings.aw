@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.29 2008/01/29 11:13:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.30 2008/01/29 16:04:00 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -86,6 +86,13 @@
 
   	@property insurance_link_menu type=relpicker table=objects field=meta reltype=RELTYPE_MENU
 	@caption Kindlustuse tüüpide kataloog
+
+
+	@property default_my_company_tab type=select table=objects field=meta
+  	@caption Minu organisatsiooni avanev tab
+
+	@property default_client_company_tab type=select table=objects field=meta
+  	@caption Kliendi organisatsiooni avanev tab
 
 
 
@@ -269,8 +276,25 @@ class crm_settings extends class_base
 			case "default_task_rows_bills_filter":
 				$prop["options"] = $this->bills_filter_options;
 				break;
+			case "default_my_company_tab":
+			case "default_client_company_tab":
+				$prop["options"] = $this->get_company_tabs();
+				break;
+				
 		}
 		return $retval;
+	}
+
+	function get_company_tabs($arr)
+	{
+		$o = new object();
+		$o->set_class_id(CL_CRM_COMPANY);
+		$ret = array();
+		foreach($o->get_group_list() as $key => $val)
+		{
+			$ret[$key] = $val["caption"];
+		}
+		return $ret;
 	}
 
 	function _get_status_limits_table($arr)
