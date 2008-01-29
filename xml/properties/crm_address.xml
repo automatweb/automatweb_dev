@@ -24,7 +24,7 @@
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-            <maxlength>10</maxlength>
+            <maxlength>100</maxlength>
             <field>postiindeks</field>
             <caption>Postiindeks</caption>
       </property>

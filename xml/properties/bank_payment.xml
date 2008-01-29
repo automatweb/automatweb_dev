@@ -228,6 +228,50 @@
             <no_caption>1</no_caption>
             <caption>Dokumentatsioon</caption>
       </property>
+      <property>
+            <name>alias_amount</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>as_alias</group>
+            <submit>no</submit>
+            <type>textbox</type>
+            <size>10</size>
+            <caption>Summa</caption>
+      </property>
+      <property>
+            <name>alias_amount_ctr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>as_alias</group>
+            <submit>no</submit>
+            <type>relpicker</type>
+            <reltype>RELTYPE_AMT_CTR</reltype>
+            <caption>Summa kontrollerist</caption>
+      </property>
+      <property>
+            <name>alias_desc</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>as_alias</group>
+            <submit>no</submit>
+            <type>textbox</type>
+            <maxlength>70</maxlength>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>alias_desc_ctr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>as_alias</group>
+            <submit>no</submit>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DESC_CTR</reltype>
+            <caption>Kirjeldus kontrollerist</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BANK_PAYMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -250,6 +294,9 @@
                   <caption>Teadmiseks</caption>
                   <submit>no</submit>
             </doc>
+            <as_alias>
+                  <caption>Aliasena</caption>
+            </as_alias>
       </groupinfo>
       <reltypes>
             <KEY>
@@ -262,6 +309,16 @@
                   <clid>CL_FILE</clid>
                   <caption>Privaatv&amp;amp;otilde;ti</caption>
             </P_KEY>
+            <AMT_CTR>
+                  <value>4</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Summa kontroller</caption>
+            </AMT_CTR>
+            <DESC_CTR>
+                  <value>5</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kirjelduse kontroller</caption>
+            </DESC_CTR>
       </reltypes>
       <layout>
             <general_l>

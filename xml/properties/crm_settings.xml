@@ -81,16 +81,6 @@
             <caption>Toimetuse kontroller</caption>
       </property>
       <property>
-            <name>controller_meeting</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CTR</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kohtumise kontroller</caption>
-      </property>
-      <property>
             <name>default_tasks_view</name>
             <table>objects</table>
             <group>general</group>
@@ -117,24 +107,6 @@
             <caption>Vaikimisi avatakse toimetuse nimel klikkides kohe read</caption>
       </property>
       <property>
-            <name>send_mail_feature</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <caption>V&amp;amp;otilde;imalus saata CRMis maile</caption>
-      </property>
-      <property>
-            <name>show_files_and_docs_in_tree</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <caption>N&amp;amp;auml;ita puus faile ja dokumente</caption>
-      </property>
-      <property>
             <name>default_task_rows_bills_filter</name>
             <table>objects</table>
             <group>general</group>
@@ -159,6 +131,34 @@
             <field>meta</field>
             <reltype>RELTYPE_CTR</reltype>
             <caption>Toimetuse salvestamise kontroller</caption>
+      </property>
+      <property>
+            <name>controller_meeting</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CTR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kohtumise kontroller</caption>
+      </property>
+      <property>
+            <name>send_mail_feature</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <caption>V&amp;amp;otilde;imalus saata CRMis maile</caption>
+      </property>
+      <property>
+            <name>show_files_and_docs_in_tree</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <caption>N&amp;amp;auml;ita puus faile ja dokumente</caption>
       </property>
       <property>
             <name>org_link_menu</name>

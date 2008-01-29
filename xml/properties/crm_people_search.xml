@@ -12,15 +12,6 @@
             <caption>Isikud veebis</caption>
       </property>
       <property>
-            <name>people_search_template</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Isikute otsinguvormi template</caption>
-      </property>
-      <property>
             <name>search_properties</name>
             <table>objects</table>
             <group>sel_props</group>

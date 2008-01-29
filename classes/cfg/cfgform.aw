@@ -4177,7 +4177,7 @@ class cfgform extends class_base
                         $grp = $gl[0];
                 }
 
-		if ($orb_data[$arr["action"]][$grp] == 1)
+		if (is_array($orb_data[$arr["action"]]) && $orb_data[$arr["action"]][$grp] == 1)
 		{
 			return false;
 		}

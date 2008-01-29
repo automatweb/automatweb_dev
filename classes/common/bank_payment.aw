@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.72 2008/01/09 14:14:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.73 2008/01/29 13:56:04 kristo Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -89,6 +89,21 @@
 	@property doc type=text store=no no_caption=1
 	@caption Dokumentatsioon
 
+@groupinfo as_alias caption="Aliasena"
+@default group=as_alias
+
+	@property alias_amount type=textbox size=10 field=meta method=serialize
+	@caption Summa
+
+	@property alias_amount_ctr type=relpicker field=meta method=serialize reltype=RELTYPE_AMT_CTR
+	@caption Summa kontrollerist
+
+	@property alias_desc type=textbox maxlength=70 field=meta method=serialize
+	@caption Kirjeldus
+
+	@property alias_desc_ctr type=relpicker field=meta method=serialize reltype=RELTYPE_DESC_CTR
+	@caption Kirjeldus kontrollerist
+
 #RELTYPES
 
 @reltype KEY value=2 clid=CL_FILE
@@ -96,6 +111,12 @@
 
 @reltype P_KEY value=3 clid=CL_FILE
 @caption Privaatv&otilde;ti
+
+@reltype AMT_CTR value=4 clid=CL_CFGCONTROLLER
+@caption Summa kontroller
+
+@reltype DESC_CTR value=5 clid=CL_CFGCONTROLLER
+@caption Kirjelduse kontroller
 
 */
 
@@ -2072,6 +2093,31 @@ class bank_payment extends class_base
 		$t.= "\n<br>\n<br>";
 	
 		return $t;
+	}
+
+	function show($arr)
+	{
+		$o = obj($arr["id"]);
+		$amt = $o->prop("alias_amount");
+		$desc = $o->prop("alias_desc");
+
+		if ($this->can("view", $o->prop("alias_amount")))
+		{
+			$i = get_instance(CL_CFGCONTROLLER);
+			$amt = $i->check_property($o->prop("alias_amount"), $o->id(), $arr);
+		}
+		if ($this->can("view", $o->prop("alias_desc")))
+		{
+			$i = get_instance(CL_CFGCONTROLLER);
+			$amt = $i->check_property($o->prop("alias_desc"), $o->id(), $arr);
+		}
+		return $this->bank_forms(array(
+			"id" => $o->id(),
+			"reference_nr" => "",
+			"amount" => $amt,
+			"expl" => $desc,
+			"lang" => "en"
+		));
 	}
 }
 
