@@ -4033,6 +4033,7 @@ class crm_company extends class_base
 		{
 			$arr["args"]["bill_payments_cust"] = $arr["request"]["bill_payments_cust"];
 			$arr["args"]["bill_payments_bill_no"] = $arr["request"]["bill_payments_bill_no"];
+			$arr["args"]["bill_payments_bill_to"] = $arr["request"]["bill_payments_bill_no"];
 			$arr["args"]["bill_payments_from"] = $arr["request"]["bill_payments_from"];
 			$arr["args"]["bill_payments_to"] = $arr["request"]["bill_payments_to"];
 			$arr["args"]["bill_payments_client_mgr"] = $arr["request"]["bill_payments_client_mgr"];
