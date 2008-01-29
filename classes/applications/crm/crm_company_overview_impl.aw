@@ -693,14 +693,7 @@ class crm_company_overview_impl extends class_base
 					"return_url" => get_ru()
 				), $task->class_id())
 			));
-			$pm->add_item(array(
-				"text" => t("Kustuta"), 
-				"oncl" => "onClick=\"if(!confirm('".t("Olete kindel et soovide toimetust kustutada?")."')) { return false; } else {window.location = '".$this->mk_my_orb("delete_tasks", array(
-					"sel" => array($t_id => $t_id),
-					"post_ru" => get_ru()
-				), CL_CRM_COMPANY)."'}\"",
-				"link" => "#"
-			));
+
 			$link = $this->mk_my_orb("mark_tasks_done", array(
 					"sel" => array($t_id => $t_id),
 					"post_ru" => "a" 
@@ -756,7 +749,14 @@ class crm_company_overview_impl extends class_base
 					"oncl" => "onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'"
 				));
 			}
-
+			$pm->add_item(array(
+				"text" => t("Kustuta"), 
+				"oncl" => "onClick=\"if(!confirm('".t("Olete kindel et soovide toimetust kustutada?")."')) { return false; } else {window.location = '".$this->mk_my_orb("delete_tasks", array(
+					"sel" => array($t_id => $t_id),
+					"post_ru" => get_ru()
+				), CL_CRM_COMPANY)."'}\"",
+				"link" => "#"
+			));
 			// if this thing has recurrences attached, then stick those in there
 			$recurs = array();
 			foreach(safe_array($task2recur[$task->id()]) as $recur_id)
