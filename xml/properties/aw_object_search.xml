@@ -55,6 +55,16 @@
             <caption>OID</caption>
       </property>
       <property>
+            <name>s_parent_search</name>
+            <table>objects</table>
+            <group>srch</group>
+            <store>no</store>
+            <type>text</type>
+            <parent>left_side</parent>
+            <field>s_parent_search</field>
+            <caption>Asukoht</caption>
+      </property>
+      <property>
             <name>s_status</name>
             <table>objects</table>
             <group>srch</group>
@@ -128,6 +138,18 @@
             <caption>Looja</caption>
       </property>
       <property>
+            <name>s_creator_from</name>
+            <table>objects</table>
+            <group>srch</group>
+            <store>no</store>
+            <type>chooser</type>
+            <parent>creamod</parent>
+            <default>0</default>
+            <orient>vertical</orient>
+            <field>s_creator_from</field>
+            <caption>Otsida loojat</caption>
+      </property>
+      <property>
             <name>s_crea_from</name>
             <table>objects</table>
             <group>srch</group>
@@ -159,6 +181,18 @@
             <parent>creamod</parent>
             <field>s_modifier</field>
             <caption>Muutja</caption>
+      </property>
+      <property>
+            <name>s_modifier_from</name>
+            <table>objects</table>
+            <group>srch</group>
+            <store>no</store>
+            <type>chooser</type>
+            <parent>creamod</parent>
+            <default>0</default>
+            <orient>vertical</orient>
+            <field>s_modifier_from</field>
+            <caption>Otsida muutjat</caption>
       </property>
       <property>
             <name>s_mod_from</name>

@@ -375,7 +375,8 @@ class popup_search extends aw_template
 		@param clid optional 
 		@param s optional
 		@param append_html optional
-		@param tbl_props optional 
+		@param tbl_props optional
+		@param no_submit optional
 
 		@comment
 			clid - not filtered by, if clid == 0
@@ -476,12 +477,12 @@ class popup_search extends aw_template
 			"value" => "Otsi",
 			"caption" => t("Otsi")
 		));
-
 		$data = array(
 				"id" => $arr["id"],
 				"pn" => $arr["pn"],
 				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
+				"no_submit" => $arr["no_submit"],
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
 				"orb_class" => $_GET["class"],
 				"reforb" => 0,
@@ -674,7 +675,7 @@ class popup_search extends aw_template
 					"select_this" => html::href(array(
 						"url" => "javascript:void(0)",
 						"caption" => t("Vali see"),
-						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);if (!el) { el=aw_get_el(\"$elname_n\", window.opener.document.changeform);} if (!el) { el=aw_get_el(\"$elname_l\", window.opener.document.changeform);} if (el.options) {sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;} else {el.value = ".$o->id().";} window.opener.document.changeform.submit();window.close()"
+						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);if (!el) { el=aw_get_el(\"$elname_n\", window.opener.document.changeform);} if (!el) { el=aw_get_el(\"$elname_l\", window.opener.document.changeform);} if (el.options) {sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;} else {el.value = ".$o->id().";} ".(($arr["no_submit"])?"":"window.opener.document.changeform.submit();")."window.close()"
 					)),
 					"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
 				);
@@ -697,6 +698,7 @@ class popup_search extends aw_template
 				"pn" => $arr["pn"],
 				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
+				"no_submit" => $arr["no_submit"],
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
 			), $_GET["class"]),
 			"append" => ifset($arr,"append_html"),
@@ -803,16 +805,21 @@ function aw_get_el(name,form)
 				$str .= "el.value = '".join(",", $arr["sel"])."';"; //$val;";
 //			}
 
-			$str .= "		}
-					window.opener.document.changeform.submit();
-					window.close()
+			$str .= "		}";
+			if(!$arr["no_submit"])
+			{
+				$str .= "
+					window.opener.document.changeform.submit();";
+			}
+			$str .=	"
+				window.close()
 				</script></body></html>
 			";
 			die($str);
 		}
 		else
 		{
-			die("
+			$str = "
 				<html><body><script language='javascript'>
 				if(window.opener.document.changeform.".$arr["pn"].")
 				{
@@ -826,10 +833,18 @@ function aw_get_el(name,form)
 						window.opener.document.changeform.".$arr["pn"].".value = '".join(",", $arr["sel"])."';
 					}
 				}	
-					window.opener.document.changeform.submit();
+					";
+			if(!$arr["no_submit"])
+			{
+				$str .= "
+					window.opener.document.changeform.submit();";
+			}
+			$str .=	"
+
 					window.close()
 				</script></body></html>
-			");
+			";
+			die($str);
 		}
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.18 2008/01/14 12:03:02 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.19 2008/01/29 11:56:48 robert Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -27,6 +27,9 @@
 			@property s_oid type=textbox  size=50 parent=left_side
 			@caption OID
 
+			@property s_parent_search type=text parent=left_side
+			@caption Asukoht
+
 			@property s_status type=chooser parent=left_side
 			@caption Aktiivsus
 
@@ -52,6 +55,9 @@
 				@property s_creator type=textbox  size=20 parent=creamod
 				@caption Looja
 
+				@property s_creator_from type=chooser parent=creamod default=0 orient=vertical
+				@caption Otsida loojat
+		
 				@property s_crea_from type=datetime_select parent=creamod default=-1
 				@caption Lisatud alates
 			
@@ -60,7 +66,10 @@
 			
 				@property s_modifier type=textbox  size=20 parent=creamod
 				@caption Muutja
-	
+
+				@property s_modifier_from type=chooser parent=creamod default=0 orient=vertical
+				@caption Otsida muutjat
+
 				@property s_mod_from type=datetime_select parent=creamod default=-1
 				@caption Muudetud alates
 			
@@ -113,6 +122,38 @@ class aw_object_search extends class_base
 		$prop["value"] = $arr["request"][$prop["name"]];
 		switch($prop["name"])
 		{
+			case "s_parent_search":
+				$v = html::textbox(array(
+					"name" => "s_parent",
+					"size" => 20,
+					"value" => $arr["request"]["s_parent"],
+				));
+				$url = $this->mk_my_orb("do_search", array(
+					"pn" => "s_parent",
+					"multiple" => 1,
+					"no_submit" => 1,
+				),"popup_search");
+				$url = "javascript:aw_popup_scroll(\"".$url."\",\"".t("Otsi")."\",550,500)";
+				$v .= " ".html::href(array(
+					"caption" => html::img(array(
+						"url" => "images/icons/search.gif",
+						"border" => 0
+					)),
+					"url" => $url
+				));
+				$prop["value"] = $v;
+				break;
+			case "s_creator_from":
+			case "s_modifier_from":
+				$prop["options"] = array(
+					0 => t("Kasutajatest"),
+					1 => t("Gruppidest"),
+				);
+				if(!strlen($prop["value"]))
+				{
+					$prop["value"] = 0;
+				}
+				break;
 			case "s_crea_from":
 			case "s_crea_to":
 			case "s_mod_from":
@@ -383,6 +424,47 @@ class aw_object_search extends class_base
 	function get_s_filt($arr)
 	{
 		$filt = array("limit" => 2000, "lang_id" => array(), "site_id" => array());
+		$arrprops = array("s_name", "s_parent");
+		foreach($arrprops as $arrprop)
+		{
+			if(strpos($arr["request"][$arrprop], ","))
+			{
+				$arr["request"][$arrprop] = explode(",", $arr["request"][$arrprop]);
+				foreach($arr["request"][$arrprop] as $id => $val)
+				{
+					$arr["request"][$arrprop][$id] = "%".trim($val)."%";
+				}
+			}
+		}
+		$groupprops = array("creator", "modifier");
+		foreach($groupprops as $gp)
+		{
+			if($arr["request"]["s_".$gp."_from"] && $arr["request"]["s_".$gp])
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_GROUP,
+					"name" => "%".$arr["request"]["s_".$gp]."%",
+				));
+				$ppl = array();
+				foreach($ol->arr() as $grp)
+				{
+					$conn = $grp->connections_from(array(
+						"type" => "RELTYPE_MEMBER",
+					));
+					foreach($conn as $c)
+					{
+						$uo = obj($c->prop("to"));
+						$uid = $uo->name();
+						$ppl[] = $uid;
+					}
+				}
+				$arr["request"]["s_".$gp] = $ppl;
+			}
+		}
+		if($arr["request"]["s_parent"])
+		{
+			$filt["parent"] = $arr["request"]["s_parent"];
+		}
 		$props = array(
 			"s_name" => "name", 
 			"s_comment" => "comment", 
