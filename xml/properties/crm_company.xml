@@ -2409,7 +2409,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>bills_payments_box</parent>
+            <parent>bills_payments_t</parent>
             <field>bill_payments_table</field>
             <caption>Laekumiste tabel</caption>
       </property>
@@ -4670,6 +4670,13 @@
                   <area_caption>Otsing</area_caption>
                   <group>bill_payments</group>
             </bills_payments_s>
+            <bills_payments_t>
+                  <type>vbox</type>
+                  <parent>bills_payments_box</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Laekumiste&amp;amp;nbsp;tabel</area_caption>
+                  <group>bill_payments</group>
+            </bills_payments_t>
             <bills_list_box>
                   <type>hbox</type>
                   <width>20%:80%</width>

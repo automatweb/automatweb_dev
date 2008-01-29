@@ -819,7 +819,10 @@ default group=org_objects
 			@property bill_payments_search type=submit store=no parent=bills_payments_s captionside=top no_caption=1
 			@caption Otsi
 
-	@property bill_payments_table type=table no_caption=1 store=no parent=bills_payments_box
+		@layout bills_payments_t type=vbox parent=bills_payments_box closeable=1 area_caption=Laekumiste&nbsp;tabel
+
+
+	@property bill_payments_table type=table no_caption=1 store=no parent=bills_payments_t
 	@caption Laekumiste tabel
 
 @default group=bills_list
