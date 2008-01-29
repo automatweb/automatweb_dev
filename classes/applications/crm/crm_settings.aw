@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.28 2008/01/18 10:20:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.29 2008/01/29 11:13:40 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -36,6 +36,24 @@
 	@property controller_task type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize
 	@caption Toimetuse kontroller
 
+         @property default_tasks_view type=select table=objects field=meta
+  	         @caption Tegevused vaikimisi vaade
+
+  	         @property group_task_view type=checkbox ch_value=1 table=objects field=meta
+  	         @caption Grupeeri tegevused vaade
+
+  	         @property view_task_rows_open type=checkbox ch_value=1 table=objects field=meta
+  	         @caption Vaikimisi avatakse toimetuse nimel klikkides kohe read
+  	 
+	         @property default_task_rows_bills_filter type=select table=objects field=meta
+  	         @caption Toimetuse ridades valitud Arve tulba vaikimisi filter
+  	 
+	@property task_rows_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
+	@caption Toimetuse ridade kontroller
+	
+	@property task_save_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
+	@caption Toimetuse salvestamise kontroller
+	
 	@property controller_meeting type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize
 	@caption Kohtumise kontroller
 

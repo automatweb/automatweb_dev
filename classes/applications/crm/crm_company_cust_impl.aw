@@ -2002,9 +2002,9 @@ class crm_company_cust_impl extends class_base
 					));
 				}
 			}
-			/*else
+			else
 			{
-				$ceo = $o->name();
+				//$ceo = $o->name();
 				$mail = "";
 				if (is_oid($o->prop("email")) && $this->can("view", $o->prop("email")))
 				{
@@ -2030,9 +2030,10 @@ class crm_company_cust_impl extends class_base
 				if ($this->can("view", $o->prop("phone")))
 				{
 					$urlo = obj($o->prop("phone"));
-					$mail = $urlo->name()." ".$mail;
+					//$mail = $urlo->name()." ".$mail;
+					$phone = $urlo->name();
 				}
-			}*/
+			}
 
 			# phone
 			if (($default_cfg or in_array("phone", $visible_fields)) and $this->can("view", $o->prop("phone_id")))

@@ -6,12 +6,15 @@ class crm_bill_payment_obj extends _int_object
 	{
 		if($name == "sum")
 		{
+			if(!$this->id())
+			{
+				$this->save();//kui id'd pole , siis läheb lolliks 
+			}
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_BILL,
 				"lang_id" => array(),
 				"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $this->id(),
 			));
-
 			$bi = get_instance(CL_CRM_BILL);
 			foreach($ol -> arr() as $o)
 			{

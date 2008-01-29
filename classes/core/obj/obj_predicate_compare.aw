@@ -32,6 +32,8 @@ class obj_predicate_compare
 		data to compared
 		@param data2 optional type=string
 		data to compared
+		@param type optional type=string
+			data type
 
 		@comment
 		Used in object list filtering property values.
@@ -44,11 +46,12 @@ class obj_predicate_compare
 		
 		// generates list of bugs with statuses from 1 to 6 (inclucing 1 and 6)
 	**/
-	function obj_predicate_compare($comparator, $data, $data2 = NULL)
+	function obj_predicate_compare($comparator, $data, $data2 = NULL, $type)
 	{
 		$this->comparator = $comparator;
 		$this->data = $data;
 		$this->data2 = $data2;
+		$this->type = $type;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.196 2008/01/28 10:59:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.197 2008/01/29 11:13:41 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -302,6 +302,31 @@ class task extends class_base
 			STOPPER_RUNNING => t("Stopper k&auml;ib"),
 		);
 	}
+
+        function get_partipicants($arr)
+        {
+                $p = array();
+                if ($this->can("view", $arr["request"]["alias_to_org"]))
+                {
+                        $ao = obj($arr["request"]["alias_to_org"]);
+                        if ($ao->class_id() == CL_CRM_PERSON)
+                        {
+                                $p[$ao->id()] = $ao->id();
+                        }
+                }
+                if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
+                {
+                        $conns = $arr['obj_inst']->connections_to(array(
+                                'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
+                        ));
+                        foreach($conns as $conn)
+                        {
+                                $obj = $conn->from();
+                                $p[$obj->id()] = $obj->id();
+                        }
+                }
+                return $p;
+        }
 
 	/**
 		@attrib name=stopper_pop all_args=1
@@ -1035,6 +1060,29 @@ class task extends class_base
 					"in_budget" => $arr["obj_inst"]->prop("in_budget") ? 1 : 0,
 					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
 				);
+				// read cfgform and check if the props are set in the form
+				$cff = get_instance(CL_CFGFORM);
+ $cfgform_id = $this->get_cfgform_for_object(array(
+                                "obj_inst" => $this->obj_inst,
+                                "args" => $arr["request"],
+                        ));
+				if ($cfgform_id)
+				{
+				$grps = $cff->get_cfg_groups($cfgform_id);
+				$ps = $cff->get_cfg_proplist($cfgform_id);
+				foreach($data["options"] as $k => $v)
+				{
+					if (!isset($ps[$k]) /*|| !isset($grps[$ps[$k]["group"]])*/)
+					{
+						unset($data["options"][$k]);
+					}
+					else
+					if ( $ps[$k]["caption"] != "")
+					{
+						$data["options"][$k] = $ps[$k]["caption"];
+					}
+				}
+				}
 				break;
 			case "priority":
 			case "bill_no":
@@ -1104,6 +1152,11 @@ class task extends class_base
 				if ($arr["new"])
 				{
 					$data["value"] = time() + 900;
+				}
+				if ($cal)
+				{
+					$calo = obj($cal);
+					$data["minute_step"] = $calo->prop("minute_step");
 				}
 				break;
 
@@ -2263,7 +2316,7 @@ class task extends class_base
 		}
 		ksort($data);
 		ksort($data_done);
-		$cs = array_merge($data, $data_done);
+		//$cs = array_merge($data, $data_done);
 
 		$null_idx = 0;
 		$comm = get_instance(CL_COMMENT);
@@ -3871,57 +3924,93 @@ class task extends class_base
 	function _hrs_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		                                $cff = get_instance(CL_CFGFORM);
+ $cfgform_id = $this->get_cfgform_for_object(array(
+                                "obj_inst" => $this->obj_inst,
+                                "args" => $arr["request"],
+                        ));
+                                $ps = $cff->get_cfg_proplist($cfgform_id);
+
+		if ($ps["priority"])
+		{	
 		$t->define_field(array(
 			"name" => "priority",
-			"caption" => t("Prioriteet"),
+			"caption" => $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
 			"align" => "center"
 		));
+		}
+		if ($ps["num_hrs_guess"])
+{		
 		$t->define_field(array(
 			"name" => "num_hrs_guess",
-			"caption" => t("Prognoositav tundide arv"),
+			"caption" => $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav tundide arv"),
 			"align" => "center"
 		));
+}
+		if ($ps["num_hrs_real"])
+{
 		$t->define_field(array(
 			"name" => "num_hrs_real",
-			"caption" => t("Tegelik tundide arv"),
+			"caption" => $ps["num_hrs_real"]["caption"] != "" ? $ps["num_hrs_real"]["caption"] : t("Tegelik tundide arv"),
 			"align" => "center"
 		));
+}
+if ($ps["num_hrs_to_cust"])
+{
 		$t->define_field(array(
 			"name" => "num_hrs_to_cust",
-			"caption" => t("Tundide arv kliendile"),
+			"caption" => $ps["num_hrs_to_cust"]["caption"] != "" ? $ps["num_hrs_to_cust"]["caption"] : t("Tundide arv kliendile"),
 			"align" => "center"
 		));
+}
+if ($ps["hr_price"])
+{
 		$t->define_field(array(
 			"name" => "hr_price",
-			"caption" => t("Tunnihind"),
+			"caption" => $ps["hr_price"]["caption"] != "" ?  $ps["hr_price"]["caption"] : t("Tunnihind"),
 			"align" => "center"
 		));
+}
+if ($ps["deal_price"])
+{
 		$t->define_field(array(
 			"name" => "deal_price",
-			"caption" => t("Kokkuleppehind"),
+			"caption" => $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kokkuleppehind"),
 			"align" => "center"
 		));
+}
+if ($ps["hr_price_currency"])
+{
 		$t->define_field(array(
 			"name" => "hr_price_currency",
-			"caption" => t("Valuuta"),
+			"caption" => $ps["hr_price_currency"]["caption"] != "" ? $ps["hr_price_currency"]["caption"] : t("Valuuta"),
 			"align" => "center"
 		));
+}
+if ($ps["bill_no"])
+{
 		$t->define_field(array(
 			"name" => "bill_no",
-			"caption" => t("Arve number"),
+			"caption" => $ps["bill_no"]["caption"] != "" ? $ps["bill_no"]["caption"] : t("Arve number"),
 			"align" => "center"
 		));
+}
+if ($ps["code"])
+{
 		$t->define_field(array(
 			"name" => "code",
-			"caption" => t("Kood"),
+			"caption" => $ps["code"]["caption"] != "" ? $ps["code"]["caption"]  : t("Kood"),
 			"align" => "center"
 		));
+}
+if ($ps["service_type"])
+{
 		$t->define_field(array(
 			"name" => "service_type",
-			"caption" => t("Teenuse liik"),
+			"caption" => $ps["service_type"]["caption"] != "" ?  $ps["service_type"]["caption"] : t("Teenuse liik"),
 			"align" => "center"
 		));
-
+}
 		$curr_object_list = new object_list(array(
 			"class_id" => CL_CURRENCY,
 			"lang_id" => array(),
@@ -3979,7 +4068,7 @@ class task extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-
+		$t->non_filtered = 1;
 		$t->define_data(array(
 			"priority" => html::textbox(array(
 				"name" => "priority",

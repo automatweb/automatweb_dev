@@ -30,6 +30,12 @@ stops[{VAR:number}] = new Array({VAR:el_hr}, {VAR:el_min}, {VAR:el_sec});
 <!-- END SUB: STOPPER -->
 
 <script language="javascript">
+function forward_this_sh__(desc)
+{
+	window.location="{VAR:stop_url}&desc="+desc;
+}
+
+
 function update_stoppers()
 {
 	num = stops.length;

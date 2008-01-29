@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.109 2007/12/12 12:49:03 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.110 2008/01/29 11:13:45 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -91,6 +91,36 @@ class aw_table extends aw_template
 		$this->use_chooser = false;
 		// if true and chooser is used, checking chooser checkboxes changes the style of the row as well
 		$this->chooser_hilight = true;
+
+		### maintain all selected filters
+
+		$saved_filters = aw_global_get ($this->filter_name . "_saved");
+		$this->selected_filters = $saved_filters ? aw_unserialize ($saved_filters) : array ();
+
+		### set/clear new selected filters
+		$request = aw_global_get ("request");
+
+		if ($selected_filter = $request[$this->filter_name])
+		{
+			list ($filter_key, $filter_selection, $filter_txtvalue) = explode (",", $selected_filter);
+
+			if ($filter_selection)
+			{
+				$this->selected_filters[$filter_key] = array(
+					'filter_selection' => $filter_selection,
+					'filter_txtvalue' => $filter_txtvalue,
+				);
+			}
+			else
+			{
+				unset ($this->selected_filters[$filter_key]);
+			}
+		}
+
+		if (sizeof($this->selected_filters) > 0)
+		{
+			aw_global_set ($this->filter_name . "_saved", aw_serialize ($this->selected_filters));
+		}
 	}
 
 	/**
@@ -144,15 +174,16 @@ class aw_table extends aw_template
 	function define_data($row)
 	{
 		### apply filter
+		if (!$this->non_filtered)
+	{
 		foreach ($this->selected_filters as $filter_key => $filter_array)
 		{
 			extract ($filter_array);
 			$field_name = $this->filter_index[$filter_key];
 
 			// if exists value filtervalue-[rowname] use that for filtering (good for linked values etc)
-			$value = $row[(isset($row['filtervalue-'.$field_name]) ? 'filtervalue-' : '') . $field_name];
-
-			if (!empty($filter_txtvalue))
+			$value = strip_tags($row[$field_name]);
+			if (!empty($filter_txtvalue) && stristr($value, $filter_txtvalue) === false)
 			{
 				if (isset($this->filter_comparators[$field_name]))
 				{
@@ -179,7 +210,7 @@ class aw_table extends aw_template
 				}
 			}
 		}
-
+}
 		$this->data[] = $row;
 
 		if(!$this->no_recount)
@@ -1141,7 +1172,6 @@ class aw_table extends aw_template
 						"onclick" => isset($v1["onclick"]) && isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
 	//					"onclick" => isset($v1["onclick"]) && isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
 					));
-
 					if ($v1["name"] == "rec")
 					{
 						$val = $counter;
@@ -2455,7 +2485,7 @@ class aw_table extends aw_template
 					$args = array (
 						"name" => $filter_name,
 						"options" => $filter_values,
-						"onchange" => "window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text",
+						"onchange" => "xchanged=1;window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text",
 					);
 					$filter_contents = html::select ($args);
 				}
@@ -2469,7 +2499,7 @@ class aw_table extends aw_template
 						'onkeypress' => "var key = window.event ? window.event.keyCode : (event ? event.which : NULL);
 							if(key == 13)
 							{
-								window.location = this.value.length>0 ? '$newurl,1,' + this.value : '$url' ;
+								xchanged=1;window.location = this.value.length>0 ? '$newurl,1,' + this.value : '$url' ;
 								return false;
 							}",
 					));
@@ -2577,6 +2607,7 @@ class vcl_table extends aw_table
 	{
 		// I need access to class information!
 		$pr = &$arr["property"];
+		$this->aw_table(array("prefix" => $pr["name"]));
 		if (!isset($pr["vcl_inst"]) || !is_object($pr["vcl_inst"]))
 		{
 			$this->set_layout("generic");

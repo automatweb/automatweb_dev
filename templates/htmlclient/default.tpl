@@ -274,7 +274,7 @@ function generic_loader2()
 
 function generic_unloader()
 {
-	if (changed)
+	if (changed && !xchanged)
 	{
 		if (confirm("{VAR:confirm_unchanged_text}"))
 		{

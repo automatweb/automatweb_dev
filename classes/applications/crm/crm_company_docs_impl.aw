@@ -281,7 +281,7 @@ class crm_company_docs_impl extends class_base
 							$ud = posix_getpwuid($d[4]);
 							$rv[$fn] = array(
 								"id" => $fn,
-								"name" => $file,
+								"name" => iconv("utf-8", aw_global_get("charset"), $file),
 								"has_subs" => $has_dirs ? 1 : 0,
 								"url" => aw_url_change_var("tf" , $fldo->id()."|".$fn),
 								"createdby" => $ud["name"],
@@ -299,7 +299,7 @@ class crm_company_docs_impl extends class_base
 							$ud = posix_getpwuid($d[4]);
 							$rv[$fn] = array(
 								"id" => $fn,
-								"name" => $file,
+								"name" => iconv("utf-8", aw_global_get("charset"), $file),
 								"type" => "file",
 								"has_subs" => 0,
 								"change_url" => $this->mk_my_orb("change_file", array("return_url" => get_ru(), "fid" => $fldo->id().":".$fn,"in_popup" => 1, "section" => aw_global_get("section")), "server_folder"),
@@ -406,7 +406,7 @@ class crm_company_docs_impl extends class_base
 			"root_icon" => "images/transparent.gif",
 		));
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_DOCS_FOLDER")) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => array(40,51) /*"RELTYPE_SERVER_FOLDER", "RELTYPE_DOCS_FOLDER")*/)) as $c)
 		{
 			$this->_render_folder_in_tree($arr, $c->to());
 		}

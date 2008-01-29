@@ -621,10 +621,30 @@ class crm_bill extends class_base
 			$sum = $o->prop("partial_recieved");
 			$sum = $sum + $p->get_free_sum();
 		}
+		
+		if(is_object($p))
+		{
+			if($p->prop("currency") != $o->prop("currency"))
+			{
+				arr("valuuta vastuolus");
+				return "";
+			}
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_BILL,
+				"lang_id" => array(),
+				"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $p->id(),
+			));
+			$eb = reset($ol->arr());
+			if(is_object($eb) && $eb->prop("customer") != $o->prop("customer"))
+			{
+				arr("klient vastuolus");
+				return "";
+			}
+		}
 
 		if(!is_object($p))
 		{
-			$sum = $this->get_bill_sum($o,BILL_SUM);
+			$sum = $this->get_bill_sum($o,BILL_SUM) - $o->prop("partial_recieved");
 			$p = new object();
 			$p-> set_parent($o->id());
 			$p-> set_name($o->name() . " " . t("laekumine"));
@@ -657,7 +677,7 @@ class crm_bill extends class_base
 			$p-> save();
 		}
 
-		return $this->mk_my_orb("change", array("id" => $p->id(), "return_url" => get_ru()), CL_CRM_BILL_PAYMENT);
+		return $this->mk_my_orb("change", array("id" => $p->id(), "return_url" => $ru), CL_CRM_BILL_PAYMENT);
 		if($ru)
 		{
 			return $ru;

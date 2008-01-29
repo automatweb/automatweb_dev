@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.27 2007/12/06 14:33:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.28 2008/01/29 11:13:41 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -181,7 +181,6 @@ class task_quick_entry extends class_base
 	**/
 	function cust_autocomplete_source($arr)
 	{
-		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
 		$cl_json = get_instance("protocols/data/json");
 
 		$errorstring = "";
@@ -225,7 +224,6 @@ class task_quick_entry extends class_base
 	**/
 	function proj_autocomplete_source($arr)
 	{
-		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
 		$cl_json = get_instance("protocols/data/json");
 
 		$errorstring = "";
@@ -238,7 +236,6 @@ class task_quick_entry extends class_base
 			"options" => &$autocomplete_options,// required
 			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
 		);
-
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["project"])."%",
@@ -266,7 +263,6 @@ class task_quick_entry extends class_base
 	**/
 	function name_autocomplete_source($arr)
 	{
-		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
 		$cl_json = get_instance("protocols/data/json");
 
 		$errorstring = "";
@@ -283,13 +279,13 @@ class task_quick_entry extends class_base
 		$ol = new object_list(array(
 			"class_id" => array(CL_CRM_PERSON),
 			"lastname" => iconv("UTF-8", aw_global_get("charset"), $arr["custp_ln"])."%",
-			"firstname" => iconv("UTF-8", aw_global_get("charset"), $arr["custp_fn"]),
+			"firstname" => iconv("UTF-8", aw_global_get("charset"), $arr["custp_fn"])."%",
 			"lang_id" => array(),
 			"site_id" => array(),
 		));
 		$autocomplete_options = $ol->names();
                 foreach($ol->arr() as $k => $v)
-                {
+               	{ 
                         $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", $v->prop("lastname"));
                 }
 		header("Content-type: text/html; charset=utf-8");
@@ -306,7 +302,6 @@ class task_quick_entry extends class_base
 	**/
 	function task_autocomplete_source($arr)
 	{
-		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
 		$cl_json = get_instance("protocols/data/json");
 
 		$errorstring = "";
@@ -321,7 +316,7 @@ class task_quick_entry extends class_base
 		);
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
-			"CL_TASK.project.name" => iconv("UTF-8", aw_global_get("charset"), $arr["project"])."%",
+			"CL_TASK.project.name" =>  iconv("UTF-8", aw_global_get("charset"), $arr["project"])."%",
 			"CL_TASK.customer.name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"name" => $arr["task"]."%",
 			"lang_id" => array(),
@@ -350,34 +345,34 @@ class task_quick_entry extends class_base
 		$cur_co = get_current_company();
 		$cur_p = get_current_person();
 		$tcust = $arr["request"]["customer"];
-		if (mb_detect_encoding($arr["request"]["customer"], "UTF-8,ISO-8859-1") == "UTF-8")
+		/*if (mb_detect_encoding($arr["request"]["customer"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["customer"]);
 			if ($arr["request"]["customer"] == "")
 			{
 				$arr["request"]["customer"] = $tcust;
 			}
-		}
+		}*/
 
 		$tproj = $arr["request"]["project"];
-		if (mb_detect_encoding($arr["request"]["project"], "UTF-8,ISO-8859-1") == "UTF-8")
+		/*if (mb_detect_encoding($arr["request"]["project"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["project"]);
 			if ($arr["request"]["project"] == "")
 			{
 				$arr["request"]["project"] = $tproj;
 			}
-		}
+		}*/
 
 		$ttask = $arr["request"]["task"];
-		if (mb_detect_encoding($arr["request"]["task"], "UTF-8,ISO-8859-1") == "UTF-8")
+		/*if (mb_detect_encoding($arr["request"]["task"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["task"]);
 			if ($arr["request"]["task"] == "")
 			{
 				$arr["request"]["task"] = $ttask;
 			}
-		}
+		}*/
 		if ($arr["request"]["task"] == "")
 		{
 			$arr["request"]["task"] = $arr["request"]["project"];
@@ -620,14 +615,14 @@ class task_quick_entry extends class_base
 	function check_existing($arr)
 	{
 		$ctmp = $arr["c"];
-		if (mb_detect_encoding($arr["c"],"UTF-8,ISO-8859-1") == "UTF-8")
+		/*if (mb_detect_encoding($arr["c"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["c"] = iconv("UTF-8", aw_global_get("charset"), $arr["c"]);
 			if ($arr["c"] == "")
 			{
 				$arr["c"] = $ctmp;
 			}
-		}
+		}*/
 		$ret = "";
 		// if customer exists
 		$ol = new object_list(array(
@@ -642,14 +637,14 @@ class task_quick_entry extends class_base
 		}
 
 		$ptmp = $arr["p"];
-		if (mb_detect_encoding($arr["p"],"UTF-8,ISO-8859-1") == "UTF-8")
+		/*if (mb_detect_encoding($arr["p"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["p"] = iconv("UTF-8", aw_global_get("charset"), $arr["p"]);
 			if ($arr["p"] == "")
 			{
 				$arr["p"] = $ptmp;
 			}
-		}
+		}*/
 		// if project exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
@@ -664,14 +659,14 @@ class task_quick_entry extends class_base
 		}
 
 		$ttmp = $arr["t"];
-		if (mb_detect_encoding($arr["t"],"UTF-8,ISO-8859-1") == "UTF-8")
+		/*if (mb_detect_encoding($arr["t"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["t"] = iconv("UTF-8", aw_global_get("charset"), $arr["t"]);
 			if ($arr["t"] == "")
 			{
 				$arr["t"] = $ttmp;
 			}
-		}
+		}*/
 		// if task exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
@@ -685,8 +680,8 @@ class task_quick_entry extends class_base
 		{
 			$ret .= sprintf(t("Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["t"]);
 		}
-		header("Content-type: text/html; charset=utf-8");
-		die(iconv(aw_global_get("charset"), "UTF-8", $ret));
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		die(/*iconv(aw_global_get("charset"), "UTF-8",*/ ($ret));
 	}
 	
 }

@@ -450,8 +450,8 @@ class crm_company_qv_impl extends class_base
 			"contact_p" => $cp,
 			"bills_in_sum" => number_format($this->bills_sum, 2, ',', ''),
 			"done_sum" => number_format($this->sum, 2, ',', ''),
-			"hrs_on_bill" => $this->hrs_on_bill,
-			"total_work_hrs" => $this->hrs_total,
+			"hrs_on_bill" =>  number_format($this->hrs_on_bill, 2, ',', ''),
+			"total_work_hrs" =>  number_format($this->hrs_total, 2, ',', ''),
 			"timespan" => $ts
 		));
 		return $arr["prop"]["value"] = $this->parse();

@@ -465,7 +465,7 @@
             <name>pohitegevus</name>
             <table>kliendibaas_firma</table>
             <group>org_sections</group>
-            <type>popup_search</type>
+            <type>relpicker</type>
             <clid>CL_CRM_SECTOR</clid>
             <style>relpicker</style>
             <reltype>RELTYPE_TEGEVUSALAD</reltype>

@@ -177,17 +177,45 @@ class crm_bill_payment extends class_base
 		));
 	}
 
+	function _get_bill_payments_cust(&$arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["bill_payments_cust"];
+	}
+	function _get_bill_payments_client_mgr(&$arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["bill_payments_client_mgr"];
+	}
+	function _get_bill_payments_from(&$arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["bill_payments_from"];
+	}
+	function _get_bill_payments_to(&$arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["bill_payments_to"];
+	}
+	function _get_bill_payments_bill_no(&$arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["bill_payments_bill_no"];
+	}
+	function _get_bill_payments_bill_to(&$arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["bill_payments_bill_to"];
+	}
+
 	function _get_bill_payments_table($arr)
 	{
+		$filter = array(
+			"class_id" => array(CL_CRM_BILL_PAYMENT),
+			"lang_id" => array(),
+		);
+
+		arr($arr);
+		$ol = new object_list($filter);
+
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_bills_list_t($t, $arr["request"]);
 
 		$t->set_caption(t("Laekumised"));
-
-		$ol = new object_list(array(
-			"class_id" => array(CL_CRM_BILL_PAYMENT),
-			"lang_id" => array(),
-		));
 
 		$sum = 0;
 		$inst = get_instance("applications/crm/crm_company_stats_impl");

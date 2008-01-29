@@ -15,6 +15,11 @@ class popup_search extends aw_template
 
 	function init_vcl_property($arr)
 	{
+		if ($arr["property"]["style"] == "relpicker")
+		{
+			$i = get_instance("vcl/relpicker");
+			return $i->init_vcl_property($arr);
+		}
 		if ($arr["request"]["action"] == "view")
 		{
 			$p = $arr["prop"];
@@ -110,6 +115,7 @@ class popup_search extends aw_template
 			$sel =  $arr["obj_inst"]->prop($arr["property"]["name"]);
 		}
 
+		if ($arr["property"]["style"] == "autocomplete")
 		if ($arr["property"]["style"] == "autocomplete")
 		{
 			$selstr = "";

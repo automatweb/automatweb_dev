@@ -3548,6 +3548,7 @@ class crm_company extends class_base
 
 	function get_cust_bds()
 	{
+		enter_function("crm_company::get_cust_bds");
 		if(date('w') == 5)
 		{
 			$e_add = 2;
@@ -3573,20 +3574,32 @@ class crm_company extends class_base
 			WHERE	
 				objects.class_id = '145' AND 
 				objects.status > 0  AND
-				kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
+				kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday is not null
 		";
+		exit_function("crm_company::get_cust_bds");
+		enter_function("crm_company::get_cust_bds::1");
 		$bds = array();
 		$this->db_query($q);
+		exit_function("crm_company::get_cust_bds::1");
+		enter_function("crm_company::get_cust_bds::2");
+		$cur_y = date('Y');
 		while ($row = $this->db_next())
 		{
-			//$m = date("m", $row["bd"]);
-			list($y, $m, $d) = explode("-", $row["bd"]);
-			$bd = mktime(12,0,0,$m,$d,date('Y'));
+			if (is_numeric($row["bd"]))
+			{
+				$bd = $row["bd"];
+			}
+			else
+			{
+				list($y, $m, $d) = explode("-", $row["bd"]);
+				$bd = mktime(1,0,0,$m,$d,$cur_y);
+			}
 			if ($bd > $s_d && $bd < $e_d)
 			{
-				$bds[mktime(0,0,0,$m,$d,date('Y'))][] = $row["oid"];
+				$bds[$bd][] = $row["oid"];
 			}
 		}
+		exit_function("crm_company::get_cust_bds::2");
 		return $bds;
 	}
 
@@ -3826,7 +3839,7 @@ class crm_company extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		if($arr['args']["group"] == "stats_s")
+		if($arr['args']["group"] == "stats_s" || $arr['args']["group"] == "stats")
 		{
 			$arr['args']['stats_s_cust_type'] = ($arr['request']['stats_s_cust_type']);
 			$arr['args']['stats_s_cust'] = ($arr['request']['stats_s_cust']);

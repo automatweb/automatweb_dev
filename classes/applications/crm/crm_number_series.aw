@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.8 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.9 2008/01/29 11:13:40 kristo Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -174,7 +174,7 @@ class crm_number_series extends class_base
 		$nr = 0;
 		foreach($ser as $idx => $row)
 		{
-			if($row["class"] == $class && (!$time || ($time > $row["from"] && $time < $row["to"])))
+			if($row["class"] == $class && (!$time || ($time >= $row["from"] && $time <= $row["to"])))
 			{
 				$num = $nums[$idx];
 				if ($num > $row["end"])
@@ -193,7 +193,6 @@ class crm_number_series extends class_base
 				$nums[$idx] = $num;
 				$series->set_meta("ser_vals", $nums);
 				$series->save();
-
 				// actually, just list all bills and get max number+1 for bills
 				$filter = array(					
 					"class_id" => $class,					

@@ -1794,7 +1794,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					else
 					{
-						$sql[] = $tf." $comparator '".$v_data."' ";
+						if(!($val->type == "int"))
+						{
+							$ent = "'";
+						}
+						else
+						{
+							$ent = "";
+						}
+						$sql[] = $tf." $comparator $ent".$v_data."$ent ";
 					}
 				}
 				else

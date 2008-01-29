@@ -448,6 +448,7 @@ class crm_company_overview_impl extends class_base
 			"colspan" => "colspan",
 		));
 
+		
 		if ($r["group"] != "meetings")
 		{
 			$t->define_field(array(
@@ -597,6 +598,32 @@ class crm_company_overview_impl extends class_base
 					$last_proj = $task->prop("project");
 				}
 			}
+			
+			if($group)
+			{
+/*				if($last_cust != $task->prop("customer"))
+				{
+					$table_data[] = array(
+						"name" => "<h3>".$cust->name()."</h3>",
+					);
+					$last_cust = $task->prop("customer");
+				}
+*/				
+				if($last_proj != $task->prop("project"))
+				{
+					if($this->can("view" , $task->prop("project")))
+					{
+						$proj = obj($task->prop("project"));
+						$table_data[] = array(
+							"name" => "<h3>".$cust_name." - ". $proj->name()."</h3>",
+							"colspan" => 4,
+						);
+					}
+					$last_proj = $task->prop("project");
+				}
+			}
+
+
 
 			$proj = $task->prop("project");
 			$proj_str = "";
@@ -2045,11 +2072,11 @@ class crm_company_overview_impl extends class_base
 				"name" => $row->prop("content"),
 			), CL_TASK);
 			$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
-
+//if(aw_global_get("uid") == "Teddi.Rull") arr($row->id());
 			$t->define_data(array(
 				"name" => $row->prop("content"),
 				"who" => html::obj_change_url($row->prop("impl")),
-				"when" => date("d.m.Y", $row->prop("date")),
+				"when" => date("d.m.Y",$row->prop("date") > 100 ? $row->prop("date") : $row->created()),
 				"time" => $row->prop("time_real")."<br>".$stopper,
 				"is_done" => $row->prop("done") ? t("Jah") : t("Ei")
 			));

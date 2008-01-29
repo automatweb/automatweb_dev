@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.15 2008/01/09 12:53:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.16 2008/01/29 11:13:45 kristo Exp $
 // currency.aw - Currency management
 
 /*
@@ -268,17 +268,6 @@ class currency extends class_base
 		return $ret;
 	}
 
-	function get($id)
-	{
-		if (!is_array(aw_global_get("currency_cache")))
-		{
-			aw_global_set("currency_cache",$this->get_list(RET_ARR));
-		}
-
-		$_t = aw_global_get("currency_cache");
-		return $_t[$id];
-	}
-	
 	/** converts sum from one currency to another
 	@attrib params=name api=1
 	@param sum required type=int
@@ -351,7 +340,7 @@ class currency extends class_base
 		}
 		return $sum;
 	}
-	
+
 	/** returns company currency
 		@attrib api=1
 	**/
@@ -367,6 +356,18 @@ class currency extends class_base
 		return $company->prop("currency");
 	}
 	
+	function _check_curr_date($date , $start , $end)
+	{
+		extract($date);
+		$start = (mktime(0, 0, 0, $start["month"], $start["day"], $start["year"]));
+		$end = (mktime(0, 0, 0, $end["month"], $end["day"], $end["year"]));
+		if($date > $start && $date < $end)
+		{
+			return true;
+		}
+		else return false;	
+	}
+
 	/** returns default currency
 		@attrib api=1
 	**/
@@ -393,17 +394,16 @@ class currency extends class_base
 		$this->default_currency = $curr;
 		return $curr;
 	}
-	
-	function _check_curr_date($date , $start , $end)
+
+	function get($id)
 	{
-		extract($date);
-		$start = (mktime(0, 0, 0, $start["month"], $start["day"], $start["year"]));
-		$end = (mktime(0, 0, 0, $end["month"], $end["day"], $end["year"]));
-		if($date > $start && $date < $end)
+		if (!is_array(aw_global_get("currency_cache")))
 		{
-			return true;
+			aw_global_set("currency_cache",$this->get_list(RET_ARR));
 		}
-		else return false;	
+
+		$_t = aw_global_get("currency_cache");
+		return $_t[$id];
 	}
 }
 ?>

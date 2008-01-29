@@ -114,12 +114,18 @@ function getCaretStart(obj)
 		{
 			var Lp=obj.createTextRange();
 		}
-
-		if (M.moveToBookmark && M.moveToElementText)
+		if (Lp && M.moveToBookmark && M.moveToElementText)
 		{
-			Lp.setEndPoint("EndToStart", M);
+			Lp.setEndPoint("EndToStart",M);
 		}
-
+		if (!Lp)
+		{
+			return -1;
+		}
+		if (!Lp.text)
+		{
+			return -1;
+		}
 		var rb=Lp.text.length;
 
 		if(rb>obj.value.length)
