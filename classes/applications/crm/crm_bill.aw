@@ -413,7 +413,6 @@ class crm_bill extends class_base
 		switch($prop["name"])
 		{
 			case 'partial_recieved':
-				arr($arr["request"]["new_payment"]);
 				$pa = array();
 				if(is_oid($arr["request"]["new_payment"]))
 				{
@@ -622,15 +621,23 @@ class crm_bill extends class_base
 			$sum = $o->prop("partial_recieved");
 			$sum = $sum + $p->get_free_sum();
 		}
+
 		if(!is_object($p))
 		{
+			$sum = $this->get_bill_sum($o,BILL_SUM);
 			$p = new object();
 			$p-> set_parent($o->id());
 			$p-> set_name($o->name() . " " . t("laekumine"));
 			$p-> set_class_id(CL_CRM_BILL_PAYMENT);
+			$p->save();
+			$o->connect(array(
+				"to" => $p->id(),
+				"type" => "RELTYPE_PAYMENT"
+			));
 			$p-> set_prop("date", time());
-			$p-> set_prop("sum", $this->get_bill_sum($o,BILL_SUM));
+			$p-> set_prop("sum", $sum);//see koht sureb miskipärast
 			$curr = $this->get_bill_currency_id($o);
+
 			if($curr)
 			{
 				$ci = get_instance(CL_CURRENCY);
@@ -649,11 +656,8 @@ class crm_bill extends class_base
 			}
 			$p-> save();
 		}
-		$o->connect(array(
-			"to" => $p->id(),
-			"type" => "RELTYPE_PAYMENT"
-		));
-		return $this->mk_my_orb("change", array("id" => $p->id()), CL_CRM_BILL_PAYMENT);
+
+		return $this->mk_my_orb("change", array("id" => $p->id(), "return_url" => get_ru()), CL_CRM_BILL_PAYMENT);
 		if($ru)
 		{
 			return $ru;
@@ -1485,6 +1489,27 @@ class crm_bill extends class_base
 			"impl_email" => $impl_mail,
 			"impl_url" => $impl->prop_str("url_id"),
 		));
+		if($ord_country)
+		{
+			$this->vars(array("HAS_COUNTRY" => $this->parse("HAS_COUNTRY")));
+		}	
+		if($ord_county)
+		{
+			$this->vars(array("HAS_COUNTY" => $this->parse("HAS_COUNTY")));
+		}		
+		if ($b->prop("bill_due_date") > 200)
+		{
+			$this->vars(array(
+				"HAS_DUE_DATE" => $this->parse("HAS_DUE_DATE")
+			));
+		}
+		else
+		if ($b->prop("bill_due_date_text") != "")
+		{
+			$this->vars(array(
+				"NO_DUE_DATE" => $this->parse("NO_DUE_DATE")
+			));
+		}
 		if($b->prop("udef1")) $this->vars(array("userch1_checked" => $this->parse("userch1_checked")));
 		if($b->prop("udef2")) $this->vars(array("userch2_checked" => $this->parse("userch2_checked")));
 		if($b->prop("udef3")) $this->vars(array("userch3_checked" => $this->parse("userch3_checked")));
