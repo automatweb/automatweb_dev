@@ -318,8 +318,6 @@ class form_controller extends form_base
 		{
 			return true;	// don't remove this, otherwise all controller checks will fail withut a controller
 		}
-		enter_function("form_controller::eval_controller");
-		enter_function("form_controller::eval_controller::$id");
 		$this->form_ref =& $form_ref;
 		$this->el_ref =& $el_ref;
 		$this->entry = $entry;
@@ -355,8 +353,6 @@ class form_controller extends form_base
 			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br />";
 		}
 
-		exit_function("form_controller::eval_controller");
-		exit_function("form_controller::eval_controller::".$co[OID]);
 		return $res;
 	}
 
