@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.13 2007/05/23 08:02:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.14 2008/01/29 16:47:19 kaarel Exp $
 // phone.aw - Telefon
 /*
 
@@ -27,7 +27,7 @@
 */
 
 /*
-@reltype BELONGTO value=1 clid=CL_CRM_ADDRESS,CL_CRM_COMPANY,CL_CRM_PERSON
+@reltype BELONGTO value=1 clid=CL_CRM_ADDRESS,CL_CRM_COMPANY,CL_CRM_PERSON,CL_CRM_PERSON_WORK_RELATION
 @caption Numbriga seotud objekt
 
 @reltype COUNTRY value=2 clid=CL_CRM_COUNTRY
