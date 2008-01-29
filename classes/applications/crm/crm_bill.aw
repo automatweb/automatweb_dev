@@ -211,8 +211,7 @@ class crm_bill extends class_base
 			case 'partial_recieved':
 				$sum = $prop["value"];
 				$prop["value"] = number_format($prop["value"], 2);
-				$curn = $arr["obj_inst"]->prop("customer.currency.name");
-				$prop["value"] .= " ".($curn == "" ? "EEK" : $curn);
+				$prop["value"] .= " ".$this->get_bill_currency($arr["obj_inst"]);
 				$url = $this->mk_my_orb("do_search", array(
 					"pn" => "new_payment",
 					"clid" => CL_CRM_BILL_PAYMENT,
@@ -479,7 +478,7 @@ class crm_bill extends class_base
 					$payments = $arr["obj_inst"]->connections_from(array('type' => 'RELTYPE_PAYMENT'));
 					if(!(is_array($payments) && sizeof($payments)))
 					{
-						$this->add_payment(array("o "=> $arr["obj_inst"]));
+						$this->add_payment(array("o"=> $arr["obj_inst"]));
 					}
 
 				}
