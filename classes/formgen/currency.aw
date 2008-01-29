@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.16 2008/01/29 11:13:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.17 2008/01/29 15:58:43 kristo Exp $
 // currency.aw - Currency management
 
 /*
@@ -366,6 +366,22 @@ class currency extends class_base
 			return true;
 		}
 		else return false;	
+	}
+
+
+	/** returns default currency
+		@attrib api=1
+	**/
+	function get_default_currency_name()
+	{
+		$c = $this->get_default_currency();
+		if(!(is_oid($c) && $this->can("view" , $c)))
+		{
+			return "EEK";
+		}
+		
+		$o = obj($c);
+		return $o->name();
 	}
 
 	/** returns default currency
