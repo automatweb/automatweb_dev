@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.37 2007/12/13 10:19:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.38 2008/01/29 10:56:01 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -214,7 +214,7 @@ class messenger_v2 extends class_base
 
 	/**  
 		
-		@attrib name=my_messages params=name is_public="1" caption="Minu kirjad" 
+		@attrib name=my_messages params=name is_public="1" caption="Minu kirjad" all_args="1"
 		
 		
 		@returns
@@ -226,13 +226,13 @@ class messenger_v2 extends class_base
 	function my_messages($arr)
 	{
 		$msgr_id = $this->get_messenger_for_user();
-
 		if (empty($msgr_id))
 		{
 			return t("kulla mees, sa pole omale default messengeri ju valinud?");
 		};
 		$arr["id"] = $msgr_id;
 		$arr["group"] = "main_view";
+		$arr["action"] = "change";
 		return $this->change($arr);
 
 
