@@ -787,10 +787,39 @@ default group=org_objects
 
 	@property bs_tb type=toolbar no_caption=1
 
+
+
 @default group=bill_payments
+
 	@property bill_payments_tb type=toolbar store=no no_caption=1
 	@caption Laekumiste toolbar
-	@property bill_payments_table type=table no_caption=1 store=no
+
+	@layout bills_payments_box type=hbox width=20%:80%
+
+		@layout bills_payments_s type=vbox parent=bills_payments_box closeable=1 area_caption=Otsing
+
+			@property bill_payments_cust type=textbox size=30 store=no parent=bills_payments_s captionside=top
+			@caption Klient
+
+			@property bill_payments_bill_no type=textbox size=15 store=no parent=bills_payments_s captionside=top
+			@caption Arve nr alates
+'
+			@property bill_payments_bill_to type=textbox size=15 store=no parent=bills_payments_s captionside=top
+			@caption Arve nr kuni
+
+			@property bill_payments_from type=date_select store=no parent=bills_payments_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox
+			@caption Esitatud alates
+
+			@property bill_payments_to type=date_select store=no parent=bills_payments_s captionside=top format=day_textbox,month_textbox,year_textbox
+			@caption Esitatud kuni
+
+			@property bill_payments_client_mgr type=text store=no parent=bills_payments_s captionside=top
+			@caption Kliendihaldur
+
+			@property bill_payments_search type=submit store=no parent=bills_payments_s captionside=top no_caption=1 group=bills_list
+			@caption Otsi
+
+	@property bill_payments_table type=table no_caption=1 store=no parent=bills_payments_box
 	@caption Laekumiste tabel
 
 @default group=bills_list

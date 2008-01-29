@@ -2312,12 +2312,104 @@
             <caption>Laekumiste toolbar</caption>
       </property>
       <property>
+            <name>bill_payments_cust</name>
+            <table>objects</table>
+            <group>bill_payments</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>bills_payments_s</parent>
+            <captionside>top</captionside>
+            <field>bill_payments_cust</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>bill_payments_bill_no</name>
+            <table>objects</table>
+            <group>bill_payments</group>
+            <type>textbox</type>
+            <size>15</size>
+            <store>no</store>
+            <parent>bills_payments_s</parent>
+            <captionside>top</captionside>
+            <field>bill_payments_bill_no</field>
+            <caption>Arve nr alates</caption>
+      </property>
+      <property>
+            <name>bill_payments_bill_to</name>
+            <table>objects</table>
+            <group>bill_payments</group>
+            <type>textbox</type>
+            <size>15</size>
+            <store>no</store>
+            <parent>bills_payments_s</parent>
+            <captionside>top</captionside>
+            <field>bill_payments_bill_to</field>
+            <caption>Arve nr kuni</caption>
+      </property>
+      <property>
+            <name>bill_payments_from</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>bills_payments_s</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>bill_payments_from</field>
+            <caption>Esitatud alates</caption>
+      </property>
+      <property>
+            <name>bill_payments_to</name>
+            <table>objects</table>
+            <group>bill_payments</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>bills_payments_s</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>bill_payments_to</field>
+            <caption>Esitatud kuni</caption>
+      </property>
+      <property>
+            <name>bill_payments_client_mgr</name>
+            <table>objects</table>
+            <group>bill_payments</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>bills_payments_s</parent>
+            <captionside>top</captionside>
+            <field>bill_payments_client_mgr</field>
+            <caption>Kliendihaldur</caption>
+      </property>
+      <property>
+            <name>bill_payments_search</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>bills_payments_s</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>bill_payments_search</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>bill_payments_table</name>
             <table>objects</table>
             <group>bill_payments</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <parent>bills_payments_box</parent>
             <field>bill_payments_table</field>
             <caption>Laekumiste tabel</caption>
       </property>
@@ -4565,6 +4657,19 @@
                   <area_caption>Otsing</area_caption>
                   <group>documents_news</group>
             </docs_news_left>
+            <bills_payments_box>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>bill_payments</group>
+                  <area_caption></area_caption>
+            </bills_payments_box>
+            <bills_payments_s>
+                  <type>vbox</type>
+                  <parent>bills_payments_box</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>bill_payments</group>
+            </bills_payments_s>
             <bills_list_box>
                   <type>hbox</type>
                   <width>20%:80%</width>
