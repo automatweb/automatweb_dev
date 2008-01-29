@@ -2659,7 +2659,7 @@ class crm_company extends class_base
 			case "bill_payments_bill_to":
 			case "bill_payments_from":
 			case "bill_payments_to":
-			case "bill_payments_client_mgr"
+			case "bill_payments_client_mgr":
   	                          $bills_p_impl = get_instance("applications/crm/crm_bill_payment");
   	                          $fn = "_get_".$data["name"];
   	                        return $bills_p_impl->$fn($arr);
