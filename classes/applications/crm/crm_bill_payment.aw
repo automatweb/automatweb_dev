@@ -187,6 +187,10 @@ class crm_bill_payment extends class_base
 	}
 	function _get_bill_payments_from(&$arr)
 	{
+		if(!$arr["request"]["bill_payments_from"])
+		{
+			$arr["request"]["bill_payments_from"] = (time() - 30*3600*24);
+		}
 		$arr["prop"]["value"] = $arr["request"]["bill_payments_from"];
 	}
 	function _get_bill_payments_to(&$arr)
@@ -208,8 +212,105 @@ class crm_bill_payment extends class_base
 			"class_id" => array(CL_CRM_BILL_PAYMENT),
 			"lang_id" => array(),
 		);
+		$srch = $arr["request"];
+		if($srch["bill_payments_search"])
+		{
+			if($srch["bill_payments_cust"] || $srch["bill_payments_bill_no"] || $srch["bill_payments_bill_to"] || $srch["bill_payments_client_mgr"])
+			{
+				$bfilter = array(
+					"class_id" => CL_CRM_BILL,
+				);
+				if($srch["bill_payments_cust"])
+				{
+					$bfilter[] = new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"CL_CRM_BILL.customer(CL_CRM_COMPANY).name" => "%".$srch["bill_payments_cust"]."%",
+							"CL_CRM_BILL.customer(CL_CRM_PERSON).name" => "%".$srch["bill_payments_cust"]."%",
+							"CL_CRM_BILL.customer_name" => "%".$srch["bill_payments_cust"]."%",
+						)
+					));
+				}
 
-		arr($arr);
+				if($srch["bill_payments_client_mgr"])
+				{
+	
+					$relist = new object_list(array(
+						"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
+						"CL_CRM_COMPANY_ROLE_ENTRY.person.name" => map("%%%s%%", explode(",", $srch["bill_payments_client_mgr"]))
+					));
+
+					$rs = array();
+					foreach($relist->arr() as $o)
+					{
+						$rs = $o->prop("client");
+					}
+
+					$ft = new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"CL_CRM_BILL.customer.client_manager.name" => map("%%%s%%", explode(",", $srch["bill_payments_client_mgr"])),
+							"oid" => $rs,
+						)
+					));
+					$bfilter[] = $ft;
+				}
+				if($srch["bill_payments_bill_no"] && $srch["bill_payments_bill_to"])
+				{
+					$bfilter["bill_no"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $arr["request"]["bill_payments_bill_no"] , $arr["request"]["bill_payments_bill_to"], "int");
+				}
+				else
+				if($srch["bill_payments_bill_to"])
+				{
+					$bfilter["bill_no"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["request"]["bill_payments_bill_to"], "","int");
+				}
+				elseif($srch["bill_payments_bill_no"])
+				{
+					$bfilter["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["request"]["bill_payments_bill_no"], "","int");
+				}
+
+				$bills = new object_list($bfilter);
+				$ids = array();
+				
+				foreach($bills->arr() as $bill)
+				{
+					$conns_tmp = $bill->connections_from(array(
+						"type" => "RELTYPE_PAYMENT",
+					));
+					foreach($conns_tmp as $conn)
+					{
+						$ids[$conn->prop('to')] = $conn->prop('to');
+					}
+				}
+				if(sizeof($ids))
+				{
+					 $filter["oid"] = $ids;
+				}
+				else
+				{
+					$filter["oid"] = 1;
+				}
+			}
+
+			$to = 9999999999;
+			$from = 1;
+			if($srch["bill_payments_from"])
+			{
+				$from = date_edit::get_timestamp($srch["bill_payments_from"]);
+			}
+			if($srch["bill_payments_to"])
+			{
+				$to = date_edit::get_timestamp($srch["bill_payments_to"]);
+			}
+			if($srch["bill_payments_from"] || $srch["bill_payments_to"])
+			{
+				$filter["date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from , $to);
+			}
+		}
+		else
+		{
+			$filter["date"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, (time() - 30*3600*24));
+		}
 		$ol = new object_list($filter);
 
 		$t =& $arr["prop"]["vcl_inst"];
