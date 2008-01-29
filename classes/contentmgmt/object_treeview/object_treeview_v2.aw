@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.116 2008/01/29 10:12:22 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.117 2008/01/29 12:01:47 robert Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1013,17 +1013,17 @@ class object_treeview_v2 extends class_base
 	// parsing table rows - if the field value, which is used to make table groups
 	// changes, i'll create group header line and put it in the table
 	// groups are not made, if char param is present in url
+			$controllers = array();
+			$conn = $ob->connections_from(array(
+				"type" => "RELTYPE_ROW_CONTROLLER",
+			));
+			foreach($conn as $cn)
+			{
+				$controllers[] = $cn->prop("to");
+			}				
+			$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
 			foreach($ol as $odata)
 			{
-				$controllers = array();
-				$conn = $ob->connections_from(array(
-					"type" => "RELTYPE_ROW_CONTROLLER",
-				));
-				foreach($conn as $cn)
-				{
-					$controllers[] = $cn->prop("to");
-				}				
-				$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
 				foreach ($controllers as $controller)
 				{
 					if ($view_controller_inst->check_property(&$odata, $controller, array()) == PROP_IGNORE)
