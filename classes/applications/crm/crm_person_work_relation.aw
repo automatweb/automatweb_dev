@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.7 2008/01/21 14:12:22 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.8 2008/01/29 10:29:23 kaarel Exp $
 // crm_person_work_relation.aw - Töösuhe 
 /*
 
@@ -63,6 +63,15 @@
 
 @reltype SECTION value=7 clid=CL_CRM_SECTION
 @caption &Uuml;ksus
+
+@reltype PHONE value=8 clid=CL_CRM_PHONE
+@caption Telefon
+
+@reltype PHONE value=8 clid=CL_CRM_PHONE
+@caption Telefon
+
+@reltype EMAIL value=9 clid=CL_ML_MEMBER
+@caption E-post
 
 */
 
