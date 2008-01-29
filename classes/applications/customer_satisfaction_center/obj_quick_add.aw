@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.11 2007/12/06 14:33:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.12 2008/01/29 12:44:05 robert Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -385,6 +385,7 @@ class obj_quick_add extends class_base
 			$ol = new object_list(array(
 				"parent" => $urlvars["parent"]
 			));
+			$ol->sort_by_cb(array($this, "_qa_ol_sort"));
 			if(count($ol->list))
 			{
 				$pm->add_sub_menu(array(
@@ -419,6 +420,16 @@ class obj_quick_add extends class_base
 		die($pm->get_menu(array(
 			"text" => '<img alt="" title="" border="0" src="'.aw_ini_get("baseurl").'/automatweb/images/aw06/ikoon_lisa.gif" id="mb_user_qa" border="0" class="ikoon" />'.t("Lisa kiiresti").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>'
 		)));
+	}
+
+	function _qa_ol_sort($a, $b)
+	{
+		$a = aw_ini_get('classes.'.$a->class_id().'.name');
+		$b = aw_ini_get('classes.'.$b->class_id().'.name');
+		if ($a == $b) {
+			return 0;
+		}
+		return ($a < $b) ? -1 : 1;
 	}
 
 	function init_qa()

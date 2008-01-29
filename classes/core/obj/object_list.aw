@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.63 2008/01/08 09:40:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.64 2008/01/29 12:44:03 robert Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -319,6 +319,26 @@ class object_list extends _int_obj_container_base
 		$this->_int_sort_list($param["prop"], ((empty($param["order"]) || $param["order"] == "asc") ? "asc" : "desc"));
 	}
 
+	/** sorts the object list with the specified function
+		@attrib api=1 params=cb
+
+		@errors
+			none
+
+		@param cb required 
+			can be either the function to sort by,
+			or an array that consists of an object instance an the function
+
+		@returns
+			none
+
+		@examples
+			$ol = new object_list(array(
+				"name" => "foo%"
+			));
+			$ol->sort_by_cb(array($this, "__sorter"));
+			$ol->sort_by_cb("func");
+	**/
 	function sort_by_cb($cb)
 	{
 		if (is_array($cb))
