@@ -1316,34 +1316,19 @@ function check_pagecache_folders()
 		$fq = $pg."/".$f;
 		if (!is_dir($fq))
 		{
-			if (!mkdir($fq, 0777))
-			{
-				classload("core/error");
-				error::raise(array(
-					"id" => "ERR_NO_FOLD",
-					"msg" => sprintf(t("check_pagecache_folders(): could not create folder %s"), $fq)
-				));
-				die();
-			}
+			@mkdir($fq, 0777);
 			chmod($fq, 0777);
 			for($i = 0; $i < 16; $i++)
 			{
 				$ffq = $fq ."/".($i < 10 ? $i : chr(ord('a') + ($i- 10)));
-				if (!mkdir($ffq, 0777))
-				{
-					error::raise(array(
-						"id" => "ERR_NO_FOLD",
-						"msg" => sprintf(t("check_pagecache_folders(): could not create folder %s"), $ffq)
-					));
-					die();
-				}
+				@mkdir($ffq, 0777);
 				chmod($ffq, 0777);
 			}
 		}
 	}
 	if (!is_dir($pg."/temp"))
 	{
-		mkdir($pg."/temp", 0777);
+		@mkdir($pg."/temp", 0777);
 		chmod($pg."/temp", 0777);
 		touch($pg."/temp/lmod");
 	}
