@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.8 2008/01/30 16:29:40 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.9 2008/01/30 17:48:58 kaarel Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -1737,8 +1737,8 @@ class event_import extends class_base
 				}
 				else
 				{ // excisting event
-					print "[ --- ][".$lg[$imp_lang_id]."] ".$event_data["name"].", ID - ".$event_obj->id()."<br>";
 					$event_obj = new object($imps["event"][$ext_sys_event][$event_id]);
+					print "[ --- ][".$lg[$imp_lang_id]."] ".$event_data["name"].", ID - ".$event_obj->id()."<br>";
 					
 					// Don't wanna lose any translations alreay imported or entered.
 					$all_vals = $event_obj->meta("translations");
