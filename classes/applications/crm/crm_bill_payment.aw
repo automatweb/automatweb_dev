@@ -61,6 +61,9 @@ class crm_bill_payment extends class_base
 		switch($prop["name"])
 		{
 			case "bills":
+				$sum = 0;
+				$bi = get_instance(CL_CRM_BILL);
+				
 				if($arr["obj_inst"]->id())
 				{
 					$ol = new object_list(array(
@@ -68,12 +71,28 @@ class crm_bill_payment extends class_base
 						"lang_id" => array(),
 						"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $arr["obj_inst"]->id(),
 					));
-					$bi = get_instance(CL_CRM_BILL);
 					foreach($ol -> arr() as $o)
 					{
-						$prop["value"] .= "\n".t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ".$bi->get_bill_sum($o)." ".$bi->get_bill_currency($o);
+						$this_sum = $bi->get_bill_sum($o);
+						$free_sum = $arr["obj_inst"]->get_free_sum($o->id());
+						$sum = $sum + $this_sum;
+						$prop["value"] .= t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ". number_format($free_sum , 2)." ".$bi->get_bill_currency($o)."<br>\n";
 					}
 				}
+				if($sum < $arr["obj_inst"]->prop("sum"))
+				{
+					$url = $this->mk_my_orb("do_search", array(
+						"pn" => "add_bill",
+						"clid" => CL_CRM_BILL,
+					), "popup_search", false, true);
+	
+					$prop["value"].= html::href(array(
+						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+						"title" => t("Lisa Arve"),
+					))."<br>";
+				}
+
 				break;
 			case "payment_type":
 				$prop["options"] = array(0 => t("&Uuml;lekandega"), 1 => t("Sularahas"));
@@ -90,8 +109,45 @@ class crm_bill_payment extends class_base
 
 		switch($prop["name"])
 		{
+			case "bills":
+			{
+				$free_sum = $arr["obj_inst"]->get_free_sum();
+				$pa = array();
+				if(is_oid($arr["request"]["add_bill"]))
+				{
+					$pa[] = $arr["request"]["add_bill"];
+				}
+				else
+				{
+					$pa = explode(",",$arr["request"]["add_bill"]);
+				}
+				$error = array();
+				foreach($pa as $p)
+				{
+					if(!is_oid($p))
+					{
+						continue;
+					}
+					if($free_sum > 0)
+					{
+						$err = $arr["obj_inst"]->add_bill($p);
+						if($err)
+						{
+							$error[] = $err;
+						}
+					}
+					else
+					{
+						$error[] = t("Ei j&auml;tku raha arvele id'ga ").$p;
+					}
+				}
+				if(sizeof($error))
+				{
+					$prop["error"] = join("<br>\n" , $error);
+				}
+				break;
+			}
 		}
-
 		return $retval;
 	}
 
@@ -374,6 +430,7 @@ class crm_bill_payment extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		$arr["add_bill"] = "";	
 		$arr["post_ru"] = post_ru();
 	}
 

@@ -209,8 +209,21 @@ class crm_bill extends class_base
 			//	}
 			//	break;
 			case 'partial_recieved':
-				$sum = $prop["value"];
-				$prop["value"] = number_format($prop["value"], 2);
+				$sum = $this->get_bill_recieved_money($arr["obj_inst"]);
+/*				$bi = get_instance(CL_CRM_BILL);
+				$bill_sum = $bi->get_bill_sum($arr["obj_inst"]);
+				$sum = 0;
+				foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+				{
+					$p = $conn->to();
+					$sum = $sum + $p->get_free_sum($arr["obj_inst"]->id());
+				}
+				if($bill_sum < $sum)
+				{
+					$sum = $bill_sum;
+				}
+*/
+				$prop["value"] = number_format($sum, 2);
 				$prop["value"] .= " ".$this->get_bill_currency($arr["obj_inst"]);
 				$url = $this->mk_my_orb("do_search", array(
 					"pn" => "new_payment",
@@ -425,8 +438,17 @@ class crm_bill extends class_base
 				{
 					if(is_oid($p) && $this->can("view" , $p))
 					{
-						$this->add_payment(array("o" => $arr["obj_inst"], "p" => $p));
+						$error = $this->add_payment(array(
+							"o" => $arr["obj_inst"],
+							"p" => $p,
+							"show_error" => 1,
+						));
 					}
+				}
+				if($error)
+				{
+					$prop["error"] = $error;
+					return PROP_ERROR;
 				}
 				break;
 			case "bill_no":
@@ -617,13 +639,18 @@ class crm_bill extends class_base
 		if(is_oid($p) && $this->can("view" , $p))
 		{
 			$p = obj($p);
-			$sum = $o->prop("partial_recieved");
-			$sum = $sum + $p->get_free_sum();
+//			$sum = $o->prop("partial_recieved");
+//			$sum = $sum + $p->get_free_sum();
 		}
 		
 		if(is_object($p))
 		{
-			if($p->prop("currency") != $o->prop("currency"))
+			$error = $p->add_bill($o);
+			if($error)
+			{
+				arr($error);
+			}
+/*			if($p->prop("currency") != $this->get_bill_currency_id($o);)
 			{
 				arr("valuuta vastuolus");
 				return "";
@@ -639,6 +666,11 @@ class crm_bill extends class_base
 				arr("klient vastuolus");
 				return "";
 			}
+			$o->connect(array(
+				"to" => $p->id(),
+				"type" => "RELTYPE_PAYMENT"
+			));
+*/
 		}
 
 		if(!is_object($p))
@@ -676,6 +708,10 @@ class crm_bill extends class_base
 			$p-> save();
 		}
 
+		if($show_error == 1)
+		{
+			return $error;
+		}
 		return $this->mk_my_orb("change", array("id" => $p->id(), "return_url" => $ru), CL_CRM_BILL_PAYMENT);
 		if($ru)
 		{
@@ -2781,6 +2817,44 @@ class crm_bill extends class_base
 			$tr->set_prop("bill_id", 0);
 			$tr->save();
 		}
+	}
+
+	/**
+		@attrib api=1 all_args=1
+	@param bill required type=object
+		bill object 
+	@param payment optional type=oid
+		payment id you want to ignore
+	@returns string error
+
+	@comment
+		returns sum not paid for bill
+	**/
+	function get_bill_needs_payment($arr)
+	{
+		extract($arr);
+		$bill_sum = $this->get_bill_sum($bill);
+		$sum = 0;
+		foreach($bill->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+		{
+			$p = $conn->to();
+			if($payment && $payment == $p->id())
+			{
+				break;
+			}
+			$sum = $sum + $p->get_free_sum($bill->id());
+		}
+		if($bill_sum < $sum)
+		{
+			$sum = $bill_sum;
+		}
+		return $bill_sum - $sum;
+	}
+
+	function get_bill_recieved_money($b)
+	{
+		$bill_sum = $this->get_bill_sum($b);
+		return $bill_sum - $this->get_bill_needs_payment(array("bill" => $b));
 	}
 
 	function callback_mod_tab($arr)
