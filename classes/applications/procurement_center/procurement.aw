@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.26 2008/01/30 09:38:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.27 2008/01/30 11:24:33 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -1462,8 +1462,27 @@ class procurement extends class_base
 				$pcpo = obj($contact_persons[$po]);
 				$contact_person = $pcpo->name();
 			}
+
+
+			$vars = array(
+				"orderer_name" => $o->prop("orderer.name"),
+				"orderer_phone" => $o->prop("orderer.phone_id.name"),
+				"orderer_email" => $o->prop("orderer.email_id.mail"),
+				"orderer_fax" => $o->prop("orderer.telefax_id.name"),
+			);
+			$us = get_instance(CL_USER);
+			$up = new object($us->get_current_person());
+			if(is_object($up))
+			{
+				if($up->prop("phone.name")) $vars["orderer_phone"] = $up->prop("phone.name");
+				if($up->prop("email.name")) $vars["orderer_email"] = $up->prop("email.name");
+				if($up->prop("fax.name")) $vars["orderer_fax"] = $up->prop("fax.name");
+				$vars["orderer_name"] = $up->name();
+			}
+
+			$this->vars($vars);
 			$this->vars(array(
-				"orderer_name" =>$o->prop("orderer.name"),
+				//"orderer_name" =>$o->prop("orderer.name"),
 				"orderer_city" =>$o->prop("orderer.contact.linn.name"),
 				"orderer_index" => $o->prop("orderer.contact.postiindeks"),
 				"orderer_country" => $o->prop("orderer.contact.riik.name"),
@@ -1597,6 +1616,19 @@ class procurement extends class_base
 			print "<script type='text/javascript'>
 						window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");
 			</script>";
+		}
+		if(!(is_oid($_SESSION["cur_admin_if"]) && $this->can("view" , $_SESSION["cur_admin_if"])))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_ADMIN_IF,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			if ($ol->count())
+			{
+				$o = $ol->begin();
+				$_SESSION["cur_admin_if"] = $o->id();
+			}
 		}
 		$adminif = obj($_SESSION["cur_admin_if"]);
 		$loch=html::get_change_url($_SESSION["cur_admin_if"], array("parent" => $menu->id(), "group" => "o",));
