@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.261 2008/01/30 08:49:29 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.262 2008/01/30 08:49:54 voldemar Exp $
 
 /*
 
@@ -2456,7 +2456,7 @@ class site_show extends class_base
 			"LEFT_PANE" => $lp,
 			"RIGHT_PANE" => $rp,
 			"NO_LEFT_PANE" => "",
-			"NO_RIGHT_PANE" => ""
+			"NO_RIGHT_PANE" => "",
 			"POPUP_MENUS_SITE" => $this->cache->file_get("aw_toolbars") // toolbar menu button menuitem layer
 		));
 
