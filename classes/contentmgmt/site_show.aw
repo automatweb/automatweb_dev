@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.262 2008/01/30 08:49:54 voldemar Exp $
 
 /*
 
@@ -2352,7 +2351,9 @@ class site_show extends class_base
 			"IS_FRONTPAGE2" => ($isfp ? $this->parse("IS_FRONTPAGE2") : ""),
 			"IS_NOT_FRONTPAGE" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE") : ""),
 			"IS_NOT_FRONTPAGE2" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
+			"POPUP_MENUS_SITE" => $this->cache->file_get("aw_toolbars") // toolbar menu button menuitem layer
 		));
+		$this->cache->file_set("aw_toolbars", "");
 
 
 		if (aw_global_get("uid") == "")
@@ -2457,7 +2458,6 @@ class site_show extends class_base
 			"RIGHT_PANE" => $rp,
 			"NO_LEFT_PANE" => "",
 			"NO_RIGHT_PANE" => "",
-			"POPUP_MENUS_SITE" => $this->cache->file_get("aw_toolbars") // toolbar menu button menuitem layer
 		));
 
 		// check if logged is outside LEFT_PANE and if it is, then parse logged again if we are logged in
