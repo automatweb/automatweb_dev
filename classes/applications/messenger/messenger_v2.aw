@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.38 2008/01/29 10:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.39 2008/01/30 14:34:16 robert Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -527,7 +527,19 @@ class messenger_v2 extends class_base
 					"url" => "#",
 					"onClick" => "javascipt:msgr_load('middle_pane_outer', 'msg_contents', true, '".$url."&msgid=".$move["prev"]."');",
 				));
-				
+				$cur = get_current_company();
+				$tb->add_button(array(
+					"name" => "save_to_mf",
+					"tooltip" => t("Salvesta"),
+					"img" => "save.gif",
+					"url" => $this->mk_my_orb("new", array(
+						"msgrid" => $arr["request"]["msgrid"],
+						"mailbox" => $arr["request"]["mailbox"],
+						"msgid" => $arr["request"]["msgid"],
+						"parent" => $cur->id(),
+						"save" => "mf",
+					),CL_MESSAGE),
+				));
 				$tb_html = $tb->get_toolbar();
 				$ms_html = $this->_fetch_message_contents(&$arr);
 				//if($arr["request"]["view_layout"]) { die("doup");}

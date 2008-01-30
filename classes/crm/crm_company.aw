@@ -1425,6 +1425,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype LANGUAGE value=69 clid=CL_LANGUAGE
 @caption Language
 
+@reltype MAILS_FOLDER value=70 clid=CL_MENU
+@caption Meilide kataloog
+
 
 */
 /*

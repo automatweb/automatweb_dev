@@ -75,6 +75,27 @@
             <caption>Teema</caption>
       </property>
       <property>
+            <name>customer</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER</reltype>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>project</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>html_mail</name>
             <group>general</group>
             <table>messages</table>
@@ -87,9 +108,10 @@
       <property>
             <name>message</name>
             <group>general</group>
-            <table>messages</table>
-            <type>text</type>
-            <field>message</field>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Sisu</caption>
       </property>
       <property>
@@ -233,6 +255,16 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>Meiliaadress</caption>
             </MAIL_ADDRESS>
+            <CUSTOMER>
+                  <value>3</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Klient</caption>
+            </CUSTOMER>
+            <PROJECT>
+                  <value>4</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Projekt</caption>
+            </PROJECT>
       </reltypes>
       <forminfo>
             <showmsg>

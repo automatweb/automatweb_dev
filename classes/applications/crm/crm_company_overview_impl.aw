@@ -323,8 +323,14 @@ class crm_company_overview_impl extends class_base
 		$t->set_caption("Kirjad");
 		
 		$cur = get_current_company();
+		$parents[] = $cur->id();
+		$mf = $cur->get_first_obj_by_reltype("RELTYPE_MAILS_FOLDER");
+		if($mf)
+		{
+			$parents[] = $mf->id();
+		}
 		$filt = array(
-			"parent" => $cur->id(),
+			"parent" => $parents,
 			"class_id" => CL_MESSAGE,
 		);
 		if($arr["request"]["id"] != $cur->id())

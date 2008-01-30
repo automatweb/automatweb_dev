@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.42 2007/12/06 14:33:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.43 2008/01/30 14:34:16 robert Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -34,10 +34,16 @@
 	property date type=text store=no
 	caption Kuup&auml;ev
 	
+	@property customer type=relpicker reltype=RELTYPE_CUSTOMER multiple=1 table=objects field=meta method=serialize
+	@caption Klient
+
+	@property project type=relpicker reltype=RELTYPE_PROJECT table=objects field=meta method=serialize
+	@caption Projekt
+
 	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
 	@caption HTML kiri
 
-	@property message type=text
+	@property message type=textbox field=meta method=serialize table=objects
 	@caption Sisu
 
 	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no new_items=5
@@ -92,6 +98,12 @@
 
 	@reltype MAIL_ADDRESS value=2 clid=CL_ML_MEMBER
 	@caption Meiliaadress
+
+	@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY
+	@caption Klient
+
+	@reltype PROJECT value=4 clid=CL_PROJECT
+	@caption Projekt
 
 */
 
@@ -501,6 +513,20 @@ class mail_message extends class_base
 				$prop["value"] = $this->parse();
 				break;
 
+			case "name":
+				if($this->msgdata["subject"])
+				{
+					$prop["value"] = $this->msgdata["subject"];
+				}
+				break;
+
+			case "cc":
+				if($this->msgdata["cc"])
+				{
+					$prop["value"] = $this->msgdata["cc"];
+				}
+				break;
+
 			case "msg_content":
 				$prop["value"] = nl2br(create_links(htmlspecialchars($this->msgdata["content"])));
 				break;
@@ -571,6 +597,11 @@ class mail_message extends class_base
 					$prop["value"] = $arr["request"]["mto"];
 				}
 				
+				if($this->msgdata["to"])
+				{
+					$prop["value"] = $this->msgdata["to"];
+				}
+
 				break;
 
 			case "mfrom":
@@ -595,6 +626,15 @@ class mail_message extends class_base
 					$prop["options"] = array(
 						$prop["value"] => $mfrom_obj->prop("name"),
 					);
+				}
+				if($this->msgdata["from"])
+				{
+					$ob = obj();
+					$ob->set_class_id(CL_ML_MEMBER);
+					$ob->set_parent($arr["request"]["msgrid"]);
+					$ob->set_name($this->msgdata["fromarr"][0]->mailbox."@".$this->msgdata["fromarr"][0]->host);
+					$ob->save();
+					$prop["options"][$ob->id()] = $ob->name();
 				}
 				break;
 
@@ -621,8 +661,10 @@ class mail_message extends class_base
 
 				break;
 			case "message":
+				$prop["type"] = "text";
 				$prop["value"] = html::textarea(array(
 					"name" => "message",
+					"value" => $this->msgdata["content"]? nl2br(htmlspecialchars($this->msgdata["content"])): $prop["value"],
 				));
 				$fck_inst = get_instance("vcl/fck_editor");
 				
@@ -631,14 +673,64 @@ class mail_message extends class_base
 						"message",
 					),
 				));
-				//
+				break;
+				
+			case "customer":
+				$tmp[] = $this->msgdata["fromarr"][0]->host;
+				foreach($this->msgdata["toarr"] as $to)
+				{
+					$tmp[] = $to->host;
+				}
+				foreach($tmp as $tmph)
+				{
+					$tmph2 = explode(".",$tmph);
+					$host = $tmph2[count($tmph2)-2].".".$tmph2[count($tmph2)-1];
+					$hosts[] = "%".$host;
+				}
+				$ol = new object_list(array(
+					"class_id" => CL_ML_MEMBER,
+					"mail" => $hosts,
+				));
+				$ids = $ol->ids();
+				if(count($ids))
+				{
+					$c = new connection();
+					$conn = $c->find(array(
+						"from.class_id" => CL_CRM_PERSON,
+						"to.class_id" => CL_ML_MEMBER,
+						"to.oid" => $ids,
+					));
+					foreach($conn as $con)
+					{
+						$ppl[$con["from"]] = $con["from"];
+					}
+				}
+				$cur = get_current_company();
+				if(count($ppl))
+				{
+					$conn2 = $c->find(array(
+						"from.class_id" => CL_CRM_PERSON,
+						"to.class_id" => CL_CRM_COMPANY,
+						"type" => "RELTYPE_WORK",
+						"from.oid" => $ppl,
+					));
+					foreach($conn2 as $co)
+					{
+						if($cur->id() == $co["to"])
+						{
+							continue;
+						}
+						$comp = obj($co["to"]);
+						$prop["options"][$co["to"]] = $comp->name();
+						$prop["value"][$co["to"]] = $co["to"];
+					}
+				}
 			break;
 
 		}
 		return $retval;
 	}
 
-	/*
 	function set_property($arr)
 	{
 		$retval = PROP_OK;
@@ -648,7 +740,6 @@ class mail_message extends class_base
 		};
 		return $retval;
 	}
-	*/
 
 	// basically the same as deliver, except that this one is _not_
 	// called through ORB, and you can specify replacements here
@@ -1019,6 +1110,27 @@ class mail_message extends class_base
 		};
 	}
 
+	function callback_post_save($arr)
+	{
+		$cur = get_current_company();
+		$mf = $cur->get_first_obj_by_reltype("RELTYPE_MAILS_FOLDER");
+		if(!$mf)
+		{
+			$mf = obj();
+			$mf->set_class_id(CL_MENU);
+			$mf->set_parent($cur->id());
+			$mf->set_name(t("Meilide kaust"));
+			$mf->save();
+
+			$cur->connect(array(
+				"type" => "RELTYPE_MAILS_FOLDER",
+				"to" => $mf->id(),
+			));
+		}
+		$arr["obj_inst"]->set_parent($mf->id());
+		$arr["obj_inst"]->save();
+	}
+
 	function gen_identities($arr)
 	{
 		$rv = &$arr["prop"];
@@ -1044,6 +1156,14 @@ class mail_message extends class_base
 		};
 	}
 	
+	function callback_on_load($arr)
+	{
+		if($arr["request"]["mailbox"] && $arr["request"]["msgrid"] && $arr["request"]["msgid"])
+		{
+			$this->load_remote_message($arr["request"]);
+		}
+	}
+
 	/** Can be used to download message parts 
 		
 		@attrib name=get_part params=name 

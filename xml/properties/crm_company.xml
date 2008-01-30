@@ -465,7 +465,7 @@
             <name>pohitegevus</name>
             <table>kliendibaas_firma</table>
             <group>org_sections</group>
-            <type>relpicker</type>
+            <type>popup_search</type>
             <clid>CL_CRM_SECTOR</clid>
             <style>relpicker</style>
             <reltype>RELTYPE_TEGEVUSALAD</reltype>
@@ -4183,6 +4183,11 @@
                   <clid>CL_LANGUAGE</clid>
                   <caption>Language</caption>
             </LANGUAGE>
+            <MAILS_FOLDER>
+                  <value>70</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Meilide kataloog</caption>
+            </MAILS_FOLDER>
       </reltypes>
       <layout>
             <co_top>

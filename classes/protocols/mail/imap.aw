@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.42 2007/10/11 13:15:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.43 2008/01/30 14:34:31 robert Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. &otilde;igemini ta tagastab need boxid kus seike kiri sees
@@ -723,8 +723,10 @@ class imap extends class_base
 		$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
 		$msgdata = array(
 			"from" => $this->MIME_decode($hdrinfo->fromaddress),
+			"fromarr" => $this->MIME_decode($hdrinfo->from),
 			"reply_to" => $this->MIME_decode($hdrinfo->reply_toaddress),
 			"to" => $this->MIME_decode($hdrinfo->toaddress),
+			"toarr" => $this->MIME_decode($hdrinfo->to),
 			"subject" => $this->_parse_subj($hdrinfo->subject),
 			"cc" => $this->MIME_decode($hdrinfo->ccaddress),
 			"date" => $hdrinfo->MailDate,
