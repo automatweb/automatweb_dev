@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.260 2008/01/28 11:07:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.261 2008/01/30 08:49:29 voldemar Exp $
 
 /*
 
@@ -1002,7 +1002,7 @@ class site_show extends class_base
 				}
 			}
 
-			// what is going on here: we can't limit the list as the user said, if 
+			// what is going on here: we can't limit the list as the user said, if
 			// we are going to flter the list later, because it will get less items as requested
 			// so, if we are not filtering the list, limit the query, else just read the ids
 			// and count the objects that should be added manually. it seems the best
@@ -1608,7 +1608,7 @@ class site_show extends class_base
 			$this->parse("NO_SEL_MENU_IMAGE_URL");
 		}
 	}
-	
+
 	////
 	// !build "you are here" links from the path
 	function make_yah()
@@ -1994,7 +1994,7 @@ class site_show extends class_base
 //	{
 //			arr(!($_GET["group"] != $_SESSION["menu_item_tab"] && $_SESSION["menu_item_tab"] != $_GET["openedtab"])); arr($_SESSION["menu_item_tab"]);
 //		if($_GET["group"] != $_SESSION["menu_item_tab"] && $_SESSION["menu_item_tab"] != $_GET["openedtab"]) return false;
-//		
+//
 //		return true;
 //	}
 
@@ -2457,6 +2457,7 @@ class site_show extends class_base
 			"RIGHT_PANE" => $rp,
 			"NO_LEFT_PANE" => "",
 			"NO_RIGHT_PANE" => ""
+			"POPUP_MENUS_SITE" => $this->cache->file_get("aw_toolbars") // toolbar menu button menuitem layer
 		));
 
 		// check if logged is outside LEFT_PANE and if it is, then parse logged again if we are logged in
@@ -2850,7 +2851,7 @@ class site_show extends class_base
 		$this->make_yah();
 
 		$this->make_langs();
-		
+
 		classload("core/util/minify_js_and_css");
 		minify_js_and_css::parse_site_header(& $this);
 
