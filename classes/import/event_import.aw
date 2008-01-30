@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.6 2007/12/24 13:18:28 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.7 2008/01/30 16:11:04 kaarel Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -969,6 +969,9 @@ class event_import extends class_base
 	**/
 	function ignore($arr)
 	{
+		aw_set_exec_time(AW_LONG_PROCESS);
+		ini_set("memory_limit", "800M");
+
 		$o = obj($arr["id"]);
 		// The field where the data of ignored fields is saved
 		if (!is_array($arr["sel"]) && is_array($arr["check"]))
@@ -1188,15 +1191,123 @@ class event_import extends class_base
 		$event_time_data[$time_i][$saved_xml_conf_time[$xml_source->id()."_".$curtag.$postfix]] = trim($attr_value, " \t\n\r\0");
 	}
 
+	function remove_crap($v, $i)
+	{		
+		/*
+		$crap = array(
+			"А" => "&#1040;",
+			"а" => "&#1072;",
+			"Б" => "&#1041;",
+			"б" => "&#1073;",
+			"В" => "&#1042;",
+			"в" => "&#1074;",
+			"Г" => "&#1043;",
+			"г" => "&#1075;",
+			"Д" => "&#1044;",
+			"д" => "&#1076;",
+			"Е" => "&#1045;",
+			"е" => "&#1077;",
+			"Ж" => "&#1046;",
+			"ж" => "&#1078;",
+			"З" => "&#1047;",
+			"з" => "&#1079;",
+			"И" => "&#1048;",
+			"и" => "&#1080;",
+			"Й" => "&#1049;",
+			"й" => "&#1081;",
+			"К" => "&#1050;",
+			"к" => "&#1082;",
+			"Л" => "&#1051;",
+			"л" => "&#1083;",
+			"М" => "&#1052;",
+			"м" => "&#1084;",
+			"Н" => "&#1053;",
+			"н" => "&#1085;",
+			"О" => "&#1054;",
+			"о" => "&#1086;",
+			"П" => "&#1055;",
+			"п" => "&#1087;",
+			"Р" => "&#1056;",
+			"р" => "&#1088;",
+			"С" => "&#1057;",
+			"с" => "&#1089;",
+			"Т" => "&#1058;",
+			"т" => "&#1090;",
+			"У" => "&#1059;",
+			"у" => "&#1091;",
+			"Ф" => "&#1060;",
+			"ф" => "&#1092;",
+			"Х" => "&#1061;",
+			"х" => "&#1093;",
+			"Ц" => "&#1062;",
+			"ц" => "&#1094;",
+			"Ч" => "&#1063;",
+			"ч" => "&#1095;",
+			"Ш" => "&#1064;",
+			"ш" => "&#1096;",
+			"Щ" => "&#1065;",
+			"щ" => "&#1097;",
+			"Ъ" => "&#1066;",
+			"ъ" => "&#1098;",
+			"Ы" => "&#1067;",
+			"ы" => "&#1099;",
+			"Ь" => "&#1068;",
+			"ь" => "&#1100;",
+			"Э" => "&#1069;",
+			"э" => "&#1101;",
+			"Ю" => "&#1070;",
+			"ю" => "&#1102;",
+			"Я" => "&#1071;",
+			"я" => "&#1103;",
+			"«" => "&laquo;",
+			"»" => "&raquo;",
+		);
+		foreach($crap as $piece_of_crap => $gold)
+		{
+			$v = str_replace($piece_of_crap, $gold, $v);
+		}
+		*/
+		$v = str_replace("ā", "&#257;", $v);
+		$v = str_replace("ē", "&#275;", $v);
+		$v = str_replace("ū", "&#363;", $v);
+		$v = str_replace("ņ", "&#326;", $v);
+		$v = str_replace("š", "&#353;", $v);
+		$v = str_replace("ī", "&#299;", $v);
+		$v = str_replace("ģ", "&#291;", $v);
+		$v = str_replace("ļ", "&#316;", $v);
+		$v = str_replace("Ģ", "&#290;", $v);
+		$v = str_replace("ķ", "&#311;", $v);
+		$v = str_replace("Я", "&#1071;", $v);
+		$v = str_replace("ž", "&#382;", $v);
+		$v = str_replace("„", "\"", $v);
+		$v = str_replace("“", "\"", $v);
+		$v = str_replace("”", "\"", $v);
+		$v = str_replace("’", "&rsquo;", $v);
+		$v = str_replace("–", "&ndash;", $v);
+		$v = str_replace("—", "&mdash;", $v);
+		$v = str_replace("õ", "&otilde;", $v);
+		$v = str_replace("ä", "&auml;", $v);
+		$v = str_replace("ö", "&ouml;", $v);
+		$v = str_replace("ü", "&uuml;", $v);
+		$v = str_replace("Õ", "&Otilde;", $v);
+		$v = str_replace("Ä", "&Auml;", $v);
+		$v = str_replace("Ö", "&Ouml;", $v);
+		$v = str_replace("Ü", "&Uuml;", $v);
+
+		return $v;
+	}
+
 //	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $import_orig = true)
 	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $imp_lang_id)
 	{
 		$li = $o->prop("original_lang");
 		$import_orig = ($li == $imp_lang_id);
 		$lg = get_instance("languages");
-		$lg = $lg->get_list();
 		$lg_cfg = $lg->cfg;
 		$lg_list = $lg_cfg["list"];
+		$lg = $lg->get_list();
+//		arr($lg_list);
+//		exit;
 
 		$orig_val = (!$import_orig) ? $imp_lang_id."_orig_val_" : "orig_val_";
 
@@ -1553,6 +1664,10 @@ class event_import extends class_base
 
 					print "<strong>[ new ][".$lg[$imp_lang_id]."] </strong>";
 					$event_obj = new object;
+					if(!$import_orig)
+					{
+						$event_obj->set_meta("trans_".$imp_lang_id."_status", 0);
+					}
 					$event_obj->set_lang_id($li);
 					$event_obj->set_class_id($class_id);
 					$event_obj->set_parent($dirs["event"]);		// Kaust, kuhu sündmusi kirjutatakse (event_manager)
@@ -1575,6 +1690,7 @@ class event_import extends class_base
 								// Importing the original content
 //								print "Importing the original content -> ".$key."<br>";
 								$event_obj->set_prop($key, $value);
+								$event_obj->set_status(STAT_ACTIVE);
 								$event_obj->set_meta($imp_lang_id."_orig_val_".$key, $imp_lang_id."_orig_val_");
 							}
 							else
@@ -1584,6 +1700,7 @@ class event_import extends class_base
 								if(in_array($key, $translatable_fields))
 								{
 									$all_vals[$imp_lang_id][$key] = $value;
+									$event_obj->set_meta("trans_".$imp_lang_id."_status", 1);
 								}
 								$event_obj->set_meta("orig_val_".$key, "orig_val_");
 							}
@@ -1596,7 +1713,7 @@ class event_import extends class_base
 						$event_obj->set_meta("translations", $all_vals);
 					}
 					$event_obj->save();
-					print $event_data["name"]." [saved]<br>";
+					print $event_data["name"].", ID - ".$event_obj->id()." [saved]<br>";
 					flush();
 					// We make a record of the event we just imported so we won't make a duplicate.
 					$extent_obj = new object;
@@ -1636,12 +1753,15 @@ class event_import extends class_base
 					
 					foreach($event_data as $key => $value)
 					{
-						/*
 						$value1 = $value;
-						$value = iconv("UTF-8", $lg_all[$imp_lang_id]["charset"], $value);
+						$value = $this->remove_crap($value, $imp_lang_id);
+//						$value = htmlspecialchars($value, ENT_QUOTES, "UTF-8");
+//						print $value."<br>";
+						$value = iconv("UTF-8", $lg_list[$imp_lang_id]["charset"]."//IGNORE", $value);
+						/*
 						if($value1 != $value)
 						{
-							print $key." = ".$value1.", ";
+							print $key." = ".$value1."<br>";
 							print $key." = ".$value."<br>";
 						}
 						/**/
@@ -1694,6 +1814,10 @@ class event_import extends class_base
 									{
 //										print "Importing original content -> ".$key."<br>";
 										$event_obj->set_prop($key, $value);
+										if(!empty($value))
+										{
+											$event_obj->set_status(STAT_ACTIVE);
+										}
 									}
 									else
 									{
@@ -1701,6 +1825,10 @@ class event_import extends class_base
 										{	
 											$all_vals[$imp_lang_id][$key] = $value;
 											$event_obj->set_meta("translations", $all_vals);
+											if(!empty($value))
+											{								
+												$event_obj->set_meta("trans_".$imp_lang_id."_status", 1);
+											}
 										}
 										
 									}
@@ -2132,9 +2260,22 @@ class event_import extends class_base
 	function import_events($arr)
 	{
 		/*
-		$o = new object(73682);
-		arr($o->meta("translations"));
+		// LOADS OF PAIN IN THE A**
+		$f = fopen("http://www.kultura.lv/rssfeed.php?lng=ru&s=1195768800&e=1195853400", "r");
+		fread($f, 4000);
+		$s = fread($f, 4000);
+		fclose($f);
+		$all_vals[3]["name"] = iconv("UTF-8", "iso-8859-5", $s);
+		$o = new object(78457);
+		$o->set_meta("translations", $all_vals);
+		$o->save();
 		exit;
+		/*
+		$o = new object(73740);
+//		arr($o->meta("translations"));
+		arr($o->meta());
+		exit;
+		/**/
 		/*
 		$o = obj($arr['id']);
 
