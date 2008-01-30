@@ -139,6 +139,8 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		list($tarr) = $this->contained->search(array(
 			"brother_of" => $oid,
+			"site_id" => array(),
+			"lang_id" => array()
 		));
 
 		$tarr[$oid] = 1;
