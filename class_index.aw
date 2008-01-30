@@ -76,22 +76,20 @@ class class_index
 						elseif (T_STRING === $token[0] and "expecting name" === $next)
 						{
 							$next = "";
-
-							// try to read old data for class found
+							$modified = filemtime($class_file);
+							$class_path = $path . substr($file, 0, - 1 - $ext_len);// relative path + file without extension
 							$class_name = $token[1];
 							$class_dfn_file = $index_dir . $class_name . "." . $ext;
 
+							// try to read old data for class found
 							if (is_readable($class_dfn_file))
 							{
 								$class_dfn = unserialize(file_get_contents($class_dfn_file));
-							}
 
-							$modified = filemtime($class_file);
-							$class_path = $path . substr($file, 0, - 1 - $ext_len);// relative path + file without extension
-
-							if (isset($class_dfn["last_update"]) and $class_dfn["last_update"] === $time)
-							{
-								throw new awex_clidx_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
+								if (isset($class_dfn["last_update"]) and $class_dfn["last_update"] === $time)
+								{
+									throw new awex_clidx_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
+								}
 							}
 
 							if (
