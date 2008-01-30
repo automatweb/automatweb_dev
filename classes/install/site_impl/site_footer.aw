@@ -1,6 +1,5 @@
 <?php
 
-$cache = get_instance("cache");
 $sf = new aw_template();
 $sf->tpl_init();
 $sf->read_template(!empty($index_template) ? $index_template : "index.tpl");
@@ -12,7 +11,6 @@ $sf->vars(array(
 	"charset" => aw_global_get("charset"),
 	"sel_charset" => aw_global_get("charset"),
 	"title_action" => aw_global_get("title_action"),
-	"POPUP_MENUS_SITE" => $cache->file_get("aw_toolbars") // toolbar menu button menuitem layer
 ));
 
 if (aw_global_get("uid"))
