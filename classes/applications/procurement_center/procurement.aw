@@ -1,6 +1,5 @@
 <?php
-
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.25 2008/01/23 09:12:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.26 2008/01/30 09:38:57 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -164,7 +163,7 @@ class procurement extends class_base
 	function procurement()
 	{
 		$this->init(array(
-			"tpldir" => "applications/procurement_center/procurement",
+			"tpldir" => "applications/procurement_center",
 			"clid" => CL_PROCUREMENT
 		));
 
@@ -1416,7 +1415,8 @@ class procurement extends class_base
 	{
 		extract ($arr);
 		unset($_SESSION["procurement"]["print_data"]);
-		if(!$this->can("view" , $template))
+		if(!$template)
+//		if(!$this->can("view" , $template))
 		{
 			return t("Templeiti on ka tarvis");
 		}
@@ -1447,7 +1447,8 @@ class procurement extends class_base
 		
 		if(!$template_isoid)
 		{
-			$this->read_template($template);
+			$this->read_site_template($template);
+
 		}
 		$conv = get_instance("core/converters/html2pdf");
 		$fi = get_instance(CL_FILE);
@@ -1599,7 +1600,6 @@ class procurement extends class_base
 		}
 		$adminif = obj($_SESSION["cur_admin_if"]);
 		$loch=html::get_change_url($_SESSION["cur_admin_if"], array("parent" => $menu->id(), "group" => "o",));
-
 		print "<script type='text/javascript'>window.location.href='".$loch."'</script>";
 //arr($this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id())));
 
