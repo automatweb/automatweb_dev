@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.38 2008/01/21 12:33:39 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.39 2008/01/30 13:25:55 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1356,7 +1356,7 @@ class admin_if extends class_base
 		$t->vars(array(
 			"logout_text" => t("Logi v&auml;lja"),
 			"location_text" => t("Asukoht:"),
-			"footer_l1" => t("AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."),
+			"footer_l1" => sprintf(t("AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-%s."), date("Y")),
 			"footer_l2" => t("Palun k&uuml;lasta meie kodulehek&uuml;lgi:"),
 			"st" => t("Seaded")
 		));
