@@ -1,9 +1,9 @@
 <?php
 
+$cache = get_instance("cache");
 $sf = new aw_template();
 $sf->tpl_init();
 $sf->read_template(!empty($index_template) ? $index_template : "index.tpl");
-
 $_t = aw_global_get("act_period");
 $sf->vars(array(
 	"content" => $content,
@@ -12,17 +12,18 @@ $sf->vars(array(
 	"charset" => aw_global_get("charset"),
 	"sel_charset" => aw_global_get("charset"),
 	"title_action" => aw_global_get("title_action"),
+	"POPUP_MENUS_SITE" => $cache->file_get("aw_toolbars") // toolbar menu button menuitem layer
 ));
 
-if (aw_global_get("uid")) 
+if (aw_global_get("uid"))
 {
 	$sf->vars(array(
 		"login" => "",
-		"uid"  => aw_global_get("uid"),	
+		"uid"  => aw_global_get("uid"),
 	));
 	$sf->parse("logged");
-} 
-else 
+}
+else
 {
 	$sf->vars(array("logged" => ""));
 	$sf->parse("login");
@@ -72,7 +73,7 @@ else
 
 aw_shutdown();
 
-// do a cache clean every hour 
+// do a cache clean every hour
 if (filectime(aw_ini_get("cache.page_cache")."/temp/lmod") < (time() - 3600))
 {
 	$m = get_instance("core/maitenance");
