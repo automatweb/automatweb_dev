@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.73 2008/01/29 13:56:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.74 2008/01/30 09:26:58 kristo Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -1561,7 +1561,7 @@ class bank_payment extends class_base
 		}
 
 		if(!$arr["service"]) $arr["service"] = "0002";
-		if(!$arr["version"]) $arr["version"] = "0001";
+		if(!$arr["version"]) $arr["version"] = "0003";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
 		if(!$arr["confirm"]) $arr["confirm"] = "YES";
 		if(!$arr["acc"]) $arr["acc"] = "";
@@ -2101,15 +2101,15 @@ class bank_payment extends class_base
 		$amt = $o->prop("alias_amount");
 		$desc = $o->prop("alias_desc");
 
-		if ($this->can("view", $o->prop("alias_amount")))
+		if ($this->can("view", $o->prop("alias_amount_ctr")))
 		{
 			$i = get_instance(CL_CFGCONTROLLER);
-			$amt = $i->check_property($o->prop("alias_amount"), $o->id(), $arr);
+			$amt = $i->check_property($o->prop("alias_amount_ctr"), $o->id(), $arr);
 		}
-		if ($this->can("view", $o->prop("alias_desc")))
+		if ($this->can("view", $o->prop("alias_desc_ctr")))
 		{
 			$i = get_instance(CL_CFGCONTROLLER);
-			$amt = $i->check_property($o->prop("alias_desc"), $o->id(), $arr);
+			$desc = $i->check_property($o->prop("alias_desc_ctr"), $o->id(), $arr);
 		}
 		return $this->bank_forms(array(
 			"id" => $o->id(),
