@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.31 2008/01/28 11:37:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.32 2008/01/31 10:56:49 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -974,8 +974,15 @@ class persons_webview extends class_base
 
 	function parse_worker($worker)
 	{
-		if(!$this->section && !$this->view_obj->prop("department_grouping")) $this->section = $worker->get_first_obj_by_reltype("RELTYPE_SECTION");
-		if(!$this->section && !$this->view_obj->prop("department_grouping")) $this->section = $worker->get_first_obj_by_reltype("RELTYPE_COMPANY");
+		$vars = array();
+		if(!$this->section && !$this->view_obj->prop("department_grouping"))
+		{
+			$this->section = $worker->get_first_obj_by_reltype("RELTYPE_SECTION");
+		}
+		if(!$this->section && !$this->view_obj->prop("department_grouping"))
+		{
+			$this->section = $worker->get_first_obj_by_reltype("RELTYPE_COMPANY");
+		}
 
 		//amet
 		$this->parse_profession($worker);
@@ -990,7 +997,10 @@ class persons_webview extends class_base
 		else
 		{
 			$photo_obj = $worker->get_first_obj_by_reltype("RELTYPE_PICTURE");
-			if(is_object($photo_obj)) $photo = $image_inst->make_img_tag_wl($photo_obj->id());
+			if(is_object($photo_obj))
+			{
+				$photo = $image_inst->make_img_tag_wl($photo_obj->id());
+			}
 		}
 		
 		//igast telefoninumbrid
@@ -999,7 +1009,10 @@ class persons_webview extends class_base
 		
 		$phone_obj = $worker->get_first_obj_by_reltype("RELTYPE_PHONE");
 		
-		if(is_object($phone_obj)) $phone = $phone_obj->name();
+		if(is_object($phone_obj))
+		{
+			$phone = $phone_obj->name();
+		}
 
 		$phone_list = new object_list($worker->connections_from (array (
 			"type" => "RELTYPE_PHONE",
@@ -1022,8 +1035,14 @@ class persons_webview extends class_base
 		//url
 		$url = $url_obj = $urls = "";
 		$url_obj = $worker->prop("url");
-		if(!is_object($url_obj)) $url_obj = $worker->get_first_obj_by_reltype("RELTYPE_URL");
-		if(is_object($url_obj)) $url = $url_obj->prop("url");
+		if(!is_object($url_obj))
+		{
+			$url_obj = $worker->get_first_obj_by_reltype("RELTYPE_URL");
+		}
+		if(is_object($url_obj))
+		{
+			$url = $url_obj->prop("url");
+		}
 		$url_list = new object_list($worker->connections_from (array (
 			"type" => "RELTYPE_URL",
 		)));
@@ -1036,10 +1055,16 @@ class persons_webview extends class_base
 		//mail	
 		$email = $email_obj = $emails = "";
 		$email_obj = $worker->prop("email");
-		if(!is_object($email_obj)) $email_obj = $worker->get_first_obj_by_reltype("RELTYPE_EMAIL");
+		if(!is_object($email_obj))
+		{
+			$email_obj = $worker->get_first_obj_by_reltype("RELTYPE_EMAIL");
+		}
 		$name_with_email = $worker->name();
 		if(is_object($email_obj)) $email_obj->prop("mail");
-		if(strlen($email) > 3)$name_with_email = '<a href =mailto:'.$email.'> '. $name_with_email.' </a>';
+		if(strlen($email) > 3)
+		{
+			$name_with_email = '<a href =mailto:'.$email.'> '. $name_with_email.' </a>';
+		}
 		$mail_list = new object_list($worker->connections_from (array (
 			"type" => "RELTYPE_EMAIL",
 		)));
@@ -1061,7 +1086,10 @@ class persons_webview extends class_base
 
 		//palk
 		$wage_doc_exist = "";
-		if(is_oid($worker->prop("wage_doc"))) $wage_doc_exist = '<a href ='.$worker->prop("wage_doc").'> '. t("Palk").' </a>';
+		if(is_oid($worker->prop("wage_doc")))
+		{
+			$wage_doc_exist = '<a href ='.$worker->prop("wage_doc").'> '. t("Palk").' </a>';
+		}
 		$next_level_link = $this->mk_my_orb("parse_alias",
 			array(
 				"id" => $this->view_obj->id(),
@@ -1088,6 +1116,7 @@ class persons_webview extends class_base
 			));
 		}
 
+		//haridus
 		$education = "";
 		if($this->is_template("EDUCATION_SUB"))
 		{
@@ -1124,6 +1153,7 @@ class persons_webview extends class_base
 			}
 		}
 
+		//peatatud töösuhe
 		if($this->is_template("STOPPED"))
 		{
 			$stopped_reason = $subsitute = $stopped = "";
@@ -1160,6 +1190,15 @@ class persons_webview extends class_base
 			}
 		}
 
+		//töösuhe
+		$or = $worker->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+		if(is_object($or))
+		{
+			$vars["org_rel_comment"] = $or->prop("comment");
+		}
+
+		$this->vars($vars);
+
 		$this->vars_safe(array(
 		//	"profession" => $profession,
 			"name" => $worker->name(),
@@ -1190,8 +1229,8 @@ class persons_webview extends class_base
 			"EDU_SUB" => $edu_sub,
 			"EDUCATION_SUB" => $education,
 			"STOPPED" => $stopped,
+			"comment" => $worker->prop("comment"),
 		));
-	
 		$asdasd.= $this->parse("EDU_SUB");
 		$this->vars_safe(array(
 			"EDU_SUB" => $asdasd,
