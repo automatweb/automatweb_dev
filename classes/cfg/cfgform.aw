@@ -2485,54 +2485,38 @@ class cfgform extends class_base
 		));
 	}
 
-	function add_new_properties($arr)
+	private function add_new_properties($arr)
 	{
 		$target = $arr["request"]["target"];
-		// first check, whether a group with that id exists
-		$_tgt = $arr["obj_inst"]->meta("cfg_groups");
-		if (isset($_tgt[$target]))
-		{
-			$this->_init_cfgform_data($arr["obj_inst"]);
-			// and now I just have to modify the proplist, eh?
-			$prplist = $this->prplist;
-			$mark = $arr["request"]["mark"];
-			if (is_array($mark))
-			{
-				foreach($mark as $pkey => $pval)
-				{
-					// if this is a valid property, then add it to the list
-					if ($this->all_props[$pkey])
-					{
-						// need to add another group
-						if ($prplist[$pkey])
-						{
-							$groups = $prplist[$pkey]["group"];
-							if (is_array($groups))
-							{
-								$prplist[$pkey]["group"][$target] = $target;
-							}
-							else
-							{
-								$prplist[$pkey]["group"] = array(
-									$groups => $groups,
-									$target => $target,
-								);
-							}
+		$this->_init_cfgform_data($arr["obj_inst"]);
 
-						}
-						else
+		// first check, whether a group with that id exists
+		if (array_key_exists($this->cfg_groups[$target]) and is_array($arr["request"]["mark"]))
+		{
+			foreach($arr["request"]["mark"] as $pkey => $pval)
+			{
+				// if this is a valid property, then add it to the list
+				if ($this->all_props[$pkey])
+				{
+					// need to add another group
+					if (isset($this->cfg_proplist[$pkey]))
+					{
+						// add group only if prop not already in that group
+						if (is_array($this->cfg_proplist[$pkey]["group"]) and !in_array($target, $this->cfg_proplist[$pkey]["group"]))
 						{
-							// add for the very first time
-							$prplist[$pkey] = array(
-								"name" => $pkey,
-								"caption" => $this->all_props[$pkey]["caption"],
-								"group" => array($target => $target),
-							);
+							$this->cfg_proplist[$pkey]["group"][] = $target;
+						}
+						elseif ($target !== $this->cfg_proplist[$pkey]["group"])
+						{
+							$this->cfg_proplist[$pkey]["group"] = array($this->cfg_proplist[$pkey]["group"], $target);
 						}
 					}
+					else
+					{
+						// add for the very first time
+						$this->cfg_proplist[$pkey] = $this->all_props[$pkey];
+					}
 				}
-
-				$this->cfg_proplist = $prplist;
 			}
 		}
 	}
