@@ -160,6 +160,28 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>E-post</caption>
             </EMAIL>
+            <FAX>
+                  <value>10</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Faks</caption>
+            </FAX>
+=======
+            <SECTION>
+                  <value>7</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>&amp;amp;Uuml;ksus</caption>
+            </SECTION>
+            <PHONE>
+                  <value>8</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Telefon</caption>
+            </PHONE>
+            <EMAIL>
+                  <value>9</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-post</caption>
+            </EMAIL>
+>>>>>>> 1.7
       </reltypes>
 </properties>
 
