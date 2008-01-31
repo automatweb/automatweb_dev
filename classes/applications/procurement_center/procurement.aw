@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.27 2008/01/30 11:24:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.28 2008/01/31 10:48:53 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -1355,7 +1355,8 @@ class procurement extends class_base
 		"".
 		// fetch list of companies with that name and ask user if count > 0
 		"var url = '".$this->mk_my_orb("check_existing")."';";
-
+if($arr["request"]["group"] == "products")
+{
 		$x = 0;
 		if($size>25)
 		{
@@ -1367,7 +1368,7 @@ class procurement extends class_base
 				";
 			$x++;
 		}
-
+}
 		$ret.= "num= aw_get_url_contents(url);".
 		"if (num != \"\")
 		{
@@ -1465,19 +1466,19 @@ class procurement extends class_base
 
 
 			$vars = array(
-				"orderer_name" => $o->prop("orderer.name"),
-				"orderer_phone" => $o->prop("orderer.phone_id.name"),
-				"orderer_email" => $o->prop("orderer.email_id.mail"),
-				"orderer_fax" => $o->prop("orderer.telefax_id.name"),
+				"orderer_person_name" => $o->prop("orderer.name"),
+				"orderer_person_phone" => $o->prop("orderer.phone_id.name"),
+				"orderer_person_email" => $o->prop("orderer.email_id.mail"),
+				"orderer_person_fax" => $o->prop("orderer.telefax_id.name"),
 			);
 			$us = get_instance(CL_USER);
 			$up = new object($us->get_current_person());
 			if(is_object($up))
 			{
-				if($up->prop("phone.name")) $vars["orderer_phone"] = $up->prop("phone.name");
-				if($up->prop("email.name")) $vars["orderer_email"] = $up->prop("email.name");
-				if($up->prop("fax.name")) $vars["orderer_fax"] = $up->prop("fax.name");
-				$vars["orderer_name"] = $up->name();
+				if($up->prop("phone.name")) $vars["orderer_person_phone"] = $up->prop("phone.name");
+				if($up->prop("email.name")) $vars["orderer_person_email"] = $up->prop("email.mail");
+				if($up->prop("fax.name")) $vars["orderer_person_fax"] = $up->prop("fax.name");
+				$vars["orderer_person_name"] = $up->name();
 			}
 
 			$this->vars($vars);
@@ -1490,6 +1491,10 @@ class procurement extends class_base
 				"odrerer_area" => $o->prop("orderer.contact.piirkond.name"),
 				"orderer_street" => $o->prop("orderer.contact.aadress"),
 				"orderer_address" => $o->prop("orderer.contact.name"),
+				"orderer_name" => $o->prop("orderer.name"),
+				"orderer_phone" => $o->prop("orderer.phone_id.name"),
+				"orderer_email" => $o->prop("orderer.email_id.mail"),
+				"orderer_fax" => $o->prop("orderer.telefax_id.name"),
 				"nr" => $o->prop("procurement_nr"),
 				"name" => $o->name(),
 				"offerer_name" => $offerer->name(),
@@ -1497,7 +1502,7 @@ class procurement extends class_base
 				"offerer_email" => $offerer->prop("email_id.mail"),
 				"offerer_fax" => $offerer->prop("telefax_id.name"),
 				"offers_date" => $o->prop("offers_date"),
-				"offers_date_str" => date("d.m.Y" , $o->prop("offers_date")),
+				"offers_date_str" => date("d F, Y" , $o->prop("offers_date")),
 				"procurement_info" => $o->prop("procurement_info"),
 				"contact_person" => $contact_person,
 			));

@@ -1778,7 +1778,8 @@ class crm_company extends class_base
  						$data["options"][$l->id()] = $l->name();
  					}
  				}
- 				break;
+ 				return true;
+
 			case "tax_clearance_certificate_view":
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_TAX_CLEARANCE_FILE",
@@ -3378,6 +3379,55 @@ class crm_company extends class_base
 			}
 		}
 
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=remove_from_category all_args=1
+	**/
+	function remove_from_category($arr)
+	{
+		
+		if (is_array($arr["check"]) && is_oid($arr["category"]) && $this->can("view" , $arr["category"]))
+		{
+			$c = obj($arr["category"]);
+			foreach($arr['check'] as $key => $value)
+			{
+				$c->disconnect(array('from' => $value));
+			}
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=remove_cust_relations all_args=1
+	**/
+	function remove_cust_relations($arr)
+	{
+		if (is_array($arr["check"]))
+		{
+			$id1 = reset($arr["check"]);
+			if(!(is_oid($id1) && $this->can("view" , $id1)))
+			{
+				return $arr["post_ru"];
+			}
+			$cust_rel_list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"buyer" => $arr["check"],
+				"seller" => $arr["id"],
+			));
+			$cust_rel_list->delete();
+			$cust_rel_list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"buyer" => $arr["id"],
+				"seller" => $arr["check"],
+			));
+			$cust_rel_list->delete();
+		}
 		return $arr["post_ru"];
 	}
 
@@ -7449,14 +7499,14 @@ class crm_company extends class_base
 				{
 					$email = $customer->get_first_obj_by_reltype("RELTYPE_EMAIL");
 				}
-				if(is_object($email))
+				if(is_object($email) && is_email($email->prop("mail")))
 				{
 					$mails[] = $email->prop("mail");
 				}
 			}
 		}
-		$send_to = join($mails , ", ");
-//		$user = aw_global_get("uid");
+		$send_to = join($mails , ",");
+		$user = aw_global_get("uid");
 
 		$mfrom = aw_global_get("uid_oid");
 		$user_obj = obj($mfrom);

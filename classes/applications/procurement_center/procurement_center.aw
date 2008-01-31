@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.43 2008/01/10 11:26:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.44 2008/01/31 10:48:53 markop Exp $
 // procurement_center.aw - Hankekeskkond
 /*
 
@@ -2402,12 +2402,12 @@ class procurement_center extends class_base
 	function get_company_contacts($company)
 	{
 		$ret = "";
-		if(is_oid($company->prop("phone_id")))
+		if($this->can("view" , $company->prop("phone_id")))
 		{
 			$phone = obj($company->prop("phone_id"));
 			$ret .= " " . $phone->name();
 		}
-		if(is_oid($company->prop("email_id")))
+		if($this->can("view" , $company->prop("email_id")))
 		{
 			$email = obj($company->prop("email_id"));
 			$ret .= " " . $email->name();
