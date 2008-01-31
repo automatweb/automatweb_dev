@@ -2491,31 +2491,25 @@ class cfgform extends class_base
 		$this->_init_cfgform_data($arr["obj_inst"]);
 
 		// first check, whether a group with that id exists
-		if (array_key_exists($this->cfg_groups[$target]) and is_array($arr["request"]["mark"]))
+		if (isset($this->cfg_groups[$target]) and is_array($arr["request"]["mark"]))
 		{
 			foreach($arr["request"]["mark"] as $pkey => $pval)
 			{
 				// if this is a valid property, then add it to the list
-				if ($this->all_props[$pkey])
+				if (!isset($this->cfg_proplist[$pkey]) and isset($this->all_props[$pkey]))
 				{
-					// need to add another group
-					if (isset($this->cfg_proplist[$pkey]))
-					{
-						// add group only if prop not already in that group
-						if (is_array($this->cfg_proplist[$pkey]["group"]) and !in_array($target, $this->cfg_proplist[$pkey]["group"]))
-						{
-							$this->cfg_proplist[$pkey]["group"][] = $target;
-						}
-						elseif ($target !== $this->cfg_proplist[$pkey]["group"])
-						{
-							$this->cfg_proplist[$pkey]["group"] = array($this->cfg_proplist[$pkey]["group"], $target);
-						}
-					}
-					else
-					{
-						// add for the very first time
-						$this->cfg_proplist[$pkey] = $this->all_props[$pkey];
-					}
+					$this->cfg_proplist[$pkey] = $this->all_props[$pkey];
+				}
+
+				// need to add another group
+				// add group only if prop not already in that group
+				if (is_array($this->cfg_proplist[$pkey]["group"]) and !in_array($target, $this->cfg_proplist[$pkey]["group"]))
+				{
+					$this->cfg_proplist[$pkey]["group"][] = $target;
+				}
+				elseif ($target !== $this->cfg_proplist[$pkey]["group"])
+				{
+					$this->cfg_proplist[$pkey]["group"] = array($this->cfg_proplist[$pkey]["group"], $target);
 				}
 			}
 		}
