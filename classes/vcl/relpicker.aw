@@ -29,6 +29,9 @@ class relpicker extends  core
 
 		@param no_edit optional type=int
 
+		@param options optional type=array
+			Options to be displayed in the relpicker select box
+
 	**/
 	function create_relpicker($arr)
 	{
@@ -48,13 +51,9 @@ class relpicker extends  core
 			$selected = $o->prop($property);
 		}
 		
-		if($no_sel == 1)
+		if($no_sel != 1)
 		{
-			$options = array();
-		}
-		else
-		{
-			$options = array("0" => t("--vali--"));
+			$options = $options[0] = t("--vali--");
 		}
 
 		// generate option list
