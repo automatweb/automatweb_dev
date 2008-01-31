@@ -431,6 +431,16 @@
             <caption>Template set</caption>
       </property>
       <property>
+            <name>tpl_dir_applies_to_all</name>
+            <table>objects</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>templates</group>
+            <caption>Kasuta template setist k&amp;amp;otilde;iki templatesid</caption>
+      </property>
+      <property>
             <name>show_lead_template</name>
             <table>objects</table>
             <type>select</type>

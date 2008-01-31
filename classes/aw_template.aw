@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.85 2007/12/27 14:47:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.86 2008/01/31 11:36:30 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -45,9 +45,9 @@ class aw_template extends core
 			}
 			else
 			{
-				$this->template_dir = $this->cfg["tpldir"] . "/$basedir";
+				$this->template_dir = $this->_find_site_template_dir() . "/$basedir";
 				$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
-				$this->site_template_dir = $this->cfg["site_tpldir"]."/".$basedir;
+				$this->site_template_dir = $this->_find_site_template_dir()."/".$basedir;
 			}
 		}
 		else
@@ -63,6 +63,35 @@ class aw_template extends core
 		$this->_init_vars();
 
 		$this->use_eval = false;
+	}
+
+	private function _find_site_template_dir()
+	{
+		static $dir;
+		if ($dir !== null)
+		{
+			return $dir;
+		}
+
+		if (is_admin())
+		{
+			return $dir = $this->cfg["tpldir"];
+		}
+
+		$sect = aw_global_get("section");
+		if (!$this->can("view", $sect))
+		{
+			return $this->cfg["tpldir"];
+		}
+		$rv = $this->cfg["tpldir"];
+		foreach(obj($sect)->path() as $path_item)
+		{
+			if ($path_item->prop("tpl_dir_applies_to_all") && $path_item->prop("tpl_dir"))
+			{
+				$rv = aw_ini_get("site_basedir")."/".$path_item->prop("tpl_dir");
+			}
+		}
+		return $dir = $rv;
 	}
 
 	function _init_vars()

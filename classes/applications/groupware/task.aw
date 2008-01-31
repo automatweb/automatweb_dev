@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.197 2008/01/29 11:13:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.198 2008/01/31 11:36:32 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3924,93 +3924,98 @@ class task extends class_base
 	function _hrs_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		                                $cff = get_instance(CL_CFGFORM);
- $cfgform_id = $this->get_cfgform_for_object(array(
-                                "obj_inst" => $this->obj_inst,
-                                "args" => $arr["request"],
-                        ));
-                                $ps = $cff->get_cfg_proplist($cfgform_id);
-
-		if ($ps["priority"])
-		{	
-		$t->define_field(array(
-			"name" => "priority",
-			"caption" => $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
-			"align" => "center"
+		$cff = get_instance(CL_CFGFORM);
+		$cfgform_id = $this->get_cfgform_for_object(array(
+			"obj_inst" => $this->obj_inst,
+			"args" => $arr["request"],
 		));
+		$has = false;
+		if ($this->can("view", $cfgform_id))
+		{
+			$has = true;
+			$ps = $cff->get_cfg_proplist($cfgform_id);
 		}
-		if ($ps["num_hrs_guess"])
-{		
-		$t->define_field(array(
-			"name" => "num_hrs_guess",
-			"caption" => $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav tundide arv"),
-			"align" => "center"
-		));
-}
-		if ($ps["num_hrs_real"])
-{
-		$t->define_field(array(
-			"name" => "num_hrs_real",
-			"caption" => $ps["num_hrs_real"]["caption"] != "" ? $ps["num_hrs_real"]["caption"] : t("Tegelik tundide arv"),
-			"align" => "center"
-		));
-}
-if ($ps["num_hrs_to_cust"])
-{
-		$t->define_field(array(
-			"name" => "num_hrs_to_cust",
-			"caption" => $ps["num_hrs_to_cust"]["caption"] != "" ? $ps["num_hrs_to_cust"]["caption"] : t("Tundide arv kliendile"),
-			"align" => "center"
-		));
-}
-if ($ps["hr_price"])
-{
-		$t->define_field(array(
-			"name" => "hr_price",
-			"caption" => $ps["hr_price"]["caption"] != "" ?  $ps["hr_price"]["caption"] : t("Tunnihind"),
-			"align" => "center"
-		));
-}
-if ($ps["deal_price"])
-{
-		$t->define_field(array(
-			"name" => "deal_price",
-			"caption" => $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kokkuleppehind"),
-			"align" => "center"
-		));
-}
-if ($ps["hr_price_currency"])
-{
-		$t->define_field(array(
-			"name" => "hr_price_currency",
-			"caption" => $ps["hr_price_currency"]["caption"] != "" ? $ps["hr_price_currency"]["caption"] : t("Valuuta"),
-			"align" => "center"
-		));
-}
-if ($ps["bill_no"])
-{
-		$t->define_field(array(
-			"name" => "bill_no",
-			"caption" => $ps["bill_no"]["caption"] != "" ? $ps["bill_no"]["caption"] : t("Arve number"),
-			"align" => "center"
-		));
-}
-if ($ps["code"])
-{
-		$t->define_field(array(
-			"name" => "code",
-			"caption" => $ps["code"]["caption"] != "" ? $ps["code"]["caption"]  : t("Kood"),
-			"align" => "center"
-		));
-}
-if ($ps["service_type"])
-{
-		$t->define_field(array(
-			"name" => "service_type",
-			"caption" => $ps["service_type"]["caption"] != "" ?  $ps["service_type"]["caption"] : t("Teenuse liik"),
-			"align" => "center"
-		));
-}
+
+		if (!$has || $ps["priority"])
+		{	
+			$t->define_field(array(
+				"name" => "priority",
+				"caption" => $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["num_hrs_guess"])
+		{		
+			$t->define_field(array(
+				"name" => "num_hrs_guess",
+				"caption" => $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav tundide arv"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["num_hrs_real"])
+		{
+			$t->define_field(array(
+				"name" => "num_hrs_real",
+				"caption" => $ps["num_hrs_real"]["caption"] != "" ? $ps["num_hrs_real"]["caption"] : t("Tegelik tundide arv"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["num_hrs_to_cust"])
+		{
+			$t->define_field(array(
+				"name" => "num_hrs_to_cust",
+				"caption" => $ps["num_hrs_to_cust"]["caption"] != "" ? $ps["num_hrs_to_cust"]["caption"] : t("Tundide arv kliendile"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["hr_price"])
+		{
+			$t->define_field(array(
+				"name" => "hr_price",
+				"caption" => $ps["hr_price"]["caption"] != "" ?  $ps["hr_price"]["caption"] : t("Tunnihind"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["deal_price"])
+		{
+			$t->define_field(array(
+				"name" => "deal_price",
+				"caption" => $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kokkuleppehind"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["hr_price_currency"])
+		{
+			$t->define_field(array(
+				"name" => "hr_price_currency",
+				"caption" => $ps["hr_price_currency"]["caption"] != "" ? $ps["hr_price_currency"]["caption"] : t("Valuuta"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["bill_no"])
+		{
+			$t->define_field(array(
+				"name" => "bill_no",
+				"caption" => $ps["bill_no"]["caption"] != "" ? $ps["bill_no"]["caption"] : t("Arve number"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["code"])
+		{
+			$t->define_field(array(
+				"name" => "code",
+				"caption" => $ps["code"]["caption"] != "" ? $ps["code"]["caption"]  : t("Kood"),
+				"align" => "center"
+			));
+		}
+		if (!$has || $ps["service_type"])
+		{
+			$t->define_field(array(
+				"name" => "service_type",
+				"caption" => $ps["service_type"]["caption"] != "" ?  $ps["service_type"]["caption"] : t("Teenuse liik"),
+				"align" => "center"
+			));
+		}
 		$curr_object_list = new object_list(array(
 			"class_id" => CL_CURRENCY,
 			"lang_id" => array(),

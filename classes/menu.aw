@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.217 2008/01/21 12:33:44 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.218 2008/01/31 11:36:30 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -184,6 +184,9 @@
 
 		@property tpl_dir table=objects type=select field=meta method=serialize group=templates
 		@caption Template set
+
+		@property tpl_dir_applies_to_all table=objects type=checkbox ch_value=1 field=meta method=serialize group=templates
+		@caption Kasuta template setist k&otilde;iki templatesid
 
 		@property show_lead_template type=select field=meta method=serialize group=templates
 		@caption Leadi template
