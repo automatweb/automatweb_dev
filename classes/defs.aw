@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.250 2008/01/22 10:02:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.251 2008/01/31 12:02:46 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -356,7 +356,7 @@ if (!defined("DEFS"))
 				aw_ini_get("mail.smtp_server"),
 				$from,
 				$to,
-				$headers."\nX-Mailer: AutomatWeb\nTo: $to\nSubject: ".$subject."\n\n".$msg
+				trim($headers)."\nX-Mailer: AutomatWeb\nTo: $to\nSubject: ".$subject."\n\n".$msg
 			);
 		}
 		else
