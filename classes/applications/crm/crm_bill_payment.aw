@@ -74,9 +74,10 @@ class crm_bill_payment extends class_base
 					foreach($ol -> arr() as $o)
 					{
 						$this_sum = $bi->get_bill_sum($o);
-						$free_sum = $arr["obj_inst"]->get_free_sum($o->id());
+					//	$free_sum = $arr["obj_inst"]->get_free_sum($o->id());
 						$sum = $sum + $this_sum;
-						$prop["value"] .= t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ". number_format($free_sum , 2)." ".$bi->get_bill_currency($o)."<br>\n";
+						$bill_sum = $bi->get_bill_recieved_money($o , $arr["obj_inst"]->id());
+						$prop["value"] .= t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ". number_format($bill_sum , 2)." ".$bi->get_bill_currency($o)."<br>\n";
 					}
 				}
 				if($sum < $arr["obj_inst"]->prop("sum"))
@@ -239,7 +240,12 @@ class crm_bill_payment extends class_base
 	}
 	function _get_bill_payments_client_mgr(&$arr)
 	{
-		$arr["prop"]["value"] = $arr["request"]["bill_payments_client_mgr"];
+		$v = $arr["request"]["bill_payments_client_mgr"];
+		$arr["prop"]["value"] = html::textbox(array(
+			"name" => "bill_payments_client_mgr",
+			"value" => $v,
+			"size" => 25
+		))."<a href='javascript:void(0)' onClick='document.changeform.bill_s_client_mgr.value=\"\"' title=\"$tt\" alt=\"$tt\"><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";	
 	}
 	function _get_bill_payments_from(&$arr)
 	{
@@ -376,7 +382,7 @@ class crm_bill_payment extends class_base
 
 		$sum = 0;
 		$inst = get_instance("applications/crm/crm_company_stats_impl");
-		
+		$curr = get_instance("formgen/currency");
 		foreach($ol->arr() as $o)
 		{
 			$cust_name = $bill = $bills_list = "";
@@ -424,7 +430,8 @@ class crm_bill_payment extends class_base
 //vajalik vaid siis kui mingi summa teema ka ikka tuleb, mis oleks loogiline
 		$t->define_data(array(
 			"sum" => "<b>".number_format($sum, 2)."</b>",
-			"bill_no" => t("<b>Summa</b>")
+			"bill_no" => t("<b>Summa</b>"),
+			"currency" => $curr->get_default_currency_name(),
 		));
 	}
 

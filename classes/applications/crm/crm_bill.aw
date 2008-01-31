@@ -2837,11 +2837,11 @@ class crm_bill extends class_base
 		$sum = 0;
 		foreach($bill->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
 		{
-			$p = $conn->to();
+			$p = $conn->to();//echo $p->id();
 			if($payment && $payment == $p->id())
 			{
 				break;
-			}
+			}//arr($sum);arr($payment);
 			$sum = $sum + $p->get_free_sum($bill->id());
 		}
 		if($bill_sum < $sum)
@@ -2851,9 +2851,13 @@ class crm_bill extends class_base
 		return $bill_sum - $sum;
 	}
 
-	function get_bill_recieved_money($b)
+	function get_bill_recieved_money($b,$payment=0)
 	{
 		$bill_sum = $this->get_bill_sum($b);
+		if($payment)
+		{//arr($this->get_bill_needs_payment(array("bill" => $b))); arr($this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment)));
+			return ($this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment)) - $this->get_bill_needs_payment(array("bill" => $b)));
+		}
 		return $bill_sum - $this->get_bill_needs_payment(array("bill" => $b));
 	}
 
