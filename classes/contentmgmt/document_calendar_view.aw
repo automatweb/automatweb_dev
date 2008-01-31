@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.2 2008/01/31 12:12:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.3 2008/01/31 12:15:15 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-@reltype folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@property folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Dokumentide kataloog
 
 @reltype FOLDER value=1 clid=CL_MENU

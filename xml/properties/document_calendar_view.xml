@@ -1,5 +1,15 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Dokumentide kataloog</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_DOCUMENT_CALENDAR_VIEW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -8,13 +18,6 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <reltypes>
-            <folder>
-                  <type>relpicker</type>
-                  <reltype>RELTYPE_FOLDER</reltype>
-                  <field>meta</field>
-                  <method>serialize</method>
-                  <caption>Dokumentide kataloog</caption>
-            </folder>
             <FOLDER>
                   <value>1</value>
                   <clid>CL_MENU</clid>
