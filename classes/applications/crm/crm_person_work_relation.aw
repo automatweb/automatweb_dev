@@ -1,7 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.9 2008/01/29 10:49:33 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.10 2008/01/31 15:43:28 kaarel Exp $
 // crm_person_work_relation.aw - Töösuhe 
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PHONE, on_connect_phone_to_work_relation)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_ML_MEMBER, on_connect_email_to_work_relation)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PHONE, on_disconnect_phone_from_work_relation)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_disconnect_email_from_work_relation)
 
 @classinfo syslog_type=ST_CRM_PERSON_WORK_RELATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 no_name=1 maintainer=markop
 
@@ -13,7 +19,11 @@
 @property org type=relpicker reltype=RELTYPE_ORG
 @caption Organisatsioon
 
-@property section type=relpicker reltype=RELTYPE_SECTION
+@property section type=hidden reltype=RELTYPE_SECTION
+#@property section type=relpicker reltype=RELTYPE_SECTION
+#@caption &Uuml;ksus (non-functioning)
+
+@property section2 type=relpicker reltype=RELTYPE_SECTION
 @caption &Uuml;ksus
 
 @property profession type=relpicker reltype=RELTYPE_PROFESSION
@@ -70,6 +80,9 @@
 @reltype EMAIL value=9 clid=CL_ML_MEMBER
 @caption E-post
 
+@reltype FAX value=10 clid=CL_CRM_PHONE
+@caption Faks
+
 */
 
 class crm_person_work_relation extends class_base
@@ -79,6 +92,86 @@ class crm_person_work_relation extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_PERSON_WORK_RELATION
 		));
+	}
+
+	function get_property($arr)
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "section2":
+				$data["value"] = $arr["obj_inst"]->prop("section");
+				break;
+		}
+		return $retval;
+	}
+
+	function on_connect_phone_to_work_relation($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PERSON_WORK_RELATION && $target_obj->prop("type") == "fax")
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => 10,		// RELTYPE_FAX
+			));
+		}
+		else
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => 8,		// RELTYPE_PHONE
+			));
+		}
+	}
+
+	function on_connect_email_to_work_relation($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PERSON_WORK_RELATION)
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => 9,		// RELTYPE_EMAIL
+			));
+		}
+	}
+
+	function on_disconnect_phone_from_work_relation($arr)
+	{
+		obj_set_opt("no_cache", 1);
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PERSON_WORK_RELATION)
+		{
+			if($target_obj->is_connected_to(array('from' => $conn->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+					"errors" => false
+				));
+			}
+		}
+	}
+
+	function on_disconnect_email_from_work_relation($arr)
+	{
+		obj_set_opt("no_cache", 1);
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PERSON_WORK_RELATION)
+		{
+			if($target_obj->is_connected_to(array('from' => $conn->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+					"errors" => false
+				));
+			}
+		}
 	}
 }
 ?>
