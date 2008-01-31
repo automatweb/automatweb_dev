@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_payment_terms.aw,v 1.1 2005/04/13 12:49:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_payment_terms.aw,v 1.2 2008/01/31 13:54:13 kristo Exp $
 // crm_offer_payment_terms.aw - Pakkumise maksetingimused 
 /*
 
-@classinfo syslog_type=ST_CRM_OFFER_PAYMENT_TERMS relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_CRM_OFFER_PAYMENT_TERMS relationmgr=yes no_comment=1 no_status=1 maintainer=markop
 
 @default table=objects
 @default group=general

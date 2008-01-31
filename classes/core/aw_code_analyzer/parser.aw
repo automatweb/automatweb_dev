@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 define("IS_PARSED", 1);
 define("NOT_PARSED", 0);
 

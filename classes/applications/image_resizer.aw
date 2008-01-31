@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/Attic/image_resizer.aw,v 1.4 2006/03/10 11:40:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/Attic/image_resizer.aw,v 1.5 2008/01/31 13:49:50 kristo Exp $
 // image_resizer.aw - Piltide muutja 
 
 /*
 
-@classinfo syslog_type=ST_IMAGE_RESIZER relationmgr=yes
+@classinfo syslog_type=ST_IMAGE_RESIZER relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

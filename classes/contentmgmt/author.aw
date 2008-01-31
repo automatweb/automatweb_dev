@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.6 2005/09/17 20:47:55 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.7 2008/01/31 13:52:14 kristo Exp $
 // author.aw - Autori artiklid 
 /*
 
-@classinfo syslog_type=ST_AUTHOR no_status=1 no_comment=1
+@classinfo syslog_type=ST_AUTHOR no_status=1 no_comment=1 maintainer=dragut
 
 @default table=objects
 @default group=general

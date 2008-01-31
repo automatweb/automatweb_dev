@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 // package manager server
 

@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.8 2006/01/16 13:02:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.9 2008/01/31 13:54:28 kristo Exp $
 // menu_export.aw - helper class for exporting menus
+/*
+@classinfo  maintainer=kristo
+*/
 class menu_export
 {
 	function menu_export()

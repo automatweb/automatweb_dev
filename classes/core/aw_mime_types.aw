@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class aw_mime_types
 {
 	var $type2ext = array(

@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class add_link extends aw_template
 {
 	// that is just a generic add link plugin for documents

@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kaarel
+*/
 class relpicker extends  core
 {
 	function relpicker()

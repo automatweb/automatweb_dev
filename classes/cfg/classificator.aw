@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.21 2006/10/24 06:44:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.22 2008/01/31 13:52:00 kristo Exp $
 
 /*
 
-@classinfo syslog_type=ST_CLASSIFICATOR relationmgr=yes
+@classinfo syslog_type=ST_CLASSIFICATOR relationmgr=yes maintainer=kristo
 
 
 @default table=objects

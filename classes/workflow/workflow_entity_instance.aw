@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_entity_instance.aw,v 1.2 2005/04/21 08:54:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_entity_instance.aw,v 1.3 2008/01/31 13:55:40 kristo Exp $
 // workflow_entity_instance.aw - Protsessi kulg 
 /*
 
-@classinfo syslog_type=ST_WORKFLOW_ENTITY_INSTANCE relationmgr=yes
+@classinfo syslog_type=ST_WORKFLOW_ENTITY_INSTANCE relationmgr=yes maintainer=kristo
 
 @default group=general
 

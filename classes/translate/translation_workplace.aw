@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.8 2007/02/12 13:43:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.9 2008/01/31 13:55:34 kristo Exp $
 // translation_workplace.aw - T&otilde;lkimise t&ouml;&ouml;laud 
 /*
 
-@classinfo syslog_type=ST_TRANSLATION_WORKPLACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_TRANSLATION_WORKPLACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

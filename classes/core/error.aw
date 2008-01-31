@@ -2,6 +2,9 @@
 
 // simple error class to replace core::raise_error. why? well, because this will have a *static* method
 // that can throw errors, so you can throw errors from objects that do not derive from core
+/*
+@classinfo  maintainer=kristo
+*/
 
 class error
 {

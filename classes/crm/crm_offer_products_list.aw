@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_products_list.aw,v 1.2 2006/10/11 17:09:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_products_list.aw,v 1.3 2008/01/31 13:54:13 kristo Exp $
 // crm_offer_products_list.aw - Pakkumise toodete nimekiri 
 /*
 
-@classinfo syslog_type=ST_CRM_OFFER_PRODUCTS_LIST relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_CRM_OFFER_PRODUCTS_LIST relationmgr=yes no_comment=1 no_status=1 maintainer=markop
 
 @default table=objects
 @default group=general

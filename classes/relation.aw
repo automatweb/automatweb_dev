@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_RELATION
+@classinfo syslog_type=ST_RELATION maintainer=kristo
 
 @default table=objects
 @default group=general

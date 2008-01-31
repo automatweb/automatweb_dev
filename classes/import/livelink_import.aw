@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.27 2007/12/12 12:51:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.28 2008/01/31 13:54:39 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -39,7 +39,7 @@
 
 	@groupinfo auth caption="Autoriseerimine"
 
-	@classinfo syslog_type=ST_LIVELINK_IMPORT relationmgr=yes
+	@classinfo syslog_type=ST_LIVELINK_IMPORT relationmgr=yes maintainer=kristo
 
 	@reltype LOGFILE value=1 clid=CL_FILE
 	@caption Logifail

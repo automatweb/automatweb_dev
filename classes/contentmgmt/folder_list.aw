@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.14 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.15 2008/01/31 13:52:14 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
-@classinfo syslog_type=ST_FOLDER_LIST relationmgr=yes
+@classinfo syslog_type=ST_FOLDER_LIST relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

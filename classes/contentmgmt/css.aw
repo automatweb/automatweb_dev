@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.15 2007/03/27 11:39:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.16 2008/01/31 13:52:14 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
-@classinfo syslog_type=ST_CSS relationmgr=yes
+@classinfo syslog_type=ST_CSS relationmgr=yes maintainer=kristo
 
 @default group=general 
 @default table=objects

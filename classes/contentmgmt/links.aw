@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.38 2007/11/27 10:42:22 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.39 2008/01/31 13:52:14 kristo Exp $
 
 /*
-@classinfo no_status=1 syslog_type=ST_LINKS
+@classinfo no_status=1 syslog_type=ST_LINKS maintainer=kristo
 @tableinfo extlinks index=id master_table=objects master_index=oid
 
 @default group=general

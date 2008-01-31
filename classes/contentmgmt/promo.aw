@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.105 2007/07/11 10:36:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.106 2008/01/31 13:52:15 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -23,7 +23,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 /*
 	@classinfo trans=1
 
-	@groupinfo general_sub caption="&Uuml;ldine" parent=general
+	@groupinfo general_sub caption="&Uuml;ldine" parent=general maintainer=kristo
 
 		@property name type=textbox rel=1 trans=1 table=objects group=general_sub
 		@caption Nimi

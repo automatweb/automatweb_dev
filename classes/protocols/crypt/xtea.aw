@@ -22,6 +22,9 @@
 //
 //
 
+/*
+@classinfo  maintainer=kristo
+*/
 
 /**
  *  Class that implements the xTEA encryption algorithm.
@@ -112,7 +115,7 @@
  *  @TODO       Add CFB.
  *
  *  @package    Crypt_Xtea
- *  @version    $Revision: 1.2 $
+ *  @version    $Revision: 1.3 $
  *  @access     public
  *  @author     Jeroen Derks <jeroen@derks.it>
  */

@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.17 2006/01/05 08:39:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.18 2008/01/31 13:54:34 kristo Exp $
 // form_entry_element.aw - 
+/*
+@classinfo  maintainer=kristo
+*/
 load_vcl("date_edit");
 lc_load("definition");
 classload("formgen/form_element");

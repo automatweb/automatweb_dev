@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.8 2007/04/11 09:07:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.9 2008/01/31 13:50:13 kristo Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
-@classinfo syslog_type=ST_SPA_BOOKING relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SPA_BOOKING relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @tableinfo aw_spa_bookings index=aw_oid master_index=brother_of master_table=objects
 
 @default table=aw_spa_bookings

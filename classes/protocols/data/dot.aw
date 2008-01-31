@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/data/dot.aw,v 1.1 2007/02/10 12:32:50 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/data/dot.aw,v 1.2 2008/01/31 13:55:19 kristo Exp $
 // dot.aw - DOT 
+/*
+@classinfo  maintainer=tarvo
+*/
 
 define("DOT_RATIO_FILL", "fill");
 define("DOT_RATIO_COMPRESS", "compress");

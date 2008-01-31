@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=voldemar
+*/
 
 ### address system settings
 define ("ADDRESS_SYSTEM", 1);

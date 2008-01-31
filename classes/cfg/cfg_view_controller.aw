@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.9 2007/11/15 15:04:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.10 2008/01/31 13:52:00 kristo Exp $
 // cfg_view_controller.aw - NÃ&auml;itamise kontroller 
 /*
 
-@classinfo syslog_type=ST_CFG_VIEW_CONTROLLER relationmgr=yes
+@classinfo syslog_type=ST_CFG_VIEW_CONTROLLER relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

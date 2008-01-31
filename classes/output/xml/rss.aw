@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/output/xml/rss.aw,v 1.3 2005/03/24 10:04:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/output/xml/rss.aw,v 1.4 2008/01/31 13:54:57 kristo Exp $
 // rss.aw - RSS feed generator
-
+/*
+@classinfo maintainer=kristo
+*/
 define(ITEM_TPL,"
 <item rdf:about=\"%s\">
 <title>%s</title>

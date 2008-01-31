@@ -2,7 +2,7 @@
 /*
 
 @classinfo syslog_type=ST_ACTOR
-@classinfo relationmgr=yes
+@classinfo relationmgr=yes maintainer=kristo
 
 @groupinfo general caption=Üldine
 

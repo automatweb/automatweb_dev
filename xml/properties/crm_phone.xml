@@ -58,6 +58,7 @@
                         <num_0>CL_CRM_ADDRESS</num_0>
                         <num_1>CL_CRM_COMPANY</num_1>
                         <num_2>CL_CRM_PERSON</num_2>
+                        <num_3>CL_CRM_PERSON_WORK_RELATION</num_3>
                   </clid>
                   <caption>Numbriga seotud objekt</caption>
             </BELONGTO>

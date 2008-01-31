@@ -1,7 +1,7 @@
 <?php
 /*
 
-@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_DB relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_DB relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default field=meta
 @default method=serialize

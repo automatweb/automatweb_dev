@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class date
 {
 	var $month = array("&#1103;&#1085;&#1074;&#1072;&#1088;&#1100;",

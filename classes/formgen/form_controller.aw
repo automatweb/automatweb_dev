@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 // controller types in element - each controller can be used for every one of these, 
 // they are just here to specify for which controller in the element the controller is selected

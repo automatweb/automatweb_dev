@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_LAYOUT relationmgr=yes
+@classinfo syslog_type=ST_LAYOUT relationmgr=yes maintainer=kristo
 
 @groupinfo settings caption=M&auml;&auml;rangud
 @groupinfo layout caption=Tabel

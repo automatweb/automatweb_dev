@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 class _int_obj_container_base
 {

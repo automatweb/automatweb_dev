@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.4 2005/04/19 17:57:03 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.5 2008/01/31 13:52:21 kristo Exp $
 // document_archive.aw - Dokumendiarhiiv 
 /*
 
-@classinfo syslog_type=ST_DOCUMENT_ARCHIVE relationmgr=yes
+@classinfo syslog_type=ST_DOCUMENT_ARCHIVE relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

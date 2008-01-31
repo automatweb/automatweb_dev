@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.25 2008/01/11 10:30:16 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.26 2008/01/31 13:52:23 kristo Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
-@classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1
+@classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1 maintainer=dragut
 
 @tableinfo forum_topics index=aw_oid master_index=brother_of master_table=objects
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_content_type.aw,v 1.1 2006/04/17 10:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_content_type.aw,v 1.2 2008/01/31 13:52:14 kristo Exp $
 // document_content_type.aw - Sisu t&uuml;&uuml;p 
 /*
 
-@classinfo syslog_type=ST_DOCUMENT_CONTENT_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_DOCUMENT_CONTENT_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,6 +1,9 @@
 <?php
-// $Id: menu_alias.aw,v 2.15 2006/09/20 21:53:53 tarvo Exp $
+// $Id: menu_alias.aw,v 2.16 2008/01/31 13:49:48 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
+/*
+@classinfo  maintainer=kristo
+*/
 class menu_alias extends aw_template
 {
 	function menu_alias()

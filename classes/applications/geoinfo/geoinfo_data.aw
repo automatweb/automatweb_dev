@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_data.aw,v 1.3 2007/12/27 13:00:20 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_data.aw,v 1.4 2008/01/31 13:49:54 kristo Exp $
 // geoinfo_data.aw - Geoinfo andmed 
 /*
 
-@classinfo syslog_type=ST_GEOINFO_DATA relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_GEOINFO_DATA relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
 
 @default table=objects
 @default group=data

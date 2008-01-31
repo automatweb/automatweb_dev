@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.21 2007/11/28 08:23:59 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.22 2008/01/31 13:54:39 kristo Exp $
 // scala_import.aw - Scala import 
 /*
 
-@classinfo syslog_type=ST_SCALA_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SCALA_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=hannes
 @tableinfo scala_import index=oid master_table=objects master_index=oid
 
 @default table=objects

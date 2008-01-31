@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.21 2006/10/11 13:06:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.22 2008/01/31 13:55:36 kristo Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
-@classinfo syslog_type=ST_GANTT_CHART relationmgr=yes
+@classinfo syslog_type=ST_GANTT_CHART relationmgr=yes maintainer=voldemar
 
 @default table=objects
 @default field=meta

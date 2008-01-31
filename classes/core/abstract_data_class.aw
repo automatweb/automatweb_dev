@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_data_class.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_data_class.aw,v 1.3 2008/01/31 13:52:49 kristo Exp $
 // abstract_data_class.aw - Tundmatud andmed 
 /*
 
-@classinfo syslog_type=ST_ABSTRACT_DATA_CLASS relationmgr=yes
+@classinfo syslog_type=ST_ABSTRACT_DATA_CLASS relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

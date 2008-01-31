@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.9 2008/01/30 17:48:58 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.10 2008/01/31 13:54:39 kristo Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
-@classinfo syslog_type=ST_EVENT_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_EVENT_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kaarel
 
 @default table=objects
 @default group=general

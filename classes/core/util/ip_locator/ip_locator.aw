@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.6 2007/03/28 07:37:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.7 2008/01/31 13:54:11 kristo Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
-@classinfo syslog_type=ST_IP_LOCATOR relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_IP_LOCATOR relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

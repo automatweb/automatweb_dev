@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/intranet/intranet.aw,v 1.3 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/intranet/intranet.aw,v 1.4 2008/01/31 13:54:48 kristo Exp $
 // intranet.aw - Intranet 
 /*
 
-@classinfo syslog_type=ST_INTRANET relationmgr=yes
+@classinfo syslog_type=ST_INTRANET relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.29 2007/08/21 22:49:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.30 2008/01/31 13:52:07 kristo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
-@classinfo syslog_type=ST_DDOC relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_DDOC relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
 @default group=general

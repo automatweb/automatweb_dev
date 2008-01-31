@@ -1,5 +1,8 @@
 <?php
 // mysql.aw - MySQL draiver
+/*
+@classinfo  maintainer=kristo
+*/
 class mysql
 {
 	var $dbh; #database handle

@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.45 2007/11/16 12:25:40 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.46 2008/01/31 13:49:48 kristo Exp $
 // scheduler.aw - Scheduler
+/*
+@classinfo  maintainer=kristo
+*/
 class scheduler extends aw_template
 {
 	/** 

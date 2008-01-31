@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/citizenship.aw,v 1.1 2007/12/28 13:01:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/citizenship.aw,v 1.2 2008/01/31 13:52:01 kristo Exp $
 // citizenship.aw - Citizenship 
 /*
 
-@classinfo syslog_type=ST_CITIZENSHIP relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CITIZENSHIP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

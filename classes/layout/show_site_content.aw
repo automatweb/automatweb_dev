@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/show_site_content.aw,v 1.6 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/show_site_content.aw,v 1.7 2008/01/31 13:54:49 kristo Exp $
 /*
 
-@classinfo syslog_type=ST_SITE_CONTENT
+@classinfo syslog_type=ST_SITE_CONTENT maintainer=kristo
 
 @default table=objects
 @default group=general

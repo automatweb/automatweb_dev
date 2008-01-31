@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=voldemar
+*/
 
 class aw_uri_obj extends _int_object
 {

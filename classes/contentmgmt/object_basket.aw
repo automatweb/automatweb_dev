@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.7 2008/01/02 14:58:30 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.8 2008/01/31 13:52:14 kristo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
-@classinfo syslog_type=ST_OBJECT_BASKET relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_OBJECT_BASKET relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
 
 @default table=objects
 @default group=general

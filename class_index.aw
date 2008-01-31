@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=voldemar
+*/
 class class_index
 {
 	const INDEX_DIR = "/files/class_index/";

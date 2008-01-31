@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer.aw,v 1.4 2006/02/16 11:35:47 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer.aw,v 1.5 2008/01/31 13:54:16 kristo Exp $
 // crm_special_offer.aw - Organisatsiooni eripakkumine
 // Not related to crm_offer
 /*
 
-@classinfo syslog_type=ST_CRM_SPECIAL_OFFER relationmgr=yes
+@classinfo syslog_type=ST_CRM_SPECIAL_OFFER relationmgr=yes maintainer=markop
 
 @default table=objects
 

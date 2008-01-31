@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.17 2006/09/27 15:03:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.18 2008/01/31 13:52:38 kristo Exp $
 
 /*
 
-@classinfo syslog_type=ST_RATE_SCALE relationmgr=yes
+@classinfo syslog_type=ST_RATE_SCALE relationmgr=yes maintainer=kristo
 
 @groupinfo scale caption=Skaala
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.6 2006/05/05 09:47:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.7 2008/01/31 13:52:14 kristo Exp $
 // contents.aw - Saidi sisukord
 /*
 
-@classinfo syslog_type=ST_CONTENTS relationmgr=yes no_status=1 
+@classinfo syslog_type=ST_CONTENTS relationmgr=yes no_status=1  maintainer=kristo
 
 @default table=objects
 @default group=general

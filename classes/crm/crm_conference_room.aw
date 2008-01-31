@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_conference_room.aw,v 1.1 2006/10/12 11:25:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_conference_room.aw,v 1.2 2008/01/31 13:54:12 kristo Exp $
 // room.aw - Ruum 
 /*
 
-@classinfo syslog_type=ST_CRM_CONFERENCE_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_CONFERENCE_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @tableinfo room index=oid master_table=objects master_index=oid
 
 @default table=room

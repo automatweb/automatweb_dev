@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.45 2007/12/12 12:51:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.46 2008/01/31 13:54:33 kristo Exp $
 // form_actions.aw - creates and executes form actions
+/*
+@classinfo  maintainer=kristo
+*/
 classload("formgen/form_base");
 class form_actions extends form_base
 {

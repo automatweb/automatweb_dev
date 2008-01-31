@@ -1,6 +1,9 @@
 <?php
-// $Id: tabpanel.aw,v 1.22 2007/12/04 13:03:48 kristo Exp $
+// $Id: tabpanel.aw,v 1.23 2008/01/31 13:55:36 kristo Exp $
 // tabpanel.aw - class for creating tabbed dialogs
+/*
+@classinfo  maintainer=kristo
+*/
 class tabpanel extends aw_template
 {
 	////

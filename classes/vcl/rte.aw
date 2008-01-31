@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.18 2006/06/02 12:47:12 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.19 2008/01/31 13:55:36 kristo Exp $
 // rte.aw - Rich Text Editor 
 /*
 
-@classinfo syslog_type=ST_RTE relationmgr=yes
+@classinfo syslog_type=ST_RTE relationmgr=yes maintainer=hannes
 
 @default table=objects
 @default group=general

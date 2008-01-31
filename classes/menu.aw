@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.218 2008/01/31 11:36:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.219 2008/01/31 13:49:48 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
 
-	@classinfo trans=1
+	@classinfo trans=1 maintainer=kristo
 
 	@groupinfo general_sub caption="&Uuml;ldine" parent=general
 
@@ -1588,7 +1588,6 @@ class menu extends class_base
 					$filt = array(
 						"class_id" => CL_MENU,
 						"alias" => $data["value"],
-						"site_id" => array(),
 						"lang_id" => array()
 					);
 					if (aw_ini_get("menuedit.recursive_aliases") == 1)

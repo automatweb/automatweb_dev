@@ -2,7 +2,7 @@
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_PERSON, on_save_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_COMPANY, on_save_co)
-
+@classinfo  maintainer=markop
 */
 
 class crm_user_creator extends core

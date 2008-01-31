@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.7 2005/04/21 08:32:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.8 2008/01/31 13:49:48 kristo Exp $
 // priority.aw - prioriteedi objekt
 /*
+	@classinfo  maintainer=kristo
 	@default table=objects
 	@default field=meta
 	@default method=serialize

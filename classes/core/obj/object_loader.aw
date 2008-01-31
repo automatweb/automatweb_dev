@@ -1,5 +1,8 @@
 <?php
 /*
+@classinfo  maintainer=kristo
+*/
+/*
 
 this message will get called whenever an object is saved and given the class_id as the message type parameter
 and the object's id as the "oid" parameter

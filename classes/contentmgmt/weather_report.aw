@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.3 2007/11/20 10:58:45 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.4 2008/01/31 13:52:15 kristo Exp $
 // weather_report.aw - Ilmateade 
 /*
 
-@classinfo syslog_type=ST_WEATHER_REPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_WEATHER_REPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
 
 @default table=objects
 @default group=general

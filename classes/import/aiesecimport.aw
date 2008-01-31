@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.3 2007/11/28 08:22:15 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.4 2008/01/31 13:54:39 kristo Exp $
 // aiesecimport.aw - Aiesec import 
 /*
 
-@classinfo syslog_type=ST_AIESECIMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_AIESECIMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=hannes
 
 @default table=objects
 @default group=general

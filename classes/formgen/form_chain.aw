@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.31 2007/11/28 07:51:57 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.32 2008/01/31 13:54:33 kristo Exp $
 // form_chain.aw - form chains
+/*
+@classinfo  maintainer=kristo
+*/
 
 classload("formgen/form_base");
 class form_chain extends form_base

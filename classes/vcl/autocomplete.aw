@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class autocomplete
 {
 	function autocomplete()

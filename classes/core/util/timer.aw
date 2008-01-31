@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/timer.aw,v 1.2 2007/01/17 14:45:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/timer.aw,v 1.3 2008/01/31 13:54:05 kristo Exp $
 // klass taimerite jaoks
+/*
+@classinfo  maintainer=kristo
+*/
 class aw_timer 
 {
 	var $timers; // siin sailitame koiki taimereid

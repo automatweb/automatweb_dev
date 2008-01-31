@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/ru/number.aw,v 1.2 2005/04/21 08:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/ru/number.aw,v 1.3 2008/01/31 13:53:32 kristo Exp $
 // et.aw - Estonian localization
+/*
+@classinfo  maintainer=kristo
+*/
 class number
 {
 	function get_lc_number($number)

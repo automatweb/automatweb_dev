@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.6 2005/03/10 12:41:13 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.7 2008/01/31 13:50:18 kristo Exp $
 // survey.aw - Ankeet 
 /*
 
-@classinfo syslog_type=ST_SURVEY relationmgr=yes
+@classinfo syslog_type=ST_SURVEY relationmgr=yes maintainer=kristo
 @tableinfo survey index=aw_id master_table=objects master_index=brother_of
 
 @default table=objects

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.63 2007/12/11 12:21:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.64 2008/01/31 13:52:37 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource
 /*
 
-@classinfo syslog_type=ST_OTV_DS_OBJ relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_OTV_DS_OBJ relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 @default table=objects
 
 

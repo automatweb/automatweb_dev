@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.10 2006/11/15 13:07:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.11 2008/01/31 13:50:07 kristo Exp $
 // shop_warehouse_config.aw - Lao konfiguratsioon 
 /*
 
-@classinfo syslog_type=ST_SHOP_WAREHOUSE_CONFIG relationmgr=yes
+@classinfo syslog_type=ST_SHOP_WAREHOUSE_CONFIG relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

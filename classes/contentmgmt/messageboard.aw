@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/messageboard.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/messageboard.aw,v 1.3 2008/01/31 13:52:14 kristo Exp $
 // messageboard.aw - Teadete tahvel 
 /*
 
-@classinfo syslog_type=ST_MESSAGEBOARD 
+@classinfo syslog_type=ST_MESSAGEBOARD  maintainer=kristo
 
 @default table=objects
 @default group=general

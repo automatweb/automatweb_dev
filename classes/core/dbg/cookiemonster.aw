@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/dbg/cookiemonster.aw,v 1.2 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/dbg/cookiemonster.aw,v 1.3 2008/01/31 13:53:03 kristo Exp $
 // a class to aid in debugging - you can set cookies in your browser with this
 
 /*
+@classinfo  maintainer=kristo
+
 @default group=general
 @default form=monster
 

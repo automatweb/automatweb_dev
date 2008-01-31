@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.9 2005/04/26 10:57:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.10 2008/01/31 13:55:00 kristo Exp $
 // crm_pank.aw - Pank 
 /*
-@classinfo syslog_type=ST_PANK relationmgr=yes
+@classinfo syslog_type=ST_PANK relationmgr=yes maintainer=kristo
 @tableinfo pank index=oid master_table=objects master_index=oid
 
 @default table=objects

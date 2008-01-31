@@ -1,6 +1,7 @@
 <?php
 
 /*
+@classinfo  maintainer=kristo
 
 @default table=objects
 

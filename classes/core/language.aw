@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.25 2006/10/12 13:57:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.26 2008/01/31 13:52:49 kristo Exp $
 // language.aw - Keel 
 /*
 
-@classinfo syslog_type=ST_LANGUAGE relationmgr=yes no_status=1 no_comment=1 
+@classinfo syslog_type=ST_LANGUAGE relationmgr=yes no_status=1 no_comment=1  maintainer=kristo
 
 @default table=objects
 @default group=general

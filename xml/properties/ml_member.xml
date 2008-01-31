@@ -286,5 +286,16 @@
                   <master_index>oid</master_index>
             </ml_users>
       </tableinfo>
+      <reltypes>
+            <BELONGTO>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                        <num_2>CL_CRM_PERSON_WORK_RELATION</num_2>
+                  </clid>
+                  <caption>E-postiaadressiga seotud objekt</caption>
+            </BELONGTO>
+      </reltypes>
 </properties>
 

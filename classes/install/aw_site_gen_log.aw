@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site_gen_log.aw,v 1.4 2005/03/22 15:32:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site_gen_log.aw,v 1.5 2008/01/31 13:54:40 kristo Exp $
 /*
 
-@classinfo syslog_type=ST_AW_SITE_GEN_LOG
+@classinfo syslog_type=ST_AW_SITE_GEN_LOG maintainer=kristo
 
 @groupinfo view caption="Vaata logi"
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.11 2007/11/28 08:08:26 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.12 2008/01/31 13:52:37 kristo Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
-@classinfo syslog_type=ST_OTV_DS_KULTUURIAKEN relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_OTV_DS_KULTUURIAKEN relationmgr=yes no_comment=1 no_status=1 maintainer=dragut
 
 @default table=objects
 @default group=general

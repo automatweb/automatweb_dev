@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=kristo
+*/
 class alias_parser extends core
 {
 	function alias_parser()

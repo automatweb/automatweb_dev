@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.110 2008/01/29 11:13:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.111 2008/01/31 13:55:36 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
+/*
+@classinfo  maintainer=kristo
+*/
 
 class aw_table extends aw_template
 {

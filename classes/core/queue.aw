@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class queue
 {
 	/** Queue constructor. Resets internal arrays and counters.

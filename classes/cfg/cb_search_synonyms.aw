@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search_synonyms.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search_synonyms.aw,v 1.3 2008/01/31 13:52:00 kristo Exp $
 // cb_search_synonyms.aw - Classbase otsingu s&uuml;non&uuml;mid 
 /*
 
-@classinfo syslog_type=ST_CB_SEARCH_SYNONYMS relationmgr=yes no_status=1
+@classinfo syslog_type=ST_CB_SEARCH_SYNONYMS relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

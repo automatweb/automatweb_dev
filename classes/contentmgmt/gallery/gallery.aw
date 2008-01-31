@@ -1,6 +1,9 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.9 2005/04/05 13:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.10 2008/01/31 13:52:27 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 
 class gallery extends aw_template
 {

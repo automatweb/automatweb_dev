@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.26 2007/05/24 12:29:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.27 2008/01/31 13:52:39 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -18,7 +18,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE,CL_SITE_SEARCH_CONTENT_GRP, on_save_g
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_menu)
 
 
-@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP relationmgr=yes
+@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

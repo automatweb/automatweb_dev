@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/pop3.aw,v 1.3 2006/05/19 10:53:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/pop3.aw,v 1.4 2008/01/31 13:55:23 kristo Exp $
 // pop3.aw - POP3 login 
 /*
 
-@classinfo syslog_type=ST_PROTO_POP3 relationmgr=yes
+@classinfo syslog_type=ST_PROTO_POP3 relationmgr=yes  maintainer=kristo
 
 @default table=objects
 @default group=general

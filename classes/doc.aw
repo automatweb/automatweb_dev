@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.162 2008/01/22 10:14:47 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.163 2008/01/31 13:49:47 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -7,7 +7,7 @@
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
-@classinfo trans=1 no_comment=1 relationmgr=yes syslog_type=ST_DOCUMENT r2=1
+@classinfo trans=1 no_comment=1 relationmgr=yes syslog_type=ST_DOCUMENT r2=1 maintainer=kristo
 
 @default table=documents
 @default group=general

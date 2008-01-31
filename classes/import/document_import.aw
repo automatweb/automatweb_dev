@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.8 2007/05/24 09:38:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.9 2008/01/31 13:54:39 kristo Exp $
 // document_import.aw - Dokumentide import 
 /*
 
-@classinfo syslog_type=ST_DOCUMENT_IMPORT relationmgr=yes prop_cb=1
+@classinfo syslog_type=ST_DOCUMENT_IMPORT relationmgr=yes prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general

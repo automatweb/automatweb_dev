@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class hate
 {
 	var $colors = array("red", "green", "blue", "magenta");

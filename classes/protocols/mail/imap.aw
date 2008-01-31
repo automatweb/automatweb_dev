@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.43 2008/01/30 14:34:31 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.44 2008/01/31 13:55:23 kristo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. &otilde;igemini ta tagastab need boxid kus seike kiri sees
 */
 /*
 
-@classinfo syslog_type=ST_PROTO_IMAP 
+@classinfo syslog_type=ST_PROTO_IMAP  maintainer=kristo
 
 @default table=objects
 @default group=general

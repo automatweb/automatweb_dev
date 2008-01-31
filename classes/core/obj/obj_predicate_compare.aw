@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 define("OBJ_COMP_LESS", 1);
 define("OBJ_COMP_GREATER", 2);

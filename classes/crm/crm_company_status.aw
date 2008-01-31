@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company_status.aw,v 1.1 2007/10/03 12:30:04 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company_status.aw,v 1.2 2008/01/31 13:54:12 kristo Exp $
 // crm_company_status.aw - Organisatsiooni Staatus 
 /*
 
-@classinfo syslog_type=ST_CRM_COMPANY_STATUS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_COMPANY_STATUS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

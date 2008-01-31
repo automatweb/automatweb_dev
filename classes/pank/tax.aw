@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.4 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.5 2008/01/31 13:55:00 kristo Exp $
 // tax.aw - Maks 
 /*
 
-@classinfo syslog_type=ST_TAX relationmgr=yes
+@classinfo syslog_type=ST_TAX relationmgr=yes maintainer=kristo
 @tableinfo tax index=oid master_table=objects master_index=oid 
 
 @default table=objects

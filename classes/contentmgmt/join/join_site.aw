@@ -4,7 +4,7 @@
 
 EMIT_MESSAGE(MSG_USER_JOINED)
 
-@classinfo syslog_type=ST_JOIN_SITE relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_JOIN_SITE relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @groupinfo general_sub parent=general caption="&Uuml;ldine"
 @groupinfo general_ctrl parent=general caption="Kontrollerid"

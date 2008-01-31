@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.9 2006/11/23 15:05:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.10 2008/01/31 13:54:28 kristo Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
 
-@classinfo syslog_type=ST_XML_EXPORT relationmgr=yes
+@classinfo syslog_type=ST_XML_EXPORT relationmgr=yes maintainer=dragut
 
 @default table=objects
 @default group=general

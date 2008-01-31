@@ -1,6 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.32 2006/05/17 12:36:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.33 2008/01/31 13:49:48 kristo Exp $
 // menu_cache.aw - Menüüde cache
+/*
+@classinfo  maintainer=kristo
+*/
+
 class menu_cache extends aw_template
 {
 	function menu_cache($args = array())

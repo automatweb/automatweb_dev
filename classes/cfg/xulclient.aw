@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/xulclient.aw,v 1.4 2005/04/26 14:16:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/xulclient.aw,v 1.5 2008/01/31 13:52:00 kristo Exp $
 // xulclient - generates XUL for configuration forms
+/*
+@classinfo  maintainer=kristo
+*/
 
 class xulclient extends aw_template
 {

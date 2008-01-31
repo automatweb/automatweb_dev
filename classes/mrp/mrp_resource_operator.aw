@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource_operator.aw,v 1.2 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource_operator.aw,v 1.3 2008/01/31 13:54:53 kristo Exp $
 // mrp_resource_operator.aw - Operaator 
 /*
 
-@classinfo syslog_type=ST_MRP_RESOURCE_OPERATOR relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_MRP_RESOURCE_OPERATOR relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @default table=objects
 @default group=general

@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class menu_site_admin extends core
 {
 	function menu_site_admin()

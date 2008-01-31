@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_MENU_AREA 
+@classinfo syslog_type=ST_MENU_AREA  maintainer=kristo
 @classinfo relationmgr=yes
 
 @default table=objects

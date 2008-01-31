@@ -2,7 +2,7 @@
 // rss_import.aw - RSS import
 /*
 
-@classinfo syslog_type=ST_RSS_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_RSS_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=voldemar
 
 @default table=objects
 @default group=general

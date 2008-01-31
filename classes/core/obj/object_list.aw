@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.64 2008/01/29 12:44:03 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.65 2008/01/31 13:53:35 kristo Exp $
 // object_list.aw - with this you can manage object lists
+/*
+@classinfo  maintainer=kristo
+*/
 
 class object_list extends _int_obj_container_base
 {

@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class popup_menu extends aw_template
 {
 	var $items;

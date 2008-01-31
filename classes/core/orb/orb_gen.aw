@@ -1,9 +1,12 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: orb_gen.aw,v 1.1 2006/03/17 13:11:59 dragut Exp $
+	@cvs $Id: orb_gen.aw,v 1.2 2008/01/31 13:53:39 kristo Exp $
 
 	@comment 
 	generates orb defs, based on information from docgen_analyzer

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/tax_chain.aw,v 1.2 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/tax_chain.aw,v 1.3 2008/01/31 13:55:00 kristo Exp $
 // tax_chain.aw - Maksu pärg 
 /*
 
-@classinfo syslog_type=ST_TAX_CHAIN relationmgr=yes
+@classinfo syslog_type=ST_TAX_CHAIN relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,7 +1,7 @@
 <?php
 /*
 
-	@classinfo syslog_type=ST_WORKFLOW
+	@classinfo syslog_type=ST_WORKFLOW maintainer=kristo
 	@classinfo relationmgr=yes
 
 	@groupinfo general caption=Üldine

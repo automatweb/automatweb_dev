@@ -2,7 +2,7 @@
 // ows_profile.aw - OWS Kliendiprofiil
 /*
 
-@classinfo syslog_type=ST_OWS_PROFILE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_OWS_PROFILE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

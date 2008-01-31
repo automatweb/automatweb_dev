@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.18 2005/08/09 20:34:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.19 2008/01/31 13:51:58 kristo Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
-@classinfo syslog_type=ST_MAJA_XML_EDITOR relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_MAJA_XML_EDITOR relationmgr=yes no_status=1 no_comment=1 maintainer=dragut
 
 @default table=objects
 @default group=general

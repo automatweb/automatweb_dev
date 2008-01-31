@@ -5,7 +5,9 @@ error_reporting(E_PARSE | E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E
 ini_set("display_errors", "On");
 // apparently __FILE__ does not work with Zend Encoder. But since
 // don't use that anyway, it's of no concern. At least now.
-
+/*
+@classinfo  maintainer=kristo
+*/
 class aw_exception extends Exception {}
 
 // include aw const

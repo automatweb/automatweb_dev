@@ -1,8 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/xml/xml_parser.aw,v 1.3 2005/04/21 08:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/xml/xml_parser.aw,v 1.4 2008/01/31 13:55:43 kristo Exp $
 // xml_parser.aw - Wrapper for the xml parsing stuff
 // right now this class can only bitch and die
 // in the future it should wrap all the parser functions
+/*
+@classinfo  maintainer=kristo
+*/
 class xml_parser
 {
 	function xml_parser()

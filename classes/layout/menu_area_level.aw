@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/Attic/menu_area_level.aw,v 1.10 2005/03/24 10:04:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/Attic/menu_area_level.aw,v 1.11 2008/01/31 13:54:49 kristo Exp $
 /*
 
-@classinfo syslog_type=ST_MENU_AREA_LEVEL relationmgr=yes
+@classinfo syslog_type=ST_MENU_AREA_LEVEL relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

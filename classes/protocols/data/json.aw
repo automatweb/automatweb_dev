@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=voldemar
+*/
 
 /**
 * Converts to and from JSON format.
@@ -50,7 +53,7 @@
 * @author      Matt Knapp <mdknapp[at]gmail[dot]com>
 * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
 * @copyright   2005 Michal Migurski
-* @version     CVS: $Id: json.aw,v 1.1 2006/04/21 07:33:06 voldemar Exp $
+* @version     CVS: $Id: json.aw,v 1.2 2008/01/31 13:55:19 kristo Exp $
 * @license     http://www.opensource.org/licenses/bsd-license.php
 * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
 */

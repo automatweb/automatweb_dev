@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.186 2008/01/16 08:51:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.187 2008/01/31 13:49:48 kristo Exp $
 // users.aw - User Management
-
+/*
+@classinfo  maintainer=kristo
+*/
 if (!headers_sent())
 {
 	session_register("add_state");

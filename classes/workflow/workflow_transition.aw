@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_transition.aw,v 1.2 2005/04/21 08:54:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_transition.aw,v 1.3 2008/01/31 13:55:40 kristo Exp $
 // workflow_transition.aw - J&auml;rgnevus 
 /*
 
-@classinfo syslog_type=ST_WORKFLOW_TRANSITION relationmgr=yes
+@classinfo syslog_type=ST_WORKFLOW_TRANSITION relationmgr=yes maintainer=kristo
 
 @tableinfo aw_wf_transitions index=aw_id master_table=objects master_index=brother_of
 

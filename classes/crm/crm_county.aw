@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.6 2006/09/01 12:05:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.7 2008/01/31 13:54:12 kristo Exp $
 /*
 	@tableinfo kliendibaas_maakond index=oid master_table=objects master_index=oid
 
@@ -28,7 +28,7 @@
 	
 //	@default table=kliendibaas_maakond
 
-	@classinfo no_status=1
+	@classinfo no_status=1 maintainer=markop
 
 */
 

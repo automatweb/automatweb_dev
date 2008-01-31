@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 // this class just defines the protocol for obj data sources
 // all of them should derive from this one. if php5 would

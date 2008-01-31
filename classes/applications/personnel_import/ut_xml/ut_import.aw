@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_import/ut_xml/ut_import.aw,v 1.1 2008/01/22 12:30:09 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_import/ut_xml/ut_import.aw,v 1.2 2008/01/31 13:50:06 kristo Exp $
 // ut_import.aw - UT Import 
 /*
 
-@classinfo syslog_type=ST_UT_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_UT_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kaarel
 
 @default table=objects
 @default group=general

@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 classload("contentmgmt/site_search/parsers/parser_base");
 classload("contentmgmt/site_search/parsers/ss_parser_html");
 classload("contentmgmt/site_search/parsers/ss_parser_doc");

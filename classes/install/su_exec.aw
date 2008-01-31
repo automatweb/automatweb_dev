@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class su_exec extends class_base
 {
 	function su_exec()

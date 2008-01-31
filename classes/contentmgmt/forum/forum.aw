@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.16 2008/01/23 15:36:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.17 2008/01/31 13:52:22 kristo Exp $
 // forum.aw - forums/messageboards
 /*
+@classinfo  maintainer=dragut
         // stuff that goes into the objects table
         @default table=objects
 	@default group=general

@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_IPADDRESS no_status=1 
+@classinfo syslog_type=ST_IPADDRESS no_status=1  maintainer=kristo
 
 @groupinfo general caption=Üldine
 

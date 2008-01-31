@@ -1,6 +1,7 @@
 <?php
 
 /*
+@classinfo  maintainer=kristo
 
 This message will get posted when we are showing the site.
 parameters:

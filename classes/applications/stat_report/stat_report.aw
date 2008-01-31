@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stat_report/Attic/stat_report.aw,v 1.6 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stat_report/Attic/stat_report.aw,v 1.7 2008/01/31 13:50:15 kristo Exp $
 // stat_report.aw - Stati aruannete upload 
 /*
 
-@classinfo syslog_type=ST_STAT_REPORT relationmgr=yes
+@classinfo syslog_type=ST_STAT_REPORT relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

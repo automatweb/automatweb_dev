@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.22 2005/03/21 07:06:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.23 2008/01/31 13:49:48 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 /*
 
-@classinfo relationmgr=yes syslog_type=ST_OBJECT_CHAIN no_status=1 no_comment=1
+@classinfo relationmgr=yes syslog_type=ST_OBJECT_CHAIN no_status=1 no_comment=1 maintainer=kristo
 
 @property objs type=relpicker reltype=RELTYPE_OBJECT multiple=1 table=objects field=meta method=serialize group=general
 @caption Vali objektid

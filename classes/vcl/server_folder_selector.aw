@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class server_folder_selector extends core
 {
 	function server_folder_selector()

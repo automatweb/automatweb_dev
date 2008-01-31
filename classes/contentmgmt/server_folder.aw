@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.11 2008/01/23 12:56:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.12 2008/01/31 13:52:15 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
-@classinfo syslog_type=ST_SERVER_FOLDER no_comment=1 no_status=1
+@classinfo syslog_type=ST_SERVER_FOLDER no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

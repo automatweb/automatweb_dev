@@ -1,6 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.111 2008/01/25 08:18:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.112 2008/01/31 13:49:45 kristo Exp $
 // here we define basic constants needed by all components
+/*
+@classinfo  maintainer=kristo
+*/
+
 set_magic_quotes_runtime(0);
 
 define ("AW_SHORT_PROCESS", 1);

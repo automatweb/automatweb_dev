@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.8 2007/11/28 07:53:51 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.9 2008/01/31 13:54:34 kristo Exp $
 classload("formgen/form_base");
+/*
+@classinfo  maintainer=kristo
+*/
 class form_import extends form_base
 {
 	function form_import()

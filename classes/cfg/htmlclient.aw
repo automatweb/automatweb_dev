@@ -5,6 +5,9 @@
 // for editing objects, then we can just add other clients
 // (xmlrpc, rdf, tty, etc) which take care of converting the data
 // from the cfgmanager to the required form.
+/*
+@classinfo  maintainer=kristo
+*/
 
 class htmlclient extends aw_template
 {

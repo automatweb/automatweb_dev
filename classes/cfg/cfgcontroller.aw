@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.11 2007/04/23 12:10:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.12 2008/01/31 13:52:00 kristo Exp $
 // cfgcontroller.aw - Kontroller(Classbase) 
 /*
 
-@classinfo syslog_type=ST_CFGCONTROLLER relationmgr=yes
+@classinfo syslog_type=ST_CFGCONTROLLER relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

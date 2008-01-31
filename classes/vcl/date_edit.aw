@@ -2,6 +2,9 @@
 // klassile antakse ette "unix timestamp", ta konverdib
 // selle ajaühikuteks, ning tagastab nende muutmiseks
 // sobivad vormielemendid
+/*
+@classinfo  maintainer=kristo
+*/
 class date_edit
 {
 	// vormielementide nimed saavad olema kujul

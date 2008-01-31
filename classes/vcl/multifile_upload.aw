@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=hannes
+*/
 class multifile_upload extends class_base
 {
 	function multifile_upload()

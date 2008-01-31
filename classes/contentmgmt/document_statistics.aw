@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.20 2006/04/17 13:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.21 2008/01/31 13:52:14 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
-@classinfo syslog_type=ST_DOCUMENT_STATISTICS relationmgr=yes no_status=1
+@classinfo syslog_type=ST_DOCUMENT_STATISTICS relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

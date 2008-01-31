@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.5 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.6 2008/01/31 13:55:30 kristo Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
+/*
+@classinfo  maintainer=kristo
+*/
 class db_stat extends aw_template
 {
 	// konstruktor

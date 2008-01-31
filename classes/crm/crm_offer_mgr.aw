@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_mgr.aw,v 1.4 2006/03/08 15:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_mgr.aw,v 1.5 2008/01/31 13:54:13 kristo Exp $
 // crm_offer_mgr.aw - Pakkumiste haldus 
 /*
 
-@classinfo syslog_type=ST_CRM_OFFER_MGR relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_CRM_OFFER_MGR relationmgr=yes no_status=1 no_comment=1 maintainer=markop
 
 @default table=objects
 @default group=general

@@ -1,5 +1,8 @@
 <?php
 // core.aw - Core functions
+/*
+@classinfo  maintainer=kristo
+*/
 
 // if a function can either return all properties for something or just a name, then use
 // $return parameter and give it one of these defined values, so that it will be consistent

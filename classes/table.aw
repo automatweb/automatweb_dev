@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.64 2006/09/27 15:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.65 2008/01/31 13:49:48 kristo Exp $
 // table.aw - tabelite haldus
+/*
+@classinfo  maintainer=kristo
+*/
 class table extends aw_template
 {
 	var $table_id;

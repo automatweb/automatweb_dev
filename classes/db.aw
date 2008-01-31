@@ -1,9 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.28 2007/11/15 12:23:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.29 2008/01/31 13:49:47 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
 // means to create and manage alternate database connections
+
+/*
+@classinfo  maintainer=kristo 
+*/
 
 define("DB_TABLE_TYPE_STORED_PROC", 1);
 define("DB_TABLE_TYPE_TABLE", 2);

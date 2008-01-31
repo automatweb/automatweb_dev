@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.7 2006/11/09 08:54:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.8 2008/01/31 13:54:53 kristo Exp $
 // mrp_prisma_browser.aw - Reusneri andmete sirvimine 
 /*
 
-@classinfo syslog_type=ST_MRP_PRISMA_BROWSER no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_MRP_PRISMA_BROWSER no_comment=1 no_status=1 prop_cb=1 maintainer=voldemar
 
 @default table=objects
 @default group=general

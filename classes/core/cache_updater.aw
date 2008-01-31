@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/cache_updater.aw,v 1.4 2006/03/06 11:34:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/cache_updater.aw,v 1.5 2008/01/31 13:52:49 kristo Exp $
 // cache_updater.aw - Cache uuendamine 
 /*
 
-@classinfo syslog_type=ST_CACHE_UPDATER relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_CACHE_UPDATER relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

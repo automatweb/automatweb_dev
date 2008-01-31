@@ -1,5 +1,8 @@
 <?php
 classload("formgen/form_base");
+/*
+@classinfo  maintainer=kristo
+*/
 class form_stat_table extends form_base
 {
 	function form_stat_table()

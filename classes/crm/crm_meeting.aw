@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.92 2007/11/30 10:39:58 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.93 2008/01/31 13:54:12 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
 
-@classinfo syslog_type=ST_CRM_MEETING confirm_save_data=1
+@classinfo syslog_type=ST_CRM_MEETING confirm_save_data=1 maintainer=markop
 
 @default table=objects
 

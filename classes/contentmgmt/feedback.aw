@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class db_feedback extends aw_template 
 {
 	function db_feedback() 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.41 2007/12/28 09:37:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.42 2008/01/31 13:52:27 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
-@classinfo syslog_type=ST_MINI_GALLERY relationmgr=yes no_status=1
+@classinfo syslog_type=ST_MINI_GALLERY relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 

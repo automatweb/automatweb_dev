@@ -1,6 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/pgsql.aw,v 1.9 2007/11/15 12:23:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/pgsql.aw,v 1.10 2008/01/31 13:54:21 kristo Exp $
 // pgsql.aw - PostgreSQL draiver
+/*
+@classinfo  maintainer=kristo
+*/
+
 class pgsql
 {
 	var $dbh; #database handle

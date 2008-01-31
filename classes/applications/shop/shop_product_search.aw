@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.7 2006/10/20 10:19:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.8 2008/01/31 13:50:07 kristo Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
-@classinfo syslog_type=ST_SHOP_PRODUCT_SEARCH relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_SHOP_PRODUCT_SEARCH relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

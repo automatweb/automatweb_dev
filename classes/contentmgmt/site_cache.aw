@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.47 2008/01/03 09:22:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.48 2008/01/31 13:52:15 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 
 class site_cache extends aw_template
 {

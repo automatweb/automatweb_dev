@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.8 2007/06/05 09:41:29 kristo Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.9 2008/01/31 13:52:49 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 class icons extends aw_template
 {
 	function icons()

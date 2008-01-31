@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.11 2005/05/23 12:32:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.12 2008/01/31 13:50:07 kristo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
-@classinfo syslog_type=ST_SHOP_SPECIAL_OFFER relationmgr=yes no_caption=1 no_status=1
+@classinfo syslog_type=ST_SHOP_SPECIAL_OFFER relationmgr=yes no_caption=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

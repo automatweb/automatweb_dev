@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 // this is the aw message dispatcher
 // it accepts messages and delivers them to all listeners

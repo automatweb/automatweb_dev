@@ -1,5 +1,6 @@
 <?php
 /*
+	@classinfo  maintainer=markop
 	@tableinfo kliendibaas_riik index=oid master_table=objects master_index=oid
 
 	@default table=objects

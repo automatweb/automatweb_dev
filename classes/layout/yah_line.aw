@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_YAH_LINE
+@classinfo syslog_type=ST_YAH_LINE maintainer=kristo
 
 @default table=objects
 @default group=general

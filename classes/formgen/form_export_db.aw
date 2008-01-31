@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 classload("formgen/form_base");
 class form_export_db extends form_base

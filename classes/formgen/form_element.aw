@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.86 2007/03/28 10:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.87 2008/01/31 13:54:33 kristo Exp $
 // form_element.aw - vormi element.
+/*
+@classinfo  maintainer=kristo
+*/
 class form_element extends aw_template
 {
 		// FIXME: need stringid lokaliseerida

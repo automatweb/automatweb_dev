@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.12 2007/01/31 15:19:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.13 2008/01/31 13:54:16 kristo Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
-@classinfo syslog_type=ST_CRM_SECTION_WEBSIDE relationmgr=yes
+@classinfo syslog_type=ST_CRM_SECTION_WEBSIDE relationmgr=yes maintainer=markop
 
 @default table=objects
 @default group=general

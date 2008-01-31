@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.8 2006/03/21 14:55:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.9 2008/01/31 13:51:59 kristo Exp $
 /*
 
-	@classinfo syslog_type=ST_CAL_CONTENT
+	@classinfo syslog_type=ST_CAL_CONTENT maintainer=kristo
 
 	@default table=objects
 	@default group=general

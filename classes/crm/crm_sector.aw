@@ -36,7 +36,7 @@
 	@property info_document type=relpicker reltype=RELTYPE_DOCUMENT field=meta method=serialize
 	@caption Tutvustus
 
-	@classinfo syslog_type=ST_CRM_SECTOR
+	@classinfo syslog_type=ST_CRM_SECTOR maintainer=markop
 
 
 @groupinfo transl caption=T&otilde;lgi

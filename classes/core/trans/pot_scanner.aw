@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.49 2007/12/27 14:47:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.50 2008/01/31 13:53:50 kristo Exp $
+/*
+@classinfo  maintainer=tarvo
+*/
 class pot_scanner extends core
 {
 	function pot_scanner()

@@ -1,9 +1,9 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.9 2005/04/04 09:30:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.10 2008/01/31 13:52:14 kristo Exp $
 
 /*
-	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP
+	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP maintainer=kristo
 	
 	@default table=objects
 	@default field=meta

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.24 2007/10/22 07:26:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.25 2008/01/31 13:52:23 kristo Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -29,7 +29,7 @@
 @property ip type=textbox
 @caption IP
 
-@classinfo syslog_type=ST_COMMENT no_status=1 relationmgr=yes
+@classinfo syslog_type=ST_COMMENT no_status=1 relationmgr=yes maintainer=dragut
 
 @reltype FORUM_IMAGE value=1 clid=CL_IMAGE
 @caption Pilt

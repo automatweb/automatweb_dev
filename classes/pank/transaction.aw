@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/transaction.aw,v 1.5 2005/03/24 10:04:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/transaction.aw,v 1.6 2008/01/31 13:55:00 kristo Exp $
 // transaction.aw - Ülekanne 
 /*
 
-@classinfo syslog_type=ST_TRANSACTION relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_TRANSACTION relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 @tableinfo pank_transaction index=oid master_table=objects master_index=oid
 
 @groupinfo general caption="Üldine" submit=no

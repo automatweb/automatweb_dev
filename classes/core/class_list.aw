@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.7 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.8 2008/01/31 13:52:49 kristo Exp $
 // class_list.aw - Klasside nimekiri 
 /*
 
-@classinfo syslog_type=ST_CLASS_LIST relationmgr=yes
+@classinfo syslog_type=ST_CLASS_LIST relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

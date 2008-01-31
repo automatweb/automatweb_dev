@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/target_audience.aw,v 1.1 2006/04/05 12:13:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/target_audience.aw,v 1.2 2008/01/31 13:52:15 kristo Exp $
 // target_audience.aw - Sihtr&uuml;hm 
 /*
 
-@classinfo syslog_type=ST_TARGET_AUDIENCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_TARGET_AUDIENCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_target_audience index=aw_oid master_index=brother_of master_table=objects
 @default table=aw_target_audience
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.3 2007/01/05 12:58:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.4 2008/01/31 13:52:49 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
-@classinfo syslog_type=ST_MAITENANCE relatiomgr=yes
+@classinfo syslog_type=ST_MAITENANCE relatiomgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

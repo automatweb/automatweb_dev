@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_userdefined.aw,v 1.2 2006/12/27 11:15:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_userdefined.aw,v 1.3 2008/01/31 13:54:01 kristo Exp $
 // auth_server_userdefined.aw - Autentimisserver kasutajadefineeritud 
 /*
 
-@classinfo syslog_type=ST_AUTH_SERVER_USERDEFINED relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_AUTH_SERVER_USERDEFINED relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

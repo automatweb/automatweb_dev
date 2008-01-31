@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.7 2007/01/25 10:12:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.8 2008/01/31 13:52:32 kristo Exp $
 // join_site_rule.aw - Liitumise Reegel 
 /*
 
-@classinfo syslog_type=ST_JOIN_SITE_RULE relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_JOIN_SITE_RULE relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

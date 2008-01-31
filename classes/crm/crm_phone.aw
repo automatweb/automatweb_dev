@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.14 2008/01/29 16:47:19 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.15 2008/01/31 13:54:15 kristo Exp $
 // phone.aw - Telefon
 /*
 
-@classinfo syslog_type=ST_CRM_PHONE relationmgr=yes
+@classinfo syslog_type=ST_CRM_PHONE relationmgr=yes maintainer=markop
 
 @default table=objects
 @default group=general

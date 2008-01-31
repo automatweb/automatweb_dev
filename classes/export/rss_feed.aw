@@ -2,7 +2,7 @@
 // rss_feed.aw - RSS voog
 /*
 
-@classinfo syslog_type=ST_RSS_FEED relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_RSS_FEED relationmgr=yes no_comment=1 no_status=1 prop_cb=1  maintainer=voldemar
 
 @groupinfo dfn caption="Definitsioon"
 

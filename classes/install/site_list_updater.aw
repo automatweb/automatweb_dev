@@ -1,7 +1,7 @@
 <?php
 
 /*
-
+@classinfo maintainer=kristo
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_login)
 
 */

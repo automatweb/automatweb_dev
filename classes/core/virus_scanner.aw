@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class virus_scanner extends class_base
 {
 	function virus_scanner($arr = array())

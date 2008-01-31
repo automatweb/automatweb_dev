@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.42 2007/11/28 07:57:45 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.43 2008/01/31 13:55:30 kristo Exp $
 
 /*
 
-@classinfo syslog_type=ST_DRONLINE relationmgr=yes
+@classinfo syslog_type=ST_DRONLINE relationmgr=yes maintainer=kristo
 
 @tableinfo dronline_bg_status index=id master_table=objects master_index=id
 

@@ -34,7 +34,7 @@
 
 
 
-	@classinfo no_status=1 syslog_type=ST_CRM_CITY
+	@classinfo no_status=1 syslog_type=ST_CRM_CITY maintainer=markop
 	
 	//@property location type=textarea
 	//@caption Asukoha kirjeldus

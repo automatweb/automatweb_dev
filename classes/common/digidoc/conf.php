@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=tarvo
+*/
 //define('PEAR_PATH', dirname(__FILE__).'/inc/'); // Kasutamaks süsteemseid PEARi mooduleid, väärtusta see '' 
 define('PEAR_PATH', aw_ini_get("basedir").'/addons/pear/');
 //define('PEAR_PATH', '');

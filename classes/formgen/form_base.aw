@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.29 2005/08/17 06:52:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.30 2008/01/31 13:54:33 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
+/*
+@classinfo  maintainer=kristo
+*/
 
 classload("formgen/form_db_base");
 class form_base extends form_db_base

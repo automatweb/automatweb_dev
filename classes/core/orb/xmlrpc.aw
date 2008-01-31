@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.2 2005/04/05 13:52:34 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.3 2008/01/31 13:53:39 kristo Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");

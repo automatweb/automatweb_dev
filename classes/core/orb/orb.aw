@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.25 2007/09/13 13:17:01 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.26 2008/01/31 13:53:39 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 

@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/serializers/xml.aw,v 1.3 2007/05/16 14:02:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/serializers/xml.aw,v 1.4 2008/01/31 13:53:49 kristo Exp $
 // xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
+/*
+@classinfo  maintainer=kristo
+*/
 class xml 
 {
 	////

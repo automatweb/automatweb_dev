@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=voldemar
+*/
 
 require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 

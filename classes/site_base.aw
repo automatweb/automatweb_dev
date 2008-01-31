@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 // this is the base class for the "site" class where you can put site-specific functionality
 // and that has callbacks and hooks for all the actions you could ever want, so you can intercept aw 
 // when you need to do something site specific

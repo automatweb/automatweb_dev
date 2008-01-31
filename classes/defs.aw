@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.251 2008/01/31 12:02:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.252 2008/01/31 13:49:47 kristo Exp $
 // defs.aw - common functions
 
 /*
 EMIT_MESSAGE(MSG_MAIL_SENT)
+@classinfo maintainer=kristo
 */
 
 if (!defined("DEFS"))

@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/proptest.aw,v 1.3 2005/11/03 13:16:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/proptest.aw,v 1.4 2008/01/31 13:52:00 kristo Exp $
 // proptest.aw - Property Test File, for unit tests
 // Feel free to add new things and write new tests, but if you change any existing ones, then make sure
 // that you update any relevant tests as well
 /*
 
-@classinfo syslog_type=ST_PROPTEST relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROPTEST relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,5 +1,8 @@
 <?php
 // sys.aw - various system related functions
+/*
+@classinfo  maintainer=kristo
+*/
 
 class sys extends aw_template
 {

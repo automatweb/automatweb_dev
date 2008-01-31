@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class debugclient extends aw_template
 {
 	var $formdata;

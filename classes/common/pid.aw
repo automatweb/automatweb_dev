@@ -9,6 +9,7 @@ define ("PID_ERROR_INVALID_DATE", 3);
 define ("PID_ERROR_INVALID_COUNTRY", 4);
 
 /*
+@classinfo  maintainer=voldemar
 
 Class for working with personal identification numbers (PID-s). Loading and common usage:
 

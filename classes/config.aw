@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.75 2007/06/05 10:13:26 kristo Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.76 2008/01/31 13:49:47 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 class config extends aw_template
 {
 	function config() 

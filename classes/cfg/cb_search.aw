@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.47 2008/01/28 12:41:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.48 2008/01/31 13:52:00 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
-@classinfo syslog_type=ST_CB_SEARCH relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_CB_SEARCH relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
 @default table=objects
 @default group=general

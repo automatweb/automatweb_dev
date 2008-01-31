@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.10 2005/04/07 14:32:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.11 2008/01/31 13:52:37 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
-@classinfo syslog_type=ST_OTV_DS_PP_SEARCH relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_OTV_DS_PP_SEARCH relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
 @default table=objects
 @default group=general

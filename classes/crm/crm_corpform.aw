@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.6 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.7 2008/01/31 13:54:12 kristo Exp $
 /*
 	@tableinfo kliendibaas_ettevotlusvorm index=oid master_table=objects master_index=oid
 
@@ -17,7 +17,7 @@
 //	@property vorm type=textbox size=10
 //	@caption vorm
 	
-	@classinfo no_status=1 syslog_type=ST_CRM_CORPFORM
+	@classinfo no_status=1 syslog_type=ST_CRM_CORPFORM maintainer=markop
 */
 
 

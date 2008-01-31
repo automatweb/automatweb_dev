@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.6 2005/07/15 10:36:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.7 2008/01/31 13:54:00 kristo Exp $
 // auth_remote_settings.aw - Automaatne sissep&auml;&auml;s 
 /*
 
-@classinfo syslog_type=ST_AUTH_REMOTE_SETTINGS relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_AUTH_REMOTE_SETTINGS relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

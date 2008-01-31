@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class send_link extends aw_template
 {
 	function send_link()

@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.22 2006/03/23 14:27:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.23 2008/01/31 13:54:16 kristo Exp $
 /*
-@classinfo relationmgr=yes syslog_type=ST_CRM_SELECTION
+@classinfo relationmgr=yes syslog_type=ST_CRM_SELECTION maintainer=markop
 @default table=objects
 @default group=general
 

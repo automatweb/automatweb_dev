@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.64 2007/10/23 11:27:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.65 2008/01/31 13:50:07 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
-@classinfo syslog_type=ST_SHOP_ORDER relationmgr=yes no_status=1
+@classinfo syslog_type=ST_SHOP_ORDER relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

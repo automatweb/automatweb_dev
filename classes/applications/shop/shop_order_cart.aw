@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.68 2008/01/29 14:40:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.69 2008/01/31 13:50:07 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
-@classinfo syslog_type=ST_SHOP_ORDER_CART relationmgr=yes no_status=1
+@classinfo syslog_type=ST_SHOP_ORDER_CART relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

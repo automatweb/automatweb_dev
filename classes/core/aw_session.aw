@@ -1,4 +1,8 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
+
 class aw_session 
 {
 	var $ses_table = "aw_sessions";

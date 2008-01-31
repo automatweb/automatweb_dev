@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.23 2007/11/27 10:01:36 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.24 2008/01/31 13:52:14 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
-@classinfo syslog_type=ST_NEWSFEED relationmgr=yes
+@classinfo syslog_type=ST_NEWSFEED relationmgr=yes maintainer=robert
 
 @default table=objects
 

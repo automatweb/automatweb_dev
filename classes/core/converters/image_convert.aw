@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 define("IMAGE_PNG", 1);
 define("IMAGE_JPEG", 2);
 define("IMAGE_GIF", 3);

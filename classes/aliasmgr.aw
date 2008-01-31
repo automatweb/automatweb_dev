@@ -1,7 +1,9 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.213 2007/06/11 06:58:28 tarvo Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.214 2008/01/31 13:49:47 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 class aliasmgr extends aw_template
 {
 	function aliasmgr($args = array())

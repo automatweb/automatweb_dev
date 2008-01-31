@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.102 2007/10/10 09:21:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.103 2008/01/31 13:49:48 kristo Exp $
 // search.aw - Search Manager
 
 /*
+	@classinfo  maintainer=kristo
+
 	@default table=objects
 	@default field=meta
 	@default method=serialize

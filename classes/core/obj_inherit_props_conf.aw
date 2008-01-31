@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj_inherit_props_conf.aw,v 1.5 2006/03/23 12:46:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj_inherit_props_conf.aw,v 1.6 2008/01/31 13:52:49 kristo Exp $
 // obj_inherit_props_conf.aw - Objekti omaduste p&auml;rimine 
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_OBJ_INHERIT_PROPS_CONF, on_save_conf)
 
 
-@classinfo syslog_type=ST_OBJ_INHERIT_PROPS_CONF relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_OBJ_INHERIT_PROPS_CONF relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

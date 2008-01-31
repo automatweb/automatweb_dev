@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.43 2007/12/12 12:50:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.44 2008/01/31 13:52:14 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -9,7 +9,7 @@ session_register("poll_clicked");
 
 /*
 
-@classinfo trans=1
+@classinfo trans=1 maintainer=kristo
 @classinfo relationmgr=yes
 @classinfo syslog_type=ST_POLL
 

@@ -1,7 +1,7 @@
 <?php
 
 /*
-	@classinfo syslog_type=ST_PROCESS
+	@classinfo syslog_type=ST_PROCESS maintainer=kristo
 	@classinfo relationmgr=yes
 
 	@default table=objects

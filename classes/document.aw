@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.391 2007/12/14 15:16:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.392 2008/01/31 13:49:47 kristo Exp $
 // document.aw - Dokumentide haldus. 
-
+/*
+@classinfo  maintainer=kristo
+*/
 class document extends aw_template
 {
 	var $blocks;

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.52 2006/09/27 15:03:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.53 2008/01/31 13:52:14 kristo Exp $
 
 /*
 
-@classinfo syslog_type=ST_OBJECT_ relationmgr=yes
+@classinfo syslog_type=ST_OBJECT_ relationmgr=yes maintainer=kristo
 
 @groupinfo folders caption=Kaustad
 @groupinfo clids caption=Objektit&uuml;&uuml;bid

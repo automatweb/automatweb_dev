@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.26 2007/06/05 09:41:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.27 2008/01/31 13:49:48 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 
 class templatemgr extends aw_template
 {

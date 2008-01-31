@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.32 2005/03/24 10:01:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.33 2008/01/31 13:54:33 kristo Exp $
 // form_calendar.aw - manages formgen controlled calendars
+/*
+@classinfo  maintainer=kristo
+*/
 classload("formgen/form_base");
 class form_calendar extends form_base
 {

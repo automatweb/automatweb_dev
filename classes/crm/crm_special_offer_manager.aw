@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer_manager.aw,v 1.3 2007/01/05 12:33:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer_manager.aw,v 1.4 2008/01/31 13:54:16 kristo Exp $
 // crm_special_offer_manager.aw - Organisatsiooni eripakkumiste haldus 
 // Valitud eripakkumiste veebi kuvamiseks
 /*
 
-@classinfo syslog_type=ST_CRM_SPECIAL_OFFER_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_SPECIAL_OFFER_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

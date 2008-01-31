@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.85 2007/12/12 12:51:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.86 2008/01/31 13:54:34 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 classload("formgen/form_base");
 class form_table extends form_base
 {

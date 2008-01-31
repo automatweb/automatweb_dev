@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 define("OP_START_BLK", 1);
 define("OP_END_BLK", 2);

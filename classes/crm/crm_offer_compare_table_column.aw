@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_compare_table_column.aw,v 1.1 2005/04/28 07:41:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_compare_table_column.aw,v 1.2 2008/01/31 13:54:13 kristo Exp $
 // crm_offer_compare_table_column.aw - Pakkumise v&otilde;rdlustabeli tulp 
 /*
 
-@classinfo syslog_type=ST_CRM_OFFER_COMPARE_TABLE_COLUMN relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_CRM_OFFER_COMPARE_TABLE_COLUMN relationmgr=yes no_comment=1 no_status=1 maintainer=markop
 
 @default table=objects
 @default group=general

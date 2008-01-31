@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.6 2007/11/20 11:14:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.7 2008/01/31 13:50:07 kristo Exp $
 // shop_warehouse_export.aw - Lao v&auml;ljaminek 
 /*
 
-@classinfo syslog_type=ST_SHOP_WAREHOUSE_EXPORT relationmgr=yes no_status=1
+@classinfo syslog_type=ST_SHOP_WAREHOUSE_EXPORT relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

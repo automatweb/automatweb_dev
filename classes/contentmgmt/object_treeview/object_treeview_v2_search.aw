@@ -2,7 +2,7 @@
 // object_treeview_v2_search.aw - Objektinimekirja otsing
 /*
 
-@classinfo syslog_type=ST_OBJECT_TREEVIEW_V2_SEARCH relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_OBJECT_TREEVIEW_V2_SEARCH relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

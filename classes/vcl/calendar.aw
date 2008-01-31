@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.101 2007/12/27 14:47:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.102 2008/01/31 13:55:35 kristo Exp $
 // calendar.aw - VCL calendar
+/*
+@classinfo  maintainer=kristo
+*/
 class vcalendar extends aw_template
 {
 	/**

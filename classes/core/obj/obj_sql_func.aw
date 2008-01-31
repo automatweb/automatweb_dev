@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 define("OBJ_SQL_UNIQUE", 1);
 define("OBJ_SQL_COUNT", 2);

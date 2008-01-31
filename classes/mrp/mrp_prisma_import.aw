@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.23 2007/11/28 07:59:44 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.24 2008/01/31 13:54:53 kristo Exp $
 // mrp_prisma_import.aw - Prisma import
 /*
 
-@classinfo syslog_type=ST_MRP_PRISMA_IMPORT relationmgr=yes no_status=1
+@classinfo syslog_type=ST_MRP_PRISMA_IMPORT relationmgr=yes no_status=1 maintainer=voldemar
 
 @default table=objects
 @default group=general

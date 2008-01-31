@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.3 2008/01/31 12:15:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.4 2008/01/31 13:52:14 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
-@classinfo syslog_type=ST_DOCUMENT_CALENDAR_VIEW relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_DOCUMENT_CALENDAR_VIEW relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

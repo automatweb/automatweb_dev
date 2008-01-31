@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.13 2007/12/13 11:03:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.14 2008/01/31 13:55:23 kristo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -10,6 +10,11 @@
 
 // ideaalis peaks see edaspidi toetama ka teisi mailisaatmismeetodeid
 // peale PHP mail funktsiooni
+
+/*
+@classinfo  maintainer=kristo
+*/
+
 define('X_MAILER',"AW Mail 2.0");
 define('WARNING','This is a MIME encoded message');
 define('OCTET','application/octet-stream');

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.5 2006/09/05 09:56:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.6 2008/01/31 13:52:14 kristo Exp $
 // iframe.aw - iframes
 
 /*
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes maintainer=kristo
 
 	@default table=objects
 	@default field=meta

@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class smtp extends aw_template
 {
 	function smtp()
@@ -30,7 +33,9 @@ class smtp extends aw_template
 			$this->raise_error(ERR_SMTP_MFROM,sprintf(t("smtp: error '%s' after MAIL FROM:<%s>"), $err, $from), false);
 		}
 
-		$this->send_command("RCPT TO:<$to>");
+		// to can contain multiple addresses
+		$to_arr = explode(",", $to);
+		$this->send_command("RCPT TO:<".reset($to_arr).">");
 		if (!$this->get_status($err = $this->read_response()))
 		{
 			$this->raise_error(ERR_SMTP_RCPT,sprintf(t("smtp: error '%s' after RCPT TO:<%s>"), $err, $to), false);

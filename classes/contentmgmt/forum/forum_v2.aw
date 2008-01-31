@@ -4,7 +4,7 @@
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
 
 	@classinfo syslog_type=ST_FORUM
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes maintainer=dragut
 
 @default table=objects
 

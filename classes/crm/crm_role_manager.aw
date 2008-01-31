@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=markop
+*/
 class crm_role_manager extends class_base
 {
 	function crm_role_manager()

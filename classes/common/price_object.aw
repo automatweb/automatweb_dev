@@ -1,6 +1,9 @@
 <?php
 
-//maintainer=markop  
+/*
+@classinfo maintainer=markop
+*/
+
 class price_object extends _int_object
 {
 	function _init_override_object()

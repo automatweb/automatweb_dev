@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.7 2007/11/15 12:23:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.8 2008/01/31 13:54:21 kristo Exp $
 // mysql.aw - MySQL draiver
+/*
+@classinfo  maintainer=kristo
+*/
 class mssql
 {
 	var $dbh; #database handle

@@ -1,6 +1,9 @@
 <?php
 // fastcall.aw - this gets loaded instead of aw base classes if we are doing an orb fastcall
 // so that initialization would be quick and that no template and database functionality will be present
+/*
+@classinfo  maintainer=kristo
+*/
 class aw_template
 {
 	function init()

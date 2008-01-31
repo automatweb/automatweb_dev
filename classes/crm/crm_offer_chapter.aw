@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_chapter.aw,v 1.2 2005/06/21 11:56:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_chapter.aw,v 1.3 2008/01/31 13:54:13 kristo Exp $
 // crm_offer_chapter.aw - Pakkumise peat&uuml;kk 
 /*
 
-@classinfo syslog_type=ST_CRM_OFFER_CHAPTER relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_CRM_OFFER_CHAPTER relationmgr=yes no_comment=1 no_status=1 maintainer=markop
 
 @default table=objects
 @default group=general

@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 class ss_parser_sxw extends ss_parser_base
 {

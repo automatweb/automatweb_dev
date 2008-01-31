@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.3 2007/07/10 09:51:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.4 2008/01/31 13:52:39 kristo Exp $
 // site_search_content_grp_multisite.aw - Saidi sisu otsingu grupp mitu saiti 
 /*
 
-@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_MULTISITE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_MULTISITE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

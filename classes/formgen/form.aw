@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.128 2007/12/12 12:51:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.129 2008/01/31 13:54:33 kristo Exp $
 // form.aw - Class for creating forms
+/*
+@classinfo  maintainer=kristo
+*/
 
 /*
 

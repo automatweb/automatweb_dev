@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.16 2007/11/22 08:50:10 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.17 2008/01/31 13:54:16 kristo Exp $
 // crm_profession.aw - Ametinimetus
 /*
-@classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes
+@classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes maintainer=markop
 @tableinfo kliendibaas_amet index=oid master_table=objects master_index=oid
 
 @default table=objects

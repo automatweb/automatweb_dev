@@ -1,11 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.12 2005/12/14 12:42:43 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.13 2008/01/31 13:55:35 kristo Exp $
 // comments VCL component
 
 // what kind of forms do I need?
 // 1. uid, title of comment, comment - not implemented
 // 2. user, email, title of comment, comment - not imlemented
 // 3. uid, comment - for logged in users - implemented
+/*
+@classinfo  maintainer=kristo
+*/
 class comments extends class_base
 {
 	function comments()

@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.15 2007/04/23 12:12:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.16 2008/01/31 13:54:51 kristo Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
 // ju ldse fun
 /*
 
-@classinfo syslog_type=ST_METAMGR relationmgr=yes
+@classinfo syslog_type=ST_METAMGR relationmgr=yes maintainer=kristo
 @default table=objects
 
 @property transyes type=checkbox group=general field=meta method=serialize

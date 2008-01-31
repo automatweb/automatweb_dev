@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.9 2006/04/19 11:41:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.10 2008/01/31 13:52:37 kristo Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
-@classinfo syslog_type=ST_OTV_DATA_FILTER relationmgr=yes no_status=1
+@classinfo syslog_type=ST_OTV_DATA_FILTER relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/reminder.aw,v 1.4 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/reminder.aw,v 1.5 2008/01/31 13:55:36 kristo Exp $
 // reminder UI VCL component
-
+/*
+@classinfo  maintainer=kristo
+*/
 class reminder extends core
 {
 	function reminder()

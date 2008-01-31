@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class print_preview extends aw_template
 {
 	function print_preview()

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_resource.aw,v 1.5 2005/12/06 18:20:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_resource.aw,v 1.6 2008/01/31 13:55:40 kristo Exp $
 // workflow_resource.aw - Ressurss 
 /*
 
-@classinfo syslog_type=ST_WORKFLOW_RESOURCE relationmgr=yes
+@classinfo syslog_type=ST_WORKFLOW_RESOURCE relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

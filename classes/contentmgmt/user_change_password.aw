@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/user_change_password.aw,v 1.2 2005/09/21 12:47:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/user_change_password.aw,v 1.3 2008/01/31 13:52:15 kristo Exp $
 // user_change_password.aw - Kasutaja parooli muutmine 
 /*
 
-@classinfo syslog_type=ST_USER_CHANGE_PASSWORD relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_USER_CHANGE_PASSWORD relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

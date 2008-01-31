@@ -1,10 +1,10 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.65 2007/03/28 10:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.66 2008/01/31 13:52:27 kristo Exp $
 
 /*
 
-@classinfo syslog_type=ST_GALLERY relationmgr=yes
+@classinfo syslog_type=ST_GALLERY relationmgr=yes maintainer=kristo
 
 @groupinfo page_1 caption=Lehek&uuml;lg&nbsp;1
 @groupinfo page_2 caption=Lehek&uuml;lg&nbsp;2

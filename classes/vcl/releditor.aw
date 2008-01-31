@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.98 2007/12/06 15:45:15 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.99 2008/01/31 13:55:36 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
 	multiple connections
+@classinfo  maintainer=kristo
 */
 
 class releditor extends core

@@ -1,8 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/socket.aw,v 1.1 2006/09/20 11:28:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/socket.aw,v 1.2 2008/01/31 13:55:12 kristo Exp $
 // socket.aw - low level communications
 // provides functions that can be used by other classes to connect to hosts
 // and read/write information to/from those hosts
+/*
+@classinfo  maintainer=kristo
+*/
 class socket 
 {
 	var $host;

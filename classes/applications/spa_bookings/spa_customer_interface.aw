@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.32 2007/11/22 12:01:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.33 2008/01/31 13:50:13 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
-@classinfo syslog_type=ST_SPA_CUSTOMER_INTERFACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SPA_CUSTOMER_INTERFACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

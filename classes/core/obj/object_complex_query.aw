@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 // complex queries that return object lists or data fittable to vcl table
 

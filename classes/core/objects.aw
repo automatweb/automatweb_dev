@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.6 2006/06/26 10:26:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.7 2008/01/31 13:52:49 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
+/*
+@classinfo  maintainer=kristo
+*/
 class objects extends core
 {
 	function objects()

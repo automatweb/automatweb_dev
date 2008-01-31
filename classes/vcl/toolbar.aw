@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.31 2008/01/24 20:31:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.32 2008/01/31 13:55:36 kristo Exp $
 // toolbar.aw - drawing toolbars
+/*
+@classinfo  maintainer=kristo
+*/
 class toolbar extends aw_template
 {
 	function toolbar($args = array())

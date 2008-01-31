@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.11 2007/01/31 08:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.12 2008/01/31 13:52:14 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -25,7 +25,7 @@
 	@property preview type=text store=no
 	@caption Eelvaade
 
-	@classinfo syslog_type=ST_FLASH
+	@classinfo syslog_type=ST_FLASH maintainer=kristo
 
 */
 

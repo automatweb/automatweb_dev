@@ -1,4 +1,8 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
+
 class html extends aw_template
 {
 	/**

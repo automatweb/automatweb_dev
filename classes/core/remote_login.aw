@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/remote_login.aw,v 1.3 2006/04/24 09:18:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/remote_login.aw,v 1.4 2008/01/31 13:52:49 kristo Exp $
 // remote_login.aw - AW remote login
 
 /*
+	@classinfo  maintainer=kristo
+
 	@default table=objects
 	@default field=meta
 	@default method=serialize

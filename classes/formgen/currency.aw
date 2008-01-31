@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.17 2008/01/29 15:58:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.18 2008/01/31 13:54:33 kristo Exp $
 // currency.aw - Currency management
 
 /*
 
-@classinfo syslog_type=ST_CURRENCY no_status=1 
+@classinfo syslog_type=ST_CURRENCY no_status=1 maintainer=kristo
 
 @default group=general
 

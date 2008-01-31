@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.17 2006/04/17 10:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.18 2008/01/31 13:52:27 kristo Exp $
 /*
 
-@classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
+@classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes maintainer=kristo
 
 @groupinfo imgsize caption=Piltide&nbsp;suurused
 @groupinfo logo caption=Lisapilt

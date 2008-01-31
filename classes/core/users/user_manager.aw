@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.7 2007/09/26 13:44:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.8 2008/01/31 13:53:57 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
 HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_search_change)
 
-@classinfo syslog_type=ST_USER_MANAGER relationmgr=yes no_comment=1 prop_cb=1
+@classinfo syslog_type=ST_USER_MANAGER relationmgr=yes no_comment=1 prop_cb=1 maintainer=kristo
+
 
 @default table=objects
 @default group=general

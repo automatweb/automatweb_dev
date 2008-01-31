@@ -1,6 +1,9 @@
 <?php
-// $Id: cfgutils.aw,v 1.90 2007/12/17 07:55:36 kristo Exp $
+// $Id: cfgutils.aw,v 1.91 2008/01/31 13:52:00 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
+/*
+@classinfo  maintainer=kristo
+*/
 class cfgutils extends aw_template
 {
 	function cfgutils($args = array())

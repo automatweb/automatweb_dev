@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.21 2007/01/09 08:40:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.22 2008/01/31 13:55:30 kristo Exp $
 /*
+@classinfo  maintainer=kristo
 
 @default table=objects
 @default field=meta

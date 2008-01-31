@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.9 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.10 2008/01/31 13:50:18 kristo Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
-@classinfo syslog_type=ST_SURVEY_MANAGER relationmgr=yes
+@classinfo syslog_type=ST_SURVEY_MANAGER relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

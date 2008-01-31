@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/aw_sysconfig.aw,v 1.3 2005/05/23 13:01:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/aw_sysconfig.aw,v 1.4 2008/01/31 13:52:49 kristo Exp $
 // aw_sysconfig.aw - AW Sysconfig 
 /*
 
-@classinfo syslog_type=ST_AW_SYSCONFIG relationmgr=yes
+@classinfo syslog_type=ST_AW_SYSCONFIG relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

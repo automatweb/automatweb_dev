@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 // tokens for the script interpreter
 define("OSI_TOK_VAR_ASSIGN", 1);	// params { $name }
 define("OSI_TOK_CREATE_INI", 2);	// params { }

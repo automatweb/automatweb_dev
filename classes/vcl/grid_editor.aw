@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 classload("layout/active_page_data");
 class grid_editor extends class_base
 {

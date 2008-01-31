@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.8 2007/05/04 10:34:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.9 2008/01/31 13:54:12 kristo Exp $
 // crm_category.aw - Kategooria 
 /*
 
 @tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
-@classinfo syslog_type=ST_CRM_CATEGORY relationmgr=yes
+@classinfo syslog_type=ST_CRM_CATEGORY relationmgr=yes maintainer=markop
 
 @default table=objects
 @default group=general

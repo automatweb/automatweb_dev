@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.27 2008/01/28 11:54:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.28 2008/01/31 13:54:00 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
-@classinfo syslog_type=ST_AUTH_CONFIG relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_AUTH_CONFIG relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

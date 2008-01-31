@@ -2,6 +2,8 @@
 
 /**
 
+	@classinfo  maintainer=kristo
+
 	@comment 
 		
 		uses the base analyzer to create a simple analysis that just lists functions and their parameters

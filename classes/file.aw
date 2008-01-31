@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.173 2008/01/24 09:58:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.174 2008/01/31 13:49:47 kristo Exp $
 /*
 
 
-@classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
+@classinfo trans=1 relationmgr=yes syslog_type=ST_FILE maintainer=kristo
 @tableinfo files index=id master_table=objects master_index=oid
 @default table=files
 

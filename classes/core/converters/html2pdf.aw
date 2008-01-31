@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class html2pdf extends class_base
 {
 	function html2pdf()

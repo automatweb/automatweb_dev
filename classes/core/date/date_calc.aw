@@ -1,6 +1,10 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.3 2006/11/15 13:07:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.4 2008/01/31 13:53:01 kristo Exp $
+
+/*
+@classinfo  maintainer=kristo
+*/
 
 /** returns timestamps for the beginning and end of the given date range
 

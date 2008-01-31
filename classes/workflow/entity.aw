@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_ENTITY
+@classinfo syslog_type=ST_ENTITY maintainer=kristo
 @classinfo relationmgr=yes
 
 @tableinfo aw_wf_entity_types index=aw_id master_table=objects master_index=brother_of

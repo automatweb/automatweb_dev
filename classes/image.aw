@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.218 2008/01/16 09:10:20 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.219 2008/01/31 13:49:47 kristo Exp $
 // image.aw - image management
 /*
-	@classinfo syslog_type=ST_IMAGE trans=1
+	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
 
 	@tableinfo images index=id master_table=objects master_index=oid
 

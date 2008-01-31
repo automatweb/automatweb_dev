@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/sql_filter.aw,v 1.1 2006/09/20 11:16:36 kristo Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/formgen/sql_filter.aw,v 1.2 2008/01/31 13:54:34 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 class sql_filter extends aw_template 
 {
 	function sql_filter()

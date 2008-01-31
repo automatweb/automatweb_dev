@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.58 2007/11/23 11:47:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.59 2008/01/31 13:54:12 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
-@classinfo syslog_type=ST_CRM_OFFER relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_OFFER relationmgr=yes no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 @tableinfo aw_crm_offer index=aw_oid master_table=objects master_index=oid

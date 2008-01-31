@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_SITE_SEARCH
+@classinfo syslog_type=ST_SITE_SEARCH maintainer=kristo
 
 @groupinfo general caption=Üldine
 

@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class localetest extends testrunner
 {
 	function localetest()

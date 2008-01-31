@@ -4,6 +4,7 @@
 this message will be sent when the contents of the popup search listbox change
 so that clients can perform actions based on the change
 EMIT_MESSAGE(MSG_POPUP_SEARCH_CHANGE)
+@classinfo  maintainer=kristo
 
 */
 class popup_search extends aw_template

@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=voldemar
+*/
 class rss_feed_obj extends _int_object
 {
 	function set_prop($name, $value)

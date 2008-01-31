@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.6 2005/05/10 13:52:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.7 2008/01/31 13:54:00 kristo Exp $
 // auth_server_nds.aw - Autentimisserver NDS 
 /*
 
-@classinfo syslog_type=ST_AUTH_SERVER_NDS relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_AUTH_SERVER_NDS relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

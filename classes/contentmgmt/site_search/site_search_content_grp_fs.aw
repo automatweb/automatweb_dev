@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.7 2007/07/10 09:51:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.8 2008/01/31 13:52:39 kristo Exp $
 // site_search_content_grp_fs.aw - Otsingu failis&uuml;steemi indekseerija 
 /*
 
-@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_FS relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_FS relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default field=meta

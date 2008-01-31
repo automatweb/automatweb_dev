@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/syslog.aw,v 1.7 2005/04/21 08:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/syslog.aw,v 1.8 2008/01/31 13:55:30 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
+/*
+@classinfo  maintainer=kristo
+*/
 class db_syslog extends aw_template
 {
 	function db_syslog()

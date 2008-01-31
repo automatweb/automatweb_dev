@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.20 2007/02/28 09:03:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.21 2008/01/31 13:50:07 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
-@classinfo syslog_type=ST_SHOP_PACKET relationmgr=yes no_status=1 
+@classinfo syslog_type=ST_SHOP_PACKET relationmgr=yes no_status=1  maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.7 2007/01/22 13:58:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.8 2008/01/31 13:53:57 kristo Exp $
 // id_config.aw - ID-Kaardi konfiguratsioon 
 /*
 
-@classinfo syslog_type=ST_ID_CONFIG relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ID_CONFIG relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

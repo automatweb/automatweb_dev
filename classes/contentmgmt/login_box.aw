@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/login_box.aw,v 1.2 2007/10/11 11:26:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/login_box.aw,v 1.3 2008/01/31 13:52:14 kristo Exp $
 // login_box.aw - Sisselogimiskast 
 /*
 
-@classinfo syslog_type=ST_LOGIN_BOX relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_LOGIN_BOX relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

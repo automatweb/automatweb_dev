@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.7 2006/03/23 11:50:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.8 2008/01/31 13:55:00 kristo Exp $
 // account.aw - Konto 
 /*
 @tableinfo pank_account index=oid master_table=objects master_index=oid
-@classinfo syslog_type=ST_ACCOUNT relationmgr=yes
+@classinfo syslog_type=ST_ACCOUNT relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

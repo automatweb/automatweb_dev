@@ -9,6 +9,8 @@
 //
 // Common properties for all classes
 /*
+	@classinfo  maintainer=kristo
+
 	@default table=objects
 	@default group=general
 

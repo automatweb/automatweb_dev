@@ -1,6 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.27 2006/08/21 12:53:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.28 2008/01/31 13:51:59 kristo Exp $
 // Shared functionality for event classes
+/*
+@classinfo  maintainer=kristo
+*/
+
 class event_property_lib extends aw_template
 {
 	function event_property_lib()

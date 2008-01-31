@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/external/xml_source.aw,v 1.3 2007/12/23 15:49:02 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/external/xml_source.aw,v 1.4 2008/01/31 13:52:12 kristo Exp $
 // xml_source.aw - XML source 
 /*
 
-@classinfo syslog_type=ST_XML_SOURCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_XML_SOURCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kaarel
 
 @default table=objects
 @default group=general

@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.46 2007/03/27 11:19:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.47 2008/01/31 13:49:48 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
 
 define("ST_TABLE",0);
 define("ST_CELL",1);

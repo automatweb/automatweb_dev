@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.60 2008/01/29 12:01:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.61 2008/01/31 13:50:07 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -8,7 +8,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 @tableinfo aw_shop_warehouses index=aw_oid master_table=objects master_index=brother_of
 
-@classinfo syslog_type=ST_SHOP_WAREHOUSE relationmgr=yes
+@classinfo syslog_type=ST_SHOP_WAREHOUSE relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

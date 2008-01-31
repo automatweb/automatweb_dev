@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.32 2007/02/20 09:03:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.33 2008/01/31 13:52:38 kristo Exp $
 /*
 
-@classinfo syslog_type=ST_RATE relationmgr=yes
+@classinfo syslog_type=ST_RATE relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company_role_entry.aw,v 1.3 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company_role_entry.aw,v 1.4 2008/01/31 13:54:12 kristo Exp $
 // crm_company_role_entry.aw - Rolli kirje 
 /*
 
-@classinfo syslog_type=ST_CRM_COMPANY_ROLE_ENTRY relationmgr=yes
+@classinfo syslog_type=ST_CRM_COMPANY_ROLE_ENTRY relationmgr=yes maintainer=markop
 
 @default group=general
 

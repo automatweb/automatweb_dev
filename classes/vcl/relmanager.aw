@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.15 2005/12/16 18:52:39 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.16 2008/01/31 13:55:36 kristo Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -8,7 +8,7 @@
 // like the single relpicker .. radiobutton is used for selecting data
 
 // can I perhaps merge those things?
-
+@classinfo maintainer=kristo
 */
 class relmanager extends aw_template 
 {

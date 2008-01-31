@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class keyword_selector extends class_base
 {
 	function keyword_selector()

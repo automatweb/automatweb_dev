@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 
 classload("vcl/popup_search");
 class ct_linked_obj_search extends popup_search

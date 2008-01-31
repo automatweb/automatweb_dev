@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/mail_notify.aw,v 1.1 2008/01/15 14:16:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/mail_notify.aw,v 1.2 2008/01/31 13:55:36 kristo Exp $
 // reminder UI VCL component
-
+/*
+@classinfo maintainer=markop
+*/
 class mail_notify extends core
 {
 	function mail_notify()

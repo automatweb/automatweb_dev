@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.37 2008/01/03 12:41:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.38 2008/01/31 13:50:13 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
-@classinfo syslog_type=ST_SPA_BOOKINGS_OVERVIEW relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SPA_BOOKINGS_OVERVIEW relationmgr=yes no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
 @default group=general

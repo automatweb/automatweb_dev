@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/file/ocsp.aw,v 1.2 2007/05/10 12:26:12 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/file/ocsp.aw,v 1.3 2008/01/31 13:55:21 kristo Exp $
 // ocsp.aw - OCSP p&auml;ring 
+/*
+@classinfo  maintainer=tarvo
+*/
 
 class ocsp extends class_base
 {

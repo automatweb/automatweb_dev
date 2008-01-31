@@ -1,4 +1,7 @@
 <?
+/*
+@classinfo  maintainer=kristo
+*/
 
 class promo_display 
 {

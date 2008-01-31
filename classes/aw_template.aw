@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.86 2008/01/31 11:36:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.87 2008/01/31 13:49:47 kristo Exp $
 // aw_template.aw - Templatemootor
-
+/*
+@classinfo  maintainer=kristo
+*/
 
 classload("core");
 

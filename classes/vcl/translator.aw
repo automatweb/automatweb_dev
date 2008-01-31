@@ -1,5 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.8 2005/06/20 14:55:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.9 2008/01/31 13:55:36 kristo Exp $
+/*
+@classinfo  maintainer=kristo
+*/
+
 class translator extends  core
 {
 	function translator()

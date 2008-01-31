@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.10 2007/02/07 13:41:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.11 2008/01/31 13:52:49 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
-@classinfo syslog_type=ST_ABSTRACT_DATASOURCE relationmgr=yes
+@classinfo syslog_type=ST_ABSTRACT_DATASOURCE relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

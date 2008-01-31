@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.4 2008/01/02 10:03:03 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.5 2008/01/31 13:49:54 kristo Exp $
 // geoinfo_manager.aw - Geoinfo haldus 
 /*
 
-@classinfo syslog_type=ST_GEOINFO_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_GEOINFO_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
 
 @default table=objects
 @default group=general

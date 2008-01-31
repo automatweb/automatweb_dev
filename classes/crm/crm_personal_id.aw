@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_personal_id.aw,v 1.1 2006/04/07 10:51:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_personal_id.aw,v 1.2 2008/01/31 13:54:15 kristo Exp $
 // crm_personal_id.aw - Isikutunnistus 
 /*
 
-@classinfo syslog_type=ST_CRM_PERSONAL_ID relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_PERSONAL_ID relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @tableinfo crm_personal_id index=oid master_table=objects master_index=oid
 

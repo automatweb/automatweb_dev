@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.60 2007/12/27 18:54:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.61 2008/01/31 13:51:59 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -7,7 +7,7 @@
 
 // also, all view related functions from CL_PLANNER will move over here
 
-@classinfo syslog_type=ST_CALENDAR_VIEW relationmgr=yes no_status=1
+@classinfo syslog_type=ST_CALENDAR_VIEW relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

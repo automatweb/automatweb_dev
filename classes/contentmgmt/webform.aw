@@ -2,7 +2,7 @@
 // webform.aw - Veebivorm
 /*
 
-@classinfo syslog_type=ST_WEBFORM relationmgr=yes no_status=1
+@classinfo syslog_type=ST_WEBFORM relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 

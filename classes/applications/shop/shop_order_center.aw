@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.56 2007/10/18 07:50:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.57 2008/01/31 13:50:07 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
 @tableinfo aw_shop_order_center index=aw_id master_table=objects master_index=brother_of
 
-@classinfo syslog_type=ST_SHOP_ORDER_CENTER relationmgr=yes
+@classinfo syslog_type=ST_SHOP_ORDER_CENTER relationmgr=yes maintainer=kristo
 
 @default group=general
 

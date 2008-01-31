@@ -1,5 +1,8 @@
 <?php
 // ~1220 rida jama:)
+/*
+@classinfo  maintainer=kristo
+*/
 
 class search_filter extends aw_template
 {

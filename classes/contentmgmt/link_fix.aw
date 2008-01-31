@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo maintainer=robert
+*/
 class link_fix extends _int_object
 {
 	function __construct($param)

@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo  maintainer=kristo
+*/
 class ss_parser_html extends ss_parser_base
 {
 	function ss_parser_html($url)

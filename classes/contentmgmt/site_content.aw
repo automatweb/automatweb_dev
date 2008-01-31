@@ -1,4 +1,8 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
+
 classload("menuedit");
 class site_content extends menuedit
 {

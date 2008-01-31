@@ -1,5 +1,7 @@
 <?php
-
+/*
+@classinfo maintainer=kristo
+*/
 class quick_add extends class_base
 {
 	function quick_add()

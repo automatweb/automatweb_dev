@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/meta.aw,v 1.3 2006/12/18 10:26:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/meta.aw,v 1.4 2008/01/31 13:54:51 kristo Exp $
 // meta.aw - Vidin 
 /*
 
-@classinfo syslog_type=ST_META relationmgr=yes
+@classinfo syslog_type=ST_META relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

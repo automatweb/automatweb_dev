@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.52 2008/01/24 12:37:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.53 2008/01/31 13:54:40 kristo Exp $
 /*
 
-@classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
+@classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1 maintainer=kristo
 
 @groupinfo templates caption=Templated
 @groupinfo db caption=Andmebaas

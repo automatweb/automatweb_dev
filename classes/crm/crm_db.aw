@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.43 2007/06/27 13:34:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.44 2008/01/31 13:54:12 kristo Exp $
 // crm_db.aw - CRM database
 /*
-@classinfo relationmgr=yes syslog_type=ST_CRM_DB
+@classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
 @default table=objects
 @default group=general
 

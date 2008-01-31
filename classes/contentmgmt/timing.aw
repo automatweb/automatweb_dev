@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.15 2007/05/07 12:03:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.16 2008/01/31 13:52:15 kristo Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -12,7 +12,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_tdisconne
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_MENU, on_tdisconnect_to)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_TIMING, init_scheduler)
 
-@classinfo syslog_type=ST_TIMING relationmgr=yes no_status=1
+@classinfo syslog_type=ST_TIMING relationmgr=yes no_status=1 maintainer=dragut
 
 @default table=objects
 @default group=general

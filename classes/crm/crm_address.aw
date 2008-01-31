@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.31 2008/01/29 11:13:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.32 2008/01/31 13:54:12 kristo Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
-	@classinfo relationmgr=yes syslog_type=ST_CRM_ADDRESS
+	@classinfo relationmgr=yes syslog_type=ST_CRM_ADDRESS maintainer=markop
 	@tableinfo kliendibaas_address index=oid master_table=objects master_index=oid
 
 	@default table=objects

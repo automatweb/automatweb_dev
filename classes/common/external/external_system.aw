@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/external/external_system.aw,v 1.2 2006/11/09 15:14:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/external/external_system.aw,v 1.3 2008/01/31 13:52:12 kristo Exp $
 // external_system.aw - Siduss&uuml;steem 
 /*
 
-@classinfo syslog_type=ST_EXTERNAL_SYSTEM relationmgr=yes no_comment=1 prop_cb=1
+@classinfo syslog_type=ST_EXTERNAL_SYSTEM relationmgr=yes no_comment=1 prop_cb=1 maintainer=voldemar
 
 @tableinfo aw_ext_systems index=aw_oid master_table=objects master_index=brother_of
 

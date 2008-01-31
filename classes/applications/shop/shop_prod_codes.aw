@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_prod_codes.aw,v 1.2 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_prod_codes.aw,v 1.3 2008/01/31 13:50:07 kristo Exp $
 // shop_prod_codes.aw - Tootekoodid 
 /*
 
-@classinfo syslog_type=ST_SHOP_PROD_CODES relationmgr=yes
+@classinfo syslog_type=ST_SHOP_PROD_CODES relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

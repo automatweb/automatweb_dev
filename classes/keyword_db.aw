@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keyword_db.aw,v 2.9 2006/09/20 21:53:53 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keyword_db.aw,v 2.10 2008/01/31 13:49:48 kristo Exp $
 // keyword_db.aw - V&otilde;tmes&otilde;nade baas
 /*
-@classinfo syslog_type=ST_KEYWORD_DB no_status=1 no_comment=1
+@classinfo syslog_type=ST_KEYWORD_DB no_status=1 no_comment=1 maintainer=kristo
 
 @default table=objects
 @default group=general

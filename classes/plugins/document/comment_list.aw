@@ -1,4 +1,7 @@
 <?php
+/*
+@classinfo  maintainer=kristo
+*/
 class comment_list extends aw_template
 {
 	function show($args)

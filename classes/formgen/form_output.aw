@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.19 2005/03/24 10:01:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.20 2008/01/31 13:54:34 kristo Exp $
 classload("formgen/form_base");
+/*
+@classinfo  maintainer=kristo
+*/
 class form_output extends form_base 
 {
 	function form_output()

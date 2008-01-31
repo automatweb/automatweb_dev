@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.22 2007/10/19 11:28:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.23 2008/01/31 13:54:12 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
-@classinfo syslog_type=ST_CRM_DEAL relationmgr=yes
+@classinfo syslog_type=ST_CRM_DEAL relationmgr=yes maintainer=markop
 
 @default table=objects
 @default group=general

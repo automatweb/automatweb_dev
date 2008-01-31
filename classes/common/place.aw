@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/place.aw,v 1.1 2005/09/14 12:11:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/place.aw,v 1.2 2008/01/31 13:52:01 kristo Exp $
 // place.aw - Koht 
 /*
 
-@classinfo syslog_type=ST_PLACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PLACE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general

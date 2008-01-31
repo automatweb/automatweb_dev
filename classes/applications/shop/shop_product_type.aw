@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.7 2006/10/20 14:59:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.8 2008/01/31 13:50:07 kristo Exp $
 // shop_product_type.aw - Toote t&uuml;&uuml;p 
 /*
 
-@classinfo syslog_type=ST_SHOP_PRODUCT_TYPE relationmgr=yes no_status=1
+@classinfo syslog_type=ST_SHOP_PRODUCT_TYPE relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general

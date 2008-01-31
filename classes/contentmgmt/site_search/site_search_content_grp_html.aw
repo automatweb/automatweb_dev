@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.12 2007/12/12 12:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.13 2008/01/31 13:52:39 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
-@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_HTML relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_HTML relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default field=meta

@@ -1,9 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.10 2007/11/23 13:19:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.11 2008/01/31 13:53:04 kristo Exp $
 
 // more ideas --- I might want to keep the help open when switching between tabs... for this I need to 
 // set a cookie
-
+/*
+@classinfo  maintainer=kristo
+*/
 class help extends aw_template
 {
 	function help()

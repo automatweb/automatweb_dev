@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.6 2006/03/22 09:31:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.7 2008/01/31 13:54:39 kristo Exp $
 // taavi_import.aw - Taavi import 
 /*
 
-@classinfo syslog_type=ST_TAAVI_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_TAAVI_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general

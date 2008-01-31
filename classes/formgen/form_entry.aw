@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.11 2007/12/12 12:51:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.12 2008/01/31 13:54:34 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -10,6 +10,9 @@
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_FORM_ENTRY, on_add_alias)
 
+*/
+/*
+@classinfo  maintainer=kristo
 */
 
 class form_entry extends aw_template

@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/htmlpreview.aw,v 1.3 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/htmlpreview.aw,v 1.4 2008/01/31 13:52:00 kristo Exp $
 // htmlpreview - generates HTML views for objects
+/*
+@classinfo  maintainer=kristo
+*/
 
 class htmlpreview extends aw_template
 {

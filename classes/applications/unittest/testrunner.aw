@@ -1,6 +1,9 @@
 <?php
 define("TEST_PASS",0);
 define("TEST_FAIL",1);
+/*
+@classinfo  maintainer=kristo
+*/
 
 class testrunner extends core
 {

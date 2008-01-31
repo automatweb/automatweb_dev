@@ -2,7 +2,7 @@
 // aw_uri.aw - URI
 /*
 
-@classinfo relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=voldemar
 
 @default table=objects
 @default group=general

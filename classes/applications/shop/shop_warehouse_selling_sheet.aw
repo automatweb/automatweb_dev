@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_selling_sheet.aw,v 1.1 2006/04/07 09:32:35 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_selling_sheet.aw,v 1.2 2008/01/31 13:50:07 kristo Exp $
 // shop_warehouse_selling_sheet.aw - Müügi-saateleht 
 /*
 
-@classinfo syslog_type=ST_SHOP_WAREHOUSE_SELLING_SHEET relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SHOP_WAREHOUSE_SELLING_SHEET relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @tableinfo shop_warehouse_selling_sheet index=oid master_table=objects master_index=oid
 

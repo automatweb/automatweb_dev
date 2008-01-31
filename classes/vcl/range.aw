@@ -1,6 +1,8 @@
 <?php
 // range VCL component
-
+/*
+@classinfo maintainer=dragut
+*/
 class range extends class_base
 {
 	var $name;

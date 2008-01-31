@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.16 2007/05/16 14:02:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.17 2008/01/31 13:54:13 kristo Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
+@classinfo  maintainer=markop
 
 @default group=general
 @default form=crm_search

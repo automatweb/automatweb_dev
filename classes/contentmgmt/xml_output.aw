@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/xml_output.aw,v 1.3 2007/08/23 08:37:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/xml_output.aw,v 1.4 2008/01/31 13:52:15 kristo Exp $
 // xml_output.aw - XML V&auml;ljund 
 /*
 
-@classinfo syslog_type=ST_XML_OUTPUT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_XML_OUTPUT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
 
 @default table=objects
 @default group=general

@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.8 2007/12/13 15:16:12 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.9 2008/01/31 13:54:05 kristo Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
+/*
+@classinfo  maintainer=hannes
+*/
 class minify_js_and_css extends class_base
 {
 	function compress_js($script, $use_javascriptpacker=false)

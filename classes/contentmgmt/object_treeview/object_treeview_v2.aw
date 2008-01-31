@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.117 2008/01/29 12:01:47 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.118 2008/01/31 13:52:37 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
-@classinfo syslog_type=ST_OBJECT_TREEVIEW_V2 relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_OBJECT_TREEVIEW_V2 relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
 @default table=objects
 @default group=general

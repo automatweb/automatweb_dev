@@ -1,10 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.53 2007/08/29 08:27:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.54 2008/01/31 13:49:47 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
 // cache kasutamist kontrollib muutuja USE_PAGE_CACHE
 // cachetakse ainult mitte sisse-loginud kasutajatele
+/*
+@classinfo  maintainer=kristo
+*/
 
 class cache extends core
 {

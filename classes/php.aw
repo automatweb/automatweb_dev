@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.20 2007/06/05 09:41:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.21 2008/01/31 13:49:48 kristo Exp $
 // php.aw - PHP serializer
+/*
+@classinfo  maintainer=kristo
+*/
 class php_serializer 
 {
 	var $no_index = false;

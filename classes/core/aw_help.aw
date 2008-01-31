@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/aw_help.aw,v 1.3 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/aw_help.aw,v 1.4 2008/01/31 13:52:49 kristo Exp $
 // aw_help.aw - Abitekst 
 /*
 
-@classinfo syslog_type=ST_AW_HELP relationmgr=yes
+@classinfo syslog_type=ST_AW_HELP relationmgr=yes maintainer=kristo
 
 @default table=objects
 @default group=general

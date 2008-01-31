@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.12 2007/05/07 08:07:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.13 2008/01/31 13:52:15 kristo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 
@@ -15,7 +15,7 @@
 /*
 
 
-@classinfo syslog_type=ST_SITE_STYLES no_comment=1
+@classinfo syslog_type=ST_SITE_STYLES no_comment=1 maintainer=kristo
 
 @default table=objects
 @default group=general

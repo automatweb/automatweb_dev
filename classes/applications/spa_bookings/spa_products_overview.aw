@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_products_overview.aw,v 1.2 2007/07/02 08:48:47 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_products_overview.aw,v 1.3 2008/01/31 13:50:13 kristo Exp $
 // spa_products_overview.aw - Broneeringute toitlustuse haldus 
 /*
 
-@classinfo syslog_type=ST_SPA_PRODUCTS_OVERVIEW relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SPA_PRODUCTS_OVERVIEW relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 tableinfo spa_products_overview index=id master_index=oid master_table=objects
 

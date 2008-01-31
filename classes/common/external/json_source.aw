@@ -2,7 +2,7 @@
 // json_source.aw - JSON Source
 /*
 
-@classinfo syslog_type=ST_JSON_SOURCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_JSON_SOURCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=voldemar
 
 @default table=objects
 @default group=general

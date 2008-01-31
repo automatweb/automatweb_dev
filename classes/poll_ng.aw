@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.12 2005/03/21 12:50:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.13 2008/01/31 13:49:48 kristo Exp $
 
 /*
 
@@ -14,7 +14,7 @@
 
 @groupinfo choices caption=Vastusevariandid
 
-@classinfo relationmgr=yes syslog_type=ST_POLL_NG
+@classinfo relationmgr=yes syslog_type=ST_POLL_NG maintainer=kristo
 
 @reltype ANSWER value=1 clid=CL_DOCUMENT
 @caption polli vastus

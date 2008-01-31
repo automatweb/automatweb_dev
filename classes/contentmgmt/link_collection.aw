@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/link_collection.aw,v 1.3 2007/04/09 11:27:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/link_collection.aw,v 1.4 2008/01/31 13:52:14 kristo Exp $
 // link_collection.aw - Lingikogu 
 /*
 
-@classinfo syslog_type=ST_LINK_COLLECTION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_LINK_COLLECTION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_link_collection index=aw_oid master_index=brother_of master_table=objects
 @default table=aw_link_collection
 

@@ -2,8 +2,10 @@
 
 /** aw code analyzer
 
+	@classinfo  maintainer=kristo
+
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.10 2007/09/14 07:12:47 hannes Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.11 2008/01/31 13:52:52 kristo Exp $
 
 	@comment
 	analyses aw code

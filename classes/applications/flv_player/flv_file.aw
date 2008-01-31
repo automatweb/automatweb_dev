@@ -2,7 +2,7 @@
 // flv_file.aw - FLV fail
 /*
 
-@classinfo syslog_type=ST_FLV_FILE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_FLV_FILE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=hannes
 
 @default table=objects
 @default group=general

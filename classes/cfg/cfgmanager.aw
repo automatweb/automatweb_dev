@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.16 2005/04/01 13:02:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.17 2008/01/31 13:52:00 kristo Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 
@@ -23,7 +23,7 @@
 @caption Seadete vorm
 
 @groupinfo config caption=Seaded
-@classinfo relationmgr=yes syslog_type=ST_CFGMANAGER
+@classinfo relationmgr=yes syslog_type=ST_CFGMANAGER maintainer=kristo
 
 */
 class cfgmanager extends class_base

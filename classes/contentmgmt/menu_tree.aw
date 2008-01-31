@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.28 2007/12/11 09:27:45 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.29 2008/01/31 13:52:14 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -8,7 +8,7 @@
 	@default method=serialize
 	@default group=general
 
-	@classinfo trans=1 syslog_type=ST_MENU_TREE
+	@classinfo trans=1 syslog_type=ST_MENU_TREE maintainer=kristo
 	@property children_only type=checkbox ch_value=1 trans=1
 	@caption Ainult alammen&uuml;&uuml;d
 

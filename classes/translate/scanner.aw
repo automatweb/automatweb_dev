@@ -1,5 +1,9 @@
 <?php
 // parses a bunch o files and creates translation templates
+/*
+@classinfo  maintainer=kristo
+*/
+
 classload("aw_template");
 class scanner extends aw_template
 {

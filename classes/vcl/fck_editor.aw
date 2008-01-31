@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.18 2008/01/31 09:25:08 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.19 2008/01/31 13:55:36 kristo Exp $
 // fck_editor.aw - FCKeditor
-
+/*
+@classinfo  maintainer=hannes
+*/
 class fck_editor extends aw_template
 {
 	function fck_editor()

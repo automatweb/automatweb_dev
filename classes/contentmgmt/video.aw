@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.9 2006/03/09 13:42:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.10 2008/01/31 13:52:15 kristo Exp $
 // video.aw - Video 
 /*
 
-@classinfo syslog_type=ST_VIDEO relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_VIDEO relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 
 @default table=objects

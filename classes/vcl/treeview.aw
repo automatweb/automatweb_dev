@@ -2,7 +2,7 @@
 // treeview.aw - tree generator
 /*
 
-	@classinfo relationmgr=yes syslog_type=ST_TREEVIEW
+	@classinfo relationmgr=yes syslog_type=ST_TREEVIEW maintainer=kristo
 
 	@default table=objects
 	@default group=general

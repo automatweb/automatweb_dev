@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/unittest/tester.aw,v 1.2 2006/09/20 11:28:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/unittest/tester.aw,v 1.3 2008/01/31 13:50:23 kristo Exp $
 
 /*
+@classinfo  maintainer=kristo
+
 @default group=general
 @default form=tester
 

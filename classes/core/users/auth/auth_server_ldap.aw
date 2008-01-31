@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.15 2005/06/20 11:17:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.16 2008/01/31 13:54:00 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
-@classinfo syslog_type=ST_AUTH_SERVER_LDAP relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_AUTH_SERVER_LDAP relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general
