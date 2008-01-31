@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.17 2007/11/09 10:10:48 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.18 2008/01/31 09:25:08 hannes Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor extends aw_template
@@ -54,6 +54,15 @@ class fck_editor extends aw_template
 		$this->read_template("fck_editor.tpl");
 		$this->submerge=1;
 		
+		if (isset ($arr["toolbarset"]) )
+		{
+			$s_toolbarset = $arr["toolbarset"];
+		}
+		else
+		{
+			$s_toolbarset = "aw_doc";
+		}
+		
 		$tmp='';
 		foreach($arr["props"] as $nm)
         {
@@ -77,6 +86,7 @@ class fck_editor extends aw_template
 				"width"=> "600px",
 				"height"=> $height,
 				"lang" => $strFcklang,
+				"toolbarset" => $s_toolbarset,
 			));
 			$tmp.= $this->parse("EDITOR");
 		}

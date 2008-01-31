@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.43 2008/01/30 14:34:16 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.44 2008/01/31 09:25:14 hannes Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -672,6 +672,7 @@ class mail_message extends class_base
 					"props" => array(
 						"message",
 					),
+					"toolbarset" => "aw_email",
 				));
 				break;
 				

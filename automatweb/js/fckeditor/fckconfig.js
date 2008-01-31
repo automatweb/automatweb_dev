@@ -80,7 +80,7 @@ FCKConfig.Plugins.Add( 'awlup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awfup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awimageupload', 'en,et' ) ;
 
-FCKConfig.ToolbarSets["aw"] = [
+FCKConfig.ToolbarSets["aw_doc"] = [
        ['Source','Cut','Copy','Paste','PasteText','PasteWord'],
        ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
        ['Bold','Italic','Underline','StrikeThrough','-'],
@@ -88,6 +88,17 @@ FCKConfig.ToolbarSets["aw"] = [
        ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
        ['awlup','Unlink','Anchor'],
        ['awimageupload','awfup','Table','Rule'],
+       ['Style','FontFormat']
+] ;
+
+FCKConfig.ToolbarSets["aw_email"] = [
+       ['Source','Cut','Copy','Paste','PasteText','PasteWord'],
+       ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+       ['Bold','Italic','Underline','StrikeThrough','-'],
+       ['OrderedList','UnorderedList','-','Outdent','Indent'],
+       ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+       ['awlup','Unlink','Anchor'],
+       ['awimageupload','Table','Rule'],
        ['Style','FontFormat']
 ] ;
 
