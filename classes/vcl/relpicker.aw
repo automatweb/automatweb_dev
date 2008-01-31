@@ -6,6 +6,179 @@ class relpicker extends  core
 		$this->init("");
 	}
 
+	/**
+		@attrib name=create_relpicker params=pos api=1 
+
+		@param name required type=string
+			String to indetify the relpicker
+
+		@param reltype required type=string
+			The reltype the relpicker uses
+
+		@param oid required type=int
+			The object's ID the relpicker pickes relations for
+
+		@param property required type=int
+			The property's name that relpicker pickes relations for
+
+		@param multiple optional type=int
+
+		@param no_sel optional type=int
+
+		@param automatic optional type=int
+
+		@param no_edit optional type=int
+
+	**/
+	function create_relpicker($arr)
+	{
+		extract($arr);
+
+		if(!$this->can("view", $oid))
+		{
+			return false;
+		}
+
+		$o = new object($oid);
+		$relinfo = $o->get_relinfo();
+		$clids = $relinfo[$reltype]["clid"];
+
+		if($o->is_property($property))
+		{
+			$selected = $o->prop($property);
+		}
+		
+		if($no_sel == 1)
+		{
+			$options = array();
+		}
+		else
+		{
+			$options = array("0" => t("--vali--"));
+		}
+
+		// generate option list
+		// if automatic is set, then create a list of all properties of that type
+		if (isset($automatic))
+		{
+			foreach($clids as $clid)
+			{
+				if (!empty($clid))
+				{
+					$olist = new object_list(array(
+						"class_id" => $clid,
+						"site_id" => array(),
+						"lang_id" => array()
+					));
+					$names = $olist->names();
+					asort($names);
+					$options = $options + $names;
+				};
+			}
+			
+		}
+		else
+		{
+			$conns = $o->connections_from(array(
+				"type" => $reltype
+			));
+
+			foreach($conns as $conn)
+			{
+				$options[$conn->prop("to")] = $conn->prop("to.name");
+			}
+		}
+
+		$r = html::select(array(
+			"name" => $name,
+			"options" => $options,
+			"selected" => $selected,
+		));
+
+		$url = $this->mk_my_orb("do_search", array(
+			"id" => $oid,
+			"pn" => $name,
+			"clid" => $clids,
+			"multiple" => $multiple
+		), "popup_search", false, true);
+
+		if (!$no_edit)
+		{
+			$r .= " ".html::href(array(
+				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+				"title" => t("Otsi")
+			));
+		}
+		if(!is_array($selected) && $this->can("edit", $selected) && !$no_edit)
+		{
+			$selected_obj = new object($selected);
+			$selected_clid = $selected_obj->class_id();
+			$r .= " ".html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $selected,
+					"return_url" => get_ru(),
+				), $selected_clid),
+//				"url" => html::get_change_url($selected_id, array("return_url" => get_ru())),
+				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
+				"title" => t("Muuda")
+			));
+		}
+		if(!$no_edit)
+		{
+			$clss = aw_ini_get("classes");
+			if (count($clid) > 1)
+			{
+				$pm = get_instance("vcl/popup_menu");
+				$pm->begin_menu($name."_relp_pop");
+				foreach($clids as $clid)
+				{
+					$pm->add_item(array(
+						"text" => $clss[$clid]["name"],
+						"link" => html::get_new_url(
+							$clid,
+							$oid,
+							array(
+								"alias_to" => $oid,
+								"alias_to_prop" => $property,
+								"reltype" => $reltype,
+								"return_url" => get_ru()
+							)
+						)
+					));
+				}
+				$r .= " ".$pm->get_menu(array(
+					"icon" => "new.gif",
+					"alt" => t("Lisa")
+				));
+			}
+			else
+			{
+				foreach($clids as $clid)
+				{
+					$r .= " ".html::href(array(
+						"url" => html::get_new_url(
+							$clid,
+							$oid,
+							array(
+								"alias_to_prop" => $property,
+								"alias_to" => $oid,
+								"reltype" => $reltype,
+								"return_url" => get_ru()
+							)
+						),
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/new.gif' border=0>",
+						"title" => sprintf(t("Lisa uus %s"), $clss[$_clid]["name"])
+					));
+				}
+			}
+			return $r;
+		}
+		/*
+		return array($val["name"] => $val);
+		*/
+	}
+
 	function init_vcl_property($arr)
 	{
 		$prop = &$arr["property"];
