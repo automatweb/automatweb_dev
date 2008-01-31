@@ -7,5 +7,19 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <folder>
+                  <type>relpicker</type>
+                  <reltype>RELTYPE_FOLDER</reltype>
+                  <field>meta</field>
+                  <method>serialize</method>
+                  <caption>Dokumentide kataloog</caption>
+            </folder>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kataloog</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 

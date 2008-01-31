@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.1 2007/08/29 10:51:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.2 2008/01/31 12:12:19 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
@@ -7,6 +7,12 @@
 
 @default table=objects
 @default group=general
+
+@reltype folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@caption Dokumentide kataloog
+
+@reltype FOLDER value=1 clid=CL_MENU
+@caption Kataloog
 
 */
 
@@ -98,7 +104,15 @@ class document_calendar_view extends class_base
 		$ss = get_instance("contentmgmt/site_show");
 		$ss->_init_path_vars();
 
-		$docs = $ss->get_default_document(array("obj" => obj(aw_global_get("section"))));
+		$o = obj($arr["id"]);
+		if ($this->can("view", $o->prop("folder")))
+		{
+			$docs = $ss->get_default_document(array("obj" => obj($o->prop("folder"))));
+		}
+		else
+		{
+			$docs = $ss->get_default_document(array("obj" => obj(aw_global_get("section"))));
+		}
 		$awa = new aw_array($docs);
 		foreach($awa->get() as $docid)
 		{
