@@ -257,6 +257,25 @@
             <caption>CV aktiivne</caption>
       </property>
       <property>
+            <name>cv_doc</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_CV_DOC</reltype>
+            <caption>CV Dokumendina</caption>
+      </property>
+      <property>
+            <name>cv_link</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>CV URL</caption>
+      </property>
+      <property>
             <name>wage_doc</name>
             <table>objects</table>
             <group>general2</group>
@@ -2028,6 +2047,11 @@
                   <clid>CL_CRM_DEGREE</clid>
                   <caption>Kraad</caption>
             </DEGREE>
+            <CV_DOC>
+                  <value>76</value>
+                  <clid>CL_FILE</clid>
+                  <caption>CV Dokument</caption>
+            </CV_DOC>
       </reltypes>
       <layout>
             <co_bottom_seller>

@@ -101,6 +101,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property cvactive type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption CV aktiivne
 
+@property cv_doc type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_CV_DOC
+@caption CV Dokumendina
+
+@property cv_link type=textbox table=objects field=meta method=serialize 
+@caption CV URL
+
 @property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
 @caption Palga dokument
 
@@ -814,6 +820,9 @@ caption S&otilde;bragrupid
 
 @reltype DEGREE value=75 clid=CL_CRM_DEGREE
 @caption Kraad
+
+@reltype CV_DOC value=76 clid=CL_FILE
+@caption CV Dokument
 
 */
 
