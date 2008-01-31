@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.112 2007/12/13 11:18:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.113 2008/01/31 15:22:00 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
-@classinfo syslog_type=ST_MAILINGLIST relationmgr=yes no_status=1 r2=yes maintainer=markop
+@classinfo syslog_type=ST_MAILINGLIST relationmgr=yes no_status=1 r2=yes maintainer=markop allow_rte=2
 
 @default table=objects
 @default field=meta
@@ -208,28 +208,67 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property mail_toolbar type=toolbar no_caption=1
 @caption Maili toolbar
 
-@property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
-@caption Grupid kellele kiri saata
+@layout mail_top type=hbox closeable=1 width=20%:20%:60%
+	@property send_away type=checkbox ch_value=1 store=no parent=mail_top no_caption=1
+	@caption Saada peale salvestamist ära
+	
+	@property save_as_new type=checkbox ch_value=1 parent=mail_top no_caption=1
+	@caption Salvesta uue kirjana
+	
+	@property no_fck type=checkbox ch_value=1 parent=mail_top no_caption=1
+	@caption Maili kirjutamine plaintext vaates
 
-@property req_members_m type=text
-@caption Otsi ka alamobjektide alt
 
-@property no_fck type=checkbox ch_value=1
-@caption Maili kirjutamine plaintext vaates
+@layout write_message_layout type=hbox width=40%:60% 
+	@layout wml type=vbox parent=write_message_layout area_caption=&nbsp;
+	
+		@property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 parent=wml captionside=top
+		@caption Grupid kellele kiri saata
+		
+		@property req_members_m type=text parent=wml captionside=top
+		@caption Otsi ka alamobjektide alt
+		
+		@property bounce type=textbox parent=wml captionside=top
+		@caption Bounce aadress
+		
+		@property mfrom_name type=textbox store=no parent=wml captionside=top
+		@caption Saatja nimi
+		
+		@property mfrom type=select store=no parent=wml captionside=top
+		@caption Saatja e-maili aadress
+		
+		@property subject type=textbox  size=50 store=no parent=wml captionside=top
+		@caption Teema
 
-@property bounce type=textbox
-@caption Bounce aadress
+		
+		@property template_selector type=select store=no parent=wml captionside=top
+		@caption Vali template
+		
+		@property html_mail type=checkbox ch_value=1 parent=wml captionside=top no_caption=1
+		@caption HTML kiri
+		
+		@property register_data type=text parent=wml
+		@caption Registri andmed:
+		
+		@property copy_template type=select store=no parent=wml captionside=top
+		@caption Vali template mille sisusse kopeerida
+		
+		property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1 parent=wml captionside=top
+		caption Maili kirjutamine
 
-@property register_data type=text
-@caption Registri andmed
+		@property legend type=text store=no parent=wml captionside=top no_caption=1
+		@caption Legend
+			
+	@layout wmr type=vbox parent=write_message_layout area_caption=&nbsp;
 
-@property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
-@caption Maili kirjutamine
+		@property message type=textarea cols=70 rows=60 store=no parent=wmr no_caption=1
+		@caption Sisu
+
+@property message_id type=hidden store=no parent=wmr no_caption=1
+@caption Kirja id
 
 @property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
 @caption Aliastehaldur
-
-
 
 ------------------------------------------------------------------------
 
@@ -321,9 +360,13 @@ class ml_list extends class_base
 
 	function callback_pre_edit($arr)
 	{
-		if(($arr["group"] == "write_mail")&&(!$arr["obj_inst"]->prop("no_fck")))
+		if(($arr["group"] == "write_mail") && (!$arr["obj_inst"]->prop("no_fck")))
 		{
 			$arr["classinfo"]["allow_rte"] = $arr["obj_inst"]->prop("classinfo_allow_rte");
+		}
+		if($arr["obj_inst"]->prop("no_fck"))
+		{
+			$arr["classinfo"]["allow_rte"] = 0;
 		}
 	}
 
@@ -812,6 +855,111 @@ class ml_list extends class_base
 					"caption" => $prop["value"],
 				));
 				break;
+
+			case "legend":
+				$prop["caption"] = t("Asenduste legend");
+				$prop["value"] = t("Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />
+					#username# - AutomatWebi kasutajanimi<br />
+					#name# - Listi liikme nimi<br />
+					#e-mail# - Listi liikme e-mail<br/>
+					#subject# - Kirja teema<br />
+					#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
+					#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br />
+					#lahkumine# - link, millel klikkides inimene saab listist lahkuda<br />
+					<br />
+					Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi l&otilde;ppu #traceid#
+					N&auml;iteks: http://www.struktuur.ee/aw#traceid#
+				");
+				break;
+
+			case "copy_template":
+				$templates = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_TEMPLATE",
+				));
+				$options = array(0 => t(" - vali - "));
+				$tm = get_instance("templatemgr");
+				$options = $tm->template_picker(array(
+					"folder" => "automatweb/mlist"
+				));
+				foreach($templates as $template)
+				{
+					$options[$template->prop("to")] = $template->prop("to.name");
+				}
+				$prop["options"] = $options;
+				$msg_obj = $this->_get_mail_message_object($arr);
+				$prop["value"] = $msg_obj->meta("copy_template");
+				break;
+			
+			case "template_selector":
+				$templates = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_TEMPLATE",
+				));
+				foreach($templates as $template)
+				{
+					$options[$template->prop("to")] = $template->prop("to.name");
+				}
+				// insert a template selector, if there are any templates available
+				if (sizeof($templates) > 0 )
+				{
+					$options = array(0 => t(" - vali - "));
+					foreach($templates as $template)
+					{
+						$options[$template->prop("to")] = $template->prop("to.name");
+					}
+					$prop["options"] = $options;
+					$msg_obj = $this->_get_mail_message_object($arr);
+					$prop["value"] = $msg_obj->meta("template_selector");
+				}
+				break;
+
+			case "message_id":
+				$msg_obj = $this->_get_mail_message_object($arr);
+				$prop["value"] = $msg_obj->id();
+				break;
+			case "mfrom_name":
+				$msg_obj = $this->_get_mail_message_object($arr);
+				$prop["value"] = $msg_obj->meta("mfrom_name");
+				break;
+			case "message":
+				$msg_obj = $this->_get_mail_message_object($arr);
+				$prop["value"] = $msg_obj->prop("message");
+				$prop["richtext"] = 1;
+				//allow_rte
+				break;
+			case "html_mail":
+				$msg_obj = $this->_get_mail_message_object($arr);
+				//$prop["value"] = 1;
+				$prop["checked"] = $msg_obj->prop("html_mail");
+				break;
+
+			case "html_mail":
+				$msg_obj = $this->_get_mail_message_object($arr);
+				$prop["value"] = $msg_obj->prop("html_mail");
+				break;
+	
+			case "mfrom":
+				$objs = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_SENDER",
+				));
+				$opts = safe_array($prop["options"]);
+				foreach($objs as $obj)
+				{
+					if(in_array(array_keys($opts), $obj->prop("to")))
+					{
+						continue;
+					}
+					$opts[$obj->prop("to")] = $obj->prop("to.name");
+				}
+				$prop["options"] = $opts;
+				$msg_obj = $this->_get_mail_message_object($arr);
+				$prop["value"] = $msg_obj->prop("mfrom");
+				break;
+
+			case "subject":
+				$msg_obj = $this->_get_mail_message_object($arr);
+				$prop["value"] = $msg_obj->name();
+				break;
+
 			case "search_tb":
 				$toolbar = &$prop["vcl_inst"];
 				$toolbar->add_button(array(
@@ -823,7 +971,7 @@ class ml_list extends class_base
 				));
 				break;
 			case "req_members_m":
-				if(!sizeof($arr["obj_inst"]->prop("write_user_folder")))
+				if(!(is_array($arr["obj_inst"]->prop("write_user_folder")) && sizeof($arr["obj_inst"]->prop("write_user_folder"))))
 				{
 					return PROP_IGNORE;
 				}
@@ -841,6 +989,10 @@ class ml_list extends class_base
 					}
 				}
 				$prop["value"] = $ret;
+				if(!$prop["value"])
+				{
+					return PROP_IGNORE;
+				}
 				break;
 				
 			case "classinfo_allow_rte":
@@ -921,21 +1073,6 @@ class ml_list extends class_base
 				if($prop["value"]) $this->set_classinfo(array("allow_rte" => 0));
 				else $this->set_classinfo(array("allow_rte" => $arr["obj_inst"]->prop("classinfo_allow_rte")));
 			
-			case "emb[mfrom]":
-				$objs = $arr["obj_inst"]->connections_from(array(
-					"type" => "RELTYPE_SENDER",
-				));
-				$opts = safe_array($prop["options"]);
-				foreach($objs as $obj)
-				{
-					if(in_array(array_keys($opts), $obj->prop("to")))
-					{
-						continue;
-					}
-					$opts[$obj->prop("to")] = $obj->prop("to.name");
-				}
-				$prop["options"] = $opts;
-				break;
 			case "sub_form_type":
 				$prop["options"] = array(
 					"0" => t("liitumine"),
@@ -1268,7 +1405,7 @@ class ml_list extends class_base
 				}
 				break;
 
-			case "write_mail":
+			case "message":
 				$this->submit_write_mail($arr);
 				break;
 
@@ -1278,9 +1415,9 @@ class ml_list extends class_base
 				break;
 
 			case "bounce":
-				if(is_oid($arr["request"]["emb"]["id"]) && $this->can("view" , $arr["request"]["emb"]["id"]))
+				if(is_oid($arr["request"]["id"]) && $this->can("view" , $arr["request"]["id"]))
 				{
-					$mail_object = obj($arr["request"]["emb"]["id"]);
+					$mail_object = obj($arr["request"]["id"]);
 					$mail_object -> set_meta("bounce" , $prop["value"]);
 				}
 				return PROP_IGNORE;
@@ -2856,6 +2993,36 @@ class ml_list extends class_base
 		return $rv;
 	}
 
+	function _get_mail_message_object($arr)
+	{
+		if(is_object($this->msg_obj))
+		{
+			return $this->msg_obj;
+		}
+		$writer = get_instance(CL_MESSAGE);
+		$writer->init_class_base();
+		$all_props = $writer->get_property_group(array(
+			"group" => "general",
+		));
+		if (is_oid($arr["request"]["msg_id"]))
+		{
+			$this->msg_obj = new object($arr["request"]["msg_id"]);
+			$arr["obj_inst"]->set_prop("write_user_folder", $this->msg_obj->meta("list_source"));
+		}
+		else
+		{
+			$arr["obj_inst"]->set_prop("write_user_folder", null);
+			$this->msg_obj = new object();
+			$this->msg_obj->set_class_id(CL_MESSAGE);
+			$folder = $arr["obj_inst"]->prop("msg_folder");
+			$this->msg_obj->set_parent((!empty($folder) ? $folder : $arr["obj_inst"]->parent()));
+			$this->msg_obj->save();
+		};
+		return $this->msg_obj;
+	}
+
+//seda funktsiooni nüüd enam vaja pole ma loodan... a igaks juhuks jätab praegu alles
+/*
 	function callback_gen_write_mail($arr)
 	{
 		$writer = get_instance(CL_MESSAGE);
@@ -2934,7 +3101,7 @@ class ml_list extends class_base
 		
 
 		
-		$prps = array("name", "html_mail", "message", "msg_contener_title", "msg_contener_content" , "mfrom",  "mfrom_name"); 
+		$prps = array("name", "html_mail", "msg_contener_title", "msg_contener_content" , "mfrom",  "mfrom_name"); 
 		foreach($all_props as $id => $prop)
 		{
 			if (in_array($id, $prps))
@@ -2997,41 +3164,45 @@ class ml_list extends class_base
 			$xprops = $writer->parse_properties(array(
 				"obj_inst" => $msg_obj,
 				"properties" => $filtered_props,
-				"name_prefix" => "emb",
+		//		"name_prefix" => "emb",
 				"classinfo" => array("allow_rte" => $arr["obj_inst"]->prop("classinfo_allow_rte")),
 			));
 		}
-/*		if(is_oid($xprops["emb_mfrom"]["value"]))
-		{
-		$email_obj = obj($xprops["emb_mfrom"]["value"]);
-		$mailto = $email_obj->prop("mail");
-		//$xprops["emb_mfrom"]["value"] = $mailto;
-		}
-*/
+//		if(is_oid($xprops["emb_mfrom"]["value"]))
+//		{
+//		$email_obj = obj($xprops["emb_mfrom"]["value"]);
+//		$mailto = $email_obj->prop("mail");
+//		//$xprops["emb_mfrom"]["value"] = $mailto;
+//		}
+//
 //		arr($xprops);
-		$xprops["emb_message"]["value"] = $msg_obj->prop("message");
-		$xprops["emb_message"]["type"] = "textarea";
-		$xprops["emb_message"]["cols"] = 80;
-		$xprops["emb_message"]["rows"] = 40;
-		$xprops["emb_message"]["origin_type"] = "textarea";
+		$xprops["message"]["value"] = $msg_obj->prop("message");
+		$xprops["message"]["type"] = "textarea";
+		$xprops["message"]["cols"] = 80;
+		$xprops["message"]["rows"] = 40;
+		$xprops["message"]["origin_type"] = "textarea";
 		return $xprops;
 	}
+*/
 
 	function submit_write_mail($arr)
 	{
 		$img_inst = get_instance(CL_IMAGE);
-		$msg_data = $arr["request"]["emb"];
-		//ei ole aimugi moment kust kurat see asi vahepeal muutunud on..... kehv lahendus, aga asja peaks ruttu tööle saama ju
-		if(!$msg_data["message"]) $msg_data["message"] = $arr["request"]["message"];
-		// 1. create an object. for this I need to know the parent
-		// for starters I'll use the one from the list object itself
-		#$msg_data["parent"] = $arr["obj_inst"]->parent();
+		$msg_data = $arr["request"];
+		$msg_data["id"] = $arr["request"]["message_id"];
+		$msg_data["name"] = $arr["request"]["subject"];
+		if(!$msg_data["html_mail"])
+		{
+			$msg_data["html_mail"] = "0";
+		}
+		unset($msg_data["rawdata"]);
+
 		$msg_data["mto"] = $arr["obj_inst"]->id();
 		$folder = $arr["obj_inst"]->prop("msg_folder");
 		$mail_id = $msg_data["id"];
 		if(is_oid($msg_data["id"]) && $this->can("view", $msg_data["id"]))
 		{
-			if(!$arr["request"]["emb"]["save_as_new"])
+			if(!$arr["request"]["save_as_new"])
 			{
 				$status = $this->db_fetch_row("SELECT status FROM ml_queue WHERE lid = ".$arr["obj_inst"]->id()." ANd mid = ".$msg_data["id"]);
 				if(!$status["status"])
@@ -3051,7 +3222,8 @@ class ml_list extends class_base
 		}
 		$tpl = $msg_data["template_selector"];
 		$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
-		if((!strlen($msg_data["message"]) > 0 ) && $msg_data["copy_template"])
+//arr($msg_data);arr(strlen($msg_data["message"]));die();
+		if((!strlen(trim(str_replace("<br>" , "" , $msg_data["message"]))) > 0 ) && $msg_data["copy_template"])
 		{
 			if(is_oid($msg_data["copy_template"]))
 			{
@@ -3100,10 +3272,7 @@ class ml_list extends class_base
 					
 				}
 			}
-//			$this->read_template($template_obj->id());
-//			$this->vars(array("asd" => "aaaaaaaaaaaaaaaaaaaa"));
 			$msg_data["message"] = $this->parse();
-	//		$msg_data["message"] = $template_obj->prop("content");
 		}
 		$msg_data["return"] = "id";
 		//uhh......minuarust on selle kõigega ikka miski jama
@@ -3122,8 +3291,6 @@ class ml_list extends class_base
 		$message_id = $writer->submit($msg_data);
 
 		$sender = $msg_obj->prop("mfrom");
-		// if you send from this address a mail once, you send from it again,
-		// without needance to use that relpickah search -- ahz
 		if($this->can("view", $sender))
 		{
 			$arr["obj_inst"]->connect(array(
@@ -3217,7 +3384,7 @@ class ml_list extends class_base
 			));
 		}
 		$this->submit_write_mail(array(
-			"request" => array("emb" => $arr),
+			"request" => array($arr),
 			"obj_inst" => obj($arr["mto"]),
 		));
 	}

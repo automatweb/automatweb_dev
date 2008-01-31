@@ -508,25 +508,29 @@
             <caption>Maili toolbar</caption>
       </property>
       <property>
-            <name>write_user_folder</name>
+            <name>send_away</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>write_mail</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MEMBER_PARENT</reltype>
-            <editonly>1</editonly>
-            <multiple>1</multiple>
-            <caption>Grupid kellele kiri saata</caption>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>mail_top</parent>
+            <no_caption>1</no_caption>
+            <caption>Saada peale salvestamist &amp;auml;ra</caption>
       </property>
       <property>
-            <name>req_members_m</name>
+            <name>save_as_new</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>write_mail</group>
-            <type>text</type>
-            <caption>Otsi ka alamobjektide alt</caption>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>mail_top</parent>
+            <no_caption>1</no_caption>
+            <caption>Salvesta uue kirjana</caption>
       </property>
       <property>
             <name>no_fck</name>
@@ -536,7 +540,34 @@
             <group>write_mail</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <parent>mail_top</parent>
+            <no_caption>1</no_caption>
             <caption>Maili kirjutamine plaintext vaates</caption>
+      </property>
+      <property>
+            <name>write_user_folder</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_PARENT</reltype>
+            <editonly>1</editonly>
+            <multiple>1</multiple>
+            <parent>wml</parent>
+            <captionside>top</captionside>
+            <caption>Grupid kellele kiri saata</caption>
+      </property>
+      <property>
+            <name>req_members_m</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>text</type>
+            <parent>wml</parent>
+            <captionside>top</captionside>
+            <caption>Otsi ka alamobjektide alt</caption>
       </property>
       <property>
             <name>bounce</name>
@@ -545,7 +576,71 @@
             <method>serialize</method>
             <group>write_mail</group>
             <type>textbox</type>
+            <parent>wml</parent>
+            <captionside>top</captionside>
             <caption>Bounce aadress</caption>
+      </property>
+      <property>
+            <name>mfrom_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>wml</parent>
+            <captionside>top</captionside>
+            <caption>Saatja nimi</caption>
+      </property>
+      <property>
+            <name>mfrom</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>wml</parent>
+            <captionside>top</captionside>
+            <caption>Saatja e-maili aadress</caption>
+      </property>
+      <property>
+            <name>subject</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>textbox</type>
+            <size>50</size>
+            <store>no</store>
+            <parent>wml</parent>
+            <captionside>top</captionside>
+            <caption>Teema</caption>
+      </property>
+      <property>
+            <name>template_selector</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>wml</parent>
+            <captionside>top</captionside>
+            <caption>Vali template</caption>
+      </property>
+      <property>
+            <name>html_mail</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>wml</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <caption>HTML kiri</caption>
       </property>
       <property>
             <name>register_data</name>
@@ -554,19 +649,59 @@
             <method>serialize</method>
             <group>write_mail</group>
             <type>text</type>
-            <caption>Registri andmed</caption>
+            <parent>wml</parent>
+            <caption>Registri andmed:</caption>
       </property>
       <property>
-            <name>write_mail</name>
+            <name>copy_template</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>write_mail</group>
-            <type>callback</type>
-            <callback>callback_gen_write_mail</callback>
+            <type>select</type>
             <store>no</store>
+            <parent>wml</parent>
+            <captionside>top</captionside>
+            <caption>Vali template mille sisusse kopeerida</caption>
+      </property>
+      <property>
+            <name>legend</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>wml</parent>
+            <captionside>top</captionside>
             <no_caption>1</no_caption>
-            <caption>Maili kirjutamine</caption>
+            <caption>Legend</caption>
+      </property>
+      <property>
+            <name>message</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>textarea</type>
+            <cols>70</cols>
+            <rows>60</rows>
+            <store>no</store>
+            <parent>wmr</parent>
+            <no_caption>1</no_caption>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>message_id</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>hidden</type>
+            <store>no</store>
+            <parent>wmr</parent>
+            <no_caption>1</no_caption>
+            <caption>Kirja id</caption>
       </property>
       <property>
             <name>aliasmgr</name>
@@ -678,6 +813,7 @@
             <no_status>1</no_status>
             <r2>yes</r2>
             <maintainer>markop</maintainer>
+            <allow_rte>2</allow_rte>
       </classinfo>
       <groupinfo>
             <membership>
@@ -801,6 +937,31 @@
                   <group>list_status</group>
                   <area_caption></area_caption>
             </status_bottom>
+            <mail_top>
+                  <type>hbox</type>
+                  <closeable>1</closeable>
+                  <width>20%:20%:60%</width>
+                  <group>write_mail</group>
+                  <area_caption></area_caption>
+            </mail_top>
+            <write_message_layout>
+                  <type>hbox</type>
+                  <width>40%:60%</width>
+                  <group>write_mail</group>
+                  <area_caption></area_caption>
+            </write_message_layout>
+            <wml>
+                  <type>vbox</type>
+                  <parent>write_message_layout</parent>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
+                  <group>write_mail</group>
+            </wml>
+            <wmr>
+                  <type>vbox</type>
+                  <parent>write_message_layout</parent>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
+                  <group>write_mail</group>
+            </wmr>
       </layout>
 </properties>
 
