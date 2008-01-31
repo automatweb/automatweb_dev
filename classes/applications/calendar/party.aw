@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.11 2008/01/31 20:00:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.12 2008/01/31 22:28:24 kristo Exp $
 // party.aw - Pidu 
 /*
 
@@ -140,15 +140,6 @@ class party extends class_base
 			"img" => "save.gif",
 		));
 		$tb->add_search_button(array(
-			/*"name" => "search",
-
-			"tooltip" => t("Otsi"),
-			"url" => $this->mk_my_orb("search_aliases", array(
-				"id" => $arr["obj_inst"]->id(),
-				"objtype" => CL_CRM_PERSON,
-				"reltype" => 2,
-			)),
-			"img" => "search.gif",*/
 			"pn" => "set_artist",
 			"clid" => CL_CRM_PERSON,
 			"multiple" => 1

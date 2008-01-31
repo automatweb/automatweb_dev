@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.106 2008/01/31 13:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.107 2008/01/31 22:28:26 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -585,33 +585,6 @@ class promo extends class_base
 
 		$obj->save();
 	}
-
-	function callback_on_addalias($args = array())
-	{
-		$obj_list = explode(",",$args["alias"]);
-		$obj =&obj($args["id"]);
-
-		if ($args["reltype"] == RELTYPE_ASSIGNED_MENU)
-		{
-			$var = "section";
-		}
-		else
-		if ($args["reltype"] == RELTYPE_DOC_SOURCE)
-		{
-			$var = "last_menus";
-		};
-
-		$data = $obj->meta($var);
-
-		foreach($obj_list as $val)
-		{
-			$data[$val] = $val;
-		};
-
-		$obj->set_meta($var,$data);
-		$obj->save();
-	}
-
 
 	function parse_alias($args = array())
 	{

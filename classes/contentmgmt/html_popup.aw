@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.10 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.11 2008/01/31 22:28:26 kristo Exp $
 
 /*
 	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP maintainer=kristo
@@ -150,21 +150,6 @@ class html_popup extends class_base
 		};
 
 		$obj->set_meta("menus",$section);
-		$obj->save();
-	}
-
-	function callback_on_addalias($args = array())
-	{
-		$obj =&obj($args["id"]);
-		$data = $obj->meta("menus");
-
-		$obj_list = explode(",",$args["alias"]);
-		foreach($obj_list as $val)
-		{
-			$data[$val] = $val;
-		};
-
-		$obj->set_meta("menus",$data);
 		$obj->save();
 	}
 

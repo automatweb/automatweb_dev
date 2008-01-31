@@ -257,6 +257,23 @@ class alias_parser extends core
 		return $retval;
 	}
 
+	////
+	// !returns an array of alias id => alias name (#blah666#) for object $oid
+	function get_alias_list_for_obj_as_aliasnames($oid)
+	{
+		$cnts = array();
+		$ret = array();
+
+		$o = obj($oid);
+		$tmp = aw_ini_get("classes");
+		foreach($o->connections_from() as $c)
+		{
+			list($astr) = explode(",",$tmp[$c->prop("to.class_id")]["alias"]);
+			$ret[$c->prop("to")] = "#".$astr.($c->prop("idx"))."#";
+		}
+		return $ret;
+	}
+
 	/** returns the variables that should be inserted into the current template and that were created by the aliases parsed. each class can return from it's parse_alias method, an array that contains the variables that get added to this list. 
 
 		@attrib api=1

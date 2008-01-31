@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.9 2008/01/31 13:54:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.10 2008/01/31 22:28:28 kristo Exp $
 // document_import.aw - Dokumentide import 
 /*
 
@@ -289,7 +289,7 @@ class document_import extends class_base
 			));
 
 			$file_inst = get_instance(CL_FILE);
-			$aliasmgr = get_instance("aliasmgr");
+			$aliasmgr = get_instance("alias_parser");
 			$file_objects = array();
 			if (!empty($arr['request']['link']))
 			{

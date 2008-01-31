@@ -1678,15 +1678,6 @@ class class_base extends aw_template
 						"caption" => t("Tagasi"),
 					));
 				}
-
-
-//					$this->cli->add_tab(array(
-//						"id" => "back",
-//		//				"link" => $link,
-//						"caption" => $GLOBALS["site_title"],
-//		//				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
-//		//				"disabled" => empty($this->id),
-//					));
 			}
 		}
 
@@ -1773,11 +1764,6 @@ class class_base extends aw_template
 					$res = $this->inst->callback_mod_tab($tabinfo);
 				}
 
-				if (isset($this->action) && ($this->action == "search_aliases" || $this->action == "list_aliases"))
-				{
-					unset($val["active"]);
-				}
-
 				// XXX: temporary hack to hide general tab
 				if ($key == "general" && isset($this->hide_general))
 				{
@@ -1817,31 +1803,6 @@ class class_base extends aw_template
 		if (isset($this->hide_relationmgr))
 		{
 			$this->classinfo["relationmgr"] = false;
-		}
-
-
-		// XX: I need a better way to handle relationmgr, it should probably be a special
-		// property type instead of being hardcoded.
-
-		// well, there is a "relationmgr" property type and if used the property is drawn
-		// in an iframe. But what I really need is an argument to the group definition,
-		// .. which .. makes the group into a relation manager. eh? Or perhaps I should
-		// just go with the iframe layout thingie. This frees us from the unneccessary
-		// wrappers inside the class_base.
-		if (empty($this->request["cb_part"]) && $this->classinfo(array("name" => "relationmgr")) && empty($this->classinfo["hide_tabs"]))
-		{
-			$link = "";
-			if (isset($this->id))
-			{
-				$link = $this->mk_my_orb(
-					"list_aliases",
-					array(
-						"id" => $this->id,
-						"return_url" => ($return_url)
-					),
-					$_GET["class"] ? $_GET["class"] : get_class($this->orb_class)
-				);
-			}
 		}
 
 		$cli_args = array(
@@ -3162,7 +3123,7 @@ class class_base extends aw_template
 								"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
 								"tooltip" => $grp_data["caption"],
 								"target" => $target,
-								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => $cb_part)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => $cb_part)),
+								"url" => $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => $cb_part)),
 							));
 
 						}
@@ -3327,221 +3288,6 @@ class class_base extends aw_template
 		}
 		return $resprops;
 	}*/
-
-	// wrappers for alias manager
-
-	/** Displays alias manager inside the configuration manager interface
-
-		@attrib name=list_aliases params=name all_args="1"
-
-
-		@returns
-
-
-		@comment
-		this means I have to generate a list of group somewhere
-
-	**/
-	function list_aliases($args = array())
-	{
-		extract($args);
-
-		$this->init_class_base();
-
-		$cli = get_instance("cfg/" . $this->output_client,$o_arr);
-		$this->cli = &$cli;
-		$this->cli->config["show_help"] = aw_ini_get("class_base.show_help");
-
-		$this->action = $action;
-		$this->obj_inst = new object($args["id"]);
-		$this->request = $args;
-
-		$this->id = $args["id"];
-
-		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
-
-		$cfgform_id = $args["args"]["cfgform"];
-		if (empty($cfgform_id) && is_object($this->obj_inst))
-		{
-			$cfgform_id = $this->obj_inst->meta("cfgform_id");
-		};
-
-		$this->use_group = "list_aliases";
-
-		$defaults = $this->get_property_group(array(
-			"clid" => $this->clid,
-			"clfile" => $this->clfile,
-			"cfgform_id" => $cfgform_id,
-		));
-
-
-		$reltypes = $this->get_rel_types();
-
-		$clid_list = array();
-		if (sizeof($this->relinfo) > 0)
-		{
-			foreach($reltypes as $key => $val)
-			{
-				$rel_type_classes[$key] = $this->relclasses[$key];
-			};
-		};
-
-		if (!empty($args["cb_part"]))
-		{
-			$this->classinfo["no_yah"] = 1;
-			$this->classinfo["hide_tabs"] = 1;
-			aw_global_set("hide_yah",1);
-		};
-
-		$return_url = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
-		$search_return_url = $args["return_url"];
-
-		$gen = $almgr->list_aliases(array(
-			"id" => $id,
-			"reltypes" => $reltypes,
-			"rel_type_classes" => $rel_type_classes,
-			"return_url" => !empty($return_url) ? $return_url : $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
-			"search_return_url" => $search_return_url
-		));
-
-
-		if ($args["no_op"] == 1)
-		{
-			return $gen;
-		}
-		else
-		{
-			return $this->gen_output(array("content" => $gen,"orb_action" => "change"));
-		}
-	}
-
-	////"log.txt"
-	// !Displays alias manager search form inside the configuration manager interface
-	/**
-
-		@attrib name=search_aliases params=name all_args="1"
-
-
-		@returns
-
-
-		@comment
-
-	**/
-	function search_aliases($args = array())
-	{
-		extract($args);
-		$this->init_class_base();
-
-		$cli = get_instance("cfg/" . $this->output_client,$o_arr);
-		$this->cli = &$cli;
-		$this->cli->config["show_help"] = aw_ini_get("class_base.show_help");
-
-		$this->action = $action;
-		$this->obj_inst = new object($args["id"]);
-		$this->id = $args["id"];
-		$this->request = $args;
-
-		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
-
-		$cfgform_id = $args["args"]["cfgform"];
-		if (empty($cfgform_id) && is_object($this->obj_inst))
-		{
-			$cfgform_id = $this->obj_inst->meta("cfgform_id");
-		};
-
-		$this->use_group = "list_aliases";
-		$defaults = $this->get_property_group(array(
-			"clid" => $this->clid,
-			"clfile" => $this->clfile,
-			"group" => $args["group"],
-			"cfgform_id" => $cfgform_id,
-		));
-
-
-		$reltypes = $this->get_rel_types();
-
-		$clid_list = array();
-		if (sizeof($this->relinfo) > 0)
-		{
-			foreach($reltypes as $key => $val)
-			{
-				$rel_type_classes[$key] = $this->relclasses[$key];
-			};
-		};
-
-		$args["clid_list"] = $clid_list;
-
-		if (empty($args["return_url"]))
-		{
-			$args["return_url"] = $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
-		};
-		$gen = $almgr->search($args + array(
-			"reltypes" => $this->get_rel_types(),
-			'rel_type_classes' => $rel_type_classes,//$this->get_rel_type_classes(),
-		));
-		$classname = get_class($this->orb_class);
-		if (isset($reltype))
-		{
-			$title = "Loo seos $reltypes[$reltype] $classname objektiga " . $this->coredata["name"];
-		};
-		return $this->gen_output(array(
-			"content" => $gen,
-			"title" => $title,
-			"orb_action" => "change",
-		));
-	}
-
-	/** Handles the "saving" of relation list
-
-		@attrib name=submit_list params=name all_args="1"
-
-
-		@returns
-
-
-		@comment
-
-	**/
-	function submit_list($args = array())
-	{
-		$this->init_class_base();
-		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
-		if (empty($args["subaction"]))
-		{
-			$args["subaction"] = "delete";
-		};
-		$retval = $almgr->submit_list($args);
-		if (method_exists($this->inst,"callback_on_submit_relation_list"))
-		{
-			$this->inst->callback_on_submit_relation_list($args);
-		};
-		return $retval;
-	}
-
-	/** Handles creating of new relations between the object and
-
-		@attrib name=addalias params=name all_args="1"
-
-
-		@returns
-
-
-		@comment
-		selected search results
-
-	**/
-	function orb_addalias($args = array())
-	{
-		$this->init_class_base();
-		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
-		$retval = $almgr->orb_addalias($args);
-		if (method_exists($this->inst,"callback_on_addalias"))
-		{
-			$this->inst->callback_on_addalias($args);
-		};
-		return $retval;
-	}
 
 	/** _serialize replacement for class_base based objects
 

@@ -62,8 +62,7 @@ class image_manager extends aw_template
 		}
 		else
 		{
-			$am = get_instance("aliasmgr");
-			$parent = $am->get_def_img_folder_from_path(obj($doc->parent()));
+			$parent = $this->get_def_img_folder_from_path(obj($doc->parent()));
 			if (!$parent)
 			{
 				$parent = $doc->parent();
@@ -78,6 +77,20 @@ class image_manager extends aw_template
 			"image" => $image_url
 		));
 		die($this->parse());
+	}
+
+	function get_def_img_folder_from_path($o)
+	{
+		$ret = aw_ini_get("image.default_folder");
+		$pt = $o->path();
+		foreach($pt as $path_item)
+		{
+			if ($this->can("view", $path_item->prop("default_image_folder")) && ($path_item->prop("default_image_folder_is_inherited") || $path_item->id() == $o->id()))
+			{
+				$ret = $path_item->prop("default_image_folder");
+			}
+		}
+		return $ret;
 	}
 
 	/**

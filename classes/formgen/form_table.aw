@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.86 2008/01/31 13:54:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.87 2008/01/31 22:28:27 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -1358,8 +1358,18 @@ class form_table extends form_base
 	{
 		if (!($ret = aw_cache_get("form_table::aliases",$this->table_id)))
 		{
-			$am = get_instance("aliasmgr");
-			$ret = $am->get_alias_list_for_obj_as_aliasnames($this->table_id);
+			$am = get_instance("alias_parser");
+			$ret = array();
+			$as = $am->get_oo_aliases(array("oid" => $this->table_id));
+			$tmp = aw_ini_get("classes");
+			foreach($as as $clid => $dat)
+			{
+				foreach($dat as $cp)
+				{
+					list($astr) = explode(",",$tmp[$cp["to.class_id"]]["alias"]);
+					$ret[$cp["to"]] = "#".$astr.($cp["idx"])."#";
+				}
+			}
 			aw_cache_set("form_table::aliases", $this->table_id, $ret);
 		}
 
@@ -3008,7 +3018,7 @@ if ($_GET["HJ"] == 1)
 
 	function do_render_text_aliases($text)
 	{
-		$am = get_instance("aliasmgr");
+		$am = get_instance("alias_parser");
 		
 		$aliases = $am->get_oo_aliases(array("oid" => $this->table_id));
 		

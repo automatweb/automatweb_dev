@@ -626,7 +626,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 
 		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
 		$htmlc->start_output();
-		$aliasmgr = get_instance("aliasmgr");
+		$aliasmgr = get_instance("alias_parser");
 		$prop_list = $ob->get_property_list();
 		foreach($props as $propname => $propdata)
 		{
