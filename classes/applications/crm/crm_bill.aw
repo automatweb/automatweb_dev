@@ -2840,8 +2840,12 @@ class crm_bill extends class_base
 			$p = $conn->to();//echo $p->id();
 			if($payment && $payment == $p->id())
 			{
+				if(($bill_sum - $sum) > $p->prop("sum")) // kui arve summa - juba makstud summa on suurem kui antud laekumine , siis tagastaks selle sama laekumise summa, sest rohkem võtta ju pole
+				{
+					return $p->prop("sum");
+				}
 				break;
-			}//arr($sum);arr($payment);
+			}
 			$sum = $sum + $p->get_free_sum($bill->id());
 		}
 		if($bill_sum < $sum)
@@ -2854,11 +2858,21 @@ class crm_bill extends class_base
 	function get_bill_recieved_money($b,$payment=0)
 	{
 		$bill_sum = $this->get_bill_sum($b);
+		$needed = $this->get_bill_needs_payment(array("bill" => $b));
 		if($payment)
-		{//arr($this->get_bill_needs_payment(array("bill" => $b))); arr($this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment)));
-			return ($this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment)) - $this->get_bill_needs_payment(array("bill" => $b)));
+		{
+			$needed_wtp = $this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment));
+			$payment = obj($payment);
+			$free_sum = $payment->get_free_sum($b->id());
+			return min($free_sum , $needed_wtp);
 		}
-		return $bill_sum - $this->get_bill_needs_payment(array("bill" => $b));
+		return $this->posValue($bill_sum - $needed);
+	}
+
+	function posValue($nr)
+	{
+		if($nr < 0) return 0;
+		else return $nr;
 	}
 
 	function callback_mod_tab($arr)

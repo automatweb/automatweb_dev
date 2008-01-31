@@ -73,10 +73,10 @@ class crm_bill_payment extends class_base
 					));
 					foreach($ol -> arr() as $o)
 					{
-						$this_sum = $bi->get_bill_sum($o);
-					//	$free_sum = $arr["obj_inst"]->get_free_sum($o->id());
-						$sum = $sum + $this_sum;
-						$bill_sum = $bi->get_bill_recieved_money($o , $arr["obj_inst"]->id());
+					//	$this_sum = $bi->get_bill_sum($o);
+						$free_sum = $arr["obj_inst"]->get_free_sum($o->id());
+						$sum = $sum + $free_sum;
+						$bill_sum = $bi->get_bill_recieved_money($o , $arr["obj_inst"]->id());//arr($bill_sum); arr($free_sum);
 						$prop["value"] .= t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ". number_format($bill_sum , 2)." ".$bi->get_bill_currency($o)."<br>\n";
 					}
 				}
