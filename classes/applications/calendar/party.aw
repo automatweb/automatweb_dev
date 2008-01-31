@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.10 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.11 2008/01/31 20:00:09 kristo Exp $
 // party.aw - Pidu 
 /*
 
@@ -139,15 +139,19 @@ class party extends class_base
 			"action" => "",
 			"img" => "save.gif",
 		));
-		$tb->add_button(array(
-			"name" => "search",
+		$tb->add_search_button(array(
+			/*"name" => "search",
+
 			"tooltip" => t("Otsi"),
 			"url" => $this->mk_my_orb("search_aliases", array(
 				"id" => $arr["obj_inst"]->id(),
 				"objtype" => CL_CRM_PERSON,
 				"reltype" => 2,
 			)),
-			"img" => "search.gif",
+			"img" => "search.gif",*/
+			"pn" => "set_artist",
+			"clid" => CL_CRM_PERSON,
+			"multiple" => 1
 		));
 		$tb->add_button(array(
 			"name" => "delete",
@@ -314,6 +318,17 @@ class party extends class_base
 		}
 		$this->vars($evt);
 		return $this->parse();
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["set_artist"] = "0";
+	}
+
+	function callback_post_save($arr)
+	{
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["set_artist"], 2);
 	}
 }
 ?>
