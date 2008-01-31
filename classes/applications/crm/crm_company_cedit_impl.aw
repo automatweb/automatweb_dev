@@ -21,6 +21,23 @@ class crm_company_cedit_impl extends core
 		));
 		$i = get_instance(CL_CRM_PHONE);
 		$ptypes = $i->get_phone_types();
+
+		$cns2wrs = $arr["obj_inst"]->connections_from(array(
+			"type" => 67,		// RELTYPE_CURRENT_JOB
+		));
+		foreach($cns2wrs as $cn2wr)
+		{					
+			$wr = $cn2wr->to();
+			$wr_org = obj($wr->prop("org"));
+			$wr_prof = obj($wr->prop("profession"));
+			$wrs[$wr->id()] = $wr_org->name().", ".$wr_prof->name()." ";
+			foreach($wr->connections_from(array("type" => 8)) as $cn2ph)
+			{
+				$conns[$cn2ph->id()] = $cn2ph;
+				$cns2phs[$cn2ph->conn["from"]][$cn2ph->conn["to"]] = 1;
+			}
+		} 
+
 		foreach($conns as $conn)
 		{
 			$obj = $conn->to();
@@ -68,6 +85,31 @@ class crm_company_cedit_impl extends core
 			}
 			else
 			{
+				$popup_menu = get_instance("vcl/popup_menu");
+				$popup_menu->begin_menu("c2wr".$obj->id());
+				foreach($wrs as $wr_id => $wr_name)
+				{				
+					$popup_menu->add_item(array(
+							"text" => $wr_name.($cns2phs[$wr_id][$obj->id()] == 1 ? t("(eemalda)") : t("(seosta)")),
+							"link" => $this->mk_my_orb("c2wr", array(
+								"id" => $arr["obj_inst"]->oid,
+								"wrid" => $wr_id,
+								"toid" => $obj->id(),
+								"reltype" => 8,
+								"return_url" => get_ru(),
+							), CL_CRM_PERSON)
+					));
+				} 
+				$popup_menu->add_item(array(
+						"text" => t("Isiklik"),
+						"link" => $this->mk_my_orb("c2wr", array(
+							"id" => $arr["obj_inst"]->oid,
+							"wrid" => 0,
+							"toid" => $obj->id(),
+							"reltype" => 13,
+							"return_url" => get_ru(),
+						), CL_CRM_PERSON)
+				));
 				$t->define_data(array(
 					"sel" => $obj->id(),
 					"choose" => $chooser,
@@ -78,6 +120,7 @@ class crm_company_cedit_impl extends core
 						"caption" => t("Muuda"),
 						"url" => $ch_url,
 					)),
+					"rels" => $popup_menu->get_menu(),
 				));
 			}
 		}
@@ -128,9 +171,26 @@ class crm_company_cedit_impl extends core
 			$pn = "fax";
 			$tp = "RELTYPE_FAX";
 		}
+
 		$conns = $arr["obj_inst"]->connections_from(array(
 			"type" => $tp,
 		));
+
+		$cns2wrs = $arr["obj_inst"]->connections_from(array(
+			"type" => 67,		// RELTYPE_CURRENT_JOB
+		));
+		foreach($cns2wrs as $cn2wr)
+		{					
+			$wr = $cn2wr->to();
+			$wr_org = obj($wr->prop("org"));
+			$wr_prof = obj($wr->prop("profession"));
+			$wrs[$wr->id()] = $wr_org->name().", ".$wr_prof->name()." ";
+			foreach($wr->connections_from(array("type" => 10)) as $cn2fx)
+			{
+				$conns[$cn2fx->id()] = $cn2fx;
+				$cns2fxs[$cn2fx->conn["from"]][$cn2fx->conn["to"]] = 1;
+			}
+		} 
 		$i = get_instance(CL_CRM_PHONE);
 		foreach($conns as $conn)
 		{
@@ -160,6 +220,31 @@ class crm_company_cedit_impl extends core
 			}
 			else
 			{
+				$popup_menu = get_instance("vcl/popup_menu");
+				$popup_menu->begin_menu("c2wr".$obj->id());
+				foreach($wrs as $wr_id => $wr_name)
+				{				
+					$popup_menu->add_item(array(
+							"text" => $wr_name.($cns2fxs[$wr_id][$obj->id()] == 1 ? t("(eemalda)") : t("(seosta)")),
+							"link" => $this->mk_my_orb("c2wr", array(
+								"id" => $arr["obj_inst"]->oid,
+								"wrid" => $wr_id,
+								"toid" => $obj->id(),
+								"reltype" => 10,
+								"return_url" => get_ru(),
+							), CL_CRM_PERSON)
+					));
+				} 
+				$popup_menu->add_item(array(
+						"text" => t("Isiklik"),
+						"link" => $this->mk_my_orb("c2wr", array(
+							"id" => $arr["obj_inst"]->oid,
+							"wrid" => 0,
+							"toid" => $obj->id(),
+							"reltype" => 13,
+							"return_url" => get_ru(),
+						), CL_CRM_PERSON)
+				));
 				$t->define_data(array(
 					"sel" => $obj->id(),
 					"choose" => $chooser,
@@ -168,6 +253,7 @@ class crm_company_cedit_impl extends core
 						"caption" => t("Muuda"),
 						"url" => $ch_url,
 					)),
+					"rels" => $popup_menu->get_menu(),
 				));
 			}
 		}
@@ -446,9 +532,26 @@ class crm_company_cedit_impl extends core
 		{
 			$pn = "email";
 		}
+
 		$conns = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_EMAIL",
 		));
+
+		$cns2wrs = $arr["obj_inst"]->connections_from(array(
+			"type" => 67,		// RELTYPE_CURRENT_JOB
+		));
+		foreach($cns2wrs as $cn2wr)
+		{					
+			$wr = $cn2wr->to();
+			$wr_org = obj($wr->prop("org"));
+			$wr_prof = obj($wr->prop("profession"));
+			$wrs[$wr->id()] = $wr_org->name().", ".$wr_prof->name()." ";
+			foreach($wr->connections_from(array("type" => 9)) as $cn2ml)
+			{
+				$conns[$cn2ml->id()] = $cn2ml;
+				$cns2mls[$cn2ml->conn["from"]][$cn2ml->conn["to"]] = 1;
+			}
+		} 
 		foreach($conns as $conn)
 		{
 			$obj = $conn->to();
@@ -477,6 +580,31 @@ class crm_company_cedit_impl extends core
 			}
 			else
 			{
+				$popup_menu = get_instance("vcl/popup_menu");
+				$popup_menu->begin_menu("c2wr".$obj->id());
+				foreach($wrs as $wr_id => $wr_name)
+				{				
+					$popup_menu->add_item(array(
+							"text" => $wr_name.($cns2mls[$wr_id][$obj->id()] == 1 ? t("(eemalda)") : t("(seosta)")),
+							"link" => $this->mk_my_orb("c2wr", array(
+								"id" => $arr["obj_inst"]->oid,
+								"wrid" => $wr_id,
+								"toid" => $obj->id(),
+								"reltype" => 9,
+								"return_url" => get_ru(),
+							), CL_CRM_PERSON)
+					));
+				} 
+				$popup_menu->add_item(array(
+						"text" => t("Isiklik"),
+						"link" => $this->mk_my_orb("c2wr", array(
+							"id" => $arr["obj_inst"]->oid,
+							"wrid" => 0,
+							"toid" => $obj->id(),
+							"reltype" => 11,
+							"return_url" => get_ru(),
+						), CL_CRM_PERSON)
+				));
 				$t->define_data(array(
 					"sel" => $obj->id(),
 					"choose" => $chooser,
@@ -485,6 +613,7 @@ class crm_company_cedit_impl extends core
 						"caption" => t("Muuda"),
 						"url" => $ch_url,
 					)),
+					"rels" => $popup_menu->get_menu(),
 				));
 			}
 		}
