@@ -1233,6 +1233,13 @@ class crm_company_overview_impl extends class_base
 				$res["flags"] = array("mask" => OBJ_IS_DONE, "flags" => $r["act_s_status"] == 1 ? 0 : OBJ_IS_DONE);
 			}
 		}
+		$res[] = new object_list_filter(array(
+			"logic" => "OR",
+			"conditions" => array(
+				"CL_BUG.bug_status" => array(1,2,10,11),
+				//"CL_TASK.oid" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
+			)
+		));
 		return $res;
 	}
 
@@ -1630,8 +1637,18 @@ class crm_company_overview_impl extends class_base
 				break;
 
 			default:
-				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER, CL_BUG);
-
+				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+				$cali = get_instance(CL_PLANNER);
+				$calid = $cali->get_calendar_for_user();
+				if($calid)
+				{
+					$cal = obj($calid);
+					$eec = $cal->prop("event_entry_classes");
+					if($eec[CL_BUG])
+					{
+						$clid[] = CL_BUG;
+					}
+				}
 				if ($co == $arr["obj_inst"]->id())
 				{
 					$tasks = array();

@@ -5044,6 +5044,7 @@ class crm_company extends class_base
 			"to" => $u->get_current_person(),
 			"from.class_id" => CL_BUG,
 			"type" => "RELTYPE_MONITOR",
+			"bug_status" => array(1,2,10,11),
 		));
 		$ret = array();
 		foreach($cs as $c)
@@ -5087,19 +5088,30 @@ class crm_company extends class_base
 				$ret[] = $c["to"];
 			}
 		}
-		$c = new connection();
-		$cs2 = $c->find(array(
-			"to" => $u->get_current_person(),
-			"from.class_id" => CL_BUG,
-			"type" => "RELTYPE_MONITOR",
-		));
-		foreach($cs2 as $c2)
+		$cali = get_instance(CL_PLANNER);
+		$calid = $cali->get_calendar_for_user();
+		if($calid)
 		{
-			if ($this->can("view", $c2["from"]))
+			$cal = obj($calid);
+			$eec = $cal->prop("event_entry_classes");
+			if($eec[CL_BUG])
 			{
-				$ret[] = $c2["from"];
+				$cp = $u->get_current_person();
+				$ol = new object_list(array(
+					"class_id" => CL_BUG,
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"who" => $cp,
+							"monitors" => $cp,
+						)
+					)),
+					"bug_status" => array(1,2,10,11),
+				));
+				$ret = array_merge($ret, $ol->ids());
 			}
 		}
+		
 		foreach($this->get_my_offers() as $ofid)
 		{
 			if ($this->can("view", $c["to"]))
@@ -6531,6 +6543,26 @@ class crm_company extends class_base
 					return false;
 				}
 				$arr["link"] = html::get_change_url($msg, array("return_url" => get_ru(), "group" => "main_view"));
+			}
+		}
+	
+		if($arr["id"] == "bugs")
+		{
+			$show = 0;
+			$cali = get_instance(CL_PLANNER);
+			$calid = $cali->get_calendar_for_user();
+			if($calid)
+			{
+				$cal = obj($calid);
+				$eec = $cal->prop("event_entry_classes");
+				if($eec[CL_BUG])
+				{
+					$show = 1;
+				}
+			}
+			if(!$show)
+			{
+				return false;
 			}
 		}
 
