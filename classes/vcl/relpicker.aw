@@ -35,6 +35,9 @@ class relpicker extends  core
 		@param options optional type=array
 			Options to be displayed in the relpicker select box
 
+		@param buttonspos optional type=string
+			Position for buttons. Values: right, bottom. Default: right
+
 	**/
 	function create_relpicker($arr)
 	{
@@ -53,10 +56,15 @@ class relpicker extends  core
 		{
 			$selected = $o->prop($property);
 		}
+
+		if(!is_array($options))
+		{
+			$options = array();
+		}
 		
 		if($no_sel != 1)
 		{
-			$options = $options[0] = t("--vali--");
+			$options = array(0 => t("--vali--")) + $options;
 		}
 
 		// generate option list
@@ -96,6 +104,11 @@ class relpicker extends  core
 			"options" => $options,
 			"selected" => $selected,
 		));
+
+		if($buttonspos == "bottom")
+		{
+			$r .= "<br>";
+		}
 
 		$url = $this->mk_my_orb("do_search", array(
 			"id" => $oid,
@@ -176,9 +189,6 @@ class relpicker extends  core
 			}
 			return $r;
 		}
-		/*
-		return array($val["name"] => $val);
-		*/
 	}
 
 	function init_vcl_property($arr)
