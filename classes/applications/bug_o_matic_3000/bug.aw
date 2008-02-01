@@ -1932,6 +1932,10 @@ class bug extends class_base
  					}
  				}
  			}
+			if(!$users[$who])
+			{
+				$users[$who] = $who;
+			}
  			if($users[$who])
  			{
  				$us = get_instance(CL_USER);
