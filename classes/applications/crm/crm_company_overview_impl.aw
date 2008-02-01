@@ -103,7 +103,7 @@ class crm_company_overview_impl extends class_base
 		$planner = get_instance(CL_PLANNER);
 
 		$task_ol = $this->_get_task_list($arr);
-		$evts = $this->make_keys($task_ol->ids());
+		$evts = $task_ol->arr();
 
 
 		$this->overview = array();
@@ -146,13 +146,20 @@ class crm_company_overview_impl extends class_base
 			}
 		}
 
-		foreach($evts as $obj_id)
+		foreach($evts as $obj_id=>$obj)
 		{
 			if(!$this->can("view", $obj_id))
 			{
 				continue;
 			}
-			$item = new object($obj_id);
+			if(is_oid($obj))
+			{
+				$item = new object($obj_id);
+			}
+			else
+			{
+				$item = $obj;
+			}
 			// relative needs last n and next m items, those might be 
 			// outside of the current range
 			$date = $item->prop("start1");
