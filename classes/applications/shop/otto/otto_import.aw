@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.80 2008/01/17 02:19:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.81 2008/02/01 02:00:53 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -751,6 +751,7 @@ class otto_import extends class_base
 			$data_str .= '<br />Kategooriad: '.$prod_obj->prop('user11');
 			$data_str .= '<br />Leht: '.$prod_obj->prop('user18');
 			$data_str .= '<br />Tootekoodid: '.$prod_obj->prop('user6');
+			$data_str .= '<br />Toode on nimekirjas n&auml;htav: '.(($prod_obj->prop('userch4') == 1) ? 'Jah' : 'Ei');
 			$data_str .= '<br />'.html::href(array(
 				'caption' => t('Muuda toodet'),
 				'url' => $this->mk_my_orb('change', array(
@@ -1065,6 +1066,11 @@ class otto_import extends class_base
 					'value' => $prod_obj->prop('user4'),
 					'size' => 40
 				)).implode(' | ', $other_prods_links),
+			));
+
+			$t->define_data(array(
+				'caption' => t('&Uuml;hendav pilt'),
+				'data' => $prod_obj->prop('user2')
 			));
 
 			$pics_str = '';
@@ -3275,24 +3281,6 @@ arr('---------------------------------------------------------------');
 						product_id = ".$product_obj->id().",
 						color = '".$code_data['color']."'
 				");
-
-/*
-// xxx
-				// see siin on ajutine, selleks, et lingid vanadele objektidele t88le j22ks. 
-				// paari kuu p2rast v6ib selle siit ilmselt 2ra koristada et ta vett ei segaks:
-				// 22.03.2007 --dragut
-
-// lets take this out now ... and we'll see if anything gets b0rked or not --dragut 04.10.2007
-				$this->db_query("
-					update
-						otto_tmp_obj_lut
-					set
-						new_oid = ".$product_obj->id()."
-					where
-						pcode = '".$product_code."' and
-						lang_id = ".aw_global_get('lang_id')."
-				");
-*/
 			}
 
 			////
