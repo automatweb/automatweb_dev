@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.12 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.13 2008/02/01 06:01:12 hannes Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -232,7 +232,7 @@ class flash extends class_base
 
 
 		$this->vars(array(
-			"id" => $ob->prop("name"),
+			"id" => "aw_flash_".$ob->id(),
 			"url" => $url,
 			"width" => $ob->prop("width"),
 			"height" => $ob->prop("height"),
