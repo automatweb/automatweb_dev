@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.24 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.25 2008/02/01 10:07:35 robert Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -214,12 +214,12 @@ class newsfeed extends class_base
 					"parent" => $src_folder,
 					"class_id" => CL_MENU,
 					"site_id" => array(),
+					"lang_id" => array(),
 				));
 				$items = $tree->to_list();
-				$parents = $parents + $items->ids();
+				$parents = array_merge($parents, $items->ids());
 			};
 		};
-
 		$items = array();
 		//arr($o->properties());
 		$res = array();
