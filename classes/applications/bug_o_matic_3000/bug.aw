@@ -1257,6 +1257,7 @@ class bug extends class_base
 			$bi = $bug->prop("bug_severity");
 			$dd = $bug->prop("deadline");
 			$bl = $bug->prop("num_hrs_guess");
+			$proj = $bug->prop("project");
 			$p = 0;
 			eval($formula);
 			$rv = $p;
