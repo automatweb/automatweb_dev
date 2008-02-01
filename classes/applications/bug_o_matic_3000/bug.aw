@@ -2047,7 +2047,7 @@ die($email);
  			$url = "http://autotest.struktuur.ee/?bug=1&email=".$email."&file=".$file;
  			print $url;
 			if($file && (substr_count($file, '.aw') || substr_count($file, '.php')|| substr_count($file, '.xml') || substr_count($file, '.ini')))
-			{ 
+			{  
  				$a = file_get_contents($url);
 			}
 			else
