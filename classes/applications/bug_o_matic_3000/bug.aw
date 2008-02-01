@@ -2032,6 +2032,10 @@ die($email);
  					}
  				}
  			}
+			if(!$users[$who])
+			{
+				$users[$who] = $who;
+			}
  			if($users[$who])
  			{
  				$us = get_instance(CL_USER);
@@ -2047,6 +2051,10 @@ die($email);
 					}
 				}
  			}
+			if(!$email)
+			{
+				$email = $who;
+			}
  			aw_restore_acl();
  			$url = "http://autotest.struktuur.ee/?bug=1&email=".$email."&file=".$file;
  			print $url;
