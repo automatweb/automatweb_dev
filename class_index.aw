@@ -4,8 +4,9 @@
 */
 class class_index
 {
-	const INDEX_DIR = "/files/class_index/";
+	const INDEX_DIR = "/pagecache/class_index/";
 	const CLASS_DIR = "/classes/";
+	const LOCAL_CLASS_DIR = "/files/classes/";
 	const LOCAL_CLASS_PREFIX = "_aw_local_class__"; // local class names in form OBJ_LOCAL_CLASS_PREFIX . $class_obj_id
 	const UPDATE_EXEC_TIMELIMIT = 300;
 
@@ -104,7 +105,7 @@ class class_index
 								// new definition
 								$class_dfn = array(
 									"file" => $class_path,
-									"clidx_version" => 1, // to comply with changes to class index format
+									"clidx_version" => 2, // to comply with changes to class index format
 									"last_update" => $time
 								);
 
@@ -176,7 +177,7 @@ class class_index
 		if (0 === strpos($name, self::LOCAL_CLASS_PREFIX))
 		{
 			// load local class
-			$class_file = $dir . "/files/classes/" . $name . "." . aw_ini_get("ext");
+			$class_file = $dir . self::LOCAL_CLASS_DIR . $name . "." . aw_ini_get("ext");
 
 			if (!is_readable($class_dfn_file))
 			{
@@ -186,7 +187,7 @@ class class_index
 		else
 		{
 			// try existing index
-			$class_dfn_file = $dir . "/files/class_index/" . $name . "." . aw_ini_get("ext");
+			$class_dfn_file = $dir . self::INDEX_DIR . $name . "." . aw_ini_get("ext");
 			$class_dir = aw_ini_get("basedir") . self::CLASS_DIR;
 
 			if (!is_readable($class_dfn_file))
@@ -254,7 +255,7 @@ class class_index
 
 		do
 		{
-			$class_dfn_file = aw_ini_get("site_basedir") . "/files/class_index/" . $name . "." . aw_ini_get("ext");
+			$class_dfn_file = aw_ini_get("site_basedir") . self::INDEX_DIR . $name . "." . aw_ini_get("ext");
 
 			if (!is_readable($class_dfn_file))
 			{
