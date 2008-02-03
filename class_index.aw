@@ -2,6 +2,7 @@
 /*
 @classinfo maintainer=voldemar
 */
+
 class class_index
 {
 	const INDEX_DIR = "/pagecache/class_index/";
