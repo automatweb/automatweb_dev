@@ -294,7 +294,7 @@ msgstr ""
 msgid "Tekst"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:220 classes/cfg/cb_search.aw:990
+#: classes/cfg/cb_search.aw:220 classes/cfg/cb_search.aw:991
 msgid "J&auml;rjekord"
 msgstr ""
 
@@ -318,75 +318,75 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:949
+#: classes/cfg/cb_search.aw:950
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:955
+#: classes/cfg/cb_search.aw:956
 msgid "Kataloog"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:961
+#: classes/cfg/cb_search.aw:962
 msgid "Mitu kirjet lehel"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:997
+#: classes/cfg/cb_search.aw:998
 msgid "Element"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1003
+#: classes/cfg/cb_search.aw:1004
 msgid "Tabelis"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1009
+#: classes/cfg/cb_search.aw:1010
 msgid "Hind"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1015
+#: classes/cfg/cb_search.aw:1016
 msgid "Sorditav"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1021
+#: classes/cfg/cb_search.aw:1022
 msgid "Vaikimisi sort"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1027
+#: classes/cfg/cb_search.aw:1028
 msgid "Vaata tulp"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1033
+#: classes/cfg/cb_search.aw:1034
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1049
+#: classes/cfg/cb_search.aw:1050
 msgid "Muuda"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1050
+#: classes/cfg/cb_search.aw:1051
 msgid "Vaata"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1051
+#: classes/cfg/cb_search.aw:1052
 msgid "Kustuta"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1151
+#: classes/cfg/cb_search.aw:1152
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1434
+#: classes/cfg/cb_search.aw:1435
 msgid "OID"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1441
+#: classes/cfg/cb_search.aw:1442
 msgid "Nimi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1448
+#: classes/cfg/cb_search.aw:1449
 msgid "Kasuta?"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1454
+#: classes/cfg/cb_search.aw:1455
 msgid "K.A. Alamkataloogid?"
 msgstr ""
 

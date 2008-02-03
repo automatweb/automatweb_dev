@@ -14,27 +14,27 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/unittest/tester.aw:103
+#: classes/applications/unittest/tester.aw:105
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/unittest/tester.aw:107
+#: classes/applications/unittest/tester.aw:109
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/unittest/tester.aw:111
+#: classes/applications/unittest/tester.aw:113
 msgid "Tulemus"
 msgstr ""
 
-#: classes/applications/unittest/tester.aw:115
+#: classes/applications/unittest/tester.aw:117
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/unittest/tester.aw:355
+#: classes/applications/unittest/tester.aw:357
 msgid "Logging out"
 msgstr ""
 
-#: classes/applications/unittest/tester.aw:367
+#: classes/applications/unittest/tester.aw:369
 msgid "Succeeded? Server returned"
 msgstr ""
 

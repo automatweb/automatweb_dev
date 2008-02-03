@@ -10,7 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/formgen/form_base.aw:57
+#: classes/formgen/form_base.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/formgen/form_base.aw:60
 msgid "form->load(%s): no such form!"
 msgstr ""
 

@@ -202,43 +202,43 @@ msgstr ""
 msgid "Minimaalne tulpade arv"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:568
+#: classes/crm/persons_webview.aw:567
 msgid "pole asutust valitud"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1007
+#: classes/crm/persons_webview.aw:1047
 msgid "Palk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1038
+#: classes/crm/persons_webview.aw:1080
 msgid "Põhiharidus"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1039
+#: classes/crm/persons_webview.aw:1081
 msgid "Keskharidus"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1040
+#: classes/crm/persons_webview.aw:1082
 msgid "Kesk-eriharidus"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1041
+#: classes/crm/persons_webview.aw:1083
 msgid "Diplom"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1042
+#: classes/crm/persons_webview.aw:1084
 msgid "Bakalaureus"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1043
+#: classes/crm/persons_webview.aw:1085
 msgid "Magister"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1044
+#: classes/crm/persons_webview.aw:1086
 msgid "Doktor"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1045
+#: classes/crm/persons_webview.aw:1087
 msgid "Teaduste kandidaat"
 msgstr ""
 

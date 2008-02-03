@@ -10,23 +10,39 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:64 classes/applications/crm/crm_company_cedit_impl.aw:78 classes/applications/crm/crm_company_cedit_impl.aw:156 classes/applications/crm/crm_company_cedit_impl.aw:168 classes/applications/crm/crm_company_cedit_impl.aw:337 classes/applications/crm/crm_company_cedit_impl.aw:349 classes/applications/crm/crm_company_cedit_impl.aw:473 classes/applications/crm/crm_company_cedit_impl.aw:485 classes/applications/crm/crm_company_cedit_impl.aw:542 classes/applications/crm/crm_company_cedit_impl.aw:585 classes/applications/crm/crm_company_cedit_impl.aw:714 classes/applications/crm/crm_company_cedit_impl.aw:729 classes/applications/crm/crm_company_cedit_impl.aw:846 classes/applications/crm/crm_company_cedit_impl.aw:924 classes/applications/crm/crm_company_cedit_impl.aw:941
+#: classes/applications/crm/crm_company_cedit_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:81 classes/applications/crm/crm_company_cedit_impl.aw:120 classes/applications/crm/crm_company_cedit_impl.aw:216 classes/applications/crm/crm_company_cedit_impl.aw:253 classes/applications/crm/crm_company_cedit_impl.aw:423 classes/applications/crm/crm_company_cedit_impl.aw:435 classes/applications/crm/crm_company_cedit_impl.aw:576 classes/applications/crm/crm_company_cedit_impl.aw:613 classes/applications/crm/crm_company_cedit_impl.aw:671 classes/applications/crm/crm_company_cedit_impl.aw:714 classes/applications/crm/crm_company_cedit_impl.aw:843 classes/applications/crm/crm_company_cedit_impl.aw:858 classes/applications/crm/crm_company_cedit_impl.aw:975 classes/applications/crm/crm_company_cedit_impl.aw:1053 classes/applications/crm/crm_company_cedit_impl.aw:1070
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:75
+#: classes/applications/crm/crm_company_cedit_impl.aw:93 classes/applications/crm/crm_company_cedit_impl.aw:228 classes/applications/crm/crm_company_cedit_impl.aw:588
+msgid "(eemalda)"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:93 classes/applications/crm/crm_company_cedit_impl.aw:228 classes/applications/crm/crm_company_cedit_impl.aw:588
+msgid "(seosta)"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:104 classes/applications/crm/crm_company_cedit_impl.aw:239 classes/applications/crm/crm_company_cedit_impl.aw:599
+msgid "Isiklik"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:117
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:75
+#: classes/applications/crm/crm_company_cedit_impl.aw:117
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:677
+#: classes/applications/crm/crm_company_cedit_impl.aw:806
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:852
+#: classes/applications/crm/crm_company_cedit_impl.aw:981
 msgid "Vali &uuml;ks"
 msgstr ""
 

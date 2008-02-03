@@ -10,59 +10,63 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/sys.aw:40
+#: classes/sys.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/sys.aw:43
 msgid "Tabeli nimi"
 msgstr ""
 
-#: classes/sys.aw:45
+#: classes/sys.aw:48
 msgid "Suurus"
 msgstr ""
 
-#: classes/sys.aw:72
+#: classes/sys.aw:75
 msgid "Total"
 msgstr ""
 
-#: classes/sys.aw:183
+#: classes/sys.aw:186
 msgid "Failed opening connection to server %s"
 msgstr ""
 
-#: classes/sys.aw:193
+#: classes/sys.aw:196
 msgid "Write error"
 msgstr ""
 
-#: classes/sys.aw:561
+#: classes/sys.aw:564
 msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr ""
 
-#: classes/sys.aw:617
+#: classes/sys.aw:620
 msgid "all done!"
 msgstr ""
 
-#: classes/sys.aw:663
+#: classes/sys.aw:666
 msgid "Nimi"
 msgstr ""
 
-#: classes/sys.aw:667
+#: classes/sys.aw:670
 msgid "Klass"
 msgstr ""
 
-#: classes/sys.aw:671
+#: classes/sys.aw:674
 msgid "Muutja"
 msgstr ""
 
-#: classes/sys.aw:675
+#: classes/sys.aw:678
 msgid "Muutmise aeg"
 msgstr ""
 
-#: classes/sys.aw:847
+#: classes/sys.aw:850
 msgid "all done!! database seems to be relatively ok!"
 msgstr ""
 
-#: classes/sys.aw:907
+#: classes/sys.aw:910
 msgid "All done"
 msgstr ""
 
-#: classes/sys.aw:995
+#: classes/sys.aw:998
 msgid "$fn"
 msgstr ""
 

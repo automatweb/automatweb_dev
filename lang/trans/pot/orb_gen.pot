@@ -14,23 +14,3 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/orb/orb_gen.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/core/orb/orb_gen.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/core/orb/orb_gen.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/core/orb/orb_gen.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/core/orb/orb_gen.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-

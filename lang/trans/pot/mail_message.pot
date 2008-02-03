@@ -98,6 +98,30 @@ msgstr ""
 msgid "Omaduse Teema (name) help"
 msgstr ""
 
+#: classes/applications/messenger/mail_message.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
+msgstr ""
+
 #: classes/applications/messenger/mail_message.aw:prop_html_mail
 msgid "Omaduse HTML kiri (html_mail) caption"
 msgstr ""
@@ -222,75 +246,87 @@ msgstr ""
 msgid "Seose Meiliaadress (RELTYPE_MAIL_ADDRESS) tekst"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:211
+#: classes/applications/messenger/mail_message.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:rel_RELTYPE_PROJECT
+msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:223
 msgid "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:350
+#: classes/applications/messenger/mail_message.aw:362
 msgid "Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:762
+#: classes/applications/messenger/mail_message.aw:854
 msgid "Saada"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:769
+#: classes/applications/messenger/mail_message.aw:861
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:792
+#: classes/applications/messenger/mail_message.aw:884
 msgid "Vasta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:799
+#: classes/applications/messenger/mail_message.aw:891
 msgid "Vasta/k&otilde;igile"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:806
+#: classes/applications/messenger/mail_message.aw:898
 msgid "Edasta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:814
+#: classes/applications/messenger/mail_message.aw:906
 msgid "Kustutada see kiri? (tagasi ei saa!)"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:815
+#: classes/applications/messenger/mail_message.aw:907
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:837
+#: classes/applications/messenger/mail_message.aw:929
 msgid "Lisa kalendrisse"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:869 classes/applications/messenger/mail_message.aw:939
+#: classes/applications/messenger/mail_message.aw:961 classes/applications/messenger/mail_message.aw:1031
 msgid "Lisa bugiks"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:951
+#: classes/applications/messenger/mail_message.aw:1043
 msgid "P&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:956
+#: classes/applications/messenger/mail_message.aw:1048
 msgid "Tavaline"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:962
+#: classes/applications/messenger/mail_message.aw:1054
 msgid "K&otilde;ik p&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1309
+#: classes/applications/messenger/mail_message.aw:1123
+msgid "Meilide kaust"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:1430
 msgid "kustutatud!"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1311
+#: classes/applications/messenger/mail_message.aw:1432
 msgid "sulge aken"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1390
+#: classes/applications/messenger/mail_message.aw:1511
 msgid "saadetud<p>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1513
+#: classes/applications/messenger/mail_message.aw:1634
 msgid "----Forwarded message-----\n"
 msgstr ""
 

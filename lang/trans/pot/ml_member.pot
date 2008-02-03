@@ -358,3 +358,7 @@ msgstr ""
 msgid "Grupi Muud väljad (udef_fields) help"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_member.aw:rel_RELTYPE_BELONGTO
+msgid "Seose E-postiaadressiga seotud objekt (RELTYPE_BELONGTO) tekst"
+msgstr ""
+

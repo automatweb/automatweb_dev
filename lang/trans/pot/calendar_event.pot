@@ -374,6 +374,66 @@ msgstr ""
 msgid "Omaduse Faili upload 1 (ufupload1) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox1
+msgid "Omaduse  (ucheckbox1) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox1_comment
+msgid "Omaduse  (ucheckbox1) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox1_help
+msgid "Omaduse  (ucheckbox1) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox2
+msgid "Omaduse  (ucheckbox2) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox2_comment
+msgid "Omaduse  (ucheckbox2) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox2_help
+msgid "Omaduse  (ucheckbox2) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox3
+msgid "Omaduse  (ucheckbox3) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox3_comment
+msgid "Omaduse  (ucheckbox3) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox3_help
+msgid "Omaduse  (ucheckbox3) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox4
+msgid "Omaduse  (ucheckbox4) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox4_comment
+msgid "Omaduse  (ucheckbox4) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox4_help
+msgid "Omaduse  (ucheckbox4) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox5
+msgid "Omaduse  (ucheckbox5) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox5_comment
+msgid "Omaduse  (ucheckbox5) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_ucheckbox5_help
+msgid "Omaduse  (ucheckbox5) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:prop_title
 msgid "Omaduse Sissejuhatus (title) caption"
 msgstr ""
@@ -634,31 +694,31 @@ msgstr ""
 msgid "Seose Toimumisaeg (RELTYPE_EVENT_TIME) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:395
+#: classes/applications/calendar/calendar_event.aw:410
 msgid "Algusaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:396
+#: classes/applications/calendar/calendar_event.aw:411
 msgid "L&otilde;puaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:437
+#: classes/applications/calendar/calendar_event.aw:452
 msgid "Sellist toimumiskohta pole"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:466
+#: classes/applications/calendar/calendar_event.aw:481
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:470
+#: classes/applications/calendar/calendar_event.aw:485
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:474
+#: classes/applications/calendar/calendar_event.aw:489
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:504
+#: classes/applications/calendar/calendar_event.aw:519
 msgid "Kustuta"
 msgstr ""
 

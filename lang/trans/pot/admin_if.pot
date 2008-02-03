@@ -114,11 +114,11 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:135 classes/admin/admin_if.aw:972
+#: classes/admin/admin_if.aw:135 classes/admin/admin_if.aw:1001
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_if.aw:142 classes/admin/admin_if.aw:978
+#: classes/admin/admin_if.aw:142 classes/admin/admin_if.aw:1007
 msgid "Kopeeri"
 msgstr ""
 
@@ -126,11 +126,11 @@ msgstr ""
 msgid "Kleebi"
 msgstr ""
 
-#: classes/admin/admin_if.aw:159 classes/admin/admin_if.aw:988
+#: classes/admin/admin_if.aw:159 classes/admin/admin_if.aw:1017
 msgid "Kustuta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:160 classes/admin/admin_if.aw:984
+#: classes/admin/admin_if.aw:160 classes/admin/admin_if.aw:1013
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
@@ -194,39 +194,39 @@ msgstr ""
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/admin/admin_if.aw:941
+#: classes/admin/admin_if.aw:970
 msgid "Ava"
 msgstr ""
 
-#: classes/admin/admin_if.aw:961
+#: classes/admin/admin_if.aw:990
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1265 classes/admin/admin_if.aw:1298
+#: classes/admin/admin_if.aw:1294 classes/admin/admin_if.aw:1327
 msgid "Administreerimisliides"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1328
+#: classes/admin/admin_if.aw:1357
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1329
+#: classes/admin/admin_if.aw:1358
 msgid "Asukoht:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1330
-msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
+#: classes/admin/admin_if.aw:1359
+msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-%s."
 msgstr ""
 
-#: classes/admin/admin_if.aw:1331
+#: classes/admin/admin_if.aw:1360
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1332
+#: classes/admin/admin_if.aw:1361
 msgid "Seaded"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1399 classes/admin/admin_if.aw:1451
+#: classes/admin/admin_if.aw:1428 classes/admin/admin_if.aw:1480
 msgid "Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"
 msgstr ""
 

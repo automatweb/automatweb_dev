@@ -10,63 +10,67 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/releditor.aw:45
-msgid "Klassi ID"
+#: classes/vcl/releditor.aw:class__help
+msgid "Klassi  help"
 msgstr ""
 
 #: classes/vcl/releditor.aw:46
+msgid "Klassi ID"
+msgstr ""
+
+#: classes/vcl/releditor.aw:47
 msgid "Klass"
 msgstr ""
 
-#: classes/vcl/releditor.aw:64
+#: classes/vcl/releditor.aw:65
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:74
+#: classes/vcl/releditor.aw:75
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:110
+#: classes/vcl/releditor.aw:111
 msgid "Seda seost ei saa redigeerida!"
 msgstr ""
 
-#: classes/vcl/releditor.aw:239 classes/vcl/releditor.aw:438 classes/vcl/releditor.aw:446 classes/vcl/releditor.aw:457
+#: classes/vcl/releditor.aw:240 classes/vcl/releditor.aw:439 classes/vcl/releditor.aw:447 classes/vcl/releditor.aw:458
 msgid "Uus"
 msgstr ""
 
-#: classes/vcl/releditor.aw:317 classes/vcl/releditor.aw:488
+#: classes/vcl/releditor.aw:318 classes/vcl/releditor.aw:489
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/releditor.aw:447
+#: classes/vcl/releditor.aw:448
 msgid "Lisa %s"
 msgstr ""
 
-#: classes/vcl/releditor.aw:462
+#: classes/vcl/releditor.aw:463
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:465
+#: classes/vcl/releditor.aw:466
 msgid "Kustutada valitud seosed?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:497
+#: classes/vcl/releditor.aw:498
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: classes/vcl/releditor.aw:567 classes/vcl/releditor.aw:774
+#: classes/vcl/releditor.aw:568 classes/vcl/releditor.aw:775
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/releditor.aw:697
+#: classes/vcl/releditor.aw:698
 msgid "Vali üks"
 msgstr ""
 
-#: classes/vcl/releditor.aw:707 classes/vcl/releditor.aw:759
+#: classes/vcl/releditor.aw:708 classes/vcl/releditor.aw:760
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:765
+#: classes/vcl/releditor.aw:766
 msgid "Nimi"
 msgstr ""
 

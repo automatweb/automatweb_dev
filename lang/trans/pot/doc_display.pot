@@ -10,75 +10,79 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/doc_display.aw:654
+#: classes/doc_display.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/doc_display.aw:662
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/doc_display.aw:660
+#: classes/doc_display.aw:668
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc_display.aw:665
+#: classes/doc_display.aw:673
 msgid "Peida"
 msgstr ""
 
-#: classes/doc_display.aw:669
+#: classes/doc_display.aw:677
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/doc_display.aw:675
+#: classes/doc_display.aw:683
 msgid "Kleebi"
 msgstr ""
 
-#: classes/doc_display.aw:871
+#: classes/doc_display.aw:879
 msgid "jaanuar"
 msgstr ""
 
-#: classes/doc_display.aw:872
+#: classes/doc_display.aw:880
 msgid "veebruar"
 msgstr ""
 
-#: classes/doc_display.aw:873
+#: classes/doc_display.aw:881
 msgid "märts"
 msgstr ""
 
-#: classes/doc_display.aw:874
+#: classes/doc_display.aw:882
 msgid "aprill"
 msgstr ""
 
-#: classes/doc_display.aw:875
+#: classes/doc_display.aw:883
 msgid "mai"
 msgstr ""
 
-#: classes/doc_display.aw:876
+#: classes/doc_display.aw:884
 msgid "juuni"
 msgstr ""
 
-#: classes/doc_display.aw:877
+#: classes/doc_display.aw:885
 msgid "juuli"
 msgstr ""
 
-#: classes/doc_display.aw:878
+#: classes/doc_display.aw:886
 msgid "august"
 msgstr ""
 
-#: classes/doc_display.aw:879
+#: classes/doc_display.aw:887
 msgid "september"
 msgstr ""
 
-#: classes/doc_display.aw:880
+#: classes/doc_display.aw:888
 msgid "oktoober"
 msgstr ""
 
-#: classes/doc_display.aw:881
+#: classes/doc_display.aw:889
 msgid "november"
 msgstr ""
 
-#: classes/doc_display.aw:882
+#: classes/doc_display.aw:890
 msgid "detsember"
 msgstr ""
 
-#: classes/doc_display.aw:889
+#: classes/doc_display.aw:897
 msgid "Just postitatud"
 msgstr ""
 

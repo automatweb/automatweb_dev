@@ -166,27 +166,23 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:144
-msgid "Otsi"
-msgstr ""
-
-#: classes/applications/calendar/party.aw:154
+#: classes/applications/calendar/party.aw:149
 msgid "Eemalda esineja"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:156
+#: classes/applications/calendar/party.aw:151
 msgid "Oled kindel, et soovid valitud esinejad eemaldada?"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:166
+#: classes/applications/calendar/party.aw:161
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:171
+#: classes/applications/calendar/party.aw:166
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:176
+#: classes/applications/calendar/party.aw:171
 msgid "Amet"
 msgstr ""
 

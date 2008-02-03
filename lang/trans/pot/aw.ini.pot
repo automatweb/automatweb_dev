@@ -2259,7 +2259,7 @@ msgid "Klassi Konverentsi kalendrivaade (1210) nimi"
 msgstr ""
 
 #: aw.ini:class_1211
-msgid "Klassi Pakiserver (1211) nimi"
+msgid "Klassi URI (Internetiaadress) (1211) nimi"
 msgstr ""
 
 #: aw.ini:class_1212
@@ -2442,6 +2442,10 @@ msgstr ""
 msgid "Klassi Surmakaunter (1369) nimi"
 msgstr ""
 
+#: aw.ini:class_1371
+msgid "Klassi Pakk (1371) nimi"
+msgstr ""
+
 #: aw.ini:class_1372
 msgid "Klassi Rahvus (1372) nimi"
 msgstr ""
@@ -2472,6 +2476,26 @@ msgstr ""
 
 #: aw.ini:class_1382
 msgid "Klassi FLV video (1382) nimi"
+msgstr ""
+
+#: aw.ini:class_1383
+msgid "Klassi Laekumine (1383) nimi"
+msgstr ""
+
+#: aw.ini:class_1388
+msgid "Klassi V&auml;ljasaadetud meilid (1388) nimi"
+msgstr ""
+
+#: aw.ini:class_1389
+msgid "Klassi Saadetud meil (1389) nimi"
+msgstr ""
+
+#: aw.ini:class_1390
+msgid "Klassi Isikute otsing (1390) nimi"
+msgstr ""
+
+#: aw.ini:class_1391
+msgid "Klassi RSS import (1391) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_1
@@ -5068,6 +5092,18 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1381
 msgid "syslog.type.ST_OWS_PROFILE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1388
+msgid "syslog.type.ST_SENT_MAIL_DATABASE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1389
+msgid "syslog.type.ST_AW_SENT_MAIL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1391
+msgid "syslog.type.ST_RSS_IMPORT"
 msgstr ""
 
 #: aw.ini:syslogactions_1

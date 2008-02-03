@@ -10,51 +10,55 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/obj/acl_base.aw:73
+#: classes/core/obj/acl_base.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/obj/acl_base.aw:76
 msgid "acl_base::add_acl_group_to_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:80
+#: classes/core/obj/acl_base.aw:83
 msgid "acl_base::add_acl_group_to_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:108
+#: classes/core/obj/acl_base.aw:111
 msgid "acl_base::add_acl_group_to_new_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:115
+#: classes/core/obj/acl_base.aw:118
 msgid "acl_base::add_acl_group_to_new_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:140
+#: classes/core/obj/acl_base.aw:143
 msgid "acl_base::remove_acl_group_from_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:147
+#: classes/core/obj/acl_base.aw:150
 msgid "acl_base::remove_acl_group_from_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:176
+#: classes/core/obj/acl_base.aw:179
 msgid "acl_base::save_acl(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:183
+#: classes/core/obj/acl_base.aw:186
 msgid "acl_base::save_acl(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:219
+#: classes/core/obj/acl_base.aw:222
 msgid "acl_base::save_acl_masked(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:226
+#: classes/core/obj/acl_base.aw:229
 msgid "acl_base::save_acl_masked(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:407
+#: classes/core/obj/acl_base.aw:410
 msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:582
+#: classes/core/obj/acl_base.aw:585
 msgid "acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
 msgstr ""
 

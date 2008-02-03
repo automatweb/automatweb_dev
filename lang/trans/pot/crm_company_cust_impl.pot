@@ -346,19 +346,19 @@ msgstr ""
 msgid "%s kliendid: %s"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2063
+#: classes/applications/crm/crm_company_cust_impl.aw:2064
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2067
+#: classes/applications/crm/crm_company_cust_impl.aw:2068
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2073
+#: classes/applications/crm/crm_company_cust_impl.aw:2074
 msgid "Eemalda kliendigrupist"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2133
+#: classes/applications/crm/crm_company_cust_impl.aw:2134
 msgid "Kontaktid"
 msgstr ""
 

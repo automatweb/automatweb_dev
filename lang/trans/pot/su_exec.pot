@@ -10,7 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/install/su_exec.aw:25
+#: classes/install/su_exec.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/install/su_exec.aw:27
 msgid "su_exec is not available!"
 msgstr ""
 

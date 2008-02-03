@@ -10,59 +10,63 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/contentmgmt/site_show.aw:2092
+#: classes/contentmgmt/site_show.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/contentmgmt/site_show.aw:2098
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2173
+#: classes/contentmgmt/site_show.aw:2179
 msgid "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2377
+#: classes/contentmgmt/site_show.aw:2385
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2883
+#: classes/contentmgmt/site_show.aw:2891
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress:"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2919
+#: classes/contentmgmt/site_show.aw:2927
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2924
+#: classes/contentmgmt/site_show.aw:2932
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3115
+#: classes/contentmgmt/site_show.aw:3123
 msgid "Lisa uus k&otilde;rvale"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3125
+#: classes/contentmgmt/site_show.aw:3133
 msgid "Lisa uus alamkaust"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3135
+#: classes/contentmgmt/site_show.aw:3143
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3145
+#: classes/contentmgmt/site_show.aw:3153
 msgid "Muuda &otilde;igusi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3154
+#: classes/contentmgmt/site_show.aw:3162
 msgid "Peida"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3158
+#: classes/contentmgmt/site_show.aw:3166
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3166 classes/contentmgmt/site_show.aw:3198
+#: classes/contentmgmt/site_show.aw:3174 classes/contentmgmt/site_show.aw:3206
 msgid "Kleebi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3186
+#: classes/contentmgmt/site_show.aw:3194
 msgid "Lisa uus"
 msgstr ""
 

@@ -14,35 +14,35 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/crm/crm_org_search.aw:93
+#: classes/crm/crm_org_search.aw:94
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/crm/crm_org_search.aw:99
+#: classes/crm/crm_org_search.aw:100
 msgid "Õiguslik vorm"
 msgstr ""
 
-#: classes/crm/crm_org_search.aw:105
+#: classes/crm/crm_org_search.aw:106
 msgid "Aadress"
 msgstr ""
 
-#: classes/crm/crm_org_search.aw:111
+#: classes/crm/crm_org_search.aw:112
 msgid "E-post"
 msgstr ""
 
-#: classes/crm/crm_org_search.aw:117
+#: classes/crm/crm_org_search.aw:118
 msgid "WWW"
 msgstr ""
 
-#: classes/crm/crm_org_search.aw:122
+#: classes/crm/crm_org_search.aw:123
 msgid "Telefon"
 msgstr ""
 
-#: classes/crm/crm_org_search.aw:128
+#: classes/crm/crm_org_search.aw:129
 msgid "Kontaktisik"
 msgstr ""
 
-#: classes/crm/crm_org_search.aw:375
+#: classes/crm/crm_org_search.aw:376
 msgid "Otsing ei leidnud ühtegi objekti"
 msgstr ""
 

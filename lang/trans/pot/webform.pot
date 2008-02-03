@@ -906,19 +906,19 @@ msgstr ""
 msgid "Registreeru"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1988
+#: classes/contentmgmt/webform.aw:1978
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2649
+#: classes/contentmgmt/webform.aw:2639
 msgid "Kinnita"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2654
+#: classes/contentmgmt/webform.aw:2644
 msgid "Tagasi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2776
+#: classes/contentmgmt/webform.aw:2766
 msgid "Liigu edasi &raquo;"
 msgstr ""
 

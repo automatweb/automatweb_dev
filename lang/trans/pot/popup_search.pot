@@ -10,67 +10,71 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/popup_search.aw:154 classes/vcl/popup_search.aw:471 classes/vcl/popup_search.aw:875
+#: classes/vcl/popup_search.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:161 classes/vcl/popup_search.aw:479 classes/vcl/popup_search.aw:897
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:163
+#: classes/vcl/popup_search.aw:170
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:203
+#: classes/vcl/popup_search.aw:210
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:221
+#: classes/vcl/popup_search.aw:228
 msgid "Lisa uus %s"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:237
+#: classes/vcl/popup_search.aw:244
 msgid "Eemalda"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:322
+#: classes/vcl/popup_search.aw:329
 msgid "Vali eemaldatavad objektid"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:338 classes/vcl/popup_search.aw:604 classes/vcl/popup_search.aw:608
+#: classes/vcl/popup_search.aw:345 classes/vcl/popup_search.aw:612 classes/vcl/popup_search.aw:616
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:419
+#: classes/vcl/popup_search.aw:427
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:449 classes/vcl/popup_search.aw:580
+#: classes/vcl/popup_search.aw:457 classes/vcl/popup_search.aw:588
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:456
+#: classes/vcl/popup_search.aw:464
 msgid "Objekti id"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:547
+#: classes/vcl/popup_search.aw:555
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:573
+#: classes/vcl/popup_search.aw:581
 msgid "OID"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:586
+#: classes/vcl/popup_search.aw:594
 msgid "Asukoht"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:592
+#: classes/vcl/popup_search.aw:600
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:596
+#: classes/vcl/popup_search.aw:604
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:670
+#: classes/vcl/popup_search.aw:678
 msgid "Vali see"
 msgstr ""
 

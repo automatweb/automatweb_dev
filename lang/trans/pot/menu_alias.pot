@@ -10,11 +10,15 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/menu_alias.aw:74
+#: classes/menu_alias.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/menu_alias.aw:77
 msgid "Muuda men&uuml;&uuml; linki"
 msgstr ""
 
-#: classes/menu_alias.aw:79
+#: classes/menu_alias.aw:82
 msgid "Lisa men&uuml;&uuml; link"
 msgstr ""
 

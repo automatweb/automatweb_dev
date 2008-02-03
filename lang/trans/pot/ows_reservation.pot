@@ -290,6 +290,18 @@ msgstr ""
 msgid "Omaduse Guest comments (guest_comments) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_reservation.aw:prop_guest_bd
+msgid "Omaduse S&uuml;nnip&auml;ev (guest_bd) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_guest_bd_comment
+msgid "Omaduse S&uuml;nnip&auml;ev (guest_bd) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_guest_bd_help
+msgid "Omaduse S&uuml;nnip&auml;ev (guest_bd) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_reservation.aw:prop_smoking
 msgid "Omaduse Smoking (smoking) caption"
 msgstr ""

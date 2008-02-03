@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/crm/crm_user_creator.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/crm/crm_user_creator.aw:324
 msgid "Nimes sisaldunud tähemärgid [%s] pole kasutajanimedes lubatud."
 msgstr ""

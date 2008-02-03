@@ -10,15 +10,19 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/scheduler.aw:752
+#: classes/scheduler.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/scheduler.aw:755
 msgid "Aeg"
 msgstr ""
 
-#: classes/scheduler.aw:757
+#: classes/scheduler.aw:760
 msgid "URL"
 msgstr ""
 
-#: classes/scheduler.aw:762
+#: classes/scheduler.aw:765
 msgid "Kordus"
 msgstr ""
 

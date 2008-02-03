@@ -10,155 +10,159 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/relationmgr.aw:133
+#: classes/vcl/relationmgr.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:136
 msgid "Kliki siia j&auml;tkamiseks"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:151 classes/vcl/relationmgr.aw:910
+#: classes/vcl/relationmgr.aw:154 classes/vcl/relationmgr.aw:913
 msgid "Alias"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:152
+#: classes/vcl/relationmgr.aw:155
 msgid "Too vend"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:153
+#: classes/vcl/relationmgr.aw:156
 msgid "&Otilde;igus"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:226 classes/vcl/relationmgr.aw:672
+#: classes/vcl/relationmgr.aw:229 classes/vcl/relationmgr.aw:675
 msgid "Objekti t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:287
+#: classes/vcl/relationmgr.aw:290
 msgid "Tagasi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:292 classes/vcl/relationmgr.aw:413 classes/vcl/relationmgr.aw:891
+#: classes/vcl/relationmgr.aw:295 classes/vcl/relationmgr.aw:416 classes/vcl/relationmgr.aw:894
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:299
+#: classes/vcl/relationmgr.aw:302
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:307
+#: classes/vcl/relationmgr.aw:310
 msgid "OID"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:313 classes/vcl/relationmgr.aw:441
+#: classes/vcl/relationmgr.aw:316 classes/vcl/relationmgr.aw:444
 msgid "Looja"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:319 classes/vcl/relationmgr.aw:453 classes/vcl/relationmgr.aw:936
+#: classes/vcl/relationmgr.aw:322 classes/vcl/relationmgr.aw:456 classes/vcl/relationmgr.aw:939
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:325 classes/vcl/relationmgr.aw:429
+#: classes/vcl/relationmgr.aw:328 classes/vcl/relationmgr.aw:432
 msgid "Asukoht"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:331
+#: classes/vcl/relationmgr.aw:334
 msgid "Staatus"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:333
+#: classes/vcl/relationmgr.aw:336
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:334
+#: classes/vcl/relationmgr.aw:337
 msgid "Aktiivsed"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:335
+#: classes/vcl/relationmgr.aw:338
 msgid "Deaktiivsed"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:345 classes/vcl/relationmgr.aw:418 classes/vcl/relationmgr.aw:897
+#: classes/vcl/relationmgr.aw:348 classes/vcl/relationmgr.aw:421 classes/vcl/relationmgr.aw:900
 msgid "Keel"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:355
+#: classes/vcl/relationmgr.aw:358
 msgid "Otsi vendi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:366 classes/vcl/relationmgr.aw:705 classes/vcl/relationmgr.aw:714
+#: classes/vcl/relationmgr.aw:369 classes/vcl/relationmgr.aw:708 classes/vcl/relationmgr.aw:717
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:402
+#: classes/vcl/relationmgr.aw:405
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:408 classes/vcl/relationmgr.aw:883
+#: classes/vcl/relationmgr.aw:411 classes/vcl/relationmgr.aw:886
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:424 classes/vcl/relationmgr.aw:955
+#: classes/vcl/relationmgr.aw:427 classes/vcl/relationmgr.aw:958
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:434
+#: classes/vcl/relationmgr.aw:437
 msgid "Loodud"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:446 classes/vcl/relationmgr.aw:944
+#: classes/vcl/relationmgr.aw:449 classes/vcl/relationmgr.aw:947
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:459
+#: classes/vcl/relationmgr.aw:462
 msgid "<a href='javascript:selall(\"sel\")'>Vali</a>"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:468
+#: classes/vcl/relationmgr.aw:471
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:685 classes/vcl/relationmgr.aw:963
+#: classes/vcl/relationmgr.aw:688 classes/vcl/relationmgr.aw:966
 msgid "Seose t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:698
+#: classes/vcl/relationmgr.aw:701
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:724
+#: classes/vcl/relationmgr.aw:727
 msgid "Uuenda"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:734
+#: classes/vcl/relationmgr.aw:737
 msgid "Loo seos(ed)"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:745
+#: classes/vcl/relationmgr.aw:748
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:752
+#: classes/vcl/relationmgr.aw:755
 msgid "Kustuta seos(ed)"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:761
+#: classes/vcl/relationmgr.aw:764
 msgid "L&otilde;ika seos(ed)"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:767
+#: classes/vcl/relationmgr.aw:770
 msgid "Kopeeri seos(ed)"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:775
+#: classes/vcl/relationmgr.aw:778
 msgid "Kleebi seos(ed)"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:904
+#: classes/vcl/relationmgr.aw:907
 msgid "Muu info"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:918
+#: classes/vcl/relationmgr.aw:921
 msgid "Link"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:927
+#: classes/vcl/relationmgr.aw:930
 msgid "Cache"
 msgstr ""
 

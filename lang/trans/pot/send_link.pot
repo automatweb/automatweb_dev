@@ -10,7 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/plugins/document/send_link.aw:26
+#: classes/plugins/document/send_link.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/plugins/document/send_link.aw:29
 msgid "Saada link nähtav"
 msgstr ""
 

@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Organisatsioon (org) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_work_relation.aw:prop_section
+msgid "Omaduse &Uuml;ksus (section) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_section_comment
+msgid "Omaduse &Uuml;ksus (section) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_section_help
+msgid "Omaduse &Uuml;ksus (section) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_work_relation.aw:prop_profession
 msgid "Omaduse Amet (profession) caption"
 msgstr ""
@@ -36,6 +48,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_profession_help
 msgid "Omaduse Amet (profession) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_room
+msgid "Omaduse T&ouml;&ouml;ruum (room) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_room_comment
+msgid "Omaduse T&ouml;&ouml;ruum (room) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_room_help
+msgid "Omaduse T&ouml;&ouml;ruum (room) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_start
@@ -51,27 +75,39 @@ msgid "Omaduse Suhte algus (start) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_end
-msgid "Omaduse Suhte lõpp (end) caption"
+msgid "Omaduse Suhte l&otilde;pp (end) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_end_comment
-msgid "Omaduse Suhte lõpp (end) kommentaar"
+msgid "Omaduse Suhte l&otilde;pp (end) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_end_help
-msgid "Omaduse Suhte lõpp (end) help"
+msgid "Omaduse Suhte l&otilde;pp (end) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_tasks
-msgid "Omaduse Ülesanded (tasks) caption"
+msgid "Omaduse &Uuml;lesanded (tasks) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_tasks_comment
-msgid "Omaduse Ülesanded (tasks) kommentaar"
+msgid "Omaduse &Uuml;lesanded (tasks) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_tasks_help
-msgid "Omaduse Ülesanded (tasks) help"
+msgid "Omaduse &Uuml;lesanded (tasks) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_load
+msgid "Omaduse Koormus (load) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_load_comment
+msgid "Omaduse Koormus (load) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_load_help
+msgid "Omaduse Koormus (load) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_directive_link
@@ -98,6 +134,18 @@ msgstr ""
 msgid "Omaduse Ametijuhend (directive) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_work_relation.aw:prop_contract_stop
+msgid "Omaduse T&ouml;&ouml;lepingu peatumine (contract_stop) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_contract_stop_comment
+msgid "Omaduse T&ouml;&ouml;lepingu peatumine (contract_stop) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:prop_contract_stop_help
+msgid "Omaduse T&ouml;&ouml;lepingu peatumine (contract_stop) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_ORG
 msgid "Seose Organisatsioon (RELTYPE_ORG) tekst"
 msgstr ""
@@ -119,6 +167,22 @@ msgid "Seose Ametijuhend (RELTYPE_DESC_FILE) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_CONTRACT_STOP
-msgid "Seose Töölepingu peatamine (RELTYPE_CONTRACT_STOP) tekst"
+msgid "Seose T&ouml;&ouml;lepingu peatamine (RELTYPE_CONTRACT_STOP) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_SECTION
+msgid "Seose &Uuml;ksus (RELTYPE_SECTION) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_PHONE
+msgid "Seose Telefon (RELTYPE_PHONE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_EMAIL
+msgid "Seose E-post (RELTYPE_EMAIL) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_FAX
+msgid "Seose Faks (RELTYPE_FAX) tekst"
 msgstr ""
 

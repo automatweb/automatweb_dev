@@ -10,23 +10,27 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/pkmgr/packagemgr_server.aw:30
+#: classes/core/pkmgr/packagemgr_server.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/pkmgr/packagemgr_server.aw:33
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/core/pkmgr/packagemgr_server.aw:37
+#: classes/core/pkmgr/packagemgr_server.aw:40
 msgid "ID"
 msgstr ""
 
-#: classes/core/pkmgr/packagemgr_server.aw:42
+#: classes/core/pkmgr/packagemgr_server.aw:45
 msgid "Nimi"
 msgstr ""
 
-#: classes/core/pkmgr/packagemgr_server.aw:47
+#: classes/core/pkmgr/packagemgr_server.aw:50
 msgid "Viimane versioon"
 msgstr ""
 
-#: classes/core/pkmgr/packagemgr_server.aw:52 classes/core/pkmgr/packagemgr_server.aw:69
+#: classes/core/pkmgr/packagemgr_server.aw:55 classes/core/pkmgr/packagemgr_server.aw:72
 msgid "Muuda"
 msgstr ""
 

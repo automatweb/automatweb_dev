@@ -10,51 +10,55 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/date_edit.aw:184
-msgid "Jaanuar"
-msgstr ""
-
-#: classes/vcl/date_edit.aw:185
-msgid "Veebruar"
-msgstr ""
-
-#: classes/vcl/date_edit.aw:186
-msgid "M&auml;rts"
+#: classes/vcl/date_edit.aw:class__help
+msgid "Klassi  help"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:187
-msgid "Aprill"
+msgid "Jaanuar"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:188
-msgid "Mai"
+msgid "Veebruar"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:189
-msgid "Juuni"
+msgid "M&auml;rts"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:190
-msgid "Juuli"
+msgid "Aprill"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:191
-msgid "August"
+msgid "Mai"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:192
-msgid "September"
+msgid "Juuni"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:193
-msgid "Oktoober"
+msgid "Juuli"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:194
-msgid "November"
+msgid "August"
 msgstr ""
 
 #: classes/vcl/date_edit.aw:195
+msgid "September"
+msgstr ""
+
+#: classes/vcl/date_edit.aw:196
+msgid "Oktoober"
+msgstr ""
+
+#: classes/vcl/date_edit.aw:197
+msgid "November"
+msgstr ""
+
+#: classes/vcl/date_edit.aw:198
 msgid "Detsember"
 msgstr ""
 

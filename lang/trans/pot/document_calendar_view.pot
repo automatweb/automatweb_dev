@@ -14,3 +14,19 @@ msgstr ""
 msgid "Klassi Dokumentide kalendrivaade help"
 msgstr ""
 
+#: classes/contentmgmt/document_calendar_view.aw:prop_folder
+msgid "Omaduse Dokumentide kataloog (folder) caption"
+msgstr ""
+
+#: classes/contentmgmt/document_calendar_view.aw:prop_folder_comment
+msgid "Omaduse Dokumentide kataloog (folder) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/document_calendar_view.aw:prop_folder_help
+msgid "Omaduse Dokumentide kataloog (folder) help"
+msgstr ""
+
+#: classes/contentmgmt/document_calendar_view.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kataloog (RELTYPE_FOLDER) tekst"
+msgstr ""
+

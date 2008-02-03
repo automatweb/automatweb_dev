@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/crm/crm_company_qv_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_qv_impl.aw:22
 msgid "Kuup&auml;ev"
 msgstr ""

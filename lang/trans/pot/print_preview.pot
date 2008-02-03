@@ -10,7 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/plugins/document/print_preview.aw:26
+#: classes/plugins/document/print_preview.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/plugins/document/print_preview.aw:29
 msgid "Prindi nähtav"
 msgstr ""
 

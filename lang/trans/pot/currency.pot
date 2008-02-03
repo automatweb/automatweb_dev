@@ -154,7 +154,7 @@ msgstr ""
 msgid "Kursid"
 msgstr ""
 
-#: classes/formgen/currency.aw:327
+#: classes/formgen/currency.aw:316
 msgid "currency::convert - kas %s või %s pole valuutadaobjektide id'd"
 msgstr ""
 

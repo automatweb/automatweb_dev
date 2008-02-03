@@ -10,23 +10,27 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/export/export.aw:236
+#: classes/export/export.aw:class_103_help
+msgid "Klassi Ekspordi ruul help"
+msgstr ""
+
+#: classes/export/export.aw:239
 msgid "Folder %s does not exist on server!"
 msgstr ""
 
-#: classes/export/export.aw:249
+#: classes/export/export.aw:252
 msgid "eksport juba k&auml;ib!"
 msgstr ""
 
-#: classes/export/export.aw:470
+#: classes/export/export.aw:473
 msgid "Found stop flag as %s, shutting down."
 msgstr ""
 
-#: classes/export/export.aw:493
+#: classes/export/export.aw:496
 msgid "VIGA, tyhi url!"
 msgstr ""
 
-#: classes/export/export.aw:777
+#: classes/export/export.aw:780
 msgid "VIGA! EI LEIDNUD ext for type %s"
 msgstr ""
 

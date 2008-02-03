@@ -474,79 +474,79 @@ msgstr ""
 msgid "Uudised"
 msgstr ""
 
-#: classes/install/aw_site.aw:1883
+#: classes/install/aw_site.aw:1884
 msgid "Demo polli k&uuml;&uuml;simus"
 msgstr ""
 
-#: classes/install/aw_site.aw:1886 classes/install/aw_site.aw:1890
+#: classes/install/aw_site.aw:1887 classes/install/aw_site.aw:1891
 msgid "Jah"
 msgstr ""
 
-#: classes/install/aw_site.aw:1887
+#: classes/install/aw_site.aw:1888
 msgid "ei"
 msgstr ""
 
-#: classes/install/aw_site.aw:1888 classes/install/aw_site.aw:1890
+#: classes/install/aw_site.aw:1889 classes/install/aw_site.aw:1891
 msgid "V&otilde;ibolla"
 msgstr ""
 
-#: classes/install/aw_site.aw:1890
+#: classes/install/aw_site.aw:1891
 msgid "Ei"
 msgstr ""
 
-#: classes/install/aw_site.aw:1909
+#: classes/install/aw_site.aw:1910
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/install/aw_site.aw:1910
+#: classes/install/aw_site.aw:1911
 msgid "Pealkiri 2"
 msgstr ""
 
-#: classes/install/aw_site.aw:1911
+#: classes/install/aw_site.aw:1912
 msgid "Pealkiri 3"
 msgstr ""
 
-#: classes/install/aw_site.aw:1913
+#: classes/install/aw_site.aw:1914
 msgid "Sisu 1"
 msgstr ""
 
-#: classes/install/aw_site.aw:1914
+#: classes/install/aw_site.aw:1915
 msgid "Sisu 2"
 msgstr ""
 
-#: classes/install/aw_site.aw:1915
+#: classes/install/aw_site.aw:1916
 msgid "Sisu 3"
 msgstr ""
 
-#: classes/install/aw_site.aw:1917
+#: classes/install/aw_site.aw:1918
 msgid "Veel sisu 1"
 msgstr ""
 
-#: classes/install/aw_site.aw:1918
+#: classes/install/aw_site.aw:1919
 msgid "Veel sisu 2"
 msgstr ""
 
-#: classes/install/aw_site.aw:1919
+#: classes/install/aw_site.aw:1920
 msgid "Veel sisu 3"
 msgstr ""
 
-#: classes/install/aw_site.aw:1947
+#: classes/install/aw_site.aw:1948
 msgid "Eesnimi"
 msgstr ""
 
-#: classes/install/aw_site.aw:1948
+#: classes/install/aw_site.aw:1949
 msgid "Perekonnanimi"
 msgstr ""
 
-#: classes/install/aw_site.aw:1949
+#: classes/install/aw_site.aw:1950
 msgid "E-posti aadress"
 msgstr ""
 
-#: classes/install/aw_site.aw:1950
+#: classes/install/aw_site.aw:1951
 msgid "Minu teade"
 msgstr ""
 
-#: classes/install/aw_site.aw:1951
+#: classes/install/aw_site.aw:1952
 msgid "Saadan"
 msgstr ""
 

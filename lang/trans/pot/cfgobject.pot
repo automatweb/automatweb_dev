@@ -10,35 +10,39 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/cfg/cfgobject.aw:42
+#: classes/cfg/cfgobject.aw:class_120_help
+msgid "Klassi Salvestatud seaded help"
+msgstr ""
+
+#: classes/cfg/cfgobject.aw:45
 msgid "Lisa"
 msgstr ""
 
-#: classes/cfg/cfgobject.aw:73 classes/cfg/cfgobject.aw:395
+#: classes/cfg/cfgobject.aw:76 classes/cfg/cfgobject.aw:398
 msgid "Muuda konfiobjekti"
 msgstr ""
 
-#: classes/cfg/cfgobject.aw:78 classes/cfg/cfgobject.aw:400
+#: classes/cfg/cfgobject.aw:81 classes/cfg/cfgobject.aw:403
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/cfgobject.aw:84
+#: classes/cfg/cfgobject.aw:87
 msgid "Vali objektid"
 msgstr ""
 
-#: classes/cfg/cfgobject.aw:356
+#: classes/cfg/cfgobject.aw:359
 msgid "Rakenda"
 msgstr ""
 
-#: classes/cfg/cfgobject.aw:361
+#: classes/cfg/cfgobject.aw:364
 msgid "Vali konfiguratsiooniobjektid"
 msgstr ""
 
-#: classes/cfg/cfgobject.aw:407
+#: classes/cfg/cfgobject.aw:410
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/cfgobject.aw:414
+#: classes/cfg/cfgobject.aw:417
 msgid "Muuda"
 msgstr ""
 
