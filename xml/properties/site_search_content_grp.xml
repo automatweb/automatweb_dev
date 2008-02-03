@@ -44,6 +44,7 @@
       <classinfo>
             <syslog_type>ST_SITE_SEARCH_CONTENT_GRP</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <SEARCH_LOCATION>
