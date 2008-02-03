@@ -22,6 +22,7 @@
       <classinfo>
             <syslog_type>ST_META</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <transl>

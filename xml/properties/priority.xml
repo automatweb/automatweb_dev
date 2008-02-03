@@ -9,6 +9,9 @@
             <group>pri</group>
             <caption>Prioriteedid</caption>
       </property>
+      <classinfo>
+            <maintainer>kristo</maintainer>
+      </classinfo>
       <groupinfo>
             <pri>
                   <caption>Prioriteedid</caption>

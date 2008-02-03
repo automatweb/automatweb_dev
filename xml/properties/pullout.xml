@@ -62,6 +62,7 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_PULLOUT</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <DOCUMENT>

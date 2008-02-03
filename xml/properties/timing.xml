@@ -88,6 +88,7 @@
             <syslog_type>ST_TIMING</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <maintainer>dragut</maintainer>
       </classinfo>
       <groupinfo>
             <objects>

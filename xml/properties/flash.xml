@@ -59,6 +59,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_FLASH</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
 </properties>
 

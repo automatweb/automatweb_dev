@@ -76,6 +76,7 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_HTML_POPUP</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <OBJ>

@@ -187,6 +187,9 @@
             <ch_value>1</ch_value>
             <caption>Kas n&amp;amp;auml;idata ka alamkataloogid</caption>
       </property>
+      <classinfo>
+            <maintainer>kristo</maintainer>
+      </classinfo>
       <groupinfo>
             <types>
                   <caption>T&amp;amp;uuml;&amp;amp;uuml;bid</caption>

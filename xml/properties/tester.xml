@@ -8,6 +8,9 @@
             <field>tests</field>
             <caption>Tulemused</caption>
       </property>
+      <classinfo>
+            <maintainer>kristo</maintainer>
+      </classinfo>
       <forminfo>
             <tester>
                   <onsubmit>do_nothing</onsubmit>

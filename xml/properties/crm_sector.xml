@@ -105,6 +105,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_CRM_SECTOR</syslog_type>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <transl>

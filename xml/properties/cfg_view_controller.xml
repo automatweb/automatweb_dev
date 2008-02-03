@@ -24,6 +24,7 @@
       <classinfo>
             <syslog_type>ST_CFG_VIEW_CONTROLLER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
 </properties>
 

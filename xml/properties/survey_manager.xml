@@ -109,6 +109,7 @@
       <classinfo>
             <syslog_type>ST_SURVEY_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <survey_list>

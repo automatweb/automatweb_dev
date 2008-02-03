@@ -60,6 +60,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <settings>

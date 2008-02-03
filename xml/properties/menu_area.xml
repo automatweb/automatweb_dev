@@ -44,6 +44,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_MENU_AREA</syslog_type>
+            <maintainer>kristo</maintainer>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <reltypes>

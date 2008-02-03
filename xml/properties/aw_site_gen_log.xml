@@ -11,6 +11,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_AW_SITE_GEN_LOG</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <view>

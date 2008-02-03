@@ -80,6 +80,7 @@
       <classinfo>
             <syslog_type>ST_IMAGE_RESIZER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <config>

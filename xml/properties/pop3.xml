@@ -31,6 +31,7 @@
       <classinfo>
             <syslog_type>ST_PROTO_POP3</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
 </properties>
 

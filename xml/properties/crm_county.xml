@@ -39,6 +39,7 @@
       </property>
       <classinfo>
             <no_status>1</no_status>
+            <maintainer>markop</maintainer>
       </classinfo>
       <tableinfo>
             <kliendibaas_maakond>

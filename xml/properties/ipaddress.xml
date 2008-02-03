@@ -22,6 +22,7 @@
       <classinfo>
             <syslog_type>ST_IPADDRESS</syslog_type>
             <no_status>1</no_status>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <general>

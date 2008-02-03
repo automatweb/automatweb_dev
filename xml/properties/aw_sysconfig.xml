@@ -14,6 +14,7 @@
       <classinfo>
             <syslog_type>ST_AW_SYSCONFIG</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <configure>

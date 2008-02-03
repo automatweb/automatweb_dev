@@ -35,6 +35,7 @@
       <classinfo>
             <syslog_type>ST_STAT_REPORT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <settings>

@@ -243,6 +243,7 @@
       <classinfo>
             <syslog_type>ST_IMAGE</syslog_type>
             <trans>1</trans>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <show>

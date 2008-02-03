@@ -25,6 +25,7 @@
             <syslog_type>ST_AUTHOR</syslog_type>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
+            <maintainer>dragut</maintainer>
       </classinfo>
 </properties>
 

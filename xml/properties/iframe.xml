@@ -64,6 +64,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <CONTENT>

@@ -61,6 +61,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_PROTO_IMAP</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <test>

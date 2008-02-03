@@ -3496,6 +3496,7 @@
             <confirm_save_data>1</confirm_save_data>
             <versioned>1</versioned>
             <prop_cb>1</prop_cb>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <general_sub>

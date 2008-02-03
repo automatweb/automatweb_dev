@@ -40,6 +40,7 @@
       <classinfo>
             <syslog_type>ST_CRM_CATEGORY</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>markop</maintainer>
       </classinfo>
       <tableinfo>
             <aw_account_balances>

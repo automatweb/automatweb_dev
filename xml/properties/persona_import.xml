@@ -153,7 +153,7 @@
       <classinfo>
             <syslog_type>ST_PERSONA_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
-            <maintainer>knummert</maintainer>
+            <maintainer>kaarel</maintainer>
       </classinfo>
       <groupinfo>
             <settings>

@@ -108,6 +108,7 @@
       <classinfo>
             <syslog_type>ST_CRM_SECTION_WEBSIDE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <order>

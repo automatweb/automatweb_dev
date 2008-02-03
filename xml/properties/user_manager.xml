@@ -135,6 +135,7 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <prop_cb>1</prop_cb>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <users>

@@ -137,6 +137,7 @@
       <classinfo>
             <syslog_type>ST_DRONLINE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <folders>

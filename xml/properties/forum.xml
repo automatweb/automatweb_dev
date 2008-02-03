@@ -97,6 +97,9 @@
             <callback>callback_get_languages</callback>
             <caption>Keel</caption>
       </property>
+      <classinfo>
+            <maintainer>dragut</maintainer>
+      </classinfo>
       <groupinfo>
             <rates>
                   <caption>Hinded</caption>

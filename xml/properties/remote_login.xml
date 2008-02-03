@@ -27,5 +27,8 @@
             <type>textbox</type>
             <caption>Server</caption>
       </property>
+      <classinfo>
+            <maintainer>kristo</maintainer>
+      </classinfo>
 </properties>
 

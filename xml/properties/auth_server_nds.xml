@@ -118,6 +118,7 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <GROUP>

@@ -61,6 +61,7 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_TREEVIEW</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <FOLDER>

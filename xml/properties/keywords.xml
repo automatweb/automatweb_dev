@@ -23,6 +23,7 @@
             <relationmgr>yes</relationmgr>
             <status>no</status>
             <no_status>1</no_status>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <transl>

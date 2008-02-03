@@ -85,6 +85,7 @@
       <classinfo>
             <hide_tabs>1</hide_tabs>
             <syslog_type>ST_STAT_UPLOADER</syslog_type>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <forminfo>
             <stat>

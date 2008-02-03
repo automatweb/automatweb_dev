@@ -63,6 +63,7 @@
       <classinfo>
             <syslog_type>ST_METAMGR</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <manager>

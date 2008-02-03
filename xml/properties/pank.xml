@@ -169,6 +169,7 @@
       <classinfo>
             <syslog_type>ST_PANK</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <account_overview>

@@ -38,6 +38,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_ENTITY</syslog_type>
+            <maintainer>kristo</maintainer>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <tableinfo>

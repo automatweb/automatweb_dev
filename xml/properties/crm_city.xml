@@ -49,6 +49,7 @@
       <classinfo>
             <no_status>1</no_status>
             <syslog_type>ST_CRM_CITY</syslog_type>
+            <maintainer>markop</maintainer>
       </classinfo>
       <tableinfo>
             <kliendibaas_linn>

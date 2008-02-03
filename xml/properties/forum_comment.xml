@@ -61,6 +61,7 @@
             <syslog_type>ST_COMMENT</syslog_type>
             <no_status>1</no_status>
             <relationmgr>yes</relationmgr>
+            <maintainer>dragut</maintainer>
       </classinfo>
       <tableinfo>
             <forum_comments>

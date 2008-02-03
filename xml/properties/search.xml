@@ -210,6 +210,9 @@
             </group>
             <type>textbox</type>
       </property>
+      <classinfo>
+            <maintainer>kristo</maintainer>
+      </classinfo>
       <groupinfo>
             <search>
                   <caption>Lihtne&amp;amp;nbsp;otsing</caption>

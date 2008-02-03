@@ -86,6 +86,7 @@
       <classinfo>
             <syslog_type>ST_ACCOUNT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <account_overview>

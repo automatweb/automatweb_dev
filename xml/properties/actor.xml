@@ -20,6 +20,7 @@
       <classinfo>
             <syslog_type>ST_ACTOR</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <general>

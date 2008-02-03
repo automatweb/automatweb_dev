@@ -24,6 +24,7 @@
             <syslog_type>ST_CB_SEARCH_SYNONYMS</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <maintainer>kristo</maintainer>
       </classinfo>
 </properties>
 

@@ -121,6 +121,7 @@
       <classinfo>
             <syslog_type>ST_MENU_AREA_LEVEL</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <STYLE>

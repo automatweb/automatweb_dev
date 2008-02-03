@@ -180,6 +180,7 @@
       <classinfo>
             <syslog_type>ST_XML_EXPORT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>dragut</maintainer>
       </classinfo>
       <groupinfo>
             <config>

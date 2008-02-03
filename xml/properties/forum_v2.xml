@@ -704,6 +704,7 @@
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>dragut</maintainer>
       </classinfo>
       <groupinfo>
             <general_sub>

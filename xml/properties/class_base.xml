@@ -41,6 +41,9 @@
             <ch_value>2</ch_value>
             <caption>Vajab t&amp;amp;otilde;lget</caption>
       </property>
+      <classinfo>
+            <maintainer>kristo</maintainer>
+      </classinfo>
       <groupinfo>
             <general>
                   <caption>&amp;amp;Uuml;ldine</caption>

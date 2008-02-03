@@ -116,6 +116,7 @@
             <syslog_type>ST_DOCUMENT_STATISTICS</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <folders>

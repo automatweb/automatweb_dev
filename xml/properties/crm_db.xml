@@ -183,6 +183,7 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_DB</syslog_type>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <org>

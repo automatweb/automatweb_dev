@@ -186,6 +186,7 @@
       <classinfo>
             <syslog_type>ST_LAYOUT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
