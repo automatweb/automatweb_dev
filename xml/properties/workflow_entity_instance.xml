@@ -27,6 +27,7 @@
       <classinfo>
             <syslog_type>ST_WORKFLOW_ENTITY_INSTANCE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <tableinfo>
             <aw_wf_entities>

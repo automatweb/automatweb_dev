@@ -79,6 +79,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_WORKFLOW</syslog_type>
+            <maintainer>kristo</maintainer>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>

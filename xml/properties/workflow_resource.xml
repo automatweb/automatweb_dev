@@ -31,6 +31,7 @@
       <classinfo>
             <syslog_type>ST_WORKFLOW_RESOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <overview>
