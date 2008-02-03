@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/trans/mk_pot.aw,v 1.5 2007/11/26 18:56:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/scripts/trans/mk_pot.aw,v 1.6 2008/02/03 22:55:12 dragut Exp $
 $basedir = realpath(".");
 include("$basedir/init.aw");
 init_config(array("ini_files" => array("$basedir/aw.ini")));
 classload("defs");
 classload("aw_template");
+aw_global_set("no_db_connection", true);
 
 if (in_array("--dbg", $argv))
 {
