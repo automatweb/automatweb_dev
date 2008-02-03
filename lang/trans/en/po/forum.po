@@ -198,15 +198,15 @@ msgstr "Select"
 
 #: classes/contentmgmt/forum/forum.aw:1310
 msgid "Nime v&auml;li peab olema t&auml;idetud"
-msgstr ""
+msgstr "Name field must be filled"
 
 #: classes/contentmgmt/forum/forum.aw:1314
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud"
-msgstr ""
+msgstr "Comment field must be filled"
 
 #: classes/contentmgmt/forum/forum.aw:1318
 msgid "Sisestatud kontrollkood on vale"
-msgstr ""
+msgstr "Verification code is incorrect"
 
 #: classes/contentmgmt/forum/forum.aw:2417
 msgid "Näita"
