@@ -33,6 +33,7 @@
             <syslog_type>ST_SHOP_WAREHOUSE_RECEPTION</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <income>

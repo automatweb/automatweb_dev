@@ -63,6 +63,7 @@
             <syslog_type>ST_SHOP_PRODUCT_TYPE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <reltypes>
             <SP_CFGFORM>

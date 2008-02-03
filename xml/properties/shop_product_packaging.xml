@@ -399,6 +399,7 @@
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT_PACKAGING</syslog_type>
             <relationmgr>yes</relationmgr>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <data>

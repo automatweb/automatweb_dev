@@ -45,6 +45,7 @@
             <relationmgr>yes</relationmgr>
             <no_caption>1</no_caption>
             <no_status>1</no_status>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <vis>
