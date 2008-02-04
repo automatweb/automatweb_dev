@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.75 2008/02/04 11:59:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.76 2008/02/04 12:05:19 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -1916,6 +1916,7 @@ class bank_payment extends class_base
 			$bank_id = $this->merchant_id[$val["SOLOPMT-RETURN-VERSION"]];
 		}
 		$ret["bank"] = $this->banks[$bank_id];
+		$ret["bank_id"] = $bank_id;
 		$ret["curr"] = $val["VK_CURR"];
 		return $ret;
 	}
