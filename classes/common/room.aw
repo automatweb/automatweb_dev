@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.219 2008/01/03 12:51:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.220 2008/02/04 12:52:50 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3577,6 +3577,10 @@ class room extends class_base
 	function save_products($arr)
 	{
 		$this_obj = obj($arr["id"]);
+		if(is_oid($this_obj->prop("inherit_prods_from")) && $this->can("view" , $this_obj->prop("inherit_prods_from")))
+		{
+			$this_obj = obj($this_obj->prop("inherit_prods_from"));
+		}
 		$prod_data = $this_obj->meta("prod_data");
 		foreach($arr["set_ord"]  as $id => $ord)
 		{
