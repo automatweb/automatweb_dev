@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.5 2008/02/04 11:12:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.6 2008/02/04 11:12:52 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
@@ -107,7 +107,7 @@ class document_calendar_view extends class_base
 		$o = obj($arr["id"]);
 		if ($this->can("view", $o->prop("folder")))
 		{
-			$docs = $ss->get_default_document(array("obj" => obj($o->prop("folder"), "include_submenus" => 1)));
+			$docs = $ss->get_default_document(array("obj" => obj($o->prop("folder")), "include_submenus" => 1));
 		}
 		else
 		{
