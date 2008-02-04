@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.49 2008/01/10 13:56:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.50 2008/02/04 12:31:42 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
-@classinfo syslog_type=ST_CRM_COMPANY_WEBVIEW relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
+@classinfo syslog_type=ST_CRM_COMPANY_WEBVIEW relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
@@ -368,7 +368,6 @@ class crm_company_webview extends class_base
 		$extrainfo = array(); // crm_field_{type} objects in type => array('o'=>obj,'p'=>properties)  array (type is class id) (see reltype FIELD on crm_company)
 		$used_fields = $this->v2_name_map;
 		classload("crm/crm_company");
-
 		$images_conns = null; // Variable for connections to image objects, if this is set before parsing images, allows overriding image selection
 		foreach ($datafields as $item => $mapped)
 		{
@@ -476,7 +475,7 @@ class crm_company_webview extends class_base
 				case 'name':
 				case 'comment':
 				case 'description':
-					$value = nl2br($c->prop($mapped));
+					$value = nl2br($c->trans_get_val($mapped));
 				break;
 				case 'founded':
 					if ($c->prop($mapped) > 0)
@@ -1361,7 +1360,7 @@ class crm_company_webview extends class_base
 				continue;
 			}
 			$address = $phone = $fax = $openhours = $email = $web = "";
-			$name = $o->name();
+			$name = $o->trans_get_val("name");
 			$tmp_ad = $this->can("view", $o->prop("contact"))?obj($o->prop("contact")):false;
 			$tmp_cty = $tmp_ad?$tmp_ad->prop("maakond.name"):false;
 			$cty_cap = $tmp_cty?$name." (".$tmp_cty.")":$name;
@@ -1510,7 +1509,7 @@ class crm_company_webview extends class_base
 					}
 					elseif(substr($item, 0, 6) == 'userta')
 					{
-						$value = $o->prop($item);
+						$value = $o->trans_get_val($item);
 					}
 					else
 					{
@@ -1623,7 +1622,6 @@ class crm_company_webview extends class_base
 			));
 		}
 		$this->parse('company_list');
-
 		return $this->parse();
 	}
 
