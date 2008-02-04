@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.74 2008/01/30 09:26:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.75 2008/02/04 11:59:16 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -132,6 +132,10 @@ class bank_payment extends class_base
 		"hansapank_lt"		=> "Leedu Hansapank",
 		"credit_card"		=> "Kaardikeskus (krediitkaart)",
 		"snoras"		=> "AB bankas SNORAS"
+	);
+	
+	var $different_accounts = array(
+		"hansapank", "seb", "krediidipank" , "sampopank" ,"hansapank_lv" , "hansapank_lt" ,"snoras","nordeapank"
 	);
 	
 	//kõikidele pankadele ühine info
@@ -898,6 +902,10 @@ class bank_payment extends class_base
 			$data["name"] = $val;
 			foreach($this->bank_props as $prop => $caption)
 			{
+				if(!in_array($key, $this->different_accounts) && ($prop == "stamp" || $prop == "rec_name") )
+				{
+					continue;
+				}
 				$data[$prop] = html::textbox(array(
 					"name" => "meta[".$key."][".$prop."]",
 //					"type" => "textbox",
@@ -1121,6 +1129,7 @@ class bank_payment extends class_base
 		if(!$arr["service"]) $arr["service"] = "1002";
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
+		$arr["expl"] =  trim($arr["expl"]);
 		if(array_key_exists($arr["lang"] , $this->languages["hansa"]))
 		{
 			$arr["lang"] = $this->languages["hansa"][$arr["lang"]];
@@ -1560,6 +1569,7 @@ class bank_payment extends class_base
 			fclose($fp);
 		}
 
+		$arr["expl"] =  trim($arr["expl"]);
 		if(!$arr["service"]) $arr["service"] = "0002";
 		if(!$arr["version"]) $arr["version"] = "0003";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
@@ -1602,7 +1612,7 @@ class bank_payment extends class_base
 		{
 			$arr["lang"] = "ENG";
 		}
-
+		$arr["expl"] =  trim($arr["expl"]);
 		if(!$arr["stamp"]) $arr["stamp"] = "666";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
@@ -1641,6 +1651,7 @@ class bank_payment extends class_base
 		{
 			$arr["lang"] = "en";
 		}
+		$arr["expl"] =  trim($arr["expl"]);
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["priv_key"])
@@ -1745,8 +1756,8 @@ class bank_payment extends class_base
 			"SOLOPMT_VERSION"     => $service,// 1.    Payment Version   SOLOPMT_VERSION   "0002"   AN 4  M
 			"SOLOPMT_STAMP"       => $stamp,// 2.    Payment Specifier    SOLOPMT_STAMP  Code specifying the payment   N 20  M 
 			"SOLOPMT_RCV_ID"      => $sender_id, // 3.    Service Provider ID  SOLOPMT_RCV_ID    Customer ID (in Nordea's register)  AN 15    M 
-//			"SOLOPMT_RCV_ACCOUNT" => $acc,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
-//			"SOLOPMT_RCV_NAME"    => $name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
+			"SOLOPMT_RCV_ACCOUNT" => $acc,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
+			"SOLOPMT_RCV_NAME"    => $name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
 			"SOLOPMT_LANGUAGE"    => $lang,// 6.    Payment Language  SOLOPMT_LANGUAGE  1 = Finnish 2 = Swedish 3 = English    N 1   O 
 			"SOLOPMT_AMOUNT"      => $amount,// 7.    Payment Amount    SOLOPMT_AMOUNT    E.g. 990.00    AN 19    M 
 			"SOLOPMT_REF"         => $reference_nr,// 8.    Payment Reference Number   SOLOPMT_REF    Standard reference number  AN 20    M 
@@ -1761,6 +1772,11 @@ class bank_payment extends class_base
 			"SOLOPMT_KEYVERS"     => $version,// 17.   Key Version    SOLOPMT_KEYVERS   E.g. 0001   N 4   O 
 			"SOLOPMT_CUR"         => $curr,// 18.   Currency Code  SOLOPMT_CUR    EUR   A 3   O 
 		);
+		if(!($name && $acc))
+		{
+			unset($params["SOLOPMT_RCV_NAME"]);
+			unset($params["SOLOPMT_RCV_ACCOUNT"]);
+		}
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);	
 	}
