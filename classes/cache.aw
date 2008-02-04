@@ -1,12 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.54 2008/01/31 13:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.55 2008/02/04 19:09:26 kristo Exp $
 
-// cache.aw - klass objektide cachemisex. 
-// cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
-// cache kasutamist kontrollib muutuja USE_PAGE_CACHE
-// cachetakse ainult mitte sisse-loginud kasutajatele
 /*
 @classinfo  maintainer=kristo
+@comment
+	Class for caching data, cache is kept in the file system, in folder defined in ini file by variable cache.page_cache
 */
 
 class cache extends core
@@ -17,15 +15,8 @@ class cache extends core
 		aw_config_init_class(&$this);
 	}
 	
-	////
-	// !kirjutab cachesse
-	// $oid - objekti id, mille kohta cache tehakse
-	// $arr - array objekti kuju identivatest parameetritest (periood ntx), millest moodustatakse cache faili nimi.
-	// $content - cachetav asi
-	// $clear_flag - kui see on false, siis ei clearita cache_dirty flagi sellele objektile
-	//               idee on selles, et siis saab yhele objektile ka mitu cachet teha.
-	/**
-		@attrib params=pos 
+	/** writes a page to the html page cache
+		@attrib params=pos api=1
 
 		@param oid required type=string
 			Object id, which is cached.
@@ -79,12 +70,25 @@ class cache extends core
 		}
 	}
 
-	////
-	// !tshekib et kas objekt on cachetud ja kas cachemist yldse kasutatakse. 
-	// kui kasutatakse ja objekt on olemas, siis tagastab objekti cache
-	// kui ei, siis false
-	// $oid - objekti id, mille kohta cachet kysitaxe
-	// $arr - array objekti kuju identivatest parameetritest (periood ntx), millest moodustatakse cache faili nimi.
+	/** reads a page from the html page cache
+		@attrib params=pos api=1
+
+		@param oid required type=string
+			Object id, which is cached.
+
+		@param arr required type=array
+			Array containing parameters identifying object ('period' for example), which is used to compose filename in cache.
+
+		@param real_oid optional type=oid default=NULL
+			[xxx] If this is set, then oid parameter will be overwritten by this parameter. Seems that oid parameters value may not always be valid object id, so it is possible to supply correct object id via real_oid parameter.
+
+		@errors
+			none
+
+		@returns
+			If the cache for the given parameters exists and is valid, then returns cache content, else false
+	
+	**/
 	function get($oid,$arr, $real_oid = NULL)
 	{
 		if ($real_oid === NULL)
@@ -119,7 +123,7 @@ class cache extends core
 		}
 	}
 	
-	/**
+	/** Writes the given data to a cache file in the main cache folder
 		@attrib params=pos api=1
 
 		@param key required type=string
@@ -147,7 +151,6 @@ class cache extends core
 		{
 			$fname = $this->cfg["page_cache"];
 			$hash = md5($key);
-			// make 3-level folder structure
 			$fname .= "/".$hash{0};
 			if (!is_dir($fname))
 			{
@@ -161,7 +164,7 @@ class cache extends core
 		}
 	}
 
-	/**
+	/** Reads a cached file from the main cache folder
 		@attrib params=pos api=1
 
 		@param key required type=string
@@ -172,7 +175,7 @@ class cache extends core
 
 		@returns
 			Contents of the file in cache.	
-			false if page_cache is not set in aw.ini
+			false if page_cache is not set in aw.ini of file is not found
 	
 		@comment
 			Not recommended to use.
@@ -209,7 +212,7 @@ class cache extends core
 		}
 	}
 
-	/**
+	/** Returns cache file contents if the cache is not older than the given time
 		@attrib params=pos api=1
 
 		@param key required type=string
@@ -223,12 +226,12 @@ class cache extends core
 
 		@returns
 			- Contents of the file in cache.	
+			- false if the cache file does not exist
 			- false if page_cache is not set in aw.ini
 			- false if supplied timestamp has newer time than the file's modification time
 	
 		@comment
 			Checks, if the file in cache modification time is older than the time supplied via parameter. If it is older, then returns false, else filecontent.
-			Not recommended to use.
 
 		@examples
 			$cache = get_instance('cache');
@@ -255,7 +258,7 @@ class cache extends core
 		return $this->get_file(array("file" => $fqfn));
 	}
 
-	/**
+	/** Clears the given file from the cache
 		@attrib params=pos api=1
 
 		@param key required type=string
@@ -269,7 +272,6 @@ class cache extends core
 	
 		@comment
 			Deletes the file from cache
-			Not recommended to use.
 
 		@examples
 			$cache = get_instance('cache');
@@ -287,145 +289,7 @@ class cache extends core
 		}
 	}
 
-	/**
-		@attrib params=pos api=1
-
-		@param pt required type=string
-			Folder under $site/pagecache
-		@param oid required type=int
-			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
-		@param fn required type=string
-			Filename containing cached data
-
-		@errors
-			none
-
-		@returns
-			- false if file does not exist in cache
-	
-		@comment
-			Not recommended to use, because include() seems to be slower than eval().
-		@examples
-			none		
-	**/
-	function file_get_incl_pt_oid($pt, $oid, $fn)
-	{
-		$fq = $this->cfg["page_cache"]."/".$pt."/".substr($oid, -1, 1)."/".$fn;
-		if (!file_exists($fq))
-		{
-			return false;
-		}
-		include($fq);
-		return $arr;
-	}
-
-	/**
-		@attrib params=pos api=1
-
-		@param pt required type=string
-			Folder under $site/pagecache
-		@param oid required type=int
-			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
-		@param fn required type=string
-			Filename containing cached data
-
-		@errors
-			none
-
-		@returns
-			false if file does not exist in cache
-	
-		@comment
-			Not recommended to use, because include() seems to be slower than eval().
-		@examples
-			none		
-	**/
-	function file_get_incl_pt($pt, $subf, $fn)
-	{
-		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
-		if (!file_exists($fq))
-		{
-			return false;
-		}
-		include($fq);
-		return $arr;
-	}
-
-	/**
-		@attrib params=pos api=1
-
-		@param pt required type=string
-			Folder under $site/pagecache
-		@param oid required type=int
-			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
-		@param fn required type=string
-			Filename containing cached data
-		@param dat required type=string
-			Data to be cached
-
-		@errors
-			Throws error when file cannot be opened for writing
-
-		@returns
-			none
-	
-		@comment
-			Not recommended to use, because include() seems to be slower than eval().
-
-		@examples
-			$cache = get_instance('cache');
-			$cache->file_set_incl_pt_oid('foo', 1234, 'bar', 'Hello World');
-			// creates into folder $site/pagecache/foo/4/ file bar which contains 'Hello World'
-	**/
-	function file_set_incl_pt_oid($pt, $oid, $fn, $dat)
-	{
-		$fq = $this->cfg["page_cache"]."/".$pt."/".substr($oid, -1, 1)."/".$fn;
-
-		$str = "<?php\n";
-		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
-		$str .= "?>";
-		
-		return $this->file_set_pt($pt, substr($oid, -1, 1), $fn, $str);
-	}
-
-	/**
-		@attrib params=pos api=1
-
-		@param pt required type=string
-			Folder under $site/pagecache
-		@param subf required type=string
-			Folder under the folder specified by $pt parameter 
-		@param fn required type=string
-			Filename containing cached data
-		@param dat required type=string
-			Data to be cached
-
-		@errors
-			Throws error when file cannot be opened for writing
-
-		@returns
-			none
-	
-		@comment
-			Not recommended to use, because include() seems to be slower than eval().
-
-		@examples
-			$cache = get_instance('cache');
-			$cache->file_set_incl_pt('foo', 'asd', 'bar', 'Hello World');
-			// creates into folder $site/pagecache/foo/asd/ file bar which contains 'Hello World'
-	**/
-	function file_set_incl_pt($pt, $subf, $fn, $dat)
-	{
-		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
-
-		$str = "<?php\n";
-		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
-		$str .= "?>";
-		
-		return $this->file_set_pt($pt, $subf, $fn, $str);
-	}
-
-	/**
+	/** Sets cache content for parent and oid and function
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -457,7 +321,7 @@ class cache extends core
 		return $this->file_set_pt($pt, substr($oid, -1, 1), $fn, $cont);
 	}
 
-	/**
+	/** Returns cache content for parent and oid and function
 		@attrib params=pos api=1
 			
 		@param pt required type=string
@@ -488,7 +352,7 @@ class cache extends core
 		return $this->file_get_pt($pt, substr($oid, -1, 1), $fn);
 	}
 
-	/**
+	/** Returns cache content for parent and oid and function if it is not older than the given timestamp
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -529,7 +393,7 @@ class cache extends core
 		return $this->file_get_pt_ts($pt, substr($oid, -1, 1), $fn, $ts);
 	}
 
-	/**
+	/** Sets cache content for parent folder and function
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -561,17 +425,13 @@ class cache extends core
 		if (!$f)
 		{
 			return;
-			error::raise(array(
-				"id" => "ERR_CACHE_FILE",
-				"msg" => sprintf(t("cache::file_set_pt(%s, %s, %s): could not open file %s for writing!"), $pt, $subf, $fn, $fq)
-			));
 		}
 		fwrite($f, $cont);
 		fclose($f);
 		@chmod($fname, 0666);
 	}
 
-	/**
+	/** Returns cache content for parent folder function
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -616,7 +476,7 @@ class cache extends core
 		return $ret;
 	}
 
-	/**
+	/** Returns cache content for parent folder function if it is not older thatn the given timestamp
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -670,7 +530,7 @@ class cache extends core
 		return $ret;
 	}
 
-	/**
+	/** Clears cache for parent
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -705,7 +565,7 @@ class cache extends core
 		$this->_crea_fld($pt);
 	}
 
-	/**
+	/** Clears cache for parent and oid
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -740,7 +600,7 @@ class cache extends core
 		chmod($fq, 0777);
 	}
 
-	/**
+	/** Clears cache for parent oid and function
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -773,7 +633,7 @@ class cache extends core
 		@unlink($fq);
 	}
 
-	/**
+	/** Clears cache for parent and folder
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -813,7 +673,7 @@ class cache extends core
 		chmod($fq, 0777);
 	}
 
-	function _crea_fld($f)
+	private function _crea_fld($f)
 	{
 		$fq = $this->cfg["page_cache"]."/".$f;
 		mkdir($fq, 0777);
@@ -826,7 +686,7 @@ class cache extends core
 		}
 	}
 
-	/**
+	/** Returns client-unserialized cache file
 		@attrib params=name api=1
 
 		@param fname required type=string
@@ -973,7 +833,7 @@ class cache extends core
 	}
 
 
-	/**
+	/** Returns the date for the last time any object in the system was modified
 		@attrib api=1
 
 		@errors
@@ -1008,7 +868,7 @@ class cache extends core
 		return $last_mod;
 	}
 
-	/**
+	/** Completely clears the cache.
 		@attrib params=pos api=1
 
 		@errors
@@ -1017,8 +877,6 @@ class cache extends core
 		@returns
 			none
 	
-		@comment
-			Completely clears the cache.
 
 		@examples
 			$cache = get_instance('cache');

@@ -4,6 +4,8 @@
 */
 class alias_parser extends core
 {
+	private $tmp_vars;
+
 	function alias_parser()
 	{
 		$this->init();
@@ -207,10 +209,31 @@ class alias_parser extends core
 		exit_function("aliasmgr::parse_oo_aliases::loop");
 	}
 
-	////
-	// !Gets all aliases for an object
-	// params:
-	//   oid - the object whose aliases we must return
+	/**  Returns an array of aw aliases that are attached to gthe given object
+		@attrib api=1 params=name
+
+		@param oid required type=int acl=view
+			the object for which the aliases are returned
+		
+		@errors
+			none
+
+		@returns
+			array { aliased object class_id => array { alias number => array { all connection properties + aliaslink } } }
+
+		@examples
+
+			$alp = get_instance("alias_parser");
+			$alias_list = $alp->get_oo_aliases(array("oid" => $oid));
+
+			foreach($alias_list as $class_id => $data)
+			{
+				foreach($data as $idx => $alias)
+				{
+					echo "object ".$alias["to"].", name ".$alias["name"]." is connected <br>";
+				}
+			}
+	**/
 	function get_oo_aliases($args = array())
 	{
 		extract($args);
@@ -257,8 +280,28 @@ class alias_parser extends core
 		return $retval;
 	}
 
-	////
-	// !returns an array of alias id => alias name (#blah666#) for object $oid
+	/** returns an array of alias id => alias name (#blah666#) for the given object
+		@attrib api=1 params=pos
+
+		@param oid required type=int acl=view
+			the object for which the aliases are returned
+		
+		@errors
+			none
+
+		@returns
+			array { aliased object id => alias string }
+
+		@examples
+
+			$alp = get_instance("alias_parser");
+			$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($oid);
+
+			foreach($alias_list as $obj_id => $alias_string)
+			{
+				echo "alias for object $obj_id is $alias_string <br>";
+			}
+	**/
 	function get_alias_list_for_obj_as_aliasnames($oid)
 	{
 		$cnts = array();

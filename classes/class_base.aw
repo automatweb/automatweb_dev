@@ -61,26 +61,6 @@ define('PROP_ERROR',3);
 // notify the user and DO NOT display the form/save the object
 define('PROP_FATAL_ERROR',4);
 
-
-// block showing contents of a single tab. callback_pre_edit uses this
-define('CB_ERROR',1);
-
-// block showing the entire form, could be used to report nicely
-// formatted error messages back user. Not used yet.
-define('CB_FATAL_ERROR',2);
-
-// reltypes starting from id-s with 100 are reserved and should not be used
-// anywhere else
-
-// a special type for relations - link. This can be used to create links
-// between objects - defining "link" is left to the owning class of the
-// object. Basically it's just like "alias" but the alias textbox is
-// _not_ show in the relation manager
-define('RELTYPE_LINK',100);
-
-// link to the config form that was used to create the object
-define('RELTYPE_CFGFORM',101);
-
 // translation
 define('RELTYPE_TRANSLATION',102);
 define('RELTYPE_ORIGINAL',103);
@@ -1113,9 +1093,6 @@ class class_base extends aw_template
 
 		if ($save_ok)
 		{
-			// logging should be defined by the form info
-			$this->log_obj_change();
-			// as well as this
 			if ($request["is_sa"] == 1)
 			{
 				$args["is_sa"] = 1;
@@ -1247,23 +1224,6 @@ class class_base extends aw_template
 		}
 
 		return $retval;
-	}
-
-	////
-	// ! Log the action
-	function log_obj_change()
-	{
-		$name = $this->obj_inst->name();
-
-		$syslog_type = ST_CONFIG;
-		if (!empty($this->classinfo['syslog_type']))
-		{
-			$syslog_type = @constant($this->classinfo['syslog_type']);
-		}
-
-		// XXX: if I want to save data that does not belong to
-		// objects table, then I don't want to log it like this --duke
-		//$this->_log($syslog_type, isset($this->new) ? SA_ADD : SA_CHANGE, $name, $this->id);
 	}
 
 	function get_cfgform_for_object($args = array())
@@ -4265,33 +4225,6 @@ class class_base extends aw_template
 	// init functions for classes that do not use automatic form generator
 	//
 	//////////////////////////////////////////////////////////////////////
-
-	////
-	// !initializes the add function UI
-	// params:
-	// $args - the arguments to the add function
-	// $classname - the name that will be used in the path
-	// $tpl - the template to read
-	function _add_init($args, $classname, $tpl)
-	{
-		// check if we can add objects under the parent menu
-		if (!$this->can("add", $args["parent"]))
-		{
-			$this->acl_error("add", $args["parent"]);
-		}
-		// make the path
-		$self_url = aw_global_get("REQUEST_URI");
-		if ($args["return_url"] != "")
-		{
-			// if return url is set, we must make the path point to the url gievn
-			$this->mk_path(0,"<a href='$args[return_url]'>Tagasi</a> / <a href='$self_url'>Lisa $classname</a>");
-		}
-		else
-		{
-			$this->mk_path($args["parent"],"<a href='$self_url'>Lisa $classname</a>");
-		}
-		$this->read_template($tpl);
-	}
 
 	function _change_init($args, $classname, $tpl = "")
 	{

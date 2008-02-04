@@ -1,15 +1,26 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.87 2008/01/31 13:49:47 kristo Exp $
-// aw_template.aw - Templatemootor
 /*
 @classinfo  maintainer=kristo
+@comment
+	The aw template engine
 */
-
-classload("core");
 
 class aw_template extends core
 {
-	var $debug_mode;
+	public $template_dir;
+	public $adm_template_dir;
+	public $site_template_dir;
+	public $vars;
+	public $sub_merge;
+	public $template_filename;
+	public $v2_name_map;
+
+	private $debug_mode;
+	private $use_eval;
+	private $v2_templates;
+	private $v2_arr;
+	private $v2_parent_map;
+	private $c_templates;
 
 	function init($args = array())
 	{
@@ -34,8 +45,6 @@ class aw_template extends core
 		{
 			aw_config_init_class(&$this);
 		}
-
-		$this->REQUEST_URI = aw_global_get("REQUEST_URI");
 
 		if (substr($basedir,0,1) != "/" && !preg_match("/^[a-z]:/i", substr($basedir,0,2)))
 		{
@@ -879,7 +888,7 @@ class aw_template extends core
 		return true;
 	}
 
-	function req_read_tpl($fq_name,$cur_name,$parent_name)
+	private function req_read_tpl($fq_name,$cur_name,$parent_name)
 	{
 		$cur_src = "";
 		$this->v2_parent_map[$cur_name] = $parent_name;
@@ -1018,6 +1027,5 @@ class aw_template extends core
 		return isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : ""; 
 	}
 };
-classload("class_base","html");
 
 ?>
