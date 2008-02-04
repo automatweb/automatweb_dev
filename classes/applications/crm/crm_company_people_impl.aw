@@ -175,7 +175,8 @@ class crm_company_people_impl extends class_base
 
 	function callb_human_name($arr)
 	{
-		list($ln, $fn) = explode(" ", $arr["name"]);
+		$fn = $arr["firstname"];
+		$ln = $arr["lastname"];
 		return html::get_change_url(
 			$arr["id"],
 			array("return_url" => get_ru()),
@@ -509,7 +510,10 @@ class crm_company_people_impl extends class_base
 				$img = $img_i->make_img_tag_wl($imgo->id(),"","",array("width" => 60));
 			}
 
-			list($fn, $ln) = explode(" ", $person->prop('name'));
+			// This will cause huge problems when there are spaces in first or last name.
+//			list($fn, $ln) = explode(" ", $person->prop('name'));
+			$fn = $person->prop("firstname");
+			$ln = $person->prop("lastname");
 			$aol = new object_list(array(
 				"class_id" => CL_CRM_AUTHORIZATION,
 				"lang_id" => array(),
@@ -532,6 +536,8 @@ class crm_company_people_impl extends class_base
 			}
 			$authoirization = join(", " , $a_links);
 			$tdata = array(
+				"firstname" => $fn,
+				"lastname" => $ln,
 				"name" => $ln." ".$fn,
 				"image" => $img,
 				"cal" => $cal,
@@ -711,6 +717,8 @@ class crm_company_people_impl extends class_base
 				'cal_id' => $calid
 			));
 			$t->define_data(array(
+				"firstname" => $o->prop("firstname"),
+				"lastname" => $o->prop("lastname"),
 				"name" => $o->prop('name'),
 				"id" => $o->id(),
 				"phone" => $person_data['phone'],
