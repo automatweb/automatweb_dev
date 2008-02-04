@@ -177,10 +177,16 @@ class crm_company_people_impl extends class_base
 	{
 		$fn = $arr["firstname"];
 		$ln = $arr["lastname"];
+
+		if(empty($arr["firstname"]) && empty($arr["lastname"]))
+			$name = $arr["name"];
+		else
+			$name = $fn." ".$ln;
+
 		return html::get_change_url(
 			$arr["id"],
 			array("return_url" => get_ru()),
-			parse_obj_name($fn." ".$ln)
+			parse_obj_name($name)
 		);
 	}
 
@@ -596,10 +602,11 @@ class crm_company_people_impl extends class_base
 		foreach($o->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
 		{
 			$ccp = (isset($_SESSION["crm_copy_p"][$c->prop("to")]) || isset($_SESSION["crm_cut_p"][$c->prop("to")]) ? "#E2E2DB" : "");
-			list($fn, $ln) = explode(" ", $c->prop("to.name"));
+			// This produces an error if there are more than 2 words in the name.
+//			list($fn, $ln) = explode(" ", $c->prop("to.name"));
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"image" => $section_img,
-				"name" => $ln." ".$fn,
+				"name" => $c->prop("to.name"),
 				"id" => $c->prop("to"),
 				"cutcopied" => $ccp
 			));
@@ -608,10 +615,11 @@ class crm_company_people_impl extends class_base
 		foreach($o->connections_from(array("type" => "RELTYPE_PROFESSIONS")) as $c)
 		{
 			$ccp = (isset($_SESSION["crm_copy_p"][$c->prop("to")]) || isset($_SESSION["crm_cut_p"][$c->prop("to")]) ? "#E2E2DB" : "");
-			list($fn, $ln) = explode(" ", $c->prop("to.name"));
+			// This produces an error if there are more than 2 words in the name.
+//			list($fn, $ln) = explode(" ", $c->prop("to.name"));
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"image" => $prof_img,
-				"name" => $ln." ".$fn,
+				"name" => $c->prop("to.name"),
 				"id" => $c->prop("to"),
 				"cutcopied" => $ccp
 			));
