@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.22 2008/01/28 11:17:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.23 2008/02/04 10:27:06 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -422,6 +422,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"no_reforb" => 1,
 				"set_currency" => $currency
 			)),
+			"phone_ext_list_as_js_array" => $adr->get_phone_ext_list_as_js_array(),
 			"country_list" => $this->picker($arr["ct_country"], $adr->get_country_list()),
 			"smoking" => checked($arr["smoking"]),
 			"baby_cot" => checked($arr["baby_cot"]),
@@ -1885,6 +1886,19 @@ $rate_ids = array();
 				"ERR_".$_GET["error"] => $this->parse("ERR_".$_GET["error"])
  			));
 		}
+		
+		$tmp = "";
+		for ($i=0;$i<10;$i++)
+		{
+			$this->vars(array(
+				"i" => $i,
+			));
+			$tmp .= $this->parse("CURRENCIES");
+		}
+		$this->vars(array(
+			"CURRENCIES" => $tmp,
+		));
+
 
 		return $this->parse();
 	}
@@ -2485,7 +2499,6 @@ echo dbg::dump($return);
 		$parameters["customerId"] = 0;
 		$parameters["rateIDs"] = explode(",", $arr["rate_ids"]);
 		$parameters["customCurrencyCode"] = $arr["set_currency"];
-echo dbg::dump($parameters);
 		$return = $this->do_orb_method_call(array(
 			"action" => "GetMultipleRateDetails",
 			"class" => "http://markus.ee/RevalServices/Booking/",
@@ -2493,7 +2506,23 @@ echo dbg::dump($parameters);
 			"method" => "soap",
 			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
-		die(dbg::dump($return));
+		$i=0;
+		$s_out = "var a_prices = new Array();\n";
+		if (count($parameters["rateIDs"]) > 1)
+		{
+			foreach ($return["GetMultipleRateDetailsResult"]["RateList"]["RateInfo"] as $rateinfo)
+			{
+				$s_out .= 'tmp = {"id" : "'.$rateinfo["RateId"].'", "AverageDailyRate" : "'.$rateinfo["AverageDailyRateInCustomCurrency"].'", "TotalPrice" : "'.$rateinfo["TotalPriceInCustomCurrency"].'" };'."\n";
+				$s_out .= "a_prices[a_prices.length] = tmp;\n";
+			}
+		}
+		else if (count($parameters["rateIDs"]) != 0)
+		{
+			$rateinfo = $return["GetMultipleRateDetailsResult"]["RateList"]["RateInfo"];
+			$s_out .= 'tmp = {"id" : "'.$rateinfo["RateId"].'", "AverageDailyRate" : "'.$rateinfo["AverageDailyRate"].'", "TotalPrice" : "'.$rateinfo["TotalPrice"].'" };'."\n";
+			$s_out .= "a_prices[a_prices.length] = tmp;\n";
+		}
+		die($s_out);
 	}
 
 	function _init_mail_templates_t(&$t)
