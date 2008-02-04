@@ -1,0 +1,72 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/package_management/package.aw:class_1371_help
+msgid "Klassi Pakk help"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_version
+msgid "Omaduse Versioon (version) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_version_comment
+msgid "Omaduse Versioon (version) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_version_help
+msgid "Omaduse Versioon (version) help"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_description
+msgid "Omaduse Kirjeldus (description) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_description_comment
+msgid "Omaduse Kirjeldus (description) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_description_help
+msgid "Omaduse Kirjeldus (description) help"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_dependencies
+msgid "Omaduse S&otilde;ltuvused (dependencies) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_dependencies_comment
+msgid "Omaduse S&otilde;ltuvused (dependencies) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_dependencies_help
+msgid "Omaduse S&otilde;ltuvused (dependencies) help"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:rel_RELTYPE_DEPENDENCY
+msgid "Seose S&otilde;ltuvus (RELTYPE_DEPENDENCY) tekst"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:52
+msgid "Pakkide nimekiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:56
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:60
+msgid "Versioon"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:65
+msgid "Kirjeldus"
+msgstr ""
+
