@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="generic_xml_ds" folder="common/external" extends="class_base">
+	</class>
+</orb>
+
