@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.24 2008/02/04 12:11:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.25 2008/02/04 12:23:50 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -597,7 +597,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		}
 		$rate = $rate["RateDetails"];
 
-		if ($rate["IsMandatoryDeposit"] != "false" || $_SESSION["uid"] == "struktuur")
+		if (/*$rate["IsMandatoryDeposit"] != "false" ||*/ aw_global_get("uid") == "struktuur" || aw_global_get("uid") == "erik" || aw_global_get("uid") == "martorav")
 		{
 			$this->read_template("view4_bank.tpl");
 		}
@@ -673,12 +673,12 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		{
 			$ow_bron = obj($arr["ow_bron"]);
 			$bpo = $ow_bron->prop("bank_payment");
-		
 			$bs = $ow_bron->meta("bank_settings");
 			if ($this->can("view", $bs[$arr["i_location"]]))
 			{
 				$bpo = $bs[$arr["i_location"]];
 			}
+		//echo "<!-- bpo = $bpo , loc = ".$arr["i_location"]." bs = ".dbg::dump($bs)." --> ";
 		}
 		$this->vars(array(
 			"guest_comments" => nl2br($arr["bron_comment"]),
@@ -977,7 +977,14 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			//echo "HOIATUS!!! Broneeringud kirjutatakse live systeemi, niiet kindlasti tuleb need 2ra tyhistada!!!! <br><br><br>";
 			//echo("makebooking with params: ".dbg::dump($params)." retval = ".dbg::dump($return));
 
-			$o->set_parent(aw_ini_get("ows.bron_folder"));
+			if ($this->can("view", $o->prop("ows_bron.confirmed_rvs_folder")))
+			{
+				$o->set_parent($o->prop("ows_bron.confirmed_rvs_folder"));
+			}
+			else
+			{
+				$o->set_parent(aw_ini_get("ows.bron_folder"));
+			}
 			$o->set_class_id(CL_OWS_RESERVATION);
 			$o->set_name(sprintf(t("OWS Bron %s %s @ %s"), 
 				$params["guestFirstName"], $params["guestLastName"], date("d.m.Y H:i")
@@ -1050,6 +1057,27 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			"data" => $html,
 		));
 		$awm->gen_mail();
+
+		if ($this->can("view", $o->prop("ows_bron")))
+		{
+			$bron = obj($o->prop("ows_bron"));
+			$h_bcc = $bron->meta("hotel_bcc");
+			if (!empty($h_bcc[$o->prop("hotel_id")]))
+			{
+				$awm = get_instance("protocols/mail/aw_mail");
+				$awm->create_message(array(
+					"froma" => "info@revalhotels.com",
+					"fromn" => "Reval Hotels",
+					"subject" => "Revalhotels reservation",
+					"to" => $h_bcc[$o->prop("hotel_id")],
+					"body" => strip_tags($html),
+				));
+				$awm->htmlbodyattach(array(
+					"data" => $html,
+				));
+				$awm->gen_mail();
+			}
+		}
 
 		if ($o->prop("hotel_id") == 38)
 		{
@@ -1210,6 +1238,17 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			)),
 			"guest_email" => urldecode($o->prop("guest_email"))
 		));
+
+		// if cc data exists, then let the user see it.
+		if ($o->prop("guarantee_cc_exp_date") > 100)
+		{
+			$this->vars(array("HAS_CC_DATA" => $this->parse("HAS_CC_DATA")));
+		}
+		// if payment was by cc, then write that
+		if ($o->prop("payment_type") == "CreditCard")
+		{
+			$this->vars(array("PAID_BY_CC" => $this->parse("PAID_BY_CC")));
+		}
 
 		return $this->parse();
 	}
@@ -2165,11 +2204,12 @@ $rate_ids = array();
 		}
 		$hotel = $return["GetHotelDetailsResult"]["HotelDetails"];
 			$bp = get_instance(CL_BANK_PAYMENT);
+//die(dbg::dump($arr["bpo"]));
 			die($bp->do_payment(array(
 				"payment_id" => $arr["bpo"],
 				"bank_id" => "credit_card",
 				"amount" => $rate["TotalPriceInEur"]*16.0,
-				"reference_nr" => $arr["reservation"],
+				"reference_nr" => $arr["aw_rvs_id"],
 				"expl" => "webID:".$arr["aw_rvs_id"]." ".$arr["i_checkin"]."-".$arr["i_checkout"]." ".iconv("utf-8", aw_global_get("charset")."//IGNORE", $hotel["HotelName"])." ".$arr["ct"]["firstname"]." ".$arr["ct"]["lastname"],
 				"lang" => $lc
 			)));
@@ -2606,6 +2646,43 @@ echo dbg::dump($return);
 	function _set_bank_settings_table($arr)
 	{
 		$arr["obj_inst"]->set_meta("bank_settings", $arr["request"]["bank"]);
+	}
+
+	function _init_mail_bcc_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "hotel",
+			"caption" => t("Hotell"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "bcc",
+			"caption" => t("BCC"),
+			"align" => "center"
+		));
+	}
+
+	function _get_mail_bcc($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_mail_bcc_t($t);
+
+		$h = $arr["obj_inst"]->meta("hotel_bcc");
+		foreach($this->hotel_list as $hotel_id => $hotel_name)
+		{
+			$t->define_data(array(
+				"hotel" => $hotel_name,
+				"bcc" => html::textbox(array(
+					"name" => "bcc[$hotel_id]",
+					"value" => $h[$hotel_id]
+				))
+			));
+		}
+	}
+
+	function _set_mail_bcc($arr)
+	{
+		$arr["obj_inst"]->set_meta("hotel_bcc", $arr["request"]["bcc"]);
 	}
 }
 ?>
