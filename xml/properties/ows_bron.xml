@@ -42,6 +42,15 @@
             <field>mail_templates</field>
       </property>
       <property>
+            <name>mail_bcc</name>
+            <table>objects</table>
+            <group>mail_bcc</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>mail_bcc</field>
+      </property>
+      <property>
             <name>bank_settings_table</name>
             <table>objects</table>
             <group>bank_settings</group>
@@ -70,6 +79,10 @@
                   <caption>T&amp;amp;uuml;histusmeil</caption>
                   <parent>mail_settings</parent>
             </mail_settings_cancel>
+            <mail_bcc>
+                  <caption>BCC</caption>
+                  <parent>mail_settings</parent>
+            </mail_bcc>
             <bank_settings>
                   <caption>Panga seaded</caption>
             </bank_settings>

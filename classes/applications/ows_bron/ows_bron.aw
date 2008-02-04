@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.23 2008/02/04 10:27:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.24 2008/02/04 12:11:08 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -21,6 +21,10 @@
 
 	@property mail_templates type=table store=no no_caption=1
 
+@default group=mail_bcc
+
+	@property mail_bcc type=table store=no no_caption=1
+
 @default group=bank_settings
 
 	@property bank_settings_table type=table store=no no_caption=1
@@ -28,6 +32,7 @@
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_confirm caption="Kinnitusmeil" parent=mail_settings
 	@groupinfo mail_settings_cancel caption="T&uuml;histusmeil" parent=mail_settings
+	@groupinfo mail_bcc caption="BCC" parent=mail_settings
 
 @groupinfo bank_settings caption="Panga seaded"
 	
