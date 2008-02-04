@@ -1,5 +1,21 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="relpicker" folder="vcl" extends="core">
+		<action name="create_relpicker">
+			<function name="create_relpicker">
+				<arguments>
+					<required name="name" type="string" />
+					<required name="reltype" type="string" />
+					<required name="oid" type="int" />
+					<required name="property" type="int" />
+					<optional name="multiple" type="int" />
+					<optional name="no_sel" type="int" />
+					<optional name="automatic" type="int" />
+					<optional name="no_edit" type="int" />
+					<optional name="options" type="array" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

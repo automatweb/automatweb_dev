@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.174 2008/01/31 13:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.175 2008/02/04 13:02:06 kristo Exp $
 /*
 
 
@@ -52,14 +52,6 @@
 
 	@property show_icon type=checkbox ch_value=1 default=8
 	@caption N&auml;ita ikooni
-
-@default group=dates
-	@property j_time type=date_select
-	@caption J&otilde;ustumise kuup&auml;ev
-
-	@property act_date type=date_select
-	@caption Avaldamise kuup&auml;ev
-
 
 	@property udef1 type=textbox display=none
 	@caption User-defined 1

@@ -137,13 +137,6 @@
 			</function>
 		</action>
 
-		<action name="make_all">
-			<function name="make_all">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="make_trans">
 			<function name="make_translations">
 				<arguments>
@@ -173,5 +166,6 @@
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>

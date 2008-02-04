@@ -3,4 +3,3 @@
 	<class name="rss_import" folder="import" extends="class_base">
 	</class>
 </orb>
-

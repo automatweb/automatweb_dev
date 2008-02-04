@@ -554,15 +554,6 @@
             <caption>Alammen&amp;amp;uuml;&amp;amp;uuml;d objektist</caption>
       </property>
       <property>
-            <name>aip_filename</name>
-            <table>objects</table>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>menus_sub</group>
-            <caption>Failinimi</caption>
-      </property>
-      <property>
             <name>get_content_from</name>
             <table>objects</table>
             <type>relpicker</type>
@@ -940,6 +931,7 @@
       </property>
       <classinfo>
             <trans>1</trans>
+            <maintainer>kristo</maintainer>
             <relationmgr>yes</relationmgr>
             <objtable>menu</objtable>
             <objtable_index>id</objtable_index>

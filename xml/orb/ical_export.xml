@@ -1,9 +1,10 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="ical_export" folder="applications/calendar" extends="class_base">
-		<action name="export_to_google_calendar" nologin="1" all_args="1">
-			<function name="export_to_google_calendar">
+		<action name="sync_google" nologin="1" all_args="1">
+			<function name="sync_google">
 				<arguments>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>

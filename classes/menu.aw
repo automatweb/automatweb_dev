@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.219 2008/01/31 13:49:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.220 2008/02/04 13:02:06 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -229,9 +229,6 @@
 
 		@property submenus_from_obj type=relpicker reltype=RELTYPE_SUBMENUS table=objects  field=meta method=serialize group=menus_sub
 		@caption Alammen&uuml;&uuml;d objektist
-
-		@property aip_filename type=textbox field=meta method=serialize group=menus_sub
-		@caption Failinimi
 
 		@property get_content_from type=relpicker reltype=RELTYPE_CONTENT_FROM field=meta method=serialize group=menus_sub
 		@caption Sisu objektist

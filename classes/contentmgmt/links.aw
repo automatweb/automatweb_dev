@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.39 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.40 2008/02/04 13:02:08 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS maintainer=kristo
@@ -8,7 +8,7 @@
 @default group=general
 
 	@property comment type=textarea cols=30 rows=5 table=objects 
-	@caption Kommentaar lingikogusse
+	@caption Kommentaar
 
 	@property url type=textbox table=extlinks default=http://
 	@caption URL

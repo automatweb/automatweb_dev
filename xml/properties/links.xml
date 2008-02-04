@@ -8,7 +8,7 @@
             <rows>5</rows>
             <table>objects</table>
             <field>comment</field>
-            <caption>Kommentaar lingikogusse</caption>
+            <caption>Kommentaar</caption>
       </property>
       <property>
             <name>url</name>

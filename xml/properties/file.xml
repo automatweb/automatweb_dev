@@ -129,27 +129,9 @@
             <caption>N&amp;amp;auml;ita ikooni</caption>
       </property>
       <property>
-            <name>j_time</name>
-            <table>objects</table>
-            <group>dates</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>date_select</type>
-            <caption>J&amp;amp;otilde;ustumise kuup&amp;amp;auml;ev</caption>
-      </property>
-      <property>
-            <name>act_date</name>
-            <table>objects</table>
-            <group>dates</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>date_select</type>
-            <caption>Avaldamise kuup&amp;amp;auml;ev</caption>
-      </property>
-      <property>
             <name>udef1</name>
             <table>objects</table>
-            <group>dates</group>
+            <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -159,7 +141,7 @@
       <property>
             <name>udef2</name>
             <table>objects</table>
-            <group>dates</group>
+            <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>

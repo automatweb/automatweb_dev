@@ -34,34 +34,6 @@
 			</function>
 		</action>
 
-		<action name="list_aliases" all_args="1">
-			<function name="list_aliases">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="search_aliases" all_args="1">
-			<function name="search_aliases">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_list" all_args="1">
-			<function name="submit_list">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="addalias" all_args="1">
-			<function name="orb_addalias">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="ng_serialize">
 			<function name="_serialize">
 				<arguments>
