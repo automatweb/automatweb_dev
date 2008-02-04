@@ -2513,6 +2513,18 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>bill_s_with_tax</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>bill_s_with_tax</field>
+            <caption>K&amp;amp;auml;ibemaksuta/K&amp;amp;auml;ibemaksuga</caption>
+      </property>
+      <property>
             <name>bill_s_search</name>
             <table>objects</table>
             <group>bills_list</group>

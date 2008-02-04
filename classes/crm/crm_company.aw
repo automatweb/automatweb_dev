@@ -858,6 +858,9 @@ default group=org_objects
 			@property bill_s_status type=select store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Staatus
 
+			@property bill_s_with_tax type=chooser store=no parent=bills_list_s captionside=top no_caption=1
+			@caption K&auml;ibemaksuta/K&auml;ibemaksuga
+
 			@property bill_s_search type=submit store=no parent=bills_list_s captionside=top no_caption=1 group=bills_list
 			@caption Otsi
 
@@ -2638,6 +2641,7 @@ class crm_company extends class_base
 			case 'bills_mon_tb':
 			case "bill_s_client_mgr":
 			case "bill_s_status":
+			case "bill_s_with_tax":
 			case "bs_tb":
 				static $bills_impl;
 				if (!$bills_impl)
@@ -4083,6 +4087,7 @@ class crm_company extends class_base
 			$arr["args"]["bill_s_from"] = $arr["request"]["bill_s_from"];
 			$arr["args"]["bill_s_to"] = $arr["request"]["bill_s_to"];
 			$arr["args"]["bill_s_client_mgr"] = $arr["request"]["bill_s_client_mgr"];
+			$arr["args"]["bill_s_with_tax"] = $arr["request"]["bill_s_with_tax"];
 			$arr["args"]["bill_s_status"] = $arr["request"]["bill_s_status"];
 			$arr["args"]["bill_s_search"] = $arr["request"]["bill_s_search"];
 		}
