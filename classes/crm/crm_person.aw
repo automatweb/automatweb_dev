@@ -1373,7 +1373,19 @@ class crm_person extends class_base
 				$i = get_instance(CL_CRM_COMPANY);
 				$i->_proc_server_folder($arr);
 				break;
-
+			case "dl_cat":
+				$data["options"] = array(
+					0 => "",
+					1 => "A",
+					6 => "A1",
+					2 => "B",
+					7 => "BE",
+					3 => "C",
+					8 => "C1",
+					4 => "D",
+					5 => "E"
+				);
+				break;
 			case "docs_tb":
 			case "docs_tree":
 			case "docs_tbl":
@@ -2217,7 +2229,7 @@ class crm_person extends class_base
 			$pc = new object();
 			$pc->set_class_id(CL_CRM_ADDRESS);
 			$pc->set_name($arr["obj_inst"]->name());
-			$pc->set_parent($arr["obj_inst"]->parent());
+			$pc->set_parent($arr["obj_inst"]->id());
 			$pc->save();
 
 			$arr["obj_inst"]->connect(array(
@@ -3001,7 +3013,7 @@ class crm_person extends class_base
 			if(!$o = $this->has_current_job_relation($arr["obj_inst"]->id()))
 			{
 				$o = new object();
-				$o->set_parent($arr["obj_inst"]->parent());
+				$o->set_parent($arr["obj_inst"]->id());
 				$o->set_class_id(CL_CRM_PERSON_WORK_RELATION);
 				$o->set_name($arr["obj_inst"]->prop_str("work_contact"));
 				$o->save();
@@ -4017,7 +4029,6 @@ class crm_person extends class_base
 		}
 		$person_obj = &obj($person_obj->prop("from"));
 
-		$email_obj = &obj($person_obj->prop("email"));
 		$phone_obj = &obj($person_obj->prop("phone"));
 
 		$this->read_template($arr["cv"]);
@@ -4228,8 +4239,8 @@ class crm_person extends class_base
 			"birthday" => date("d.m.Y", $bd),
 			"social_status" => $person_obj->prop("social_status"),
 			"mail" => html::href(array(
-				"url" => "mailto:" . $email_obj->prop("mail"),
-				"caption" => $email_obj->prop("mail"),
+				"url" => "mailto:" . $person_obj->prop("email"),
+				"caption" => $person_obj->prop("email"),
 			)),
 			"phone" => $phone_obj->name(),
 			"sectors" => $tmp_sectors,
