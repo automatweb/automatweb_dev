@@ -3095,15 +3095,6 @@
             <caption>Tulemused</caption>
       </property>
       <property>
-            <name>stats_s_group_by</name>
-            <table>objects</table>
-            <group>stats_s</group>
-            <type>checkbox</type>
-            <store>no</store>
-            <field>stats_s_group_by</field>
-            <caption>Grupeeri tegevuse alusel</caption>
-      </property>
-      <property>
             <name>stats_s_group_by_client</name>
             <table>objects</table>
             <group>stats_s</group>

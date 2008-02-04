@@ -989,15 +989,6 @@ default group=org_objects
 	@property stats_s_res_type type=select store=no
 	@caption Tulemused
 
-	@property stats_s_group_by type=checkbox store=no
-	@caption Grupeeri kliendi alusel
-
-	@property stats_s_group_by type=checkbox store=no
-	@caption Grupeeri projekti alusel
-
-	@property stats_s_group_by type=checkbox store=no
-	@caption Grupeeri tegevuse alusel
-
 	@property stats_s_group_by_client type=checkbox ch_value=1 store=no
 	@caption Grupeeri kliendi alusel
 
