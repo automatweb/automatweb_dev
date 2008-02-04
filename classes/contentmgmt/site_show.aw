@@ -672,6 +672,17 @@ class site_show extends class_base
 				$filt_lang_id = array();
 			}
 
+			if (!empty($arr["include_submenus"]))
+			{
+				$ot = new object_tree(array(
+					"class_id" => CL_MENU,
+					"parent" => $obj->id(),
+					"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
+					"sort_by" => "objects.parent"
+				));
+				$sections += $this->make_keys($ot->ids());
+			}
+			else
 			if ($obj->class_id() == CL_PROMO)
 			{
 				if ($obj->prop("show_inact") == 1)
