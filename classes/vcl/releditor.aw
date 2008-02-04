@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.99 2008/01/31 13:55:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.100 2008/02/04 13:32:01 robert Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -568,6 +568,8 @@ class releditor extends core
 						"caption" => t("Muuda"),
 						"url" => $url,
 					)),
+					"_sort_jrk" => $conn->prop("to.jrk"),
+					"_sort_name" => $conn->prop("to.name"),
 					"_active" => ($arr["request"][$this->elname] == $c_to),
 				);
 				$export_props = array();
@@ -792,7 +794,7 @@ class releditor extends core
 		}
 
 		$awt->set_sortable(true);
-		$awt->set_default_sortby(array("ord", "id"));
+		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));
 		$awt->sort_by();
 		$awt->set_sortable(false);
 
