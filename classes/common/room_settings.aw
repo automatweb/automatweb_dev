@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.27 2008/01/31 13:52:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.28 2008/02/05 14:00:35 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -325,6 +325,10 @@ class room_settings extends class_base
 		$objs = array();
 		foreach($oids as $set_oid)
 		{
+			if(!is_oid($set_oid))
+			{
+				continue;
+			}
 			$objs[] = obj($set_oid);
 		}
 

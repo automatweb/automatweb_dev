@@ -6,6 +6,11 @@
 
 @default table=objects
 
+@property weekdays type=text store=no no_caption=1
+@caption Nädalapäevad
+
+@property days type=text store=no no_caption=1
+@caption P&auml;evade plaan
 
 @reltype CURRENCY value=1 clid=CL_CURRENCY
 @caption valuuta
@@ -21,6 +26,7 @@ class crm_working_time_scenario extends class_base
 			"tpldir" => "applications/crm/crm_working_time_scenario",
 			"clid" => CL_CRM_WORKING_TIME_SCENARIO
 		));
+		$this->days = array(t("Esmaspäev"),t("Teisip&auml;ev"), t("Kolmap&auml;ev"), t("Neljap&auml;ev"),t("Reede"), t("Laup&auml;ev"), t("P&uuml;hap&auml;ev"));
 	}
 
 	function get_property($arr)
@@ -30,7 +36,75 @@ class crm_working_time_scenario extends class_base
 
 		switch($prop["name"])
 		{
-			case "bills":
+			case "weekdays":
+				if($arr["obj_inst"]->get_free_times())
+				{
+					return PROP_IGNORE;
+				}
+				$wd = $arr["obj_inst"]->get_weekdays();
+				$ft = $arr["obj_inst"]->get_free_times();
+				$time = $arr["obj_inst"]->get_time();
+				$prop["value"] = "";
+				$prop["value"].= html::checkbox(array(
+					"name" => "weekdays[0]",
+					"caption" => t("Esmaspäev"),
+					"checked" => $wd[0],
+				));
+				$prop["value"].= html::checkbox(array(
+					"name" => "weekdays[1]",
+					"caption" => t("Teisip&auml;ev"),
+					"checked" => $wd[1],
+				));
+				$prop["value"].= html::checkbox(array(
+					"name" => "weekdays[2]",
+					"caption" => t("Kolmap&auml;ev"),
+					"checked" => $wd[2],
+				));
+				$prop["value"].= html::checkbox(array(
+					"name" => "weekdays[3]",
+					"caption" => t("Neljap&auml;ev"),
+					"checked" => $wd[3],
+				));
+				$prop["value"].= html::checkbox(array(
+					"name" => "weekdays[4]",
+					"caption" => t("Reede"),
+					"checked" => $wd[4],
+				));
+				$prop["value"].= html::checkbox(array(
+					"name" => "weekdays[5]",
+					"caption" => t("Laup&auml;ev"),
+					"checked" => $wd[5],
+				));
+				$prop["value"].= html::checkbox(array(
+					"name" => "weekdays[6]",
+					"caption" => t("P&uuml;hap&auml;ev"),
+					"checked" => $wd[6],
+				));
+				$prop["value"].= "\n<br>".t("Vabu aegu")." ".html::textbox(array(
+					"name" => "free_times",
+					"caption" => t("Vabu aegu"),
+					"size" => 10,
+					"value" => $ft,
+				));
+				$prop["value"].= "\n<br>".t("Alates")." ".html::time_select(array(
+					"name" => "start",
+	//				"caption" => t("Vabu aegu"),
+//					"size" => 10,
+					"value" => $time[0],
+				));
+				$prop["value"].= "\n<br>".t("Kuni")." ".html::time_select(array(
+					"name" => "end",
+	//				"caption" => t("Vabu aegu"),
+//					"size" => 10,
+					"value" => $time[1],
+				));
+				break;
+			case "days":
+				if(!$arr["obj_inst"]->get_free_times())
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = $this->get_days_table($arr);
 				break;
 		}
 
@@ -44,10 +118,26 @@ class crm_working_time_scenario extends class_base
 
 		switch($prop["name"])
 		{
-			case "bills":
-			{
+			case "weekdays":
+				if(is_array($arr["request"]["weekdays"]))
+				{
+					$arr["obj_inst"]->set_weekdays($arr["request"]["weekdays"]);
+				}
+				if($arr["request"]["free_times"])
+				{
+					$arr["obj_inst"]->set_free_times($arr["request"]["free_times"]);
+				}
+				if($arr["request"]["start"])
+				{
+					$arr["obj_inst"]->set_time(array($arr["request"]["start"] , $arr["request"]["end"]));
+				}
 				break;
-			}
+			case "days":
+				if($arr["request"]["scenario_data"])
+				{
+					$arr["obj_inst"]->set_scenario_data($arr["request"]["scenario_data"]);
+				}
+				break;
 		}
 		return $retval;
 	}
@@ -55,6 +145,97 @@ class crm_working_time_scenario extends class_base
 	{
 		$arr["add_bill"] = "";	
 		$arr["post_ru"] = post_ru();
+	}
+
+	function get_days_table($arr)
+	{
+		$wd = $arr["obj_inst"]->get_weekdays();
+		$ft = $arr["obj_inst"]->get_free_times();
+		$time = $arr["obj_inst"]->get_time();
+		$counttime = ($time[1]["hour"] - $time[0]["hour"]) * 60 + ($time[1]["minute"] - $time[0]["minute"]);
+		$t = new vcl_table;
+		$x = 1;
+
+		$t->define_field(array(
+			"name" => "day",
+			"caption" => t("P&auml;ev"),
+		));
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => t("Algus"),
+		));
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => t("L&otilde;pp"),
+		));
+		$t->define_field(array(
+			"name" => "pause",
+			"caption" => t("Paus"),
+		));
+
+		$scenario_data = $arr["obj_inst"]->get_scenario_data();
+		if(!$scenario_data)
+		{
+			foreach($wd as $day => $data)
+			{
+				$start = $time[0];
+				$t->define_data(array(
+					"day" => $this->days[$day],
+				));
+				$x = 0;
+				while($x < $ft)
+				{
+					$end = $start;
+					$end["minute"] = $end["minute"] + $counttime/$ft;
+					$t->define_data(array(
+						"start" => html::time_select(array(
+							"name" => "scenario_data[".$day."][".$x."][start]",
+							"value" => $start,
+						)),
+						"end" => html::time_select(array(
+							"name" => "scenario_data[".$day."][".$x."][end]",
+							"value" => $end,
+						)),
+						"pause" => html::checkbox(array(
+							"name" => "scenario_data[".$day."][".$x."][is_pause]",
+						//	"value" => "",
+						)),
+					));
+					$start = $end;
+					$x++;
+				}
+			}
+		}
+		else
+		{
+			foreach($scenario_data as $day => $data)
+			{
+				$t->define_data(array(
+					"day" => $this->days[$day],
+				));
+				$x = 0;
+				foreach($data as $stuff)
+				{
+					$t->define_data(array(
+						"start" => html::time_select(array(
+							"name" => "scenario_data[".$day."][".$x."][start]",
+							"value" => $stuff["start"],
+						)),
+						"end" => html::time_select(array(
+							"name" => "scenario_data[".$day."][".$x."][end]",
+							"value" => $stuff["end"],
+						)),
+						"pause" => html::checkbox(array(
+							"name" => "scenario_data[".$day."][".$x."][is_pause]",
+							"checked" => $stuff["is_pause"]
+						)),
+					));
+					$x++;
+				}
+			}
+		}
+		return $t->draw(); 
+
 	}
 
 	function show($arr)
@@ -72,50 +253,114 @@ class crm_working_time_scenario extends class_base
 	**/
 	function make_worker_table($arr)
 	{
-		//extract($arr);
-		if(is_array($_POST["bron"]))
+		$ret = "";
+		if(is_oid($arr["person"]) && $this->can("view" , $arr["person"]))
 		{
-
-			//siin objektide tegemine jne
-			die("<script type='text/javascript'>
-				window.close();
-				</script>
-			");
+			$p = obj($arr["person"]);
+			$ret.= $p->name()."<br>\n";
 		}
+		//arr($_POST);
+		if(is_array($_POST["bron_times"]))
+		{
+			foreach($_POST["bron_times"] as $tmstmp => $data)
+			{
+				if($data["accept"])
+				{
+					print "teeb bronni ajale ".date("d.m.Y h:i" , $tmstmp)."\n<br>";
+				}
+			}
+			//siin objektide tegemine jne
+//			die("<script type='text/javascript'>
+//				window.close();
+//				</script>
+//			");
+		}
+
+		$scenario = obj($arr["scenario"]);	
+	
+		$scenario_data = $scenario->get_scenario_data();
+
 		$start = date_edit::get_timestamp($arr["start"]);
 		$end = date_edit::get_timestamp($arr["end"]);
+		classload("core/date/date_calc");
+		$week_start = get_week_start($start);
 
-
+		$weeks = number_format(($end - $week_start) / (24*3600*7) , 0);
 
 		classload("vcl/table");
 		$t = new vcl_table(array(
 			"layout" => "generic",
 		));
-		$s = $start;
+
+		$t->define_field(array(
+			"name" => "d0",
+			"caption" => t("Esmasp&auml;ev"),
+			"valign" => "top",
+		));
+		$t->define_field(array(
+			"name" => "d1",
+			"caption" => t("Teisip&auml;ev"),
+			"valign" => "top",
+		));
+		$t->define_field(array(
+			"name" => "d2",
+			"caption" => t("Kolmap&auml;ev"),
+			"valign" => "top",
+		));
+		$t->define_field(array(
+			"name" => "d3",
+			"caption" => t("Neljap&auml;ev"),
+			"valign" => "top",
+		));
+		$t->define_field(array(
+			"name" => "d4",
+			"caption" => t("Reede"),
+			"valign" => "top",
+		));
+		$t->define_field(array(
+			"name" => "d5",
+			"caption" => t("laup&auml;ev"),
+			"valign" => "top",
+		));
+		$t->define_field(array(
+			"name" => "d6",
+			"caption" => t("P&uuml;hap&auml;ev"),
+			"valign" => "top",
+		));
+
+		$s = $week_start;
 		while($s < $end)
 		{
-			$t->define_field(array(
-				"name" => $s,
-				"caption" => date("d.m.Y h:i" , $s),
-			));
-			$s = $s + 24*3600;	
+			$data = array();
+			$day = 0;
+			while($day < 7)
+			{
+				if($s < $end && $s >= $start)
+				{
+					$data["d".$day] = date("d.m.Y" , $s) . "<br>". $scenario->get_date_options($s);
+				}
+				else
+				{
+					$data["d".$day] = date("d.m.Y" , $s);
+				}
+				
+				$s = $s + 24*3600;
+				$day ++;
+			}
+			$t->define_data($data);
 		}
-
-
-		
-		$t->define_data(array(
-			"value" => html::submit(array(
-				"value" => t("Salvesta"),
-			)),
-		));	
-		
-		$t->define_data(array(
-			"value" => html::hidden(array(
-				"name" => "bron[id]",
-				"value" => $id,
-			)),
+	
+		print html::form(array(
+			"method" => "POST",
+			"content" => $ret.$t->draw().
+				html::hidden(array(
+					"name" => "person",
+					"value" => $arr["person"],
+				)),
+				html::submit(array(
+					"value" => t("Salvesta"),
+				)),
 		));
-		die($err.html::form(array("method" => "POST", "content" => $t->draw())));
 	}
 
 }

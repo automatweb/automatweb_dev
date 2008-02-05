@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.220 2008/02/04 12:52:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.221 2008/02/05 14:00:35 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -258,6 +258,10 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 @property people type=text submit=no no_caption=1
 
+@groupinfo work_graphs caption="T&ouml;&ouml;graafikud" parent=open_hrs  submit=no
+@default  group=work_graphs
+
+@property work_graphs type=text submit=no no_caption=1 
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
@@ -316,6 +320,8 @@ caption Templeit
 @reltype ROOM value=46 clid=CL_ROOM
 @caption Ruum
 
+@reltype WORKING_SCENARIO value=47 clid=CL_CRM_WORKING_TIME_SCENARIO
+@caption T&ouml;&ouml;aja tsenaariumid
 */
 
 class room extends class_base
@@ -393,7 +399,20 @@ class room extends class_base
 				$arr["month"] = $month;
 				$prop["value"].= $this->get_people_table($arr);
 				break;
-			
+			case "work_graphs":
+				$prop["value"] = $this->get_people_work_table($arr);
+				if($arr["request"]["scenario"])
+				{
+					foreach($arr["request"]["scenario"] as $sc => $data)
+					{
+						$data["person"] = $sc;
+						$url = $this->mk_my_orb("make_worker_table", $data
+							,CL_CRM_WORKING_TIME_SCENARIO
+						);
+						$prop["value"].= '<script language=javascript>Javascript:window.open("'.$url.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")</script>';
+					}
+				}
+				break;
 			case "price":
 				$prop["options"] = array(
 					1 => t("Inimese kohta"),
@@ -596,6 +615,10 @@ class room extends class_base
 				
 				$arr['obj_inst']->set_meta('working_days',$wd);
 				break;
+// 			case "work_graphs":
+// //				$prop["value"] = $this->get_people_work_table($arr);
+// 				arr($arr);
+// 				break;
 			case "products_find_product_name":
 				
 				if($arr["request"]["sel_imp"]);
@@ -686,6 +709,13 @@ class room extends class_base
 			if ($arr["request"]["set_view_dates"] == 4)
 			{
 				$arr["args"]["end"] = $arr["args"]["start"] + 24*3600*31;
+			}
+		}
+		if($arr["request"]["submit_scenario"])
+		{
+			foreach($arr["request"]["sel"] as $sel)
+			{
+				$arr["args"]["scenario"][$sel] = $arr["request"]["scenario"][$sel];
 			}
 		}
 	}
@@ -5814,7 +5844,83 @@ class room extends class_base
 		return $ol;
 	}
 	
+	function get_people_work_table($arr)
+	{
+		$working_days = $arr["obj_inst"]->meta("working_days");
+		classload("vcl/table");
+		if($arr["month"])
+		{
+			$time = mktime(0,0,0,(date("m" , time()) +$arr["month"]) ,date("j" , time()), date("Y" , time()));
+		}
+		else
+		{
+			$time = time();
+		}
+		$t = new vcl_table;
+		$x = 1;
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => t("Algus"),
+		));
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => t("L&otilde;pp"),
+		));
+		$t->define_field(array(
+			"name" => "scenario",
+			"caption" => t("Tsenaarium"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+			"width" => "20px",
+		));
+
+		$days = date("t" , $time);
+		$soptions = array();
+		$scenarios = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_WORKING_SCENARIO",
+		));
+		foreach($scenarios as $sc)
+		{
+			$soptions[$sc->prop("to")] = $sc->prop("to.name");
+		}
+
+		$pl = $this->get_people_for_oh($arr["obj_inst"]);
+		foreach($pl->arr() as $po)
+		{
+			$data = array();
+			$data["name"] = $po->name();
+			$data["start"] = html::date_select(array(
+				"name" => "scenario[".$po->id()."][start]",
+				"value" => time(),
+			));
+			$data["end"] = html::date_select(array(
+				"name" => "scenario[".$po->id()."][end]",
+				"value" => time() + 24*3600*28,
+			));
+
+			$data["scenario"] = html::select(array(
+				"name" => "scenario[".$po->id()."][scenario]",
+//				"value" => $start1,
+				"options" => $soptions,
+			));
+			$data["oid"] = $po->id();
+			$t->define_data($data);
+		}
 		
+		$submit = html::submit(array(
+			"name" => "submit_scenario",
+			"value" => t("koosta aegade tabel"),
+		));
+
+		return $t->draw().$submit; 
+	}
+	
 	function get_people_table($arr)
 	{
 		$working_days = $arr["obj_inst"]->meta("working_days");

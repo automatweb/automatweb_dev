@@ -622,6 +622,16 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>work_graphs</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>work_graphs</group>
+            <type>text</type>
+            <submit>no</submit>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <field>meta</field>
@@ -683,6 +693,11 @@
                   <caption>Inimeste t&amp;amp;ouml;&amp;amp;ouml;ajad</caption>
                   <parent>open_hrs</parent>
             </people>
+            <work_graphs>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;graafikud</caption>
+                  <parent>open_hrs</parent>
+                  <submit>no</submit>
+            </work_graphs>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -763,6 +778,11 @@
                   <clid>CL_ROOM</clid>
                   <caption>Ruum</caption>
             </ROOM>
+            <WORKING_SCENARIO>
+                  <value>47</value>
+                  <clid>CL_CRM_WORKING_TIME_SCENARIO</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;aja tsenaariumid</caption>
+            </WORKING_SCENARIO>
       </reltypes>
       <layout>
             <general_split>
