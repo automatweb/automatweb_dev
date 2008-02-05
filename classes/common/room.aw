@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.222 2008/02/05 15:37:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.223 2008/02/05 17:03:31 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1150,7 +1150,7 @@ class room extends class_base
 		extract($arr);
 //		arr($arr);
 		extract($_POST["bron"]);
-		
+		extract($_GET["bron"]);
 		
 		$room = obj($resource);
 		$professions = $room->prop("professions");
@@ -1164,7 +1164,7 @@ class room extends class_base
 			$people_opts = array("") + $ol->names();
 		}
 		
-		if(is_array($_POST["bron"]))
+		if(is_array($_POST["bron"]) || is_array($_GET["bron"]))
 		{
 			$room_inst = get_instance(CL_ROOM);
 			$start1 = mktime($start1["hour"], $start1["minute"], 0, $start1["month"], $start1["day"], $start1["year"]);
@@ -1327,6 +1327,32 @@ class room extends class_base
 			$product_obj = obj($product);
 			$end = $start1 + $product_obj->prop("reservation_time")*$product_obj->prop("reservation_time_unit");
 		}
+
+		$url = html::get_new_url(
+			CL_QUICK_RESERVATION,
+			$room->id(),
+			array(
+				"end" => $end,
+				"start1" => $start1,
+				"firstname" => $firstname,
+				"lastname" => $lastname,
+				"company" => $company,
+				"phone" => $phone,
+				"comment" => $comment,
+				"people" => $people,
+				"parent" => $parent,
+				"resource" => $resource,
+				"error" => $err,
+				"return_url" => $return_url,
+				"in_popup" => 1,
+//				"connect_impl" => $arr["request"]["id"],
+			)
+		);
+		die("<script type='text/javascript'>
+			window.location.href='".$url."';
+			</script>
+		");
+
 		
 		classload("vcl/table");
 		$t = new vcl_table(array(
