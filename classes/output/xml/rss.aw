@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/output/xml/rss.aw,v 1.4 2008/01/31 13:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/output/xml/rss.aw,v 1.5 2008/02/05 09:23:30 kristo Exp $
 // rss.aw - RSS feed generator
 /*
 @classinfo maintainer=kristo
@@ -100,13 +100,7 @@ class rss extends aw_template
 		$rootmenu = $this->cfg["rootmenu"];
 
 
-		$m = get_instance("contentmgmt/site_content");
-
-		// read all the menus and other necessary info into arrays from the database
-		$m->make_menu_caches();
-
-		// leiame, kas on tegemist perioodilise rubriigiga
-		$periodic = $m->is_periodic($parent);
+		$m = get_instance("contentmgmt/site_show");
 
 		// loome sisu
 		$d = get_instance(CL_DOCUMENT);

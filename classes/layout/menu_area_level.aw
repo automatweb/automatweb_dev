@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/Attic/menu_area_level.aw,v 1.11 2008/01/31 13:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/Attic/menu_area_level.aw,v 1.12 2008/02/05 09:23:30 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_MENU_AREA_LEVEL relationmgr=yes maintainer=kristo
@@ -62,7 +62,7 @@ class menu_area_level extends class_base
 			'tpldir' => 'layout/menu_area_level',
 			'clid' => CL_MENU_AREA_LEVEL
 		));
-		$this->mned = get_instance("contentmgmt/site_content");
+		$this->mned = get_instance("contentmgmt/site_show");
 	}
 
 	////

@@ -2902,47 +2902,6 @@ class site_show extends class_base
 		die(t("Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: ".aw_global_get("REMOTE_ADDR")."<br>Leht: ".$o));
 	}
 
-	////
-	// !Redirect the user if he/she didn't have the right to view that section
-	function no_access_redir($section)
-	{
-		$c = get_instance("config");
-		$ec = $c->get_simple_config("errors");
-		$ra = aw_unserialize($ec);
-
-		$gidlist = aw_global_get("gidlist");
-		if (is_array($gidlist))
-		{
-			$d_gid = 0;
-			$d_pri = 0;
-			$d_url = "";
-			foreach($gidlist as $gid)
-			{
-				if ($ra[$gid]["pri"] >= $d_pri && $ra[$gid]["url"] != "")
-				{
-					$d_gid = $gid;
-					$d_pri = $ra[$gid]["pri"];
-					$d_url = $ra[$gid]["url"];
-				}
-			}
-
-			if ($d_url != "")
-			{
-				if ($d_url != aw_global_get("REQUEST_URI"))
-				{
-					header("Location: $d_url");
-					die();
-				}
-				else
-				{
-					$this->raise_error(ERR_ACL_ERR,t("Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"),1);
-				};
-
-			}
-		}
-		$this->raise_error(ERR_MNEDIT_NOACL,sprintf(t("No ACL error messages defined! no can_view access for object %s"), $section),true);
-	}
-
 	function _init_path_vars(&$arr)
 	{
 		if ($this->can("view",aw_global_get("section")))
