@@ -4,7 +4,7 @@
 @comment
 	The aw template engine
 */
-
+classload("core");
 class aw_template extends core
 {
 	public $template_dir;
