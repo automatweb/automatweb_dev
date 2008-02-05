@@ -14,22 +14,30 @@ class class_index
 
 	/**
 	@attrib api=1 params=pos
-	@param full_update required type=string
-		Update additional info also. Currently only class parent info.
+	@param full_update optional type=bool
+		Update all definitions regardless if class files modified and perform maintenance. Default false
 	@returns void
 	@comment
 		Updates entire class index. Reads all files in class directory and parses them, looking for php class definitions.
 	**/
 	public static function update($full_update = false)
 	{
-		self::_update("", "", $full_update);
-	}
-
-	private static function _update($class_dir = "", $path = "", $full_update =  false)
-	{
-		$time = time();
 		$max_execution_time_prev_val = ini_get("max_execution_time");
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);
+
+		$found_classes = self::_update("", "", $full_update);
+
+		if ($full_update)
+		{
+			self::clean_up($found_classes);
+		}
+
+		set_time_limit($max_execution_time_prev_val);
+	}
+
+	private static function _update($class_dir = "", $path = "", $full_update = false)
+	{
+		$time = time();
 
 		if (empty($class_dir))
 		{
@@ -45,7 +53,10 @@ class class_index
 
 			if (!$ret)
 			{
-				throw new awex_clidx("Failed to create index directory.");
+				$e = new awex_clidx_filesys("Failed to create index directory.");
+				$e->clidx_file = $index_dir;
+				$e->clidx_op = "mkdir";
+				throw $e;
 			}
 		}
 
@@ -55,6 +66,9 @@ class class_index
 		}
 
 		// scan all files in given class directory for php class definitions
+		$cl_handle = null; // class file resource handle
+		$found_classes = array(); // names of all found classes/ifaces
+
 		if ($handle = opendir($class_dir))
 		{
 			$non_dirs = array(".", "..", "CVS");
@@ -70,31 +84,60 @@ class class_index
 				{
 					// parse code
 					$tmp = token_get_all(file_get_contents($class_file));
-					$next = "";
+					$type = "";
 
 					foreach ($tmp as $token)
 					{
-						if (T_CLASS === $token[0] or T_INTERFACE === $token[0])
+						if (T_CLASS === $token[0])
 						{
-							$next = "expecting name";
+							$type = "class";
 						}
-						elseif (T_STRING === $token[0] and "expecting name" === $next)
+						elseif (T_INTERFACE === $token[0])
 						{
-							$next = "";
+							$type = "interface";
+						}
+						elseif (T_STRING === $token[0] and ("class" === $type or "interface" === $type))
+						{
+							if (is_resource($cl_handle) and !empty($class_dfn))
+							{ // write previous class/iface dfn file
+								fwrite($cl_handle, serialize($class_dfn));
+								fclose($cl_handle);
+							}
+
 							$modified = filemtime($class_file);
 							$class_path = $path . substr($file, 0, - 1 - $ext_len);// relative path + file without extension
 							$class_name = $token[1];
 							$class_dfn_file = $index_dir . $class_name . "." . $ext;
 
-							// try to read old data for class found
-							if (is_readable($class_dfn_file))
+							if (in_array($class_name, $found_classes) and "core/locale" !== substr($class_path, 0, 11) and aw_ini_get("basedir") . self::CLASS_DIR . "core/fastcall_base.aw" !== $class_file)
 							{
+								if (!is_readable($class_dfn_file))
+								{
+									$e = new awex_clidx_filesys("Can't read redeclared class definition file '" . $class_dfn_file . "'.");
+									$e->clidx_file = $class_dfn_file;
+									$e->clidx_op = "is_readable";
+									throw $e;
+								}
+
 								$class_dfn = unserialize(file_get_contents($class_dfn_file));
 
-								if (isset($class_dfn["last_update"]) and $class_dfn["last_update"] === $time)
+								if ("core/fastcall_base" !== $class_dfn["file"])
 								{
-									throw new awex_clidx_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
+									$e = new awex_clidx_double_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
+									$e->cl_name = $class_name;
+									$e->path1 = $class_dfn["file"];
+									$e->path2 = $class_path;
+									throw $e;
 								}
+							}
+
+							if (!$full_update and is_readable($class_dfn_file))
+							{ // try to read old data for class/iface found
+								$class_dfn = unserialize(file_get_contents($class_dfn_file));
+							}
+							else
+							{
+								$class_dfn = array();
 							}
 
 							if (
@@ -103,52 +146,59 @@ class class_index
 								$class_dfn["last_update"] < $modified or
 								$class_dfn["file"] !== $class_path
 							)
-							{ // previous definition not found or class modified
+							{ // previous definition not found or class/iface modified
 								// new definition
 								$class_dfn = array(
 									"file" => $class_path,
-									"clidx_version" => 2, // to comply with changes to class index format
-									"last_update" => $time
+									"clidx_version" => 3, // to comply with changes to class index format
+									"last_update" => $time,
+									"type" => $type
 								);
 
-								// update index file
+								// open index file for this class/iface
 								$cl_handle = @fopen($class_dfn_file, "w");
 
 								if (false === $cl_handle)
 								{
-									throw new awex_clidx("Unable to update class index for '" . $file . "'.");
+									$e = new awex_clidx_filesys("Unable to update class index for '" . $file . "'.");
+									$e->clidx_file = $class_dfn_file;
+									$e->clidx_op = "fopen";
+									throw $e;
 								}
-
-								fwrite($cl_handle, serialize($class_dfn));
-								fclose($cl_handle);
 							}
+							else
+							{
+								$class_dfn = array();
+							}
+
+							$found_classes[] = $class_name;
+							$type = "";
 						}
-						elseif ($full_update and T_EXTENDS === $token[0])
+						elseif (T_EXTENDS === $token[0])
 						{
-							$next = "expecting parent";
+							$type = "extends";
 						}
-						elseif ($full_update and T_STRING === $token[0] and "expecting parent" === $next and !empty($class_dfn) and !empty($class_dfn_file))
+						elseif (T_STRING === $token[0] and "extends" === $type and !empty($class_dfn))
 						{ // 'extends' always comes right after class name therefore variables are still set.
-							$next = "";
 							$class_parent = $token[1];
 							$class_dfn["extends"] = $class_parent;
-
-							// update index file
-							$cl_handle = @fopen($class_dfn_file, "w");
-
-							if (false === $cl_handle)
-							{
-								throw new awex_clidx_full_upd("Unable to update class index for '" . $file . "'.");
-							}
-
-							fwrite($cl_handle, serialize($class_dfn));
-							fclose($cl_handle);
+							$type = "";
+						}
+						elseif (T_IMPLEMENTS === $token[0])
+						{
+							$type = "implements";
+						}
+						elseif (T_STRING === $token[0] and "implements" === $type and !empty($class_dfn))
+						{ // 'implements' always comes right after class name therefore variables are still set.
+							$interface = $token[1];
+							$class_dfn["implements"] = $interface;
+							$type = "";
 						}
 					}
 				}
 				elseif ("dir" === @filetype($class_file) and !in_array($file, $non_dirs))
 				{
-					self::_update($class_dir . $file . "/", $path . $file . "/", $full_update);
+					$found_classes = array_merge(self::_update($class_dir . $file . "/", $path . $file . "/", $full_update), $found_classes);
 				}
 			}
 
@@ -156,13 +206,19 @@ class class_index
 		}
 		else
 		{
-			throw new awex_clidx("Couldn't open class directory.");
+			$e = new awex_clidx_filesys("Couldn't open class directory.");
+			$e->clidx_file = $class_dir;
+			$e->clidx_op = "opendir";
+			throw $e;
 		}
 
-		if ($max_execution_time_prev_val !== self::UPDATE_EXEC_TIMELIMIT)
-		{
-			set_time_limit($max_execution_time_prev_val);
+		if (is_resource($cl_handle) and !empty($class_dfn))
+		{ // write last class dfn file
+			fwrite($cl_handle, serialize($class_dfn));
+			fclose($cl_handle);
 		}
+
+		return $found_classes;
 	}
 
 	/**
@@ -183,7 +239,10 @@ class class_index
 
 			if (!is_readable($class_dfn_file))
 			{
-				throw new awex_clidx("Local class definition not found.");
+				$e = new awex_clidx_filesys("Local class definition not found or not readable.");
+				$e->clidx_file = $class_dfn_file;
+				$e->clidx_op = "is_readable";
+				throw $e;
 			}
 		}
 		else
@@ -199,7 +258,10 @@ class class_index
 
 				if (!is_readable($class_dfn_file))
 				{
-					throw new awex_clidx("Class definition not found.");
+					$e = new awex_clidx_filesys("Class definition not found or not readable.");
+					$e->clidx_file = $class_dfn_file;
+					$e->clidx_op = "is_readable";
+					throw $e;
 				}
 			}
 
@@ -221,7 +283,10 @@ class class_index
 
 				if (!is_readable($class_dfn_file))
 				{
-					throw new awex_clidx("Class definition not found.");
+					$e = new awex_clidx_filesys("Class definition not found or not readable.");
+					$e->clidx_file = $class_dfn_file;
+					$e->clidx_op = "is_readable";
+					throw $e;
 				}
 
 				$class_dfn = unserialize(file_get_contents($class_dfn_file));
@@ -229,7 +294,10 @@ class class_index
 
 				if (!is_readable($class_file))
 				{
-					throw new awex_clidx("Class file not found.");
+					$e = new awex_clidx_filesys("Class file not found.");
+					$e->clidx_file = $class_file;
+					$e->clidx_op = "is_readable";
+					throw $e;
 				}
 			}
 		}
@@ -261,11 +329,14 @@ class class_index
 
 			if (!is_readable($class_dfn_file))
 			{
-				self::update(true); // added with clidx_version 1 -- no check for second update redundancy needed.
+				self::update();
 
 				if (!is_readable($class_dfn_file))
 				{
-					throw new awex_clidx("Class definition not found.");
+					$e = new awex_clidx_filesys("Class definition not found or not readable.");
+					$e->clidx_file = $class_dfn_file;
+					$e->clidx_op = "is_readable";
+					throw $e;
 				}
 			}
 
@@ -273,7 +344,7 @@ class class_index
 
 			if (empty($class_dfn["clidx_version"])) // clidx_version must be >=1, earlier formats don't have 'extends' parameter.
 			{
-				self::update(true);
+				self::update();
 				$class_dfn = unserialize(file_get_contents($class_dfn_file));
 			}
 
@@ -284,10 +355,58 @@ class class_index
 
 		return (bool) in_array($parent, $parents);
 	}
+
+	private function clean_up($classes)
+	{
+		$index_dir = aw_ini_get("site_basedir") . self::INDEX_DIR;
+		$ext_len = strlen(aw_ini_get("ext"));
+		$ext_len = empty($ext_len) ? 1000 : -$ext_len - 1;
+
+		if ($handle = opendir($index_dir))
+		{
+			while (($cl_dfn_file = readdir($handle)) !== false)
+			{
+				$file = $index_dir . $cl_dfn_file;
+
+				if ("file" === @filetype($file) and !in_array(substr($cl_dfn_file, 0, $ext_len), $classes))
+				{
+					$deleted = unlink($file);
+
+					if (!$deleted)
+					{
+						$e = new awex_clidx_filesys("Couldn't delete redundant file in class index");
+						$e->clidx_file = $file;
+						$e->clidx_op = "unlink";
+						throw $e;
+					}
+				}
+			}
+
+			closedir($handle);
+		}
+		else
+		{
+			$e = new awex_clidx_filesys("Couldn't open index directory");
+			$e->clidx_file = $index_dir;
+			$e->clidx_op = "opendir";
+			throw $e;
+		}
+	}
 }
 
 class awex_clidx extends aw_exception {}
-class awex_clidx_full_upd extends awex_clidx {}
-class awex_clidx_dfn extends awex_clidx {}
+
+class awex_clidx_filesys extends awex_clidx
+{
+	public $clidx_file;
+	public $clidx_op;
+}
+
+class awex_clidx_double_dfn extends awex_clidx
+{
+	public $clidx_cl_name;
+	public $clidx_path1;
+	public $clidx_path2;
+}
 
 ?>

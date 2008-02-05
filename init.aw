@@ -1,4 +1,5 @@
 <?php
+
 // this should be here, url parsing and variable initialization
 // should be the first thing that is done
 error_reporting(E_PARSE | E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR);
@@ -87,7 +88,7 @@ function aw_ini_get($var)
 			else
 			{
 				return;
-				// throw new awex_not_found("Invalid key");//!!!
+				// throw new aw_exception("Invalid key");
 			}
 		}
 	}
@@ -1345,12 +1346,42 @@ function __autoload($class_name)
 		return;
 	}
 
-	$class_file = class_index::get_file_by_name($class_name);
+	try
+	{
+		$class_file = class_index::get_file_by_name($class_name);
+	}
+	catch (awex_clidx_double_dfn $e)
+	{
+		exit("Class redeclared. Fix errors and run again.");//!!! tmp
+
+		//!!! take action -- delete/rename one of the classes or load both or ...
+		$class_file = class_index::get_file_by_name($class_name);
+	}
+	catch (awex_clidx_filesys $e)
+	{
+		exit("Classload filesystem error. Not readable or no such class.");//!!! tmp
+		//!!! take action -- try to alter filesystem permissions ...
+	}
+	catch (awex_clidx $e)
+	{
+		exit("Unknown classload error.");//!!! tmp
+		//!!! take action
+	}
+
 	require($class_file);
 
-	if (!class_exists($class_name, false))
+	if (!class_exists($class_name, false) and !interface_exists($class_name, false))
 	{ // class may be moved to another file, force update and try again
-		class_index::update();
+		try
+		{
+			class_index::update(true);
+		}
+		catch (awex_clidx $e)
+		{
+			exit("Fatal classload error.");//!!! tmp
+			//!!! take action
+		}
+
 		$class_file = class_index::get_file_by_name($class_name);
 		require($class_file);
 	}
