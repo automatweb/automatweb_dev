@@ -10,6 +10,16 @@
             <method>serialize</method>
             <caption>Dokumentide kataloog</caption>
       </property>
+      <property>
+            <name>do_subs</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ka alamkataloogid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_DOCUMENT_CALENDAR_VIEW</syslog_type>
             <relationmgr>yes</relationmgr>

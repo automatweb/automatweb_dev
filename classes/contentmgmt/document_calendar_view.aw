@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.6 2008/02/04 11:12:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.7 2008/02/05 12:18:45 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
@@ -10,6 +10,9 @@
 
 @property folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Dokumentide kataloog
+
+@property do_subs type=checkbox ch_value=1 field=meta method=serialize
+@caption Ka alamkataloogid
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Kataloog
@@ -107,7 +110,10 @@ class document_calendar_view extends class_base
 		$o = obj($arr["id"]);
 		if ($this->can("view", $o->prop("folder")))
 		{
-			$docs = $ss->get_default_document(array("obj" => obj($o->prop("folder")), "include_submenus" => 1));
+			$docs = $ss->get_default_document(array(
+				"obj" => obj($o->prop("folder")), 
+				"include_submenus" => $arr["obj_inst"]->prop("do_subs")
+			));
 		}
 		else
 		{
