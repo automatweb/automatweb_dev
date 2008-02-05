@@ -2833,6 +2833,10 @@ class crm_bill extends class_base
 	function get_bill_needs_payment($arr)
 	{
 		extract($arr);
+		if(!(is_object($bill) && is_oid($bill->id())))
+		{
+			return 0;
+		}
 		$bill_sum = $this->get_bill_sum($bill);
 		$sum = 0;
 		foreach($bill->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
@@ -2857,6 +2861,10 @@ class crm_bill extends class_base
 
 	function get_bill_recieved_money($b,$payment=0)
 	{
+		if(!(is_object($b) && is_oid($b->id())))
+		{
+			return 0;
+		}
 		$bill_sum = $this->get_bill_sum($b);
 		$needed = $this->get_bill_needs_payment(array("bill" => $b));
 		if($payment)
