@@ -170,11 +170,17 @@ class crm_working_time_scenario extends class_base
 		));
 		$t->define_field(array(
 			"name" => "pause",
-			"caption" => t("Paus"),
+			"caption" => t("Suletud"),
+			"width" => 50,
+		));
+		$t->define_field(array(
+			"name" => "pause_reason",
+			"caption" => t("Suletud p&otilde;hjus"),
+			"width" => 300,
 		));
 
 		$scenario_data = $arr["obj_inst"]->get_scenario_data();
-		if(!$scenario_data)
+		if($scenario_data)
 		{
 			foreach($wd as $day => $data)
 			{
@@ -191,13 +197,19 @@ class crm_working_time_scenario extends class_base
 						"start" => html::time_select(array(
 							"name" => "scenario_data[".$day."][".$x."][start]",
 							"value" => $start,
+							"minute_step" => 10,
 						)),
 						"end" => html::time_select(array(
 							"name" => "scenario_data[".$day."][".$x."][end]",
 							"value" => $end,
+							"minute_step" => 10,
 						)),
 						"pause" => html::checkbox(array(
 							"name" => "scenario_data[".$day."][".$x."][is_pause]",
+						//	"value" => "",
+						)),
+						"pause_reason" => html::textbox(array(
+							"name" => "scenario_data[".$day."][".$x."][pause_reason]",
 						//	"value" => "",
 						)),
 					));
@@ -229,13 +241,16 @@ class crm_working_time_scenario extends class_base
 							"name" => "scenario_data[".$day."][".$x."][is_pause]",
 							"checked" => $stuff["is_pause"]
 						)),
+						"pause_reason" => html::textbox(array(
+							"name" => "scenario_data[".$day."][".$x."][pause_reason]",
+							"value" => $stuff["pause_reason"]
+						)),
 					));
 					$x++;
 				}
 			}
 		}
-		return $t->draw(); 
-
+		return $t->draw();
 	}
 
 	function show($arr)
@@ -259,21 +274,44 @@ class crm_working_time_scenario extends class_base
 			$p = obj($arr["person"]);
 			$ret.= $p->name()."<br>\n";
 		}
-		//arr($_POST);
+
 		if(is_array($_POST["bron_times"]))
 		{
+			$room_inst = get_instance(CL_ROOM);
 			foreach($_POST["bron_times"] as $tmstmp => $data)
 			{
 				if($data["accept"])
 				{
-					print "teeb bronni ajale ".date("d.m.Y h:i" , $tmstmp)."\n<br>";
+					$start = mktime($data["start"]["hour"], $data["start"]["minute"],0,date("m",$tmstmp),date("d",$tmstmp),date("Y",$tmstmp));
+					$end = mktime($data["end"]["hour"], $data["end"]["minute"],0,date("m",$tmstmp),date("d",$tmstmp),date("Y",$tmstmp));
+
+					$bron = $room_inst->make_reservation(array(
+						"not_verified" => 1,
+						"id" => $_POST["room"],
+						"data" => array(
+							"start" => $start,
+							"end" => $end,
+						),
+					));
+					if(is_oid($bron))
+					{
+						$bron_object = obj($bron);
+						$bron_object->set_prop("people" , $_POST["person"]);
+						if($data["is_pause"])
+						{
+							$bron_object->set_prop("time_closed" , 1);
+							$bron_object->set_prop("closed_info" , $data["pause_reason"]);
+						}
+						$bron_object->save();
+					}
+//					print "teeb bronni ajale ".date("d.m.Y h:i" , $start)." - ".date("d.m.Y h:i" , $end)."\n<br>";
 				}
 			}
 			//siin objektide tegemine jne
-//			die("<script type='text/javascript'>
-//				window.close();
-//				</script>
-//			");
+			die("<script type='text/javascript'>
+				window.close();
+				</script>
+			");
 		}
 
 		$scenario = obj($arr["scenario"]);	
@@ -356,9 +394,12 @@ class crm_working_time_scenario extends class_base
 				html::hidden(array(
 					"name" => "person",
 					"value" => $arr["person"],
-				)),
+				)).html::hidden(array(
+					"name" => "room",
+					"value" => $arr["room"],
+				)).
 				html::submit(array(
-					"value" => t("Salvesta"),
+					"value" => t("Moodusta eelbroneeringud"),
 				)),
 		));
 	}

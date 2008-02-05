@@ -6,7 +6,7 @@
 		<group>general</group>
 		<type>text</type>
 		<caption>Nadalapaevad</caption>
-		<no_caption>1</no_caption>
+ 		<no_caption>1</no_caption>
                 <store>no</store>
       </property>
       <property>

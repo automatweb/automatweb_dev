@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.221 2008/02/05 14:00:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.222 2008/02/05 15:37:27 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -406,6 +406,7 @@ class room extends class_base
 					foreach($arr["request"]["scenario"] as $sc => $data)
 					{
 						$data["person"] = $sc;
+						$data["room"] = $arr["obj_inst"]->id();
 						$url = $this->mk_my_orb("make_worker_table", $data
 							,CL_CRM_WORKING_TIME_SCENARIO
 						);

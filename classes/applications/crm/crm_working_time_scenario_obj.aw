@@ -66,6 +66,13 @@ class crm_working_time_scenario_obj extends _int_object
 			$ret.= html::time_select(array("name" => "bron_times[".$time."][start]" , "value" => $opt["start"]));
 			$ret.= "-";
 			$ret.= html::time_select(array("name" => "bron_times[".$time."][end]" , "value" => $opt["end"]));
+
+			if($opt["is_pause"])
+			{
+				$ret.= html::hidden(array("name" => "bron_times[".$time."][is_pause]" , "value" => 1));
+				$ret.= html::hidden(array("name" => "bron_times[".$time."][pause_reason]" , "value" => $opt["pause_reason"]));
+				$ret.= $opt["pause_reason"];
+			}
 			$ret.= "\n<br>";
 		}
 		if($ret)
