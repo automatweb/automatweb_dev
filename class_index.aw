@@ -11,6 +11,7 @@ class class_index
 	const LOCAL_CLASS_DIR = "/files/classes/";
 	const LOCAL_CLASS_PREFIX = "_aw_local_class__"; // local class names in form OBJ_LOCAL_CLASS_PREFIX . $class_obj_id
 	const UPDATE_EXEC_TIMELIMIT = 300;
+	const CL_NAME_MAXLEN = 1024;
 
 	/**
 	@attrib api=1 params=pos
@@ -73,15 +74,27 @@ class class_index
 		{
 			$non_dirs = array(".", "..", "CVS");
 			$ext = aw_ini_get("ext");
-			$ext_len = strlen($ext);
+
+			if (empty($ext))
+			{
+				$ext_len = self::CL_NAME_MAXLEN;
+			}
+			else
+			{
+				$ext = "." . $ext;
+				$ext_len = - strlen($ext);
+			}
+
+			// these files are ignored under class directory
+			$cl_dir_tmp = aw_ini_get("basedir") . self::CLASS_DIR;
+			$ignore_files = array($cl_dir_tmp . "core/fastcall_base" . $ext);
 
 			while (($file = readdir($handle)) !== false)
 			{
 				$class_file = $class_dir . $file;
 
-				// process only code files
-				if ("file" === @filetype($class_file) and strrchr($file, ".") === "." . $ext)
-				{
+				if ("file" === @filetype($class_file) and strrchr($file, ".") === $ext and !in_array($class_file, $ignore_files))
+				{ // process only applicable code files
 					// parse code
 					$tmp = token_get_all(file_get_contents($class_file));
 					$type = "";
@@ -105,11 +118,12 @@ class class_index
 							}
 
 							$modified = filemtime($class_file);
-							$class_path = $path . substr($file, 0, - 1 - $ext_len);// relative path + file without extension
+							$class_path = $path . substr($file, 0, $ext_len);// relative path + file without extension
 							$class_name = $token[1];
-							$class_dfn_file = $index_dir . $class_name . "." . $ext;
+							$class_dfn_file = $index_dir . $class_name . $ext;
 
-							if (in_array($class_name, $found_classes) and "core/locale" !== substr($class_path, 0, 11) and aw_ini_get("basedir") . self::CLASS_DIR . "core/fastcall_base.aw" !== $class_file)
+							// look for redeclared classes
+							if (in_array($class_name, $found_classes) and "core/locale" !== substr($class_path, 0, 11))
 							{
 								if (!is_readable($class_dfn_file))
 								{
@@ -120,15 +134,11 @@ class class_index
 								}
 
 								$class_dfn = unserialize(file_get_contents($class_dfn_file));
-
-								if ("core/fastcall_base" !== $class_dfn["file"])
-								{
-									$e = new awex_clidx_double_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
-									$e->cl_name = $class_name;
-									$e->path1 = $class_dfn["file"];
-									$e->path2 = $class_path;
-									throw $e;
-								}
+								$e = new awex_clidx_double_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
+								$e->cl_name = $class_name;
+								$e->path1 = $class_dfn["file"];
+								$e->path2 = $class_path;
+								throw $e;
 							}
 
 							if (!$full_update and is_readable($class_dfn_file))
@@ -360,7 +370,7 @@ class class_index
 	{
 		$index_dir = aw_ini_get("site_basedir") . self::INDEX_DIR;
 		$ext_len = strlen(aw_ini_get("ext"));
-		$ext_len = empty($ext_len) ? 1000 : -$ext_len - 1;
+		$ext_len = empty($ext_len) ? self::CL_NAME_MAXLEN :  (- 1 - $ext_len);
 
 		if ($handle = opendir($index_dir))
 		{

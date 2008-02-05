@@ -1352,19 +1352,29 @@ function __autoload($class_name)
 	}
 	catch (awex_clidx_double_dfn $e)
 	{
-		exit("Class redeclared. Fix errors and run again.");//!!! tmp
+		exit ("Class '" . $e->clidx_cl_name . "' redeclared. Fix errors.");//!!! tmp
 
 		//!!! take action -- delete/rename one of the classes or load both or ...
-		$class_file = class_index::get_file_by_name($class_name);
-	}
-	catch (awex_clidx_filesys $e)
-	{
-		exit("Classload filesystem error. Not readable or no such class.");//!!! tmp
-		//!!! take action -- try to alter filesystem permissions ...
+		// $class_file = class_index::get_file_by_name($class_name);
 	}
 	catch (awex_clidx $e)
 	{
-		exit("Unknown classload error.");//!!! tmp
+		try
+		{
+			class_index::update(true);
+		}
+		catch (awex_clidx $e)
+		{
+		}
+
+		try
+		{
+			$class_file = class_index::get_file_by_name($class_name);
+		}
+		catch (awex_clidx $e)
+		{
+			exit("Fatal classload error.");//!!! tmp
+		}
 		//!!! take action
 	}
 
