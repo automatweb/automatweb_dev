@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.9 2008/01/25 08:05:33 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.10 2008/02/06 18:23:56 hannes Exp $
 // ical_export.aw - Sündmuste eksport (iCal) 
 /*
 
@@ -30,30 +30,21 @@
 
 @groupinfo google_calendar caption="Google kalender"
 @default group=google_calendar
-	
+
 	@groupinfo google_calendar_settings caption="Seaded" parent=google_calendar
 	@default group=google_calendar_settings
+	
+		@property google_calendar_settings_calendar type=select field=meta method=serialize
+		@caption Vali Google kalender
 		
-		@property google_calendar_url type=hidden field=meta method=serialize
+		@property google_calendar_settings_newcalname type=textbox store=no
+		@caption Uue kalendri nimi
 		
-		@property google_calendar_settings_title type=textbox field=meta method=serialize
-		@caption Kalendri pealkiri
+		@property google_calendar_settings_color type=select store=no
+		@caption Värv
 		
-		@property google_calendar_settings_summary type=textarea field=meta method=serialize cols=60 rows=10
-		@caption Kirjeldus
-		
-		@property google_calendar_settings_location type=textbox field=meta method=serialize
-		@caption Asukoht
-		
-		@property google_calendar_settings_color type=select field=meta method=serialize cols=60 rows=10
-		@caption V&auml;rv
-		
-		@property automatic_sync type=checkbox ch_value=1 field=meta method=serialize
-		@caption Automaatne sünkroniseerimine (15 min intervalliga)... hetkel ei toimi
-		
-		@property do_import type=checkbox store=no ch_value=1
-		@caption Impordi praegu
-		
+		@property google_calendar_settings_calendar_url type=hidden store=no
+	
 	@groupinfo google_calendar_user caption="Kasutaja" parent=google_calendar
 	@default group=google_calendar_user
 	
@@ -65,6 +56,7 @@
 		
 		@property google_calendar_password_2 type=password field=meta method=serialize
 		@caption Parool uuesti
+		
 		
 @reltype CALENDAR value=1 clid=CL_PLANNER
 @caption Kalender
@@ -78,26 +70,113 @@ class ical_export extends class_base
 			"tpldir" => "applications/calendar/ical_export",
 			"clid" => CL_ICAL_EXPORT
 		));
+		
+		ini_set ("include_path", ".:".aw_ini_get("basedir")."/addons/ZendGdata-1.0.3/library/");
+		include_once("Zend/Loader.php");
+		Zend_Loader::loadClass('Zend_Gdata');
+		Zend_Loader::loadClass('Zend_Gdata_AuthSub');
+		Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
+		Zend_Loader::loadClass('Zend_Gdata_Calendar');
 
 		define ("GOOGLE_CALENDAR_PASSWORD_1_HASH", "X1X1X1X1X1");
 		define ("GOOGLE_CALENDAR_PASSWORD_2_HASH", "X2X2X2X2X2");
 	}
 	
-	// todo : +02:00 should not be static
-	function timestamp_to_google_date($timestamp)
+	function _get_google_calendar_settings_newcalname($arr)
 	{
-		return date  ("Y-m-d\Th:i:s.000+02:00", $timestamp);
+		$o = & $arr["obj_inst"];
+		
+		if ($o->prop("google_calendar_settings_calendar") ==  "new_cal")
+		{
+			
+		}
+		else
+		{
+			return PROP_IGNORE;
+		}
 	}
 	
+	function _set_google_calendar_settings_newcalname($arr)
+	{
+		$o = & $arr["obj_inst"];
+		$prop = & $arr["prop"];
+		
+		if (strlen($prop["value"]) > 0 )
+		{
+			$service = Zend_Gdata_Calendar::AUTH_SERVICE_NAME; // predefined service name for calendar
+			$client = Zend_Gdata_ClientLogin::getHttpClient($o->prop("google_calendar_uid")."@gmail.com",$o->prop("google_calendar_password_1"),$service);
+			
+			$this->create_google_calendar(array(
+				"obj_inst" => & $o,
+				"client" => $client,
+				"title" => $o->prop("google_calendar_settings_title"),
+				//"summary" => $o->prop("google_calendar_settings_summary"),
+				//"location" => $o->prop("google_calendar_settings_location"),
+				"color" => $o->prop("google_calendar_settings_color"),
+			));
+		}
+	}
+	
+	function _get_google_calendar_settings_calendar($arr)
+	{
+		$prop = & $arr["prop"];
+		$o = & $arr["obj_inst"];
+		
+		$service = Zend_Gdata_Calendar::AUTH_SERVICE_NAME; // predefined service name for calendar
+		$client = Zend_Gdata_ClientLogin::getHttpClient($o->prop("google_calendar_uid")."@gmail.com",$o->prop("google_calendar_password_1"),$service);
+		
+		$gdata_cal = new Zend_Gdata_Calendar($client);
+		//$cal_feed = $gdata_cal->getCalendarListFeed();
+		$cal_feed = $gdata_cal->getCalendarEventFeed("http://www.google.com/calendar/feeds/default/owncalendars/full");
+
+		$a_calendars["new_cal"] = t("Loo uus kalender...");
+		foreach ($cal_feed as $calendar)
+		{
+			$a_calendars[$calendar->link[0]->href] = utf8_decode($calendar->title->text);
+		}
+		
+		
+		$prop["options"] = $a_calendars;
+		$prop["selected"] = $prop["value"];
+		$prop["size"] = count($a_calendars);
+	}
+	
+	function timestamp_to_google_date($timestamp, $timezone="GMT")
+	{
+		if ($timezone=="GMT")
+		{
+			return gmdate  ("Y-m-d\TH:i:s.000\Z", $timestamp);
+		}
+		else if(strpos($timezone, "GMT+")===0)
+		{
+			$hourplus = substr($timezone, 4, 2);
+			return gmdate  ("Y-m-d\TH:i:s.000+".$hourplus.":00", $timestamp);
+		}
+	}
+	
+	// i've found 2 different types of date strings in gcal:
+	// a) 2008-02-06T10:00:00.000Z
+	// b) 2008-02-06T10:00:00.000+02:00 ... where hours are ofc user defined timestamps from google cal settings
+	// this function turns both types to greenwich timestamp
 	function google_date_to_timestamp($s_date)
 	{
 		$year = substr($s_date, 0, 4);
 		$month = substr($s_date, 5, 2);
 		$day = substr($s_date, 8, 2);
-		$hour = substr($s_date, 11, 2);
+		$hour = (int)substr($s_date, 11, 2);
+		
+		// if not greenwich time, turn it to 1
+		if (substr ($s_date, -1,1) !="Z")
+		{
+			$hourminus = (int)substr($s_date, -5,2);
+			$hour = $hour-$hourminus;
+		}
+		
 		$minute = substr($s_date, 14, 2);
 		$second = substr($s_date, 17, 2);
-		return mktime  ($hour, $minute, $second, $month, $day, $year);
+		
+		$ts = gmmktime  ($hour, $minute, $second, $month, $day, $year);
+		return $ts;
 	}
 	
 	function _set_automatic_sync($arr)
@@ -121,8 +200,16 @@ class ical_export extends class_base
 	// codes from  http://www.mail-archive.com/google-calendar-help-dataapi@googlegroups.com/msg04033.html
 	function _get_google_calendar_settings_color($arr)
 	{
+		$o = & $arr["obj_inst"];
+		
+		if ($o->prop("google_calendar_settings_calendar") !=  "new_cal")
+		{
+			return PROP_IGNORE;
+		}
+		
 	    $property =& $arr["prop"];
 	    $property["options"]  = array(
+				"choose" => t("Vali..."),
 	           	"#A32929" => "#A32929",	
 				"#B1365F" => "#B1365F",
 				"#7A367A" => "#7A367A",
@@ -145,6 +232,31 @@ class ical_export extends class_base
 				"#6E6E41" => "#6E6E41",
 				"#8D6F47" => "#8D6F47",
 	    );
+		
+	    $property["options_styles"]  = array(
+				"choose" => "",
+	           	"#A32929" => "background: #A32929; color: white;",	
+				"#B1365F" => "background: #B1365F; color: white;",
+				"#7A367A" => "background: #7A367A; color: white;",
+				"#5229A3" => "background: #5229A3; color: white;",
+				"#29527A" => "background: #29527A; color: white;",
+				"#2952A3" => "background: #2952A3; color: white;",
+				"#1B887A" => "background: #1B887A; color: white;",
+				"#28754E" => "background: #28754E; color: white;",
+				"#0D7813" => "background: #0D7813; color: white;",
+				"#528800" => "background: #528800; color: white;",
+				"#88880E" => "background: #88880E; color: white;",
+				"#AB8B00" => "background: #AB8B00; color: white;",
+				"#BE6D00" => "background: #BE6D00; color: white;",
+				"#B1440E" => "background: #B1440E; color: white;",
+				"#865A5A" => "background: #865A5A; color: white;",
+				"#705770" => "background: #705770; color: white;",
+				"#4E5D6C" => "background: #4E5D6C; color: white;",
+				"#5A6986" => "background: #5A6986; color: white;",
+				"#4A716C" => "background: #4A716C; color: white;",
+				"#6E6E41" => "background: #6E6E41; color: white;",
+				"#8D6F47" => "background: #8D6F47; color: white;",
+	    );
 	}
 	
 	
@@ -160,10 +272,12 @@ class ical_export extends class_base
 	 /**
 		@attrib name=sync_google all_args=1 nologin=1
 		@param id required type=int acl=view
+		@param cal_parent required type=int
 	**/
 	function sync_google($arr)
 	{
 		$this->google_calendar_sync($arr);
+		echo "valma";
 		die();
 	}
 	
@@ -182,14 +296,14 @@ class ical_export extends class_base
 		$client = Zend_Gdata_ClientLogin::getHttpClient($o->prop("google_calendar_uid")."@gmail.com",$o->prop("google_calendar_password_1"),$service);
 		
 		// todo timezone to aw admin -- it should be dropdown
-		$this->create_google_calendar(array(
-				"obj_inst" => & $o,
-				"client" => $client,
-				"title" => $o->prop("google_calendar_settings_title"),
-				"summary" => $o->prop("google_calendar_settings_summary"),
-				"location" => $o->prop("google_calendar_settings_location"),
-				"color" => $o->prop("google_calendar_settings_color"),
-		));
+		//$this->create_google_calendar(array(
+		//		"obj_inst" => & $o,
+		//		"client" => $client,
+		//		"title" => $o->prop("google_calendar_settings_title"),
+		//		"summary" => $o->prop("google_calendar_settings_summary"),
+		//		"location" => $o->prop("google_calendar_settings_location"),
+		//		"color" => $o->prop("google_calendar_settings_color"),
+		//));
 		$this->sync_events(array(
 				"obj_inst" => & $o,
 				"client" => $client,
@@ -199,18 +313,18 @@ class ical_export extends class_base
 	
 	function sync_events($arr)
 	{
-		//arr($this->google_date_to_timestamp("2008-01-02T11:00:00.000+02:00"));
-		//arr($this->timestamp_to_google_date(1199264400));
+		//obj_set_opt("no_cache", 1);
 		$a_aw_events = $this->get_aw_calendar_events_array($arr);
 		$a_google_events = $this->get_google_calendar_events_array($arr);
-		
-		// first fetch new events from google calendar
+			
+		$b_created_new_aw_events = false;
 		foreach ($a_google_events as $event)
 		{
 			$this->db_query("SELECT id FROM aw_google_calendar_event_relations_to_aw_events WHERE aw_calexport_id = ".$arr["obj_inst"]->id()." AND google_id = '".$event["google_id"]."';");
 			$row = $this->db_next();
 			if (!isset($row["id"]))
 			{
+				$b_created_new_aw_events =true;
 				$o = new object(array(
 					"class_id" => CL_CALENDAR_EVENT,
 					"parent" => $arr["cal_parent"],
@@ -219,29 +333,143 @@ class ical_export extends class_base
 				$o->set_class_id(CL_CALENDAR_EVENT);
 				$o->set_prop("start1", $event["start"]);
 				$o->set_prop("end", $event["end"]);
-				$o->set_prop("description", $event["end"]);
+				$o->set_prop("description", $event["description"]);
+				$o->set_status(STAT_ACTIVE);
 				$o->save();
-				$this->db_query("insert into aw_google_calendar_event_relations_to_aw_events (aw_calexport_id, aw_id, google_id) values (".$arr["obj_inst"]->id().", ".$o->id().", '".$event["google_id"]."')");
+				//$this->db_query("update objects set modified=".$event["modified"]." WHERE oid=".$o->id());
+				//$this->db_query("insert into aw_google_calendar_event_relations_to_aw_events (aw_calexport_id, aw_id,aw_modified, google_id, google_modified) values (".$arr["obj_inst"]->id().", ".$o->id().",".$event["modified"].", '".$event["google_id"]."', ".$event["modified"].")");
+				$i_time = time();
+				$this->db_query("insert into aw_google_calendar_event_relations_to_aw_events (aw_calexport_id, aw_id,google_id, modified) values (".$arr["obj_inst"]->id().", ".$o->id().", '".$event["google_id"]."', ".$i_time.")");
+				
 			}
 		}
 		
 		// now fetch new events from aw calendar to google calendar
+		$b_created_new_google_events = false;
 		foreach ($a_aw_events as $event)
 		{
-			$this->db_query("SELECT id FROM aw_google_calendar_event_relations_to_aw_events WHERE aw_calexport_id = ".$arr["obj_inst"]->id()." AND aw_id = '".$event["aw_id"]."';");
+			$this->db_query("SELECT id FROM aw_google_calendar_event_relations_to_aw_events WHERE aw_calexport_id = ".$arr["obj_inst"]->id()." AND aw_id = ".$event["aw_id"]);
 			$row = $this->db_next();
 			if (!isset($row["id"]))
 			{
 				$title = utf8_encode ($event["title"]);
-				$start = $this->timestamp_to_google_date($event["start"]);
-				$end = $this->timestamp_to_google_date($event["end"]);
-				$google_id = $this->create_google_event ($arr["client"],$arr["obj_inst"]->prop("google_calendar_url"), $title,'','', $start,$end);
-				$this->db_query("insert into aw_google_calendar_event_relations_to_aw_events (aw_calexport_id, aw_id, google_id) values (".$arr["obj_inst"]->id().", ".$event["aw_id"].", '".$google_id."')");
+				$start = $event["start"];
+				$end = $event["end"];
+				$description = $event["description"];
+				// todo: uses GMT+02... even if u set otherwise from google
+				$google_id = $this->create_google_event ($arr["client"],$arr["obj_inst"]->prop("google_calendar_settings_calendar"), $title,$description,'', $start,$end, "GMT+02:00");
+				//$this->db_query("insert into aw_google_calendar_event_relations_to_aw_events (aw_calexport_id, aw_id, aw_modified,  google_id, google_modified) values (".$arr["obj_inst"]->id().", ".$event["aw_id"].", ".$event["modified"].", '".$google_id."', ".$event["modified"].")");
+				$i_time = time();
+				$this->db_query("insert into aw_google_calendar_event_relations_to_aw_events (aw_calexport_id, aw_id, google_id, modified) values (".$arr["obj_inst"]->id().", ".$event["aw_id"].", '".$google_id."', ".$i_time.")");
 			}
 		}
 		
-		// check if some events needs to be synced
+		// fetch events again if needed
+		if ($b_created_new_aw_events)
+		{
+			$a_aw_events = $this->get_aw_calendar_events_array($arr);
+		}
+		if ($b_created_new_google_events)
+		{
+			$a_google_events = $this->get_google_calendar_events_array($arr);
+		}
+		
+		$this->db_query("SELECT id, aw_id, google_id, modified from aw_google_calendar_event_relations_to_aw_events");
+		$a_modified = array();
+		while($row = $this->db_next())
+		{
+			$b_newer_is_google = $b_newer_is_aw =false;
+			if ($a_aw_events[$row["aw_id"]]["modified"] > $a_google_events[$row["google_id"]]["modified"] )
+			{
+				$i_newest_time = $a_aw_events[$row["aw_id"]]["modified"];
+				$b_newer_is_aw = true;
+			}
+			else if ( $a_aw_events[$row["aw_id"]]["modified"] < $a_google_events[$row["google_id"]]["modified"] )
+			{
+				$i_newest_time = $a_google_events[$row["google_id"]]["modified"];
+				$b_newer_is_google = true;
+			}
+			else
+			{
+				continue;
+			}
+			
+			// and finally now we know from where to copy
+			if ($i_newest_time > $row["modified"])
+			{
+				if ($b_newer_is_aw)
+				{
+					//$this->update_google_event(array(
+					//	"client" => $arr["client"],
+					//	"event_id" => $row["google_id"],
+					//));
+					arr($arr["client"]);
+					arr($this->getEvent($arr["client"], "6cqjbggdl108ij74f5evgsee40"));
+				}
+				else if ($b_newer_is_google)
+				{
+					$this->update_aw_event(array(
+						"oid" => $row["aw_id"],
+						"title" => $a_google_events[$row["google_id"]]["title"],
+						"start" => $a_google_events[$row["google_id"]]["start"],
+						"end" => $a_google_events[$row["google_id"]]["end"],
+						"description" => $a_google_events[$row["google_id"]]["description"],
+					));
+					$a_modified[] = array(
+						"id" => $row["id"],
+					);
+				}
+			}
+		}
+		
+		// finalize
+		// change modified date in aw_google_calendar_event_relations_to_aw_events
+		// cuz we can't do it in 'while' cycle above
+		foreach ($a_modified as $mod)
+		{
+			$this->db_query("update aw_google_calendar_event_relations_to_aw_events set modified=".time()." WHERE id=".$mod["id"]);
+		}
+		
 	}
+	
+	// todo: c if some fields are not the same on other event types
+	function update_aw_event($arr)
+	{
+		$o = obj($arr["oid"]);
+		$o->set_name($arr["title"]);
+		$o->set_prop("start1", $arr["start"]);
+		$o->set_prop("end", $arr["end"]);
+		$o->set_prop("description", $arr["description"]);
+		$o->save();
+	}
+	
+	// todo: fatal.. cant delete nor update cuz getEvent f does not work
+	function update_google_event ($arr) 
+	{
+		extract($arr);
+		//$event = $this->getEvent($client, $event_id);
+		//$event->delete($event_id);
+		//$gdataCal = new Zend_Gdata_Calendar($client);
+		//$gdataCal->delete($event_id); 
+	}
+	
+	function getEvent($client, $eventId) 
+{
+  $gdataCal = new Zend_Gdata_Calendar($client);
+  $query = $gdataCal->newEventQuery();
+  $query->setUser('default');
+  $query->setVisibility('private');
+  $query->setProjection('full');
+  $query->setEvent($eventId);
+
+  try {
+    $eventEntry = $gdataCal->getCalendarEventEntry($query);
+    return $eventEntry;
+  } catch (Zend_Gdata_App_Exception $e) {
+    var_dump($e);
+    return null;
+  }
+}
 	
 	function get_google_calendar_events_array($arr)
 	{
@@ -249,24 +477,28 @@ class ical_export extends class_base
 		$client = $arr["client"];
 		$obj = $arr["obj_inst"];
 		$gdataCal = new Zend_Gdata_Calendar($client);
-		$eventFeed = $gdataCal->getCalendarEventFeed($obj->prop("google_calendar_url"));
+		$eventFeed = $gdataCal->getCalendarEventFeed($obj->prop("google_calendar_settings_calendar"));
 		foreach ($eventFeed as $event) {
-			$a_events[] = array(
+			$a_events[$event->id->text] = array(
 				"google_id" => $event->id->text,
 				"title" => utf8_decode ($event->title->text),
 				"description" => utf8_decode ($event->content->text),
 				"where" => utf8_decode ($event->where->text),
+				"modified" => $this->google_date_to_timestamp($event->updated->text),
+				"modified_raw" =>$event->updated->text,
 			);
 			foreach ($event->when as $when)
 			{
 				$start = $when->startTime;
-				$a_events[count($a_events)-1]["start"] = $this->google_date_to_timestamp($start);
+				$a_events[$event->id->text]["start_raw"] = $start;
+				$a_events[$event->id->text]["start"] = $this->google_date_to_timestamp($start);
 				$end = $when->endTime;
-				$a_events[count($a_events)-1]["end"] = $this->google_date_to_timestamp($end);
+				$a_events[$event->id->text]["end"] = $this->google_date_to_timestamp($end);
+				$a_events[$event->id->text]["end_raw"] = $end;
 			}
 			
 			foreach ($event->where as $where) {
-				$a_events[count($a_events)-1]["where"] = $where->valueString;
+				$a_events[$event->id->text]["where"] = $where->valueString;
 			}
 		}
 		return $a_events;
@@ -288,33 +520,44 @@ class ical_export extends class_base
 			
 			foreach($events->ids() as $oid)
 			{
-				if($obj->prop("personal_not") && $event->prop("is_personal"))
-				{
-					continue;
-				}
 				$event = obj($oid);
-				
 				
 				switch($event->class_id())
 				{
 					case CL_TASK:
-						$a_events[] = array(
+						$a_events[$event->id()] = array(
 							"aw_id" => $event->id(),
 							"title" => $event->prop("name"),
 							"description" => $event->prop("content"),
 							"start" => $event->prop("start1"),
 							"end" => $event->prop("end"),
 							"where" => $event->prop(""),
+							"modified" => $event->modified(),
+							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+02:00"),
 						);
 					break;
 					case CL_CRM_CALL:
-						$a_events[] = array(
+						$a_events[$event->id()] = array(
 							"aw_id" => $event->id(),
 							"title" => $event->prop("name"),
 							"description" => $event->prop("content"),
 							"start" => $event->prop("start1"),
 							"end" => $event->prop("end"),
 							"where" => $event->prop(""),
+							"modified" => $event->modified(),
+							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+02:00"),
+						);
+					break;
+					case CL_CALENDAR_EVENT:
+						$a_events[$event->id()] = array(
+							"aw_id" => $event->id(),
+							"title" => $event->prop("name"),
+							"description" => $event->prop("content"),
+							"start" => $event->prop("start1"),
+							"end" => $event->prop("end"),
+							"where" => $event->prop(""),
+							"modified" => $event->modified(),
+							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+02:00"),
 						);
 					break;
 				}
@@ -346,7 +589,6 @@ class ical_export extends class_base
 		{
 			$client = $arr["client"];
 			$s_title = strlen($arr["title"])>0 ?  utf8_encode($arr["title"]) : t("aw kalender");
-			$s_tmp_title = md5($s_title);
 			$s_summary = utf8_encode($arr["summary"]);
 			$s_location = utf8_encode($arr["location"]);
 			$s_timezone = strlen($arr["timezone"])>0 ?  $arr["timezone"] : "Europe/Tallinn";
@@ -364,17 +606,18 @@ class ical_export extends class_base
 						<gd:where rel='' label='' valueString='[LOCATION]'></gd:where>
 						</entry> ";
 			
+			// todo: summary aw kalendrisse
+			// 
 			$gdataCal = new Zend_Gdata_Calendar($client);
 			$uri = 'http://www.google.com/calendar/feeds/default/owncalendars/full';
-			$xml = str_replace('[TITLE]', $s_tmp_title, $xml);
+			$xml = str_replace('[TITLE]', $s_title, $xml);
 			$xml = str_replace('[SUMMARY]', $s_summary, $xml);
 			$xml = str_replace('[LOCATION]', $s_location, $xml);
 			$xml = str_replace('[TIMEZONE]', $s_timezone, $xml);
 			$xml = str_replace('[COLOR]', $s_color, $xml);
-			$gdataCal->post($xml, $uri); 
-			
-			$s_cal_url = $this->get_google_calendar_url_by_name($client, $s_tmp_title);
-			$obj->set_prop("google_calendar_url", $s_cal_url);
+			$o_gcal_post = $gdataCal->post($xml, $uri);
+			$s_cal_url = str_replace ("default/owncalendars/full/", "", $o_gcal_post->headers["Location"]) . "/private/full";
+			$obj->set_prop("google_calendar_settings_calendar_url", $s_cal_url);
 			$obj->save();
 		}
 	}
@@ -459,25 +702,25 @@ class ical_export extends class_base
 	}
 	
 	function create_google_event ($client, $s_url, $title = 'nimetu', $desc='', $where = '',
-    $start = '', $end='', $tzOffset = '+02')
+    $start, $end, $tzOffset = 'GMT+02:00')
 	{
 		$gdataCal = new Zend_Gdata_Calendar($client);
 		$newEvent = $gdataCal->newEventEntry();
 		
 		$newEvent->title = $gdataCal->newTitle($title);
 		$newEvent->where = array($gdataCal->newWhere($where));
-		$newEvent->content = $gdataCal->newContent("$desc");
+		$newEvent->content = $gdataCal->newContent($desc);
 		
 		$when = $gdataCal->newWhen();
-		$when->startTime = $this->timestamp_to_google_date($start);
-		$when->endTime = $this->timestamp_to_google_date($end);
+		$when->startTime = $this->timestamp_to_google_date($start,  $tzOffset);
+		$when->endTime = $this->timestamp_to_google_date($end,  $tzOffset);
 		$newEvent->when = array($when);
 		
 		// Upload the event to the calendar server
 		// A copy of the event as it is recorded on the server is returned
 		// todo... why isn't second parameter working???
 		//$createdEvent = $gdataCal->insertEvent($newEvent, $s_url);
-		$createdEvent = $gdataCal->insertEvent($newEvent);
+		$createdEvent = $gdataCal->insertEvent($newEvent, $s_url);
 		return $createdEvent->id->text;
 	}
 	
@@ -815,6 +1058,14 @@ class ical_export extends class_base
 	{
 		$obj = $parm["obj_inst"];
 		$id = $parm['id'];
+		
+		if ($id == "google_calendar")
+		{
+			if ($obj->prop("calendar")==0)
+			{
+				return false;
+			}
+		}
 		
 		// this hides google settings tab before google account settings are not set
 		{
