@@ -71,7 +71,7 @@ function aw_ini_get($var)
 
 	if ("" === $path[0])
 	{
-		return;
+		throw new aw_exception("Invalid key");
 	}
 	else
 	{
@@ -86,8 +86,7 @@ function aw_ini_get($var)
 				$val = $GLOBALS["cfg"][$index];
 			}
 			else
-			{
-				return;
+			{return;
 				// throw new aw_exception("Invalid key");
 			}
 		}
@@ -1352,7 +1351,7 @@ function __autoload($class_name)
 	}
 	catch (awex_clidx_double_dfn $e)
 	{
-		exit ("Class '" . $e->clidx_cl_name . "' redeclared. Fix errors.");//!!! tmp
+		exit ("Class '" . $e->clidx_cl_name . "' redeclared. Fix error in '" . $e->clidx_path1 . "' or '" . $e->clidx_path2 . "'.");//!!! tmp
 
 		//!!! take action -- delete/rename one of the classes or load both or ...
 		// $class_file = class_index::get_file_by_name($class_name);
@@ -1373,7 +1372,7 @@ function __autoload($class_name)
 		}
 		catch (awex_clidx $e)
 		{
-			exit("Fatal classload error.");//!!! tmp
+			exit("Fatal classload error. " . $e->getMessage());//!!! tmp
 		}
 		//!!! take action
 	}
@@ -1388,7 +1387,7 @@ function __autoload($class_name)
 		}
 		catch (awex_clidx $e)
 		{
-			exit("Fatal classload error.");//!!! tmp
+			exit("Fatal classload error. " . $e->getMessage());//!!! tmp
 			//!!! take action
 		}
 
