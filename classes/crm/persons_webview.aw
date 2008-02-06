@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.32 2008/01/31 10:56:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.33 2008/02/06 10:17:20 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1190,12 +1190,30 @@ class persons_webview extends class_base
 			}
 		}
 
-		//töösuhe
+		//praeguse töösuhte info
 		$or = $worker->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
 		if(is_object($or))
 		{
 			$vars["org_rel_comment"] = $or->prop("comment");
+			$vars["room"] = $or->prop("room");
+			$vars["profession"] = $or->prop("profession.name");
 		}
+
+		//kraad
+		$degree = $worker->get_first_obj_by_reltype("RELTYPE_DEGREE");
+		if(is_object($degree))
+		{
+			$vars["degree_name"] = $degree->name();
+			$vars["degree_subject"] = $degree->prop("subject");
+		}
+
+		//cv
+		$file_inst = get_instance(CL_FILE);
+		if($worker->prop("cv_doc"))
+		{
+			$vars["cv_doc"] = $file_inst->get_url($worker->prop("cv_doc"), $worker->prop("cv_doc.name"));
+		}
+		$vars["cv_link"] = $worker->prop("cv_link");
 
 		$this->vars($vars);
 
