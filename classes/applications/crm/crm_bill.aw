@@ -452,7 +452,7 @@ class crm_bill extends class_base
 				}
 				break;
 			case "bill_no":
-				if ($prop["value"] != $arr["obj_inst"]->prop("bill_no"))
+				if ($prop["value"] && $prop["value"] != $arr["obj_inst"]->prop("bill_no"))
 				{
 					// check that no bills have the same number
 					$ol = new object_list(array(
