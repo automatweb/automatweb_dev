@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.35 2008/02/06 13:33:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.36 2008/02/06 13:34:05 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -108,7 +108,7 @@ class spa_customer_interface extends class_base
 
 		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
 
-		$ct = obj($id)
+		$ct = obj($id);
 		$sect = $this->can("view", $ct->prop("if_section")) ? $ct->prop("if_section") : aw_global_get("section");
 		$wb = $this->can("view", $ct->prop("if_wb")) ? $ct->prop("if_wb") : 231;
 
