@@ -135,9 +135,9 @@ class class_index
 
 								$class_dfn = unserialize(file_get_contents($class_dfn_file));
 								$e = new awex_clidx_double_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
-								$e->cl_name = $class_name;
-								$e->path1 = $class_dfn["file"];
-								$e->path2 = $class_path;
+								$e->clidx_cl_name = $class_name;
+								$e->clidx_path1 = $class_dfn["file"];
+								$e->clidx_path2 = $class_path;
 								throw $e;
 							}
 
