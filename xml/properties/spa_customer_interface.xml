@@ -42,6 +42,16 @@
             <method>serialize</method>
             <caption>Liidese kaust</caption>
       </property>
+      <property>
+            <name>if_wb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IF_WB</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SPA_CUSTOMER_INTERFACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -71,6 +81,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Liidese kaust</caption>
             </IF_SECT>
+            <IF_WB>
+                  <value>5</value>
+                  <clid>CL_SPA_BOOKIGS_ENTRY</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
+            </IF_WB>
       </reltypes>
 </properties>
 

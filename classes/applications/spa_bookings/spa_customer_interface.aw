@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.34 2008/02/06 13:30:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.35 2008/02/06 13:33:45 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -20,6 +20,9 @@
 @property if_section type=relpicker reltype=RELTYPE_IF_SECT field=meta method=serialize
 @caption Liidese kaust
 
+@property if_wb type=relpicker reltype=RELTYPE_IF_WB field=meta method=serialize
+@caption T&ouml;&ouml;laud
+
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Toodete kataloog
 
@@ -31,6 +34,9 @@
 
 @reltype IF_SECT value=4 clid=CL_MENU
 @caption Liidese kaust
+
+@reltype IF_WB value=5 clid=CL_SPA_BOOKIGS_ENTRY
+@caption T&ouml;&ouml;laud
 
 */
 
@@ -104,6 +110,7 @@ class spa_customer_interface extends class_base
 
 		$ct = obj($id)
 		$sect = $this->can("view", $ct->prop("if_section")) ? $ct->prop("if_section") : aw_global_get("section");
+		$wb = $this->can("view", $ct->prop("if_wb")) ? $ct->prop("if_wb") : 231;
 
 		$bank_payment = $ct->prop("bank_payment");
 		
@@ -178,7 +185,7 @@ class spa_customer_interface extends class_base
 			if ($confirmed && $has_times && $has_prods)
 			{
 				$booking_str .= " / ".html::href(array(
-					"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
+					"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => $wb)),
 					"caption" => t("Prindi"),
 					"target" => "_blank"
 				));
@@ -197,7 +204,7 @@ class spa_customer_interface extends class_base
 					)),
 				"confirm_url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
 				"pay_url" => $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment,"section" => aw_global_get("section"))),
-				"print_url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
+				"print_url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => $wb)),
 			));
 			if (!$confirmed || !$has_prods)
 			{
