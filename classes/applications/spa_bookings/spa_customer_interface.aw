@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.33 2008/01/31 13:50:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.34 2008/02/06 13:30:22 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -17,6 +17,9 @@
 @property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT field=meta method=serialize
 @caption Pangamakse objekt
 
+@property if_section type=relpicker reltype=RELTYPE_IF_SECT field=meta method=serialize
+@caption Liidese kaust
+
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Toodete kataloog
 
@@ -25,6 +28,9 @@
 
 @reltype BANK_PAYMENT value=3 clid=CL_BANK_PAYMENT
 @caption Pangamakse
+
+@reltype IF_SECT value=4 clid=CL_MENU
+@caption Liidese kaust
 
 */
 
@@ -96,8 +102,9 @@ class spa_customer_interface extends class_base
 
 		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
 
-		$ct = obj($id);
-		
+		$ct = obj($id)
+		$sect = $this->can("view", $ct->prop("if_section")) ? $ct->prop("if_section") : aw_global_get("section");
+
 		$bank_payment = $ct->prop("bank_payment");
 		
 		$rooms = $ct->prop("rooms");
@@ -334,7 +341,7 @@ class spa_customer_interface extends class_base
 						if ($date == "")
 						{
 							$prod_str[] = html::popup(array(
-								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "_not_verified" => 1, "rooms" => $rooms)),
+								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => $sect, "_not_verified" => 1, "rooms" => $rooms)),
 								"caption" => $prod->trans_get_val("name"),
 								"height" => 500,
 								"width" => 750,
@@ -753,11 +760,13 @@ class spa_customer_interface extends class_base
 		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		$ct = obj($arr["id"]);
 		$rooms = $ct->prop("rooms");
+		$sect = $this->can("view", $ct->prop("if_section")) ? $ct->prop("if_section") : aw_global_get("section");
+
 		return $ei->mk_my_orb("select_room_booking", array(
 			"booking" => $arr["bron"], 
 			"prod" => $arr["prod"], 
 			"prod_num" => 0, 
-			"section" => "3169", 
+			"section" => $sect, 
 			"_not_verified" => 1, 
 			"rooms" => $rooms,
 			"retf" => $arr["r"]
@@ -1115,11 +1124,12 @@ class spa_customer_interface extends class_base
 		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		$ct = obj($arr["id"]);
 		$rooms = $ct->prop("rooms");
+		$sect = $this->can("view", $ct->prop("if_section")) ? $ct->prop("if_section") : aw_global_get("section");
 		return $ei->mk_my_orb("select_room_booking", array(
 			"booking" => $this->last_bron, 
 			"prod" => $arr["prod"], 
 			"prod_num" => 0, 
-			"section" => "3169", 
+			"section" => $sect, 
 			"_not_verified" => 1, 
 			"rooms" => $rooms,
 			"retf" => $arr["r"]
