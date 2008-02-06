@@ -51,6 +51,9 @@
 @property confirm_page_template type=select
 @caption Kinnitusvaate templeit
 
+@property after_confirm_edit type=checkbox ch_value=1
+@caption Peale kinnitusvaadet mine muutmisele
+
 @property send_all_rows_to_mail type=checkbox ch_value=1
 @caption Saada kõik read meilile
 
@@ -1805,6 +1808,7 @@ class webform extends class_base
 					"id" => $ftype != CL_CALENDAR_REGISTRATION_FORM  ? $arr["id"] : $ef_id,
 					"doc_id" => is_object($arr["doc_id"]) ? $arr["doc_id"]->id() : $arr["doc_id"],
 					"subaction" => "",
+					"section" => aw_global_get("section")
 				),
 				"errors" => $errors,
 				"values" => $values,
@@ -2568,6 +2572,11 @@ class webform extends class_base
 				$awm->gen_mail();
 			}
 
+			if ($obj_inst->prop("after_confirm_edit"))
+			{
+				return $this->mk_my_orb("change", array("id" => $o->id(), "section" => aw_global_get("section")), CL_REGISTER_DATA);
+			}
+
 			if ($obj_inst->prop("disp_after_entry") != "")
 			{
 				return $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => $rval), CL_WEBFORM, false, false, "&", false);
@@ -2631,6 +2640,7 @@ class webform extends class_base
 		}
 		$vars['reforb'] = $this->mk_reforb('save_form_data', array(
 			'id' => $arr['id'],
+			"section" => aw_global_get("section"),
 			'return_url' => aw_ini_get('baseurl').'/'.(is_object($arr['doc_id']) ? $arr["doc_id"]->id() : $arr["doc_id"]),
 		), 'webform');
 
