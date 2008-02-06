@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.69 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.70 2008/02/06 10:03:10 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1305,8 +1305,22 @@ class shop_order_cart extends class_base
 
 		foreach(safe_array($cart["user_data"]) as $k => $v)
 		{
-			if ($els[$k]["type"] == "select" && $els[$k]["store"] == "connect")
+			if (($els[$k]["type"] == "chooser" || $els[$k]["type"] == "select") && $els[$k]["store"] == "connect")
 			{
+				if (is_array($v))
+                                {
+					$vs = array();
+					foreach($v as $v_oid)
+					{
+						if ($this->can("view", $v_oid))
+						{
+							$tmp = obj($v_oid);
+							$vs[] = $tmp->name();
+						}
+					}
+					$v = join(", ", $vs);
+				}
+				else
 				if ($this->can("view", $v))
 				{
 					$tmp = obj($v);
