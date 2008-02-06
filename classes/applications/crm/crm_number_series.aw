@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.9 2008/01/29 11:13:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.10 2008/02/06 11:14:05 markop Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -203,7 +203,7 @@ class crm_number_series extends class_base
 				);
 				if($time)
 				{
-					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $row["start"] , $row["end"]);
+					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $row["start"] , $row["end"], "int");
 				}
 				else
 				{
