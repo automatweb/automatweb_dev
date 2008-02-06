@@ -2767,7 +2767,7 @@ class crm_company extends class_base
 				$data["value"] = $arr["request"]["my_stats_s_type"];
 				$data["options"] = array(
 					"rows" => t("Ridade kaupa"),
-					"" => t("Kokkuv&otilde;te"),
+					"pers_det" => t("Kokkuv&otilde;te"),
 				);
 				break;
 
