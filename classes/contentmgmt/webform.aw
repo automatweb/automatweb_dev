@@ -2574,7 +2574,7 @@ class webform extends class_base
 
 			if ($obj_inst->prop("after_confirm_edit"))
 			{
-				return $this->mk_my_orb("change", array("id" => $o->id(), "section" => aw_global_get("section")), CL_REGISTER_DATA);
+				return $this->mk_my_orb("change", array("id" => $o->id(), "section" => aw_global_get("section")), CL_REGISTER_DATA, false, false, "&", false);
 			}
 
 			if ($obj_inst->prop("disp_after_entry") != "")
