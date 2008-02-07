@@ -1,22 +1,24 @@
 <?xml version='1.0'?>
 <properties>
-	<property>
-		<name>weekdays</name>
-		<table>objects</table>
-		<group>general</group>
-		<type>text</type>
-		<caption>Nadalapaevad</caption>
- 		<no_caption>1</no_caption>
-                <store>no</store>
+      <property>
+            <name>weekdays</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>weekdays</field>
+            <caption>N&amp;auml;dalap&amp;auml;evad</caption>
       </property>
       <property>
-	      <name>days</name>
-	      <table>objects</table>
-	      <group>general</group>
-	      <type>text</type>
-	      <caption>Paevade plaan</caption>
-	      <no_caption>1</no_caption>
+            <name>days</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
             <store>no</store>
+            <no_caption>1</no_caption>
+            <field>days</field>
+            <caption>P&amp;amp;auml;evade plaan</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_WORKING_TIME_SCENARIO</syslog_type>
