@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.50 2008/02/04 12:31:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.51 2008/02/07 13:52:01 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -207,7 +207,7 @@ class crm_company_webview extends class_base
 		}
 		
 		$this->read_template($tmpl);
-
+		lc_site_load("crm_company_webview", &$this);
 		$org = ifset($_REQUEST, 'org');
 		if (!$this->can('view', $org) || !($c = obj($org)) || $c->class_id() != CL_CRM_COMPANY)
 		{
@@ -1628,6 +1628,7 @@ class crm_company_webview extends class_base
 	function _get_conference_room_html($oid)
 	{
 		$this->read_template("company_popup_show.tpl");
+		lc_site_load("crm_company_webview", &$this);
 		$o = obj($oid);
 		$props = $o->get_property_list();
 		foreach($props as $pn => $pd)
@@ -1736,7 +1737,7 @@ class crm_company_webview extends class_base
 			$tmpl = "default.tpl";
 		}
 		$this->read_template($tmpl);
-
+		lc_site_load("crm_company_webview", &$this);
 		$ar = array();
 		$si = get_instance("contentmgmt/site_show");
 		$si->_init_path_vars($ar);
@@ -1778,6 +1779,7 @@ class crm_company_webview extends class_base
 			$tmpl = "default.tpl";
 		}
 		$this->read_template($tmpl);
+		lc_site_load("crm_company_webview", &$this);
 		$this->vars(array(
 			"company_id" => $arr["org"],
 			"print_link" => aw_url_change_var("print", 1)
