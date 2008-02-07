@@ -5921,6 +5921,11 @@ class class_base extends aw_template
 		}
 	}
 
+	function callback_mod_reforb($arr)
+	{
+		$arr["all_trans_status"] = 0;
+	}
+
 	function callback_generate_scripts($arr)
 	{
 		if(aw_ini_get("user_interface.content_trans") && !$arr["new"])
@@ -5966,12 +5971,6 @@ class class_base extends aw_template
 			$function_check = "function check()
 			{
 				var f = document.forms['changeform'];
-				var input = document.createElement('input');
-				input.setAttribute('type', 'hidden');
-				input.setAttribute('id', 'all_trans_status');
-				input.setAttribute('name', 'all_trans_status');
-				input.setAttribute('value', '0');
-				f.appendChild(input);
 				".$if_clause."
 				{
 					if(confirm('Kas " . $asd . " kõik tõlked?'))
