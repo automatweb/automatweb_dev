@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.14 2007/12/06 14:33:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.15 2008/02/07 16:33:08 instrumental Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 
@@ -58,12 +58,23 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @property info type=textarea rows=15 cols=60
 @caption Lisainfo
 
+@property offer_cfgform type=relpicker reltype=RELTYPE_CFGFORM
+@caption CV seadete vorm
+
 @groupinfo candidate caption="Kandideerimised" submit=no
 @default group=candidate
 
 @property candidate_toolbar type=toolbar no_caption=1
 
 @property candidate_table type=table no_caption=1
+
+@groupinfo custom_cfgform caption="Uus CV seadete vorm"
+@default group=custom_cfgform 
+
+	@property new_cfgform_name type=textbox store=no
+	@caption Nimi
+
+	@property new_cfgform_tbl type=table store=no no_caption=1
 
 @reltype CANDIDATE value=1 clid=CL_PERSONNEL_MANAGEMENT_CANDIDATE
 @caption Kandidatuur
@@ -82,6 +93,9 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 
 @reltype FIELD value=6 clid=CL_META
 @caption Valdkond
+
+@reltype CFGFORM value=7 clid=CL_CFGFORM
+@caption CV seadete vorm
 
 */
 
@@ -104,6 +118,20 @@ class personnel_management_job_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			/*
+			case "new_cfgform_name":
+				if($this->can("view", $arr["obj_inst"]->prop("offer_cfgform")))
+				{
+					$cfgform = obj($arr["obj_inst"]->prop("offer_cfgform"));
+					$prop["value"] = $cfgform->name();
+				}
+				break;
+				*/
+
+			case "new_cfgform_tbl":
+				$this->_get_new_cfgform_tbl($arr);
+				break;
+
 			case "toolbar":
 				$this->toolbar($arr);
 				break;
@@ -132,6 +160,43 @@ class personnel_management_job_offer extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function _get_new_cfgform_tbl($arr)
+	{
+		$cfgform_id = $arr["obj_inst"]->prop("offer_cfgform");
+		if(!$this->can("view", $cfgform_id))
+		{
+			return false;
+		}
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		$t->define_field(array(
+			"name" => "group",
+			"caption" => t("Grupp"),
+		));
+		$t->define_field(array(
+			"name" => "property",
+			"caption" => t("Omadus"),
+		));
+		$t->define_field(array(
+			"name" => "selected",
+			"caption" => t("Valitud"),
+		));
+
+		$cfgform = obj($cfgform_id);
+		foreach($cfgform->meta("cfg_proplist") as $pid => $pdata)
+		{
+			$t->define_data(array(
+				"group" => $pdata["group"],
+				"property" => $pdata["caption"],
+				"selected" => html::checkbox(array(
+					"name" => "new_cfgform_tbl[".$pid."]",
+					"value" => 1,
+					"checked" => (($pdata["disabled"] == 1) ? 0 : 1),
+				)),
+			));
+		}
 	}
 
 	function candidate_toolbar($arr)
@@ -251,8 +316,43 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "new_cfgform_tbl":
+				$this->_set_new_cfgform_tbl($arr);
+				break;
 		}
 		return $retval;
+	}
+
+	function _set_new_cfgform_tbl($arr)
+	{
+		$data = $arr["request"]["new_cfgform_tbl"];
+		$cfgform_id = $arr["obj_inst"]->prop("offer_cfgform");
+		if(!$this->can("view", $cfgform_id))
+		{
+			return false;
+		}
+		$cfgform = obj($cfgform_id);
+		$cfgform_inst = $cfgform->instance();
+		$new_cfgform_id = $cfgform->save_new();
+		$new_cfgform = obj($new_cfgform_id);
+		$new_cfgform->set_name($arr["request"]["new_cfgform_name"]);
+		$cfg_proplist = $new_cfgform->meta("cfg_proplist");
+//		foreach($data as $i => $v)
+		foreach($cfg_proplist as $i => $v)
+		{
+			if(!array_key_exists($i, $data))
+			{
+				$cfgform_inst->disable_property(array(
+					"id" => $new_cfgform_id,
+					"property" => $i
+				));
+			}
+		}
+		foreach($arr["obj_inst"]->connections_from(array("type" => 7)) as $conn)
+		{
+			$conn->delete();
+		}
+		$arr["obj_inst"]->set_prop("offer_cfgform", $new_cfgform_id);
 	}
 	
 	function parse_alias($arr)
