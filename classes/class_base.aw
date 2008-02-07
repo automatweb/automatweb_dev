@@ -5928,7 +5928,8 @@ class class_base extends aw_template
 
 	function callback_generate_scripts($arr)
 	{
-		if(aw_ini_get("user_interface.content_trans") && !$arr["new"])
+		$restricted_clids = array("cfgform");
+		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && !in_array($arr["request"]["class"], $restricted_clids) && $arr["request"]["group"] != "relationmgr")
 		{
 			if($arr["request"]["class"] == "admin_if")
 			{
@@ -5968,10 +5969,15 @@ class class_base extends aw_template
 				$all_trans_status_value = ($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1;
 			}
 			
-			$function_check = "function check()
+			$function_check = "
+			function el_exists(name)
+			{
+
+			}
+			function check()
 			{
 				var f = document.forms['changeform'];
-				".$if_clause."
+				if(true)
 				{
 					if(confirm('Kas " . $asd . " kõik tõlked?'))
 					{
