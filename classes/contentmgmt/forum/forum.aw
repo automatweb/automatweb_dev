@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.18 2008/02/07 18:05:54 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.19 2008/02/07 18:11:23 hannes Exp $
 // forum.aw - forums/messageboards
 /*
 @classinfo  maintainer=dragut
@@ -1280,6 +1280,7 @@ topic");
 		global $HTTP_COOKIE_VARS;
 		$aw_mb_name = $HTTP_COOKIE_VARS["aw_mb_name"];
 		$aw_mb_mail = $HTTP_COOKIE_VARS["aw_mb_mail"];
+		$aw_mb_url = $HTTP_COOKIE_VARS["aw_mb_url"];
 		if ($subj)
 		{
 			$reply = $this->parse("reply");
@@ -1345,6 +1346,7 @@ topic");
 			"num_comments" => $cnt,
 			"name" => $aw_mb_name,
 			"mail" => $aw_mb_mail,
+			"url" => $aw_mb_url,
 			"comment" => $args["comment"],
 			"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $board,"section" => aw_global_get("section")),"forum"),
 			"subj" => $subj,
@@ -1384,7 +1386,7 @@ topic");
 			$name = $from;
 		};
 		$url = trim($url);
-		if (strpos($url, "http://") !== 0 && strpos($url, "https://") !== 0 )
+		if (strlen($url) > 0 && (strpos($url, "http://") !== 0 && strpos($url, "https://") !== 0) )
 		{
 			$url = "http://".$url;
 		}
