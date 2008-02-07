@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.225 2008/02/07 12:31:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.226 2008/02/07 12:37:14 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -321,7 +321,7 @@ caption Templeit
 @caption Ruum
 
 @reltype WORKING_SCENARIO value=47 clid=CL_CRM_WORKING_TIME_SCENARIO
-@caption T&ouml;&ouml;aja tsenaariumid
+@caption T&ouml;&ouml;aja stsenaariumid
 */
 
 class room extends class_base
@@ -5909,7 +5909,7 @@ class room extends class_base
 		));
 		$t->define_field(array(
 			"name" => "scenario",
-			"caption" => t("Tsenaarium"),
+			"caption" => t("Stsenaarium"),
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
