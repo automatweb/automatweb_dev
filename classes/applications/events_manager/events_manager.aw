@@ -730,19 +730,47 @@ class events_manager extends class_base
 		switch ($args["e_find_news"])
 		{
 			case "arch":
-				$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS, $time);
+				//$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS, time());
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"end" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+						"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+					)
+				));
 				break;
 			case "curr":
 				$filter[] = new object_list_filter(array(
 					"logic" => "AND",
 					"conditions" => array(
-						"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $time),
-						"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $time),
+//						"start1" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+//						"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+						new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"start1" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+								"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.start" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+							)
+						)),
+						new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+								"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+							)
+						))
 					)
 				));
 				break;
 			case "new":
-				$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, $time);
+				//$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"start1" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+						"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.start" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+					)
+				));
 				break;
 		}
 
