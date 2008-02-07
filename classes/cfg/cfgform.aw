@@ -4162,6 +4162,24 @@ class cfgform extends class_base
 		return true;
 	}
 
+	/** Removes the property from 'the list of properties in use'.
+		@attrib name=disable_property api=1
+		@param id required type=int
+		@param property required type=string
+	**/
+	function disable_property($arr)
+	{
+		extract($arr);
+		if(!$this->can("view", $id))
+			return false;
+
+		$o = obj($id);
+		$cfg_proplist = $o->meta("cfg_proplist");
+		$cfg_proplist[$property]["disabled"] = 1;
+		$o->set_meta("cfg_proplist", $cfg_proplist);
+		$o->save();
+	}
+
 	private function add_group($o, $name = false, $parent = false, $caption = "")
 	{
 		if (!isset($this->cfg_groups))
