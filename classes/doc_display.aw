@@ -589,22 +589,17 @@ class doc_display extends aw_template
 	function _parse_youtube_links($str)
 	{
 		$tmp_template = end(explode("/", $this->template_filename));
-		if (strpos($str, "http://www.youtube.com/watch?")!==0)
+		if (strpos($str, "http://www.youtube.com/watch?")!==0 && $this->is_template("youtube_link"))
 		{
 			$str = str_replace  ( "http://www.youtube.com/watch?v="  , "http://www.youtube.com/v/", $str );
-			$this->tpl_init("html");
-			$this->read_template("youtube.tpl");
 			$this->vars(array(
 				"link" => "\${1}",
 			));
-			$s_embed = $this->parse();
+			$s_embed = $this->parse("youtube_link");
 			$str = preg_replace  ("/(http:\/\/www.youtube.com\/v\/.*)\n/imsU", $s_embed, $str);
 		}
-		$this->tpl_reset();
-		$this->tpl_init("automatweb/documents");
-		$this->read_template($tmp_template);
 	}
-
+	
 	function _do_forum($doc)
 	{
 		if ($doc->prop("is_forum") &&
@@ -637,6 +632,40 @@ class doc_display extends aw_template
 		$this->vars(array(
 			'FORUM_ADD' => $fr
 		));
+		
+		if ($doc->prop("is_forum") && $this->is_template("FORUM_POST"))
+		{
+			if ($num_comments>0)
+			{
+				$this->db_query("SELECT name, url,  time, comment FROM comments WHERE board_id = ".$doc->id() );
+				
+				while($row = $this->db_next())
+				{
+					$s_comment = $row["comment"];
+					$this->_parse_youtube_links(& $s_comment);
+					$s_name = $row["name"];
+					$s_url = $row["url"];
+					if (strlen($s_url)>0)
+					{
+						$s_name = html::href(array(
+							"caption" => $s_name,
+                                "url" => $s_url,
+						));
+					}
+					$this->vars(array(
+						"name" => $s_name,
+						"post_created_hr" => $this->get_date_human_readable( $row["time"]),
+						"comment" => $s_comment,
+					));
+					$tmp .= $this->parse("FORUM_POST");
+					
+					$this->vars(array(
+						"FORUM_POST" => $tmp,
+					));
+					$this->parse();
+				}
+			}
+		}
 	}
 
 	function _do_charset($doc)
