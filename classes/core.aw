@@ -9,8 +9,6 @@ define("STAT_DELETED", 0);
 define("STAT_NOTACTIVE", 1);
 define("STAT_ACTIVE", 2);
 
-classload("acl_base");
-
 class core extends acl_base
 {
 	var $errmsg;
