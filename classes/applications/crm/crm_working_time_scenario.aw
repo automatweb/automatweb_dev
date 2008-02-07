@@ -180,7 +180,7 @@ class crm_working_time_scenario extends class_base
 		));
 
 		$scenario_data = $arr["obj_inst"]->get_scenario_data();
-		if($scenario_data)
+		if(!$scenario_data)
 		{
 			foreach($wd as $day => $data)
 			{
