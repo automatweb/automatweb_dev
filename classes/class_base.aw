@@ -1223,6 +1223,16 @@ class class_base extends aw_template
 			$retval = aw_url_change_var($this->translation_lang_var_name, $this->inst->translation_lang_id, $retval);
 		}
 
+		if($all_trans_status != 0)
+		{
+			$o = obj($id);
+			foreach($o->meta("translations") as $lid => $ldata)
+			{
+				$o->set_meta("trans_".$lid."_status", 2 - $all_trans_status);
+			}
+			$o->save();
+		}
+
 		return $retval;
 	}
 
@@ -5908,6 +5918,71 @@ class class_base extends aw_template
 			{
 				return false;
 			}
+		}
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		if(aw_ini_get("user_interface.content_trans") && !$arr["new"])
+		{
+			if($arr["request"]["class"] == "admin_if")
+			{
+				$if_clause = "
+				anything_changed = false;
+				statuses = new Array();
+				statuses_val = new Array();
+				for(i = 0; i < f.elements.length; i++)
+				{
+					el1 = f.elements[i];
+					if(el1.name.indexOf('old[status][') == 0)
+					{
+						el2 = aw_get_el('new[status][' + el1.name.substring(12));
+						if(el1.value == el2.value && !el2.checked || el1.value != el2.value && el2.checked)
+						{
+							anything_changed = true;
+							break;
+						}
+					}
+				}
+				if(anything_changed)";
+				$asd = "aktiveerin/deaktiveerin";
+				$all_trans_status_value = 1;
+			}
+			else
+			{
+				if($arr["request"]["class"] == "language")
+				{
+					$status_variable = "lang_status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1);
+				}
+				else
+				{
+					$status_variable = "status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1);
+				}
+				$asd = ($arr["obj_inst"]->status() != STAT_ACTIVE) ? "aktiveerin" : "deaktiveerin";
+				$if_clause = "if(!f.".$status_variable.".checked)";
+				$all_trans_status_value = ($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1;
+			}
+			
+			$function_check = "function check()
+			{
+				var f = document.forms['changeform'];
+				var input = document.createElement('input');
+				input.setAttribute('type', 'hidden');
+				input.setAttribute('id', 'all_trans_status');
+				input.setAttribute('name', 'all_trans_status');
+				input.setAttribute('value', '0');
+				f.appendChild(input);
+				".$if_clause."
+				{
+					if(confirm('Kas " . $asd . " kõik tõlked?'))
+					{
+						f.all_trans_status.value = ".$all_trans_status_value.";
+					}
+				}				
+			}
+			
+			aw_submit_handler = check;";
+			return $function_check;
 		}
 	}
 
