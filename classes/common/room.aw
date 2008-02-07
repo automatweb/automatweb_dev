@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.226 2008/02/07 12:37:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.227 2008/02/07 13:13:46 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2203,7 +2203,7 @@ class room extends class_base
 							}
 							else
 							{
-								$col[$x] = $settings->prop("col_web_halfling") != "" ? $settings->prop("col_web_halfling") : "#FFE4B5";
+								$col[$x] = $settings->prop("col_web_halfling") != "" ? "#".$settings->prop("col_web_halfling") : "#FFE4B5";
 							}
 
 							if ($last_bron->prop("content") != "" || $last_bron->comment() != "")
