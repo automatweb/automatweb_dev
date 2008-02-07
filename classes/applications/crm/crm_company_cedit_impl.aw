@@ -11,6 +11,12 @@ class crm_company_cedit_impl extends core
 
 	function _get_phone_tbl(&$t, $arr)
 	{
+		$org_fixed = 0;
+		$query = $this->parse_url_parse_query($arr["request"]["return_url"]);
+		if($query["class"] == "crm_company" && $this->can("view", $query["id"]))
+		{
+			$org_fixed = $query["id"];
+		}
 		$pn = "phone_id";
 		if ($arr["obj_inst"]->class_id() == CL_CRM_PERSON)
 		{
@@ -28,9 +34,30 @@ class crm_company_cedit_impl extends core
 		foreach($cns2wrs as $cn2wr)
 		{					
 			$wr = $cn2wr->to();
-			$wr_org = obj($wr->prop("org"));
-			$wr_prof = obj($wr->prop("profession"));
-			$wrs[$wr->id()] = $wr_org->name().", ".$wr_prof->name()." ";
+			if($wr->prop("org") != $org_fixed && $org_fixed != 0)
+			{
+				continue;
+			}
+			if($this->can("view", $wr->prop("org")))
+			{
+				$wr_org = obj($wr->prop("org"));
+				$wrs[$wr->id()] = $wr_org->name();
+			}
+			else
+			{
+				$wrs[$wr->id()] = t("<i>ORGANISATSIOON M&Auml;&Auml;RAMATA</i>");
+			}
+
+			if($this->can("view", $wr->prop("profession")))
+			{
+				$wr_prof = obj($wr->prop("profession"));
+				$wrs[$wr->id()] .= ", ".$wr_prof->name()." ";
+			}
+			else
+			{
+				$wrs[$wr->id()] .= " ";
+			}
+
 			foreach($wr->connections_from(array("type" => 8)) as $cn2ph)
 			{
 				$conns[$cn2ph->id()] = $cn2ph;
@@ -164,6 +191,12 @@ class crm_company_cedit_impl extends core
 
 	function _get_fax_tbl(&$t, $arr)
 	{
+		$org_fixed = 0;
+		$query = $this->parse_url_parse_query($arr["request"]["return_url"]);
+		if($query["class"] == "crm_company" && $this->can("view", $query["id"]))
+		{
+			$org_fixed = $query["id"];
+		}
 		$pn = "telefax_id";
 		$tp = "RELTYPE_TELEFAX";
 		if ($arr["obj_inst"]->class_id() == CL_CRM_PERSON)
@@ -182,9 +215,30 @@ class crm_company_cedit_impl extends core
 		foreach($cns2wrs as $cn2wr)
 		{					
 			$wr = $cn2wr->to();
-			$wr_org = obj($wr->prop("org"));
-			$wr_prof = obj($wr->prop("profession"));
-			$wrs[$wr->id()] = $wr_org->name().", ".$wr_prof->name()." ";
+			if($wr->prop("org") != $org_fixed && $org_fixed != 0)
+			{
+				continue;
+			}
+			if($this->can("view", $wr->prop("org")))
+			{
+				$wr_org = obj($wr->prop("org"));
+				$wrs[$wr->id()] = $wr_org->name();
+			}
+			else
+			{
+				$wrs[$wr->id()] = t("<i>ORGANISATSIOON M&Auml;&Auml;RAMATA</i>");
+			}
+
+			if($this->can("view", $wr->prop("profession")))
+			{
+				$wr_prof = obj($wr->prop("profession"));
+				$wrs[$wr->id()] .= ", ".$wr_prof->name()." ";
+			}
+			else
+			{
+				$wrs[$wr->id()] .= " ";
+			}
+
 			foreach($wr->connections_from(array("type" => 10)) as $cn2fx)
 			{
 				$conns[$cn2fx->id()] = $cn2fx;
@@ -527,6 +581,12 @@ class crm_company_cedit_impl extends core
 
 	function _get_email_tbl(&$t, $arr)
 	{
+		$org_fixed = 0;
+		$query = $this->parse_url_parse_query($arr["request"]["return_url"]);
+		if($query["class"] == "crm_company" && $this->can("view", $query["id"]))
+		{
+			$org_fixed = $query["id"];
+		}
 		$pn = "email_id";
 		if ($arr["obj_inst"]->class_id() == CL_CRM_PERSON)
 		{
@@ -543,9 +603,30 @@ class crm_company_cedit_impl extends core
 		foreach($cns2wrs as $cn2wr)
 		{					
 			$wr = $cn2wr->to();
-			$wr_org = obj($wr->prop("org"));
-			$wr_prof = obj($wr->prop("profession"));
-			$wrs[$wr->id()] = $wr_org->name().", ".$wr_prof->name()." ";
+			if($wr->prop("org") != $org_fixed && $org_fixed != 0)
+			{
+				continue;
+			}
+			if($this->can("view", $wr->prop("org")))
+			{
+				$wr_org = obj($wr->prop("org"));
+				$wrs[$wr->id()] = $wr_org->name();
+			}
+			else
+			{
+				$wrs[$wr->id()] = t("<i>ORGANISATSIOON M&Auml;&Auml;RAMATA</i>");
+			}
+
+			if($this->can("view", $wr->prop("profession")))
+			{
+				$wr_prof = obj($wr->prop("profession"));
+				$wrs[$wr->id()] .= ", ".$wr_prof->name()." ";
+			}
+			else
+			{
+				$wrs[$wr->id()] .= " ";
+			}
+
 			foreach($wr->connections_from(array("type" => 9)) as $cn2ml)
 			{
 				$conns[$cn2ml->id()] = $cn2ml;
@@ -1280,6 +1361,18 @@ class crm_company_cedit_impl extends core
 		$autocomplete_options = array_unique($autocomplete_options);
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
+	}
+	
+	function parse_url_parse_query($return_url)
+	{
+		$url = parse_url($return_url);
+		$query = explode("&", $url["query"]);
+		foreach($query as $q)
+		{
+			$t = explode("=", $q);
+			$ret[$t[0]] = $t[1];
+		}
+		return $ret;
 	}
 
 }

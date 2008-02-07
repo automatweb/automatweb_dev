@@ -8,7 +8,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_SECTION, on_connect
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disconnect_section_from_person)
 
-@classinfo relationmgr=yes syslog_type=ST_CRM_PERSON no_status=1 confirm_save_data=1 maintainer=markop
+@classinfo relationmgr=yes syslog_type=ST_CRM_PERSON no_status=1 confirm_save_data=1
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 @tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
@@ -101,12 +101,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property cvactive type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption CV aktiivne
 
-@property cv_doc type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_CV_DOC
-@caption CV Dokumendina
-
-@property cv_link type=textbox table=objects field=meta method=serialize 
-@caption CV URL
-
 @property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
 @caption Palga dokument
 
@@ -191,26 +185,29 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 			@caption Aadress
 
 
-	@layout work_super type=vbox  closeable=1 area_caption=T&ouml;&ouml;koht
+	@layout work_super type=vbox  closeable=1 area_caption=T&ouml;&ouml;kohad
 
-		@layout work type=hbox parent=work_super width=30%:30%:30%
+		@property work_tbl type=table parent=work_super store=no no_caption=1
 
-			@property work_contact type=relpicker reltype=RELTYPE_WORK parent=work captionside=top
-			@caption Organisatsioon
+#		@layout work type=hbox parent=work_super width=30%:30%:30%
 
-			@property org_section type=relpicker reltype=RELTYPE_SECTION parent=work multiple=1 table=objects field=meta method=serialize store=connect captionside=top
-			@caption Osakond
 
-			@property rank type=relpicker reltype=RELTYPE_RANK automatic=1 parent=work captionside=top
-			@caption Ametinimetus
+#			@property work_contact type=relpicker reltype=RELTYPE_WORK parent=work captionside=top
+#			@caption Organisatsioon
+
+#			@property org_section type=relpicker reltype=RELTYPE_SECTION parent=work multiple=1 table=objects field=meta method=serialize store=connect captionside=top
+#			@caption Osakond
+
+#			@property rank type=relpicker reltype=RELTYPE_RANK automatic=1 parent=work captionside=top
+#			@caption Ametinimetus
 
 #			@property comment type=textarea cols=40 rows=3 table=objects field=comment parent=work captionside=top
 #			@caption Kontakt
 
-		@layout work_down type=hbox parent=work_super width=20%:80%
+#		@layout work_down type=hbox parent=work_super width=20%:80%
 
-			@property work_contact_start parent=work_down captionside=top type=releditor reltype=RELTYPE_CURRENT_JOB rel_id=first props=start store=no
-			@caption T&ouml;&ouml;le asumise aeg
+#			@property work_contact_start parent=work_down captionside=top type=releditor reltype=RELTYPE_CURRENT_JOB rel_id=first props=start store=no
+#			@caption T&ouml;&ouml;le asumise aeg
 
 
 		@layout ceditphf type=hbox width=50%:50%
@@ -821,9 +818,6 @@ caption S&otilde;bragrupid
 @reltype DEGREE value=75 clid=CL_CRM_DEGREE
 @caption Kraad
 
-@reltype CV_DOC value=76 clid=CL_FILE
-@caption CV Dokument
-
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
@@ -866,6 +860,9 @@ class crm_person extends class_base
 		$form = &$arr["request"];
 		switch($prop["name"])
 		{
+			case "work_tbl":
+				$this->_save_work_tbl($arr);
+				break;
 			case "citizenship_table":
 				$this->_save_citizenship_table($arr);
 				break;
@@ -1021,6 +1018,62 @@ class crm_person extends class_base
 		return $retval;
 	}
 
+	function _save_work_tbl($arr)
+	{
+		foreach($arr["obj_inst"]->connections_from(array("type" => array(6, 21))) as $conn)
+		{
+			$doomed_conns[$conn->prop("to")] = $conn->id();
+		}
+		foreach($arr["request"]["work_tbl"] as $wr_id => $data)
+		{
+			$wr = new object($wr_id);
+			$wr->set_prop("org", $data["org"]);
+			$wr->set_prop("section", $data["sec"]);
+			$wr->set_prop("profession", $data["pro"]);
+			$wr->save();
+			if($this->can("view", $data["org"]))
+			{
+				$org = obj($data["org"]);
+				if($this->can("view", $data["sec"]))
+				{
+					$org->connect(array(
+						"to" => $data["sec"],
+						"reltype" => 28,		// RELTYPE_SECTION
+					));
+				}
+				else
+				{
+					$org->connect(array(
+						"to" => $arr["obj_inst"]->id(),
+						"reltype" => 8,		// RELTYPE_WORKERS
+					));
+					unset($doomed_conns[$data["org"]]);
+				}
+			}
+			if($this->can("view", $data["sec"]))
+			{
+				$sec = obj($data["sec"]);
+				if($this->can("view", $data["pro"]))
+				{
+					$sec->connect(array(
+						"to" => $data["pro"],
+						"reltype" => 3,		// RELTYPE_PROFESSIONS
+					));
+				}
+				$sec->connect(array(
+					"to" => $arr["obj_inst"]->id(),
+					"reltype" => 2,		// RELTYPE_WORKERS
+				));
+				unset($doomed_conns[$data["sec"]]);
+			}
+		}
+		foreach($doomed_conns as $doomed_conn)
+		{
+			$doomed_conn = new connection($doomed_conn);
+			$doomed_conn->delete();
+		}
+	}
+
 	function _get_cust_contract_creator($arr)
 	{
 		// list of all persons in my company
@@ -1125,6 +1178,9 @@ class crm_person extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "work_tbl":
+				return $this->_get_work_tbl($arr);
+				break;
 			case "nationality":
 				$ol = new object_list(array(
 					"site_id" => array(),
@@ -1239,7 +1295,7 @@ class crm_person extends class_base
 				break;
 
 			case "contact_desc_text":
-				$data["value"] = $this->get_short_description($arr["obj_inst"]->id());
+				$data["value"] = $this->get_short_description($arr);
 				break;
 
 			case "ext_sys_t":
@@ -1373,19 +1429,7 @@ class crm_person extends class_base
 				$i = get_instance(CL_CRM_COMPANY);
 				$i->_proc_server_folder($arr);
 				break;
-			case "dl_cat":
-				$data["options"] = array(
-					0 => "",
-					1 => "A",
-					6 => "A1",
-					2 => "B",
-					7 => "BE",
-					3 => "C",
-					8 => "C1",
-					4 => "D",
-					5 => "E"
-				);
-				break;
+
 			case "docs_tb":
 			case "docs_tree":
 			case "docs_tbl":
@@ -1774,6 +1818,7 @@ class crm_person extends class_base
 					"number" => t("Telefoninumber"),
 					"type" => t("T&uuml;&uuml;p"),
 					"is_public" => t("Avalik"),
+					"rels" => t("Seotus t&ouml;&ouml;kohaga"),
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_phone_tbl($t, $arr);
@@ -1784,6 +1829,7 @@ class crm_person extends class_base
 				$t = &$data["vcl_inst"];
 				$fields = array(
 					"number" => t("Faksi number"),
+					"rels" => t("Seotus t&ouml;&ouml;kohaga"),
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_fax_tbl($t, $arr);
@@ -1804,6 +1850,7 @@ class crm_person extends class_base
 				$t = &$data["vcl_inst"];
 				$fields = array(
 					"email" => t("Emaili aadress"),
+					"rels" => t("Seotus t&ouml;&ouml;kohaga"),
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_email_tbl($t, $arr);
@@ -1926,6 +1973,160 @@ class crm_person extends class_base
 		}
 		return $retval;
 
+	}
+
+	function recursive_connections_from($ids, $reltype, $array)
+	{
+		foreach(connection::find(array("from" => $ids, "type" => $reltype)) as $conn)
+		{
+			$array[$conn["to"]] = $conn["to.name"];
+			$new_ids[$conn["to"]] = $conn["to.name"];
+		}
+		if(count($new_ids) > 0)
+		{
+			$this->recursive_connections_from($new_ids, $reltype, &$array);
+		}
+	}
+
+	function _get_work_tbl($arr)
+	{
+		$org_fixed = 0;
+		$query = $this->parse_url_parse_query($arr["request"]["return_url"]);
+		if($query["class"] == "crm_company" && $this->can("view", $query["id"]))
+		{
+			$org_fixed = $query["id"];
+		}
+
+		$org_arr = new object_data_list(
+			array(
+				"class_id" => CL_CRM_COMPANY,
+				"parent" => array()
+			),
+			array
+			(
+				CL_CRM_COMPANY => array("oid" => "oid", "name" => "name")
+			)
+		);
+		$orgs = array(0 => t("--vali--"));
+		foreach($org_arr->list_data as $lde)
+		{
+			$orgs[$lde["oid"]] = $lde["name"];
+		}
+
+		$sec_arr = new object_data_list(
+			array(
+				"class_id" => CL_CRM_SECTION,
+				"parent" => array()
+			),
+			array
+			(
+				CL_CRM_SECTION => array("oid" => "oid", "name" => "name")
+			)
+		);
+		$secs = array(0 => t("--vali--"));
+		foreach($sec_arr->list_data as $lde)
+		{
+			$secs[$lde["oid"]] = $lde["name"];
+		}
+
+		$pro_arr = new object_data_list(
+			array(
+				"class_id" => CL_CRM_PROFESSION,
+				"parent" => array()
+			),
+			array
+			(
+				CL_CRM_PROFESSION => array("oid" => "oid", "name" => "name")
+			)
+		);
+		$pros = array(0 => t("--vali--"));
+		foreach($pro_arr->list_data as $lde)
+		{
+			$pros[$lde["oid"]] = $lde["name"];
+		}
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "org",
+			"caption" => t("Organisatsioon"),
+		));
+		$t->define_field(array(
+			"name" => "sec",
+			"caption" => t("Osakond"),
+		));
+		$t->define_field(array(
+			"name" => "pro",
+			"caption" => t("Ametinimetus"),
+		));
+		$relpicker = get_instance("vcl/relpicker");
+		foreach($arr["obj_inst"]->connections_from(array("type" => 67)) as $conn)
+		{
+			$wr = $conn->to();
+			$orgid = $wr->prop("org");
+			$secid = $wr->prop("section");
+			if($orgid != $org_fixed && $org_fixed != 0)
+			{
+				continue;
+			}
+			if($this->can("view", $orgid))
+			{
+				$org_obj = new object($orgid);
+				if(!is_array($sec_options[$orgid]))
+				{
+					$ids = array();
+					foreach($org_obj->connections_from(array("type" => 28)) as $org_conn)
+					{
+						$sec_options[$orgid][$org_conn->prop("to")] = $org_conn->prop("to.name");
+						$ids[$org_conn->prop("to")] = $org_conn->prop("to");
+					}
+					if(count($ids) > 0)
+					{
+						$this->recursive_connections_from($ids, 1, &$sec_options[$orgid]);
+					}
+				}
+			}
+			$pro_options = array();
+			if($this->can("view", $secid))
+			{
+				$sec_obj = obj($secid);
+				foreach($sec_obj->connections_from(array("type" => 3)) as $pro_conn)
+				{
+					$pro_options[$pro_conn->prop("to")] = $pro_conn->prop("to.name");
+				}
+			}
+			elseif(count($sec_options[$orgid]) > 0)
+			{
+				foreach(connection::find(array("from" => array_flip($sec_options[$orgid]), "type" => 3)) as $pro_conn)
+				{
+					$pro_options[$pro_conn["to"]] = $pro_conn["to.name"];
+				}
+			}
+			$t->define_data(array(
+				"org" => $relpicker->create_relpicker(array(
+					"name" => "work_tbl[".$wr->id()."][org]",
+					"reltype" => 1,
+					"oid" => $wr->id(),
+					"property" => "org",
+//					"buttonspos" => "bottom",
+				)),
+				"sec" => $relpicker->create_relpicker(array(
+					"name" => "work_tbl[".$wr->id()."][sec]",
+					"reltype" => 7,
+					"oid" => $wr->id(),
+					"property" => "section",
+					"options" => $sec_options[$orgid],
+//					"buttonspos" => "bottom",
+				)),
+				"pro" => $relpicker->create_relpicker(array(
+					"name" => "work_tbl[".$wr->id()."][pro]",
+					"reltype" => 3,
+					"oid" => $wr->id(),
+					"property" => "profession",
+					"options" => $pro_options,
+//					"buttonspos" => "bottom",
+				)),
+			));
+		}
 	}
 
 	function isik_toolbar($args)
@@ -2229,7 +2430,7 @@ class crm_person extends class_base
 			$pc = new object();
 			$pc->set_class_id(CL_CRM_ADDRESS);
 			$pc->set_name($arr["obj_inst"]->name());
-			$pc->set_parent($arr["obj_inst"]->id());
+			$pc->set_parent($arr["obj_inst"]->parent());
 			$pc->save();
 
 			$arr["obj_inst"]->connect(array(
@@ -3008,12 +3209,13 @@ class crm_person extends class_base
 
 	function callback_post_save($arr)
 	{
+		/*
 		if($arr["obj_inst"]->prop("work_contact"))
 		{
 			if(!$o = $this->has_current_job_relation($arr["obj_inst"]->id()))
 			{
 				$o = new object();
-				$o->set_parent($arr["obj_inst"]->id());
+				$o->set_parent($arr["obj_inst"]->parent());
 				$o->set_class_id(CL_CRM_PERSON_WORK_RELATION);
 				$o->set_name($arr["obj_inst"]->prop_str("work_contact"));
 				$o->save();
@@ -3037,6 +3239,7 @@ class crm_person extends class_base
 				$o->delete();
 			}
 		}
+		*/
 
 		if (aw_global_get("uid") != "")
 		{
@@ -4029,6 +4232,7 @@ class crm_person extends class_base
 		}
 		$person_obj = &obj($person_obj->prop("from"));
 
+		$email_obj = &obj($person_obj->prop("email"));
 		$phone_obj = &obj($person_obj->prop("phone"));
 
 		$this->read_template($arr["cv"]);
@@ -4239,8 +4443,8 @@ class crm_person extends class_base
 			"birthday" => date("d.m.Y", $bd),
 			"social_status" => $person_obj->prop("social_status"),
 			"mail" => html::href(array(
-				"url" => "mailto:" . $person_obj->prop("email"),
-				"caption" => $person_obj->prop("email"),
+				"url" => "mailto:" . $email_obj->prop("mail"),
+				"caption" => $email_obj->prop("mail"),
 			)),
 			"phone" => $phone_obj->name(),
 			"sectors" => $tmp_sectors,
@@ -4363,13 +4567,136 @@ class crm_person extends class_base
 		}
 	}
 
+	function parse_url_parse_query($return_url)
+	{
+		$url = parse_url($return_url);
+		$query = explode("&", $url["query"]);
+		foreach($query as $q)
+		{
+			$t = explode("=", $q);
+			$ret[$t[0]] = $t[1];
+		}
+		return $ret;
+	}
+
 	/** returns a line of info about the person - name, company, section, email, phone
 		@attrib api=1 params=pos
 
 		@param p required type=oid
 			The person to return the info for
 	**/
-	function get_short_description($p)
+	function get_short_description($arr)
+	{
+		$org_fixed = 0;
+		$query = $this->parse_url_parse_query($arr["request"]["return_url"]);
+		if($query["class"] == "crm_company" && $this->can("view", $query["id"]))
+		{
+			$org_fixed = $query["id"];
+		}
+		$p = $arr["obj_inst"];
+		$p_href = html::href(array(
+			'url' => html::get_change_url($p->id()),
+			'caption' => $p->name(),
+		));
+
+		$cwrs = array();
+		$cou = 0;
+		foreach($p->connections_from(array("type" => 67)) as $conn)		// RELTYPE_CURRENT_JOB
+		{
+			$toid = $conn->conn["to"];
+			$to = obj($toid);
+			$orgid = $to->prop("org");
+			if($orgid != $org_fixed && $org_fixed != 0)
+			{
+				continue;
+			}
+
+			$cwrs[$orgid]["professions"][$cou] = $to->prop("profession");
+			foreach($to->connections_from(array("type" => 8)) as $cn)		// RELTYPE_PHONE
+			{
+				if($this->can("view", $cn->conn["to"]))
+					$cwrs[$orgid]["phones"][$cn->conn["to"]] = $cn->conn["to.name"];
+			}
+			foreach($to->connections_from(array("type" => 9)) as $cn)		// RELTYPE_EMAIL
+			{
+				if($this->can("view", $cn->conn["to"]))
+					$cwrs[$orgid]["emails"][$cn->conn["to"]] = $cn->conn["to.name"];
+			}
+			foreach($to->connections_from(array("type" => 10)) as $cn)		// RELTYPE_FAX
+			{
+				if($this->can("view", $cn->conn["to"]))
+					$cwrs[$orgid]["faxes"][$cn->conn["to"]] = $cn->conn["to.name"];
+			}
+
+			$cou++;
+		}
+		$ret = "";
+//		arr($cwrs);
+		foreach($cwrs as $org_id => $data)
+		{
+			if(strlen($ret) > 0)
+			{
+				$ret .= "<br>";
+			}
+			$ret .= $p_href;
+			if($this->can("view", $org_id))
+			{
+				$company = new object($org_id);
+				$ret .= " ".html::href(array(
+					'url' => html::get_change_url($org_id),
+					'caption' => $company->name(),
+				));
+			}
+			else
+			{
+				$ret .= " <i>ORGANISATSIOON M&Auml;&Auml;RAMATA</i>";
+			}
+			foreach($data["professions"] as $prof)
+			{
+				if(!$this->can("view", $prof))
+					continue;
+				$profession = new object($prof);
+				$ret .= ", ".html::href(array(
+					'url' => html::get_change_url($prof),
+					'caption' => $profession->name(),
+				));
+			}
+			foreach($data["phones"] as $ph_id => $ph)
+			{
+				$ret .= ", ".html::href(array(
+					'url' => html::get_change_url($ph_id),
+					'caption' => $ph,
+				));
+			}
+			foreach($data["emails"] as $ml_id => $ml)
+			{
+				$ml_obj = new object($ml_id);
+				$ret .= ", ".html::href(array(
+					'url' => html::get_change_url($ml_id),
+					'caption' => $ml_obj->prop("mail"),
+				));
+			}
+			if(sizeof($data["faxes"]) > 0)
+				$ret .= ", faks ";
+			$mtof = false;
+			foreach($data["faxes"] as $fx_id => $fx)
+			{
+				if($mtof)
+					$ret .= ",";
+
+				$fx_obj = new object($fx_id);
+				$ret .= " ".html::href(array(
+					'url' => html::get_change_url($fx_id),
+					'caption' => $fx_obj->name(),
+				));
+				$mtof = true;
+			}
+		}
+		return $ret;
+	}
+	
+	/*
+	function get_short_description($p)		// OLD VERSION OF THIS FUNCTION
 	{
 		$p = obj($p);
 		$ret = html::href(array(
@@ -4441,6 +4768,7 @@ class crm_person extends class_base
 		}
 		return $ret;
 	}
+	/**/
 
 	function _ct_rel_tb($arr)
 	{
@@ -5069,6 +5397,81 @@ class crm_person extends class_base
 			));
 
 			$t->define_data($data);
+		}
+	}
+
+	
+
+	/**
+		@attrib name=c2wr 
+		@param id required type=int
+		@param wrid required type=int
+		@param toid required type=int
+		@param reltype required type=int
+		@param return_url required type=string
+	**/
+	function c2wr($arr)
+	{
+		// Isiklik
+		if($arr["wrid"] == 0 && is_oid($arr["toid"]))
+		{
+			$to = new object($arr["toid"]);
+			foreach($to->connections_from() as $conn)
+			{
+				$pwr = $conn->to();
+				if($pwr->class_id() == CL_CRM_PERSON_WORK_RELATION)
+				{
+					$conn->delete(true);
+				}
+			}
+			$o = new object($arr["id"]);
+			$o->connect(array(
+				"to" => $arr["toid"],
+				"reltype" => $arr["reltype"],
+			));
+			header("Location: ".$arr["return_url"]);
+		}
+		elseif(is_oid($arr["wrid"]) && is_oid($arr["toid"]))
+		{
+			$reltypes = array(
+				8 => 13,
+				9 => 11,
+				10 => 54,
+			);
+			$connect = true;
+			$wr = new object($arr["wrid"]);
+			$wrc = 0;
+			foreach($wr->connections_from(array("type" => $arr["reltype"])) as $conn)
+			{
+				$wrc++;
+				if($conn->conn["to"] == $arr["toid"])
+				{		
+					$conn->delete(true);
+					$connect = false;
+				}
+			}
+			if($wrc <= 1)
+			{
+				$to = new object($arr["toid"]);
+				$o = new object($arr["id"]);
+				$o->connect(array(
+					"to" => $arr["toid"],
+					"reltype" => $reltypes[$arr["reltype"]],
+				));
+			}
+			if($connect)
+			{
+				$wr->connect(array(
+					"to" => $arr["toid"],
+					"reltype" => $arr["reltype"],
+				));
+				$o = new object($arr["id"]);
+				$o->disconnect(array(
+					"from" => $arr["toid"],
+					"errors" => false,
+				));
+			}
+			header("Location: ".$arr["return_url"]);
 		}
 	}
 
