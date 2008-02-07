@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.38 2008/01/31 13:50:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.39 2008/02/07 11:54:31 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -42,6 +42,9 @@
 			
 				@property rs_booking_to type=date_select store=no captionside=top parent=r_srch format=day_textbox,month_textbox,year_textbox
 				@caption Broneering kuni
+		
+				@property rs_unconfirmed type=checkbox ch_value=1 store=no parent=r_srch no_caption=1 prop_cb=1
+				@caption Kinnitamata
 
 				@property rs_btn type=submit store=no parent=r_srch no_caption=1
 				@caption Otsi
@@ -165,6 +168,9 @@ class spa_bookings_overview extends class_base
 		$arr["args"]["rs_booker_name"] = $arr["request"]["rs_booker_name"];
 		$arr["args"]["rs_booking_from"] = $arr["request"]["rs_booking_from"];
 		$arr["args"]["rs_booking_to"] = $arr["request"]["rs_booking_to"];
+		$arr["args"]["rs_unconfirmed"] = $arr["request"]["rs_unconfirmed"];
+
+
 
 		$arr["args"]["r_rs_name"] = $arr["request"]["r_rs_name"];
 		$arr["args"]["r_rs_booker_name"] = $arr["request"]["r_rs_booker_name"];
@@ -234,7 +240,7 @@ class spa_bookings_overview extends class_base
 		$from = date_edit::get_timestamp($arr["request"]["rs_booking_from"]);
 		$to = date_edit::get_timestamp($arr["request"]["rs_booking_to"]);
 
-		$srch = !empty($arr["request"]["rs_name"]) || !empty($arr["request"]["rs_booker_name"]) || $from > 1 || $to > 1 ;	
+		$srch = !empty($arr["request"]["rs_name"]) || !empty($arr["request"]["rs_booker_name"]) || $from > 1 || $to > 1 || $arr["request"]["rs_unconfirmed"];	
 		$room2booking = array();
 		if ($srch)
 		{
@@ -249,7 +255,7 @@ class spa_bookings_overview extends class_base
 				$f["name"] = "%".$arr["request"]["rs_name"]."%";
 			}
 
-			if (!empty($arr["request"]["rs_booker_name"]) || $from > 1 || $to > 1)
+			if (!empty($arr["request"]["rs_booker_name"]) || $from > 1 || $to > 1 || $arr["request"]["rs_unconfirmed"])
 			{
 				// get all bookings for that person
 				$bf = array(
@@ -274,6 +280,11 @@ class spa_bookings_overview extends class_base
 				if ($to > 1)
 				{
 					$bf["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
+				}
+
+				if (!empty($arr["request"]["rs_unconfirmed"]))
+				{
+					$bf["verified"] = 0;
 				}
 
 				$bookings = new object_list($bf);
@@ -374,7 +385,6 @@ class spa_bookings_overview extends class_base
 					"caption" => t("Prindi"),
 					"target" => "_blank"
 				));
-
 				foreach($bookings as $booking)
 				{
 					$t->define_data(array(
@@ -496,6 +506,10 @@ class spa_bookings_overview extends class_base
 
 		foreach(safe_array($arr["obj_inst"]->prop("groups")) as $grp_id)
 		{
+			if(!$this->can("view" , $grp_id))
+			{
+				continue;
+			}
 			$go = obj($grp_id);
 			$tb->add_sub_menu(array(
 				"parent" => "print",
@@ -1254,6 +1268,11 @@ class spa_bookings_overview extends class_base
 	}
 
 	function _get_r_rs_booker_name($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_rs_unconfirmed($arr)
 	{
 		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 	}

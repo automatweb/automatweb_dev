@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.28 2008/02/05 14:00:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.29 2008/02/07 11:54:33 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property hold_not_verifyed type=textbox field=meta method=serialize
 	@caption Kinnitamata broneeringut tuleb hoida kinni x minutit
+
+	@property show_unverified type=checkbox ch_value=1 field=meta method=serialize 
+	@caption N&auml;ita kalendris kinnitamata broneeringuid
 
 	@property related_room_folder type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_RELATED_ROOM_FOLDER
 	@caption Seotud ruumide kaust

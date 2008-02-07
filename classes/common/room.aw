@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.223 2008/02/05 17:03:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.224 2008/02/07 11:54:33 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1893,7 +1893,7 @@ class room extends class_base
 		}
 		$this->len = $len;
 		enter_function("get_calendar_tbl::3::genres");
-		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len);
+		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len , $settings->prop("show_unverified"));
 		$this->_init_calendar_t($t,$this->start, $len);
 		exit_function("get_calendar_tbl::3::genres");
 
@@ -4965,7 +4965,7 @@ class room extends class_base
 		return $ret;
 	}
 
-	function generate_res_table($room, $start = 0, $end = 0)
+	function generate_res_table($room, $start = 0, $end = 0,$un = 0)
 	{
 		$this->max_capacity = $room->prop("max_capacity");
 		$this->allow_multiple = $room->prop("allow_multiple");
@@ -4984,20 +4984,30 @@ class room extends class_base
 			$end = $this->start + (7*24*3600);
 		}
 		$step_length = $this->step_lengths[$room->prop("time_unit")];
+
 		$filt = array(
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
 			"resource" => $room->id(),
 			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
-			new object_list_filter(array(
+		);
+
+		if($un)
+		{
+			;
+		}
+		else
+		{
+			$filt[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
 					"verified" => 1,
 					"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time())
 				)
-			))
-		);
+			));
+		}
+
 		$use_prod_times = $room->prop("use_product_times");
 		
 		$reservations = new object_list($filt);

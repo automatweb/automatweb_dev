@@ -107,6 +107,19 @@
             <caption>Broneering kuni</caption>
       </property>
       <property>
+            <name>rs_unconfirmed</name>
+            <table>objects</table>
+            <group>rooms</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>r_srch</parent>
+            <no_caption>1</no_caption>
+            <prop_cb>1</prop_cb>
+            <field>rs_unconfirmed</field>
+            <caption>Kinnitamata</caption>
+      </property>
+      <property>
             <name>rs_btn</name>
             <table>objects</table>
             <group>rooms</group>
