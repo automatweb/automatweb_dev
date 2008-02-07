@@ -5,7 +5,7 @@
 @classinfo syslog_type=ST_CRM_WORKING_TIME_SCENARIO relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
-
+@default group=general
 @property weekdays type=text store=no no_caption=1
 @caption Nädalapäevad
 
@@ -37,7 +37,7 @@ class crm_working_time_scenario extends class_base
 		switch($prop["name"])
 		{
 			case "weekdays":
-				if($arr["obj_inst"]->get_free_times())
+				if($arr["new"] || $arr["obj_inst"]->get_free_times())
 				{
 					return PROP_IGNORE;
 				}
@@ -100,7 +100,7 @@ class crm_working_time_scenario extends class_base
 				));
 				break;
 			case "days":
-				if(!$arr["obj_inst"]->get_free_times())
+				if($arr["new"] || !$arr["obj_inst"]->get_free_times())
 				{
 					return PROP_IGNORE;
 				}
