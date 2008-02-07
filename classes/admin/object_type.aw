@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.25 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.26 2008/02/07 14:45:22 voldemar Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -209,7 +209,7 @@ class object_type extends class_base
 				"name" => "classificator[" . $key . "]",
 				"selected" => $mx[$key],
 				"type" => "select",
-				"caption" => t("Oks"),
+				"caption" => $key . " " . t("Oks"),
 				"options" => $opts,
 				"parent" => "c".$key,
 			);
