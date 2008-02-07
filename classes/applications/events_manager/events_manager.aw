@@ -379,10 +379,13 @@ class events_manager extends class_base
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id())) ? $o->name() :
 					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), ($o->name() ? $o->name() : "(".t("Nimetu").")")),
+				"name_str" => $o->name(),
 				"comment" => $o->prop("comment"),
 				"oid" => $o->id(),
 			));
 		}
+		$t->set_default_sortby(array("name_str"));
+		$t->sort_by();
 	}
 
 	function get_cgf_from_manager($this_o, $type)
@@ -454,8 +457,11 @@ class events_manager extends class_base
 					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), ($o->name()?$o->name():"(".t("Nimetu").")")),
 				"address" => $o->prop("contact.name"),
 				"oid" => $o->id(),
+				"name_str" => $o->name(),
 			));
 		}
+		$t->set_default_sortby(array("name_str"));
+		$t->sort_by();
 	}
 
 	function _get_sectors_tree($arr)
