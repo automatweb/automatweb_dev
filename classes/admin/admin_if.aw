@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.39 2008/01/30 13:25:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.40 2008/02/07 12:29:34 instrumental Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1122,6 +1122,13 @@ class admin_if extends class_base
 							else
 							{
 								$o->set_prop($column, $val);
+							}
+							if($all_trans_status != 0 && $column == "status")
+							{
+								foreach($o->meta("translations") as $lid => $ldata)
+								{
+									$o->set_meta("trans_".$lid."_status", ($val - 1));
+								}
 							}
 							$o->save();
 						}
