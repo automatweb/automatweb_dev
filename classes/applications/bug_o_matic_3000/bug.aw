@@ -1196,6 +1196,8 @@ class bug extends class_base
 			$msgtxt = t("Bug") . ": " . $this->mk_my_orb("change",array("id" => $oid)) . "\n";
 			$msgtxt .= t("Summary") . ": " . $name . "\n";
 			$msgtxt .= t("URL") . ": " . $bug->prop("bug_url") . "\n";
+			$msgtxt .= t("Status"). ": " . $this->bug_statuses[$bug->prop("bug_status")] . "\n";
+			$msgtxt .= t("Priority"). ": " . $bug->prop("bug_priority") . "\n";
 			$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
 			$msgtxt .= strip_tags($comment)."\n";
 			$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc", false));
