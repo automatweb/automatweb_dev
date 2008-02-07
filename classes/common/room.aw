@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.224 2008/02/07 11:54:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.225 2008/02/07 12:31:46 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -408,7 +408,7 @@ class room extends class_base
 						$data["person"] = $sc;
 						$data["room"] = $arr["obj_inst"]->id();
 						$url = $this->mk_my_orb("make_worker_table", $data
-							,CL_CRM_WORKING_TIME_SCENARIO
+							,"applications/crm/crm_working_time_scenario"
 						);
 						$prop["value"].= '<script language=javascript>Javascript:window.open("'.$url.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")</script>';
 					}
