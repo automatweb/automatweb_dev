@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.17 2008/01/31 13:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.18 2008/02/07 18:05:54 hannes Exp $
 // forum.aw - forums/messageboards
 /*
 @classinfo  maintainer=dragut
@@ -1383,7 +1383,11 @@ topic");
 		{
 			$name = $from;
 		};
-
+		$url = trim($url);
+		if (strpos($url, "http://") !== 0 && strpos($url, "https://") !== 0 )
+		{
+			$url = "http://".$url;
+		}
 
 		$forum_obj = new object($board);
 
@@ -1436,6 +1440,7 @@ topic");
 			{
 				setcookie("aw_mb_name",$name,time()+24*3600*1000);
 				setcookie("aw_mb_mail",$email,time()+24*3600*1000);
+				setcookie("aw_mb_url",$url,time()+24*3600*1000);
 			}
 			// yeah, legacy code sucks, but we support it anyway
 			if (not($name))
@@ -1457,9 +1462,9 @@ topic");
 			}
 			else
 			{
-				$q = "INSERT INTO comments (parent, board_id, name, email, comment, subj,
+				$q = "INSERT INTO comments (parent, board_id, name, email, url, comment, subj,
 						time, site_id, ip)
-				VALUES ('$parent','$board','$name','$email','$comment','$subj',
+				VALUES ('$parent','$board','$name','$email','$url','$comment','$subj',
 						$t,'$site_id', '$ip')";
 			};
 
