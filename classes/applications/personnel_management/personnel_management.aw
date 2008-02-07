@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.16 2007/12/06 14:33:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.17 2008/02/07 16:31:51 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -69,17 +69,25 @@
 
 ----------------------------------------
 @groupinfo offers caption="Tööpakkumised" submit=no
-@default group=offers
 
-@property offers_toolbar type=toolbar no_caption=1
+@groupinfo offers_ parent=offers caption="Üldine"
+@default group=offers_
 
-@layout offers type=hbox width=15%:85%
+	@property offers_toolbar type=toolbar no_caption=1
 
-	@layout offers_tree type=vbox parent=offers closeable=1 area_caption=Kaustad
+	@layout offers type=hbox width=15%:85%
 
-		@property offers_tree type=treeview no_caption=1 parent=offers_tree
+		@layout offers_tree type=vbox parent=offers closeable=1 area_caption=Kaustad
 
-@property offers_table type=table no_caption=1 parent=offers
+			@property offers_tree type=treeview no_caption=1 parent=offers_tree
+
+	@property offers_table type=table no_caption=1 parent=offers
+
+@groupinfo offers_conf parent=offers caption="Seaded"
+@default group=offers_conf
+
+	@property default_offers_cfgform type=relpicker reltype=RELTYPE_DEFAULT_OFFERS_CFGFORM
+	@caption Default seadete vorm
 
 ----------------------------------------
 
@@ -114,6 +122,9 @@
 
 @reltype SEARCH_SAVE value=6 clid=CL_BLAH
 @caption Otsingu salvestus
+
+@reltype DEFAULT_OFFERS_CFGFORM value=7 clid=CL_CFGFORM
+@caption Tööpakkumiste default-seadetevorm
 
 */
 
