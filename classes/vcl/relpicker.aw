@@ -1,7 +1,4 @@
 <?php
-/*
-@classinfo  maintainer=kaarel
-*/
 class relpicker extends  core
 {
 	function relpicker()
@@ -10,7 +7,7 @@ class relpicker extends  core
 	}
 
 	/**
-		@attrib name=create_relpicker params=pos api=1 
+		@attrib name=create_relpicker params=name api=1 
 
 		@param name required type=string
 			String to indetify the relpicker
@@ -33,10 +30,36 @@ class relpicker extends  core
 		@param no_edit optional type=int
 
 		@param options optional type=array
-			Options to be displayed in the relpicker select box
+			Options to be displayed in the relpicker select box. Array(oid => caption).
 
 		@param buttonspos optional type=string
 			Position for buttons. Values: right, bottom. Default: right
+
+		@returns The HTML of the relpicker.
+
+		@examples 
+
+		$relpicker = get_instance(CL_RELPICKER);
+		$relpicker->create_relpicker(array(
+			"name" => "myRelpicker",
+			"reltype" => 1,
+			"oid" => 123,
+			"property" => "myProperty",
+		));
+		
+		$myOptions = array(
+			1 => "Object1",
+			2 => "Object2",
+			3 => "Object3",
+		);
+		$relpicker = get_instance(CL_RELPICKER);
+		$relpicker->create_relpicker(array(
+			"name" => "myRelpicker",
+			"reltype" => "RELTYPE_FOO",
+			"oid" => 123,
+			"property" => "myProperty",
+			"options" => $myOptions,
+		));
 
 	**/
 	function create_relpicker($arr)
@@ -189,6 +212,9 @@ class relpicker extends  core
 			}
 			return $r;
 		}
+		/*
+		return array($val["name"] => $val);
+		*/
 	}
 
 	function init_vcl_property($arr)
