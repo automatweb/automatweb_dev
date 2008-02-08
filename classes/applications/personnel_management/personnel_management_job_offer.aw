@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.15 2008/02/07 16:33:08 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.16 2008/02/08 12:09:07 instrumental Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 
@@ -7,7 +7,6 @@
 
 @default table=objects
 @default group=general
-
 
 tableinfo personnel_management_job index=oid master_table=objects master_index=oid
 
@@ -60,6 +59,8 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 
 @property offer_cfgform type=relpicker reltype=RELTYPE_CFGFORM
 @caption CV seadete vorm
+
+@property default_cfgform type=hidden
 
 @groupinfo candidate caption="Kandideerimised" submit=no
 @default group=candidate
@@ -128,6 +129,30 @@ class personnel_management_job_offer extends class_base
 				break;
 				*/
 
+			case "default_cfgform":
+				if($this->can("view", $arr["request"]["personnel_management_id"]))
+				{
+					$pm = obj($arr["request"]["personnel_management_id"]);
+					$prop["value"] = $pm->prop("default_offers_cfgform");
+				}
+				break;
+
+			case "offer_cfgform":
+				if($arr["request"]["personnel_management_id"] && $arr["new"] == 1)
+				{
+					if($this->can("view", $arr["request"]["personnel_management_id"]))
+					{
+						$pm = obj($arr["request"]["personnel_management_id"]);
+						if($this->can("view", $pm->prop("default_offers_cfgform")))
+						{						
+							$cfgform = obj($pm->prop("default_offers_cfgform"));
+							$prop["value"] = $pm->prop("default_offers_cfgform");
+							$prop["options"] = array($cfgform->id() => $cfgform->name());
+						}
+					}
+				}
+				break;
+
 			case "new_cfgform_tbl":
 				$this->_get_new_cfgform_tbl($arr);
 				break;
@@ -162,9 +187,27 @@ class personnel_management_job_offer extends class_base
 		return $retval;
 	}
 
+	function heavy_implode($sep, $arr)
+	{
+		$grs = "";
+		$grs_c = 0;
+		foreach($arr as $gr)
+		{
+			if(is_array($gr))
+			{
+				$gr = $this->heavy_implode($sep, $gr);
+			}
+			$grs .= ($grs_c > 0) ? $sep.$gr : $gr;
+			$grs_c++;
+		}
+		return $grs;
+	}
+
 	function _get_new_cfgform_tbl($arr)
 	{
-		$cfgform_id = $arr["obj_inst"]->prop("offer_cfgform");
+		$cfgform_id = $arr["obj_inst"]->prop("default_cfgform");
+		if(!is_oid($cfgform_id))
+			$cfgform_id = $arr["obj_inst"]->prop("offer_cfgform");
 		if(!$this->can("view", $cfgform_id))
 		{
 			return false;
@@ -187,13 +230,18 @@ class personnel_management_job_offer extends class_base
 		$cfgform = obj($cfgform_id);
 		foreach($cfgform->meta("cfg_proplist") as $pid => $pdata)
 		{
+			if(is_array($pdata["group"]))
+			{
+				$pdata["group"] = $this->heavy_implode(", ", $pdata["group"]);
+			}
 			$t->define_data(array(
 				"group" => $pdata["group"],
 				"property" => $pdata["caption"],
 				"selected" => html::checkbox(array(
 					"name" => "new_cfgform_tbl[".$pid."]",
 					"value" => 1,
-					"checked" => (($pdata["disabled"] == 1) ? 0 : 1),
+					"checked" => 1,
+//					"checked" => (($pdata["disabled"] == 1) ? 0 : 1),
 				)),
 			));
 		}
@@ -342,7 +390,7 @@ class personnel_management_job_offer extends class_base
 		{
 			if(!array_key_exists($i, $data))
 			{
-				$cfgform_inst->disable_property(array(
+				$cfgform_inst->remove_property(array(
 					"id" => $new_cfgform_id,
 					"property" => $i
 				));

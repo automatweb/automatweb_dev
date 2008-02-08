@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.17 2008/02/07 16:31:51 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.18 2008/02/08 12:08:48 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -316,7 +316,10 @@ class personnel_management extends class_base
 		$tb->add_menu_item(array(
 			"parent" => "add",
 			"text" => t("Tööpakkumine"),
-			"link" => html::get_new_url(CL_PERSONNEL_MANAGEMENT_JOB_OFFER, $pt, array("return_url" => get_ru())),
+			"link" => html::get_new_url(CL_PERSONNEL_MANAGEMENT_JOB_OFFER, $pt, array(
+				"return_url" => get_ru(),
+				"personnel_management_id" => $arr["obj_inst"]->id()
+			)),
 			"href_id" => "add_bug_href"
 		));
 		$tb->add_menu_item(array(
