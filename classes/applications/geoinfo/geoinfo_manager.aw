@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.5 2008/01/31 13:49:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.6 2008/02/08 08:20:26 kristo Exp $
 // geoinfo_manager.aw - Geoinfo haldus 
 /*
 
@@ -80,38 +80,6 @@ class geoinfo_manager extends class_base
 			}
 		}
 		return $clids;
-	}
-
-	function get_prop_list($clid)
-	{
-		$goodprops = array(0=>"");
-		$cff = get_instance(CL_CFGFORM);
-		$manager_form = $cff->get_sysdefault(array("clid"=>$clid));
-		if($manager_form)
-		{
-			foreach($cff->get_cfg_proplist($manager_form) as $pn=>$pd)
-			{
-				if($pd["caption"])
-				{
-					$goodprops[$pn] = $pd["caption"];
-				}
-			}
-		}
-		else
-		{
-			$o = obj();
-			$o->set_class_id($clid);
-			$list = $o->get_property_list();
-			foreach($list as $lid => $li)
-			{
-				if($li["caption"])
-				{
-				//if(strpos($li["type"], "text")>-1 && $li["caption"])
-					$goodprops[$lid] = $li["caption"];
-				}
-			}
-		}
-		return $goodprops;
 	}
 
 	/**
@@ -611,12 +579,13 @@ class geoinfo_manager extends class_base
 		$this->init_rels_mgr_table($t, $arr);
 
 		$args["clids"] = $this->get_data_clids($arr);
+		$cfi = get_instance(CL_CFGFORM);
 		foreach($args["clids"] as $clid)
 		{
-			$args["cl_proplist"][$clid] = $this->get_prop_list($clid);
+			$args["cl_proplist"][$clid] = $cfi->get_prop_list($clid);
 		}
 		$args["xmlfields"] = $this->xml_get_fields($arr);
-		$list = $this->get_prop_list(CL_GEOINFO_DATA);
+		$list = $cfi->get_prop_list(CL_GEOINFO_DATA);
 		unset($list[0]);
 		$args["obj_inst"] = $arr["obj_inst"];
 		foreach($list as $pn=>$pd)
@@ -764,6 +733,7 @@ class geoinfo_manager extends class_base
 					"tags" => t('V&auml;&auml;rtused on tagides &lt;coord_x&gt;23.409&lt;/coord_x&gt;')."<br />",
 					"props" => t('V&auml;&auml;rtused on omadustes &lt;item coord_x="23.409" /&gt;')
 				);
+				$prop["onclick"] = 'alert("asd")';
 				if(!$prop["value"])
 					$prop["value"] = "tags";
 				break;
