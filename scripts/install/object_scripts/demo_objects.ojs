@@ -113,7 +113,7 @@ $do = obj { class_id=CL_MENU, parent=${parent}, name="N&auml;idisobjektid", stat
 				rel { from=${auth_kirke}, to=${groups.admins}, reltype=2 }
 
 			# server rels
-			$auth_config = obj { class_id=CL_AUTH_CONFIG, parent=${auth_folder}, name="!{url} autentimise seaded", status=STAT_ACTIVE, flags=16, metadata="$arr = array('auth'=>array('!{auth_kirke}'=>array('use'=>'1','jrk'=>'1','int_name'=>''),'!{auth_local}'=>array('use'=>'1','jrk'=>'2','int_name'=>'')));" }
+			$auth_config = obj { class_id=CL_AUTH_CONFIG, parent=${auth_folder}, name="!{url} autentimise seaded", status=STAT_ACTIVE, flags=16, metadata="$arr = array('auth'=>array('!{auth_kirke}'=>array('use'=>'1','jrk'=>'2','int_name'=>''),'!{auth_local}'=>array('use'=>'1','jrk'=>'1','int_name'=>'')));" }
 
 				rel { from=${auth_config}, to=${auth_local}, reltype=1 }
 				rel { from=${auth_config}, to=${auth_kirke}, reltype=1 }
