@@ -53,6 +53,8 @@ function make_keys($arr)
 
 #chdir("../..");
 
+$basedir = realpath(".");
+include("$basedir/init.aw");
 $args_from_caller = isset($args["mkcl_file"]);
 $stdin = fopen("php://stdin", "r");
 $class = array();
@@ -158,8 +160,8 @@ echo "\n\nRequesting new class id...\n";
 
 if (!$args_from_caller)
 {
-	$basedir = realpath(".");
-	include("$basedir/init.aw");
+//	$basedir = realpath(".");
+//	include("$basedir/init.aw");
 	init_config(array("ini_files" => array("$basedir/aw.ini")));
 	classload("defs");
 	classload("aw_template");
