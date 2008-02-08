@@ -96,6 +96,9 @@
 @property ufupload1 type=fileupload
 @caption Faili upload 1
 
+@property multifile_upload type=multifile_upload table=objects field=meta method=serialize reltype=RELTYPE_FILE store=no
+@caption Faili upload
+
 @property ucheckbox1 type=checkbox
 @caption
 
@@ -128,11 +131,25 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @property sector type=relpicker multiple=1 reltype=RELTYPE_SECTOR store=connect automatic=1 size=10
 @caption Valdkonnad
 
-@property location type=popup_search reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATION style=autocomplete field=ucheck5 no_edit=1
+property location type=popup_search reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATION style=autocomplete field=ucheck5 no_edit=1
+caption Toimumiskoht
+
+
+@property location type=releditor reltype=RELTYPE_LOCATION mode=manager rel_id=first props=name,address.riik,address.maakond,address.linn,address.aadress table_fields=name,address.riik,address.maakond,address.linn,address.aadress field=ucheck5
 @caption Toimumiskoht
 
-@property organizer type=popup_search reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete method=serialize field=meta table=objects no_edit=1
+@property organizer type=hidden reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY,CL_CRM_PERSON multiple=1 method=serialize field=meta table=objects no_edit=1
 @caption Korraldaja
+
+@property organizer_tb type=toolbar store=no no_caption=1
+@caption Korraldaja toolbar
+
+@property organizer_table type=table store=no no_caption=1
+@caption Korraldaja tabel
+
+
+- korraldaja releditoriks (kontakt tel, aadress[riik, maakond, linn, t2nav], email, www, nimi)
+
 
 @property level type=select field=level field=ucheck4
 @caption Tase
@@ -209,6 +226,10 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 @reltype EVENT_TIME value=9 clid=CL_EVENT_TIME
 @caption Toimumisaeg
 
+@reltype FILE value=10 clid=CL_FILE
+@caption Fail
+
+
 */
 
 
@@ -275,6 +296,16 @@ class calendar_event extends class_base
 					}
 				}
 				break;
+			case "organizer":
+				$os = explode(",",$prop["value"]);
+				foreach($os  as $id)
+				{
+					if(is_oid($id))
+					{
+						$arr["obj_inst"]->connect(array("to" => $id, "type" => "RELTYPE_ORGANIZER"));
+					}
+				}
+				return PROP_IGNORE;
 
 			case "event_time":
 				return PROP_IGNORE;
@@ -288,7 +319,7 @@ class calendar_event extends class_base
 				$this->trans_save($arr, $this->trans_props);
 				break;
 
-			case "organizer":
+/*			case "organizer":
 		 		if(!is_oid($prop["value"]))
  				{
  					if(is_oid($arr["request"]["organizer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["organizer_awAutoCompleteTextbox"]))
@@ -307,7 +338,9 @@ class calendar_event extends class_base
  					}
  				}
 				break;
-			case "location":
+*/			case "location":
+				//arr($prop["value"]);die();
+
 		 		if(!is_oid($prop["value"]))
  				{
  					if(is_oid($arr["request"]["location_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["location_awAutoCompleteTextbox"]))
@@ -387,6 +420,17 @@ class calendar_event extends class_base
 				{
 					$this->do_event_time_table($arr);
 				}
+				break;
+			case "location":
+				//$prop["table_fields"] = array("name","address.riik","afaf");
+				$prop["props"] = $prop["table_fields"];//explode(",", "name,address,address.riik,address.linn,address.street,address.county");
+//					arr($prop);
+				break;
+			case "organizer_table":
+				$this->_get_organizer_table($arr);
+				break;
+			case "organizer_tb":
+				$this->_get_organizer_tb($arr);
 				break;
 		}
 		return $retval;
@@ -714,6 +758,160 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 		return $this->parse();
 	}
 
+	function _get_organizer_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+
+		$tb->add_menu_button(array(
+			"name" => "main_menu",
+			"tooltip" => t("Uus"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "main_menu",
+			"title" => t("Organisatsioon"),
+			"text" => t("Organisatsioon"),
+			"tooltip" => t("Lisa uus korraldaja"),
+			"link" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 6,
+				"return_url" => get_ru(),
+				"parent" => $arr["obj_inst"]->id(),
+			), CL_CRM_COMPANY),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "main_menu",
+			"tooltip" => t("Lisa uus korraldaja"),
+			"title" => t("Isik"),
+			"text" => t("Isik"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 6,
+				"return_url" => get_ru(),
+				"parent" => $arr["obj_inst"]->id(),
+			), CL_CRM_PERSON),
+		));
+
+		$popup_search = get_instance("vcl/popup_search");
+		$search_butt = $popup_search->get_popup_search_link(array(
+			"pn" => "organizer",
+			"clid" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
+		));
+		$tb->add_cdata($search_butt);
+
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "remove_organizers",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
+
+	}
+
+	function _get_organizer_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" =>  t("Telefon"),
+		));
+		$t->define_field(array(
+			"name" => "country",
+			"caption" =>  t("Riik"),
+		));
+		$t->define_field(array(
+			"name" => "county",
+			"caption" =>  t("Maakond"),
+		));
+		$t->define_field(array(
+			"name" => "city",
+			"caption" =>  t("Linn"),
+		));
+		$t->define_field(array(
+			"name" => "street",
+			"caption" =>  t("T&auml;nav"),
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" =>  t("E-mail"),
+		));
+		$t->define_field(array(
+			"name" => "www",
+			"caption" =>  t("WWW"),
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" =>  t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" =>  t("Muuda"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->set_caption(t("Korraldajad"));
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ORGANIZER")) as $c)
+		{
+			$o = $c->to();
+			$change_url = html::obj_change_url($o->id(),t("Muuda"));
+			if($o->class_id() == CL_CRM_COMPANY)
+			{
+				$t->define_data(array(
+					"name" => $o->name(),
+					"email" => $o->prop("email_id.mail"),
+					"country" => $o->prop("contact.riik.name"),
+					"county" => $o->prop("contact.maakond.name"),
+					"city" => $o->prop("contact.linn.name"),
+					"street" => $o->prop("contact.aadress"),
+					"www" => $o->prop("url_id.name"),
+					"phone" => $o->prop("phone_id.name"),
+					"change" => $change_url,
+					"oid" => $o->id()
+				));
+			}
+			else
+			{
+				$t->define_data(array(
+					"name" => $o->name(),
+					"email" => $o->prop("email.mail"),
+					"country" => $o->prop("address.riik.name"),
+					"county" => $o->prop("address.maakond.name"),
+					"city" => $o->prop("address.linn.name"),
+					"street" => $o->prop("address.aadress"),
+					"www" => $o->prop("url.name"),
+					"phone" => $o->prop("phone.name"),
+					"change" => $change_url,
+					"oid" => $o->id()
+				));
+
+			}
+		}
+
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+
+        /**
+                @attrib name=remove_organizers
+        **/
+        function remove_organizers($arr)
+        {
+		$o = obj($arr["id"]);
+                foreach($arr["sel"] as $id)
+		{
+			$o->disconnect(array("from" => $id));
+		}
+                return $arr["post_ru"];
+        }
+
 	public function do_db_upgrade($table, $field, $q, $err)
 	{
 		if ("planner" === $table)
@@ -735,5 +933,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 
 		return false;
 	}
+	
+
 }
 ?>

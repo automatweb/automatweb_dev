@@ -18,5 +18,12 @@
 			</function>
 		</action>
 
+		<action name="remove_organizers">
+			<function name="remove_organizers">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.100 2008/02/04 13:32:01 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.101 2008/02/08 12:47:12 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -144,6 +144,7 @@ class releditor extends core
 		// and to customize table display in manager mode
 		//$all_props = $t->get_property_group($filter);
 		$all_props = $t->load_defaults();
+		$this->clid = $use_clid;
 		$act_props = array();
 		$use_form = $prop["use_form"];
 
@@ -598,6 +599,7 @@ class releditor extends core
 				}
 
 				$property_list = $target->get_property_list();
+
 				foreach($property_list as $_pn => $_pd)
 				{
 					if (!in_array($_pn,$tb_fields))
@@ -659,6 +661,9 @@ class releditor extends core
 					}
 					$export_props[$_pn] = $prop["value"];
 				}
+				
+
+
 				$ed_fields["name"] = "name";
 				//$export_props = $target->properties();
 				if ($ed_fields && ($this->form_type != $target->id()))
@@ -688,6 +693,12 @@ class releditor extends core
 					);
 
 				};
+				$stuff = $this->get_sub_prop_values(array(
+					"prop" => &$prop,
+					"obj_inst" => $target,
+					"fields" => $this->get_sub_props($tb_fields),
+				));
+				$rowdata = $rowdata + $stuff;
 				// This one defines the display table data. Just a reminder for myself. - Kaarel
 				$awt->define_data($rowdata);
 			}
@@ -734,6 +745,20 @@ class releditor extends core
 			foreach($arr["prop"]["table_fields"] as $table_field)
 			{
 				$caption = $table_field;
+				if(sizeof(explode("." , $table_field)) > 1)
+				{
+					$sub_fileds = explode("." , $table_field);
+					$reltype = $this->all_props[$sub_fileds[0]]["reltype"];
+					$o_ = new object();
+					$o_->set_class_id($this->clid);
+					$relinfo = $o_->get_relinfo();
+					$clid = reset($relinfo[$reltype]["clid"]);
+					$o_2 = new object();
+					$o_2->set_class_id($clid);
+					$prop2 = $o_2->get_property_list();
+					$caption = $prop2[$sub_fileds[1]]["caption"];
+
+				}
 				if (isset($this->all_props[$table_field]))
 				{
 					$caption = $this->all_props[$table_field]['caption'];
@@ -806,6 +831,38 @@ class releditor extends core
 		);
 
 		return $rv;
+	}
+
+	function get_sub_prop_values($arr)
+	{
+		$ret = array();
+		foreach($arr["fields"] as $field => $data)
+		{
+			$ret[$field] = $arr["obj_inst"]->prop_str($field);
+		}
+		return $ret;
+	}
+
+	function get_sub_props($table_fields)
+	{
+		$ret = array();
+		foreach($table_fields as $table_field)
+		{
+			if(sizeof(explode("." , $table_field)) > 1)
+			{
+				$sub_fileds = explode("." , $table_field);
+				$reltype = $this->all_props[$sub_fileds[0]]["reltype"];
+				$o_ = new object();
+				$o_->set_class_id($this->clid);
+				$relinfo = $o_->get_relinfo();
+				$clid = reset($relinfo[$reltype]["clid"]);
+				$o_2 = new object();
+				$o_2->set_class_id($clid);
+				$prop2 = $o_2->get_property_list();
+				$ret[$table_field] = $prop2[$sub_fileds[1]];;
+			}
+		}
+		return $ret;
 	}
 
 	function process_releditor($arr)

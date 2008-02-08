@@ -225,6 +225,17 @@
             <caption>Faili upload 1</caption>
       </property>
       <property>
+            <name>multifile_upload</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>multifile_upload</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_FILE</reltype>
+            <store>no</store>
+            <caption>Faili upload</caption>
+      </property>
+      <property>
             <name>ucheckbox1</name>
             <group>general</group>
             <table>planner</table>
@@ -302,29 +313,62 @@
             <name>location</name>
             <group>general</group>
             <table>planner</table>
-            <type>popup_search</type>
+            <type>releditor</type>
             <reltype>RELTYPE_LOCATION</reltype>
-            <clid>CL_SCM_LOCATION</clid>
-            <style>autocomplete</style>
+            <mode>manager</mode>
+            <rel_id>first</rel_id>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>address.riik</num_1>
+                  <num_2>address.maakond</num_2>
+                  <num_3>address.linn</num_3>
+                  <num_4>address.aadress</num_4>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>address.riik</num_1>
+                  <num_2>address.maakond</num_2>
+                  <num_3>address.linn</num_3>
+                  <num_4>address.aadress</num_4>
+            </table_fields>
             <field>ucheck5</field>
-            <no_edit>1</no_edit>
             <caption>Toimumiskoht</caption>
       </property>
       <property>
             <name>organizer</name>
             <group>general</group>
             <table>objects</table>
-            <type>popup_search</type>
+            <type>hidden</type>
             <reltype>RELTYPE_ORGANIZER</reltype>
             <clid>
                   <num_0>CL_CRM_COMPANY</num_0>
                   <num_1>CL_CRM_PERSON</num_1>
             </clid>
-            <style>autocomplete</style>
+            <multiple>1</multiple>
             <method>serialize</method>
             <field>meta</field>
             <no_edit>1</no_edit>
             <caption>Korraldaja</caption>
+      </property>
+      <property>
+            <name>organizer_tb</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>organizer_tb</field>
+            <caption>Korraldaja toolbar</caption>
+      </property>
+      <property>
+            <name>organizer_table</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>organizer_table</field>
+            <caption>Korraldaja tabel</caption>
       </property>
       <property>
             <name>level</name>
@@ -506,6 +550,11 @@
                   <clid>CL_EVENT_TIME</clid>
                   <caption>Toimumisaeg</caption>
             </EVENT_TIME>
+            <FILE>
+                  <value>10</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Fail</caption>
+            </FILE>
       </reltypes>
 </properties>
 
