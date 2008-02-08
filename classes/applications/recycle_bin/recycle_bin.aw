@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.25 2007/12/06 14:33:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.26 2008/02/08 12:57:29 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -41,7 +41,7 @@
 
 	@property s_res type=table no_caption=1
 
-@default group=recycle_settings
+@default group=recycle_groups
 
 	@property delete_grps type=relpicker reltype=RELTYPE_DEL_GRP automatic=1 multiple=1 store=connect
 	@caption Grupid, kes saavad kustutada
@@ -49,10 +49,21 @@
 	@property admin_grps type=relpicker reltype=RELTYPE_ADM_GRP automatic=1 multiple=1 store=connect
 	@caption Grupid, kes saavad m&auml;&auml;ranguid muuta
 
+@default group=recycle_autoclean
+
+	@property do_autoclean type=checkbox ch_value=1 field=meta method=serialize
+	@caption T&uuml;hjenda automaatselt
+
+	@property autoclean_age type=select field=meta method=serialize
+	@caption Kui vanad automaatselt kustutatakse
+
 @groupinfo recycle submit=no caption="Prügikast"
 @groupinfo recycle_list submit=no caption="Nimekiri" parent=recycle
 @groupinfo recycle_search caption="Otsing" parent=recycle submit_method=get
 @groupinfo recycle_settings caption="M&auml;&auml;rangud" 
+	@groupinfo recycle_groups parent=recycle_settings caption="Grupid"
+	@groupinfo recycle_autoclean parent=recycle_settings caption="Automaatne t&uuml;hjendamine"
+
 
 @reltype DEL_GRP value=1 clid=CL_GROUP
 @caption Kustutaja grupp
@@ -139,8 +150,29 @@ class recycle_bin extends class_base
 			case "s_class_id":
 				$prop["options"] = get_class_picker();
 				break;
+
+			case "autoclean_age":
+				$prop["options"] = $this->get_autoclean_age_options();
+				break;
 		};
 		return $retval;
+	}
+
+	function get_autoclean_age_options()
+	{
+		return array(
+			7 => t("1 N&auml;dal"),
+			14 => t("2 N&auml;dalat"),
+			21 => t("3 N&auml;dalat"),
+			31 => t("1 Kuu"),
+			61 => t("2 Kuud"),
+			92  => t("3 Kuud"),
+			123 => t("4 Kuud"),
+			160 => t("5 Kuud"),
+			185 => t("6 Kuud"),
+			365 => t("1 aasta"),
+			720 => t("2 aastat")
+		);
 	}
 
 	function _init_table(&$table)
@@ -578,6 +610,56 @@ class recycle_bin extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["return_url"] = aw_global_get("REQUEST_URI");
+	}
+
+	/**
+		@attrib name=do_autoclean nologin="1"
+	**/
+	function do_autoclean()
+	{
+		// list all trash cans
+		$ol = new object_list(array(
+			"class_id" => CL_RECYCLE_BIN,
+			"lang_id" => array()
+		));
+		if (!$ol->count())
+		{
+			continue;
+		}
+		$do_clean = 0;
+		foreach($ol->arr() as $o)
+		{
+			if ($o->prop("do_autoclean") && $o->prop("autoclean_age") > 0)
+			{
+				$do_clean = $o->prop("autoclean_age");
+			}
+		}
+
+		if ($do_clean > 1)
+		{
+			$this->_do_clean($do_clean);
+		}
+	}
+
+	function _do_clean($max_age)
+	{
+		$where = array();
+		$ts = time() - ($max_age * 24 * 3600);
+		$where[] = " modified <=  $ts ";
+
+		$sql = "SELECT * FROM objects WHERE status = 0 AND site_id = ".aw_ini_get("site_id")." AND ".join(" AND ", $where);
+		$this->db_query($sql);
+		$rows = array();
+		while ($row = $this->db_next())
+		{
+			// aaand delete
+			echo "delete $row[oid] - $row[name] mod = ".date("d.m.Y H:i", $row["modified"])."<br>";
+			$rows[] = $row["oid"];
+		}
+		if (count($rows))
+		{
+			$this->final_delete(array("mark" => $rows));
+		}
 	}
 }
 ?>

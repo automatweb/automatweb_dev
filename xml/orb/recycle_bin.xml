@@ -29,5 +29,12 @@
 			</function>
 		</action>
 
+		<action name="do_autoclean" nologin="1">
+			<function name="do_autoclean">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
