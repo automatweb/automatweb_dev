@@ -5928,8 +5928,7 @@ class class_base extends aw_template
 
 	function callback_generate_scripts($arr)
 	{
-		$restricted_clids = array("cfgform");
-		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && !in_array($arr["request"]["class"], $restricted_clids) && $arr["request"]["group"] != "relationmgr")
+		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && $arr["request"]["group"] != "relationmgr")
 		{
 			if($arr["request"]["class"] == "admin_if")
 			{
@@ -5953,9 +5952,11 @@ class class_base extends aw_template
 				if(anything_changed)";
 				$asd = "aktiveerin/deaktiveerin";
 				$all_trans_status_value = 1;
+				$if_clause2 = "true";
 			}
 			else
 			{
+				$if_clause2 = "el_exists('status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1)."') == 1";
 				if($arr["request"]["class"] == "language")
 				{
 					$status_variable = "lang_status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1);
@@ -5970,20 +5971,32 @@ class class_base extends aw_template
 			}
 			
 			$function_check = "
-			function el_exists(name)
+			function el_exists(id)
 			{
-
+				var ret = 0;
+				for(i = 0; i < document.changeform.elements.length; i++)
+				{
+					el = document.changeform.elements[i];
+					if(el.id.indexOf(id) == 0)
+					{
+						ret = 1;
+					}
+				}
+				return ret;
 			}
 			function check()
 			{
-				var f = document.forms['changeform'];
-				if(true)
+				if(".$if_clause2.")
 				{
-					if(confirm('Kas " . $asd . " kõik tõlked?'))
+					var f = document.forms['changeform'];
+					".$if_clause."
 					{
-						f.all_trans_status.value = ".$all_trans_status_value.";
-					}
-				}				
+						if(confirm('Kas " . $asd . " kõik tõlked?'))
+						{
+							f.all_trans_status.value = ".$all_trans_status_value.";
+						}
+					}				
+				}
 			}
 			
 			aw_submit_handler = check;";
