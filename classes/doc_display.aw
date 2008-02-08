@@ -589,14 +589,18 @@ class doc_display extends aw_template
 	function _parse_youtube_links($str)
 	{
 		$tmp_template = end(explode("/", $this->template_filename));
-		if (strpos($str, "http://www.youtube.com/watch?")!==0 && $this->is_template("youtube_link"))
+		if ( $this->is_template("youtube_link") && strpos($str, "http://www.youtube.com/")!==0)
 		{
 			$str = str_replace  ( "http://www.youtube.com/watch?v="  , "http://www.youtube.com/v/", $str );
-			$this->vars(array(
-				"link" => "\${1}",
-			));
-			$s_embed = $this->parse("youtube_link");
-			$str = preg_replace  ("/(http:\/\/www.youtube.com\/v\/.*)\n/imsU", $s_embed, $str);
+			
+			if (strpos($str, "http://www.youtube.com/v/")!==0)
+			{
+				$this->vars(array(
+					"link" => "\${1}\${2}",
+				));
+				$s_embed = $this->parse("youtube_link");
+				$str = preg_replace  ("/(http:\/\/www.youtube.com\/v\/[a-zA-Z0-9_]*)$|(http:\/\/www.youtube.com\/v\/.*)\n/imsU", $s_embed, $str);
+			}
 		}
 	}
 	
@@ -637,7 +641,7 @@ class doc_display extends aw_template
 		{
 			if ($num_comments>0)
 			{
-				$this->db_query("SELECT name, url,  time, comment FROM comments WHERE board_id = ".$doc->id() );
+				$this->db_query("SELECT name, url,  time, comment FROM comments WHERE board_id = ".$doc->id() ." ORDER BY time ASC");
 				
 				while($row = $this->db_next())
 				{
@@ -652,6 +656,7 @@ class doc_display extends aw_template
                                 "url" => $s_url,
 						));
 					}
+					$this->dequote(&$s_comment);
 					$this->vars(array(
 						"name" => $s_name,
 						"post_created_hr" => $this->get_date_human_readable( $row["time"]),
