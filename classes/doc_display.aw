@@ -500,29 +500,29 @@ class doc_display extends aw_template
 	
 	function _parse_wiki_titles($str)
 	{
-		$a_pattern[0] = "/\r\n======([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)======\r\n/mU";
+		$a_pattern[0] = "/\r\n======([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)======\r\n/mU";
 		$a_replacement[0] = "<h6>\\1</h6>";
-		$a_pattern[1] = "/^======([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)======\r\n/mU";
+		$a_pattern[1] = "/^======([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)======\r\n/mU";
 		$a_replacement[1] = "<h6>\\1</h6>";
-		$a_pattern[2] = "/\r\n=====([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)=====\r\n/mU";
+		$a_pattern[2] = "/\r\n=====([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)=====\r\n/mU";
 		$a_replacement[2] = "<h5>\\1</h5>";
-		$a_pattern[3] = "/^=====([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)=====\r\n/mU";
+		$a_pattern[3] = "/^=====([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)=====\r\n/mU";
 		$a_replacement[3] = "<h5>\\1</h5>";
-		$a_pattern[4] = "/\r\n====([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)====\r\n/mU";
+		$a_pattern[4] = "/\r\n====([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)====\r\n/mU";
 		$a_replacement[4] = "<h4>\\1</h4>";
-		$a_pattern[5] = "/^====([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)====\r\n/mU";
+		$a_pattern[5] = "/^====([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)====\r\n/mU";
 		$a_replacement[5] = "<h4>\\1</h4>";
-		$a_pattern[6] = "/\r\n===([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)===\r\n/mU";
+		$a_pattern[6] = "/\r\n===([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)===\r\n/mU";
 		$a_replacement[6] = "<h3>\\1</h3>";
-		$a_pattern[7] = "/^===([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)===\r\n/mU";
+		$a_pattern[7] = "/^===([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)===\r\n/mU";
 		$a_replacement[7] = "<h3>\\1</h3>";
-		$a_pattern[8] = "/\r\n==([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)==\r\n/mU";
+		$a_pattern[8] = "/\r\n==([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)==\r\n/mU";
 		$a_replacement[8] = "<h2>\\1</h2>";
-		$a_pattern[9] = "/^==([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)==\r\n/mU";
+		$a_pattern[9] = "/^==([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)==\r\n/mU";
 		$a_replacement[9] = "<h2>\\1</h2>";
-		$a_pattern[10] = "/\r\n=([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)=\r\n/mU";
+		$a_pattern[10] = "/\r\n=([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)=\r\n/mU";
 		$a_replacement[10] = "<h1>\\1</h1>";
-		$a_pattern[11] = "/^=([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-]+)=\r\n/mU";
+		$a_pattern[11] = "/^=([a-zA-Z0-9\s,\/\.õÕäÄöÖüÜ\-\?]+)=\r\n/mU";
 		$a_replacement[11] = "<h1>\\1</h1>";
 		
 		
