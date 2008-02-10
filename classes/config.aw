@@ -38,80 +38,6 @@ class config extends aw_template
 		return $this->db_fetch_field($q,"content");
 	}
 
-	/**  
-		
-		@attrib name=errors params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function errors($arr)
-	{
-		$this->read_template("errors.tpl");
-
-		$es = $this->get_simple_config("errors");
-		$ea = aw_unserialize($es);
-
-		$ol = new object_list(array(
-			"class_id" => CL_GROUP,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		foreach($ol->arr() as $o)
-		{
-			$this->vars(array(
-				"grp_id" => $o->prop("gid"),
-				"grp_name" => $o->prop("name"),
-				"url" => $ea[$o->prop("gid")]["url"],
-				"priority" => $ea[$o->prop("gid")]["pri"]
-			));
-			$li .= $this->parse("LINE");
-		}
-		$this->vars(array(
-			"LINE" => $li,
-			"reforb" => $this->mk_reforb("submit_errors", array())
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit_errors params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_errors($arr)
-	{
-		extract($arr);
-
-		$es = $this->get_simple_config("errors");
-		$ea = aw_unserialize($es);
-
-		if (is_array($grps))
-		{
-			foreach($grps as $grp => $gar)
-			{
-				$ea[$grp]["url"] = $gar["url"];
-				$ea[$grp]["pri"] = $gar["pri"];
-			}
-		}
-
-		$ss = aw_serialize($ea, SERIALIZE_XML);
-		$this->quote(&$ss);
-		$this->set_simple_config("errors", $ss);
-
-		return $this->mk_my_orb("errors", array());
-	}
-
 	function get_grp_redir()
 	{
 		$es = $this->get_simple_config("login_grp_redirect_".aw_ini_get("site_id")."_".aw_global_get("LC"));
@@ -234,16 +160,10 @@ class config extends aw_template
 		$al = $this->get_simple_config("after_login");
 		$doc = $this->get_simple_config("orb_err_mustlogin");
 		$err = $this->get_simple_config("error_redirect");
-		$if = $this->get_simple_config("user_info_form");
-		$op = $this->get_simple_config("user_info_op");
 		$al = $this->get_simple_config("useradd::autologin");
 		$ipp = $this->get_cval("ipaddresses::default_folder");
 
-		$fb = get_instance("formgen/form_base");
-		$ops = $fb->get_op_list($if);
-
 		$us = get_instance("users");
-
 		$la = get_instance("languages");
 		$li = $la->get_list(array("all_data" => true));
 		$r_al = "";
@@ -303,8 +223,6 @@ class config extends aw_template
 		$this->vars(array(
 			"AFTER_LOGIN" => $r_al,
 			"favicon" => $fvi,
-			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
-			"ops" => $this->picker($op,$ops[$if]),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"MUSTLOGIN" => $r_ml,
 			"ERROR_REDIRECT" => $r_el,
@@ -336,8 +254,6 @@ class config extends aw_template
 			$var = "after_login_".$ld["acceptlang"];
 			$this->set_simple_config($var, $$var);
 		}
-		$this->set_simple_config("user_info_form",$user_info_form);
-		$this->set_simple_config("user_info_op",$user_info_op);
 
 		foreach($li as $lid => $ld)
 		{

@@ -22,6 +22,21 @@ class aw_template extends core
 	private $v2_parent_map;
 	private $c_templates;
 
+	/** The derived class should always call this with the template folder as an argument
+		@attrib api=1 params=name
+		@param tpldir required type=string
+			The template folder, relative to basedir/templates
+
+		@example
+			class a extends aw_template
+			{
+				function a()
+				{
+					$this->init(array("tpldir" => "applications/a"));
+				}
+			}	
+
+	**/
 	function init($args = array())
 	{
 		parent::init($args);
@@ -176,15 +191,15 @@ class aw_template extends core
 		return $this->tpl_reset();
 	}
 
-	////
-	// !resets all templates and variables
+	/** Resets all template content, but not the variable values
+		@attrib api=1 
+	**/
 	function tpl_reset()
 	{
 		unset($this->templates);
 		$this->v2_templates = array();
 		$this->v2_name_map = array();
 		$this->v2_parent_map = array();
-		//$this->_init_vars();
 	}
 
 	////
@@ -734,7 +749,7 @@ class aw_template extends core
 		return true;
 	}
 
-	/** imports variables into the current template, overwriting the previous variables of the same name
+	/** imports variables into the current template, overwriting the previous variables of the same name. escapes php code 
 		@attrib api=1
 
 		@param params required type=array
@@ -766,6 +781,30 @@ class aw_template extends core
 		}
 	}
 
+	/** imports variables into the current template, overwriting the previous variables of the same name. DOES NOT escapes php code 
+		@attrib api=1
+
+		@param params required type=array
+			array of name => value pairs that are used as variable name => variable value
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			-- template foo.tpl
+			{VAR:allah}
+		
+			-- code
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			$tpl->vars(array(
+				"allah" => "akhbar"
+			));
+			echo $tpl->parse(); // prints akhbar
+	**/
 	function vars_safe($params)
 	{
 		$this->vars = array_merge($this->vars,$params);
