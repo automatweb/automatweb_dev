@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.199 2008/02/11 11:07:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.200 2008/02/11 11:08:21 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2960,7 +2960,6 @@ class task extends class_base
 				$new_row->set_class_id(CL_TASK_ROW);
 				$new_row->set_name($ro->name());
 				$new_row->set_parent($ro->parent());
-				$new_row->save();
 				foreach($ro->properties() as $prop => $val)
 				{
 					if($new_row->is_property($prop) && !in_array($prop,$nc_props))
