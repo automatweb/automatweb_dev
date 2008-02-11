@@ -1,6 +1,6 @@
 <?php
 
-class crm_company_obj extends _int_object
+class shop_order_obj extends _int_object
 {
 	function set_prop($name,$value)
 	{
