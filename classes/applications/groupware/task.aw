@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.198 2008/01/31 11:36:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.199 2008/02/11 11:07:53 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2970,7 +2970,7 @@ class task extends class_base
 				}
 				//metas ei näi miskit kasulikku olevat... loodetavasti ka ei tule
 //				$new_row->set_meta($ro->meta());
-//				$new_row->save();
+				$new_row->save();
 				$task->connect(array("to"=> $new_row->id(), "type" => "RELTYPE_ROW"));
 			}
 		}
