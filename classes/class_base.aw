@@ -4240,7 +4240,10 @@ class class_base extends aw_template
 	{
 		if (!$this->can("edit", $args["id"]))
 		{
-			$this->acl_error("edit", $args["id"]);
+			error::raise(array(
+				"id" => ERR_ACL,
+				"msg" => sprintf(t("ACL error saidil %s: CAN_%s denied for oid %s"), aw_ini_get("baseurl"),"edit", $args["id"])
+			));
 		}
 		$ob = new object($args["id"]);
 		$self_url = aw_global_get("REQUEST_URI");

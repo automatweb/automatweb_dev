@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.38 2008/01/31 13:49:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.39 2008/02/11 09:42:50 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -245,8 +245,8 @@ class period extends class_base
 	{
 		$q = "UPDATE menu SET active_period = '$id' WHERE id = '$oid'";
 		$this->db_query($q);
-		$this->flush_cache();
 		$this->cache->file_invalidate($this->cf_ap_name);
+		$this->cache->file_clear_pt("html");
 	}
 	
 	// see funktsioon tagastab kõigi eksisteerivate perioodide nimekirja

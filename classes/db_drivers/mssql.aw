@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.8 2008/01/31 13:54:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.9 2008/02/11 09:43:07 kristo Exp $
 // mysql.aw - MySQL draiver
 /*
 @classinfo  maintainer=kristo
@@ -162,20 +162,14 @@ class mssql
 	}
 
 
-	function db_next($deq = true)
+	function db_next()
 	{
-		$deq = !$GLOBALS['cfg']['magic_quotes_runtime'];
 		# this function cannot be called before a query is made
 		// don't need numeric indices
 		$res = @mssql_fetch_array($this->qID,MSSQL_ASSOC);
 		if ($res)
 		{
 			$this->rec_count++;
-			if ($deq)
-			{
-				//$this->dequote($res);
-			}
-			//$res['rec'] = $this->rec_count;
 		};
 		return $res;
 	}

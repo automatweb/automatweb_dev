@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/pgsql.aw,v 1.10 2008/01/31 13:54:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/pgsql.aw,v 1.11 2008/02/11 09:43:07 kristo Exp $
 // pgsql.aw - PostgreSQL draiver
 /*
 @classinfo  maintainer=kristo
@@ -147,7 +147,7 @@ class pgsql
 	}
 
 
-	function db_next($deq = true)
+	function db_next()
 	{
 		# this function cannot be called before a query is made
 		// don't need numeric indices

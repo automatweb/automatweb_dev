@@ -1392,29 +1392,6 @@ class _int_object
 		return $retval;
 	}
 
-	function is_cache_dirty()
-	{
-		return $this->obj["cachedirty"];
-	}
-
-	function set_cache_dirty($param = true)
-	{
-		if (!(is_numeric($param) || is_bool($param)) && $param != "")
-		{
-			error::raise(array(
-				"id" => ERR_CACHE_FLAG,
-				"msg" => sprintf(t("object::set_cache_dirty(%s): parameter must be integer or boolean!"), $param)
-			));
-			return;
-		}
-
-		$prev = $this->obj["cachedirty"];
-
-		$this->_int_set_of_value("cachedirty", $param);
-		$this->_int_do_implicit_save();
-		return $prev;
-	}
-
 	function last()
 	{
 		// god damn, no setter for this or we'll never get rid of it!

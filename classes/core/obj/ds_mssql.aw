@@ -311,7 +311,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				created,					modified,						status,						site_id,
 				hits,						lang_id,						comment,					modifiedby,
 				jrk,						period,							alias,						periodic,
-				cachedirty,					metadata,						subclass,					flags, 
+				metadata,						subclass,					flags, 
 				oid,						brother_of
 		) VALUES (
 				'".$objdata["parent"]."',	'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
@@ -427,7 +427,6 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 			alias = '".$objdata["alias"]."',
 			periodic = '".$objdata["periodic"]."',
 			site_id = '".$objdata["site_id"]."',
-			cachedirty = '1',
 			metadata = '".$metadata."',
 			subclass = '".$objdata["subclass"]."',
 			flags = '".$objdata["flags"]."',
@@ -1144,7 +1143,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				created,					modified,						status,						site_id,
 				hits,						lang_id,						comment,					modifiedby,
 				jrk,						period,							alias,						periodic,
-				cachedirty,					metadata,						subclass,					flags,
+				metadata,						subclass,					flags,
 				brother_of, oid
 		) VALUES (
 				'".$parent."',				'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',

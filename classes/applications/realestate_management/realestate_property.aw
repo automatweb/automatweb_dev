@@ -989,8 +989,6 @@ class realestate_property extends class_base
 				$client->save ();
 			}
 		}
-
-		$this->re_manager->set_cache_dirty (true);
 	}
 /* END classbase methods */
 
@@ -2837,12 +2835,6 @@ class realestate_property extends class_base
 					"show" => false,
 				));
 			}
-		}
-
-		if (is_oid ($this_object->prop ("realestate_manager")))
-		{
-			$manager = obj ($this_object->prop ("realestate_manager"));
-			$manager->set_cache_dirty (true);
 		}
 	}
 

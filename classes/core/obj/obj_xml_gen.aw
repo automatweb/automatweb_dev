@@ -134,7 +134,7 @@ class obj_xml_gen
 		$xml .= "\t\t<ot_flds>\n";
 		foreach($flds as $fld => $t)
 		{
-			$fld = $fld == "jrk" ? "ord" : ($fld == "periodic" ? "is_periodic" : ($fld == "cachedirty" ? "is_cache_dirty" : ($fld == "metadata" ? "meta" : $fld)));
+			$fld = $fld == "jrk" ? "ord" : ($fld == "periodic" ? "is_periodic" : ($fld == "metadata" ? "meta" : $fld));
 			$val = $o->$fld();
 			if (false && $fld == "parent")
 			{

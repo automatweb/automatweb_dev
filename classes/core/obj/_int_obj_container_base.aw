@@ -122,11 +122,6 @@ class _int_obj_container_base
 		return $this->_int_setter("merge_prop", $param);
 	}
 
-	function set_cache_dirty($param)
-	{
-		return $this->_int_setter("set_cache_dirty", $param);
-	}
-
 	function set_implicit_save($param)
 	{
 		return $this->_int_setter("set_implicit_save", $param);

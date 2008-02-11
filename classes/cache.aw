@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.55 2008/02/04 19:09:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.56 2008/02/11 09:42:49 kristo Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -24,9 +24,8 @@ class cache extends core
 			Array containing parameters identifying object ('period' for example), which is used to compose filename in cache.
 		@param content required type=string
 			Data which is cached.
-		@param clear_flag optional type=bool default=true
-			If the value is false, then cache_dirty flag is not cleared for this object. The idea is, that in that way, i can make multiple caches for one object.
-			NOTE: cache_dirty flag is a field in objects table, which value may be [1|0]. When it is 1, then http://www.site.ee/object_id comes from cache, othervise not.
+		@param xxx optional type=bool default=true
+			Unused
 		@param real_section optional type=oid default=NULL
 			[xxx] If this is set, then oid parameter will be overwritten by this parameter. Seems that oid parameters value may not always be valid object id, so it is possible to supply correct object id via real_section parameter.
 
@@ -42,7 +41,7 @@ class cache extends core
 		@examples
 			none
 	**/
-	function set($oid,$arr,$content,$clear_flag = true, $real_section = NULL)
+	function set($oid,$arr,$content,$xxx = true, $real_section = NULL)
 	{
 		if ($real_section === NULL)
 		{
@@ -62,11 +61,6 @@ class cache extends core
 			}
 
 			$this->file_set_pt_oid("html", $real_section, $fname, $content);
-
-			if ($clear_flag)
-			{
-				$this->clear_cache($real_section, $fname);
-			}
 		}
 	}
 
@@ -108,14 +102,7 @@ class cache extends core
 				$fname = "/".md5($fname);
 			}
 
-			if ($this->cache_dirty($real_oid, $fname))
-			{
-				return false;
-			}
-			else
-			{
-				return $this->file_get_pt_oid("html", $real_oid, $fname);
-			}
+			return $this->file_get_pt_oid("html", $real_oid, $fname);
 		}
 		else
 		{

@@ -1709,49 +1709,6 @@ class object
 		return $GLOBALS["objects"][$this->oid]->fetch();
 	}
 
-	/**	returns the dirtyness of the object's cache
-		@attrib api=1
-
-		@errors
-			none
-
-		@returns
-			boolean value, true if the object's cache is dirty, false if the cache is valid,
-			NULL if no current object exists
-
-		@examples
-			$o = obj(56);
-			if ($o->is_cache_dirty())
-			{
-				echo "cache is dirty!";
-			}
-	**/
-	function is_cache_dirty()
-	{
-		return $GLOBALS["objects"][$this->oid]->is_cache_dirty();
-	}
-
-	/** sets the cache expired flag for the current object, this is also set automatically if the object is changed
-		@attrib api=1
-
-		@param param optional type=bool
-			cache expired flag, if true, cache is marked as expired, if false, cache is marked as valid
-
-		@errors
-			none, if implicit save is off
-
-		@returns
-			the previous value for the cache dirty flag
-
-		@examples
-			$o =& obj(3);
-			$o->set_cache_dirty(true);
-	**/
-	function set_cache_dirty($param = true)
-	{
-		return $GLOBALS["objects"][$this->oid]->set_cache_dirty($param);
-	}
-
 	function last()
 	{
 		return $GLOBALS["objects"][$this->oid]->last();

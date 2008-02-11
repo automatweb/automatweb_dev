@@ -190,21 +190,14 @@ class mysql
 	}
 
 
-	function db_next($deq = true)
+	function db_next()
 	{
-		$deq = !$GLOBALS['cfg']['magic_quotes_runtime'];
 		# this function cannot be called before a query is made
 		// don't need numeric indices
 		$res = @mysql_fetch_array($this->qID,MYSQL_ASSOC);
 		if ($res)
 		{
 			$this->rec_count++;
-			if ($deq)
-			{
-				//const.aw sets magic quotes off always so we should be safe here.
-				//$this->dequote($res);
-			}
-			//$res['rec'] = $this->rec_count;
 		};
 		return $res;
 	}

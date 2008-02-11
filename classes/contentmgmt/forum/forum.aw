@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.19 2008/02/07 18:11:23 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.20 2008/02/11 09:42:59 kristo Exp $
 // forum.aw - forums/messageboards
 /*
 @classinfo  maintainer=dragut
@@ -1473,7 +1473,8 @@ topic");
 			$this->db_query($q);
 
 			// need to flush cache here
-			$this->flush_cache();	
+			$c = get_instance("cache");
+			$c->file_clear_pt("html");
 		}
 		else
 		{

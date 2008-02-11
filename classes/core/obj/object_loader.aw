@@ -34,7 +34,7 @@ class _int_object_loader extends core
 			"modified", "status", "lang_id",
 			"comment", "modifiedby", "jrk",
 			"period", "alias", "periodic", 
-			"site_id", "cachedirty", "metadata",
+			"site_id", "metadata",
 			"subclass", "flags", "brother_of"
 		));
 

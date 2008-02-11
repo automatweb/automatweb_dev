@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.129 2007/12/10 18:47:50 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.130 2008/02/11 09:42:52 kristo Exp $
 /*
 
 @classinfo maintainer=kristo
@@ -522,44 +522,6 @@ class admin_menus extends aw_template
 	{
 		extract($arr);
 		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel));
-
-		// check if any objects that are to be copied need special handling
-		if (is_array($sel))
-		{
-			foreach($sel as $oid => $one)
-			{
-				$ob = obj($oid);
-				if ($ob->class_id() == CL_MENU)
-				{
-					return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel));
-				}
-			}
-		}
-
-		// if not, just copy the damn things
-		$copied_objects = array();
-		if (is_array($sel))
-		{
-			foreach($sel as $oid => $one)
-			{
-				$r = $this->serialize(array("oid" => $oid));
-				if ($r != false)
-				{
-					$copied_objects[$oid] = $r;
-				}
-			}
-		}
-
-		aw_session_set("copied_objects", $copied_objects);
-
-		if (!empty($arr['return_url']))
-		{
-			return $arr['return_url'];
-		}
-		else
-		{
-			return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
-		}
 	}
 
 	/**  
@@ -656,22 +618,6 @@ class admin_menus extends aw_template
 	function submit_copy_feedback($arr)
 	{
 		extract($arr);
-		/*aw_register_default_class_member("admin_menus", "serialize_submenus", $ser_submenus);
-		aw_register_default_class_member("admin_menus", "serialize_subobjs",$ser_subobjs);
-
-		$copied_objects = array();
-		if (is_array($sel))
-		{
-			foreach($sel as $oid => $one)
-			{
-				$r = $this->serialize(array("oid" => $oid));
-				if ($r != false)
-				{
-					$copied_objects[$oid] = $r;
-				}
-			}
-		}*/
-
 		$params = array(
 			"copy_subobjects" => $ser_type == 2 ? 1 : 0,
 			"copy_subfolders" => $ser_type == 1 ? 1 : 0,
@@ -1005,7 +951,10 @@ class admin_menus extends aw_template
 		extract($arr);
 		if (!$this->prog_acl("view", PRG_MENUEDIT))
 		{
-			$this->acl_error("view", PRG_MENUEDIT);
+			error::raise(array(
+				"id" => ERR_ACL,
+				"msg" => sprintf(t("ACL error saidil %s: CAN_%s denied for oid %s"), aw_ini_get("baseurl"),"view", PRG_MENUEDIT)
+			));
 		}
 
 
@@ -1646,58 +1595,6 @@ class admin_menus extends aw_template
 
 		$obj = obj($oid);
 		return $this->mk_my_orb("change", array("id" => $oid, "parent" => $parent), $obj->class_id());
-	}
-
-	function req_serialize_obj_tree($oid)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_MENU,
-			"parent" => $oid,
-			"site_id" => array(),
-			"lang_id" => array()
-		));
-	
-		$oids = join(",", array_values($ol->ids()));
-		if ($oids != "")
-		{
-			$this->db_query("SELECT * FROM menu WHERE id IN ($oids)");
-			while ($row = $this->db_next())
-			{
-				$cur_id = $row["id"];
-
-				$hash = gen_uniq_id();
-				$this->menu_hash2id[$cur_id] = $hash;
-
-				$od = $ol->get_at($cur_id);
-				$od = $od->fetch();
-				$od["parent"] = $this->menu_hash2id[$od["parent"]];
-				$od["oid"] = $hash;
-				$row["id"] = $hash;
-
-				$dat = array(
-					"object" => $od,
-					"table" => $row
-				);
-				$this->ser_obj[$hash] = $dat;
-
-				$this->save_handle();
-				$this->req_serialize_obj_tree($cur_id);
-				$this->restore_handle();
-			}
-		}
-		if ($this->serialize_subobjs || aw_global_get("__is_rpc_call"))
-		{
-			$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_MENU." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
-			while ($row = $this->db_next())
-			{
-				$dat = $this->serialize(array("oid" => $row["oid"]));
-				if ($dat !== false)
-				{
-					$hash = gen_uniq_id();
-					$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
-				}
-			}
-		}
 	}
 
 	function _init_default_rf_table(&$t)

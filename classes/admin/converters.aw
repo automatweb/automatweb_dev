@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.77 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.78 2008/02/11 09:42:53 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -1609,34 +1609,6 @@ class converters extends aw_template
 			}
 		}
 		die("all done!");
-	}
-
-	/** cache data to sep table
-
-		@attrib name=cache_data_to_sep_tbl
-
-	**/
-	function cache_data_to_sep_tbl($arr)
-	{
-		$ex = array();
-		$this->db_query("SELECT oid FROM objects_cache_data");
-		while ($row = $this->db_next())
-		{
-			$ex[$row["oid"]] = $row["oid"];
-		}
-
-		$this->db_query("SELECT oid FROM objects");
-		while($row = $this->db_next())
-		{
-			if (!isset($ex[$row["oid"]]))
-			{
-				$this->save_handle();
-				$this->db_query("INSERT INTO objects_cache_data (oid) values($row[oid])");
-				echo "ins $row[oid] <br>";
-				$this->restore_handle();
-			}
-		}
-		die("all done");
 	}
 
 	/**

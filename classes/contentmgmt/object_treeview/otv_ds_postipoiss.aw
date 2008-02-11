@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.31 2008/01/31 13:52:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.32 2008/02/11 09:43:01 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -733,7 +733,6 @@ class otv_ds_postipoiss extends class_base
 				$this->db_query("INSERT INTO aw_otv_ds_pp_cache_file2folder(aw_file, aw_folder, aw_pp_id) values('$id','$sb','".$o->id()."')");
 			}
 		}
-		$this->flush_cache();
 		$c = get_instance("cache");
 		$c->file_clear_pt("html");
 		echo "all done! <br>\n";

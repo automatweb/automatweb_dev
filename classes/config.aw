@@ -11,31 +11,78 @@ class config extends aw_template
 		lc_load("definition");
 	}
 
+	/** sets the value for a configuration key
+		@attrib api=1 params=pos
+		
+		@param ckey required type=string
+			The config key name
+
+		@param value required type=string
+			The config key value
+
+		@comment
+			This can be used to store generic configuration settings, that apply for the entire site. Settings that don't fit in any object. The method can be used both as statically or via an instance.
+
+		@example
+			config::set_simple_config("default_field", "allah");
+			echo config::get_simple_config("default_field"); // echoes allah
+	**/
 	function set_simple_config($ckey,$value)
 	{
-		// 1st, check if the necessary key exists
-		$this->quote(&$value);
-		$ret = $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM config WHERE ckey = '$ckey'","cnt");
-		if ($ret == false)
+		if (!is_object($this))
 		{
-			// no such key, so create it
-			$this->quote($value);
-			$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
+			$i = new core();
+			$i->init();
 		}
 		else
 		{
-			$this->quote($content);
+			$i = $this;
+		}
+		// 1st, check if the necessary key exists
+		$i->quote(&$value);
+		$ret = $i->db_fetch_field("SELECT COUNT(*) AS cnt FROM config WHERE ckey = '$ckey'","cnt");
+		if ($ret == false)
+		{
+			// no such key, so create it
+			$i->quote($value);
+			$i->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
+		}
+		else
+		{
+			$i->quote($content);
 			$q = "UPDATE config
 				SET content = '$value'
 				WHERE ckey = '$ckey'";
-			$this->db_query($q);
+			$i->db_query($q);
 		}
 	}
 
+	/** gets the value for a configuration key
+		@attrib api=1 params=pos
+		
+		@param ckey required type=string
+			The config key name
+
+		@comment
+			This can be used to read generic configuration settings, that apply for the entire site. Settings that don't fit in any object. The method can be used both as statically or via an instance.
+
+		@example
+			config::set_simple_config("default_field", "allah");
+			echo config::get_simple_config("default_field"); // echoes allah
+	**/
 	function get_simple_config($ckey)
 	{
+		if (!is_object($this))
+		{
+			$i = new core();
+			$i->init();
+		}
+		else
+		{
+			$i = $this;
+		}
 		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
-		return $this->db_fetch_field($q,"content");
+		return $i->db_fetch_field($q,"content");
 	}
 
 	function get_grp_redir()

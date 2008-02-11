@@ -1,5 +1,4 @@
 <?php
-// core.aw - Core functions
 /*
 @classinfo  maintainer=kristo
 */
@@ -13,16 +12,33 @@ class core extends acl_base
 {
 	var $errmsg;
 
-	////
-	// !fetch the value for config key $ckey
+	/** every class that derives from core, should call this initialization method
+		@attrib api=1 params=name
+
+		@param clid optional type=int
+			If set, sets the class_id of the class that inherits from core
+
+		@comment
+			Initializes databas connection 
+
+	**/
+	function init($args = false)
+	{
+		parent::init($args);
+		if (is_array($args) && isset($args["clid"]))
+		{
+			$this->clid = $args["clid"];
+		}
+	}
+
+	/** deprecated - use config::get_simple_config instead **/
 	function get_cval($ckey)
 	{
 		$q = sprintf("SELECT content FROM config WHERE ckey = '%s'",$ckey);
 		return $this->db_fetch_field($q,"content");
 	}
 
-	////
-	// !set config key $ckey to value $val
+	/** deprecated - use config::set_simple_config instead **/
 	function set_cval($ckey,$val)
 	{
 		$ret = $this->db_fetch_row("SELECT content FROM config WHERE ckey = '$ckey'");
@@ -228,114 +244,15 @@ class core extends acl_base
 		return ($timestamp) ? date($dateformat,$timestamp) : date($dateformat);
 	}
 
-	///
-	// !Margib koik saidi objektid dirtyks
-	function flush_cache($oid = NULL)
-	{
-		if (aw_global_get("no_cache_flush") == 1)
-		{
-			return;
-		}
-		if (!aw_ini_get("cache.use_html_cache"))
-		{
-			return;
-		}
+	/** adds a view to an object
+		@attrib api=1 params=pos
 
-		if ($oid !== NULL)
-		{
-			$hoid = " AND oid = '$oid'";
-		}
+		@param oid required type=oid
+			The object to which to add the view
 
-		if (aw_ini_get("cache.table_is_sep"))
-		{
-			$q = "UPDATE objects_cache_data SET cachedirty = 1, cachedata = '' ".($hoid != "" ? " WHERE ".$hoid : "");
-			$this->db_query($q);
-		}
-		else
-		{
-			$q = "UPDATE objects SET cachedirty = 1, cachedata = '' where status != 0 ".$hoid;
-			$this->db_query($q);
-		}
-	}
-
-	////
-	// !returns true if object $oid 's cahe dirty flag is set
-	function cache_dirty($oid, $fname = "")
-	{
-		if (!aw_ini_get("cache.use_html_cache"))
-		{
-			return true;
-		}
-
-		if (aw_ini_get("cache.table_is_sep"))
-		{
-			$q = "SELECT cachedirty,cachedata FROM objects_cache_data WHERE oid = '$oid'";
-		}
-		else
-		{
-			$q = "SELECT cachedirty,cachedata FROM objects WHERE oid = '$oid'";
-		}
-
-		$this->db_query($q);
-		$row = $this->db_next();
-
-		if ($fname == "")
-		{
-			return ($row["cachedirty"] == 1) ? true : false;
-		}
-		else
-		{
-			$dat = aw_unserialize($row["cachedata"]);
-			return !$dat[$fname];
-		}
-	}
-
-	////
-	// !sets objects $oid's cache dirty flag to false
-	function clear_cache($oid, $fname = "")
-	{
-		if (!aw_ini_get("cache.use_html_cache"))
-		{
-			return;
-		}
-		if (!is_oid($oid))
-		{
-			return;
-		}
-
-		if (aw_ini_get("cache.table_is_sep"))
-		{
-			$ccd = $this->db_fetch_field("SELECT cachedata FROM objects_cache_data WHERE oid = '$oid'","cachedata");
-		}
-		else
-		{
-			$ccd = $this->db_fetch_field("SELECT cachedata FROM objects WHERE oid = '$oid'","cachedata");
-		}
-
-		$dat = aw_unserialize($ccd);
-		if ($fname != "")
-		{
-			$dat[$fname] = 1;
-		}
-		$ds = aw_serialize($dat);
-		$this->quote($ds);
-
-
-		if (aw_ini_get("cache.table_is_sep"))
-		{
-			$q = "UPDATE objects_cache_data SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
-		}
-		else
-		{
-			$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
-		}
-		//XXX the following query was commented out on eau, have to watch out for this one
-
-		$this->db_query($q);
-	}
-
-	////
-	// !lisab objektile yhe vaatamise
+		@comments
+			Writes the number of views to a table, one row per object. Can be used for extremely simplistic statistics.
+	**/
 	function add_hit($oid)
 	{
 		if ($oid)
@@ -651,16 +568,6 @@ class core extends acl_base
 		aw_global_set("__from_raise_error",0);
 	}
 
-	////
-	// !prints an error message about the fact that the user has no access to do this
-	function acl_error($right, $oid)
-	{
-		error::raise(array(
-			"id" => ERR_ACL,
-			"msg" => sprintf(t("ACL error saidil %s: CAN_%s denied for oid %s"), aw_ini_get("baseurl"),$right, $oid)
-		));
-	}
-
 	/** Creates orb links
 		@attrib api=1
 
@@ -800,7 +707,7 @@ class core extends acl_base
 		return $res;
 	}
 
-	function process_orb_args($prefix,$arr, $enc = true)
+	private function process_orb_args($prefix,$arr, $enc = true)
 	{
 		foreach($arr as $name => $value)
 		{
@@ -832,13 +739,7 @@ class core extends acl_base
 		};
 	}
 
-	////
-	// !old version of orb url maker, use mk_my_orb instead
-	// kui user = 1, siis suunatakse tagasi Saidi sisse. Now, I do realize that this is not
-	// the best solution, but for now, it works
-
-	// Kas seda kasutatkse veel? - duke
-	// well, kasuttakse, aga tegelt ei tohiks. ysnaga, DEPRECATEED - terryf
+	/** deprecated - no not use **/
 	function mk_orb($fun,$arr, $cl_name = "",$user = "")
 	{
 		return $this->mk_my_orb($fun,$arr,$cl_name);
@@ -1186,108 +1087,6 @@ class core extends acl_base
 			$ret.= chr(hexdec($str[$i].$str[$i+1]));
 		};
 		return $ret;
-	}
-
-	////
-	// !serializemise funktsioonid.
-	// need on siin sellex et kui objekt ei implemendi serializemist, siis errorit ei tulex.
-	function _serialize($arr = array())
-	{
-		return false;
-	}
-
-	function _unserialize($arr = array())
-	{
-		return false;
-	}
-
-	////
-	// !creates a string representation of object
-	// $arr["oid"] = object's id
-	function serialize($arr)
-	{
-		extract($arr);
-		$obj = obj($oid);
-
-		$tmp = aw_ini_get("classes");
-		$v = $tmp[$obj->class_id()];
-		if (!is_array($v))
-		{
-			return false;
-		}
-
-		$file = $v["alias_class"] != "" ? $v["alias_class"] : $v["file"];
-		if ($file == "document")
-		{
-			$file = "doc";
-		};
-
-		$clid = clid_for_name($file);
-		$t = get_instance($clid ? $clid : $file);
-		$s = $t->_serialize($arr);
-		if (!$s)
-		{
-			return false;
-		}
-
-		if (aw_global_get("__is_rpc_call"))
-		{
-			$arr["raw"] = 1;
-		};
-		$str = array("class_id" => $obj->class_id(), "str" => $s);
-		return isset($arr["raw"]) ? $s : serialize($str);
-	}
-
-	////
-	// !creates an object based on the string representation created by serialize()
-	// $arr["str"] = string
-	// $arr["parent"] = new object's parent
-	// $arr["period"] = new object's period
-	function unserialize($arr)
-	{
-		extract($arr);
-
-		if (is_array($str))
-		{
-			$arr["raw"] = $str;
-		};
-
-		$s = isset($arr["raw"]) ? $arr["raw"] : unserialize($str);
-
-		if (!is_array($s))
-		{
-			return false;
-		}
-
-
-		$tmp = aw_ini_get("classes");
-		$s_class_id = $s["class_id"];
-		$v = $tmp[$s_class_id];
-		if (!is_array($v))
-		{
-			return false;
-		}
-
-		$fl = $v["alias_class"] != "" ? $v["alias_class"] : $v["file"];
-		if ($fl == "document")
-		{
-			$fl = "doc";
-		};
-
-
-		$t = get_instance($fl);
-		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period, "raw" => $arr["raw"]));
-	}
-
-	////
-	// !this should be called from the constructor of each class
-	function init($args = false)
-	{
-		parent::init($args);
-		if (is_array($args) && isset($args["clid"]))
-		{
-			$this->clid = $args["clid"];
-		}
 	}
 
 	////

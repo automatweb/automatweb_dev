@@ -526,10 +526,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				objects.periodic as periodic,
 				objects.site_id as site_id,
 				objects.brother_of as brother_of,
-				objects.cachedirty as cachedirty,
 				objects.metadata as metadata,
 				objects.subclass as subclass,
-				objects.cachedata as cachedata,
 				objects.flags as flags";
 			if (aw_ini_get("acl.use_new_acl") == 1)
 			{
@@ -654,7 +652,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				created,					modified,						status,						site_id,
 				hits,						lang_id,						comment,					modifiedby,
 				jrk,						period,							alias,						periodic,
-				cachedirty,					metadata,						subclass,					flags
+				metadata,						subclass,					flags
 				$acld_fld
 		) VALUES (
 				'".$objdata["parent"]."',	'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
@@ -681,12 +679,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// hits
 		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
-
-		// cache data
-		if (aw_ini_get("cache.table_is_sep"))
-		{
-			$this->db_query("INSERT INTO objects_cache_data(oid) values($oid)");
-		}
 
 		// now we need to create entries in all tables that are in properties as well.
 		$tbls = array();
@@ -770,11 +762,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		// we need to clear the html cache here, not in ds_cache, because ds_cache can be not loaded
 		// even when html caching is turned on
-		// now. there are two ways of doing this:
-		// 1) clear the html cache folder
-		// 2) $this->cache->flush_cache() that clears the object table in db
-		// now, previously 1) would have been pretty slow
-		// but now it should no longer be, so we do 1)
 		$this->cache->file_clear_pt("html");
 	}
 
@@ -1982,7 +1969,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				created,					modified,						status,						site_id,
 				hits,						lang_id,						comment,					modifiedby,
 				jrk,						period,							alias,						periodic,
-				cachedirty,					metadata,						subclass,					flags,
+				metadata,						subclass,					flags,
 				brother_of
 		) VALUES (
 				'".$parent."',				'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',

@@ -1,18 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.29 2008/01/31 13:49:47 kristo Exp $
-// this is the class that allows us to connect to multiple datasources at once
-// it replaces the mysql class which was used up to now, but still routes all
-// db functions to it so that everything stays working and it also provides
-// means to create and manage alternate database connections
-
 /*
 @classinfo  maintainer=kristo 
-*/
 
-define("DB_TABLE_TYPE_STORED_PROC", 1);
-define("DB_TABLE_TYPE_TABLE", 2);
-
-/*
 	// this still works
 	$this->db_query($q);
 	while($row = $this->db_next())
@@ -46,13 +35,23 @@ define("DB_TABLE_TYPE_TABLE", 2);
 	// calling a method for switching connections or something, this class
 	// should and will take care of connecting to correct sources
 */
+define("DB_TABLE_TYPE_STORED_PROC", 1);
+define("DB_TABLE_TYPE_TABLE", 2);
 
 class db_connector
 {
 	var $dc; # this is where we hold connections
 
-	////
-	// !init default database connection
+	/** All derived classes should call this before using anything. Connects to the default database
+		@attrib api=1 params=name
+		
+		@param no_db optional type=bool
+			If set to true, no database connection will be created
+
+		@comment
+			Initializes the class and makes sure that a database connection exists, unless the no_db parameter is given or the aw global no_db_connection is set
+
+	**/
 	function init($args = array())
 	{
 		// dammit, I hate it when I don't know whether the args are string or array
@@ -84,51 +83,51 @@ class db_connector
 		));
 	}
 
-	////
-	// !Creates a connection with default arguments
+	/** deprecated - do not use, use init() instead **/
 	function db_init($args = array())
 	{
 		$this->init($args);
 	}
 
-	/**
-	@attrib api=1 params=name
-	@param driver required type=string
-		the type of the SQL driver to use
-	@param server required type=string
-		SQL server location
-	@param base required type=string
-		SQL base
-	@param username required type=string
-	@param password required type=string
-	@param cid optional type=oid default=$this->default_cid
-		connetion id
-	@errors
-		die(t("this driver is not supported")) - if that driver doesn't exist
-	@returns db connection object
-	@comment
-		Creates a connection to a data source
-	@examples
-		$db->db_connect(array(
-			'driver' => 'mysql',
-			'server' => aw_ini_get('install.mysql_host'),
-			'base' => 'mysql',
-			'username' => aw_ini_get('install.mysql_user'),
-			'password' => aw_ini_get('install.mysql_pass')
-		));
+	/** Connects to the database
+		@attrib api=1 params=name
+	
+		@param driver required type=string
+			the type of the SQL driver to use
+		@param server required type=string
+			SQL server location
+		@param base required type=string
+			SQL base
+		@param username required type=string
+		@param password required type=string
+		@param cid optional type=oid default=$this->default_cid
+			connetion name
+		@errors
+			die(t("this driver is not supported")) - if that driver doesn't exist
+	
+		@returns db connection object
+	
+		@comment
+			Creates a connection to a data source
+
+		@examples
+			$db->db_connect(array(
+				'driver' => 'mysql',
+				'server' => aw_ini_get('install.mysql_host'),
+				'base' => 'mysql',
+				'username' => aw_ini_get('install.mysql_user'),
+				'password' => aw_ini_get('install.mysql_pass')
+			));
 	**/
 	function db_connect($args = array())
 	{
 		extract($args);
-		// FIXME: validate arguments
-		// dc is not an object if the $driver class had a syntax error
 		$dc = get_instance("db_drivers/".$driver);
 		if (!is_object($dc))
 		{
 			die(t("this driver is not supported"));
 		};
 
-		// FIXME: check for return value
 		$dc->db_connect($server,$base,$username,$password);
 
 		aw_global_set($id,$dc);
@@ -142,18 +141,20 @@ class db_connector
 		return $dc;
 	}
 
-	// route all functions to default/primary driver
-	/**
-	@attrib api=1 params=pos
-	@param qtext required type=string
-		SQL query
-	@param errors optional type=bool default=true
-		if you dont want to see errors, then it should be false
-	@returns true - if query was successful, else returns DB error
-	@comment Makes a DB query
-	@examples
-		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
-		$this->db_query($q);
+	/** Does a db query
+		@attrib api=1 params=pos
+		
+		@param qtext required type=string
+			SQL query
+		
+		@param errors optional type=bool default=true
+			if you dont want to see errors, then it should be false
+
+		@returns true - if query was successful, else returns DB error
+
+		@examples
+			$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
+			$this->db_query($q);
 	**/
 	function db_query($qtext,$errors = true)
 	{
@@ -165,17 +166,21 @@ class db_connector
 		return $retval;
 	}
 
-	/**
-	@attrib api=1 params=pos
-	@param qtext required type=string
-		SQL query
-	@param limit required type=int default=0
-		Retrieve rows starting limit
-	@param count optional type=int default=0
-		if > 0 ,Retrieve that many rows
-	@returns true - if query was successful, else returns DB error
-	@comment Changes a query text a little
-	@examples
+	/** Does a database query, but limits the result count by the given parameter
+		@attrib api=1 params=pos
+		
+		@param qtext required type=string
+			SQL query
+	
+		@param limit required type=int default=0
+			Retrieve rows starting limit
+
+		@param count optional type=int default=0
+			if > 0 ,Retrieve that many rows
+
+		@returns true - if query was successful, else returns DB error
+	
+		@examples
 			$per_page = 100;
 			$page = 12;
 			$q = 'SELECT * FROM '.$db_table.');
@@ -190,134 +195,146 @@ class db_connector
 		};
 		return $retval;
 	}
-	/**
-	@attrib api=1 params=pos
-	@param dec optional type=bool default=true
-		it is useless.....
-	@returns next row of a query result
-	@examples
-		$q = "SELECT * FROM table";
-		$data = array();
-		$this->db_query($q);
-		while($w = $this->db_next())
-		{
-			$data[] = $w["column"];
-		}
+
+	/** returns next row of a query result
+		@attrib api=1 params=pos
+
+		@returns 
+			Associative array containing the next row of data from the active query result set
+
+		@examples
+			$q = "SELECT * FROM table";
+			$data = array();
+			$this->db_query($q);
+			while($w = $this->db_next())
+			{
+				$data[] = $w["column"];
+			}
 	**/
-	function db_next($dec = true)
+	function db_next()
 	{
-		return $this->dc[$this->default_cid]->db_next($dec);
+		return $this->dc[$this->default_cid]->db_next();
 	}
 
-	/**
-	@attrib api=1
-	@returns oid
+	/** Returns the last identifier generated by a sequence in a table
+		@attrib api=1
 
-	@examples
-	$oid = $this->db_last_insert_id();
+		@examples
+			$oid = $this->db_last_insert_id();
 	**/
 	function db_last_insert_id()
 	{
 		return $this->dc[$this->default_cid]->db_last_insert_id();
 	}
 
-	/**
-	@attrib params=pos api=1
-	@param sql optional type=string default=""
-		SQL query
-	@returns row of a query result
-	@comment
-		makes a query and returns a row
-
-	@examples
-		$row = $this->db_fetch_row("SELECT * FROM my_table WHERE status = "kopp ees");
+	/** Performs a query and returns the first row of the result set
+		@attrib params=pos api=1
+	
+		@param sql optional type=string default=""
+			SQL query
+	
+		@examples
+			$row = $this->db_fetch_row("SELECT * FROM my_table WHERE status = "kopp ees");
 	**/
 	function db_fetch_row($sql = "")
 	{
 		return $this->dc[$this->default_cid]->db_fetch_row($sql);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** Performs a SQL query and returns the value for the given column in the first row of the result
+		@attrib params=pos api=1
 
-	@param qtext optional type=string default=""
-		QSL query
-	@param field optional type=string default=""
-		field name
-	@returns field of a DB query row
+		@param qtext optional type=string default=""
+			QSL query
 
-	@comment
-		makes a query and returns a field
-	@examples
-		$id = $this->db_fetch_field("SELECT id FROM forms WHERE id = '$row[oid]'", "id");
+		@param field optional type=string default=""
+			field name
+
+		@examples
+			$id = $this->db_fetch_field("SELECT id FROM forms WHERE id = '$row[oid]'", "id");
 	**/
 	function db_fetch_field($qtext,$field)
 	{
 		return $this->dc[$this->default_cid]->db_fetch_field($qtext,$field);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** Performs a query and returns all the rows as an array of arrays
+		@attrib params=pos api=1
 
-	@param $qtext optional type=string default=""
-		SQL query... if not set, tries to fetch from previous db_query
-	@returns array
+		@param $qtext optional type=string default=""
+			SQL query... if not set, tries to fetch from previous db_query
 
-	@comment fetch all rows from db_query result
-	@examples
-		$arr = $this->db_fetch_array('select id , name , parent from users');
+		@examples
+			$arr = $this->db_fetch_array('select id , name , parent from users');
 	**/
 	function db_fetch_array($qtext="")
 	{
 		return $this->dc[$this->default_cid]->db_fetch_array($qtext);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** Quote string or stings in array with slashes
+		@attrib params=pos api=1
 
-	@param arr required type=string/array
-		string/array of strings , you want to quote
-	@returns string/array
+		@param arr required type=string/array
+			string/array of strings , you want to quote
 
-	@comment
-		Quote string or stings in array with slashes
+		@returns string/array
+
+		@comment
+			Quote string or stings in array with slashes
+
+		@examples
+			$str = "a'b";
+			$this->quote($str);
+			echo $str; // echoes a\'b if the driver is mysql
 	**/
 	function quote(&$arr)
 	{
 		return $this->dc[$this->default_cid]->quote($arr);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** Removes quote() added quotes from a string
+		@attrib params=pos api=1
 
-	@param arr required type=string/array
-		string/array of strings , you want to unquote
-	@returns string/array
+		@param arr required type=string/array
+			string/array of strings , you want to unquote
 
-	@comment
-		Un-quote quoted string
+		@returns string/array
+
+		@examples
+			$str = "a'b";
+			$this->quote($str);
+			$this->unquote($str);
+			echo $str; // echoes a'b
 	**/
 	function dequote(&$arr)
 	{
 		return $this->dc[$this->default_cid]->dequote($arr);
 	}
 
-	/**
-	@attrib api=1
+	/** Returns the number of rows in the last query result
+		@attrib api=1
 
-	@returns int , number of rows
+		@returns int , number of rows
 	**/
 	function num_rows()
 	{
 		return $this->dc[$this->default_cid]->num_rows();
 	}
 
-	/**
-	@attrib api=1
+	/** Lists tables in the database, names can be fetched with db_next_table
+		@attrib api=1
 
-	@comment
-		Retrieves a list of table names from a database.($this->tID)
-		Retrieves the number of rows from a result set ($this->tablecount)
+		@comment
+			Retrieves a list of table names from a database.($this->tID)
+			Retrieves the number of rows from a result set ($this->tablecount)
+
+		@examples
+			$this->db_list_tables();
+			while ($t = $this->db_next_table())
+			{
+				echo "table = ".dbg::dump($t);
+			}
 	**/
 	function db_list_tables()
 	{
@@ -512,8 +529,6 @@ class db_connector
 		return $this->dc[$this->default_cid]->restore_handle();
 	}
 
-	////
-	// !fetchib kirje suvalisest tabelist
 	/**
 	@attrib params=pos api=1
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.129 2008/01/31 13:54:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.130 2008/02/11 09:43:10 kristo Exp $
 // form.aw - Class for creating forms
 /*
 @classinfo  maintainer=kristo
@@ -1410,10 +1410,6 @@ class form extends form_base
 		{
 			$this->load($id);
 		};
-		if (!($this->can("view",$id)) && !aw_ini_get("menuedit.no_view_acl_checks"))
-		{
-			$this->acl_error("view",$id);
-		}
 
 		if ($form_action == "")
 		{
@@ -1469,11 +1465,7 @@ class form extends form_base
 		else
 		if (isset($entry_id) && $entry_id)
 		{
-			if (!($this->can("edit",$entry_id) || $this->can("view",$entry_id)))
-			{
-				$this->acl_error("edit",$entry_id);
-			}
-
+			error::view_check($entry_id);
 			$this->load_entry($entry_id,$silent_errors);
 		}
 		else
@@ -1961,13 +1953,7 @@ class form extends form_base
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_errors", $this->controller_errors);
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_is_error", true);
 				aw_session_del("form_redir_after_submit_".$this->id);
-
-				// also, we need to invalidate the cache for the section if no user is logged in.
-				// why? well, because oterwise it would be cached and the user would not see the error message
-				if (aw_global_get("uid") == "" && $arr["section"])
-				{
-					$this->flush_cache($arr["section"]);
-				}
+				aw_session_set("no_cache", 1);
 
 				if ((!$controllers_ok) || ($has_errors))
 				{
@@ -2242,10 +2228,7 @@ class form extends form_base
 
 		if (!$no_load_entry && $id)
 		{
-			if (!($this->can("view",$id)) && !aw_ini_get("menuedit.no_view_acl_checks"))
-			{
-				$this->acl_error("view",$id);
-			}
+			error::view_check($id);
 			$this->load($id);
 		}
 
@@ -2258,10 +2241,7 @@ class form extends form_base
 
 		if (!$no_load_op)
 		{
-			if (!($this->can("view",$op_id)) && !aw_ini_get("menuedit.no_view_acl_checks"))
-			{
-				$this->acl_error("view",$op_id);
-			}
+			error::view_check($op_id);
 			if ($GLOBALS["fg_op_dbg"] == 1)
 			{
 				echo "op_id = $op_id <br />";
@@ -2284,19 +2264,13 @@ class form extends form_base
 				$this->raise_error(ERR_F_OP_NO_SESSION_FORM,sprintf(t("Sessioonist lugemise formi pole valitud v&auml;ljundile %s "), $op_id),true);
 			}
 
-			if (!$this->can("view",$id) && !aw_ini_get("menuedit.no_view_acl_checks"))
-			{
-				$this->acl_error("view",$id);
-			}
+			error::view_check($id);
 			$this->load($id);
 		}
 
 		if (!$no_load_entry)
 		{
-			if (!$this->can("view",$entry_id) && !aw_ini_get("menuedit.no_view_acl_checks")) 
-			{
-				$this->acl_error("view",$entry_id);
-			}
+			error::view_check($entry_id);
 			$this->load_entry($entry_id);
 			//$this->_do_value_controllers();
 		}
