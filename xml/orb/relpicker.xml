@@ -13,6 +13,7 @@
 					<optional name="automatic" type="int" />
 					<optional name="no_edit" type="int" />
 					<optional name="options" type="array" />
+					<optional name="buttonspos" type="string" />
 				</arguments>
 			</function>
 		</action>

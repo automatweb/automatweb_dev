@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.33 2008/02/06 10:17:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.34 2008/02/11 09:48:39 kristo Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -567,7 +567,7 @@ class persons_webview extends class_base
 	}
 	
 	/** parse alias 
-		@attrib name=parse_alias is_public="1"
+		@attrib name=parse_alias is_public="1" nologin="1"
 	**/
 	function parse_alias($arr)
 	{

@@ -325,18 +325,19 @@
                   <type>hbox</type>
                   <width>40%:60%</width>
                   <group>general</group>
+                  <area_caption></area_caption>
             </general_l>
             <general_left>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>N&amp;otilde;utavad</area_caption>
+                  <area_caption>N&amp;amp;otilde;utavad</area_caption>
                   <parent>general_l</parent>
                   <group>general</group>
             </general_left>
             <general_right>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>&amp;nbsp;</area_caption>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
                   <parent>general_l</parent>
                   <group>general</group>
             </general_right>

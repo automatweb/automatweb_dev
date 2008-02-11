@@ -30,14 +30,6 @@ function setLink(li,title)
 </tr>
 <!-- END SUB: ERROR_REDIRECT -->
 <tr bgcolor="#C9EFEF">
-<td class="plain">Vali kasutaja info form:</td>
-<td class="plain"><select name='user_info_form'>{VAR:forms}</select></td>
-</tr>
-<tr bgcolor="#C9EFEF">
-<td class="plain">Vali kasutaja info v&auml;ljund:</td>
-<td class="plain"><select name='user_info_op'>{VAR:ops}</select></td>
-</tr>
-<tr bgcolor="#C9EFEF">
 <td class="plain">Uploadi "favorites icon":</td>
 <td class="plain">{VAR:favicon} <input type="file" name="favicon"></td>
 </tr>

@@ -5,6 +5,7 @@
 			<function name="sync_google">
 				<arguments>
 					<required name="id" type="int" acl="view" />
+					<required name="cal_parent" type="int" />
 				</arguments>
 			</function>
 		</action>

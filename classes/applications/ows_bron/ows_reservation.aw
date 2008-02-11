@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.11 2008/01/28 11:10:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.12 2008/02/11 09:48:37 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -319,7 +319,7 @@ if (!is_oid($arr["id"]))
 			$o->save();
 			aw_restore_acl();
 			$i = get_instance(CL_OWS_BRON);
-			$i->send_mail_from_bron($o);
+			$i->send_mail_from_bron($o,true);
 	}
 }
 ?>

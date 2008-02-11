@@ -3,7 +3,7 @@
 // so that initialization would be quick and that no template and database functionality will be present
 /*
 @classinfo  maintainer=kristo
-*/
+ */
 class aw_template
 {
 	function init()
@@ -23,7 +23,7 @@ class aw_template
 	}
 };
 
-class core 
+class core
 {
 	function db_init() 
 	{

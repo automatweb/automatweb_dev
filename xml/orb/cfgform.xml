@@ -48,5 +48,23 @@
 			</function>
 		</action>
 
+		<action name="disable_property">
+			<function name="disable_property">
+				<arguments>
+					<required name="id" type="int" />
+					<required name="property" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_property">
+			<function name="remove_property">
+				<arguments>
+					<required name="id" type="int" />
+					<required name="property" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

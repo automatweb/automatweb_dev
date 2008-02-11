@@ -1644,6 +1644,7 @@
             <syslog_type>ST_CRM_PERSON</syslog_type>
             <no_status>1</no_status>
             <confirm_save_data>1</confirm_save_data>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <general2>
