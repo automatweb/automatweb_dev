@@ -3247,6 +3247,35 @@
             <field>my_stats</field>
       </property>
       <property>
+            <name>undone_orders</name>
+            <table>objects</table>
+            <group>customer_situtation</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>undone_orders</field>
+            <caption>Pooleliolevad tellimused	</caption>
+      </property>
+      <property>
+            <name>unpaid_bills</name>
+            <table>objects</table>
+            <group>customer_situtation</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>unpaid_bills</field>
+            <caption>Laekumata arved</caption>
+      </property>
+      <property>
+            <name>this_year_cash_flow</name>
+            <table>objects</table>
+            <group>customer_situtation</group>
+            <type>text</type>
+            <store>no</store>
+            <field>this_year_cash_flow</field>
+            <caption>Aasta k&amp;amp;auml;ive</caption>
+      </property>
+      <property>
             <name>qv_cust_inf</name>
             <table>objects</table>
             <group>quick_view</group>
@@ -3792,6 +3821,12 @@
                   <submit>no</submit>
                   <save>no</save>
             </stats_my>
+            <customer_situtation>
+                  <parent>stats</parent>
+                  <caption>Kliendi hetkeseis</caption>
+                  <submit>no</submit>
+                  <save>no</save>
+            </customer_situtation>
             <quick_view>
                   <caption>Vaata</caption>
                   <submit>no</submit>

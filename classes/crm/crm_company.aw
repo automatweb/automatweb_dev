@@ -1038,6 +1038,16 @@ default group=org_objects
 
 	@property my_stats type=text store=no no_caption=1
 
+@default group=customer_situtation
+	@property undone_orders type=table store=no no_caption=1
+	@caption Pooleliolevad tellimused	
+
+	@property unpaid_bills type=table store=no no_caption=1
+	@caption Laekumata arved
+
+	@property this_year_cash_flow type=text store=no
+	@caption Aasta k&auml;ive
+
 @default group=quick_view
 
 	@property qv_cust_inf type=text store=no no_caption=1
@@ -1206,6 +1216,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo stats_s parent=stats caption="Otsi" save=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
 	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no
+	@groupinfo customer_situtation parent=stats caption="Kliendi hetkeseis" submit=no save=no
 
 groupinfo qv caption="Vaata"  submit=no save=no
 
@@ -2702,6 +2713,9 @@ class crm_company extends class_base
 				aw_global_set("changeform_target",  "_blank");
 				break;
 
+			case "undone_orders":
+			case "unpaid_bills":
+			case "this_year_cash_flow":
 			case "stats_tb":
 			case "stats_list":
 			case "stats_s_toolbar":
