@@ -37,7 +37,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code
 	@caption Kliendikood
 
-	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
+	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL 
 	@caption Arve esitaja
 
 	@property bill_date type=date_select table=aw_crm_bill field=aw_date

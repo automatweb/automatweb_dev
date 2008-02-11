@@ -2,50 +2,50 @@
 <properties>
       <property>
             <name>billp_tb</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>toolbar</type>
             <store>no</store>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <field>billp_tb</field>
-            <caption>Arve toolbar</caption>
+            <caption>Arve toolbar</caption>
       </property>
       <property>
             <name>name</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
-            <field>name</field>
-            <caption>Nimi</caption>
+            <field>name</field>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>comment</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
-            <field>comment</field>
-            <caption>Kommentaar lisale</caption>
+            <field>comment</field>
+            <caption>Kommentaar lisale</caption>
       </property>
       <property>
             <name>time_spent_desc</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
-            <field>aw_time_spent_desc</field>
-            <caption>Kulunud aeg tekstina</caption>
+            <field>aw_time_spent_desc</field>
+            <caption>Kulunud aeg tekstina</caption>
       </property>
       <property>
             <name>bill_no</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
-            <field>aw_bill_no</field>
-            <caption>Number</caption>
+            <field>aw_bill_no</field>
+            <caption>Number</caption>
       </property>
       <property>
             <name>customer</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>popup_search</type>
             <field>aw_customer</field>
             <reltype>RELTYPE_CUST</reltype>
@@ -53,291 +53,291 @@
                   <num_0>CL_CRM_COMPANY</num_0>
                   <num_1>CL_CRM_PERSON</num_1>
             </clid>
-            <style>autocomplete</style>
-            <caption>Klient</caption>
+            <style>autocomplete</style>
+            <caption>Klient</caption>
       </property>
       <property>
             <name>customer_name</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
-            <field>aw_customer_name</field>
-            <caption>Kliendi nimi</caption>
+            <field>aw_customer_name</field>
+            <caption>Kliendi nimi</caption>
       </property>
       <property>
             <name>customer_address</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
-            <field>aw_customer_address</field>
-            <caption>Kliendi aadress</caption>
+            <field>aw_customer_address</field>
+            <caption>Kliendi aadress</caption>
       </property>
       <property>
             <name>customer_address_meta</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <field>customer_address_meta</field>
-            <caption>Kliendi aadressi muutujad metas</caption>
+            <caption>Kliendi aadressi muutujad metas</caption>
       </property>
       <property>
             <name>customer_code</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
-            <field>aw_customer_code</field>
-            <caption>Kliendikood</caption>
+            <field>aw_customer_code</field>
+            <caption>Kliendikood</caption>
       </property>
       <property>
             <name>impl</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>popup_search</type>
             <style>relpicker</style>
             <field>aw_impl</field>
-            <reltype>RELTYPE_IMPL</reltype>
-            <caption>Arve esitaja</caption>
+            <reltype>RELTYPE_IMPL</reltype>
+            <caption>Arve esitaja</caption>
       </property>
       <property>
             <name>bill_date</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>date_select</type>
-            <field>aw_date</field>
-            <caption>Kuup&amp;amp;auml;ev</caption>
+            <field>aw_date</field>
+            <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>bill_due_date_days</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
             <field>aw_due_date_days</field>
-            <size>5</size>
-            <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
+            <size>5</size>
+            <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
       </property>
       <property>
             <name>bill_due_date</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>date_select</type>
-            <field>aw_due_date</field>
-            <caption>Tasumise kuup&amp;amp;auml;ev</caption>
+            <field>aw_due_date</field>
+            <caption>Tasumise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>bill_recieved</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>date_select</type>
             <field>aw_recieved</field>
-            <default>-1</default>
-            <caption>Laekumiskuup&amp;amp;auml;ev</caption>
+            <default>-1</default>
+            <caption>Laekumiskuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>bill_trans_date</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>date_select</type>
             <field>aw_trans_date</field>
-            <default>-1</default>
-            <caption>Kandekuup&amp;amp;auml;ev</caption>
+            <default>-1</default>
+            <caption>Kandekuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>payment_mode</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>select</type>
-            <field>aw_payment_mode</field>
-            <caption>Makseviis</caption>
+            <field>aw_payment_mode</field>
+            <caption>Makseviis</caption>
       </property>
       <property>
             <name>state</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>select</type>
-            <field>aw_state</field>
-            <caption>Staatus</caption>
+            <field>aw_state</field>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>partial_recieved</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <field>meta</field>
-            <method>serialize</method>
-            <caption>Osaline laekumine</caption>
+            <method>serialize</method>
+            <caption>Osaline laekumine</caption>
       </property>
       <property>
             <name>disc</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
             <field>aw_discount</field>
             <size>5</size>
-            <caption>Allahindlus (%)</caption>
+            <caption>Allahindlus (%)</caption>
       </property>
       <property>
             <name>sum</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>text</type>
             <field>aw_sum</field>
             <size>5</size>
-            <caption>Summa</caption>
+            <caption>Summa</caption>
       </property>
       <property>
             <name>monthly_bill</name>
             <table>aw_crm_bill</table>
-            <group>general</group>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>aw_monthly_bill</field>
-            <caption>Kuuarve</caption>
+            <field>aw_monthly_bill</field>
+            <caption>Kuuarve</caption>
       </property>
       <property>
             <name>language</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <automatic>1</automatic>
             <field>meta</field>
             <method>serialize</method>
-            <reltype>RELTYPE_LANGUAGE</reltype>
-            <caption>Keel</caption>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <caption>Keel</caption>
       </property>
       <property>
             <name>rows_different_pages</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <field>meta</field>
-            <method>serialize</method>
-            <caption>Read erinevatel lehek&amp;uuml;lgedel</caption>
+            <method>serialize</method>
+            <caption>Read erinevatel lehek&amp;uuml;lgedel</caption>
       </property>
       <property>
             <name>bill_rows</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <field>bill_rows</field>
-            <caption>Arveread</caption>
+            <caption>Arveread</caption>
       </property>
       <property>
             <name>signers</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general</group>
             <type>crm_participant_search</type>
             <reltype>RELTYPE_SIGNER</reltype>
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
-            <style>relpicker</style>
-            <caption>Allkirjastajad</caption>
+            <style>relpicker</style>
+            <caption>Allkirjastajad</caption>
       </property>
       <property>
             <name>ctp_text</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general</group>
             <type>textbox</type>
             <field>meta</field>
-            <method>serialize</method>
-            <caption>Kontaktisik vabatekstina</caption>
+            <method>serialize</method>
+            <caption>Kontaktisik vabatekstina</caption>
       </property>
       <property>
             <name>udef1</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <method>serialize</method>
-            <caption>Kasutajadefineeritud muutuja 1</caption>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 1</caption>
       </property>
       <property>
             <name>udef2</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <method>serialize</method>
-            <caption>Kasutajadefineeritud muutuja 2</caption>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 2</caption>
       </property>
       <property>
             <name>udef3</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <method>serialize</method>
-            <caption>Kasutajadefineeritud muutuja 3</caption>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 3</caption>
       </property>
       <property>
             <name>udef4</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <method>serialize</method>
-            <caption>Kasutajadefineeritud muutuja 4</caption>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 4</caption>
       </property>
       <property>
             <name>udef5</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <method>serialize</method>
-            <caption>Kasutajadefineeritud muutuja 5</caption>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 5</caption>
       </property>
       <property>
             <name>preview</name>
-            <table>objects</table>
-            <group>preview</group>
+            <table>objects</table>
+            <group>preview</group>
             <type>text</type>
             <store>no</store>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <field>preview</field>
       </property>
       <property>
             <name>preview_add</name>
-            <table>objects</table>
-            <group>preview_add</group>
+            <table>objects</table>
+            <group>preview_add</group>
             <type>text</type>
             <store>no</store>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <field>preview_add</field>
       </property>
       <property>
             <name>preview_w_rows</name>
-            <table>objects</table>
-            <group>preview_w_rows</group>
+            <table>objects</table>
+            <group>preview_w_rows</group>
             <type>text</type>
             <store>no</store>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <field>preview_w_rows</field>
       </property>
       <property>
             <name>bill_tb</name>
-            <table>objects</table>
-            <group>tasks</group>
+            <table>objects</table>
+            <group>tasks</group>
             <type>toolbar</type>
             <store>no</store>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <field>bill_tb</field>
       </property>
       <property>
             <name>bill_task_list</name>
-            <table>objects</table>
-            <group>tasks</group>
+            <table>objects</table>
+            <group>tasks</group>
             <type>table</type>
             <store>no</store>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <field>bill_task_list</field>
       </property>
       <classinfo>
@@ -346,79 +346,76 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
             <confirm_save_data>1</confirm_save_data>
-            <maintainer>markop</maintainer>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <tasks>
                   <caption>Toimetused</caption>
-                  <submit>no</submit>
+                  <submit>no</submit>
             </tasks>
             <preview>
                   <caption>Eelvaade</caption>
-                  <></>
             </preview>
             <preview_add>
                   <caption>Arve Lisa</caption>
-                  <></>
             </preview_add>
             <preview_w_rows>
                   <caption>Eelvaade ridadega</caption>
-                  <></>
             </preview_w_rows>
       </groupinfo>
       <tableinfo>
             <aw_crm_bill>
                   <index>aw_oid</index>
                   <master_index>brother_of</master_index>
-                  <master_table>objects</master_table>
+                  <master_table>objects</master_table>
             </aw_crm_bill>
       </tableinfo>
       <reltypes>
             <TASK>
                   <value>1</value>
-                  <clid>CL_TASK</clid>
-                  <caption>&amp;amp;Uuml;lesanne</caption>
+                  <clid>CL_TASK</clid>
+                  <caption>&amp;amp;Uuml;lesanne</caption>
             </TASK>
             <CUST>
                   <value>2</value>
                   <clid>
                         <num_0>CL_CRM_COMPANY</num_0>
-                        <num_1>CL_CRM_PERSON</num_1>
+                        <num_1>CL_CRM_PERSON</num_1>
                   </clid>
-                  <caption>Klient</caption>
+                  <caption>Klient</caption>
             </CUST>
             <IMPL>
                   <value>3</value>
                   <clid>
                         <num_0>CL_CRM_COMPANY</num_0>
-                        <num_1>CL_CRM_PERSON</num_1>
+                        <num_1>CL_CRM_PERSON</num_1>
                   </clid>
-                  <caption>Teostaja</caption>
+                  <caption>Teostaja</caption>
             </IMPL>
             <LANGUAGE>
                   <value>4</value>
-                  <clid>CL_LANGUAGE</clid>
-                  <caption>Keel</caption>
+                  <clid>CL_LANGUAGE</clid>
+                  <caption>Keel</caption>
             </LANGUAGE>
             <ROW>
                   <value>5</value>
-                  <clid>CL_BILL_ROW</clid>
-                  <caption>Rida</caption>
+                  <clid>CL_BILL_ROW</clid>
+                  <caption>Rida</caption>
             </ROW>
             <PROD>
                   <value>6</value>
-                  <clid>CL_SHOP_PRODUCT</clid>
-                  <caption>Toode</caption>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Toode</caption>
             </PROD>
             <SIGNER>
                   <value>7</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>Allkirjastaja</caption>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Allkirjastaja</caption>
             </SIGNER>
             <PAYMENT>
                   <value>8</value>
-                  <clid>CL_CRM_BILL_PAYMENT</clid>
-                  <caption>Laekumine</caption>
+                  <clid>CL_CRM_BILL_PAYMENT</clid>
+                  <caption>Laekumine</caption>
             </PAYMENT>
       </reltypes>
 </properties>
