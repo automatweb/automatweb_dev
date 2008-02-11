@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.25 2008/02/01 10:07:35 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.26 2008/02/11 13:31:00 robert Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -45,6 +45,13 @@
 	@property folders type=table store=no 
 	@caption Kaustade seaded
 
+@default group=fields
+	
+	@property separator type=textbox field=meta method=serialize default="<br>"
+	@caption V&auml;ljade eraldaja
+
+	@property fields_table type=table store=no no_caption=1
+
 @default group=kw
 
 	@property kw type=table store=no
@@ -52,6 +59,7 @@
 
 @groupinfo folders caption="Kaustad"
 @groupinfo kw caption="M&auml;rks&otilde;nad"
+@groupinfo fields caption="V&auml;ljad"
 
 @reltype FEED_SOURCE value=1 clid=CL_MENU
 @caption Materjalide kaust
@@ -100,6 +108,13 @@ class newsfeed extends class_base
 				$this->_kw($arr);
 				break;
 
+			case "separator":
+				if(!$prop["value"])
+				{
+					$prop["value"] = "<br>";
+				}
+				break;
+
 			case "feedtype":
 				$prop["options"] = array(
 					"rss20" => t("RSS 2.0"),
@@ -118,9 +133,56 @@ class newsfeed extends class_base
 				$this->do_folders_table($arr);
 				break;
 
+			case "fields_table":
+				$this->do_fields_table($arr);
+				break;
 
 		};
 		return $retval;
+	}
+
+	function do_fields_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "sel",
+			"caption" => t("Vali"),
+		));
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("J&auml;rjekord"),
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("V&auml;li"),
+		));
+		$cfi = get_instance(CL_CFGFORM);
+		$props = $cfi->get_property_list(CL_DOCUMENT);
+		$fields = $arr["obj_inst"]->meta("fields");
+		if(!count($fields))
+		{
+			$fields = array(
+				"lead" => 0,
+				"content" => 0,
+			);
+		}
+		foreach($props as $prop=>$name)
+		{
+			$t->define_data(array(
+				"sel" => html::checkbox(array(
+					"name" => "fields[".$prop."]",
+					"value" => 1,
+					"checked" => isset($fields[$prop])?1:0,
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "jrks[".$prop."]",
+					"value" => $fields[$prop],
+					"size" => 2,
+				)),
+				"name" => $name,
+			));
+		}
+		
 	}
 
 	function do_folders_table($arr)
@@ -184,6 +246,24 @@ class newsfeed extends class_base
 		return $retval;
 	}	
 
+	function callback_post_save($arr)
+	{
+		$re = $arr["request"];
+		if($re["group"] == "fields")
+		{
+			$data = array();
+			foreach($re["jrks"] as $prop=>$jrk)
+			{
+				if($re["fields"][$prop])
+				{
+					$data[$prop] = $jrk;
+				}
+			}
+			$arr["obj_inst"]->set_meta("fields", $data);
+			$arr["obj_inst"]->save();
+		}
+	}
+
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
@@ -214,7 +294,6 @@ class newsfeed extends class_base
 					"parent" => $src_folder,
 					"class_id" => CL_MENU,
 					"site_id" => array(),
-					"lang_id" => array(),
 				));
 				$items = $tree->to_list();
 				$parents = array_merge($parents, $items->ids());
@@ -343,8 +422,12 @@ class newsfeed extends class_base
 					$first = $mod_date;
 				};
 				$oid = $o->id();
-				$art_lead = $o->prop("lead");
-				$description = $o->prop("content");
+				$fields = $feedobj->meta("fields");
+				asort($fields);
+				foreach($fields as $prop=>$f)
+				{
+					$props[$prop] = $o->prop($prop);
+				}
 				$title = $o->name();
 				if($feedobj->prop("folder_name"))
 				{
@@ -357,22 +440,29 @@ class newsfeed extends class_base
 					if ($si)
 					{
 						$si->parse_document_new($o);
-						$art_lead = $o->prop("lead");
-						$description = $o->prop("content");
+						foreach($fields as $prop=>$f)
+						{
+							$props[$prop] = $o->prop($prop);
+							$al->parse_oo_aliases($oid,$props[$prop]);
+						}
 					}
-
-					$al->parse_oo_aliases($oid,$art_lead);
-					$al->parse_oo_aliases($oid,$description);
 				}
 				else
 				{
-					$art_lead = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$art_lead);
-					$description = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$description);
-
-					$art_lead = preg_replace("/#d#(.*)#\/d#/imsU","\\1",$art_lead);
-					$description = preg_replace("/#d#(.*)#\/d#/imsU","\\1",$description);
+					foreach($props as $prop=>$val)
+					{
+					
+						$props[$prop] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$val); 
+						$props[$prop] = preg_replace("/#d#(.*)#\/d#/imsU","\\1",$val);
+					}
 
 				};
+				$separator = $feedobj->prop("separator");
+				if(!$separator)
+				{
+					$separator = "<br>";
+				}
+				$description = implode($separator, $props);
 				$items[] = array(
 					"item_id" => $oid,
 					"title" => $title,
@@ -383,7 +473,7 @@ class newsfeed extends class_base
 					"author" => $o->prop("author"),
 					"source" => $source,
      					"art_lead" => $art_lead,
-					"description" => $art_lead.'<br><br>'.$description,
+					"description" => $description,
 					"guid" => $baseurl . "/" . $oid,
 					"pubDate" => date("r",$mod_date),
 				);	

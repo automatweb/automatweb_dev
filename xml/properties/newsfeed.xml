@@ -98,6 +98,28 @@
             <caption>Kaustade seaded</caption>
       </property>
       <property>
+            <name>separator</name>
+            <table>objects</table>
+            <group>fields</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <default>
+            <![CDATA["<br>"]]>
+            </default>
+            <caption>V&amp;amp;auml;ljade eraldaja</caption>
+      </property>
+      <property>
+            <name>fields_table</name>
+            <table>objects</table>
+            <group>fields</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>kw</name>
             <table>objects</table>
             <group>kw</group>
@@ -119,6 +141,9 @@
             <kw>
                   <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
             </kw>
+            <fields>
+                  <caption>V&amp;amp;auml;ljad</caption>
+            </fields>
       </groupinfo>
       <reltypes>
             <FEED_SOURCE>

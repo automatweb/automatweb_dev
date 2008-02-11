@@ -4162,6 +4162,42 @@ class cfgform extends class_base
 		return true;
 	}
 
+	/**checks if class has a cfgform, if it has, get properties from that, otherwise gets them from the class itself
+		@attrib api=1 params=clid
+		@param clid required type=int
+		@returns array of properties
+	**/
+	function get_property_list($clid)
+	{
+		$goodprops = array(0=>"");
+		$manager_form = $this->get_sysdefault(array("clid"=>$clid));
+		if($manager_form)
+		{
+			foreach($this->get_cfg_proplist($manager_form) as $pn=>$pd)
+			{
+				if($pd["caption"])
+				{
+					$goodprops[$pn] = $pd["caption"];
+				}
+			}
+		}
+		else
+		{
+			$o = obj();
+			$o->set_class_id($clid);
+			$list = $o->get_property_list();
+			foreach($list as $lid => $li)
+			{
+				if($li["caption"])
+				{
+				//if(strpos($li["type"], "text")>-1 && $li["caption"])
+					$goodprops[$lid] = $li["caption"];
+				}
+			}
+		}
+		return $goodprops;
+	}
+
 	/** 
 		@attrib name=disable_property api=1
 		@param id required type=int

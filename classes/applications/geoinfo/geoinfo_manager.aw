@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.6 2008/02/08 08:20:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.7 2008/02/11 13:30:56 robert Exp $
 // geoinfo_manager.aw - Geoinfo haldus 
 /*
 
@@ -582,10 +582,10 @@ class geoinfo_manager extends class_base
 		$cfi = get_instance(CL_CFGFORM);
 		foreach($args["clids"] as $clid)
 		{
-			$args["cl_proplist"][$clid] = $cfi->get_prop_list($clid);
+			$args["cl_proplist"][$clid] = $cfi->get_property_list($clid);
 		}
 		$args["xmlfields"] = $this->xml_get_fields($arr);
-		$list = $cfi->get_prop_list(CL_GEOINFO_DATA);
+		$list = $cfi->get_property_list(CL_GEOINFO_DATA);
 		unset($list[0]);
 		$args["obj_inst"] = $arr["obj_inst"];
 		foreach($list as $pn=>$pd)
