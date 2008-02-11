@@ -44,20 +44,20 @@ class crm_bill_payment_obj extends _int_object
 				$value = $ci->convert(array("sum" => 1, "from" => $this->prop("currency"), "date" => $this->prop("date") ? $this->prop("date") : time()));
 			}
 		}
-		if($name == "currency")
-		{
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_BILL,
-				"lang_id" => array(),
-				"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $this->id(),
-			));
-			$o = reset($ol->arr());
-			$bi = get_instance(CL_CRM_BILL);
-			if(is_object($o) && $bi->get_bill_currency_id($o) != $value)
-			{
-				return;
-			}
-		}
+	//	if($name == "currency")
+	//	{
+	//		$ol = new object_list(array(
+	//			"class_id" => CL_CRM_BILL,
+	//			"lang_id" => array(),
+	//			"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $this->id(),
+	//		));
+	//		$o = reset($ol->arr());
+	//		$bi = get_instance(CL_CRM_BILL);
+	//		if(is_object($o) && $bi->get_bill_currency_id($o) != $value)
+	//		{
+	//			return;
+	//		}
+	//	}
 		parent::set_prop($name,$value);
 	}
 
