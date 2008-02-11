@@ -659,7 +659,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
 				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
 				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
-				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."'
+										'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."'
 				$acld_val
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
@@ -1976,7 +1976,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
 				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
 				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
-				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."',
+										'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."',
 				'".$objdata["oid"]."'
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
