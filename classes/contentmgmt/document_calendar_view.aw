@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.7 2008/02/05 12:18:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.8 2008/02/11 10:11:13 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
@@ -103,32 +103,45 @@ class document_calendar_view extends class_base
 		$style_title = "minical_table";
 		$style_background = "minical_table";
 
-		// fetch all doc times
-		$ss = get_instance("contentmgmt/site_show");
-		$ss->_init_path_vars();
 
 		$o = obj($arr["id"]);
 		if ($this->can("view", $o->prop("folder")))
 		{
-			$docs = $ss->get_default_document(array(
-				"obj" => obj($o->prop("folder")), 
-				"include_submenus" => $arr["obj_inst"]->prop("do_subs")
-			));
+			$pt = $o->prop("folder");
 		}
 		else
 		{
-			$docs = $ss->get_default_document(array("obj" => obj(aw_global_get("section"))));
+			$pt = aw_global_get("section");
 		}
-		$awa = new aw_array($docs);
-		foreach($awa->get() as $docid)
+
+		// list menus
+		$menu_tree = new object_tree(array(
+			"parent" => $pt,
+			"class_id" => CL_MENU,
+			"status" => STAT_ACTIVE,
+		));
+		$pts = $menu_tree->ids();
+		$pts[] = $pt;
+
+		// this is the place for object_data_list
+		$t = new object_data_list(
+			array(
+				"class_id" => CL_DOCUMENT,
+				"parent" => $pts
+			),
+			array(
+				CL_DOCUMENT => array("oid", "doc_modified")
+			)
+		);
+
+		foreach($t->arr() as $doc)
 		{
-			$doco = obj($docid);
-			$this->overview_items[date("Ymd", $doco->prop("doc_modified"))] = $doco;
-			$this->overview_items_oids[date("Ymd", $doco->prop("doc_modified"))][] = $doco->id();
-			$this->overview_urls[date("Ymd", $doco->prop("doc_modified"))] = aw_url_change_var(array(
-				"day" => date("d", $doco->prop("doc_modified")),
-				"month" => date("m", $doco->prop("doc_modified")),
-				"year" => date("Y", $doco->prop("doc_modified")),
+			$this->overview_items[date("Ymd", $doc["doc_modified"])] = $doco;
+			$this->overview_items_oids[date("Ymd", $doc["doc_modified"])][] = $doc["oid"];
+			$this->overview_urls[date("Ymd", $doc["doc_modified"])] = aw_url_change_var(array(
+				"day" => date("d", $doc["doc_modified"]),
+				"month" => date("m", $doc["doc_modified"]),
+				"year" => date("Y", $doc["doc_modified"]),
 				"date" => $_GET["date"]
 			));
 		}
