@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.9 2008/02/11 10:12:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.10 2008/02/11 10:23:36 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
@@ -57,6 +57,7 @@ class document_calendar_view extends class_base
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
+		enter_function("document_calendar_view::show");
 		$start = mktime(0,0,0, date("m"), 1, date("Y"));
 		if ($_GET["date"] != "")
 		{
@@ -103,7 +104,7 @@ class document_calendar_view extends class_base
 		$style_title = "minical_table";
 		$style_background = "minical_table";
 
-
+		enter_function("document_calendar_view::show::fetch_documents");
 		$o = obj($arr["id"]);
 		if ($this->can("view", $o->prop("folder")))
 		{
@@ -131,13 +132,12 @@ class document_calendar_view extends class_base
 				"doc_modified" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $realstart, $realend)
 			),
 			array(
-				CL_DOCUMENT => array("oid", "doc_modified")
+				CL_DOCUMENT => array("oid" => "oid", "doc_modified" => "doc_modified")
 			)
 		);
-
 		foreach($t->arr() as $doc)
 		{
-			$this->overview_items[date("Ymd", $doc["doc_modified"])] = $doco;
+			$this->overview_items[date("Ymd", $doc["doc_modified"])] = $doc;
 			$this->overview_items_oids[date("Ymd", $doc["doc_modified"])][] = $doc["oid"];
 			$this->overview_urls[date("Ymd", $doc["doc_modified"])] = aw_url_change_var(array(
 				"day" => date("d", $doc["doc_modified"]),
@@ -146,6 +146,7 @@ class document_calendar_view extends class_base
 				"date" => $_GET["date"]
 			));
 		}
+		exit_function("document_calendar_view::show::fetch_documents");
 
 		$done_days = array();
 		$j = $realstart;
@@ -284,6 +285,7 @@ class document_calendar_view extends class_base
 				"date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
 			))
 		));
+		exit_function("document_calendar_view::show");
 		return $this->parse();
 	}
 }
