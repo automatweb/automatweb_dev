@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.18 2008/02/08 12:08:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.19 2008/02/11 17:48:04 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -9,6 +9,9 @@
 @default table=objects
 @default field=meta
 @default method=serialize
+
+@groupinfo general2 caption="&Uuml;ldine" parent=general
+@default group=general2
 
 @property persons_fld type=relpicker reltype=RELTYPE_MENU
 @caption Isikute kaust
@@ -28,6 +31,11 @@
 @property owner_org type=relpicker reltype=RELTYPE_OWNER_ORG
 @caption Omanikorganisatsioon
 
+@groupinfo search_conf caption="Otsingu seaded" parent=general
+@default group=search_conf
+
+@property search_conf_tbl type=table no_caption=1
+
 -------------------TÖÖOTSIJAD-----------------------
 @groupinfo employee caption="Tööotsijad" submit=no
 
@@ -42,16 +50,16 @@
 
 ----------------------------------------
 
-@groupinfo employee_list caption="Nimekiri" parent=employee submit=no
-@default group=employee_list
+# @groupinfo employee_list caption="Nimekiri" parent=employee submit=no
+# @default group=employee_list
 
-@property employee_list_toolbar type=toolbar no_caption=1
+# @property employee_list_toolbar type=toolbar no_caption=1
 
-@layout employee_list type=hbox width=15%:85%
+# @layout employee_list type=hbox width=15%:85%
 
-@property employee_list_tree type=treeview no_caption=1 parent=employee_list
+# @property employee_list_tree type=treeview no_caption=1 parent=employee_list
 
-@property employee_list_table type=table no_caption=1 parent=employee_list
+# @property employee_list_table type=table no_caption=1 parent=employee_list
 
 ----------------------------------------
 
@@ -68,20 +76,48 @@
 @property candidate_table type=table no_caption=1 parent=candidate
 
 ----------------------------------------
-@groupinfo offers caption="Tööpakkumised" submit=no
+@groupinfo offers caption="T&ouml;&ouml;pakkumised" submit=no
 
-@groupinfo offers_ parent=offers caption="Üldine"
+@groupinfo offers_ parent=offers caption="Üldine" submit=no
 @default group=offers_
 
 	@property offers_toolbar type=toolbar no_caption=1
 
 	@layout offers type=hbox width=15%:85%
 
-		@layout offers_tree type=vbox parent=offers closeable=1 area_caption=Kaustad
+		@layout offers_tree_n_search type=vbox parent=offers
 
-			@property offers_tree type=treeview no_caption=1 parent=offers_tree
+			@layout offers_tree type=vbox parent=offers_tree_n_search closeable=1 area_caption=Kaustad
+
+				@property offers_tree type=treeview no_caption=1 parent=offers_tree
+			
+			@layout offers_search type=vbox parent=offers_tree_n_search closeable=1 area_caption=Otsing
+
+				@layout os_top type=vbox parent=offers_search
+
+					@property os_pr type=textbox parent=os_top captionside=top store=no size=18
+					@caption Ametikoht
+
+					@property os_area type=textbox parent=os_top captionside=top store=no size=18
+					@caption Piirkond
+
+				@layout os_dl_layout type=vbox parent=offers_search
+
+					@property os_dl_from type=date_select store=no parent=os_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox
+					@caption T&auml;htaeg alates
+
+					@property os_dl_to type=date_select store=no parent=os_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox
+					@caption T&auml;htaeg kuni
+
+				@property os_status type=chooser store=no parent=offers_search captionside=top
+				@caption Staatus
+
+				@property act_s_sbt type=submit parent=offers_search no_caption=1
+				@caption Otsi
 
 	@property offers_table type=table no_caption=1 parent=offers
+
+	@property offers_search_results_table type=table no_caption=1 parent=offers
 
 @groupinfo offers_conf parent=offers caption="Seaded"
 @default group=offers_conf
@@ -136,6 +172,16 @@ class personnel_management extends class_base
 			"clid" => CL_PERSONNEL_MANAGEMENT,
 			"tpldir" => "applications/personnel_management/personnel_management",
 		));
+		
+		$this->search_vars = array(
+			"name" => "Nimi",
+			"age" => "Vanus",
+			"gender" => "Sugu",
+			"apps" => "Kandideerimised",
+			"modtime" => "Muutmise aeg",
+			"show" => "Vaata",
+			"change" => "Muuda"
+		);
 	}
 
 	function callback_on_load($arr)
@@ -182,6 +228,19 @@ class personnel_management extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "os_pr":
+			case "os_area":
+			case "os_dl_from":
+			case "os_dl_to":
+				$s = $arr['request'][$prop["name"]];
+				$this->dequote(&$s);
+				$prop['value'] = $s;
+				break;
+
+			case "search_conf_tbl":
+				$this->_get_search_conf_tbl($arr);
+				break;
+
 			case "employee_list_toolbar":
 				$this->employee_list_toolbar($arr);
 				break;
@@ -218,8 +277,58 @@ class personnel_management extends class_base
 			case "offers_tree":
 				$this->offers_tree($arr);
 				break;
+
+			case "os_status":
+				$prop["options"] = array(
+					"0" => t("K&otilde;ik"),
+					"2" => t("Aktiivsed"),
+					"1" => t("Mitteaktiivne"),
+				);
+				$prop["value"] = $arr['request'][$prop["name"]];
+				break;
 		}
 		return $retval;
+	}
+
+	function _get_search_conf_tbl($arr)
+	{
+		$conf = $arr["obj_inst"]->meta("search_conf_tbl");
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "table",
+			"caption" => t("Tabel"),
+		));
+		$vars = $this->search_vars;
+		foreach($vars as $name => $caption)
+		{
+			$t->define_field(array(
+				"name" => $name,
+				"caption" => t($caption),
+			));
+		}
+
+		// Tables the configuration applies for
+		$tables = array(
+			"candidate" => t("Kandideerijate otsingu tulemused")
+		);
+
+		foreach($tables as $id => $caption)
+		{
+			$data = array("table" => t($caption));
+			foreach($vars as $name => $_caption)
+			{
+				$data[$name] = html::hidden(array(
+						"name" => "search_conf_tbl[".$id."][".$name."][caption]",
+						"value" => $_caption,
+					)).
+				html::checkbox(array(
+					"name" => "search_conf_tbl[".$id."][".$name."][disabled]",
+					"value" => 1,
+					"checked" => $conf[$id][$name]["disabled"] == 1 ? false : true,
+				));
+			}
+			$t->define_data($data);
+		}
 	}
 
 	function employee_list_tree($arr)
@@ -235,9 +344,35 @@ class personnel_management extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->add_item(0, array(
-			"id" => 3,
-			"name" => t("Element"),
+			"id" => $this->offers_fld,
+			"name" => $arr["request"]["fld_id"] == $this->offers_fld ? "<b>".t("Aktiivsed tööpakkumised")."</b>" : t("Aktiivsed tööpakkumised"),
+			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "fld_id" => $this->offers_fld)),
 		));
+		$objs = new object_tree(array(
+			"parent" => $this->offers_fld,
+			"class_id" => array(CL_ADMIN_IF, CL_MENU, CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
+			"sort_by" => "objects.name",
+			"status" => STAT_ACTIVE,
+		));
+		$obx = $objs->to_list();
+		$img_inst = get_instance(CL_IMAGE);
+		foreach($obx->arr() as $ob)
+		{
+			$id = $ob->id();
+			$childs = new object_list(array(
+				"parent" => $id,
+				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			));
+			$cnt = $childs->count();
+			$str = $cnt > 0 ? " (".$cnt.")" : "";
+			$id_tag = ($ob->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER) ? "job_id" : "fld_id";
+			$t->add_item($ob->parent(), array(
+				"id" => $id,
+				"name" => ($arr["request"]["fld_id"] == $id || $arr["request"]["job_id"] == $id) ? "<b>".$ob->name().$str."</b>" : $ob->name().$str,
+				"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], $id_tag => $id)),
+				"iconurl" => $img_inst->get_url_by_id($id),
+			));
+		}
 	}
 
 	function offers_tree($arr)
@@ -258,9 +393,44 @@ class personnel_management extends class_base
 		$obx = $objs->to_list();
 		$t->add_item(0, array(
 			"id" => $this->offers_fld,
-			"name" => $obj->name().$str,
+			"name" => $arr["request"]["fld_id"] == $this->offers_fld ? "<b>".$obj->name().$str."</b>" : $obj->name().$str,
 			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "fld_id" => $this->offers_fld)),
 		));
+		$counties = new object_list(array(
+			"parent" => array(),
+			"class_id" => CL_CRM_COUNTY,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$county_inst = get_instance(CL_CRM_COUNTY);
+		$county_tot = 0;
+		foreach($counties->arr() as $county)
+		{
+			$cnt_county = $county_inst->get_job_offers(array(
+				"id" => $county->id(),
+				"parent" => $this->offers_fld,
+			))->count();
+			if($cnt_county == 0)
+			{
+				continue;
+			}
+			$str_county = " (".$cnt_county.")";
+			$t->add_item("location", array(
+				"id" => $county->id(),
+				"name" => $arr["request"]["fld_id"] == $county->id() ? "<b>".$county->name().$str_county."</b>" : $county->name().$str_county,
+				"url" => $this->mk_my_orb("change", array("id" => $arr["request"]["id"], "group" => $arr["request"]["group"], "fld_id" => $county->id(), "county_id" => $county->id())),
+			));
+			$county_tot++;
+		}
+		if($county_tot > 0)
+		{
+			$str_loc = " (".$county_tot.")";
+			$t->add_item(0, array(
+				"id" => "location",
+				"name" => $arr["request"]["fld_id"] == "location" ? "<b>".t("Asukoht").$str_loc."</b>" : t("Asukoht").$str_loc,
+				"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "fld_id" => "location")),
+			));
+		}
 		foreach($obx->arr() as $ob)
 		{
 			$id = $ob->id();
@@ -311,14 +481,16 @@ class personnel_management extends class_base
 			"name" => "add",
 			"tooltip" => t("Uus"),
 		));
-
+		$arr["request"]["fld_id"] = $arr["request"]["fld_id"] == "location" ? $this->offers_fld : $arr["request"]["fld_id"];
+		$arr["request"]["fld_id"] = $arr["request"]["fld_id"] == $arr["request"]["county_id"] ? $this->offers_fld : $arr["request"]["fld_id"];
 		$pt = $arr["request"]["fld_id"] ? $arr["request"]["fld_id"] : $this->offers_fld;
 		$tb->add_menu_item(array(
 			"parent" => "add",
 			"text" => t("Tööpakkumine"),
 			"link" => html::get_new_url(CL_PERSONNEL_MANAGEMENT_JOB_OFFER, $pt, array(
 				"return_url" => get_ru(),
-				"personnel_management_id" => $arr["obj_inst"]->id()
+				"personnel_management_id" => $arr["obj_inst"]->id(),
+				"county_id" => $arr["request"]["county_id"],
 			)),
 			"href_id" => "add_bug_href"
 		));
@@ -342,6 +514,12 @@ class personnel_management extends class_base
 				"action" => "paste_offers",
 			));
 		}
+		$tb->add_button(array(
+			"name" => "save",
+			"caption" => t("Salvesta"),
+			"img" => "save.gif",
+			"action" => "save_offers",
+		));
 		$tb->add_delete_button();
 
 	}
@@ -373,16 +551,91 @@ class personnel_management extends class_base
 		
 	}
 
-	function candidate_table($arr)
+	function birthday($birthday)
+	{
+		list($year, $month, $day) = explode("-", $birthday);
+		$year_diff = date("Y") - $year;
+		$month_diff = date("m") - $month;
+		$day_diff = date("d") - $day;
+		if ($month_diff < 0)
+			$year_diff--;
+		elseif ($month_diff == 0 && $day_diff < 0)
+			$year_diff--;
+
+		return $year_diff;	
+	}
+
+	function candidate_table_dir($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
+			"align" => "center",
 		));
-		$t->define_data(array(
-			"name" => "test",
+		$ol = new object_list(array(
+			"class_id" => array(CL_ADMIN_IF, CL_MENU, CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
+			"parent" => $arr["request"]["fld_id"],
 		));
+		foreach($ol->arr() as $obj)
+		{
+			$id_tag = ($obj->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER) ? "job_id" : "fld_id";
+			$t->define_data(array(
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], $id_tag => $obj->id())),
+					"caption" => $obj->name(),
+				)),
+			));
+		}
+	}
+
+	function candidate_table($arr)
+	{
+		if($this->can("view", $arr["request"]["fld_id"]))
+		{
+			return $this->candidate_table_dir($arr);
+		}
+		$t = &$arr["prop"]["vcl_inst"];
+		$vars = $this->search_vars;
+		$gender = array(1 => "mees", "naine");
+		$conf = $arr["obj_inst"]->meta("search_conf_tbl");
+		$conf = $conf["candidate"];
+		$t->define_chooser(array(
+			"field" => "id",
+			"name" => "sel",
+		));
+		foreach($conf as $name => $d)
+		{
+			if(!$d["disabled"])
+			{
+				$t->define_field(array(
+					"name" => $name,
+					"caption" => t($vars[$name]),
+					"align" => "center",
+				));
+			}
+		}
+		if($this->can("view", $arr["request"]["job_id"]))
+		{
+			$job = get_instance(CL_PERSONNEL_MANAGEMENT_JOB_OFFER);
+			$objs = $job->get_candidates(array(
+				"id" => $arr["request"]["job_id"],
+				"status" => 2,
+			));
+			foreach($objs->arr() as $obj)
+			{
+				$t->define_data(array(
+					"id" => $obj->id(),
+					"name" => $obj->name(),
+					"age" => $this->birthday($obj->prop("birthday")),
+					"gender" => t($gender[$obj->prop("gender")]),
+					"applications" => "",
+					"modtime" => date("Y-m-d H:i:s", $obj->prop("modified")),
+					"show" => "",
+					"change" => html::get_change_url($obj->id(), array("return_url" => get_ru()), t("Muuda")),
+				));
+			}
+		}
 	}
 
 	function _init_offers_table(&$t)
@@ -431,12 +684,23 @@ class personnel_management extends class_base
 		$toopakkujad_ids = array();
 		$toopakkujad = array();
 
-		$fld_id = $this->can("view", $arr["request"]["fld_id"]) ? $arr["request"]["fld_id"] : $this->offers_fld; 
+		if(!is_oid($arr["request"]["county_id"]))
+		{
+			$fld_id = $this->can("view", $arr["request"]["fld_id"]) ? $arr["request"]["fld_id"] : $this->offers_fld; 
 
-		$objs = new object_list(array(
-			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
-			"parent" => $fld_id,
-		));
+			$objs = new object_list(array(
+				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+				"parent" => $fld_id,
+			));
+		}
+		else
+		{
+			$county_inst = get_instance(CL_CRM_COUNTY);
+			$objs = $county_inst->get_job_offers(array(
+				"id" => $arr["request"]["county_id"],
+				"parent" => $this->offers_fld,
+			));
+		}
 
 		foreach ($objs->arr() as $obj)
 		{
@@ -456,7 +720,14 @@ class personnel_management extends class_base
 				"location" => $obj->prop("location.name"),
 				"end" => $end,
 				"created" => $obj->created(),
-				"status" => $obj->prop_str("status") ? t("aktiivne") : t("mitteaktiivne"),
+				"status" => html::hidden(array(
+					"name" => "old[status][".$obj->id()."]",
+					"value" => $obj->status() == STAT_ACTIVE ? 2 : 1,
+				)).html::checkbox(array(
+					"name" => "new[status][".$obj->id()."]",
+					"value" => 2,
+					"checked" => $obj->status() == STAT_ACTIVE ? true : false,
+				)),
 			));
 		}
 		$t->set_default_sortby("created");
@@ -470,6 +741,20 @@ class personnel_management extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{			
+			case "search_conf_tbl":
+				foreach($prop["value"] as $id => $data)
+				{
+					foreach($data as $name => $v)
+					{
+						$meta[$id][$name]["disabled"] = 1 - $v["disabled"];
+					}
+				}
+				$arr["obj_inst"]->set_meta("search_conf_tbl", $meta);
+				break;
+
+			case "offers_table":
+				$this->save_offers($arr["request"]);
+				break;
 		}
 		
 		return $retval;
@@ -530,6 +815,23 @@ class personnel_management extends class_base
 			$ofo = obj($ofid);
 			$ofo->set_parent($arr["fld_id"]);
 			$ofo->save();
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=save_offers
+	**/
+	function save_offers($arr)
+	{
+		foreach($arr["old"]["status"] as $oid => $old_status)
+		{
+			if($arr["new"]["status"][$oid] != $old_status)
+			{
+				$o = obj($oid);
+				$o->set_prop("status", ($arr["new"]["status"][$oid] == 2 ? 2 : 1));
+				$o->save();
+			}
 		}
 		return $arr["post_ru"];
 	}

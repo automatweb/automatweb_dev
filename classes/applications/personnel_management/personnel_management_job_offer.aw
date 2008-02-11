@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.16 2008/02/08 12:09:07 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.17 2008/02/11 17:48:22 instrumental Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_CITY, on_connect_job_offer_to_city)
 
 @classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER relationmgr=yes r2=yes no_comment=1 maintainer=kristo
 
@@ -31,22 +33,22 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @caption Konkursi algusaeg
 
 @property end type=date_select
-@caption Konkursi tähtaeg
+@caption Konkursi t&auml;htaeg
 
 @property profession type=relpicker reltype=RELTYPE_PROFESSION
 @caption Ametikoht
 
-@property field type=classificator reltype=RELTYPE_FIELD store=connect
+@property field type=relpicker reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
 
 @property location type=relpicker reltype=RELTYPE_LOCATION
 @caption Asukoht
 
 @property workinfo type=textarea rows=15 cols=60
-@caption Töö sisu
+@caption T&ouml;&ouml; sisu
 
 @property requirements type=textarea rows=15 cols=60
-@caption Nõudmised kandidaadile
+@caption N&otilde;udmised kandidaadile
 
 @property suplementary type=textarea rows=15 cols=60
 @caption Kasuks tuleb
@@ -56,6 +58,18 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 
 @property info type=textarea rows=15 cols=60
 @caption Lisainfo
+
+@property motivation_letter type=checkbox ch_value=1
+@caption Vajalik motivatsioonikiri
+
+@property start_working type=chooser
+@caption T&ouml;&ouml;leasumise aeg
+
+@property job_offer_file type=text
+@caption T&ouml;&ouml;pakkumine failina
+
+@property apply type=text
+@caption Kandideerin
 
 @property offer_cfgform type=relpicker reltype=RELTYPE_CFGFORM
 @caption CV seadete vorm
@@ -119,6 +133,34 @@ class personnel_management_job_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			case "job_offer_file":
+				$prop["value"] = html::href(array(
+					"caption" => t("T&ouml;&ouml;pakkumine PDF-formaadis"),
+					"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id())),
+					"target" => "_blank",
+				));
+				break;
+
+			case "apply":
+				$prop["value"] = html::href(array(
+					"caption" => "Kandideerin",
+					"url" => $this->mk_my_orb("new", array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 1, "parent" => $arr["obj_inst"]->id(), "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_CANDIDATE),
+				));
+				break;
+
+			case "start_working":
+				$date_edit = get_instance("vcl/date_edit");
+				$date_edit->fields = array(
+					"day" => 1,
+					"month" => 1,
+					"year" => 1,
+				);
+				$prop["options"] = array(
+					"asap" => t("ASAP"),
+					"date_select" => $date_edit->gen_edit_form("start_working_date", time()),
+				);
+				break;
+
 			/*
 			case "new_cfgform_name":
 				if($this->can("view", $arr["obj_inst"]->prop("offer_cfgform")))
@@ -181,7 +223,11 @@ class personnel_management_job_offer extends class_base
 				$objs = new object_list(array(
 					"class_id" => CL_CRM_COUNTY,
 				));
-				$prop["options"] = array(0 => t("--vali--")) + $objs->names();
+				if(!is_array($prop["options"]))
+					$prop["options"] = array();
+				$prop["options"] += array(0 => t("--vali--")) + $objs->names();
+				if(is_oid($arr["request"]["county_id"]))
+					$prop["value"] = $arr["request"]["county_id"];
 				break;
 		}
 		return $retval;
@@ -654,6 +700,48 @@ class personnel_management_job_offer extends class_base
 			$conn->delete();
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
+	}
+
+	function on_connect_job_offer_to_city($arr)
+	{
+		$conn = $arr['connection'];
+		$target_obj = $conn->from();
+		if($target_obj->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER)
+		{
+			$city_obj = $conn->to();
+			foreach($city_obj->connections_from(array("type" => 3)) as $conn2)
+			{
+				$target_obj->connect(array(
+					'to' => $conn2->conn["to"],
+					'reltype' => 5,		// RELTYPE_LOCATION
+				));
+			}
+		}
+	}
+
+	/**
+
+	@attrib name=get_candidates api=1
+
+	**/
+	function get_candidates($arr)
+	{
+		$ret = new object_list();
+
+		$job = obj($arr["id"]);
+		foreach($job->connections_from(array("type" => 1)) as $conn)
+		{
+			if(!isset($arr["status"]) || $conn->conn["to.status"] == $arr["status"])
+			{
+				$to = $conn->to();
+				if($this->can("view", $to->prop("person")))
+				{
+					$ret->add($to->prop("person"));
+				}
+			}
+		}
+
+		return $ret;
 	}
 }
 ?>
