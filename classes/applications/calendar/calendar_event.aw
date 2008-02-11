@@ -899,18 +899,18 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 		$arr["post_ru"] = post_ru();
 	}
 
-        /**
-                @attrib name=remove_organizers
-        **/
-        function remove_organizers($arr)
-        {
+	/**
+		@attrib name=remove_organizers
+	**/
+	function remove_organizers($arr)
+	{
 		$o = obj($arr["id"]);
-                foreach($arr["sel"] as $id)
+		foreach($arr["sel"] as $id)
 		{
 			$o->disconnect(array("from" => $id));
 		}
-                return $arr["post_ru"];
-        }
+		return $arr["post_ru"];
+	}
 
 	public function do_db_upgrade($table, $field, $q, $err)
 	{
