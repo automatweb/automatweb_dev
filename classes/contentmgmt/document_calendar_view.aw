@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.8 2008/02/11 10:11:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.9 2008/02/11 10:12:20 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
@@ -127,7 +127,8 @@ class document_calendar_view extends class_base
 		$t = new object_data_list(
 			array(
 				"class_id" => CL_DOCUMENT,
-				"parent" => $pts
+				"parent" => $pts,
+				"doc_modified" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $realstart, $realend)
 			),
 			array(
 				CL_DOCUMENT => array("oid", "doc_modified")
