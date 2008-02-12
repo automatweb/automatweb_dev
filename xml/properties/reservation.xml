@@ -300,6 +300,15 @@
             <caption>Klient saabus</caption>
       </property>
       <property>
+            <name>inbetweener</name>
+            <table>aw_room_reservations</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>select</type>
+            <field>aw_inbetweener</field>
+            <caption>Vahendaja</caption>
+      </property>
+      <property>
             <name>people</name>
             <table>aw_room_reservations</table>
             <group>general</group>

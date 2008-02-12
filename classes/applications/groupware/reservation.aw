@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.88 2008/01/09 09:13:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.89 2008/02/12 13:58:19 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -116,6 +116,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 
 	@property client_arrived type=chooser table=aw_room_reservations field=aw_client_arrived
 	@caption Klient saabus
+
+	@property inbetweener type=select table=aw_room_reservations field=aw_inbetweener
+	@caption Vahendaja
 
 	@property people type=select table=aw_room_reservations field=aw_people
 	@caption Org. esindajad
@@ -289,6 +292,7 @@ class reservation extends class_base
 				break;	
 
 			case "people":
+			case "inbetweener":
 				if(is_oid($arr["obj_inst"]->prop("resource")))
 				{
 					$room = obj($arr["obj_inst"]->prop("resource"));
@@ -1805,6 +1809,7 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 				aw_special_discount double,
 				aw_client_arrived int,
 				aw_people int,
+				aw_inbetweener int,
 				aw_sum text,
 				aw_special_sum double,
 				aw_products_discount double,
@@ -1872,6 +1877,7 @@ flush();
 					));
 					break;
 				case "aw_paid":
+				case "aw_inbetweener":
 					$this->db_add_col($t, array(
 						"name" => $f,
 						"type" => "int"
