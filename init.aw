@@ -1015,7 +1015,7 @@ function &__get_site_instance()
 
 function enter_function($name,$args = array())
 {
-	if (!empty($GLOBALS["cfg"]["debug"]["profile"]))
+	if (empty($GLOBALS["cfg"]["debug"]["profile"]))
 	{
 		return;
 	}
@@ -1034,7 +1034,7 @@ function enter_function($name,$args = array())
 
 function exit_function($name,$ret = "")
 {
-	if (!empty($GLOBALS["cfg"]["debug"]["profile"]))
+	if (empty($GLOBALS["cfg"]["debug"]["profile"]))
 	{
 		return;
 	}
