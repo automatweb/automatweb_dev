@@ -1838,7 +1838,7 @@ class forum_v2 extends class_base
 				}
 				$this->vars(array(
 					"author_pname" => $pname,
-					"author_email" => $user_obj->prop("email"),
+					"author_emaili" => $user_obj->prop("email"),
 				));
 			}
 
@@ -1941,25 +1941,28 @@ class forum_v2 extends class_base
 	{
 		$ui = get_instance(CL_USER);
 		$pid = $ui->get_person_for_uid($uid);
-		$p = obj($pid);
-		$adrid = $p->prop("address");
-		if(is_oid($adrid) && $this->can("view", $adrid))
+		if(is_oid($pid))
 		{
-			$adro = obj($adrid);
-			if($t = $adro->prop("linn"))
+			$p = obj($pid);
+			$adrid = $p->prop("address");
+			if(is_oid($adrid) && $this->can("view", $adrid))
 			{
-				$to = obj($t);
-				$result["location"] = $to->name();
+				$adro = obj($adrid);
+				if($t = $adro->prop("linn"))
+				{
+					$to = obj($t);
+					$result["location"] = $to->name();
+				}
 			}
-		}
-		if(($bd = $p->prop("birthday")) > 10)
-		{
-			$result["age"] = floor((time() - strtotime($bd))/31556926);
-		}
-		if($pic = $p->prop("picture"))
-		{
-			$ii = get_instance(CL_IMAGE);
-			$result["avatar"] = $ii->get_url_by_id($pic);
+			if(($bd = $p->prop("birthday")) > 10)
+			{
+				$result["age"] = floor((time() - strtotime($bd))/31556926);
+			}
+			if($pic = $p->prop("picture"))
+			{
+				$ii = get_instance(CL_IMAGE);
+				$result["avatar"] = $ii->get_url_by_id($pic);
+			}
 		}
 		return $result;
 	}
@@ -3172,7 +3175,7 @@ class forum_v2 extends class_base
 				$arr["pname"] = $user_obj->name();
 				if($obj_inst->prop("post_name"))
 				{
-					$ui = get_instance("CL_USER");
+					$ui = get_instance(CL_USER);
 					$p = obj($ui->get_current_person());
 					$arr["uname"] = $p->name();
 				}
