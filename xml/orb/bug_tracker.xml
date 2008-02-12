@@ -160,5 +160,12 @@
 			</function>
 		</action>
 
+		<action name="create_feedback_bug" all_args="1">
+			<function name="create_feedback_bug">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

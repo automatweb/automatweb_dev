@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.5 2007/12/06 14:33:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.6 2008/02/12 13:18:12 robert Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -13,10 +13,10 @@
 @property rules type=text store=no
 @caption Reeglid
 
-@property person_t type=text store=no
+@property person_t type=textbox field=meta method=serialize
 @caption Isik
 
-@property co_t type=text store=no
+@property co_t type=textbox field=meta method=serialize
 @caption Organisatsioon
 
 @property fb_class type=textbox size=5 table=aw_customer_feedback field=aw_d_class
@@ -134,13 +134,21 @@ class customer_feedback_entry extends class_base
 				break;
 
 			case "person_t":
-				$p = get_current_person();
-				$prop["value"] = $p->name();
+				$prop["type"] = "text";
+				if(!$prop["value"])
+				{
+					$p = get_current_person();
+					$prop["value"] = $p->name();
+				}
 				break;
 
 			case "co_t":
-				$p = get_current_company();
-				$prop["value"] = $p->name();
+				$prop["type"] = "text";
+				if(!$prop["value"])
+				{
+					$p = get_current_company();
+					$prop["value"] = $p->name();
+				}
 				break;
 
 			case "fb_class":
@@ -225,7 +233,7 @@ class customer_feedback_entry extends class_base
 				$p = get_current_person();
 				if ($prop["value"] == "")
 				{
-					$prop["value"] = $p->prop_str("phone");
+					$prop["value"] = $p->prop_str("phone.name");
 				}
 				break;
 
@@ -233,7 +241,7 @@ class customer_feedback_entry extends class_base
 				$p = get_current_person();
 				if ($prop["value"] == "")
 				{
-					$prop["value"] = $p->prop_str("email");
+					$prop["value"] = $p->prop_str("email.mail");
 				}
 				break;
 
@@ -320,6 +328,21 @@ class customer_feedback_entry extends class_base
 			case "fb_class":
 			case "fb_object_grp":
 				return PROP_IGNORE;
+			case "person_t":
+				if(!$prop["value"])
+				{
+					$p = get_current_person();
+					$prop["value"] = $p->name();
+				}
+			case "co_t":
+				if(!$prop["value"])
+				{
+					$p = get_current_company();
+					$prop["value"] = $p->name();
+				}
+				$arr["obj_inst"]->set_prop($prop["name"], $prop["value"]);
+				$arr["obj_inst"]->save();
+				break;
 		}
 		return $retval;
 	}	
@@ -336,7 +359,7 @@ class customer_feedback_entry extends class_base
 		@attrib name=redir_new_feedback
 		@param d_class required 
 		@param d_obj optional
-		@param object_grp required
+		@param object_grp optional
 		@param url optional
 	**/
 	function redir_new_feedback($arr)
@@ -472,11 +495,15 @@ class customer_feedback_entry extends class_base
 		$ct .= "Objekti grupp: ".$gl[$o->prop("fb_object_grp")]["caption"]." \n";
 
 		$ct .= "Kommentaar:\n".$o->prop("comment_ta")."\n";
-		$ct .= "T6sidus: ".$this->severities[$o->prop("seriousness")]."\n";
-		$ct .= "Tagasiside tyyp: ".$this->fb_types[$o->prop("fb_type")]."\n";
+		$ct .= "Tõsidus: ".$this->severities[$o->prop("seriousness")]."\n";
+		$ct .= "Tagasiside tüüp: ".$this->fb_types[$o->prop("fb_type")]."\n";
 		$ct .= "Tagasiside email: ".$o->prop("fb_email")."\n";
 		$ct .= "Tagasiside telefon: ".$o->prop("fb_phone")."\n";
 		$ct .= "\n\nMuutmise aadress: ".$this->mk_my_orb("change", array("id" => $o->id(), "group" => "dev_status", "auth_code" => $o->meta("auth_code")));
+		if(aw_ini_get("customer_feedback.btsite"))
+		{
+			$ct .= "\n\n Bugi loomine: ".$this->mk_my_orb("create_bug", array("id" => $o->id()));
+		}
 
 		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->create_message(array(
@@ -602,6 +629,42 @@ class customer_feedback_entry extends class_base
 				<td class='aw04contentcellright'>$f3u</td>
 			</tr>
 		</table>";
+	}
+
+	/**
+	@attrib name=create_bug all_args=1
+	**/
+	function create_bug($arr)
+	{
+		if(is_oid($arr["id"]) && $site = aw_ini_get("customer_feedback.btsite"))
+		{
+			$o = obj($arr["id"]);
+			$o2 = $o->get_first_obj_by_reltype("RELTYPE_OBJECT");
+			$cldata = aw_ini_get("classes");
+			$params = array(
+				"site" => aw_ini_get("baseurl"),
+				"person" => $o->prop("person_t"),
+				"company" => $o->prop("co_t"),
+				"fb_class" => $cldata[$o->prop("fb_class")]["name"],
+				"name" => $o2->name(),
+				"oid" => $o2->id(),
+				"comment" => $o->prop("comment_ta"),
+				"group" => $o->prop("fb_object_grp"),
+				"fb_oid" =>  $arr["id"],
+			);
+aw_global_set("xmlrpc_dbg", 1);
+			$url = $this->do_orb_method_call(array(
+				"action" => "create_feedback_bug",
+				"class" => "bug_tracker",
+				"params" => $params,
+				"method" => "xmlrpc",
+				"server" => $site
+			));
+			if($url)
+			{
+				return $url;
+			}
+		}
 	}
 }
 ?>

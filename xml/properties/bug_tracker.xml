@@ -543,6 +543,16 @@
             <caption>Grupid, mis saavad buge sulgeda</caption>
       </property>
       <property>
+            <name>fb_folder</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FB_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tagasiside bugide kaust</caption>
+      </property>
+      <property>
             <name>def_notify_list</name>
             <table>objects</table>
             <group>settings_g</group>
@@ -1207,6 +1217,15 @@
                   </clid>
                   <caption>Tellimuste kataloog</caption>
             </DEVO_FOLDER>
+            <FB_FOLDER>
+                  <value>11</value>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_BUG</num_1>
+                        <num_2>CL_BUG_TRACKER</num_2>
+                  </clid>
+                  <caption>Tagasiside bugide kaust</caption>
+            </FB_FOLDER>
       </reltypes>
       <layout>
             <bug>

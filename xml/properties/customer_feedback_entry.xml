@@ -13,18 +13,18 @@
             <name>person_t</name>
             <table>objects</table>
             <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>person_t</field>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Isik</caption>
       </property>
       <property>
             <name>co_t</name>
             <table>objects</table>
             <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>co_t</field>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Organisatsioon</caption>
       </property>
       <property>

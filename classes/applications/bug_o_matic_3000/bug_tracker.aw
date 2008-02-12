@@ -203,6 +203,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property agroup type=relpicker reltype=RELTYPE_AGROUP field=meta method=serialize multiple=1 store=connect
 	@caption Grupid, mis saavad buge sulgeda
 
+	@property fb_folder type=relpicker reltype=RELTYPE_FB_FOLDER field=meta method=serialize
+	@caption Tagasiside bugide kaust
+
 	@property def_notify_list type=textbox table=objects field=meta method=serialize
 	@caption Bugi kommentaaride CC
 
@@ -444,6 +447,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype DEVO_FOLDER value=10 clid=CL_MENU,CL_DEVELOPMENT_ORDER_CAT
 @caption Tellimuste kataloog
+
+@reltype FB_FOLDER value=11 clid=CL_MENU,CL_BUG,CL_BUG_TRACKER
+@caption Tagasiside bugide kaust
 */
 
 classload("applications/bug_o_matic_3000/bug");
@@ -2047,16 +2053,6 @@ class bug_tracker extends class_base
 			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
-		$t->define_field(array(
-			"name" => "customer",
-			"caption" => t("Klient"),
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "project",
-			"caption" => t("Projekt"),
-			"sortable" => 1
-		));
 
 		$bugi = get_instance(CL_BUG);
 		$t->define_field(array(
@@ -2074,7 +2070,7 @@ class bug_tracker extends class_base
 			"sortable" => 1,
 		));
 
-		/*$t->define_field(array(
+		$t->define_field(array(
 			"name" => "sort_priority",
 			"caption" => t("SP"),
 			"tooltip" => t("Kombineeritud prioriteet"),
@@ -2082,7 +2078,7 @@ class bug_tracker extends class_base
 			"numeric" => 1,
 			"callback" => array(&$this,"sp_callback"),
 			"callb_pass_row" => 0
-		));*/
+		));
 
 		$t->define_field(array(
 			"name" => "bug_priority",
@@ -2402,9 +2398,7 @@ class bug_tracker extends class_base
 				"obj" => $bug,
 				"comment_count" => (int)$comments_by_bug[$bug->id()],
 				"comment" => (int)$comments_by_bug[$bug->id()],
-				"col" => $col,
-				"customer" => $bug->prop_str("customer"),
-				"project" => $bug->prop_str("project")
+				"col" => $col
 			));
 		}
 		$t->set_numeric_field("sort_priority");
@@ -4225,6 +4219,57 @@ echo "<div style='font-size: 10px;'>";
 		}
 
 		return $ret;
+	}
+
+	/**
+	@attrib name=create_feedback_bug all_args=1 no_login=1
+	**/
+	function create_feedback_bug($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_BUG_TRACKER,
+		));
+		foreach($ol->arr() as $o)
+		{
+			if(is_oid($o->prop("fb_folder")))
+			{
+				$fbf = $o->prop("fb_folder");
+			}
+		}
+		if($fbf)
+		{
+			$o = obj();
+			$o->set_class_id(CL_BUG);
+			$o->set_parent($fbf);
+			$o->set_name("Tagasiside saidilt ".$arr["site"]);
+			$ol = new object_list(array(
+				"name" => $arr["company"],
+				"class_id" => CL_CRM_COMPANY,
+			));
+			if($ol->count())
+			{
+				$co = $ol->begin();
+				$o->set_prop("customer", $co->id());
+			}
+			$content = "Sait: ".$arr["site"];
+			$content .= "\nIsik: ".$arr["person"];
+			$content .= "\nFirma: ".$arr["company"];
+			$content .= "\nKlass: ".$arr["fb_class"];
+			$content .= "\nKaart: ".$arr["group"];
+			$content .= "\nObjekt: ".$arr["name"]." (".$arr["oid"].")";
+			$content .= "\n\nKommentaar:\n".$arr["comment"];
+			$o->set_prop("bug_content", $content);
+			$arr["link"] = str_replace(aw_ini_get("baseurl"),$arr["site"]."/automatweb",$this->mk_my_orb("change", array("id" => $arr["fb_oid"]), CL_CUSTOMER_FEEDBACK_ENTRY));
+			$o->set_prop("bug_url", $arr["link"]);
+			$o->save();
+			$url = $this->mk_my_orb("change", array("id" => $o->id()), CL_BUG);
+			$url = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl")."/automatweb", $url);
+			return $url;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 ?>
