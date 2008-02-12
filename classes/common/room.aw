@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.228 2008/02/12 15:01:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.229 2008/02/12 15:18:14 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2070,7 +2070,7 @@ class room extends class_base
 									}
 									$cus = join(", ", $cus);
 									//$cus = $customer->name();
-									$phone = $customer->prop_str("phone");
+									$phone = $customer->prop("phone.name");
 									$phones = array();
 									if(!$phone)
 									{
