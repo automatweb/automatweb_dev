@@ -685,7 +685,7 @@ class events_manager extends class_base
 		$time = time();
 		$filter = array(
 			"class_id" => array(CL_CALENDAR_EVENT),
-//			"parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
+			"parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
 //			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $time)
 		);
 
