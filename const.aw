@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.112 2008/01/31 13:49:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.113 2008/02/12 12:02:02 kristo Exp $
 // here we define basic constants needed by all components
 /*
 @classinfo  maintainer=kristo
@@ -45,7 +45,7 @@ if (($QUERY_STRING == "" && $PATH_INFO == "") && $REQUEST_URI != "")
 if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
 {
 	// apache 2 fix
-	$QUERY_STRING = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $QUERY_STRING))));
+	$QUERY_STRING = str_replace("xmlrpc.aw", "", str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $QUERY_STRING)))));
 }
 
 
@@ -64,7 +64,7 @@ if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "A
 	if ($_SERVER["REQUEST_URI"] != "")
 	{
 		$pi = "?".substr($_SERVER["REQUEST_URI"], 1);
-		$pi = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $pi))));
+		$pi = str_replace("xmlrpc.aw", "", str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $pi)))));
 	}
 }
 
