@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.48 2008/01/31 13:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.49 2008/02/12 12:00:29 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -357,7 +357,7 @@ class site_cache extends aw_template
 
 	function ip_access($arr)
 	{
-		if (is_oid($arr["force_sect"]))
+		if ($this->can("view", $arr["force_sect"]))
 		{
 			$so = obj($arr["force_sect"]);
 		}
