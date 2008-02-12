@@ -39,6 +39,18 @@ class grid_editor extends class_base
 		if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
 		{
 			$this->arr["cols"] =1;
+			if (!is_array($this->arr["map"]))
+			{
+				$this->arr["map"] = array();
+			}
+			if (!is_array($this->arr["map"][0]))
+			{
+				$this->arr["map"][0] = array();
+			}
+			if (!is_array($this->arr["map"][0][0]))
+			{
+				$this->arr["map"][0][0] = array();
+			}
 			$this->arr["map"][0][0] = array("row" => 0, "col" => 0);
 			$this->arr["rows"] = 1;
 		}

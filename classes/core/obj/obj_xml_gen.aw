@@ -22,7 +22,7 @@ class obj_xml_gen
 
 		$obj_list = $this->_gather_objects($o, $options);
 
-		$xml = $options["no_header"] ? "<obj id=\"{$oid}\">\n" : "<?xml version='1.0'?>\n<obj id=\"{$oid}\">\n";
+		$xml = $options["no_header"] ? "<obj id=\"{$oid}\">\n" : "<?xml version='1.0' encoding='".aw_global_get("charset")."'?>\n<obj id=\"{$oid}\">\n";
 		$xml .= "<start_object>$oid</start_object>\n";
 		$xml .= "<objects>\n";
 		list($obj_xml, $id_map) = $this->_ser_objects($o, $obj_list);
@@ -138,14 +138,6 @@ class obj_xml_gen
 			$val = $o->$fld();
 			if (false && $fld == "parent")
 			{
-				/*if (!isset($id_map[$val]))
-				{
-					error::raise(array(
-						"id" => "ERR_OBJ_XML",
-						"msg" => sprintf(t("obj_xml_gen::_ser_one_obj(): could not find parent %s in d_map!"), $val)
-					));
-					die();
-				}*/
 				$val = $id_map[$val];
 			}
 			$xml .= "\t\t\t<$fld>".$this->_xml_ser_val($val)."</$fld>\n";
@@ -181,12 +173,12 @@ class obj_xml_gen
 		}
 		if (is_array($v))
 		{
-			$v = aw_serialize($v,SERIALIZE_PHP_FILE);
+			$v = aw_serialize($v,SERIALIZE_PHP);
 		}
 
 		if (is_string($v))
 		{
-			return "<![CDATA[".$v."]]>";
+			return "<![CDATA[\n".$v."\n]]>";
 		}
 	}
 
@@ -243,9 +235,18 @@ class obj_xml_gen
 		//xml_parse_into_struct($parser,$xml,&$keys,&$values);
 		xml_set_element_handler($parser, array(&$this, "_start_el"), array(&$this, "_end_el"));
 		xml_set_character_data_handler($parser, array(&$this, "_chard"));
-		xml_parse($parser, $xml, true);
+		$res = xml_parse($parser, $xml, true);
+		if (!$res)
+		{
+echo xml_error_string  (xml_get_error_code($parser))."<br>";
+		echo 	sprintf('XML error at line %d column %d',
+                    xml_get_current_line_number($parser),
+                    xml_get_current_column_number($parser));
+echo "<pre>".htmlentities($xml)."</pre>";
+		}
 		xml_parser_free($parser);
 		// create objects
+//echo dbg::dump($this->objects);
 		$oid = $this->_crea_obj($this->objects[$this->start_object], $parent);
 		unset($this->objects[$this->start_object]);
 		$old2new = array($this->start_object => $oid);
@@ -317,6 +318,8 @@ class obj_xml_gen
 		$o->set_subclass($data["ot_flds"]["subclass"]);
 		$o->set_flags($data["ot_flds"]["flags"]);
 
+		$pl = $o->get_property_list();
+
 		// now, props
 		foreach($data["props"] as $k => $v)
 		{
@@ -325,13 +328,14 @@ class obj_xml_gen
 				continue;
 			}
 
-			if ($o->is_property($k))
+			// we need to skip metadata props, because they are serialized and we didn't do that here
+			if ($o->is_property($k) && $pl[$k]["field"] != "metadata" && $pl[$k]["table"] != "objects")
 			{
 				$o->set_prop($k, $v);
 			}
 		}
 
-		$md = aw_unserialize($data["ot_flds"]["meta"]);
+		$md = aw_unserialize(trim($data["ot_flds"]["meta"]));
 		if (is_array($md))
 		{
 			foreach($md as $k => $v)
@@ -428,6 +432,7 @@ class obj_xml_gen
 
 	function _chard($parser, $str)
 	{
+		$str = iconv("utf-8", aw_global_get("charset"), $str);
 		if (trim($str) == "")
 		{
 			return;
