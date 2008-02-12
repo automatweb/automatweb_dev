@@ -338,6 +338,7 @@ class crm_company_docs_impl extends class_base
 
 		// get object we get stuff from
 		list($fld_id, $sel) = explode("|", $arr["parent"]);
+		$fld_id = trim($fld_id);
 		$fldo = obj($fld_id);
 		
 		$get_f = $sts && $sts->prop("show_files_and_docs_in_tree");
@@ -495,10 +496,33 @@ class crm_company_docs_impl extends class_base
 		));
 	}
 
-	function get_docs_table_header($o,$id,$sel)
+	function get_docs_table_header($o,$id,$level)
 	{
 		$path = html::href(array(
 			"url" => $this->mk_my_orb("change", array(
+				"id" => $id,
+				"return_url" => get_ru(),
+				"group" => "documents_all",
+				"docs_s_sbt" => $_GET["docs_s_sbt"],
+				"docs_s_created_after" => $_GET["docs_s_created_after"],
+				"tf" => $o->id(),
+			),
+			 CL_CRM_COMPANY),
+			"caption" => $o->name()?$o->name():"",
+		));
+
+		if($this->can("view" , $o->parent()) && $o->parent() != $id && $level < 3)
+		{
+			$path = $this->get_docs_table_header(obj($o->parent()),$id,$level+1).$path.  " / " ;
+		}
+		elseif($this->can("view" , $o->parent()) && $o->parent() != $id)
+		{
+			$path = $this->get_docs_table_header(obj($o->parent()),$id,$level+1);
+		}
+		elseif($o->parent() == $id)
+		{
+			$path = html::href(array(
+					"url" => $this->mk_my_orb("change", array(
 					"id" => $id,
 					"return_url" => get_ru(),
 					"group" => "documents_all",
@@ -507,21 +531,32 @@ class crm_company_docs_impl extends class_base
 					"tf" => $o->id(),
 				),
 				 CL_CRM_COMPANY),
-				"caption" => $o->name()?$o->name():"",
+				"caption" => $o->name()?$o->name():"...",
 			)).", ".t("folder").": ";
-		if ($sel != "")
-		{
-			if ($o->class_id() == CL_MENU)
-			{
-				$item = obj($sel);
-				$path .= $item->path_str(array("start_at" => $o->id()));
-			}
-			else
-			{
-				$path .= $sel;
-			}
 		}
 		return $path;
+	}
+
+	// function to get level of item in tree
+	// as it's needed by js toggle_children(htmlobj,level)
+	// although not really sure about it because ajax tree itself has mostly 1 as level... sometimes 2
+	function get_element_level_in_docs_table($arr,$oid)
+	{
+		$fld = $this->_init_docs_fld($arr["obj_inst"]);	
+		$i_root = $fld->id();
+		$i=0;
+		$root_not_found = true;
+		$i_parent = $oid;
+		while(true)
+		{
+			$i++;
+			if ($i_root==$i_parent)
+			{
+				return $i;
+			}
+			$o = obj($i_parent);
+			$i_parent = $o->parent();
+		}
 	}
 
 	function _get_docs_tbl($arr)
@@ -529,6 +564,9 @@ class crm_company_docs_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		list($fld_id, $sel) = explode("|", $arr["request"]["tf"]);
 
+		$fld = $this->_init_docs_fld($arr["obj_inst"]);	
+		$i_root = $fld->id();
+		
 		$fldo = obj($fld_id);
 		if(!$arr["request"]["tf"])
 		{
@@ -538,7 +576,7 @@ class crm_company_docs_impl extends class_base
 		}
 		else
 		{
-			$path = $this->get_docs_table_header($fldo,$arr['obj_inst']->id(),$sel);
+			$path = $this->get_docs_table_header($fldo,$arr['obj_inst']->id(),0);
 		}
 
 		$t->set_caption($path);
@@ -671,12 +709,15 @@ class crm_company_docs_impl extends class_base
 					"icon" => icons::get_icon_url($entry["class_id"] ? $entry["class_id"] : CL_FILE)
 				));
 			}
+			if (!isset($i_docs_table_level))
+			{
+				$i_docs_table_level = $this->get_element_level_in_docs_table($arr, $entry["id"]);
+			}
 			$t->define_data(array(
-				"icon" => $icon,
-				"name" => html::href(array(
-					"url" => $entry["url"],
-					"caption" => $entry["name"]
+				"icon" => $o->class_id() == CL_MENU ? html::href(array("caption" => "<img alt=\"\" border=0 src='".icons::get_icon_url($o->class_id())."'>" , "url" => aw_url_change_var("tf" , $o->id()), "onclick"=>"toggle_children(document.getElementById(\"".$i_root."|".$o->id()."treenode\"),".$i_docs_table_level.");")) : $pm->get_menu(array(
+					"icon" => icons::get_icon_url($o)
 				)),
+				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $entry["name"]),
 				"class_id" => $clss[$entry["class_id"]]["name"],
 				"createdby" => $entry["createdby"],
 				"created" => $entry["created"],
