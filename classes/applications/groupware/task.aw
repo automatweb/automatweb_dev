@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.200 2008/02/11 11:08:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.201 2008/02/12 16:29:29 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -4388,7 +4388,17 @@ class task extends class_base
 	function add_part_popup($arr)
 	{
 		extract($arr);
+		if(!(is_oid($task) && $this->can("view" , $task)))
+		{
+			die('<script src="http://intranet.automatweb.com/orb.aw?class=minify_js_and_css&action=get_js&name=aw_admin.js" type="text/javascript"></script>
+			<script type="text/javascript">
+				el=aw_get_el("participants_h",window.opener.document.changeform);if (!el) { el=aw_get_el("participants_h", window.opener.document.changeform);} if (!el) { el=aw_get_el("participants_h", window.opener.document.changeform);} if (el.options) {sz= el.options.length;el.options.length=sz+1;el.options[sz].value='.$part.';el.options[sz].selected = 1;} else {el.value = '.$part.';} window.opener.document.changeform.submit();window.close()
+			</script>'
+			);
+		}
+
 		$task = obj($task);
+
 		$p = obj($part);
 		$types = 10;
 		if ($task->class_id() == CL_CRM_CALL)
