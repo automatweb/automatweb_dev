@@ -2047,6 +2047,16 @@ class bug_tracker extends class_base
 			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
+		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"sortable" => 1
+		));
 
 		$bugi = get_instance(CL_BUG);
 		$t->define_field(array(
@@ -2064,7 +2074,7 @@ class bug_tracker extends class_base
 			"sortable" => 1,
 		));
 
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "sort_priority",
 			"caption" => t("SP"),
 			"tooltip" => t("Kombineeritud prioriteet"),
@@ -2072,7 +2082,7 @@ class bug_tracker extends class_base
 			"numeric" => 1,
 			"callback" => array(&$this,"sp_callback"),
 			"callb_pass_row" => 0
-		));
+		));*/
 
 		$t->define_field(array(
 			"name" => "bug_priority",
@@ -2392,7 +2402,9 @@ class bug_tracker extends class_base
 				"obj" => $bug,
 				"comment_count" => (int)$comments_by_bug[$bug->id()],
 				"comment" => (int)$comments_by_bug[$bug->id()],
-				"col" => $col
+				"col" => $col,
+				"customer" => $bug->prop_str("customer"),
+				"project" => $bug->prop_str("project")
 			));
 		}
 		$t->set_numeric_field("sort_priority");
