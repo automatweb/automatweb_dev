@@ -591,15 +591,15 @@ class doc_display extends aw_template
 		$tmp_template = end(explode("/", $this->template_filename));
 		if ( $this->is_template("youtube_link") && strpos($str, "http://www.youtube.com/")!==0)
 		{
-			$str = str_replace  ( "http://www.youtube.com/watch?v="  , "http://www.youtube.com/v/", $str );
+			$str = str_replace  ( array("http://www.youtube.com/watch?v=", "http://youtube.com/watch?v=")  , array("http://www.youtube.com/v/", "http://youtube.com/v/"), $str );
 			
 			if (strpos($str, "http://www.youtube.com/v/")!==0)
 			{
 				$this->vars(array(
-					"link" => "\${1}\${2}",
+					"link" => "\${1}\${2}\${3}\${4}",
 				));
 				$s_embed = $this->parse("youtube_link");
-				$str = preg_replace  ("/(http:\/\/www.youtube.com\/v\/[a-zA-Z0-9_]*)$|(http:\/\/www.youtube.com\/v\/.*)\n/imsU", $s_embed, $str);
+				$str = preg_replace  ("/(http:\/\/www.youtube.com\/v\/[a-zA-Z0-9_]*)$|(http:\/\/www.youtube.com\/v\/.*)\n|(http:\/\/youtube.com\/v\/[a-zA-Z0-9_]*)$|(http:\/\/youtube.com\/v\/.*)\n/imsU", $s_embed, $str);
 			}
 		}
 	}
