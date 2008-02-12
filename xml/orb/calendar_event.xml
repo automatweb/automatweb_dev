@@ -18,6 +18,13 @@
 			</function>
 		</action>
 
+		<action name="show" all_args="1">
+			<function name="show">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="remove_organizers">
 			<function name="remove_organizers">
 				<arguments>

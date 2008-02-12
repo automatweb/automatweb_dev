@@ -740,6 +740,9 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	/**
+	@attrib name=show all_args=1
+	**/
 	function show($arr)
 	{
 		// nii .. kuidas ma siin saan ära kasutada classbaset mulle vajaliku vormi genereerimiseks?

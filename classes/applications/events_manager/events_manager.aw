@@ -685,9 +685,10 @@ class events_manager extends class_base
 		$time = time();
 		$filter = array(
 			"class_id" => array(CL_CALENDAR_EVENT),
-			"parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
-			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $time)
+//			"parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
+//			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $time)
 		);
+
 		$groups = aw_global_get("gidlist_oid");
 		$editors_groups = $this_o->prop("editors_groups");
 
@@ -778,8 +779,15 @@ class events_manager extends class_base
 					)
 				));
 				break;
+			default ://see annab uued ja kestvad, juhul kui vastavat nuppu vajutada
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+						"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+					)
+				));
 		}
-
 		return new object_list($filter);
 	}
 
@@ -837,8 +845,12 @@ class events_manager extends class_base
 
 			$name = parse_obj_name($o->name());
 
+			$parse_url = $this->mk_my_orb("show", array(
+				"id" => $oid,
+			),CL_CALENDAR_EVENT);
+
 			$t->define_data(array(
-				"name" => $can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $name) : $name,
+				"name" => html::href(array("caption" => $name, "url" => $parse_url)),//$can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $name) : $name,
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"sector" => (is_object($sec)) ? $sec->name() : "",
 				"level" => $cal_event->level_options[$o->prop("level")],
