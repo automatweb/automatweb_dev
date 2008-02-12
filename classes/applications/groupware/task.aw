@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.201 2008/02/12 16:29:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.202 2008/02/12 16:50:39 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -4413,6 +4413,13 @@ class task extends class_base
 			"to" => $task->id(),
 			"reltype" => $types
 		));
+
+		$pl = get_instance(CL_PLANNER);
+		// also add to their calendar
+		if (($cal = $pl->get_calendar_for_person($p)))
+		{
+			$pl->add_event_to_calendar(obj($cal), $task);
+		}
 
 	//	$task->connect(array("to" => $part, "reltype" => 4));
 		die('<script type="text/javascript">
