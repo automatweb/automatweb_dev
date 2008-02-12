@@ -148,7 +148,7 @@ function MultiSelector( list_target, max )
 			// Remove this row from the list
 			//this.parentNode.parentNode.removeChild( this.parentNode );
 			this.parentNode.parentNode.parentNode.removeChild (this.parentNode.parentNode);
-			
+
 			// Decrement counter
 			//this.parentNode.element.multi_selector.count--;
 
@@ -179,28 +179,31 @@ function MultiSelector( list_target, max )
 
 function multifile_delete(id)
 {
-	var XMLHttpRequestObject = false;
-	
-	if (window.XMLHttpRequest) {
-		XMLHttpRequestObject = new XMLHttpRequest();
-	} else if (window.ActiveXObject) {
-		XMLHttpRequestObject = new
-		ActiveXObject("Microsoft.XMLHTTP");
-	}
-	
-	if(XMLHttpRequestObject) {
-		XMLHttpRequestObject.open("GET", '/automatweb/orb?class=multifile_upload&action=ajax_delete_obj&id='+id);
-		XMLHttpRequestObject.onreadystatechange = function()
-		{
-			if (XMLHttpRequestObject.readyState == 4 && XMLHttpRequestObject.status == 200) {
-				//callback(XMLHttpRequestObject.responseText);
-				parentDiv = document.getElementById("multifile_upload_files_list");
-				Div = document.getElementById("multifile_"+id);
-				parentDiv.removeChild (Div);
-				delete XMLHttpRequestObject;
-				XMLHttpRequestObject = null;
-			}
+	var check = confirm("Oled kindel?");
+	if(check){
+		var XMLHttpRequestObject = false;
+		
+		if (window.XMLHttpRequest) {
+			XMLHttpRequestObject = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			XMLHttpRequestObject = new
+			ActiveXObject("Microsoft.XMLHTTP");
 		}
-		XMLHttpRequestObject.send(null);
-	} 
+		
+		if(XMLHttpRequestObject) {
+			XMLHttpRequestObject.open("GET", '/automatweb/orb.aw?class=multifile_upload&action=ajax_delete_obj&id='+id);
+			XMLHttpRequestObject.onreadystatechange = function()
+			{
+				if (XMLHttpRequestObject.readyState == 4 && XMLHttpRequestObject.status == 200) {
+					//callback(XMLHttpRequestObject.responseText);
+					parentDiv = document.getElementById("multifile_upload_files_list");
+					Div = document.getElementById("multifile_"+id);
+					parentDiv.removeChild (Div);
+					delete XMLHttpRequestObject;
+					XMLHttpRequestObject = null;
+				}
+			}
+			XMLHttpRequestObject.send(null);
+		}
+	}
 }
