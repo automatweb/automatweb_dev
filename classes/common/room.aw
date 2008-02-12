@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.227 2008/02/07 13:13:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.228 2008/02/12 15:01:56 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2054,7 +2054,7 @@ class room extends class_base
 						{
 							$last_bron = obj($this->last_bron_id);
 							$cus = t("BRON");
-							$title = "";
+							$title = $phone = "";
 							$imgstr = "";
 							$codes = array();
 							if (!$_GET["no_det_info"])
@@ -2070,7 +2070,19 @@ class room extends class_base
 									}
 									$cus = join(", ", $cus);
 									//$cus = $customer->name();
-						
+									$phone = $customer->prop_str("phone");
+									$phones = array();
+									if(!$phone)
+									{
+										$conns = $customer->connections_from(array(
+											"type" => "RELTYPE_PHONE",
+										));//arr($customer);
+										foreach($conns as $conn)
+										{
+											$phones[] = $conn->prop("to.name");
+										};
+										$phone = join (", " , $phones);
+									}
 									$products = $last_bron->meta("amount");
 									$title = $last_bron->prop("content");
 									if($last_bron->prop("comment"))
@@ -2091,7 +2103,10 @@ class room extends class_base
 											if($this->can("view" , $prod))
 											{
 												$product = obj($prod);
-												$codes[] = $product->prop("code");
+												if($product->prop("code"))
+												{
+													$codes[] = $product->prop("code");
+												}
 												$title .= " ".$product->name();
 												if ($settings->prop("cal_show_prod_img"))
 												{
@@ -2125,14 +2140,14 @@ class room extends class_base
 								}
 							}
 							$dx_p = array(
-								"caption" => "<span><font color=#26466D><u>".$cus . "</u> " . join($codes , ",")."</FONT></span>",
+								"caption" => "<span><font color=#26466D><u>".$cus . ( $phone ? (" , ".$phone):"" )."</u> " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
 							);
 							if ($settings->prop("cal_show_prods"))
 							{
 								$dx_p["caption"] .= " <b>".$title."</b>";
 							}
-							
+
 							if ($settings->prop("bron_no_popups"))
 							{
 								$dx_p["url"] = html::get_change_url($this->last_bron_id,array("return_url" => get_ru(),));
