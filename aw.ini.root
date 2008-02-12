@@ -91,3 +91,10 @@ include ${ini_dir}/stats.ini
 include ${ini_dir}/room_reservation.ini
 include ${ini_dir}/id_config.ini
 include ${ini_dir}/ocsp.ini
+include ${ini_dir}/expp.ini
+include ${ini_dir}/date_edit.ini
+include ${ini_dir}/spa.ini
+include ${ini_dir}/realestate.ini
+include ${ini_dir}/ows.ini
+include ${ini_dir}/otto.ini
+include ${ini_dir}/calendar.ini

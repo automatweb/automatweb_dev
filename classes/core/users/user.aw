@@ -869,10 +869,6 @@ class user extends class_base
 		{
 			$po = obj($arr["request"]["parent"]);
 			$rm = aw_ini_get("users.root_folder");
-			if (!$rm)
-			{
-				$rm = aw_ini_get("users.rootmenu");
-			}
 
 			if ($po->class_id() != CL_GROUP && $po->id() != $rm)
 			{
@@ -1266,10 +1262,6 @@ class user extends class_base
 			{
 				// we have to move the object to a new loacation
 				$rm = aw_ini_get("users.root_folder");
-				if (!$rm)
-				{
-					$rm = aw_ini_get("users.rootmenu");
-				}
 				$arr["obj_inst"]->set_parent($rm);
 				$arr["obj_inst"]->save();
 
@@ -1675,10 +1667,6 @@ class user extends class_base
 		$o->set_name($uid);
 		$o->set_class_id(CL_USER);
 		$pt = aw_ini_get("users.root_folder");
-		if ($pt < 2)
-		{
-			$pt = aw_ini_get("users.rootmenu");
-		}
 		$o->set_parent($pt);
 		$o->set_prop("uid", $uid);
 		$o->set_prop("password", $password);

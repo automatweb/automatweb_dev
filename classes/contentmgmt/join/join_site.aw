@@ -825,9 +825,9 @@ class join_site extends class_base
 		$lang_errs = $ob->meta("lang_errs");
 		$fill_msg = "J&auml;rgnev v&auml;li peab olema t&auml;idetud!";
 		$lang_id = aw_global_get("lang_id");
-		if (aw_ini_get("user_interface.full_contente_trans"))
+		if (aw_ini_get("user_interface.full_content_trans"))
 		{
-			$lang_id = aw_ini_get("ct_lang_id");
+			$lang_id = aw_global_get("ct_lang_id");
 		}
 		if (!empty($lang_errs["next_filled"][$lang_id]))
 		{
@@ -1729,9 +1729,9 @@ class join_site extends class_base
                 $lang_errs = $ob->meta("lang_errs");
                 $fill_msg = "J&auml;rgnev v&auml;li peab olema t&auml;idetud!";
                 $lang_id = aw_global_get("lang_id");
-                if (aw_ini_get("user_interface.full_contente_trans"))
+                if (aw_ini_get("user_interface.full_content_trans"))
                 {
-                        $lang_id = aw_ini_get("ct_lang_id");
+                        $lang_id = aw_global_get("ct_lang_id");
                 }
                 if (!empty($lang_errs["next_filled"][$lang_id]))
                 {

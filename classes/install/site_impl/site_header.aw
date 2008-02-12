@@ -9,7 +9,6 @@ if (empty($_COOKIE["nocache"]) && aw_ini_get("config.use_squid"))
 };
 
 
-
 ini_set("session.save_handler", "files");
 session_name("automatweb");
 if (empty($_COOKIE["automatweb"]))

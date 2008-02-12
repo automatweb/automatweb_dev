@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.399 2008/02/05 09:23:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.400 2008/02/12 12:59:26 kristo Exp $
 // menuedit.aw - menuedit. heh.
 /*
 @classinfo  maintainer=kristo
@@ -274,7 +274,7 @@ class menuedit extends aw_template
 			$class_id = $_obj->class_id();
 			if ($class_id == CL_MENU)
 			{
-				if (!($_obj->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id && !aw_ini_get("menuedit.do_not_set_lang_id_by_section"))
+				if (!($_obj->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id )
 				{
 					$set_lang_id = $_obj->lang_id();
 				};
@@ -285,13 +285,13 @@ class menuedit extends aw_template
 				if ($class_id == CL_DOCUMENT && $this->can("view", $_obj->parent()))
 				{
 					$pt = obj($_obj->parent());
-					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id && !aw_ini_get("menuedit.do_not_set_lang_id_by_section"))
+					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id)
 					{
 						$set_lang_id = $_obj->lang_id();
 					}
 				}
 				else
-				if (!$set_ct_lang_id && !aw_ini_get("menuedit.do_not_set_lang_id_by_section"))
+				if (!$set_ct_lang_id)
 				{
 					$set_lang_id = $_obj->lang_id();
 				}

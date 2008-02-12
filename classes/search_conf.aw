@@ -151,12 +151,6 @@ class search_conf extends aw_template
 		extract($arr);
 		$this->read_template("search.tpl");
 
-		if (($bs = aw_ini_get("search.baseurl")) != "")
-		{
-			$this->cfg["baseurl"] = $bs;
-			$this->vars(array("baseurl" => $bs));
-		}
-
 		$k = get_instance(CL_KEYWORD);
 
 		$keys = array();

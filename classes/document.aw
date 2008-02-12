@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.392 2008/01/31 13:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.393 2008/02/12 12:59:26 kristo Exp $
 // document.aw - Dokumentide haldus. 
 /*
 @classinfo  maintainer=kristo
@@ -1945,11 +1945,6 @@ if (is_object($docobj))
 
 		$this->read_template("search.tpl");
 
-		if (($bs = aw_ini_get("search.baseurl")) != "")
-		{
-			$this->cfg["baseurl"] = $bs;
-			$this->vars(array("baseurl" => $bs));
-		}
 		lc_site_load("document",$this);
 
 		// genereerime listi koikidest menyydest, samasugune kood on ka

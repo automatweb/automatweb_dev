@@ -1722,7 +1722,7 @@ class site_template_compiler extends aw_template
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
 
 		$lang_var = "lang_id";
-		if (aw_ini_get("user_interfacce.full_content_trans") == 1)
+		if (aw_ini_get("user_interface.full_content_trans") == 1)
 		{
 			$lang_var = "ct_lang_id";
 		}
@@ -1741,7 +1741,7 @@ class site_template_compiler extends aw_template
 
 		$res = "";
 		$lang_var = "lang_id";
-		if (aw_ini_get("user_interfacce.full_content_trans") == 1)
+		if (aw_ini_get("user_interface.full_content_trans") == 1)
 		{
 			$lang_var = "ct_lang_id";
 		}

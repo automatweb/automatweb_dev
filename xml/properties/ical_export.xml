@@ -68,72 +68,39 @@
             <caption>Faili url</caption>
       </property>
       <property>
-            <name>google_calendar_url</name>
+            <name>google_calendar_settings_calendar</name>
             <table>objects</table>
             <group>google_calendar_settings</group>
-            <type>hidden</type>
+            <type>select</type>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Vali Google kalender</caption>
       </property>
       <property>
-            <name>google_calendar_settings_title</name>
+            <name>google_calendar_settings_newcalname</name>
             <table>objects</table>
             <group>google_calendar_settings</group>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kalendri pealkiri</caption>
-      </property>
-      <property>
-            <name>google_calendar_settings_summary</name>
-            <table>objects</table>
-            <group>google_calendar_settings</group>
-            <type>textarea</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <cols>60</cols>
-            <rows>10</rows>
-            <caption>Kirjeldus</caption>
-      </property>
-      <property>
-            <name>google_calendar_settings_location</name>
-            <table>objects</table>
-            <group>google_calendar_settings</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Asukoht</caption>
+            <store>no</store>
+            <field>google_calendar_settings_newcalname</field>
+            <caption>Uue kalendri nimi</caption>
       </property>
       <property>
             <name>google_calendar_settings_color</name>
             <table>objects</table>
             <group>google_calendar_settings</group>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <cols>60</cols>
-            <rows>10</rows>
-            <caption>V&amp;amp;auml;rv</caption>
-      </property>
-      <property>
-            <name>automatic_sync</name>
-            <table>objects</table>
-            <group>google_calendar_settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Automaatne s&amp;uuml;nkroniseerimine (15 min intervalliga)... hetkel ei toimi</caption>
-      </property>
-      <property>
-            <name>do_import</name>
-            <table>objects</table>
-            <group>google_calendar_settings</group>
-            <type>checkbox</type>
             <store>no</store>
-            <ch_value>1</ch_value>
-            <field>do_import</field>
-            <caption>Impordi praegu</caption>
+            <field>google_calendar_settings_color</field>
+            <caption>V&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>google_calendar_settings_calendar_url</name>
+            <table>objects</table>
+            <group>google_calendar_settings</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>google_calendar_settings_calendar_url</field>
       </property>
       <property>
             <name>google_calendar_uid</name>

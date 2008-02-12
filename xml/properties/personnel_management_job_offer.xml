@@ -150,6 +150,24 @@
             <caption>Lisainfo</caption>
       </property>
       <property>
+            <name>offer_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>CV seadete vorm</caption>
+      </property>
+      <property>
+            <name>default_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
             <name>candidate_toolbar</name>
             <table>objects</table>
             <group>candidate</group>
@@ -169,6 +187,26 @@
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
+      <property>
+            <name>new_cfgform_name</name>
+            <table>objects</table>
+            <group>custom_cfgform</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>new_cfgform_tbl</name>
+            <table>objects</table>
+            <group>custom_cfgform</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -181,6 +219,9 @@
                   <caption>Kandideerimised</caption>
                   <submit>no</submit>
             </candidate>
+            <custom_cfgform>
+                  <caption>Uus CV seadete vorm</caption>
+            </custom_cfgform>
       </groupinfo>
       <reltypes>
             <CANDIDATE>
@@ -217,6 +258,11 @@
                   <clid>CL_META</clid>
                   <caption>Valdkond</caption>
             </FIELD>
+            <CFGFORM>
+                  <value>7</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>CV seadete vorm</caption>
+            </CFGFORM>
       </reltypes>
 </properties>
 
