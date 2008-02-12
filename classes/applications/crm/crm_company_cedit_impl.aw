@@ -22,15 +22,20 @@ class crm_company_cedit_impl extends core
 		{
 			$pn = "phone";
 		}
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_PHONE",
-		));
+		$conns = array();
+		$cns2wrs = array();
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_PHONE",
+			));
+
+			$cns2wrs = $arr["obj_inst"]->connections_from(array(
+				"type" => 67,		// RELTYPE_CURRENT_JOB
+			));
+		}
 		$i = get_instance(CL_CRM_PHONE);
 		$ptypes = $i->get_phone_types();
-
-		$cns2wrs = $arr["obj_inst"]->connections_from(array(
-			"type" => 67,		// RELTYPE_CURRENT_JOB
-		));
 		foreach($cns2wrs as $cn2wr)
 		{					
 			$wr = $cn2wr->to();
@@ -593,13 +598,21 @@ class crm_company_cedit_impl extends core
 			$pn = "email";
 		}
 
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_EMAIL",
-		));
+		$conns = array();
+		if (is_oid( $arr["obj_inst"]->id()))
+		{
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_EMAIL",
+			));
+		}
 
-		$cns2wrs = $arr["obj_inst"]->connections_from(array(
-			"type" => 67,		// RELTYPE_CURRENT_JOB
-		));
+		$cns2wrs = array();
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$cns2wrs = $arr["obj_inst"]->connections_from(array(
+				"type" => 67,		// RELTYPE_CURRENT_JOB
+			));
+		}
 		foreach($cns2wrs as $cn2wr)
 		{					
 			$wr = $cn2wr->to();
@@ -725,9 +738,16 @@ class crm_company_cedit_impl extends core
 		{
 			$pn = "profession";
 		}
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_PREVIOUS_JOB",
-		));
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_PREVIOUS_JOB",
+			));
+		}
+		else
+		{
+			$conns = array();
+		}
 		foreach($conns as $conn)
 		{
 			$obj = $conn->to();
@@ -1067,12 +1087,16 @@ class crm_company_cedit_impl extends core
 
 	function _get_adr_tbl(&$t, $arr)
 	{
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_ADDRESS",
-		));
+		$conns = array();
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_ADDRESS",
+			));
+		}
 
 		$pp = "contact";
-		if (!$arr["obj_inst"]->is_property("contact"))
+		if (is_oid($arr["obj_inst"]->id()) && !$arr["obj_inst"]->is_property("contact"))
 		{
 			$pp = "address";
 		}

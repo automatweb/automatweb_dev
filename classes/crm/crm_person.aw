@@ -3125,7 +3125,12 @@ class crm_person extends class_base
 			"field" => "from",
 		));
 
-		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn)
+		$cs = array();
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB"));
+		}
+		foreach ($cs as $conn)
 		{
 			$prevjob = $conn->to();
 			if($prevjob->prop("org"))
@@ -4599,6 +4604,10 @@ class crm_person extends class_base
 			'caption' => $p->name(),
 		));
 
+		if (!is_oid($p->id()))
+		{
+			return;
+		}
 		$cwrs = array();
 		$cou = 0;
 		foreach($p->connections_from(array("type" => 67)) as $conn)		// RELTYPE_CURRENT_JOB
