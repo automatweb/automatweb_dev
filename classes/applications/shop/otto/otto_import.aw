@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.81 2008/02/01 02:00:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.82 2008/02/12 22:52:46 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -36,15 +36,6 @@
 
 @property do_safe_update type=checkbox ch_value=1 store=no
 @caption &Auml;ra uuenda pilte ja kategooriaid
-
-property restart_pict_i type=checkbox ch_value=1
-caption Alusta piltide importi algusest
-
-property restart_prod_i type=checkbox ch_value=1
-caption Alusta toodete importi algusest
-
-property just_update_prod_data type=checkbox ch_value=1
-caption Uuenda ainult toote andmed
 
 @property last_import_log type=text store=no
 @caption Viimase impordi logi
@@ -2567,17 +2558,17 @@ class otto_import extends class_base
 
 				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
 
-				echo "Loading <a href=\"$url\">page</a> content <br>\n";
+				echo "-- Loading <a href=\"$url\">page</a> content <br>\n";
 				flush();
 				$html = $this->file_get_contents($url);
-				echo "Page content loaded, parsing ...<br>";
+				echo "-- Page content loaded, parsing ...<br>";
 				flush();
 				// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
 
 				if (strpos($html,"Leider konnten wir") !== false)
 				{ 
 					// read from baur.de
-					echo "Can't find an product for <b>$pcode</b> from otto.de, so searching from baur.de<br>\n";
+					echo "-- Can't find an product for <b>$pcode</b> from otto.de, so searching from baur.de<br>\n";
 
 					$this->read_img_from_baur(array(
 						'pcode' => $pcode,
@@ -2597,13 +2588,13 @@ class otto_import extends class_base
 
 					foreach($urld as $url)
 					{
-						echo "Searching pictures from <a href=\"$url\">url</a> <br>\n";
+						echo "-- Searching pictures from <a href=\"$url\">url</a> <br>\n";
 						$html = $this->file_get_contents($url);
 
 						if (!preg_match_all("/<img id=\"mainimage\" src=\"(.*)\.jpg\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
 						{
 							// if we can't find image from the product view, then this should try to search the image from the other sites:
-							echo "Let's try to search from the baur.de page: <br />\n";
+							echo "---- Let's try to search from the baur.de page: <br />\n";
 							$this->read_img_from_baur(array(
 								'pcode' => $pcode,
 								'import_obj' => $import_obj
@@ -2622,7 +2613,7 @@ class otto_import extends class_base
 							$connection_image = $matches[1];
 							if (!empty($connection_image))
 							{
-								echo "[Connection image] ";
+								echo "-- [Connection image] ";
 								$image_ok = $this->get_image(array(
 									'source' => 'http://image01.otto.de:80/pool/formatb/'.$connection_image.'.jpg',
 									'format' => SMALL_PICTURE,
@@ -2667,8 +2658,8 @@ class otto_import extends class_base
 								continue;
 							}
 
-							echo $imnr."<br>\n";
-							echo "image from product $pcode : ($t_imnr)<br />";
+							echo "-- ".$imnr."<br>\n";
+							echo "-- image from product $pcode : ($t_imnr)<br />";
 							$q = "SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'";
 							$t_imnr = $this->db_fetch_field($q, "pcode");
 
@@ -2735,7 +2726,6 @@ class otto_import extends class_base
 								// some pictures are coming from different URL-s, so if we get 0 sized image ($image_ok === false)
 								// lets try some other places to get the image:
 								$image_ok = $this->get_image(array(
-								//	'source' => 'http://image01.otto.de:80/pool/ov_formatd/'.$imnr.'.jpg',
 									'source' => 'http://image01.otto.de/pool/ov_formatd/'.$imnr.'.jpg',
 									'format' => SMALL_PICTURE,
 									'otto_import' => $import_obj,
@@ -2775,19 +2765,21 @@ arr('---------------------------------------------------------------');
 
 							// save rundum
 							// get rundum imnr from html
-							preg_match("/'http:\/\/image01\.otto\.de:80\/pool\/format360\/(.*)'/imsU", $r_html, $mt);
-							$flash_file_url = str_replace("'", "", $mt[0]).".swf";
-							$flash_file_name = $mt[1];
-
-							echo " | <a href=".$flash_file_url.">flash file: ".$flash_file_name."</a>";
-
-							$this->get_video(array(
-								'source' => $flash_file_url,
-								'otto_import' => $import_obj
-							));
-
-							$this->db_query("update otto_prod_img set video = '".addslashes(strip_tags($flash_file_name))."' where pcode = '".$pcode."'");
-
+							preg_match_all("/javascript:setnewRUA\('format360\/(.*)', \d+\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
+							$flash_file_names = $mt[1];
+							foreach ($flash_file_names as $flash_file_name)
+							{
+								$flash_file_url = "http://image01.otto.de:80/pool/format360/".$flash_file_name.".swf";
+								$video_download_result = $this->get_video(array(
+									'source' => $flash_file_url,
+									'otto_import' => $import_obj
+								));
+								if ($video_download_result !== false)
+								{
+									echo " | <a href='".$flash_file_url."'>".$flash_file_name."</a>";
+									$this->db_query("update otto_prod_img set video = '".addslashes(strip_tags($flash_file_name))."' where pcode = '".$pcode."'");
+								}
+							}
 							echo "<br /> \n";
 						}
 					}
@@ -4737,12 +4729,11 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 
-		$url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/SchwabDe/de_DE/-/EUR/SV_ParametricSearch-Progress;sid=CUEKcPjDjXgLcLrISj06UONvQYLj_AIgPN2HQ_xO?_PipelineID=search_pipe_svms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortCursorPosition=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
-	//	arr($url);
+		$url = "http://suche.schwab.de/Schwab/Search.ff?query=".$pcode;
 		echo "[ SCHWAB ] Loading <a href=\"$url\">page</a> content ";
 		$fc = $this->file_get_contents($url);
 		echo "[ok]<br />\n";
-		if (strpos($fc, "Sie suchen einen Artikel mit bestimmten Eigenschaften") !== false)
+		if (strpos($fc, "Keine passenden Ergebnisse für:") !== false)
 		{
 			echo "[ SCHWAB ] can't find a product for <b>$pcode</b> from schwab.de, so searching from albamoda<br>\n";
 			return $this->read_img_from_albamoda(array(
@@ -4752,20 +4743,31 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		}
 
 		// match prod urls
-		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
-		$pcs = array_unique($mt[1]);
+	//	preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+	//	$pcs = array_unique($mt[1]);
 	//	echo "[schwab] got pcs as ".dbg::dump($pcs)."\n";
 
-		foreach($pcs as $prodref)
+	// I assume that this is not exactly needed, cause I have the product code already
+	//	preg_match("/query: '(.*)'/", $fc, $mt);
+	//	$pcode = $mt[1];
+
+	// It doesn't have the the support for multiple products in search result right now. 
+	// Because:
+	//	a) I assume, that product code is products identifier, so one code == one product
+	//	b) I don't have a test case at the moment where there are multiple products/pictures in search result
+	//		and I don't know how it looks like in html source
+		preg_match("/articleId: '(.*)'/", $fc, $mt);
+		$articleId = $mt[1];
+
+		$product_url = "http://www.schwab.de/is-bin/INTERSHOP.enfinity/WFS/Schwab-SchwabDe-Site/de_DE/-/EUR/SV_DisplayProductInformation-SearchDetail?ls=0&query=".$pcode."&ArticleNo=".$articleId;
+
+		// ok, lets keep this loop for now, maybe in real life examples there will be multiple products/pictures in search results:
+		$pcs = array(
+			0 => $product_url
+		);
+
+		foreach($pcs as $prod_url)
 		{
-			if ($prodref == "")
-			{
-				continue;
-			}
-
-
-//			$prod_url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/SchwabDe/de_DE/-/EUR/SV_DisplayProductInformation-ProductRef;sid=CUEKcPjDjXgLcLrISj06UONvQYLj_AIgPN2HQ_xO?ls=&ProductRef=".$prodref."&SearchDetail=1&aktPage=&Query_Text=371388&ArtikelID_Text=&Personen_Text=&PreisMin_Text=&PreisMax_Text=&Hersteller_Text=&Artikel_Text=&Stichwoerter_Text=&Artikel=&Hersteller=&Trend=";
-			$prod_url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/Schwab-SchwabDe-Site/de_DE/-/EUR/SV_DisplayProductInformation-ProductRef;sid=Tk4bsAx5e3E7sEiXlcw0kBfV9c4JypIszkKxAg7F2xHxVkXqRnRWsaWbfmq0NJCohr5LSNgR?ProductRef=".$prodref."&ls=0&SearchDetail=1&SearchDetail=one&stype=&Orengelet.sortPipelet.sortResultSetSize=10&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=";
 			echo "[ SCHWAB ] product <a href=\"$prod_url\">url</a>: <br />\n";
 			$fc2 = $this->file_get_contents($prod_url);
 
@@ -4805,6 +4807,9 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 				$this->added_images[] = $first_im;
 			}
 
+// apparently there seems to be no other images ... 
+// again, if in real life there actually are, then lets keep the possibility for now:
+/*
 			// get other images
 			preg_match_all("/jump_img\('(\d+)'\)/imsU", $fc2, $mt, PREG_PATTERN_ORDER);
 			$otherim = $mt[1];
@@ -4827,11 +4832,11 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 							otto_prod_img(pcode, nr,imnr, server_id) 
 							values('$pcode','$nr','$im', 3)
 					");
-					//echo "q = $q <br>";
 					$this->db_query($q);
 					$this->added_images[] = $im;
 				}
 			}
+*/
 		}		
 	}
 
@@ -4841,7 +4846,7 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 		$import_obj = $arr['import_obj'];
 
 		$url = "http://suche.albamoda.de/servlet/SearchServlet?clientId=AlbaModa-AlbaModaDe-Site&query=".$pcode."&resultsPerPage=120&category=&color=&manufacturer=&minPrice=&maxPrice=&prodDetailUrl=http%3A//www.albamoda.de/is-bin/INTERSHOP.enfinity/WFS/AlbaModa-AlbaModaDe-Site/de_DE/-/EUR/AM_ViewProduct-ProductRef%3Bsid%3DYxKYQ1BufUk5QxZUapu1Y0vC4a2r_3Im9-K6C8SemFURf8RYYg66C8SeC-oUEg%3D%3D%3Fls%3D%26ProductRef%3D%253CSKU%253E%2540AlbaModa-AlbaModaDe%26SearchBack%3D-1%26SearchDetail%3Dtrue";
-	//	arr($url);
+
 		echo "[ ALBAMODA ] Loading <a href=\"$url\">page</a> content ";
 		$fc = $this->file_get_contents($url);
 		echo "[ok]<br />\n";
@@ -5386,11 +5391,12 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 
 		if (!file_exists($new_file))
 		{
-			$this->copy_file(array(
+			$result = $this->copy_file(array(
 				'source' => $arr['source'],
 				'target' => $new_file
 			));
 		}
+		return $result;
 	}
 
 	////
@@ -5432,17 +5438,18 @@ $url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/
 				$content .= fread($f, 1024);
 			}
 			fclose($f);
-	
+
+			$f = fopen($arr['target'], 'wb');
+			if ($f)
+			{
+				fwrite($f, $content);
+				fclose($f);
+			}
+
+			return true;
 		}
 
-		$f = fopen($arr['target'], 'wb');
-		if ($f)
-		{
-			fwrite($f, $content);
-			fclose($f);
-		}
-
-		return true;
+		return false;
 	}
 
 	function get_file_name($imnr)
