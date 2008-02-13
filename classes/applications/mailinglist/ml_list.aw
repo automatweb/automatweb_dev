@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.113 2008/01/31 15:22:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.114 2008/02/13 16:32:20 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1918,7 +1918,7 @@ class ml_list extends class_base
 		}
 		$t->define_chooser(array(
 			"name" => "sel",
-			"field" => "id",
+			"field" => "oid",
 		));
 
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
@@ -1958,11 +1958,13 @@ class ml_list extends class_base
 							), CL_ML_MEMBER),
 					));
 					$name = html::get_change_url($val["oid"], array("return_url" => get_ru()), $val["name"]);
+					$oid = $val["oid"];
 				}
 				else
 				{
 					$source = $parent_name;
 					$name = $val["name"];
+					$oid = $val["parent"]."_row_count_".$val["row_cnt"];
 				}
 				$tabledata = array(
 					"id" => $val["oid"],
@@ -1971,6 +1973,7 @@ class ml_list extends class_base
 					"source" => $source,
 					"others" => $others,
 					"name" => $name,
+					"oid" => $oid,
 				);
 				if(is_oid($is_oid))
 				{
@@ -2325,6 +2328,7 @@ class ml_list extends class_base
 		}
 		if(!$separator) $separator=",";
 		if($separator[0] == "/") $separator = str_replace("/t", "\t" ,$separator);
+		$row_count = 0;
 		foreach($rows as $row)
 		{
 			$column = explode($separator , $row);
@@ -2346,12 +2350,14 @@ class ml_list extends class_base
 							"name" => $name,
 							"mail" => $mail,
 							"parent_name" => $file_data["name"],
+							"row_cnt" => $row_count,
 						);
 					}
 					$cnt++;
 				}
 			}
 			if(!$all) $already_found[$mail] = $mail;
+			$row_count++;
 		}
 		$this->already_found = $already_found;
 		if(!$all)$this->member_count = sizeof($already_found);
@@ -3416,6 +3422,7 @@ class ml_list extends class_base
 	**/
 	function delete_members($arr)
 	{
+		$del_from_file = array();
 		foreach(safe_array($arr["sel"]) as $member_id)
 		{
 			if(is_oid($member_id) && $this->can("delete", $member_id))
@@ -3423,7 +3430,37 @@ class ml_list extends class_base
 				$member_obj = new object($member_id);
 				$member_obj->delete();
 			}
+			else $del_from_file[] = $member_id;
 		}
+		if(sizeof($del_from_file))
+		{
+			$f = array();
+			foreach($del_from_file as $d)
+			{
+				$asd = explode("_row_count_", $d);
+				$row = $asd[1];
+				$file = $asd[0];
+				$f[$file][$row] =1;
+			}
+			$file_inst = get_instance(CL_FILE);
+			foreach($f as $file => $data)
+			{
+				$file_data = $file_inst->get_file_by_id($file);
+				$rows = explode("\n" , $file_data["content"]);
+				foreach($data as $key => $val)
+				{
+					if($val)
+					{
+						unset($rows[$key]);
+					}
+				}
+				$file_data["content"] = join("\n" , $rows);
+				$file_data["file_id"] = $file;
+
+				$file_inst->save_file($file_data);
+			}
+		}
+
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "member_list"));
 	}
 
@@ -3603,7 +3640,7 @@ class ml_list extends class_base
 			
 			$t->define_chooser(array(
 				"name" => "sel",
-				"field" => "id",
+				"field" => "oid",
 			));
 			
 			$t->set_default_sortby("id");
@@ -3693,11 +3730,13 @@ class ml_list extends class_base
 								), CL_ML_MEMBER),
 						));
 						$name = html::get_change_url($val["oid"], array("return_url" => get_ru()), $val["name"]);
+						$oid = $val["oid"];
 					}
 					else
 					{
 						$source = $parent_name;
 						$name = $val["name"];
+						$oid = $val["parent"]."_row_count_".$val["row_cnt"];
 					}
 					$tabledata = array(
 						"id" => $val["oid"],
@@ -3706,6 +3745,7 @@ class ml_list extends class_base
 						"source" => $source,
 						"others" => $others,
 						"name" => $name,
+						"oid" => $oid,
 					);
 					$t->define_data($tabledata);
 				}
