@@ -144,6 +144,7 @@ class crm_company_docs_impl extends class_base
 					"parent" => $sel ? $sel : $fldo->id(),
 					"lang_id" => array(),
 					"class_id" => CL_MENU,
+					"sort_by" => "objects.name ASC",
 				));
 				foreach($ol->arr() as $o)
 				{
@@ -736,6 +737,11 @@ class crm_company_docs_impl extends class_base
 
 		foreach($cur_level_folders as $entry)
 		{
+			if (is_oid($entry["id"]))
+			{
+				$o = obj($entry["id"]);
+			}
+
 			$pm = get_instance("vcl/popup_menu");
 			$pm->begin_menu("sf".$entry["id"]);
 
@@ -766,7 +772,6 @@ class crm_company_docs_impl extends class_base
 			else
 			if ($fld->class_id() == CL_MENU)
 			{
-				$o = obj($entry["id"]);
 				foreach($o->connections_from(array("type" => "RELTYPE_FILE")) as $c)
 				{
 					$pm->add_item(array(
@@ -795,9 +800,16 @@ class crm_company_docs_impl extends class_base
 				$i_docs_table_level = $this->get_element_level_in_docs_table($arr, $entry["id"]);
 			}
 			$t->define_data(array(
-				"icon" => $o->class_id() == CL_MENU ? html::href(array("caption" => "<img alt=\"\" border=0 src='".icons::get_icon_url($o->class_id())."'>" , "url" => aw_url_change_var("tf" , $fld->id()."|".$o->id()), "onclick"=>"toggle_children(document.getElementById(\"".$i_root."|".$o->id()."treenode\"),".$i_docs_table_level.");")) : $pm->get_menu(array(
-					"icon" => icons::get_icon_url($o)
-				)),
+				"icon" =>
+					$o->class_id() == CL_MENU
+						?
+					html::href(array(
+						"caption" => "<img alt=\"\" border=0 src='".icons::get_icon_url($o->class_id())."'>" ,
+						"url" => aw_url_change_var("tf" , $fld->id()."|".$o->id()),
+						"onclick"=>"toggle_children(document.getElementById(\"".$i_root."|".$o->id()."treenode\"),".$i_docs_table_level.");"
+					))
+						:
+					$pm->get_menu(array("icon" => icons::get_icon_url($o))),
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $entry["name"]),
 				"class_id" => $clss[$entry["class_id"]]["name"],
 				"createdby" => $entry["createdby"],
