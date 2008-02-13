@@ -201,8 +201,9 @@ class crm_company_docs_impl extends class_base
 						{
 							$url = html::get_change_url($o->id(), array("return_url" => get_ru()));
 						}
+						$id = $o->id();
 						$rv[$id] = array(
-							"id" => $o->id(),
+							"id" => $id,
 							"name" => $o->name(),
 							"type" => "file",
 							"has_subs" => 0,
@@ -419,20 +420,22 @@ class crm_company_docs_impl extends class_base
 		// to open the load-on-demand tree to the selected branch
 		$open_path = array();
 		list($fld_id, $sel) = explode("|", $arr["request"]["tf"]);
-		$open_path[] = $fld_id; // top parent item
 
 		if ($fld_id !== $sel)
 		{
 			$o = new object($sel);
 
-			while ($o->parent() != $fld_id)
+			do
 			{
+				$open_path[] = $fld_id ."|". $o->id();
 				$o = new object($o->parent());
-				$open_path[] = $fld_id ."|". $o->id(); // selected item
 			}
+			while (is_oid($o->parent()) and $o->id() != $fld_id);
 
-			$open_path[] = $fld_id ."|". $o->id(); // selected item
+			$open_path = array_reverse($open_path);
 		}
+
+		array_unshift($open_path, $fld_id); // top parent item
 
 		classload("core/icons");
 		$file_inst = get_instance(CL_FILE);
