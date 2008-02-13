@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.142 2007/12/27 14:47:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.143 2008/02/13 13:30:07 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -2083,31 +2083,9 @@ class planner extends class_base
 				$comment = " /<i>".$result->comment()."</i>";
 			}
 			
-			if($result->class_id() != CL_CRM_OFFER)
-			{
-				$href_to_event = html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"group" => "add_event", 
-						"event_id" => $result->brother_of(), 
-						"id" => $arr["obj_inst"]->id()),
-						CL_PLANNER),
-					"caption" => $result->name(),
-				));
-				//$href_to_event = html::get_change_url($result->brother_of(), array("return_url" => get_ru()));
-			}
-			else
-			{
-				$href_to_event = html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"id" => $result->brother_of(),
-					), CL_CRM_OFFER),
-					"caption" => $result->name(),
-				));
-			}
-			
 			$table->define_data(array(
 				"id" => $result->brother_of(),
-				"name" => $href_to_event.$comment,
+				"name" => html::obj_change_url($result).$comment,
 				"date" => $result->prop("start1"),
 				"createdby" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $author_person_obj->id()), CL_CRM_PERSON),
@@ -2766,6 +2744,18 @@ class planner extends class_base
 
 	function post_submit_event($event)
 	{
+		// list all bros and change their names and comments if changed
+		$ol = new object_list(array("lang_id" => array(), "site_id" => array(), "brother_of" => $event->id()));
+		foreach($ol->arr() as $o)
+		{
+			if ($o->name() != $event->name() || $o->comment() != $event->comment())
+			{
+				$o->set_name($event->name());
+				$o->set_comment($event->comment());
+				$o->save();
+			}
+		}
+
 		$pl = get_instance(CL_PLANNER);
 		if ($_REQUEST["add_to_cal"])
 		{
