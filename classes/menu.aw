@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.220 2008/02/04 13:02:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.221 2008/02/13 10:33:31 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2168,7 +2168,17 @@ class menu extends class_base
 		}
 
 		// also parents
+		if (aw_ini_get("ini_rootmenu"))
+		{
+			$tmp = aw_ini_get("rootmenu");
+			aw_ini_set("rootmenu", aw_ini_get("ini_rootmenu"));
+		}
 		$pt = $sect->path();
+		if (aw_ini_get("ini_rootmenu"))
+		{
+			aw_ini_set("rootmenu", $tmp);
+		}
+
 		foreach($pt as $o)
 		{
 			if ($o->id() == $sect->id())
