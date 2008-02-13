@@ -1594,7 +1594,8 @@ class user extends class_base
 			$p->set_name("CO ".$uo->prop("real_name")." ".aw_global_get("uid"));
 			aw_disable_acl();
 			$p->save();
-			$p_o->set_prop("work_contact", $p->id());
+			// This property no longer exists for person.
+//			$p_o->set_prop("work_contact", $p->id());
 			$p_o->save();
 			aw_restore_acl();
 			// now, connect user to person
