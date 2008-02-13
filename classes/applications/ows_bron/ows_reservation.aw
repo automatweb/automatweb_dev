@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.12 2008/02/11 09:48:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.13 2008/02/13 12:41:24 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -122,6 +122,9 @@
 @property rate_long_note type=textarea rows=10 cols=80 field=aw_rate_long_note
 @caption Rate long note
 
+@property rate_room_type_code type=textbox field=aw_rate_room_type_code
+@caption Rate room type code
+
 @default group=bron_data
 
 	@property confirmation_code type=textbox field=aw_confirmation_code
@@ -203,6 +206,7 @@ class ows_reservation extends class_base
 
 			case "aw_rate_title":
 			case "aw_rate_long_note":
+			case "aw_rate_room_type_code":
 				$this->db_add_col($t, array("name" => $f, "type" => "text"));
 				return true;
 		}
