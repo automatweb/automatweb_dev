@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.14 2008/02/13 09:16:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.15 2008/02/13 10:41:54 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -1308,6 +1308,13 @@ class user_bookmarks extends class_base
 				$data[$o->id()] = $o->id();
 			}
 		}
+		$ol = new object_list(array(
+			"oid" => array_keys($data),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
+		));
+		return $this->make_keys($ol->ids());
 		return $data;
 	}
 
