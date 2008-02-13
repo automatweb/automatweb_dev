@@ -2,6 +2,9 @@
 /*
 @classinfo maintainer=markop
 */
+
+// tf parameter format is $docs_folder_oid|$selected_item_id. $docs_folder_oid|$docs_folder_oid when no subitem selected.
+
 class crm_company_docs_impl extends class_base
 {
 	function crm_company_docs_impl()
@@ -21,20 +24,16 @@ class crm_company_docs_impl extends class_base
 
 	function _init_docs_fld($o)
 	{
-		$fldo = $o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER");
-		if (!$fldo)
-		{
-			$fldo = obj();
-			$fldo->set_parent($o->id());
-			$fldo->set_class_id(CL_MENU);
-			$fldo->set_name($o->name().t(" dokumendid"));
-			$fldo->save();
+		$fldo = obj();
+		$fldo->set_parent($o->id());
+		$fldo->set_class_id(CL_MENU);
+		$fldo->set_name($o->name().t(" dokumendid"));
+		$fldo->save();
 
-			$o->connect(array(
-				"to" => $fldo->id(),
-				"reltype" => "RELTYPE_DOCS_FOLDER"
-			));
-		}
+		$o->connect(array(
+			"to" => $fldo->id(),
+			"reltype" => "RELTYPE_DOCS_FOLDER"
+		));
 
 		return $fldo;
 	}
@@ -61,21 +60,39 @@ class crm_company_docs_impl extends class_base
 
 	function _get_docs_tb($arr)
 	{
-		$fld = $this->_init_docs_fld($arr["obj_inst"]);
-
 		$tb =& $arr["prop"]["vcl_inst"];
 		$tb->add_menu_button(array(
 			'name'=>'add_item',
 			'tooltip'=> t('Uus')
 		));
 
-		foreach($this->adds as $clid => $nm)
+		list($fld_oid, $sel_id) = explode("|", $arr["request"]["tf"]);
+		$parent = null;
+
+		if ($this->can("view", $sel_id)) // todo: implement checking server and ftp folders add rights
 		{
-			$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text' => $nm,
-				'link' => html::get_new_url($clid, is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $fld->id(), array("return_url" => get_ru()))
-			));
+			$parent = $sel_id;
+		}
+		elseif ($this->can("view", $fld_oid)) // todo: implement checking server and ftp folders add rights
+		{
+			$parent = $fld_oid;
+		}
+		elseif (false === $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+		{ // no docs folder found. create&connect-to new folder.
+			$fld = $this->_init_docs_fld($arr["obj_inst"]);
+			$parent = $fld->id();
+		}
+
+		if (isset($parent))
+		{
+			foreach($this->adds as $clid => $nm)
+			{
+				$tb->add_menu_item(array(
+					'parent'=>'add_item',
+					'text' => $nm,
+					'link' => html::get_new_url($clid, $parent, array("return_url" => get_ru()))
+				));
+			}
 		}
 
 		$tb->add_button(array(
@@ -102,16 +119,19 @@ class crm_company_docs_impl extends class_base
 			));
 		}
 
-		$tb->add_separator();
+		if (isset($parent))
+		{
+			$tb->add_separator();
 
-		$inst = get_instance(CL_ADMIN_IF);
-		$id = $inst->find_admin_if_id();
-		$tb->add_button(array(
-			"name" => "import",
-			"tooltip" => t("Impordi faile"),
-			"url" => $this->mk_my_orb("change", array("integrated" => 1, "id" => $id, "group" => "fu", "parent" => is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $fld->id(), "return_url" => get_ru()), CL_ADMIN_IF),
-			"img" => "import.gif",
-		));
+			$inst = get_instance(CL_ADMIN_IF);
+			$id = $inst->find_admin_if_id();
+			$tb->add_button(array(
+				"name" => "import",
+				"tooltip" => t("Impordi faile"),
+				"url" => $this->mk_my_orb("change", array("integrated" => 1, "id" => $id, "group" => "fu", "parent" => $parent, "return_url" => get_ru()), CL_ADMIN_IF),
+				"img" => "import.gif",
+			));
+		}
 	}
 
 	function _get_level_folders_from_fld($fldo, $sel, $get_f)
@@ -156,8 +176,12 @@ class crm_company_docs_impl extends class_base
 
 				if ($get_f)
 				{
+					$applicable_classes = $this->adds;
+					unset($applicable_classes[CL_MENU]);
+					$applicable_classes = array_keys($applicable_classes);
+
 					$ol3 = new object_list(array(
-						"class_id" => array_keys($this->adds),
+						"class_id" => $applicable_classes,
 						"lang_id" => array(),
 						"parent" => $sel ? $sel : $fldo->id(),
 						"sort_by" => "objects.name ASC",
@@ -234,7 +258,7 @@ class crm_company_docs_impl extends class_base
 							"url" => $this->mk_my_orb("get_file", array("id" => $fldo->id(), "file" => $nf), $fldo->class_id())
 						);
 					}
-				}	
+				}
 				return $rv;
 
 			case CL_SERVER_FOLDER:
@@ -246,11 +270,11 @@ class crm_company_docs_impl extends class_base
 				{
 					$dir = $sel;
 				}
-				if ($dh = @opendir($dir)) 
+				if ($dh = @opendir($dir))
 				{
 
-					while (false !== ($file = readdir($dh))) 
-					{ 
+					while (false !== ($file = readdir($dh)))
+					{
 						if ($file == "." || $file == "..")
 						{
 							continue;
@@ -260,15 +284,15 @@ class crm_company_docs_impl extends class_base
 						if (is_dir($fn))
 						{
 							$has_dirs = false;
-							if ($dhs = @opendir($fn)) 
+							if ($dhs = @opendir($fn))
 							{
-								while (false !== ($subf = readdir($dhs))) 
-								{ 
+								while (false !== ($subf = readdir($dhs)))
+								{
 									if ($subf == "." || $subf == "..")
 									{
 										continue;
 									}
-	
+
 									if (is_dir($fn."/".$subf))
 									{
 										$has_dirs = true;
@@ -276,7 +300,7 @@ class crm_company_docs_impl extends class_base
 									}
 								}
 							}
-							
+
 							$d = stat($fn);
 							$ud = posix_getpwuid($d[4]);
 							$rv[$fn] = array(
@@ -333,28 +357,28 @@ class crm_company_docs_impl extends class_base
 			"type" => TREE_DHTML,
 			"branch" => 1,
 			"tree_id" => "offers_tree",
-			"persist_state" => 1
+			// "persist_state" => 1
 		));
 
 		// get object we get stuff from
 		list($fld_id, $sel) = explode("|", $arr["parent"]);
 		$fld_id = trim($fld_id);
 		$fldo = obj($fld_id);
-		
+
 		$get_f = $sts && $sts->prop("show_files_and_docs_in_tree");
 		$cur_level_folders = $this->_get_level_folders_from_fld($fldo, $sel, $get_f);
 
 		foreach($cur_level_folders as $entry)
 		{
 			$d = array(
-				"id" => $fld_id."|".$entry["id"],
-				"name" =>  ($sel == $fld_id."|".$entry["id"]) ? "<b>".$entry["name"]."</B>" : $entry["name"],
+				"id" => $fld_id . "|" . $entry["id"],
+				"name" =>  $entry["name"],
 				"iconurl" => icons::get_icon_url($entry["type"] == "file" ? CL_FILE : CL_MENU, $entry["name"]),
-				"url" => $entry["type"] == "file" 
-					? 
+				"url" => $entry["type"] == "file"
+					?
                                 		$entry["url"]
 					:
-						aw_url_change_var("tf", $fld_id."|".$entry["id"] , $GLOBALS["set_retu"]),
+						aw_url_change_var("tf", $fld_id."|".$entry["id"] , $arr["set_retu"]),
 			);
 
 			$tree->add_item(0,$d);
@@ -368,7 +392,15 @@ class crm_company_docs_impl extends class_base
 				));
 			}
 		}
-		
+
+		// get selected item
+		preg_match ("/tf=([^\&]+)/", $arr["set_retu"], $active_node);
+
+		if ($active_node[1])
+		{
+			$tree->set_selected_item(urldecode($active_node[1]));
+		}
+
 		die($tree->finalize_tree());
 	}
 
@@ -379,29 +411,42 @@ class crm_company_docs_impl extends class_base
 			return PROP_IGNORE;
 		}
 
-		$seti = get_instance(CL_CRM_SETTINGS);
-		$sts = $seti->get_current_settings();
-		$classes = array(CL_MENU);
-
 		if (!$arr["request"]["tf"] && $arr["request"]["files_from_fld"] == "")
 		{
 			$arr["request"]["files_from_fld"] = "/";
 		}
-		$fld = $this->_init_docs_fld($arr["obj_inst"]);
+
+		// to open the load-on-demand tree to the selected branch
+		$open_path = array();
+		list($fld_id, $sel) = explode("|", $arr["request"]["tf"]);
+		$open_path[] = $fld_id; // top parent item
+
+		if ($fld_id !== $sel)
+		{
+			$o = new object($sel);
+
+			while ($o->parent() != $fld_id)
+			{
+				$o = new object($o->parent());
+				$open_path[] = $fld_id ."|". $o->id(); // selected item
+			}
+
+			$open_path[] = $fld_id ."|". $o->id(); // selected item
+		}
 
 		classload("core/icons");
 		$file_inst = get_instance(CL_FILE);
 		$gbf = $this->mk_my_orb("get_tree_stuff",array(
-				"set_retu" => get_ru(),
-				"active" => $_GET["tf"],
-				"parent" => " ",
-			));
+			"set_retu" => get_ru(),
+			"parent" => " ",
+		));
 		$arr["prop"]["vcl_inst"]->start_tree (array (
 			"type" => TREE_DHTML,
 			"tree_id" => "crm_docs_t",
+			"open_path" => $open_path,
 			"get_branch_func" => $gbf,
 			"has_root" => 1,
-			"persist_state" => 1,
+			// "persist_state" => 1,
 			"root_name" => "",
 			"root_url" => "#",
 			"root_icon" => "images/transparent.gif",
@@ -411,6 +456,8 @@ class crm_company_docs_impl extends class_base
 		{
 			$this->_render_folder_in_tree($arr, $c->to());
 		}
+
+		$arr["prop"]["vcl_inst"]->set_selected_item($arr["request"]["tf"]);
 	}
 
 	function _init_docs_tbl(&$t, $r = array())
@@ -496,8 +543,22 @@ class crm_company_docs_impl extends class_base
 		));
 	}
 
-	function get_docs_table_header($o,$id,$level)
+	function get_docs_table_header($sel, $id, $level, $fld)
 	{
+		// selected item
+		if ($this->can("view", $sel))
+		{
+			$o = new object($sel);
+		}
+		elseif (is_oid($sel)) // may cause ambiguity when server folder name resembles an aw oid
+		{
+			return;
+		}
+		else
+		{
+			$o = $fld;// temporary. when ftp & server folder path reading implemented, this should be replaced with that.
+		}
+
 		$path = html::href(array(
 			"url" => $this->mk_my_orb("change", array(
 				"id" => $id,
@@ -505,22 +566,23 @@ class crm_company_docs_impl extends class_base
 				"group" => "documents_all",
 				"docs_s_sbt" => $_GET["docs_s_sbt"],
 				"docs_s_created_after" => $_GET["docs_s_created_after"],
-				"tf" => $o->id(),
+				"tf" => $fld->id() . "|" . $o->id(),
 			),
 			 CL_CRM_COMPANY),
 			"caption" => $o->name()?$o->name():"",
 		));
 
-		if($this->can("view" , $o->parent()) && $o->parent() != $id && $level < 3)
+		if($o->parent() != $id && $level < 3)
 		{
-			$path = $this->get_docs_table_header(obj($o->parent()),$id,$level+1).$path.  " / " ;
+			$path = $this->get_docs_table_header($o->parent(), $id, $level+1, $fld).$path.  " / " ;
 		}
-		elseif($this->can("view" , $o->parent()) && $o->parent() != $id)
+		elseif($o->parent() != $id)
 		{
-			$path = $this->get_docs_table_header(obj($o->parent()),$id,$level+1);
+			$path = $this->get_docs_table_header($o->parent(), $id, $level+1, $fld);
 		}
 		elseif($o->parent() == $id)
 		{
+			$yah_caption = (", " . t("folder").": ");
 			$path = html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 					"id" => $id,
@@ -528,11 +590,11 @@ class crm_company_docs_impl extends class_base
 					"group" => "documents_all",
 					"docs_s_sbt" => $_GET["docs_s_sbt"],
 					"docs_s_created_after" => $_GET["docs_s_created_after"],
-					"tf" => $o->id(),
+					"tf" => $fld->id() . "|" . $o->id(),
 				),
 				 CL_CRM_COMPANY),
-				"caption" => $o->name()?$o->name():"...",
-			)).", ".t("folder").": ";
+				"caption" => $o->name() ? $o->name() : "...",
+			)) . $yah_caption;
 		}
 		return $path;
 	}
@@ -542,7 +604,11 @@ class crm_company_docs_impl extends class_base
 	// although not really sure about it because ajax tree itself has mostly 1 as level... sometimes 2
 	function get_element_level_in_docs_table($arr,$oid)
 	{
-		$fld = $this->_init_docs_fld($arr["obj_inst"]);	
+		if (false === $fld = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+		{ // no docs folder found. create&connect-to new folder.
+			$fld = $this->_init_docs_fld($arr["obj_inst"]);
+		}
+
 		$i_root = $fld->id();
 		$i=0;
 		$root_not_found = true;
@@ -564,19 +630,33 @@ class crm_company_docs_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		list($fld_id, $sel) = explode("|", $arr["request"]["tf"]);
 
-		$fld = $this->_init_docs_fld($arr["obj_inst"]);	
-		$i_root = $fld->id();
-		
-		$fldo = obj($fld_id);
-		if(!$arr["request"]["tf"])
+		if (!is_oid($fld_id))
 		{
-			$format = t("%s dokumendid");
-			$format = strlen($arr["request"]["tf"])?$format.t(", kataloog: %s"):$format;
-			$path =  sprintf($format, $arr['obj_inst']->name(), $fldo->name());
+			if (false === $fld = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+			{ // no docs folder found. create&connect-to new folder.
+				$fld = $this->_init_docs_fld($arr["obj_inst"]);
+			}
+		}
+		elseif ($this->can("view", $fld_id))
+		{
+			$fld = new object($fld_id);
 		}
 		else
 		{
-			$path = $this->get_docs_table_header($fldo,$arr['obj_inst']->id(),0);
+			$arr["prop"]["error"] = t("Dokumentide kataloogile puudub juurdepääsuõigus");
+			return PROP_ERROR;
+		}
+
+		$i_root = $fld->id();
+
+		if(!$arr["request"]["tf"])
+		{
+			$format = t("%s dokumendid");
+			$path =  sprintf($format, $arr['obj_inst']->name(), $fld->name());
+		}
+		else
+		{
+			$path = $this->get_docs_table_header($sel, $arr['obj_inst']->id(), 0, $fld);
 		}
 
 		$t->set_caption($path);
@@ -598,8 +678,6 @@ class crm_company_docs_impl extends class_base
 				$default_cfg = false;
 			}
 		}
-
-		$fld = $this->_init_docs_fld($arr["obj_inst"]);
 
 		if (($arr["request"]["do_doc_search"] || $arr["request"]["docs_s_sbt"] != "") && !$arr["request"]["tf"])
 		{
@@ -646,7 +724,7 @@ class crm_company_docs_impl extends class_base
 		}
 		else
 		{
-			$cur_level_folders = $this->_get_level_folders_from_fld($fldo, $sel, true);
+			$cur_level_folders = $this->_get_level_folders_from_fld($fld, $sel, true);
 		}
 
 		classload("core/icons");
@@ -658,7 +736,7 @@ class crm_company_docs_impl extends class_base
 			$pm = get_instance("vcl/popup_menu");
 			$pm->begin_menu("sf".$entry["id"]);
 
-			if ($fldo->class_id() == CL_SERVER_FOLDER)
+			if ($fld->class_id() == CL_SERVER_FOLDER)
 			{
 				$pm->add_item(array(
 					"text" => t("Ava internetist"),
@@ -683,7 +761,7 @@ class crm_company_docs_impl extends class_base
 				));
 			}
 			else
-			if ($fldo->class_id() == CL_MENU)
+			if ($fld->class_id() == CL_MENU)
 			{
 				$o = obj($entry["id"]);
 				foreach($o->connections_from(array("type" => "RELTYPE_FILE")) as $c)
@@ -699,8 +777,8 @@ class crm_company_docs_impl extends class_base
 			if ($entry["type"] != "file")
 			{
 				$icon = html::href(array(
-					"caption" => "<img border=0 src='".icons::get_icon_url(CL_MENU)."'>" , 
-					"url" => aw_url_change_var("tf" , $fldo->id()."|".$entry["id"])
+					"caption" => "<img border=0 src='".icons::get_icon_url(CL_MENU)."'>" ,
+					"url" => aw_url_change_var("tf" , $fld->id()."|".$entry["id"])
 				));
 			}
 			else
@@ -714,7 +792,7 @@ class crm_company_docs_impl extends class_base
 				$i_docs_table_level = $this->get_element_level_in_docs_table($arr, $entry["id"]);
 			}
 			$t->define_data(array(
-				"icon" => $o->class_id() == CL_MENU ? html::href(array("caption" => "<img alt=\"\" border=0 src='".icons::get_icon_url($o->class_id())."'>" , "url" => aw_url_change_var("tf" , $o->id()), "onclick"=>"toggle_children(document.getElementById(\"".$i_root."|".$o->id()."treenode\"),".$i_docs_table_level.");")) : $pm->get_menu(array(
+				"icon" => $o->class_id() == CL_MENU ? html::href(array("caption" => "<img alt=\"\" border=0 src='".icons::get_icon_url($o->class_id())."'>" , "url" => aw_url_change_var("tf" , $fld->id()."|".$o->id()), "onclick"=>"toggle_children(document.getElementById(\"".$i_root."|".$o->id()."treenode\"),".$i_docs_table_level.");")) : $pm->get_menu(array(
 					"icon" => icons::get_icon_url($o)
 				)),
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $entry["name"]),
@@ -730,7 +808,8 @@ class crm_company_docs_impl extends class_base
 				"is_menu" => $entry["type"] != "file" ? 0 : 1
 			));
 		}
-		if(!$arr["request"]["tf"] || $arr["request"]["tf"] == $fld->id())
+
+		if(!$arr["request"]["tf"] || $sel == $fld->id())
 		{
 			$person = $arr["request"]["id"];
 			$c = new connection();
@@ -1079,7 +1158,21 @@ class crm_company_docs_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_docs_lmod_t($t);
 
-		$fld = $this->_init_docs_fld($arr["obj_inst"]);
+		list($fld_id, $sel) = explode("|", $arr["request"]["tf"]);
+
+		if (!is_oid($fld_id))
+		{
+			if (false === $fld = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+			{ // no docs folder found. create&connect-to new folder.
+				$fld = $this->_init_docs_fld($arr["obj_inst"]);
+			}
+		}
+		else
+		{
+			$fld = obj($fld_id);
+		}
+
+
 		$ot = new object_tree(array(
 			"class_id" => CL_MENU,
 			"parent" => $fld->id()
@@ -1143,131 +1236,16 @@ class crm_company_docs_impl extends class_base
 	{
 		$arr["prop"]["vcl_inst"]->add_item(0,array(
 			"id" => $fld->id(),
-			"name" => ($_GET["tf"]==$fld->id()) ? "<b>".$fld->name()."</B>":$fld->name(),
+			"name" => $fld->name(),
 			"iconurl" => icons::get_icon_url($fld->class_id()),
-			"url" => aw_url_change_var("tf", $fld->id()),
+			"url" => aw_url_change_var("tf", $fld->id() . "|" . $fld->id()),
 		));
 		$arr["prop"]["vcl_inst"]->add_item($fld->id(),array(
-			"id" => "nokupan".$fld->id(),
+			"id" => "nokupan" . $fld->id() . "-" . $fld->id(),
 			"name" => "dummy",
 			"iconurl" => icons::get_icon_url($fld->class_id()),
-			"url" => aw_url_change_var("tf", $fld->id()),
+			"url" => aw_url_change_var("tf", $fld->id() . "|" . $fld->id()),
 		));
-		return;
-
-		// get first level from folder and add that to
-
-		$ol = new object_list(array(
-			"class_id" => $classes,
-			"lang_id" => array(),
-			"parent" => $fld->id(),
-			"sort_by" => "objects.name ASC",
-			//"sortby" => "objects.class_id",
-		));
-		$ol->sort_by(array(
-			"prop" => "ord",
-			"order" => "asc"
-		));
-
-		if ($sts && $sts->prop("show_files_and_docs_in_tree"))
-		{
-			$classes = array(CL_DOCUMENT,CL_FILE);
-			$ol3 = new object_list(array(
-				"class_id" => $classes,
-				"lang_id" => array(),
-				"parent" => $fld->id(),
-				"sort_by" => "objects.name ASC",
-			));
-			$ol3->sort_by(array(
-				"prop" => "ord",
-				"order" => "asc"
-			));
-			foreach($ol3->names() as $id => $name)
-			{
-				$ol->add($id);
-			}
-		}
-
-		foreach($ol->arr() as $o)
-		{
-			$d = array(
-				"id" => $o->id(),
-				"name" => ($_GET["tf"]==$o->id()) ? "<b>".$o->name()."</B>":$o->name(),
-				"iconurl" => icons::get_icon_url($o->class_id()),
-				"url" => aw_url_change_var("tf", $o->id() , $set_retu),
-			);
-			if($o->class_id() == CL_FILE)
-			{
-				$d["url"] = $file_inst->get_url($o->id()).$o->name();
-				$d["url_target"] = "new window";
-			}
-
-			$arr["prop"]["vcl_inst"]->add_item($fld->id(),$d);
-			$ol2 = new object_list(array(
-				"class_id" => array(CL_MENU),
-				"lang_id" => array(),
-				"parent" => $o->id(),
-				"sort_by" => "objects.name ASC",
-			));
-			$ol2->sort_by(array(
-				"prop" => "ord",
-				"order" => "asc"
-			));
-			if ($sts && $sts->prop("show_files_and_docs_in_tree"))
-			{
-				$classes = array(CL_DOCUMENT,CL_FILE);
-				$ol4 = new object_list(array(
-					"class_id" => $classes,
-					"lang_id" => array(),
-					"parent" => $o->id(),
-					"sort_by" => "objects.name ASC",
-				));
-				$ol4->sort_by(array(
-					"prop" => "ord",
-					"order" => "asc"
-				));
-
-				foreach($ol4->names() as $id => $name)
-				{
-					$ol2->add($id);
-				}
-			}
-			foreach($ol2->names() as $id => $name)
-			{
-				$o2 = obj($id);
-				$arr["prop"]["vcl_inst"]->add_item($o->id(), array(
-					"id" => $o2->id(),
-					"name" => $o2->name(),
-					"url" => aw_url_change_var("tf", $o2->id()),
-				));
-			}
-		}
-
-		// if there is a server folder object attached, then get the rest of the folders from that
-		$sf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
-		if ($sf)
-		{
-			$s = $sf->instance();
-			$fld = $s->get_folders($sf);
-			$t =& $arr["prop"]["vcl_inst"];
-			$t->add_item(0, array(
-				"id" => $sf->id(),
-				"name" => ($arr["request"]["files_from_fld"] == "/" ? "<b>".iconv("utf-8", aw_global_get("charset"), $sf->name())."</b>" : iconv("utf-8", aw_global_get("charset"), $sf->name())),
-				"url" => aw_url_change_var("files_from_fld", "/")
-			));
-
-			usort($fld, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
-			foreach($fld as $item)
-			{
-				$item["name"] = iconv("utf-8", aw_global_get("charset"), $item["name"]);
-				if ($arr["request"]["files_from_fld"] == $item["id"])
-				{
-					$item["name"] = "<b>".$item["name"]."</b>";
-				}
-				$item["url"] = aw_url_change_var("files_from_fld", urlencode($item["id"]));
-				$t->add_item($item["parent"] === 0 ? $sf->id() : $item["parent"], $item);
-			}
-		}
 	}
 }
 ?>
