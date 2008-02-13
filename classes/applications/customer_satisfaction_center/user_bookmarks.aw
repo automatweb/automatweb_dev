@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.13 2008/02/13 09:10:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.14 2008/02/13 09:16:28 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -1345,7 +1345,7 @@ class user_bookmarks extends class_base
 			}
 			if(!$pt)
 			{
-				$pt = "";
+				$pt = $bmid;
 			}
 			if ($li->class_id() == CL_MENU || $li->class_id == CL_USER_BOOKMARKS)
 			{
