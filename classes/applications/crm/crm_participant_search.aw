@@ -75,8 +75,11 @@ class crm_participant_search extends popup_search
 				$cos = array();
 				foreach($tmp as $co)
 				{
-					$o = obj($co);
-					$cos[] = $o->name();
+					if ($this->can("view", $co))
+					{
+						$o = obj($co);
+						$cos[] = $o->name();
+					}
 				}
 			}
 			$text = array();
