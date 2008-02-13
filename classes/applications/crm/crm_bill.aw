@@ -645,7 +645,11 @@ class crm_bill extends class_base
 		
 		if(is_object($p))
 		{
-			$error = $p->add_bill($o);
+			$sum = $this->get_bill_needs_payment(array("bill" => $o));
+			$error = $p->add_bill(array(
+				"sum" => $sum,
+				"o" => $o,
+			));
 			if($error)
 			{
 				arr($error);
@@ -675,7 +679,7 @@ class crm_bill extends class_base
 
 		if(!is_object($p))
 		{
-			$sum = $this->get_bill_sum($o,BILL_SUM) - $o->prop("partial_recieved");
+			$sum = $this->get_bill_needs_payment(array("bill" => $o));
 			$p = new object();
 			$p-> set_parent($o->id());
 			$p-> set_name($o->name() . " " . t("laekumine"));
@@ -686,26 +690,31 @@ class crm_bill extends class_base
 				"type" => "RELTYPE_PAYMENT"
 			));
 			$p-> set_prop("date", time());
-			$p-> set_prop("sum", $sum);//see koht sureb miskipärast
-			$curr = $this->get_bill_currency_id($o);
+			$p->save();
+			$p->add_bill(array(
+				"sum" => $sum,
+				"o" => $o,
+			));
+//			$p-> set_prop("sum", $sum);//see koht sureb miskipärast
+//			$curr = $o->get_bill_currency_id();
 
-			if($curr)
-			{
-				$ci = get_instance(CL_CURRENCY);
-				$p -> set_prop("currency", $curr);
-				$rate = 1;
-				if(($default_c = $ci->get_default_currency) != $curr)
-				{
-					$rate = $ci->convert(array(
-						"sum" => 1,
-						"from" => $curr,
-						"to" => $default_c,
-						"date" => time(),
-					));
-				}
-				$p -> set_prop("currency_rate", $rate);
-			}
-			$p-> save();
+//			if($curr)
+//			{
+//				$ci = get_instance(CL_CURRENCY);
+//				$p -> set_prop("currency", $curr);
+//				$rate = 1;
+//				if(($default_c = $ci->get_default_currency) != $curr)
+//				{
+//					$rate = $ci->convert(array(
+//						"sum" => 1,
+//						"from" => $curr,
+//						"to" => $default_c,
+//						"date" => time(),
+//					));
+//				}
+//				$p -> set_prop("currency_rate", $rate);
+//			}
+//			$p-> save();
 		}
 
 		if($show_error == 1)
@@ -2833,6 +2842,10 @@ class crm_bill extends class_base
 	function get_bill_needs_payment($arr)
 	{
 		extract($arr);
+		if(is_oid($bill))
+		{
+			$bill = obj($bill);
+		}
 		if(!(is_object($bill) && is_oid($bill->id())))
 		{
 			return 0;
@@ -2850,11 +2863,12 @@ class crm_bill extends class_base
 				}
 				break;
 			}
-			$sum = $sum + $p->get_free_sum($bill->id());
+//			$sum = $sum + $p->get_free_sum($bill->id());
+			$sum = $sum + $p->get_bill_sum($bill->id());
 		}
 		if($bill_sum < $sum)
 		{
-			$sum = $bill_sum;
+			return 0;
 		}
 		return $bill_sum - $sum;
 	}
@@ -2865,15 +2879,16 @@ class crm_bill extends class_base
 		{
 			return 0;
 		}
-		$bill_sum = $this->get_bill_sum($b);
-		$needed = $this->get_bill_needs_payment(array("bill" => $b));
 		if($payment)
 		{
-			$needed_wtp = $this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment));
+//			$needed_wtp = $this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment));
 			$payment = obj($payment);
-			$free_sum = $payment->get_free_sum($b->id());
-			return min($free_sum , $needed_wtp);
+//			$free_sum = $payment->get_free_sum($b->id());
+//			return min($free_sum , $needed_wtp);
+			return $payment->get_bill_sum($b->id());
 		}
+		$bill_sum = $this->get_bill_sum($b);
+		$needed = $this->get_bill_needs_payment(array("bill" => $b));
 		return $this->posValue($bill_sum - $needed);
 	}
 
@@ -2891,6 +2906,20 @@ class crm_bill extends class_base
 		}
 		return true;
 	}
+
+	function get_bill_id($arr)
+	{
+		$bills = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"bill_no" => $arr["no"],
+		));
+		if(sizeof($bills->ids()))
+		{
+			return reset($bills->ids());
+		}
+	}
+
 }
 ?>
 

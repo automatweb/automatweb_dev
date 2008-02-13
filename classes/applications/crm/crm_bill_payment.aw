@@ -62,32 +62,15 @@ class crm_bill_payment extends class_base
 		{
 			case "bills":
 				$sum = 0;
-				$bi = get_instance(CL_CRM_BILL);
-				
 				if($arr["obj_inst"]->id())
 				{
-					$ol = new object_list(array(
-						"class_id" => CL_CRM_BILL,
-						"lang_id" => array(),
-						"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $arr["obj_inst"]->id(),
-					));
-					foreach($ol -> arr() as $o)
-					{
-					//	$this_sum = $bi->get_bill_sum($o);
-						$free_sum = $arr["obj_inst"]->get_free_sum($o->id());
-						$sum = $sum + $free_sum;
-						$bill_sum = $bi->get_bill_recieved_money($o , $arr["obj_inst"]->id());//arr($bill_sum); arr($free_sum);
-						$prop["value"] .= t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ". number_format($bill_sum , 2)." ".$bi->get_bill_currency($o)."<br>\n";
-					}
-				}
-				if($sum < $arr["obj_inst"]->prop("sum"))
-				{
+					$prop["value"] = $this->_get_bills_table($arr);
 					$url = $this->mk_my_orb("do_search", array(
 						"pn" => "add_bill",
 						"clid" => CL_CRM_BILL,
 					), "popup_search", false, true);
 	
-					$prop["value"].= html::href(array(
+					$prop["value"].= "<br>".html::href(array(
 						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
 						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 						"title" => t("Lisa Arve"),
@@ -98,9 +81,79 @@ class crm_bill_payment extends class_base
 			case "payment_type":
 				$prop["options"] = array(0 => t("&Uuml;lekandega"), 1 => t("Sularahas"));
 				break;
+			case "sum":
+				$prop["type"] = "text";
+				if(!$arr["new"])
+				{
+					$prop["value"] = number_format($arr["obj_inst"]->get_connected_bills_sum() , 2);
+				}
+				break;
 		}
 
 		return $retval;
+	}
+
+	function _get_bills_table($arr)
+	{
+		classload("vcl/table");
+		$t = new vcl_table;
+		$t->define_field(array(
+			"name" => "nr",
+			"caption" => t("Arve nr"),
+		));
+		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+		));
+		$t->define_field(array(
+			"name" => "curr",
+			"caption" => t("Valuuta"),
+		));
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $arr["obj_inst"]->id(),
+		));
+
+		$bi = get_instance(CL_CRM_BILL);
+
+		foreach($ol -> arr() as $o)
+		{
+		//	$this_sum = $bi->get_bill_sum($o);
+		//	$free_sum = $arr["obj_inst"]->get_free_sum($o->id());
+		//	$sum = $sum + $free_sum;
+			$bill_sum = $arr["obj_inst"]->get_bill_sum($o->id());
+			if(!$bill_sum)
+			{
+				$bill_sum = $bi->get_bill_needs_payment(array("bill" => $o->id()));//get_bill_recieved_money($o , $arr["obj_inst"]->id());//arr($bill_sum); arr($free_sum);
+			}
+			$t->define_data(array(
+				"nr" => html::obj_change_url($o->id(),$o->prop("bill_no")),
+				"sum" => html::textbox(array("name" => "bills[".$o->id()."][sum]", "value" => $bill_sum , "size" => 8)),
+				"customer" => $o->prop("customer.name"),
+				"curr" => $arr["obj_inst"]->get_currency_name(),
+			));
+//			$prop["value"] .= t("Arve nr:").html::obj_change_url($o->id(),$o->prop("bill_no")).", ".$o->prop("customer.name").",  ".
+//			html::textbox(array("name" => "bills[".$o->id()."][sum]", "value" => $bill_sum , "size" => 8))
+//			." ".$arr["obj_inst"]->get_currency_name()."<br>\n";
+			
+		}
+		$t->define_data(array(
+			"nr" => html::textbox(array("name" => "bills[new][no]" , "size" => 8)),
+			"sum" => html::textbox(array("name" => "bills[new][sum]", "value" => 0 , "size" => 8)),
+			"curr" => $arr["obj_inst"]->get_currency_name(),
+		));
+
+//		$prop["value"] .= t("Arve nr:").
+//			html::textbox(array("name" => "bills[new][no]" , "size" => 8))." ".t("Summa").": ".
+//			html::textbox(array("name" => "bills[new][sum]", "value" => 0 , "size" => 8))
+//			." ".$arr["obj_inst"]->get_currency_name()."<br>\n";
+		return $t->draw();	
 	}
 
 	function set_property($arr = array())
@@ -112,8 +165,36 @@ class crm_bill_payment extends class_base
 		{
 			case "bills":
 			{
-				$free_sum = $arr["obj_inst"]->get_free_sum();
+				$bi = get_instance(CL_CRM_BILL);
+				$bills = $arr["request"]["bills"];
+				foreach($bills as $bill => $data)
+				{
+					if($bill == "new")
+					{
+						$bill_id = $bi->get_bill_id(array(
+							"no" => $data["no"],
+						));
+						if($bill_id)
+						{
+							$arr["obj_inst"]->add_bill(array(
+								"o" => $bill_id,
+								"sum" => $data["sum"],
+							));
+						}
+					}
+					elseif($this->can("view" , $bill))
+					{
+						$arr["obj_inst"]->set_bill_sum(array(
+							"bill" => $bill,
+							"sum" => $data["sum"],
+						));
+					}
+
+				}
+
+//				$free_sum = $arr["obj_inst"]->get_free_sum();
 				$pa = array();
+
 				if(is_oid($arr["request"]["add_bill"]))
 				{
 					$pa[] = $arr["request"]["add_bill"];
@@ -129,18 +210,18 @@ class crm_bill_payment extends class_base
 					{
 						continue;
 					}
-					if($free_sum > 0)
-					{
-						$err = $arr["obj_inst"]->add_bill($p);
+//					if($free_sum > 0)
+//					{
+						$err = $arr["obj_inst"]->add_bill(array("o" => $p));
 						if($err)
 						{
 							$error[] = $err;
 						}
-					}
-					else
-					{
-						$error[] = t("Ei j&auml;tku raha arvele id'ga ").$p;
-					}
+//					}
+//					else
+//					{
+//						$error[] = t("Ei j&auml;tku raha arvele id'ga ").$p;
+//					}
 				}
 				if(sizeof($error))
 				{
