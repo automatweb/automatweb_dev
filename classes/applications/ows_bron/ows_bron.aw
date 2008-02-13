@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.25 2008/02/04 12:23:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.26 2008/02/13 12:47:08 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -666,6 +666,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		$o->set_prop("is_handicapped", $arr["is_handicapped"]);
 		$o->set_prop("rate_title", $rate["Title"]);
 		$o->set_prop("rate_long_note", $rate["LongNote"]);
+		$o->set_prop("rate_room_type_code", $rate["OwsRoomTypeCode"]);
 		$o->set_meta("bron_data", $arr);
 		$o->save();
 
@@ -1040,7 +1041,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		return $this->mk_my_orb("display_final_page", $d);
 	}
 
-	function send_mail_from_bron($o)
+	function send_mail_from_bron($o, $do_bcc = false)
 	{
 		$this->is_mail = 1;
 		$html = $this->display_final_page(array("rvs_id" => $o->id()));
@@ -1058,17 +1059,23 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		));
 		$awm->gen_mail();
 
-		if ($this->can("view", $o->prop("ows_bron")))
+		if ($this->can("view", $o->prop("ows_bron")) && $do_bcc)
 		{
 			$bron = obj($o->prop("ows_bron"));
 			$h_bcc = $bron->meta("hotel_bcc");
+			$h_bcc_t = $bron->meta("hotel_bcc_titles");
 			if (!empty($h_bcc[$o->prop("hotel_id")]))
 			{
+				$subj = "Revalhotels reservation";
+				if (!empty($h_bcc_t[$o->prop("hotel_id")]))
+				{
+					$subj = $h_bcc_t[$o->prop("hotel_id")];
+				}
 				$awm = get_instance("protocols/mail/aw_mail");
 				$awm->create_message(array(
 					"froma" => "info@revalhotels.com",
 					"fromn" => "Reval Hotels",
-					"subject" => "Revalhotels reservation",
+					"subject" => $subj,
 					"to" => $h_bcc[$o->prop("hotel_id")],
 					"body" => strip_tags($html),
 				));
@@ -1207,7 +1214,22 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		$hotel = $return["GetHotelDetailsResult"]["HotelDetails"];
 
 		$this->vars($o->properties());
+
+		$code =  $hotel["OwsHotelCode"]."-".$o->prop("rate_room_type_code");
+		$ol = new object_list(array(
+			"class_id" => CL_DOCUMENT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"user4" => $code
+		));
+		$doc = $ol->begin();
+		if (!$doc)
+		{
+			$doc = obj();
+		}
+
 		$this->vars(array(
+			"doc_room_type" => $doc->name(),
 			"guest_phone" => urldecode($o->prop("guest_phone")),
 			"confirmation_number" => $o->prop("confirmation_code"),
 			"cancel_url" => $this->mk_my_orb("cancel_booking", array("confirmation_number" => $o->prop("confirmation_code"))),
@@ -2660,6 +2682,11 @@ echo dbg::dump($return);
 			"caption" => t("BCC"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "subject",
+			"caption" => t("Kirja teema"),
+			"align" => "center"
+		));
 	}
 
 	function _get_mail_bcc($arr)
@@ -2668,6 +2695,7 @@ echo dbg::dump($return);
 		$this->_init_mail_bcc_t($t);
 
 		$h = $arr["obj_inst"]->meta("hotel_bcc");
+		$ht = $arr["obj_inst"]->meta("hotel_bcc_titles");
 		foreach($this->hotel_list as $hotel_id => $hotel_name)
 		{
 			$t->define_data(array(
@@ -2675,6 +2703,10 @@ echo dbg::dump($return);
 				"bcc" => html::textbox(array(
 					"name" => "bcc[$hotel_id]",
 					"value" => $h[$hotel_id]
+				)),
+				"subject" => html::textbox(array(
+					"name" => "subj[$hotel_id]",
+					"value" => $ht[$hotel_id]
 				))
 			));
 		}
@@ -2683,6 +2715,7 @@ echo dbg::dump($return);
 	function _set_mail_bcc($arr)
 	{
 		$arr["obj_inst"]->set_meta("hotel_bcc", $arr["request"]["bcc"]);
+		$arr["obj_inst"]->set_meta("hotel_bcc_titles", $arr["request"]["subj"]);
 	}
 }
 ?>

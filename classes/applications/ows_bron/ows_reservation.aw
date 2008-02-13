@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.13 2008/02/13 12:41:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.14 2008/02/13 12:47:08 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -269,17 +269,17 @@ if (!is_oid($arr["id"]))
       	"webLanguageId" => $lang,
       	"customCurrencyCode" => $o->prop("currency"),
 				"guestTitle" => $o->prop("guest_title"),
-      	"guestFirstName" => $o->prop("guest_firstname"),
-      	"guestLastName" => $o->prop("guest_lastname"),
+      	"guestFirstName" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_firstname")),
+      	"guestLastName" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_lastname")),
       	"guestCountryCode" => $o->prop("guest_country"),
       	"guestStateOrProvince" => $o->prop("guest_state"),
       	"guestCity" => $o->prop("guest_city"),
       	"guestPostalCode" => $o->prop("guest_postal_code"),
-      	"guestAddress1" => $o->prop("guest_adr_1"),
-      	"guestAddress2" => $o->prop("guest_adr_2"),
+      	"guestAddress1" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_adr_1")),
+      	"guestAddress2" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_adr_2")),
       	"guestPhone" => $o->prop("guest_phone"),
       	"guestEmail" => $o->prop("guest_email"),
-      	"guestComments" => urlencode($o->prop("guest_comments"))." ",
+      	"guestComments" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_comments")),
       	"roomSmokingPreferenceId" => (int)$o->prop("smoking"),
       	"floorPreferenceId" => (int)$o->prop("low_floor"),
       	"isAllergic" => (bool)$o->prop("is_allergic"),
@@ -288,6 +288,14 @@ if (!is_oid($arr["id"]))
       	"paymentType" => "NoPayment",
 				"guestBirthday" => $bd
 			);
+
+			$bank_inst = get_instance(CL_BANK_PAYMENT);
+			$data = $bank_inst->get_payment_info();
+			if ($data["bank"] == "credit_card")
+			{
+				$params["guaranteeType"] = "CreditCard";
+			}
+
 //die(dbg::dump($params));
 			$return = $this->do_orb_method_call(array(
 				"action" => "MakeBookingExWithBirthday",
@@ -299,15 +307,28 @@ if (!is_oid($arr["id"]))
 	//echo dbg::dump($return);
 			if ($return["MakeBookingExWithBirthdayResult"]["ResultCode"] != "Success")
 			{
-				die("webservice error: ".dbg::dump($return));
+				$o->set_meta("query", $params);
+				$o->set_meta("result", $return);
+				aw_disable_acl();
+				$o->save();
+				aw_restore_acl();
+				$this->proc_ws_error($params, $return);
 			}
 			//echo "HOIATUS!!! Broneeringud kirjutatakse live systeemi, niiet kindlasti tuleb need 2ra tyhistada!!!! <br><br><br>";
 			//echo("makebooking with params: ".dbg::dump($params)." retval = ".dbg::dump($return));
 
 			//$o->set_parent(aw_ini_get("ows.bron_folder"));
 			//$o->set_class_id(CL_OWS_RESERVATION);
+			if ($this->can("view", $o->prop("ows_bron.confirmed_rvs_folder")))
+			{
+				$o->set_parent($o->prop("ows_bron.confirmed_rvs_folder"));
+			}
+			else
+			{
+				$o->set_parent(aw_ini_get("ows.bron_folder"));
+			}
 			$o->set_prop("is_confirmed", 1);
-			$o->set_prop("payment_type", $params["paymentType"]);
+			$o->set_prop("payment_type", $params["guaranteeType"]);
 
 			$o->set_prop("confirmation_code", $return["MakeBookingExWithBirthdayResult"]["ConfirmationCode"]);
 			$o->set_prop("booking_id", $return["MakeBookingExWithBirthdayResult"]["BookingId"]);
@@ -323,7 +344,22 @@ if (!is_oid($arr["id"]))
 			$o->save();
 			aw_restore_acl();
 			$i = get_instance(CL_OWS_BRON);
-			$i->send_mail_from_bron($o,true);
+			$i->send_mail_from_bron($o, true);
+
+			header("Location: ".$this->mk_my_orb("display_final_page", array("rvs_id" => $o->id(), "section" => 107221)));
+			die("<script language=javascript>window.location.href='".$this->mk_my_orb("display_final_page", array("rvs_id" => $o->id(), "section" => 107221))."';</script>");
+	}
+
+	function proc_ws_error($parameters, $return)
+	{
+		//mail("vead@struktu);
+		error::raise(array(
+			"id" => "ERR_OWS",
+			"msg" => "rv = ".dbg::dump($return)." params = ".dbg::dump($parameters)
+		));
+		//die("ws error ".dbg::dump($return));
+header("Location: http://www.revalhotels.com");
+die();
 	}
 }
 ?>
