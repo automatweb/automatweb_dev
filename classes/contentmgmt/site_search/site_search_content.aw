@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.97 2008/02/14 12:51:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.98 2008/02/14 14:22:15 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1005,7 +1005,7 @@ class site_search_content extends class_base
 		$ret = array(); //$res;
 		foreach($res as $i)
 		{
-			if (strpos(mb_strtolower($i["content"], "iso-8859-15"), mb_strtolower($str, "iso-8859-15")) !== false)
+			if ($opts["str"] == S_OPT_ANY_WORD || $opts["str"] == S_OPT_ALL_WORDS || strpos(mb_strtolower($i["content"], "iso-8859-15"), mb_strtolower($str, "iso-8859-15")) !== false)
 			{
 				$ret[] = $i;
 			}

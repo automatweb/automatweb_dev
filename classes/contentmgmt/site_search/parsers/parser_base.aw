@@ -83,7 +83,7 @@ class ss_parser_base
 		list($usec, $sec) = explode(" ", microtime());
 		$tm_s = ((float)$usec + (float)$sec);
 
-		$this->content = $http->get($this->url, $this->session, $this->cookie_name,5000000);
+		$this->content = $http->get($this->url, $this->session, $this->cookie_name,5000000, true);
 echo "content len = ".strlen($this->content)." <br>\n";
 flush();
 		$this->headers = $http->get_headers();
