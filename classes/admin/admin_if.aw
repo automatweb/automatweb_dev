@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.40 2008/02/07 12:29:34 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.41 2008/02/14 15:08:41 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -249,7 +249,7 @@ class admin_if extends class_base
 		{
 			foreach($rn as $rn_i)
 			{
-				if (isset($has_items[$rn_i]))
+				if (isset($has_items[$rn_i]) && $this->can("view", $rn_i))
 				{
 					continue;
 				}
