@@ -83,7 +83,9 @@ class ss_parser_base
 		list($usec, $sec) = explode(" ", microtime());
 		$tm_s = ((float)$usec + (float)$sec);
 
-		$this->content = $http->get($this->url, $this->session, $this->cookie_name);
+		$this->content = $http->get($this->url, $this->session, $this->cookie_name,5000000);
+echo "content len = ".strlen($this->content)." <br>\n";
+flush();
 		$this->headers = $http->get_headers();
 		if (strpos($this->headers, "404 Not Found") !== false)
 		{

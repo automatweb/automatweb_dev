@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.96 2008/01/31 13:52:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.97 2008/02/14 12:51:21 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -2305,6 +2305,11 @@ class site_search_content extends class_base
 
 		// get search results
 		$settings = $this->set_defaults($arr["request"]);
+		if (empty($settings["s_group"]))
+		{
+			$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SEARCH_GRP")));
+			$settings["s_group"] = $ol->ids();
+		} 
 		$res = $this->get_multi_search_results($settings);
 		if (count($res) == 0)
 		{
@@ -2673,11 +2678,15 @@ class site_search_content extends class_base
 			"caption" => t("Lihtne otsing"),
 			"link" => aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".aw_global_get("section")."&group=search_simple"
 		));
-		$tp->add_tab(array(
-			"active" => $grp != "search_simple",
-			"caption" => t("Detailotsing"),
-			"link" => aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".aw_global_get("section")."&group=search_complex"
-		));
+		$ctr_o = $o->get_first_obj_by_reltype("RELTYPE_CPLX_EL_CTR");
+		if ($ctr_o)
+		{
+			$tp->add_tab(array(
+				"active" => $grp != "search_simple",
+				"caption" => t("Detailotsing"),
+				"link" => aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".aw_global_get("section")."&group=search_complex"
+			));
+		}
 		return $tp->get_tabpanel(array(
 			"content" => $html
 		));
