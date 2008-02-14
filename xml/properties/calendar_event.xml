@@ -231,9 +231,10 @@
             <type>multifile_upload</type>
             <field>meta</field>
             <method>serialize</method>
-            <reltype>RELTYPE_FILE</reltype>
+            <reltype>RELTYPE_PICTURE</reltype>
+            <image>1</image>
             <store>no</store>
-            <caption>Faili upload</caption>
+            <caption>Pildi upload</caption>
       </property>
       <property>
             <name>ucheckbox1</name>
@@ -315,60 +316,33 @@
             <table>planner</table>
             <type>releditor</type>
             <reltype>RELTYPE_LOCATION</reltype>
-            <mode>manager</mode>
             <rel_id>first</rel_id>
+            <field>ucheck5</field>
             <props>
                   <num_0>name</num_0>
-                  <num_1>address.riik</num_1>
-                  <num_2>address.maakond</num_2>
-                  <num_3>address.linn</num_3>
-                  <num_4>address.aadress</num_4>
+                  <num_1>address</num_1>
             </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>address.riik</num_1>
-                  <num_2>address.maakond</num_2>
-                  <num_3>address.linn</num_3>
-                  <num_4>address.aadress</num_4>
-            </table_fields>
-            <field>ucheck5</field>
             <caption>Toimumiskoht</caption>
       </property>
       <property>
             <name>organizer</name>
             <group>general</group>
             <table>objects</table>
-            <type>hidden</type>
+            <type>releditor</type>
             <reltype>RELTYPE_ORGANIZER</reltype>
-            <clid>
-                  <num_0>CL_CRM_COMPANY</num_0>
-                  <num_1>CL_CRM_PERSON</num_1>
-            </clid>
-            <multiple>1</multiple>
+            <clid>CL_CRM_COMPANY</clid>
             <method>serialize</method>
             <field>meta</field>
-            <no_edit>1</no_edit>
+            <rel_id>first</rel_id>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>contact</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>contact</num_1>
+            </table_fields>
             <caption>Korraldaja</caption>
-      </property>
-      <property>
-            <name>organizer_tb</name>
-            <group>general</group>
-            <table>planner</table>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>organizer_tb</field>
-            <caption>Korraldaja toolbar</caption>
-      </property>
-      <property>
-            <name>organizer_table</name>
-            <group>general</group>
-            <table>planner</table>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>organizer_table</field>
-            <caption>Korraldaja tabel</caption>
       </property>
       <property>
             <name>level</name>
@@ -529,10 +503,7 @@
             </SECTOR>
             <ORGANIZER>
                   <value>6</value>
-                  <clid>
-                        <num_0>CL_CRM_COMPANY</num_0>
-                        <num_1>CL_CRM_PERSON</num_1>
-                  </clid>
+                  <clid>CL_CRM_COMPANY</clid>
                   <caption>Korraldaja</caption>
             </ORGANIZER>
             <URL>

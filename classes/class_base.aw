@@ -4174,6 +4174,7 @@ class class_base extends aw_template
 								"request" => &$args,
 								"obj_inst" => &$this->obj_inst,
 								"new" => $new,
+								"prop" => $prop,
 				        ));
 					//}
 

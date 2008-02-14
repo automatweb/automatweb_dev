@@ -27,7 +27,7 @@ class multifile_upload extends class_base
 		if ($arr["new"] != 1)
 		{
 			$i = 1;
-			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FILE")) as $file)
+			foreach($arr["obj_inst"]->connections_from(array("type" => $arr["prop"]["reltype"])) as $file)
 			{
 				$fo =  $file->to();
 				$file_instance = $fo->instance();
@@ -38,7 +38,7 @@ class multifile_upload extends class_base
 					"file_name"=>$fo -> name(),
 					"file_url" => $file_instance->get_url($fo->id(), $fo->name()),
 					"edit_url" => html::get_change_url($fo->id()),
-					"delete_url" => aw_ini_get("baseurl")."/automatweb/orb?class=multifile_upload&action=ajax_delete_obj&id=".$fo->id(),
+					"delete_url" =>$file_url, aw_ini_get("baseurl")."/automatweb/orb?class=multifile_upload&action=ajax_delete_obj&id=".$fo->id(),
 				));
 				$tmp .= $this->parse('file');
 			}
@@ -61,22 +61,32 @@ class multifile_upload extends class_base
 		
 	}
 	
+
 	function callback_post_save($arr)
 	{
-		$fi = get_instance(CL_FILE);
 		$parent = $arr["obj_inst"]->parent();
 		$oid = $arr["obj_inst"]->id();
 		$clid = $arr["obj_inst"]->class_id();
 		$o = obj($oid);
+		if($arr["prop"]["image"])
+		{
+			$fi = get_instance(CL_IMAGE);
+		}
+		else
+		{
+			$fi = get_instance(CL_FILE);
+		}
+
 		$files = $fi -> add_upload_multifile("file", $parent);
 		foreach ($files as $file)
 		{
-			 $o->connect(array(
-			 				"to" => $file["id"],
-							"type" => "RELTYPE_FILE"
-				));
+			$o->connect(array(
+				"to" => $file["id"],
+				"type" => $arr["prop"]["reltype"],
+			));
 		}
 	}
+
 	
 	/**
 	@attrib name=ajax_delete_obj

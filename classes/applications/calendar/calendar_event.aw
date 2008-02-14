@@ -96,8 +96,8 @@
 @property ufupload1 type=fileupload
 @caption Faili upload 1
 
-@property multifile_upload type=multifile_upload table=objects field=meta method=serialize reltype=RELTYPE_FILE store=no
-@caption Faili upload
+@property multifile_upload type=multifile_upload table=objects field=meta method=serialize reltype=RELTYPE_PICTURE image=1 store=no
+@caption Pildi upload
 
 @property ucheckbox1 type=checkbox
 @caption
@@ -117,8 +117,6 @@
 @property title type=textarea field=title
 @caption Sissejuhatus
 
-
-
 @property short_description type=textarea allow_rte=2 field=user1
 @caption L&uuml;hikirjeldus
 
@@ -135,17 +133,23 @@ property location type=popup_search reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATIO
 caption Toimumiskoht
 
 
-@property location type=releditor reltype=RELTYPE_LOCATION mode=manager rel_id=first props=name,address.riik,address.maakond,address.linn,address.aadress table_fields=name,address.riik,address.maakond,address.linn,address.aadress field=ucheck5
+@property location type=releditor reltype=RELTYPE_LOCATION rel_id=first field=ucheck5 props=name,address
 @caption Toimumiskoht
 
-@property organizer type=hidden reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY,CL_CRM_PERSON multiple=1 method=serialize field=meta table=objects no_edit=1
+property location_tb type=toolbar store=no no_caption=1
+caption Asukoha toolbar
+
+property location_table type=table store=no no_caption=1
+caption Asukoha tabel
+
+@property organizer type=releditor reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY method=serialize field=meta table=objects rel_id=first props=name,contact table_fields=name,contact
 @caption Korraldaja
 
-@property organizer_tb type=toolbar store=no no_caption=1
-@caption Korraldaja toolbar
+property organizer_tb type=toolbar store=no no_caption=1
+caption Korraldaja toolbar
 
-@property organizer_table type=table store=no no_caption=1
-@caption Korraldaja tabel
+property organizer_table type=table store=no no_caption=1
+caption Korraldaja tabel
 
 
 - korraldaja releditoriks (kontakt tel, aadress[riik, maakond, linn, t2nav], email, www, nimi)
@@ -214,7 +218,7 @@ caption Toimumiskoht
 @reltype SECTOR value=5 clid=CL_CRM_SECTOR
 @caption Tegevusala
 
-@reltype ORGANIZER value=6 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@reltype ORGANIZER value=6 clid=CL_CRM_COMPANY
 @caption Korraldaja
 
 @reltype URL value=7 clid=CL_URL
@@ -258,6 +262,9 @@ class calendar_event extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+//			case "multifile_upload":
+//				arr($arr); 
+//				die();
 			case "ufupload1":
                                 if (is_uploaded_file($_FILES["ufupload1"]["tmp_name"]))
                                 {
@@ -297,7 +304,7 @@ class calendar_event extends class_base
 				}
 				break;
 			case "organizer":
-				$os = explode(",",$prop["value"]);
+/*				$os = explode(",",$prop["value"]);
 				foreach($os  as $id)
 				{
 					if(is_oid($id))
@@ -306,7 +313,8 @@ class calendar_event extends class_base
 					}
 				}
 				return PROP_IGNORE;
-
+*/
+				break;
 			case "event_time":
 				return PROP_IGNORE;
 
@@ -338,8 +346,9 @@ class calendar_event extends class_base
  					}
  				}
 				break;
-*/			case "location":
+			case "location":
 				//arr($prop["value"]);die();
+
 
 		 		if(!is_oid($prop["value"]))
  				{
@@ -358,7 +367,7 @@ class calendar_event extends class_base
  						if(is_object($cust_obj))$prop["value"] = $cust_obj->id();
  					}
  				}
-				break;
+				break;*/
 		}
 		$meta = $arr["obj_inst"]->meta();
 		if (substr($prop["name"],0,1) == "u")
@@ -423,14 +432,20 @@ class calendar_event extends class_base
 				break;
 			case "location":
 				//$prop["table_fields"] = array("name","address.riik","afaf");
-				$prop["props"] = $prop["table_fields"];//explode(",", "name,address,address.riik,address.linn,address.street,address.county");
-//					arr($prop);
+//				$prop["props"] = $prop["table_fields"];//explode(",", "name,address,address.riik,address.linn,address.street,address.county");
+					arr($prop);
 				break;
 			case "organizer_table":
 				$this->_get_organizer_table($arr);
 				break;
 			case "organizer_tb":
 				$this->_get_organizer_tb($arr);
+				break;
+			case "location_table":
+				$this->_get_location_table($arr);
+				break;
+			case "location_tb":
+				$this->_get_location_tb($arr);
 				break;
 		}
 		return $retval;
@@ -778,6 +793,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 			"link" => $this->mk_my_orb("new", array(
 				"alias_to" => $arr["obj_inst"]->id(),
 				"reltype" => 6,
+				"alias_to_prop" => "organizer",
 				"return_url" => get_ru(),
 				"parent" => $arr["obj_inst"]->id(),
 			), CL_CRM_COMPANY),
@@ -791,6 +807,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 			"url" => $this->mk_my_orb("new", array(
 				"alias_to" => $arr["obj_inst"]->id(),
 				"reltype" => 6,
+				"alias_to_prop" => "organizer",
 				"return_url" => get_ru(),
 				"parent" => $arr["obj_inst"]->id(),
 			), CL_CRM_PERSON),
@@ -857,10 +874,12 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 			"name" => "sel",
 			"field" => "oid",
 		));
-		$t->set_caption(t("Korraldajad"));
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ORGANIZER")) as $c)
-		{
-			$o = $c->to();
+		$t->set_caption(t("Korraldaja"));
+		if(!$arr["obj_inst"]->prop("organizer")) return;
+		$o = obj($arr["obj_inst"]->prop("organizer"));
+//		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ORGANIZER")) as $c)
+//		{
+//			$o = $c->to();
 			$change_url = html::obj_change_url($o->id(),t("Muuda"));
 			if($o->class_id() == CL_CRM_COMPANY)
 			{
@@ -893,7 +912,94 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 				));
 
 			}
-		}
+//		}
+
+	}
+
+	function _get_location_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus toimumiskoht"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 8,
+				"alias_to_prop" => "location",
+				"return_url" => get_ru(),
+				"parent" => $arr["obj_inst"]->id(),
+			), CL_SCM_LOCATION),
+		));
+
+
+		$popup_search = get_instance("vcl/popup_search");
+		$search_butt = $popup_search->get_popup_search_link(array(
+			"pn" => "location",
+			"clid" => array(CL_SCM_LOCATION),
+		));
+		$tb->add_cdata($search_butt);
+
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "remove_organizers",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
+
+	}
+
+	function _get_location_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" =>  t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "country",
+			"caption" =>  t("Riik"),
+		));
+		$t->define_field(array(
+			"name" => "county",
+			"caption" =>  t("Maakond"),
+		));
+		$t->define_field(array(
+			"name" => "city",
+			"caption" =>  t("Linn"),
+		));
+		$t->define_field(array(
+			"name" => "street",
+			"caption" =>  t("T&auml;nav"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" =>  t("Muuda"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->set_caption(t("Asukoht"));
+		if(!$arr["obj_inst"]->prop("location")) return;
+		$o = obj($arr["obj_inst"]->prop("location"));
+//		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LOCATION")) as $c)
+//		{
+//			$o = $c->to();
+			$change_url = html::obj_change_url($o->id(),t("Muuda"));
+			$t->define_data(array(
+				"name" => $o->name(),
+				"country" => $o->prop("address.riik.name"),
+				"county" => $o->prop("address.maakond.name"),
+				"city" => $o->prop("address.linn.name"),
+				"street" => $o->prop("address.aadress"),
+				"change" => $change_url,
+				"oid" => $o->id()
+			));
+//		}
 
 	}
 

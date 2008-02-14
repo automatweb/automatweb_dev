@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.76 2008/02/04 12:05:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.77 2008/02/14 13:52:26 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -1479,8 +1479,8 @@ class bank_payment extends class_base
 		$VK_MAC = base64_encode( $VK_signature);
 
 		$http = get_instance("protocols/file/http");
-		$link = "https://www.sampo.ee/cgi-bin/pizza";
-		$handler = "https://www.sampo.ee/cgi-bin/pizza";
+		$link = $handler = $this->bank_link["sampopank"];//"https://www.sampo.ee/cgi-bin/pizza";
+	//	$handler = "https://www.sampo.ee/cgi-bin/pizza";
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
