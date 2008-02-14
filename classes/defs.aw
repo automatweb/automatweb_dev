@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.252 2008/01/31 13:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.253 2008/02/14 22:07:33 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -18,6 +18,52 @@ if (!defined("DEFS"))
 	define("SERIALIZE_XMLRPC", 5);
 	define("SERIALIZE_PHP_FILE",6);
 
+	/** registers a post-submit handler callback
+		@attrib api=1 params=pos
+
+		@param class required type=string or class_id
+			The name of the class the callback belongs to
+
+		@param method requierd type=string
+			The method in the class to call
+			
+		@param params required type=array
+			Additional parameters to pass to the handler method
+
+		@param to_class required type=class_id
+			The class of object that should be added before the ps event handler is called
+
+
+		@comment
+			Sometimes you need to provide a link for the user to add some object and after the user has added it, you need to do something with it. With this you can. 
+			You can register an action with this method and recieve a handler id. Then you must add it to the url, as the parameter "pseh". Now, when the user clicks the link, fills in the form and thus creates the object, the callback will be called with the new data object as the first parameter and the array you gave as the second parameter
+
+		@examples
+			class handler 
+			{
+				function handler($obj_inst, $params)
+				{
+					$obj_inst->set_name($params["name"]);
+					$obj_inst->save();
+				}		
+			}
+			
+			.... somewhere else...
+			echo html::href(array(
+				"caption" => t("Click me"),
+				"url" => $this->mk_my_orb("new", array(
+					"parent" => 6,
+					"pseh" => aw_register_ps_event_handler(
+						"handler", 
+						"handler", 
+						array("name" => "allah", 
+						CL_MENU
+					)
+				), CL_MENU)
+			));
+
+			now, all menus that are created via this link, get the name "allah", in spite of what the user types in the name box
+	**/
 	function aw_register_ps_event_handler($class, $method, $params, $to_class)
 	{
 		$inf = array($class, $method, $params, $to_class);
@@ -28,6 +74,9 @@ if (!defined("DEFS"))
 
 	/** returns the object of the currently active person
 		@attrib api=1
+
+		@comment
+			When a user is logged in, then this method never fails - if the person for the current user does not exist yet, it gets created automatically.
 	**/
 	function get_current_person()
 	{
@@ -49,6 +98,9 @@ if (!defined("DEFS"))
 
 	/** returns the object of the currently active company
 		@attrib api=1
+
+		@comment
+			When a user is logged in, then this method never fails - if the company for the current user does not exist yet, it gets created automatically.
 	**/
 	function get_current_company()
 	{
@@ -70,6 +122,12 @@ if (!defined("DEFS"))
 
 		@attrib api=1
 
+		@examples
+			// after clicking this, the "back" link in the admin interface is created correctly
+			echo html::href(array(
+				"caption" => t("Loo uus objekt"),
+				"url" => $this->mk_my_orb("new", array("parent" => 6, "return_url" => get_ru()), CL_MENU)
+			));
 	**/
 	function get_ru()
 	{
@@ -79,14 +137,15 @@ if (!defined("DEFS"))
 	/** use this to get the correct return_url argument for POST requests
 
 		@attrib api=1
-
 	**/
 	function post_ru()
 	{
 		return aw_url_change_var("post_ru", NULL, aw_ini_get("baseurl").aw_global_get("REQUEST_URI"));
 	}
 
+	// DEPRECATED - DO NOT USE!
 	// oh sweet lord what crappy ideas one has when time is short
+	// crickey, mate! this really is terrible. - terryf
 	function convert_unicode($source)
 	{
 		$retval = str_replace(chr(195).chr(181), "&otilde;", $source);
@@ -160,6 +219,9 @@ if (!defined("DEFS"))
 
 		@returns
 			the given string, with e-mail aadresses replaced with <a href='mailto:address'>address</a>
+
+		@comment
+			If the text already contains <a href='mailto: 's then it will double them, thus breaking html
 	**/
 	function create_email_links($str)
 	{
@@ -246,7 +308,7 @@ if (!defined("DEFS"))
 			the message is ignored.
 
 			Using this function you can enable messages get posted from message handlers.
-			The reason for theis behaviour is, that it is VERY easy to create message handlers
+			The reason for this behaviour is, that it is VERY easy to create message handlers
 			that will trigger loops, so use this very carefully.
 
 			The calls to aw_allow_recursive_messages() / aw_restore_recursive_messages() can be restored
@@ -265,16 +327,6 @@ if (!defined("DEFS"))
 	function aw_restore_recursive_messages()
 	{
 		aw_global_set("__allow_rec_msg", aw_global_get("__allow_rec_msg")-1);
-	}
-
-	function get_lc_date($time=0, $format=3)
-	{
-		$inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
-		if(!is_object($inst))
-		{
-			$inst = get_instance("core/locale/en/date");
-		}
-		return $inst->get_lc_date($time, $format);
 	}
 
 	/** posts an AW message with a message parameter
@@ -337,6 +389,8 @@ if (!defined("DEFS"))
 		@comment
 			Replacement for php's mail(), so that we can always add headers of parameters to sendmail for every message sent via aw.
 			So use this instead of mail()
+
+			This also posts the MSG_MAIL_SENT aw message, so you can do stuff when mails get sent
 
 		@examples
 			send_mail("example@example.com", "example", "foo!");
@@ -547,6 +601,19 @@ if (!defined("DEFS"))
 		return $pwd;
 	}
 
+	/** places <a href tags around urls in text $src
+		@attrib api=1
+
+		@param src required type=text
+			The text to create the links in
+
+		@comment
+			the difference between this, and create_links is, that this tries to make sure, that if there already is an <a href around the url, it will not double it. 
+			It does fail quite miserably though. 
+
+		@returns
+			The given text with http://www.ee replaced with <a href="http://www.ee">http://www.ee</a>
+	**/
 	function create_safe_links($src)
 	{
 		// create link if it already is not part of an <a tag
@@ -576,8 +643,22 @@ if (!defined("DEFS"))
 		return $src;
 	}
 
-	////
-	// !parses template source in $src, and replaces variables in it with variables from $vars
+	/** Replace template variables in the given string
+		@attrib api=1 params=pos
+
+		@param src optional type=string
+			The template string
+
+		@param vars optional type=array
+			The list of variable values
+
+		@comment
+			The aw_template parser uses this to actually insert values into templates
+
+		@examples
+			$str = "a = {VAR:value} ";
+			echo localparse($str, array("value" => 5));	// echoes "a = 5"
+	**/
 	function localparse($src = "",$vars = array())
 	{
 		// kogu asendus tehakse ühe reaga
@@ -620,47 +701,6 @@ if (!defined("DEFS"))
 
 		return array($values,$tags);
 	};
-
-	function get_lc_month($id)
-	{
-		if (aw_global_get("LC") == "et")
-		{
-			$mnames = explode("|","jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
-			return $mnames[(int)$id-1];
-		}
-		$mnames = explode("|",LC_MONTH);
-		return $mnames[(int)$id];
-	}
-
-	////
-	// !tagastab lokaliseeritud päevanime
-	function get_lc_weekday($id)
-	{
-		return locale::get_lc_weekday($id);
-	}
-
-	/** creates html linebreaks in text
-		@attrib api=1
-
-		@param text required type=string
-			The text to format
-
-		@comment
-			the difference with nl2br is, that nl2br inserts html tags before linebreaks
-			but this replaces linebreaks with html tags
-
-		@returns
-			The formatted text
-
-		@examples
-			echo format_text("a\nb\n\nc"); // prints a<br />b<p>c
-	**/
-	function format_text($text)
-	{
-		$text = str_replace("\n\n","<p>",$text);
-		$text = str_replace("\n","<br />",$text);
-		return $text;
-	}
 
 	/** checks if the parameter is an oid
 		@attrib api=1
@@ -1702,6 +1742,17 @@ if (!defined("DEFS"))
 			}
 			echo "\n";
 		}
+	}
+
+	// deprecated - use locale::get_lc_date instead
+	function get_lc_date($time=0, $format=3)
+	{
+		$inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+		if(!is_object($inst))
+		{
+			$inst = get_instance("core/locale/en/date");
+		}
+		return $inst->get_lc_date($time, $format);
 	}
 
 	// wrapper for localization classes

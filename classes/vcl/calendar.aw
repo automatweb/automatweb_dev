@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.102 2008/01/31 13:55:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.103 2008/02/14 22:07:35 kristo Exp $
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
@@ -1311,7 +1311,7 @@ class vcalendar extends aw_template
 				"daynum" => date("j",$reals),
 				"monthnum" => date("m",$reals),
 				"dayname" => date("F d, Y",$reals),
-				"lc_weekday" => get_lc_weekday($wn,$reals),
+				"lc_weekday" => locale::get_lc_weekday($wn,$reals),
 				"lc_month" => $mn,
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$reals))),
 				"date_and_time" => $dt . ". " . $mn2,
@@ -1376,7 +1376,7 @@ class vcalendar extends aw_template
 		$this->last_event = $event;
 		$i = $this->range["start"];
 		$dt = date("d",$i);
-		$mn = get_lc_month(date("m",$i));
+		$mn = locale::get_lc_month(date("m",$i));
 		$this->vars(array(
 			"DCHECK" => $dcheck,
 			"EVENT" => $events_for_day,
@@ -1707,7 +1707,7 @@ class vcalendar extends aw_template
 	function draw_event($evt)
 	{
 		$m = date("m",$evt["timestamp"]);
-		$lc_month = get_lc_month($m);
+		$lc_month = locale::get_lc_month($m);
 		if (isset($evt["url"]))
 		{
 			$evt["link"] = $evt["url"];
@@ -1871,7 +1871,7 @@ class vcalendar extends aw_template
 			"COMMENT" => "",
 			"DCHECKED" => $dchecked,
 			"comment" => $evt["comment"],
-			"day_name" => strtoupper(substr(get_lc_weekday(date("w",$evt["start1"])),0,1)),
+			"day_name" => strtoupper(substr(locale::get_lc_weekday(date("w",$evt["start1"])),0,1)),
 			"date_and_time" => $dt . ". " . $mn,
 			"section" => aw_global_get("section")
 		));

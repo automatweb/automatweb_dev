@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.5 2008/01/31 13:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.6 2008/02/14 22:07:35 kristo Exp $
 // document_archive.aw - Dokumendiarhiiv 
 /*
 
@@ -230,7 +230,7 @@ class document_archive extends class_base
 			$parents[] = $conn->prop("to");
 		};
 		$_date = $start;
-		$date_est = date("d", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est = date("d", $_date).". ".locale::get_lc_month(date("m", $_date))." ".date("Y", $_date);
 		$d = get_instance(CL_DOCUMENT);
 		$rv = "<h2>$date_est</h2>";
 		if (!empty($parents))
