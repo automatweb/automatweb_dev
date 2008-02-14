@@ -441,7 +441,12 @@ class _int_object_loader extends core
 		{
 			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
 			$fn .= "-nliug-".(isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : "");
-			if (($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) == false)
+			if (($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
+			{
+				$max_acl = aw_unserialize($str_max_acl);
+			}
+
+			if (!$max_acl)
 			{
 				$max_acl = $this->_calc_max_acl($oid);
 				if ($max_acl === false)
@@ -454,10 +459,6 @@ class _int_object_loader extends core
 					);
 				}
 				$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
-			}
-			else
-			{
-				$max_acl = aw_unserialize($str_max_acl);
 			}
 
 			$this->__aw_acl_cache[$oid] = $max_acl;
@@ -484,12 +485,13 @@ class _int_object_loader extends core
 		$do_orig = false;
 		while ($cur_oid > 0)
 		{
-			if (isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]))
+			$tmp = null;
+			if (isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]) && isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]["acldata"]))
 			{
 				$tmp = $GLOBALS["__obj_sys_acl_memc"][$cur_oid];
 			}
 			else
-			if (isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]))
+			if (isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]) && isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]["acldata"]))
 			{
 				$tmp = $GLOBALS["__obj_sys_objd_memc"][$cur_oid];
 			}
