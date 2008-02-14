@@ -340,210 +340,161 @@ class db_connector
 	{
 		return $this->dc[$this->default_cid]->db_list_tables();
 	}
-	//------------------------------------------------------------------------------------
-	/**
-	@attrib api=1
 
-	@returns String , table name of a field
+	/** Returns the next table in the query done by db_list_tables
+		@attrib api=1
+
+		@returns String , table name 
 	**/
 	function db_next_table()
 	{
 		return $this->dc[$this->default_cid]->db_next_table();
 	}
 
-	/**
-	@attrib api=1
+	/** Retrieves information about a table
+		@attrib params=pos api=1
 
-	@returns an array of objects containing field information.
-	**/
-	function db_get_fields()
-	{
-		return $this->dc[$this->default_cid]->db_get_fields();
-	}
+		@param $name required type=string
+			table name
+		
+		@returns 
+			array - the properties of table $name or false if it doesn't exist
+			properties are returned as array $tablename => $tableprops
+			where $tableprops is an array("name" => $table_name, "fields" => $fieldprops)
+			where $fieldprops is an array of $fieldname => $cur_props
+			where $cur_props is an array("name" => $field_name, "length" => $field_length, "type" => $field_type, "flags" => $field_flags)
 
-	/**
-	@attrib params=pos api=1
-
-	@param $name required type=string
-		table name
-	@returns array - the properties of table $name or false if it doesn't exist
-	properties are returned as array $tablename => $tableprops
-	where $tableprops is an array("name" => $table_name, "fields" => $fieldprops)
-	where $fieldprops is an array of $fieldname => $cur_props
-	where $cur_props is an array("name" => $field_name, "length" => $field_length, "type" => $field_type, "flags" => $field_flags)
-
-	@examples
-	CREATE TABLE tbl (id int, content text)
-	db_get_table("tbl") returns:
-	array("name" => "tbl",
-		"fields" => array("id" => array("name" => "id", "length" => 10, "type" => "int", "flags" => ""),
-		"content" => array("name" => "content", "length" => "65535", "type" => "text", "flags" => "")
-		))
+		@examples
+			CREATE TABLE tbl (id int, content text)
+			db_get_table("tbl") returns:
+			array("name" => "tbl",
+				"fields" => array("id" => array("name" => "id", "length" => 10, "type" => "int", "flags" => ""),
+				"content" => array("name" => "content", "length" => "65535", "type" => "text", "flags" => "")
+				))
 	**/
 	function db_get_table($name)
 	{
 		return $this->dc[$this->default_cid]->db_get_table($name);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** Creates a new database table
+		@attrib params=pos api=1
 
-	@param $name required type=string
-		table name
-	@returns field "create table" of a query result
+		@param $name required type=string
+			table name to create
 
-	@comment makes query SHOW CREATE TABLE $name and returns field "create table" of a result
-	**/
-	function db_show_create_table($name)
-	{
-		return $this->dc[$this->default_cid]->db_show_create_table($name);
-	}
+		@param $field_data required type=array
+			initial field definitions. Format:
+			array(
+				"field_name1" => array(
+					"type" => "INT",
+					"null" => false,
+					"default" => 0
+				),
+				"field_name2" => array(
+					"type" => "CHAR",
+					"length" => 15,
+					"index" => true // whether to index column
+				),
+			);
 
-	/**
-	@attrib params=pos api=1
+		@param $primary required type=string
+			primary key field name
 
-	@param $source required type=array
-		table array representation
-	@param $dest required type=string
-		destination table name
+		@returns TRUE on success, FALSE on failure
 
-	@comment syncs the tables, creates all fields in $dest that are not in $dest, but are in $source
-	**/
-	function db_sync_tables($source,$dest)
-	{
-		return $this->dc[$this->default_cid]->db_sync_tables($source,$dest);
-	}
-
-	/**
-	@attrib params=pos api=1
-
-	@param $name required type=string
-		table name to create
-	@param $field_data required type=array
-		initial field definitions. Format:
-		array(
-			"field_name1" => array(
-				"type" => "INT",
-				"null" => false,
-				"default" => 0
-			),
-			"field_name2" => array(
-				"type" => "CHAR",
-				"length" => 15,
-				"index" => true // whether to index column
-			),
-		);
-	@param $primary required type=string
-		primary key field name
-
-	@returns TRUE on success, FALSE on failure
-	@comment creates a new table.
+		@examples
+			 $this->db_create_table("crm_insurance", $field_data, "oid");
 	**/
 	function db_create_table($name, $field_data, $primary)
 	{
 		return $this->dc[$this->default_cid]->db_create_table($name, $field_data, $primary);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** Returns sql for field type with length
+		@attrib params=pos api=1
 
-	@param $type required type=string
-		type of field you want to qreate
-	@param $length required type=int
-		length of field you want to create
-	@comment this returns the sql for creating the field
+		@param $type required type=string
+			type of field you want to qreate
 
-	@examples
-		if driver is mysql
-		$str = $this->mk_field_len(varchar , 100);
-		($str = "VARCHAR(100)")
+		@param $length required type=int
+			length of field you want to create
+
+		@comment 
+			this returns the sql for creating the field
+
+		@examples
+			if driver is mysql
+			$str = $this->mk_field_len(varchar , 100);
+			($str = "VARCHAR(100)")
 	**/
 	function mk_field_len($type,$length)
 	{
 		return $this->dc[$this->default_cid]->mk_field_len($type,$length);
 	}
 
-	/**
-	@attrib params=name api=1
+	/** Reads and returns the structure of the database
+		@attrib api=1
 
-	@param name required type=string
-		table name
-	@param fields optional type=array
-		field info : array('name' = .. , 'type' = .. , 'length' => .. , flags => ..)
-	@returns string
-
-	@comment
-	this creates a nice string from the results of db_get_table
-	**/
-	function db_print_table($args)
-	{
-		return $this->dc[$this->default_cid]->db_print_table($args);
-	}
-
-	/**
-	@attrib api=1
-
-	@returns array
-
-	@comment
-	Reads and returns the structure of the database
-
+		@returns 
+			array { table_name => array { field_name => array{ type => field type, flags => array { field extra data }, key => if field has a key, key name } } }
 	**/
 	function db_get_struct()
 	{
 		return $this->dc[$this->default_cid]->db_get_struct();
 	}
 
-	/**
-	@attrib api=1
+	/** saves query handle in the internal stack
+		@attrib api=1
 
-	@comment
-	saves query handle in the internal stack
-	it's your task to make sure you call those functions in correct
-	order, otherwise weird things could happen
+		@comment
+			The idea behind save_handle/restore_handle is, that you can iterate over the results of another query, while you are iterating over the results of some other query. 
+			it's your task to make sure you call those functions in correct
+			order, otherwise weird things could happen
 
-	@examples ${restore_handle}
+		@examples 
+			$this->db_query("SELECT * FROM foo");
+			while ($row = $this->db_next())
+			{
+				$this->save_handle();	// if you didn't have these here, then the loop would only get done once, because the update query would replace the internal result set iterator
+				$this->db_query("UPDATE foo SET b=1 WHERE c = $row[a]");
+				$this->restore_handle();
+			}
 	**/
 	function save_handle()
 	{
 		return $this->dc[$this->default_cid]->save_handle();
 	}
 
-	////
-	// !Sets current query handle
-	/**
-	@attrib api=1
+	/** restores query handle from internal stack
+		@attrib api=1
 
-	@comment restores query handle from internal check
-
-	@examples
-	function mark_queue_locked($qid)
-	{
-		$this->save_handle();
-		$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
-		$this->restore_handlE();
-	}
+		@examples
+			${save_handle}
 	**/
 	function restore_handle()
 	{
 		return $this->dc[$this->default_cid]->restore_handle();
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** fetch record from table
+		@attrib params=pos api=1
 
-	@param table required type=string
-		table name
-	@param field required type=string
-		field name - the one you want to check
-	@param selector required type=string
-		field value - value , you are looking for
-	@param fields optional type=array default="*"
-		fields you want to see in query result
-	@returns array
+		@param table required type=string
+			table name
+		
+		@param field required type=string
+			field name - the one you want to check
 
-	@comment
-		fetch record from table
+		@param selector required type=string
+			field value - value , you are looking for
+
+		@param fields optional type=array default="*"
+			fields you want to see in query result
+
+		@returns 
+			array containing the requested fields or all fields in the table
+
 	**/
 	function get_record($table,$field,$selector,$fields = array())
 	{
@@ -560,63 +511,63 @@ class db_connector
 		return $this->db_fetch_row();
 	}
 
-	/**
-	@attrib api=1
+	/** selects a list of databases from the server, the list can be retrieved by calling db_next_database()
+		@attrib api=1
 
-	@comment
-	selects a list of databases from the server, the list can be retrieved by calling db_next_database()
-
-	@examples
-	$dbi->db_list_databases();
-	while ($db = $dbi->db_next_database())
-	{
-		echo $db['name']
-	}
+		@examples
+			$dbi->db_list_databases();
+			while ($db = $dbi->db_next_database())
+			{
+				echo $db['name']
+			}
 	**/
 	function db_list_databases()
 	{
 		return $this->dc[$this->default_cid]->db_list_databases();
 	}
 
-	/**
-	@attrib api=1
+	/** Retrieves the next database in the current list
+		@attrib api=1
 
-	@return array - the next database from the list created by db_list_databases()
+		@returns 
+			the next database from the list created by db_list_databases()
+			array {name => database name }
 
-	@examples ${db_list_databases}
+		@examples ${db_list_databases}
 	**/
 	function db_next_database()
 	{
 		return $this->dc[$this->default_cid]->db_next_database();
 	}
 
-	/**
-	@attrib params=name api=1
+	/** createa a database in the server
+		@attrib params=name api=1
 
-	@param name required type=string
-		the name of the database
-	@param user required type=string
-		the user that will get access to the database
-	@param host required type=string
-		the host from where the access will be granted
-	@param pass required type=string
-		the password for the database
-	@comment
-		tries to create the database in the server
+		@param name required type=string
+			the name of the database
+
+		@param user required type=string
+			the user that will get access to the database
+
+		@param host required type=string
+			the host from where the access will be granted
+
+		@param pass required type=string
+			the password for the database
+		
 	**/
 	function db_create_database($arr)
 	{
 		return $this->dc[$this->default_cid]->db_create_database($arr);
 	}
 
-	/**
-	@attrib api=1
-	@return array()
+	/** returns a list of all available database drivers on the system
+		@attrib api=1
+	
+		@returns array(driver_class => driver_class)
 
-	@comment
-		returns a list of all available database drivers on the system
-	@examples
-		$args['prop']['options'] = $this->list_db_drivers();
+		@examples
+			$args['prop']['options'] = $this->list_db_drivers();
 	**/
 	function list_db_drivers()
 	{
@@ -637,225 +588,214 @@ class db_connector
 		return $ret;
 	}
 
-	/**
-	@attrib api=1
-	@return array('Server_version' => .. , 'Protocol_version' => .. , 'Host_info' => .. , Variables => values , 'Queries_per_sec' => ..)
+	/** returns server status - the fields returned are server-specific
+		@attrib api=1
+		
+		@returns 
+			array('Server_version' => .. , 'Protocol_version' => .. , 'Host_info' => .. , Variables => values , 'Queries_per_sec' => ..)
 
-	@comment
-		returns server status - the fields returned are server-specific
-	@examples
-		$stat = $server->db_server_status();
+		@examples
+			$stat = $server->db_server_status();
 	**/
 	function db_server_status()
 	{
 		return $this->dc[$this->default_cid]->db_server_status();
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** returns information about the specified table - the fields returned are server specific
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the name of the table
-	@return array()
+		@param tbl required type=string
+			the name of the table
 
-	@comment
-		returns information about the specified table - the fields returned are server specific
+		@returns array of status fields
 	**/
 	function db_get_table_info($tbl)
 	{
 		return $this->dc[$this->default_cid]->db_get_table_info($tbl);
 	}
 
-	/**
-	@attrib api=1
-	@return  array('' => '', 'AUTO_INCREMENT' => 'AUTO_INCREMENT');
+	/** Returns a list of database specific flags that you can assign to a field
+		@attrib api=1
 
-	@comment
-		returns array of database flags
+		@returns  
+			array('' => '', 'AUTO_INCREMENT' => 'AUTO_INCREMENT');
+
 	**/
 	function db_list_flags()
 	{
 		return $this->dc[$this->default_cid]->db_list_flags();
 	}
 
-	/**
-	@attrib api=1
+	/** Returns a database-specific list of field types
+		@attrib api=1
 
-	@return array()
+		@returns array(type_name => type_name)
 
-	@comment
-		returns array of database field types
 	**/
 	function db_list_field_types()
 	{
 		return $this->dc[$this->default_cid]->db_list_field_types();
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** adds a column to table $tbl
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the table to add to
-	@param coldat required type=array
-		coldat - new column properties array(name, type, length, null, default, extra)
+		@param tbl required type=string
+			the table to add to
+		
+		@param coldat required type=array
+			coldat - new column properties array(name, type, length, null, default, extra)
 
-	@comment
-		adds a column to table $tbl
 	**/
 	function db_add_col($tbl,$coldat)
 	{
 		return $this->dc[$this->default_cid]->db_add_col($tbl,$coldat);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** change a column in table
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the table where the column is
-	@param col required type=string
-		the column to change
-	@param newdat required type=array
-		new column properties array(name, type, length, null, default, extra)
-	@comment
-		change a column in table
+		@param tbl required type=string
+			the table where the column is
+		
+		@param col required type=string
+			the column to change
+
+		@param newdat required type=array
+			new column properties array(name, type, length, null, default, extra)
+		
 	**/
 	function db_change_col($tbl, $col, $newdat)
 	{
 		return $this->dc[$this->default_cid]->db_change_col($tbl, $col, $newdat);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** drops column $col from table $tbl
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the table where the column is
-	@param col required type=string
-		the column to drop
-	@comment
-		drops column $col from table $tbl
+		@param tbl required type=string
+			the table where the column is
+
+		@param col required type=string
+			the column to drop		
 	**/
 	function db_drop_col($tbl,$col)
 	{
 		return $this->dc[$this->default_cid]->db_drop_col($tbl,$col);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** lists indexes for table $tbl, you can retriev the list by calling db_nect_index
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the table name
-	@comment
-		lists indexes for table $tbl
+		@param tbl required type=string
+			the table name
+			
 	**/
 	function db_list_indexes($tbl)
 	{
 		return $this->dc[$this->default_cid]->db_list_indexes($tbl);
 	}
 
-	/**
-	@attrib api=1
+	/** fetches next index from list created by db_list_indexes
+		@attrib api=1
 
-	@returns:array - index_name - the name of the index
-			col_name - the name of the column that the index is created on
-			unique - if true, values in index must be unique
-	@comment
-		fetches next index from list created by db_list_indexes
+		@returns
+			array - 
+				index_name - the name of the index
+				col_name - the name of the column that the index is created on
+				unique - if true, values in index must be unique
 	**/
 	function db_next_index()
 	{
 		return $this->dc[$this->default_cid]->db_next_index();
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** adds an index to table $tbl
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the table name
-	@param $idx_dat required type=array
-		an array that defines index properties -
-			name - the name of the index
-			col - the column on what to create the index
-	@comment
-		adds an index to table $tbl
+		@param tbl required type=string
+			the table name
+
+		@param $idx_dat required type=array
+			an array that defines index properties -
+				name - the name of the index
+				col - the column on what to create the index
 	**/
 	function db_add_index($tbl, $idx_dat)
 	{
 		return $this->dc[$this->default_cid]->db_add_index($tbl, $idx_dat);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** drops index $name from table $tbl
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the table name
-	@param name required type=string
-		index name
-	@comment
-		drops index $name from table $tbl
+		@param tbl required type=string
+			the table name
+
+		@param name required type=string
+			index name
 	**/
 	function db_drop_index($tbl, $name)
 	{
 		return $this->dc[$this->default_cid]->db_drop_index($tbl, $name);
 	}
 
-	/**
-	@attrib api=1
-	@returns false - if no error has occurred
-		otherwise - array -
-		error_cmd - the query that produced the error
-		error_code - the db-specific error code
-		error_string - the error string returned by the database
-	@comment
-		returns last occurred error
+	/** returns last occurred error
+		@attrib api=1
+
+		@returns false - if no error has occurred
+			otherwise - array -
+				error_cmd - the query that produced the error
+				error_code - the db-specific error code
+				error_string - the error string returned by the database
 	**/
 	function db_get_last_error()
 	{
 		return $this->dc[$this->default_cid]->db_get_last_error();
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** checks if the table exists
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the table name
-	@returns true if the specified table exists in the database
+		@param tbl required type=string
+			the table name
 
-	@comment
-		checks if the table exists
+		@returns 
+			true if the specified table exists in the database, false if not
 	**/
 	function db_table_exists($tbl)
 	{
 		return $this->dc[$this->default_cid]->db_table_exists($tbl);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** escapes a database table field name based on the db driver
+		@attrib params=pos api=1
 
-	@param fn required type=string
-		database table field name
-	@returns string
+		@param fn required type=string
+			database table field name
 
-	@comment
-		escapes a database table field name based on the db driver
+		@returns string
+	
+		@examples
+			 $q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")....
 	**/
 	function db_fn($fn)
 	{
 		return $this->dc[$this->default_cid]->db_fn($fn);
 	}
 
-	/**
-	@attrib params=pos api=1
+	/** checks if the table given is a stored procedure or a real table
+		@attrib params=pos api=1
 
-	@param tbl required type=string
-		the table name
-	@returns type of the table, as one of the DB_TABLE_TYPE constants
+		@param tbl required type=string
+			the table name
 
-	@comment
-		gets the table type
+		@returns type of the table, as one of the DB_TABLE_TYPE constants
 	**/
 	function db_get_table_type($tbl)
 	{
 		return $this->dc[$this->default_cid]->db_get_table_type($tbl);
 	}
-};
+}
 ?>

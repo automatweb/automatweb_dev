@@ -319,19 +319,6 @@ class mysql
 		return $res;
 	}
 
-	function db_get_fields()
-	{
-		$retval = array();
-		// print $this->num_fields;   // kommenterisin välja, kui keegi pahandab siis süüdi on axel
-		$this->num_fields;
-		for ($i = 0; $i < $this->num_fields; $i++)
-		{
-			$retval[] = mysql_fetch_field($this->qID);
-		}
-		return $retval;
-	}
-
-
 	////
 	// !returns the properties of table $name or false if it doesn't exist
 	// properties are returned as array $tablename => $tableprops
@@ -388,50 +375,6 @@ class mysql
 	}
 
 	////
-	// !syncs the tables, creates all fields in $dest that are not in $dest, but are in $source
-	// $dest is table name, $source is table array representation
-	function db_sync_tables($source,$dest)
-	{
-		$dest_t = $this->db_get_table($dest);
-
-		// now if the table doesn't exist, create it
-		if (!$dest_t)
-		{
-			// create
-			$fls = array();
-			foreach ($source['fields'] as $fname => $fdata)
-			{
-				$fls[] = $fdata['name'].' '.$this->mk_field_len($fdata['type'],$fdata['length']);
-			}
-			$sql = 'CREATE TABLE '.$dest.'('.(join(',',$fls)).')';
-			$this->db_query($sql);
-		}
-		else
-		{
-			// iterate over all fields and add the missing ones and convert the changed ones
-			foreach($source['fields'] as $fname => $fdata)
-			{
-				if (is_array($dest_t['fields'][$fdata['name']]))
-				{
-					// field exists, convert it if necessary
-					$dest_field = $dest_t['fields'][$fdata['name']];
-					if ($dest_field['type'] != $fdata['type'] || $dest_field['length'] != $fdata['length'])
-					{
-						$sql = "ALTER TABLE $dest CHANGE ".$fdata['name'].' '.$fdata['name'].' '.$this->mk_field_len($fdata['type'],$fdata['length']);
-						$this->db_query($sql);
-					}
-				}
-				else
-				{
-					// field does not exist, add it
-					$sql = "ALTER TABLE $dest ADD ".$fdata['name'].' '.$this->mk_field_len($fdata['type'],$fdata['length']);
-					$this->db_query($sql);
-				}
-			}
-		}
-	}
-
-	////
 	// !this returns the sql for creating the field
 	function mk_field_len($type,$length)
 	{
@@ -450,24 +393,6 @@ class mysql
 			default:
 				return $type;
 		}
-	}
-
-	////
-	// !this creates a nice string from the results of db_get_table
-	function db_print_table($arr)
-	{
-		$ret = 'CREATE TABLE '.$arr['name'];
-		$ret.='(';
-		$fs = array();
-		if (is_array($arr['fields']))
-		{
-			foreach($arr['fields'] as $fname => $fdata)
-			{
-				$fs[] = $fdata['name'].' '.$fdata['type'].'('.$fdata['length'].') '.$fdata['flags'];
-			}
-		}
-		$ret.=join(',',$fs);
-		return $ret.')';
 	}
 
 	////
@@ -561,12 +486,6 @@ class mysql
 		$q = "CREATE TABLE `$name` ($field_dfns, PRIMARY KEY(`$primary`)" . $index . ")";
 		return $this->db_query($q);
 	}
-
-	function db_show_create_table($name)
-	{
-		return $this->db_fetch_field('SHOW CREATE TABLE '.$name, 'Create Table');
-	}
-
 
 	function db_list_databases()
 	{
