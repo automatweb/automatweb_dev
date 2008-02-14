@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.27 2007/11/23 07:10:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.28 2008/02/14 08:32:28 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -525,7 +525,7 @@ class watercraft extends class_base
 			WATERCRAFT_TYPE_SCOOTER => t('Skuuter'),
 			WATERCRAFT_TYPE_SAILBOARD => t('Purjelaud'),
 			WATERCRAFT_TYPE_OTHER => t('Muu alus'),
-			WATERCRAFT_TYPE_ACCESSORIES => t('Varustus/tarvikud')
+			WATERCRAFT_TYPE_ACCESSORIES => t('Varustus')
 		);
 
 		$this->accessories = array(
