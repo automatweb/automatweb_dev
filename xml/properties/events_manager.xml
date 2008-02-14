@@ -259,6 +259,16 @@
             <caption>Toimetajate kasutajagrupid</caption>
       </property>
       <property>
+            <name>preview_object</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DOCUMENT</reltype>
+            <caption>Eelvaate objekt</caption>
+      </property>
+      <property>
             <name>forms_caption</name>
             <table>objects</table>
             <group>settings</group>
@@ -509,6 +519,11 @@
                   <clid>CL_GROUP</clid>
                   <caption>Kasutajagrupp</caption>
             </GROUP>
+            <DOCUMENT>
+                  <value>12</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Dokument</caption>
+            </DOCUMENT>
       </reltypes>
       <layout>
             <events_top>

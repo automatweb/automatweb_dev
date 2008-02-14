@@ -105,6 +105,9 @@
 	@property editors_groups type=relpicker multiple=1 reltype=RELTYPE_GROUP automatic=1
 	@caption Toimetajate kasutajagrupid
 
+	@property preview_object type=relpicker reltype=RELTYPE_DOCUMENT
+	@caption Eelvaate objekt
+
 	@property forms_caption type=text store=no subtitle=1
 	@caption Vormid
 
@@ -187,6 +190,8 @@
 @reltype GROUP value=11 clid=CL_GROUP
 @caption Kasutajagrupp
 
+@reltype DOCUMENT value=12 clid=CL_DOCUMENT
+@caption Dokument
 */
 
 class events_manager extends class_base
