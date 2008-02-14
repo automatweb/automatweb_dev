@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.219 2008/01/31 13:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.220 2008/02/14 13:57:07 markop Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -643,6 +643,40 @@ class image extends class_base
 			return false;
 		}
 	}
+
+	function add_upload_multifile($name,$parent)
+	{
+		$output = Array();
+		$_fi = get_instance(CL_FILE);
+		foreach ($_FILES[$name]["error"] as $key => $error)
+		{
+			if ($error == UPLOAD_ERR_OK)
+			{
+
+				$img_obj = new object();
+				$img_obj->set_parent($parent);
+				$img_obj->set_class_id(CL_IMAGE);
+				$img_obj->set_status(STAT_ACTIVE);
+				$img_obj->set_name($_FILES[$name]["name"][$key]);
+				if (is_uploaded_file($_FILES[$name]['tmp_name'][$key]))
+				{
+					$sz = getimagesize($_FILES[$name]['tmp_name'][$key]);
+					$fl = $_fi->_put_fs(array(
+						"type" => $_FILES[$name]['type'][$key],
+						"content" => $this->get_file(array(
+							"file" => $_FILES[$name]['tmp_name'][$key],
+						)),
+					));
+					$img_obj->set_prop("file", $fl);
+				}
+				$img_obj->save();
+				$img_id = $img_obj->id();
+				$output[] = array("id" => $img_id,"url" => $this->get_url($img_id,$_FILES[$name]["name"][$key]), "orig_name" => $fname);
+			}
+		}
+		return $output;
+	}
+
 
 	/** Saves a image that was uploaded in a form to the database
 
