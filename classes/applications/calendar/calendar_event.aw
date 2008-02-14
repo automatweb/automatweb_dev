@@ -433,7 +433,7 @@ class calendar_event extends class_base
 			case "location":
 				//$prop["table_fields"] = array("name","address.riik","afaf");
 //				$prop["props"] = $prop["table_fields"];//explode(",", "name,address,address.riik,address.linn,address.street,address.county");
-					arr($prop);
+//					arr($prop);
 				break;
 			case "organizer_table":
 				$this->_get_organizer_table($arr);
