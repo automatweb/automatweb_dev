@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.10 2008/01/31 13:54:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.11 2008/02/14 14:46:21 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -944,6 +944,9 @@ class event_import extends class_base
 		$category = $source->prop("category");
 		$url_params .= (!empty($category) && !empty($arr["UD_category"])) ? $category . "=" . $arr["UD_category"] . "&" : "";
 		
+		// The last ? or & is always unnecessary
+		$url_params = substr($url_params, 0, strlen($url_params) - 1);
+		
 		print "<br> &nbsp; &nbsp; - URL used: ". $xml_file_url.$url_params . "<br><br>";
 		$f = fopen($xml_file_url.$url_params, "r");
 		if ($f === false)
@@ -956,8 +959,12 @@ class event_import extends class_base
 		}
 		fclose($f);
 
+		if($source->prop("encoding") && $source->prop("encoding") != "UTF-8");
+			$xml_file_content = iconv($source->prop("encoding"), "UTF-8", $xml_file_content);
+
 		$xml_file_content = str_replace("&", "&amp;", $xml_file_content);
 		$xml_file_content = str_replace("", "'", $xml_file_content);
+		$xml_file_content = ereg_replace("<!--.*-->", "", $xml_file_content);
 
 		return parse_xml_def(array(
 			"xml" => $xml_file_content,
@@ -1193,80 +1200,6 @@ class event_import extends class_base
 
 	function remove_crap($v, $i)
 	{		
-		/*
-		$crap = array(
-			"А" => "&#1040;",
-			"а" => "&#1072;",
-			"Б" => "&#1041;",
-			"б" => "&#1073;",
-			"В" => "&#1042;",
-			"в" => "&#1074;",
-			"Г" => "&#1043;",
-			"г" => "&#1075;",
-			"Д" => "&#1044;",
-			"д" => "&#1076;",
-			"Е" => "&#1045;",
-			"е" => "&#1077;",
-			"Ж" => "&#1046;",
-			"ж" => "&#1078;",
-			"З" => "&#1047;",
-			"з" => "&#1079;",
-			"И" => "&#1048;",
-			"и" => "&#1080;",
-			"Й" => "&#1049;",
-			"й" => "&#1081;",
-			"К" => "&#1050;",
-			"к" => "&#1082;",
-			"Л" => "&#1051;",
-			"л" => "&#1083;",
-			"М" => "&#1052;",
-			"м" => "&#1084;",
-			"Н" => "&#1053;",
-			"н" => "&#1085;",
-			"О" => "&#1054;",
-			"о" => "&#1086;",
-			"П" => "&#1055;",
-			"п" => "&#1087;",
-			"Р" => "&#1056;",
-			"р" => "&#1088;",
-			"С" => "&#1057;",
-			"с" => "&#1089;",
-			"Т" => "&#1058;",
-			"т" => "&#1090;",
-			"У" => "&#1059;",
-			"у" => "&#1091;",
-			"Ф" => "&#1060;",
-			"ф" => "&#1092;",
-			"Х" => "&#1061;",
-			"х" => "&#1093;",
-			"Ц" => "&#1062;",
-			"ц" => "&#1094;",
-			"Ч" => "&#1063;",
-			"ч" => "&#1095;",
-			"Ш" => "&#1064;",
-			"ш" => "&#1096;",
-			"Щ" => "&#1065;",
-			"щ" => "&#1097;",
-			"Ъ" => "&#1066;",
-			"ъ" => "&#1098;",
-			"Ы" => "&#1067;",
-			"ы" => "&#1099;",
-			"Ь" => "&#1068;",
-			"ь" => "&#1100;",
-			"Э" => "&#1069;",
-			"э" => "&#1101;",
-			"Ю" => "&#1070;",
-			"ю" => "&#1102;",
-			"Я" => "&#1071;",
-			"я" => "&#1103;",
-			"«" => "&laquo;",
-			"»" => "&raquo;",
-		);
-		foreach($crap as $piece_of_crap => $gold)
-		{
-			$v = str_replace($piece_of_crap, $gold, $v);
-		}
-		*/
 		$v = str_replace("ā", "&#257;", $v);
 		$v = str_replace("ē", "&#275;", $v);
 		$v = str_replace("ū", "&#363;", $v);
@@ -1297,6 +1230,10 @@ class event_import extends class_base
 		return $v;
 	}
 
+	function make_piletimaailm_links($v, $o, $pmlinks)
+	{
+	}
+
 //	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $import_orig = true)
 	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $imp_lang_id)
 	{
@@ -1306,8 +1243,6 @@ class event_import extends class_base
 		$lg_cfg = $lg->cfg;
 		$lg_list = $lg_cfg["list"];
 		$lg = $lg->get_list();
-//		arr($lg_list);
-//		exit;
 
 		$orig_val = (!$import_orig) ? $imp_lang_id."_orig_val_" : "orig_val_";
 
@@ -1333,6 +1268,8 @@ class event_import extends class_base
 		print " &nbsp; - <strong>[STARTED]</strong> " . $xml_source->name() . " [".t(strtoupper($lg[$imp_lang_id]))."]" . "<br>";
 		flush();		
 
+		// <  POSSIBLE ERRORS  >
+
 		if(!is_oid($xml_source->prop("external_system_event")))
 		{
 			die(t("External system for events not set!"));
@@ -1352,6 +1289,8 @@ class event_import extends class_base
 		{
 			die(t("External system for event times not set!"));
 		}
+
+		// </  POSSIBLE ERRORS  >
 
 		// The tag for event, so we can track when an event is coplete.
 		$tag_event = $xml_source->prop("tag_event");
@@ -1424,25 +1363,28 @@ class event_import extends class_base
 			}
 		}
 
+
+		// <  LOAD XML CONTENT  >
+
 		$load_xml_content_params = array(
 			"UD_xml_source_id" => $xml_source->id(),
 			"UD_start_timestamp" => "".date("YmdHis", $o->meta("last_import")),
 			"UD_start_timestamp_unix" => $o->meta("last_import"),
 			"UD_future_length" => $o->prop("future_length"),
 		);
-//		if(!$import_orig)
-//		{
-			$load_xml_content_params["UD_lang_param"] = $param_lang;
-			$load_xml_content_params["UD_lang_value"] = $saved_language_table[$imp_lang_id];
-//		}
 
-		// In case we have to import all the events, we unset the date.
+		$load_xml_content_params["UD_lang_param"] = $param_lang;
+		$load_xml_content_params["UD_lang_value"] = $saved_language_table[$imp_lang_id];
+
+		// In case we have to import all the events...
 		if($o->prop("import_events_all"))
 		{
 			$load_xml_content_params["UD_start_timestamp"] = "19700101000000";
 			$load_xml_content_params["UD_start_timestamp_unix"] = 1;
 		}
 		$xml_content = $this->load_xml_content($load_xml_content_params);
+
+		// </  LOAD XML CONTENT  >
 
 		if ($xml_content === false)
 		{
@@ -1673,6 +1615,7 @@ class event_import extends class_base
 					$event_obj->set_parent($dirs["event"]);		// Kaust, kuhu sündmusi kirjutatakse (event_manager)
 					// By default new events are not public.
 					$event_obj->set_prop("published", 0);
+					$pmlinks = array();
 					if(!empty($event_data["level"]))
 					{
 						if(array_key_exists($event_data["level"], $saved_lvl_conf))
@@ -1685,6 +1628,13 @@ class event_import extends class_base
 					{
 						if(!empty($key) && !empty($value))
 						{
+							if(!(strpos("piletimaailm.com", $value) === false))
+							{
+								$this->make_piletimaailm_links($value, &$event_obj, &$pmlinks);
+							}
+
+							$value = $this->remove_crap($value, $imp_lang_id);
+							$value = iconv("UTF-8", $lg_list[$imp_lang_id]["charset"]."//IGNORE", $value);
 							if($import_orig)
 							{
 								// Importing the original content
@@ -1712,6 +1662,7 @@ class event_import extends class_base
 //						print "Saving translations<br>";
 						$event_obj->set_meta("translations", $all_vals);
 					}
+					$event_obj->set_meta("pmlinks", $pmlinks);
 					$event_obj->save();
 					print $event_data["name"].", ID - ".$event_obj->id()." [saved]<br>";
 					flush();
@@ -1736,7 +1687,7 @@ class event_import extends class_base
 					$imps["event"][$ext_sys_event][$event_id] = $event_obj->id();
 				}
 				else
-				{ // excisting event
+				{ // existing event
 					$event_obj = new object($imps["event"][$ext_sys_event][$event_id]);
 					print "[ --- ][".$lg[$imp_lang_id]."] ".$event_data["name"].", ID - ".$event_obj->id()."<br>";
 					
@@ -1750,21 +1701,17 @@ class event_import extends class_base
 					$change_auto = $event_obj->meta("auto_fields");
 					$change_auto = str_replace(" ", "", $change_auto);
 					$change_auto = explode(",", $change_auto);
+					$pmlinks = $event_obj->meta("pmlinks");
 					
 					foreach($event_data as $key => $value)
 					{
-						$value1 = $value;
-						$value = $this->remove_crap($value, $imp_lang_id);
-//						$value = htmlspecialchars($value, ENT_QUOTES, "UTF-8");
-//						print $value."<br>";
-						$value = iconv("UTF-8", $lg_list[$imp_lang_id]["charset"]."//IGNORE", $value);
-						/*
-						if($value1 != $value)
+						if(!(strpos("piletimaailm.com", $value) === false))
 						{
-							print $key." = ".$value1."<br>";
-							print $key." = ".$value."<br>";
+							$this->make_piletimaailm_links($value, &$event_obj);
 						}
-						/**/
+
+						$value = $this->remove_crap($value, $imp_lang_id);
+						$value = iconv("UTF-8", $lg_list[$imp_lang_id]["charset"]."//IGNORE", $value);
 						if(!empty($key))
 						{
 							// If the content of the field has been modified manually, we use the $saved_conf_aw array.
@@ -1847,6 +1794,8 @@ class event_import extends class_base
 							}
 						}
 					}
+					$event_obj->set_meta("pmlinks", $pmlinks);
+					$event_obj->save();
 				}
 				flush();
 //				arr($event_obj->meta("translations"));
@@ -2314,25 +2263,10 @@ class event_import extends class_base
 		if (!$this->can("view", $arr['id']))
 		{
 			die(t("You don't have view access to import object!"));
-			/*
-			error::raise(array(
-				"msg" => t("You don't have view access to import object!"),
-			));			
-			return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
-			*/
 		}
 
 		$o = obj($arr['id']);
 		$li = $o->prop("original_lang");
-
-		/*
-		// This seems to be the easiest way to export the objects.
-		$o = obj($arr['id']);
-		print "<pre>";
-		print htmlentities($o->get_xml());
-		print "</pre>";
-		exit;
-		/**/
 		
 		$events_manager_id = $o->prop("events_manager");
 
@@ -2344,12 +2278,6 @@ class event_import extends class_base
 		if (!$this->can("view", $events_manager_id))
 		{
 			die(t("You don't have view access to events manager object!"));
-			/*
-			error::raise(array(
-				"msg" => t("You don't have view access to events manager object!"),
-			));			
-			return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
-			*/
 		}
 
 		$events_manager_obj = obj($events_manager_id);
@@ -2394,18 +2322,13 @@ class event_import extends class_base
 		if (!$this->can("view", $event_form_id))
 		{
 			die(t("You don't have view access to eventform object!"));
-			/*
-			error::raise(array(
-				"msg" => t("You don't have view access to eventform object!"),
-			));			
-			return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
-			*/
 		}
 
 		$event_form_obj = obj($event_form_id);
 
 		$class_id = $event_form_obj->prop("subclass");
 
+		// <  GATHERING PREVIOUSLY IMPORTED DATA  >
 		// Gathering the IDs of events, locations, categories (aka sectors) and event times already imported...
 		
 		$imported_events = array();
@@ -2450,33 +2373,40 @@ class event_import extends class_base
 				"parent" => $impd_objs["parent"],
 				"class_id" => $impd_objs["class_id"],
 			));
-			$extents = new object_list(array(
-				"class_id" => CL_EXTERNAL_SYSTEM_ENTRY,
-				"obj" => $ol->ids(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"parent" => array(),
-			));
-			foreach($extents->arr() as $ext_obj)
+
+			$extents = new object_data_list(
+				array(
+					"class_id" => CL_EXTERNAL_SYSTEM_ENTRY,
+					"obj" => $ol->ids(),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"parent" => array(),
+				),
+				array(
+					CL_EXTERNAL_SYSTEM_ENTRY => array(
+						"value" => "value",
+						"obj" => "obj",
+						"ext_sys_id" => "ext_sys_id",
+					),
+				)
+			);
+
+			// This is what takes A LOT of time!
+
+			foreach($extents->list_data as $ext)
 			{
-				$ext_ids_arr = str_replace(" ", "", $ext_obj->prop("value"));
+				$ext_ids_arr = str_replace(" ", "", $ext["value"]);
 				// The external IDs are separated with commas
 				$ext_ids = explode(",", $ext_ids_arr);
 				foreach($ext_ids as $ext_id)
 				{
 					// We don't wanna get an error saying "object::load(44650): no view access for object 44650!"
-					if($this->can("view", $ext_obj->prop("obj")) && is_oid($ext_obj->prop("obj")))
-						$impd_objs["array_var"][$ext_obj->prop("ext_sys_id")][$ext_id] = $ext_obj->prop("obj");
+					if($this->can("view", $ext["obj"]) && is_oid($ext["obj"]))
+						$impd_objs["array_var"][$ext["ext_sys_id"]][$ext_id] = $ext["obj"];
 				}
 			}
 		}
-
-		/*
-		arr($locations);
-		arr($categories);
-		arr($imported_times);
-		exit;
-		/**/
+		// </  GATHERING PREVIOUSLY IMPORTED DATA  >
 
 		$conns_to_xl_sources = $o->connections_from(array(
 			"type" => "RELTYPE_XML_SOURCE",
