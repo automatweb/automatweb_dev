@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/external/xml_source.aw,v 1.4 2008/01/31 13:52:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/external/xml_source.aw,v 1.5 2008/02/14 14:44:36 instrumental Exp $
 // xml_source.aw - XML source 
 /*
 
@@ -29,6 +29,9 @@
 		@property tag_id type=select
 		@caption ID
 		@comment XML väli või argument, kus on imporditava sündmuse ID
+
+		@property encoding type=textbox
+		@caption Encoding
 
 	@groupinfo sub_extsys caption="Siduss&uuml;steemid" parent=general
 	@default group=sub_extsys
