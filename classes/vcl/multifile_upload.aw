@@ -38,7 +38,7 @@ class multifile_upload extends class_base
 					"file_name"=>$fo -> name(),
 					"file_url" => $file_instance->get_url($fo->id(), $fo->name()),
 					"edit_url" => html::get_change_url($fo->id()),
-					"delete_url" =>$file_url, aw_ini_get("baseurl")."/automatweb/orb?class=multifile_upload&action=ajax_delete_obj&id=".$fo->id(),
+					"delete_url" => aw_ini_get("baseurl")."/automatweb/orb?class=multifile_upload&action=ajax_delete_obj&id=".$fo->id(),
 				));
 				$tmp .= $this->parse('file');
 			}
@@ -60,7 +60,6 @@ class multifile_upload extends class_base
 	{
 		
 	}
-	
 
 	function callback_post_save($arr)
 	{
@@ -87,7 +86,6 @@ class multifile_upload extends class_base
 		}
 	}
 
-	
 	/**
 	@attrib name=ajax_delete_obj
 	
