@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.34 2008/02/11 09:48:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.35 2008/02/14 10:55:51 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -974,7 +974,6 @@ class persons_webview extends class_base
 
 	function parse_worker($worker)
 	{
-		$vars = array();
 		if(!$this->section && !$this->view_obj->prop("department_grouping"))
 		{
 			$this->section = $worker->get_first_obj_by_reltype("RELTYPE_SECTION");
@@ -986,6 +985,17 @@ class persons_webview extends class_base
 
 		//amet
 		$this->parse_profession($worker);
+
+		$vars = array(
+			"name" => $worker->name(),
+			"wage_doc" => $worker->prop("wage_doc"),
+			"ta1" => $worker->prop("udef_ta1"),
+			"ta2" => $worker->prop("udef_ta2"),
+			"ta3" => $worker->prop("udef_ta3"),
+			"ta4" => $worker->prop("udef_ta4"),
+			"ta5" => $worker->prop("udef_ta5"),
+			"comment" => $worker->prop("comment"),
+		);
 
 		//pilt
 		$photo="";
@@ -1214,46 +1224,49 @@ class persons_webview extends class_base
 			$vars["cv_doc"] = $file_inst->get_url($worker->prop("cv_doc"), $worker->prop("cv_doc.name"));
 		}
 		$vars["cv_link"] = $worker->prop("cv_link");
+		$vars["photo"] = $photo;
+		$vars["phone"] = $phone;
+		$vars["phones"] = $phones;
+		$vars["contact"] = $contact;
+		$vars["email"] = $email;
+		$vars["emails"] = $emails;
+		$vars["education"] = $person_inst->edulevel_options[$worker->prop("edulevel")];
+		$vars["speciality"] = $speciality;
+		$vars["name_with_email"] = $name_with_email;
+		$vars["wage_doc_exist"] = $wage_doc_exist;
+		$vars["next_level_link"] = $next_level_link;
+		$vars["company"] = $company;
+		$vars["section"] = $this->section->trans_get_val("name");
+		$vars["url"] = $url;
+		$vars["urls"] = $urls;
+		$vars["school"] = $school;
+		$vars["subject_field"] = $subject_field;
+		$vars["EDUCATION_SUB"] = $education;
+		$vars["STOPPED"] = $stopped;
 
-		$this->vars($vars);
+		$this->vars_safe($vars);
+
+		$subs = array();
+		foreach($vars as $key => $val)
+		{
+			$sub_name = strtoupper($key)."_SUB";
+			if($this->is_template($sub_name))
+			{
+				if($val)
+				{
+					$subs[$sub_name] = $this->parse($sub_name);
+				}
+				else
+				{
+					$subs[$sub_name] = "";
+				}
+			}
+		}
+		$this->vars_safe($subs);
 
 		$this->vars_safe(array(
-		//	"profession" => $profession,
-			"name" => $worker->name(),
-			"photo" => $photo,
-			"phone" => $phone,
-			"phones" => $phones,
-			"contact" => $contact,
-			"email" => $email,
-			"emails" => $emails,
-			"education" => $person_inst->edulevel_options[$worker->prop("edulevel")],
-			"speciality" => $speciality,
-			"name_with_email" => $name_with_email,
-			"wage_doc"	=> $worker->prop("wage_doc"),
-			"wage_doc_exist" => $wage_doc_exist,
-			"next_level_link" => $next_level_link,
-			"company" => $company,
-			"section" => $this->section->trans_get_val("name"),
-			"url"	=> $url,
-			"urls"	=> $urls,
-			"school" => $school,
-			"subject_field" => $subject_field,
-			//	"directive" => $directive,
-			"ta1" => $worker->prop("udef_ta1"),
-			"ta2" => $worker->prop("udef_ta2"),
-			"ta3" => $worker->prop("udef_ta3"),
-			"ta4" => $worker->prop("udef_ta4"),
-			"ta5" => $worker->prop("udef_ta5"),
-			"EDU_SUB" => $edu_sub,
-			"EDUCATION_SUB" => $education,
-			"STOPPED" => $stopped,
-			"comment" => $worker->prop("comment"),
+			"EDU_SUB" => $this->parse("EDU_SUB")
 		));
-		$asdasd.= $this->parse("EDU_SUB");
-		$this->vars_safe(array(
-			"EDU_SUB" => $asdasd,
-		));
-		
 	}
 
 	function get_cols_num($row)
