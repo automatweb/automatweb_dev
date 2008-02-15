@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/mail_notify.aw,v 1.2 2008/01/31 13:55:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/mail_notify.aw,v 1.3 2008/02/15 13:01:56 markop Exp $
 // reminder UI VCL component
 /*
 @classinfo maintainer=markop
@@ -9,6 +9,7 @@ class mail_notify extends core
 	function mail_notify()
 	{
 		$this->init("");
+		$GLOBALS["add_mod_reforb"] = array("add_selected_people" => "");
 		// so I have to somehow check, whether the table I need for saving my things, exists.
 	}
 
@@ -17,22 +18,9 @@ class mail_notify extends core
 		$GLOBALS["add_mod_reforb"] = array("add_selected_people" => "");
 		$rv = array();
 
-		$rv["mail_notify_toolbar"] = array(
-			"type" => "toolbar",
-			"name" => "[mail_notify_toolbar]",
-			"value" => $this->_sp_tb($arr),
-			"store" => "no",
-			"no_caption" => 1,
-		);
+		$rv["mail_notify_toolbar"] = $this->callback_mail_notify_toolbar($arr);
 
-		$rv["mail_notify_table"] = array(
-			"type" => "table",
-			"name" => "[mail_notify_table]",
-			"value" => $this->_sp_table($arr),
-//			"value" => $this->_get_mail_notify_table($arr),
-			"store" => "no",
-			"no_caption" => 1,
-		);
+		$rv["mail_notify_table"] =  $this->callback_mail_notify_table($arr);
 
 
 /*
@@ -73,7 +61,45 @@ class mail_notify extends core
 			"store" => "no",
 		);
 */
-		$rv["mail_notify_mail_settings"] = array(
+		$rv["mail_notify_mail_settings"] = $this->callback_mail_notify_mail_settings($arr);
+
+		$rv["mail_notify_text"] = $this->callback_mail_notify_text($arr);
+
+		$rv["mail_notify_subject"] = $this->callback_mail_notify_subject($arr);
+
+		$rv["mail_notify_from"] = $this->callback_mail_notify_from($arr);
+
+		$rv["mail_notify_content"] = $this->mail_notify_content($arr);
+
+		return $rv;
+	}
+
+	function callback_mail_notify_toolbar($arr)
+	{
+		return array(
+			"type" => "toolbar",
+			"name" => "[mail_notify_toolbar]",
+			"value" => $this->_sp_tb($arr),
+			"store" => "no",
+			"no_caption" => 1,
+		);
+	}
+
+	function callback_mail_notify_table($arr)
+	{
+		return array(
+			"type" => "table",
+			"name" => "[mail_notify_table]",
+			"value" => $this->_sp_table($arr),
+//			"value" => $this->_get_mail_notify_table($arr),
+			"store" => "no",
+			"no_caption" => 1,
+		);
+	}
+
+	function callback_mail_notify_mail_settings($arr)
+	{
+		return array(
 			"type" => "text",
 			"name" => "[mail_notify_mail_settings]",
 			"subtitle" => 1,
@@ -81,32 +107,44 @@ class mail_notify extends core
 			"caption" => t("Maili seaded"),
 			"store" => "no",
 		);
+	}
 
-		$rv["mail_notify_text"] = array(
+	function callback_mail_notify_text($arr)
+	{
+		return array(
 			"type" => "text",
 			"name" => "[Sisu v&otilde;imalike asenduste tekst]",
 			"no_caption" => 1,
 			"value" => t("V&otilde;imalikud asendused\n<br>#file# - faili nimi \n<br>#file_url# - link failile \n<br>#user_name# - muutja nimi"),
 			"store" => "no",
 		);
+	}
 
-		$rv["mail_notify_subject"] = array(
+	function callback_mail_notify_subject($arr)
+	{
+		return array(
 			"type" => "textbox",
 			"name" => "mail_notify_subject",
 			"caption" => t("Teema"),
 			"value" => $this->_get_subject($arr),
 			"store" => "no",
 		);
+	}
 
-		$rv["mail_notify_from"] = array(
+	function callback_mail_notify_from($arr)
+	{
+		return array(
 			"type" => "textbox",
 			"name" => "mail_notify_from",
 			"caption" => t("Kellelt"),
 			"value" => $this->_get_from($arr),
 			"store" => "no",
 		);
+	}
 
-		$rv["mail_notify_content"] = array(
+	function callback_mail_notify_content($arr)
+	{
+		return  array(
 			"type" => "textarea",
 			"cols" => 50,
 			"rows" => 5,
@@ -115,8 +153,6 @@ class mail_notify extends core
 			"value" => $this->_get_content($arr),
 			"store" => "no",
 		);
-
-		return $rv;
 	}
 
 	function _get_mail_notify_table($arr)

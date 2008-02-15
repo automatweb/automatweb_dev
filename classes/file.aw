@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.175 2008/02/04 13:02:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.176 2008/02/15 13:01:53 markop Exp $
 /*
 
 
@@ -101,8 +101,30 @@
 	property sp_s_res type=table store=no
 	caption Otsingu tulemused
 
-	@property n_test type=mail_notify store=no
-	@caption maili teavituse test prop
+
+@property mail_notify_toolbar type=toolbar store=no no_caption=1
+@caption Maili teavituse toolbar
+
+@property mail_notify_table type=table store=no no_caption=1
+@caption Maili teavituse tabel
+
+@property mail_notify_mail_settings type=text store=no no_caption=1
+@caption Maili seaded
+
+@property mail_notify_text type=text store=no no_caption=1
+@caption Maili seaded
+
+@property mail_notify_subject type=textbox store=no no_caption=1
+@caption Maili subjekt
+
+@property mail_notify_from type=textbox store=no no_caption=1
+@caption Kellelt
+
+@property mail_notify_content type=textbox store=no no_caption=1
+@caption Sisu
+
+	property n_test type=mail_notify store=no
+	caption maili teavituse test prop
 
 @groupinfo settings caption=Seadistused
 @groupinfo dates caption=Ajad
@@ -241,6 +263,18 @@ class file extends class_base
 						));
 						break;
 				}
+				break;
+			case "mail_notify_toolbar":
+			case "mail_notify_table":
+			case "mail_notify_mail_settings":
+			case "mail_notify_text":
+			case "mail_notify_subject":
+			case "mail_notify_from":
+			case "mail_notify_content":
+				classload("vcl/mail_notify");
+				$mn = new mail_notify();
+				$fn = "callback_".$data["name"];
+				$data = $mn->$fn($arr);
 				break;
 			case "show_icon":
 				if ($arr["obj_inst"]->prop("show_icon") == 8 || $arr["obj_inst"]->prop("show_icon") === NULL)
@@ -455,6 +489,11 @@ class file extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "mail_notify_toolbar":
+				classload("vcl/mail_notify");
+				$mn = new mail_notify();
+				$mn->process_vcl_property($arr);
+				break;
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
