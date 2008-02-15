@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.7 2008/02/11 13:30:56 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_manager.aw,v 1.8 2008/02/15 10:30:49 robert Exp $
 // geoinfo_manager.aw - Geoinfo haldus 
 /*
 
@@ -300,7 +300,7 @@ class geoinfo_manager extends class_base
 						{
 							foreach($tmpvar as $tmp)
 							{
-								$allvars[$tmp] = $val["value"];
+								$allvars[$tmp] = iconv("UTF-8",aw_global_get("charset"),trim($val["value"]));
 							}
 						}
 					}
@@ -310,7 +310,7 @@ class geoinfo_manager extends class_base
 						{
 							foreach($tmpvar as $tmp)
 							{
-								$curvars[$tmp] = $val["value"];
+								$curvars[$tmp] = iconv("UTF-8",aw_global_get("charset"), trim($val["value"]));
 							}
 						}
 					}
@@ -367,7 +367,7 @@ class geoinfo_manager extends class_base
 							{
 								foreach($tmpvar as $tmp)
 								{
-									$curvars[$tmp] = $v;
+									$curvars[$tmp] = iconv("UTF-8",aw_global_get("charset"), trim($v));
 								}
 							}
 						}
@@ -505,11 +505,12 @@ class geoinfo_manager extends class_base
 		$tmp = array();
 		foreach($arr["request"] as $var => $val)
 		{
-			if($var == "MAX_FILE_SIZE")
-				continue;
 			$tmpvar = explode('--', $var);
-			$tmp[$tmpvar[1]]["fields"][$val][] = $tmpvar[0];
-			$tmp[$tmpvar[1]]["props"][$tmpvar[0]] = $val;
+			if(strlen($tmpvar[1]))
+			{
+				$tmp[$tmpvar[1]]["fields"][$val][] = $tmpvar[0];
+				$tmp[$tmpvar[1]]["props"][$tmpvar[0]] = $val;
+			}
 		}
 		$arr["obj_inst"]->set_meta("rels", $tmp);
 	}
@@ -733,7 +734,6 @@ class geoinfo_manager extends class_base
 					"tags" => t('V&auml;&auml;rtused on tagides &lt;coord_x&gt;23.409&lt;/coord_x&gt;')."<br />",
 					"props" => t('V&auml;&auml;rtused on omadustes &lt;item coord_x="23.409" /&gt;')
 				);
-				$prop["onclick"] = 'alert("asd")';
 				if(!$prop["value"])
 					$prop["value"] = "tags";
 				break;
