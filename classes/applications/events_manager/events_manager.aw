@@ -806,6 +806,8 @@ class events_manager extends class_base
 		$get_ru = get_ru();
 		$t_publish = t("Avalda");
 		$t_mk_copy = t("Tee koopia");
+		$t_change = t("Muuda");
+
 		foreach($ol->arr() as $o)
 		{
 			$oid = $o->id();
@@ -851,18 +853,17 @@ class events_manager extends class_base
 
 			if($arr["obj_inst"]-> prop("preview_object"))
 			{
-				$parse_url = $GLOBALS["cfg"]["baseurl"]."/".$arr["obj_inst"]-> prop("preview_object")."?evt_id=".$oid;
-//kultuur.info/$dok_oid?evt_id=$syndmuse_oid
-//				$parse_url = $this->mk_my_orb("show", array(
-	//				"id" => $oid,
-	//			),CL_CALENDAR_EVENT);
+				$parse_url = aw_ini_get("baseurl")."/".$arr["obj_inst"]-> prop("preview_object")."?evt_id=".$oid;
 			}
+
+			$change = html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $t_change);
+
 			$t->define_data(array(
 				"name" => ($parse_url)? html::href(array("caption" => $name, "url" => $parse_url)):($can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $name) : $name),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"sector" => (is_object($sec)) ? $sec->name() : "",
 				"level" => $cal_event->level_options[$o->prop("level")],
-				"tasks" => $make_copy . " " . $publish,
+				"tasks" => $make_copy . " " . $publish . " " . $change,
 				"oid" => $oid,
 				"region" => $o->prop("location.address.maakond.name") ." ".$o->prop("location.address.linn.name"),
 				"translated" => $translated,
