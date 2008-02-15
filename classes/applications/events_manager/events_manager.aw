@@ -807,6 +807,7 @@ class events_manager extends class_base
 		$t_publish = t("Avalda");
 		$t_mk_copy = t("Tee koopia");
 		$t_change = t("Muuda");
+		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "event");
 
 		foreach($ol->arr() as $o)
 		{
