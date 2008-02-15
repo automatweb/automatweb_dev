@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,84 +9,98 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/mail_notify.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:42 classes/vcl/mail_notify.aw:313
+#: classes/vcl/mail_notify.aw:30 classes/vcl/mail_notify.aw:349
 msgid "Valitud isikud"
-msgstr ""
+msgstr "Selected people"
 
-#: classes/vcl/mail_notify.aw:49 classes/vcl/mail_notify.aw:142
+#: classes/vcl/mail_notify.aw:37 classes/vcl/mail_notify.aw:178
 msgid "Isik"
-msgstr ""
+msgstr "Person"
 
-#: classes/vcl/mail_notify.aw:56 classes/vcl/mail_notify.aw:149 classes/vcl/mail_notify.aw:268
+#: classes/vcl/mail_notify.aw:44 classes/vcl/mail_notify.aw:185
+#: classes/vcl/mail_notify.aw:304
 msgid "Organisatsioon"
-msgstr ""
+msgstr "Company"
 
-#: classes/vcl/mail_notify.aw:63 classes/vcl/mail_notify.aw:64 classes/vcl/mail_notify.aw:157
+#: classes/vcl/mail_notify.aw:51 classes/vcl/mail_notify.aw:52
+#: classes/vcl/mail_notify.aw:193
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
-#: classes/vcl/mail_notify.aw:71 classes/vcl/mail_notify.aw:222
+#: classes/vcl/mail_notify.aw:59 classes/vcl/mail_notify.aw:258
 msgid "Otsingu tulemused"
-msgstr ""
+msgstr "Search results"
 
-#: classes/vcl/mail_notify.aw:80 classes/vcl/mail_notify.aw:81
+#: classes/vcl/mail_notify.aw:106 classes/vcl/mail_notify.aw:107
 msgid "Maili seaded"
-msgstr ""
+msgstr "E-mail settings"
 
-#: classes/vcl/mail_notify.aw:89
-msgid "V&otilde;imalikud asendused\n<br>#file# - faili nimi \n<br>#file_url# - link failile \n<br>#user_name# - muutja nimi"
-msgstr ""
+#: classes/vcl/mail_notify.aw:118
+msgid "V&otilde;imalikud asendused"
+msgstr "Possible replacements"
 
-#: classes/vcl/mail_notify.aw:96
+#: classes/vcl/mail_notify.aw:118
+msgid "faili nimi"
+msgstr "file name"
+
+#: classes/vcl/mail_notify.aw:118
+msgid "link failile"
+msgstr "link to file"
+
+#: classes/vcl/mail_notify.aw:118
+msgid "muutja nimi"
+msgstr "changer name"
+
+#: classes/vcl/mail_notify.aw:128
 msgid "Teema"
-msgstr ""
+msgstr "Subject"
 
-#: classes/vcl/mail_notify.aw:104
+#: classes/vcl/mail_notify.aw:139
 msgid "Kellelt"
-msgstr ""
+msgstr "From"
 
-#: classes/vcl/mail_notify.aw:114
+#: classes/vcl/mail_notify.aw:152
 msgid "Sisu"
-msgstr ""
+msgstr "Content"
 
-#: classes/vcl/mail_notify.aw:177
+#: classes/vcl/mail_notify.aw:213
 msgid "Teavitus muutunud dokumendist"
+msgstr "Notification about modified document"
+
+#: classes/vcl/mail_notify.aw:245
+msgid ""
+"User %s has added/changed the following file %s. Please click the link below to view the document \n"
+" %s"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:209
-msgid "User %s has added/changed the following file %s. Please click the link below to view the document \n %s"
-msgstr ""
-
-#: classes/vcl/mail_notify.aw:263
+#: classes/vcl/mail_notify.aw:299
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
-#: classes/vcl/mail_notify.aw:273
+#: classes/vcl/mail_notify.aw:309
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
-#: classes/vcl/mail_notify.aw:279
+#: classes/vcl/mail_notify.aw:315
 msgid "E-mail"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:343
+#: classes/vcl/mail_notify.aw:379
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
-#: classes/vcl/mail_notify.aw:349
+#: classes/vcl/mail_notify.aw:385
 msgid "Kustuta valitute hulgast"
-msgstr ""
+msgstr "Delete"
 
-#: classes/vcl/mail_notify.aw:362
+#: classes/vcl/mail_notify.aw:398
 msgid "Otsi isikuid hulgast"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:373
+#: classes/vcl/mail_notify.aw:409
 msgid "Saada teavitusmeil"
-msgstr ""
-
+msgstr "Send notification e-mail"
