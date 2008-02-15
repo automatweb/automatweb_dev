@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.6 2008/02/12 13:18:12 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.7 2008/02/15 10:00:57 robert Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -652,7 +652,6 @@ class customer_feedback_entry extends class_base
 				"group" => $o->prop("fb_object_grp"),
 				"fb_oid" =>  $arr["id"],
 			);
-aw_global_set("xmlrpc_dbg", 1);
 			$url = $this->do_orb_method_call(array(
 				"action" => "create_feedback_bug",
 				"class" => "bug_tracker",

@@ -21,13 +21,17 @@ class bug_object extends _int_object
 		{
 			$c = get_current_company();
 			if($c)
-			$this->set_prop("orderer", $c->id());
+			{
+				$this->set_prop("orderer", $c->id());
+			}
 		}
 		if (!$this->prop("orderer_unt"))
 		{
 			$p = get_current_person();
 			if($p)
-			$sets = $p->prop("org_section");
+			{
+				$sets = $p->prop("org_section");
+			}
 			if (is_array($sets))
 			{
 				$sets = reset($sets);
@@ -38,7 +42,9 @@ class bug_object extends _int_object
 		{
 			$p = get_current_person();
 			if($p)
-			$this->set_prop("orderer_person", $p->id());
+			{
+				$this->set_prop("orderer_person", $p->id());
+			}
 		}
 	}
 }
