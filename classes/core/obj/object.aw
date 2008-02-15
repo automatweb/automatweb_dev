@@ -2000,7 +2000,7 @@ class object
 
 	function __toString()
 	{
-		return (string)$this->oid;
+		return "AW Object: ".(string)$this->oid;
 	}
 }
 
