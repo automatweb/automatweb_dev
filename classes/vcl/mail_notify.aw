@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/mail_notify.aw,v 1.3 2008/02/15 13:01:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/mail_notify.aw,v 1.4 2008/02/15 13:26:52 markop Exp $
 // reminder UI VCL component
 /*
 @classinfo maintainer=markop
@@ -115,7 +115,7 @@ class mail_notify extends core
 			"type" => "text",
 			"name" => "[Sisu v&otilde;imalike asenduste tekst]",
 			"no_caption" => 1,
-			"value" => t("V&otilde;imalikud asendused\n<br>#file# - faili nimi \n<br>#file_url# - link failile \n<br>#user_name# - muutja nimi"),
+			"value" => t("V&otilde;imalikud asendused")."\n<br>#file# - ".t("faili nimi"). "\n<br>#file_url# - ".t("link failile")." \n<br>#user_name# - ".t("muutja nimi"),
 			"store" => "no",
 		);
 	}
@@ -163,13 +163,13 @@ class mail_notify extends core
 
 		$t->define_field(array(
 			"name" => "search",
-			"caption" => t(""),
+			"caption" => "",
 			"align" => "left",
 			"width" => "180px",
 		));
 		$t->define_field(array(
 			"name" => "results",
-			"caption" => t(""),
+			"caption" => "",
 			"align" => "center",
 		));
 
