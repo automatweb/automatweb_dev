@@ -641,7 +641,7 @@ class doc_display extends aw_template
 		{
 			if ($num_comments>0)
 			{
-				$this->db_query("SELECT name, url,  time, comment FROM comments WHERE board_id = ".$doc->id() ." ORDER BY time ASC");
+				$this->db_query("SELECT id, name, url,  time, comment FROM comments WHERE board_id = ".$doc->id() ." ORDER BY time ASC");
 				
 				while($row = $this->db_next())
 				{
@@ -658,6 +658,7 @@ class doc_display extends aw_template
 					}
 					$this->dequote(&$s_comment);
 					$this->vars(array(
+						"id" => $row["id"],
 						"name" => $s_name,
 						"post_created_hr" => $this->get_date_human_readable( $row["time"]),
 						"comment" => $s_comment,
