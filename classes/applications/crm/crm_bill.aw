@@ -134,7 +134,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 @reltype LANGUAGE value=4 clid=CL_LANGUAGE
 @caption Keel
 
-@reltype ROW value=5 clid=CL_BILL_ROW
+@reltype ROW value=5 clid=CL_CRM_BILL_ROW
 @caption Rida
 
 @reltype PROD value=6 clid=CL_SHOP_PRODUCT

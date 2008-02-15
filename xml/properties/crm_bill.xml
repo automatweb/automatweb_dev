@@ -399,7 +399,7 @@
             </LANGUAGE>
             <ROW>
                   <value>5</value>
-                  <clid>CL_BILL_ROW</clid>
+                  <clid>CL_CRM_BILL_ROW</clid>
                   <caption>Rida</caption>
             </ROW>
             <PROD>
