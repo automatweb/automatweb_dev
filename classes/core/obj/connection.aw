@@ -96,7 +96,7 @@ class connection
 			{
 				error::raise(array(
 					"id" => ERR_CONNECTION,
-					"msg" => sprintf(t("connection::constructior(%s): parameter must be numeric or array!"), $id)
+					"msg" => sprintf(t("connection::constructor(%s): parameter must be numeric or array!"), $id)
 				));
 				return;
 			}
