@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.253 2008/02/14 22:07:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.254 2008/02/15 23:17:08 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -791,8 +791,16 @@ if (!defined("DEFS"))
 		return true;
 	}
 
-	////
-	// !kontrollime, kas parameeter on kuupäev (kujul pp-kk-aaaa)
+	/** checks if the parameter is a valid date in the format of dd-mm-yyyy
+		@attrib api=1 params=pos
+
+		@param param required type=string
+			The string to check for date validity
+
+		@returns
+			true if the strin contains a valid date, false if not
+
+	**/
 	function is_date($param)
 	{
 		$valid = preg_match("/^(\d{1,2}?)-(\d{1,2}?)-(\d{4}?)$/",$param,$parts);
@@ -815,9 +823,28 @@ if (!defined("DEFS"))
 		return $valid;
 	};
 
-	////
-	// !if a is between z and y, return true else return false
-	// y < z
+	/** cheks if the parameter is in the given range
+		@attrib api=1 params=pos
+
+		@param a required type=int
+			The value to check
+
+		@param y requierd type=int
+			The beginning of the range
+
+		@param z required type=int
+			The end of the range
+
+		@param onTrue optional type=mixed
+			The value to return if the parameter is in the range, defaults to true
+
+		@param onFalse optional type=mixed
+			The value to return if the parameter is not in the range, defaults to false
+
+		@returns
+			The value if the parameter onTrue, if the value is in the range (inclusive), the value if the onFalse parameter if not.
+
+	**/
 	function between($a,$y,$z, $onTrue = true, $onFalse = false)
 	{
 		if (($a >= $y) && ($a <= $z))
@@ -831,48 +858,107 @@ if (!defined("DEFS"))
 	}
 
 	/** check if the parameter is an e-mail address
-	// !Kas argument on e-maili aadress?
-	// Courtesy of martin@linuxator.com ;)**/
+		@attrib api=1 params=pos
+
+		@param address optional type=string
+			The string to check for e-mailiness
+
+		@returns
+			true if the value seems to be an valid e-mail, false if not
+
+		@comment Courtesy of martin@linuxator.com ;)
+	**/
 	function is_email ($address = "")
 	{
 		return preg_match('/([a-z0-9-]*((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',$address);
 	}
 
+	/** checks if the current page is in the admin interface
+		@attrib api=1 
+
+		@returns
+			true if the current page is displayed in the admin interface, false if not
+	**/
 	function is_admin()
 	{
 		return (stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false);
 	}
 
-	////
-	// !Genereerib md5 hashi kas parameetrist voi suvalisest arvust.
-	function gen_uniq_id($param = "")
+	/** Generates a random and pretty unique id, based on md5
+		@attrib api=1 
+
+		@returns
+			a random, hard-to-predict 32 character string of numbers and letters
+	**/
+	function gen_uniq_id()
 	{
 		return md5(uniqid('',true)); 
 	};
 
-	////
-	// !Kasutamiseks vormides checkboxide kuvamise juures, vastavalt argumendi tõeväärtusele
-	// tagastab kas stringi "checked" voi tühja stringi.
+	/** helper for generating html checkboxes
+		@attrib api=1 params=pos
+
+		@param arg required type=bool
+			
+		@returns
+			"CHECKED" if the argument evaluates to true, "" if not
+
+		@comment
+			You can use this to generate checked checkboxes in html
+	**/
 	function checked($arg)
 	{
 		return ($arg) ? "CHECKED" : "";
 	}
 
-	////
-	// !Kasutamiseks vormides listboxide juures, vastavalt argumendi tõeväärtusele
-	// tagastab kas stringi "selected" voi tühja stringi
+	/** helper for generating html selectbox options
+		@attrib api=1 params=pos
+
+		@param arg required type=bool
+			
+		@returns
+			"selected" if the argument evaluates to true, "" if not
+
+		@comment
+			You can use this to generate the selected listbox item in html
+	**/
 	function selected($arg)
 	{
 		return ($arg) ? "SELECTED" : "";
 	}
 
-	////
-	// !Kasutamiseks vormides elementide juures, mis võivad olla disabled olekus
+	/** helper for generating disabled html elements
+		@attrib api=1 params=pos
+
+		@param arg required type=bool
+			
+		@returns
+			"DISABLED" if the argument evaluates to true, "" if not
+
+		@comment
+			You can use this to generate html elements that can be disabled or not
+	**/
 	function disabled($arg)
 	{
 		return ($arg) ? "DISABLED" : "";
 	}
 
+	/** Debug print variable values
+		@attrib api=1 params=pos
+
+		@param arr required type=mixed
+			The value to output
+
+		@param die optional type=bool
+			If set to true, script execution is stopped after outputting the value, defaults to false
+
+		@param see_html optional type=bool
+			If set to true, the value displayed is fed through htmlspecialchars, so you can see the html tags in yer browser
+
+		@comment
+			Use this to output any value to the user in a pretty way, basically wraps print_r. The value is printed directly to the browser, not returned. 
+
+	**/
 	function arr($arr,$die=false,$see_html=false)
 	{
 		echo '<hr/>';
@@ -892,34 +978,38 @@ if (!defined("DEFS"))
 		return $arr;
 	}
 
+	/** Shortcut for arr()
+		@attrib api=1 params=pos
+		@comment
+			See arr(), this is jsut a shorter form of that
+	**/
 	function d($arg)
 	{
 		arr($arg);
 	}
 
-        function ld($msg)
-        {
-                $core = new core();
-                $msg =  is_array($msg)?$msg:array("dbg" => $msg);
-                $msg["type"] = "REMOTE_DEBUG";
-                $msg["origin"] = $_SERVER["SERVER_NAME"];
-                $ret = $core->do_orb_method_call(array(
-                        "class" => "file",
-                        "action" => "handle_remote_dbg",
-                        "params" => $msg,
-                        "method" => "xmlrpc",
-                        "server" => "tarvo.dev.struktuur.ee"
-               ));
-        }
+	/** Formats array values as specified
+		@attrib api=1 params=pos
 
-	////
-	// !järgmine funktsioon on inspireeritud perlist ;)
-	// kasutusnäide:
-	//       print $object->map("--- %s ---\n",array("1","2","3"));
-	// tulemus:
-	//      --- 1 ---
-	//      --- 2 ---
-	//      --- 3 ---
+		@param format required type=string
+			The format string (same format as sprintf )
+
+		@param array required type=array
+			The array whose contents you want to reformat
+
+		@returns 
+			The array, with the format string applied to each value
+
+		@examples
+			foreach(map("--- %s ---\n",array("1","2","3")) as $entry)
+			{
+				echo $entry;
+			}
+			result:
+				--- 1 ---
+				--- 2 ---
+				--- 3 ---
+	**/
 	function map($format,$array)
 	{
 		$retval = array();
@@ -937,11 +1027,34 @@ if (!defined("DEFS"))
 		return $retval;
 	}
 
-	////
-	// !sama, mis eelmine, ainult et moodustuvad paarid
-	// array iga elemendi indeksist ja väärtusest
-	// format peab siis sisaldama vähemalt kahte kohta muutujate jaoks
-	// kui $type != 0, siis pööratakse array nö ringi ... key ja val vahetatakse ära
+	/** Formats array keys and values as specified
+		@attrib api=1 params=pos
+
+		@param format required type=string
+			The format string (same format as sprintf ) must contain two string replacement marks
+
+		@param array required type=array
+			The array whose contents you want to reformat
+
+		@param type optional type=bool
+			If set to true, the array keys and values get flipped before formatting, defaults to false
+
+		@param empty optional type=bool
+			If set to true, empty values are included in the result, else they are discarded. defaults to false
+
+		@returns 
+			The array, with the format string applied to each key and value pair. 
+
+		@examples
+			foreach(map2("%s: %s ---\n",array("a" => "1","b" => "2","c" => "3")) as $entry)
+			{
+				echo $entry;
+			}
+			result:
+				a: 1 ---
+				b: 2 ---
+				c: 3 ---
+	**/
 	function map2($format,$array,$type = 0,$empty = false)
 	{
 		$retval = array();
@@ -975,8 +1088,9 @@ if (!defined("DEFS"))
 		return $retval;
 	}
 
-	////
-	// !returns the ip address of the current user. tries to bypass the users cache if it can
+	/** Returns the ip address of the current user. tries to bypass the users cache if it can
+		@attrib api=1
+	**/
 	function get_ip()
 	{
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
@@ -987,8 +1101,18 @@ if (!defined("DEFS"))
 		return $ip;
 	}
 
-	////
-	// !Let's deal with no name objects in one place
+	/** Use this to display object names.
+		@attrib api=1 params=pos
+
+		@param name required type=string
+			The name of the object to process
+
+		@returns
+			The name given if it is not empty, (nimetu) if not. 
+
+		@comment
+			The idea here is, that if the object's name is not empty, the user still sees something to click on for example
+	**/
 	function parse_obj_name($name)
 	{
 		$name = trim($name);
@@ -997,6 +1121,15 @@ if (!defined("DEFS"))
 		return $rv;
 	}
 
+	/** Use this to display object names.
+		@attrib api=1 params=pos
+
+		@param name required type=string
+			The name of the object to process. The name is changed in place (reference argument)
+
+		@comment
+			The idea here is, that if the object's name is not empty, the user still sees something to click on for example
+	**/
 	function parse_obj_name_ref(&$name)
 	{
 		$name = trim($name);
@@ -1004,6 +1137,24 @@ if (!defined("DEFS"))
 		$name = str_replace('"',"&quot;", $name);
 	}
 
+	/** Serializes the given array to a string
+		@attrib api=1 params=pos
+
+		@param arr required type=array
+			The array to serialize
+
+		@param type optional type=int
+			The type of serializer to use, can be one of (SERIALIZE_PHP, SERIALIZE_PHP_FILE, SERIALIZE_PHP_NOINDEX, SERIALIZE_XML, SERIALIZE_XMLRPC), defaults to SERIALIZE_PHP
+
+		@param flags optional type=array
+			An array of settings to pass to the serializer
+
+		@returns
+			A string that contains the array in a serialized form. can be turned back to an array by aw_unserialize
+
+		@comment
+			This can only handle arrays, not objects or any other type of values
+	**/
 	function aw_serialize($arr,$type = SERIALIZE_PHP, $flags = array())
 	{
 		switch($type)
@@ -1051,6 +1202,22 @@ if (!defined("DEFS"))
 		return $str;
 	}
 
+	/** unserializes a string to an array
+		@attrib api=1 params=pos
+
+		@param str required type=string
+			The string to unserialize
+
+		@param dequote optional type=bool
+			Whether to run dequote() on the string before unserializing or not. defaults to false
+
+		@returns
+			The array, as unserialized from the string. If the string is not a valid serialization, returns null
+
+		@comment
+			Use this to unserialize strings created by aw_serialize or php's serialize(), it autodetects the serializer type from the beginning of the string. 
+
+	**/
 	function aw_unserialize($str,$dequote = 0)
 	{
 		$retval = false;
@@ -1153,22 +1320,21 @@ if (!defined("DEFS"))
 		$GLOBALS["__aw_globals_inited"] = true;
 	}
 
-	/**
-		@attrib params=pos
-		@param time
-		time in seconds
-		@comment
-		sets the reload time for current page(in seconds)
-	**/
-	function set_page_reload($arg)
-	{
-		header("Refresh: ".$arg);
-	}
+	/** return global variable value
+		@attrib api=1 params=pos
 
-	////
-	// !this function replaces php's GLOBAL - it keeps global variables in a global object instance
-	// why is this? well, because then they can't be set from the url, overriding the default values
-	// and causing potential security problems
+		@param var required type=string
+			The variable whose value you want to fetch
+
+		@returns
+			The aw global variable value for the given variable
+
+		@comment
+			This fetches values from the request, cookie and session and those set from aw_global_set. 
+			this function replaces php's GLOBAL - it keeps global variables in a global object instance
+			why is this? well, because then they can't be set from the url, overriding the default values
+			and causing potential security problems
+	**/
 	function aw_global_get($var)
 	{
 		/*if ($var == "lang_id")
@@ -1178,6 +1344,18 @@ if (!defined("DEFS"))
 		return isset($GLOBALS["__aw_globals"][$var]) ? $GLOBALS["__aw_globals"][$var] : false;
 	}
 
+	/** Sets an aw global variable value
+		@attrib api=1 params=pos
+
+		@param var required type=string
+			The name of the variable to set the value for
+
+		@param val required type=string
+			The value of the variable to set
+
+		@comment
+			Values set by this can be fetched by aw_global_get()
+	**/
 	function aw_global_set($var,$val)
 	{
 		/*if ($var == "lang_id")
@@ -1187,8 +1365,22 @@ if (!defined("DEFS"))
 		$GLOBALS["__aw_globals"][$var] = $val;
 	}
 
-	////
-	// !this replaces global caches - if you use this function, then cache contents cannot be overriden from the url
+	/** read value from a memory cache
+		@attrib api=1 params=pos
+
+		@param cache required type=string
+			The name of the cache to read from
+
+		@param key required type=string
+			The name of the key to read from the cache
+
+		@returns
+			The value fo the key in the given cache
+
+		@comment
+			Use this method instead of $GLOBALS["cache_name"][$key] = foo; because if you do that, then the values can be inserted via the request. This method protects you from that. 
+			Or use static members or static variables. 
+	**/
 	function aw_cache_get($cache,$key)
 	{
 		if (is_array($key))
@@ -1207,6 +1399,25 @@ if (!defined("DEFS"))
 		return isset($GLOBALS["__aw_cache"][$cache][$key]) ? $GLOBALS["__aw_cache"][$cache][$key] : false;
 	}
 
+	/** write value to a memory cache
+		@attrib api=1 params=pos
+
+		@param cache required type=string
+			The name of the cache to write to
+
+		@param key required type=string
+			The name of the key in the cache to write to
+
+		@param val optional type=mixed
+			The value of the cache key, defaults to ""
+
+		@examples
+			aw_cache_set("lookup", "v1", calc_complicated_thing());
+			aw_cache_set("lookup", "v2", calc_complicated_thing2());
+			...
+			....
+			$val = aw_cache_get("lookup", "v1");
+	**/
 	function aw_cache_set($cache,$key,$val = "")
 	{
 		if (is_array($key))
@@ -1235,7 +1446,18 @@ if (!defined("DEFS"))
 			}
 		};
 	}
+	
+	/** clears the contents of the given memory cache
+		@attrib api=1 params=pos
 
+		@param cache required type=string
+			The name of the cache to clear
+
+		@exmples
+			aw_cache_set("a", "b", "c");
+			aw_cache_flush("a");
+			echo aw_cache_get("a", "b");	// echoes ""
+	**/
 	function aw_cache_flush($cache)
 	{
 		if (!is_array($GLOBALS["__aw_cache"]))
@@ -1245,8 +1467,18 @@ if (!defined("DEFS"))
 		$GLOBALS["__aw_cache"][$cache] = false;
 	}
 
-	////
-	// !this returns the entire cache array - this is useful for instance if you want to iterate over the cache
+	/** this returns the entire cache array - this is useful for instance if you want to iterate over the cache
+		@attrib api=1 params=pos
+
+		@param cache required type=string
+			The name of the cache to return
+
+		@returns 
+			Array { key => value } for the given cache
+
+		@examples:
+			 $this->file_cache->file_set($this->cf_name,aw_serialize(aw_cache_get_array("languages")));
+	**/
 	function aw_cache_get_array($cache)
 	{
 		if (!is_array($GLOBALS["__aw_cache"]))
@@ -1257,8 +1489,15 @@ if (!defined("DEFS"))
 		return isset($GLOBALS["__aw_cache"][$cache]) ? $GLOBALS["__aw_cache"][$cache] : false;
 	}
 
-	////
-	// !this is for initializing the cache
+	/** initializes the given cache from an array
+		@attrib api=1 params=pos
+
+		@param cache required type=string
+			The name of the cache to initialize
+
+		@param arr required type=array
+			The value to initialize the cache with
+	**/
 	function aw_cache_set_array($cache,$arr)
 	{
 		if (!is_array($GLOBALS["__aw_cache"]))
@@ -1271,52 +1510,21 @@ if (!defined("DEFS"))
 		}
 	}
 
-	////
-	// !this replaces global caches - if you use this function, then cache contents cannot be overriden from the url
-	function aw_session_cache_get($cache,$key)
-	{
-		if (!is_array($_SESSION["__aw_sess_cache"]))
-		{
-			return false;
-		}
-		if (!isset($_SESSION["__aw_sess_cache"][$cache]) || !is_array($_SESSION["__aw_sess_cache"][$cache]))
-		{
-			return false;
-		}
-		return isset($_SESSION["__aw_sess_cache"][$cache][$key]) ? $_SESSION["__aw_sess_cache"][$cache][$key] : false;
-	}
+	/** saves a local variable's value to the session 
+		@attrib api=1 params=pos
 
-	function aw_session_cache_set($cache,$key,$val = "")
-	{
-		// if $key is array, we will just stick it into the cache.
-		// NO!! that's what aw_cache_set_array() is for!!! - terryf
-		if (!is_array($_SESSION["__aw_sess_cache"]))
-		{
-			$_SESSION["__aw_sess_cache"] = array($cache => array($key => $val));
-		}
-		else
-		if (!is_array($_SESSION["__aw_sess_cache"][$cache]))
-		{
-			$_SESSION["__aw_sess_cache"][$cache] = array($key => $val);
-		}
-		else
-		{
-			$_SESSION["__aw_sess_cache"][$cache][$key] = $val;
-		}
-	}
+		@param name required type=string
+			The name of the variable to write the value for
 
-	function aw_session_cache_flush($cache)
-	{
-		if (!is_array($_SESSION["__aw_sess_cache"]))
-		{
-			$_SESSION["__aw_sess_cache"] = array();
-		}
-		$_SESSION["__aw_sess_cache"][$cache] = false;
-	}
+		@param value required type=mixed
+			The value of the variable to set
 
-	////
-	// !saves a local variable's value to the session - there is no session_get, because
-	// session vars are automatically registered as globals as well, so for retrieval you can use aw_global_get()
+		@comment
+			there is no session_get, because session vars are automatically registered as globals as well, so for retrieval you can use aw_global_get().
+			Also, if the value is empty, this will not do anything for some weird reason. 
+			Just use $_SESSION directly. 
+			This was useful in the days, when there was no $_SESSION. 
+	**/
 	function aw_session_set($name,$value)
 	{
 		if (headers_sent())
@@ -1332,8 +1540,18 @@ if (!defined("DEFS"))
 		aw_global_set($name,$value);
 	}
 
-	////
-	// !deletes the variable $name from the session
+	/** deletes a variable from the session 
+		@attrib api=1 params=pos
+
+		@param name required type=string
+			The name of the variable to write the value for
+
+		@param leave_global optional type=bool
+			If set to true, the global variable with the same name is not cleared
+
+		@comment
+			Just use $_SESSION directly. 
+	**/
 	function aw_session_del($name, $leave_global = false)
 	{
 		unset($_SESSION[$name]);
@@ -1344,8 +1562,15 @@ if (!defined("DEFS"))
 		}
 	}
 
-	////
-	// !deletes all variables from the session that match preg pattern $pattern
+	/** deletes all variables from the session that match preg pattern $pattern
+		@attrib api=1 params=pos
+
+		@param pattern required type=string
+			The regex to match with the variable names
+		
+		@examples
+			 aw_session_del_patt("/form_rel_tree(.*)/"); 
+	**/
 	function aw_session_del_patt($pattern)
 	{
 		foreach($GLOBALS["HTTP_SESSION_VARS"] as $vn => $vv)
@@ -1357,6 +1582,25 @@ if (!defined("DEFS"))
 		}
 	}
 
+	/** Registers default values for class member variables
+		@attrib api=1 params=pos
+
+		@param class required type=string
+			The class to put the member variable in
+
+		@param member required type=string
+			The name of the variable
+
+		@param value required type=mixed
+			The varaible value
+
+		@comment
+			Use this, when you want to pass data to instances of some class, that get created after the call to this.
+		
+		@examples
+			aw_register_default_class_member("document", "shown_document", $docid);
+			// now, wherever a new document class instance is created, it has a memver variable named shown_document with the value in the variable $docid
+	**/
 	function aw_register_default_class_member($class, $member, $value)
 	{
 		$members = aw_cache_get("__aw_default_class_members", $class);
@@ -1365,8 +1609,13 @@ if (!defined("DEFS"))
 	}
 
 	/** temporarily switches the current user to $arr[uid]
+		@attrib api=1 params=name
 
+		@param uid required type=string
+			The username to switch to. 
 
+		@comment	
+			This can be used to elevate privileges to some other user, so be really careful with it!
 	**/
 	function aw_switch_user($arr)
 	{
@@ -1391,6 +1640,13 @@ if (!defined("DEFS"))
 		aw_cache_flush("__aw_acl_cache");
 	}
 
+	/** restores the original username the request was running under
+		@attrib api=1 
+
+		@comment
+			Switches the user back to the one the request was running as, before any calls to aw_switch_user();
+
+	**/
 	function aw_restore_user()
 	{
 		$old_uids = aw_global_get("old_uids");
@@ -1402,22 +1658,55 @@ if (!defined("DEFS"))
 		aw_global_set("old_uids", $old_uids);
 	}
 
+	/** disables all acl checks 
+		@attrib api=1
+
+		@comment
+			This should only be used just before savin something, not before reading something. The reason for this is, that if you keep this on for a bit loner, then aw will start throwing errors about nonexisting objects. This is because object deletion checks are also done via acl and since acl is turned off, things start to go wrong if anything is deleted. 
+			This behaviour is intentional, to make it really hard to use this function, because you really shouldn't. Acls should be set correctly. 
+
+		@examples
+			$o = obj($oid);
+			aw_disable_acl();	
+			$o->save();			// this is how this is meant to be used. 
+			aw_restore_acl();
+	**/
 	function aw_disable_acl()
 	{
 		$GLOBALS["__aw_disable_acl"] = $GLOBALS["cfg"]["acl"]["no_check"];
 		$GLOBALS["cfg"]["acl"]["no_check"] = 1;
 	}
 
+	/** restores acl checks that were turned off by aw_disable_acl()
+		@attrib api=1
+
+		@examples
+			${aw_disable_acl}
+	**/
 	function aw_restore_acl()
 	{
 		$GLOBALS["cfg"]["acl"]["no_check"] = $GLOBALS["__aw_disable_acl"];
 	}
 
+	/** Finds the class id, given the class name
+		@attrib api=1 params=pos
+
+		@param class_name required type=string
+			The name of the class to look up
+
+		@returns
+			The class_id of the given class or null if no id is assigned to that class
+
+		@examples
+			$o = obj();
+			$o->set_class_id(clid_for_name("bug"));
+	**/
 	function clid_for_name($class_name)
 	{
 		return aw_ini_get("class_lut.".$class_name);
 	}
 
+	/** deprecated - do not use. or, rather - needs thinking about. does not work anyway **/
 	function aw_register_header_text_cb($cb)
 	{
 		aw_global_set("__aw.header_text_cb", $cb);
@@ -1438,6 +1727,7 @@ if (!defined("DEFS"))
 		return "";
 	}
 
+	/** internal **/
 	function warning_prop($level = false, $oid = false, $prop = false)
 	{
 		static $prop_warnings;
@@ -1449,6 +1739,18 @@ if (!defined("DEFS"))
 		$prop_warnings[$oid][$prop] = $level;
 	}
 
+	/** Set a warning that the user can see if he has the correct level set
+		@attrib api=1 params=pos
+
+		@param msg optional type=string
+			The warning text
+
+		@param level optional type=int
+			The level for which to display this warning, defaults to 1
+
+		@comment
+			Warnings are informational for the user, for instance if something is not configured, that should be, you can give a warning, so that the user sees the problem.
+	**/
 	function warning($msg = false, $level = 1)
 	{
 		static $gen_warnings;
@@ -1460,39 +1762,46 @@ if (!defined("DEFS"))
 		$gen_warnings[$level][] = $msg;
 	}
 
+	/** returns the object for which the active flag is set for the current language and site
+		@attrib api=1 params=pos
+
+		@param clid required type=class_id
+			The class id to fetch the active object for
+
+	**/
 	function get_active($clid)
 	{
-
-                $pl = new object_list(array(
-                        "class_id" => $clid,
-                ));
+		$pl = new object_list(array(
+			"class_id" => $clid,
+		));
 		if(!$pl->count())
 		{
 			return false;
 		}
-                for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
-                {
-                        if($o->flag(OBJ_FLAG_IS_SELECTED))
-                        {
-                                break;
-                        }
-                }
+		for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
+		{
+			if($o->flag(OBJ_FLAG_IS_SELECTED))
+			{
+				break;
+			}
+		}
 		return $o;
 	}
 
-	////
-	// !all network functions go in here, all must be static
+	/** all network functions go in here, all must be static **/
 	class inet
 	{
-		////
-		// !resolvib ip aadressiks. cacheb kiiruse huvides tulemusi
-		// voib kasutada ntx syslogi juures
-		// tagastab 2 elemendiga array, esimene on lahendatud
-		// nimi, teine aadress, mis ette anti voi stringist välja
-		// parsiti
+		/** Resolves an ip address to it's dns name. caches results
+			@attrib api=1 params=pos
+
+			@param addr required type=string
+				The ip to resolve, can also be in the format foozah / 1.2.3.4, then the first bit is ignored
+
+			@returns
+				array { resolved name, ip address }
+		**/
 		function gethostbyaddr($addr)
 		{
-			// *wink terryf*, kena regexp mis?
 			// idee on selles, et parsib lahti ntx syslogis olevad
 			// aadressid kujul host.ee / 1.2.3.4
 			if (preg_match("/^(.*?)\s*?\/\s+?([0-9\.]+?)$/",$addr,$parts))
@@ -1507,8 +1816,15 @@ if (!defined("DEFS"))
 			return array($ret,$addr);
 		}
 
-		////
-		// !returns the ip address that resolves to $name
+		/** returns the ip address that resolves to $name
+			@attrib api=1 params=pos
+
+			@param name required type=string
+				The dns address to resolve
+
+			@comment
+				wrapper for gethostbyname, caches results for speed
+		**/
 		function name2ip($name)
 		{
 			if (!($ret = aw_cache_get("name2ip_solved",$name)))
@@ -1519,8 +1835,18 @@ if (!defined("DEFS"))
 			return $ret;
 		}
 
-		////
-		// !kontrollime, kas parameeter on ikka IP aadress
+		/** checks if the argument is a valid ip address
+			@attrib api=1 params=pos
+
+			@param addr required type=string
+				This is the string to check for ip-ness
+
+			@comment
+				The format is 4 numbers, separated by . each must be between 1 and 255
+		
+			@returns 
+				true, if the argument is a valid ip address, false if not
+		**/
 		function is_ip($addr)
 		{
 			// match 1 to 3 digits
@@ -1553,9 +1879,23 @@ if (!defined("DEFS"))
 		}
 	}
 
+	/** class for debug helpers **/
 	class dbg
 	{
-		// debuukimisel on see funktsioon abiks
+
+		/** dumps the parameter to a human-readable string and returns the string
+			@attrib api=1 params=pos
+
+			@param data required type=mixed
+				The value to dump
+
+			@returns
+				string with human-readable representation of the given value. Useful for debugging. Wrapper for var_dump()
+
+			@examples
+				$s = array(1, 2);
+				echo dbg::dump($s);
+		**/
 		function dump($data)
 		{
 			ob_start();
@@ -1567,6 +1907,16 @@ if (!defined("DEFS"))
 			return $ret;
 		}
 
+		/** prints detailed information about string contents
+			@attrib api=1 params=pos
+
+			@param str required type=string
+				The string to dump
+
+			@comment
+				Echoes the full string and then for each character, it's character code and position in the string. 
+				Useful for debugging character set problems.
+		**/
 		function str_dbg($str)
 		{
 			echo "str = $str <br>";
@@ -1577,9 +1927,12 @@ if (!defined("DEFS"))
 			echo "---<br>";
 		}
 
-		////
-		// !prints the message if $GLOBALS["DEBUG"] == 1, basically the same as core::dmsg, but with this you don't need to fiddle
-		// around with sessions
+		/** prints the given message to the user, if $GLOBALS["DEBUG"] is set
+			@attrib api=1 params=pos
+
+			@param msg required type=string
+				The message to print
+		**/
 		function p($msg)
 		{
 			if (aw_global_get("DEBUG") == 1)
@@ -1588,7 +1941,15 @@ if (!defined("DEFS"))
 			}
 		}
 
-		// prints if the user has a cookie named debug1
+		/** prints the given message to the user, if a cookie with the name debug1 is set
+			@attrib api=1 params=pos
+
+			@param msg required type=string
+				The message to print
+
+			@comment 
+				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
+		**/
 		function p1($msg)
 		{
 			if ($_COOKIE["debug1"])
@@ -1597,7 +1958,15 @@ if (!defined("DEFS"))
 			}
 		}
 
-		// prints if the user has a cookie named debug2
+		/** prints the given message to the user, if a cookie with the name debug2 is set
+			@attrib api=1 params=pos
+
+			@param msg required type=string
+				The message to print
+
+			@comment 
+				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
+		**/
 		function p2($msg)
 		{
 			if ($_COOKIE["debug2"])
@@ -1606,7 +1975,15 @@ if (!defined("DEFS"))
 			}
 		}
 
-		// prints if the user has a cookie named debug3
+		/** prints the given message to the user, if a cookie with the name debug3 is set
+			@attrib api=1 params=pos
+
+			@param msg required type=string
+				The message to print
+
+			@comment 
+				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
+		**/
 		function p3($msg)
 		{
 			if ($_COOKIE["debug3"])
@@ -1615,7 +1992,15 @@ if (!defined("DEFS"))
 			}
 		}
 
-		// prints if the user has a cookie named debug4
+		/** prints the given message to the user, if a cookie with the name debug4 is set
+			@attrib api=1 params=pos
+
+			@param msg required type=string
+				The message to print
+
+			@comment 
+				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
+		**/
 		function p4($msg)
 		{
 			if ($_COOKIE["debug4"])
@@ -1624,7 +2009,15 @@ if (!defined("DEFS"))
 			}
 		}
 
-		// prints if the user has a cookie named debug5
+		/** prints the given message to the user, if a cookie with the name debug5 is set
+			@attrib api=1 params=pos
+
+			@param msg required type=string
+				The message to print
+
+			@comment 
+				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
+		**/
 		function p5($msg)
 		{
 			if ($_COOKIE["debug5"])
@@ -1635,6 +2028,21 @@ if (!defined("DEFS"))
 			}
 		}
 
+		/** formats a given backtrace to a human-readable format
+			@attrib api=1 params=pos
+
+			@param bt required type=array
+				The backtrace data to process
+
+			@param skip required type=int
+				Number of levels to skip from the end
+
+			@returns
+				html with the backtrace formatted to usr-readable format
+
+			@examples
+				echo process_backtrace(debug_backtrace());
+		**/
 		function process_backtrace($bt, $skip = -1)
 		{
 			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
@@ -1692,6 +2100,12 @@ if (!defined("DEFS"))
 			return $msg;
 		}
 
+		/** formats a one-line user-readable string from the current backtrace
+			@attrib api=1 
+
+			@returns
+				One-line string with a human-readable backtrace
+		**/
 		function short_backtrace()
 		{
 			$msg = "";
@@ -1728,6 +2142,12 @@ if (!defined("DEFS"))
 			return $msg;
 		}
 
+		/** prints the results of a database query
+			@attrib api=1 params=pos
+
+			@param q required type=string
+				The sql query to perform
+		**/
 		function q($q)
 		{
 			$first = true;
@@ -1755,7 +2175,7 @@ if (!defined("DEFS"))
 		return $inst->get_lc_date($time, $format);
 	}
 
-	// wrapper for localization classes
+	/** all localization functions are grouped here **/
 	class locale
 	{
 		var $default_locale = "en";
@@ -1769,6 +2189,21 @@ if (!defined("DEFS"))
 			};
 		}
 
+		/** returns the name of the weekday in the current language
+			@attrib api=1 params=pos
+
+			@param num required type=int
+				The number of the weekday to return. 
+
+			@param short optional type=bool
+				If true, the short name of the weekday is returned. Defaults to false
+
+			@param ucfirst optional type=bool
+				If true, the first characters are uppercased. ddefaults to false
+
+			@comment
+				The number of the weekday is 0-7 inclusive. 0 and 7 both are for sunday.
+		**/
 		function get_lc_weekday($num, $short = false, $ucfirst = false)
 		{
 			static $lc_date_inst;
@@ -1787,6 +2222,13 @@ if (!defined("DEFS"))
 			};
 		}
 
+		/** returns the name of the month in the current language
+			@attrib api=1 params=pos
+
+			@param num required type=int
+				The number of the month to return the name for
+
+		**/
 		function get_lc_month($num)
 		{
 			static $lc_date_inst;
@@ -1805,6 +2247,22 @@ if (!defined("DEFS"))
 			};
 		}
 
+		/** returns a localized date in the current language
+			@attrib api=1 params=pos 
+
+			@param timestamp required type=int
+				The unix timestamp to return the date for
+
+			@param format required type=int
+				One of the defined date formats
+
+			@comment 
+				The date formats are:
+					LC_DATE_FORMAT_SHORT = For example: 20.06.88 or 05.12.98
+					LC_DATE_FORMAT_SHORT_FULLYEAR = For example: 20.06.1999 or 05.12.1998
+					LC_DATE_FORMAT_LONG = For example: 20. juuni 99
+					LC_DATE_FORMAT_LONG_FULLYEAR = For example: 20. juuni 1999
+		**/					
 		function get_lc_date($timestamp,$format)
 		{
 			static $lc_date_inst;
@@ -1823,6 +2281,20 @@ if (!defined("DEFS"))
 			};
 		}
 
+		/** returns a readable string for the number given
+			@attrib api=1 params=pos
+
+			@param number required type=int
+				The number to stringify
+
+			@returns
+				the text version of the number. 
+
+			@examples
+				if the language is english, then
+					locale::get_lc_number(7); 
+				returns "seven"
+		**/
 		function get_lc_number($number)
 		{
 			static $lc_date_inst;
@@ -1840,7 +2312,22 @@ if (!defined("DEFS"))
 				return $number;
 			};
 		}
+	
+		/** returns the given amount of money as text with the currency name n the right place
+			@attrib api=1 params=pos
 
+			@param number required type=double
+				The sum to stringify
+
+			@param currency required type=object
+				The currency object to use for the sum.
+
+			@param lc optional type=string
+				The locale code, defaults to the current one
+
+			@comment
+				Does the same, as get_lc_number, but appends/prepends the currency name and unit names as needed. Used for writing the amount on bills as text.
+		**/
 		function get_lc_money_text($number, $currency, $lc = NULL)
 		{
 			if (!$lc)
@@ -2009,11 +2496,23 @@ if (!defined("DEFS"))
 			reset($this->arg);
 		}
 
+		/** checks if the given key exists in the current array
+			@attrib api=1 params=pos
+
+			@param key required type=string
+				The key to check
+
+			@returns 
+				true if the given key exists in the array, false if not
+		**/
 		function key_exists($key)
 		{
 			return isset($this->arg[$key]);
 		}
 
+		/** returns the first element in the array
+			@attrib api=1
+		**/
 		function first()
 		{
 			$this->reset();
@@ -2066,14 +2565,16 @@ if (!defined("DEFS"))
 		}
 	};
 
-	function do_nothing()
-	{
-
-	}
 
 	/** returns the parameter or an array if the parameter is not an array
+		@attrib api=1 params=pos
 
-		@attrib api=1
+		@param var required type=mixed
+			The value to check for array-ness
+
+		@examples
+			foreach(safe_array($request["yeah"]) as $k => $v)
+			...
 	**/
 	function safe_array($var)
 	{
@@ -2084,50 +2585,54 @@ if (!defined("DEFS"))
 		return array();
 	}
 
-	/**
+	/** Merges arrays
+		@attrib api=1 params=pos
+
 		@comment
 			Works like php's array_merge, with a little difference. when array_merge reindexes numeric array keys, then aw_merge doens't
 	**/
 	function aw_merge()
 	{
-	     	if(($argc = func_num_args()) < 1)
-	     	{
-	     		return false;
-	     	}
-         	foreach(func_get_args() as $k => $array)
+		if(($argc = func_num_args()) < 1)
 		{
-                 	foreach($array as $k => $v)
-                 	{
-                        	$retval[$k] = $v;
-                        }
+			return false;
+		}
+		foreach(func_get_args() as $k => $array)
+		{
+			foreach($array as $k => $v)
+			{
+				$retval[$k] = $v;
+			}
 		}
 		return $retval;
  	}
  
-	/**
+	/** Merges arrays recursively
+		@attrib api=1 params=pos
+
 		@comment
 			Same as aw_merge, but does the same thing recursevly through array
 	**/	
  	function req_aw_merge()
  	{
-        	if(($argc = func_num_args()) < 1)
-                {
-                	return false;
-                }
-         	foreach(func_get_args() as $k => $array)
-         	{
-                	foreach($array as $k => $v)
-                	{
-                        	if(is_array($v))
-                        	{
-                                	$retval[$k] = aw_merge($retval[$k], req_aw_merge($v));
-                         	}
-                         	else
-                         	{
-                                	$retval[$k] = $v;
-                                }
-                        }
-                }
+		if(($argc = func_num_args()) < 1)
+		{
+			return false;
+		}
+		foreach(func_get_args() as $k => $array)
+		{
+			foreach($array as $k => $v)
+			{
+				if(is_array($v))
+				{
+					$retval[$k] = aw_merge($retval[$k], req_aw_merge($v));
+				}
+				else
+				{
+					$retval[$k] = $v;
+				}
+			}
+		}
 		return $retval;
 	}
 
@@ -2150,125 +2655,6 @@ if (!defined("DEFS"))
 		function cal_days_in_month($type, $month, $year)
 		{
 			return date("j",mktime(0,0,0,$month+1,0,$year));
-		}
-	}
-
-	if (!function_exists("strptime"))
-	{
-		function strptime($string, $format)
-		{
-			$hour = $minute = $second = $month = $day;
-			$year = date('Y');
-
-			if (preg_match('=(%[a-zA-Z]%[a-zA-Z])=', $format))
-			{
-				trigger_error("format string needs to have delimiting special chars between format chars");
-				return 0;
-			}
-
-			$format = str_replace(
-				array('%%', '%r',             '%R',       '%T'),
-				array('',   '%I:%M:%S %p',    '%H:%M',    '%H:%M:%S'),
-				$format
-			);
-			$string = str_replace('%', '', $string);
-
-			// %b - abbreviated month name
-			if ($tmp = strptime_extract($format, $string, 'b'))
-			{
-				for($i = 1, $months = array(); $i <= 12; $i++)
-				{
-					$months[$i] = strftime('%b', mktime(0, 0, 0, $i));
-				}
-				$month = array_search($tmp, $months);
-			}
-
-			// %B - full month name
-			if ($tmp = strptime_extract($format, $string, 'B'))
-			{
-				for($i = 1, $months = array(); $i <= 12; $i++)
-				{
-					$months[$i] = strftime('%B', mktime(0, 0, 0, $i));
-				}
-				$month = array_search($tmp, $months);
-			}
-																		// %d - day of month, two digits 01-31
-			if ($tmp = strptime_extract($format, $string, 'd'))
-			{
-				$day = $tmp;
-			}
-			// %H - hour, two digits 00-23
-			if ($tmp = strptime_extract($format, $string, 'H'))
-			{
-				$hour = $tmp;
-			}
-			// %I - hour, two digits 01-12
-			if ($tmp = strptime_extract($format, $string, 'I'))
-			{
-				$hour = $tmp;
-				if (strptime_extract($format, $string, 'p') == strftime('%p', mktime(13)))
-				{
-					$hour += 12;
-				}
-			}
-
-			// %m - month number, two digits 01,12
-			if ($tmp = strptime_extract($format, $string, 'm'))
-			{
-				$month = $tmp;
-			}
-
-			// %M - minute, two digits 00-59
-			if ($tmp = strptime_extract($format, $string, 'M'))
-			{
-				$minute = $tmp;
-			}
-			// %S - second, two digits 00-61
-			if ($tmp = strptime_extract($format, $string, 'S'))
-			{
-				$second = $tmp;
-			}
-
-			// %y - year as a decimal number without a century (range 00 to 99)
-			if ($tmp = strptime_extract($format, $string, 'y'))
-			{
-				$year = $tmp;
-				if ($year >= 70)
-				{
-					$year += 1900;
-				}
-				else
-				{
-					$year += 2000;
-				}
-			}
-
-			// %Y - year as a decimal number including the century
-			if ($tmp = strptime_extract($format, $string, 'Y'))
-			{
-				$year = $tmp;
-			}
-			return mktime($hour, $minute, $second, $month, $day, $year);
-		}
-
-		function strptime_extract($format, $string, $char)
-		{
-			if (!$pos = strpos($format, $char))
-			{
-				return false;
-			}
-
-			$tmp = substr($format, 0, $pos);
-			if (preg_match_all('=([^a-zA-Z0-9%])=', $tmp, $m))
-			{
-				while($char = array_shift($m[1]))
-				{
-					$string = substr($string, strpos($string, $char) + 1);
-				}
-			}
-
-			list($val) = preg_split('=([^a-zA-Z0-9%])=', $string, 2);
-			return $val;
 		}
 	}
 };
