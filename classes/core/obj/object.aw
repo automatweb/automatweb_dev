@@ -1997,6 +1997,11 @@ class object
 	{
 		return $GLOBALS["objects"][$this->oid]->prop_is_translated($prop);
 	}
+
+	function __toString()
+	{
+		return (string)$this->oid;
+	}
 }
 
 function obj($param = NULL)
