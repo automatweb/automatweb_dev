@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.11 2008/02/14 14:46:21 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.12 2008/02/15 16:18:59 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -959,7 +959,7 @@ class event_import extends class_base
 		}
 		fclose($f);
 
-		if($source->prop("encoding") && $source->prop("encoding") != "UTF-8");
+		if($source->prop("encoding") && $source->prop("encoding") != "UTF-8")
 			$xml_file_content = iconv($source->prop("encoding"), "UTF-8", $xml_file_content);
 
 		$xml_file_content = str_replace("&", "&amp;", $xml_file_content);
@@ -976,9 +976,6 @@ class event_import extends class_base
 	**/
 	function ignore($arr)
 	{
-		aw_set_exec_time(AW_LONG_PROCESS);
-		ini_set("memory_limit", "800M");
-
 		$o = obj($arr["id"]);
 		// The field where the data of ignored fields is saved
 		if (!is_array($arr["sel"]) && is_array($arr["check"]))
@@ -2208,6 +2205,8 @@ class event_import extends class_base
 	**/
 	function import_events($arr)
 	{
+		aw_set_exec_time(AW_LONG_PROCESS);
+		ini_set("memory_limit", "800M");
 		/*
 		// LOADS OF PAIN IN THE A**
 		$f = fopen("http://www.kultura.lv/rssfeed.php?lng=ru&s=1195768800&e=1195853400", "r");
@@ -2344,6 +2343,11 @@ class event_import extends class_base
 		);
 
 		$impd_objs_arr = array(
+			"event_times" => array(
+				"parent" => $dir_event,
+				"class_id" => CL_EVENT_TIME,
+				"array_var" => &$imported_times,
+			),
 			"events" => array(
 				"parent" => $dir_event,
 				"class_id" => $class_id,
@@ -2359,20 +2363,19 @@ class event_import extends class_base
 				"class_id" => CL_CRM_SECTOR,
 				"array_var" => &$categories,
 			),
-			"event_times" => array(
-				"parent" => $dir_event,
-				"class_id" => CL_EVENT_TIME,
-				"array_var" => &$imported_times,
-			),
 		);
 
-		foreach($impd_objs_arr as $impd_objs)
+		foreach($impd_objs_arr as $name => $impd_objs)
 		{
+			print "Gettin object_list for ".$name.".<br>";
+			flush();
 			$ol = new object_list(array(
 				"lang_id" => $li,
 				"parent" => $impd_objs["parent"],
 				"class_id" => $impd_objs["class_id"],
 			));
+			print "Gettin object_data_list for external system entries.<br>";;
+			flush();
 
 			$extents = new object_data_list(
 				array(
@@ -2390,8 +2393,8 @@ class event_import extends class_base
 					),
 				)
 			);
-
-			// This is what takes A LOT of time!
+			print "Making object_data_list into suitabe array.<br>";
+			flush();
 
 			foreach($extents->list_data as $ext)
 			{
@@ -2412,7 +2415,7 @@ class event_import extends class_base
 			"type" => "RELTYPE_XML_SOURCE",
 		));
 
-		print "<strong>..:: ".strtoupper($o->name())." EVENTS IMPORT STARTED ::..<br><br></strong>";
+		print "<br><strong>..:: ".strtoupper($o->name())." EVENTS IMPORT STARTED ::..<br><br></strong>";
 		flush();
 
 		foreach($conns_to_xl_sources as $conn_to_xl_source)
