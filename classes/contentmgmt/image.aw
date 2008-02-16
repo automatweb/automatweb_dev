@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.220 2008/02/14 13:57:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.1 2008/02/16 14:11:44 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
