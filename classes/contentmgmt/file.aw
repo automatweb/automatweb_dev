@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.176 2008/02/15 13:01:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.1 2008/02/16 10:18:12 kristo Exp $
 /*
 
 
