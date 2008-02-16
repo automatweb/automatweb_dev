@@ -579,7 +579,7 @@ function classload($args)
 	while(list(,$lib) = each($arg_list))
 	{
 		// let's not allow including ../../../etc/passwd :)
-		$lib = str_replace(".","", $lib);
+		$lib = $olib = str_replace(".","", $lib);
 		// check if we need to load a site class instead
 		if (isset($GLOBALS["cfg"]["site_classes"][$lib]))
 		{
@@ -619,7 +619,7 @@ function classload($args)
 		else
 		{
 			// try to handle it with class_index and autoload
-			__autoload($lib);
+			__autoload($olib);
 
 			/*classload("core/error");
 			error::raise(array(
@@ -1381,7 +1381,7 @@ function __autoload($class_name)
 		//!!! take action
 	}
 
-	require($class_file);
+	require_once($class_file);
 
 	if (!class_exists($class_name, false) and !interface_exists($class_name, false))
 	{ // class may be moved to another file, force update and try again
