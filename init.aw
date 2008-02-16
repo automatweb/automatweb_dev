@@ -618,11 +618,14 @@ function classload($args)
 		}
 		else
 		{
-			classload("core/error");
+			// try to handle it with class_index and autoload
+			__autoload($lib);
+
+			/*classload("core/error");
 			error::raise(array(
 				"id" => "ERR_NO_CLASS",
 				"msg" => sprintf(t("classload(): class %s not found!"), $lib)
-			));
+			));*/
 		}
 		if (file_exists($lib) && is_readable($lib))
 		{
@@ -703,7 +706,8 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 		$ext = $GLOBALS["cfg"]["ext"];
 		if (!file_exists($classdir."/".str_replace(".","", $class).".".$ext))
 		{
-			if (!$errors)
+			__autoload($class);
+			/*if (!$errors)
 			{
 				return false;
 			}
@@ -717,7 +721,7 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 			else
 			{
 				print("Class $class does not exist. Also, class 'error' not loaded.");
-			}
+			}*/
 		}
 		$_fn = $classdir."/".str_replace(".","", $class).".".$ext;
 		incl_f($_fn);
