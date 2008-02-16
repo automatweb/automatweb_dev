@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.71 2008/01/31 13:49:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/keywords.aw,v 1.1 2008/02/16 14:19:54 kristo Exp $
 // keywords.aw - dokumentide v&otilde;tmes&otilde;nad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
