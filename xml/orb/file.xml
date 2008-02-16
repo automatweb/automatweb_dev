@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="file" folder="" extends="class_base">
+	<class name="file" folder="contentmgmt" extends="class_base">
 		<action name="preview" nologin="1">
 			<function name="show">
 				<arguments>
