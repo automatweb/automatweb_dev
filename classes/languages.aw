@@ -34,13 +34,28 @@ class languages extends aw_template
 		}
 	}
 
-	////
-	// !trying to unify names here. 
-	// all_data - returns all data otherwise just the stuff to stick in a listbox
-	// ignore_status - if true, returns also inactive languages
-	// addempty - if true, empty element is added in the beginning
-	// key - use that field as keys of the return array
-	// set_for_user - boolean option if you only want the languyages set for the user
+	/** returns a list of available languages
+		@attrib api=1 params=name
+
+		@param all_data optional type=bool
+			If set to true, returns all data about the language, else just the name, defaults to false
+
+		@param ignore_status optional type=bool
+			If set to true, returns all languages, even the ones marked as not active, defaults to false
+
+		@param addempty optional type=bool
+			If set to true, the first element in the returned array is an empty one, this is for using it as listbox options, defaults to false
+
+		@param key optional type=string
+			The field to use as the array index, defaults to "id"
+
+		@param set_for_user optional type=bool
+			If set to true, only the languages that are selected from the user config are returned, defaults to false
+
+		@returns 
+			list of languages as an array { key => language_data }
+
+	**/			
 	function get_list($arr = array())
 	{
 		extract($arr);
@@ -192,7 +207,7 @@ class languages extends aw_template
 	////
 	// !this tries to figure out the balance between the user's language preferences and the 
 	// languages that are available. this will only return active languages.
-	function find_best()
+	private function find_best()
 	{
 		$la = aw_cache_get_array("languages");
 		$langs = array();
@@ -260,6 +275,16 @@ class languages extends aw_template
 		return $a["acceptlang"];
 	}
 
+	/** Finds the language id for a language code (en,et,..)
+		@attrib api=1 params=pos
+
+		@param code required type=string
+			The code to find the language id for
+
+		@returns
+			NULL if no language for the code is defined in the system, language id (not language object id) 
+
+	**/
 	function get_langid_for_code($code)
 	{
 		$list = $this->get_list(array("all_data" => true));
