@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="document_brother" folder="" extends="document">
+	<class name="document_brother" folder="contentmgmt" extends="document">
 		<action name="new" is_public="1">
 			<function name="add">
 				<arguments>

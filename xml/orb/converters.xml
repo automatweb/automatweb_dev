@@ -186,13 +186,6 @@
 			</function>
 		</action>
 
-		<action name="cache_data_to_sep_tbl">
-			<function name="cache_data_to_sep_tbl">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="conv_task_rows">
 			<function name="conv_task_rows">
 				<arguments>
