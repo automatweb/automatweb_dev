@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.130 2008/02/11 09:42:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.131 2008/02/17 21:59:53 kristo Exp $
 /*
 
 @classinfo maintainer=kristo
@@ -386,7 +386,6 @@ class admin_menus extends aw_template
 	{
 		extract($arr);
 
-		$updmenus = array();
 		if ($file_type == "text")
 		{
 			$this->do_text_import($arr);
@@ -409,8 +408,6 @@ class admin_menus extends aw_template
 			$i_p = $menus[0];
 			$this->req_import_menus($i_p, &$menus, $parent);
 		}
-
-		$this->invalidate_menu_cache();
 
 		return $this->mk_my_orb("right_frame", array("parent" => $parent));
 	}
@@ -737,11 +734,6 @@ class admin_menus extends aw_template
 		}
 
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
-	}
-
-	function invalidate_menu_cache()
-	{
-		// I REALLY don't think this is necessary eny more
 	}
 
 	////	
@@ -1534,7 +1526,6 @@ class admin_menus extends aw_template
 				}
 			}
 		}
-		$this->invalidate_menu_cache();
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
 	}
 
@@ -1567,7 +1558,6 @@ class admin_menus extends aw_template
 				}
 			}
 		}
-		$this->invalidate_menu_cache();
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
 	}
 

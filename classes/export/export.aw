@@ -15,9 +15,6 @@ class export extends aw_template
 	function export()
 	{
 		$this->init("export");
-		$this->menu_cache = get_instance("menu_cache");
-		$this->menu_cache->make_caches();
-
 		$this->type2ext = array(
 			"text/html" => "html",
 			"text/html; charset=iso-8859-1" => "html",
@@ -516,10 +513,6 @@ class export extends aw_template
 			$t_lang_id=$mt[1];
 		}
 
-		// if we switch languages, we have to remake menu caches
-		$this->menu_cache->make_caches(array("lang_id" => $t_lang_id));
-//		echo "made cache for $t_lang_id <br />";
-
 		// set the hash table
 		$this->hashes[$url] = $this->get_hash_for_url($url,$t_lang_id);
 		$current_section = $this->current_section;
@@ -640,7 +633,6 @@ class export extends aw_template
 						{
 							$t_lang_id=$mt[1];
 						}
-						$this->menu_cache->make_caches(array("lang_id" => $t_lang_id));
 						$fname = $this->get_hash_for_url($link,$t_lang_id).".".$this->get_ext_for_link($link,$http_response_header);
 					}
 					$tid = gen_uniq_id();
@@ -1041,7 +1033,6 @@ class export extends aw_template
 			return $this->fix_fn($this->hash2url[$lang_id][$url]);
 		}
 
-		$this->menu_cache->make_caches(array("lang_id" => $lang_id));
 		//echo "get_hash_for_url($url, $lang_id)<br />";
 		$fpurls = array(
 			$this->cfg["baseurl"]."/?set_lang_id=1&automatweb=aw_export",
@@ -1081,8 +1072,8 @@ class export extends aw_template
 			$secid = $mt[1];
 			if ($secid)
 			{
-				$md = $this->menu_cache->get_cached_menu($secid);
-				$mn = $md["name"];
+				$tmp = obj($secid);
+				$mn = $tmp->name();
 				if ($mn != "")
 				{
 					$cnt = 1;
@@ -1133,11 +1124,11 @@ class export extends aw_template
 				// add them together
 				while ($secid && ($secid != 1) && $secid != $this->cfg["rootmenu"]) 
 				{
-					$sec = $this->menu_cache->get_cached_menu($secid);
-					$secid = $sec["parent"];
-					if ($sec["alias"] != "")
+					$sec = obj($secid);
+					$secid = $sec->parent();
+					if ($sec->alias() != "")
 					{
-						$mn = $sec["alias"]."/".$mn;
+						$mn = $sec->alias()."/".$mn;
 					}
 					
 					$cnt++;

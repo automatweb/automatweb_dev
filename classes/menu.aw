@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.223 2008/02/17 21:21:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.224 2008/02/17 21:59:50 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1649,9 +1649,6 @@ class menu extends class_base implements main_subtemplate_handler
 
 	function callback_post_save($arr)
 	{
-		$this->updmenus[] = (int)$arr["obj_inst"]->id();
-		$m = get_instance("menuedit");
-		$m->invalidate_menu_cache($this->updmenus);
 		$request = &$arr["request"];
 		if(($request["group"] == "general_sub" || $request["group"] == "general" || $request["group"] == "") && aw_ini_get("menu.automatic_aliases")  && $arr["obj_inst"]->prop("alias_ch") == 1)
 		{

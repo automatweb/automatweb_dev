@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.400 2008/02/12 12:59:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.401 2008/02/17 21:59:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 /*
 @classinfo  maintainer=kristo
@@ -34,11 +34,6 @@ class menuedit extends aw_template
 		$o->set_prop("type", $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB);
 		$o->set_prop("link", $args["link"]);
 		$newoid = $o->save();
-
-		if (!$args['no_flush'])
-		{
-			$this->invalidate_menu_cache();
-		}
 
 		return $newoid;
 	}
@@ -658,10 +653,6 @@ class menuedit extends aw_template
 			"75" => LC_MENUEDIT_CATALOG,
 			"77" => LC_MENUEDIT_PMETHOD,
 		);
-	}
-
-	function invalidate_menu_cache()
-	{
 	}
 
 	// builds HTML popups

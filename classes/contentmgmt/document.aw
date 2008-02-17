@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.1 2008/02/16 10:18:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.2 2008/02/17 21:59:54 kristo Exp $
 // document.aw - Dokumentide haldus. 
 /*
 @classinfo  maintainer=kristo
@@ -1327,8 +1327,6 @@ if (is_object($docobj))
 
 		if (($this->template_has_var("parent_id") || $this->template_has_var("parent_name") || $this->template_has_var("menu_image") || $this->template_has_var("menu_addr")) && $doc["parent"])
 		{
-			/*$mcache = get_instance("menu_cache");
-			$mn = $mcache->get_cached_menu($doc["parent"]);*/
 			$p_o = obj($doc["parent"]);
 			$this->vars(array(
 				"parent_name" => $p_o->name(),

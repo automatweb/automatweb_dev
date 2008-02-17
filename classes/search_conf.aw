@@ -507,11 +507,6 @@ class search_conf extends aw_template
 			));
 
 			$ap = $this->do_sorting($arr);
-
-			$mned = get_instance("contentmgmt/site_show");
-			$mc = get_instance("menu_cache");
-			$mc->make_caches();
-
 			$page = max(0, $page);
 
 			$sql = "SELECT objects.*,documents.* FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons $perstr $sid $ap LIMIT ".($page*$this->per_page).",".$this->per_page;
@@ -533,30 +528,6 @@ class search_conf extends aw_template
 				$co = ($row["author"] != "" ? "Autor: ".$row["author"]."<br>" : "").$co;
 
 				$sec = $row["docid"];
-				if ($mc->subs[$row["parent"]] == 1)
-				{
-					// we need to push all parent menus aliases to menuedit::menu_aliases for make_menu_link to work
-					$mrow = $mc->get_cached_menu($row["parent"]);
-					$mpr = $mrow["parent"];
-					$mned->menu_aliases = array();
-
-					while ($mpr > 0 && $mpr != $this->cfg["rootmenu"])
-					{
-						$mrow = $mc->get_cached_menu($mpr);
-						if ($mrow["alias"] != "")
-						{
-							array_push($mned->menu_aliases,$mrow["alias"]);
-						}
-						$mpr = $mrow["parent"];
-					}
-					$mr = $mc->get_cached_menu($row["parent"]);
-					if (!is_array($mr))
-					{
-						$mr = array();
-					}
-					$sec = $mned->make_menu_link($mr);
-				}
-
 				$this->vars(array(
 					"section" => $sec,
 					"title" => $row["title"],
