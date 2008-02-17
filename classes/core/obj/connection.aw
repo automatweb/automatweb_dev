@@ -78,7 +78,7 @@ class connection
 
 			// find all connections from object 66
 			$c = new connection();
-			$results = $c->search(array("from" => 66));
+			$results = $c->find(array("from" => 66));
 
 			// create a new connection
 			$c = new connection(array(
