@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.221 2008/02/13 10:33:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.222 2008/02/17 21:12:57 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -460,7 +460,7 @@
 define("IP_ALLOWED", 1);
 define("IP_DENIED", 2);
 
-class menu extends class_base
+class menu extends class_base implements main_subtemplate_handler
 {
 	function menu($args = array())
 	{
@@ -472,51 +472,6 @@ class menu extends class_base
 		$this->trans_props = array(
 			"name","alias", "link","keywords","description","page_title"
 		);
-	}
-
-	/** Generate a form for adding or changing an object
-
-		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa"
-
-		@param parent optional type=int acl="add"
-		@param period optional
-		@param alias_to optional
-		@param return_url optional
-		@param reltype optional type=int
-
-
-		@returns
-
-
-		@comment
-		id _always_ refers to the objects table. Always. If you want to load
-		any other data, then you'll need to use other field name
-
-	**/
-	function new_change($args)
-	{
-		return $this->change($args);
-	}
-
-	/**
-
-		@attrib name=change params=name all_args="1" is_public="1" caption="Muuda"
-
-		@param id optional type=int acl="edit"
-		@param group optional
-		@param period optional
-		@param alias_to optional
-		@param return_url optional
-
-		@returns
-
-
-		@comment
-
-	**/
-	function change($args = array())
-	{
-		return parent::change($args);
 	}
 
 	function get_property($arr)
@@ -956,7 +911,7 @@ class menu extends class_base
 		return $retval;
 	}
 
-	function _get_images_table($arr)
+	private function _get_images_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_get_images_table_cols($t);
@@ -1165,7 +1120,7 @@ class menu extends class_base
 		die($output);
 	}
 
-	function menu_images_get_cnt ($arr)
+	private function menu_images_get_cnt ($arr)
 	{
 		classload("vcl/table");
 		$t =  new aw_table();
@@ -1184,7 +1139,7 @@ class menu extends class_base
 		return $i;
 	}
 
-	function menu_images_get_imgrels ($arr)
+	private function menu_images_get_imgrels ($arr)
 	{
 		classload("vcl/table");
 		$t =  new aw_table();
@@ -1208,7 +1163,7 @@ class menu extends class_base
 		return $output;
 	}
 
-	function menu_images_get ($arr)
+	private function menu_images_get ($arr)
 	{
 		classload("vcl/table");
 		$t =  new aw_table();
@@ -1246,7 +1201,7 @@ class menu extends class_base
 	}
 
 
-	function _get_images_table_cols(&$t)
+	private function _get_images_table_cols(&$t)
 	{
 		$t->define_field(array(
 			"name" => "nr",
@@ -1611,7 +1566,7 @@ class menu extends class_base
 		return $retval;
 	}
 
-	function get_object_groups($class_name)
+	private function get_object_groups($class_name)
 	{
 		$cfg = get_instance("cfg/cfgutils");
 		$cfg->load_class_properties(array("clid" => $class_name));
@@ -1625,7 +1580,7 @@ class menu extends class_base
 		return $rval;
 	}
 
-	function get_pobjects($class_id)
+	private function get_pobjects($class_id)
 	{
 		$objects = new object_list(array(
 			"class_id" => $class_id,
@@ -1634,7 +1589,7 @@ class menu extends class_base
 		return array(0 => t("-- vali --")) + $objects->names();
 	}
 
-	function update_menu_images($args = array())
+	private function update_menu_images($args = array())
 	{
 		extract($args);
 		$imgar = $meta["menu_images"];
@@ -1702,8 +1657,7 @@ class menu extends class_base
 		{
 			if(!strlen($arr["obj_inst"]->alias()))
 			{
-				$new_alias = $this->_gen_nice_alias($request["name"]);
-				$arr["obj_inst"]->set_alias($this->_gen_nice_alias($request["name"], $arr["obj_inst"]->id()));
+				$arr["obj_inst"]->set_alias($this->gen_nice_alias($request["name"], $arr["obj_inst"]->id()));
 				$arr["obj_inst"]->save();
 			}
 		}
@@ -1734,7 +1688,23 @@ class menu extends class_base
 		}
 	}
 
-	function _gen_nice_alias($name, $oid = false)
+	/** genrates a suitable alias from string
+		@attrib api=1 params=pos
+
+		@param name required type=string
+			The string to generate the alias from
+
+		@param oid optional type=oid
+			The oid of the object whose name we are converting, used to check for alias uniqueness
+
+		@comment
+			Generates a string that is suitable for an url - replaces spaces and other non-ascii characters with ones suitable for an url
+
+		@returns
+			The given sring, converted so that it can be used as an object alias
+
+	**/
+	function gen_nice_alias($name, $oid = false)
 	{
 		$name = strtolower($name);
 		$name = trim($name);
@@ -1763,7 +1733,7 @@ class menu extends class_base
 		return $this->_check_alias_name(strtolower(substr($name,0, 50)), $oid);
 	}
 
-	function _check_alias_name($name, $oid)
+	private function _check_alias_name($name, $oid)
 	{
 		$nr = 0;
 		$orig_name = $name;
@@ -1792,7 +1762,7 @@ class menu extends class_base
 
 	////
 	// !tagastab array adminni featuuridest, mida sobib ette s88ta aw_template->picker funxioonile
-	function get_feature_sel()
+	private function get_feature_sel()
 	{
 		$ret = array("0" => t("--vali--"));
 		$prog = aw_ini_get("programs");
@@ -1811,12 +1781,21 @@ class menu extends class_base
 	////
 	// !Tagastab nimekirja avalikest meetodidest. Arvatavasti tuleb see anyway ymber kirjutada,
 	// sest kui neid meetodeid saab olema palju, siis on neid sitt selectist valida
-	function get_pmethod_sel()
+	private function get_pmethod_sel()
 	{
 		$orb = get_instance("core/orb/orb");
 		return array("0" => t("--vali--")) + $orb->get_classes_by_interface(array("interface" => "public"));
 	}
 
+	/** Returns a list of keywords for the menu and all its submenus
+		@attrib api=1 params=pos
+
+		@param id required type=oid
+			The id of the menu to return keywords for
+
+		@returns
+			array { keyword_id => keyword_id }
+	**/
 	function get_menu_keywords($id)
 	{
 		// get menu and all submenus and all kw rels from those
@@ -1842,7 +1821,7 @@ class menu extends class_base
 		return $ret;
 	}
 
-	function save_menu_keywords($keywords,$id)
+	private function save_menu_keywords($keywords,$id)
 	{
 		$old_kwds = $this->get_menu_keywords($id);
 		if (is_array($keywords))
@@ -1934,7 +1913,7 @@ class menu extends class_base
 		$obj->save();
 	}
 
-	function get_brother_table($arr)
+	private function get_brother_table($arr)
 	{
 		$obj = $arr["obj_inst"];
 
@@ -1984,7 +1963,7 @@ class menu extends class_base
 		}
 	}
 
-	function get_sss_table($arr)
+	private function get_sss_table($arr)
 	{
 		$obj = $arr["obj_inst"];
 
@@ -2041,7 +2020,7 @@ class menu extends class_base
 		}
 	}
 
-	function get_sss_exclude_table($arr)
+	private function get_sss_exclude_table($arr)
 	{
 		$obj = $arr["obj_inst"];
 
@@ -2098,8 +2077,6 @@ class menu extends class_base
 		}
 	}
 
-	////
-	// !Aliaste parsimine
 	function parse_alias($args = array())
 	{
 		extract($args);

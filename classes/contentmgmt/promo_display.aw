@@ -3,7 +3,7 @@
 @classinfo  maintainer=kristo
 */
 
-class promo_display 
+class promo_display implements main_subtemplate_handler
 {
 	////
 	// !this must set the content for subtemplates in main.tpl

@@ -11,6 +11,38 @@ EMIT_MESSAGE(MSG_ON_SITE_SHOW_IMPORT_VARS);
 
 */
 
+/** all classes that wish to handle subtemplates in main.tpl must implement this **/
+interface main_subtemplate_handler
+{
+	/** This gets called, when the sub by the name defined in the ini file in subtpl_handler exists in main.tpl and the class implements this interface
+		@attrib api=1 params=name
+
+		@param inst required type=object
+			The aw_template instance to insert the value for the sub in
+
+		@param content_for required type=string
+			The name of the sub, content is requested for. Since one class can be a handler for several subs, this can be used to tell which one it is
+
+		@param request required type=array
+			The request parameters
+
+		@comment
+			This callback must fill in the contents of the template SUB, in the given instance. 
+
+		@examples
+			class foo implements main_subtemplate_handler
+			{
+				function on_get_subtemplate_content($arr)
+				{
+					$arr["inst"]->vars(array(
+						$arr["content_for"] => "allah"
+					));
+				}
+			}
+	**/
+	public function on_get_subtemplate_content($arr);
+}
+
 class site_show extends class_base
 {
 	var $path;				// the path to the selected section
@@ -2183,7 +2215,7 @@ class site_show extends class_base
 					}
 					$fl = $cldef["file"];
 					enter_function("mainc-$fl");
-					if (!method_exists($inst, "on_get_subtemplate_content"))
+					if (!$inst instanceof main_subtemplate_handler)
 					{
 						error::raise(array(
 							"id" => ERR_NO_SUBTPL_HANDLER,

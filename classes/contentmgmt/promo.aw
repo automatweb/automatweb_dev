@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.107 2008/01/31 22:28:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.108 2008/02/17 21:13:00 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -197,7 +197,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 	@reltype DOC_IGNORE value=6 clid=CL_MENU
 	@caption ignoreeri dokumente selle men&uuml;&uuml; alt
 */
-class promo extends class_base
+class promo extends class_base implements main_subtemplate_handler
 {
 	function promo()
 	{

@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.44 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.45 2008/02/17 21:13:00 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -65,7 +65,7 @@ session_register("poll_clicked");
 
 */
 
-class poll extends class_base
+class poll extends class_base implements main_subtemplate_handler
 {
 	function poll()
 	{

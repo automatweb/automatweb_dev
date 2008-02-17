@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.1 2008/02/15 23:54:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.2 2008/02/17 21:13:00 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -907,7 +907,7 @@ class doc extends class_base
 			if(!strlen($args["obj_inst"]->alias()))
 			{
 				$m = get_instance(CL_MENU);
-				$new_alias = $m->_gen_nice_alias($args["request"]["title"]);
+				$new_alias = $m->gen_nice_alias($args["request"]["title"]);
 				if ($new_alias != $args["obj_inst"]->alias())
 				{
 					$args["obj_inst"]->set_alias($new_alias);

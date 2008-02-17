@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.13 2008/01/31 13:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.14 2008/02/17 21:13:00 kristo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 
@@ -44,7 +44,7 @@ define("SITE_STYLES_NO_RANDOM", 1);
 define("SITE_STYLES_RAND_SESSION", 2);
 define("SITE_STYLES_RAND_REFRESH", 3);
 
-class site_styles extends class_base
+class site_styles extends class_base implements main_subtemplate_handler
 {
 	var $selected;
 

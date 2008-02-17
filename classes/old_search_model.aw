@@ -3,7 +3,7 @@
 @classinfo  maintainer=kristo
 */
 
-class old_search_model extends aw_template
+class old_search_model extends aw_template implements main_subtemplate_handler
 {
 	function old_search_model()
 	{

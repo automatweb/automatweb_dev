@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.14 2007/12/06 14:33:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.15 2008/02/17 21:12:58 kristo Exp $
 // commune.aw - Kommuun
 /*
 
@@ -464,7 +464,7 @@
 
 */
 
-class commune extends class_base
+class commune extends class_base implements main_subtemplate_handler
 {
 	var $common;
 	

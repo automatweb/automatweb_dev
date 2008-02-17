@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.9 2007/11/23 07:18:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.10 2008/02/17 21:13:01 kristo Exp $
 // expp_site_content.aw - expp_site_content (nimi) 
 /*
 
@@ -10,7 +10,7 @@
 
 */
 
-class expp_site_content extends class_base
+class expp_site_content extends class_base implements main_subtemplate_handler
 {
 
 	var $expp_journal_management_id = 0;

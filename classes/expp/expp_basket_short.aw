@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_basket_short.aw,v 1.7 2007/11/23 07:18:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_basket_short.aw,v 1.8 2008/02/17 21:13:01 kristo Exp $
 // expp_basket_short.aw - Expp short basket 
 /*
 
@@ -10,7 +10,7 @@
 
 */
 
-class expp_basket_short extends class_base
+class expp_basket_short extends class_base implements main_subtemplate_handler
 {
 	function expp_basket_short()
 	{

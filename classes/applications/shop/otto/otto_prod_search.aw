@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.23 2008/01/21 14:56:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.24 2008/02/17 21:12:59 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -10,7 +10,7 @@
 
 */
 
-class otto_prod_search extends class_base
+class otto_prod_search extends class_base implements main_subtemplate_handler
 {
 	var $search_fld = array(
 		array("Naiste mood", array(136)),
