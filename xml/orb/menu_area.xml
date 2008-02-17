@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="menu_area" folder="layout" extends="class_base">
-	</class>
-</orb>
