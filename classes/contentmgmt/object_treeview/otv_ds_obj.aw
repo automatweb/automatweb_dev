@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.65 2008/02/17 19:22:03 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.66 2008/02/17 19:23:44 voldemar Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource
 /*
 
@@ -88,7 +88,7 @@ class otv_ds_obj extends class_base
 			case "sort_by":
 				$prop["options"] = array(
 					"objects.modified DESC" => t("Objekti muutmise kuup&auml;eva j&auml;rgi"),
-					"objects.jrk" => t("Objektide j&auml;rjekorra j&auml;rgi")
+					"objects.jrk" => t("Objektide j&auml;rjekorra j&auml;rgi"),
 					"objects.name" => t("Objektide nime j&auml;rgi")
 				);
 				break;
