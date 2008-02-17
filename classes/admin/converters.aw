@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.78 2008/02/11 09:42:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.79 2008/02/17 22:26:10 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -338,115 +338,6 @@ class converters extends aw_template
 			};
 		};			
 		print "all done!<br />";
-	}
-
-	// parent argument should specify the folder under which to create the periods
-	/**  
-		
-		@attrib name=convert_periods params=name default="0"
-		
-		@param parent optional type=int
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function convert_periods($args)
-	{
-		$tableinfo = $this->db_get_table("periods");
-		// first, create the field in the periods table to sync with objects table
-		$parent = $args["parent"];
-		if (!$tableinfo["fields"]["obj_id"])
-		{
-			$q = "ALTER TABLE periods ADD obj_id bigint unsigned";
-			$this->db_query($q);
-
-		};
-		
-		$pid = $this->cfg["per_oid"];
-		$q = "SELECT count(*) AS pcnt FROM periods WHERE oid = '$pid'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		if ($row["pcnt"] == 0)
-		{
-			$url = $this->cfg["baseurl"] . "/automatweb";
-			header("Location: $url");
-			exit;
-		};
-		
-
-		if (empty($args["parent"]))
-		{
-			$m = get_instance("menuedit");
-			$parent = $m->add_new_menu(array(
-				"name" => "Perioodid (K)",
-				"parent" => cfg_get_admin_rootmenu2(),
-				"type" => MN_CLIENT,
-
-			));
-		}
-
-		// now, cycle over all the periods, and create an object for each one
-		// under .. what? 
-		aw_set_exec_time(AW_LONG_PROCESS);
-		$map = array();
-		$q = "SELECT * FROM periods WHERE oid = '$pid'";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			if (empty($row["obj_id"]))
-			{
-				$img_id = false;
-				$this->save_handle();
-				$undat = aw_unserialize($row["data"]);
-				$comment = $undat["comment"];
-				print "converting $row[description]<br />";
-				flush();
-				if (!empty($undat["image"]["id"]))
-				{
-					$img_id = $undat["image"]["id"];
-				};
-				unset($undat["comment"]);
-				unset($undat["image"]);
-				// it will be a relation object, so I only need to store the
-				// id
-				if ($img_id)
-				{
-					$undat["image"] = $img_id;
-				};
-				$_meta = aw_serialize($undat);
-				$this->quote(&$_meta);
-				$this->db_query("INSERT INTO 
-						objects(parent,name,comment,class_id, jrk, status, metadata, createdby, created, modifiedby, modified)
-						values('$parent','$row[description]','$comment',".CL_PERIOD.",'$row[jrk]','".!empty($row["archived"]) ? STAT_ACTIVE : STAT_NOTACTIVE."',
-						'$_meta','".aw_global_get("uid")."','".time()."','".aw_global_get("uid")."','".time()."')
-				");
-				$newid = $this->db_last_insert_id();
-				if ($img_id)
-				{
-					// create the relation too
-					$o = obj($newid);
-					$o->connect(array(
-						"to" => $img_id,
-						"reltype" => 1
-					));
-				}
-				$map[$row["id"]] = $newid;
-			};
-			$this->restore_handle();
-		};
-
-		// and now, write out the newly created oids
-		$awmap = new aw_array($map);
-		foreach($awmap->get() as $key => $val)
-		{
-			$q = sprintf("UPDATE periods SET obj_id = %d WHERE id = %d",$val,$key);
-			$this->db_query($q);
-		};
-		
-		
 	}
 
 	/**  

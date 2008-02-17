@@ -124,7 +124,7 @@ class error
 		if (!is_oid($oid) || !$t->can("view", $oid))
 		{
 			$i = get_instance("menuedit");
-			$i->_do_error_redir($oid);
+			$i->do_error_redir($oid);
 		}
 	}
 }

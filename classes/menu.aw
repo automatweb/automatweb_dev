@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.224 2008/02/17 21:59:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.225 2008/02/17 22:26:09 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -612,8 +612,7 @@ class menu extends class_base implements main_subtemplate_handler
 
 
 			case "type":
-				$m = get_instance("menuedit");
-				$data["options"] = $m->get_type_sel();
+				$data["options"] = $this->get_type_sel();
 				break;
 
 			case "tpl_lead":
@@ -2550,6 +2549,19 @@ class menu extends class_base implements main_subtemplate_handler
 		$o->set_meta("linked_obj", null);
 		$o->save();
 		return $arr["ru"];
+	}
+
+	////
+	// !Tagastab nimekirja erinevatest mentpidest
+	private function get_type_sel()
+	{
+		return array(
+			"70" => t("Sektsioon"),
+			"69" => t("Klient"),
+			"71" => t("Adminni men&uuml;&uuml;"),
+			"75" => t("Kataloog"),
+			"77" => t("Avalik meetod"),
+		);
 	}
 };
 ?>

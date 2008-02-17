@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.27 2007/11/23 11:07:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.28 2008/02/17 22:26:11 kristo Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine
 /*
 
@@ -781,14 +781,14 @@ class realestate_add extends class_base
 		if (!$this->can("edit", $arr["alias"]["target"]))
 		{
 			$i = get_instance("menuedit");
-			$i->_do_error_redir($arr["alias"]["target"]);
+			$i->do_error_redir($arr["alias"]["target"]);
 		}
 
 //
 //		if (!$this->can("edit", $arr["alias"]["target"]))
 //		{
 //			$i = get_instance("menuedit");
-//			$i->_do_error_redir($oid);
+//			$i->do_error_redir($oid);
 //		}
 
 		$targ = obj($arr["alias"]["target"]);

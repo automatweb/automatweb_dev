@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.401 2008/02/17 21:59:51 kristo Exp $
-// menuedit.aw - menuedit. heh.
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.402 2008/02/17 22:26:09 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -9,171 +8,20 @@ class menuedit extends aw_template
 	function menuedit()
 	{
 		$this->init("automatweb/menuedit");
-
-		// FIXME: damn this is a mess
-		$this->lc_load("menuedit","lc_menuedit");
-		lc_site_load("menuedit",$this);
-		lc_load("definition");
-	}
-
-	////
-	// !simpel menyy lisamise funktsioon. laienda kui soovid. Mina kasutan seda saidi seest
-	// uue folderi lisamiseks kodukataloogi alla
-	// no_flush
-	function add_new_menu($args = array())
-	{
-		// ja eeldame, et meil on v?emalt parent ja name olemas.
-		$o = obj();
-		$o->set_name($args["name"]);
-		$o->set_parent($args["parent"]);
-		$o->set_status((isset($args["status"]) ? $args["status"] : 2));
-		$o->set_class_id(CL_MENU);
-		$o->set_ord($args["jrk"]);
-		$o->set_meta("pclass", $args["pclass"]);
-		$o->set_meta("pm_url_admin", $args["pm_url_admin"]);
-		$o->set_prop("type", $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB);
-		$o->set_prop("link", $args["link"]);
-		$newoid = $o->save();
-
-		return $newoid;
-	}
-
-	////
-	// !Listib koik objektid
-	function db_listall($where = " objects.status != 0",$ignore = false,$ignore_lang = false)
-	{
-		$aa = "";
-		if (!$ignore)
-		{
-			// loeme sisse koik objektid
-			$aa = "AND ((objects.site_id = '".aw_ini_get("site_id")."') OR (objects.site_id IS NULL))";
-		};
-		if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
-		{
-			$aa.="AND (objects.lang_id=".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
-		}
-		$q = "SELECT objects.oid as oid,
-				objects.parent as parent,
-				objects.comment as comment,
-				objects.name as name,
-				objects.created as created,
-				objects.createdby as createdby,
-				objects.modified as modified,
-				objects.modifiedby as modifiedby,
-				objects.last as last,
-				objects.status as status,
-				objects.jrk as jrk,
-				objects.alias as alias,
-				objects.class_id as class_id,
-				objects.brother_of as brother_of,
-				objects.metadata as metadata,
-				objects.periodic as periodic,
-				menu.type as mtype,
-				menu.link as link,
-				menu.clickable as clickable,
-				menu.target as target,
-				menu.ndocs as ndocs,
-				menu.img_id as img_id,
-				menu.img_url as img_url,
-				menu.hide_noact as hide_noact,
-				menu.mid as mid,
-				menu.sss as sss,
-				menu.links as links,
-				menu.icon_id as icon_id,
-				menu.admin_feature as admin_feature,
-				menu.periodic as mperiodic
-			FROM objects
-				LEFT JOIN menu ON menu.id = objects.oid
-				WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
-				ORDER BY objects.parent, jrk,objects.created";
-		$this->db_query($q);
-	}
-
-
-	function do_syslog_core($log,$section)
-	{
-		if (isset($_GET["artid"]) && isset($_GET["sid"]))	// tyyp tuli meilist, vaja kirja panna
-		{
-			$artid = $_GET["artid"];
-			if (is_numeric($artid))
-			{
-				$sid = (int)$_GET["sid"];
-
-				$ml_msg = obj($sid);
-
-				$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $artid");
-				if (($ml_user = $this->db_next()))
-				{
-					$this->_log(ST_MENUEDIT, SA_PAGEVIEW ,$ml_user["name"]." (".$ml_user["mail"].") tuli lehele $log meilist ".$ml_msg->name(),$section);
-
-					// and also remember the guy
-					// set a cookie, that expires in 3 years
-					setcookie("mlxuid",$artid,time()+3600*24*1000,"/");
-				}
-			}
-		}
-		else
-		if ($isset($_GET["mlxuid"]))
-		{
-			$mlxuid = $_GET["mlxuid"];
-			$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $mlxuid");
-			if (($ml_user = $this->db_next()))
-			{
-				$this->_log(ST_MENUEDIT, SA_PAGEVIEW,$ml_user["name"]." (".$ml_user["mail"].") vaatas lehte $log",$section);
-			}
-		}
-		else
-		if (aw_ini_get("syslog.log_pageviews") == 1)
-		{
-			$this->_log(ST_MENUEDIT, SA_PAGEVIEW, $log, $section);
-		}
-	}
-
-	function do_syslog($section = 0)
-	{
-		// now build the string to put in syslog
-		$log = "";
-		$names = array();
-		foreach($this->path as $val)
-		{
-			$names[] = $this->menu_chain[$val]["name"];
-		};
-
-		if ($GLOBALS["tbl_sk"] != "")
-		{
-			$tbld = aw_global_get("fg_table_sessions");
-			$ar = new aw_array($tbld[$GLOBALS["tbl_sk"]]);
-			foreach($ar->get() as $url)
-			{
-				preg_match("/restrict_search_val=([^&$]*)/",$url,$mt);
-				$names[] = urldecode($mt[1]);
-			}
-		}
-
-		$log = join(" / ",$names);
-		$this->do_syslog_core($log,$section);
 	}
 
 	function request_startup()
 	{
 		$section = aw_global_get("section");
-		//if (is_numeric(str_replace("_", "", str_replace(":", "", $section))) || empty($section))
-		//{
-			$rs = $section == "" ? aw_ini_get("frontpage") : $section;
-			$rs = str_replace("/", "-", $rs);
-			$rs = str_replace("\\", "-", $rs);
-			aw_global_set("raw_section", $rs);
+		$rs = $section == "" ? aw_ini_get("frontpage") : $section;
+		$rs = str_replace("/", "-", $rs);
+		$rs = str_replace("\\", "-", $rs);
+		aw_global_set("raw_section", $rs);
 
-			if (strpos($section, ":") !== false)
-			{
-				$section = (int)$section;
-			}
-		//}
-		//else
-		//{
-		//	aw_global_set("raw_section", aw_ini_get("frontpage"));
-		//	$section = aw_ini_get("frontpage");
-		//}
+		if (strpos($section, ":") !== false)
+		{
+			$section = (int)$section;
+		}
 
 		$set_lang_id = false;
 		$set_ct_lang_id = isset($_GET["set_ct_lang_id"]) ? $_GET["set_ct_lang_id"] : null;
@@ -322,9 +170,6 @@ class menuedit extends aw_template
 			}
 			else
 			{
-				$this->lc_load("menuedit","lc_menuedit");
-				lc_site_load("menuedit",$this);
-				lc_load("definition");
 				$GLOBALS["objects"] = array();
 				// we must reset the objcache here, because
 				// it already contains the section obj
@@ -576,7 +421,7 @@ class menuedit extends aw_template
 			{
 				if ($show_errors)
 				{
-					$this->_do_error_redir($section);
+					$this->do_error_redir($section);
 				}
 				else
 				{
@@ -594,7 +439,7 @@ class menuedit extends aw_template
 			if (!$this->can("view", $section))
 			{
 				$ns = $_SERVER["REQUEST_URI"];
-				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$ns), $section);
+				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(t("&uuml;ritas accessida olematut objekti id-ga '%s'. Suunati esilehele."),$ns), $section);
 				if ($show_errors)
 				{
 					if (aw_ini_get("menuedit.login_on_no_access") == 1)
@@ -604,7 +449,7 @@ class menuedit extends aw_template
 					}
 					else
 					{
-						$this->_do_error_redir($section);
+						$this->do_error_redir($section);
 					}
 				}
 				else
@@ -619,7 +464,7 @@ class menuedit extends aw_template
 				{
 					if ($show_errors)
 					{
-						$this->_do_error_redir($section);
+						$this->do_error_redir($section);
 					}
 					else
 					{
@@ -642,32 +487,17 @@ class menuedit extends aw_template
 		return $section;
 	}
 
-	////
-	// !Tagastab nimekirja erinevatest mentpidest
-	function get_type_sel()
-	{
-		return array(
-			"70" => LC_MENUEDIT_SECTION,
-			"69" => LC_MENUEDIT_CLIENT,
-			"71" => LC_MENUEDIT_ADMINN_MENU,
-			"75" => LC_MENUEDIT_CATALOG,
-			"77" => LC_MENUEDIT_PMETHOD,
-		);
-	}
+	/** Redirects the user to the error page for a non-existing page
+		@attrib api=1 params=pos
 
-	// builds HTML popups
-	function build_popups()
-	{
-		// that sucks. We really need to rewrite that
-		// I mean we always read information about _all_ the popups
-		$ss = get_instance("contentmgmt/site_show");
-		$tmp = array();
-		$ss->_init_path_vars($tmp);
-		$ss->sel_section = $ss->_get_sel_section(aw_global_get("section"));
-		return $ss->build_popups();
-	}
+		@param section required type=string
+			The section (address) the user tried to access that does not exist
 
-	function _do_error_redir($section)
+		@comment
+			Checks url-replacement tables and old url relocation tables and if found, redirects to the correct url. if not, then tries to find the error page from the ini file and if not found. just prints 404 error message.
+			Also terminates execution.
+	**/
+	function do_error_redir($section)
 	{
 		// check site config
 		$pl = new object_list(array(
@@ -728,7 +558,7 @@ class menuedit extends aw_template
 				die();
 			}
 		}
-		$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$_SERVER["REQUEST_URI"]), $section);
+		$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(t("&uuml;ritas accessida objekti id-ga '%s'. Kr&auml;kkimiskatse?"),$_SERVER["REQUEST_URI"]), $section);
 		// neat :), kui objekti ei leita, siis saadame 404 koodi
 		$r404 = $this->cfg["404redir"];
 		if (is_array($r404))
@@ -753,7 +583,7 @@ class menuedit extends aw_template
 		else
 		{
 			header ("HTTP/1.1 404 Not Found");
-			printf(E_ME_NOT_FOUND);
+			printf(t("<h1>404 Sellist sektsiooni pole</h1>"));
 		};
 		exit;
 	}
