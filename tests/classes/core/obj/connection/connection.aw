@@ -26,7 +26,7 @@ class connection_test extends UnitTestCase
 	function test_construct()
 	{
 		$c = new connection();
-		$this->assertTrue(!$c->prop("to"));
+		$this->assertTrue(!$c->id());
 	}
 
 	function test_construct_id()
@@ -37,28 +37,66 @@ class connection_test extends UnitTestCase
 		$this->assertTrue($c->prop("to") == $row["target"]);
 	}
 
-	function test_construct_arr()
+	function test_construct_arr_from_to()
 	{
-		// without reltype:
 		$c = new connection(array(
 			'from' => $this->o_from->id(),
 			'to' => $this->o_to->id(),
 		));
 		$this->assertTrue($c->prop('from') == $this->o_from->id());
-		$this->assertTrue($c->prop("to") == $this->o_to->id());
+		$this->assertTrue($c->prop('to') == $this->o_to->id());
+		$this->assertTrue($c->prop('reltype') == 0);
 		// also we should check that it didn't write anything to db
 		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 0", "id");
 		$this->assertTrue($id == NULL);
+	}
 
-		// with reltype
+	function test_construct_arr_from_to_reltype()
+	{
 		$c = new connection(array(
 			'from' => $this->o_from->id(),
 			'to' => $this->o_to->id(),
-			"reltype" => 669
+			'reltype' => 669
 		));
 		$this->assertTrue($c->prop('from') == $this->o_from->id());
 		$this->assertTrue($c->prop("to") == $this->o_to->id());
 		$this->assertTrue($c->prop("reltype") == 669);
+		// also we should check that it didn't write anything to db
+		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
+		$this->assertTrue($id == NULL);
+	}
+
+	function test_construct_arr_from_to_reltype_data()
+	{
+		$c = new connection(array(
+			'from' => $this->o_from->id(),
+			'to' => $this->o_to->id(),
+			'reltype' => 669,
+			'data' => 'this string must be saved with connection'
+		));
+		$this->assertTrue($c->prop('from') == $this->o_from->id());
+		$this->assertTrue($c->prop("to") == $this->o_to->id());
+		$this->assertTrue($c->prop("reltype") == 669);
+		$this->assertTrue($c->prop('data') === 'this string must be saved with connection');
+		// also we should check that it didn't write anything to db
+		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
+		$this->assertTrue($id == NULL);
+	}
+
+	function test_construct_arr_from_to_reltype_data_idx()
+	{
+		$c = new connection(array(
+			'from' => $this->o_from->id(),
+			'to' => $this->o_to->id(),
+			'reltype' => 669,
+			'data' => 'this string must be saved with connection',
+			'idx' => 777
+		));
+		$this->assertTrue($c->prop('from') == $this->o_from->id());
+		$this->assertTrue($c->prop('to') == $this->o_to->id());
+		$this->assertTrue($c->prop('reltype') == 669);
+		$this->assertTrue($c->prop('data') === 'this string must be saved with connection');
+		$this->assertTrue($c->prop('idx') == 777);
 		// also we should check that it didn't write anything to db
 		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
 		$this->assertTrue($id == NULL);
@@ -69,7 +107,7 @@ class connection_test extends UnitTestCase
 		$c = new connection(array(
 			"from" => $this->o_from->id(),
 			"to" => $this->o_to->id(),
-			"reltype" => 669
+			"reltype" => 669,
 		));
 		$c->save();
 		$this->assertTrue($c->prop("from") == $this->o_from->id());
