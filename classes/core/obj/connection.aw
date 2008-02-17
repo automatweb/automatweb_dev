@@ -530,7 +530,7 @@ class connection
 		return obj($this->conn["from"]);
 	}
 
-	/** saves the current connection - this should be used to save the connection after is has been inited via an array by the constructor or load()
+	/** saves the current connection - this should be used to save the connection after it has been initialized via an array by the constructor or load()
 		@attrib api=1
 
 		@errors
