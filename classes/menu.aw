@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.222 2008/02/17 21:12:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.223 2008/02/17 21:21:52 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2217,7 +2217,7 @@ class menu extends class_base implements main_subtemplate_handler
 		}
 	}
 
-	function _init_seealso_docs_t(&$t)
+	private function _init_seealso_docs_t(&$t)
 	{
 		$t->define_field(array(
 			"name" => "doc",
@@ -2250,7 +2250,7 @@ class menu extends class_base implements main_subtemplate_handler
 		));
 	}
 
-	function _do_seealso_docs_t($arr)
+	private function _do_seealso_docs_t($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_seealso_docs_t($t);
@@ -2297,7 +2297,7 @@ class menu extends class_base implements main_subtemplate_handler
 		return $this->trans_callback($arr, $this->trans_props);
 	}
 
-	function kw_tb($arr)
+	private function kw_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 
@@ -2331,6 +2331,9 @@ class menu extends class_base implements main_subtemplate_handler
 		}
 	}
 
+	/** Outputs the google sitemap xml file	for the site
+		@attrib api=1
+	**/
 	function get_sitemap()
 	{
 		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.google.com/schemas/sitemap/0.84\">\n";
@@ -2375,7 +2378,7 @@ class menu extends class_base implements main_subtemplate_handler
 		die();
 	}
 
-	function _get_sss_tb($arr)
+	private function _get_sss_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 
@@ -2415,7 +2418,7 @@ class menu extends class_base implements main_subtemplate_handler
 		}
 	}
 
-	function _get_linker(&$p, $o)
+	private function _get_linker(&$p, $o)
 	{
 		$ps = get_instance("contentmgmt/ct_linked_obj_search");
 		if ($this->can("view", $o->meta("linked_obj")))
@@ -2432,7 +2435,7 @@ class menu extends class_base implements main_subtemplate_handler
 		));
 	}
 
-	function _init_stats_table(&$t)
+	private function _init_stats_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "tm",
@@ -2463,7 +2466,7 @@ class menu extends class_base implements main_subtemplate_handler
 		));
 	}
 
-	function _get_acl_views($arr)
+	private function _get_acl_views($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stats_table($t);
@@ -2484,7 +2487,7 @@ class menu extends class_base implements main_subtemplate_handler
 		}
 	}
 
-	function _get_acl_edits($arr)
+	private function _get_acl_edits($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stats_table($t);
@@ -2505,7 +2508,7 @@ class menu extends class_base implements main_subtemplate_handler
 		}
 	}
 
-	function write_trans_aliases($arr)
+	private function write_trans_aliases($arr)
 	{
 		$o = $arr["obj_inst"];
 		$l = get_instance("languages");
@@ -2528,7 +2531,7 @@ class menu extends class_base implements main_subtemplate_handler
 		}
 	}
 
-	function _seealso_docs_tb($arr)
+	private function _seealso_docs_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 		$tb->add_new_button(array(CL_DOCUMENT), $arr["obj_inst"]->id(), 18 /* RELTYPE_SEEALSO_DOCUMENT */);
