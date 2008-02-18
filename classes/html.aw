@@ -1043,13 +1043,14 @@ class html extends aw_template
 		$onMouseOut = isset($onmouseout)?" onMouseOut='".$onmouseout."'":"";
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$id = isset($id) ? " id='$id'" : "";
+		$rel = isset($rel) ? " rel='$rel'" : "";
 
 		if (empty($caption))
 		{
 			$caption = $url;
 		}
 
-		return "<a href='{$url}'" . $target . $title . $onClick . $onMouseOver . $onMouseOut . $ti . $textsize . $class . $id . ">{$caption}</a>";
+		return "<a href='{$url}'" . $target . $title . $onClick . $onMouseOver . $onMouseOut . $ti . $textsize . $class . $id . $rel. ">{$caption}</a>";
 	}
 
 	/**Popup

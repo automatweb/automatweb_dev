@@ -652,7 +652,8 @@ class doc_display extends aw_template
 					{
 						$s_name = html::href(array(
 							"caption" => $s_name,
-                                "url" => $s_url,
+							"url" => $s_url,
+							"rel" => "nofollow",
 						));
 					}
 					$this->dequote(&$s_comment);
