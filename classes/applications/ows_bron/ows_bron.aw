@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.27 2008/02/18 09:04:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.28 2008/02/18 09:21:03 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -25,18 +25,18 @@
 
 	@property mail_bcc type=table store=no no_caption=1
 
-@default group=mail_bank_bcc
-
-	@property mail_bank_bcc type=table store=no no_caption=1
-
 @default group=bank_settings
 
 	@property bank_settings_table type=table store=no no_caption=1
 
+@default group=mail_bank_bcc
+
+	@property mail_bank_bcc type=table store=no no_caption=1
+
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_confirm caption="Kinnitusmeil" parent=mail_settings
 	@groupinfo mail_settings_cancel caption="T&uuml;histusmeil" parent=mail_settings
-	@groupinfo mail_bcc caption="CC BCC" parent=mail_settings
+	@groupinfo mail_bcc caption="BCC" parent=mail_settings
 	@groupinfo mail_bank_bcc caption="Pangalingi BCC" parent=mail_settings
 
 @groupinfo bank_settings caption="Panga seaded"
@@ -1067,8 +1067,16 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		if ($this->can("view", $o->prop("ows_bron")) && $do_bcc)
 		{
 			$bron = obj($o->prop("ows_bron"));
-			$h_bcc = $bron->meta("hotel_bcc");
-			$h_bcc_t = $bron->meta("hotel_bcc_titles");
+			if ($o->prop("payment_type") == "CreditCard")
+			{
+				$h_bcc = $bron->meta("hotel_bcc");
+				$h_bcc_t = $bron->meta("hotel_bcc_titles");
+			}
+			else
+			{
+				$h_bcc = $bron->meta("hotel_bank_bcc");
+				$h_bcc_t = $bron->meta("hotel_bank_bcc_titles");
+			}
 			if (!empty($h_bcc[$o->prop("hotel_id")]))
 			{
 				$subj = "Revalhotels reservation";
