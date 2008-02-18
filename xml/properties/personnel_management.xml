@@ -2,7 +2,7 @@
 <properties>
       <property>
             <name>persons_fld</name>
-            <group>general</group>
+            <group>general2</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -12,7 +12,7 @@
       </property>
       <property>
             <name>offers_fld</name>
-            <group>general</group>
+            <group>general2</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -22,7 +22,7 @@
       </property>
       <property>
             <name>fields</name>
-            <group>general</group>
+            <group>general2</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -32,7 +32,7 @@
       </property>
       <property>
             <name>person_ot</name>
-            <group>general</group>
+            <group>general2</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -42,7 +42,7 @@
       </property>
       <property>
             <name>crmdb</name>
-            <group>general</group>
+            <group>general2</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -52,13 +52,23 @@
       </property>
       <property>
             <name>owner_org</name>
-            <group>general</group>
+            <group>general2</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_OWNER_ORG</reltype>
             <caption>Omanikorganisatsioon</caption>
+      </property>
+      <property>
+            <name>search_conf_tbl</name>
+            <group>search_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>search_save</name>
@@ -81,38 +91,6 @@
             <sform>cv_search</sform>
             <store>no</store>
             <caption>Otsi CV-sid</caption>
-      </property>
-      <property>
-            <name>employee_list_toolbar</name>
-            <group>employee_list</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>employee_list_tree</name>
-            <group>employee_list</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>treeview</type>
-            <no_caption>1</no_caption>
-            <parent>employee_list</parent>
-            <store>no</store>
-      </property>
-      <property>
-            <name>employee_list_table</name>
-            <group>employee_list</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <parent>employee_list</parent>
-            <store>no</store>
       </property>
       <property>
             <name>candidate_toolbar</name>
@@ -168,7 +146,102 @@
             <store>no</store>
       </property>
       <property>
+            <name>os_pr</name>
+            <group>offers_</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>os_top</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <size>18</size>
+            <caption>Ametikoht</caption>
+      </property>
+      <property>
+            <name>os_area</name>
+            <group>offers_</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>os_top</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <size>18</size>
+            <caption>Piirkond</caption>
+      </property>
+      <property>
+            <name>os_dl_from</name>
+            <group>offers_</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>os_dl_layout</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <caption>T&amp;amp;auml;htaeg alates</caption>
+      </property>
+      <property>
+            <name>os_dl_to</name>
+            <group>offers_</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>os_dl_layout</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <caption>T&amp;amp;auml;htaeg kuni</caption>
+      </property>
+      <property>
+            <name>os_status</name>
+            <group>offers_</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>act_s_sbt</name>
+            <group>offers_</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <parent>offers_search</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>offers_table</name>
+            <group>offers_</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>offers</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>offers_search_results_table</name>
             <group>offers_</group>
             <table>objects</table>
             <field>meta</field>
@@ -217,6 +290,14 @@
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
+            <general2>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>general</parent>
+            </general2>
+            <search_conf>
+                  <caption>Otsingu seaded</caption>
+                  <parent>general</parent>
+            </search_conf>
             <employee>
                   <caption>T&amp;ouml;&amp;ouml;otsijad</caption>
                   <submit>no</submit>
@@ -225,22 +306,18 @@
                   <caption>Otsing</caption>
                   <parent>employee</parent>
             </employee_search>
-            <employee_list>
-                  <caption>Nimekiri</caption>
-                  <parent>employee</parent>
-                  <submit>no</submit>
-            </employee_list>
             <candidate>
                   <caption>Kandideerijad</caption>
                   <submit>no</submit>
             </candidate>
             <offers>
-                  <caption>T&amp;ouml;&amp;ouml;pakkumised</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumised</caption>
                   <submit>no</submit>
             </offers>
             <offers_>
                   <parent>offers</parent>
                   <caption>&amp;Uuml;ldine</caption>
+                  <submit>no</submit>
             </offers_>
             <offers_conf>
                   <parent>offers</parent>
@@ -293,12 +370,6 @@
             </DEFAULT_OFFERS_CFGFORM>
       </reltypes>
       <layout>
-            <employee_list>
-                  <type>hbox</type>
-                  <width>15%:85%</width>
-                  <group>employee_list</group>
-                  <area_caption></area_caption>
-            </employee_list>
             <candidate>
                   <type>hbox</type>
                   <width>15%:85%</width>
@@ -311,13 +382,38 @@
                   <group>offers_</group>
                   <area_caption></area_caption>
             </offers>
-            <offers_tree>
+            <offers_tree_n_search>
                   <type>vbox</type>
                   <parent>offers</parent>
+                  <group>offers_</group>
+                  <area_caption></area_caption>
+            </offers_tree_n_search>
+            <offers_tree>
+                  <type>vbox</type>
+                  <parent>offers_tree_n_search</parent>
                   <closeable>1</closeable>
                   <area_caption>Kaustad</area_caption>
                   <group>offers_</group>
             </offers_tree>
+            <offers_search>
+                  <type>vbox</type>
+                  <parent>offers_tree_n_search</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>offers_</group>
+            </offers_search>
+            <os_top>
+                  <type>vbox</type>
+                  <parent>offers_search</parent>
+                  <group>offers_</group>
+                  <area_caption></area_caption>
+            </os_top>
+            <os_dl_layout>
+                  <type>vbox</type>
+                  <parent>offers_search</parent>
+                  <group>offers_</group>
+                  <area_caption></area_caption>
+            </os_dl_layout>
       </layout>
 </properties>
 

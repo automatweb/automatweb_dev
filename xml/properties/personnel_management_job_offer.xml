@@ -61,7 +61,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Konkursi t&amp;auml;htaeg</caption>
+            <caption>Konkursi t&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>profession</name>
@@ -79,7 +79,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>classificator</type>
+            <type>relpicker</type>
             <reltype>RELTYPE_FIELD</reltype>
             <store>connect</store>
             <caption>Valdkond</caption>
@@ -103,7 +103,7 @@
             <type>textarea</type>
             <rows>15</rows>
             <cols>60</cols>
-            <caption>T&amp;ouml;&amp;ouml; sisu</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; sisu</caption>
       </property>
       <property>
             <name>requirements</name>
@@ -114,7 +114,7 @@
             <type>textarea</type>
             <rows>15</rows>
             <cols>60</cols>
-            <caption>N&amp;otilde;udmised kandidaadile</caption>
+            <caption>N&amp;amp;otilde;udmised kandidaadile</caption>
       </property>
       <property>
             <name>suplementary</name>
@@ -148,6 +148,43 @@
             <rows>15</rows>
             <cols>60</cols>
             <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>motivation_letter</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Vajalik motivatsioonikiri</caption>
+      </property>
+      <property>
+            <name>start_working</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;leasumise aeg</caption>
+      </property>
+      <property>
+            <name>job_offer_file</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine failina</caption>
+      </property>
+      <property>
+            <name>apply</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Kandideerin</caption>
       </property>
       <property>
             <name>offer_cfgform</name>

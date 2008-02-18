@@ -437,6 +437,7 @@ class _int_object_loader extends core
 
 	function can($acl_name, $oid, $dbg = false)
 	{
+		//echo dbg::dump($GLOBALS["__obj_sys_acl_memc"]);
 		if (!isset($this->__aw_acl_cache[$oid]) || !($max_acl = $this->__aw_acl_cache[$oid]))
 		{
 			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
@@ -478,7 +479,7 @@ class _int_object_loader extends core
 		$max_acl = $GLOBALS["cfg"]["acl"]["default"];
 
 		$gl = aw_global_get("gidlist_pri_oid");
-
+//echo "calc for $oid <br>\n";
 
 		// go through the object tree and find the acl that is of highest priority among the current users group
 		$cur_oid = $oid;

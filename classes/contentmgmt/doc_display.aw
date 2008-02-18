@@ -2,7 +2,6 @@
 /*
 @classinfo  maintainer=kristo
 */
-
 class doc_display extends aw_template
 {
 	var $no_left_pane;

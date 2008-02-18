@@ -1342,10 +1342,12 @@ function check_pagecache_folders()
 
 function __autoload($class_name)
 {
+	enter_function("__autoload");
 	require_once("class_index.aw");
 
 	if ("class_index" === $class_name)
 	{
+		exit_function("__autoload");
 		return;
 	}
 
@@ -1355,6 +1357,7 @@ function __autoload($class_name)
 	}
 	catch (awex_clidx_double_dfn $e)
 	{
+		exit_function("__autoload");
 		exit ("Class '" . $e->clidx_cl_name . "' redeclared. Fix error in '" . $e->clidx_path1 . "' or '" . $e->clidx_path2 . "'.");//!!! tmp
 
 		//!!! take action -- delete/rename one of the classes or load both or ...
@@ -1376,6 +1379,7 @@ function __autoload($class_name)
 		}
 		catch (awex_clidx $e)
 		{
+			exit_function("__autoload");
 			exit("Fatal classload error. " . $e->getMessage());//!!! tmp
 		}
 		//!!! take action
@@ -1391,6 +1395,7 @@ function __autoload($class_name)
 		}
 		catch (awex_clidx $e)
 		{
+			exit_function("__autoload");
 			exit("Fatal classload error. " . $e->getMessage());//!!! tmp
 			//!!! take action
 		}
@@ -1398,6 +1403,7 @@ function __autoload($class_name)
 		$class_file = class_index::get_file_by_name($class_name);
 		require($class_file);
 	}
+	exit_function("__autoload");
 }
 
 ?>
