@@ -619,8 +619,12 @@ function classload($args)
 		else
 		{
 			// try to handle it with class_index and autoload
-			$class = substr(strrchr($olib, "/"), 1);
-			__autoload($class);
+			if (false !== strpos($olib, "/"))
+			{
+				$olib = substr(strrchr($olib, "/"), 1);
+			}
+
+			__autoload($olib);
 
 			/*classload("core/error");
 			error::raise(array(
@@ -707,7 +711,13 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 		$ext = $GLOBALS["cfg"]["ext"];
 		if (!file_exists($classdir."/".str_replace(".","", $class).".".$ext))
 		{
-			$tmp_clname = substr(strrchr($class, "/"), 1);
+			$tmp_clname = $class;
+
+			if (false !== strpos($tmp_clname, "/"))
+			{
+				$tmp_clname = substr(strrchr($class, "/"), 1);
+			}
+
 			__autoload($tmp_clname);
 			/*if (!$errors)
 			{
