@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.10 2008/02/06 18:23:56 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.11 2008/02/18 13:16:57 hannes Exp $
 // ical_export.aw - Sündmuste eksport (iCal) 
 /*
 
@@ -64,6 +64,11 @@
 
 class ical_export extends class_base
 {
+	// todo
+	// vaatamis6igused kalendrile ning kalendriexpordi objektile
+	// muutmis6igused, vaatamis jne 6igused kataloogie kus syndmused on
+	// automaatseks
+
 	function ical_export()
 	{
 		$this->init(array(
@@ -316,7 +321,7 @@ class ical_export extends class_base
 		//obj_set_opt("no_cache", 1);
 		$a_aw_events = $this->get_aw_calendar_events_array($arr);
 		$a_google_events = $this->get_google_calendar_events_array($arr);
-			
+
 		$b_created_new_aw_events = false;
 		foreach ($a_google_events as $event)
 		{
@@ -399,12 +404,16 @@ class ical_export extends class_base
 			{
 				if ($b_newer_is_aw)
 				{
-					//$this->update_google_event(array(
-					//	"client" => $arr["client"],
-					//	"event_id" => $row["google_id"],
-					//));
-					arr($arr["client"]);
-					arr($this->getEvent($arr["client"], "6cqjbggdl108ij74f5evgsee40"));
+					$a_googleid = explode ("/", $row["google_id"]);
+					$s_userid = str_replace ("%40", "@", $a_googleid[5]);
+					$s_eventid = end (explode ("/", $row["google_id"]));
+					$this->update_google_event(array(
+						"client" => $arr["client"],
+						"event_id" => $s_eventid,
+						"user_id" => $s_userid,
+						"new_title" => $a_aw_events[$row["aw_id"]]["title"],
+						"new_description" => $a_aw_events[$row["aw_id"]]["description"],
+					));
 				}
 				else if ($b_newer_is_google)
 				{
@@ -439,37 +448,61 @@ class ical_export extends class_base
 		$o->set_name($arr["title"]);
 		$o->set_prop("start1", $arr["start"]);
 		$o->set_prop("end", $arr["end"]);
-		$o->set_prop("description", $arr["description"]);
+		$i_class = $o->class_id();
+		if ($i_class == CL_TASK)
+		{
+			$o->set_prop("content", $arr["description"]);
+		}
+		else
+		{
+			$o->set_prop("description", $arr["description"]);
+		}
 		$o->save();
 	}
 	
-	// todo: fatal.. cant delete nor update cuz getEvent f does not work
 	function update_google_event ($arr) 
 	{
 		extract($arr);
-		//$event = $this->getEvent($client, $event_id);
+		$gdataCal = new Zend_Gdata_Calendar($client);
+		if ($eventOld = $this->getEvent($client, $user_id, $event_id))
+		{
+			$eventOld->title = $gdataCal->newTitle($new_title);
+			$eventOld->content = $gdataCal->newContent($new_description);
+			try {
+				$eventOld->save();
+			} catch (Zend_Gdata_App_Exception $e) {
+				arr($e);
+				return false;
+			}
+			return true;
+		} else
+		{
+			return false;
+		}
+		
 		//$event->delete($event_id);
 		//$gdataCal = new Zend_Gdata_Calendar($client);
 		//$gdataCal->delete($event_id); 
 	}
 	
-	function getEvent($client, $eventId) 
-{
-  $gdataCal = new Zend_Gdata_Calendar($client);
-  $query = $gdataCal->newEventQuery();
-  $query->setUser('default');
-  $query->setVisibility('private');
-  $query->setProjection('full');
-  $query->setEvent($eventId);
-
-  try {
-    $eventEntry = $gdataCal->getCalendarEventEntry($query);
-    return $eventEntry;
-  } catch (Zend_Gdata_App_Exception $e) {
-    var_dump($e);
-    return null;
-  }
-}
+	function getEvent($client, $userid, $eventId) 
+	{
+	  $gdataCal = new Zend_Gdata_Calendar($client);
+	  $query = $gdataCal->newEventQuery();
+	  //$query->setUser('default');
+	  $query->setUser($userid);
+	  $query->setVisibility('private');
+	  $query->setProjection('full');
+	  $query->setEvent($eventId);
+	
+	  try {
+	    $eventEntry = $gdataCal->getCalendarEventEntry($query);
+	    return $eventEntry;
+	  } catch (Zend_Gdata_App_Exception $e) {
+	    var_dump($e);
+	    return null;
+	  }
+	}
 	
 	function get_google_calendar_events_array($arr)
 	{
