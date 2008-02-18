@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.28 2008/02/18 09:21:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.29 2008/02/18 13:40:34 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -1300,6 +1300,10 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		if ($arr["i_location"] == "")
 		{
 			$arr["i_location"] = "27,37,38,39,40,41,42";
+		}
+		if ($arr["api_start_days"] > 0)
+		{
+			$arr["i_checkin"] = date("d.m.Y", time() + $arr["api_start_days"]*24*3600);
 		}
 		if ($arr["i_checkin"] == "")
 		{
