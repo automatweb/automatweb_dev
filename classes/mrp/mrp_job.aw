@@ -1388,7 +1388,9 @@ class mrp_job extends class_base
 		}
 
 		### set successive jobs' prerequisites equal to deleted job's prerequisites
-		$prerequisites = explode (",", $job->prop ("prerequisites"));
+		$prerequisites = $job->prop ("prerequisites");
+		$prerequisites = empty($prerequisites) ? array() : explode (",", $prerequisites);
+
 		$list = new object_list (array (
 			"class_id" => CL_MRP_JOB,
 			"project" => $project->id (),
@@ -1398,7 +1400,8 @@ class mrp_job extends class_base
 
 		foreach ($other_jobs as $other_job)
 		{
-			$other_job_prerequisites = explode (",", $other_job->prop ("prerequisites"));
+			$other_job_prerequisites = $other_job->prop ("prerequisites");
+			$other_job_prerequisites = empty($other_job_prerequisites) ? array() : explode (",", $other_job_prerequisites);
 
 			if (in_array ($job->id (), $other_job_prerequisites))
 			{
