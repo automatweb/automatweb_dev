@@ -619,7 +619,8 @@ function classload($args)
 		else
 		{
 			// try to handle it with class_index and autoload
-			__autoload($olib);
+			$class = substr(strrchr($olib, "/"), 1);
+			__autoload($class);
 
 			/*classload("core/error");
 			error::raise(array(
@@ -706,7 +707,8 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 		$ext = $GLOBALS["cfg"]["ext"];
 		if (!file_exists($classdir."/".str_replace(".","", $class).".".$ext))
 		{
-			__autoload($class);
+			$tmp_clname = substr(strrchr($class, "/"), 1);
+			__autoload($tmp_clname);
 			/*if (!$errors)
 			{
 				return false;
@@ -1380,7 +1382,7 @@ function __autoload($class_name)
 		catch (awex_clidx $e)
 		{
 			exit_function("__autoload");
-			exit("Fatal classload error. " . $e->getMessage());//!!! tmp
+			exit("Fatal classload error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
 		}
 		//!!! take action
 	}
@@ -1396,7 +1398,7 @@ function __autoload($class_name)
 		catch (awex_clidx $e)
 		{
 			exit_function("__autoload");
-			exit("Fatal classload error. " . $e->getMessage());//!!! tmp
+			exit("Fatal classload error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
 			//!!! take action
 		}
 
