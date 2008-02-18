@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.12 2008/02/15 16:18:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.13 2008/02/18 18:59:11 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -1259,7 +1259,7 @@ class event_import extends class_base
 		$saved_conf_aw_sector = $o->meta("log_conf_aw");
 
 		$xml_source = obj($xml_source_id);
-		if("tlidbup" != $xml_source->prop("tag_lang") && !$import_orig)
+		if("tijolatie" == $xml_source->prop("tag_lang") && !$import_orig)
 			return false;
 
 		print " &nbsp; - <strong>[STARTED]</strong> " . $xml_source->name() . " [".t(strtoupper($lg[$imp_lang_id]))."]" . "<br>";
@@ -1488,8 +1488,12 @@ class event_import extends class_base
 				}
 				if(!empty($v["attributes"]))
 				{
-					foreach($v[attributes] as $attr => $attr_value)
+					foreach($v["attributes"] as $attr => $attr_value)
 					{
+						if(strlen($attr) > 0)
+							$postfix = "_args".$attr;
+						else
+							$postfix = "";
 						$attr_value = trim($attr_value, " \t\n\r\0");
 
 						if(!empty($saved_xml_conf[$xml_source->id()."_".$curtag.$postfix]) && $saved_xml_conf[$xml_source->id()."_".$curtag.$postfix] != "do_not_save_into_db")
@@ -1585,13 +1589,11 @@ class event_import extends class_base
 				}
 				if(isset($event_data["tamtolawseh"]))
 				{
-					if($event_data["tamtolawseh"] == $saved_language_table[$imp_lang_id])
+					// We only import the languages we're told to import with $imp_lang_id. ;-)
+					if($event_data["tamtolawseh"] != $saved_language_table[$imp_lang_id])
 					{
-						$import_orig = false;
-					}
-					else
-					{
-						$import_orig = true;
+						continue;
+//						$import_orig = false;
 					}
 					unset($event_data["tamtolawseh"]);
 				}
@@ -1718,7 +1720,7 @@ class event_import extends class_base
 								$jumper = &$saved_conf_aw;
 
 							// Check for any updated fields
-							if($event_obj->prop($key) != $value)
+							if(($import_orig && $event_obj->prop($key) != $value) || (!$import_orig && $all_vals[$imp_lang_id][$key] != $value))
 							{
 								// $jumper[$key] == "log"    is NOT IN USE
 								// So it's not up-to-date!
@@ -1756,7 +1758,7 @@ class event_import extends class_base
 								{
 									if($import_orig)
 									{
-//										print "Importing original content -> ".$key."<br>";
+										//print "Importing original content -> ".$key."<br>";
 										$event_obj->set_prop($key, $value);
 										if(!empty($value))
 										{
@@ -1765,6 +1767,7 @@ class event_import extends class_base
 									}
 									else
 									{
+										//print "Importing translated content -> ".$key."<br>";
 										if(in_array($key, $translatable_fields))
 										{	
 											$all_vals[$imp_lang_id][$key] = $value;
@@ -1862,7 +1865,7 @@ class event_import extends class_base
 						{								
 							// We make a record of the location we just imported so we won't make a duplicate.
 							$extent_obj = new object;
-							$extend_obj->set_lang_id($li);
+							$extent_obj->set_lang_id($li);
 							$extent_obj->set_class_id(CL_EXTERNAL_SYSTEM_ENTRY);
 							$extent_obj->set_parent($ext_sys_location);
 							$extent_obj->set_name(sprintf(t("Siduss&uuml;steemi %s sisestus objektile %s"), $ext_sys_location_name, $place_obj->name()));
