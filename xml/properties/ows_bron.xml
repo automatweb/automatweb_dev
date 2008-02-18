@@ -51,6 +51,15 @@
             <field>mail_bcc</field>
       </property>
       <property>
+            <name>mail_bank_bcc</name>
+            <table>objects</table>
+            <group>mail_bank_bcc</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>mail_bank_bcc</field>
+      </property>
+      <property>
             <name>bank_settings_table</name>
             <table>objects</table>
             <group>bank_settings</group>
@@ -80,9 +89,13 @@
                   <parent>mail_settings</parent>
             </mail_settings_cancel>
             <mail_bcc>
-                  <caption>BCC</caption>
+                  <caption>CC BCC</caption>
                   <parent>mail_settings</parent>
             </mail_bcc>
+            <mail_bank_bcc>
+                  <caption>Pangalingi BCC</caption>
+                  <parent>mail_settings</parent>
+            </mail_bank_bcc>
             <bank_settings>
                   <caption>Panga seaded</caption>
             </bank_settings>

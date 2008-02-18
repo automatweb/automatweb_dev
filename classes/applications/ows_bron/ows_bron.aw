@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.26 2008/02/13 12:47:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.27 2008/02/18 09:04:22 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -25,6 +25,10 @@
 
 	@property mail_bcc type=table store=no no_caption=1
 
+@default group=mail_bank_bcc
+
+	@property mail_bank_bcc type=table store=no no_caption=1
+
 @default group=bank_settings
 
 	@property bank_settings_table type=table store=no no_caption=1
@@ -32,7 +36,8 @@
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_confirm caption="Kinnitusmeil" parent=mail_settings
 	@groupinfo mail_settings_cancel caption="T&uuml;histusmeil" parent=mail_settings
-	@groupinfo mail_bcc caption="BCC" parent=mail_settings
+	@groupinfo mail_bcc caption="CC BCC" parent=mail_settings
+	@groupinfo mail_bank_bcc caption="Pangalingi BCC" parent=mail_settings
 
 @groupinfo bank_settings caption="Panga seaded"
 	
@@ -2716,6 +2721,54 @@ echo dbg::dump($return);
 	{
 		$arr["obj_inst"]->set_meta("hotel_bcc", $arr["request"]["bcc"]);
 		$arr["obj_inst"]->set_meta("hotel_bcc_titles", $arr["request"]["subj"]);
+	}
+
+	function _init_mail_bank_bcc_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "hotel",
+			"caption" => t("Hotell"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "bcc",
+			"caption" => t("BCC"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "subject",
+			"caption" => t("Kirja teema"),
+			"align" => "center"
+		));
+	}
+
+	function _get_mail_bank_bcc($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_mail_bank_bcc_t($t);
+
+		$h = $arr["obj_inst"]->meta("hotel_bank_bcc");
+		$ht = $arr["obj_inst"]->meta("hotel_bank_bcc_titles");
+		foreach($this->hotel_list as $hotel_id => $hotel_name)
+		{
+			$t->define_data(array(
+				"hotel" => $hotel_name,
+				"bcc" => html::textbox(array(
+					"name" => "bcc[$hotel_id]",
+					"value" => $h[$hotel_id]
+				)),
+				"subject" => html::textbox(array(
+					"name" => "subj[$hotel_id]",
+					"value" => $ht[$hotel_id]
+				))
+			));
+		}
+	}
+
+	function _set_mail_bank_bcc($arr)
+	{
+		$arr["obj_inst"]->set_meta("hotel_bank_bcc", $arr["request"]["bcc"]);
+		$arr["obj_inst"]->set_meta("hotel_bank_bcc_titles", $arr["request"]["subj"]);
 	}
 }
 ?>
