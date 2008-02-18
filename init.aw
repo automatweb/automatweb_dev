@@ -1391,10 +1391,8 @@ function __autoload($class_name)
 		}
 		catch (awex_clidx $e)
 		{
-			exit_function("__autoload");
-			exit("Fatal classload error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
+			//!!! take action
 		}
-		//!!! take action
 	}
 
 	require_once($class_file);
@@ -1408,11 +1406,20 @@ function __autoload($class_name)
 		catch (awex_clidx $e)
 		{
 			exit_function("__autoload");
-			exit("Fatal classload error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
+			exit("Fatal update error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
 			//!!! take action
 		}
 
-		$class_file = class_index::get_file_by_name($class_name);
+		try
+		{
+			$class_file = class_index::get_file_by_name($class_name);
+		}
+		catch (awex_clidx $e)
+		{
+			exit_function("__autoload");
+			exit("Fatal classload error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
+		}
+
 		require($class_file);
 	}
 	exit_function("__autoload");
