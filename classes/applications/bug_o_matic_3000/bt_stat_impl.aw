@@ -91,7 +91,7 @@ class bt_stat_impl extends core
 						$pi = get_instance(CL_CRM_PERSON);
 						$po = obj($co->conn["from"]);
 						$u = $pi->has_user($po);
-						if($p !== false)
+						if($u !== false)
 						{
 							$uname = $u->name();
 							$stat_hrs[$uname][] = $o;
