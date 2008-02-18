@@ -128,6 +128,7 @@ class class_index
 								if (!is_readable($class_dfn_file))
 								{
 									$e = new awex_clidx_filesys("Can't read redeclared class definition file '" . $class_dfn_file . "'.");
+									$e->clidx_cl_name = $class_name;
 									$e->clidx_file = $class_dfn_file;
 									$e->clidx_op = "is_readable";
 									throw $e;
@@ -171,6 +172,7 @@ class class_index
 								if (false === $cl_handle)
 								{
 									$e = new awex_clidx_filesys("Unable to update class index for '" . $file . "'.");
+									$e->clidx_cl_name = $class_name;
 									$e->clidx_file = $class_dfn_file;
 									$e->clidx_op = "fopen";
 									throw $e;
@@ -250,6 +252,7 @@ class class_index
 			if (!is_readable($class_dfn_file))
 			{
 				$e = new awex_clidx_filesys("Local class definition not found or not readable.");
+				$e->clidx_cl_name = $name;
 				$e->clidx_file = $class_dfn_file;
 				$e->clidx_op = "is_readable";
 				throw $e;
@@ -269,6 +272,7 @@ class class_index
 				if (!is_readable($class_dfn_file))
 				{
 					$e = new awex_clidx_filesys("Class definition not found or not readable.");
+					$e->clidx_cl_name = $name;
 					$e->clidx_file = $class_dfn_file;
 					$e->clidx_op = "is_readable";
 					throw $e;
@@ -294,6 +298,7 @@ class class_index
 				if (!is_readable($class_dfn_file))
 				{
 					$e = new awex_clidx_filesys("Class definition not found or not readable.");
+					$e->clidx_cl_name = $name;
 					$e->clidx_file = $class_dfn_file;
 					$e->clidx_op = "is_readable";
 					throw $e;
@@ -305,6 +310,7 @@ class class_index
 				if (!is_readable($class_file))
 				{
 					$e = new awex_clidx_filesys("Class file not found.");
+					$e->clidx_cl_name = $name;
 					$e->clidx_file = $class_file;
 					$e->clidx_op = "is_readable";
 					throw $e;
@@ -344,6 +350,7 @@ class class_index
 				if (!is_readable($class_dfn_file))
 				{
 					$e = new awex_clidx_filesys("Class definition not found or not readable.");
+					$e->clidx_cl_name = $name;
 					$e->clidx_file = $class_dfn_file;
 					$e->clidx_op = "is_readable";
 					throw $e;
@@ -404,7 +411,10 @@ class class_index
 	}
 }
 
-class awex_clidx extends aw_exception {}
+class awex_clidx extends aw_exception
+{
+	public $clidx_cl_name;
+}
 
 class awex_clidx_filesys extends awex_clidx
 {
@@ -414,7 +424,6 @@ class awex_clidx_filesys extends awex_clidx
 
 class awex_clidx_double_dfn extends awex_clidx
 {
-	public $clidx_cl_name;
 	public $clidx_path1;
 	public $clidx_path2;
 }
