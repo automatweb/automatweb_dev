@@ -6238,6 +6238,15 @@ class crm_company extends class_base
 	function submit_paste_docs($arr)
 	{
 		$fld = $arr["tf"];
+               if(substr_count($fld, "|"))
+               {
+                       $fld_arr = explode("|" , $fld);
+                       if(is_oid($fld_arr[1]))
+                       {
+                               $fld = $fld_arr[1];
+                       }
+               }
+
 		if (!$fld)
 		{
 			$i = get_instance("applications/crm/crm_company_docs_impl");
