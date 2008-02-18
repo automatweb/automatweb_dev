@@ -40,6 +40,15 @@
             <comment>XML v&amp;auml;li v&amp;otilde;i argument, kus on imporditava s&amp;uuml;ndmuse ID</comment>
       </property>
       <property>
+            <name>encoding</name>
+            <table>objects</table>
+            <group>sub_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Encoding</caption>
+      </property>
+      <property>
             <name>external_system_event</name>
             <table>objects</table>
             <group>sub_extsys</group>

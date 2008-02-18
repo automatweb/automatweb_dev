@@ -680,7 +680,7 @@ class class_base extends aw_template
 			$orb_class = $this->clfile;
 		};
 
-		if ($orb_class == "document")
+		if (basename($orb_class) == "document")
 		{
 			$orb_class = "doc";
 		};

@@ -961,7 +961,7 @@ class cfgform extends class_base
 		$tmp = aw_ini_get("classes");
 		$fl = $tmp[$class_id]["file"];
 
-		if ($fl == "document")
+		if (basename($fl) == "document")
 		{
 			$fl = "doc";
 		}
