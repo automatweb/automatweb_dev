@@ -326,6 +326,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property currency type=relpicker reltype=RELTYPE_CURRENCY table=objects field=meta method=serialize
 @caption Valuuta
 
+@property is_quickmessenger_enabled type=checkbox table=objects field=meta method=serialize ch_value=1 default=0
+@caption Quickmessenger enabled
+
 -----------------------
 @groupinfo work_hrs caption="T&ouml;&ouml;ajad" parent=general
 @default group=work_hrs
@@ -4719,7 +4722,7 @@ class crm_person extends class_base
 		}
 		return $ret;
 	}
-	
+
 	/*
 	function get_short_description($p)		// OLD VERSION OF THIS FUNCTION
 	{
@@ -5425,10 +5428,10 @@ class crm_person extends class_base
 		}
 	}
 
-	
+
 
 	/**
-		@attrib name=c2wr 
+		@attrib name=c2wr
 		@param id required type=int
 		@param wrid required type=int
 		@param toid required type=int
@@ -5470,7 +5473,7 @@ class crm_person extends class_base
 			{
 				$wrc++;
 				if($conn->conn["to"] == $arr["toid"])
-				{		
+				{
 					$conn->delete(true);
 					$connect = false;
 				}
