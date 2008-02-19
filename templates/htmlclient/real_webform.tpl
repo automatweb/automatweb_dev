@@ -93,7 +93,7 @@
 <!-- SUB: SUBMIT -->
 <tr>
 	<td class="{VAR:webform_element}" colspan="2">
-		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="{VAR:webform_element}" onclick="self.disabled=true;submit_changeform('');">
+		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="{VAR:webform_element}" onclick="self.disabled=true;submit_changeform(''); return false;">
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
