@@ -2604,7 +2604,6 @@ class crm_company extends class_base
 
 			case "bill_s_cust":
 			case "bill_s_bill_no":
-			case "bill_s_bill_to":
 				$data['value'] = $arr['request'][$data["name"]];
 				break;
 
@@ -4125,7 +4124,6 @@ class crm_company extends class_base
 		{
 			$arr["args"]["bill_s_cust"] = $arr["request"]["bill_s_cust"];
 			$arr["args"]["bill_s_bill_no"] = $arr["request"]["bill_s_bill_no"];
-			$arr["args"]["bill_s_bill_to"] = $arr["request"]["bill_s_bill_to"];
 			$arr["args"]["bill_s_from"] = $arr["request"]["bill_s_from"];
 			$arr["args"]["bill_s_to"] = $arr["request"]["bill_s_to"];
 			$arr["args"]["bill_s_client_mgr"] = $arr["request"]["bill_s_client_mgr"];
@@ -4364,6 +4362,10 @@ class crm_company extends class_base
 			'to' => $person->id(),
 			'reltype' => $arr['reltype'],
 		));
+		
+		$wcon_wrel= new object();
+		$wcon_wrel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+		$wcon_wrel->set_parent($arr['id']);
 
 		if (is_oid($arr["profession"]) && $this->can("view", $arr["profession"]))
 		{
@@ -4371,7 +4373,9 @@ class crm_company extends class_base
 				"to" => $arr["profession"],
 				"reltype" => "RELTYPE_RANK"
 			));
-			$person->set_prop("rank", $arr["profession"]);
+			// This property no longer exists. -kaarel
+			//$person->set_prop("rank", $arr["profession"]);
+			$wcon_wrel->set_prop("profession", $arr["profession"]);
 		}
 
 		$work_contact = 0;
@@ -4387,10 +4391,6 @@ class crm_company extends class_base
 			));
 			list($work_contact,) = each($work_contact);
 		}
-		
-		$wcon_wrel= new object();
-		$wcon_wrel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
-		$wcon_wrel->set_parent($arr['id']);
 		$wcon_wrel->set_prop("org", $arr['id']);
 		$wcon_wrel->save();
 
@@ -4405,10 +4405,21 @@ class crm_company extends class_base
 		$orgs = array();
 		foreach($person->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
 		{
-			$orgs[$c->prop("to")] = $c->prop("to");
+			if(!$wcon_wrel->prop("section"))
+				$wcon_wrel->set_prop("section", $c->prop("to"));
+			else
+			{
+				// We create new work relation for every section. -kaarel
+				$wcon_wrel = obj($wcon_wrel->save_new());
+				$wcon_wrel->set_prop("section", $c->prop("to"));
+			}
+			$wcon_wrel->save();
+			//$orgs[$c->prop("to")] = $c->prop("to");
 		}
+		/* This property no longer exists. -kaarel
 		$person->set_prop("org_section", $orgs);
 		$person->save();
+		*/
 
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
@@ -6275,15 +6286,6 @@ class crm_company extends class_base
 	function submit_paste_docs($arr)
 	{
 		$fld = $arr["tf"];
-               if(substr_count($fld, "|"))
-               {
-                       $fld_arr = explode("|" , $fld);
-                       if(is_oid($fld_arr[1]))
-                       {
-                               $fld = $fld_arr[1];
-                       }
-               }
-
 		if (!$fld)
 		{
 			$i = get_instance("applications/crm/crm_company_docs_impl");
