@@ -77,10 +77,19 @@ class crm_company_docs_impl extends class_base
 		{
 			$parent = $fld_oid;
 		}
-		elseif (false === $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
-		{ // no docs folder found. create&connect-to new folder.
-			$fld = $this->_init_docs_fld($arr["obj_inst"]);
-			$parent = $fld->id();
+		else
+		{ // default docs folder
+			$parent = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER");
+
+			if (false === $parent)
+			{ // no docs folder found. create&connect-to new folder.
+				$fld = $this->_init_docs_fld($arr["obj_inst"]);
+				$parent = $fld->id();
+			}
+			else
+			{
+				$parent = $parent->id();
+			}
 		}
 
 		if (isset($parent))
