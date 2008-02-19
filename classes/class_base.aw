@@ -5451,13 +5451,14 @@ class class_base extends aw_template
 					// source language value
 					$nm = "src_lng_val_".$p;
 					$ret[$nm]["name"] = $nm;
-					$ret[$nm]["caption"] = $ppl[$p]["caption"] . t(" (l&auml;htetekst)");
+					$ret[$nm]["caption"] = $ppl[$p]["caption"] . "<small>" . t(" (l&auml;htetekst)") . "</small>";
 					$ret[$nm]["type"] = "text";
 					$ret[$nm]["value"] = (isset($src_lang_vals[$p]) ? $src_lang_vals[$p] : $o->is_property($p) ? $o->trans_get_val_str($p) : "");
 
 					// translation field
 					$nm = "trans_".$lang["id"]."_".$p;
 					$ret[$nm] = $ppl[$p];
+					$ret[$nm]["caption"] .=  "<small>" . t(" (t&otilde;lge)") . "</small>";
 					$ret[$nm]["name"] = $nm;
 					$ret[$nm]["value"] = iconv($lang["charset"], "UTF-8", $vals[$p]);
 				}
