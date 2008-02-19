@@ -450,11 +450,12 @@ class cfgform extends class_base
 
 			case "ctype":
 				classload("core/icons");
+				$clid = $arr["obj_inst"]->prop("subclass");
 				$iu = html::img(array(
-					"url" => icons::get_icon_url($arr["obj_inst"]->prop("subclass"),""),
+					"url" => icons::get_icon_url($clid,""),
 				));
 				$tmp = aw_ini_get("classes");
-				$data["value"] = $iu . " " . $tmp[$arr["obj_inst"]->prop("subclass")]["name"];
+				$data["value"] = $iu . " " . $tmp[$clid]["name"] . " [" . basename($tmp[$clid]["file"]) . "]";
 				break;
 
 			case "navtoolbar":
@@ -949,6 +950,20 @@ class cfgform extends class_base
 		$this->grplist = $this->cfg_groups = safe_array($obj->meta("cfg_groups"));
 		$this->prplist = $this->cfg_proplist = safe_array($obj->meta("cfg_proplist"));
 		$this->layout = $this->cfg_layout = safe_array($obj->meta("cfg_layout"));
+
+		// fix old cfgform objects where cfg_proplist contained only configured attributes
+		$tmp = reset($this->cfg_proplist);
+
+		if (empty($tmp["type"]))
+		{
+			foreach ($this->cfg_proplist as $name => $cfg)
+			{
+				$this->cfg_proplist[$name] = $this->cfg_proplist[$name] + $this->all_props[$name];
+			}
+
+			$obj->set_meta("cfg_proplist");
+			$obj->save();
+		}
 	}
 
 	function _init_properties($class_id)
@@ -4198,7 +4213,7 @@ class cfgform extends class_base
 		return $goodprops;
 	}
 
-	/** 
+	/**
 		@attrib name=disable_property api=1
 		@param id required type=int
 		@param property required type=string
@@ -4216,7 +4231,7 @@ class cfgform extends class_base
 		$o->save();
 	}
 
-	/** 
+	/**
 		@attrib name=remove_property api=1
 		@param id required type=int
 		@param property required type=string
