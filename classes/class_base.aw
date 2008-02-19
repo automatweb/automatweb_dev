@@ -5429,8 +5429,33 @@ class class_base extends aw_template
 			{
 				$vals = $all_vals[$lang["id"]];
 
+				// get prop values in user's source language
+				$src_lang_id = $original_lang_id;
+
+				if (aw_ini_get("uid"))
+				{
+					$users_i = get_instance("users");
+					$current_user = obj($users_i->get_oid_for_uid(aw_ini_get("uid")));
+
+					if (array_key_exists($current_user->prop("base_lang"), $all_vals))
+					{
+						$src_lang_id = $current_user->prop("base_lang");
+					}
+				}
+
+				$src_lang_vals = $all_vals[$src_lang_id];
+
+				//
 				foreach($props as $p)
 				{
+					// source language value
+					$nm = "src_lng_val_".$p;
+					$ret[$nm]["name"] = $nm;
+					$ret[$nm]["caption"] = $ppl[$p]["caption"] . t(" (l&auml;htetekst)");
+					$ret[$nm]["type"] = "text";
+					$ret[$nm]["value"] = (isset($src_lang_vals[$p]) ? $src_lang_vals[$p] : $o->is_property($p) ? $o->trans_get_val_str($p) : "");
+
+					// translation field
 					$nm = "trans_".$lang["id"]."_".$p;
 					$ret[$nm] = $ppl[$p];
 					$ret[$nm]["name"] = $nm;
