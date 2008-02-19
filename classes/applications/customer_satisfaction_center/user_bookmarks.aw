@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.15 2008/02/13 10:41:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.16 2008/02/19 09:39:32 robert Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -878,28 +878,42 @@ class user_bookmarks extends class_base
 		$pm = get_instance("vcl/popup_menu");
 		$pm->begin_menu("user_bookmarks");
 
-		// now, add items from the bum
-		$ot = new object_tree(array(
-			"parent" => $bm->id(),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "objects.jrk"
-		));
-		$list = $ot->to_list();
+		$parents = array();
+		$list = array();
+		$this->get_user_bms($bm, $list, $parents);
+		$oids = $list->ids();
 		$mt = $bm->meta("grp_sets");
 		foreach($list->arr() as $li)
 		{
 			$pt = null;
-			if ($li->parent() != $bm->id())
+			if($pa = $parents[$li->id()])
+			{
+				$pt = "mn".$pa;
+			}
+			elseif ($li->parent() != $bm->id() && $li->class_id() != CL_USER_BOOKMARKS && array_search($li->parent(), $oids)!==false)
 			{
 				$pt = "mn".$li->parent();
 			}
-			if ($li->class_id() == CL_MENU)
+			//arr($li->id().". ".$li->name()." ".$pt);
+			if ($li->class_id() == CL_MENU || $li->class_id() == CL_USER_BOOKMARKS)
 			{
-				$pm->add_sub_menu(array(
+				if($li->class_id() == CL_MENU)
+				{
+					$text = $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name();
+				}
+				else
+				{
+					$text = $li->createdby().t(" j&auml;rjehoidja");
+				}
+				$params = array(
 					"name" => "mn".$li->id(),
-					"text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name()
-				));
+					"text" => $text
+				);
+				if($pt)
+				{
+					$params["parent"] = $pt;
+				}
+				$pm->add_sub_menu($params);
 			}
 			else
 			if ($li->class_id() == CL_EXTLINK)
@@ -927,9 +941,6 @@ class user_bookmarks extends class_base
 			}
 		}
 
-		$data = $this->fetch_shared_bms($bm);
-		$this->show_shared_bms($pm, $data, $bm->id());
-
 		$pm->add_separator();
 		$pm->add_item(array(
 			"text" => t("Pane j&auml;rjehoidjasse"),
@@ -950,106 +961,23 @@ class user_bookmarks extends class_base
 		)));
 	}
 
-	function show_shared_bms(&$pm, $data, $bmid)
+	function get_user_bms($bm, &$list, &$parents)
 	{
-		$set_pts = array();
-		foreach($data as $oid=>$val)
-		{
-			$li = obj($oid);
-			$cont = 0;
-			foreach($li->path() as $po)
-			{
-				if($data[$po->id()] && $po->id() != $li->id())
-				{
-					$cont = 1;
-				}
-			}
-			if($cont)
-			{
-				continue;
-			}
-			$pt = "";
-			if(is_array($val))
-			{
-				if(!$set_pts[$val[1]])
-				{
-					$pm->add_sub_menu(array(
-						"name" => "mn".$val[1],
-						"text" => $val[1].t(" j&auml;rjehoidja")
-					));
-					$set_pts[$val[1]] = $val[1];
-				}
-				$pt = "mn".$val[1];
-			}
-			if(!$pt)
-			{
-				$pt = "";
-			}
-			if ($li->class_id() == CL_MENU || $li->class_id == CL_USER_BOOKMARKS)
-			{
-				if($li->class_id() == CL_MENU)
-				{
-					$text = $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name();
-				}
-				else
-				{
-					$text = $li->createdby().t(" j&auml;rjehoidja");
-				}
-				$pm->add_sub_menu(array(
-					"name" => "mn".$li->id(),
-					"text" => $text,
-					"parent" => $pt
-				));
-				$ot = new object_tree(array(
-					"parent" => $li->id(),
-					"lang_id" => array(),
-					"site_id" => array(),
-					"sort_by" => "objects.jrk"
-				));
-				$list = $ot->to_list();
-				foreach($list->arr() as $l)
-				{
-					foreach($l->path() as $po)
-					{
-						if($data[$po->id()])
-						{
-							continue;
-						}
-					}
-					$pt = null;
-					if ($l->parent() != $bmid)
-					{
-						$pt = "mn".$l->parent();
-					}
-					if ($l->class_id() == CL_MENU)
-					{
-						$pm->add_sub_menu(array(
-							"name" => "mn".$l->id(),
-							"text" => $l->meta("user_text") != "" ? $l->meta("user_text") : $l->name(),
-							"parent" => $pt
-						));
-					}
-					else
-					if ($l->class_id() == CL_EXTLINK)
-					{
-						$pm->add_item(array(
-							"text" => $l->meta("user_text") != "" ? $l->meta("user_text") : $l->name(),
-							"link" => $l->prop("url"),
-							"parent" => $pt
-						));
-					}
-				}
-			}
-			else
-			if ($li->class_id() == CL_EXTLINK)
-			{
-				$pm->add_item(array(
-					"text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name(),
-					"link" => $li->prop("url"),
-					"parent" => $pt
-				));
-			}
-		}
+		// now, add items from the bum
+		$ot = new object_tree(array(
+			"parent" => $bm->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
+		));
+		$list = $ot->to_list();
+		$ol = array();
+		$this->fetch_shared_bms($bm, $ol, $parents);
+		$list->add($ol);
+		$list->sort_by(array(
+			"prop" => "ord",
+			"order" => "asc",
+		));
 	}
 
 	function callback_post_save($arr)
@@ -1136,86 +1064,79 @@ class user_bookmarks extends class_base
 			"sort_by" => "objects.jrk"
 		));
 		$mt = $bm->meta("grp_sets");
-
-		$this->_req_show($ot, $bm->id());
-
-		$data_by_p = $this->show_shared_bms_site(
-			$this->fetch_shared_bms($bm),
-			$bm->id()
-		);
-		$this->_req_show_d($data_by_p, $bm->id());
-
+		$ol = array();
+		$parents = array();
+		$this->get_user_bms($bm, $ol, $parents);
+		$this->_req_show($bm, $ol, $parents, null);
 		$this->vars(array(
 			"content" => $this->ct
 		));
 		return $this->parse();
 	}
 
-	function _req_show_d($ot, $parent)
+	function _req_show($bm, &$ol, $parents, $parent)
 	{
 		$this->ct .= $this->parse("LEVEL_BEGIN");
-		foreach(safe_array($ot[$parent]) as $li)
+		$oids = $ol->ids();
+		foreach($ol->arr() as $li)
 		{
-			if (!empty($li["link"]))
+			$pt = null;
+			if($pa = $parents[$li->id()])
 			{
-				$this->vars(array(
-					"item_text" => $li["text"],
-					"item_link" => $li["link"]
-				));
-				$this->ct .= $this->parse("ITEM_LINK");
+				$pt = $pa;
+			}
+			elseif ($li->parent() != $bm->id() && $li->class_id() != CL_USER_BOOKMARKS && array_search($li->parent(), $oids)!==false)
+			{
+				$pt = $li->parent();
+			}
+			if($parent !== $pt)
+			{
+				continue;
 			}
 			else
 			{
-				$this->vars(array(
-					"item_text" => $li["text"],
-				));
-				$this->ct .= $this->parse("ITEM_TEXT");
-				if (!empty($li["name"]))
+				if ($li->class_id() == CL_MENU || $li->class_id() == CL_USER_BOOKMARKS)
 				{
-					$this->_req_show($ot, $li["name"]);
+					if($li->class_id() == CL_MENU)
+					{
+						$text = $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name();
+					}
+					else
+					{
+						$text = $li->createdby().t(" j&auml;rjehoidja");
+					}
+					$this->vars(array(
+						"item_text" => $text,
+					));
+					$this->ct .= $this->parse("ITEM_TEXT");
+					$this->_req_show($bm, $ol, $parents, $li->id());
 				}
-			}
-		}
-		$this->ct .= $this->parse("LEVEL_END");
-	}
-
-	function _req_show(&$ot, $parent)
-	{
-		$this->ct .= $this->parse("LEVEL_BEGIN");
-		foreach($ot->level($parent) as $li)
-		{
-			if ($li->class_id() == CL_MENU)
-			{
-				$this->vars(array(
-					"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name(),
-				));
-				$this->ct .= $this->parse("ITEM_TEXT");
-				$this->_req_show($ot, $li->id());
-			}
-			else
-			if ($li->class_id() == CL_EXTLINK)
-			{
-				$this->vars(array(
-					"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name(),
-					"item_link" => $li->prop("url")
-				));
-				$this->ct .= $this->parse("ITEM_LINK");
-			}
-			else
-			{
-				$grp = $mt[$li->id()];
-				$ga = "";
-				if ($grp != "")
+				else
+				if ($li->class_id() == CL_EXTLINK)
 				{
-					$gl = $li->get_group_list();
-					$ga = " - ".$gl[$grp]["caption"];
+					$this->vars(array(
+						"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name(),
+						"item_link" => $li->prop("url")
+					));
+					$this->ct .= $this->parse("ITEM_LINK");
+					$ol->remove($li->id());
 				}
-
-				$this->vars(array(
-					"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name().$ga,
-					"item_link" => html::get_change_url($li->id(), array("return_url" => $arr["url"], "group" => $grp))
-				));
-				$this->ct .= $this->parse("ITEM_LINK");
+				else
+				{
+					$grp = $mt[$li->id()];
+					$ga = "";
+					if ($grp != "")
+					{
+						$gl = $li->get_group_list();
+						$ga = " - ".$gl[$grp]["caption"];
+					}
+	
+					$this->vars(array(
+						"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name().$ga,
+						"item_link" => html::get_change_url($li->id(), array("return_url" => $arr["url"], "group" => $grp))
+					));
+					$this->ct .= $this->parse("ITEM_LINK");
+				}
 			}
 		}
 		$this->ct .= $this->parse("LEVEL_END");
@@ -1261,9 +1182,9 @@ class user_bookmarks extends class_base
 		return true;
 	}
 
-	function fetch_shared_bms($bm)
+	function fetch_shared_bms($bm, &$ol, &$parents)
 	{
-		$data = array();
+		$paths = array();
 		$conn = $bm->connections_from(array(
 			"type" => "RELTYPE_SHOW_SHARED",
 		));
@@ -1273,23 +1194,56 @@ class user_bookmarks extends class_base
 			foreach($conn as $c)
 			{
 				$o = obj($c->prop("to"));
-				if($ss)
+				$path = $o->path();
+				$cont = 0;
+				foreach($path as $po)
 				{
-					foreach($o->path() as $po)
+					if($po->class_id() == CL_USER_BOOKMARKS)
 					{
-						if($po->class_id() == CL_USER_BOOKMARKS)
+						if($po->id() != $o->id())
 						{
-							$user = $po->createdby();
+							if($po->id() == $bm->id())
+							{
+								$cont = 1;
+							}
+							elseif($ss)
+							{
+								$parents[$o->id()] = $po->id();
+								$paths[$po->id()] = array();
+							}
 						}
+						$pbms[$o->id()] = $po->meta("shared");
 					}
-					$val = array($o->id(), $user);
 				}
-				else
+				if($cont)
 				{
-					$val = $o->id();
+					continue;
 				}
-				$data[$o->id()] = $val;
+				$paths[$o->id()] = $o->path();
 			}
+		}
+		$oids = array();
+		foreach($paths as $bmid => $pth)
+		{
+			$set = 1;
+			foreach($pth as $po)
+			{
+				if($paths[$po->id()] && $po->id() != $bmid)
+				{
+					$set = 0;
+				}
+			}
+			if($set)
+			{
+				$oids[$bmid] = $bmid;
+			}
+		}
+		if(count($oids))
+		{
+			$ol = new object_list(array(
+				"oid" => $oids,
+			));
+			$olids = $ol->ids();
 		}
 		$ui = get_instance(CL_USER);
 		$uo = $ui->get_obj_for_uid(aw_global_get("uid"));
@@ -1308,118 +1262,61 @@ class user_bookmarks extends class_base
 				$data[$o->id()] = $o->id();
 			}
 		}
-		$ol = new object_list(array(
+		$ol2 = new object_list(array(
 			"oid" => array_keys($data),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"sort_by" => "objects.jrk"
 		));
-		return $this->make_keys($ol->ids());
-		return $data;
-	}
-
-	function show_shared_bms_site($data, $bmid)
-	{
-		$data_by_p = array();
-		$set_pts = array();
-		foreach($data as $oid=>$val)
+		foreach($ol2->arr() as $o)
 		{
-			$li = obj($oid);
-			$cont = 0;
-			foreach($li->path() as $po)
+			if($olids[$o->id()])
 			{
-				if($data[$po->id()] && $po->id() != $li->id())
-				{
-					$cont = 1;
-				}
-			}
-			if($cont)
-			{
-				continue;
-			}
-			$pt = "";
-			if(is_array($val))
-			{
-				if(!$set_pts[$val[1]])
-				{
-					$data_by_p[$bmid][] = array(
-						"name" => "mn".$val[1],
-						"text" => $val[1].t(" j&auml;rjehoidja")
-					);
-					$set_pts[$val[1]] = $val[1];
-				}
-				$pt = "mn".$val[1];
-			}
-			if(!$pt)
-			{
-				$pt = $bmid;
-			}
-			if ($li->class_id() == CL_MENU || $li->class_id == CL_USER_BOOKMARKS)
-			{
-				if($li->class_id() == CL_MENU)
-				{
-					$text = $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name();
-				}
-				else
-				{
-					$text = $li->createdby().t(" j&auml;rjehoidja");
-				}
-				$data_by_p[$pt][] = array(
-					"name" => "mn".$li->id(),
-					"text" => $text,
-					"parent" => $pt
-				);
-				$ot = new object_tree(array(
-					"parent" => $li->id(),
-					"lang_id" => array(),
-					"site_id" => array(),
-					"sort_by" => "objects.jrk"
-				));
-				$list = $ot->to_list();
-				foreach($list->arr() as $l)
-				{
-					foreach($l->path() as $po)
-					{
-						if($data[$po->id()])
-						{
-							continue;
-						}
-					}
-					$pt = null;
-					if ($l->parent() != $bmid)
-					{
-						$pt = "mn".$l->parent();
-					}
-					if ($l->class_id() == CL_MENU)
-					{
-						$data_by_p[$pt][] = array(
-							"name" => "mn".$l->id(),
-							"text" => $l->meta("user_text") != "" ? $l->meta("user_text") : $l->name(),
-							"parent" => $pt
-						);
-					}
-					else
-					if ($l->class_id() == CL_EXTLINK)
-					{
-						$data_by_p[$pt][] = array(
-							"text" => $l->meta("user_text") != "" ? $l->meta("user_text") : $l->name(),
-							"link" => $l->prop("url"),
-							"parent" => $pt
-						);
-					}
-				}
+				$ol2->remove($o->id());
 			}
 			else
-			if ($li->class_id() == CL_EXTLINK)
 			{
-				$data_by_p[$pt][] = array(
-					"text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name(),
-					"link" => $li->prop("url"),
-					"parent" => $pt
-				);
+				$path = $o->path();
+				foreach($path as $po)
+				{
+					if($po->class_id() == CL_USER_BOOKMARKS)
+					{
+						$pbms[$o->id()] = $po->meta("shared");
+						if($po->id() == $bm->id())
+						{
+							$ol2->remove($o->id());
+						}
+					}
+				}
 			}
 		}
-		return $data_by_p;
+		if($ol)
+		{
+			$ol->add($ol2);
+		}
+		else
+		{
+			$ol = $ol2;
+		}
+		$olids = $ol->ids();
+		foreach($ol->arr() as $o)
+		{
+			$ot = new object_tree(array(
+				"parent" => $o->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "objects.jrk"
+			));
+			$sol = $ot->to_list();
+			foreach($sol->arr() as $so)
+			{
+				if(!$olids[$so->id()] && $pbms[$o->id()][$so->id()])
+				{
+					$ol->add($so->id());
+				}
+			}
+		}
+		return $ol;
 	}
 }
 ?>
