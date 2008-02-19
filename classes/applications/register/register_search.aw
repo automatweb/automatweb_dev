@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.47 2007/12/12 12:50:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.48 2008/02/19 10:13:52 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -168,6 +168,12 @@ class register_search extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
+			"name" => "el_type",
+			"caption" => t("Elemendi t&uuml;&uuml;p"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "u_name",
 			"caption" => t("Elemendi tekst"),
 			"sortable" => 1,
@@ -224,6 +230,17 @@ class register_search extends class_base
 				"u_name" => html::textbox(array(
 					"name" => "fdata[$pn][caption]",
 					"value" => $fdata[$pn]["caption"]
+				)),
+				"el_type" => html::select(array(
+					"name" => "fdata[$pn][el_type]",
+					"value" => $fdata[$pn]["el_type"],
+					"options" => array(
+						"" => t("--vormist--"),
+						"select" => t("Rippmen&uuml;&uuml;"),
+						"multiple_select" => t("Mitmene rippmen&uuml;&uuml;"),
+						"checkbox" => t("Valikuruudud"),
+						"radiobutton" => t("Raadionupp"),
+					)
 				)),
 			));
 		}
@@ -381,6 +398,8 @@ class register_search extends class_base
 		$props =  $this->get_sform_properties($ob, $request);
 		exit_function("register_search::show::form::gsp");
 
+		$fdata = $ob->meta("fdata");
+
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
 		foreach($props as $pn => $pd)
@@ -390,6 +409,35 @@ class register_search extends class_base
 				$pd["type"] = "select";
 				$pd["multiple"] = 1;
 			}
+
+			preg_match("/rsf\[(.*)\]/imsU", $pd["name"], $mt);
+			$nn = $mt[1];
+			if (!empty($fdata[$nn]["el_type"]))
+			{
+				switch($fdata[$nn]["el_type"])
+				{
+					case "checkbox":
+						$pd["type"] = "chooser";
+						$pd["multiple"] = 1;
+						break;
+
+					case "radiobutton":
+						$pd["type"] = "chooser";
+						$pd["multiple"] = 0;
+						break;
+
+					case "select":
+						$pd["type"] = $fdata[$nn]["el_type"];
+						$pd["multiple"] = 0;
+						break;
+
+					case "multiple_select":
+						$pd["type"] = "select";
+						$pd["multiple"] = 1;
+						break;
+				}
+			}
+
 			$htmlc->add_property($pd);
 		}
 		$htmlc->finish_output();
