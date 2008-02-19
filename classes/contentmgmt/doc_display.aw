@@ -45,10 +45,19 @@ class doc_display extends aw_template
 		{
 			$si->parse_document_new($doc);
 		}
-
-		$text = $this->_get_text($arr, $doc);
-		$lead = $this->_get_lead($arr, $doc);
-		$content = $this->_get_content($arr, $doc);
+	
+		if ($this->template_has_var("text"))
+		{
+			$text = $this->_get_text($arr, $doc);
+		}
+		if ($this->template_has_var("lead"))
+		{
+			$lead = $this->_get_lead($arr, $doc);
+		}
+		if ($this->template_has_var("content"))
+		{
+			$content = $this->_get_content($arr, $doc);
+		}
 		
 		// parse keyword subs
 		$this->parse_keywords($doc);
@@ -58,32 +67,42 @@ class doc_display extends aw_template
 
 		$al = get_instance("alias_parser");
 		$mt = $doc->meta();
-		$al->parse_oo_aliases(
-			$doc->id(),
-			&$text,
-			array(
-				"templates" => &$this->templates,
-				"meta" => &$mt
-			)
-		);
 		
-		$al->parse_oo_aliases(
-			$doc->id(),
-			&$content,
-			array(
-				"templates" => &$this->templates,
-				"meta" => &$mt
-			)
-		);
+		if ($this->template_has_var("text"))
+		{
+			$al->parse_oo_aliases(
+				$doc->id(),
+				&$text,
+				array(
+					"templates" => &$this->templates,
+					"meta" => &$mt
+				)
+			);
+		}
 		
-		$al->parse_oo_aliases(
-			$doc->id(),
-			&$lead,
-			array(
-				"templates" => &$this->templates,
-				"meta" => &$mt
-			)
-		);
+		if ($this->template_has_var("content"))
+		{
+			$al->parse_oo_aliases(
+				$doc->id(),
+				&$content,
+				array(
+					"templates" => &$this->templates,
+					"meta" => &$mt
+				)
+			);
+		}
+		
+		if ($this->template_has_var("lead"))
+		{
+			$al->parse_oo_aliases(
+				$doc->id(),
+				&$lead,
+				array(
+					"templates" => &$this->templates,
+					"meta" => &$mt
+				)
+			);
+		}
 		
 		lc_site_load("document",$this);
 		
