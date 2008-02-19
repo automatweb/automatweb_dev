@@ -3745,6 +3745,22 @@ class crm_person extends class_base
 			$obj = $conn->to();
 			$this->_get_work_contacts($obj,&$rtrn);
 		}
+
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => array(16, 67),
+		));
+
+		foreach($conns as $conn)
+		{
+			$obj = $conn->to();
+			if(is_oid($obj->prop('org')))
+				$rtrn[$obj->prop('org')] = $obj->prop('org.name');
+			if(is_oid($obj->prop('section')))
+			{
+				$this->_get_work_contacts(obj($obj->prop('section')), &$rtrn);
+			}
+		}
+
 		return $rtrn;
 	}
 
