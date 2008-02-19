@@ -4365,7 +4365,7 @@ class crm_company extends class_base
 		
 		$wcon_wrel= new object();
 		$wcon_wrel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
-		$wcon_wrel->set_parent($arr['id']);
+		$wcon_wrel->set_parent($arr['parent']);
 
 		if (is_oid($arr["profession"]) && $this->can("view", $arr["profession"]))
 		{
@@ -4391,7 +4391,10 @@ class crm_company extends class_base
 			));
 			list($work_contact,) = each($work_contact);
 		}
-		$wcon_wrel->set_prop("org", $arr['id']);
+		if($this->can("view", $work_contact))
+			$wcon_wrel->set_parent($work_contact);
+
+		$wcon_wrel->set_prop("org", $work_contact);
 		$wcon_wrel->save();
 
 		$person->connect(array(
