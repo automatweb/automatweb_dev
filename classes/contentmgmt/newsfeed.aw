@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.26 2008/02/11 13:31:00 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.27 2008/02/19 12:26:49 robert Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -426,13 +426,13 @@ class newsfeed extends class_base
 				asort($fields);
 				foreach($fields as $prop=>$f)
 				{
-					$props[$prop] = $o->prop($prop);
+					$props[$prop] = $o->trans_get_val($prop);
 				}
-				$title = $o->name();
+				$title = $o->trans_get_val("title");
 				if($feedobj->prop("folder_name"))
 				{
 					$folder = obj($o->parent());
-					$title .= " - ".$folder->name();
+					$title .= " - ".$folder->trans_get_val("name");
 				}
 				if (1 == $parse_embed)
 				{
@@ -442,7 +442,16 @@ class newsfeed extends class_base
 						$si->parse_document_new($o);
 						foreach($fields as $prop=>$f)
 						{
-							$props[$prop] = $o->prop($prop);
+							$type = aw_ini_get("user_interface.content_trans");
+							if($type == 1)
+							{
+								$langid = aw_global_get("ct_lang_id");
+							}
+							else
+							{
+								$langid = aw_global_get("lang_id");
+							}
+							$props[$prop] = $o->trans_get_val($prop);
 							$al->parse_oo_aliases($oid,$props[$prop]);
 						}
 					}
