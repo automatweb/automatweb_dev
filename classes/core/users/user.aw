@@ -39,10 +39,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property link_to_p type=text store=no
 	@caption Isik
 
-	@property uid_entry store=no type=textbox group=general 
+	@property uid_entry store=no type=textbox group=general
 	@caption Kasutajanimi
 
-	@property logins field=logins type=text store=yes 
+	@property logins field=logins type=text store=yes
 	@caption Sisselogimisi
 
 	@property lastaction field=lastaction type=text
@@ -87,10 +87,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 	@property password type=hidden table=users field=password store=no
 
-	@property gen_pwd store=no type=text 
+	@property gen_pwd store=no type=text
 	@caption Genereeri parool
 
-	@property genpwd store=no type=textbox 
+	@property genpwd store=no type=textbox
 	@caption Genereeritud parool
 
 	@property resend_welcome store=no type=checkbox ch_value=1
@@ -120,7 +120,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property aclwiz type=hidden table=objects field=meta method=serialize
 
 	@property aclwizard_a type=text store=no
-	@caption 
+	@caption
 
 @groupinfo userdef caption="User-defined"
 
@@ -139,7 +139,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property userch5 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
 	@caption User-defined checkbox 5
 
-	@property join_form_entry type=hidden table=users field=join_form_entry 
+	@property join_form_entry type=hidden table=users field=join_form_entry
 
 @default group=settings
 
@@ -163,16 +163,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property lg_hd type=text subtitle=1 store=no
 	@caption T&otilde;lkekeskkond
 
+	@property base_lang type=select field=meta method=serialize table=objects
+	@caption Baaskeel
+
 	@property target_lang type=select field=meta method=serialize table=objects multiple=1
 	@caption Sihtkeel
 
 	@property rd_hd type=text subtitle=1 store=no
 	@caption Suunamine
 
-	@property after_login_redir type=textbox field=meta method=serialize table=objects 
+	@property after_login_redir type=textbox field=meta method=serialize table=objects
 	@caption P&auml;rast sisse logimist suunamine
 
-	
+
 	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
 @reltype GRP value=1 clid=CL_GROUP
@@ -231,14 +234,14 @@ class user extends class_base
 				$prop['value'] = $this->time2date($prop['value'],2);
 				break;
 
-			case "uid_entry": 
+			case "uid_entry":
 				if (is_oid($arr["obj_inst"]->id()))
 				{
 					return PROP_IGNORE;
 				}
 				break;
 
-/*			case "uid": 
+/*			case "uid":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
 					return PROP_IGNORE;
@@ -249,6 +252,7 @@ class user extends class_base
 				$prop['value'] = $this->time2date($prop['value'],2);
 				break;
 
+			case "base_lang":
 			case "target_lang":
 				$l = get_instance("languages");
 				$prop["options"] = $l->get_list();
@@ -269,7 +273,7 @@ class user extends class_base
 				break;
 
 			case "gen_pwd":
-				$prop["value"] = 
+				$prop["value"] =
 					"
 						<script language=\"javascript\">
 						function gp()
@@ -286,7 +290,7 @@ class user extends class_base
 							document.changeform.passwd_again.value = pwd;
 							document.changeform.genpwd.value = pwd;
 						}
-						</script>					
+						</script>
 					".
 					html::href(array(
 					"url" => "#",
@@ -335,7 +339,7 @@ class user extends class_base
 				break;
 		}
 		return PROP_OK;
-	}	
+	}
 
 	function set_property(&$arr)
 	{
@@ -409,7 +413,7 @@ class user extends class_base
 					}
 				}
 				break;
-			
+
 			case "resend_welcome":
 				if ($prop['value'] == 1)
 				{
@@ -461,8 +465,8 @@ class user extends class_base
 
 		// get all groups this user is member of
 		$groups = $this->users->getgroupsforuser($uid);
-	
-		$t =& $this->_start_gm_table();		
+
+		$t =& $this->_start_gm_table();
 		foreach($gl as $gid => $gd)
 		{
 			if (is_oid($gd["oid"]) && $this->can("view", $gd["oid"]))
@@ -667,7 +671,7 @@ class user extends class_base
 			"numeric" => 1,
 			"align" => "center"
 		));
-		
+
 		$t->define_field(array(
 			"name" => "gcount",
 			"caption" => t("Mitu liiget"),
@@ -698,7 +702,7 @@ class user extends class_base
 			"align" => "center"
 		));
 
-		return $t; 
+		return $t;
 	}
 
 	////
@@ -765,7 +769,7 @@ class user extends class_base
 					"parent" => $grp_o->id(),
 					"class_id" => CL_GROUP
 				));
-				
+
 				$ol = $ot->to_list();
 				for($grp_o = $ol->begin(); !$ol->end(); $grp_o = $ol->next())
 				{
@@ -782,7 +786,7 @@ class user extends class_base
 							"from" => $grp_o->id()
 						));
 					}
-	
+
 					// get all objects below that point to the current user
 					$inside_ol = new object_list(array(
 						"parent" => $grp_o->id(),
@@ -824,7 +828,7 @@ class user extends class_base
 					}
 				}
 			}
-		}		
+		}
 	}
 
 	// must not be deleting these, most important it is!
@@ -844,7 +848,7 @@ class user extends class_base
 		extract($arr);
 		$row = aw_unserialize($str);
 		$row['parent'] = $parent;
-		
+
 		$old_oid = $row["oid"];
 		$u = obj($old_oid);
 
@@ -885,7 +889,7 @@ class user extends class_base
 			die();
 		}
 	}
-	
+
 
 	function callback_mod_retval($arr)
 	{
@@ -919,7 +923,7 @@ class user extends class_base
 		if ($gid)
 		{
 			$this->users->remove_users_from_group_rec(
-				$gid, 
+				$gid,
 				array($uid),
 				false,
 				false
@@ -948,7 +952,7 @@ class user extends class_base
 				"parent" => $o->parent(),
 				"class_id" => CL_GROUP
 			));
-				
+
 			$ol = $ot->to_list();
 			for($grp_o = $ol->begin(); !$ol->end(); $grp_o = $ol->next())
 			{
@@ -965,7 +969,7 @@ class user extends class_base
 						"from" => $grp_o->id()
 					));
 				}
-	
+
 				// get all objects below that point to the current user
 				$inside_ol = new object_list(array(
 					"parent" => $grp_o->id(),
@@ -981,7 +985,7 @@ class user extends class_base
 
 	function on_delete_alias($arr)
 	{
-		// now, if the alias deleted was a group alias, then 
+		// now, if the alias deleted was a group alias, then
 		// remove the user from that goup and do all the other movements
 		if ($arr["connection"]->prop("reltype") == RELTYPE_GRP)
 		{
@@ -1146,7 +1150,7 @@ class user extends class_base
 
 			$uid = $this->users->get_uid_for_oid($user->id());
 			$gid = $this->users->get_gid_for_oid($group->id());
-		
+
 			$this->users->add_users_to_group_rec(
 				$gid,
 				array($uid),
@@ -1247,7 +1251,7 @@ class user extends class_base
 
 				//$arr["obj_inst"]->create_brother($aug_o->id());
 			}
-				
+
 			post_message_with_param(
 				MSG_USER_CREATE,
 				$this->clid,
@@ -1399,7 +1403,7 @@ class user extends class_base
 			$mail = new object();
 			$mail->set_class_id(CL_ML_MEMBER);
 			$p = obj($this->get_person_for_user($o));
-			
+
 			$mail->set_parent($p->id());
 			$mail->set_prop("mail", $umail);
 			$mail->set_prop("name", $uname);
@@ -1425,7 +1429,7 @@ class user extends class_base
 		}
 		return NULL;
 	}
-	
+
 	/**
 		@attrib api=1
 		@comment
@@ -1509,7 +1513,7 @@ class user extends class_base
 			if ($rn != "")
 			{
 				list($fn, $ln) = explode(" ", $rn);
-			}			
+			}
 			else
 			{
 				list($fn, $ln) = explode(".", $uid);
@@ -1617,7 +1621,7 @@ class user extends class_base
 		Gets the company attached to the current user
 		@returns
 		The company id
-	**/ 
+	**/
 	function get_current_company()
 	{
 		static $retval;
@@ -1748,7 +1752,7 @@ class user extends class_base
 		// find the controlling acl - select all gids that user belongs to
 		// order by priority desc
 		// go over objects in path
-		// if acl is set, match is there. 
+		// if acl is set, match is there.
 		$ca = $this->_aclw_get_controlling_acl($user, $oid);
 		if ($ca === false)
 		{
@@ -1783,7 +1787,7 @@ class user extends class_base
 		}
 
 		$g_o = obj($this->users->get_oid_for_gid($ca["gid"]));
-		
+
 		$grpstr = html::href(array(
 			"url" => $this->mk_my_orb("change", array("id" => $g_o->id()), $g_o->class_id()),
 			"caption" => $g_o->path_str()
@@ -1825,11 +1829,11 @@ class user extends class_base
 		{
 			$nlg = $this->get_cval("non_logged_in_users_group");
 			$this->db_query("
-				SELECT 
-					groups.gid as gid, 
+				SELECT
+					groups.gid as gid,
 					groups.priority as pri
-				FROM 
-					groupmembers 
+				FROM
+					groupmembers
 					LEFT JOIN groups ON groupmembers.gid = groups.gid
 				WHERE
 					groups.gid = '$nlg'
@@ -1846,7 +1850,7 @@ class user extends class_base
 					{
 						return $adat;
 					}
-	
+
 					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = '$parent'", "parent");
 				}
 				$this->restore_handle();
@@ -1855,11 +1859,11 @@ class user extends class_base
 		else
 		{
 			$this->db_query("
-				SELECT 
-					groups.gid as gid, 
+				SELECT
+					groups.gid as gid,
 					groups.priority as pri
-				FROM 
-					groupmembers 
+				FROM
+					groupmembers
 					LEFT JOIN groups ON groupmembers.gid = groups.gid
 				WHERE
 					groupmembers.uid = '$user'
@@ -1876,7 +1880,7 @@ class user extends class_base
 					{
 						return $adat;
 					}
-	
+
 					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = '$parent'", "parent");
 				}
 				$this->restore_handle();
@@ -1903,14 +1907,14 @@ class user extends class_base
 
 	/** displays a form to let the user to change her password
 		@attrib name=change_pwd
-		
+
 	**/
 	function change_pwd()
 	{
 		print "changing tha password, eh?";
 		// I need to return a class_base generated form
 	}
-	
+
 	/**
 
 		@attrib params=pos api=
@@ -1940,7 +1944,7 @@ class user extends class_base
 		}
 		return $groups_list;
 	}
-	
+
 	/**
 		@attrib params=pos api=1
 		@param uid required type=string
@@ -2143,9 +2147,9 @@ class user extends class_base
 		// if the user has acl set, then disable the tabs
 		$gl = aw_global_get("gidlist_oid");
 		foreach($gl as $g_oid)
-		{	
+		{
 			$o = obj($g_oid);
-			
+
 			if ($o->prop("type") == 1 || $o->prop("type") == 3)
 			{
 				continue;
@@ -2162,7 +2166,7 @@ class user extends class_base
 		{
 			return false;
 		}
-	
+
 		return true;
 	}
 
@@ -2183,7 +2187,7 @@ class user extends class_base
 
 	function add_rating($uid, $rating)
 	{
-		$this->db_query("INSERT INTO user2rating(uid, rating, crea_by, crea) 
+		$this->db_query("INSERT INTO user2rating(uid, rating, crea_by, crea)
 			VALUES('$uid', '$rating', '".aw_global_get("uid")."', ".time().")
 		");
 	}
@@ -2192,7 +2196,7 @@ class user extends class_base
 	{
 		return  $this->db_fetch_field("SELECT SUM(rating) as r FROM user2rating WHERE uid = '$uid'", "r");
 	}
-	
+
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
 		switch($field)
@@ -2216,7 +2220,7 @@ class user extends class_base
 
 	/**
 		@attrib name=settings_lod
-		@param url optional 
+		@param url optional
 	**/
 	function settings_lod($arr)
 	{
@@ -2225,9 +2229,9 @@ class user extends class_base
 
 		$gl = aw_global_get("gidlist_oid");
 		foreach($gl as $g_oid)
-		{	
+		{
 			$o = obj($g_oid);
-			
+
 			if ($o->prop("type") == 1 || $o->prop("type") == 3)
 			{
 				continue;
@@ -2267,7 +2271,7 @@ class user extends class_base
 
 	/**
 		@attrib name=hist_lod
-		@param url optional 
+		@param url optional
 	**/
 	function hist_lod($arr)
 	{
