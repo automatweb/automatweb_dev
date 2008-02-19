@@ -3702,10 +3702,20 @@ class crm_company extends class_base
 				$bdis = 1;
 				$p = obj($oid);
 				$contacts = array();
+				foreach($p->connections_from(array("type" => 16)) as $conn)
+				{
+					$wcon_wrel = $conn->to();
+					if($wcon_wrel->prop("org.name"))
+					{
+						$contacts[] = $p->prop("org.name");
+					}
+				}
+				/* This property no longer exists. -kaarel
 				if($p->prop("work_contact.name"))
 				{
 					$contacts[] = $p->prop("work_contact.name");
 				}
+				*/
 				if($p->prop("phone.name"))
 				{
 					$contacts[] = $p->prop("phone.name");
@@ -4176,9 +4186,21 @@ class crm_company extends class_base
 				'reltype' => $reltype
 			));
 
+			$wcon_wrel= new object();
+			$wcon_wrel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+			$wcon_wrel->set_parent($arr['id']);
+			$wcon_wrel->set_prop("org", $arr['id']);
+			$wcon_wrel->save();
+
 			$person = new object($value);
+			/* This property no longer exists. -kaarel
 			$person->set_prop('work_contact',$arr['id']);
 			$person->save();
+			*/
+			$person->connect(array(
+				"to" => $wcon_wrel->id(),
+				"reltype" => 16,	// RELTYPE_ORG_RELATION
+			));
 
 			if ($arr["cat"] && $cat != 999999)
 			{
@@ -4365,7 +4387,20 @@ class crm_company extends class_base
 			));
 			list($work_contact,) = each($work_contact);
 		}
-		$person->set_prop('work_contact',$work_contact);
+		
+		$wcon_wrel= new object();
+		$wcon_wrel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+		$wcon_wrel->set_parent($arr['id']);
+		$wcon_wrel->set_prop("org", $arr['id']);
+		$wcon_wrel->save();
+
+		$person->connect(array(
+			"to" => $wcon_wrel->id(),
+			"reltype" => 16,	// RELTYPE_ORG_RELATION
+		));
+
+		// This property no longer exists. -kaarel
+		//$person->set_prop('work_contact',$work_contact);
 
 		$orgs = array();
 		foreach($person->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
