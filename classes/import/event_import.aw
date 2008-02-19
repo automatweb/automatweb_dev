@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.13 2008/02/18 18:59:11 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.14 2008/02/19 08:05:59 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -1234,6 +1234,8 @@ class event_import extends class_base
 //	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $import_orig = true)
 	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $imp_lang_id)
 	{
+		arr($imps["event"]);
+		exit;
 		$li = $o->prop("original_lang");
 		$import_orig = ($li == $imp_lang_id);
 		$lg = get_instance("languages");
