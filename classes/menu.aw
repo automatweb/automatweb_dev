@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.225 2008/02/17 22:26:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.226 2008/02/19 13:39:12 robert Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2562,6 +2562,22 @@ class menu extends class_base implements main_subtemplate_handler
 			"75" => t("Kataloog"),
 			"77" => t("Avalik meetod"),
 		);
+	}
+
+	/**
+	@attrib name=get_menu_open caption="Ava Aktiivne" is_public=1
+	**/
+	function get_menu_open($arr)
+	{
+		$p = obj($_GET['parent']);
+		foreach($p->path() as $po)
+		{
+			if($po->class_id() == CL_MENU)
+			{
+				$parent = $po->id();
+			}
+		}
+		return $this->mk_my_orb("change", array("parent" => $parent, "group" => "o"), "admin_if");;
 	}
 };
 ?>
