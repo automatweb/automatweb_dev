@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.10 2008/01/31 13:54:28 kristo Exp $
-// xml_export.aw - XML eksport 
+// xml_export.aw - XML eksport
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
 
@@ -25,7 +24,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 
 	@property last_changed_obj_count type=textbox size=5 field=meta method=serialize
 	@caption Mitu viimati muudeetud objekti exportida
-	
+
 	@property remove_aliases type=checkbox ch_value=1 field=meta method=serialize
 	@caption Eemalda aliased
 	@comment Eemalda AW aliased (nt. #pict1#)
@@ -66,14 +65,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 	@caption FTP kataloog
 	@comment Kataloog, kuhu üle FTP fail salvestatakse (koos failinimega)
 
-	@property parents_table type=table store=no 
+	@property parents_table type=table store=no
 	@caption Kaustad, mille alt objekte v&otilde;etakse
 
 @groupinfo xml_struct caption="XML struktuur"
 @default group=xml_struct
 
 	@property xml_root_tag_name type=textbox field=meta method=serialize
-	@caption Juur m&auml;rgendi nimi
+	@caption Juurm&auml;rgendi nimi
+
+	@property xml_root_tag_attrs type=textbox field=meta method=serialize
+	@caption Juurm&auml;rgendi atribuudid
 
 	@property xml_object_tag_name type=textbox field=meta method=serialize
 	@caption Objekti m&auml;rgendi nimi
@@ -81,6 +83,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 	@property xml_struct_table type=table store=no no_caption=1
 	@caption Seadete vormi v&auml;ljad
 
+
+/////////// RELTYPES ////////////
 @reltype EXP_OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
 @caption Eksporditav objekt
 
@@ -90,22 +94,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 @reltype PARENT value=3 clid=CL_MENU,CL_PROJECT
 @caption S&uuml;ndmuste asukoht
 
+@reltype CONTROLLER value=4 clid=CL_CFGCONTROLLER
+@caption Kontroller
+
+@reltype OBJ_PREPEND_CONTROLLER value=5 clid=CL_CFGCONTROLLER
+@caption Kontroller andmete lisamiseks obj. ette
+
+@reltype OBJ_APPEND_CONTROLLER value=6 clid=CL_CFGCONTROLLER
+@caption Kontroller andmete lisamiseks obj. j2rele
+
 */
 
 class xml_export extends class_base
 {
 	function xml_export()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "export/xml_export",
 			"clid" => CL_XML_EXPORT
 		));
 	}
-
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 
 	function get_property($arr)
 	{
@@ -157,7 +167,7 @@ class xml_export extends class_base
 						"user" => $arr['obj_inst']->prop("ftp_user"),
 						"pass" => $arr['obj_inst']->prop("ftp_password"),
 					));
-					
+
 					// check if the ftp location contains file or not
 					if ($ftp_inst->cd(array("path" => $prop['value'])) === true)
 					{
@@ -177,7 +187,7 @@ class xml_export extends class_base
 						$tmp_file = substr($prop['value'], 0, strrpos($prop['value'], "/"))."/check";
 					}
 					$ftp_put_result = $ftp_inst->put_file($tmp_file, "check");
-					
+
 					if ($ftp_put_result ===	false)
 					{
 						$prop['error'] = t("Faili ei saa kirjutada");
@@ -187,9 +197,7 @@ class xml_export extends class_base
 						$ftp_inst->delete(array(
 							"file" => $tmp_file,
 						));
-						
 					}
-
 				}
 				break;
 			case "parents_table":
@@ -219,7 +227,7 @@ class xml_export extends class_base
 				break;
 
 			case "local_file_location":
-				// if file should be exported into local server folder, then lets check, if there 
+				// if file should be exported into local server folder, then lets check, if there
 				// is only folder set, if it is, then i add file name by myself, which is xml export
 				// object name.
 				$export_local_file_check = $arr['obj_inst']->prop("local_file");
@@ -237,7 +245,7 @@ class xml_export extends class_base
 				}
 				break;
 			case "ftp_file_location":
-				// so here i'll check if the ftp location points to a directory or 
+				// so here i'll check if the ftp location points to a directory or
 				// file,
 				$export_ftp_file_check = $arr['obj_inst']->prop("ftp_file");
 				if (!empty($export_ftp_file_check))
@@ -247,7 +255,7 @@ class xml_export extends class_base
 						"host" => $arr['obj_inst']->prop("ftp_host"),
 						"user" => $arr['obj_inst']->prop("ftp_user"),
 						"pass" => $arr['obj_inst']->prop("ftp_password"),
-					));	
+					));
 					// i'll try to change direcoty into the ftp_file_location
 					// if it fails, it probably is file or don't have read permission or smth
 					if ($ftp_inst->cd(array("path" => $prop['value'])) === true)
@@ -274,7 +282,7 @@ class xml_export extends class_base
 					foreach ($arr['request']['xml_data'] as $key => $value)
 					{
 					/*
-					// if we want to make it that way, that those xml struct fields will not be 
+					// if we want to make it that way, that those xml struct fields will not be
 					// saved which aren't marked to be exported in xml
 						if (empty($value['export_this_field']))
 						{
@@ -296,13 +304,18 @@ class xml_export extends class_base
 								unset($arr['request']['xml_data'][$key]['xml_tag_param'][$k]);
 							}
 						}
+
+						if (!is_oid($arr['request']['xml_data'][$key]['controller']))
+						{
+							unset($arr['request']['xml_data'][$key]['controller']);
+						}
 					}
 					$arr['obj_inst']->set_meta("xml_data", $arr['request']['xml_data']);
 				}
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
@@ -328,7 +341,7 @@ class xml_export extends class_base
 		));
 		return $this->parse();
 	}
-	
+
 	function create_parents_table($arr)
 	{
 		$o = $arr['obj_inst'];
@@ -359,7 +372,7 @@ class xml_export extends class_base
 					"name" => "parents[".$parent_id."]",
 					"checked" => (array_key_exists($parent_id, $parents->get())) ? true : false,
 				)),
-						
+
 			));
 		}
 	}
@@ -367,7 +380,7 @@ class xml_export extends class_base
 	function create_xml_struct_table($arr)
 	{
 		$o = $arr['obj_inst'];
-		
+
 		$t = &$arr['prop']['vcl_inst'];
 //		$t->set_sortable(false);
 		$t->set_default_sortby("ord");
@@ -404,12 +417,16 @@ class xml_export extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "controller",
+			"caption" => t("Kontroller")
+		));
+		$t->define_field(array(
 			"name" => "cdata",
 			"caption" => t("CDATA"),
 			"align" => "center",
 		));
-		
-		// getting all properties from cfgform, which is connected via object type 
+
+		// getting all properties from cfgform, which is connected via object type
 		$all_properties = $this->get_all_props(array(
 			"object" => $o,
 		));
@@ -417,7 +434,7 @@ class xml_export extends class_base
 		// table fields also there, so where the hell can i get those?
 
 		// well, i won't get them, so i have to manually handle those fields, which are needed
-		// hmm, seems $obj->properties() fn. returns objects table fields 
+		// hmm, seems $obj->properties() fn. returns objects table fields
 		// also it seems that some objects table fields are accessible via prop() fn.
 		// uh, what a mess :S
 		// !!
@@ -439,7 +456,16 @@ class xml_export extends class_base
 //		$options_arr['createdby'] = "createdby";
 //		$options_arr['jrk'] = "jrk";
 
-		
+		// controller selectbox options
+		$controller_options = array("" => "");
+		$connections = $o->connections_from(array("type" => RELTYPE_CONTROLLER));
+		$parents = new aw_array($o->meta("parents"));
+
+		foreach($connections as $c)
+		{
+			$controller_options[$c->prop("to")] = $c->prop("to.name");
+		}
+
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /*
 		$object_properties = $o->properties();
@@ -472,7 +498,7 @@ class xml_export extends class_base
 			$xml_tag_content_max_id = 0;
 			$xml_tag_param_str = "";
 			$xml_tag_param_max_id = 0;
-			
+
 			// data which should be appear as value of XML tag
 			foreach($saved_xml_data[$prop_data['name']]['xml_tag_content'] as $value)
 			{
@@ -503,8 +529,8 @@ class xml_export extends class_base
 				"name" => "xml_data[".$prop_data['name']."][xml_tag_content][".$xml_tag_content_max_id."][sep_after]",
 				"size" => 5,
 			));
-		
-	
+
+
 			// XML tag parameters
 			foreach ($saved_xml_data[$prop_data['name']]['xml_tag_param'] as $value)
 			{
@@ -550,6 +576,11 @@ class xml_export extends class_base
 				)),
 				"xml_tag_content" => $xml_tag_content_str,
 				"xml_tag_param" => $xml_tag_param_str,
+				"controller" => html::select(array(
+					"name" => "xml_data[" . $prop_data["name"] . "][controller]",
+					"selected" => $saved_xml_data[$prop_data["name"]]["controller"],
+					"options" => $controller_options
+				)),
 				"cdata" => html::checkbox(array(
 					"name" => "xml_data[".$prop_data['name']."][cdata]",
 					"checked" => isset($saved_xml_data[$prop_data['name']]['cdata']) ? true : false,
@@ -569,13 +600,12 @@ class xml_export extends class_base
 	/**
 		@attrib name=fetch nologin=1 all_args=1
 		@param id required type=int acl=view
-		@param modified optional type=int 
+		@param modified optional type=int
 		@param obj_count optional type=int
 		@param called_from optional
 	**/
 	function fetch($arr)
 	{
-
 		$o = obj($arr['id']);
 		$conns_to_parents = $o->connections_from(array(
 			"type" => RELTYPE_PARENT,
@@ -583,7 +613,7 @@ class xml_export extends class_base
 		$parents = $o->meta("parents");
 
 		// figure out which last_modified timestamp to use:
-		$last_modified = 0; 
+		$last_modified = 0;
 		if ($o->prop("last_object_change_time") > 0)
 		{
 			$last_modified = $o->prop("last_object_change_time");
@@ -610,7 +640,7 @@ class xml_export extends class_base
 			foreach ($xml_config_data_value['xml_tag_param'] as $key => $value)
 			{
 				// i have to check where the value of this param/property is saved
-				// cause if this is meta field, then i can't filter by this value when creating 
+				// cause if this is meta field, then i can't filter by this value when creating
 				// object_list
 				if (array_key_exists($value['param_name'], $params_from_url) && $props_from_cfgform[$value['param_name']]['method'] != "serialize")
 				{
@@ -651,7 +681,7 @@ class xml_export extends class_base
 
 
 		// count of objects which will be exported
-		$exp_objects_count = ""; 
+		$exp_objects_count = "";
 		if ($o->prop("last_changed_obj_count") != "")
 		{
 			$exp_objects_count = $o->prop("last_changed_obj_count");
@@ -661,7 +691,7 @@ class xml_export extends class_base
 			$exp_objects_count = $arr['obj_count'];
 		}
 
-		//  
+		//
 		// i have to merge here those params too which are coming from url
 		// params can be only those fields, which are not stored in meta data field
 
@@ -681,6 +711,8 @@ class xml_export extends class_base
 		$all_objects = new object_list($params);
 
 		$xml_root_tag_name = $o->prop("xml_root_tag_name");
+		$xml_root_tag_attrs = $o->prop("xml_root_tag_attrs");
+		$xml_root_tag_attrs = empty($xml_root_tag_attrs) ? "" : " " . $xml_root_tag_attrs;
 		$xml_object_tag_name = $o->prop("xml_object_tag_name");
 
 //arr("<strong>".$all_objects->count()."</strong>");
@@ -691,13 +723,24 @@ class xml_export extends class_base
 		$xml_file = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\"?>\n";
 //		$xml_file = "";
 //		$xml_file .= "<objects>\n";
-		$xml_file .= "<".$xml_root_tag_name.">\n";
+		$xml_file .= "<".$xml_root_tag_name . $xml_root_tag_attrs . ">\n";
+
+		$prepend_controller = $o->get_first_obj_by_reltype("RELTYPE OBJ_PREPEND_CONTROLLER");
+		$prepend_controller = is_object($prepend_controller) ? $prepend_controller->id() : false;
+		$append_controller = $o->get_first_obj_by_reltype("RELTYPE OBJ_APPEND_CONTROLLER");
+		$append_controller = is_object($append_controller) ? $append_controller->id() : false;
+		$cfgcontroller_i = get_instance(CL_CFGCONTROLLER);
 
 		foreach ($all_objects->arr() as $oid => $obj)
 		{
 //			$xml_file .= "<object>\n";
 			$xml_file .= "<".$xml_object_tag_name.">\n";
-			
+
+			if ($prepend_controller)
+			{
+				$xml_file .= $cfgcontroller_i->check_property($prepend_controller, $oid, $xml_config_data, $arr, array(), $obj) . "\n";
+			}
+
 			$pd = $obj->get_property_list();
 
 			foreach ($xml_config_data as $field_name => $field_config)
@@ -724,7 +767,7 @@ class xml_export extends class_base
 						$xml_file .= $xml_tag_param_value['param_name']."=\"".$this->_proc_xml_val($obj->prop($xml_tag_param_value['param_value']))."\" ";
 					}
 				}
-				
+
 				if (empty($field_config['xml_tag_content']))
 				{
 					$xml_file .= " />\n";
@@ -747,13 +790,22 @@ class xml_export extends class_base
 								$oh = get_instance(CL_OPENHOURS);
 								$str_val = $oh->show(array("id" => $ro->id()));
 							}
-	
-							$xml_file .= $this->_proc_xml_val($str_val);
 						}
 						else
 						{
-							$xml_file .= $this->_proc_xml_val($obj->prop($xml_tag_content_value['value']));
+							$str_val = $obj->prop($xml_tag_content_value['value']);
 						}
+
+						if (is_oid($field_config["controller"]))
+						{
+							$str_val = $cfgcontroller_i->check_property($field_config["controller"], $oid, $str_val, $arr, array(), $obj);
+						}
+						else
+						{
+							$str_val = $this->_proc_xml_val($str_val);
+						}
+
+						$xml_file .= $str_val;
 						$xml_file .= $xml_tag_content_value['sep_after'];
 					}
 					if ($field_config['cdata'] == 1)
@@ -763,22 +815,26 @@ class xml_export extends class_base
 					$xml_file .= "</".$field_config['name'].">\n";
 				}
 			}
-//			$xml_file .= "</object>\n";
-			$xml_file .= "</".$xml_object_tag_name.">\n";
 
-		} 
-//		$xml_file .= "</objects>";
+			if ($append_controller)
+			{
+				$xml_file .= $cfgcontroller_i->check_property($append_controller, $oid, $xml_config_data, $arr, array(), $obj) . "\n";
+			}
+
+			$xml_file .= "</".$xml_object_tag_name.">\n";
+		}
+
 		$xml_file .= "</".$xml_root_tag_name.">";
 
 		if ($o->prop("remove_aliases"))
 		{
 			$xml_file  = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$xml_file);
 		}
-//arr(htmlentities($xml_file));
+
 		header("Content-type: text/xml; charset=".aw_global_get("charset"));
 		echo $xml_file;
-		
-		
+
+
 		// i'll check first if the fn. is called from local obj (clicked the link) or by scheduler
 		// in other cases it is possibly called by url and then i don't need to put the file in local
 		// folder or in the ftp server folder
@@ -790,13 +846,13 @@ class xml_export extends class_base
 			{
 				$this->put_file(array(
 					"file" => $o->prop("local_file_location"),
-					"content" => $xml_file,	
+					"content" => $xml_file,
 				));
 			}
 
 			if ($o->prop("ftp_file"))
 			{
-			
+
 				$ftp_inst = get_instance("protocols/file/ftp");
 				$ftp_inst->connect(array(
 					"host" => $o->prop("ftp_host"),
@@ -882,11 +938,11 @@ class xml_export extends class_base
 					"time" => $next,
 				));
 			}
-		}	
+		}
 		return $next;
 
 	}
-	
+
 	function get_all_props($arr)
 	{
 		$object_type_obj = $arr['object']->get_first_obj_by_reltype("RELTYPE_EXP_OBJECT_TYPE");
@@ -988,7 +1044,7 @@ class xml_export extends class_base
 			{
 				$ret[$f_row["prop"]] = map('%%%s%%', explode(",", trim($f_row["value"])));
 			}
-		}	
+		}
 		return $ret;
 	}
 }

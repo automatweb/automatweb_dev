@@ -156,7 +156,16 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Juur m&amp;amp;auml;rgendi nimi</caption>
+            <caption>Juurm&amp;amp;auml;rgendi nimi</caption>
+      </property>
+      <property>
+            <name>xml_root_tag_attrs</name>
+            <table>objects</table>
+            <group>xml_struct</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Juurm&amp;amp;auml;rgendi atribuudid</caption>
       </property>
       <property>
             <name>xml_object_tag_name</name>
@@ -212,6 +221,21 @@
                   </clid>
                   <caption>S&amp;amp;uuml;ndmuste asukoht</caption>
             </PARENT>
+            <CONTROLLER>
+                  <value>4</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CONTROLLER>
+            <OBJ_PREPEND_CONTROLLER>
+                  <value>5</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller andmete lisamiseks obj. ette</caption>
+            </OBJ_PREPEND_CONTROLLER>
+            <OBJ_APPEND_CONTROLLER>
+                  <value>6</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller andmete lisamiseks obj. j2rele</caption>
+            </OBJ_APPEND_CONTROLLER>
       </reltypes>
 </properties>
 
