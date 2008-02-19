@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.16 2008/02/19 09:39:32 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.17 2008/02/19 13:52:51 robert Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -671,23 +671,26 @@ class user_bookmarks extends class_base
 	function _shared_tree_recur(&$t, $parent, $bm)
 	{
 		$shared = $bm->meta("shared");
-		$ol = new object_list(array(
-			"oid" => $shared,
-			"parent" => $parent,
-			"class_id" => CL_MENU
-		));
-		foreach($ol->arr() as $o)
+		if(count($shared))
 		{
-			$t->add_item($parent, array(
-				"id" => $o->id(),
-				"name" => $o->name(),
-				"iconurl" => icons::get_icon_url(CL_MENU),
-				"url" => aw_url_change_var(array(
-					"tf"=> $o->id(),
-					"user" => $bm->id(),
-				))
+			$ol = new object_list(array(
+				"oid" => $shared,
+				"parent" => $parent,
+				"class_id" => CL_MENU
 			));
-			$this->_shared_tree_recur($t, $o->id(), $bm);
+			foreach($ol->arr() as $o)
+			{
+				$t->add_item($parent, array(
+					"id" => $o->id(),
+					"name" => $o->name(),
+					"iconurl" => icons::get_icon_url(CL_MENU),
+					"url" => aw_url_change_var(array(
+						"tf"=> $o->id(),
+						"user" => $bm->id(),
+					))
+				));
+				$this->_shared_tree_recur($t, $o->id(), $bm);
+			}
 		}
 	}
 
@@ -774,38 +777,41 @@ class user_bookmarks extends class_base
 		elseif($pt > 0 && $bm && $bm->class_id() == CL_USER_BOOKMARKS && $bm->createdby != $cur_u)
 		{
 			$shared = $bm->meta("shared");
-			$ol = new object_list(array(
-				"oid" => $shared,
-				"parent" => $pt,
-				"class_id" => array(CL_MENU, CL_EXTLINK),
-			));
-			foreach($ol->arr() as $o)
+			if(count($shared))
 			{
-				foreach($o->path() as $po)
-				{
-					$pids[$po->id()] = $po->id();
-				}
-				$conn = $arr["obj_inst"]->connections_from(array(
-					"type" => "RELTYPE_SHOW_SHARED",
-					"to.oid" => $pids,
+				$ol = new object_list(array(
+					"oid" => $shared,
+					"parent" => $pt,
+					"class_id" => array(CL_MENU, CL_EXTLINK),
 				));
-				$checked = 0;
-				if(count($conn))
+				foreach($ol->arr() as $o)
 				{
-					$checked = 1;
+					foreach($o->path() as $po)
+					{
+						$pids[$po->id()] = $po->id();
+					}
+					$conn = $arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_SHOW_SHARED",
+						"to.oid" => $pids,
+					));
+					$checked = 0;
+					if(count($conn))
+					{
+						$checked = 1;
+					}
+					$t->define_data(array(
+						"display" => html::checkbox(array(
+							"name" => "show_shared[".$o->id()."]",
+							"value" => 1,
+							"checked" => $checked,
+						)),
+						"icon" => html::img(array(
+							'url' => icons::get_icon_url($o->class_id())
+						)),
+						"name" => html::obj_change_url($o->id(),$o->name()),
+						"user" => $bm->createdby(),
+					));
 				}
-				$t->define_data(array(
-					"display" => html::checkbox(array(
-						"name" => "show_shared[".$o->id()."]",
-						"value" => 1,
-						"checked" => $checked,
-					)),
-					"icon" => html::img(array(
-						'url' => icons::get_icon_url($o->class_id())
-					)),
-					"name" => html::obj_change_url($o->id(),$o->name()),
-					"user" => $bm->createdby(),
-				));
 			}
 		}
 		
@@ -830,11 +836,14 @@ class user_bookmarks extends class_base
 		elseif($pt > 0 && $bm && $bm->class_id() == CL_USER_BOOKMARKS && $bm->createdby != $cur_u)
 		{
 			$shared = $bm->meta("shared");
-			$ol = new object_list(array(
-				"oid" => $shared,
-				"parent" => $pt,
-				"class_id" => array(CL_MENU, CL_EXTLINK),
-			));
+			if(count($shared))
+			{
+				$ol = new object_list(array(
+					"oid" => $shared,
+					"parent" => $pt,
+					"class_id" => array(CL_MENU, CL_EXTLINK),
+				));
+			}
 		}
 		if($ol)
 		{
@@ -1262,59 +1271,68 @@ class user_bookmarks extends class_base
 				$data[$o->id()] = $o->id();
 			}
 		}
-		$ol2 = new object_list(array(
-			"oid" => array_keys($data),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "objects.jrk"
-		));
-		foreach($ol2->arr() as $o)
+		if(count($data))
 		{
-			if($olids[$o->id()])
-			{
-				$ol2->remove($o->id());
-			}
-			else
-			{
-				$path = $o->path();
-				foreach($path as $po)
-				{
-					if($po->class_id() == CL_USER_BOOKMARKS)
-					{
-						$pbms[$o->id()] = $po->meta("shared");
-						if($po->id() == $bm->id())
-						{
-							$ol2->remove($o->id());
-						}
-					}
-				}
-			}
-		}
-		if($ol)
-		{
-			$ol->add($ol2);
-		}
-		else
-		{
-			$ol = $ol2;
-		}
-		$olids = $ol->ids();
-		foreach($ol->arr() as $o)
-		{
-			$ot = new object_tree(array(
-				"parent" => $o->id(),
+			$ol2 = new object_list(array(
+				"oid" => array_keys($data),
 				"lang_id" => array(),
 				"site_id" => array(),
 				"sort_by" => "objects.jrk"
 			));
-			$sol = $ot->to_list();
-			foreach($sol->arr() as $so)
+			foreach($ol2->arr() as $o)
 			{
-				if(!$olids[$so->id()] && $pbms[$o->id()][$so->id()])
+				if($olids[$o->id()])
 				{
-					$ol->add($so->id());
+					$ol2->remove($o->id());
+				}
+				else
+				{
+					$path = $o->path();
+					foreach($path as $po)
+					{
+						if($po->class_id() == CL_USER_BOOKMARKS)
+						{
+							$pbms[$o->id()] = $po->meta("shared");
+							if($po->id() == $bm->id())
+							{
+								$ol2->remove($o->id());
+							}
+						}
+					}
 				}
 			}
+			if($ol)
+			{
+				$ol->add($ol2);
+			}
+			else
+			{
+				$ol = $ol2;
+			}
+			$olids = $ol->ids();
+			foreach($ol->arr() as $o)
+			{
+				$ot = new object_tree(array(
+					"parent" => $o->id(),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"sort_by" => "objects.jrk"
+				));
+				$sol = $ot->to_list();
+				foreach($sol->arr() as $so)
+				{
+					if(!$olids[$so->id()] && $pbms[$o->id()][$so->id()])
+					{
+						$ol->add($so->id());
+					}
+				}
+			}
+		}
+		if(!$ol)
+		{
+			$ol = new object_list(array(
+				"oid" => -1
+			));
 		}
 		return $ol;
 	}
