@@ -2604,6 +2604,7 @@ class crm_company extends class_base
 
 			case "bill_s_cust":
 			case "bill_s_bill_no":
+			case "bill_s_bill_to":
 				$data['value'] = $arr['request'][$data["name"]];
 				break;
 
@@ -4114,6 +4115,7 @@ class crm_company extends class_base
 		{
 			$arr["args"]["bill_s_cust"] = $arr["request"]["bill_s_cust"];
 			$arr["args"]["bill_s_bill_no"] = $arr["request"]["bill_s_bill_no"];
+			$arr["args"]["bill_s_bill_to"] = $arr["request"]["bill_s_bill_to"];
 			$arr["args"]["bill_s_from"] = $arr["request"]["bill_s_from"];
 			$arr["args"]["bill_s_to"] = $arr["request"]["bill_s_to"];
 			$arr["args"]["bill_s_client_mgr"] = $arr["request"]["bill_s_client_mgr"];
