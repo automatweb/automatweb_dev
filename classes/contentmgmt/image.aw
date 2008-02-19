@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.1 2008/02/16 14:11:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.2 2008/02/19 14:41:02 sander Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1588,6 +1588,7 @@ class image extends class_base
 		$im = $this->get_image_by_id($id);
 		$imo = obj($id);
 		$this->read_any_template("show_big.tpl");
+		$this->lc_load("image","lc_image");
 		lc_site_load("image", &$this);
 		if ($this->can("view", $imo->prop("big_flash")))
 		{
