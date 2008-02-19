@@ -148,7 +148,7 @@ class popup_search extends aw_template
 		{
 			$tmp["value"] = html::select(array(
 				"name" => $arr["property"]["name"],
-				"options" => array("" => "--Vali--") + $options,
+				"options" => array("" => t("--Vali--")) + $options,
 				"selected" => $sel,
 				"multiple" => $arr["property"]["multiple"]
 			));
@@ -475,7 +475,7 @@ class popup_search extends aw_template
 		$htmlc->add_property(array(
 			"name" => "s[submit]",
 			"type" => "submit",
-			"value" => "Otsi",
+			"value" => t("Otsi"),
 			"caption" => t("Otsi")
 		));
 		$data = array(
@@ -693,6 +693,7 @@ class popup_search extends aw_template
 
 		$t->sort_by();
 		$this->vars(array(
+			"select_text" => t("Vali"),
 			"table" => $t->draw(),
 			"reforb" => $this->mk_reforb("final_submit", array(
 				"id" => $arr["id"],
