@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.29 2008/02/18 13:40:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.30 2008/02/19 08:33:36 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -389,7 +389,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			"eur_url" => aw_url_change_var("set_currency", "EUR"),
 			"pound_url" => aw_url_change_var("set_currency", "GBP"),
 			"usd_url" => aw_url_change_var("set_currency", "USD"),
-			"eekurl" => aw_url_change_var("set_currency", "EEK"),
+			"eek_url" => aw_url_change_var("set_currency", "EEK"),
 			"eur_sel" => $currency == "EUR" ? "SELECTED" : "",
 			"pound_sel" => $currency == "GBP" ? "SELECTED" : "",
 			"usd_sel" => $currency == "USD" ? "SELECTED" : "",
