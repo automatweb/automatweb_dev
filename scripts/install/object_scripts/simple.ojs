@@ -73,7 +73,7 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 				$langs = obj { class_id=CL_MENU, parent=${mn_conf}, name="Keeled", type=MN_CLIENT, status=STAT_ACTIVE }
 
 				$dokforms = obj { class_id=CL_MENU, parent=${mn_conf}, name="Seadete vormid", type=MN_CLIENT, status=STAT_ACTIVE }
-					$doc_conf_form = obj { class_id=CL_CFGFORM, parent=${dokforms}, name="Dokument", subclass=CL_DOCUMENT, classinfo_fixed_toolbar=1 }
+					$doc_conf_form = obj { class_id=CL_CFGFORM, parent=${dokforms}, name="Dokument", subclass=CL_DOCUMENT, classinfo_fixed_toolbar=0 }
 
 				$doktpl = obj { class_id=CL_MENU, parent=${mn_conf}, name="Dokumendi templiidid", type=MN_CLIENT, status=STAT_ACTIVE }
 					obj { class_id=CL_CONFIG_AW_DOCUMENT_TEMPLATE, parent=${doktpl}, name="Tavaline pikk dokument", t_name="Tavaline pikk dokument", type=2, filename="plain.tpl", status=STAT_ACTIVE }
