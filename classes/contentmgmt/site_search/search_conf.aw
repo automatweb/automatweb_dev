@@ -110,7 +110,7 @@ class search_conf extends aw_template
 		static $m;
 		if (!$m)
 		{
-			$m = get_instance("old_search_model");
+			$m = get_instance("contentmgmt/site_search/old_search_model");
 		}
 		return $m->get_search_list(&$default);
 	}
@@ -1023,7 +1023,7 @@ class search_conf extends aw_template
 		static $m;
 		if (!$m)
 		{
-			$m = get_instance("old_search_model");
+			$m = get_instance("contentmgmt/site_search/old_search_model");
 		}
 		return $m->get_groups($no_strip);
 	}

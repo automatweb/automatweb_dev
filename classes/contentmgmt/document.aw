@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.2 2008/02/17 21:59:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.3 2008/02/19 19:47:35 kristo Exp $
 // document.aw - Dokumentide haldus. 
 /*
 @classinfo  maintainer=kristo
@@ -1959,7 +1959,7 @@ if (is_object($docobj))
 			$ss = "";
 		};
 
-		$sc = get_instance("search_conf");
+		$sc = get_instance("contentmgmt/site_search/search_conf");
 		$search_groups = $sc->get_groups();
 
 		if ($search_groups[$parent]["search_form"])
