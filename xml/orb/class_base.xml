@@ -4,6 +4,7 @@
 		<action name="new" all_args="1">
 			<function name="new_change">
 				<arguments>
+					<required name="class" />
 					<optional name="parent" type="int" acl="add" />
 					<optional name="period" />
 					<optional name="alias_to" />

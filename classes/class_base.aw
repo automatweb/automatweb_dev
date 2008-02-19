@@ -136,9 +136,21 @@ class class_base extends aw_template
 		$this->id = "";
 		$this->new = 1;
 		$this->obj_inst = new object();
+
+		if ("menu" !== $arr["class"])
+		{
+			if (class_index::is_extension_of($arr["class"], "class_base"))
+			{
+				$clid = aw_ini_get("class_lut." . $arr["class"]);
+				$this->obj_inst->set_class_id($clid);
+			}
+			else
+			{
+				throw new aw_exception("Invalid class for new object.");
+			}
+		}
+
 		$this->reltype = isset($arr["reltype"]) ? $arr["reltype"] : "";
-
-
 	}
 
 	function load_storage_object($arr)
@@ -158,6 +170,7 @@ class class_base extends aw_template
 
 		@attrib name=new params=name all_args="1"
 
+		@param class required
 		@param parent optional type=int acl="add"
 		@param period optional
 		@param alias_to optional
@@ -3897,7 +3910,7 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-			
+
 			// XXX: create a VCL component out of this
 			// would be nice if one VCL component could handle multiple property types
 			if (($type == "date_select") || ($type == "datetime_select"))
@@ -5973,7 +5986,7 @@ class class_base extends aw_template
 				$if_clause = "if(!f.".$status_variable.".checked)";
 				$all_trans_status_value = ($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1;
 			}
-			
+
 			$function_check = "
 			function el_exists(id)
 			{
@@ -5999,10 +6012,10 @@ class class_base extends aw_template
 						{
 							f.all_trans_status.value = ".$all_trans_status_value.";
 						}
-					}				
+					}
 				}
 			}
-			
+
 			aw_submit_handler = check;";
 			return $function_check;
 		}
