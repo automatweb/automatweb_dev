@@ -19,6 +19,8 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 							obj { class_id=CL_MENU, parent=${work}, name="Lisa Kaust", jrk="4", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/new", meta.pm_url_admin=1, target=1 }
 							obj { class_id=CL_MENU, parent=${work}, name="Muuda Kausta", jrk="5", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/change", meta.pm_url_admin=1, target=1 }
 
+							obj { class_id=CL_MENU, parent=${work}, name="Ava aktiivne kaust", jrk="6", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/get_menu_open", meta.pm_url_admin=1, target=1 }
+
 						$me = obj { class_id=CL_MENU, parent=${logged_admins}, jrk="2", name="Minu tegevused", status=STAT_ACTIVE, type=MN_CLIENT }
 							obj { class_id=CL_MENU, parent=${me}, name="Muuda Parooli", jrk="1", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/change_pwd" }
 							obj { class_id=CL_MENU, parent=${me}, name="Logi v&auml;lja", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/logout"}
@@ -38,6 +40,8 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 
 							obj { class_id=CL_MENU, parent=${e_work}, name="Lisa Kaust", jrk="4", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/new", meta.pm_url_admin=1, target=1 }
 							obj { class_id=CL_MENU, parent=${e_work}, name="Muuda Kausta", jrk="5", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/change", meta.pm_url_admin=1, target=1 }
+
+							obj { class_id=CL_MENU, parent=${e_work}, name="Ava aktiivne kaust", jrk="6", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/get_menu_open", meta.pm_url_admin=1, target=1 }
 
 						$e_me = obj { class_id=CL_MENU, parent=${logged_editors}, jrk="2", name="Minu tegevused", status=STAT_ACTIVE, type=MN_CLIENT }
 							obj { class_id=CL_MENU, parent=${e_me}, name="Muuda Parooli", jrk="1", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/change_pwd"}
