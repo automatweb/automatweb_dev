@@ -259,6 +259,9 @@ function init_config($arr)
 //		result: 0.005 - too small to measure correctly
 	}
 
+//selle peab ikka igaltpoolt uuesti saama, muidu ei saa sisevõrgust ja mujalt ligi
+	$baseurl = isset($_SERVER["HTTP_HOST"]) ? "http://".$_SERVER["HTTP_HOST"] : "";
+	$GLOBALS["cfg"]["baseurl"] = $baseurl;
 
 	if (!$read_from_cache)
 	{
@@ -275,8 +278,8 @@ function init_config($arr)
 
 		// now, baseurl
 		// XXX: what about https urls though?
-		$baseurl = isset($_SERVER["HTTP_HOST"]) ? "http://".$_SERVER["HTTP_HOST"] : "";
-		$GLOBALS["cfg"]["baseurl"] = $baseurl;
+//		$baseurl = isset($_SERVER["HTTP_HOST"]) ? "http://".$_SERVER["HTTP_HOST"] : "";
+//		$GLOBALS["cfg"]["baseurl"] = $baseurl;
 		foreach($ini_files as $k => $file)
 		{
 			parse_config($file);
