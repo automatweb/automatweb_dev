@@ -27,6 +27,7 @@ class class_index
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);
 
 		$found_classes = self::_update("", "", $full_update);
+		self::update_one_file(aw_ini_get("basedir")."/class_index.aw", $found_classes, $full_update, "../");
 
 		if ($full_update)
 		{
@@ -67,7 +68,6 @@ class class_index
 		}
 
 		// scan all files in given class directory for php class definitions
-		$cl_handle = null; // class file resource handle
 		$found_classes = array(); // names of all found classes/ifaces
 
 		if ($handle = opendir($class_dir))
@@ -95,118 +95,7 @@ class class_index
 
 				if ("file" === @filetype($class_file) and strrchr($file, ".") === $ext and !in_array($class_file, $ignore_files))
 				{ // process only applicable code files
-					// parse code
-					$tmp = token_get_all(file_get_contents($class_file));
-					$type = "";
-
-					foreach ($tmp as $token)
-					{
-						if (T_CLASS === $token[0])
-						{
-							$type = "class";
-						}
-						elseif (T_INTERFACE === $token[0])
-						{
-							$type = "interface";
-						}
-						elseif (T_STRING === $token[0] and ("class" === $type or "interface" === $type))
-						{
-							if (is_resource($cl_handle) and !empty($class_dfn))
-							{ // write previous class/iface dfn file
-								fwrite($cl_handle, serialize($class_dfn));
-								fclose($cl_handle);
-							}
-
-							$modified = filemtime($class_file);
-							$class_path = $path . substr($file, 0, $ext_len);// relative path + file without extension
-							$class_name = $token[1];
-							$class_dfn_file = $index_dir . $class_name . $ext;
-
-							// look for redeclared classes
-							if (in_array($class_name, $found_classes) and "core/locale" !== substr($class_path, 0, 11))
-							{
-								if (!is_readable($class_dfn_file))
-								{
-									$e = new awex_clidx_filesys("Can't read redeclared class definition file '" . $class_dfn_file . "'.");
-									$e->clidx_cl_name = $class_name;
-									$e->clidx_file = $class_dfn_file;
-									$e->clidx_op = "is_readable";
-									throw $e;
-								}
-
-								$class_dfn = unserialize(file_get_contents($class_dfn_file));
-								$e = new awex_clidx_double_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
-								$e->clidx_cl_name = $class_name;
-								$e->clidx_path1 = $class_dfn["file"];
-								$e->clidx_path2 = $class_path;
-								throw $e;
-							}
-
-							if (!$full_update and is_readable($class_dfn_file))
-							{ // try to read old data for class/iface found
-								$class_dfn = unserialize(file_get_contents($class_dfn_file));
-							}
-							else
-							{
-								$class_dfn = array();
-							}
-
-							if (
-								!isset($class_dfn["last_update"]) or
-								false === $modified or
-								$class_dfn["last_update"] < $modified or
-								$class_dfn["file"] !== $class_path
-							)
-							{ // previous definition not found or class/iface modified
-								// new definition
-								$class_dfn = array(
-									"file" => $class_path,
-									"clidx_version" => 4, // to comply with changes to class index format
-									"last_update" => $time,
-									"type" => $type
-								);
-
-								// open index file for this class/iface
-								$cl_handle = @fopen($class_dfn_file, "w");
-
-								if (false === $cl_handle)
-								{
-									$e = new awex_clidx_filesys("Unable to update class index for '" . $file . "'.");
-									$e->clidx_cl_name = $class_name;
-									$e->clidx_file = $class_dfn_file;
-									$e->clidx_op = "fopen";
-									throw $e;
-								}
-							}
-							else
-							{
-								$class_dfn = array();
-							}
-
-							$found_classes[] = $class_name;
-							$type = "";
-						}
-						elseif (T_EXTENDS === $token[0])
-						{
-							$type = "extends";
-						}
-						elseif (T_STRING === $token[0] and "extends" === $type and !empty($class_dfn))
-						{ // 'extends' always comes right after class name therefore variables are still set.
-							$class_parent = $token[1];
-							$class_dfn["extends"] = $class_parent;
-							$type = "";
-						}
-						elseif (T_IMPLEMENTS === $token[0])
-						{
-							$type = "implements";
-						}
-						elseif (T_STRING === $token[0] and "implements" === $type and !empty($class_dfn))
-						{ // 'implements' always comes right after class name therefore variables are still set.
-							$interface = $token[1];
-							$class_dfn["implements"] = $interface;
-							$type = "";
-						}
-					}
+					self::update_one_file($class_file, &$found_classes, $full_update, $path);
 				}
 				elseif ("dir" === @filetype($class_file) and !in_array($file, $non_dirs))
 				{
@@ -224,13 +113,144 @@ class class_index
 			throw $e;
 		}
 
+		return $found_classes;
+	}
+
+	private static function update_one_file($class_file, &$found_classes, $full_update, $path)
+	{
+		$time = time();
+		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
+		$ext = aw_ini_get("ext");
+		if (empty($ext))
+		{
+			$ext_len = self::CL_NAME_MAXLEN;
+		}
+		else
+		{
+			$ext = "." . $ext;
+			$ext_len = - strlen($ext);
+		}
+
+		$cl_handle = null; // class file resource handle
+		// parse code
+		$tmp = token_get_all(file_get_contents($class_file));
+		$type = "";
+
+		foreach ($tmp as $token)
+		{
+			if (T_CLASS === $token[0])
+			{
+				$type = "class";
+			}
+			elseif (T_INTERFACE === $token[0])
+			{
+				$type = "interface";
+			}
+			else
+			if (T_STRING === $token[0] and ("class" === $type or "interface" === $type))
+			{
+				if (is_resource($cl_handle) and !empty($class_dfn))
+				{ // write previous class/iface dfn file
+					fwrite($cl_handle, serialize($class_dfn));
+					fclose($cl_handle);
+				}
+
+				$modified = filemtime($class_file);
+				$class_path = $path . substr(basename($class_file), 0, $ext_len);// relative path + file without extension
+				$class_name = $token[1];
+				$class_dfn_file = $index_dir . $class_name . $ext;
+
+				// look for redeclared classes
+				if (in_array($class_name, $found_classes) and "core/locale" !== substr($class_path, 0, 11))
+				{
+					if (!is_readable($class_dfn_file))
+					{
+						$e = new awex_clidx_filesys("Can't read redeclared class definition file '" . $class_dfn_file . "'.");
+						$e->clidx_cl_name = $class_name;
+						$e->clidx_file = $class_dfn_file;
+						$e->clidx_op = "is_readable";
+						throw $e;
+					}
+
+					$class_dfn = unserialize(file_get_contents($class_dfn_file));
+					$e = new awex_clidx_double_dfn("Duplicate definition of '" . $class_name . "' in '" . $class_dfn["file"] . "' and '" . $class_path . "'.");
+					$e->clidx_cl_name = $class_name;
+					$e->clidx_path1 = $class_dfn["file"];
+					$e->clidx_path2 = $class_path;
+					throw $e;
+				}
+
+				if (!$full_update and is_readable($class_dfn_file))
+				{ // try to read old data for class/iface found
+					$class_dfn = unserialize(file_get_contents($class_dfn_file));
+				}
+				else
+				{
+					$class_dfn = array();
+				}
+
+				if (
+					!isset($class_dfn["last_update"]) or
+					false === $modified or
+					$class_dfn["last_update"] < $modified or
+					$class_dfn["file"] !== $class_path
+				)
+				{ // previous definition not found or class/iface modified
+					// new definition
+					$class_dfn = array(
+						"file" => $class_path,
+						"clidx_version" => 4, // to comply with changes to class index format
+						"last_update" => $time,
+						"type" => $type
+					);
+
+					// open index file for this class/iface
+					$cl_handle = @fopen($class_dfn_file, "w");
+
+					if (false === $cl_handle)
+					{
+						$e = new awex_clidx_filesys("Unable to update class index for '" . $file . "'.");
+						$e->clidx_cl_name = $class_name;
+						$e->clidx_file = $class_dfn_file;
+						$e->clidx_op = "fopen";
+						throw $e;
+					}
+				}
+				else
+				{
+					$class_dfn = array();
+				}
+
+				$found_classes[] = $class_name;
+				$type = "";
+			}
+			elseif (T_EXTENDS === $token[0])
+			{
+				$type = "extends";
+			}
+			elseif (T_STRING === $token[0] and "extends" === $type and !empty($class_dfn))
+			{ // 'extends' always comes right after class name therefore variables are still set.
+				$class_parent = $token[1];
+				$class_dfn["extends"] = $class_parent;
+				$type = "";
+			}
+			elseif (T_IMPLEMENTS === $token[0])
+			{
+				$type = "implements";
+			}
+			elseif (T_STRING === $token[0] and "implements" === $type and !empty($class_dfn))
+			{ // 'implements' always comes right after class name therefore variables are still set.
+				$interface = $token[1];
+				$class_dfn["implements"] = $interface;
+				$type = "";
+			}
+		}
+
 		if (is_resource($cl_handle) and !empty($class_dfn))
 		{ // write last class dfn file
 			fwrite($cl_handle, serialize($class_dfn));
 			fclose($cl_handle);
 		}
-
-		return $found_classes;
 	}
 
 	/**
