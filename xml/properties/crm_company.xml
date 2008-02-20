@@ -16,7 +16,6 @@
             <group>general_sub</group>
             <field>jrk</field>
             <type>textbox</type>
-            <display>none</display>
             <caption>Jrk</caption>
       </property>
       <property>

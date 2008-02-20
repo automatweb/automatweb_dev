@@ -20,7 +20,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
 
-	@property jrk field=jrk type=textbox display=none group=general_sub
+	@property jrk field=jrk type=textbox group=general_sub
 	@caption Jrk
 
 	@property status field=status type=checkbox display=none default=2 group=general_sub
