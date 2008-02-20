@@ -2880,9 +2880,10 @@ class join_site extends class_base
 	{
 		$jms = $arr["obj"]->meta("jm_texts");
 
-		$from = $jms[aw_global_get("lang_id")]["from"];
-		$subj = $jms[aw_global_get("lang_id")]["subj"];
-		$text = $jms[aw_global_get("lang_id")]["text"];
+		$lid = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+		$from = $jms[$lid]["from"];
+		$subj = $jms[$lid]["subj"];
+		$text = $jms[$lid]["text"];
 
 		$us = get_instance("users");
 		$cp = $us->get_change_pwd_hash_link($arr["uid"]);
