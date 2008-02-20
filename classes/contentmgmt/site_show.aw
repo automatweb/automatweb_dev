@@ -1402,6 +1402,7 @@ class site_show extends class_base
 			$this->read_template("main_only_document_content.tpl");
 			$this->vars(array(
 				"doc_content" => $docc,
+				"charset" => aw_global_get("charset")
 			));
 			$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
 			return $this->parse();

@@ -438,7 +438,18 @@ class languages extends aw_template
 			$LC = "et";
 		}
 		aw_global_set("LC", $LC);
-		aw_global_set("charset",$la["charset"]);
+
+                // if parallel trans is on, then read charset from trans lang
+		if (aw_ini_get("user_interface.full_content_trans") && aw_global_get("ct_lang_id") != $lang_id)
+		{
+			$t_la = $this->fetch(aw_global_get("ct_lang_id"));
+			aw_global_set("charset",$t_la["charset"]);
+		}
+		else
+		{
+			aw_global_set("charset",$la["charset"]);
+		}
+
 		// oh yeah, we should only overwrite admin_lang_lc if it is not set already!
 		if (true || aw_global_get("admin_lang_lc") == "")
 		{
