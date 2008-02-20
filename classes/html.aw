@@ -707,8 +707,7 @@ class html extends aw_template
 		{
 			$name = $args["name"];
 		}
-
-		return $selector->gen_edit_form($name, $val);
+		return $selector->gen_edit_form($name, $val,false,false,false,false,true);
 	}
 
 	/**Date & time selector

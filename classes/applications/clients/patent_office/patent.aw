@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.81 2007/11/23 10:41:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.82 2008/02/20 14:02:27 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1471,14 +1471,14 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		}
 		if($sz[0] > 200)
 		{
-			$sz[1] = ($sz[1]/($sz[0]/200)) % 201;
+			$sz[1] = ($sz[1]/($sz[0]/200)) % 200001;
 			$sz[0] = 200;
 		}
-		if($sz[1] > 200)
-		{
-			$sz[0] = ($sz[0]/($sz[1]/200)) % 201;
-			$sz[1] = 200;
-		}
+//		if($sz[1] > 200)
+//		{
+//			$sz[0] = ($sz[0]/($sz[1]/200)) % 200001;
+//			$sz[1] = 200;
+//		}
 		$ret =  $image_inst->make_img_tag_wl($oid, "", "" , array(
 				"height" => $sz[1],
 				"width" => $sz[0],
