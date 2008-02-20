@@ -323,7 +323,7 @@ class questionnaire extends class_base
 
 		$o = new object($arr["id"]);
 		$i = get_instance(CL_IMAGE);
-		$this->read_template("show.tpl");
+		$this->read_template("questionnaire.tpl");
 
 		if($_GET["qid"] == "end")
 		{
