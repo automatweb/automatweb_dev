@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.226 2008/02/19 13:39:12 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.227 2008/02/20 10:48:32 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -472,6 +472,22 @@ class menu extends class_base implements main_subtemplate_handler
 		$this->trans_props = array(
 			"name","alias", "link","keywords","description","page_title"
 		);
+	}
+
+	/** Generate a form for adding or changing an object 	 
+		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa" 	 
+	**/ 	 
+	function new_change($args) 	 
+	{ 	 
+		return $this->change($args); 	 
+	} 	 
+	  	 
+	/** 	 
+		@attrib name=change params=name all_args="1" is_public="1" caption="Muuda" 	 
+	**/ 	 
+	function change($args = array()) 	 
+	{ 	 
+		return parent::change($args); 	 
 	}
 
 	function get_property($arr)
