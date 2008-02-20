@@ -84,7 +84,7 @@ class questionnaire extends class_base
 	function questionnaire()
 	{
 		$this->init(array(
-			"tpldir" => "questionnaire",
+			"tpldir" => "applications/questionary/questionnaire",
 			"clid" => CL_QUESTIONNAIRE
 		));
 	}
@@ -323,7 +323,7 @@ class questionnaire extends class_base
 
 		$o = new object($arr["id"]);
 		$i = get_instance(CL_IMAGE);
-		$this->read_template("questionnaire.tpl");
+		$this->read_template("show.tpl");
 
 		if($_GET["qid"] == "end")
 		{
@@ -483,6 +483,7 @@ class questionnaire extends class_base
 			else
 			{
 				$a_obj = obj($_POST["answer"]);
+				$correct = $a_obj->prop("correct");
 				$acomment = $correct ? t("Õige!<br>") : t("Vale!<br>");
 				switch($dsply_acomment)
 				{
