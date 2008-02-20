@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.83 2008/02/13 00:16:19 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.84 2008/02/20 23:53:47 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -10,38 +10,38 @@
 @default field=meta
 @default method=serialize
 
-@property base_url type=textbox
-@caption Toodete csv failide baasaadress
+	@property base_url type=textbox
+	@caption Toodete csv failide baasaadress
 
-@property prod_folder type=relpicker reltype=RELTYPE_FOLDER
-@caption Toodete kataloog
+	@property prod_folder type=relpicker reltype=RELTYPE_FOLDER
+	@caption Toodete kataloog
 
-@property shop_product_config_form type=relpicker reltype=RELTYPE_SHOP_PRODUCT_CONFIG_FORM
-@caption Lao toote seadete vorm
+	@property shop_product_config_form type=relpicker reltype=RELTYPE_SHOP_PRODUCT_CONFIG_FORM
+	@caption Lao toote seadete vorm
 
-@property images_folder type=textbox
-@caption Serveri kaust kuhu pildid salvestatakse
+	@property images_folder type=textbox
+	@caption Serveri kaust kuhu pildid salvestatakse
 
-@property files_to_import type=text store=no
-@caption Imporditavad failid
+	@property files_to_import type=text store=no
+	@caption Imporditavad failid
 
-@property do_i type=checkbox ch_value=1
-@caption Teosta import
+	@property do_i type=checkbox ch_value=1
+	@caption Teosta import
 
-@property do_pict_i type=checkbox ch_value=1
-@caption Teosta piltide import
+	@property do_pict_i type=checkbox ch_value=1
+	@caption Teosta piltide import
 
-@property force_full_update type=checkbox ch_value=1 store=no
-@caption Uuenda k&otilde;ikide toodete piltide ja kategooriate v&auml;ljad
+	@property force_full_update type=checkbox ch_value=1 store=no
+	@caption Uuenda k&otilde;ikide toodete piltide ja kategooriate v&auml;ljad
 
-@property do_safe_update type=checkbox ch_value=1 store=no
-@caption &Auml;ra uuenda pilte ja kategooriaid
+	@property do_safe_update type=checkbox ch_value=1 store=no
+	@caption &Auml;ra uuenda pilte ja kategooriaid
 
-@property last_import_log type=text store=no
-@caption Viimase impordi logi
+	@property last_import_log type=text store=no
+	@caption Viimase impordi logi
 
-@property products_count type=text store=no
-@caption Toodete arv
+	@property products_count type=text store=no
+	@caption Toodete arv
 
 @groupinfo imported_products caption="Imporditud tooted"
 
@@ -95,11 +95,21 @@
 
 	@groupinfo files_import caption="Imporditavad failid" parent=files
 
-		@property fnames type=textarea rows=30 cols=80 group=files_import
+		@layout hbox_files_import type=hbox width=20%:80% group=files_import
+
+			@layout vbox_files_import_filenames type=vbox closeable=1 area_caption=Toodete&nbsp;otsing group=files_import parent=hbox_files_import
+
+		@property fnames type=textarea rows=15 cols=30 group=files_import parent=vbox_files_import_filenames
 		@caption Failinimed
 
-		@property first_site_to_search_images type=select group=files_import field=meta method=serialize
+
+			@layout vbox_files_import_sites type=vbox group=files_import parent=hbox_files_import
+
+		@property first_site_to_search_images type=select field=meta method=serialize group=files_import parent=vbox_files_import_sites
 		@caption Esimene leht kust pilte otsitakse
+
+		@property files_import_sites_order type=table rows=5 cols=30 field=meta method=serialize group=files_import parent=vbox_files_import_sites captionside=top
+		@caption Saitide j&auml;rjekord
 
 	@groupinfo files_order caption="Failide j&auml;rjekord" parent=files
 
@@ -1307,6 +1317,53 @@ class otto_import extends class_base
 			return PROP_OK;
 		}
 		return PROP_IGNORE;
+	}
+
+	function _get_files_import_sites_order($arr)
+	{
+		$table = &$arr['prop']['vcl_inst'];
+		$table->set_sortable(false);
+
+		$table->define_field(array(
+			'name' => 'order',
+			'caption' => t('Jrk'),
+			'align' => 'center',
+			'width' => '10%'
+		));
+		$table->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi'),
+		));
+		$sites = $arr['obj_inst']->meta("files_import_sites_order");
+
+/*
+		$sites = array(
+			"heine" => 1,
+			"otto" => 2,
+			"schwab" => 3,
+			"albamoda" => 4,
+			"baur" => 5
+		);
+*/
+		foreach ($sites as $key => $value)
+		{
+			$table->define_data(array(
+				'order' => html::textbox(array(
+					'name' => "sites_order[".trim($key)."]",
+					'value' => $value,
+					'size' => 3
+				)),
+				'name' => $key
+			));
+		}
+		return PROP_OK;
+	}
+
+	function _set_files_import_sites_order($arr)
+	{
+		asort($arr['request']['sites_order']);
+		$arr['obj_inst']->set_meta("files_import_sites_order", $arr['request']['sites_order']);
+		return PROP_OK;
 	}
 
 	function _get_containers_toolbar($arr)
@@ -2541,7 +2598,7 @@ class otto_import extends class_base
 			{
 				continue;
 			}
-			echo "process pcode $pcode <br>\n";
+			echo "\n<br /><strong>[ process pcode $pcode ]</strong><br>\n";
 			flush();
 			
 			// BONPRIX:
@@ -2550,241 +2607,17 @@ class otto_import extends class_base
 				$this->bonprix_picture_import(array(
 					'pcode' => $pcode,
 					'import_obj' => $import_obj,
-					'start_time' => $start_time,
+					'start_time' => $start_time
 				));
 			}
 			else
 			{
-
-				$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
-
-				echo "-- Loading <a href=\"$url\">page</a> content <br>\n";
-				flush();
-				$html = $this->file_get_contents($url);
-				echo "-- Page content loaded, parsing ...<br>";
-				flush();
-				// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
-
-				if (strpos($html,"Leider konnten wir") !== false)
-				{ 
-					// read from baur.de
-					echo "-- Can't find an product for <b>$pcode</b> from otto.de, so searching from baur.de<br>\n";
-
-					$this->read_img_from_baur(array(
-						'pcode' => $pcode,
-						'import_obj' => $import_obj
-					));
-				}
-				else
-				{
-					$o_html = $html;
-
-					preg_match_all("/Javascript:gotoSearchArticle\(\'(.*)\'\);/imsU", $html, $mt, PREG_PATTERN_ORDER);
-					$urld = array();
-					foreach($mt[1] as $url)
-					{
-						$urld[$url] = $url;
-					}
-
-					foreach($urld as $url)
-					{
-						echo "-- Searching pictures from <a href=\"$url\">url</a> <br>\n";
-						$html = $this->file_get_contents($url);
-
-						if (!preg_match_all("/<img id=\"mainimage\" src=\"(.*)\.jpg\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
-						{
-							// if we can't find image from the product view, then this should try to search the image from the other sites:
-							echo "---- Let's try to search from the baur.de page: <br />\n";
-							$this->read_img_from_baur(array(
-								'pcode' => $pcode,
-								'import_obj' => $import_obj
-							));
-							break;
-						}
-
-						$f_imnr = NULL;
-
-
-						// we need that connecting picture:
-						$connection_image = '';
-						$pattern = "/<img width=.* title=.* src=\"http:\/\/image01\.otto\.de:80\/pool\/ov_formatg\/(.*)\.jpg\"/imsU";
-						if (preg_match($pattern, $html, $matches ))
-						{
-							$connection_image = $matches[1];
-							if (!empty($connection_image))
-							{
-								echo "-- [Connection image] ";
-								$image_ok = $this->get_image(array(
-									'source' => 'http://image01.otto.de:80/pool/formatb/'.$connection_image.'.jpg',
-									'format' => SMALL_PICTURE,
-									'otto_import' => $import_obj,
-									'debug' => true
-								));
-								if ($image_ok)
-								{
-
-									$image_ok = $this->get_image(array(
-										'source' => 'http://image01.otto.de:80/pool/formata/'.$connection_image.'.jpg',
-										'format' => BIG_PICTURE,
-										'otto_import' => $import_obj,
-										'debug' => true
-									));
-								}
-
-								if ($image_ok)
-								{
-									echo "<a href=\"http://image01.otto.de:80/pool/formatb/".$connection_image.".jpg\">small image</a> / ";
-									echo "<a href=\"http://image01.otto.de:80/pool/formata/".$connection_image.".jpg\">big image</a><br />\n";
-								}
-								else
-								{
-									echo "Couldn't save the connection image.<br />\n";
-								}
-							}
-						}
-
-						foreach($mt[1] as $idx => $img)
-						{
-							if (strpos($img, 'leer.gif') !== false )
-							{
-								echo "-- tundub, et sellele variandile pilti ei ole <br>\n";
-								continue;
-							}
-							$imnr = basename($img, ".jpg");
-
-							if (file_get_contents(str_replace($imnr, $imnr.'.jpg', $img)) === false)
-							{
-								echo "-- selle variandi pilti ei &otilde;nnestu k&auml;tte saada<br />\n";
-								continue;
-							}
-
-							echo "-- ".$imnr."<br>\n";
-							echo "-- image from product $pcode : ($t_imnr)<br />";
-							$q = "SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'";
-							$t_imnr = $this->db_fetch_field($q, "pcode");
-
-							if (!$f_imnr)
-							{
-								$f_imnr = $t_imnr.".jpg";
-							}
-
-							if (!$t_imnr)
-							{
-								echo "-- insert new image $imnr <br />\n";
-								flush();
-
-								$q = ("
-									INSERT INTO 
-										otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
-										values('$pcode','".$mt[2][$idx]."','$imnr', 1, '$connection_image')
-								");
-								$this->db_query($q);
-								$this->added_images[] = $mt[2][$idx];
-							}
-							else
-							{
-								$this->db_query("
-									update
-										otto_prod_img
-									set
-										conn_img = '".$connection_image."'
-									where
-										imnr = '".$imnr."' and
-										nr = '".$mt[2][$idx]."' and
-										pcode = '".$pcode."'
-								");
-								echo "-- image $imnr for product $pcode is already in db<br />\n";
-								flush();
-							}
-
-							$image_ok = $this->get_image(array(
-								'source' => 'http://image01.otto.de:80/pool/formatb/'.$imnr.'.jpg',
-								'format' => SMALL_PICTURE,
-								'otto_import' => $import_obj,
-								'debug' => true
-							));
-							// download the big version of the image too:
-							$this->get_image(array(
-								'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
-								'format' => BIG_PICTURE,
-								'otto_import' => $import_obj,
-								'debug' => true
-							));
-							if ($image_ok)
-							{
-								// download the big version of the image too:
-								$this->get_image(array(
-									'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
-									'format' => BIG_PICTURE,
-									'otto_import' => $import_obj,
-									'debug' => true
-								));
-							}
-							else
-							{
-								/////
-								// some pictures are coming from different URL-s, so if we get 0 sized image ($image_ok === false)
-								// lets try some other places to get the image:
-								$image_ok = $this->get_image(array(
-									'source' => 'http://image01.otto.de/pool/ov_formatd/'.$imnr.'.jpg',
-									'format' => SMALL_PICTURE,
-									'otto_import' => $import_obj,
-									'debug' => true
-								));
-
-arr('---------------------------------------------------------------');
-var_dump($image_ok);
-echo '<br />http://image01.otto.de/pool/ov_formatd/'.$imnr.'.jpg';
-arr('---------------------------------------------------------------');
-
-								if ($image_ok)
-								{
-									// download the big version of the image too:
-									$this->get_image(array(
-										'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
-										'format' => BIG_PICTURE,
-										'otto_import' => $import_obj,
-										'debug' => true
-									));
-								}
-							}
-						}
-
-						// check for rundumanshiftph (flash)
-						if (strpos($html, "rundum_ansicht") !== false)
-						{
-							echo "[video import]";
-
-							$pattern = "/'".preg_quote("http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_DisplayProductInformation-SuperZoom3D;", "/").".*'/imsU";
-							preg_match_all($pattern, $html, $mt, PREG_PATTERN_ORDER);
-							$popup_url = str_replace("'", "", $mt[0][0].$f_imnr);
-							echo " - from <a href=\"".$popup_url."\">url</a>";
-
-							// get the rundum image number from the popup :(
-							$r_html = file_get_contents($popup_url);
-
-							// save rundum
-							// get rundum imnr from html
-							preg_match_all("/javascript:setnewRUA\('format360\/(.*)', \d+\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
-							$flash_file_names = $mt[1];
-							foreach ($flash_file_names as $flash_file_name)
-							{
-								$flash_file_url = "http://image01.otto.de:80/pool/format360/".$flash_file_name.".swf";
-								$video_download_result = $this->get_video(array(
-									'source' => $flash_file_url,
-									'otto_import' => $import_obj
-								));
-								if ($video_download_result !== false)
-								{
-									echo " | <a href='".$flash_file_url."'>".$flash_file_name."</a>";
-									$this->db_query("update otto_prod_img set video = '".addslashes(strip_tags($flash_file_name))."' where pcode = '".$pcode."'");
-								}
-							}
-							echo "<br /> \n";
-						}
-					}
-				}
-			} // if bonprix
+				$this->otto_picture_import(array(
+					'pcode' => $pcode,
+					'import_obj' => $import_obj,
+					'start_time' => $start_time
+				));
+			} 
 
 			$stat = fopen($this->cfg["site_basedir"]."/files/status.txt","w");
 		
@@ -4605,6 +4438,282 @@ arr('---------------------------------------------------------------');
 		return $ret;
 	}
 
+	function otto_picture_import($arr)
+	{
+		$sites = $arr['import_obj']->meta("files_import_sites_order");
+		$picture_found = false;
+		foreach ($sites as $site => $order)
+		{
+			switch ($site)
+			{
+				case "otto":
+					$picture_found = $this->read_img_from_otto($arr);
+					break;
+				case "heine":
+					$picture_found = $this->read_img_from_heine($arr);
+					break;
+				case "schwab":
+					$picture_found = $this->read_img_from_schwab($arr);
+					break;
+				case "albamoda":
+					$picture_found = $this->read_img_from_albamoda($arr);
+					break;
+				case "baur":
+					$picture_found = $this->read_img_from_baur($arr);
+					break;
+			}
+			if ($picture_found !== false)
+			{
+				break;
+			}
+		}
+	}
+
+	function read_img_from_otto($arr)
+	{
+		$pcode = $arr['pcode'];
+		$import_obj = $arr['import_obj'];
+		$start_time = $arr['start_time'];
+		
+
+		$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
+
+		echo "[ OTTO ] Loading <a href=\"$url\">page</a> content ... ";
+		flush();
+
+		$html = $this->file_get_contents($url);
+		echo "[ OK ]<br />\n";
+		flush();
+
+		// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
+
+		if (strpos($html,"Leider konnten wir") !== false)
+		{ 
+			echo "[ OTTO ] Can't find an product for <b>$pcode</b> from otto.de, return false<br>\n";
+			return false;
+		}
+		else
+		{
+			$o_html = $html;
+
+			preg_match_all("/Javascript:gotoSearchArticle\(\'(.*)\'\);/imsU", $html, $mt, PREG_PATTERN_ORDER);
+			$urld = array();
+			foreach($mt[1] as $url)
+			{
+				$urld[$url] = $url;
+			}
+
+			foreach($urld as $url)
+			{
+				echo "[ OTTO ] Searching pictures from <a href=\"$url\">url</a> <br />\n";
+				$html = $this->file_get_contents($url);
+
+				if (!preg_match_all("/<img id=\"mainimage\" src=\"(.*)\.jpg\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
+				{
+					echo "[ OTTO ] If we can't find image from otto.de product view, then return false <br />\n";
+/*
+	XXX
+	This is weird here actually - it breaked the loop previously, and now it should return false ... but 
+	let's consider the situation, where multiple products where found and the loop actually could look
+	through multiple products, then maybe from some next prodict it does find the images? 
+	But with previous functionality and and current one it just breaks the loop all together when it doesn't
+	find images ... I'll check back here later --dragut 19.02.2008
+*/
+					return false;
+				/*
+					$this->read_img_from_baur(array(
+						'pcode' => $pcode,
+						'import_obj' => $import_obj
+					));
+				
+					break;
+				*/
+				}
+
+				$f_imnr = NULL;
+
+
+				// we need that connecting picture:
+				$connection_image = '';
+				$pattern = "/<img width=.* title=.* src=\"http:\/\/image01\.otto\.de:80\/pool\/ov_formatg\/(.*)\.jpg\"/imsU";
+				if (preg_match($pattern, $html, $matches ))
+				{
+					$connection_image = $matches[1];
+					if (!empty($connection_image))
+					{
+						echo "-- [Connection image] ";
+						$image_ok = $this->get_image(array(
+							'source' => 'http://image01.otto.de:80/pool/formatb/'.$connection_image.'.jpg',
+							'format' => SMALL_PICTURE,
+							'otto_import' => $import_obj,
+							'debug' => true
+						));
+						if ($image_ok)
+						{
+
+							$image_ok = $this->get_image(array(
+								'source' => 'http://image01.otto.de:80/pool/formata/'.$connection_image.'.jpg',
+								'format' => BIG_PICTURE,
+								'otto_import' => $import_obj,
+								'debug' => true
+							));
+						}
+
+						if ($image_ok)
+						{
+							echo "<a href=\"http://image01.otto.de:80/pool/formatb/".$connection_image.".jpg\">small image</a> / ";
+							echo "<a href=\"http://image01.otto.de:80/pool/formata/".$connection_image.".jpg\">big image</a><br />\n";
+						}
+						else
+						{
+							echo "Couldn't save the connection image.<br />\n";
+						}
+					}
+				}
+
+				foreach($mt[1] as $idx => $img)
+				{
+					if (strpos($img, 'leer.gif') !== false )
+					{
+						echo "-- tundub, et sellele variandile pilti ei ole <br>\n";
+						continue;
+					}
+					$imnr = basename($img, ".jpg");
+
+					if (file_get_contents(str_replace($imnr, $imnr.'.jpg', $img)) === false)
+					{
+						echo "-- selle variandi pilti ei &otilde;nnestu k&auml;tte saada<br />\n";
+						continue;
+					}
+
+					echo "-- ".$imnr."<br>\n";
+					echo "-- image from product $pcode : ($t_imnr)<br />";
+					$q = "SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'";
+					$t_imnr = $this->db_fetch_field($q, "pcode");
+
+					if (!$f_imnr)
+					{
+						$f_imnr = $t_imnr.".jpg";
+					}
+
+					if (!$t_imnr)
+					{
+						echo "-- insert new image $imnr <br />\n";
+						flush();
+
+						$q = ("
+							INSERT INTO 
+								otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
+								values('$pcode','".$mt[2][$idx]."','$imnr', 1, '$connection_image')
+						");
+						$this->db_query($q);
+						$this->added_images[] = $mt[2][$idx];
+					}
+					else
+					{
+						$this->db_query("
+							update
+								otto_prod_img
+							set
+								conn_img = '".$connection_image."'
+							where
+								imnr = '".$imnr."' and
+								nr = '".$mt[2][$idx]."' and
+								pcode = '".$pcode."'
+						");
+						echo "-- image $imnr for product $pcode is already in db<br />\n";
+						flush();
+					}
+
+					$image_ok = $this->get_image(array(
+						'source' => 'http://image01.otto.de:80/pool/formatb/'.$imnr.'.jpg',
+						'format' => SMALL_PICTURE,
+						'otto_import' => $import_obj,
+						'debug' => true
+					));
+					// download the big version of the image too:
+					$this->get_image(array(
+						'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
+						'format' => BIG_PICTURE,
+						'otto_import' => $import_obj,
+						'debug' => true
+					));
+					if ($image_ok)
+					{
+						// download the big version of the image too:
+						$this->get_image(array(
+							'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
+							'format' => BIG_PICTURE,
+							'otto_import' => $import_obj,
+							'debug' => true
+						));
+					}
+					else
+					{
+						/////
+						// some pictures are coming from different URL-s, so if we get 0 sized image ($image_ok === false)
+						// lets try some other places to get the image:
+						$image_ok = $this->get_image(array(
+							'source' => 'http://image01.otto.de/pool/ov_formatd/'.$imnr.'.jpg',
+							'format' => SMALL_PICTURE,
+							'otto_import' => $import_obj,
+							'debug' => true
+						));
+
+arr('---------------------------------------------------------------');
+var_dump($image_ok);
+echo '<br />http://image01.otto.de/pool/ov_formatd/'.$imnr.'.jpg';
+arr('---------------------------------------------------------------');
+
+						if ($image_ok)
+						{
+							// download the big version of the image too:
+							$this->get_image(array(
+								'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
+								'format' => BIG_PICTURE,
+								'otto_import' => $import_obj,
+								'debug' => true
+							));
+						}
+					}
+				}
+
+				// check for rundumanshiftph (flash)
+				if (strpos($html, "rundum_ansicht") !== false)
+				{
+					echo "[video import]";
+
+					$pattern = "/'".preg_quote("http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_DisplayProductInformation-SuperZoom3D;", "/").".*'/imsU";
+					preg_match_all($pattern, $html, $mt, PREG_PATTERN_ORDER);
+					$popup_url = str_replace("'", "", $mt[0][0].$f_imnr);
+					echo " - from <a href=\"".$popup_url."\">url</a>";
+
+					// get the rundum image number from the popup :(
+					$r_html = file_get_contents($popup_url);
+
+					// save rundum
+					// get rundum imnr from html
+					preg_match_all("/javascript:setnewRUA\('format360\/(.*)', \d+\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
+					$flash_file_names = $mt[1];
+					foreach ($flash_file_names as $flash_file_name)
+					{
+						$flash_file_url = "http://image01.otto.de:80/pool/format360/".$flash_file_name.".swf";
+						$video_download_result = $this->get_video(array(
+							'source' => $flash_file_url,
+							'otto_import' => $import_obj
+						));
+						if ($video_download_result !== false)
+						{
+							echo " | <a href='".$flash_file_url."'>".$flash_file_name."</a>";
+							$this->db_query("update otto_prod_img set video = '".addslashes(strip_tags($flash_file_name))."' where pcode = '".$pcode."'");
+						}
+					}
+					echo "<br /> \n";
+				}
+			}
+		}
+		return true;
+	}
 
 	function read_img_from_baur($arr)
 	{
@@ -4623,11 +4732,15 @@ arr('---------------------------------------------------------------');
 //		if (strpos($fc, "leider keine Artikel gefunden") !== false)
 		if ( (strpos($fc, "search/topcontent/noresult_slogan.gif") !== false) || (strpos($fc, "Entschuldigung,<br>diese Seite konnte nicht gefunden werden.") !== false) || true) // xxx disable baur import for now
 		{
+		/*
 			echo "[ BAUR ] Can't find a product for <b>$pcode</b> from baur.de, so searching from schwab<br>\n";
 			return $this->read_img_from_schwab(array(
 				'pcode' => $pcode,
 				'import_obj' => $import_obj
 			));
+		*/
+			echo "[ BAUR ] Can't find a product for <b>$pcode</b> from baur.de, so return false<br>\n";
+			return false;
 			
 		}
 
@@ -4737,11 +4850,15 @@ arr('---------------------------------------------------------------');
 		echo "[ok]<br />\n";
 		if (strpos($fc, "Keine passenden Ergebnisse für:") !== false)
 		{
+		/*
 			echo "[ SCHWAB ] can't find a product for <b>$pcode</b> from schwab.de, so searching from albamoda<br>\n";
 			return $this->read_img_from_albamoda(array(
 				'pcode' => $pcode,
 				'import_obj' => $import_obj
 			));
+		*/
+			echo "[ SCHWAB ] can't find a product for <b>$pcode</b> from schwab.de, so returning false<br>\n";
+			return false;
 		}
 
 		// match prod urls
@@ -4840,6 +4957,7 @@ arr('---------------------------------------------------------------');
 			}
 */
 		}		
+		return true;
 	}
 
 	function read_img_from_albamoda($arr)
@@ -4854,17 +4972,13 @@ arr('---------------------------------------------------------------');
 		echo "[ok]<br />\n";
 		if (strpos($fc, "Es wurden leider keine Artikel") !== false)
 		{
-			echo "[ ALBAMODA ] can't find a product for <b>$pcode</b> from albamoda.de, so searching from heine<br>\n";
-			return $this->read_img_from_heine(array(
-				'pcode' => $pcode,
-				'import_obj' => $import_obj
-			));
+			echo "[ ALBAMODA ] can't find a product for code <b>$pcode</b> from albamoda.de, so return false<br>\n";
+			return false;
 		}
 
 		// match prod urls
 		preg_match_all("/displayART\('(.*)'\)/imsU", $fc, $mt, PREG_PATTERN_ORDER);
 		$pcs = array_unique($mt[1]);
-		//echo "got pcs as ".dbg::dump($pcs)."\n";
 
 		foreach($pcs as $prodref)
 		{
@@ -4911,116 +5025,166 @@ arr('---------------------------------------------------------------');
 				$this->added_images[] = $first_im;
 			}
 		}
+		return true;
 	}
 
 	function read_img_from_heine($arr)
 	{
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
+		$product_page_urls = array();
 
 		// no spaces in product code ! --dragut
 		$pcode = str_replace(" ", "", $pcode);
+
 		$url = "http://search.heine.de/Heine/Search.ff?query=".$pcode;
 
 		echo "[ HEINE ] Loading <a href=\"$url\">page</a> content ... ";
+		flush();
+
 		$fc = $this->file_get_contents($url);
-	
+		echo "[ok]<br />\n";
+		flush();
+
 		if (preg_match("/top\.location\.href\=\"(.*)\";/imsU", $fc, $mt))
 		{
 			$url = $mt[1];
-			echo "<br>[HEINE] redirecting to <a href='$url'>page</a><br>";
-
-			$fc = $this->file_get_contents($url);
-		}
-		
-		echo "[ok]<br />\n";
-
-		if (strpos($fc, "Diesen Artikel haben wir in unserem Online-Shop nicht gefunden.") !== false)
-		{
-			echo "[ HEINE ] Can't find product for code $pcode<br>";
-			echo "NO IMAGE FOUND FOR PCODE $pcode <br>\n";
-			$this->not_found_products[$pcode] = $pcode;
-/*
-			return $this->read_img_from_baur(array(
-				'pcode' => $pcode,
-				'import_obj' => $import_obj
-			));
-*/
-			flush();
-			return;
-		}
-
-	// xxx
-		$fc2 = $fc;
-
-		$patterns = array(
-			"/bild\[bildZahl\+\+\]\=\"(\d+).jpg\";/imsU",
-
-		);
-
-		// connection image ...
-		$connection_image = '';
-		if (preg_match("/ImageBundle = (\d+).jpg/", $fc, $mt))
-		{
-			$connection_image = $mt[1];
-			echo "connimage $connection_image";
-		}
-
-		foreach ($patterns as $pattern)
-		{
-			if (preg_match($pattern, $fc2, $mt))
-			{
-				break;
-			}
-		}
-
-		$first_im = $mt[1];
-
-		$image_ok = $this->get_image(array(
-			'source' => 'http://image01.otto.de/pool/format_hv_ds_b/'.$first_im.'.jpg',
-			'format' => 2,
-			'otto_import' => $import_obj,
-			'debug' => true
-		));
-		if ($image_ok)
-		{
-			// download the big version of the image too:
-			$this->get_image(array(
-				'source' => 'http://image01.otto.de/pool/format_hv_ds_a/'.$first_im.'.jpg',
-				'format' => 1,
-				'otto_import' => $import_obj,
-				'debug' => true
-			));
-		}
-
-		$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
-		if (!$imnr)
-		{
-			echo "[ HEINE ] insert new image $first_im <br>\n";
+			echo "[ HEINE ] getting redirect <a href='$url'>url</a> to product page ... ";
 			flush();
 
-			$q = ("
-				INSERT INTO 
-					otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
-					values('$pcode','1','$first_im', 5, '$connection_image')
-			");
-
-			$this->db_query($q);
-			$this->added_images[] = $first_im;
+		//	$fc = $this->file_get_contents($url);
+			$product_page_urls[] = $url;
+			echo "[ok]<br />\n";
+			flush();
 		}
 		else
 		{
-			$this->db_query("
-				update
-					otto_prod_img
-				set
-					conn_img = '".$connection_image."'
-				where
-					imnr = '".$first_im."' and
-					pcode = '".$pcode."'
-			");
-			echo "[ HEINE ] imagee ". $first_im ." for product ". $pcode ." is already in database<br />\n";
+			// v6imalik, et leiti mitu toodet, seega on meil neid k6iki vaja, et sealt pildid kokku otsida ...
+			$pattern = "/\"".preg_quote("http://www.heine.de/is-bin/INTERSHOP.enfinity/WFS/Heine-HeineDe-Site/de_DE/-/EUR/SH_ViewProduct-ArticleNo", "/").".*\"/imsU";
+			preg_match_all($pattern, $fc, $mt, PREG_PATTERN_ORDER);
+			foreach ($mt[0] as $url)
+			{
+				$url = str_replace("\"", "", $url);
+				$url = str_replace(" ", "%20", $url);
+				if ( array_search($url, $product_page_urls) === false )
+				{
+					echo "[ HEINE ] getting product page <a href='$url'>url</a> ... ";
+					$product_page_urls[] = $url;
+					echo "[ok]<br />\n";
+					flush();
+				}
+			}
 		}
+
+		$found_image = false;
+		foreach ($product_page_urls as $url)
+		{
+			$fc = $this->file_get_contents($url);
+
+			if (strpos($fc, "Sie sind auf der Suche nach etwas Besonderem?") !== false)
+			{
+				echo "[ HEINE ] Can't find product for code $pcode from page <a href=\"$url\">$url</a><br />\n";
+				flush();
+				continue;
+			}
+
+
+			// connection image ... xxx to fix!
+			$connection_image = '';
+			if (preg_match("/ImageBundle = (\d+).jpg/", $fc, $mt))
+			{
+				$connection_image = $mt[1];
+				echo "[ HEINE ] salvestan seose pildi $connection_image ";
+				echo "[ <a href=\"http://image01.otto.de/pool/format_hv_ds_b/".$connection_image.".jpg\">v&auml;ike</a> ";
+				echo "| <a href=\"http://image01.otto.de/pool/format_hv_ds_a/".$connection_image.".jpg\">suur</a> ]<br />\n";
+				$image_ok = $this->get_image(array(
+					'source' => 'http://image01.otto.de/pool/format_hv_ds_b/'.$connection_image.'.jpg',
+					'format' => 2,
+					'otto_import' => $import_obj,
+					'debug' => true
+				));
+				if ($image_ok)
+				{
+					// download the big version of the image too:
+					$this->get_image(array(
+						'source' => 'http://image01.otto.de/pool/format_hv_ds_a/'.$connection_image.'.jpg',
+						'format' => 1,
+						'otto_import' => $import_obj,
+						'debug' => true
+					));
+				}
+			}
+
+
+			$patterns = array(
+				"/bild\[bildZahl\+\+\]\=\"(\d+).jpg\";/imsU",
+			);
+
+			foreach ($patterns as $pattern)
+			{
+				if (preg_match($pattern, $fc, $mt))
+				{
+					break;
+				}
+			}
+
+			if (empty($mt))
+			{
+				continue;
+			}
+
+			$first_im = $mt[1];
+			echo "[ HEINE ] salvestan pildi $first_im [ <a href=\"http://image01.otto.de/pool/format_hv_ds_b/".$first_im.".jpg\">v&auml;ike</a> | <a href=\"http://image01.otto.de/pool/format_hv_ds_a/".$first_im.".jpg\">suur</a> ]<br />\n";
+			$image_ok = $this->get_image(array(
+				'source' => 'http://image01.otto.de/pool/format_hv_ds_b/'.$first_im.'.jpg',
+				'format' => 2,
+				'otto_import' => $import_obj,
+				'debug' => true
+			));
+			if ($image_ok)
+			{
+				// download the big version of the image too:
+				$this->get_image(array(
+					'source' => 'http://image01.otto.de/pool/format_hv_ds_a/'.$first_im.'.jpg',
+					'format' => 1,
+					'otto_import' => $import_obj,
+					'debug' => true
+				));
+			}
+
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
+			if (!$imnr)
+			{
+				echo "[ HEINE ] lisan uue pildi \"".$first_im."\" tootele \"".$pcode."\" piltide andmebaasi <br />\n";
+				flush();
+
+				$q = ("
+					INSERT INTO 
+						otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
+						values('$pcode','1','$first_im', 5, '$connection_image')
+				");
+
+				$this->db_query($q);
+				$this->added_images[] = $first_im;
+			}
+			else
+			{
+				$this->db_query("
+					update
+						otto_prod_img
+					set
+						conn_img = '".$connection_image."'
+					where
+						imnr = '".$first_im."' and
+						pcode = '".$pcode."'
+				");
+				echo "[ HEINE ] pilt \"". $first_im ."\" tootele \"". $pcode ."\" on piltide andmebaasis juba olemas <br />\n";
+			}
+			$found_image = true;
+		}
+
+		// if images has been found, it should return true, false othervise
+		return $found_image; 
 
 	}
 
