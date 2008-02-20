@@ -2167,7 +2167,7 @@ class join_site extends class_base
 					}
 					unset($prop["size"]);
 
-        	                        if ($breaks[$clid][$oldn])
+        	                        if (is_array($breaks[$clid]) && $breaks[$clid][$oldn])
 	                                {
                                 	        foreach(safe_array($prop["options"]) as $_k => $_v)
                         	                {
