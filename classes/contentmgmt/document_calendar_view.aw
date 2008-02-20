@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.10 2008/02/11 10:23:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_calendar_view.aw,v 1.11 2008/02/20 10:19:37 kristo Exp $
 // document_calendar_view.aw - Dokumentide kalendrivaade 
 /*
 
@@ -113,6 +113,11 @@ class document_calendar_view extends class_base
 		else
 		{
 			$pt = aw_global_get("section");
+			$pto = obj($pt);
+			if ($pto->class_id() != CL_MENU)
+			{
+				$pt = $pto->parent();
+			}
 		}
 
 		// list menus
@@ -144,7 +149,7 @@ class document_calendar_view extends class_base
 				"month" => date("m", $doc["doc_modified"]),
 				"year" => date("Y", $doc["doc_modified"]),
 				"date" => $_GET["date"]
-			));
+			), false, obj_link($pt));
 		}
 		exit_function("document_calendar_view::show::fetch_documents");
 
