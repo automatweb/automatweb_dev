@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.14 2008/02/19 08:05:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.15 2008/02/20 15:49:41 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -2355,7 +2355,7 @@ class event_import extends class_base
 			),
 			"events" => array(
 				"parent" => $dir_event,
-				"class_id" => $class_id,
+				"class_id" => CL_CALENDAR_EVENT,
 				"array_var" => &$imported_events,
 			),
 			"locations" => array(
@@ -2379,14 +2379,15 @@ class event_import extends class_base
 				"parent" => $impd_objs["parent"],
 				"class_id" => $impd_objs["class_id"],
 			));
-			print "Gettin object_data_list for external system entries.<br>";;
+			arr($ol->ids());
+			print "Getting object_data_list for external system entries.<br>";;
 			flush();
 
 			$extents = new object_data_list(
 				array(
 					"class_id" => CL_EXTERNAL_SYSTEM_ENTRY,
 					"obj" => $ol->ids(),
-					"lang_id" => array(),
+					"lang_id" => $li,
 					"site_id" => array(),
 					"parent" => array(),
 				),
@@ -2398,7 +2399,8 @@ class event_import extends class_base
 					),
 				)
 			);
-			print "Making object_data_list into suitabe array.<br>";
+			arr($extents);
+			print "Making object_data_list into suitable array.<br>";
 			flush();
 
 			foreach($extents->list_data as $ext)
@@ -2414,6 +2416,7 @@ class event_import extends class_base
 				}
 			}
 		}
+		exit;
 		// </  GATHERING PREVIOUSLY IMPORTED DATA  >
 
 		$conns_to_xl_sources = $o->connections_from(array(
