@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="questionnaire_question" folder="applications/questionary" extends="class_base">
+	</class>
+</orb>
+		
