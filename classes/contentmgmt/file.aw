@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.1 2008/02/16 10:18:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.2 2008/02/21 11:56:30 kristo Exp $
 /*
 
 
@@ -437,11 +437,10 @@ class file extends class_base
 				$this->_sp_s_res($arr);
 				break;
 			case "sp_text":
-				$data["value"] = t("V&otilde;imalikud asendused\n<br>
-					#file# - faili nimi \n<br>
-					#file_url# - link failile \n<br>
-					#user_name# - muutja nimi
-					");
+				$data["value"] = t("V&otilde;imalikud asendused<br>").
+					t("#file# - faili nimi <br>").
+					t("#file_url# - link failile <br>").
+					t("#user_name# - muutja nimi");
 				break;
 			case "sp_content":
 				if(!strlen($data["value"]))

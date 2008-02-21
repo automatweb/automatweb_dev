@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.202 2008/02/12 16:50:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.203 2008/02/21 11:56:29 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2138,7 +2138,7 @@ class task extends class_base
 
 		$t->define_field(array(
 			"name" => "done",
-			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"done\")'>Tehtud</a>"),
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"done\")'>".t("Tehtud")."</a>",
 			"align" => "center",
 			"filter" => array(
 				t("Jah"),
@@ -2149,7 +2149,7 @@ class task extends class_base
 		
 		$t->define_field(array(
 			"name" => "on_bill",
-			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>Arvele</a>"),
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>".t("Arvele")."</a>",
 			"align" => "center",
 			"filter_options" => array("selected" => $selected),
 			"filter" => array(
