@@ -55,7 +55,11 @@ class acl_manager extends class_base
 		}
 		foreach($o->acl_get() as $gid => $inf)
 		{
-			$dat = array("grp" => html::obj_change_url($inf["oid"]));
+			if (!$this->can("view", $gid))
+			{
+				continue;
+			}
+			$dat = array("grp" => html::obj_change_url($gid));
 			foreach(aw_ini_get("acl.names") as $id => $name)
 			{
 				$dat[$id] = ($inf[$id] ? t("Jah") : t("Ei"));
