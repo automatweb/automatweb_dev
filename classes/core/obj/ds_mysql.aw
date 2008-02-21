@@ -2032,7 +2032,33 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (substr($filt[1], 0, 7) != "RELTYPE")
 				{
 					// so just return the table and field for that class
-					$prop = $GLOBALS["properties"][$clid][$filt[1]];
+					if (isset($GLOBALS["properties"][$clid][$filt[1]]))
+					{
+						$prop = $GLOBALS["properties"][$clid][$filt[1]];
+					}
+					else
+					{
+						// see if it is an objtbl prop
+						switch($filt[1])
+						{
+							case "id":
+							case "oid":
+								return array("objects", "oid");
+
+							case "created":
+							case "createdby":
+							case "modified":
+							case "modifiedby":
+							case "parent":
+							case "name":
+							case "lang_id":
+							case "comment":
+							case "period":
+							case "site_id":
+								return array("objects", $filt[1]);
+						}
+					}
+					
 					$this->used_tables[$prop["table"]] = $prop["table"];
 					return array($prop["table"], $prop["field"]);
 				}
