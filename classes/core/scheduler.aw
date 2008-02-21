@@ -1,31 +1,28 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.46 2008/01/31 13:49:48 kristo Exp $
-// scheduler.aw - Scheduler
 /*
+$Header: /home/cvs/automatweb_dev/classes/core/scheduler.aw,v 1.1 2008/02/21 21:42:18 kristo Exp $
 @classinfo  maintainer=kristo
 */
+
+/** 
+		The scheduler can be used to schedule events to happen at certain times.
+		An event is an orb function call that will get called at the time specified. 
+		You can specify a certain time or an aw repeater when the event will take place.
+
+		The fields in the event array are:
+		time - the time that the event is scheduled for - unix timestamp
+		event - the full url of the page that will be requested
+		uid - the username as who the event will be executed
+		password - the password for the account in uid
+		rep_id - the id of the repeater that generated this event
+
+		The fields in the log entry array are:
+		time - the time that the event was actually executed
+		event - the event array for the event that took place
+		response - the text that was returned from the HTTP request including headers
+**/
 class scheduler extends aw_template
 {
-	/** 
-		@attrib api=1
-
-		@comment
-			The scheduler can be used to schedule events to happen at certain times.
-			An event is an orb function call that will get called at the time specified. 
-			You can specify a certain time or an aw repeater when the event will take place.
-
-			The fields in the event array are:
-			time - the time that the event is scheduled for - unix timestamp
-			event - the full url of the page that will be requested
-			uid - the username as who the event will be executed
-			password - the password for the account in uid
-			rep_id - the id of the repeater that generated this event
- 
-			The fields in the log entry array are:
-			time - the time that the event was actually executed
-			event - the event array for the event that took place
-			response - the text that was returned from the HTTP request including headers
- 	**/
 	function scheduler()
 	{
 		$this->init("scheduler");
