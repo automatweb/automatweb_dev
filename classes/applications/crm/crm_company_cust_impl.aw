@@ -2386,40 +2386,44 @@ class crm_company_cust_impl extends class_base
 		$link = "document.changeform.elements.cust_cat.value='%s';submit_changeform('save_as_customer')";
 		foreach($categories as $id=>$cat)
 		{
-			$tb->add_sub_menu(array(
-				'parent'=> "save_as_cust",
-				"name" => $id,
-				'text' => $cat,
-			));
-
 			$ol = new object_list(array(
 				"class_id" => array(CL_CRM_COMPANY_STATUS),
 				"category" => $id,
 				"parent" => $company->id()
 
 			));
-			foreach($ol->arr() as $o)
+			if(count($ol->ids()))
 			{
-				$linkn = str_replace(urlencode("%s"), "status_".$o->id(), str_replace("%s", 'status_'.$o->id(), $link));
-				if($this->_do_cust_cat_tb_submenus3($tb, $o->id()))
+				$tb->add_sub_menu(array(
+					'parent'=> "save_as_cust",
+					"name" => $id,
+					'text' => $cat,
+				));
+	
+				
+				foreach($ol->arr() as $o)
 				{
-					$tb->add_sub_menu(array(
-						'parent'=> $id,
-						"name" => $o->id(),
-						'text' => $o->name(),
-						'onClick' => $linkn,
-						"link" =>"#"
-					));
-				}
-				else
-				{
-					$tb->add_menu_item(array(
-						"parent" => $id,
-						"name" => $o->id(),
-						"text" => $o->name(),
-						'onClick' => $linkn,
-						"link" =>"#"
-					));
+					$linkn = str_replace(urlencode("%s"), "status_".$o->id(), str_replace("%s", 'status_'.$o->id(), $link));
+					if($this->_do_cust_cat_tb_submenus3($tb, $o->id()))
+					{
+						$tb->add_sub_menu(array(
+							'parent'=> $id,
+							"name" => $o->id(),
+							'text' => $o->name(),
+							'onClick' => $linkn,
+							"link" =>"#"
+						));
+					}
+					else
+					{
+						$tb->add_menu_item(array(
+							"parent" => $id,
+							"name" => $o->id(),
+							"text" => $o->name(),
+							'onClick' => $linkn,
+							"link" =>"#"
+						));
+					}
 				}
 			}
 		}
