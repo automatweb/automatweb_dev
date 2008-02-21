@@ -16,4 +16,9 @@ class obj_sql_func
 		$this->params = $params;
 		$this->name = $name;
 	}
+
+	function __toString()
+	{
+		return "obj_sql_func(".$this->sql_func.",".$this->name.",".join(safe_array($this->params)).")";
+	}
 }

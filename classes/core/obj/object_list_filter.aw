@@ -38,6 +38,11 @@ class object_list_filter
 	{
 		$this->filter = $param;
 	}
+
+	function __toString()
+	{
+		return "object_list_filter(".serialize($this->filter).")";
+	}
 }
 
 ?>

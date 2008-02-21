@@ -56,5 +56,11 @@ class obj_predicate_compare
 		$this->data2 = $data2;
 		$this->type = $type;
 	}
+
+	function __toString()
+	{	
+		$str = "objcompare-".$this->comparator."-".$this->data."-".$this->data2."-".$this->type;
+		return $str;
+	}
 }
 ?>

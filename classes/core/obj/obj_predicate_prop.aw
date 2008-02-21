@@ -44,5 +44,10 @@ class obj_predicate_prop
 			$this->compare = OBJ_COMP_EQUAL;
 		}
 	}
+
+	function __toString()
+	{
+		return "obj_predicate_prop(".$this->prop.",".$this->compare.")";
+	}
 }
 ?>

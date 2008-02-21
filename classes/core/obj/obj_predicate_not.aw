@@ -26,5 +26,10 @@ class obj_predicate_not
 	{
 		$this->data = $data;
 	}
+
+	function __toString()
+	{
+		return "obj_predicate_not(".$this->data.")";
+	}
 }
 ?>
