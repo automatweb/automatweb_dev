@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.51 2008/02/07 13:52:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.52 2008/02/21 15:09:07 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -252,7 +252,8 @@ class crm_company_webview extends class_base
 		{
 			return "";
 		}
-		$this->vars(array("company_id" => $org));
+		$this->vars(array("company_id" => $org, "modified" => date("d/m/y", $c->modified())));
+
 		$this->add_hit($org);
 		
 		$webview = obj($arr['list_id']);
