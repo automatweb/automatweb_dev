@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.39 2008/02/07 11:54:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.40 2008/02/21 14:18:23 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1199,14 +1199,15 @@ class spa_bookings_overview extends class_base
 			foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
 			{
 				$b = $c->to();
-				$sum = $room_instance->cal_room_price(array(
-					"room" => $b->prop("resource"),
-					"start" => $b->prop("start1"),
-					"end" => $b->prop("end"),
-					"people" => $b->prop("people_count"),
-					"products" => $b->meta("amount"),
-					"bron" => $b,
-				));
+				$sum = $b->get_sum();
+//				$sum = $room_instance->cal_room_price(array(
+//					"room" => $b->prop("resource"),
+//					"start" => $b->prop("start1"),
+//					"end" => $b->prop("end"),
+//					"people" => $b->prop("people_count"),
+//					"products" => $b->meta("amount"),
+//					"bron" => $b,
+//				));
 				foreach($sum as $cur => $amt)
 				{
 					$d[$o->createdby()][$o->prop("package")]["sum"][$cur] += $amt;
