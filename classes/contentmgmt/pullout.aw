@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.18 2008/01/31 13:49:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/pullout.aw,v 1.1 2008/02/21 19:44:17 kristo Exp $
 // pullout.aw - Pullout manager
 
 /*
