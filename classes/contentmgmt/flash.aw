@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.13 2008/02/01 06:01:12 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.14 2008/02/21 09:14:15 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -27,6 +27,13 @@
 
 	@classinfo syslog_type=ST_FLASH maintainer=kristo
 
+@default group=transl
+
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
+@groupinfo transl caption=T&otilde;lgi
+
 */
 
 class flash extends class_base
@@ -37,6 +44,10 @@ class flash extends class_base
 			'tpldir' => 'flash',
 			'clid' => CL_FLASH
 		));
+
+		$this->trans_props = array(
+			"click_tag"
+		);
 	}
 
 	function get_property($arr = array())
@@ -69,6 +80,11 @@ class flash extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		if ($prop["name"] == "transl")
+		{
+			$this->trans_save($arr, $this->trans_props);
+			return PROP_OK;
+		}
 		if ($prop["name"] == "file")
 		{
 			$fdata = $_FILES["file"];
@@ -239,6 +255,20 @@ class flash extends class_base
 		));
 
 		return $this->parse();
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>
