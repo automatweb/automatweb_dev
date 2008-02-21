@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.21 2008/01/31 13:49:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/serializers/php.aw,v 1.1 2008/02/21 19:14:45 kristo Exp $
 // php.aw - PHP serializer
 /*
 @classinfo  maintainer=kristo

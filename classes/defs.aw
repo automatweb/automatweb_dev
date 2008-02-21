@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.255 2008/02/19 10:56:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.256 2008/02/21 19:14:45 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -10,7 +10,6 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 if (!defined("DEFS"))
 {
 	define("DEFS",1);
-	classload("php");
 	define("SERIALIZE_PHP",1);
 	define("SERIALIZE_XML",2);
 	define("SERIALIZE_NATIVE",3);
@@ -1160,7 +1159,6 @@ if (!defined("DEFS"))
 		switch($type)
 		{
 			case SERIALIZE_PHP:
-				classload("php");
 				$ser = new php_serializer;
 				foreach($flags as $fk => $fv)
 				{
@@ -1169,7 +1167,6 @@ if (!defined("DEFS"))
 				$str = $ser->php_serialize($arr);
 				break;
 			case SERIALIZE_PHP_FILE:
-				classload("php_file");
 				$ser = new php_serializer_file;
 				foreach($flags as $fk => $fv)
 				{
@@ -1178,7 +1175,6 @@ if (!defined("DEFS"))
 				$str = $ser->php_serialize($arr);
 				break;
 			case SERIALIZE_PHP_NOINDEX:
-				classload("php");
 				$ser = new php_serializer;
 				$ser->set("no_index",1);
 				$str = $ser->php_serialize($arr);
