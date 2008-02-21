@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.15 2008/02/20 15:49:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.16 2008/02/21 10:53:49 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -1229,13 +1229,44 @@ class event_import extends class_base
 
 	function make_piletimaailm_links($v, $o, $pmlinks)
 	{
+		// I find it the easiest way to treat spaces and line breaks equally.
+		$v = str_replace("\n", " ", $v);
+		foreach(explode(" ", $v) as $s)
+		{
+			// These characters are punctuation marks rather than a part of the piletimaailm.com url.
+			$s = trim($s, ",.)(:;?!-");
+			if(strpos($s, "piletimaailm.com") === false)
+				continue;
+
+			// We don't want any e-mail adresses here.
+			if(ereg("[[:alnum:]]+@[[:alnum:]]+\.[[:alnum:]]+", $s))
+				continue;
+
+			// $pmlinks is an array of piletimaailm.com links already connected to the object.
+			if(!in_array($s, $pmlinks))
+			{
+				$link = new object;
+				$link->set_class_id(CL_EXTLINK);
+				$link->set_parent($o->id());
+				$link->set_prop("name", $s);
+				$link->set_prop("url", $s);
+				$link->save();
+				$pmlinks[$link->id()] = $s;
+				$o->connect(array(
+					"to" => $link->id(),
+					"reltype" => "RELTYPE_URL",
+				));
+			}
+		}
 	}
 
 //	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $import_orig = true)
 	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $imp_lang_id)
 	{
+		/*
 		arr($imps["event"]);
 		exit;
+		*/
 		$li = $o->prop("original_lang");
 		$import_orig = ($li == $imp_lang_id);
 		$lg = get_instance("languages");
@@ -1616,6 +1647,8 @@ class event_import extends class_base
 					$event_obj->set_parent($dirs["event"]);		// Kaust, kuhu sündmusi kirjutatakse (event_manager)
 					// By default new events are not public.
 					$event_obj->set_prop("published", 0);
+					// I might need to connect the event object. So I have to save it here. Hopefully it won't cause major impact on cache size.
+					$event_obj->save();
 					$pmlinks = array();
 					if(!empty($event_data["level"]))
 					{
@@ -1629,7 +1662,7 @@ class event_import extends class_base
 					{
 						if(!empty($key) && !empty($value))
 						{
-							if(!(strpos("piletimaailm.com", $value) === false))
+							if(!(strpos($value, "piletimaailm.com") === false))
 							{
 								$this->make_piletimaailm_links($value, &$event_obj, &$pmlinks);
 							}
@@ -1706,9 +1739,9 @@ class event_import extends class_base
 					
 					foreach($event_data as $key => $value)
 					{
-						if(!(strpos("piletimaailm.com", $value) === false))
+						if(strpos($value, "piletimaailm.com") !== false)
 						{
-							$this->make_piletimaailm_links($value, &$event_obj);
+							$this->make_piletimaailm_links($value, &$event_obj, &$pmlinks);
 						}
 
 						$value = $this->remove_crap($value, $imp_lang_id);
@@ -1980,7 +2013,7 @@ class event_import extends class_base
 							{
 								$event_obj->connect(array(
 									"to" => $category_obj->id(),
-									"type" => RELTYPE_SECTOR,
+									"type" => "RELTYPE_SECTOR",
 								));
 								$sector_prop_val[$category_obj->id()] = $category_obj->id();
 								$event_obj->set_prop("sector", $sector_prop_val);
@@ -2379,7 +2412,7 @@ class event_import extends class_base
 				"parent" => $impd_objs["parent"],
 				"class_id" => $impd_objs["class_id"],
 			));
-			arr($ol->ids());
+			//arr($ol->ids());
 			print "Getting object_data_list for external system entries.<br>";;
 			flush();
 
@@ -2399,11 +2432,11 @@ class event_import extends class_base
 					),
 				)
 			);
-			arr($extents);
+			//arr($extents);
 			print "Making object_data_list into suitable array.<br>";
 			flush();
 
-			foreach($extents->list_data as $ext)
+			foreach($extents->arr() as $ext)
 			{
 				$ext_ids_arr = str_replace(" ", "", $ext["value"]);
 				// The external IDs are separated with commas
@@ -2416,7 +2449,7 @@ class event_import extends class_base
 				}
 			}
 		}
-		exit;
+		//exit;
 		// </  GATHERING PREVIOUSLY IMPORTED DATA  >
 
 		$conns_to_xl_sources = $o->connections_from(array(
