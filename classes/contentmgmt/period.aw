@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.39 2008/02/11 09:42:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.1 2008/02/21 19:06:56 kristo Exp $
 // period.aw - periods 
 /*
 
