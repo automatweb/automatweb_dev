@@ -1483,6 +1483,11 @@ class user extends class_base
 		{
 			return obj();
 		}
+		$tmp = $this->get_person_for_user(obj($oid));
+		if (!$this->can("view", $tmp))
+		{
+			return obj();
+		}
 		return obj($this->get_person_for_user(obj($oid)));
 	}
 
