@@ -3,7 +3,7 @@
 @classinfo  maintainer=kristo
 */
 
-class group_object extends _int_object
+class group_obj extends _int_object
 {
 	function name()
 	{
