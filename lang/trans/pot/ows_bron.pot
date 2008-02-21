@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse  (mail_templates) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_bcc
+msgid "Omaduse  (mail_bcc) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_bcc_comment
+msgid "Omaduse  (mail_bcc) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_bcc_help
+msgid "Omaduse  (mail_bcc) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_bron.aw:prop_bank_settings_table
 msgid "Omaduse  (bank_settings_table) caption"
 msgstr ""
@@ -98,6 +110,14 @@ msgstr ""
 msgid "Grupi T&uuml;histusmeil (mail_settings_cancel) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_bcc
+msgid "Grupi BCC (mail_bcc) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_bcc_help
+msgid "Grupi BCC (mail_bcc) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_bron.aw:group_bank_settings
 msgid "Grupi Panga seaded (bank_settings) pealkiri"
 msgstr ""
@@ -114,35 +134,39 @@ msgstr ""
 msgid "Seose Kinnitatud tellimuste kaust (RELTYPE_CONFIRMED_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:629 classes/applications/ows_bron/ows_bron.aw:976
+#: classes/applications/ows_bron/ows_bron.aw:635 classes/applications/ows_bron/ows_bron.aw:989
 msgid "OWS Bron %s %s @ %s"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2223
+#: classes/applications/ows_bron/ows_bron.aw:2282
 msgid "The booking you requested does not exist!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2228
+#: classes/applications/ows_bron/ows_bron.aw:2287
 msgid "The booking you requested has already been cancelled!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2503
+#: classes/applications/ows_bron/ows_bron.aw:2577 classes/applications/ows_bron/ows_bron.aw:2655
 msgid "Hotell"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2508
+#: classes/applications/ows_bron/ows_bron.aw:2582
 msgid "Template"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2540
+#: classes/applications/ows_bron/ows_bron.aw:2614
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2545
+#: classes/applications/ows_bron/ows_bron.aw:2619
 msgid "Pangamakse objekt"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2556
+#: classes/applications/ows_bron/ows_bron.aw:2630
 msgid "--vali--"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2660
+msgid "BCC"
 msgstr ""
 

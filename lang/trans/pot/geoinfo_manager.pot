@@ -170,51 +170,51 @@ msgstr ""
 msgid "Seose XML skeem (RELTYPE_SCHEMA) tekst"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:521
+#: classes/applications/geoinfo/geoinfo_manager.aw:489
 msgid "Impordi XML-ist"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:551
+#: classes/applications/geoinfo/geoinfo_manager.aw:519
 msgid "Väljade seostamine"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:560
+#: classes/applications/geoinfo/geoinfo_manager.aw:528
 msgid "Väli"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:644
+#: classes/applications/geoinfo/geoinfo_manager.aw:613
 msgid "Ekspordi KMZ"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:653
+#: classes/applications/geoinfo/geoinfo_manager.aw:622
 msgid "Impordi koordinaadid"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:662
+#: classes/applications/geoinfo/geoinfo_manager.aw:631
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:667
+#: classes/applications/geoinfo/geoinfo_manager.aw:636
 msgid "X koordinaat"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:672
+#: classes/applications/geoinfo/geoinfo_manager.aw:641
 msgid "Y koordinaat"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:677
+#: classes/applications/geoinfo/geoinfo_manager.aw:646
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:684
+#: classes/applications/geoinfo/geoinfo_manager.aw:653
 msgid "Andmeobjektid"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:764
+#: classes/applications/geoinfo/geoinfo_manager.aw:733
 msgid "V&auml;&auml;rtused on tagides &lt;coord_x&gt;23.409&lt;/coord_x&gt;"
 msgstr ""
 
-#: classes/applications/geoinfo/geoinfo_manager.aw:765
+#: classes/applications/geoinfo/geoinfo_manager.aw:734
 msgid "V&auml;&auml;rtused on omadustes &lt;item coord_x=\"23.409\" /&gt;"
 msgstr ""
 

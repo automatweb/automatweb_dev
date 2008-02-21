@@ -83,7 +83,6 @@ $GLOBALS["TRANS"]["Omaduse Men&uuml;&uuml; pildid (menu_images) caption"] = "Fol
 $GLOBALS["TRANS"]["Omaduse Men&uuml;&uuml; pildid (menu_images) help"] = "pictures tied with the folder. Usage of these pictures depends on the site´s  configurations.";
 $GLOBALS["TRANS"]["Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) caption"] = "Submenus from object";
 $GLOBALS["TRANS"]["Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) help"] = "makes it able to say to the folder to take the sub-folders structure from another object for displaying them on web.";
-$GLOBALS["TRANS"]["Omaduse Failinimi (aip_filename) caption"] = "File name";
 $GLOBALS["TRANS"]["Omaduse Sisu objektist (get_content_from) caption"] = "Content from object";
 $GLOBALS["TRANS"]["Omaduse Sisu objektist (get_content_from) help"] = "makes it able to display some other objects content with a certain folder.";
 $GLOBALS["TRANS"]["Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) caption"] = "Get subfolders from the folder";

@@ -11,7 +11,7 @@ msgstr ""
 
 
 #: classes/common/external/xml_source.aw:class_1354_help
-msgid "Klassi XML andmeallikas help"
+msgid "Klassi Syndmuste XML andmeallikas help"
 msgstr ""
 
 #: classes/common/external/xml_source.aw:prop_url

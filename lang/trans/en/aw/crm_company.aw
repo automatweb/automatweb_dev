@@ -213,7 +213,6 @@ $GLOBALS["TRANS"]["Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"] = "Clent
 $GLOBALS["TRANS"]["Seose Organisatsiooni grupp (RELTYPE_GROUP) tekst"] = "Organisation user group";
 $GLOBALS["TRANS"]["Seose Leping (RELTYPE_CONTRACT) tekst"] = "Contract";
 $GLOBALS["TRANS"]["Seose Pakkumise fail (RELTYPE_OFFER_FILE) tekst"] = "Offer file";
-$GLOBALS["TRANS"]["Seose dokumentide kataloog (RELTYPE_DOCS_FOLDER) tekst"] = "Documents folder";
 $GLOBALS["TRANS"]["Seose sissetuleku meetod (RELTYPE_REFERAL_TYPE) tekst"] = "Referal type";
 $GLOBALS["TRANS"]["Seose Pilt (RELTYPE_IMAGE) tekst"] = "Image";
 $GLOBALS["TRANS"]["Seose Eripakkumine (RELTYPE_SPECIAL_OFFERS) tekst"] = "Special offer";

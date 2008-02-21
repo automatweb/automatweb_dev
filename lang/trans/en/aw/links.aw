@@ -1,6 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Kommentaar lingikogusse (comment) caption"] = "Commentary to links collection";
-$GLOBALS["TRANS"]["Omaduse Kommentaar lingikogusse (comment) help"] = "compartment for comments where could be added any information to clarify the instructions about the object.  The comments are not visible on web.";
 $GLOBALS["TRANS"]["Omaduse URL (url) caption"] = "URL";
 $GLOBALS["TRANS"]["Omaduse URL (url) help"] = "the address where the link refers. It is written in following form: http://www.struktuur.ee or in case of inner site references the document's or folder´s ID.";
 $GLOBALS["TRANS"]["Omaduse Klikke (hits) caption"] = "Clicks";

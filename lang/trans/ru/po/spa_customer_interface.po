@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -49,6 +49,30 @@ msgstr ""
 msgid "Omaduse Pangamakse objekt (bank_payment) help"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_if_section
+msgid "Omaduse Liidese kaust (if_section) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_if_section_comment
+msgid "Omaduse Liidese kaust (if_section) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_if_section_help
+msgid "Omaduse Liidese kaust (if_section) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_if_wb
+msgid "Omaduse T&ouml;&ouml;laud (if_wb) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_if_wb_comment
+msgid "Omaduse T&ouml;&ouml;laud (if_wb) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_if_wb_help
+msgid "Omaduse T&ouml;&ouml;laud (if_wb) help"
+msgstr ""
+
 #: classes/applications/spa_bookings/spa_customer_interface.aw:rel_RELTYPE_FOLDER
 msgid "Seose Toodete kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
@@ -61,39 +85,47 @@ msgstr ""
 msgid "Seose Pangamakse (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:115
+#: classes/applications/spa_bookings/spa_customer_interface.aw:rel_RELTYPE_IF_SECT
+msgid "Seose Liidese kaust (RELTYPE_IF_SECT) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:rel_RELTYPE_IF_WB
+msgid "Seose T&ouml;&ouml;laud (RELTYPE_IF_WB) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:129
 msgid "Broneering %s / %s"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:155
+#: classes/applications/spa_bookings/spa_customer_interface.aw:169
 msgid "Lisa teenus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:166
+#: classes/applications/spa_bookings/spa_customer_interface.aw:180
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:167
+#: classes/applications/spa_bookings/spa_customer_interface.aw:181
 msgid "Maksa"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:175
+#: classes/applications/spa_bookings/spa_customer_interface.aw:189
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:359
+#: classes/applications/spa_bookings/spa_customer_interface.aw:373
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:887
-#: classes/applications/spa_bookings/spa_customer_interface.aw:982
+#: classes/applications/spa_bookings/spa_customer_interface.aw:903
+#: classes/applications/spa_bookings/spa_customer_interface.aw:998
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1052
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1068
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1052
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1068
 msgid "Naine"
 msgstr ""

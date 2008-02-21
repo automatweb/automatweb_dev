@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/recycle_bin/recycle_bin.aw:class_856_help
 msgid "Klassi Pr&uuml;gikast help"
@@ -182,6 +181,30 @@ msgstr ""
 msgid "Omaduse Grupid, kes saavad m&auml;&auml;ranguid muuta (admin_grps) help"
 msgstr ""
 
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_do_autoclean
+msgid "Omaduse T&uuml;hjenda automaatselt (do_autoclean) caption"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_do_autoclean_comment
+msgid "Omaduse T&uuml;hjenda automaatselt (do_autoclean) kommentaar"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_do_autoclean_help
+msgid "Omaduse T&uuml;hjenda automaatselt (do_autoclean) help"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_autoclean_age
+msgid "Omaduse Kui vanad automaatselt kustutatakse (autoclean_age) caption"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_autoclean_age_comment
+msgid "Omaduse Kui vanad automaatselt kustutatakse (autoclean_age) kommentaar"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_autoclean_age_help
+msgid "Omaduse Kui vanad automaatselt kustutatakse (autoclean_age) help"
+msgstr ""
+
 #: classes/applications/recycle_bin/recycle_bin.aw:group_recycle
 msgid "Grupi Prügikast (recycle) pealkiri"
 msgstr ""
@@ -214,6 +237,22 @@ msgstr ""
 msgid "Grupi M&auml;&auml;rangud (recycle_settings) help"
 msgstr ""
 
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_groups
+msgid "Grupi Grupid (recycle_groups) pealkiri"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_groups_help
+msgid "Grupi Grupid (recycle_groups) help"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_autoclean
+msgid "Grupi Automaatne t&uuml;hjendamine (recycle_autoclean) pealkiri"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_autoclean_help
+msgid "Grupi Automaatne t&uuml;hjendamine (recycle_autoclean) help"
+msgstr ""
+
 #: classes/applications/recycle_bin/recycle_bin.aw:rel_RELTYPE_DEL_GRP
 msgid "Seose Kustutaja grupp (RELTYPE_DEL_GRP) tekst"
 msgstr ""
@@ -222,59 +261,102 @@ msgstr ""
 msgid "Seose Admin grupp (RELTYPE_ADM_GRP) tekst"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:156
-msgid "Nimi"
+#: classes/applications/recycle_bin/recycle_bin.aw:164
+msgid "1 N&auml;dal"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:162
-msgid "ID"
+#: classes/applications/recycle_bin/recycle_bin.aw:165
+msgid "2 N&auml;dalat"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:166
+msgid "3 N&auml;dalat"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:167
+msgid "1 Kuu"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:168
+msgid "2 Kuud"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:169
+msgid "3 Kuud"
 msgstr ""
 
 #: classes/applications/recycle_bin/recycle_bin.aw:170
-msgid "Tegevus"
+msgid "4 Kuud"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:175
-msgid "Objektitüüp"
+#: classes/applications/recycle_bin/recycle_bin.aw:171
+msgid "5 Kuud"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:182
-msgid "Kustutaja"
+#: classes/applications/recycle_bin/recycle_bin.aw:172
+msgid "6 Kuud"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:190
-msgid "Kustutatud"
+#: classes/applications/recycle_bin/recycle_bin.aw:173
+msgid "1 aasta"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:174
+msgid "2 aastat"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:188
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:194
+msgid "ID"
 msgstr ""
 
 #: classes/applications/recycle_bin/recycle_bin.aw:202
+msgid "Tegevus"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:207
+msgid "Objektitüüp"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:214
+msgid "Kustutaja"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:222
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:234
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:263
+#: classes/applications/recycle_bin/recycle_bin.aw:295
 msgid "Taasta"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:293
+#: classes/applications/recycle_bin/recycle_bin.aw:325
 msgid "Taasta valitud objektid"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:299
+#: classes/applications/recycle_bin/recycle_bin.aw:331
 msgid "Uuenda"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:324
+#: classes/applications/recycle_bin/recycle_bin.aw:356
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:326
+#: classes/applications/recycle_bin/recycle_bin.aw:358
 msgid "Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:332
+#: classes/applications/recycle_bin/recycle_bin.aw:364
 msgid "T&uuml;hjenda"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:334
+#: classes/applications/recycle_bin/recycle_bin.aw:366
 msgid "Ettevaatust! Objektid kustutatakse j&auml;&auml;davalt!"
 msgstr ""
-

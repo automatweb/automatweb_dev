@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -133,6 +133,30 @@ msgstr ""
 msgid "Omaduse Kaustade seaded (folders) help"
 msgstr ""
 
+#: classes/contentmgmt/newsfeed.aw:prop_separator
+msgid "Omaduse V&auml;ljade eraldaja (separator) caption"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_separator_comment
+msgid "Omaduse V&auml;ljade eraldaja (separator) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_separator_help
+msgid "Omaduse V&auml;ljade eraldaja (separator) help"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_fields_table
+msgid "Omaduse  (fields_table) caption"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_fields_table_comment
+msgid "Omaduse  (fields_table) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_fields_table_help
+msgid "Omaduse  (fields_table) help"
+msgstr ""
+
 #: classes/contentmgmt/newsfeed.aw:prop_kw
 msgid "Omaduse Milliste m&auml;rk&otilde;nadega dokumente n&auml;idata (kw) caption"
 msgstr ""
@@ -161,70 +185,86 @@ msgstr ""
 msgid "Grupi M&auml;rks&otilde;nad (kw) help"
 msgstr ""
 
+#: classes/contentmgmt/newsfeed.aw:group_fields
+msgid "Grupi V&auml;ljad (fields) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:group_fields_help
+msgid "Grupi V&auml;ljad (fields) help"
+msgstr ""
+
 #: classes/contentmgmt/newsfeed.aw:rel_RELTYPE_FEED_SOURCE
 msgid "Seose Materjalide kaust (RELTYPE_FEED_SOURCE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:82
+#: classes/contentmgmt/newsfeed.aw:90
 msgid "Suurem (uuem) enne"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:83
+#: classes/contentmgmt/newsfeed.aw:91
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:89
+#: classes/contentmgmt/newsfeed.aw:97
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:90
+#: classes/contentmgmt/newsfeed.aw:98
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:91
+#: classes/contentmgmt/newsfeed.aw:99
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:92
+#: classes/contentmgmt/newsfeed.aw:100
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:93
+#: classes/contentmgmt/newsfeed.aw:101
 msgid "Objekti nime j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:94
+#: classes/contentmgmt/newsfeed.aw:102
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:95
+#: classes/contentmgmt/newsfeed.aw:103
 msgid "Random"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:105
+#: classes/contentmgmt/newsfeed.aw:120
 msgid "RSS 2.0"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:106
+#: classes/contentmgmt/newsfeed.aw:121
 msgid "Atom (implementeerimata)"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:131
+#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:561
+msgid "Vali"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:153
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:157
+msgid "V&auml;li"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:193
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:135
+#: classes/contentmgmt/newsfeed.aw:197
 msgid "Name"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:139
+#: classes/contentmgmt/newsfeed.aw:201
 msgid "Võta alamkaustadest ka"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:465
+#: classes/contentmgmt/newsfeed.aw:555
 msgid "M&auml;rks&otilde;na"
-msgstr ""
-
-#: classes/contentmgmt/newsfeed.aw:471
-msgid "Vali"
 msgstr ""

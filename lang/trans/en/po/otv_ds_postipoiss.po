@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -75,21 +75,15 @@ msgid "Omaduse  (update_cache) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_db_to_xml_connections
-msgid ""
-"Omaduse Andmebaasi tabeli ja XML faili v&auml;ljade seosed "
-"(db_to_xml_connections) caption"
+msgid "Omaduse Andmebaasi tabeli ja XML faili v&auml;ljade seosed (db_to_xml_connections) caption"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_db_to_xml_connections_comment
-msgid ""
-"Omaduse Andmebaasi tabeli ja XML faili v&auml;ljade seosed "
-"(db_to_xml_connections) kommentaar"
+msgid "Omaduse Andmebaasi tabeli ja XML faili v&auml;ljade seosed (db_to_xml_connections) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_db_to_xml_connections_help
-msgid ""
-"Omaduse Andmebaasi tabeli ja XML faili v&auml;ljade seosed "
-"(db_to_xml_connections) help"
+msgid "Omaduse Andmebaasi tabeli ja XML faili v&auml;ljade seosed (db_to_xml_connections) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct
@@ -150,10 +144,10 @@ msgstr "<b>Files</b>"
 msgid "the subject xml file (%s) does not exist!"
 msgstr "the subject xml file (%s) does not exist!"
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:759
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:758
 msgid "Andmebaasi v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:763
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:762
 msgid "XML v&auml;li"
 msgstr ""

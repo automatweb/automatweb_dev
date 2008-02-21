@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -13,21 +13,6 @@ msgstr ""
 #: classes/contentmgmt/links.aw:class_21_help
 msgid "Klassi Link help"
 msgstr ""
-
-# classes/contentmgmt/links.aw:prop_comment
-#: classes/contentmgmt/links.aw:prop_comment
-msgid "Omaduse Kommentaar lingikogusse (comment) caption"
-msgstr "Commentary to links collection"
-
-# classes/contentmgmt/links.aw:prop_comment_comment
-#: classes/contentmgmt/links.aw:prop_comment_comment
-msgid "Omaduse Kommentaar lingikogusse (comment) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/links.aw:prop_comment_help
-#: classes/contentmgmt/links.aw:prop_comment_help
-msgid "Omaduse Kommentaar lingikogusse (comment) help"
-msgstr "compartment for comments where could be added any information to clarify the instructions about the object.  The comments are not visible on web."
 
 # classes/contentmgmt/links.aw:prop_url
 #: classes/contentmgmt/links.aw:prop_url
@@ -417,3 +402,11 @@ msgstr "Inner-site link"
 #: classes/contentmgmt/links.aw:484
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
+
+# classes/contentmgmt/links.aw:prop_comment
+#~ msgid "Omaduse Kommentaar lingikogusse (comment) caption"
+#~ msgstr "Commentary to links collection"
+
+# classes/contentmgmt/links.aw:prop_comment_help
+#~ msgid "Omaduse Kommentaar lingikogusse (comment) help"
+#~ msgstr "compartment for comments where could be added any information to clarify the instructions about the object.  The comments are not visible on web."

@@ -818,7 +818,7 @@ msgstr ""
 msgid "Puudutab k&otilde;iki"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:393 classes/applications/bug_o_matic_3000/bug.aw:447 classes/applications/bug_o_matic_3000/bug.aw:472 classes/applications/bug_o_matic_3000/bug.aw:612 classes/applications/bug_o_matic_3000/bug.aw:703 classes/applications/bug_o_matic_3000/bug.aw:736 classes/applications/bug_o_matic_3000/bug.aw:751 classes/applications/bug_o_matic_3000/bug.aw:2316 classes/applications/bug_o_matic_3000/bug.aw:2359 classes/applications/bug_o_matic_3000/bug.aw:2382 classes/applications/bug_o_matic_3000/bug.aw:2425
+#: classes/applications/bug_o_matic_3000/bug.aw:393 classes/applications/bug_o_matic_3000/bug.aw:447 classes/applications/bug_o_matic_3000/bug.aw:472 classes/applications/bug_o_matic_3000/bug.aw:612 classes/applications/bug_o_matic_3000/bug.aw:703 classes/applications/bug_o_matic_3000/bug.aw:736 classes/applications/bug_o_matic_3000/bug.aw:751 classes/applications/bug_o_matic_3000/bug.aw:2318 classes/applications/bug_o_matic_3000/bug.aw:2361 classes/applications/bug_o_matic_3000/bug.aw:2384 classes/applications/bug_o_matic_3000/bug.aw:2427
 msgid "--vali--"
 msgstr ""
 
@@ -902,79 +902,87 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1338
+#: classes/applications/bug_o_matic_3000/bug.aw:1199
+msgid "Status"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:1200
+msgid "Priority"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:1340
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1344 classes/applications/bug_o_matic_3000/bug.aw:1381
+#: classes/applications/bug_o_matic_3000/bug.aw:1346 classes/applications/bug_o_matic_3000/bug.aw:1383
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1349
+#: classes/applications/bug_o_matic_3000/bug.aw:1351
 msgid "Sisu"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1354
+#: classes/applications/bug_o_matic_3000/bug.aw:1356
 msgid "Vanem-bugi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1360
+#: classes/applications/bug_o_matic_3000/bug.aw:1362
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1372 classes/applications/bug_o_matic_3000/bug.aw:1572
+#: classes/applications/bug_o_matic_3000/bug.aw:1374 classes/applications/bug_o_matic_3000/bug.aw:1574
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1407
+#: classes/applications/bug_o_matic_3000/bug.aw:1409
 msgid "Nimi, vanem-bugi ja t&auml;htaeg peavad olema seatud!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1435 classes/applications/bug_o_matic_3000/bug.aw:1873
+#: classes/applications/bug_o_matic_3000/bug.aw:1437 classes/applications/bug_o_matic_3000/bug.aw:1875
 msgid "\nTegelik tundide arv muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1567
+#: classes/applications/bug_o_matic_3000/bug.aw:1569
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1577
+#: classes/applications/bug_o_matic_3000/bug.aw:1579
 msgid "Tunnid"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1585
+#: classes/applications/bug_o_matic_3000/bug.aw:1587
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1820
+#: classes/applications/bug_o_matic_3000/bug.aw:1822
 msgid "Failid:"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1821
+#: classes/applications/bug_o_matic_3000/bug.aw:1823
 msgid "Aeg:"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1907
+#: classes/applications/bug_o_matic_3000/bug.aw:1909
 msgid "Added comment to bug %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2067
+#: classes/applications/bug_o_matic_3000/bug.aw:2069
 msgid "seda faili ei testi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2174
+#: classes/applications/bug_o_matic_3000/bug.aw:2176
 msgid "Uus arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2179
+#: classes/applications/bug_o_matic_3000/bug.aw:2181
 msgid "Samale tasemele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2185
+#: classes/applications/bug_o_matic_3000/bug.aw:2187
 msgid "Sisse"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2477
+#: classes/applications/bug_o_matic_3000/bug.aw:2479
 msgid "Puuduvad õigused bugi sulgeda!"
 msgstr ""
 

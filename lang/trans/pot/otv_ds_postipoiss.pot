@@ -126,11 +126,11 @@ msgstr ""
 msgid "the subject xml file (%s) does not exist!"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:759
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:758
 msgid "Andmebaasi v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:763
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:762
 msgid "XML v&auml;li"
 msgstr ""
 

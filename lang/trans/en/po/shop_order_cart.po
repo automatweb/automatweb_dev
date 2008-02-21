@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -100,16 +100,16 @@ msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr "controller"
 
 #: classes/applications/shop/shop_order_cart.aw:162
-#: classes/applications/shop/shop_order_cart.aw:989
-#: classes/applications/shop/shop_order_cart.aw:1259
+#: classes/applications/shop/shop_order_cart.aw:988
+#: classes/applications/shop/shop_order_cart.aw:1258
 msgid "shop_order_cart::show(): no product layout set for cart (%s)"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:416
+#: classes/applications/shop/shop_order_cart.aw:415
 msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
 msgstr "For product %s, you must order an amount that is divisble by %s, currently you ordered %s"
 
-#: classes/applications/shop/shop_order_cart.aw:767
+#: classes/applications/shop/shop_order_cart.aw:766
 msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 msgstr "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 

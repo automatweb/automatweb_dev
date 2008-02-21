@@ -213,15 +213,15 @@ msgstr "Delete"
 
 #: classes/applications/crm/crm_company_cust_impl.aw:699
 msgid "Eemalda grupist"
-msgstr ""
+msgstr "Remove from group"
 
 #: classes/applications/crm/crm_company_cust_impl.aw:705
 msgid "L&otilde;peta klinedisuhe"
-msgstr ""
+msgstr "End customer relation"
 
 #: classes/applications/crm/crm_company_cust_impl.aw:712
 msgid "Kustuta l&otilde;plikult"
-msgstr ""
+msgstr "Delete from system"
 
 #: classes/applications/crm/crm_company_cust_impl.aw:719
 msgid "Salvesta kliendina"

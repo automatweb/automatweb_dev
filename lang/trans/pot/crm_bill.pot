@@ -463,19 +463,51 @@ msgid "Grupi Eelvaade (preview) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:group_preview_add
-msgid "Grupi preview_add (preview_add) pealkiri"
+msgid "Grupi Arve Lisa (preview_add) pealkiri"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:group_preview_add_help
-msgid "Grupi preview_add (preview_add) help"
+msgid "Grupi Arve Lisa (preview_add) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:group_preview_w_rows
-msgid "Grupi preview_w_rows (preview_w_rows) pealkiri"
+msgid "Grupi Eelvaade ridadega (preview_w_rows) pealkiri"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:group_preview_w_rows_help
-msgid "Grupi preview_w_rows (preview_w_rows) help"
+msgid "Grupi Eelvaade ridadega (preview_w_rows) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_TASK
+msgid "Seose &Uuml;lesanne (RELTYPE_TASK) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_CUST
+msgid "Seose Klient (RELTYPE_CUST) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_IMPL
+msgid "Seose Teostaja (RELTYPE_IMPL) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_LANGUAGE
+msgid "Seose Keel (RELTYPE_LANGUAGE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_ROW
+msgid "Seose Rida (RELTYPE_ROW) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_PROD
+msgid "Seose Toode (RELTYPE_PROD) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_SIGNER
+msgid "Seose Allkirjastaja (RELTYPE_SIGNER) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_PAYMENT
+msgid "Seose Laekumine (RELTYPE_PAYMENT) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:165

@@ -182,30 +182,6 @@ msgstr ""
 msgid "Omaduse N&auml;ita ikooni (show_icon) help"
 msgstr ""
 
-#: classes/file.aw:prop_j_time
-msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) caption"
-msgstr ""
-
-#: classes/file.aw:prop_j_time_comment
-msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_j_time_help
-msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) help"
-msgstr ""
-
-#: classes/file.aw:prop_act_date
-msgid "Omaduse Avaldamise kuup&auml;ev (act_date) caption"
-msgstr ""
-
-#: classes/file.aw:prop_act_date_comment
-msgid "Omaduse Avaldamise kuup&auml;ev (act_date) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_act_date_help
-msgid "Omaduse Avaldamise kuup&auml;ev (act_date) help"
-msgstr ""
-
 #: classes/file.aw:prop_udef1
 msgid "Omaduse User-defined 1 (udef1) caption"
 msgstr ""
@@ -330,107 +306,119 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:188
+#: classes/file.aw:180
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/file.aw:208
+#: classes/file.aw:200
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/file.aw:209 classes/file.aw:228
+#: classes/file.aw:201 classes/file.aw:220
 msgid "Allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:216
+#: classes/file.aw:208
 msgid "DigiDoc konteinerisse"
 msgstr ""
 
-#: classes/file.aw:227
+#: classes/file.aw:219
 msgid "Allkirjasta"
 msgstr ""
 
-#: classes/file.aw:235
+#: classes/file.aw:227
 msgid "DigiDoc konteiner"
 msgstr ""
 
-#: classes/file.aw:246
+#: classes/file.aw:238
 msgid "Allkirjasta fail"
 msgstr ""
 
-#: classes/file.aw:247
+#: classes/file.aw:239
 msgid "Faili: %s, allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:296
+#: classes/file.aw:288
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:392
+#: classes/file.aw:384
 msgid "Paiguta dokumenti"
 msgstr ""
 
-#: classes/file.aw:414
-msgid "V&otilde;imalikud asendused\n<br>					#file# - faili nimi \n<br>					#file_url# - link failile \n<br>					#user_name# - muutja nimi"
+#: classes/file.aw:406
+msgid "V&otilde;imalikud asendused<br>"
 msgstr ""
 
-#: classes/file.aw:427
-msgid "User %s has added/changed the following file %s. Please click the link below to view the document \n %s"
+#: classes/file.aw:407
+msgid "#file# - faili nimi <br>"
 msgstr ""
 
-#: classes/file.aw:437
+#: classes/file.aw:408
+msgid "#file_url# - link failile <br>"
+msgstr ""
+
+#: classes/file.aw:409
+msgid "#user_name# - muutja nimi"
+msgstr ""
+
+#: classes/file.aw:422
+msgid "User %s has added/changed the following file %s. Please click the link below to view the document %s"
+msgstr ""
+
+#: classes/file.aw:432
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 
-#: classes/file.aw:506
+#: classes/file.aw:501
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr ""
 
-#: classes/file.aw:766
+#: classes/file.aw:761
 msgid "faili ikoon"
 msgstr ""
 
-#: classes/file.aw:884
+#: classes/file.aw:879
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/file.aw:1520
+#: classes/file.aw:1515
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/file.aw:1641
+#: classes/file.aw:1636
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/file.aw:1649
+#: classes/file.aw:1644
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/file.aw:1683
+#: classes/file.aw:1678
 msgid "Salvesta"
 msgstr ""
 
-#: classes/file.aw:1689
+#: classes/file.aw:1684
 msgid "Kustuta"
 msgstr ""
 
-#: classes/file.aw:1696
+#: classes/file.aw:1691
 msgid "Saada teavitusmeil"
 msgstr ""
 
-#: classes/file.aw:1706
+#: classes/file.aw:1701
 msgid "Nimi"
 msgstr ""
 
-#: classes/file.aw:1711
+#: classes/file.aw:1706
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/file.aw:1716
+#: classes/file.aw:1711
 msgid "Telefon"
 msgstr ""
 
-#: classes/file.aw:1721
+#: classes/file.aw:1716
 msgid "E-mail"
 msgstr ""
 

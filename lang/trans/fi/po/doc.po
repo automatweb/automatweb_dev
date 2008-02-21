@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1377,62 +1377,62 @@ msgstr ""
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:937
+#: classes/doc.aw:935
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:953 classes/doc.aw:1777
+#: classes/doc.aw:956 classes/doc.aw:1780
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:1115
+#: classes/doc.aw:1118
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:1128
+#: classes/doc.aw:1131
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/doc.aw:1412 classes/doc.aw:1507 classes/doc.aw:1511
+#: classes/doc.aw:1415 classes/doc.aw:1510 classes/doc.aw:1514
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/doc.aw:1459
+#: classes/doc.aw:1462
 msgid "Versioon"
 msgstr ""
 
-#: classes/doc.aw:1465 classes/doc.aw:1525 classes/doc.aw:1553
+#: classes/doc.aw:1468 classes/doc.aw:1528 classes/doc.aw:1556
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc.aw:1471
+#: classes/doc.aw:1474
 msgid "Hinne"
 msgstr ""
 
-#: classes/doc.aw:1477
+#: classes/doc.aw:1480
 msgid "Hinda"
 msgstr ""
 
-#: classes/doc.aw:1483
+#: classes/doc.aw:1486
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/doc.aw:1489
+#: classes/doc.aw:1492
 msgid "Vali"
 msgstr ""
 
-#: classes/doc.aw:1520 classes/doc.aw:1548
+#: classes/doc.aw:1523 classes/doc.aw:1551
 msgid "--Vali--"
 msgstr ""
 
-#: classes/doc.aw:1645
+#: classes/doc.aw:1648
 msgid "Kustuta"
 msgstr ""
 
-#: classes/doc.aw:1713
+#: classes/doc.aw:1716
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/doc.aw:1751 classes/doc.aw:1752 classes/doc.aw:1753
+#: classes/doc.aw:1754 classes/doc.aw:1755 classes/doc.aw:1756
 msgid "<b>"
 msgstr ""

@@ -14,18 +14,6 @@ msgstr ""
 msgid "Klassi Link help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:prop_comment
-msgid "Omaduse Kommentaar lingikogusse (comment) caption"
-msgstr ""
-
-#: classes/contentmgmt/links.aw:prop_comment_comment
-msgid "Omaduse Kommentaar lingikogusse (comment) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/links.aw:prop_comment_help
-msgid "Omaduse Kommentaar lingikogusse (comment) help"
-msgstr ""
-
 #: classes/contentmgmt/links.aw:prop_url
 msgid "Omaduse URL (url) caption"
 msgstr ""

@@ -181,30 +181,6 @@ msgstr ""
 msgid "Omaduse N&auml;ita ikooni (show_icon) help"
 msgstr ""
 
-#: classes/file.aw:prop_j_time
-msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) caption"
-msgstr ""
-
-#: classes/file.aw:prop_j_time_comment
-msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_j_time_help
-msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) help"
-msgstr ""
-
-#: classes/file.aw:prop_act_date
-msgid "Omaduse Avaldamise kuup&auml;ev (act_date) caption"
-msgstr ""
-
-#: classes/file.aw:prop_act_date_comment
-msgid "Omaduse Avaldamise kuup&auml;ev (act_date) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_act_date_help
-msgid "Omaduse Avaldamise kuup&auml;ev (act_date) help"
-msgstr ""
-
 #: classes/file.aw:prop_udef1
 msgid "Omaduse User-defined 1 (udef1) caption"
 msgstr ""
@@ -253,124 +229,16 @@ msgstr ""
 msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) help"
 msgstr ""
 
-#: classes/file.aw:prop_sp_tb
-msgid "Omaduse  (sp_tb) caption"
+#: classes/file.aw:prop_n_test
+msgid "Omaduse maili teavituse test prop (n_test) caption"
 msgstr ""
 
-#: classes/file.aw:prop_sp_tb_comment
-msgid "Omaduse  (sp_tb) kommentaar"
+#: classes/file.aw:prop_n_test_comment
+msgid "Omaduse maili teavituse test prop (n_test) kommentaar"
 msgstr ""
 
-#: classes/file.aw:prop_sp_tb_help
-msgid "Omaduse  (sp_tb) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_text
-msgid "Omaduse Sisu m&otilde;imalike asenduste tekst (sp_text) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_text_comment
-msgid "Omaduse Sisu m&otilde;imalike asenduste tekst (sp_text) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_text_help
-msgid "Omaduse Sisu m&otilde;imalike asenduste tekst (sp_text) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_subject
-msgid "Omaduse Teema (sp_subject) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_subject_comment
-msgid "Omaduse Teema (sp_subject) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_subject_help
-msgid "Omaduse Teema (sp_subject) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_from
-msgid "Omaduse Kellelt (sp_from) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_from_comment
-msgid "Omaduse Kellelt (sp_from) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_from_help
-msgid "Omaduse Kellelt (sp_from) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_content
-msgid "Omaduse Sisu (sp_content) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_content_comment
-msgid "Omaduse Sisu (sp_content) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_content_help
-msgid "Omaduse Sisu (sp_content) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_table
-msgid "Omaduse Valitud isikud (sp_table) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_table_comment
-msgid "Omaduse Valitud isikud (sp_table) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_table_help
-msgid "Omaduse Valitud isikud (sp_table) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_p_name
-msgid "Omaduse Isik (sp_p_name) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_p_name_comment
-msgid "Omaduse Isik (sp_p_name) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_p_name_help
-msgid "Omaduse Isik (sp_p_name) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_p_co
-msgid "Omaduse Organisatsioon (sp_p_co) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_p_co_comment
-msgid "Omaduse Organisatsioon (sp_p_co) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_p_co_help
-msgid "Omaduse Organisatsioon (sp_p_co) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_sbt
-msgid "Omaduse Otsi (sp_sbt) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_sbt_comment
-msgid "Omaduse Otsi (sp_sbt) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_sbt_help
-msgid "Omaduse Otsi (sp_sbt) help"
-msgstr ""
-
-#: classes/file.aw:prop_sp_s_res
-msgid "Omaduse Otsingu tulemused (sp_s_res) caption"
-msgstr ""
-
-#: classes/file.aw:prop_sp_s_res_comment
-msgid "Omaduse Otsingu tulemused (sp_s_res) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_sp_s_res_help
-msgid "Omaduse Otsingu tulemused (sp_s_res) help"
+#: classes/file.aw:prop_n_test_help
+msgid "Omaduse maili teavituse test prop (n_test) help"
 msgstr ""
 
 #: classes/file.aw:prop_acl
@@ -437,108 +305,118 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:186
+#: classes/file.aw:180
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/file.aw:206
+#: classes/file.aw:200
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/file.aw:207 classes/file.aw:226
+#: classes/file.aw:201 classes/file.aw:220
 msgid "Allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:214
+#: classes/file.aw:208
 msgid "DigiDoc konteinerisse"
 msgstr ""
 
-#: classes/file.aw:225
+#: classes/file.aw:219
 msgid "Allkirjasta"
 msgstr ""
 
-#: classes/file.aw:233
+#: classes/file.aw:227
 msgid "DigiDoc konteiner"
 msgstr ""
 
-#: classes/file.aw:244
+#: classes/file.aw:238
 msgid "Allkirjasta fail"
 msgstr ""
 
-#: classes/file.aw:245
+#: classes/file.aw:239
 msgid "Faili: %s, allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:294
+#: classes/file.aw:288
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:390
+#: classes/file.aw:384
 msgid "Paiguta dokumenti"
 msgstr ""
 
-#: classes/file.aw:412
-msgid ""
-"V&otilde;imalikud asendused\n"
-"<br>\t\t\t\t\t#file# - faili nimi \n"
-"<br>\t\t\t\t\t#file_url# - link failile \n"
-"<br>\t\t\t\t\t#user_name# - muutja nimi"
+#: classes/file.aw:406
+msgid "V&otilde;imalikud asendused<br>"
 msgstr ""
 
-#: classes/file.aw:425 classes/file.aw:1880
-msgid ""
-"User %s has added/changed the following file %s. Please click the link below to view the document \n"
-" %s"
+#: classes/file.aw:407
+msgid "#file# - faili nimi <br>"
 msgstr ""
 
-#: classes/file.aw:435 classes/file.aw:1899
+#: classes/file.aw:408
+msgid "#file_url# - link failile <br>"
+msgstr ""
+
+#: classes/file.aw:409
+msgid "#user_name# - muutja nimi"
+msgstr ""
+
+#: classes/file.aw:422
+msgid "User %s has added/changed the following file %s. Please click the link below to view the document %s"
+msgstr ""
+
+#: classes/file.aw:432
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 
-#: classes/file.aw:504
+#: classes/file.aw:501
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr ""
 
-#: classes/file.aw:882
+#: classes/file.aw:761
+msgid "faili ikoon"
+msgstr ""
+
+#: classes/file.aw:879
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/file.aw:1509
+#: classes/file.aw:1515
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/file.aw:1626
+#: classes/file.aw:1636
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/file.aw:1634
+#: classes/file.aw:1644
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/file.aw:1668
+#: classes/file.aw:1678
 msgid "Salvesta"
 msgstr ""
 
-#: classes/file.aw:1674
+#: classes/file.aw:1684
 msgid "Kustuta"
 msgstr ""
 
-#: classes/file.aw:1681
+#: classes/file.aw:1691
 msgid "Saada teavitusmeil"
 msgstr ""
 
-#: classes/file.aw:1691
+#: classes/file.aw:1701
 msgid "Nimi"
 msgstr ""
 
-#: classes/file.aw:1696
+#: classes/file.aw:1706
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/file.aw:1701
+#: classes/file.aw:1711
 msgid "Telefon"
 msgstr ""
 
-#: classes/file.aw:1706
+#: classes/file.aw:1716
 msgid "E-mail"
 msgstr ""

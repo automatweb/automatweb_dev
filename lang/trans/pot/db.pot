@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/db.aw:107 classes/db.aw:128
+#: classes/db.aw:106 classes/db.aw:128
 msgid "this driver is not supported"
 msgstr ""
 

@@ -25,6 +25,18 @@ msgstr ""
 msgid "Omaduse Pangamakse objekt (bank_payment) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_bron.aw:prop_confirmed_rvs_folder
+msgid "Omaduse Kinnitatud tellimuste kataloog (confirmed_rvs_folder) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_confirmed_rvs_folder_comment
+msgid "Omaduse Kinnitatud tellimuste kataloog (confirmed_rvs_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_confirmed_rvs_folder_help
+msgid "Omaduse Kinnitatud tellimuste kataloog (confirmed_rvs_folder) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_bron.aw:prop_template
 msgid "Omaduse Template (Vaikimis bron_box.tpl) (template) caption"
 msgstr ""
@@ -47,6 +59,30 @@ msgstr ""
 
 #: classes/applications/ows_bron/ows_bron.aw:prop_mail_templates_help
 msgid "Omaduse  (mail_templates) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_bcc
+msgid "Omaduse  (mail_bcc) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_bcc_comment
+msgid "Omaduse  (mail_bcc) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_bcc_help
+msgid "Omaduse  (mail_bcc) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_bank_settings_table
+msgid "Omaduse  (bank_settings_table) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_bank_settings_table_comment
+msgid "Omaduse  (bank_settings_table) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_bank_settings_table_help
+msgid "Omaduse  (bank_settings_table) help"
 msgstr ""
 
 #: classes/applications/ows_bron/ows_bron.aw:group_mail_settings
@@ -73,27 +109,64 @@ msgstr ""
 msgid "Grupi T&uuml;histusmeil (mail_settings_cancel) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_bcc
+msgid "Grupi BCC (mail_bcc) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_bcc_help
+msgid "Grupi BCC (mail_bcc) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_bank_settings
+msgid "Grupi Panga seaded (bank_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_bank_settings_help
+msgid "Grupi Panga seaded (bank_settings) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_bron.aw:rel_RELTYPE_BANK_PAYMENT
 msgid "Seose Pangamakse (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:613
-#: classes/applications/ows_bron/ows_bron.aw:949
+#: classes/applications/ows_bron/ows_bron.aw:rel_RELTYPE_CONFIRMED_FOLDER
+msgid "Seose Kinnitatud tellimuste kaust (RELTYPE_CONFIRMED_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:635
+#: classes/applications/ows_bron/ows_bron.aw:989
 msgid "OWS Bron %s %s @ %s"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2138
+#: classes/applications/ows_bron/ows_bron.aw:2282
 msgid "The booking you requested does not exist!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2143
+#: classes/applications/ows_bron/ows_bron.aw:2287
 msgid "The booking you requested has already been cancelled!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2401
+#: classes/applications/ows_bron/ows_bron.aw:2577
+#: classes/applications/ows_bron/ows_bron.aw:2655
 msgid "Hotell"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2406
+#: classes/applications/ows_bron/ows_bron.aw:2582
 msgid "Template"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2614
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2619
+msgid "Pangamakse objekt"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2630
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2660
+msgid "BCC"
 msgstr ""

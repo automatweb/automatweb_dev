@@ -27,7 +27,6 @@ $GLOBALS["TRANS"]["object::flag(%s): flag must be integer!"] = "object::flag(%s)
 $GLOBALS["TRANS"]["object::set_flag(%s, %s): flag must be integer!"] = "object::set_flag(%s, %s): flag must be integer!";
 $GLOBALS["TRANS"]["object::set_flag(%s, %s): value must be integer!"] = "object::set_flag(%s, %s): value must be integer!";
 $GLOBALS["TRANS"]["object::set_prop(%s, %s): no property %s defined for current object!"] = "object::set_prop(%s, %s): no property %s defined for current object!";
-$GLOBALS["TRANS"]["object::set_cache_dirty(%s): parameter must be integer or boolean!"] = "object::set_cache_dirty(%s): parameter must be integer or boolean!";
 $GLOBALS["TRANS"]["object::instance(): no object loaded or class id not set!"] = "object::instance(): no object loaded or class id not set!";
 $GLOBALS["TRANS"]["object::create_brother(%s): no parent!"] = "object::create_brother(%s): no parent!";
 $GLOBALS["TRANS"]["object::load(%s): no view access for object %s!"] = "object::load(%s): no view access for object %s!";

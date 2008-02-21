@@ -10,7 +10,6 @@ $GLOBALS["TRANS"]["Omaduse Allahindlus (%) (disc) caption"] = "Discount (%)";
 $GLOBALS["TRANS"]["Omaduse Summa (sum) caption"] = "Sum";
 $GLOBALS["TRANS"]["Omaduse Kuuarve (monthly_bill) caption"] = "Monthly Invoice";
 $GLOBALS["TRANS"]["Omaduse Keel (language) caption"] = "Language";
-$GLOBALS["TRANS"]["Omaduse Arveread  (bill_rows) caption"] = "Invoice rows";
 $GLOBALS["TRANS"]["Omaduse  (preview) caption"] = "Preview";
 $GLOBALS["TRANS"]["Grupi Toimetused (tasks) pealkiri"] = "Tasks";
 $GLOBALS["TRANS"]["Grupi Toimetused (tasks) help"] = "Tasks";

@@ -13,30 +13,6 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/obj/object.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/core/obj/object.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/core/obj/object.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/core/obj/object.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/core/obj/object.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
-#: classes/core/obj/object.aw:111
-msgid "Call to undefined method '%s'."
-msgstr ""
-
 #: classes/core/obj/object.aw:145
 msgid "object loader is not object!!"
 msgstr ""

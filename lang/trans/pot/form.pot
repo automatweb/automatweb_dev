@@ -14,31 +14,31 @@ msgstr ""
 msgid "Klassi Vorm help"
 msgstr ""
 
-#: classes/formgen/form.aw:2284
+#: classes/formgen/form.aw:2264
 msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s"
 msgstr ""
 
-#: classes/formgen/form.aw:3057
+#: classes/formgen/form.aw:3031
 msgid "No table selected for showing search results for form %s!"
 msgstr ""
 
-#: classes/formgen/form.aw:3406
+#: classes/formgen/form.aw:3380
 msgid "form->search(%s): no forms selected as search targets!"
 msgstr ""
 
-#: classes/formgen/form.aw:3594
+#: classes/formgen/form.aw:3568
 msgid "No forms selected as search targets!"
 msgstr ""
 
-#: classes/formgen/form.aw:3800
+#: classes/formgen/form.aw:3774
 msgid "No table selected for showing data!"
 msgstr ""
 
-#: classes/formgen/form.aw:3848
+#: classes/formgen/form.aw:3822
 msgid "Tulemuste kuvamise tabelis pole yhtegi elementi!"
 msgstr ""
 
-#: classes/formgen/form.aw:4755
+#: classes/formgen/form.aw:4729
 msgid "form->metainfo(): weird error!"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -113,11 +113,11 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:135 classes/admin/admin_if.aw:972
+#: classes/admin/admin_if.aw:135 classes/admin/admin_if.aw:1001
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_if.aw:142 classes/admin/admin_if.aw:978
+#: classes/admin/admin_if.aw:142 classes/admin/admin_if.aw:1007
 msgid "Kopeeri"
 msgstr ""
 
@@ -125,11 +125,11 @@ msgstr ""
 msgid "Kleebi"
 msgstr ""
 
-#: classes/admin/admin_if.aw:159 classes/admin/admin_if.aw:988
+#: classes/admin/admin_if.aw:159 classes/admin/admin_if.aw:1017
 msgid "Kustuta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:160 classes/admin/admin_if.aw:984
+#: classes/admin/admin_if.aw:160 classes/admin/admin_if.aw:1013
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
@@ -195,38 +195,38 @@ msgstr ""
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/admin/admin_if.aw:941
+#: classes/admin/admin_if.aw:970
 msgid "Ava"
 msgstr ""
 
-#: classes/admin/admin_if.aw:961
+#: classes/admin/admin_if.aw:990
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1265 classes/admin/admin_if.aw:1298
+#: classes/admin/admin_if.aw:1301 classes/admin/admin_if.aw:1334
 msgid "Administreerimisliides"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1328
+#: classes/admin/admin_if.aw:1364
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1329
+#: classes/admin/admin_if.aw:1365
 msgid "Asukoht:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1330
-msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
+#: classes/admin/admin_if.aw:1366
+msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-%s."
 msgstr ""
 
-#: classes/admin/admin_if.aw:1331
+#: classes/admin/admin_if.aw:1367
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1332
+#: classes/admin/admin_if.aw:1368
 msgid "Seaded"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1399 classes/admin/admin_if.aw:1451
+#: classes/admin/admin_if.aw:1435 classes/admin/admin_if.aw:1487
 msgid "Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"
 msgstr ""

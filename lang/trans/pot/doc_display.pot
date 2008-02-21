@@ -14,75 +14,75 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/doc_display.aw:662
+#: classes/doc_display.aw:716
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/doc_display.aw:668
+#: classes/doc_display.aw:722
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc_display.aw:673
+#: classes/doc_display.aw:727
 msgid "Peida"
 msgstr ""
 
-#: classes/doc_display.aw:677
+#: classes/doc_display.aw:731
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/doc_display.aw:683
+#: classes/doc_display.aw:737
 msgid "Kleebi"
 msgstr ""
 
-#: classes/doc_display.aw:879
+#: classes/doc_display.aw:933
 msgid "jaanuar"
 msgstr ""
 
-#: classes/doc_display.aw:880
+#: classes/doc_display.aw:934
 msgid "veebruar"
 msgstr ""
 
-#: classes/doc_display.aw:881
+#: classes/doc_display.aw:935
 msgid "märts"
 msgstr ""
 
-#: classes/doc_display.aw:882
+#: classes/doc_display.aw:936
 msgid "aprill"
 msgstr ""
 
-#: classes/doc_display.aw:883
+#: classes/doc_display.aw:937
 msgid "mai"
 msgstr ""
 
-#: classes/doc_display.aw:884
+#: classes/doc_display.aw:938
 msgid "juuni"
 msgstr ""
 
-#: classes/doc_display.aw:885
+#: classes/doc_display.aw:939
 msgid "juuli"
 msgstr ""
 
-#: classes/doc_display.aw:886
+#: classes/doc_display.aw:940
 msgid "august"
 msgstr ""
 
-#: classes/doc_display.aw:887
+#: classes/doc_display.aw:941
 msgid "september"
 msgstr ""
 
-#: classes/doc_display.aw:888
+#: classes/doc_display.aw:942
 msgid "oktoober"
 msgstr ""
 
-#: classes/doc_display.aw:889
+#: classes/doc_display.aw:943
 msgid "november"
 msgstr ""
 
-#: classes/doc_display.aw:890
+#: classes/doc_display.aw:944
 msgid "detsember"
 msgstr ""
 
-#: classes/doc_display.aw:897
+#: classes/doc_display.aw:951
 msgid "Just postitatud"
 msgstr ""
 

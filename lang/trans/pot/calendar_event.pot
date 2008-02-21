@@ -374,6 +374,18 @@ msgstr ""
 msgid "Omaduse Faili upload 1 (ufupload1) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:prop_multifile_upload
+msgid "Omaduse Faili upload (multifile_upload) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_multifile_upload_comment
+msgid "Omaduse Faili upload (multifile_upload) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_multifile_upload_help
+msgid "Omaduse Faili upload (multifile_upload) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:prop_ucheckbox1
 msgid "Omaduse  (ucheckbox1) caption"
 msgstr ""
@@ -504,6 +516,30 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_organizer_help
 msgid "Omaduse Korraldaja (organizer) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer_tb
+msgid "Omaduse Korraldaja toolbar (organizer_tb) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer_tb_comment
+msgid "Omaduse Korraldaja toolbar (organizer_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer_tb_help
+msgid "Omaduse Korraldaja toolbar (organizer_tb) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer_table
+msgid "Omaduse Korraldaja tabel (organizer_table) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer_table_comment
+msgid "Omaduse Korraldaja tabel (organizer_table) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_organizer_table_help
+msgid "Omaduse Korraldaja tabel (organizer_table) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_level
@@ -694,31 +730,95 @@ msgstr ""
 msgid "Seose Toimumisaeg (RELTYPE_EVENT_TIME) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:410
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_FILE
+msgid "Seose Fail (RELTYPE_FILE) tekst"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:454
 msgid "Algusaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:411
+#: classes/applications/calendar/calendar_event.aw:455
 msgid "L&otilde;puaeg ei vasta formaadile"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:452
+#: classes/applications/calendar/calendar_event.aw:496
 msgid "Sellist toimumiskohta pole"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:481
+#: classes/applications/calendar/calendar_event.aw:525
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:485
+#: classes/applications/calendar/calendar_event.aw:529
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:489
+#: classes/applications/calendar/calendar_event.aw:533
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/calendar/calendar_event.aw:519
+#: classes/applications/calendar/calendar_event.aw:563 classes/applications/calendar/calendar_event.aw:807
 msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:767
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:772 classes/applications/calendar/calendar_event.aw:773
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:774 classes/applications/calendar/calendar_event.aw:785
+msgid "Lisa uus korraldaja"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:786 classes/applications/calendar/calendar_event.aw:787
+msgid "Isik"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:809
+msgid "Oled kindel, et kustutada?"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:819
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:823
+msgid "Riik"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:827
+msgid "Maakond"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:831
+msgid "Linn"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:835
+msgid "T&auml;nav"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:839
+msgid "E-mail"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:843
+msgid "WWW"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:847
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:851 classes/applications/calendar/calendar_event.aw:861
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:857
+msgid "Korraldajad"
 msgstr ""
 

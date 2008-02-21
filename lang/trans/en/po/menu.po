@@ -445,6 +445,18 @@ msgstr ""
 msgid "Omaduse Dokumentide j&auml;rjestamine (sorter) help"
 msgstr "option for repeatedly choose documents sorting principle on the web."
 
+#: classes/menu.aw:prop_doc_ord_apply_to_admin
+msgid "Omaduse Kehtib ka adminis (doc_ord_apply_to_admin) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_doc_ord_apply_to_admin_comment
+msgid "Omaduse Kehtib ka adminis (doc_ord_apply_to_admin) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_doc_ord_apply_to_admin_help
+msgid "Omaduse Kehtib ka adminis (doc_ord_apply_to_admin) help"
+msgstr ""
+
 #: classes/menu.aw:prop_ip
 msgid "Omaduse  (ip) caption"
 msgstr ""
@@ -516,6 +528,18 @@ msgstr ""
 #: classes/menu.aw:prop_tpl_dir_help
 msgid "Omaduse Template set (tpl_dir) help"
 msgstr "option for picking the website´s design for a certain folder."
+
+#: classes/menu.aw:prop_tpl_dir_applies_to_all
+msgid "Omaduse Kasuta template setist k&otilde;iki templatesid (tpl_dir_applies_to_all) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_dir_applies_to_all_comment
+msgid "Omaduse Kasuta template setist k&otilde;iki templatesid (tpl_dir_applies_to_all) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_dir_applies_to_all_help
+msgid "Omaduse Kasuta template setist k&otilde;iki templatesid (tpl_dir_applies_to_all) help"
+msgstr ""
 
 #: classes/menu.aw:prop_show_lead_template
 msgid "Omaduse Leadi template (show_lead_template) caption"
@@ -660,18 +684,6 @@ msgstr ""
 #: classes/menu.aw:prop_submenus_from_obj_help
 msgid "Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) help"
 msgstr "makes it able to say to the folder to take the sub-folders structure from another object for displaying them on web."
-
-#: classes/menu.aw:prop_aip_filename
-msgid "Omaduse Failinimi (aip_filename) caption"
-msgstr "File name"
-
-#: classes/menu.aw:prop_aip_filename_comment
-msgid "Omaduse Failinimi (aip_filename) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_aip_filename_help
-msgid "Omaduse Failinimi (aip_filename) help"
-msgstr ""
 
 #: classes/menu.aw:prop_get_content_from
 msgid "Omaduse Sisu objektist (get_content_from) caption"
@@ -1445,307 +1457,310 @@ msgstr ""
 msgid "Seose Sihtr&uuml;hm (RELTYPE_TARGET_AUDIENCE) tekst"
 msgstr ""
 
-#: classes/menu.aw:547
+#: classes/menu.aw:550
 msgid "Alati muutuv"
 msgstr ""
 
-#: classes/menu.aw:548
+#: classes/menu.aw:551
 msgid "Tunnis korra"
 msgstr ""
 
-#: classes/menu.aw:549
+#: classes/menu.aw:552
 msgid "P&auml;evas korra"
 msgstr ""
 
-#: classes/menu.aw:550
+#: classes/menu.aw:553
 msgid "N&auml;dalas korra"
 msgstr ""
 
-#: classes/menu.aw:551
+#: classes/menu.aw:554
 msgid "Kuus korra"
 msgstr ""
 
-#: classes/menu.aw:552
+#: classes/menu.aw:555
 msgid "Aastas korra"
 msgstr ""
 
-#: classes/menu.aw:553
+#: classes/menu.aw:556
 msgid "Ei muudeta (arhiveeritud)"
 msgstr ""
 
-#: classes/menu.aw:559
+#: classes/menu.aw:562
 msgid "Vali t&uuml;hjaks"
 msgstr "Select blank"
 
-#: classes/menu.aw:602
+#: classes/menu.aw:605
 msgid "Vasak"
 msgstr "Left"
 
-#: classes/menu.aw:603
+#: classes/menu.aw:606
 msgid "Parem"
 msgstr "Right"
 
-#: classes/menu.aw:617
+#: classes/menu.aw:620
 msgid "Uues aknas"
 msgstr "In new window"
 
-#: classes/menu.aw:618
+#: classes/menu.aw:621
 msgid "Klikitav"
 msgstr "Clickable"
 
-#: classes/menu.aw:632
+#: classes/menu.aw:635
 msgid "Esilehel"
 msgstr "On the frontpage"
 
-#: classes/menu.aw:633
+#: classes/menu.aw:636
 msgid "Paremal"
 msgstr "On the right"
 
-#: classes/menu.aw:647
+#: classes/menu.aw:650
 msgid "Peida &auml;ra, kui selle kausta all aktiivseid dokumente ei ole"
 msgstr "Hide, when there are no active documents beneath"
 
-#: classes/menu.aw:648
+#: classes/menu.aw:651
 msgid "Ilma men&uuml;&uuml;deta"
 msgstr "No folders"
 
-#: classes/menu.aw:673
+#: classes/menu.aw:676
 msgid "kasuta parenti valikut"
 msgstr "use parent's settings"
 
-#: classes/menu.aw:713
+#: classes/menu.aw:716
 msgid "(no icon set)"
 msgstr "(no icon set)"
 
-#: classes/menu.aw:743
+#: classes/menu.aw:746
 msgid "V&auml;li"
 msgstr "Field"
 
-#: classes/menu.aw:747 classes/menu.aw:1256
+#: classes/menu.aw:750 classes/menu.aw:1259
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/menu.aw:752 classes/menu.aw:805
+#: classes/menu.aw:755 classes/menu.aw:808
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr "By order"
 
-#: classes/menu.aw:753 classes/menu.aw:806
+#: classes/menu.aw:756 classes/menu.aw:809
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr "By creation date"
 
-#: classes/menu.aw:754 classes/menu.aw:807
+#: classes/menu.aw:757 classes/menu.aw:810
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr "By modification date"
 
-#: classes/menu.aw:755 classes/menu.aw:808
+#: classes/menu.aw:758 classes/menu.aw:811
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr "By document date"
 
-#: classes/menu.aw:756 classes/menu.aw:809
+#: classes/menu.aw:759 classes/menu.aw:812
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr "By time selected in calendar"
 
-#: classes/menu.aw:757
+#: classes/menu.aw:760
 msgid "Nime j&auml;rgi"
 msgstr "By name"
 
-#: classes/menu.aw:761 classes/menu.aw:816
+#: classes/menu.aw:764 classes/menu.aw:819
 msgid "Suurem (uuem) enne"
 msgstr "Bigger (newer) first"
 
-#: classes/menu.aw:762 classes/menu.aw:817
+#: classes/menu.aw:765 classes/menu.aw:820
 msgid "V&auml;iksem (vanem) enne"
 msgstr "Smaller (older) first"
 
-#: classes/menu.aw:810
+#: classes/menu.aw:813
 msgid "Random"
 msgstr "Random"
 
-#: classes/menu.aw:825
+#: classes/menu.aw:828
 msgid "OID"
 msgstr "OID"
 
-#: classes/menu.aw:832 classes/menu.aw:1933 classes/menu.aw:1985
-#: classes/menu.aw:2042
+#: classes/menu.aw:835 classes/menu.aw:1952 classes/menu.aw:2004
+#: classes/menu.aw:2061
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/menu.aw:852
+#: classes/menu.aw:855
 msgid "IP Nimi"
 msgstr "IP Name"
 
-#: classes/menu.aw:858
+#: classes/menu.aw:861
 msgid "IP Aadress"
 msgstr "IP Address"
 
-#: classes/menu.aw:864
+#: classes/menu.aw:867
 msgid "Lubatud"
 msgstr "Allowed"
 
-#: classes/menu.aw:870
+#: classes/menu.aw:873
 msgid "Keelatud"
 msgstr "Denied"
 
-#: classes/menu.aw:964 classes/menu.aw:1152 classes/menu.aw:1193
-#: classes/menu.aw:1217
+#: classes/menu.aw:967 classes/menu.aw:1155 classes/menu.aw:1196
+#: classes/menu.aw:1220
 msgid "Vali pilt.."
 msgstr "Select image.."
 
-#: classes/menu.aw:988 classes/menu.aw:1128
+#: classes/menu.aw:991 classes/menu.aw:1131
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/menu.aw:1250
+#: classes/menu.aw:1253
 msgid "Pildi number"
 msgstr "Image number"
 
-#: classes/menu.aw:1262
+#: classes/menu.aw:1265
 msgid "Eelvaade"
 msgstr "Preview"
 
-#: classes/menu.aw:1268
+#: classes/menu.aw:1271
 msgid "Vali Pilt"
 msgstr "Select image"
 
-#: classes/menu.aw:1274
+#: classes/menu.aw:1277
 msgid "Uploadi Pilt"
 msgstr "Upload image"
 
-#: classes/menu.aw:1280
+#: classes/menu.aw:1283
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/menu.aw:1295
+#: classes/menu.aw:1298
 msgid "Vali men&uuml;&uuml;d"
 msgstr "Select folders"
 
-#: classes/menu.aw:1305
+#: classes/menu.aw:1308
 msgid "M&auml;rgi k&otilde;ik men&uuml;&uuml;d aktiivseks"
 msgstr "Activate all folders"
 
-#: classes/menu.aw:1312
+#: classes/menu.aw:1315
 msgid "Ekspordi ikoonid"
 msgstr "Export icons"
 
-#: classes/menu.aw:1317
+#: classes/menu.aw:1320
 msgid "Ekspordi"
 msgstr "Export"
 
-#: classes/menu.aw:1336
+#: classes/menu.aw:1339
 msgid "Vali meetod"
 msgstr "Select method"
 
-#: classes/menu.aw:1349
+#: classes/menu.aw:1352
 msgid "Vali meetodiga seotud objekt"
 msgstr "Select object connected to method"
 
-#: classes/menu.aw:1359
+#: classes/menu.aw:1362
 msgid "Vali meetodiga seotud grupp"
 msgstr "Select group connected to method"
 
-#: classes/menu.aw:1368
+#: classes/menu.aw:1371
 msgid "Meetod viitab adminni"
 msgstr "Method refers to admin"
 
-#: classes/menu.aw:1376
+#: classes/menu.aw:1379
 msgid "Meetodi v&auml;ljundi kuvamisel n&auml;idatakse men&uuml;&uuml;sid"
 msgstr "Folders are shown on method's output display"
 
-#: classes/menu.aw:1384
+#: classes/menu.aw:1387
 msgid "Meetodi lisaparameetrid"
 msgstr ""
 
-#: classes/menu.aw:1407
+#: classes/menu.aw:1410
 msgid "konfi vorm"
 msgstr ""
 
-#: classes/menu.aw:1599
+#: classes/menu.aw:1601
 msgid "Selline alias on juba olemas!"
 msgstr "This alias already exists!"
 
-#: classes/menu.aw:1632
+#: classes/menu.aw:1634
 msgid "-- vali --"
 msgstr "-- select --"
 
-#: classes/menu.aw:1778 classes/menu.aw:1798
+#: classes/menu.aw:1797 classes/menu.aw:1817
 msgid "--vali--"
 msgstr "-- select --"
 
-#: classes/menu.aw:1925 classes/menu.aw:1977 classes/menu.aw:2034
+#: classes/menu.aw:1944 classes/menu.aw:1996 classes/menu.aw:2053
 msgid "ID"
 msgstr "ID"
 
-#: classes/menu.aw:1938
+#: classes/menu.aw:1957
 msgid "kustuta"
 msgstr "delete"
 
-#: classes/menu.aw:1990 classes/menu.aw:2047
+#: classes/menu.aw:2009 classes/menu.aw:2066
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr "incl. submenus"
 
-#: classes/menu.aw:2001
+#: classes/menu.aw:2020
 msgid "Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse"
 msgstr ""
 
-#: classes/menu.aw:2058
+#: classes/menu.aw:2077
 msgid "&Auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt"
 msgstr ""
 
-#: classes/menu.aw:2218
+#: classes/menu.aw:2237
 msgid "Dokument"
 msgstr "Document"
 
-#: classes/menu.aw:2225
+#: classes/menu.aw:2244
 msgid "ka alammen&uuml;&uuml;de juures"
 msgstr "incl. submenus"
 
-#: classes/menu.aw:2231
+#: classes/menu.aw:2250
 msgid "&Auml;ra kasuta &uuml;lemiste men&uuml;&uuml;de dokumente"
 msgstr ""
 
-#: classes/menu.aw:2237
+#: classes/menu.aw:2256
 msgid "Vali asukoht"
 msgstr "Select location"
 
-#: classes/menu.aw:2300
+#: classes/menu.aw:2319
 msgid "M&auml;rks&otilde;na"
 msgstr "Keyword"
 
-#: classes/menu.aw:2383
+#: classes/menu.aw:2402
 msgid "V&otilde;ta viimaseid dokumente"
 msgstr ""
 
-#: classes/menu.aw:2384 classes/menu.aw:2389
+#: classes/menu.aw:2403 classes/menu.aw:2408
 msgid "Otsi"
 msgstr ""
 
-#: classes/menu.aw:2388
+#: classes/menu.aw:2407
 msgid "&Auml;ra v&otilde;ta viimaseid dokumente"
 msgstr ""
 
-#: classes/menu.aw:2417
+#: classes/menu.aw:2436
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/menu.aw:2423
+#: classes/menu.aw:2442
 msgid "Otsi uus objekt:"
 msgstr ""
 
-#: classes/menu.aw:2434
+#: classes/menu.aw:2453
 msgid "Aeg"
 msgstr ""
 
-#: classes/menu.aw:2443
+#: classes/menu.aw:2462
 msgid "Isik"
 msgstr ""
 
-#: classes/menu.aw:2449
+#: classes/menu.aw:2468
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/menu.aw:2455
+#: classes/menu.aw:2474
 msgid "Kasutajagrupp"
 msgstr ""
+
+#~ msgid "Omaduse Failinimi (aip_filename) caption"
+#~ msgstr "File name"
 
 #~ msgid "Omaduse Objektitabeli konf (objtbl_conf) caption"
 #~ msgstr "Configuration of object table"

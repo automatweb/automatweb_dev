@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -13,26 +13,6 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/db.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/db.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/db.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/db.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/db.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
-#: classes/db.aw:103 classes/db.aw:124
+#: classes/db.aw:106 classes/db.aw:128
 msgid "this driver is not supported"
 msgstr "this driver is not supported"

@@ -10,64 +10,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/releditor.aw:45
+#: classes/vcl/releditor.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/vcl/releditor.aw:46
 msgid "Klassi ID"
 msgstr "Class ID"
 
-#: classes/vcl/releditor.aw:46
+#: classes/vcl/releditor.aw:47
 msgid "Klass"
 msgstr "Class"
 
-#: classes/vcl/releditor.aw:64
+#: classes/vcl/releditor.aw:65
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr "Error in the definition of %s (properties not defined!)"
 
-#: classes/vcl/releditor.aw:74
+#: classes/vcl/releditor.aw:75
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr "Error in the definition of %s (connection type undefined!)"
 
-#: classes/vcl/releditor.aw:110
+#: classes/vcl/releditor.aw:111
 msgid "Seda seost ei saa redigeerida!"
 msgstr "This connection can not be edited"
 
-#: classes/vcl/releditor.aw:239 classes/vcl/releditor.aw:438
-#: classes/vcl/releditor.aw:446 classes/vcl/releditor.aw:457
+#: classes/vcl/releditor.aw:241 classes/vcl/releditor.aw:440
+#: classes/vcl/releditor.aw:448 classes/vcl/releditor.aw:459
 msgid "Uus"
 msgstr "New"
 
-#: classes/vcl/releditor.aw:317 classes/vcl/releditor.aw:488
+#: classes/vcl/releditor.aw:319 classes/vcl/releditor.aw:490
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/vcl/releditor.aw:447
+#: classes/vcl/releditor.aw:449
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/vcl/releditor.aw:462
+#: classes/vcl/releditor.aw:464
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/vcl/releditor.aw:465
+#: classes/vcl/releditor.aw:467
 msgid "Kustutada valitud seosed?"
 msgstr "Delete selected relations?"
 
-#: classes/vcl/releditor.aw:497
+#: classes/vcl/releditor.aw:499
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:567 classes/vcl/releditor.aw:774
+#: classes/vcl/releditor.aw:569 classes/vcl/releditor.aw:802
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/releditor.aw:697
+#: classes/vcl/releditor.aw:711
 msgid "Vali üks"
 msgstr "Pick one"
 
-#: classes/vcl/releditor.aw:707 classes/vcl/releditor.aw:759
+#: classes/vcl/releditor.aw:721 classes/vcl/releditor.aw:787
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:765
+#: classes/vcl/releditor.aw:793
 msgid "Nimi"
 msgstr "Name"
 

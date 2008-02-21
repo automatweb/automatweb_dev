@@ -1,5 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Kommentaar lingikogusse (comment) caption"] = "märkuste lahter, kuhu v&otilde;ib lisada selguse m&otilde;ttes informatsiooni või juhiseid antud objekti kohta. Kommentaari välja kirjutatut ei ole veebipoolel näha.";
 $GLOBALS["TRANS"]["Omaduse URL (url) kommentaar"] = "aadress, kuhu link viitab.";
 $GLOBALS["TRANS"]["Omaduse URL (url) help"] = "aadress, kuhu link viitab. Kirjutatakse kujul http://www.struktuur.ee või saidi sisese lingi puhul dokumendi või kausta ID.";
 $GLOBALS["TRANS"]["Omaduse Klikke (hits) kommentaar"] = "informeeriv väli. Näitab, mitu korda on antud lingil klikitud.";

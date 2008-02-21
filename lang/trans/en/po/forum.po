@@ -184,38 +184,38 @@ msgstr "Language"
 msgid "Grupi Keel (languages) help"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:195
+#: classes/contentmgmt/forum/forum.aw:196
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/forum/forum.aw:203
+#: classes/contentmgmt/forum/forum.aw:204
 msgid "Aadress"
 msgstr "Address"
 
-#: classes/contentmgmt/forum/forum.aw:211
+#: classes/contentmgmt/forum/forum.aw:212
 msgid "Vali"
 msgstr "Select"
 
-#: classes/contentmgmt/forum/forum.aw:1310
+#: classes/contentmgmt/forum/forum.aw:1312
 msgid "Nime v&auml;li peab olema t&auml;idetud"
 msgstr "Name field must be filled"
 
-#: classes/contentmgmt/forum/forum.aw:1314
+#: classes/contentmgmt/forum/forum.aw:1316
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud"
 msgstr "Comment field must be filled"
 
-#: classes/contentmgmt/forum/forum.aw:1318
+#: classes/contentmgmt/forum/forum.aw:1320
 msgid "Sisestatud kontrollkood on vale"
 msgstr "Verification code is incorrect"
 
-#: classes/contentmgmt/forum/forum.aw:2417
+#: classes/contentmgmt/forum/forum.aw:2426
 msgid "Näita"
 msgstr "Display"
 
-#: classes/contentmgmt/forum/forum.aw:2425
+#: classes/contentmgmt/forum/forum.aw:2434
 msgid "Ekspordi XML"
 msgstr "Export XML"
 
-#: classes/contentmgmt/forum/forum.aw:2431
+#: classes/contentmgmt/forum/forum.aw:2440
 msgid "E-posti aadressid"
 msgstr "E-mail addresses"

@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:class_326_help
 msgid "Klassi Objektinimekirja Postipoisi andmeallikas help"
@@ -126,11 +125,10 @@ msgstr ""
 msgid "the subject xml file (%s) does not exist!"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:759
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:758
 msgid "Andmebaasi v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:763
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:762
 msgid "XML v&auml;li"
 msgstr ""
-

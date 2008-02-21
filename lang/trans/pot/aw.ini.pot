@@ -2399,7 +2399,7 @@ msgid "Klassi MP3 pleier (1353) nimi"
 msgstr ""
 
 #: aw.ini:class_1354
-msgid "Klassi XML andmeallikas (1354) nimi"
+msgid "Klassi Syndmuste XML andmeallikas (1354) nimi"
 msgstr ""
 
 #: aw.ini:class_1355
@@ -2495,7 +2495,15 @@ msgid "Klassi Isikute otsing (1390) nimi"
 msgstr ""
 
 #: aw.ini:class_1391
-msgid "Klassi RSS import (1391) nimi"
+msgid "Klassi XML andmeallikas (1391) nimi"
+msgstr ""
+
+#: aw.ini:class_1392
+msgid "Klassi T&ouml;&ouml;aegade stsenaarium (1392) nimi"
+msgstr ""
+
+#: aw.ini:class_1393
+msgid "Klassi Broneeringu kiirlisamine (1393) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_1
@@ -5100,6 +5108,10 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1389
 msgid "syslog.type.ST_AW_SENT_MAIL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1390
+msgid "syslog.type.ST_CRM_PEOPLE_SEARCH"
 msgstr ""
 
 #: aw.ini:syslogtypes_1391

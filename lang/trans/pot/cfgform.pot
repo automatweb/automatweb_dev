@@ -1326,19 +1326,19 @@ msgstr ""
 msgid "Vali, millised kasutajagrupid ei tohi milliseid actione kasutada."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4190
+#: classes/cfg/cfgform.aw:4262
 msgid "Ebasobiv tabi nimi."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4195
+#: classes/cfg/cfgform.aw:4267
 msgid "Selle nimega tab juba olemas."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4201
+#: classes/cfg/cfgform.aw:4273
 msgid "Selle tabi alla pole võimalik luua."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4205
+#: classes/cfg/cfgform.aw:4277
 msgid "Uus tab %s"
 msgstr ""
 

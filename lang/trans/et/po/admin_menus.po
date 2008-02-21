@@ -17,16 +17,16 @@ msgstr ""
 msgid "Ava"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:259 classes/admin/admin_menus.aw:1499
+#: classes/admin/admin_menus.aw:259 classes/admin/admin_menus.aw:1448
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:267 classes/admin/admin_menus.aw:1468
+#: classes/admin/admin_menus.aw:267 classes/admin/admin_menus.aw:1417
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:276 classes/admin/admin_menus.aw:626
-#: classes/admin/admin_menus.aw:1475
+#: classes/admin/admin_menus.aw:276 classes/admin/admin_menus.aw:588
+#: classes/admin/admin_menus.aw:1424
 msgid "Kopeeri"
 msgstr ""
 
@@ -34,7 +34,7 @@ msgstr ""
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:288 classes/admin/admin_menus.aw:1492
+#: classes/admin/admin_menus.aw:288 classes/admin/admin_menus.aw:1441
 msgid "Kustuta"
 msgstr ""
 
@@ -55,130 +55,134 @@ msgid "Tekstifail"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:344 classes/admin/admin_menus.aw:361
-#: classes/admin/admin_menus.aw:1514
+#: classes/admin/admin_menus.aw:1463
 msgid "Impordi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:582
+#: classes/admin/admin_menus.aw:544
 msgid "Vali kuidas objekte kopeerida"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:589
+#: classes/admin/admin_menus.aw:551
 msgid "Objekti kopeerimine"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:596
+#: classes/admin/admin_menus.aw:558
 msgid "Objektid"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:603
+#: classes/admin/admin_menus.aw:565
 msgid "Kopeeri alamobjektid"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:604
+#: classes/admin/admin_menus.aw:566
 msgid "Kopeeri alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:605
+#: classes/admin/admin_menus.aw:567
 msgid "Kopeeri dokumendid"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:612
+#: classes/admin/admin_menus.aw:574
 msgid "Seosed"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:619
+#: classes/admin/admin_menus.aw:581
 msgid "Seosta samade objektidega"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:620
+#: classes/admin/admin_menus.aw:582
 msgid "Loo uued seotud objektid"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:823
+#: classes/admin/admin_menus.aw:769
 msgid "Menyyde importimisel tekkis viga real %s"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:840
+#: classes/admin/admin_menus.aw:786
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1277
+#: classes/admin/admin_menus.aw:956
+msgid "ACL error saidil %s: CAN_%s denied for oid %s"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1226
 msgid "Link"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1292
+#: classes/admin/admin_menus.aw:1241
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1292 classes/admin/admin_menus.aw:1733
+#: classes/admin/admin_menus.aw:1241 classes/admin/admin_menus.aw:1630
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1391
+#: classes/admin/admin_menus.aw:1340
 msgid "Uus"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1451
+#: classes/admin/admin_menus.aw:1400
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1459
+#: classes/admin/admin_menus.aw:1408
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1484
+#: classes/admin/admin_menus.aw:1433
 msgid "Kleebi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1507
+#: classes/admin/admin_menus.aw:1456
 msgid "Uuenda"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1520
+#: classes/admin/admin_menus.aw:1469
 msgid "Suured ikoonid"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1521
+#: classes/admin/admin_menus.aw:1470
 msgid "V&auml;iksed ikoonid"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1522
+#: classes/admin/admin_menus.aw:1471
 msgid "Detailne vaade"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1527
+#: classes/admin/admin_menus.aw:1476
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1641
+#: classes/admin/admin_menus.aw:1590
 msgid "Valitud pole &uuml;htegi objekti!"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1718
+#: classes/admin/admin_menus.aw:1615
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1727
+#: classes/admin/admin_menus.aw:1624
 msgid "Jrk"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1742
+#: classes/admin/admin_menus.aw:1639
 msgid "Muutja"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1752
+#: classes/admin/admin_menus.aw:1649
 msgid "Muudetud"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1765
+#: classes/admin/admin_menus.aw:1662
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1775
+#: classes/admin/admin_menus.aw:1672
 msgid "Tegevus"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1784
+#: classes/admin/admin_menus.aw:1681
 msgid "Vali"
 msgstr ""

@@ -853,201 +853,201 @@ msgstr ""
 msgid "Eemalda"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1010
+#: classes/applications/realestate_management/realestate_property.aw:1008
 msgid "Isikukood vale pikkusega."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1046
+#: classes/applications/realestate_management/realestate_property.aw:1044
 msgid "Isikukood ei vasta Eesti Vabariigi isikukoodi standardile."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1093
+#: classes/applications/realestate_management/realestate_property.aw:1091
 msgid "Isikukoodis leiduv s&uuml;nnikuup&auml;evateave ei vasta &uuml;helegi kuup&auml;evale Gregoriuse kalendris."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1166
+#: classes/applications/realestate_management/realestate_property.aw:1164
 msgid "Nimi"
 msgstr "Имя"
 
-#: classes/applications/realestate_management/realestate_property.aw:1170
+#: classes/applications/realestate_management/realestate_property.aw:1168
 msgid "Isikukood"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1174
+#: classes/applications/realestate_management/realestate_property.aw:1172
 msgid "Telefon"
 msgstr "Телефон"
 
-#: classes/applications/realestate_management/realestate_property.aw:1178
+#: classes/applications/realestate_management/realestate_property.aw:1176
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1182
+#: classes/applications/realestate_management/realestate_property.aw:1180
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1207
+#: classes/applications/realestate_management/realestate_property.aw:1205
 msgid "Vali see"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1277
+#: classes/applications/realestate_management/realestate_property.aw:1275
 msgid "Prindi objektiinfo"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1282
+#: classes/applications/realestate_management/realestate_property.aw:1280
 msgid "Maakleri andmetega/piltidega"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1289
+#: classes/applications/realestate_management/realestate_property.aw:1287
 msgid "Maakleri andmetega/piltideta"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1296
+#: classes/applications/realestate_management/realestate_property.aw:1294
 msgid "M&uuml;&uuml;ja andmetega/piltidega"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1303
+#: classes/applications/realestate_management/realestate_property.aw:1301
 msgid "M&uuml;&uuml;ja andmetega/piltideta"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1311
+#: classes/applications/realestate_management/realestate_property.aw:1309
 msgid "Salvesta muudatused"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1349
+#: classes/applications/realestate_management/realestate_property.aw:1347
 msgid "Uue kinnisvaraobjekti loomisel vaikimisi riik defineerimata. Tekitati objekt, millel puudub aadress."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1358
+#: classes/applications/realestate_management/realestate_property.aw:1356
 msgid "Uue kinnisvaraobjekti loomisel kinnsvarahalduskeskkond defineerimata. Tekitati orbobjekt."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1367
+#: classes/applications/realestate_management/realestate_property.aw:1365
 msgid "Uue kinnisvaraobjekti loomisel ei antud argumendina kaasa loodud obj. id-d."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1708
+#: classes/applications/realestate_management/realestate_property.aw:1706
 msgid "Kinnisvaraobjektil halduskeskkond defineerimata v&otilde;i puudub juurdep&auml;&auml;su&otilde;igus (oid: %s)."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:1965
+#: classes/applications/realestate_management/realestate_property.aw:1963
 msgid "Lisaandmed"
 msgstr "Дополнительноe данные"
 
-#: classes/applications/realestate_management/realestate_property.aw:2019
+#: classes/applications/realestate_management/realestate_property.aw:2017
 msgid "Objekti id pole aw id v6i puudub juurdep22su6igus."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2027
+#: classes/applications/realestate_management/realestate_property.aw:2025
 msgid "Objekti atribuute ei 6nnestunud lugeda."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2037
+#: classes/applications/realestate_management/realestate_property.aw:2035
 msgid "Objekti klassi m22ramine eba6nnestus."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2218
+#: classes/applications/realestate_management/realestate_property.aw:2216
 msgid "Haldusjaotuse vaste 1 kinnisvarahalduskeskkonnas defineerimata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2228
+#: classes/applications/realestate_management/realestate_property.aw:2226
 msgid "Haldusjaotuse vaste 2 kinnisvarahalduskeskkonnas defineerimata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2238
+#: classes/applications/realestate_management/realestate_property.aw:2236
 msgid "Haldusjaotuse vaste 3 kinnisvarahalduskeskkonnas defineerimata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2248
+#: classes/applications/realestate_management/realestate_property.aw:2246
 msgid "Haldusjaotuse vaste 4 kinnisvarahalduskeskkonnas defineerimata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2258
+#: classes/applications/realestate_management/realestate_property.aw:2256
 msgid "Haldusjaotuse vaste 5 kinnisvarahalduskeskkonnas defineerimata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2379
+#: classes/applications/realestate_management/realestate_property.aw:2377
 msgid "T&auml;nav"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2389
+#: classes/applications/realestate_management/realestate_property.aw:2387
 msgid "Maja nr."
 msgstr "Номер дома"
 
-#: classes/applications/realestate_management/realestate_property.aw:2399
+#: classes/applications/realestate_management/realestate_property.aw:2397
 msgid "Korter"
 msgstr "Квартира"
 
-#: classes/applications/realestate_management/realestate_property.aw:2429
-#: classes/applications/realestate_management/realestate_property.aw:2525
+#: classes/applications/realestate_management/realestate_property.aw:2427
+#: classes/applications/realestate_management/realestate_property.aw:2523
 msgid "Maakleri pilt"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2440
-#: classes/applications/realestate_management/realestate_property.aw:2537
+#: classes/applications/realestate_management/realestate_property.aw:2438
+#: classes/applications/realestate_management/realestate_property.aw:2535
 msgid "Maakleri id"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2451
+#: classes/applications/realestate_management/realestate_property.aw:2449
 msgid "Maakleri kasutajanimi City24 s&uuml;steemis"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2463
-#: classes/applications/realestate_management/realestate_property.aw:2548
+#: classes/applications/realestate_management/realestate_property.aw:2461
+#: classes/applications/realestate_management/realestate_property.aw:2546
 msgid "Maakler"
 msgstr "Маклер"
 
-#: classes/applications/realestate_management/realestate_property.aw:2474
-#: classes/applications/realestate_management/realestate_property.aw:2559
+#: classes/applications/realestate_management/realestate_property.aw:2472
+#: classes/applications/realestate_management/realestate_property.aw:2557
 msgid "Maakleri e-mail"
 msgstr "E-mail маклерa"
 
-#: classes/applications/realestate_management/realestate_property.aw:2485
-#: classes/applications/realestate_management/realestate_property.aw:2570
+#: classes/applications/realestate_management/realestate_property.aw:2483
+#: classes/applications/realestate_management/realestate_property.aw:2568
 msgid "Maakleri telefon"
 msgstr "Телефон маклерa"
 
-#: classes/applications/realestate_management/realestate_property.aw:2496
-#: classes/applications/realestate_management/realestate_property.aw:2581
+#: classes/applications/realestate_management/realestate_property.aw:2494
+#: classes/applications/realestate_management/realestate_property.aw:2579
 msgid "Maakleri ametinimetus"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2616
+#: classes/applications/realestate_management/realestate_property.aw:2614
 msgid "M&uuml;&uuml;ja"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2626
+#: classes/applications/realestate_management/realestate_property.aw:2624
 msgid "M&uuml;&uuml;ja e-mail"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2636
+#: classes/applications/realestate_management/realestate_property.aw:2634
 msgid "M&uuml;&uuml;ja telefon"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2665
+#: classes/applications/realestate_management/realestate_property.aw:2663
 msgid "Ostja"
 msgstr "Покупатель"
 
-#: classes/applications/realestate_management/realestate_property.aw:2675
+#: classes/applications/realestate_management/realestate_property.aw:2673
 msgid "Ostja e-mail"
 msgstr "E-mail покупателя"
 
-#: classes/applications/realestate_management/realestate_property.aw:2685
+#: classes/applications/realestate_management/realestate_property.aw:2683
 msgid "Ostja telefon"
 msgstr "Телефон покупателя"
 
-#: classes/applications/realestate_management/realestate_property.aw:2773
+#: classes/applications/realestate_management/realestate_property.aw:2771
 msgid "Attempted map data save by unauthorized . (id: %s)"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2802
+#: classes/applications/realestate_management/realestate_property.aw:2800
 msgid "Attempted map data save on object not of allowed class. (id: %s)"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2808
+#: classes/applications/realestate_management/realestate_property.aw:2806
 msgid "Salvestatud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:2835
+#: classes/applications/realestate_management/realestate_property.aw:2833
 msgid "Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal kustutada. Viga &otilde;iguste seadetes. J&auml;&auml;b orbobjekt, mille id on %s"
 msgstr ""
 

@@ -14,23 +14,23 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:67 classes/vcl/relpicker.aw:205
+#: classes/vcl/relpicker.aw:90 classes/vcl/relpicker.aw:231
 msgid "--vali--"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:125 classes/vcl/relpicker.aw:303
+#: classes/vcl/relpicker.aw:148 classes/vcl/relpicker.aw:329
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:139 classes/vcl/relpicker.aw:314
+#: classes/vcl/relpicker.aw:162 classes/vcl/relpicker.aw:340
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:167 classes/vcl/relpicker.aw:345
+#: classes/vcl/relpicker.aw:190 classes/vcl/relpicker.aw:371
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:186 classes/vcl/relpicker.aw:364
+#: classes/vcl/relpicker.aw:209 classes/vcl/relpicker.aw:390
 msgid "Lisa uus %s"
 msgstr ""
 
