@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.17 2008/02/22 12:01:19 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.18 2008/02/22 12:02:23 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -1283,7 +1283,7 @@ class docgen_viewer extends class_base
 //echo dbg::dump($c_data);
 			}
 		}
-die("yepuh");
+//die("yepuh");
 
 		$this->db_query("DELETE FROM aw_da_callers");
 
