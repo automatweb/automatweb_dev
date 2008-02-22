@@ -630,7 +630,7 @@ class questionnaire extends class_base
 				$qcomment = $q_obj->prop("comm");
 		}
 
-		if($_qs[$q["oid"]] == 0)
+		if($_qs[$q["oid"]] != 1 && $_qs[$q["oid"]] != 2)
 		{
 			$submit = html::submit(array(
 				"value" => "Vasta",
