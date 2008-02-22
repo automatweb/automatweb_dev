@@ -588,7 +588,7 @@ class questionnaire extends class_base
 				foreach($as as $a)
 				{
 					$a_obj = obj($a["oid"]);
-					if($a_obj->prop("correct") && $a_obj->prop("name") != $_POST["answer"])
+					if($a_obj->prop("correct") && $a_obj->prop("name") != $_POST["answer"] && $a["oid"] != $_POST["answer"])
 					{
 						$answer = $a_obj->prop("name");
 						$this->vars(array(
