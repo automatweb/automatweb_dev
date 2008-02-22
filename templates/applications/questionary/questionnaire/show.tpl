@@ -32,14 +32,15 @@
 			<table width="100%">
 				<tr>
 					<td width="40%">
+						{VAR:correct_vs_false}<br>
 						<!-- SUB: CORRECT_ANSWERS -->
-						{VAR:correct_answer_caption}
+						{VAR:correct_answer_caption}<br>
 						<!-- SUB: CORRECT_ANSWER -->
 						{VAR:answer}<br>
 						<!-- END SUB: CORRECT_ANSWER -->
 						<!-- END SUB: CORRECT_ANSWERS -->
-						{VAR:qcomment}<br>
-						{VAR:acomment}<br><br>
+						{VAR:acomment}<br>
+						{VAR:qcomment}<br><br>
 					</td>
 					<td width="20%">
 						<!-- SUB: ANSWER_PICTURE -->

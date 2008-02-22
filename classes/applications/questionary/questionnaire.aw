@@ -28,14 +28,28 @@
 		@property dsply_correct2wrong type=checkbox ch_value=1 field=meta method=serialize
 		@caption Vale vastuse korral kuva &otilde;iged
 
+		@property dsply_correct2wrong_caption_single type=textbox field=meta method=serialize
+		@caption &Otilde;igete vastuste caption (ainsus)
+		@comment Kuvatakse vale vastuse korral
+
+		@property dsply_correct2wrong_caption_multiple type=textbox field=meta method=serialize
+		@caption &Otilde;igete vastuste caption (mitmus)
+		@comment Kuvatakse vale vastuse korral
+
 		@property dsply_correct2correct type=checkbox ch_value=1 field=meta method=serialize
 		@caption &Otilde;ige vastuse korral kuva k&otilde;ik &otilde;iged
 
-		@property dsply_correct_caption_single type=textbox field=meta method=serialize
+		@property dsply_correct2correct_caption_single type=textbox field=meta method=serialize
 		@caption &Otilde;igete vastuste caption (ainsus)
+		@comment Kuvatakse &otilde;ige vastuse korral
 
-		@property dsply_correct_caption_multiple type=textbox field=meta method=serialize
+		@property dsply_correct2correct_caption_multiple type=textbox field=meta method=serialize
 		@caption &Otilde;igete vastuste caption (mitmus)
+		@comment Kuvatakse &otilde;ige vastuse korral
+
+		@property comment2nothing type=textbox field=meta method=serialize
+		@caption Kommentaar, kui vastus on t&uuml;hi
+		@comment Kuvatakse vastuse kommentaari v&auml;ljas
 
 		@property str_rslts type=checkbox ch_value=1 field=meta method=serialize
 		@caption Salvesta vastamised
@@ -571,7 +585,14 @@ class questionnaire extends class_base
 						$correct_answer_count++;
 					}
 				}
-				$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct_caption_single") : $o->prop("dsply_correct_caption_multiple");
+				if(!$correct && $o->prop("dsply_correct2wrong"))
+				{
+					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2false_caption_single") : $o->prop("dsply_correct2false_caption_multiple");
+				}
+				else
+				{
+					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2correct_caption_single") : $o->prop("dsply_correct2correct_caption_multiple");
+				}
 				$this->vars(array(
 					"CORRECT_ANSWER" => $CORRECT_ANSWER,
 				));
@@ -580,6 +601,13 @@ class questionnaire extends class_base
 					"CORRECT_ANSWERS" => $CORRECT_ANSWERS,
 				));
 			}
+		}
+		elseif($_POST["qid"])
+		{
+			$acomment = $o->prop("comment2nothing");
+			$this->vars(array(
+				"acomment" => $acomment,
+			));
 		}
 		else
 		{

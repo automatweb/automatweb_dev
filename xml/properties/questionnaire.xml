@@ -39,6 +39,26 @@
             <caption>Vale vastuse korral kuva &amp;amp;otilde;iged</caption>
       </property>
       <property>
+            <name>dsply_correct2wrong_caption_single</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Otilde;igete vastuste caption (ainsus)</caption>
+            <comment>Kuvatakse vale vastuse korral</comment>
+      </property>
+      <property>
+            <name>dsply_correct2wrong_caption_multiple</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Otilde;igete vastuste caption (mitmus)</caption>
+            <comment>Kuvatakse vale vastuse korral</comment>
+      </property>
+      <property>
             <name>dsply_correct2correct</name>
             <table>objects</table>
             <group>conf</group>
@@ -49,22 +69,34 @@
             <caption>&amp;amp;Otilde;ige vastuse korral kuva k&amp;amp;otilde;ik &amp;amp;otilde;iged</caption>
       </property>
       <property>
-            <name>dsply_correct_caption_single</name>
+            <name>dsply_correct2correct_caption_single</name>
             <table>objects</table>
             <group>conf</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>&amp;amp;Otilde;igete vastuste caption (ainsus)</caption>
+            <comment>Kuvatakse &amp;amp;otilde;ige vastuse korral</comment>
       </property>
       <property>
-            <name>dsply_correct_caption_multiple</name>
+            <name>dsply_correct2correct_caption_multiple</name>
             <table>objects</table>
             <group>conf</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>&amp;amp;Otilde;igete vastuste caption (mitmus)</caption>
+            <comment>Kuvatakse &amp;amp;otilde;ige vastuse korral</comment>
+      </property>
+      <property>
+            <name>comment2nothing</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kommentaar, kui vastus on t&amp;amp;uuml;hi</caption>
+            <comment>Kuvatakse vastuse kommentaari v&amp;amp;auml;ljas</comment>
       </property>
       <property>
             <name>str_rslts</name>
