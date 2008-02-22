@@ -29,6 +29,24 @@
             <comment>Kuvatakse kommentaare, mille pikkus on &amp;gt; 0.</comment>
       </property>
       <property>
+            <name>correct_caption</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Otilde;ige vastuse teade</caption>
+      </property>
+      <property>
+            <name>false_caption</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vale vastuse teade</caption>
+      </property>
+      <property>
             <name>dsply_correct2wrong</name>
             <table>objects</table>
             <group>conf</group>

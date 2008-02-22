@@ -25,6 +25,12 @@
 		@caption Kuva vastuse kommentaari
 		@comment Kuvatakse kommentaare, mille pikkus on > 0.
 
+		@property correct_caption type=textbox field=meta method=serialize
+		@caption &Otilde;ige vastuse teade
+
+		@property false_caption type=textbox field=meta method=serialize
+		@caption Vale vastuse teade
+
 		@property dsply_correct2wrong type=checkbox ch_value=1 field=meta method=serialize
 		@caption Vale vastuse korral kuva &otilde;iged
 
@@ -522,6 +528,7 @@ class questionnaire extends class_base
 						break;
 				}
 			}
+			$correct_vs_false = $correct ? $o->prop("correct_msg") : $o->prop("false_msg");
 
 			switch($dsply_qcomment)
 			{
