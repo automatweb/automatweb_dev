@@ -2,15 +2,15 @@
 <form method="post">
 <table width="100%">
 	<tr>
-		<td>
+		<td valign="top">
 			{VAR:question}
 		</td>
 	</tr>
 	<tr>
-		<td>
-			<table width="100%" cellpadding="5" ja valign="top">
+		<td valign="top">
+			<table width="100%" cellpadding="5">
 				<tr>
-					<td>
+					<td valign="top">
 						<!-- SUB: ANSWER_RADIO -->
 							<input type="radio" value="{VAR:answer_oid}" name="answer" {VAR:answer_checked}> {VAR:answer_caption}<br>
 						<!-- END SUB: ANSWER_RADIO -->
@@ -18,7 +18,7 @@
 							<input type="textbox" name="answer" value="{VAR:answer_value}"><br>
 						<!-- END SUB: ANSWER_TEXTBOX -->
 					</td>
-					<td>
+					<td valign="top">
 						<!-- SUB: PICTURE -->
 						{VAR:picture}
 						<!-- END SUB: PICTURE -->
@@ -28,10 +28,10 @@
 		</td>		
 	</tr>
 	<tr>
-		<td>
+		<td valign="top">
 			<table width="100%">
 				<tr>
-					<td width="40%">
+					<td width="40%" valign="top">
 						{VAR:correct_vs_false}<br>
 						<!-- SUB: CORRECT_ANSWERS -->
 						{VAR:correct_answer_caption}<br>
@@ -42,12 +42,12 @@
 						{VAR:acomment}<br>
 						{VAR:qcomment}<br><br>
 					</td>
-					<td width="20%">
+					<td width="20%" valign="top">
 						<!-- SUB: ANSWER_PICTURE -->
 						{VAR:picture}
 						<!-- END SUB: ANSWER_PICTURE -->
 					</td>
-					<td>
+					<td valign="top">
 						{VAR:submit} <a href="{VAR:next_url}">{VAR:next_caption}</a>
 					</td>
 				</tr>
@@ -61,7 +61,7 @@
 <!-- SUB: RESULTS -->
 <table width="100%">
 	<tr>
-		<td align="center">
+		<td align="center" valign="top">
 			{VAR:results_percent}<br>
 			{VAR:results_text}<br>
 			<!-- SUB: RESULTS_TEXT_BY_PERCENT -->

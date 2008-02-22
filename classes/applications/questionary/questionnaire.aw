@@ -533,6 +533,9 @@ class questionnaire extends class_base
 				}
 			}
 			$correct_vs_false = $correct ? $o->prop("correct_msg") : $o->prop("false_msg");
+			$this->vars(array(
+				"correct_vs_false" => $correct_vs_false,
+			));
 
 			switch($dsply_qcomment)
 			{
