@@ -20,6 +20,7 @@ class docgen_analyzer_simple_db_writer extends aw_code_analyzer
 
 	function analyze_file($file, $is_fp = false)
 	{
+return parent::analyze_file($file, $is_fp);
 		if (!$is_fp)
 		{
 			$fp = aw_ini_get("basedir")."/classes".$file;
@@ -29,7 +30,6 @@ class docgen_analyzer_simple_db_writer extends aw_code_analyzer
 			$fp = $file;
 		}
 		$this->tokens = token_get_all(file_get_contents($fp));
-
 		$this->data = array();
 		$this->data["classes"] = array();
 		$this->brace_level = 0;
@@ -54,6 +54,7 @@ class docgen_analyzer_simple_db_writer extends aw_code_analyzer
 						$this->handle_function_begin();
 						break;
 
+					case T_DOC_COMMENT:
 					case T_COMMENT:
 						$this->last_comment = $str;
 						$this->last_comment_line = $this->get_line();

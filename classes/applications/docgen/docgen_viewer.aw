@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.16 2007/12/06 14:33:26 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.17 2008/02/22 12:01:19 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -60,6 +60,26 @@ class docgen_viewer extends class_base
 			"tpldir" => "core/docgen",
 			"clid" => CL_AW_DOCGEN_VIEWER
 		));
+
+		$this->cb_callbacks = array(
+			"callback_on_load" => 1,
+			"callback_pre_edit" => 1,
+			"callback_get_add_txt" => 1,
+			"callback_mod_layout" => 1,
+			"callback_mod_reforb" => 1,
+			"callback_generate_scripts" => 1,
+			"callback_mod_retval" => 1,
+			"callback_get_cfgform" => 1,
+			"callback_gen_path" => 1,
+			"callback_mod_tab" => 1,
+			"get_property" => 1,
+			"set_property" => 1,
+			"callback_pre_save" => 1,
+			"callback_post_save" => 1,
+			"callback_get_cfgmanager" => 1,
+			"callback_get_group_display" => 1,
+			"callback_get_default_group" => 1
+		);
 	}
 
 	function set_property($arr)
@@ -122,13 +142,14 @@ class docgen_viewer extends class_base
 		$analyzer = get_instance("core/aw_code_analyzer/aw_code_analyzer");
 
 		$data = $analyzer->analyze_file($arr["request"]["tf"]);
-die(dbg::dump($data));
+//die(dbg::dump($data));
 		foreach($data["classes"] as $class => $class_data)
 		{
 			if ($class != "")
 			{
 				$op .= $this->display_class($class_data, $file, array(
-					"api_only" => $api_only
+					"api_only" => $api_only,
+					"defines" => $data["defines"]
 				));
 			}
 		}
@@ -204,15 +225,7 @@ die(dbg::dump($data));
 	}
 
 	/**  
-		
 		@attrib name=class_list params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function class_list()
 	{
@@ -238,8 +251,18 @@ die(dbg::dump($data));
 			- terryf.
 		*/
 
+		// gather data about things in files
+		$this->db_query("SELECT * from aw_da_classes");
+		$classes = array();
+		while ($row = $this->db_next())
+		{
+			$fp = $this->cfg["basedir"].$row["file"];
+			$classes[$fp][] = $row;
+		}
+
+
 		$this->ic = get_instance("core/icons");
-		$this->_req_mk_clf_tree($tv, $this->cfg["classdir"]);
+		$this->_req_mk_clf_tree($tv, $this->cfg["classdir"], $classes);
 
 		$this->vars(array(
 			"list" => $tv->finalize_tree(array(
@@ -250,7 +273,7 @@ die(dbg::dump($data));
 		return $this->finish_with_style($this->parse());
 	}
 
-	function _req_mk_clf_tree(&$tv, $path)
+	function _req_mk_clf_tree(&$tv, $path, $classes)
 	{
 		$dc = array();
 		$fc = array();
@@ -258,7 +281,7 @@ die(dbg::dump($data));
 		while (($file = readdir($dh)) !== false)
 		{
 			$fp = $path."/".$file;
-			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
+			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#" && substr($file, -1) != "~" && substr($file, -4) != "orig" && substr($file, -3) != "rej")
 			{
 				if (is_dir($fp))
 				{
@@ -283,11 +306,12 @@ die(dbg::dump($data));
 				"id" => $fp,
 				"url" => "#",
 			));
-			$this->_req_mk_clf_tree($tv, $fp);
+			$this->_req_mk_clf_tree($tv, $fp, $classes);
 		}
 		foreach($fc as $file)
 		{
 			$fp = $path."/".$file;
+			$awpath = str_replace($this->cfg["classdir"], "", $fp);
 			if ($_GET["group"] != "")
 			{
 				$url = aw_url_change_var("tf", str_replace($this->cfg["classdir"], "", $fp));
@@ -296,13 +320,60 @@ die(dbg::dump($data));
 			{
 				$url = $this->mk_my_orb("class_info", array("file" => str_replace($this->cfg["classdir"], "", $fp)));
 			}
-			$tv->add_item($path, array(
-				"name" => $file,
-				"id" => $fp,
-				"url" => $url,
-				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
-				"target" => "classinfo"
-			));
+			// if the file only has 1 class in it, direct link to that, else split subs	
+			if (count($classes[$fp]) < 2)
+			{
+				$tv->add_item($path, array(
+					"name" => $file,
+					"id" => $fp,
+					"url" => $url,
+					"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+					"target" => "classinfo"
+				));
+			}
+			else
+			{
+				$tv->add_item($path, array(
+					"name" => $file,
+					"id" => $fp,
+					"url" => $url,
+					"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+					"target" => "classinfo"
+				));
+				foreach($classes[$fp] as $clinf)
+				{
+					$v = $clinf["class_name"];
+					if ($v == "")
+					{
+						$clinf["class_name"] = "__outer";
+						$v = t("Functions not in any class");
+					}
+					else
+					{
+						switch($clinf["class_type"])
+						{
+							case "interface":
+								$v = t("Interface: ").$v;
+								break;
+
+							case "class":
+								$v = t("Class: ").$v;
+								break;
+
+							case "exception":
+								$v = t("Exception: ").$v;
+								break;
+						}
+					}
+					$tv->add_item($fp, array(
+						"name" => $v,
+						"id" => $fp."::".$clinf["class_name"],
+						"url" => $this->mk_my_orb("class_info", array("file" => $awpath, "disp" => $clinf["class_name"])),
+						"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+						"target" => "classinfo"
+					));
+				}
+			}
 		}
 	}
 
@@ -333,9 +404,18 @@ die(dbg::dump($data));
 
 	function display_class($data, $cur_file, $opts = array())
 	{
-		$this->read_template("class_info.tpl");
+		if ($opts["disp"] == "__outer")
+		{
+			$this->read_template("function_info.tpl");
+		}
+		else
+		{
+			$this->read_template("class_info.tpl");
+		}
 
-		$f = "";
+		$f = array();
+		$api_count = 0;
+		$orb_count = 0;
 		foreach($data["functions"] as $func => $f_data)
 		{
 			$arg = "";
@@ -344,6 +424,9 @@ die(dbg::dump($data));
 			{
 				continue;
 			}
+
+			$api_count += $f_data["doc_comment"]["attribs"]["api"];
+			$orb_count += !empty($f_data["doc_comment"]["attribs"]["name"]) ? 1 : 0 ;
 
 			$_ar = new aw_array($f_data["arguments"]);
 			foreach($_ar->get() as $a_var => $a_data)
@@ -404,18 +487,61 @@ die(dbg::dump($data));
 				"view_usage" => $this->mk_my_orb("view_usage", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
 				"doc" => $this->show_doc(array("file" => $doc_file))
 			));
-			$f .= $this->parse("FUNCTION");
+			if ($f_data["doc_comment"]["attribs"]["api"] == 1)
+			{
+				$f["API"] .= $this->parse("API_FUNCTION");
+			}
+			else
+			if (!empty($f_data["doc_comment"]["attribs"]["name"]))
+			{
+				$f["ORB"] .= $this->parse("ORB_FUNCTION");
+			}
+			else
+			if (isset($this->cb_callbacks[$func]))
+			{
+				$f["CB"] .= $this->parse("CB_FUNCTION");
+			}
+			else
+			if ($f_data["access"] != "public")
+			{
+				$f["PRIVATE"] .= $this->parse("PRIVATE_FUNCTION");
+			}
+			else
+			{
+				$f["OTHER"] .= $this->parse("OTHER_FUNCTION");
+			}
 			$fl .= $this->parse("LONG_FUNCTION");
 		}
+		foreach($f as $_f_type => $_f_str)
+		{
+			if ($_f_str != "")
+			{
+				$this->vars(array(
+					$_f_type."_FUNCTION" => $_f_str
+				));
+				$this->vars(array(
+					"HAS_".$_f_type => $this->parse("HAS_".$_f_type)
+				));
+			}
+		}
+
 		if ($data["extends"] != "")
 		{
 			$this->_display_extends($data);
 		}
+		$this->_display_templates($data["functions"]);
 
 		if (is_array($data["dependencies"]))
 		{
 			$this->_display_dependencies($data["dependencies"]);
 		}
+		if (is_array($data["implements"]))
+		{
+			$this->_display_implements($data["implements"]);
+		}
+
+		$this->_display_throws($data);
+		$this->_display_defines($opts["defines"]);
 
 		// do properties
 		$clid = $this->_find_clid_for_name($data["name"]);
@@ -429,12 +555,144 @@ die(dbg::dump($data));
 			"extends" => $data["extends"],
 			"end_line" => $data["end_line"],
 			"start_line" => $data["start_line"],
-			"FUNCTION" => $f,
 			"LONG_FUNCTION" => $fl,
-			"view_class" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"]))
+			"view_class" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"])),
+			"maintainer" => $data["maintainer"],
+			"cvs_version" => $data["cvs_version"],
+			"file" => substr($cur_file, 1),
+			"func_count" => count($data["functions"]),
+			"api_func_count" => $api_count,
+			"orb_func_count" => $orb_count,
+			"type_name" => $data["type"],
+			"cvsweb_url" => "http://dev.struktuur.ee/cgi-bin/viewcvs.cgi/automatweb_dev/classes".$cur_file,
+			"class_comment" => nl2br($data["class_comment"])
 		));
 
 		return $this->finish_with_style($this->parse());
+	}
+
+	function _display_implements($impl_arr)
+	{
+		$p = "";
+		foreach($impl_arr as $impl)
+		{
+			try 
+			{
+				$clf = class_index::get_file_by_name(basename($impl));
+			}
+			catch (awex_clidx_filesys $e)
+			{
+				die("ex for class $impl ".$e->getMessage());
+			}
+			$clf = str_replace(aw_ini_get("classdir"), "", $clf);
+			$this->vars(array(
+				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => $_GET["api_only"], "disp" => basename($impl))),
+				"name" => $impl
+			));
+			$p .= $this->parse("IMPLEMENTS");
+		}
+		$this->vars(array(
+			"IMPLEMENTS" => $p
+		));
+	}
+
+	function _display_templates($funcs, $class_name)
+	{
+		// read main tpl folder from init method
+		// read template files from read_template methods
+		$used_tpls = array();
+		$tpl_folder = "";
+		foreach($funcs as $f_name => $f_data)
+		{
+			foreach(safe_array($f_data["local_calls"]) as $lcall_data)
+			{
+				if ($lcall_data["func"] == "init")
+				{
+					// read template folder arg
+					if (substr($lcall_data["arguments"], 0, 5) == "array")
+					{
+						// parse from array
+						preg_match("/tpldir['\"]\=\>['\"](.*)['\"]/imsU", $lcall_data["arguments"], $mt);
+						$tpl_folder = $mt[1];
+					}
+					else
+					{
+						$tpl_folder = $lcall_data["arguments"];
+					}
+				}
+				if ($lcall_data["func"] == "read_template")
+				{
+					$used_tpls[$f_name][$lcall_data["arguments"]] = $lcall_data["arguments"];
+				}
+			}
+		}
+
+
+		$p = "";
+		foreach($used_tpls as $f_name => $tpls)
+		{
+			foreach($tpls as $tpl)
+			{
+				$this->vars(array(
+					"func" => $f_name,
+					"tpl_file" => $this->strip_quotes($tpl)
+				));
+				$p .= $this->parse("TEMPLATE");
+			}
+		}
+
+		$this->vars(array(
+			"TEMPLATE" => $p,
+			"tpl_folder" => $tpl_folder
+		));
+	}
+
+	private function strip_quotes($str)
+	{
+		if ($str[0] == "'" || $str[0] == '"')
+		{
+			return substr(trim($str), 1, -1);
+		}
+		return $str;
+	}
+
+	function _display_throws($data)
+	{
+		$throws = array();
+		foreach(safe_array($data["functions"]) as $func)
+		{
+			foreach(safe_array($func["throws"]) as $thr)
+			{
+				$throws[$thr] = $thr;
+			}
+		}
+		$p = "";
+		foreach($throws as $impl)
+		{
+			try 
+			{
+				$clf = class_index::get_file_by_name(basename($impl));
+			}
+			catch (awex_clidx_filesys $e)
+			{
+				die("ex for class $impl ".$e->getMessage());
+			}
+
+			$clf = str_replace(aw_ini_get("classdir"), "", $clf);
+			$this->vars(array(
+				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => $_GET["api_only"], "disp" => basename($impl))),
+				"name" => $impl
+			));
+			$p .= $this->parse("THROWS");
+		}
+		if ($data["throws_undefined"])
+		{
+			$p .= $this->parse("THROWS_UNSPECIFIC");
+		}
+		$this->vars(array(
+			"THROWS" => $p,
+			"THROWS_UNSPECIFIC" => ""
+		));
 	}
 
 	/**
@@ -477,6 +735,7 @@ die(dbg::dump($data));
 
 		@param file required 
 		@param api_only optional
+		@param disp optional
 
 		@returns 
 		html with class info
@@ -493,12 +752,15 @@ die(dbg::dump($data));
 		$data = $analyzer->analyze_file($file);
 		foreach($data["classes"] as $class => $class_data)
 		{
-			if ($class != "")
+			if (!empty($arr["disp"]) && $class != $arr["disp"] && !($arr["disp"] == "__outer" && $class == ""))
 			{
-				$op .= $this->display_class($class_data, $file, array(
-					"api_only" => $api_only
-				));
+				continue;
 			}
+				$op .= $this->display_class($class_data, $file, array(
+					"api_only" => $api_only,
+					"defines" => $data["defines"],
+					"disp" => $arr["disp"]
+				));
 		}
 		return $this->finish_with_style($op);
 	}
@@ -567,7 +829,7 @@ die(dbg::dump($data));
 			$ara[] = basename($tmp[$clid]["file"]);
 		}
 
-		return join(",", $ara);
+		return join(", ", $ara);
 	}
 
 	/** displays function source 
@@ -648,10 +910,19 @@ die(dbg::dump($data));
 
 		foreach($dep as $d_class => $d_ar)
 		{
+			try 
+			{
+				$clf = class_index::get_file_by_name(basename($d_class));
+			}
+			catch (awex_clidx_filesys $e)
+			{
+				die("ex for class $d_class ".$e->getMessage());
+			}
+			$clf = str_replace(aw_ini_get("classdir"), "", $clf);
 			$this->vars(array(
 				"name" => $d_class,
 				"lines" => join(",", $d_ar["lines"]),
-				"link" => $this->mk_my_orb("class_info" , array("file" => "/".$d_class.".".$this->cfg["ext"]))
+				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => $_GET["api_only"], "disp" => basename($d_class))),
 			));
 			$d_str .= $this->parse("DEP");
 		}
@@ -758,9 +1029,27 @@ die(dbg::dump($data));
 			$orb_defs = $orb->load_xml_orb_def($_extends);
 			$ex_fname = $this->cfg["basedir"]."/classes/".$orb_defs[$dat["extends"]]["___folder"]."/".$_extends.".".$this->cfg["ext"];
 
+			try 
+			{
+				if ($dat["extends"] == "Exception")
+				{
+					$clf = "::internal";
+				}
+				else
+				{
+					$clf = class_index::get_file_by_name(basename($dat["extends"]));
+				}
+			}
+			catch (awex_clidx_filesys $e)
+			{
+				die("ex for class $_extends ".$e->getMessage());
+			}
+			$clf = str_replace(aw_ini_get("classdir"), "", $clf);
+
+
 			$this->vars(array(
 				"spacer" => str_repeat("&nbsp;", $level * 3),
-				"inh_link" => $this->mk_my_orb("class_info", array("file" => "/".$_extends.".".$this->cfg["ext"])),
+				"inh_link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => $_GET["api_only"], "disp" => basename($dat["extends"]))),
 				"inh_name" => $dat["extends"]
 			));
 			$ex .= $this->parse("EXTENDER");
@@ -945,20 +1234,22 @@ die(dbg::dump($data));
 		$files = array();
 		$p = get_instance("core/aw_code_analyzer/parser");
 		$p->_get_class_list($files,$this->cfg["classdir"]);
-
+//$files = array("/www/dev/terryf/automatweb_dev/classes/protocols/mail/aw_mail.aw");
 		foreach($files as $file)
 		{
-
+	//		echo "file $file <br>\n";
+	//		flush();
 			$da = get_instance("core/aw_code_analyzer/docgen_analyzer_simple_db_writer");
 			$data = $da->analyze_file($file, true);
-
 			$rel_file = str_replace(aw_ini_get("basedir"), "",$file);
+			$this->db_query("DELETE FROM aw_da_classes WHERE file = '$rel_file'");
 			foreach($data["classes"] as $class => $c_data)
 			{
 				$this->db_query("DELETE FROM aw_da_funcs WHERE class = '$class'");
 				$this->db_query("DELETE FROM aw_da_func_attribs WHERE class = '$class'");
 				echo "writing class $class... <br>\n";
 				flush();
+				$has_apis = "0";
 				foreach($c_data["functions"] as $fname => $fdata)
 				{
 					//echo "&nbsp;&nbsp;&nbsp;writing function $fname... <br>\n";
@@ -980,10 +1271,19 @@ die(dbg::dump($data));
 							INSERT INTO aw_da_func_attribs(class,func,attrib_name,attrib_value)
 								VALUES('$class','$fname','$aname','$avalue')
 						");
+						if ($aname == "api" && $avalue==1)
+						{
+							$has_apis = 1;
+						}
 					}
 				}
+				$this->db_query("INSERT INTO aw_da_classes(file,class_name,extends,implements,class_type,has_apis,maintainer)
+					VALUES('$rel_file','$class','$c_data[extends]', '".join(",", $c_data["implements"])."', '$c_data[type]', $has_apis, '$c_data[maintainer]') ");
+//echo "------------------<br>";
+//echo dbg::dump($c_data);
 			}
 		}
+die("yepuh");
 
 		$this->db_query("DELETE FROM aw_da_callers");
 
@@ -1098,44 +1398,62 @@ die(dbg::dump($data));
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("intro"),
 			"target" => "list",
-			"caption" => t("Klasside &uuml;levaade")
+			"caption" => t("Class overview")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("class_list"),
 			"target" => "classlist",
-			"caption" => t("K&otilde;ik klassid")
+			"caption" => t("All classes")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("api_class_list"),
 			"target" => "classlist",
-			"caption" => t("API klassid")
+			"caption" => t("API classes")
+		));
+
+		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("maintainer_class_list"),
+			"target" => "classlist",
+			"caption" => t("Classes by maintainer")
+		));
+
+		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("interface_list"),
+			"target" => "classlist",
+			"caption" => t("Interfaces")
+		));
+
+		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("exception_list"),
+			"target" => "classlist",
+			"caption" => t("Exceptions")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("doclist"),
 			"target" => "classlist",
-			"caption" => t("Eraldi dokumentatsioon")
+			"caption" => t("Separate documentation")
 		));
 
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("proplist",array('id'=>$arr['id'])),
 			"target" => "classlist",
-			"caption" => t("Classbase tagid")
+			"caption" => t("Classbase tags")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("doc_search_form"),
 			"target" => "classlist",
-			"caption" => t("Otsing")
+			"caption" => t("Search")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("do_db_update",array('id'=>$arr['id'])),
 			"target" => "bott",
-			"caption" => t("Uuenda API andmebaas")
+			"caption" => t("Renew database")
 		));
 
 		if ($arr["id"])
@@ -1156,6 +1474,146 @@ die(dbg::dump($data));
 			"content" => "&nbsp;&nbsp;".join(" | ", $ret)
 		));
 		return $this->parse();
+	}
+
+	/** 
+		@attrib name=interface_list
+	**/
+	function interface_list($arr)
+	{
+		$this->read_template("classlist.tpl");
+
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgifaces",
+			"persist_state" => true,
+			"root_name" => t("Interfaces"),
+			"url_target" => "list"
+		));
+
+		$this->ic = get_instance("core/icons");
+		// gather data about things in files
+		$this->db_query("SELECT * from aw_da_classes WHERE class_type = 'interface'");
+		while ($row = $this->db_next())
+		{
+			$tv->add_item(0, array(
+				"name" => $row["class_name"],
+				"id" => $row["class_name"],
+				"url" => $this->mk_my_orb("class_info", array("file" => str_replace("/classes/", "/",$row["file"]), "disp" => $row["class_name"])),
+				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+				"target" => "classinfo"
+			));
+		}
+
+		$this->vars(array(
+			"list" => $tv->finalize_tree(array(
+				"rootnode" => 0
+			))
+		));
+
+		return $this->finish_with_style($this->parse());
+	}
+
+	/** 
+		@attrib name=maintainer_class_list
+	**/
+	function maintainer_class_list($arr)
+	{
+		$this->read_template("classlist.tpl");
+
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgmaints",
+			"persist_state" => true,
+			"root_name" => t("Classes by maintainer"),
+			"url_target" => "list"
+		));
+
+		$this->ic = get_instance("core/icons");
+		// gather data about things in files
+		$this->db_query("SELECT * from aw_da_classes ");
+		$c = array();
+		while ($row = $this->db_next())
+		{
+			$c[$row["maintainer"]][] = $row;
+		}
+
+		foreach($c as $maintainer => $clss)
+		{
+			if ($maintainer == "")
+			{
+				$maintainer = "M&auml;&auml;ramata";
+			}
+			$tv->add_item(0, array(
+				"name" => $maintainer,
+				"id" => $maintainer,
+				"url" => "",
+				"iconurl" => $this->ic->get_icon_url(CL_MENU,""),
+				"target" => "classinfo"
+			));
+			foreach($clss as $row)
+			{
+				$tv->add_item($maintainer, array(
+					"name" => $row["class_name"],
+					"id" => $row["class_name"],
+					"url" => $this->mk_my_orb("class_info", array("file" => str_replace("/classes/", "/",$row["file"]), "disp" => $row["class_name"])),
+					"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+					"target" => "classinfo"
+				));
+			}
+		}
+
+		$this->vars(array(
+			"list" => $tv->finalize_tree(array(
+				"rootnode" => 0
+			))
+		));
+
+		return $this->finish_with_style($this->parse());
+	}
+
+	/** 
+		@attrib name=exception_list
+	**/
+	function exception_list($arr)
+	{
+		$this->read_template("classlist.tpl");
+
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgexception",
+			"persist_state" => true,
+			"root_name" => t("Exceptions"),
+			"url_target" => "list"
+		));
+
+		$this->ic = get_instance("core/icons");
+		// gather data about things in files
+		$this->db_query("SELECT * from aw_da_classes WHERE class_type = 'exception'");
+		while ($row = $this->db_next())
+		{
+			$tv->add_item(0, array(
+				"name" => $row["class_name"],
+				"id" => $row["class_name"],
+				"url" => $this->mk_my_orb("class_info", array("file" => str_replace("/classes/", "/",$row["file"]), "disp" => $row["class_name"])),
+				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+				"target" => "classinfo"
+			));
+		}
+
+		$this->vars(array(
+			"list" => $tv->finalize_tree(array(
+				"rootnode" => 0
+			))
+		));
+
+		return $this->finish_with_style($this->parse());
 	}
 
 	/**	
@@ -1398,26 +1856,19 @@ die(dbg::dump($data));
 			"root_name" => t("Classes"),
 			"url_target" => "list"
 		));
-	
-		// get files that have at least one api method
+
+		$this->db_query("SELECT * from aw_da_classes WHERE has_apis=1");
 		$api_files = array();
-		$this->db_query("
-			SELECT 
-				distinct(file) as file
-			FROM
-				aw_da_func_attribs fa
-				LEFT JOIN aw_da_funcs f ON (fa.class = f.class AND fa.func = f.func)
-			WHERE
-				fa.attrib_name = 'api' AND fa.attrib_value='1'
-		");
+		$classes = array();
 		while ($row = $this->db_next())
 		{
 			$fp = $this->cfg["basedir"].$row["file"];
 			$api_files[$fp] = $fp;
+			$classes[$fp][] = $row;
 		}
 
 		$this->ic = get_instance("core/icons");
-		$this->_req_mk_clf_api_tree($tv, $this->cfg["classdir"], $api_files);
+		$this->_req_mk_clf_api_tree($tv, $this->cfg["classdir"], $api_files, $classes);
 
 		$this->vars(array(
 			"list" => $tv->finalize_tree(array(
@@ -1428,7 +1879,7 @@ die(dbg::dump($data));
 		return $this->finish_with_style($this->parse());
 	}
 
-	function _req_mk_clf_api_tree(&$tv, $path, $api_files)
+	function _req_mk_clf_api_tree(&$tv, $path, $api_files, $classes)
 	{
 		$dc = array();
 		$fc = array();
@@ -1460,7 +1911,7 @@ die(dbg::dump($data));
 		foreach($dc as $file)
 		{
 			$fp = $path."/".$file;
-			$_hasf = $this->_req_mk_clf_api_tree($tv, $fp, $api_files);
+			$_hasf = $this->_req_mk_clf_api_tree($tv, $fp, $api_files, $classes);
 
 			if ($_hasf)
 			{
@@ -1477,18 +1928,82 @@ die(dbg::dump($data));
 		{
 			$fp = $path."/".$file;
 			$awpath = str_replace($this->cfg["classdir"], "", $fp);
-	
-			$tv->add_item($path, array(
-				"name" => $file,
-				"id" => $fp,
-				"url" => $this->mk_my_orb("class_info", array("file" => $awpath, "api_only" => 1)),
-				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
-				"target" => "classinfo"
-			));
+
+			// if the file only has 1 class in it, direct link to that, else split subs	
+			if (count($classes[$fp]) < 2)
+			{
+				$tv->add_item($path, array(
+					"name" => $file,
+					"id" => $fp,
+					"url" => $this->mk_my_orb("class_info", array("file" => $awpath, "api_only" => 1)),
+					"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+					"target" => "classinfo"
+				));
+			}
+			else
+			{
+				$tv->add_item($path, array(
+					"name" => $file,
+					"id" => $fp,
+					"url" => $this->mk_my_orb("class_info", array("file" => $awpath, "api_only" => 1)),
+					"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+					"target" => "classinfo"
+				));
+				foreach($classes[$fp] as $clinf)
+				{
+					$v = $clinf["class_name"];
+					if ($v == "")
+					{
+						$clinf["class_name"] = "__outer";
+						$v = t("Functions not in any class");
+					}
+					else
+					{
+						switch($clinf["class_type"])
+						{
+							case "interface":
+								$v = t("Interface: ").$v;
+								break;
+
+							case "class":
+								$v = t("Class: ").$v;
+								break;
+
+							case "exception":
+								$v = t("Exception: ").$v;
+								break;
+						}
+					}
+					$tv->add_item($fp, array(
+						"name" => $v,
+						"id" => $fp."::".$clinf["class_name"],
+						"url" => $this->mk_my_orb("class_info", array("file" => $awpath, "api_only" => 1, "disp" => $clinf["class_name"])),
+						"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+						"target" => "classinfo"
+					));
+				}
+			}
 			$hasf = true;
 		}
 
 		return $hasf;
+	}
+
+
+	private function _display_defines($d)
+	{
+		$s = "";
+		foreach(safe_array($d) as $def)
+		{
+			$this->vars(array(
+				"name" => $def["key"],
+				"value" => $def["value"]
+			));
+			$s .= $this->parse("DEFINES");
+		}
+		$this->vars(array(
+			"DEFINES" => $s
+		));
 	}
 }
 

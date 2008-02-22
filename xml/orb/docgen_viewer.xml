@@ -37,6 +37,7 @@
 				<arguments>
 					<required name="file" />
 					<optional name="api_only" />
+					<optional name="disp" />
 				</arguments>
 			</function>
 		</action>
@@ -96,6 +97,27 @@
 			<function name="topf">
 				<arguments>
 					<optional name="id" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="interface_list">
+			<function name="interface_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="maintainer_class_list">
+			<function name="maintainer_class_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="exception_list">
+			<function name="exception_list">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

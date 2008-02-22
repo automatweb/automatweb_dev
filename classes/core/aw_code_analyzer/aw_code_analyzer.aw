@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.11 2008/01/31 13:52:52 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.12 2008/02/22 12:01:22 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -53,7 +53,13 @@ class aw_code_analyzer extends class_base
 		{
 			$fp = $file;
 		}
-		$this->tokens = token_get_all(file_get_contents($fp));
+		$this->file_source = file_get_contents($fp);
+		$this->tokens = token_get_all($this->file_source);
+
+/*		foreach($this->tokens as $tok)
+		{
+			$this->dump_tok($tok, false);
+		}*/
 
 		$this->data = array();
 		$this->brace_level = 0;
@@ -63,8 +69,6 @@ class aw_code_analyzer extends class_base
 		$this->cur_file = $file;
 		$this->classinfo = aw_ini_get("classes");
 
-/* dbg siin ja edaspidi selles failis parandus veale. kui esines stringides muutuja: "asdfas{$sadf}dflkljlsd" siis kuna '{' ei t88delda siin T_CURLY_OPEN-ina, kutsuti '}' esinemisel handle_brace_end ilma vastava handle_brace_begin-ita. dbg on ajutine lahendus! */ $variable_token_occurred = false;
-
 		reset($this->tokens);
 		while ($token = $this->get())
 		{
@@ -73,8 +77,15 @@ class aw_code_analyzer extends class_base
 				list($id, $str) = $token;
 				switch($id)
 				{
+					case T_PRIVATE:
+					case T_PUBLIC:
+					case T_PROTECTED:
+						$this->handle_function_access_definer($id);
+						break;
+
 					case T_CLASS:
-						$this->handle_class_begin();
+					case T_INTERFACE:
+						$this->handle_class_begin($id);
 						break;
 
 					case T_FUNCTION:
@@ -90,6 +101,7 @@ class aw_code_analyzer extends class_base
 					// this handles ${variable}'s in code
 					case T_DOLLAR_OPEN_CURLY_BRACES:
 						$this->handle_brace_begin();
+						//$this->handle_variable_ref($token);
 						break;
 
 					case T_STRING:
@@ -97,8 +109,8 @@ class aw_code_analyzer extends class_base
 						break;
 
 					case T_VARIABLE:
-/* dbg */ $variable_token_occurred = true;
-						/*$this->handle_variable_ref($token);*/
+					case T_STRING_VARNAME:
+						$this->handle_variable_ref($token);
 						break;
 
 					/*case T_NEW:
@@ -107,6 +119,10 @@ class aw_code_analyzer extends class_base
 
 					case T_RETURN:
 						$this->handle_return();
+						break;
+
+					case T_THROW:
+						$this->handle_throw();
 						break;
 				}
 			}
@@ -119,14 +135,7 @@ class aw_code_analyzer extends class_base
 						break;
 
 					case "}":
-/* dbg */ if ($variable_token_occurred)
-/* dbg */ {
-/* dbg */ 	$variable_token_occurred = false;
-/* dbg */ }
-/* dbg */ else
-/* dbg */ {
 						$this->handle_brace_end();
-/* dbg */ }
 						break;
 				}
 			}
@@ -156,7 +165,7 @@ class aw_code_analyzer extends class_base
 			$this->cur_line += substr_count($ret, "\n");
 		}
 		// short dbg bt
-		//.echo $this->_dbg_backtrace()." <br>";;
+		//echo $this->_dbg_backtrace()." <br>";;
 		return $ret;
 	}
 
@@ -278,7 +287,7 @@ class aw_code_analyzer extends class_base
 		}
 	}
 
-	function handle_class_begin()
+	function handle_class_begin($tok_type)
 	{
 		$this->in_class = true;
 		$this->class_start_level = $this->brace_level;
@@ -287,13 +296,22 @@ class aw_code_analyzer extends class_base
 		$this->assert($name_t, T_STRING);
 		list($name_id, $name) = $name_t;
 		$this->current_class = $name;
+//echo "in handle class begin $name <br>";
 		$this->data["classes"][$name] = array();
 		$this->data["classes"][$name]["name"] = $name;
 		$this->data["classes"][$this->current_class]["start_line"] = $this->get_line();
 		$this->data["classes"][$name]["file"] = $this->cur_file;
 		$this->data["classes"][$name]["functions"] = array();
+		if (substr(trim($this->last_comment), 0, 3) == "/**")
+		{
+			$this->data["classes"][$name]["class_comment"] = $this->last_comment;
+		}
+
+		// parse maintainer/cvs version from file cause those apply for all classes in the file
+		$this->parse_maintainer_version();
 
 		$tok = $this->get();
+//$this->dump_tok($tok, false);
 		if (is_array($tok))
 		{
 			list($id, $str) = $tok;
@@ -304,14 +322,43 @@ class aw_code_analyzer extends class_base
 				list($extends_id, $extends) = $extends_t;
 
 				$this->data["classes"][$name]["extends"] = $extends;
+
+				// get next token to check if it implements
+				$tok = $this->get();
+				if (is_array($tok))
+				{
+					list($id, $str) = $tok;
+				}
+				else
+				{
+					$id = null;
+				}
 			}
+
+			if ($id == T_IMPLEMENTS)
+			{
+				$this->handle_t_implements();
+			}
+		}
+
+		if ($tok == "{") // class doesn't extend anything
+		{
+			$this->handle_brace_begin();
+		}
+
+		// figure out class/interface/exception
+		if ($this->data["classes"][$name]["extends"] == "Exception" || substr($name, 0, 4) == "awex")
+		{
+			$this->data["classes"][$name]["type"] = "exception";
+		}
+		else
+		if ($tok_type == T_INTERFACE)
+		{
+			$this->data["classes"][$name]["type"] = "interface";
 		}
 		else
 		{
-			if ($tok == "{") // class doesn't extend anything
-			{
-				$this->handle_brace_begin();
-			}
+			$this->data["classes"][$name]["type"] = "class";
 		}
 	}
 
@@ -335,6 +382,11 @@ class aw_code_analyzer extends class_base
 		if ($this->in_class && $this->brace_level == $this->class_start_level)
 		{
 			//echo "cur level == class start level (".$this->class_start_level.") so end class <br>";
+			if ($this->in_function)
+			{
+				// this is for interfaces with no function bodies
+				$this->handle_function_end();
+			}
 			$this->handle_class_end();
 		}
 
@@ -369,6 +421,16 @@ class aw_code_analyzer extends class_base
 		{
 			$this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment_str"] = $this->last_comment;
 		}
+		if (!$this->function_access)
+		{
+			$this->function_access = T_PUBLIC;
+		}
+		$this->faccess_lut = array(
+			T_PRIVATE => "private",
+			T_PUBLIC => "public",
+			T_PROTECTED => "protected"
+		);
+		$this->data["classes"][$this->current_class]["functions"][$f_name]["access"] = $this->faccess_lut[$this->function_access];
 
 		$this->current_function = $f_name;
 		$this->in_function = true;
@@ -961,7 +1023,49 @@ class aw_code_analyzer extends class_base
 			$o = $this->get();
 			//$this->assert_str($o, ";");
 		}
+		else
+		if ($tok[1] == "define")
+		{
+			$o_brace = $this->get();
+			$this->assert_str($o_brace, "(");
+			
+			$def_str = $this->get();
+			
+			$comme = $this->get();
+			$this->assert_str($comme, ",");
+
+			$dv = "";
+			do {
+				$def_val = $this->get();
+				if (is_array($def_val))
+				{
+					$dv .= $def_val[1];
+				}
+				else
+				if ($def_val != ")")
+				{
+					$dv .= $def_val;
+				}
+			} while($def_val != ";");
+
+			$this->assert_str($def_val, ";");
+
+			$this->data["defines"][] = array(
+				"key" => $this->strip_quotes($def_str[1]),
+				"value" => $this->strip_quotes($dv),
+				"line" => $this->get_line()
+			);
+		}
 		return $depd;
+	}
+
+	private function strip_quotes($str)
+	{
+		if ($str[0] == "'" || $str[0] == '"')
+		{
+			return substr(trim($str), 1, -1);
+		}
+		return $str;
 	}
 
 	/** skips function call arguments, returns content
@@ -1039,6 +1143,12 @@ class aw_code_analyzer extends class_base
 		/*echo "handle var ref on line ".$this->get_line()." =<br>";
 		$this->dump_tok($v_tok, false);
 		$this->dump_tok($nxt, false);*/
+		if (!is_array($nxt) && $nxt == "{")	// this is $a{4} string position handler
+		{
+			$this->handle_brace_begin();
+			$nxt = $this->get();
+		}
+
 		if (!is_array($nxt) && $nxt == "=")
 		{
 			$this->handle_variable_assign($v_tok, $nxt);
@@ -1412,6 +1522,104 @@ class aw_code_analyzer extends class_base
 			}
 		}
 	}
-	
+
+	function handle_t_implements()
+	{
+		if (!is_array($this->data["classes"][$this->current_class]["implements"]))
+		{
+			$this->data["classes"][$this->current_class]["implements"] = array();
+		}
+
+		do {
+			$implements_t = $this->get();
+			if (!is_array($implements_t))
+			{
+				if ($implements_t == "{")
+				{
+					$this->handle_brace_begin();
+					return;
+				}
+				$this->assert_str($implements_t, ",");
+				continue;
+			}
+			list($implements_id, $implements) = $implements_t;
+
+			$this->data["classes"][$this->current_class]["implements"][] = $implements;
+		} while(1);
+	}	
+
+	function parse_maintainer_version()
+	{
+		if (preg_match("/maintainer=(\S+)/ims", $this->file_source, $mt))
+		{
+			$this->data["classes"][$this->current_class]["maintainer"] = $mt[1];
+		}
+		if (preg_match("/\\\$Header\:(.*)\\\$/imsU", $this->file_source, $mt))
+		{
+			$this->data["classes"][$this->current_class]["cvs_version"] = trim($mt[1]);
+		}
+	}
+
+	function handle_throw()
+	{
+		$t = $this->get();
+		if (is_array($t) && $t[0] == T_NEW)
+		{
+			// get class name from new, that's what were throwing
+			$clsnm = $this->get();
+			if ($clsnm[0] == T_STRING)	// could be T_VARIABLE
+			{
+				// assume class name
+				$this->data["classes"][$this->current_class]["functions"][$this->current_function]["throws"][$clsnm[1]] = $clsnm[1];
+			}
+			else
+			{
+				// variable new
+				$this->data["classes"][$this->current_class]["functions"][$this->current_function]["throws_undefined"] = 1;
+			}
+		}
+		else
+		if (is_array($t) && $t[0] == T_VARIABLE)
+		{
+			// check for variable and try to get variable class from track vars
+			$var_data = $this->get_track_var($t[1]);
+			if ($var_data)
+			{
+				$this->data["classes"][$this->current_class]["functions"][$this->current_function]["throws"][$var_data["class"]] = $var_data["class"];
+			}
+			else
+			{
+				// non-tracked var, set variable dep
+				$this->data["classes"][$this->current_class]["functions"][$this->current_function]["throws_undefined"] = 1;
+			}
+		}
+		else
+		if (is_array($t) && $t[0] == T_STRING)
+		{
+			// see if we are doing get_instance or some unknown function
+			$dep = $this->handle_t_string($t);
+			if (!empty($dep["dep"]))
+			{
+				$this->data["classes"][$this->current_class]["functions"][$this->current_function]["throws"][$dep["dep"]] = $dep["dep"];
+			}
+			else
+			{
+				// unknown function, set variable dep
+				$this->data["classes"][$this->current_class]["functions"][$this->current_function]["throws_undefined"] = 1;
+			}
+		}
+	}
+
+	function handle_function_access_definer($id)
+	{
+		// check if the next token is t_function
+		// cause this can also be for var or whatever
+		$next = $this->get();
+		$this->back();
+		if (is_array($next) && $next[0] == T_FUNCTION)
+		{
+			$this->function_access = $id;
+		}
+	}
 }
 ?>

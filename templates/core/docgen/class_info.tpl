@@ -43,24 +43,42 @@ table.class_info th {
 }
 </style>
 
-<a href="{VAR:view_class}">class source</a>
 
 <table border="0" width="100%" cellpadding="2" cellspacing="0">
 <tr>
-	<td valign="top" rowspan="2" class="text" width="50%">
-		<b>{VAR:name}</b><br>
+		<td colspan="7" width="2" height="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
+</tr>
+<tr>
+	<td colspan="7">
+		<table border="0" width="100%">
+			<tr>
+				<td width="50%">
+					{VAR:type_name} <b>{VAR:name}</b> in file <b>{VAR:file}</b><br>
+					Maintainer: {VAR:maintainer}<br>
+					CVS Version: <a href='{VAR:cvsweb_url}'>{VAR:cvs_version}</a><br>
+					Methods: {VAR:func_count} total / {VAR:api_func_count} API / {VAR:orb_func_count} ORB<br>
+					View source: <a href="{VAR:view_class}">{VAR:name}</a>
+				</td>
+				<td valign="top" align="left" width="50%">
+					{VAR:class_comment}
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+		<td colspan="7" width="2" height="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
+</tr>
+<tr>
+	<td valign="top" class="text" width="25%">
+		<b>Extends</b><br>
 		<!-- SUB: EXTENDER -->
 		{VAR:spacer}<img src='{VAR:baseurl}/automatweb/images/inherit.gif'><a href='{VAR:inh_link}'>{VAR:inh_name}</a><br>
 		<!-- END SUB: EXTENDER -->
 	</td>
-	<td rowspan="2" width="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
-	<td valign="top"  width="50%" class="text"><B>dependencies</b></td>
-</tr>
-<tr>
+	<td width="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
 
-
-	<td class="text" valign="top" >
-		
+	<td valign="top"  width="25%" class="text"><B>Depends</b><Br>
 		<!-- SUB: DEP -->
 		&nbsp; - <a href='{VAR:link}'>{VAR:name}</a><br>
 		<!-- END SUB: DEP -->
@@ -68,55 +86,107 @@ table.class_info th {
 		<!-- SUB: VAR_DEP -->
 		&nbsp; - This class also has variable dependencies!<br>
 		<!-- END SUB: VAR_DEP -->
-		</td>
+
+	</td>
+	<td width="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
+
+	<td valign="top"  width="25%" class="text"><B>Implements</b><br>
+		<!-- SUB: IMPLEMENTS -->
+		&nbsp; - <a href='{VAR:link}'>{VAR:name}</a><br>
+		<!-- END SUB: IMPLEMENTS -->
+	</td>
+	<td width="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
+
+	<td valign="top"  width="25%" class="text"><B>Throws</b><Br>
+		<!-- SUB: THROWS -->
+		&nbsp; - <a href='{VAR:link}'>{VAR:name}</a><br>
+		<!-- END SUB: THROWS -->
+		<!-- SUB: THROWS_UNSPECIFIC -->
+		&nbsp; - Untrackable</a><br>
+		<!-- END SUB: THROWS_UNSPECIFIC -->
+	</td>
 </tr>
 <tr>
-		<td colspan="3" width="2" height="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
+		<td colspan="7" width="2" height="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
 </tr>
 
 <tr>
-	<td colspan="2" rowspan="4" class="text" valign="top">
-		<b>functions:</b><br>
-		<!-- SUB: FUNCTION -->
+	<td colspan="3" rowspan="4" class="text" valign="top">
+		<!-- SUB: HAS_API -->
+		<b>API methods:</b><br>
+		<!-- SUB: API_FUNCTION -->
 		<a href='{VAR:view_func}'>{VAR:name}</a><br>
 		<i>{VAR:short_comment}</i>
-		<!-- END SUB: FUNCTION -->
+		<!-- END SUB: API_FUNCTION -->
+		<br>
+		<!-- END SUB: HAS_API -->
 
-		<br><br>
-		<B>orb methods</b><br>
-		<b>class_base methods</b><br>
-		<b>other methods</b><br>
+		<!-- SUB: HAS_ORB -->
+		<B>ORB methods:</b><br>
+		<!-- SUB: ORB_FUNCTION -->
+		<a href='{VAR:view_func}'>{VAR:name}</a><br>
+		<i>{VAR:short_comment}</i>
+		<!-- END SUB: ORB_FUNCTION -->
+		<br>
+		<!-- END SUB: HAS_ORB -->
+
+		<!-- SUB: HAS_CB -->
+		<b>class_base methods:</b><br>
+		<!-- SUB: CB_FUNCTION -->
+		<a href='{VAR:view_func}'>{VAR:name}</a><br>
+		<i>{VAR:short_comment}</i>
+		<!-- END SUB: CB_FUNCTION -->
+		<br>
+		<!-- END SUB: HAS_CB -->
+
+		<!-- SUB: HAS_OTHER -->
+		<b>other public methods</b><br>
+		<!-- SUB: OTHER_FUNCTION -->
+		<a href='{VAR:view_func}'>{VAR:name}</a><br>
+		<i>{VAR:short_comment}</i>
+		<!-- END SUB: OTHER_FUNCTION -->
+		<br>
+		<!-- END SUB: HAS_OTHER -->
+
+		<!-- SUB: HAS_PRIVATE -->
+		<b>private methods</b><br>
+		<!-- SUB: PRIVATE_FUNCTION -->
+		<a href='{VAR:view_func}'>{VAR:name}</a><br>
+		<i>{VAR:short_comment}</i>
+		<!-- END SUB: PRIVATE_FUNCTION -->
+		<br>
+		<!-- END SUB: HAS_PRIVATE -->
 	</td>
-	<td class="text" valign="top">
+	<td class="text" valign="top" colspan="4">
 		<b>properties:</b><br>
-		<table border="0" cellpadding="1" cellspacing="0" width="100%">
+		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
 		<tr>
-			<td class="text"><i>Name</i></td>
-			<td class="text"><i>Type</i></td>
-			<td class="text"><i>Comment</i></td>
+			<th>Name</th>
+			<th>Type</th>
+			<th>Comment</th>
 		</tr>
 		<!-- SUB: PROP -->
 		<tr>
-			<td class="text">{VAR:name}</td>
-			<td class="text">{VAR:type}</td>
-			<td class="text">{VAR:comment}</td>
+			<td>{VAR:name}</td>
+			<td>{VAR:type}</td>
+			<td>{VAR:comment}</td>
 		</tr>
 		<!-- END SUB: PROP -->
 		</table>
 	</td>
 </tr>
 <tr>
-	<td class="text" valign="top">
+	<td class="text" valign="top" colspan="5">
 		<b>Reltypes:</b><br>
-		<table border="0" cellpadding="1" cellspacing="0" width="100%">
-			<td class="text"><i>Name</i></td>
-			<td class="text"><i>Classes</i></td>
-			<td class="text"><i>Comment</i></td>
+		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
+			<th>Name</th>
+			<th>Classes</th>
+			<th>Comment</th>
 		<!-- SUB: RELTYPE -->
 		<tr>
-			<td class="text">{VAR:name}</td>
-			<td class="text">{VAR:clids}</td>
-			<td class="text">{VAR:comment}</td>
+			<td>{VAR:name}</td>
+			<td>{VAR:clids}</td>
+			<td>{VAR:comment}</td>
 		</tr>
 		<!-- END SUB: RELTYPE -->
 		</table>
@@ -126,17 +196,17 @@ table.class_info th {
 </tr>
 <tr>
 
-	<td class="text" valign="top">
+	<td class="text" valign="top" colspan="5">
 		<b>Database tables</b><br>
-		<table border="0" cellpadding="1" cellspacing="0" width="100%">
-			<td class="text"><i>Name</i></td>
-			<td class="text"><i>Index</i></td>
-			<td class="text"><i>Properties</i></td>
+		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
+			<th>Name</th>
+			<th>Index</th>
+			<th>Properties</th>
 		<!-- SUB: TABLE -->
 		<tr>
-			<td class="text">{VAR:name}</td>
-			<td class="text">{VAR:index}</td>
-			<td class="text">{VAR:properties}</td>
+			<td>{VAR:name}</td>
+			<td>{VAR:index}</td>
+			<td>{VAR:properties}</td>
 		</tr>
 		<!-- END SUB: TABLE -->
 		</table>
@@ -146,11 +216,31 @@ table.class_info th {
 </tr>
 <tr>
 
-	<td class="text" valign="top">
+	<td class="text" valign="top" colspan="5">
 		<b>Defines:</b><br>
-
+		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
+			<th>Name</th>
+			<th>Value</th>
+		<!-- SUB: DEFINES -->
+		<tr>
+			<td>{VAR:name}</td>
+			<td>{VAR:value}</td>
+		</tr>
+		<!-- END SUB: DEFINES -->
+		</table>
 		<br>
-		<B>Templates:</b><br>
+		<B>Templates, from folder {VAR:tpl_folder}:</b><br>
+		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
+			<th>Function</th>
+			<th>Template file</th>
+		<!-- SUB: TEMPLATE -->
+		<tr>
+			<td>{VAR:func}</td>
+			<td>{VAR:tpl_file}</td>
+		</tr>
+		<!-- END SUB: TEMPLATE -->
+		</table>
+		<br>
 	</td>
 
 

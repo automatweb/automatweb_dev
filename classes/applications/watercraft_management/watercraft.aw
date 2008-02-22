@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.28 2008/02/14 08:32:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.29 2008/02/22 12:01:20 kristo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -474,8 +474,8 @@ define('CONDITION_LITTLE_USED', 3);
 define('CONDITION_USED', 4);
 define('CONDITION_NEEDS_REPAIR', 5);
 
-define('CENTREBOARD_1');
-define('CENTREBOARD_2');
+define('CENTREBOARD_1','');
+define('CENTREBOARD_2','');
 
 define('ENGINE_TYPE_2_TACT', 1);
 define('ENGINE_TYPE_4_TACT', 2);

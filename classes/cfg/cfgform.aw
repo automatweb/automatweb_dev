@@ -3055,7 +3055,6 @@ class cfgform extends class_base
 			$cff->cff_add_prop($cf_obj, "bujaka", array("caption" => t("Bujaka"), "group" => "general"));
 			$cf_obj->save();
 	**/
-	// $save parameter for internal use
 	function cff_init_from_class($o, $clid, $save = true)
 	{
 		// now that's the tricky part ... this thingsbum overrides

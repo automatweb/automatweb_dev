@@ -1,6 +1,20 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="menu" folder="" extends="class_base">
+		<action name="new" is_public="1" all_args="1" caption="Lisa">
+			<function name="new_change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change" is_public="1" all_args="1" caption="Muuda">
+			<function name="change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="ajax_menu_images_new_row">
 			<function name="ajax_menu_images_new_row">
 				<arguments>

@@ -291,7 +291,7 @@ class class_index
 
 				if (!is_readable($class_dfn_file))
 				{
-					$e = new awex_clidx_filesys("Class definition not found or not readable.");
+					$e = new awex_clidx_filesys("Class definition not found or not readable. ".$class_dfn_file);
 					$e->clidx_cl_name = $name;
 					$e->clidx_file = $class_dfn_file;
 					$e->clidx_op = "is_readable";
