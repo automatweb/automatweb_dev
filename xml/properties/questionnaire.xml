@@ -29,7 +29,7 @@
             <comment>Kuvatakse kommentaare, mille pikkus on &amp;gt; 0.</comment>
       </property>
       <property>
-            <name>correct_caption</name>
+            <name>correct_msg</name>
             <table>objects</table>
             <group>conf</group>
             <type>textbox</type>
@@ -38,7 +38,7 @@
             <caption>&amp;amp;Otilde;ige vastuse teade</caption>
       </property>
       <property>
-            <name>false_caption</name>
+            <name>false_msg</name>
             <table>objects</table>
             <group>conf</group>
             <type>textbox</type>

@@ -588,7 +588,7 @@ class questionnaire extends class_base
 				{
 					$a_obj = obj($a["oid"]);
 					$correct_answer_count = 0;
-					if($a_obj->prop("correct"))
+					if($a_obj->prop("correct") && $a_obj->prop("name") != $_POST["answer"])
 					{
 						$answer = $a_obj->prop("name");
 						$this->vars(array(
@@ -600,7 +600,7 @@ class questionnaire extends class_base
 				}
 				if(!$correct && $o->prop("dsply_correct2wrong"))
 				{
-					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2false_caption_single") : $o->prop("dsply_correct2false_caption_multiple");
+					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2wrong_caption_single") : $o->prop("dsply_correct2false_caption_multiple");
 				}
 				else
 				{
