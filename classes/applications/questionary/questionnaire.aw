@@ -31,6 +31,12 @@
 		@property dsply_correct2correct type=checkbox ch_value=1 field=meta method=serialize
 		@caption &Otilde;ige vastuse korral kuva k&otilde;ik &otilde;iged
 
+		@property dsply_correct_caption_single type=textbox field=meta method=serialize
+		@caption &Otilde;igete vastuste caption (ainsus)
+
+		@property dsply_correct_caption_multiple type=textbox field=meta method=serialize
+		@caption &Otilde;igete vastuste caption (mitmus)
+
 		@property str_rslts type=checkbox ch_value=1 field=meta method=serialize
 		@caption Salvesta vastamised
 
@@ -449,7 +455,7 @@ class questionnaire extends class_base
 		if($q_obj->prop("dsply_acomment"))
 			$dsply_acomment = $q_obj->prop("dsply_acomment");
 
-		if($_POST["qid"])
+		if($_POST["qid"] && $_POST["answer"])
 		{
 			if($q_obj->prop("ans_type"))
 			{
@@ -554,6 +560,7 @@ class questionnaire extends class_base
 				foreach($as as $a)
 				{
 					$a_obj = obj($a["oid"]);
+					$correct_answer_count = 0;
 					if($a_obj->prop("correct"))
 					{
 						$answer = $a_obj->prop("name");
@@ -561,8 +568,10 @@ class questionnaire extends class_base
 							"answer" => $answer,
 						));
 						$CORRECT_ANSWER .= $this->parse("CORRECT_ANSWER");
+						$correct_answer_count++;
 					}
 				}
+				$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct_caption_single") : $o->prop("dsply_correct_caption_multiple");
 				$this->vars(array(
 					"CORRECT_ANSWER" => $CORRECT_ANSWER,
 				));
@@ -574,6 +583,13 @@ class questionnaire extends class_base
 		}
 		else
 		{
+			$submit = html::submit(array(
+				"value" => "Vasta",
+			));
+			$this->vars(array(
+				"submit" => $submit,
+			));
+
 			if($dsply_qcomment == 1)
 				$qcomment = $q_obj->prop("comm");
 		}

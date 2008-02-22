@@ -32,14 +32,14 @@
 			<table width="100%">
 				<tr>
 					<td width="40%">
-						{VAR:qcomment}<br>
-						{VAR:acomment}<br><br>
 						<!-- SUB: CORRECT_ANSWERS -->
-						&Otilde;iged vastused olid:<br>
+						{VAR:correct_answer_caption}
 						<!-- SUB: CORRECT_ANSWER -->
 						{VAR:answer}<br>
 						<!-- END SUB: CORRECT_ANSWER -->
 						<!-- END SUB: CORRECT_ANSWERS -->
+						{VAR:qcomment}<br>
+						{VAR:acomment}<br><br>
 					</td>
 					<td width="20%">
 						<!-- SUB: ANSWER_PICTURE -->
@@ -47,7 +47,7 @@
 						<!-- END SUB: ANSWER_PICTURE -->
 					</td>
 					<td>
-						<input type="submit" value="Vasta"> <a href="{VAR:next_url}">{VAR:next_caption}</a>
+						{VAR:submit} <a href="{VAR:next_url}">{VAR:next_caption}</a>
 					</td>
 				</tr>
 			</table>

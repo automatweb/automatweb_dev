@@ -49,6 +49,24 @@
             <caption>&amp;amp;Otilde;ige vastuse korral kuva k&amp;amp;otilde;ik &amp;amp;otilde;iged</caption>
       </property>
       <property>
+            <name>dsply_correct_caption_single</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Otilde;igete vastuste caption (ainsus)</caption>
+      </property>
+      <property>
+            <name>dsply_correct_caption_multiple</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Otilde;igete vastuste caption (mitmus)</caption>
+      </property>
+      <property>
             <name>str_rslts</name>
             <table>objects</table>
             <group>conf</group>
