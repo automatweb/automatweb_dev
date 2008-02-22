@@ -611,15 +611,18 @@ class questionnaire extends class_base
 		}
 		else
 		{
+			if($dsply_qcomment == 1)
+				$qcomment = $q_obj->prop("comm");
+		}
+
+		if(!$_qs[$q["oid"]])
+		{
 			$submit = html::submit(array(
 				"value" => "Vasta",
 			));
 			$this->vars(array(
 				"submit" => $submit,
 			));
-
-			if($dsply_qcomment == 1)
-				$qcomment = $q_obj->prop("comm");
 		}
 
 		$this->vars(array(
