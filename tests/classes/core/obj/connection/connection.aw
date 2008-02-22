@@ -105,23 +105,38 @@ class connection_test extends UnitTestCase
 	function test_construct_arr_save()
 	{
 		$c = new connection(array(
-			"from" => $this->o_from->id(),
-			"to" => $this->o_to->id(),
-			"reltype" => 669,
+			'from' => $this->o_from->id(),
+			'to' => $this->o_to->id(),
+			'reltype' => 669,
+			'data' => 'this string must be saved with connection',
+			'idx' => 777
 		));
 		$c->save();
-		$this->assertTrue($c->prop("from") == $this->o_from->id());
-		$this->assertTrue($c->prop("to") == $this->o_to->id());
-		$this->assertTrue($c->prop("reltype") == 669);
-		// also we should check that it wrote the conn
+		$this->assertTrue($c->prop('from') == $this->o_from->id());
+		$this->assertTrue($c->prop('to') == $this->o_to->id());
+		$this->assertTrue($c->prop('reltype') == 669);
+		$this->assertTrue($c->prop('data') === 'this string must be saved with connection');
+		$this->assertTrue($c->prop('idx') == 777);
+
+		// also we should check that it wrote the connection to database
 		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
 		$this->assertTrue($id > 0);
+
+		$data_field = $this->db->db_fetch_field("SELECT data FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "data");
+		$this->assertTrue($data_field === 'this string must be saved with connection');
+
+		$idx_field = $this->db->db_fetch_field("SELECT idx FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "idx");
+		$this->assertTrue((int)$idx_field === 777);
 	}
 
 	function test_construct_err()
 	{
 		__disable_err();
 		$c = new connection(new object());
+		$this->assertTrue(__is_err());
+		
+		__disable_err();
+		$c = new connection("mingi id");
 		$this->assertTrue(__is_err());
 	}
 
@@ -138,13 +153,17 @@ class connection_test extends UnitTestCase
 	{
 		$c = new connection();
 		$c->load(array(
-			"from" => $this->o_from->id(),
-			"to" => $this->o_to->id(),
-			"reltype" => 669
+			'from' => $this->o_from->id(),
+			'to' => $this->o_to->id(),
+			'reltype' => 669,
+			'data' => 'this string must be saved with connection',
+			'idx' => 777
 		));
-		$this->assertTrue($c->prop("from") == $this->o_from->id());
-		$this->assertTrue($c->prop("to") == $this->o_to->id());
-		$this->assertTrue($c->prop("reltype") == 669);
+		$this->assertTrue($c->prop('from') == $this->o_from->id());
+		$this->assertTrue($c->prop('to') == $this->o_to->id());
+		$this->assertTrue($c->prop('reltype') == 669);
+		$this->assertTrue($c->prop('data') === 'this string must be saved with connection');
+		$this->assertTrue($c->prop('idx') == 777);
 		// also we should check that it didn't write anything to db
 		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
 		$this->assertTrue($id == NULL);
@@ -155,6 +174,11 @@ class connection_test extends UnitTestCase
 		__disable_err();
 		$c = new connection();
 		$c->load(new object());
+		$this->assertTrue(__is_err());
+
+		__disable_err();
+		$c = new connection();
+		$c->load("mingi id");
 		$this->assertTrue(__is_err());
 	}
 
