@@ -118,6 +118,7 @@ class relationmgr extends aw_template
 	function rel_copy($arr)
 	{
 		$i = get_instance("doc");
+		die("yea");
 		$i->rel_copy($arr);
 		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
 	}
@@ -138,7 +139,25 @@ class relationmgr extends aw_template
 		}
 		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
 	}
-		
+	
+	function _get_reltypes($clid)
+	{
+		$reltypes[0] = t("Alias");
+		$reltypes[RELTYPE_BROTHER] = t("Too vend");
+		$reltypes[RELTYPE_ACL] = t("&Otilde;igus");
+		$tmpo = obj();
+		$tmpo->set_class_id($clid);
+		$relinfo = $tmpo->get_relinfo();
+		foreach($relinfo as $key => $rel)
+		{
+			if(!$reltypes[$rel["value"]] && !$rel["hidden"])
+			{
+				$reltypes[$rel["value"]] = $rel["caption"];
+			}
+		}
+		return $reltypes;
+	}
+
 	function _init_relations($arr)
 	{
 		$this->clids = array();
@@ -151,9 +170,6 @@ class relationmgr extends aw_template
 		$this->clids[CL_SHOP_PACKET] = basename($classes[CL_SHOP_PACKET]["file"]);
 		$this->clids[CL_SHOP_PRODUCT_PACKAGING] = basename($classes[CL_SHOP_PRODUCT_PACKAGING]["file"]);
 		$this->clids[CL_GROUP] = basename($class[CL_GROUP]["file"]);
-		$this->reltypes[0] = t("Alias");
-		$this->reltypes[RELTYPE_BROTHER] = t("Too vend");
-		$this->reltypes[RELTYPE_ACL] = t("&Otilde;igus");
 		$tmp = array();
 		foreach($classes as $key => $class)
 		{
@@ -175,9 +191,8 @@ class relationmgr extends aw_template
 		);
 		foreach($arr["relinfo"] as $key => $rel)
 		{
-			if(!$this->reltypes[$rel["value"]] && !$rel["hidden"])
+			if(!$rel["hidden"])
 			{
-				$this->reltypes[$rel["value"]] = $rel["caption"];
 				$tmp = array();
 				foreach($rel["clid"] as $val)
 				{
@@ -187,6 +202,7 @@ class relationmgr extends aw_template
 				$this->rel_classes[$rel["value"]] = $tmp;
 			}
 		}
+		$this->reltypes = $this->_get_reltypes($arr["obj_inst"]->class_id());
 		if (is_array($arr["property"]["configured_rels"]))
 		{
 			$this->rel_classes = $this->rel_classes + $arr["property"]["configured_rels"];
@@ -640,164 +656,173 @@ class relationmgr extends aw_template
 	function _make_toolbar($arr)
 	{
 		$tb = get_instance("vcl/toolbar");
-		$objtype = $arr["request"]["aselect"];
-		if (is_array($objtype) && (count($objtype) == 1))
+		if(!$_SESSION["rel_reverse"][$arr["request"]["id"]])
 		{
-			$objtype = array_pop($objtype);
-		}
-		elseif (is_numeric($objtype = ltrim($objtype,',')))
-		{
-		}
-		else
-		{
-			$objtype = NULL;
-		}
-		$this->read_template("selectboxes.tpl");
-		foreach($this->reltypes as $k => $v)
-		{
-			$dval = true;
-			$single_select = "capt_new_object";
-			$sele = NULL;
-			$vals = $this->true_rel_classes[$k];
-			$vals = str_replace("&auml;", "ä", $vals);
-			$vals = str_replace("&Auml;", "Ä", $vals);
-			$vals = str_replace("&ouml;", "ö", $vals);
-			$vals = str_replace("&Ouml;", "Ö;", $vals);
-			$vals = str_replace("&uuml;", "ü", $vals);
-			$vals = str_replace("&Uuml;", "Ü", $vals);
-			$vals = str_replace("&otilde;", "õ", $vals);
-			$vals = str_replace("&Otilde;", "Õ", $vals);
-			$vals = $this->mk_kstring($vals);
-			if (isset($this->true_rel_classes[$k][$objtype]))
+			$objtype = $arr["request"]["aselect"];
+			if (is_array($objtype) && (count($objtype) == 1))
 			{
-				$sele = $objtype;
+				$objtype = array_pop($objtype);
+			}
+			elseif (is_numeric($objtype = ltrim($objtype,',')))
+			{
 			}
 			else
 			{
-				$sele = key($this->true_rel_classes[$k]);
+				$objtype = NULL;
 			}
-			if(!empty($vals))
+			$this->read_template("selectboxes.tpl");
+			foreach($this->reltypes as $k => $v)
 			{
-				$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
+				$dval = true;
+				$single_select = "capt_new_object";
+				$sele = NULL;
+				$vals = $this->true_rel_classes[$k];
+				$vals = str_replace("&auml;", "ä", $vals);
+				$vals = str_replace("&Auml;", "Ä", $vals);
+				$vals = str_replace("&ouml;", "ö", $vals);
+				$vals = str_replace("&Ouml;", "Ö;", $vals);
+				$vals = str_replace("&uuml;", "ü", $vals);
+				$vals = str_replace("&Uuml;", "Ü", $vals);
+				$vals = str_replace("&otilde;", "õ", $vals);
+				$vals = str_replace("&Otilde;", "Õ", $vals);
+				$vals = $this->mk_kstring($vals);
+				if (isset($this->true_rel_classes[$k][$objtype]))
+				{
+					$sele = $objtype;
+				}
+				else
+				{
+					$sele = key($this->true_rel_classes[$k]);
+				}
+				if(!empty($vals))
+				{
+					$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
+				}
+				if ($objtype && $this->reltype == $k)
+				{
+					$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.$objtype.'");'."\n";
+				}
+				else
+				{
+					$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.($sele ? $sele : $single_select).'");'."\n";
+				}
 			}
-			if ($objtype && $this->reltype == $k)
+	
+			$rels1 .= 'listB.addOptions("_","'.html_entity_decode(t("Objekti t&uuml;&uuml;p")).'","capt_new_object"'.");\n";
+			$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
+	
+			$this->vars(array(
+				"parent" => $this->parent,
+				"rels1" => $rels1,
+				"defaults1" => $defaults1,
+			));
+	
+			$tb->add_cdata($this->parse());
+	
+			$tb->add_cdata(
+				html::select(array(
+					"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => t('Seose t&uuml;&uuml;p')) + $this->reltypes),
+					"name" => "reltype",
+					"selected" => $this->reltype,
+					'onchange' => "listB.populate();",
+				))
+			);
+			$tb->add_cdata('<select NAME="aselect" style="width:200px"><script LANGUAGE="JavaScript">listB.printOptions()</SCRIPT></select>');
+			$ru_var = urlencode(get_ru());
+			$tb->add_cdata('<input TYPE="hidden" VALUE="'.$ru_var.'" NAME="return_url" />');
+			$tb->add_button(array(
+				"name" => "new",
+				"img" => "new.gif",
+				"url" => "javascript:create_new_object()",
+				"tooltip" => t("Lisa uus objekt"),
+			));
+			if($arr["request"]["srch"] == 1)
 			{
-				$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.$objtype.'");'."\n";
+				$tb->add_button(array(
+					"name" => "search",
+					"img" => "search.gif",
+					"tooltip" => t("Otsi"),
+					"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seosetüüp!')",
+				));
 			}
 			else
 			{
-				$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.($sele ? $sele : $single_select).'");'."\n";
+				$tb->add_button(array(
+					"name" => "search",
+					"img" => "search.gif",
+					"tooltip" => t("Otsi"),
+					"url" => "javascript:search_for_object()",
+				));
 			}
-		}
-
-		$rels1 .= 'listB.addOptions("_","'.html_entity_decode(t("Objekti t&uuml;&uuml;p")).'","capt_new_object"'.");\n";
-		$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
-
-		$this->vars(array(
-			"parent" => $this->parent,
-			"rels1" => $rels1,
-			"defaults1" => $defaults1,
-		));
-
-		$tb->add_cdata($this->parse());
-
-		$tb->add_cdata(
-			html::select(array(
-				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => t('Seose t&uuml;&uuml;p')) + $this->reltypes),
-				"name" => "reltype",
-				"selected" => $this->reltype,
-				'onchange' => "listB.populate();",
-			))
-		);
-		$tb->add_cdata('<select NAME="aselect" style="width:200px"><script LANGUAGE="JavaScript">listB.printOptions()</SCRIPT></select>');
-		$ru_var = urlencode(get_ru());
-		$tb->add_cdata('<input TYPE="hidden" VALUE="'.$ru_var.'" NAME="return_url" />');
-		$tb->add_button(array(
-			"name" => "new",
-			"img" => "new.gif",
-			"url" => "javascript:create_new_object()",
-			"tooltip" => t("Lisa uus objekt"),
-		));
-		if($arr["request"]["srch"] == 1)
-		{
+			
+			$tb->add_separator();
+			
 			$tb->add_button(array(
-				"name" => "search",
-				"img" => "search.gif",
-				"tooltip" => t("Otsi"),
-				"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seosetüüp!')",
+				"name" => "refresh",
+				"img" => "refresh.gif",
+				"tooltip" => t("Uuenda"),
+				"url" => "javascript:window.location.reload()",
 			));
-		}
-		else
-		{
-			$tb->add_button(array(
-				"name" => "search",
-				"img" => "search.gif",
-				"tooltip" => t("Otsi"),
-				"url" => "javascript:search_for_object()",
-			));
-		}
-		
-		$tb->add_separator();
-		
-		$tb->add_button(array(
-			"name" => "refresh",
-			"img" => "refresh.gif",
-			"tooltip" => t("Uuenda"),
-			"url" => "javascript:window.location.reload()",
-		));
-		
-		if($arr["request"]["srch"] == 1)
-		{
-			if ($this->search_results > 0)
+			
+			if($arr["request"]["srch"] == 1)
+			{
+				if ($this->search_results > 0)
+				{
+					$tb->add_button(array(
+						"name" => "save",
+						"tooltip" => t("Loo seos(ed)"),
+						"url" => "javascript:aw_save()",
+						"img" => "save.gif",
+					));
+				}
+			}
+			else
 			{
 				$tb->add_button(array(
 					"name" => "save",
-					"tooltip" => t("Loo seos(ed)"),
-					"url" => "javascript:aw_save()",
 					"img" => "save.gif",
+					"tooltip" => t("Salvesta"),
+					"url" => "javascript:document.changeform.submit();",
+				));
+				
+				$tb->add_button(array(
+					"name" => "delete",
+					"img" => "delete.gif",
+					"tooltip" => t("Kustuta seos(ed)"),
+					"url" => "javascript:awdelete()",
 				));
 			}
-		}
-		else
-		{
+	
+			$tb->add_separator();
 			$tb->add_button(array(
-				"name" => "save",
-				"img" => "save.gif",
-				"tooltip" => t("Salvesta"),
-				"url" => "javascript:document.changeform.submit();",
+				"name" => "rel_cut",
+				"img" => "cut.gif",
+				"tooltip" => t("L&otilde;ika seos(ed)"),
+				"action" => "rel_cut",
 			));
-			
 			$tb->add_button(array(
-				"name" => "delete",
-				"img" => "delete.gif",
-				"tooltip" => t("Kustuta seos(ed)"),
-				"url" => "javascript:awdelete()",
+				"name" => "rel_copy",
+				"img" => "copy.gif",
+				"tooltip" => t("Kopeeri seos(ed)"),
+				"action" => "rel_copy",
 			));
+			if ((is_array($_SESSION["rel_cut"]) && count($_SESSION["rel_cut"])) || (is_array($_SESSION["rel_copied"]) && count($_SESSION["rel_copied"])))
+			{
+				$tb->add_button(array(
+					"name" => "rel_paste",
+					"img" => "paste.gif",
+					"tooltip" => t("Kleebi seos(ed)"),
+					"action" => "rel_paste",
+				));
+			}
+			$tb->add_separator();
 		}
-
-		$tb->add_separator();
 		$tb->add_button(array(
-			"name" => "rel_cut",
-			"img" => "cut.gif",
-			"tooltip" => t("L&otilde;ika seos(ed)"),
-			"action" => "rel_cut",
+			"name" => "rel_reverse",
+			"img" => "connectionmanager.gif",
+			"tooltip" => t("N&auml;ita teistpidi seoseid"),
+			"action" => "rel_reverse",
 		));
-		$tb->add_button(array(
-			"name" => "rel_copy",
-			"img" => "copy.gif",
-			"tooltip" => t("Kopeeri seos(ed)"),
-			"action" => "rel_copy",
-		));
-		if ((is_array($_SESSION["rel_cut"]) && count($_SESSION["rel_cut"])) || (is_array($_SESSION["rel_copied"]) && count($_SESSION["rel_copied"])))
-		{
-			$tb->add_button(array(
-				"name" => "rel_paste",
-				"img" => "paste.gif",
-				"tooltip" => t("Kleebi seos(ed)"),
-				"action" => "rel_paste",
-			));
-		}
-
 		//$tb->add_cdata("[[ Seostehaldur V3 ]]");
 		return $tb;
 	}
@@ -995,19 +1020,29 @@ class relationmgr extends aw_template
 		$alinks = $arr["obj_inst"]->meta("aliaslinks");
 		
 		$classes = aw_ini_get("classes");
-		foreach($arr["obj_inst"]->connections_from() as $alias)
+		if($_SESSION["rel_reverse"][$arr["request"]["id"]])
+		{
+			$conn = $arr["obj_inst"]->connections_to();
+			$cn = "from";
+		}
+		else
+		{
+			$conn = $arr["obj_inst"]->connections_from();
+			$cn = "to";
+		}
+		foreach($conn as $alias)
 		{
 			$adat = array(
-				"createdby" => $alias->prop("to.createdby"),
-				"created" => $alias->prop("to.created"),
-				"modifiedby" => $alias->prop("to.modifiedby"),
-				"modified" => $alias->prop("to.modified"),
+				"createdby" => $alias->prop($cn.".createdby"),
+				"created" => $alias->prop($cn.".created"),
+				"modifiedby" => $alias->prop($cn.".modifiedby"),
+				"modified" => $alias->prop($cn.".modified"),
 				"comment" => $alias->prop("to.comment")
 			);
 			
 			$target_obj = $alias->to();
 			$adat["lang"] = $target_obj->lang();
-			$aclid = $alias->prop("to.class_id");
+			$aclid = $alias->prop($cn.".class_id");
 			
 			$edfile = $classes[$aclid]["file"];
 			if ($aclid == CL_DOCUMENT)
@@ -1034,9 +1069,9 @@ class relationmgr extends aw_template
 			}
 			
 			$adat["link"] = html::checkbox(array(
-				"name" => "link[".$alias->prop("to")."]",
+				"name" => "link[".$alias->prop($cn)."]",
 				"value" => 1,
-				"checked" => $alinks[$alias->prop("to")],
+				"checked" => $alinks[$alias->prop($cn)],
 			));
 			
 			$adat["title"] = $classes[$aclid]["name"];
@@ -1046,16 +1081,24 @@ class relationmgr extends aw_template
 			
 			$adat["name"] = html::href(array(
 				"url" => $ch,
-				"caption" => parse_obj_name($alias->prop("to.name")),
+				"caption" => parse_obj_name($alias->prop($cn.".name")),
 			));
 			
 			$adat["cache"] = html::checkbox(array(
-				"name" => "cache[".$alias->prop("to")."]",
+				"name" => "cache[".$alias->prop($cn)."]",
 				"value" => 1,
 				"checked" => ($alias->prop("cached") == 1)
 			));
 			
-			$type_str = $this->reltypes[$reltype_id];
+			if($cn == "from")
+			{
+				$reltypes = $this->_get_reltypes($alias->prop($cn.".class_id"));
+				$type_str = $reltypes[$reltype_id];
+			}
+			else
+			{
+				$type_str = $this->reltypes[$reltype_id];
+			}
 
 			if ($alias->prop("relobj_id"))
 			{
@@ -1162,6 +1205,15 @@ class relationmgr extends aw_template
 			$arr["obj_inst"]->set_meta("aliaslinks", $arr["request"]["link"]);
 			$arr["obj_inst"]->save();
 		}
+	}
+
+	/**
+	@attrib name=rel_reverse all_args=1
+	**/
+	function rel_reverse($arr)
+	{
+		$_SESSION["rel_reverse"][$arr["id"]] = $_SESSION["rel_reverse"][$arr["id"]]?0:1;
+		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));;
 	}
 }
 ?>

@@ -4187,7 +4187,6 @@ class class_base extends aw_template
 								"request" => &$args,
 								"obj_inst" => &$this->obj_inst,
 								"new" => $new,
-								"prop" => $prop,
 				        ));
 					//}
 
@@ -5381,7 +5380,6 @@ class class_base extends aw_template
 			$cf = get_instance(CL_CFGFORM);
 			$pl = $cf->get_props_from_cfgform(array("id" => $cfgform_id));
 			$ppl = $cf->get_cfg_proplist($cfgform_id);
-
 			// also, get group list and then throw out all the props that are not in visible groups
 			$gps = $cf->get_cfg_groups($cfgform_id);
 
@@ -5805,6 +5803,20 @@ class class_base extends aw_template
 			));
 		}
 		return  $arr["post_ru"];
+	}
+
+	/**
+	@attrib name=rel_reverse all_args=1
+	**/
+	function rel_reverse($arr)
+	{
+		$_SESSION["rel_reverse"][$arr["id"]] = $_SESSION["rel_reverse"][$arr["id"]]?0:1;
+		$url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"group" => $arr["group"],
+			"return_url" => $arr["return_url"]
+		), $arr["class"]);
+		return $url;
 	}
 
 	function callback_get_transl($arr)
