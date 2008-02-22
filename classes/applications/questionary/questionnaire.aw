@@ -377,6 +377,7 @@ class questionnaire extends class_base
 			$this->vars(array(
 				"RESULTS" => $RESULTS,
 			));
+			aw_session_set("questions_".$arr["id"], "");
 			return $this->parse();
 		}
 
