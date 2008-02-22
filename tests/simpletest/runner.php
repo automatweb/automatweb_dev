@@ -3,7 +3,7 @@
      *	Base include file for SimpleTest
      *	@package	SimpleTest
      *	@subpackage	UnitTester
-     *	@version	$Id: runner.php,v 1.3 2008/01/18 14:19:48 markop Exp $
+     *	@version	$Id: runner.php,v 1.4 2008/02/22 11:09:42 markop Exp $
      */
     
     /**#@+
@@ -54,11 +54,12 @@
          *    @access public
          */
         function invoke($method) {
+		global $nl;
             $this->_test_case->before($method);
             $this->_test_case->setUp();
             global $run;
             $run = $method;
-echo "call $method \n<br>";
+echo "call $method".$nl;
 flush();
             $this->_test_case->$method();
             $this->_test_case->tearDown();

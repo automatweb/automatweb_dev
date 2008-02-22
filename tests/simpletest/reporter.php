@@ -3,7 +3,7 @@
      *	base include file for SimpleTest
      *	@package	SimpleTest
      *	@subpackage	UnitTester
-     *	@version	$Id: reporter.php,v 1.2 2008/01/18 14:19:48 markop Exp $
+     *	@version	$Id: reporter.php,v 1.3 2008/02/22 11:09:42 markop Exp $
      */
 
     /**#@+
@@ -180,7 +180,7 @@
             if (! SimpleReporter::inCli()) {
                 header('Content-type: text/plain');
             }
-            print "$test_name\n<br>";
+            print "$test_name".$nl;
             flush();
         }
         
@@ -195,20 +195,20 @@
             
            $log["stuff"]["conc"] = "";
             if ($this->getFailCount() + $this->getExceptionCount() == 0) {
-                print  $log["stuff"]["conc"].="<br>OK\n<br>";
+                print  $log["stuff"]["conc"].=$nl."<br>OK".$nl;
             } else {
-                print $log["stuff"]["conc"].="<br>FAILURES!!!\n<br>";
+                print $log["stuff"]["conc"].=$nl."FAILURES!!!".$nl;
             }
-            print $log["stuff"]["conc"].="<br>Test cases run: " . $this->getTestCaseProgress() .
+            print $log["stuff"]["conc"].=$nl." Test cases run: " . $this->getTestCaseProgress() .
                     "/" . $this->getTestCaseCount() .
                     ", <br>Passes: " . $this->getPassCount() .
                     ", <br>Failures: " . $this->getFailCount() .
-                    ", <br>Exceptions: " . $this->getExceptionCount() . "\n<br>";
+                    ", <br>Exceptions: " . $this->getExceptionCount() . $nl;
             $log["tested"] = $this->getTestCaseCount();
             $log["passed"] = $this->getPassCount();
             $log["fail"] = $this->getFailCount();
             $log["exc"] = $this->getExceptionCount();
-              $log["stuff"]["conc"] = str_replace("\n" , "<br>" , $log["stuff"]["conc"]);
+            if($autotest)  $log["stuff"]["conc"] = str_replace("\n" , "<br>" , $log["stuff"]["conc"]);
         }
         
         /**
@@ -221,13 +221,13 @@
 		global $log, $run;
         	
             parent::paintFail($message);
-            print $log["stuff"]["case"][$run] = $this->getFailCount() . ") $message\n<br>";
+            print $log["stuff"]["case"][$run] = $this->getFailCount() . ") $message".$nl;
             
-           $log["stuff"]["case"][$run] =  str_replace("\n" , "<br>" , $log["stuff"]["case"][$run]);
+         if($autotest)  $log["stuff"]["case"][$run] =  str_replace("\n" , "<br>" , $log["stuff"]["case"][$run]);
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
             print "\tin " . implode("\n<br>\tin ", array_reverse($breadcrumb));
-            print "\n<br>";
+            print $nl;
         }
         
         /**
@@ -247,7 +247,7 @@
          *    @access public
          */
         function paintFormattedMessage($message) {
-            print "$message\n<br>";
+            print $message.$nl;
             flush();
         }
     }

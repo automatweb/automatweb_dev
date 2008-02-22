@@ -5,10 +5,11 @@ if ($argc < 2)
 		"Usage:\n\tphp ${argv[0]} /path/to/site/aw.ini [folder folder folder to run tests in]\n\n");
 }
 
-
+$nl = "<br>\n";
 if(!$autotest)
 {
 	chdir("..");
+	$nl = "\n";
 }
 $site_dir = str_replace("/aw.ini", "", $argv[1]);
 $aw_dir = getcwd();//"/www/dev/autotest/automatweb_dev";
@@ -108,7 +109,7 @@ elseif($_GET["test"])
 			}
 		}
 	}
-	print html::href(array("caption" => "Tagasi statistikasse" , "url" => $GLOBALS["HTTP_HOST"]));
+	print html::href(array("caption" => "Tagasi statistikasse" , "url" => $GLOBALS["_SERVER"]["SCRIPT_URI"]));
 }
 else
 {
