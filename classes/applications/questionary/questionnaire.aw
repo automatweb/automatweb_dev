@@ -600,7 +600,7 @@ class questionnaire extends class_base
 				}
 				if(!$correct && $o->prop("dsply_correct2wrong"))
 				{
-					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2wrong_caption_single") : $o->prop("dsply_correct2false_caption_multiple");
+					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2wrong_caption_single") : $o->prop("dsply_correct2wrong_caption_multiple");
 				}
 				else
 				{
@@ -610,7 +610,6 @@ class questionnaire extends class_base
 					"correct_answer_caption" => $correct_answer_caption,
 					"CORRECT_ANSWER" => $CORRECT_ANSWER,
 				));
-				arr($correct_answer_caption);
 				$CORRECT_ANSWERS = $this->parse("CORRECT_ANSWERS");
 				$this->vars(array(
 					"CORRECT_ANSWERS" => $CORRECT_ANSWERS,
