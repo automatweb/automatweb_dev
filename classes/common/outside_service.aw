@@ -6,6 +6,11 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
+
+@property url type=textbox
+@caption Aadress kuhu suunatakse peale makset
 
 */
 
@@ -56,6 +61,23 @@ class outside_service extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	/**
+		@param id required type=int acl=view
+	**/
+	function bank_return($arr)
+	{
+		if(!(is_oid($arr["id"]) && $this->can("view" , $arr["id"])))
+		{
+			return aw_ini_get("room_reservation.unsuccessful_bank_payment_url");
+		}
+
+		$o = obj($arr["id"]);
+		
+		$url = $o->prop("url");
+		header("Location:".$url);
+		die();
 	}
 }
 

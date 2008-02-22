@@ -1,5 +1,14 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>url</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Aadress kuhu suunatakse peale makset</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OUTSIDE_SERVICE</syslog_type>
             <relationmgr>yes</relationmgr>
