@@ -610,6 +610,7 @@ class questionnaire extends class_base
 					"correct_answer_caption" => $correct_answer_caption,
 					"CORRECT_ANSWER" => $CORRECT_ANSWER,
 				));
+				arr($correct_answer_caption);
 				$CORRECT_ANSWERS = $this->parse("CORRECT_ANSWERS");
 				$this->vars(array(
 					"CORRECT_ANSWERS" => $CORRECT_ANSWERS,
