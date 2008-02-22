@@ -25,10 +25,10 @@
 		@caption Kuva vastuse kommentaari
 		@comment Kuvatakse kommentaare, mille pikkus on > 0.
 
-		@property correct_caption type=textbox field=meta method=serialize
+		@property correct_msg type=textbox field=meta method=serialize
 		@caption &Otilde;ige vastuse teade
 
-		@property false_caption type=textbox field=meta method=serialize
+		@property false_msg type=textbox field=meta method=serialize
 		@caption Vale vastuse teade
 
 		@property dsply_correct2wrong type=checkbox ch_value=1 field=meta method=serialize
