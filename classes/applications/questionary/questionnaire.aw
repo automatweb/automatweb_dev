@@ -486,20 +486,19 @@ class questionnaire extends class_base
 						}
 					}
 				}
-				$acomment = $correct ? t("Õige!<br>") : t("Vale!<br>");
 				if($correct)
 					switch($dsply_acomment)
 					{
 						case 1:
-							$acomment .= $a_obj->prop("comm");
+							$acomment = $a_obj->prop("comm");
 							break;
 						case 2:
 							if($correct)
-								$acomment .= $a_obj->prop("comm");
+								$acomment = $a_obj->prop("comm");
 							break;
 						case 3:
 							if(!$correct)
-								$acomment .= $a_obj->prop("comm");
+								$acomment = $a_obj->prop("comm");
 							break;
 					}
 			}
@@ -507,19 +506,18 @@ class questionnaire extends class_base
 			{
 				$a_obj = obj($_POST["answer"]);
 				$correct = $a_obj->prop("correct");
-				$acomment = $correct ? t("Õige!<br>") : t("Vale!<br>");
 				switch($dsply_acomment)
 				{
 					case 1:
-						$acomment .= $a_obj->prop("comm");
+						$acomment = $a_obj->prop("comm");
 						break;
 					case 2:
 						if($correct)
-							$acomment .= $a_obj->prop("comm");
+							$acomment = $a_obj->prop("comm");
 						break;
 					case 3:
 						if(!$correct)
-							$acomment .= $a_obj->prop("comm");
+							$acomment = $a_obj->prop("comm");
 						break;
 				}
 			}
