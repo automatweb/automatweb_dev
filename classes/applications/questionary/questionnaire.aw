@@ -313,7 +313,7 @@ class questionnaire extends class_base
 
 	function show($arr)
 	{
-		$_qs = aw_unserialize(aw_global_get("questions"));
+		$_qs = aw_unserialize(aw_global_get("questions_".$arr["id"]));
 		$set_qs = !is_array($_qs);
 		/* $_qs values:
 		0 - undone
@@ -590,7 +590,7 @@ class questionnaire extends class_base
 			"QUESTIONNAIRE" => $QUESTIONNAIRE,
 		));
 
-		aw_session_set("questions", aw_serialize($_qs));
+		aw_session_set("questions_".$arr["id"], aw_serialize($_qs));
 		return $this->parse();
 	}
 }
