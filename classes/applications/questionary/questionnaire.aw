@@ -428,10 +428,10 @@ class questionnaire extends class_base
 			$next_url = aw_url_change_var("qid", "end");
 		}
 
-		foreach($q_obj->connections_from(array("type" => 2)) as $conn)
+		foreach($q_obj->prop("pics") as $pic_id)
 		{
 			$this->vars(array(
-				"picture" => $i->make_img_tag_wl($conn->conn["to"]),
+				"picture" => $i->make_img_tag_wl($pic_id),
 			));
 			$PICTURE .= $this->parse("PICTURE");
 		}

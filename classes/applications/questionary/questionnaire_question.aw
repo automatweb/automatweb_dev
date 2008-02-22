@@ -24,7 +24,7 @@
 
 		@property dsply_acomment type=chooser field=meta method=serialize
 		@caption Kuva vastuse kommentaari
-		@comment Kuvatakse ka siis, kui küsimustiku seadetes pole seda lubatud. Kuvatakse kommentaare, mille pikkus on > 0.
+		@comment Kuvatakse ka siis, kui küsimustiku seadetes pole seda lubatud.
 
 	@groupinfo pics parent=general caption=Pildid
 	@default group=pics
