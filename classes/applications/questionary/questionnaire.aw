@@ -341,6 +341,10 @@ class questionnaire extends class_base
 	{
 		$_qs = aw_unserialize(aw_global_get("questions_".$arr["id"]));
 		$set_qs = !is_array($_qs);
+		if(aw_global_get("questions_".$arr["id"]) == "end")
+			$set_qs = true;
+		if($set_qs)
+			$_qs = array();
 		/* $_qs values:
 		0 - undone
 		1 - done, wrong
@@ -383,7 +387,7 @@ class questionnaire extends class_base
 			$this->vars(array(
 				"RESULTS" => $RESULTS,
 			));
-			aw_session_set("questions_".$arr["id"], "");
+			aw_session_set("questions_".$arr["id"], "end");
 			return $this->parse();
 		}
 
@@ -621,7 +625,7 @@ class questionnaire extends class_base
 				$qcomment = $q_obj->prop("comm");
 		}
 
-		if(!$_qs[$q["oid"]])
+		if($_qs[$q["oid"]] == 0)
 		{
 			$submit = html::submit(array(
 				"value" => "Vasta",

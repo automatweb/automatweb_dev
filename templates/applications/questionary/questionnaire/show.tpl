@@ -8,7 +8,7 @@
 	</tr>
 	<tr>
 		<td>
-			<table width="100%">
+			<table width="100%" cellpadding="5" ja valign="top">
 				<tr>
 					<td>
 						<!-- SUB: ANSWER_RADIO -->
