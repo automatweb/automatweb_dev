@@ -42,7 +42,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kuva vastuse kommentaari</caption>
-            <comment>Kuvatakse ka siis, kui k&amp;uuml;simustiku seadetes pole seda lubatud. Kuvatakse kommentaare, mille pikkus on &amp;gt; 0.</comment>
+            <comment>Kuvatakse ka siis, kui k&amp;uuml;simustiku seadetes pole seda lubatud.</comment>
       </property>
       <property>
             <name>pics</name>

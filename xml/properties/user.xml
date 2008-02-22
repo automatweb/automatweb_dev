@@ -253,7 +253,6 @@
             <type>text</type>
             <store>no</store>
             <field>aclwizard_a</field>
-            <caption></caption>
       </property>
       <property>
             <name>userch1</name>
