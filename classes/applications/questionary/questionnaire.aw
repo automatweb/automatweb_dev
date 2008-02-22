@@ -430,6 +430,9 @@ class questionnaire extends class_base
 
 		foreach($q_obj->prop("pics") as $pic_id)
 		{
+			if(!is_oid($pic_id))
+				continue;
+
 			$this->vars(array(
 				"picture" => $i->make_img_tag_wl($pic_id),
 			));
@@ -539,8 +542,7 @@ class questionnaire extends class_base
 			if($o->prop("p_false") && !$correct)
 			{
 				$this->vars(array(
-					"apic_alt" => $o->prop("p_false.alt"),
-					"apic_src" => $i->get_url_by_id($o->prop("p_false")),
+					"picture" => $i->view(array("id" => $o->prop("p_false"))),
 				));
 				$ANSWER_PICTURE = $this->parse("ANSWER_PICTURE");
 				$this->vars(array(
