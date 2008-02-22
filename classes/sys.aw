@@ -1,9 +1,7 @@
 <?php
-// sys.aw - various system related functions
-/*
-@classinfo  maintainer=kristo
-*/
+//@classinfo  maintainer=kristo
 
+/** various system management methods **/
 class sys extends aw_template
 {
 	function sys($args = array())
@@ -12,16 +10,8 @@ class sys extends aw_template
 		$this->lc_load("syslog","lc_syslog");
 	}
 
-	/** Genereerib andmebaasi struktuuri väljundi XML-is
-
+	/** Generates xml database structure
 		@attrib name=gen_db_struct params=name nologin="1" default="0"
-
-
-		@returns
-
-
-		@comment
-
 	**/
 	function gen_db_struct($args = array())
 	{
@@ -34,6 +24,9 @@ class sys extends aw_template
 		exit;
 	}
 
+	/** Displays a table with the sise of the site's database tables
+		@attrib name=show_table_sizes
+	**/
 	function show_table_sizes()
 	{
 		classload("vcl/table");
@@ -80,16 +73,8 @@ class sys extends aw_template
 	}
 
 
-	/** Genereerib andmebaasi tabelite loomise sqli
-
-		@attrib name=gen_create_tbl params=name nologin="1" default="0"
-
-
-		@returns
-
-
-		@comment
-
+	/** Generates SQL statements that create a correct aw database structure
+		@attrib name=gen_create_tbl params=name nologin="1" 
 	**/
 	function gen_create_tbl($args = array())
 	{
@@ -109,119 +94,8 @@ class sys extends aw_template
 		exit;
 	}
 
-	/**
-
-		@attrib name=convimages params=name default="0"
-
-
-		@returns
-
-
-		@comment
-		Lisab piltidele aliases
-
-	**/
-	function convimages($args = array())
-	{
-		extract($args);
-		$q = "SELECT * FROM objects WHERE class_id = " . CL_DOCUMENT . " ORDER BY oid";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			$name = strip_tags($row["name"]);
-			print "found document $row[oid] $name, checking images<br />";
-			$this->save_handle();
-			$q = "SELECT * FROM objects WHERE parent = $row[oid] AND class_id = " . CL_IMAGE;
-			$this->db_query($q);
-			while($row2 = $this->db_next())
-			{
-				print "&nbsp;&nbsp;&nbsp;found image $row2[name]<br />";
-				print "&nbsp;&nbsp;&nbsp;checking aliases<br />";
-				$q = "SELECT * FROM aliases WHERE source = '$row[oid]' AND target = '$row2[oid]'";
-				$this->save_handle();
-				$this->db_query($q);
-				$row3 = $this->db_next();
-				if ($row3)
-				{
-					print "<b>Found alias</b><br />";
-					print "<pre>";
-					print_r($row3);
-					print "</pre>";
-				}
-				else
-				{
-					print "<b>No such alias, creating</b><br />";
-					$q = "INSERT INTO aliases (source,target,type)
-						VALUES('$row[oid]','$row2[oid]',6)";
-					$this->db_query($q);
-				};
-				$this->restore_handle();
-			};
-			$this->restore_handle();
-		}
-		exit;
-	}
-
-
-	////
-	// !Laeb predefined serverist andmebaasi struktuuri, ning kuvab selle, ning kohaliku
-	// andmebaasi vordleva tabeli
-	// argumendid:
-	// server(string) - serveri nimi
-	// port(int) - port
-	// url(string) - mida lugeda?
-
-	// njaa, see peaks hakkama üle XML-RPC serveri käima tegelikult. But for now,
-	// we will do it this way.
-	function db_sync($args = array())
-	{
-		extract($args);
-
-		$server = ($server) ? $server : "aw.struktuur.ee";
-		$port = ($port) ? $port : 80;
-
-		$fp=fsockopen($server,$port,&$this->errno, &$this->errstr);
-		if (!$fp)
-		{
-			$this->raise_error(ERR_DBSYNC_NOSERVER,sprintf(t("Failed opening connection to server %s"), $server),true);
-		};
-
-		$request = $url;
-		$op = "GET $request HTTP/1.1\r\n";
-		$op .= "User-Agent: Autom@tWeb\r\n";
-		$op .= "Host: $server\r\n\r\n";
-
-		if (!fputs($fp, $op, strlen($op)))
-		{
-			$this->errstr=t("Write error");
-			return 0;
-	    }
-		$ipd="";
-
-		while($data=fread($fp, 32768))
-		{
-			$ipd.=$data;
-		}
-
-		list(,$res) = explode("\r\n\r\n",$ipd);
-		// 1) laeme serverist andmebaasi struktuuri
-		// 2) laeme kohalikust masinast baasi struktuuri
-		// 3) kuvame vordleva tabeli, kuhu saab erinevate kirjete juurde checkboxe panna
-		// 4) teeme muudatused.
-		// 5) Toome poest uue õlle
-		return $res;
-	}
-
-	/**
-
-		@attrib name=dbsync params=name default="0"
-
-
-		@returns
-
-
-		@comment
-
+	/** Lets the user select the site to sync databases with
+		@attrib name=dbsync params=name 
 	**/
 	function db_compare_choose_donor($args = array())
 	{
@@ -268,33 +142,20 @@ class sys extends aw_template
 		return $this->parse();
 	}
 
-	/** Võrdleb kahte gen_db_sync poolt genereeritud andmebaasi definitsiooni
-
-		@attrib name=db_compare_dbs params=name default="0"
-
-
-		@returns
-
+	/** Compares database structures created by gen_db_struct and lets the user merge them
+		@attrib name=db_compare_dbs params=name 
 
 		@comment
-		argumendid:
-		left,right(array) - baaside definitsioonid
-		vasakul on sisseloetud, ehk external definitsioon, pareml on kohalik baas, kus vajalike
-		väljade juures on linnukesed.
-
+			On the left, the external definition and on the right the local database, the checkboxes are chechked where the local database needs to be added to.
 	**/
 	function _db_compare_dbs($args)
 	{
 		extract($args);
 		$right = $this->db_get_struct();
-		$block = $this->db_sync(array(
-			"server" => $donor,
-			"url" => "/?class=sys&action=gen_db_struct",
-		));
-//		global $donor_struct;
+		$h = new http();
+		$block = $h->get("http://".$donor."/?class=sys&action=gen_db_struct");
 		$dsource = aw_unserialize($block);
 		$donor_struct = $dsource;
-//		session_register("donor_struct");
 		$_SESSION['donor_struct'] = $donor_struct;
 		$all_keys = array_merge(array_flip(array_keys($dsource)),array_flip(array_keys($right)));
 		ksort($all_keys);
@@ -312,9 +173,8 @@ class sys extends aw_template
 		exit;
 	}
 
-	////
-	// !Is called from _db_compare_db-s for each invidual table
-	function _db_compare_tables($name,$arg1,$arg2)
+	/** Is called from _db_compare_db-s for each invidual table **/
+	private function _db_compare_tables($name,$arg1,$arg2)
 	{
 		// koigepealt leiame siis molema tabelidefinitsiooni väljade nimed, ning
 		// moodustame neist ühise array
@@ -387,11 +247,10 @@ class sys extends aw_template
 		return $this->parse("block");
 	}
 
-	////
-	// !Is called from _db_compare_tables for each invidual field
-	function _db_compare_fields($field1,$field2)
+	/** Is called from _db_compare_tables for each invidual field **/
+	private function _db_compare_fields($field1,$field2)
 	{
-	  global $problems;
+		global $problems;
 		if ($field1["type"] == $field2["type"])
 		{
 			$res1 = true;
@@ -423,20 +282,11 @@ class sys extends aw_template
 		return array($res1,$res2,$res3);
 	}
 
-	/**
-
+	/** Processes the selected fields from the dbsync compare databases display
 		@attrib name=submit_compare_db params=name nologin="1" default="0"
-
-
-		@returns
-
-
-		@comment
-
 	**/
 	function submit_compare_db($args = array())
 	{
-	//	global $donor_struct;
 		$donor_struct = $_SESSION['donor_struct'];
 		$orig = $this->db_get_struct();
 		extract($args);
@@ -544,11 +394,9 @@ class sys extends aw_template
 		// no need to dbsync if we are not creating a new site
 		if (!$site['site_obj']['use_existing_database'])
 		{
-			// do a dbsync from aw.struktuur.ee
-			$block = $this->db_sync(array(
-				"server" => "intranet.automatweb.com",
-				"url" => "/?class=sys&action=gen_create_tbl",
-			));
+			// do a dbsync from intranet
+			$h = new http();
+			$block = $h->get("http://intranet.automatweb.com/?class=sys&action=gen_create_tbl");
 			$tbls = aw_unserialize($block);
 
 			foreach($tbls as $tbl => $sql)
@@ -558,6 +406,8 @@ class sys extends aw_template
 
 			$q = "ALTER TABLE static_content ADD FULLTEXT content(content)";
 			$dbi->db_query($q);
+			$q = "ALTER TABLE static_content ADD FULLTEXT tit_cont(title,content)";
+			$dbi->db_query($q);
 
 			$log->add_line(array(
 				"uid" => aw_global_get("uid"),
@@ -565,13 +415,14 @@ class sys extends aw_template
 				"comment" => "",
 				"result" => "OK"
 			));
+
+			// set default error page
+			$dbi->db_query("INSERT INTO config (ckey,content) values('error_redirect','/error')");
 		}
 	}
 
-	/**
-
+	/** Checks if the database tables have correct indexes and if not, creates them
 		@attrib name=check_indexes nologin="1"
-
 	**/
 	function do_check_indexes($arr)
 	{
@@ -621,25 +472,21 @@ class sys extends aw_template
 	}
 
 	/** checks if any objects of the given class exist in the current database
-
 		@attrib name=has_objects nologin=1
 
 		@param clid required type=int
+			The class id to check for
 
 		@comment
-
-			clid - the class id to check for
 			can be used (with foreach_site) to check if a class can be safely removed
 	**/
 	function has_objects($arr)
 	{
-		/*$ol = new object_list(array(
+		$ol = new object_list(array(
 			"class_id" => $arr["clid"],
 			"lang_id" => array(),
 			"site_id" => array()
-		));*/
-		$ol = new object_list(array("class_id" => CL_DOCUMENT, "lang_id" => array(),"site_id" => array(), "content" => "%liitumisform%"));
-
+		));
 		if ($ol->count())
 		{
 			echo "<font color='red' size='7'>site ".aw_ini_get("baseurl")." HAS ".$ol->count()." objects!!!</font><br><br>";
@@ -650,10 +497,8 @@ class sys extends aw_template
 		}
 	}
 
-	/**
-
+	/** Displays a list of 1400 objects with the latest modification dates
 		@attrib name=last_mod
-
 	**/
 	function last_mod()
 	{
@@ -704,10 +549,8 @@ class sys extends aw_template
 		return $t->draw();
 	}
 
-	/**
-
+	/** Analyzes aw access logs and displays stats
 		@attrib name=perf
-
 	**/
 	function perf()
 	{
@@ -828,11 +671,9 @@ class sys extends aw_template
 	}
 
 	/** tests database by adding all possible types of objects
-
 		@attrib name=test_object_types
 
 		@param parent required acl=view;add
-
 	**/
 	function test_object_types($arr)
 	{
