@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company_status.aw,v 1.3 2008/02/21 12:06:52 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company_status.aw,v 1.4 2008/02/22 10:03:29 robert Exp $
 // crm_company_status.aw - Organisatsiooni Staatus 
 /*
 
@@ -34,7 +34,7 @@ class crm_company_status extends class_base
 			3 => t('Suhte iseloom'),
 			4 => t('Majanduslik skaala'),
 			5 => t('B2B mudel'),
-			6 => t('Müügipotentsiaal'),
+			6 => t('M&uuml;&uuml;gipotentsiaal'),
 		);
 		if($id)
 		{
