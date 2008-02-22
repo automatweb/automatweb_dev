@@ -611,9 +611,10 @@ class questionnaire extends class_base
 					"CORRECT_ANSWER" => $CORRECT_ANSWER,
 				));
 				$CORRECT_ANSWERS = $this->parse("CORRECT_ANSWERS");
-				$this->vars(array(
-					"CORRECT_ANSWERS" => $CORRECT_ANSWERS,
-				));
+				if($correct_answer_count)
+					$this->vars(array(
+						"CORRECT_ANSWERS" => $CORRECT_ANSWERS,
+					));
 			}
 		}
 		elseif($_POST["qid"])
