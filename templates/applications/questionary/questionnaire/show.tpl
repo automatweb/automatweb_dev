@@ -39,7 +39,7 @@
 						{VAR:answer}<br>
 						<!-- END SUB: CORRECT_ANSWER -->
 						<!-- END SUB: CORRECT_ANSWERS -->
-						{VAR:acomment}<br><br>
+						<br>{VAR:acomment}<br><br>
 						{VAR:qcomment}<br>
 					</td>
 					<td width="20%" valign="top">

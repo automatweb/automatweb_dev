@@ -584,10 +584,10 @@ class questionnaire extends class_base
 			}
 			if((!$correct && $o->prop("dsply_correct2wrong")) || ($correct && $o->prop("dsply_correct2correct")))
 			{
+				$correct_answer_count = 0;
 				foreach($as as $a)
 				{
 					$a_obj = obj($a["oid"]);
-					$correct_answer_count = 0;
 					if($a_obj->prop("correct") && $a_obj->prop("name") != $_POST["answer"])
 					{
 						$answer = $a_obj->prop("name");
