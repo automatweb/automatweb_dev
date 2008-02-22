@@ -607,6 +607,7 @@ class questionnaire extends class_base
 					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2correct_caption_single") : $o->prop("dsply_correct2correct_caption_multiple");
 				}
 				$this->vars(array(
+					"correct_answer_caption" => $correct_answer_caption,
 					"CORRECT_ANSWER" => $CORRECT_ANSWER,
 				));
 				$CORRECT_ANSWERS = $this->parse("CORRECT_ANSWERS");
