@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.44 2008/01/31 09:25:14 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.45 2008/02/22 09:55:42 robert Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -627,7 +627,7 @@ class mail_message extends class_base
 						$prop["value"] => $mfrom_obj->prop("name"),
 					);
 				}
-				if($this->msgdata["from"])
+				elseif($this->msgdata["from"])
 				{
 					$ob = obj();
 					$ob->set_class_id(CL_ML_MEMBER);
@@ -635,6 +635,12 @@ class mail_message extends class_base
 					$ob->set_name($this->msgdata["fromarr"][0]->mailbox."@".$this->msgdata["fromarr"][0]->host);
 					$ob->save();
 					$prop["options"][$ob->id()] = $ob->name();
+				}
+				else
+				{
+					$msgr = get_instance(CL_MESSENGER_V2);
+					$msgr = obj($msgr->get_messenger_for_user());
+					$prop["value"] = $msgr->prop("fromname");
 				}
 				break;
 
@@ -1509,7 +1515,7 @@ class mail_message extends class_base
 		}
                		
 		//print t("saadetud<p>");
-		if($adr->class_id() == CL_CRM_PERSON && $arr["return_url"])
+		if($adr && $adr->class_id() == CL_CRM_PERSON && $arr["return_url"])
 		{
 			return $arr["return_url"];
 		//	print '<script type="text/JavaScript">window.close();</script>';

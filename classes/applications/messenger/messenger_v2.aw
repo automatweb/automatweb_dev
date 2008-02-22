@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.39 2008/01/30 14:34:16 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.40 2008/02/22 09:55:42 robert Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -555,6 +555,13 @@ class messenger_v2 extends class_base
 			case "mail_view_tree":
 				$prop["value"] = $this->make_folder_tree($arr);	
 			break;
+			case "fromname":
+				$name = $arr["obj_inst"]->prop("fromname.name");
+				$prop["options"][$prop["value"]] = $name;
+			break;
+			case "msg_new2_from":
+				$prop["options"] = array($arr["obj_inst"]->prop("fromname.mail") => $arr["obj_inst"]->prop("fromname.name"));
+			break;
 		};
 		return $retval;
 	}
@@ -688,6 +695,7 @@ class messenger_v2 extends class_base
 				params = '&message_info[mfrom]=' + Url.encode(document.getElementById('message_info[mfrom]').value) + '&message_info[mto]=' + Url.encode(document.getElementById('message_info_mto_').value) + '&message_info[cc]=' + Url.encode(document.getElementById('message_info_cc_').value) + '&message_info[name]=' + Url.encode(document.getElementById('message_info_name_').value) + '&message=' + Url.encode(document.getElementById('message').value);
 				aw_post_url_contents(surl, params);
 				msgr_load('middle_pane_outer', 'msg_list', false, ourl);
+			
 			}
 
 			// loads given folder contents to right pane
@@ -1929,7 +1937,7 @@ class messenger_v2 extends class_base
 							"date" => strtotime($message->date),
 							"size" => $this->_format(sprintf("%d",$message->Size/1024),$seen),
 							"answered" => $this->_format($this->_conv_stat($message->answered),$seen),
-							"attach" => $message["has_attachments"] ? html::img(array("url" => $this->cfg["baseurl"] . "/automatweb/images/attach.gif")) : "",
+							"attach" => $message->has_attachments ? html::img(array("url" => $this->cfg["baseurl"] . "/automatweb/images/attach.gif")) : "",
 						));
 					};
 				};
