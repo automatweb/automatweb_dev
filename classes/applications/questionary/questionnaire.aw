@@ -645,6 +645,7 @@ class questionnaire extends class_base
 			$this->vars(array(
 				"submit" => $submit,
 			));
+			$next_caption = "";
 		}
 
 		$this->vars(array(
