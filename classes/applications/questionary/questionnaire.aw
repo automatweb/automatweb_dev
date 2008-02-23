@@ -387,7 +387,6 @@ class questionnaire extends class_base
 			$this->vars(array(
 				"RESULTS" => $RESULTS,
 			));
-			aw_session_set("questions_".$arr["id"], "end");
 			return $this->parse();
 		}
 
@@ -412,6 +411,14 @@ class questionnaire extends class_base
 		$qs_id = $this->array_search_by_column($_GET["qid"], $qs, "oid");
 		$q = $qs[$qs_id];
 		$q_obj = obj($q["oid"]);
+		// If it's the first question and it's not submitted right now, we start over again.
+		if($qs_id == 0 && !$_POST["qid"])
+		{
+			foreach($qs)
+			{
+				$_qs[$q["oid"]] = 0;
+			}
+		}
 		foreach($q_obj->connections_from(array("type" => 1)) as $conn)
 		{
 			$as[$conn->conn["to"]]["oid"] = $conn->conn["to"];
