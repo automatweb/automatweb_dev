@@ -414,9 +414,9 @@ class questionnaire extends class_base
 		// If it's the first question and it's not submitted right now, we start over again.
 		if($qs_id == 0 && !$_POST["qid"])
 		{
-			foreach($qs)
+			foreach($qs as $q_temp)
 			{
-				$_qs[$q["oid"]] = 0;
+				$_qs[$q_temp["oid"]] = 0;
 			}
 		}
 		foreach($q_obj->connections_from(array("type" => 1)) as $conn)
