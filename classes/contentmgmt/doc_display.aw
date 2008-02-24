@@ -676,6 +676,7 @@ class doc_display extends aw_template
 						));
 					}
 					$this->dequote(&$s_comment);
+					$s_comment = nl2br ($s_comment);
 					$this->vars(array(
 						"id" => $row["id"],
 						"name" => $s_name,
