@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.7 2008/01/31 13:50:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.8 2008/02/25 13:50:25 kristo Exp $
 // survey.aw - Ankeet 
 /*
 
@@ -191,6 +191,20 @@ class survey extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function do_db_upgrade($t,$f)
+	{
+		switch($f)
+		{
+			case "ucheckgroup1":
+			case "utext5":
+			case "utext6":
+			case "utext7":
+			case "utext8":
+				$this->db_add_col($t, array("name" => $f, "type" => "text"));
+				return true;
+		}
 	}
 }
 ?>
