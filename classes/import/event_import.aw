@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.24 2008/02/25 13:45:56 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.25 2008/02/25 13:48:08 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -856,6 +856,7 @@ class event_import extends class_base
 				}
 				break;
 		}
+		$arr["obj_inst"]->save();
 		return $retval;
 	}	
 
