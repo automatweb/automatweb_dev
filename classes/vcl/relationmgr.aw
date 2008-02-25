@@ -1050,7 +1050,7 @@ class relationmgr extends aw_template
 				$edfile = "doc";
 			}
 			
-			$ch = $this->mk_my_orb("change", array("id" => $alias->prop("to"), "return_url" => get_ru()), $edfile);
+			$ch = $this->mk_my_orb("change", array("id" => $alias->prop($cn), "return_url" => get_ru()), $edfile);
 			$reltype_id = $alias->prop("reltype");
 			
 			$adat["icon"] = html::img(array(
