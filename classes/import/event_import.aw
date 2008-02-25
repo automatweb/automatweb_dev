@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.30 2008/02/25 14:06:33 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.31 2008/02/25 14:07:15 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -128,8 +128,6 @@ class event_import extends class_base
 	// class_base classes usually need those, uncomment them if you want to use them
 	function get_property($arr)
 	{
-		arr($arr["obj_inst"]->meta("xml_conf_time_format"));
-		exit;
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
