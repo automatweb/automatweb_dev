@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.2 2008/02/17 21:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.3 2008/02/25 13:52:41 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -303,7 +303,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property kw_tb type=toolbar no_caption=1 store=no group=keywords
 
 	@property kws type=keyword_selector store=no reltype=RELTYPE_KEYWORD
-	@caption M&auml;rks&otilde;nad
+	@caption V&otilde;tmes&otilde;nad
 
 @default group=versions
 
@@ -326,7 +326,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
 @groupinfo settings caption=Seadistused icon=archive.gif
-@groupinfo kws caption="M&auml;rks&otilde;nad"
+@groupinfo kws caption="V&otilde;tmes&otilde;nad"
 @groupinfo versions caption="Versioonid"
 @groupinfo transl caption=T&otilde;lgi
 @groupinfo relationmgr caption=Seostehaldur submit=no
@@ -1713,7 +1713,7 @@ class doc extends class_base
 			}
 			$tb->add_button(array(
 				"name" => "new_kw",
-				"tooltip" => t("M&auml;rks&otilde;na"),
+				"tooltip" => t("V&otilde;tmes&otilde;na"),
 				"url" => html::get_new_url(CL_KEYWORD, $pt, array("return_url" => get_ru())),
 				"img" => "new.gif",
 			));

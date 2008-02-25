@@ -959,7 +959,7 @@
             <store>no</store>
             <reltype>RELTYPE_KEYWORD</reltype>
             <field>kws</field>
-            <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
       </property>
       <property>
             <name>versions_tb</name>
@@ -1039,7 +1039,7 @@
                   <icon>archive.gif</icon>
             </settings>
             <kws>
-                  <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
             </kws>
             <versions>
                   <caption>Versioonid</caption>
