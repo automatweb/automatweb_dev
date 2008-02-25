@@ -3319,7 +3319,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// we have to tokenize things here. 
 		$p = get_instance("core/aw_code_analyzer/parser");
 		$p->p_init(trim($str));
-		$new_str = " objects.status > 0 AND ";
+		$new_str = " objects.status > 0 AND objects.class_id = $main_clid AND ";
 		$props = $GLOBALS["properties"][$main_clid];
 		while (!$p->p_eos())
 		{
