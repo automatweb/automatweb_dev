@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.25 2008/02/25 13:48:08 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.26 2008/02/25 13:55:27 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -777,8 +777,11 @@ class event_import extends class_base
 
 	function set_property($arr = array())
 	{
+		arr($arr);
 		$prop = &$arr["prop"];
+		arr($prop["name"]));
 		$retval = PROP_OK;
+		arr($prop["name"]));
 		switch($prop["name"])
 		{			
 			// save data from xml configuration table
@@ -803,6 +806,7 @@ class event_import extends class_base
 				{
 					$arr['obj_inst']->set_meta("xml_conf_category", $arr['request']['xml_conf_category']);
 				}
+		arr($prop["name"]));
 				break;
 
 			case "category_config_table":
@@ -810,6 +814,7 @@ class event_import extends class_base
 				{
 					$arr["obj_inst"]->set_meta("cat_conf", $arr["request"]["cat_conf"]);
 				}
+		arr($prop["name"]));
 				break;
 
 			case "import_log_conf_table":
@@ -821,6 +826,7 @@ class event_import extends class_base
 				{
 					$arr["obj_inst"]->set_meta("log_conf_aw", $arr["request"]["log_conf_aw"]);
 				}
+		arr($prop["name"]));
 				break;
 
 			case "import_log_conf_sector_table":
@@ -832,6 +838,7 @@ class event_import extends class_base
 				{
 					$arr["obj_inst"]->set_meta("log_conf_sector_aw", $arr["request"]["log_conf_sector_aw"]);
 				}
+		arr($prop["name"]));
 				break;
 
 			case "import_log_conf_time_table":
@@ -843,6 +850,7 @@ class event_import extends class_base
 				{
 					$arr["obj_inst"]->set_meta("log_conf_time_aw", $arr["request"]["log_conf_time_aw"]);
 				}
+		arr($prop["name"]));
 				break;
 
 			case "import_log_conf_location_table":
@@ -854,9 +862,10 @@ class event_import extends class_base
 				{
 					$arr["obj_inst"]->set_meta("log_conf_location_aw", $arr["request"]["log_conf_location_aw"]);
 				}
+		arr($prop["name"]));
 				break;
 		}
-		$arr["obj_inst"]->save();
+		arr($prop["name"]));
 		return $retval;
 	}	
 
