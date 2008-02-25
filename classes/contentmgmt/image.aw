@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.2 2008/02/19 14:41:02 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.3 2008/02/25 13:43:53 robert Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1663,26 +1663,12 @@ class image extends class_base
 				'comments'=> $out,
 			));
 		}
-
-		if ($this->is_template("NEXT_LINK"))
+		if ($this->is_template("NEXT_LINK") && $this->can("view", $arr["minigal"]))
 		{
 			$set_next = null;
-			if($this->can("view", $arr["minigal"]))
-			{
-				$mg = get_instance(CL_MINI_GALLERY);
-				$ob = obj($arr["minigal"]);
-				$images = $mg->_pic_list($ob);
-			}
-			else
-			{
-				$images = new object_list(array(
-					"class_id" => CL_IMAGE,
-					"parent" => $im["parent"],
-					"sort_by" => "objects.jrk,objects.created desc",
-					"lang_id" => array(),
-					"site_id" => array()
-				));
-			}
+			$mg = get_instance(CL_MINI_GALLERY);
+			$ob = obj($arr["minigal"]);
+			$images = $mg->_pic_list($ob);
 			foreach($images->ids() as $im_id)
 			{
 				if ($set_next)
@@ -1702,6 +1688,7 @@ class image extends class_base
 				}
 				if ($im_id == $id)
 				{
+					echo $id;
 					if ($prev)
 					{
 						$im = obj($im_id);
