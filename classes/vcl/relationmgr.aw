@@ -1037,7 +1037,7 @@ class relationmgr extends aw_template
 				"created" => $alias->prop($cn.".created"),
 				"modifiedby" => $alias->prop($cn.".modifiedby"),
 				"modified" => $alias->prop($cn.".modified"),
-				"comment" => $alias->prop("to.comment")
+				"comment" => $alias->prop($cn.".comment")
 			);
 			
 			$target_obj = $alias->to();
