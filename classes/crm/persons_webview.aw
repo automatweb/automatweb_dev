@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.35 2008/02/14 10:55:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.36 2008/02/25 12:37:33 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1243,7 +1243,7 @@ class persons_webview extends class_base
 		$vars["subject_field"] = $subject_field;
 		$vars["EDUCATION_SUB"] = $education;
 		$vars["STOPPED"] = $stopped;
-
+		$vars = $this->to_ent($vars);
 		$this->vars_safe($vars);
 
 		$subs = array();

@@ -1269,6 +1269,38 @@ class core extends acl_base
 		}
 	}
 
+	function to_ent($data)
+	{
+		$chars = array(
+			"Ü" => "&Uuml;",
+			"ü" => "&uuml;",
+			"Õ" => "&Otilde;",
+			"õ" => "&otilde;",
+			"Ö" => "&Ouml;",
+			"ö" => "&ouml;",
+			"Ä" => "&Auml;",
+			"ä" => "&auml;",
+		);
+		if(!is_array($data))
+		{
+			foreach($chars as $char => $ent)
+			{
+				$data = str_replace($char, $ent, $data);
+			}
+		}
+		else
+		{
+			foreach($data as $key => $val)
+			{
+				foreach($chars as $char => $ent)
+				{
+					$data = str_replace($char, $ent, $data);
+				}
+			}
+		}
+		return $data;
+	}
+
 	function show($args)
 	{
 		$obj = obj($args['id']);
