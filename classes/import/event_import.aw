@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.22 2008/02/25 12:57:22 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.23 2008/02/25 13:44:29 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -777,6 +777,8 @@ class event_import extends class_base
 
 	function set_property($arr = array())
 	{
+		arr($arr);
+		exit;
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
