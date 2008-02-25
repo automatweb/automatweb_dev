@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.21 2008/02/25 12:56:16 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.22 2008/02/25 12:57:22 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -2433,7 +2433,7 @@ class event_import extends class_base
 				)
 			);
 			//arr($extents->arr());
-			exit;
+			//exit;
 			print "Making object_data_list into suitable array.<br>";
 			flush();
 
