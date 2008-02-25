@@ -1367,6 +1367,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function delete_object_cache_update($oid)
 	{
+		$this->cache->file_clear_pt_oid("acl", $oid);
 		$this->cache->file_clear_pt("html");
 		$this->cache->file_clear_pt("menu_area_cache");
 	}
@@ -1375,7 +1376,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		$awa = new aw_array($oid_list);
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid IN(".$awa->to_sql().")");
+		$this->cache->file_clear_pt("acl");
 		$this->cache->file_clear_pt("html");
+		$this->cache->file_clear_pt("menu_area_cache");
 	}
 
 	function final_delete_object($oid)
@@ -1414,7 +1417,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// also, aliases
 		$this->db_query("DELETE FROM aliases WHERE source = '$oid' OR target = '$oid'");
+		$this->cache->file_clear_pt("acl");
 		$this->cache->file_clear_pt("html");
+		$this->cache->file_clear_pt("menu_area_cache");
 	}
 
 	function req_make_sql($params, $logic = "AND", $dbg = false)
