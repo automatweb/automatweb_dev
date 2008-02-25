@@ -29,7 +29,10 @@
 			@caption Toimetaja
 
 			@property e_find_text type=textbox parent=events_top_left size=20 store=no
-			@caption  Tekst
+			@caption Tekst
+
+			@property e_find_county type=select parent=events_top_left store=no
+			@caption Maakond
 
 			@property e_find_news type=chooser no_caption=1 parent=events_top_left store=no
 			@caption Arhiivist, Uute hulgast
@@ -48,7 +51,6 @@
 
 	@property places_table type=table no_caption=1
 	@caption Toimumiskohtade tabel
-
 
 @groupinfo similar_find caption="Sarnased s&uuml;ndmused" submit=no
 @default group=similar_find
@@ -276,6 +278,15 @@ class events_manager extends class_base
 				}
 				break;
 
+			case "e_find_county":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_COUNTY,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$prop["value"] = $arr["request"][$prop["name"]];
+				$prop["options"] = array("" => "") + $ol->names();
+				break;
 			case "e_find_editor":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				$groups_list = new object_list(array(
@@ -739,6 +750,11 @@ class events_manager extends class_base
 			));
 		}
 
+		if(!empty($args["e_find_county"]))
+		{
+			$filter["CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.maakond"] = $args["e_find_county"];
+		}
+
 		switch ($args["e_find_news"])
 		{
 			case "arch":
@@ -823,6 +839,11 @@ class events_manager extends class_base
 					"title" => $t_publish,
 					"caption" => $t_publish,
 				));
+				$col = "grey";
+			}
+			else
+			{
+				$col = "#6699CC";
 			}
 
 			$make_copy = html::href(array(
@@ -859,15 +880,41 @@ class events_manager extends class_base
 
 			$change = html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $t_change);
 
+			if(($o->prop("start1") || $o->prop("end")))
+			{
+				$eventtime = date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end"));
+			}
+			else
+			{
+				$eventtime = "";
+//				$eventtimes = array();
+				$eventstart = 100000000000;
+				$eventend = 1;
+				foreach($o->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
+				{
+					$tm = $c->to();
+					if($tm->prop("start") > 1000 && ($eventstart >  $tm->prop("start"))) $eventstart = $tm->prop("start");
+					if($eventend <  $tm->prop("end")) $eventend = $tm->prop("end");
+
+//					if($tm->prop("start") || $tm->prop("end"))
+//					{
+//						$eventtimes[]= date("d.m.Y" , $tm->prop("start")). "-" .date("d.m.Y" , $tm->prop("end"));
+//					}
+				}
+				$eventtime = date("d.m.Y" , $eventstart). "-" .date("d.m.Y" , $eventend);
+//				$eventtime = join ("<br>" , $eventtimes);
+			}
+
 			$t->define_data(array(
 				"name" => ($parse_url)? html::href(array("caption" => $name, "url" => $parse_url)):($can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $name) : $name),
-				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
+				"time" => $eventtime,
 				"sector" => (is_object($sec)) ? $sec->name() : "",
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"tasks" => $make_copy . " " . $publish . " " . $change,
 				"oid" => $oid,
 				"region" => $o->prop("location.address.maakond.name") ." ".$o->prop("location.address.linn.name"),
 				"translated" => $translated,
+				"col" => $col,
 			));
 		}
 	}
@@ -1083,45 +1130,53 @@ class events_manager extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Pealkiri"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "col",
 		));
 		$t->define_field(array(
 			"name" => "time",
 			"caption" => t("Aeg"),
 			"align" => "center",
 			"sortable" => 1,
+			"chgbgcolor" => "col",
 		));
 		$t->define_field(array(
 			"name" => "sector",
 			"caption" => t("Valdkond"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "col",
 		));
 		$t->define_field(array(
 			"name" => "level",
 			"caption" => t("Tase"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "col",
 		));
 		$t->define_field(array(
 			"name" => "region",
 			"caption" => t("Regioon"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "col",
 		));
 		if($arr["request"]["group"] != "similar_find")
 		{
 			$t->define_field(array(
 				"name" => "tasks",
 				"caption" => t("Tegevused"),
-				"align" => "center"
+				"align" => "center",
+				"chgbgcolor" => "col",
 			));
 		}
 		$t->define_field(array(
 			"name" => "translated",
 			"caption" => t("T&otilde;lgitud"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "col",
 		));
 		$t->define_chooser(array(
 			"name" => "evmgr_objsel",
-			"field" => "oid"
+			"field" => "oid",
+			"chgbgcolor" => "col",
 		));
 	}
 

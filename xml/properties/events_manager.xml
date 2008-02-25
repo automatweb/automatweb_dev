@@ -53,7 +53,18 @@
             <parent>events_top_left</parent>
             <size>20</size>
             <store>no</store>
-            <caption> Tekst</caption>
+            <caption>Tekst</caption>
+      </property>
+      <property>
+            <name>e_find_county</name>
+            <table>objects</table>
+            <group>events</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <parent>events_top_left</parent>
+            <store>no</store>
+            <caption>Maakond</caption>
       </property>
       <property>
             <name>e_find_news</name>
