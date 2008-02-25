@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.16 2008/02/21 10:53:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.17 2008/02/25 11:59:16 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
