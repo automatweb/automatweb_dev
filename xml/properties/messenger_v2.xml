@@ -77,6 +77,17 @@
             <caption>Manuste arv</caption>
       </property>
       <property>
+            <name>contact_text</name>
+            <table>objects</table>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>5</rows>
+            <caption>Kontaktinfo</caption>
+      </property>
+      <property>
             <name>grouping</name>
             <table>objects</table>
             <group>grouping</group>
@@ -159,8 +170,9 @@
                   <num_1>mto</num_1>
                   <num_2>cc</num_2>
                   <num_3>name</num_3>
-                  <num_4>message</num_4>
-                  <num_5>msgrid</num_5>
+                  <num_4>add_contacts</num_4>
+                  <num_5>message</num_5>
+                  <num_6>msgrid</num_6>
             </props>
             <caption>Maili andmed</caption>
       </property>

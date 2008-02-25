@@ -106,6 +106,16 @@
             <caption>HTML kiri</caption>
       </property>
       <property>
+            <name>add_contacts</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lisa kontaktandmed</caption>
+      </property>
+      <property>
             <name>message</name>
             <group>general</group>
             <table>objects</table>

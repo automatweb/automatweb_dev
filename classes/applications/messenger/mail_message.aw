@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.45 2008/02/22 09:55:42 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.46 2008/02/25 12:08:27 robert Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -42,6 +42,9 @@
 
 	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
 	@caption HTML kiri
+
+	@property add_contacts type=checkbox ch_value=1 field=meta method=serialize table=objects
+	@caption Lisa kontaktandmed
 
 	@property message type=textbox field=meta method=serialize table=objects
 	@caption Sisu
@@ -363,30 +366,51 @@ class mail_message extends class_base
 			));
 			if($this->message)
 			{
-				$this->awm->htmlbodyattach(array(
-					"data" => $this->message,
-				));
+				$message = $this->message;
 			}
 			else
 			{
-				$this->awm->htmlbodyattach(array(
-					"data" => $msgobj->prop("message"),
-				));
+				$message = $msgobj->prop("message");
 			}
+			if($msgobj->prop("add_contacts"))
+			{
+				$msgr = get_instance(CL_MESSENGER_V2);
+				$msgrid = $msgr->get_messenger_for_user();
+				if(is_oid($msgrid))
+				{
+					$msgr = obj($msgrid);
+				}
+				if($contact = $msgr->prop("contact_text"))
+				{
+					$message .= "\n<em>".$contact."</em>";
+				}
+			}
+			$this->awm->htmlbodyattach(array(
+				"data" => $message,
+			));
 		}
 		else
 		{
 			if(!$msgobj->prop("message") && $this->message)
 			{
-				$this->awm->create_message(array(
-					"froma" => $address,
-					"fromn" => $name,
-					"subject" => $msgobj->name(),
-					"to" => $msgobj->prop("mto"),
-					"cc" => $msgobj->prop("cc"),
-					"bcc" => $msgobj->prop("bcc"),
-					"body" => $this->message,
-				));
+				$message = $this->message;
+			}
+			else
+			{
+				$message = $msgobj->prop("message");
+			}
+			if($msgobj->prop("add_contacts"))
+			{
+				$msgr = get_instance(CL_MESSENGER_V2);
+				$msgrid = $msgr->get_messenger_for_user();
+				if(is_oid($msgrid))
+				{
+					$msgr = obj($msgrid);
+				}
+				if($contact = $msgr->prop("contact_text"))
+				{
+					$message .= "\n".$contact;
+				}
 			}
 			$this->awm->create_message(array(
 				"froma" => $address,
@@ -395,7 +419,7 @@ class mail_message extends class_base
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
 				"bcc" => $msgobj->prop("bcc"),
-				"body" => $msgobj->prop("message"),
+				"body" => $message,
 			));
 		};
 
@@ -639,7 +663,11 @@ class mail_message extends class_base
 				else
 				{
 					$msgr = get_instance(CL_MESSENGER_V2);
-					$msgr = obj($msgr->get_messenger_for_user());
+					$msgrid = $msgr->get_messenger_for_user();
+					if(is_oid($msgrid))
+					{
+						$msgr = obj($msgrid);
+					}
 					$prop["value"] = $msgr->prop("fromname");
 				}
 				break;
@@ -733,6 +761,15 @@ class mail_message extends class_base
 					}
 				}
 			break;
+
+			case "add_contacts":
+				$msgr = get_instance(CL_MESSENGER_V2);
+				$msgrid = $msgr->get_messenger_for_user();
+				if(!is_oid($msgrid))
+				{
+					return PROP_IGNORE;
+				}
+				break;
 
 		}
 		return $retval;

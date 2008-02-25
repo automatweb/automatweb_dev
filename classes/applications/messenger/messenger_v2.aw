@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.40 2008/02/22 09:55:42 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.41 2008/02/25 12:08:27 robert Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -39,6 +39,9 @@ caption Identiteet
 @property num_attachments type=select field=meta method=serialize group=advanced default=1 
 @caption Manuste arv
 
+@property contact_text type=textarea cols=60 rows=5 group=advanced
+@caption Kontaktinfo
+
 @property grouping type=checkbox ch_value=1 default=0 field=meta method=serialize group=grouping
 @caption Kirjade ajaline grupeerimine
 
@@ -74,7 +77,7 @@ caption Identiteet
 				@property new_mail_toolbar type=toolbar parent=msg_new submit=no no_caption=1
 				@caption uue maili tuulbar
 		
-				@property message_info type=releditor reltype=RELTYPE_MAIL_MESSAGE parent=msg_new props=mfrom,mto,cc,name,message,msgrid
+				@property message_info type=releditor reltype=RELTYPE_MAIL_MESSAGE parent=msg_new props=mfrom,mto,cc,name,add_contacts,message,msgrid
 				@caption Maili andmed
 
 			@layout msg_new2 type=vbox parent=middle_pane closeable=1 area_caption=Uus&nbsp;kiri
@@ -611,6 +614,7 @@ class messenger_v2 extends class_base
 		// this sucks.. but right now, with this heat.. i can't do any better
 		$msgobj = obj($arg["msgid"]);
 		$msgobj->set_prop("mfrom", mb_convert_encoding($arg["message_info"]["mfrom"], "ISO-8859-1", "UTF-8"));
+		$msgobj->set_prop("add_contacts", mb_convert_encoding($arg["message_info"]["add_contacts"], "ISO-8859-1", "UTF-8"));
 		$msgobj->set_prop("mto", mb_convert_encoding($arg["message_info"]["mto"], "ISO-8859-1", "UTF-8"));
 		$msgobj->set_prop("cc", mb_convert_encoding($arg["message_info"]["cc"], "ISO-8859-1", "UTF-8"));
 		$msgobj->set_prop("name", mb_convert_encoding($arg["message_info"]["name"], "ISO-8859-1", "UTF-8"));
@@ -692,7 +696,7 @@ class messenger_v2 extends class_base
 				show_ajax_loader();
 				surl = '".$sendmail_url."';
 				//document.getElementById('right_pane_outer').display = 'none';
-				params = '&message_info[mfrom]=' + Url.encode(document.getElementById('message_info[mfrom]').value) + '&message_info[mto]=' + Url.encode(document.getElementById('message_info_mto_').value) + '&message_info[cc]=' + Url.encode(document.getElementById('message_info_cc_').value) + '&message_info[name]=' + Url.encode(document.getElementById('message_info_name_').value) + '&message=' + Url.encode(document.getElementById('message').value);
+				params = '&message_info[mfrom]=' + Url.encode(document.getElementById('message_info[mfrom]').value) +'&message_info[add_contacts]=' + Url.encode(document.getElementById('message_info[add_contacts]').value) + '&message_info[mto]=' + Url.encode(document.getElementById('message_info_mto_').value) + '&message_info[cc]=' + Url.encode(document.getElementById('message_info_cc_').value) + '&message_info[name]=' + Url.encode(document.getElementById('message_info_name_').value) + '&message=' + Url.encode(document.getElementById('message').value);
 				aw_post_url_contents(surl, params);
 				msgr_load('middle_pane_outer', 'msg_list', false, ourl);
 			
