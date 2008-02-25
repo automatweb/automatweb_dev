@@ -77,7 +77,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <caption>Uuenda k&amp;amp;otilde;ikide toodete piltide ja kategooriate v&amp;amp;auml;ljad</caption>
+            <caption>Import uuendab k&amp;amp;otilde;iki v&amp;amp;auml;lju</caption>
       </property>
       <property>
             <name>do_safe_update</name>
@@ -88,7 +88,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <caption>&amp;amp;Auml;ra uuenda pilte ja kategooriaid</caption>
+            <caption>&amp;amp;Auml;ra uuenda pilte, kategooriaid ja seotud tooteid</caption>
       </property>
       <property>
             <name>last_import_log</name>
@@ -264,8 +264,9 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <rows>30</rows>
-            <cols>80</cols>
+            <rows>15</rows>
+            <cols>30</cols>
+            <parent>vbox_files_import_filenames</parent>
             <caption>Failinimed</caption>
       </property>
       <property>
@@ -275,7 +276,22 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <parent>vbox_files_import_sites</parent>
             <caption>Esimene leht kust pilte otsitakse</caption>
+      </property>
+      <property>
+            <name>files_import_sites_order</name>
+            <table>objects</table>
+            <group>files_import</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <rows>5</rows>
+            <cols>30</cols>
+            <parent>vbox_files_import_sites</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Saitide j&amp;amp;auml;rjekord</caption>
       </property>
       <property>
             <name>files_order</name>
@@ -635,6 +651,23 @@
                   <parent>hbox_products_manager</parent>
                   <area_caption></area_caption>
             </vbox_products_manager>
+            <hbox_files_import>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>files_import</group>
+            </hbox_files_import>
+            <vbox_files_import_filenames>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
+                  <group>files_import</group>
+                  <parent>hbox_files_import</parent>
+            </vbox_files_import_filenames>
+            <vbox_files_import_sites>
+                  <type>vbox</type>
+                  <group>files_import</group>
+                  <parent>hbox_files_import</parent>
+            </vbox_files_import_sites>
       </layout>
 </properties>
 
