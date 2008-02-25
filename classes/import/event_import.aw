@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.18 2008/02/25 12:00:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.19 2008/02/25 12:10:58 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -2380,15 +2380,15 @@ class event_import extends class_base
 		);
 
 		$impd_objs_arr = array(
-			"event_times" => array(
-				"parent" => $dir_event,
-				"class_id" => CL_EVENT_TIME,
-				"array_var" => &$imported_times,
-			),
 			"events" => array(
 				"parent" => $dir_event,
 				"class_id" => CL_CALENDAR_EVENT,
 				"array_var" => &$imported_events,
+			),
+			"event_times" => array(
+				"parent" => $dir_event,
+				"class_id" => CL_EVENT_TIME,
+				"array_var" => &$imported_times,
 			),
 			"locations" => array(
 				"parent" => $dir_place,
@@ -2431,7 +2431,8 @@ class event_import extends class_base
 					),
 				)
 			);
-			//arr($extents);
+			arr($extents->arr());
+			exit;
 			print "Making object_data_list into suitable array.<br>";
 			flush();
 
