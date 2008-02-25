@@ -118,7 +118,6 @@ class relationmgr extends aw_template
 	function rel_copy($arr)
 	{
 		$i = get_instance("doc");
-		die("yea");
 		$i->rel_copy($arr);
 		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
 	}
