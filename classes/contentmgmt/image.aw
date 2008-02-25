@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.3 2008/02/25 13:43:53 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.4 2008/02/25 13:45:11 robert Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1688,7 +1688,6 @@ class image extends class_base
 				}
 				if ($im_id == $id)
 				{
-					echo $id;
 					if ($prev)
 					{
 						$im = obj($im_id);
