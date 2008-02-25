@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.19 2008/02/25 12:10:58 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.20 2008/02/25 12:50:35 instrumental Exp $
 // event_import.aw - SĆ¼ndmuste import 
 /*
 
@@ -1263,9 +1263,10 @@ class event_import extends class_base
 //	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $import_orig = true)
 	function process_import_data($arr, $imps, $o, $xml_source_id, $class_id, $dirs, $imp_lang_id)
 	{
+		/*
 		arr($imps["event"]);
 		exit;
-
+		*/
 		$li = $o->prop("original_lang");
 		$import_orig = ($li == $imp_lang_id);
 		$lg = get_instance("languages");
@@ -2431,7 +2432,7 @@ class event_import extends class_base
 					),
 				)
 			);
-			arr($extents->arr());
+			//arr($extents->arr());
 			exit;
 			print "Making object_data_list into suitable array.<br>";
 			flush();
