@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.89 2008/02/12 13:58:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.90 2008/02/25 16:41:21 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -292,7 +292,6 @@ class reservation extends class_base
 				break;	
 
 			case "people":
-			case "inbetweener":
 				if(is_oid($arr["obj_inst"]->prop("resource")))
 				{
 					$room = obj($arr["obj_inst"]->prop("resource"));
@@ -307,6 +306,32 @@ class reservation extends class_base
 				if(is_object($room))
 				{
 					$professions = $room->prop("professions");
+					if(is_array($professions) && sizeof($professions))
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_CRM_PERSON,
+							"lang_id" => array(),
+							"CL_CRM_PERSON.RELTYPE_RANK" => $professions,
+						));
+						$prop["options"] = array("") + $ol->names();
+					}
+				}
+				break;
+			case "inbetweener":
+				if(is_oid($arr["obj_inst"]->prop("resource")))
+				{
+					$room = obj($arr["obj_inst"]->prop("resource"));
+				}
+				else
+				{
+					if(is_oid($arr["request"]["resource"]))
+					{
+						$room = obj($arr["request"]["resource"]);
+					}
+				}
+				if(is_object($room))
+				{
+					$professions = $room->prop("seller_professions");
 					if(is_array($professions) && sizeof($professions))
 					{
 						$ol = new object_list(array(

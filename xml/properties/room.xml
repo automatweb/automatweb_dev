@@ -86,7 +86,21 @@
             <reltype>RELTYPE_PROFESSION</reltype>
             <multiple>1</multiple>
             <parent>general_up</parent>
+            <size>4</size>
             <caption>Ametinimetused</caption>
+      </property>
+      <property>
+            <name>seller_professions</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROFESSION</reltype>
+            <multiple>1</multiple>
+            <parent>general_up</parent>
+            <size>4</size>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindajate ametinimetused</caption>
       </property>
       <property>
             <name>inherit_prods_from</name>

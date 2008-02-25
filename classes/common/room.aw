@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.229 2008/02/12 15:18:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.230 2008/02/25 16:41:14 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -39,8 +39,11 @@
 		@property area type=relpicker reltype=RELTYPE_AREA parent=general_up
 		@caption Valdkond
 
-		@property professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up
+		@property professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up size=4
 		@caption Ametinimetused
+
+		@property seller_professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up size=4
+		@caption M&uuml;&uuml;giesindajate ametinimetused
 	
 		@property inherit_prods_from type=relpicker reltype=RELTYPE_ROOM parent=general_up
 		@caption P&auml;ri tooted ruumist
