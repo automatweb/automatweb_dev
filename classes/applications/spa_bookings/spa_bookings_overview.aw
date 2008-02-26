@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.41 2008/02/26 18:18:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.42 2008/02/26 18:58:59 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -101,6 +101,9 @@
 
 				@property r_ra_project type=textbox store=no captionside=top parent=ra_srch size=22
 				@caption Projekt
+
+				@property r_ra_worker type=select store=no captionside=top parent=ra_srch
+				@caption T&otilde;&otilde;taja
 
 				@property r_ra_seller type=select store=no captionside=top parent=ra_srch
 				@caption Vahendaja
@@ -213,6 +216,29 @@ class spa_bookings_overview extends class_base
 				$prop["options"] = array("" => "") + $ol2->names();
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
+			case "r_ra_worker":
+				$ol = new object_list(array(
+					"class_id" => CL_ROOM,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$pro = array();
+				foreach($ol->arr() as $room)
+				{
+					if(is_array($room->prop("professions")))
+					{
+						$pro = $pro  + $room->prop("professions");
+					}
+				}
+				$ol2 = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"lang_id" => array(),
+					"CL_CRM_PERSON.RELTYPE_RANK" => $pro,
+				));
+				$prop["options"] = array("" => "") + $ol2->names();
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+
 			case "r_ra_res_type":
 				$prop["options"] = array(
 					"rooms" => t("Ruumide aruanne"),
@@ -224,6 +250,7 @@ class spa_bookings_overview extends class_base
 			case "r_ra_booker_name":
 			case "r_ra_booking_from":
 			case "r_ra_seller":
+			case "r_ra_worker":
 			case "r_ra_project":
 			case "r_ra_booking_to":
 			case "r_ra_only_done":
@@ -271,6 +298,7 @@ class spa_bookings_overview extends class_base
 		$arr["args"]["r_ra_only_done"] = $arr["request"]["r_ra_only_done"];
 		$arr["args"]["r_ra_res_type"] = $arr["request"]["r_ra_res_type"];
 		$arr["args"]["r_ra_seller"] = $arr["request"]["r_ra_seller"];
+		$arr["args"]["r_ra_worker"] = $arr["request"]["r_ra_worker"];
 		$arr["args"]["r_ra_project"] = $arr["request"]["r_ra_project"];
 		$arr["args"]["r_ra_unconfirmed"] = $arr["request"]["r_ra_unconfirmed"];
 
@@ -598,6 +626,12 @@ class spa_bookings_overview extends class_base
 		if($r_ra_seller)
 		{
 			$filter["inbetweener"] = "%".$r_ra_seller."%";
+		}
+
+		//töötaja
+		if($r_ra_worker)
+		{
+			$filter["people"] = "%".$r_ra_worker."%";
 		}
 
 		//projekt
