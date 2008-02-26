@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.27 2008/02/19 12:26:49 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.28 2008/02/26 12:00:24 hannes Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -410,6 +410,7 @@ class newsfeed extends class_base
 			$source = aw_ini_get("newsfeed.source");
 			$baseurl = aw_ini_get("baseurl");
 			$parse_embed = $feedobj->prop("parse_embed");
+			$di = get_instance("doc_display");
 			foreach($ol->arr() as $o)
 			{
 				$mod_date = $o->prop("doc_modified");
@@ -426,13 +427,13 @@ class newsfeed extends class_base
 				asort($fields);
 				foreach($fields as $prop=>$f)
 				{
-					$props[$prop] = $o->trans_get_val($prop);
+					$props[$prop] = $o->prop($prop);
 				}
-				$title = $o->trans_get_val("title");
+				$title = $o->name();
 				if($feedobj->prop("folder_name"))
 				{
 					$folder = obj($o->parent());
-					$title .= " - ".$folder->trans_get_val("name");
+					$title .= " - ".$folder->name();
 				}
 				if (1 == $parse_embed)
 				{
@@ -442,17 +443,9 @@ class newsfeed extends class_base
 						$si->parse_document_new($o);
 						foreach($fields as $prop=>$f)
 						{
-							$type = aw_ini_get("user_interface.content_trans");
-							if($type == 1)
-							{
-								$langid = aw_global_get("ct_lang_id");
-							}
-							else
-							{
-								$langid = aw_global_get("lang_id");
-							}
-							$props[$prop] = $o->trans_get_val($prop);
+							$props[$prop] = $o->prop($prop);
 							$al->parse_oo_aliases($oid,$props[$prop]);
+							$di->_parse_wiki(& $props[$prop]);
 						}
 					}
 				}
@@ -472,16 +465,38 @@ class newsfeed extends class_base
 					$separator = "<br>";
 				}
 				$description = implode($separator, $props);
+				
+				if ($o->prop("alias") != "")
+				{
+					if (aw_ini_get("menuedit.language_in_url"))
+					{
+						static $ss_i;
+						if (!$ss_i)
+						{
+							$ss_i = get_instance("contentmgmt/site_show");
+						}
+						$doc_link = $ss_i->make_menu_link($o);
+					}
+					else
+					{
+						$doc_link = obj_link($o->prop("alias"));
+					}
+				}
+				else
+				{
+					$doc_link = $baseurl . "/" . $oid;
+				}
+				
 				$items[] = array(
 					"item_id" => $oid,
 					"title" => $title,
-					"link" => $baseurl . "/" . $oid,
+					"link" => $doc_link,
 					"artdate" => date("Y-m-d",$mod_date),
 					"start_date" => date("Y-m-d H:i:s",$mod_date),
 					"end_date" => "0000-00-00 00:00:00", // documents have no ending date
 					"author" => $o->prop("author"),
 					"source" => $source,
-     					"art_lead" => $art_lead,
+     				"art_lead" => $art_lead,
 					"description" => $description,
 					"guid" => $baseurl . "/" . $oid,
 					"pubDate" => date("r",$mod_date),
@@ -504,7 +519,7 @@ class newsfeed extends class_base
 				print "just go away";
 			
 			default:
-				header("Content-type: text/xml");
+				header('Content-Type: text/xml; charset=ISO-8859-1');
 				print $this->rss20_encode($data);
 		};
 		exit;
@@ -548,7 +563,7 @@ class newsfeed extends class_base
 		};
 		$res .= "\t</channel>\n";
 		$res .= "</rss>\n";
-		$res = str_replace("<br />","",$res);
+		//$res = str_replace("<br />","",$res);
 		return $res;
 	}
 
