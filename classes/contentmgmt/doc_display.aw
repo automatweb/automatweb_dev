@@ -607,18 +607,14 @@ class doc_display extends aw_template
 	function _parse_youtube_links($str)
 	{
 		$tmp_template = end(explode("/", $this->template_filename));
-		if ( $this->is_template("youtube_link") && strpos($str, "http://www.youtube.com/")!==0)
+		if ( $this->is_template("youtube_link") && (strpos($str, "http://www.youtube.com/")!==false || strpos($str, "http://youtube.com/")!==false))
 		{
-			$str = str_replace  ( array("http://www.youtube.com/watch?v=", "http://youtube.com/watch?v=")  , array("http://www.youtube.com/v/", "http://youtube.com/v/"), $str );
-			
-			if (strpos($str, "http://www.youtube.com/v/")!==0)
-			{
-				$this->vars(array(
-					"link" => "\${1}\${2}\${3}\${4}",
-				));
-				$s_embed = $this->parse("youtube_link");
-				$str = preg_replace  ("/(http:\/\/www.youtube.com\/v\/[a-zA-Z0-9_]*)$|(http:\/\/www.youtube.com\/v\/.*)\n|(http:\/\/youtube.com\/v\/[a-zA-Z0-9_]*)$|(http:\/\/youtube.com\/v\/.*)\n/imsU", $s_embed, $str);
-			}
+			$str = str_replace  ( array("http://www.youtube.com/watch?v=", "http://youtube.com/watch?v=")  , array("http://www.youtube.com/v/", "http://www.youtube.com/v/"), $str );
+			$this->vars(array(
+				"video_id" => "\${1}\${2}\${3}\${4}",
+			));
+			$s_embed = $this->parse("youtube_link");
+			$str = preg_replace  ("/http:\/\/www.youtube.com\/v\/(.*)\s|http:\/\/www.youtube.com\/v\/(.*)$/imsU", $s_embed, $str);
 		}
 	}
 	
@@ -661,6 +657,7 @@ class doc_display extends aw_template
 			{
 				$this->db_query("SELECT id, name, url,  time, comment FROM comments WHERE board_id = ".$doc->id() ." ORDER BY time ASC");
 				
+				$i=1;
 				while($row = $this->db_next())
 				{
 					$s_comment = $row["comment"];
@@ -682,6 +679,7 @@ class doc_display extends aw_template
 						"name" => $s_name,
 						"post_created_hr" => $this->get_date_human_readable( $row["time"]),
 						"comment" => $s_comment,
+						"count" => $i++,
 					));
 					$tmp .= $this->parse("FORUM_POST");
 					
