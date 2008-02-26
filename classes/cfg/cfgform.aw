@@ -961,7 +961,7 @@ class cfgform extends class_base
 				$this->cfg_proplist[$name] = $this->cfg_proplist[$name] + $this->all_props[$name];
 			}
 
-			$obj->set_meta("cfg_proplist");
+			$obj->set_meta("cfg_proplist", $this->cfg_proplist);
 			$obj->save();
 		}
 	}
