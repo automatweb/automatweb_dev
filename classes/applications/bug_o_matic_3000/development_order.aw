@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.15 2007/12/06 14:32:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.16 2008/02/26 17:03:52 dragut Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -475,7 +475,7 @@ class development_order extends class_base
 				$old = $arr["obj_inst"]->prop_str($prop["name"]);
 				if ($old != $nv && !$arr["new"])
 				{
-					$com = sprintf(t("Tagaiside kellelt muudeti %s => %s"), $old, $nv);
+					$com = sprintf(t("Tagasiside kellelt muudeti %s => %s"), $old, $nv);
 					$this->add_comments[] = $com;
 				}
 				break;

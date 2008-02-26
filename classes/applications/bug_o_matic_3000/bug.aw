@@ -1082,7 +1082,7 @@ class bug extends class_base
 
 				if (($old = $arr["obj_inst"]->prop_str($prop["name"])) != $nv && !$arr["new"])
 				{
-					$com = sprintf(t("Tagaiside kellelt muudeti %s => %s"), $old, $nv);
+					$com = sprintf(t("Tagasiside kellelt muudeti %s => %s"), $old, $nv);
 					$this->add_comments[] = $com;
 				}
 				break;
