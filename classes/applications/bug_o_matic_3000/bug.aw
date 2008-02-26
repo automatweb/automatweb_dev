@@ -1088,11 +1088,14 @@ class bug extends class_base
 				break;
 			case "deadline":
 				$bt = $this->_get_bt($arr["obj_inst"]);
-				$bdd = $bt->prop("bug_def_deadline");
-				if($arr["new"] && ((int)$bdd)>0)
+				if($bt)
 				{
-					$date = time() + $bdd*24*60*60;
-					$arr["obj_inst"]->set_prop("wish_live_date", $date);
+					$bdd = $bt->prop("bug_def_deadline");
+					if($arr["new"] && ((int)$bdd)>0)
+					{
+						$date = time() + $bdd*24*60*60;
+						$arr["obj_inst"]->set_prop("wish_live_date", $date);
+					}
 				}
 				break;
 			case "comments_table":
