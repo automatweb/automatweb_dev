@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.4 2008/02/25 13:45:11 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.5 2008/02/26 13:01:30 robert Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1669,6 +1669,8 @@ class image extends class_base
 			$mg = get_instance(CL_MINI_GALLERY);
 			$ob = obj($arr["minigal"]);
 			$images = $mg->_pic_list($ob);
+			$mg->ob = $ob;
+			$images->sort_by_cb(array(&$mg, "__sort_imgs"));
 			foreach($images->ids() as $im_id)
 			{
 				if ($set_next)
