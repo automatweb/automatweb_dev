@@ -827,3 +827,13 @@ text-decoration:underline;
 }
 
 /* END KALENDER */
+
+/* fondi suurused tabis */
+#pais .tabs a {font-size: 11px ! important;  line-height: 18px;}
+#pais .tabs .akt a {line-height: 15px;}
+#k_menyy .tabs a {font-size: 10px ! important; }
+/*
+ * #pais .tabs .norm , #pais .tabs .akt {padding-left: 0px ! important;}
+ * #pais .tabs .norm .right, #pais .tabs .akt .right {padding-right: 0px ! important;}
+ * 
+*/
