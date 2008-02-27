@@ -387,7 +387,7 @@ class doc_display extends aw_template
 		
 		if (aw_ini_get("document.use_wiki_parser") == 1)
 		{
-			$this->_parse_wiki(& $text);
+			$this->_parse_wiki(& $text, $doc);
 		}
 		
 		// line break conversion between wysiwyg and not
@@ -459,7 +459,7 @@ class doc_display extends aw_template
 		
 		if (aw_ini_get("document.use_wiki_parser") == 1)
 		{
-			$this->_parse_wiki(& $text);
+			$this->_parse_wiki(& $text, $doc);
 		}
 		
 		// line break conversion between wysiwyg and not
@@ -485,7 +485,7 @@ class doc_display extends aw_template
 		
 		if (aw_ini_get("document.use_wiki_parser") == 1)
 		{
-			$this->_parse_wiki(& $text);
+			$this->_parse_wiki(& $text, $doc);
 		}
 		
 		// line break conversion between wysiwyg and not
@@ -508,12 +508,205 @@ class doc_display extends aw_template
 		return $text;
 	}
 	
-	function _parse_wiki($str)
+	function _parse_wiki($str, $doc)
 	{
 		$str = trim($str);
+		$this->_parse_wiki_links(& $str);
 		$this->_parse_wiki_lists(& $str);
 		$this->_parse_wiki_titles(& $str);
 		$this->_parse_youtube_links(& $str);
+		$this->_parse_wiki_create_paragraphs(& $str);
+		// ''italic''
+		// '''bold'''
+		// '''''italic and bold''''''
+		$this->_parse_wiki_fontstyle(& $str);
+		// ~~~ = username
+		// ~~~~ = username date/time (UTC)
+		// ~~~~~ = date/time alone (UTC)
+		$this->_parse_wiki_sign(& $str, $doc);
+		//$this->_parse_wiki_table(& $str);
+	}
+	
+	function _parse_wiki_table($str)
+	{
+		if ( preg_match_all("/{\|.*\|}/imsU", $str, $mt_wiki_tables ) !== 0)
+		{
+			$tmp = $str;
+			$a_text = array();
+			
+			// read lines to array
+			while ( strlen(trim( $tmp)) > 0 )
+			{
+				if (preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt))
+				{
+					$tmp = preg_replace  ( "/^(.*)\r\n/U"  , "" , $tmp );
+				}
+				else if (preg_match  ( "/^(.*)$/U" , $tmp, &$mt))
+				{
+					$tmp = preg_replace  ( "/^(.*)$/U"  , "" , $tmp );
+				}
+				$a_text[] = array ("text" => $mt[1]);
+			}
+			
+			$a_tables = array();
+			foreach($mt_wiki_tables[0] as $key => $var)
+			{
+				$a_tables[] = $this->_parse_wiki_table_get_to_array( $var );
+			}
+			
+			$ti = get_instance("vcl/table");
+			$ti = new aw_table();
+			$ti->set_layout("generic");
+			foreach($a_tables as $key => $var)
+			{
+				//$s_tables[] = $this->_parse_wiki_table_parse_array_to_html( $a_tables[$key] );
+			}
+			
+			
+			
+			/*
+			$ti->define_field(array(
+				"name" => "taotleja",
+				"caption" => t("Taotleja"),
+				"sortable" => 1,
+				"align" => "center"
+			));
+			
+			$ti->define_data(array(
+				"taotleja" => "hannes",
+			));
+			
+			$ti->define_data(array(
+				"taotleja" => "kirsman",
+			));
+			
+			$ti->define_field(array(
+				"name" => "taotleja",
+				"caption" => t("Taotleja"),
+				"sortable" => 1,
+				"align" => "center"
+			));
+			
+			$ti->define_data(array(
+				"taotleja" => "hanne2s",
+			));
+			
+			$ti->define_data(array(
+				"taotleja" => "kirsman",
+			));
+			
+			arr($ti->draw(), true);
+			*/
+			arr($a_tables, true);
+			arr($mt_wiki_tables, true);
+		}
+	}
+	
+	function _parse_wiki_table_parse_array_to_html($a_table)
+	{
+		arr($a_table, 1);
+	}
+	
+	function _parse_wiki_table_get_to_array($s_table)
+	{
+		$a_out = array();
+		
+		// header
+		{
+			// table atribs
+			preg_match("/{\|\s(.*)\r\n/U", $s_table, $mt );
+			$a_out["table_atributes"] = $mt[1];
+			
+			// table header
+			preg_match("/.*\|\-(.*)\|\-/imsU", $s_table, $mt);
+			// if cell contains style elements then deal with it in
+			// _parse_wiki_table_parse_array_to_html($a_table)
+			preg_match_all("/!\s(.*)\r\n/imsU", $mt[1], $a_table_header);
+			$a_out["data"]["header"] = $a_table_header[1];
+		}
+		// rows
+		{
+			
+			preg_match("/.*\|\-.*\|-(.*)\|}/imsU", $s_table, $mt);
+			$rows = explode ("|-", $mt[1] );
+			foreach($rows as $key => $var)
+			{
+				$cols = explode("| ", $var);
+				unset ($cols[0]);
+				$a_out["data"]["rows"][] = $cols;
+			}
+		}
+		
+		return $a_out;
+	}
+	
+	function _parse_wiki_links($str)
+	{
+		$a_pattern = array();
+		$a_replacement = array();
+		
+		$a_pattern[] = "/\[([http|https].*)\s{1}(.*)\]/U";
+		$a_replacement[] = html::href(array(
+			"url" => "\\1",
+			"rel" => "nofollow",
+			"caption" => "\\2",
+		));
+		$a_pattern[] = "/\[([http|https].*)\]/U";
+		$a_replacement[] = html::href(array(
+			"url" => "\\1",
+			"rel" => "nofollow",
+			"caption" => "[<?php if (!isset(\$i_tmp_link_counter)){\$i_tmp_link_counter = 1;} echo \$i_tmp_link_counter++; ?>]",
+		));
+		$str = preg_replace  ( $a_pattern  , $a_replacement  , $str );
+	}
+	
+	function _parse_wiki_sign($str, $doc)
+	{
+		if (strpos($str, "~~~")!== false )
+		{
+			$ts = $doc->created();
+			$i_month = (int)gmdate( "n",  $ts);
+			$s_month = ucfirst(locale::get_lc_month($i_month));
+			$s_created  = gmdate( "H:i, j ",  $ts).$s_month." ". gmdate( "Y (\U\TC)",  $ts);
+			
+			$a_pattern = array();
+			$a_replacement = array();
+			$a_pattern[] = "/~~~~~/";
+			$a_replacement[] = $s_created;
+			$a_pattern[] = "/~~~~/";
+			$a_replacement[] = aw_global_get("uid")." ".$s_created;
+			$a_pattern[] = "/~~~/";
+			$a_replacement[] = aw_global_get("uid");
+			$str = preg_replace  ( $a_pattern  , $a_replacement  , $str );
+		}
+	}
+	
+	function _parse_wiki_fontstyle($str)
+	{
+		if (strpos($str, "''")!== false)
+		{
+			$a_pattern = array();
+			$a_replacement = array();
+			$a_pattern[] = "/'''''(.*)'''''/U";
+			$a_replacement[] = "<b><i>\\1</i></b>";
+			$a_pattern[] = "/''''(.*)''''/U";
+			$a_replacement[] = "<b>'\\1'</b>"; // don't do anything special... just 1 pair ' is over
+			$a_pattern[] = "/'''(.*)'''/U";
+			$a_replacement[] = "<b>\\1</b>";
+			$a_pattern[] = "/''(.*)''/U";
+			$a_replacement[] = "<i>\\1</i>";
+			$str = preg_replace  ( $a_pattern  , $a_replacement  , $str );
+		}
+	}
+	
+	// because 2 br's dont't make paragraph
+	function _parse_wiki_create_paragraphs($str)
+	{
+		if (strlen(trim($str))>0)
+		{
+			$str = "<p>$str</p>";
+			$str = str_replace  ( "\r\n\r\n", "</p><p>", $str );
+		}
 	}
 	
 	function _parse_wiki_titles($str)
@@ -552,6 +745,7 @@ class doc_display extends aw_template
 		$tmp = $str;
 		$a_text = array();
 		
+		// read lines to array
 		while ( strlen(trim( $tmp)) > 0 )
 		{
 			if (preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt))
@@ -562,46 +756,148 @@ class doc_display extends aw_template
 			{
 				$tmp = preg_replace  ( "/^(.*)$/U"  , "" , $tmp );
 			}
-			$a_text[] = $mt[1];
+			$a_text[] = array ("text" => $mt[1]);
 		}
 		
-		
+		// get more info to $a_text:
+		// recursion level
+		// list type (ordered, unordered)
 		$tmp = "";
-		
-		$working_on_list = false;
-		for ($i=0;$i<count($a_text);$i++)
+		$b_doc_containts_list = false;
+		$i_text_count = count($a_text);
+		$i_current_unordered_list_max_recursion=0;
+		$i_current_ordered_list_max_recursion=0;
+		for ($i=0;$i<$i_text_count;$i++)
 		{
-			if ( preg_match  ( "/\*(.*)/U" , $a_text[$i], &$mt)  )
+			$a_tmp = $this->_parse_wiki_lists_get_info_about_listitem_at_line($a_text[$i]["text"]);
+			$a_text[$i]["listlevel"] = $a_tmp["listlevel"] == "same_as_last" ? $a_text[$i-1]["listlevel"] : $a_tmp["listlevel"];
+			$a_text[$i]["listype"] = $a_tmp["listype"];
+		}
+		
+		// and finally output the list
+		for ($i=0;$i<$i_text_count;$i++)
+		{
+			if ($a_text[$i]["listype"] == "unordered")
 			{
-				$a_text[$i] = substr  ($a_text[$i], 2);
-				if ($working_on_list == false)
-				{
-					$tmp .= "<ul>";
-					$tmp .= "<li>".$a_text[$i]."</li>";
-					$working_on_list = true;
-				}
-				else
-				{
-					$tmp .= "<li>".$a_text[$i]."</li>";
-				}
+				$s_list_prefix = "<ul>";
+				$s_list_sufix = "</ul>";
+				$s_list_item = "<li>";
+			}
+			else if ($a_text[$i]["listype"] == "ordered")
+			{
+				$s_list_prefix = "<ol>";
+				$s_list_sufix = "</ol>";
+				$s_list_item = "<li>";
+			}
+			else if ($a_text[$i]["listype"] == "definitionlist")
+			{
+				$s_list_prefix = "<dl>";
+				$s_list_sufix = "</dl>";
+				$s_list_item = "<dd>";
+			}
+			
+			if ($a_text[$i-1]["listlevel"]==1 && $a_text[$i]["listlevel"]==0)
+			{
+				$tmp .= $s_list_sufix;
+				$tmp .= $a_text[$i]["text"]."\r\n";
+			}
+			else if ($a_text[$i]["listlevel"]==0 && $a_text[$i+1]["listlevel"]==0)
+			{
+				$tmp .= $a_text[$i]["text"]."\r\n";
+			}
+			else if ($a_text[$i]["listlevel"]==0 && $a_text[$i+1]["listlevel"]==1)
+			{
+				$tmp .= $a_text[$i]["text"]."\r\n";
+				$tmp .= $s_list_prefix;
 			}
 			else
 			{
-				if ($working_on_list == true)
+				// start list
+				if ($a_text[$i-1]["listlevel"]<$a_text[$i]["listlevel"])
 				{
-					$tmp .= "</ul>";
-					$tmp .= $a_text[$i]."\r\n";
-					$working_on_list = false;
+					$tmp .= $s_list_prefix;
+				}
+				
+				// listitems
+				if (strpos  ( $a_text[$i]["text"], "*:" ) === false || strpos  ( $a_text[$i]["text"], "#:" ) === false )
+				{
+					preg_match("/^.*\s(.*)$/imU", $a_text[$i]["text"], $mt);
+					$a_text[$i]["text"] = $mt[1];
+					$tmp .= $s_list_item.$a_text[$i]["text"];
 				}
 				else
 				{
-					$tmp .=  $a_text[$i]."\r\n";
-					
+					$tmp .= "<br>".$a_text[$i]["text"];
+				}
+				
+				// end list
+				if ($a_text[$i]["listlevel"]>$a_text[$i+1]["listlevel"])
+				{
+					$i_level_offset = $a_text[$i]["listlevel"]-$a_text[$i+1]["listlevel"];
+					for ($j=0;$j<$i_level_offset;$j++)
+					{
+						$tmp .= $s_list_sufix;
+					}
 				}
 			}
 		}
 		
+		// for debug
+		if (count($a_text)>4)
+		{
+		//arr($a_text,1);
+		//arr($tmp,1);
+		}
 		$str = $tmp;
+	}
+	
+	function _parse_wiki_lists_get_info_about_listitem_at_line($s_line)
+	{
+		if ( preg_match  ( "/^(\*.*)\s/U" , $s_line, $mt) )
+		{
+			if (strpos  ( $s_line, "*:" ) !== false )
+			{
+				return array (
+						"listlevel" => "same_as_last",
+						"listype" => "unordered",
+				);
+			}
+			
+			return array (
+				"listlevel" => strlen($mt[1]),
+				"listype" => "unordered",
+			);
+		}
+		
+		if ( preg_match  ( "/^(\#.*)\s/U" , $s_line, $mt) )
+		{
+			if (strpos  ( $s_line, "#:" ) !== false )
+			{
+				return array (
+						"listlevel" => "same_as_last",
+						"listype" => "ordered",
+				);
+			}
+			
+			return array (
+				"listlevel" => strlen($mt[1]),
+				"listype" => "ordered",
+			);
+		}
+		
+		if ( preg_match  ( "/^(:*)\s/U" , $s_line, $mt) )
+		{
+			return array (
+				"listlevel" => strlen($mt[1]),
+				"listype" => "definitionlist",
+			);
+			
+		}
+		
+		return array (
+			"listlevel" => "0",
+			"listype" => "",
+		);
 	}
 	
 	function _parse_youtube_links($str)
