@@ -90,6 +90,39 @@ class crm_company_obj extends _int_object
 
 		return number_format($sum , 2);
 	}
+	
+	// Since the crm_company object is sometimes handled as school...
+	function get_students($arr)
+	{
+		$ret = new object_list;
+
+		// Student is connected to the school via education object.
+		$cs = connection::find(array(
+			"from" => array(),
+			"to" => $arr["id"],
+			"type" => "RELTYPE_SCHOOL",
+			"from.class_id" => CL_CRM_PERSON_EDUCATION,
+		));
+		if(count($cs) > 0)
+		{
+			$schids = array();
+			foreach($cs as $c)
+			{
+				$schids[] = $c["from"];
+			}
+			$cs = connection::find(array(
+				"from" => array(),
+				"to" => $schids,
+				"from.class_id" => CL_CRM_PERSON,
+			));
+			foreach($cs as $c)
+			{
+				$ret->add($c["from"]);
+			}
+		}
+
+		return $ret;
+	}
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-class crm_phone_obj extends _int_object
+class ml_member_obj extends _int_object
 {
 	/*
 		@param id required type=oid,array(oid)
@@ -9,11 +9,11 @@ class crm_phone_obj extends _int_object
 	{
 		$ret = new object_list;
 
-		// The phone might be connected to the person via work relation.
+		// The e-mail might be connected to the person via work relation.
 		$cs = connection::find(array(
 			"from" => array(),
 			"to" => $arr["id"],
-			"type" => "RELTYPE_PHONE",
+			"type" => "RELTYPE_EMAIL",
 			"from.class_id" => CL_CRM_PERSON_WORK_RELATION,
 		));
 		if(count($cs) > 0)
@@ -36,7 +36,7 @@ class crm_phone_obj extends _int_object
 		$cs = connection::find(array(
 			"from" => array(),
 			"to" => $arr["id"],
-			"type" => "RELTYPE_PHONE",
+			"type" => "RELTYPE_EMAIL",
 			"from.class_id" => CL_CRM_PERSON,
 		));
 		foreach($cs as $c)
