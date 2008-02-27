@@ -13,6 +13,26 @@ class crm_person_obj extends _int_object
 			// create&connect box
 		}
 	}
+
+	function prop($k)
+	{
+		if ($k == "work_contact")
+		{
+			return $this->find_work_contact();
+		}
+		return parent::prop($k);
+	}
+
+	function find_work_contact()
+	{
+		$o = obj($this->id());
+		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+		if (!$org_rel)
+		{
+			return false;
+		}
+		return $org_rel->prop("org");
+	}
 }
 
 ?>
