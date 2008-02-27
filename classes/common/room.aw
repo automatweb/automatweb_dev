@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.231 2008/02/27 09:32:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.232 2008/02/27 14:31:55 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2082,6 +2082,10 @@ class room extends class_base
 						{
 							$last_bron = obj($this->last_bron_id);
 							$cus = $settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON");
+							if($last_bron->prop("time_closed") && $settings->prop("closed_time_string"))
+							{
+								$cus = $settings->prop("closed_time_string");
+							}
 							$title = $phone = "";
 							$imgstr = "";
 							$codes = array();
