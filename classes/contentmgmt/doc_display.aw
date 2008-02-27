@@ -524,7 +524,7 @@ class doc_display extends aw_template
 		// ~~~~ = username date/time (UTC)
 		// ~~~~~ = date/time alone (UTC)
 		$this->_parse_wiki_sign(& $str, $doc);
-		//$this->_parse_wiki_table(& $str);
+		$this->_parse_wiki_table(& $str);
 	}
 	
 	function _parse_wiki_table($str)
@@ -557,54 +557,71 @@ class doc_display extends aw_template
 			$ti = get_instance("vcl/table");
 			$ti = new aw_table();
 			$ti->set_layout("generic");
+			$i_tableid=0;
 			foreach($a_tables as $key => $var)
 			{
-				//$s_tables[] = $this->_parse_wiki_table_parse_array_to_html( $a_tables[$key] );
+				$s_tables[] = $this->_parse_wiki_table_parse_array_to_html( $a_tables[$key], $i_tableid++ );
 			}
 			
+			for ($i=0;$i<count($s_tables);$i++)
+			{
+				$str = preg_replace  ("/{\|.*\|}/imsU",  $s_tables[$i], $str, 1);
+			}
 			
-			
-			/*
-			$ti->define_field(array(
-				"name" => "taotleja",
-				"caption" => t("Taotleja"),
-				"sortable" => 1,
-				"align" => "center"
-			));
-			
-			$ti->define_data(array(
-				"taotleja" => "hannes",
-			));
-			
-			$ti->define_data(array(
-				"taotleja" => "kirsman",
-			));
-			
-			$ti->define_field(array(
-				"name" => "taotleja",
-				"caption" => t("Taotleja"),
-				"sortable" => 1,
-				"align" => "center"
-			));
-			
-			$ti->define_data(array(
-				"taotleja" => "hanne2s",
-			));
-			
-			$ti->define_data(array(
-				"taotleja" => "kirsman",
-			));
-			
-			arr($ti->draw(), true);
-			*/
-			arr($a_tables, true);
-			arr($mt_wiki_tables, true);
+			//arr($a_tables, true);
+			//arr($mt_wiki_tables, true);
 		}
 	}
 	
-	function _parse_wiki_table_parse_array_to_html($a_table)
+	function _parse_wiki_table_parse_array_to_html($a_table, $i_tableid)
 	{
-		arr($a_table, 1);
+		$ti = get_instance("vcl/table");
+		$ti = new aw_table();
+		$ti->set_layout("generic");
+		
+		// header
+		$i_colnr =0;
+		foreach ($a_table["data"]["header"] as $key => $val)
+		{
+			if (strpos  ($val, "|") > 0)
+			{
+				$s_name = end(explode("|", $val));
+			}
+			else
+			{
+				$s_name = $val;
+			}
+			$ti->define_field(array(
+				"name" => $i_tableid."_col_".$i_colnr++,
+				"caption" => $s_name,
+				"sortable" => 1,
+				"align" => "left"
+			));
+		}
+		
+		// rows
+		foreach ($a_table["data"]["rows"] as $key => $val)
+		{
+			$i_colnr =0;
+			$a_define_data = array();
+			foreach ($a_table["data"]["rows"][$key] as $key2 => $val2)
+			{
+				if (strpos  ($val2, "|") > 0)
+				{
+					$s_data = end(explode("|", $val2));
+				}
+				else
+				{
+					$s_data = $val2;
+				}
+			
+				$a_define_data[$i_tableid."_col_".$i_colnr] = $s_data;
+				$i_colnr++;
+			}
+			$ti->define_data($a_define_data);
+		}
+		
+		return $ti->draw();
 	}
 	
 	function _parse_wiki_table_get_to_array($s_table)
