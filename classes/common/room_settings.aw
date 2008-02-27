@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.29 2008/02/07 11:54:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.30 2008/02/27 09:32:46 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -95,6 +95,12 @@
 
 	@property closed_time_string type=textbox 
 	@caption Kinnise aja string
+
+	@property available_time_string type=textbox 
+	@caption Vaba aja string
+
+	@property reserved_time_string type=textbox 
+	@caption Broneeritud aja string
 
 	@property bron_popup_detailed type=checkbox ch_value=1
 	@caption Broneerimisaken on detailse sisuga

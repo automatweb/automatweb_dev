@@ -314,9 +314,16 @@ class crm_working_time_scenario extends class_base
 			");
 		}
 
-		$scenario = obj($arr["scenario"]);	
+		$scenario = obj($arr["scenario"]);
+		$scenario->set_room($arr["room"]);
 	
 		$scenario_data = $scenario->get_scenario_data();
+		if(is_oid($arr["scenario"]) && is_oid($arr["person"]))
+		{
+			$pers = obj($arr["person"]);
+			$pers->set_meta("last_used_working_scenario" , $arr["scenario"]);
+			$pers->save();
+		}
 
 		$start = date_edit::get_timestamp($arr["start"]);
 		$end = date_edit::get_timestamp($arr["end"]);

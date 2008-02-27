@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.42 2008/02/26 18:58:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.43 2008/02/27 09:32:52 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -641,8 +641,8 @@ class spa_bookings_overview extends class_base
 		}
 
 		//broneerimis aja järgi
-		$from = date_edit::get_timestamp($arr["request"]["r_rs_booking_from"]);
-		$to = date_edit::get_timestamp($arr["request"]["r_rs_booking_to"]);
+		$from = date_edit::get_timestamp($r_ra_booking_from);
+		$to = date_edit::get_timestamp($r_ra_booking_to);
 		if ($from > 1)
 		{
 			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);

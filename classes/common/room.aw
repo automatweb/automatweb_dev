@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.230 2008/02/25 16:41:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.231 2008/02/27 09:32:46 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -692,6 +692,30 @@ class room extends class_base
 		{
 			$this->_save_img_ord(&$arr);
 		}
+
+		if($arr["request"]["add_scenario"])
+		{
+			$o = obj($arr["request"]["id"]);
+			if(substr_count($arr["request"]["add_scenario"],","))
+			{
+				$csa = explode("," , $arr["request"]["add_scenario"]);
+			}
+			else
+			{
+				$csa = array($arr["request"]["add_scenario"]);
+			}
+			foreach($csa as $cs)
+			{
+				if(is_oid($cs))
+				{
+					$o->connect(array(
+						"to" => $cs,
+						"reltype" => "RELTYPE_WORKING_SCENARIO",
+					));
+				}
+			}
+		}
+
 		if ($arr["request"]["set_view_dates"])
 		{
 			$arr["args"]["start"] = date_edit::get_timestamp($arr["request"]["set_d_from"]);
@@ -744,6 +768,7 @@ class room extends class_base
 		$arr["set_view_dates"] = " ";
 		$arr["set_oh"] = " ";
 		$arr["set_ps"] = " ";
+		$arr["add_scenario"] = " ";
 	}
 
 	////////////////////////////////////
@@ -1698,8 +1723,8 @@ class room extends class_base
 	function _get_hidden_fields($arr)
 	{
 		$ret = html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
-		$ret.=html::hidden(array("name" => "free_field_value", "id"=>"free_field_value" ,"value"=>"VABA"));
-		$ret.=html::hidden(array("name" => "res_field_value", "id"=>"res_field_value" ,"value"=>"BRON"));
+		$ret.=html::hidden(array("name" => "free_field_value", "id"=>"free_field_value" ,"value"=>($this->settings && $this->settings->prop("available_time_string"))?$this->settings->prop("available_time_string") :t("VABA")));
+		$ret.=html::hidden(array("name" => "res_field_value", "id"=>"res_field_value" ,"value"=>($this->settings && $this->settings->prop("reserved_time_string"))?$this->settings->prop("reserved_time_string") :t("BRON")));
 		$ret.=html::hidden(array("name" => "do_field_value", "id"=>"do_field_value" ,"value"=>"Broneeri"));
 		
 		return $ret;
@@ -1707,7 +1732,7 @@ class room extends class_base
 
 	function _get_calendar_select($arr)
 	{
-		$settings = $this->get_settings_for_room($arr["obj_inst"]);
+		$this->settings = $settings = $this->get_settings_for_room($arr["obj_inst"]);
 		
 		$ret = "";
 		$ret .= $this->_get_mark_arrived_pop($arr, $settings);
@@ -2036,7 +2061,7 @@ class room extends class_base
 								$prod_menu = "";
 							}
 							$val = 0;
-							$string = t("VABA");
+							$string = $settings->prop("available_time_string")?$settings->prop("available_time_string") :t("VABA");
 							$col[$x] = "#E1E1E1";
 							if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
 							{
@@ -2056,7 +2081,7 @@ class room extends class_base
 						if(is_oid($this->last_bron_id) && !$arr["web"])
 						{
 							$last_bron = obj($this->last_bron_id);
-							$cus = t("BRON");
+							$cus = $settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON");
 							$title = $phone = "";
 							$imgstr = "";
 							$codes = array();
@@ -2320,7 +2345,7 @@ class room extends class_base
 						else
 						{
 							$col[$x] = "#EE6363";
-					 		$d[$x] ="<span><font color=#26466D>".t("BRON")."</FONT></span>";
+					 		$d[$x] ="<span><font color=#26466D>".$settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON")."</FONT></span>";
 						}
 						$onclick[$x] = "";
 					}
@@ -5946,8 +5971,43 @@ class room extends class_base
 		}
 
 		$pl = $this->get_people_for_oh($arr["obj_inst"]);
+
+		$new_sc = html::href(array(
+			"url" => html::get_new_url(
+				CL_CRM_WORKING_TIME_SCENARIO,
+				$arr["obj_inst"]->id(),
+				array(
+					"alias_to" => $arr["obj_inst"]->id(),
+					"reltype" => 47,
+					"return_url" => get_ru()
+				)
+			),
+			"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/new.gif' border=0>",
+			"title" => t("Lisa uus t&ouml;&ouml;aja stsenaarium"),
+		));
+
+
+
+		$url = $this->mk_my_orb("do_search", array(
+			"pn" => "add_scenario",
+			"clid" => CL_CRM_WORKING_TIME_SCENARIO,
+		), "popup_search", false, true);
+
+		$search_sc = html::href(array(
+			"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+			"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+			"title" => t("Otsi")
+		));
+
+
 		foreach($pl->arr() as $po)
 		{
+			$person_scenario = $po->meta("last_used_working_scenario");
+			$edit_sc = html::href(array(
+				"url" => html::get_change_url($person_scenario, array("return_url" => get_ru())),
+					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
+					"title" => t("Muuda")
+			));
 			$data = array();
 			$data["name"] = $po->name();
 			$data["start"] = html::date_select(array(
@@ -5961,9 +6021,9 @@ class room extends class_base
 
 			$data["scenario"] = html::select(array(
 				"name" => "scenario[".$po->id()."][scenario]",
-//				"value" => $start1,
+				"value" => $person_scenario,
 				"options" => $soptions,
-			));
+			)).$new_sc.$search_sc.($person_scenario ? $edit_sc : "");
 			$data["oid"] = $po->id();
 			$t->define_data($data);
 		}

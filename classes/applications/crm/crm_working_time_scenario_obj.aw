@@ -47,6 +47,14 @@ class crm_working_time_scenario_obj extends _int_object
 		$this->set_meta("scenario_data" , $data);
 	}
 
+	function set_room($room)
+	{
+		if(is_oid($room) && $this->can("view" , $room))
+		{
+			$this->room = $room;
+		}
+	}
+
 	function get_date_options($d)
 	{
 		$ret = "";
@@ -58,10 +66,21 @@ class crm_working_time_scenario_obj extends _int_object
 			$weekday = 6;
 		}
 		//arr(date("w" , $d));
+		$room_inst = get_instance(CL_ROOM);
 		foreach($sd[$weekday] as $opt)
 		{
 			$time = mktime($opt["start"]["hour"],$opt["start"]["minute"],0,date("m",$d),date("d",$d),date("Y",$d));
-			$ret.= html::checkbox(array("name" => "bron_times[".$time."][accept]" , "checked" => 1));
+			$na = 0;
+			if($this->room)
+			{
+				$na = !$room_inst->check_if_available(array(
+					"room" => $this->room,
+					"start" => mktime($opt["start"]["hour"],$opt["start"]["minute"],0,date("m",$d),date("d",$d),date("Y",$d)),
+					"end" => mktime($opt["end"]["hour"],$opt["end"]["minute"],0,date("m",$d),date("d",$d),date("Y",$d)),
+					"ignore_deadline" => 1,
+				));
+			}
+			$ret.= html::checkbox(array("name" => "bron_times[".$time."][accept]" , "checked" => $na?0:1));
 			$ret.= "";
 			$ret.= html::time_select(array("name" => "bron_times[".$time."][start]" , "value" => $opt["start"]));
 			$ret.= "-";
@@ -72,6 +91,10 @@ class crm_working_time_scenario_obj extends _int_object
 				$ret.= html::hidden(array("name" => "bron_times[".$time."][is_pause]" , "value" => 1));
 				$ret.= html::hidden(array("name" => "bron_times[".$time."][pause_reason]" , "value" => $opt["pause_reason"]));
 				$ret.= $opt["pause_reason"];
+			}
+			if($na)
+			{
+				$ret.= t("Sellel ajal on juba broneering");
 			}
 			$ret.= "\n<br>";
 		}
