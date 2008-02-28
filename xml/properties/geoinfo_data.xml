@@ -51,7 +51,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 1</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 1</caption>
       </property>
       <property>
             <name>userta1</name>
@@ -62,7 +62,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 2</caption>
+            <caption>Kasutaja defineeritud kast 1</caption>
       </property>
       <property>
             <name>usertf2</name>
@@ -71,7 +71,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 3</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 2</caption>
       </property>
       <property>
             <name>userta2</name>
@@ -82,7 +82,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 4</caption>
+            <caption>Kasutaja defineeritud kast 2</caption>
       </property>
       <property>
             <name>usertf3</name>
@@ -91,7 +91,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 5</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 3</caption>
       </property>
       <property>
             <name>userta3</name>
@@ -102,7 +102,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 6</caption>
+            <caption>Kasutaja defineeritud kast 3</caption>
       </property>
       <property>
             <name>usertf4</name>
@@ -111,7 +111,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 7</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 4</caption>
       </property>
       <property>
             <name>userta4</name>
@@ -122,7 +122,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 8</caption>
+            <caption>Kasutaja defineeritud kast 4</caption>
       </property>
       <property>
             <name>usertf5</name>
@@ -131,7 +131,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 9</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 5</caption>
       </property>
       <property>
             <name>userta5</name>
@@ -142,7 +142,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 10</caption>
+            <caption>Kasutaja defineeritud kast 5</caption>
       </property>
       <property>
             <name>usertf6</name>
@@ -151,7 +151,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 11</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 6</caption>
       </property>
       <property>
             <name>userta6</name>
@@ -162,7 +162,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 12</caption>
+            <caption>Kasutaja defineeritud kast 6</caption>
       </property>
       <property>
             <name>usertf7</name>
@@ -171,7 +171,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 13</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 7</caption>
       </property>
       <property>
             <name>userta7</name>
@@ -182,7 +182,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 14</caption>
+            <caption>Kasutaja defineeritud kast 7</caption>
       </property>
       <property>
             <name>usertf8</name>
@@ -191,7 +191,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 15</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 8</caption>
       </property>
       <property>
             <name>userta8</name>
@@ -202,7 +202,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 16</caption>
+            <caption>Kasutaja defineeritud kast 8</caption>
       </property>
       <property>
             <name>usertf9</name>
@@ -211,7 +211,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 17</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 9</caption>
       </property>
       <property>
             <name>userta9</name>
@@ -222,7 +222,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 18</caption>
+            <caption>Kasutaja defineeritud kast 9</caption>
       </property>
       <property>
             <name>usertf10</name>
@@ -231,7 +231,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 19</caption>
+            <caption>Kasutaja defineeritud v&amp;amp;auml;li 10</caption>
       </property>
       <property>
             <name>userta10</name>
@@ -242,7 +242,7 @@
             <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasutaja defineeritud 20</caption>
+            <caption>Kasutaja defineeritud kast 10</caption>
       </property>
       <property>
             <name>icon_t</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_data.aw,v 1.4 2008/01/31 13:49:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/geoinfo/geoinfo_data.aw,v 1.5 2008/02/28 13:53:47 robert Exp $
 // geoinfo_data.aw - Geoinfo andmed 
 /*
 
@@ -26,64 +26,64 @@
 @default group=usert
 
 	@property usertf1 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 1
+	@caption Kasutaja defineeritud v&auml;li 1
 
 	@property userta1 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 2
+	@caption Kasutaja defineeritud kast 1
 
 	@property usertf2 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 3
+	@caption Kasutaja defineeritud v&auml;li 2
 
 	@property userta2 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 4
+	@caption Kasutaja defineeritud kast 2
 
 	@property usertf3 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 5
+	@caption Kasutaja defineeritud v&auml;li 3
 
 	@property userta3 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 6
+	@caption Kasutaja defineeritud kast 3
 
 	@property usertf4 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 7
+	@caption Kasutaja defineeritud v&auml;li 4
 
 	@property userta4 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 8
+	@caption Kasutaja defineeritud kast 4
 
 	@property usertf5 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 9
+	@caption Kasutaja defineeritud v&auml;li 5
 
 	@property userta5 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 10
+	@caption Kasutaja defineeritud kast 5
 
 	@property usertf6 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 11
+	@caption Kasutaja defineeritud v&auml;li 6
 
 	@property userta6 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 12
+	@caption Kasutaja defineeritud kast 6
 
 	@property usertf7 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 13
+	@caption Kasutaja defineeritud v&auml;li 7
 
 	@property userta7 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 14
+	@caption Kasutaja defineeritud kast 7
 
 	@property usertf8 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 15
+	@caption Kasutaja defineeritud v&auml;li 8
 
 	@property userta8 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 16
+	@caption Kasutaja defineeritud kast 8
 
 	@property usertf9 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 17
+	@caption Kasutaja defineeritud v&auml;li 9
 
 	@property userta9 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 18
+	@caption Kasutaja defineeritud kast 9
 
 	@property usertf10 type=textbox field=meta method=serialize
-	@caption Kasutaja defineeritud 19
+	@caption Kasutaja defineeritud v&auml;li 10
 
 	@property userta10 type=textarea cols=46 rows=3 field=meta method=serialize
-	@caption Kasutaja defineeritud 20
+	@caption Kasutaja defineeritud kast 10
 
 @default group=pm_styles
 	
