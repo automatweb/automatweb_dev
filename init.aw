@@ -1391,8 +1391,10 @@ function __autoload($class_name)
 			{
 				try
 				{
-					$class_file = class_index::get_file_by_name(basename($class_name));
-					echo "Invalid class name: '" . $class_name . "'. ";
+					$tmp = $class_name;
+					$class_name = basename($class_name);
+					$class_file = class_index::get_file_by_name($class_name);
+					echo "Invalid class name: '" . $tmp . "'. ";
 					require_once($class_file);
 				}
 				catch (awex_clidx $e)
