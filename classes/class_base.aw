@@ -1453,7 +1453,7 @@ class class_base extends aw_template
 
 		$clid = $this->clid;
 
-		if (empty($clid) && method_exists(basename($orb_class), "get_opt"))
+		if (empty($clid) && is_object($this->orb_class) && method_exists($this->orb_class, "get_opt"))
 		{
 			$clid = $this->orb_class->get_opt("clid");
 		};
