@@ -4256,8 +4256,23 @@ class crm_person extends class_base
 		}
 		$person_obj = &obj($person_obj->prop("from"));
 
-		$email_obj = &obj($person_obj->prop("email"));
-		$phone_obj = &obj($person_obj->prop("phone"));
+		$email_addr = "";
+		if ($this->can("view", $person_obj->prop("email")))
+		{
+			$email_obj = &obj($person_obj->prop("email"));
+			$email_addr = $email_obj->prop("email");
+		}
+		else
+		if (is_email($person_obj->prop("email")))
+		{
+			$email_addr = $person_obj->prop("email");
+		}
+
+		$phone_obj = obj();
+		if ($this->can("view", $person_obj->prop("phone")))
+		{
+			$phone_obj = &obj($person_obj->prop("phone"));
+		}
 
 		$this->read_template($arr["cv"]);
 
@@ -4467,8 +4482,8 @@ class crm_person extends class_base
 			"birthday" => date("d.m.Y", $bd),
 			"social_status" => $person_obj->prop("social_status"),
 			"mail" => html::href(array(
-				"url" => "mailto:" . $email_obj->prop("mail"),
-				"caption" => $email_obj->prop("mail"),
+				"url" => "mailto:" . $email_addr,
+				"caption" => $email_addr,
 			)),
 			"phone" => $phone_obj->name(),
 			"sectors" => $tmp_sectors,
