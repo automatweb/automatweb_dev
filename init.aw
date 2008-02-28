@@ -1,5 +1,5 @@
 <?php
-// 1Äripäeva,
+// 1Äripäeva1,
 
 // this should be here, url parsing and variable initialization
 // should be the first thing that is done
