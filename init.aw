@@ -1385,6 +1385,18 @@ function __autoload($class_name)
 		}
 		catch (awex_clidx $e)
 		{
+			if (basename($class_name) !== $class_name)
+			{
+				try
+				{
+					$class_file = class_index::get_file_by_name(basename($class_name));
+					echo "Invalid class name: '" . $class_name . "'";
+				}
+				catch (awex_clidx $e)
+				{
+					//!!! take action
+				}
+			}
 			//!!! take action
 		}
 	}
