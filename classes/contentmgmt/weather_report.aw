@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.4 2008/01/31 13:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.5 2008/02/28 12:25:38 robert Exp $
 // weather_report.aw - Ilmateade 
 /*
 
@@ -16,6 +16,9 @@
 
 @property cache_time type=textbox field=meta method=serialize
 @caption Cache uuendusaeg (h)
+
+@property pic_url type=textbox field=meta method=serialize
+@caption Piltide url
 
 @property pic_list type=textarea cols=60 rows=4 field=meta method=serialize
 @caption Pildid (nt Light rain=rain.gif)
@@ -128,8 +131,13 @@ class weather_report extends class_base
 					$val = trim(implode(':', $field));
 					if($prop == "Conditions")
 					{
+						$pic_url = $ob->prop("pic_url");
+						if(empty($pic_url))
+						{
+							$pic_url = "http://icons-pe.wxug.com/graphics/conds/";
+						}
 						$src = strtolower(str_replace(" ","",$val));
-						$imgsrc = "http://icons-pe.wxug.com/graphics/conds/".$src.".GIF";
+						$imgsrc = $pic_url.$src.".GIF";
 						if(!@fopen($imgsrc, "r"))
 						{
 							$piclist = $ob->prop("pic_list");

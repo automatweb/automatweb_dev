@@ -28,6 +28,15 @@
             <caption>Cache uuendusaeg (h)</caption>
       </property>
       <property>
+            <name>pic_url</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Piltide url</caption>
+      </property>
+      <property>
             <name>pic_list</name>
             <table>objects</table>
             <group>general</group>
