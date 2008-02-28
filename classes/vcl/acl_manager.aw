@@ -118,7 +118,6 @@ class acl_manager extends class_base
 				"site_id" => array()
 			)),
 			"var" => "grp_id",
-			"icon" => icons::get_icon_url(CL_GROUP)
 		));
 
 		$this->vars(array(
