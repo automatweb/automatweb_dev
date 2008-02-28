@@ -88,7 +88,7 @@
 			@caption
 
 			@property add_grp_name type=textbox store=no parent=add_grp
-			@comment Süsteemne identifitseerija tabile. Ainult ladina tähestiku tähed ning alakriips ( _ ) lubatud. Vähim pikkus 2.
+			@comment S&uuml;steemne identifitseerija tabile. Ainult ladina t&auml;hestiku t&auml;hed ning alakriips ( _ ) lubatud. V&auml;him pikkus 2.
 			@caption Nimi
 
 			@property add_grp_caption type=textbox store=no parent=add_grp
@@ -141,7 +141,7 @@
 	@caption Kontrollerid
 
 	@property default_table type=table group=defaults no_caption=1
-	@caption Vaikimisi väärtused
+	@caption Vaikimisi v&auml;&auml;rtused
 
 	@property trans_tbl_capt type=text subtitle=1 group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12
 	@caption Omadused
@@ -303,11 +303,11 @@ class cfgform extends class_base
 	/*
 	Format: array(
 		group_name => array(
-            [caption] => Üldine
+            [caption] => Yldine
             [default] => 1 // exclusive 1 or null
             [icon] => edit
             [focus] => name // name of property to get focus on page load. default null
-            [orig_caption] => Üldine
+            [orig_caption] => Yldine
             [parent] => work // parent group. optional
             [submit] => no // don't show submit button. default null
 		), ...
@@ -799,11 +799,11 @@ class cfgform extends class_base
 		));
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => t("Tüüp"),
+			"caption" => t("T&uuml;&uuml;p"),
 		));
 		$t->define_field(array(
 			"name" => "value",
-			"caption" => t("Väärtus"),
+			"caption" => t("V&auml;&auml;rtus"),
 		));
 
 		$props = $this->get_props_from_cfgform(array(
@@ -819,7 +819,7 @@ class cfgform extends class_base
 				// so, how do I determine whether this property has a default or not?
 				// kas ma pean kuhugi kirja panema selle asja?
 
-				// eino, asi on ikka näitamises ju eksole. mitte salvestamises
+				// eino, asi on ikka n&auml;itamises ju eksole. mitte salvestamises
 				$pname = $arr["prop"]["name"];
 				$t->define_data(array(
 					"name" => $prop["caption"] . "(" . $prop["name"] . ")",
@@ -893,7 +893,7 @@ class cfgform extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "act",
-			"caption" => t("Süsteemi default"),
+			"caption" => t("S&uuml;steemi default"),
 			"align" => "center",
 			"width" => 85,
 		));
@@ -927,7 +927,7 @@ class cfgform extends class_base
 				"value" => 0,
 				"checked" => 0 == $active,
 			)),
-			"name" => t("Ära kasuta vormi"),
+			"name" => t("&Auml;ra kasuta vormi"),
 		));
 
 		foreach($ol->arr() as $o)
@@ -1870,7 +1870,7 @@ class cfgform extends class_base
 								"richtext_caption" => t("RTE"),
 								"richtext_checked" => checked($property["richtext"] == 1),
 								"richtext" => $property["richtext"],
-								"rows_caption" => t("Kõrgus"),
+								"rows_caption" => t("K&otilde;rgus"),
 								"rows" => $property["rows"],
 								"cols_caption" => t("Laius"),
 								"cols" => $property["cols"],
@@ -2149,7 +2149,7 @@ class cfgform extends class_base
 			"capt_prp_order" => t("Jrk."),
 			"capt_prp_key" => t("Nimi"),
 			"capt_prp_caption" => t("Pealkiri"),
-			"capt_prp_type" => t("Tüüp")
+			"capt_prp_type" => t("T&uuml;&uuml;p")
 		));
 
 		$item = $arr["prop"];
@@ -2183,7 +2183,7 @@ class cfgform extends class_base
 		$t->define_field(array(
 			"name" => "type",
 			"sortable" => true,
-			"caption" => t("Tüüp"),
+			"caption" => t("T&uuml;&uuml;p"),
 		));
 
 		$t->define_field(array(
@@ -2311,7 +2311,7 @@ class cfgform extends class_base
 		}
 		else
 		{
-			$opts[""] = t("Ühtegi tabi pole veel!");
+			$opts[""] = t("&Uuml;htegi tabi pole veel!");
 		}
 
 		$toolbar->add_cdata(html::select(array(
@@ -2381,7 +2381,7 @@ class cfgform extends class_base
 			// merge all
 			$toolbar->add_menu_item(array(
 				"parent" => "merge",
-				"text" => t("Kõik"),
+				"text" => t("K&otilde;ik"),
 				"link" => $this->mk_my_orb("merge", array(
 					"id" => $this_oid,
 					"scope" => "all",
@@ -2432,7 +2432,7 @@ class cfgform extends class_base
 			// reload all
 			$toolbar->add_menu_item(array(
 				"parent" => "reload",
-				"text" => t("Kõik"),
+				"text" => t("K&otilde;ik"),
 				"link" => $this->mk_my_orb("reload", array(
 					"id" => $this_oid,
 					"scope" => "all",
@@ -2584,7 +2584,7 @@ class cfgform extends class_base
 					}
 					else
 					{
-						$arr["prop"]["error"] = t("Viga päringu formaadis");
+						$arr["prop"]["error"] = t("Viga p&auml;ringu formaadis");
 						return PROP_ERROR;
 					}
 
@@ -2987,7 +2987,7 @@ class cfgform extends class_base
 		// create the default document config form
 		$form = obj($osi_vars["doc_conf_form"]);
 
-		// Üldine (general)
+		// Yldine (general)
 		// 100, navtoolbar
 		// 200, status
 		// 300, title
@@ -3230,7 +3230,7 @@ class cfgform extends class_base
 			}
 		}
 
-		//see värk siis kontrollib, kas miskile kasutajale on mingi omadus äkki maha keeratud
+		//see v&auml;rk siis kontrollib, kas miskile kasutajale on mingi omadus &auml;kki maha keeratud
 		$show_to_groups = $o->meta("show_to_groups");
 		$user_group_list = aw_global_get("gidlist_oid");
 
@@ -3737,7 +3737,7 @@ class cfgform extends class_base
 		));
 		$t->define_field(array(
 			"name" => "view_ctrl",
-			"caption" => t("Näitamise kontroller"),
+			"caption" => t("N&auml;itamise kontroller"),
 			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
@@ -3749,7 +3749,7 @@ class cfgform extends class_base
 		$t->define_field(array(
 			"name" => "opt_show",
 			"caption" => '<a href="javascript:selall(\'grphide\')">' . t("N") . '</a>',
-			"tooltip" => t("Näita tabi"),
+			"tooltip" => t("N&auml;ita tabi"),
 			"chgbgcolor" => "bg_colour",
 		));
 	 }
@@ -3938,6 +3938,7 @@ class cfgform extends class_base
 			}
 
 			$this->cfgview_vars["cfgform"] = $args["id"];
+			$this->cfgview_vars["class"] = $class;
 			$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 			$_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
 
@@ -4284,7 +4285,7 @@ class cfgform extends class_base
 
 		if (!empty($parent) and (!array_key_exists($parent, $this->cfg_groups) or !empty($this->cfg_groups[$parent]["parent"])))
 		{
-			return t("Selle tabi alla pole võimalik luua.");
+			return t("Selle tabi alla pole v&otilde;imalik luua.");
 		}
 
 		$this->cfg_groups[$name] = array(
