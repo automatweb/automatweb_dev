@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.17 2008/01/31 13:54:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.18 2008/02/28 11:50:56 kristo Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 @classinfo  maintainer=markop
@@ -44,7 +44,9 @@ class crm_org_search extends class_base
 {
 	function crm_org_search()
 	{
-		$this->init();
+		$this->init(array(
+			"clid" => CL_CRM_ORG_SEARCH
+		));
 	}
 
 	function init_search($arr)
