@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.8 2007/12/21 16:29:35 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.9 2008/02/28 08:29:49 kristo Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -24,7 +24,7 @@
 @caption Eriala
 
 @property main_speciality type=chooser
-@caption Põhieriala
+@caption P&otilde;hieriala
 
 @property in_progress type=chooser
 @caption Omandamisel
@@ -38,10 +38,10 @@
 @caption Algus
 
 @property end type=date_select format=month,year parent=time
-@caption Lõpp
+@caption L&otilde;pp
 
 @property end_date type=date_select
-@caption Lõpetamise kuupäev
+@caption L&otilde;petamise kuupäev
 
 @property diploma_nr type=textbox
 @caption Diplomi number

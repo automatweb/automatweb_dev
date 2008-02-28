@@ -44,7 +44,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
-            <caption>P&amp;otilde;hieriala</caption>
+            <caption>P&amp;amp;otilde;hieriala</caption>
       </property>
       <property>
             <name>in_progress</name>
@@ -90,7 +90,7 @@
                   <num_1>year</num_1>
             </format>
             <parent>time</parent>
-            <caption>L&amp;otilde;pp</caption>
+            <caption>L&amp;amp;otilde;pp</caption>
       </property>
       <property>
             <name>end_date</name>
@@ -99,7 +99,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>L&amp;otilde;petamise kuup&amp;auml;ev</caption>
+            <caption>L&amp;amp;otilde;petamise kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>diploma_nr</name>
@@ -115,7 +115,6 @@
             <no_name>1</no_name>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
-            <maintainer>markop</maintainer>
       </classinfo>
       <reltypes>
             <FIELD>
