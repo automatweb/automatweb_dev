@@ -1,4 +1,5 @@
 <?php
+// 1
 
 // this should be here, url parsing and variable initialization
 // should be the first thing that is done
@@ -259,7 +260,7 @@ function init_config($arr)
 //		result: 0.005 - too small to measure correctly
 	}
 
-//selle peab ikka igaltpoolt uuesti saama, muidu ei saa sisevõrgust ja mujalt ligi
+//selle peab ikka igaltpoolt uuesti saama, muidu ei saa sisev6rgust ja mujalt ligi
 	$baseurl = isset($_SERVER["HTTP_HOST"]) ? "http://".$_SERVER["HTTP_HOST"] : "";
 	$GLOBALS["cfg"]["baseurl"] = $baseurl;
 
@@ -1144,7 +1145,7 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 	$is_rpc_call = $GLOBALS["__aw_globals"]["__is_rpc_call"];
 	$rpc_call_type = $GLOBALS["__aw_globals"]["__rpc_call_type"];
 
-	$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<Br><br>\n\n PHP error: errno = $errno , errstr = $errstr, errfile = $errfile, errline = $errline , context = $context\n<br>";
+	$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie t&auml;helepanu mingile ebat&auml;psusele  andmetes v&otilde;i n&auml;puveale.<Br><br>\n\n PHP error: errno = $errno , errstr = $errstr, errfile = $errfile, errline = $errline , context = $context\n<br>";
 
 	// meilime veateate listi ka
 	$subj = "Viga saidil ".$GLOBALS["cfg"]["baseurl"];
