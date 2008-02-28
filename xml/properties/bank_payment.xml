@@ -83,6 +83,17 @@
             <caption>Selgitus</caption>
       </property>
       <property>
+            <name>expl_controller</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CTR</reltype>
+            <parent>general_right</parent>
+            <caption>Selgituse kontroller</caption>
+      </property>
+      <property>
             <name>test</name>
             <table>objects</table>
             <field>meta</field>
@@ -319,6 +330,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Kirjelduse kontroller</caption>
             </DESC_CTR>
+            <CTR>
+                  <value>6</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CTR>
       </reltypes>
       <layout>
             <general_l>
