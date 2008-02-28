@@ -260,6 +260,7 @@ class relationmgr extends aw_template
 		$reforb = $this->mk_reforb("change", array("no_reforb" => 1, "search" => 1) + $req, $req["class"]);
 		$defcs = array(CL_IMAGE => "image.default_folder", CL_FILE => "file.default_folder", CL_EXTLINK => "links.default_folder");
 		$def_str = "";
+		$return_url = get_ru();
 		foreach($defcs as $def_clid => $def_ini)
 		{
 			$def_val = aw_ini_get($def_ini);
@@ -1114,6 +1115,7 @@ class relationmgr extends aw_template
 		}
 		$defcs = array(CL_IMAGE => "image.default_folder", CL_FILE => "file.default_folder", CL_EXTLINK => "links.default_folder");
 		$def_str = "";
+		$return_url = get_ru();
 		foreach($defcs as $def_clid => $def_ini)
 		{
 			$def_val = aw_ini_get($def_ini);
