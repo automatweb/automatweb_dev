@@ -1360,6 +1360,7 @@ function __autoload($class_name)
 	try
 	{
 		$class_file = class_index::get_file_by_name($class_name);
+		require_once($class_file);
 	}
 	catch (awex_clidx_double_dfn $e)
 	{
@@ -1382,6 +1383,7 @@ function __autoload($class_name)
 		try
 		{
 			$class_file = class_index::get_file_by_name($class_name);
+			require_once($class_file);
 		}
 		catch (awex_clidx $e)
 		{
@@ -1390,7 +1392,8 @@ function __autoload($class_name)
 				try
 				{
 					$class_file = class_index::get_file_by_name(basename($class_name));
-					echo "Invalid class name: '" . $class_name . "'";
+					echo "Invalid class name: '" . $class_name . "'. ";
+					require_once($class_file);
 				}
 				catch (awex_clidx $e)
 				{
@@ -1400,8 +1403,6 @@ function __autoload($class_name)
 			//!!! take action
 		}
 	}
-
-	require_once($class_file);
 
 	if (!class_exists($class_name, false) and !interface_exists($class_name, false))
 	{ // class may be moved to another file, force update and try again
@@ -1419,14 +1420,13 @@ function __autoload($class_name)
 		try
 		{
 			$class_file = class_index::get_file_by_name($class_name);
+			require_once($class_file);
 		}
 		catch (awex_clidx $e)
 		{
 			exit_function("__autoload");
 			exit("Fatal classload error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
 		}
-
-		require($class_file);
 	}
 	exit_function("__autoload");
 }
