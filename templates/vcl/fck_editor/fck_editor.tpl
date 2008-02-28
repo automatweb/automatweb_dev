@@ -70,8 +70,7 @@ window.onload = function()
 {
 	<!-- SUB: EDITOR -->
 	var fck{VAR:name} = new FCKeditor("{VAR:name}");
-	fck{VAR:name}.BasePath = "js/fckeditor/";
-	fck{VAR:name}.ToolbarSet = "{VAR:toolbarset}";
+	fck{VAR:name}.BasePath = "/automatweb/js/fckeditor/";
 	fck{VAR:name}.Width = "{VAR:width}";
 	fck{VAR:name}.Height = "{VAR:height}";
 	fck{VAR:name}.Config["AutoDetectLanguage"] = false;
