@@ -1397,7 +1397,7 @@ class treeview extends class_base
 			}
 			else
 			{
-				$nm = parse_obj_name($root_item->name());
+				$nm = parse_obj_name($root_item->trans_get_val("name"));
 			}
 
 			if ($var && $_GET[$var] == "")
@@ -1426,7 +1426,7 @@ class treeview extends class_base
 			}
 			else
 			{
-				$oname = parse_obj_name($o->name());
+				$oname = parse_obj_name($o->trans_get_val("name"));
 			}
 
 			if(isset($arr["tree_opts"]["item_name_length"]))
