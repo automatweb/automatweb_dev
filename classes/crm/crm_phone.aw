@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.15 2008/01/31 13:54:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.16 2008/02/28 08:21:51 instrumental Exp $
 // phone.aw - Telefon
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON_WORK_RELATION, on_connect_work_relation_to_phone)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELATION, on_disconnect_work_relation_from_phone)
 
 @classinfo syslog_type=ST_CRM_PHONE relationmgr=yes maintainer=markop
 
@@ -68,6 +71,36 @@ class crm_phone extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function on_connect_work_relation_to_phone($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PHONE)
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => 1,		// RELTYPE_BELONGTO
+			));
+		}
+	}
+
+	function on_disconnect_work_relation_from_phone($arr)
+	{
+		obj_set_opt("no_cache", 1);
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PHONE)
+		{
+			if($target_obj->is_connected_to(array('from' => $conn->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+					"errors" => false
+				));
+			}
+		}
 	}
 
 	// Returns nicer view (formatted, with or without country code)
