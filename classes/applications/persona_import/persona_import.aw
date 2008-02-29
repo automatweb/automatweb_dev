@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.34 2008/01/31 13:49:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.35 2008/02/29 14:02:32 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
-@classinfo syslog_type=ST_PERSONA_IMPORT relationmgr=yes maintainer=kaarel
+@classinfo syslog_type=ST_PERSONA_IMPORT relationmgr=yes maintainer=knummert
 
 @default table=objects
 @default group=general
@@ -31,16 +31,16 @@
 @caption XML faili nimi
 
 @property xml_personnel_file type=textbox
-@caption Töötajate XML fail
+@caption T&ouml;&ouml;tajate XML fail
 
 @property xml_education_file type=textbox
-@caption Hariduskäigu XML fail
+@caption Haridusk&auml;igu XML fail
 
 @property xml_work_relations_ending_file type=textbox
-@caption Töösuhete peatumise XML fail
+@caption T&ouml;&ouml;suhete peatumise XML fail
 
 @property xml_structure_file type=textbox
-@caption Struktuuriüksuste XML fail
+@caption Struktuuri&uuml;ksuste XML fail
 
 @property xml_link type=relpicker reltype=RELTYPE_LINK_REL
 @caption Impordi objekt
@@ -480,15 +480,15 @@ die($fdat);
 			
 			if ($target && $w_open && "complete" == $val["type"])
 			{
-				// iconv seemed to have a problem with õ character. Better safe than sorry.
-				$tmp[$val["tag"]] = str_replace("õ", "&otilde;", $val["value"]);
-				$tmp[$val["tag"]] = str_replace("ä", "&auml;", $tmp[$val["tag"]]);
-				$tmp[$val["tag"]] = str_replace("ö", "&ouml;", $tmp[$val["tag"]]);
-				$tmp[$val["tag"]] = str_replace("ü", "&uuml;", $tmp[$val["tag"]]);
-				$tmp[$val["tag"]] = str_replace("Õ", "&Otilde;", $tmp[$val["tag"]]);
-				$tmp[$val["tag"]] = str_replace("Ä", "&Auml;", $tmp[$val["tag"]]);
-				$tmp[$val["tag"]] = str_replace("Ö", "&Ouml;", $tmp[$val["tag"]]);
-				$tmp[$val["tag"]] = str_replace("Ü", "&Uuml;", $tmp[$val["tag"]]);
+				// iconv seemed to have a problem with &otilde; character. Better safe than sorry.
+				$tmp[$val["tag"]] = str_replace("&otilde;", "&otilde;", $val["value"]);
+				$tmp[$val["tag"]] = str_replace("&auml;", "&auml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("&ouml;", "&ouml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("&uuml;", "&uuml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("&otilde;", "&Otilde;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("&auml;", "&Auml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("&ouml;", "&Ouml;", $tmp[$val["tag"]]);
+				$tmp[$val["tag"]] = str_replace("&uuml;", "&Uuml;", $tmp[$val["tag"]]);
 			};
 		};
 
@@ -650,11 +650,13 @@ die($fdat);
 				"prop" => "address",
 				"clid" => CL_CRM_ADDRESS,
 			),
+			/*
 			"AMETIKOHT_NIMETUS" => array(
 				"reltype" => 7, // RELTYPE_PROFESSION
 				"prop" => "rank",
 				"clid" => CL_CRM_PROFESSION,
 			),
+			*/
 		);
 
 		$simple_data = array();
@@ -718,7 +720,7 @@ die($fdat);
 			$ylem = $yksus["YLEMYKSUS_ID"];
 
 
-			// aga nüüd vaja kontrollida, et kas sellise ext_id-ga üksus on olemas, kui on, siis
+			// aga n&uuml;&uuml;d vaja kontrollida, et kas sellise ext_id-ga &uuml;ksus on olemas, kui on, siis
 			// uut pole vaja teha
 			//$links = $sections[$ylem][] = $sections[$ext_id];
 
@@ -750,12 +752,12 @@ die($fdat);
 			};
 		}
 
-		// nüüd on vaja leida olemasolevad seosed
+		// n&uuml;&uuml;d on vaja leida olemasolevad seosed
 		$c = new connection();
 		$existing = $c->find(array(
 			"from.class_id" => CL_CRM_SECTION,
 			"to.class_id" => CL_CRM_SECTION,
-			"type" => 1 // RELTYPE_SECTION, ehk alamüksus
+			"type" => 1 // RELTYPE_SECTION, ehk alam&uuml;ksus
 		));
 
 		/*
@@ -891,7 +893,7 @@ die($fdat);
 			};
 
 			// ametikoht_nimetus
-			// eriala - aga see käib vist haridusega kokku?
+			// eriala - aga see k&auml;ib vist haridusega kokku?
 
  			if (!empty($worker["E_POST"]))
 			{
@@ -1056,6 +1058,15 @@ die($fdat);
 			}
 			/**/
 
+			if(!empty($worker["HARIDUSTASE"]))
+			{
+				$haridustase = iconv("UTF-8", "ISO-8859-4", $worker["HARIDUSTASE"]);
+				$person_obj->set_prop("edulevel", str_replace("&otilde;", "o", $haridustase));
+				$person_obj->save();
+				print "Setting education level to ".$haridustase.".<br>";
+				flush();
+			}
+
 			if(!empty($worker["AMETIKOHT_NIMETUS"]))
 			{
 				$ametikoht_nimetus = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKOHT_NIMETUS"]);
@@ -1107,6 +1118,7 @@ die($fdat);
 					if($rank->meta("external_id") == $worker["TOOTAJA_ID"] && $rank->name() == $ametikoht_nimetus)
 					{
 						$profession_id = $rank->id();
+						print "using existing crm_profession object ".$ametikoht_nimetus." ID - ".$profession_id.".<br>";
 					}
 					else
 					{
@@ -1326,7 +1338,7 @@ die($fdat);
 						"reltype" => 21, //RELTYPE_SECTION,
 					));
 
-					$person_obj->set_prop("org_section", $sections_byname[$worker["YKSUS"]]);
+					$person_obj->set_prop("org_section", array($sections_byname[$worker["YKSUS"]]));
 					print "sect connect done<br>";
 				}
 				else
@@ -1354,9 +1366,14 @@ die($fdat);
 					$person_obj->set_prop("org_section",$ykid);
 					print "sect connect done<br>";
 				}
-				if($worker["YKSUS"] != iconv("UTF-8", "ISO-8859-4", $worker["ALLASUTUS"]) && isset($ylem_ykid) && !empty($worker["YKSUS_ID"]))
+				if(is_oid($company_id))
 				{
-					if($this->can("view", $sections[$worker["YKSUS_ID"]]) && $ylem_yksus->id() != $sections[$worker["YKSUS_ID"]])
+					$person_obj->set_prop("work_contact", $company_id);
+					print "company connect done<br>";
+				}
+				if($worker["YKSUS"] != iconv("UTF-8", "ISO-8859-4", $worker["ALLASUTUS"]) && isset($ylem_ykid) && !empty($worker["YKSUS_ID"]) && $ylem_yksus->id() != $sections[$worker["YKSUS_ID"]])
+				{
+					if($this->can("view", $sections[$worker["YKSUS_ID"]]))
 					{
 						$ylem_yksus->connect(array(
 							"to" => $sections[$worker["YKSUS_ID"]],
@@ -1400,7 +1417,8 @@ die($fdat);
 			}
 
 			$ametikirjeldus_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKIRJELDUS_VIIT"]);
-			print "setting 'Viit ametijuhendile' property for crm_profession object ".$ametikoht_nimetus."<br>";
+			print "setting 'Viit ametijuhendile' property for crm_profession object ".$ametikoht_nimetus." ID - ".$rank->id()."<br>";
+			print $ametikirjeldus_viit."<br>";
 			$rank->set_prop("directive_link", $ametikirjeldus_viit);
 			$rank->save();
 			/*
@@ -1414,12 +1432,13 @@ die($fdat);
 			// let us keep track of all existing workers, so I can properly assign vacations and contract_stops
 			$persons[$ext_id] = $person_obj->id();
 
+			$person_obj->save();
 			print "person done<br><br>";
 			flush();
 
 			//arr($worker);
 			$persona_persons_done[$ext_id] = $ext_id;
-			// mul on vaja seda folderi id, mille alla töötaja objekte teha
+			// mul on vaja seda folderi id, mille alla t&ouml;&ouml;taja objekte teha
 	
 			// 1 means done
 			$persona_to_process[$ext_id] = 1;
@@ -1454,7 +1473,7 @@ die($fdat);
 			};
 
 
-			// ja siia siis .. kui on möödas rohkem kui XX ühikut, siis die ja 
+			// ja siia siis .. kui on m&ouml;&ouml;das rohkem kui XX &uuml;hikut, siis die ja 
 			// header("Location: self");
 
 		};
@@ -1465,7 +1484,7 @@ die($fdat);
 		print "</pre>";
 		flush();
 
-		// siia jäävad ainult jäägid, need märgime deaktiivseks ja ongi kõik
+		// siia j&auml;&auml;vad ainult j&auml;&auml;gid, need m&auml;rgime deaktiivseks ja ongi k&otilde;ik
 		foreach($person_match as $ext_id => $obj_id)
 		{
 			$person_obj = new object($obj_id);
@@ -1499,9 +1518,9 @@ die($fdat);
 		$mxlist = array_flip($mx->names());
 //		arr($mxlist);
 
-		// ei, aga põhimõtteliselt, kui töötajal juba on puhkus või peatumine, siis teist me ei tee
+		// ei, aga p&otilde;him&otilde;tteliselt, kui t&ouml;&ouml;tajal juba on puhkus v&otilde;i peatumine, siis teist me ei tee
 
-		// aga nüüd .. ma tahan person klassile lisada meetodid 
+		// aga n&uuml;&uuml;d .. ma tahan person klassile lisada meetodid 
 		// add_or_update_vacation
 		// add_or_update_contract_stop
 
@@ -1597,7 +1616,7 @@ die($fdat);
 				$stop->save();
 				
 
-				// I was told to connect these to 'Töösuhe' object instead
+				// I was told to connect these to 'T&ouml;&ouml;suhe' object instead
 				/*
 				$t->connect(array(
 					"to" => $stop->id(),
@@ -1705,8 +1724,8 @@ die($fdat);
 					$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);					
 					$education->set_prop("in_progress", $hariduskaik["ON_OPILANE"]);
 					$education->set_prop("diploma_nr", $hariduskaik["DIPLOM_NUMBER"]);
-					// Põhiharidus might cause some drama. We wanna avoid that.
-					$education->set_prop("degree", $degree[str_replace("õ", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
+					// P&otilde;hiharidus might cause some drama. We wanna avoid that.
+					$education->set_prop("degree", $degree[str_replace("&otilde;", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
 					$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
 //					if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
 					if(!empty($hariduskaik["DIPLOM_KUUPAEV"]))
@@ -1734,8 +1753,8 @@ die($fdat);
 				$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
 				$education->set_prop("in_progress", $hariduskaik["ON_OPILANE"]);
 				$education->set_prop("diploma_nr", $hariduskaik["DIPLOM_NUMBER"]);
-				// Põhiharidus might cause some drama. We wanna avoid that.
-				$education->set_prop("degree", $degree[str_replace("õ", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
+				// P&otilde;hiharidus might cause some drama. We wanna avoid that.
+				$education->set_prop("degree", $degree[str_replace("&otilde;", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
 				$education->set_prop("obtain_language", iconv("UTF-8", "ISO-8859-4", $hariduskaik["KEEL"]));
 //				if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
 				if(!empty($hariduskaik["DIPLOM_KUUPAEV"]))
@@ -1854,14 +1873,14 @@ die($fdat);
 		
 
 
-		// puhkusi ning ka peatumisi näidatakse eraldi tabelis
-		// ainus asi mis neid eristab on töötaja ID. sama peatumise kohta. Therefore I have no way in hell
+		// puhkusi ning ka peatumisi n&auml;idatakse eraldi tabelis
+		// ainus asi mis neid eristab on t&ouml;&ouml;taja ID. sama peatumise kohta. Therefore I have no way in hell
 		// of deleting old vacations .. it simply is not going to happen
 
 		/* puhkus
 		<rida>
 			<tootaja_id>190</tootaja_id>
-			<puhkuse_liik>põhipuhkus</puhkuse_liik>
+			<puhkuse_liik>p&otilde;hipuhkus</puhkuse_liik>
 			<algus>20041222T00:00:00</algus>
 			<lopp>20041229T00:00:00</lopp>
 			<kestus>6</kestus>
@@ -1905,7 +1924,7 @@ die($fdat);
 			<puhkused>
 			  <rida>
 			   <tootaja_id>190</tootaja_id>
-			   <puhkuse_liik>põhipuhkus</puhkuse_liik>
+			   <puhkuse_liik>p&otilde;hipuhkus</puhkuse_liik>
 			   <algus>20041222T00:00:00</algus>
 			   <lopp>20041229T00:00:00</lopp>
 			   <kestus>6</kestus>
@@ -1970,7 +1989,7 @@ die($fdat);
 
 		$rpx = array_flip($px);
 
-		// isiku puhul on tegemist lihtsalt esimese vastavat tüüpi seosega pildiobjektiga
+		// isiku puhul on tegemist lihtsalt esimese vastavat t&uuml;&uuml;pi seosega pildiobjektiga
 
 		$cx = new connection();
 		$existing = $cx->find(array(
@@ -2178,13 +2197,13 @@ die($fdat);
 		$conns = $o->connections_from(array(
 			"type" => "RELTYPE_RECURRENCE",
 		));
-		// iga asja kohta on vaja teada seda, et millal ta välja kutsutakse
+		// iga asja kohta on vaja teada seda, et millal ta v&auml;lja kutsutakse
 		$sch = get_instance("scheduler");
 		foreach($conns as $conn)
 		{
 			$rep_id = $conn->prop("to");
 			$event_url = $this->mk_my_orb("invoke",array("id" => $o->id()));
-			// lisab iga ühendatud recurrence objekti kohta kirje scheduleri
+			// lisab iga &uuml;hendatud recurrence objekti kohta kirje scheduleri
 			$sch->add(array(
 			 	"event" => $event_url,
 				"rep_id" => $rep_id,
