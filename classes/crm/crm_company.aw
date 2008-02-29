@@ -928,7 +928,7 @@ default group=org_objects
 @default group=ovrv_email
 
 	@layout mail_main type=hbox width=20%:80%
-		
+
 		@property mail_tb type=toolbar store=no no_caption=1
 
 		@layout mail_search type=vbox closeable=1 area_caption=Otsing parent=mail_main
@@ -944,7 +944,7 @@ default group=org_objects
 
 			@property mail_s_submit type=submit parent=mail_search no_caption=1
 			@caption Otsi
-		
+
 		@layout mail_tbl_box type=vbox parent=mail_main
 
 			@property mail_tbl type=table store=no no_caption=1 parent=mail_tbl_box
@@ -1040,7 +1040,7 @@ default group=org_objects
 
 @default group=customer_situtation
 	@property undone_orders type=table store=no no_caption=1
-	@caption Pooleliolevad tellimused	
+	@caption Pooleliolevad tellimused
 
 	@property unpaid_bills type=table store=no no_caption=1
 	@caption Laekumata arved
@@ -1227,7 +1227,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @groupinfo versions caption=Versioonid submit=no save=no parent=stats
 @groupinfo open_hrs caption="Avamisajad" parent=people
 @groupinfo user_settings caption="Seaded" parent=people
-@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all submit=no
+@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption &Otilde;iguslik vorm
@@ -3405,7 +3405,7 @@ class crm_company extends class_base
 	**/
 	function remove_from_category($arr)
 	{
-		
+
 		if (is_array($arr["check"]) && is_oid($arr["category"]) && $this->can("view" , $arr["category"]))
 		{
 			$c = obj($arr["category"]);
@@ -3636,14 +3636,14 @@ class crm_company extends class_base
 		$e_d = mktime(23,59,59, date('m'),date('d')+1+$e_add,date('Y'));
 		$pred = $s_m > $e_m ? "OR" : "AND";
 		$q = "
-			SELECT 
+			SELECT
 				objects.name as name,
 				objects.oid as oid,
 				kliendibaas_isik.birthday as bd
-			FROM 
-				objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
-			WHERE	
-				objects.class_id = '145' AND 
+			FROM
+				objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of
+			WHERE
+				objects.class_id = '145' AND
 				objects.status > 0  AND
 				kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday is not null
 		";
@@ -3735,7 +3735,7 @@ class crm_company extends class_base
 				$this->vars(array(
 					"name" => html::obj_change_url($p->id(),$p->name()),
 					"contacts" => implode(", ", $contacts),
-				)); 
+				));
 				$tmp2 .= $this->parse("bds");
 			}
 			if($bdis)
@@ -4371,7 +4371,7 @@ class crm_company extends class_base
 			'to' => $person->id(),
 			'reltype' => $arr['reltype'],
 		));
-		
+
 		$wcon_wrel= new object();
 		$wcon_wrel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
 		$wcon_wrel->set_parent($arr['parent']);
@@ -5197,7 +5197,7 @@ class crm_company extends class_base
 				$ret = array_merge($ret, $ol->ids());
 			}
 		}
-		
+
 		foreach($this->get_my_offers() as $ofid)
 		{
 			if ($this->can("view", $c["to"]))
@@ -6631,7 +6631,7 @@ class crm_company extends class_base
 				$arr["link"] = html::get_change_url($msg, array("return_url" => get_ru(), "group" => "main_view"));
 			}
 		}
-	
+
 		if($arr["id"] == "bugs")
 		{
 			$show = 0;
