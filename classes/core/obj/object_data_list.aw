@@ -49,18 +49,18 @@ class object_data_list
 	{
 		$arr = array();
 		$p = &$this->props;
-		foreach($this->list_data as $od)
+		foreach($this->list_data as $oid => $od)
 		{
 			$cp = $p[$od["class_id"]];
 			foreach($od as $ode_i => $ode_v)
 			{
 				if(array_key_exists($ode_i, $cp))
 				{
-					$arr[$cp[$ode_i]] = $ode_v;
+					$arr[$oid][$cp[$ode_i]] = $ode_v;
 				}
 				elseif(in_array($ode_i, $cp) && is_int(array_search($ode_i, $cp)))
 				{
-					$arr[$ode_i] = $ode_v;
+					$arr[$oid][$ode_i] = $ode_v;
 				}
 			}
 		}
