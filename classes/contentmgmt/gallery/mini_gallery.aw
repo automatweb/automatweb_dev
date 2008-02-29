@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.42 2008/01/31 13:52:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.43 2008/02/29 12:29:59 robert Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -33,7 +33,7 @@
 	@caption Piltide j&auml;rjestamine
 
 	@property addheight type=textbox size=5 field=meta method=serialize default=0
-	@caption Pildi aknale lisatav kõrgus
+	@caption Pildi aknale lisatav k&otilde;rgus
 
 	@property addwidth type=textbox size=5 field=meta method=serialize default=0
 	@caption Pildi aknale lisatav laius
@@ -329,7 +329,8 @@ class mini_gallery extends class_base
 		{
 			$fo = obj($img->parent());
 			$this->vars(array(
-				"folder_name" => $fo->trans_get_val("name")
+				"folder_name" => $fo->trans_get_val("name"),
+				"col_count" => $ob->prop("cols")?$ob->prop("cols"):100,
 			));
 			$str .= $this->parse("FOLDER_CHANGE");
 		}
