@@ -9,6 +9,40 @@
 
 class object_data_list
 {
+	/** Returns object_data_list.
+		@attrib params=pos name=object_data_list
+
+		@param params 
+
+		@param props
+
+		@errors
+			Returns error if param is not an array.
+
+		@returns
+			object_data_list object.
+
+		@examples
+			$odl = new object_data_list(
+				array(
+					"class_id" => CL_FILE
+				),
+				array(
+					CL_FILE => array("oid", "name"),
+				)
+			);
+			
+			$odl = new object_data_list(
+				array(
+					"class_id" => array(CL_FILE, CL_MENU),
+					"parent" => 126,
+				),
+				array(
+					CL_FILE => array("oid" => "id", "name"),
+					CL_MENU => array("oid", "name" => "nimi"),
+				)
+			);
+	**/
 	function object_data_list($param, $props)
 	{
 		if (!is_array($param))
@@ -21,11 +55,9 @@ class object_data_list
 
 		$this->_int_load($param, $props);
 		$this->props = $props;
-	}
+	}	
 
-	
-
-	/** returns an array of all the objects in the list
+	/** Returns an array of all the objects in the list.
 		@attrib api=
 
 		@errors
@@ -44,6 +76,17 @@ class object_data_list
 				)
 			);
 			$files_data = $odl->arr();
+
+			$files_data = Array (
+				[1232] => Array(
+					[id] => 1232
+					[name] => Foo
+				)
+				[123125] => Array(
+					[id] => 123125
+					[name] => Yahoo
+				)
+			)
 	**/
 	function arr()
 	{
