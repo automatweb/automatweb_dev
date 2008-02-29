@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.65 2008/01/31 13:49:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/table.aw,v 1.1 2008/02/29 19:05:27 kristo Exp $
 // table.aw - tabelite haldus
 /*
 @classinfo  maintainer=kristo
@@ -1550,12 +1550,12 @@ class table extends aw_template
 		{
 			return $str;
 		};
-		$fnc=strtoupper($str[1].$str[2].$str[3].$str[4]);//võta funktsiooni nimi
+		$fnc=strtoupper($str[1].$str[2].$str[3].$str[4]);//v6ta funktsiooni nimi
 
 		$evl="error";
 		if ($str[4]=="(")// kui on funktsioon
 		{
-			// pljää, this is complicated stuff.
+			// plj22, this is complicated stuff.
 			//get parameters for func
 			if (!($rightbound=strrpos($str,")")))
 			{
@@ -1602,7 +1602,7 @@ class table extends aw_template
 			{
 				$parms[$k]=$this->filter_eval("=".$val);
 				
-				//$parms[$k]=(int)$parms[$k];//täisarvud ainult praegu??
+				//$parms[$k]=(int)$parms[$k];//t2isarvud ainult praegu??
 			};
 			//echo("parms=<pre>");print_r($parms);Echo("</pre>");//dbg
 			$evl=$params;//dbg
@@ -2820,8 +2820,8 @@ class xmlmenu
 {
 	// konstruktor
 	// argumendid
-	// xmldef(text) - menüü definitsioon, XML-is
-	// template(text) - template, mida kasutada menüü joonistamiseks
+	// xmldef(text) - menyy definitsioon, XML-is
+	// template(text) - template, mida kasutada menyy joonistamiseks
 	// vars(array) - array muuutujatest, mis xml-i sees asendada oleks vaja
 	function xmlmenu($args = array())
 	{
@@ -2830,7 +2830,7 @@ class xmlmenu
 		$this->xmldef = localparse($xmldef,$vars);
 	}
 
-	//// Ehitab menüü
+	//// Ehitab menyy
 	// argumendid:
 	// vars(array) - muutujad
 	// xml(string) - path to xml definiton
@@ -2886,10 +2886,10 @@ class xmlmenu
 	}
 
 	////
-	// !Laeb vajalikud definitsioonid mälust
+	// !Laeb vajalikud definitsioonid m2lust
 	// argumendid:
-	// xmldef(text) - menüü definitsioon, XML-is
-	// template(text) - template, mida kasutada menüü joonistamiseks
+	// xmldef(text) - menyy definitsioon, XML-is
+	// template(text) - template, mida kasutada menyy joonistamiseks
 	function load_from_memory($args = array())
 	{
 		$this->tpl->use_template($args["template"]);
@@ -2897,7 +2897,7 @@ class xmlmenu
 	}
 		
 	////
-	// !Loob menüü
+	// !Loob menyy
 	// argumendid:
 	// activelist(array) - array aktiivsetest elementidest
 	function create($args = array())
@@ -2907,7 +2907,7 @@ class xmlmenu
 		$this->activelist = array_merge($nil,$args["activelist"]);
 		$this->level = 1;
 
-		// genereerime menüü
+		// genereerime menyy
 		$menudefs = aw_unserialize($this->xmldef);
 		$this->_gen_menu($menudefs);
 
@@ -2915,7 +2915,7 @@ class xmlmenu
 	}
 
 	////
-	// !Kutsutakse välja create seest, ning kutsub iseennast rekursiivselt välja
+	// !Kutsutakse v2lja create seest, ning kutsub iseennast rekursiivselt v2lja
 	function _gen_menu($menudefs = array())
 	{
 		// foreach-i ei saa rekursiivsete funktsioonide sees kasutada, sest see loob iga
