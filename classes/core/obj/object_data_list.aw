@@ -20,11 +20,51 @@ class object_data_list
 		}
 
 		$this->_int_load($param, $props);
+		$this->props = $props;
 	}
 
+	
+
+	/** returns an array of all the objects in the list
+		@attrib api=
+
+		@errors
+			none
+
+		@returns
+			array of data of objects in the list, array key is object id, value is object instance
+
+		@examples
+			$odl = new object_data_list(
+				array(
+					"class_id" => CL_FILE
+				),
+				array(
+					CL_FILE => array("oid" => "id", "name"),
+				)
+			);
+			$files_data = $odl->arr();
+	**/
 	function arr()
 	{
-		return $this->list_data;
+		$arr = array();
+		$p = &$this->props;
+		foreach($this->list_data as $od)
+		{
+			$cp = $p[$od["class_id"]];
+			foreach($od as $ode_i => $ode_v)
+			{
+				if(array_key_exists($ode_i, $cp))
+				{
+					$arr[$cp[$ode_i]] = $ode_v;
+				}
+				elseif(in_array($ode_i, $cp) && is_int(array_search($ode_i, $cp)))
+				{
+					$arr[$ode_i] = $ode_v;
+				}
+			}
+		}
+		return $arr;
 	}
 
 	////////// private
