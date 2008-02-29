@@ -71,7 +71,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@caption T&auml;htaeg
 
 		@property actual_live_date type=date_select captionside=top parent=settings_col3 field=meta method=serialize table=objects
-		@caption Tegelik Live kuupäev
+		@caption Tegelik Live kuup&auml;ev
 
 	@property vb_d1 type=hidden store=no no_caption=1 parent=settings
 
@@ -180,7 +180,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Kasutusvalmis
 
 	@property wish_live_date type=date_select field=meta method=serialize table=objects
-	@caption Soovitav Live kuupäev
+	@caption Soovitav Live kuup&auml;ev
 
 	@property cust_crit type=textarea rows=10 cols=50 field=aw_cust_crit
 	@caption Vastuv&otilde;tu kriteeriumid
@@ -282,7 +282,7 @@ class bug extends class_base
 			BUG_OPEN => t("Lahtine"),
 			BUG_INPROGRESS => t("Tegemisel"),
 			BUG_DONE => t("Valmis"),
-			BUG_VIEWING => t("Ülevaatamisel"),
+			BUG_VIEWING => t("&Uuml;levaatamisel"),
 			BUG_TESTING => t("Testimisel"),
 			BUG_TESTED => t("Testitud"),
 			BUG_CLOSED => t("Suletud"),
@@ -1967,9 +1967,9 @@ class bug extends class_base
 	function send_commit_mail_to_maintainer($arr)
 	{
 		extract($arr);
+		$cmtr = $who;
 		$who = "";
 
-		$path = str_replace("1234567890" , "automatweb" , $path);
 		$aw_loc = str_replace("automatweb_dev" , "" , $GLOBALS["awd"]);
 		$myFile = $aw_loc.$path."/".$file;
 		$fh = fopen($myFile, 'r');
@@ -1980,6 +1980,11 @@ class bug extends class_base
 		foreach($regs as $reg)
 		{
 			$who = $reg;
+		}
+
+		if($cmtr == $who)
+		{
+			die();
 		}
 
 		if($who)
@@ -2479,7 +2484,7 @@ die($email);
 			if(!$canclose)
 			{
 				$retval = PROP_FATAL_ERROR;
-				$prop["error"] = t("Puuduvad õigused bugi sulgeda!");
+				$prop["error"] = t("Puuduvad &otilde;igused bugi sulgeda!");
 			}
 		}
 
