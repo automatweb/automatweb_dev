@@ -259,8 +259,11 @@ function init_config($arr)
 	}
 
 //selle peab ikka igaltpoolt uuesti saama, muidu ei saa sisev6rgust ja mujalt ligi
-	$baseurl = isset($_SERVER["HTTP_HOST"]) ? "http://".$_SERVER["HTTP_HOST"] : "";
-	$GLOBALS["cfg"]["baseurl"] = $baseurl;
+	if (!$GLOBALS["cfg"]["no_update_baseurl"])
+	{
+		$baseurl = isset($_SERVER["HTTP_HOST"]) ? "http://".$_SERVER["HTTP_HOST"] : "";
+		$GLOBALS["cfg"]["baseurl"] = $baseurl;
+	}
 
 	if (!$read_from_cache)
 	{

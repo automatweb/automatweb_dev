@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.402 2008/02/17 22:26:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.403 2008/02/29 10:48:20 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -213,6 +213,12 @@ class menuedit extends aw_template
 			$section = substr($section,0,-1);
 		};
 
+		// if the baseurl is site.ee/foo/bla, then cut that out from section
+		$bits = parse_url(aw_ini_get("baseurl"));
+		if ($bits["path"] != "")
+		{
+			$section = str_replace(substr($bits["path"], 1), "", $section);
+		}
 
 		if ($section == "")
 		{

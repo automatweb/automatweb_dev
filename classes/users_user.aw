@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.144 2008/01/31 13:49:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.145 2008/02/29 10:48:20 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -93,7 +93,7 @@ class users_user extends aw_template
 			global $verbosity;
 			if ($verbosity = 1)
 			{
-				$msg = "Vigane kasutajanimi vıi parool";
+				$msg = "Vigane kasutajanimi v&otilde;i parool";
 			}
 
 			$_msg = aw_ini_get("users.login_failed_msg");
@@ -209,7 +209,6 @@ class users_user extends aw_template
 		// 2nd try to find the group based url and if that fails, then the everyone's url and then just the baseurl.
 		// wow. is this graceful degradation or what!
 		$this->url = aw_global_get("request_uri_before_auth");
-
 		if ($params["return"] != "")
 		{
 			$this->url = $params["return"];
@@ -238,6 +237,11 @@ class users_user extends aw_template
 		$this->login_successful = true;
 		if ($this->url[0] == "/")
 		{
+			$bits = parse_url($this->cfg["baseurl"]);
+			if ($bits["path"] != "")
+			{
+				$this->url = str_replace($bits["path"], "", $this->url);
+			}
 			$this->url = $this->cfg["baseurl"].$this->url;
 		}
 
@@ -299,7 +303,7 @@ $t = time();
 	}
 
 	////
-	// !Logib v‰lja. Orb-i versioon
+	// !logs you out
 	function orb_logout($args = array())
 	{
 		extract($args);
@@ -787,7 +791,7 @@ $t = time();
 
 		// make a list of all users
 		$users = array();
-		// uid == "" oli kunagi kasutusel selleks, et saaks sisselogimata kasutajat gruppidesse panna ja talle ıigusi anda.
+		// uid == "" oli kunagi kasutusel selleks, et saaks sisselogimata kasutajat gruppidesse panna ja talle 6igusi anda.
 		$this->db_query("SELECT * FROM users WHERE uid != '' ");
 		while ($row = $this->db_next())
 		{
@@ -1221,7 +1225,7 @@ $t = time();
 		{
 			if (isset($row))
 			{
-				// inbox defauldib kodukataloogile, kui seda m‰‰ratud pole
+				// inbox defauldib kodukataloogile, kui seda m22ratud pole
 				$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
 			}
 		}

@@ -1,10 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.113 2008/02/12 12:02:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.114 2008/02/29 10:47:46 kristo Exp $
 // here we define basic constants needed by all components
 /*
 @classinfo  maintainer=kristo
 */
-
 set_magic_quotes_runtime(0);
 
 define ("AW_SHORT_PROCESS", 1);
@@ -212,7 +211,7 @@ define("FSUBTYPE_EMAIL_ACTION",4);
 define("FSUBTYPE_CAL_CONF",8);
 
 // kui see on otsinguvorm, siis kas otsingutulemusi filtreeritakse
-// läbi kalendri?
+// l2bi kalendri?
 define("FSUBTYPE_CAL_SEARCH",16);
 
 // like CAL_CONF, but data is entered directly
