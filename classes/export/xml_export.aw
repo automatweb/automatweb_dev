@@ -63,7 +63,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 
 	@property ftp_file_location type=textbox field=meta method=serialize
 	@caption FTP kataloog
-	@comment Kataloog, kuhu üle FTP fail salvestatakse (koos failinimega)
+	@comment Kataloog, kuhu &uuml;le FTP fail salvestatakse (koos failinimega)
 
 	@property parents_table type=table store=no
 	@caption Kaustad, mille alt objekte v&otilde;etakse
@@ -883,8 +883,7 @@ class xml_export extends class_base
 
 	function _proc_xml_val($str)
 	{
-		$str = str_replace("&", "&amp;", $str);
-		return str_replace("<", "&lt;", str_replace(">", "&gt;", $str));
+		return htmlspecialchars($str, ENT_NOQUOTES);
 	}
 
 	//// params:
