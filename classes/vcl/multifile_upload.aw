@@ -77,6 +77,10 @@ class multifile_upload extends class_base
 		}
 
 		$files = $fi -> add_upload_multifile("file", $parent);
+		if(!$arr["prop"]["reltype"])
+		{
+			$arr["prop"]["reltype"] = "RELTYPE_FILE";
+		}
 		foreach ($files as $file)
 		{
 			$o->connect(array(
