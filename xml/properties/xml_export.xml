@@ -236,6 +236,16 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Kontroller andmete lisamiseks obj. j2rele</caption>
             </OBJ_APPEND_CONTROLLER>
+            <PREPEND_CONTROLLER>
+                  <value>7</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller andmete lisamiseks sisu ette</caption>
+            </PREPEND_CONTROLLER>
+            <APPEND_CONTROLLER>
+                  <value>8</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller andmete lisamiseks sisu j2rele</caption>
+            </APPEND_CONTROLLER>
       </reltypes>
 </properties>
 

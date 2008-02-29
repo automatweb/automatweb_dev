@@ -103,6 +103,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 @reltype OBJ_APPEND_CONTROLLER value=6 clid=CL_CFGCONTROLLER
 @caption Kontroller andmete lisamiseks obj. j2rele
 
+@reltype PREPEND_CONTROLLER value=7 clid=CL_CFGCONTROLLER
+@caption Kontroller andmete lisamiseks sisu ette
+
+@reltype APPEND_CONTROLLER value=8 clid=CL_CFGCONTROLLER
+@caption Kontroller andmete lisamiseks sisu j2rele
+
 */
 
 class xml_export extends class_base
@@ -725,20 +731,30 @@ class xml_export extends class_base
 //		$xml_file .= "<objects>\n";
 		$xml_file .= "<".$xml_root_tag_name . $xml_root_tag_attrs . ">\n";
 
-		$prepend_controller = $o->get_first_obj_by_reltype("RELTYPE OBJ_PREPEND_CONTROLLER");
+		$obj_prepend_controller = $o->get_first_obj_by_reltype("RELTYPE_OBJ_PREPEND_CONTROLLER");
+		$obj_prepend_controller = is_object($obj_prepend_controller) ? $obj_prepend_controller->id() : false;
+		$obj_append_controller = $o->get_first_obj_by_reltype("RELTYPE_OBJ_APPEND_CONTROLLER");
+		$obj_append_controller = is_object($obj_append_controller) ? $obj_append_controller->id() : false;
+		$prepend_controller = $o->get_first_obj_by_reltype("RELTYPE_PREPEND_CONTROLLER");
 		$prepend_controller = is_object($prepend_controller) ? $prepend_controller->id() : false;
-		$append_controller = $o->get_first_obj_by_reltype("RELTYPE OBJ_APPEND_CONTROLLER");
+		$append_controller = $o->get_first_obj_by_reltype("RELTYPE_APPEND_CONTROLLER");
 		$append_controller = is_object($append_controller) ? $append_controller->id() : false;
 		$cfgcontroller_i = get_instance(CL_CFGCONTROLLER);
+
+		// prepend data from controller
+		if ($prepend_controller)
+		{
+			$xml_file .= $cfgcontroller_i->check_property($prepend_controller, null, $all_objects, $arr, array(), null);
+		}
 
 		foreach ($all_objects->arr() as $oid => $obj)
 		{
 //			$xml_file .= "<object>\n";
 			$xml_file .= "<".$xml_object_tag_name.">\n";
 
-			if ($prepend_controller)
+			if ($obj_prepend_controller)
 			{
-				$xml_file .= $cfgcontroller_i->check_property($prepend_controller, $oid, $xml_config_data, $arr, array(), $obj) . "\n";
+				$xml_file .= $cfgcontroller_i->check_property($obj_prepend_controller, $oid, $xml_config_data, $arr, array(), $obj) . "\n";
 			}
 
 			$pd = $obj->get_property_list();
@@ -816,12 +832,18 @@ class xml_export extends class_base
 				}
 			}
 
-			if ($append_controller)
+			if ($obj_append_controller)
 			{
-				$xml_file .= $cfgcontroller_i->check_property($append_controller, $oid, $xml_config_data, $arr, array(), $obj) . "\n";
+				$xml_file .= $cfgcontroller_i->check_property($obj_append_controller, $oid, $xml_config_data, $arr, array(), $obj) . "\n";
 			}
 
 			$xml_file .= "</".$xml_object_tag_name.">\n";
+		}
+
+		// append data from controller
+		if ($append_controller)
+		{
+			$xml_file .= $cfgcontroller_i->check_property($append_controller, null, $all_objects, $arr, array(), null);
 		}
 
 		$xml_file .= "</".$xml_root_tag_name.">";
