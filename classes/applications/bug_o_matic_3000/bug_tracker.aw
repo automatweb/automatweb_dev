@@ -419,7 +419,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
-@caption Jälgija
+@caption J&auml;lgija
 
 @reltype OBJECT_TYPE value=2 clid=CL_OBJECT_TYPE
 @caption Objekti t&uuml;&uuml;p
@@ -762,7 +762,7 @@ class bug_tracker extends class_base
 		$prevm = time()-30*24*60*60;
 		$c_ol = new object_list(array(
 			"class_id" => CL_BUG_COMMENT,
-			"comment" => "%http://dev.struktuur.ee/cgi-bin/viewcvs.cgi%",
+			"comment" => "%viewcvs.cgi%",
 			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $prevm),
 		));
 		$bug_oids = array();
@@ -770,11 +770,14 @@ class bug_tracker extends class_base
 		{
 			$bug_oids[$c_o->parent()] = $c_o->parent();
 		}
-		$ol = new object_list(array(
-			"class_id" => CL_BUG,
-			"oid" => $bug_oids,
-		));
-		$this->get_table_from_ol($ol, $t, $arr);
+		if(count($bug_oids))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_BUG,
+				"oid" => $bug_oids,
+			));
+			$this->get_table_from_ol($ol, $t, $arr);
+		}
 	}
 
 	function _init_complete_table(&$t)
