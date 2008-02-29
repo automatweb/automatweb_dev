@@ -2681,6 +2681,15 @@ class cfgform extends class_base
 					$grplist[$key]["grp_d_ctl"] = (int) $arr["request"]["grp_d_ctl"][$key];
 					$grplist[$key]["ord"] = (int) $arr["request"]["grpord"][$key];
 
+					if (empty($arr["request"]["grpsubmit"][$key]))
+					{
+						$grplist[$key]["submit"] = "no";
+					}
+					elseif ($grplist[$key]["submit"] === "no")
+					{
+						unset($grplist[$key]["submit"]);
+					}
+
 					$styl = $arr["request"]["grpstyle"][$key];
 
 					if (!empty($styl))
@@ -3752,6 +3761,12 @@ class cfgform extends class_base
 			"tooltip" => t("N&auml;ita tabi"),
 			"chgbgcolor" => "bg_colour",
 		));
+		$t->define_field(array(
+			"name" => "opt_submit",
+			"caption" => '<a href="javascript:selall(\'grpsubmit\')">' . t("S") . '</a>',
+			"tooltip" => t("N&auml;ita submit nuppu"),
+			"chgbgcolor" => "bg_colour",
+		));
 	 }
 
 	function _edit_groups_tbl($arr)
@@ -3825,6 +3840,11 @@ class cfgform extends class_base
 					"name" => "grphide[$gn]",
 					"value" => 1,
 					"checked" => (int) !$gd["grphide"],
+				)),
+				"opt_submit" => html::checkbox(array(
+					"name" => "grpsubmit[$gn]",
+					"value" => 1,
+					"checked" => (int) ($gd["submit"] !== "no"),
 				)),
 				"bg_colour" => $bg_colour,
 			));
