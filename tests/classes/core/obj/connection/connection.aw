@@ -336,6 +336,67 @@ class connection_test extends UnitTestCase
 		$from = $c->from();
 		$this->assertTrue(__is_err());
 	}
+
+	function test_prop_reltype()
+	{
+		$row = $this->db->db_fetch_row("SELECT id, reltype FROM aliases LIMIT 1");
+		$c = new connection();
+		$c->load($row["id"]);
+		$this->assertTrue($row["reltype"] == $c->prop("reltype"));
+	}
+
+	function test_prop_err()
+	{
+		$c = new connection();
+		__disable_err();
+		$to = $c->prop("to");
+		$this->assertTrue(__is_err());
+	}
+
+	function test_prop_from_name()
+	{
+		$row = $this->db->db_fetch_row("SELECT a.id, f.name FROM aliases a, objects f WHERE a.source = f.oid LIMIT 1");
+		$c = new connection();
+		$c->load($row["id"]);
+		$this->assertTrue($row["name"] == $c->prop("from.name"));
+	}
+
+	function test_prop_to_name()
+	{
+		$row = $this->db->db_fetch_row("SELECT a.id, t.class_id FROM aliases a, objects t WHERE a.target = t.oid LIMIT 1");
+		$c = new connection();
+		$c->load($row["id"]);
+		$this->assertTrue($row["class_id"] == $c->prop("to.class_id"));
+	}
+
+	function test_alias_to_link_true()
+	{
+		$c = new connection(array(
+			"from" => $this->o_from->id(),
+			"to" => $this->o_to->id(),
+			"reltype" => 669,
+		));
+		$c->save();
+		$c->alias_to_link(true);
+		$row = $this->db->db_fetch_row("SELECT a.target, f.metadata FROM aliases a, objects f WHERE a.source = f.oid AND a.id = ".$c->id()." LIMIT 1");
+		$meta = aw_unserialize($row["metadata"]);
+		$this->assertTrue($meta["aliaslinks"][$row["target"]] == 1);
+	}
+
+	function test_alias_to_link_false()
+	{
+		$c = new connection(array(
+			"from" => $this->o_from->id(),
+			"to" => $this->o_to->id(),
+			"reltype" => 669,
+		));
+		$c->save();
+		$c->alias_to_link(false);
+		$row = $this->db->db_fetch_row("SELECT a.target, f.metadata FROM aliases a, objects f WHERE a.source = f.oid AND a.id = ".$c->id()." LIMIT 1");
+		$meta = aw_unserialize($row["metadata"]);
+		$this->assertFalse(isset($meta["aliaslinks"][$row["target"]]));
+	}
+
 	function _get_temp_o()
 	{
 	//	aw_disable_acl();
@@ -347,7 +408,7 @@ class connection_test extends UnitTestCase
 	//	aw_restore_acl();
 
 		return $o;
-	}	
+	}
 }
 
 ?>
