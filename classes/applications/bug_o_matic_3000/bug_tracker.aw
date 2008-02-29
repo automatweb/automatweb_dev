@@ -763,6 +763,8 @@ class bug_tracker extends class_base
 		$c_ol = new object_list(array(
 			"class_id" => CL_BUG_COMMENT,
 			"comment" => "%viewcvs.cgi%",
+			"lang_id" => array(),
+			"site_id" => array(),
 			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $prevm),
 		));
 		$bug_oids = array();
