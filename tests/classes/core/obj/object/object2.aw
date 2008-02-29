@@ -68,12 +68,12 @@ class object_test2 extends UnitTestCase
 		$o1->save();
 
 		$o2 = $this->_get_temp_o();
-		$o2->set_parent($o1);
+		$o2->set_parent($o1->id());
 		$o2->set_name("o2");
 		$o2->save();
 
 		$o3 = $this->_get_temp_o();
-		$o3->set_parent($o2);
+		$o3->set_parent($o2->id());
 		$o3->set_name("o3");
 
 		$str = $o3->path_str();
@@ -95,12 +95,12 @@ class object_test2 extends UnitTestCase
 		$o1->save();
 
 		$o2 = $this->_get_temp_o();
-		$o2->set_parent($o1);
+		$o2->set_parent($o1->id());
 		$o2->set_name("o2");
 		$o2->save();
 
 		$o3 = $this->_get_temp_o();
-		$o3->set_parent($o2);
+		$o3->set_parent($o2->id());
 		$o3->set_name("o3");
 
 		$str = $o3->path_str(array(
@@ -124,12 +124,12 @@ class object_test2 extends UnitTestCase
 		$o1->save();
 
 		$o2 = $this->_get_temp_o();
-		$o2->set_parent($o1);
+		$o2->set_parent($o1->id());
 		$o2->set_name("o2");
 		$o2->save();
 
 		$o3 = $this->_get_temp_o();
-		$o3->set_parent($o2);
+		$o3->set_parent($o2->id());
 		$o3->set_name("o3");
 
 		$str = $o3->path_str(array(
@@ -153,12 +153,12 @@ class object_test2 extends UnitTestCase
 		$o1->save();
 
 		$o2 = $this->_get_temp_o();
-		$o2->set_parent($o1);
+		$o2->set_parent($o1->id());
 		$o2->set_name("o2");
 		$o2->save();
 
 		$o3 = $this->_get_temp_o();
-		$o3->set_parent($o2);
+		$o3->set_parent($o2->id());
 		$o3->set_name("o3");
 
 		$str = $o3->path_str(array(
@@ -199,6 +199,195 @@ class object_test2 extends UnitTestCase
 		$o = obj();
 		$o->set_class_id(CL_MENU);
 		$this->assertTrue($o->is_property("target"));
+	}
+
+	function test_can_new()
+	{
+		$o = obj($this->obj_id);
+		$this->assertTrue($o->can("view"));
+	}
+
+	function test_parent()
+	{
+		$p = aw_ini_get("site_rootmenu");
+		$o1 = $this->_get_temp_o();
+		$o1->save();
+		$this->assertEqual($p, $o1->parent());
+		$o1->delete(true);
+	}
+
+	function test_set_parent()
+	{
+		$o1 = $this->_get_temp_o();
+		$o1->set_class_id(CL_MENU);
+		$site_id = 666;
+		$o1->set_site_id($site_id);
+		$o1->save();
+		$p = $o1->id();
+		$o2 = $this->_get_temp_o();
+		$o2->set_parent($p);
+		aw_disable_acl();
+		$o2->save();
+		aw_restore_acl();
+		$this->assertEqual($site_id, $o2->site_id());
+		$id = $o2->id();
+		$this->assertEqual($p, $this->db->db_fetch_field("SELECT parent FROM objects WHERE oid = $id", "parent"));
+		$o1->delete(true);
+		$o2->delete(true);
+	}
+
+	function test_name()
+	{
+		$o = $this->_get_temp_o();
+		$name = $o->name() + 1;
+		$o->set_name($name);
+		$this->assertEqual($name, $o->name());
+	}
+
+	function test_set_name()
+	{
+		$o = $this->_get_temp_o();
+		$name = $o->name() + 1;
+		$o->set_name($name);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($name, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = $id", "name"));
+		$o->delete(true);
+	}
+
+	function test_class_id()
+	{
+		$o = $this->_get_temp_o();
+		$clid = CL_MENU;
+		$o->set_class_id($clid);
+		$this->assertEqual($clid, $o->class_id());
+	}
+
+	function test_set_class_id()
+	{
+		$o = $this->_get_temp_o();
+		$id = $o->id();
+		$clid = CL_MENU;
+		$o->set_class_id($clid);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$this->assertEqual($clid, $this->db->db_fetch_field("SELECT class_id FROM objects WHERE oid = $id", "class_id"));
+		$o->delete(true);
+	}
+
+	function test_status()
+	{
+		$o = $this->_get_temp_o();
+		$o->save();
+		$this->assertEqual(1, $o->status());
+		$o->delete(true);
+	}
+
+	function test_set_status()
+	{
+		$o = $this->_get_temp_o();
+		$o->set_status(2);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual(2, $this->db->db_fetch_field("SELECT status FROM objects WHERE oid = $id", "status"));
+		$o->delete(true);
+	}
+
+	function test_lang()
+	{
+		$o = $this->_get_temp_o();
+		$lang = "et";
+		$o->set_lang($lang);
+		$this->assertEqual($lang, $o->lang());
+	}
+
+	function test_lang_id()
+	{
+		$o = $this->_get_temp_o();
+		$lang_id = 1;
+		$o->set_lang_id($lang_id);
+		$this->assertEqual($lang_id, $o->lang_id());
+	}
+
+	function test_set_lang_id()
+	{
+		$o = $this->_get_temp_o();
+		$id = $o->id();
+		$lang_id = 1;
+		$o->set_lang_id($lang_id);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$this->assertEqual($lang_id, $this->db->db_fetch_field("SELECT lang_id FROM objects WHERE oid = $id", "lang_id"));
+		$o->delete(true);
+	}
+
+	function test_comment()
+	{
+		$o = $this->_get_temp_o();
+		$comment = 1;
+		$o->set_comment($comment);
+		$this->assertEqual($comment, $o->comment());
+	}
+
+	function test_set_comment()
+	{
+		$o = $this->_get_temp_o();
+		$comment = 1;
+		$o->set_comment($comment);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($comment, $this->db->db_fetch_field("SELECT comment FROM objects WHERE oid = $id", "comment"));
+		$o->delete(true);
+	}
+
+	function test_ord()
+	{
+		$o = $this->_get_temp_o();
+		$ord = 1;
+		$o->set_ord($ord);
+		$this->assertEqual($ord, $o->ord());
+	}
+
+	function test_set_ord()
+	{
+		$o = $this->_get_temp_o();
+		$ord = 1;
+		$o->set_ord($ord);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($ord, $this->db->db_fetch_field("SELECT jrk FROM objects WHERE oid = $id", "jrk"));
+		$o->delete(true);
+	}
+
+	function test_alias()
+	{
+		$o = $this->_get_temp_o();
+		$alias = "alias";
+		$o->set_alias($alias);
+		$this->assertEqual($alias, $o->alias());
+	}
+
+	function test_set_alias()
+	{
+		$o = $this->_get_temp_o();
+		$alias = "alias";
+		$o->set_alias($alias);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($alias, $this->db->db_fetch_field("SELECT alias FROM objects WHERE oid = $id", "alias"));
+		$o->delete(true);
 	}
 }
 ?>

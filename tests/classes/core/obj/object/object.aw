@@ -113,13 +113,13 @@ class object_test extends UnitTestCase
 		$this->assertTrue($o->get_implicit_save());
 		aw_disable_acl();
 		$o->set_name($oldn+1);
-		$this->assertEqual($oldn+1, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
+		$this->assertEqual($oldn+1, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$this->obj_id, "name"));
 		$o->set_implicit_save(false);
 		$this->assertFalse($o->get_implicit_save());
 		$o->set_name($oldn);
-		$this->assertFalse($oldn == $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
+		$this->assertFalse($oldn == $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$this->obj_id, "name"));
 		$o->save();
-		$this->assertEqual($oldn, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
+		$this->assertEqual($oldn, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$this->obj_id, "name"));
 		aw_restore_acl();
 	}
 
@@ -779,7 +779,9 @@ class object_test extends UnitTestCase
 		$o1->save();
 		$o2->save();
 		$o3->save();
-
+		$o1->delete(true);
+		$o2->delete(true);
+		$o3->delete(true);
 		
 		$this->assertTrue(__is_err());
 	}
