@@ -1,5 +1,5 @@
 <?php
- 
+  
 //maintainer=markop
 class task_object extends _int_object
 {
