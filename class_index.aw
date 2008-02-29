@@ -28,6 +28,7 @@ class class_index
 
 		$found_classes = self::_update("", "", $full_update);
 		self::update_one_file(aw_ini_get("basedir")."/class_index.aw", $found_classes, $full_update, "../");
+		self::update_one_file(aw_ini_get("basedir")."/init.aw", $found_classes, $full_update, "../");
 
 		if ($full_update)
 		{
