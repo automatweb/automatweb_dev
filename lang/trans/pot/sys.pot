@@ -14,59 +14,51 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/sys.aw:43
+#: classes/sys.aw:36
 msgid "Tabeli nimi"
 msgstr ""
 
-#: classes/sys.aw:48
+#: classes/sys.aw:41
 msgid "Suurus"
 msgstr ""
 
-#: classes/sys.aw:75
+#: classes/sys.aw:68
 msgid "Total"
 msgstr ""
 
-#: classes/sys.aw:186
-msgid "Failed opening connection to server %s"
-msgstr ""
-
-#: classes/sys.aw:196
-msgid "Write error"
-msgstr ""
-
-#: classes/sys.aw:564
+#: classes/sys.aw:414
 msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr ""
 
-#: classes/sys.aw:620
+#: classes/sys.aw:471
 msgid "all done!"
 msgstr ""
 
-#: classes/sys.aw:666
+#: classes/sys.aw:511
 msgid "Nimi"
 msgstr ""
 
-#: classes/sys.aw:670
+#: classes/sys.aw:515
 msgid "Klass"
 msgstr ""
 
-#: classes/sys.aw:674
+#: classes/sys.aw:519
 msgid "Muutja"
 msgstr ""
 
-#: classes/sys.aw:678
+#: classes/sys.aw:523
 msgid "Muutmise aeg"
 msgstr ""
 
-#: classes/sys.aw:850
+#: classes/sys.aw:691
 msgid "all done!! database seems to be relatively ok!"
 msgstr ""
 
-#: classes/sys.aw:910
+#: classes/sys.aw:751
 msgid "All done"
 msgstr ""
 
-#: classes/sys.aw:998
+#: classes/sys.aw:839
 msgid "$fn"
 msgstr ""
 

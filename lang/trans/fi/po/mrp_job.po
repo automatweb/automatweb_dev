@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/mrp/mrp_job.aw:class_826_help
 msgid "Klassi Tegevus help"
@@ -370,7 +369,10 @@ msgstr ""
 msgid "Kommentaar peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:545 classes/mrp/mrp_job.aw:687 classes/mrp/mrp_job.aw:822 classes/mrp/mrp_job.aw:915 classes/mrp/mrp_job.aw:984 classes/mrp/mrp_job.aw:1060 classes/mrp/mrp_job.aw:1181
+#: classes/mrp/mrp_job.aw:545 classes/mrp/mrp_job.aw:687
+#: classes/mrp/mrp_job.aw:822 classes/mrp/mrp_job.aw:915
+#: classes/mrp/mrp_job.aw:984 classes/mrp/mrp_job.aw:1060
+#: classes/mrp/mrp_job.aw:1181
 msgid "Töö id vale"
 msgstr ""
 
@@ -410,11 +412,13 @@ msgstr ""
 msgid "Ressursi vabastamine ebaõnnestus. Job: %s, res: %s"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:743 classes/mrp/mrp_job.aw:877 classes/mrp/mrp_job.aw:1453
+#: classes/mrp/mrp_job.aw:743 classes/mrp/mrp_job.aw:877
+#: classes/mrp/mrp_job.aw:1456
 msgid "Ressursihalduskeskkond defineerimata."
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:834 classes/mrp/mrp_job.aw:927 classes/mrp/mrp_job.aw:1193
+#: classes/mrp/mrp_job.aw:834 classes/mrp/mrp_job.aw:927
+#: classes/mrp/mrp_job.aw:1193
 msgid "Töö pole tegemisel"
 msgstr ""
 
@@ -430,7 +434,6 @@ msgstr ""
 msgid "Töö pole katkestatud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:1473
+#: classes/mrp/mrp_job.aw:1476
 msgid "Lisas kommentaari"
 msgstr ""
-

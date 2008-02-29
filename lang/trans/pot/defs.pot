@@ -14,7 +14,15 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/defs.aw:955 classes/defs.aw:963
+#: classes/defs.aw:52
+msgid "Click me"
+msgstr ""
+
+#: classes/defs.aw:127
+msgid "Loo uus objekt"
+msgstr ""
+
+#: classes/defs.aw:1118 classes/defs.aw:1135
 msgid "(nimetu)"
 msgstr ""
 

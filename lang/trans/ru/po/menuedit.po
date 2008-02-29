@@ -9,8 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/menuedit.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
+#: classes/menuedit.aw:442
+msgid "&uuml;ritas accessida olematut objekti id-ga '%s'. Suunati esilehele."
+msgstr ""
+
+#: classes/menuedit.aw:561
+msgid "&uuml;ritas accessida objekti id-ga '%s'. Kr&auml;kkimiskatse?"
+msgstr ""
+
+#: classes/menuedit.aw:586
+msgid "<h1>404 Sellist sektsiooni pole</h1>"
+msgstr ""

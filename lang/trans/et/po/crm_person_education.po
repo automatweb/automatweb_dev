@@ -63,15 +63,15 @@ msgid "Omaduse Eriala (speciality) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_main_speciality
-msgid "Omaduse Põhieriala (main_speciality) caption"
+msgid "Omaduse P&otilde;hieriala (main_speciality) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_main_speciality_comment
-msgid "Omaduse Põhieriala (main_speciality) kommentaar"
+msgid "Omaduse P&otilde;hieriala (main_speciality) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_main_speciality_help
-msgid "Omaduse Põhieriala (main_speciality) help"
+msgid "Omaduse P&otilde;hieriala (main_speciality) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_in_progress
@@ -111,27 +111,27 @@ msgid "Omaduse Algus (start) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end
-msgid "Omaduse Lõpp (end) caption"
+msgid "Omaduse L&otilde;pp (end) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end_comment
-msgid "Omaduse Lõpp (end) kommentaar"
+msgid "Omaduse L&otilde;pp (end) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end_help
-msgid "Omaduse Lõpp (end) help"
+msgid "Omaduse L&otilde;pp (end) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end_date
-msgid "Omaduse Lõpetamise kuupäev (end_date) caption"
+msgid "Omaduse L&otilde;petamise kuupäev (end_date) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end_date_comment
-msgid "Omaduse Lõpetamise kuupäev (end_date) kommentaar"
+msgid "Omaduse L&otilde;petamise kuupäev (end_date) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end_date_help
-msgid "Omaduse Lõpetamise kuupäev (end_date) help"
+msgid "Omaduse L&otilde;petamise kuupäev (end_date) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_diploma_nr

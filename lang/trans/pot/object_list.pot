@@ -19,7 +19,7 @@ msgid "object_list::filter(): parameter must be an array!"
 msgstr ""
 
 #: classes/core/obj/object_list.aw:106
-msgid "objct_list::filter(): oid parameter cannot be an empty array!"
+msgid "object_list::filter(): oid parameter cannot be an empty array!"
 msgstr ""
 
 #: classes/core/obj/object_list.aw:311
@@ -66,11 +66,11 @@ msgstr ""
 msgid "object_list::from_arr(): parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:875
+#: classes/core/obj/object_list.aw:874
 msgid "object_list::filter(%s => %s): can not complex searches on metadata fields!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:882
+#: classes/core/obj/object_list.aw:881
 msgid "object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
 msgstr ""
 

@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Cache uuendusaeg (h) (cache_time) help"
 msgstr ""
 
+#: classes/contentmgmt/weather_report.aw:prop_pic_url
+msgid "Omaduse Piltide url (pic_url) caption"
+msgstr ""
+
+#: classes/contentmgmt/weather_report.aw:prop_pic_url_comment
+msgid "Omaduse Piltide url (pic_url) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/weather_report.aw:prop_pic_url_help
+msgid "Omaduse Piltide url (pic_url) help"
+msgstr ""
+
 #: classes/contentmgmt/weather_report.aw:prop_pic_list
 msgid "Omaduse Pildid (nt Light rain=rain.gif) (pic_list) caption"
 msgstr ""

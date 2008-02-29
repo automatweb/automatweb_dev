@@ -9,42 +9,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/obj/connection.aw:96
-msgid "connection::constructior(%s): parameter must be numeric or array!"
-msgstr "connection::constructior(%s): parameter must be numeric or array!"
+#: classes/core/obj/connection.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/core/obj/connection.aw:146
+#: classes/core/obj/connection.aw:99
+msgid "connection::constructor(%s): parameter must be numeric or array!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:149
 msgid "connection::load(): parameter must be either array (connection data) or integer (connection id)!"
 msgstr "connection::load(): parameter must be either array (connection data) or integer (connection id)!"
 
-#: classes/core/obj/connection.aw:205
+#: classes/core/obj/connection.aw:208
 msgid "connection::find(): parameter must be an array of filter parameters!"
 msgstr "connection::find(): parameter must be an array of filter parameters!"
 
-#: classes/core/obj/connection.aw:296
+#: classes/core/obj/connection.aw:299
 msgid "connection::change(%s): parameter must be an array!"
 msgstr "connection::change(%s): parameter must be an array!"
 
-#: classes/core/obj/connection.aw:334
+#: classes/core/obj/connection.aw:337
 msgid "connection::delete(): no current connection to delete!"
 msgstr "connection::delete(): no current connection to delete!"
 
-#: classes/core/obj/connection.aw:344
+#: classes/core/obj/connection.aw:347
 msgid "connection::delete(): no view access for this connection (%s)!"
 msgstr "connection::delete(): no view access for this connection (%s)!"
 
-#: classes/core/obj/connection.aw:496 classes/core/obj/connection.aw:523
+#: classes/core/obj/connection.aw:499 classes/core/obj/connection.aw:526
 msgid "connection::to(): no current connection!"
 msgstr "connection::to(): no current connection!"
 
-#: classes/core/obj/connection.aw:562
+#: classes/core/obj/connection.aw:565
 msgid "connection::load(%s): no connection with id $id!"
 msgstr "connection::load(%s): no connection with id $id!"
 
-#: classes/core/obj/connection.aw:572 classes/core/obj/connection.aw:596
+#: classes/core/obj/connection.aw:575 classes/core/obj/connection.aw:599
 msgid "connection::load(%s): no view access for this connection!"
 msgstr "connection::load(%s): no view access for this connection!"
 
-#: classes/core/obj/connection.aw:584
+#: classes/core/obj/connection.aw:587
 msgid "connection::save(): connection must have both ends defined!"
 msgstr "connection::save(): connection must have both ends defined!"
+
+#~ msgid "connection::constructior(%s): parameter must be numeric or array!"
+#~ msgstr "connection::constructior(%s): parameter must be numeric or array!"

@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/document_periodic.aw:class_29_help
+#: classes/contentmgmt/document_periodic.aw:class_29_help
 msgid "Klassi Dokument(p) help"
 msgstr ""
 

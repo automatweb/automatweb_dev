@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/relation.aw:class_179_help
+#: classes/core/relation.aw:class_179_help
 msgid "Klassi Seoseobjekt help"
 msgstr ""
 

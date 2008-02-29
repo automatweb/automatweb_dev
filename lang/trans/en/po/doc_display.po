@@ -9,78 +9,78 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/doc_display.aw:class__help
+#: classes/contentmgmt/doc_display.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/doc_display.aw:716
+#: classes/contentmgmt/doc_display.aw:1048
 msgid "Lisa uus"
 msgstr "Add new"
 
-#: classes/doc_display.aw:722
+#: classes/contentmgmt/doc_display.aw:1054
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/doc_display.aw:727
+#: classes/contentmgmt/doc_display.aw:1059
 msgid "Peida"
 msgstr "Hide"
 
-#: classes/doc_display.aw:731
+#: classes/contentmgmt/doc_display.aw:1063
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/doc_display.aw:737
+#: classes/contentmgmt/doc_display.aw:1069
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/doc_display.aw:933
+#: classes/contentmgmt/doc_display.aw:1265
 msgid "jaanuar"
 msgstr ""
 
-#: classes/doc_display.aw:934
+#: classes/contentmgmt/doc_display.aw:1266
 msgid "veebruar"
 msgstr ""
 
-#: classes/doc_display.aw:935
+#: classes/contentmgmt/doc_display.aw:1267
 msgid "märts"
 msgstr ""
 
-#: classes/doc_display.aw:936
+#: classes/contentmgmt/doc_display.aw:1268
 msgid "aprill"
 msgstr ""
 
-#: classes/doc_display.aw:937
+#: classes/contentmgmt/doc_display.aw:1269
 msgid "mai"
 msgstr ""
 
-#: classes/doc_display.aw:938
+#: classes/contentmgmt/doc_display.aw:1270
 msgid "juuni"
 msgstr ""
 
-#: classes/doc_display.aw:939
+#: classes/contentmgmt/doc_display.aw:1271
 msgid "juuli"
 msgstr ""
 
-#: classes/doc_display.aw:940
+#: classes/contentmgmt/doc_display.aw:1272
 msgid "august"
 msgstr ""
 
-#: classes/doc_display.aw:941
+#: classes/contentmgmt/doc_display.aw:1273
 msgid "september"
 msgstr ""
 
-#: classes/doc_display.aw:942
+#: classes/contentmgmt/doc_display.aw:1274
 msgid "oktoober"
 msgstr ""
 
-#: classes/doc_display.aw:943
+#: classes/contentmgmt/doc_display.aw:1275
 msgid "november"
 msgstr ""
 
-#: classes/doc_display.aw:944
+#: classes/contentmgmt/doc_display.aw:1276
 msgid "detsember"
 msgstr ""
 
-#: classes/doc_display.aw:951
+#: classes/contentmgmt/doc_display.aw:1283
 msgid "Just postitatud"
 msgstr ""

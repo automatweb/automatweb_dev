@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_working_time_scenario.aw:class_1392_help
-msgid "Klassi T&ouml;&ouml;aegade stsenaarium help"
+#: classes/applications/crm/crm_working_time_scenario.aw:class__help
+msgid "Klassi  help"
 msgstr ""
 
 #: classes/applications/crm/crm_working_time_scenario.aw:prop_weekdays
@@ -46,19 +46,19 @@ msgstr ""
 msgid "Esmaspäev"
 msgstr ""
 
-#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:55 classes/applications/crm/crm_working_time_scenario.aw:340
+#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:55 classes/applications/crm/crm_working_time_scenario.aw:347
 msgid "Teisip&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:60 classes/applications/crm/crm_working_time_scenario.aw:345
+#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:60 classes/applications/crm/crm_working_time_scenario.aw:352
 msgid "Kolmap&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:65 classes/applications/crm/crm_working_time_scenario.aw:350
+#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:65 classes/applications/crm/crm_working_time_scenario.aw:357
 msgid "Neljap&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:70 classes/applications/crm/crm_working_time_scenario.aw:355
+#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:70 classes/applications/crm/crm_working_time_scenario.aw:362
 msgid "Reede"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Laup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:80 classes/applications/crm/crm_working_time_scenario.aw:365
+#: classes/applications/crm/crm_working_time_scenario.aw:29 classes/applications/crm/crm_working_time_scenario.aw:80 classes/applications/crm/crm_working_time_scenario.aw:372
 msgid "P&uuml;hap&auml;ev"
 msgstr ""
 
@@ -102,15 +102,15 @@ msgstr ""
 msgid "Suletud p&otilde;hjus"
 msgstr ""
 
-#: classes/applications/crm/crm_working_time_scenario.aw:335
+#: classes/applications/crm/crm_working_time_scenario.aw:342
 msgid "Esmasp&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_working_time_scenario.aw:360
+#: classes/applications/crm/crm_working_time_scenario.aw:367
 msgid "laup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_working_time_scenario.aw:402
+#: classes/applications/crm/crm_working_time_scenario.aw:409
 msgid "Moodusta eelbroneeringud"
 msgstr ""
 

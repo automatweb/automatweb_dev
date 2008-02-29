@@ -313,6 +313,30 @@ msgstr ""
 msgid "Omaduse Kinnise aja string (closed_time_string) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_available_time_string
+msgid "Omaduse Vaba aja string (available_time_string) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_available_time_string_comment
+msgid "Omaduse Vaba aja string (available_time_string) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_available_time_string_help
+msgid "Omaduse Vaba aja string (available_time_string) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_reserved_time_string
+msgid "Omaduse Broneeritud aja string (reserved_time_string) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_reserved_time_string_comment
+msgid "Omaduse Broneeritud aja string (reserved_time_string) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_reserved_time_string_help
+msgid "Omaduse Broneeritud aja string (reserved_time_string) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:prop_bron_popup_detailed
 msgid "Omaduse Broneerimisaken on detailse sisuga (bron_popup_detailed) caption"
 msgstr ""
@@ -753,70 +777,70 @@ msgstr ""
 msgid "Seose Grupp (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:246
+#: classes/common/room_settings.aw:252
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:249
+#: classes/common/room_settings.aw:255
 msgid "#ord# - tellimuse sisu<br>#reason# - kinnituse eemaldamise p&ouml;hjus"
 msgstr ""
 
-#: classes/common/room_settings.aw:261
+#: classes/common/room_settings.aw:267
 msgid "sisu tuleb common/room/preview.tpl failist"
 msgstr ""
 
-#: classes/common/room_settings.aw:521
+#: classes/common/room_settings.aw:527
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:527
+#: classes/common/room_settings.aw:533
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:569
+#: classes/common/room_settings.aw:575
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:574
+#: classes/common/room_settings.aw:580
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:580
+#: classes/common/room_settings.aw:586
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:586 classes/common/room_settings.aw:598
+#: classes/common/room_settings.aw:592 classes/common/room_settings.aw:604
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:592
+#: classes/common/room_settings.aw:598
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:605
+#: classes/common/room_settings.aw:611
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:611
+#: classes/common/room_settings.aw:617
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:617
+#: classes/common/room_settings.aw:623
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:628
+#: classes/common/room_settings.aw:634
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:629
+#: classes/common/room_settings.aw:635
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:630
+#: classes/common/room_settings.aw:636
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:670
+#: classes/common/room_settings.aw:676
 msgid "Vali"
 msgstr ""

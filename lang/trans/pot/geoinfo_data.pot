@@ -63,243 +63,243 @@ msgid "Omaduse Aadress (address) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf1
-msgid "Omaduse Kasutaja defineeritud 1 (usertf1) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 1 (usertf1) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf1_comment
-msgid "Omaduse Kasutaja defineeritud 1 (usertf1) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 1 (usertf1) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf1_help
-msgid "Omaduse Kasutaja defineeritud 1 (usertf1) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 1 (usertf1) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta1
-msgid "Omaduse Kasutaja defineeritud 2 (userta1) caption"
+msgid "Omaduse Kasutaja defineeritud kast 1 (userta1) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta1_comment
-msgid "Omaduse Kasutaja defineeritud 2 (userta1) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 1 (userta1) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta1_help
-msgid "Omaduse Kasutaja defineeritud 2 (userta1) help"
+msgid "Omaduse Kasutaja defineeritud kast 1 (userta1) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf2
-msgid "Omaduse Kasutaja defineeritud 3 (usertf2) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 2 (usertf2) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf2_comment
-msgid "Omaduse Kasutaja defineeritud 3 (usertf2) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 2 (usertf2) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf2_help
-msgid "Omaduse Kasutaja defineeritud 3 (usertf2) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 2 (usertf2) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta2
-msgid "Omaduse Kasutaja defineeritud 4 (userta2) caption"
+msgid "Omaduse Kasutaja defineeritud kast 2 (userta2) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta2_comment
-msgid "Omaduse Kasutaja defineeritud 4 (userta2) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 2 (userta2) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta2_help
-msgid "Omaduse Kasutaja defineeritud 4 (userta2) help"
+msgid "Omaduse Kasutaja defineeritud kast 2 (userta2) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf3
-msgid "Omaduse Kasutaja defineeritud 5 (usertf3) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 3 (usertf3) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf3_comment
-msgid "Omaduse Kasutaja defineeritud 5 (usertf3) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 3 (usertf3) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf3_help
-msgid "Omaduse Kasutaja defineeritud 5 (usertf3) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 3 (usertf3) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta3
-msgid "Omaduse Kasutaja defineeritud 6 (userta3) caption"
+msgid "Omaduse Kasutaja defineeritud kast 3 (userta3) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta3_comment
-msgid "Omaduse Kasutaja defineeritud 6 (userta3) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 3 (userta3) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta3_help
-msgid "Omaduse Kasutaja defineeritud 6 (userta3) help"
+msgid "Omaduse Kasutaja defineeritud kast 3 (userta3) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf4
-msgid "Omaduse Kasutaja defineeritud 7 (usertf4) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 4 (usertf4) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf4_comment
-msgid "Omaduse Kasutaja defineeritud 7 (usertf4) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 4 (usertf4) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf4_help
-msgid "Omaduse Kasutaja defineeritud 7 (usertf4) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 4 (usertf4) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta4
-msgid "Omaduse Kasutaja defineeritud 8 (userta4) caption"
+msgid "Omaduse Kasutaja defineeritud kast 4 (userta4) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta4_comment
-msgid "Omaduse Kasutaja defineeritud 8 (userta4) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 4 (userta4) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta4_help
-msgid "Omaduse Kasutaja defineeritud 8 (userta4) help"
+msgid "Omaduse Kasutaja defineeritud kast 4 (userta4) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf5
-msgid "Omaduse Kasutaja defineeritud 9 (usertf5) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 5 (usertf5) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf5_comment
-msgid "Omaduse Kasutaja defineeritud 9 (usertf5) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 5 (usertf5) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf5_help
-msgid "Omaduse Kasutaja defineeritud 9 (usertf5) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 5 (usertf5) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta5
-msgid "Omaduse Kasutaja defineeritud 10 (userta5) caption"
+msgid "Omaduse Kasutaja defineeritud kast 5 (userta5) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta5_comment
-msgid "Omaduse Kasutaja defineeritud 10 (userta5) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 5 (userta5) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta5_help
-msgid "Omaduse Kasutaja defineeritud 10 (userta5) help"
+msgid "Omaduse Kasutaja defineeritud kast 5 (userta5) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf6
-msgid "Omaduse Kasutaja defineeritud 11 (usertf6) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 6 (usertf6) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf6_comment
-msgid "Omaduse Kasutaja defineeritud 11 (usertf6) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 6 (usertf6) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf6_help
-msgid "Omaduse Kasutaja defineeritud 11 (usertf6) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 6 (usertf6) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta6
-msgid "Omaduse Kasutaja defineeritud 12 (userta6) caption"
+msgid "Omaduse Kasutaja defineeritud kast 6 (userta6) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta6_comment
-msgid "Omaduse Kasutaja defineeritud 12 (userta6) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 6 (userta6) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta6_help
-msgid "Omaduse Kasutaja defineeritud 12 (userta6) help"
+msgid "Omaduse Kasutaja defineeritud kast 6 (userta6) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf7
-msgid "Omaduse Kasutaja defineeritud 13 (usertf7) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 7 (usertf7) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf7_comment
-msgid "Omaduse Kasutaja defineeritud 13 (usertf7) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 7 (usertf7) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf7_help
-msgid "Omaduse Kasutaja defineeritud 13 (usertf7) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 7 (usertf7) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta7
-msgid "Omaduse Kasutaja defineeritud 14 (userta7) caption"
+msgid "Omaduse Kasutaja defineeritud kast 7 (userta7) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta7_comment
-msgid "Omaduse Kasutaja defineeritud 14 (userta7) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 7 (userta7) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta7_help
-msgid "Omaduse Kasutaja defineeritud 14 (userta7) help"
+msgid "Omaduse Kasutaja defineeritud kast 7 (userta7) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf8
-msgid "Omaduse Kasutaja defineeritud 15 (usertf8) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 8 (usertf8) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf8_comment
-msgid "Omaduse Kasutaja defineeritud 15 (usertf8) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 8 (usertf8) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf8_help
-msgid "Omaduse Kasutaja defineeritud 15 (usertf8) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 8 (usertf8) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta8
-msgid "Omaduse Kasutaja defineeritud 16 (userta8) caption"
+msgid "Omaduse Kasutaja defineeritud kast 8 (userta8) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta8_comment
-msgid "Omaduse Kasutaja defineeritud 16 (userta8) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 8 (userta8) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta8_help
-msgid "Omaduse Kasutaja defineeritud 16 (userta8) help"
+msgid "Omaduse Kasutaja defineeritud kast 8 (userta8) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf9
-msgid "Omaduse Kasutaja defineeritud 17 (usertf9) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 9 (usertf9) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf9_comment
-msgid "Omaduse Kasutaja defineeritud 17 (usertf9) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 9 (usertf9) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf9_help
-msgid "Omaduse Kasutaja defineeritud 17 (usertf9) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 9 (usertf9) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta9
-msgid "Omaduse Kasutaja defineeritud 18 (userta9) caption"
+msgid "Omaduse Kasutaja defineeritud kast 9 (userta9) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta9_comment
-msgid "Omaduse Kasutaja defineeritud 18 (userta9) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 9 (userta9) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta9_help
-msgid "Omaduse Kasutaja defineeritud 18 (userta9) help"
+msgid "Omaduse Kasutaja defineeritud kast 9 (userta9) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf10
-msgid "Omaduse Kasutaja defineeritud 19 (usertf10) caption"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 10 (usertf10) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf10_comment
-msgid "Omaduse Kasutaja defineeritud 19 (usertf10) kommentaar"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 10 (usertf10) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_usertf10_help
-msgid "Omaduse Kasutaja defineeritud 19 (usertf10) help"
+msgid "Omaduse Kasutaja defineeritud v&auml;li 10 (usertf10) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta10
-msgid "Omaduse Kasutaja defineeritud 20 (userta10) caption"
+msgid "Omaduse Kasutaja defineeritud kast 10 (userta10) caption"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta10_comment
-msgid "Omaduse Kasutaja defineeritud 20 (userta10) kommentaar"
+msgid "Omaduse Kasutaja defineeritud kast 10 (userta10) kommentaar"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_userta10_help
-msgid "Omaduse Kasutaja defineeritud 20 (userta10) help"
+msgid "Omaduse Kasutaja defineeritud kast 10 (userta10) help"
 msgstr ""
 
 #: classes/applications/geoinfo/geoinfo_data.aw:prop_icon_t

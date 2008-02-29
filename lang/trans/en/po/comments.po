@@ -9,19 +9,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/comments.aw:56
-msgid "kommentaari<br><br>"
+#: classes/vcl/comments.aw:class__help
+msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/comments.aw:90
+#: classes/vcl/comments.aw:59
+msgid "kommentaari"
+msgstr ""
+
+#: classes/vcl/comments.aw:93
 msgid "Lisa kommentaar"
 msgstr "Add comment"
 
-#: classes/vcl/comments.aw:95
+#: classes/vcl/comments.aw:98
 msgid "Kasutaja"
 msgstr "User"
 
-#: classes/vcl/comments.aw:101
+#: classes/vcl/comments.aw:104
 msgid "Kommentaar"
 msgstr "Comment"
 

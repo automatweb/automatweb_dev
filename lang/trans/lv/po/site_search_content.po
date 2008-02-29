@@ -483,22 +483,22 @@ msgstr ""
 msgid "Sisu"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2375
+#: classes/contentmgmt/site_search/site_search_content.aw:2380
 msgid "t&auml;psuse"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2376
+#: classes/contentmgmt/site_search/site_search_content.aw:2381
 msgid "kuup&auml;eva alusel"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2377
+#: classes/contentmgmt/site_search/site_search_content.aw:2382
 msgid "pealkirja alusel"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2673
+#: classes/contentmgmt/site_search/site_search_content.aw:2678
 msgid "Lihtne otsing"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2678
+#: classes/contentmgmt/site_search/site_search_content.aw:2686
 msgid "Detailotsing"
 msgstr ""

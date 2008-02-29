@@ -499,7 +499,7 @@ msgid "--vali--"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:478
-msgid "Tagaiside kellelt muudeti %s => %s"
+msgid "Tagasiside kellelt muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:493

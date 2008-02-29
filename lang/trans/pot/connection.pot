@@ -15,7 +15,7 @@ msgid "Klassi  help"
 msgstr ""
 
 #: classes/core/obj/connection.aw:99
-msgid "connection::constructior(%s): parameter must be numeric or array!"
+msgid "connection::constructor(%s): parameter must be numeric or array!"
 msgstr ""
 
 #: classes/core/obj/connection.aw:149

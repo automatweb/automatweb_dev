@@ -9,6 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/defs.aw:912 classes/defs.aw:920
+#: classes/defs.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/defs.aw:52
+msgid "Click me"
+msgstr ""
+
+#: classes/defs.aw:127
+msgid "Loo uus objekt"
+msgstr ""
+
+#: classes/defs.aw:1118 classes/defs.aw:1135
 msgid "(nimetu)"
 msgstr "(unnamed)"

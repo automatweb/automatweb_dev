@@ -14,99 +14,99 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:31 classes/vcl/grid_editor.aw:1349 classes/vcl/grid_editor.aw:1475 classes/vcl/grid_editor.aw:1553 classes/vcl/grid_editor.aw:1583 classes/vcl/grid_editor.aw:1613 classes/vcl/grid_editor.aw:1769 classes/vcl/grid_editor.aw:1808
+#: classes/vcl/grid_editor.aw:31 classes/vcl/grid_editor.aw:1361 classes/vcl/grid_editor.aw:1487 classes/vcl/grid_editor.aw:1565 classes/vcl/grid_editor.aw:1595 classes/vcl/grid_editor.aw:1625 classes/vcl/grid_editor.aw:1781 classes/vcl/grid_editor.aw:1820
 msgid "allah"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:211 classes/vcl/grid_editor.aw:222
+#: classes/vcl/grid_editor.aw:223 classes/vcl/grid_editor.aw:234
 msgid "Lisa tulp"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:220
+#: classes/vcl/grid_editor.aw:232
 msgid "Oled kindel et tahad tulpa kustutada?"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:221
+#: classes/vcl/grid_editor.aw:233
 msgid "Kustuta tulp"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:245 classes/vcl/grid_editor.aw:245
+#: classes/vcl/grid_editor.aw:257 classes/vcl/grid_editor.aw:257
 msgid "Jaga pooleks horisontaalselt"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:246 classes/vcl/grid_editor.aw:246
+#: classes/vcl/grid_editor.aw:258 classes/vcl/grid_editor.aw:258
 msgid "Jaga pooleks vertikaalselt"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:250 classes/vcl/grid_editor.aw:250
+#: classes/vcl/grid_editor.aw:262 classes/vcl/grid_editor.aw:262
 msgid "Kustuta &uuml;lemine cell"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:254 classes/vcl/grid_editor.aw:254
+#: classes/vcl/grid_editor.aw:266 classes/vcl/grid_editor.aw:266
 msgid "Kustuta vasak cell"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:258 classes/vcl/grid_editor.aw:258
+#: classes/vcl/grid_editor.aw:270 classes/vcl/grid_editor.aw:270
 msgid "Kustuta parem cell"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:262 classes/vcl/grid_editor.aw:262
+#: classes/vcl/grid_editor.aw:274 classes/vcl/grid_editor.aw:274
 msgid "Kustuta alumine cell"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:300
+#: classes/vcl/grid_editor.aw:312
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:301
+#: classes/vcl/grid_editor.aw:313
 msgid "Kustuta rida"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:302
+#: classes/vcl/grid_editor.aw:314
 msgid "Oled kindel et soovid rida kustutada?"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:318
+#: classes/vcl/grid_editor.aw:330
 msgid "Mitu lahtrit kustutada"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1770 classes/vcl/grid_editor.aw:1809
+#: classes/vcl/grid_editor.aw:1782 classes/vcl/grid_editor.aw:1821
 msgid "allah2"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1948
+#: classes/vcl/grid_editor.aw:1960
 msgid "Merge alla"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1954
+#: classes/vcl/grid_editor.aw:1966
 msgid "Merge &uuml;les"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1960
+#: classes/vcl/grid_editor.aw:1972
 msgid "Merge vasakule"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1966
+#: classes/vcl/grid_editor.aw:1978
 msgid "Merge paremale"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1973
+#: classes/vcl/grid_editor.aw:1985
 msgid "Split alla"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1979
+#: classes/vcl/grid_editor.aw:1991
 msgid "Split &uuml;les"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1985
+#: classes/vcl/grid_editor.aw:1997
 msgid "Split vasakule"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1991
+#: classes/vcl/grid_editor.aw:2003
 msgid "Split paremale"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1997
+#: classes/vcl/grid_editor.aw:2009
 msgid "Kustuta read/tulbad"
 msgstr ""
 

@@ -723,15 +723,15 @@ msgstr "incl. submenus"
 msgid "Pane pealkirjaks"
 msgstr "Set as title"
 
-#: classes/contentmgmt/promo.aw:1135
+#: classes/contentmgmt/promo.aw:1108
 msgid "M&auml;rks&otilde;na"
 msgstr "Keyword"
 
-#: classes/contentmgmt/promo.aw:1189
+#: classes/contentmgmt/promo.aw:1162
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1195
+#: classes/contentmgmt/promo.aw:1168
 msgid "Otsi uus objekt:"
 msgstr ""
 

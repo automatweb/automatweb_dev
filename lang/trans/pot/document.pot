@@ -10,103 +10,103 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/document.aw:class_7_help
+#: classes/contentmgmt/document.aw:class_7_help
 msgid "Klassi Dokument help"
 msgstr ""
 
-#: classes/document.aw:485
+#: classes/contentmgmt/document.aw:485
 msgid "Viimati muudetud:"
 msgstr ""
 
-#: classes/document.aw:687
+#: classes/contentmgmt/document.aw:687
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr ""
 
-#: classes/document.aw:717
+#: classes/contentmgmt/document.aw:717
 msgid "Loe edasi"
 msgstr ""
 
-#: classes/document.aw:1184 classes/document.aw:1233
+#: classes/contentmgmt/document.aw:1184 classes/contentmgmt/document.aw:1233
 msgid "Vaata lisaks:"
 msgstr ""
 
-#: classes/document.aw:1189 classes/document.aw:1238
+#: classes/contentmgmt/document.aw:1189 classes/contentmgmt/document.aw:1238
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2494
+#: classes/contentmgmt/document.aw:2487
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2501
+#: classes/contentmgmt/document.aw:2494
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2509
+#: classes/contentmgmt/document.aw:2502
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:3019
+#: classes/contentmgmt/document.aw:3012
 msgid "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n"
 msgstr ""
 
-#: classes/document.aw:3049
+#: classes/contentmgmt/document.aw:3042
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:3051
+#: classes/contentmgmt/document.aw:3044
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
 
-#: classes/document.aw:3497
+#: classes/contentmgmt/document.aw:3490
 msgid "jaanuar"
 msgstr ""
 
-#: classes/document.aw:3498
+#: classes/contentmgmt/document.aw:3491
 msgid "veebruar"
 msgstr ""
 
-#: classes/document.aw:3499
+#: classes/contentmgmt/document.aw:3492
 msgid "märts"
 msgstr ""
 
-#: classes/document.aw:3500
+#: classes/contentmgmt/document.aw:3493
 msgid "aprill"
 msgstr ""
 
-#: classes/document.aw:3501
+#: classes/contentmgmt/document.aw:3494
 msgid "mai"
 msgstr ""
 
-#: classes/document.aw:3502
+#: classes/contentmgmt/document.aw:3495
 msgid "juuni"
 msgstr ""
 
-#: classes/document.aw:3503
+#: classes/contentmgmt/document.aw:3496
 msgid "juuli"
 msgstr ""
 
-#: classes/document.aw:3504
+#: classes/contentmgmt/document.aw:3497
 msgid "august"
 msgstr ""
 
-#: classes/document.aw:3505
+#: classes/contentmgmt/document.aw:3498
 msgid "september"
 msgstr ""
 
-#: classes/document.aw:3506
+#: classes/contentmgmt/document.aw:3499
 msgid "oktoober"
 msgstr ""
 
-#: classes/document.aw:3507
+#: classes/contentmgmt/document.aw:3500
 msgid "november"
 msgstr ""
 
-#: classes/document.aw:3508
+#: classes/contentmgmt/document.aw:3501
 msgid "detsember"
 msgstr ""
 
-#: classes/document.aw:3515
+#: classes/contentmgmt/document.aw:3508
 msgid "Just postitatud"
 msgstr ""
 

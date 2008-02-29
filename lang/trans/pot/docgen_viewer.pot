@@ -154,67 +154,95 @@ msgstr ""
 msgid "Kujundusosa Klassi&nbsp;info (tbl) pealkiri"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:90 classes/applications/docgen/docgen_viewer.aw:97 classes/applications/docgen/docgen_viewer.aw:227 classes/applications/docgen/docgen_viewer.aw:815 classes/applications/docgen/docgen_viewer.aw:885 classes/applications/docgen/docgen_viewer.aw:1328 classes/applications/docgen/docgen_viewer.aw:1398
+#: classes/applications/docgen/docgen_viewer.aw:110 classes/applications/docgen/docgen_viewer.aw:117 classes/applications/docgen/docgen_viewer.aw:240 classes/applications/docgen/docgen_viewer.aw:1104 classes/applications/docgen/docgen_viewer.aw:1174 classes/applications/docgen/docgen_viewer.aw:1786 classes/applications/docgen/docgen_viewer.aw:1856
 msgid "Classes"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:146
+#: classes/applications/docgen/docgen_viewer.aw:167
 msgid "Open DocGen"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:399
+#: classes/applications/docgen/docgen_viewer.aw:349 classes/applications/docgen/docgen_viewer.aw:1958
+msgid "Functions not in any class"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:356 classes/applications/docgen/docgen_viewer.aw:1965
+msgid "Interface:"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:360 classes/applications/docgen/docgen_viewer.aw:1969
+msgid "Class:"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:364 classes/applications/docgen/docgen_viewer.aw:1973
+msgid "Exception:"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:482
 msgid "nothing"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:400 classes/applications/docgen/docgen_viewer.aw:402
+#: classes/applications/docgen/docgen_viewer.aw:483 classes/applications/docgen/docgen_viewer.aw:485
 msgid "none"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1039
+#: classes/applications/docgen/docgen_viewer.aw:1339
 msgid "ALL DONE"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1101
-msgid "Klasside &uuml;levaade"
+#: classes/applications/docgen/docgen_viewer.aw:1401
+msgid "Class overview"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1107
-msgid "K&otilde;ik klassid"
+#: classes/applications/docgen/docgen_viewer.aw:1407
+msgid "All classes"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1113
-msgid "API klassid"
+#: classes/applications/docgen/docgen_viewer.aw:1413
+msgid "API classes"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1119
-msgid "Eraldi dokumentatsioon"
+#: classes/applications/docgen/docgen_viewer.aw:1419 classes/applications/docgen/docgen_viewer.aw:1532
+msgid "Classes by maintainer"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1126
-msgid "Classbase tagid"
+#: classes/applications/docgen/docgen_viewer.aw:1425 classes/applications/docgen/docgen_viewer.aw:1492
+msgid "Interfaces"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1132
-msgid "Otsing"
+#: classes/applications/docgen/docgen_viewer.aw:1431 classes/applications/docgen/docgen_viewer.aw:1592
+msgid "Exceptions"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1138
-msgid "Uuenda API andmebaas"
+#: classes/applications/docgen/docgen_viewer.aw:1437
+msgid "Separate documentation"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1149
+#: classes/applications/docgen/docgen_viewer.aw:1444
+msgid "Classbase tags"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:1450
+msgid "Search"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:1456
+msgid "Renew database"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:1467
 msgid "Foorum"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1166
+#: classes/applications/docgen/docgen_viewer.aw:1624
 msgid "Otsingus&otilde;na(d)"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1168
+#: classes/applications/docgen/docgen_viewer.aw:1626
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1173
+#: classes/applications/docgen/docgen_viewer.aw:1631
 msgid "Loo otsingu andmebaas"
 msgstr ""
 

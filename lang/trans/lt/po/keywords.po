@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,56 +9,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/keywords.aw:class_82_help
+#: classes/contentmgmt/keywords.aw:class_82_help
 msgid "Klassi V&otilde;tmes&otilde;na help"
 msgstr ""
 
-#: classes/keywords.aw:prop_keyword
+#: classes/contentmgmt/keywords.aw:prop_keyword
 msgid "Omaduse M&auml;rks&otilde;na (keyword) caption"
 msgstr ""
 
-#: classes/keywords.aw:prop_keyword_comment
+#: classes/contentmgmt/keywords.aw:prop_keyword_comment
 msgid "Omaduse M&auml;rks&otilde;na (keyword) kommentaar"
 msgstr ""
 
-#: classes/keywords.aw:prop_keyword_help
+#: classes/contentmgmt/keywords.aw:prop_keyword_help
 msgid "Omaduse M&auml;rks&otilde;na (keyword) help"
 msgstr ""
 
-#: classes/keywords.aw:prop_transl
+#: classes/contentmgmt/keywords.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/keywords.aw:prop_transl_comment
+#: classes/contentmgmt/keywords.aw:prop_transl_comment
 msgid "Omaduse T&otilde;lgi (transl) kommentaar"
 msgstr ""
 
-#: classes/keywords.aw:prop_transl_help
+#: classes/contentmgmt/keywords.aw:prop_transl_help
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
-#: classes/keywords.aw:group_transl
+#: classes/contentmgmt/keywords.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
 msgstr ""
 
-#: classes/keywords.aw:group_transl_help
+#: classes/contentmgmt/keywords.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
-#: classes/keywords.aw:rel_RELTYPE_KEYWORD
+#: classes/contentmgmt/keywords.aw:rel_RELTYPE_KEYWORD
 msgid "Seose Dokument (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/keywords.aw:rel_RELTYPE_FILE
+#: classes/contentmgmt/keywords.aw:rel_RELTYPE_FILE
 msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
-#: classes/keywords.aw:rel_RELTYPE_LINK
+#: classes/contentmgmt/keywords.aw:rel_RELTYPE_LINK
 msgid "Seose Link (RELTYPE_LINK) tekst"
 msgstr ""
 
-#: classes/keywords.aw:1176
+#: classes/contentmgmt/keywords.aw:1176
 msgid "Selline v&otilde;tmes&otilde;na on juba olemas (%s)!"
 msgstr ""
-

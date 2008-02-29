@@ -458,6 +458,18 @@ msgstr ""
 msgid "Omaduse Rate long note (rate_long_note) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_room_type_code
+msgid "Omaduse Rate room type code (rate_room_type_code) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_room_type_code_comment
+msgid "Omaduse Rate room type code (rate_room_type_code) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_rate_room_type_code_help
+msgid "Omaduse Rate room type code (rate_room_type_code) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_reservation.aw:prop_confirmation_code
 msgid "Omaduse Confirmation code (confirmation_code) caption"
 msgstr ""

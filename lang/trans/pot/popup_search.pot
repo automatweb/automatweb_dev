@@ -14,7 +14,11 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:161 classes/vcl/popup_search.aw:479 classes/vcl/popup_search.aw:897
+#: classes/vcl/popup_search.aw:151
+msgid "--Vali--"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:161 classes/vcl/popup_search.aw:478 classes/vcl/popup_search.aw:479 classes/vcl/popup_search.aw:898
 msgid "Otsi"
 msgstr ""
 
@@ -38,7 +42,7 @@ msgstr ""
 msgid "Vali eemaldatavad objektid"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:345 classes/vcl/popup_search.aw:612 classes/vcl/popup_search.aw:616
+#: classes/vcl/popup_search.aw:345 classes/vcl/popup_search.aw:612 classes/vcl/popup_search.aw:616 classes/vcl/popup_search.aw:696
 msgid "Vali"
 msgstr ""
 

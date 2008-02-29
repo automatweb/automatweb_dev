@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,9 +9,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:class_1131_help
 msgid "Klassi Kasutaja j&auml;rjehoidjad help"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_sharing
+msgid "Omaduse J&auml;rjehoidjate jagamine (sharing) caption"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_sharing_comment
+msgid "Omaduse J&auml;rjehoidjate jagamine (sharing) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_sharing_help
+msgid "Omaduse J&auml;rjehoidjate jagamine (sharing) help"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_show
+msgid "Omaduse Jagatud j&auml;rjehoidjaid n&auml;idatakse (shared_show) caption"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_show_comment
+msgid "Omaduse Jagatud j&auml;rjehoidjaid n&auml;idatakse (shared_show) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_show_help
+msgid "Omaduse Jagatud j&auml;rjehoidjaid n&auml;idatakse (shared_show) help"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_bm_tb
@@ -50,6 +73,42 @@ msgstr ""
 msgid "Omaduse  (bm_table) help"
 msgstr ""
 
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_tb
+msgid "Omaduse  (shared_tb) caption"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_tb_comment
+msgid "Omaduse  (shared_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_tb_help
+msgid "Omaduse  (shared_tb) help"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_tree
+msgid "Omaduse  (shared_tree) caption"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_tree_comment
+msgid "Omaduse  (shared_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_tree_help
+msgid "Omaduse  (shared_tree) help"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_table
+msgid "Omaduse  (shared_table) caption"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_table_comment
+msgid "Omaduse  (shared_table) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:prop_shared_table_help
+msgid "Omaduse  (shared_table) help"
+msgstr ""
+
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:group_bms
 msgid "Grupi J&auml;rjehoidja (bms) pealkiri"
 msgstr ""
@@ -58,79 +117,137 @@ msgstr ""
 msgid "Grupi J&auml;rjehoidja (bms) help"
 msgstr ""
 
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:group_shared
+msgid "Grupi Jagatud j&auml;rjehoidjad (shared) pealkiri"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:group_shared_help
+msgid "Grupi Jagatud j&auml;rjehoidjad (shared) help"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:rel_RELTYPE_SHOW_SHARED
+msgid "Seose Jagatud j&auml;rjehoidja (RELTYPE_SHOW_SHARED) tekst"
+msgstr ""
+
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:layout_bm_tree
 msgid "Kujundusosa Puu (bm_tree) pealkiri"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:91
-msgid "%s j&auml;rjehoidja"
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:layout_shared_tree
+msgid "Kujundusosa Puu (shared_tree) pealkiri"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:109
-msgid "Uus"
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:92
+msgid "&Uuml;ksteise all"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:113
-msgid "Kataloog"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:118 classes/applications/customer_satisfaction_center/user_bookmarks.aw:302
-msgid "Link"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:131
-msgid "Salvesta"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:137
-msgid "Kustuta"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:144
-msgid "Kopeeri"
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:93
+msgid "Kasutajate kaupa"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:151
+msgid "%s j&auml;rjehoidja"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:169
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:173
+msgid "Kataloog"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:178
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:428
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:717
+msgid "Link"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:191
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:614
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:197
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:204
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:211
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:160
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:220
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:291
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:412
+msgid "Jaga"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:417
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:706
 msgid "Ikoon"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:297
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:423
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:712
 msgid "Objekti nimi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:307
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:433
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:312
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:438
+msgid "Tee kohustuslikuks"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:443
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:317
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:448
 msgid "Kasutaja tekst"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:452
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:505
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:644
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:915
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1115
+msgid "j&auml;rjehoidja"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:701
+msgid "Kuva endal"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:722
+msgid "Kasutaja"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:772
+msgid "j&auml;rjehoidjad"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:955
 msgid "Pane j&auml;rjehoidjasse"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:456
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:959
 msgid "Eemalda j&auml;rjehoidjast"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:460
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:963
 msgid "Toimeta j&auml;rjehoidjat"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:466
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:969
 msgid "J&auml;rjehoidja"
 msgstr ""
-

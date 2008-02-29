@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,14 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/error.aw:33 classes/core/error.aw:91
+#: classes/core/error.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/error.aw:36 classes/core/error.aw:94
 msgid "class::function(): parameter %s is not set!"
 msgstr ""
 
-#: classes/core/error.aw:62 classes/core/error.aw:63 classes/core/error.aw:64
+#: classes/core/error.aw:65 classes/core/error.aw:66 classes/core/error.aw:67
 msgid "not specified"
 msgstr "not specified"
 
-#: classes/core/error.aw:67
+#: classes/core/error.aw:70
 msgid "Acl error, access %s was denied for object %s in function %s"
 msgstr "Acl error, access %s was denied for object %s in function %s"

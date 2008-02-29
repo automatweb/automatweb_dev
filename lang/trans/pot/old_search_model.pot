@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/old_search_model.aw:class_124_help
+#: classes/contentmgmt/site_search/old_search_model.aw:class_124_help
 msgid "Klassi Objekti otsing help"
 msgstr ""
 

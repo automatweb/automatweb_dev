@@ -14,7 +14,3 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/obj/obj_xml_gen.aw:145
-msgid "obj_xml_gen::_ser_one_obj(): could not find parent %s in d_map!"
-msgstr ""
-

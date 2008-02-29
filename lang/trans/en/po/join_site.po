@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -785,8 +785,8 @@ msgstr "Change"
 
 #: classes/contentmgmt/join/join_site.aw:436
 #: classes/contentmgmt/join/join_site.aw:455
-#: classes/contentmgmt/join/join_site.aw:2952
-#: classes/contentmgmt/join/join_site.aw:3072
+#: classes/contentmgmt/join/join_site.aw:2953
+#: classes/contentmgmt/join/join_site.aw:3073
 msgid "Omadus"
 msgstr "Property"
 
@@ -905,98 +905,98 @@ msgstr "Join mail subject (%s)"
 msgid "Liitumise meil (%s)"
 msgstr "Join mail (%s)"
 
-#: classes/contentmgmt/join/join_site.aw:2925
+#: classes/contentmgmt/join/join_site.aw:2926
 msgid "Sellise koodiga kasutajat pole olemas!"
 msgstr "A user with this code does not exist"
 
-#: classes/contentmgmt/join/join_site.aw:2957
+#: classes/contentmgmt/join/join_site.aw:2958
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/contentmgmt/join/join_site.aw:2962
+#: classes/contentmgmt/join/join_site.aw:2963
 msgid "Reavahetus sisu vahel"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2975
-#: classes/contentmgmt/join/join_site.aw:3198
+#: classes/contentmgmt/join/join_site.aw:2976
+#: classes/contentmgmt/join/join_site.aw:3199
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/contentmgmt/join/join_site.aw:2976
+#: classes/contentmgmt/join/join_site.aw:2977
 msgid "Tekstikast"
 msgstr "Texbox"
 
-#: classes/contentmgmt/join/join_site.aw:2977
+#: classes/contentmgmt/join/join_site.aw:2978
 msgid "Listbox"
 msgstr "Listbox"
 
-#: classes/contentmgmt/join/join_site.aw:2978
+#: classes/contentmgmt/join/join_site.aw:2979
 msgid "Raadionupp"
 msgstr "Radiobutton"
 
-#: classes/contentmgmt/join/join_site.aw:2979
+#: classes/contentmgmt/join/join_site.aw:2980
 msgid "Checkbox"
 msgstr "Checkbox"
 
-#: classes/contentmgmt/join/join_site.aw:3133
+#: classes/contentmgmt/join/join_site.aw:3134
 msgid "Liitu nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3134
-#: classes/contentmgmt/join/join_site.aw:3153
-#: classes/contentmgmt/join/join_site.aw:3173
+#: classes/contentmgmt/join/join_site.aw:3135
+#: classes/contentmgmt/join/join_site.aw:3154
+#: classes/contentmgmt/join/join_site.aw:3174
 msgid "<b>Nuppude tekstid</b>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3152
+#: classes/contentmgmt/join/join_site.aw:3153
 msgid "Salvesta nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3172
+#: classes/contentmgmt/join/join_site.aw:3173
 msgid "T&uuml;hista nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3193
+#: classes/contentmgmt/join/join_site.aw:3194
 msgid "T&otilde;lgi omaduste tekste"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3220
+#: classes/contentmgmt/join/join_site.aw:3221
 msgid "Veateade"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3245
+#: classes/contentmgmt/join/join_site.aw:3246
 msgid "J&auml;rgnev v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3246
+#: classes/contentmgmt/join/join_site.aw:3247
 msgid "Sellise kasutajanimega kasutaja on juba olemas!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3247
+#: classes/contentmgmt/join/join_site.aw:3248
 msgid "Sisestatud paroolid on erinevad!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3248
+#: classes/contentmgmt/join/join_site.aw:3249
 msgid "Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3249
+#: classes/contentmgmt/join/join_site.aw:3250
 msgid "Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3250
+#: classes/contentmgmt/join/join_site.aw:3251
 msgid "Paroolis peab olema v&auml;hemalt 3 t&auml;hte!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3268
+#: classes/contentmgmt/join/join_site.aw:3269
 msgid "T&otilde;lgi veateateid"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3275
+#: classes/contentmgmt/join/join_site.aw:3276
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3325
+#: classes/contentmgmt/join/join_site.aw:3326
 msgid "T&otilde;lgi vahepealkiri"
 msgstr ""
 

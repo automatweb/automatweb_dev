@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1444,8 +1444,8 @@ msgid "Muu alus"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft.aw:528
-msgid "Varustus/tarvikud"
-msgstr "Equipment"
+msgid "Varustus"
+msgstr ""
 
 #: classes/applications/watercraft_management/watercraft.aw:532
 msgid "Lisavarustus"
@@ -1655,6 +1655,9 @@ msgstr "Amount"
 #: classes/applications/watercraft_management/watercraft.aw:1097
 msgid "-"
 msgstr ""
+
+#~ msgid "Varustus/tarvikud"
+#~ msgstr "Equipment"
 
 #~ msgid "Foka 1"
 #~ msgstr "Foka 1"

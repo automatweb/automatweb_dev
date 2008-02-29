@@ -14,23 +14,23 @@ msgstr ""
 msgid "Klassi Ekspordi ruul help"
 msgstr ""
 
-#: classes/export/export.aw:239
+#: classes/export/export.aw:236
 msgid "Folder %s does not exist on server!"
 msgstr ""
 
-#: classes/export/export.aw:252
+#: classes/export/export.aw:249
 msgid "eksport juba k&auml;ib!"
 msgstr ""
 
-#: classes/export/export.aw:473
+#: classes/export/export.aw:470
 msgid "Found stop flag as %s, shutting down."
 msgstr ""
 
-#: classes/export/export.aw:496
+#: classes/export/export.aw:493
 msgid "VIGA, tyhi url!"
 msgstr ""
 
-#: classes/export/export.aw:780
+#: classes/export/export.aw:772
 msgid "VIGA! EI LEIDNUD ext for type %s"
 msgstr ""
 

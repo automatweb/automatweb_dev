@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/import/event_import.aw:class_1356_help
-msgid "Klassi S&uuml;ndmuste import help"
+#: classes/import/event_import.aw:class_1337_help
+msgid "Klassi Sündmuste import help"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_events_manager
@@ -446,59 +446,59 @@ msgstr ""
 msgid "Muudatust allikas ignoreeritakse"
 msgstr ""
 
-#: classes/import/event_import.aw:1338
+#: classes/import/event_import.aw:1305
 msgid "External system for events not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1343
+#: classes/import/event_import.aw:1310
 msgid "External system for locations not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1348
+#: classes/import/event_import.aw:1315
 msgid "External system for categories (aka sectors) not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1353
+#: classes/import/event_import.aw:1320
 msgid "External system for event times not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1723 classes/import/event_import.aw:1922 classes/import/event_import.aw:2049 classes/import/event_import.aw:2224
+#: classes/import/event_import.aw:1708 classes/import/event_import.aw:1906 classes/import/event_import.aw:2033 classes/import/event_import.aw:2208
 msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
 
-#: classes/import/event_import.aw:2316 classes/import/event_import.aw:2319
+#: classes/import/event_import.aw:2302
 msgid "You don't have view access to import object!"
 msgstr ""
 
-#: classes/import/event_import.aw:2341
+#: classes/import/event_import.aw:2312
 msgid "Events manager not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2346 classes/import/event_import.aw:2349
+#: classes/import/event_import.aw:2317
 msgid "You don't have view access to events manager object!"
 msgstr ""
 
-#: classes/import/event_import.aw:2360
+#: classes/import/event_import.aw:2325
 msgid "Events manager: Directory for events not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2366
+#: classes/import/event_import.aw:2331
 msgid "Events manager: Directory for places not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2372
+#: classes/import/event_import.aw:2337
 msgid "Events manager: Directory for organizers not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2378
+#: classes/import/event_import.aw:2343
 msgid "Events manager: Directory for categories not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2391
+#: classes/import/event_import.aw:2356
 msgid "Event form not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2396 classes/import/event_import.aw:2399
+#: classes/import/event_import.aw:2361
 msgid "You don't have view access to eventform object!"
 msgstr ""
 

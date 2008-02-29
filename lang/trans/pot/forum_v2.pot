@@ -1034,27 +1034,27 @@ msgstr ""
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1874
+#: classes/contentmgmt/forum/forum_v2.aw:1872
 msgid "Sisestatud kontrollnumber on vale! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1878
+#: classes/contentmgmt/forum/forum_v2.aw:1876
 msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1882
+#: classes/contentmgmt/forum/forum_v2.aw:1880
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1886
+#: classes/contentmgmt/forum/forum_v2.aw:1884
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1890
+#: classes/contentmgmt/forum/forum_v2.aw:1888
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1894
+#: classes/contentmgmt/forum/forum_v2.aw:1892
 msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
 msgstr ""
 

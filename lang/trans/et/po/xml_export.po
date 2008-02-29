@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -231,15 +231,27 @@ msgid "Omaduse Kaustad, mille alt objekte v&otilde;etakse (parents_table) help"
 msgstr ""
 
 #: classes/export/xml_export.aw:prop_xml_root_tag_name
-msgid "Omaduse Juur m&auml;rgendi nimi (xml_root_tag_name) caption"
+msgid "Omaduse Juurm&auml;rgendi nimi (xml_root_tag_name) caption"
 msgstr ""
 
 #: classes/export/xml_export.aw:prop_xml_root_tag_name_comment
-msgid "Omaduse Juur m&auml;rgendi nimi (xml_root_tag_name) kommentaar"
+msgid "Omaduse Juurm&auml;rgendi nimi (xml_root_tag_name) kommentaar"
 msgstr ""
 
 #: classes/export/xml_export.aw:prop_xml_root_tag_name_help
-msgid "Omaduse Juur m&auml;rgendi nimi (xml_root_tag_name) help"
+msgid "Omaduse Juurm&auml;rgendi nimi (xml_root_tag_name) help"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_xml_root_tag_attrs
+msgid "Omaduse Juurm&auml;rgendi atribuudid (xml_root_tag_attrs) caption"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_xml_root_tag_attrs_comment
+msgid "Omaduse Juurm&auml;rgendi atribuudid (xml_root_tag_attrs) kommentaar"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_xml_root_tag_attrs_help
+msgid "Omaduse Juurm&auml;rgendi atribuudid (xml_root_tag_attrs) help"
 msgstr ""
 
 #: classes/export/xml_export.aw:prop_xml_object_tag_name
@@ -313,70 +325,86 @@ msgstr ""
 msgid "Seose S&uuml;ndmuste asukoht (RELTYPE_PARENT) tekst"
 msgstr ""
 
-#: classes/export/xml_export.aw:122
+#: classes/export/xml_export.aw:rel_RELTYPE_CONTROLLER
+msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/export/xml_export.aw:rel_RELTYPE_OBJ_PREPEND_CONTROLLER
+msgid "Seose Kontroller andmete lisamiseks obj. ette (RELTYPE_OBJ_PREPEND_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/export/xml_export.aw:rel_RELTYPE_OBJ_APPEND_CONTROLLER
+msgid "Seose Kontroller andmete lisamiseks obj. j2rele (RELTYPE_OBJ_APPEND_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/export/xml_export.aw:132
 msgid "Teosta eksport"
 msgstr ""
 
-#: classes/export/xml_export.aw:127
+#: classes/export/xml_export.aw:137
 msgid "Ekspordi AW objektid"
 msgstr ""
 
-#: classes/export/xml_export.aw:145
+#: classes/export/xml_export.aw:155
 msgid "Faili/kausta ei saa kirjutada"
 msgstr ""
 
-#: classes/export/xml_export.aw:183
+#: classes/export/xml_export.aw:193
 msgid "Faili ei saa kirjutada"
 msgstr ""
 
-#: classes/export/xml_export.aw:339
+#: classes/export/xml_export.aw:352
 msgid "Kaust"
 msgstr ""
 
-#: classes/export/xml_export.aw:344
+#: classes/export/xml_export.aw:357
 msgid "Kaasaarvatud alamkaustad"
 msgstr ""
 
-#: classes/export/xml_export.aw:376
+#: classes/export/xml_export.aw:389
 msgid "Vali"
 msgstr ""
 
-#: classes/export/xml_export.aw:380
+#: classes/export/xml_export.aw:393
 msgid "Seadete vormi v&auml;li"
 msgstr ""
 
-#: classes/export/xml_export.aw:385
+#: classes/export/xml_export.aw:398
 msgid "jrk"
 msgstr ""
 
-#: classes/export/xml_export.aw:393
+#: classes/export/xml_export.aw:406
 msgid "XML v&auml;lja nimetus"
 msgstr ""
 
-#: classes/export/xml_export.aw:398
+#: classes/export/xml_export.aw:411
 msgid "XML v&auml;lja sisu"
 msgstr ""
 
-#: classes/export/xml_export.aw:403
+#: classes/export/xml_export.aw:416
 msgid "Parameetrid"
 msgstr ""
 
-#: classes/export/xml_export.aw:408
+#: classes/export/xml_export.aw:421
+msgid "Kontroller"
+msgstr ""
+
+#: classes/export/xml_export.aw:425
 msgid "CDATA"
 msgstr ""
 
-#: classes/export/xml_export.aw:909
+#: classes/export/xml_export.aw:965
 msgid "Omadus"
 msgstr ""
 
-#: classes/export/xml_export.aw:914
+#: classes/export/xml_export.aw:970
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/export/xml_export.aw:919
+#: classes/export/xml_export.aw:975
 msgid "T&auml;pne"
 msgstr ""
 
-#: classes/export/xml_export.aw:937
+#: classes/export/xml_export.aw:993
 msgid "--vali--"
 msgstr ""

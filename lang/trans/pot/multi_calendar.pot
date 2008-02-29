@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/calendar/vcl/multi_calendar.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/applications/calendar/vcl/multi_calendar.aw:61
 msgid "Kalendrid, millest otsida"
 msgstr ""

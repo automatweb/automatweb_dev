@@ -15,7 +15,7 @@ msgid "Klassi  help"
 msgstr ""
 
 #: classes/vcl/comments.aw:59
-msgid "kommentaari<br><br>"
+msgid "kommentaari"
 msgstr ""
 
 #: classes/vcl/comments.aw:93

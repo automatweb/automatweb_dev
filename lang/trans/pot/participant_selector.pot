@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/calendar/vcl/participant_selector.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/applications/calendar/vcl/participant_selector.aw:37
 msgid "Nimi"
 msgstr ""

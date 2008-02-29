@@ -9,8 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/import/event_import.aw:class_1356_help
-msgid "Klassi S&uuml;ndmuste import help"
+#: classes/import/event_import.aw:class_1337_help
+msgid "Klassi Sündmuste import help"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_events_manager
@@ -23,6 +23,18 @@ msgstr ""
 
 #: classes/import/event_import.aw:prop_events_manager_help
 msgid "Omaduse S&uuml;ndmuste halduse keskkond (events_manager) help"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_event_form
+msgid "Omaduse S&uuml;ndmuse vorm (event_form) caption"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_event_form_comment
+msgid "Omaduse S&uuml;ndmuse vorm (event_form) kommentaar"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_event_form_help
+msgid "Omaduse S&uuml;ndmuse vorm (event_form) help"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_xml_sources
@@ -49,16 +61,16 @@ msgstr ""
 msgid "Omaduse JSON allikad: (json_sources) help"
 msgstr ""
 
-#: classes/import/event_import.aw:prop_cb_log_changes
-msgid "Omaduse Muudatuste tegemiseks k&uuml;sin luba? (cb_log_changes) caption"
+#: classes/import/event_import.aw:prop_original_lang
+msgid "Omaduse Keel (original_lang) caption"
 msgstr ""
 
-#: classes/import/event_import.aw:prop_cb_log_changes_comment
-msgid "Omaduse Muudatuste tegemiseks k&uuml;sin luba? (cb_log_changes) kommentaar"
+#: classes/import/event_import.aw:prop_original_lang_comment
+msgid "Omaduse Keel (original_lang) kommentaar"
 msgstr ""
 
-#: classes/import/event_import.aw:prop_cb_log_changes_help
-msgid "Omaduse Muudatuste tegemiseks k&uuml;sin luba? (cb_log_changes) help"
+#: classes/import/event_import.aw:prop_original_lang_help
+msgid "Omaduse Keel (original_lang) help"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_translatable_fields
@@ -98,15 +110,27 @@ msgid "Omaduse J&auml;rgmine automaatne import (next_import_text) help"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_import_events_all
-msgid "Omaduse Impordi k&otilde;ik s&uuml;ndmused (import_events_all) caption"
+msgid "Omaduse Impordi s&uuml;ndmused algusest (import_events_all) caption"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_import_events_all_comment
-msgid "Omaduse Impordi k&otilde;ik s&uuml;ndmused (import_events_all) kommentaar"
+msgid "Omaduse Impordi s&uuml;ndmused algusest (import_events_all) kommentaar"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_import_events_all_help
-msgid "Omaduse Impordi k&otilde;ik s&uuml;ndmused (import_events_all) help"
+msgid "Omaduse Impordi s&uuml;ndmused algusest (import_events_all) help"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_future_length
+msgid "Omaduse Imporditavate p&auml;evade arv (future_length) caption"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_future_length_comment
+msgid "Omaduse Imporditavate p&auml;evade arv (future_length) kommentaar"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_future_length_help
+msgid "Omaduse Imporditavate p&auml;evade arv (future_length) help"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_import_events
@@ -439,59 +463,59 @@ msgstr ""
 msgid "Muudatust allikas ignoreeritakse"
 msgstr ""
 
-#: classes/import/event_import.aw:1227
+#: classes/import/event_import.aw:1305
 msgid "External system for events not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1232
+#: classes/import/event_import.aw:1310
 msgid "External system for locations not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1237
+#: classes/import/event_import.aw:1315
 msgid "External system for categories (aka sectors) not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1242
+#: classes/import/event_import.aw:1320
 msgid "External system for event times not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1606 classes/import/event_import.aw:1794
-#: classes/import/event_import.aw:1921 classes/import/event_import.aw:2096
+#: classes/import/event_import.aw:1708 classes/import/event_import.aw:1906
+#: classes/import/event_import.aw:2033 classes/import/event_import.aw:2208
 msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
 
-#: classes/import/event_import.aw:2175 classes/import/event_import.aw:2178
+#: classes/import/event_import.aw:2302
 msgid "You don't have view access to import object!"
 msgstr ""
 
-#: classes/import/event_import.aw:2200
+#: classes/import/event_import.aw:2312
 msgid "Events manager not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2205 classes/import/event_import.aw:2208
+#: classes/import/event_import.aw:2317
 msgid "You don't have view access to events manager object!"
 msgstr ""
 
-#: classes/import/event_import.aw:2219
+#: classes/import/event_import.aw:2325
 msgid "Events manager: Directory for events not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2225
+#: classes/import/event_import.aw:2331
 msgid "Events manager: Directory for places not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2231
+#: classes/import/event_import.aw:2337
 msgid "Events manager: Directory for organizers not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2237
+#: classes/import/event_import.aw:2343
 msgid "Events manager: Directory for categories not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2250
+#: classes/import/event_import.aw:2356
 msgid "Event form not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2255 classes/import/event_import.aw:2258
+#: classes/import/event_import.aw:2361
 msgid "You don't have view access to eventform object!"
 msgstr ""

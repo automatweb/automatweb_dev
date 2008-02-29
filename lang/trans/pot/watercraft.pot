@@ -1415,7 +1415,7 @@ msgid "Muu alus"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft.aw:528
-msgid "Varustus/tarvikud"
+msgid "Varustus"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft.aw:532

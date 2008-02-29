@@ -47,6 +47,6 @@ msgid "B2B mudel"
 msgstr ""
 
 #: classes/crm/crm_company_status.aw:37
-msgid "Müügipotensiaal"
+msgid "M&uuml;&uuml;gipotentsiaal"
 msgstr ""
 

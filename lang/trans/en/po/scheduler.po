@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,14 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/scheduler.aw:752
+#: classes/core/scheduler.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/scheduler.aw:752
 msgid "Aeg"
 msgstr "Time"
 
-#: classes/scheduler.aw:757
+#: classes/core/scheduler.aw:757
 msgid "URL"
 msgstr "URL"
 
-#: classes/scheduler.aw:762
+#: classes/core/scheduler.aw:762
 msgid "Kordus"
 msgstr "Recurrence"

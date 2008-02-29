@@ -190,22 +190,9 @@ msgstr ""
 msgid "Klassi V&otilde;tmes&otilde;na (82) nimi"
 msgstr ""
 
-#: aw.ini:class_83
-msgid "Klassi V&otilde;tmes&otilde;nade baas (83) nimi"
-msgstr ""
-
 # aw.ini:class_85
 #: aw.ini:class_85
 msgid "Klassi Pullout (85) nimi"
-msgstr ""
-
-# aw.ini:class_86
-#: aw.ini:class_86
-msgid "Klassi Objektigrupp (86) nimi"
-msgstr ""
-
-#: aw.ini:class_89
-msgid "Klassi Men&uuml;&uuml; alias (89) nimi"
 msgstr ""
 
 #: aw.ini:class_90
@@ -256,11 +243,6 @@ msgstr ""
 msgid "Klassi Scheduler (108) nimi"
 msgstr ""
 
-# aw.ini:class_114
-#: aw.ini:class_114
-msgid "Klassi Prioriteet (114) nimi"
-msgstr ""
-
 #: aw.ini:class_115
 msgid "Klassi Objekti t&uuml;&uuml;p (115) nimi"
 msgstr ""
@@ -278,11 +260,6 @@ msgstr ""
 # aw.ini:class_120
 #: aw.ini:class_120
 msgid "Klassi Salvestatud seaded (120) nimi"
-msgstr ""
-
-# aw.ini:class_121
-#: aw.ini:class_121
-msgid "Klassi Objekti otsing (121) nimi"
 msgstr ""
 
 # aw.ini:class_122
@@ -409,11 +386,6 @@ msgstr ""
 msgid "Klassi AW_Log (164) nimi"
 msgstr ""
 
-# aw.ini:class_165
-#: aw.ini:class_165
-msgid "Klassi Poll (uus) (165) nimi"
-msgstr ""
-
 # aw.ini:class_166
 #: aw.ini:class_166
 msgid "Klassi Polli vastus (166) nimi"
@@ -475,11 +447,6 @@ msgstr ""
 
 #: aw.ini:class_180
 msgid "Klassi Men&uuml;&uuml;piirkond (180) nimi"
-msgstr ""
-
-# aw.ini:class_181
-#: aw.ini:class_181
-msgid "Klassi Asukohariba (181) nimi"
 msgstr ""
 
 # aw.ini:class_182
@@ -2596,6 +2563,18 @@ msgstr ""
 msgid "Klassi Toimumisaeg (1322) nimi"
 msgstr ""
 
+#: aw.ini:class_1337
+msgid "Klassi Sündmuste import (1337) nimi"
+msgstr ""
+
+#: aw.ini:class_1338
+msgid "Klassi Impordi logi (1338) nimi"
+msgstr ""
+
+#: aw.ini:class_1339
+msgid "Klassi XML allikas (1339) nimi"
+msgstr ""
+
 #: aw.ini:class_1323
 msgid "Klassi OWS Broneeringukeskus (1323) nimi"
 msgstr ""
@@ -2716,12 +2695,20 @@ msgstr ""
 msgid "Klassi Surmakaunter (1369) nimi"
 msgstr ""
 
+#: aw.ini:class_1370
+msgid "Klassi The Terminator (1370) nimi"
+msgstr ""
+
 #: aw.ini:class_1371
 msgid "Klassi Pakk (1371) nimi"
 msgstr ""
 
 #: aw.ini:class_1372
 msgid "Klassi Rahvus (1372) nimi"
+msgstr ""
+
+#: aw.ini:class_1384
+msgid "Klassi Broneeringu kiirlisamine (1384) nimi"
 msgstr ""
 
 #: aw.ini:class_1373
@@ -2741,7 +2728,7 @@ msgid "Klassi Citizenship (1377) nimi"
 msgstr ""
 
 #: aw.ini:class_1378
-msgid "Klassi RSS voog (1378) nimi"
+msgid "Klassi Organisatsioonide otsing (1378) nimi"
 msgstr ""
 
 #: aw.ini:class_1381
@@ -2754,6 +2741,14 @@ msgstr ""
 
 #: aw.ini:class_1383
 msgid "Klassi Laekumine (1383) nimi"
+msgstr ""
+
+#: aw.ini:class_1385
+msgid "Klassi Kraad (1385) nimi"
+msgstr ""
+
+#: aw.ini:class_1386
+msgid "Klassi Personali import (1386) nimi"
 msgstr ""
 
 #: aw.ini:class_1388
@@ -2773,11 +2768,31 @@ msgid "Klassi XML andmeallikas (1391) nimi"
 msgstr ""
 
 #: aw.ini:class_1392
-msgid "Klassi T&ouml;&ouml;aegade stsenaarium (1392) nimi"
+msgid "Klassi Mobi SMS haldur (1392) nimi"
 msgstr ""
 
 #: aw.ini:class_1393
-msgid "Klassi Broneeringu kiirlisamine (1393) nimi"
+msgid "Klassi Dünaamiline küsimustik (1393) nimi"
+msgstr ""
+
+#: aw.ini:class_1394
+msgid "Klassi Dünaamilise küsimustiku küsimus (1394) nimi"
+msgstr ""
+
+#: aw.ini:class_1395
+msgid "Klassi Dünaamilise küsimustiku vastus (1395) nimi"
+msgstr ""
+
+#: aw.ini:class_1396
+msgid "Klassi Dünaamilise küsimustiku vastaja (1396) nimi"
+msgstr ""
+
+#: aw.ini:class_1397
+msgid "Klassi AW v&auml;line teenus (1397) nimi"
+msgstr ""
+
+#: aw.ini:class_1398
+msgid "Klassi Haridustase (1398) nimi"
 msgstr ""
 
 # aw.ini:classfolder_1
@@ -5415,10 +5430,6 @@ msgstr ""
 msgid "syslog.type.ST_GEOINFO_DATA"
 msgstr ""
 
-#: aw.ini:syslogtypes_1378
-msgid "syslog.type.ST_RSS_FEED"
-msgstr ""
-
 #: aw.ini:syslogtypes_1381
 msgid "syslog.type.ST_OWS_PROFILE"
 msgstr ""
@@ -5429,10 +5440,6 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1389
 msgid "syslog.type.ST_AW_SENT_MAIL"
-msgstr ""
-
-#: aw.ini:syslogtypes_1390
-msgid "syslog.type.ST_CRM_PEOPLE_SEARCH"
 msgstr ""
 
 #: aw.ini:syslogtypes_1391

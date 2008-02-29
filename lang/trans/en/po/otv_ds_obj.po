@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -235,26 +235,30 @@ msgstr "By object modified date"
 msgid "Objektide j&auml;rjekorra j&auml;rgi"
 msgstr "By object order"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:159
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:92
+msgid "Objektide nime j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:160
 msgid "ID"
 msgstr "ID"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:167
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:168
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:172
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:173
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr "incl. submenus"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:179
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:180
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr "do not display root menu"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:434
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:435
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:435
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:436
 msgid "OID"
 msgstr ""

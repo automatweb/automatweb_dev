@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,69 +9,77 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/popup_search.aw:154 classes/vcl/popup_search.aw:471
-#: classes/vcl/popup_search.aw:875
+#: classes/vcl/popup_search.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:151
+msgid "--Vali--"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:161 classes/vcl/popup_search.aw:478
+#: classes/vcl/popup_search.aw:479 classes/vcl/popup_search.aw:898
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/vcl/popup_search.aw:163
+#: classes/vcl/popup_search.aw:170
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/popup_search.aw:203
+#: classes/vcl/popup_search.aw:210
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/vcl/popup_search.aw:221
+#: classes/vcl/popup_search.aw:228
 msgid "Lisa uus %s"
 msgstr "Add new %s"
 
-#: classes/vcl/popup_search.aw:237
+#: classes/vcl/popup_search.aw:244
 msgid "Eemalda"
 msgstr "Remove"
 
-#: classes/vcl/popup_search.aw:322
+#: classes/vcl/popup_search.aw:329
 msgid "Vali eemaldatavad objektid"
 msgstr "Select objects to remove"
 
-#: classes/vcl/popup_search.aw:338 classes/vcl/popup_search.aw:604
-#: classes/vcl/popup_search.aw:608
+#: classes/vcl/popup_search.aw:345 classes/vcl/popup_search.aw:612
+#: classes/vcl/popup_search.aw:616 classes/vcl/popup_search.aw:696
 msgid "Vali"
 msgstr "Select"
 
-#: classes/vcl/popup_search.aw:419
+#: classes/vcl/popup_search.aw:427
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/vcl/popup_search.aw:449 classes/vcl/popup_search.aw:580
+#: classes/vcl/popup_search.aw:457 classes/vcl/popup_search.aw:588
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/vcl/popup_search.aw:456
+#: classes/vcl/popup_search.aw:464
 msgid "Objekti id"
 msgstr "Object ID"
 
-#: classes/vcl/popup_search.aw:547
+#: classes/vcl/popup_search.aw:555
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:573
+#: classes/vcl/popup_search.aw:581
 msgid "OID"
 msgstr "OID"
 
-#: classes/vcl/popup_search.aw:586
+#: classes/vcl/popup_search.aw:594
 msgid "Asukoht"
 msgstr "Location in system"
 
-#: classes/vcl/popup_search.aw:592
+#: classes/vcl/popup_search.aw:600
 msgid "Muutja"
 msgstr "Modifiedby"
 
-#: classes/vcl/popup_search.aw:596
+#: classes/vcl/popup_search.aw:604
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/vcl/popup_search.aw:670
+#: classes/vcl/popup_search.aw:678
 msgid "Vali see"
 msgstr "Select this"
 

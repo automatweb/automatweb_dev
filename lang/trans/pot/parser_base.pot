@@ -14,11 +14,11 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/parsers/parser_base.aw:110
+#: classes/contentmgmt/site_search/parsers/parser_base.aw:112
 msgid "parser_base::_put(%s, content): can not open %s for writing!"
 msgstr ""
 
-#: classes/contentmgmt/site_search/parsers/parser_base.aw:121
+#: classes/contentmgmt/site_search/parsers/parser_base.aw:123
 msgid "parser_base::_get(%s): can not open file for reading!"
 msgstr ""
 

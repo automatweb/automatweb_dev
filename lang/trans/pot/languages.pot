@@ -10,11 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/languages.aw:class__help
+#: classes/core/languages.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/languages.aw:463
+#: classes/core/languages.aw:499
 msgid "Lisas keele"
 msgstr ""
 

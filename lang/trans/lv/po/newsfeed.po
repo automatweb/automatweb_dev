@@ -241,7 +241,7 @@ msgstr ""
 msgid "Atom (implementeerimata)"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:561
+#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:585
 msgid "Vali"
 msgstr ""
 
@@ -265,6 +265,6 @@ msgstr ""
 msgid "Võta alamkaustadest ka"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:555
+#: classes/contentmgmt/newsfeed.aw:579
 msgid "M&auml;rks&otilde;na"
 msgstr ""

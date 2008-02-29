@@ -86,3 +86,23 @@ msgstr ""
 msgid "Omaduse Eelvaade (preview) help"
 msgstr ""
 
+#: classes/contentmgmt/flash.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+

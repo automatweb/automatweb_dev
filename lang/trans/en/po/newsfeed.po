@@ -263,7 +263,7 @@ msgstr "RSS 2.0"
 msgid "Atom (implementeerimata)"
 msgstr "Atom (not implemented)"
 
-#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:561
+#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:585
 msgid "Vali"
 msgstr ""
 
@@ -287,6 +287,6 @@ msgstr "Name"
 msgid "Võta alamkaustadest ka"
 msgstr "Include subfolders"
 
-#: classes/contentmgmt/newsfeed.aw:555
+#: classes/contentmgmt/newsfeed.aw:579
 msgid "M&auml;rks&otilde;na"
 msgstr ""

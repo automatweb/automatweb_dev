@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2015-06-01 19:54+0200\n"
 "Last-Translator: ergo\n"
 "Language-Team: \n"
@@ -734,15 +734,15 @@ msgstr ""
 msgid "Pane pealkirjaks"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1135
+#: classes/contentmgmt/promo.aw:1108
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1189
+#: classes/contentmgmt/promo.aw:1162
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1195
+#: classes/contentmgmt/promo.aw:1168
 msgid "Otsi uus objekt:"
 msgstr ""
 

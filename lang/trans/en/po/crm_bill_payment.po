@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_bill_payment.aw:class_1383_help
 msgid "Klassi Laekumine help"
 msgstr ""
@@ -90,83 +89,95 @@ msgstr ""
 msgid "Seose valuuta (RELTYPE_CURRENCY) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:80
-msgid "Arve nr:"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:93
+#: classes/applications/crm/crm_bill_payment.aw:76
 msgid "Lisa Arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:99 classes/applications/crm/crm_bill_payment.aw:415
+#: classes/applications/crm/crm_bill_payment.aw:82
+#: classes/applications/crm/crm_bill_payment.aw:496
 msgid "&Uuml;lekandega"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:99 classes/applications/crm/crm_bill_payment.aw:415
+#: classes/applications/crm/crm_bill_payment.aw:82
+#: classes/applications/crm/crm_bill_payment.aw:496
 msgid "Sularahas"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:142
-msgid "Ei j&auml;tku raha arvele id'ga"
+#: classes/applications/crm/crm_bill_payment.aw:102
+msgid "Arve nr"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:163
-msgid "Lisa uus laekumine"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:169
-msgid "Kustuta valitud laekumised"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:170
-msgid "Oled kindel et soovid valitud laekumised kustutada?"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:176
-msgid "Otsi"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:186
-msgid "Kuup&auml;ev"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:194
-msgid "Nimi"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:199
-msgid "Arved"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:204
+#: classes/applications/crm/crm_bill_payment.aw:106
+#: classes/applications/crm/crm_bill_payment.aw:285
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:210
-msgid "Tasumisviis"
-msgstr ""
-
-#: classes/applications/crm/crm_bill_payment.aw:216
+#: classes/applications/crm/crm_bill_payment.aw:110
+#: classes/applications/crm/crm_bill_payment.aw:153
+#: classes/applications/crm/crm_bill_payment.aw:297
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:222
+#: classes/applications/crm/crm_bill_payment.aw:114
+#: classes/applications/crm/crm_bill_payment.aw:303
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:228
+#: classes/applications/crm/crm_bill_payment.aw:141
+#: classes/applications/crm/crm_bill_payment.aw:152
+msgid "Arve nr:"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:223
+msgid "Ei j&auml;tku raha arvele id'ga"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:244
+msgid "Lisa uus laekumine"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:250
+msgid "Kustuta valitud laekumised"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:251
+msgid "Oled kindel et soovid valitud laekumised kustutada?"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:257
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:267
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:275
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:280
+msgid "Arved"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:291
+msgid "Tasumisviis"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_payment.aw:309
 msgid "Valuutakurss"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:381
+#: classes/applications/crm/crm_bill_payment.aw:462
 msgid "Laekumised"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:402 classes/applications/crm/crm_bill_payment.aw:406 classes/applications/crm/crm_bill_payment.aw:412
+#: classes/applications/crm/crm_bill_payment.aw:483
+#: classes/applications/crm/crm_bill_payment.aw:487
+#: classes/applications/crm/crm_bill_payment.aw:493
 msgid "nimetu"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment.aw:433
+#: classes/applications/crm/crm_bill_payment.aw:514
 msgid "<b>Summa</b>"
 msgstr ""
-
