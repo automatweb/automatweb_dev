@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.85 2008/02/25 18:47:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.86 2008/02/29 14:33:37 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1281,10 +1281,18 @@ class otto_import extends class_base
 			{
 				$image_converter = get_instance('core/converters/image_convert');
 				$image_converter->load_from_file($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg');
-
-				$image_converter->resize_simple(168, 240);
-				$image_converter->save($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg', 2);
-
+				
+				list($image_width, $image_height) = $image_converter->size();
+				if ($image_width >= $image_height)
+				{
+					$new_image_height = ($image_height * 168) / $image_width;
+					$image_converter->resize_simple(168, $new_image_height);
+				}
+				else
+				{
+					$image_converter->resize_simple(168, 240);
+				}
+				$image_converter->save($small_picture, 2);
 			}
 
 			// add picture to product only when both big and small picture files exist:
@@ -1298,6 +1306,13 @@ class otto_import extends class_base
 		
 		if ($pics_mod)
 		{
+			foreach ($pics as $k => $v)
+			{
+				if (empty($v))
+				{
+					unset($pics[$k]);
+				}
+			}
 			$prod_obj->set_prop('user3', implode(',', $pics));
 			$prod_obj->set_prop('userch2', 1);
 			$save = true;
@@ -2029,7 +2044,7 @@ class otto_import extends class_base
 					$added_categories = array_diff($categories, $old_categories);
 					$deleted_categories = array_diff($old_categories, $categories);
 
-					arr($added_categories);
+				//	arr($added_categories);
 					$tmp_added_categories = array();
 					foreach ($added_categories as $key => $value)
 					{
@@ -2042,8 +2057,10 @@ class otto_import extends class_base
 
 					if (!empty($added_categories))
 					{
+/*
 						echo "added categories <br /> \n";
 						arr($added_categories);
+*/
 						// mul on vaja k6iki nende kategooriatega tooteid
 
 						$prod_ol = new object_list(array(
@@ -2069,7 +2086,7 @@ class otto_import extends class_base
 							{
 								$tmp_prods[$row['product']] = $row['section'];
 							}
-							arr($tmp_prods);
+						//	arr($tmp_prods);
 						}
 
 						foreach ($prod_ol_ids as $prod_id)
@@ -2096,7 +2113,7 @@ class otto_import extends class_base
 
 
 
-					arr($deleted_categories);
+				//	arr($deleted_categories);
 					$tmp_deleted_categories = array();
 					foreach ($deleted_categories as $key => $value)
 					{
@@ -2989,7 +3006,7 @@ class otto_import extends class_base
 			echo "<b>product: ".$product['title']."</b><br>\n";
 
 			// niisiis, kuidas ma teada saan kas sellisele tootele on juba objekt olemas ...
-			// ilmselt peab tootekoodide järgi vaatama, et kas selline tootekood on lut-is olemas
+			// ilmselt peab tootekoodide j2rgi vaatama, et kas selline tootekood on lut-is olemas
 
 			// get all product codes and colors:
 			$product_codes = array();
@@ -3074,7 +3091,7 @@ class otto_import extends class_base
 			// user6 - tootekoodid, komadega eraldatult
 			$product_obj->set_prop('user6', implode(',', $product_codes));
 			
-			// user7 - värvid, komadega eraldatult
+			// user7 - v2rvid, komadega eraldatult
 			$product_obj->set_prop('user7', implode(',', $colors));
 
 			// is categories and images update allowed for this product:
@@ -3903,7 +3920,7 @@ class otto_import extends class_base
 
 	function conv($str)
 	{
-		$str = str_replace(chr(207), "ž", $str);
+		$str = str_replace(chr(207), (string)(ord(126).ord(94)), $str);
 		return $str;
 	}
 
@@ -4175,12 +4192,8 @@ class otto_import extends class_base
 	// ??? --dragut
 	function do_post_import_fixes($obj)
 	{
-		/*echo chr(154);
-		echo chr(137);
-		die();*/
-		//'user17' => '%Î
 		$query = 'select aw_oid, tauser2 from aw_shop_products where '.
-						' tauser2 like "%Î%" or tauser2 like "%Ï%" or tauser2 like"%'.chr(137).'%"';
+						' tauser2 like "%'.chr(206).'%" or tauser2 like "%'.chr(207).'%" or tauser2 like"%'.chr(137).'%"';
 		//echo $query,"<br><br>";
 		$this->db_query($query);
 
@@ -4527,19 +4540,11 @@ class otto_import extends class_base
 	XXX
 	This is weird here actually - it breaked the loop previously, and now it should return false ... but 
 	let's consider the situation, where multiple products where found and the loop actually could look
-	through multiple products, then maybe from some next prodict it does find the images? 
+	through multiple products, then maybe from some next product it does find the images? 
 	But with previous functionality and and current one it just breaks the loop all together when it doesn't
 	find images ... I'll check back here later --dragut 19.02.2008
 */
 					return false;
-				/*
-					$this->read_img_from_baur(array(
-						'pcode' => $pcode,
-						'import_obj' => $import_obj
-					));
-				
-					break;
-				*/
 				}
 
 				$f_imnr = NULL;
@@ -4553,7 +4558,7 @@ class otto_import extends class_base
 					$connection_image = $matches[1];
 					if (!empty($connection_image))
 					{
-						echo "-- [Connection image] ";
+						echo "[ OTTO ] Siduv pilt ";
 						$image_ok = $this->get_image(array(
 							'source' => 'http://image01.otto.de:80/pool/formatb/'.$connection_image.'.jpg',
 							'format' => SMALL_PICTURE,
@@ -4587,19 +4592,19 @@ class otto_import extends class_base
 				{
 					if (strpos($img, 'leer.gif') !== false )
 					{
-						echo "-- tundub, et sellele variandile pilti ei ole <br>\n";
+						echo "[ OTTO ] tundub, et sellele variandile pilti ei ole <br>\n";
 						continue;
 					}
 					$imnr = basename($img, ".jpg");
 
 					if (file_get_contents(str_replace($imnr, $imnr.'.jpg', $img)) === false)
 					{
-						echo "-- selle variandi pilti ei &otilde;nnestu k&auml;tte saada<br />\n";
+						echo "[ OTTO ] selle variandi pilti ei &otilde;nnestu k&auml;tte saada<br />\n";
 						continue;
 					}
 
-					echo "-- ".$imnr."<br>\n";
-					echo "-- image from product $pcode : ($t_imnr)<br />";
+					echo "[ OTTO ] ".$imnr."<br>\n";
+					echo "[ OTTO ] image from product $pcode : ($t_imnr)<br />";
 					$q = "SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'";
 					$t_imnr = $this->db_fetch_field($q, "pcode");
 
@@ -4610,7 +4615,7 @@ class otto_import extends class_base
 
 					if (!$t_imnr)
 					{
-						echo "-- insert new image $imnr <br />\n";
+						echo "[ OTTO ] insert new image $imnr <br />\n";
 						flush();
 
 						$q = ("
@@ -4633,7 +4638,7 @@ class otto_import extends class_base
 								nr = '".$mt[2][$idx]."' and
 								pcode = '".$pcode."'
 						");
-						echo "-- image $imnr for product $pcode is already in db<br />\n";
+						echo "[ OTTO ] image $imnr for product $pcode is already in db<br />\n";
 						flush();
 					}
 
@@ -4672,11 +4677,6 @@ class otto_import extends class_base
 							'debug' => true
 						));
 
-arr('---------------------------------------------------------------');
-var_dump($image_ok);
-echo '<br />http://image01.otto.de/pool/ov_formatd/'.$imnr.'.jpg';
-arr('---------------------------------------------------------------');
-
 						if ($image_ok)
 						{
 							// download the big version of the image too:
@@ -4693,7 +4693,7 @@ arr('---------------------------------------------------------------');
 				// check for rundumanshiftph (flash)
 				if (strpos($html, "rundum_ansicht") !== false)
 				{
-					echo "[video import]";
+					echo "[ OTTO ] video ";
 
 					$pattern = "/'".preg_quote("http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_DisplayProductInformation-SuperZoom3D;", "/").".*'/imsU";
 					preg_match_all($pattern, $html, $mt, PREG_PATTERN_ORDER);
@@ -4860,15 +4860,8 @@ arr('---------------------------------------------------------------');
 		echo "[ SCHWAB ] Loading <a href=\"$url\">page</a> content ";
 		$fc = $this->file_get_contents($url);
 		echo "[ok]<br />\n";
-		if (strpos($fc, "Keine passenden Ergebnisse für:") !== false)
+		if (strpos($fc, "Keine passenden Ergebnisse f".chr(252)."r:") !== false)
 		{
-		/*
-			echo "[ SCHWAB ] can't find a product for <b>$pcode</b> from schwab.de, so searching from albamoda<br>\n";
-			return $this->read_img_from_albamoda(array(
-				'pcode' => $pcode,
-				'import_obj' => $import_obj
-			));
-		*/
 			echo "[ SCHWAB ] can't find a product for <b>$pcode</b> from schwab.de, so returning false<br>\n";
 			return false;
 		}
@@ -4974,6 +4967,7 @@ arr('---------------------------------------------------------------');
 
 	function read_img_from_albamoda($arr)
 	{
+		
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 
@@ -4982,6 +4976,13 @@ arr('---------------------------------------------------------------');
 		echo "[ ALBAMODA ] Loading <a href=\"$url\">page</a> content ";
 		$fc = $this->file_get_contents($url);
 		echo "[ok]<br />\n";
+
+		preg_match("/var url = \"(.*)\"/imsU", $fc, $mt);
+		$url = $mt[1];
+		echo "[ ALBAMODA ] Redirecting to and loading <a href=\"$url\">page</a> content ";
+		$fc = $this->file_get_contents($url);
+		echo "[ok]<br />\n";
+
 		if (strpos($fc, "Es wurden leider keine Artikel") !== false)
 		{
 			echo "[ ALBAMODA ] can't find a product for code <b>$pcode</b> from albamoda.de, so return false<br>\n";
@@ -4989,7 +4990,9 @@ arr('---------------------------------------------------------------');
 		}
 
 		// match prod urls
-		preg_match_all("/displayART\('(.*)'\)/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+	//	preg_match_all("/displayART\('(.*)'\)/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+		preg_match_all("/".preg_quote('IMG id="hauptbild" class="bb" onmouseover="javascript:setStatus(1);" onmouseout="javascript:setStatus(0);" ', '/')."SRC=\"(.*)\" name=\"gross\"/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+
 		$pcs = array_unique($mt[1]);
 
 		foreach($pcs as $prodref)
