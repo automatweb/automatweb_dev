@@ -168,7 +168,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@caption Avamisajad
 
 
------- Üldine - Tegevused grupp -----
+------ Yldine - Tegevused grupp -----
 @default group=org_sections
 
 	@property kaubamargid type=textarea cols=65 rows=3 table=kliendibaas_firma
@@ -420,11 +420,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 				@property language type=relpicker reltype=RELTYPE_LANGUAGE table=kliendibaas_firma parent=ce_other_bot captionside=top
 				@caption Vaikimisi keel
 
-- Töötajad vaatesse
-Võimalus määrata, kes on volitatud isikud ja volituse alus. Töötaja nime järele on võimalik panna märkeruut tulpa &#8220;Volitatud&#8221;. Selle märkimisel avaneb uus aken, kus küsitakse volituse alust (Objektitüüp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik).
+- Tootajad vaatesse
+Voimalus maarata, kes on volitatud isikud ja volituse alus. Tootaja nime jarele on voimalik panna markeruut tulpa &#8220;Volitatud&#8221;. Selle markimisel avaneb uus aken, kus kysitakse volituse alust (Objektityyp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik).
 
 - Kontaktandmetesse seos: Keel
-Vaikimisi eesti keel. Keelele peab saama määrata, milline on süsteemi default. Vaikimisi väärtus Arve-saatelehel
+Vaikimisi eesti keel. Keelele peab saama maarata, milline on systeemi default. Vaikimisi vaartus Arve-saatelehel
 
 	@property phone_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
 	@property telefax_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
@@ -1505,6 +1505,15 @@ class crm_company extends class_base
 		$this->users_person = new object($us->get_current_person());
 	}
 
+	function __cust_cat_sort($a, $b)
+	{
+		if ($a->prop("to.jrk") == $b->prop("to.jrk"))
+		{
+			return strcmp($a->prop("to.name"), $b->prop("to.name"));
+		}
+		return ($a->prop("to.jrk") < $b->prop("to.jrk")) ? -1 : 1;
+	}
+
 	/*
 		arr[]
 			tree_inst -> the treeview object
@@ -1561,7 +1570,7 @@ class crm_company extends class_base
 			));
 			$ol->arr();
 		}
-
+		uasort($conns, array($this, "__cust_cat_sort"));
 		//parent nodes'id actually
 		$this_level_id = $node_id;
 		foreach($conns as $key=>$conn)
@@ -1571,7 +1580,7 @@ class crm_company extends class_base
 			{
 				continue;
 			}
-			//iga alam item saab ühe võrra suurema väärtuse
+			//iga alam item saab yhe v6rra suurema vaartuse
 			//if the 'to.id' eq active_node then it should be bold
 			$name = $conn->prop('to.name');
 			if($style)
@@ -3587,7 +3596,7 @@ class crm_company extends class_base
 	}
 
 	/*
-		kõik lingid saavad $key muutuja lisaks
+		k6ik lingid saavad $key muutuja lisaks
 	*/
 	function callback_mod_reforb($arr)
 	{
@@ -5336,7 +5345,7 @@ class crm_company extends class_base
 			$arr["sel"] = $sel;
 		}
 
-		//kui tööd erinevatele klientidele
+		//kui t88d erinevatele klientidele
 		if($this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"])))
 		{
 			return aw_url_change_var("different_customers", "1", $arr["post_ru"]);
@@ -8226,12 +8235,12 @@ class crm_company extends class_base
 
 
 /*Aadress:
-(kui mitu siis Aadress 1, Aadress 2 jne üksteise all)
+(kui mitu siis Aadress 1, Aadress 2 jne yksteise all)
 Telefon: xxxxxxx, yyyyyyy
 Faks: tttttttt,iiiiiiii
 E-mail: aaa@bbb.ee (klikitav)
 WWW: http://www.domain.ee (klikitav)
-Bank accounts: üksteise all
+Bank accounts: yksteise all
 */
 
 	function init_short_description_table(&$t)
