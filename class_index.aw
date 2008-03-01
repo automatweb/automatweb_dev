@@ -122,6 +122,7 @@ class class_index
 		$time = time();
 		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
 		$ext = aw_ini_get("ext");
+
 		if (empty($ext))
 		{
 			$ext_len = self::CL_NAME_MAXLEN;
@@ -147,8 +148,7 @@ class class_index
 			{
 				$type = "interface";
 			}
-			else
-			if (T_STRING === $token[0] and ("class" === $type or "interface" === $type))
+			elseif (T_STRING === $token[0] and ("class" === $type or "interface" === $type))
 			{
 				if (is_resource($cl_handle) and !empty($class_dfn))
 				{ // write previous class/iface dfn file
@@ -262,13 +262,13 @@ class class_index
 	**/
 	public static function get_file_by_name($name)
 	{
-		$dir = aw_ini_get("site_basedir");
+		$ext = aw_ini_get("ext");
 
 		// determine if class is aw class or local
 		if (0 === strpos($name, self::LOCAL_CLASS_PREFIX))
 		{
 			// load local class
-			$class_file = $dir . self::LOCAL_CLASS_DIR . $name . "." . aw_ini_get("ext");
+			$class_file = aw_ini_get("site_basedir") . self::LOCAL_CLASS_DIR . $name . "." . $ext;
 
 			if (!is_readable($class_dfn_file))
 			{
@@ -282,7 +282,7 @@ class class_index
 		else
 		{
 			// try existing index
-			$class_dfn_file = aw_ini_get("basedir") . self::INDEX_DIR . $name . "." . aw_ini_get("ext");
+			$class_dfn_file = aw_ini_get("basedir") . self::INDEX_DIR . $name . "." . $ext;
 			$class_dir = aw_ini_get("basedir") . self::CLASS_DIR;
 
 			if (!is_readable($class_dfn_file))
@@ -292,7 +292,7 @@ class class_index
 
 				if (!is_readable($class_dfn_file))
 				{
-					$e = new awex_clidx_filesys("Class definition not found or not readable. ".$class_dfn_file);
+					$e = new awex_clidx_filesys("'" . $name . "' class/interface definition not found.");
 					$e->clidx_cl_name = $name;
 					$e->clidx_file = $class_dfn_file;
 					$e->clidx_op = "is_readable";
@@ -303,13 +303,13 @@ class class_index
 			$class_dfn = unserialize(file_get_contents($class_dfn_file));
 
 			if (1 >= (int) $class_dfn["last_update"])
-			{
+			{ // in case definition is corrupt or ...
 				self::update();
 				$class_dfn = unserialize(file_get_contents($class_dfn_file));
 			}
 
 			// load aw class dfn
-			$class_file = $class_dir . $class_dfn["file"] . "." . aw_ini_get("ext");
+			$class_file = $class_dir . $class_dfn["file"] . "." . $ext;
 
 			if (!is_readable($class_file))
 			{
@@ -318,7 +318,7 @@ class class_index
 
 				if (!is_readable($class_dfn_file))
 				{
-					$e = new awex_clidx_filesys("Class definition not found or not readable.");
+					$e = new awex_clidx_filesys("'" . $name . "' class/interface definition not found.");
 					$e->clidx_cl_name = $name;
 					$e->clidx_file = $class_dfn_file;
 					$e->clidx_op = "is_readable";
@@ -326,11 +326,11 @@ class class_index
 				}
 
 				$class_dfn = unserialize(file_get_contents($class_dfn_file));
-				$class_file = $class_dir . $class_dfn["file"] . "." . aw_ini_get("ext");
+				$class_file = $class_dir . $class_dfn["file"] . "." . $ext;
 
 				if (!is_readable($class_file))
 				{
-					$e = new awex_clidx_filesys("Class file not found.");
+					$e = new awex_clidx_filesys("Class file not found. Update created an index file with false data.");
 					$e->clidx_cl_name = $name;
 					$e->clidx_file = $class_file;
 					$e->clidx_op = "is_readable";
