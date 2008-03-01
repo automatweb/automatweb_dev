@@ -210,7 +210,7 @@ class class_index
 
 					if (false === $cl_handle)
 					{
-						$e = new awex_clidx_filesys("Unable to update class index for '" . $file . "'.");
+						$e = new awex_clidx_filesys("Unable to update class index for '" . $class_file . "'.");
 						$e->clidx_cl_name = $class_name;
 						$e->clidx_file = $class_dfn_file;
 						$e->clidx_op = "fopen";
