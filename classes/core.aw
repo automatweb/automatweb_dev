@@ -420,6 +420,11 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		if (substr($_REQUEST["class"], 0, 4) == "http")
+		{
+			$send_mail = false;
+		}
+
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si,"process_error"))
 		{
