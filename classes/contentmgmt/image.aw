@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.5 2008/02/26 13:01:30 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.6 2008/03/03 17:26:49 sander Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -299,6 +299,11 @@ class image extends class_base
 	function parse_alias($args = array())
 	{
 		// Defaults
+		$xhtml_slash = "";
+		if (aw_ini_get("content.doctype") == "xhtml")
+		{
+			$xhtml_slash = " /";
+		}
 		$force_comments = false;
 		extract($args);
 		$f = $alias;
@@ -491,16 +496,16 @@ class image extends class_base
 					}
 					if ($idata["comment"] != "" || $authortxt != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
 					}
 					else
 					if ($vars["align"] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
 					}
 					else
 					{
-						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a>", $idata["link"], $vars["target"], $idata["url"]);
+						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a>", $idata["link"], $vars["target"], $idata["url"]);
 					}
 				};
 			}
@@ -539,7 +544,7 @@ class image extends class_base
 					{
 						$replacement .= "<a href=\"javascript:void(0)\" onClick=\"$bi_link\">";
 					};
-					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\" class=\"$use_style\" width='".$i_size[0]."' height='".$i_size[1]."'>";
+					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\" class=\"$use_style\" width='".$i_size[0]."' height='".$i_size[1]."'$xhtml_slash>";
 					if (!empty($idata["big_url"]) || $do_comments)
 					{
 						$replacement .= "</a>";
