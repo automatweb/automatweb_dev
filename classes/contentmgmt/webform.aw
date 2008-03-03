@@ -55,7 +55,7 @@
 @caption Peale kinnitusvaadet mine muutmisele
 
 @property send_all_rows_to_mail type=checkbox ch_value=1
-@caption Saada kõik read meilile
+@caption Saada k&otilde;ik read meilile
 
 @default group=general_redir
 
@@ -2489,7 +2489,7 @@ class webform extends class_base
 				{
 					if ($_FILES[$key]["name"]["file"] != "")
 					{
-						$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).": ".$_FILES[$key]["name"]["file"]."\n";
+						$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).":\n".$_FILES[$key]["name"]["file"]."\n\n";
 						$fo = $o->get_first_obj_by_reltype($relprops[$key]["reltype"]);
 						$attaches[] = array(
 							"content" => file_get_contents($fo->prop("file")),
@@ -2503,7 +2503,7 @@ class webform extends class_base
 				{
 					if ($_FILES[$key]["name"]["file"] != "")
 					{
-						$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).": ".$_FILES[$key]["name"]["file"]."\n";
+						$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).":\n".$_FILES[$key]["name"]["file"]."\n\n";
 						$fo = $o->get_first_obj_by_reltype($relprops[$key]["reltype"]);
 						$attaches[] = array(
 							"content" => file_get_contents($fo->prop("file")),
@@ -2515,7 +2515,7 @@ class webform extends class_base
 				else
 				if(!in_array($prplist[$key]["type"], $this->no_trans) && !(empty($arr[$key]) && !$obj_inst->prop("send_all_rows_to_mail")))
 				{
-					$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).": ".$arr[$key]."\n";
+					$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).":\n".$arr[$key]."\n\n";
 				}
 			}
 			foreach($obj_inst->connections_from(array("type" => "RELTYPE_AFTER_SAVE_CONTROLLER")) as $c)
