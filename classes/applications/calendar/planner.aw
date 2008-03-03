@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.143 2008/02/13 13:30:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.144 2008/03/03 13:02:18 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -25,58 +25,58 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption S&uuml;ndmuste kataloog
-	@comment Sellest kataloogist võetakse ja ka salvestatakse siia kalendrisse lisatavaid sündmusi
+	@comment Sellest kataloogist v&otilde;etakse ja ka salvestatakse siia kalendrisse lisatavaid s&uuml;ndmusi
 
 	@property no_event_folder type=checkbox store=no newonly=1 ch_value=1
-	@caption Ära tee sündmuste kataloogi
+	@caption &Auml;ra tee s&uuml;ndmuste kataloogi
 
 @default group=time_settings
 
 	@property day_start type=time_select rel=1
-	@caption Päev algab
+	@caption P&auml;ev algab
 
 	@property day_end type=time_select rel=1
-	@caption Päev lõpeb
+	@caption P&auml;ev l&otilde;peb
 
 	@property minute_step type=select 
-	@caption Sündmuse sisestamise minutite täpsus
+	@caption S&uuml;ndmuse sisestamise minutite t&auml;psus
 	
 	@property event_def_len type=select 
-	@caption Sündmuse vaikimisi pikkus (min)
+	@caption S&uuml;ndmuse vaikimisi pikkus (min)
 	
 @default group=advanced
 
 	@property navigator_visible type=checkbox ch_value=1 default=1 
-	@caption Näita navigaatorit
+	@caption N&auml;ita navigaatorit
 	
 	@property navigator_months type=select 
 	@caption Kuud navigaatoris
 
 	@property my_projects type=checkbox ch_value=1 
-	@caption Näita projekte
-	@comment Kui valitud, siis näidatakse ka sündmusi kõigist projektidest, milles kalendri omanik osaleb.
+	@caption N&auml;ita projekte
+	@comment Kui valitud, siis n&auml;idatakse ka s&uuml;ndmusi k&otilde;igist projektidest, milles kalendri omanik osaleb.
 
 	@property workdays type=chooser multiple=1 
-	@caption Tööpäevad
+	@caption T&ouml;&ouml;p&auml;evad
 	
 	@property tab_views type=chooser multiple=1 
 	@caption Vaate tabid
 	
 	@property del_views type=select multiple=1 
-	@caption Kustutamisvõimalusega vaated
+	@caption Kustutamisv&otilde;imalusega vaated
 	
 	@property event_entry_classes type=chooser multiple=1 orient=vertical 
-	@caption Sündmuste klassid
-	@comment Siit valitud klasse saab kasutada kalendrisse sündmuste sisestamiseks
+	@caption S&uuml;ndmuste klassid
+	@comment Siit valitud klasse saab kasutada kalendrisse s&uuml;ndmuste sisestamiseks
 
 	@property month_week type=checkbox ch_value=1 
-	@caption Näita kuuvaadet samamoodi nagu nädalavaadet
+	@caption N&auml;ita kuuvaadet samamoodi nagu n&auml;dalavaadet
 	
 	@property multi_days type=checkbox ch_value=1 
-	@caption Näita mitmepäevaseid sündmusi ainult esimesel päeval
+	@caption N&auml;ita mitmep&auml;evaseid s&uuml;ndmusi ainult esimesel p&auml;eval
 	
 	@property show_bdays type=checkbox ch_value=1 
-	@caption Näita s&uuml;nnip&auml;evi
+	@caption N&auml;ita s&uuml;nnip&auml;evi
 	
 @default group=vac_settings
 
@@ -178,16 +178,16 @@ define("REP_YEAR",4);
 
 /*
 @reltype EVENT_SOURCE value=2 clid=CL_PLANNER,CL_PROJECT
-@caption võta s&uuml;ndmusi
+@caption v&otilde;ta s&uuml;ndmusi
 
 @reltype EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING,CL_RESERVATION
 @caption s&uuml;ndmus
 
 @reltype DC_RELATION value=4 clid=CL_RELATION
-@caption viide kalendri väljundile
+@caption viide kalendri v&auml;ljundile
 
 @reltype GET_DC_RELATION value=5 clid=CL_PLANNER
-@caption võta kalendri väljundid
+@caption v&otilde;ta kalendri v&auml;ljundid
 
 @reltype EVENT_FOLDER value=6 clid=CL_MENU,CL_PLANNER
 @caption s&uuml;ndmuste kataloog
@@ -202,10 +202,10 @@ define("REP_YEAR",4);
 @caption Teised
 
 @reltype ICAL_EXPORT value=10 clid=CL_ICAL_EXPORT
-@caption Väline kalender (eksport)
+@caption V&auml;line kalender (eksport)
 
 @reltype ICAL_IMPORT value=11 clid=CL_ICAL_IMPORT
-@caption Väline kalender (import)
+@caption V&auml;line kalender (import)
 */
 
 define("CAL_SHOW_DAY",1);
@@ -215,7 +215,6 @@ define("CAL_SHOW_MONTH",4);
 
 
 lc_load("calendar");
-// Klassi sees me kujutame koiki kuupäevi kujul dd-mm-YYYY (ehk d-m-Y date format)
 class planner extends class_base
 {
 	function planner($args = array())
@@ -236,10 +235,10 @@ class planner extends class_base
 			"5" => "relative",
 		);
 		$this->vt = array(
-			"day" => t("Päev"),
-			"week" => t("Nädal"),
+			"day" => t("P&auml;ev"),
+			"week" => t("N&auml;dal"),
 			"month" => t("Kuu"),
-			"relative" => t("Ülevaade"),
+			"relative" => t("&Uuml;levaade"),
 			"search" => t("Otsing"),
 		);
 
@@ -467,7 +466,7 @@ class planner extends class_base
 				
 				$data["options"] = array(
 					CL_CRM_OFFER => t("Pakkumine"),
-					CL_CRM_CALL => t("Kõne"),
+					CL_CRM_CALL => t("K&otilde;ne"),
 					CL_TASK => t("Toimetus"),
 					CL_CRM_MEETING => t("Kohtumine"),
 					CL_RESERVATION => t("Broneering"),
@@ -499,7 +498,7 @@ class planner extends class_base
 					}
 					else
 					{
-						$data["value"] = t("Otsingu tulemusena ei leitud ühtegi objekti");
+						$data["value"] = t("Otsingu tulemusena ei leitud &uuml;htegi objekti");
 					}
 				}
 				else
@@ -532,9 +531,9 @@ class planner extends class_base
 				{
 					$data["vcl_inst"]->add_button(array(
 						"name" => "delete",
-						"tooltip" => t("Kustuta märgitud sündmused"),
+						"tooltip" => t("Kustuta m&auml;rgitud s&uuml;ndmused"),
 						"action" => "delete_events",
-						"confirm" => t("Oled kindel, et soovid valitud sündmused kustutada?"),
+						"confirm" => t("Oled kindel, et soovid valitud s&uuml;ndmused kustutada?"),
 						"img" => "delete.gif",
 						"class" => "menuButton",
 					));
@@ -562,9 +561,9 @@ class planner extends class_base
 				}
 				
 				$data["options"] = array(
-					"done" => t("Otsi tehtud sündmusi"),
-					"not_done" => t("Otsi tegemata sündmusi"),
-					"all_cal" => t("Otsi kõigist kalendritest"),
+					"done" => t("Otsi tehtud s&uuml;ndmusi"),
+					"not_done" => t("Otsi tegemata s&uuml;ndmusi"),
+					"all_cal" => t("Otsi k&otilde;igist kalendritest"),
 				);
 				break;
 
@@ -735,7 +734,7 @@ class planner extends class_base
 		{
 			return array(array(
 				"type" => "text",
-				"value" => t("Sündmuste kataloog on valimata"),
+				"value" => t("S&uuml;ndmuste kataloog on valimata"),
 			));
 			return PROP_ERROR;
 		};
@@ -744,7 +743,7 @@ class planner extends class_base
 		{
 			return array(array(
 				"type" => "text",
-				"value" => t("Sul pole õigusi sündmuste kataloogi kirjutamiseks"),
+				"value" => t("Sul pole &otilde;igusi s&uuml;ndmuste kataloogi kirjutamiseks"),
 			));
 			return PROP_ERROR;
 		};
@@ -799,7 +798,7 @@ class planner extends class_base
 
 		$res_props = array();
 			
-		// nii - aga kuidas ma lahenda probleemi sündmuste panemisest teise kalendrisse?
+		// nii - aga kuidas ma lahenda probleemi s&uuml;ndmuste panemisest teise kalendrisse?
 		// see peaks samamoodi planneri funktsionaalsus olema. wuhuhuuu
 
 		// no there are 3 possible scenarios.
@@ -817,7 +816,7 @@ class planner extends class_base
 			{
 				return array(array(
 					"type" => "text",
-					"value" => sprintf(t("Klassi '%s/%s' ei saa kasutada sündmuste sisestamiseks"),$tmp[$clid]["name"],$tmp[$clid]["def"]),
+					"value" => sprintf(t("Klassi '%s/%s' ei saa kasutada s&uuml;ndmuste sisestamiseks"),$tmp[$clid]["name"],$tmp[$clid]["def"]),
 				));
 			}
 			else
@@ -958,14 +957,14 @@ class planner extends class_base
 		// this deals with creating of one additional connection .. hm. I wonder whether
 		// there is a better way to do that.
 
-		// tolle uue objekti juurest luuakse seos äsja loodud eventi juurde jah?
+		// tolle uue objekti juurest luuakse seos &auml;sja loodud eventi juurde jah?
 
-		// aga kui ma lisaks lihtsalt sündmuse isiku juurde?
+		// aga kui ma lisaks lihtsalt s&uuml;ndmuse isiku juurde?
 		// ja see tekiks automaatselt parajasti sisse logitud kasutaja kalendrisse,
 		// kui tal selline olemas on? See oleks ju palju parem lahendus.
-		// aga kuhu kurat ma sellisel juhul selle sündmuse salvestan?
-		// äkki ma saan seda nii teha, et isiku juures üldse sündmust ei salvestata,
-		// vaid broadcastitakse vastav message .. ja siis kalender tekitab selle sündmuse?
+		// aga kuhu kurat ma sellisel juhul selle s&uuml;ndmuse salvestan?
+		// &auml;kki ma saan seda nii teha, et isiku juures &uuml;ldse s&uuml;ndmust ei salvestata,
+		// vaid broadcastitakse vastav message .. ja siis kalender tekitab selle s&uuml;ndmuse?
 
 		preg_match('/alias_to_org=(\w*|\d*)&/', $gl, $o);
 		preg_match('/reltype_org=(\w*|\d*)&/', $gl, $r);
@@ -1108,9 +1107,9 @@ class planner extends class_base
 	
 	////
 	// !Kuvab kalendri muutmiseks (eelkoige adminnipoolel)
-	// id - millist kalendrit näidata
-	// disp - vaate tüüp
-	// date - millisele kuupäevale keskenduda
+	// id - millist kalendrit n2idata
+	// disp - vaate tyyp
+	// date - millisele kuup2evale keskenduda
 	function view($args = array())
 	{
 		return $this->change(array("id" => $args["id"]));
@@ -1173,7 +1172,7 @@ class planner extends class_base
 	}
 
 	////
-	// !Tagastab timestambi mingi kuupäevastambi kohta
+	// !Tagastab timestambi mingi kuup2evastambi kohta
 	// $date - d-m-Y
 	function tm_convert($date)
 	{
@@ -1199,13 +1198,14 @@ class planner extends class_base
 				"tooltip" => t("Uus"),
 			));
 			$conn_count = 0;
+			$parent = $this->can("view", $arr["obj_inst"]->prop("event_folder")) ? $arr["obj_inst"]->prop("event_folder") : $id;
 			foreach($conns as $conn)
 			{
 				$conn_count++;
 				$cf = $conn->to();
 				$toolbar->add_menu_item(array(
 					"parent" => "create_event",
-					"link" => html::get_new_url($cf->prop("subclass"), $id, array("return_url" => get_ru(), "add_to_cal" => $id, "cfgform" => $conn->prop("to"))),
+					"link" => html::get_new_url($cf->prop("subclass"), $parent, array("return_url" => get_ru(), "add_to_cal" => $id, "cfgform" => $conn->prop("to"))),
 					"text" => $conn->prop("to.name"),
 				));
 			};
@@ -1235,7 +1235,7 @@ class planner extends class_base
 			/*
 			$toolbar->add_button(array(
 				"name" => "search",
-				"tooltip" => t("Otsi kalendri sündmust"),
+				"tooltip" => t("Otsi kalendri s&uuml;ndmust"),
 				"url" => aw_url_change_var(array("search" => 1)),
 				"img" => "search.gif",
 			));
@@ -1269,9 +1269,9 @@ class planner extends class_base
 			{
 				$toolbar->add_button(array(
 					"name" => "delete",
-					"tooltip" => t("Kustuta märgitud sündmused"),
+					"tooltip" => t("Kustuta m&auml;rgitud s&uuml;ndmused"),
 					"action" => "delete_events",
-					"confirm" => t("Oled kindel, et soovid valitud sündmused kustutada?"),
+					"confirm" => t("Oled kindel, et soovid valitud s&uuml;ndmused kustutada?"),
 					"img" => "delete.gif",
 					"class" => "menuButton",
 				));
@@ -1282,7 +1282,7 @@ class planner extends class_base
 			{
 				$toolbar->add_separator();
 
-				$prj_opts = array("" => t("--filtreeri projekti järgi--"));
+				$prj_opts = array("" => t("--filtreeri projekti j&auml;rgi--"));
 			
 				$owners = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_CALENDAR_OWNERSHIP",
@@ -1432,7 +1432,7 @@ class planner extends class_base
 			"overview_func" => array(&$this,"get_overview"),
 			"full_weeks" => $full_weeks,
 			"month_week" => $o->prop("month_week"),
-			// päeva algus ja päeva lõpp on vaja ette anda!
+			// p2eva algus ja p2eva l6pp on vaja ette anda!
 			"day_start" => $o->prop("day_start"),
 			"day_end" => $o->prop("day_end"),
 			"filt_views" => $o->prop("tab_views"),
@@ -1480,7 +1480,7 @@ class planner extends class_base
 			{
 				continue;
 			}
-			// recurrence information on lihtsalt nimekiri timestampidest, millel sündmus esineb
+			// recurrence information on lihtsalt nimekiri timestampidest, millel syndmus esineb
 			if (!$_GET["XX6"])
 			{
 				$varx = array(
@@ -1696,8 +1696,8 @@ class planner extends class_base
 	function gen_vacancies($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		// mis väljad peavad olema
-		// jrk, algus, lõpp, checkbox kinnita
+		// mis v2ljad peavad olema
+		// jrk, algus, l6pp, checkbox kinnita
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk"),
@@ -1709,7 +1709,7 @@ class planner extends class_base
 		));
 		$t->define_field(array(
 			"name" => "end",
-			"caption" => t("Lõpp"),
+			"caption" => t("L&otilde;pp"),
 		));
 		$t->define_chooser(array(
 			"name" => "confirm",
@@ -1907,7 +1907,7 @@ class planner extends class_base
 			"name" => "end",
 			//"type" => "time",
 			//"format" => "H:i d-M",
-			"caption" => t("Lõpp"),
+			"caption" => t("L&otilde;pp"),
 		));
 		$t->define_field(array(
 			"name" => "meeting",
@@ -1994,20 +1994,20 @@ class planner extends class_base
 			
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => t("Sündmuse nimi"),
+			"caption" => t("S&uuml;ndmuse nimi"),
 			"sortable" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "createdby",
-			"caption" => t("Sündmuse looja"),
+			"caption" => t("S&uuml;ndmuse looja"),
 			"sortable" => "1",
 			"align" => "center",
 		));
 
 		$table->define_field(array(
 			"name" => "participants",
-			"caption" => t("Sündmusel osalejad"),
+			"caption" => t("S&uuml;ndmusel osalejad"),
 			"sortable" => "1",
 			"align" => "center",
 		));
