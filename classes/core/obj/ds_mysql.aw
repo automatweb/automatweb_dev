@@ -2621,6 +2621,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->_do_add_class_id($clid, true);
 			foreach($props as $pn => $resn)
 			{
+				if (is_numeric($pn))
+				{
+					$pn = $resn;
+				}
 				if (is_object($resn) && get_class($resn) == "obj_sql_func")
 				{
 					$has_func = true;
