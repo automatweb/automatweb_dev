@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.204 2008/03/03 12:10:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.205 2008/03/03 12:11:28 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -431,18 +431,18 @@ class task extends class_base
 			array(
 				"name" => "name",
 				"type" => "textbox",
-				"caption" => "Nimi",
+				"caption" => t("Nimi"),
 			),
 			array(
 				"name" => "part",
 				"type" => "textbox",
-				"caption" => "Osaleja",
+				"caption" => t("Osaleja"),
 				"autocomplete" => true,
 			),
 			array(
 				"name" => "project",
 				"type" => "textbox",
-				"caption" => "Projekt",
+				"caption" => t("Projekt"),
 				"autocomplete" => true,
 			),
 			array(
