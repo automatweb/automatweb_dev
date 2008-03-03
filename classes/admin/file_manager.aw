@@ -45,6 +45,11 @@ class file_manager extends aw_template
 		{
 			$parent = $doc->parent();
 		}
+		if (!$parent)
+		{
+			// parse the documents parent from the url
+			$parent = $params["parent"];
+		}
 		$image_url = html::get_new_url(CL_FILE, $parent, array("in_popup"=>1, "docid" => $doc->id()));
 		$this->read_template("manage.tpl");
 
