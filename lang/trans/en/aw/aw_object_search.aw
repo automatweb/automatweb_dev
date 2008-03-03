@@ -4,6 +4,7 @@ $GLOBALS["TRANS"]["Omaduse Nimi (s_name) kommentaar"] = "Name";
 $GLOBALS["TRANS"]["Omaduse Kommentaar (s_comment) caption"] = "Comment";
 $GLOBALS["TRANS"]["Omaduse T&uuml;&uuml;p (s_clid) caption"] = "Type";
 $GLOBALS["TRANS"]["Omaduse OID (s_oid) caption"] = "Object ID";
+$GLOBALS["TRANS"]["Omaduse Asukoht (s_parent_search) caption"] = "Location";
 $GLOBALS["TRANS"]["Omaduse Aktiivsus (s_status) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Alias (s_alias) caption"] = "Alias";
 $GLOBALS["TRANS"]["Omaduse Keel (s_language) caption"] = "Language";

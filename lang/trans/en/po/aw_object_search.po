@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_parent_search
 msgid "Omaduse Asukoht (s_parent_search) caption"
-msgstr ""
+msgstr "Location"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_parent_search_comment
 msgid "Omaduse Asukoht (s_parent_search) kommentaar"
