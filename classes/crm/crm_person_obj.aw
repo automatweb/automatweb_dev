@@ -25,6 +25,10 @@ class crm_person_obj extends _int_object
 
 	function find_work_contact()
 	{
+		if (!is_oid($this->id()))
+		{
+			return false;
+		}
 		$o = obj($this->id());
 		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
 		if (!$org_rel)
