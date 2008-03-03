@@ -1,0 +1,37 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>skill</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SKILL</reltype>
+            <store>connect</store>
+            <field>skill</field>
+            <caption>Oskus</caption>
+      </property>
+      <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <field>name</field>
+            <caption>Oskuse tase</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CRM_SKILL_LEVEL</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <reltypes>
+            <SKILL>
+                  <value>1</value>
+                  <clid>CL_CRM_SKILL</clid>
+                  <caption>Oskus</caption>
+            </SKILL>
+      </reltypes>
+</properties>
+
