@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.6 2008/03/03 17:26:49 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.7 2008/03/03 18:03:21 sander Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -496,12 +496,12 @@ class image extends class_base
 					}
 					if ($idata["comment"] != "" || $authortxt != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
+						$replacement = sprintf("<table border='0' cellpadding='0' cellspacing='0' %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
 					}
 					else
 					if ($vars["align"] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
+						$replacement = sprintf("<table border='0' cellpadding='0' cellspacing='0' %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
 					}
 					else
 					{
@@ -538,7 +538,7 @@ class image extends class_base
 					$replacement = "";
 					if ($vars["align"] != "")
 					{
-						$replacement .= "<table border=0 cellpadding=5 cellspacing=0 $vars[align]><tr><td>";
+						$replacement .= "<table border='0' cellpadding='5' cellspacing='0' $vars[align]><tr><td>";
 					}
 					if (!empty($idata["big_url"]) || $do_comments)
 					{
