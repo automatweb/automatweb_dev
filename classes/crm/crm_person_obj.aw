@@ -64,7 +64,7 @@ class crm_person_obj extends _int_object
 			// no job relations. create a default
 			$crel = obj();
 			$crel->set_parent($this->parent());
-			$crel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+			$crel->set_class_id(CL_CRM_PERSON_WORK_RELATION);$crel->save();
 			$crel->set_prop("org", $work->id());
 			if ($prof)
 			{
