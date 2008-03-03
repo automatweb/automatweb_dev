@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.21 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.22 2008/03/03 13:21:55 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -177,6 +177,10 @@ class object_export extends class_base
 		$dat = $arr["obj_inst"]->meta("dat");
 
 		$ps = $this->get_properties_from_obj($arr["obj_inst"]);
+		$ps["oid"] = array(
+			"type" => "text",
+			"caption" => "Objekti id"
+		);
 		foreach($ps as $pn => $pd)
 		{
 			if ($pd["type"] == "submit")
