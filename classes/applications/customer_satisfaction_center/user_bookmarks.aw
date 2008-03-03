@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.17 2008/02/19 13:52:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.18 2008/03/03 11:18:06 robert Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -886,11 +886,41 @@ class user_bookmarks extends class_base
 
 		$pm = get_instance("vcl/popup_menu");
 		$pm->begin_menu("user_bookmarks");
-
-		$parents = array();
-		$list = array();
-		$this->get_user_bms($bm, $list, $parents);
-		$oids = $list->ids();
+		$c = get_instance("cache");
+		$time = 5*24*60*60;
+		if (!($cd = $c->file_get_pt_ts("d","","bms_".$bm->id(), time() - $time)))
+		{
+			$parents = array();
+			$list = array();
+			$this->get_user_bms($bm, $list, $parents);
+			$listids = array();
+			$i = 0;
+			foreach($list->arr() as $li)
+			{
+				$listids[$i] = $li->id();
+				$i++;
+			}
+			$cd = array(
+				"listids" => $listids,
+				"parents" => $parents,
+			);
+			$c->file_set_pt("d", "", "bms_".$bm->id(), aw_serialize($cd));
+		}
+		if($cd && !is_array($cd))
+		{
+			$cd = aw_unserialize($cd);
+		}
+		if($cd)
+		{
+			$oids = $cd["listids"];
+			$parents = $cd["parents"];
+		}
+		$params["oid"] = -1;
+		if(count($oids))
+		{
+			$params["oid"] = $oids;
+		}
+		$list = new object_list($params);
 		$mt = $bm->meta("grp_sets");
 		foreach($list->arr() as $li)
 		{
