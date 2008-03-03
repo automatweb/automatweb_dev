@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.203 2008/02/21 11:56:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.204 2008/03/03 12:10:40 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2335,9 +2335,9 @@ class task extends class_base
 		$row_ids[] = NULL;
 		$not_sorted=true;
 		
-		//statistikasse nende ridade tunnid, mida reaalselt tabelis näha (kliendile)
+		//statistikasse nende ridade tunnid, mida reaalselt tabelis n2ha (kliendile)
 		$this->visible_rows_sum = 0;
-		//kõikide ridade tundide summa (kliendile)
+		//k6ikide ridade tundide summa (kliendile)
 		$this->sum = 0;
 		
 		foreach($row_ids as $ro)
@@ -2511,7 +2511,7 @@ class task extends class_base
 //					"multiple" => 1
 //				)),
 					"impl_val" => $is_str,
-					"time" => $row->prop("time_guess")." - Prognoos<br>".$row->prop("time_real")." - Kulunud<br>".$row->prop("time_to_cust")." - Kliendile<br>",
+					"time" => $row->prop("time_guess")." - ".t("Prognoos")."<br>".$row->prop("time_real")." - ".t("Kulunud")."<br>".$row->prop("time_to_cust")." - ".t("Kliendile")."<br>",
 					"done" => "",
 					"done_val" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done"),
 					"on_bill" => $onbill,
@@ -2967,7 +2967,7 @@ class task extends class_base
 						$new_row->set_prop($prop , $val);
 					}
 				}
-				//metas ei näi miskit kasulikku olevat... loodetavasti ka ei tule
+				//metas ei n2i miskit kasulikku olevat... loodetavasti ka ei tule
 //				$new_row->set_meta($ro->meta());
 				$new_row->save();
 				$task->connect(array("to"=> $new_row->id(), "type" => "RELTYPE_ROW"));
@@ -3513,7 +3513,7 @@ class task extends class_base
 		$max_row = 0;
 		$max_ord = 0;
 		//paneb ikka ette maksimumi leidma juba, siis on lollikindlam
-		//käib küll topelt tsükli läbi, kuid savestamisel vaevalt see oluline ajakadu on
+		//k2ib kyll topelt tsykli l2bi, kuid savestamisel vaevalt see oluline ajakadu on
 		if(sizeof($_POST["rows"]) > 3)
 		{
 			foreach($_POST["rows"] as $row)
@@ -3633,7 +3633,7 @@ class task extends class_base
 				}
 			}
 
-			//järjekorra seadmine
+			//j2rjekorra seadmine
 			if($e["ord"] > $max_ord) $max_ord = $e["ord"];
 			if($e["ord"] == null)
 			{
@@ -4261,7 +4261,7 @@ class task extends class_base
 //			"name" => "",
 		));
 
-		//otsib enda ja kliendi töötajate hulgast osalejaid
+		//otsib enda ja kliendi t88tajate hulgast osalejaid
 		if (is_oid($cur->id()))
 		{
 			$our_workers = $cur->connections_from(array("type" => "RELTYPE_WORKERS"));
@@ -4614,7 +4614,7 @@ class task extends class_base
 			$types = 8;
 		}
 
-		//sündmuste kiirlisamiseks teeb sellise häki
+		//syndmuste kiirlisamiseks teeb sellise h2ki
 		$this->fast_add_participants($arr,$types);
 
 		foreach($arr["obj_inst"]->connections_to(array("type" => $types)) as $c)
@@ -5033,9 +5033,9 @@ class task extends class_base
 	}
 	
 	//Toimima peaks see siis nii, et kui Toimetuses on ainult 1 rida, siis pannakse kokkuleppehind
-	// sinna rea taha kirja. Kui on kaks või rohkem 0 tundidega rida, siis jagatakse kokkuleppehind 
-	//võrdselt nendele ridadele. Kui on osa ridu tundidega ja osa ilma, siis jagatakse kokkuleppehind 
-	//ainult tundidega ridade vahel ära.
+	// sinna rea taha kirja. Kui on kaks v6i rohkem 0 tundidega rida, siis jagatakse kokkuleppehind 
+	//v6rdselt nendele ridadele. Kui on osa ridu tundidega ja osa ilma, siis jagatakse kokkuleppehind 
+	//ainult tundidega ridade vahel 2ra.
 	function get_row_ageement_price($row, $task = null)
 	{
 		if(is_oid($row))
@@ -5077,12 +5077,12 @@ class task extends class_base
 			{
 				return $sum;
 			}
-			//kui on mitu rida , mille aeg näitab 0
+			//kui on mitu rida , mille aeg n2itab 0
 			if($row_cnt > 1 && $time_cnt == 0)
 			{
 				return $sum / $row_cnt;
 			}
-			//kui on mitu rida ja mõnel on aeg, teistel mitte
+			//kui on mitu rida ja m6nel on aeg, teistel mitte
 			if($row_cnt > 1 && $time_cnt > 0)
 			{
 				return ($row->prop("time_to_cust")/$time_cnt) * $sum;
