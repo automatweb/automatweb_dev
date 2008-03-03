@@ -134,6 +134,10 @@ class obj_xml_gen
 		$xml .= "\t\t<ot_flds>\n";
 		foreach($flds as $fld => $t)
 		{
+			if ($fld == "cachedirty")
+			{
+				continue;
+			}
 			$fld = $fld == "jrk" ? "ord" : ($fld == "periodic" ? "is_periodic" : ($fld == "metadata" ? "meta" : $fld));
 			$val = $o->$fld();
 			if (false && $fld == "parent")
