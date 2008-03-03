@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.205 2008/03/03 12:11:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.206 2008/03/03 12:12:08 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -460,7 +460,7 @@ class task extends class_base
 			array(
 				"name" => "desc",
 				"type" => "textarea",
-				"caption" => "Kirjeldus",
+				"caption" => t("Kirjeldus"),
 			),
 		);
 		return $props;
