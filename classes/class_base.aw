@@ -159,6 +159,12 @@ class class_base extends aw_template
 
 		$this->obj_inst = new object($this->id);
 
+		$clid = aw_ini_get("class_lut." . $arr["class"]);
+		if($this->obj_inst->class_id() != $clid)
+		{
+			throw new aw_exception("Given class doesn't match the object's class_id");
+		}
+
 		$this->parent = "";
 
 		$this->use_mode = "edit";
@@ -761,7 +767,7 @@ class class_base extends aw_template
 			$this->inst->callback_mod_reforb(&$argblock,$this->request);
 		};
 
-		if(is_array($GLOBALS["add_mod_reforb"])) // et saaks mõnest x kohast veel välju juurde, näiteks mingist komponendist
+		if(is_array($GLOBALS["add_mod_reforb"])) // et saaks m6nest x kohast veel v2lju juurde, n2iteks mingist komponendist
 		{
 			foreach($GLOBALS["add_mod_reforb"] as $key => $val)
 			{
@@ -3597,7 +3603,6 @@ class class_base extends aw_template
 		$filter["group"] = $group;
 		$filter["rel"] = $this->is_rel;
 		$filter["ignore_layout"] = 1;
-
 		if ($args["cfgform"])
 		{
 			$filter["cfgform_id"] = $args["cfgform"];
@@ -6046,7 +6051,7 @@ class class_base extends aw_template
 					var f = document.forms['changeform'];
 					".$if_clause."
 					{
-						if(confirm('Kas " . $asd . " kõik tõlked?'))
+						if(confirm('Kas " . $asd . " koik tolked?'))
 						{
 							f.all_trans_status.value = ".$all_trans_status_value.";
 						}
@@ -6060,7 +6065,7 @@ class class_base extends aw_template
 	}
 
 //--------------- mailiga teavitamise komponentide orb funktsuoonid------------
-//tõenäoliselt koristab need ära kui parema mooduse leiab kuda neid hoida
+//t6en4oliselt koristab need 4ra kui parema mooduse leiab kuda neid hoida
 	/**
 		@attrib name=co_autocomplete_source
 		@param sp_p_co optional
