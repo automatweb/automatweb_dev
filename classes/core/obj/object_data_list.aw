@@ -94,16 +94,24 @@ class object_data_list
 		$p = &$this->props;
 		foreach($this->list_data as $oid => $od)
 		{
-			$cp = $p[$od["class_id"]];
-			foreach($od as $ode_i => $ode_v)
+			if (!isset($od["class_id"]) || !isset($p[$od["class_id"]]))
 			{
-				if(array_key_exists($ode_i, $cp))
+				$arr[$oid] = $od;
+			}
+			else
+			{
+				$cp = $p[$od["class_id"]];
+				foreach($od as $ode_i => $ode_v)
 				{
-					$arr[$oid][$cp[$ode_i]] = $ode_v;
-				}
-				elseif(in_array($ode_i, $cp) && is_int(array_search($ode_i, $cp)))
-				{
-					$arr[$oid][$ode_i] = $ode_v;
+					if(array_key_exists($ode_i, $cp))
+					{
+						$arr[$oid][$cp[$ode_i]] = $ode_v;
+					}
+					else
+					if(in_array($ode_i, $cp) && is_int(array_search($ode_i, $cp)))
+					{
+						$arr[$oid][$ode_i] = $ode_v;
+					}
 				}
 			}
 		}
