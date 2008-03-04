@@ -77,6 +77,7 @@
 		<input type="checkbox" name="del[]" value="{VAR:id}" />
 		</div>
 		<!-- END SUB: ADMIN_BLOCK -->
+	<a name="c{VAR:id}"></a>
 	<strong>{VAR:name}</strong> 
 		<!-- SUB: CHANGE_LINK -->
 		<a href="{VAR:change_url}">Muuda</a>

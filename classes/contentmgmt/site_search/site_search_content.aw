@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.98 2008/02/14 14:22:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.99 2008/03/04 14:24:39 robert Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -38,7 +38,7 @@
 @default group=keywords
 
 	@property do_keyword_search type=checkbox field=meta method=serialize ch_value=1
-	@caption Otsing märksõnadest
+	@caption Otsing m&auml;rks&otilde;nadest
 
 	@property keyword_search_classes type=select multiple=1 field=meta method=serialize
 	@caption Klassid
@@ -116,7 +116,7 @@
 @reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
 
-@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP_FS,CL_CRM_DB_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_MULTISITE
+@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP_FS,CL_CRM_DB_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_MULTISITE,CL_FORUM_V2
 @caption otsingu grupp
 
 @reltype CPLX_EL_CTR value=3 clid=CL_FORM_CONTROLLER
@@ -126,7 +126,7 @@
 @caption kompleksotsingu tulemuste kontroller
 
 @groupinfo static caption="Staatiline otsing"
-@groupinfo keywords caption="Märksõnade järgi otsing"
+@groupinfo keywords caption="M&auml;rks&otilde;nade j&auml;rgi otsing"
 @groupinfo searchgroups caption="Otsingu grupid"
 @groupinfo search caption="Otsi" submit_method=get
 	@groupinfo search_simple caption="Lihtne otsing" submit_method=get parent=search
@@ -352,8 +352,8 @@ class site_search_content extends class_base
 
 		$sort_opts = array(
 			0 => t("--vali--"),
-			S_ORD_TIME => t("Kuupäeva järgi (uuem enne)"),
-			S_ORD_TIME_ASC => t("Kuupäeva järgi (vanem enne)"),
+			S_ORD_TIME => t("Kuup&auml;eva j&auml;rgi (uuem enne)"),
+			S_ORD_TIME_ASC => t("Kuup&auml;eva j&auml;rgi (vanem enne)"),
 			S_ORD_TITLE => t("Pealkirja j&auml;rgi"),
 			S_ORD_CONTENT => t("Sisu j&auml;rgi"),
 			S_ORD_MATCH => t("T&auml;psuse j&auml;rgi"),
@@ -614,7 +614,7 @@ class site_search_content extends class_base
 			}
 		}
 		
-		//paneb default väärtused
+		//paneb default v44rtused
 		if(is_oid($arr["field"]))
 		{
 			$_SESSION["active_section"] = $arr["field"];
@@ -716,7 +716,7 @@ class site_search_content extends class_base
 					$key_opt = "";
 				}
 			}
-			//see siis viimaste üksikute jaoks
+			//see siis viimaste yksikute jaoks
 			if($kw_cnt > 0)
 			{
 				$this->vars(array(
@@ -1298,7 +1298,7 @@ class site_search_content extends class_base
 		enter_function("site_search_content::fetch_search_results");
 		extract($arr);
 		$g = get_instance(CL_SITE_SEARCH_CONTENT_GRP);
-		// sealt tulevad ainult menüüd .. aga ma pean diilima ka teiste asjadega
+		// sealt tulevad ainult menyyd .. aga ma pean diilima ka teiste asjadega
 		// see koostab nimekirja parentitest ehk asjadest, KUST ma otsima pean
 		// aga mul on vaja mingeid callbacke, et saaks otsida ka mujalt
 		$ms = $g->get_menus(array("id" => $group));
@@ -1862,7 +1862,7 @@ class site_search_content extends class_base
 		));
 		$results = array();
 
-		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust näitama
+		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust n2itama
 		if ($str != "" || $area || (is_array($keyword) && sizeof($keyword)) || is_oid($field))
 		{
 			if (1 == $o->prop("multi_groups"))

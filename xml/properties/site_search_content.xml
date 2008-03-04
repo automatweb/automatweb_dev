@@ -88,7 +88,7 @@
             <group>keywords</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Otsing m&amp;auml;rks&amp;otilde;nadest</caption>
+            <caption>Otsing m&amp;amp;auml;rks&amp;amp;otilde;nadest</caption>
       </property>
       <property>
             <name>keyword_search_classes</name>
@@ -251,7 +251,7 @@
                   <caption>Staatiline otsing</caption>
             </static>
             <keywords>
-                  <caption>M&amp;auml;rks&amp;otilde;nade j&amp;auml;rgi otsing</caption>
+                  <caption>M&amp;amp;auml;rks&amp;amp;otilde;nade j&amp;amp;auml;rgi otsing</caption>
             </keywords>
             <searchgroups>
                   <caption>Otsingu grupid</caption>
@@ -287,6 +287,7 @@
                         <num_4>CL_SITE_SEARCH_CONTENT_GRP_FS</num_4>
                         <num_5>CL_CRM_DB_SEARCH</num_5>
                         <num_6>CL_SITE_SEARCH_CONTENT_GRP_MULTISITE</num_6>
+                        <num_7>CL_FORUM_V2</num_7>
                   </clid>
                   <caption>otsingu grupp</caption>
             </SEARCH_GRP>

@@ -323,7 +323,7 @@ define('TOPICS_LAST_TOPIC_AUTHOR', 2);
 // (cl_msgboard_topic) which in turn contain comments (cl_comment) to topics.
 
 
-class forum_v2 extends class_base
+class forum_v2 extends class_base implements site_search_content_group_interface
 {
 	var $topics_sort_order = array();
 
@@ -890,8 +890,8 @@ class forum_v2 extends class_base
 		$first = 0;
 		foreach($conns as $conn)
 		{
-			// ideaalis võiks saada teemasid teha ka otse foorumi sisse.
-			// see tähendab siis seda, et kui kataloogi pole määratud, siis
+			// ideaalis v6iks saada teemasid teha ka otse foorumi sisse.
+			// see t4hendab siis seda, et kui kataloogi pole m44ratud, siis
 			// tulevad teemad by default kohe foorum sisse. Ja nii ongi...
 			if ($this->depth == 0)
 			{
@@ -1053,7 +1053,7 @@ class forum_v2 extends class_base
 	}
 
 	////
-	// !antakse ette parent ja sügavus ja siis tehakse lotsa tööd
+	// !antakse ette parent ja sygavus ja siis tehakse lotsa t88d
 	function _rec_folder_tree($arr)
 	{
 		$folder_list = new object_list(array(
@@ -3623,6 +3623,132 @@ class forum_v2 extends class_base
 			return 0;
 		}
 		return ( $a['comment_count'] < $b['comment_count'] ) ? 1 : -1;
+	}
+
+	function scs_get_search_results($arr)
+	{
+		extract($arr);
+		$forum = obj($group);
+		$params["class_id"] = array(CL_MSGBOARD_TOPIC, CL_COMMENT);
+		$params[] = new object_list_filter(array(
+			"logic" => "OR",
+			"conditions" => array(
+				"comment" => "%".$str."%",
+				"commtext" => "%".$str."%",
+				"name" => "%".$str."%",
+			),
+		));
+		if($forum->prop("activation"))
+		{
+			$params[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"active" => 1,
+					"class_id" => CL_COMMENT,
+				),
+			));
+		}
+		$start = $date["from"];
+		$end = $date["to"];
+		if($start > 0 && $end > 0)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end);
+		}
+		elseif($start > 0)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_GREATER,$start);
+		}
+		elseif($end > 0)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_LESS,$end);
+		}
+		$parents = array_keys($this->get_search_folders(array("obj_inst" => $forum)));
+		$params[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"parent" => $parents,
+					"class_id" => CL_COMMENT,
+				),
+			));
+		$params["site_id"] = array();
+		$params["lang_id"] = array();
+		$ol = new object_list($params);
+		foreach($ol->arr() as $o)
+		{
+			if($o->class_id() == CL_COMMENT)
+			{
+				$tp = obj($o->parent());
+				if($forum->prop("activation") && !$tp->prop("active"))
+				{
+					continue;
+				}
+				$path = $o->path();
+				$cont = 1;
+				foreach($path as $po)
+				{
+					if(array_search($po->id(), $parents))
+					{
+						$cont = 0;
+						break;
+					}
+				}
+				if($cont)
+				{
+					continue;
+				}
+			}
+			$ids[$o->id()] = $o->id();
+		}
+		return $ids;
+	}
+
+	function scs_display_search_results($arr)
+	{
+		$this->read_template("scs_results.tpl");
+		$ob = obj($arr["group"]);
+		$conn = $ob->connections_to(array(
+			"type" => 0,
+			"from.class_id" => CL_DOCUMENT
+		));
+		foreach($conn as $c)
+		{
+			$section = $c->prop("from");
+		}
+		if(count($arr["results"]))
+		{
+			$ol = new object_list(array(
+				"oid" => $arr["results"],
+			));
+			$tmp = "";
+			foreach($ol->arr() as $o)
+			{
+				$add = "";
+				if($o->class_id() == CL_COMMENT)
+				{
+					$tp = obj($o->parent());
+					$add = "#c".$o->id();
+				}
+				$url = $this->mk_my_orb("change",array(
+					"topic" => ($tp)?$tp->id():$o->id(),
+					"id" => $ob->id(),
+					"folder" => ($tp)?$tp->parent():$o->parent(),
+					"section" => $section,
+					"_alias" => get_class($this),
+					"group" => "contents",
+				));
+				$url .= $add;
+				$name = $o->name()?$o->name():t("Nimetu");
+				$this->vars(array(
+					"link" => $url,
+					"name" => $name,
+				));
+				$tmp .= $this->parse("ROW");
+			}
+			$this->vars(array(
+				"ROW" => $tmp,
+			));
+		}
+		return $this->parse();
 	}
 
 }
