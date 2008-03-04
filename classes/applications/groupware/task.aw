@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.208 2008/03/04 11:19:45 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.209 2008/03/04 15:33:10 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2412,8 +2412,8 @@ class task extends class_base
 			$pref = "";
 			if ($row->class_id() == CL_CRM_MEETING)
 			{
-				$date = date("d/m/y",($row->prop("start1") > 100 ? $row->prop("start1") : time()));
-				$d_comp = date("Ymd",$row->prop("start1") > 100 ? $row->prop("start1") : time());
+				$date = date("d/m/y",($row->prop("start1") > 100 ? $row->prop("start1") : $row->created()));
+				$d_comp = date("Ymd",$row->prop("start1") > 100 ? $row->prop("start1") : $row->created());
 				$i = $row->instance();
 				$i->get_property($argb);
 				//$impls = $pr["options"];
@@ -2422,8 +2422,8 @@ class task extends class_base
 			}
 			else
 			{
-				$date = date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : time()));
-				$d_comp =  date("Ymd",($row->prop("date") > 100 ? $row->prop("date") : time()));
+				$date = date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : $row->created()));
+				$d_comp =  date("Ymd",($row->prop("date") > 100 ? $row->prop("date") : $row->created()));
 				$app = "";
 			}
 			
