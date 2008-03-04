@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.207 2008/03/03 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.208 2008/03/04 11:19:45 robert Exp $
 // task.aw - TODO item
 /*
 
@@ -1152,6 +1152,11 @@ class task extends class_base
 				if ($arr["new"])
 				{
 					$data["value"] = time() + 900;
+					if($day = $arr["request"]["date"])
+					{
+						$da = explode("-", $day);
+						$data["value"] = mktime(date('h',$data["value"]), date('i', $data["value"]), 0, $da[1], $da[0], $da[2]);
+					}
 				}
 				if ($cal)
 				{
@@ -1168,6 +1173,15 @@ class task extends class_base
 				{
 					$calo = obj($cal);
 					$data["minute_step"] = $calo->prop("minute_step");
+				}
+				if ($arr["new"])
+				{
+					$data["value"] = time();
+					if($day = $arr["request"]["date"])
+					{
+						$da = explode("-", $day);
+						$data["value"] = mktime(date('h',$data["value"]), date('i', $data["value"]), 0, $da[1], $da[0], $da[2]);
+					}
 				}
 				break;
 

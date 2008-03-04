@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.65 2008/01/31 13:54:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.66 2008/03/04 11:19:48 robert Exp $
 // crm_call.aw - phone call
 /*
 
@@ -464,6 +464,14 @@ class crm_call extends class_base
 				{
 					$data["value"] = time() + 900;
 				}
+				if ($arr["new"])
+				{
+					if($day = $arr["request"]["date"])
+					{
+						$da = explode("-", $day);
+						$data["value"] = mktime(date('h',$data["value"]), date('i', $data["value"]), 0, $da[1], $da[0], $da[2]);
+					}
+				}
 				break;
 
 			case 'task_toolbar' :
@@ -612,7 +620,6 @@ class crm_call extends class_base
 
 		$pl = get_instance(CL_PLANNER);
 		$pl->post_submit_event($arr["obj_inst"]);
-
 		if(!empty($arr['new']))
 		{
 			$this->add_participant($arr["obj_inst"], get_current_person());
@@ -705,7 +712,7 @@ class crm_call extends class_base
 		{
 			if(!strlen($arr["data"]["name"]["value"]) || !strlen($arr["data"]["part"]["value"]) || !strlen($arr["data"]["project"]["value"]))
 			{
-				return t("Nimi, osaleja ja projekt peavad olema täidetud!");
+				return t("Nimi, osaleja ja projekt peavad olema t&auml;idetud!");
 			}
 		}
 		if(!$this->can("view", $arr["data"]["project"]["value"]))
@@ -766,18 +773,18 @@ class crm_call extends class_base
 			array(
 				"name" => "name",
 				"type" => "textbox",
-				"caption" => "Nimi",
+				"caption" => t("Nimi"),
 			),
 			array(
 				"name" => "part",
 				"type" => "textbox",
-				"caption" => "Osaleja",
+				"caption" => t("Osaleja"),
 				"autocomplete" => true,
 			),
 			array(
 				"name" => "project",
 				"type" => "textbox",
-				"caption" => "Projekt",
+				"caption" => t("Projekt"),
 				"autocomplete" => true,
 			),
 			array(
@@ -795,7 +802,7 @@ class crm_call extends class_base
 			array(
 				"name" => "desc",
 				"type" => "textarea",
-				"caption" => "Kirjeldus",
+				"caption" => t("Kirjeldus"),
 			),
 		);
 		return $props;

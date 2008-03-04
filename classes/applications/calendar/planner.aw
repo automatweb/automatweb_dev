@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.144 2008/03/03 13:02:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.145 2008/03/04 11:19:42 robert Exp $
 // planner.aw - kalender
 /*
 
@@ -1205,7 +1205,7 @@ class planner extends class_base
 				$cf = $conn->to();
 				$toolbar->add_menu_item(array(
 					"parent" => "create_event",
-					"link" => html::get_new_url($cf->prop("subclass"), $parent, array("return_url" => get_ru(), "add_to_cal" => $id, "cfgform" => $conn->prop("to"))),
+					"link" => html::get_new_url($cf->prop("subclass"), $parent, array("return_url" => get_ru(), "add_to_cal" => $id, "cfgform" => $conn->prop("to"), "day" => ($arr["request"]["viewtype"] == "day")?$arr["request"]["date"]:0)),
 					"text" => $conn->prop("to.name"),
 				));
 			};
@@ -2431,22 +2431,6 @@ class planner extends class_base
 			"event_id" => $arr["event_id"],
 			"cb_group" => $arr["emb"]["cb_group"]
 		), $arr["class"]);
-	}
-
-	/*
-		@attrib name=wtf
-	*/
-	function wtf()
-	{
-		$ol = new object_list(array(
-			"parent" => 437,
-			"class_id" => CL_CRM_MEETING,
-		));
-		foreach($ol->arr() as $o)
-		{
-			arr($o->properties());
-		};
-
 	}
 	
 	/**

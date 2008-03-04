@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.93 2008/01/31 13:54:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.94 2008/03/04 11:19:48 robert Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -83,7 +83,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @layout center_bit_bottom type=vbox closeable=1 area_caption=Kokkuv&otilde;te
 
 	@property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1 parent=center_bit_bottom
-	@caption Kokkuvõte
+	@caption Kokkuv&otilde;te
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
@@ -427,8 +427,8 @@ class crm_meeting extends class_base
 						$this->mail_data["subject"],
 						$this->mail_data["date"],
 						$this->mail_data["content"]);
-					break;
 				}
+				break;
 			case "start1":
 			case "end":
 				$p = get_instance(CL_PLANNER);
@@ -447,8 +447,16 @@ class crm_meeting extends class_base
 				{
 					$data["value"] = time() + 900;
 				}
+				if ($arr["new"])
+				{
+					if($day = $arr["request"]["date"])
+					{
+						$da = explode("-", $day);
+						$data["value"] = mktime(date('h',$data["value"]), date('i', $data["value"]), 0, $da[1], $da[0], $da[2]);
+					}
+				}
 				break;
-
+			
 			case "sel_resources":
 				$t = get_instance(CL_TASK);
 				$t->_get_sel_resources($arr);
@@ -1363,7 +1371,7 @@ class crm_meeting extends class_base
 		{
 			if(!strlen($arr["data"]["name"]["value"]) || !strlen($arr["data"]["part"]["value"]) || !strlen($arr["data"]["project"]["value"]))
 			{
-				return t("Nimi, osaleja ja projekt peavad olema täidetud!");
+				return t("Nimi, osaleja ja projekt peavad olema t&auml;idetud!");
 			}
 		}
 		if(!$this->can("view", $arr["data"]["project"]["value"]))
@@ -1474,18 +1482,18 @@ class crm_meeting extends class_base
 			array(
 				"name" => "name",
 				"type" => "textbox",
-				"caption" => "Nimi",
+				"caption" => t("Nimi"),
 			),
 			array(
 				"name" => "part",
 				"type" => "textbox",
-				"caption" => "Osaleja",
+				"caption" => t("Osaleja"),
 				"autocomplete" => true,
 			),
 			array(
 				"name" => "project",
 				"type" => "textbox",
-				"caption" => "Projekt",
+				"caption" => t("Projekt"),
 				"autocomplete" => true,
 			),
 			array(
@@ -1503,7 +1511,7 @@ class crm_meeting extends class_base
 			array(
 				"name" => "desc",
 				"type" => "textarea",
-				"caption" => "Kirjeldus",
+				"caption" => t("Kirjeldus"),
 			),
 		);
 		return $props;
