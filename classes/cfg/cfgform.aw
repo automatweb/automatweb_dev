@@ -2534,7 +2534,7 @@ class cfgform extends class_base
 	{
 		$subaction = $arr["request"]["subaction"];
 		$this->_init_cfgform_data($arr["obj_inst"]);
-
+		
 		switch($subaction)
 		{
 			case "addgrp":

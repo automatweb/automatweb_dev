@@ -1407,6 +1407,7 @@ function __autoload($class_name)
 			//!!! take action
 		}
 	}
+	require_once($class_file);
 
 	if (!class_exists($class_name, false) and !interface_exists($class_name, false))
 	{ // class may be moved to another file, force update and try again

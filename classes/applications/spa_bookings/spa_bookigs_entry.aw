@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.74 2008/03/04 08:12:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.75 2008/03/04 08:51:42 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -31,6 +31,9 @@
 
 	@property print_view_ctr type=relpicker reltype=RELTYPE_PRINT_CTR field=meta method=serialize
 	@caption Printvaate andmdete valideerimise kontroller
+
+	@property if_section type=relpicker reltype=RELTYPE_IF_SECT field=meta method=serialize
+	@caption Saidipoolne kaust
 
 @default group=settings_mail
 
@@ -135,6 +138,8 @@
 @reltype OWNER value=6 clid=CL_USER
 @caption Omanik
 
+@reltype IF_SECT value=7 clid=CL_MENU
+@caption Kaust
 */
 
 class spa_bookigs_entry extends class_base
@@ -1148,7 +1153,7 @@ $t->set_sortable(false);
 		$room2settings = array();
 		foreach($p_rooms as $room_id => $room_obj)
 		{
-			$room2inst[$room_id] = new room;
+			$room2inst[$room_id] = clone $room_inst;
 			$room2inst[$room_id]->generate_res_table($room_obj, $range_from, $range_to);
 			$room2inst[$room_id]->pauses = $room2inst[$room_id]->get_current_pauses_for_room($room_obj);
 			$room2settings[$room_id] = $room_inst->get_settings_for_room($room_obj);
@@ -1225,7 +1230,6 @@ $t->set_sortable(false);
 				}
 				if ($oh->prop("date_to") > 100 && $from > $oh->prop("date_to"))
 				{
-echo "oh ".$oh->id()." to = ".date("d.m.Y", $oh->prop("date_to"))." from = ".date("d.m.Y", $from)." <br>";
 					$oh = null;
 					continue;
 				}
@@ -1824,24 +1828,36 @@ echo "oh ".$oh->id()." to = ".date("d.m.Y", $oh->prop("date_to"))." from = ".dat
 		}
 		// list all rooms and find the ones for this product
 		$p_rooms = array();
-		$rooms = new object_list(array(
-			"class_id" => CL_ROOM,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "objects.jrk"
-		));
-		$ri = get_instance(CL_ROOM);
-		foreach($rooms->arr() as $room)
+		// cache room list in var
+		if (!empty($this->pd_data_list_cache))
 		{
-			$pd = $ri->get_active_items($room);
-			if(array_key_exists($prod , $pd->arr()))
+			$pd_data_list = $this->pd_data_list_cache;
+		}
+		else
+		{
+			$rooms = new object_list(array(
+				"class_id" => CL_ROOM,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "objects.jrk"
+			));
+			$ri = get_instance(CL_ROOM);
+			$pd_data_list = array();
+			foreach($rooms->arr() as $room)
 			{
-				$p_rooms[$room->id()] = $room;
+				$pd = $ri->get_active_items($room);
+				$pd_data_list[$room->id()] = $pd->arr();
 			}
-//			if ($pd[$prod]["active"])
-//			{
-//				$p_rooms[$room->id()] = $room;
-//			}
+
+			$this->pd_data_list_cache = $pd_data_list;
+		}
+
+		foreach($pd_data_list as $room_id => $pd_data)
+		{
+			if(array_key_exists($prod , $pd_data))
+			{
+				$p_rooms[$room_id] = obj($room_id);
+			}
 		}
 		$cache[$prod] = $p_rooms;
 		return $p_rooms;
@@ -2436,7 +2452,6 @@ echo "oh ".$oh->id()." to = ".date("d.m.Y", $oh->prop("date_to"))." from = ".dat
 			$booking->set_prop("end", $orig_booking->prop("end"));
 			$booking->set_prop("package", $d["package"]);
 			$booking->save();
-//echo "b2 ".$booking->id()." <Br>";
 			// for this booking, create empty reservations for all products so we can search by them
 			$booking_inst = $booking->instance();
 			$booking_inst->check_reservation_conns($booking);
