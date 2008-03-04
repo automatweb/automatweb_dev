@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.30 2008/02/27 09:32:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.31 2008/03/04 08:12:49 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -77,7 +77,7 @@
 	@caption Veebis poolelioleva tellimuse v&auml;rvi
 
 	@property col_closed type=colorpicker 
-	@caption Kinnise aja värvi
+	@caption Kinnise aja v&auml;rvi
 
 	@property col_recent type=colorpicker 
 	@caption Hiljuti muudetud reserveeringud
@@ -199,7 +199,7 @@
 		@property order_mail_groups type=select multiple=1
 		@caption Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse
 
-Meili sisu peab saama tõlkida, ilmselt seadetele Tõlgi vaade teha lisaks.
+Meili sisu peab saama t6lkida, ilmselt seadetele T6lgi vaade teha lisaks.
 
 @groupinfo grp_settings caption="Gruppide seaded"
 @default group=grp_settings
@@ -647,6 +647,10 @@ class room_settings extends class_base
 		));
 		foreach($ol->arr() as $o)
 		{
+			if (!is_array($settings[$o->id()]))
+			{
+				$settings[$o->id()] = array();
+			}
 			$t->define_data(array(
 				"grp" => html::obj_change_url($o),
 				"from" => html::textbox(array(

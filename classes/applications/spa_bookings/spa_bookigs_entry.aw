@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.73 2008/01/31 13:50:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.74 2008/03/04 08:12:46 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -324,15 +324,13 @@ class spa_bookigs_entry extends class_base
 				}
 			}
 		}
-//arr($arr["request"]);
 
-		//selline asi et saaks juhul kui teise tulba päis pole täidetud, siis teises tulbas oleva info esimesse
-		if(!$arr["request"]["d"][1]["start"]["day"]){arr("aasd");
+		//selline asi et saaks juhul kui teise tulba p2is pole t2idetud, siis teises tulbas oleva info esimesse
+		if(!$arr["request"]["d"][1]["start"]["day"]){
 			$arr["request"]["d"][0]["ppl"] =  array_merge($arr["request"]["d"][0]["ppl"], $arr["request"]["d"][1]["ppl"]);
 			unset($arr["request"]["d"][1]["ppl"]);
 		}
-
-		//uuendus, et siis need mis erineva mailiaadressiga, need läheks omaette broneeringuks
+		//uuendus, et siis need mis erineva mailiaadressiga, need l2heks omaette broneeringuks
 		for($i = 0; $i < 15; $i++)
 		{
 			$d = $arr["request"]["d"][$i];
@@ -355,12 +353,12 @@ class spa_bookigs_entry extends class_base
 				}
 			}
 		}
-//arr($arr["request"]);
+
 		$feedback = "";
 		
 		//if(aw_global_get("uid") == "reiskar"){arr($arr);}
 		
-		//see nüüd selleks, et kui esimeses tulbas on infot ja teises mitte
+		//see nyyd selleks, et kui esimeses tulbas on infot ja teises mitte
 	/*	$default_data = array();
 		
 		if($d["start"]["day"])
@@ -391,6 +389,7 @@ class spa_bookigs_entry extends class_base
 			$d = $arr["request"]["d"][$i];
 			if ($d["fn"] != "" && $d["ln"] != "" && $d["pass"] != "")
 			{
+				enter_function("sbe::begin");
 				$start = date_edit::get_timestamp($d["start"]);
 				$end = date_edit::get_timestamp($d["end"]);
 				if ($end < 100 && $this->can("view", $d["package"]))
@@ -431,7 +430,7 @@ class spa_bookigs_entry extends class_base
 					$existing_user = true;
 */
 				}
-				
+				exit_function("sbe::begin");
 				if (!$existing_user)
 				{
 					$existing_user = false;
@@ -496,11 +495,9 @@ class spa_bookigs_entry extends class_base
 				$booking->save();
 //echo "booking = ".$booking->id()." <br>";
 				$this->created_booking = $booking->id();
-
 				// for this booking, create empty reservations for all products so we can search by them
 				$booking_inst = $booking->instance();
 				$booking_inst->check_reservation_conns($booking);
-
 				$po = obj($d["packet"]);
 				if (is_admin())
 				{
@@ -531,31 +528,37 @@ class spa_bookigs_entry extends class_base
 				{
 					$feedback .= $this->_add_ppl_entry($d, $booking);
 				}
+				enter_function("sbe::mail");
 				if(!$not_send_email)
 				{
-					if ($arr["obj_inst"]->prop("b_send_mail_to_user") && !$existing_user)
+					if (is_email($d["email"]))
 					{
-						send_mail(
-							$d["email"], 
-							$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
-							str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_mail_content")),
-							"From: ".$this->_get_from_addr($arr["obj_inst"])
-						);
-					}
-					if($arr["obj_inst"]->prop("b_ex_mail_content") && $existing_user)
-					{
-						$us = get_instance("users");
-						send_mail(
-							$d["email"],
-							$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
-							str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_ex_mail_content")),
-							"From: ".$this->_get_from_addr($arr["obj_inst"])
-						);
+						if ($arr["obj_inst"]->prop("b_send_mail_to_user") && !$existing_user)
+						{
+							send_mail(
+								$d["email"], 
+								$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
+								str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_mail_content")),
+								"From: ".$this->_get_from_addr($arr["obj_inst"])
+							);
+						}
+						if($arr["obj_inst"]->prop("b_ex_mail_content") && $existing_user)
+						{
+							$us = get_instance("users");
+							send_mail(
+								$d["email"],
+								$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
+								str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_ex_mail_content")),
+								"From: ".$this->_get_from_addr($arr["obj_inst"])
+							);
+						}
 					}
 				}
+				exit_function("sbe::mail");
 			}
 		}
 		$_SESSION["spa_bookings_entry_fb"] = $feedback;
+//		if(aw_global_get("uid") == "struktuur") {aw_shutdown(); die();}
 	}
 
 	function _get_cust_entry_fb($arr)
@@ -925,6 +928,10 @@ $t->set_sortable(false);
 					$prod2tm = array();
 					foreach($prods_in_group as $prod_id)
 					{
+						if (!$this->can("view", $prod_id))
+						{
+							continue;	
+						}
 						$prod = obj($prod_id);
 						foreach($dates as $_prod_id => $nums)
 						{
@@ -942,6 +949,10 @@ $t->set_sortable(false);
 
 					foreach($prods_in_group as $prod_id)
 					{
+						if (!$this->can("view", $prod_id))
+						{
+							continue;	
+						}
 						$prod = obj($prod_id);
 						if ($date == "")
 						{
@@ -1090,7 +1101,7 @@ $t->set_sortable(false);
 		if ($from < 100 || $to < 100)
 		{
 			$from = get_day_start();
-			$to = get_day_start() + 24*3600*7 - 1;//see -1 sellepärast et kui kella 00st võtab, siis on juba uus päev ja võtab järgmise päeva ka sisse
+			$to = get_day_start() + 24*3600*7 - 1;//see -1 sellep2rast et kui kella 00st v6tab, siis on juba uus p2ev ja v6tab j2rgmise p2eva ka sisse
 		}
 		$range_from = $from;
 		$range_to = $to;
@@ -1214,6 +1225,7 @@ $t->set_sortable(false);
 				}
 				if ($oh->prop("date_to") > 100 && $from > $oh->prop("date_to"))
 				{
+echo "oh ".$oh->id()." to = ".date("d.m.Y", $oh->prop("date_to"))." from = ".date("d.m.Y", $from)." <br>";
 					$oh = null;
 					continue;
 				}
@@ -1223,6 +1235,7 @@ $t->set_sortable(false);
 				$room2oh[$room->id()] = $oh;
 			}
 		}
+		
 		for ($h = 0; $h < $num_steps; $h++)
 		{
 			$d = array();
@@ -1245,7 +1258,7 @@ $t->set_sortable(false);
 				$avail = false;
 				foreach($p_rooms as $room)
 				{
-					if($room->prop("allow_multiple")) // idee selles, et kui ühes ruumis on lubatud mitmele, siis loeb kõigil kokku palju vaba ruumi on... kui mõnel ruumil pole määratud, siis see annab juurde väärtuse 1
+					if($room->prop("allow_multiple")) // idee selles, et kui yhes ruumis on lubatud mitmele, siis loeb k6igil kokku palju vaba ruumi on... kui m6nel ruumil pole m22ratud, siis see annab juurde v22rtuse 1
 					{
 						$allow_multiple = 1;
 					}
@@ -1268,7 +1281,7 @@ $t->set_sortable(false);
 						}
 					}
 				}
-
+				
 				foreach($book_dates as $_book_prod => $_prod_nums)
 				{
 					foreach($_prod_nums as $_book_time)
@@ -1286,7 +1299,7 @@ $t->set_sortable(false);
 					$avail = false;
 				}
 				$tmp_to = $cur_step_end - get_day_start($cur_step_end);
-				if ($h*$time_step < $d_from || $h*$time_step >= $d_to || $tmp_to > $d_to)
+				if ($h*$time_step < $d_from || $h*$time_step + $tmp2 >= $d_to || ($tmp_to + $tmp2) > $d_to)
 				{
 					continue;
 				}
@@ -1323,7 +1336,7 @@ $t->set_sortable(false);
 				//$t->define_data($d);
 			}
 		}
-
+		
 		foreach($p_rooms as $room)
 		{
 			$oh = $room_inst->get_current_openhours_for_room($room);
@@ -1360,7 +1373,7 @@ $t->set_sortable(false);
 			$available_after = $available_for_user-$available_before;
 			$midday_h = date("G" ,$room_midday);
 			$booked_in_day = array(0,0,0,0,0,0,0);
-			//otsib pooled vabad ajad peale keskpäeva
+			//otsib pooled vabad ajad peale keskp2eva
 			foreach($data as $key => $dat)
 			{
 				foreach($dat as $day => $val)
@@ -1375,7 +1388,7 @@ $t->set_sortable(false);
 					}
 				}
 			}
-			//otsib ülejäänud vabad ajad enne keskpäeva
+			//otsib ylej22nud vabad ajad enne keskp2eva
 			krsort($data);
 			foreach($data as $key => $dat)
 			{
@@ -1391,7 +1404,7 @@ $t->set_sortable(false);
 					}
 				}
 			}
-			//juhul kui vabu aegu ei saand enne keskpäeva täis, siis vaatab igaks juhuks , äkki on peale lõunat veel vabu aegu
+			//juhul kui vabu aegu ei saand enne keskp2eva t2is, siis vaatab igaks juhuks , 2kki on peale l6unat veel vabu aegu
 			ksort($data);
 			foreach($data as $key => $dat)
 			{
@@ -1512,9 +1525,8 @@ $t->set_sortable(false);
 				$bron->connect(array(
 					"to" => $rv_id,
 					"type" => "RELTYPE_ROOM_BRON"
-				));
+				));//if(aw_global_get("uid") == "struktuur")arr($bron);
 				$bron->save();
-
 				if ($arr["retf"] != "")
 				{
 					die("<script language=javascript>
@@ -1800,11 +1812,15 @@ $t->set_sortable(false);
 
 	function get_rooms_for_product($prod)
 	{
+		static $cache;
+		if (isset($cache[$prod]))
+		{
+			return $cache[$prod];
+		}
 		$po = obj($prod);
 		if ($po->class_id() == CL_SHOP_PRODUCT_PACKAGING)
 		{
 			$prod_con = reset($po->connections_to(array("from.class_id" => CL_SHOP_PRODUCT)));
-//			$prod = $prod_con->prop("from");
 		}
 		// list all rooms and find the ones for this product
 		$p_rooms = array();
@@ -1827,6 +1843,7 @@ $t->set_sortable(false);
 //				$p_rooms[$room->id()] = $room;
 //			}
 		}
+		$cache[$prod] = $p_rooms;
 		return $p_rooms;
 	}
 
@@ -1899,8 +1916,11 @@ $t->set_sortable(false);
 	**/
 	function delete_booking($arr)
 	{
-		$b = obj($arr["booking"]);
-		$b->delete();
+		if ($this->can("delete", $arr["booking"]))
+		{
+			$b = obj($arr["booking"]);
+			$b->delete();
+		}
 		$sb = obj($arr["spa_bron"]);
 		$ep = $sb->meta("extra_prods");
 		foreach($ep as $ei_key => $ei_entry)
@@ -2103,6 +2123,7 @@ $t->set_sortable(false);
 			{
 				case "date_select":
 					$type="date_select";
+					$propl[$propertyn]["year_to"] = date("Y")+1;
 					break;
 
 				case "chooser":
@@ -2182,7 +2203,7 @@ $t->set_sortable(false);
 				"value" => $val,
 				"options" => $opts,
 				"year_from" => $year_from,
-				"year_to" => date("Y")
+				"year_to" => date("Y")+1
 			));
 		}
 
@@ -2326,7 +2347,7 @@ $t->set_sortable(false);
 		}
 
 		// if package is set in the submit, then do create spa booking
-		if ($arr["ud"]["pk_name"] && count($arr["out_arr"]))
+		if ($arr["ud"]["pk_name"] && is_array($arr["out_arr"]) && count($arr["out_arr"]))
 		{
 			$b = obj();
 			$b->set_class_id(CL_SPA_BOOKING);
@@ -2342,6 +2363,40 @@ $t->set_sortable(false);
 					"to" => $r_id,
 					"type" => "RELTYPE_ROOM_BRON"
 				));
+			}
+		}
+		else
+		if ($arr["ud"]["pk_name"] || date_edit::get_timestamp($arr["ud"]["pk_arrival"]) || date_edit::get_timestamp($arr["ud"]["pk_leave"]))
+		{
+			// then we should just change the package set methinks
+			foreach(safe_array($arr["rvs"]) as $rv_id)
+			{
+				$rvo = obj($rv_id);
+				$c = new connection();
+				$conns = $c->find(array(
+					"from.class_id" => CL_SPA_BOOKING,
+					"to" => $rvo->id()
+				));
+				if (count($conns))
+				{
+					$con = reset($conns);
+					$rvo = obj($con["from"]);
+					$_from = $rvo->prop("start");
+					$_to = $rvo->prop("end");
+				}
+				if ($arr["ud"]["pk_name"] && $rvo->prop("package") != $arr["ud"]["pk_name"])
+				{
+					$rvo->set_prop("package", $arr["ud"]["pk_name"]);
+				}
+				if (($pka = date_edit::get_timestamp($arr["ud"]["pk_arrival"])) != -1 && $rvo->prop("start") != $pka)
+				{
+					$rvo->set_prop("start", $pka);
+				}
+				if (($pke = date_edit::get_timestamp($arr["ud"]["pk_leave"])) != -1 && $rvo->prop("end") != $pke)
+				{
+					$rvo->set_prop("end", $pke);
+				}
+				$rvo->save();
 			}
 		}
 		return aw_ini_get("baseurl")."/automatweb/closewin.html";
@@ -2423,12 +2478,12 @@ password type=string
 		$errors = "";
 		if(!$firstname) $errors.= t("Eesnimi puudu")."\n<br>";
 		if(!$lastname) $errors.= t("Perenimi puudu")."\n<br>";
-		if(!$gender) $errors.= t("Sugu määramata")."\n<br>";
-		if(!$birthday) $errors.= t("Sünniaeg puudu")."\n<br>";
+		if(!$gender) $errors.= t("Sugu m&auml;&auml;ramata")."\n<br>";
+		if(!$birthday) $errors.= t("S&uuml;nniaeg puudu")."\n<br>";
 		if(!$email) $errors.= t("E-post puudu")."\n<br>";
 		if(!$start) $errors.= t("Algus puudu")."\n<br>";
 		if(!$packet_id) $errors.= t("Paketi id puudu")."\n<br>";
-		if(!$agency_id) $errors.= t("Büroo puudu")."\n<br>";
+		if(!$agency_id) $errors.= t("B&uuml;roo puudu")."\n<br>";
 		//if(!$firstname) $errors.= t("Eesnimi puudu")."\n<br>";
 		
 		//arr($arr);
@@ -2442,7 +2497,7 @@ password type=string
 		
 		if(!(is_oid($agency_id) && $this->can("view" , $agency_id)))
 		{
-			if(!$agency_id) $errors.= t("Büroo puudu")."\n<br>";
+			if(!$agency_id) $errors.= t("B&uuml;roo puudu")."\n<br>";
 		}
 		if(!(sizeof($ol->arr())))
 		{
@@ -2542,12 +2597,12 @@ password type=string
 			Eesnimi : <input type="textbox" name=firstname value="Eesnimega"><br>
 			Perenimi : <input type="textbox" name=lastname value="Inimene"><br>
 			Sugu : <input type="textbox" name=gender value="M"><br>
-			Sünnipäev : <input type="textbox" name=birthday value="11.11.1980"><br>
+			S&uuml;nnip&auml;ev : <input type="textbox" name=birthday value="11.11.1980"><br>
 			E-mail : <input type="textbox" name=email value="email"><br>
 			Start <input type="textbox" name=start value="23888"><br>
 			paketi id <input type="textbox" name=packet_id value="1394"><br>
 			Parool : <input type="password" name=password value="spauto"><br>
-			Büroo : <input type="textbox" name=agency_id value="63"><br>
+			B&uuml;roo : <input type="textbox" name=agency_id value="63"><br>
 			
 			Saada mail ? <input type="checkbox" name=send_email value="1"><br>
 			<input type=submit value="tee pakett"><br>

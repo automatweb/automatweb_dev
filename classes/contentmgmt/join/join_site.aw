@@ -829,6 +829,7 @@ class join_site extends class_base
 		{
 			$lang_id = aw_global_get("ct_lang_id");
 		}
+
 		if (!empty($lang_errs["next_filled"][$lang_id]))
 		{
 			$fill_msg = $lang_errs["next_filled"][$lang_id];
@@ -3183,6 +3184,27 @@ class join_site extends class_base
                         $d["l".$lid] = html::textbox(array(
                                 "name" => "d[$clid][__cancel_but][$lid]",
                                 "value" => $lang_props[$clid]["__cancel_but"][$lid],
+                                "size" => 20
+                        ));
+
+                }
+                $t->define_data($d);
+
+
+		$d = array(
+                        "orig" => t("Suunamine"),
+                        "class" => t("<b>Suuna p&auml;rast registreerumist</b>")
+                );
+                $clid = "bt";
+                foreach($ll as $lid => $lang)
+                {
+                        if ($lid == $arr["obj_inst"]->lang_id())
+                        {
+                                continue;
+                        }
+                        $d["l".$lid] = html::textbox(array(
+                                "name" => "d[$clid][__after_join_url][$lid]",
+                                "value" => $lang_props[$clid]["__after_join_url"][$lid],
                                 "size" => 20
                         ));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.21 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.22 2008/03/04 08:12:43 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -535,12 +535,18 @@ class shop_packet extends class_base
 	**/
 	function get_products_for_package($o)
 	{
+		static $cache;
+		if (isset($cache[$o->id()]))
+		{
+			return $cache[$o->id()];
+		}
 		$pd = $o->meta("packet_content");
 		$ret = array();
 		foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			$ret[$c->prop("to")] = max(1, $pd[$c->prop("to")]);
 		}
+		$cache[$o->id()] = $ret;
 		return $ret;
 	}
 

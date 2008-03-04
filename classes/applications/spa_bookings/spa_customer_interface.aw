@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.36 2008/02/06 13:34:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.37 2008/03/04 08:12:46 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -285,6 +285,10 @@ class spa_customer_interface extends class_base
 					));
 					foreach($prods_in_group as $prod_id)
 					{
+						if (!$this->can("view", $prod_id))
+						{
+							continue;
+						}
 						$prod = obj($prod_id);
 						foreach($dates as $_prod_id => $nums)
 						{
@@ -344,10 +348,15 @@ class spa_customer_interface extends class_base
 
 					foreach($prods_in_group as $prod_id)
 					{
+						if (!$this->can("view", $prod_id))
+						{
+							continue;
+						}
 						$prod = obj($prod_id);
 						if ($date == "")
 						{
 							$prod_str[] = html::popup(array(
+								"caption" => $prod->trans_get_val("name"),
 								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => $sect, "_not_verified" => 1, "rooms" => $rooms)),
 								"caption" => $prod->trans_get_val("name"),
 								"height" => 500,
@@ -395,6 +404,10 @@ class spa_customer_interface extends class_base
 
                                         foreach($prods_in_group as $prod_id)
                                         {
+						if (!$this->can("view", $prod_id))
+						{
+							continue;
+						}
                                                 $prod = obj($prod_id);
                                                 foreach($dates as $_prod_id => $nums)
                                                 {
@@ -969,7 +982,7 @@ class spa_customer_interface extends class_base
 					continue;
 				}
 				$b->set_prop("verified", 1);
-				if(!$b->meta("mail_sent"))//topelt mailide vältimiseks
+				if(!$b->meta("mail_sent"))//topelt mailide v2ltimiseks
 				{
 					$room_res_inst = get_instance(CL_ROOM_RESERVATION);
 					if($b->meta("tpl"))
@@ -987,7 +1000,7 @@ class spa_customer_interface extends class_base
 				$b->save();
 				aw_restore_acl();
 				
-				//juhuks kui mõni enne maksmist magama jäänud, kuid siiski seda mõne tunni pärast teha kavatseb
+				//juhuks kui m6ni enne maksmist magama j22nud, kuid siiski seda m6ne tunni p2rast teha kavatseb
 				if(!$room_inst->check_if_available(array(
 					"room" => $b->prop("resource"),
 					"start" => $b->prop("start1"),

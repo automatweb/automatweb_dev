@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.9 2008/01/31 13:50:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.10 2008/03/04 08:12:46 kristo Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -148,6 +148,7 @@ class spa_booking extends class_base
 	**/
 	function check_reservation_conns($booking)
 	{
+		enter_function("spa_booking::check_reservation_conns");
 		if (!$this->can("view", $booking->prop("package")))
 		{
 			return;
@@ -159,7 +160,6 @@ class spa_booking extends class_base
 			$room_bron = $c->to();
 			$rv2prod[$room_bron->meta("product_for_bron")] = $room_bron;
 		}
-
 		$package = obj($booking->prop("package"));
 		$pk = $package->instance();
 		$entry_inst = get_instance(CL_SPA_BOOKIGS_ENTRY);
@@ -173,9 +173,10 @@ class spa_booking extends class_base
 				$rooms = $entry_inst->get_rooms_for_product($prod->id());
 				if (count($rooms))
 				{
+					$room_inst = get_instance(CL_ROOM);
 					for ($i = 0; $i < $count; $i++)
 					{
-						$room_inst = get_instance(CL_ROOM);
+						enter_function("spa_booking::make_reservation");
 						$rv_id = $room_inst->make_reservation(array(
 							"id" => reset(array_keys($rooms)),
 							"data" => array(
@@ -191,10 +192,12 @@ class spa_booking extends class_base
 							"to" => $rv_id,
 							"type" => "RELTYPE_ROOM_BRON"
 						));
+						exit_function("spa_booking::make_reservation");
 					}
 				}
 			}
 		}
+		exit_function("spa_booking::check_reservation_conns");
 	}
 }
 ?>

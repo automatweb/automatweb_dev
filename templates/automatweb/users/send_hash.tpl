@@ -1,8 +1,8 @@
 <form method="POST" action="/index.{VAR:ext}">
 <span style="font-family: Arial, Helvetica; font-size: 12px">
 <strong></strong>
-Sisestage oma kasutajanimi või e-posti aadress ning teile meilitakse link, millele klikkides pääsete parooli muutmise lehele.<br><br>
-Probleemide puhul palun võtke ühendust aadressil <a href="mailto:{VAR:webmaster}">{VAR:webmaster}</a>.
+{VAR:LC_USER_ENTER}.<br><br>
+{VAR:LC_USER_PROBLEMS} <a href="mailto:{VAR:webmaster}">{VAR:webmaster}</a>.
 </span>
 <br><br>
 <table border="0">
@@ -11,7 +11,7 @@ Probleemide puhul palun võtke ühendust aadressil <a href="mailto:{VAR:webmaster}
 <input type="radio" name="type" value="email" checked>
 </td>
 <td>
-E-posti aadress:
+{VAR:LC_USER_MAIL}:
 </td>
 <td><input type="text" name="email" size="30">
 </td>
@@ -21,14 +21,14 @@ E-posti aadress:
 <input type="radio" name="type" value="uid">
 </td>
 <td>
-Kasutajanimi:
+{VAR:LC_USER_NAME}:
 </td>
 <td><input type="text" name="uid" size="30">
 </td>
 </tr>
 <tr style="font-family: Arial, Helvetica; font-size: 12px">
 <td colspan="3" align="center">
-<input type="submit" value="Soovin meeldetuletust">
+<input type="submit" value="{VAR:LC_USER_BUTTON}">
 </td>
 </tr>
 <tr style="font-family: Arial, Helvetica; font-size: 12px">

@@ -93,6 +93,11 @@ class msg_dispatch
 
 	function _get_handlers_for_message($msg)
 	{
+		static $cache;
+		if (isset($cache[$msg]))
+		{
+			return $cache[$msg];
+		}
 		$msg = str_replace(".", "", $msg);
 		$file = aw_ini_get("basedir")."/xml/msgmaps/".$msg.".xml";
 		
@@ -103,7 +108,8 @@ class msg_dispatch
 		));
 
 		$handlers = new aw_array(aw_unserialize($fc));
-		return $handlers->get();
+		$cache[$msg] = $handlers->get();
+		return $cache[$msg];
 	}
 }
 ?>

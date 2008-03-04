@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.90 2008/02/25 16:41:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.91 2008/03/04 08:12:40 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -132,7 +132,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property modder type=text store=no no_caption=1
 	
 property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
-caption Kokkuvõte
+caption Kokkuv&otilde;te
 
 @groupinfo reserved_resources caption="Ressursid"
 @default group=reserved_resources
@@ -863,7 +863,7 @@ class reservation extends class_base
 					$pl_ol =  $room_instance->get_active_items($room);
 					$pl = $pl_ol->arr();
 					
-					//peksab need välja mis ruumi juures aktiivseks pole läinud
+					//peksab need v2lja mis ruumi juures aktiivseks pole l2inud
 					$shop_order_center->do_sort_packet_list($pl, $soc->meta("itemsorts"), $soc->prop("grouping"));
 				
 					// get the template for products for this folder
@@ -1030,7 +1030,7 @@ class reservation extends class_base
 					
 					"price" => $is_admin ? $this->_get_admin_price_view($prod,$prod_price):number_format($prod_price, 2),
 					"sum" => "<span id='pr".$prod->id()."'>".number_format($prod_sum, 2)."</span>",
-					//ei julge praegu külge panna
+					//ei julge praegu kylge panna
 /*					"sum" =>  html::textbox(array(
 						"name"=>'price['.$prod->id().']',
 						"value" => number_format((!$arr["web"])? $this->get_product_price(array("product" => $prod->id(), "reservation" => $arr["obj_inst"])): $prod->prop("price"), 2),
@@ -1607,8 +1607,8 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 			date("d.m.Y H:i", $arr["obj_inst"]->modified())
 		);
 	
-		//lõppu maksmise infi, juhul kui on makstud
-		//ei näinud mõtet eraldi property tegemiseks
+		//l6ppu maksmise infi, juhul kui on makstud
+		//ei n2inud m6tet eraldi property tegemiseks
 		if(is_array($arr["obj_inst"]->meta("payment_info")))
 		{
 			$inf = $arr["obj_inst"]->meta("payment_info");
@@ -2346,7 +2346,39 @@ flush();
 			"bron" => $reservation,
 		));
 	}
-	
+
+        function get_products_discount($reservation)
+        {
+                extract($arr);
+                if(is_oid($reservation) && $this->can("view" , $reservation))
+                {
+                        $reservation = obj($reservation);
+                }
+                if(!is_object($reservation))
+                {
+                        return false;
+                }
+                return $reservation->prop("products_discount");
+        }
+        /** gets reservation products discount
+                @attrib api=1 params=name
+                @param reservation required type=object/oid
+                @returns array
+                        array(prod1 => discount, prod2 => discount , ...)
+        **/
+        function get_product_discount($reservation)
+        {
+                if(is_oid($reservation) && $this->can("view" , $reservation))
+                {
+                        $reservation = obj($reservation);
+                }
+                if(!is_object($reservation))
+                {
+                        return false;
+                }
+                return $reservation->meta("product_discount");
+        }
+
 	/**
 		@attrib params=pos api=1
 		@param id required type=oid
@@ -2502,7 +2534,7 @@ flush();
 		return true;
 	}
 	
-// edasi toodete kräpp
+// edasi toodete kr2pp
 	/** Returns products data
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
@@ -2631,7 +2663,7 @@ flush();
 		}
 		$prod_info = $reservation->meta("products_total_price");
 	
-		//kui määratakse kindla valuutaga summa, kui mitte, siis võib arvestada default valuutana
+		//kui m22ratakse kindla valuutaga summa, kui mitte, siis v6ib arvestada default valuutana
 		if(!$curr)
 		{
 			$prod_info = $sum;
@@ -2686,7 +2718,7 @@ flush();
 		
 		foreach($products as $product => $sum)
 		{
-			//kui määratakse kindla valuutaga summa, kui mitte, siis võib arvestada default valuutana
+			//kui m22ratakse kindla valuutaga summa, kui mitte, siis v6ib arvestada default valuutana
 			if(!$curr)
 			{
 				$prod_info[$product] = $sum;
@@ -2699,24 +2731,6 @@ flush();
 		$reservation->set_meta("products_price" , $prod_info);
 		$reservation->save();
 		return 1;
-	}
-	
-	/** gets reservation products discount
-		@attrib api=1 params=name
-		@param reservation required type=object/oid
-	**/
-	function get_products_discount($reservation)
-	{
-		extract($arr);
-		if(is_oid($reservation) && $this->can("view" , $reservation))
-		{
-			$reservation = obj($reservation);
-		}
-		if(!is_object($reservation))
-		{
-			return false;
-		}
-		return $reservation->prop("products_discount");
 	}
 	
 	/** sets reservation products discount
@@ -2772,27 +2786,7 @@ flush();
 		return 1;
 	}
 
-	/** gets reservation products discount
-		@attrib api=1 params=name
-		@param reservation required type=object/oid
-		@returns array
-			array(prod1 => discount, prod2 => discount , ...)
-	**/
-	function get_product_discount($reservation)
-	{
-		if(is_oid($reservation) && $this->can("view" , $reservation))
-		{
-			$reservation = obj($reservation);
-		}
-		if(!is_object($reservation))
-		{
-			return false;
-		}
-		return $reservation->meta("product_discount");
-	}
-
-
-//siit alumised juba võiks töötada	
+//siit alumised juba v6iks t88tada	
 //totaalse hinna ja allahindluse teema
 	/**
 		@attrib api=1 params=name
@@ -2842,7 +2836,7 @@ flush();
 		return 0;
 	}
 
-	// - määrab kogusumma
+	// - m22rab kogusumma
 	/**
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
@@ -2865,7 +2859,7 @@ flush();
 			return 0;
 		}
 		
-		//kui määratakse kindla valuutaga summa, kui mitte, siis võib arvestada default valuutana
+		//kui m22ratakse kindla valuutaga summa, kui mitte, siis v6ib arvestada default valuutana
 		if(!$curr)
 		{
 			$reservation->set_meta("special_sum" , $sum);
@@ -2902,7 +2896,7 @@ flush();
 		return $reservation->meta("special_discount");
 	}
 	
-	// - määrab kogusumma sooduse
+	// - m22rab kogusumma sooduse
 	/**
 		@attrib api=1 params=pos
 		@param reservation required type=object/oid
@@ -2925,7 +2919,7 @@ flush();
 	}
 	
 	//leiab default valuuta broneeringu jaoks
-	//objekti annab kaasa selleks, et miskeid muid tingimusi äkki broneeringul oleks kust valuuta võtta
+	//objekti annab kaasa selleks, et miskeid muid tingimusi 2kki broneeringul oleks kust valuuta v6tta
 	/**
 		@attrib api=1 params=pos
 		@param reservation required type=object/oid
@@ -2966,7 +2960,7 @@ flush();
 			return false;
 		}
 		$this->c_inst = get_instance(CL_CURRENCY);
-		//otsib siis kõigepealt broneeringu metast, siis vaatab edasi... a noh, et kui on valuuta määratud, siis proovib seda valuutat leida, või siis kui miski teine teema on ,siis häkib ümber
+		//otsib siis k6igepealt broneeringu metast, siis vaatab edasi... a noh, et kui on valuuta m22ratud, siis proovib seda valuutat leida, v6i siis kui miski teine teema on ,siis h2kib ymber
 		if($sum = $this->_get_product_price_from_meta(array(
 			"product" => $product,
 			"reservation" => $reservation,
@@ -2976,7 +2970,7 @@ flush();
 			return $sum;
 		}
 
-		//lõpuks siis produkti enda juurest
+		//l6puks siis produkti enda juurest
 		if(is_oid($product) && $this->can("view" , $product))
 		{
 			return $this->_get_product_price_from_product($product , $reservation->id(), $curr);

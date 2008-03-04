@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.44 2008/02/28 10:44:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.45 2008/03/04 08:12:46 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -243,7 +243,7 @@ class spa_bookings_overview extends class_base
 				$prop["options"] = array(
 					"rooms" => t("Ruumide aruanne"),
 					"sellers" => t("Vahendajate aruanne"),
-					"workers" => t("Töötajate aruanne"),
+					"workers" => t("T&ouml;&ouml;tajate aruanne"),
 					"projects" => t("Projektide aruanne"),
 				);
 			case "r_ra_name":
@@ -274,6 +274,12 @@ class spa_bookings_overview extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "rooms_folder":
+				if ($arr["group"] != "general")
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -318,6 +324,11 @@ class spa_bookings_overview extends class_base
 
 	function _get_rooms_tree($arr)
 	{
+		if (!$this->can("view", $arr["obj_inst"]->prop("rooms_folder")))
+		{
+			mail("kristo@struktuur.ee", "rumide kaust", "valimata ".$arr["obj_inst"]->id());
+			die("Tubade kaust on valimata, palun valige see <a href='/automatweb/orb.aw?class=spa_bookings_overview&action=change&id=".$arr["obj_inst"]->id()."'>siit</a>");
+		}
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML,
@@ -604,7 +615,7 @@ class spa_bookings_overview extends class_base
 //			"verified" => 1,
 		);
 
-		//kinnitamata pole vaja näha
+		//kinnitamata pole vaja n2ha
 		if(!$r_ra_unconfirmed)
 		{
 			$filter["verified"] = 1;
@@ -628,7 +639,7 @@ class spa_bookings_overview extends class_base
 			$filter["inbetweener"] = "%".$r_ra_seller."%";
 		}
 
-		//töötaja
+		//t88taja
 		if($r_ra_worker)
 		{
 			$filter["people"] = "%".$r_ra_worker."%";
@@ -640,7 +651,7 @@ class spa_bookings_overview extends class_base
 			$filter["CL_RESERVATION.RELTYPE_PROJECT.name"] = "%".$r_ra_project."%";
 		}
 
-		//broneerimis aja järgi
+		//broneerimis aja j2rgi
 		$from = date_edit::get_timestamp($r_ra_booking_from);
 		$to = date_edit::get_timestamp($r_ra_booking_to);
 		if ($from > 1)
@@ -656,13 +667,13 @@ class spa_bookings_overview extends class_base
 			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
 		}
 
-		//saabumise järgi
+		//saabumise j2rgi
 		if($r_ra_only_done)
 		{
 			$filter["client_arrived"] = 1;
 		}
 
-		//saabumise järgi
+		//saabumise j2rgi
 		if($r_ra_only_done)
 		{
 			$filter["client_arrived"] = 1;
@@ -976,6 +987,10 @@ class spa_bookings_overview extends class_base
 		$rv2r = array();
 		foreach($arr["rvs"] as $b_oid)
                 {
+			if (!$this->can("view", $b_oid))
+			{
+				continue;
+			}
                         $rvs = obj($b_oid);
 			$rv2r[$b_oid] = $rvs->prop("resource");
 			$_from = min($_from, $rvs->prop("start1"));
@@ -1025,6 +1040,10 @@ class spa_bookings_overview extends class_base
 
 		foreach($arr["rvs"] as $b_oid)
 		{
+			if (!$this->can("view", $b_oid))
+			{
+				continue;
+			}
 			$rvs = obj($b_oid);
 			$ro = obj($rv2r[$b_oid]);
 			//$prod_obj = obj($rvs->meta("product_for_bron"));
@@ -1203,7 +1222,7 @@ class spa_bookings_overview extends class_base
 			$prop = array(
 				"vcl_inst" => &$t
 			);
-			$ri->room_count = $r_ol->count();//et mitu ruumi kõrvuti inimlikult jääksid näha
+			$ri->room_count = $r_ol->count();//et mitu ruumi k6rvuti inimlikult j22ksid n2ha
 			$ri->_get_calendar_tbl(array(
 				"room" => $room_id,
 				"prop" => $prop
@@ -1266,8 +1285,10 @@ class spa_bookings_overview extends class_base
 					$field_data["onclick"] = "k".$idx.$field_data["onclick"];
 					$field_data["rowspan"] = "k".$idx.$field_data["rowspan"];
 					$prev_t->define_field($field_data);
+
 				}
 				$room2tbl[$prev_main_idx]["popup_menu"] .= $dat["popup_menu"];
+
 				unset($room2tbl[$idx]);
 			}
 			else

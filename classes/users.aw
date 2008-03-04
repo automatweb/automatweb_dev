@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.188 2008/02/12 12:59:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.189 2008/03/04 08:12:59 kristo Exp $
 // users.aw - User Management
 /*
 @classinfo  maintainer=kristo
@@ -771,6 +771,7 @@ class users extends users_user
 		if (not(is_valid("uid",$uid)))
 		{
 			$this->read_adm_template("hash_results.tpl");
+			lc_site_load("users", &$this);
 			$this->vars(array(
 				"msg" => t("Vigane kasutajanimi"),
 			));
@@ -783,6 +784,7 @@ class users extends users_user
 		if (not($row))
 		{
 			$this->read_adm_template("hash_results.tpl");
+		lc_site_load("users", &$this);
 			$this->vars(array(
 				"msg" => t("Sellist kasutajat pole registreeritud"),
 			));
@@ -794,6 +796,7 @@ class users extends users_user
 		if ($pwhash != $key)
 		{
 			$this->read_adm_template("hash_results.tpl");
+		lc_site_load("users", &$this);
 			$this->vars(array(
 				"msg" => t("Sellist v&otilde;tit pole v&auml;ljastatud"),
 			));
@@ -806,6 +809,7 @@ class users extends users_user
 		if (($ts + (3600*24*400)) < time())
 		{
 			$this->read_adm_template("hash_results.tpl");
+		lc_site_load("users", &$this);
 			$this->vars(array(
 				"msg" => t("See v&otilde;ti on juba aegunud")." <a href='".$this->mk_my_orb('send_hash')."'>".t("Telli uusi v&otilde;ti")."</a>"
 			));
@@ -813,7 +817,7 @@ class users extends users_user
 		}
 
 		$this->read_adm_template("hash_change_password.tpl");
-
+		lc_site_load("users", &$this);
 		$this->vars(array(
 			"uid" => $uid,
 			"reforb" => $this->mk_reforb("submit_password_hash",array("uid" => $uid,"pwhash" => $pwhash)),
@@ -883,7 +887,7 @@ class users extends users_user
 	**/
 	function submit_password_hash($args = array())
 	{
-		extract($args);
+		extract($args);	
 		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
 		$this->db_query($q);
 		$row = $this->db_next();
@@ -894,8 +898,7 @@ class users extends users_user
 		};
 
 		$uo = obj($row["oid"]);
-		$pwhash1 = $uo->prop("password_hash");
-
+		$pwhash1 = $uo->meta("password_hash");
 		if ($pwhash1 != $pwhash)
 		{
 			aw_session_set("status_msg","Sellist v&otilde;tit pole v&auml;ljastatud");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.77 2008/01/16 14:24:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.78 2008/03/04 08:12:49 kristo Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -75,7 +75,7 @@ class room_reservation extends class_base
 		$this->bank_inst = get_instance(CL_BANK_PAYMENT);
 		$this->banks = array(
 			"hansapank" => "Hansapank",
-			"seb" => "Ühispank",
+			"seb" => "&Uuml;hispank",
 			"sampopank" => "Sampopank",
 			"credit_card" => "Krediitkaart",
 			"hansapanklv" => "LV-Hansasabankas",
@@ -167,7 +167,7 @@ class room_reservation extends class_base
 	function submit_meta($arr = array())
 	{
 		$meta = $arr["request"]["meta"];
-		//praagib välja tasemed, kus ei ole kas adekvaatset template faili või nime
+		//praagib v2lja tasemed, kus ei ole kas adekvaatset template faili v6i nime
 		if(($arr["prop"]["name"] == "levels") && is_array($meta))
 		{
 			$temp_arr = array();
@@ -330,7 +330,7 @@ class room_reservation extends class_base
 		global $level;
 		enter_function("room_reservation::parse_alias");
 
-		//antud juhul peaks objektist võtma info hoopis... peaks olema just tagasi pangamakselt tulnud
+		//antud juhul peaks objektist v6tma info hoopis... peaks olema just tagasi pangamakselt tulnud
 		if($_GET["preview"])
 		{
 			if($_GET["tpl"])
@@ -350,10 +350,10 @@ class room_reservation extends class_base
 
 		$targ = obj($arr["alias"]["target"]);
 
-		//ruumi valiku jama... toodete tellimise jne jne jaoks.... et ruume võib olla mitu, on see paras käkk
-		// kõigepealt vaatab, kui on 1 ruum, siis kui on mitu, võtab sessioonist ruumi id, kui see on olemas
+		//ruumi valiku jama... toodete tellimise jne jne jaoks.... et ruume v6ib olla mitu, on see paras k2kk
+		// k6igepealt vaatab, kui on 1 ruum, siis kui on mitu, v6tab sessioonist ruumi id, kui see on olemas
 		// kui pole, siis esimese ruumidest
-		//seda jama dubleerib toodete vaates... sest vahepeal võib kalendris teine ruum valitud olla
+		//seda jama dubleerib toodete vaates... sest vahepeal v6ib kalendris teine ruum valitud olla
 		if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms")) == 1)
 		{
 			$room = obj(reset($targ->prop("rooms")));
@@ -382,7 +382,7 @@ class room_reservation extends class_base
 		$levels = $targ->meta("levels");
 		$this->vars($this->get_level_urls($levels));
 
-		//teeb viimasel vaatel testi, et kas kõik kohustulslikud on täidetud
+		//teeb viimasel vaatel testi, et kas k6ik kohustulslikud on t2idetud
 		$last_l = max(array_keys($levels));
 		if($last_l - 1 == $level)
 		{
@@ -390,7 +390,7 @@ class room_reservation extends class_base
 			if(!array_key_exists($obl , $_SESSION["room_reservation"][$room->id()]))
 			{
 				$_SESSION["room_reservation"][$room->id()][$obl] = "";
-			}//keegi võis tark olla ja mööda hiilida viimasele lehele, et kui mõndasi muutujaid ei ole siis täidab kohustulsikud väljad tühjade väärtustega enne kontrolli
+			}//keegi v6is tark olla ja m88da hiilida viimasele lehele, et kui m6ndasi muutujaid ei ole siis t6idab kohustulsikud v6ljad tyhjade v22rtustega enne kontrolli
 			if($err = $this->check_fields($_SESSION["room_reservation"][$room->id()]))
 			{
 				$_SESSION["room_reservation"][$room->id()]["stay"] = 1;
@@ -422,7 +422,7 @@ class room_reservation extends class_base
 		$data = array("joga" => "jogajoga");
 		$data["revoke_url"] = $this->mk_my_orb("revoke_reservation", array("room" => $room->id() , "room_res" => $targ->id()));
 
-		//seda vaja, et toodete tabelis vana crapi ka näha oleks,....et vahepeal võib ruum muutunud olla
+		//seda vaja, et toodete tabelis vana crapi ka n2ha oleks,....et vahepeal v6ib ruum muutunud olla
 		$this->set_cart_session($room);
 
 		$this->vars($this->get_site_props(array(
@@ -461,7 +461,7 @@ class room_reservation extends class_base
 			"PROD" 	=> $p,
 			"errors" => $_SESSION["room_reservation"][$room->id()]["errors"],
 			"CONTINUE" => ($_SESSION["room_reservation"][$room->id()]["start"]) ? $this->parse("CONTINUE") : "",
-			"continue_submit" => $_SESSION["room_reservation"][$room->id()]["start"] ? "changeform.submit();" : "alert('".t("Vali enne jätkamist sobiv aeg!")."');",
+			"continue_submit" => $_SESSION["room_reservation"][$room->id()]["start"] ? "changeform.submit();" : "alert('".t("Vali enne j&auml;tkamist sobiv aeg!")."');",
 			//"continue_alt" => !$_SESSION["room_reservation"][$room->id()]["start"] ? "alert();" : "",//t("Vali enne j&auml;tkamist sobiv aeg!") : "",
 			"reforb" => $this->mk_reforb("parse_alias",array(
 				"section"	=> aw_global_get("section"),
@@ -501,7 +501,7 @@ class room_reservation extends class_base
 			)),
 		));
 		$_SESSION["room_reservation"][$room->id()]["errors"] = null;
-		//property väärtuse saatmine kujul "property_nimi"_value
+		//property v22rtuse saatmine kujul "property_nimi"_value
 		exit_function("room_reservation::parse_alias");
 		return $this->parse();
 	}
@@ -542,7 +542,7 @@ class room_reservation extends class_base
 		@param start optional type=int
 		@param end optional type=int
 		@param products optional type=array
-		@comment et siis arvutab broneeringu hinna arvestades miinimumhinda, ja kui anda objekt ette, siis võtab ülejäänud info sealt
+		@comment et siis arvutab broneeringu hinna arvestades miinimumhinda, ja kui anda objekt ette, siis v6tab ylej22nud info sealt
 	**/
 	function get_total_bron_price($arr)
 	{
@@ -808,7 +808,7 @@ class room_reservation extends class_base
 			"end" => $_SESSION["room_reservation"][$room->id()]["end"],
 			"products" => -1,
 		));
-		//muidu annab massiivi kõikide valuutade hindadega... et eks selgub, kuda seda hiljem tahetakse
+		//muidu annab massiivi k6ikide valuutade hindadega... et eks selgub, kuda seda hiljem tahetakse
 		$room_res = obj($arr["id"]);
 
 		$show_curr = $room_res->prop("prices");
@@ -854,7 +854,7 @@ class room_reservation extends class_base
 					"room" => $room,
 				));
 				$data["menu_disc"][$curr]+= $room_inst->last_discount;
-				$data["menu_sum"][$curr] += $room_inst->last_discount;//menüü hinda näitab kokku vist
+				$data["menu_sum"][$curr] += $room_inst->last_discount;//menyy hinda n2itab kokku vist
 
 				$data["sum"][$curr] = $sum[$curr]." ".$currency->name();
 				$data["bargain"][$curr] = ($data["menu_disc"][$curr]+$room_inst->bargain_value[$curr])." ".$currency->name();
@@ -1106,7 +1106,7 @@ class room_reservation extends class_base
 			"web" => 1,
 			"room" => $room->id(),
 		));
-		//kui tuleb kuskilt kaugelt müstilisest templatest tellimise vaade, siis jääb asi nii nagu on... muidu teeb tabeli
+		//kui tuleb kuskilt kaugelt mystilisest templatest tellimise vaade, siis j22b asi nii nagu on... muidu teeb tabeli
 		if(!$html)
 		{
 			$html = $t->draw();
@@ -1327,13 +1327,13 @@ class room_reservation extends class_base
 				}
 			}
 		}//if(aw_global_get("uid") == "struktuur"){arr($_SESSION["room_reservation"]);arr($arr);die();}
-		//tegelt teised ruumid 'ra nullida oleks vaja ... vist.... jätame selle tuleviku tarkadele otsustada
+		//tegelt teised ruumid 'ra nullida oleks vaja ... vist.... j2tame selle tuleviku tarkadele otsustada
 		$_SESSION["room_reservation"]["room_id"] = $room;
 
-		//teeb kohe algul broneeringu ära... igal kalenri submittimisel salvestab
+		//teeb kohe algul broneeringu 2ra... igal kalenri submittimisel salvestab
 		$bron_id = $_SESSION["room_reservation"][$room]["bron_id"];
 		$_SESSION["room_reservation"][$room]["bron_id"] = $room_inst->make_reservation(array(
-			"not_verified" => 1,//veebi poolelt et ei kinnitaks ära
+			"not_verified" => 1,//veebi poolelt et ei kinnitaks 2ra
 			"id" => $room,
 			"res_id" => $bron_id,
 			"data" => $_SESSION["room_reservation"][$room],
@@ -1386,7 +1386,7 @@ class room_reservation extends class_base
 				$bron_id = $_SESSION["room_reservation"][$room]["bron_id"];
 			}
 			$_SESSION["room_reservation"][$room]["bron_id"] = $room_inst->make_reservation(array(
-				"not_verified" => 1,//veebi poolelt et ei kinnitaks ära
+				"not_verified" => 1,//veebi poolelt et ei kinnitaks 2ra
 				"id" => $room,
 				"res_id" => $bron_id,
 				"data" => $_SESSION["room_reservation"][$room],
@@ -1436,7 +1436,7 @@ class room_reservation extends class_base
 		foreach($room as $r)
 		{
 			$r = obj($r);
-			//miski imevalemiga on keegi oma reserveeringut üle kirjutama pääsenud.... järgnev vast aitab selle vastu.... point tegelikult et ei oleks maksmisele mindud ja siis peale seda sama bronni id'ga make_reservation funktsiooni mindud... see tuleb välistada
+			//miski imevalemiga on keegi oma reserveeringut yle kirjutama p22senud.... j2rgnev vast aitab selle vastu.... point tegelikult et ei oleks maksmisele mindud ja siis peale seda sama bronni id'ga make_reservation funktsiooni mindud... see tuleb v2listada
 			if(!(is_array($_SESSION["room_reservation"][$r->id()]) && (sizeof($_SESSION["room_reservation"][$r->id()]))))
 			{
 				continue;
@@ -1450,7 +1450,7 @@ class room_reservation extends class_base
 			$_SESSION["room_reservation"][$r->id()]["bron_id"] = $room_inst->make_reservation(array(
 				"id" => $r->id(),
 				"res_id" => $bron_id,
-				"not_verified" => 1,//veebi poolelt et ei kinnitaks ära
+				"not_verified" => 1,//veebi poolelt et ei kinnitaks 2ra
 				"data" => $_SESSION["room_reservation"][$r->id()],
 				"tpl" => $tpl,
 			));
@@ -1464,7 +1464,7 @@ class room_reservation extends class_base
 			$sum = $this->get_total_bron_price(array(
 				"bron" => $bron,
 			));
-			//2 lolli asja järjest
+			//2 lolli asja j2rjest
 			foreach($sum as $curr => $val)
 			{
 				$c = obj($curr);
@@ -1493,7 +1493,7 @@ class room_reservation extends class_base
 		
 		if(is_oid($res))
 		{
-			$expl_res = " (".$res.")"; //et broneerimise objekt ka näha jääks
+			$expl_res = " (".$res.")"; //et broneerimise objekt ka n2ha j22ks
 		}
 		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => reset($bron_ids)));
 		$ret = $bank_inst->do_payment(array(
@@ -1509,7 +1509,7 @@ class room_reservation extends class_base
 	*/
 		$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]));
 
-		//kuna siiani asi ei jõua, siis makse kontrollis peaks vist sessiooni ära nullima... või ma ei tea
+		//kuna siiani asi ei j6ua, siis makse kontrollis peaks vist sessiooni 2ra nullima... v6i ma ei tea
 		return $ret;
 		//return $section."?level=".$level;
 	}
@@ -1570,7 +1570,7 @@ class room_reservation extends class_base
 				$this->send_affirmation_mail($arr["id"],$tpl);
 			}
 
-			//no ilge idiootsus, kuid peab kindel olema et adminni lehele ei ürita minna
+			//no ilge idiootsus, kuid peab kindel olema et adminni lehele ei yrita minna
 			$GLOBALS["cfg"]["in_admin"] = 0;
 			$GLOBALS["cfg"]["__default"]["in_admin"] = 0;
 //			header("Location:".$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"] , "tpl" => $tpl,)));
@@ -1642,7 +1642,7 @@ class room_reservation extends class_base
 			return $this->set;
 		}
 
-		//järgnevalt maili saatmise võimalus juhul kui on ruumi broneerimise objektist väljad täidetud... et siis annaks nagu settingute objektiks hoopis broneerimise objekti, kuna propertyd on samad... kuid ei tea kui hea mõte see on... juhul kui mujal ka kasutama hakata neid settinguid kui maili saatmisel, siis tuleb teha 2 erinevat muutujat
+		//j2rgnevalt maili saatmise v6imalus juhul kui on ruumi broneerimise objektist v2ljad t2idetud... et siis annaks nagu settingute objektiks hoopis broneerimise objekti, kuna propertyd on samad... kuid ei tea kui hea m6te see on... juhul kui mujal ka kasutama hakata neid settinguid kui maili saatmisel, siis tuleb teha 2 erinevat muutujat
 		if(is_oid($o->meta("room_reservation_id")) && $this->can("view" , $o->meta("room_reservation_id")))
 		{
 			$res = obj($o->meta("room_reservation_id"));
@@ -1707,7 +1707,7 @@ class room_reservation extends class_base
 		$awm->gen_mail();
 	}
 
-	//see märgib ka makstuks, kui vaja seda funktsiooni ka muudmoodi kasutada, siis peaks miski muutuja juurde tekitama, mis maksmise asjadega ei tegeleks
+	//see m2rgib ka makstuks, kui vaja seda funktsiooni ka muudmoodi kasutada, siis peaks miski muutuja juurde tekitama, mis maksmise asjadega ei tegeleks
 	function make_verified($id)
 	{
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
@@ -1716,11 +1716,12 @@ class room_reservation extends class_base
 			$room_inst = get_instance(CL_ROOM);
 			$bron = obj($id);
 			$bron->set_prop("verified" , 1);
-			//broneeringusse maksest tuleva info, niipalju kui seda saab...siia seepärast, et ei taha mitmes kohas acl disableda
+			//broneeringusse maksest tuleva info, niipalju kui seda saab...siia seep2rast, et ei taha mitmes kohas acl disableda
 			$bron->set_meta("payment_info" , $bank_inst->get_payment_info());
-			$bron->set_prop("paid" , 1);
+			// this was turned off in kalevspa	
+			//$bron->set_prop("paid" , 1);
 			aw_disable_acl();
-			if(!$bron->meta("mail_sent"))//topelt mailide vältimiseks
+			if(!$bron->meta("mail_sent"))//topelt mailide v2ltimiseks
 			{
 				$bron->set_meta("mail_sent",1);
 			}
@@ -1730,7 +1731,7 @@ class room_reservation extends class_base
 			}
 			$bron->save();
 			aw_restore_acl();
-			//juhuks kui mõni enne maksmist magama jäänud, kuid siiski seda mõne tunni pärast teha kavatseb
+			//juhuks kui m6ni enne maksmist magama j22nud, kuid siiski seda m6ne tunni p2rast teha kavatseb
 			if(!$room_inst->check_if_available(array(
 				"room" => $bron->prop("resource"),
 				"start" => $bron->prop("start1"),
