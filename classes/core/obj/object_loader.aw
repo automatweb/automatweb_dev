@@ -694,7 +694,8 @@ class _int_object_loader extends core
 				"action" => "handle_remote_update",
 				"params" => array(
 					"data" => $data
-				)
+				),
+				"no_errors" => 1	// sites may not respond or be password protected or whatever and the user does not need to see that
 			));
 		}	
 	}

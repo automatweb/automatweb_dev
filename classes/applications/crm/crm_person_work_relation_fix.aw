@@ -8,7 +8,7 @@ class crm_person_work_relation_fix extends _int_object
 	
 	function set_prop($var, $val)
 	{
-		if($var == "org")
+		if($var == "org" && is_oid($this->id()))
 		{
 			foreach(parent::connections_from(array("type" => 1)) as $conn)
 			{				
@@ -18,7 +18,7 @@ class crm_person_work_relation_fix extends _int_object
 				}
 			}
 		}
-		if($var == "section")
+		if($var == "section" && is_oid($this->id()))
 		{
 			foreach(parent::connections_from(array("type" => 7)) as $conn)
 			{
@@ -28,7 +28,7 @@ class crm_person_work_relation_fix extends _int_object
 				}
 			}
 		}
-		if($var == "profession")
+		if($var == "profession" && is_oid($this->id()))
 		{
 			foreach(parent::connections_from(array("type" => 3)) as $conn)
 			{
