@@ -2621,7 +2621,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->_do_add_class_id($clid, true);
 			foreach($props as $pn => $resn)
 			{
-				if (is_numeric($pn))
+				if (is_numeric($pn) && !is_object($resn))
 				{
 					$pn = $resn;
 				}
