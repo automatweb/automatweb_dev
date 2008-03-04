@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.209 2008/03/04 15:33:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.210 2008/03/04 20:31:22 voldemar Exp $
 // task.aw - TODO item
 /*
 
@@ -36,23 +36,23 @@
 
 			@property deadline type=datetime_select table=planner field=deadline parent=top_2way_right
 			@caption T&auml;htaeg
-	
+
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
 
-@layout center_bit type=hbox 
+@layout center_bit type=hbox
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
 
-	@layout center_bit_left type=vbox parent=center_bit 
+	@layout center_bit_left type=vbox parent=center_bit
 
 
 		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
 
 		@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit_left_ct width=100%
 		@caption Sisu
-		
 
-	@layout center_bit_right type=vbox parent=center_bit 
+
+	@layout center_bit_right type=vbox parent=center_bit
 
 		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
 
@@ -90,7 +90,7 @@
 	@property is_personal type=checkbox ch_value=1 field=meta method=serialize parent=personal no_caption=1
 	@caption Isiklik
 
-@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill
 @caption Saata arve
 
 @property in_budget type=checkbox ch_value=1 table=planner field=aw_in_budget
@@ -104,10 +104,10 @@
 @property priority type=textbox size=5 table=planner field=priority
 @caption Prioriteet
 
-@property num_hrs_guess type=textbox size=5 field=meta method=serialize 
-@caption Prognoositav tundide arv 	
+@property num_hrs_guess type=textbox size=5 field=meta method=serialize
+@caption Prognoositav tundide arv
 
-@property num_hrs_real type=textbox size=5 field=meta method=serialize 
+@property num_hrs_real type=textbox size=5 field=meta method=serialize
 @caption Tegelik tundide arv
 
 @property num_hrs_to_cust type=textbox size=5 field=meta method=serialize
@@ -115,7 +115,7 @@
 
 @layout hr_price_layout type=hbox no_caption=1
 caption Tunnihind
-	
+
 	@property hr_price type=textbox size=5 field=meta method=serialize parent=hr_price_layout
 	@caption Tunnihind
 
@@ -124,7 +124,7 @@ caption Tunnihind
 
 @layout deal_price_layout type=hbox no_caption=1
 caption Kokkuleppehind
-	
+
 	@property deal_unit type=textbox size=5 field=meta method=serialize parent=hr_price_layout
 	@caption &Uuml;hik
 
@@ -135,7 +135,7 @@ caption Kokkuleppehind
 	@caption Kokkuleppehind
 
 
-@property bill_no type=text table=planner 
+@property bill_no type=text table=planner
 @caption Arve number
 
 @property code type=hidden size=5 table=planner field=code
@@ -144,7 +144,7 @@ caption Kokkuleppehind
 @property participants type=popup_search multiple=1 table=objects field=meta method=serialize clid=CL_CRM_PERSON
 @caption Osalejad
 
-@property controller_disp type=text store=no 
+@property controller_disp type=text store=no
 @caption Kontrolleri v&auml;ljund
 
 property aliasmgr type=aliasmgr store=no
@@ -207,7 +207,7 @@ caption Osalejad
 	@property rows type=table store=no no_caption=1 method=serialize
 	@property rows_bottom type=text no_caption=1
 	@property rows_oe type=text no_caption=1
-	
+
 @default group=resources
 
 	@property sel_resources type=table no_caption=1 method=serialize
@@ -217,17 +217,17 @@ caption Osalejad
 	@layout predicates_left type=vbox parent=predicates_l closeable=1 area_caption=Eeldustegevused no_padding=1
 
 	@property predicates_tb type=toolbar parent=predicates_left no_caption=1
-	@property predicates_table type=table store=no  no_caption=1 parent=predicates_left 
-	
+	@property predicates_table type=table store=no  no_caption=1 parent=predicates_left
+
 	@layout predicates_right type=vbox parent=predicates_l
-	
+
 	@property predicates multiple=1 type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect field=meta parent=predicates_right method=serialize
 	@caption Eeldustegevused
 
 	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal method=
 	@caption Verstapost
 
-@groupinfo rows caption=Read 
+@groupinfo rows caption=Read
 @groupinfo recurrence caption=Kordumine submit=no
 @groupinfo calendars caption=Kalendrid
 @groupinfo others caption=Teised submit_method=get
@@ -235,7 +235,7 @@ caption Osalejad
 @groupinfo comments caption=Kommentaarid parent=other_exp
 @groupinfo reminders caption=Meeldetuletused parent=other_exp
 @groupinfo participants caption=Osalejad submit=no
-@groupinfo other_exp caption="Muud kulud"  
+@groupinfo other_exp caption="Muud kulud"
 @groupinfo resources caption="Ressursid" parent=other_exp
 @groupinfo predicates caption="Eeldused" parent=other_exp
 
@@ -342,7 +342,7 @@ class task extends class_base
 	function stopper_pop($arr)
 	{
 		$this->read_template("stopper_pop.tpl");
-		
+
 		$ui = get_instance(CL_USER);
 		$u = obj($ui->get_current_user());
 		$stos = $this->get_stos($u);
@@ -374,8 +374,8 @@ class task extends class_base
 		$html = $this->draw_alternative_stoppers($stos, $arr);
 		return $html;
 	}
-	
-	
+
+
 	function stopper_autocomplete($requester, $params)
 	{
 		switch($requester)
@@ -394,7 +394,7 @@ class task extends class_base
 				if(strlen($params["part"]))
 				{
 					$parts = split(",", $params["part"]);
-					
+
 					$c = new connection();
 					$conns = $c->find(array(
 						"from.class_id" => CL_PROJECT,
@@ -426,7 +426,7 @@ class task extends class_base
 	}
 
 	function gen_stopper_addon($fafa)
-	{		
+	{
 		$props = array(
 			array(
 				"name" => "name",
@@ -493,7 +493,7 @@ class task extends class_base
 				"no_caption" => 1,
 			)
 		);
-		// this upper_layout is here for a reason, so dont you even try to remove this.. 
+		// this upper_layout is here for a reason, so dont you even try to remove this..
 		$layoutinfo["upper_layout"] = array(
 			"type" => "vbox",
 			"no_caption" => 1,
@@ -694,7 +694,7 @@ class task extends class_base
 				{
 					$prop_orig_name = $prop["name"];
 					$prop["name"] = "stopdata_".$ident."_".$prop["name"];
-					
+
 					if($prop["autocomplete"] || isset($prop["autocomplete_delimiters"]))
 					{
 						$prop["autocomplete_params"] = $params;
@@ -703,7 +703,7 @@ class task extends class_base
 							"class" => "task",
 							"requester_class" => $stopper["type"],
 						));
-						
+
 						//$prop["content"] = $stopper["data"][$prop_orig_name]["caption"]?$stopper["data"][$prop_orig_name]["caption"]:$stopper["data"][$prop_orig_name]["value"];
 						if(strlen($stopper["data"][$prop_orig_name]["caption"]))
 						{
@@ -723,7 +723,7 @@ class task extends class_base
 							"value" => 0,
 						));
 					}
-					$prop["value"] = strlen($prop["value"])?$prop["value"]:$stopper["data"][$prop_orig_name]["value"];				
+					$prop["value"] = strlen($prop["value"])?$prop["value"]:$stopper["data"][$prop_orig_name]["value"];
 					$prop["selected"] = strlen($prop["selected"])?$prop["selected"]:$stopper["data"][$prop_orig_name]["value"];
 					$prop["parent"] = "sto_".$ident."_right";
 					/*
@@ -736,7 +736,7 @@ class task extends class_base
 
 						$prop["name"] = $prop["name"]."_fake";
 						$prop["disabled"] = 1;
-						
+
 						//$prop["type"] = "hidden";
 						//$prop["no_caption"] = 1;
 					}
@@ -854,7 +854,7 @@ class task extends class_base
 		$json = get_instance("protocols/data/json");
 		die($json->encode($ret));
 	}
-	
+
 	function callback_get_default_group($arr)
 	{
 		$seti = get_instance(CL_CRM_SETTINGS);
@@ -865,9 +865,9 @@ class task extends class_base
 		}
 		return "general";
 	}
-	
+
 	function callback_on_load($arr)
-	{	
+	{
 		if(($arr["request"]["msgid"]))
 		{
 			$mail = get_instance(CL_MESSAGE);
@@ -882,7 +882,7 @@ class task extends class_base
 		$this->co = $u->get_current_company();
 		$this->person = $u->get_current_person();
 	}
-	
+
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -908,7 +908,7 @@ class task extends class_base
 				{
 					break;
 				}
-				
+
 				if($on_bill_str == t("Arveta"))
 				{
 					$data["value"]= t("Muud kulud, mille kohta ei ole arvet esitatud");
@@ -921,7 +921,7 @@ class task extends class_base
 				{
 					$data["value"]= t("Muud kulud");
 				}
-				
+
 				$data["value"].= ":\n<br>";
 				$cs = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_EXPENSE",
@@ -998,19 +998,19 @@ class task extends class_base
 				$data["value"].=t("Kokku:")." ".$sum." ".$cu_name;
 				if(!$there_are_oe) $data["value"] = "";
 				break;
-				
+
 			case "predicates":
 				return PROP_IGNORE;
 				break;
-			
+
 			case "predicates_tb":
 				$this->_predicates_tb($arr);
 				break;
-				
+
 			case "predicates_table":
 				$this->_predicates_table($arr);
 				break;
-				
+
 		        case "parts_tb":
                                $this->_parts_tb($arr);
                               break;
@@ -1118,7 +1118,7 @@ class task extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-			
+
 			case "content":
 				if($this->mail_data)
 				{
@@ -1132,9 +1132,9 @@ class task extends class_base
 					break;
 				}
 				break;
-				
+
 			case "end":
-				
+
 	//			$dayend = mktime($prop["value"]["hour"],$prop["value"]["minute"],0,$prop["value"]["month"],$prop["value"]["day"],$prop["value"]["year"]);
 				$daystart = mktime($arr["request"]["start1"]["hour"],$arr["request"]["start1"]["minute"],0,$arr["request"]["start1"]["month"],$arr["request"]["start1"]["day"],$arr["request"]["start1"]["year"]);
 				if($daystart > $data["value"]) $data["value"] = $daystart;
@@ -1493,7 +1493,7 @@ class task extends class_base
 		};
 		return $retval;
 	}
-	
+
 	function cb_calendar_others($arr)
 	{
 		$elib = get_instance("calendar/event_property_lib");
@@ -1510,7 +1510,7 @@ class task extends class_base
 			$i = get_instance(CL_FORM_CONTROLLER);
 			$arr = $i->eval_controller($sts->prop("task_save_controller"), $arr);
 		}
-		
+
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -1523,7 +1523,7 @@ class task extends class_base
 //				if($daystart > $dayend) $prop["value"] = $daystart;
 				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($prop["value"]))
 				{
-					
+
 					$prop["value"] = $arr["request"]["start1"];
 					$arr["request"]["end"] = $arr["request"]["start1"];
 				}
@@ -1675,14 +1675,14 @@ class task extends class_base
 								$obj->set_name($entry["name"]);
 								$obj->set_prop("date" , $entry["date"]);
 								$obj->set_prop("cost" , $entry["cost"]);
-								$obj->set_prop("who" , $entry["who"]);	
+								$obj->set_prop("who" , $entry["who"]);
 								$obj->set_prop("currency" , $entry["currency"]);
 								$obj->save();
 							}
 							continue;
 						}
 					}
-					//edasi juhul kui sellist kulude objekti veel pole 
+					//edasi juhul kui sellist kulude objekti veel pole
 					if ($entry["name"] != "" && $entry["cost"] != "")
 					{
 						$row = obj();
@@ -1691,8 +1691,8 @@ class task extends class_base
 						$row->set_name($entry["name"]);
 						$row->set_prop("date", $entry["date"]);
 						$row->set_prop("cost", $entry["cost"]);
-						$row->set_prop("who" , $entry["who"]);	
-						$row->set_prop("currency" , $entry["currency"]);	
+						$row->set_prop("who" , $entry["who"]);
+						$row->set_prop("currency" , $entry["currency"]);
 						$row->save();
 						$arr["obj_inst"]->connect(array(
 							"to" => $row->id(),
@@ -1702,7 +1702,7 @@ class task extends class_base
 				}
 				$arr["obj_inst"]->set_meta("other_expenses", null);
 				break;
-				
+
 			case "hrs_table":
 				$different_customers = 0;
 				if(is_oid($arr["obj_inst"]->prop("project")) && $arr["obj_inst"]->prop("customer"))
@@ -1764,7 +1764,7 @@ class task extends class_base
 			if (!is_array($pv) && is_oid($pv))
 			{
 				$pv = array($pv => $pv);
-			}	
+			}
 			else
 			if (!is_array($pv) && !is_oid($pv))
 			{
@@ -1846,14 +1846,14 @@ class task extends class_base
 				));
 			}
 		}
-		
+
 		if (is_array($this->post_save_add_parts))
 		{
 			foreach(safe_array($this->post_save_add_parts) as $person)
 			{
 				$this->add_participant($arr["obj_inst"], obj($person));
 			}
-			
+
 		}
 		//the person who added the task will be a participant, whether he likes it
 		//or not
@@ -1890,7 +1890,7 @@ class task extends class_base
 		$pl = get_instance(CL_PLANNER);
 		$pl->post_submit_event($arr["obj_inst"]);
 	}
-	
+
 	function request_execute($obj)
 	{
 		$this->read_template("show.tpl");
@@ -1907,7 +1907,7 @@ class task extends class_base
 		$elib = get_instance('calendar/event_property_lib');
 		return $elib->participant_selector($arr);
 	}
-	
+
 	function _init_other_exp_t(&$t)
 	{
 		$t->define_field(array(
@@ -1935,28 +1935,28 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "bill",
 			"caption" => t("Arve nr.")
-		));	
+		));
 	}
 
 	function _other_expenses($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_other_exp_t($t);
-		
+
 		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
 // 		$dat = array();
 		$dat[] = array();
 		$dat[] = array();
 		$dat[] = array();
 		$nr = 1;
-		
+
 		$participians = $this->get_partipicants($arr);
 		$pa_list = new object_list();
 		if (is_oid($participians) || (is_array($participians) && count($participians)))
 		{
 			$pa_list->add($participians);
 		}
-		
+
 		$cs = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_EXPENSE",
 		));
@@ -2040,7 +2040,7 @@ class task extends class_base
 		}
 		$t->set_sortable(false);
 	}
-	
+
 	function _get_currencys()
 	{
 		$data = array();
@@ -2053,7 +2053,7 @@ class task extends class_base
                 }
 		return $data;
 	}
-	
+
 	/**
 		@attrib name=error_popup
 		@param text optional
@@ -2069,7 +2069,7 @@ class task extends class_base
 	**/
 	function search_for_proj($arr)
 	{
-		
+
 	}
 
 
@@ -2087,7 +2087,7 @@ class task extends class_base
 				$selected = $settings_inst->bills_filter_options[$sts->prop("default_task_rows_bills_filter")];
 			}
 		}
-		
+
 /*		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Kuup&auml;ev")."<br>",
@@ -2097,7 +2097,7 @@ class task extends class_base
 			"callback" =>  array(&$this, "__date_format"),
 			"callb_pass_row" => true,
 		));
-*/		
+*/
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk")."<br>".t("Kuup&auml;ev"),
@@ -2160,7 +2160,7 @@ class task extends class_base
 			),
 			"filter_compare" => array(&$this, "__done_filt_comp"),
 		));
-		
+
 		$t->define_field(array(
 			"name" => "on_bill",
 			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>".t("Arvele")."</a>",
@@ -2242,7 +2242,7 @@ class task extends class_base
 		{
 			return false;
 		}
-		
+
 		if ($str == t("Arvel") && $row["bill_val"] != "billed")
 		{
 			return false;
@@ -2274,7 +2274,7 @@ class task extends class_base
 	//	{
 	//		if($task->prop("hr_price_currency") != $task->prop("deal_price_currency")) arr($task->id());
 	//	}
-	
+
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
 		if ($sts && $sts->prop("task_rows_controller"))
@@ -2286,7 +2286,7 @@ class task extends class_base
 				$this->$key = $val;
 			}
 		}
-	
+
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$impls = $this->_get_possible_participants($arr["obj_inst"], true, $arr["obj_inst"]->prop("participants"));
@@ -2348,12 +2348,12 @@ class task extends class_base
 		$row_ids[] = NULL;
 		$row_ids[] = NULL;
 		$not_sorted=true;
-		
+
 		//statistikasse nende ridade tunnid, mida reaalselt tabelis n2ha (kliendile)
 		$this->visible_rows_sum = 0;
 		//k6ikide ridade tundide summa (kliendile)
 		$this->sum = 0;
-		
+
 		foreach($row_ids as $ro)
 		{
 			if ($ro === NULL)
@@ -2426,7 +2426,7 @@ class task extends class_base
 				$d_comp =  date("Ymd",($row->prop("date") > 100 ? $row->prop("date") : $row->created()));
 				$app = "";
 			}
-			
+
 			if($d_comp < date("Ymd",time()))
 			{
 				$col = "red";
@@ -2623,8 +2623,8 @@ class task extends class_base
 			)).$this->__date_format($val);
 		}
 	}
-	
-	
+
+
 	function __time_format($val)
 	{
 		if($val["result_sum"])
@@ -2648,10 +2648,10 @@ class task extends class_base
 			//defauldiks oleks tunnid
 			if($unit) $unit = t("h");
 			return "<b>".t("Kokku:").$sum." ".$unit." (".$cash." ".$curr.")";
-		}	
+		}
 		return $val["time"];
 	}
-	
+
 	function __date_format($val)
 	{
 		if($val["date_val"])
@@ -2667,7 +2667,7 @@ class task extends class_base
 			)).$val["date_sel"];
 		}
 	}
-	
+
 	function __id_format($val)
 	{
 		return " ";
@@ -2703,7 +2703,7 @@ class task extends class_base
 		{
 			$task = obj($task->brother_of());
 		}
-		
+
 		$curr = $task->prop("hr_price_currency");
 		foreach($task->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
@@ -2764,7 +2764,7 @@ class task extends class_base
 				);
 			}
 		}
-				
+
 		// add other expenses rows
 		foreach(safe_array($task->meta("other_expenses")) as $idx => $oe)
 		{
@@ -2795,7 +2795,7 @@ class task extends class_base
 					$rows[$id] = array(
 						"name" => $ob->name(),
 						"unit" => "",
-						
+
 						"price" => $stats_inst->convert_to_company_currency(array(
 							"sum" => $ob->prop("cost"),
 							"o" => $ob,
@@ -2824,8 +2824,8 @@ class task extends class_base
 
 	/**
 		@attrib name=del_file_rel
-		@param fid required 
-		@param return_url optional 
+		@param fid required
+		@param return_url optional
 	**/
 	function del_file_rel($arr)
 	{
@@ -2860,7 +2860,7 @@ class task extends class_base
 			"img" => "new.gif",
 			"tooltip" => t("Kohtumine"),
 			"url" => $this->mk_my_orb(
-				"new", 
+				"new",
 				array(
 					"parent" => $arr["obj_inst"]->parent(),
 					"return_url" => get_ru(),
@@ -2895,21 +2895,21 @@ class task extends class_base
 			"tooltip" => t("Kustuta read"),
 			"action" => "delete_task_rows"
 		));
-	
+
 		$tb->add_button(array(
 			"name" => "copy",
 			"img" => "copy.gif",
 			"tooltip" => t("Kopeeri read"),
 			"action" => "copy_task_rows"
 		));
-	
+
 		$tb->add_button(array(
 			"name" => "cut",
 			"img" => "cut.gif",
 			"tooltip" => t("L&otilde;ika read"),
 			"action" => "cut_task_rows"
 		));
-		
+
 		if($_SESSION["task_rows"])
 		{
 			$tb->add_button(array(
@@ -2930,7 +2930,7 @@ class task extends class_base
 		$_SESSION["task_rows"]["sel"] = $arr["sel"];
 		return $arr["post_ru"];
 	}
-	
+
 	/**
 		@attrib name=cut_task_rows all_args=1
 	**/
@@ -3014,7 +3014,7 @@ class task extends class_base
 	}
 
 	function _get_default_name($o)
-	{	
+	{
 		$n = $o->prop_str("project");
 		if ($n == "")
 		{
@@ -3023,7 +3023,7 @@ class task extends class_base
 			{
 				$uid = $o->createdby();
 				if ($uid != "")
-				{	
+				{
 					$u = get_instance("users");
 					$u_o = obj($u->get_oid_for_uid($uid));
 
@@ -3147,13 +3147,13 @@ class task extends class_base
 		$sel_ids = array_flip($sel_res->ids());
 		foreach($res->arr() as $r)
 		{
-			// get events for the resource 
+			// get events for the resource
 			$avail = true;
 			$evstr = "";
 			$ri = $r->instance();
 			$events = $ri->get_events_for_range(
-				$r, 
-				$arr["obj_inst"]->prop("start1"), 
+				$r,
+				$arr["obj_inst"]->prop("start1"),
 				$arr["obj_inst"]->prop("end")
 			);
 			if (count($events))
@@ -3170,8 +3170,8 @@ class task extends class_base
 			if ($avail)
 			{
 				$una = $ri->get_unavailable_periods(
-					$r, 
-					$arr["obj_inst"]->prop("start1"), 
+					$r,
+					$arr["obj_inst"]->prop("start1"),
 					$arr["obj_inst"]->prop("end")
 				);
 
@@ -3185,13 +3185,13 @@ class task extends class_base
 								  date("d.m.Y H:i", $event["end"]).": ".$event["name"];
 					}
 				}
-			}			
+			}
 
 			if ($avail)
 			{
 				$una = $ri->get_recurrent_unavailable_periods(
-					$r, 
-					$arr["obj_inst"]->prop("start1"), 
+					$r,
+					$arr["obj_inst"]->prop("start1"),
 					$arr["obj_inst"]->prop("end")
 				);
 				if (count($una))
@@ -3204,7 +3204,7 @@ class task extends class_base
 								  date("d.m.Y H:i", $event["end"])."<br>";
 					}
 				}
-			}			
+			}
 
 			$t->define_data(array(
 				"name" => html::obj_change_url($r),
@@ -3319,7 +3319,7 @@ class task extends class_base
 				// here we find such elements which use autocomplete.. hopefully
 				if(array_key_exists($k.$ac_postfix, $arr))
 				{
-					// we have to store the real value and the caption in case autocomplete is used 
+					// we have to store the real value and the caption in case autocomplete is used
 					if($v != $arr[$k.$ac_postfix])
 					{
 						$stos[$spl[1]]["data"][$spl[2]]["value"] = $v;
@@ -3350,7 +3350,7 @@ class task extends class_base
 				$url = $this->mk_my_orb("stopper_pop",array(), CL_TASK);
 			}
 		}
-		
+
 		if ($arr["s_action"] == "del")
 		{
 			unset($stos[$arr["ident"]]);
@@ -3367,27 +3367,12 @@ class task extends class_base
 		{
 			// stop timer and write row to task
 			$stopper = $stos[$arr["ident"]];
-			
+
 			$elapsed = (time() - $stopper["start"]) + $stopper["base"];
-			$el_hr = (int)($elapsed / 3600);
-			$el_min = (int)(($elapsed - $el_hr * 3600) / 60);
-			if ($el_min < 15)
-			{
-				$el_hr += 0.25;
-			}
-			else
-			if ($el_min < 30)
-			{
-				$el_hr += 0.5;
-			}
-			else
-			if ($el_min < 45)
-			{
-				$el_hr += 0.75;
-			}
+			$el_hr = floor($elapsed / 3600) + ceil((($elapsed % 3600) / 60) / 15) * 0.25;
+			$stopper["hours"] = $el_hr;
 
 			$i = get_instance($stopper["type"]);
-			$stopper["hours"] = $el_hr;
 			$stopper["first_start"] = $arr["ident"];
 			$rv = false;
 			if(method_exists($i, "handle_stopper_stop"))
@@ -3404,7 +3389,7 @@ class task extends class_base
 				$this->stop_error[$arr["ident"]] = $rv;
 				// do something !!
 			}
-		
+
 		}
 		else
 		if ($arr["s_action"] == "start")
@@ -3435,7 +3420,7 @@ class task extends class_base
 			{
 				$new_stop["start"] = time();
 			}
-			
+
 			if($this->can("view", $arr["source_id"]))
 			{
 				$o = obj($arr["source_id"]);
@@ -3451,9 +3436,9 @@ class task extends class_base
 						$inst->handle_stopper_start($o);
 					}
 				}
-				
+
 			}
-			
+
 			if (isset($arr["type"]))
 			{
 				$new_stop["type"] = $arr["type"];
@@ -3600,7 +3585,7 @@ class task extends class_base
 					}
 				}
 			}
-			
+
 			if(isset($e["task"]))
 			{
 				if ($o->prop("content") != $e["task"])
@@ -3609,7 +3594,7 @@ class task extends class_base
 					$is_mod = true;
 				}
 			}
-			
+
 			if(isset($e["impl"]))
 			{
 				if ($o->class_id() == CL_CRM_MEETING)
@@ -3659,7 +3644,7 @@ class task extends class_base
 				$o->set_prop("ord", $e["ord"]);
 				$is_mod = true;
 			}
-			
+
 			if(isset($e["time_real"]))
 			{
 				$e["time_real"] = str_replace(",", ".", $e["time_real"]);
@@ -3669,14 +3654,14 @@ class task extends class_base
 					$is_mod = true;
 				}
 			}
-			
+
 			if(isset($e["time_to_cust"]))
 			{
 				if ($e["time_to_cust"] == "")
 				{
 					$e["time_to_cust"] = $e["time_real"];
 				}
-			
+
 				$e["time_to_cust"] = str_replace(",", ".", $e["time_to_cust"]);
 				if ($o->prop("time_to_cust") != $e["time_to_cust"])
 				{
@@ -3684,14 +3669,14 @@ class task extends class_base
 					$is_mod = true;
 				}
 			}
-			
+
 			if(isset($e["done"]))
 			{
 				if ($o->class_id() == CL_CRM_MEETING)
 				{
 					$o->set_prop("is_done", $e["done"] ? 8 : 0);
 					$is_mod = true;
-				}	
+				}
 				else
 				{
 					if ((int)$o->prop("done") != (int)$e["done"])
@@ -3722,7 +3707,7 @@ class task extends class_base
 					$o->set_prop("send_bill", (int)$e["on_bill"]);
 				}
 			}
-			
+
 			if ($is_mod)
 			{
 				$o->save();
@@ -3812,7 +3797,7 @@ class task extends class_base
 		}
 		header("Content-type: text/xml");
 		$xml = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\" standalone=\"yes\"?>\n<response>\n";
-	
+
 		foreach($ol->names() as $id => $n)
 		{
 			$xml .= "<item><value>$id</value><text>$n</text></item>";
@@ -3820,7 +3805,7 @@ class task extends class_base
 		$xml .= "</response>";
 		die($xml);
 	}
-	
+
 	function callback_generate_scripts($arr)
 	{
 		$url = $this->mk_my_orb("get_proj_for_cust");
@@ -3836,7 +3821,7 @@ class task extends class_base
 				if (req.readyState == 4)
 				{
 					// only if "OK"
-					if (req.status == 200) 
+					if (req.status == 200)
 					{
 						response = req.responseXML.documentElement;
 						items = response.getElementsByTagName("item");
@@ -3849,8 +3834,8 @@ class task extends class_base
 							text = items[i].childNodes[1].firstChild.data;
 							aw_add_list_el(document.changeform.project, value, text);
 						}
-					} 
-					else 
+					}
+					else
 					{
 						alert("There was a problem retrieving the XML data:\n" + req.statusText);
 					}
@@ -3872,7 +3857,7 @@ class task extends class_base
 		return $arr["post_ru"];
 	}
 
-	
+
 	function handle_stopper_stop($arr)
 	{
 		if(!$this->can("view", $arr["oid"]))
@@ -3884,11 +3869,11 @@ class task extends class_base
 				$o->set_name($arr["data"]["name"]["value"]);
 				$o->set_class_id(CL_TASK);
 				$o->set_prop("start1", $arr["first_start"]);
-				
+
 				$o->set_prop("is_done", $arr["data"]["isdone"]["value"]?1:0);
 				$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
 				$o->set_prop("content", $arr["data"]["desc"]["value"]);
-				
+
 				$o->save();
 				$person = obj($arr["data"]["part"]["value"]);
 				$person->connect(array(
@@ -3899,7 +3884,7 @@ class task extends class_base
 					"to" => $arr["data"]["project"]["value"],
 					"type" => "RELTYPE_PROJECT",
 				));
-				
+
 				$arr["oid"] = $o->id();
 			}
 			else
@@ -3912,7 +3897,7 @@ class task extends class_base
 		$o->set_prop("num_hrs_real", $o->prop("nuh_hrs_real") + $arr["hours"]);
 		$o->set_prop("num_hrs_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
 		$o->set_prop("end", time());
-		
+
 		$cp = get_current_person();
 
 		$row = obj();
@@ -3921,7 +3906,7 @@ class task extends class_base
 		$row->set_prop("content", $arr["data"]["desc"]["value"]);
 		$row->set_prop("date", $arr["start"]);
 		$row->set_prop("impl", array($cp->id() => $cp->id()));
-		
+
 		$row->set_prop("time_guess", strlen($arr["data"]["timeguess"]["value"])?$arr["data"]["timeguess"]["value"]:$arr["hours"]);
 		$row->set_prop("time_real", strlen($arr["data"]["timereal"]["value"])?$arr["data"]["timereal"]["value"]:$arr["hours"]);
 		$row->set_prop("time_to_cust", strlen($arr["data"]["timetocust"]["value"])?$arr["data"]["timetocust"]["value"]:$arr["hours"]);
@@ -3950,7 +3935,7 @@ class task extends class_base
 		}
 
 		if (!$has || $ps["priority"])
-		{	
+		{
 			$t->define_field(array(
 				"name" => "priority",
 				"caption" => $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
@@ -3958,7 +3943,7 @@ class task extends class_base
 			));
 		}
 		if (!$has || $ps["num_hrs_guess"])
-		{		
+		{
 			$t->define_field(array(
 				"name" => "num_hrs_guess",
 				"caption" => $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav tundide arv"),
@@ -4113,7 +4098,7 @@ class task extends class_base
 				"value" => $arr["obj_inst"]->prop("hr_price"),
 				"size" => 5
 			)),
-			"deal_price" => 
+			"deal_price" =>
 				"<table border=0><tr><td>".t("Hind")."</td><td>".t("Kogus")."</td><td>".t("&Uuml;hik")."</td></tr><tr>".
 				"<td>".html::textbox(array(
 				"name" => "deal_price",
@@ -4156,12 +4141,12 @@ class task extends class_base
 			"name" => "cust",
 			"text" => t("Tellija"),
 		));
-	
+
 		if (!is_object($arr["obj_inst"]))
 		{
 			return;
 		}
-	
+
 		$tb->add_menu_item(array(
 			"parent" => "cust",
 			"text" => t("Organisatsioon"),
@@ -4206,7 +4191,7 @@ class task extends class_base
 					"parent" => "part",
 					"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cust->name()),
 					"link" => html::get_new_url(CL_CRM_PERSON, $cust->id(), array(
-						"return_url" => get_ru(), 
+						"return_url" => get_ru(),
 						"add_to_task" => $arr["obj_inst"]->id(),
 						"add_to_co" => $cust->id(),
 					))
@@ -4219,7 +4204,7 @@ class task extends class_base
 			"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cur_co->name()),
 			"parent" => "part",
 			"link" => html::get_new_url(CL_CRM_PERSON, $cur_co->id(), array(
-				"return_url" => get_ru(), 
+				"return_url" => get_ru(),
 				"add_to_task" => $arr["obj_inst"]->id(),
 				"add_to_co" => $cur_co->id()
 			))
@@ -4706,7 +4691,7 @@ class task extends class_base
 	/**
 		@attrib name=new_files_on_demand all_args=1
 	**/
-	function new_files_on_demand_____redeclared ($arr)//to author: fix or remove 
+	function new_files_on_demand_____redeclared ($arr)//to author: fix or remove
 	{
 
 		$tb = get_instance("vcl/popup_menu");
@@ -4847,7 +4832,7 @@ class task extends class_base
 				"parent" => $pt_n,
 				"text" => $nm,
 				"link" => html::get_new_url($clid, $pt, array(
-					"return_url" => get_ru(), 
+					"return_url" => get_ru(),
 					"alias_to" => $_GET["id"],
 					"reltype" => 2
 				)),
@@ -4981,7 +4966,7 @@ class task extends class_base
 				$o->set_prop("project", 0);
 				$o->save();
 			}
-		}	
+		}
 
 		if (is_array($arr["sel_part"]) && count($arr["sel_part"]))
 		{
@@ -5014,7 +4999,7 @@ class task extends class_base
 		}
 		return $arr["post_ru"];
 	}
-	
+
 	function _init_predicates_table(&$t)
 	{
 		$t->define_chooser(array(
@@ -5048,8 +5033,8 @@ class task extends class_base
 		}
 		return $t->draw();
 	}
-	
-	
+
+
 	function _predicates_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -5076,7 +5061,7 @@ class task extends class_base
 				"reltype" => 9
 			)),
 		));
-		
+
 		$url = $this->mk_my_orb("do_search", array(
 				"pn" => "predicates",
 				"clid" => array(
@@ -5098,10 +5083,10 @@ class task extends class_base
 			"action" => "delete_rels"
 		));
 	}
-	
+
 	//Toimima peaks see siis nii, et kui Toimetuses on ainult 1 rida, siis pannakse kokkuleppehind
-	// sinna rea taha kirja. Kui on kaks v6i rohkem 0 tundidega rida, siis jagatakse kokkuleppehind 
-	//v6rdselt nendele ridadele. Kui on osa ridu tundidega ja osa ilma, siis jagatakse kokkuleppehind 
+	// sinna rea taha kirja. Kui on kaks v6i rohkem 0 tundidega rida, siis jagatakse kokkuleppehind
+	//v6rdselt nendele ridadele. Kui on osa ridu tundidega ja osa ilma, siis jagatakse kokkuleppehind
 	//ainult tundidega ridade vahel 2ra.
 	function get_row_ageement_price($row, $task = null)
 	{
@@ -5137,7 +5122,7 @@ class task extends class_base
 				$ob = $ro->to();
 				$row_cnt ++;
 				$time_cnt = $time_cnt + $ob->prop("time_to_cust");
-			
+
 			}
 			//kui on ainuke rida
 			if($row_cnt == 1)
