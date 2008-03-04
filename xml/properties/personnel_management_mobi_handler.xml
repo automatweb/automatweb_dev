@@ -1,6 +1,33 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>service_id</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teenuse ID</caption>
+      </property>
+      <property>
+            <name>mpassword</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>password</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parool</caption>
+      </property>
+      <property>
+            <name>url</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mobi URL</caption>
+      </property>
+      <property>
             <name>number</name>
             <table>objects</table>
             <group>send_sms</group>
@@ -14,9 +41,31 @@
             <table>objects</table>
             <group>send_sms</group>
             <type>textarea</type>
+            <rows>7</rows>
+            <cols>20</cols>
             <store>no</store>
             <field>message</field>
-            <caption>S&amp;otilde;num</caption>
+            <caption>S&amp;amp;otilde;num</caption>
+            <comment>Maksimaalselt 160 t&amp;amp;auml;hem&amp;amp;auml;rki.</comment>
+      </property>
+      <property>
+            <name>symbol_count</name>
+            <table>objects</table>
+            <group>send_sms</group>
+            <type>textbox</type>
+            <store>no</store>
+            <size>3</size>
+            <field>symbol_count</field>
+            <caption>T&amp;amp;auml;hem&amp;amp;auml;rke</caption>
+      </property>
+      <property>
+            <name>send</name>
+            <table>objects</table>
+            <group>send_sms</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>send</field>
+            <caption>Saada</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_MOBI_HANDLER</syslog_type>
@@ -28,6 +77,7 @@
       <groupinfo>
             <send_sms>
                   <caption>Saada SMS</caption>
+                  <submit>no</submit>
             </send_sms>
             <log>
                   <caption>Logi</caption>

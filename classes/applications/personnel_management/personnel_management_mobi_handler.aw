@@ -7,14 +7,30 @@
 @default table=objects
 @default group=general
 
-@groupinfo send_sms caption="Saada SMS"
+	@property service_id type=textbox field=meta method=serialize
+	@caption Teenuse ID
+
+	@property mpassword type=password field=meta method=serialize
+	@caption Parool
+
+	@property url type=textbox field=meta method=serialize
+	@caption Mobi URL
+
+@groupinfo send_sms caption="Saada SMS" submit=no
 @default group=send_sms
 
 	@property number type=textbox store=no
 	@caption Telefoninumber
 
-	@property message type=textarea store=no
+	@property message type=textarea rows=7 cols=20 store=no
 	@caption S&otilde;num
+	@comment Maksimaalselt 160 t&auml;hem&auml;rki.
+
+	@property symbol_count type=textbox store=no size=3
+	@caption T&auml;hem&auml;rke
+
+	@property send type=submit
+	@caption Saada
 
 @groupinfo log caption="Logi"
 @default group=log
@@ -33,6 +49,7 @@ class personnel_management_mobi_handler extends class_base
 
 	function get_property($arr)
 	{
+		// stream_context_create
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 
