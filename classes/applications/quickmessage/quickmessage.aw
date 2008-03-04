@@ -1,29 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.10 2007/12/06 14:33:54 kristo Exp $
-// quickmessage.aw - Kiirteade  
+
+// quickmessage.aw - Kiirteade
 /*
 
-@classinfo syslog_type=ST_QUICKMESSAGE relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
+@classinfo syslog_type=ST_QUICKMESSAGE no_status=1 no_comment=1 maintainer=voldemar
 @tableinfo quickmessages index=id master_table=objects master_index=brother_of
 
 @default table=quickmessages
 @default group=general
 
+@property msg_status type=hidden datatype=int
+@property msg_type type=hidden datatype=int
+@property box type=hidden datatype=int
 
-@property mstatus type=hidden table=objects field=meta method=serialize datatype=int
-@caption 
-
-@property user_from type=text
-@caption Kellelt
-
-@property user_to type=textbox
+@property user_to type=relpicker store=no
 @caption Kellele
 
-@property subject type=textbox
-@caption Teema
-
-@property content type=textarea
-@caption Sisu
+@property msg type=textarea
+@caption Teade
 
 */
 
@@ -35,9 +29,9 @@ class quickmessage extends class_base
 			"clid" => CL_QUICKMESSAGE
 		));
 	}
+
 	function get_property($arr)
 	{
-		//arr($arr);
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -45,13 +39,13 @@ class quickmessage extends class_base
 			case "user_from":
 				$prop["value"] = aw_global_get("uid");
 				break;
+
 			case "name":
 				$retval = PROP_IGNORE;
 				break;
+		}
 
-		};
 		return $retval;
 	}
-
 }
 ?>

@@ -98,3 +98,4 @@ include ${ini_dir}/realestate.ini
 include ${ini_dir}/ows.ini
 include ${ini_dir}/otto.ini
 include ${ini_dir}/calendar.ini
+include ${ini_dir}/quickmessaging.ini

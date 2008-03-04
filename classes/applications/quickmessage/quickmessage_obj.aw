@@ -1,5 +1,9 @@
 <?php
 
+/*
+@classinfo maintainer=voldemar
+*/
+
 class quickmessage_obj extends _int_object
 {
 	const TYPE_GENERIC = 1;
