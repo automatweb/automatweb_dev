@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.91 2008/03/04 08:12:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.92 2008/03/04 13:17:25 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1714,10 +1714,27 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 			if($amt && $this->can("view", $product))
 			{
 				$prod=obj($product);
+				if($prod->meta("cur_prices"))
+				{
+					$str = "";
+					foreach($prod->meta("cur_prices") as $curr => $sum)
+					{
+						if($this->can("view" , $curr))
+						{
+							$co = obj($curr);
+							$str.= number_format($sum*$amt,2)." " .$co->name()." ";
+						}
+					}
+				}
+				else
+				{
+					$str = number_format($prod->prop("price")*$amt,2);
+				}
+
 				$val[] = sprintf(t("%s: %s tk / %s"),
 					$prod->name(),
 					$amt,
-					number_format($prod->prop("price")*$amt,2)
+					$str
 				);
 			}
 		}
