@@ -80,10 +80,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @default group=chpwd
 
 	@property passwd type=password store=no
-	@caption Salasõna
+	@caption Salas&otilde;na
 
 	@property passwd_again type=password store=no
-	@caption Salasõna uuesti
+	@caption Salas&otilde;na uuesti
 
 	@property password type=hidden table=users field=password store=no
 
@@ -1964,7 +1964,7 @@ class user extends class_base
 		static $cache;
 		if (isset($cache[$uid][$no_user_grp]))
 		{
-			return $cache[$uid][$no_user_grp];
+			//return $cache[$uid][$no_user_grp];
 		}
 		if ($uid == "")
 		{
@@ -1989,9 +1989,12 @@ class user extends class_base
 		if ($no_user_grp)
 		{
 			$tmp = $groups->begin();
-			$rv = $groups->next();
-			$cache[$uid][$no_user_grp] = $rv;
-			return $rv;
+			if ($tmp->prop("type") == GRP_DEFAULT)
+			{
+				$rv = $groups->next();
+				$cache[$uid][$no_user_grp] = $rv;
+				return $rv;
+			}
 		}
 		$rv = $groups->begin();
 		$cache[$uid][$no_user_grp] = $rv;

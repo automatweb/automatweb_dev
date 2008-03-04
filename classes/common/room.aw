@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.232 2008/02/27 14:31:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.233 2008/03/04 10:10:41 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -103,9 +103,9 @@
 			caption inimeste arv / broneeringute arv
 		
 		
-valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva t&auml;iendava info selle valdkonna objektitüübi kaudu, nt konverentsid).
+valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva t&auml;iendava info selle valdkonna objektityybi kaudu, nt konverentsid).
 - puhveraeg enne (mitu tundi enne reserveeringu algust lisaks bronnitakse ruumide ettevalmistamiseks)
-- puhveraeg pärast (mitu tundi peale reserveeringu lõppu broneeritakse ruumide korrastamiseks
+- puhveraeg p2rast (mitu tundi peale reserveeringu l6ppu broneeritakse ruumide korrastamiseks
 
 # TAB CALENDAR
 
@@ -1827,7 +1827,7 @@ class room extends class_base
 		$this->start = $arr["request"]["start"];
 
 		exit_function("get_calendar_tbl");
-		//see siis näitab miskeid valitud muid nädalaid
+		//see siis n2itab miskeid valitud muid n2dalaid
 		enter_function("get_calendar_tbl::2");
 		$start_hour = 0;
 		$start_minute = 0;
@@ -1851,7 +1851,7 @@ class room extends class_base
 		if($arr["request"]["start"])
 		{
 			$today_start = $arr["request"]["start"];
-			//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
+			//seda avamise alguse aega peab ka ikka arvestama, muidu v6tab esimese tsykli miskist x kohast
  			if($gwo["start_hour"])
  			{
 	 			$this->start = $this->start+3600*$gwo["start_hour"];
@@ -1892,7 +1892,7 @@ class room extends class_base
 				$this->start = $today_start = get_week_start();
 			}
 
-			//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
+			//seda avamise alguse aega peab ka ikka arvestama, muidu v6tab esimese tsykli miskist x kohast
 			if($gwo["start_hour"])
 			{
 				$this->start = $this->start+3600*$gwo["start_hour"];
@@ -1977,21 +1977,7 @@ class room extends class_base
 				{
 					$visible=1;
 					$rowspan[$x] = 1;
-/*-					if ($this->is_paused($start_step,$end_step))
-					{
-						if($col_buffer)
-						{
-							$col[$x] = "#".$col_buffer;
-						}
-						else
-						{
-							"#EE6363";
-						}
-						$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-						$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
-					}
-					else
-*/					if($this->check_if_available(array(
+					if($this->check_if_available(array(
 						"room" => $room_id,
 						"start" => $start_step,
 						"end" => $end_step,
@@ -2065,7 +2051,7 @@ class room extends class_base
 							$col[$x] = "#E1E1E1";
 							if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
 							{
-								//teeb selle kontrolli ka , et äkki tüübid ültse teist ruumi tahavad juba... et siis läheks sassi
+								//teeb selle kontrolli ka , et 2kki tyybid yltse teist ruumi tahavad juba... et siis l2heks sassi
 								if(!$_SESSION["room_reservation"]["room_id"] || $_SESSION["room_reservation"]["room_id"] == $room_id || in_array($room_id, $_SESSION["room_reservation"]["room_id"]))
 								{
 									$val = 1;
@@ -2637,7 +2623,7 @@ class room extends class_base
 		$end_this = (date("H" , $end-1)*3600 + date("i" , $end-1)*60);
 		$start_this = (date("H" , $start)*3600 + date("i" , $start)*60);
 		
-		//kontrollib et tsükli lõpp äkki läheb järgmisesse päeva juba... siis oleks lõpp kuidagi varajane ja avatud oleku kontroll läheks puusse
+		//kontrollib et tsykli l6pp 2kki l2heb j2rgmisesse p2eva juba... siis oleks l6pp kuidagi varajane ja avatud oleku kontroll l2heks puusse
 		if($start_this > $end_this)
 		{
 			$end_this+=24*3600;
@@ -2684,7 +2670,7 @@ class room extends class_base
 		$end_this = (date("H" , $end-1)*3600 + date("i" , $end-1)*60);
 		$start_this = (date("H" , $start)*3600 + date("i" , $start)*60);
 		
-		//kontrollib et tsükli lõpp äkki läheb järgmisesse päeva juba... siis oleks lõpp kuidagi varajane ja avatud oleku kontroll läheks puusse
+		//kontrollib et tsykli l6pp 2kki l2heb j2rgmisesse p2eva juba... siis oleks l6pp kuidagi varajane ja avatud oleku kontroll l2heks puusse
 		if($start_this > $end_this)
 		{
 			$end_this+=24*3600;
@@ -2820,7 +2806,7 @@ class room extends class_base
 		}
 		$pct = floor(100 / ($op_len));
 
-		//kui ruume tuleb vaates palju, siis oleks targem väiksemaks teha, kuigi noh, juhul kui neid nagu väga palju, siis ei kujuta ettegi kuda välja hakkab nägema
+		//kui ruume tuleb vaates palju, siis oleks targem v2iksemaks teha, kuigi noh, juhul kui neid nagu v2ga palju, siis ei kujuta ettegi kuda v2lja hakkab n2gema
 		if($this->room_count > 1)
 		{
 			$pct = (int)($pct / $this->room_count);
@@ -2854,7 +2840,7 @@ class room extends class_base
 		$t->set_sortable(false);
 	}
 
-	//see ruumi sees tehes, eeldusel, et pärast liigub edasi reserveerimise objekti vaatesse, kus valib asju... tregelt nüüd juba popup kõigepealt
+	//see ruumi sees tehes, eeldusel, et p2rast liigub edasi reserveerimise objekti vaatesse, kus valib asju... tregelt nyyd juba popup k6igepealt
 	/**
 		@attrib name=do_add_reservation params=name all_args=1
 		@param id optional oid
@@ -3361,7 +3347,7 @@ class room extends class_base
 				));
 			}
 			
-			//järjekorda kui pole, siis võtab objektist selle järjekorra mis on laos jne
+			//j2rjekorda kui pole, siis v6tab objektist selle j2rjekorra mis on laos jne
 			$ord = $o->ord();
 			if($prod_data[$o->id()]["ord"])
 			{
@@ -3835,7 +3821,7 @@ class room extends class_base
 		return $ol;
 	}
 
-	//annab vastavalt ruumile siis kas pakendite või toodete object listi, mis on aktiivsed
+	//annab vastavalt ruumile siis kas pakendite v6i toodete object listi, mis on aktiivsed
 	/** gets active room products or packagings
 		@attrib params=pos api=1
 		@param o required type=object/oid
@@ -4077,7 +4063,7 @@ class room extends class_base
 		
 		$data = array("joga" => "jogajoga");
 		$this->vars($data);
-		//property väärtuse saatmine kujul "property_nimi"_value
+		//property v22rtuse saatmine kujul "property_nimi"_value
 		exit_function("room::parse_alias");
 		return $this->parse();
 	}
@@ -4188,7 +4174,7 @@ class room extends class_base
 			}
 		}
 		$step = 1;
-		$time = $end-$start;//+60 seepärast et oleks nagu täisminutid ja täistunnid jne
+		$time = $end-$start;//+60 seep2rast et oleks nagu t2isminutid ja t2istunnid jne
 		while($time >= 60)//alla minuti ei ole oluline aeg eriti..
 		{
 			$price = "";
@@ -4200,7 +4186,7 @@ class room extends class_base
 					"end" => $end,
 				));
 			}
-			if(!is_object($price))//kõvemal tasemel enam ei ole hindu.... laseb vanaga edasi
+			if(!is_object($price))//k6vemal tasemel enam ei ole hindu.... laseb vanaga edasi
 			{
 				$price = $this->get_best_time_in_prices(array(
 					"time" => $time,
@@ -4222,11 +4208,11 @@ class room extends class_base
 				));
 			}
 
-			if(!is_object($price) || !($price->prop("time") > 0) || !$this->step_length)//igaks juhuks... ei taha et asi tsüklisse jääks
+			if(!is_object($price) || !($price->prop("time") > 0) || !$this->step_length)//igaks juhuks... ei taha et asi tsyklisse j22ks
 			{
 				break;
 			}
-			//otsib, kas mõni soodushind kattub 
+			//otsib, kas m6ni soodushind kattub 
 			$bargain = $this->get_bargain(array(
 				"price" => $price,
 				"room" => $room,
@@ -4242,7 +4228,7 @@ class room extends class_base
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
 			{
-				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
+				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seep2rast, et l6ppemise t2istunniks v6etakse esialgu ymardatud allapoole tunnid... et siis ajale tuleb yks juurde liita, sest poolik tund l2heb t2is tunnina arvesse
 				$this->bargain_value[$currency] = $this->bargain_value[$currency] + $bargain*$hr_price;
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
@@ -4325,7 +4311,7 @@ class room extends class_base
 			$rv["prod_discount"] = $this->average_discount_for_products;
 		}
 		
-		//teeb kõigepealt kontrolli, et kas miinimumhind on olemas üldse, kõhutunnne ütleb, et seadete otsimine võtab rohkem aega,... niiet paneb selle hilisemaks
+		//teeb k6igepealt kontrolli, et kas miinimumhind on olemas yldse, k6hutunnne ytleb, et seadete otsimine v6tab rohkem aega,... niiet paneb selle hilisemaks
 		if(is_array($room->meta("web_room_min_price")) && sizeof($room->meta("web_room_min_price")))
 		{
 			$min = $room->meta("web_room_min_price");
@@ -4468,7 +4454,7 @@ class room extends class_base
 						)
 					)
 					{//arr(array_intersect($grp, $groups));arr($grp); arr($groups);arr($bargain);
-						//kui enne oli ka mõni , a prioriteet oli suurem, siis see ei lähe
+						//kui enne oli ka m6ni , a prioriteet oli suurem, siis see ei l2he
 						if(!($priority  > $bargain->prop("priority")))
 						{
 						//	if(aw_global_get("uid") == "struktuur" )arr($bargain->prop("priority"));
@@ -4553,8 +4539,8 @@ class room extends class_base
 	}
 	
 	
-	//annab soodustuse juhul kui see täpselt kattub hinna ajaga või kui üks soodustus lõppeb kas enne aja lõppu , või algab alles poole pealt
-	//inimliku lolluse vastu kahjuks see funktsioon ei aita, kui kellelgi on tahtmist mitmeid poolikult kattuvaid soodustusi ühele ajale paigutada... palun väga, kuid resultaati ei oska ette ennustada
+	//annab soodustuse juhul kui see t2pselt kattub hinna ajaga v6i kui yks soodustus l6ppeb kas enne aja l6ppu , v6i algab alles poole pealt
+	//inimliku lolluse vastu kahjuks see funktsioon ei aita, kui kellelgi on tahtmist mitmeid poolikult kattuvaid soodustusi yhele ajale paigutada... palun v2ga, kuid resultaati ei oska ette ennustada
 	function get_bargain($arr)
 	{
 		extract($arr);
@@ -4584,7 +4570,7 @@ class room extends class_base
 			$end = $start+$time;
 			foreach($bargain_conns as $conn)
 			{
-				$bargain = $conn->to();//kui järgnevas iffis midagi ei tööta.... siis edu... mulle vist 
+				$bargain = $conn->to();//kui j2rgnevas iffis midagi ei t88ta.... siis edu... mulle vist 
 				//if($bargain->prop("type") == 2 && $bargain->prop("active") == 1){arr($bargain);arr($bargain->prop("date_from")); arr($bargain->prop("date_to")); arr($start); arr($time);print " - - - - - - " ;}
 				if(
 					($bargain->prop("active") == 1) &&
@@ -4593,7 +4579,7 @@ class room extends class_base
 					(
 						(
 							$bargain->prop("date_from") <= ($start+60) &&
-							($bargain->prop("date_to") + 86400) >= ($start+$time)//südaööni
+							($bargain->prop("date_to") + 86400) >= ($start+$time)//syda88ni
 						)||
 						(
 							$bargain->prop("recur")	&&
@@ -4633,14 +4619,14 @@ class room extends class_base
 					
 						$from = $bargain->prop("time_from");
 						$to = $bargain->prop("time_to");//arr(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start))); arr(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))); arr($start);arr($end);
-						//juhul kui aeg mahub täpselt soodushinna sisse
+						//juhul kui aeg mahub t2pselt soodushinna sisse
 						if(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start && mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end)
 						{
 							$ret = 0.01*$bargain->prop("bargain_percent");
 							$priority = $bargain->prop("priority");
 							continue;
 						}
-						//juhul kui mõni kattub poolikult... esimene siis , et kui allahindlus algul on,... teine, et allahindlus tuleb poolepealt
+						//juhul kui m6ni kattub poolikult... esimene siis , et kui allahindlus algul on,... teine, et allahindlus tuleb poolepealt
 						if((mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start) && (mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) > $start))
 						{
 							$ret = 0.01*$bargain->prop("bargain_percent")*(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) - $start)/($end-$start);
@@ -4679,7 +4665,7 @@ class room extends class_base
 		//arr($start);arr(date("G:i",$start));
 		foreach($prices as $key => $price)
 		{//arr($time);
-			//jube porno.... testib kas hinna ajastus kattub järgneva ajaga
+			//jube porno.... testib kas hinna ajastus kattub j2rgneva ajaga
 			$time_from = $price->prop("time_from");
 			$time_to = $price->prop("time_to");
 			$end = $start + $price->prop("time") * $this->step_length;//arr("/");arr($end);arr("\\");
@@ -4689,11 +4675,11 @@ class room extends class_base
 			{
 				if((mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <= $start) || 
 					(mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))>= ($start + $price->prop("time") * $this->step_length))
-				)//kui miskeid täis aegu ei ole, siis lähevad poolikud hiljem kasutusse
+				)//kui miskeid t2is aegu ei ole, siis l2hevad poolikud hiljem kasutusse
 				{
 					$prices_to_use_when_situation_is_hopeless[] = $price;
 				}
-				continue; //siia tuleb mingi eriti sünge kood, mis peaks hindu ajaliselt tükeldama hakkama ....
+				continue; //siia tuleb mingi eriti synge kood, mis peaks hindu ajaliselt tykeldama hakkama ....
 			}
 	//		if(aw_global_get("uid") == "struktuur"){
 	//		arr((mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))>= ($start + $price->prop("time") * $this->step_length)));
@@ -4725,7 +4711,7 @@ class room extends class_base
 		}
 	}
 	
-	//parem ära ürita aru saada mis see pooletoobine funktsioon teeb.... loodame lihtsalt, et kunagi seda vaja ei lähe
+	//parem 2ra yrita aru saada mis see pooletoobine funktsioon teeb.... loodame lihtsalt, et kunagi seda vaja ei l2he
 	function get_half_prices($arr)
 	{
 		extract($arr);
@@ -4739,7 +4725,7 @@ class room extends class_base
 			$end = $start + $price->prop("time") * $this->step_length;
 			if(mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <= $start)
 			{
-				//p näitab kui suur osa summast ja ajast kasutusse läheb
+				//p n2itab kui suur osa summast ja ajast kasutusse l2heb
 				$p = (mktime($time_to["hour"], $time_to["minute"], 0, date("m",$start), date("d",$start), date("y",$start))-$start)/($price->prop("time") * $this->step_length);
 				$half_obj = new object();
 				$half_obj->set_parent($price->id());
@@ -4824,7 +4810,7 @@ class room extends class_base
 	{
 		extract($arr);
 		$this->last_discount = 0;
-		if(is_array($products) && sizeof($products))//kui tooteid pole, võiks selle osa vahele jätta... võibolla võidab paar millisekundit
+		if(is_array($products) && sizeof($products))//kui tooteid pole, v6iks selle osa vahele j2tta... v6ibolla v6idab paar millisekundit
 		{
 			$bron_inst = get_instance(CL_RESERVATION);
 
@@ -4882,7 +4868,7 @@ class room extends class_base
 					}
 				}
 			}
-				//võtab toote hinnalt toodete allahindluse maha
+				//v6tab toote hinnalt toodete allahindluse maha
 			if($prod_discount)
 			{
 				$this->last_discount = $sum*0.01*$prod_discount;
@@ -4896,13 +4882,13 @@ class room extends class_base
 			$this->average_discount_for_products = ($this->last_discount / ($sum + $this->last_discount)) * 100;
 		}
 
-		//ja juhul kui jääb alla miinimumi, siis jääb miinimum
+		//ja juhul kui j22b alla miinimumi, siis j22b miinimum
 		if(is_object($room) && is_oid($currency))
 		{
 			$min = $room->meta("web_min_prod_prices");
 			if($sum < $min[$currency])
 			{
-				if(!$prod_discount)//tegelt ei tea kas seda tahabki keegi näha...a teeb miski keskmise hinnasooduse arvutuse kui läheb käiku miinimumhind
+				if(!$prod_discount)//tegelt ei tea kas seda tahabki keegi n2ha...a teeb miski keskmise hinnasooduse arvutuse kui l2heb k2iku miinimumhind
 				{
 					$this->average_discount_for_products = ((($sum + $this->last_discount) - $min[$currency]) / $min[$currency]) * 100;
 					if(!($this->average_discount_for_products > 0))
@@ -4961,7 +4947,7 @@ class room extends class_base
 		return $prod_discount;
 	}
 	
-//kui ruumile tekitada muurtuja check_for_people , siis annab tulemuseks arvu palju inimesi mahub, juhul kui on ruumile võimalik mitu broneeringut teha
+//kui ruumile tekitada muurtuja check_for_people , siis annab tulemuseks arvu palju inimesi mahub, juhul kui on ruumile v6imalik mitu broneeringut teha
 	function check_from_table($arr)
 	{
 		$ret = 1;
@@ -4996,7 +4982,7 @@ class room extends class_base
 					}
 					else
 					{
-						if($val["verified"] && !$this->is_after_buffer) // juhul kui pole järelpuhver ja on kinnitatud, siis pole vaja enam edasi otsida
+						if($val["verified"] && !$this->is_after_buffer) // juhul kui pole j2relpuhver ja on kinnitatud, siis pole vaja enam edasi otsida
 						{
 							return false;
 						}
@@ -5072,7 +5058,7 @@ class room extends class_base
 			{
 				$start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
 				$this->res_table[$start]["end"] = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
-				//tekitab eelnevale või eelnevatele cellidele nö. broneeringu, mis on lihtsalt broneeritud buffriks
+				//tekitab eelnevale v6i eelnevatele cellidele n8. broneeringu, mis on lihtsalt broneeritud buffriks
 				if($room->prop("buffer_after"))
 				{
 					$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["end"] = $start;
@@ -5132,7 +5118,7 @@ class room extends class_base
 		$buff_before = $room->prop("buffer_before")*$room->prop("buffer_before_unit");
 		$buff_after = $room->prop("buffer_after")*$room->prop("buffer_after_unit");
 	
-		//tootepõhisel ruumi broneerimisel
+		//tootep6hisel ruumi broneerimisel
 		if($room->prop("use_product_times"))
 		{
 			$last_bron = $this->get_last_bron(array("room" => $room , "start" => $start));
@@ -5161,7 +5147,7 @@ class room extends class_base
 			$filt["oid"] = new obj_predicate_not($arr["ignore_booking"]);
 		}
 		$reservations = new object_list($filt);
-		//ueh... filter ei tööta, niiet .... oehjah
+		//ueh... filter ei t88ta, niiet .... oehjah
 		$verified_reservations = new object_list();
 		foreach($reservations->arr() as $res)
 		{
@@ -5779,7 +5765,7 @@ class room extends class_base
 			{
 				$rv[] = $oh;
 			}
-			//sel juhul kui üks on konkreetselt antud grupile mõjuv, siis tagastaks selle ja ei hakkaks üldse edasi vaatamagi
+			//sel juhul kui yks on konkreetselt antud grupile m6juv, siis tagastaks selle ja ei hakkaks yldse edasi vaatamagi
 			if (is_array($oh->prop("apply_group")) && count($oh->prop("apply_group")) && count(array_intersect($gl, safe_array($oh->prop("apply_group")))))
 			{
 				return array($oh);
