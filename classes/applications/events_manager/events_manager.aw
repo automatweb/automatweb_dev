@@ -44,6 +44,9 @@
 			@property event_table type=table no_caption=1 parent=events_top_right store=no
 			@caption S&uumlndmuste tabel
 
+			@property per_page_str type=text no_caption=1 parent=events_top_right store=no
+			@caption N&auml;ita s&uuml;ndmusi rida
+
 @groupinfo places caption="Toimumiskohad" submit=no
 @default group=places
 	@property places_tb type=toolbar no_caption=1
@@ -61,7 +64,7 @@
 	@caption P&auml;evi t&auml;nasest:
 
 	@property similar_table type=table no_caption=1
-	@caption Leitud sarnased sündmused
+	@caption Leitud sarnased s&uuml;ndmused
 
 
 @groupinfo organiser caption="Korraldajad" submit=no
@@ -102,7 +105,10 @@
 	@caption Kaardiserveri url
 
 	@property similar_time type=textbox
-	@caption Sarnaste sündmuste kattumisaeg (tundides)
+	@caption Sarnaste s&uuml;ndmuste kattumisaeg (tundides)
+
+	@property events_per_page type=textbox
+	@caption S&uuml;ndmusi &uuml;hel lehel
 
 	@property editors_groups type=relpicker multiple=1 reltype=RELTYPE_GROUP automatic=1
 	@caption Toimetajate kasutajagrupid
@@ -226,6 +232,32 @@ class events_manager extends class_base
 
 		switch($prop["name"])
 		{
+			case "per_page_str":
+				if(!($GLOBALS["event_result_count"] > $this_o->prop("events_per_page")))
+				{
+					return PROP_IGNORE;
+				}
+				$x = 0;
+				while($x < $GLOBALS["event_result_count"])
+				{
+					$str = " ";
+					$str.= $x;
+					$str.= " - ";
+					$str.= ($x + $this_o->prop("events_per_page") > $GLOBALS["event_result_count"]) ? $GLOBALS["event_result_count"]:$x + $this_o->prop("events_per_page");
+					if($_GET["ev_page_start"] != $x)
+					{
+						$prop["value"].= html::href(array(
+							"url" => aw_url_change_var("ev_page_start", $x),
+							"caption" => $str,
+						));
+					}
+					else
+					{
+						$prop["value"].= $str;
+					}
+					$x = $x + $this_o->prop("events_per_page");
+				}
+				break;
 			case "events_tb":
 				$this->_get_events_tb($arr);
 				break;
@@ -594,7 +626,7 @@ class events_manager extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta m&auml;rgistatud s&uuml;ndmused"),
 			"action" => "delete",
-			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud toimumiskohad?"),
+			"confirm" => t("Olete kindel, et soovite kustudada k&otilde;ik valitud toimumiskohad?"),
 		));
 	}
 
@@ -618,7 +650,7 @@ class events_manager extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta m&auml;rgistatud valdkonnad"),
 			"action" => "delete",
-			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud valdkonnad?"),
+			"confirm" => t("Olete kindel, et soovite kustudada k&otilde;ik valitud valdkonnad?"),
 		));
 	}
 
@@ -660,7 +692,7 @@ class events_manager extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta m&auml;rgistatud korraldajad"),
 			"action" => "delete",
-			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud korraldajad?"),
+			"confirm" => t("Olete kindel, et soovite kustudada k&otilde;ik valitud korraldajad?"),
 		));
 	}
 
@@ -677,7 +709,7 @@ class events_manager extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta m&auml;rgistatud toimetajad"),
 			"action" => "delete",
-			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud toimetajad?"),
+			"confirm" => t("Olete kindel, et soovite kustudada k&otilde;ik valitud toimetajad?"),
 		));
 
 		$url = $this->mk_my_orb("do_search", array(
@@ -824,10 +856,30 @@ class events_manager extends class_base
 		$t_mk_copy = t("Tee koopia");
 		$t_change = t("Muuda");
 		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "event");
+		$ol_count = $GLOBALS["event_result_count"] = $ol->count();
 
-		foreach($ol->arr() as $o)
+		$max_events = $arr["obj_inst"]->prop("events_per_page");
+
+		$cnt = 0;
+		foreach($ol->ids() as $oid)
 		{
-			$oid = $o->id();
+			if($ol_count > $max_events)
+			{
+				if($_GET["ev_page_start"] && $_GET["ev_page_start"] > $cnt)
+				{
+					$cnt++;
+					continue;
+				}
+				if(isset($_GET["ev_page_start"]) && ($_GET["ev_page_start"] + $max_events) < $cnt)
+				{
+					break;
+				}
+				elseif($cnt > $max_events)
+				{
+					break;
+				}
+			}
+			$o = obj($oid);
 			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTOR");
 			$can_edit = $this->can("edit" , $oid);
 
@@ -839,11 +891,11 @@ class events_manager extends class_base
 					"title" => $t_publish,
 					"caption" => $t_publish,
 				));
-				$col = "grey";
+				$col = "#CCCCCC";
 			}
 			else
 			{
-				$col = "#6699CC";
+				$col = "#99CCCC";
 			}
 
 			$make_copy = html::href(array(
@@ -880,30 +932,31 @@ class events_manager extends class_base
 
 			$change = html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $t_change);
 
+
+
+//aeg naitamiseks, koigepealt propidest, siis objektidest
+			$eventtime = "";
+//			$eventtimes = array();
+			$eventstart = 100000000000;
+			$eventend = 1;
 			if(($o->prop("start1") || $o->prop("end")))
 			{
-				$eventtime = date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end"));
+//				$eventtime = date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end"));
+				if($o->prop("start1") > 1000 && ($eventstart >  $o->prop("start1"))) $eventstart = $o->prop("start1");
+				if($eventend <  $o->prop("end")) $eventend = $o->prop("end");
 			}
-			else
+			foreach($o->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
 			{
-				$eventtime = "";
-//				$eventtimes = array();
-				$eventstart = 100000000000;
-				$eventend = 1;
-				foreach($o->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
-				{
-					$tm = $c->to();
-					if($tm->prop("start") > 1000 && ($eventstart >  $tm->prop("start"))) $eventstart = $tm->prop("start");
-					if($eventend <  $tm->prop("end")) $eventend = $tm->prop("end");
-
-//					if($tm->prop("start") || $tm->prop("end"))
-//					{
-//						$eventtimes[]= date("d.m.Y" , $tm->prop("start")). "-" .date("d.m.Y" , $tm->prop("end"));
-//					}
-				}
-				$eventtime = date("d.m.Y" , $eventstart). "-" .date("d.m.Y" , $eventend);
-//				$eventtime = join ("<br>" , $eventtimes);
+				$tm = $c->to();
+				if($tm->prop("start") > 1000 && ($eventstart >  $tm->prop("start"))) $eventstart = $tm->prop("start");
+				if($eventend <  $tm->prop("end")) $eventend = $tm->prop("end");
+//				if($tm->prop("start") || $tm->prop("end"))
+//				{
+//					$eventtimes[]= date("d.m.Y" , $tm->prop("start")). "-" .date("d.m.Y" , $tm->prop("end"));
+//				}
 			}
+			$eventtime = date("d.m.Y" , $eventstart). "-" .date("d.m.Y" , $eventend);
+//			$eventtime = join ("<br>" , $eventtimes);
 
 			$t->define_data(array(
 				"name" => ($parse_url)? html::href(array("caption" => $name, "url" => $parse_url)):($can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $name) : $name),
@@ -916,6 +969,7 @@ class events_manager extends class_base
 				"translated" => $translated,
 				"col" => $col,
 			));
+			$cnt++;
 		}
 	}
 
@@ -1020,7 +1074,7 @@ class events_manager extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta m&auml;rgistatud s&uuml;ndmused"),
 			"action" => "delete",
-			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud s&uuml;ndmused?"),
+			"confirm" => t("Olete kindel, et soovite kustudada k&otilde;ik valitud s&uuml;ndmused?"),
 		));
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "print",
@@ -1057,7 +1111,7 @@ class events_manager extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta m&auml;rgistatud s&uuml;ndmused"),
 			"action" => "delete",
-			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud s&uuml;ndmused?"),
+			"confirm" => t("Olete kindel, et soovite kustudada k&otilde;ik valitud s&uuml;ndmused?"),
 		));
 	}
 
@@ -1431,46 +1485,46 @@ class events_manager extends class_base
 			1 => "Harjumaa",
 			2 => "Hiiumaa",
 			3 => "Ida-Virumaa",
-			4 => "Jõgevamaa",
-			5 => "Järvamaa",
-			6 => "Läänemaa",
-			7 => "Lääne-Virumaa",
-			8 => "Põlvamaa",
-			9 => "Pärnumaa",
+			4 => "J&otilde;gevamaa",
+			5 => "J&auml;rvamaa",
+			6 => "L&auml;&auml;nemaa",
+			7 => "L&auml;&auml;ne-Virumaa",
+			8 => "P&otilde;lvamaa",
+			9 => "P&auml;rnumaa",
 			10 => "Raplamaa",
 			11 => "Saaremaa",
 			12 => "Tartumaa",
 			13 => "Valgamaa",
 			14 => "Viljandimaa",
-			15 => "Võrumaa",
+			15 => "V&otilde;rumaa",
 		);
 
 		$citys = array(
 			1 => "Haapsalu",
-			2 => "Jõgeva",
+			2 => "J&otilde;geva",
 			3 => "Kuressaare",
-			4 => "Kärdla",
+			4 => "K&auml;rdla",
 			5 => "Narva",
 			6 => "Paide",
-			7 => "Põlva",
-			8 => "Pärnu",
+			7 => "P&otilde;lva",
+			8 => "P&auml;rnu",
 			9 => "Rakvere",
 			10 => "Rapla",
 			11 => "Tallinn",
 			12 => "Tartu",
 			13 => "Valga",
 			14 => "Viljandi",
-			15 => "Võru",
-			16 => "Jõhvi",
-			17 => "Kohtla-Järve",
-			18 => "Otepää",
+			15 => "V&otilde;ru",
+			16 => "J&otilde;hvi",
+			17 => "Kohtla-J&auml;rve",
+			18 => "Otep&auml;&auml;",
 		);
 
 		$this->teemad = array(
 			1 => "muusika",
 			2 => "klassikaline muusika",
 			88=> "vanamuusika" ,
-			3=> "pärimusmuusika" ,
+			3=> "p&auml;rimusmuusika" ,
 			102 => "orkestrimuusika",
 			100 => "koorimuusika",
 			4 => "jazzmuusika",
@@ -1479,13 +1533,13 @@ class events_manager extends class_base
 			32 => "festival",
 			6 => "teater",
 			8 => "draama" ,
-			30 => "komöödia",
+			30 => "kom&ouml;&ouml;dia",
 			10 => "muusikal",
 			9 => "ooper",
 			95 => "operett",
 			12 => "lasteetendus",
 			98 => "koguperelavastus",
-			13 => "vabaõhuetendus",
+			13 => "vaba&otilde;huetendus",
 			33 => "alternatiivteater",
 			31 => "festival",
 			7 => "draama",
@@ -1500,30 +1554,30 @@ class events_manager extends class_base
 			46 => "dokumentaalfilm",
 			48 => "kunstiline film",
 			47 => "animafilm",
-			114 => "näitus",
+			114 => "n&auml;itus",
 			115 => "workshop",
 			49 => "festival",
 			15 => "kunst",
-			43 => "näitus",
+			43 => "n&auml;itus",
 			45 => "performance",
 			90 => "workshop",
 			44 => "festival",
 			16 => "kirjandus",
 			135 => "raamatuesitlus",
-			105 => "pärimuskultuur",
+			105 => "p&auml;rimuskultuur",
 			109 => "rahvatants",
-			110 => "pärimusmuusika",
-			111 => "käsitöö",
+			110 => "p&auml;rimusmuusika",
+			111 => "k&auml;sit&ouml;&ouml;",
 			112 => "rahvakalender",
 			113 => "festival",
 			17 => "loengud",
 			40 => "seminar",
 			42 => "konverents",
 			91 => "teadus",
-			134 => "vestlusõhtu",
+			134 => "vestlus&otilde;htu",
 			41 => "kursused",
 			93 => "sport",
-			106 => "näitused",
+			106 => "n&auml;itused",
 			116 => "ajalugu",
 			117 => "fotograafia",
 			118 => "kirjandus",
@@ -1568,11 +1622,11 @@ class events_manager extends class_base
 			$filter["CL_CALENDAR_EVENT.RELTYPE_SECTOR.kood"] = $teema;
 
 		}
-//keel? est (vaikimisi), eng. Kuvatakse vastavalt eesti või ingliskeelsed sündmused.
+//keel? est (vaikimisi), eng. Kuvatakse vastavalt eesti voi ingliskeelsed syndmused.
 
 		$ol =  new object_list($filter);
 
-		//kuna tuli probleeme, siis peab kirvemeetodil praakima valed linnad ja maakonnad välja
+		//kuna tuli probleeme, siis peab kirvemeetodil praakima valed linnad ja maakonnad valja
 		if($linn || $maakond)
 		{
 

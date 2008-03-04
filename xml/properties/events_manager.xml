@@ -101,6 +101,18 @@
             <caption>S&amp;amp;uumlndmuste tabel</caption>
       </property>
       <property>
+            <name>per_page_str</name>
+            <table>objects</table>
+            <group>events</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>events_top_right</parent>
+            <store>no</store>
+            <caption>N&amp;amp;auml;ita s&amp;amp;uuml;ndmusi rida</caption>
+      </property>
+      <property>
             <name>places_tb</name>
             <table>objects</table>
             <group>places</group>
@@ -256,6 +268,15 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Sarnaste s&amp;uuml;ndmuste kattumisaeg (tundides)</caption>
+      </property>
+      <property>
+            <name>events_per_page</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>S&amp;amp;uuml;ndmusi &amp;amp;uuml;hel lehel</caption>
       </property>
       <property>
             <name>editors_groups</name>
