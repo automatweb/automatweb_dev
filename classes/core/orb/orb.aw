@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.26 2008/01/31 13:53:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.27 2008/03/04 09:21:55 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -26,13 +26,13 @@ class orb extends aw_template
 	// without calling the instructor
 	function process_request($args = array())
 	{
-		// peavad olema vähemalt
+		// peavad olema v2hemalt
 		// a) class
 		// b) action
 		// c) vars (sisaldab vastavalt vajadusele kas $HTTP_GET_VARS-i voi $HTTP_POST_VARS-i
 
 		// optional
-		// d) silent. veateateid ei väljastata. caller peaks kontrollima return valuet,
+		// d) silent. veateateid ei v2ljastata. caller peaks kontrollima return valuet,
 		// kui see on false, siis oli viga.
 		if ($args["class"] == "periods")
 		{
@@ -208,7 +208,7 @@ class orb extends aw_template
 			}
 			else
 			{
-				// loome õige objekti
+				// loome 6ige objekti
 				//$t = new $class;
 
 				$t->set_opt("orb_class",&$this->orb_class);
@@ -339,7 +339,7 @@ class orb extends aw_template
 		$this->data = $content;
 
 		// kui klass teeb enda sisse $info nimelise array, ja kirjutab sinna mingit teksti, siis
-		// see votab nad sealt välja ja caller saab get_info funktsiooni kaudu kätte kogu vajaliku info.
+		// see votab nad sealt v2lja ja caller saab get_info funktsiooni kaudu k2tte kogu vajaliku info.
 		// no ntx aw sees on vaja kuidagi saada string aw index.tpl-i sisse pealkirjaks
 		// ilmselt see pole koige lihtsam lahendus, but hey, it works
 		if (isset($t->info) && is_array($t->info))
@@ -353,6 +353,11 @@ class orb extends aw_template
 	{
 		if ($args["type"] == "int")
 		{
+			// check for http: in it and don't error if it is there
+			if (strpos($args["value"], "http:") !== false)
+			{
+				die("silly robot!");
+			}
 			if (!is_numeric($args["value"]))
 			{
 				$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$args["name"]),true,$this->silent);
@@ -388,13 +393,13 @@ class orb extends aw_template
 		// R.I.P. parser
 		xml_parser_free($parser);
 
-		// konteinerite tüübid
+		// konteinerite tyybid
 		$containers = array("class","action","function","arguments");
 
-		// argumentide tüübid
+		// argumentide tyybid
 		$argtypes = array("optional","required","define");
 
-		// argumentide andmetüübid (int, string, whatever)
+		// argumentide andmetyybid (int, string, whatever)
 		$types = array();
 
 		// ja siia moodustub loplik struktuur
@@ -402,7 +407,7 @@ class orb extends aw_template
 
 		foreach($values as $key => $val)
 		{
-			// parajasti töödeldava tag-i nimi
+			// parajasti t88deldava tag-i nimi
 			$tag = $val["tag"];
 
 			// on kas tyhi, "open", "close" voi "complete".
@@ -411,7 +416,7 @@ class orb extends aw_template
 			// tagi parameetrid, array
 			$attribs = isset($val["attributes"]) ? $val["attributes"] : array();
 
-			// kui tegemist on nö "konteiner" tag-iga, siis...
+			// kui tegemist on n8 "konteiner" tag-iga, siis...
 			if (in_array($tag,$containers))
 			{
 
@@ -498,7 +503,7 @@ class orb extends aw_template
 					$$tag = "";
 				};
 			};
-			// kui leidsime argumenti määrava tag-i, siis ...
+			// kui leidsime argumenti m22rava tag-i, siis ...
 			if (in_array($tag,$argtypes))
 			{
 				// kontroll, just in case
