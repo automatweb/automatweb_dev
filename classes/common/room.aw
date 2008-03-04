@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.233 2008/03/04 10:10:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.234 2008/03/04 12:57:15 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1355,11 +1355,11 @@ class room extends class_base
 			$product_obj = obj($product);
 			$end = $start1 + $product_obj->prop("reservation_time")*$product_obj->prop("reservation_time_unit");
 		}
-
 		$url = html::get_new_url(
 			CL_QUICK_RESERVATION,
 			$room->id(),
 			array(
+				"product" => $product,
 				"end" => $end,
 				"start1" => $start1,
 				"firstname" => $firstname,

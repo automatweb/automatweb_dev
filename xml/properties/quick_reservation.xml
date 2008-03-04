@@ -99,6 +99,15 @@
             <field>resource</field>
             <caption>Ruum</caption>
       </property>
+      <property>
+            <name>product</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>product</field>
+            <caption>Toode</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_QUICK_RESERVATION</syslog_type>
             <relationmgr>yes</relationmgr>

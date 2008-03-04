@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.1 2008/02/05 17:03:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.2 2008/03/04 12:57:17 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -41,6 +41,10 @@
 
 	@property resource type=hidden store=no
 	@caption Ruum
+
+	@property product type=hidden store=no
+	@caption Toode
+
 
 */
 
@@ -102,7 +106,9 @@ class quick_reservation extends class_base
 			"return_url" => $arr["request"]["return_url"],
 			"parent" => $arr["request"]["bron"]["parent"],
 			"resource" => $arr["request"]["bron"]["resource"],
+			"product" => $arr["request"]["bron"]["product"],
 		));
+
 		die("<script type='text/javascript'>
 			window.location.href='".$url."';
 		</script>
