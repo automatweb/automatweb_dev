@@ -2041,7 +2041,8 @@ function dump_obj_table($pre = "")
 	flush();
 }
 
-class awex_awobj extends aw_exception {}
-class awex_awobj_method extends awex_awobj {}
+class awex_obj extends aw_exception {}
+class awex_obj_method extends awex_obj {}
+class awex_obj_acl extends awex_obj {}
 
 ?>

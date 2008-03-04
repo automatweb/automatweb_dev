@@ -99,11 +99,9 @@ class _int_object
 
 		if (!$this->can("delete"))
 		{
-			error::raise(array(
-				"id" => ERR_ACL,
-				"msg" => sprintf(t("object::delete(): no delete access for current object (%s)"), $this->obj["oid"])
-			));
-			return;
+			$e = new awex_obj_acl("No delete access.");
+			$e->awobj_id = $this->obj["oid"];
+			throw $e;
 		}
 
 		$ret = $this->obj["oid"];
@@ -1541,7 +1539,7 @@ class _int_object
 			$trans = true;
 		}
 
-		if ((!empty($GLOBALS["cfg"]["user_interface"]["full_content_trans"]) || !empty($GLOBALS["cfg"]["user_interface"]["trans_classes"][$this->class_id()])) && 
+		if ((!empty($GLOBALS["cfg"]["user_interface"]["full_content_trans"]) || !empty($GLOBALS["cfg"]["user_interface"]["trans_classes"][$this->class_id()])) &&
 			($cl = aw_global_get($GLOBALS["cfg"]["user_interface"]["full_content_trans"] ? "ct_lang_id" : "lang_id")) != $this->lang_id())
 		{
 			$trans = true;
@@ -1740,12 +1738,11 @@ class _int_object
 	{
 		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
 		{
-			error::raise(array(
-				"id" => ERR_ACL,
-				"msg" => sprintf(t("object::load(%s): no view access for object %s!"), $oid, $oid)
-			));
-			return;
+			$e = new awex_obj_acl("No view access object with id '" . $oid . "'.");
+			$e->awobj_id = $oid;
+			throw $e;
 		}
+
 		$this->_init_empty();
 
 		// now. we gots to find the class_id of the object
