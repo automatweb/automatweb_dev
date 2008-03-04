@@ -1,14 +1,18 @@
 <?php
+
+/*
+@classinfo  maintainer=kristo
+*/
+
 //  this should be here, url parsing and variable initialization
 // should be the first thing that is done
 error_reporting(E_PARSE | E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR);
 ini_set("display_errors", "On");
 // apparently __FILE__ does not work with Zend Encoder. But since
 // don't use that anyway, it's of no concern. At least now.
-/*
-@classinfo  maintainer=kristo
-*/
+
 class aw_exception extends Exception {}
+set_exception_handler("aw_exception_handler");
 
 // include aw const
 include_once(dirname(__FILE__)."/const.aw");
@@ -1434,6 +1438,19 @@ function __autoload($class_name)
 		}
 	}
 	exit_function("__autoload");
+}
+
+function aw_exception_handler($e)
+{
+	switch ($e->get_class())
+	{
+		case "awex_obj_acl":
+			error::raise(array(
+				"id" => ERR_ACL,
+				"msg" => $e->getMessage()
+			));
+			return;
+	}
 }
 
 ?>
