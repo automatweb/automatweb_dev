@@ -1451,6 +1451,8 @@ function aw_exception_handler($e)
 			));
 			return;
 	}
+
+	echo "Uncaught exception: " , $exception->getMessage(), "\n";
 }
 
 ?>
