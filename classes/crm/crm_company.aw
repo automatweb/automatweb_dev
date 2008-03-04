@@ -214,6 +214,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property userta5 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 5
 
+	@property usercheckbox1 type=checkbox table=kliendibaas_firma field=usercheckbox1 ch_value=1
+	@caption User-defined checkbox 1
+
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
@@ -7152,6 +7155,13 @@ class crm_company extends class_base
 					$this->db_add_col($tbl, array(
 						"name" => $field,
 						"type" => "int"
+					));
+					return true;
+
+				case "usercheckbox1":
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => "int(1)"
 					));
 					return true;
 

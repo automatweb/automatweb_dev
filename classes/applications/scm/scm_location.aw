@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.7 2007/12/06 14:34:06 kristo Exp $
-// scm_location.aw - Toimumiskoht 
+// scm_location.aw - Toimumiskoht
 /*
 
 @classinfo syslog_type=ST_SCM_LOCATION relationmgr=yes no_status=1 prop_cb=1 maintainer=tarvo
@@ -31,9 +30,12 @@
 @property make_copy type=choose multiple=1 field=meta method=serialize
 @caption Tee koopia
 
+@property usercheckbox1 type=checkbox table=scm_location field=usercheckbox1 ch_value=1
+@caption User-defined checkbox 1
+
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -86,7 +88,7 @@ class scm_location extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
@@ -137,13 +139,13 @@ class scm_location extends class_base
 		if (empty($field))
 		{
 			$this->db_query('CREATE TABLE '.$table.' (
-				oid INT PRIMARY KEY NOT NULL, 
+				oid INT PRIMARY KEY NOT NULL,
 				address int
 			)');
 			return true;
 		}
 
-		
+
 		switch ($field)
 		{
 			case 'address':
@@ -166,6 +168,13 @@ class scm_location extends class_base
 					'type' => 'text'
 				));
                                 return true;
+
+			case "usercheckbox1":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int(1)"
+				));
+				return true;
 		}
 		return false;
 	}

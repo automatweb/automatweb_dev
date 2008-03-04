@@ -569,6 +569,15 @@
             <caption>User-defined TA 5</caption>
       </property>
       <property>
+            <name>usercheckbox1</name>
+            <table>kliendibaas_firma</table>
+            <group>add_info</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>usercheckbox1</field>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
             <name>description_doc</name>
             <table>objects</table>
             <group>add_info</group>

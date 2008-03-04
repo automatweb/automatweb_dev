@@ -62,6 +62,15 @@
             <caption>Tee koopia</caption>
       </property>
       <property>
+            <name>usercheckbox1</name>
+            <table>scm_location</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>usercheckbox1</field>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
