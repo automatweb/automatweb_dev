@@ -425,6 +425,17 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+                if ($err_type == "ERR_ACL" && substr($_REQUEST["id"], 0, 4) == "http")
+                {
+                        $send_mail = false;
+                }
+
+		if ($err_type == 110 && strpos($msg, "http:") !== false)
+		{
+			die("silly robot");
+			$send_mail = false;
+		}
+
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si,"process_error"))
 		{
