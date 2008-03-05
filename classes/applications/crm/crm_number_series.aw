@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.10 2008/02/06 11:14:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.11 2008/03/05 13:21:43 markop Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -199,16 +199,16 @@ class crm_number_series extends class_base
 					"lang_id" => array(),					
 					"site_id" => array(),					
 					"sort_by" => "CAST(aw_crm_bill.aw_bill_no as signed) DESC",	
-					"limit" => 1,
+					//"limit" => 1,
 				);
 				if($time)
 				{
-					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $row["start"] , $row["end"], "int");
+					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, (int)($row["start"]) , (int)($row["end"]) , "int");
 				}
 				else
 				{
 					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
-				}
+				}//arr($filter);
 				$ol = new object_list($filter);
 				if ($ol->count())
 				{
@@ -216,8 +216,8 @@ class crm_number_series extends class_base
 					$num = $o->prop("bill_no") + 1;
 				}
 				
-				//siia teeb nüüd eriti räige kirvemeetodi
-				//kui mingil x põhjusel peaks tahtma olemasolevat numbrit anda, siis tsükkel käib või maailmalõpuni... või vähemalt niikaua kuni leiab numbri mis pole kasutuses või tuleb miski muu piirang peale ja on niisama p...
+				//siia teeb nyyd eriti raige kirvemeetodi
+				//kui mingil x pohjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel kaib voi maailmalopuni... voi vahemalt niikaua kuni leiab numbri mis pole kasutuses voi tuleb miski muu piirang peale ja on niisama p...
 				
 				while(true)
 				{
@@ -251,8 +251,8 @@ class crm_number_series extends class_base
 			$num = $o->prop("bill_no") + 1;
 		}
 			
-		//siia teeb nüüd eriti räige kirvemeetodi
-		//kui mingil x põhjusel peaks tahtma olemasolevat numbrit anda, siis tsükkel käib või maailmalõpuni... või vähemalt niikaua kuni leiab numbri mis pole kasutuses või tuleb miski muu piirang peale ja on niisama p...
+		//siia teeb nyyd eriti raige kirvemeetodi
+		//kui mingil x pohjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel kaib voi maailmalopuni... voi vahemalt niikaua kuni leiab numbri mis pole kasutuses voi tuleb miski muu piirang peale ja on niisama p...
 		while(true)
 		{
 			$ol2 = new object_list(array(
