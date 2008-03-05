@@ -577,11 +577,11 @@ class crm_bill extends class_base
 						{
 							$this->_set_bddd = $crel->prop("bill_due_date_days");
 						}
-						if(!($arr["obj_inst"]->prop("bill_due_date_days") > 0))
+						if(!$this->_set_bddd && !($arr["obj_inst"]->prop("bill_due_date_days") > 0))
 						{
 							$this->_set_bddd = $co_obj->prop("bill_due_days");
 						}
-						if(!($arr["obj_inst"]->prop("bill_due_date_days") > 0) && $client_obj->class_id() == CL_CRM_COMPANY)
+						if(!$this->_set_bddd && !($arr["obj_inst"]->prop("bill_due_date_days") > 0) && $client_obj->class_id() == CL_CRM_COMPANY)
 						{
 							$this->_set_bddd = $client_obj->prop("bill_due_days");
 						}
