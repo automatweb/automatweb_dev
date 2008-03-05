@@ -774,7 +774,10 @@
             </OPENHOURS>
             <PROFESSION>
                   <value>12</value>
-                  <clid>CL_CRM_PROFESSION</clid>
+                  <clid>
+                        <num_0>CL_CRM_PROFESSION</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>Ametinimetus</caption>
             </PROFESSION>
             <SETTINGS>

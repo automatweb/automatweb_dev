@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.234 2008/03/04 12:57:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.235 2008/03/05 15:15:03 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -311,7 +311,7 @@ caption Templeit
 @reltype OPENHOURS value=44 clid=CL_OPENHOURS
 @caption Avamisajad
 
-@reltype PROFESSION value=12 clid=CL_CRM_PROFESSION
+@reltype PROFESSION value=12 clid=CL_CRM_PROFESSION,CL_CRM_PERSON
 @caption Ametinimetus
 
 @reltype SETTINGS value=13 clid=CL_ROOM_SETTINGS
