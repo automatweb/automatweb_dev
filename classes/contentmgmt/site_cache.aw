@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.49 2008/02/12 12:00:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.50 2008/03/05 09:03:19 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -211,6 +211,8 @@ class site_cache extends aw_template
 			
 			$tres = $res;
 			$res = str_replace("<?xml", "&lt;?xml", $res);
+			$res = str_replace("<?XML", "&lt;?xml", $res);
+
 			eval("?>".$res);
 			$res = ob_get_contents();
 			if (strpos($res, "syntax err") !== false || strpos($res, "parse err") !== false)
