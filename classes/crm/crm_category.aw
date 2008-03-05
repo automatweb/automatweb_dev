@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.10 2008/03/05 11:49:43 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.11 2008/03/05 12:01:47 instrumental Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -95,8 +95,8 @@ class crm_category extends class_base
 			"align" => "center",
 		));
 		$conns = $arr["obj_inst"]->connections_to(array(
-			"clid" => CL_CRM_PERSON,
-			"type" => "RELTYPE_CATEGORY",
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_CATEGORY",		// RELTYPE_CATEGORY
 		));
 		foreach($conns as $conn)
 		{
@@ -124,7 +124,7 @@ class crm_category extends class_base
 					$c = new connection(array(
 						"to" => $arr["obj_inst"]->id(),
 						"from" => $p,
-						"reltype" => "RELTYPE_CATEGORY",
+						"reltype" => 80,		// RELTYPE_CATEGORY
 					));
 					$c->save();
 				}
