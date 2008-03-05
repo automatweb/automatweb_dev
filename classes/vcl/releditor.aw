@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.101 2008/02/08 12:47:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.102 2008/03/05 14:40:55 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -72,7 +72,7 @@ class releditor extends core
 			$xprops[] = array(
 				"type" => "text",
 				"caption" => t(" "),
-				"error" => sprintf(t("Viga %s definitsioonis (seose tüüp defineerimata!)"), $prop["name"])
+				"error" => sprintf(t("Viga %s definitsioonis (seose t&uuml;&uuml;p defineerimata!)"), $prop["name"])
 			);
 		};
 
@@ -346,6 +346,12 @@ class releditor extends core
 			$t->cb_values = $arr["cb_values"];
 		};
 
+		// There's prolly a better place for this. -kaarel
+		foreach($act_props as $ap_key => $ap_data)
+		{
+			if(array_key_exists($ap_key.".options", $arr["prop"]))
+				$act_props[$ap_key]["options"] = $arr["prop"][$ap_key.".options"];
+		}
 
 		// parse_properties fills the thing with values and stuff. And it eats my precious toolbar
 		$xprops = $t->parse_properties(array(
@@ -497,7 +503,7 @@ class releditor extends core
 				"name" => "clone",
 				"img" => "copy.gif",
 				"tooltip" => t("Klooni valitud objektid"),
-				"url" => "javascript:element = 'check[';len = document.changeform.elements.length;var count = 0;for (i=0; i < len; i++){if (document.changeform.elements[i].checked == true){count++;}}if(count == 1){num=prompt('Mitu objekti kloonida soovid?', '1');document.changeform.releditor_clones.value=num;document.changeform.submit();}else{alert('Sa oled kas liiga vähe või liiga palju objekte kloonimiseks valinud, proovi uuesti')}",
+				"url" => "javascript:element = 'check[';len = document.changeform.elements.length;var count = 0;for (i=0; i < len; i++){if (document.changeform.elements[i].checked == true){count++;}}if(count == 1){num=prompt('Mitu objekti kloonida soovid?', '1');document.changeform.releditor_clones.value=num;document.changeform.submit();}else{alert('Sa oled kas liiga v&auml;he v&otilde;i liiga palju objekte kloonimiseks valinud, proovi uuesti')}",
 			));
 		}
 
@@ -708,7 +714,7 @@ class releditor extends core
 		{
 			$awt->define_field(array(
 				"name" => "default",
-				"caption" => t("Vali üks"),
+				"caption" => t("Vali &uuml;ks"),
 				"align" => "center",
 				"sortable" => 1
 			));
