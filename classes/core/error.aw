@@ -12,18 +12,22 @@ class error
 		@attrib api=1 params=name
 
 		@param id required type=string
-			error id, unique string, prefixed by ERR_ that identifies the error
-		@param msg required type=string
-			error message to show
+		Error id, unique string, prefixed by ERR_ that identifies the error
 
-		@param fatal optional type=bool 
+		@param msg required type=string
+		Error message to show
+
+		@param fatal optional type=bool
 			if set, aborts execution defaults to true
 
-		@param show optional type=bool 
+		@param exception optional type=Exception
+		If error id is ERR_UNCAUGHT_EXCEPTION, this contains the exception object
+
+		@param show optional type=bool
 			if true, error is shown to user, error is always logged and sent to the mailinglist, defaults to true
 
 		@errors
-			this is the error handler. what do you think. 
+			this is the error handler. what do you think.
 
 		@returns
 			none
@@ -57,6 +61,12 @@ class error
 		}
 		$inst = new aw_template;
 		$inst->init();
+
+		if (ERR_UNCAUGHT_EXCEPTION === $arr["id"])
+		{
+			$inst->raise_error_exception = $arr["exception"];
+		}
+
 		$inst->raise_error($arr["id"], $arr["msg"], $arr["fatal"], !$arr["show"]);
 	}
 
@@ -113,7 +123,7 @@ class error
 			function foo($oid)
 			{
 				error::view_check($oid);	// this should only be calles for objects that you absolutely cannot do without
-				$o = obj($oid);		// this is safe to do now. 
+				$o = obj($oid);		// this is safe to do now.
 				echo  $o->name();
 			}
 	**/

@@ -11,6 +11,7 @@ define("STAT_ACTIVE", 2);
 class core extends acl_base
 {
 	var $errmsg;
+	public $raise_error_exception;
 
 	/** every class that derives from core, should call this initialization method
 		@attrib api=1 params=name
@@ -19,7 +20,7 @@ class core extends acl_base
 			If set, sets the class_id of the class that inherits from core
 
 		@comment
-			Initializes databas connection 
+			Initializes databas connection
 
 	**/
 	function init($args = false)
@@ -313,7 +314,11 @@ class core extends acl_base
 		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie t&auml;helepanu mingile ebat&auml;psusele  andmetes v&otilde;i n&auml;puveale.<br /><br />\n\n".$msg." </b>";
 
 		// also attach backtrace
-		if (function_exists("debug_backtrace"))
+		if (is_a($this->raise_error_exception, "Exception"))
+		{
+			$msg .= $this->raise_error_exception->getTraceAsString();
+		}
+		elseif (function_exists("debug_backtrace"))
 		{
 			$msg .= dbg::process_backtrace(debug_backtrace());
 		}

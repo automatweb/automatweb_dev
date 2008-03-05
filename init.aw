@@ -1442,17 +1442,12 @@ function __autoload($class_name)
 
 function aw_exception_handler($e)
 {
-	switch ($e->get_class())
-	{
-		case "awex_obj_acl":
-			error::raise(array(
-				"id" => ERR_ACL,
-				"msg" => $e->getMessage()
-			));
-			return;
-	}
-
-	echo "Uncaught exception: " , $exception->getMessage(), "\n";
+	error::raise(array(
+		"id" => ERR_UNCAUGHT_EXCEPTION,
+		"msg" => $e->getMessage(),
+		"fatal" => true,
+		"exception" => $e
+	));
 }
 
 ?>
