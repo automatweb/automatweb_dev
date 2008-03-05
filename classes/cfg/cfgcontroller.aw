@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.12 2008/01/31 13:52:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.13 2008/03/05 14:27:11 robert Exp $
 // cfgcontroller.aw - Kontroller(Classbase) 
 /*
 
@@ -75,7 +75,9 @@ class cfgcontroller extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		$trc = aw_ini_get("user_interface.trans_classes");
+		
+		if ($arr["id"] == "transl" && (aw_ini_get("user_interface.content_trans") != 1 && !$trc[$this->clid]))
 		{
 			return false;
 		}
