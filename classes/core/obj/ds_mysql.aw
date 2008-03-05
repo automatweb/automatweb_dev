@@ -492,6 +492,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$fields[] = $table.".`".$prop["field"]."_to` AS `".$prop["name"]."_to`";
 				}
 				else
+				if ($prop["method"] == "bitmask")
+				{
+					$fields[] = " (".$table.".`".$prop["field"]."` & ".$prop["ch_value"].") AS `".$prop["name"]."`";
+				}
+				else
 				{
 					$fields[] = $table.".`".$prop["field"]."` AS `".$prop["name"]."`";
 				}
