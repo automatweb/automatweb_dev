@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.87 2008/02/29 15:05:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.88 2008/03/05 02:50:06 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -99,17 +99,17 @@
 
 			@layout vbox_files_import_filenames type=vbox closeable=1 area_caption=Toodete&nbsp;otsing group=files_import parent=hbox_files_import
 
-		@property fnames type=textarea rows=15 cols=30 group=files_import parent=vbox_files_import_filenames
-		@caption Failinimed
+				@property fnames type=textarea rows=15 cols=30 group=files_import parent=vbox_files_import_filenames
+				@caption Failinimed
 
 
 			@layout vbox_files_import_sites type=vbox group=files_import parent=hbox_files_import
 
-		@property first_site_to_search_images type=select field=meta method=serialize group=files_import parent=vbox_files_import_sites
-		@caption Esimene leht kust pilte otsitakse
+				@property first_site_to_search_images type=select field=meta method=serialize group=files_import parent=vbox_files_import_sites
+				@caption Esimene leht kust pilte otsitakse
 
-		@property files_import_sites_order type=table rows=5 cols=30 field=meta method=serialize group=files_import parent=vbox_files_import_sites captionside=top
-		@caption Saitide j&auml;rjekord
+				@property files_import_sites_order type=table rows=5 cols=30 field=meta method=serialize group=files_import parent=vbox_files_import_sites captionside=top
+				@caption Saitide j&auml;rjekord
 
 	@groupinfo files_order caption="Failide j&auml;rjekord" parent=files
 
@@ -342,7 +342,6 @@ class otto_import extends class_base
 			case "discount_products_count":
 				$all_products_count = $this->db_fetch_field("select count(*) as count from bp_discount_products", "count");
 				$products_count = $this->db_fetch_field("select count(*) as count from bp_discount_products where lang_id=".aw_global_get('lang_id'), "count");
-			//	$prop['value'] = $products_count." / ".$all_products_count;
 				$prop['value'] = 'Aktiivse keele all ('.aw_global_get('lang_id').'): <strong>'.$products_count.'</strong>';
 				$prop['value'] .= '<br />';
 				$prop['value'] .= 'K&otilde;ik kokku (olenemata keelest): <strong>'.$all_products_count.'</strong>';
@@ -1352,15 +1351,17 @@ class otto_import extends class_base
 		));
 		$sites = $arr['obj_inst']->meta("files_import_sites_order");
 
-/*
-		$sites = array(
-			"heine" => 1,
-			"otto" => 2,
-			"schwab" => 3,
-			"albamoda" => 4,
-			"baur" => 5
-		);
-*/
+		if (empty($sites))
+		{
+			$sites = array(
+				"heine" => 1,
+				"otto" => 2,
+				"schwab" => 3,
+				"albamoda" => 4,
+				"baur" => 5
+			);
+		}
+
 		foreach ($sites as $key => $value)
 		{
 			$table->define_data(array(
@@ -3211,8 +3212,12 @@ class otto_import extends class_base
 				$connection_image = '';
 				foreach ($images as $value)
 				{
-					$images_arr[$value['imnr']] = $value['imnr'];
-					// siin v6ib ollanyyd see probleem, et vahel, m6nel tootel ei ole seda yhenduspilti
+					if (!empty($value['imnr']))
+					{
+						$images_arr[$value['imnr']] = $value['imnr'];
+					}
+
+					// siin v6ib olla nyyd see probleem, et vahel, m6nel tootel ei ole seda yhenduspilti
 					// k6ikide tootekoodide kohta. ma arvan, et see on otto poolne black tegelt
 					// nii et niikui leian selle yhenduspildi, siis aitab kyll:
 					if (!empty($value['conn_img']) && empty($connection_image))
@@ -5005,7 +5010,7 @@ class otto_import extends class_base
 			{
 				continue;
 			}
-			$prod_url = "http://www.albamoda.de/is-bin/INTERSHOP.enfinity/WFS/AlbaModaDe/de_DE/-/EUR/AM_ViewProduct-ProductRef;sid=ytMKUs3doZEKUo_WSsAnctZxm9kZ5q0_w_o_iYvu?SearchArt1=".$prodref."&SearchDetail=1&ProductRef=".$prodref."&aktProductRef=".$prodref."&Query_Text=".$pcode."&OsPsCP=0&searchpipe=search_pipe_am_de";
+		//	$prod_url = "http://www.albamoda.de/is-bin/INTERSHOP.enfinity/WFS/AlbaModaDe/de_DE/-/EUR/AM_ViewProduct-ProductRef;sid=ytMKUs3doZEKUo_WSsAnctZxm9kZ5q0_w_o_iYvu?SearchArt1=".$prodref."&SearchDetail=1&ProductRef=".$prodref."&aktProductRef=".$prodref."&Query_Text=".$pcode."&OsPsCP=0&searchpipe=search_pipe_am_de";
 			$fc2 = $this->file_get_contents($prod_url);
 
 			// get first image
@@ -5326,7 +5331,31 @@ class otto_import extends class_base
 
 		flush();
 
-		echo "valmis! <br>";
+		$other_prods = array();
+		foreach ($product_ids as $id)
+		{
+			$other_prods[] = " user4 like '%".$id."%' ";
+		}
+		$other_prods_data = $this->db_fetch_array("select * from aw_shop_products where ".implode(" or ", $other_prods)." ");
+		arr($other_prods_data);
+		foreach ($other_prods_data as $data)
+		{
+			$additional_prods = explode(',', $data['user4']);
+			$valid_prods = array();
+			foreach ($additional_prods as $prod)
+			{
+				if (!empty($prod) && array_search($prod, $product_ids) === false)
+				{
+					$valid_prods[] = $prod;
+				}
+			}
+			$sql = 'update aw_shop_products set user4 = '.implode(',', $valid_prods).' where aw_oid='.$data['aw_oid'];
+			$this->db_query($sql);
+		}
+		$cache = get_instance("cache");
+		$cache->full_flush();
+
+		echo "valmis! <br />";
 	}
 
 	function _get_id_by_code($code, $s_type = NULL)
