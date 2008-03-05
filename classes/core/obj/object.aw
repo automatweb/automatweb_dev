@@ -110,7 +110,7 @@ class object
 		}
 		else
 		{
-			throw new awex_awobj_method("Call to undefined method '" . $method . "'.");
+			throw new awex_obj_method("Call to undefined method '" . $method . "'.");
 		}
 	}
 
@@ -2041,7 +2041,11 @@ function dump_obj_table($pre = "")
 	flush();
 }
 
-class awex_obj extends aw_exception {}
+class awex_obj extends aw_exception
+{
+	public $awobj_id;
+}
+
 class awex_obj_method extends awex_obj {}
 class awex_obj_acl extends awex_obj {}
 
