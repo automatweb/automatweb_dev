@@ -601,6 +601,21 @@ class connection
 			return;
 		}
 
+		// check if there already exists a connection between these ends with this reltype
+		$ext_conns = $this->find(array(
+			"from" => $this->conn["from"],
+			"to" => $this->conn["to"],
+			"type" => $this->conn["reltype"],
+		));
+		if(count($ext_conns) > 0)
+		{
+			foreach($ext_conns as $ext_conn)
+			{
+				$this->conn["id"] = $ext_conn["id"];
+				break;
+			}
+		}
+
 		// check if this is a new connection
 		$new = false;
 		if (!$this->conn["id"])
