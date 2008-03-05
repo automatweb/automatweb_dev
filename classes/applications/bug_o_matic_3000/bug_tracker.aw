@@ -3603,7 +3603,7 @@ class bug_tracker extends class_base
 					if ($this->can("view", $pred_id))
 					{
 						$predo = obj($pred_id);
-						if ($predo->prop("bug_status") < 3 || $predo->prop("bug_status") == 11)
+						if ($predo->prop("bug_status") < 3 || $predo->prop("bug_status") == 11 || $predo->prop("bug_status") == 10)
 						{
 							$preds_done = false;
 						}
