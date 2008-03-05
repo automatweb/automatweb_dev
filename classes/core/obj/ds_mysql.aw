@@ -163,7 +163,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			return $this->load_version_properties($arr);
 		}
 		$ret = array();
-
 		// then read the properties from the db
 		// find all the tables that the properties are in
 		$tables = array();
@@ -537,6 +536,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if (aw_ini_get("acl.use_new_acl") == 1)
 			{
 				$q .= ",objects.acldata as acldata";
+			}
+			if (count($objtblprops))
+			{
+				foreach($objtblprops as $objtblprop)
+				{
+	                                if ($objtblprop["method"] == "bitmask")
+	                                {
+	                                        $q .= ",\n(objects.`".$objtblprop["field"]."` & ".$objtblprop["ch_value"].") AS `".$objtblprop["name"]."`";
+	                                }
+				}
 			}
 			if (count($fields) > 0)
 			{
@@ -2573,6 +2582,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($sql["q"] != "")
 			{
 				// query
+//				echo dbg::dump($sql).dbg::short_backtrace();
 				$this->db_query($sql["q"]);
 				while ($row = $this->db_next())
 				{
