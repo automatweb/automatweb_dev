@@ -6,14 +6,14 @@ class crm_bill_obj extends _int_object
 	{
 		if($name == "bill_no")
 		{
-			if(!$this->name())
-			{
+//			if(!$this->name() || strlen($this->name()) < 9)
+//			{
 				$this->set_name(t("Arve nr")." ".$value);
-			}
-			elseif($this->prop("bill_no") && substr_count($this->name() , $this->prop("bill_no")))
-			{
-				$this->set_name(str_replace($this->prop("bill_no"), $value , $this->name()));
-			}
+//			}
+//			elseif($this->prop("bill_no") && substr_count($this->name() , $this->prop("bill_no")))
+//			{
+//				$this->set_name(str_replace($this->prop("bill_no"), $value , $this->name()));
+//			}
 		}
 
 		parent::set_prop($name,$value);

@@ -77,7 +77,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@caption Keel
 
 	@property rows_different_pages type=text field=meta method=serialize
-	@caption Read erinevatel lehekülgedel
+	@caption Read erinevatel lehek&uuml;lgedel
 
 	@property bill_rows type=text store=no no_caption=1
 	@caption Arveread
@@ -162,7 +162,7 @@ class crm_bill extends class_base
 		));
 
 		$this->states = array(
-			-5 => t("Tühistatud"),
+			-5 => t("T&uuml;histatud"),
 			0 => t("Koostamisel"),
 			1 => t("Saadetud"),
 			2 => t("Makstud"),
@@ -266,6 +266,12 @@ class crm_bill extends class_base
 					if(!$time) $time = time();
 					$i = get_instance(CL_CRM_NUMBER_SERIES);
 					$prop["value"] = $i->find_series_and_get_next(CL_CRM_BILL, 0 , $time);
+					if (!$arr["new"] && is_oid($arr["obj_inst"]->id()))
+					{
+						$arr["obj_inst"]->set_prop("bill_no" , $prop["value"]);
+						$arr["obj_inst"]->save();
+					}
+					//if(aw_global_get("uid") == "Teddi.Rull")arr($co_obj);
 				}
 				break;
 
@@ -695,7 +701,7 @@ class crm_bill extends class_base
 				"sum" => $sum,
 				"o" => $o,
 			));
-//			$p-> set_prop("sum", $sum);//see koht sureb miskipärast
+//			$p-> set_prop("sum", $sum);//see koht sureb miskiprast
 //			$curr = $o->get_bill_currency_id();
 
 //			if($curr)
@@ -970,7 +976,7 @@ class crm_bill extends class_base
 					$r_pers[$rp_id] = $rp_o->name();
 				}
 			}
-			//miski suva järjekorranuumbrite genereerimine... kui on vaja
+			//miski suva jrjekorranuumbrite genereerimine... kui on vaja
 			if($default_row_jrk < $t_inf["jrk"]) $default_row_jrk = $t_inf["jrk"];
 			if(!$t_inf["jrk"]) $t_inf["jrk"] = $default_row_jrk;
 			$default_row_jrk = $default_row_jrk + 10;
@@ -1407,7 +1413,7 @@ class crm_bill extends class_base
 				$ord_city = $this->get_customer_address($b->id(), "city");
 				//$ord_no = substr(strrchr($ct->prop("aadress"), " "), 1 );
 				$ord_street = $this->get_customer_address($b->id(), "street");//$ct->prop("aadress");
-				//riigi tõlge, kui on inglise keeles
+				//riigi tlge, kui on inglise keeles
 				if($b->prop("language"))
 				{
 					$lo = obj($b->prop("language"));
@@ -1479,7 +1485,7 @@ class crm_bill extends class_base
 				$impl_index = $ct->prop("postiindeks");
 				$impl_county = $ct->prop_str("maakond");
 				$impl_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
-				//loodetavastu tuleb millalgi mõni parem idee
+				//loodetavastu tuleb millalgi mni parem idee
 			//	$impl_no = substr(strrchr($ct->prop("aadress"), " "), 1 );
 				$impl_street = $ct->prop("aadress");
 				//arr($impl_street);
@@ -1488,7 +1494,7 @@ class crm_bill extends class_base
 				if ($this->can("view", $ct->prop("riik")))
 				{
 					$riik = obj($ct->prop("riik"));
-					//see tundub küll mõttetu...et nagu need tingimused on täidetud, siis mõni rida allpool tehakse täpselt sama
+					//see tundub k&uuml;ll mttetu...et nagu need tingimused on tidetud, siis mni rida allpool tehakse tpselt sama
 //					if( $riik->name() != $ord_country)
 //					{
 //						$ord_addr .= " ".$ord_country;
@@ -1599,8 +1605,8 @@ class crm_bill extends class_base
 		$sum = 0;
 		
 		$agreement = $b->meta("agreement_price");
-		if($agreement["price"] && $agreement["name"]) $agreement = array($agreement); // kui on vanast ajast jäänud
-		if($agreement[0]["price"] && strlen($agreement[0]["name"]) > 0 )//kui kokkuleppehind on täidetud, siis rohkem ridu ei ole näha
+		if($agreement["price"] && $agreement["name"]) $agreement = array($agreement); // kui on vanast ajast jnud
+		if($agreement[0]["price"] && strlen($agreement[0]["name"]) > 0 )//kui kokkuleppehind on tidetud, siis rohkem ridu ei ole nha
 		{
 			$bill_rows = $agreement;
 //			$agreement_price_data = $this->get_agreement_row($agreement);
@@ -1610,11 +1616,11 @@ class crm_bill extends class_base
 		{
 			$bill_rows = $this->get_bill_rows($b);
 		}
-		$brows = $bill_rows; //moment ei tea miks see topelt tuleb... igaks juhuks ei võtnud maha... hiljem käib miski reset
+		$brows = $bill_rows; //moment ei tea miks see topelt tuleb... igaks juhuks ei vtnud maha... hiljem kib miski reset
 		$grp_rows = array();
 		$tax_rows = array();
 		$_no_prod_idx = -1;
-		$has_nameless_rows = 0;//miski muutuja , et kui see üheks muutub, siis lisab liidab kõik read kokku
+		$has_nameless_rows = 0;//miski muutuja , et kui see heks muutub, siis lisab liidab kik read kokku
 	
 		foreach($brows as $row)
 		{
@@ -1688,7 +1694,7 @@ class crm_bill extends class_base
 		}
 
 		$fbr = reset($brows);
-		//koondab sama nimega ja nimetud ühe hinnaga read kokku
+		//koondab sama nimega ja nimetud he hinnaga read kokku
 		
 		if(!$arr["all_rows"]) $grp_rows = $this->collocate_rows($grp_rows);
 		foreach($grp_rows as $prod => $grp_rowa)
@@ -1710,7 +1716,7 @@ class crm_bill extends class_base
 					$desc = $grp_row["name"];
 				}
 
-				//kui vaid ühel real on nimi... et siis arve eeltvaates moodustuks nendest 1 rida
+				//kui vaid hel real on nimi... et siis arve eeltvaates moodustuks nendest 1 rida
 //				if(!$arr["all_rows"] && $has_nameless_rows)
 //				{
 //					if(!strlen($grp_row["comment"])>0 && $primary_row_is_set) break;
@@ -1917,7 +1923,7 @@ class crm_bill extends class_base
 			$inf[] = $rd;
 		}
 		usort($inf, array(&$this, "__br_sort"));
-		//sotrimine järjekorranumbri järgi
+		//sotrimine jrjekorranumbri jrgi
 //		foreach ($inf as $key => $row) {
 //		   $volume[$key]  = $row['jrk'];
 //		   $edition[$key] = $row;
@@ -1951,10 +1957,10 @@ class crm_bill extends class_base
 	{
 		$b = obj($arr["id"]);
 		$bill_rows = $this->get_bill_rows($b);
-		//lükkab mõned read kokku ja liidab summa , ning koguse.võibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha äkki
+		//lkkab mned read kokku ja liidab summa , ning koguse.vibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha ki
 //		$bill_rows = $this->collocate($bill_rows);
 		
-		//tühja kirjeldusega read välja
+		//thja kirjeldusega read vlja
 		foreach($bill_rows as $key => $val)
 		{
 			if(!(strlen($val["name"]) > 0)) unset($bill_rows[$key]);
@@ -2412,12 +2418,12 @@ class crm_bill extends class_base
 			}
 		}
 		
-		//summa õigeks
+		//summa igeks
 		if(is_array($arr["request"]["agreement_price"]))
 		{
 			foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
 			{
-				//comment on see mis nagu näitama hakkab... et paneb selle samaks mis nimi
+				//comment on see mis nagu nitama hakkab... et paneb selle samaks mis nimi
 				
 				$arr["request"]["agreement_price"][$key]["comment"] = $agreement_price["name"];
 				//vaikimisi artikkel ka
@@ -2628,7 +2634,7 @@ class crm_bill extends class_base
 		));
 		
 		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille väärtus on 0 krooni")."');	if(fRet){";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
 		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
 		if(!$has_val) $onclick.= "}else;";
 		
@@ -2640,7 +2646,7 @@ class crm_bill extends class_base
 		));
 
 		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille väärtus on 0 krooni")."');	if(fRet){";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
 		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
 		if(!$has_val) $onclick.= "}else;";
 		
@@ -2653,7 +2659,7 @@ class crm_bill extends class_base
 		));
 
 		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille väärtus on 0 krooni")."');	if(fRet){";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;tus on 0 krooni")."');	if(fRet){";
 		$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
 		if(!$has_val) $onclick.= "}else;";
 
@@ -2857,7 +2863,7 @@ class crm_bill extends class_base
 			$p = $conn->to();//echo $p->id();
 			if($payment && $payment == $p->id())
 			{
-				if(($bill_sum - $sum) > $p->prop("sum")) // kui arve summa - juba makstud summa on suurem kui antud laekumine , siis tagastaks selle sama laekumise summa, sest rohkem võtta ju pole
+				if(($bill_sum - $sum) > $p->prop("sum")) // kui arve summa - juba makstud summa on suurem kui antud laekumine , siis tagastaks selle sama laekumise summa, sest rohkem vtta ju pole
 				{
 					return $p->prop("sum");
 				}
