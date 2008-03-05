@@ -155,7 +155,7 @@
       <groupinfo>
             <recycle>
                   <submit>no</submit>
-                  <caption>Pr&amp;uuml;gikast</caption>
+                  <caption>Pr&amp;amp;uuml;gikast</caption>
             </recycle>
             <recycle_list>
                   <submit>no</submit>
@@ -190,6 +190,11 @@
                   <clid>CL_GROUP</clid>
                   <caption>Admin grupp</caption>
             </ADM_GRP>
+            <RESTORE_FOLDER>
+                  <value>3</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Taastamise kaust</caption>
+            </RESTORE_FOLDER>
       </reltypes>
 </properties>
 

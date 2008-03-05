@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.26 2008/02/08 12:57:29 kristo Exp $
-// recycle_bin.aw - Prügikast 
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.27 2008/03/05 13:58:51 robert Exp $
+// recycle_bin.aw - Pr&uuml;gikast 
 /*
 
 @default table=objects
@@ -57,7 +57,7 @@
 	@property autoclean_age type=select field=meta method=serialize
 	@caption Kui vanad automaatselt kustutatakse
 
-@groupinfo recycle submit=no caption="Prügikast"
+@groupinfo recycle submit=no caption="Pr&uuml;gikast"
 @groupinfo recycle_list submit=no caption="Nimekiri" parent=recycle
 @groupinfo recycle_search caption="Otsing" parent=recycle submit_method=get
 @groupinfo recycle_settings caption="M&auml;&auml;rangud" 
@@ -70,6 +70,9 @@
 
 @reltype ADM_GRP value=2 clid=CL_GROUP
 @caption Admin grupp
+
+@reltype RESTORE_FOLDER value=3 clid=CL_MENU
+@caption Taastamise kaust
 
 */
 class recycle_bin extends class_base
@@ -204,7 +207,7 @@ class recycle_bin extends class_base
 		
 		$table->define_field(array(
 			"name" => "class_id",
-			"caption" => t("Objektitüüp"),
+			"caption" => t("Objektit&uuml;&uuml;p"),
 			"sortable" => 1,
 			"width" => 1,
 		));
@@ -267,7 +270,7 @@ class recycle_bin extends class_base
 			$rows[$row["oid"]] = $row;
 		}
 
-		$this->_insert_tbl($rows, $table);
+		$this->_insert_tbl($rows, $table, $arr["obj_inst"]->id());
 
 		return $table->draw_text_pageselector(array(
 			"d_row_cnt" => $cnt,
@@ -275,7 +278,7 @@ class recycle_bin extends class_base
 		)).$table->draw();
 	}
 
-	function _insert_tbl($rows, &$table)
+	function _insert_tbl($rows, &$table, $obj_id)
 	{	
 		$classes = aw_ini_get("classes");
 		
@@ -297,7 +300,8 @@ class recycle_bin extends class_base
 						"restore_object", 
 						array(
 							"oid" => $row["oid"],
-							"return_url" => get_ru()
+							"return_url" => get_ru(),
+							"id" => $obj_id
 						), 
 						"recycle_bin"
 					),
@@ -368,6 +372,44 @@ class recycle_bin extends class_base
 		}
 	}
 
+	function get_restore_folder($ob)
+	{
+		$conn = $ob->connections_from(array(
+			"type" => "RELTYPE_RESTORE_FOLDER"
+		));
+		foreach($conn as $c)
+		{
+			$fo = obj($c->prop("to"));
+		}
+		return $fo;
+	}
+
+	function check_parent($oid, $ob)
+	{
+		$query = "SELECT parent FROM objects WHERE oid='".$oid."'";
+		$p = $this->db_fetch_field($query, "parent");
+		$query = "SELECT status FROM objects WHERE oid='".$p."'";
+		$status = $this->db_fetch_field($query, "status");
+		if($status < 1)
+		{
+			$fo = $this->get_restore_folder($ob);
+			$this->db_query("UPDATE objects SET parent='".$fo->id()."' WHERE oid='".$oid."'");
+		}
+	}
+
+	function check_subs($oid)
+	{
+		$query = "SELECT oid FROM objects WHERE parent='".$oid."'";
+		$subs = $this->db_fetch_array($query);
+		foreach($subs as $sub)
+		{
+			$oid = $sub["oid"];
+			$query = "UPDATE objects SET status=1 WHERE oid =".$oid;
+			$this->db_query($query);
+			$this->check_subs($oid);
+		}
+	}
+
 	/**
 		@attrib name=restore_object all_args=1
 	**/
@@ -379,6 +421,11 @@ class recycle_bin extends class_base
 		$c = get_instance("cache");
 		$c->file_clear_pt("acl");
 		
+		$ob = obj($arr["id"]);
+		$oid = $arr["oid"];
+		$this->check_parent($oid, $ob);
+		$this->check_subs($oid);
+
 		return $arr["return_url"];
 	}
 	
@@ -392,12 +439,16 @@ class recycle_bin extends class_base
 			$arr = $_GET;
 		}
 
+		$ob = obj($arr["id"]);
+
 		if($arr["mark"])
 		{
 			foreach($arr["mark"] as $oid)
 			{
 				$query = "UPDATE objects SET status=1 WHERE oid=$oid";
 				$this->db_query($query);
+				$this->check_parent($oid, $ob);
+				$this->check_subs($oid);
 			}
 		}
 
@@ -604,12 +655,13 @@ class recycle_bin extends class_base
 		{
 			$rows[$row["oid"]] = $row;
 		}
-		$this->_insert_tbl($rows, $t);
+		$this->_insert_tbl($rows, $t, $arr["obj_inst"]->id());
 	}
 
 	function callback_mod_reforb($arr)
 	{
 		$arr["return_url"] = aw_global_get("REQUEST_URI");
+		$arr["new"] = ($_GET["action"]=="new")?1:0;
 	}
 
 	/**
