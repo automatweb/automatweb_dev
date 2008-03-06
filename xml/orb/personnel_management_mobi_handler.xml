@@ -1,5 +1,22 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="personnel_management_mobi_handler" folder="applications/personnel_management" extends="class_base">
+		<action name="send_sms">
+			<function name="send_sms">
+				<arguments>
+					<required name="id" type="oid" />
+					<required name="number" type="int" />
+					<required name="message" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_it">
+			<function name="send_it">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
