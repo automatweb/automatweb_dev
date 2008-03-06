@@ -1,14 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.189 2008/03/04 08:12:59 kristo Exp $
-// users.aw - User Management
 /*
+$Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.190 2008/03/06 13:55:18 kristo Exp $
 @classinfo  maintainer=kristo
 */
 if (!headers_sent())
 {
 	session_register("add_state");
 };
-define("PER_PAGE", 20);
 
 classload("users_user");
 class users extends users_user
@@ -22,22 +20,14 @@ class users extends users_user
 	}
 
 	/** generates the form for changing the users ($id) password
-
-		@attrib name=change_pwd params=name is_public="1" caption="Change password" default="0"
+		@attrib name=change_pwd params=name is_public="1" caption="Change password"
 
 		@param id optional
 		@param error optional
-
-		@returns
-
-
-		@comment
-
 	**/
 	function change_pwd($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array()).LC_USERS_USERS);
 		if (!$id)
 		{
 			$id = aw_global_get("uid");
@@ -84,24 +74,24 @@ class users extends users_user
 		extract($arr);
 		if(!$username || !$old_pass || !$new_pass || !$new_pass_repeat)
 		{
-			$error = "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud";
+			$error = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud");
 		}
 		elseif($new_pass != $new_pass_repeat)
 		{
-			$error = "Uus parool ja parooli kordus ei ole samad";
+			$error = t("Uus parool ja parooli kordus ei ole samad");
 		}
 		elseif($new_pass == $old_pass)
 		{
-			$error =  "Te ei tohi panna uuesti sama vana parooli";
+			$error =  t("Te ei tohi panna uuesti sama vana parooli");
 		}
 		elseif(!is_valid("password", $old_pass))
 		{
-			$error = "Vigane v&otilde;i vale parool";
+			$error = t("Vigane v&otilde;i vale parool");
 		}
 
 		elseif(!is_valid("uid", $username))
 		{
-			$error =  "Vigane kasutajanimimi $uid";
+			$error =  sprintf(t("Vigane kasutajanimimi %s"), $uid);
 		}
 		else
 		{
@@ -113,7 +103,7 @@ class users extends users_user
 			));
 			if(!$success)
 			{
-				$error = "Vana parool on vale";
+				$error = t("Vana parool on vale");
 			}
 		}
 		if($error)
@@ -122,13 +112,10 @@ class users extends users_user
 				"error" => $error,
 				"uid" => $username,
 			), "users");
-			die();
 		}
-		elseif ($success)
+		else
+		if ($success)
 		{
-			//sellep&auml;rast ,et me teda uuesti parooli muutmisele ei saadaks paneme talle &uuml;he logini kirja
-			//$q = "UPDATE users SET logins = logins+1 WHERE uid = '$username'";
-
 			aw_disable_acl();
 				$user_obj = &obj(users::get_oid_for_uid($username));
 				$logins = $user_obj->prop("logins") + 1;
@@ -150,15 +137,7 @@ class users extends users_user
 	}
 
 	/** saves the uses changed password
-
-		@attrib name=submit_change_pwd params=name default="0"
-
-
-		@returns
-
-
-		@comment
-
+		@attrib name=submit_change_pwd params=name 
 	**/
 	function submit_change_pwd($arr)
 	{
@@ -197,7 +176,6 @@ class users extends users_user
 			$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
 			$mail = str_replace("#parool#", $arr["pwd"],$mail);
 			$mail = str_replace("#kasutaja#", $arr["id"],$mail);
-			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true, "user" => $arr["id"]))),$mail);
 			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($arr["id"]), $mail);
 
 			send_mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
@@ -226,446 +204,14 @@ class users extends users_user
 		}
 	}
 
-	/** adds the user and ssets all join form entries from site interface
-
-		@attrib name=submit_user_site params=name nologin="1" default="0"
-
-
-		@returns
-
-
-		@comment
-
-	**/
-	function submit_user_site($arr)
-	{
-		extract($arr);
-		aw_set_exec_time(AW_LONG_PROCESS);
-
-		global $add_state;
-		$add_state["pass"] = $pass;
-		$add_state["uid"] = $a_uid;
-		$add_state["email"] = $email;
-
-		if ($this->can_add($arr))
-		{
-			$jfs = serialize($this->get_join_form_entries($join_grp));
-
-			$us = get_instance(CL_USER);
-			$us->add_user(array(
-				"join_form_entry" => $jfs,
-				"uid" => $add_state["uid"],
-				"password" => $add_state["pass"],
-				"email" => $add_state["email"],
-				"join_grp" => $join_grp
-			));
-
-			$si = __get_site_instance();
-			if (method_exists($si, "on_add_user_site"))
-			{
-				$si->on_add_user_site($add_state["uid"]);
-			}
-
-			$this->update_dyn_user($add_state["uid"]);
-
-			$al = $this->get_cval("useradd::autologin");
-
-			$last_join_uid = $add_state["uid"];
-			aw_session_set("last_join_uid", $last_join_uid);
-
-			if ($al)
-			{
-				$uid = $add_state["uid"];
-				$session = gen_uniq_id();
-				aw_session_set("uid", $uid);
-				aw_session_set("session", $session);
-				aw_global_set("uid", $uid);
-			}
-
-			// send him some email as well
-			$c = get_instance("config");
-			$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
-			$mail = str_replace("#parool#", $add_state["pass"],$mail);
-			$mail = str_replace("#kasutaja#", $add_state["uid"],$mail);
-			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true))),$mail);
-			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($add_state["uid"]), $mail);
-
-			send_mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
-			$jsa = $c->get_simple_config("join_send_also");
-			if ($jsa != "")
-			{
-				send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
-			}
-			$add_state = "";
-			aw_session_set("session_filled_forms",array());
-
-			$this->_log(ST_USERS, SA_ADD,  $add_state["uid"]);
-			return $this->cfg["baseurl"]."/".$after_join;
-		}
-		else
-		{
-			$add_state["level"] = 0;
-			return $this->cfg["baseurl"]."/".$section;
-		}
-
-		return $this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp));
-	}
-
-	function can_add($arr)
-	{
-		global $add_state;
-		$reserved = array("system");
-
-		extract($arr);
-		if (in_array($a_uid,$reserved))
-		{
-			return false;
-		};
-		$q = "SELECT * FROM users WHERE uid = '$a_uid'";
-		$this->db_query($q);
-		$row = $this->db_next();
-
-		if ($arr["sj"])
-		{
-                	$lang_errs = $arr["sj"]->meta("lang_errs");
-                	$lang_id = aw_global_get("lang_id");
-                	if (aw_ini_get("user_interface.full_content_trans"))
-                	{
-                        	$lang_id = aw_global_get("ct_lang_id");
-                	}
-		}
-
-		if ($row)
-		{
-			$te = t("Sellise kasutajanimega kasutaja on juba olemas!");
-                        if (!empty($lang_errs["user_exists"][$lang_id]))
-                        {
-                                $te = $lang_errs["user_exists"][$lang_id];
-                        }
-			$add_state["error"] = $te;
-			return false;
-		}
-
-		if (!is_valid("uid",$a_uid))
-		{
-			$te = t("Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!");
-                        if (!empty($lang_errs["uid_short"][$lang_id]))
-                        {
-                                $te = $lang_errs["uid_short"][$lang_id];
-                        }
-			$add_state["error"] = $te;
-			return false;
-		}
-
-		if ($pass != $pass2)
-		{
-			$te = t("Sisestatud paroolid on erinevad!");
-			if (!empty($lang_errs["pwd_typo"][$lang_id]))
-                        {
-                                $te = $lang_errs["pwd_typo"][$lang_id];
-                        }
-			$add_state["error"] = $te;
-			return false;
-		}
-
-		if (!is_valid("password", $pass))
-		{
-			$te = t("Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!");
-			if (!empty($lang_errs["pwd_err"][$lang_id]))
-                        {
-                                $te = $lang_errs["pwd_err"][$lang_id];
-                        }
-			$add_state["error"] = $te;
-			return false;
-		}
-
-		if (strlen($a_uid) < 3)
-		{
-			$te = t("Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!");
-			if (!empty($lang_errs["uid_short"][$lang_id]))
-                        {
-                                $te = $lang_errs["uid_short"][$lang_id];
-                        }
-			$add_state["error"] = $te;
-			return false;
-		}
-
-		if (strlen($pass) < 3)
-		{
-			$te = t("Paroolis peab olema v&auml;hemalt 3 t&auml;hte!");
-			if (!empty($lang_errs["pwd_short"][$lang_id]))
-                        {
-                                $te = $lang_errs["pwd_short"][$lang_id];
-                        }
-			$add_state["error"] = $te;
-			return false;
-		}
-		$add_state["error"] = "";
-		return true;
-	}
-
-	function get_join_form($after_join)
-	{
-		aw_global_set("no_cache_content", 1);
-
-		// siin hoitaxe forme, mis kasutaja on selle sessiooni jooxul t2itnud.
-		$session_filled_forms = aw_global_get("session_filled_forms");
-
-		$jfs = array();
-		$this->db_query("SELECT objects.*,forms.grp as grp,forms.j_mustfill as j_mustfill FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND objects.site_id = ".$this->cfg["site_id"]." AND forms.subtype = ".FSUBTYPE_JOIN);
-		while ($row = $this->db_next())
-		{
-			// paneme siia arraysse aint need formid, mida PEAB t2itma, teisi v6ime ignoreerida
-			if ($row["j_mustfill"] == 1)
-			{
-				$jfs[$row["oid"]] = array("group" => $row["grp"]);
-			}
-		}
-
-		// nini nyyd on vaja tshekkida et kas k6ik vajalikud formid on t2idetud
-		$groups = array();
-		reset($jfs);
-		// teeme gruppide nimekirja
-		while (list($fid,$ar) = each($jfs))
-		{
-			$groups[$ar["group"]][$fid] = $session_filled_forms[$fid];
-		}
-
-		// k2ime grupid l2bi ja tshekime, et kas m6ni on tervenisti t2idetud
-		$group_filled = false;
-		reset($groups);
-		while (list($group,$ar) = each($groups))
-		{
-			$all_filled = true;
-			reset($ar);
-			while (list($fid,$filled) = each($ar))
-			{
-				if (!$filled)
-				{
-					$all_filled = false;
-				}
-			}
-
-			if ($all_filled)
-			{
-				// leidsime grupi, kus k6ik on t2idetud
-				$group_filled = true;
-				$add_group = $group;
-				break;
-			}
-		}
-
-		if ($group_filled)
-		{
-			global $add_state;
-
-			if ($add_state["email"] == "")
-			{
-				// kui pole emailiaadressi, siis yritame seda leida liitumisformidest
-				foreach($groups[$add_group] as $fid => $eid)
-				{
-					$f = get_instance(CL_FORM);
-					$f->load($fid);
-					$f->load_entry($eid);
-					$em = $f->get_element_value_by_name("E-mail");
-					if ($em != false)
-					{
-						$add_state["email"] = $em;
-						break;
-					}
-				}
-			}
-
-			// n2itame kasutaja tegemise formi
-			$this->read_template("add_site.tpl");
-			$this->vars(array(
-				"error" => $add_state["error"],
-				"uid" => $add_state["uid"],
-				"email" => $add_state["email"],
-				"reforb"	=> $this->mk_reforb("submit_user_site", array("join_grp" => $add_group, "section" => aw_global_get("section"), "after_join" => $after_join))
-			));
-			return $this->parse();
-		}
-		else
-		{
-			// kribame et mine ja t2ida k6ik regimisformid 2ra
-			$this->read_template("add_not_all_forms.tpl");
-			return $this->parse();
-		}
-	}
-
-	////
-	// !tagastab nimekirja formi sisestustest, mis on kasutaja t2itnud ja mis kuuluvad kasutaja liitumisformide gruppi $group
-	function get_join_form_entries($group)
-	{
-		$session_filled_forms = aw_global_get("session_filled_forms");
-
-		$ret = array();
-
-		$this->db_query("SELECT id,grp FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND subtype = ".FSUBTYPE_JOIN." AND grp = '$group'");
-		// teeme gruppide nimekirja
-		while ($row = $this->db_next())
-		{
-			$ret[$row["id"]] = $session_filled_forms[$row["id"]];
-		}
-		return $ret;
-	}
-
-	////
-	// !shows the data the user entered when he joined if the user is logged in
-	// if he is not logged in, but just joined, then the session contains the variable $last_join_uid and then that will be used
-	// the for outputs for the data will be taken from config where when selecting join forms the user can select the output for all join forms
-	// paramtaters:
-	//  nohtml - if true, the output generated can be sent to an email
-	//  user - the username for whom to show the data
-	function show_join_data($arr)
-	{
-		extract($arr);
-		if (!$tpl)
-		{
-			$tpl = "show_join_data.tpl";
-		}
-		if ($user != "")
-		{
-			$uuid = $user;
-		}
-		if ($uuid == "")
-		{
-			$uuid = aw_global_get("uid");
-		}
-		if ($uuid == "")
-		{
-			$uuid = aw_global_get("last_join_uid");
-		}
-		if ($uuid == "")
-		{
-			return "";
-		}
-
-		// now get all the join forms for thew users join group and show dem!
-		$ops = array();
-		$aps = "";
-		if ($second)
-		{
-			$aps = "2";
-		}
-		$this->db_query("SELECT id,j_op".$aps." FROM forms WHERE subtype = ".FSUBTYPE_JOIN);
-		while ($row = $this->db_next())
-		{
-			$ops[$row["id"]] = $row["j_op".$aps];
-		}
-
-		$udata = $this->get_user(array("uid" => $uuid));
-		if ($udata)
-		{
-			$jf = unserialize($udata["join_form_entry"]);
-			{
-				$f = get_instance(CL_FORM);
-				if (is_array($jf))
-				{
-					foreach($jf as $joinform => $joinentry)
-					{
-						if ($ops[$joinform] && $this->can("view", $joinentry))
-						{
-							$ret.=$f->show(array(
-								"id" => $joinform,
-								"entry_id" => $joinentry,
-								"op_id" => $ops[$joinform],
-								"no_html" => $nohtml,
-								"no_load_op" => $arr["no_load_op"]
-							));
-						}
-					};
-				}
-			};
-			if ($nohtml)
-			{
-				$this->read_template("show_join_data_nohtml.tpl");
-			}
-			else
-			{
-				$this->read_template($tpl);
-			}
-			$this->vars(array(
-				"username" => $uuid,
-				"password" => $udata["password"]
-			));
-			$ret.=$this->parse();
-		}
-		return $ret;
-	}
-
-	////
-	// !shows the form where the user can enter his/her password and then sends a pre-defined email to the user
-	/** this actually sends the reminder-email
-
-		@attrib name=pwd_remind params=name nologin="1"
-
-	**/
-	function pwd_remind($arr)
-	{
-		extract($arr);
-		$this->read_template("pwd_remind_form.tpl");
-
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_pwd_remind", array("after" => $matches[1]))
-		));
-
-		return $this->parse();
-	}
-
-	/** this actually sends the reminder-email
-
-		@attrib name=submit_pwd_remind params=name nologin="1" default="0"
-
-
-		@returns
-
-
-		@comment
-
-	**/
-	function submit_pwd_remind($arr)
-	{
-		extract($arr);
-		$udata = $this->get_user(array("uid" => $username));
-		if (!$udata)
-		{
-			$username = $this->db_fetch_field("SELECT uid FROM users WHERE email = '$username'","uid");
-			$udata = $this->get_user(array("uid" => $username));
-		}
-
-		$c = get_instance("config");
-		$mail = $c->get_simple_config("remind_pwd_mail".aw_global_get("LC"));
-		$mail = str_replace("#parool#", $udata["password"],$mail);
-		$mail = str_replace("#kasutaja#", $username,$mail);
-		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true,"user" => $username,"no_load_op" => 1))),$mail);
-
-		#$mail = str_replace("\r","",$mail);
-		$mail = str_replace("\r\n","\n",$mail);
-
-		send_mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
-		$this->_log(ST_USERS, SA_REMIND_PWD, $username);
-		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
-	}
-
-	/** Generates an unique hash, which when used in a url can be used to let the used change
-
-		@attrib name=send_hash params=name nologin="1" default="0"
-
-
-		@returns
-
-
-		@comment
-		his/her password
-
+	/** Generates an unique hash, which when used in a url can be used to let the used change his/her password
+		@attrib name=send_hash params=name nologin="1" 
 	**/
 	function send_hash($args = array())
 	{
 		extract($args);
 
-		if (not(aw_ini_get("auth.md5_passwords")))
+		if (!aw_ini_get("auth.md5_passwords"))
 		{
 			return "<font color=red>This site does not use encrypted passwords and therefore this function does not work</font>";
 		};
@@ -681,16 +227,8 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	/**
-
-		@attrib name=submit_send_hash params=name nologin="1" default="0"
-
-
-		@returns
-
-
-		@comment
-
+	/** 
+		@attrib name=submit_send_hash params=name nologin="1" 
 	**/
 	function submit_send_hash($args = array())
 	{
@@ -701,7 +239,7 @@ class users extends users_user
 			aw_session_set("status_msg",t("Vigane kasutajanimi"));
 			return $this->mk_my_orb("send_hash",array());
 		};
-		if (($type == "email") && not(is_email($email)))
+		if (($type == "email") && !(is_email($email)))
 		{
 			aw_session_set("status_msg",t("Vigane e-posti aadress"));
 			return $this->mk_my_orb("send_hash",array());
@@ -751,24 +289,17 @@ class users extends users_user
 	}
 
 	/** Allows the user to change his/her password
-
 		@attrib name=pwhash params=name nologin="1" default="0"
 
 		@param k required
 		@param u required
-
-		@returns
-
-
-		@comment
-
 	**/
 	function password_hash($args = array())
 	{
 		extract($args);
 		$uid = $u;
 		$key = $k;
-		if (not(is_valid("uid",$uid)))
+		if (!(is_valid("uid",$uid)))
 		{
 			$this->read_adm_template("hash_results.tpl");
 			lc_site_load("users", &$this);
@@ -791,7 +322,9 @@ class users extends users_user
 			return $this->parse();
 		};
 
+		aw_disable_acl();
 		$uo = obj($row["oid"]);
+		aw_restore_acl();
 		$pwhash = $uo->meta("password_hash");
 		if ($pwhash != $key)
 		{
@@ -825,65 +358,8 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	/**
-
-		@attrib name=change_pwd_hash params=name nologin="1" default="0"
-
-		@param pass1 required
-		@param pass2 required
-		@param a required
-		@param change optional
-
-		@returns
-
-
-		@comment
-
-	**/
-	function change_pwd_hash($args = array())
-	{
-		global $a;
-		$this->quote($a);
-		$q = "SELECT * FROM storage WHERE skey = '$a'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		if (!$row)
-		{
-			return "<span style='color: red'>Sellist v&otilde;tit pole v&auml;ljastatud!</span><br />";
-		};
-		if ($args["change"])
-		{
-			if ($args["pass1"] && $args["pass2"])
-			{
-				$_data = aw_unserialize($row["data"]);
-				$newpass = md5($args["pass1"]);
-				$q = "UPDATE users SET password = '$newpass' WHERE uid = '$_data[uid]'";
-				$this->db_query($q);
-				return $this->login(array("uid" => $_data["uid"], "password" => $args["pass1"]));
-			}
-			else
-			{
-				return "<span style='color: red'>Viga parooli sisestamisel</a>";
-			};
-		};
-
-		$this->read_template("hash_change_password_plain.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("change_pwd_hash",array("no_reforb" => 1, "change" => 1,"a" => $a)),
-		));
-		return $this->parse();
-	}
-
 	/** Submits the password
-
-		@attrib name=submit_password_hash params=name nologin="1" default="0"
-
-
-		@returns
-
-
-		@comment
-
+		@attrib name=submit_password_hash params=name nologin="1"
 	**/
 	function submit_password_hash($args = array())
 	{
@@ -893,7 +369,7 @@ class users extends users_user
 		$row = $this->db_next();
 		if (not($row))
 		{
-			aw_session_set("status_msg","Sellist kasutajat pole registreeritud");
+			aw_session_set("status_msg",t("Sellist kasutajat pole registreeritud"));
 			return $this->mk_my_orb("send_hash",array());
 		};
 
@@ -901,19 +377,19 @@ class users extends users_user
 		$pwhash1 = $uo->meta("password_hash");
 		if ($pwhash1 != $pwhash)
 		{
-			aw_session_set("status_msg","Sellist v&otilde;tit pole v&auml;ljastatud");
+			aw_session_set("status_msg",t("Sellist v&otilde;tit pole v&auml;ljastatud"));
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
 		if (not(is_valid("password",$pass1)))
 		{
-			aw_session_set("status_msg","Parool sisaldab keelatud m&auml;rke");
+			aw_session_set("status_msg",t("Parool sisaldab keelatud m&auml;rke"));
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
 		if ($pass1 != $pass2)
 		{
-			aw_session_set("status_msg","Paroolid peavad olema &uuml;hesugused");
+			aw_session_set("status_msg",t("Paroolid peavad olema &uuml;hesugused"));
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
@@ -922,9 +398,7 @@ class users extends users_user
 		$q = "UPDATE users SET password = '$newpass' WHERE uid = '$uid'";
 		$this->db_query($q);
 		$this->_log(ST_USERS, SA_CHANGE_PWD, $uid);
-//		$this->read_adm_template("password_change_success.tpl");
-//		return $this->parse();
-		aw_session_set("status_msg","<b><font color=green>Parool on edukalt vahetatud</font></b>");
+		aw_session_set("status_msg","<b><font color=green>".t("Parool on edukalt vahetatud.")."</font></b>");
 		return $this->login(array("uid" => $uid, "password" => $pass1));
 	}
 
@@ -1321,12 +795,18 @@ class users extends users_user
 		));
 	}
 
-	////
-	// !sends user welcome mail to user and others
-	// parameters:
-	//	uid - the user whose mail to send
-	//	pass - if set, #password# is replaced by this,
-	//	       since passwords in db are hashed, we can't read it from there
+	/** sends user welcome mail to user and others
+		@attrib api=1 params=name
+		
+		@param uid required type=string
+			the user whose mail to send
+
+		@param pass optional type=string
+			if set, #password# is replaced by this, since passwords in db are hashed, we can't read it from there
+
+		@comment
+			Mail content is read from join_mail$LC in config table
+	**/
 	function send_welcome_mail($arr)
 	{
 		extract($arr);
@@ -1339,10 +819,6 @@ class users extends users_user
 		$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
 		$mail = str_replace("#parool#", $pass,$mail);
 		$mail = str_replace("#kasutaja#", $uid,$mail);
-		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array(
-			"nohtml" => true,
-			"user" => $uid
-		))),$mail);
 		$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($uid), $mail);
 
 		send_mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
@@ -1662,78 +1138,6 @@ class users extends users_user
 	}
 
 	/**
-		@attrib name=udata
-	**/
-	function do_change_site($arr)
-	{
-		extract($arr);
-		$id = aw_global_get("uid");
-		if ($id == "")
-		{
-			return LC_USERS_NOT_LOGGED_IN;
-		}
-
-		if (not($fid))
-		{
-			$udata = $this->get_user();
-			$jfar = $this->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
-			$jfs = "";
-			reset($jfar);
-			list($fid,$name) = each($jfar);
-		};
-
-		$u = $this->get_user();
-		$fs = unserialize($u["join_form_entry"]);
-
-		$t = get_instance("formgen/form");
-		return $t->gen_preview(array(
-			"id" => $fid,
-			"entry_id" => $fs[$fid],
-			"reforb" => $this->mk_reforb("save_udata", array("fid" => $fid,"user_id" => $id,"section" => aw_global_get("section")))
-		));
-	}
-
-	function get_jf_list($join_grp)
-	{
-		$ret = array();
-		$this->db_query("SELECT id,j_name  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN." ORDER BY forms.j_order");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["id"]] = $row["j_name"];
-		}
-		return $ret;
-	}
-
-	/** this saves the data entered in the form and flushes all necessary caches and group memberships
-		@attrib name=save_udata params=name default="0"
-		@returns
-		@comment
-
-	**/
-	function submit_do_change_site($arr)
-	{
-		extract($arr);
-
-		$u = $this->get_user($user_id);
-		$fs = unserialize($u["join_form_entry"]);
-
-		$t = get_instance(CL_FORM);
-		$t->process_entry(array(
-			"id" => $fid,
-			"entry_id" => $fs[$fid]
-		));
-
-		$fs[$fid] = $t->entry_id;
-
-		// write the entry to the user table as well, in case it is a new entry
-		$this->save(array("uid" => $user_id, "join_form_entry" => aw_serialize($fs,SERIALIZE_NATIVE)));
-
-		$this->update_dyn_user($user_id);
-
-		return $this->mk_my_orb("udata", array("fid" => $fid,"section" => $section));
-	}
-
-	/**
 		@comment
 			converts certificates subject value to ISO-8859-1
 	**/
@@ -1786,6 +1190,5 @@ class users extends users_user
 		}
 		return $data;
 	}
-
 }
 ?>
