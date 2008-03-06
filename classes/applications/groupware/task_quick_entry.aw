@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.29 2008/03/06 11:04:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.30 2008/03/06 11:05:12 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -183,7 +183,7 @@ class task_quick_entry extends class_base
 	{
 //list($usec, $sec) = explode(" ", microtime());
 //$start = ((float)$usec + (float)$sec);
-//		$cl_json = get_instance("protocols/data/json");
+		$cl_json = get_instance("protocols/data/json");
 
 		$errorstring = "";
 		$error = false;
