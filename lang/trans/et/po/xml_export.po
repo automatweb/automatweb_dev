@@ -337,74 +337,82 @@ msgstr ""
 msgid "Seose Kontroller andmete lisamiseks obj. j2rele (RELTYPE_OBJ_APPEND_CONTROLLER) tekst"
 msgstr ""
 
-#: classes/export/xml_export.aw:132
+#: classes/export/xml_export.aw:rel_RELTYPE_PREPEND_CONTROLLER
+msgid "Seose Kontroller andmete lisamiseks sisu ette (RELTYPE_PREPEND_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/export/xml_export.aw:rel_RELTYPE_APPEND_CONTROLLER
+msgid "Seose Kontroller andmete lisamiseks sisu j2rele (RELTYPE_APPEND_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/export/xml_export.aw:138
 msgid "Teosta eksport"
 msgstr ""
 
-#: classes/export/xml_export.aw:137
+#: classes/export/xml_export.aw:143
 msgid "Ekspordi AW objektid"
 msgstr ""
 
-#: classes/export/xml_export.aw:155
+#: classes/export/xml_export.aw:161
 msgid "Faili/kausta ei saa kirjutada"
 msgstr ""
 
-#: classes/export/xml_export.aw:193
+#: classes/export/xml_export.aw:199
 msgid "Faili ei saa kirjutada"
 msgstr ""
 
-#: classes/export/xml_export.aw:352
+#: classes/export/xml_export.aw:358
 msgid "Kaust"
 msgstr ""
 
-#: classes/export/xml_export.aw:357
+#: classes/export/xml_export.aw:363
 msgid "Kaasaarvatud alamkaustad"
 msgstr ""
 
-#: classes/export/xml_export.aw:389
+#: classes/export/xml_export.aw:395
 msgid "Vali"
 msgstr ""
 
-#: classes/export/xml_export.aw:393
+#: classes/export/xml_export.aw:399
 msgid "Seadete vormi v&auml;li"
 msgstr ""
 
-#: classes/export/xml_export.aw:398
+#: classes/export/xml_export.aw:404
 msgid "jrk"
 msgstr ""
 
-#: classes/export/xml_export.aw:406
+#: classes/export/xml_export.aw:412
 msgid "XML v&auml;lja nimetus"
 msgstr ""
 
-#: classes/export/xml_export.aw:411
+#: classes/export/xml_export.aw:417
 msgid "XML v&auml;lja sisu"
 msgstr ""
 
-#: classes/export/xml_export.aw:416
+#: classes/export/xml_export.aw:422
 msgid "Parameetrid"
 msgstr ""
 
-#: classes/export/xml_export.aw:421
+#: classes/export/xml_export.aw:427
 msgid "Kontroller"
 msgstr ""
 
-#: classes/export/xml_export.aw:425
+#: classes/export/xml_export.aw:431
 msgid "CDATA"
 msgstr ""
 
-#: classes/export/xml_export.aw:965
+#: classes/export/xml_export.aw:986
 msgid "Omadus"
 msgstr ""
 
-#: classes/export/xml_export.aw:970
+#: classes/export/xml_export.aw:991
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/export/xml_export.aw:975
+#: classes/export/xml_export.aw:996
 msgid "T&auml;pne"
 msgstr ""
 
-#: classes/export/xml_export.aw:993
+#: classes/export/xml_export.aw:1014
 msgid "--vali--"
 msgstr ""

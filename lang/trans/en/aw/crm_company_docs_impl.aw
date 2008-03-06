@@ -20,7 +20,6 @@ $GLOBALS["TRANS"]["Loodud"] = "Created";
 $GLOBALS["TRANS"]["Muutja"] = "Modifier";
 $GLOBALS["TRANS"]["Muudetud"] = "Modified";
 $GLOBALS["TRANS"]["%s dokumendid"] = "%s documents";
-$GLOBALS["TRANS"][", kataloog: %s"] = ", folder: %s";
 $GLOBALS["TRANS"]["Ava internetist"] = "Open from Internet";
 $GLOBALS["TRANS"]["Ava serverist"] = "Open from server";
 $GLOBALS["TRANS"]["Laadi uus versioon"] = "Upload new version";

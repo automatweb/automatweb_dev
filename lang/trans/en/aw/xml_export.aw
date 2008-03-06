@@ -14,7 +14,6 @@ $GLOBALS["TRANS"]["Omaduse FTP kasutaja (ftp_user) caption"] = "FTP user";
 $GLOBALS["TRANS"]["Omaduse FTP parool (ftp_password) caption"] = "FTP password";
 $GLOBALS["TRANS"]["Omaduse FTP kataloog (ftp_file_location) caption"] = "FTP server folder";
 $GLOBALS["TRANS"]["Omaduse Kaustad, mille alt objekte v&otilde;etakse (parents_table) caption"] = "Folders to export objects from";
-$GLOBALS["TRANS"]["Omaduse Juur m&auml;rgendi nimi (xml_root_tag_name) caption"] = "Root tag name";
 $GLOBALS["TRANS"]["Omaduse Objekti m&auml;rgendi nimi (xml_object_tag_name) caption"] = "Object tag name";
 $GLOBALS["TRANS"]["Omaduse Seadete vormi v&auml;ljad (xml_struct_table) caption"] = "Configuration form fields";
 $GLOBALS["TRANS"]["Grupi Seaded (config) pealkiri"] = "Configurations";

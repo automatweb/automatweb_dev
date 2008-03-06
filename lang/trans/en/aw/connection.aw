@@ -1,5 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["connection::constructior(%s): parameter must be numeric or array!"] = "connection::constructior(%s): parameter must be numeric or array!";
 $GLOBALS["TRANS"]["connection::load(): parameter must be either array (connection data) or integer (connection id)!"] = "connection::load(): parameter must be either array (connection data) or integer (connection id)!";
 $GLOBALS["TRANS"]["connection::find(): parameter must be an array of filter parameters!"] = "connection::find(): parameter must be an array of filter parameters!";
 $GLOBALS["TRANS"]["connection::change(%s): parameter must be an array!"] = "connection::change(%s): parameter must be an array!";

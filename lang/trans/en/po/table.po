@@ -9,11 +9,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/table.aw:114
+#: classes/contentmgmt/table.aw:class_3_help
+msgid "Klassi Tabel help"
+msgstr ""
+
+#: classes/contentmgmt/table.aw:117
 msgid "no such table %s (tables.class->load_table)!"
 msgstr "no such table %s (tables.class->load_table)!"
 
-#: classes/table.aw:2471
+#: classes/contentmgmt/table.aw:2474
 msgid "table->import: No file uploaded!"
 msgstr "table->import: No file uploaded!"
 

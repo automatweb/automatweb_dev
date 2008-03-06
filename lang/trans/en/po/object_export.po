@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -177,18 +177,22 @@ msgstr ""
 msgid "Eksporditav"
 msgstr "Exportable"
 
-#: classes/admin/object_export.aw:250
+#: classes/admin/object_export.aw:182
+msgid "Objekti id"
+msgstr ""
+
+#: classes/admin/object_export.aw:254
 msgid "Looja"
 msgstr ""
 
-#: classes/admin/object_export.aw:257
+#: classes/admin/object_export.aw:261
 msgid "Loodud"
 msgstr ""
 
-#: classes/admin/object_export.aw:264
+#: classes/admin/object_export.aw:268
 msgid "Muutja"
 msgstr ""
 
-#: classes/admin/object_export.aw:271
+#: classes/admin/object_export.aw:275
 msgid "Muudetud"
 msgstr ""

@@ -758,7 +758,7 @@ msgid "Valmis"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:285
-msgid "Ülevaatamisel"
+msgid "&Uuml;levaatamisel"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:286
@@ -824,10 +824,10 @@ msgstr ""
 #: classes/applications/bug_o_matic_3000/bug.aw:703
 #: classes/applications/bug_o_matic_3000/bug.aw:736
 #: classes/applications/bug_o_matic_3000/bug.aw:751
-#: classes/applications/bug_o_matic_3000/bug.aw:2321
-#: classes/applications/bug_o_matic_3000/bug.aw:2364
-#: classes/applications/bug_o_matic_3000/bug.aw:2387
-#: classes/applications/bug_o_matic_3000/bug.aw:2430
+#: classes/applications/bug_o_matic_3000/bug.aw:2326
+#: classes/applications/bug_o_matic_3000/bug.aw:2369
+#: classes/applications/bug_o_matic_3000/bug.aw:2392
+#: classes/applications/bug_o_matic_3000/bug.aw:2435
 msgid "--vali--"
 msgstr ""
 
@@ -981,22 +981,22 @@ msgstr ""
 msgid "Added comment to bug %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2072
+#: classes/applications/bug_o_matic_3000/bug.aw:2077
 msgid "seda faili ei testi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2179
+#: classes/applications/bug_o_matic_3000/bug.aw:2184
 msgid "Uus arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2184
+#: classes/applications/bug_o_matic_3000/bug.aw:2189
 msgid "Samale tasemele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2190
+#: classes/applications/bug_o_matic_3000/bug.aw:2195
 msgid "Sisse"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:2482
-msgid "Puuduvad õigused bugi sulgeda!"
+#: classes/applications/bug_o_matic_3000/bug.aw:2487
+msgid "Puuduvad &otilde;igused bugi sulgeda!"
 msgstr ""

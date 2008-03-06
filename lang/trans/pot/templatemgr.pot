@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/templatemgr.aw:69
+#: classes/templatemgr.aw:81
 msgid "Vaikimisi:"
 msgstr ""
 

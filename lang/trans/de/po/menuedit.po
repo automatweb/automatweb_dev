@@ -13,14 +13,14 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/menuedit.aw:442
+#: classes/menuedit.aw:448
 msgid "&uuml;ritas accessida olematut objekti id-ga '%s'. Suunati esilehele."
 msgstr ""
 
-#: classes/menuedit.aw:561
+#: classes/menuedit.aw:567
 msgid "&uuml;ritas accessida objekti id-ga '%s'. Kr&auml;kkimiskatse?"
 msgstr ""
 
-#: classes/menuedit.aw:586
+#: classes/menuedit.aw:592
 msgid "<h1>404 Sellist sektsiooni pole</h1>"
 msgstr ""

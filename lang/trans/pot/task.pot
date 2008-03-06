@@ -906,6 +906,18 @@ msgstr ""
 msgid "Stopper k&auml;ib"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:434 classes/applications/groupware/task.aw:549 classes/applications/groupware/task.aw:1901 classes/applications/groupware/task.aw:3111
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:439 classes/applications/groupware/task.aw:4183 classes/applications/groupware/task.aw:4252 classes/applications/groupware/task.aw:4555
+msgid "Osaleja"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:445 classes/applications/groupware/task.aw:4172 classes/applications/groupware/task.aw:4234 classes/applications/groupware/task.aw:4379 classes/applications/groupware/task.aw:4504
+msgid "Projekt"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:451 classes/applications/groupware/task.aw:1045 classes/applications/groupware/task.aw:2141
 msgid "Tehtud"
 msgstr ""
@@ -914,12 +926,12 @@ msgstr ""
 msgid "Arvele"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:521
-msgid "Stopper '%s'"
+#: classes/applications/groupware/task.aw:463
+msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:549 classes/applications/groupware/task.aw:1901 classes/applications/groupware/task.aw:3111
-msgid "Nimi"
+#: classes/applications/groupware/task.aw:521
+msgid "Stopper '%s'"
 msgstr ""
 
 #: classes/applications/groupware/task.aw:558 classes/applications/groupware/task.aw:577 classes/applications/groupware/task.aw:4805
@@ -1102,6 +1114,18 @@ msgstr ""
 msgid "Toimetus"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:2514
+msgid "Prognoos"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:2514
+msgid "Kulunud"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:2514
+msgid "Kliendile"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:2635
 msgid "h"
 msgstr ""
@@ -1232,14 +1256,6 @@ msgstr ""
 
 #: classes/applications/groupware/task.aw:4162
 msgid "Isik"
-msgstr ""
-
-#: classes/applications/groupware/task.aw:4172 classes/applications/groupware/task.aw:4234 classes/applications/groupware/task.aw:4379 classes/applications/groupware/task.aw:4504
-msgid "Projekt"
-msgstr ""
-
-#: classes/applications/groupware/task.aw:4183 classes/applications/groupware/task.aw:4252 classes/applications/groupware/task.aw:4555
-msgid "Osaleja"
 msgstr ""
 
 #: classes/applications/groupware/task.aw:4193 classes/applications/groupware/task.aw:4205

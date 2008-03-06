@@ -294,7 +294,7 @@ msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:175
 #: classes/applications/persona_import/persona_import.aw:251
-#: classes/applications/persona_import/persona_import.aw:1942
+#: classes/applications/persona_import/persona_import.aw:1961
 msgid "You forgot to enter server data"
 msgstr ""
 
@@ -334,39 +334,39 @@ msgstr ""
 msgid "parse finished, processing starts<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:679
+#: classes/applications/persona_import/persona_import.aw:681
 msgid "creating yksused objects<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:732
+#: classes/applications/persona_import/persona_import.aw:734
 msgid "created new section<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:745
+#: classes/applications/persona_import/persona_import.aw:747
 msgid "updating existing section<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:805
+#: classes/applications/persona_import/persona_import.aw:807
 msgid "<h1>sections</h1>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:807
+#: classes/applications/persona_import/persona_import.aw:809
 msgid "<h1>sections done</h1>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:820
+#: classes/applications/persona_import/persona_import.aw:822
 msgid "creating person objects<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:848
+#: classes/applications/persona_import/persona_import.aw:850
 msgid "<br>creating new person object<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:854
+#: classes/applications/persona_import/persona_import.aw:856
 msgid "updating existing person object<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:873
-#: classes/applications/persona_import/persona_import.aw:966
+#: classes/applications/persona_import/persona_import.aw:875
+#: classes/applications/persona_import/persona_import.aw:968
 msgid "Vaata"
 msgstr ""

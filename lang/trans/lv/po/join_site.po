@@ -900,22 +900,27 @@ msgid "J&auml;rgnev v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:3247
+#: classes/contentmgmt/join/join_site.aw:3379
 msgid "Sellise kasutajanimega kasutaja on juba olemas!"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:3248
+#: classes/contentmgmt/join/join_site.aw:3401
 msgid "Sisestatud paroolid on erinevad!"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:3249
+#: classes/contentmgmt/join/join_site.aw:3412
 msgid "Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:3250
+#: classes/contentmgmt/join/join_site.aw:3423
 msgid "Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:3251
+#: classes/contentmgmt/join/join_site.aw:3434
 msgid "Paroolis peab olema v&auml;hemalt 3 t&auml;hte!"
 msgstr ""
 
@@ -929,4 +934,8 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:3326
 msgid "T&otilde;lgi vahepealkiri"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:3390
+msgid "Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!"
 msgstr ""

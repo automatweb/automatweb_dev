@@ -113,7 +113,6 @@ $GLOBALS["TRANS"]["Rent"] = "Rent";
 $GLOBALS["TRANS"]["Ost"] = "Buy";
 $GLOBALS["TRANS"]["Kummipaat"] = "Rubber-boat";
 $GLOBALS["TRANS"]["Skuuter"] = "Scooter";
-$GLOBALS["TRANS"]["Varustus/tarvikud"] = "Equipment";
 $GLOBALS["TRANS"]["Lisavarustus"] = "Additional equipment";
 $GLOBALS["TRANS"]["Mootor"] = "Engine";
 $GLOBALS["TRANS"]["Purjed"] = "Sails";

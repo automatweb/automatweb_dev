@@ -14,67 +14,79 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/users.aw:225
+#: classes/users.aw:77
+msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud"
+msgstr ""
+
+#: classes/users.aw:81
+msgid "Uus parool ja parooli kordus ei ole samad"
+msgstr ""
+
+#: classes/users.aw:85
+msgid "Te ei tohi panna uuesti sama vana parooli"
+msgstr ""
+
+#: classes/users.aw:89
+msgid "Vigane v&otilde;i vale parool"
+msgstr ""
+
+#: classes/users.aw:94
+msgid "Vigane kasutajanimimi %s"
+msgstr ""
+
+#: classes/users.aw:106
+msgid "Vana parool on vale"
+msgstr ""
+
+#: classes/users.aw:203
 msgid "Parool on edukalt vahetatud"
 msgstr ""
 
-#: classes/users.aw:340
-msgid "Sellise kasutajanimega kasutaja on juba olemas!"
-msgstr ""
-
-#: classes/users.aw:351
-msgid "Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!"
-msgstr ""
-
-#: classes/users.aw:362
-msgid "Sisestatud paroolid on erinevad!"
-msgstr ""
-
-#: classes/users.aw:373
-msgid "Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!"
-msgstr ""
-
-#: classes/users.aw:384
-msgid "Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!"
-msgstr ""
-
-#: classes/users.aw:395
-msgid "Paroolis peab olema v&auml;hemalt 3 t&auml;hte!"
-msgstr ""
-
-#: classes/users.aw:701 classes/users.aw:775
+#: classes/users.aw:239 classes/users.aw:306
 msgid "Vigane kasutajanimi"
 msgstr ""
 
-#: classes/users.aw:706
+#: classes/users.aw:244
 msgid "Vigane e-posti aadress"
 msgstr ""
 
-#: classes/users.aw:726
+#: classes/users.aw:264
 msgid "Kasutajal $uid puudub korrektne e-posti aadress. Palun p&ouml;&ouml;rduge veebisaidi haldaja poole"
 msgstr ""
 
-#: classes/users.aw:744
+#: classes/users.aw:282
 msgid "Paroolivahetus saidil %s"
 msgstr ""
 
-#: classes/users.aw:747
+#: classes/users.aw:285
 msgid "Parooli muutmise link saadeti  aadressile <b>%s</b>. Vaata oma postkasti<br />T&auml;name!<br />"
 msgstr ""
 
-#: classes/users.aw:787
+#: classes/users.aw:318 classes/users.aw:366
 msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
-#: classes/users.aw:798
+#: classes/users.aw:329 classes/users.aw:375
 msgid "Sellist v&otilde;tit pole v&auml;ljastatud"
 msgstr ""
 
-#: classes/users.aw:810
+#: classes/users.aw:341
 msgid "See v&otilde;ti on juba aegunud"
 msgstr ""
 
-#: classes/users.aw:810
+#: classes/users.aw:341
 msgid "Telli uusi v&otilde;ti"
+msgstr ""
+
+#: classes/users.aw:381
+msgid "Parool sisaldab keelatud m&auml;rke"
+msgstr ""
+
+#: classes/users.aw:387
+msgid "Paroolid peavad olema &uuml;hesugused"
+msgstr ""
+
+#: classes/users.aw:396
+msgid "Parool on edukalt vahetatud."
 msgstr ""
 

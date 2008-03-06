@@ -1,6 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Failed opening connection to server %s"] = "Failed opening connection to server %s";
-$GLOBALS["TRANS"]["Write error"] = "Write error";
 $GLOBALS["TRANS"]["L&otilde;i saidi andmebaasi tabelid"] = "Created site database tables";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Klass"] = "Class";

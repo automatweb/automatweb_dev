@@ -2795,6 +2795,11 @@ msgstr ""
 msgid "Klassi Haridustase (1398) nimi"
 msgstr ""
 
+# aw.ini:classfolder_29
+#: aw.ini:classfolder_29
+msgid "Klassi kataloogi Dokumendid (29) nimi"
+msgstr ""
+
 # aw.ini:classfolder_1
 #: aw.ini:classfolder_1
 msgid "Klassi kataloogi Sisuhaldus (1) nimi"
@@ -2891,11 +2896,6 @@ msgstr ""
 
 #: aw.ini:classfolder_28
 msgid "Klassi kataloogi Töövoogude juhtimine (28) nimi"
-msgstr ""
-
-# aw.ini:classfolder_29
-#: aw.ini:classfolder_29
-msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""
 
 # aw.ini:classfolder_31

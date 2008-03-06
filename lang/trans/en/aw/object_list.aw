@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["object_list::filter(): parameter must be an array!"] = "object_list::filter(): parameter must be an array!";
-$GLOBALS["TRANS"]["objct_list::filter(): oid parameter cannot be an empty array!"] = "objct_list::filter(): oid parameter cannot be an empty array!";
 $GLOBALS["TRANS"]["object_list::sort_by(): argument must be an array!"] = "object_list::sort_by(): argument must be an array!";
 $GLOBALS["TRANS"]["object_list::sort_by(): prop argument must be present!"] = "object_list::sort_by(): prop argument must be present!";
 $GLOBALS["TRANS"]["object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance!"] = "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance!";

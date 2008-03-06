@@ -226,11 +226,11 @@ msgstr ""
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:84 classes/contentmgmt/gallery/mini_gallery.aw:629
+#: classes/contentmgmt/gallery/mini_gallery.aw:84 classes/contentmgmt/gallery/mini_gallery.aw:630
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:85 classes/contentmgmt/gallery/mini_gallery.aw:635 classes/contentmgmt/gallery/mini_gallery.aw:737
+#: classes/contentmgmt/gallery/mini_gallery.aw:85 classes/contentmgmt/gallery/mini_gallery.aw:636 classes/contentmgmt/gallery/mini_gallery.aw:738
 msgid "J&auml;rjekord"
 msgstr ""
 
@@ -258,43 +258,43 @@ msgstr ""
 msgid "Pildistamise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:429
+#: classes/contentmgmt/gallery/mini_gallery.aw:430
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:593
+#: classes/contentmgmt/gallery/mini_gallery.aw:594
 msgid "Galerii"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:593
+#: classes/contentmgmt/gallery/mini_gallery.aw:594
 msgid "pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:607
+#: classes/contentmgmt/gallery/mini_gallery.aw:608
 msgid "Lisa uus pilt"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:613
+#: classes/contentmgmt/gallery/mini_gallery.aw:614
 msgid "Salvesta pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:619
+#: classes/contentmgmt/gallery/mini_gallery.aw:620
 msgid "Kustuta valitud pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:621
+#: classes/contentmgmt/gallery/mini_gallery.aw:622
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:641
+#: classes/contentmgmt/gallery/mini_gallery.aw:642
 msgid "Muutja"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:647
+#: classes/contentmgmt/gallery/mini_gallery.aw:648
 msgid "Muudetud"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:732
+#: classes/contentmgmt/gallery/mini_gallery.aw:733
 msgid "Kausta nimi"
 msgstr ""
 
