@@ -55,6 +55,10 @@ $GLOBALS["__obj_sys_opts"] = array();
 
 class object
 {
+	const STAT_DELETED = 0;
+	const STAT_NOTACTIVE = 1;
+	const STAT_ACTIVE = 2;
+
 	var $oid;	// the object this instance points to
 
 	/** object class constructor
@@ -429,6 +433,7 @@ class object
 	}
 
 	/** returns array of connection object instances, that other objects have to the current object
+		@attrib api=1
 
 		@errors
 			- if no object is loaded, error is thrown
@@ -2043,6 +2048,7 @@ function dump_obj_table($pre = "")
 
 class awex_obj extends aw_exception
 {
+	//!!! siia, et automaatselt laetaks obj id ja meetod, milles ex tehti. viimane throw?
 	public $awobj_id;
 }
 

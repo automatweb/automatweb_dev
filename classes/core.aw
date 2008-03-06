@@ -3,10 +3,12 @@
 @classinfo  maintainer=kristo
 */
 
+//// DEPRECATED. moved to object class' constants
 // object statuses
 define("STAT_DELETED", 0);
 define("STAT_NOTACTIVE", 1);
 define("STAT_ACTIVE", 2);
+//// END DEPRECATED
 
 class core extends acl_base
 {
