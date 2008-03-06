@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.77 2008/02/14 13:52:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.78 2008/03/06 15:31:52 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -39,6 +39,9 @@
 
 		@property expl type=textbox parent=general_right
 		@caption Selgitus
+
+		@property expl_controller type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize  parent=general_right
+		@caption Selgituse kontroller
 
 		@property test type=checkbox parent=general_right no_caption=1
 		@caption testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)
@@ -118,6 +121,9 @@
 @reltype DESC_CTR value=5 clid=CL_CFGCONTROLLER
 @caption Kirjelduse kontroller
 
+@reltype CTR value=6 clid=CL_FORM_CONTROLLER
+@caption Kontroller
+
 */
 
 class bank_payment extends class_base
@@ -138,7 +144,7 @@ class bank_payment extends class_base
 		"hansapank", "seb", "krediidipank" , "sampopank" ,"hansapank_lv" , "hansapank_lt" ,"snoras","nordeapank"
 	);
 	
-	//kõikidele pankadele ühine info
+	//koikidele pankadele yhine info
 	var $for_all_banks = array(
 		"amount"	=> "Summa",
 		"expl"		=> "Selgitus",
@@ -191,13 +197,13 @@ class bank_payment extends class_base
 		"krediidipank",
 	);
 
-	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
+	//monel pangal testkeskkond, et tore monikord seda kasutada proovimiseks
 	var $test_link = array(
 		"seb"	=> "https://www.seb.ee/cgi-bin/dv.sh/un3min.r",
 		"credit_card"	=> "https://pos.estcard.ee/test-pos/servlet/iPAYServlet",
 	);
 
-	//test keskkonnas läheb üldjuhul miskeid testandmeid vaja
+	//test keskkonnas laheb yldjuhul miskeid testandmeid vaja
 	var $test_priv_keys = array(
 		"seb"	=> "seb_test_priv.pem",
 	);
@@ -347,14 +353,32 @@ class bank_payment extends class_base
 		lc_site_load("bank_payment", &$this);
 		
 		//tegelt neid 2 j'rgmist pole vaja, sest iga panga puhul tulevad need va lisamised paratamatult uuesti
-		//võtab objekti seest mõningad puuduvad väärtused
+		//votab objekti seest moningad puuduvad vaartused
 //		$data = $this->_add_object_data($payment,$data);
-		//lisab puuduvad default väärtused
+		//lisab puuduvad default vaartused
 //		$data = $this->_add_default_data($data);
 		//paneb panga crapi templatesse
 		$this->_init_banks($payment,$data);
 
 		return $this->parse();
+	}
+
+	function _get_explanation($arr)
+	{
+		extract($arr);
+		if($payment->prop("expl") && (strlen($payment->prop("expl")) + strlen($data["expl"])  < 70))
+		{
+			$data["expl"] = $payment->prop("expl")." ".$data["expl"];
+		}
+		
+		if($this->can("view" , $payment->prop("expl_controller")))
+		{
+			$pco = obj($payment->prop("expl_controller"));
+			$pci = $pco->instance();
+			$new_expl = $pci->eval_controller($pco->id(), $data);
+			if($new_expl) $data["expl"] = $new_expl;
+		}
+		return trim(substr($data["expl"], 0, 70));
 	}
 
 	function _add_object_data($payment,$data)
@@ -363,10 +387,11 @@ class bank_payment extends class_base
 		{
 			$data["test"] = 1;
 		}
-		if($payment->prop("expl") && (strlen($payment->prop("expl")) + strlen($data["expl"])  < 70))
-		{
-			$data["expl"] = trim($payment->prop("expl")." ".$data["expl"]);
-		}
+		$data["expl"] = $this->_get_explanation(array(
+			"payment" => $payment,
+			"data" => $data,
+		));
+
 		if(!$data["priv_key"] && $payment->prop("private_key"))
 		{
 			$file_inst = get_instance(CL_FILE);
@@ -583,7 +608,7 @@ class bank_payment extends class_base
 					if(array_key_exists($val[$this->ref[$bank_id]] ,  $done)) continue;
 					$done[$val[$this->ref[$bank_id]]] = $val[$this->ref[$bank_id]];
 				}
-/*´				 if(aw_global_get("uid") == "struktuur"){//arr($val);
+/*				 if(aw_global_get("uid") == "struktuur"){//arr($val);
  					$_SESSION["bank_return"]["data"] = $val;
  					arr($val["good"] = $this->check_response($val));
  					arr($val["VK_MSG"]);
@@ -918,7 +943,7 @@ class bank_payment extends class_base
 		}
 	}
 /*	
-	//tekitab võimalike pankade ja propertyte nimekirja
+	//tekitab voimalike pankade ja propertyte nimekirja
 	function callback_bank($arr)
 	{
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
@@ -945,7 +970,7 @@ class bank_payment extends class_base
 		return $ret;
 	}
 */	
-	//tegelt seda pole ikka vaja.. a äkki miski hetk läheb
+	//tegelt seda pole ikka vaja.. a akki miski hetk laheb
 /*	
 	function callback_bank_test($arr)
 	{
@@ -1051,23 +1076,26 @@ class bank_payment extends class_base
 	**/	
 	function do_payment($arr)
 	{
-		//selle nõmeduse pidi siia ette panema, sest hiljem bank_id'd muutes peaks muidu siia funktsiooni tagasi pöörama
-		if(is_oid($arr["payment_id"]) && $arr["cntr"])
+		//selle nomeduse pidi siia ette panema, sest hiljem bank_id'd muutes peaks muidu siia funktsiooni tagasi poorama
+		if(is_oid($arr["payment_id"]))
 		{
 			$payment = obj($arr["payment_id"]);
 			$bank_data = $payment->meta("bank");
-			if($bank_data[$arr["bank_id"]."_".$arr["cntr"]])
+
+			if($arr["cntr"])
 			{
-				$arr["bank_id"] = $arr["bank_id"]."_".$arr["cntr"];
+				if($bank_data[$arr["bank_id"]."_".$arr["cntr"]])
+				{
+					$arr["bank_id"] = $arr["bank_id"]."_".$arr["cntr"];
+				}
 			}
-			
-			//siia paneb kräpi mida peaks makselt tagasi tulles kuskilt kätte saama... parim on ikka see objekt mida maksma minnakse
+			//siia paneb krapi mida peaks makselt tagasi tulles kuskilt katte saama... parim on ikka see objekt mida maksma minnakse
 			if(is_oid($arr["reference_nr"]) && $this->can("view" , $arr["reference_nr"]))
 			{
 				$ref_object = obj($arr["reference_nr"]);
-				$ref_object->set_meta("bank_cntr" , $arr["cntr"]);
+				if($arr["cntr"]) $ref_object->set_meta("bank_cntr" , $arr["cntr"]);
 				$ref_object->set_meta("bank_payment_id" , $arr["payment_id"]);//hiljem saaks logis kasutada
-				$ref_object->set_meta("bank_is_test" , $payment->meta("test"));//selle järgi võiks testimise sertifikaadikontrolli tööle panna
+				$ref_object->set_meta("bank_is_test" , $payment->meta("test"));//selle jargi voiks testimise sertifikaadikontrolli toole panna
 				$ref_object->save();
 			}
 /*			if($bank_data[$arr["bank_id"]."_".$_SESSION["ct_lang_lc"]]["sender_id"])
@@ -1230,7 +1258,7 @@ class bank_payment extends class_base
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
-//			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+//			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaonnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
 		$optional = array(
@@ -1288,7 +1316,7 @@ class bank_payment extends class_base
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaonnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
 		if($service == 1001)
@@ -1338,7 +1366,7 @@ class bank_payment extends class_base
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaonnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
 		if($service == 1001)
@@ -1389,7 +1417,7 @@ class bank_payment extends class_base
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaonnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
 		if($service == 1001)
@@ -1435,7 +1463,7 @@ class bank_payment extends class_base
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
-			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Päringu koostaja ID (Kaupluse ID)
+			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Paringu koostaja ID (Kaupluse ID)
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
 			"VK_AMOUNT"	=> $amount,	//$row["summa"];
 			"VK_CURR"	=> $curr,	//"EEK"
@@ -1443,7 +1471,7 @@ class bank_payment extends class_base
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaonnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
 		if($service == 1001)
@@ -1484,7 +1512,7 @@ class bank_payment extends class_base
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
-			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Päringu koostaja ID (Kaupluse ID)
+			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Paringu koostaja ID (Kaupluse ID)
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
 			"VK_AMOUNT"	=> $amount,	//$row["summa"];
 			"VK_CURR"	=> $curr,	//"EEK"
@@ -1492,7 +1520,7 @@ class bank_payment extends class_base
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaonnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
 		if($service == 1001)
@@ -1533,7 +1561,7 @@ class bank_payment extends class_base
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
-			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Päringu koostaja ID (Kaupluse ID)
+			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Paringu koostaja ID (Kaupluse ID)
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
 			"VK_AMOUNT"	=> $amount,	//$row["summa"];
 			"VK_CURR"	=> $curr,	//"EEK"
@@ -1541,7 +1569,7 @@ class bank_payment extends class_base
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaonnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
 		if($service == 1001)
@@ -1692,7 +1720,7 @@ class bank_payment extends class_base
 		openssl_free_key($pkeyid);
 		$mac=bin2hex($signature);
 		//echo "https://pos.estcard.ee/webpos/servlet/iPAYServlet?action=$action&amp;ver=$ver&amp;id=$idnp&amp;ecuno=$ecuno&amp;eamount=$eamount&amp;cur=$cur&amp;datetime=$datetime&amp;mac=$mac&amp;lang=en";
-		//testi lõpp
+		//testi lopp
 		$VK_message = $version;
 		$VK_message.= sprintf("%-10s", $sender_id);
 		$VK_message.= sprintf("%012s",$reference_nr);
@@ -1717,14 +1745,14 @@ class bank_payment extends class_base
 		}
 		$params = array(
 			"action"	=> $service,		//"gaf"
-			"ver"		=> $version,		//Protokolli versioon, Fikseeritud väärtus: 002
-			"id"		=> $sender_id,		//Kaupmehe kasutajanimi süsteemis
-			"ecuno"		=> $ecuno,	//Tehingu unikaalne number kaupmehe süsteemis,min. lubatud väärtus 100000
-			"eamount"	=> $eamount,		//Kaupmehe süsteemi poolt antav tehingu summa sentides.;
+			"ver"		=> $version,		//Protokolli versioon, Fikseeritud vaartus: 002
+			"id"		=> $sender_id,		//Kaupmehe kasutajanimi systeemis
+			"ecuno"		=> $ecuno,	//Tehingu unikaalne number kaupmehe systeemis,min. lubatud vaaartus 100000
+			"eamount"	=> $eamount,		//Kaupmehe systeemi poolt antav tehingu summa sentides.;
 			"cur"		=> $curr,		//Tehingu valuuta nimi . Fikseeritud: EEK
-			"datetime"	=> $datetime,		//AAAAKKPPTTmmss 	Tehingu kuupäev,kellaaeg
-			"mac" 		=> $VK_MAC,		//Sõnumi signatuur (MAC)*
-			"lang" 		=> $lang,		//et,en . Süsteemis kasutatav keel. et - Eesti, en - Inglise
+			"datetime"	=> $datetime,		//AAAAKKPPTTmmss 	Tehingu kuupaev,kellaaeg
+			"mac" 		=> $VK_MAC,		//Sonumi signatuur (MAC)*
+			"lang" 		=> $lang,		//et,en . Systeemis kasutatav keel. et - Eesti, en - Inglise
 		);//		if(aw_global_get("uid") == "struktuur")
 		//{arr($params); die();
 		//}
@@ -1891,8 +1919,8 @@ class bank_payment extends class_base
 		return $ret;
 	}
 	
-	//mõnes kohas äkki tahab kuskile objekti ka salvestada infot makse kohta... näiteks broneeringu juures..
-	//niiet paneb kõik selle käma sessiooni selgemalt kirja... võtab sessioonist $_SESSION["bank_return"]["data"] küljest kõik
+	//mones kohas akki tahab kuskile objekti ka salvestada infot makse kohta... naiteks broneeringu juures..
+	//niiet paneb koik selle kama sessiooni selgemalt kirja... votab sessioonist $_SESSION["bank_return"]["data"] kyljest koik
 	function get_payment_info($val)
 	{
 		$ret = array(
@@ -1931,7 +1959,7 @@ class bank_payment extends class_base
 	function check_response()
 	{
 		extract($_SESSION["bank_return"]["data"]);
-		if($action == "afb")//selliselt tulevad krediitkaardimakse tagasipöördumised
+		if($action == "afb")//selliselt tulevad krediitkaardimakse tagasipoordumised
 		{
 			return $this->check_cc_response();
 		}
@@ -1958,7 +1986,7 @@ class bank_payment extends class_base
 
 		$signature = base64_decode($VK_MAC);
 
-		//väike häkk siis teiste riikide samade pankade jaoks
+		//vaike hakk siis teiste riikide samade pankade jaoks
 		$id = substr($VK_REF ,0 , -1 );
 		if(is_oid($id) && $this->can("view" , $id))
 		{
@@ -2024,7 +2052,7 @@ class bank_payment extends class_base
 		$str = $data["SOLOPMT-RETURN-VERSION"]."&".$data["SOLOPMT-RETURN-STAMP"]."&".$data["SOLOPMT-RETURN-REF"]."&".$data["SOLOPMT-RETURN-PAID"]."&".$cert."&";
 		if($data["SOLOPMT-RETURN-MAC"] == strtoupper(md5($str))) $ok = 1;
 		else $ok = 0;
-		//a seniks returnime ok, nagu oleks kõik hästi
+		//a seniks returnime ok, nagu oleks koik hasti
 		return $ok;
 	}
 
@@ -2057,7 +2085,7 @@ class bank_payment extends class_base
 		$t.= "\n<br>\n<br>";
 		
 		$t.= "5.";
-		$t.= t("Vastu saadakse avalikud võtmed, mis peavad jõudma kataloogi");
+		$t.= t("Vastu saadakse avalikud v&otilde;tmed, mis peavad j&otilde;udma kataloogi");
 		$t.= " ".$this->cfg["site_basedir"]."/pank/\n<br>";
 		$banks = array();
 		foreach($this->public_key_files as $b=> $fn){$banks[] = $this->banks[$b]. " - ".$fn;}
@@ -2078,7 +2106,7 @@ class bank_payment extends class_base
 		$t.= "\n<br>\n<br>";
 	
 		$t.= "Nordea. ";
-		$t.= t("Kasutab lihtsalt üht MAC v&otilde;tit, mis peaks asuma v&otilde;tmete kataloogis nimega nordea.mac");
+		$t.= t("Kasutab lihtsalt &uuml;ht MAC v&otilde;tit, mis peaks asuma v&otilde;tmete kataloogis nimega nordea.mac");
 		$t.= "\n<br>\n<br>";
 	
 		$t.= "Kaardikeskus. ";

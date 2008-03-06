@@ -30,6 +30,16 @@
             <caption>Tellimuse e-maili subjekt</caption>
       </property>
       <property>
+            <name>subject_handler</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Subjekti kontroller</caption>
+      </property>
+      <property>
             <name>update_handler</name>
             <table>objects</table>
             <group>general</group>
