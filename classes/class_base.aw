@@ -4464,8 +4464,7 @@ class class_base extends aw_template
 				"class_id" => $cls_id
 			));
 		}
-		else
-		if ($this->can("view", $arr["cfgform_id"]) && !$force_mgr)
+		elseif ($this->can("view", $arr["cfgform_id"]) && !$force_mgr)
 		{
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
@@ -4566,6 +4565,14 @@ class class_base extends aw_template
 			}
 		}
 
+		// redefine relmgr
+		$cfg_props["relationmgr"] =Array(
+			"name" => "relationmgr",
+			"type" => "relationmgr",
+			"caption" => t("Seostehaldur"),
+			"store" => "no",
+			"group" => "relationmgr"
+		);
 		$this->_cfg_props = $cfg_props;
 
 		// I need group and caption from each one
@@ -4927,7 +4934,7 @@ class class_base extends aw_template
 			foreach($cfg_flags as $key => $val)
 			{
 				$this->classinfo[$val] = $cfgform_obj->prop($key);
-			};
+			}
 
 			// sometimes the grplist is empty in config form.
 			// I don't know why, but it is, and in this case
@@ -4974,6 +4981,11 @@ class class_base extends aw_template
 				$tmp[$gkey] = $gval;
 			}
 
+			if (!$cfgform_obj->prop("classinfo_disable_relationmgr"))
+			{
+				$tmp["relationmgr"] = $this->groupinfo["relationmgr"];
+			}
+
 			$this->groupinfo = $tmp;
 		}
 
@@ -5017,26 +5029,24 @@ class class_base extends aw_template
 			$this->classinfo = array();
 		};
 		$this->classinfo = array_merge($this->classinfo,$cfgu->get_classinfo());
-		if (isset($this->classinfo["r2"]) || true)
+
+		$this->groupinfo["relationmgr"] = array(
+			"caption" => t("Seostehaldur"),
+			"submit" => "no",
+		);
+
+		if(!empty($_REQUEST["srch"]))
 		{
-			$this->groupinfo["relationmgr"] = array(
-				"caption" => t("Seostehaldur"),
-				"submit" => "no",
-			);
-			if(!empty($_REQUEST["srch"]))
-			{
-				$this->groupinfo["relationmgr"]["submit_method"] = "get";
-			}
+			$this->groupinfo["relationmgr"]["submit_method"] = "get";
+		}
 
-			$defaults["relationmgr"] = array(
-				"name" => "relationmgr",
-				"type" => "relationmgr",
-				"caption" => t("Seostehaldur"),
-				"store" => "no",
-				"group" => "relationmgr",
-			);
-
-		};
+		$defaults["relationmgr"] = array(
+			"name" => "relationmgr",
+			"type" => "relationmgr",
+			"caption" => t("Seostehaldur"),
+			"store" => "no",
+			"group" => "relationmgr",
+		);
 
 		if (isset($this->classinfo["no_status"]))
 		{
