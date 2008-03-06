@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.67 2008/02/18 08:59:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.68 2008/03/06 11:14:26 voldemar Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -8,14 +8,14 @@
 class object_list extends _int_obj_container_base
 {
 	var $list = array();	// array of objects in the current list
-	var $list_names = array(); 
+	var $list_names = array();
 
 	/** creates the object list, can also initialize it with objects
 		@attrib api=1
 
 		@param param optional type=array
-			array of filter parameters, by what the object list is filtered. if class is 
-			specified in the filter, the filter can also include properties, otherwise properties 
+			array of filter parameters, by what the object list is filtered. if class is
+			specified in the filter, the filter can also include properties, otherwise properties
 			are ignored, only object table parameters are used, optional
 
 		@comment
@@ -44,7 +44,7 @@ class object_list extends _int_obj_container_base
 				"name" => "%foo%",
 				"class_id" => CL_BAR,
 				"sort_by" => "objects.created DESC",
-				"limit" => "2,6" 
+				"limit" => "2,6"
 			));
 	**/
 	function object_list($param = NULL)
@@ -82,7 +82,7 @@ class object_list extends _int_obj_container_base
 			// creates a list of all objects in the system, that have status = STAT_ACTIVE, the previous list is discarded
 			$ol->filter(array(
 				"status" => STAT_ACTIVE
-			)); 
+			));
 			// returns all active objects in the system
 	**/
 	function filter($param)
@@ -128,7 +128,7 @@ class object_list extends _int_obj_container_base
 		}
 
 		// we should check the individual arguments as well .. if "oid" is an object
-		// (aw_array) .. then this thingie will return absurd results .. like 
+		// (aw_array) .. then this thingie will return absurd results .. like
 		// for id-s of all documents in the database.. yehh ...it happened
 		// in UT --duke
 
@@ -160,13 +160,13 @@ class object_list extends _int_obj_container_base
 
 		@param param required type=oid
 			the object(s) to add to the list. type: integer (object id), string (object alias), object class instance, object list instance
-		
+
 		@errors
 			- acl error is raised if the user has no view access to the object specified
 
 		@returns
 			the number of object in the list after addition
-		
+
 		@examples
 			$ol = new object_list();
 			$ol->add(obj(56));
@@ -184,7 +184,7 @@ class object_list extends _int_obj_container_base
 	/** removes the specified object(s) from the current list
 		@attrib api=1
 
-		@param param required 
+		@param param required
 			the objects to remove from the list
 			type: integer (object id), string (alias), object class instance, object list instance
 
@@ -278,13 +278,13 @@ class object_list extends _int_obj_container_base
 		@errors
 			none
 
-		@param prop required 
+		@param prop required
 			the property to sort by
 			type: string (list is sorted by that property only), array (list is sorted by each property in the array)
 
-		@param order optional 
+		@param order optional
 			the order to sort by, optional, defaults to "asc"
-			type: string (asc/dec), array (each entry corresponds to the order to sort by in the sortable properties array)
+			type: string (asc/desc), array (each entry corresponds to the order to sort by in the sortable properties array)
 
 		@returns
 			none
@@ -328,7 +328,7 @@ class object_list extends _int_obj_container_base
 		@errors
 			none
 
-		@param cb required 
+		@param cb required
 			can be either the function to sort by,
 			or an array that consists of an object instance an the function
 
@@ -481,8 +481,8 @@ class object_list extends _int_obj_container_base
 
 		@param func required type=string
 			object class function name to call for each object in the list, required
-		
-		@param params optional  
+
+		@param params optional
 			array of parameters to pass to the member function
 
 		@param save optional type=bool
@@ -560,7 +560,7 @@ class object_list extends _int_obj_container_base
 	/** iterates over the list, calling the specified user function with each object as the parameter
 		@attrib api=1
 
-		@param func required 
+		@param func required
 			the name of the function to call, required. the function gets the object reference as the parameter
 			type: text (global function name) , array (array(&$this, "func") - class member function name)
 
@@ -620,7 +620,7 @@ class object_list extends _int_obj_container_base
 
 		// why not foreach($this->list as $item)? it works just as well, and is
 		// easier on the eyes -- duke
-		// 
+		//
 		// because then I will not have to reimplement lazy loading here. ever heard of encapsulation?
 		// -- terryf
 
@@ -690,7 +690,7 @@ class object_list extends _int_obj_container_base
 			));
 			$files = $ol->arr();
 			$ol2 = object_list::from_arr($arr);
-	**/		
+	**/
 	function from_arr($param)
 	{
 		if (!is_array($param))
@@ -787,7 +787,7 @@ class object_list extends _int_obj_container_base
 	{
 		return count($this->list);
 	}
-	
+
 	// static
 	function iterate_list($oids, $func, $param1 = null, $param2 = null, $param3 = null)
 	{
@@ -870,14 +870,14 @@ class object_list extends _int_obj_container_base
 						if (is_object($mf_v))
 						{
 							error::raise(array(
-								"id" => "ERR_META_FILTER",	
+								"id" => "ERR_META_FILTER",
 								"msg" => sprintf(t("object_list::filter(%s => %s): can not complex searches on metadata fields!"), $mf_k, $mf_v)
 							));
 						}
 						if ($mf_v{0} == "%")
 						{
 							error::raise(array(
-								"id" => "ERR_META_FILTER",	
+								"id" => "ERR_META_FILTER",
 								"msg" => sprintf(t("object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"), $mf_k, $mf_v)
 							));
 						}
@@ -943,7 +943,7 @@ class object_list extends _int_obj_container_base
 		$this->_sby_order = $order;
 
 		$this->_int_sort_list_cb(array(&$this, "_int_sort_list_default_sort"));
-	
+
 		unset($this->_sby_prop);
 		unset($this->_sby_order);
 	}
@@ -1017,7 +1017,7 @@ class object_list extends _int_obj_container_base
 	function _int_sort_list_cb($cb)
 	{
 		// cb is checked before getting here
-		
+
 		$this->cb = $cb;
 
 		// init list
