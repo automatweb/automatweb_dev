@@ -110,7 +110,7 @@ class html extends aw_template
 		textbox name
 	@param value optional type=string
 		textbox value
-	@param contenr optional type=string
+	@param content optional type=string
 		text visible to user when $option_is_tuple is set to TRUE.
 	@param size optional type=int
 		textbox size
