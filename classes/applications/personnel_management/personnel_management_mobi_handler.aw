@@ -29,7 +29,7 @@
 	@property symbol_count type=textbox store=no size=3
 	@caption T&auml;hem&auml;rke
 
-	@property send type=submit
+	@property send type=submit action=send_sms
 	@caption Saada
 
 @groupinfo log caption="Logi"
@@ -49,7 +49,6 @@ class personnel_management_mobi_handler extends class_base
 
 	function get_property($arr)
 	{
-		// stream_context_create
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 
@@ -58,6 +57,69 @@ class personnel_management_mobi_handler extends class_base
 		}
 
 		return $retval;
+	}
+		
+	/** Sends SMS via Mobi.
+		@attrib name=send_sms api=1 params=name
+
+		@param id required type=oid
+			The OID of the Mobi handler object, that describes the service ID, password and Mobi URL.
+
+		@param number required type=int
+			The phone number to send the SMS to. Must contain aera code, only digits. (Example: 3725123456)
+
+		@param message required type=string
+			The content of the SMS. No more than 160 symbols.
+
+		@example
+
+		@comment
+
+		@returns The feedback from Mobi.
+
+		@errors Return error if number contains other symbols beside digits. Returns error if message contains more than 160 symbols.
+	**/
+	function send_sms($arr)
+	{
+		if(!preg_match("/\d*/", $arr["number"]))
+		{
+			error::raise(array(
+				"id" => "ERR_PARAM",
+				"msg" => t("personnel_management_mobi_handler::send_sms(number => ".$arr['number']."): number must only contain digits!")
+			));
+		}
+
+		if(strlen($arr["message"]) > 160)
+		{
+			error::raise(array(
+				"id" => "ERR_PARAM",
+				"msg" => t("personnel_management_mobi_handler::send_sms(message => ".$arr['message']."): message must be no more than 160 symbols!")
+			));
+		}
+		$o = obj($arr["id"]);
+		$service_id = $o->prop("service_id");
+		$password = $o->prop("mpassword");
+		$url = $o->prop("url");
+
+		$params = array(
+			"serviceid" => 81,
+			"password" => "e1DsA8fJr4w",
+			"phone" => "37255547369",
+			"text" => "Text. Yeah!",
+			"requestid" => 1,
+		);
+		arr(http_build_query($params));
+		$args = array(
+			"http" => array(
+				"method" => "POST",
+				"header" => "Content-type: application/x-www-form-urlencoded",
+				"content" => http_build_query($params),
+			)
+		);
+		$context = stream_context_create($args);
+
+		arr(file_get_contents($url, false, $context));
+		exit;
 	}
 
 	function set_property($arr = array())

@@ -63,6 +63,7 @@
             <table>objects</table>
             <group>send_sms</group>
             <type>submit</type>
+            <action>send_sms</action>
             <store>no</store>
             <field>send</field>
             <caption>Saada</caption>
