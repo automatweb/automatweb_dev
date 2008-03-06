@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.28 2008/01/29 11:13:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.29 2008/03/06 11:04:40 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -181,7 +181,9 @@ class task_quick_entry extends class_base
 	**/
 	function cust_autocomplete_source($arr)
 	{
-		$cl_json = get_instance("protocols/data/json");
+//list($usec, $sec) = explode(" ", microtime());
+//$start = ((float)$usec + (float)$sec);
+//		$cl_json = get_instance("protocols/data/json");
 
 		$errorstring = "";
 		$error = false;
@@ -195,24 +197,29 @@ class task_quick_entry extends class_base
 		);
 
 		$ol = new object_list(array(
-			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+			"class_id" => array(CL_CRM_COMPANY),
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"lang_id" => array(),
 			"site_id" => array(),
 			"limit" => 500,
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"class_id" => CL_CRM_COMPANY,
-					"is_customer" => 1
-				)
-			))
+//			new object_list_filter(array(
+//				"logic" => "OR",
+//				"conditions" => array(
+//					"class_id" => CL_CRM_COMPANY,
+//					"is_customer" => 1
+//				)
+//			))
 		));
 		$autocomplete_options = $ol->names();
 		foreach($autocomplete_options as $k => $v)
 		{
 			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
 		}
+//		$asd = $cl_json->encode($option_data);
+//		list($usec, $sec) = explode(" ", microtime());
+//		$end = ((float)$usec + (float)$sec);
+		
+//		$autocomplete_options[0] = $arr["customer"].substr(($end - $start), 0, 6);ksort($autocomplete_options);
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
@@ -526,7 +533,7 @@ class task_quick_entry extends class_base
 		{
 			$t = $ol->begin();
 			
-			//järjekorranumbri andmine
+			//jarjekorranumbri andmine
 			$max_ord = 0;
 			foreach($t->connections_from(array("type" => 7)) as $row)
 			{
