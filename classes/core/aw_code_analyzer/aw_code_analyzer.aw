@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.12 2008/02/22 12:01:22 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.13 2008/03/06 18:44:07 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -460,10 +460,15 @@ class aw_code_analyzer extends class_base
 		while (1)
 		{
 			$arg_is_ref = false;
-
-			// possibilities here are: T_VARIABLE or string "&", then T_VARIABLE
+			$var_typehint = "";
+			// possibilities here are: T_STRING as type hint, T_VARIABLE or string "&", then T_VARIABLE
 			if (is_array($tok))
 			{
+				if ($tok[0] == T_STRING)
+				{
+					$var_typehint = $t[1];
+					$tok = $this->get();
+				}
 				$this->assert($tok, T_VARIABLE);
 			}
 			else
@@ -561,7 +566,8 @@ class aw_code_analyzer extends class_base
 				"has_default_val" => $has_default_val,
 				"default_val" => $defval,
 				"default_value_type" => $defval_type,
-				"is_ref" => $arg_is_ref
+				"is_ref" => $arg_is_ref,
+				"typehint" => $var_typehint
 			);
 			//$this->dump_tok($tok);
 			$tok = $this->get();
