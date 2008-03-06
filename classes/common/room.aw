@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.235 2008/03/05 15:15:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.236 2008/03/06 10:33:38 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -5909,7 +5909,14 @@ class room extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_PERSON,
 			"lang_id" => array(),
-			"CL_CRM_PERSON.RELTYPE_RANK" => $o->prop("professions"),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_RANK" => $o->prop("professions"),
+					"oid" => $o->prop("professions"),
+				),
+			)),
+			//"CL_CRM_PERSON.RELTYPE_RANK" => $o->prop("professions"),
 		));
 		return $ol;
 	}
