@@ -104,6 +104,11 @@ class aw_template extends core
 			return $dir = $this->cfg["tpldir"];
 		}
 
+		if (!aw_global_get("aw_init_done"))
+		{
+			return $this->cfg["tpldir"];
+		}
+
 		$sect = aw_global_get("section");
 		if (!$this->can("view", $sect))
 		{
@@ -888,7 +893,7 @@ class aw_template extends core
 		{
 			$src = localparse($val, $this->vars);
 		};
-		// võtame selle maha ka .. this is NOT a good place for that
+		// v6tame selle maha ka .. this is NOT a good place for that
 		//aw_session_del("status_msg", true);
 
 		if ($this->sub_merge == 1)

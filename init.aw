@@ -888,9 +888,13 @@ function aw_startup()
 
 	#$syslog = get_instance("syslog/syslog");
 	#$syslog->request_startup();
+
+	aw_global_set("aw_init_done", 1);
+
 	$m = get_instance("menuedit");
 	$m->request_startup();
 	__init_aw_session_track();
+
 
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_e = $sec + $micro;
