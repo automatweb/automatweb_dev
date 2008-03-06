@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.45 2008/02/17 21:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.46 2008/03/06 09:27:28 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -58,10 +58,10 @@ session_register("poll_clicked");
 @default group=settings
 
 @property tpl_question type=select field=meta method=serialize table=objects
-@caption Kujunduspõhi kuvamiseks
+@caption Kujundusp&otilde;hi kuvamiseks
 
 @property tpl_results type=select field=meta method=serialize table=objects
-@caption Kujunduspõhi tulemustele
+@caption Kujundusp&otilde;hi tulemustele
 
 */
 
@@ -322,7 +322,7 @@ class poll extends class_base implements main_subtemplate_handler
 			$id = $poll_id;
 			$def = true;
 		}
-		if (!is_numeric($id))
+		if (!$this->can("view", $id))
 		{
 			return "";
 		}
@@ -347,11 +347,6 @@ class poll extends class_base implements main_subtemplate_handler
 
 		$tplsrc = (strlen($poll->meta('tpl_results'))>1)?$poll->meta('tpl_results'):'show.tpl';
 		$this->read_template($tplsrc);
-
-		if (!$this->can("view", $id))
-		{
-			return "";
-		}
 
 		$lang_id = aw_global_get("lang_id");
 		$this->vars(array(
