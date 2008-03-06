@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.229 2008/02/24 14:36:39 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.230 2008/03/06 13:13:03 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1550,29 +1550,7 @@ class menu extends class_base implements main_subtemplate_handler
 				break;
 
 			case "alias":
-				if ($data["value"] != "")
-				{
-					$filt = array(
-						"class_id" => CL_MENU,
-						"alias" => $data["value"],
-						"lang_id" => array()
-					);
-					if (aw_ini_get("menuedit.recursive_aliases") == 1)
-					{
-						$filt["parent"] = $arr["obj_inst"]->parent();
-					}
-					if (is_oid($arr["obj_inst"]->id()))
-					{
-						$filt["oid"] = new obj_predicate_not($arr["obj_inst"]->id());
-					}
-					$ol = new object_list($filt);
-					if (count($ol->ids()))
-					{
-						$data["error"] = t("Selline alias on juba olemas!");
-						return PROP_FATAL_ERROR;
-					}
-				}
-				break;
+				return $this->_check_alias($arr);
 
 			case "seealso_docs_t":
 				$arr["obj_inst"]->set_meta("sad_opts", $arr["request"]["sad_opts"]);
@@ -2598,6 +2576,71 @@ class menu extends class_base implements main_subtemplate_handler
 			}
 		}
 		return $this->mk_my_orb("change", array("parent" => $parent, "group" => "o"), "admin_if");;
+	}
+
+	private function _check_alias($arr)
+	{
+		if ($arr["prop"]["value"] != "")
+		{
+			$filt = array(
+				"class_id" => CL_MENU,
+				"alias" => $arr["prop"]["value"],
+				"lang_id" => array()
+			);
+			if (is_oid($arr["obj_inst"]->id()))
+			{
+				$filt["oid"] = new obj_predicate_not($arr["obj_inst"]->id());
+			}
+
+			if (aw_ini_get("menuedit.recursive_aliases") == 1)
+			{
+				// if this menu is the first one in it's path then list all menus with the same alias and check if
+				// their parents also have none and if so, then we fail.
+				if ($this->_object_has_parent_aliases($arr["obj_inst"]))
+				{
+					$filt["parent"] = $arr["obj_inst"]->parent();
+				}
+				else
+				{
+					$ol = new object_list($filt);
+					$has_no_parent_als = false;
+					foreach($ol->arr() as $other_menu)
+					{
+						if (!$this->_object_has_parent_aliases($other_menu))
+						{
+							$has_no_parent_als = true;
+						}
+					}
+
+					if ($has_no_parent_als)
+					{
+						$arr["prop"]["error"] = t("Selline alias on juba olemas!");
+						return PROP_FATAL_ERROR;
+					}
+					return PROP_OK;
+				}
+			}
+
+			$ol = new object_list($filt);
+			if (count($ol->ids()))
+			{
+				$arr["prop"]["error"] = t("Selline alias on juba olemas!");
+				return PROP_FATAL_ERROR;
+			}
+		}
+		return PROP_OK;
+	}
+
+	private function _object_has_parent_aliases($o)
+	{
+		foreach($o->path() as $path_item)
+		{
+			if ($path_item->alias() != "")
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 };
 ?>
