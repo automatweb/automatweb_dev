@@ -1432,10 +1432,8 @@ class user extends class_base
 
 	/**
 		@attrib api=1
-		@comment
-		Returns current users uid
 		@returns
-		Current users uid
+		Current user object id
 	**/
 	function get_current_user()
 	{
@@ -1491,7 +1489,14 @@ class user extends class_base
 		return obj($this->get_person_for_user(obj($oid)));
 	}
 
-	function get_person_for_user($u)
+	/**
+		@attrib params=pos api=1
+		@param user required type=cl_user
+		User object
+		@returns
+		Person object id
+	**/
+	function get_person_for_user(object $u)
 	{
 		obj_set_opt("no_cache", 1);
 		aw_disable_acl();
