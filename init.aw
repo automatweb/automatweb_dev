@@ -1446,6 +1446,10 @@ function __autoload($class_name)
 
 function aw_exception_handler($e)
 {
+	if (!class_exists("error"))
+	{
+		classload("core/error");
+	}
 	error::raise(array(
 		"id" => ERR_UNCAUGHT_EXCEPTION,
 		"msg" => $e->getMessage(),

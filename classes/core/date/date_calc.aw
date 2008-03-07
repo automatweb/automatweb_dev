@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.4 2008/01/31 13:53:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.5 2008/03/07 12:18:48 kristo Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -447,4 +447,6 @@ function timespans_overlap($a_from, $a_to, $b_from, $b_to)
 	}
 	return true;
 }
+
+class date_calc {} ;
 ?>

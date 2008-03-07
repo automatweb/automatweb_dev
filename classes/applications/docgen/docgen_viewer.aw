@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.18 2008/02/22 12:02:23 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.19 2008/03/07 12:18:46 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -914,7 +914,7 @@ class docgen_viewer extends class_base
 			{
 				$clf = class_index::get_file_by_name(basename($d_class));
 			}
-			catch (awex_clidx_filesys $e)
+			catch (exception $e)
 			{
 				die("ex for class $d_class ".$e->getMessage());
 			}

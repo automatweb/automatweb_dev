@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.256 2008/02/21 19:14:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.257 2008/03/07 12:18:44 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -2653,5 +2653,6 @@ if (!defined("DEFS"))
 			return date("j",mktime(0,0,0,$month+1,0,$year));
 		}
 	}
+	class defs {};
 };
 ?>

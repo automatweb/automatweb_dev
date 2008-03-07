@@ -53,6 +53,7 @@ class class_index
 		if (!is_dir($index_dir))
 		{
 			$ret = mkdir($index_dir, 0777);
+			chmod($index_dir, 0777);
 
 			if (!$ret)
 			{
@@ -207,7 +208,7 @@ class class_index
 
 					// open index file for this class/iface
 					$cl_handle = @fopen($class_dfn_file, "w");
-
+					chmod($class_dfn_file, 0666);
 					if (false === $cl_handle)
 					{
 						$e = new awex_clidx_filesys("Unable to update class index for '" . $class_file . "'.");
