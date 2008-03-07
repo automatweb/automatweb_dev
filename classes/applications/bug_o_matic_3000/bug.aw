@@ -1833,6 +1833,32 @@ class bug extends class_base
 		return $msg;
 	}
 
+	function add_to_last_comment($bug, $msg)
+	{
+		$comments = $bug->connections_from(array(
+			"type" => "RELTYPE_COMMENT",
+		));
+		foreach($comments as $c)
+		{
+			$comm = obj($c->prop("to"));
+		}
+		if(is_object($comm) && ($comm->modified() + 120 > time()))
+		{
+			$comment = $comm->comment();
+			$c = explode("\n", $comment);
+			$m = explode("\n", $msg);
+			$new_diffs_array = explode("http", $m[0]);
+			$c[0].= " http".$new_diffs_array[1];
+			$new_files = substr($m[1], 8);
+			$c[1].= " ".$new_files;
+			$nc = join("\n", $c);
+			$comm->set_prop("comment" , $nc);
+			$comm->save();
+			return 1;
+		}
+		return 0;
+	}
+
 	/**
 		@attrib name=handle_commit nologin=1
 		@param bugno required type=int
@@ -1851,6 +1877,16 @@ class bug extends class_base
 
 		$com = false;
 		$ostat = $nstat = $bug->prop("bug_status");
+
+		if(($bug->modified() + 120) > time())
+		{
+			if($this->add_to_last_comment($bug, $msg))
+			{
+				aw_restore_acl();
+				die(sprintf(t("Modified bug %s last comment"), $arr["bugno"]));
+			}
+		}
+
 		if ($arr["set_fixed"] == 1)
 		{
 			$msg .= "\nStaatus muudeti ".$this->bug_statuses[$bug->prop("bug_status")]." => ".$this->bug_statuses[BUG_DONE]."\n";
@@ -1905,6 +1941,7 @@ class bug extends class_base
 		{
 			$bug->save();
 		}
+
 		$this->_add_comment($bug, $msg, $ostat, $nstat, $add_wh, $com);
 		print "test\n";
 
