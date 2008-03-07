@@ -242,6 +242,7 @@ class object_test2 extends UnitTestCase
 		$name = $o->name() + 1;
 		$o->set_name($name);
 		$this->assertEqual($name, $o->name());
+		$o->delete(true);
 	}
 
 	function test_set_name()
@@ -263,6 +264,7 @@ class object_test2 extends UnitTestCase
 		$clid = CL_MENU;
 		$o->set_class_id($clid);
 		$this->assertEqual($clid, $o->class_id());
+		$o->delete(true);
 	}
 
 	function test_set_class_id()
@@ -304,6 +306,7 @@ class object_test2 extends UnitTestCase
 		$lang = "et";
 		$o->set_lang($lang);
 		$this->assertEqual($lang, $o->lang());
+		$o->delete(true);
 	}
 
 	function test_lang_id()
@@ -312,6 +315,7 @@ class object_test2 extends UnitTestCase
 		$lang_id = 1;
 		$o->set_lang_id($lang_id);
 		$this->assertEqual($lang_id, $o->lang_id());
+		$o->delete(true);
 	}
 
 	function test_set_lang_id()
@@ -333,6 +337,7 @@ class object_test2 extends UnitTestCase
 		$comment = 1;
 		$o->set_comment($comment);
 		$this->assertEqual($comment, $o->comment());
+		$o->delete(true);
 	}
 
 	function test_set_comment()
@@ -354,6 +359,7 @@ class object_test2 extends UnitTestCase
 		$ord = 1;
 		$o->set_ord($ord);
 		$this->assertEqual($ord, $o->ord());
+		$o->delete(true);
 	}
 
 	function test_set_ord()
@@ -375,6 +381,7 @@ class object_test2 extends UnitTestCase
 		$alias = "alias";
 		$o->set_alias($alias);
 		$this->assertEqual($alias, $o->alias());
+		$o->delete(true);
 	}
 
 	function test_set_alias()
@@ -387,6 +394,87 @@ class object_test2 extends UnitTestCase
 		aw_restore_acl();
 		$id = $o->id();
 		$this->assertEqual($alias, $this->db->db_fetch_field("SELECT alias FROM objects WHERE oid = $id", "alias"));
+		$o->delete(true);
+	}
+
+	function test_createdby()
+	{
+		$uid = $this->db->db_fetch_field("SELECT uid FROM users LIMIT 0,1", "jrk");
+		aw_switch_user(array("uid"=>$uid));
+		$o = $this->_get_temp_o();
+		$id = $o->id();
+		$this->assertEqual($uid, $this->db->db_fetch_field("SELECT createdby FROM objects WHERE oid= $id", "createdby"));
+		$o->delete(true);
+	}
+
+	function test_modifiedby()
+	{
+		$o = $this->_get_temp_o();
+		$uid = $this->db->db_fetch_field("SELECT uid FROM users LIMIT 0,1", "jrk");
+		aw_switch_user(array("uid"=>$uid));
+		$o->set_name(1);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($uid, $this->db->db_fetch_field("SELECT modifiedby FROM objects WHERE oid= $id", "modifiedby"));
+		$o->delete(true);
+	}
+
+	function test_created()
+	{
+		$time = time();
+		$o = $this->_get_temp_o();
+		$id = $o->id();
+		$this->assertEqual($time, $this->db->db_fetch_field("SELECT created FROM objects WHERE oid= $id", "created"));
+		$o->delete(true);
+	}
+
+	function test_modified()
+	{
+		$o = $this->_get_temp_o();
+		$o->set_name(1);
+		$time = time();
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($time, $this->db->db_fetch_field("SELECT modified FROM objects WHERE oid= $id", "modified"));
+		$o->delete(true);
+	}
+
+	function test_period()
+	{
+		$o = $this->_get_temp_o();
+		$period = 1;
+		$o->set_period($period);
+		$this->assertEqual($period, $o->period());
+		$o->delete(true);
+	}
+
+	function test_set_period()
+	{
+		$o = $this->_get_temp_o();
+		$period = 1;
+		$o->set_period($period);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($period, $this->db->db_fetch_field("SELECT period FROM objects WHERE oid = $id", "period"));
+		$o->delete(true);
+	}
+
+	function test_set_periodic()
+	{
+		$o = $this->_get_temp_o();
+		$periodic = 1;
+		$o->set_periodic($periodic);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($periodic, $this->db->db_fetch_field("SELECT periodic FROM objects WHERE oid = $id", "periodic"));
 		$o->delete(true);
 	}
 }
