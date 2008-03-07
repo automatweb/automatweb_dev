@@ -51,7 +51,7 @@ class task_object extends _int_object
 			if (aw_global_get("uid") != $this->createdby())
 			{
 				$this->_no_display = 1;
-			}.
+			}
 		}
 	}
 }
