@@ -437,6 +437,12 @@ echo "cmd2 = $cmd <br>";
 	**/
 	function nightly_move()
 	{
+		$inp = $this->get_cval("night_moves_in_progress");
+		if ((time() - $inp) < 3600*10)
+		{
+			die("already in progress");
+		}
+		$this->set_cval("night_moves_in_progress", time());
 		$this->delete_all_online_periods();
 
 		echo "moving data from syuslog to _archive <Br>\n";
@@ -554,6 +560,7 @@ echo "cmd2 = $cmd <br>";
 			}
 			$this->db_query("INSERT INTO syslog_archive_sessions(session_id, entry_page, exit_page, tm_s, tm_e) values('$session','$inf[entry_page]', '$inf[exit_page]',$inf[tm_s], $inf[tm_e])");
 		}
+		$this->set_cval("night_moves_in_progress", 0);
 		die("all done");
 	}
 
