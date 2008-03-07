@@ -1062,17 +1062,6 @@ class htmlclient extends aw_template
 				$retval = html::textbox($arr);
 				$id = str_replace("[","_",$arr["name"]);
 				$id = str_replace("]","_",$id);
-				if (isset($arr["zee_shaa_helper"]))
-				{
-					$name = $arr["name"];
-					$retval .= html::button(array(
-						"value" => "ð",
-						"onclick" => "el=document.getElementById('${id}');el.value=el.value+'ð';el.focus();",
-					)) . html::button(array(
-						"value" => "þ",
-						"onclick" => "el=document.getElementById('${id}');el.value=el.value+'þ';el.focus();",
-					));
-				};
 				break;
 
 			case "textarea":
@@ -1243,8 +1232,13 @@ class htmlclient extends aw_template
 	{
 		$layout_items = array();
 		$sub_layouts = array();
+		if($this->view_layout && ($this->view_layout == $layout_name || $this->show_layouts[$this->parent_layouts[$layout_name]]))
+		{
+			$this->show_layouts[$layout_name] = 1;
+		}
 		foreach(safe_array(isset($this->layout_by_parent[$layout_name]) ? $this->layout_by_parent[$layout_name] : null) as $lkey => $lval)
 		{
+			$this->parent_layouts[$lkey] = $layout_name;
 			$html = $this->parse_layouts($lkey);
 			if($this->view_layout && $this->view_layout == $lkey)
 			{
@@ -1257,7 +1251,14 @@ class htmlclient extends aw_template
 				$layout_items[] = $html;
 			}
 		}
-
+		
+		if($this->view_layout)
+		{
+			if(!$this->show_layouts[$this->parent_layouts[$layout_name]] && !$this->show_layouts[$layout_name])
+			{
+				return null;
+			}
+		}
 		$html = "";
 		$ldata = $this->layoutinfo[$layout_name];
 		$location = false;
