@@ -41,7 +41,7 @@ class crm_bill_obj extends _int_object
 		));
 		return $pop->get_menu();
 	}
-  
+   
 	function get_bill_currency_id()
 	{
 		if($this->prop("customer.currency"))
