@@ -111,7 +111,7 @@ function cfgformToggleSelectProps(grpId)
 			</div>
 		<!-- END SUB: options -->
 		</td>
-		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" class="prpGrp{VAR:grp_id}" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"/></td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" class="prpGrp{VAR:grp_id}" name="mark[{VAR:prp_mark_key}]" value="1" style="border: 3px solid blue;"/></td>
 	</tr>
 	<!-- END SUB: property -->
 	</table>

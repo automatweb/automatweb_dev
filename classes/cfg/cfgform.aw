@@ -2095,6 +2095,7 @@ class cfgform extends class_base
 						"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
 						"prp_caption" => $property["caption"],
 						"prp_type" => $type_selector,
+						"prp_mark_key" => $prpdata["name"] . "|" . $key,
 						"prp_key" => $prpdata["name"],
 						"prp_order" => $property["ord"],
 						"options" => $options,
@@ -2277,7 +2278,7 @@ class cfgform extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => t("Kustuta valitud omadused"),
+			"tooltip" => t("Eemalda valitud omadused tab-ist"),
 			"url" => "javascript:document.changeform.subaction.value='delete';submit_changeform();",
 			"img" => "delete.gif",
 		));
@@ -2534,7 +2535,7 @@ class cfgform extends class_base
 	{
 		$subaction = $arr["request"]["subaction"];
 		$this->_init_cfgform_data($arr["obj_inst"]);
-		
+
 		switch($subaction)
 		{
 			case "addgrp":
@@ -2554,7 +2555,17 @@ class cfgform extends class_base
 				{
 					foreach($mark as $pkey => $val)
 					{
-						unset($this->cfg_proplist[$pkey]);
+						list($prop, $grp) = explode("|", $pkey, 2);
+
+						if (!is_array($this->cfg_proplist[$prop]["group"]) or 1 === count($this->cfg_proplist[$prop]["group"]))
+						{
+							unset($this->cfg_proplist[$prop]);
+						}
+						elseif (in_array($grp, $this->cfg_proplist[$prop]["group"], true))
+						{
+							$idx = reset(array_keys($this->cfg_proplist[$prop]["group"], $grp));
+							unset($this->cfg_proplist[$prop]["group"][$idx]);
+						}
 					}
 				}
 				break;
@@ -2590,24 +2601,26 @@ class cfgform extends class_base
 
 					foreach($mark as $pkey => $val)
 					{
+						list($prop, $grp) = explode("|", $pkey, 2);
+
 						// set parent group
-						if (is_array($this->cfg_proplist[$pkey]["group"]))
+						if (is_array($this->cfg_proplist[$prop]["group"]) and !in_array($grp, $this->cfg_proplist[$prop]["group"]))
 						{
-							$this->cfg_proplist[$pkey]["group"][] = $target_grp;
+							$this->cfg_proplist[$prop]["group"][] = $target_grp;
 						}
 						else
 						{
-							$this->cfg_proplist[$pkey]["group"] = $target_grp;
+							$this->cfg_proplist[$prop]["group"] = $target_grp;
 						}
 
 						// set parent layout
 						if ($target_layout)
 						{
-							$this->cfg_proplist[$pkey]["parent"] = $target_layout;
+							$this->cfg_proplist[$prop]["parent"] = $target_layout;
 						}
 						else
 						{
-							unset($this->cfg_proplist[$pkey]["parent"]);
+							unset($this->cfg_proplist[$prop]["parent"]);
 						}
 					}
 				}
