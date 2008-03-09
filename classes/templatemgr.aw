@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.27 2008/01/31 13:49:48 kristo Exp $
-/*
+/**
+A class to help manage template files. 
+$Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.28 2008/03/09 16:27:50 kristo Exp $
 @classinfo  maintainer=kristo
-*/
-
+**/
 class templatemgr extends aw_template
 {
 	function templatemgr()
@@ -11,12 +11,25 @@ class templatemgr extends aw_template
 		$this->init("templatemgr");
 	}
 
-	////
-	// !Retrieves a list of templates
-	// type(int) - the type of templtes to list
-	// caption - the string for the default entry, defaults to "default"
-	// menu - if set, default template is read from that menu
-	// def - default template filename
+	/** Retrieves a list of document templates, defined in the templates table
+		@attrib api=1 params=name
+
+		@param type required type=int
+			the type of templates to list (1 - lead template, 2 - long template)
+
+		@param caption optional type=string
+			the string for the default entry, defaults to "default"
+
+		@param menu optional type=bool
+			if set, default template is read from that menu, defaults to false
+
+		@param def optional type=string
+			default template filename
+	
+		@returns
+			Array {0 => default caption, template_id => template name,... }
+
+	**/
 	function get_template_list($args = array())
 	{
 		if (!isset($args["caption"]))
@@ -24,7 +37,6 @@ class templatemgr extends aw_template
 			$args["caption"] = "default";
 		}
 
-		// kysime infot adminnitemplatede kohta
 		$type = (int)$args["type"];
 		if ($args["menu"])
 		{
@@ -71,6 +83,16 @@ class templatemgr extends aw_template
 		return $result;
 	}
 
+	/** Returns document template file name for document template id
+		@attrib api=1 params=name
+
+		@param id required type=int
+			The document template id to fetch the file name for
+
+		@returns
+			Template file name without path or null if not found
+
+	**/
 	function get_template_file_by_id($args = array())
 	{
 		$id = (int)$args["id"];
@@ -88,28 +110,22 @@ class templatemgr extends aw_template
 	}
 
 	/** returns a list of all template folders that are for this site 
-		
-		@attrib name=get_template_folder_list params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-		return value is array, key is complete template folder path and value is the path, starting from the site basefolder
+		@attrib name=get_template_folder_list params=name nologin="1" 
 
+		@comment
+			return value is array, key is complete template folder path and value is the path, starting from the site basefolder
 	**/
 	function get_template_folder_list($arr)
 	{
 		extract($arr);
 		$this->tplfolder_list = array(
-			$this->cfg["tpldir"] => $this->cfg["tpldir"]//str_replace($this->cfg["site_basedir"],$this->cfg["stitle"], $this->cfg["tpldir"])
+			$this->cfg["tpldir"] => $this->cfg["tpldir"]
 		);
 		$this->_req_tplfolders($this->cfg["tpldir"]);
 		return $this->tplfolder_list;
 	}
 
-	function _req_tplfolders($fld)
+	private function _req_tplfolders($fld)
 	{
 		$cnt = 0;
 		if ($dir = @opendir($fld)) 
@@ -123,7 +139,7 @@ class templatemgr extends aw_template
 					{
 						$cnt++;
 						$this->_req_tplfolders($cf);
-						$this->tplfolder_list[$cf] = $cf;//str_replace($this->cfg["site_basedir"],$this->cfg["stitle"], $cf);
+						$this->tplfolder_list[$cf] = $cf;
 					}
 				}
 			}  
@@ -132,10 +148,19 @@ class templatemgr extends aw_template
 		return $cnt;
 	}
 	
-	////
-        // !finds the full document template for menu $section
-        // if the template is not set for this menu, traverses the object tree upwards
-        // until it finds a menu for which it is set
+	/** finds the full document template for the given menu
+		@attrib api=1 params=pos
+
+		@param section required type=int
+			The menu to find the template for
+
+		@comment
+			if the template is not set for this menu, traverses the object tree upwards
+			until it finds a menu for which it is set
+
+		@returns
+			Template file name without path
+	**/
 	function get_long_template($section)
 	{
 		if (empty($section))
@@ -171,12 +196,21 @@ class templatemgr extends aw_template
 			$template = "plain.tpl";
 		};
 		return $template;
-        }
+	}
 
-	////
-        // !finds the lead template for menu $section
-        // if the template is not set for this menu, traverses the object tree upwards
-        // until it finds a menu for which it is set	
+	/** finds the lead document template for the given menu
+		@attrib api=1 params=pos
+
+		@param section required type=int
+			The menu to find the template for
+
+		@comment
+			if the template is not set for this menu, traverses the object tree upwards
+			until it finds a menu for which it is set
+
+		@returns
+			Template file name without path
+	**/
 	function get_lead_template($section)
 	{
 		$obj = new object($section);
@@ -201,10 +235,16 @@ class templatemgr extends aw_template
 			$template = "lead.tpl";
 		};
 		return $template;
-        }
+	}
 
 	/** returns an array of templates that are in template folder $folder, checks site side first, then admin
+		@attrib api=1 params=name
 
+		@param folder required type=string
+			The template folder to list templates for
+
+		@returns 
+			array { template_file => template_file } 
 	**/
 	function template_picker($arr)
 	{
