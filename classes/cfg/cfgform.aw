@@ -1771,6 +1771,7 @@ class cfgform extends class_base
 	{
 		$this->read_template("layout.tpl");
 		$used_props = $by_group = $by_layout = $layouts_by_grp = array();
+		$by_group = array();
 
 		if (isset($this->cfg_groups))
 		{
@@ -1802,10 +1803,20 @@ class cfgform extends class_base
 						$layout_grp = $this->cfg_layout[$property["parent"]]["group"];
 					}
 
+					$i = false;
 					foreach((array) $property["group"] as $gkey)
 					{
 						if ($gkey !== $layout_grp)
 						{
+							if ($i)
+							{
+								$property["cfgf_property_editing_disabled"] = true;
+							}
+							else
+							{
+								$i = true;
+							}
+
 							$by_group[$gkey][] = $property;
 						}
 					}
@@ -1862,234 +1873,244 @@ class cfgform extends class_base
 						continue;
 					}
 
-					// additional options
-					switch ($property["type"])
+					if (empty($property["cfgf_property_editing_disabled"]))
 					{
-						case "textarea":
-							$this->vars(array(
-								"richtext_caption" => t("RTE"),
-								"richtext_checked" => checked($property["richtext"] == 1),
-								"richtext" => $property["richtext"],
-								"rows_caption" => t("K&otilde;rgus"),
-								"rows" => $property["rows"],
-								"cols_caption" => t("Laius"),
-								"cols" => $property["cols"],
-								"prp_key" => $property["name"],
-							));
-							$property["cfgform_additional_options"] = $this->parse("textarea_options");
-							$this->vars(array("textarea_options" => ""));
-							break;
+						// additional options
+						switch ($property["type"])
+						{
+							case "textarea":
+								$this->vars(array(
+									"richtext_caption" => t("RTE"),
+									"richtext_checked" => checked($property["richtext"] == 1),
+									"richtext" => $property["richtext"],
+									"rows_caption" => t("K&otilde;rgus"),
+									"rows" => $property["rows"],
+									"cols_caption" => t("Laius"),
+									"cols" => $property["cols"],
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("textarea_options");
+								$this->vars(array("textarea_options" => ""));
+								break;
 
-						case "textbox":
-							$this->vars(array(
-								"size_caption" => t("Laius"),
-								"size" => $property["size"],
-								"prp_key" => $property["name"],
-							));
-							$property["cfgform_additional_options"] = $this->parse("textbox_options");
-							$this->vars(array("textbox_options" => ""));
-							break;
+							case "textbox":
+								$this->vars(array(
+									"size_caption" => t("Laius"),
+									"size" => $property["size"],
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("textbox_options");
+								$this->vars(array("textbox_options" => ""));
+								break;
 
-						case "relpicker":
-							$this->vars(array(
-								"no_edit_caption" => t("Nuppudeta"),
-								"no_edit_checked" => checked($property["no_edit"] == 1),
-								"no_edit" => $property["no_edit"],
-								"displayradio_caption" => t("Valikud"),
-								"displayradio_ch" => ("radio" === $property["display"]) ? ' checked="1"' : "",
-								"displayselect_caption" => t("Selectbox"),
-								"displayselect_ch" => ("select" === $property["display"]) ? ' checked="1"' : "",
-								"stylenormal_caption" => t("Tavaline"),
-								"stylenormal_ch" => (empty($property["display"])) ? ' checked="1"' : "",
-								"styleac_caption" => t("Autocomplete"),
-								"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
-								"size_caption" => t("K&otilde;rgus"),
-								"size" => $property["size"],
-								"prp_key" => $property["name"],
-							));
-							$property["cfgform_additional_options"] = $this->parse("relpicker_options");
-							$this->vars(array("relpicker_options" => ""));
-							break;
+							case "relpicker":
+								$this->vars(array(
+									"no_edit_caption" => t("Nuppudeta"),
+									"no_edit_checked" => checked($property["no_edit"] == 1),
+									"no_edit" => $property["no_edit"],
+									"displayradio_caption" => t("Valikud"),
+									"displayradio_ch" => ("radio" === $property["display"]) ? ' checked="1"' : "",
+									"displayselect_caption" => t("Selectbox"),
+									"displayselect_ch" => ("select" === $property["display"]) ? ' checked="1"' : "",
+									"stylenormal_caption" => t("Tavaline"),
+									"stylenormal_ch" => (empty($property["display"])) ? ' checked="1"' : "",
+									"styleac_caption" => t("Autocomplete"),
+									"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
+									"size_caption" => t("K&otilde;rgus"),
+									"size" => $property["size"],
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("relpicker_options");
+								$this->vars(array("relpicker_options" => ""));
+								break;
 
-						case "select":
-							$this->vars(array(
-								"size_caption" => t("K&otilde;rgus"),
-								"size" => $property["size"],
-								"prp_key" => $property["name"],
-							));
-							$property["cfgform_additional_options"] = $this->parse("select_options");
-							$this->vars(array("select_options" => ""));
-							break;
+							case "select":
+								$this->vars(array(
+									"size_caption" => t("K&otilde;rgus"),
+									"size" => $property["size"],
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("select_options");
+								$this->vars(array("select_options" => ""));
+								break;
 
-						case "date_select":
-							settype($property["format"], "array");
-							$this->vars(array(
-								"prp_key" => $property["name"],
+							case "date_select":
+								settype($property["format"], "array");
+								$this->vars(array(
+									"prp_key" => $property["name"],
 
-								"buttons_show_caption" => t("Nupud: jah"),
-								"buttons_show_ch" => (1 == $property["buttons"]) ? ' checked="1"' : "",
-								"buttons_hide_caption" => t("ei"),
-								"buttons_hide_ch" => ("0" === $property["buttons"]) ? ' checked="1"' : "",
-								"buttons_default_caption" => t("m&auml;&auml;ramata"),
-								"buttons_default_ch" => (!isset($property["buttons"])) ? ' checked="1"' : "",
+									"buttons_show_caption" => t("Nupud: jah"),
+									"buttons_show_ch" => (1 == $property["buttons"]) ? ' checked="1"' : "",
+									"buttons_hide_caption" => t("ei"),
+									"buttons_hide_ch" => ("0" === $property["buttons"]) ? ' checked="1"' : "",
+									"buttons_default_caption" => t("m&auml;&auml;ramata"),
+									"buttons_default_ch" => (!isset($property["buttons"])) ? ' checked="1"' : "",
 
-								"format_caption" => t("Formaat:"),
+									"format_caption" => t("Formaat:"),
 
-								"format_dayselect_caption" => t("P&auml;ev: select"),
-								"format_dayselect_ch" => (in_array("day", $property["format"])) ? ' checked="1"' : "",
-								"format_daytext_caption" => t("text"),
-								"format_daytext_ch" => (in_array("day_textbox", $property["format"])) ? ' checked="1"' : "",
-								"format_daynone_caption" => t("m&auml;&auml;ramata"),
-								"format_daynone_ch" => (!in_array("day", $property["format"]) and !in_array("day_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_dayselect_caption" => t("P&auml;ev: select"),
+									"format_dayselect_ch" => (in_array("day", $property["format"])) ? ' checked="1"' : "",
+									"format_daytext_caption" => t("text"),
+									"format_daytext_ch" => (in_array("day_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_daynone_caption" => t("m&auml;&auml;ramata"),
+									"format_daynone_ch" => (!in_array("day", $property["format"]) and !in_array("day_textbox", $property["format"])) ? ' checked="1"' : "",
 
-								"format_monthselect_caption" => t("Kuu: select"),
-								"format_monthselect_ch" => (in_array("month", $property["format"])) ? ' checked="1"' : "",
-								"format_monthtext_caption" => t("text"),
-								"format_monthtext_ch" => (in_array("month_textbox", $property["format"])) ? ' checked="1"' : "",
-								"format_monthnone_caption" => t("m&auml;&auml;ramata"),
-								"format_monthnone_ch" => (!in_array("month", $property["format"]) and !in_array("month_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_monthselect_caption" => t("Kuu: select"),
+									"format_monthselect_ch" => (in_array("month", $property["format"])) ? ' checked="1"' : "",
+									"format_monthtext_caption" => t("text"),
+									"format_monthtext_ch" => (in_array("month_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_monthnone_caption" => t("m&auml;&auml;ramata"),
+									"format_monthnone_ch" => (!in_array("month", $property["format"]) and !in_array("month_textbox", $property["format"])) ? ' checked="1"' : "",
 
-								"format_yearselect_caption" => t("Aasta: select"),
-								"format_yearselect_ch" => (in_array("year", $property["format"])) ? ' checked="1"' : "",
-								"format_yeartext_caption" => t("text"),
-								"format_yeartext_ch" => (in_array("year_textbox", $property["format"])) ? ' checked="1"' : "",
-								"format_yearnone_caption" => t("m&auml;&auml;ramata"),
-								"format_yearnone_ch" => (!in_array("year", $property["format"]) and !in_array("year_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_yearselect_caption" => t("Aasta: select"),
+									"format_yearselect_ch" => (in_array("year", $property["format"])) ? ' checked="1"' : "",
+									"format_yeartext_caption" => t("text"),
+									"format_yeartext_ch" => (in_array("year_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_yearnone_caption" => t("m&auml;&auml;ramata"),
+									"format_yearnone_ch" => (!in_array("year", $property["format"]) and !in_array("year_textbox", $property["format"])) ? ' checked="1"' : "",
 
-								"format_hourselect_caption" => t("Tund: select"),
-								"format_hourselect_ch" => (in_array("hour", $property["format"])) ? ' checked="1"' : "",
-								"format_hourtext_caption" => t("text"),
-								"format_hourtext_ch" => (in_array("hour_textbox", $property["format"])) ? ' checked="1"' : "",
-								"format_hournone_caption" => t("m&auml;&auml;ramata"),
-								"format_hournone_ch" => (!in_array("hour", $property["format"]) and !in_array("hour_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_hourselect_caption" => t("Tund: select"),
+									"format_hourselect_ch" => (in_array("hour", $property["format"])) ? ' checked="1"' : "",
+									"format_hourtext_caption" => t("text"),
+									"format_hourtext_ch" => (in_array("hour_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_hournone_caption" => t("m&auml;&auml;ramata"),
+									"format_hournone_ch" => (!in_array("hour", $property["format"]) and !in_array("hour_textbox", $property["format"])) ? ' checked="1"' : "",
 
-								"format_minuteselect_caption" => t("Minut: select"),
-								"format_minuteselect_ch" => (in_array("minute", $property["format"])) ? ' checked="1"' : "",
-								"format_minutetext_caption" => t("text"),
-								"format_minutetext_ch" => (in_array("minute_textbox", $property["format"])) ? ' checked="1"' : "",
-								"format_minutenone_caption" => t("m&auml;&auml;ramata"),
-								"format_minutenone_ch" => (!in_array("minute", $property["format"]) and !in_array("minute_textbox", $property["format"])) ? ' checked="1"' : ""
-							));
-							$property["cfgform_additional_options"] = $this->parse("date_select_options");
-							$this->vars(array("date_select_options" => ""));
-							break;
+									"format_minuteselect_caption" => t("Minut: select"),
+									"format_minuteselect_ch" => (in_array("minute", $property["format"])) ? ' checked="1"' : "",
+									"format_minutetext_caption" => t("text"),
+									"format_minutetext_ch" => (in_array("minute_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_minutenone_caption" => t("m&auml;&auml;ramata"),
+									"format_minutenone_ch" => (!in_array("minute", $property["format"]) and !in_array("minute_textbox", $property["format"])) ? ' checked="1"' : ""
+								));
+								$property["cfgform_additional_options"] = $this->parse("date_select_options");
+								$this->vars(array("date_select_options" => ""));
+								break;
 
-						case "datetime_select":
-							$this->vars(array(
-								"prp_key" => $property["name"],
-								"dayselect_caption" => t("P&auml;ev: select"),
-								"dayselect_ch" => ("select" === $property["day"] or empty($property["day"])) ? ' checked="1"' : "",
-								"daytext_caption" => t("textbox"),
-								"daytext_ch" => ("text" === $property["day"]) ? ' checked="1"' : "",
-								"monthselect_caption" => t("Kuu: select"),
-								"monthselect_ch" => ("select" === $property["month"] or empty($property["month"])) ? ' checked="1"' : "",
-								"monthtext_caption" => t("textbox"),
-								"monthtext_ch" => ("text" === $property["month"]) ? ' checked="1"' : "",
-							));
-							$property["cfgform_additional_options"] = $this->parse("datetime_select_options");
-							$this->vars(array("datetime_select_options" => ""));
-							break;
+							case "datetime_select":
+								$this->vars(array(
+									"prp_key" => $property["name"],
+									"dayselect_caption" => t("P&auml;ev: select"),
+									"dayselect_ch" => ("select" === $property["day"] or empty($property["day"])) ? ' checked="1"' : "",
+									"daytext_caption" => t("textbox"),
+									"daytext_ch" => ("text" === $property["day"]) ? ' checked="1"' : "",
+									"monthselect_caption" => t("Kuu: select"),
+									"monthselect_ch" => ("select" === $property["month"] or empty($property["month"])) ? ' checked="1"' : "",
+									"monthtext_caption" => t("textbox"),
+									"monthtext_ch" => ("text" === $property["month"]) ? ' checked="1"' : "",
+								));
+								$property["cfgform_additional_options"] = $this->parse("datetime_select_options");
+								$this->vars(array("datetime_select_options" => ""));
+								break;
 
-						case "chooser":
-							$this->vars(array(
-								"orienth_caption" => t("Horisontaalselt"),
-								"orienth_ch" => ("horizontal" === $property["orient"]) ? ' checked="1"' : "",
-								"orientv_caption" => t("Vertikaalselt"),
-								"orientv_ch" => ("vertical" === $property["orient"]) ? ' checked="1"' : "",
-								"prp_key" => $property["name"],
-							));
-							$property["cfgform_additional_options"] = $this->parse("chooser_options");
-							$this->vars(array("chooser_options" => ""));
-							break;
+							case "chooser":
+								$this->vars(array(
+									"orienth_caption" => t("Horisontaalselt"),
+									"orienth_ch" => ("horizontal" === $property["orient"]) ? ' checked="1"' : "",
+									"orientv_caption" => t("Vertikaalselt"),
+									"orientv_ch" => ("vertical" === $property["orient"]) ? ' checked="1"' : "",
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("chooser_options");
+								$this->vars(array("chooser_options" => ""));
+								break;
 
-						case "layout":
-							$this->vars(array(
-								"hbox_caption" => t("Horisontaalne"),
-								"hbox_ch" => ("hbox" === $property["type"]) ? ' checked="1"' : "",
-								"hbox_caption" => t("Vertikaalne"),
-								"hbox_ch" => ("vertical" === $property["type"]) ? ' checked="1"' : "",
-								"prp_key" => $property["name"],
-							));
-							$property["cfgform_additional_options"] = $this->parse("layout_options");
-							$this->vars(array("layout_options" => ""));
-							break;
+							case "layout":
+								$this->vars(array(
+									"hbox_caption" => t("Horisontaalne"),
+									"hbox_ch" => ("hbox" === $property["type"]) ? ' checked="1"' : "",
+									"hbox_caption" => t("Vertikaalne"),
+									"hbox_ch" => ("vertical" === $property["type"]) ? ' checked="1"' : "",
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("layout_options");
+								$this->vars(array("layout_options" => ""));
+								break;
 
-						default:
-							$property["cfgform_additional_options"] = "";
+							default:
+								$property["cfgform_additional_options"] = "";
+						}
+
+						$this->vars(array(
+							"prp_key" => $property["name"],
+							"no_caption_caption" => t("&Auml;ra n&auml;ita pealkirja"),
+							"no_caption_checked" => checked(!empty($property["no_caption"])),
+							"no_caption" => $property["no_caption"],
+							"captionside_l_caption" => t("Pealkiri vasakul"),
+							"captionside_l_ch" =>  ("left" === $property["captionside"]) ? ' checked="1"' : "",
+							"captionside_t_caption" => t("Pealkiri &uuml;lal"),
+							"captionside_t_ch" =>  ("top" === $property["captionside"]) ? ' checked="1"' : "",
+							"textsize_caption" => '<span title="' . t("CSS formaadis:") . ' 12px, 0.7em, ..." style="cursor: help;">' . t("Tekstisuurus") . '</span>',
+							"textsize" => $property["textsize"],
+							"disabled_caption" => t("Mitteaktiivne (disabled)"),
+							"disabled_checked" => checked(!empty($property["disabled"])),
+							"disabled" => $property["disabled"],
+							"prp_options" => $property["cfgform_additional_options"],
+							"prp_opts_caption" => t("Lisavalikud"),
+							"tmp_id" => $cnt,
+						));
+						$options = $this->parse("options");
+						$this->vars(array("options" => ""));
+
+						// type selector
+						$type_options = array();
+
+						switch ($property["type"])
+						{ /// get type options
+							case "textbox":
+								$type_options = array(
+									"textbox" => "textbox",
+									"textarea" => "textarea"
+								);
+								break;
+
+							case "textarea":
+								$type_options = array(
+									"textarea" => "textarea",
+									"textbox" => "textbox"
+								);
+								break;
+
+							case "date_select":
+								$type_options = array(
+									"date_select" => "date_select",
+									"datetime_select" => "datetime_select"
+								);
+								break;
+
+							case "datetime_select":
+								$type_options = array(
+									"datetime_select" => "datetime_select",
+									"date_select" => "date_select"
+								);
+								break;
+						}
+
+						/// some elements' type not alterable. those also form elements and in POST request
+						$disabled = !count($type_options);
+						if ($disabled)
+						{
+							$type_options = array($property["type"] => $property["type"]);
+						}
+
+						///
+						$type_selector = html::select(array(
+							"name" => "prpconfig[" . $prpdata["name"] . "][type]",
+							"options" => $type_options,
+							"disabled" => $disabled,
+							"value" => $property["type"]
+						));
+
+						//
+						$used_props[$property["name"]] = 1;
+						$prop_tpl = "property";
 					}
-
-					$this->vars(array(
-						"prp_key" => $property["name"],
-						"no_caption_caption" => t("&Auml;ra n&auml;ita pealkirja"),
-						"no_caption_checked" => checked(!empty($property["no_caption"])),
-						"no_caption" => $property["no_caption"],
-						"captionside_l_caption" => t("Pealkiri vasakul"),
-						"captionside_l_ch" =>  ("left" === $property["captionside"]) ? ' checked="1"' : "",
-						"captionside_t_caption" => t("Pealkiri &uuml;lal"),
-						"captionside_t_ch" =>  ("top" === $property["captionside"]) ? ' checked="1"' : "",
-						"textsize_caption" => '<span title="' . t("CSS formaadis:") . ' 12px, 0.7em, ..." style="cursor: help;">' . t("Tekstisuurus") . '</span>',
-						"textsize" => $property["textsize"],
-						"disabled_caption" => t("Mitteaktiivne (disabled)"),
-						"disabled_checked" => checked(!empty($property["disabled"])),
-						"disabled" => $property["disabled"],
-						"prp_options" => $property["cfgform_additional_options"],
-						"prp_opts_caption" => t("Lisavalikud"),
-						"tmp_id" => $cnt,
-					));
-					$options = $this->parse("options");
-					$this->vars(array("options" => ""));
-
-					// type selector
-					$type_options = array();
-
-					switch ($property["type"])
-					{ /// get type options
-						case "textbox":
-							$type_options = array(
-								"textbox" => "textbox",
-								"textarea" => "textarea"
-							);
-							break;
-
-						case "textarea":
-							$type_options = array(
-								"textarea" => "textarea",
-								"textbox" => "textbox"
-							);
-							break;
-
-						case "date_select":
-							$type_options = array(
-								"date_select" => "date_select",
-								"datetime_select" => "datetime_select"
-							);
-							break;
-
-						case "datetime_select":
-							$type_options = array(
-								"datetime_select" => "datetime_select",
-								"date_select" => "date_select"
-							);
-							break;
-					}
-
-					/// some elements' type not alterable. those also form elements and in POST request
-					$disabled = !count($type_options);
-					if ($disabled)
+					else
 					{
-						$type_options = array($property["type"] => $property["type"]);
+						$options = "";
+						$type_selector = $property["type"];
+						$prop_tpl = "property_disabled";
 					}
-
-					///
-					$type_selector = html::select(array(
-						"name" => "prpconfig[" . $prpdata["name"] . "][type]",
-						"options" => $type_options,
-						"disabled" => $disabled,
-						"value" => $property["type"]
-					));
-
-					//
-					$used_props[$property["name"]] = 1;
 
 					$this->vars(array(
 						"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
@@ -2104,11 +2125,11 @@ class cfgform extends class_base
 
 					if ($layout)
 					{
-						$layout_props .= $this->parse("property");
+						$layout_props .= $this->parse($prop_tpl);
 					}
 					else
 					{
-						$sc .= $this->parse("property");
+						$sc .= $this->parse($prop_tpl);
 					}
 				}
 

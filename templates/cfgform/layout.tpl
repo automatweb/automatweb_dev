@@ -114,6 +114,16 @@ function cfgformToggleSelectProps(grpId)
 		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" class="prpGrp{VAR:grp_id}" name="mark[{VAR:prp_mark_key}]" value="1" style="border: 3px solid blue;"/></td>
 	</tr>
 	<!-- END SUB: property -->
+	<!-- SUB: property_disabled -->
+	<tr>
+		<td width="50" bgcolor="{VAR:bgcolor}">{VAR:prp_order}</td>
+		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_key}</td>
+		<td width="150" bgcolor="{VAR:bgcolor}">{VAR:prp_caption}</td>
+		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
+		<td width="250" bgcolor="{VAR:bgcolor}"></td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" class="prpGrp{VAR:grp_id}" name="mark[{VAR:prp_mark_key}]" value="1" style="border: 3px solid blue;"/></td>
+	</tr>
+	<!-- END SUB: property_disabled -->
 	</table>
 </fieldset>
 <!-- END SUB: group -->
