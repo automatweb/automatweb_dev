@@ -57,75 +57,75 @@ msgid "Omaduse S&uuml;ndmuste kataloog (event_folder) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_no_event_folder
-msgid "Omaduse Ära tee sündmuste kataloogi (no_event_folder) caption"
+msgid "Omaduse &Auml;ra tee s&uuml;ndmuste kataloogi (no_event_folder) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_no_event_folder_comment
-msgid "Omaduse Ära tee sündmuste kataloogi (no_event_folder) kommentaar"
+msgid "Omaduse &Auml;ra tee s&uuml;ndmuste kataloogi (no_event_folder) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_no_event_folder_help
-msgid "Omaduse Ära tee sündmuste kataloogi (no_event_folder) help"
+msgid "Omaduse &Auml;ra tee s&uuml;ndmuste kataloogi (no_event_folder) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_day_start
-msgid "Omaduse Päev algab (day_start) caption"
+msgid "Omaduse P&auml;ev algab (day_start) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_day_start_comment
-msgid "Omaduse Päev algab (day_start) kommentaar"
+msgid "Omaduse P&auml;ev algab (day_start) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_day_start_help
-msgid "Omaduse Päev algab (day_start) help"
+msgid "Omaduse P&auml;ev algab (day_start) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_day_end
-msgid "Omaduse Päev lõpeb (day_end) caption"
+msgid "Omaduse P&auml;ev l&otilde;peb (day_end) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_day_end_comment
-msgid "Omaduse Päev lõpeb (day_end) kommentaar"
+msgid "Omaduse P&auml;ev l&otilde;peb (day_end) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_day_end_help
-msgid "Omaduse Päev lõpeb (day_end) help"
+msgid "Omaduse P&auml;ev l&otilde;peb (day_end) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_minute_step
-msgid "Omaduse Sündmuse sisestamise minutite täpsus (minute_step) caption"
+msgid "Omaduse S&uuml;ndmuse sisestamise minutite t&auml;psus (minute_step) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_minute_step_comment
-msgid "Omaduse Sündmuse sisestamise minutite täpsus (minute_step) kommentaar"
+msgid "Omaduse S&uuml;ndmuse sisestamise minutite t&auml;psus (minute_step) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_minute_step_help
-msgid "Omaduse Sündmuse sisestamise minutite täpsus (minute_step) help"
+msgid "Omaduse S&uuml;ndmuse sisestamise minutite t&auml;psus (minute_step) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_event_def_len
-msgid "Omaduse Sündmuse vaikimisi pikkus (min) (event_def_len) caption"
+msgid "Omaduse S&uuml;ndmuse vaikimisi pikkus (min) (event_def_len) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_event_def_len_comment
-msgid "Omaduse Sündmuse vaikimisi pikkus (min) (event_def_len) kommentaar"
+msgid "Omaduse S&uuml;ndmuse vaikimisi pikkus (min) (event_def_len) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_event_def_len_help
-msgid "Omaduse Sündmuse vaikimisi pikkus (min) (event_def_len) help"
+msgid "Omaduse S&uuml;ndmuse vaikimisi pikkus (min) (event_def_len) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_navigator_visible
-msgid "Omaduse Näita navigaatorit (navigator_visible) caption"
+msgid "Omaduse N&auml;ita navigaatorit (navigator_visible) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_navigator_visible_comment
-msgid "Omaduse Näita navigaatorit (navigator_visible) kommentaar"
+msgid "Omaduse N&auml;ita navigaatorit (navigator_visible) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_navigator_visible_help
-msgid "Omaduse Näita navigaatorit (navigator_visible) help"
+msgid "Omaduse N&auml;ita navigaatorit (navigator_visible) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:prop_navigator_months
@@ -144,27 +144,27 @@ msgid "Omaduse Kuud navigaatoris (navigator_months) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_my_projects
-msgid "Omaduse Näita projekte (my_projects) caption"
+msgid "Omaduse N&auml;ita projekte (my_projects) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_my_projects_comment
-msgid "Omaduse Näita projekte (my_projects) kommentaar"
+msgid "Omaduse N&auml;ita projekte (my_projects) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_my_projects_help
-msgid "Omaduse Näita projekte (my_projects) help"
+msgid "Omaduse N&auml;ita projekte (my_projects) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_workdays
-msgid "Omaduse Tööpäevad (workdays) caption"
+msgid "Omaduse T&ouml;&ouml;p&auml;evad (workdays) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_workdays_comment
-msgid "Omaduse Tööpäevad (workdays) kommentaar"
+msgid "Omaduse T&ouml;&ouml;p&auml;evad (workdays) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_workdays_help
-msgid "Omaduse Tööpäevad (workdays) help"
+msgid "Omaduse T&ouml;&ouml;p&auml;evad (workdays) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:prop_tab_views
@@ -183,63 +183,63 @@ msgid "Omaduse Vaate tabid (tab_views) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_del_views
-msgid "Omaduse Kustutamisvõimalusega vaated (del_views) caption"
+msgid "Omaduse Kustutamisv&otilde;imalusega vaated (del_views) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_del_views_comment
-msgid "Omaduse Kustutamisvõimalusega vaated (del_views) kommentaar"
+msgid "Omaduse Kustutamisv&otilde;imalusega vaated (del_views) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_del_views_help
-msgid "Omaduse Kustutamisvõimalusega vaated (del_views) help"
+msgid "Omaduse Kustutamisv&otilde;imalusega vaated (del_views) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_event_entry_classes
-msgid "Omaduse Sündmuste klassid (event_entry_classes) caption"
+msgid "Omaduse S&uuml;ndmuste klassid (event_entry_classes) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_event_entry_classes_comment
-msgid "Omaduse Sündmuste klassid (event_entry_classes) kommentaar"
+msgid "Omaduse S&uuml;ndmuste klassid (event_entry_classes) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_event_entry_classes_help
-msgid "Omaduse Sündmuste klassid (event_entry_classes) help"
+msgid "Omaduse S&uuml;ndmuste klassid (event_entry_classes) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_month_week
-msgid "Omaduse Näita kuuvaadet samamoodi nagu nädalavaadet (month_week) caption"
+msgid "Omaduse N&auml;ita kuuvaadet samamoodi nagu n&auml;dalavaadet (month_week) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_month_week_comment
-msgid "Omaduse Näita kuuvaadet samamoodi nagu nädalavaadet (month_week) kommentaar"
+msgid "Omaduse N&auml;ita kuuvaadet samamoodi nagu n&auml;dalavaadet (month_week) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_month_week_help
-msgid "Omaduse Näita kuuvaadet samamoodi nagu nädalavaadet (month_week) help"
+msgid "Omaduse N&auml;ita kuuvaadet samamoodi nagu n&auml;dalavaadet (month_week) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_multi_days
-msgid "Omaduse Näita mitmepäevaseid sündmusi ainult esimesel päeval (multi_days) caption"
+msgid "Omaduse N&auml;ita mitmep&auml;evaseid s&uuml;ndmusi ainult esimesel p&auml;eval (multi_days) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_multi_days_comment
-msgid "Omaduse Näita mitmepäevaseid sündmusi ainult esimesel päeval (multi_days) kommentaar"
+msgid "Omaduse N&auml;ita mitmep&auml;evaseid s&uuml;ndmusi ainult esimesel p&auml;eval (multi_days) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_multi_days_help
-msgid "Omaduse Näita mitmepäevaseid sündmusi ainult esimesel päeval (multi_days) help"
+msgid "Omaduse N&auml;ita mitmep&auml;evaseid s&uuml;ndmusi ainult esimesel p&auml;eval (multi_days) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_show_bdays
-msgid "Omaduse Näita s&uuml;nnip&auml;evi (show_bdays) caption"
+msgid "Omaduse N&auml;ita s&uuml;nnip&auml;evi (show_bdays) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_show_bdays_comment
-msgid "Omaduse Näita s&uuml;nnip&auml;evi (show_bdays) kommentaar"
+msgid "Omaduse N&auml;ita s&uuml;nnip&auml;evi (show_bdays) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_show_bdays_help
-msgid "Omaduse Näita s&uuml;nnip&auml;evi (show_bdays) help"
+msgid "Omaduse N&auml;ita s&uuml;nnip&auml;evi (show_bdays) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:prop_vac_count
@@ -647,7 +647,7 @@ msgid "Grupi Toimetused (tasks) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:rel_RELTYPE_EVENT_SOURCE
-msgid "Seose võta s&uuml;ndmusi (RELTYPE_EVENT_SOURCE) tekst"
+msgid "Seose v&otilde;ta s&uuml;ndmusi (RELTYPE_EVENT_SOURCE) tekst"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:rel_RELTYPE_EVENT
@@ -655,11 +655,11 @@ msgid "Seose s&uuml;ndmus (RELTYPE_EVENT) tekst"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:rel_RELTYPE_DC_RELATION
-msgid "Seose viide kalendri väljundile (RELTYPE_DC_RELATION) tekst"
+msgid "Seose viide kalendri v&auml;ljundile (RELTYPE_DC_RELATION) tekst"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:rel_RELTYPE_GET_DC_RELATION
-msgid "Seose võta kalendri väljundid (RELTYPE_GET_DC_RELATION) tekst"
+msgid "Seose v&otilde;ta kalendri v&auml;ljundid (RELTYPE_GET_DC_RELATION) tekst"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:rel_RELTYPE_EVENT_FOLDER
@@ -681,11 +681,16 @@ msgid "Seose Teised (RELTYPE_OTHER_CALENDAR) tekst"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:rel_RELTYPE_ICAL_EXPORT
-msgid "Seose Väline kalender (eksport) (RELTYPE_ICAL_EXPORT) tekst"
+msgid "Seose V&auml;line kalender (eksport) (RELTYPE_ICAL_EXPORT) tekst"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:rel_RELTYPE_ICAL_IMPORT
-msgid "Seose Väline kalender (import) (RELTYPE_ICAL_IMPORT) tekst"
+msgid "Seose V&auml;line kalender (import) (RELTYPE_ICAL_IMPORT) tekst"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:238
+#: classes/applications/calendar/planner.aw:389
+msgid "P&auml;ev"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:238

@@ -638,7 +638,7 @@ msgstr ""
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:703 classes/applications/groupware/reservation.aw:940 classes/applications/groupware/reservation.aw:1954 classes/applications/groupware/reservation.aw:2088
+#: classes/applications/groupware/reservation.aw:703 classes/applications/groupware/reservation.aw:940 classes/applications/groupware/reservation.aw:1971 classes/applications/groupware/reservation.aw:2105
 msgid "Nimi"
 msgstr ""
 
@@ -670,7 +670,7 @@ msgstr ""
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:956 classes/applications/groupware/reservation.aw:1797
+#: classes/applications/groupware/reservation.aw:956 classes/applications/groupware/reservation.aw:1814
 msgid "Summa"
 msgstr ""
 
@@ -758,59 +758,59 @@ msgstr ""
 msgid "Toidud: %s\n"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1717
+#: classes/applications/groupware/reservation.aw:1734
 msgid "%s: %s tk / %s"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1760
+#: classes/applications/groupware/reservation.aw:1777
 msgid "Tooted"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1769 classes/applications/groupware/reservation.aw:2229
+#: classes/applications/groupware/reservation.aw:1786 classes/applications/groupware/reservation.aw:2246
 msgid "Ruum"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1778
+#: classes/applications/groupware/reservation.aw:1795
 msgid "Soodustus ruumilt (-%d %%)"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1787
+#: classes/applications/groupware/reservation.aw:1804
 msgid "Soodustus toodetelt (-%d %%)"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1954
+#: classes/applications/groupware/reservation.aw:1971
 msgid "Eesnimi"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1954
+#: classes/applications/groupware/reservation.aw:1971
 msgid "Perenimi"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1959
+#: classes/applications/groupware/reservation.aw:1976
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:1964
+#: classes/applications/groupware/reservation.aw:1981
 msgid "Meiliaadress"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2093
+#: classes/applications/groupware/reservation.aw:2110
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2114
+#: classes/applications/groupware/reservation.aw:2131
 msgid "Kinnituatud, kordused loodud"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2219
+#: classes/applications/groupware/reservation.aw:2236
 msgid "Alates"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2224
+#: classes/applications/groupware/reservation.aw:2241
 msgid "Kuni"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:2265
+#: classes/applications/groupware/reservation.aw:2282
 msgid "Korratud reserveeringud"
 msgstr ""
 

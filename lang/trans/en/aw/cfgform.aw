@@ -8,7 +8,6 @@ $GLOBALS["TRANS"]["Omaduse Layout (layout) caption"] = "Layout";
 $GLOBALS["TRANS"]["Omaduse Av. Toolbar (availtoolbar) caption"] = "Av. Toolbar";
 $GLOBALS["TRANS"]["Omaduse Subaction (sys) (subaction) caption"] = "Subaction";
 $GLOBALS["TRANS"]["Omaduse Kontrollerid (gen_view_controllers) caption"] = "Controllers";
-$GLOBALS["TRANS"]["Omaduse Vaikimisi v‰‰rtused (default_table) caption"] = "Default values";
 $GLOBALS["TRANS"]["Omaduse Omadused (trans_tbl_capt) caption"] = "Properties";
 $GLOBALS["TRANS"]["Omaduse Fix. toolbar (classinfo_fixed_toolbar) caption"] = "Fixed toolbar";
 $GLOBALS["TRANS"]["Grupi Layout (layout) pealkiri"] = "Layout";

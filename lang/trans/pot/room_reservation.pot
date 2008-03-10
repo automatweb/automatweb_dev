@@ -234,11 +234,7 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-#: classes/common/room_reservation.aw:464
-msgid "Vali enne jätkamist sobiv aeg!"
-msgstr ""
-
-#: classes/common/room_reservation.aw:465
+#: classes/common/room_reservation.aw:464 classes/common/room_reservation.aw:465
 msgid "Vali enne j&auml;tkamist sobiv aeg!"
 msgstr ""
 
@@ -274,7 +270,7 @@ msgstr ""
 msgid "Broneering: %s"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1741
+#: classes/common/room_reservation.aw:1742
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""
 

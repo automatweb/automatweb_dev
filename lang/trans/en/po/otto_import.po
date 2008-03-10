@@ -812,6 +812,10 @@ msgstr ""
 msgid "Kujundusosa Toodete&nbsp;otsing (vbox_products_manager_search) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/otto/otto_import.aw:layout_vbox_files_import_filenames
+msgid "Kujundusosa Toodete&nbsp;otsing (vbox_files_import_filenames) pealkiri"
+msgstr ""
+
 #: classes/applications/shop/otto/otto_import.aw:317
 msgid "Impordi soodustooted"
 msgstr ""

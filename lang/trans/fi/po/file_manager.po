@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -13,42 +13,42 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/admin/file_manager.aw:75
+#: classes/admin/file_manager.aw:80
 msgid "Uus fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:76
+#: classes/admin/file_manager.aw:81
 msgid "Vali olemasolev fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:85
+#: classes/admin/file_manager.aw:90
 msgid "Fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:90
+#: classes/admin/file_manager.aw:95
 msgid "Asukoht"
 msgstr ""
 
-#: classes/admin/file_manager.aw:95
+#: classes/admin/file_manager.aw:100
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/file_manager.aw:156
+#: classes/admin/file_manager.aw:161
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/file_manager.aw:235
+#: classes/admin/file_manager.aw:240
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/file_manager.aw:242
+#: classes/admin/file_manager.aw:247
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/file_manager.aw:248
+#: classes/admin/file_manager.aw:253
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/file_manager.aw:255
+#: classes/admin/file_manager.aw:260
 msgid "Viimased 30"
 msgstr ""

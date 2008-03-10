@@ -9,8 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/groupware/quick_reservation.aw:class_1393_help
+#: classes/applications/groupware/quick_reservation.aw:class_1384_help
 msgid "Klassi Broneeringu kiirlisamine help"
 msgstr ""
 
@@ -146,3 +145,14 @@ msgstr ""
 msgid "Omaduse Ruum (resource) help"
 msgstr ""
 
+#: classes/applications/groupware/quick_reservation.aw:prop_product
+msgid "Omaduse Toode (product) caption"
+msgstr ""
+
+#: classes/applications/groupware/quick_reservation.aw:prop_product_comment
+msgid "Omaduse Toode (product) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/quick_reservation.aw:prop_product_help
+msgid "Omaduse Toode (product) help"
+msgstr ""

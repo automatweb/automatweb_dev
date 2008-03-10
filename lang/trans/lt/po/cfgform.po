@@ -314,15 +314,15 @@ msgid "Omaduse Kontrollerid (gen_view_controllers) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:prop_default_table
-msgid "Omaduse Vaikimisi v‰‰rtused (default_table) caption"
+msgid "Omaduse Vaikimisi v&auml;&auml;rtused (default_table) caption"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:prop_default_table_comment
-msgid "Omaduse Vaikimisi v‰‰rtused (default_table) kommentaar"
+msgid "Omaduse Vaikimisi v&auml;&auml;rtused (default_table) kommentaar"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:prop_default_table_help
-msgid "Omaduse Vaikimisi v‰‰rtused (default_table) help"
+msgid "Omaduse Vaikimisi v&auml;&auml;rtused (default_table) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:prop_trans_tbl_capt

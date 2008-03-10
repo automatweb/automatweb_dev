@@ -394,7 +394,7 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:587
+#: classes/applications/shop/shop_packet.aw:593
 msgid "Kustuta tooted paketist"
 msgstr ""
 

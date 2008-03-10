@@ -87,51 +87,51 @@ msgid "Omaduse XML faili nimi (xml_filename) help"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file
-msgid "Omaduse Töötajate XML fail (xml_personnel_file) caption"
+msgid "Omaduse T&ouml;&ouml;tajate XML fail (xml_personnel_file) caption"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file_comment
-msgid "Omaduse Töötajate XML fail (xml_personnel_file) kommentaar"
+msgid "Omaduse T&ouml;&ouml;tajate XML fail (xml_personnel_file) kommentaar"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file_help
-msgid "Omaduse Töötajate XML fail (xml_personnel_file) help"
+msgid "Omaduse T&ouml;&ouml;tajate XML fail (xml_personnel_file) help"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_education_file
-msgid "Omaduse Hariduskäigu XML fail (xml_education_file) caption"
+msgid "Omaduse Haridusk&auml;igu XML fail (xml_education_file) caption"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_education_file_comment
-msgid "Omaduse Hariduskäigu XML fail (xml_education_file) kommentaar"
+msgid "Omaduse Haridusk&auml;igu XML fail (xml_education_file) kommentaar"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_education_file_help
-msgid "Omaduse Hariduskäigu XML fail (xml_education_file) help"
+msgid "Omaduse Haridusk&auml;igu XML fail (xml_education_file) help"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_work_relations_ending_file
-msgid "Omaduse Töösuhete peatumise XML fail (xml_work_relations_ending_file) caption"
+msgid "Omaduse T&ouml;&ouml;suhete peatumise XML fail (xml_work_relations_ending_file) caption"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_work_relations_ending_file_comment
-msgid "Omaduse Töösuhete peatumise XML fail (xml_work_relations_ending_file) kommentaar"
+msgid "Omaduse T&ouml;&ouml;suhete peatumise XML fail (xml_work_relations_ending_file) kommentaar"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_work_relations_ending_file_help
-msgid "Omaduse Töösuhete peatumise XML fail (xml_work_relations_ending_file) help"
+msgid "Omaduse T&ouml;&ouml;suhete peatumise XML fail (xml_work_relations_ending_file) help"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_structure_file
-msgid "Omaduse Struktuuriüksuste XML fail (xml_structure_file) caption"
+msgid "Omaduse Struktuuri&uuml;ksuste XML fail (xml_structure_file) caption"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_structure_file_comment
-msgid "Omaduse Struktuuriüksuste XML fail (xml_structure_file) kommentaar"
+msgid "Omaduse Struktuuri&uuml;ksuste XML fail (xml_structure_file) kommentaar"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_structure_file_help
-msgid "Omaduse Struktuuriüksuste XML fail (xml_structure_file) help"
+msgid "Omaduse Struktuuri&uuml;ksuste XML fail (xml_structure_file) help"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:prop_xml_link

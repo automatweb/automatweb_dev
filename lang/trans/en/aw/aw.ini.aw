@@ -134,7 +134,6 @@ $GLOBALS["TRANS"]["Klassi J&auml;rgnevus (253) nimi"] = "Transition";
 $GLOBALS["TRANS"]["Klassi Protsessi kulg (254) nimi"] = "Process workflow";
 $GLOBALS["TRANS"]["Klassi Kaustade nimekiri (255) nimi"] = "Folder list";
 $GLOBALS["TRANS"]["Klassi Profiil (256) nimi"] = "Profile";
-$GLOBALS["TRANS"]["Klassi Keel (266) nimi"] = "Language";
 $GLOBALS["TRANS"]["Klassi Personalikeskkond (275) nimi"] = "Personnell center";
 $GLOBALS["TRANS"]["Klassi Tööpakkumine (285) nimi"] = "Job offer";
 $GLOBALS["TRANS"]["Klassi Muutuja (277) nimi"] = "Variable";

@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/groupware/task_quick_entry.aw:class_1070_help
 msgid "Klassi Kiire toimetuse lisamine help"
@@ -178,15 +177,14 @@ msgstr ""
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:641
+#: classes/applications/groupware/task_quick_entry.aw:643
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:663
+#: classes/applications/groupware/task_quick_entry.aw:665
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:686
+#: classes/applications/groupware/task_quick_entry.aw:688
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
-

@@ -114,19 +114,19 @@ msgstr ""
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:373
+#: classes/applications/spa_bookings/spa_customer_interface.aw:382
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:903 classes/applications/spa_bookings/spa_customer_interface.aw:998
+#: classes/applications/spa_bookings/spa_customer_interface.aw:916 classes/applications/spa_bookings/spa_customer_interface.aw:1011
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1068
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1081
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1068
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1081
 msgid "Naine"
 msgstr ""
 

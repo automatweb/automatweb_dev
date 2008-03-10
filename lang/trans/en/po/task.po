@@ -950,7 +950,7 @@ msgstr ""
 
 #: classes/applications/groupware/task.aw:558
 #: classes/applications/groupware/task.aw:577
-#: classes/applications/groupware/task.aw:4805
+#: classes/applications/groupware/task.aw:4858
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
@@ -1079,9 +1079,9 @@ msgstr "Delete selected"
 #: classes/applications/groupware/task.aw:4354
 #: classes/applications/groupware/task.aw:4355
 #: classes/applications/groupware/task.aw:4380
-#: classes/applications/groupware/task.aw:4742
-#: classes/applications/groupware/task.aw:5023
-#: classes/applications/groupware/task.aw:5025
+#: classes/applications/groupware/task.aw:4795
+#: classes/applications/groupware/task.aw:5076
+#: classes/applications/groupware/task.aw:5078
 msgid "Otsi"
 msgstr "Search"
 
@@ -1171,19 +1171,22 @@ msgstr ""
 
 #: classes/applications/groupware/task.aw:2446
 #: classes/applications/groupware/task.aw:2456
-#: classes/applications/groupware/task.aw:4996
+#: classes/applications/groupware/task.aw:5049
 msgid "Toimetus"
 msgstr "Task"
 
 #: classes/applications/groupware/task.aw:2514
+#: classes/applications/groupware/task.aw:2554
 msgid "Prognoos"
 msgstr "Prognosis"
 
 #: classes/applications/groupware/task.aw:2514
+#: classes/applications/groupware/task.aw:2559
 msgid "Kulunud"
 msgstr "Elapsed"
 
 #: classes/applications/groupware/task.aw:2514
+#: classes/applications/groupware/task.aw:2564
 msgid "Kliendile"
 msgstr "To customer"
 
@@ -1307,8 +1310,8 @@ msgid "&Uuml;hik"
 msgstr ""
 
 #: classes/applications/groupware/task.aw:4137
-#: classes/applications/groupware/task.aw:4697
-#: classes/applications/groupware/task.aw:4991
+#: classes/applications/groupware/task.aw:4750
+#: classes/applications/groupware/task.aw:5044
 msgid "Uus"
 msgstr ""
 
@@ -1348,39 +1351,39 @@ msgstr ""
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:4771
+#: classes/applications/groupware/task.aw:4824
 msgid "Fail"
 msgstr "File"
 
-#: classes/applications/groupware/task.aw:4772
+#: classes/applications/groupware/task.aw:4825
 msgid "Memo"
 msgstr "Memo"
 
-#: classes/applications/groupware/task.aw:4773
+#: classes/applications/groupware/task.aw:4826
 msgid "CRM Dokument"
 msgstr "Document"
 
-#: classes/applications/groupware/task.aw:4774
+#: classes/applications/groupware/task.aw:4827
 msgid "Leping"
 msgstr "Contract"
 
-#: classes/applications/groupware/task.aw:4775
+#: classes/applications/groupware/task.aw:4828
 msgid "Pakkumine"
 msgstr "Offer"
 
-#: classes/applications/groupware/task.aw:4799
+#: classes/applications/groupware/task.aw:4852
 msgid "Manuse nimi"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:4811
+#: classes/applications/groupware/task.aw:4864
 msgid "Viimane muutja"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:4959
+#: classes/applications/groupware/task.aw:5012
 msgid "Eeldustegevus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:5005
+#: classes/applications/groupware/task.aw:5058
 msgid "K&otilde;ne"
 msgstr ""
 

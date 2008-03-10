@@ -26,7 +26,7 @@ msgstr ""
 msgid "msg_dispatch::post_message - no parameter for message posted!"
 msgstr ""
 
-#: classes/core/msg/msg_dispatch.aw:102
+#: classes/core/msg/msg_dispatch.aw:107
 msgid "msg_dispatch::post_message - no such message (%s) defined!"
 msgstr ""
 

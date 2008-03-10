@@ -217,7 +217,7 @@ msgstr "You are here:"
 
 #: classes/admin/admin_if.aw:1366
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-%s."
-msgstr ""
+msgstr "AutomatWeb&reg; is the registered trademark of Struktuur Meedia. All rights reserved, &copy; 1999-%s."
 
 #: classes/admin/admin_if.aw:1367
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"

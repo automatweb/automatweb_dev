@@ -1438,7 +1438,7 @@ msgid "Grupi Projektide &uuml;levaade (stat_proj_overview) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_MONITOR
-msgid "Seose Jälgija (RELTYPE_MONITOR) tekst"
+msgid "Seose J&auml;lgija (RELTYPE_MONITOR) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:rel_RELTYPE_OBJECT_TYPE

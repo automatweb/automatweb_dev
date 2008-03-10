@@ -14,47 +14,47 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/admin/link_manager.aw:103
+#: classes/admin/link_manager.aw:108
 msgid "Uus link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:104
+#: classes/admin/link_manager.aw:109
 msgid "Vali olemasolev link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:113
+#: classes/admin/link_manager.aw:118
 msgid "Link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:118
+#: classes/admin/link_manager.aw:123
 msgid "Asukoht"
 msgstr ""
 
-#: classes/admin/link_manager.aw:123
+#: classes/admin/link_manager.aw:128
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/link_manager.aw:171
+#: classes/admin/link_manager.aw:176
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/link_manager.aw:209
+#: classes/admin/link_manager.aw:214
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/link_manager.aw:215
+#: classes/admin/link_manager.aw:220
 msgid "URL"
 msgstr ""
 
-#: classes/admin/link_manager.aw:222
+#: classes/admin/link_manager.aw:227
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/link_manager.aw:228
+#: classes/admin/link_manager.aw:233
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/link_manager.aw:235
+#: classes/admin/link_manager.aw:240
 msgid "Viimased 30"
 msgstr ""
 

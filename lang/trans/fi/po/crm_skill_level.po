@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_skill_level.aw:class_1401_help
+msgid "Klassi Oskuse tase help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill_level.aw:prop_skill
+msgid "Omaduse Oskus (skill) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_skill_level.aw:prop_skill_comment
+msgid "Omaduse Oskus (skill) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_skill_level.aw:prop_skill_help
+msgid "Omaduse Oskus (skill) help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill_level.aw:prop_name
+msgid "Omaduse Oskuse tase (name) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_skill_level.aw:prop_name_comment
+msgid "Omaduse Oskuse tase (name) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_skill_level.aw:prop_name_help
+msgid "Omaduse Oskuse tase (name) help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill_level.aw:rel_RELTYPE_SKILL
+msgid "Seose Oskus (RELTYPE_SKILL) tekst"
+msgstr ""
+

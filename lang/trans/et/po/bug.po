@@ -210,15 +210,15 @@ msgid "Omaduse T&auml;htaeg (deadline) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_actual_live_date
-msgid "Omaduse Tegelik Live kuupäev (actual_live_date) caption"
+msgid "Omaduse Tegelik Live kuup&auml;ev (actual_live_date) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_actual_live_date_comment
-msgid "Omaduse Tegelik Live kuupäev (actual_live_date) kommentaar"
+msgid "Omaduse Tegelik Live kuup&auml;ev (actual_live_date) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_actual_live_date_help
-msgid "Omaduse Tegelik Live kuupäev (actual_live_date) help"
+msgid "Omaduse Tegelik Live kuup&auml;ev (actual_live_date) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_vb_d1
@@ -546,15 +546,15 @@ msgid "Omaduse Kasutusvalmis (cust_live_date) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_wish_live_date
-msgid "Omaduse Soovitav Live kuupäev (wish_live_date) caption"
+msgid "Omaduse Soovitav Live kuup&auml;ev (wish_live_date) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_wish_live_date_comment
-msgid "Omaduse Soovitav Live kuupäev (wish_live_date) kommentaar"
+msgid "Omaduse Soovitav Live kuup&auml;ev (wish_live_date) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_wish_live_date_help
-msgid "Omaduse Soovitav Live kuupäev (wish_live_date) help"
+msgid "Omaduse Soovitav Live kuup&auml;ev (wish_live_date) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_crit
