@@ -33,7 +33,7 @@ class _int_object_loader extends core
 			"parent", "name", "class_id",
 			"modified", "status", "lang_id",
 			"comment", "modifiedby", "jrk",
-			"period", "alias", "periodic", 
+			"period", "alias", "periodic",
 			"site_id", "metadata",
 			"subclass", "flags", "brother_of"
 		));
@@ -47,7 +47,7 @@ class _int_object_loader extends core
 		}
 
 		$dss = array_reverse(explode(",", $datasources));
-	
+
 		classload("core/obj/ds_".$dss[0]);
 		$clname = "_int_obj_ds_".$dss[0];
 		// the first is the db specific ds, that does not contain anything
@@ -309,7 +309,7 @@ class _int_object_loader extends core
 		}
 		// return the new value, so that the pointers go to the right place.
 		//
-		// the problem that there might be other pointers to the previous object should not arise, 
+		// the problem that there might be other pointers to the previous object should not arise,
 		// because you probably will not be able to acquire pointers to temp-objects.
 		// probably.
 		// well, here's to hoping it won't happen!
@@ -320,7 +320,7 @@ class _int_object_loader extends core
 
 		static $lastmod_set;
 		if (!$lastmod_set)
-		{		
+		{
 			if (aw_ini_get("site_show.objlastmod_only_menu"))
 			{
 				if ($GLOBALS["objects"][$t_oid]->class_id() == CL_MENU)
@@ -389,10 +389,10 @@ class _int_object_loader extends core
 		// cfgu->load_properties is expensive, so we cache the results.
 		// why here? because it does a lot more than just load properties
 		// and it's a bit tricky to cache all that information there --duke
-		// 
+		//
 		// removed the caching from here, it is done in object::_int_load_properties
 		// it won't call this function if an object of the same class id has been loaded before
-		// so doing the caching here is just wasting memory now. 
+		// so doing the caching here is just wasting memory now.
 		// - terryf
 
 		$props = $this->cfgu->load_properties($arr);
@@ -401,18 +401,18 @@ class _int_object_loader extends core
 	}
 
 	/** switches the object_loader's default database connection to $new_conn
-		
+
 		@attrib params=pos
 
-		@param new_conn required 
+		@param new_conn required
 
 		new conn is the new database connection to set the datasource to
-		returns the old connection 
+		returns the old connection
 	**/
 	function switch_db_connection($new_conn)
 	{
-		// ok, we need to find the real connection. 
-		// iterate over the ds chain until we hit the last one. 
+		// ok, we need to find the real connection.
+		// iterate over the ds chain until we hit the last one.
 		// that should be the final database ds
 		$ds =& $this->ds;
 		while (is_object($ds->contained))
@@ -432,7 +432,7 @@ class _int_object_loader extends core
 		$old = $ds->dc[$ds->default_cid];
 		$ds->dc[$ds->default_cid] = $new_conn;
 		$this->dc[$ds->default_cid] = $new_conn;
-		return $old; 
+		return $old;
 	}
 
 	function can($acl_name, $oid, $dbg = false)
@@ -539,7 +539,7 @@ class _int_object_loader extends core
 			foreach($acld as $g_oid => $g_acld)
 			{
 				// this applies the affects subobjects setting - if the first object has this set, then ignore the acls for that
-				$skip = false; //$cur_oid == $oid && $g_acld["can_subs"] == 1;		
+				$skip = false; //$cur_oid == $oid && $g_acld["can_subs"] == 1;
 
 				if (isset($gl[$g_oid]) && $gl[$g_oid] > $max_priority && !$skip)
 				{
@@ -642,7 +642,16 @@ class _int_object_loader extends core
 			$this->cache_handlers = array();
 			$this->registered = 1;
 		}
-		$repl = aw_ini_get("object_cache.replicate_sites");
+
+		try
+		{
+			$repl = aw_ini_get("object_cache.replicate_sites");
+		}
+		catch (Exception $e)
+		{
+			$repl = null;
+		}
+
 		if (is_array($repl) || $site_id != aw_ini_get("site_id"))
 		{
 			$this->cache_handlers[$site_id][$oid][$type] = $type;
@@ -654,8 +663,17 @@ class _int_object_loader extends core
 		// go over all the registered cache updates and if they are for another site, then propagate them to that one
 		$sl = get_instance("install/site_list");
 		$f = fopen(aw_ini_get("site_basedir")."/files/updlog.txt", "a");
-		$repl = aw_ini_get("object_cache.replicate_sites");
-		$cur_sid = aw_ini_get("site_id");
+
+		try // shutdown functions can't throw exceptions
+		{
+			$repl = aw_ini_get("object_cache.replicate_sites");
+			$cur_sid = aw_ini_get("site_id");
+		}
+		catch (Exception $e)
+		{
+			$repl = null;
+			$cur_sid = null;
+		}
 
 		foreach($this->cache_handlers as $site_id => $data)
 		{
@@ -697,7 +715,7 @@ class _int_object_loader extends core
 				),
 				"no_errors" => 1	// sites may not respond or be password protected or whatever and the user does not need to see that
 			));
-		}	
+		}
 	}
 }
 
