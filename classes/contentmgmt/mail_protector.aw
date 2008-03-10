@@ -32,7 +32,7 @@ class mail_protector
 		$str = preg_replace("/<a([^>]*)href=([\"|'])mailto:([^\"']*)@(.*)([\"|'])(.*)>(.*)<\/a>/imsU",$repl, $str);
 
 		$repl = "\\1<script type=\"text/javascript\">aw_proteml(\"\\2\",\"\\3\");</script><noscript>\\2<img src='".aw_ini_get("baseurl")."/automatweb/images/at.png' alt='@' style='vertical-align: middle;'$xhtml_slash>\\3</noscript>";
-		$str = preg_replace("/([\s|^|>|^*[:punct:]])([-a-zA-Z0-9_][-.a-zA-Z0-9_]*[^ ])@([-.a-zA-Z0-9_]+\.[-a-zA-Z_]{2,4}[^ |^[:punct:]*]*)/",$repl, $str);
+		$str = preg_replace("/([^=\"][\s|^|>|^[:punct:]])(\w[-.a-zA-Z0-9_]+)@([-.a-zA-Z0-9_]+\.[a-zA-Z]{2,6})/",$repl, $str);
 		return $str;
 	}
 }
