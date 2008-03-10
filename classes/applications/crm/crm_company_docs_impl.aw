@@ -24,6 +24,13 @@ class crm_company_docs_impl extends class_base
 
 	function _init_docs_fld($o)
 	{
+		aw_disable_acl();
+		$tmp = $o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER");
+		aw_restore_acl();
+		if ($tmp)
+		{
+			return $tmp;
+		}
 		$fldo = obj();
 		$fldo->set_parent($o->id());
 		$fldo->set_class_id(CL_MENU);
@@ -656,7 +663,7 @@ class crm_company_docs_impl extends class_base
 		}
 		else
 		{
-			$arr["prop"]["error"] = t("Dokumentide kataloogile puudub juurdep‰‰suıigus");
+			$arr["prop"]["error"] = t("Dokumentide kataloogile puudub juurdep&auml;&auml;su&otilde;igus");
 			return PROP_ERROR;
 		}
 
