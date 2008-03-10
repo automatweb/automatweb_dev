@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.30 2008/03/06 11:05:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.31 2008/03/10 14:12:26 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -181,8 +181,8 @@ class task_quick_entry extends class_base
 	**/
 	function cust_autocomplete_source($arr)
 	{
-//list($usec, $sec) = explode(" ", microtime());
-//$start = ((float)$usec + (float)$sec);
+list($usec, $sec) = explode(" ", microtime());
+$start = ((float)$usec + (float)$sec);
 		$cl_json = get_instance("protocols/data/json");
 
 		$errorstring = "";
@@ -215,11 +215,11 @@ class task_quick_entry extends class_base
 		{
 			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
 		}
-//		$asd = $cl_json->encode($option_data);
-//		list($usec, $sec) = explode(" ", microtime());
-//		$end = ((float)$usec + (float)$sec);
+		$asd = $cl_json->encode($option_data);
+		list($usec, $sec) = explode(" ", microtime());
+		$end = ((float)$usec + (float)$sec);
 		
-//		$autocomplete_options[0] = $arr["customer"].substr(($end - $start), 0, 6);ksort($autocomplete_options);
+		$autocomplete_options[0] = $arr["customer"].substr(($end - $start), 0, 6);ksort($autocomplete_options);
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}

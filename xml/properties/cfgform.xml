@@ -106,7 +106,7 @@
             <type>textbox</type>
             <store>no</store>
             <parent>add_grp</parent>
-            <comment>S&amp;uuml;steemne identifitseerija tabile. Ainult ladina t&amp;auml;hestiku t&amp;auml;hed ning alakriips ( _ ) lubatud. V&amp;auml;him pikkus 2.</comment>
+            <comment>S&amp;amp;uuml;steemne identifitseerija tabile. Ainult ladina t&amp;amp;auml;hestiku t&amp;amp;auml;hed ning alakriips ( _ ) lubatud. V&amp;amp;auml;him pikkus 2.</comment>
             <caption>Nimi</caption>
       </property>
       <property>
@@ -277,7 +277,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Vaikimisi v&amp;auml;&amp;auml;rtused</caption>
+            <caption>Vaikimisi v&amp;amp;auml;&amp;amp;auml;rtused</caption>
       </property>
       <property>
             <name>trans_tbl_capt</name>

@@ -110,6 +110,9 @@
 	@property events_per_page type=textbox
 	@caption S&uuml;ndmusi &uuml;hel lehel
 
+	@property events_per_page type=textbox
+	@caption S&uuml;ndmusi &uuml;hel lehel
+
 	@property editors_groups type=relpicker multiple=1 reltype=RELTYPE_GROUP automatic=1
 	@caption Toimetajate kasutajagrupid
 
@@ -931,7 +934,6 @@ class events_manager extends class_base
 			}
 
 			$change = html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $t_change);
-
 
 
 //aeg naitamiseks, koigepealt propidest, siis objektidest

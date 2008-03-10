@@ -23,7 +23,12 @@
 		<name>{VAR:name}</name>
 		<description>
 		<![CDATA[
-<p>Aadress: {VAR:address}</p>
+		<style type="text/css">
+<!--
+.style1 {color: #999999}
+-->
+</style>
+<p class="style1">Aadress: {VAR:address}</p>
 <table width="650" border="0" cellpadding="5" cellspacing="0">
   <tr>
     <td align="center"><img src="http://klient.struktuur.ee/ttu/kaart/flash/Pildid/{VAR:userta2}_1.JPG" width="200" height="150" border="1" bordercolor="#0099CC" /></td>
@@ -31,77 +36,77 @@
     <td align="center"><img src="http://klient.struktuur.ee/ttu/kaart/flash/Pildid/{VAR:userta2}_3.JPG" width="200" height="150" border="1" bordercolor="#0099CC" /></td>
   </tr>
 </table>
-<table width="650" border="1" style="border-collapse:collapse" bordercolor="#0099CC" cellspacing="0" cellpadding="5">
+<table width="650" border="1" bordercolor="#6699FF" cellspacing="0" cellpadding="5">
   <tr>
-    <td>Hoone kood: </td>
-    <td>{VAR:userta2}</td>
+    <td><span class="style1">Hoone kood:</span></td>
+    <td><span class="style1">{VAR:userta2}</span></td>
   </tr>
   <tr>
-    <td width="55%">Hoone maht (m3) </td>
-    <td width="45%">{VAR:desc1}</td>
+    <td width="55%"><span class="style1">Hoone maht (m3)</span></td>
+    <td width="45%"><span class="style1">{VAR:desc1}</span></td>
   </tr>
   <tr>
-    <td>Suletud netopind (m2)</td>
-    <td>{VAR:desc2}</td>
+    <td><span class="style1">Suletud netopind (m2)</span></td>
+    <td><span class="style1">{VAR:desc2}</span></td>
   </tr>
   <tr>
-    <td>&Otilde;pilaste arv: </td>
-    <td>{VAR:userta3}</td>
+    <td><span class="style1">&Otilde;pilaste arv:</span></td>
+    <td><span class="style1">{VAR:userta3}</span></td>
   </tr>
   <tr>
-    <td>M&auml;rkused:</td>
-    <td>{VAR:userta4}</td>
+    <td><span class="style1">M&auml;rkused:</span></td>
+    <td><span class="style1">{VAR:userta4}</span></td>
   </tr>
   <tr>
-    <td>Hoone soojuse eritarbimine  kWh/(m2 a), 2003</td>
-    <td>{VAR:usertf1}</td>
+    <td><span class="style1">Hoone soojuse eritarbimine  kWh/(m2 a), 2003</span></td>
+    <td><span class="style1">{VAR:usertf1}</span></td>
   </tr>
   <tr>
-    <td>Hoone soojuse eritarbimine  kWh/(m2 a), 2004</td>
-    <td>{VAR:usertf2}</td>
+    <td><span class="style1">Hoone soojuse eritarbimine  kWh/(m2 a), 2004</span></td>
+    <td><span class="style1">{VAR:usertf2}</span></td>
   </tr>
   <tr>
-    <td>Hoone soojuse eritarbimine  kWh/(m2 a), 2005</td>
-    <td>{VAR:usertf3}</td>
+    <td><span class="style1">Hoone soojuse eritarbimine  kWh/(m2 a), 2005</span></td>
+    <td><span class="style1">{VAR:usertf3}</span></td>
   </tr>
   <tr>
-    <td>Hoone soojuse eritarbimine  kWh/(m2 a), 2006</td>
-    <td>{VAR:usertf4}</td>
+    <td><span class="style1">Hoone soojuse eritarbimine  kWh/(m2 a), 2006</span></td>
+    <td><span class="style1">{VAR:usertf4}</span></td>
   </tr>
   <tr>
-    <td>Hoone elektri eritarbimine kWh/(m2 a ) 2003</td>
-    <td>{VAR:usertf5}</td>
+    <td><span class="style1">Hoone elektri eritarbimine kWh/(m2 a ) 2003</span></td>
+    <td><span class="style1">{VAR:usertf5}</span></td>
   </tr>
   <tr>
-    <td>Hoone elektri eritarbimine kWh/(m2 a ) 2004</td>
-    <td>{VAR:usertf6}</td>
+    <td><span class="style1">Hoone elektri eritarbimine kWh/(m2 a ) 2004</span></td>
+    <td><span class="style1">{VAR:usertf6}</span></td>
   </tr>
   <tr>
-    <td>Hoone elektri eritarbimine kWh/(m2 a ) 2005</td>
-    <td>{VAR:usertf7}</td>
+    <td><span class="style1">Hoone elektri eritarbimine kWh/(m2 a ) 2005</span></td>
+    <td><span class="style1">{VAR:usertf7}</span></td>
   </tr>
   <tr>
-    <td>Hoone elektri eritarbimine kWh/(m2 a ) 2006</td>
-    <td>{VAR:usertf8}</td>
+    <td><span class="style1">Hoone elektri eritarbimine kWh/(m2 a ) 2006</span></td>
+    <td><span class="style1">{VAR:usertf8}</span></td>
   </tr>
   <tr>
-    <td>Hoone energia  eritarbimine kWh/(m2 a ) 2003</td>
-    <td>{VAR:usertf9}</td>
+    <td><span class="style1">Hoone energia  eritarbimine kWh/(m2 a ) 2003</span></td>
+    <td><span class="style1">{VAR:usertf9}</span></td>
   </tr>
   <tr>
-    <td>Hoone energia  eritarbimine kWh/(m2 a ) 2004</td>
-    <td>{VAR:usertf10}</td>
+    <td><span class="style1">Hoone energia  eritarbimine kWh/(m2 a ) 2004</span></td>
+    <td><span class="style1">{VAR:usertf10}</span></td>
   </tr>
   <tr>
-    <td>Hoone energia  eritarbimine kWh/(m2 a ) 2005</td>
-    <td>{VAR:userta5}</td>
+    <td><span class="style1">Hoone energia  eritarbimine kWh/(m2 a ) 2005</span></td>
+    <td><span class="style1">{VAR:userta5}</span></td>
   </tr>
   <tr>
-    <td>Hoone energia  eritarbimine kWh/(m2 a ) 2006</td>
-    <td>{VAR:userta1}</td>
+    <td><span class="style1">Hoone energia  eritarbimine kWh/(m2 a ) 2006</span></td>
+    <td><span class="style1">{VAR:userta1}</span></td>
   </tr>
 </table>
-		{VAR:address} {VAR:desc1} {VAR:desc2} {VAR:usertf1} {VAR:userta1} {VAR:usertf2} {VAR:userta2} {VAR:usertf3} {VAR:userta3} {VAR:usertf4} {VAR:userta4} {VAR:usertf5} {VAR:userta5} {VAR:usertf6} {VAR:userta6} {VAR:usertf7} {VAR:userta7} {VAR:usertf8} {VAR:userta8} {VAR:usertf9} {VAR:userta9} {VAR:usertf10} {VAR:userta10}
+		<!--{VAR:address} {VAR:desc1} {VAR:desc2} {VAR:usertf1} {VAR:userta1} {VAR:usertf2} {VAR:userta2} {VAR:usertf3} {VAR:userta3} {VAR:usertf4} {VAR:userta4} {VAR:usertf5} {VAR:userta5} {VAR:usertf6} {VAR:userta6} {VAR:usertf7} {VAR:userta7} {VAR:usertf8} {VAR:userta8} {VAR:usertf9} {VAR:userta9} {VAR:usertf10} {VAR:userta10}-->
 		]]>
 		</description>
 		<LookAt>

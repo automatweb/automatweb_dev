@@ -1878,7 +1878,15 @@ class bug extends class_base
 		$com = false;
 		$ostat = $nstat = $bug->prop("bug_status");
 
-		if(($bug->modified() + 120) > time())
+		$comments = $bug->connections_from(array(
+			"type" => "RELTYPE_COMMENT",
+		));
+		foreach($comments as $c)
+		{
+			$comm = obj($c->prop("to"));
+		}
+
+		if(is_object($comm) && ($comm->modified() + 120) > time())
 		{
 			if($this->add_to_last_comment($bug, $msg))
 			{

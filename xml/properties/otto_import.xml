@@ -655,11 +655,12 @@
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>files_import</group>
+                  <area_caption></area_caption>
             </hbox_files_import>
             <vbox_files_import_filenames>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
+                  <area_caption>Toodete&amp;amp;nbsp;otsing</area_caption>
                   <group>files_import</group>
                   <parent>hbox_files_import</parent>
             </vbox_files_import_filenames>
@@ -667,6 +668,7 @@
                   <type>vbox</type>
                   <group>files_import</group>
                   <parent>hbox_files_import</parent>
+                  <area_caption></area_caption>
             </vbox_files_import_sites>
       </layout>
 </properties>

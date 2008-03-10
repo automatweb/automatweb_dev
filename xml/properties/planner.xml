@@ -35,7 +35,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT_FOLDER</reltype>
             <caption>S&amp;amp;uuml;ndmuste kataloog</caption>
-            <comment>Sellest kataloogist v&amp;otilde;etakse ja ka salvestatakse siia kalendrisse lisatavaid s&amp;uuml;ndmusi</comment>
+            <comment>Sellest kataloogist v&amp;amp;otilde;etakse ja ka salvestatakse siia kalendrisse lisatavaid s&amp;amp;uuml;ndmusi</comment>
       </property>
       <property>
             <name>no_event_folder</name>
@@ -47,7 +47,7 @@
             <store>no</store>
             <newonly>1</newonly>
             <ch_value>1</ch_value>
-            <caption>&amp;Auml;ra tee s&amp;uuml;ndmuste kataloogi</caption>
+            <caption>&amp;amp;Auml;ra tee s&amp;amp;uuml;ndmuste kataloogi</caption>
       </property>
       <property>
             <name>day_start</name>
@@ -57,7 +57,7 @@
             <method>serialize</method>
             <type>time_select</type>
             <rel>1</rel>
-            <caption>P&amp;auml;ev algab</caption>
+            <caption>P&amp;amp;auml;ev algab</caption>
       </property>
       <property>
             <name>day_end</name>
@@ -67,7 +67,7 @@
             <method>serialize</method>
             <type>time_select</type>
             <rel>1</rel>
-            <caption>P&amp;auml;ev l&amp;otilde;peb</caption>
+            <caption>P&amp;amp;auml;ev l&amp;amp;otilde;peb</caption>
       </property>
       <property>
             <name>minute_step</name>
@@ -76,7 +76,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>S&amp;uuml;ndmuse sisestamise minutite t&amp;auml;psus</caption>
+            <caption>S&amp;amp;uuml;ndmuse sisestamise minutite t&amp;amp;auml;psus</caption>
       </property>
       <property>
             <name>event_def_len</name>
@@ -85,7 +85,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>S&amp;uuml;ndmuse vaikimisi pikkus (min)</caption>
+            <caption>S&amp;amp;uuml;ndmuse vaikimisi pikkus (min)</caption>
       </property>
       <property>
             <name>navigator_visible</name>
@@ -96,7 +96,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <caption>N&amp;auml;ita navigaatorit</caption>
+            <caption>N&amp;amp;auml;ita navigaatorit</caption>
       </property>
       <property>
             <name>navigator_months</name>
@@ -115,8 +115,8 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita projekte</caption>
-            <comment>Kui valitud, siis n&amp;auml;idatakse ka s&amp;uuml;ndmusi k&amp;otilde;igist projektidest, milles kalendri omanik osaleb.</comment>
+            <caption>N&amp;amp;auml;ita projekte</caption>
+            <comment>Kui valitud, siis n&amp;amp;auml;idatakse ka s&amp;amp;uuml;ndmusi k&amp;amp;otilde;igist projektidest, milles kalendri omanik osaleb.</comment>
       </property>
       <property>
             <name>workdays</name>
@@ -126,7 +126,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <multiple>1</multiple>
-            <caption>T&amp;ouml;&amp;ouml;p&amp;auml;evad</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;p&amp;amp;auml;evad</caption>
       </property>
       <property>
             <name>tab_views</name>
@@ -146,7 +146,7 @@
             <method>serialize</method>
             <type>select</type>
             <multiple>1</multiple>
-            <caption>Kustutamisv&amp;otilde;imalusega vaated</caption>
+            <caption>Kustutamisv&amp;amp;otilde;imalusega vaated</caption>
       </property>
       <property>
             <name>event_entry_classes</name>
@@ -157,8 +157,8 @@
             <type>chooser</type>
             <multiple>1</multiple>
             <orient>vertical</orient>
-            <caption>S&amp;uuml;ndmuste klassid</caption>
-            <comment>Siit valitud klasse saab kasutada kalendrisse s&amp;uuml;ndmuste sisestamiseks</comment>
+            <caption>S&amp;amp;uuml;ndmuste klassid</caption>
+            <comment>Siit valitud klasse saab kasutada kalendrisse s&amp;amp;uuml;ndmuste sisestamiseks</comment>
       </property>
       <property>
             <name>month_week</name>
@@ -168,7 +168,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita kuuvaadet samamoodi nagu n&amp;auml;dalavaadet</caption>
+            <caption>N&amp;amp;auml;ita kuuvaadet samamoodi nagu n&amp;amp;auml;dalavaadet</caption>
       </property>
       <property>
             <name>multi_days</name>
@@ -178,7 +178,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita mitmep&amp;auml;evaseid s&amp;uuml;ndmusi ainult esimesel p&amp;auml;eval</caption>
+            <caption>N&amp;amp;auml;ita mitmep&amp;amp;auml;evaseid s&amp;amp;uuml;ndmusi ainult esimesel p&amp;amp;auml;eval</caption>
       </property>
       <property>
             <name>show_bdays</name>
@@ -188,7 +188,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita s&amp;amp;uuml;nnip&amp;amp;auml;evi</caption>
+            <caption>N&amp;amp;auml;ita s&amp;amp;uuml;nnip&amp;amp;auml;evi</caption>
       </property>
       <property>
             <name>vac_count</name>
@@ -472,7 +472,7 @@
                         <num_0>CL_PLANNER</num_0>
                         <num_1>CL_PROJECT</num_1>
                   </clid>
-                  <caption>v&amp;otilde;ta s&amp;amp;uuml;ndmusi</caption>
+                  <caption>v&amp;amp;otilde;ta s&amp;amp;uuml;ndmusi</caption>
             </EVENT_SOURCE>
             <EVENT>
                   <value>3</value>
@@ -487,12 +487,12 @@
             <DC_RELATION>
                   <value>4</value>
                   <clid>CL_RELATION</clid>
-                  <caption>viide kalendri v&amp;auml;ljundile</caption>
+                  <caption>viide kalendri v&amp;amp;auml;ljundile</caption>
             </DC_RELATION>
             <GET_DC_RELATION>
                   <value>5</value>
                   <clid>CL_PLANNER</clid>
-                  <caption>v&amp;otilde;ta kalendri v&amp;auml;ljundid</caption>
+                  <caption>v&amp;amp;otilde;ta kalendri v&amp;amp;auml;ljundid</caption>
             </GET_DC_RELATION>
             <EVENT_FOLDER>
                   <value>6</value>
@@ -523,12 +523,12 @@
             <ICAL_EXPORT>
                   <value>10</value>
                   <clid>CL_ICAL_EXPORT</clid>
-                  <caption>V&amp;auml;line kalender (eksport)</caption>
+                  <caption>V&amp;amp;auml;line kalender (eksport)</caption>
             </ICAL_EXPORT>
             <ICAL_IMPORT>
                   <value>11</value>
                   <clid>CL_ICAL_IMPORT</clid>
-                  <caption>V&amp;auml;line kalender (import)</caption>
+                  <caption>V&amp;amp;auml;line kalender (import)</caption>
             </ICAL_IMPORT>
       </reltypes>
 </properties>

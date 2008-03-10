@@ -70,7 +70,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>T&amp;ouml;&amp;ouml;tajate XML fail</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tajate XML fail</caption>
       </property>
       <property>
             <name>xml_education_file</name>
@@ -79,7 +79,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Haridusk&amp;auml;igu XML fail</caption>
+            <caption>Haridusk&amp;amp;auml;igu XML fail</caption>
       </property>
       <property>
             <name>xml_work_relations_ending_file</name>
@@ -88,7 +88,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>T&amp;ouml;&amp;ouml;suhete peatumise XML fail</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;suhete peatumise XML fail</caption>
       </property>
       <property>
             <name>xml_structure_file</name>
@@ -97,7 +97,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Struktuuri&amp;uuml;ksuste XML fail</caption>
+            <caption>Struktuuri&amp;amp;uuml;ksuste XML fail</caption>
       </property>
       <property>
             <name>xml_link</name>
@@ -153,7 +153,7 @@
       <classinfo>
             <syslog_type>ST_PERSONA_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
-            <maintainer>kaarel</maintainer>
+            <maintainer>knummert</maintainer>
       </classinfo>
       <groupinfo>
             <settings>

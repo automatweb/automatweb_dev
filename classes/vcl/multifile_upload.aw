@@ -58,7 +58,7 @@ class multifile_upload extends class_base
 
 	function process_vcl_property($arr)
 	{
-		
+
 	}
 
 	function callback_post_save($arr)
@@ -75,12 +75,7 @@ class multifile_upload extends class_base
 		{
 			$fi = get_instance(CL_FILE);
 		}
-
 		$files = $fi -> add_upload_multifile("file", $parent);
-		if(!$arr["prop"]["reltype"])
-		{
-			$arr["prop"]["reltype"] = "RELTYPE_FILE";
-		}
 		foreach ($files as $file)
 		{
 			$o->connect(array(

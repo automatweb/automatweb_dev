@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.75 2008/03/04 08:51:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.76 2008/03/10 14:12:27 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1240,12 +1240,14 @@ $t->set_sortable(false);
 			}
 		}
 		
+		$o_range_from = $range_from;
 		for ($h = 0; $h < $num_steps; $h++)
 		{
 			$d = array();
 			for ($i = 0; $i < $num_days; $i++)
 			{
 				$s = $range_from + ($i * 24 * 3600);
+				
 				if ($s < $from || $s > $to)
 				{
 					continue;
@@ -1269,7 +1271,15 @@ $t->set_sortable(false);
 					$room2inst[$room->id()]->check_for_people = 1;
 					if ($room2oh[$room->id()])
 					{
-						list($d_start, $d_end) = $oh_i->get_times_for_date($room2oh[$room->id()], $range_from+($i*24*3600)+$h*3600);
+						list($d_start, $d_end) = $oh_i->get_times_for_date($room2oh[$room->id()], $range_from+($i*24*3600)+$h*$time_step);
+						if (date("I", $range_from+(($i*24*3600)+$h*$time_step)) == 1 && date("I", $range_from+((($i)*24*3600))) == 1 && date("I", $range_from) == 0)
+						{
+							$d_end += 3600;
+						}
+						if (date("I", $range_from+$i*24*3600) == 0 && date("I", $range_from) == 1)
+						{
+							$d_end -= $time_step;
+						}
 						$d_from = min($d_from, $d_start);
 						$d_to = max($d_to, $d_end);
 					}
@@ -1285,7 +1295,7 @@ $t->set_sortable(false);
 						}
 					}
 				}
-				
+
 				foreach($book_dates as $_book_prod => $_prod_nums)
 				{
 					foreach($_prod_nums as $_book_time)
@@ -1313,7 +1323,7 @@ $t->set_sortable(false);
 					"prod" => $arr["prod"],
 					"prod_num" => $arr["prod_num"],
 					"booking" => $arr["booking"],
-					"_not_verified" => $arr["_not_verified"],
+					"_not_verified" => (int)$arr["_not_verified"],
 					"retf" => $arr["retf"]
 				), get_class($this), false, false, "&amp;");
 				if (!$avail)
@@ -1845,8 +1855,9 @@ $t->set_sortable(false);
 			$pd_data_list = array();
 			foreach($rooms->arr() as $room)
 			{
-				$pd = $ri->get_active_items($room);
-				$pd_data_list[$room->id()] = $pd->arr();
+				//$pd = $ri->get_active_items($room);
+				$pd = $ri->get_prod_data_for_room($room);
+				$pd_data_list[$room->id()] = $pd;
 			}
 
 			$this->pd_data_list_cache = $pd_data_list;
@@ -1854,7 +1865,7 @@ $t->set_sortable(false);
 
 		foreach($pd_data_list as $room_id => $pd_data)
 		{
-			if(array_key_exists($prod , $pd_data))
+			if($pd_data[$prod]["active"])
 			{
 				$p_rooms[$room_id] = obj($room_id);
 			}
