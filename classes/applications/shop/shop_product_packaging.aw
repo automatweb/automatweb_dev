@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.32 2008/03/04 19:37:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.33 2008/03/10 18:43:48 instrumental Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -146,14 +146,14 @@
 	@property acl type=acl_manager store=no
 	@caption &Otilde;igused
 
-@groupinfo ammount_limits caption="Kogusepiirangud"
-@default group=ammount_limits
+@groupinfo amount_limits caption="Kogusepiirangud"
+@default group=amount_limits
 
-	@property ammount_limits type=hidden store=no
+	@property amount_limits type=hidden store=no
 
-	@property ammount_limits_tb type=toolbar no_caption=1
+	@property amount_limits_tb type=toolbar no_caption=1
 
-	@property ammount_limits_tbl type=table no_caption=1 store=no
+	@property amount_limits_tbl type=table no_caption=1 store=no
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
@@ -205,25 +205,12 @@ class shop_product_packaging extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "ammount_limits_tb":
-				$t = &$prop["vcl_inst"];
-				$t->add_search_button(array(
-					"pn" => "ammount_limits",
-					"multiple" => "1",
-					"clid" => CL_GROUP,
-				));
-				$t->add_button(array(
-					"name" => "delete_ammout",
-					"tooltip" => t("Kustuta"),
-					"img" => "delete.gif",
-					"action" => "delete_ammounts",
-					"confirm" => t("Kas olete kindel, et soovite kustutada kogusepiirangud valitud gruppidele?"),
-				));
-				$t->add_save_button();
+			case "amount_limits_tb":
+				shop_product::_get_amount_limits_tb($arr);
 				break;
 
-			case "ammount_limits_tbl":
-				$this->_get_ammount_limits_tbl($arr);
+			case "amount_limits_tbl":
+				shop_product::_get_amount_limits_tbl($arr);
 				break;
 
 			case "price_cur":
@@ -241,7 +228,7 @@ class shop_product_packaging extends class_base
 		return $retval;
 	}
 
-	function _get_ammount_limits_tbl($arr)
+	function _get_amount_limits_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_chooser(array(
@@ -254,16 +241,16 @@ class shop_product_packaging extends class_base
 			"align" => "left",
 		));
 		$t->define_field(array(
-			"name" => "min_ammount",
+			"name" => "min_amount",
 			"caption" => t("Minimaalne kogus"),
 			"align" => "center",			
 		));
 		$t->define_field(array(
-			"name" => "max_ammount",
+			"name" => "max_amount",
 			"caption" => t("Maksimaalne kogus"),
 			"align" => "center",			
 		));
-		$ammount_limits = $this->get_ammount_limits(array(
+		$amount_limits = $this->get_amount_limits(array(
 			"id" => $arr["obj_inst"]->id(),
 		));
 		$odl = new object_data_list(
@@ -278,17 +265,17 @@ class shop_product_packaging extends class_base
 			)
 		);
 		$groups = $odl->arr();
-		foreach($ammount_limits as $g => $limits)
+		foreach($amount_limits as $g => $limits)
 		{
 			$t->define_data(array(
 				"oid" => $g,
 				"group" => $groups[$g]["name"],
-				"min_ammount" => html::textbox(array(
+				"min_amount" => html::textbox(array(
 					"name" => "limits[".$g."][min]",
 					"value" => $limits["min"],
 					"size" => 6,
 				)),
-				"max_ammount" => html::textbox(array(
+				"max_amount" => html::textbox(array(
 					"name" => "limits[".$g."][max]",
 					"value" => $limits["max"],
 					"size" => 6,
@@ -307,24 +294,13 @@ class shop_product_packaging extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "ammount_limits":
-				$gs = explode(",", $prop["value"]);
-				$limits = $arr["obj_inst"]->meta("ammount_limits");
-				foreach($gs as $g)
-				{
-					arr($g);
-					if(!is_array($limits[$g]) && is_oid($g))
-					{
-						$limits[$g]["min"] = 0;
-						$limits[$g]["max"] = 0;
-					}
-				}
-				$arr["obj_inst"]->set_meta("ammount_limits", $limits);
+			case "amount_limits":
+				shop_product::_set_amount_limits($arr);
 				break;
 
-			case "ammount_limits_tbl":
-				if(empty($arr["request"]["ammount_limits"]))
-					$arr["obj_inst"]->set_meta("ammount_limits", $arr["request"]["limits"]);
+			case "amount_limits_tbl":
+				if(empty($arr["request"]["amount_limits"]))
+					$arr["obj_inst"]->set_meta("amount_limits", $arr["request"]["limits"]);
 				break;
 
 			case "price_cur":
@@ -640,7 +616,7 @@ class shop_product_packaging extends class_base
 		}
 	}
 
-	/** Returns the list of ammount limits for the product.
+	/** Returns the list of amount limits for the product.
 		@attrib name=get_ammuot_limits api=1 params=name
 
 		@param id required type=oid
@@ -649,13 +625,13 @@ class shop_product_packaging extends class_base
 		@param group optional type=array(oid),oid
 			If no group is given, limits for all groups will be returned. Can be either oid or array of oid's.
 
-		@returns The list of ammount limits for the product.
+		@returns The list of amount limits for the product.
 
 	**/
-	function get_ammount_limits($arr)
+	function get_amount_limits($arr)
 	{
 		$o = obj($arr["id"]);
-		$ammount_limits = $o->meta("ammount_limits");
+		$amount_limits = $o->meta("amount_limits");
 		if(is_oid($arr["group"]))
 		{
 			$arr["group"] = array($arr["group"]);
@@ -663,24 +639,24 @@ class shop_product_packaging extends class_base
 
 		foreach($arr["group"] as $g)
 		{
-			if(array_key_exists($g, $ammount_limits))
+			if(array_key_exists($g, $amount_limits))
 			{
-				$ret[$g] = $ammount_limits[$g];
+				$ret[$g] = $amount_limits[$g];
 			}
 		}
 
 		// If no group is given, limits for all groups will be returned.
 		if(count($arr["group"]) == 0)
 		{
-			return $ammount_limits;
+			return $amount_limits;
 		}
 		return $ret;
 	}
 
 	/**
-		@attrib name=delete_ammounts
+		@attrib name=delete_amounts
 	**/
-	function delete_ammounts($arr)
+	function delete_amounts($arr)
 	{
 		foreach($arr["limits"] as $g => $limit)
 		{
@@ -688,7 +664,7 @@ class shop_product_packaging extends class_base
 				unset($arr["limits"][$g]);
 		}
 		$o = obj($arr["id"]);
-		$o->set_meta("ammount_limits", $arr["limits"]);
+		$o->set_meta("amount_limits", $arr["limits"]);
 		$o->save();
 		
 		return $arr["post_ru"];
