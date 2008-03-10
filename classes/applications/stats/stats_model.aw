@@ -410,7 +410,9 @@ echo "cmd2 = $cmd <br>";
 			$o->set_class_id(CL_STATS_ARCH_STATUS);
 			$o->set_name(t("Syslogi arhiivi staatus"));
 			$o->set_parent(aw_ini_get("amenustart"));
+			aw_disable_acl();
 			$o->save();
+			aw_restore_acl();
 			return $o;
 		}
 		return $ol->begin();
