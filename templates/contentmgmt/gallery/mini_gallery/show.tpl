@@ -39,3 +39,21 @@ Vali lehek&uuml;lg:
 <!-- END SUB: FOLDER_CHANGE -->
 
 </table>
+
+
+
+<!-- SUB: IMAGE -->
+<img title="{VAR:alt}" alt="{VAR:alt}" src="{VAR:imgref}">
+<!-- END SUB: IMAGE -->
+
+<!-- SUB: IMAGE_BIG_LINKED -->
+<a {VAR:target} href="{VAR:plink}"><img title="{VAR:alt}" alt="{VAR:alt}" src="{VAR:imgref}"></a>
+<!-- END SUB: IMAGE_BIG_LINKED -->
+
+<!-- SUB: IMAGE_HAS_BIG -->
+<a href="JavaScript: void(0)" onClick="window.open('{VAR:bi_show_link}','popup','width={VAR:big_width},height={VAR:big_height}');"><img src="{VAR:imgref}" alt="{VAR:alt}" title="{VAR:alt}" border="0"></a>
+<!-- END SUB: IMAGE_HAS_BIG -->
+
+<!-- SUB: IMAGE_LINKED -->
+<a {VAR:target} href="{VAR:plink}"><img title="{VAR:alt}" alt="{VAR:alt}" src="{VAR:imgref}"></a>
+<!-- END SUB: IMAGE_LINKED -->
