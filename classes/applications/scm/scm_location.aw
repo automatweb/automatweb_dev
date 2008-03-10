@@ -27,6 +27,9 @@
 @property photo type=relpicker table=scm_location field=photo reltype=RELTYPE_PHOTO
 @caption Foto kohast
 
+@property owner type=relpicker table=scm_location field=owner reltype=RELTYPE_OWNER
+@caption Omanik
+
 @property make_copy type=choose multiple=1 field=meta method=serialize
 @caption Tee koopia
 
@@ -48,6 +51,9 @@
 @caption Foto
 
 @reltype ADDRESS value=3 clid=CL_CRM_ADDRESS
+@caption Aadress
+
+@reltype OWNER value=4 clid=CL_CRM_COMPANY
 @caption Aadress
 
 */
@@ -151,6 +157,7 @@ class scm_location extends class_base
 			case 'address':
 			case 'map':
 			case 'photo':
+			case 'owner':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
@@ -170,7 +177,7 @@ class scm_location extends class_base
                                 return true;
 
 			case "usercheckbox1":
-				$this->db_add_col($tbl, array(
+				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int(1)"
 				));
