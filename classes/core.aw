@@ -318,7 +318,7 @@ class core extends acl_base
 		// also attach backtrace
 		if (is_a($this->raise_error_exception, "Exception"))
 		{
-			$msg .= $this->raise_error_exception->getTraceAsString();
+			$msg .= str_replace("#", "<br /><b>#</b>", $this->raise_error_exception->getTraceAsString());
 		}
 		elseif (function_exists("debug_backtrace"))
 		{
