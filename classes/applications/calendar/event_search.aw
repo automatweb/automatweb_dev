@@ -37,6 +37,9 @@
 	@property items_per_page type=textbox size=5 field=meta method=serialize
 	@caption Mitu s&uuml;ndmust lehel
 
+	@property preview_object type=relpicker reltype=RELTYPE_DOCUMENT
+	@caption Eelvaate objekt
+
 @groupinfo ftsearch caption="Otsinguvorm"
 @default group=ftsearch
 
@@ -92,6 +95,8 @@
 @reltype STYLE value=5 clid=CL_CSS
 @caption Stiil
 
+@reltype DOCUMENT value=6 clid=CL_DOCUMENT
+@caption Dokument
 */
 
 class event_search extends class_base
@@ -467,7 +472,7 @@ class event_search extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sepa",
-			"caption" => t("Eraldaja pärast"),
+			"caption" => t("Eraldaja p&auml;rast"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -657,6 +662,7 @@ class event_search extends class_base
 		$start_tm = strtotime("today 0:00");
 		$end_tm = strtotime("+30 days", $start_tm);
 		$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, $end_tm);
+
 		$ol = new object_list($search);
 		$ret = array();
 		$baseurl = aw_ini_get("baseurl");
@@ -688,7 +694,7 @@ class event_search extends class_base
 	{
 		enter_function("event_search::show");
 		$ob = new object($arr["id"]);
-
+//arr($arr);
 		$event_cfgform = $ob->prop('event_cfgform');
 		if ($this->can('view', ($event_cfgform)))
 		{
@@ -1041,14 +1047,14 @@ class event_search extends class_base
 			);
 			if(count($prj_ch1) > 1)
 			{
-				$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
+				$vars["options"] = array(0 => t("k&otilde;ik")) + $prj_ch1;
 				$vars["optgnames"] = $optgnames1;
 				$vars["optgroup"] = $prj_ch1;
 			}
 			else
 			{
 				$vars["options"] = array(0 => t("K&otilde;ik")) + (array)reset($prj_ch1);
-				//$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
+				//$vars["options"] = array(0 => t("k&otilde;ik")) + $prj_ch1;
 			}
 			$htmlc->add_property($vars);
 		}
@@ -1064,13 +1070,13 @@ class event_search extends class_base
 			);
 			if(count($prj_ch2) > 1)
 			{
-				$vars["options"] = array(0 => t("kõik"));
+				$vars["options"] = array(0 => t("k&otilde;ik"));
 				$vars["optgnames"] = $optgnames2;
 				$vars["optgroup"] = $prj_ch2;
 			}
 			else
 			{
-				$vars["options"] = array(0 => t("kõik")) + reset($prj_ch2);
+				$vars["options"] = array(0 => t("k&otilde;ik")) + reset($prj_ch2);
 			}
 			$htmlc->add_property($vars);
 		}
@@ -1657,8 +1663,16 @@ class event_search extends class_base
 								}
 								if($tabledef[$nms]["clickable"] == 1 && !$search["oid"])
 								{
+									if($ob-> prop("preview_object"))
+									{
+										$parse_url = aw_ini_get("baseurl")."/".$ob-> prop("preview_object")."?evt_id=".$id;
+									}
+									else
+									{
+										$parse_url = aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id));
+									}
 									$v = html::href(array(
-										"url" => aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id)),
+										"url" => $parse_url,
 										"caption" => $v,
 									));
 								}

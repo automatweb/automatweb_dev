@@ -90,6 +90,16 @@
             <caption>Mitu s&amp;amp;uuml;ndmust lehel</caption>
       </property>
       <property>
+            <name>preview_object</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DOCUMENT</reltype>
+            <caption>Eelvaate objekt</caption>
+      </property>
+      <property>
             <name>navigator_range</name>
             <table>objects</table>
             <group>ftsearch</group>
@@ -226,6 +236,11 @@
                   <clid>CL_CSS</clid>
                   <caption>Stiil</caption>
             </STYLE>
+            <DOCUMENT>
+                  <value>6</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Dokument</caption>
+            </DOCUMENT>
       </reltypes>
 </properties>
 
