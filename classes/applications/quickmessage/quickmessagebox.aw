@@ -2,7 +2,7 @@
 // quickmessagebox.aw - Kiirs5numite haldus
 /*
 
-@classinfo syslog_type=ST_QUICKMESSAGEBOX no_status=1 maintainer=voldemar
+@classinfo syslog_type=ST_QUICKMESSAGEBOX maintainer=voldemar prop_cb=1
 
 @groupinfo message_box caption="Messages"
 	@groupinfo message_inbox caption="Inbox" parent=message_box
@@ -19,6 +19,7 @@
 
 	@property is_contactlist_add_approval_required type=checkbox ch_value=1
 	@caption Require approval
+	@If checked, other users can't add you to their contact list without your approval
 
 	@property approved_senders type=select
 	@caption Allow messages from
@@ -26,11 +27,14 @@
 	@property contactlist type=relpicker multiple=1 size=7 reltype=RELTYPE_CONTACT automatic=1
 	@caption Contacts
 
-@property msg_tbl type=table no_caption=1 store=no group=message_inbox,message_outbox
+@property msg_toolbar type=toolbar no_caption=1 store=no group=message_inbox,message_outbox
+@property Message list toolbar
+
+@property msg_inbox_tbl type=table no_caption=1 store=no group=message_inbox
 @caption Messages
 
-@property msg_toolbar type=toolbar no_caption=1 store=no group=message_inbox,message_outbox
-@property Inboxi toolbar
+@property msg_outbox_tbl type=table no_caption=1 store=no group=message_outbox
+@caption Messages
 
 
 ////////////////// RELTYPES ////////////////////
@@ -40,10 +44,19 @@
 @reltype CONTACT value=3 clid=CL_USER
 @caption Contact
 
+@reltype READ_MESSAGE value=5 clid=CL_QUICKMESSAGE
+@caption Read message
+
+@reltype UNREAD_MESSAGE value=6 clid=CL_QUICKMESSAGE
+@caption Unread message
+
 */
 
 class quickmessagebox extends class_base
 {
+	const COLOUR_READ = "grey";
+	const COLOUR_UNREAD = "#CCEECC";
+
 	function quickmessagebox()
 	{
 		$this->init(array(
@@ -52,36 +65,131 @@ class quickmessagebox extends class_base
 		));
 	}
 
-	function get_msg_tbl($arr)
+	function _get_msg_inbox_tbl($arr)
 	{
-		$t = $arr["prop"]["vcl_inst"];
-		$this->init_msg_tbl($t);
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->init_msg_tbl($t, "inbox");
+		$cl_user = get_instance(CL_USER);
+
+		$msgs = $arr["obj_inst"]->get_read_msgs();
+		$msgs->sort_by(array("prop" => "created", "order" => "asc"));
+		foreach ($msgs->arr() as $msg)
+		{
+			$from = new object($cl_user->get_person_for_user(new object($msg->prop("from"))));
+			$t->define_data(array(
+				"oid" => $msg->id(),
+				"from" => $from->name(),
+				"msg" => $msg->prop("msg"),
+				"sent" => date("d.m Y H:i:s", $msg->created()),
+				// "colour" => self::COLOUR_READ
+			));
+		}
+
+		$msgs = $arr["obj_inst"]->read_new_msgs();
+		$msgs->sort_by(array("prop" => "created", "order" => "asc"));
+		foreach ($msgs->arr() as $msg)
+		{
+			$from = new object($cl_user->get_person_for_user(new object($msg->prop("from"))));
+			$t->define_data(array(
+				"oid" => $msg->id(),
+				"from" => $from->name(),
+				"msg" => $msg->prop("msg"),
+				"sent" => date("d.m Y H:i:s", $msg->created()),
+				"colour" => self::COLOUR_UNREAD
+			));
+		}
+
+		return PROP_OK;
 	}
 
-	private function init_msg_tbl(&$t)
+	function _get_msg_outbox_tbl($arr)
 	{
-		$t->define_field(array(
-			"name" => "from",
-			"caption" => t("From"),
-			"sortable" => 1
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->init_msg_tbl($t, "outbox");
+		$cl_user = get_instance(CL_USER);
+
+		$msgs = $arr["obj_inst"]->get_sent_msgs();
+		$msgs->sort_by(array("prop" => "created", "order" => "asc"));
+		foreach ($msgs->arr() as $msg)
+		{
+			$to = array();
+			foreach ($msg->prop("to") as $to_oid)
+			{
+				$tmp = new object($cl_user->get_person_for_user(new object($to_oid)));
+				$to[] = $tmp->name();
+			}
+			$to = implode(", ", $to);
+
+			$t->define_data(array(
+				"oid" => $msg->id(),
+				"to" => $to,
+				"msg" => $msg->prop("msg"),
+				"sent" => date("d.m Y H:i:s", $msg->created()),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	private function init_msg_tbl(&$t, $type)
+	{
+		$t->define_chooser(array(
+			"name" => "sel",
+			"chgbgcolor" => "colour",
+			"field" => "oid"
 		));
+
+		switch ($type)
+		{
+			case "inbox":
+				$t->define_field(array(
+					"name" => "from",
+					"caption" => t("From"),
+					"chgbgcolor" => "colour",
+					"sortable" => 1
+				));
+				break;
+			case "outbox":
+				$t->define_field(array(
+					"name" => "to",
+					"caption" => t("To"),
+					"chgbgcolor" => "colour",
+					"sortable" => 1
+				));
+				break;
+		}
 
 		$t->define_field(array(
 			"name" => "msg",
 			"caption" => t("Message"),
+			"chgbgcolor" => "colour",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "sent",
 			"caption" => t("Sent"),
+			"chgbgcolor" => "colour",
 			"sortable" => 1
 		));
 	}
 
-	function get_msg_toolbar($arr)
+	function _get_msg_toolbar($arr)
 	{
 		$toolbar =& $arr["prop"]["vcl_inst"];
+
+		$url = $this->mk_my_orb("new", array(
+			"return_url" => get_ru(),
+			"parent" => $arr["obj_inst"]->id()
+		), "quickmessage");
+
+		$toolbar->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("New message"),
+			"url" => $url
+		));
+
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -89,18 +197,27 @@ class quickmessagebox extends class_base
 			"action" => "delete_message",
 			"confirm" => t("Delete selected messages?")
 		));
+
+		return PROP_OK;
 	}
 
-	function get_approved_senders($arr)
+	function _get_approved_senders($arr)
 	{
 		$arr["prop"]["options"] = quickmessagebox_obj::get_approved_senders_options();
+		return PROP_OK;
 	}
 
-	function get_owner($arr)
+	function _get_owner($arr)
 	{
-		$request = aw_request->get_current();
 		$uid = aw_global_get("uid");
-		$arr["prop"]["options"][] = t;
+		return PROP_OK;
+	}
+
+	function _get_contactlist($arr)
+	{
+		$u_oid = reset(array_keys($arr["prop"]["options"], aw_global_get("uid")));
+		unset($arr["prop"]["options"][$u_oid]);
+		return PROP_OK;
 	}
 
 	/**
@@ -118,9 +235,16 @@ class quickmessagebox extends class_base
 		}
 		catch (aw_exception $e)
 		{
-			echo $e->getMsg();
+			echo $e->getMessage();
 			flush();
 		}
+
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => $arr["return_url"],
+			"group" => $arr["group"],
+		), $arr["class"]);
+		return $return_url;
 	}
 }
 

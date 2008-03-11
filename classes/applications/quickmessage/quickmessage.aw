@@ -3,21 +3,27 @@
 // quickmessage.aw - Kiirteade
 /*
 
-@classinfo syslog_type=ST_QUICKMESSAGE no_status=1 no_comment=1 maintainer=voldemar
+@classinfo syslog_type=ST_QUICKMESSAGE no_status=1 no_comment=1 maintainer=voldemar prop_cb=1
 @tableinfo quickmessages index=id master_table=objects master_index=brother_of
 
 @default table=quickmessages
 @default group=general
+	@property name type=text table=objects
 
-@property msg_status type=hidden datatype=int
-@property msg_type type=hidden datatype=int
-@property box type=hidden datatype=int
+	@property to type=hidden datatype=int
+	@property from type=hidden datatype=int
 
-@property user_to type=relpicker store=no
-@caption Kellele
+	@property from_display type=text store=no editonly=1
+	@caption From
 
-@property msg type=textarea
-@caption Teade
+	@property to_display type=textbox store=no option_is_tuple=1 newonly=1
+	@caption To
+
+	@property msg type=textarea newonly=1 rows=10
+	@caption Message
+
+	@property msg_display type=text store=no editonly=1 field=msg
+	@caption Message
 
 */
 
@@ -30,22 +36,63 @@ class quickmessage extends class_base
 		));
 	}
 
-	function get_property($arr)
+	function _get_to_display($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
+		$arr["prop"]["autocomplete_delimiters"] = array(",", ";");
+		$arr["prop"]["options"] = $arr["obj_inst"]->get_to_options();
+		return PROP_OK;
+	}
+
+	function _set_to($arr)
+	{
+		$arr["obj_inst"]->set_prop("to", explode(",", $arr["request"]["to_display"]));
+	}
+
+	function submit($arr)
+	{
+		$ret = parent::submit($arr);
+
+		try
 		{
-			case "user_from":
-				$prop["value"] = aw_global_get("uid");
-				break;
+			$return_url = new aw_uri($arr["return_url"]);
 
-			case "name":
-				$retval = PROP_IGNORE;
-				break;
+			if ("quickmessagebox" === $return_url->arg("class"))
+			{
+				return (string) $return_url;
+			}
+			else
+			{
+				return $ret;
+			}
 		}
+		catch (Exception $e)
+		{
+			return $ret;
+		}
+	}
 
-		return $retval;
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		if ("quickmessages" === $table)
+		{
+			switch($field)
+			{
+				case "from":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "int"
+					));
+					break;
+
+				case "to":
+				case "msg":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "text"
+					));
+					break;
+			}
+		}
 	}
 }
 ?>

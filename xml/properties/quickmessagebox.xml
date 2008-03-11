@@ -1,130 +1,133 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>maxsize</name>
+            <name>owner</name>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Kirja maksimaalne suurus (m&amp;auml;rkides)</caption>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <newonly>1</newonly>
+            <reltype>RELTYPE_OWNER</reltype>
+            <caption>Select owner</caption>
       </property>
       <property>
-            <name>newmessage</name>
+            <name>is_contactlist_add_approval_required</name>
             <table>objects</table>
-            <group>newmessage</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>callback_new_message</callback>
-            <store>no</store>
-      </property>
-      <property>
-            <name>inbox_toolbar</name>
-            <table>objects</table>
-            <group>inbox</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>Inboxi</name>
-            <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Require approval</caption>
       </property>
       <property>
-            <name>inbox</name>
+            <name>approved_senders</name>
             <table>objects</table>
-            <group>inbox</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Sissetulnud kirjad</caption>
+            <group>general</group>
+            <type>select</type>
+            <caption>Allow messages from</caption>
       </property>
       <property>
-            <name>outbox_toolbar</name>
+            <name>contactlist</name>
             <table>objects</table>
-            <group>outbox</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <size>7</size>
+            <reltype>RELTYPE_CONTACT</reltype>
+            <automatic>1</automatic>
+            <caption>Contacts</caption>
+      </property>
+      <property>
+            <name>msg_toolbar</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>message_inbox</num_0>
+                  <num_1>message_outbox</num_1>
+            </group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Outboxi toolbar</caption>
       </property>
       <property>
-            <name>outbox</name>
+            <name>Message</name>
             <table>objects</table>
-            <group>outbox</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
+      </property>
+      <property>
+            <name>msg_inbox_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>message_inbox</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>V&amp;auml;lja saadetud kirjad</caption>
+            <caption>Messages</caption>
       </property>
       <property>
-            <name>archive_toolbar</name>
+            <name>msg_outbox_tbl</name>
             <table>objects</table>
-            <group>archive</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Arhiivi toolbar</caption>
-      </property>
-      <property>
-            <name>archive</name>
-            <table>objects</table>
-            <group>archive</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <group>message_outbox</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Arhiiv</caption>
+            <caption>Messages</caption>
       </property>
       <classinfo>
             <syslog_type>ST_QUICKMESSAGEBOX</syslog_type>
-            <relationmgr>yes</relationmgr>
-            <no_status>1</no_status>
-            <maintainer>kristo</maintainer>
+            <maintainer>voldemar</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <newmessage>
-                  <caption>Uus teade</caption>
-            </newmessage>
-            <inbox>
+            <message_box>
+                  <caption>Messages</caption>
+            </message_box>
+            <message_inbox>
                   <caption>Inbox</caption>
-                  <submit>no</submit>
-            </inbox>
-            <outbox>
+                  <parent>message_box</parent>
+            </message_inbox>
+            <message_outbox>
                   <caption>Outbox</caption>
-                  <submit>no</submit>
-            </outbox>
-            <archive>
-                  <caption>Arhiiv</caption>
-                  <submit>no</submit>
-            </archive>
+                  <parent>message_box</parent>
+            </message_outbox>
+            <general>
+                  <caption>Settings</caption>
+            </general>
       </groupinfo>
       <reltypes>
             <OWNER>
                   <value>4</value>
                   <clid>CL_USER</clid>
-                  <caption>Omanik</caption>
+                  <caption>Owner</caption>
             </OWNER>
-            <CONTACT_LIST>
+            <CONTACT>
+                  <value>3</value>
+                  <clid>CL_USER</clid>
+                  <caption>Contact</caption>
+            </CONTACT>
+            <READ_MESSAGE>
                   <value>5</value>
-                  <clid>CL_CONTACT_LIST</clid>
-                  <caption>Aadressiraamat</caption>
-            </CONTACT_LIST>
+                  <clid>CL_QUICKMESSAGE</clid>
+                  <caption>Read message</caption>
+            </READ_MESSAGE>
+            <UNREAD_MESSAGE>
+                  <value>6</value>
+                  <clid>CL_QUICKMESSAGE</clid>
+                  <caption>Unread message</caption>
+            </UNREAD_MESSAGE>
       </reltypes>
 </properties>
 

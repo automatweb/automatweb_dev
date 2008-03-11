@@ -13,6 +13,21 @@ class quickmessagebox_obj extends _int_object
 	const STATUS_READ = 1;
 	const STATUS_UNREAD = 2;
 
+	const COUNTER_FILE = "/files/qmsg_msg_counter.aw";
+
+	private $counter_file;
+
+	public function __construct($param)
+	{
+		$this->counter_file = self::get_counter_file();
+		return parent::_int_object($param);
+	}
+
+	private static function get_counter_file()
+	{
+		return aw_ini_get("site_basedir") . self::COUNTER_FILE;
+	}
+
 	public function set_status($status)
 	{// only one msgbox active for a user
 		// if (STAT_$this->status())
@@ -22,56 +37,57 @@ class quickmessagebox_obj extends _int_object
 
 	/**
 	@attrib api=1
-	@param msgs required type=object_list
-		Messages to change status in this box
-	@param status required type=string
-		Options: read, unread.
-	@returns void
-	@comment
-		Returns message objects corresponding to status parameter in this box. Read, unread, or all.
-	@errors
-		Throws awex_qmsg_param on parameter errors.
+	@returns object_list
+		Read messages.
 	**/
-	public function set_msgs_status(object_list $msgs, $status)
+	public function get_read_msgs()
 	{
-		switch ($status)
-		{
-			case "read":
-				$type = "RELTYPE_READ_MESSAGE";
-				break;
-			case "unread":
-				$type = "RELTYPE_UNREAD_MESSAGE";
-				break;
-			default:
-				throw new awex_qmsg_param("Invalid status parameter value.");
-		}
-
-		$this->connect(array("to" => $msgs->ids(), "type" => $type));
+		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_READ_MESSAGE")));
+		return $ol;
 	}
 
 	/**
+	Reads new messages.
 	@attrib api=1
-	@param status optional type=string
-		Options: read, unread. All messages in this box returned if not specified.
-	@returns array
-	@comment
-		Returns message objects corresponding to status parameter in this box. Read, unread, or all.
+	@returns object_list
+		Unread messages.
 	**/
-	public function get_received_msgs($status = null)
+	public function read_new_msgs()
 	{
-		switch ($status)
+		$unread = $this->connections_from(array("type" => "RELTYPE_UNREAD_MESSAGE"));
+		$ol = new object_list();
+
+		if (count($unread))
 		{
-			case "read":
-				$type = "RELTYPE_READ_MESSAGE";
-				break;
-			case "unread":
-				$type = "RELTYPE_UNREAD_MESSAGE";
-				break;
-			default:
-				$type = array("RELTYPE_UNREAD_MESSAGE", "RELTYPE_READ_MESSAGE");
+			$ol = new object_list($unread);
+			$this->disconnect(array(
+				"from" => $ol->ids(),
+				"type" => "RELTYPE_UNREAD_MESSAGE"
+			));
+			$this->connect(array(
+				"to" => $ol->ids(),
+				"type" => "RELTYPE_READ_MESSAGE"
+			));
+			$this->update_counter(- $ol->count());
 		}
 
-		$ol = new object_list($this->connections_from(array("type" => $type)));
+		return $ol;
+	}
+
+	public function get_sent_msgs($limit = 0, $page = 1)
+	{
+		if (!is_int($limit) or !is_int($page) or $page < 1 or $limit < 0)
+		{
+			throw new awex_qmsg_param("Invalid page ('" . $page . "') or limit ('" . $limit . "') parameter");
+		}
+
+		$limit = (0 === $limit) ? null : (($page * $limit) . "," . $limit);
+		$ol = new object_list(array(
+			"class_id" => CL_QUICKMESSAGE,
+			"limit" => $limit,
+			"lang_id" => array(),
+			"from" => aw_global_get("uid_oid")
+		));
 		return $ol;
 	}
 
@@ -95,8 +111,9 @@ class quickmessagebox_obj extends _int_object
 
 		$this->connect(array(
 			"to" => $msg->id(),
-			"type" => "UNREAD_MESSAGE"
+			"type" => "RELTYPE_UNREAD_MESSAGE"
 		));
+		$this->update_counter(1);
 	}
 
 	/**
@@ -115,6 +132,14 @@ class quickmessagebox_obj extends _int_object
 		return $options;
 	}
 
+	/**
+	@attrib api=1
+	@returns cl_quickmessagebox object
+		User's messagebox.
+	@errors
+		throws awex_qmsg_no_box if user has no messagebox.
+		throws awex_qmsg_cfg if user has more than one messagebox.
+	**/
 	public static function get_msgbox_for_user(object $user)
 	{
 		$c = $user->connections_to(array(
@@ -160,9 +185,8 @@ class quickmessagebox_obj extends _int_object
 			throw new awex_qmsg_param("No messages to delete.");
 		}
 
+		// load messages
 		$delete_q = array();
-		$failed = array();
-
 		foreach ($msgs as $msg)
 		{
 			if (!is_a($msg, "object"))
@@ -177,20 +201,41 @@ class quickmessagebox_obj extends _int_object
 				}
 			}
 
-			if ($msg->prop("box") !== $this->id())
-			{
-				$e = new awex_qmsg_param("Trying to delete message not belonging to this messagebox.");
-				$e->qmsg_affected_msgs = array($msg->id() => "wrong box");
-				throw $e;
-			}
-
-			$delete_q[] = $msg;
+			$delete_q[$msg->id()] = $msg;
 		}
 
+		// get connections to messages to be deleted.
+		$c = new connection();
+		$c = $c->find(array(
+			"from" => $this->id(),
+			"to" => array_keys($delete_q)
+		));
+
+		// get count of unread messages among those to be deleted
+		$unread = array();
+		$connectes_msgs = array();
+		foreach ($c as $connection)
+		{
+			if ("6" === $connection["reltype"]) // RELTYPE_UNREAD_MESSAGE
+			{
+				$unread[] = $connection["to"];
+			}
+
+			$connectes_msgs[] = $connection["to"];
+		}
+
+		// check if connected to this box. delete.
+		$failed = array();
 		foreach ($delete_q as $msg)
 		{
 			try
 			{
+				if (!in_array($msg->id(), $connectes_msgs))
+				{
+					$e = new awex_qmsg_box("Can't delete messages not belonging to this messagebox.");
+					$e->qmsg_affected_msgs = array($msg->id() => "wrong box");
+				}
+
 				$msg->delete();
 			}
 			catch (Exception $e)
@@ -199,12 +244,134 @@ class quickmessagebox_obj extends _int_object
 			}
 		}
 
+		// subtract deleted from new message count
+		$unread_deleted = count(array_diff($unread, array_keys($failed)));
+		if ($unread_deleted)
+		{
+			$this->update_counter(- $unread_deleted);
+		}
+
 		if (count($failed))
 		{
 			$e = new awex_qmsg("Some messages couldn't be deleted.");
 			$e->qmsg_affected_msgs = $failed;
 			throw $e;
 		}
+	}
+
+	/**
+	@attrib api=1 params=pos
+	@param msgbox_id required type=int
+		Messagebox object id
+	@returns int
+		Number of new messages in specified box
+	@errors
+		throws awex_qmsg_counter on various counter reading errors
+	**/
+	public static function get_new_msgs_count($msgbox_id)
+	{
+		if (!is_oid($msgbox_id))
+		{
+			throw new awex_qmsg_param("Invalid messagebox id.");
+		}
+
+		$counter_file = self::get_counter_file();
+		$fp = @fopen($counter_file, "r");
+
+		if (flock($fp, LOCK_SH))
+		{
+			// get current counter
+			$counter_data = @fread($fp, @filesize($counter_file));
+
+			if (false === $counter_data)
+			{
+				throw new awex_qmsg_counter("New message counter couldn't be updated. Couldn't read counter file.", 1);
+			}
+
+			$counter_data = unserialize($counter_data);
+
+			if (false === $counter_data)
+			{
+				throw new awex_qmsg_counter("New message counter couldn't be updated. Invalid counter data.", 2);
+			}
+
+			return isset($counter_data[$msgbox_id]) ? $counter_data[$msgbox_id] : 0;
+		}
+		else
+		{
+			throw new awex_qmsg_counter("New message counter couldn't be updated. Failed to acquire shared lock.", 6);
+		}
+
+		fclose($fp);
+	}
+
+	// $count - int, counter value changed by that amount
+	private function update_counter($count)
+	{
+		// update unread msgs counter
+		$fp = @fopen($this->counter_file, "a+");
+		$ret = rewind($fp);
+
+		if ($ret and flock($fp, LOCK_EX))
+		{
+			// get current counter
+			$size = filesize($this->counter_file);
+
+			if ($size)
+			{
+				$counter_data = @fread($fp, $size);
+
+				if (false === $counter_data)
+				{
+					throw new awex_qmsg_counter("New message counter couldn't be updated. Couldn't read counter file.", 1);
+				}
+
+				$counter_data = unserialize($counter_data);
+
+				if (false === $counter_data)
+				{
+					throw new awex_qmsg_counter("New message counter couldn't be updated. Invalid counter data.", 2);
+				}
+			}
+			else
+			{
+				$counter_data = array();
+			}
+
+			// update counter
+			if (!isset($counter_data[$this->id()]))
+			{
+				$counter_data[$this->id()] = 0;
+			}
+
+			$counter = $counter_data[$this->id()] + $count;
+
+			if ($counter < 0)
+			{
+				throw new awex_qmsg_counter("New message counter couldn't be updated. Negative new count.", 5);
+			}
+
+			$counter_data[$this->id()] = $counter;
+			$ret = ftruncate($fp, 0);
+
+			if (false === $ret)
+			{
+				throw new awex_qmsg_counter("New message counter couldn't be updated. Couldn't reset file.", 8);
+			}
+
+			$ret = @fwrite($fp, serialize($counter_data));
+
+			if (false === $ret)
+			{
+				throw new awex_qmsg_counter("New message counter couldn't be updated. Couldn't write counter file.", 3);
+			}
+		}
+		else
+		{
+			throw new awex_qmsg_counter("New message counter couldn't be updated. Failed to acquire lock.", 4);
+		}
+
+		fclose($fp);
 	}
 }
 
@@ -217,6 +384,7 @@ class awex_qmsg_unwanted_msg extends awex_qmsg {}
 class awex_qmsg_box extends awex_qmsg {}
 class awex_qmsg_no_box extends awex_qmsg_box {}
 class awex_qmsg_cfg extends awex_qmsg_box {}
+class awex_qmsg_counter extends awex_qmsg_box {}
 
 
 ?>

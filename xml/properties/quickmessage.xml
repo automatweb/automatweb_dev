@@ -1,53 +1,75 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>mstatus</name>
+            <name>name</name>
             <table>objects</table>
             <group>general</group>
-            <type>hidden</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <datatype>int</datatype>
-            <caption></caption>
+            <type>text</type>
+            <field>name</field>
       </property>
       <property>
-            <name>user_from</name>
+            <name>to</name>
+            <table>quickmessages</table>
+            <group>general</group>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>to</field>
+      </property>
+      <property>
+            <name>from</name>
+            <table>quickmessages</table>
+            <group>general</group>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>from</field>
+      </property>
+      <property>
+            <name>from_display</name>
             <table>quickmessages</table>
             <group>general</group>
             <type>text</type>
-            <field>user_from</field>
-            <caption>Kellelt</caption>
+            <store>no</store>
+            <editonly>1</editonly>
+            <field>from_display</field>
+            <caption>From</caption>
       </property>
       <property>
-            <name>user_to</name>
+            <name>to_display</name>
             <table>quickmessages</table>
             <group>general</group>
             <type>textbox</type>
-            <field>user_to</field>
-            <caption>Kellele</caption>
+            <store>no</store>
+            <option_is_tuple>1</option_is_tuple>
+            <newonly>1</newonly>
+            <field>to_display</field>
+            <caption>To</caption>
       </property>
       <property>
-            <name>subject</name>
-            <table>quickmessages</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>subject</field>
-            <caption>Teema</caption>
-      </property>
-      <property>
-            <name>content</name>
+            <name>msg</name>
             <table>quickmessages</table>
             <group>general</group>
             <type>textarea</type>
-            <field>content</field>
-            <caption>Sisu</caption>
+            <newonly>1</newonly>
+            <rows>10</rows>
+            <field>msg</field>
+            <caption>Message</caption>
+      </property>
+      <property>
+            <name>msg_display</name>
+            <table>quickmessages</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <field>msg</field>
+            <caption>Message</caption>
       </property>
       <classinfo>
             <syslog_type>ST_QUICKMESSAGE</syslog_type>
-            <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
-            <maintainer>kristo</maintainer>
+            <maintainer>voldemar</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <tableinfo>
             <quickmessages>

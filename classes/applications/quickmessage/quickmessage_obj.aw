@@ -63,6 +63,30 @@ class quickmessage_obj extends _int_object
 		return $options;
 	}
 
+	public function awobj_set_to($value)
+	{
+		if (!is_array($value) or !count($value))
+		{
+			throw new awex_qmsg_param("Invalid message recipient parameter specified. [" . var_export($value, true) . "]");
+		}
+
+		foreach ($value as $id)
+		{
+			if (!is_oid($id))
+			{
+				throw new awex_qmsg_param("Invalid message recipient id specified. [" . $id . "]");
+			}
+		}
+
+		$value = implode(",", $value);
+		return parent::set_prop("to", $value);
+	}
+
+	public function awobj_get_to()
+	{
+		return explode(",", parent::prop("to"));
+	}
+
 	public function save()
 	{
 		$new = !$this->obj["oid"];
@@ -74,8 +98,9 @@ class quickmessage_obj extends _int_object
 				$to_o = new object($this->prop("to"));
 				$msgbox = quickmessagebox_obj::get_msgbox_for_user($to_o);
 				$usersuserinst = get_instance("users_user");
-				$u_oid = $usersuserinst->get_oid_for_uid(aw_global_get("uid"));
+				$u_oid = aw_global_get("uid_oid");
 				$this->set_prop("from", $u_oid);
+				$this->set_name(aw_global_get("uid") . " => " .  $to_o->name() . " @ " . date("d.M. Y H:i:s"));
 			}
 			catch (awex_obj_acl $e)
 			{
