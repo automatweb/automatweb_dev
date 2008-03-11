@@ -37,7 +37,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code
 	@caption Kliendikood
 
-	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL 
+	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
 	@caption Arve esitaja
 
 	@property bill_date type=date_select table=aw_crm_bill field=aw_date
@@ -162,12 +162,15 @@ class crm_bill extends class_base
 		));
 
 		$this->states = array(
-			-5 => t("T&uuml;histatud"),
+
 			0 => t("Koostamisel"),
 			1 => t("Saadetud"),
 			2 => t("Makstud"),
 			3 => t("Laekunud"),
+			6 => t("Osaliselt laekunud"),
 			4 => t("Kreeditarve"),
+			5 => t("Tehtud kreeditarve"),
+			-5 => t("T&uuml;histatud"),
 		);
 	}
 
@@ -271,7 +274,7 @@ class crm_bill extends class_base
 						$arr["obj_inst"]->set_prop("bill_no" , $prop["value"]);
 						$arr["obj_inst"]->save();
 					}
-					//if(aw_global_get("uid") == "Teddi.Rull")arr($co_obj);
+					
 				}
 				break;
 
@@ -651,11 +654,7 @@ class crm_bill extends class_base
 		
 		if(is_object($p))
 		{
-			$sum = $this->get_bill_needs_payment(array("bill" => $o));
-			$error = $p->add_bill(array(
-				"sum" => $sum,
-				"o" => $o,
-			));
+			$error = $p->add_bill($o);
 			if($error)
 			{
 				arr($error);
@@ -685,7 +684,7 @@ class crm_bill extends class_base
 
 		if(!is_object($p))
 		{
-			$sum = $this->get_bill_needs_payment(array("bill" => $o));
+			$sum = $this->get_bill_sum($o,BILL_SUM) - $o->prop("partial_recieved");
 			$p = new object();
 			$p-> set_parent($o->id());
 			$p-> set_name($o->name() . " " . t("laekumine"));
@@ -696,31 +695,26 @@ class crm_bill extends class_base
 				"type" => "RELTYPE_PAYMENT"
 			));
 			$p-> set_prop("date", time());
-			$p->save();
-			$p->add_bill(array(
-				"sum" => $sum,
-				"o" => $o,
-			));
-//			$p-> set_prop("sum", $sum);//see koht sureb miskiprast
-//			$curr = $o->get_bill_currency_id();
+			$p-> set_prop("sum", $sum);//see koht sureb miskiprast
+			$curr = $this->get_bill_currency_id($o);
 
-//			if($curr)
-//			{
-//				$ci = get_instance(CL_CURRENCY);
-//				$p -> set_prop("currency", $curr);
-//				$rate = 1;
-//				if(($default_c = $ci->get_default_currency) != $curr)
-//				{
-//					$rate = $ci->convert(array(
-//						"sum" => 1,
-//						"from" => $curr,
-//						"to" => $default_c,
-//						"date" => time(),
-//					));
-//				}
-//				$p -> set_prop("currency_rate", $rate);
-//			}
-//			$p-> save();
+			if($curr)
+			{
+				$ci = get_instance(CL_CURRENCY);
+				$p -> set_prop("currency", $curr);
+				$rate = 1;
+				if(($default_c = $ci->get_default_currency) != $curr)
+				{
+					$rate = $ci->convert(array(
+						"sum" => 1,
+						"from" => $curr,
+						"to" => $default_c,
+						"date" => time(),
+					));
+				}
+				$p -> set_prop("currency_rate", $rate);
+			}
+			$p-> save();
 		}
 
 		if($show_error == 1)
@@ -934,7 +928,7 @@ class crm_bill extends class_base
 			{
 				$prods[$pko->id()] = $pko->name();
 			}
-		}
+		}//if(aw_global_get("uid") == "Teddi.Rull")$arr["obj_inst"]->connect(array("to" => 25403, "type" => "RELTYPE_ROW"));
 		$rows = $this->get_bill_rows($arr["obj_inst"]);
 		if (!is_oid($arr["obj_inst"]->id()))
 		{
@@ -1494,7 +1488,7 @@ class crm_bill extends class_base
 				if ($this->can("view", $ct->prop("riik")))
 				{
 					$riik = obj($ct->prop("riik"));
-					//see tundub k&uuml;ll mttetu...et nagu need tingimused on tidetud, siis mni rida allpool tehakse tpselt sama
+					//see tundub kll mttetu...et nagu need tingimused on tidetud, siis mni rida allpool tehakse tpselt sama
 //					if( $riik->name() != $ord_country)
 //					{
 //						$ord_addr .= " ".$ord_country;
@@ -1957,7 +1951,7 @@ class crm_bill extends class_base
 	{
 		$b = obj($arr["id"]);
 		$bill_rows = $this->get_bill_rows($b);
-		//lkkab mned read kokku ja liidab summa , ning koguse.vibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha ki
+		//lkkab mned read kokku ja liidab summa , ning koguse.vibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha kki
 //		$bill_rows = $this->collocate($bill_rows);
 		
 		//thja kirjeldusega read vlja
@@ -2659,7 +2653,7 @@ class crm_bill extends class_base
 		));
 
 		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;tus on 0 krooni")."');	if(fRet){";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
 		$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
 		if(!$has_val) $onclick.= "}else;";
 
@@ -2848,10 +2842,6 @@ class crm_bill extends class_base
 	function get_bill_needs_payment($arr)
 	{
 		extract($arr);
-		if(is_oid($bill))
-		{
-			$bill = obj($bill);
-		}
 		if(!(is_object($bill) && is_oid($bill->id())))
 		{
 			return 0;
@@ -2869,12 +2859,11 @@ class crm_bill extends class_base
 				}
 				break;
 			}
-//			$sum = $sum + $p->get_free_sum($bill->id());
-			$sum = $sum + $p->get_bill_sum($bill->id());
+			$sum = $sum + $p->get_free_sum($bill->id());
 		}
 		if($bill_sum < $sum)
 		{
-			return 0;
+			$sum = $bill_sum;
 		}
 		return $bill_sum - $sum;
 	}
@@ -2885,16 +2874,15 @@ class crm_bill extends class_base
 		{
 			return 0;
 		}
-		if($payment)
-		{
-//			$needed_wtp = $this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment));
-			$payment = obj($payment);
-//			$free_sum = $payment->get_free_sum($b->id());
-//			return min($free_sum , $needed_wtp);
-			return $payment->get_bill_sum($b->id());
-		}
 		$bill_sum = $this->get_bill_sum($b);
 		$needed = $this->get_bill_needs_payment(array("bill" => $b));
+		if($payment)
+		{
+			$needed_wtp = $this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment));
+			$payment = obj($payment);
+			$free_sum = $payment->get_free_sum($b->id());
+			return min($free_sum , $needed_wtp);
+		}
 		return $this->posValue($bill_sum - $needed);
 	}
 
@@ -2912,19 +2900,5 @@ class crm_bill extends class_base
 		}
 		return true;
 	}
-
-	function get_bill_id($arr)
-	{
-		$bills = new object_list(array(
-			"class_id" => CL_CRM_BILL,
-			"lang_id" => array(),
-			"bill_no" => $arr["no"],
-		));
-		if(sizeof($bills->ids()))
-		{
-			return reset($bills->ids());
-		}
-	}
-
 }
 ?>
