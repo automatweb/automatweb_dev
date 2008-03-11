@@ -10,6 +10,7 @@ class class_index
 	const CLASS_DIR = "/classes/";
 	const LOCAL_CLASS_DIR = "/files/classes/";
 	const LOCAL_CLASS_PREFIX = "_aw_local_class__"; // local class names in form OBJ_LOCAL_CLASS_PREFIX . $class_obj_id
+	const UPDATE_EXEC_TIMELIMIT = 300;
 	const CL_NAME_MAXLEN = 1024;
 
 	/**
