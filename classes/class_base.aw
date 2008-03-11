@@ -1019,10 +1019,8 @@ class class_base extends aw_template
 	**/
 	function submit($args = array())
 	{
-		$form_data = null;
 		// since submit should never change the return url, make sure we get at it later
 		$real_return_url = $args["return_url"];
-
 
 		// check whether this current class is based on class_base
 		$this->init_class_base();
@@ -1031,10 +1029,13 @@ class class_base extends aw_template
 		$this->is_translated = 0;
 		// object framework does it's own quoting
 		//$this->quote($args);
-		extract($args);
-
 
 		$request = $args;
+		$id = $args["id"];
+		$group = $args["group"];
+		$extraids = $args["extraids"];
+		$action = $args["action"];
+		$all_trans_status = $args["all_trans_status"];
 
 		// I need to know the id of the configuration form, so that I
 		// can load it. Reason being, the properties can be grouped
@@ -1081,11 +1082,6 @@ class class_base extends aw_template
 			"return_url" => $request["return_url"],
 		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
 
-		if (!empty($form_data["no_rte"]))
-		{
-			$args["no_rte"] = 1;
-		};
-
 		if (!$save_ok)
 		{
 			$args["parent"] = $request["parent"];
@@ -1097,18 +1093,19 @@ class class_base extends aw_template
 			else
 			{
 				$action = "change";
-			};
+			}
 		}
 		else
 		{
 			$action = "change";
-		};
+		}
+
 		$orb_class = get_class($this->orb_class);
 		$class = aw_global_get("class");
 		if (is_oid($class))
 		{
 			$orb_class = $class;
-		};
+		}
 
 		if ($save_ok)
 		{
