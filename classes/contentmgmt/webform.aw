@@ -2248,8 +2248,8 @@ class webform extends class_base
 
 					default:
 						$pd["value"] = $pd["caption"];
-						$pd["onFocus"] = "if (this.value == '".$pd['value']."')this.value=''";
-						$pd["onBlur"] = "if (this.value == '')this.value='".$pd['value']."'";
+						$pd["onfocus"] = "if (this.value == '".$pd['value']."')this.value=''";
+						$pd["onblur"] = "if (this.value == '')this.value='".$pd['value']."'";
 				}
 
 			}
