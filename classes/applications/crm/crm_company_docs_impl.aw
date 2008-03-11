@@ -160,7 +160,7 @@ class crm_company_docs_impl extends class_base
 					"parent" => $sel ? $sel : $fldo->id(),
 					"lang_id" => array(),
 					"class_id" => CL_MENU,
-					"sort_by" => "objects.name ASC",
+					"sort_by" => "objects.jrk ASC , objects.name ASC",
 				));
 				foreach($ol->arr() as $o)
 				{
