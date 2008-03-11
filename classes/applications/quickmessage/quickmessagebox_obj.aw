@@ -74,6 +74,16 @@ class quickmessagebox_obj extends _int_object
 		return $ol;
 	}
 
+
+	/**
+	@attrib api=1 params=pos
+	@param limit optional type=int default=0
+		Messages per 'page'.
+	@param page optional type=int default=1
+		'Page' number
+	@returns object_list
+		Messages sent by this box's owner.
+	**/
 	public function get_sent_msgs($limit = 0, $page = 1)
 	{
 		if (!is_int($limit) or !is_int($page) or $page < 1 or $limit < 0)
@@ -152,16 +162,32 @@ class quickmessagebox_obj extends _int_object
 		if (1 === count($c))
 		{
 			$c = reset($c);
-			return $c->from();
+			$box = $c->from();
 		}
 		elseif (0 === count($c))
 		{
-			throw new awex_qmsg_no_box("User has no messagebox configured.");
+			if (aw_ini_get("quickmessaging.auto_create_box"))
+			{
+				$box = new object();
+				$box->set_class_id(CL_QUICKMESSAGEBOX);
+				$box->set_prop("owner", $user->id());
+				$box->save();
+				$box->connect(array(
+					"to" => $user->id(),
+					"type" => "RELTYPE_OWNER"
+				));
+			}
+			else
+			{
+				throw new awex_qmsg_no_box("User has no messagebox configured.");
+			}
 		}
 		else
 		{
 			throw new awex_qmsg_cfg("Messagebox configuration error. User has more than one messagebox.");
 		}
+
+		return $box;
 	}
 
 	/**
