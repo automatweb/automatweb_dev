@@ -10,7 +10,6 @@ class class_index
 	const CLASS_DIR = "/classes/";
 	const LOCAL_CLASS_DIR = "/files/classes/";
 	const LOCAL_CLASS_PREFIX = "_aw_local_class__"; // local class names in form OBJ_LOCAL_CLASS_PREFIX . $class_obj_id
-	const UPDATE_EXEC_TIMELIMIT = 300;
 	const CL_NAME_MAXLEN = 1024;
 
 	/**
@@ -23,9 +22,11 @@ class class_index
 	**/
 	public static function update($full_update = false)
 	{
+		// ...
 		$max_execution_time_prev_val = ini_get("max_execution_time");
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);
 
+		// update
 		$found_classes = self::_update("", "", $full_update);
 		self::update_one_file(aw_ini_get("basedir")."/class_index.aw", $found_classes, $full_update, "../");
 		self::update_one_file(aw_ini_get("basedir")."/init.aw", $found_classes, $full_update, "../");
@@ -35,6 +36,7 @@ class class_index
 			self::clean_up($found_classes);
 		}
 
+		// restore normality
 		set_time_limit($max_execution_time_prev_val);
 	}
 
@@ -53,7 +55,6 @@ class class_index
 		if (!is_dir($index_dir))
 		{
 			$ret = mkdir($index_dir, 0777);
-			chmod($index_dir, 0777);
 
 			if (!$ret)
 			{
@@ -62,6 +63,17 @@ class class_index
 				$e->clidx_op = "mkdir";
 				throw $e;
 			}
+
+			$ret = chmod($index_dir, 0777);
+
+			if (!$ret)
+			{
+				$e = new awex_clidx_filesys("Failed to change index directory permissions.");
+				$e->clidx_file = $index_dir;
+				$e->clidx_op = "mkdir";
+				throw $e;
+			}
+
 		}
 
 		if (!is_dir($class_dir))
@@ -208,10 +220,20 @@ class class_index
 
 					// open index file for this class/iface
 					$cl_handle = @fopen($class_dfn_file, "w");
-					chmod($class_dfn_file, 0666);
-					if (false === $cl_handle)
+					$ret = chmod($class_dfn_file, 0666);
+
+					if (!$ret)
 					{
-						$e = new awex_clidx_filesys("Unable to update class index for '" . $class_file . "'.");
+						$e = new awex_clidx_filesys("Failed to change file permissions for " . $class_dfn_file . ".");
+						$e->clidx_file = $class_dfn_file;
+						$e->clidx_op = "mkdir";
+						throw $e;
+					}
+
+					// aquire lock
+					if (!flock($cl_handle, LOCK_EX))
+					{
+						$e = new awex_clidx_filesys("Unable to update class index for '" . $class_file . "'. Failed to aquire lock.");
 						$e->clidx_cl_name = $class_name;
 						$e->clidx_file = $class_dfn_file;
 						$e->clidx_op = "fopen";
@@ -449,5 +471,7 @@ class awex_clidx_double_dfn extends awex_clidx
 	public $clidx_path1;
 	public $clidx_path2;
 }
+
+class awex_clidx_lock extends aw_exception {}
 
 ?>
