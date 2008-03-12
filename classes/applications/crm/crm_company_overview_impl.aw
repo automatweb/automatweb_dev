@@ -589,6 +589,14 @@ class crm_company_overview_impl extends class_base
 			$cust_name = "";
 			
 			$cust_str = "";
+			if(!$this->can("view", $cust))
+			{
+				$cust_o = $task->get_first_obj_by_reltype(array("type" => "RELTYPE_CUSTOMER"));
+				if(is_object($cust_o))
+				{
+					$cust = $cust_o->id();
+				}
+			}
 			if (is_oid($cust) && $this->can("view", $cust))
 			{
 				$cust_o = obj($cust);
