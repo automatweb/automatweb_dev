@@ -1591,6 +1591,7 @@ class user extends class_base
 		if ($this->can("view", $p_o->prop("work_contact")))
 		{
 			aw_restore_acl();
+			obj_set_opt("no_cache", 0);
 			return $p_o->prop("work_contact");
 		}
 		$cons = $p_o->connections_from(array(

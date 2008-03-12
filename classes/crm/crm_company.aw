@@ -5143,32 +5143,59 @@ class crm_company extends class_base
 		return $ret;
 	}
 
-	function get_my_offers()
+	function get_my_offers($range = null)
 	{
 		$u = get_instance(CL_USER);
-		$c = new connection();
-		$cs = $c->find(array(
-			"to" => $u->get_current_person(),
-			"from.class_id" => CL_CRM_OFFER,
-			"type" => "RELTYPE_SALESMAN",
-		));
-		$ret = array();
-		foreach($cs as $c)
+		$filt = array(
+			"class_id" => CL_CRM_OFFER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_OFFER.RELTYPE_SALESMAN" => $u->get_current_person()
+		);
+		if ($range)
 		{
-			$ret[] = $c["from"];
+			$filt[] = new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($range["start"], $range["end"]));
 		}
-		return $ret;
+		$ol = new object_list($filt);
+		return $ol->ids();
 	}
 
-	function get_my_actions()
+	function get_my_actions($range = null)
 	{
+		enter_function("get_my_actions");
+
+		enter_function("get_my_actions:1");
 		$u = get_instance(CL_USER);
-		$c = new connection();
-		$cs = $c->find(array(
+
+		$filt = null;
+		if ($range != null)
+		{
+			// list all tasks in that range and then filter by person. 
+			// beacause SOME IDIOT deciced that connection from person to task was a good idea to record members
+			// this will really have to be converted sometime. REALLY.
+			$ol = new object_list(array(
+				"class_id" => array(CL_TASK, CL_CRM_MEETING, CL_CRM_CALL),
+				"lang_id" => array(),
+				"site_id" => array(),
+				new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($range["start"], $range["end"]))
+			));
+			$filt = $ol->ids();
+		}
+
+		$params = array(
 			"from" => $u->get_current_person(),
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => array("RELTYPE_PERSON_TASK", "RELTYPE_PERSON_MEETING", "RELTYPE_PERSON_CALL"),
-		));
+		);
+		if ($filt)
+		{
+			$params["to"] = $filt;
+		}
+		$c = new connection();
+		$cs = $c->find($params);
+		exit_function("get_my_actions:1");
+
+		enter_function("get_my_actions:2");
 		$ret = array();
 		foreach($cs as $c)
 		{
@@ -5177,8 +5204,12 @@ class crm_company extends class_base
 				$ret[] = $c["to"];
 			}
 		}
+
 		$cali = get_instance(CL_PLANNER);
 		$calid = $cali->get_calendar_for_user();
+		exit_function("get_my_actions:2");
+
+		enter_function("get_my_actions:3");
 		if($calid)
 		{
 			$cal = obj($calid);
@@ -5186,7 +5217,7 @@ class crm_company extends class_base
 			if($eec[CL_BUG])
 			{
 				$cp = $u->get_current_person();
-				$ol = new object_list(array(
+				$filt = array(
 					"class_id" => CL_BUG,
 					new object_list_filter(array(
 						"logic" => "OR",
@@ -5196,18 +5227,27 @@ class crm_company extends class_base
 						)
 					)),
 					"bug_status" => array(1,2,10,11),
-				));
+				);
+				if ($range !== null)
+				{
+					$filt["deadline"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $range["start"], $range["end"]);
+				}
+				$ol = new object_list($filt);
 				$ret = array_merge($ret, $ol->ids());
 			}
 		}
+		exit_function("get_my_actions:3");
 
-		foreach($this->get_my_offers() as $ofid)
+		enter_function("get_my_actions:4");
+		foreach($this->get_my_offers($range) as $ofid)
 		{
 			if ($this->can("view", $c["to"]))
 			{
 				$ret[] = $ofid;
 			}
 		}
+		exit_function("get_my_actions:4");
+		exit_function("get_my_actions");
 		return $ret;
 	}
 
