@@ -1219,6 +1219,16 @@ class event_search extends class_base
 			}
 			if ($search['class_id'] == CL_CALENDAR_EVENT)
 			{
+				if (!empty($arr['org']))
+				{
+					$search[] = new object_list_filter(array(
+						'logic' => 'OR',
+						'conditions' => array(
+							"CL_CALENDAR_EVENT.RELTYPE_ORGANIZER" => $arr['org'],
+							"CL_CALENDAR_EVENT.RELTYPE_LOCATION.owner" => $arr['org'],
+						)
+					));
+				}
 				if (!empty($arr['sector']))
 				{
 					$search['CL_CALENDAR_EVENT.RELTYPE_SECTOR.name'] = '%'.$arr['sector'].'%';
