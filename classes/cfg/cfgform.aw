@@ -3975,6 +3975,7 @@ class cfgform extends class_base
 			$class = strtolower(substr($classes[$this_o->prop("subclass")]["def"], 3));
 			$this->_get_cfgview_params($this_o);
 			$action = $this->cfgview_vars["action"];
+			$this->cfgview_grps = safe_array($this_o->prop("cfgview_grps"));
 
 			if ("new" !== $action and !is_oid($this->cfgview_vars["id"]))
 			{
@@ -3993,6 +3994,13 @@ class cfgform extends class_base
 
 			$this->cfgview_vars["cfgform"] = $args["id"];
 			$this->cfgview_vars["class"] = $class;
+
+			if (empty($this->cfgview_vars["group"]))
+			{
+				$this->cfgview_vars["group"] = reset($this->cfgview_grps);
+				$_GET["group"] = $this->cfgview_vars["group"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
+			}
+
 			$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 			$_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
 
