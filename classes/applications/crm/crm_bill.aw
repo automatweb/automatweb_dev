@@ -473,7 +473,7 @@ class crm_bill extends class_base
 					));
 					if ($ol->count())
 					{
-						$prop["error"] = t("Sellise numberiga arve on juba olemas!");
+						$prop["error"] = t("Selle numbriga arve on juba olemas");
 						return PROP_ERROR;
 					}
 
