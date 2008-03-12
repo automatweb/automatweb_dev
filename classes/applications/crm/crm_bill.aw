@@ -170,7 +170,7 @@ class crm_bill extends class_base
 			6 => t("Osaliselt laekunud"),
 			4 => t("Kreeditarve"),
 			5 => t("Tehtud kreeditarve"),
-			-5 => t("T&uuml;histatud"),
+//			-5 => t("T&uuml;histatud"),
 		);
 	}
 
