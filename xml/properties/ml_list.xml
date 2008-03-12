@@ -157,6 +157,15 @@
             <caption>Kaustad kust otsida</caption>
       </property>
       <property>
+            <name>req_members_s</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>text</type>
+            <caption>Otsi ka alamobjektide alt</caption>
+      </property>
+      <property>
             <name>search_mail</name>
             <table>objects</table>
             <field>meta</field>
@@ -354,6 +363,27 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Liikmed</caption>
+      </property>
+      <property>
+            <name>export_folders</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_members</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_PARENT</reltype>
+            <editonly>1</editonly>
+            <multiple>1</multiple>
+            <caption>Kaustad, mida eksportida</caption>
+      </property>
+      <property>
+            <name>req_members_e</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_members</group>
+            <type>text</type>
+            <caption>Otsi ka alamobjektide alt</caption>
       </property>
       <property>
             <name>export_type</name>

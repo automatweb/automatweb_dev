@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.115 2008/02/18 14:52:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.116 2008/03/12 15:01:34 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -62,6 +62,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property search_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Kaustad kust otsida
+
+@property req_members_s type=text
+@caption Otsi ka alamobjektide alt
 
 @property search_mail type=textbox
 @caption E-mail
@@ -141,6 +144,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @groupinfo export_members caption=Eksport parent=membership
 @default group=export_members
 
+@property export_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@caption Kaustad, mida eksportida
+
+@property req_members_e type=text
+@caption Otsi ka alamobjektide alt
+
 @property export_type type=chooser orient=vertical store=no
 @caption Formaat
 
@@ -210,7 +219,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @layout mail_top type=hbox closeable=1 width=20%:20%:60%
 	@property send_away type=checkbox ch_value=1 store=no parent=mail_top no_caption=1
-	@caption Saada peale salvestamist ära
+	@caption Saada peale salvestamist &auml;ra
 	
 	@property save_as_new type=checkbox ch_value=1 parent=mail_top no_caption=1
 	@caption Salvesta uue kirjana
@@ -480,7 +489,7 @@ class ml_list extends class_base
 		));
 	}
 
-	/** See händleb juba õiget postitust, siis kui on valitud saatmise ajavahemikud
+	/** See handleb juba oiget postitust, siis kui on valitud saatmise ajavahemikud
 		@attrib name=submit_post_message
 	**/
 	function submit_post_message($args)
@@ -971,20 +980,36 @@ class ml_list extends class_base
 					"img" => "delete.gif",
 				));
 				break;
+			case "classinfo_allow_rte":
+				$prop["options"] = array(
+					0 => t("Ei kuva"),
+					1 => t("AW RTE"),
+					2 => t("FCKeditor"),
+				);
+				$prop["type"] = "select";
+				break;
+			case "req_members_s": 
+				$source_prop = "search_menu";
+			case "req_members_e":
+				if(!$source_prop) $source_prop = "export_folders";
 			case "req_members_m":
-				if(!(is_array($arr["obj_inst"]->prop("write_user_folder")) && sizeof($arr["obj_inst"]->prop("write_user_folder"))))
+				if(!$source_prop) $source_prop = "write_user_folder";
+			case "req_members":
+				if(!$source_prop) $source_prop = "def_user_folder";
+				if(!(is_array($arr["obj_inst"]->prop($source_prop)) && sizeof($arr["obj_inst"]->prop($source_prop))))
 				{
 					return PROP_IGNORE;
 				}
+				$_SESSION["submembers_source_prop_value"] = $arr["obj_inst"]->prop($source_prop);
 				$ret = "";
-				foreach($arr["obj_inst"]->prop("write_user_folder") as $menu)
+				foreach($arr["obj_inst"]->prop($source_prop) as $menu)
 				{
 					if(is_oid($menu) && $this->can("view" , $menu))
 					{
 						$menu_o = obj($menu);
-						if($menu_o->class_id() == CL_MENU)
+						if($menu_o->class_id() == CL_MENU || $menu_o->class_id() == CL_CRM_SECTOR)
 						{
-							$ret.=html::checkbox(array("name" => "req_members_m[".$menu."]" , "value" => 1, "checked" => $prop["value"][$menu]));
+							$ret.=html::checkbox(array("name" => "req_members[".$menu."]" , "value" => 1, "checked" => $menu_o->meta("req_members")));
 							$ret.=" ".$menu_o->name()."\n";
 						}
 					}
@@ -994,36 +1019,6 @@ class ml_list extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				break;
-				
-			case "classinfo_allow_rte":
-				$prop["options"] = array(
-					0 => t("Ei kuva"),
-					1 => t("AW RTE"),
-					2 => t("FCKeditor"),
-				);
-				$prop["type"] = "select";
-				break;
-	
-			case "req_members":
-				if(!sizeof($arr["obj_inst"]->prop("def_user_folder")))
-				{
-					return PROP_IGNORE;
-				}
-				$ret = "";
-				foreach($arr["obj_inst"]->prop("def_user_folder") as $menu)
-				{
-					if(is_oid($menu) && $this->can("view" , $menu))
-					{
-						$menu_o = obj($menu);
-						if($menu_o->class_id() == CL_MENU)
-						{
-							$ret.=html::checkbox(array("name" => "req_members[".$menu."]" , "value" => 1, "checked" => $prop["value"][$menu]));
-							$ret.=" ".$menu_o->name()."\n";
-						}
-					}
-				}
-				$prop["value"] = $ret;
 				break;
 			case "send_button":
 				$prop["value"] = t("Saada!");
@@ -1042,7 +1037,7 @@ class ml_list extends class_base
 				break;
 			
 			case "db_mail_count":
-				return PROP_IGNORE;//see teeb paljudes saitides aeglaseks nimekirja näitamise... kui miski mahakeeramine variant teha, siis võib seda jälle näidata
+				return PROP_IGNORE;//see teeb paljudes saitides aeglaseks nimekirja naitamise... kui miski mahakeeramine variant teha, siis voib seda jalle naidata
 				$list_id = $arr["obj_inst"]->id();
 				$time = time()-3*30*3600;
 				$row = $this->db_fetch_row("SELECT count(*) as cnt FROM ml_sent_mails WHERE lid = '$list_id' AND mail_sent = 1 and tm < '$time'");
@@ -1317,44 +1312,40 @@ class ml_list extends class_base
 					return PROP_FATAL_ERROR;
 				}
 				break;
+			case "req_members_s": 
+				$source_prop = "search_menu";
+			case "req_members_e":
+				if(!$source_prop) $source_prop = "export_folders";
 			case "req_members_m":
-				$arr["obj_inst"]->set_meta("req_members" , $prop["value"]);
-				$arr["obj_inst"]->set_meta("req_members_m" , $prop["value"]);
-				foreach($prop["value"] as $key=> $val)
-				{
-					if(is_oid($key))
-					{
-						$menu = obj($key);
-						$menu->set_meta("req_members",$prop["value"][$key]);
-						$menu->save();
-					}
-				}
-				if(is_array($arr["request"]["def_user_folder"]))
-				{
-					foreach($arr["request"]["def_user_folder"] as $fld)
-					{
-						if(is_oid($fld))
-						{
-							$menu = obj($fld);
-							$menu->set_meta("req_members",$prop["value"][$fld]);
-							$menu->save();
-						}
-					}
-				}
-				break;
-			
+				if(!$source_prop) $source_prop = "write_user_folder";
 			case "req_members":
-				$arr["obj_inst"]->set_meta("req_members" , $prop["value"]);
-				foreach($prop["value"] as $key=> $val)
+				if(!$source_prop) $source_prop = "def_user_folder";
+				if($_SESSION["submembers_source_prop_value"])
 				{
-					if(is_oid($key))
+					foreach($_SESSION["submembers_source_prop_value"] as $key)
 					{
-						$menu = obj($key);
-						$menu->set_meta("req_members",$prop["value"][$key]);
-						$menu->save();
+						if(is_oid($key))
+						{
+							$menu = obj($key);
+							$menu->set_meta("req_members",$_POST["req_members"][$key]);
+							$menu->save();
+						}
+					}
+					unset($_SESSION["submembers_source_prop_value"]);
+				}
+				else
+				{
+					foreach($_POST["req_members"] as $key=> $val)
+					{
+						if(is_oid($key))
+						{
+							$menu = obj($key);
+							$menu->set_meta("req_members",$val);
+							$menu->save();
+						}
 					}
 				}
-				if(is_array($arr["request"]["def_user_folder"]))
+/*				if(is_array($arr["request"]["def_user_folder"]))
 				{
 					foreach($arr["request"]["def_user_folder"] as $fld)
 					{
@@ -1365,8 +1356,9 @@ class ml_list extends class_base
 							$menu->save();
 						}
 					}
-				}
+				}*/
 				break;
+
 			case "delete_textfile":
 				$imp = $_FILES["delete_textfile"]["tmp_name"];
 				if (!is_uploaded_file($imp))
@@ -1757,8 +1749,19 @@ class ml_list extends class_base
 	function export_members($arr)
 	{
 		$arr["obj_inst"] = &obj($arr["id"]);
-		$members = $this->get_members(array("id" => $arr["id"]));
-		
+		if($arr["obj_inst"]->prop("export_folders"))
+		{
+			$srcs = $arr["obj_inst"]->prop("export_folders");
+			$members = $this->get_members(array(
+				"id" => $arr["id"],
+				"src" => $srcs,
+			));
+		}
+		else
+		{
+			$members = $this->get_members(array("id" => $arr["id"]));
+		}
+
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
 		$ser = "";
 		
@@ -1769,7 +1772,6 @@ class ml_list extends class_base
 			$config_data = $config_obj->meta("cfg_proplist");
 			uasort($config_data, array($this,"__sort_props_by_ord"));
 		}
-		
 		$imported = array();
 		foreach($members as $key => $val)
 		{
@@ -1781,6 +1783,10 @@ class ml_list extends class_base
 				"lid" => $arr["id"],
 				"member" => $val["oid"],
 			));
+			if(!$mailto)
+			{
+				$mailto = $val["mail"];
+			}
 			if(!in_array($mailto, $imported))
 			{
 				$imported[] = $mailto;
@@ -2158,7 +2164,7 @@ class ml_list extends class_base
 				$status_str = $mq->a_status[$row["status"]];
 			//};
 			
-			//mõnele pole subjekti pandud
+			//monele pole subjekti pandud
 			if(!strlen($mail_obj->name()) > 0) $mail_name = t("(Nimetu)");
 			else $mail_name = $mail_obj->name();
 			 
@@ -2259,7 +2265,7 @@ class ml_list extends class_base
 	// --------------------------------------------------------------------
 	// messengerist saatmise osa
 	////
-	//! Messenger kutsub välja kui on valitud liste targetiteks
+	//! Messenger kutsub valja kui on valitud liste targetiteks
 	// vajab targets ja id
 	function route_post_message($args = array())
 	{
@@ -2376,14 +2382,14 @@ class ml_list extends class_base
 				continue;
 			}
 			$o = obj($menu);
-			if(!($o->class_id() == CL_MENU))
+			if(!($o->class_id() == CL_MENU || $o->class_id() == CL_CRM_SECTOR))
 			{
 				continue;
 			}
 			if($o->meta("req_members"))
 			{
 				$ol = new object_list(array(
-					"class_id" => CL_MENU,
+					"class_id" => array(CL_MENU,CL_CRM_SECTOR),
 					"lang_id" => array(),
 					"parent" => $menu,
 				));
@@ -2416,6 +2422,8 @@ class ml_list extends class_base
 		if 1, then return all member dublicates also
 	@param no_return optional type=int
 		if 1, then returns nothing... if you need only a number of members
+	@param src optional type=array
+		List member source
 	@returns array
 	@comment
 		if the source is file, then parent_name is set
@@ -2814,7 +2822,7 @@ class ml_list extends class_base
 		{
 			$p2t = "<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
 		}
-		// kommentaar on selleks, et sorteerimine töötaks (hopefully)
+		// kommentaar on selleks, et sorteerimine tootaks (hopefully)
 		return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
 	}
 	
@@ -3028,7 +3036,7 @@ class ml_list extends class_base
 		return $this->msg_obj;
 	}
 
-//seda funktsiooni nüüd enam vaja pole ma loodan... a igaks juhuks jätab praegu alles
+//seda funktsiooni nyyd enam vaja pole ma loodan... a igaks juhuks jatab praegu alles
 /*
 	function callback_gen_write_mail($arr)
 	{
@@ -3282,10 +3290,10 @@ class ml_list extends class_base
 			$msg_data["message"] = $this->parse();
 		}
 		$msg_data["return"] = "id";
-		//uhh......minuarust on selle kõigega ikka miski jama
-		//tõenäoliselt on varsti jälle miski probleem selle kohaga...a noh
-		//no kui kirja kirjutad html vaates ja ei pane html kirjaks, siis on ikka enda viga kui miski vigane värk ära saadetakse
-		//eks ma praegu kommenteerin selle koha välja... niikuinii on kellelgi varsti jälle vaja seda tagasi
+		//uhh......minuarust on selle koigega ikka miski jama
+		//toenaoliselt on varsti jalle miski probleem selle kohaga...a noh
+		//no kui kirja kirjutad html vaates ja ei pane html kirjaks, siis on ikka enda viga kui miski vigane vark ara saadetakse
+		//eks ma praegu kommenteerin selle koha valja... niikuinii on kellelgi varsti jalle vaja seda tagasi
 /*		if((!$msg_obj->prop("html_mail")) && $msg_data["send_away"])
 		{
 			//$msg_data["message"] = str_replace("\n", "", $msg_data["message"]);
