@@ -5443,11 +5443,9 @@ class class_base extends aw_template
 				// get prop values in user's source language
 				$src_lang_id = $original_lang_id;
 
-				if (aw_ini_get("uid"))
+				if (aw_global_get("uid"))
 				{
-					$users_i = get_instance("users");
-					$current_user = obj($users_i->get_oid_for_uid(aw_ini_get("uid")));
-
+					$current_user = obj(aw_global_get("uid_oid"));
 					if (array_key_exists($current_user->prop("base_lang"), $all_vals))
 					{
 						$src_lang_id = $current_user->prop("base_lang");

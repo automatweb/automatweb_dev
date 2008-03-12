@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.12 2007/12/06 14:33:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.13 2008/03/12 21:22:46 kristo Exp $
 /*
 @classinfo maintainer=kristo
 */
@@ -52,7 +52,7 @@ class project_selector extends core
 		else
 		{
 			$users = get_instance("users");
-			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+			$user = new object(aw_global_get("uid_oid"));
 			$conns = $user->connections_to(array(
 				"from.class_id" => CL_PROJECT,
 				"sort_by" => "from.name",

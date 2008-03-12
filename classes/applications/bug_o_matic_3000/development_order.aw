@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.16 2008/02/26 17:03:52 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.17 2008/03/12 21:22:17 kristo Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -659,26 +659,8 @@ class development_order extends class_base
 		{
 			$user_list[] = $bug->createdby();
 		}
-		$u2p = array();
-		if (count($user_list))
-		{
-			$oid_list = array_flip($us->get_oid_for_uid_list($user_list));
-			$c = new connection();
-			$u2p_conns = $c->find(array(
-				"from.class_id" => CL_USER,
-				"from" => array_keys($oid_list),
-				"type" => "RELTYPE_PERSON"
-			));
-			$person_oids = array();
-			foreach($u2p_conns as $con)
-			{
-				$person_oids[] = $con["to"];
-				$u2p[$oid_list[$con["from"]]] = $con["to"];
-			}
-
-			$person_ol = new object_list(array("class_id" => CL_CRM_PERSON, "oid" => $person_oids, "lang_id" => array(), "site_id" => array()));
-			$person_ol->arr();
-		}
+		$bt_i = get_instance(CL_BUG_TRACKER);
+		$u2p = $bt_i->get_user2person_arr_from_list($user_list);
 
 		if (!$ol->count())
 		{

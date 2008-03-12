@@ -373,9 +373,8 @@ class core extends acl_base
 		$head = "";
 		if (($uid = aw_global_get("uid")) != "")
 		{
-			$us = get_instance("users");
-			$udata = $us->get_user(array("uid" => $uid));
-			$eml = $udata["email"];
+			$uso = obj(aw_global_get("uid_oid"));
+			$eml = $uso->prop("email");
 			if ($eml == "")
 			{
 				$eml = "automatweb@automatweb.com";

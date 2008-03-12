@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.76 2008/03/10 14:12:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.77 2008/03/12 21:23:12 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -422,8 +422,7 @@ class spa_bookigs_entry extends class_base
 					{
 						$p_i = $p->instance();
 						$user = $p_i->has_user($p);
-						if(is_object($user) && in_array($arr["obj_inst"]->prop("user_group") ,
-						 $u->get_oids_by_uid($user->prop("uid"))))
+						if(is_object($user) && array_key_exists($arr["obj_inst"]->prop("user_group") , $user->get_groups_for_user()))
 						{
 							$existing_user = true;
 							break;

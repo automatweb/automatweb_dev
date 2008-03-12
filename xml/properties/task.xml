@@ -271,7 +271,7 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Prognoositav tundide arv 	</caption>
+            <caption>Prognoositav tundide arv</caption>
       </property>
       <property>
             <name>num_hrs_real</name>

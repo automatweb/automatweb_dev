@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.87 2008/01/31 22:28:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.88 2008/03/12 21:24:10 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -140,15 +140,6 @@ class form_table extends form_base
 				{
 					$show_grps = $gst["to_grps"];
 					$found = true;
-				}
-			}
-			if ($found)
-			{
-				// now figure out the list of users in the selected groups, so we can do the row_data check quickly
-				$us = get_instance("users");
-				foreach($show_grps as $gid)
-				{
-					$this->show_modifiedby += $us->getgroupmembers2($gid);
 				}
 			}
 		}
@@ -1717,7 +1708,7 @@ class form_table extends form_base
 			"has_pages_lb" => checked($this->table["has_pages_type"] == "lb"),
 			"has_user_entries" => checked($this->table["user_entries"]),
 			"records_per_page" => $this->table["records_per_page"],
-			"uee_grps" => $this->mpicker($this->table["user_entries_except_grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
+			"uee_grps" => $this->mpicker($this->table["user_entries_except_grps"], get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
 			"skip_one_liners" => checked($this->table["skip_one_liners"]),
 			"skip_one_liners_col" => $this->picker($this->table["skip_one_liners_col"],$this->get_col_picker()),
 			"show_second_table" => checked($this->table["show_second_table"]),
@@ -2024,7 +2015,7 @@ class form_table extends form_base
 			{
 				$us = get_instance("users");
 				$this->vars(array(
-					"grps" => $this->mpicker($this->table["defs"][$col]["grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC))))
+					"grps" => $this->mpicker($this->table["defs"][$col]["grps"], get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC))))
 				));
 				$coldata[$col][6] = $this->parse("SEL_GRPS");
 			}
@@ -3113,8 +3104,7 @@ if ($_GET["HJ"] == 1)
 		$this->mk_path($this->table_parent, "Muuda formi tabelit");
 		$this->do_menu();
 
-		$gp = get_instance("users");
-		$grplist = $gp->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
+		$grplist = get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
 
 		$l = "";
 		if (is_array($this->table["grpsettings"]))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.13 2008/01/31 13:55:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.14 2008/03/12 21:24:22 kristo Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -56,7 +56,7 @@ class comments extends class_base
 			{
 				$res .= "<h2>" . $this->obj->name() . "</h2>";
 			};
-			$res .= count($comms) . t(" kommentaari<br><br>");
+			$res .= count($comms) . " ".t("kommentaari")."<br><br>";
 			$res .= "$pager<br><br>";
 			$c = 0;
 			foreach($comms as $row)

@@ -145,7 +145,7 @@
             <type>password</type>
             <store>no</store>
             <field>passwd</field>
-            <caption>Salas&amp;otilde;na</caption>
+            <caption>Salas&amp;amp;otilde;na</caption>
       </property>
       <property>
             <name>passwd_again</name>
@@ -154,7 +154,7 @@
             <type>password</type>
             <store>no</store>
             <field>passwd_again</field>
-            <caption>Salas&amp;otilde;na uuesti</caption>
+            <caption>Salas&amp;amp;otilde;na uuesti</caption>
       </property>
       <property>
             <name>password</name>
@@ -162,7 +162,6 @@
             <group>chpwd</group>
             <type>hidden</type>
             <field>password</field>
-            <store>no</store>
       </property>
       <property>
             <name>gen_pwd</name>

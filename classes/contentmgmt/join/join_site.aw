@@ -1417,7 +1417,7 @@ class join_site extends class_base
 			$n_pass2 = $sessd["typo_".CL_USER]["passwd_again"];
 
 			$us = get_instance("users");
-			if ($us->can_add(array("a_uid" => $n_uid, "pass" => $n_pass, "pass2" => $n_pass2, "sj" => $obj)))
+			if ($this->can_add(array("a_uid" => $n_uid, "pass" => $n_pass, "pass2" => $n_pass2, "sj" => $obj)))
 			{
 				$join_done = true;
 				// add the user
@@ -3370,6 +3370,99 @@ class join_site extends class_base
 				$data_o->connect(array("to" => $rv["id"], "type" => "RELTYPE_IMAGE"));
 			}
 		}
+	}
+
+	function can_add($arr)
+	{
+		global $add_state;
+		$reserved = array("system");
+
+		extract($arr);
+		if (in_array($a_uid,$reserved))
+		{
+			return false;
+		};
+		$q = "SELECT * FROM users WHERE uid = '$a_uid'";
+		$this->db_query($q);
+		$row = $this->db_next();
+
+		if ($arr["sj"])
+		{
+			$lang_errs = $arr["sj"]->meta("lang_errs");
+			$lang_id = aw_global_get("lang_id");
+			if (aw_ini_get("user_interface.full_content_trans"))
+			{
+				$lang_id = aw_global_get("ct_lang_id");
+			}
+		}
+
+		if ($row)
+		{
+			$te = t("Sellise kasutajanimega kasutaja on juba olemas!");
+			if (!empty($lang_errs["user_exists"][$lang_id]))
+			{
+				$te = $lang_errs["user_exists"][$lang_id];
+			}
+			$add_state["error"] = $te;
+			return false;
+		}
+
+		if (!is_valid("uid",$a_uid))
+		{
+			$te = t("Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!");
+			if (!empty($lang_errs["uid_short"][$lang_id]))
+			{
+				$te = $lang_errs["uid_short"][$lang_id];
+			}
+			$add_state["error"] = $te;
+			return false;
+		}
+
+		if ($pass != $pass2)
+		{
+			$te = t("Sisestatud paroolid on erinevad!");
+			if (!empty($lang_errs["pwd_typo"][$lang_id]))
+			{
+				$te = $lang_errs["pwd_typo"][$lang_id];
+			}
+			$add_state["error"] = $te;
+			return false;
+		}
+
+		if (!is_valid("password", $pass))
+		{
+			$te = t("Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!");
+			if (!empty($lang_errs["pwd_err"][$lang_id]))
+			{
+				$te = $lang_errs["pwd_err"][$lang_id];
+			}
+			$add_state["error"] = $te;
+			return false;
+		}
+
+		if (strlen($a_uid) < 3)
+		{
+			$te = t("Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!");
+			if (!empty($lang_errs["uid_short"][$lang_id]))
+			{
+				$te = $lang_errs["uid_short"][$lang_id];
+			}
+			$add_state["error"] = $te;
+			return false;
+		}
+
+		if (strlen($pass) < 3)
+		{
+			$te = t("Paroolis peab olema v&auml;hemalt 3 t&auml;hte!");
+			if (!empty($lang_errs["pwd_short"][$lang_id]))
+			{
+				$te = $lang_errs["pwd_short"][$lang_id];
+			}
+			$add_state["error"] = $te;
+			return false;
+		}
+		$add_state["error"] = "";
+		return true;
 	}
 }
 ?>

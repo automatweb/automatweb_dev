@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.8 2008/01/31 13:53:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.9 2008/03/12 21:23:44 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -708,14 +708,6 @@ class user_manager extends class_base
 			}
 			arsort($groups); // Sort groups by priority
 			$groups = array_keys($groups);
-/*			if ($o->prop('uid') == 'Oioilane')
-			{
-				arr($groups);
-				arr($o->connections_to());
-				$u = get_instance('users');
-				$groups2 = $u->getgroupsforuser($o->prop('uid'));
-			}
-*/
 			// Find user's company, if CL_USER has CL_CRM_PERSON
 			$companies = array();
 			if ($person = $o->get_first_obj_by_reltype('RELTYPE_PERSON'))
@@ -988,7 +980,7 @@ class user_manager extends class_base
 				$items[$url_loginmenu] = t("Loginmen&uuml;&uuml;");
 				
 				// Find value for table
-				$gid = $users->get_gid_for_oid($o->id());
+				$gid = $o->prop("gid");
 				if (isset($lm[$gid]) && isset($lm[$gid]['menu']) && is_oid($lm[$gid]['menu']))
 				{
 					$loginmenu = obj($lm[$gid]['menu']);
@@ -1147,7 +1139,7 @@ class user_manager extends class_base
 				return;
 			}
 			$o_i = $o->instance();
-			$gid = $o_i->users->get_gid_for_oid($o->id());
+ 			$gid = $o->prop("gid");
 			$a = $o_i->acl_list_acls();
 			
 			$acl = array();
@@ -1203,8 +1195,8 @@ class user_manager extends class_base
 				));
 			}
 			$lm = $conf->meta('lm');
-			$users = get_instance("users");
-			$gid = $users->get_gid_for_oid($arr['group']);
+			$go = obj($arr["group"]);
+			$gid = $go->prop("gid");
 			$lm[$gid] = array(
 				'menu' => $arr['menu'],
 				'pri' => 100, // Priority
@@ -1299,7 +1291,8 @@ class user_manager extends class_base
 				));
 			}
 			$lm = $conf->meta('lm');
-			$gid = $users->get_gid_for_oid($oid);
+			$go = obj($oid);
+			$gid = $go->prop("gid");
 			$lm[$gid] = array(
 				'menu' => $menu,
 				'pri' => 100, // Priority

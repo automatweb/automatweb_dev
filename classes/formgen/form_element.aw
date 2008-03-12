@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.87 2008/01/31 13:54:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.88 2008/03/12 21:24:10 kristo Exp $
 // form_element.aw - vormi element.
 /*
 @classinfo  maintainer=kristo
@@ -328,7 +328,7 @@ class form_element extends aw_template
 						"listbox_activity_value" => $this->arr["listbox_activity"][$b],
 						"num" => $b,
 						"user_entries_only" => checked($this->arr["user_entries_only"] == 1),
-						"user_entries_only_exclude" => $this->mpicker($this->arr["user_entries_only_exclude"], $users->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
+						"user_entries_only_exclude" => $this->mpicker($this->arr["user_entries_only_exclude"], get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
 						"chain_entries_only" => checked($this->arr["chain_entries_only"] == 1),
 					));
 					$at = "";

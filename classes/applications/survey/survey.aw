@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.8 2008/02/25 13:50:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.9 2008/03/12 21:23:17 kristo Exp $
 // survey.aw - Ankeet 
 /*
 
@@ -150,22 +150,6 @@ class survey extends class_base
 	function callback_mod_retval($arr)
 	{
 		//$arr["args"]["goto"] = aw_ini_get("baseurl") . "/" . $arr["args"]["redirect_to"];
-	}
-
-	function callback_post_save($arr)
-	{
-		/*
-		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-		if ($arr["new"])
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $user,
-				"reltype" => "RELTYPE_OWNER",
-			));
-		};
-		*/
-
 	}
 
 	////////////////////////////////////

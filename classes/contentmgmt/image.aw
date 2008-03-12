@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.7 2008/03/03 18:03:21 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.8 2008/03/12 21:23:21 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -187,7 +187,7 @@ class image extends class_base
 			if ($row)
 			{
 				array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
-				$row["url"] = $this->get_url($row["file"]);
+				$row["url"] = $this->get_url($row["file"])."/".$row["name"];
 				// if the image is from another site, then make the url point to that
 				if ($row["site_id"] != aw_ini_get("site_id"))
 				{
@@ -215,10 +215,11 @@ class image extends class_base
 			if ($this->can("view", $id))
 			{
 				$o = obj($id);
-				$row["comment"] = $this->trans_get_val($o, "comment");
-				$row["link"] = $this->trans_get_val($o, "link");
-				$row["meta"]["author"] = $this->trans_get_val($o, "author");
-				$row["meta"]["alt"] = $this->trans_get_val($o, "alt");
+				$row["name"] = $o->trans_get_val("name");
+				$row["comment"] = $o->trans_get_val("comment");
+				$row["link"] =$ $o->trans_get_val("link");
+				$row["meta"]["author"] = $o->trans_get_val("author");
+				$row["meta"]["alt"] = $o->trans_get_val("alt");
 				if ($row["meta"]["alt"] == "" && aw_ini_get("image.default_alt_text_is_name"))
 				{
 					$row["meta"]["alt"] = $row["name"];
@@ -396,10 +397,18 @@ class image extends class_base
 				{
 					$alt = " alt=\"".$idata["meta"]["alt"]."\"";
 				}
+
+				$replacement = "<a href=\"javascript:void(0)\" onClick=\"$bi_link\"".$alt.">".$idata["name"]."</a>";
+				if (isset($tpls["image_text_only"]))
+				{
+					$tpl = "image_text_only";
+					$replacement = localparse($tpls[$tpl],$vars);
+				}
+
 				return array(
-					"replacement" => "<a href=\"javascript:void(0)\" onClick=\"$bi_link\"".$alt.">".$idata["name"]."</a>",
+					"replacement" => $replacement,
 					"inplace" => "",
-				);
+                                );
 			}
 
 			if ($idata["file"] != "")
@@ -419,6 +428,7 @@ class image extends class_base
 			{
 				$idata['link'] = $args['link_prefix'].$idata['oid'];
 			}
+			$d = get_instance("doc_display");
 			$vars = array(
 				"width" => $i_size[0],
 				"height" => $i_size[1],
@@ -438,9 +448,11 @@ class image extends class_base
 				"bi_show_link" => $bi_show_link,
 				"bi_link" => $bi_link,
 				"author" => $idata["meta"]["author"],
-				"docid" => isset($args["oid"]) ? $args["oid"] : null,
-				"comments" => $num_comments,
-
+				"docid" => isset($args["oid"]) ? (is_object($args["oid"]) ? $args["oid"]->id() : $args["oid"]) : null,
+				"doc_link" => $dd->get_doc_link(obj($args["oid"])),
+				"image_id" => $idata["oid"],
+				"document_link" => $dd->get_doc_link(obj($f["source"])),
+				"comments" => $num_comments
 			);
 			$tmp = new aw_template;
 			lc_site_load("document", &$tmp);
@@ -448,6 +460,8 @@ class image extends class_base
 			{
 				$vars += $tmp->vars;
 			}
+
+
 			if ($this->can("view", $idata["meta"]["big_flash"]))
 			{
 				$idata["big_url"] = " ";
@@ -511,6 +525,13 @@ class image extends class_base
 			}
 			else
 			{
+				if (!empty($tpls["image_inplace_".$args["data"]["prop"]]) /*&& $this->image_inplace_used*/)
+				{
+					$tpl = "image_inplace_".$args["data"]["prop"];
+					$inplace = $tpl;
+					$this->image_inplace_used = true;
+				}
+				else
 				if ($tpls["image_inplace"] && !$GLOBALS["image_inplace_used"][$f["from"]])
 				{
 					$tpl = "image_inplace";
@@ -527,6 +548,11 @@ class image extends class_base
 					{
 						$tpl = "image_has_big";
 					}
+					if (isset($tpls["image_text_only"]) && $idata["file"] == "")
+					{
+						$tpl = "image_text_only";
+					}
+
 					$inplace = 0;
 				};
 				if (isset($tpls[$tpl]))

@@ -573,8 +573,8 @@
             <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>usercheckbox1</field>
+            <ch_value>1</ch_value>
             <caption>User-defined checkbox 1</caption>
       </property>
       <property>
@@ -3262,7 +3262,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>undone_orders</field>
-            <caption>Pooleliolevad tellimused	</caption>
+            <caption>Pooleliolevad tellimused</caption>
       </property>
       <property>
             <name>unpaid_bills</name>

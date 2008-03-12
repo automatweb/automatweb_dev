@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.59 2008/01/31 13:54:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.60 2008/03/12 21:23:54 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -553,7 +553,7 @@ class crm_offer extends class_base
 		if($arr["new"]==1)
 		{
 			$users = get_instance("users");
-			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+			$user = new object(aw_global_get("uid_oid"));
 			$conns = $user->connections_to(array(
 				"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
 			));

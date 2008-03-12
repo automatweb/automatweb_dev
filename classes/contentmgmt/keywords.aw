@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/keywords.aw,v 1.1 2008/02/16 14:19:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/keywords.aw,v 1.2 2008/03/12 21:23:21 kristo Exp $
 // keywords.aw - dokumentide v&otilde;tmes&otilde;nad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -394,94 +394,6 @@ class keywords extends class_base
 		return $this->cfg["baseurl"] . $res;
 	}
 	
-	/** Handleb EBS stiilis huvideformist tulnud datat 
-		
-		@attrib name=submit_interests2 params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_interests2($args = array())
-	{
-		extract($args);
-		global $HTTP_REFERER;
-		if (!is_array($check))
-		{
-			return $HTTP_REFERER;
-		};
-		$inlist = join(",",map("'%d'",$check));
-		// niisiis on mul koigepealt vaja kindlaks teha millistest erinevatest kategooriatest votmesonu
-		// vormist tuli
-		$q = "SELECT * FROM keywords WHERE id IN ($inlist) GROUP BY category_id";
-		$this->db_query($q);
-		$catlist = array();
-		while($row = $this->db_next())
-		{
-			$catlist[$row["category_id"]] = $row["category_id"];
-		}
-		// Nyyd on vaja teada saada koikide kasutatud kategooriate nimed
-		$cat_inlist = join(",",map("'%d'",$catlist));
-		$q = "SELECT * FROM keywordcategories WHERE id IN($cat_inlist)";
-		$this->db_query($q);
-		$catnamelist = array();
-		while($row = $this->db_next())
-		{
-			$catnamelist[$row["id"]] = $row["name"];
-		};
-		// ja lopuks siis keywordide nimekiri
-		$q = "SELECT * FROM keywords WHERE id IN ($inlist) ORDER BY category_id,keyword";
-		$this->db_query($q);
-		$kw = array();
-		$lists = array();
-		while($row = $this->db_next())
-		{
-			$kw[$row["category_id"]][] = $row["keyword"];
-			$lists[$row["keyword"]] = $row["list_id"];
-		};
-
-		// vahepeal kui on defineeritud m2rks6nu valinud tyypide grupp, siis paneme ta sinna gruppi ka
-		if ($this->cfg["dyn_group"])
-		{
-			$usu = get_instance("users_user");
-			$usu->add_users_to_group($this->cfg["dyn_group"], array(aw_global_get("uid")),0,true);
-		}
-
-		// ja nyyd koostame meili
-		$txt = "";
-		$txt .= sprintf(LC_KEYWORDS_NAME,$name);
-		$txt .= sprintf(LC_KEYWORDS_ADDRESS,$email);
-		$uid = aw_global_get("uid");
-		foreach($kw as $key => $val)
-		{
-			$txt .= "\n" . $catnamelist[$key] . "\n";
-			$txt .= str_repeat("-",strlen($catnamelist[$key])) . "\n";
-			foreach($val as $keyword)
-			{
-				$txt .= " - " . $keyword . "\n";
-				$lid = $lists[$keyword];
-			};
-		};
-		classload("list");
-		$list = new mlist();
-		$list->remove_user_from_lists(array(
-			"uid" => aw_global_get("uid"),
-		));
-		$list->add_user_to_lists(array(
-			"uid" => aw_global_get("uid"),
-			"name" => $name,
-			"email" => $email,
-			"list_ids" => $lists,
-		));
-		$from = sprintf("%s <%s>",$name,$email);
-		send_mail(KW_MAIL,KW_SUBJECT,$txt,"From: $from");
-		$retval = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=$after";
-		return $retval;
-	}
-
 	/** Kuvab koikide keywordide vormi 
 		
 		@attrib name=list params=name default="0"
@@ -798,39 +710,13 @@ class keywords extends class_base
 	// see peaks vist tegelikult hoopis mujal klassis olema
 	function _get_user_data($args = array())
 	{
-		$that = get_instance("users");
-		$udata = $that->get_user();
-		$jf = unserialize($udata["join_form_entry"]);
-		$eesnimi = $perenimi = "";
-		if (is_array($jf))
-		{
-			$f = get_instance(CL_FORM);
-			foreach($jf as $joinform => $joinentry)
-			{ 
-				$f->load($joinform);
-				$f->load_entry($joinentry);
-				$el = $f->get_element_by_name("Eesnimi");
-				if ($el->entry)
-				{
-					$eesnimi = $el->entry;
-				};
-				$el = $f->get_element_by_name("Perekonnanimi");
-				if ($el->entry)
-				{	
-					$perenimi = $el->entry;
-				};
-				$el = $f->get_element_by_name("Ees_ja_perekonnanimi");
-				if ($el->entry)
-				{
-					$nimi = $el->entry;
-				};
-			};
-		};
+		$uo = obj(aw_global_get("uid_oid"));
 		$res = array();
+		list($eesnimi, $perenimi) = explode(" ", $uo->prop("real_name"));
 		$res["Eesnimi"] = $eesnimi;
 		$res["Perenimi"] = $perenimi;
-		$res["Nimi"] = $nimi;
-		$res["Email"] = $udata["email"];
+		$res["Nimi"] = $uo->prop("real_name");
+		$res["Email"] = $uo->prop("email");
 		return $res;
 	}
 
@@ -841,84 +727,6 @@ class keywords extends class_base
 			"url" => aw_url_change_var("set_kw", $arr["id"], obj_link(aw_ini_get("keywords.alias_folder"))),
 			"caption" => $ob->name()
 		));
-	}
-
-	/*function parse_aliases($args = array())
-	{
-		extract($args);
-		$retval = "";
-		if (preg_match("/_form algus=\"(.*)\" go=\"(.*)\"/",$matches[2], $maat))
-		{
-			$retval = $this->show_interests_form($maat[1],$maat[2]);
-		}
-		elseif (preg_match("/_check algus=\"(.*)\" go=\"(.*)\"/",$matches[2], $maat))
-		{
-			$retval = $this->show_interests_form2(array(
-				"beg" => $maat[1],
-				"section" => $maat[2],
-			));
-		}
-		elseif (preg_match("/_kategooriad go=\"(.*)\"/",$matches[2], $maat))
-		{
-			$retval = $this->show_categories(array("after" => $maat[1]));
-		};
-		return $retval;
-	}*/
-
-	function show_interests_form($beg = "",$section = 0)
-	{
-		if ($beg != "")
-		{
-			$beg = explode(",",$beg);
-		}
-		$this->read_template("keywords.tpl");
-		$udata = $this->_get_user_data();
-		classload("list");
-		$mlist = new mlist();
-		$act = $mlist->get_user_lists(array(
-			"uid" => aw_global_get("uid"),
-		));
-		$udata = $this->_get_user_data();
-		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
-		$this->vars(array(
-			"name" => $name,
-			"email" => $udata["Email"],
-			"keywords" => $this->multiple_option_list($act,$this->get_all_keywords(array("beg" => $beg))),
-			"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode("/index.".$this->cfg["ext"]."?section=$section")))
-		));
-		return $this->parse();
-	}
-
-	function show_interests_form2($args = array())
-	{
-		extract($args);
-		$this->read_template("keywords2.tpl");
-		$udata = $this->_get_user_data();
-		classload("list");
-		$mlist = new mlist();
-		$kw = get_instance(CL_KEYWORD);
-		$act = $mlist->get_user_lists(array(
-			"uid" => aw_global_get("uid"),
-		));
-		$kwlist = $this->get_all_keywords(array("beg" => $beg));
-		$ret = "";
-		foreach($kwlist as $k => $v)
-		{
-			$this->vars(array(
-				"checked" => ($act[$k]) ? "checked" : "",
-				"id" => $k,
-				"keyword" => $v,
-			));
-			$ret .= $this->parse("keywords");
-		};
-		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
-		$this->vars(array(
-			"name" => $name,
-			"email" => $udata["Email"],
-			"keywords" => $ret,
-			"reforb" => $this->mk_reforb("submit_interests",array("gotourl" => urlencode("/index.".$this->cfg["ext"]."?section=$section"))),
-		));
-		return $this->parse();
 	}
 
 	function show_categories($args = array())

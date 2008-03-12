@@ -763,9 +763,7 @@ class webform extends class_base
 		));
 		if($this->p_clid == CL_REGISTER_DATA)
 		{
-			$nlg = $this->get_cval("non_logged_in_users_group");
-			$g_oid = users::get_oid_for_gid($nlg);
-			$group = obj($g_oid);
+			$group = obj(group::get_non_logged_in_group());
 			$dir = obj();
 			$dir->set_parent($arr["obj_inst"]->parent());
 			$dir->set_class_id(CL_MENU);

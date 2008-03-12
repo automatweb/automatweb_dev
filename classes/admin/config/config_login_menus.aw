@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.20 2007/12/28 09:15:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.21 2008/03/12 21:22:11 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -98,15 +98,15 @@ class config_login_menus extends class_base
 	{
 		$o_lm = $o->meta("lm");
 		
-		$us = get_instance("users");
-		$gl = $us->get_group_list(array("type" => array(GRP_DYNAMIC, GRP_REGULAR)));
+		$gl = get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_DYNAMIC, GRP_REGULAR)));
 
 		$lm = $this->_get_login_menus();
 
-		foreach($gl as $gid => $gdat)
+		foreach($gl as $gid => $gname)
 		{
-			$lm[aw_global_get("lang_id")][$gid]["menu"] = $o_lm[$gid]["menu"];
-			$lm[aw_global_get("lang_id")][$gid]["pri"] = $o_lm[$gid]["pri"];
+			$go = obj($gid);
+			$lm[aw_global_get("lang_id")][$go->prop("gid")]["menu"] = $o_lm[$go->prop("gid")]["menu"];
+			$lm[aw_global_get("lang_id")][$go->prop("gid")]["pri"] = $o_lm[$go->prop("gid")]["pri"];
 		}
 
 		$data = aw_serialize($lm);
@@ -123,45 +123,33 @@ class config_login_menus extends class_base
 		// foreach group add relpicker
 		$ret = array();
 
-		$us = get_instance("users");
-		$gl = $us->get_group_list(array("type" => array(GRP_DYNAMIC, GRP_REGULAR)));
+		$gl = get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_DYNAMIC, GRP_REGULAR)));
 
 		$lm = $arr["obj_inst"]->meta("lm");
 
 
-		foreach($gl as $gid => $gdat)
+		foreach($gl as $gid => $gname)
 		{
-			/*
-			$node = array();
-			$node["caption"] = $gdat["name"];
-			$node["store"] = "no";
-			$node["name"] = "grp_tx_".$gid;
-			$node["items"] = array();
-			$node["group"] = "general";
-
-			$ret[] = $node;
-			*/
+			$go = obj($gid);
+			$gid = $go->prop("gid");
 
 			$tmp = array(
 				"type" => "textbox",
-				"caption" => $gdat["name"],
+				"caption" => $gname,
 				"size" => 4,
 				"name" => "lm[$gid][pri]",
 				"value" => $lm[$gid]["pri"]
 			);
-			//array_push($node["items"], $tmp);
 			$ret[] = $tmp;
 
 			$tmp = array(
-				"caption" => $gdat["name"] . t(" menyy"),
+				"caption" => $gname . t(" menyy"),
 				"type" => "relpicker",
 				"name" => "lm[$gid][menu]",
 				"value" => $lm[$gid]["menu"],
 				"reltype" => "RELTYPE_FOLDER"
 			);
-			//array_push($node["items"], $tmp);
 
-			//$ret[] = $node;
 			$ret[] = $tmp;
 		}
 

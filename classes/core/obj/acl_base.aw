@@ -102,31 +102,34 @@ class acl_base extends db_connector
 		}
 	}
 
-	function add_acl_group_to_new_obj($gid,$oid, $aclarr)
+	function add_acl_group_to_new_obj($g_oid,$oid, $aclarr)
 	{
-		if ($gid < 1 || !is_numeric($gid))
+		if ($g_oid < 1 || !is_numeric($g_oid))
 		{
 			error::raise(array(
 				"id" => "ERR_ACL",
-				"msg" => sprintf(t("acl_base::add_acl_group_to_new_obj(%s, %s,..): the given gid is incorrect"), $gid, $oid)
+				"msg" => sprintf(t("acl_base::add_acl_group_to_new_obj(%s, %s,..): the given gid is incorrect"), $g_oid, $oid)
 			));
 		}
 		if (!is_oid($oid))
 		{
 			error::raise(array(
 				"id" => "ERR_ACL",
-				"msg" => sprintf(t("acl_base::add_acl_group_to_new_obj(%s, %s,..): the given oid is incorrect"), $gid, $oid)
+				"msg" => sprintf(t("acl_base::add_acl_group_to_new_obj(%s, %s,..): the given oid is incorrect"), $g_oid, $oid)
 			));
 		}
 		$acl = $this->get_acl_value($aclarr);
+		aw_disable_acl();
+		$go = obj($g_oid);
+		$gid = $go->prop("gid");
+		aw_restore_acl();
 		$this->db_query("INSERT INTO acl(acl,oid,gid) VALUES($acl,$oid,$gid)");
 
 		if (aw_ini_get("acl.use_new_acl"))
 		{
 			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
 			// convert gid to oid
-			$g = get_instance("users");
-			$g_oid = $g->get_oid_for_gid($gid);
+			$g_oid = $go->id();
 			$ad[$g_oid] = $this->get_acl_value_n($aclarr);
 			$ser = aw_serialize($ad);
 			$this->quote(&$ser);
@@ -134,31 +137,22 @@ class acl_base extends db_connector
 		}
 	}
 
-	function remove_acl_group_from_obj($gid,$oid)
+	function remove_acl_group_from_obj($g_obj,$oid)
 	{
-		if ($gid < 1 || !is_numeric($gid))
-		{
-			error::raise(array(
-				"id" => "ERR_ACL",
-				"msg" => sprintf(t("acl_base::remove_acl_group_from_obj(%s, %s,..): the given gid is incorrect"), $gid, $oid)
-			));
-		}
 		if (!is_oid($oid))
 		{
 			error::raise(array(
 				"id" => "ERR_ACL",
-				"msg" => sprintf(t("acl_base::remove_acl_group_from_obj(%s, %s,..): the given oid is incorrect"), $gid, $oid)
+				"msg" => sprintf(t("acl_base::remove_acl_group_from_obj(%s, %s,..): the given oid is incorrect"), $g_obj->id(), $oid)
 			));
 		}
+		$gid = $g_obj->prop("gid");
 		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
 
 		if (aw_ini_get("acl.use_new_acl"))
 		{
 			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
-			// convert gid to oid
-			$g = get_instance("users");
-			$g_oid = $g->get_oid_for_gid($gid);
-			unset($ad[$g_oid]);
+			unset($ad[$g_obj->id()]);
 			$ser = aw_serialize($ad);
 			$this->quote(&$ser);
 			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
@@ -193,8 +187,7 @@ class acl_base extends db_connector
 		{
 			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
 			// convert gid to oid
-			$g = get_instance("users");
-			$g_oid = $g->get_oid_for_gid($gid);
+			$g_oid = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$gid'", "oid");
 			$ad[$g_oid] = $this->get_acl_value_n($aclarr);
 			$ser = aw_serialize($ad);
 			$this->quote(&$ser);
@@ -209,70 +202,6 @@ class acl_base extends db_connector
 			$c->file_clear_pt("acl");
 			$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
 		}
-	}
-
-	////
-	// !saves the acl for oid<=>gid relation, but only touches the acls set in mask, leaves others in tact
-	function save_acl_masked($oid,$gid,$aclarr,$mask)
-	{
-		if ($gid < 1 || !is_numeric($gid))
-		{
-			error::raise(array(
-				"id" => "ERR_ACL",
-				"msg" => sprintf(t("acl_base::save_acl_masked(%s, %s,..): the given gid is incorrect"), $gid, $oid)
-			));
-		}
-		if (!is_oid($oid))
-		{
-			error::raise(array(
-				"id" => "ERR_ACL",
-				"msg" => sprintf(t("acl_base::save_acl_masked(%s, %s,..): the given oid is incorrect"), $gid, $oid)
-			));
-		}
-		$acl = $this->get_acl_for_oid_gid($oid,$gid);
-
-		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
-		reset($acl_ids);
-		$nd = array();
-		while(list($bitpos,$name) = each($acl_ids))
-		{
-			if (isset($mask[$name]))
-			{
-				if (isset($aclarr[$name]) && $aclarr[$name] == 1)
-				{
-					$a = $GLOBALS["cfg"]["acl"]["allowed"];
-				}
-				else
-				{
-					$a = $GLOBALS["cfg"]["acl"]["denied"];
-				}
-			}
-			else
-			{
-				$a = $acl[$name];
-			}
-
-			$nd[$name] = (int)$aclarr[$name];
-			$qstr[] = " ( $a << $bitpos ) ";
-		}
-		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
-
-		if (aw_ini_get("acl.use_new_acl"))
-		{
-			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
-			// convert gid to oid
-			$g = get_instance("users");
-			$g_oid = $g->get_oid_for_gid($gid);
-			$ad[$g_oid] = $nd;
-			$ser = aw_serialize($ad);
-			$this->quote(&$ser);
-			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
-		}
-
-		aw_session_set("__acl_cache", array());
-		$c = get_instance("cache");
-		$c->file_clear_pt("acl");
-		$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
 	}
 
 	function get_acl_for_oid_gid($oid,$gid)
@@ -500,7 +429,10 @@ class acl_base extends db_connector
 			$aclarr = array();
 			while (list(,$k) = each($acl_ids))
 			{
-				$aclarr[$k] = $GLOBALS["cfg"]["acl"]["allowed"];
+				if ($k != "can_subs")
+				{
+					$aclarr[$k] = $GLOBALS["cfg"]["acl"]["allowed"];
+				}
 			}
 
 			$gr = $this->get_user_group($uuid);
@@ -514,7 +446,7 @@ class acl_base extends db_connector
 
 			if ($gr)
 			{
-				$this->add_acl_group_to_new_obj($gr["gid"], $oid, $aclarr);
+				$this->add_acl_group_to_new_obj($gr, $oid, $aclarr);
 			}
 		}
 	}
@@ -705,12 +637,7 @@ class acl_base extends db_connector
 	// !returns the default group for the user
 	function get_user_group($uid)
 	{
-		if ($uid == $_SESSION["uid"])
-		{
-			return aw_global_get("current_user_group");
-		}
-		$this->db_query("SELECT * FROM groups WHERE type=1 AND name='$uid'");
-		return $this->db_next();
+		return $this->db_fetch_field("SELECT oid FROM groups WHERE type=1 AND name='$uid'", "oid");
 	}
 
 	function get_acl_value($aclarr)

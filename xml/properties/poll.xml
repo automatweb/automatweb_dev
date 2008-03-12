@@ -87,7 +87,7 @@
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
-            <caption>Kujundusp&amp;otilde;hi kuvamiseks</caption>
+            <caption>Kujundusp&amp;amp;otilde;hi kuvamiseks</caption>
       </property>
       <property>
             <name>tpl_results</name>
@@ -96,7 +96,7 @@
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
-            <caption>Kujundusp&amp;otilde;hi tulemustele</caption>
+            <caption>Kujundusp&amp;amp;otilde;hi tulemustele</caption>
       </property>
       <classinfo>
             <trans>1</trans>

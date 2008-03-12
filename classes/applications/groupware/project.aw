@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.128 2007/11/23 10:54:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.129 2008/03/12 21:22:33 kristo Exp $
 // project.aw - Projekt
 /*
 
@@ -1171,8 +1171,6 @@ class project extends class_base
 			{
 				// see asi peab nüüd hakkama tagastame foldereid!
 				$user_obj = new object($arr["user_ids"][0]);
-				// this is wrong, I need to figure out the users, that this calendar belongs to
-				//$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
 				$conns = $user_obj->connections_to(array(
 					"from.class_id" => CL_PROJECT,
 				));

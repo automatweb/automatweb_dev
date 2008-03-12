@@ -85,7 +85,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property passwd_again type=password store=no
 	@caption Salas&otilde;na uuesti
 
-	@property password type=hidden table=users field=password store=no
+	@property password type=hidden table=users field=password 
 
 	@property gen_pwd store=no type=text
 	@caption Genereeri parool
@@ -265,7 +265,7 @@ class user extends class_base
 				break;
 
 			case "groups":
-				$prop['value'] = $this->_get_group_membership($arr["obj_inst"]->prop("uid"), $arr["obj_inst"]->id());
+				$prop['value'] = $this->_get_group_membership($arr["obj_inst"], $arr["obj_inst"]->id());
 				break;
 
 			case "stat":
@@ -404,11 +404,8 @@ class user extends class_base
 					else
 					{
 						// change pwd
-						$this->users->save(array(
-							"uid" => $arr["obj_inst"]->prop("uid"),
-							"password" => $prop['value']
-						));
 						$arr["obj_inst"]->set_meta("password_change_time", time());
+						$arr["obj_inst"]->set_password($prop["value"]);
 						$this->_set_pwd = $prop["value"];
 					}
 				}
@@ -425,7 +422,7 @@ class user extends class_base
 				break;
 
 			case "groups":
-				$prop['value'] = $this->_set_group_membership($arr["obj_inst"]->prop("uid"), $arr["request"], $arr["obj_inst"]->id());
+				$prop['value'] = $this->_set_group_membership($arr["obj_inst"], $arr["request"], $arr["obj_inst"]->id());
 				break;
 
 			case "aclwiz":
@@ -459,46 +456,48 @@ class user extends class_base
 		return PROP_OK;
 	}
 
-	function _get_group_membership($uid, $id)
+	function _get_group_membership($o, $id)
 	{
-		$gl = $this->users->get_group_list(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
+		$gl = get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
 
 		// get all groups this user is member of
-		$groups = $this->users->getgroupsforuser($uid);
+		$groups = $o->get_groups_for_user();
 
 		$t =& $this->_start_gm_table();
-		foreach($gl as $gid => $gd)
+		foreach($gl as $g_oid => $g_name)
 		{
-			if (is_oid($gd["oid"]) && $this->can("view", $gd["oid"]))
-			{
-				$tmp = obj($gd["oid"]);
-				$gd["name"] = $tmp->name();
-			}
+			$go = obj($g_oid);
+			$gd = array();
+			$gd["name"] = $go->name();
+			$gd["priority"] = $go->prop("priority");
+			$gd["gcount"] = $go->get_member_count();
+			$gd["modifiedby"] = $go->modifiedby();
+			$gd["modified"] = $go->modified();
 
 			$can_edit = true;
-			if (is_oid($gd["oid"]) && !$this->can("edit", $gd["oid"]))
+			if (!$this->can("edit", $g_oid))
 			{
 				$can_edit = false;
 			}
 
-			if ($gd["type"] == GRP_DYNAMIC)
+			if ($go->prop("type") == GRP_DYNAMIC)
 			{
 				$gd["type"] = t("D&uuml;naamiline");
-				$gd["is_member"] = (isset($groups[$gid]) ? LC_YES : LC_NO);
+				$gd["is_member"] = (isset($groups[$g_oid]) ? t("Jah") : t("Ei"));
 			}
 			else
 			{
 				$gd["type"] = t("Tavaline");
 				if (!$can_edit)
 				{
-					$gd["is_member"] = isset($groups[$gid]) ? t("Jah") : t("Ei");
+					$gd["is_member"] = isset($groups[$g_oid]) ? t("Jah") : t("Ei");
 				}
 				else
 				{
 					$gd["is_member"] = html::checkbox(array(
-						"name" => "member[$gid]",
+						"name" => "member[$g_oid]",
 						"value" => 1,
-						"checked" => isset($groups[$gid])
+						"checked" => isset($groups[$g_oid])
 					));
 				}
 			}
@@ -511,53 +510,52 @@ class user extends class_base
 		return $t->draw();
 	}
 
-	function _set_group_membership($uid, $form_data, $id)
+	function _set_group_membership($o, $form_data, $id)
 	{
 		$member = $form_data["member"];
 
 		// now update group membership.
 		// get the groups that the user is member of
-		$groups = $this->users->getgroupsforuser($uid);
+		$groups = $o->get_groups_for_user();
 
 		// get a list of all groups, so we can throw out the dynamic groups
-		$gl = $this->users->get_group_list(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
-
+		$gl = get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
+		
 
 		// now, go over both lists and get rid of the dyn groups
 		$_member = array();
 		$_tm = new aw_array($member);
-		foreach($_tm->get() as $gid => $is)
+		foreach($_tm->get() as $g_oid => $is)
 		{
-			if ($gl[$gid]["type"] != GRP_DYNAMIC)
+			$go = obj($g_oid);
+			if ($go->prop("type") != GRP_DYNAMIC)
 			{
-				$_member[$gid] = $is;
+				$_member[$g_oid] = $is;
 			}
 		}
 		$member = $_member;
 
 		$_groups = array();
-		foreach($groups as $gid => $is)
+		foreach($groups as $g_oid => $go)
 		{
-			if ($gl[$gid]["type"] != GRP_DYNAMIC)
+			if ($go->prop("type") != GRP_DYNAMIC)
 			{
-				$_groups[$gid] = $is;
+				$_groups[$g_oid] = true;
 			}
 		}
 		$groups = $_groups;
 
 		// now, remove user from all removed groups
-		foreach($groups as $gid => $is)
+		foreach($groups as $g_oid => $is)
 		{
-			if (!$this->can("edit", $gl[$gid]["oid"]))
+			if (!$this->can("edit", $g_oid))
 			{
 				continue;
 			}
-			if ($member[$gid] != 1 && $is && isset($gl[$gid]))
+			$group = obj($g_oid);
+			if ($member[$g_oid] != 1 && $is && isset($gl[$g_oid]))
 			{
-				$this->users->remove_users_from_group_rec($gid, array($uid), false, false);
-
-				$group = obj($this->users->get_oid_for_gid($gid));
-				$user = obj($this->users->get_oid_for_uid($uid));
+				$user = $o;
 
 				// do the group add trick
 				// now, delete the user from the group
@@ -610,15 +608,12 @@ class user extends class_base
 		}
 
 		// now, add to all groups
-		foreach($member as $gid => $is)
+		foreach($member as $g_oid => $is)
 		{
-			if ($is && !$groups[$gid])
+			if ($is && !$groups[$g_oid])
 			{
-				$this->users->add_users_to_group_rec($gid, array($uid), true, true, false);
-
-				$group = obj($this->users->get_oid_for_gid($gid));
-				$_o = $this->users->get_oid_for_uid($uid);
-				$user = obj($_o);
+				$group = obj($g_oid);
+				$user = $o;
 
 				// get groups
 				$grps = $group->path();
@@ -727,23 +722,12 @@ class user extends class_base
 
 		if ($obj->is_brother())
 		{
-			// old parent group
-			$o_gid = $this->users->get_gid_for_oid($obj->parent());
-
-			// new gid
-			$n_gid = $this->users->get_gid_for_oid($new_parent);
-
-			// get the user
-			$uid = $this->users->get_uid_for_oid($obj->brother_of());
-
-			if ($o_gid)
+			$grp_o = obj($obj->parent());
+			if ($grp_o->class_id() == CL_GROUP)
 			{
-				$this->users->remove_users_from_group_rec($o_gid, array($uid), false, false);
-
 				// get the parent obj for the user's brother
 				// and remove the user from that group
 				$real_user = $obj->get_original();
-				$grp_o = obj($obj->parent());
 
 
 				// sync manually here.
@@ -797,12 +781,10 @@ class user extends class_base
 				}
 			}
 
-			if ($n_gid)
+			$group = obj($new_parent);
+			if ($group->class_id() == CL_GROUP)
 			{
-				$this->users->add_users_to_group_rec($n_gid, array($uid), false, true, false);
-
 				// get groups
-				$group = obj($new_parent);
 				$user = $obj->get_original();
 
 				$grps = $group->path();
@@ -917,18 +899,8 @@ class user extends class_base
 			return;
 		}
 		$grp_o = obj($o->parent());
-
-		$gid = $this->users->get_gid_for_oid($o->parent());
-		$uid = $this->users->get_uid_for_oid($o->brother_of());
-		if ($gid)
+		if ($grp_o->class_id() == CL_GROUP)
 		{
-			$this->users->remove_users_from_group_rec(
-				$gid,
-				array($uid),
-				false,
-				false
-			);
-
 			// sync manually here.
 			// remove alias from user to group
 			if ($real_user->is_connected_to(array("to" => $grp_o->id())))
@@ -991,16 +963,6 @@ class user extends class_base
 		{
 			$user = $arr["connection"]->from();
 			$group = $arr["connection"]->to();
-
-			$uid = $this->users->get_uid_for_oid($user->id());
-			$gid = $this->users->get_gid_for_oid($group->id());
-
-			$this->users->remove_users_from_group_rec(
-				$gid,
-				array($uid),
-				false,	// checkdyn
-				false	// normalize
-			);
 
 			// now, delete the user from the group
 			if ($group->is_connected_to(array("to" => $user->id())))
@@ -1148,17 +1110,6 @@ class user extends class_base
 			$user = $arr["connection"]->from();
 			$group = $arr["connection"]->to();
 
-			$uid = $this->users->get_uid_for_oid($user->id());
-			$gid = $this->users->get_gid_for_oid($group->id());
-
-			$this->users->add_users_to_group_rec(
-				$gid,
-				array($uid),
-				true,
-				true,
-				false
-			);
-
 			// get groups
 			$grps = $group->path();
 			foreach($grps as $p_o)
@@ -1220,21 +1171,11 @@ class user extends class_base
 		$go_to = false;
 		if ($arr["new"])
 		{
-			$this->users->add(array(
-				"uid" => $arr["obj_inst"]->prop("uid"),
-				"password" => $this->_set_pwd ? $this->_set_pwd : generate_password(),
-				"email" => $arr["request"]["email"],
-				"join_grp" => "",
-				"join_form_entry" => "",
-				"user_oid" => $arr["obj_inst"]->id(),
-				"no_add_user" => true
-			));
-			$arr["obj_inst"]->set_prop("home_folder", $this->users->hfid);
+			$arr["obj_inst"]->set_password($this->_set_pwd ? $this->_set_pwd : generate_password());
 			$arr["obj_inst"]->save();
 
 			// add user to all users grp if we are not under that
-			$aug = aw_ini_get("groups.all_users_grp");
-			$aug_oid = $this->users->get_oid_for_gid($aug);
+			$aug_oid = user::get_all_users_group();
 			if (is_oid($aug_oid) && $aug_oid != $arr["obj_inst"]->parent())
 			{
 				$aug_o = obj($aug_oid);
@@ -1270,9 +1211,6 @@ class user extends class_base
 				$arr["obj_inst"]->save();
 
 				// and do the add to group thing
-				$uid = $arr["obj_inst"]->prop("uid");
-				$gid = $this->users->get_gid_for_oid($parent->id());
-
 				$user = $arr["obj_inst"];
 
 				$user->connect(array(
@@ -1285,14 +1223,6 @@ class user extends class_base
 					"to" => $user->id(),
 					"reltype" => "RELTYPE_MEMBER" // from group
 				));
-
-				$this->users->add_users_to_group_rec(
-					$gid,
-					array($uid),
-					true,
-					true,
-					false
-				);
 
 				// get groups
 				$grps = $parent->path();
@@ -1321,11 +1251,8 @@ class user extends class_base
 			}
 			if ($this->_set_pwd != "")
 			{
-				$this->users->save(array(
-					"uid" => $arr["obj_inst"]->prop("uid"),
-					"password" => $this->_set_pwd
-				));
 				$arr["obj_inst"]->set_meta("password_change_time", time());
+				$arr["obj_inst"]->set_password($this->_set_pwd);
 			}
 		}
 
@@ -1437,7 +1364,7 @@ class user extends class_base
 	**/
 	function get_current_user()
 	{
-		return $this->users->get_oid_for_uid(aw_global_get("uid"));
+		return aw_global_get("uid_oid");
 	}
 
 	/** returns the oid of the CL_CRM_PERSON object that's attached to the current user
@@ -1538,10 +1465,8 @@ class user extends class_base
 			if ($uid == aw_global_get("uid"))
 			{
 				// set acl to the given user
-				$us = get_instance("users");
-				$g = obj($us->get_oid_for_gid($us->get_gid_by_uid($uid)));
 				$p->acl_set(
-					$g,
+					obj($u->get_default_group()),
 					array("can_edit" => 1, "can_add" => 1, "can_view" => 1, "can_delete" => 1)
 				);
 			}
@@ -1561,11 +1486,9 @@ class user extends class_base
 			if (aw_global_get("uid") == $u->prop("uid") && !$this->can("edit", $person_c->prop("to")))
 			{
 				aw_disable_acl();
-				$us = get_instance("users");
-				$g = obj($us->get_oid_for_gid($us->get_gid_by_uid($u->prop("uid"))));
 				$p = obj($person_c->prop("to"));
 				$p->acl_set(
-					$g,
+					obj($u->get_default_group()),
 					array("can_edit" => 1, "can_add" => 1, "can_view" => 1, "can_delete" => 1)
 				);
 				aw_restore_acl();
@@ -1685,35 +1608,16 @@ class user extends class_base
 		$pt = aw_ini_get("users.root_folder");
 		$o->set_parent($pt);
 		$o->set_prop("uid", $uid);
-		$o->set_prop("password", $password);
+		$o->set_password($password);
 		$o->set_prop("email", $email);
 		$o->set_prop("real_name", $arr["real_name"]);
 		$o->set_prop("join_grp" , $arr["join_grp"]);
+		$o->set_prop("home_folder", $this->users->hfid);
+		$o->set_password($password);
 		$o->save();
 
-		$this->users->add(array(
-			"uid" => $uid,
-			"password" => $password,
-			"email" => $o->prop("email"),
-			"join_grp" => $arr["join_grp"],
-			"join_form_entry" => $arr["join_form_entry"],
-			"user_oid" => $o->id(),
-			"no_add_user" => true,
-			"all_users_grp" => ($all_users_grp ? $all_users_grp : aw_ini_get("groups.all_users_grp")),
-			"use_md5_passwords" => ($use_md5_passwords ? $use_md5_passwords : aw_ini_get("auth.md5_passwords")),
-			"obj_parent" => $obj_parent
-		));
-
-		// we need to do this like this, cause the functions in users class are really badly done.
-		$this->users->save(array(
-			"uid" => $uid,
-			"password" => $password,
-			"home_folder" => $this->users->hfid
-		));
-
 		// add user to all users grp if we are not under that
-		$aug = aw_ini_get("groups.all_users_grp");
-		$aug_oid = $this->users->get_oid_for_gid($aug);
+		$aug_oid = user::get_all_users_group();
 		if ($aug_oid != $o->parent())
 		{
 			$aug_o = obj($aug_oid);
@@ -1797,7 +1701,7 @@ class user extends class_base
 			$ro_str = $this->db_fetch_field("select name from objects where oid = '$oid'", "name")." (oid = $oid)";
 		}
 
-		$g_o = obj($this->users->get_oid_for_gid($ca["gid"]));
+		$g_o = obj($this->db_fetch_field("SELECT oid FROM groups WHERE gid = '".$ca["gid"]."'", "oid"));
 
 		$grpstr = html::href(array(
 			"url" => $this->mk_my_orb("change", array("id" => $g_o->id()), $g_o->class_id()),
@@ -1975,10 +1879,7 @@ class user extends class_base
 		if ($uid == "")
 		{
 			// return non logged in users group
-			$nlu = $this->get_cval("non_logged_in_users_group");
-			$ui = get_instance("users");
-			$gd = $ui->fetchgroup($nlu);
-			$rv = obj($gd["oid"]);
+			$rv = obj(group::get_non_logged_in_group());
 			$cache[$uid][$no_user_grp] = $rv;
 			return $rv;
 		}
@@ -2080,29 +1981,13 @@ class user extends class_base
 		}
 
 		// final delete default group
-		$def_gid = $u->get_gid_by_uid($user->prop("uid"));
-		$def_gid_oid = $u->get_oid_for_gid($def_gid);
+		$def_gid_oid = $user->get_default_group();
 		if (is_oid($def_gid_oid) && $this->_object_ex($def_gid_oid))
 		{
 			aw_disable_acl();
 			$def_gid_o = obj($def_gid_oid);
 			$def_gid_o->delete(true);
 			aw_restore_acl();
-		}
-
-		if ($def_gid)
-		{
-			// delete all acl's from the acl table for this user
-			$this->db_query("DELETE FROM acl WHERE gid = $def_gid");
-		}
-
-		// remove from all groups
-		$this->db_query("DELETE FROM groupmembers WHERE uid = '".$user->prop("uid")."'");
-
-		// remove groupmembers from def group
-		if ($def_gid)
-		{
-			$this->db_query("DELETE FROM groupmembers WHERE gid = $def_gid");
 		}
 
 		// final delete person
@@ -2385,6 +2270,58 @@ class user extends class_base
 			return 1;
 		}
 		return $val;
+	}
+
+	function require_password_change($uid)
+	{
+		$user_inst = get_instance(CL_USER);
+		$gid_obj = $user_inst->get_highest_pri_grp_for_user($uid);
+		if(is_object($gid_obj) && $gid_obj->prop("require_change_pass"))
+		{
+			return true;
+		}
+	}
+
+	function is_first_login($uid)
+	{
+		$user = &obj(users::get_oid_for_uid($uid));
+		if(!$user->prop("logins"))
+		{
+			return true;
+		}
+	}
+
+	/** returns the oid of the all users group
+		@attrib api=1
+	**/
+	static public function get_all_users_group()
+	{
+		$c = get_instance("config");
+		$aug_oid = $c->get_simple_config("all_users_grp_oid");
+		if (!$aug_oid)
+		{
+			$aug = aw_ini_get("groups.all_users_grp");
+			// convert to oid and store that
+			aw_disable_acl();
+			$ol = new object_list(array(
+				"class_id" => CL_GROUP,
+				"gid" => $aug,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			if ($ol->count())
+			{
+				$go = $ol->begin();
+				$aug_oid = $go->id();
+				$c->set_simple_config("all_users_grp_oid", $aug_oid);
+			}
+			else
+			{
+				throw awex_no_group(sprintf(t("could not find the group oid for gid %s"), $aug));
+			}
+			aw_restore_acl();
+		}
+		return $aug_oid;
 	}
 }
 ?>

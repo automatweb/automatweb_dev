@@ -80,7 +80,7 @@
             <field>meta</field>
             <method>serialize</method>
             <default>0</default>
-            <caption>Pildi aknale lisatav k&amp;otilde;rgus</caption>
+            <caption>Pildi aknale lisatav k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>addwidth</name>

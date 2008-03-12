@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.108 2008/02/17 21:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.109 2008/03/12 21:23:21 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -273,8 +273,7 @@ class promo extends class_base implements main_subtemplate_handler
 				break;
 
 			case "groups":
-				$u = get_instance("users");
-				$prop["options"] = $u->get_group_picker(array(
+				$prop["options"] = get_instance(CL_GROUP)->get_group_picker(array(
 					"type" => array(GRP_REGULAR,GRP_DYNAMIC),
 				));
 				break;

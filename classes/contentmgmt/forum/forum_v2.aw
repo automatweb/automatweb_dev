@@ -3441,14 +3441,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			return false;
 		}
 
-		if ($_GET["XX5"])
-		{
-			$nlg = $this->get_cval("non_logged_in_users_group");
-			$g_oid = users::get_oid_for_gid($nlg);
-			print "nlg = $nlg, g_oid = $g_oid<br>";
-		};
-
-
 		$check_ids = array($uid_oid) + $gids;
 		$c = new connection();
 		$conns = $c->find(array(
@@ -3468,16 +3460,12 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		if ($conn->prop("reltype") == 1) //RELTYPE_TOPIC_FOLDER
 		{
 			// now I need to grant certian privileges
-			$nlg = $this->get_cval("non_logged_in_users_group");
-                        $g_oid = users::get_oid_for_gid($nlg);
-			$group = new object($g_oid);
+			$group = obj(group::get_non_logged_in_group());
 
 			$target_object = new object($conn->prop("to"));
 			$target_object->acl_set($group, array("can_add" => 1, "can_view" => 1));
 			$target_object->save();
-
-		};
-
+		}
 	}
 
 	function _filter_output($text)

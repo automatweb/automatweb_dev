@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.82 2008/02/20 14:02:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.83 2008/03/12 21:22:25 kristo Exp $
 // patent.aw - Patent 
 /*
 
@@ -1032,9 +1032,8 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		$name = $p->name();
 		if($name && $name == $o->name())
 		{
-			$u = get_instance("users_user");
-			$gid = $u->get_gid_by_uid($uid);
-			$grp = obj($u->get_oid_for_gid($gid));
+			$uo = obj(aw_global_get("uid_oid"));
+			$grp = obj($uo->get_default_group());
 			$o->acl_set($grp, array("can_view" => 1, "can_edit" => 1, "can_delete" => 0));
 		}
 	}

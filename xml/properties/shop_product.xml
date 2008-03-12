@@ -809,6 +809,32 @@
             <caption>Kokkusobivad tooted</caption>
       </property>
       <property>
+            <name>amount_limits</name>
+            <table>objects</table>
+            <group>amount_limits</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>amount_limits</field>
+      </property>
+      <property>
+            <name>amount_limits_tb</name>
+            <table>objects</table>
+            <group>amount_limits</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>amount_limits_tb</field>
+      </property>
+      <property>
+            <name>amount_limits_tbl</name>
+            <table>objects</table>
+            <group>amount_limits</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>amount_limits_tbl</field>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -821,6 +847,7 @@
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
@@ -845,6 +872,9 @@
             <match_prod>
                   <caption>Kokkusobivad tooted</caption>
             </match_prod>
+            <amount_limits>
+                  <caption>Kogusepiirangud</caption>
+            </amount_limits>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.101 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.102 2008/03/12 21:22:21 kristo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -3218,7 +3218,7 @@ class conference_planning extends class_base
 		//$obj->save();
 		$users = get_instance("users");
 		$obj->set_name($data["function_name"]);
-		$obj->set_prop("submitter", $users->get_oid_for_uid(aw_global_get("uid")));
+		$obj->set_prop("submitter", aw_global_get("uid_oid"));
 		$obj->set_prop("contact_preference", $data["user_contact_preference"]);
 		$obj->set_prop("country", $data["country"]);
 		$obj->set_prop("organisation", $data["organisation_company"]);

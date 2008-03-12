@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.46 2008/01/31 13:54:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.47 2008/03/12 21:24:10 kristo Exp $
 // form_actions.aw - creates and executes form actions
 /*
 @classinfo  maintainer=kristo
@@ -779,29 +779,6 @@ class form_actions extends form_base
 			$GLOBALS["no_html"] = 1;
 		}
 
-		if (aw_global_get("uid") != "" && !$data["no_user_info_link"])
-		{
-			$u = get_instance("users");
-			$uif = $u->get_user(aw_global_get("uid"));
-			$jfes = unserialize($uif["join_form_entry"]);
-
-			if (is_array($jfes))
-			{
-				$app = LC_FORM_BASE_USER.aw_global_get("uid").LC_FORM_BASE_INFO;
-				foreach($jfes as $fid => $eid)
-				{
-					$app .= $this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
-				}
-				
-				if ($data['link_caption'] != '')
-				{
-					$app_html .= html::href(array(
-						'url' => $this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form"),
-						'caption' => LC_FORM_BASE_USER.aw_global_get("uid").LC_FORM_BASE_INFO
-					)).'<br />';
-				}
-			}
-		}
 		$f = get_instance(CL_FORM);
 		if ($data['op_id'] && ($data['link_caption'] != '' || $data["send_html_mail"]))
 		{

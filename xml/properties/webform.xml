@@ -128,7 +128,7 @@
             <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Saada k&amp;otilde;ik read meilile</caption>
+            <caption>Saada k&amp;amp;otilde;ik read meilile</caption>
       </property>
       <property>
             <name>redirect</name>

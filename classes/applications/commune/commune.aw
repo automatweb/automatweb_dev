@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.15 2008/02/17 21:12:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.16 2008/03/12 21:22:29 kristo Exp $
 // commune.aw - Kommuun
 /*
 
@@ -4559,26 +4559,6 @@ class commune extends class_base implements main_subtemplate_handler
 			"request" => $arr["request"],
 		);
 		$box->save_new_message($vars);
-		/*
-		$users = get_instance("users");
-		$u_id = $users->get_oid_for_uid(aw_global_get("uid"));
-		$t_id = $users->get_oid_for_uid($arr["user_to"]);
-		if (empty($t_id))
-		{
-			die(t("aga sellist kasutajat pole üldse olemas"));
-		};
-		$user = new object($u_id);
-		$o = new object();
-		$o->set_class_id(CL_QUICKMESSAGE);
-		$o->set_parent($u_id);
-		$o->set_status(STAT_ACTIVE);
-		// need to resolve it!
-		$o->set_prop("user_from",$u_id);
-		$o->set_prop("user_to",$t_id);
-		$o->set_prop("subject",$arr["subject"]);
-		$o->set_prop("content",$arr["content"]);
-		$o->save();
-		*/
 	}
 	
 	function callback_profile_view($arr)

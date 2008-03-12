@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.116 2008/03/12 15:01:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.117 2008/03/12 21:22:54 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -397,9 +397,7 @@ class ml_list extends class_base
 			elseif($con->prop("reltype") == 1)
 			{
 				$to = $con->to();
-				$nlg = $this->get_cval("non_logged_in_users_group");
-				$g_oid = users::get_oid_for_gid($nlg);
-				$group = obj($g_oid);
+				$group = obj(group::get_non_logged_in_group());
 				$to->acl_set($group, array("can_view" => 1, "can_add" => 1));
 				$to->save();
 			}

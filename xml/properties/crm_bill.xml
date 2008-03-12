@@ -212,7 +212,7 @@
             <type>text</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Read erinevatel lehek&amp;uuml;lgedel</caption>
+            <caption>Read erinevatel lehek&amp;amp;uuml;lgedel</caption>
       </property>
       <property>
             <name>bill_rows</name>

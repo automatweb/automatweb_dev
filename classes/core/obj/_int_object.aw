@@ -2426,7 +2426,6 @@ class _int_object
 			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
 			"objdata" => $this->obj,
 		));
-
 		foreach(safe_array($GLOBALS["of2prop"][$this->obj["class_id"]]) as $key => $val)
 		{
 			//if (!$this->obj["properties"][$key])

@@ -3,4 +3,3 @@
 	<class name="outside_service" folder="common" extends="class_base">
 	</class>
 </orb>
-		

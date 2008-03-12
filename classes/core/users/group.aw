@@ -2,8 +2,6 @@
 
 /*
 
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_GROUP, on_save_grp)
-
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_GROUP, on_delete_grp)
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_GROUP, on_add_alias_to_group)
@@ -281,31 +279,20 @@ class group extends class_base
 	function set_property(&$arr)
 	{
 		$prop =& $arr["prop"];
-		$gid = $this->users->get_gid_for_oid($arr["obj_inst"]->id());
+		$gid = $arr["obj_inst"]->prop("gid");
 
 		if ($prop['name'] == 'data')
 		{
-			if (isset($arr['request']['gid']))
-			{
-				$gid = $arr['request']['gid']; // This avoids error upon group copy-paste
-			}
-			else
-			{
-				$gid = $this->users->get_gid_for_oid($arr["request"]["group_id"]);
-			}
-			$pg = $this->users->fetchgroup($gid);
-			if (isset($pg["search_form"]))
+			if ($this->can("view", $arr["obj_inst"]->prop("search_form")))
 			{
 				$f = get_instance(CL_FORM);
 				$f->process_entry(array(
-					"id" => $pg["search_form"],
+					"id" => $arr["obj_inst"]->prop("search_form"),
 					"entry_id" => $arr["entry_id"]
 				));
 				$eid = $f->entry_id;
 
 				$this->db_query("UPDATE groups SET data = '$eid' WHERE gid = '$gid'");
-
-				$this->users->update_dyn_group($gid);
 			}
 		}
 		else
@@ -564,7 +551,7 @@ class group extends class_base
 			);
 
 			// get active acl
-			$act_acl = $this->get_acl_for_oid_gid($ea, $this->users->get_gid_for_oid($arr["request"]["id"]));
+			$act_acl = $this->get_acl_for_oid_gid($ea, $arr["obj_inst"]->prop("gid"));
 
 			$a = $this->acl_list_acls();
 			foreach($a as $a_bp => $a_name)
@@ -598,9 +585,7 @@ class group extends class_base
 		$id = $parm['id'];
 		if ($id == 'dyn_search')
 		{
-			$od = $this->users->fetchgroup($this->users->get_gid_for_oid($parm['obj_inst']->id()));
-
-			if (!isset($od["type"]) or $od["type"] != GRP_DYNAMIC)
+			if ($parm['obj_inst']->prop("type") != GRP_DYNAMIC)
 			{
 				return false;
 			}
@@ -685,72 +670,10 @@ class group extends class_base
 		return $ret;
 	}
 
-	function on_save_grp($arr)
-	{
-		$o = obj($arr["oid"]);
-
-		$modified = false;
-
-		// ok, find all the groups that this group object is under
-		// and make it really a part of those groups
-		foreach(array_reverse($o->path()) as $p_o)
-		{
-			if ($p_o->id() == $arr["oid"])
-			{
-				continue;
-			}
-
-			if ($p_o->class_id() == CL_GROUP)
-			{
-				$p_gid = $this->users->get_gid_for_oid($p_o->id());
-
-				if ($o->prop("gp_parent") != $p_gid)
-				{
-					$o->set_prop("gp_parent", $p_gid);
-					$o->save();
-					$modified = true;
-				}
-			}
-
-			if ($modified)
-			{
-				break;
-			}
-		}
-
-		if ($modified && $p_gid)
-		{
-			// this of course means we get to update user membership as well.
-			// what we gotta do is get all users from this group and add them to the parent group
-
-			unset($this->users->grpcache);
-			unset($this->users->grpcache2);
-
-			// this will also trigger alias creation and other magic that syncs back from
-			// user tables to object table
-			$members = $this->users->getgroupmembers2($this->users->get_gid_for_oid($o->id()));
-			if (count($members) > 0)
-			{
-				$this->users->add_users_to_group_rec(
-					$p_gid,
-					$members
-				);
-			}
-			$c = get_instance("cache");
-			$c->file_clear_pt("acl");
-		}
-	}
-
 	function on_remove_alias_from_group($arr)
 	{
 		$uid_o = $arr["connection"]->to();
 		$grp_o = $arr["connection"]->from();
-
-		$uid = $this->users->get_uid_for_oid($uid_o->id());
-		$gid = $this->users->get_gid_for_oid($grp_o->id());
-
-		// remove user from group rec
-		$this->users->remove_users_from_group_rec($gid, array($uid), false, false);
 
 		// delete all brothers from the current group
 		$user_brothers = new object_list(array(
@@ -804,11 +727,6 @@ class group extends class_base
 	{
 		if ($arr["connection"]->prop("reltype") == 2) //RELTYPE_MEMBER
 		{
-			// get the gid to what we must add the user
-			$gid = $this->users->get_gid_for_oid($arr["connection"]->prop("from"));
-			// get the uid to add
-			$uid = $this->users->get_uid_for_oid($arr["connection"]->prop("to"));
-
 			$group = $arr["connection"]->from();
 			$user = $arr["connection"]->to();
 
@@ -817,8 +735,6 @@ class group extends class_base
 				"to" => $group->id(),
 				"reltype" => "RELTYPE_GRP" // from user
 			));
-
-			$this->users->add_users_to_group_rec($gid, array($uid), true, true, false);
 
 			// do our own sync here
 			// add a brother below this group
@@ -860,22 +776,17 @@ class group extends class_base
 	{
 		extract($arr);
 
-		$gid = $this->users->get_gid_for_oid($oid);
-		if ($gid)
+		// check if this is the user's default group and if so, block delete
+		aw_disable_acl();
+		$g_o = obj($oid);
+		if ($g_o->prop("type") == 1)
 		{
-			// check if this is the user's default group and if so, block delete
-			aw_disable_acl();
-			$g_o = obj($oid);
-			if ($g_o->prop("type") == 1)
-			{
-				die(t("Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"));
-			}
-			aw_restore_acl();
-
-			$this->users->deletegroup($gid);
-			$c = get_instance("cache");
-			$c->file_clear_pt("acl");
+			die(t("Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"));
 		}
+		aw_restore_acl();
+
+		$c = get_instance("cache");
+		$c->file_clear_pt("acl");
 	}
 
 	function callback_get_default_acl($arr)
@@ -955,9 +866,7 @@ class group extends class_base
 			// handle acl add
 			$from = $arr["connection"]->from();
 			$grp = $arr["connection"]->to();
-			$gid = $grp->prop("gp_gid");
-
-			$this->remove_acl_group_from_obj($gid, $from->id());
+			$this->remove_acl_group_from_obj($grp, $from->id());
 		}
 	}
 
@@ -974,10 +883,6 @@ class group extends class_base
 	**/
 	function add_user_to_group($user, $group)
 	{
-		// old tables
-		$this->users->add_users_to_group_rec($group->prop("gid"), array($user->prop("uid")), false, true);
-
-
 		// for each group in path from the to-add group
 		foreach($group->path() as $p_o)
 		{
@@ -1019,12 +924,6 @@ class group extends class_base
 	**/
 	function remove_user_from_group($user, $group)
 	{
-		$gid = $this->users->get_gid_for_oid($group->id());
-		$uid = $this->users->get_uid_for_oid($user->id());
-
-		// remove user from group rec
-		$this->users->remove_users_from_group_rec($gid, array($uid), false, false);
-
 		// delete all brothers from the current group
 		$user_brothers = new object_list(array(
 			"parent" => $group->id(),
@@ -1087,6 +986,128 @@ class group extends class_base
 		));
 		return $ol->arr();
 	}
+	
+	/** adds a group
+		@attrib api=1 params=pos
+
+		@param parent required type=oid
+			The group object parent
+
+		@param name required type=string
+			The name of the group
+
+		@param type required type=int
+			The group type, one of the defined group type constants
+
+		@param priority required type=int
+			The group priority
+
+		@returns
+			the new group's oid
+
+		@comment
+			This is just a wrapper for object adding, nothing special is going on
+	**/
+	function add_group($parent, $name, $type, $priority)
+	{
+		$o = obj();
+		$o->set_class_id(CL_GROUP);
+		$o->set_name($name);
+		$o->set_status(STAT_ACTIVE);
+		$o->set_parent($parent);
+		$o->set_prop("name", $name);
+		$o->set_prop("type", $type);
+		$o->set_prop("priority", $priority);
+		return $o->save();
+	}
+
+	/** returns a list of groups in the system
+		@attrib api=1 params=name
+
+		@param type optional type=array
+			Array of group types to return
+
+		@returns
+			array { group oid => group name }
+	**/
+	function get_group_picker($arr)
+	{
+		$filt = array(
+			"class_id" => CL_GROUP,
+			"lang_id" => array(),
+			"site_id" => array()
+		);
+		if ($arr["type"])
+		{
+			$filt["type"] = $arr["type"];
+		}
+		$ol = new object_list($filt);
+		return $ol->names();
+	}
+
+	/** returns the oid for the non logged in group. if it does not exist yet, creates it
+		@attrib api=1 
+	**/
+	static public function get_non_logged_in_group()
+	{
+		static $cache;
+		if ($cache !== null)
+		{
+			return $cache;
+		}
+
+		$c = get_instance("config");
+
+		if ($_SESSION["non_logged_in_users_group_oid"])
+		{
+			$nlg_oid = $_SESSION["non_logged_in_users_group_oid"];
+		}
+		else
+		{
+			$nlg_oid = $c->get_simple_config("non_logged_in_users_group_oid");
+		}
+
+		if (!$nlg_oid)
+		{
+			$nlg_gid = $c->get_simple_config("non_logged_in_users_group");
+			if ($nlg_gid)
+			{
+				// convert to oid and store that
+				aw_disable_acl();
+				$ol = new object_list(array(
+					"class_id" => CL_GROUP,
+					"gid" => $nlg_gid,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				if ($ol->count())
+				{
+					$go = $ol->begin();
+					$nlg_oid = $go->id();
+					$c->set_simple_config("non_logged_in_users_group_oid", $nlg_oid);
+				}
+				else
+				{
+					throw awex_no_group(sprintf(t("could not find the group oid for gid %s"), $nlg_gid));
+				}
+				aw_restore_acl();
+			}
+			else
+			{
+				// create nlg group
+				$grpp = aw_ini_get("groups.tree_root");
+				aw_disable_acl();
+				$nlg_o = obj(get_instance(CL_GROUP)->add_group($grpp, "Sisse logimata kasutajad", GRP_REGULAR, 1));
+				aw_restore_acl();
+				$c->set_simple_config("non_logged_in_users_group_oid", $nlg_o->id());
+				$nlg_oid = $nlg_o->id();
+			}
+		}
+		$cache = $nlg_oid;
+		$_SESSION["non_logged_in_users_group_oid"] = $nlg_oid;
+		return $nlg_oid;
+	}
 }
 
+class awex_no_group extends aw_exception {};
 ?>

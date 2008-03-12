@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.80 2008/02/22 13:44:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.81 2008/03/12 21:22:06 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -1248,7 +1248,8 @@ class converters extends aw_template
 			echo "oid = $row[oid] gid = $row[gid] <br>\n";
 			flush();
 			$obj = obj($row["oid"]);
-			$g_obj = obj($us->get_oid_for_gid($row["gid"]));
+			$g_oid = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '".$row["gid"]."'", "oid");
+			$g_obj = obj($g_oid);
 
 			$goid = $g_obj->id();
 			if (is_oid($goid))
@@ -1357,7 +1358,7 @@ class converters extends aw_template
 		");
 		while ($row = $this->db_next())
 		{
-			$skip = ($row["g_type"] == GRP_DEFAULT || $row["g_type"] == GRP_DELETED_USER) && (strtolower($row["g_name"]) == strtolower($row["createdby"]) || $row["createdby"] == "");
+			$skip = ($row["g_type"] == GRP_DEFAULT) && (strtolower($row["g_name"]) == strtolower($row["createdby"]) || $row["createdby"] == "");
 
 			if (true || !$skip)
 			{

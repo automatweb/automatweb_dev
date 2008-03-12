@@ -152,7 +152,7 @@ class object
 		$oid = $GLOBALS["object_loader"]->param_to_oid($param);
 		if ($force_reload && is_oid($oid))
 		{
-			unset($GLOBALS["objects"][$oid]);
+			$GLOBALS["objects"][$oid] = null;
 		}
 
 		$cnt = false;
@@ -1837,6 +1837,10 @@ class object
 			));
 		}
 
+		if (!$group->prop("gid"))
+		{
+			return;
+		}
 		$GLOBALS["object_loader"]->add_acl_group_to_obj($group->prop("gid"), $this->id());
 		$GLOBALS["object_loader"]->save_acl(
 			$this->id(),
@@ -1883,7 +1887,7 @@ class object
 	function acl_del($g_oid)
 	{
 		$group = obj($g_oid);
-		$GLOBALS["object_loader"]->remove_acl_group_from_obj($group->prop("gid"), $this->id());
+		$GLOBALS["object_loader"]->remove_acl_group_from_obj($group, $this->id());
 		$this->disconnect(array(
 			"from" => $group->id(),
 			"type" => RELTYPE_ACL

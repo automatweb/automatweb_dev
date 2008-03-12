@@ -4,15 +4,8 @@
 		<action name="delete_message">
 			<function name="delete_message">
 				<arguments>
+					<required name="id" type="int" acl="view" />
 					<required name="sel" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="archive_message">
-			<function name="archive_message">
-				<arguments>
-					<required name="sel" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>

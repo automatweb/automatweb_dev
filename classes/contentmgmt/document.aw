@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.3 2008/02/19 19:47:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.4 2008/03/12 21:23:21 kristo Exp $
 // document.aw - Dokumentide haldus. 
 /*
 @classinfo  maintainer=kristo
@@ -1085,28 +1085,6 @@ if (is_object($docobj))
 		// <mail to="bla@ee">lahe tyyp</mail>
  		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
 		$doc["content"] = str_replace(LC_DOCUMENT_CURRENT_TIME,$this->time2date(time(),2),$doc["content"]);
-
-		if (!(strpos($doc["content"],"#liitumisform") === false))
-		{
-			$qt = false;
-			if (!preg_match("/#liitumisform info=\"(.*)\"#/",$doc["content"], $maat))
-			{
-				preg_match("/#liitumisform info=&quot;(.*)&quot;#/",$doc["content"], $maat);
-				$qt = true;
-			}
-
-			// siin tuleb n2idata kasutaja liitumisformi, kuhu saab passwordi ja staffi kribada.
-			// aga aint sel juhul, kui kasutaja on enne t2itnud k6ik miski grupi formid.
-			$dbu = get_instance("users");
-			if ($qt)
-			{
-				$doc["content"] = preg_replace("/#liitumisform info=&quot;(.*)&quot;#/",$dbu->get_join_form($maat[1]),$doc["content"]);
-			}
-			else
-			{
-				$doc["content"] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc["content"]);
-			}
-		}
 				
 		$ab = "";
 
@@ -2578,17 +2556,6 @@ if (is_object($docobj))
 					"function" => "parse_aliases",
 					));
 
-		// liituja info. bijaatch!
-		$mp = $this->register_parser(array(
-					"reg" => "/(#)liituja_andmed(#)/i",
-					));
-
-		$this->register_sub_parser(array(
-					"class" => "users",
-					"reg_id" => $mp,
-					"function" => "show_join_data",
-					));
-		
 		// detailed search
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)search_conf(#)/i",
@@ -2598,28 +2565,6 @@ if (is_object($docobj))
 					"class" => "search_conf",
 					"reg_id" => $mp,
 					"function" => "search",
-					));
-		
-		// change password
-		$mp = $this->register_parser(array(
-					"reg" => "/(#)password_form(#)/i",
-					));
-
-		$this->register_sub_parser(array(
-					"class" => "users",
-					"reg_id" => $mp,
-					"function" => "change_pwd_hash",
-		));
-
-		// parooli meeldetuletus. bijaatch!
-		$mp = $this->register_parser(array(
-					"reg" => "/#parooli_meeldetuletus edasi=\"(.*)\"#/i",
-					));
-
-		$this->register_sub_parser(array(
-					"class" => "users",
-					"reg_id" => $mp,
-					"function" => "pwd_remind",
 					));
 	}
 

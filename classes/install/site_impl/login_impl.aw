@@ -12,7 +12,7 @@ include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".a
 		}
 
 $te = new aw_template;
-$te->tpl_init("");
+$te->init("");
 $te->read_template("login.tpl");
 lc_site_load("login", $te);
 // if there is an auth config then get the list of servers to add 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.46 2008/02/25 12:08:27 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.47 2008/03/12 21:22:58 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -1332,7 +1332,7 @@ class mail_message extends class_base
 		// kuidas ma teen siia nimekirja k&otilde;igist kasutaja projektidest?
 
 		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+		$user = new object(aw_global_get("uid_oid"));
 		$conns = $user->connections_to(array(
 			"from.class_id" => CL_PROJECT,
 			"sort_by" => "from.name",

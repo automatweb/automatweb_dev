@@ -31,9 +31,35 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>list</name>
+            <table>objects</table>
+            <group>list</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>list</field>
+      </property>
+      <property>
+            <name>list_tb</name>
+            <table>objects</table>
+            <group>list</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>list_tb</field>
+      </property>
+      <property>
+            <name>list_tbl</name>
+            <table>objects</table>
+            <group>list</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>list_tbl</field>
+      </property>
+      <property>
             <name>balance</name>
             <table>aw_account_balances</table>
-            <group>general</group>
+            <group>list</group>
             <type>hidden</type>
             <field>aw_balance</field>
       </property>
@@ -42,6 +68,12 @@
             <relationmgr>yes</relationmgr>
             <maintainer>markop</maintainer>
       </classinfo>
+      <groupinfo>
+            <list>
+                  <caption>Nimekiri</caption>
+                  <submit>no</submit>
+            </list>
+      </groupinfo>
       <tableinfo>
             <aw_account_balances>
                   <master_index>oid</master_index>

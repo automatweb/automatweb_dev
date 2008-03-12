@@ -163,7 +163,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Leitud sarnased s&amp;uuml;ndmused</caption>
+            <caption>Leitud sarnased s&amp;amp;uuml;ndmused</caption>
       </property>
       <property>
             <name>organiser_tb</name>
@@ -267,7 +267,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Sarnaste s&amp;uuml;ndmuste kattumisaeg (tundides)</caption>
+            <caption>Sarnaste s&amp;amp;uuml;ndmuste kattumisaeg (tundides)</caption>
       </property>
       <property>
             <name>events_per_page</name>

@@ -139,7 +139,7 @@
 		</action>
 
 		<action name="new_files_on_demand" all_args="1">
-			<function name="new_files_on_demand">
+			<function name="new_files_on_demand_____redeclared">
 				<arguments>
 				</arguments>
 			</function>

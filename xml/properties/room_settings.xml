@@ -215,7 +215,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Kinnise aja v&amp;auml;rvi</caption>
+            <caption>Kinnise aja v&amp;amp;auml;rvi</caption>
       </property>
       <property>
             <name>col_recent</name>

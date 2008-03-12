@@ -1219,7 +1219,7 @@ class mrp_job extends class_base
 
 			### log out user
 			$u = get_instance("users");
-			$u->orb_logout();
+			$u->logout();
 
 			return $return_url;
 		}

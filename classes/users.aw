@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.190 2008/03/06 13:55:18 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.191 2008/03/12 21:22:01 kristo Exp $
 @classinfo  maintainer=kristo
 */
 if (!headers_sent())
@@ -33,15 +33,16 @@ class users extends users_user
 			$id = aw_global_get("uid");
 		}
 
-		$u = $this->get_user($id);
-		if (!($this->can("change", $u["oid"]) || aw_global_get("uid") == $id))
+		$oid = $this->get_oid_for_uid($id);
+		if (!($this->can("change", $oid) || aw_global_get("uid") == $id))
 		{
 			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
 		}
 
+		$uo = obj($oid);
 		$this->read_template("changepwd.tpl");
 		$this->vars(array(
-			"email" => $u["email"],
+			"email" => $uo->prop("email"),
 			"error" => $error,
 			"reforb" => $this->mk_reforb("submit_change_pwd", array("id" => $id))
 		));
@@ -142,8 +143,8 @@ class users extends users_user
 	function submit_change_pwd($arr)
 	{
 		extract($arr);
-		$udata = $this->get_user($id);
-		if (!($this->can("change", $udata["oid"]) || aw_global_get("uid") == $id))
+		$oid = $this->get_oid_for_uid($id);
+		if (!($this->can("change", $oid) || aw_global_get("uid") == $id))
 		{
 			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
 		}
@@ -158,19 +159,18 @@ class users extends users_user
 			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => "Uus parool sisaldab lubamatuid m&auml;rke<br />"));
 		}
 
+		aw_disable_acl();
+		$o = obj($oid);
 		if ($arr["pwd"] != "")
 		{
-			$this->save(array("uid" => $arr["id"], "password" => $arr["pwd"],"email" => $arr["email"]));
+			$o->set_password($arr["pwd"]);
 		}
-		else
-		{
-			$this->save(array("uid" => $arr["id"], "email" => $arr["email"]));
-		}
+		$o->set_prop("email",$arr["email"]);
+		$o->save();
+		aw_restore_acl();
 
 		if ($send_welcome_mail)
 		{
-			$udata = $this->get_user(array("uid" => $arr["id"]));
-
 			// send him some email as well if the users selected to do so
 			$c = get_instance("config");
 			$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
@@ -178,7 +178,7 @@ class users extends users_user
 			$mail = str_replace("#kasutaja#", $arr["id"],$mail);
 			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($arr["id"]), $mail);
 
-			send_mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+			send_mail($o->prop("email"),$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			$jsa = $c->get_simple_config("join_send_also");
 			if ($jsa != "")
 			{
@@ -410,25 +410,28 @@ class users extends users_user
 		die();
 	}
 
-	function create_gidlists($uid)
+	function create_gidlists($u_oid)
 	{
 		$gidlist = array();
 		$gidlist_pri = array();
 		$gidlist_pri_oid = array();
 		$gidlist_oid = array();
-		$gl = $this->get_gids_by_uid($uid,true);
-		foreach($gl as $gid => $gd)
+
+		aw_disable_acl();
+		$u_obj = obj($u_oid);
+		$gl = $u_obj->get_groups_for_user();
+		aw_restore_acl();
+		foreach($gl as $g_oid => $g_obj)
 		{
+			$gid = $g_obj->prop("gid");
 			$gidlist[(int)$gid] = (int)$gd["gid"];
-			$gidlist_pri[(int)$gid] = (int)$gd["priority"];
-			if ($gd["oid"])
+			$gidlist_pri[(int)$gid] = (int)$g_obj->prop("priority");
+			$gidlist_pri_oid[(int)$g_oid] = (int)$g_obj->prop("priority");
+			$gidlist_oid[(int)$g_oid] = (int)$g_oid;
+			
+			if ($g_obj->name() == $u_obj->name() && $g_obj->prop("type") == 1)
 			{
-				$gidlist_pri_oid[(int)$gd["oid"]] = (int)$gd["priority"];
-				$gidlist_oid[(int)$gd["oid"]] = (int)$gd["oid"];
-			}
-			if ($gd["name"] == $uid && $gd["type"] == 1)
-			{
-				aw_global_set("current_user_group", $gd);
+				aw_global_set("current_user_group_oid", $g_oid);
 			}
 		}
 
@@ -478,9 +481,10 @@ class users extends users_user
 
 		if (($uid = aw_global_get("uid")) != "")
 		{
-			$this->create_gidlists($uid);
+			$this->create_gidlists($_SESSION["uid_oid"]);
 			$gidlist = aw_global_get("gidlist");
 			$gidlist_pri = aw_global_get("gidlist_pri");
+			$gidlist_pri_oid = aw_global_get("gidlist_pri_oid");
 			if (count($gidlist) < 1)
 			{
 				$this->kill_user();
@@ -490,86 +494,77 @@ class users extends users_user
 			$hig_p = -1;
 			$hig_w_u = 0;
 			$hig_w_u_p = -1;
-			foreach($gidlist_pri as $_gid => $_pri)
+			foreach($gidlist_pri_oid as $g_oid => $_pri)
 			{
 				if ($_pri > $hig_p && $_pri != 100000000)
 				{
 					$hig_p = $_pri;
-					$hig = $_gid;
+					$hig_o = $g_oid;
 				}
 				if ($_pri > $hig_w_u_p)
 				{
 					$hig_w_u_p = $_pri;
-					$hig_w_u = $_gid;
+					$hig_w_u = $g_oid;
 				}
 			}
 
-			if ($hig)
+			if ($hig_o)
 			{
-				$_oid = $this->get_oid_for_gid($hig);
-				if ($_oid)
+				aw_disable_acl();
+				$o = obj($hig_o);
+				aw_restore_acl();
+				$ar2 = $o->meta("admin_rootmenu2");
+				$gf = $o->meta("grp_frontpage");
+				$lang_id = aw_global_get("lang_id");
+				if (is_array($ar2) && $ar2[$lang_id])
 				{
-					aw_disable_acl();
-					$o = obj($_oid);
-					aw_restore_acl();
-					$ar2 = $o->meta("admin_rootmenu2");
-					$gf = $o->meta("grp_frontpage");
-					$lang_id = aw_global_get("lang_id");
-					if (is_array($ar2) && $ar2[$lang_id])
+					aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
+					$inrm = aw_ini_get("ini_rootmenu");
+					if (!$inrm)
 					{
-						aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
-						$inrm = aw_ini_get("ini_rootmenu");
-						if (!$inrm)
-						{
-							$inrm = aw_ini_get("rootmenu");
-						}
-						aw_ini_set("ini_rootmenu", $inrm);
-						aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+						$inrm = aw_ini_get("rootmenu");
 					}
-					if (is_array($gf) && $gf[$lang_id])
-					{
-						aw_ini_set("frontpage",$gf[$lang_id]);
-					}
+					aw_ini_set("ini_rootmenu", $inrm);
+					aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+				}
+				if (is_array($gf) && $gf[$lang_id])
+				{
+					aw_ini_set("frontpage",$gf[$lang_id]);
 				}
 			}
 
 			if ($hig_w_u)
 			{
-				$_oid = $this->get_oid_for_gid($hig_w_u);
-				if ($_oid)
+				aw_disable_acl();
+				$o = obj($hig_w_u);
+				aw_restore_acl();
+				$ar2 = $o->meta("admin_rootmenu2");
+				$gf = $o->meta("grp_frontpage");
+				$lang_id = aw_global_get("lang_id");
+				if (is_array($ar2) && $ar2[$lang_id])
 				{
-					aw_disable_acl();
-					$o = obj($_oid);
-					aw_restore_acl();
-					$ar2 = $o->meta("admin_rootmenu2");
-					$gf = $o->meta("grp_frontpage");
-					$lang_id = aw_global_get("lang_id");
-					if (is_array($ar2) && $ar2[$lang_id])
+					aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
+					$inrm = aw_ini_get("ini_rootmenu");
+					if (!$inrm)
 					{
-						aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
-						$inrm = aw_ini_get("ini_rootmenu");
-						if (!$inrm)
-						{
-							$inrm = aw_ini_get("rootmenu");
-						}
-						aw_ini_set("ini_rootmenu", $inrm);
-						aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+						$inrm = aw_ini_get("rootmenu");
 					}
-					if (is_array($gf) && $gf[$lang_id])
-					{
-						aw_ini_set("frontpage",$gf[$lang_id]);
-					}
+					aw_ini_set("ini_rootmenu", $inrm);
+					aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+				}
+				if (is_array($gf) && $gf[$lang_id])
+				{
+					aw_ini_set("frontpage",$gf[$lang_id]);
 				}
 			}
 
 			if (aw_ini_get("groups.multi_group_admin_rootmenu"))
 			{
 				$admr = array();
-				foreach($gidlist_pri as $_gid => $_pri)
+				foreach($gidlist_pri_oid as $g_oid => $_pri)
 				{
-					$_oid = $this->get_oid_for_gid($_gid);
 					aw_disable_acl();
-					$o = obj($_oid);
+					$o = obj($g_oid);
 					aw_restore_acl();
 					$ar2 = $o->meta("admin_rootmenu2");
 					$lang_id = aw_global_get("lang_id");
@@ -597,34 +592,13 @@ class users extends users_user
 			// now the only problem is how do I identify the group.
 			// that's gonna be a problem, but I guess the only way is the config table.
 
-			if (empty($_SESSION["non_logged_in_users_group"]) || !is_array($_SESSION["non_logged_in_users_group"]))
-			{
-				$nlg = $this->get_cval("non_logged_in_users_group");
-				if (!$nlg && ($grpp = aw_ini_get("groups.tree_root")))
-				{
-					aw_disable_acl();
-					$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $grpp);
-					aw_restore_acl();
-					$this->set_cval("non_logged_in_users_group", $nlg);
-				}
-
-				$gd = $this->fetchgroup($nlg);
-
-				$_SESSION["non_logged_in_users_group"] = array(
-					"nlg" => $nlg,
-					"gd" => $gd
-				);
-			}
-			else
-			{
-				$nlg = $_SESSION["non_logged_in_users_group"]["nlg"];
-				$gd = $_SESSION["non_logged_in_users_group"]["gd"];
-			}
+			$nlg_o = obj(group::get_non_logged_in_group());
+			$nlg = $nlg_o->prop("gid");
 
 			$gidlist = array($nlg => $nlg);
-			$gidlist_pri = array($nlg => $gd["priority"]);
-			$gidlist_oid = array($gd["oid"] => $gd["oid"]);
-			$gidlist_pri_oid[(int)$gd["oid"]] = (int)$gd["priority"];
+			$gidlist_pri = array($nlg => $nlg_o->prop("priority"));
+			$gidlist_oid = array($nlg_o->id() => $nlg_o->id());
+			$gidlist_pri_oid[(int)$nlg_o->id()] = (int)$nlg_o->prop("priority");
 			if (!empty($_SESSION["nliug"]))
 			{
 				// get gid for oid
@@ -701,22 +675,23 @@ class users extends users_user
 			echo "adding groups... <br>\n";
 			flush();
 
-			$aug = $this->addgroup(0,"K&otilde;ik kasutajad", GRP_REGULAR,0,1000,0,$ini_opts["groups.tree_root"]);
-			$ini_opts["groups.all_users_grp"] = $aug;
+			$grp_i = get_instance(CL_GROUP);
+			$aug = obj($grp_i->add_group($ini_opts["groups.tree_root"],"K&otilde;ik kasutajad", GRP_REGULAR, 1000));
+			$ini_opts["groups.all_users_grp"] = $aug->prop("gid");
 
-			$admg = $this->addgroup(0,"Administraatorid", GRP_REGULAR,0,10000,0,$ini_opts["groups.tree_root"]);
+			$admg = $grp_i->add_group($ini_opts["groups.tree_root"],"Administraatorid", GRP_REGULAR,10000);
 			echo "Administraatorid <br>\n";
 			flush();
-			$osi_vars["groups.admins"] = $this->get_oid_for_gid($admg);
+			$osi_vars["groups.admins"] = $admg;
 
-			$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $ini_opts["groups.tree_root"]);
-			$this->set_cval("non_logged_in_users_group", $nlg);
-			$osi_vars["groups.not_logged"] = $this->get_oid_for_gid($nlg);
+			$nlg = obj($grp_i->add_group($ini_opts["groups.tree_root"], "Sisse logimata kasutajad", GRP_REGULAR, 1));
+			$this->set_cval("non_logged_in_users_group", $nlg->prop("gid"));
+			$osi_vars["groups.not_logged"] = $nlg->id();
 
 			// deny access from aw_obj_priv
 			$o = obj($osi_vars["aw_obj_priv"]);
 			$o->connect(array(
-				"to" => $this->get_oid_for_gid($nlg),
+				"to" => $nlg->id(),
 				"reltype" => RELTYPE_ACL,
 			));
 			$this->save_acl($o->id(), $nlg, array());
@@ -735,25 +710,17 @@ class users extends users_user
 			$admo->set_prop("can_admin_interface", 1);
 			$admo->save();
 
-			$editors = $this->addgroup(0,"Toimetajad", GRP_REGULAR,0,5000,0,$ini_opts["groups.tree_root"]);
+			$editors = $grp_i->add_group($ini_opts["groups.tree_root"],"Toimetajad", GRP_REGULAR,5000);
 			echo "Toimetajad <br>\n";
 			flush();
-			$osi_vars["groups.editors"] = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$editors'", "oid");
-
-
-			/*$this->addgroup(0,"Kliendid", GRP_REGULAR,0,2500,0,$ini_opts["groups.tree_root"]);
-			echo "Kliendid <br>\n";
-			flush();
-			$this->addgroup(0,"Partnerid", GRP_REGULAR,0,3000,0,$ini_opts["groups.tree_root"]);
-			echo "Partnerid <br>\n";
-			flush();*/
+			$osi_vars["groups.editors"] = $editors;
 
 			// create default user
 			$us = get_instance(CL_USER);
 			$user_o = $us->add_user(array(
 				"uid" => $site["site_obj"]["default_user"],
 				"password" => $site["site_obj"]["default_user_pwd"],
-				"all_users_grp" => $aug,
+				"all_users_grp" => $aug->prop("gid"),
 				"use_md5_passwords" => true,
 				"obj_parent" => $ini_opts["users.root_folder"]
 			));
@@ -763,14 +730,12 @@ class users extends users_user
 			echo "Adding users... <br>\n";
 			flush();
 
-			// add user to admin group
-			$this->add_users_to_group_rec($admg,array($site["site_obj"]["default_user"]),true,true,false);
 			echo "adding user to groups! <br>\n";
 			flush();
 			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$admg'", "oid"));
 			echo "administrator <br>\n";
 			flush();
-			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$aug'", "oid"));
+			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '".$aug->prop("gid")."'", "oid"));
 			echo "all users <br>\n";
 			flush();
 			aw_global_set("__in_post_message", 0);
@@ -810,9 +775,7 @@ class users extends users_user
 	function send_welcome_mail($arr)
 	{
 		extract($arr);
-		$udata = $this->get_user(array(
-			"uid" => $uid
-		));
+		$o = obj($this->get_oid_for_uid($uid));
 
 		// send him some email as well if the users selected to do so
 		$c = get_instance("config");
@@ -821,7 +784,7 @@ class users extends users_user
 		$mail = str_replace("#kasutaja#", $uid,$mail);
 		$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($uid), $mail);
 
-		send_mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+		send_mail($o->prop("email"),$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		$jsa = $c->get_simple_config("join_send_also");
 		if ($jsa != "")
 		{
@@ -1007,8 +970,6 @@ class users extends users_user
 				"from.class_id" => CL_USER,
 				"to" => $ol->ids()
 			));
-			$us = get_instance("users_user");
-
 
 			if(count($conns) < 1)
 			{
@@ -1121,20 +1082,14 @@ class users extends users_user
 		return parent::login($arr);
 	}
 
-	/** logout
+	/** logs the current user out
+		@attrib name=logout params=name nologin="1" is_public="1" caption="Logi v&auml;lja"
 
-		@attrib name=logout params=name default="0" nologin="1" is_public="1" caption="Logi v&auml;lja"
-
-		@returns
-
-
-		@comment
-			logs the current user out
-
+		@param redir_to optional 
 	**/
 	function orb_logout($arr = array())
 	{
-		return parent::orb_logout($arr);
+		return parent::logout($arr);
 	}
 
 	/**

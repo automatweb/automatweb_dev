@@ -807,7 +807,7 @@ class realestate_manager extends class_base
 								// return PROP_ERROR;
 							}
 
-							$gid = $this->cl_users->get_gid_for_oid($this->usr_mgr_profession_group->id ());
+							$gid = $this->usr_mgr_profession_group->prop("gid");
 							$acl_current_settings = $this->get_acl_for_oid_gid(
 								$connection->prop ("from"), $gid
 							);
@@ -980,7 +980,7 @@ class realestate_manager extends class_base
 							}
 
 							$connected_unit = obj ($connection->prop ("from"));
-							$gid = $this->cl_users->get_gid_for_oid($this->usr_mgr_profession_group->id ());
+							$gid = $this->usr_mgr_profession_group->prop("gid");
 							$acl_current_settings = $this->get_acl_for_oid_gid(
 								$connected_unit->id (), $gid
 							);
@@ -1461,7 +1461,7 @@ class realestate_manager extends class_base
 			if (is_oid ($this_object->prop ($folder_name . "_folder")))
 			{
 				// $folder = obj ($this_object->prop ($folder_name . "_folder"));
-				$gid = $this->cl_users->get_gid_for_oid ($this->usr_mgr_profession_group->id ());
+				$gid = $this->usr_mgr_profession_group->prop ("gid");
 				$acl_current_settings = $this->get_acl_for_oid_gid ($this_object->prop ($folder_name . "_folder"), $gid);
 
 				$can_view = (int)(bool) $acl_current_settings["can_view"];

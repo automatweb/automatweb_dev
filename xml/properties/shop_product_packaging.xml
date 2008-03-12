@@ -387,6 +387,32 @@
             <caption>&amp;amp;Otilde;igused</caption>
       </property>
       <property>
+            <name>amount_limits</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>amount_limits</field>
+      </property>
+      <property>
+            <name>amount_limits_tb</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>amount_limits_tb</field>
+      </property>
+      <property>
+            <name>amount_limits_tbl</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>amount_limits_tbl</field>
+      </property>
+      <property>
             <name>transl</name>
             <table>aw_shop_packaging</table>
             <group>transl</group>
@@ -411,6 +437,9 @@
             <acl>
                   <caption>&amp;amp;Otilde;igused</caption>
             </acl>
+            <amount_limits>
+                  <caption>Kogusepiirangud</caption>
+            </amount_limits>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

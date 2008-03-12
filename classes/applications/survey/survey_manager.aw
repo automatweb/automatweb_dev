@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.10 2008/01/31 13:50:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.11 2008/03/12 21:23:17 kristo Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
@@ -357,7 +357,7 @@ class survey_manager extends class_base
 			};
 			// try to figure out whether this user has a filled survey
 			$users = get_instance("users");
-			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+			$user = new object(aw_global_get("uid_oid"));
 
 			$conns = $user->connections_to(array(
 				"from.class_id" => CL_SURVEY,

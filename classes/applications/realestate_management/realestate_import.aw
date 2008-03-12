@@ -792,8 +792,8 @@ class realestate_import extends class_base
 
 							if (is_oid ($connection["from"]))
 							{
-								$cl_users = get_instance("users");
-								$agent_uid = $cl_users->get_uid_for_oid ($connection["from"]);
+								$from_obj = obj($connection["from"]);
+								$agent_uid = $from_obj->prop("uid");
 							}
 							else
 							{
@@ -1905,8 +1905,8 @@ class realestate_import extends class_base
 
 								if (is_oid ($connection["from"]))
 								{
-									$cl_users = get_instance("users");
-									$agent_uid = $cl_users->get_uid_for_oid ($connection["from"]);
+									$from_obj = obj($connection["from"]);
+									$agent_uid = $from_obj->prop("uid");
 								}
 								else
 								{

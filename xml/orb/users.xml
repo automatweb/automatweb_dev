@@ -35,27 +35,6 @@
 			</function>
 		</action>
 
-		<action name="submit_user_site" nologin="1">
-			<function name="submit_user_site">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="pwd_remind" nologin="1">
-			<function name="pwd_remind">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_pwd_remind" nologin="1">
-			<function name="submit_pwd_remind">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="send_hash" nologin="1">
 			<function name="send_hash">
 				<arguments>
@@ -75,17 +54,6 @@
 				<arguments>
 					<required name="k" />
 					<required name="u" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change_pwd_hash" nologin="1">
-			<function name="change_pwd_hash">
-				<arguments>
-					<required name="pass1" />
-					<required name="pass2" />
-					<required name="a" />
-					<optional name="change" />
 				</arguments>
 			</function>
 		</action>
@@ -123,20 +91,7 @@
 		<action name="logout" nologin="1" is_public="1" caption="Logi v&amp;auml;lja">
 			<function name="orb_logout">
 				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="udata">
-			<function name="do_change_site">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="save_udata">
-			<function name="submit_do_change_site">
-				<arguments>
+					<optional name="redir_to" />
 				</arguments>
 			</function>
 		</action>
