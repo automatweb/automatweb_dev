@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.1 2008/02/21 19:06:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.2 2008/03/12 09:48:02 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -249,7 +249,7 @@ class period extends class_base
 		$this->cache->file_clear_pt("html");
 	}
 	
-	// see funktsioon tagastab kõigi eksisteerivate perioodide nimekirja
+	// see funktsioon tagastab k2igi eksisteerivate perioodide nimekirja
 	// array kujul
 	// $active muutujaga saab ette anda selle, milline periood peaks olema aktiivne
 	// kui $active == 0, siis on selected see option, mis parajasti aktiivne on
@@ -351,6 +351,7 @@ class period extends class_base
 	// !returns period $id
 	function get($id) 
 	{
+		$id = (int)$id;
 		if (!$id)
 		{
 			return;
