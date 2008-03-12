@@ -7,7 +7,7 @@ class relpicker extends  core
 	}
 
 	/**
-		@attrib name=create_relpicker params=name api=1 
+		@attrib name=create_relpicker params=name api=1
 
 		@param name required type=string
 			String to indetify the relpicker
@@ -37,7 +37,7 @@ class relpicker extends  core
 
 		@returns The HTML of the relpicker.
 
-		@examples 
+		@examples
 
 		$relpicker = get_instance(CL_RELPICKER);
 		$relpicker->create_relpicker(array(
@@ -46,7 +46,7 @@ class relpicker extends  core
 			"oid" => 123,
 			"property" => "myProperty",
 		));
-		
+
 		$myOptions = array(
 			1 => "Object1",
 			2 => "Object2",
@@ -84,7 +84,7 @@ class relpicker extends  core
 		{
 			$options = array();
 		}
-		
+
 		if($no_sel != 1)
 		{
 			$options = array(0 => t("--vali--")) + $options;
@@ -101,14 +101,14 @@ class relpicker extends  core
 					$olist = new object_list(array(
 						"class_id" => $clid,
 						"site_id" => array(),
-						"lang_id" => array()
+						"lang_id" => array(),
+						"brother_of" => new obj_predicate_prop("id")
 					));
 					$names = $olist->names();
 					asort($names);
 					$options = $options + $names;
-				};
+				}
 			}
-			
 		}
 		else
 		{
@@ -248,7 +248,8 @@ class relpicker extends  core
 					$olist = new object_list(array(
 						"class_id" => $clid,
 						"site_id" => array(),
-						"lang_id" => array()
+						"lang_id" => array(),
+						"brother_of" => new obj_predicate_prop("id")
 					));
 					$names = $olist->names();
 					asort($names);
