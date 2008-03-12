@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.88 2008/03/05 02:50:06 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.89 2008/03/12 23:10:40 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -4986,67 +4986,138 @@ class otto_import extends class_base
 		$fc = $this->file_get_contents($url);
 		echo "[ok]<br />\n";
 
-		preg_match("/var url = \"(.*)\"/imsU", $fc, $mt);
-		$url = $mt[1];
-		echo "[ ALBAMODA ] Redirecting to and loading <a href=\"$url\">page</a> content ";
-		$fc = $this->file_get_contents($url);
-		echo "[ok]<br />\n";
 
-		if (strpos($fc, "Es wurden leider keine Artikel") !== false)
+		if (strpos($fc, "Es wurden leider keine Artikel gefunden.") !== false)
 		{
 			echo "[ ALBAMODA ] can't find a product for code <b>$pcode</b> from albamoda.de, so return false<br>\n";
 			return false;
 		}
 
-		// match prod urls
-	//	preg_match_all("/displayART\('(.*)'\)/imsU", $fc, $mt, PREG_PATTERN_ORDER);
-		preg_match_all("/".preg_quote('IMG id="hauptbild" class="bb" onmouseover="javascript:setStatus(1);" onmouseout="javascript:setStatus(0);" ', '/')."SRC=\"(.*)\" name=\"gross\"/imsU", $fc, $mt, PREG_PATTERN_ORDER);
-
-		$pcs = array_unique($mt[1]);
-
-		foreach($pcs as $prodref)
+		// if we found only one product, then the user is redirected directly to the products page
+		// if multiple products were found, then I need collect all the urls to products
+		if (strpos($fc, "<!-- redirect_proddetail.vm -->") !== false)
 		{
-			if ($prodref == "")
+			// one product, lets get the url where the user is redirected to
+			preg_match("/var url = \"(.*)\"/imsU", $fc, $mt);
+			$url = $mt[1];
+			echo "[ ALBAMODA ] One product found: <a href=\"$url\">page</a> <br />\n";
+			$prod_urls = array($mt[1]);
+		}
+		else
+		{
+			// multiple products, lets collect all the product urls from the search results
+			$pattern = "/<a href=\"(http\:\/\/.*)\">/i";
+			preg_match_all($pattern, $fc, $mt, PREG_PATTERN_ORDER);
+			$prod_urls = array_unique($mt[1]);
+			echo "[ ALBAMODA ] Found ".count($prod_urls)." products: ";
+			$prod_count = 0;
+			foreach ($prod_urls as $prod_url)
 			{
+				$prod_count++;
+				echo " <a href=\"".$prod_url."\">[ ".$prod_count." ]</a> ";
+			}
+			echo "<br />\n";
+		}
+
+
+		foreach($prod_urls as $url)
+		{
+			$fc = $this->file_get_contents($url);
+			echo "<br />\n";
+
+			echo "[ ALBAMODA ] Loading product <a href=\"$url\">page</a> <br />\n";
+
+			// apparently some products are broken in albamoda as well, so lets chek if we got a product from this url at the first place:
+			if (strpos($fc, "Liebe Kundin, lieber Kunde.") !== false)
+			{
+				echo "[ ALBAMODA ] Product page seems to be unavailable <a href=\"".$url."\">[ url ]</a><br />\n";
 				continue;
 			}
-		//	$prod_url = "http://www.albamoda.de/is-bin/INTERSHOP.enfinity/WFS/AlbaModaDe/de_DE/-/EUR/AM_ViewProduct-ProductRef;sid=ytMKUs3doZEKUo_WSsAnctZxm9kZ5q0_w_o_iYvu?SearchArt1=".$prodref."&SearchDetail=1&ProductRef=".$prodref."&aktProductRef=".$prodref."&Query_Text=".$pcode."&OsPsCP=0&searchpipe=search_pipe_am_de";
-			$fc2 = $this->file_get_contents($prod_url);
 
-			// get first image
-			preg_match("/http:\/\/image01\.otto\.de:80\/pool\/AlbaModaDe\/de_DE\/images\/albamoda_formatb\/(\d+).jpg/imsU", $fc2, $mt);
-			$first_im = $mt[1];
+			$pattern = "/SRC=\"http\:\/\/image01\.otto\.de\:80\/pool\/albamoda_formatK\/(.*)\.jpg\"/U";
+			preg_match_all($pattern, $fc, $mt, PREG_PATTERN_ORDER);
 
-			$image_ok = $this->get_image(array(
-				'source' => 'http://image01.otto.de:80/pool/AlbaModaDe/de_DE/images/albamoda_formatb/'.$first_im.'.jpg',
-				'format' => 2,
+			$image_name = $mt[1][0];
+			
+			echo "[ ALBAMODA ] Image files: ";
+
+			$small_image_src = 'http://image01.otto.de:80/pool/albamoda_formatL/'.$image_name.'.jpg';
+			$small_image_ok = $this->get_image(array(
+				'source' => $small_image_src,
+				'format' => SMALL_PICTURE,
 				'otto_import' => $import_obj,
 				'debug' => true
 			));
-			if ($image_ok)
+
+			if ($small_image_ok)
 			{
-				// download the big version of the image too:
-				$this->get_image(array(
-					'source' => 'http://image01.otto.de:80/pool/AlbaModaDe/de_DE/images/albamoda_formata//'.$first_im.'.jpg',
-					'format' => 1,
-					'otto_import' => $import_obj,
-					'debug' => true
-				));
+				echo "<a href=\"".$small_image_src."\">[ Small image ]</a> ";
+			}
+			else
+			{
+				echo "<a href=\"".$small_image_src."\">[ Getting small image failed ]</a> ";
 			}
 
-			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
+			// download the big version of the image too:
+			$big_image_src = 'http://image01.otto.de:80/pool/albamoda_formatK/'.$image_name.'.jpg';
+			$big_image_ok = $this->get_image(array(
+				'source' => $big_image_src,
+				'format' => BIG_PICTURE,
+				'otto_import' => $import_obj,
+				'debug' => true
+			));
+
+			if ($big_image_ok)
+			{
+				echo "<a href=\"".$big_image_src."\">[ Big image ]</a> ";
+			}
+			else
+			{
+				echo "<a href=\"".$big_image_src."\">[ Getting big image failed ]</a> ";
+			}
+		
+			echo " <br />\n";
+
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$image_name' AND nr = '1' AND pcode = '$pcode'", "pcode");
 			if (!$imnr)
 			{
-				echo "[ ALBAMODA ] insert new image $first_im <br>\n";
+				echo "[ ALBAMODA ] Database: insert new image $image_name <br>\n";
 				flush();
 				$q = ("
 					INSERT INTO 
 						otto_prod_img(pcode, nr,imnr, server_id) 
-						values('$pcode','1','$first_im', 4)
+						values('$pcode','1','$image_name', 4)
 				");
-				//echo "q = $q <br>";
 				$this->db_query($q);
-				$this->added_images[] = $first_im;
+			// seems it is not used, so lets start to remove this to get removed unused code -- dragut@10.03.2008 
+			//	$this->added_images[] = $image_name;
+			}
+			else
+			{
+				echo "[ ALBAMODA ] Database: Image [".$image_name."] is already in database <br />\n";
+			}
+
+			////
+			// Albamoda does have videos as well, so lets improt them too:
+
+			$pattern = "/so\.addVariable\(\"flv_file\", \"(.*\.flv)\"\);/";
+			preg_match($pattern, $fc, $mt);
+			$file_url = $mt[1];
+			if (!empty($file_url))
+			{
+				$parts = explode('/', $file_url);
+				$filename = $parts[count($parts) - 2];
+
+				$video_download_result = $this->get_video(array(
+					'source' => $file_url,
+					'filename' => $filename.'.flv',
+					'otto_import' => $import_obj
+				));
+				if ($video_download_result !== false)
+				{
+					echo "[ ALBAMODA ] Video: <a href=\"".$file_url."\">".$filename."</a><br />\n";
+					$this->db_query("update otto_prod_img set video = '".addslashes(strip_tags($filename)).".flv' where pcode = '".$pcode."'");
+				}
 			}
 		}
 		return true;
@@ -5589,7 +5660,14 @@ class otto_import extends class_base
 	// otto_import - otto_import object's instance (aw object)
 	function get_video($arr)
 	{
-		$filename = basename($arr['source']);
+		if (!empty($arr['filename']))
+		{
+			$filename = $arr['filename'];
+		}
+		else
+		{
+			$filename = basename($arr['source']);
+		}
 
 		if (empty($filename) || empty($arr['otto_import']))
 		{
