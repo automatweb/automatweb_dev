@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.57 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.58 2008/03/12 13:12:42 markop Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -20,16 +20,16 @@
 @default method=serialize
 
 @property cart_type type=chooser
-@caption Ostukorvi tüüp
+@caption Ostukorvi t&uuml;&uuml;p
 
 @property multi_items type=checkbox ch_value=1
-@caption Ostukorvis võib olla mitu sama ID-ga toodet
+@caption Ostukorvis v&otilde;ib olla mitu sama ID-ga toodet
 
 @property show_unconfirmed type=checkbox ch_value=1
-@caption Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi
+@caption N&auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi
 
 @property no_change_button type=checkbox ch_value=1
-@caption Ära kuva tellimiskeskkonnas toote kõrvale "Muuda" nuppu
+@caption &Auml;ra kuva tellimiskeskkonnas toote k&otilde;rvale "Muuda" nuppu
 
 @property only_prods type=checkbox ch_value=1
 @caption Ostukorvis on tooted ilma pakendite, piltide jms
@@ -39,6 +39,8 @@
 
 @property data_form type=relpicker reltype=RELTYPE_ORDER_FORM
 @caption Tellija andmete vorm
+
+
 
 @property data_form_person type=select
 @caption Isiku nime element andmete vormis
@@ -66,9 +68,6 @@
 
 @property chart_final_template type=select
 @caption Ostukorvi l&ouml;ppvaate template
-
-@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
-@caption Pangamakse objekt
 
 @property show_prod_and_package type=checkbox ch_value=1
 @caption N&auml;ita selgituses toodet/paketti
@@ -159,6 +158,22 @@
 @caption Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele
 
 
+@groupinfo payment_settings caption="Pangamakse seaded"
+@default group=payment_settings
+
+	@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
+	@caption Pangamakse objekt
+
+	@property bank_id type=select
+	@caption Panga muutuja
+
+	@property orderer_mail type=select
+	@caption Tellija mailiaadressi muutuja
+
+	@property bank_lang type=select
+	@caption Panga keele muutuja
+
+
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
 
@@ -200,10 +215,22 @@ class shop_order_center extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bank_id":
+			case "orderer_mail":
+			case "bank_lang":
+				$cx = get_instance("cfg/cfgutils");
+				$props = $cx->load_class_properties(array(
+					"clid" => CL_REGISTER_DATA,
+				));
+				foreach($props as $p => $dsadsad)
+				{
+					$prop["options"][$p] = $p;
+				}
+				break;
 			case "cart_type":
 				$prop["options"] = array(
-					0 => t("Sessionipõhine"),
-					1 => t("Kasutajapõhine"),
+					0 => t("Sessionip&otilde;hine"),
+					1 => t("Kasutajap&otilde;hine"),
 				);
 				break;
 				

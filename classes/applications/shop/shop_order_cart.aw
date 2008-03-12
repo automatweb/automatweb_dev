@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.70 2008/02/06 10:03:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.71 2008/03/12 13:12:42 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -16,6 +16,9 @@
 
 @property email_subj type=textbox field=meta method=serialize
 @caption Tellimuse e-maili subjekt
+
+@property subject_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
+@caption Subjekti kontroller
 
 @property update_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
 @caption Korvi uuendamise kontroller
@@ -314,6 +317,10 @@ class shop_order_cart extends class_base
 		if(!$soce_arr["bank"])
 		{
 			$soce_arr["bank"] = $_SESSION["cart"]["user_data"]["user9"];
+			if($oc->prop("bank_id"))
+			{
+				$soce_arr["bank"] = $uta[$order_center->prop("bank_id")];
+			}
 			if(!$soce_arr["bank"]) $need_to_choose_default_bank = 1;
 		}
 		if(is_oid($bank_payment))
@@ -795,7 +802,7 @@ class shop_order_cart extends class_base
 			}
 		}
 		
-		//kui pank ise teeb päringu tagasi, siis võtab miski muu keeele milles maili saata, et järgnev siis selle vastu
+		//kui pank ise teeb paringu tagasi, siis votab miski muu keeele milles maili saata, et jargnev siis selle vastu
 		if($oc->meta("lang_id"))
 		{
 			$params["lang_id"] = $oc->meta("lang_id");
@@ -916,7 +923,7 @@ class shop_order_cart extends class_base
 		}
 		return $ret;
 	}
-		/* siin pannakse andmed lõplikku tabelisse */
+		/* siin pannakse andmed loplikku tabelisse */
 	function get_item_in_cart($arr)
 	{
 		$it = !$arr["it"] ? 0 : $arr["it"];
@@ -1669,7 +1676,17 @@ class shop_order_cart extends class_base
 		$soc = get_instance(CL_SHOP_ORDER_CART);
 		$cart = $soc->get_cart(obj($oc));
 		$user_data = $cart["user_data"];
-		$bank = $user_data["user9"];$bank_lang=$user_data["user10"];
+		$bank = $user_data["user9"];
+		if($oc->prop("bank_id"))
+		{
+			$bank = $uta[$order_center->prop("bank_id")];
+		}
+		$bank_lang=$user_data["user10"];
+		if($oc->prop("bank_lang"))
+		{
+			$bank_lang = $uta[$order_center->prop("bank_lang")];
+		}
+
 		//if(aw_global_get(uid) == "struktuur"){arr($_SESSION);arr($user_data);arr($GLOBALS);die();}
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
@@ -1698,7 +1715,7 @@ class shop_order_cart extends class_base
 		
 		if(is_oid($arr["oc"]) && strlen($expl." (".$arr["oc"].")") < 70)
 		{
-			$expl.= " (".$arr["oc"].")"; //et tellimiskeskkonna objekt ka näha jääks
+			$expl.= " (".$arr["oc"].")"; //et tellimiskeskkonna objekt ka naha jaaks
 		}
 		
 //		if(aw_global_get("uid") == "struktuur"){arr($_SESSION["bank_payment"]["url"]);arr($expl); die();}

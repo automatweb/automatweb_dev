@@ -25,7 +25,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
-            <caption>Ostukorvi t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Ostukorvi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>multi_items</name>
@@ -35,7 +35,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Ostukorvis v&amp;otilde;ib olla mitu sama ID-ga toodet</caption>
+            <caption>Ostukorvis v&amp;amp;otilde;ib olla mitu sama ID-ga toodet</caption>
       </property>
       <property>
             <name>show_unconfirmed</name>
@@ -45,7 +45,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
+            <caption>N&amp;amp;auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
       </property>
       <property>
             <name>no_change_button</name>
@@ -55,7 +55,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;Auml;ra kuva tellimiskeskkonnas toote k&amp;otilde;rvale &amp;quot;Muuda&amp;quot; nuppu</caption>
+            <caption>&amp;amp;Auml;ra kuva tellimiskeskkonnas toote k&amp;amp;otilde;rvale &amp;quot;Muuda&amp;quot; nuppu</caption>
       </property>
       <property>
             <name>only_prods</name>
@@ -170,16 +170,6 @@
             <method>serialize</method>
             <type>select</type>
             <caption>Ostukorvi l&amp;amp;ouml;ppvaate template</caption>
-      </property>
-      <property>
-            <name>bank_payment</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_BANK_PAYMENT</reltype>
-            <caption>Pangamakse objekt</caption>
       </property>
       <property>
             <name>show_prod_and_package</name>
@@ -394,6 +384,43 @@
             <store>no</store>
             <caption>Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele</caption>
       </property>
+      <property>
+            <name>bank_payment</name>
+            <group>payment_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BANK_PAYMENT</reltype>
+            <caption>Pangamakse objekt</caption>
+      </property>
+      <property>
+            <name>bank_id</name>
+            <group>payment_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Panga muutuja</caption>
+      </property>
+      <property>
+            <name>orderer_mail</name>
+            <group>payment_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Tellija mailiaadressi muutuja</caption>
+      </property>
+      <property>
+            <name>bank_lang</name>
+            <group>payment_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Panga keele muutuja</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -423,6 +450,9 @@
             <orgfieldmap>
                   <caption>Firma andmete kaart</caption>
             </orgfieldmap>
+            <payment_settings>
+                  <caption>Pangamakse seaded</caption>
+            </payment_settings>
       </groupinfo>
       <tableinfo>
             <aw_shop_order_center>
