@@ -170,6 +170,7 @@ class quickmessagebox_obj extends _int_object
 			{
 				$box = new object();
 				$box->set_class_id(CL_QUICKMESSAGEBOX);
+				$box->set_parent($user->id());
 				$box->set_prop("owner", $user->id());
 				$box->save();
 				$box->connect(array(
