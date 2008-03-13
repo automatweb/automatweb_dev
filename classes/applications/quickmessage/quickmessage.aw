@@ -12,6 +12,7 @@
 
 	@property to type=hidden datatype=int
 	@property from type=hidden datatype=int
+	@property box type=hidden datatype=int
 
 	@property from_display type=text store=no editonly=1
 	@caption From
@@ -43,9 +44,28 @@ class quickmessage extends class_base
 		return PROP_OK;
 	}
 
+	function _get_box($arr)
+	{
+		$status = PROP_OK;
+		$box = $arr["request"]["box"];
+
+		if (!is_oid($box))
+		{
+			$status = PROP_ERROR;
+			$arr["prop"]["error"] = t("Specified messagebox id is invalid.");
+		}
+		else
+		{
+			$arr["prop"]["value"] = (int) $box;
+		}
+
+		return $status;
+	}
+
 	function _set_to($arr)
 	{
 		$arr["obj_inst"]->set_prop("to", explode(",", $arr["request"]["to_display"]));
+		return PROP_OK;
 	}
 
 	function submit($arr)
@@ -75,6 +95,7 @@ class quickmessage extends class_base
 			switch($field)
 			{
 				case "from":
+				case "box":
 					$this->db_add_col($table, array(
 						"name" => $field,
 						"type" => "int"

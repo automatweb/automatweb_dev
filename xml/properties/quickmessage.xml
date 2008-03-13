@@ -24,6 +24,14 @@
             <field>from</field>
       </property>
       <property>
+            <name>box</name>
+            <table>quickmessages</table>
+            <group>general</group>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>box</field>
+      </property>
+      <property>
             <name>from_display</name>
             <table>quickmessages</table>
             <group>general</group>

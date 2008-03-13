@@ -89,7 +89,7 @@ class quickmessagebox_obj extends _int_object
 			"class_id" => CL_QUICKMESSAGE,
 			"limit" => $limit,
 			"lang_id" => array(),
-			"from" => aw_global_get("uid_oid")
+			"box" => $this->id()
 		));
 		return $ol;
 	}

@@ -180,7 +180,8 @@ class quickmessagebox extends class_base
 
 		$url = $this->mk_my_orb("new", array(
 			"return_url" => get_ru(),
-			"parent" => $arr["obj_inst"]->id()
+			"parent" => $arr["obj_inst"]->id(),
+			"box" => $arr["obj_inst"]->id()
 		), "quickmessage");
 
 		$toolbar->add_button(array(

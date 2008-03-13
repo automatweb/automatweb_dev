@@ -30,14 +30,14 @@ class quickmessage_obj extends _int_object
 
 	public function get_to_options()
 	{//!!! teha ymber, et msgbox v6etaks current useri kaudu
-		if (!$_GET["parent"])
+		if (!$_GET["box"])
 		{
 			return;
 		}
 
 		try
 		{
-			$msgbox = new object($_GET["parent"]);
+			$msgbox = new object($_GET["box"]);
 		}
 		catch (Exception $e)
 		{
