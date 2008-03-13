@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.237 2008/03/13 13:26:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.238 2008/03/13 14:16:04 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1744,7 +1744,7 @@ class room extends class_base
                 while($x<20)
                 {//arr(date("d-m-Y h:i",($weekstart + 8000)));
                         $url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
-                        $options[$url] = date("W" , ($weekstart + 3600)) . ". " .date("d.m.Y", ($weekstart + 3600)) . " - " . date("d.m.Y", ($weekstart+604800));//see +4k on selleks, et kellakeeramise jama puhul üle tunni ka mõjuks
+                        $options[$url] = date("W" , ($weekstart + 3600)) . ". " .date("d.m.Y", ($weekstart + 3600)) . " - " . date("d.m.Y", ($weekstart+604800));//see +4k on selleks, et kellakeeramise jama puhul yle tunni ka mojuks
                         if($arr["request"]["start"] == $weekstart) $selected = $url;
                         $weekstart = $weekstart + 604800;
                         $x++;
@@ -5365,6 +5365,16 @@ class room extends class_base
 			{
 				window.location.reload();
 			}
+	
+			function confirm_delete(field,url,change_var)
+			{
+				fRet=confirm("'.t("Olete kindel et kustutada ").":".'" + document.getElementById(field).options[document.getElementById(field).selectedIndex].text);
+				if(fRet)
+				{
+					window.location.href=url + "&" + change_var + "="+document.getElementById(field).value;
+				}
+				;
+			}
 		';
 	}
 
@@ -5922,6 +5932,16 @@ class room extends class_base
 	
 	function get_people_work_table($arr)
 	{
+		if($this->can("view" , $_GET["delete_scenario"]))
+		{
+			$del_c = obj($_GET["delete_scenario"]);
+			$del_c->delete();
+			die(
+				'<script type="text/javascript">
+				history.go(-1);
+				</script>'
+			);
+		}
 		$working_days = $arr["obj_inst"]->meta("working_days");
 		classload("vcl/table");
 		if($arr["month"])
@@ -6004,6 +6024,12 @@ class room extends class_base
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
 					"title" => t("Muuda")
 			));
+			$delete_sc = html::href(array(
+				"url" => 'javascript:confirm_delete("scenario['.$po->id().'][scenario]","'.aw_url_change_var('return_url' , '').'","delete_scenario")',
+				//	window.location.href="'.aw_url_change_var("return_url" , "").'&delete_scenario="+document.getElementById("scenario[420][scenario]").value;',
+				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
+				"title" => t("Kustuta")
+			));
 			$data = array();
 			$data["name"] = $po->name();
 			$data["start"] = html::date_select(array(
@@ -6019,7 +6045,7 @@ class room extends class_base
 				"name" => "scenario[".$po->id()."][scenario]",
 				"value" => $person_scenario,
 				"options" => $soptions,
-			)).$new_sc.$search_sc.($person_scenario ? $edit_sc : "");
+			)).$new_sc.$search_sc.($person_scenario ? $edit_sc : "").$delete_sc;
 			$data["oid"] = $po->id();
 			$t->define_data($data);
 		}
