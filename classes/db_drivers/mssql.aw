@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.10 2008/02/14 21:21:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.11 2008/03/13 09:20:49 voldemar Exp $
 // mysql.aw - MySQL draiver
 /*
 @classinfo  maintainer=kristo
@@ -526,6 +526,16 @@ class mssql
 		{
 			$len = '('.$length.')';
 		}
+
+		// quote column name
+		$col_name = explode(".", $name);
+		foreach ($col_name as $key => $name_part)
+		{
+			$col_name[$key] = "[" . $name_part . "]";
+		}
+		$name = implode(".", $col_name);
+
+		// exec q
 		$q = "ALTER TABLE $tbl ADD $name $type $len $null ".($default == '' ? '' : "default '$default'")." $extra ";
 		$this->db_query($q);
 	}

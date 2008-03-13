@@ -579,6 +579,16 @@ class mysql
 		{
 			$len = '('.$length.')';
 		}
+
+		// quote column name
+		$col_name = explode(".", $name);
+		foreach ($col_name as $key => $name_part)
+		{
+			$col_name[$key] = "`" . $name_part . "`";
+		}
+		$name = implode(".", $col_name);
+
+		// exec q
 		$q = "ALTER TABLE $tbl ADD $name $type $len $null ".($default == '' ? '' : "default '$default'")." $extra ";
 		$this->db_query($q);
 	}
