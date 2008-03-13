@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.27 2008/03/04 09:21:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.28 2008/03/13 11:22:25 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -191,7 +191,6 @@ class orb extends aw_template
 
 		// check acl
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $vars);
-
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
 			//$t = new $class;
@@ -253,6 +252,10 @@ class orb extends aw_template
 		}
 		else
 		{
+			if ($_SERVER["REQUEST_METHOD"] == "POST")
+			{
+				$params = $_POST;
+			}
 			// required arguments
 			$required = $orb_defs[$class][$action]["required"];
 			$optional = $orb_defs[$class][$action]["optional"];

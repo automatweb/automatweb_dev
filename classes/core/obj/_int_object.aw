@@ -1171,6 +1171,7 @@ class _int_object
 						}
 					}
 					else
+					if (is_oid($this->id()))
 					{
 						$rels = new object_list($this->connections_from(array(
 							"type" => $pd["reltype"]

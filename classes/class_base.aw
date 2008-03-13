@@ -801,7 +801,7 @@ class class_base extends aw_template
 			"attr" => "method",
 		));
 
-		$method = "POST";
+		$method = "post";
 
 		if (!empty($form_submit_method))
 		{
@@ -1019,6 +1019,7 @@ class class_base extends aw_template
 	**/
 	function submit($args = array())
 	{
+		$form_data = null;
 		// since submit should never change the return url, make sure we get at it later
 		$real_return_url = $args["return_url"];
 

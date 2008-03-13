@@ -1,9 +1,34 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Ruumid (rooms) caption"] = "Rooms";
+$GLOBALS["TRANS"]["Omaduse N&auml;ita hindu valuutades (prices) caption"] = "Show prices in currencies";
+$GLOBALS["TRANS"]["Omaduse Ruume saab samal ajal broneerida mitu (multiple_reservations) caption"] = "Reserve several rooms at the same time";
 $GLOBALS["TRANS"]["Omaduse Broneeringu template (reservation_template) caption"] = "Reservation template";
+$GLOBALS["TRANS"]["Omaduse Kinnitusmaili template (ver_mail_template) caption"] = "Confirmation e-mail template";
+$GLOBALS["TRANS"]["Omaduse Broneerimise katkestamise url (revoke_url) caption"] = "Reservation cancellation URL";
+$GLOBALS["TRANS"]["Omaduse Tasemed (levels) caption"] = "Levels";
+$GLOBALS["TRANS"]["Omaduse T&otilde;lgi (trans) caption"] = "Translate";
+$GLOBALS["TRANS"]["Omaduse Meili from aadress (order_mail_from) caption"] = "E-mail from address";
+$GLOBALS["TRANS"]["Omaduse Meili from nimi (order_mail_from_name) caption"] = "E-mail from";
+$GLOBALS["TRANS"]["Omaduse Meili subjekt (order_mail_subj) caption"] = "E-mail subject";
+$GLOBALS["TRANS"]["Omaduse Meili sisu legend (order_mail_legend) caption"] = "Legend for e-mail content";
+$GLOBALS["TRANS"]["Omaduse Kellele tellimuse kohta meil saata (order_mail_to) caption"] = "Send e-mails about reservations to";
+$GLOBALS["TRANS"]["Omaduse Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse (order_mail_groups) caption"] = "Send e-mail about reservations made by user groups";
+$GLOBALS["TRANS"]["Grupi T&otilde;lgi (trans) pealkiri"] = "Translate";
+$GLOBALS["TRANS"]["Grupi Tellimusmeil (order_email) pealkiri"] = "Reservation e-mail";
+$GLOBALS["TRANS"]["Seose Ruum mida broneerida (RELTYPE_ROOM) tekst"] = "Room to reserve";
+$GLOBALS["TRANS"]["sisu tuleb common/room/preview.tpl failist"] = "content from file common/room/preview.tpl";
 $GLOBALS["TRANS"]["Template fail peab asuma kataloogis :"] = "Template file should be in folder:";
 $GLOBALS["TRANS"]["Tase"] = "Level";
 $GLOBALS["TRANS"]["Etapi nimi"] = "Stage name";
 $GLOBALS["TRANS"]["Template"] = "Template";
+$GLOBALS["TRANS"]["Vali enne jätkamist sobiv aeg!"] = "Before continuing, please select suitable time";
 $GLOBALS["TRANS"]["Vali enne j&auml;tkamist sobiv aeg!"] = "Before continuing, please select suitable time";
+$GLOBALS["TRANS"]["Kinnitatud"] = "Confirmed";
+$GLOBALS["TRANS"]["Kinnitamata"] = "Unconfirmed";
+$GLOBALS["TRANS"]["Nimi on kohustuslik"] = "Name is required";
+$GLOBALS["TRANS"]["Telefon on kohustuslik"] = "Phone is required";
+$GLOBALS["TRANS"]["E-Mail on kohustuslik"] = "E-mail is required";
+$GLOBALS["TRANS"]["Salvesta"] = "Save";
+$GLOBALS["TRANS"]["Broneeringut ei &otilde;nnestunud kinnitada"] = "Unsuccessful confirmation";
+$GLOBALS["TRANS"]["Broneering: %s"] = "Reservation: %s";
 ?>

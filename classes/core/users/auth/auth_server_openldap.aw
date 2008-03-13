@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.6 2008/01/31 13:54:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.7 2008/03/13 11:22:28 kristo Exp $
 // auth_server_openldap.aw - Autentimisserver OpenLDAP 
 /*
 
@@ -146,6 +146,7 @@ class auth_server_openldap extends class_base
 			return array(false, sprintf(t("Ei saanud &uuml;hendust LDAP serveriga %s"), $server->prop("server")));
 		}
 		ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
+		ldap_set_option($res, LDAP_OPT_NETWORK_TIMEOUT, 3);
 
 		$uid = $credentials["uid"];
 

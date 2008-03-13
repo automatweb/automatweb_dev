@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.41 2008/02/14 15:08:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.42 2008/03/13 11:22:01 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -817,7 +817,7 @@ class admin_if extends class_base
 			if ($row["class_id"] == CL_MP3)
 			{
 				$s_play_url = str_replace("automatweb/","",$this->mk_my_orb("play", array("id" => $row["oid"]),"mp3", false,true,"/"))."/".str_replace("/","_","fail.mp3");
-				$s_mp3_onclick = 'myRef = window.open("'.$s_play_url.'","AW MP3 Mängija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")';
+				$s_mp3_onclick = 'myRef = window.open("'.$s_play_url.'","AW MP3 M&auml;ngija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")';
 				$caption = parse_obj_name($row_o->trans_get_val("name"));
 				$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'" onClick=\''.$s_mp3_onclick.'\'>'.$caption."</a>";
 			}
@@ -1098,7 +1098,6 @@ class admin_if extends class_base
 	function save_if($arr)
 	{
 		extract($arr);
-
 		if (is_array($old))
 		{
 			foreach($old as $column => $coldat)

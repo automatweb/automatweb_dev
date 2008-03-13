@@ -123,7 +123,7 @@ $fh = fopen($myFile, 'a');
 fwrite($fh, serialize($_SESSION["bank_return"]["data"])."\n");
 fclose($fh);
 
-//esimene on hansapanga, EYP, sampo ja krediidipanga positiivne vastus, teine nordea(ükskõik milline.. et negatiivne peaks mujale minema)... kolmas krediitkaardikeskuse
+//esimene on hansapanga, EYP, sampo ja krediidipanga positiivne vastus, teine nordea(yksk6ik milline.. et negatiivne peaks mujale minema)... kolmas krediitkaardikeskuse
 	if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1101  || $_POST["VK_SERVICE"] == 1101 || $_GET["SOLOPMT-RETURN-VERSION"] == "0002"||  ($_GET["action"] == "afb" && $_GET["respcode"] == "000")
 	|| ($_SESSION["bank_return"]["data"]["action"] == "afb" && $_SESSION["bank_return"]["data"]["respcode"] == "000")
 	)
@@ -131,7 +131,7 @@ fclose($fh);
 	$url = $_SESSION["bank_payment"]["url"];
 	if(!$url)
 	{
-		if(!$this->can("view" , $id))
+		if(!$bi->can("view" , $id))
 		{
 			die("Kui sa seda n&auml;ed, siis l&auml;ks midagi pahasti");
 		}

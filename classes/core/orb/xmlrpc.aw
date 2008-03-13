@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.3 2008/01/31 13:53:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.4 2008/03/13 11:22:25 kristo Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -93,10 +93,17 @@ class xmlrpc extends aw_template
 			}
 			else
 			{
-				$this->raise_error(ERR_XML_PARSER_ERROR,sprintf(t("Viga XML-RPC p2ringu vastuse dekodeerimisel: %s!"), xml_error_string($err)), true,false);
+				$lines = explode("\n", $xml);
+				echo htmlspecialchars($lines[xml_get_current_line_number($parser)-1])." <br>";
+				$this->raise_error(ERR_XML_PARSER_ERROR,sprintf(t("Viga XML-RPC p2ringu vastuse dekodeerimisel: %s on line %s!"), xml_error_string($err),xml_get_current_line_number($parser)), true,false);
 			}
 		}
 		xml_parser_free($parser); 
+
+		foreach($this->vals as $k => $v)
+		{
+			$this->vals[$k]["value"] = iconv("utf-8", aw_global_get("charset")."//IGNORE", $v["value"]);
+		}
 
 		reset($this->vals);
 		list(,$tmp) = each($this->vals);
@@ -190,6 +197,7 @@ class xmlrpc extends aw_template
 		{
 			$server = substr($server,7);
 		};
+
 		$fp = fsockopen($server,$port,&$this->errno, &$this->errstr, 5);
 		$op = "POST $handler HTTP/1.0\r\n";
 		$op .= "User-Agent: AutomatWeb\r\n";
@@ -201,6 +209,7 @@ class xmlrpc extends aw_template
 		}
 		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
 		$op .= $request;
+
 		if (!fputs($fp, $op, strlen($op))) 
 		{
 			$this->errstr="Write error";
@@ -211,6 +220,7 @@ class xmlrpc extends aw_template
 		{
 			$ipd.=$data;
 		}
+
 		fclose($fp);
 		list($headers,$data) = explode("\r\n\r\n",$ipd);
 		return $data;
@@ -330,7 +340,7 @@ class xmlrpc extends aw_template
 
 	function encode_return_data($dat)
 	{
-		$xml  = "<?xml version=\"1.0\"?>\n";
+		$xml  = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\"?>\n";
 		$xml .= "<methodResponse>\n";
 		$xml .= "\t<params>\n";
 		$xml .= "\t\t<param>\n";

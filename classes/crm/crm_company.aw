@@ -5241,7 +5241,7 @@ class crm_company extends class_base
 		enter_function("get_my_actions:4");
 		foreach($this->get_my_offers($range) as $ofid)
 		{
-			if ($this->can("view", $c["to"]))
+			if ($this->can("view", $ofid))
 			{
 				$ret[] = $ofid;
 			}

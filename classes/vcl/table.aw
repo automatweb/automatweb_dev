@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.111 2008/01/31 13:55:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.112 2008/03/13 11:22:34 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -1148,7 +1148,7 @@ class aw_table extends aw_template
 
 					// moodustame celli
 					$rowspan = isset($this->actionrows) ? $this->actionrows : $rowspan;
-					//järgnev peaks suutma tulpi kokku liita ja järgmised vastavald ära blokeerima
+					//j2rgnev peaks suutma tulpi kokku liita ja j2rgmised vastavald 2ra blokeerima
 					if(isset($this->rowspans[$v1["name"]]) && $this->rowspans[$v1["name"]]>1)
 					{
 						$this->rowspans[$v1["name"]]--;
@@ -2488,7 +2488,8 @@ class aw_table extends aw_template
 					$args = array (
 						"name" => $filter_name,
 						"options" => $filter_values,
-						"onchange" => "xchanged=1;window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text",
+						"class" => "filterSelect",
+						"onchange" => "xchanged=1;window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text"
 					);
 					$filter_contents = html::select ($args);
 				}
@@ -2663,12 +2664,12 @@ class vcl_table extends aw_table
 			}
 		}
 
-		// tagastame selle käki
+		// tagastame selle k2ki
 		return '<div id="tablebox">
 		    <div class="pais">
 			<div class="caption">'.$this->table_caption.'</div>
 			<div class="navigaator">
-				<!-- siia tuleb ühel ilusal päeval lehtede kruttimise navigaator, homseks seda vaja pole, seega las see div jääb tühjaks -->
+				<!-- siia tuleb yhel ilusal p2eval lehtede kruttimise navigaator, homseks seda vaja pole, seega las see div j22b tyhjaks -->
 				'.$pageselector_top.'
 				
 			</div>

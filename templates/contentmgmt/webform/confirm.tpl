@@ -11,7 +11,7 @@ This is an example template file of the webforms confirmation page.
 <p>
 {VAR:uservar1_caption}: {VAR:uservar1} 
 </p>
-<form method="post" action="orb.aw">
+<form method="post" action="{VAR:baseurl}/orb.aw">
 
 {VAR:reforb}
 {VAR:confirmed_button} {VAR:not_confirmed_button}

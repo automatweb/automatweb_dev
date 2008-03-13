@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.48 2008/01/31 13:52:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.49 2008/03/13 11:22:13 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -28,7 +28,7 @@
 @property show_non_cf_fields type=checkbox ch_value=1
 @caption N&auml;ita ka v&auml;lju, mis ei ole seadete vormis
 
-@groupinfo props caption="Väljad"
+@groupinfo props caption="V&auml;ljad"
 
 @property choose_fields type=table group=props no_caption=1
 @caption Vali omadused
@@ -187,7 +187,7 @@ class cb_search extends class_base
 		));
 		$t->define_field(array(
 			"name" => "in_form",
-			"caption" => t("Näita vormis"),
+			"caption" => t("N&auml;ita vormis"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -202,7 +202,7 @@ class cb_search extends class_base
 		));
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => t("Tüüp"),
+			"caption" => t("T&uuml;&uuml;p"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -690,7 +690,10 @@ class cb_search extends class_base
 				if ($this->__tdata["__defaultsort"] != "")
 				{
 					$sp = $f_props[$this->__tdata["__defaultsort"]];
-					$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ASC ";
+					if ($sp)
+					{
+						$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ASC ";
+					}
 				}
 				else
 				{

@@ -462,6 +462,10 @@ div.menu a.menuItem_sub span.menuItemText {background: url(/automatweb/images/ar
 	text-transform: uppercase;
 	background-color: #FFFFFF;
 }
+.filterSelect {
+font-size: 10px;
+}
+
 .clear {
 	clear: both
 }

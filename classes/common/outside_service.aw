@@ -72,10 +72,10 @@ class outside_service extends class_base
 		{
 			return aw_ini_get("room_reservation.unsuccessful_bank_payment_url");
 		}
-
+		aw_disable_acl();
 		$o = obj($arr["id"]);
-		
 		$url = $o->prop("url");
+		aw_restore_acl();
 		header("Location:".$url);
 		die();
 	}

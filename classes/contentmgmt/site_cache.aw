@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.50 2008/03/05 09:03:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.51 2008/03/13 11:22:20 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -24,6 +24,7 @@ class site_cache extends aw_template
 		{
 			$si->pre_start_display($arr);
 		}
+
 		//if (aw_ini_get("menuedit.content_from_class_base") == 1 && aw_global_get("section") != aw_ini_get("frontpage"))
 		if (aw_ini_get("menuedit.content_from_class_base") == 1)
 		{

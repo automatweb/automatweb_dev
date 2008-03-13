@@ -2068,7 +2068,7 @@ class bug_tracker extends class_base
 
 		$t->define_field(array(
 			"name" => "bug_priority",
-			"caption" => t("Prioriteet"),
+			"caption" => t("Pri"),
 			"sortable" => 1,
 			"numeric" => 1,
 			"filter" => array(

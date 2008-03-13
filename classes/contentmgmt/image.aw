@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.8 2008/03/12 21:23:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.9 2008/03/13 11:22:20 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -217,7 +217,7 @@ class image extends class_base
 				$o = obj($id);
 				$row["name"] = $o->trans_get_val("name");
 				$row["comment"] = $o->trans_get_val("comment");
-				$row["link"] =$ $o->trans_get_val("link");
+				$row["link"] = $o->trans_get_val("link");
 				$row["meta"]["author"] = $o->trans_get_val("author");
 				$row["meta"]["alt"] = $o->trans_get_val("alt");
 				if ($row["meta"]["alt"] == "" && aw_ini_get("image.default_alt_text_is_name"))
@@ -449,9 +449,9 @@ class image extends class_base
 				"bi_link" => $bi_link,
 				"author" => $idata["meta"]["author"],
 				"docid" => isset($args["oid"]) ? (is_object($args["oid"]) ? $args["oid"]->id() : $args["oid"]) : null,
-				"doc_link" => $dd->get_doc_link(obj($args["oid"])),
+				"doc_link" => $d->get_doc_link(obj($args["oid"])),
 				"image_id" => $idata["oid"],
-				"document_link" => $dd->get_doc_link(obj($f["source"])),
+				"document_link" => $d->get_doc_link(obj($f["source"])),
 				"comments" => $num_comments
 			);
 			$tmp = new aw_template;
