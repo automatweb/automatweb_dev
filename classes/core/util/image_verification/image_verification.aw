@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.7 2008/01/31 13:54:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.8 2008/03/13 09:43:33 hannes Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
@@ -176,6 +176,8 @@ class image_verification extends class_base
 
 		// output the image
 		header('Content-type: image/png');
+		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 		imagepng($im);
 		imagedestroy($im);
 	}
