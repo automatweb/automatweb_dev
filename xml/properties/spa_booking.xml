@@ -82,7 +82,10 @@
             </EXTRA_PROD>
             <SELLER>
                   <value>5</value>
-                  <clid>CL_CRM_PERSON</clid>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
             </SELLER>
             <MAIN_PERSON>

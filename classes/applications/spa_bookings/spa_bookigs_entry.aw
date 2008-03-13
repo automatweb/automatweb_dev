@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.77 2008/03/12 21:23:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.78 2008/03/13 16:05:19 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -2195,6 +2195,24 @@ $t->set_sortable(false);
 					break;
 
 				case "pk_tb_name":
+					foreach($_GET["rvs"] as $rvid)
+					{
+						if($this->can("view" , $rvid))
+						{
+							$rvo = obj($rvid);
+							$c = new connection();
+							$conns = $c->find(array(
+								"from.class_id" => CL_SPA_BOOKING,
+								"to" => $rvo->id()
+							));
+							if (count($conns))
+							{
+								$con = reset($conns);
+								$rvo = obj($con["from"]);
+								$val = $rvo->prop("seller");
+							}
+						}
+					}
 					$type = "select";
 					$capt = t("Reisib&uuml;roo nimi");
 					$opts = array("" => t("--vali--"));
@@ -2414,6 +2432,11 @@ $t->set_sortable(false);
 				{
 					$rvo->set_prop("package", $arr["ud"]["pk_name"]);
 				}
+				if ($arr["ud"]["pk_tb_name"] && $rvo->prop("seller") != $arr["ud"]["pk_tb_name"])
+				{
+					$rvo->set_prop("seller", $arr["ud"]["pk_tb_name"]);
+				}
+
 				if (($pka = date_edit::get_timestamp($arr["ud"]["pk_arrival"])) != -1 && $rvo->prop("start") != $pka)
 				{
 					$rvo->set_prop("start", $pka);

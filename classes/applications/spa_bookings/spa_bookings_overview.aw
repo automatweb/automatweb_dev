@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.47 2008/03/13 13:26:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.48 2008/03/13 16:05:19 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1024,7 +1024,7 @@ class spa_bookings_overview extends class_base
 		}
 		list($y, $m, $d) = explode("-", $p->prop("birthday"));
 		$this->vars(array(
-			"bureau" => $b->createdby(),
+			"bureau" => $b->prop("seller")?$b->prop("seller.name"):$b->createdby(),
 			"person" => $p->trans_get_val("name"),
 			"package" => $b->trans_get_val_str("package"),
 			"from" => date("d.m.Y", $_from),

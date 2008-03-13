@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.10 2008/03/04 08:12:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.11 2008/03/13 16:05:19 markop Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -37,7 +37,7 @@
 @reltype EXTRA_PROD value=4 clid=CL_SHOP_PRODUCT
 @caption Lisateenus
 
-@reltype SELLER value=5 clid=CL_CRM_PERSON
+@reltype SELLER value=5 clid=CL_CRM_PERSON,CL_CRM_COMPANY
 @caption M&uuml;&uuml;ja
 
 @reltype MAIN_PERSON value=6 clid=CL_CRM_PERSON
