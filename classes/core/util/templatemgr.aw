@@ -1,7 +1,7 @@
 <?php
 /**
 A class to help manage template files. 
-$Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.28 2008/03/09 16:27:50 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.1 2008/03/13 20:38:33 kristo Exp $
 @classinfo  maintainer=kristo
 **/
 class templatemgr extends aw_template
