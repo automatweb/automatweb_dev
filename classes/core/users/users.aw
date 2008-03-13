@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.192 2008/03/13 20:30:28 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.1 2008/03/13 20:35:49 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");

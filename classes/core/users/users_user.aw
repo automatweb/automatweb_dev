@@ -11,7 +11,7 @@ define("GROUP_LEVEL_PRIORITY", 100000);
 define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 /*
-$Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.148 2008/03/13 20:30:28 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users_user.aw,v 1.1 2008/03/13 20:35:49 kristo Exp $
 @classinfo maintainer=kristo
 EMIT_MESSAGE(MSG_USER_LOGIN);
 EMIT_MESSAGE(MSG_USER_LOGOUT);
