@@ -1,22 +1,22 @@
 <table>
 	<tr style="font-size:10px;font-weight:bold;">
 		<td>
-			nimi
+			Name
 		</td>
 		<td>
-			aeg
+			Time
 		</td>
 		<td>
-			attendees
+			Attendees
 		</td>
 		<td>
-			hotel
+			Hotel(s)
 		</td>
 		<td>
-			copy and update
+			Copy and update
 		</td>
 		<td>
-			remove from
+			Remove
 		</td>
 	</tr>
 	<!-- SUB: RFP -->
