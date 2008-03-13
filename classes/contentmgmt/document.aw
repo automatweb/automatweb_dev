@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.4 2008/03/12 21:23:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.5 2008/03/13 17:02:54 hannes Exp $
 // document.aw - Dokumentide haldus. 
 /*
 @classinfo  maintainer=kristo
@@ -62,7 +62,7 @@ $this->period = $period;
 }
 
 ////
-// !Listib dokud mingi menüü all
+// !Listib dokud mingi menyy all
 function list_docs($parent,$period = -1,$status = -1,$visible = -1)
 {
 if ($period == -1)
@@ -313,7 +313,7 @@ if (is_object($docobj))
 	}
 
 	////
-	// !genereerib objekti nö valmiskujul
+	// !genereerib objekti n8 valmiskujul
 	// params: docid, text, tpl, tpls, leadonly, strip_img, secID, boldlead, tplsf, notitleimg, showlead, no_stip_lead, doc
 	// tpls - selle votmega antakse ette template source, mille sisse kood paigutada
 	// doc - kui tehakse p2ring dokude tabelisse, siis v6ib ju sealt saadud inffi kohe siia kaasa panna ka
@@ -345,7 +345,7 @@ if (is_object($docobj))
 		
 		global $awt;
 
-		// küsime dokumendi kohta infot
+		// kysime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
 		if (!isset($doc) || !is_array($doc))
@@ -2858,12 +2858,47 @@ if (is_object($docobj))
 		ob_start();
 		$dat = $this->get_record("objects","oid",$section);
 		$this->_log(ST_DOCUMENT, SA_PRINT, "$dat[name] ",$section);
-		echo $this->gen_preview(array(
+		$str = $this->gen_preview(array(
 			"docid" => $section,
 			"tpl" => "print.tpl",
 			"is_printing" => true,
 			"no_strip_lead" => 1
 		));
+
+		preg_match_all("/\<a.*href\s*=\s*[\"']{1}(.*)[\"']{1}.*\<\/a>/imsU", $str, $a_link_matches);
+		foreach ($a_link_matches[0] as $key => $var)
+		{
+			if (	strpos($a_link_matches[1][$key], "mailto") === false && 
+					strpos($a_link_matches[1][$key], "http") === false &&
+					 strpos($a_link_matches[1][$key], "https") === false
+					 )
+			{
+				$a_print_link_find = array(
+					"/href\s*=\s*\"\//U",
+					"/href\s*=\s*\"[^https]|href\s*=\s*\"[^http]/U",
+				);
+
+				$a_print_link_replace = array(
+					"href=\"".aw_ini_get("baseurl")."/",
+					"href=\"".aw_ini_get("baseurl")."/",
+				);
+				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
+				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
+			}
+			else if (strpos($a_link_matches[1][$key], "mailto") !== false)
+			{
+				$a_print_link_find = array(
+					"/<a.*href\s*=\s*\"\mailto:(.*)\".*a>/U",
+				);
+	
+				$a_print_link_replace = array(
+					"\\1",
+				);
+				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
+				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
+			}
+		}
+		echo $str;
 		aw_shutdown();
 		if ($GLOBALS["format"] == "pdf")
 		{
@@ -3096,7 +3131,7 @@ if (is_object($docobj))
 
 	function register_parser($args = array())
 	{
-		// esimesel kasutamisel loome uue nö dummy objekti, mille sisse
+		// esimesel kasutamisel loome uue n8 dummy objekti, mille sisse
 		// edaspidi registreerime koikide parserite callback meetodid
 		if (!isset($this->parsers) || !is_object($this->parsers))
 		{
@@ -3123,8 +3158,8 @@ if (is_object($docobj))
 		}
 		else
 		{
-			// kui klassi ja funktsiooni polnud defineeritud, siis järelikult
-			// soovitakse siia alla registreerida nö. sub_parsereid.
+			// kui klassi ja funktsiooni polnud defineeritud, siis j2relikult
+			// soovitakse siia alla registreerida n8. sub_parsereid.
 			$block = array(
 				"reg" => $reg,
 				"parserchain" => array(),
@@ -3133,7 +3168,7 @@ if (is_object($docobj))
 		$this->parsers->reglist[] = $block;
 		
 	
-		// tagastab äsja registreeritud parseriobjekti ID nimekirjas
+		// tagastab 2sja registreeritud parseriobjekti ID nimekirjas
 		return sizeof($this->parsers->reglist) - 1;
 	}
 
@@ -3141,7 +3176,7 @@ if (is_object($docobj))
 	// !Registreerib alamparseri
 	// argumendid:
 	// idx(int) - millise $match array elemendi peale erutuda
-	// match(string) - mis peaks elemendi väärtuses olema, et see välja kutsuks
+	// match(string) - mis peaks elemendi v22rtuses olema, et see v2lja kutsuks
 	// reg_id(int) - millise master parseri juurde see registreerida
 	// class(string) - klass
 	// function(string) - funktsiooni nimi
@@ -3185,7 +3220,7 @@ if (is_object($docobj))
 
 		foreach($this->parsers->reglist as $pkey => $parser)
 		{
-			// itereerime seni, kuni see äsjaleitud regulaaravaldis enam ei matchi.
+			// itereerime seni, kuni see 2sjaleitud regulaaravaldis enam ei matchi.
 			$cnt = 0;
 			while(preg_match($parser["reg"],$text,$matches))
 			{
@@ -3195,7 +3230,7 @@ if (is_object($docobj))
 					return;
 				};
 				// siia tuleb tekitada mingi if lause, mis 
-				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja välja
+				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja v2lja
 				if (sizeof($parser["parserchain"] > 0))
 				{
 					foreach($parser["parserchain"] as $skey => $sval)
@@ -3434,7 +3469,7 @@ if (is_object($docobj))
 		$a_months = array(
 			1=>t("jaanuar"),
 			2=>t("veebruar"),
-			3=>t("märts"),
+			3=>t("m&auml;rts"),
 			4=>t("aprill"),
 			5=>t("mai"),
 			6=>t("juuni"),
