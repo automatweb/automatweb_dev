@@ -2871,7 +2871,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		if ($this->obj_inst->prop('use_image_verification'))
 		{
 			$image_verification = $this->obj_inst->get_first_obj_by_reltype('RELTYPE_IMAGE_VERIFICATION');
-			if (!empty($image_verification))
+			if (!empty($image_verification) && is_array($image_verification))
 			{
 				$htmlc->add_property(array(
 					'name' => 'image_verification',
