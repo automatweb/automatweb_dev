@@ -58,7 +58,7 @@ class quickmessage extends class_base
 
 			if ("quickmessagebox" === $return_url->arg("class"))
 			{
-				$ret = (string) $return_url;
+				$ret = $return_url->get();
 			}
 		}
 		catch (Exception $e)
