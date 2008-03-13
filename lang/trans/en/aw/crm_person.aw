@@ -106,6 +106,7 @@ $GLOBALS["TRANS"]["Kokkuv&otilde;te"] = "Summary";
 $GLOBALS["TRANS"]["H&auml;rra"] = "Mr";
 $GLOBALS["TRANS"]["Proua"] = "Mrs";
 $GLOBALS["TRANS"]["Preili"] = "Ms";
+$GLOBALS["TRANS"]["H&auml;rra"] = "Mr";
 $GLOBALS["TRANS"]["Vallaline"] = "Single";
 $GLOBALS["TRANS"]["Abielus"] = "Married";
 $GLOBALS["TRANS"]["Lahutatud"] = "Divorced";

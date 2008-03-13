@@ -1,29 +1,29 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/es/common.aw,v 1.3 2005/11/03 13:33:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/lang/es/common.aw,v 1.4 2008/03/13 13:27:18 kristo Exp $
 // kuude nimed
-define("LC_M1","january");
-define("LC_M2","february");
-define("LC_M3","march");
-define("LC_M4","april");
-define("LC_M5","may");
-define("LC_M6","june");
-define("LC_M7","july");
-define("LC_M8","august");
-define("LC_M9","september");
-define("LC_M10","october");
-define("LC_M11","november");
-define("LC_M12","december");
+define("LC_M1","Enero");
+define("LC_M2","Febrero");
+define("LC_M3","Marzo");
+define("LC_M4","Abril");
+define("LC_M5","Mayo");
+define("LC_M6","Junio");
+define("LC_M7","Julio");
+define("LC_M8","Agosto");
+define("LC_M9","Septiembre");
+define("LC_M10","Octubre");
+define("LC_M11","Noviembre");
+define("LC_M12","Diciembre");
 
-define("LC_MONTH","|January|February|March|April|May|June|July|August|September|October|November|December");
-define("LC_WEEKDAY","|monday|tuesday|wednesday|thursday|friday|saturday|sunday");
+define("LC_MONTH","|Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre");
+define("LC_WEEKDAY","|Lunes|Martes|Miércoles|Jueves|Viernes|S?bado|Domingo");
 
-define("LC_MONDAY","Monday");
-define("LC_TUESDAY","Tuesday");
-define("LC_WEDNESDAY","Wednesday");
-define("LC_THURSDAY","Thursday");
-define("LC_FRIDAY","Friday");
-define("LC_SATURDAY","Saturday");
-define("LC_SUNDAY","Sunday");
+define("LC_MONDAY","Lunes");
+define("LC_TUESDAY","Martes");
+define("LC_WEDNESDAY","Miércoles");
+define("LC_THURSDAY","Jueves");
+define("LC_FRIDAY","Viernes");
+define("LC_SATURDAY","S?bado");
+define("LC_SUNDAY","Domingo");
 
 define("LC_YES","yes");
 define("LC_NO","no");

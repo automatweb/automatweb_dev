@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.17 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.18 2008/03/13 13:26:51 kristo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -483,7 +483,7 @@ class rfp_manager extends class_base
 		$inst->store_data($obj->prop("conference_planner"), $data, false);
 		$o = $this->can("view", $obj->prop("conference_planner"))?obj($obj->prop("conference_planner")):false;
 
-		return aw_ini_get("baseurl")."/".$o->prop("document");
+		return aw_ini_get("baseurl")."/".($o?$o->prop("document"):"");
 	}
 
 	/**

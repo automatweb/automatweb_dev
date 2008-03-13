@@ -704,6 +704,14 @@ class site_show extends class_base
 				$filt_lang_id = array();
 			}
 
+			if ($obj->class_id() == CL_PROMO && $obj->prop("docs_from_current_menu") && $this->can("view", aw_global_get("section")))
+			{
+				$so = obj(aw_global_get("section"));
+				$sections = array(
+					$so->class_id() == CL_MENU ? $so->id() : $so->parent()
+				);
+			}
+			else
 			if (!empty($arr["include_submenus"]))
 			{
 				$ot = new object_tree(array(
@@ -1071,6 +1079,9 @@ class site_show extends class_base
 					}
 				}
 				$documents = $doc_ol;
+                                $filter[] = new object_list_filter(array(
+                                        "non_filter_classes" => CL_DOCUMENT
+                                ));
 			}
 			else
 			{
@@ -1416,6 +1427,8 @@ class site_show extends class_base
 				$this->vars(array(
 					"doc_content" => $docc,
 				));
+				aw_global_set("no_cache", 1);
+
 				return $this->parse();
 			}
 			return $docc;
@@ -1911,6 +1924,28 @@ class site_show extends class_base
 				{
 					$url = str_replace("/".aw_global_get("ct_lang_lc")."/", "/".$row["acceptlang"]."/", $url);
 				}*/
+				// get the current url.
+				// check if it has the language set in it
+				// if it does, then replace it with the new one
+				$cur_url = get_ru();
+				$bits = parse_url($cur_url);
+				$new_url = null;
+				if (strlen($bits["path"]) > 1 && $bits["path"][0] == "/")
+				{
+					list($_lang_bit, $_rest) = explode("/", substr($bits["path"], 1), 2);
+					if ($_lang_bit == aw_global_get("ct_lang_lc"))
+					{
+						$new_path = "/".$row["acceptlang"]."/".$_rest;
+						$new_url = str_replace($bits["path"], $new_path, $cur_url);
+					}
+				}
+				// else
+				// make the url
+				if ($new_url === null)
+				{
+					$new_url = $this->make_menu_link($this->section_obj, $row["acceptlang"]);
+				}
+				$url = $new_url;
 				if (substr($_GET["class"], 0, 4) == "shop")
 				{
 					$url = aw_url_change_var("section", $row["acceptlang"]."/".aw_global_get("section"));
@@ -2606,6 +2641,7 @@ class site_show extends class_base
 				$link_str = $dd->get_doc_link($linked_obj);
 			}
 		}
+		
 		if ($o->prop("type") == MN_PMETHOD)
 		{
 			// I should retrieve orb definitions for the requested class

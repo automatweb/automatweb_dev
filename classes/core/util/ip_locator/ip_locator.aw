@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.7 2008/01/31 13:54:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.8 2008/03/13 13:26:42 kristo Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -227,10 +227,14 @@ class ip_locator extends class_base
 		// ja uuendab baasi tabeli ära
 		
 	//	$file = '/www/dev/dragut/site/files/ip-to-country.csv';
-		if ($this->can('view', $arr['id']))
+		if (false && $this->can('view', $arr['id']))
 		{
 			$obj_inst = new object($arr['id']);
 			$file = $obj_inst->prop('csv_file_location');
+		}
+		else
+		{
+			$file = aw_ini_get("classdir")."/core/util/ip_locator/ip-to-country.csv";
 		}
 		$db_table_name = 'ip2country';
 		
@@ -247,7 +251,6 @@ class ip_locator extends class_base
 		}
 
 		$this->db_query("delete from ".$this->db_table_name);
-
 		$lines = file($file);
 		foreach ($lines as $line)
 		{

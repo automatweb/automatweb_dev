@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.99 2008/03/04 14:24:39 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.100 2008/03/13 13:26:34 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1054,6 +1054,7 @@ class site_search_content extends class_base
 			$stat = " o.status > 0 AND ";
 		}
 
+		$lid_s = " o.lang_id = '".aw_global_get("lang_id")."' AND ";
 		$opts["str"] = mb_strtolower($opts["str"], "iso-8859-15");
 		$this->quote($str);
 		$joiner = "LEFT JOIN documents d ON o.brother_of = d.docid";
@@ -1061,6 +1062,8 @@ class site_search_content extends class_base
 	                aw_ini_get("languages.default") != aw_global_get("ct_lang_id"))
 		{
 			$joiner = "LEFT JOIN doc_ct_content d ON d.oid = o.brother_of AND d.lang_id = ".aw_global_get("ct_lang_id");
+			$lid_s = " d.lang_id = '".aw_global_get("lang_id")."' AND ";
+			$stat = " o.status > 0 AND ";
 		}
 
 		if ($this->can("view", $arr["obj"]->prop("search_only_kws")) || (is_array($arr["obj"]->prop("search_only_kws")) && count($arr["obj"]->prop("search_only_kws"))))
@@ -1117,6 +1120,19 @@ class site_search_content extends class_base
 		while ($row = $this->db_next())
 		{
 			if (!$this->can("view", $row["docid"]))
+			{
+				continue;
+			}
+			$doco = obj($row["docid"]);
+			if (aw_ini_get("user_interface.full_content_trans") && aw_global_get("ct_lang_id") != aw_ini_get("languages.default"))
+			{
+				$stat = $doco->meta("trans_".aw_global_get("ct_lang_id")."_status") == 1 ? STAT_ACTIVE : STAT_NOTACTIVE;
+			}
+			else
+			{
+				$stat = $doco->status();
+			}
+			if (!($arr["opts"]["search_notactive"] == 1 || (is_array($arr["opts"]["str"]) && $arr["opts"]["str"]["search_notactive"] == 1)) && $stat < STAT_ACTIVE)
 			{
 				continue;
 			}
@@ -1321,7 +1337,7 @@ class site_search_content extends class_base
 		{
 			$go = obj($group);
 			$opts["search_notactive"] = $go->prop("search_notactive");
-
+			
 			$ret = $this->merge_result_sets($ret, $this->fetch_live_search_results(array(
 				"menus" => $ms,
 				"str" => $str,

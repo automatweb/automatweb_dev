@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.230 2008/03/06 13:13:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.231 2008/03/13 13:26:22 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2355,7 +2355,16 @@ class menu extends class_base implements main_subtemplate_handler
 			}
 			foreach($l_list as $lid => $ldat)
 			{
-				$xml .= "<url><loc>".str_replace("&", "&amp;", $si->make_menu_link($item, $ldat["acceptlang"]))."</loc><lastmod>".date("Y-m-d", $item->created())."</lastmod>";
+				$tmp = str_replace("&", "&amp;", $si->make_menu_link($item, $ldat["acceptlang"]))."</loc><lastmod>".date("Y-m-d", $item->created())."</lastmod>";
+				if ($tmp[0] == "/")
+				{
+					$tmp = aw_ini_get("baseurl").$tmp;
+				}
+				if (strpos($tmp, "://") === false)
+				{
+					$tmp = aw_ini_get("baseurl")."/".$tmp;
+				}
+				$xml .= "<url><loc>".$tmp."</loc><lastmod>".date("Y-m-d", $item->created())."</lastmod>";
 				$xml .= "<changefreq>".$ct."</changefreq><priority>".((double)$cpri)."</priority></url>\n";
 			}
 		}

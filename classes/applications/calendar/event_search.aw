@@ -845,6 +845,13 @@ class event_search extends class_base
 		}
 		if ($event_class_id == CL_CALENDAR_EVENT)
 		{
+			$htmlc->add_property(array(
+				"name" => "end_date",
+				"caption" => $formconfig["end_date"]["caption"],
+				"type" => "date_select",
+				"value" => $end_tm,
+				"buttons" => true
+			));
 			if($formconfig["location"]["active"] && $show_search_form)
 			{
 				$htmlc->add_property(array(

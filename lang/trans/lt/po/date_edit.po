@@ -12,49 +12,49 @@ msgstr ""
 
 #: classes/vcl/date_edit.aw:184
 msgid "Jaanuar"
-msgstr "Janvâris"
+msgstr "Sausis"
 
 #: classes/vcl/date_edit.aw:185
 msgid "Veebruar"
-msgstr "Februâris"
+msgstr "Vasaris"
 
 #: classes/vcl/date_edit.aw:186
 msgid "M&auml;rts"
-msgstr "Marts"
+msgstr "Kovas"
 
 #: classes/vcl/date_edit.aw:187
 msgid "Aprill"
-msgstr "Aprîlis"
+msgstr "Balandis"
 
 #: classes/vcl/date_edit.aw:188
 msgid "Mai"
-msgstr "Maijs"
+msgstr "Geguþë"
 
 #: classes/vcl/date_edit.aw:189
 msgid "Juuni"
-msgstr "Jûnijs"
+msgstr "Birþelis"
 
 #: classes/vcl/date_edit.aw:190
 msgid "Juuli"
-msgstr "Jûlijs"
+msgstr "Liepa"
 
 #: classes/vcl/date_edit.aw:191
 msgid "August"
-msgstr "Augusts"
+msgstr "Rugpjûtis"
 
 #: classes/vcl/date_edit.aw:192
 msgid "September"
-msgstr "Septembris"
+msgstr "Rugsëjis"
 
 #: classes/vcl/date_edit.aw:193
 msgid "Oktoober"
-msgstr "Oktobris"
+msgstr "Spalis"
 
 #: classes/vcl/date_edit.aw:194
 msgid "November"
-msgstr "Novembris"
+msgstr "Lapkritis"
 
 #: classes/vcl/date_edit.aw:195
 msgid "Detsember"
-msgstr "Decembris"
+msgstr "Gruodis"
 

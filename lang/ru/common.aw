@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/ru/common.aw,v 1.6 2007/06/05 09:35:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/ru/common.aw,v 1.7 2008/03/13 13:27:28 kristo Exp $
 // kuude nimed
 define("LC_M1","&#1103;&#1085;&#1074;&#1072;&#1088;&#1100;");
 define("LC_M2","&#1092;&#1077;&#1074;&#1088;&#1072;&#1083;&#1100;");
@@ -14,21 +14,21 @@ define("LC_M10","&#1086;&#1082;&#1090;&#1103;&#1073;&#1088;&#1100;");
 define("LC_M11","&#1085;&#1086;&#1103;&#1073;&#1088;&#1100;");
 define("LC_M12","&#1076;&#1077;&#1082;&#1072;&#1073;&#1088;&#1100;");
 
-define("LC_MONTH","|jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
-define("LC_WEEKDAY","|esmaspäev|teisipäev|kolmapäev|neljapäev|reede|laupäev|pühapäev");
+define("LC_MONTH","|ÿíâàðü|ôåâðàëü|ìàðò|àïðåëü|ìàé|èþíü|èþëü|àâãóñò|ñåíòÿáðü|îêòÿáðü|íîÿáðü|äåêàáðü");
+define("LC_WEEKDAY","|ïîíåäåëüíèê|âòîðíèê|ñðåäà|÷åòâåðã|ïÿòíèöà|ñóááîòà|âîñêðåñåíüå");
 
-define("LC_MONDAY","Esmasp&auml;ev");
-define("LC_TUESDAY","Teisip&auml;ev");
-define("LC_WEDNESDAY","Kolmap&auml;ev");
-define("LC_THURSDAY","Neljap&auml;ev");
-define("LC_FRIDAY","Reede");
-define("LC_SATURDAY","Laup&auml;ev");
-define("LC_SUNDAY","P&uuml;hap&auml;ev");
+define("LC_MONDAY","ïîíåäåëüíèê");
+define("LC_TUESDAY","âòîðíèê");
+define("LC_WEDNESDAY","ñðåäà");
+define("LC_THURSDAY","÷åòâåðã");
+define("LC_FRIDAY","ïÿòíèöà");
+define("LC_SATURDAY","ñóááîòà");
+define("LC_SUNDAY","âîñêðåñåíüå");
 
 define("LC_YES","jah");
 define("LC_NO","ei");
 
-define("MN_MENUEDIT","Menüüeditor");
+define("MN_MENUEDIT","Menuueditor");
 define("MN_DOCLIST","Dokumentide nimekiri");
 define("MN_USERS","Kasutajad");
 define("MN_GROUPS","Grupid");
@@ -37,7 +37,7 @@ define("MN_LANG","Keeled");
 define("MN_BUGTRACK","BugTrack");
 define("MN_FORMGEN","FormGen");
 define("MN_GRAPH","Graafikud");
-define("MN_FACE","Nädala nägu");
+define("MN_FACE","Nadala nagu");
 define("MN_POLL","Poll");
 define("MN_SEARCH","Config/Otsing");
 define("MN_PERIODS","Perioodid");
@@ -47,8 +47,8 @@ define("MN_VARS","Muutujad");
 define("MN_STAMPS","Stambid");
 define("MN_CODESTAT","Koodi Stat");
 define("MN_AWMAIL","Autom@tMail");
-define("MN_EVENTS","Üritused");
-define("MN_EVENT_PLACES","Ürituste kohad");
+define("MN_EVENTS","Uritused");
+define("MN_EVENT_PLACES","Urituste kohad");
 define("MN_QUIZ","Testid");
 define("MN_GALERII","Galerii");
 define("MN_KROONIKA_BANNER","Kroonika banner");
@@ -66,7 +66,7 @@ define("MN_BANNERS","Bannerid");
 define("MN_SEARCH_OBJS","Objektide otsing");
 define("MN_SITE_BANNER_ADMIN","Kasutaja bannerite admin");
 define("MN_SITE_BANNER_STATS","Kasutaja bannerite statistika");
-define("MN_KEYWORD","Võtmesõnad");
+define("MN_KEYWORD","Votmesonad");
 define("MN_BANNER_USERS", "Bannerite kasutajad");
 define("MN_BANNER_PROFILES", "Bannerite profiilid");
 define("MN_EKOMAR", "EKOMAR");

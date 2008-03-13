@@ -1,5 +1,4 @@
 <?php
-
 /*
 @classinfo  maintainer=kristo
 */
@@ -867,7 +866,8 @@ function aw_startup()
 		$GLOBALS["cfg"]["ini_frontpage"] = $tmp;
 		$GLOBALS["cfg"]["frontpage"] = $tmp[aw_global_get("lang_id")];
 	}
-	$LC = aw_global_get("LC");
+
+	$LC = $GLOBALS["cfg"]["user_interface"]["full_content_trans"] ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
 
 	@include($GLOBALS["cfg"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["ext"]);
 	@include($GLOBALS["cfg"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["ext"]);
@@ -1247,9 +1247,9 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 
 function log_pv($mt)
 {
-	if (file_exists("/www/automatweb_new/logger.aw"))
+	if (file_exists("/home/revalhotels/automatweb_dev/logger.aw"))
 	{
-		@include_once("/www/automatweb_new/logger.aw");
+		@include_once("/home/revalhotels/automatweb_dev/logger.aw");
 	}
 }
 
@@ -1415,8 +1415,7 @@ function __autoload($class_name)
 			//!!! take action
 		}
 	}
-	require_once($class_file);
-
+	
 	if (!class_exists($class_name, false) and !interface_exists($class_name, false))
 	{ // class may be moved to another file, force update and try again
 		try

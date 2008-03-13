@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.8 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.9 2008/03/13 13:27:06 kristo Exp $
 // crm_conference_value_days.aw - Konverentsi kalendrivaade 
 /*
 
@@ -145,7 +145,7 @@ class crm_conference_value_days extends class_base
 				$bg_colors[substr($data["DayTypeDate"], 0, 10)] = $data["ConferenceDayType"];
 			}
 		}
-		
+
 		while($n < $months+$calendar_month)
 		{
 			$month_start = mktime(0, 0, 0, date("n",(time() + $n*30*24*3600)), 1, date("Y",(time() + $n*30*24*3600)));
@@ -154,18 +154,19 @@ class crm_conference_value_days extends class_base
 			$day_of_the_week = date("w",($month_start));
 			if($day_of_the_week == 0) $day_of_the_week = 7;
 			
+			// well, i changed these get_lc's from locale:: class to static, because these different languages fucked the locale classload totally up. if anybody wants to fix it, be my guest.. 
 			$html.='<table class="type4">
 				<tr class="subheading">	
-					<th colspan="7">'.locale::get_lc_month(date("m",(time() + $n*30*24*3600)))." ".date("Y",(time() + $n*30*24*3600)).'</th>
+					<th colspan="7">'.get_lc_month(date("m",(time() + $n*30*24*3600)))." ".date("Y",(time() + $n*30*24*3600)).'</th>
 				</tr>
 				<tr>
-					<th>'.strtoupper(substr(locale::get_lc_weekday(1,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(locale::get_lc_weekday(2,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(locale::get_lc_weekday(3,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(locale::get_lc_weekday(4,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(locale::get_lc_weekday(5,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(locale::get_lc_weekday(6,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(locale::get_lc_weekday(7,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(get_lc_weekday(1,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(get_lc_weekday(2,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(get_lc_weekday(3,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(get_lc_weekday(4,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(get_lc_weekday(5,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(get_lc_weekday(6,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(get_lc_weekday(7,true), 0, 1)).'</th>
 				</tr>';
 			$day_start = $month_start - 3600*24*($day_of_the_week - 1);
 			$w = 0;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.257 2008/03/07 12:18:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.258 2008/03/13 13:26:22 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -396,6 +396,7 @@ if (!defined("DEFS"))
 	**/
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")
 	{
+//	echo "enter send to = $to , subj = $subject , msg:<pre>$headers\n$msg</pre>";
 		if (!is_email($to))
 		{
 			return;
@@ -443,7 +444,6 @@ if (!defined("DEFS"))
 		{
 			$app = $bt[1]["file"].":".$bt[1]["line"];
 		}
-
 		post_message(MSG_MAIL_SENT, array(
 			"from" => $from,
 			"to" => $to,
@@ -769,9 +769,9 @@ if (!defined("DEFS"))
 				'min' => 3,
 				'max' => 255),
 			'uid'	=> array(
-				'min' => 2,
-				'content'	=> '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM.@',
-				'max' => 30)
+				'content'	=> '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM.@-',
+				'max' => 100,
+				'min' => 2)
 			);
 		// defineerimata character set, bail out
 		if (!isset($sets[$set]))
@@ -1092,11 +1092,11 @@ if (!defined("DEFS"))
 	**/
 	function get_ip()
 	{
-		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
+		/*$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if (!inet::is_ip($ip))
-		{
+		{*/
 			$ip = aw_global_get("REMOTE_ADDR");
-		}
+		//}
 		return $ip;
 	}
 
@@ -1354,9 +1354,9 @@ if (!defined("DEFS"))
 	**/
 	function aw_global_set($var,$val)
 	{
-		/*if ($var == "lang_id")
+		/*if ($var == "recievers_name")
 		{
-			echo "setto $val from ".dbg::process_backtrace(debug_backtrace());
+			echo "setto ".dbg::dump($val)." from ".dbg::process_backtrace(debug_backtrace());
 		}*/
 		$GLOBALS["__aw_globals"][$var] = $val;
 	}
@@ -1722,6 +1722,200 @@ if (!defined("DEFS"))
 		}
 		return "";
 	}
+	
+	function xml_job_offerings_temp_function($xml)
+	{
+		$backfile = "http://www.cvkeskus.ee/xml_jobs.php?id=rev01h"; 
+		$ct = file_get_contents($xml?$xml:$backfile);
+		//$ct = html_entity_decode($ct, ENT_QUOTES, "utf-8");
+		$parser = xml_parser_create("utf-8");
+		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+		if (xml_parse_into_struct($parser,$ct,&$values) === 0)
+		{
+			echo "xml error ".xml_error_string(xml_get_error_code($parser))." on line ".xml_get_current_line_number($parser)." <br>";
+		}
+		xml_parser_free($parser);
+
+		$l = get_instance("languages");
+		$ld = $l->fetch(aw_global_get("ct_lang_id"));
+
+		$job_ad_data = array();
+		$opens = array();
+		$to_arrays = array(
+			 "jobType", "workTime", "category","region"
+		);
+		foreach($values as $node)
+		{
+			$$node["tag"] = ($node["type"] == "open" && $node["tag"] == "jobAd")?$node["attributes"]["id"]:false;
+			if($jobAd)
+			{
+				switch($node["type"])
+				{
+					case "open":
+						$opens[$node["tag"]] = ($node["tag"] == "jobAd")?false:true;
+						break;
+					case "complete":
+						if(!strlen(trim($node["value"])))
+						{
+							continue;
+						}
+						$str = "\$job_ad_data[".$jobAd."]";
+						foreach($opens as $t => $v)
+						{
+							$str .= $v?"[\"".$t."\"]":"";
+						}
+						$to_array = in_array($node["tag"], $to_arrays)?"[]":"";
+						//$node["value"] = html_entity_decode($node["value"], ENT_COMPAT, "utf-8");
+						$node["value"] = iconv("utf-8", $ld["charset"]."//IGNORE", $node["value"]);
+						$str .= "[\"".$node["tag"]."\"]".$to_array." = \"".str_replace("\"", "&quot;", $node["value"])."\";";
+						eval($str);
+						break;
+					case "close":
+						$opens[$node["tag"]] = false;
+						break;
+				}
+			}
+		}
+		uasort($job_ad_data,"__sort_job_xml");
+		return $job_ad_data;
+	}
+
+		$GLOBALS["__reval_hotel_list"] = array(
+			"Reval Hotel Olümpia",
+			"Reval Hotel Central",
+			"Reval Park Hotel  Casino",
+			"Reval Inn Tallinn",
+			"Reval Hotel Latvija",
+			"Reval Hotel R?dzene",
+			"Reval Hotel Lietuva",
+			"Reval Inn Vilnius",
+			"Reval Inn Klaipeda",
+		);
+	function __sort_job_xml($a, $b)
+	{
+		global $__reval_hotel_list;
+		return array_search(str_replace("&", "", $a["employer"]["name"]), $sort_order) - array_search(str_replace("&", "", $b["emplyer"]["name"]), $__reval_hotel_list);
+		return 0;
+	}
+	
+	function xml_job_temp_list($job_ad_data, $job_doc, $region = null)
+	{
+		$tpl = new aw_template();
+		$tpl->init(array(
+			 "tpl_dir" => "/",
+		));
+		$lut = array(
+			"et" => "ee",
+			"lt" => "lt",
+			"en" => "en",
+			"lv" => "lv",
+			"ru" => "ru"
+		);
+		$tpl->read_template("temp_jobs.tpl");
+		lc_site_load("reval_cv", $tpl);
+		foreach($job_ad_data as $jobId => $data)
+		{
+//		echo "dl = $data[language] , lut = ".$lut[aw_global_get("ct_lang_lc")]." <br>";
+			if ($data["language"] != $lut[aw_global_get("ct_lang_lc")])
+			{
+				continue;
+			}
+			if ($region !== null && $data["region"][0] != $region)
+			{
+				continue;
+			}
+			$tpl->vars(array(
+				 "id" => $jobId,
+				"title" => $data["title"],
+				 "location" => $data["location"],
+				 "employer" => $data["employer"]["name"],
+				"nr" => ++$count,
+				"expires" => $data["expires"],
+				"url" => aw_ini_get("baseurl")."/".$job_doc."?job_id=".$jobId,
+				"class" => (($count % 2) == 0)?"even":"odd",
+				 //"url" => aw_url_change_var("job_id", $jobId),
+			));
+			$rows .= $tpl->parse("ROW");
+		}
+		$tpl->vars(array(
+			 "ROW" => $rows,
+		));
+		$tpl->vars($vars);
+		
+		return $tpl->parse();
+	}
+	
+	function xml_job_temp_job($job_ad_data)
+	{
+		$job = $job_ad_data[$_GET["job_id"]];
+		$job["job_id"] = $_GET["job_id"];
+		$tpl = new aw_template();
+		$tpl->init(array(
+			 "tpl_dir" => "/",
+		));
+		$tpl->read_template("temp_job.tpl");
+		lc_site_load("reval_cv", $tpl);
+// set the job data to vars
+		 $vars = $job;
+	     // now lets override some shit
+		 $arrs = array(
+			 "description", "requirements", "offers"
+		);
+		 foreach($arrs as $elem)
+		 {
+			 foreach(split("[*]", $job[$elem]) as $value)
+			 {
+				 $value = trim($value, "*\n\r");
+				 if(!strlen($value))
+				 {
+					 continue;
+				 }
+				 $tpl->vars(array(
+					$elem => $value,
+				 ));
+				 $vars[strtoupper($elem)] .= $tpl->parse(strtoupper($elem));
+			 }
+		 }
+
+		// for cat, worktime & jobtype
+		$arrs = array(
+			 "category" => &$job["categories"]["category"],
+			 "worktime" => &$job["timeOfWork"]["workTime"],
+			 "jobtype" => &$job["jobArrangements"]["jobType"]
+		);
+		 foreach($arrs as $k => $vals)
+		 {
+			 unset($_for_join);
+			 foreach($vals as $value)
+			 {
+				 $tpl->vars(array(
+					$k."_value" => $value,
+				 ));
+				 $_for_join[$k][] = $value;
+				 $vars[strtoupper($k)] .= $tpl->parse(strtoupper($k));
+			 }
+			 if(count($_for_join[$k]))
+			 {
+				 $vars[$k."_joined"] = join(", ", $_for_join[$k]);
+				 $tpl->vars(array(
+					strtoupper($k) => $vars[strtoupper($k)],
+				 ));
+				 $vars["HAS_".strtoupper($k)] = $tpl->parse("HAS_".strtoupper($k));
+			 }
+			 else
+			 {
+				 $vars[$k."_joined"] = "-";
+			 }
+		 }
+		 
+		// employer sub
+		 $tpl->vars($job["employer"]);
+		 $vars["EMPLOYER"] = $tpl->parse("EMPLOYER");
+		 $vars["EMPLOYER_2"] = $tpl->parse("EMPLOYER_2");
+
+		 $tpl->vars($vars);
+		return $tpl->parse();
+	} 
 
 	/** internal **/
 	function warning_prop($level = false, $oid = false, $prop = false)
@@ -2228,7 +2422,11 @@ if (!defined("DEFS"))
 		function get_lc_month($num)
 		{
 			static $lc_date_inst;
-			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+			if(!class_exists("date", false))
+			{
+				//$lc_date_inst = @get_instance("core/locale/".aw_global_get("ct_lang_lc")."/date", array(), false);
+				//$lc_date_inst = get_instance("core/locale/".aw_global_get("ct_lang_lc")."/date");
+			}	
 			if(!is_object($lc_date_inst))
 			{
 				$lc_date_inst = get_instance("core/locale/en/date");

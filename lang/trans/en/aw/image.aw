@@ -47,4 +47,5 @@ $GLOBALS["TRANS"]["kommentaari"] = "comments";
 $GLOBALS["TRANS"]["Uues aknas"] = "In a new window";
 $GLOBALS["TRANS"]["&Auml;ra n&auml;ita print-vaates"] = "Don't show in print view";
 $GLOBALS["TRANS"]["Lisa"] = "Add";
+$GLOBALS["TRANS"]["Salvesta ja paiguta dokumenti"] = "Save and insert into document";
 ?>

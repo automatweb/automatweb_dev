@@ -108,7 +108,6 @@ class core extends acl_base
 		{
 			return;
 		}
-
 		if (empty($this->dc))
 		{
 			print "SYSLOG: $text\n";

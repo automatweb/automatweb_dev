@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.46 2008/03/13 11:22:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.47 2008/03/13 13:26:26 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -175,7 +175,7 @@
 @caption Kasutajagrupp
 
 */
-
+classload("vcl/date_edit");
 class spa_bookings_overview extends class_base
 {
 	function spa_bookings_overview()
@@ -1227,7 +1227,7 @@ class spa_bookings_overview extends class_base
 			$ri->room_count = $r_ol->count();//et mitu ruumi k6rvuti inimlikult j22ksid n2ha
 			$ri->_get_calendar_tbl(array(
 				"room" => $room_id,
-				"prop" => $prop
+				"prop" => $prop,
 			));
 			$room2tbl[] = array(
 				"t" => $t,

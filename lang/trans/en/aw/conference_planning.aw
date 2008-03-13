@@ -33,4 +33,8 @@ $GLOBALS["TRANS"]["Telefoninumber on puudu"] = "Phone is mandatory";
 $GLOBALS["TRANS"]["E-mail on puudu"] = "E-mail is mandatory";
 $GLOBALS["TRANS"]["-"] = "-";
 $GLOBALS["TRANS"]["Kasutanimi on juba olemas, palun logige sisse."] = "Username already exists, please log in";
+$GLOBALS["TRANS"]["&Uuml;rituse t&uuml;&uuml;p"] = "Event type";
+$GLOBALS["TRANS"]["Algusaeg"] = "Start time";
+$GLOBALS["TRANS"]["L&otilde;puaeg"] = "End time";
+$GLOBALS["TRANS"]["Osalejate arv"] = "Attendees no";
 ?>

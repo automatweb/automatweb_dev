@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.102 2008/03/12 21:22:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.103 2008/03/13 13:26:51 kristo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -96,6 +96,8 @@
 @default group=mails
 
 	@property mails type=text no_caption=1 store=no
+
+	@property city_mails type=table no_caption=1 store=no
 
 @groupinfo users_notification caption="Kasutaja teavitus"
 @default group=users_notification
@@ -3423,7 +3425,7 @@ class conference_planning extends class_base
 					"to" => $data["billing_email"],
 					"body" => $c_obj->prop_str("usr_contents"),
 				));
-				$awm->gen_mail();
+			$awm->gen_mail();
 			}
 		}
 		return $url;
@@ -4092,6 +4094,54 @@ class conference_planning extends class_base
 		$a_sum = $a->prop("single_count") + $a->prop("double_count") + $a->prop("suite_count");
 		$b_sum = $b->prop("single_count") + $b->prop("double_count") + $b->prop("suite_count");
 		return $b_sum - $a_sum;
+	}
+
+	function _get_city_mails($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "city",
+			"caption" => t("Linn")
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => t("Meil")
+		));
+
+		$vs = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+		$el = $vs[0]["elements"][19];
+		$ol = new object_list(array(
+			"parent" => $el["choices"],
+		));
+		
+		$ce = $arr["obj_inst"]->meta("city_emails");
+
+		$from = $arr["obj_inst"]->prop("search_from");
+		foreach($from as $oid)
+		{
+				if($this->can("view", $oid))
+				{
+					$obj = obj($oid);
+					$town = obj($obj->prop("address.linn"));
+					$towns[$obj->prop("address.linn")] = $town->name();
+				}
+		}
+
+		foreach($towns as $town_id => $town_name)
+		{
+			$t->define_data(array(
+				"city" => $town_name,
+				"email" => html::textbox(array(
+					"name" => "ce[".($town_id)."]",
+					"value" => $ce[($town_id)]
+				))
+			));
+		}
+	}
+
+	function _set_city_mails($arr)
+	{
+		$arr["obj_inst"]->set_meta("city_emails", $arr["request"]["ce"]);
 	}
 }
 ?>

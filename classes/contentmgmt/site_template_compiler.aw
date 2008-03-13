@@ -118,7 +118,7 @@ class site_template_compiler extends aw_template
 
 		// get all subtemplates
 		$tpls = $this->get_subtemplates_regex("(MENU_.*)");
-
+		
 		// now figure out the menu areas that are used
 		$_tpls = array();
  		foreach($tpls as $tpl)
@@ -1427,7 +1427,8 @@ class site_template_compiler extends aw_template
 
 			if (aw_ini_get("user_interface.full_content_trans"))
 			{
-				$ret .= $this->_gi()."if (!(".$o_name."->status() == STAT_ACTIVE || ".$o_name."->meta(\"trans_\".aw_global_get(\"ct_lang_id\").\"_status\")))\n";
+				$ret .= $this->_gi()."if (!(".$o_name."->status() == STAT_ACTIVE || (".$o_name."->lang_id() != aw_global_get(\"ct_lang_id\") && ".$o_name."->meta(\"trans_\".aw_global_get(\"ct_lang_id\").\"_status\"))))\n";
+			//	$ret .= $this->_gi()."if ((aw_ini_get(\"languages.default\") == aw_global_get(\"ct_lang_id\") && ".$o_name."->status() != STAT_ACTIVE) || (aw_ini_get(\"languages.default\") != aw_global_get(\"ct_lang_id\") && !".$o_name."->meta(\"trans_\".aw_global_get(\"ct_lang_id\").\"_status\")))\n";
 				$ret .= $this->_gi()."{\n";
 				$this->brace_level++;
 					$ret .= $this->_gi()."continue;\n";

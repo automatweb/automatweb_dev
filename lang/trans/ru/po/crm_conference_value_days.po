@@ -90,8 +90,3 @@ msgstr "мес€ца"
 msgid "Previous"
 msgstr "ѕредыдущие"
 
-#~ msgid "Next 3 months"
-#~ msgstr "—ледующие три мес€ца"
-
-#~ msgid "Previous 3 months"
-#~ msgstr "ѕредыдущие три мес€ца"

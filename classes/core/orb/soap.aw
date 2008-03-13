@@ -15,8 +15,8 @@ class soap extends aw_template
 		require_once(aw_ini_get("basedir")."/addons/soapclient.aw");
 		$soapclient = new C_SoapClient($arr["server"]);
 		$soapclient->namespace = $arr["class"];
-		$soapclient->debug = 0;
-
+		$soapclient->debug = aw_global_get("soap_debug");
+		
 		$return = $soapclient->call($arr["action"] , $arr["params"]);
 		return $return;
 	}

@@ -259,6 +259,16 @@
             <field>mails</field>
       </property>
       <property>
+            <name>city_mails</name>
+            <table>objects</table>
+            <group>mails</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>city_mails</field>
+      </property>
+
+      <property>
             <name>usr_send_mail</name>
             <table>objects</table>
             <group>users_notification</group>

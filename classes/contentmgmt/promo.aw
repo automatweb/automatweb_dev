@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.109 2008/03/12 21:23:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.110 2008/03/13 13:26:32 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -138,6 +138,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 	@groupinfo menus_sub parent=menus caption="Dokumendid"
 
 		@property lm_tb type=toolbar store=no no_caption=1 group=menus_sub
+
+		@property docs_from_current_menu type=checkbox ch_value=1 group=menus_sub
+		@caption Dokumendid aktiivse men&uuml;&uuml; alt
 
 		@property last_menus type=table group=menus_sub method=serialize store=no
 		@caption Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse

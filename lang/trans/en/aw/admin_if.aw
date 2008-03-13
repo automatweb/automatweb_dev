@@ -38,5 +38,6 @@ $GLOBALS["TRANS"]["Asukoht:"] = "You are here:";
 $GLOBALS["TRANS"]["AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-%s."] = "AutomatWeb&reg; is the registered trademark of Struktuur Meedia. All rights reserved, &copy; 1999-%s.";
 $GLOBALS["TRANS"]["Palun k&uuml;lasta meie kodulehek&uuml;lgi:"] = "Please visit our websites";
 $GLOBALS["TRANS"]["Seaded"] = "Settings";
+$GLOBALS["TRANS"]["Kujundusosa Kataloogid (o_bot_left) pealkiri"] = "Folders";
 $GLOBALS["TRANS"]["Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"] = "File %s found and saved<br />\n";
 ?>

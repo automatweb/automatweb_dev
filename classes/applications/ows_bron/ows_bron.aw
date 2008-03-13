@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.30 2008/02/19 08:33:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.31 2008/03/13 13:27:15 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -414,7 +414,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 				"i_promo" => $arr["i_promo"],
 				"section" => aw_global_get("section"),
 				"no_reforb" => 1,
-				"set_currency" => $currency,
+				//"set_currency" => $currency,
 				"api_departure_days" => $arr["api_departure_days"],
 				"r_url" => aw_url_change_var("error", null, get_ru()),
 				"ow_bron" => $arr["ow_bron"],
@@ -602,9 +602,14 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		}
 		$rate = $rate["RateDetails"];
 
-		if (/*$rate["IsMandatoryDeposit"] != "false" ||*/ aw_global_get("uid") == "struktuur" || aw_global_get("uid") == "erik" || aw_global_get("uid") == "martorav")
+		if (aw_global_get("uid") == "struktuur" || aw_global_get("uid") == "erik" || aw_global_get("uid") == "martorav")
 		{
 			$this->read_template("view4_bank.tpl");
+		}
+		else
+		if ($rate["IsMandatoryDeposit"] != "false")
+		{
+			$this->read_template("view4_only_cc.tpl");
 		}
 		else
 		{
@@ -1430,7 +1435,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		$checkout = sprintf("%04d", $checkoutdata2[2]).'-'.sprintf("%02d",$checkoutdata2[1]).'-'.sprintf("%02d",$checkoutdata2[0]).'T23:59:00';
 		$checkout_ts = mktime(0,0,0,$checkoutdata2[1], $checkoutdata2[0], $checkoutdata2[2]);
 
-		if (($checkout_ts - $checkin_ts) > (24*3600*19))
+		if (($checkout_ts - $checkin_ts) > (24*3600*99))
 		{
 			$arr["r_url"] = aw_url_change_var("error", 7, $arr["r_url"]);
 			return $arr["r_url"];

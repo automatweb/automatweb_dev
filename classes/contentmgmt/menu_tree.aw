@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.29 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.30 2008/03/13 13:26:32 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -323,6 +323,7 @@ class menu_tree extends class_base
 		}
 		$ol = new object_list($filt);
 		$_parents = array();
+		$lid = aw_global_get("ct_lang_id");
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			if ($hu && (!$o->prop_is_translated("name") || ($lid == $o->lang_id() && $o->status() == STAT_NOTACTIVE)))

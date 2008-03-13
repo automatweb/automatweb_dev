@@ -1273,7 +1273,6 @@ class class_base extends aw_template
 				return $cfid;
 			}
 		}
-
 		// 1. if there is a cfgform specified in the url, then we will use that
 		if (!empty($args["args"]["cfgform"]))
 		{
@@ -2436,7 +2435,7 @@ class class_base extends aw_template
 			};
 		};
 		$nm = $property["name"];
-
+		
 		// if this is a new object and the property has a default value, use it
 		if (empty($this->id) && isset($property["default"]))
 		{
@@ -2620,7 +2619,7 @@ class class_base extends aw_template
 				$resprops[$key] = $val;
 			}
 		}
-
+		
 		$properties = $resprops;
 		$resprops = array();
 
@@ -2776,7 +2775,6 @@ class class_base extends aw_template
 		{
 			$has_rte = false;
 		};
-
 
 
 		$properties = $resprops;
@@ -5230,7 +5228,7 @@ class class_base extends aw_template
 
 	/////////////////////////////////////////////
 	// sorta-automatic translation helpers
-	function trans_save($arr, $props)
+	function trans_save($arr, $props, $props_if = array())
 	{
 		$o = $arr["obj_inst"];
 		$o->set_no_modify(true);
@@ -5259,6 +5257,9 @@ class class_base extends aw_template
 			chr(195).chr(132) => "&Auml;",
 			chr(196).chr(171) => "&#299;",
 			chr(196).chr(129) => "&#257;",
+			chr(196).chr(147) => "&#275;",
+			chr(197).chr(179) => "&#371;",
+			chr(196).chr(141) => "&#269;",
 			chr(197).chr(171) => "&#363;"
 		);
 		$all_vals = $o->meta("translations");
@@ -5369,7 +5370,7 @@ class class_base extends aw_template
 		$arr["obj_inst"]->set_meta("translations", $all_vals);
 	}
 
-	function trans_callback($arr, $props)
+	function trans_callback($arr, $props, $props_if_filled = null)
 	{
 		aw_global_set("output_charset","UTF-8");
 		$ret = array();
@@ -5539,6 +5540,38 @@ class class_base extends aw_template
 					"type" => "submit",
 				);
 			}
+
+			foreach(safe_array($props_if_filled) as $p)
+			{
+				if ($arr["obj_inst"]->prop($p) != "")
+				{
+					$nm = "trans_".$lid."_".$p;
+					$ret[$nm] = array(
+						"name" => $nm,
+						"caption" => t($pl[$p]["caption"]),
+						"type" => $pl[$p]["type"],
+						"value" => iconv($lang["charset"], "UTF-8", $vals[$p])
+					);
+					if ($pl[$p]["richtext"] == 1)
+					{
+						$ret[$nm]["richtext"] = 1;
+					}
+				}
+			}
+			$nm = "act_".$lid;
+			$ret[$nm] = array(
+				"name" => $nm,
+				"caption" => t("T&otilde;lge aktiivne"),
+				"type" => "checkbox",
+				"ch_value" => 1,
+				"value" => $o->meta("trans_".$lid."_status") 
+			);
+			$nm = "sbt_".$lid;
+			$ret[$nm] = array(
+				"name" => $nm,
+				"caption" => t("Salvesta"),
+				"type" => "submit",
+			);
 		}
 
 		return $ret;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.236 2008/03/06 10:33:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.237 2008/03/13 13:26:29 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1742,9 +1742,9 @@ class room extends class_base
                 $week = date("W" , time());
                 $weekstart = get_week_start();
                 while($x<20)
-                {
+                {//arr(date("d-m-Y h:i",($weekstart + 8000)));
                         $url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
-                        $options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
+                        $options[$url] = date("W" , ($weekstart + 3600)) . ". " .date("d.m.Y", ($weekstart + 3600)) . " - " . date("d.m.Y", ($weekstart+604800));//see +4k on selleks, et kellakeeramise jama puhul üle tunni ka mõjuks
                         if($arr["request"]["start"] == $weekstart) $selected = $url;
                         $weekstart = $weekstart + 604800;
                         $x++;
@@ -2870,7 +2870,6 @@ class room extends class_base
 					$arr["id"] = $room;
 				}
 			}
-
 			extract($times);
 
 			$room = obj($arr["id"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.403 2008/02/29 10:48:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.404 2008/03/13 13:26:22 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -65,11 +65,17 @@ class menuedit extends aw_template
 				$section_a = $section;
 				$lc = aw_global_get("ct_lang_lc");
 			}
-			if ($section_a == "")
+			if ($section_a == "" && substr($section, -1) != "/")
 			{
 				$lc = aw_global_get("ct_lang_lc");
 				$section_a = $section;
 			}
+			else
+			if ($section_a == "")
+			{
+				$section_a = aw_ini_get("frontpage");
+			}
+			
 			if ($lc != "" && $section_a != "")
 			{
 				// switch to lang
@@ -243,7 +249,7 @@ class menuedit extends aw_template
 			$c = get_instance(CL_MENU);
 			$c->get_sitemap();
 		}
-
+		
 		// sektsioon ei olnud numbriline
 		if (!is_oid($section))
 		{
@@ -362,7 +368,7 @@ class menuedit extends aw_template
                                                 }
 
 						$obj = new object($cand_id);
-						if ($obj->id() != $obj->brother_of())
+						if ($obj->id() != $obj->brother_of() && $this->can("view", $obj->brother_of()))
 						{
 							$obj = obj($obj->brother_of());
 						}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.78 2008/03/04 08:12:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.79 2008/03/13 13:26:29 kristo Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -81,6 +81,9 @@ class room_reservation extends class_base
 			"hansapanklv" => "LV-Hansasabankas",
 			"hansapanklt" => "LT-Hansasabankas",
 		);
+
+		$this->obligatory = array("name","phone","email");
+
 		$this->banks = $this->banks + $this->bank_inst->banks;
 
 		$this->obligatory = array("name","phone","email");

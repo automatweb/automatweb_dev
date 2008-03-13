@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.103 2008/02/14 22:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.104 2008/03/13 13:26:47 kristo Exp $
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
@@ -1094,6 +1094,9 @@ class vcalendar extends aw_template
 					"date" => locale::get_lc_date($reals,5),
 					"lc_weekday" => locale::get_lc_weekday(date("w",$reals)),
 					"lc_month" => locale::get_lc_month(date("m",$reals)),
+					"y_num" => date("Y", $reals),
+					"m_num" => date("m", $reals),
+					"d_num" => date("d", $reals),
 					"daylink" => aw_url_change_var(array(
 						"viewtype" => "day",
 						"date" => date("d-m-Y",$reals),
@@ -1317,6 +1320,9 @@ class vcalendar extends aw_template
 				"date_and_time" => $dt . ". " . $mn2,
 				"day_name" => locale::get_lc_weekday($wn,true),
 				"long_day_name" => locale::get_lc_weekday($wn),
+				"y_num" => date("Y", $reals),
+                                "m_num" => date("m", $reals),
+                                "d_num" => date("d", $reals),
 				"date" => locale::get_lc_date($reals,5),
 			));
 			$tpl = $dstamp == $now ? "TODAY" : "DAY";
@@ -1655,7 +1661,11 @@ class vcalendar extends aw_template
 					"event_title" => "",
 					"event_content" => "",
 					"event_comment" => "",
-					"EVENT" => $events_str
+					"EVENT" => $events_str,
+					"y_num" => date("Y", $i),
+                                        "m_num" => date("m", $i),
+                                        "d_num" => date("d", $i)
+
 				));
 
 				if($this->is_template("CLICKABLE") && $mode == 0)

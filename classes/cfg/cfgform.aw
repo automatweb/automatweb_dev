@@ -2776,7 +2776,7 @@ class cfgform extends class_base
 	**/
 	function get_props_from_cfgform($arr)
 	{
-		$cf = obj($arr["id"]);
+	if(!$arr["id"])return array();	$cf = obj($arr["id"]);
 
 		$cfgx = get_instance("cfg/cfgutils");
 		$ret = $cfgx->load_properties(array(
@@ -2785,9 +2785,7 @@ class cfgform extends class_base
 
 		$subclass = $cf->prop("subclass");
 		// XXX: can be removed once doc and document are merged
-		$inst_name = ($subclass == CL_DOCUMENT) ? "doc" : $subclass;
-
-		$class_i = get_instance($inst_name);
+		$inst_name = ($subclass == CL_DOCUMENT) ? "doc" : $subclass;		$class_i = get_instance($inst_name);
 		$tmp = $class_i->load_from_storage(array(
 			"id" => $cf->id()
 		));
@@ -3944,6 +3942,42 @@ class cfgform extends class_base
 		}
 		$t->set_sortable(false);
 	}
+        
+	/**checks if class has a cfgform, if it has, get properties from that, otherwise gets them from the class itself
+                @attrib api=1 params=clid
+                @param clid required type=int
+                @returns array of properties
+        **/
+        function get_property_list($clid)
+        {
+                $goodprops = array(0=>"");
+                $manager_form = $this->get_sysdefault(array("clid"=>$clid));
+                if($manager_form)
+                {
+                        foreach($this->get_cfg_proplist($manager_form) as $pn=>$pd)
+                        {
+                                if($pd["caption"])
+                                {
+                                        $goodprops[$pn] = $pd["caption"];
+                                }
+                        }
+                }
+                else
+                {
+                        $o = obj();
+                        $o->set_class_id($clid);
+                        $list = $o->get_property_list();
+                        foreach($list as $lid => $li)
+                        {
+                                if($li["caption"])
+                                {
+                                //if(strpos($li["type"], "text")>-1 && $li["caption"])
+                                        $goodprops[$lid] = $li["caption"];
+                                }
+                        }
+                }
+                return $goodprops;
+        }
 
 	function parse_alias($args)
 	{

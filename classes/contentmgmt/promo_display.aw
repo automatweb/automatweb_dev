@@ -70,7 +70,6 @@ if ($_GET["PROMO_DBG"] == 1)
 			{
 				continue;
 			}
-
 			if (!$o->prop("tpl_lead"))
 			{
 				$tpl_filename = $default_tpl_filename;
@@ -189,7 +188,10 @@ if ($_GET["PROMO_DBG"] == 1)
 			{
 				$show_promo = false;
 			};
-
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo "promo = ".$o->id()." show = ".dbg::dump($show_promo)." <br>";
+}
 			if ($o->meta("not_in_search") == 1 && $_GET["class"] == "site_search_content")
 			{
 				$show_promo = false;
@@ -213,6 +215,7 @@ if ($_GET["PROMO_DBG"] == 1)
 			{
 				$show_promo = false;
 			}
+
 			// this line decides, whether we should show this promo box here or not.
 			// now, how do I figure out whether the promo box is actually in my path?
 
@@ -245,7 +248,7 @@ if ($_GET["PROMO_DBG"] == 1)
 					$has_rand = true;
 				}
 			
-				if (!$has_rand && $o->meta("version") == 2 && (aw_ini_get("promo.version") == 2) && !$o->prop("auto_period"))
+				if (!$has_rand && $o->meta("version") == 2 && (aw_ini_get("promo.version") == 2) && !$o->prop("auto_period") && !$o->prop("docs_from_current_menu") && false)
 				{
 					enter_function("mainc-contentmgmt/promo-read_docs");
 					$docid = array_values(safe_array($o->meta("content_documents")));
@@ -284,7 +287,10 @@ if ($_GET["PROMO_DBG"] == 1)
 					));
 					exit_function("mainc-contentmgmt/promo-read_docs-old");
 				}
-
+if ($_GET["PROMO_DBG"] == 1)
+{
+	echo "3promo = ".$o->id()." show = ".dbg::dump($docid)." <br>";
+}
 				if ($o->prop("trans_all_langs"))
 				{
 					obj_set_opt("no_cache", 0);
@@ -339,8 +345,9 @@ if ($_GET["PROMO_DBG"] == 1)
 
 					if ($d_cnt >= $o->prop("tpl_lead_last_count") && $o->prop("tpl_lead_last"))
                                         {
-                                                $tpl_filename = $tplmgr->get_template_file_by_id(array("id" => $o->prop("tpl_lead_last")));
-						
+						$tpl_filename = $tplmgr->get_template_file_by_id(array(
+		                                        "id" => $o->prop("tpl_lead_last"),
+			                        ));
                                         }
 
 					enter_function("promo-prev");

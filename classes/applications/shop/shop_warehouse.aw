@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.61 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.62 2008/03/13 13:27:17 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1239,11 +1239,11 @@ class shop_warehouse extends class_base
 		$tb->set_numeric_field("hidden_ord");				
 		$tb->set_default_sortby(array("is_menu", "hidden_ord"));
 		$tb->sort_by();
-
+		
 		return $tb->draw(array(
-			"pageselector" => "text",
-			"records_per_page" => 50,
-			"has_pages" => 1
+			//"pageselector" => "text",
+			//"records_per_page" => 50,
+			//"has_pages" => 1
 		));
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.42 2008/03/13 11:22:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.43 2008/03/13 13:26:23 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -590,7 +590,7 @@ class admin_if extends class_base
 			"type" => "time",
 			"format" => "d-M-y / H:i",
 			"sortable" => 1,
-			"numeric" => "yea",
+			"numeric" => 1,
 			"chgbgcolor" => "cutcopied",
 		));
 		
@@ -882,9 +882,10 @@ class admin_if extends class_base
 			
 			$t->define_data($row);
 			$num_records++;
-
 		}
-		
+
+		$sortby = $_GET["sortby"];
+
 		if($sortby == "status")
 		{
 			$sortby = "status_val";	
@@ -909,6 +910,7 @@ class admin_if extends class_base
 		$t->set_default_sorder("desc");
 		
 		$t->set_numeric_field("hidden_jrk");
+
 		if($sortby == "name")
 		{
 			$t->sort_by(array(

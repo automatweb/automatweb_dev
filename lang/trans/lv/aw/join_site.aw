@@ -1,9 +1,9 @@
 <?php
-$GLOBALS["TRANS"]["Maa"] = "ðalis";
-$GLOBALS["TRANS"]["Postiindeks"] = "Paðto indeksas";
-$GLOBALS["TRANS"]["Linn"] = "Miestas";
-$GLOBALS["TRANS"]["Maakond"] = "Valstybë (regionas)";
-$GLOBALS["TRANS"]["T&auml;nava nimi"] = "Gatvës pavadinimas";
-$GLOBALS["TRANS"]["T&uuml;hista"] = "Atðaukti";
+$GLOBALS["TRANS"]["Maa"] = "Valsts";
+$GLOBALS["TRANS"]["Postiindeks"] = "Pasta indekss";
+$GLOBALS["TRANS"]["Linn"] = "Pilsçta";
+$GLOBALS["TRANS"]["Maakond"] = "Rajons";
+$GLOBALS["TRANS"]["T&auml;nava nimi"] = "Iela";
+$GLOBALS["TRANS"]["T&uuml;hista"] = "At?aukti";
 $GLOBALS["TRANS"]["Liitun"] = "Prisijungti";
 ?>

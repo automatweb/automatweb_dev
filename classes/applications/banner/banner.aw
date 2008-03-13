@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.32 2008/01/02 12:29:18 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.33 2008/03/13 13:26:23 kristo Exp $
 
 /*
 
@@ -459,6 +459,8 @@ class banner extends class_base
 		{
 			$ip = aw_global_get("REMOTE_ADDR");
 		}
+
+		$bid = (int)$bid;
 		$this->db_query("INSERT INTO banner_clicks (tm,bid,ip,langid) values('".time()."','$bid','$ip','$langid')");
 	}
 
@@ -572,7 +574,7 @@ class banner extends class_base
 		if ($click)
 		{
 			// redirect
-			if ($bid)
+			if ($this->can("view", $bid))
 			{
 				$this->add_click($bid);
 				$ba = obj($bid);
@@ -645,7 +647,7 @@ class banner extends class_base
 		{
 			$this->error_banner();
 		}
-
+		
 		$f_o = obj($o->trans_get_val("banner_file"));
 		if ($f_o->class_id() == CL_IMAGE)
 		{
@@ -658,6 +660,11 @@ class banner extends class_base
 		else
 		if ($f_o->class_id() == CL_FLASH)
 		{
+			if ($o->prop("url") != "")
+			{
+				$url = $this->mk_my_orb("proc_banner", array("click" => 1, "id" => $o->id()));
+				$f_o->set_prop("click_tag", $url);
+			}
 			$i = get_instance(CL_FLASH);
 			$i->show(array(
 				"file" => basename($f_o->prop("file"))
@@ -681,7 +688,7 @@ class banner extends class_base
 					$this->add_simple_view($banner->id(), $loc);
 				}
 				$content_o = obj($content);
-				$url = $this->mk_my_orb("proc_banner", array("click" => 1, "bid" => $banner->id()), "banner", false, false, "&amp;");
+				$url = $this->mk_my_orb("proc_banner", array("click" => 1, "bid" => $banner->id()), "banner", false, false, "&");
 				$target = $banner->prop("banner_new_win") ? "target=\"_blank\"" : "";
 				switch($content_o->class_id())
 				{
@@ -729,10 +736,10 @@ class banner extends class_base
 						}
 						else
 						{
-							$html = /*"<a $target href='$url'>".*/$f->view(array(
+							$html = $f->view(array(
 								"id" => $content_o->id(),
 								"clickTAG" => $url
-							))/*."</a>"*/;
+							));
 						}
 						break;
 

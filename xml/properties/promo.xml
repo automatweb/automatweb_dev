@@ -310,6 +310,16 @@
             <caption>Vali men&amp;amp;uuml;&amp;amp;uuml;d, mille alt viimaseid dokumente v&amp;amp;otilde;etakse</caption>
       </property>
       <property>
+      	<name>docs_from_current_menu</name>
+	<type>checkbox</type>
+	<group>menus_sub</group>
+	<method>serialize</method>
+	<table>objects</table>
+	<field>meta</field>
+	<ch_value>1</ch_value>
+	<caption>Dokumendid aktiivse men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
+      </property>
+      <property>
             <name>ndocs</name>
             <type>textbox</type>
             <size>4</size>

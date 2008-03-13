@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.71 2008/03/12 13:12:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.72 2008/03/13 13:27:17 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -388,6 +388,8 @@ class shop_order_cart extends class_base
 		}
 		$awa = new aw_array($arr["add_to_cart"]);
 		//arr($arr);arr($cart);
+		$si = __get_site_instance();
+		$has_cb = method_exists($si, "check_submit_add_to_cart");
 		foreach($awa->get() as $iid => $quantx)
 		{
 			if (!is_oid($iid) || !$this->can("view", $iid))
@@ -431,9 +433,32 @@ class shop_order_cart extends class_base
 						$order_ok = false;
 					}
 				}
+				if ($has_cb)
+				{
+					if (is_array($rv = $si->check_submit_add_to_cart($iid, $cc)))
+					{
+						 $soce = aw_global_get("soc_err");
+						 if (!is_array($soce))
+						 {
+						 	 $soce = array();
+
+						}
+						$soce[$iid] = array(
+                                                        "msg" => $rv["msg"], 
+                                                        "prod_name" => $i_o->name(),
+                                                        "prod_id" => $i_o->id(),
+                                                        "must_order_num" => $mon,
+                                           //             "ordered_num" => $cc,
+                                            //            "ordered_num_enter" => $quant,
+                                                        "is_err" => true
+                                                );
+                                                aw_session_set("soc_err", $soce);
+                                                $order_ok = false;
+
+					}
+				}
 			}
 		}
-//arr($soce);
 
 		if (($arr["from"] != "confirm" && $arr["from"] != "") || (is_array($GLOBALS["user_data"]) && count($GLOBALS["user_data"])))
 		{

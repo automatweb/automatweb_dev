@@ -230,6 +230,15 @@
             <caption>Meili sisu (kui t&amp;amp;uuml;hi, siis templatest)</caption>
       </property>
       <property>
+      	<name>mail_template</name>
+	<group>mail_settings_orderer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+		<type>textbox</type>
+	<caption>Meili template</caption>
+      </property>
+      <property>
             <name>mail_to_seller_in_el</name>
             <group>mail_settings_seller</group>
             <table>objects</table>

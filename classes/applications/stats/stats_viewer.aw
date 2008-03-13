@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.6 2008/01/31 13:50:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.7 2008/03/13 13:26:27 kristo Exp $
 // stats_viewer.aw - Statistika 
 /*
 
@@ -925,10 +925,10 @@ class stats_viewer extends class_base
 				"gid" => $gs[$row["g_oid"]],
 				"session" => $row["session_id"],
 				"ctry" => $row["country"],
-				"referer" => html::href(array(
+				"referer" => $row["referer"] != "" ? html::href(array(
 					"url" => $row["referer"],
 					"caption" => t("Referer")
-				)),
+				)) : "",
 				"mail_id" => $row["mail_id"]
 			));
 		}
@@ -2084,7 +2084,7 @@ class stats_viewer extends class_base
 			$s_pct = ($row["sessions"]*100.0)/$s_sum;
 			$t->define_data(array(
 				"tm" => $tm,
-				"day" => $row["country"],
+				"day" => $row["country"] == "" ? t("Tundmatu") : $row["country"],
 				"views" => $row["total"],
 				"visits" => $row["sessions"],
 				"views_pct" => html::img(array(

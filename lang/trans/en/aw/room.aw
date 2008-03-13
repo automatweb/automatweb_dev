@@ -118,6 +118,7 @@ $GLOBALS["TRANS"]["Muuda"] = "Change";
 $GLOBALS["TRANS"]["Jah"] = "Yes";
 $GLOBALS["TRANS"]["Ei"] = "No";
 $GLOBALS["TRANS"]["Broneering"] = "Reservation";
+$GLOBALS["TRANS"]["VABA"] = "FREE";
 $GLOBALS["TRANS"]["Sellisele ajale pole broneerida v&otilde;imalik"] = "Rservation isn't possible to this time";
 $GLOBALS["TRANS"]["Algusaeg"] = "Start time";
 $GLOBALS["TRANS"]["L&otilde;ppaeg"] = "End time";

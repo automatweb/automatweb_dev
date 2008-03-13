@@ -1,5 +1,7 @@
 <?php
-
+if (!defined("C_SOAPCLIENT") && !class_exists("C_SoapClient", false))
+{
+define("C_SOAPCLIENT", 1);
 class C_SoapClient {
   var $host = "";
   var $port = "";
@@ -239,22 +241,26 @@ class C_SoapClient {
 	function http_get($headers, $content, $host, $port) {
 
  	  	// make connection to server
-	    $connRef = fsockopen($host, $port, $errno, $errstr, 5);
+	    $connRef = fsockopen($host, $port, $errno, $errstr, 50);
 
-        set_time_limit(10);
+        set_time_limit(100);
 
 	    $data = "";
 
 	    if (!$connRef) {
 	        $data .= "Connect Failed: ".$errstr." (".$errno.")";
-	        return false;
+if (aw_global_get("soap_debug") == 1 )
+{
+echo "fetch data fail= <pre>".htmlentities($data)."</pre><br>";
+}
+return false;
 	    }
 
 	    fputs($connRef, $headers);
 	    fputs($connRef, $content);
 
-		stream_set_timeout($connRef, 10);
-		set_time_limit(60);
+		stream_set_timeout($connRef, 600);
+		set_time_limit(600);
 
 		$data = "";
 		$status = socket_get_status($connRef);
@@ -280,6 +286,10 @@ class C_SoapClient {
 		}
 
 		@fclose($connRef);
+if (aw_global_get("soap_debug") == 1 )
+{
+echo "fetch data = <pre>".htmlentities($data)."</pre><br>";
+}
 
 	return $data;
   }
@@ -673,5 +683,5 @@ class C_XMLTag {
 	}
 
 }
-
+}
 ?>

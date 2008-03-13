@@ -46,7 +46,10 @@ class date
 				return $newdate;
 		}
 	}
-	
-	
+
+	function get_lc_month($num)
+	{
+		return $this->month[$num-1];
+	}
 }
 ?>

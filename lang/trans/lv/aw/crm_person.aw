@@ -1,7 +1,8 @@
 <?php
-$GLOBALS["TRANS"]["Vallaline"] = "Nevedæs/netekëjusi";
-$GLOBALS["TRANS"]["Abielus"] = "Vedæs/iðtekëjusi";
-$GLOBALS["TRANS"]["Lahutatud"] = "Iðsiskyræs/ (-usi)";
-$GLOBALS["TRANS"]["mees"] = "vyras";
-$GLOBALS["TRANS"]["naine"] = "moteris";
+$GLOBALS["TRANS"]["Vallaline"] = "neprecçjies";
+$GLOBALS["TRANS"]["Abielus"] = "precçjies";
+$GLOBALS["TRANS"]["Lahutatud"] = "ðíîries";
+$GLOBALS["TRANS"]["Vabaabielus"] = " ";
+$GLOBALS["TRANS"]["mees"] = "vîrietis";
+$GLOBALS["TRANS"]["naine"] = "sieviete";
 ?>

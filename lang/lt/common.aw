@@ -1,29 +1,29 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/lt/common.aw,v 1.3 2005/11/03 13:33:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/lang/lt/common.aw,v 1.4 2008/03/13 13:27:21 kristo Exp $
 // kuude nimed
-define("LC_M1","january");
-define("LC_M2","february");
-define("LC_M3","march");
-define("LC_M4","april");
-define("LC_M5","may");
-define("LC_M6","june");
-define("LC_M7","july");
-define("LC_M8","august");
-define("LC_M9","september");
-define("LC_M10","october");
-define("LC_M11","november");
-define("LC_M12","december");
+define("LC_M1","Sausis");
+define("LC_M2","Vasaris");
+define("LC_M3","Kovas");
+define("LC_M4","Balandis");
+define("LC_M5","Geguþë");
+define("LC_M6","Birþelis");
+define("LC_M7","Liepa");
+define("LC_M8","Rugpjûtis");
+define("LC_M9","Rugsëjis");
+define("LC_M10","Spalis");
+define("LC_M11","Lapkritis");
+define("LC_M12","Gruodis");
 
-define("LC_MONTH","|January|February|March|April|May|June|July|August|September|October|November|December");
-define("LC_WEEKDAY","|monday|tuesday|wednesday|thursday|friday|saturday|sunday");
+define("LC_MONTH","|Sausis|Vasaris|Kovas|Balandis|Geguþë|Birþelis|Liepa|Rugpjûtis|Rugsëjis|Spalis|Lapkritis|Gruodis");
+define("LC_WEEKDAY","|Pirmadienis|Antradienis|Treèiadienis|Ketvirtadienis|Pentadienis|Ðeðtadienis|Sekmadienis");
 
-define("LC_MONDAY","Monday");
-define("LC_TUESDAY","Tuesday");
-define("LC_WEDNESDAY","Wednesday");
-define("LC_THURSDAY","Thursday");
-define("LC_FRIDAY","Friday");
-define("LC_SATURDAY","Saturday");
-define("LC_SUNDAY","Sunday");
+define("LC_MONDAY","Pirmadienis");
+define("LC_TUESDAY","Antradienis");
+define("LC_WEDNESDAY","Treèiadienis");
+define("LC_THURSDAY","Ketvirtadienis");
+define("LC_FRIDAY","Pentadienis");
+define("LC_SATURDAY","Ðeðtadienis");
+define("LC_SUNDAY","Sekmadienis");
 
 define("LC_YES","yes");
 define("LC_NO","no");

@@ -2498,15 +2498,15 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:1603
 msgid "Vallaline"
-msgstr "Nevedæs/netekëjusi"
+msgstr "neprecçjies"
 
 #: classes/crm/crm_person.aw:1604
 msgid "Abielus"
-msgstr "Vedæs/iðtekëjusi"
+msgstr "precçjies"
 
 #: classes/crm/crm_person.aw:1605
 msgid "Lahutatud"
-msgstr "Iðsiskyræs/ (-usi)"
+msgstr "ðíîries"
 
 #: classes/crm/crm_person.aw:1606
 msgid "Vabaabielus"
@@ -2522,11 +2522,11 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:1627
 msgid "mees"
-msgstr "vyras"
+msgstr ""
 
 #: classes/crm/crm_person.aw:1628
 msgid "naine"
-msgstr "moteris"
+msgstr ""
 
 #: classes/crm/crm_person.aw:1809 classes/crm/crm_person.aw:3123
 #: classes/crm/crm_person.aw:3160

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.32 2008/01/31 13:54:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.33 2008/03/13 13:26:44 kristo Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -618,6 +618,7 @@ class crm_address extends class_base
 				$tmp[$k] = $str;
 			}
 		}
+		asort($tmp);
 		return $tmp;
 	}
 
@@ -935,6 +936,22 @@ class crm_address extends class_base
 		$countrys = $this->get_country_list();
 		return array_search($o->name(), $countrys);
 	}
+	
+	function get_phone_ext_list_as_js_array()
+	{
+		$a_list = $this->get_phone_ext_list();
+		
+		$a_list_count = count($a_list);
+		$s_out = "a_phone_prefixes = {";
+		foreach ($a_list as $key => $val)
+		{
+			$s_out .= '"'.$key.'" : "'.$a_list[$key].'",'."\n";
+		}
+		$s_out = substr($s_out, 0, strlen($s_out)-2);
+		$s_out .= "};";
+		
+		return $s_out;
+	}
 
 	function get_phone_ext_list()
 	{
@@ -999,7 +1016,7 @@ class crm_address extends class_base
 			"DO" => "+1-809",
 			"DZ" => "+213",
 			"EC" => "+593",
-			"EE" => "+37",
+			"EE" => "+372",
 			"EG" => "+20",
 			"EH" => "",
 			"ER" => "+291",

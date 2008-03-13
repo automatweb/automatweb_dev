@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.12 2008/01/29 12:44:05 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.13 2008/03/13 13:26:24 kristo Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -449,6 +449,7 @@ class obj_quick_add extends class_base
 			$o->set_name(sprintf(t("%s kiirlisamine"), $p->name()));
 			aw_disable_acl();
 			$o->save();
+			
 			$o->connect(array(
 				"to" => $p->id(),
 				"type" => "RELTYPE_PERSON"

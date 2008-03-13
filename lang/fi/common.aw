@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/fi/common.aw,v 1.3 2005/11/03 13:33:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/lang/fi/common.aw,v 1.4 2008/03/13 13:27:20 kristo Exp $
 // kuude nimed
 define("LC_M1","tammikuu");
 define("LC_M2","helmikuu");
@@ -17,13 +17,13 @@ define("LC_M12","joulukuu");
 define("LC_MONTH","|tammikuu|helmikuu|maaliskuu|huhtikuu|toukokuu|kesäkuu|heinäkuu|elokuu|syyskuu|lokakuu|marraskuu|joulukuu");
 define("LC_WEEKDAY","|esmaspäev|teisipäev|kolmapäev|neljapäev|reede|laupäev|pühapäev");
 
-define("LC_MONDAY","Esmasp&auml;ev");
-define("LC_TUESDAY","Teisip&auml;ev");
-define("LC_WEDNESDAY","Kolmap&auml;ev");
-define("LC_THURSDAY","Neljap&auml;ev");
-define("LC_FRIDAY","Reede");
-define("LC_SATURDAY","Laup&auml;ev");
-define("LC_SUNDAY","P&uuml;hap&auml;ev");
+define("LC_MONDAY","Maanantai");
+define("LC_TUESDAY","Tiistai");
+define("LC_WEDNESDAY","Keskiviikko");
+define("LC_THURSDAY","Torstai");
+define("LC_FRIDAY","Perjantai");
+define("LC_SATURDAY","Lauantai");
+define("LC_SUNDAY","Sunnuntai");
 
 define("LC_YES","jah");
 define("LC_NO","ei");

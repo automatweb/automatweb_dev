@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.78 2008/03/06 15:31:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.79 2008/03/13 13:26:29 kristo Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -360,7 +360,40 @@ class bank_payment extends class_base
 		//paneb panga crapi templatesse
 		$this->_init_banks($payment,$data);
 
+		$this->vars(array(
+			"go_to_cc_url" => $this->mk_my_orb("redir_to_cc", array("id" => $arr["id"]))
+		));
+
 		return $this->parse();
+	}
+
+	/**
+		@attrib name=redir_to_cc
+		@param id required
+	**/
+	function redir_to_cc($arr)
+	{
+		$o = obj($arr["id"]);
+		$amt = $o->prop("alias_amount");
+		$desc = $o->prop("alias_desc");
+
+		if ($this->can("view", $o->prop("alias_amount_ctr")))
+		{
+			$i = get_instance(CL_CFGCONTROLLER);
+			$amt = $i->check_property($o->prop("alias_amount_ctr"), $o->id(), $arr);
+		}
+		if ($this->can("view", $o->prop("alias_desc_ctr")))
+		{
+			$i = get_instance(CL_CFGCONTROLLER);
+			$desc = $i->check_property($o->prop("alias_desc_ctr"), $o->id(), $arr);
+		}
+		die($this->do_payment(array(
+			"payment_id" => $arr["id"],
+			"bank_id" => "credit_card",
+			"amount" => $amt,
+			"expl" => $desc,
+			"lang" => aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC")
+		)));
 	}
 
 	function _get_explanation($arr)
@@ -1076,6 +1109,18 @@ class bank_payment extends class_base
 	**/	
 	function do_payment($arr)
 	{
+		if(!$arr["reference_nr"])
+		{
+			$msg = ""; foreach($arr as $p => $v){$msg.= "\n".$p." = ".$v;}
+			foreach($_GET as $p => $v){$msg.= "\n".$p." = ".$v;}
+			foreach($_POST as $p => $v){$msg.= "\n".$p." = ".$v;}
+			send_mail(
+				"markop@struktuur.ee",
+				"vigane makse revalis",
+				$msg
+			);
+			return "";
+		}
 		//selle nomeduse pidi siia ette panema, sest hiljem bank_id'd muutes peaks muidu siia funktsiooni tagasi poorama
 		if(is_oid($arr["payment_id"]))
 		{

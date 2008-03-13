@@ -23,7 +23,7 @@ msgstr "Group"
 
 #: classes/vcl/acl_manager.aw:65
 msgid "Jah"
-msgstr "Yes"
+msgstr "Yes" 
 
 #: classes/vcl/acl_manager.aw:65
 msgid "Ei"

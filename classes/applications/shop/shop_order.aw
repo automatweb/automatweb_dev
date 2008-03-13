@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.66 2008/03/06 15:31:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.67 2008/03/13 13:27:17 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -822,7 +822,7 @@ class shop_order extends class_base
 							// make content for empty prods
 							$_html = $this->show(array(
 								"id" => $oi->id(),
-								"show_only_prods_with_val" => $eml
+								"show_only_prods_with_val" => $eml,
 							));
 							foreach($emails as $c)
 							{
@@ -940,7 +940,7 @@ class shop_order extends class_base
 				{
 					$html = $this->show(array(
 						"id" => $oi->id(),
-						"template" => "show_cust.tpl"
+						"template" => $this->order_center->prop("mail_template") != "" ?  $this->order_center->prop("mail_template") : "show_cust.tpl"
 					));
 				}
 	
@@ -1038,7 +1038,7 @@ class shop_order extends class_base
 	
 			$awm = get_instance("protocols/mail/aw_mail");
 	//		$awm->dbg = 1;
-			$html = $this->show(array("id" => $o->id() "template" => $order_center->prop("mail_template")));
+			$html = $this->show(array("id" => $o->id(), "template" => $order_center->prop("mail_template")));
 			//if(aw_global_get("uid") == "struktuur"){arr($_send_to);arr($html);arr($o->meta("user_data"));die(); }
 			$awm->create_message(array(
 				"froma" => $mail_from_addr,

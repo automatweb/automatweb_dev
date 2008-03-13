@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.47 2008/03/12 21:22:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.48 2008/03/13 13:26:25 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -101,6 +101,9 @@
 
 	@reltype MAIL_ADDRESS value=2 clid=CL_ML_MEMBER
 	@caption Meiliaadress
+	
+	@reltype RELTYPE_REGISTER_DATA value=3 clid=CL_REGISTER_DATA
+	@caption Registri andmed
 
 	@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY
 	@caption Klient

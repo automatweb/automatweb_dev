@@ -99,4 +99,5 @@ $GLOBALS["TRANS"]["V&auml;ljumisi"] = "Exits";
 $GLOBALS["TRANS"]["Loodud"] = "Created";
 $GLOBALS["TRANS"]["Looja"] = "Created by";
 $GLOBALS["TRANS"]["Vaata"] = "View";
+$GLOBALS["TRANS"]["Tundmatu"] = "Unknown";
 ?>

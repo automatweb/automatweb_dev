@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.51 2008/03/13 11:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.52 2008/03/13 13:26:32 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -216,7 +216,7 @@ class site_cache extends aw_template
 
 			eval("?>".$res);
 			$res = ob_get_contents();
-			if (strpos($res, "syntax err") !== false || strpos($res, "parse err") !== false)
+			if (strpos($res, "syntax err") !== false || strpos($res, "parse err") !== false || strpos($res, "Fatal err") !== false)
 			{
 				preg_match("/on line \<b\>(\d+)\<\/b\>/ims", $res, $mt);
 				$lines = explode("\n", str_replace("<?xml", "&lt;?xml", $tres));
