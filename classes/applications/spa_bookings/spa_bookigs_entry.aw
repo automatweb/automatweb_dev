@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.78 2008/03/13 16:05:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.79 2008/03/13 20:30:31 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -552,7 +552,7 @@ class spa_bookigs_entry extends class_base
 							send_mail(
 								$d["email"],
 								$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
-								str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_ex_mail_content")),
+								str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->id()), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_ex_mail_content")),
 								"From: ".$this->_get_from_addr($arr["obj_inst"])
 							);
 						}

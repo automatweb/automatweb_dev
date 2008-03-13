@@ -11,7 +11,7 @@ define("GROUP_LEVEL_PRIORITY", 100000);
 define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 /*
-$Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.147 2008/03/13 13:26:22 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.148 2008/03/13 20:30:28 kristo Exp $
 @classinfo maintainer=kristo
 EMIT_MESSAGE(MSG_USER_LOGIN);
 EMIT_MESSAGE(MSG_USER_LOGOUT);
@@ -285,7 +285,8 @@ class users_user extends aw_template
 		return false;
 	}
 
-	/** returns the oid for the given uid. but this is deprecated, because you should be using user oid's, not uids. **/
+	/** returns the oid for the given uid. but this is deprecated, because you should be using user oid's, not uids. 
+	**/
 	function get_oid_for_uid($uid)
 	{
 		if (!($ret = aw_cache_get("get_oid_for_uid", $uid)))

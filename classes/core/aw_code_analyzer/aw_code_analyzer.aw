@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.13 2008/03/06 18:44:07 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.14 2008/03/13 20:30:42 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -584,6 +584,7 @@ class aw_code_analyzer extends class_base
 		$this->in_function = false;
 		$this->var_track_func_scope = array();
 		$this->current_function = "";
+		$this->function_access = T_PUBLIC;
 	}
 
 	// reads constant array definition and returns the corresponding array

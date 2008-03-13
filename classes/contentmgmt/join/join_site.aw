@@ -1493,7 +1493,8 @@ class join_site extends class_base
 						"uid" => $n_uid,
 						"pass" => $n_pass,
 						"email" => $n_email,
-						"data" => $sessd
+						"data" => $sessd,
+						"u_obj" => $u_oid
 					));
 				}
 
@@ -1535,7 +1536,7 @@ class join_site extends class_base
 			}
 			else
 			{
-				$nf["gen"] = $GLOBALS["add_state"]["error"];
+				$nf["gen"] = $_SESSION["add_state"]["error"];
 			}
 		}
 		// if not, then just return to the fill page. we should give the user some error message as well
@@ -2887,7 +2888,7 @@ class join_site extends class_base
 		$text = $jms[$lid]["text"];
 
 		$us = get_instance("users");
-		$cp = $us->get_change_pwd_hash_link($arr["uid"]);
+		$cp = $us->get_change_pwd_hash_link($arr["u_obj"]->id());
 
 		$text = str_replace("#parool#", $arr["pass"], $text);
 		$text = str_replace("#kasutaja#", $arr["uid"], $text);
@@ -3374,7 +3375,6 @@ class join_site extends class_base
 
 	function can_add($arr)
 	{
-		global $add_state;
 		$reserved = array("system");
 
 		extract($arr);
@@ -3403,7 +3403,7 @@ class join_site extends class_base
 			{
 				$te = $lang_errs["user_exists"][$lang_id];
 			}
-			$add_state["error"] = $te;
+			$_SESSION["add_state"]["error"] = $te;
 			return false;
 		}
 
@@ -3414,7 +3414,7 @@ class join_site extends class_base
 			{
 				$te = $lang_errs["uid_short"][$lang_id];
 			}
-			$add_state["error"] = $te;
+			$_SESSION["add_state"]["error"] = $te;
 			return false;
 		}
 
@@ -3425,7 +3425,7 @@ class join_site extends class_base
 			{
 				$te = $lang_errs["pwd_typo"][$lang_id];
 			}
-			$add_state["error"] = $te;
+			$_SESSION["add_state"]["error"] = $te;
 			return false;
 		}
 
@@ -3436,7 +3436,7 @@ class join_site extends class_base
 			{
 				$te = $lang_errs["pwd_err"][$lang_id];
 			}
-			$add_state["error"] = $te;
+			$_SESSION["add_state"]["error"] = $te;
 			return false;
 		}
 
@@ -3447,7 +3447,7 @@ class join_site extends class_base
 			{
 				$te = $lang_errs["uid_short"][$lang_id];
 			}
-			$add_state["error"] = $te;
+			$_SESSION["add_state"]["error"] = $te;
 			return false;
 		}
 
@@ -3458,10 +3458,10 @@ class join_site extends class_base
 			{
 				$te = $lang_errs["pwd_short"][$lang_id];
 			}
-			$add_state["error"] = $te;
+			$_SESSION["add_state"]["error"] = $te;
 			return false;
 		}
-		$add_state["error"] = "";
+		$_SESSION["add_state"]["error"] = "";
 		return true;
 	}
 }

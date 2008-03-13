@@ -10,6 +10,7 @@
             <automatic>1</automatic>
             <newonly>1</newonly>
             <reltype>RELTYPE_OWNER</reltype>
+            <clid>CL_USER</clid>
             <caption>Select owner</caption>
       </property>
       <property>

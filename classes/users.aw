@@ -1,62 +1,50 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.191 2008/03/12 21:22:01 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.192 2008/03/13 20:30:28 kristo Exp $
 @classinfo  maintainer=kristo
 */
-if (!headers_sent())
-{
-	session_register("add_state");
-};
-
 classload("users_user");
-class users extends users_user
+class users extends users_user implements request_startup
 {
 	function users()
 	{
 		$this->init("automatweb/users");
-		lc_site_load("definition",&$this);
-		lc_load("definition");
-		$this->lc_load("users","lc_users");
 	}
 
-	/** generates the form for changing the users ($id) password
+	/** generates the form for changing the current users password
 		@attrib name=change_pwd params=name is_public="1" caption="Change password"
 
-		@param id optional
 		@param error optional
 	**/
 	function change_pwd($arr)
 	{
-		extract($arr);
-		if (!$id)
-		{
-			$id = aw_global_get("uid");
-		}
-
-		$oid = $this->get_oid_for_uid($id);
-		if (!($this->can("change", $oid) || aw_global_get("uid") == $id))
-		{
-			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
-		}
-
-		$uo = obj($oid);
+		$uo = obj(aw_global_get("uid_oid"));
 		$this->read_template("changepwd.tpl");
 		$this->vars(array(
 			"email" => $uo->prop("email"),
-			"error" => $error,
-			"reforb" => $this->mk_reforb("submit_change_pwd", array("id" => $id))
+			"error" => $arr["error"],
+			"reforb" => $this->mk_reforb("submit_change_pwd")
 		));
 		return $this->parse();
 	}
 
-	/**
-		@attrib name=change_password_not_logged nologin=1 all_args=1 is_public="1"
+	/** Generates the form for changing any user's password while being logged out
+		@attrib name=change_password_not_logged nologin=1 is_public="1"
+
+		@param uid required
+			The user's oid whose password to change
+
+		@param error optional
 	**/
 	function change_password_not_logged($arr)
 	{
+		aw_disable_acl();
+		$uo = obj($arr["uid"]);
+		aw_restore_acl();
 		$this->read_template("changepwdnotlogged.tpl");
 		$this->vars(array(
-			"username" => $arr['uid'],
+			"username" => $uo->prop('uid'),
+			"user_oid" => $arr["uid"],
 			"error" => $arr["error"],
 		));
 		return $this->parse();
@@ -89,16 +77,14 @@ class users extends users_user
 		{
 			$error = t("Vigane v&otilde;i vale parool");
 		}
-
-		elseif(!is_valid("uid", $username))
-		{
-			$error =  sprintf(t("Vigane kasutajanimimi %s"), $uid);
-		}
 		else
 		{
 			$auth = get_instance(CL_AUTH_SERVER_LOCAL);
+			aw_disable_acl();
+			$uo = obj($username);
+			aw_restore_acl();
 			list($success, $error) = $auth->check_auth(NULL, array(
-				"uid" =>  $username,
+				"uid" =>  $uo->prop("uid"),
 				"password" => $old_pass,
 				"pwdchange" => 1,
 			));
@@ -118,53 +104,40 @@ class users extends users_user
 		if ($success)
 		{
 			aw_disable_acl();
-				$user_obj = &obj(users::get_oid_for_uid($username));
-				$logins = $user_obj->prop("logins") + 1;
-				$user_obj->set_prop("logins", $logins);
-				$user_obj->save();
+			$user_obj = obj($username);
+			$logins = $user_obj->prop("logins") + 1;
+			$user_obj->set_prop("logins", $logins);
+			$user_obj->set_password($new_pass);
+			$user_obj->save();
 			aw_restore_acl();
 
-			$this->login(array(
-				"uid" => $username,
-				"password" => $old_pass,
-			));
-			$this->submit_change_pwd(array(
-				"pwd" => $new_pass,
-				"pwd2" => $new_pass_repeat,
-				"id" => aw_global_get("uid"),
+			return $this->login(array(
+				"uid" => $user_obj->prop("uid"),
+				"password" => $new_pass,
 			));
 		}
-
 	}
 
-	/** saves the uses changed password
+	/** saves the users changed password
 		@attrib name=submit_change_pwd params=name 
 	**/
 	function submit_change_pwd($arr)
 	{
 		extract($arr);
-		$oid = $this->get_oid_for_uid($id);
-		if (!($this->can("change", $oid) || aw_global_get("uid") == $id))
-		{
-			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
-		}
-
 		if ($arr["pwd"] != $arr["pwd2"])
 		{
-			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => LC_USERS_PASSW_NOT_SAME));
+			return $this->mk_my_orb("change_pwd", array("error" => t("Paroolid peavad olema samad!")));
 		}
 
 		if (!is_valid("password",$pwd))
 		{
-			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => "Uus parool sisaldab lubamatuid m&auml;rke<br />"));
+			return $this->mk_my_orb("change_pwd", array("error" => t("Uus parool sisaldab lubamatuid m&auml;rke<br />")));
 		}
 
+		$oid = aw_global_get("uid_oid");
 		aw_disable_acl();
 		$o = obj($oid);
-		if ($arr["pwd"] != "")
-		{
-			$o->set_password($arr["pwd"]);
-		}
+		$o->set_password($arr["pwd"]);
 		$o->set_prop("email",$arr["email"]);
 		$o->save();
 		aw_restore_acl();
@@ -172,36 +145,15 @@ class users extends users_user
 		if ($send_welcome_mail)
 		{
 			// send him some email as well if the users selected to do so
-			$c = get_instance("config");
-			$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
-			$mail = str_replace("#parool#", $arr["pwd"],$mail);
-			$mail = str_replace("#kasutaja#", $arr["id"],$mail);
-			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($arr["id"]), $mail);
-
-			send_mail($o->prop("email"),$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
-			$jsa = $c->get_simple_config("join_send_also");
-			if ($jsa != "")
-			{
-				send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
-			}
+			$this->send_welcome_mail(array(
+				"u_oid" => $oid,
+				"pass" => $arr["pwd"]
+			));
 		}
 
-		$this->_log(ST_USERS, SA_CHANGE_PWD, $arr['id']);
-
-		if (!empty($arr["return_url"]))
-		{
-			return $arr["return_url"];
-		}
-
-		if (is_admin())
-		{
-			return $this->mk_my_orb("gen_list", array(), "users");
-		}
-		else
-		{
-			header("Refresh: 2;url=".$this->cfg["baseurl"]);
-			die(t("Parool on edukalt vahetatud"));
-		}
+		$this->_log(ST_USERS, SA_CHANGE_PWD, $o->prop("uid"));
+		header("Refresh: 2;url=".$this->cfg["baseurl"]);
+		die(t("Parool on edukalt vahetatud"));
 	}
 
 	/** Generates an unique hash, which when used in a url can be used to let the used change his/her password
@@ -209,87 +161,92 @@ class users extends users_user
 	**/
 	function send_hash($args = array())
 	{
-		extract($args);
-
 		if (!aw_ini_get("auth.md5_passwords"))
 		{
-			return "<font color=red>This site does not use encrypted passwords and therefore this function does not work</font>";
+			return t("<font color=red>This site does not use encrypted passwords and therefore this function does not work</font>");
 		};
 
 		$this->read_template("send_hash.tpl");
 
 		lc_site_load("users", &$this);
 		$this->vars(array(
-			"webmaster" => $this->cfg["webmaster_mail"],
+			"webmaster" => aw_ini_get("users.webmaster_mail"),
 			"reforb" => $this->mk_reforb("submit_send_hash",array("section" => aw_global_get("section"))),
 		));
-
+		unset($_SESSION["status_msg"]);
 		return $this->parse();
 	}
 
-	/** 
+	/** Handles hash sender submit
 		@attrib name=submit_send_hash params=name nologin="1" 
 	**/
 	function submit_send_hash($args = array())
 	{
 		extract($args);
-		extract($_POST);
-		if (($type == "uid") && not(is_valid("uid",$uid)))
+		if (($type == "uid") && !is_valid("uid",$uid))
 		{
 			aw_session_set("status_msg",t("Vigane kasutajanimi"));
 			return $this->mk_my_orb("send_hash",array());
 		};
-		if (($type == "email") && !(is_email($email)))
+		if (($type == "email") && !is_email($email))
 		{
 			aw_session_set("status_msg",t("Vigane e-posti aadress"));
 			return $this->mk_my_orb("send_hash",array());
 		};
+		$filt = array(
+			"class_id" => CL_USER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"blocked" => new obj_predicate_not(1)
+		);
 		if ($type == "uid")
 		{
-			$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
+			$filt["uid"] = $uid;
 		}
 		else
 		{
-			$q = "SELECT * FROM users WHERE email = '$email' AND blocked = 0";
+			$filt["email"] = $email;
 		};
-		$this->db_query($q);
-		while($row = $this->db_next())
+		aw_disable_acl();
+		$ol = new object_list($filt);
+		foreach($ol->arr() as $o)
 		{
-			if ($type == "email")
+			if (!is_email($o->prop("email")))
 			{
-				$uid = $row["uid"];
-			};
-			if (not(is_email($row["email"])))
-			{
-				$status_msg .= t("Kasutajal $uid puudub korrektne e-posti aadress. Palun p&ouml;&ouml;rduge veebisaidi haldaja poole");
+				$status_msg .= sprintf(t("Kasutajal %s puudub korrektne e-posti aadress. Palun p&ouml;&ouml;rduge veebisaidi haldaja poole"), $o->prop("uid"));
 				aw_session_set("status_msg", $status_msg);
+				aw_restore_acl();
 				return $this->mk_my_orb("send_hash",array());
 			};
 
 			$this->read_template("hash_send.tpl");
 			lc_site_load("users", &$this);
 			$this->vars(array(
-				"churl" => $this->get_change_pwd_hash_link($uid),
-				"email" => $this->cfg["webmaster_mail"],
-				"name_wm" => $this->cfg["webmaster_name"],
-				"uid" => $row["uid"],
-				"host" => $host,
+				"churl" => $this->get_change_pwd_hash_link($o->id()),
+				"email" => aw_ini_get("users.webmaster_mail"),
+				"name_wm" => aw_ini_get("users.webmaster_name"),
+				"uid" => $o->prop("uid"),
+				"host" => aw_global_get("HTTP_HOST"),
 			));
 			$msg = $this->parse();
-			$from = sprintf("%s <%s>", $this->cfg["webmaster_name"], $this->cfg["webmaster_mail"]);
+			$from = sprintf("%s <%s>", aw_ini_get("users.webmaster_name"), aw_ini_get("users.webmaster_mail"));
 			send_mail(
-				$row["email"],
-				sprintf(t("Paroolivahetus saidil %s"), aw_global_get("HTTP_HOST")), $msg, "From: $from");
+				$o->prop("email"),
+				sprintf(t("Paroolivahetus saidil %s"), aw_global_get("HTTP_HOST")), 
+				$msg, 
+				"From: $from"
+			);
 			aw_session_set(
 				"status_msg",
-				sprintf(t("Parooli muutmise link saadeti  aadressile <b>%s</b>. Vaata oma postkasti<br />T&auml;name!<br />"), $row["email"])
+				sprintf(t("Parooli muutmise link saadeti  aadressile <b>%s</b>. Vaata oma postkasti<br />T&auml;name!<br />"), $o->prop("email"))
 			);
 		};
+		aw_restore_acl();
 		return $this->mk_my_orb("send_hash",array("section" => $args["section"]));
 	}
 
-	/** Allows the user to change his/her password
-		@attrib name=pwhash params=name nologin="1" default="0"
+	/** Allows the user to change his/her password from the link in the email sent by submit_send_hash
+		@attrib name=pwhash params=name nologin="1"
 
 		@param k required
 		@param u required
@@ -309,27 +266,33 @@ class users extends users_user
 			return $this->parse();
 		};
 
-		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = '0'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		if (not($row))
+		$filt = array(
+			"class_id" => CL_USER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"blocked" => new obj_predicate_not(1),
+			"uid" => $uid
+		);
+		aw_disable_acl();
+		$ol = new object_list($filt);
+		if (!$ol->count())
 		{
 			$this->read_adm_template("hash_results.tpl");
-		lc_site_load("users", &$this);
+			lc_site_load("users", &$this);
 			$this->vars(array(
 				"msg" => t("Sellist kasutajat pole registreeritud"),
 			));
 			return $this->parse();
 		};
 
-		aw_disable_acl();
-		$uo = obj($row["oid"]);
+		$uo = $ol->begin();
 		aw_restore_acl();
+
 		$pwhash = $uo->meta("password_hash");
 		if ($pwhash != $key)
 		{
 			$this->read_adm_template("hash_results.tpl");
-		lc_site_load("users", &$this);
+			lc_site_load("users", &$this);
 			$this->vars(array(
 				"msg" => t("Sellist v&otilde;tit pole v&auml;ljastatud"),
 			));
@@ -342,7 +305,7 @@ class users extends users_user
 		if (($ts + (3600*24*400)) < time())
 		{
 			$this->read_adm_template("hash_results.tpl");
-		lc_site_load("users", &$this);
+			lc_site_load("users", &$this);
 			$this->vars(array(
 				"msg" => t("See v&otilde;ti on juba aegunud")." <a href='".$this->mk_my_orb('send_hash')."'>".t("Telli uusi v&otilde;ti")."</a>"
 			));
@@ -353,87 +316,61 @@ class users extends users_user
 		lc_site_load("users", &$this);
 		$this->vars(array(
 			"uid" => $uid,
-			"reforb" => $this->mk_reforb("submit_password_hash",array("uid" => $uid,"pwhash" => $pwhash)),
+			"reforb" => $this->mk_reforb("submit_password_hash",array("uid" => $uo->id(),"pwhash" => $pwhash)),
 		));
+		unset($_SESSION["status_msg"]);
 		return $this->parse();
 	}
 
-	/** Submits the password
+	/** Submits the password change form based on hash
 		@attrib name=submit_password_hash params=name nologin="1"
 	**/
 	function submit_password_hash($args = array())
 	{
 		extract($args);	
-		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
-		$this->db_query($q);
-		$row = $this->db_next();
-		if (not($row))
+		aw_disable_acl();
+		$uo = obj($args["uid"]);
+		aw_restore_acl();
+		if ($uo->class_id() != CL_USER && $uo->prop("blocked") != 1)
 		{
 			aw_session_set("status_msg",t("Sellist kasutajat pole registreeritud"));
 			return $this->mk_my_orb("send_hash",array());
 		};
 
-		$uo = obj($row["oid"]);
 		$pwhash1 = $uo->meta("password_hash");
 		if ($pwhash1 != $pwhash)
 		{
 			aw_session_set("status_msg",t("Sellist v&otilde;tit pole v&auml;ljastatud"));
-			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
+			return $this->mk_my_orb("pwhash",array("u" => $uo->prop("uid"),"k" => $pwhash));
 		};
 
-		if (not(is_valid("password",$pass1)))
+		if (!is_valid("password",$pass1))
 		{
 			aw_session_set("status_msg",t("Parool sisaldab keelatud m&auml;rke"));
-			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
+			return $this->mk_my_orb("pwhash",array("u" => $uo->prop("uid"),"k" => $pwhash));
 		};
 
 		if ($pass1 != $pass2)
 		{
 			aw_session_set("status_msg",t("Paroolid peavad olema &uuml;hesugused"));
-			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
+			return $this->mk_my_orb("pwhash",array("u" => $uo->prop("uid"),"k" => $pwhash));
 		};
+		$uo->set_password($pass1);
+		aw_disable_acl();
+		$uo->save();
+		aw_restore_acl();
 
-		// tundub, et k&otilde;ik on allright. muudame parooli &auml;ra
-		$newpass = md5($pass1);
-		$q = "UPDATE users SET password = '$newpass' WHERE uid = '$uid'";
-		$this->db_query($q);
-		$this->_log(ST_USERS, SA_CHANGE_PWD, $uid);
+		$this->_log(ST_USERS, SA_CHANGE_PWD, $uo->prop("uid"));
 		aw_session_set("status_msg","<b><font color=green>".t("Parool on edukalt vahetatud.")."</font></b>");
-		return $this->login(array("uid" => $uid, "password" => $pass1));
+		return $this->login(array("uid" => $uo->prop("uid"), "password" => $newpass));
 	}
-
-	function kill_user()
-	{
-		aw_session_set("uid","");
-		session_destroy();
-		header("Location: ".aw_ini_get("baseurl"));
-		die();
-	}
-
-	function create_gidlists($u_oid)
+	
+	private function create_gidlists($u_oid)
 	{
 		$gidlist = array();
 		$gidlist_pri = array();
 		$gidlist_pri_oid = array();
 		$gidlist_oid = array();
-
-		aw_disable_acl();
-		$u_obj = obj($u_oid);
-		$gl = $u_obj->get_groups_for_user();
-		aw_restore_acl();
-		foreach($gl as $g_oid => $g_obj)
-		{
-			$gid = $g_obj->prop("gid");
-			$gidlist[(int)$gid] = (int)$gd["gid"];
-			$gidlist_pri[(int)$gid] = (int)$g_obj->prop("priority");
-			$gidlist_pri_oid[(int)$g_oid] = (int)$g_obj->prop("priority");
-			$gidlist_oid[(int)$g_oid] = (int)$g_oid;
-			
-			if ($g_obj->name() == $u_obj->name() && $g_obj->prop("type") == 1)
-			{
-				aw_global_set("current_user_group_oid", $g_oid);
-			}
-		}
 
 		if (!empty($_SESSION["nliug"]) && !is_admin())
 		{
@@ -443,6 +380,22 @@ class users extends users_user
 			$gidlist_pri[$nliug_o->prop("gid")] = $nliug_o->prop("priority");
 			$gidlist_oid[$nliug_o->id()] = $nliug_o->id();
 			$gidlist_pri_oid[(int)$nliug_o->id()] = (int)$nliug_o->prop("priority");
+		}
+		else
+		{
+			aw_disable_acl();
+			$u_obj = obj($u_oid);
+			$gl = $u_obj->get_groups_for_user();
+			aw_restore_acl();
+
+			foreach($gl as $g_oid => $g_obj)
+			{
+				$gid = $g_obj->prop("gid");
+				$gidlist[(int)$gid] = (int)$gd["gid"];
+				$gidlist_pri[(int)$gid] = (int)$g_obj->prop("priority");
+				$gidlist_pri_oid[(int)$g_oid] = (int)$g_obj->prop("priority");
+				$gidlist_oid[(int)$g_oid] = (int)$g_oid;
+			}
 		}
 
 		aw_global_set("gidlist", $gidlist);
@@ -473,7 +426,6 @@ class users extends users_user
 			$_SESSION["nliug"] = $_COOKIE["nliug"];
 		}
 
-
 		if (!isset($_SESSION["nliug"]))
 		{
 			$_SESSION["nliug"] = null;
@@ -482,12 +434,10 @@ class users extends users_user
 		if (($uid = aw_global_get("uid")) != "")
 		{
 			$this->create_gidlists($_SESSION["uid_oid"]);
-			$gidlist = aw_global_get("gidlist");
-			$gidlist_pri = aw_global_get("gidlist_pri");
 			$gidlist_pri_oid = aw_global_get("gidlist_pri_oid");
-			if (count($gidlist) < 1)
+			if (count($gidlist_pri_oid) < 1)
 			{
-				$this->kill_user();
+				$this->logout();
 			}
 			// get highest priority group
 			$hig = 0;
@@ -510,52 +460,12 @@ class users extends users_user
 
 			if ($hig_o)
 			{
-				aw_disable_acl();
-				$o = obj($hig_o);
-				aw_restore_acl();
-				$ar2 = $o->meta("admin_rootmenu2");
-				$gf = $o->meta("grp_frontpage");
-				$lang_id = aw_global_get("lang_id");
-				if (is_array($ar2) && $ar2[$lang_id])
-				{
-					aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
-					$inrm = aw_ini_get("ini_rootmenu");
-					if (!$inrm)
-					{
-						$inrm = aw_ini_get("rootmenu");
-					}
-					aw_ini_set("ini_rootmenu", $inrm);
-					aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
-				}
-				if (is_array($gf) && $gf[$lang_id])
-				{
-					aw_ini_set("frontpage",$gf[$lang_id]);
-				}
+				$this->_init_group_settings($hig_o);
 			}
 
 			if ($hig_w_u)
 			{
-				aw_disable_acl();
-				$o = obj($hig_w_u);
-				aw_restore_acl();
-				$ar2 = $o->meta("admin_rootmenu2");
-				$gf = $o->meta("grp_frontpage");
-				$lang_id = aw_global_get("lang_id");
-				if (is_array($ar2) && $ar2[$lang_id])
-				{
-					aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
-					$inrm = aw_ini_get("ini_rootmenu");
-					if (!$inrm)
-					{
-						$inrm = aw_ini_get("rootmenu");
-					}
-					aw_ini_set("ini_rootmenu", $inrm);
-					aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
-				}
-				if (is_array($gf) && $gf[$lang_id])
-				{
-					aw_ini_set("frontpage",$gf[$lang_id]);
-				}
+				$this->_init_group_settings($hig_w_u);
 			}
 
 			if (aw_ini_get("groups.multi_group_admin_rootmenu"))
@@ -622,13 +532,19 @@ class users extends users_user
 		}
 	}
 
-	function get_change_pwd_hash_link($uid)
+	/** Returns a link that allows the user to change his/her password 
+		@attrib api=1 params=pos
+
+		@param u_oid required type=oid
+			The user object oid whose password can be changed
+	**/
+	function get_change_pwd_hash_link($u_oid)
 	{
 		$ts = time();
 		$hash = substr(gen_uniq_id(),0,15);
 
 		aw_disable_acl();
-		$uo = obj($this->get_oid_for_uid($uid));
+		$uo = obj($u_oid);
 		$uo->set_meta("password_hash",$hash);
 		$uo->set_meta("password_hash_timestamp",$ts);
 		if ($uo->parent())
@@ -694,19 +610,15 @@ class users extends users_user
 				"to" => $nlg->id(),
 				"reltype" => RELTYPE_ACL,
 			));
-			$this->save_acl($o->id(), $nlg, array());
+			$this->save_acl($o->id(), $nlg->prop("gid"), array());
 
 			echo "Sisse logimata kasutajad <br>\n";
 			flush();
 
 
 			// give admins access to admin interface
-
-
 			aw_global_set("__in_post_message", 1);
-			// can not use cache here, go direct
-			$adm_oid = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$admg'", "oid");
-			$admo = obj($adm_oid);
+			$admo = obj($admg);
 			$admo->set_prop("can_admin_interface", 1);
 			$admo->save();
 
@@ -726,16 +638,16 @@ class users extends users_user
 			));
 			$user_o->set_parent($ini_opts["users.root_folder"]);
 			$user_o->save();
-			$this->last_user_oid = $user_o->id();
+			$last_user_oid = $user_o->id();
 			echo "Adding users... <br>\n";
 			flush();
 
 			echo "adding user to groups! <br>\n";
 			flush();
-			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$admg'", "oid"));
+			$this->_install_create_g_u_o_rel($last_user_oid, $admg);
 			echo "administrator <br>\n";
 			flush();
-			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '".$aug->prop("gid")."'", "oid"));
+			$this->_install_create_g_u_o_rel($last_user_oid, $aug->id());
 			echo "all users <br>\n";
 			flush();
 			aw_global_set("__in_post_message", 0);
@@ -743,7 +655,7 @@ class users extends users_user
 		}
 	}
 
-	function _install_create_g_u_o_rel($u_oid, $g_oid)
+	private function _install_create_g_u_o_rel($u_oid, $g_oid)
 	{
 		// create objects
 		$u_o = obj($u_oid);
@@ -763,8 +675,8 @@ class users extends users_user
 	/** sends user welcome mail to user and others
 		@attrib api=1 params=name
 		
-		@param uid required type=string
-			the user whose mail to send
+		@param u_oid required type=oid
+			the user oid whose mail to send
 
 		@param pass optional type=string
 			if set, #password# is replaced by this, since passwords in db are hashed, we can't read it from there
@@ -774,15 +686,12 @@ class users extends users_user
 	**/
 	function send_welcome_mail($arr)
 	{
-		extract($arr);
-		$o = obj($this->get_oid_for_uid($uid));
-
-		// send him some email as well if the users selected to do so
+		$o = obj($arr["u_oid"]);
 		$c = get_instance("config");
 		$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
-		$mail = str_replace("#parool#", $pass,$mail);
-		$mail = str_replace("#kasutaja#", $uid,$mail);
-		$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($uid), $mail);
+		$mail = str_replace("#parool#", $arr["pass"],$mail);
+		$mail = str_replace("#kasutaja#", $o->prop("uid"),$mail);
+		$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($o->id()), $mail);
 
 		send_mail($o->prop("email"),$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		$jsa = $c->get_simple_config("join_send_also");
@@ -796,7 +705,7 @@ class users extends users_user
 		@comment
 			fixes umlauts etc in name.
 	**/
-	function fix_name($name, $space = "_")
+	private function fix_name($name, $space = "_")
 	{
 		$name = strtolower($name);
 		$name = trim($name);
@@ -816,9 +725,8 @@ class users extends users_user
 		finds first available uid in format firstname.lastname[.###]
 		etc: 'john.smith','johm.smith.051' ...
 	**/
-	function _find_username($first, $last)
+	private function _find_username($first, $last)
 	{
-
 		$first = $this->fix_name($first);
 		$last = $this->fix_name($last);
 		$suffix = "";
@@ -840,16 +748,11 @@ class users extends users_user
 		}
 	}
 
-	/**
+	/** Logs user in with id-card over ssl.
 		@attrib name=id_pre_login params=name nologin=1
-		@comment
-		Logs user in with id-card over ssl.
 	**/
 	function id_pre_login($arr)
 	{
-		//dbg::p1($_SERVER);
-		//arr($_SERVER);
-		//die();
 		if($_SERVER["HTTPS"] != "on")
 		{
 			return aw_ini_get("baseurl");
@@ -874,12 +777,6 @@ class users extends users_user
 		$arr["firstname"] = $data["f_name"];
 		$arr["lastname"] = $data["l_name"];
 		$arr["ik"] = $data["pid"];
-
-		/* for debug
-		if($_SERVER["REMOTE_ADDR"] == "62.65.36.186")
-		{
-		}
-		*/
 
 		$arr["gender"] = ($arr["ik"][0] == 1 || $arr["ik"][0] == 3 || $arr["ik"][0] == 5)?1:2;
 
@@ -1043,16 +940,11 @@ class users extends users_user
 					hash_time > ".time()." AND
 					uid = '$arr[uid]'
 			";
-	//		echo "q =- $q <br>\n\n";
-		//	flush();
 			$row = $this->db_fetch_row($q);
-		//	echo "row = ".dbg::dump($row)."\n\n\n";
-		//	flush();
 			if ($row["hash"] == $arr["hash"])
 			{
 				// do quick login
 				$_SESSION["uid"] = $arr["uid"];
-				$_SESSION["login_hash_data"] = $row;
 				aw_global_set("uid", $arr["uid"]);
 				$oid = $this->get_oid_for_uid($arr["uid"]);
 				aw_session_set("uid_oid", $oid);
@@ -1068,10 +960,8 @@ class users extends users_user
 
 				// remove stale hash table entries
 				$this->db_query("DELETE FROM user_hashes WHERE hash_time < ".(time() - 60*24*3600));
-				//echo "logged in user  \n\n\n";
-				//flush();
 
-				$url = ($t = urldecode(aw_global_get("request_uri_before_auth")))?$t:aw_ini_get("baseurl");
+				$url = ($t = urldecode(aw_global_get("request_uri_before_auth"))) ? $t : aw_ini_get("baseurl");
 				if ($url == aw_ini_get("baseurl")."/login.aw")
 				{
 					$url = aw_ini_get("baseurl");
@@ -1096,7 +986,8 @@ class users extends users_user
 		@comment
 			converts certificates subject value to ISO-8859-1
 	**/
-	function certstr2utf8($str) {
+	private function certstr2utf8($str) 
+	{
 		$result="";
 		$encoding=mb_detect_encoding($str,"ASCII, UTF-8");
 		if ($encoding=="ASCII")
@@ -1126,7 +1017,7 @@ class users extends users_user
 				l_name => lastname,
 				pid => personal id,
 	**/
-	function returncertdata($cert)
+	private function returncertdata($cert)
 	{
 		$data = array();
 		$certstructure=openssl_x509_parse($cert);
@@ -1144,6 +1035,31 @@ class users extends users_user
 			$data['pid'] = $this->certstr2utf8($certstructure["subject"]["S"]);
 		}
 		return $data;
+	}
+
+	private function _init_group_settings($group_oid)
+	{
+		aw_disable_acl();
+		$o = obj($group_oid);
+		aw_restore_acl();
+		$ar2 = $o->meta("admin_rootmenu2");
+		$gf = $o->meta("grp_frontpage");
+		$lang_id = aw_global_get("lang_id");
+		if (is_array($ar2) && $ar2[$lang_id])
+		{
+			aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
+			$inrm = aw_ini_get("ini_rootmenu");
+			if (!$inrm)
+			{
+				$inrm = aw_ini_get("rootmenu");
+			}
+			aw_ini_set("ini_rootmenu", $inrm);
+			aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+		}
+		if (is_array($gf) && $gf[$lang_id])
+		{
+			aw_ini_set("frontpage",$gf[$lang_id]);
+		}
 	}
 }
 ?>

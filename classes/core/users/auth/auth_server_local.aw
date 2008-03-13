@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.13 2008/03/12 21:23:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.14 2008/03/13 20:30:51 kristo Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 
@@ -127,7 +127,7 @@ class auth_server_local extends class_base
 
 		if($success && user::require_password_change($udata["uid"]) && user::is_first_login($udata["uid"]) && !$credentials["pwdchange"])
 		{ 
-			Header("Location: ".$this->mk_my_orb("change_password_not_logged", array("uid" => $udata["uid"]), "users"));
+			Header("Location: ".$this->mk_my_orb("change_password_not_logged", array("uid" => $udata["oid"]), "users"));
 			exit;		
 		}
 		

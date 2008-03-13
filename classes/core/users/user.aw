@@ -415,7 +415,7 @@ class user extends class_base
 				if ($prop['value'] == 1)
 				{
 					$this->users->send_welcome_mail(array(
-						"uid" => $arr["obj_inst"]->prop("uid"),
+						"u_uid" => $arr["obj_inst"]->id(),
 						"pass" => $arr['request']['passwd']
 					));
 				}

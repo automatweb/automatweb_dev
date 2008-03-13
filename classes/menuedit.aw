@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.404 2008/03/13 13:26:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.405 2008/03/13 20:30:28 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
-class menuedit extends aw_template
+class menuedit extends aw_template implements request_startup
 {
 	function menuedit()
 	{

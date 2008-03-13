@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.2 2008/03/12 09:48:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.3 2008/03/13 20:30:34 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -65,7 +65,7 @@
 
 // perioodi pilt
 
-class period extends class_base
+class period extends class_base implements request_startup
 {
 	function period($oid = 0)
 	{

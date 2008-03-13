@@ -81,7 +81,6 @@ class user_object extends _int_object
 		{
 			$pwd = md5($pwd);
 		}
-
 		parent::set_prop("password", $pwd);
 	}
 
@@ -120,6 +119,11 @@ class user_object extends _int_object
 	**/
 	function get_default_group()
 	{
+		static $cache;
+		if ($cache)
+		{
+			return $cache;
+		}
 		// now, the user's own group is not in this list probably, so we go get that as well
 		$ol = new object_list(array(
 			"class_id" => array(CL_GROUP, CL_USER_GROUP),
@@ -131,6 +135,7 @@ class user_object extends _int_object
 		if ($ol->count())
 		{
 			$mg = $ol->begin();
+			$cache = $mg->id();
 			return $mg->id();
 		}
 		return null;

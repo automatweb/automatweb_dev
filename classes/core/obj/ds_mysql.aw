@@ -652,7 +652,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$acld_fld = $acld_val = "";
 		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")
 		{
-			$g_d = aw_global_get("current_user_group_oid");
+			$uo = obj(aw_global_get("uid_oid"));
+			$g_d = $uo->get_default_group();
 			$acld_fld = ",acldata";
 			$acld_val = ",'".str_replace("'", "\\'", aw_serialize(array(
 				$g_d => $this->get_acl_value_n($this->acl_get_default_acl_arr())

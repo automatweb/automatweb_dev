@@ -548,7 +548,7 @@
             <store>no</store>
             <parent>mail_top</parent>
             <no_caption>1</no_caption>
-            <caption>Saada peale salvestamist &amp;auml;ra</caption>
+            <caption>Saada peale salvestamist &amp;amp;auml;ra</caption>
       </property>
       <property>
             <name>save_as_new</name>

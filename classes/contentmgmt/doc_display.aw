@@ -428,6 +428,7 @@ class doc_display extends aw_template
 				}
                                 $li = get_instance("aw_template");
                                 $li->init();
+				lc_site_load("login", &$li);
                                 $li->read_template("login.tpl");
                                 $text = str_replace("#login#", $li->parse(), $text);
                         }

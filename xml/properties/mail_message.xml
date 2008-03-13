@@ -265,6 +265,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>Meiliaadress</caption>
             </MAIL_ADDRESS>
+            <RELTYPE_REGISTER_DATA>
+                  <value>3</value>
+                  <clid>CL_REGISTER_DATA</clid>
+                  <caption>Registri andmed</caption>
+            </RELTYPE_REGISTER_DATA>
             <CUSTOMER>
                   <value>3</value>
                   <clid>CL_CRM_COMPANY</clid>

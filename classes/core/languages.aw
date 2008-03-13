@@ -3,7 +3,7 @@
 @classinfo  maintainer=kristo
 */
 
-class languages extends aw_template
+class languages extends aw_template implements request_startup
 {
 	function languages()
 	{

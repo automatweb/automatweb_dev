@@ -7,7 +7,7 @@ Te peate oma parooli muutma.
 	<tr>
 		<td>Kasutajanimi</td>
 		<td>
-			<input type="hidden" name="username" value='{VAR:username}'>
+			<input type="hidden" name="username" value='{VAR:user_oid}'>
 			{VAR:username}
 		</td>
 	<tr>

@@ -4,15 +4,16 @@
 		<action name="change_pwd" is_public="1" caption="Change password">
 			<function name="change_pwd">
 				<arguments>
-					<optional name="id" />
 					<optional name="error" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_password_not_logged" nologin="1" is_public="1" all_args="1">
+		<action name="change_password_not_logged" nologin="1" is_public="1">
 			<function name="change_password_not_logged">
 				<arguments>
+					<required name="uid" />
+					<optional name="error" />
 				</arguments>
 			</function>
 		</action>
