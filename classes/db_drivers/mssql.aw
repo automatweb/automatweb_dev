@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.11 2008/03/13 09:20:49 voldemar Exp $
-// mysql.aw - MySQL draiver
+// mssql.aw - MSSQL draiver
 /*
 @classinfo  maintainer=kristo
 */
@@ -189,7 +188,7 @@ class mssql
 		return $this->db_next();
 	}
 
-	# seda voib kasutada, kui on vaja teada saada mingit kindlat välja
+	# seda voib kasutada, kui on vaja teada saada mingit kindlat v2lja
 	# a 'la cval tabelist config
 	# $cval = db_fetch_field("SELECT cval FROM config WHERE ckey = '$ckey'","cval")
 	function db_fetch_field($qtext,$field)
@@ -218,7 +217,7 @@ class mssql
 
 
 
-	# need 2 funktsiooni oskavad käituda nii array-de kui ka stringidega
+	# need 2 funktsiooni oskavad k2ituda nii array-de kui ka stringidega
 	function quote(&$arr)
 	{
 		if (is_array($arr))
