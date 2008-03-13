@@ -28,13 +28,6 @@ class quickmessagebox_obj extends _int_object
 		return aw_ini_get("site_basedir") . self::COUNTER_FILE;
 	}
 
-	public function set_status($status)
-	{// only one msgbox active for a user
-		// if (STAT_$this->status())
-		// {
-		// }
-	}
-
 	/**
 	@attrib api=1
 	@returns object_list
@@ -149,6 +142,8 @@ class quickmessagebox_obj extends _int_object
 	@errors
 		throws awex_qmsg_no_box if user has no messagebox.
 		throws awex_qmsg_cfg if user has more than one messagebox.
+	@comment
+		If no messagebox found for user and ini setting quickmessaging.auto_create_box is set to true, creates one.
 	**/
 	public static function get_msgbox_for_user(object $user)
 	{
@@ -156,7 +151,6 @@ class quickmessagebox_obj extends _int_object
 			"class" => CL_QUICKMESSAGEBOX,
 			// "type" => "RELTYPE_OWNER",
 			"type" => 4,
-			"from.status" => object::STAT_ACTIVE
 		));
 
 		if (1 === count($c))
@@ -171,6 +165,7 @@ class quickmessagebox_obj extends _int_object
 				$box = new object();
 				$box->set_class_id(CL_QUICKMESSAGEBOX);
 				$box->set_parent($user->id());
+				$box->set_name(sprintf(t("Quickmessagebox of %s"), $user->name()));
 				$box->set_prop("owner", $user->id());
 				$box->save();
 				$box->connect(array(

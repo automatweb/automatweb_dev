@@ -14,7 +14,7 @@
 @default method=serialize
 
 @default group=general
-	@property owner type=relpicker automatic=1 newonly=1 reltype=RELTYPE_OWNER
+	@property owner type=relpicker automatic=1 newonly=1 reltype=RELTYPE_OWNER clid=CL_USER
 	@caption Select owner
 
 	@property is_contactlist_add_approval_required type=checkbox ch_value=1
