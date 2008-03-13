@@ -58,17 +58,14 @@ class quickmessage extends class_base
 
 			if ("quickmessagebox" === $return_url->arg("class"))
 			{
-				return (string) $return_url;
-			}
-			else
-			{
-				return $ret;
+				$ret = (string) $return_url;
 			}
 		}
 		catch (Exception $e)
 		{
-			return $ret;
 		}
+
+		return $ret;
 	}
 
 	function do_db_upgrade($table, $field, $q, $err)
