@@ -1189,7 +1189,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
-		$sql .= " ORDER BY a.id ";
+	//	$sql .= " ORDER BY a.id ";
 
 		$this->db_query($sql);
 		$ret = array();
@@ -1200,6 +1200,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$ret[$row["id"]] = $row;
 		}
 
+		ksort($ret);
 		return $ret;
 	}
 

@@ -3652,9 +3652,9 @@ class bug_tracker extends class_base
 		$u = get_instance("users");
 		foreach($bug2uid as $b_uid => $bugs)
 		{
-			if (is_oid($b_uid))
+			if ($this->can("view", $b_uid))
 			{
-				$b_person = obj($b_person);
+				$b_person = obj($b_uid);
 				$eml = $b_person->prop_str("email");
 			}
 			else

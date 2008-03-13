@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.211 2008/03/05 11:19:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.212 2008/03/13 10:57:08 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3263,8 +3263,12 @@ class task extends class_base
 
 	function get_stos($u = false)
 	{
-		$ui = get_instance(CL_USER);
-		$u = $u?$u:obj($ui->get_current_user());
+		static $cur_u;
+		if (!$cur_u)
+		{
+			$cur_u = obj(aw_global_get("uid_oid"));
+		}
+		$u = $u ? $u : $cur_u;
 		return aw_unserialize($u->prop("stoppers"));
 	}
 

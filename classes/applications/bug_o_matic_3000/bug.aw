@@ -316,7 +316,10 @@ class bug extends class_base
 	{
 		$this->cx = get_instance("cfg/cfgutils");
 		$pt = $arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"];
-
+		if (!$pt)
+		{
+			return;
+		}
 		$parent = new object($pt);
 		$props = $parent->properties();
 		$cx_props = $this->cx->load_properties(array(

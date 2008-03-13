@@ -1762,7 +1762,8 @@ class _int_object
 		$cld = $GLOBALS["cfg"]["classes"][$this->obj["class_id"]];
 		if (!empty($cld["object_override"]))
 		{
-			$i = get_instance($cld["object_override"]);
+			$cln = basename($cld["object_override"]);
+			$i = new $cln;
 			// copy props
 			$i->obj = $this->obj;
 			$i->implicit_save = $this->implicit_save;
