@@ -159,6 +159,14 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>on_demand</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <field>aw_on_demand</field>
+            <caption>Sissen&amp;amp;otilde;udmisel</caption>
+      </property>
+      <property>
             <name>partial_recieved</name>
             <table>objects</table>
             <group>general</group>

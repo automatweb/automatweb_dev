@@ -61,6 +61,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property state type=select table=aw_crm_bill field=aw_state
 	@caption Staatus
 
+	@property on_demand type=checkbox table=aw_crm_bill field=aw_on_demand
+	@caption Sissen&otilde;udmisel
+
 	@property partial_recieved type=text field=meta method=serialize
 	@caption Osaline laekumine
 
@@ -170,7 +173,7 @@ class crm_bill extends class_base
 			6 => t("Osaliselt laekunud"),
 			4 => t("Kreeditarve"),
 			5 => t("Tehtud kreeditarve"),
-//			-5 => t("T&uuml;histatud"),
+			-5 => t("Maha kantud"),
 		);
 	}
 
@@ -2642,7 +2645,7 @@ class crm_bill extends class_base
 		$onclick = "";
 		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
 		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
-		if(!$has_val) $onclick.= "}else;";
+		if(!$has_val) $onclick.= "}else {;}";
 		
 
 		$tb->add_menu_item(array(
@@ -2777,6 +2780,7 @@ class crm_bill extends class_base
 				return true;
 			case "aw_trans_date":
 			case "aw_payment_mode":
+			case "aw_on_demand":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int"
