@@ -69,7 +69,10 @@ class crm_data extends class_base
 			{
 				$of["CL_CRM_BILL.state"] = $filter["state"];
 			}
-
+			if (isset($filter["on_demand"]) && $filter["on_demand"] != -1)
+			{
+				$of["CL_CRM_BILL.on_demand"] = $filter["on_demand"];
+			}
 			$of2 = $of;
 
 			if (!empty($filter["client_mgr"]))
