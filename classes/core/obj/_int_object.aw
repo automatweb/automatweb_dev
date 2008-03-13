@@ -1682,6 +1682,77 @@ class _int_object
 		return $val;
 	}
 
+	public function acl_del($g_oid)
+	{
+		$group = obj($g_oid);
+		$GLOBALS["object_loader"]->remove_acl_group_from_obj($group, $this->obj["oid"]);
+		$this->disconnect(array(
+			"from" => $group->id(),
+			"type" => RELTYPE_ACL
+		));
+	}
+
+	public function acl_get()
+	{
+		return $GLOBALS["object_loader"]->get_acl_groups_for_obj($this->obj["oid"]);
+	}
+
+	public function acl_set($group, $acl)
+	{
+		if (!$this->is_connected_to(array("to" => $group->id())))
+		{
+			$this->connect(array(
+				"to" => $group->id(),
+				"reltype" => RELTYPE_ACL
+			));
+		}
+
+		if (!$group->prop("gid"))
+		{
+			return;
+		}
+
+		$GLOBALS["object_loader"]->add_acl_group_to_obj($group->prop("gid"), $this->obj["oid"]);
+		$GLOBALS["object_loader"]->save_acl(
+			$this->obj["oid"],
+			$group->prop("gid"),
+			$acl
+		);
+	}
+
+	public function get_first_conn_by_reltype($type = NULL)
+	{
+		$conns = $this->connections_from(array(
+			"type" => $type,
+		));
+		return reset($conns); // reset($empty_arr) gives bool(false)
+	}
+
+	public function get_first_obj_by_reltype($type = NULL)
+	{
+		$conns = $this->connections_from(array(
+			"type" => $type,
+		));
+		if ($first = reset($conns))
+		{
+			return $first->to();
+		}
+		return false;
+	}
+
+	public function get_xml($options)
+	{
+		$i = get_instance("core/obj/obj_xml_gen");
+		return $i->gen($this->obj["oid"], $options);
+	}
+
+	public function from_xml($xml, $parent)
+	{
+		$i = get_instance("core/obj/obj_xml_gen");
+		$oid = $i->unser($xml, $parent);
+		return new object($oid);
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// private functions
 

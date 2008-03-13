@@ -499,10 +499,7 @@ class object
 	**/
 	function get_first_conn_by_reltype($type = NULL)
 	{
-		$conns = $GLOBALS["objects"][$this->oid]->connections_from(array(
-			"type" => $type,
-		));
-		return reset($conns); // reset($empty_arr) gives bool(false)
+		return $GLOBALS["objects"][$this->oid]->get_first_conn_by_reltype($type);
 	}
 
 	/** Finds the first connection of type specified by parameter and returns the target object where the connection points to.
@@ -535,14 +532,7 @@ class object
 	**/
 	function get_first_obj_by_reltype($type = NULL)
 	{
-		$conns = $GLOBALS["objects"][$this->oid]->connections_from(array(
-			"type" => $type,
-		));
-		if ($first = reset($conns))
-		{
-			return $first->to();
-		}
-		return false;
+		return $GLOBALS["objects"][$this->oid]->get_first_obj_by_reltype($type);
 	}
 
 	/** returns an array of object instances that are the current objects parent objects
@@ -1829,24 +1819,7 @@ class object
 	**/
 	function acl_set($group, $acl)
 	{
-		if (!$this->is_connected_to(array("to" => $group->id())))
-		{
-			$this->connect(array(
-				"to" => $group->id(),
-				"reltype" => RELTYPE_ACL
-			));
-		}
-
-		if (!$group->prop("gid"))
-		{
-			return;
-		}
-		$GLOBALS["object_loader"]->add_acl_group_to_obj($group->prop("gid"), $this->id());
-		$GLOBALS["object_loader"]->save_acl(
-			$this->id(),
-			$group->prop("gid"),
-			$acl
-		);
+		return $GLOBALS["objects"][$this->oid]->acl_set($group, $acl);
 	}
 
 	/** returns a list of all the current acl connections for this object
@@ -1868,7 +1841,7 @@ class object
 	**/
 	function acl_get()
 	{
-		return $GLOBALS["object_loader"]->get_acl_groups_for_obj($this->oid);
+		return $GLOBALS["objects"][$this->oid]->acl_get();
 	}
 
 	/** removes an acl relation from the curtrent object
@@ -1886,12 +1859,7 @@ class object
 	**/
 	function acl_del($g_oid)
 	{
-		$group = obj($g_oid);
-		$GLOBALS["object_loader"]->remove_acl_group_from_obj($group, $this->id());
-		$this->disconnect(array(
-			"from" => $group->id(),
-			"type" => RELTYPE_ACL
-		));
+		return $GLOBALS["objects"][$this->oid]->acl_del($g_oid);
 	}
 
 	/** returns the object's data in xml
@@ -1932,8 +1900,7 @@ class object
 	**/
 	function get_xml($options)
 	{
-		$i = get_instance("core/obj/obj_xml_gen");
-		return $i->gen($this->id(), $options);
+		return $GLOBALS["objects"][$this->oid]->get_xml($options);
 	}
 
 	/** creates objects from the xml string given
@@ -1962,9 +1929,7 @@ class object
 	**/
 	function from_xml($xml, $parent)
 	{
-		$i = get_instance("core/obj/obj_xml_gen");
-		$oid = $i->unser($xml, $parent);
-		return new object($oid);
+		return $GLOBALS["objects"][$this->oid]->from_xml($xml, $parent);
 	}
 
 	function set_create_new_version()
