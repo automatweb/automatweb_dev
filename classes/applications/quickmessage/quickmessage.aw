@@ -10,9 +10,9 @@
 @default group=general
 	@property name type=text table=objects
 
-	@property to type=hidden datatype=int
-	@property from type=hidden datatype=int
-	@property box type=hidden datatype=int
+	@property to type=hidden
+	@property from type=hidden
+	@property box type=hidden
 
 	@property from_display type=text store=no editonly=1
 	@caption From
@@ -50,7 +50,7 @@ class quickmessage extends class_base
 		$box = $arr["request"]["box"];
 
 		if (!is_oid($box))
-		{
+		{exit(1);
 			$status = PROP_ERROR;
 			$arr["prop"]["error"] = t("Specified messagebox id is invalid.");
 		}

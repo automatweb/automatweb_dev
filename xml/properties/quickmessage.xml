@@ -12,7 +12,6 @@
             <table>quickmessages</table>
             <group>general</group>
             <type>hidden</type>
-            <datatype>int</datatype>
             <field>to</field>
       </property>
       <property>
@@ -20,7 +19,6 @@
             <table>quickmessages</table>
             <group>general</group>
             <type>hidden</type>
-            <datatype>int</datatype>
             <field>from</field>
       </property>
       <property>
@@ -28,7 +26,6 @@
             <table>quickmessages</table>
             <group>general</group>
             <type>hidden</type>
-            <datatype>int</datatype>
             <field>box</field>
       </property>
       <property>
