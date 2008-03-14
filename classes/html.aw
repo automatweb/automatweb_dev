@@ -186,8 +186,8 @@ class html extends aw_template
 		$value = str_replace('"' , '&quot;',$value);
 		settype ($option_is_tuple, "boolean");
 		$onkeypress = isset($onkeypress) ? ' onkeypress="'.$onkeypress.'"' : "";
-		$onFocus = isset($onFocus) ? ' onFocus="'.$onFocus.'"' : '';
-		$onBlur = isset($onBlur) ? ' onBlur="'.$onBlur.'"' : '';
+		$onFocus = isset($onFocus) ? ' onfocus="'.$onFocus.'"' : '';
+		$onBlur = isset($onBlur) ? ' onblur="'.$onBlur.'"' : '';
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$autocomplete = "";
 		$js_name = str_replace(array("[", "]", "-"), "_", $name);
@@ -339,8 +339,8 @@ class html extends aw_template
 		$cols = !empty($cols) ? $cols : 60;
 		$rows = !empty($rows) ? $rows : 40;
 		$value = isset($value) ? $value : "";
-		$onFocus = isset($onFocus) ? ' onFocus="'.$onFocus.'"' : '';
-		$onBlur = isset($onBlur) ? ' onBlur="'.$onBlur.'"' : '';
+		$onFocus = isset($onFocus) ? ' onfocus="'.$onFocus.'"' : '';
+		$onBlur = isset($onBlur) ? ' onblur="'.$onBlur.'"' : '';
 
 
 		if (strpos($value, "<") !== false)
