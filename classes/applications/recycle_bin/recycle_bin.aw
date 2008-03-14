@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.27 2008/03/05 13:58:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.28 2008/03/14 10:24:09 robert Exp $
 // recycle_bin.aw - Pr&uuml;gikast 
 /*
 
@@ -285,26 +285,35 @@ class recycle_bin extends class_base
 		get_instance("core/icons");
 
 		$paths = $this->_get_paths($rows);
-		
+		$popup_menu = get_instance("vcl/popup_menu");
 		foreach($rows as $row)
 		{
+			$popup_menu->begin_menu("restore".$row["oid"]);
+			$popup_menu->add_item(array(
+				"text" => t("Taasta"),
+				"link" => $this->mk_my_orb("restore_object", array(
+					"oid" => $row["oid"],
+					"id" => $obj_id,
+					"return_url" => get_ru(),
+				)),
+			));
+			$popup_menu->add_item(array(
+				"text" => t("Taasta ka alamobjektid"),
+				"link" => $this->mk_my_orb("restore_object", array(
+					"oid" => $row["oid"],
+					"id" => $obj_id,
+					"return_url" => get_ru(),
+					"subs" => 1,
+				)),
+			));
 			$table->define_data(array(
 				"name" => $row["name"],
 				"modified" => $row["modified"],
 				"modifiedby" => $row["modifiedby"],
 				"oid" => $row["oid"],
 				"id" => $row["oid"],
-				"restore" => html::href(array(
-					"caption" => t("Taasta"),
-					"url" => $this->mk_my_orb(
-						"restore_object", 
-						array(
-							"oid" => $row["oid"],
-							"return_url" => get_ru(),
-							"id" => $obj_id
-						), 
-						"recycle_bin"
-					),
+				"restore" => $popup_menu->get_menu(array(
+					"text" => t("Taasta"),
 				)),
 				"class_id" => $classes[$row["class_id"]]["name"],
 				"icon" => html::img(array(
@@ -323,18 +332,29 @@ class recycle_bin extends class_base
 	function do_toolbar($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "restore",
+			"tooltip" => t("Taasta"),
+			"img" => "restore.gif",
+		));
+		$tb->add_menu_item(array(
+			"parent" => "restore",
+			"text" => t("Valitud objektid"),
+			"link" => "#",
+			"onClick" => "submit_changeform('restore_objects')",
+		));		
+		$tb->add_menu_item(array(
+			"parent" => "restore",
+			"text" => t("Objektid ja alamobjektid"),
+			"link" => "#",
+			"onClick" => "document.forms.changeform.subs.value=1; submit_changeform('restore_objects')",
+		));
 		$tb->add_button(array(
-    		"name" => "save",
-    		"img" => "restore.gif",
-    		"tooltip" => t("Taasta valitud objektid"),
-    		"action" => "restore_objects",
-    	));
-    	$tb->add_button(array(
-    		"name" => "refresh",
-    		"img" => "refresh.gif",
-    		"tooltip" => t("Uuenda"),
-    		"url" => aw_url_change_var(array()),
-    	));
+			"name" => "refresh",
+			"img" => "refresh.gif",
+			"tooltip" => t("Uuenda"),
+			"url" => aw_url_change_var(array()),
+		));
 
 		$o = $arr["obj_inst"];
 		$admg = array();
@@ -424,7 +444,10 @@ class recycle_bin extends class_base
 		$ob = obj($arr["id"]);
 		$oid = $arr["oid"];
 		$this->check_parent($oid, $ob);
-		$this->check_subs($oid);
+		if($arr["subs"])
+		{
+			$this->check_subs($oid);
+		}
 
 		return $arr["return_url"];
 	}
@@ -438,7 +461,6 @@ class recycle_bin extends class_base
 		{
 			$arr = $_GET;
 		}
-
 		$ob = obj($arr["id"]);
 
 		if($arr["mark"])
@@ -448,7 +470,10 @@ class recycle_bin extends class_base
 				$query = "UPDATE objects SET status=1 WHERE oid=$oid";
 				$this->db_query($query);
 				$this->check_parent($oid, $ob);
-				$this->check_subs($oid);
+				if($arr["subs"])
+				{
+					$this->check_subs($oid);
+				}
 			}
 		}
 
@@ -662,6 +687,7 @@ class recycle_bin extends class_base
 	{
 		$arr["return_url"] = aw_global_get("REQUEST_URI");
 		$arr["new"] = ($_GET["action"]=="new")?1:0;
+		$arr["subs"] = 0;
 	}
 
 	/**
