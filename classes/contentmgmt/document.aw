@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.5 2008/03/13 17:02:54 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.6 2008/03/14 11:31:39 hannes Exp $
 // document.aw - Dokumentide haldus. 
 /*
 @classinfo  maintainer=kristo
@@ -2865,7 +2865,7 @@ if (is_object($docobj))
 			"no_strip_lead" => 1
 		));
 
-		preg_match_all("/\<a.*href\s*=\s*[\"']{1}(.*)[\"']{1}.*\<\/a>/imsU", $str, $a_link_matches);
+		preg_match_all("/\<a.*href=\"{1}(.*)\"{1}.*>(.*)\<\/a>/imsU", $str, $a_link_matches);
 		foreach ($a_link_matches[0] as $key => $var)
 		{
 			if (	strpos($a_link_matches[1][$key], "mailto") === false && 
@@ -2874,13 +2874,25 @@ if (is_object($docobj))
 					 )
 			{
 				$a_print_link_find = array(
-					"/href\s*=\s*\"\//U",
-					"/href\s*=\s*\"[^https]|href\s*=\s*\"[^http]/U",
+					"/href\s*=\s*[\"']{1}(\/.*)[\"']{1}(.*)>(.*)</U",
+					"/href\s*=\s*[\"']{1}([^h][^t][^t][^p][^:].*)[\"']{1}(.*)>(.*)<|href\s*=\s*[\"']{1}([^h][^t][^t][^p][^s][^:].*)[\"']{1}(.*)>(.*)</U",
 				);
 
 				$a_print_link_replace = array(
-					"href=\"".aw_ini_get("baseurl")."/",
-					"href=\"".aw_ini_get("baseurl")."/",
+					"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(".aw_ini_get("baseurl")."\\1)</span><",
+					"href=\"".aw_ini_get("baseurl")."/\\1\"\\2>\\3 <span class=\"url\">(".aw_ini_get("baseurl")."/\\1)</span><",
+				);
+				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
+				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
+			}
+			else if (strpos($a_link_matches[1][$key], "mailto") === false)
+			{
+				$a_print_link_find = array(
+					"/href\s*=\s*[\"']{1}(http.*)[\"']{1}(.*)>(.*)</U",
+				);
+
+				$a_print_link_replace = array(
+					"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
 				);
 				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
 				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
@@ -2888,7 +2900,7 @@ if (is_object($docobj))
 			else if (strpos($a_link_matches[1][$key], "mailto") !== false)
 			{
 				$a_print_link_find = array(
-					"/<a.*href\s*=\s*\"\mailto:(.*)\".*a>/U",
+					"/<a.*href\s*=\s*[\"']{1}\mailto:(.*)[\"']{1}.*a>/U",
 				);
 	
 				$a_print_link_replace = array(
@@ -2896,6 +2908,7 @@ if (is_object($docobj))
 				);
 				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
 				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
+
 			}
 		}
 		echo $str;
