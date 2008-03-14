@@ -1,0 +1,329 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>1.9. Using the YouTube data API</title>
+<link rel="stylesheet" href="dbstyle.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+<link rel="start" href="index.html" title="Programmer's Reference Guide">
+<link rel="up" href="zend.gdata.html" title="Chapter 1. Zend_Gdata">
+<link rel="prev" href="zend.gdata.gbase.html" title="1.8. Using Google Base">
+<link rel="next" href="zend.gdata.photos.html" title="1.10. Using Picasa Web Albums">
+<link rel="chapter" href="zend.gdata.html" title="Chapter 1. Zend_Gdata">
+<link rel="index" href="the.index.html" title="Index">
+<link rel="subsection" href="zend.gdata.youtube.html#zend.gdata.youtube.videos" title="1.9.1. Retrieving video feeds">
+<link rel="subsection" href="zend.gdata.youtube.html#zend.gdata.youtube.comments" title="1.9.2. Retrieving video comments">
+<link rel="subsection" href="zend.gdata.youtube.html#zend.gdata.youtube.playlists" title="1.9.3. Retrieving playlist feeds">
+<link rel="subsection" href="zend.gdata.youtube.html#zend.gdata.youtube.subscriptions" title="1.9.4. Retrieving a list of a user's subscriptions">
+<link rel="subsection" href="zend.gdata.youtube.html#zend.gdata.youtube.profile" title="1.9.5. Retrieving a user's profile">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader"><table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">1.9. Using the YouTube data API</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="zend.gdata.gbase.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 1. Zend_Gdata</th>
+<td width="20%" align="right"> <a accesskey="n" href="zend.gdata.photos.html">Next</a>
+</td>
+</tr>
+</table></div>
+<div class="sect1" lang="en">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="zend.gdata.youtube"></a>1.9. Using the YouTube data API</h2></div></div></div>
+<p>
+        The YouTube data API offers read-only access to YouTube's content 
+        in the form of Google data ("GData") feeds.  The API gives access to
+        lists of videos matching specific criteria, popular videos, and more.
+        It also allows access to public information about YouTube users, including
+        playlists, subscriptions and contacts.
+    </p>
+<p>
+        For more information on the YouTube data API, please refer
+        to the <a href="http://code.google.com/apis/youtube/" target="_top">
+        YouTube data API documentation</a>.
+    </p>
+<div class="note"><table border="0" summary="Note: Authentication">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td>
+<th align="left">Authentication</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            The YouTube data API currently allows read-only access to public 
+            data, so no authentication is required.
+            </p></td></tr>
+</table></div>
+<div class="sect2" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="zend.gdata.youtube.videos"></a>1.9.1. Retrieving video feeds</h3></div></div></div>
+<p>
+            The YouTube data API provides numerous feeds that return a list of 
+            videos, such as standard feeds, related videos, video responses, 
+            user's uploads, and user's favorites. For example, the 
+            user's uploads feed returns all videos uploaded by a specific user. 
+            See the <a href="http://code.google.com/apis/youtube/reference.html#Feeds" target="_top">
+            reference guide</a> for a detailed list of all feeds. All the 
+            feeds described in this section are "video feeds" -- feeds that return 
+            lists of videos.
+        </p>
+<div class="sect3" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="zend.gdata.youtube.videos.searching"></a>1.9.1.1. Searching for videos by metadata</h4></div></div></div>
+<p>
+                You can retrieve a list of videos that match specified 
+                search criteria, using the video feed.  The following query
+                looks for videos which contain the word "cat" in their 
+                metadata, starting with the 10th video and displaying 20 
+                videos per page, ordered by the view count.
+            </p>
+<pre class="programlisting">&lt;?php
+require_once 'Zend/Loader.php';
+Zend_Loader::loadClass('Zend_Gdata_YouTube');
+
+$yt = new Zend_Gdata_YouTube();
+$query = $yt-&gt;newVideoQuery();
+$query-&gt;videoQuery = 'cat';
+$query-&gt;startIndex = 10;
+$query-&gt;maxResults = 20;
+$query-&gt;orderBy = 'viewCount';
+
+echo $query-&gt;queryUrl . "\n";
+$videoFeed = $yt-&gt;getVideoFeed($query); 
+
+foreach ($videoFeed as $videoEntry) {
+  echo "---------VIDEO----------\n";
+  echo "Title: " . $videoEntry-&gt;mediaGroup-&gt;title-&gt;text . "\n";
+  echo "\nDescription:\n";
+  echo $videoEntry-&gt;mediaGroup-&gt;description-&gt;text;
+  echo "\n\n\n";
+}
+?&gt;</pre>
+<p>
+                For more details on the different query parameters, please 
+                refer to the <a href="http://code.google.com/apis/youtube/reference.html#Parameters" target="_top">
+                Reference Guide</a>.  There are helper functions in
+                Zend_Gdata_YouTube_VideoQuery for each of these parameters.
+            </p>
+</div>
+<div class="sect3" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="zend.gdata.youtube.videos.searchingcategories"></a>1.9.1.2. Searching for videos by categories and tags/keywords</h4></div></div></div>
+<p>
+                Searching for videos in specific categories is done by
+                generating a <a href="http://code.google.com/apis/youtube/reference.html#CategorySearch" target="_top">
+                specially formatted URL</a>.  For example, to search for 
+                comedy videos which contain the keyword dog:
+            </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$query = $yt-&gt;newVideoQuery();
+$query-&gt;category = 'Comedy/dog';
+
+echo $query-&gt;queryUrl . "\n";
+$videoFeed = $yt-&gt;getVideoFeed($query); 
+</pre>
+</div>
+<div class="sect3" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="zend.gdata.youtube.videos.standard"></a>1.9.1.3. Retrieving standard feeds</h4></div></div></div>
+<p>
+                The YouTube data API has a number of 
+                <a href="http://code.google.com/apis/youtube/reference.html#VideoFeeds" target="_top">
+                standard feeds</a>.  These standard feeds can be retrieved
+                as Zend_Gdata_YouTube_VideoFeed objects using the specified 
+                URLs, but many also have helper methods in Zend_Gdata_YouTube.
+            </p>
+<p>
+                To retrieve the top rated videos using the helper method:
+            </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+
+$videoFeed = $yt-&gt;getTopRatedVideoFeed(); 
+</pre>
+<p>
+                There are also query parameters to specify the time period
+                over which the standard feed is computed.  Only valid with the
+                top_rated and most_viewed standard feeds.
+            </p>
+<p>
+                For example, to retrieve the top rated videos for today:
+            </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$query = $yt-&gt;newVideoQuery();
+$query-&gt;setTime('today');
+$videoFeed = $yt-&gt;getTopRatedVideoFeed($query); 
+</pre>
+<p>
+                Alternatively, you could just retrieve the feed using the
+                URL:
+            </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$query = $yt-&gt;newVideoQuery('http://gdata.youtube.com/feeds/standardfeeds/top_rated');
+$query-&gt;setTime('today');
+$videoFeed = $yt-&gt;getVideoFeed($query); 
+</pre>
+</div>
+<div class="sect3" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="zend.gdata.youtube.videos.user"></a>1.9.1.4. Retrieving videos uploaded by a user</h4></div></div></div>
+<p>
+                You can retrieve a list of videos uploaded by a particular user
+                using a simple helper method. This example retrieves videos 
+                uploaded by the user 'liz'.
+            </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$videoFeed = $yt-&gt;getUserUploads('liz'); 
+</pre>
+</div>
+<div class="sect3" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="zend.gdata.youtube.videos.favorites"></a>1.9.1.5. Retrieving videos favorited by a user</h4></div></div></div>
+<p>
+                You can retrieve a list of a user's favorite videos
+                using a simple helper method. This example retrieves videos 
+                favorited by the user 'liz'.
+            </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$videoFeed = $yt-&gt;getUserFavorites('liz'); 
+</pre>
+</div>
+<div class="sect3" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="zend.gdata.youtube.videos.responses"></a>1.9.1.6. Retrieving video responses for a video</h4></div></div></div>
+<p>
+                You can retrieve a list of a video's video responses
+                using a simple helper method. This example retrieves video
+                response for a video with the ID 'abc123813abc'.
+            </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$videoFeed = $yt-&gt;getVideoResponseFeed('abc123813abc'); 
+</pre>
+</div>
+</div>
+<div class="sect2" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="zend.gdata.youtube.comments"></a>1.9.2. Retrieving video comments</h3></div></div></div>
+<p>
+            The comments for each YouTube video can be retrieved in 
+            several ways.  To retrieve the comments for the video with 
+            the ID 'abc123813abc', use the following code: 
+        </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$commentFeed = $yt-&gt;getVideoCommentFeed('abc123813abc'); 
+
+foreach ($commentFeed as $commentEntry) {
+    echo $commentEntry-&gt;title-&gt;text . "\n";
+    echo $commentEntry-&gt;content-&gt;text . "\n\n\n";
+} 
+</pre>
+<p>
+            Comments can also be retrieved for a video if you have
+            a copy of the Zend_Gdata_YouTube_VideoEntry object:
+        </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$videoEntry = $yt-&gt;getVideoEntry('abc123813abc'); 
+// we don't know the video ID in this example, but we do have the URL
+$commentFeed = $yt-&gt;getVideoCommentFeed(null, $videoEntry-&gt;comments-&gt;href);
+</pre>
+</div>
+<div class="sect2" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="zend.gdata.youtube.playlists"></a>1.9.3. Retrieving playlist feeds</h3></div></div></div>
+<p>
+            The YouTube data API provides information about users, including
+            profiles, playlists, subscriptions, and more.
+        </p>
+<div class="sect3" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="zend.gdata.youtube.playlists.user"></a>1.9.3.1. Retrieving the playlists of a user</h4></div></div></div>
+<p>
+                The library provides a helper method to retrieve
+                the playlists associated with a given user.  To retrieve the
+                playlists for the user 'liz':
+            </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$playlistListFeed = $yt-&gt;getPlaylistListFeed('liz'); 
+
+foreach ($playlistListFeed as $playlistEntry) {
+    echo $playlistEntry-&gt;title-&gt;text . "\n";
+    echo $playlistEntry-&gt;description-&gt;text . "\n";
+    echo $playlistEntry-&gt;getPlaylistVideoFeedUrl() . "\n\n\n";
+} 
+</pre>
+</div>
+<div class="sect3" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="zend.gdata.youtube.playlists.user"></a>1.9.3.2. Retrieving a specific playlist</h4></div></div></div>
+<p>
+                The library provides a helper method to retrieve
+                the videos associated with a given playlist.  To retrieve the
+                playlists for a specific playlist entry:
+            </p>
+<pre class="programlisting">
+$playlistVideoFeed = $yt-&gt;getPlaylistVideoFeed($playlistEntry-&gt;getPlaylistVideoFeedUrl()); 
+</pre>
+</div>
+</div>
+<div class="sect2" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="zend.gdata.youtube.subscriptions"></a>1.9.4. Retrieving a list of a user's subscriptions</h3></div></div></div>
+<p>
+            A user can have several types of subscriptions: channel 
+            subscription, tag subscription, or favorites subscription.
+            A Zend_Gdata_YouTube_SubscriptionEntry is used to represent
+            individual subscriptions.
+        </p>
+<p>
+            To retrieve all subscriptions for the user 'liz':
+        </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$subscriptionFeed = $yt-&gt;getSubscriptionFeed('liz'); 
+
+foreach ($subscriptionFeed as $subscriptionEntry) {
+    echo $subscriptionEntry-&gt;title-&gt;text . "\n";
+} 
+</pre>
+</div>
+<div class="sect2" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="zend.gdata.youtube.profile"></a>1.9.5. Retrieving a user's profile</h3></div></div></div>
+<p>
+            You can retrieve the public profile information
+            for any YouTube user.  To retrieve the profile
+            for the user 'liz':
+        </p>
+<pre class="programlisting">
+$yt = new Zend_Gdata_YouTube();
+$userProfile = $yt-&gt;getUserProfile('liz'); 
+echo "username: " . $userProfile-&gt;username-&gt;text . "\n";
+echo "age: " . $userProfile-&gt;age-&gt;text . "\n";
+echo "hometown: " . $userProfile-&gt;hometown-&gt;text . "\n"; 
+</pre>
+</div>
+</div>
+<div class="navfooter"><table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="zend.gdata.gbase.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="zend.gdata.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="zend.gdata.photos.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">1.8. Using Google Base </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> 1.10. Using Picasa Web Albums</td>
+</tr>
+</table></div>
+<div class="revinfo"></div>
+</body>
+</html>
