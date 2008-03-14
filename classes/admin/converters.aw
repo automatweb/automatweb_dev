@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.81 2008/03/12 21:22:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.82 2008/03/14 08:55:34 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -907,7 +907,7 @@ class converters extends aw_template
 	**/
 	function convert_crm_relations2($arr)
 	{
-		// see annab mulle kõik aadressiobjektid, millel on seos URL objektiga
+		// see annab mulle k6ik aadressiobjektid, millel on seos URL objektiga
 		aw_set_exec_time(AW_LONG_PROCESS);	
 		// 21 / 6 / 16 is URL
 		// 219 / 9 / 17 is phone (but really fax)
@@ -991,7 +991,7 @@ class converters extends aw_template
 					"to" => $tg_phone->id(),
 					"reltype" => 13,
 				));
-				// seose tüüp - 13
+				// seose tyyp - 13
 			};
 			if ($row["class_id"] == 129)
 			{
@@ -1001,7 +1001,7 @@ class converters extends aw_template
 					"to" => $tg_phone->id(),
 					"reltype" => 17,
 				));
-				// seose tüüp - 17
+				// seose tyyp - 17
 			};
 			flush();
 			$this->restore_handle();
@@ -1850,6 +1850,43 @@ echo "mod ".$con["to.name"]."<br>";
 		}
 		die("all done ");
 		
+	}
+
+	/**
+		@attrib name=fix_memberships
+	**/
+	function fix_memberships()
+	{
+		$this->db_query("SELECT * FROM groupmembers ");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			// convert uid to oid
+			$u_oid = $this->db_fetch_field("SELECT oid FROM users WHERE uid = '$row[uid]'", "oid");
+			// convert gid to oid
+			$g_oid = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$row[gid]'", "oid");
+
+			if ($u_oid && $g_oid)
+			{
+				// create rel if not exists
+				$target = $this->db_fetch_field("SELECT target FROM aliases WHERE source = $u_oid AND target = $g_oid and reltype=1", "target");
+				if (!$target)
+				{
+					echo "create rel from $u_oid => $g_oid <br>";	
+					$this->db_query("INSERT INTO aliases (source, target, reltype) values($u_oid, $g_oid, 1)");
+				}
+
+				$target = $this->db_fetch_field("SELECT target FROM aliases WHERE source = $g_oid AND target = $u_oid and reltype=2 ", "target");
+				if (!$target)
+				{
+					echo "create rel from $g_oid => $u_oid <br>";	
+
+					$this->db_query("INSERT INTO aliases (source, target, reltype) values($g_oid, $u_oid, 2)");
+				}
+			}
+			$this->restore_handle();
+		}
+		die("all done");
 	}
 };
 ?>
