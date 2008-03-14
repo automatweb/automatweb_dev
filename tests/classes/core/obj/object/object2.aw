@@ -236,6 +236,24 @@ class object_test2 extends UnitTestCase
 		$o2->delete(true);
 	}
 
+	function test_set_parent_err1()
+	{
+		$o = $this->_get_temp_o();
+		__disable_err();
+		$o->set_parent("abc".mt_rand());
+		$this->assertTrue(__is_err());
+		$o->delete(true);
+	}
+
+	function test_set_parent_err2()
+	{
+		$o = $this->_get_temp_o();
+		__disable_err();
+		$o->set_parent();
+		$this->assertTrue(__is_err());
+		$o->delete(true);
+	}
+
 	function test_name()
 	{
 		$o = $this->_get_temp_o();
@@ -280,6 +298,15 @@ class object_test2 extends UnitTestCase
 		$o->delete(true);
 	}
 
+	function test_set_class_id_err()
+	{
+		$o = $this->_get_temp_o();
+		__disable_err();
+		$o->set_class_id("asd".mt_rand());
+		$this->assertTrue(__is_err());
+		$o->delete(true);
+	}
+
 	function test_status()
 	{
 		$o = $this->_get_temp_o();
@@ -297,6 +324,15 @@ class object_test2 extends UnitTestCase
 		aw_restore_acl();
 		$id = $o->id();
 		$this->assertEqual(2, $this->db->db_fetch_field("SELECT status FROM objects WHERE oid = $id", "status"));
+		$o->delete(true);
+	}
+
+	function test_set_status_err()
+	{
+		$o = $this->_get_temp_o();
+		__disable_err();
+		$o->set_status(mt_rand());
+		$this->assertTrue(__is_err());
 		$o->delete(true);
 	}
 
@@ -328,6 +364,15 @@ class object_test2 extends UnitTestCase
 		$o->save();
 		aw_restore_acl();
 		$this->assertEqual($lang_id, $this->db->db_fetch_field("SELECT lang_id FROM objects WHERE oid = $id", "lang_id"));
+		$o->delete(true);
+	}
+
+	function test_set_lang_id_err()
+	{
+		$o = $this->_get_temp_o();
+		__disable_err();
+		$o->set_lang_id("abc");
+		$this->assertTrue(__is_err());
 		$o->delete(true);
 	}
 
@@ -476,6 +521,223 @@ class object_test2 extends UnitTestCase
 		$id = $o->id();
 		$this->assertEqual($periodic, $this->db->db_fetch_field("SELECT periodic FROM objects WHERE oid = $id", "periodic"));
 		$o->delete(true);
+	}
+
+	function test_site_id()
+	{
+		$o = $this->_get_temp_o();
+		$site_id = 1;
+		$o->set_site_id($site_id);
+		$this->assertEqual($site_id, $o->site_id());
+		$o->delete(true);
+	}
+
+	function test_set_site_id()
+	{
+		$o = $this->_get_temp_o();
+		$site_id = 1;
+		$o->set_site_id($site_id);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($site_id, $this->db->db_fetch_field("SELECT site_id FROM objects WHERE oid = $id", "site_id"));
+		$o->delete(true);
+	}
+
+	function test_get_original()
+	{
+		$o1 = $this->_get_temp_o();
+		$o2 = $o1->get_original();
+		$this->assertEqual($o1->id(), $o2->id());
+		$parent = $o1->parent();
+		$o3 = obj($o1->create_brother($parent));
+		$o4 = $o2->get_original();
+		$this->assertEqual($o1->id(), $o4->id());
+		$o1->delete(true);
+		$o2->delete(true);
+	}
+
+	function test_create_brother()
+	{
+		$o1 = $this->_get_temp_o();
+		__disable_err();
+		$tmp = $o1->create_brother();
+		$this->assertTrue(__is_err());
+		$o2 = obj($o1->create_brother($o1->parent()));
+		$this->assertEqual($o1->id(), $o2->id());
+		$o3 = obj($o1->create_brother($o1->parent()));
+		$this->assertEqual($o2->id(), $o3->id());
+	}
+
+	function test_subclass()
+	{
+		$o = $this->_get_temp_o();
+		$subclass = 1;
+		$o->set_subclass($subclass);
+		$this->assertEqual($subclass, $o->subclass());
+		$o->delete(true);
+	}
+
+	function test_set_subclass()
+	{
+		$o = $this->_get_temp_o();
+		$subclass = 1;
+		$o->set_subclass($subclass);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($subclass, $this->db->db_fetch_field("SELECT subclass FROM objects WHERE oid = $id", "subclass"));
+		$o->delete(true);
+	}
+
+	function test_flags()
+	{
+	}
+	
+	function test_set_flags()
+	{
+	}
+
+	function test_flag()
+	{
+	}
+	
+	function test_set_flag()
+	{
+	}
+
+	function test_meta()
+	{
+		$o = $this->_get_temp_o();
+		$o->set_meta("var", 1);
+		$this->assertEqual(1, $o->meta("var"));
+		$o->delete(true);
+	}
+	
+	function test_set_meta()
+	{
+		$o = $this->_get_temp_o();
+		$o->set_meta("var", 1);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$metadata = $this->db->db_fetch_field("SELECT metadata FROM objects WHERE oid = $id", "metadata");
+		eval($metadata);
+		$this->assertEqual(1, $arr["var"]);
+		$o->delete(true);
+	}
+
+	function test_prop()
+	{
+		$o = $this->_get_temp_o();
+		$name = 1;
+		$o->set_prop("name", $name);
+		$this->assertEqual($name, $o->prop("name"));
+		$o->delete(true);
+	}
+
+	function test_set_prop()
+	{
+		$o = $this->_get_temp_o();
+		$name = 1;
+		$o->set_prop("name", $name);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$this->assertEqual($name, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = $id", "name"));
+		$o->delete(true);
+	}
+
+	function test_prop_str()
+	{
+		$o1 = $this->_get_temp_o();
+		$o1->set_class_id(CL_MENU);
+		$o2 = $this->_get_temp_o();
+		$o2->set_class_id(CL_MENU);
+		$name = "abc";
+		$o2->set_name($name);
+		aw_disable_acl();
+		$o2->save();
+		$o1->set_prop("default_image_folder", $o2->id());
+		$o1->save();
+		aw_restore_acl();
+		$this->assertEqual($name,$o1->prop_str("default_image_folder"));
+		$o1->delete(true);
+		$o2->delete(true);
+	}
+
+	function test_get_property_list()
+	{
+
+	}
+
+	function test_get_group_list()
+	{
+
+	}
+
+	function test_get_relinfo()
+	{
+
+	}
+	
+	function test_get_tableinfo()
+	{
+
+	}
+
+	function test_get_classinfo()
+	{
+
+	}
+	
+	function test_properties()
+	{
+
+	}
+
+	function test_brother_of()
+	{
+
+	}
+
+	function test_instance()
+	{
+
+	}
+
+	function test_is_connected_to()
+	{
+
+	}
+
+	function test_acl_set()
+	{
+
+	}
+
+	function test_acl_get()
+	{
+
+	}
+
+	function test_acl_del()
+	{
+
+	}
+
+	function test_get_xml()
+	{
+
+	}
+
+	function test_from_xml()
+	{
+
 	}
 }
 ?>
