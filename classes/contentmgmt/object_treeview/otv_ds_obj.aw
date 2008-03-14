@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.66 2008/02/17 19:23:44 voldemar Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource
 /*
 
@@ -26,6 +25,9 @@
 
 	@property sort_by type=select field=meta method=serialize
 	@caption Objekte sorteeritakse
+
+	@property fld_sort_by type=select field=meta method=serialize
+	@caption Katalooge sorteeritakse
 
 	@property use_meta_as_folders type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kasuta kaustade puu joonistamiseks muutujaid
@@ -89,6 +91,14 @@ class otv_ds_obj extends class_base
 				$prop["options"] = array(
 					"objects.modified DESC" => t("Objekti muutmise kuup&auml;eva j&auml;rgi"),
 					"objects.jrk" => t("Objektide j&auml;rjekorra j&auml;rgi"),
+					"objects.name" => t("Objektide nime j&auml;rgi")
+				);
+				break;
+
+			case "fld_sort_by":
+				$prop["options"] = array(
+					"objects.jrk" => t("Objektide j&auml;rjekorra j&auml;rgi"),
+					"objects.modified DESC" => t("Objekti muutmise kuup&auml;eva j&auml;rgi"),
 					"objects.name" => t("Objektide nime j&auml;rgi")
 				);
 				break;
@@ -279,6 +289,8 @@ class otv_ds_obj extends class_base
 
 		classload("core/icons", "image");
 
+		$sort = $ob->prop("fld_sort_by");
+		$sort = empty($sort) ? "objects.jrk" : $sort;
 
 		$opts = array();
 		$use_meta_as_folders = $ob->prop("use_meta_as_folders");
@@ -312,7 +324,7 @@ class otv_ds_obj extends class_base
 					"parent" => $root_id,
 					"status" => $ob->prop("show_notact_folder") ? array(STAT_ACTIVE,STAT_NOTACTIVE) : STAT_ACTIVE,
 					"lang_id" => array(),
-					"sort_by" => "objects.jrk"
+					"sort_by" => $sort
 				));
 
 				if ($tree_type == "TREE_TABLE")

@@ -60,6 +60,15 @@
             <caption>Objekte sorteeritakse</caption>
       </property>
       <property>
+            <name>fld_sort_by</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Katalooge sorteeritakse</caption>
+      </property>
+      <property>
             <name>use_meta_as_folders</name>
             <table>objects</table>
             <group>general</group>
