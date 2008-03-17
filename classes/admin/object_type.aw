@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.26 2008/02/07 14:45:22 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.27 2008/03/17 19:35:21 instrumental Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
+
+	@classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE maintainer=kristo
+
 	@default table=objects
 	@default group=general
 
@@ -22,8 +25,6 @@
 
 	@groupinfo settings caption="Klassi konfiguratsioon"
 	@groupinfo defobj caption="Aktiivne objekt"
-
-	@classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE maintainer=kristo
 
 	@reltype OBJECT_CFGFORM value=1 clid=CL_CFGFORM
 	@caption Seadete vorm
@@ -335,6 +336,43 @@ class object_type extends class_base
 		}
 
 		return $ret;
+	}
+
+	/**
+		@attrib name=get_sysdefault api=1 params=pos
+
+		@param clid required type=class_id
+			The class_id the system default object_type is asked for.
+
+	**/
+	function get_default_settings($clid)
+	{
+		$o = obj(object_type::get_obj_for_class(array(
+			"clid" => $clid,
+		)));
+		return $o->meta();
+	}
+
+	/**
+		@attrib name=get_classificator_options api=1 params=name
+
+		@param clid required type=class_id
+		
+		@param classificator required type=string
+
+	**/
+	function get_classificator_options($arr)
+	{
+		$conf = object_type::get_default_settings($arr["clid"]);
+		if(!is_oid($conf["classificator"][$arr["classificator"]]))
+			return false;
+
+		$ol = new object_list(array(
+			"class_id" => CL_META,
+			"parent" => $conf["classificator"][$arr["classificator"]],
+			"status" => object::STAT_ACTIVE,
+		));
+		return $ol->names();
 	}
 }
 ?>
