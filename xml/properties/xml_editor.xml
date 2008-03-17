@@ -10,42 +10,22 @@
             <caption>XML fail</caption>
       </property>
       <property>
-            <name>excisting_xml_files</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>select</type>
-            <store>no</store>
-            <method>serialize</method>
-            <field>excisting_xml_files</field>
-            <caption>files/xml kaustas olevad xml failid</caption>
-      </property>
-      <property>
-            <name>add_xml_file_to_server</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>fileupload</type>
-            <store>no</store>
-            <method>serialize</method>
-            <field>add_xml_file_to_server</field>
-            <caption>lisa uus xml fail serverisse</caption>
-      </property>
-      <property>
             <name>xml_content</name>
             <table>objects</table>
-            <group>content</group>
+            <group>general</group>
             <type>table</type>
             <store>no</store>
+            <no_caption>1</no_caption>
             <field>xml_content</field>
             <caption>xml-i sisu tabel</caption>
       </property>
       <classinfo>
             <syslog_type>ST_XML_EDITOR</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+            <prop_cb>1</prop_cb>
+            <maintainer>dragut</maintainer>
       </classinfo>
-      <groupinfo>
-            <content>
-                  <caption>Sisu</caption>
-            </content>
-      </groupinfo>
 </properties>
 
