@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/external/external_system.aw,v 1.4 2008/03/17 11:42:08 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/external/external_system.aw,v 1.5 2008/03/17 11:42:56 robert Exp $
 // external_system.aw - Siduss&uuml;steem 
 /*
 
@@ -114,7 +114,7 @@ class external_system extends class_base
 		}
 		$t->define_pageselector(array(
 			"type" => "text",
-			"records_per_page" => 10,
+			"records_per_page" => 200,
 			"position" => "both",
 		));
 	}
