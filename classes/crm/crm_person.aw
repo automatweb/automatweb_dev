@@ -237,7 +237,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 			@property cedit_bank_account_tbl type=table store=no no_caption=1 parent=ceditbank
 
-		@layout ceditprof type=vbox closeable=1 area_caption=Töösuhted
+		@layout ceditprof type=vbox closeable=1 area_caption=T&ouml;&ouml;suhted
 
 			@property cedit_profession_tbl type=table store=no no_caption=1 parent=ceditprof store=no
 
@@ -344,10 +344,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 ------------------------------------------------------------------
 @groupinfo cv caption="Elulugu"
 
-@groupinfo education caption="Haridusk&auml;ik" parent=cv submit=no
+@groupinfo education caption="Haridusk&auml;ik" parent=cv
 @default group=education
 
-@property education_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table_fields=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table=objects field=meta method=serialize
+property education_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table_fields=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table=objects field=meta method=serialize
+
+@property education_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION props=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table_fields=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table=objects field=meta method=serialize
+@caption Haridus
+
+
 
 ------------------------------------------------------------------
 
@@ -840,13 +845,13 @@ class crm_person extends class_base
 			"udef_ta1", "udef_ta2", "udef_ta3", "udef_ta4", "udef_ta5"
 		);
 		$this->edulevel_options = array(
-			0 => t("-- Vali üks --"),
+			0 => t("-- Vali &uuml;ks --"),
 			"pohiharidus" => t("P&otilde;hiharidus"),
 			"keskharidus" => t("Keskharidus"),
 			"keskeriharidus" => t("Kesk-eriharidus"),
 			"kutsekeskharidus" => t("Kutsekeskharidus"),
 			"kutsekorgharidus" => t("Kutsek&otilde;rgharidus"),
-			"rakenduskorgharidus" => t("Rakenduskõrgharidus"),
+			"rakenduskorgharidus" => t("Rakendusk&otilde;rgharidus"),
 			"korgharidus" => t("K&otilde;rgharidus"),
 			"diplom" => t("Diplom"),
 			"bakalaureus" => t("Bakalaureus"),
@@ -1181,6 +1186,12 @@ class crm_person extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "education_edit[speciality]":
+				if(!$arr["called_from"] == "releditor_table")
+				{
+					$data["value"] = 111;
+				}
+				break;
 			case "work_tbl":
 				return $this->_get_work_tbl($arr);
 				break;
@@ -5018,13 +5029,13 @@ class crm_person extends class_base
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
 
-			//kui on kokkuleppehind kas arvel, või kui arvet ei ole, siis toimetusel... tuleb vähe arvutada
+			//kui on kokkuleppehind kas arvel, voi kui arvet ei ole, siis toimetusel... tuleb vahe arvutada
 			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
 				$sum = $row_inst->get_row_ageement_price($o);
 			}
 
-			//õigesse valuutasse
+			//oigesse valuutasse
 			$sum = $stat_inst->convert_to_company_currency(array(
 				"sum"=>$sum,
 				"o"=>$task,
