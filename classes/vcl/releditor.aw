@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.102 2008/03/05 14:40:55 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.103 2008/03/17 09:39:08 hannes Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -15,8 +15,418 @@ class releditor extends core
 		$this->init();
 	}
 
+	function init_new_manager($arr)
+	{
+		//arr($arr);
+		enter_function("init-rel-editor-new");
+		$prop = $arr["prop"];
+		$this->elname = $prop["name"];
+		$obj = $arr["obj_inst"];
+		$obj_inst = $obj;
+		$clid = $arr["prop"]["clid"][0];
+		if (empty($clid) && is_object($arr["obj_inst"]))
+		{
+			$relinfo = $arr["obj_inst"]->get_relinfo();
+			$clid = $relinfo[$prop["reltype"]]["clid"][0];
+
+		}
+
+		$props = $arr["prop"]["props"];
+		if (!is_array($props) && !empty($props))
+		{
+			$props = array($props);
+		};
+
+		$xprops = array();
+
+//		$errors = false;
+
+
+		// Automatic fields for manager
+/*		$this->auto_fields = array(
+			'class_id' => t("Klassi ID"),
+			'class_name' => t("Klass"),
+		);
+*/
+
+		// manager is a kind of small aliasmgr, it has a table, rows can be clicked
+		// 	to edit items, new items can be added, existing ones can be deleted
+
+		// form is a single form, which can be used to edit a single connection. It
+		// is also the default
+//		$visual = isset($prop["mode"]) && $prop["mode"] == "manager" ? "manager" : "form";
+
+/*
+		if (!is_array($props) && empty($prop["use_form"]))
+		{
+			$errors = true;
+			$xprops[] = array(
+				"type" => "text",
+				"caption" => t(" "),
+				"error" => sprintf(t("Viga %s definitsioonis (omadused defineerimata!)"), $prop["name"]),
+			);
+		};
+
+		if (empty($clid))
+		{
+			$errors = true;
+			$xprops[] = array(
+				"type" => "text",
+				"caption" => t(" "),
+				"error" => sprintf(t("Viga %s definitsioonis (seose t&uuml;&uuml;p defineerimata!)"), $prop["name"])
+			);
+		};
+
+*/		// now check whether a relation was requested from url
+/*		$edit_id = $arr["request"][$this->elname];
+
+		$found = true;
+
+		$cache_inst = get_instance("cache");
+
+		if (!empty($edit_id) && is_oid($edit_id) && is_oid($arr["obj_inst"]->id()))
+		{
+			// check whether this connection exists
+			$found = false;
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => $arr["prop"]["reltype"],
+			));
+
+
+
+			foreach($conns as $conn)
+			{
+				if ($conn->prop("to") == $edit_id)
+				{
+					$found = true;
+				};
+			};
+		};
+
+		if (!$found)
+		{
+			$errors = true;
+			$xprops[] = array(
+				"type" => "text",
+				"caption" => t(" "),
+				"value" => t("Seda seost ei saa redigeerida!"),
+			);
+		};
+
+		if ($errors)
+		{
+			return $xprops;
+		};
+*/
+		if ($clid == 7)
+		{
+			$use_clid = "doc";
+		}
+		else
+		{
+			$use_clid = $clid;
+		};
+		$t = get_instance($use_clid);
+
+		$parent_inst = get_instance($obj_inst->class_id());
+
+		$t->init_class_base();
+		$emb_group = "general";
+
+
+//		$filter = array(
+//			"group" => "general",
+//		);
+
+/*		if (!empty($prop["use_form"]))
+		{
+			$filter["form"] = $prop["use_form"];
+		};
+*/
+		$all_props = array();
+
+		// generate a list of all properties. Needed to display edit form
+		// and to customize table display in manager mode
+		//$all_props = $t->get_property_group($filter);
+		$all_props = $t->load_defaults();
+//		$this->clid = $use_clid;
+		$act_props = array();
+		$use_form = $prop["use_form"];
+
+
+		if (!empty($use_form))
+		{
+			foreach($all_props as $key => $_prop)
+			{
+				if (is_array($_prop["form"]) && in_array($use_form,$_prop["form"]))
+				{
+					$props[$key] = $key;
+				};
+			};
+		};
+
+		$form_type = $arr["request"][$this->elname];
+		if (($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
+		{
+			$form_type = "new";
+		}
+		$this->form_type = $form_type;
+
+		#$this->all_props = $act_props;
+		$pcount = sizeof($props);
+
+		// the toolbar should be before the props, because otherwise it
+		// would look freakish when adding new or changing -- ahz
+/*		if($visual == "manager" && $arr["prop"]["no_toolbar"] != 1)
+/		{
+			// insert the toolbar into property array
+			$tbdef = $this->init_rel_toolbar($arr);
+			$act_props[$tbdef["name"]] = $tbdef;
+		}
+*/
+		// act_props needs to contain properties, if
+		// 1) visual is form and form_type is empty, if a single relation (rel_id=first) is being edited
+		// 2) ....
+
+
+		foreach($all_props as $key => $_prop)
+		{
+			//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
+			//if ($all_props[$key])
+			//if (is_array($props) && in_array($key,$props))
+			//if ((!empty($form_type) && $all_props[$key]) || (is_array($props) && in_array($key,$props)))
+			//if (!empty($form_type) && $all_props[$key] && is_array($props) && in_array($key,$props))
+			if ($all_props[$key] && is_array($props) && in_array($key,$props))
+			{
+				// if (!empty($form_type) || $visual != "manager")
+				if (!empty($form_type) || $visual != "manager")
+				{
+					// if (1 == $pcount)// yksiku elemendi caption releditor property captioniga sama
+					if (1 == $pcount and "manager" != $visual)
+					{
+						$_prop["caption"] = $prop["caption"];
+					};
+					//saadab asja get_property'sse
+					$act_props[$key] = $_prop;
+				};
+			};
+			$this->all_props[$key] = $_prop;
+		};
+
+//		$this->table_props = $props;
+
+		// "someone" has already used cfgform property, but for what purpose or why, is a big f'ing mystery to me,
+		// so i'll just implement something neater
+
+		$cfgform_id = $arr["prop"]["cfgform_id"];
+		if(is_oid($cfgform_id) && $this->can("view", $cfgform_id))
+		{
+			$cfg = get_instance(CL_CFGFORM);
+			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
+			//$act_props = $act_props + $this->cfg_act_props;
+		}
+
+		if (!empty($prop["choose_default"]))
+		{
+			$this->choose_default = 1;
+		};
+/*
+		if ($visual == "manager")
+		{
+			// insert the table into property array
+			$tabledef = $this->init_rel_table($arr);
+			$act_props[$tabledef["name"]] = $tabledef;
+		};
+*/
+		// "form" does not need a caption
+/*		if ($visual == "manager")
+		{
+			if ("new" == $form_type || ($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
+			{
+				$act_props = array($this->elname . "_caption" => array(
+					"name" => $this->elname . "_caption",
+					"type" => "text",
+					"value" => (empty($prop["no_caption"]) ? $prop["caption"] . " - " : "") . t("Uus"),
+					"subtitle" => 1,
+				)) + $act_props;
+			}
+			elseif (empty($prop["no_caption"]))
+			{
+				$act_props = array($this->elname . "_caption" => array(
+					"name" => $this->elname . "_caption",
+					"type" => "text",
+					"value" => $prop["caption"],
+					"subtitle" => 1,
+				)) + $act_props;
+			}
+		}
+*/
+		$obj_inst = false;
+
+		// load the first connection.
+		// It should be relatively simple to extend this so that it can load
+		// a programmaticaly specified relation
+
+		// need to check whether a existing recurrence thing is specifed, if so, add that
+		if ($form_type != "new" && is_object($arr["obj_inst"]) &&  is_oid($arr["obj_inst"]->id()))
+		{
+			if ($edit_id)
+			{
+				$obj_inst = new object($edit_id);
+			}
+			else if (!empty($prop["rel_id"]) || $prop["rel_id"] == "first")
+			{
+			//else if ($prop["rel_id"] == "first")
+			//{
+				$o = $arr["obj_inst"];
+				if (is_object($o) && is_oid($o->id()))
+				{
+					$conns = $o->connections_from(array(
+						"type" => $prop["reltype"],
+					));
+					// take the first
+					if ($prop["rel_id"] == "first")
+					{
+						$key = reset($conns);
+						if ($key)
+						{
+							$obj_inst = $key->to();
+						};
+					}
+					else
+					if ($conns[$prop["rel_id"]])
+					{
+						$obj_inst = $conns[$prop["rel_id"]]->to();
+					};
+				};
+			};
+		};
+
+		if (is_object($obj_inst) && empty($arr["view"]))
+		{
+			$act_props["id"] = array(
+				"type" => "hidden",
+				"name" => "id",
+				"value" => $obj_inst->id(),
+			);
+
+		};
+
+
+/*		if (($visual == "manager" && (is_object($obj_inst) || ($form_type == "new" || ($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))))))
+		//if ($visual == "form" || ($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
+		{
+			// I might not want a submit button, eh?
+			// exactly my point: i don't want it, so the save button will be on toolbar -- ahz
+			/*
+			$act_props["sbt"] = array(
+				"type" => "submit",
+				"name" => "sbt",
+				"value" => t("Salvesta"),
+			);*/
+/*
+			if ($arr["prop"]["cfgform"])
+			{
+				$act_props["eb_cfgform"] = array(
+					"type" => "hidden",
+					"name" => "cfgform",
+					"value" => $arr["prop"]["cfgform"],
+				);
+			};
+		};
+*/
+		if (!$obj_inst)
+		{
+			$obj_inst = new object();
+		};
+
+		// so that the object can access the source object
+		if (is_object($arr["obj_inst"]))
+		{
+			aw_global_set("from_obj",$arr["obj_inst"]->id());
+		};
+
+		// maybe I can use the property name itself
+		if ($arr["cb_values"])
+		{
+			$t->cb_values = $arr["cb_values"];
+		};
+
+//arr($act_props);arr($this->elname);
+		// parse_properties fills the thing with values and stuff. And it eats my precious toolbar
+		$this->elname = $this->elname."[0]";
+		$xprops = $t->parse_properties(array(
+			"properties" => $act_props,
+			"name_prefix" => $this->elname,
+			"obj_inst" => $obj_inst,
+		));//arr($xprops);
+/*
+		// add this after parse, otherwise the name will be in form propname[elname], and I do not
+		// want this
+		if ("manager" == $visual)
+		{
+			$act_name = $prop["name"] . "_action";
+			$xprops[$act_name] = array(
+				"type" => "hidden",
+				"name" => $act_name,
+				"id" => $act_name,
+				"value" => "",
+			);
+		};
+
+		if ($prop["parent"] != "")
+		{
+			$tmp = array();
+			foreach($xprops as $pn => $pd)
+			{
+				$pd["parent"] = $prop["parent"];
+				$tmp[$pn] = $pd;
+			}
+			$xprops = $tmp;
+		}
+*/
+		exit_function("init-rel-editor-new");
+
+		$tb = get_instance("vcl/toolbar");
+		$tb->add_button(array(
+			"name" => "new",
+			"tooltip" => t("Lisa uus")." " . $prop["caption"],
+			"caption" => t("Lisa uus")." " . $prop["caption"],
+			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
+		));
+
+	
+		$xprops[$prop["name"]."[0]toolbar"] = array(
+			"type" => "text",
+			"value" => $tb->get_toolbar(),
+			"store" => "no",
+			"name" => $this->elname."_toolbar",
+			"caption" => $this->elname."_toolbar",
+			"no_caption" => 1,
+ 		);
+
+//		arr($xprops);
+		foreach($xprops as $key => $prop)
+		{
+			$get_prop_arr = $arr;
+			$get_prop_arr["prop"] = $prop;
+			$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $get_prop_arr["prop"]["name"]);
+			$parent_inst->get_property($get_prop_arr);
+			$get_prop_arr["prop"]["name"] = $prop["name"];
+			$xprops[$key] = $get_prop_arr["prop"];
+		}
+//		arr($xprops);
+
+		return $xprops;
+
+	}
+
 	function init_rel_editor($arr)
 	{
+		if($arr["prop"]["mode"] == "manager2")
+		{
+			return $this->init_new_manager($arr);
+		}
 		enter_function("init-rel-editor");
 		$prop = $arr["prop"];
 		$this->elname = $prop["name"];
