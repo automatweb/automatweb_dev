@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/xml_editor.aw,v 1.2 2008/03/17 10:02:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/xml_editor.aw,v 1.3 2008/03/17 10:03:32 dragut Exp $
 // xml_editor.aw - xml editor 
 /*
 
@@ -93,7 +93,7 @@ class xml_editor extends class_base
 
 		$t->define_field(array(
 			"name" => "xml_element",
-			"caption" => "xml elements",
+			"caption" => t("xml elements"),
 		));
 
 		$xml_file_content = file_get_contents($arr['obj_inst']->prop('xml_file'));
