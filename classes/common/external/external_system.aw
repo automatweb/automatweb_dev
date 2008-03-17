@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/external/external_system.aw,v 1.3 2008/01/31 13:52:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/external/external_system.aw,v 1.4 2008/03/17 11:42:08 robert Exp $
 // external_system.aw - Siduss&uuml;steem 
 /*
 
@@ -16,12 +16,17 @@
 	@property apply_class type=select field=aw_apply_class
 	@caption Klass, millele kehtib
 
+	@property systems type=relpicker field=meta table=objects method=serialize multiple=1 reltype=RELTYPE_SYSTEM
+	@caption Kuvatavad siduss&uuml;steemid
+
 @default group=data
 
 	@property data_table type=table no_caption=1 store=no
 
 @groupinfo data caption="Andmed"
 
+@reltype SYSTEM value=1 clid=CL_EXTERNAL_SYSTEM
+@caption Siduss&uuml;steem
 
 */
 
@@ -72,19 +77,34 @@ class external_system extends class_base
 		}
 	}
 
-	function _init_data_table(&$t)
+	function _get_ext_sys_arr($arr)
+	{
+		$ss = $arr["obj_inst"]->prop("systems");
+		if(count($ss))
+		{
+			$params["oid"] = $ss;
+		}
+		else
+		{
+			$params["oid"] = -1;
+		}
+		$params["class_id"] = CL_EXTERNAL_SYSTEM;
+		$params["lang_id"] = array();
+		$params["site_id"] = array();
+		$ol = new object_list($params);
+		$arr = $ol->arr();
+		return $arr;
+	}
+
+	function _init_data_table(&$t, $arr)
 	{
 		$t->define_field(array(
 			"name" => "co",
 			"caption" => t("Organisatsioon"),
 			"align" => "center",
 		));
-		$ol = new object_list(array(
-			"class_id" => CL_EXTERNAL_SYSTEM,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		foreach($ol->arr() as $o)
+		$exts = $this->_get_ext_sys_arr($arr);
+		foreach($exts as $o)
 		{
 			$t->define_field(array(
 				"name" => $o->id(),
@@ -92,19 +112,19 @@ class external_system extends class_base
 				"align" => "center",
 			));
 		}
+		$t->define_pageselector(array(
+			"type" => "text",
+			"records_per_page" => 10,
+			"position" => "both",
+		));
 	}
 
 	function _get_data_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_data_table($t);
+		$this->_init_data_table($t, $arr);
 
-		$ext_sys = new object_list(array(
-			"class_id" => CL_EXTERNAL_SYSTEM,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		$ext_sys_arr = $ext_sys->arr();
+		$ext_sys_arr = $this->_get_ext_sys_arr($arr);
 
 		$ol = new object_list(array(
 			"class_id" => $arr["obj_inst"]->prop("apply_class"),
