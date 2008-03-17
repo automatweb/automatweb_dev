@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/mail_notify.aw,v 1.4 2008/02/15 13:26:52 markop Exp $
 // reminder UI VCL component
 /*
 @classinfo maintainer=markop
@@ -76,25 +75,27 @@ class mail_notify extends core
 
 	function callback_mail_notify_toolbar($arr)
 	{
-		return array(
+		$ret = array(
 			"type" => "toolbar",
 			"name" => "[mail_notify_toolbar]",
 			"value" => $this->_sp_tb($arr),
 			"store" => "no",
-			"no_caption" => 1,
-		);
+		)  + $arr["prop"];
+		unset($ret["vcl_inst"]);
+		return $ret;
 	}
 
 	function callback_mail_notify_table($arr)
 	{
-		return array(
+		$ret = array(
 			"type" => "table",
 			"name" => "[mail_notify_table]",
 			"value" => $this->_sp_table($arr),
 //			"value" => $this->_get_mail_notify_table($arr),
 			"store" => "no",
-			"no_caption" => 1,
-		);
+		) + $arr["prop"];
+		unset($ret["vcl_inst"]);
+		return $ret;
 	}
 
 	function callback_mail_notify_mail_settings($arr)
@@ -257,7 +258,7 @@ class mail_notify extends core
 		$this->_init_p_tbl($t);
 		$t->set_caption(t("Otsingu tulemused"));
 		$search_data = $arr["obj_inst"] -> meta("not_mail_ppl_search");
-		 
+
 		if ($search_data["name"] != "" || $search_data["co"] != "")
 		{
 			$param = array(
@@ -287,7 +288,7 @@ class mail_notify extends core
 		}
 		if(!$p)
 		{
-			return "";//tühja tabeliga ei hakka läbustama
+			return "";//tyhja tabeliga ei hakka l2bustama
 		}
 		return $t->get_html();
 	}
@@ -342,7 +343,7 @@ class mail_notify extends core
 				"oid" => $p->id()
 			));
 		}
-		if(!$p)//tühja tabeliga ei hakka läbustama
+		if(!$p)//tyhja tabeliga ei hakka l2bustama
 		{
 			return "";
 		}
