@@ -809,8 +809,8 @@ class crm_company_cedit_impl extends core
 					"choose" => $chooser,
 					"org" => $org_data,
 					"profession" => $profession_data,
-					"start" => (!empty($start_data)) ? date("d.m.Y", $start_data) : "",
-					"end" => (!empty($end_data)) ? date("d.m.Y", $end_end) : "",
+					"start" => (empty($start_data) || $end_data < $start_data) ? t("M&auml;&auml;ramata") : date("d.m.Y", $start_data),
+					"end" => (empty($end_data) || $end_data < $start_data) ? t("M&auml;&auml;ramata") : date("d.m.Y", $end_data),
 					"change" => html::href(array(
 						"caption" => t("Muuda"),
 						"url" => $ch_url_profession,
