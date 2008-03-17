@@ -984,7 +984,8 @@ class doc_display extends aw_template
 				while($row = $this->db_next())
 				{
 					$s_comment = $row["comment"];
-					$this->_parse_youtube_links(& $s_comment);
+					//$this->_parse_youtube_links(& $s_comment);
+					$this->_parse_wiki(& $s_comment, $doc);
 					$s_name = $row["name"];
 					$s_url = $row["url"];
 					if (strlen($s_url)>0)
