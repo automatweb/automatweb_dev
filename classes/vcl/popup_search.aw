@@ -30,9 +30,9 @@ class popup_search extends aw_template
 		}
 		$style = isset($arr['property']['style']) ? $arr['property']['style'] : 'default'; // Options: default, relpicker
 		$reltype = "";
-	
+
 		$options = array();
-		
+
 		if ($style == 'default')
 		{
 			$name = "popup_search[".$arr["property"]["name"]."]";
@@ -195,10 +195,10 @@ class popup_search extends aw_template
 						$pm->add_item(array(
 							"text" => $clss[$_clid]["name"],
 							"link" => html::get_new_url(
-								$_clid, 
-								$arr["obj_inst"]->id(), 
+								$_clid,
+								$arr["obj_inst"]->id(),
 								array(
-									"alias_to" => $arr["obj_inst"]->id(), 
+									"alias_to" => $arr["obj_inst"]->id(),
 									"reltype" => $rel_val,
 									"return_url" => get_ru()
 								)
@@ -216,10 +216,10 @@ class popup_search extends aw_template
 					{
 						$tmp["value"] .= " ".html::href(array(
 							"url" => html::get_new_url(
-								$cl, 
-								$arr["obj_inst"]->id(), 
+								$cl,
+								$arr["obj_inst"]->id(),
 								array(
-									"alias_to" => $arr["obj_inst"]->id(), 
+									"alias_to" => $arr["obj_inst"]->id(),
 									"reltype" => $rel_val,
 									"return_url" => get_ru()
 								)
@@ -258,13 +258,13 @@ class popup_search extends aw_template
 			$arr["obj_inst"]->set_prop($arr["prop"]["name"], $arr["prop"]["value"]);
 		}
 	}
-				
-				
+
+
 	/**
 		@attrib name=do_unlink
 
 		@param id required type=int acl=view
-		@param pn required 
+		@param pn required
 		@param rem optional
 
 		@comment
@@ -310,7 +310,7 @@ class popup_search extends aw_template
 					$ob->set_prop($arr['pn'], $possible_value);
 					$ob->save();
 				}
-				
+
 				die("
 					<html><body><script language='javascript'>
 						window.opener.location.reload();
@@ -362,22 +362,24 @@ class popup_search extends aw_template
 
 				return $html;
 			}
-		}	
+		}
 	  }
 	}
 
 	/**
-		
+
 		@attrib name=do_search api=1
 
 		@param id optional
-		@param pn required 
+		@param pn required
 		@param multiple optional
-		@param clid optional 
+		@param clid optional
 		@param s optional
 		@param append_html optional
 		@param tbl_props optional
 		@param no_submit optional
+		@param start_empty optional type=bool
+			If true, initially search results table is empty.
 
 		@comment
 			clid - not filtered by, if clid == 0
@@ -397,7 +399,7 @@ class popup_search extends aw_template
 	/**
 		@attrib params=pos
 		@param htmlc required type=object
-			cfg/htmlclient object instance reference 
+			cfg/htmlclient object instance reference
 		@param arr required type=array
 			array of params, same as #do_search 'es params.
 		@comment
@@ -499,7 +501,7 @@ class popup_search extends aw_template
 
 		return $html;
 	}
-	
+
 	function _process_reforb_args(&$data)
 	{
 	}
@@ -512,7 +514,7 @@ class popup_search extends aw_template
 			array of params, same as #do_search 'es params.
 		@comment
 			manages data coming from the form and makes it readable for filter.
-			This function can be overridden from extending class. This is needed when you extend a class to popup_search() and add some 
+			This function can be overridden from extending class. This is needed when you extend a class to popup_search() and add some
 			specific new pops with overriding _insert_form_props() function, then you have to manage the data coming from these new props
 			in here.
 			Little example is shown on the #_insert_form_props function documentation
@@ -618,12 +620,15 @@ class popup_search extends aw_template
 		$t->set_default_sortby("name");
 
 		$filter = array();
+		$count = 0;
 		if ($arr['clid'] > 0)
 		{
 			$filter['class_id'] = $arr['clid'];
-		}	
+			$count = 1;
+		}
 
 		$this->_get_filter_props($filter, $arr);
+		$count = !($count ===  count($filter) and $arr["start_empty"]);
 
 		if (!$_GET["MAX_FILE_SIZE"])
 		{
@@ -660,7 +665,7 @@ class popup_search extends aw_template
 				$elname_n .= "][]";
 			}
 			classload("core/icons");
-			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			for($count and $o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
 				$dat = array(
 					"oid" => $o->id(),
@@ -711,7 +716,7 @@ class popup_search extends aw_template
 
 	/**
 
-		@attrib name=final_submit all_args="1" 
+		@attrib name=final_submit all_args="1"
 
 	**/
 	function final_submit($arr)
@@ -726,7 +731,7 @@ class popup_search extends aw_template
 				$o->set_prop($arr["pn"], $arr["sel"][0]);
 			}
 			$o->save();
-		
+
 			// if relpicker, define relations
 			$props = $o->get_property_list();
 			$prop = $props[$arr['pn']];
@@ -752,7 +757,7 @@ class popup_search extends aw_template
 					}
 				}
 			}
-		
+
 			// emit message so objects can update crap
 			post_message_with_param(MSG_POPUP_SEARCH_CHANGE, $o->class_id(), array(
 				"oid" => $o->id(),
@@ -834,7 +839,7 @@ function aw_get_el(name,form)
 					{
 						window.opener.document.changeform.".$arr["pn"].".value = '".join(",", $arr["sel"])."';
 					}
-				}	
+				}
 					";
 			if(!$arr["no_submit"])
 			{
@@ -851,7 +856,7 @@ function aw_get_el(name,form)
 	}
 
 	/** sets the options for the given objects given popup search property
-		
+
 		@param obj required
 		@param prop required
 		@param opts required

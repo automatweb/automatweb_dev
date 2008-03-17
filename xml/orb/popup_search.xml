@@ -22,6 +22,7 @@
 					<optional name="append_html" />
 					<optional name="tbl_props" />
 					<optional name="no_submit" />
+					<optional name="start_empty" />
 				</arguments>
 			</function>
 		</action>
