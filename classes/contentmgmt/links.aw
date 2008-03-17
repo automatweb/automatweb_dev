@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.40 2008/02/04 13:02:08 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS maintainer=kristo
@@ -7,7 +6,7 @@
 
 @default group=general
 
-	@property comment type=textarea cols=30 rows=5 table=objects 
+	@property comment type=textarea cols=30 rows=5 table=objects
 	@caption Kommentaar
 
 	@property url type=textbox table=extlinks default=http://
@@ -16,18 +15,18 @@
 	@property alias type=textbox size=60 table=objects field=alias
 	@caption Alias
 
-	@property docid type=hidden table=extlinks 
+	@property docid type=hidden table=extlinks
 
-	@property hits type=text table=extlinks 
+	@property hits type=text table=extlinks
 	@caption Klikke
 
-	@property url_int_text type=text store=no 
+	@property url_int_text type=text store=no
 	@caption Saidi sisene link
 
-	@property alt type=textbox table=objects field=meta method=serialize search=1 
+	@property alt type=textbox table=objects field=meta method=serialize search=1
 	@caption Alt tekst
 
-	@property newwindow type=checkbox ch_value=1 search=1 table=extlinks 
+	@property newwindow type=checkbox ch_value=1 search=1 table=extlinks
 	@caption Uues aknas
 
 	@property ord type=textbox size=3 table=objects field=jrk
@@ -65,7 +64,7 @@
 	@caption Pilt
 
 	@property link_image_show type=text store=no editonly=1 group=Pilt
-	@caption 
+	@caption
 
 	@property link_image_check_active type=checkbox ch_value=1 group=Pilt table=objects field=meta method=serialize
 	@caption Pilt aktiivne
@@ -75,7 +74,7 @@
 
 
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
@@ -106,10 +105,10 @@ class links extends class_base
 		);
 	}
 
-	/**  
-		
-		@attrib name=search_doc params=name 
-		
+	/**
+
+		@attrib name=search_doc params=name
+
 		@param s_name optional
 		@param s_content optional
 
@@ -214,15 +213,15 @@ class links extends class_base
 		return $this->parse();
 	}
 
-	/**  
-		
-		@attrib name=show params=name nologin="1" 
-		
+	/**
+
+		@attrib name=show params=name nologin="1"
+
 		@param id required type=int
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -248,7 +247,7 @@ class links extends class_base
 		header("Location: ".$url);
 		die();
 	}
-	
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -319,7 +318,7 @@ class links extends class_base
 				));
 				$prop['value'] = $this->parse();
 				break;
-	
+
 			case "url":
 				if ($prop["value"] == "" && $arr["obj_inst"]->prop("docid") != "")
 				{
@@ -391,7 +390,7 @@ class links extends class_base
 
 	// registreerib kliki lingile
 	// peab ehitama ka mehhanisimi sp&auml;mmimise v&auml;ltimiseks
-	function add_hit($id,$host,$uid) 
+	function add_hit($id,$host,$uid)
 	{
 		if (!aw_ini_get("links.use_hit_counter"))
 		{
@@ -443,13 +442,13 @@ class links extends class_base
 				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
 				<script language='javascript'>
 
-				function SetAttribute( element, attName, attValue ) 
-				{ 
-					if ( attValue == null || attValue.length == 0 ) 
+				function SetAttribute( element, attName, attValue )
+				{
+					if ( attValue == null || attValue.length == 0 )
 					{
 						element.removeAttribute( attName, 0 ) ;
-					} 
-					else 
+					}
+					else
 					{
 						element.setAttribute( attName, attValue, 0 ) ;
 					}
@@ -457,17 +456,17 @@ class links extends class_base
 
 				FCK=window.parent.opener.FCK;
 				var eSelected = FCK.Selection.MoveToAncestorNode(\"A\");
-				if (eSelected) 
-				{ 
+				if (eSelected)
+				{
 					eSelected.href=\"".$link_url."\";
-					eSelected.innerHTML=\"".$arr["obj_inst"]->prop("name")."\"; 
-					SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ; 
-				} 
-				else 
-				{ 
-					FCK.InsertHtml(aw_get_url_contents(\"$url\")); 
+					eSelected.innerHTML=\"".$arr["obj_inst"]->prop("name")."\";
+					SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ;
 				}
- 
+				else
+				{
+					FCK.InsertHtml(aw_get_url_contents(\"$url\"));
+				}
+
 				window.parent.close();
 			</script>
 			");
