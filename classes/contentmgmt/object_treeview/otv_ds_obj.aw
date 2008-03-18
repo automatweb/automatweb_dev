@@ -255,7 +255,7 @@ class otv_ds_obj extends class_base
 
 		@comment
 
-			returnes an array, key is entry id, value is array(
+			returns an array, key is entry id, value is array(
 				id => id,
 				parent => parent
 				name => name,
@@ -289,8 +289,8 @@ class otv_ds_obj extends class_base
 
 		classload("core/icons", "image");
 
-		$sort = $ob->prop("fld_sort_by");
-		$sort = empty($sort) ? "objects.jrk" : $sort;
+		$fld_sort_by = $ob->prop("fld_sort_by");
+		$sort = (empty($fld_sort_by) ? "objects.jrk" : $fld_sort_by) . " ASC";
 
 		$opts = array();
 		$use_meta_as_folders = $ob->prop("use_meta_as_folders");
@@ -377,7 +377,17 @@ class otv_ds_obj extends class_base
 				);
 			}
 		}
-		uasort($ret, create_function('$a,$b', 'return ($a["jrk"] == $b["jrk"] ? 0 : ($a["jrk"] > $b["jrk"] ? 1 : -1));'));
+
+		switch ($fld_sort_by)
+		{
+			case "objects.jrk":
+				uasort($ret, create_function('$a,$b', 'return ($a["jrk"] == $b["jrk"] ? 0 : ($a["jrk"] > $b["jrk"] ? 1 : -1));'));
+				break;
+			case "objects.name":
+				uasort($ret, create_function('$a,$b', 'return (strcmp($a["name"], $b["name"]));'));
+				break;
+		}
+
 		return $ret;
 	}
 
