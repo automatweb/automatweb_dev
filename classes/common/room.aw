@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.238 2008/03/13 14:16:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.239 2008/03/18 10:28:42 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -5114,6 +5114,12 @@ class room extends class_base
 			return false;
 		}
 		$room = obj($room);
+		$set = $this->get_settings_for_room($room);
+		$tm = 600000;
+		if ($set->prop("cal_refresh_time") > 0)
+		{
+			$tm = $set->prop("cal_refresh_time") * 60000;
+		}
 		$buff_before = $room->prop("buffer_before")*$room->prop("buffer_before_unit");
 		$buff_after = $room->prop("buffer_after")*$room->prop("buffer_after_unit");
 	
@@ -5155,7 +5161,7 @@ class room extends class_base
 				$verified_reservations->add($res->id());
 //				$reservations->remove($res->id());
 			}
-			elseif(!($res->prop("deadline") > time()))
+			elseif(!(is_object($set) && $set->prop("show_unverified")) && !($res->prop("deadline") > time()))
 			{
 				$reservations->remove($res->id());
 			}
