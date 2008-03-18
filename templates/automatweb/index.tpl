@@ -10,7 +10,11 @@
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
 
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery-1.2.2.min.js"></script>	
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_timer.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_releditor.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_dump.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_formreset.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -23,6 +27,8 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
 <!-- END SUB: MINIFY_JS_AND_CSS -->
+
+
 
 <script type="text/javascript">
 shortcut("Ctrl+Shift+A",function() {
