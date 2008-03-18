@@ -69,6 +69,16 @@
             <field>msg</field>
             <caption>Message</caption>
       </property>
+      <property>
+            <name>send</name>
+            <table>quickmessages</table>
+            <group>general</group>
+            <type>submit</type>
+            <store>no</store>
+            <newonly>1</newonly>
+            <field>send</field>
+            <caption>Send</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_QUICKMESSAGE</syslog_type>
             <no_status>1</no_status>

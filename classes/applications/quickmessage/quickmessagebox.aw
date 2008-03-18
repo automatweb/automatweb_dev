@@ -4,9 +4,9 @@
 
 @classinfo syslog_type=ST_QUICKMESSAGEBOX maintainer=voldemar prop_cb=1
 
-@groupinfo message_box caption="Messages"
-	@groupinfo message_inbox caption="Inbox" parent=message_box
-	@groupinfo message_outbox caption="Outbox" parent=message_box
+@groupinfo message_box caption="Messages" submit=no
+	@groupinfo message_inbox caption="Inbox" parent=message_box submit=no
+	@groupinfo message_outbox caption="Outbox" parent=message_box submit=no
 @groupinfo general caption="Settings"
 
 @default table=objects
@@ -246,6 +246,16 @@ class quickmessagebox extends class_base
 			"group" => $arr["group"],
 		), $arr["class"]);
 		return $return_url;
+	}
+
+	/**
+		@attrib name=get_new_msgs_count
+		@param id required type=int acl=view
+	**/
+	function get_new_msgs_count($arr)
+	{
+		echo quickmessagebox_obj::get_new_msgs_count($arr["id"]);
+		exit;
 	}
 }
 

@@ -95,14 +95,17 @@
       <groupinfo>
             <message_box>
                   <caption>Messages</caption>
+                  <submit>no</submit>
             </message_box>
             <message_inbox>
                   <caption>Inbox</caption>
                   <parent>message_box</parent>
+                  <submit>no</submit>
             </message_inbox>
             <message_outbox>
                   <caption>Outbox</caption>
                   <parent>message_box</parent>
+                  <submit>no</submit>
             </message_outbox>
             <general>
                   <caption>Settings</caption>

@@ -26,6 +26,9 @@
 	@property msg_display type=text store=no editonly=1 field=msg
 	@caption Message
 
+	@property send type=submit store=no newonly=1
+	@caption Send
+
 */
 
 class quickmessage extends class_base
