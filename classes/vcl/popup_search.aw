@@ -474,6 +474,18 @@ class popup_search extends aw_template
 
 		$this->_insert_form_props($htmlc, $arr);
 
+		if (count($arr["tbl_props"]))
+		{
+			foreach ($arr["tbl_props"] as $key => $value)
+			{
+				$htmlc->add_property(array(
+					"name" => "tbl_props[" . $key . "]",
+					"type" => "hidden",
+					"value" => $value,
+				));
+			}
+		}
+
 		$htmlc->add_property(array(
 			"name" => "s[submit]",
 			"type" => "submit",
