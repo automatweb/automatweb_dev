@@ -35,6 +35,25 @@ class group_obj extends _int_object
 		$r = $odl->arr();
 		return $r[0]["cnt"];
 	}
+
+	function get_group_persons()
+	{
+		$persons = new object_list();
+		$ol = new object_list(array(
+			"class_id" => CL_USER,
+			"parent" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$user_inst = get_instance(CL_USER);
+		foreach($ol->arr() as $o)
+		{
+			$persons->add($user_inst->get_person_for_user($o));
+		}
+		return $persons;
+	}
+
+
 }
 
 ?>

@@ -368,6 +368,13 @@ class mail_notify extends core
 			"site_id" => array(),
 			"class_id" => CL_CRM_PERSON,
 		));
+		$ol2 = new object_list(array(
+			"oid" => $persons,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_GROUP,
+		));
+		$ol->add($ol2);
 		return $ol->names();
 	}
 
@@ -390,7 +397,7 @@ class mail_notify extends core
 		$popup_search = get_instance("vcl/popup_search");
 		$search_butt = $popup_search->get_popup_search_link(array(
 			"pn" => "add_selected_people",
-			"clid" => CL_CRM_PERSON,
+			"clid" => array(CL_CRM_PERSON,CL_GROUP)
 		));
 
 		$tb->add_cdata($search_butt);

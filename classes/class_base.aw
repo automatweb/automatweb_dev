@@ -6186,15 +6186,28 @@ class class_base extends aw_template
 	{
 		$o = obj($arr["id"]);
 		$ppl = $this->get_people_list($o);
+		$u = get_instance(CL_USER);
+		$person = $u->get_person_for_uid(aw_global_get("uid"));
+		$user_name = "";
+		if(is_object($person))
+		{
+			$user_name = $person->name();
+		}
 		foreach($ppl as $oid => $nm)
 		{
-			$u = get_instance(CL_USER);
-			$person = $u->get_person_for_uid(aw_global_get("uid"));
-			$user_name = "";
-			if(is_object($person))
+			$p = obj($oid);
+			if($p->class_id() == CL_GROUP)
 			{
-				$user_name = $person->name();
+				$group_person_list = $p->get_group_persons();
+				foreach($group_person_list->arr() as $group_person)
+				{
+					$ppl[$group_person->id()] = $group_person->name();
+				}
+				unset($ppl[$oid]);
 			}
+		}
+		foreach($ppl as $oid => $nm)
+		{
 
 			if(!$o->prop("sp_content"))
 			{
