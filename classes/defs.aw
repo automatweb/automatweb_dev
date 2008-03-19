@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.258 2008/03/13 13:26:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.259 2008/03/19 14:37:03 markop Exp $
 // defs.aw - common functions
 
 /*
@@ -407,12 +407,17 @@ if (!defined("DEFS"))
 		if (aw_ini_get("mail.use_smtp"))
 		{
 			$smtp = get_instance("protocols/mail/smtp");
-			$smtp->send_message(
-				aw_ini_get("mail.smtp_server"),
-				$from,
-				$to,
-				trim($headers)."\nX-Mailer: AutomatWeb\nTo: $to\nSubject: ".$subject."\n\n".$msg
-			);
+			//see va smtp protokoll ei taha yldse toetada mitmele saatmist korraga
+			$to_arr = explode(",", $to);
+			foreach($to_arr as $t)
+			{
+				$smtp->send_message(
+					aw_ini_get("mail.smtp_server"),
+					$mt[1],
+					$t,
+					trim($headers)."\nX-Mailer: AutomatWeb\nTo: $to\nSubject: ".$subject."\n\n".$msg
+				);
+			}
 		}
 		else
 		{
@@ -660,9 +665,9 @@ if (!defined("DEFS"))
 	**/
 	function localparse($src = "",$vars = array())
 	{
-		// kogu asendus tehakse ühe reaga
-		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
-		// mis eval-ist läbi lastakse.
+		// kogu asendus tehakse yhe reaga
+		// "e" regexpi lopus tahendab seda, et teist parameetrit ksitletakse php koodina,
+		// mis eval-ist lbi lastakse.
 		$src = @preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
 		$src = @preg_replace("/{DATE:(.+?)\|(.+?)}/e","((is_numeric(\$vars[\"\\1\"]) && \$vars[\"\\1\"] > 1 )? date(\"\\2\",\$vars[\"\\1\"]) : \"\")",$src);
 		return @preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
@@ -803,12 +808,12 @@ if (!defined("DEFS"))
 	function is_date($param)
 	{
 		$valid = preg_match("/^(\d{1,2}?)-(\d{1,2}?)-(\d{4}?)$/",$param,$parts);
-		// päevade arv < 0 ?
+		// pevade arv < 0 ?
 		if ($parts[1] < 0)
 		{
 			$valid = false;
 		}
-		// päevi rohkem, kui selles kuus?
+		// pevi rohkem, kui selles kuus?
 		else
 		if ($parts[1] > date("t",mktime(0,0,0,$parts[2],1,$parts[3])) )
 		{
@@ -1781,7 +1786,7 @@ if (!defined("DEFS"))
 	}
 
 		$GLOBALS["__reval_hotel_list"] = array(
-			"Reval Hotel Olümpia",
+			"Reval Hotel Ol&uuml;mpia",
 			"Reval Hotel Central",
 			"Reval Park Hotel  Casino",
 			"Reval Inn Tallinn",
