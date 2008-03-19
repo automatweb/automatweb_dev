@@ -740,7 +740,10 @@ function awActb(obj, valueObj)
 
 				if (!actb_display)
 				{
-					actb_loadOptions();
+					if ("dynamic" == actb_mode)
+					{
+						actb_loadOptions();
+					}
 					actb_lastKey = -1;
 				}
 				break;
@@ -756,7 +759,10 @@ function awActb(obj, valueObj)
 
 			case 8:
 				setTimeout(function(){
-					actb_loadOptions();
+					if ("dynamic" == actb_mode)
+					{
+						actb_loadOptions();
+					}
 					actb_lastKey = -1;
 				}, 40);
 				return true;
@@ -777,7 +783,10 @@ function awActb(obj, valueObj)
 			default:
 				if ("realtime" == actb_mode /*&& actb_curr.value.length*/)
 				{
-					actb_loadOptions();
+					if ("dynamic" == actb_mode)
+					{
+						actb_loadOptions();
+					}
 					actb_lastKey = a;
 				}
 				else
