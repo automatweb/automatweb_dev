@@ -14,6 +14,8 @@ class html extends aw_template
 		element id
 	@param options optional type=array
 		selection options array(value => text)
+	@param disabled_options optional type=array
+		array of values disabled
 	@param selected optional type=int
 		already selected options
 	@param onchange optional type=string
@@ -77,7 +79,8 @@ class html extends aw_template
 		foreach(safe_array($options) as $k => $v)
 		{
 			$selected = isset($sel_array[$k]) ? " selected " : "";
-			$optstr .= "<option $selected value=\"$k\">$v</option>\n";
+			$d = in_array($k, $disabled_options) ? " disabled=\"disabled\"" : "";
+			$optstr .= "<option $selected value=\"$k\"$d>$v</option>\n";
 		}
 		// implementing a thing called optgroup -- ahz
 		foreach(safe_array($optgroup) as $key => $val)
