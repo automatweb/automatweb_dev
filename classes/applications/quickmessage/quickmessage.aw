@@ -73,19 +73,48 @@ class quickmessage extends class_base
 
 	function submit($arr)
 	{
-		$ret = parent::submit($arr);
-
 		try
 		{
-			$return_url = new aw_uri($arr["return_url"]);
+			$ret = parent::submit($arr);
 
-			if ("quickmessagebox" === $return_url->arg("class"))
+			try
 			{
-				$ret = $return_url->get();
+				$return_url = new aw_uri($arr["return_url"]);
+
+				if ("quickmessagebox" === $return_url->arg("class"))
+				{
+					$ret = $return_url->get();
+				}
+			}
+			catch (Exception $e)
+			{
 			}
 		}
-		catch (Exception $e)
+		catch (awex_qmsg_param $e)
 		{
+			$args = array(
+				"id" => 1,
+				"group" => 1,
+				"box" => 1,
+				"parent" => 1,
+				"return_url" => 1,
+				"section" => 1,
+			);
+			$args = array_intersect_key($arr, $args);
+
+			if ($this->new)
+			{
+				$action = "new";
+				unset($args["id"]);
+				$propvalues["to_display"]["error"] = sprintf(t("Can't post to '%s'"), $arr["to_display"]);
+				aw_session_set("cb_values", $propvalues);
+			}
+			else
+			{
+				$action = "change";
+			}
+
+			$ret = $this->mk_my_orb($action, $args, $arr["class"], false, (bool) $arr["ret_to_orb"], "&", false);
 		}
 
 		return $ret;
