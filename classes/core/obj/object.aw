@@ -114,7 +114,7 @@ class object
 		}
 		else
 		{
-			throw new awex_obj_method("Call to undefined method '" . $method . "'.");
+			throw new awex_obj_method("Call to undefined method '" . $method . "' on an instance of '" . get_class($GLOBALS["objects"][$this->oid]) . "' with clid '" . $GLOBALS["objects"][$this->oid]->class_id() . "'.");
 		}
 	}
 
