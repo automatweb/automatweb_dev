@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.105 2008/03/20 12:37:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.106 2008/03/20 14:26:31 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -149,7 +149,6 @@ class releditor extends core
 					$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $this->elname)."[".$get_prop_arr["prop"]["name"]."]";
 					$parent_inst->get_property($get_prop_arr);
 					$prop = $get_prop_arr["prop"];
-
 /*
 					$hidden_input = $this->all_props[$_pn];//arr($hidden_input);//arr($prop["name"]); //arr($this->all_props);
 					$hidden_input["value"] = $target->prop($_pn);
