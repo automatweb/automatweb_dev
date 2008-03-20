@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.109 2008/03/20 14:41:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.110 2008/03/20 14:42:23 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -29,7 +29,7 @@ class releditor extends core
 		if(!is_object($arr["obj_inst"]))
 		{
 			$arr["obj_inst"] = obj($arr["request"]["id"]);
-		} 
+		}  
 
 		$htmlclient = get_instance("cfg/htmlclient");
 
