@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.104 2008/03/17 17:08:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.105 2008/03/20 12:37:37 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -31,6 +31,8 @@ class releditor extends core
 			$arr["obj_inst"] = obj($arr["request"]["id"]);
 		}
 
+		$htmlclient = get_instance("cfg/htmlclient");
+
 		$parent_inst = get_instance($arr["obj_inst"]->class_id());
 		$parent_property_list = $arr["obj_inst"]->get_property_list();
 		$arr["prop"] = $parent_property_list[$arr["prop"]["name"]];
@@ -60,6 +62,15 @@ class releditor extends core
 					"_sort_jrk" => $conn->prop("to.jrk"),
 					"_sort_name" => $conn->prop("to.name"),
 					"_active" => ($arr["request"][$this->elname] == $c_to),
+					"delete" => html::submit(array(
+						"name" => "del_button",
+						"value" => t("Kustuta"),
+						"onclick" => "releditor_delete_".$c_to,
+						)).html::submit(array(
+						"name" => "del_button",
+						"value" => t("Muuda"),
+						"onclick" => "releditor_change_".$c_to,
+						)),
 				);
 
 				$property_list = $target->get_property_list();
@@ -139,8 +150,17 @@ class releditor extends core
 					$parent_inst->get_property($get_prop_arr);
 					$prop = $get_prop_arr["prop"];
 
-					$export_props[$_pn] = $prop["value"];
-
+/*
+					$hidden_input = $this->all_props[$_pn];//arr($hidden_input);//arr($prop["name"]); //arr($this->all_props);
+					$hidden_input["value"] = $target->prop($_pn);
+					$get_prop_arr = $arr;
+					$get_prop_arr["prop"] = $hidden_input;
+					$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $get_prop_arr["prop"]["name"]);
+					$parent_inst->get_property($get_prop_arr);
+					$get_prop_arr["prop"]["name"] = $prop["name"];
+					$hidden_input = $get_prop_arr["prop"];
+*/
+					$export_props[$_pn] = $prop["value"];//.$htmlclient->draw_element($hidden_input);
 				}
 				$fields_defined = 1;
 				$rowdata = $export_props + $rowdata;
@@ -148,6 +168,10 @@ class releditor extends core
 				$awt->define_data($rowdata);
 			}
 		}
+		$awt->define_field(array(
+			"name" => "delete",
+			"caption" => "",
+		));
 		$awt->set_sortable(true);
 		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));
 		$awt->sort_by();
@@ -363,6 +387,7 @@ class releditor extends core
 					"id" : "'.$arr["obj_inst"]->id().'",
 					"reltype" : "'.$arr["prop"]["reltype"].'",
 					"clid" : "'.$arr["prop"]["clid"].'",
+					"del_url" : "'.aw_ini_get("baseurl").'/?class=releditor&action=delo&id=",
 					});
 			</script></input><br>',
 			"store" => "no",
@@ -1257,6 +1282,16 @@ class releditor extends core
 			}
 		}
 		return $ret;
+	}
+
+	/**
+		@attrib name=delo all_args=1 public=1
+	**/
+	function delo($arr)
+	{
+		extract($arr);
+		$o = obj($id);
+		$o->delete();
 	}
 
 	/**

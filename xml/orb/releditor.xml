@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="releditor" folder="vcl" extends="core">
+		<action name="delo" all_args="1">
+			<function name="delo">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="process_new_releditor" all_args="1">
 			<function name="process_new_releditor">
 				<arguments>
