@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.405 2008/03/13 20:30:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.406 2008/03/21 16:01:31 sander Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -595,7 +595,7 @@ class menuedit extends aw_template implements request_startup
 		else
 		{
 			header ("HTTP/1.1 404 Not Found");
-			printf(t("<h1>404 Sellist sektsiooni pole</h1>"));
+			printf(t("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"> <html><head><title>404</title><meta name=\"robots\" content=\"noindex, nofollow\"></head><body><h1>404 Sellist sektsiooni pole</h1></body></html>"));
 		};
 		exit;
 	}
