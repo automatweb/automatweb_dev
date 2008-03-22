@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.231 2008/03/13 13:26:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.232 2008/03/22 19:26:11 hannes Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1710,7 +1710,7 @@ class menu extends class_base implements main_subtemplate_handler
 			{
 				$tmp .= "s";
 			}
-			else if (ord($name{$i}) == 233 || ord($name{$i}) == 201)//e with acute
+			else if (ord($name{$i}) == 233 || ord($name{$i}) == 201 || ord($name{$i}) == 235)//e with acute
 			{
 				$tmp .= "e";
 			}
