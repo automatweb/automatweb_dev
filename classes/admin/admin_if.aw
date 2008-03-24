@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.43 2008/03/13 13:26:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.44 2008/03/24 08:59:41 markop Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -641,6 +641,10 @@ class admin_if extends class_base
 		$site_id = $this->cfg["site_id"];
 		$parent = $arr["request"]["parent"];
 		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
+		if (!$this->can("view", $parent))
+		{
+//			return;
+		}
 		$menu_obj = new object($parent);
 
 		if (!isset($period))
@@ -689,16 +693,18 @@ class admin_if extends class_base
 		// by the way, mk_my_orb is pretty expensive and all those calls to it
 		// here take up to 10% of the time used to create the page -- duke
 
-		$sby = "";
+		$sby = $sby2 = "";
 		if (!empty($_GET["sortby"]))
 		{
 			if ($_GET["sortby"] == "hidden_jrk")
 			{
 				$sby = " ORDER BY jrk ".$_GET["sort_order"];
+				$sby2 = " ORDER BY c,jrk ".$_GET["sort_order"];
 			}
 			else
 			{
 				$sby = " ORDER BY ".$_GET["sortby"]." ".$_GET["sort_order"];
+				$sby2 = " ORDER BY c,".$_GET["sortby"]." ".$_GET["sort_order"];
 			}
 			$sortby = $_GET["sortby"];
 			$GLOBALS["sort_order"] = $_GET["sort_order"];
@@ -718,7 +724,7 @@ class admin_if extends class_base
 		$query = "FROM objects
 				LEFT JOIN menu m ON m.id = objects.oid
 			WHERE
-				$where $sby";
+				$where ";
 
 /*		$filter = array(
 			"parent" => $parent,
@@ -738,7 +744,7 @@ class admin_if extends class_base
 
 		// make pageselector.
 		// total count
-		$q = "SELECT count(*) as cnt $query";
+		$q = "SELECT count(*) as cnt $query $sby";
 		$t->d_row_cnt = $this->db_fetch_field($q, "cnt");
 		if ($t->d_row_cnt > $per_page)
 		{
@@ -752,7 +758,7 @@ class admin_if extends class_base
 			));
 		}
 
-		$q = "SELECT objects.* $query $lim";
+		$q = "SELECT objects.* , IF(class_id=".CL_MENU.",1,2) as c  $query $sby2 $lim";
 		$this->db_query($q);
 
 		// perhaps this should even be in the config file?
