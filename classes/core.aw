@@ -866,7 +866,7 @@ class core extends acl_base
 						"parent" => $obj->id(),
 						"period" => $period,
 					),"admin_menus"),
-					"caption" => strip_tags($name),
+					"caption" => parse_obj_name(strip_tags($name)),
 				)) . " / " . $path;
 			}
 			/*if ($current->class_id() == CL_MENU)
