@@ -25,11 +25,11 @@ class crm_person_obj extends _int_object
 
 	function find_work_contact()
 	{
-		$o = obj($this->id());
-		if (!is_oid($o->id()))
-		{
+		// It won't work with new object, so we need to check the oid.
+		if(!is_oid($this->id()))
 			return false;
-		}
+
+		$o = obj($this->id());
 		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
 		if (!$org_rel)
 		{
@@ -38,62 +38,104 @@ class crm_person_obj extends _int_object
 		return $org_rel->prop("org");
 	}
 
-	function connections_from($arr)
+	function add_person_to_list($arr)
 	{
-		$rv = parent::connections_from($arr);
-		if (($arr["type"] == 67 || $arr["type"] == "RELTYPE_CURRENT_JOB") && count($rv) == 0 && !$GLOBALS["NOC"])
+		$o = obj($arr["id"]);
+		$o->connect(array(
+			"to" => $arr["list_id"],
+			"reltype" => "RELTYPE_CATEGORY",
+		));
+	}
+
+	function get_applications($arr = array())
+	{
+		$this->prms(&$arr);
+
+		/*
+		// Gimme a reason why this won't work!?
+		return new object_list(array(
+			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			"parent" => $arr["parent"],
+			"status" => $arr["status"],
+			"CL_PERSONNEL_MANAGEMENT_JOB_OFFER.RELTYPE_CANDIDATE.RELTYPE_PERSON" => parent::id(),
+		));
+		*/
+		$ret = new object_list();
+
+		$conns = connection::find(array(
+			"to" => parent::id(),
+			"from.class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE,
+			"type" => "RELTYPE_PERSON"
+		));
+		foreach($conns as $conn)
 		{
-			$o = obj($this->id());
-			$work = $o->get_first_obj_by_reltype("RELTYPE_WORK");
-			if (!$work)
-			{
-				return $rv;
-			}
-			$prof = $o->get_first_obj_by_reltype("RELTYPE_RANK");
-			if (!$prof)
-			{
-				// try to find reverse version
-				$try_conns = $this->connections_to(array("from.class_id" => CL_CRM_PROFESSION));
-				if (count($try_conns))
-				{
-					$try_c = reset($try_conns);
-					$prof = $try_c->from();
-				}
-			}
-		//	die(dbg::dump($prof));
-			// no job relations. create a default
-			$crel = obj();
-			$crel->set_parent($this->parent());
-			$crel->set_class_id(CL_CRM_PERSON_WORK_RELATION);$crel->save();
-			$crel->set_prop("org", $work->id());
-			if ($prof)
-			{
-				$crel->set_prop("profession", $prof->id());
-			}
-			$sect = $o->get_first_obj_by_reltype("RELTYPE_SECTION");
-			if (!$sect)
-			{
-				$try_conns = $this->connections_to(array("from.class_id" => CL_CRM_SECTION));
-				if (count($try_conns))
-				{
-				 	$try_c = reset($try_conns);
-					$sect = $try_c->from();
-				}
-			}
-			if ($sect)
-			{
-				$crel->set_prop("section", $sect->id());
-				//$crel->set_prop("section2", $sect->id());
-			}
-			aw_disable_acl();
-			$crel->save();
-			$GLOBALS["NOC"] = 1;
-			$this->connect(array("to" => $crel->id(), "type" => 67));
-			aw_restore_acl();
-			$rv = parent::connections_from($arr);
-			$GLOBALS["NOC"] = 0;
+			$ids[] = $conn["from"];
 		}
-		return $rv;
+
+		if(count($ids) == 0)
+			return $ret;
+
+		$conns = connection::find(array(
+			"to" => $ids,
+			"from.class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			"type" => "RELTYPE_CANDIDATE"
+		));
+		foreach($conns as $conn)
+		{
+			if((in_array($conn["from.status"], $arr["status"]) || count($arr["status"]) == 0) && (in_array($conn["from.parent"], $arr["parent"]) || count($arr["parent"]) == 0))
+			{
+				$ret->add($conn["from"]);
+			}
+		}
+
+		return $ret;
+	}
+	
+	function prms($arr)
+	{
+		$arr["parent"] = !isset($arr["parent"]) ? array() : $arr["parent"];
+		if(!is_array($arr["parent"]))
+		{
+			$arr["parent"] = array($arr["parent"]);
+		}
+		$arr["status"] = !isset($arr["status"]) ? array() : $arr["status"];
+		if(!is_array($arr["status"]))
+		{
+			$arr["status"] = array($arr["status"]);
+		}
+		$arr["childs"] = !isset($arr["childs"]) ? true : $arr["childs"];
+
+		if($arr["childs"] && (!is_array($arr["parent"]) || count($arr["parent"]) > 0))
+		{
+			$pars = $arr["parent"];
+			foreach($pars as $par)
+			{
+				$ot = new object_tree(array(
+					"class_id" => CL_MENU,
+					"status" => $arr["status"],
+					"parent" => $par,
+				));
+				foreach($ot->ids() as $oid)
+				{
+					$arr["parent"][] = $oid;
+				}
+			}
+		}
+	}
+
+	function get_age()
+	{
+		if(strlen(parent::prop("birthday")) != 10)
+			return false;
+
+		$date_bits = explode("-", parent::prop("birthday"));
+		$age = date("Y") - $date_bits[0];
+		if(date("m") < $date_bits[1] || date("m") == $date_bits[1] && date("d") < $date_bits[2])
+		{
+			$age--;
+		}
+
+		return ($age < 0) ? false : $age;
 	}
 }
 
