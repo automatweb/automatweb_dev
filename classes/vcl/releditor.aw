@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.110 2008/03/20 14:42:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.111 2008/03/24 12:44:56 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -45,10 +45,17 @@ class releditor extends core
 			));
 			$name = $arr["prop"]["name"];
 			$return_url = get_ru();
+			$rows_count = 1;
 			foreach($conns as $conn)
 			{
 				$c_to = $conn->prop("to");
 				$target = $conn->to();
+
+				$hidden_div = html::hidden(Array(
+					"name" => $arr["prop"]["name"]."[".$rows_count."][id]",
+					"value" => $c_to
+				));
+
 				$clinst = $target->instance();
 				$rowdata = array(
 					"id" => $c_to,
@@ -63,13 +70,11 @@ class releditor extends core
 					"_sort_name" => $conn->prop("to.name"),
 					"_active" => ($arr["request"][$this->elname] == $c_to),
 					"delete" => html::submit(array(
-						"name" => "del_button",
+						"name" => "releditor_del_button_".$rows_count,
 						"value" => t("Kustuta"),
-						"onclick" => "releditor_delete_".$c_to,
 						)).html::submit(array(
-						"name" => "del_button",
+						"name" => "releditor_edit_button_".$rows_count,
 						"value" => t("Muuda"),
-						"onclick" => "releditor_change_".$c_to,
 						)),
 				);
 
@@ -149,7 +154,7 @@ class releditor extends core
 					$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $this->elname)."[".$get_prop_arr["prop"]["name"]."]";
 					$parent_inst->get_property($get_prop_arr);
 					$prop = $get_prop_arr["prop"];
-/*
+
 					$hidden_input = $this->all_props[$_pn];//arr($hidden_input);//arr($prop["name"]); //arr($this->all_props);
 					$hidden_input["value"] = $target->prop($_pn);
 					$get_prop_arr = $arr;
@@ -158,13 +163,20 @@ class releditor extends core
 					$parent_inst->get_property($get_prop_arr);
 					$get_prop_arr["prop"]["name"] = $prop["name"];
 					$hidden_input = $get_prop_arr["prop"];
-*/
+					$hidden_input["name"] = str_replace("[" , "[".$rows_count."][" , $hidden_input["name"]); 
+
+					$hidden_div.= $htmlclient->draw_element($hidden_input);
 					$export_props[$_pn] = $prop["value"];//.$htmlclient->draw_element($hidden_input);
 				}
 				$fields_defined = 1;
 				$rowdata = $export_props + $rowdata;
 				// This one defines the display table data. Just a reminder for myself. - Kaarel
+
+
+				//viimasesse tulpa muutmise jaoks peidetud asjad
+				$rowdata["delete"].='<div style="display: none;">'.$hidden_div.'</div>';
 				$awt->define_data($rowdata);
+				$rows_count++;
 			}
 		}
 		$awt->define_field(array(
@@ -371,8 +383,8 @@ class releditor extends core
 			"value" => '<br>',
 			"store" => "no",
 			"name" => $this->elname."_break",
-			"caption" => $this->elname."_break",
-			"no_caption" => 1,
+			"caption" => " ",//$this->elname."_break",
+//			"no_caption" => 1,
 		);
 
 		if(is_array($arr["prop"]["clid"]))$arr["prop"]["clid"] = reset($arr["prop"]["clid"]);
@@ -388,11 +400,11 @@ class releditor extends core
 					"clid" : "'.$arr["prop"]["clid"].'",
 					"del_url" : "'.aw_ini_get("baseurl").'/?class=releditor&action=delo&id=",
 					});
-			</script></input><br>',
+			</script>',
 			"store" => "no",
 			"name" => $this->elname."_add_button",
-			"caption" => $this->elname."_add_button",
-			"no_caption" => 1,
+			"caption" => " ",//$this->elname."_add_button",
+//			"no_caption" => 1,
  		);
 
 		$xprops[$prop["name"]."[0]toolbar"] = array(
@@ -400,8 +412,8 @@ class releditor extends core
 			"value" => $tb->get_toolbar(),
 			"store" => "no",
 			"name" => $this->elname."_toolbar",
-			"caption" => $this->elname."_toolbar",
-			"no_caption" => 1,
+			"caption" => " ",//$this->elname."_toolbar",
+//			"no_caption" => 1,
  		);
 
 		$xprops[$prop["name"]."[0]table"] = array(
@@ -409,8 +421,8 @@ class releditor extends core
 			"value" => $this->init_new_rel_table($arr),
 			"store" => "no",
 			"name" => $this->elname."_table",
-			"caption" => $this->elname."_table",
-			"no_caption" => 1,
+			"caption" => " ",//$this->elname."_table",
+//			"no_caption" => 1,
  		);
 
 //		arr($xprops);
@@ -1297,7 +1309,7 @@ class releditor extends core
 		@attrib name=process_new_releditor all_args=1
 	**/
 	function process_new_releditor($arr)
-	{//arr($_POST);die();
+	{
 		extract($arr);
 		if($id) $arr["request"]["id"] = $id;
 		if($reltype) $arr["prop"]["reltype"] = $reltype;
@@ -1323,11 +1335,17 @@ class releditor extends core
 		}
 		foreach($arr["prop"]["value"] as $key => $data)
 		{
-			$o = new object();
-			$o->set_class_id($clid);
-			$o->set_parent($parent);
-			$o->set_name();
-
+			if(is_object($data["id"]) && $this->can("view" , $data["id"]))
+			{
+				$o = obj($data["id"]);
+			}
+			else
+			{
+				$o = new object();
+				$o->set_class_id($clid);
+				$o->set_parent($parent);
+				$o->set_name();
+			}
 			foreach($data as $prop => $val)
 			{
 				if(is_array($val))
@@ -1349,8 +1367,11 @@ class releditor extends core
 				"reltype" =>  $arr["prop"]["reltype"],
 			));
 		}
-		header ("Content-Type: text/html; charset=".aw_global_get("charset"));
-		die($this->init_new_rel_table($arr));
+		if(!is_object($arr["obj_inst"]))
+		{
+			header ("Content-Type: text/html; charset=".aw_global_get("charset"));
+			die($this->init_new_rel_table($arr));
+		}
 	}
 
 	function process_releditor($arr)

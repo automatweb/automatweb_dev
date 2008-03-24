@@ -809,7 +809,7 @@
             <group>education</group>
             <type>releditor</type>
             <store>no</store>
-            <mode>manager</mode>
+            <mode>manager2</mode>
             <reltype>RELTYPE_EDUCATION</reltype>
             <props>
                   <num_0>degree</num_0>
@@ -837,6 +837,7 @@
             </table_fields>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Haridus</caption>
       </property>
       <property>
             <name>add_edu_edit</name>
@@ -1632,7 +1633,6 @@
             <education>
                   <caption>Haridusk&amp;amp;auml;ik</caption>
                   <parent>cv</parent>
-                  <submit>no</submit>
             </education>
             <add_edu>
                   <caption>T&amp;amp;auml;ienduskoolitus</caption>
