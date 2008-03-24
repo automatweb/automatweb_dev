@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.18 2008/03/03 11:18:06 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.19 2008/03/24 12:17:18 robert Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -94,6 +94,7 @@ class user_bookmarks extends class_base
 				);
 				break;
 		};
+		$this->clear_cache();
 		return $retval;
 	}
 
@@ -1059,6 +1060,7 @@ class user_bookmarks extends class_base
 		}
 		$lo->set_prop("url", $arr["url"]);
 		$lo->save();
+		$this->clear_cache();
 		return $arr["url"];
 	}
 	/**
@@ -1081,7 +1083,14 @@ class user_bookmarks extends class_base
 				$item->delete();
 			}
 		}
+		$this->clear_cache();
 		return $arr["url"];
+	}
+
+	function clear_cache()
+	{
+		$c = get_instance("cache");
+		$c->file_clear_pt("d");
 	}
 
 	function show($arr)
