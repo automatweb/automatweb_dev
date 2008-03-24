@@ -16,10 +16,10 @@ class relpicker extends  core
 			The reltype the relpicker uses
 
 		@param oid required type=int
-			The object's ID the relpicker pickes relations for
+			The object's ID the relpicker picks relations for
 
 		@param property required type=int
-			The property's name that relpicker pickes relations for
+			The property's name that relpicker picks relations for
 
 		@param multiple optional type=int
 
@@ -212,9 +212,6 @@ class relpicker extends  core
 			}
 			return $r;
 		}
-		/*
-		return array($val["name"] => $val);
-		*/
 	}
 
 	function init_vcl_property($arr)
@@ -321,8 +318,9 @@ class relpicker extends  core
 				"clid" => $clid,
 				"multiple" => $arr["property"]["multiple"]
 			), "popup_search", false, true);
-
-			if (/*is_oid($this->obj->id()) &&*/ !$val["no_edit"])
+			
+			// I only want the search button. No edit or new buttons!
+			if (/*is_oid($this->obj->id()) &&*/ !$val["no_edit"] || $val["search_button"])
 			{
 				$val["post_append_text"] .= " ".html::href(array(
 					"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
