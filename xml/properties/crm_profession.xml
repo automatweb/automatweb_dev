@@ -6,7 +6,7 @@
             <group>general</group>
             <field>subclass</field>
             <type>textbox</type>
-            <caption>Siduss&amp;uuml;steemi ID</caption>
+            <caption>Siduss&amp;amp;uuml;steemi ID</caption>
       </property>
       <property>
             <name>hr_price</name>
@@ -24,7 +24,7 @@
             <type>textbox</type>
             <size>4</size>
             <field>jrk</field>
-            <caption>J&amp;auml;rk</caption>
+            <caption>J&amp;amp;auml;rk</caption>
       </property>
       <property>
             <name>directive_link</name>
@@ -67,17 +67,14 @@
             <caption>P&amp;amp;auml;devused</caption>
       </property>
       <property>
-            <name>trans</name>
+            <name>transl</name>
             <table>objects</table>
-            <group>trans</group>
-            <type>translator</type>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
             <store>no</store>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>name_in_plural</num_1>
-            </props>
-            <field>trans</field>
-            <caption>T&amp;otilde;lkimine</caption>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PROFESSION</syslog_type>
@@ -86,8 +83,11 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
             <trans>
-                  <caption>T&amp;otilde;lkimine</caption>
+                  <caption>T&amp;amp;otilde;lkimine</caption>
             </trans>
       </groupinfo>
       <tableinfo>
