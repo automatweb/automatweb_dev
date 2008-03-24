@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.112 2008/03/24 13:54:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.113 2008/03/24 15:15:09 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -47,19 +47,20 @@ class releditor extends core
 			$return_url = get_ru();
 			$rows_count = 1;
 			$del_hiddens = "";
+			$conns_count = sizeof($conns);
 			foreach($conns as $conn)
 			{
 				$c_to = $conn->prop("to");
 				$target = $conn->to();
 
 				$hidden_div = html::hidden(Array(
-					"name" => str_replace("[0]" , "[".$rows_count."]" , $this->elname)."[id]",
+					"name" => $this->elname."[".$rows_count."][id]",
 					"value" => $c_to
 				));
-				$del_hiddens .=html::hidden(Array(
-					"name" => str_replace("[0]" , "[".$rows_count."]" , $this->elname)."[releditor_remove]",
-					"value" => ""
-				));
+//				$del_hiddens .=html::hidden(Array(
+//					"name" => str_replace("[0]" , "[".$rows_count."]" , $this->elname)."[releditor_remove]",
+//					"value" => ""
+//				));
 				
 				$clinst = $target->instance();
 				$rowdata = array(
@@ -156,7 +157,7 @@ class releditor extends core
 					$get_prop_arr = $arr;
 					$get_prop_arr["called_from"] = "releditor_table";
 					$get_prop_arr["prop"] = $prop;
-					$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $this->elname)."[".$get_prop_arr["prop"]["name"]."]";
+					$get_prop_arr["prop"]["name"] = $this->elname."[".$get_prop_arr["prop"]["name"]."]";
 					$parent_inst->get_property($get_prop_arr);
 					$prop = $get_prop_arr["prop"];
 
@@ -193,7 +194,7 @@ class releditor extends core
 		$awt->sort_by();
 		$awt->set_sortable(false);
 
-		return '<div id="releditor_'.str_replace("[0]" , "" , $this->elname).'_table_wrapper">'.$awt->draw()."</div>".$del_hiddens;
+		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>".$del_hiddens;
 	}
 
 
@@ -212,6 +213,11 @@ class releditor extends core
 			$clid = $relinfo[$prop["reltype"]]["clid"][0];
 
 		}
+
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => $arr["prop"]["reltype"],
+		));
+		$conns_count = sizeof($conns);
 
 		$props = $arr["prop"]["props"];
 		if (!is_array($props) && !empty($props))
@@ -359,10 +365,10 @@ class releditor extends core
 			$t->cb_values = $arr["cb_values"];
 		};
 
-		$this->elname = $this->elname."[0]";
+		$this->elname = $this->elname;
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
-			"name_prefix" => $this->elname,
+			"name_prefix" => $this->elname."[".$conns_count."]",
 			"obj_inst" => $obj_inst,
 		));
 
@@ -1314,7 +1320,7 @@ class releditor extends core
 		@attrib name=process_new_releditor all_args=1
 	**/
 	function process_new_releditor($arr)
-	{
+	{//arr($arr); arr($_POST);die();
 		extract($arr);
 		if($id) $arr["request"]["id"] = $id;
 		if($reltype) $arr["prop"]["reltype"] = $reltype;
@@ -1338,13 +1344,15 @@ class releditor extends core
 				}
 			}
 		}
+		$save_stuff = 0;
 		foreach($arr["prop"]["value"] as $key => $data)
 		{
-			if(!$key)
+			if(!$save_stuff)
 			{
+				$save_stuff = 1;
 				continue;
 			}
-			if(is_object($data["id"]) && $this->can("view" , $data["id"]))
+			if($this->can("view" , $data["id"]))
 			{
 				$o = obj($data["id"]);
 			}
@@ -1376,6 +1384,15 @@ class releditor extends core
 				"reltype" =>  $arr["prop"]["reltype"],
 			));
 		}
+		foreach($_POST["releditor"]["delete_oid"] as $key => $id)
+		{
+			if($this->can("delete" , $id))
+			{
+				$o = obj($id); 
+				$o->delete();
+			}
+		}
+
 		if(!is_object($arr["obj_inst"]))
 		{
 			header ("Content-Type: text/html; charset=".aw_global_get("charset"));
