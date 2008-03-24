@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.117 2008/03/12 21:22:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.118 2008/03/24 12:40:59 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -3231,6 +3231,23 @@ class ml_list extends class_base
 			$msg_obj->set_parent((!empty($folder) ? $folder : $arr["obj_inst"]->parent()));
 			$msg_obj->set_class_id(CL_MESSAGE);
 			$msg_obj->save();
+			if(is_oid($msg_data["id"]) && $this->can("view" , $msg_data["id"]))
+			{
+				$ex_mess = obj($msg_data["id"]);
+				$ex_conns = $ex_mess->connections_from(array());
+				if(count($ex_conns) > 0)
+				{
+					foreach ($ex_conns as $ex_conn)
+					{
+						$exid = $ex_conn->prop("to");
+						$msg_obj->connect(array(
+							"to" => $exid,
+							"reltype" => $ex_conn->prop("reltype"),
+						));
+					}
+				}
+
+			}
 			$msg_data["id"] = $msg_obj->id();
 		}
 		$tpl = $msg_data["template_selector"];
