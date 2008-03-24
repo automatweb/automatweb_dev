@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.111 2008/03/24 12:44:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.112 2008/03/24 13:54:38 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -46,16 +46,21 @@ class releditor extends core
 			$name = $arr["prop"]["name"];
 			$return_url = get_ru();
 			$rows_count = 1;
+			$del_hiddens = "";
 			foreach($conns as $conn)
 			{
 				$c_to = $conn->prop("to");
 				$target = $conn->to();
 
 				$hidden_div = html::hidden(Array(
-					"name" => $arr["prop"]["name"]."[".$rows_count."][id]",
+					"name" => str_replace("[0]" , "[".$rows_count."]" , $this->elname)."[id]",
 					"value" => $c_to
 				));
-
+				$del_hiddens .=html::hidden(Array(
+					"name" => str_replace("[0]" , "[".$rows_count."]" , $this->elname)."[releditor_remove]",
+					"value" => ""
+				));
+				
 				$clinst = $target->instance();
 				$rowdata = array(
 					"id" => $c_to,
@@ -70,7 +75,7 @@ class releditor extends core
 					"_sort_name" => $conn->prop("to.name"),
 					"_active" => ($arr["request"][$this->elname] == $c_to),
 					"delete" => html::submit(array(
-						"name" => "releditor_del_button_".$rows_count,
+						"name" => "releditor_del_button_".$c_to,
 						"value" => t("Kustuta"),
 						)).html::submit(array(
 						"name" => "releditor_edit_button_".$rows_count,
@@ -188,7 +193,7 @@ class releditor extends core
 		$awt->sort_by();
 		$awt->set_sortable(false);
 
-		return '<div id="releditor_'.str_replace("[0]" , "" , $this->elname).'_table_wrapper">'.$awt->draw()."</div>";
+		return '<div id="releditor_'.str_replace("[0]" , "" , $this->elname).'_table_wrapper">'.$awt->draw()."</div>".$del_hiddens;
 	}
 
 
@@ -1335,6 +1340,10 @@ class releditor extends core
 		}
 		foreach($arr["prop"]["value"] as $key => $data)
 		{
+			if(!$key)
+			{
+				continue;
+			}
 			if(is_object($data["id"]) && $this->can("view" , $data["id"]))
 			{
 				$o = obj($data["id"]);
