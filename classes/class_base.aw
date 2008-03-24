@@ -160,7 +160,7 @@ class class_base extends aw_template
 		$this->obj_inst = new object($this->id);
 
 		$clid = aw_ini_get("class_lut." . $arr["class"]);
-		if($this->obj_inst->class_id() != $clid && is_admin())
+		if($this->obj_inst->class_id() != $clid && is_admin() && $this->obj_inst->class_id() != CL_RELATION)
 		{
 			throw new aw_exception("Given class doesn't match the object's class_id");
 		}

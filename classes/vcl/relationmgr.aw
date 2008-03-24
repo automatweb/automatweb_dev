@@ -742,7 +742,7 @@ class relationmgr extends aw_template
 					"name" => "search",
 					"img" => "search.gif",
 					"tooltip" => t("Otsi"),
-					"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seosetüüp!')",
+					"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seosetuup!')",
 				));
 			}
 			else
@@ -1103,7 +1103,7 @@ class relationmgr extends aw_template
 			if ($alias->prop("relobj_id"))
 			{
 				$adat["reltype"] = html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $alias->prop("relobj_id"),"return_url" => $return_url), $classes[$aclid]["file"]),
+					"url" => $this->mk_my_orb("change", array("id" => $alias->prop("relobj_id"),"return_url" => get_ru()), $classes[$aclid]["file"]),
 					"caption" => $type_str,
 				));
 			}
