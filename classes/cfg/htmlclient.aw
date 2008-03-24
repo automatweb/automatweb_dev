@@ -1120,13 +1120,14 @@ class htmlclient extends aw_template
 			case "submit":
 				// but what if there is more than 1 of those?
 				// attaching this might just break something somewhere
+				$submit_onclick = isset($arr["onclick"]) ? ($arr["onclick"] . " ") : "";
 				if (isset($arr['action']))
 				{
-					$arr["onclick"] = "submit_changeform('" . $arr['action'] . "'); return false;";
+					$arr["onclick"] = $submit_onclick."submit_changeform('" . $arr['action'] . "'); return false;";
 				}
 				else
 				{
-					$arr["onclick"] = "submit_changeform();";
+					$arr["onclick"] = $submit_onclick."submit_changeform();";
 				}
 				$arr["class"] = "sbtbutton";
 				$retval = html::submit($arr);
