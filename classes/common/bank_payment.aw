@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.79 2008/03/13 13:26:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.80 2008/03/25 13:40:21 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -1111,15 +1111,7 @@ class bank_payment extends class_base
 	{
 		if(!$arr["reference_nr"])
 		{
-			$msg = ""; foreach($arr as $p => $v){$msg.= "\n".$p." = ".$v;}
-			foreach($_GET as $p => $v){$msg.= "\n".$p." = ".$v;}
-			foreach($_POST as $p => $v){$msg.= "\n".$p." = ".$v;}
-			send_mail(
-				"markop@struktuur.ee",
-				"vigane makse revalis",
-				$msg
-			);
-			return "";
+			$arr["reference_nr"] = time();
 		}
 		//selle nomeduse pidi siia ette panema, sest hiljem bank_id'd muutes peaks muidu siia funktsiooni tagasi poorama
 		if(is_oid($arr["payment_id"]))
@@ -1149,7 +1141,7 @@ class bank_payment extends class_base
 			}
 */		
 		}
-				
+		
 		switch($arr["bank_id"]) {
 			case "seb":
 				$arr = $this->check_args($arr);
