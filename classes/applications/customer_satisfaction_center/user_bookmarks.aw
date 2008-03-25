@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.19 2008/03/24 12:17:18 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.20 2008/03/25 10:20:24 robert Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -73,6 +73,7 @@ class user_bookmarks extends class_base
 
 			case "bm_table":
 				$this->_bm_table($arr);
+				$this->clear_cache($arr["obj_inst"]);
 				break;
 
 			case "shared_tb":
@@ -81,6 +82,7 @@ class user_bookmarks extends class_base
 
 			case "shared_table":
 				$this->_shared_table($arr);
+				$this->clear_cache($arr["obj_inst"]);
 				break;
 			
 			case "shared_tree":
@@ -94,7 +96,6 @@ class user_bookmarks extends class_base
 				);
 				break;
 		};
-		$this->clear_cache();
 		return $retval;
 	}
 
@@ -889,7 +890,7 @@ class user_bookmarks extends class_base
 		$pm->begin_menu("user_bookmarks");
 		$c = get_instance("cache");
 		$time = 5*24*60*60;
-		if (!($cd = $c->file_get_pt_ts("d","","bms_".$bm->id(), time() - $time)))
+		if (!($cd = $c->file_get_ts("bms".$bm->id(), time() - $time)))
 		{
 			$parents = array();
 			$list = array();
@@ -905,7 +906,7 @@ class user_bookmarks extends class_base
 				"listids" => $listids,
 				"parents" => $parents,
 			);
-			$c->file_set_pt("d", "", "bms_".$bm->id(), aw_serialize($cd));
+			$c->file_set("bms".$bm->id(), aw_serialize($cd));
 		}
 		if($cd && !is_array($cd))
 		{
@@ -1060,7 +1061,7 @@ class user_bookmarks extends class_base
 		}
 		$lo->set_prop("url", $arr["url"]);
 		$lo->save();
-		$this->clear_cache();
+		$this->clear_cache($bm);
 		return $arr["url"];
 	}
 	/**
@@ -1083,14 +1084,14 @@ class user_bookmarks extends class_base
 				$item->delete();
 			}
 		}
-		$this->clear_cache();
+		$this->clear_cache($bm);
 		return $arr["url"];
 	}
 
-	function clear_cache()
+	function clear_cache($bm)
 	{
 		$c = get_instance("cache");
-		$c->file_clear_pt("d");
+		$c->file_invalidate("bms".$bm->id());
 	}
 
 	function show($arr)
