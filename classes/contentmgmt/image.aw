@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.9 2008/03/13 11:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.10 2008/03/25 10:57:28 robert Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -109,6 +109,13 @@
 
 	@property grkeywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
 	@caption AW M&auml;rks&otilde;nad
+
+@groupinfo comments caption="Kommentaarid"
+@default group=comments
+	
+	@property comments_tb type=toolbar no_caption=1 store=no
+
+	@property comments_tbl type=table no_caption=1 store=no
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
@@ -1175,6 +1182,12 @@ class image extends class_base
 				{
 					$retval = PROP_IGNORE;
 				};
+				break;
+			case "comments_tb":
+				$this->_comments_tb($arr);
+				break;
+			case "comments_tbl":
+				$this->_comments_tbl($arr);
 				break;
 		};
 
@@ -2272,6 +2285,60 @@ class image extends class_base
 		if (!$arr["no_die"])
 		{
 			die($arr["img_id"]);
+		}
+	}
+
+	function _comments_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_COMMENT),$arr["obj_inst"]->id());
+		$tb->add_delete_button();
+	}
+
+	function _comments_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "body",
+			"caption" => t("Sisu"),
+		));
+		$t->define_field(array(
+			"name" => "author",
+			"caption" => t("Autor"),
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"caption" => t("Aeg"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$ol = new object_list(array(
+			"parent" => $arr["obj_inst"]->id(),
+			"class_id" => CL_COMMENT,
+		));
+		foreach($ol->arr() as $oid=>$o)
+		{
+			$author = $o->prop("uname");
+			if (empty($author))
+			{
+				$author = $o->createdby();
+			};
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"body" => nl2br(create_links($o->prop("commtext"))),
+				"oid" => $oid,
+				"author" => $author,
+				"date" => $o->created(),
+			));
 		}
 	}
 

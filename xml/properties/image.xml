@@ -233,6 +233,22 @@
             <caption>AW M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
       <property>
+            <name>comments_tb</name>
+            <group>comments</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>comments_tb</field>
+      </property>
+      <property>
+            <name>comments_tbl</name>
+            <group>comments</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>comments_tbl</field>
+      </property>
+      <property>
             <name>transl</name>
             <group>transl</group>
             <type>callback</type>
@@ -266,6 +282,9 @@
                   <caption>M&amp;amp;auml;rk&amp;amp;otilde;nad</caption>
                   <parent>show</parent>
             </keywords>
+            <comments>
+                  <caption>Kommentaarid</caption>
+            </comments>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
