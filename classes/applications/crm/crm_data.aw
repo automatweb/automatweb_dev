@@ -76,30 +76,35 @@ class crm_data extends class_base
 			$of2 = $of;
 
 			if (!empty($filter["client_mgr"]))
-			{
+			{//arr($filter["client_mgr"]);
 				$relist = new object_list(array(
 					"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
 					"CL_CRM_COMPANY_ROLE_ENTRY.person.name" => map("%%%s%%", explode(",", $filter["client_mgr"]))
 				));
 
+				$relist3 = new object_list(array(
+					"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+					"CL_CRM_COMPANY_CUSTOMER_DATA.client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"]))
+				));
+				$relist2 = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"CL_CRM_COMPANY.client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"]))
+				));
+				$relist -> add($relist3);
 				$rs = array();
 				foreach($relist->arr() as $o)
 				{
-					$rs = $o->prop("client");
+					$rs[] = $o->prop("buyer");
 				}
-
+				$rs = $rs + $relist2->ids();
 				$ft = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"CL_CRM_BILL.customer.client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
 //						"CL_CRM_BILL.customer(CL_CRM_COMPANY).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
-						"oid" => $rs,
-//						"CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
-//						"CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
-//						"oid" => $rs
+						"CL_CRM_BILL.customer" => $rs,
+						"CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
 					)
 				));
-
 				$of[] = $ft;
 				$of2[] = $ft;
 			}
