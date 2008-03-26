@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="crm_area_obj" folder="applications/crm" extends="_int_object">
+		<action name="get_job_offers">
+			<function name="get_job_offers">
+				<arguments>
+					<optional name="parent" type="oid,array(oid)" acl="view" />
+					<optional name="status" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_residents">
+			<function name="get_residents">
+				<arguments>
+					<optional name="parent" type="oid,array(oid)" />
+					<optional name="status" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
