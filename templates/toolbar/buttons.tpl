@@ -40,10 +40,10 @@
 			<table cellpadding=0 cellspacing=0>
 				<tr>
 					<td valign='bottom'>
-					<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"  width="16" height="16" ></a>
+					<a href="javascript:void(0);" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"  width="16" height="16" ></a>
 					</td>
 					<td valign='bottom'>
-						<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"  width="7" height="4" ></a></td>
+						<a href="javascript:void(0);" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"  width="7" height="4" ></a></td>
 					</a>
 				</tr>
 			</table>

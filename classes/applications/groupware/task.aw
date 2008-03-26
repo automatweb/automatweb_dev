@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.213 2008/03/26 14:59:32 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.214 2008/03/26 15:38:34 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -4691,9 +4691,9 @@ class task extends class_base
  				"name" => "mainf",
  				"text" => $fldo->name(),
  			));
- 			$this->_add_fa($tb, "mainf", $fldo->id());
+ 			$this->_add_fa($tb, "mainf", $fldo->id(),$arr["obj_inst"]->id());
  			$this->_req_level = 0;
- 			$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf");
+ 			$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf",$arr["obj_inst"]->id());
  		}
 
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
@@ -4744,9 +4744,9 @@ class task extends class_base
  				"name" => "mainf",
  				"text" => $fldo->name(),
  			));
- 			$this->_add_fa($tb, "mainf", $fldo->id());
+ 			$this->_add_fa($tb, "mainf", $fldo->id(),$arr["obj_inst"]->id());
  			$this->_req_level = 0;
- 			$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf");
+ 			$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf",$arr["obj_inst"]->id());
  		}
 
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
@@ -4817,7 +4817,7 @@ class task extends class_base
 		));
 	}
 
-	function _req_get_folders_tb($ot, &$folders, $parent, &$tb, $parent_nm)
+	function _req_get_folders_tb($ot, &$folders, $parent, &$tb, $parent_nm,$task)
 	{
 		$this->_req_level++;
 		$objs = $ot->level($parent);
@@ -4828,13 +4828,13 @@ class task extends class_base
 				"name" => "fd".$o->id(),
 				"text" => $o->name(),
 			));
-			$this->_add_fa($tb, "fd".$o->id(), $o->id());
-			$this->_req_get_folders_tb($ot, $folders, $o->id(), $tb, "fd".$o->id());
+			$this->_add_fa($tb, "fd".$o->id(), $o->id(),$task);
+			$this->_req_get_folders_tb($ot, $folders, $o->id(), $tb, "fd".$o->id(),$task);
 		}
 		$this->_req_level--;
 	}
 
-	function _add_fa(&$tb, $pt_n, $pt)
+	function _add_fa(&$tb, $pt_n, $pt,$task)
 	{
 		$types = array(
 			CL_FILE => t("Fail"),
@@ -4849,8 +4849,8 @@ class task extends class_base
 				"parent" => $pt_n,
 				"text" => $nm,
 				"link" => html::get_new_url($clid, $pt, array(
-					"return_url" => get_ru(),
-					"alias_to" => $_GET["id"],
+					"return_url" => $task?(html::get_change_url($task)):get_ru(),
+					"alias_to" => $task,
 					"reltype" => 2
 				)),
 			));
