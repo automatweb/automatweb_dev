@@ -1026,6 +1026,29 @@ class crm_person extends class_base
 		return $retval;
 	}
 
+	function is_connected_to_section($org,$section)
+	{
+		$ret = 0;
+		foreach($org->connections_from(array("type" => RELTYPE_SECTION)) as $conn)
+		{
+			if($conn->prop("to") == $section)
+			{
+				$ret = 1;
+			}
+			else
+			{
+				$sec_obj = $conn->to();
+				$ret = $this->is_connected_to_section($sec_obj,$section);
+			}
+
+			if($ret == 1)
+			{
+				break;
+			}
+		}
+		return $ret;
+	}
+
 	function _save_work_tbl($arr)
 	{
 		foreach($arr["obj_inst"]->connections_from(array("type" => array(6, 21))) as $conn)
@@ -1044,10 +1067,13 @@ class crm_person extends class_base
 				$org = obj($data["org"]);
 				if($this->can("view", $data["sec"]))
 				{
-					$org->connect(array(
-						"to" => $data["sec"],
-						"reltype" => 28,		// RELTYPE_SECTION
-					));
+					if(!$this->is_connected_to_section($org,$data["sec"]))
+					{
+						$org->connect(array(
+							"to" => $data["sec"],
+							"reltype" => 28,		// RELTYPE_SECTION
+						));
+					}
 				}
 				else
 				{
