@@ -180,7 +180,7 @@
 
 class stats_viewer extends class_base
 {
-	private $stat_sel_flt; // if user has selected a filter, this contains its id
+	private $stat_sel_flt; // if user has selected a filter, this contains its id string
 	private $saved_filters = array(); // if user has selected or is adding a filter, this contains all saved filters. Format is array(filter1_id => (array) data, ...)
 	private $stats_disp_filter_parameters; // used by stats display views to create human readable filter descriptions for table headers.
 

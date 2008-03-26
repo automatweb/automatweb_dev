@@ -17,6 +17,14 @@
 			</function>
 		</action>
 
+		<action name="delete_saved_filter">
+			<function name="delete_saved_filter">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="find_obj_redir">
 			<function name="find_obj_redir">
 				<arguments>

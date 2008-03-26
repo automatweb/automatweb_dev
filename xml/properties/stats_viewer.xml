@@ -21,6 +21,18 @@
             <parent>a</parent>
       </property>
       <property>
+            <name>saved_filter_name</name>
+            <table>objects</table>
+            <group>stats_filter</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>a</parent>
+            <store>no</store>
+            <caption>Salvestatava filtri nimi</caption>
+            <comment>J&amp;amp;auml;ta t&amp;amp;uuml;hjaks kui ei soovi salvestatud filtrite nimekirja hulka salvestada</comment>
+      </property>
+      <property>
             <name>s_date_from</name>
             <table>objects</table>
             <group>stats_filter</group>
@@ -69,8 +81,18 @@
             <type>chooser</type>
             <multiple>1</multiple>
             <parent>dates</parent>
-            <no_caption>1</no_caption>
             <caption>N&amp;amp;auml;dalap&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>s_period</name>
+            <table>objects</table>
+            <group>stats_filter</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>dates</parent>
+            <caption>Periood</caption>
+            <comment>Kui periood valitud siis Alates ja Kuni v&amp;amp;auml;lju ei arvestata</comment>
       </property>
       <property>
             <name>s_username</name>
