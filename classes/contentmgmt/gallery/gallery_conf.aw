@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.18 2008/01/31 13:52:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.19 2008/03/26 12:13:00 robert Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes maintainer=kristo
@@ -33,6 +33,9 @@
 
 	@property controller type=relpicker reltype=RELTYPE_CONTROLLER
 	@caption Pildi muundamise kontroller
+
+	@property comm_edit_grp type=relpicker multiple=1 reltype=RELTYPE_EDIT_GRP
+	@caption Kommentaaride muutmise grupid
 
 @default group=imgsize
 
@@ -162,7 +165,8 @@
 @reltype CONTROLLER value=6 clid=CL_FORM_CONTROLLER
 @caption Kontroller
 
-
+@reltype EDIT_GRP value=7 clid=CL_GROUP
+@caption Muutmise grupp
 */
 
 define("CORNER_LEFT_TOP", 1);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.25 2008/01/31 13:52:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.26 2008/03/26 12:13:20 robert Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -21,7 +21,7 @@
 @caption E-post
 
 @property remember type=checkbox store=no
-@caption Jäta nimi ja e-post meelde
+@caption J&auml;ta nimi ja e-post meelde
 
 @property commtext type=textarea
 @caption Kommentaar
@@ -207,6 +207,19 @@ class forum_comment extends class_base
 			"site_id" => array()
 		));
 		return $clist->count();
+	}
+
+	/**
+	@attrib name=del_comment all_args=1
+	**/
+	function del_comment($arr)
+	{
+		if(is_oid($arr["id"]))
+		{
+			$o = obj($arr["id"]);
+			$o->delete();
+		}
+		return $arr["return_url"];
 	}
 
 	function do_db_upgrade($table, $field, $q, $err)

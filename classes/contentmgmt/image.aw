@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.10 2008/03/25 10:57:28 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.11 2008/03/26 12:12:51 robert Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1663,12 +1663,36 @@ class image extends class_base
 			$parse = "with_comments";
 			classload("vcl/comments");
 			$comments = new comments();
+			$cfid = $this->_get_conf_for_folder($imo->parent());
+			$ui = get_instance(CL_USER);
+			$curid = $ui->get_current_user();
+			if(is_oid($curid) && is_oid($cfid))
+			{
+				$cur = obj($curid);
+				$conn = $cur->connections_from(array(
+					"type" => "RELTYPE_GRP"
+				));
+				$cfo = obj($cfid);
+				$grps = $cfo->prop("comm_edit_grp");	
+				$edit_ok = 0;
+				foreach($grps as $grp)
+				{
+					foreach($conn as $c)
+					{
+						if($c->prop("to") == $grp)
+						{
+							$edit_ok = 1;
+						}
+					}
+				}
+			}
 			$ret_list = $comments->init_vcl_property(array(
 				'property' => array(
 					'name' => "image_comm",
 					"no_form" => 1,
 					'no_heading' => 1,
 					'sort_by' => "created desc", // Newer first
+					'edit' => $edit_ok,
 				),
 				'obj_inst' => obj($id),
 			));

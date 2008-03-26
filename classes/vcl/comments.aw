@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.14 2008/03/12 21:24:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.15 2008/03/26 12:13:14 robert Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -70,7 +70,25 @@ class comments extends class_base
 						$author = $row["createdby"];
 					};
 					$res .= "<p><b>" . $author . "</b>, " . $this->time2date($row["created"]) . "<br>";
-					$res .= nl2br(create_links($row["commtext"])) . "</p>";
+					$res .= nl2br(create_links($row["commtext"]));
+					if($prop["edit"])
+					{
+						$baseurl = aw_ini_get("baseurl");
+						$res .= "<br>" . html::href(array(
+							"url" => str_replace($baseurl, $baseurl."/automatweb", $this->mk_my_orb("change", array(
+								"id" => $row["oid"],
+								"return_url" => get_ru()
+							), CL_COMMENT)),
+							"caption" => t("Muuda"),
+						)) . " " . html::href(array(
+							"url" => $this->mk_my_orb("del_comment", array(
+								"id" => $row["oid"],
+								"return_url" => get_ru()
+							), CL_COMMENT),
+							"caption" => t("Kustuta"),
+						));
+					}
+					$res .=  "</p>";
 				};
 			};
 			$pr1 = $prop;

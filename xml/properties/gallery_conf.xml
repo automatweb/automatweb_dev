@@ -72,6 +72,17 @@
             <caption>Pildi muundamise kontroller</caption>
       </property>
       <property>
+            <name>comm_edit_grp</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_EDIT_GRP</reltype>
+            <caption>Kommentaaride muutmise grupid</caption>
+      </property>
+      <property>
             <name>resize_before_crop</name>
             <table>objects</table>
             <field>meta</field>
@@ -457,6 +468,11 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>Kontroller</caption>
             </CONTROLLER>
+            <EDIT_GRP>
+                  <value>7</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Muutmise grupp</caption>
+            </EDIT_GRP>
       </reltypes>
 </properties>
 
