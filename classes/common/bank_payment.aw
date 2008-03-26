@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.80 2008/03/25 13:40:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.81 2008/03/26 11:03:41 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -1130,10 +1130,15 @@ class bank_payment extends class_base
 			if(is_oid($arr["reference_nr"]) && $this->can("view" , $arr["reference_nr"]))
 			{
 				$ref_object = obj($arr["reference_nr"]);
-				if($arr["cntr"]) $ref_object->set_meta("bank_cntr" , $arr["cntr"]);
+				if($arr["cntr"])
+				{
+					$ref_object->set_meta("bank_cntr" , $arr["cntr"]);
+				}
 				$ref_object->set_meta("bank_payment_id" , $arr["payment_id"]);//hiljem saaks logis kasutada
 				$ref_object->set_meta("bank_is_test" , $payment->meta("test"));//selle jargi voiks testimise sertifikaadikontrolli toole panna
+				aw_disable_acl();
 				$ref_object->save();
+				aw_restore_acl();
 			}
 /*			if($bank_data[$arr["bank_id"]."_".$_SESSION["ct_lang_lc"]]["sender_id"])
 			{
