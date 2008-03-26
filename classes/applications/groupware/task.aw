@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.212 2008/03/13 10:57:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.213 2008/03/26 14:59:32 robert Exp $
 // task.aw - TODO item
 /*
 
@@ -4132,6 +4132,11 @@ class task extends class_base
 		));
 	}
 
+	function __parts_sort($a, $b)
+	{
+		return strcmp($a->name(), $b->name());
+	}
+
 	function _parts_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -4263,21 +4268,25 @@ class task extends class_base
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 //			"name" => "",
 		));
-
+		$ci = get_instance(CL_CRM_COMPANY);
 		//otsib enda ja kliendi t88tajate hulgast osalejaid
 		if (is_oid($cur->id()))
 		{
-			$our_workers = $cur->connections_from(array("type" => "RELTYPE_WORKERS"));
-			if(sizeof($our_workers))
+			$workers = $ci->get_employee_picker($cur, false, true);
+			if(!count($workers))
+			{
+				$workers = $ci->get_employee_picker($cur, false, false);
+			}
+			if(sizeof($workers))
 			{
 				$tb->add_sub_menu(array(
 					"parent" => "part_search",
 					"text" => $cur->name(),
 					"name" => "part_our",
 				));
-				foreach($our_workers as $c)
+				foreach($workers as $oid=>$name)
 				{
-					$worker = $c->to();
+					$worker = obj($oid);
 					$url = $this->mk_my_orb("add_part_popup", array("part" => $worker->id(), "task" => $arr["obj_inst"]->id()), "task");
 					$tb->add_menu_item(array(
 						"parent" => "part_our",
@@ -4293,7 +4302,11 @@ class task extends class_base
 			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 			{
 				$customer = $c->to();
-				$cust_workers = $customer->connections_from(array("type" => "RELTYPE_WORKERS"));
+				$cust_workers = $ci->get_employee_picker($customer, false, true);
+				if(!count($workers))
+				{
+					$cust_workers = $ci->get_employee_picker($customer, false, false);
+				}
 				if(sizeof($cust_workers))
 				{
 					$tb->add_sub_menu(array(
@@ -4301,9 +4314,9 @@ class task extends class_base
 						"text" => $customer->name(),
 						"name" => "part_cust",
 					));
-					foreach($cust_workers as $c)
+					foreach($cust_workers as $c=>$name)
 					{
-						$worker = $c->to();
+						$worker = obj($c);
 						$url = $this->mk_my_orb("add_part_popup", array("part" => $worker->id(), "task" => $arr["obj_inst"]->id()), "task");
 						$tb->add_menu_item(array(
 							"parent" => "part_cust",
