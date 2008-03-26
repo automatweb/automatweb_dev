@@ -184,8 +184,8 @@ class stats_viewer extends class_base
 	private $saved_filters = array(); // if user has selected or is adding a filter, this contains all saved filters. Format is array(filter1_id => (array) data, ...)
 	private $stats_disp_filter_parameters; // used by stats display views to create human readable filter descriptions for table headers.
 
-	private $weekday_options = array();
-	private $period_options = array();
+	private $weekday_options = array(); // weekdays
+	private $period_options = array(); // relative time periods for stats
 
 	const PERIOD_CUR_MON = 1;
 	const PERIOD_PREV_MON = 2;
