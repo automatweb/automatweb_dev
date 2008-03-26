@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.19 2008/01/29 11:56:48 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.20 2008/03/26 12:23:57 robert Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -387,6 +387,7 @@ class aw_object_search extends class_base
 		$ol = new object_list($filt);
 		classload("core/icons");
 		$clss = aw_ini_get("classes");
+		$t->set_caption(t("Leiti ").$ol->count().t(" objekti"));
 		foreach($ol->arr() as $o)
 		{
 			if($o->class_id() == CL_USER)
