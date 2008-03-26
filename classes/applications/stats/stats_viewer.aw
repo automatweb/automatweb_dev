@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.7 2008/03/13 13:26:27 kristo Exp $
-// stats_viewer.aw - Statistika 
+// stats_viewer.aw - Statistika
 /*
 
 @classinfo syslog_type=ST_STATS_VIEWER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -19,12 +18,13 @@
 	@layout a type=vbox
 	@property s_tb type=toolbar store=no no_caption=1 parent=a
 
+	@property saved_filter_name type=textbox parent=a store=no
+	@caption Salvestatava filtri nimi
+	@comment J&auml;ta t&uuml;hjaks kui ei soovi salvestatud filtrite nimekirja hulka salvestada
+
 	@layout dates type=vbox closeable=1 area_caption=Kuup&auml;evad
-
 		@layout dates_top type=hbox parent=dates width=50%:50%
-
 			@layout dates_left type=vbox parent=dates_top
-	
 				@property s_date_from type=date_select parent=dates_left
 				@caption Alates
 
@@ -32,22 +32,22 @@
 				@caption Kuni
 
 			@layout dates_right type=vbox parent=dates_top
-
 				@property s_hr_from type=select parent=dates_right
 				@caption Kellaaeg alates
-	
+
 				@property s_hr_to type=select parent=dates_right
 				@caption Kellaaeg kuni
 
-		@property s_wd type=chooser multiple=1 parent=dates no_caption=1
+		@property s_wd type=chooser multiple=1 parent=dates
 		@caption N&auml;dalap&auml;ev
 
+		@property s_period type=chooser parent=dates
+		@caption Periood
+		@comment Kui periood valitud siis Alates ja Kuni v&auml;lju ei arvestata
+
 	@layout us type=vbox area_caption=Kasutajad closeable=1
-
 		@layout us_top type=hbox parent=us width=50%:50%
-
 			@layout us_left type=vbox parent=us_top
-
 				@property s_username type=table parent=us_left no_caption=1
 				@caption Kasutajanimi
 
@@ -55,7 +55,7 @@
 				@caption Kasutajanimi v&auml;ljaarvatud
 
 			@layout us_right type=vbox parent=us_top
-	
+
 				@property s_user_group type=table parent=us_right no_caption=1
 				@caption Kasutajagrupp
 
@@ -65,22 +65,18 @@
 		@property vis1 type=text parent=us store=no no_caption=1
 
 	@layout obj type=vbox area_caption=Objektid closeable=1
-
 		@layout obj_top type=hbox parent=obj width=50%:50%
-
 			@layout obj_left type=vbox parent=obj_top
-
 				@property s_root_o type=table parent=obj_left no_caption=1
 				@caption Juurobjekt
 
 			@layout obj_right type=vbox parent=obj_top
-
 				@property s_clid type=select multiple=1 size=5 parent=obj_right captionside=top
 				@caption Objektit&uuml;&uuml;p
 
 		@property vis2 type=text parent=obj store=no no_caption=1
 
-	
+
 	@layout act type=hbox width=50%:50%
 
 		@layout act_left type=vbox closeable=1 area_caption=Tegevus parent=act
@@ -134,14 +130,14 @@
 	@property s_res_add_2 type=table store=no no_caption=1
 
 @default group=stats_eex
-	
-	@property eex_from type=date_select 
+
+	@property eex_from type=date_select
 	@caption Alates
 
-	@property eex_to type=date_select 
+	@property eex_to type=date_select
 	@caption Kuni
 
-	@property stats_eex_inf type=text store=no 
+	@property stats_eex_inf type=text store=no
 	@caption Unikaalseid k&uuml;lastusi
 
 	@property stats_eex_entry type=table store=no no_caption=1
@@ -149,7 +145,7 @@
 
 @default group=browser
 
-		@property browser_tb type=toolbar no_caption=1 store=no 
+		@property browser_tb type=toolbar no_caption=1 store=no
 
 		@layout browser_split type=hbox width="20%:80%"
 
@@ -161,7 +157,7 @@
 
 
 @groupinfo data caption="Andmed" submit=no
-@groupinfo stats caption="Statistika" 
+@groupinfo stats caption="Statistika"
 	@groupinfo stats_filter caption="Koosta filter" parent=stats
 	@groupinfo stats_disp caption="Tulemused" parent=stats submit=no
 	@groupinfo stats_eex caption="Entry & Exit pages" parent=stats request_method=get
@@ -184,6 +180,21 @@
 
 class stats_viewer extends class_base
 {
+	private $stat_sel_flt; // if user has selected a filter, this contains its id
+	private $saved_filters = array(); // if user has selected or is adding a filter, this contains all saved filters. Format is array(filter1_id => (array) data, ...)
+	private $stats_disp_filter_parameters; // used by stats display views to create human readable filter descriptions for table headers.
+
+	private $weekday_options = array();
+	private $period_options = array();
+
+	const PERIOD_CUR_MON = 1;
+	const PERIOD_PREV_MON = 2;
+	const PERIOD_PREV_MON_TO_NOW = 3;
+	const PERIOD_CUR_WEEK = 4;
+	const PERIOD_PREV_WEEK = 5;
+	const PERIOD_TODAY = 6;
+	const PERIOD_YESTERDAY = 7;
+
 	function stats_viewer()
 	{
 		$this->init(array(
@@ -193,18 +204,39 @@ class stats_viewer extends class_base
 		$this->m = get_instance("applications/stats/stats_model");
 
 		$this->res_types = array(
-			"det" => t("Detailselt"), 
+			"det" => t("Detailselt"),
 			"day" => t("P&auml;evade l&otilde;ikes"),
-			"wd" => t("N&auml;dalap&auml;evade l&otilde;ikes"), 
-			"mon" => t("Kuude l&otilde;ikes"), 
-			"tm" => t("Kellaaja j&auml;rgi"), 
-			"obj" => t("Objektide l&otilde;ikes"), 
-			"uid" => t("Kasutajate l&otilde;ikes"), 
-			"grp" => t("Kasutajagruppide l&otilde;ikes"), 
-			"act" => t("Tegevuste l&otilde;ikes"), 
-			"obt" => t("Objektit&uuml;&uuml;pide l&otilde;ikes"), 
-			"ipa" => t("IP aadressite l&otilde;ikes"), 
+			"wd" => t("N&auml;dalap&auml;evade l&otilde;ikes"),
+			"mon" => t("Kuude l&otilde;ikes"),
+			"tm" => t("Kellaaja j&auml;rgi"),
+			"obj" => t("Objektide l&otilde;ikes"),
+			"uid" => t("Kasutajate l&otilde;ikes"),
+			"grp" => t("Kasutajagruppide l&otilde;ikes"),
+			"act" => t("Tegevuste l&otilde;ikes"),
+			"obt" => t("Objektit&uuml;&uuml;pide l&otilde;ikes"),
+			"ipa" => t("IP aadressite l&otilde;ikes"),
 			"ctr" => t("Asukohamaade l&otilde;ikes")
+		);
+
+		$this->period_options = array(
+			0 => t("M&auml;&auml;ramata"),
+			self::PERIOD_CUR_MON => t("Jooksev kuu"),
+			self::PERIOD_PREV_MON => t("Eelmine kuu"),
+			self::PERIOD_PREV_MON_TO_NOW => t("Eelmise kuu algusest t&auml;naseni"),
+			self::PERIOD_CUR_WEEK => t("Jooksev n&auml;dal"),
+			self::PERIOD_PREV_WEEK => t("Eelmine n&auml;dal"),
+			self::PERIOD_TODAY => t("T&auml;na"),
+			self::PERIOD_YESTERDAY => t("Eile")
+		);
+
+		$this->weekday_options = array(
+			2 => t("Esmasp&auml;ev"),
+			3 => t("Teisip&auml;ev"),
+			4 => t("Kolmap&auml;ev"),
+			5 => t("Neljap&auml;ev"),
+			6 => t("Reede"),
+			7 => t("Laup&auml;ev"),
+			1 => t("P&uuml;hap&auml;ev")
 		);
 	}
 
@@ -212,6 +244,12 @@ class stats_viewer extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+
+		if ($this->stat_sel_flt and isset($this->saved_filters[$this->stat_sel_flt][$prop["name"]]))
+		{
+			$prop["value"] = $this->saved_filters[$this->stat_sel_flt][$prop["name"]];
+		}
+
 		switch($prop["name"])
 		{
 			case "stats_eex_entry":
@@ -234,15 +272,11 @@ class stats_viewer extends class_base
 				return $this->_data_table($arr);
 
 			case "s_wd":
-				$prop["options"] = array(
-					2 => t("Esmasp&auml;ev"), 
-					3 => t("Teisip&auml;ev"),
-					4 => t("Kolmap&auml;ev"),
-					5 => t("Neljap&auml;ev"),
-					6 => t("Reede"),
-					7 => t("Laup&auml;ev"),
-					1 => t("P&uuml;hap&auml;ev")
-				);
+				$prop["options"] = $this->weekday_options;
+				break;
+
+			case "s_period":
+				$prop["options"] = $this->period_options;
 				break;
 
 			case "s_hr_from":
@@ -292,25 +326,35 @@ class stats_viewer extends class_base
 			case "s_country":
 				$prop["options"] = $this->make_keys($this->m->get_country_list());
 				break;
-	
+
 			case "s_res":
 				$this->_s_res($arr);
 				break;
 
 			case "s_res_add":
-				if (!is_array($arr["obj_inst"]->prop("s_add_res_type")) || count($arr["obj_inst"]->prop("s_add_res_type"))<1)
+				$s_add_res_type = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_add_res_type"] : $arr["obj_inst"]->prop("s_add_res_type");
+
+				if (!is_array($s_add_res_type) || count($s_add_res_type) < 1)
 				{
-					return PROP_IGNORE;
+					$retval = PROP_IGNORE;
 				}
+				else
+				{
 				$this->_s_res_add($arr);
+				}
 				break;
 
 			case "s_res_add_2":
-				if (!is_array($arr["obj_inst"]->prop("s_add_res_type")) || count($arr["obj_inst"]->prop("s_add_res_type"))<2)
+				$s_add_res_type = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_add_res_type"] : $arr["obj_inst"]->prop("s_add_res_type");
+
+				if (!is_array($s_add_res_type) || count($s_add_res_type) < 2)
 				{
-					return PROP_IGNORE;
+					$retval = PROP_IGNORE;
 				}
+				else
+				{
 				$this->_s_res_add_2($arr);
+				}
 				break;
 
 			case "s_add_res_type":
@@ -343,14 +387,72 @@ class stats_viewer extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+
 		switch($prop["name"])
 		{
 			case "s_root_o":
+				if ($this->stat_sel_flt)
+				{  // save filter to selection
+					$this->saved_filters[$this->stat_sel_flt]["subs"] = $arr["request"]["incl_subs"];
+				}
+				else
+				{ // save default filter
 				$arr["obj_inst"]->set_meta("subs", $arr["request"]["incl_subs"]);
+				}
+
+			case "s_user_group":
+			case "s_username":
+				$prop_name = $prop["name"] . "_use";
+
+				if ($this->stat_sel_flt)
+				{  // save filter to selection
+					$this->saved_filters[$this->stat_sel_flt][$prop_name] = $arr["request"][$prop_name];
+				}
+				else
+				{ // save default filter
+					$arr["obj_inst"]->set_meta($prop_name, $arr["request"][$prop_name]);
+				}
+				break;
+
+			case "saved_filter_name":
+			case "s_date_from":
+			case "s_date_to":
+			case "s_hr_from":
+			case "s_hr_to":
+			case "s_wd":
+			case "s_username":
+			case "s_username_except":
+			case "s_user_group":
+			case "s_user_group_except":
+			case "s_clid":
+			case "s_action":
+			case "s_action_except":
+			case "s_country":
+			case "s_country_except":
+			case "s_sessid":
+			case "s_ip":
+			case "s_ip_except":
+			case "s_referer":
+			case "s_res_type":
+			case "s_add_res_type":
+			case "s_limit":
+				if ($this->stat_sel_flt)
+				{// save filter to selection
+					$this->saved_filters[$this->stat_sel_flt][$prop["name"]] = $prop["value"];
+					$retval = PROP_IGNORE;
+				}
 				break;
 		}
 		return $retval;
-	}	
+	}
+
+	function callback_pre_save($arr)
+	{
+		if ($this->stat_sel_flt)
+		{
+			$arr["obj_inst"]->set_meta("saved_filters", $this->saved_filters);
+		}
+	}
 
 	function callback_post_save($arr)
 	{
@@ -366,6 +468,90 @@ class stats_viewer extends class_base
 		$arr["obj_h"] = 0;
 		$arr["user_h"] = 0;
 		$arr["ugroup_h"] = 0;
+	}
+
+	function callback_mod_retval($arr)
+	{
+		if ($this->stat_sel_flt)
+		{
+			$arr["args"]["stat_sel_flt"] = $this->stat_sel_flt;
+		}
+	}
+
+	function callback_on_load($arr)
+	{
+		// saved filters
+		if (is_a($this->obj_inst, "object"))
+		{
+			// old objects upgrade
+			if (!$this->obj_inst->meta("stats_viewer_version")) // version 1 has changes in filter parameter format for root obj, user and group
+			{
+				foreach($this->obj_inst->connections_from(array("type" => array("RELTYPE_OBJ", "RELTYPE_USER", "RELTYPE_GROUP"))) as $c)
+				{
+					switch ($c->prop("to.class_id"))
+					{
+						case CL_USER:
+							$s_username_use[$c->prop("to")] = 1;
+							break;
+
+						case CL_GROUP:
+							$s_user_group_use[$c->prop("to")] = 1;
+							break;
+
+						case CL_MENU:
+							$s_root_o_use[$c->prop("to")] = 1;
+							break;
+					}
+				}
+
+				$this->obj_inst->set_meta("s_root_o_use", $s_root_o_use);
+				$this->obj_inst->set_meta("s_username_use", $s_username_use);
+				$this->obj_inst->set_meta("s_user_group_use", $s_user_group_use);
+				$this->obj_inst->set_meta("stats_viewer_version", 1);
+				$this->obj_inst->save();
+			}
+
+			if ("stats_filter" === $arr["request"]["group"] or "stats_disp" === $arr["request"]["group"] or "stats" === $arr["request"]["group"])
+			{
+				// for GET request load filters always (for selectors)
+				$this->saved_filters = safe_array($this->obj_inst->meta("saved_filters"));
+
+				if (!empty($arr["request"]["stat_sel_flt"]) and isset($this->saved_filters[$arr["request"]["stat_sel_flt"]]))
+				{ // set selected
+					$this->stat_sel_flt = $arr["request"]["stat_sel_flt"];
+				}
+			}
+		}
+		elseif (!empty($arr["request"]["saved_filter_name"]) and is_oid($arr["request"]["id"]))
+		{ // for POST request
+			$o = new object($arr["request"]["id"]);
+			$saved_filters = safe_array($o->meta("saved_filters"));
+
+			// search for existing filter by user submitted name
+			foreach ($saved_filters as $id => $data)
+			{
+				if ($data["saved_filter_name"] === $arr["request"]["saved_filter_name"])
+				{
+					$this->stat_sel_flt = $id;
+					$this->saved_filters = $saved_filters;
+					break;
+				}
+			}
+
+			if (!$this->stat_sel_flt)
+			{ // name not found, saving a new filter
+				// new filter id
+				$i = 1;
+
+				while (isset($saved_filters[$i]))
+				{
+					$i++;
+				}
+
+				$this->stat_sel_flt = $i;
+				$this->saved_filters = $saved_filters;
+			}
+		}
 	}
 
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
@@ -429,7 +615,7 @@ class stats_viewer extends class_base
 
 	/**
 		@attrib name=bring_online
-		@param per_id required 
+		@param per_id required
 		@param return_url required
 	**/
 	function bring_online($arr)
@@ -452,6 +638,11 @@ class stats_viewer extends class_base
 			"caption" => t("Ka alamobjektid"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "use",
+			"caption" => t("Kasuta filtris"),
+			"align" => "center"
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -460,14 +651,22 @@ class stats_viewer extends class_base
 	}
 
 	function _s_root_o($arr)
-	{	
+	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$o = $arr["obj_inst"];
 		$this->_init_s_root_o($t);
-		$incl_subs = $arr["obj_inst"]->meta("subs");
+		$incl_subs = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["subs"] : $o->meta("subs");
+		$s_root_o_use = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_root_o_use"] : $o->meta("s_root_o_use");
+
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_OBJ")) as $c)
 		{
 			$t->define_data(array(
 				"name" => html::obj_change_url($c->prop("to")),
+				"use" => html::checkbox(array(
+					"name" => "s_root_o_use[".$c->prop("to")."]",
+					"value" => 1,
+					"checked" => $s_root_o_use[$c->prop("to")]
+				)),
 				"incl_subs" => html::checkbox(array(
 					"name" => "incl_subs[".$c->prop("to")."]",
 					"value" => 1,
@@ -485,6 +684,11 @@ class stats_viewer extends class_base
 			"caption" => t("Objekti nimi"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "use",
+			"caption" => t("Kasuta filtris"),
+			"align" => "center"
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -492,13 +696,21 @@ class stats_viewer extends class_base
 	}
 
 	function _s_username($arr)
-	{	
+	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_s_username_t($t);
+		$o = $arr["obj_inst"];
+		$s_username_use = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_username_use"] : $o->meta("s_username_use");
+
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_USER")) as $c)
 		{
 			$t->define_data(array(
 				"name" => html::obj_change_url($c->prop("to")),
+				"use" => html::checkbox(array(
+					"name" => "s_username_use[".$c->prop("to")."]",
+					"value" => 1,
+					"checked" => $s_username_use[$c->prop("to")]
+				)),
 				"oid" => $c->prop("to")
 			));
 		}
@@ -512,6 +724,11 @@ class stats_viewer extends class_base
 			"caption" => t("Objekti nimi"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "use",
+			"caption" => t("Kasuta filtris"),
+			"align" => "center"
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -519,13 +736,21 @@ class stats_viewer extends class_base
 	}
 
 	function _s_user_group($arr)
-	{	
+	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_s_user_group_t($t);
+		$o = $arr["obj_inst"];
+		$s_user_group_use = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_user_group_use"] : $o->meta("s_user_group_use");
+
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_GROUP")) as $c)
 		{
 			$t->define_data(array(
 				"name" => html::obj_change_url($c->prop("to")),
+				"use" => html::checkbox(array(
+					"name" => "s_user_group_use[".$c->prop("to")."]",
+					"value" => 1,
+					"checked" => $s_user_group_use[$c->prop("to")]
+				)),
 				"oid" => $c->prop("to")
 			));
 		}
@@ -561,13 +786,56 @@ class stats_viewer extends class_base
 			"text" => t("Kasutajagrupp"),
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 		));
-		
+
+		if ($this->stat_sel_flt)
+		{
 		$tb->add_button(array(
 			"name" => "delete",
-			"tooltip" => t("Kustuta"),
+				"tooltip" => t("Kustuta valitud filter"),
+				"img" => "delete.gif",
+				"action" => "delete_saved_filter"
+			));
+		}
+		else
+		{
+			$tb->add_button(array(
+				"name" => "delete",
+				"tooltip" => t("Kustuta seosed"),
 			"img" => "delete.gif",
 			"action" => "del_rels"
 		));
+	}
+
+		// saved filters
+		$ss = array($this->mk_my_orb("change", array(
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "stats_filter",
+			"return_url" => $arr["request"]["return_url"])) => ""
+		);
+		$selected = null;
+
+		foreach($this->saved_filters as $id => $data)
+		{
+			$opr = array();
+			$opr["id"] = $arr["obj_inst"]->id();
+			$opr["group"] = "stats_filter";
+			$opr["stat_sel_flt"] = $id;
+			$url = $this->mk_my_orb("change", $opr);
+			$ss[$url] = $data["saved_filter_name"];
+
+			if ($id == $this->stat_sel_flt)
+			{
+				$selected = $url;
+			}
+		}
+
+		$html = html::select(array(
+			"options" => $ss,
+			"onchange" => "el=document.changeform.tb_stat_sel_flt;window.location=el.options[el.selectedIndex].value",
+			"name" => "tb_stat_sel_flt",
+			"selected" => $selected
+		));
+		$tb->add_cdata($html);
 	}
 
 	/**
@@ -576,33 +844,168 @@ class stats_viewer extends class_base
 	function del_rels($arr)
 	{
 		$o = obj($arr["id"]);
+
 		if (is_array($arr["sel"]))
 		{
-
 			foreach($arr["sel"] as $item)
 			{
 				$o->disconnect(array("from" => $item));
 			}
 		}
+
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=delete_saved_filter
+		@param id required type=int acl=view
+	**/
+	function delete_saved_filter($arr)
+	{
+		$o = obj($arr["id"]);
+
+		if (!empty($arr["saved_filter_name"]))
+		{
+			$saved_filters = safe_array($o->meta("saved_filters"));
+
+			// search for filter by user submitted name
+			foreach ($saved_filters as $id => $data)
+			{
+				if ($data["saved_filter_name"] === $arr["saved_filter_name"])
+				{
+					// delete filter
+					unset($saved_filters[$id]);
+					$o->set_meta("saved_filters", $saved_filters);
+					$o->save();
+					break;
+				}
+			}
+		}
+
 		return $arr["post_ru"];
 	}
 
 	function _s_res($arr)
 	{
-		$fn = "_s_res_".($arr["obj_inst"]->prop("s_res_type") ? $arr["obj_inst"]->prop("s_res_type") : "det");
+		$s_res_type = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_res_type"] : $arr["obj_inst"]->prop("s_res_type");
+		$fn = "_s_res_".($s_res_type ? $s_res_type : "det");
 		$this->$fn($arr);
+
 		// create desc from opts
-		$arr["prop"]["vcl_inst"]->set_caption($this->res_types[($arr["obj_inst"]->prop("s_res_type") ? $arr["obj_inst"]->prop("s_res_type") : "det")]);
+		$arr["prop"]["vcl_inst"]->set_caption($this->res_types[($s_res_type ? $s_res_type : "det")]);
+		$arr["prop"]["vcl_inst"]->set_header($this->get_filter_description($this->stats_disp_filter_parameters));
+
 		if ($arr["request"]["get_csv_file"] == 1)
 		{
 			header("Content-type: text/csv");
 			header("Content-disposition: inline; filename=stats.csv;");
 			die($arr["prop"]["vcl_inst"]->get_csv_file(";"));
 		}
+
 		if ($arr["request"]["get_html_file"] == 1)
 		{
 			$GLOBALS["__aw_op_handler"] = array(&$this, "op_handler");
 		}
+	}
+
+	private function get_filter_description ()
+	{
+		$r = $this->stats_disp_filter_parameters;
+		$fd = array();
+
+		// date
+		 if (array_key_exists($r["s_period"], $this->period_options))
+		 {
+			 $fd[] = $this->period_options[$r["s_period"]];
+		 }
+		 else
+		 {
+			 $fd[] = t("Periood: ") . date("d.m.Y", $r["s_date_from"]) . "-" . date("d.m.Y", $r["s_date_from"]);
+		 }
+
+		 if ($r["s_hr_from"] and $r["s_hr_to"])
+		 {
+			 $fd[] = t("Kell: ") . $r["s_hr_from"] . "-" . $r["s_hr_to"];
+		 }
+
+		 if (!empty($r["wd"]))
+		 {
+			 $tmp = array_intersect_key($this->weekday_options, $r["wd"]);
+			 $fd[] = t("P&auml;evad: ") . implode(", ", $tmp);
+		 }
+
+		// users
+		if (!empty($r["s_uids"]))
+		{
+			$fd[] = ($r["s_username_except"] ? t("V&auml;lja arvatud kasutajad: ") : t("Kasutajad: ")) . implode(", ", $r["s_uids"]);
+		}
+
+		if (!empty($r["s_group"]))
+		{
+			$fd[] = ($r["s_user_group_except"] ? t("V&auml;lja arvatud kasutajagrupid: ") : t("Kasutajagrupid: ")) . implode(", ", $r["s_group"]);
+		}
+
+		// objects
+		if (!empty($r["s_objs"]))
+		{
+			 $tmp = $r["s_objs"];
+			 foreach ($tmp as $key => $oid)
+			 {
+				 $o = new object($oid);
+				 $tmp[$key] = $o->name() . " [" . t("id: ") . $oid . "]";
+			 }
+			 $fd[] = t("Juurobjektid: ") . implode(", ", $tmp);
+		}
+
+		if (!empty($r["s_clid"]))
+		{
+			 $tmp = array_intersect_key(get_class_picker(), $r["s_clid"]);
+			 $fd[] = t("Objekti&uuml;&uuml;bid: ") . implode(", ", $tmp);
+		}
+
+		// actions
+		 if (!empty($r["s_action"]))
+		 {
+			$tmp = aw_ini_get("syslog.actions");
+			foreach($tmp as $id => $dat)
+			{
+				$tmp[$id] = $dat["name"];
+			}
+			 $tmp = array_intersect_key($tmp, $r["s_action"]);
+			 $fd[] = ($r["s_action_except"] ? t("V&auml;lja arvatud tegevused: ") : t("Tegevused: ")) . implode(", ", $tmp);
+		 }
+
+		// countries
+		if (!empty($r["s_country"]))
+		{
+			$fd[] = ($r["s_country_except"] ? t("V&auml;lja arvatud maad: ") : t("Maad: ")) . implode(", ", $r["s_country"]);
+		}
+
+		// ip
+		if (!empty($r["s_ip"]))
+		{
+			$fd[] = ($r["s_ip_except"] ? t("V&auml;lja arvatud IP aadress: ") : t("IP aadress: ")) . $r["s_ip"];
+		}
+
+		// session
+		if (!empty($r["s_sessid"]))
+		{
+			$fd[] = t("Sessiooni ID: ") . $r["s_sessid"];
+		}
+
+		// referer
+		if (!empty($r["s_referer"]))
+		{
+			$fd[] = t("Referer: ") . $r["s_referer"];
+		}
+
+		// limit
+		if (!empty($r["s_limit"]))
+		{
+			$fd[] = sprintf(t("Limiit %s rida"), $r["s_limit"]);
+		}
+
+		return t("Valikud -- ") . implode("; ", $fd);
 	}
 
 	function op_handler($op)
@@ -622,10 +1025,22 @@ class stats_viewer extends class_base
 
 	function _s_res_add($arr)
 	{
-		foreach(safe_array($arr["obj_inst"]->prop("s_add_res_type")) as $tpid)
+		$s_add_res_type = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_add_res_type"] : $arr["obj_inst"]->prop("s_add_res_type");
+
+		foreach(safe_array($s_add_res_type) as $tpid)
 		{
 			$fn = "_s_res_".$tpid;
-			$arr["obj_inst"]->set_prop("s_limit", 30);
+			$limit = 30;
+
+			if ($this->stat_sel_flt)
+			{
+				$this->saved_filters[$this->stat_sel_flt]["s_limit"] = $limit;
+			}
+			else
+			{
+				$arr["obj_inst"]->set_prop("s_limit", $limit);
+			}
+
 			$this->$fn($arr);
 			$arr["prop"]["vcl_inst"]->set_caption($this->res_types[$tpid]);
 			return;
@@ -634,16 +1049,29 @@ class stats_viewer extends class_base
 
 	function _s_res_add_2($arr)
 	{
+		$s_add_res_type = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_add_res_type"] : $arr["obj_inst"]->prop("s_add_res_type");
 		$f = true;
-		foreach(safe_array($arr["obj_inst"]->prop("s_add_res_type")) as $tpid)
+
+		foreach(safe_array($s_add_res_type) as $tpid)
 		{
 			if ($f)
 			{
 				$f = false;
 				continue;
 			}
+
 			$fn = "_s_res_".$tpid;
-			$arr["obj_inst"]->set_prop("s_limit", 30);
+			$limit = 30;
+
+			if ($this->stat_sel_flt)
+			{
+				$this->saved_filters[$this->stat_sel_flt]["s_limit"] = $limit;
+			}
+			else
+			{
+				$arr["obj_inst"]->set_prop("s_limit", $limit);
+			}
+
 			$this->$fn($arr);
 			$arr["prop"]["vcl_inst"]->set_caption($this->res_types[$tpid]);
 			return;
@@ -711,14 +1139,74 @@ class stats_viewer extends class_base
 	function _get_where_bit($r)
 	{
 		$sql = array();
-		if ($r["s_date_from"] != -1)
+
+		if ($r["s_period"])
 		{
-			$sql[] = " tm >= ".$r["s_date_from"];
+			switch ($r["s_period"])
+			{
+				case self::PERIOD_CUR_MON:
+					$sql[] = " created_month = " . date("n");
+					$sql[] = " created_year = " . date("Y");
+					break;
+
+				case self::PERIOD_PREV_MON:
+					$month = date("n") - 1;
+					$year = date("Y");
+					if (0 === $month)
+					{
+						$month = 12;
+						--$year;
+					}
+					$sql[] = " created_month = " . $month;
+					$sql[] = " created_year = " . $year;
+					break;
+
+				case self::PERIOD_PREV_MON_TO_NOW:
+					$time = mktime(0, 0, 0, date("n") - 1, 1, date("Y"));
+					$sql[] = " tm >= ".$time;
+					break;
+
+				case self::PERIOD_CUR_WEEK:
+					classload("core/date/date_calc");
+					$time = get_week_start();
+					$sql[] = " tm >= " . $time;
+					break;
+
+				case self::PERIOD_PREV_WEEK:
+					classload("core/date/date_calc");
+					$to = get_week_start();
+					$wd = date("N");
+					$wd = $wd > 3 ? 8 : 5;
+					$from = get_week_start(time() - $wd * 86400);
+					$sql[] = " tm >= ".$from;
+					$sql[] = " tm < ".$to;
+					break;
+
+				case self::PERIOD_TODAY:
+					$time = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
+					$sql[] = " tm >= ".$time;
+					break;
+
+				case self::PERIOD_YESTERDAY:
+					$from = mktime(0, 0, 0, date("n"), date("j") - 1, date("Y"));
+					$to = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
+					$sql[] = " tm >= ".$from;
+					$sql[] = " tm < ".$to;
+					break;
+			}
 		}
-		if ($r["s_date_to"] != -1)
+		else
 		{
-			$sql[] = " tm <= ".$r["s_date_to"];
+			if ($r["s_date_from"] != -1)
+			{
+				$sql[] = " tm >= ".$r["s_date_from"];
+			}
+			if ($r["s_date_to"] != -1)
+			{
+				$sql[] = " tm <= ".$r["s_date_to"];
+			}
 		}
+
 		if ($r["s_hr_from"] > 0)
 		{
 			$sql[] = " created_hour >= ".$r["s_hr_from"];
@@ -746,11 +1234,13 @@ class stats_viewer extends class_base
 			$awa = new aw_array($r["s_clid"]);
 			$sql[] = " o.class_id IN (".$awa->to_sql().") ";
 		}
+
 		if (is_array($r["s_wd"]) && count($r["s_wd"]))
 		{
 			$awa = new aw_array($r["s_wd"]);
 			$sql[] = " created_wd IN (".$awa->to_sql().") ";
 		}
+
 		if ($r["s_sessid"] != "")
 		{
 			$sql[] = " s.session_id = '".$r["s_sessid"]."' ";
@@ -831,47 +1321,80 @@ class stats_viewer extends class_base
 	function get_s_params_from_obj($o)
 	{
 		$r = $o->properties();
+
+		if ($this->stat_sel_flt)
+		{
+			$r = array_merge($r, $this->saved_filters[$this->stat_sel_flt]);
+		}
+
+		$s_root_o_use = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_root_o_use"] : $o->meta("s_root_o_use");
 		$objs = array();
-		$subs = $o->meta("subs");
+		$subs = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["subs"] : $o->meta("subs");
+		$s_clid = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_clid"] : $o->prop("s_clid");
 		foreach($o->connections_from(array("type" => "RELTYPE_OBJ")) as $c)
 		{
-			$objs[$c->prop("to")] = $c->prop("to");
-			if ($subs[$c->prop("to")])
+			$to_oid = $c->prop("to");
+
+			if (isset($s_root_o_use[$to_oid]))
 			{
-				$clid = array(CL_MENU,CL_PROMO,CL_DOCUMENT,CL_EXTLINK);
-				if (is_array($o->prop("s_clid")) && count($o->prop("s_clid")))
+				$objs[$to_oid] = $to_oid;
+				if ($subs[$to_oid])
 				{
 					$clid = array(CL_MENU,CL_PROMO,CL_DOCUMENT,CL_EXTLINK);
-					foreach($o->prop("s_clid") as $_cl)
+						if (is_array($s_clid) && count($s_clid))
 					{
-						$clid[] = $_cl;
+						$clid = array(CL_MENU,CL_PROMO,CL_DOCUMENT,CL_EXTLINK);
+							foreach($s_clid as $_cl)
+						{
+							$clid[] = $_cl;
+						}
 					}
-				}
-				$ot = new object_tree(array(
-					"parent" => $c->prop("to"),
-					"class_id" => $clid
-				));
-				foreach($ot->ids() as $id)
-				{
-					$objs[$id] = $id;
+					$ot = new object_tree(array(
+						"parent" => $to_oid,
+						"class_id" => $clid
+					));
+					foreach($ot->ids() as $id)
+					{
+						$objs[$id] = $id;
+					}
 				}
 			}
 		}
 		$r["s_objs"] = $objs;
+
+		$s_username_use = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_username_use"] : $o->meta("s_username_use");
 		$uids = array();
 		foreach($o->connections_from(array("type" => "RELTYPE_USER")) as $c)
 		{
-			$t = $c->to();
-			$uids[$t->prop("uid")] = $t->prop("uid");
+			if (isset($s_username_use[$c->prop("to")]))
+			{
+				$t = $c->to();
+				$uids[$t->prop("uid")] = $t->prop("uid");
+			}
 		}
 		$r["s_uids"] = $uids;
 
+		$s_user_group_use = $this->stat_sel_flt ? $this->saved_filters[$this->stat_sel_flt]["s_user_group_use"] : $o->meta("s_user_group_use");
 		$gps = array();
 		foreach($o->connections_from(array("type" => "RELTYPE_GROUP")) as $c)
 		{
-			$gps[$c->prop("to")] = $c->prop("to");
+			if (isset($s_user_group_use[$c->prop("to")]))
+			{
+				$gps[$c->prop("to")] = $c->prop("to");
+			}
 		}
 		$r["s_group"] = $gps;
+
+		if (is_array($r["s_date_from"]))
+		{
+			$r["s_date_from"] = mktime(0, 0, 0, $r["s_date_from"]["month"], $r["s_date_from"]["day"], $r["s_date_from"]["year"]);
+		}
+		if (is_array($r["s_date_to"]))
+		{
+			$r["s_date_to"] = mktime(0, 0, 0, $r["s_date_to"]["month"], $r["s_date_to"]["day"], $r["s_date_to"]["year"]);
+		}
+
+		$this->stats_disp_filter_parameters = $r;
 		return $r;
 	}
 
@@ -890,21 +1413,21 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_det_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$g_ol = new object_list(array("class_id" => CL_GROUP, "site_id" => array(), "lang_id" => array()));
 		$gs = $g_ol->names();
 
 		$q = "
-			SELECT 
+			SELECT
 				s.*,
 				o.*
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
-			ORDER BY 
-				id DESC 
-			LIMIT 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
+			ORDER BY
+				id DESC
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -986,21 +1509,21 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_day_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				created_year,
 				created_month,
 				created_day
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				created_year,created_month,created_day
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1093,19 +1616,19 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_wd_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				created_wd
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				created_wd
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1199,19 +1722,19 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_mon_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				created_month
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				created_month
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1303,19 +1826,19 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_tm_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				created_hour
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				created_hour
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1407,20 +1930,20 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_obj_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				s.oid,
 				o.name as name
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				s.oid
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1516,19 +2039,19 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_uid_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				s.uid
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				s.uid
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1621,19 +2144,19 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_grp_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				s.g_oid as g_oid
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				s.g_oid
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1729,19 +2252,19 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_act_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				s.act_id as act_id
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				s.act_id
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1835,19 +2358,19 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_obt_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				o.class_id as class_id
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				o.class_id
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -1941,20 +2464,20 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_ipa_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				s.ip as ip,
 				s.ip_resolved as ip_resolved
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				s.ip
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -2048,19 +2571,19 @@ class stats_viewer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_ctr_t($t);
 		$r = $this->get_s_params_from_obj($arr["obj_inst"]);
-	
+
 		$q = "
-			SELECT 
+			SELECT
 				count(*) as total,
 				count(distinct(session_id)) as sessions,
 				s.country as country
-			FROM 
-				syslog_archive s 
-				LEFT JOIN objects o ON o.oid = s.oid 
-			".$this->_get_where_bit($r, $arr["obj_inst"])." 
+			FROM
+				syslog_archive s
+				LEFT JOIN objects o ON o.oid = s.oid
+			".$this->_get_where_bit($r, $arr["obj_inst"])."
 			GROUP BY
 				s.country
-			LIMIT 
+			LIMIT
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
@@ -2119,6 +2642,37 @@ class stats_viewer extends class_base
 			"tooltip" => t("Salvesta HTML"),
 			"url" => aw_url_change_var("get_html_file", 1)
 		));
+
+		// saved filters
+		$ss = array($this->mk_my_orb("change", array(
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "stats_disp",
+			"return_url" => $arr["request"]["return_url"])) => ""
+		);
+		$selected =  null;
+
+		foreach($this->saved_filters as $id => $data)
+		{
+			$opr = array();
+			$opr["id"] = $arr["obj_inst"]->id();
+			$opr["group"] = "stats_disp";
+			$opr["stat_sel_flt"] = $id;
+			$url = $this->mk_my_orb("change", $opr);
+			$ss[$url] = $data["saved_filter_name"];
+
+			if ($id == $this->stat_sel_flt)
+			{
+				$selected = $url;
+			}
+		}
+
+		$html = html::select(array(
+			"options" => $ss,
+			"onchange" => "el=document.changeform.tb_stat_sel_flt;window.location=el.options[el.selectedIndex].value",
+			"name" => "tb_stat_sel_flt",
+			"selected" => $selected
+		));
+		$tb->add_cdata($html);
 	}
 
 	/**
@@ -2169,10 +2723,10 @@ class stats_viewer extends class_base
 				$where[] = " tm_s <= ".$to." ";
 			}
 		}
-		$this->db_query("SELECT 
+		$this->db_query("SELECT
 				count(*) as cnt,
-				entry_page 
-			FROM 
+				entry_page
+			FROM
 				syslog_archive_sessions
 			WHERE
 				".join(" AND ", $where)."
@@ -2252,10 +2806,10 @@ class stats_viewer extends class_base
 				$where[] = " tm_e <= ".$to." ";
 			}
 		}
-		$this->db_query("SELECT 
+		$this->db_query("SELECT
 				count(*) as cnt,
-				exit_page 
-			FROM 
+				exit_page
+			FROM
 				syslog_archive_sessions
 			WHERE
 				".join(" AND ", $where)."
@@ -2318,9 +2872,9 @@ class stats_viewer extends class_base
 			}
 		}
 		$where = join(" AND ", $where);
-		$arr["prop"]["value"] = $this->db_fetch_field("SELECT 
+		$arr["prop"]["value"] = $this->db_fetch_field("SELECT
 				count(*) as cnt
-			FROM 
+			FROM
 				syslog_archive_sessions
 			WHERE
 				$where
@@ -2354,7 +2908,7 @@ class stats_viewer extends class_base
 			'tree_id' => 'stats_browser',
 			'persist_state' => true,
 		));
-		
+
 		foreach($dates as $y => $mons)
 		{
 			$t->add_item(0, array(
