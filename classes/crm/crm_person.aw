@@ -4,11 +4,13 @@
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_SECTION, on_connect_section_to_person)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONNEL_MANAGEMENT_JOB_WANTED, on_connect_job_wanted_to_person)
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disconnect_section_from_person)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT_JOB_WANTED, on_disconnect_job_wanted_from_person)
 
-@classinfo relationmgr=yes syslog_type=ST_CRM_PERSON no_status=1 confirm_save_data=1
+@classinfo relationmgr=yes syslog_type=ST_CRM_PERSON no_status=1 confirm_save_data=1 prop_cb=1
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 @tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
@@ -17,9 +19,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 @groupinfo general2 caption="&Uuml;ldine" parent=general
 @default group=general2
-
-@property person_tb type=toolbar submit=no no_caption=1
-@caption Isiku toolbar
 
 @property name type=text
 @caption Nimi
@@ -101,14 +100,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property cvactive type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption CV aktiivne
 
-@property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
-@caption Palga dokument
-
-@property nationality type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_NATIONALITY
-@caption Rahvus
-
-@property citizenship_table type=table submit=no no_caption=1 editonly=1
-@caption Kodakondsuse tabel
+# @property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
+# @caption Palga dokument
 
 ------------------------------------------------------------------
 
@@ -237,7 +230,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 			@property cedit_bank_account_tbl type=table store=no no_caption=1 parent=ceditbank
 
-		@layout ceditprof type=vbox closeable=1 area_caption=T&ouml;&ouml;suhted
+		@layout ceditprof type=vbox closeable=1 area_caption=Eelnev&nbsp;t&ouml;&ouml;kogemus
 
 			@property cedit_profession_tbl type=table store=no no_caption=1 parent=ceditprof store=no
 
@@ -259,6 +252,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 ------------------------------------------------------------------
 @groupinfo description caption="Kirjeldus" parent=general
 @default group=description
+
+@property person_tb type=toolbar submit=no no_caption=1
+@caption Isiku toolbar
+
+@property nationality type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_NATIONALITY
+@caption Rahvus
+
+@property citizenship_table type=table submit=no editonly=1
+@caption Kodakondsuse tabel
 
 @property notes type=textarea cols=60 rows=10
 @caption Vabas vormis tekst
@@ -344,15 +346,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 ------------------------------------------------------------------
 @groupinfo cv caption="Elulugu"
 
-@groupinfo education caption="Haridusk&auml;ik" parent=cv
+@groupinfo education caption="Haridusk&auml;ik" parent=cv submit=no
 @default group=education
 
-property education_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table_fields=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table=objects field=meta method=serialize
+@property education_tlb type=toolbar no_caption=1 store=no
 
-@property education_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION props=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table_fields=degree,school,field,speciality,main_speciality,obtain_language,start,end,end_date,diploma_nr table=objects field=meta method=serialize
-@caption Haridus
+@property edulevel type=select field=edulevel table=kliendibaas_isik
+@caption Haridustase
 
-
+@property education_tbl type=table no_caption=1 store=no
 
 ------------------------------------------------------------------
 
@@ -363,50 +365,44 @@ property education_edit type=releditor store=no mode=manager reltype=RELTYPE_EDU
 
 @groupinfo orgs caption="Organisatoorne kuuluvus" parent=cv submit=no
 
-@property org_edit type=releditor store=no mode=manager reltype=RELTYPE_ORG_RELATION props=org,profession,start,end table_fields=org,profession,start,end group=orgs
+@property org_edit type=releditor store=no mode=manager reltype=RELTYPE_COMPANY_RELATION props=org,start,end,add_info table_fields=org,start,end,add_info group=orgs
 
 ------------------------------------------------------------------
 
 @groupinfo recommends caption="Soovitajad" parent=cv submit=no
+@default group=recommends
 
-@property recommends_edit type=releditor store=no mode=manager reltype=RELTYPE_RECOMMENDS props=firstname,lastname,rank,work_contact,comment table_fields=firstname,lastname,rank,work_contact,comment group=recommends
+#@property recommends_edit type=releditor store=no mode=manager reltype=RELTYPE_RECOMMENDS props=firstname,lastname,phone,email table_fields=firstname,lastname,phone,email group=recommends
+
+@property recommends_tlb type=toolbar store=no no_caption=1
+
+@property recommends_tbl type=table store=no no_caption=1
 
 ------------------------------------------------------------------
 
-@groupinfo addinfo caption="Muud oskused" parent=cv
-@default group=addinfo
+@groupinfo addinfo_new caption="Muud oskused" parent=cv
+@default group=addinfo_new
 @default table=objects
-@default field=meta
-@default method=serialize
 
-@property language type=text subtitle=1
-@caption Keeleoskus
+	@property add_info_tlb type=toolbar no_caption=1 store=no
 
-@property mlang type=relpicker reltype=RELTYPE_LANGUAGE_SKILL table=objects field=meta method=serialize
-@caption Emakeel
+	@property mlang type=relpicker reltype=RELTYPE_MOTHER_TONGUE table=kliendibaas_isik field=mlang no_edit=1
+	@caption Emakeel
 
-@property lang_edit type=releditor mode=manager reltype=RELTYPE_LANGUAGE_SKILL props=language,talk,understand,write table_fields=language,talk,understand,write
+	@property skills_lang_tbl type=table store=no
+	@caption Keeleoskus
 
-@property compskills type=text subtitle=1
-@caption Arvutioskus
+	@property skills_tbl type=table store=no
+	@caption Oskused
 
-@property compskills_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to
-Arvutioskus: Programm	Valik v&otilde;i tekstikast / Tase	Valik
+	@property drivers_license type=select multiple=1 field=drivers_license table=kliendibaas_isik
+	@caption Autojuhiload
 
-@property drivers_license type=text subtitle=1
-@caption Autojuhiload
+	@property dl_can_use type=checkbox ch_value=1 table=kliendibaas_isik
+	@caption Kas v&otilde;imalik kasutada isiklikku autot t&ouml;&ouml;eesm&auml;rkidel
 
-@property dl_cat type=classificator store=no
-@caption Kategooria
-
-@property dl_since type=select
-@caption Alates
-
-@property dl_can_use type=checkbox ch_value=1
-@caption Kas v&otilde;imalik kasutada t&ouml;&ouml;eesm&auml;rkidel
-
-@property addinfo type=textarea
-@caption Muud oskused
+	@property addinfo type=textarea table=kliendibaas_isik field=addinfo
+	@caption Muud oskused
 
 ------------------------------------------------------------------
 
@@ -443,12 +439,11 @@ Arvutioskus: Programm	Valik v&otilde;i tekstikast / Tase	Valik
 @groupinfo candidate caption="Kandideerimised" parent=work submit=no
 @default group=candidate
 
-@property candidate_tb type=toolbar no_caption=1 store=no
+	@property candidate_tb type=toolbar no_caption=1 store=no
 
-@property candidate_table type=table no_caption=1
+	@property candidate_table type=table no_caption=1
 
-@property candidate type=releditor reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no
-
+------------------------------------------------------------------
 
 @groupinfo skills caption="P&auml;devused" parent=work submit=no
 @default group=skills
@@ -826,6 +821,27 @@ caption S&otilde;bragrupid
 @reltype DEGREE value=75 clid=CL_CRM_DEGREE
 @caption Kraad
 
+@reltype EDUCATION_LEVEL value=76 clid=CL_CRM_PERSON_EDUCATION_LEVEL
+@caption Haridustase
+
+@reltype WORK_WANTED value=77 clid=CL_PERSONNEL_MANAGEMENT_JOB_WANTED
+@caption Soovitud t&ouml;&ouml;
+
+@reltype MOTHER_TONGUE value=78 clid=CL_CRM_LANGUAGE
+@caption Emakeel
+
+@reltype CATEGORY value=80 clid=CL_CRM_CATEGORY
+@caption List
+
+@reltype SKILL_LEVEL value=81 clid=CL_CRM_SKILL_LEVEL
+@caption Oskuse tase
+
+@reltype COMPANY_RELATION value=82 clid=CL_CRM_COMPANY_RELATION
+@caption Organisatoorne kuuluvus
+
+@reltype PERSONNEL_MANAGEMENT value=83 clid=CL_PERSONNEL_MANAGEMENT
+@caption Personalikeskkond
+
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
@@ -845,19 +861,31 @@ class crm_person extends class_base
 			"udef_ta1", "udef_ta2", "udef_ta3", "udef_ta4", "udef_ta5"
 		);
 		$this->edulevel_options = array(
-			0 => t("-- Vali &uuml;ks --"),
-			"pohiharidus" => t("P&otilde;hiharidus"),
-			"keskharidus" => t("Keskharidus"),
-			"keskeriharidus" => t("Kesk-eriharidus"),
-			"kutsekeskharidus" => t("Kutsekeskharidus"),
-			"kutsekorgharidus" => t("Kutsek&otilde;rgharidus"),
-			"rakenduskorgharidus" => t("Rakendusk&otilde;rgharidus"),
-			"korgharidus" => t("K&otilde;rgharidus"),
-			"diplom" => t("Diplom"),
-			"bakalaureus" => t("Bakalaureus"),
-			"magister" => t("Magister"),
-			"doktor" => t("Doktor"),
-			"teadustekandidaat" => t("Teaduste kandidaat"),
+			0 => t("--vali--"),
+			1 => t("P&otilde;hiharidus"),
+			2 => t("Keskharidus"),
+			3 => t("Kesk-eriharidus"),
+			4 => t("Kutsekeskharidus"),
+			5 => t("Kutsek&otilde;rgharidus"),
+			6 => t("Rakendusk&otilde;rgharidus"),
+			7 => t("K&otilde;rgharidus"),
+			8 => t("Diplom"),
+			9 => t("Bakalaureus"),
+			10 => t("Magister"),
+			11 => t("Doktor"),
+			12 => t("Teaduste kandidaat"),
+		);
+		$this->drivers_licence_categories = array(
+			"a" => "A",
+			"a1" => "A1",
+			"a2" => "A2",
+			"b" => "B",
+			"b1" => "B1",
+			"c" => "C",
+			"c1" => "C1",
+			"d" => "D",
+			"d1" => "D1",
+			"e" => "E",
 		);
 	}
 
@@ -868,12 +896,51 @@ class crm_person extends class_base
 		$form = &$arr["request"];
 		switch($prop["name"])
 		{
+			case "skills_tbl":
+				foreach($arr["request"]["skills"] as $key => $val)
+				{
+					if($arr["request"]["skills"][$key] != $arr["request"]["skills_old"][$key])
+					{
+						$o = obj($key);
+						$o->set_prop("level", $val);
+						$o->save();
+					}
+				}
+				break;
+
+			case "skills_lang_tbl":
+				foreach($arr["request"]["lang"] as $key => $val)
+				{
+					if($val["talk"] != $arr["request"]["lang_talk"][$key] || $val["understand"] != $arr["request"]["lang_understand"][$key] || $val["write"] != $arr["request"]["lang_write"][$key])
+					{
+						$o = obj($key);
+						$o->set_prop("talk", $val["talk"]);
+						$o->set_prop("understand", $val["understand"]);
+						$o->set_prop("write", $val["write"]);
+						$o->save();
+					}
+				}
+				break;
+
+			case "drivers_license":
+				$s = "";
+				foreach($prop["value"] as $c)
+				{
+					$s .= $c;
+				}
+				$prop["value"] = $s;
+				$arr["obj_inst"]->set_prop("drivers_license", $prop["value"]);
+				return PROP_IGNORE;
+				break;
+
 			case "work_tbl":
 				$this->_save_work_tbl($arr);
 				break;
+
 			case "citizenship_table":
 				$this->_save_citizenship_table($arr);
 				break;
+
 			case "phone":
 			case "fax":
 			case "url":
@@ -1026,29 +1093,6 @@ class crm_person extends class_base
 		return $retval;
 	}
 
-	function is_connected_to_section($org,$section)
-	{
-		$ret = 0;
-		foreach($org->connections_from(array("type" => RELTYPE_SECTION)) as $conn)
-		{
-			if($conn->prop("to") == $section)
-			{
-				$ret = 1;
-			}
-			else
-			{
-				$sec_obj = $conn->to();
-				$ret = $this->is_connected_to_section($sec_obj,$section);
-			}
-
-			if($ret == 1)
-			{
-				break;
-			}
-		}
-		return $ret;
-	}
-
 	function _save_work_tbl($arr)
 	{
 		foreach($arr["obj_inst"]->connections_from(array("type" => array(6, 21))) as $conn)
@@ -1067,13 +1111,10 @@ class crm_person extends class_base
 				$org = obj($data["org"]);
 				if($this->can("view", $data["sec"]))
 				{
-					if(!$this->is_connected_to_section($org,$data["sec"]))
-					{
-						$org->connect(array(
-							"to" => $data["sec"],
-							"reltype" => 28,		// RELTYPE_SECTION
-						));
-					}
+					$org->connect(array(
+						"to" => $data["sec"],
+						"reltype" => 28,		// RELTYPE_SECTION
+					));
 				}
 				else
 				{
@@ -1105,6 +1146,245 @@ class crm_person extends class_base
 		{
 			$doomed_conn = new connection($doomed_conn);
 			$doomed_conn->delete();
+		}
+	}
+
+	function _get_add_info_tlb($arr)
+	{
+		$personnel_management_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
+		$pm = obj($personnel_management_inst->get_sysdefault());
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_menu_button(array(
+			"name" => "new_skill",
+			"img" => "new.gif",
+		));
+		$t->add_sub_menu(array(
+			"parent" => "new_skill",
+			"name" => "new_lang_skill",
+			"text" => t("Keeleoskus"),
+		));
+		foreach($personnel_management_inst->get_languages() as $lkey => $lname)
+		{
+			$t->add_menu_item(array(
+				"parent" => "new_lang_skill",
+				"name" => "new_lang_skill_".$lkey,
+				"text" => $lname,
+				"link" => $this->mk_my_orb("add_lang_skill", array("lang_id" => $lkey, "id" => $arr["obj_inst"]->id(), "return_url" => get_ru())),
+			));
+		}
+
+		$skill_manager_inst = get_instance(CL_CRM_SKILL_MANAGER);
+		$sm_id = $pm->prop("skill_manager");
+		$skills = $skill_manager_inst->get_skills(array("id" => $sm_id));
+		foreach($skills as $id => $data)
+		{
+			$parent = ($id == $sm_id) ? "new_skill" : "new_skill_".$id;
+			foreach($data as $id2 => $name)
+			{
+				if(array_key_exists($id2, $skills))
+				{
+					$t->add_sub_menu(array(
+						"name" => "new_skill_".$id2,
+						"text" => $name["name"],
+						"parent" => $parent,
+					));
+				}
+				else
+				{
+					$t->add_menu_item(array(
+						"parent" => "new_skill_".$id,
+						"name" => "new_skill_".$id2,
+						"text" => $name["name"],
+						"link" => $this->mk_my_orb("add_skill", array("skill_id" => $id2, "id" => $arr["obj_inst"]->id(), "return_url" => get_ru())),
+					));
+				}
+			}
+		}
+		$t->add_delete_button();
+		$t->add_save_button();
+	}
+
+	function _get_skills_lang_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "select",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "lang",
+			"caption" => t("Keel"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "talk",
+			"caption" => t("R&auml;&auml;gin"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "understand",
+			"caption" => t("Saan aru"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "write",
+			"caption" => t("Kirjutan"),
+			"align" => "center",
+		));
+		$lang_ops[0] = t("--vali--");
+		$lang_ops += get_instance("crm_person_language")->lang_lvl_options;
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LANGUAGE_SKILL")) as $conn)
+		{
+			$to = $conn->to();
+			$t->define_data(array(
+				"oid" => $to->id(),
+				"lang" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $to->id(), "return_url" => get_ru()), CL_CRM_PERSON_LANGUAGE),
+					"caption" => $to->prop("language.name")
+				)),
+				"talk" => html::select(array(
+					"name" => "lang[".$to->id()."][talk]",
+					"options" => $lang_ops,
+					"selected" => $to->prop("talk"),
+				)).html::hidden(array(
+					"name" => "lang_talk[".$to->id()."]",
+					"value" => $to->prop("talk"),
+				)),
+				"understand" => html::select(array(
+					"name" => "lang[".$to->id()."][understand]",
+					"options" => $lang_ops,
+					"selected" => $to->prop("understand"),
+				)).html::hidden(array(
+					"name" => "lang_understand[".$to->id()."]",
+					"value" => $to->prop("understand"),
+				)),
+				"write" => html::select(array(
+					"name" => "lang[".$to->id()."][write]",
+					"options" => $lang_ops,
+					"selected" => $to->prop("write"),
+				)).html::hidden(array(
+					"name" => "lang_write[".$to->id()."]",
+					"value" => $to->prop("write"),
+				)),
+			));
+		}
+	}
+
+	function _get_skills_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "select",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "skill",
+			"caption" => t("Oskus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "level",
+			"caption" => t("Tase"),
+			"align" => "center",
+		));
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SKILL_LEVEL")) as $conn)
+		{
+			$to = $conn->to();
+			
+			if(!isset($parents[$to->prop("skill.parent")]))
+			{
+				$parent_obj = obj($to->prop("skill.parent"));
+				$parents[$to->prop("skill.parent")] = $parent_obj->name();
+			}
+			$parent = $parents[$to->prop("skill.parent")];
+
+			if(!isset($options[$to->prop("skill.lvl_meta")]))
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $to->prop("skill.lvl_meta"),
+					"status" => object::STAT_ACTIVE,
+					"lang_id" => array(),
+					"sort_by" => "jrk",
+				));
+				$options[$to->prop("skill.lvl_meta")][0] = t("--vali--");
+				$options[$to->prop("skill.lvl_meta")] += $ol->names();
+			}
+
+			$level = ($to->prop("skill.lvl")) ? html::select(array(
+				"name" => "skills[".$to->id()."]",
+				"options" => $options[$to->prop("skill.lvl_meta")],
+				"selected" => $to->prop("level"),
+			)) : "";
+			$t->define_data(array(
+				"oid"  => $to->id(),
+				"skill" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $to->id(), "return_url" => get_ru()), CL_CRM_SKILL_LEVEL),
+					"caption" => $to->prop("skill.name")
+				)),
+				"level" => $level.html::hidden(array(
+					"name" => "skills_old[".$to->id()."]",
+					"value" => $to->prop("level"),
+				)),
+				"parent" => $parent,
+			));
+		}
+		$t->set_rgroupby(array(
+			"parent" => "parent",
+		));
+	}
+
+	function _get_recommends_tlb($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_new_button(array(CL_CRM_RECOMMENDATION), $arr["obj_inst"]->id());
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_obj",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
+	}
+
+	function _get_recommends_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Soovitav isik"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "jobwish",
+			"caption" => t("T&ouml;&ouml;soov, mille juurde soovitus kuulub"),
+			"align" => "center",
+		));
+		// Waitin for bug #227455.
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_CRM_RECOMMENDATION,
+				"CL_CRM_RECOMMENDATION.RELTYPE_JOBWISH.RELTYPE_PERSON" => $arr["obj_inst"]->id(),
+			),
+			array(
+				//CL_CRM_RECOMMENDATION => array("person.name" => "person", "jobwish.name" => "jobwish"),			// This is not possible at this very moment.
+				CL_CRM_RECOMMENDATION => array("person", "jobwish"),
+			)
+		);
+		foreach($odl->arr() as $oid => $odata)
+		{
+			$p = obj($odata["person"]);
+			$j = obj($odata["jobwish"]);
+			$t->define_data(array(
+				"oid" => $oid,
+				"person" => html::obj_change_url($odata["person"]),
+				"jobwish" => html::obj_change_url($odata["jobwish"]),
+			));
 		}
 	}
 
@@ -1205,22 +1485,97 @@ class crm_person extends class_base
 		return $res;
 	}
 
-
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
+		$personnel_management_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 		switch($data["name"])
 		{
-			case "education_edit[speciality]":
-				if(!$arr["called_from"] == "releditor_table")
+			case "edulevel":
+				$data["options"] = $this->edulevel_options;
+				break;
+			case "udef_skills_1_re":
+			case "udef_skills_2_re":
+			case "udef_skills_3_re":
+			case "udef_skills_4_re":
+			case "udef_skills_5_re":
+				$skills = $personnel_management_inst->get_udef_skills(array("id" => $personnel_management_inst->get_sysdefault()));
+				$i = substr($data["name"], 12, 1);
+				$skill = $skills[$i];
+				if(is_oid($skill["skill"]))
 				{
-					$data["value"] = 111;
+					$data["reltype"] = "RELTYPE_SKILL_LEVEL_".$i;
+					$props = array("skill");
+					if($skill["levels"])
+						$props[] = "name";
+					$data["props"] = $props;
+					$data["table_fields"] = $props;
+					$data["mode"] = "manager";
+					$data["skill.options"] = $this->get_skills($skill["skill"]);
 				}
 				break;
-			case "work_tbl":
-				return $this->_get_work_tbl($arr);
+
+			case "udef_skills_1_tb":
+			case "udef_skills_2_tb":
+			case "udef_skills_3_tb":
+			case "udef_skills_4_tb":
+			case "udef_skills_5_tb":
+				$this->_get_udef_skills_tb($arr);
 				break;
+
+			case "udef_skills_1":
+			case "udef_skills_2":
+			case "udef_skills_3":
+			case "udef_skills_4":
+			case "udef_skills_5":
+				// The cfgform should still override this.
+				if($data["caption"] == $data["orig_caption"])
+				{
+					$skills = $personnel_management_inst->get_udef_skills(array("id" => $personnel_management_inst->get_sysdefault()));
+					$skill = $skills[substr($data["name"], 12, 1)];
+					if(is_oid($skill["skill"]))
+					{
+						$skill_obj = obj($skill["skill"]);
+						$data["caption"] = $skill_obj->name();
+					}
+				}
+				break;
+
+			case "mlang":
+				$pm = obj($personnel_management_inst->get_sysdefault());
+				$data["options"][0] = t("--vali--");
+				foreach($personnel_management_inst->get_languages() as $lkey => $lname)
+				{
+					$data["options"][$lkey] = $lname;
+				}
+				break;
+
+			case "drivers_license":
+				$stupid = array("a1", "a2", "a", "b1", "b", "c1", "c", "d1", "d", "e");
+				$data["options"] = $this->drivers_licence_categories;
+				$c = 0;
+				foreach($stupid as $s)
+				{
+					$data["value"] = str_replace($s, "", $data["value"], &$c);
+					if($c > 0)
+						$selected[$s] = $s;
+				}
+				$data["value"] = $selected;
+				break;
+
+			case "jobs_wanted_tb":
+				$t = &$data["vcl_inst"];
+				$t->add_new_button(array(CL_PERSONNEL_MANAGEMENT_JOB_WANTED), $arr["obj_inst"]->id(), 77);
+				$t->add_button(array(
+					"name" => "delete",
+					"img" => "delete.gif",
+					"tooltip" => t("Kustuta"),
+					"action" => "delete_obj",
+					"confirm" => t("Oled kindel, et kustutada?"),
+				));
+				break;
+
 			case "nationality":
 				$ol = new object_list(array(
 					"site_id" => array(),
@@ -1229,12 +1584,14 @@ class crm_person extends class_base
 				));
 				$data["options"] = array("" => " ")  + $ol->names();
 				break;
+
 			case "org_section":
 				if(!is_array($data["value"]) && is_array(unserialize($data["value"])))
 				{
 					$data["value"] = unserialize($data["value"]);
 				}
 				break;
+
 			case "work_projects":
 				$t = &$data["vcl_inst"];
 				$t->define_field(array(
@@ -1257,7 +1614,7 @@ class crm_person extends class_base
 				));
 				$t->define_field(array(
 					"name" => "description",
-					"caption" => t("&Uuml;lessanded"),
+					"caption" => t("&Uuml;lesanded"),
 				));
 
 
@@ -1342,16 +1699,6 @@ class crm_person extends class_base
 				$this->_ext_sys_t(&$arr);
 				break;
 
-			case "edulevel":
-				$data["options"] = array(
-					0 => t("-- vali --"),
-					1 => t("p&otilde;hi"),
-					2 => t("kesk"),
-					3 => t("kesk-eri"),
-					4 => t("k&otilde;rgem"),
-				);
-				break;
-
 			case "citizenship_table":
 				$cit = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CITIZENSHIP"));
 				if(!sizeof($cit))
@@ -1359,10 +1706,6 @@ class crm_person extends class_base
 					return PROP_IGNORE;
 				}
 				$this->_get_citizenship_table(&$arr);
-				break;
-
-			case "person_tb":
-				$this->_get_person_tb(&$arr);
 				break;
 
 			case "cv_view_tb":
@@ -1459,10 +1802,6 @@ class crm_person extends class_base
 					"rows" => t("Ridade kaupa"),
 					"" => t("Kokkuv&otilde;te"),
 				);
-				break;
-
-			case "my_stats":
-				$this->_get_my_stats($arr);
 				break;
 
 			case "server_folder":
@@ -1807,11 +2146,7 @@ class crm_person extends class_base
 				}
 				else
 				{
-					$data["value"] = html::get_change_url(
-						$tmp->id(),
-						array("return_url" => get_ru()),
-						$tmp->name()
-					);
+					$data["value"] = html::obj_change_url($tmp->id());
 				}
 				break;
 
@@ -1841,10 +2176,7 @@ class crm_person extends class_base
 					if ($ol->count())
 					{
 						$b = $ol->begin();
-						$data["value"] = html::href(array(
-							"url" => html::get_change_url($b->id(), array("return_url" => get_ru())),
-							"caption" => t("Muuda")
-						));
+						$data["value"] = html::obj_change_url($b->id(), t("Muuda"));
 						return PROP_OK;
 					}
 				}
@@ -1997,10 +2329,7 @@ class crm_person extends class_base
 			//kliendisuhte teema
 			case "buyer_contact_person":
 			case "contact_person":
-				$data["value"] = html::href(array(
-					"url" => html::get_change_url($arr["obj_inst"]->id()),
-					"caption" => $arr["obj_inst"]->name(),
-				));
+				$data["value"] = html::obj_change_url($arr["obj_inst"]->id());
 				break;
 
 			case "co_is_cust":
@@ -2015,6 +2344,179 @@ class crm_person extends class_base
 
 	}
 
+	function _get_candidate_tb($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_obj",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
+	}
+
+	function _get_candidate_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "job_offer",
+			"caption" => t("T&ouml;&ouml;pakkumine"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "profession",
+			"caption" => t("Ametikoht"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "company",
+			"caption" => t("Organisatsioon"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "deadline",
+			"caption" => t("T&auml;htaeg"),
+			"align" => "center",
+		));
+		foreach($arr["obj_inst"]->connections_to(array("from.class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE, "type" => "RELTYPE_PERSON")) as $conn)
+		{
+			$from = $conn->from();
+			$t->define_data(array(
+				"oid" => $from->id(),
+				"job_offer" => html::obj_change_url($from->prop("job_offer")),
+				"profession" => html::obj_change_url($from->prop("job_offer.profession")),
+				"company" => html::obj_change_url($from->prop("job_offer.company")),
+				"deadline" => get_lc_date($from->prop("job_offer.end")),
+			));
+		}
+	}
+
+	function _get_education_tlb($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_new_button(array(CL_CRM_PERSON_EDUCATION), $arr["obj_inst"]->id(), 23);		// RELTYPE_EDUCATION
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_obj",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
+		$t->add_save_button();
+	}
+
+	function _get_education_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "school",
+			"caption" => t("Kool"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "degree",
+			"caption" => t("Akadeemiline kraad"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "field",
+			"caption" => t("Valdkond"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "speciality",
+			"caption" => t("Eriala"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "main_speciality",
+			"caption" => t("P&otilde;hieriala"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "obtain_language",
+			"caption" => t("Omandamise keel"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => t("Algus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => t("L&otilde;pp"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "end_date",
+			"caption" => t("L&otilde;petamise kuup&auml;ev"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "diploma_nr",
+			"caption" => t("Diplomi number"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",			
+		));
+		$deg_ops = array(
+			"pohiharidus" => t("P&otilde;hiharidus"),
+			"keskharidus" => t("Keskharidus"),
+			"keskeriharidus" => t("Kesk-eriharidus"),
+			"diplom" => t("Diplom"),
+			"bakalaureus" => t("Bakalaureus"),
+			"magister" => t("Magister"),
+			"doktor" => t("Doktor"),
+			"teadustekandidaat" => t("Teaduste kandidaat"),
+		);
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EDUCATION")) as $conn)
+		{
+			$to = $conn->to();
+			$t->define_data(array(
+				"oid" => $to->id(),
+				"school" => is_oid($to->prop("school_1")) ? html::obj_change_url($to->prop("school_1")) : $to->prop("school_2"),
+				"degree" => $deg_ops[$to->prop("degree")],
+				"field" => $to->prop("field.name"),
+				"speciality" => $to->prop("speciality"),
+				"main_speciality" => $to->prop("main_speciality") == 0 ? t("Ei") : t("Jah"),
+				"obtain_language" => $to->prop("obtain_language.name"),
+				"start" => get_lc_date($to->prop("start")),
+				"end" => get_lc_date($to->prop("end")),
+				"end_date" => get_lc_date($to->prop("end_date")),
+				"diploma_nr" => $to->prop("diploma_nr"),
+				"change" => html::obj_change_url($to->id(), t("Muuda")),
+			));
+		}
+	}
+
+	function _get_udef_skills_tb($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_save_button();
+	}
+
+	function _get_udef_skills_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+	}
+
 	function recursive_connections_from($ids, $reltype, $array)
 	{
 		foreach(connection::find(array("from" => $ids, "type" => $reltype)) as $conn)
@@ -2025,6 +2527,65 @@ class crm_person extends class_base
 		if(count($new_ids) > 0)
 		{
 			$this->recursive_connections_from($new_ids, $reltype, &$array);
+		}
+	}
+
+	function _get_jobs_wanted_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "field",
+			"caption" => t("Tegevusala"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "load",
+			"caption" => t("T&ouml;&ouml;koormus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "wage",
+			"caption" => t("Palgasoov"),
+			"align" => "center",
+		));
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_WORK_WANTED")) as $conn)
+		{
+			$to = $conn->to();
+			$field = $to->prop("field");
+			if(!empty($field))
+			{
+				$fol = new object_list(array(
+					"oid" => $to->prop("field"),
+					"parent" => array(),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"status" => array(),
+				));
+				$field = "";
+				foreach($fol->names() as $name)
+				{
+					if(strlen($field) != 0)
+						$field .= ", ";
+					$field .= $name;
+				}
+			}
+			$t->define_data(array(
+				"oid" => $to->id(),
+				"name" => html::obj_change_url($to->id()),
+				"field" => $field,
+				"load" => $to->prop("load.name"),
+				"wage" => $to->prop("pay")." kuni ".$to->prop("pay2"),
+			));
 		}
 	}
 
@@ -2949,6 +3510,31 @@ class crm_person extends class_base
 		return $this->overview;
 	}
 
+	function on_connect_job_wanted_to_person($arr)
+	{
+		$conn = $arr['connection'];
+		$target_obj = $conn->to();
+		if($target_obj->class_id() == CL_CRM_PERSON)
+		{
+			$target_obj->connect(array(
+				'to' => $conn->prop('from'),
+				'reltype' => "RELTYPE_WORK_WANTED",
+			));
+		}
+	}
+
+	function on_disconnect_job_wanted_from_person($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PERSON)
+		{
+			$target_obj->disconnect(array(
+				"from" => $conn->prop("from"),
+			));
+		};
+	}
+
 
 	function on_connect_section_to_person($arr)
 	{
@@ -2961,7 +3547,6 @@ class crm_person extends class_base
 				'reltype' => "RELTYPE_SECTION",
 			));
 		}
-
 	}
 
 
@@ -3152,7 +3737,7 @@ class crm_person extends class_base
 
 		$table->define_field(array(
 			"name" => "tasks",
-			"caption" => t("T&ouml;&ouml;&uuml;lessanded"),
+			"caption" => t("T&ouml;&ouml;&uuml;lesanded"),
 		));
 
 		$table->define_field(array(
@@ -3376,6 +3961,34 @@ class crm_person extends class_base
 				aw_restore_acl();
 			}
 		}
+		
+		if($this->can("view", $arr["obj_inst"]->meta("temp_ofr_id")))
+		{
+			$o = obj($arr["obj_inst"]->meta("temp_ofr_id"));
+			$p = $arr["obj_inst"];
+
+			$c = new object;
+			$c->set_class_id(CL_PERSONNEL_MANAGEMENT_CANDIDATE);
+			$c->set_status(object::STAT_ACTIVE);
+			$c->set_parent($o->id());
+			$c->set_name($p->name()." kandidatuur kohale ".$o->name());
+			$c->set_prop("person", $p->id());
+			$c->save();
+
+			// Job offer to candidate.
+			$o->connect(array(
+				"to" => $c->id(),
+				"reltype" => "RELTYPE_CANDIDATE",
+			));
+			// Candidate to person.
+			$c->connect(array(
+				"to" => $p->id(),
+				"reltype" => "RELTYPE_PERSON",
+			));
+			// Don't wanna do it twice.
+			$p->set_meta("temp_ofr_id", "");
+			$p->save();
+		}
 	}
 
 	function gen_code($o)
@@ -3459,6 +4072,11 @@ class crm_person extends class_base
 			$this->set_work_project_tasks($arr["obj_inst"]->id(), $tasks);
 		}
 		$arr["obj_inst"]->set_meta("no_create_user_yet", NULL);
+		
+		if (!empty($arr["request"]["ofr_id"]))
+		{
+			$arr["obj_inst"]->set_meta("temp_ofr_id", $arr["request"]["ofr_id"]);
+		};
 	}
 
 
@@ -3981,6 +4599,7 @@ class crm_person extends class_base
 			case "udef_ta4":
 			case "udef_ta5":
 			case "ext_id_alphanumeric":
+			case "addinfo":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "text"
@@ -3998,6 +4617,9 @@ class crm_person extends class_base
 			case "bill_penalty_pct":
 			case "buyer_contract_person":
 			case "address":
+			case "edulevel":
+			case "mlang":
+			case "dl_can_use":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "int",
@@ -4008,6 +4630,13 @@ class crm_person extends class_base
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "varchar(255)"
+				));
+				break;
+
+			case "drivers_license":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "varchar(20)"
 				));
 				break;
 		}
@@ -4024,6 +4653,7 @@ class crm_person extends class_base
 		$arr["add_to_task"] = $_GET["add_to_task"];
 		$arr["add_to_co"] = $_GET["add_to_co"];
 		$arr["post_ru"] = post_ru();
+		$arr["ofr_id"] = $_GET["ofr_id"];
 	}
 
 	function callback_mod_tab($arr)
@@ -4081,7 +4711,7 @@ class crm_person extends class_base
 			"site_id" => array()
 		));
 		$o = $ol->begin();
-		header("Location: ".html::get_change_url($o->id())."&return_url=".urlencode($arr["return_url"])."&warn_conflicts=1");
+		header("Location: ".html::get_change_url($o->id(), array("return_url" => $arr["return_url"], "warn_conflicts" => 1)));
 		die();
 	}
 
@@ -4268,19 +4898,35 @@ class crm_person extends class_base
 
 	function get_cv_tpl()
 	{
-		$dir = aw_ini_get("basedir")."/crm/person/cv/";
-		$ret = array(
-			$dir."cv_clonmel.tpl" => "clonmel",
-			$dir."show_cv.tpl" => "default",
-		);
+		$dir = aw_ini_get("tpldir")."/crm/person/cv/";
+		$handle = opendir($dir);
+		$ret = array();
+		while(false !== ($file = readdir($handle)))
+		{
+			if(preg_match("/\\.tpl/", $file))
+				$ret[$dir.$file] = str_replace(".tpl", "", $file);
+		}
 		return $ret;
 	}
 
 	/**
 		@attrib name=show_cv all_args=1 params=name
+
+		@parem id required type=oid acl=view
+			The oid of the person viewed.
+
+		@param cv optional type=string
+			The cv template to use.
 	**/
 	function show_cv($arr)
 	{
+		$img_inst = get_instance(CL_IMAGE);
+		$phone_inst = get_instance(CL_CRM_PHONE);
+		$edu_inst = get_instance(CL_CRM_PERSON_EDUCATION);
+		$pers_lang_inst = get_instance(CL_CRM_PERSON_LANGUAGE);
+		$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
+		$sm_inst = get_instance(CL_CRM_SKILL_MANAGER);
+
 		if(!$arr["cv"])
 		{
 			$arr["cv"] = "cv/".basename(key($this->get_cv_tpl()));
@@ -4293,23 +4939,13 @@ class crm_person extends class_base
 		}
 		$person_obj = &obj($person_obj->prop("from"));
 
-		$email_addr = "";
-		if ($this->can("view", $person_obj->prop("email")))
-		{
+		// Dunno where prop("email") gets its value, but it's not OID!
+		if(is_oid($person_obj->prop("email")))
 			$email_obj = &obj($person_obj->prop("email"));
-			$email_addr = $email_obj->prop("email");
-		}
 		else
-		if (is_email($person_obj->prop("email")))
-		{
-			$email_addr = $person_obj->prop("email");
-		}
-
-		$phone_obj = obj();
-		if ($this->can("view", $person_obj->prop("phone")))
-		{
-			$phone_obj = &obj($person_obj->prop("phone"));
-		}
+			// Not the neatest way to solve it, but seriously. What if person has no e-mail??
+			$email_obj = new object();
+		$phone_obj = &obj($person_obj->prop("phone"));
 
 		$this->read_template($arr["cv"]);
 
@@ -4497,7 +5133,6 @@ class crm_person extends class_base
 		$gidlist = aw_global_get("gidlist_oid");
 		$personname = $person_obj->name();
 		$cur_job = $this->has_current_job_relation($ob->id());
-		$img_inst = get_instance(CL_IMAGE);
 		$bd = split("-", $ob->prop("birthday"));
 		$bd = mktime(0,0,0,$bd[1],$bd[2], $bd[0]);
 		$tio = $cur_job?(time() - $cur_job->prop("start")):false;
@@ -4519,8 +5154,8 @@ class crm_person extends class_base
 			"birthday" => date("d.m.Y", $bd),
 			"social_status" => $person_obj->prop("social_status"),
 			"mail" => html::href(array(
-				"url" => "mailto:" . $email_addr,
-				"caption" => $email_addr,
+				"url" => "mailto:" . $email_obj->prop("mail"),
+				"caption" => $email_obj->prop("mail"),
 			)),
 			"phone" => $phone_obj->name(),
 			"sectors" => $tmp_sectors,
@@ -4534,7 +5169,836 @@ class crm_person extends class_base
 			"picture_url" => $img_inst->get_url_by_id($ob->prop("picture")),
 			"company_logo" => $this->can("view",$logo)?$img_inst->get_url_by_id($logo):"",
 		));
+
+		// Don't want anything broken, so I leave it exactly as it is and add my share here. -kaarel
+		if($this->can("view", $arr["id"]))
+		{
+			$o = obj($arr["id"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		// SUB: CRM_PERSON.PICTURE
+		if($this->can("view", $o->prop("picture")))
+		{
+			$this->vars(array(
+				"crm_person.picture" => $img_inst->view(array("id" => $o->prop("picture"))),
+			));
+			$this->vars(array(
+				"CRM_PERSON.PICTURE" => $this->parse("CRM_PERSON.PICTURE"),
+			));
+		}
+		// END SUB: CRM_PERSON.PICTURE
+		
+		// SUB: CRM_PERSON.PERSONAL_INFO
+		$parse_cppi = 0;
+
+		//		SUB: CRM_PERSON.NAME
+		if(strlen($o->name()) > 0)
+		{
+			$this->vars(array(
+				"crm_person.name" => $o->name(),
+			));
+			$this->vars(array(
+				"CRM_PERSON.NAME" => $this->parse("CRM_PERSON.NAME"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.NAME
+
+		//		SUB: CRM_PERSON.PERSONAL_ID
+		// This needs some heavier check. Maybe I'll come back to it later. Don't think it's that important. Prolly should be checked already when setting the property.
+		if(preg_match("/[34]\d{10}/", $o->prop("personal_id")))
+		{
+			$this->vars(array(
+				"crm_person.personal_id" => $o->prop("personal_id"),
+			));
+			$this->vars(array(
+				"CRM_PERSON.PERSONAL_ID" => $this->parse("CRM_PERSON.PERSONAL_ID"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.PERSONAL_ID
+
+		//		SUB: CRM_PERSON.BIRTHDAY
+		// Birthday is saved in YYYY-MM-DD format.
+		//if(preg_match("(19|20)[1-9]{2}[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])", $o->prop("birthday")))
+		if(strlen($o->prop("birthday")) == 10)
+		{
+			$date_bits = explode("-", $o->prop("birthday"));
+			$this->vars(array(
+				"crm_person.birthday" => get_lc_date(mktime(0, 0, 0, $date_bits[1], $date_bits[2], $date_bits[0])),
+				"crm_person.age" => $o->get_age(),
+			));
+			$this->vars(array(
+				"CRM_PERSON.BIRTHDAY" => $this->parse("CRM_PERSON.BIRTHDAY"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.BIRTHDAYGENDER
+
+		//		SUB: CRM_PERSON.GENDER
+		if($o->prop("gender") == 2 || $o->prop("gender") == 1)
+		{
+			$this->vars(array(
+				"crm_person.gender" => ($o->prop("gender") == 1) ? t("Mees") : t("Naine"),
+			));
+			$this->vars(array(
+				"CRM_PERSON.GENDER" => $this->parse("CRM_PERSON.GENDER"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.GENDER
+
+		//		SUB: CRM_PERSON.NATIONALITY
+		if($this->can("view", $o->prop("nationality")))
+		{
+			$this->vars(array(
+				"crm_person.nationality" => $o->prop("nationality.name"),
+			));
+			$this->vars(array(
+				"CRM_PERSON.NATIONALITY" => $this->parse("CRM_PERSON.NATIONALITY"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.NATIONALITY
+
+		//		SUB: CRM_PERSON.MLANG
+		if($this->can("view", $o->prop("mlang")))
+		{
+			$this->vars(array(
+				"crm_person.mlang" => $o->prop("mlang.name"),
+			));
+			$this->vars(array(
+				"CRM_PERSON.MLANG" => $this->parse("CRM_PERSON.MLANG"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.MLANG
+
+		//		SUB: CRM_PERSON.EDULEVEL
+		if($o->prop("edulevel") > 0)
+		{
+			$options = $this->edulevel_options;
+			$this->vars(array(
+				"crm_person.edulevel" => $options[$o->prop("edulevel")],
+			));
+			$this->vars(array(
+				"CRM_PERSON.EDULEVEL" => $this->parse("CRM_PERSON.EDULEVEL"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.EDULEVEL
+
+		//		SUB: CRM_PERSON.SOCIAL_STATUS
+		if($o->prop("social_status") > 0 && $o->prop("social_status") < 5)
+		{
+			$social_status = array(
+				3 => t("Vallaline"),
+				1 => t("Abielus"),
+				2 => t("Lahutatud"),
+				4 => t("Vabaabielus"),
+			);
+			$this->vars(array(
+				"crm_person.social_status" => $social_status[$o->prop("social_status")],
+			));
+			$this->vars(array(
+				"CRM_PERSON.SOCIAL_STATUS" => $this->parse("CRM_PERSON.SOCIAL_STATUS"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.SOCIAL_STATUS
+
+		//		SUB: CRM_PERSON.CHILDREN1
+		if($o->prop("children1") >= 0)
+		{
+			$this->vars(array(
+				"crm_person.children1" => $o->prop("children1"),
+			));
+			$this->vars(array(
+				"CRM_PERSON.CHILDREN1" => $this->parse("CRM_PERSON.CHILDREN1"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.CHILDREN1
+
+		//		SUB: CRM_PERSON.MODIFIED
+		$this->vars(array(
+			"crm_person.modified" => get_lc_date($o->prop("modified")),
+		));
+		$this->vars(array(
+			"CRM_PERSON.MODIFIED" => $this->parse("CRM_PERSON.MODIFIED"),
+		));
+		//		END SUB: CRM_PERSON.MODIFIED
+
+		if($parse_cppi > 0)
+		{
+			$this->vars(array(
+				"CRM_PERSON.PERSONAL_INFO" => $this->parse("CRM_PERSON.PERSONAL_INFO"),
+			));
+		}
+		// END SUB: CRM_PERSON.PERSONAL_INFO
+
+		// SUB: CITIZENSHIPS
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_CITIZENSHIP",
+		));
+		if(count($conns) > 0)
+		{
+			$CITIZENSHIP = "";
+			foreach($conns as $conn)
+			{
+				// SUB: CITIZENSHIP
+				$cs = $conn->to();
+				$start = $cs->prop("start");
+				$start = mktime(0, 0, 0, $start["month"], $start["day"], $start["year"]);
+				$end = $cs->prop("end");
+				$end = mktime(0, 0, 0, $end["month"], $end["day"], $end["year"]);
+				$this->vars(array(
+					"citizenship.country" => $cs->prop("country.name"),
+					"citizenship.start" => get_lc_date($start),
+					"citizenship.end" => $end >= $start ? get_lc_date($end) : t("t&auml;nap&auml;evani"),
+				));
+				$CITIZENSHIP .= $this->parse("CITIZENSHIP");
+				// END SUB: CITIZENSHIP
+			}
+			$this->vars(array(
+				"CITIZENSHIP" => $CITIZENSHIP,
+			));
+			$this->vars(array(
+				"CITIZENSHIPS" => $this->parse("CITIZENSHIPS"),
+			));
+		}
+		// END SUB: CITIZENSHIPS
+
+		// SUB: CRM_PERSON_EDUCATIONS
+		$parse_cpe = 0;
+
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_EDUCATION",
+		));
+		$options = $edu_inst->degree_options;
+		$CRM_PERSON_EDUCATION = "";
+		foreach($conns as $conn)
+		{
+			//	SUB: CRM_PERSON_EDUCATION
+			$to = $conn->to();
+			$this->vars(array(
+				"crm_person_education.school" => is_oid($to->prop("school_1")) ? $to->prop("school_1.name") : $to->prop("school_2"),
+				"crm_person_education.degree" => $options[$to->prop("degree")],
+				"crm_person_education.field" => $to->prop("field.name"),
+				"crm_person_education.speciality" => $to->prop("speciality"),
+				"crm_person_education.main_speciality" => ($to->prop("main_speciality") == 1) ? t("Jah") : t("Ei"),
+				"crm_person_education.in_progress" => ($to->prop("in_progress") == 1) ? t("Jah") : t("Ei"),
+				"crm_person_education.obtain_language" => $to->prop("obtain_language.name"),
+				"crm_person_education.start" => get_lc_date($to->prop("start")),
+				"crm_person_education.end" => get_lc_date($to->prop("end")),
+				"crm_person_education.end_date" => get_lc_date($to->prop("end_date")),
+				"crm_person_education.diploma_nr" => $to->prop("diploma_nr"),
+			));
+
+			$CRM_PERSON_EDUCATION .= $this->parse("CRM_PERSON_EDUCATION");
+
+			$parse_cpe++;
+			//	END SUB: CRM_PERSON_EDUCATION
+		}
+
+		if($parse_cpe > 0)
+		{
+			$this->vars(array(
+				"CRM_PERSON_EDUCATION" => $CRM_PERSON_EDUCATION,
+			));
+			$this->vars(array(
+				"CRM_PERSON_EDUCATIONS" => $this->parse("CRM_PERSON_EDUCATIONS"),
+			));
+		}
+		// END SUB: CRM_PERSON_EDUCATIONS
+
+		// SUB: CRM_PERSON_ADD_EDUCATIONS
+		$parse_cpae = 0;
+
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_ADD_EDUCATION",
+		));
+		$CRM_PERSON_ADD_EDUCATION = "";
+		foreach($conns as $conn)
+		{
+			//	SUB: CRM_PERSON_ADD_EDUCATION
+			$to = $conn->to();
+			$this->vars(array(
+				"crm_person_add_education.org" => $to->prop("org"),
+				"crm_person_add_education.field" => $to->prop("field"),
+				"crm_person_add_education.time" => get_lc_date($to->prop("time")),
+				"crm_person_add_education.length" => $to->prop("length"),
+			));
+
+			$CRM_PERSON_ADD_EDUCATION .= $this->parse("CRM_PERSON_ADD_EDUCATION");
+
+			$parse_cpae++;
+			//	END SUB: CRM_PERSON_ADD_EDUCATION
+		}
+
+		if($parse_cpae > 0)
+		{
+			$this->vars(array(
+				"CRM_PERSON_ADD_EDUCATION" => $CRM_PERSON_ADD_EDUCATION,
+			));
+			$this->vars(array(
+				"CRM_PERSON_ADD_EDUCATIONS" => $this->parse("CRM_PERSON_ADD_EDUCATIONS"),
+			));
+		}
+		// END SUB: CRM_PERSON_ADD_EDUCATIONS
+
+		// SUB: CRM_PERSON_LANGUAGES
+		$parse_cpl = 0;
+		$options = $pers_lang_inst->lang_lvl_options;
+		$CRM_PERSON_LANGUAGE = "";
+		foreach($o->connections_from(array("type" => "RELTYPE_LANGUAGE_SKILL")) as $conn)
+		{
+			$to = $conn->to();
+			if(is_oid($to->prop("language")))
+			{
+				$this->vars(array(
+					"crm_person_language.language" => $to->prop("language.name"),
+					"crm_person_language.talk" => $options[$to->prop("talk")],
+					"crm_person_language.understand" => $options[$to->prop("understand")],
+					"crm_person_language.write" => $options[$to->prop("write")],
+				));
+				$CRM_PERSON_LANGUAGE .= $this->parse("CRM_PERSON_LANGUAGE");
+			}
+			$parse_cpl++;
+		}
+
+		if($parse_cpl > 0)
+		{
+			$this->vars(array(
+				"CRM_PERSON_LANGUAGE" => $CRM_PERSON_LANGUAGE,
+			));
+			$this->vars(array(
+				"CRM_PERSON_LANGUAGES" => $this->parse("CRM_PERSON_LANGUAGES"),
+			));
+		}
+		// END SUB: CRM_PERSON_LANGUAGES
+
+		if(is_oid($pm_inst->get_sysdefault()))
+		{
+			$pm_obj = obj($pm_inst->get_sysdefault());			
+			$sm_id = $pm_obj->prop("skill_manager");
+
+			$skills = $sm_inst->get_skills(array("id" => $sm_id));
+			$conns = $o->connections_from(array(
+				"type" => "RELTYPE_SKILL_LEVEL",
+			));
+
+			foreach($skills[$sm_id] as $id => $data)
+			{
+				// SUB: CRM_SKILL
+				$CRM_SKILL_LEVEL = "";
+				$parse_sk = 0;
+
+				$this->recursive_ids($id, $skills, &$ids);
+				foreach($conns as $conn)
+				{
+					$to = $conn->to();
+					if(in_array($to->prop("skill"), $ids))
+					{
+						$this->vars(array(
+							"crm_skill_level.skill" => $to->prop("skill.name"),
+							"crm_skill_level.level" => $to->prop("level.name"),
+						));
+						$CRM_SKILL_LEVEL .= $this->parse("CRM_SKILL_LEVEL");
+					}
+					$parse_sk++;
+				}
+
+				if($parse_sk > 0)
+				{
+					$this->vars(array(
+						"CRM_SKILL_LEVEL" => $CRM_SKILL_LEVEL,
+						"crm_skill" => $data["name"],
+					));
+					$this->vars(array(
+						"CRM_SKILL" => $this->parse("CRM_SKILL"),
+					));
+				}
+				// END SUB: CRM_SKILL
+			}
+		}
+
+		// SUB: CRM_PERSON.DRIVERS_LICENSE
+		if(strlen($o->prop("drivers_license")) > 0)
+		{
+			$stupid = array("a1", "a2", "a", "b1", "b", "c1", "c", "d1", "d", "e");
+			$options = $this->drivers_licence_categories;
+			$dl = $o->prop("drivers_license");
+			foreach($stupid as $s)
+			{
+				$dl = str_replace($s, "", $dl, &$c);
+				if($c > 0)
+				{
+					if(strlen($v) > 0)
+						$v .= ", ";
+					$v .= $options[$s];
+				}
+			}
+			$this->vars(array(
+				"crm_person.drivers_license" => $v,
+				"crm_person.dl_can_use" => ($o->prop("dl_can_use") == 1) ? t("Jah") : t("Ei"),
+			));
+			$this->vars(array(
+				"CRM_PERSON.DRIVERS_LICENSE" => $this->parse("CRM_PERSON.DRIVERS_LICENSE"),
+			));
+		}
+		// END SUB: CRM_PERSON.DRIVERS_LICENSE
+
+		// SUB: CRM_COMPANY_RELATIONS
+		$parse_ccr = 0;
+
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_COMPANY_RELATION",
+		));
+		$CRM_COMPANY_RELATION = "";
+		foreach($conns as $conn)
+		{
+			//	SUB: CRM_COMPANY_RELATION
+			$to = $conn->to();
+			if(strlen($to->prop("start")) == 10 && $to->prop("start") != "0000-00-00")
+			{
+				$s = explode("-", $to->prop("start"));
+				$start = get_lc_date(mktime(0, 0, 0, $s[1], $s[2], $s[0]));
+			}
+			else
+			{
+				$start = t("M&auml;&auml;ramata");
+			}
+
+			if(strlen($to->prop("end")) == 10 && $to->prop("end") != "0000-00-00")
+			{
+				$e = explode("-", $to->prop("end"));
+				$end = get_lc_date(mktime(0, 0, 0, $e[1], $e[2], $e[0]));
+			}
+			else
+			{
+				$end = t("M&auml;&auml;ramata");
+			}
+
+			$this->vars(array(
+				"crm_company_relation.org" => $to->prop("org.name"),
+				"crm_company_relation.start" => $start,
+				"crm_company_relation.end" => $end,
+				"crm_company_relation.add_info" => nl2br($to->prop("add_info")),
+			));
+
+			$CRM_COMPANY_RELATION .= $this->parse("CRM_COMPANY_RELATION");
+
+			$parse_ccr++;
+			//	END SUB: CRM_COMPANY_RELATION
+		}
+
+		if($parse_ccr > 0)
+		{
+			$this->vars(array(
+				"CRM_COMPANY_RELATION" => $CRM_COMPANY_RELATION,
+			));
+			$this->vars(array(
+				"CRM_COMPANY_RELATIONS" => $this->parse("CRM_COMPANY_RELATIONS"),
+			));
+		}
+		// END SUB: CRM_COMPANY_RELATIONS
+
+		// SUB: CRM_PERSON.CONTACT
+		$parse_cpc = 0;
+
+		//		SUB: CRM_PERSON.PHONES		
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_PHONE",
+		));
+		$cns2wrs = $o->connections_from(array(
+			"type" => "RELTYPE_CURRENT_JOB",
+		));
+		foreach($cns2wrs as $cn2wr)
+		{					
+			$wr = $cn2wr->to();
+			foreach($wr->connections_from(array("type" => "RELTYPE_PHONE")) as $cn2ph)
+			{
+				$conns[$cn2ph->id()] = $cn2ph;
+			}
+		}
+		$CRM_PERSON_PHONE = "";
+		if(count($conns) > 0)
+		{
+			$ph_types = $phone_inst->phone_types;
+			foreach($conns as $conn)
+			{
+			//		SUB: CRM_PERSON.PHONE
+				$ph = $conn->to();
+				$this->vars(array(
+					"crm_person.phone.name" => $ph->name(),
+					"crm_person.phone.type" => $ph_types[$ph->prop("type")],
+				));
+				$CRM_PERSON_PHONE .= $this->parse("CRM_PERSON.PHONE");
+			//		END SUB: CRM_PERSON.PHONE
+			}
+			$this->vars(array(
+				"CRM_PERSON.PHONE" => $CRM_PERSON_PHONE,
+			));
+			$this->vars(array(
+				"CRM_PERSON.PHONES" => $this->parse("CRM_PERSON.PHONES"),
+			));
+			$parse_cpc++;
+		}
+		//		END SUB: CRM_PERSON.PHONES
+
+		//		SUB: CRM_PERSON.FAXES
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_FAX",
+		));
+		$cns2wrs = $o->connections_from(array(
+			"type" => "RELTYPE_CURRENT_JOB",
+		));
+		foreach($cns2wrs as $cn2wr)
+		{					
+			$wr = $cn2wr->to();
+			foreach($wr->connections_from(array("type" => "RELTYPE_FAX")) as $cn2ph)
+			{
+				$conns[$cn2ph->id()] = $cn2ph;
+			}
+		}
+		$CRM_PERSON_FAX = "";
+		if(count($conns) > 0)
+		{
+			foreach($conns as $conn)
+			{
+			//		SUB: CRM_PERSON.FAX
+				$ph = $conn->to();
+				$this->vars(array(
+					"crm_person.fax" => $ph->name(),
+				));
+				$CRM_PERSON_FAX .= $this->parse("CRM_PERSON.FAX");
+			//		END SUB: CRM_PERSON.FAX
+			}
+			$this->vars(array(
+				"CRM_PERSON.FAX" => $CRM_PERSON_FAX,
+			));
+			$this->vars(array(
+				"CRM_PERSON.FAXES" => $this->parse("CRM_PERSON.FAXES"),
+			));
+			$parse_cpc++;
+		}
+		//		END SUB: CRM_PERSON.FAXES
+
+		//		SUB: CRM_PERSON.EMAILS
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_EMAIL",
+		));
+		$cns2wrs = $o->connections_from(array(
+			"type" => "RELTYPE_CURRENT_JOB",
+		));
+		foreach($cns2wrs as $cn2wr)
+		{					
+			$wr = $cn2wr->to();
+			foreach($wr->connections_from(array("type" => "RELTYPE_EMAIL")) as $cn2ph)
+			{
+				$conns[$cn2ph->id()] = $cn2ph;
+			}
+		}
+		$CRM_PERSON_EMAIL = "";
+		if(count($conns) > 0)
+		{
+			foreach($conns as $conn)
+			{
+			//		SUB: CRM_PERSON.EMAIL
+				$ph = $conn->to();
+				$this->vars(array(
+					"crm_person.email" => $ph->prop("mail"),
+				));
+				$CRM_PERSON_EMAIL .= $this->parse("CRM_PERSON.EMAIL");
+			//		END SUB: CRM_PERSON.EMAIL
+			}
+			$this->vars(array(
+				"CRM_PERSON.EMAIL" => $CRM_PERSON_EMAIL,
+			));
+			$this->vars(array(
+				"CRM_PERSON.EMAILS" => $this->parse("CRM_PERSON.EMAILS"),
+			));
+			$parse_cpc++;
+		}
+		//		END SUB: CRM_PERSON.EMAILS
+
+		//		SUB: CRM_PERSON.ADDRESSES
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_ADDRESS",
+		));
+		$CRM_PERSON_EMAIL = "";
+		if(count($conns) > 0)
+		{
+			foreach($conns as $conn)
+			{
+			//		SUB: CRM_PERSON.ADDRESS
+				$addr = $conn->to();
+				$this->vars(array(
+					"crm_person.address.aadress" => $addr->prop("aadress"),
+					"crm_person.address.linn" => $addr->prop("linn.name"),
+					"crm_person.address.postiindeks" => $addr->prop("postiindeks"),
+					"crm_person.address.maakond" => $addr->prop("maakond.name"),
+					"crm_person.address.piirkond" => $addr->prop("piirkond.name"),
+					"crm_person.address.riik" => $addr->prop("riik.name"),
+				));
+				$CRM_PERSON_ADDRESS .= $this->parse("CRM_PERSON.ADDRESS");
+			//		END SUB: CRM_PERSON.ADDRESS
+			}
+			$this->vars(array(
+				"CRM_PERSON.ADDRESS" => $CRM_PERSON_ADDRESS,
+			));
+			$this->vars(array(
+				"CRM_PERSON.ADDRESSES" => $this->parse("CRM_PERSON.ADDRESSES"),
+			));
+			$parse_cpc++;
+		}
+		//		END SUB: CRM_PERSON.ADDRESSES
+
+		if($parse_cpc > 0)
+		{
+			$this->vars(array(
+				"CRM_PERSON.CONTACT" => $this->parse("CRM_PERSON.CONTACT"),
+			));
+		}
+		// END SUB: CRM_PERSON.CONTACT
+
+		// SUB: CRM_PERSON_WORK_RELATIONS
+		$parse_cpwr = 0;
+		$CRM_PERSON_WORK_RELATION = "";
+
+		$conns = $o->connections_from(array("type" => array("RELTYPE_CURRENT_JOB", "RELTYPE_PREVIOUS_JOB")));
+		
+		foreach($conns as $conn)
+		{
+			$to = $conn->to();
+			$s = $to->prop("start");
+			$e = $to->prop("end");
+			$start = empty($s) ? get_lc_date($s) : t("M&auml;&auml;ramata");
+			$end = empty($e) ? get_lc_date($e) : t("M&auml;&auml;ramata");
+			$this->vars(array(
+				"crm_person_work_relation.org" => $to->prop("org.name"),
+				"crm_person_work_relation.section" => $to->prop("section.name"),
+				"crm_person_work_relation.profession" => $to->prop("profession.name"),
+				"crm_person_work_relation.start" => $start,
+				"crm_person_work_relation.end" => $end,
+				"crm_person_work_relation.tasks" => nl2br($to->prop("tasks")),
+				"crm_person_work_relation.load" => is_oid($to->prop("load")) ? $to->prop("load.name") : t("M&auml;&auml;ramata"),
+			));
+			$CRM_PERSON_WORK_RELATION .= $this->parse("CRM_PERSON_WORK_RELATION");
+			$parse_cpwr++;
+		}
+
+		if($parse_cpwr > 0)
+		{
+			$this->vars(array(
+				"CRM_PERSON_WORK_RELATION" => $CRM_PERSON_WORK_RELATION,
+			));
+			$this->vars(array(
+				"CRM_PERSON_WORK_RELATIONS" => $this->parse("CRM_PERSON_WORK_RELATIONS"),
+			));
+		}
+		// END SUB: CRM_PERSON_WORK_RELATIONS
+
+		// SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED
+		$parse_pmjw = 0;
+		$PERSONNEL_MANAGEMENT_JOB_WANTED = "";
+
+		$conns = $o->connections_from(array("type" => "RELTYPE_WORK_WANTED"));
+		
+		foreach($conns as $conn)
+		{
+			$to = $conn->to();
+
+			$field = "";
+			if(count($to->prop("field")) > 0)
+			{
+				$f_ol = new object_list(array(
+					"class_id" => CL_META,
+					"oid" => $to->prop("field"),
+					"lang_id" => array(),
+					"parent" => array(),
+					"site_id" => array(),
+				));
+				$f_nms = $f_ol->names();
+				foreach($to->prop("field") as $fid)
+				{
+					if(!is_oid($fid))
+						continue;
+
+					if(strlen($field) > 0)
+						$field .= ", ";
+					$field .= $f_nms[$fid];
+				}
+			}
+			$job_type = "";
+			if(count($to->prop("job_type")) > 0)
+			{
+				$jt_ol = new object_list(array(
+					"class_id" => CL_META,
+					"oid" => $to->prop("job_type"),
+					"lang_id" => array(),
+					"parent" => array(),
+					"site_id" => array(),
+				));
+				$jt_nms = $jt_ol->names();
+				foreach($to->prop("job_type") as $jtid)
+				{
+					if(!is_oid($jtid))
+						continue;
+
+					if(strlen($job_type) > 0)
+						$job_type .= ", ";
+					$job_type .= $jt_nms[$jtid];
+				}
+			}
+			$location = "";
+			if(count($to->prop("location")) > 0)
+			{
+				$l_ol = new object_list(array(
+					"class_id" => array(CL_CRM_CITY, CL_CRM_COUNTY, CL_CRM_COUNTRY, CL_CRM_AREA),
+					"oid" => $to->prop("location"),
+					"lang_id" => array(),
+					"parent" => array(),
+					"site_id" => array(),
+				));
+				$l_nms = $l_ol->names();
+				foreach($to->prop("location") as $lid)
+				{
+					if(!is_oid($lid))
+						continue;
+
+					if(strlen($location) > 0)
+						$location .= ", ";
+					$location .= $l_nms[$lid];
+				}
+			}
+
+			$recommendations = "";
+			foreach($to->connections_to(array("from.class_id" => CL_CRM_RECOMMENDATION, "type" => "RELTYPE_JOBWISH")) as $conn2)
+			{
+				$from = $conn2->from();
+				if(strlen($recommendations) > 0)
+					$recommendations .= ", ";
+				$recommendations .= $from->prop("person.name");
+			}
+
+			$this->vars(array(
+				"personnel_management_job_wanted.field" => $field,
+				"personnel_management_job_wanted.job_type" => $job_type,
+				"personnel_management_job_wanted.professions" => nl2br($to->prop("professions")),
+				"personnel_management_job_wanted.load" => is_oid($to->prop("load")) ? $to->prop("load.name") : t("M&auml;&auml;ramata"),
+				"personnel_management_job_wanted.pay" => $to->prop("pay"),
+				"personnel_management_job_wanted.pay2" => $to->prop("pay2"),
+				"personnel_management_job_wanted.location" => $location,
+				"personnel_management_job_wanted.addinfo" => nl2br($to->prop("addinfo")),
+				"recommendation.person" => $recommendations,
+			));
+			$PERSONNEL_MANAGEMENT_JOB_WANTED .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED");
+			$parse_pmjw++;
+		}
+
+		if($parse_pmjw > 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED" => $PERSONNEL_MANAGEMENT_JOB_WANTED,
+			));
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED"),
+			));
+		}
+		// END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED
+
+		// SUB: PREVIOUS_CANDIDACIES
+		$parse_pc = 0;
+		$PREVIOUS_CANDIDACY = "";
+
+		$pm_obj = obj($pm_inst->get_sysdefault());
+
+		$this->vars(array(
+			"personnel_management.owner_org" => $pm_obj->prop("owner_org.name"),
+		));
+
+		foreach($o->connections_to(array("from.class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE, "type" => "RELTYPE_PERSON")) as $conn)
+		{
+			$from = $conn->from();
+			if(!is_oid($from->prop("job_offer")))
+				continue;
+
+			$jo = obj($from->prop("job_offer"));
+			if($jo->status() == object::STAT_ACTIVE && $jo->prop("end") >= (mktime(0, 0, 0, date("m"), date("d"), date("Y"))))
+				continue;
+
+			$this->vars(array(
+				"personnel_management_job_offer.profession" => $jo->prop("profession.name"),
+				"personnel_management_job_offer.field" => $jo->prop("field.name"),
+				"personnel_management_job_offer.end" => get_lc_date($jo->prop("end")),
+			));
+			$PREVIOUS_CANDIDACY .= $this->parse("PREVIOUS_CANDIDACY");
+			$parse_pc++;
+		}
+
+		if($parse_pc > 0)
+		{
+			$this->vars(array(
+				"PREVIOUS_CANDIDACY" => $PREVIOUS_CANDIDACY,
+			));
+			$this->vars(array(
+				"PREVIOUS_CANDIDACIES" => $this->parse("PREVIOUS_CANDIDACIES"),
+			));
+		}
+		// END SUB: PREVIOUS_CANDIDACIES
+
+		// SUB: PERSONNEL_MANAGEMENT_CANDIDATES
+		$parse_pmc = 0;
+		$PERSONNEL_MANAGEMENT_CANDIDATE = "";
+
+		foreach($o->connections_to(array("from.class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE, "type" => "RELTYPE_PERSON")) as $conn)
+		{
+			$from = $conn->from();
+			if(!is_oid($from->prop("job_offer")))
+				continue;
+
+			$jo = obj($from->prop("job_offer"));
+			if($jo->status() != object::STAT_ACTIVE || $jo->prop("end") < (mktime(0, 0, 0, date("m"), date("d"), date("Y"))))
+				continue;
+
+			$this->vars(array(
+				"personnel_management_job_offer.company" => $jo->prop("company.name"),
+				"personnel_management_job_offer.profession" => $jo->prop("profession.name"),
+				"personnel_management_job_offer.field" => $jo->prop("field.name"),
+				"personnel_management_job_offer.end" => get_lc_date($jo->prop("end")),
+			));
+			$PERSONNEL_MANAGEMENT_CANDIDATE .= $this->parse("PERSONNEL_MANAGEMENT_CANDIDATE");
+			$parse_pmc++;
+		}
+
+		if($parse_pmc > 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_CANDIDATE" => $PERSONNEL_MANAGEMENT_CANDIDATE,
+			));
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_CANDIDATES" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES"),
+			));
+		}
+		// END SUB: PERSONNEL_MANAGEMENT_CANDIDATES
+
+
 		return $arr["die"]?die($this->parse()):$this->parse();
+	}
+
+	function recursive_ids($id, $arr, $ids)
+	{
+		foreach($arr[$id] as $id_ => $arr_)
+		{
+			$ids[] = $this->recursive_ids($id_, $arr, &$ids);
+		}
+		return $id;
 	}
 
 	function get_project_roles($arr)
@@ -4670,10 +6134,7 @@ class crm_person extends class_base
 			$org_fixed = $query["id"];
 		}
 		$p = $arr["obj_inst"];
-		$p_href = html::href(array(
-			'url' => html::get_change_url($p->id()),
-			'caption' => $p->name(),
-		));
+		$p_href = html::obj_change_url($p->id());
 
 		if (!is_oid($p->id()))
 		{
@@ -4710,7 +6171,25 @@ class crm_person extends class_base
 
 			$cou++;
 		}
-		$ret = "";
+		$ret = $p_href;
+		$ph_inst = get_instance(CL_CRM_PHONE);
+		$phone_types = $ph_inst->phone_types;
+		foreach($p->connections_from(array("type" => "RELTYPE_PHONE")) as $cn)
+		{
+			$to = $cn->to();
+			$ret .= ", ".$phone_types[$to->prop("type")]." ".html::obj_change_url($to->id());
+		}
+		foreach($p->connections_from(array("type" => "RELTYPE_EMAIL")) as $cn)
+		{
+			$to = $cn->to();
+			$ret .= ", ".html::obj_change_url($to->id(), $to->prop("mail"));
+		}
+		foreach($p->connections_from(array("type" => "RELTYPE_FAX")) as $cn)
+		{
+			$to = $cn->to();
+			$ret .= ", ".t("faks")." ".html::obj_change_url($to->id());
+		}
+
 //		arr($cwrs);
 		foreach($cwrs as $org_id => $data)
 		{
@@ -4718,14 +6197,9 @@ class crm_person extends class_base
 			{
 				$ret .= "<br>";
 			}
-			$ret .= $p_href;
 			if($this->can("view", $org_id))
 			{
-				$company = new object($org_id);
-				$ret .= " ".html::href(array(
-					'url' => html::get_change_url($org_id),
-					'caption' => $company->name(),
-				));
+				$ret .= html::obj_change_url($org_id);
 			}
 			else
 			{
@@ -4735,26 +6209,16 @@ class crm_person extends class_base
 			{
 				if(!$this->can("view", $prof))
 					continue;
-				$profession = new object($prof);
-				$ret .= ", ".html::href(array(
-					'url' => html::get_change_url($prof),
-					'caption' => $profession->name(),
-				));
+				$ret .= ", ".html::obj_change_url($prof);
 			}
 			foreach($data["phones"] as $ph_id => $ph)
 			{
-				$ret .= ", ".html::href(array(
-					'url' => html::get_change_url($ph_id),
-					'caption' => $ph,
-				));
+				$ret .= ", ".html::obj_change_url($ph_id);
 			}
 			foreach($data["emails"] as $ml_id => $ml)
 			{
 				$ml_obj = new object($ml_id);
-				$ret .= ", ".html::href(array(
-					'url' => html::get_change_url($ml_id),
-					'caption' => $ml_obj->prop("mail"),
-				));
+				$ret .= ", ".html::obj_change_url($ml_id, $ml_obj->prop("mail"));
 			}
 			if(sizeof($data["faxes"]) > 0)
 				$ret .= ", faks ";
@@ -4764,11 +6228,7 @@ class crm_person extends class_base
 				if($mtof)
 					$ret .= ",";
 
-				$fx_obj = new object($fx_id);
-				$ret .= " ".html::href(array(
-					'url' => html::get_change_url($fx_id),
-					'caption' => $fx_obj->name(),
-				));
+				$ret .= " ".html::obj_change_url($fx_id);
 				$mtof = true;
 			}
 		}
@@ -5055,13 +6515,13 @@ class crm_person extends class_base
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
 
-			//kui on kokkuleppehind kas arvel, voi kui arvet ei ole, siis toimetusel... tuleb vahe arvutada
+			//kui on kokkuleppehind kas arvel, v6i kui arvet ei ole, siis toimetusel... tuleb v2he arvutada
 			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
 				$sum = $row_inst->get_row_ageement_price($o);
 			}
 
-			//oigesse valuutasse
+			//6igesse valuutasse
 			$sum = $stat_inst->convert_to_company_currency(array(
 				"sum"=>$sum,
 				"o"=>$task,
@@ -5572,5 +7032,108 @@ class crm_person extends class_base
 		}
 	}
 
+	function get_skills($id)
+	{
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_META,
+				"parent" => $id,
+				"status" => STAT_ACTIVE,
+			),
+			array(
+				CL_META => array("name"),
+			)
+		);
+		$ids = array();
+		foreach($odl->arr() as $oid => $odata)
+		{
+			$ret[$oid] = $odata["name"];
+			$ids[] = $oid;
+		}
+		if(count($ids) > 0)
+		{
+			$adds = $this->get_skills($ids);
+
+			foreach($adds as $add_id => $add)
+			{
+				$ret[$add_id] = $add;
+			}
+		}
+
+		return $ret;
+	}
+
+	/**
+		@attrib name=add_skill params=name
+
+		@param id required type=oid
+
+		@param skill_id required type=oid
+
+		@param return_url required type=string
+
+	**/
+	function add_skill($arr)
+	{
+		/*
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL.skill" => $arr["skill_id"],
+			"oid" => $arr["id"],
+		));
+		*/
+		$ol = new object_list;
+		if($ol->count() == 0)
+		{
+			$p = obj($arr["id"]);
+			$s = new object;
+			$s->set_class_id(CL_CRM_SKILL_LEVEL);
+			$s->set_parent($arr["id"]);
+			$s->set_status(object::STAT_ACTIVE);
+			$s->set_prop("skill", $arr["skill_id"]);
+			$s->save();
+			$p->connect(array(
+				"to" => $s->id(),
+				"reltype" => "RELTYPE_SKILL_LEVEL",
+			));
+		}
+
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib name=add_lang_skill params=name
+
+		@param id required type=oid
+
+		@param lang_id required type=oid
+
+		@param return_url required type=string
+
+	**/
+	function add_lang_skill($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.language" => $arr["lang_id"],
+			"oid" => $arr["id"],
+		));
+		if($ol->count() == 0)
+		{
+			$p = obj($arr["id"]);
+			$s = new object;
+			$s->set_class_id(CL_CRM_PERSON_LANGUAGE);
+			$s->set_parent($arr["id"]);
+			$s->set_status(object::STAT_ACTIVE);
+			$s->set_prop("language", $arr["lang_id"]);
+			$s->save();
+			$p->connect(array(
+				"to" => $s->id(),
+				"reltype" => "RELTYPE_LANGUAGE_SKILL",
+			));
+		}
+
+		return $arr["return_url"];
+	}
 }
 ?>

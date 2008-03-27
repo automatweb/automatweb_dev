@@ -60,5 +60,35 @@ class crm_city extends class_base
 			'clid' => CL_CRM_CITY,
 		));
 	}
+
+	/** Returns object list of personnel_management_job_offer objects that are connected to the city.
+
+	@attrib name=get_job_offers params=name api=1
+
+	@param id required type=oid acl=view
+
+	@param parent optional type=oid,array acl=view
+
+	**/
+	function get_job_offers($arr)
+	{
+		if(!is_array($arr["parent"]) && isset($arr["parent"]))
+		{
+			$arr["parent"] = array(0 => $arr["parent"]);
+		}
+		$o = obj($arr["id"]);
+		$conns2 = $o->connections_to(array(
+			"class" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+		));
+		$ret = new object_list();
+		foreach($conns2 as $conn2)
+		{
+			if(!isset($arr["parent"]) || in_array($conn2->conn["from.parent"], $arr["parent"]))
+			{
+				$ret->add($conn2->conn["from"]);
+			}
+		}
+		return $ret;
+	}
 };
 ?>

@@ -125,6 +125,7 @@ class crm_person_obj extends _int_object
 
 	function get_age()
 	{
+		// Implement better syntaxt check here!
 		if(strlen(parent::prop("birthday")) != 10)
 			return false;
 

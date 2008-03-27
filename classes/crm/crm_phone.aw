@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.16 2008/02/28 08:21:51 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.17 2008/03/27 09:10:49 instrumental Exp $
 // phone.aw - Telefon
 /*
 
@@ -7,12 +7,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON_WORK_RELATIO
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELATION, on_disconnect_work_relation_from_phone)
 
 @classinfo syslog_type=ST_CRM_PHONE relationmgr=yes maintainer=markop
+@tableinfo kliendibaas_telefon master_table=objects master_index=oid index=oid
 
 @default table=objects
 @default group=general
 
 @property name type=textbox
 @caption Number
+
+@property number_without_crap type=hidden field=number table=kliendibaas_telefon
 
 @property comment type=textbox
 @caption Kommentaar
@@ -53,6 +56,19 @@ class crm_phone extends class_base
 			"skype" => t("skype"),
 			"extension" => t("sisetelefon"),
 		);
+	}
+
+	function set_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "number_without_crap":
+				$prop["value"] = str_replace(array(" ", "-", "(", ")") , "", $arr["request"]["name"]);
+				break;
+		};
+		return $retval;
 	}
 
 	function get_phone_types()
@@ -144,5 +160,43 @@ class crm_phone extends class_base
 		return $return;
 	}
 
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ($tbl == "kliendibaas_telefon" && $field == "")
+		{
+			$this->db_query("create table kliendibaas_telefon (oid int primary key)");
+			return true;
+		}
+
+		switch($field)
+		{
+			case "number":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "varchar(50)"
+				));
+				break;
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PHONE,
+			"parent" => array(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
+		));
+		foreach($ol->arr() as $o)
+		{
+			$oid = $o->id();
+			$number = str_replace(array(" ", "-", "(", ")") , "", $o->name());
+
+			$this->db_query("
+				INSERT INTO
+					kliendibaas_telefon (oid, number)
+				VALUES
+					('$oid', '$number')
+			");
+		}
+	}
 };
 ?>
