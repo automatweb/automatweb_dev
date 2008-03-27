@@ -1,8 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.22 2008/01/29 16:46:39 kaarel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.23 2008/03/27 09:30:09 instrumental Exp $
 // ml_member.aw - Mailing list member
 
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON_WORK_RELATION, on_connect_work_relation_to_email)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELATION, on_disconnect_work_relation_from_email)
+
 @classinfo maintainer=markop
 	@default table=objects
 	@default group=general
@@ -99,7 +103,7 @@
 	@property udef_date2 type=date_select field=meta method=serialize year_from=1930 default=-1
 	@caption Kuup&auml;ev 2
 	
-	@groupinfo udef_fields caption="Muud väljad"
+	@groupinfo udef_fields caption="Muud v&auml;ljad"
 	
 	@tableinfo ml_users index=id master_table=objects master_index=oid
 
@@ -400,6 +404,36 @@ class ml_member extends class_base
 			"url" => "mailto:".$o->prop("mail"),
 			"caption" => $o->prop("mail")
 		));
+	}
+
+	function on_connect_work_relation_to_email($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_ML_MEMBER)
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => 1,		// RELTYPE_BELONGTO
+			));
+		}
+	}
+
+	function on_disconnect_work_relation_from_email($arr)
+	{
+		obj_set_opt("no_cache", 1);
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_ML_MEMBER)
+		{
+			if($target_obj->is_connected_to(array('from' => $conn->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+					"errors" => false
+				));
+			}
+		}
 	}
 };
 ?>
