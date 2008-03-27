@@ -225,6 +225,71 @@ class file_manager extends aw_template
 		die($stuff);
 	}
 
+	/**
+		@attrib name=compress all_args=1
+		@param files optional
+			file id's
+		@returns compressed file path
+	**/
+	function compress($arr)
+	{
+		extract($arr);
+		
+		$file_inst = get_instance(CL_FILE);
+		$zip = new ZipArchive();
+
+		$zipfilename = $GLOBALS["sited"]."/files/".time()."files.zip";
+		if ($zip->open($zipfilename, ZIPARCHIVE::CREATE)!==TRUE) {
+			exit("cannot open <$zipfilename>\n");
+		}
+
+		foreach($files as $id)
+		{
+			if(!$this->can("view" , $id)) continue;
+
+			$fileo = obj($id);
+			if(!$fileo->class_id() == CL_FILE) continue;
+
+			$file_data = $file_inst->get_file_by_id($id);
+			$filepath = $file_data["properties"]["file"];
+			$filename = $file_data["properties"]["name"];
+			$filepath = str_replace("/new/" , "/" , $filepath);
+			$zip->addFile($filepath,"/".$filename);
+		}
+
+		$zip->close();
+		return $zipfilename;
+	}
+
+	/**
+		@attrib name=compress_submit
+	**/
+	function compress_submit($arr)
+	{
+		$field_name = "sel";
+		$zip_name = "cfiles.zip";
+		if($_GET["field_name"])
+		{
+			$field_name = $_GET["field_name"];
+		}
+		if($_GET["zip_name"])
+		{
+			$zip_name = $_GET["zip_name"];
+		}
+		if($arr[$field_name])
+		{
+			$fname = $this->compress(array(
+				"files" => $arr[$field_name],
+			));
+			header("Content-type: application/zip");
+			header("Content-length: ".filesize($fname));
+ 			header("Content-disposition: inline; filename=".$zip_name.";");
+			readfile($fname);
+			unlink($fname);
+		}
+		die();
+	}
+
 	function draw_form($arr)
 	{
 		classload("cfg/htmlclient");

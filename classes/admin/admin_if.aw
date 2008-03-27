@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.44 2008/03/24 08:59:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.45 2008/03/27 15:44:06 markop Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -201,6 +201,7 @@ class admin_if extends class_base
 			"url" => obj_link($arr["request"]["parent"]),
 			"img" => "preview.gif",
 		));
+		$tb->add_zip_button(array());
 	}
 
 	function get_cutcopied_objects()

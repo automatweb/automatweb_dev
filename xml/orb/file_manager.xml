@@ -35,5 +35,20 @@
 			</function>
 		</action>
 
+		<action name="compress">
+			<function name="compress">
+				<arguments>
+					<required name="files" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="compress_submit">
+			<function name="compress_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
