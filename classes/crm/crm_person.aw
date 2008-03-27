@@ -354,6 +354,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property edulevel type=select field=edulevel table=kliendibaas_isik
 @caption Haridustase
 
+@property academic_degree type=select field=academic_degree table=kliendibaas_isik
+@caption Akadeemiline kraad
+
 @property education_tbl type=table no_caption=1 store=no
 
 ------------------------------------------------------------------
@@ -875,6 +878,12 @@ class crm_person extends class_base
 			11 => t("Doktor"),
 			12 => t("Teaduste kandidaat"),
 		);
+		$this->academic_degree_options = array(
+			0 => t("--vali--"),
+			1 => t("Bakalaureus"),
+			2 => t("Magister"),
+			3 => t("Doktor"),
+		);
 		$this->drivers_licence_categories = array(
 			"a" => "A",
 			"a1" => "A1",
@@ -896,6 +905,11 @@ class crm_person extends class_base
 		$form = &$arr["request"];
 		switch($prop["name"])
 		{
+			case "edulevel":
+				if($prop["value"] < 7)
+					$arr["obj_inst"]->set_prop("academic_degree", 0);
+				break;
+
 			case "skills_tbl":
 				foreach($arr["request"]["skills"] as $key => $val)
 				{
@@ -1492,6 +1506,13 @@ class crm_person extends class_base
 		$personnel_management_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 		switch($data["name"])
 		{
+			case "academic_degree":
+				// If edulevel is lower than 'k8rgharidus'
+				if($arr["obj_inst"]->prop("edulevel") < 7)
+					return PROP_IGNORE;
+
+				$data["options"] = $this->academic_degree_options;
+				break;
 			case "edulevel":
 				$data["options"] = $this->edulevel_options;
 				break;
@@ -1832,6 +1853,8 @@ class crm_person extends class_base
 			case 'docs_s_user':
 			case 'docs_s_sbt':
 			case 'docs_s_clear':
+				//$data['value'] = $arr['request'][$data["name"]];
+				/*
 				if(!$arr['request']['do_doc_search'])
 				{
 					return PROP_IGNORE;
@@ -1840,6 +1863,7 @@ class crm_person extends class_base
 				{
 					$data['value'] = $arr['request'][$data["name"]];
 				}
+				*/
 				break;
 
 			case "is_important":
@@ -4618,6 +4642,7 @@ class crm_person extends class_base
 			case "buyer_contract_person":
 			case "address":
 			case "edulevel":
+			case "academic_degree":
 			case "mlang":
 			case "dl_can_use":
 				$this->db_add_col($tbl, array(
