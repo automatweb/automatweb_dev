@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.11 2008/02/18 13:16:57 hannes Exp $
-// ical_export.aw - Sündmuste eksport (iCal) 
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.12 2008/03/27 13:14:01 hannes Exp $
 /*
 
 @classinfo syslog_type=ST_ICAL_EXPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
@@ -23,7 +22,7 @@
 	@caption Ajavahemiku l&otilde;pp
 
 	@property personal_not type=checkbox ch_value=1 field=meta method=serialize
-	@caption &Auml;ra ekspordi isiklikke sündmusi
+	@caption &Auml;ra ekspordi isiklikke s&uuml;ndmusi
 
 	@property url type=text store=no
 	@caption Faili url
@@ -41,7 +40,7 @@
 		@caption Uue kalendri nimi
 		
 		@property google_calendar_settings_color type=select store=no
-		@caption Värv
+		@caption V&auml;rv
 		
 		@property google_calendar_settings_calendar_url type=hidden store=no
 	
@@ -321,7 +320,7 @@ class ical_export extends class_base
 		//obj_set_opt("no_cache", 1);
 		$a_aw_events = $this->get_aw_calendar_events_array($arr);
 		$a_google_events = $this->get_google_calendar_events_array($arr);
-
+		
 		$b_created_new_aw_events = false;
 		foreach ($a_google_events as $event)
 		{
@@ -449,14 +448,7 @@ class ical_export extends class_base
 		$o->set_prop("start1", $arr["start"]);
 		$o->set_prop("end", $arr["end"]);
 		$i_class = $o->class_id();
-		if ($i_class == CL_TASK)
-		{
-			$o->set_prop("content", $arr["description"]);
-		}
-		else
-		{
-			$o->set_prop("description", $arr["description"]);
-		}
+		$o->set_prop("content", $arr["description"]);
 		$o->save();
 	}
 	
@@ -562,11 +554,11 @@ class ical_export extends class_base
 							"aw_id" => $event->id(),
 							"title" => $event->prop("name"),
 							"description" => $event->prop("content"),
-							"start" => $event->prop("start1"),
-							"end" => $event->prop("end"),
+							"start" => $event->prop("start1")+(60*60*2),
+							"end" => $event->prop("end")+(60*60*2),
 							"where" => $event->prop(""),
 							"modified" => $event->modified(),
-							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+02:00"),
+							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+00:00"),
 						);
 					break;
 					case CL_CRM_CALL:
@@ -574,11 +566,11 @@ class ical_export extends class_base
 							"aw_id" => $event->id(),
 							"title" => $event->prop("name"),
 							"description" => $event->prop("content"),
-							"start" => $event->prop("start1"),
-							"end" => $event->prop("end"),
+							"start" => $event->prop("start1")+(60*60*2),
+							"end" => $event->prop("end")+(60*60*2),
 							"where" => $event->prop(""),
 							"modified" => $event->modified(),
-							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+02:00"),
+							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+00:00"),
 						);
 					break;
 					case CL_CALENDAR_EVENT:
@@ -586,8 +578,20 @@ class ical_export extends class_base
 							"aw_id" => $event->id(),
 							"title" => $event->prop("name"),
 							"description" => $event->prop("content"),
-							"start" => $event->prop("start1"),
-							"end" => $event->prop("end"),
+							"start" => $event->prop("start1")+(60*60*2),
+							"end" => $event->prop("end")+(60*60*2),
+							"where" => $event->prop(""),
+							"modified" => $event->modified(),
+							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+00:00"),
+						);
+					break;
+					case CL_CRM_MEETING:
+						$a_events[$event->id()] = array(
+							"aw_id" => $event->id(),
+							"title" => $event->prop("name"),
+							"description" => $event->prop("content"),
+							"start" => $event->prop("start1")+(60*60*2),
+							"end" => $event->prop("end")+(60*60*2),
 							"where" => $event->prop(""),
 							"modified" => $event->modified(),
 							"modified2" =>$this->timestamp_to_google_date($event->modified(), "GMT+02:00"),
@@ -609,7 +613,7 @@ class ical_export extends class_base
 			$o->save();
 			$prop["value"] = $o->prop("name");
 		}
-		$prop["post_append_text"] = t(" &uuml;le 15 sümboli (ka t&uuml;hikud) ei soovita nimeks, kuna pikem tekst j&auml;&auml;b Google kalendris paani taha peitu.");
+		$prop["post_append_text"] = t(" &uuml;le 15 s&uuml;mboli (ka t&uuml;hikud) ei soovita nimeks, kuna pikem tekst j&auml;&auml;b Google kalendris paani taha peitu.");
 	}
 	
 	// creating new calendar is hack for now cuz Google Calendar APIs don't support this
@@ -690,7 +694,7 @@ class ical_export extends class_base
 	function _get_google_calendar_settings_location($arr)
 	{
 		$prop = & $arr["prop"];
-		$prop["post_append_text"] = t(" näiteks Tallinn v&otilde;i Haapsalu. Kui Google kalender on avalik, siis see aitab inimestel Sinu s&uuml;ndmusi paremini leida.");
+		$prop["post_append_text"] = t(" n&auml;iteks Tallinn v&otilde;i Haapsalu. Kui Google kalender on avalik, siis see aitab inimestel Sinu s&uuml;ndmusi paremini leida.");
 	}
 	
 	function _get_google_calendar_password_1($arr)
@@ -727,7 +731,7 @@ class ical_export extends class_base
 		
 		if ($prop["value"] != $o->prop("google_calendar_password_1") )
 		{
-			$prop["error"] = t("Paroolid ei ühti");
+			$prop["error"] = t("Paroolid ei &uuml;hti");
 			return PROP_FATAL_ERROR;
 		}
 		
