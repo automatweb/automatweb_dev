@@ -266,6 +266,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property citizenship_table type=table submit=no editonly=1
 @caption Kodakondsuse tabel
 
+@property cv_file_url type=text store=no
+@caption CV fail
+
+@property cv_file type=releditor reltype=RELTYPE_CV_FILE rel_id=first props=file table=objects field=meta method=serialize
+@caption CV failina
+
 @property notes type=textarea cols=60 rows=10
 @caption Vabas vormis tekst
 
@@ -849,6 +855,9 @@ caption S&otilde;bragrupid
 @reltype PERSONNEL_MANAGEMENT value=83 clid=CL_PERSONNEL_MANAGEMENT
 @caption Personalikeskkond
 
+@reltype CV_FILE value=84 clid=CL_FILE
+@caption CV failina
+
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
@@ -1165,6 +1174,24 @@ class crm_person extends class_base
 			$doomed_conn = new connection($doomed_conn);
 			$doomed_conn->delete();
 		}
+	}
+
+	function _get_cv_file_url($arr)
+	{
+		// if image is uploaded
+		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CV_FILE");
+		if (!$o)
+		{
+			return PROP_IGNORE;
+		}
+		
+		$file_inst = get_instance(CL_FILE);
+		$arr["prop"]["value"] = html::img(array(
+				"url" => icons::get_icon_url(CL_FILE),
+			)).html::href(array(
+			"caption" => $o->name(),
+			"url" => $file_inst->get_url($o->id(), $o->name()),
+		));
 	}
 
 	function _get_add_info_tlb($arr)

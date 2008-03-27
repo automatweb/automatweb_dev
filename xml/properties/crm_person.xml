@@ -589,6 +589,27 @@
             <caption>Kodakondsuse tabel</caption>
       </property>
       <property>
+            <name>cv_file_url</name>
+            <table>kliendibaas_isik</table>
+            <group>description</group>
+            <type>text</type>
+            <store>no</store>
+            <field>cv_file_url</field>
+            <caption>CV fail</caption>
+      </property>
+      <property>
+            <name>cv_file</name>
+            <table>objects</table>
+            <group>description</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_CV_FILE</reltype>
+            <rel_id>first</rel_id>
+            <props>file</props>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>CV failina</caption>
+      </property>
+      <property>
             <name>notes</name>
             <table>kliendibaas_isik</table>
             <group>description</group>
@@ -1900,6 +1921,11 @@
                   <clid>CL_PERSONNEL_MANAGEMENT</clid>
                   <caption>Personalikeskkond</caption>
             </PERSONNEL_MANAGEMENT>
+            <CV_FILE>
+                  <value>84</value>
+                  <clid>CL_FILE</clid>
+                  <caption>CV failina</caption>
+            </CV_FILE>
       </reltypes>
       <layout>
             <co_bottom_seller>
