@@ -27,6 +27,24 @@
             <caption>Algus</caption>
       </property>
       <property>
+            <name>time_text</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Aeg</caption>
+      </property>
+      <property>
+            <name>lenght_hrs</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kestvus tundides</caption>
+      </property>
+      <property>
             <name>length</name>
             <table>objects</table>
             <group>general</group>

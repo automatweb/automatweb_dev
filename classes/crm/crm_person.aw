@@ -367,7 +367,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @groupinfo add_edu caption="T&auml;ienduskoolitus" parent=cv submit=no
 
-@property add_edu_edit type=releditor store=no mode=manager reltype=RELTYPE_ADD_EDUCATION props=org,field,time,length table_fields=org,field,time,length group=add_edu
+@property add_edu_edit type=releditor store=no mode=manager reltype=RELTYPE_ADD_EDUCATION props=org,field,time,time_text,lenght_hrs,length table_fields=org,field,time,time_text,lenght_hrs,length group=add_edu
 ------------------------------------------------------------------
 
 @groupinfo orgs caption="Organisatoorne kuuluvus" parent=cv submit=no

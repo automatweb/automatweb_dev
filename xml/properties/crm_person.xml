@@ -849,13 +849,17 @@
                   <num_0>org</num_0>
                   <num_1>field</num_1>
                   <num_2>time</num_2>
-                  <num_3>length</num_3>
+                  <num_3>time_text</num_3>
+                  <num_4>lenght_hrs</num_4>
+                  <num_5>length</num_5>
             </props>
             <table_fields>
                   <num_0>org</num_0>
                   <num_1>field</num_1>
                   <num_2>time</num_2>
-                  <num_3>length</num_3>
+                  <num_3>time_text</num_3>
+                  <num_4>lenght_hrs</num_4>
+                  <num_5>length</num_5>
             </table_fields>
             <field>add_edu_edit</field>
       </property>
