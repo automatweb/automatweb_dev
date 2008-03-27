@@ -1,54 +1,56 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.6 2007/12/06 14:33:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.7 2008/03/27 09:23:28 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_WANTED relationmgr=yes r2=yes no_comment=1 maintainer=kristo
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_job_wanted)
 
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_job_wanted)
+
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_WANTED relationmgr=yes r2=yes no_status=1 no_comment=1 maintainer=kristo
 @tableinfo personnel_management_job_wanted master_table=objects master_index=oid index=oid
 
 @default table=personnel_management_job_wanted
 @default group=general
-@default table=objects
-@default field=meta
-@default method=serialize
 
-@property field type=classificator multiple=1 orient=vertical store=connect field=meta method=serialize table=objects
+@property field type=classificator multiple=1 reltype=RELTYPE_FIELD orient=vertical store=connect
 @caption Tegevusala
 
-@property professions type=textarea table=objects field=comment
+@property job_type type=classificator multiple=1 reltype=RELTYPE_JOB_TYPE store=connect
+@caption T&ouml;&ouml; liik
+
+@property professions type=textarea field=ametinimetus
 @caption Soovitavad ametid
 
-@property load type=classificator multiple=1 orient=vertical store=connect field=meta method=serialize table=objects
-@caption Töö koormus
+@property load type=select field=koormus
+@caption T&ouml;&ouml;koormus
 
-@layout pay type=hbox width=15%:15%:70%
+@property pay type=textbox size=5 datatype=int field=palgasoov
+@caption Palgasoov alates
 
-@property pay type=textbox size=5 datatype=int parent=pay
-@caption Palgasoov alates-kuni
+@property pay2 type=textbox size=5 datatype=int field=palgasoov2
+@caption Palgasoov kuni
 
-@property pay2 type=textbox size=5 datatype=int parent=pay no_caption=1
+@property location type=relpicker multiple=1 automatic=1 orient=vertical store=connect reltype=RELTYPE_LOCATION
+@caption T&ouml;&ouml; asukoht
 
-@property location type=relpicker multiple=1 automatic=1 orient=vertical store=connect field=meta method=serialize table=objects
-@caption Töö asukoht
+@property addinfo type=textarea field=lisainfo
+@caption Lisainfo soovitava t&ouml;&ouml; kohta
 
-@property addinfo type=textarea
-@caption Lisainfo soovitava töö kohta
+@reltype PERSON value=1 clid=CL_CRM_PERSON
+@caption T&ouml;&ouml;soovija
 
-@property sbutton type=submit store=no
-@caption Lisa
+@reltype FIELD value=2 clid=CL_META
+@caption Valdkond
 
-@groupinfo candidate caption="Kandideerimised" submit=no
-@default group=candidate
+@reltype LOAD value=3 clid=CL_META
+@caption T&ouml;&ouml;koormus
 
-@property candidate_toolbar type=toolbar no_caption=1
+@reltype LOCATION value=4 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA
+@caption Asukoht
 
-@property candidate_table type=table no_caption=1
-
-------------SEOSED-------------------
-
-@reltype CANDIDATE value=3 clid=CL_PERSONNEL_MANAGEMENT_CANDIDATE
-@caption Kandideerimine
+@reltype JOB_TYPE value=5 clid=CL_META
+@caption T&ouml;&ouml; liik
 
 */
 
@@ -69,6 +71,13 @@ class personnel_management_job_wanted extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
+			case "load":
+				$prop["options"] = object_type::get_classificator_options(array(
+					"clid" => CL_PERSONNEL_MANAGEMENT,
+					"classificator" => "cv_load",
+				));
+				break;
+
 			case "sbutton":
 				if(is_numeric($_GET["eoid"]))
 				{
@@ -104,6 +113,59 @@ class personnel_management_job_wanted extends class_base
 		{
 		};
 		return $retval;
+	}		
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ($tbl == "personnel_management_job_wanted" && $field == "")
+		{
+			$this->db_query("create table personnel_management_job_wanted (oid int primary key)");
+			return true;
+		}
+
+		switch($field)
+		{
+			case "ametinimetus":
+			case "lisainfo":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "text"
+				));
+				break;
+			case "koormus":
+			case "palgasoov":
+			case "palgasoov2":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int"
+				));
+				break;
+		}
+	}
+
+	function on_connect_person_to_job_wanted($arr)
+	{
+		$conn = $arr['connection'];
+		$target_obj = $conn->to();
+		if($target_obj->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_WANTED)
+		{
+			$target_obj->connect(array(
+				'to' => $conn->prop('from'),
+				'reltype' => "RELTYPE_PERSON",
+			));
+		}
+	}
+
+	function on_disconnect_person_from_job_wanted($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_WANTED)
+		{
+			$target_obj->disconnect(array(
+				"from" => $conn->prop("from"),
+			));
+		};
 	}
 }
 ?>

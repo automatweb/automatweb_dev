@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.9 2007/12/06 14:33:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.10 2008/03/27 09:23:28 instrumental Exp $
 // personnel_management_cv_search.aw - CV Otsing 
 /*
 
@@ -10,50 +10,75 @@
 @default form=cv_search
 @default store=no
 
-
-@property cv_name type=textbox
+@property cv_name type=textbox size=18
 @caption Nimi
 
-@property cv_company type=textbox
-@caption Ettevõte
+@property cv_company type=textbox size=18
+@caption Ettev&otilde;te
 
-@property cv_job type=textbox
+@property cv_job type=textbox size=18
 @caption Ametinimetus
 
 @layout pay type=hbox
 
-@property cv_paywish type=textbox parent=pay
+@property cv_paywish type=textbox parent=pay size=6
 @caption Palk alates
 
-@property cv_paywish2 type=textbox parent=pay
+@property cv_paywish2 type=textbox parent=pay size=6
 @caption Palk kuni
 
 @property cv_field type=classificator multiple=1 orient=vertical
 @caption Tegevusala
 
 @property cv_type type=classificator multiple=1
-@caption Töö liik
+@caption T&ouml;&ouml; liik
 
 @property cv_location type=relpicker multiple=1 orient=vertical
-@caption Töötamise piirkond
+@caption T&ouml;&ouml;tamise piirkond
 
 @property cv_load type=classificator multiple=1 orient=vertical
-@caption Töökoormus
+@caption T&ouml;&ouml;koormus
 
-@property cv_personality type=textarea
+@property cv_personality type=textbox size=18
 @caption Isikuomadused
 
-@property cv_comments type=textarea
+@property cv_comments type=textbox size=18
 @caption Kommentaarid
 
-@property cv_recommenders type=textarea
+@property cv_recommenders type=textbox size=18
 @caption Soovitajad
+
+@property cv_mother_tongue type=classificator
+@caption Emakeel
+
+@property cv_lang_exp type=classificator multiple=1
+@caption Keeleoskus
+
+@property cv_pc_exp type=textbox size=18
+@caption Arvutioskus
+
+@property cv_gender type=textbox size=18
+@caption Sugu
+
+@layout cv_age type=hbox
+
+	@property cv_age_from type=textbox parent=cv_age size=4
+	@caption Vanus alates
+
+	@property cv_age_to type=textbox parent=cv_age size=4
+	@caption Vanus kuni
+
+@property cv_previous_rank type=textbox size=18
+@caption T&ouml;&ouml;kogemuse ametinimetus
+
+@property cv_driving_licence type=textbox size=18
+@caption Juhiload
 
 @property cv_search_button type=submit value=Otsi
 @caption Otsi
 
-@property cv_search_results type=table no_caption=1
-@caption Otsingutulemused 
+#@property cv_search_results type=table no_caption=1
+#@caption Otsingutulemused 
 
 @property no_reforb type=hidden value=1
 

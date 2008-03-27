@@ -1,11 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.17 2008/02/11 17:48:22 instrumental Exp $
-// personnel_management_job_offer.aw - Tööpakkumine 
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.18 2008/03/27 09:23:28 instrumental Exp $
+// personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_CITY, on_connect_job_offer_to_city)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONNEL_MANAGEMENT_CANDIDATE, on_connect_candidate_to_job_offer)
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER relationmgr=yes r2=yes no_comment=1 maintainer=kristo
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT_CANDIDATE, on_disconnect_candidate_from_job_offer)
+
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER relationmgr=yes r2=yes no_comment=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general
@@ -41,8 +43,17 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @property field type=relpicker reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
 
-@property location type=relpicker reltype=RELTYPE_LOCATION
-@caption Asukoht
+#@property location type=relpicker reltype=RELTYPE_LOCATION
+#@caption Asukoht
+
+@property loc_area type=relpicker reltype=RELTYPE_AREA
+@caption Piirkond
+
+@property loc_county type=relpicker reltype=RELTYPE_COUNTY
+@caption Maakond
+
+@property loc_city type=relpicker reltype=RELTYPE_CITY
+@caption Linn
 
 @property workinfo type=textarea rows=15 cols=60
 @caption T&ouml;&ouml; sisu
@@ -103,14 +114,23 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @reltype PROFESSION value=4 clid=CL_CRM_PROFESSION
 @caption Ametikoht
 
-@reltype LOCATION value=5 clid=CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_CITY
-@caption Asukoht
+#@reltype LOCATION value=5 clid=CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_CITY
+#@caption Asukoht
 
 @reltype FIELD value=6 clid=CL_META
 @caption Valdkond
 
 @reltype CFGFORM value=7 clid=CL_CFGFORM
 @caption CV seadete vorm
+
+@reltype AREA value=8 clid=CL_CRM_AREA
+@caption Piirkond
+
+@reltype COUNTY value=9 clid=CL_CRM_COUNTY
+@caption Piirkond
+
+@reltype CITY value=10 clid=CL_CRM_CITY
+@caption Piirkond
 
 */
 
@@ -193,22 +213,6 @@ class personnel_management_job_offer extends class_base
 						}
 					}
 				}
-				break;
-
-			case "new_cfgform_tbl":
-				$this->_get_new_cfgform_tbl($arr);
-				break;
-
-			case "toolbar":
-				$this->toolbar($arr);
-				break;
-
-			case "candidate_toolbar":
-				$this->candidate_toolbar($arr);
-				break;
-
-			case "candidate_table":
-				$this->candidate_table($arr);
 				break;
 			
 			case "profession":
@@ -293,7 +297,7 @@ class personnel_management_job_offer extends class_base
 		}
 	}
 
-	function candidate_toolbar($arr)
+	function _get_candidate_toolbar($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->add_button(array(
@@ -302,9 +306,10 @@ class personnel_management_job_offer extends class_base
 			"img" => "new.gif",
 			"url" => $this->mk_my_orb("new", array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 1, "parent" => $arr["obj_inst"]->id(), "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_CANDIDATE),
 		));
+		$t->add_delete_button();
 	}
 
-	function toolbar($arr)
+	function _get_toolbar($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
 		$tb->add_button(array(
@@ -332,7 +337,7 @@ class personnel_management_job_offer extends class_base
 		}
 	}
 	
-	function candidate_table($arr)
+	function _get_candidate_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 				
@@ -348,14 +353,16 @@ class personnel_management_job_offer extends class_base
 		));
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => t("Kuupäev"),
+			"caption" => t("Kuup&auml;ev"),
 			"sortable" => 1,
 		));
-
 		$t->define_field(array(
 			"name" => "intro",
 			"caption" => t("Kaaskiri"),
-			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "intro_file",
+			"caption" => t("Kaaskiri (failina)"),
 		));
 			
 		$t->define_chooser(array(
@@ -369,28 +376,29 @@ class personnel_management_job_offer extends class_base
 			$person = $obj->get_first_obj_by_reltype("RELTYPE_PERSON");
 			$intro = $obj->prop("intro");
 			$file = $obj->prop("intro_file");
-			$fid = reset($file);
+			$fid = $file;
 			if($this->can("view", $fid))
 			{
 				$file = obj($fid);
 				$file_inst = get_instance(CL_FILE);
-				$intro_url = html::href(array(
+				$intro_file_url = html::img(array(
+						"url" => icons::get_icon_url(CL_FILE),
+					)).html::href(array(
 					"caption" => t("kaaskiri"),
 					"url" => $file_inst->get_url($fid, $file->name()),
 				));
 			}
-			elseif(!empty($intro))
-			{
-				$intro_url = html::href(array(
-					"caption" => t("kaaskiri"),
-					"url" => $this->mk_my_orb("view_intro", array("id" => $id), CL_PERSONNEL_MANAGEMENT_CANDIDATE),
-					"target" => "_blank",
-				));
-			}
 			else
 			{
-				$intro_url = t("Puudub");
+				$intro_file_url = t("Puudub");
 			}
+
+			$intro_url = !empty($intro) ? html::href(array(
+				"caption" => t("kaaskiri"),
+				"url" => $this->mk_my_orb("view_intro", array("id" => $id), CL_PERSONNEL_MANAGEMENT_CANDIDATE),
+				"target" => "_blank",
+			)) : t("Puudub");
+
 			$t->define_data(array(
 				"name" => html::get_change_url($id, array("return_url" => get_ru()), $obj->name()),
 				"person" => html::href(array(
@@ -400,6 +408,7 @@ class personnel_management_job_offer extends class_base
 				"date" => get_lc_date($obj->created()),
 				"id" => $id,
 				"intro" => $intro_url,
+				"intro_file" => $intro_file_url,
 			));
 		}
 	}
@@ -415,6 +424,11 @@ class personnel_management_job_offer extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
 	}
 
 	function _set_new_cfgform_tbl($arr)
@@ -524,10 +538,10 @@ class personnel_management_job_offer extends class_base
 		$job_parse_props["phone"]["view"] = true;
 		$job_parse_props["email"]["view"] = true;
 		
-		//Tööpakkumise objekt
+		//T88pakkumise objekt
 		$ob = new object($arr["id"]);
 		
-		//Kui tööpakkumist vaatas tööotsija , siis lisame ühe HITI.
+		//Kui t88pakkumist vaatas t88otsija , siis lisame yhe HITI.
 		if($this->my_profile["group"]=="employee")
 		{
 			$this->add_view(array("id" => $ob->id()));
@@ -702,46 +716,29 @@ class personnel_management_job_offer extends class_base
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
 	}
 
-	function on_connect_job_offer_to_city($arr)
+	function on_connect_candidate_to_job_offer($arr)
 	{
 		$conn = $arr['connection'];
-		$target_obj = $conn->from();
+		$target_obj = $conn->to();
 		if($target_obj->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER)
 		{
-			$city_obj = $conn->to();
-			foreach($city_obj->connections_from(array("type" => 3)) as $conn2)
-			{
-				$target_obj->connect(array(
-					'to' => $conn2->conn["to"],
-					'reltype' => 5,		// RELTYPE_LOCATION
-				));
-			}
+			$target_obj->connect(array(
+				'to' => $conn->prop('from'),
+				'reltype' => "RELTYPE_CANDIDATE",
+			));
 		}
 	}
-
-	/**
-
-	@attrib name=get_candidates api=1
-
-	**/
-	function get_candidates($arr)
+	
+	function on_disconnect_candidate_from_job_offer($arr)
 	{
-		$ret = new object_list();
-
-		$job = obj($arr["id"]);
-		foreach($job->connections_from(array("type" => 1)) as $conn)
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER)
 		{
-			if(!isset($arr["status"]) || $conn->conn["to.status"] == $arr["status"])
-			{
-				$to = $conn->to();
-				if($this->can("view", $to->prop("person")))
-				{
-					$ret->add($to->prop("person"));
-				}
-			}
-		}
-
-		return $ret;
+			$target_obj->disconnect(array(
+				"from" => $conn->prop("from"),
+			));
+		};
 	}
 }
 ?>
