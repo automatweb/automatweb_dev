@@ -86,6 +86,27 @@
             <caption>Koormus</caption>
       </property>
       <property>
+            <name>salary</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kuutasu</caption>
+            <comment>Bruto</comment>
+      </property>
+      <property>
+            <name>salary_currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CURRENCY</reltype>
+            <store>connect</store>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
             <name>directive_link</name>
             <table>objects</table>
             <group>general</group>
@@ -174,6 +195,11 @@
                   <clid>CL_CRM_PHONE</clid>
                   <caption>Faks</caption>
             </FAX>
+            <CURRENCY>
+                  <value>11</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>Valuuta</caption>
+            </CURRENCY>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.11 2008/03/27 09:18:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.12 2008/03/27 22:13:05 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -44,6 +44,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @property load type=select
 @caption Koormus
 
+@property salary type=textbox field=meta method=serialize
+@caption Kuutasu
+@comment Bruto
+
+@property salary_currency type=relpicker reltype=RELTYPE_CURRENCY store=connect
+@caption Valuuta
+
 @property directive_link type=textbox field=meta method=serialize 
 @caption Viit ametijuhendile
 
@@ -82,6 +89,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 
 @reltype FAX value=10 clid=CL_CRM_PHONE
 @caption Faks
+
+@reltype CURRENCY value=11 clid=CL_CURRENCY
+@caption Valuuta
 
 */
 
