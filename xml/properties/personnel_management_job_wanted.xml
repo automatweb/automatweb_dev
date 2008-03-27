@@ -2,126 +2,92 @@
 <properties>
       <property>
             <name>field</name>
-            <table>objects</table>
+            <table>personnel_management_job_wanted</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>classificator</type>
             <multiple>1</multiple>
+            <reltype>RELTYPE_FIELD</reltype>
             <orient>vertical</orient>
             <store>connect</store>
+            <field>field</field>
             <caption>Tegevusala</caption>
       </property>
       <property>
-            <name>professions</name>
-            <table>objects</table>
+            <name>job_type</name>
+            <table>personnel_management_job_wanted</table>
             <group>general</group>
-            <field>comment</field>
-            <method>serialize</method>
+            <type>classificator</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_JOB_TYPE</reltype>
+            <store>connect</store>
+            <field>job_type</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; liik</caption>
+      </property>
+      <property>
+            <name>professions</name>
+            <table>personnel_management_job_wanted</table>
+            <group>general</group>
             <type>textarea</type>
+            <field>ametinimetus</field>
             <caption>Soovitavad ametid</caption>
       </property>
       <property>
             <name>load</name>
-            <table>objects</table>
+            <table>personnel_management_job_wanted</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>classificator</type>
-            <multiple>1</multiple>
-            <orient>vertical</orient>
-            <store>connect</store>
-            <caption>T&amp;ouml;&amp;ouml; koormus</caption>
+            <type>select</type>
+            <field>koormus</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
       </property>
       <property>
             <name>pay</name>
-            <table>objects</table>
+            <table>personnel_management_job_wanted</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
             <datatype>int</datatype>
-            <parent>pay</parent>
-            <caption>Palgasoov alates-kuni</caption>
+            <field>palgasoov</field>
+            <caption>Palgasoov alates</caption>
       </property>
       <property>
             <name>pay2</name>
-            <table>objects</table>
+            <table>personnel_management_job_wanted</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
             <datatype>int</datatype>
-            <parent>pay</parent>
-            <no_caption>1</no_caption>
+            <field>palgasoov2</field>
+            <caption>Palgasoov kuni</caption>
       </property>
       <property>
             <name>location</name>
-            <table>objects</table>
+            <table>personnel_management_job_wanted</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <multiple>1</multiple>
             <automatic>1</automatic>
             <orient>vertical</orient>
             <store>connect</store>
-            <caption>T&amp;ouml;&amp;ouml; asukoht</caption>
+            <reltype>RELTYPE_LOCATION</reltype>
+            <field>location</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; asukoht</caption>
       </property>
       <property>
             <name>addinfo</name>
-            <table>objects</table>
+            <table>personnel_management_job_wanted</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textarea</type>
-            <caption>Lisainfo soovitava t&amp;ouml;&amp;ouml; kohta</caption>
-      </property>
-      <property>
-            <name>sbutton</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>submit</type>
-            <store>no</store>
-            <caption>Lisa</caption>
-      </property>
-      <property>
-            <name>candidate_toolbar</name>
-            <table>objects</table>
-            <group>candidate</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>candidate_table</name>
-            <table>objects</table>
-            <group>candidate</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
+            <field>lisainfo</field>
+            <caption>Lisainfo soovitava t&amp;amp;ouml;&amp;amp;ouml; kohta</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_WANTED</syslog_type>
             <relationmgr>yes</relationmgr>
             <r2>yes</r2>
+            <no_status>1</no_status>
             <no_comment>1</no_comment>
             <maintainer>kristo</maintainer>
       </classinfo>
-      <groupinfo>
-            <candidate>
-                  <caption>Kandideerimised</caption>
-                  <submit>no</submit>
-            </candidate>
-      </groupinfo>
       <tableinfo>
             <personnel_management_job_wanted>
                   <master_table>objects</master_table>
@@ -130,19 +96,36 @@
             </personnel_management_job_wanted>
       </tableinfo>
       <reltypes>
-            <CANDIDATE>
+            <PERSON>
+                  <value>1</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;soovija</caption>
+            </PERSON>
+            <FIELD>
+                  <value>2</value>
+                  <clid>CL_META</clid>
+                  <caption>Valdkond</caption>
+            </FIELD>
+            <LOAD>
                   <value>3</value>
-                  <clid>CL_PERSONNEL_MANAGEMENT_CANDIDATE</clid>
-                  <caption>Kandideerimine</caption>
-            </CANDIDATE>
+                  <clid>CL_META</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
+            </LOAD>
+            <LOCATION>
+                  <value>4</value>
+                  <clid>
+                        <num_0>CL_CRM_CITY</num_0>
+                        <num_1>CL_CRM_COUNTY</num_1>
+                        <num_2>CL_CRM_COUNTRY</num_2>
+                        <num_3>CL_CRM_AREA</num_3>
+                  </clid>
+                  <caption>Asukoht</caption>
+            </LOCATION>
+            <JOB_TYPE>
+                  <value>5</value>
+                  <clid>CL_META</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml; liik</caption>
+            </JOB_TYPE>
       </reltypes>
-      <layout>
-            <pay>
-                  <type>hbox</type>
-                  <width>15%:15%:70%</width>
-                  <group>general</group>
-                  <area_caption></area_caption>
-            </pay>
-      </layout>
 </properties>
 

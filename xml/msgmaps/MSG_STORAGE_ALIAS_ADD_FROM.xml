@@ -16,58 +16,88 @@
       <param>CL_ML_MEMBER</param>
 </num_2>
 <num_3>
-      <class>crm/crm_person</class>
-      <func>on_connect_org_to_person</func>
-      <param>CL_CRM_COMPANY</param>
+      <class>applications/personnel_management/personnel_management_candidate</class>
+      <func>on_connect_job_offer_to_candidate</func>
+      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
 </num_3>
 <num_4>
-      <class>crm/crm_person</class>
-      <func>on_connect_section_to_person</func>
-      <param>CL_CRM_SECTION</param>
+      <class>applications/personnel_management/personnel_management_job_offer</class>
+      <func>on_connect_candidate_to_job_offer</func>
+      <param>CL_PERSONNEL_MANAGEMENT_CANDIDATE</param>
 </num_4>
 <num_5>
-      <class>crm/crm_section</class>
-      <func>on_connect_person_to_section</func>
+      <class>applications/personnel_management/personnel_management_job_wanted</class>
+      <func>on_connect_person_to_job_wanted</func>
       <param>CL_CRM_PERSON</param>
 </num_5>
 <num_6>
+      <class>applications/mailinglist/ml_member</class>
+      <func>on_connect_work_relation_to_email</func>
+      <param>CL_CRM_PERSON_WORK_RELATION</param>
+</num_6>
+<num_7>
+      <class>crm/crm_phone</class>
+      <func>on_connect_work_relation_to_phone</func>
+      <param>CL_CRM_PERSON_WORK_RELATION</param>
+</num_7>
+<num_8>
+      <class>crm/crm_person</class>
+      <func>on_connect_org_to_person</func>
+      <param>CL_CRM_COMPANY</param>
+</num_8>
+<num_9>
+      <class>crm/crm_person</class>
+      <func>on_connect_section_to_person</func>
+      <param>CL_CRM_SECTION</param>
+</num_9>
+<num_10>
+      <class>crm/crm_person</class>
+      <func>on_connect_job_wanted_to_person</func>
+      <param>CL_PERSONNEL_MANAGEMENT_JOB_WANTED</param>
+</num_10>
+<num_11>
+      <class>crm/crm_section</class>
+      <func>on_connect_person_to_section</func>
+      <param>CL_CRM_PERSON</param>
+</num_11>
+<num_12>
       <class>crm/crm_company</class>
       <func>on_connect_person_to_org</func>
       <param>CL_CRM_PERSON</param>
-</num_6>
-<num_7>
+</num_12>
+<num_13>
       <class>crm/crm_company</class>
       <func>on_create_customer</func>
       <param>CL_CRM_CATEGORY</param>
-</num_7>
-<num_8>
+</num_13>
+<num_14>
       <class>contentmgmt/timing</class>
       <func>on_tconnect_from</func>
       <param>CL_DOCUMENT</param>
-</num_8>
-<num_9>
+</num_14>
+<num_15>
       <class>contentmgmt/timing</class>
       <func>on_tconnect_from</func>
       <param>CL_MENU</param>
-</num_9>
-<num_10>
+</num_15>
+<num_16>
       <class>contentmgmt/reminder</class>
       <func>on_rconnect_from</func>
       <param>CL_DOCUMENT</param>
-</num_10>
-<num_11>
+</num_16>
+<num_17>
       <class>contentmgmt/forum/forum_v2</class>
       <func>on_connect_menu</func>
       <param>CL_FORUM_V2</param>
-</num_11>
-<num_12>
+</num_17>
+<num_18>
       <class>core/users/user</class>
       <func>on_add_alias</func>
       <param>CL_USER</param>
-</num_12>
-<num_13>
+</num_18>
+<num_19>
       <class>core/users/group</class>
       <func>on_add_alias_to_group</func>
       <param>CL_GROUP</param>
-</num_13>
+</num_19>
 </xml>

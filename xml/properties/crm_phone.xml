@@ -9,6 +9,13 @@
             <caption>Number</caption>
       </property>
       <property>
+            <name>number_without_crap</name>
+            <table>kliendibaas_telefon</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>number</field>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
@@ -52,6 +59,13 @@
             <maintainer>markop</maintainer>
             <no_status>1</no_status>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_telefon>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+                  <index>oid</index>
+            </kliendibaas_telefon>
+      </tableinfo>
       <reltypes>
             <BELONGTO>
                   <value>1</value>

@@ -7,17 +7,20 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SKILL</reltype>
             <store>connect</store>
+            <no_edit>1</no_edit>
             <field>skill</field>
             <caption>Oskus</caption>
       </property>
       <property>
-            <name>name</name>
+            <name>level</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
-            <size>4</size>
-            <field>name</field>
-            <caption>Oskuse tase</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LEVEL</reltype>
+            <store>connect</store>
+            <no_edit>1</no_edit>
+            <field>level</field>
+            <caption>Tase</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_SKILL_LEVEL</syslog_type>
@@ -32,6 +35,11 @@
                   <clid>CL_CRM_SKILL</clid>
                   <caption>Oskus</caption>
             </SKILL>
+            <LEVEL>
+                  <value>2</value>
+                  <clid>CL_META</clid>
+                  <caption>Oskuse tase</caption>
+            </LEVEL>
       </reltypes>
 </properties>
 

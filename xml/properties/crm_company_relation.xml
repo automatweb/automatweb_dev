@@ -10,6 +10,34 @@
             <field>org</field>
             <caption>Organisatsioon</caption>
       </property>
+      <property>
+            <name>start</name>
+            <table>kliendibaas_organisatoorne_kuuluvus</table>
+            <group>general</group>
+            <type>date_select</type>
+            <year_from>1950</year_from>
+            <save_format>iso8601</save_format>
+            <field>rel_start</field>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <table>kliendibaas_organisatoorne_kuuluvus</table>
+            <group>general</group>
+            <type>date_select</type>
+            <year_from>1950</year_from>
+            <save_format>iso8601</save_format>
+            <field>rel_end</field>
+            <caption>L&amp;amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>add_info</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>comment</field>
+            <caption>Lisainfo</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY_RELATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -17,6 +45,13 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_organisatoorne_kuuluvus>
+                  <master_index>oid</master_index>
+                  <master_table>objects</master_table>
+                  <index>oid</index>
+            </kliendibaas_organisatoorne_kuuluvus>
+      </tableinfo>
       <reltypes>
             <COMPANY>
                   <value>1</value>

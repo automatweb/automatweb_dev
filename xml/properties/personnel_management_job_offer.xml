@@ -85,14 +85,34 @@
             <caption>Valdkond</caption>
       </property>
       <property>
-            <name>location</name>
+            <name>loc_area</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_LOCATION</reltype>
-            <caption>Asukoht</caption>
+            <reltype>RELTYPE_AREA</reltype>
+            <caption>Piirkond</caption>
+      </property>
+      <property>
+            <name>loc_county</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTY</reltype>
+            <caption>Maakond</caption>
+      </property>
+      <property>
+            <name>loc_city</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CITY</reltype>
+            <caption>Linn</caption>
       </property>
       <property>
             <name>workinfo</name>
@@ -249,6 +269,7 @@
             <relationmgr>yes</relationmgr>
             <r2>yes</r2>
             <no_comment>1</no_comment>
+            <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
@@ -281,15 +302,6 @@
                   <clid>CL_CRM_PROFESSION</clid>
                   <caption>Ametikoht</caption>
             </PROFESSION>
-            <LOCATION>
-                  <value>5</value>
-                  <clid>
-                        <num_0>CL_CRM_COUNTY</num_0>
-                        <num_1>CL_CRM_COUNTRY</num_1>
-                        <num_2>CL_CRM_CITY</num_2>
-                  </clid>
-                  <caption>Asukoht</caption>
-            </LOCATION>
             <FIELD>
                   <value>6</value>
                   <clid>CL_META</clid>
@@ -300,6 +312,21 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>CV seadete vorm</caption>
             </CFGFORM>
+            <AREA>
+                  <value>8</value>
+                  <clid>CL_CRM_AREA</clid>
+                  <caption>Piirkond</caption>
+            </AREA>
+            <COUNTY>
+                  <value>9</value>
+                  <clid>CL_CRM_COUNTY</clid>
+                  <caption>Piirkond</caption>
+            </COUNTY>
+            <CITY>
+                  <value>10</value>
+                  <clid>CL_CRM_CITY</clid>
+                  <caption>Piirkond</caption>
+            </CITY>
       </reltypes>
 </properties>
 

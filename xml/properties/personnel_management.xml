@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <group>general2</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>persons_fld</name>
             <group>general2</group>
             <table>objects</table>
@@ -18,7 +26,17 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_MENU</reltype>
-            <caption>T&amp;ouml;&amp;ouml;pakkumiste kaust</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumiste kaust</caption>
+      </property>
+      <property>
+            <name>shools_fld</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Koolide kaust</caption>
       </property>
       <property>
             <name>fields</name>
@@ -38,7 +56,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_PERSON_OT</reltype>
-            <caption>Isikute objektit&amp;uuml;&amp;uuml;p</caption>
+            <caption>Isikute objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>crmdb</name>
@@ -61,40 +79,68 @@
             <caption>Omanikorganisatsioon</caption>
       </property>
       <property>
+            <name>sysdefault_pm</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <caption>Default personalikeskkond</caption>
+      </property>
+      <property>
+            <name>cv_tpl</name>
+            <group>search_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>CV templeit</caption>
+      </property>
+      <property>
             <name>search_conf_tbl</name>
             <group>search_conf</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
-            <no_caption>1</no_caption>
             <store>no</store>
+            <caption>Tulemuste tabeli v&amp;amp;auml;ljad</caption>
       </property>
       <property>
-            <name>search_save</name>
-            <group>employee_search</group>
+            <name>skill_manager</name>
+            <group>skill_conf</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_SEARCH_SAVE</reltype>
-            <caption>Varasem otsing</caption>
+            <reltype>RELTYPE_SKILL_MANAGER</reltype>
+            <caption>Oskuste haldur</caption>
       </property>
       <property>
-            <name>search_cv</name>
-            <group>employee_search</group>
+            <name>skills_fld</name>
+            <group>skill_conf</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>form</type>
-            <sclass>applications/personnel_management/personnel_management_cv_search</sclass>
-            <sform>cv_search</sform>
-            <store>no</store>
-            <caption>Otsi CV-sid</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Oskuste kaust</caption>
       </property>
       <property>
-            <name>candidate_toolbar</name>
-            <group>candidate</group>
+            <name>skills_tbl</name>
+            <group>skill_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Oskuste konfiguratsioon</caption>
+      </property>
+      <property>
+            <name>lang_tb</name>
+            <group>lang_conf</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -103,25 +149,562 @@
             <store>no</store>
       </property>
       <property>
-            <name>candidate_tree</name>
-            <group>candidate</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>treeview</type>
-            <no_caption>1</no_caption>
-            <parent>candidate</parent>
-            <store>no</store>
-      </property>
-      <property>
-            <name>candidate_table</name>
-            <group>candidate</group>
+            <name>lang_tbl</name>
+            <group>lang_conf</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
-            <parent>candidate</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>employee_tb</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>add_employee</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <store>no</store>
+      </property>
+      <property>
+            <name>employee_tree</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>employee_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>search_save</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_SAVE</reltype>
+            <parent>employee_search_1</parent>
+            <captionside>top</captionside>
+            <search_button>1</search_button>
+            <no_edit>1</no_edit>
+            <caption>Varasem otsing</caption>
+      </property>
+      <property>
+            <name>cv_name</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>cv_tel</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>cv_email</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>E-post</caption>
+      </property>
+      <property>
+            <name>cv_addinfo</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>cv_gender</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Sugu</caption>
+      </property>
+      <property>
+            <name>cv_age_from</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>cv_age</parent>
+            <captionside>top</captionside>
+            <size>4</size>
+            <store>no</store>
+            <caption>Vanus alates</caption>
+      </property>
+      <property>
+            <name>cv_age_to</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>cv_age</parent>
+            <captionside>top</captionside>
+            <size>4</size>
+            <store>no</store>
+            <caption>Vanus kuni</caption>
+      </property>
+      <property>
+            <name>cv_edulvl</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Haridustase</caption>
+      </property>
+      <property>
+            <name>cv_schl</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Kool</caption>
+      </property>
+      <property>
+            <name>cv_schl_area</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Valdkond</caption>
+      </property>
+      <property>
+            <name>cv_schl_stat</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <size>18</size>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>cv_job</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>soovitud_t88</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Ametinimetus</caption>
+      </property>
+      <property>
+            <name>cv_paywish</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>pay</parent>
+            <captionside>top</captionside>
+            <size>6</size>
+            <store>no</store>
+            <caption>Palk alates</caption>
+      </property>
+      <property>
+            <name>cv_paywish2</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>pay</parent>
+            <captionside>top</captionside>
+            <size>6</size>
+            <store>no</store>
+            <caption>Palk kuni</caption>
+      </property>
+      <property>
+            <name>cv_field</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <parent>soovitud_t88</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Tegevusala</caption>
+      </property>
+      <property>
+            <name>cv_type</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <multiple>1</multiple>
+            <parent>soovitud_t88</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; liik</caption>
+      </property>
+      <property>
+            <name>cv_location</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <parent>soovitud_t88</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tamise piirkond</caption>
+      </property>
+      <property>
+            <name>cv_load</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <reltype>RELTYPE_JOB_WANTED_LOAD</reltype>
+            <parent>soovitud_t88</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
+      </property>
+      <property>
+            <name>cv_personality</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>oskused</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Isikuomadused</caption>
+      </property>
+      <property>
+            <name>cv_mother_tongue</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <parent>oskused</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Emakeel</caption>
+      </property>
+      <property>
+            <name>cv_lang_exp</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <parent>oskused</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Keeleoskus</caption>
+      </property>
+      <property>
+            <name>cv_lang_exp_lvl</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <parent>oskused</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Keeleoskuse tase</caption>
+      </property>
+      <property>
+            <name>cv_exps_n_lvls</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>oskused</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cv_driving_licence</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <type>text</type>
+            <multiple>1</multiple>
+            <parent>oskused</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Juhiload</caption>
+      </property>
+      <property>
+            <name>cv_previous_rank</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>t88kogemus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;kogemuse ametinimetus</caption>
+      </property>
+      <property>
+            <name>cv_company</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>t88kogemus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Ettev&amp;amp;otilde;te</caption>
+      </property>
+      <property>
+            <name>cv_recommenders</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>t88kogemus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Soovitajad</caption>
+      </property>
+      <property>
+            <name>cv_comments</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>t88kogemus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Kommentaarid</caption>
+      </property>
+      <property>
+            <name>cv_search_button</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <parent>cv_search_buttons</parent>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>cv_search_button_save_search</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <parent>cv_search_buttons</parent>
+            <store>no</store>
+            <caption>Otsi ja salvesta</caption>
+      </property>
+      <property>
+            <name>employee_tbl</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>employee_right</parent>
             <store>no</store>
       </property>
       <property>
@@ -156,10 +739,11 @@
             <captionside>top</captionside>
             <store>no</store>
             <size>18</size>
+            <form>offers_search</form>
             <caption>Ametikoht</caption>
       </property>
       <property>
-            <name>os_area</name>
+            <name>os_county</name>
             <group>offers_</group>
             <table>objects</table>
             <field>meta</field>
@@ -169,7 +753,22 @@
             <captionside>top</captionside>
             <store>no</store>
             <size>18</size>
-            <caption>Piirkond</caption>
+            <form>offers_search</form>
+            <caption>Maakond</caption>
+      </property>
+      <property>
+            <name>os_city</name>
+            <group>offers_</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>os_top</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <size>18</size>
+            <form>offers_search</form>
+            <caption>Linn</caption>
       </property>
       <property>
             <name>os_dl_from</name>
@@ -186,6 +785,7 @@
                   <num_1>month_textbox</num_1>
                   <num_2>year_textbox</num_2>
             </format>
+            <form>offers_search</form>
             <caption>T&amp;amp;auml;htaeg alates</caption>
       </property>
       <property>
@@ -203,6 +803,7 @@
                   <num_1>month_textbox</num_1>
                   <num_2>year_textbox</num_2>
             </format>
+            <form>offers_search</form>
             <caption>T&amp;amp;auml;htaeg kuni</caption>
       </property>
       <property>
@@ -215,10 +816,11 @@
             <store>no</store>
             <parent>offers_search</parent>
             <captionside>top</captionside>
+            <form>offers_search</form>
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>act_s_sbt</name>
+            <name>os_sbt</name>
             <group>offers_</group>
             <table>objects</table>
             <field>meta</field>
@@ -226,22 +828,12 @@
             <type>submit</type>
             <parent>offers_search</parent>
             <no_caption>1</no_caption>
+            <form>offers_search</form>
             <store>no</store>
             <caption>Otsi</caption>
       </property>
       <property>
             <name>offers_table</name>
-            <group>offers_</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <parent>offers</parent>
-            <store>no</store>
-      </property>
-      <property>
-            <name>offers_search_results_table</name>
             <group>offers_</group>
             <table>objects</table>
             <field>meta</field>
@@ -287,6 +879,7 @@
             <r2>yes</r2>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
+            <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
@@ -298,14 +891,18 @@
                   <caption>Otsingu seaded</caption>
                   <parent>general</parent>
             </search_conf>
+            <skill_conf>
+                  <caption>Oskuste seaded</caption>
+                  <parent>general</parent>
+            </skill_conf>
+            <lang_conf>
+                  <caption>Keelte seaded</caption>
+                  <parent>general</parent>
+            </lang_conf>
             <employee>
-                  <caption>T&amp;ouml;&amp;ouml;otsijad</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</caption>
                   <submit>no</submit>
             </employee>
-            <employee_search>
-                  <caption>Otsing</caption>
-                  <parent>employee</parent>
-            </employee_search>
             <candidate>
                   <caption>Kandideerijad</caption>
                   <submit>no</submit>
@@ -316,7 +913,7 @@
             </offers>
             <offers_>
                   <parent>offers</parent>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <submit>no</submit>
             </offers_>
             <offers_conf>
@@ -351,7 +948,7 @@
             <PERSON_OT>
                   <value>4</value>
                   <clid>CL_OBJECT_TYPE</clid>
-                  <caption>Objektit&amp;uuml;&amp;uuml;p</caption>
+                  <caption>Objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </PERSON_OT>
             <OWNER_ORG>
                   <value>5</value>
@@ -360,22 +957,158 @@
             </OWNER_ORG>
             <SEARCH_SAVE>
                   <value>6</value>
-                  <clid>CL_BLAH</clid>
+                  <clid>CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED</clid>
                   <caption>Otsingu salvestus</caption>
             </SEARCH_SAVE>
             <DEFAULT_OFFERS_CFGFORM>
                   <value>7</value>
                   <clid>CL_CFGFORM</clid>
-                  <caption>T&amp;ouml;&amp;ouml;pakkumiste default-seadetevorm</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumiste default-seadetevorm</caption>
             </DEFAULT_OFFERS_CFGFORM>
+            <JOB_WANTED_LOAD>
+                  <value>8</value>
+                  <clid>CL_META</clid>
+                  <caption>Soovitud t&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
+            </JOB_WANTED_LOAD>
+            <SKILL_MANAGER>
+                  <value>9</value>
+                  <clid>CL_CRM_SKILL_MANAGER</clid>
+            </SKILL_MANAGER>
       </reltypes>
       <layout>
-            <candidate>
+            <employee>
                   <type>hbox</type>
-                  <width>15%:85%</width>
-                  <group>candidate</group>
+                  <width>20%:80%</width>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
                   <area_caption></area_caption>
-            </candidate>
+            </employee>
+            <employee_left>
+                  <type>vbox</type>
+                  <parent>employee</parent>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </employee_left>
+            <employee_tree>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>employee_left</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</area_caption>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+            </employee_tree>
+            <employee_search>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>employee_left</parent>
+                  <area_caption>Otsing</area_caption>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+            </employee_search>
+            <employee_search_1>
+                  <type>vbox</type>
+                  <parent>employee_search</parent>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </employee_search_1>
+            <isikuandmed>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>employee_search</parent>
+                  <area_caption>Isikuandmed</area_caption>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+            </isikuandmed>
+            <cv_age>
+                  <type>hbox</type>
+                  <parent>isikuandmed</parent>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </cv_age>
+            <haridus>
+                  <type>vbox</type>
+                  <parent>employee_search</parent>
+                  <area_caption>Haridus</area_caption>
+                  <closeable>1</closeable>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+            </haridus>
+            <soovitud_t88>
+                  <type>vbox</type>
+                  <parent>employee_search</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Soovitud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;</area_caption>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+            </soovitud_t88>
+            <pay>
+                  <type>hbox</type>
+                  <parent>soovitud_t88</parent>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </pay>
+            <oskused>
+                  <type>vbox</type>
+                  <parent>employee_search</parent>
+                  <area_caption>Oskused</area_caption>
+                  <closeable>1</closeable>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+            </oskused>
+            <t88kogemus>
+                  <type>vbox</type>
+                  <parent>employee_search</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;kogemus</area_caption>
+                  <closeable>1</closeable>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+            </t88kogemus>
+            <cv_search_buttons>
+                  <type>hbox</type>
+                  <parent>employee_search</parent>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </cv_search_buttons>
+            <employee_right>
+                  <type>vbox</type>
+                  <parent>employee</parent>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </employee_right>
             <offers>
                   <type>hbox</type>
                   <width>15%:85%</width>
@@ -392,14 +1125,14 @@
                   <type>vbox</type>
                   <parent>offers_tree_n_search</parent>
                   <closeable>1</closeable>
-                  <area_caption>Kaustad</area_caption>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumised</area_caption>
                   <group>offers_</group>
             </offers_tree>
             <offers_search>
                   <type>vbox</type>
                   <parent>offers_tree_n_search</parent>
                   <closeable>1</closeable>
-                  <area_caption>Otsing</area_caption>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumiste&amp;amp;nbsp;otsing</area_caption>
                   <group>offers_</group>
             </offers_search>
             <os_top>
@@ -415,5 +1148,12 @@
                   <area_caption></area_caption>
             </os_dl_layout>
       </layout>
+      <forminfo>
+            <offers_search>
+                  <onload>init_offers_search</onload>
+                  <onsubmit>do_offers_search</onsubmit>
+                  <method>post</method>
+            </offers_search>
+      </forminfo>
 </properties>
 

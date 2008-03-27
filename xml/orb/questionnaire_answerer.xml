@@ -3,4 +3,3 @@
 	<class name="questionnaire_answerer" folder="applications/questionary" extends="class_base">
 	</class>
 </orb>
-		

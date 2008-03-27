@@ -11,6 +11,16 @@
             <caption>Isik</caption>
       </property>
       <property>
+            <name>job_offer</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <type>relpicker</type>
+            <reltype>RELTYPE_JOB_OFFER</reltype>
+            <store>connect</store>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine</caption>
+      </property>
+      <property>
             <name>intro_file</name>
             <group>general</group>
             <table>objects</table>
@@ -56,6 +66,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Kaaskiri failina</caption>
             </FILE>
+            <JOB_OFFER>
+                  <value>3</value>
+                  <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine</caption>
+            </JOB_OFFER>
       </reltypes>
 </properties>
 

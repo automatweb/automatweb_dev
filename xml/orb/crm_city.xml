@@ -1,5 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_city" folder="crm" extends="class_base">
+		<action name="get_job_offers">
+			<function name="get_job_offers">
+				<arguments>
+					<required name="id" type="oid" acl="view" />
+					<optional name="parent" type="oid,array" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

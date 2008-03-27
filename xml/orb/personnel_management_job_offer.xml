@@ -31,12 +31,5 @@
 			</function>
 		</action>
 
-		<action name="get_candidates">
-			<function name="get_candidates">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

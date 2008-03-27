@@ -69,6 +69,7 @@
 		<action name="show_cv" all_args="1">
 			<function name="show_cv">
 				<arguments>
+					<optional name="cv" type="string" />
 				</arguments>
 			</function>
 		</action>
@@ -96,6 +97,26 @@
 					<required name="wrid" type="int" />
 					<required name="toid" type="int" />
 					<required name="reltype" type="int" />
+					<required name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_skill">
+			<function name="add_skill">
+				<arguments>
+					<required name="id" type="oid" />
+					<required name="skill_id" type="oid" />
+					<required name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_lang_skill">
+			<function name="add_lang_skill">
+				<arguments>
+					<required name="id" type="oid" />
+					<required name="lang_id" type="oid" />
 					<required name="return_url" type="string" />
 				</arguments>
 			</function>

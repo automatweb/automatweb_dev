@@ -3,4 +3,3 @@
 	<class name="personnel_management_cv_search_saved" folder="applications/personnel_management" extends="class_base">
 	</class>
 </orb>
-		

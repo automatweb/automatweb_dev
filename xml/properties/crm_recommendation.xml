@@ -1,5 +1,27 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>person</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PERSON</reltype>
+            <store>connect</store>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Soovitav isik</caption>
+      </property>
+      <property>
+            <name>jobwish</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_JOBWISH</reltype>
+            <store>connect</store>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Soovitatav t&amp;amp;ouml;&amp;amp;ouml;</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_RECOMMENDATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +29,17 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <JOBWISH>
+                  <value>1</value>
+                  <clid>CL_PERSONNEL_MANAGEMENT_JOB_WANTED</clid>
+                  <caption>Soovitatav t&amp;amp;ouml;&amp;amp;ouml;</caption>
+            </JOBWISH>
+            <PERSON>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Soovitav isik</caption>
+            </PERSON>
+      </reltypes>
 </properties>
 

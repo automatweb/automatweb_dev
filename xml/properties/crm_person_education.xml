@@ -1,113 +1,103 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>school</name>
-            <table>objects</table>
+            <name>school_1</name>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <type>textbox</type>
-            <field>name</field>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SCHOOL</reltype>
+            <field>school_1</field>
             <caption>Kool</caption>
       </property>
       <property>
-            <name>degree</name>
-            <table>objects</table>
+            <name>school_2</name>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>textbox</type>
+            <field>school_2</field>
+            <caption>Muu kool</caption>
+      </property>
+      <property>
+            <name>degree</name>
+            <table>kliendibaas_haridus</table>
+            <group>general</group>
             <type>select</type>
+            <field>degree</field>
             <caption>Akadeemiline kraad</caption>
       </property>
       <property>
             <name>field</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>classificator</type>
             <reltype>RELTYPE_FIELD</reltype>
             <store>connect</store>
+            <field>field</field>
             <caption>Valdkond</caption>
       </property>
       <property>
             <name>speciality</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>speciality</field>
             <caption>Eriala</caption>
       </property>
       <property>
             <name>main_speciality</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>chooser</type>
+            <field>main_speciality</field>
             <caption>P&amp;amp;otilde;hieriala</caption>
       </property>
       <property>
             <name>in_progress</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>chooser</type>
+            <field>in_progress</field>
             <caption>Omandamisel</caption>
       </property>
       <property>
             <name>obtain_language</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <field>obtain_language</field>
             <caption>Omandamise keel</caption>
       </property>
       <property>
             <name>start</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>date_select</type>
-            <format>
-                  <num_0>month</num_0>
-                  <num_1>year</num_1>
-            </format>
-            <parent>time</parent>
+            <field>start</field>
             <caption>Algus</caption>
       </property>
       <property>
             <name>end</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>date_select</type>
-            <format>
-                  <num_0>month</num_0>
-                  <num_1>year</num_1>
-            </format>
-            <parent>time</parent>
+            <field>end</field>
             <caption>L&amp;amp;otilde;pp</caption>
       </property>
       <property>
             <name>end_date</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>date_select</type>
-            <caption>L&amp;amp;otilde;petamise kuup&amp;auml;ev</caption>
+            <field>end_date</field>
+            <caption>L&amp;amp;otilde;petamise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>diploma_nr</name>
-            <table>objects</table>
+            <table>kliendibaas_haridus</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>diploma_nr</field>
             <caption>Diplomi number</caption>
       </property>
       <classinfo>
@@ -116,19 +106,29 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_haridus>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_haridus>
+      </tableinfo>
       <reltypes>
             <FIELD>
                   <value>1</value>
                   <clid>CL_META</clid>
                   <caption>Valdkond</caption>
             </FIELD>
+            <SCHOOL>
+                  <value>2</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Kool</caption>
+            </SCHOOL>
+            <LANGUAGE>
+                  <value>3</value>
+                  <clid>CL_LANGUAGE</clid>
+                  <caption>Omandamise keel</caption>
+            </LANGUAGE>
       </reltypes>
-      <layout>
-            <time>
-                  <type>hbox</type>
-                  <group>general</group>
-                  <area_caption></area_caption>
-            </time>
-      </layout>
 </properties>
 

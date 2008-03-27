@@ -2,38 +2,45 @@
 <properties>
       <property>
             <name>language</name>
-            <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
-            <field>name</field>
+            <table>kliendibaas_keeleoskus</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <field>language</field>
+            <no_edit>1</no_edit>
             <caption>Keel</caption>
       </property>
       <property>
             <name>talk</name>
-            <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>kliendibaas_keeleoskus</table>
             <type>select</type>
-            <caption>R&amp;auml;&amp;auml;gin</caption>
+            <field>sk_talk</field>
+            <caption>R&amp;amp;auml;&amp;amp;auml;gin</caption>
       </property>
       <property>
             <name>understand</name>
-            <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>kliendibaas_keeleoskus</table>
             <type>select</type>
+            <field>sk_understand</field>
             <caption>Saan aru</caption>
       </property>
       <property>
             <name>write</name>
-            <table>objects</table>
             <group>general</group>
+            <table>kliendibaas_keeleoskus</table>
+            <type>select</type>
+            <field>sk_write</field>
+            <caption>Kirjutan</caption>
+      </property>
+      <property>
+            <name>person</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <caption>Kirjutan</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PERSON_LANGUAGE</syslog_type>
@@ -42,5 +49,19 @@
             <no_status>1</no_status>
             <maintainer>markop</maintainer>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_keeleoskus>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_keeleoskus>
+      </tableinfo>
+      <reltypes>
+            <LANGUAGE>
+                  <value>1</value>
+                  <clid>CL_CRM_LANGUAGE</clid>
+                  <caption>Keel</caption>
+            </LANGUAGE>
+      </reltypes>
 </properties>
 

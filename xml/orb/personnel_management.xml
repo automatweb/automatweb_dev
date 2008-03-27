@@ -22,5 +22,34 @@
 			</function>
 		</action>
 
+		<action name="add2list">
+			<function name="add2list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_udef_skills">
+			<function name="get_udef_skills">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_languages">
+			<function name="get_languages">
+				<arguments>
+					<optional name="id" type="oid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_cands">
+			<function name="delete_cands">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

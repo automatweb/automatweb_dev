@@ -82,7 +82,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>select</type>
             <caption>Koormus</caption>
       </property>
       <property>
