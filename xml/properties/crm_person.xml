@@ -121,6 +121,18 @@
             <caption>Lapsi</caption>
       </property>
       <property>
+            <name>children_list</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <cols>30</cols>
+            <rows>5</rows>
+            <caption>Lapsed</caption>
+            <comment>Nimi ja vanus</comment>
+      </property>
+      <property>
             <name>pictureurl</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -807,6 +819,14 @@
             <type>select</type>
             <field>edulevel</field>
             <caption>Haridustase</caption>
+      </property>
+      <property>
+            <name>academic_degree</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>select</type>
+            <field>academic_degree</field>
+            <caption>Akadeemiline kraad</caption>
       </property>
       <property>
             <name>education_tbl</name>

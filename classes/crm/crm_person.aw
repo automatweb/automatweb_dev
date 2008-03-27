@@ -60,6 +60,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property children1 type=select table=objects field=meta method=serialize
 @caption Lapsi
 
+@property children_list type=textarea table=objects field=meta method=serialize cols=30 rows=5
+@caption Lapsed
+@comment Nimi ja vanus
+
 @property pictureurl type=textbox size=40 maxlength=200
 @caption Pildi/foto url
 
