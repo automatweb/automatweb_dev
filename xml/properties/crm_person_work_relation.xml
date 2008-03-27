@@ -107,6 +107,15 @@
             <caption>Valuuta</caption>
       </property>
       <property>
+            <name>benefits</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Soodustused ja eritingimused</caption>
+      </property>
+      <property>
             <name>directive_link</name>
             <table>objects</table>
             <group>general</group>

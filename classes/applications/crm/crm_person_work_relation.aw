@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.12 2008/03/27 22:13:05 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.13 2008/03/27 22:15:47 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -50,6 +50,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 
 @property salary_currency type=relpicker reltype=RELTYPE_CURRENCY store=connect
 @caption Valuuta
+
+@property benefits type=textarea
+@caption Soodustused ja eritingimused
 
 @property directive_link type=textbox field=meta method=serialize 
 @caption Viit ametijuhendile
