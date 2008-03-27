@@ -7,6 +7,19 @@
 @default table=objects
 @default group=general
 
+@property subheading type=checkbox cb_value=1 field=meta method=serialize
+@caption Vahepealkiri
+@comment Kui oskus on vahepealkiri, ei saa teda siduda isikuga ega m&auml;&auml;rata tema taset.
+
+@property lvl type=checkbox ch_value=1 field=meta method=serialize
+@property Saab m&auml;&auml;rata taset
+
+@property lvl_meta type=relpicker reltype=RELTYPE_LEVELS field=meta method=serialize
+@property Tasemed
+
+@reltype LEVELS value=1 clid=CL_META
+@caption Tasemed
+
 */
 
 class crm_skill extends class_base

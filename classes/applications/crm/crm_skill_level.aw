@@ -7,15 +7,17 @@
 @default table=objects
 @default group=general
 
-@property skill type=relpicker reltype=RELTYPE_SKILL store=connect
+@property skill type=relpicker reltype=RELTYPE_SKILL store=connect no_edit=1
 @caption Oskus
 
-@property name type=textbox size=4 field=name
-@caption Oskuse tase
+@property level type=relpicker reltype=RELTYPE_LEVEL store=connect no_edit=1
+@caption Tase
 
 @reltype SKILL value=1 clid=CL_CRM_SKILL
 @caption Oskus
 
+@reltype LEVEL value=2 clid=CL_META
+@caption Oskuse tase
 
 */
 
@@ -36,6 +38,24 @@ class crm_skill_level extends class_base
 
 		switch($prop["name"])
 		{
+			case "level":
+				$prop["options"][0] = t("--vali--");
+				if(is_oid($arr["obj_inst"]->prop("skill")))
+				{
+					$skill_obj = obj($arr["obj_inst"]->prop("skill"));
+					if(is_oid($skill_obj->prop("lvl_meta")))
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_META,
+							"parent" => $skill_obj->prop("lvl_meta"),
+							"lang_id" => array(),
+							"status" => object::STAT_ACTIVE,
+							"sort_by" => "jrk",
+						));
+						$prop["options"] += $ol->names();
+					}
+				}
+				break;
 		}
 
 		return $retval;

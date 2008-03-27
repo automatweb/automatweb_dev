@@ -39,6 +39,8 @@ class crm_degree extends class_base
 
 	function set_property($arr = array())
 	{
+		arr($arr);
+		exit;
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 

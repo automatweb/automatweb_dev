@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.10 2008/01/31 15:43:28 kaarel Exp $
-// crm_person_work_relation.aw - Töösuhe 
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.11 2008/03/27 09:18:04 instrumental Exp $
+// crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PHONE, on_connect_phone_to_work_relation)
@@ -41,7 +41,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @property tasks type=textarea
 @caption &Uuml;lesanded
 
-@property load type=textbox
+@property load type=select
 @caption Koormus
 
 @property directive_link type=textbox field=meta method=serialize 
@@ -100,6 +100,13 @@ class crm_person_work_relation extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "load":
+				$data["options"] = object_type::get_classificator_options(array(
+					"clid" => CL_PERSONNEL_MANAGEMENT,
+					"classificator" => "cv_load",
+				));
+				break;
+
 			case "section2":
 				$data["value"] = $arr["obj_inst"]->prop("section");
 				break;

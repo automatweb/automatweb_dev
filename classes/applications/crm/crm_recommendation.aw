@@ -7,6 +7,18 @@
 @default table=objects
 @default group=general
 
+@property person type=relpicker reltype=RELTYPE_PERSON store=connect field=meta method=serialize
+@caption Soovitav isik
+
+@property jobwish type=relpicker reltype=RELTYPE_JOBWISH store=connect field=meta method=serialize
+@caption Soovitatav t&ouml;&ouml;
+
+@reltype JOBWISH value=1 clid=CL_PERSONNEL_MANAGEMENT_JOB_WANTED
+@caption Soovitatav t&ouml;&ouml;
+
+@reltype PERSON value=2 clid=CL_CRM_PERSON
+@caption Soovitav isik
+
 */
 
 class crm_recommendation extends class_base

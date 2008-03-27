@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.5 2007/11/23 10:48:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.6 2008/03/27 09:18:04 instrumental Exp $
 // crm_area.aw - Piirkond 
 /*
 
@@ -70,6 +70,36 @@ class crm_area extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	/** Returns object list of personnel_management_job_offer objects that are connected to the area.
+
+	@attrib name=get_job_offers params=name api=1
+
+	@param id required type=oid acl=view
+
+	@param parent optional type=oid,array acl=view
+
+	**/
+	function get_job_offers($arr)
+	{
+		if(!is_array($arr["parent"]) && isset($arr["parent"]))
+		{
+			$arr["parent"] = array(0 => $arr["parent"]);
+		}
+		$o = obj($arr["id"]);
+		$conns2 = $o->connections_to(array(
+			"class" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+		));
+		$ret = new object_list();
+		foreach($conns2 as $conn2)
+		{
+			if(!isset($arr["parent"]) || in_array($conn2->conn["from.parent"], $arr["parent"]))
+			{
+				$ret->add($conn2->conn["from"]);
+			}
+		}
+		return $ret;
 	}
 
 //-- methods --//

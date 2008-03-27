@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.25 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.26 2008/03/27 09:18:04 instrumental Exp $
 // crm_job_entry.aw - T88 kirje
 /*
 
@@ -410,8 +410,10 @@ class crm_job_entry extends class_base
 				$pers->save();
 
 				// add person as employee
+				/* This porperty no longer exists.
 				$pers->set_prop("work_contact", $c->id());
 				$pers->save();
+				*/
 				$c->connect(array(
 					"to" => $pers->id(),
 					"type" => "RELTYPE_WORKERS"

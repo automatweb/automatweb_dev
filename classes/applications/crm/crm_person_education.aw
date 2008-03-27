@@ -1,53 +1,62 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.9 2008/02/28 08:29:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.10 2008/03/27 09:18:04 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
 @classinfo syslog_type=ST_CRM_PERSON_EDUCATION no_name=1 no_comment=1 no_status=1
+@tableinfo kliendibaas_haridus index=oid master_table=objects master_index=oid
 
 @default table=objects
 @default group=general
 
-@property school type=textbox field=name
+@default table=kliendibaas_haridus
+
+@property school_1 type=relpicker reltype=RELTYPE_SCHOOL field=school_1
 @caption Kool
 
-@default field=meta
-@default method=serialize
+@property school_2 type=textbox field=school_2
+@caption Muu kool
 
-@property degree type=select
+@property degree type=select field=degree
 @caption Akadeemiline kraad
 
 @property field type=classificator reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
 
-@property speciality type=textbox
+@property speciality type=textbox field=speciality
 @caption Eriala
 
-@property main_speciality type=chooser
+@property main_speciality type=chooser field=main_speciality
 @caption P&otilde;hieriala
 
-@property in_progress type=chooser
+@property in_progress type=chooser field=in_progress
 @caption Omandamisel
 
-@property obtain_language type=textbox
+@property obtain_language type=relpicker reltype=RELTYPE_LANGUAGE field=obtain_language
 @caption Omandamise keel
 
-@layout time type=hbox
-
-@property start type=date_select format=month,year parent=time
+# format=month,year doesn't work!!!! -kaarel
+@property start type=date_select field=start
 @caption Algus
 
-@property end type=date_select format=month,year parent=time
+# format=month,year doesn't work!!!! -kaarel
+@property end type=date_select field=end
 @caption L&otilde;pp
 
-@property end_date type=date_select
-@caption L&otilde;petamise kuupäev
+@property end_date type=date_select field=end_date
+@caption L&otilde;petamise kuup&auml;ev
 
-@property diploma_nr type=textbox
+@property diploma_nr type=textbox field=diploma_nr
 @caption Diplomi number
 
 @reltype FIELD value=1 clid=CL_META
 @caption Valdkond
+
+@reltype SCHOOL value=2 clid=CL_CRM_COMPANY
+@caption Kool
+
+@reltype LANGUAGE value=3 clid=CL_LANGUAGE
+@caption Omandamise keel
 
 */
 
@@ -58,6 +67,31 @@ class crm_person_education extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_PERSON_EDUCATION
 		));
+		$this->degree_options = array(
+			"pohiharidus" => t("P&otilde;hiharidus"),
+			"keskharidus" => t("Keskharidus"),
+			"keskeriharidus" => t("Kesk-eriharidus"),
+			"diplom" => t("Diplom"),
+			"bakalaureus" => t("Bakalaureus"),
+			"magister" => t("Magister"),
+			"doktor" => t("Doktor"),
+			"teadustekandidaat" => t("Teaduste kandidaat"),
+		);
+	}
+
+	function set_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "start":
+			case "end":
+				$value = mktime(0, 0, 0, $prop["value"]["month"], 1, $prop["value"]["year"]);
+				$prop["value"] = $value;
+				break;
+		}
+		return $retval;
 	}
 
 	function get_property($arr)
@@ -81,19 +115,73 @@ class crm_person_education extends class_base
 				break;
 
 			case "degree":
-				$arr["prop"]["options"] = array(
-					"pohiharidus" => t("Põhiharidus"),
-					"keskharidus" => t("Keskharidus"),
-					"keskeriharidus" => t("Kesk-eriharidus"),
-					"diplom" => t("Diplom"),
-					"bakalaureus" => t("Bakalaureus"),
-					"magister" => t("Magister"),
-					"doktor" => t("Doktor"),
-					"teadustekandidaat" => t("Teaduste kandidaat"),
-				);
+				$arr["prop"]["options"] = $this->degree_options;
 				break;
 		};
 		return $retval;
+	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ($tbl == "kliendibaas_haridus" && $field == "")
+		{
+			$this->db_query("create table kliendibaas_haridus (oid int primary key)");
+			return true;
+		}
+
+		switch($field)
+		{
+			case "school_1":
+			case "main_speciality":
+			case "in_progress":
+			case "obtain_language":
+			case "start":
+			case "end":
+			case "end_date":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int"
+				));
+				break;
+			case "school_2":
+			case "degree":
+			case "speciality":
+			case "diploma_nr":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "varchar(50)"
+				));
+				break;
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON_EDUCATION,
+			"parent" => array(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
+		));
+		foreach($ol->arr() as $o)
+		{
+			$oid = $o->id();
+			$main_speciality = $o->meta("main_speciality");
+			$in_progress = $o->meta("in_progress");
+			$obtain_language = $o->meta("obtain_language");
+			$start = $o->meta("start");
+			$end = $o->meta("end");
+			$end_date = $o->meta("end_date");
+			$school_2 = $o->meta("school");
+			$degree = $o->meta("degree");
+			$speciality = $o->meta("speciality");
+			$diploma_nr = $o->meta("diploma_nr");
+
+			$this->db_query("
+				INSERT INTO
+					kliendibaas_haridus (oid, school_1, main_speciality, in_progress, obtain_language, start, end, end_date, school_2, degree, speciality, diploma_nr)
+				VALUES
+					('$oid', '', '$main_speciality', '$in_progress', '$obtain_language', '$start', '$end', '$end_date', '$school_2', '$degree', '$speciality', '$diploma_nr')
+			");
+		}
 	}
 };
 ?>
