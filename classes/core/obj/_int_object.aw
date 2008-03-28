@@ -207,7 +207,7 @@ class _int_object
 			);
 			if (!empty($param["type"]))
 			{
-				$finder["type"] = $param["type"];
+				$finder["type"] = $GLOBALS["object_loader"]->resolve_reltype($param["type"], $this->obj["class_id"]);
 			}
 			$conn_id = $c->find($finder);
 			if (count($conn_id) < 1)

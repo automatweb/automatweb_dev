@@ -373,6 +373,9 @@ class object
 		@param from required type=oid
 			the object to disconnect from, required.
 
+		@param type optional type=reltype
+			if set, only this type of connections are removed - can be string, or numeric or array of either
+
 		@param errors optional type=bool
 			if false no error is thrown when the connection does not exist, defaults to true
 
