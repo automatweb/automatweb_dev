@@ -1,8 +1,5 @@
 <?php
-// add_tree_conf.aw - Lisamise puu konff
-
 /*
-
 	@classinfo no_comment=1 no_status=1 syslog_type=ST_ADD_TREE_CONF maintainer=kristo
 
 	@default table=objects
@@ -11,7 +8,6 @@
 	@default group=general
 
 	@property sel type=table store=no group=general no_caption=1
-
 */
 
 class add_tree_conf extends class_base
@@ -58,7 +54,7 @@ class add_tree_conf extends class_base
 		$arr["obj_inst"]->set_meta("class_structure", aw_ini_get("classes"));
 	}
 
-	function _do_sel_tbl(&$arr, $visible, $usable, $alias_add)
+	private function _do_sel_tbl(&$arr, $visible, $usable, $alias_add)
 	{
 		$t =& $arr["vcl_inst"];
 
@@ -115,7 +111,7 @@ class add_tree_conf extends class_base
 		$this->_req_do_table($t, 0, $visible, $usable, $alias_add);
 	}
 
-	function _req_do_table(&$t, $parent, $visible, $usable, $alias_add)
+	private function _req_do_table(&$t, $parent, $visible, $usable, $alias_add)
 	{
 		if ($this->level == -1)
 		{
@@ -213,7 +209,14 @@ class add_tree_conf extends class_base
 		$this->level--;
 	}
 
-	/** returns the active add_tree_conf for the current user, false if none
+	/** returns the active add_tree_conf oid for the current user, false if none
+		@attrib api=1
+
+		@returns
+			false if acl.check_prog = 0 in ini file
+			the configured add_tree_conf object oid if found
+			add_tree_conf.default from ini file if none configured
+			0 if none found
 	**/
 	function get_current_conf()
 	{
@@ -264,6 +267,13 @@ class add_tree_conf extends class_base
 	}
 
 	/** returns the list of usable classes for tree conf $id
+		@attrib api=1 params=pos
+
+		@param id required type=oid
+			The add_tree_conf object oid to use
+
+		@returns
+			array { clid => clid } for all clids that the add tree conf allows to be used
 	**/
 	function get_usable_filter($id)
 	{
@@ -276,7 +286,7 @@ class add_tree_conf extends class_base
 		return $ret;	
 	}
 
-	function get_meta_classes($o, $r, $v, $ret)
+	private function get_meta_classes($o, $r, $v, $ret)
 	{
 		$clss = $o->meta("class_structure");
 		if (!is_array($clss))
@@ -335,6 +345,13 @@ class add_tree_conf extends class_base
 	}
 
 	/** returns the list of alias-addable classes for tree conf $id
+		@attrib api=1 params=pos
+
+		@param id required type=oid
+			The add_tree_conf objects oid to use
+
+		@returns
+			array { clid => clid } for all classes that can be added as aliases
 	**/
 	function get_alias_filter($id)
 	{
@@ -348,12 +365,16 @@ class add_tree_conf extends class_base
 	}
 
 	/** returns true if the given class can be used in the given conf
+		@attrib api=1 params=pos
 
-		@comment
+		@param atc required type=cl_add_tree_conf
+			The add tree conf object to use
 
-			$atc - add_tree_conf object instance
-			$class - the name of the class to check access to
+		@param class required type=clid|class_name
+			The class_id or class name to check for access
 
+		@returns
+			true if class can be accessed, false if not
 	**/
 	function can_access_class($atc, $class)
 	{
@@ -438,7 +459,21 @@ class add_tree_conf extends class_base
 		return $ret;
 	}
 
+	/** checks for accessibility of several classes at once
+		@attrib api=1 params=pos
 
+		@param atc required type=object
+			The add tree conf object to use
+
+		@param classes required type=array
+			The list of classes to check Array { key => array { class_id => temp } }
+
+		@param for_aliasmgr optional type=bool
+			If set to true, alias access is checked. if false, class access. defaults to false
+
+		@returns
+			classes array with unusable classes removed
+	**/
 	function can_access_classes($atc, $classes, $for_aliasmgr = false)
 	{
 		$grps = $atc->meta("folder_structure");
@@ -515,7 +550,7 @@ class add_tree_conf extends class_base
 
 		$clss = aw_ini_get("classes");
 
-		//  Dokumendi seostehalduris kuvatakse vaikimisi järgmisi objekte:
+		//  Dokumendi seostehalduris kuvatakse vaikimisi j2rgmisi objekte:
 		$alias_addable = array(CL_EXTLINK, CL_FILE, CL_IMAGE, CL_LAYOUT, CL_WEBFORM, CL_MINI_GALLERY, CL_DOCUMENT, CL_MENU_TREE, CL_ML_LIST, CL_PROMO, CL_CFGFORM);
 
 		foreach($clss as $clid => $cld)
@@ -523,7 +558,7 @@ class add_tree_conf extends class_base
 			$this->adc_set_class($o, $clid, true, true, in_array($clid, $alias_addable));
 		}
 
-		// Kohe tuleb välja jätta järgmiste programmide kasutamise võimalus:
+		// Kohe tuleb v2lja j2tta j2rgmiste programmide kasutamise v6imalus:
 
 		// Otsingud > Saidi otsing (vist mingi vana objekt)
 		$this->adc_set_class($o, CL_SITE_SEARCH, false, false, false);
@@ -534,10 +569,10 @@ class add_tree_conf extends class_base
 		$this->adc_set_class($o, CL_ML_STAMP, false, false, false);
 		$this->adc_set_class($o, CL_ML_LIST_CONF, false, false, false);
 
-		// Süsteemi haldus > Töösolevad klassid
+		// Systeemi haldus > T88solevad klassid
 		$this->adc_set_fld($o, 19, false);
 
-		// Süsteemi haldus > Varia & Vanad
+		// Systeemi haldus > Varia & Vanad
 		$this->adc_set_fld($o, 4, false);
 
 		$o->save();
@@ -561,6 +596,15 @@ class add_tree_conf extends class_base
 		aw_restore_messages();
 	}
 
+	/** Sets all access to all classes
+		@attrib api=1 params=pos
+
+		@param o required type=cl_add_tree_conf
+			The add tree conf object to modify
+
+		@comment
+			does not save the atc object, so you need to do that
+	**/
 	function adc_set_all($o)
 	{
 		$visible = array();
@@ -588,6 +632,25 @@ class add_tree_conf extends class_base
 		$o->set_meta("alias_add", $alias_add);
 	}
 
+	/** sets access to a single class 
+		@attrib api=1 params=pos
+
+		@param o required type=cl_add_tree_conf
+			the atc object to use
+
+		@param clid required type=clid
+			the class_id for the class to modify access to
+
+		@param visible required type=bool
+			If the class is visible
+
+		@param usable required type=bool
+			If the class can be used
+
+		@param alias_add required type=bool
+			If the class can be added as an alias
+
+	**/
 	function adc_set_class($o, $clid, $visible, $usable, $alias_add)
 	{
 		$v = $o->meta("visible");
@@ -624,6 +687,19 @@ class add_tree_conf extends class_base
 		$o->set_meta("alias_add", $a);
 	}
 
+	/** Sets access to a class folder
+		@attrib api=1 params=pos
+
+		@param o required type=cl_add_tree_conf
+			The atc object to modify
+
+		@param fld required type=int
+			The classfolder id to set access for
+
+		@param visible required type=bool
+			If the folder is visible
+
+	**/
 	function adc_set_fld($o, $fld, $visible)
 	{
 		$v = $o->meta("visible");
@@ -638,6 +714,18 @@ class add_tree_conf extends class_base
 		$o->set_meta("visible", $v);
 	}
 
+	/** returns a tree of classes that can be used to construct the add menu
+		@attrib api=1 params=name
+
+		@param az optional type=bool
+			If set to true, classes a-z item is added with all classes
+
+		@param docforms optional type=bool
+			If set to true, document config forms are added to the tree as addable documents
+
+		@returns
+			array{ parent => array {class_id => class_entry} } for all folders and classes that can be used
+	**/
 	function get_class_tree($arr = array())
 	{
 		$conf_obj_id = $this->get_current_conf();
@@ -757,7 +845,5 @@ class add_tree_conf extends class_base
 
 		return $by_parent;
 	}
-
-
 };
 ?>

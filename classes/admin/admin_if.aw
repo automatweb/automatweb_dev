@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.45 2008/03/27 15:44:06 markop Exp $
-// admin_if.aw - Administreerimisliides 
 /*
-
 @classinfo syslog_type=ST_ADMIN_IF no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
@@ -103,14 +100,14 @@ class admin_if extends class_base
 		$arr["args"]["parent"] = $arr["request"]["parent"];
 	}
 
-	function _o_tb($arr)
+	private function _o_tb($arr)
 	{
 		$parent = $arr["request"]["parent"];
 		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
 		$arr["request"]["parent"] = $parent;
 
 		$tb =& $arr["prop"]["vcl_inst"];
-		// add button is load on demand and only visible if the add privilege is set
+		// add button only visible if the add privilege is set
 		if ($this->can("add", $arr["request"]["parent"]))
 		{
 			$tb->add_menu_button(array(
@@ -204,7 +201,7 @@ class admin_if extends class_base
 		$tb->add_zip_button(array());
 	}
 
-	function get_cutcopied_objects()
+	private function get_cutcopied_objects()
 	{
 		$sel_objs = aw_global_get("cut_objects");
 		if (!is_array($sel_objs))
@@ -220,7 +217,7 @@ class admin_if extends class_base
 		return $sel_objs;
 	}
 
-	function _o_tree($arr)
+	private function _o_tree($arr)
 	{
 		$tree =& $arr["prop"]["vcl_inst"];
 
@@ -376,7 +373,7 @@ class admin_if extends class_base
 		die($t->finalize_tree());
 	}
 
-	function resolve_item_new($m)
+	private function resolve_item_new($m)
 	{
 		enter_function("admin_folders::resolve_item_new");
 		$arr = array("parent" => $m->parent());
@@ -452,7 +449,7 @@ class admin_if extends class_base
 		return $rv ? $arr : false;
 	}
 
-	function mk_home_folder_new()
+	private function mk_home_folder_new()
 	{
 		$us = get_instance(CL_USER);
 		if (!$this->can("view", $us->get_current_user()))
@@ -500,7 +497,7 @@ class admin_if extends class_base
 
 	}
 
-	function mk_admin_tree_new()
+	private function mk_admin_tree_new()
 	{
 		// make this one level only, so we save a lot on the headaches
 		$ol = new object_list(array(
@@ -533,7 +530,7 @@ class admin_if extends class_base
 		$this->period = $tmp;
 	}
 
-	function setup_rf_table(&$t)
+	private function setup_rf_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "icon",
@@ -614,14 +611,6 @@ class admin_if extends class_base
 			"chgbgcolor" => "cutcopied",
 		));
 
-		/*$t->define_field(array(
-			"name" => "select",
-			"caption" => "<a href='javascript:selall()'>".t("Vali")."</a>",
-			"width" => 30,
-			"align" => "center",
-			"talign" => "center",
-			"chgbgcolor" => "cutcopied",
-		));*/
 		$t->define_chooser(array(
 			"name" => "sel",
 			"chgbgcolor" => "cutcopied",
@@ -629,7 +618,7 @@ class admin_if extends class_base
 		));
 	}
 
-	function _o_tbl($arr)
+	private function _o_tbl($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->setup_rf_table($t);

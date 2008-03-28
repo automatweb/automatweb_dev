@@ -1029,12 +1029,14 @@ class site_show extends class_base
 				if ($df["day"])
 				{
 					$s_tm = mktime(0, 0, 0, $df["month"], $df["day"], $df["year"]);
+					$s_tm = ($s_tm === false ? -1 : $s_tm);
 					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $s_tm, $s_tm+24*3600);
 				}
 				else
 				if ($df["week"])
 				{
 					$s_tm = mktime(0, 0, 0, 1, 1, $df["year"]) + $df["week"] * 24*3600*7;
+					$s_tm = $s_tm === false ? -1 : $s_tm;
 					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $s_tm, $s_tm+24*3600*7);
 				}
 				else
@@ -1042,6 +1044,8 @@ class site_show extends class_base
 				{
 					$s_tm = mktime(0, 0, 0, $df["month"], 1, $df["year"]);
 					$e_tm = mktime(0, 0, 0, $df["month"]+1, 1, $df["year"]);
+					$s_tm = $s_tm === false ? -1 : $s_tm;
+					$e_tm = $e_tm === galse ? -1 : $e_tm;
 					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $s_tm, $e_tm);
 				}
 				else
@@ -1049,6 +1053,8 @@ class site_show extends class_base
 				{
 					$s_tm = mktime(0, 0, 0, 1, 1, $df["year"]);
 					$e_tm = mktime(0, 0, 0, 1, 1, $df["year"]+1);
+					$s_tm = $s_tm === false ? -1 : $s_tm;
+					$e_tm = $e_tm === galse ? -1 : $e_tm;
 					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $s_tm, $e_tm);
 				}
 			}
@@ -2092,7 +2098,7 @@ class site_show extends class_base
 
 		$pos = array_search($parent, $this->path_ids);
 
-		//umm... peab miski valusa häki vahele kirjutama selle jaoks, kui menüüst võetakse omadus, et tabid tuleks adminniliidese tabidest
+		//umm... peab miski valusa h2ki vahele kirjutama selle jaoks, kui menyyst v6etakse omadus, et tabid tuleks adminniliidese tabidest
 		if($this->can("view" , $parent))
 		{
 			$parent_obj = obj($parent);

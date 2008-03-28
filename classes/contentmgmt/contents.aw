@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.7 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.8 2008/03/28 08:04:21 kristo Exp $
 // contents.aw - Saidi sisukord
 /*
 
@@ -58,7 +58,7 @@ class contents extends class_base
 		}
 		$this->read_template($tpl);
 
-		$this->d_tpl = isset($d_tpl) && $d_tpl != "" ? $d_tpl : "lead.tpl";
+		$this->d_tpl = isset($d_tpl) && $d_tpl != "" ? basename($d_tpl) : "lead.tpl";
 		
 		$this->period = aw_global_get("act_per_id");
 		if ($this->period < 2)

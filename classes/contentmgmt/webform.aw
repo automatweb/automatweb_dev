@@ -2429,6 +2429,9 @@ class webform extends class_base
 				}
 			}
 			$name = "";
+			$o->set_name(trim($name));
+			$o->set_prop("register_id", $register->id());
+			$o->save();
 			foreach(safe_array($obj_inst->prop("obj_name")) as $key => $val)
 			{
 				if ($prplist[$key]["type"] == "date_select")
@@ -2451,9 +2454,6 @@ class webform extends class_base
 					$name .= " ".$o->prop_str($key); //$arr[$key];
 				}
 			}
-			$o->set_name(trim($name));
-			$o->set_prop("register_id", $register->id());
-			$o->save();
 
 			$body = "";
 			$attaches = array();

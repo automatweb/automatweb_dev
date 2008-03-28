@@ -425,6 +425,11 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		if ($err_type == 30 && $_REQUEST["comment"] != "")
+		{
+			$send_mail = false;
+		}
+
 		if (substr($_REQUEST["class"], 0, 4) == "http" || substr($_REQUEST["entry_id"], 0, 4) == "http")
 		{
 			$send_mail = false;

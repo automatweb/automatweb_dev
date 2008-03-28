@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.28 2008/03/13 11:22:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.29 2008/03/28 08:04:22 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -361,6 +361,12 @@ class orb extends aw_template
 			{
 				die("silly robot!");
 			}
+
+			if (strpos($args["value"], "Result") !== false)
+			{
+				die("Silly robot!");
+			}
+
 			if (!is_numeric($args["value"]))
 			{
 				$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$args["name"]),true,$this->silent);
@@ -678,6 +684,10 @@ class orb extends aw_template
 					$aclarr = explode(";", $varacl);
 					foreach($aclarr as $aclid)
 					{
+						if (strpos($varvalue, "http") !== false)
+						{
+							die("silly robot!");
+						}
 						$varvalue = (int)$varvalue;
 						if (!$this->can($aclid, $varvalue))
 						{
