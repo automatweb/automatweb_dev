@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property billp_tb type=toolbar store=no no_caption=1
 	@caption Arve toolbar
-
+ 
 	@property name type=textbox table=objects field=name
 	@caption Nimi
 
