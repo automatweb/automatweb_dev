@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.26 2008/03/26 12:13:20 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.27 2008/03/28 10:10:39 robert Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -217,7 +217,34 @@ class forum_comment extends class_base
 		if(is_oid($arr["id"]))
 		{
 			$o = obj($arr["id"]);
-			$o->delete();
+			$imo = obj($o->parent());
+		}
+		if($imo->class_id() == CL_IMAGE)
+		{
+			$ii = get_instance(CL_IMAGE);
+			$cfid = $ii->_get_conf_for_folder($imo->parent());
+			$ui = get_instance(CL_USER);
+			$curid = $ui->get_current_user();
+			if(is_oid($curid) && is_oid($cfid))
+			{
+				$cur = obj($curid);
+				$conn = $cur->connections_from(array(
+					"type" => "RELTYPE_GRP"
+				));
+				$cfo = obj($cfid);
+				$grps = $cfo->prop("comm_edit_grp");	
+				$edit_ok = 0;
+				foreach($grps as $grp)
+				{
+					foreach($conn as $c)
+					{
+						if($c->prop("to") == $grp)
+						{
+							$o->delete();
+						}
+					}
+				}
+			}
 		}
 		return $arr["return_url"];
 	}
