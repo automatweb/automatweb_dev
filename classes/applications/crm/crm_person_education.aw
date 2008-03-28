@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.10 2008/03/27 09:18:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.11 2008/03/28 09:49:00 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -129,6 +129,19 @@ class crm_person_education extends class_base
 			return true;
 		}
 
+		$props = array(
+			"main_speciality" => "main_speciality",
+			"in_progress" => "in_progress",
+			"obtain_language" => "obtain_language",
+			"start" => "start",
+			"end" => "end",
+			"end_date" => "end_date",
+			"school_2" => "school",
+			"degree" => "degree",
+			"speciality" => "speciality",
+			"diploma_nr" => "diploma_nr",
+		);
+
 		switch($field)
 		{
 			case "school_1":
@@ -142,7 +155,28 @@ class crm_person_education extends class_base
 					"name" => $field,
 					"type" => "int"
 				));
-				break;
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_PERSON_EDUCATION,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"status" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$value = $o->meta($props[$field]);
+					$oid = $o->id();
+					$this->db_query("
+						INSERT INTO
+							kliendibaas_haridus (oid, $field)
+						VALUES
+							('$oid', '$value')
+						ON DUPLICATE KEY UPDATE
+							$field = '$value'
+					");
+				}
+				return true;
+
 			case "school_2":
 			case "degree":
 			case "speciality":
@@ -151,37 +185,30 @@ class crm_person_education extends class_base
 					"name" => $field,
 					"type" => "varchar(50)"
 				));
-				break;
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_PERSON_EDUCATION,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"status" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$value = $o->meta($props[$field]);
+					$oid = $o->id();
+					$this->db_query("
+						INSERT INTO
+							kliendibaas_haridus (oid, $field)
+						VALUES
+							('$oid', '$value')
+						ON DUPLICATE KEY UPDATE
+							$field = '$value'
+					");
+				}
+				return true;
 		}
 
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_PERSON_EDUCATION,
-			"parent" => array(),
-			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
-		));
-		foreach($ol->arr() as $o)
-		{
-			$oid = $o->id();
-			$main_speciality = $o->meta("main_speciality");
-			$in_progress = $o->meta("in_progress");
-			$obtain_language = $o->meta("obtain_language");
-			$start = $o->meta("start");
-			$end = $o->meta("end");
-			$end_date = $o->meta("end_date");
-			$school_2 = $o->meta("school");
-			$degree = $o->meta("degree");
-			$speciality = $o->meta("speciality");
-			$diploma_nr = $o->meta("diploma_nr");
-
-			$this->db_query("
-				INSERT INTO
-					kliendibaas_haridus (oid, school_1, main_speciality, in_progress, obtain_language, start, end, end_date, school_2, degree, speciality, diploma_nr)
-				VALUES
-					('$oid', '', '$main_speciality', '$in_progress', '$obtain_language', '$start', '$end', '$end_date', '$school_2', '$degree', '$speciality', '$diploma_nr')
-			");
-		}
+		return false;
 	}
 };
 ?>

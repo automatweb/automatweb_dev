@@ -75,7 +75,7 @@ class crm_company_relation extends class_base
 					"name" => $field,
 					"type" => "date"
 				));
-				break;
+				return true;
 		}
 	}
 
