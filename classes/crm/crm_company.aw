@@ -20,7 +20,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
 
-	@property jrk field=jrk type=textbox group=general_sub
+	@property jrk field=jrk type=textbox display=none group=general_sub
 	@caption Jrk
 
 	@property status field=status type=checkbox display=none default=2 group=general_sub
@@ -213,9 +213,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 	@property userta5 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 5
-
-	@property usercheckbox1 type=checkbox table=kliendibaas_firma field=usercheckbox1 ch_value=1
-	@caption User-defined checkbox 1
 
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
@@ -423,11 +420,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 				@property language type=relpicker reltype=RELTYPE_LANGUAGE table=kliendibaas_firma parent=ce_other_bot captionside=top
 				@caption Vaikimisi keel
 
-- Tootajad vaatesse
-Voimalus maarata, kes on volitatud isikud ja volituse alus. Tootaja nime jarele on voimalik panna markeruut tulpa &#8220;Volitatud&#8221;. Selle markimisel avaneb uus aken, kus kysitakse volituse alust (Objektityyp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik).
+- T88tajad vaatesse
+V6imalus m22rata, kes on volitatud isikud ja volituse alus. T88taja nime j2rele on v6imalik panna m2rkeruut tulpa &#8220;Volitatud&#8221;. Selle m2rkimisel avaneb uus aken, kus kysitakse volituse alust (Objektityyp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik).
 
 - Kontaktandmetesse seos: Keel
-Vaikimisi eesti keel. Keelele peab saama maarata, milline on systeemi default. Vaikimisi vaartus Arve-saatelehel
+Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. Vaikimisi v22rtus Arve-saatelehel
 
 	@property phone_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
 	@property telefax_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
@@ -931,7 +928,7 @@ default group=org_objects
 @default group=ovrv_email
 
 	@layout mail_main type=hbox width=20%:80%
-
+		
 		@property mail_tb type=toolbar store=no no_caption=1
 
 		@layout mail_search type=vbox closeable=1 area_caption=Otsing parent=mail_main
@@ -947,7 +944,7 @@ default group=org_objects
 
 			@property mail_s_submit type=submit parent=mail_search no_caption=1
 			@caption Otsi
-
+		
 		@layout mail_tbl_box type=vbox parent=mail_main
 
 			@property mail_tbl type=table store=no no_caption=1 parent=mail_tbl_box
@@ -1040,16 +1037,6 @@ default group=org_objects
 	@caption N&auml;ita
 
 	@property my_stats type=text store=no no_caption=1
-
-@default group=customer_situtation
-	@property undone_orders type=table store=no no_caption=1
-	@caption Pooleliolevad tellimused
-
-	@property unpaid_bills type=table store=no no_caption=1
-	@caption Laekumata arved
-
-	@property this_year_cash_flow type=text store=no
-	@caption Aasta k&auml;ive
 
 @default group=quick_view
 
@@ -1219,7 +1206,6 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo stats_s parent=stats caption="Otsi" save=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
 	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no
-	@groupinfo customer_situtation parent=stats caption="Kliendi hetkeseis" submit=no save=no
 
 groupinfo qv caption="Vaata"  submit=no save=no
 
@@ -1230,7 +1216,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @groupinfo versions caption=Versioonid submit=no save=no parent=stats
 @groupinfo open_hrs caption="Avamisajad" parent=people
 @groupinfo user_settings caption="Seaded" parent=people
-@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all
+@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all submit=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption &Otilde;iguslik vorm
@@ -1508,15 +1494,6 @@ class crm_company extends class_base
 		$this->users_person = new object($us->get_current_person());
 	}
 
-	function __cust_cat_sort($a, $b)
-	{
-		if ($a->prop("to.jrk") == $b->prop("to.jrk"))
-		{
-			return strcmp($a->prop("to.name"), $b->prop("to.name"));
-		}
-		return ($a->prop("to.jrk") < $b->prop("to.jrk")) ? -1 : 1;
-	}
-
 	/*
 		arr[]
 			tree_inst -> the treeview object
@@ -1573,7 +1550,7 @@ class crm_company extends class_base
 			));
 			$ol->arr();
 		}
-		uasort($conns, array($this, "__cust_cat_sort"));
+
 		//parent nodes'id actually
 		$this_level_id = $node_id;
 		foreach($conns as $key=>$conn)
@@ -1583,7 +1560,7 @@ class crm_company extends class_base
 			{
 				continue;
 			}
-			//iga alam item saab yhe v6rra suurema vaartuse
+			//iga alam item saab yhe v6rra suurema v22rtuse
 			//if the 'to.id' eq active_node then it should be bold
 			$name = $conn->prop('to.name');
 			if($style)
@@ -2725,9 +2702,6 @@ class crm_company extends class_base
 				aw_global_set("changeform_target",  "_blank");
 				break;
 
-			case "undone_orders":
-			case "unpaid_bills":
-			case "this_year_cash_flow":
 			case "stats_tb":
 			case "stats_list":
 			case "stats_s_toolbar":
@@ -3408,7 +3382,7 @@ class crm_company extends class_base
 	**/
 	function remove_from_category($arr)
 	{
-
+		
 		if (is_array($arr["check"]) && is_oid($arr["category"]) && $this->can("view" , $arr["category"]))
 		{
 			$c = obj($arr["category"]);
@@ -3639,14 +3613,14 @@ class crm_company extends class_base
 		$e_d = mktime(23,59,59, date('m'),date('d')+1+$e_add,date('Y'));
 		$pred = $s_m > $e_m ? "OR" : "AND";
 		$q = "
-			SELECT
+			SELECT 
 				objects.name as name,
 				objects.oid as oid,
 				kliendibaas_isik.birthday as bd
-			FROM
-				objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of
-			WHERE
-				objects.class_id = '145' AND
+			FROM 
+				objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
+			WHERE	
+				objects.class_id = '145' AND 
 				objects.status > 0  AND
 				kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday is not null
 		";
@@ -3694,7 +3668,7 @@ class crm_company extends class_base
 		{
 			$e_add = 0;
 		}
-		$s_d = mktime(1,0,0,date('m'),date('d'),date('Y'));
+		$s_d = mktime(0,0,0,date('m'),date('d'),date('Y'));
 		$e_d = mktime(23,59,59, date('m'),date('d')+1+$e_add,date('Y'));
 		$bds = $this->get_cust_bds();
 		$dc = 0;
@@ -3707,64 +3681,38 @@ class crm_company extends class_base
 		{
 			$dc++;
 			$tmp2 = '';
-			$bdis = 0;
 			foreach($bds[$i] as $oid)
 			{
-				$bdis = 1;
 				$p = obj($oid);
-				$contacts = array();
-				foreach($p->connections_from(array("type" => 16)) as $conn)
-				{
-					$wcon_wrel = $conn->to();
-					if($wcon_wrel->prop("org.name"))
-					{
-						$contacts[] = $p->prop("org.name");
-					}
-				}
-				/* This property no longer exists. -kaarel
-				if($p->prop("work_contact.name"))
-				{
-					$contacts[] = $p->prop("work_contact.name");
-				}
-				*/
-				if($p->prop("phone.name"))
-				{
-					$contacts[] = $p->prop("phone.name");
-				}
-				if($p->prop("email.mail"))
-				{
-					$contacts[] = $p->prop("email.mail");
-				}
 				$this->vars(array(
 					"name" => html::obj_change_url($p->id(),$p->name()),
-					"contacts" => implode(", ", $contacts),
-				));
+					"company" => ", ".$p->prop("work_contact.name"),
+					"phone" => $p->prop("phone.name")?", ".$p->prop("phone.name"):"",
+					"email" => $p->prop("email.mail")?", ".$p->prop("email.mail"):"",
+				)); 
 				$tmp2 .= $this->parse("bds");
 			}
-			if($bdis)
+			if($dc == 1)
 			{
-				if($dc == 1)
-				{
-					$day = t("T&auml;na");
-				}
-				elseif($dc == 2)
-				{
-					$day = t("Homme");
-				}
-				elseif(date('w',$i) == 0)
-				{
-					$day = t("P&uuml;hap&auml;ev");
-				}
-				elseif(date('w',$i) == 1)
-				{
-					$day = t("Esmasp&auml;ev");
-				}
-				$this->vars(array(
-					"bds" => $tmp2,
-					"day" => $day,
-				));
-				$tmp .= $this->parse("days");
+				$day = t("T&auml;na");
 			}
+			elseif($dc == 2)
+			{
+				$day = t("Homme");
+			}
+			elseif(date('w',$i) == 0)
+			{
+				$day = t("P&uuml;hap&auml;ev");
+			}
+			elseif(date('w',$i) == 1)
+			{
+				$day = t("Esmasp&auml;ev");
+			}
+			$this->vars(array(
+				"bds" => $tmp2,
+				"day" => $day,
+			));
+			$tmp .= $this->parse("days");
 		}
 		$this->vars(array(
 			"days" => $tmp
@@ -4196,21 +4144,9 @@ class crm_company extends class_base
 				'reltype' => $reltype
 			));
 
-			$wcon_wrel= new object();
-			$wcon_wrel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
-			$wcon_wrel->set_parent($arr['id']);
-			$wcon_wrel->set_prop("org", $arr['id']);
-			$wcon_wrel->save();
-
 			$person = new object($value);
-			/* This property no longer exists. -kaarel
 			$person->set_prop('work_contact',$arr['id']);
 			$person->save();
-			*/
-			$person->connect(array(
-				"to" => $wcon_wrel->id(),
-				"reltype" => 16,	// RELTYPE_ORG_RELATION
-			));
 
 			if ($arr["cat"] && $cat != 999999)
 			{
@@ -4375,19 +4311,13 @@ class crm_company extends class_base
 			'reltype' => $arr['reltype'],
 		));
 
-		$wcon_wrel= new object();
-		$wcon_wrel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
-		$wcon_wrel->set_parent($arr['parent']);
-
 		if (is_oid($arr["profession"]) && $this->can("view", $arr["profession"]))
 		{
 			$person->connect(array(
 				"to" => $arr["profession"],
 				"reltype" => "RELTYPE_RANK"
 			));
-			// This property no longer exists. -kaarel
-			//$person->set_prop("rank", $arr["profession"]);
-			$wcon_wrel->set_prop("profession", $arr["profession"]);
+			$person->set_prop("rank", $arr["profession"]);
 		}
 
 		$work_contact = 0;
@@ -4403,38 +4333,15 @@ class crm_company extends class_base
 			));
 			list($work_contact,) = each($work_contact);
 		}
-		if($this->can("view", $work_contact))
-			$wcon_wrel->set_parent($work_contact);
-
-		$wcon_wrel->set_prop("org", $work_contact);
-		$wcon_wrel->save();
-
-		$person->connect(array(
-			"to" => $wcon_wrel->id(),
-			"reltype" => 16,	// RELTYPE_ORG_RELATION
-		));
-
-		// This property no longer exists. -kaarel
-		//$person->set_prop('work_contact',$work_contact);
+		$person->set_prop('work_contact',$work_contact);
 
 		$orgs = array();
 		foreach($person->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
 		{
-			if(!$wcon_wrel->prop("section"))
-				$wcon_wrel->set_prop("section", $c->prop("to"));
-			else
-			{
-				// We create new work relation for every section. -kaarel
-				$wcon_wrel = obj($wcon_wrel->save_new());
-				$wcon_wrel->set_prop("section", $c->prop("to"));
-			}
-			$wcon_wrel->save();
-			//$orgs[$c->prop("to")] = $c->prop("to");
+			$orgs[$c->prop("to")] = $c->prop("to");
 		}
-		/* This property no longer exists. -kaarel
 		$person->set_prop("org_section", $orgs);
 		$person->save();
-		*/
 
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
@@ -5143,59 +5050,32 @@ class crm_company extends class_base
 		return $ret;
 	}
 
-	function get_my_offers($range = null)
+	function get_my_offers()
 	{
 		$u = get_instance(CL_USER);
-		$filt = array(
-			"class_id" => CL_CRM_OFFER,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_CRM_OFFER.RELTYPE_SALESMAN" => $u->get_current_person()
-		);
-		if ($range)
+		$c = new connection();
+		$cs = $c->find(array(
+			"to" => $u->get_current_person(),
+			"from.class_id" => CL_CRM_OFFER,
+			"type" => "RELTYPE_SALESMAN",
+		));
+		$ret = array();
+		foreach($cs as $c)
 		{
-			$filt[] = new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($range["start"], $range["end"]));
+			$ret[] = $c["from"];
 		}
-		$ol = new object_list($filt);
-		return $ol->ids();
+		return $ret;
 	}
 
-	function get_my_actions($range = null)
+	function get_my_actions()
 	{
-		enter_function("get_my_actions");
-
-		enter_function("get_my_actions:1");
 		$u = get_instance(CL_USER);
-
-		$filt = null;
-		if ($range != null)
-		{
-			// list all tasks in that range and then filter by person. 
-			// beacause SOME IDIOT deciced that connection from person to task was a good idea to record members
-			// this will really have to be converted sometime. REALLY.
-			$ol = new object_list(array(
-				"class_id" => array(CL_TASK, CL_CRM_MEETING, CL_CRM_CALL),
-				"lang_id" => array(),
-				"site_id" => array(),
-				new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($range["start"], $range["end"]))
-			));
-			$filt = $ol->ids();
-		}
-
-		$params = array(
+		$c = new connection();
+		$cs = $c->find(array(
 			"from" => $u->get_current_person(),
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => array("RELTYPE_PERSON_TASK", "RELTYPE_PERSON_MEETING", "RELTYPE_PERSON_CALL"),
-		);
-		if ($filt)
-		{
-			$params["to"] = $filt;
-		}
-		$c = new connection();
-		$cs = $c->find($params);
-		exit_function("get_my_actions:1");
-
-		enter_function("get_my_actions:2");
+		));
 		$ret = array();
 		foreach($cs as $c)
 		{
@@ -5204,12 +5084,8 @@ class crm_company extends class_base
 				$ret[] = $c["to"];
 			}
 		}
-
 		$cali = get_instance(CL_PLANNER);
 		$calid = $cali->get_calendar_for_user();
-		exit_function("get_my_actions:2");
-
-		enter_function("get_my_actions:3");
 		if($calid)
 		{
 			$cal = obj($calid);
@@ -5217,7 +5093,7 @@ class crm_company extends class_base
 			if($eec[CL_BUG])
 			{
 				$cp = $u->get_current_person();
-				$filt = array(
+				$ol = new object_list(array(
 					"class_id" => CL_BUG,
 					new object_list_filter(array(
 						"logic" => "OR",
@@ -5227,27 +5103,18 @@ class crm_company extends class_base
 						)
 					)),
 					"bug_status" => array(1,2,10,11),
-				);
-				if ($range !== null)
-				{
-					$filt["deadline"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $range["start"], $range["end"]);
-				}
-				$ol = new object_list($filt);
+				));
 				$ret = array_merge($ret, $ol->ids());
 			}
 		}
-		exit_function("get_my_actions:3");
-
-		enter_function("get_my_actions:4");
-		foreach($this->get_my_offers($range) as $ofid)
+		
+		foreach($this->get_my_offers() as $ofid)
 		{
-			if ($this->can("view", $ofid))
+			if ($this->can("view", $c["to"]))
 			{
 				$ret[] = $ofid;
 			}
 		}
-		exit_function("get_my_actions:4");
-		exit_function("get_my_actions");
 		return $ret;
 	}
 
@@ -6513,7 +6380,7 @@ class crm_company extends class_base
 
 	function get_cust_rel($view_co, $crea_if_not_exists = false, $my_co = null)
 	{
-		if (!is_object($view_co) || !is_oid($view_co->id()))
+		if (!is_oid($view_co->id()))
 		{
 			return false;
 		}
@@ -6674,7 +6541,7 @@ class crm_company extends class_base
 				$arr["link"] = html::get_change_url($msg, array("return_url" => get_ru(), "group" => "main_view"));
 			}
 		}
-
+	
 		if($arr["id"] == "bugs")
 		{
 			$show = 0;
@@ -7198,13 +7065,6 @@ class crm_company extends class_base
 					));
 					return true;
 
-				case "usercheckbox1":
-					$this->db_add_col($tbl, array(
-						"name" => $field,
-						"type" => "int(1)"
-					));
-					return true;
-
 				case "bill_penalty_pct":
 					$this->db_add_col($tbl, array(
 						"name" => $field,
@@ -7230,6 +7090,7 @@ class crm_company extends class_base
 					break;
 			}
 		}
+		return false;
 	}
 
 	function callback_get_add_txt($arr)
@@ -8356,7 +8217,7 @@ Bank accounts: yksteise all
 				$aa[] = $a->name();
 			}
 			$t->define_data(array(
-				"caption" => t("Telefon").":",
+				"caption" => t("Telefon".":"),
 				"data" => join($aa, ", "),
 			));
 		}

@@ -77,6 +77,8 @@ class crm_company_relation extends class_base
 				));
 				return true;
 		}
+
+		return false;
 	}
 
 	function callback_mod_reforb($arr)
