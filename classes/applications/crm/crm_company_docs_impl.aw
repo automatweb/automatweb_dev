@@ -148,7 +148,8 @@ class crm_company_docs_impl extends class_base
 				"img" => "import.gif",
 			));
 		}
-		$tb->add_zip_button(array());
+		$file_manager = get_instance("admin/file_manager");
+		$file_manager->add_zip_button(array("tb" => &$tb));
 	}
 
 	function _get_level_folders_from_fld($fldo, $sel, $get_f)

@@ -35,10 +35,10 @@
 			</function>
 		</action>
 
-		<action name="compress">
+		<action name="compress" all_args="1">
 			<function name="compress">
 				<arguments>
-					<required name="files" />
+					<optional name="files" />
 				</arguments>
 			</function>
 		</action>

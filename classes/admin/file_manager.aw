@@ -290,6 +290,68 @@ class file_manager extends aw_template
 		die();
 	}
 
+	/**
+		@attribs params=name api=1
+		@param tb required type=object
+			Toolbar object
+		@param tooltip optional type=string
+			Text to be displayed for the button
+		@param img optional type=string
+			Icon url to display.
+		@param confirm optional type=string
+			If is set, asks for confirmation displaying given text as question.
+		@param zip_name optional type=string
+			Zip file name
+		@param field_name optional type=string default=sel
+		@comment
+			Adds zip compress button to toolbar.
+		@examples
+			$tmp = get_instance("vcl/toolbar");
+			$tmp->add_zip_button(array(
+				"name" => "asd",
+				"tooltip" => t("zip"),
+				"confirm" => t("Oled sa kindel et tahad seda jama pakkida?"),
+			));
+	**/
+	function add_zip_button($args = array())
+	{
+		$tb = &$args["tb"];
+		unset($args["tb"]);
+		$args['url'] = "javascript: void(0)";
+		$args["name"] = "zip";
+		
+		if(!$args["img"])
+		{
+			$args['img'] = 'archive_small.gif';
+		}
+		if(!$args["tooltip"])
+		{
+			$args["tooltip"] = t("Lae alla ZIP failina");
+		}
+
+		$url = aw_global_get("baseurl")."/orb.aw?class=file_manager&action=compress_submit";
+		if(!$args["field_name"])
+		{
+			$url.="&files_var=".$args["field_name"];
+		}
+		if(!$args["zip_name"])
+		{
+			$url.="&zip_name=".$args["zip_name"];
+		}
+
+		unset($args["field_name"]);
+		$args['onClick'] = "
+			tmp = $('form').attr('action');
+			win = window.open('','Window1','menubar=no,width=300,height=500,toolbar=no');
+			document.changeform.action='".$url."';
+			document.changeform.target='Window1';
+			document.changeform.submit();
+			$('form').attr('action', tmp);
+		";
+
+		$tb->add_button($args);
+	}
+
 	function draw_form($arr)
 	{
 		classload("cfg/htmlclient");

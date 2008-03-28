@@ -198,7 +198,8 @@ class admin_if extends class_base
 			"url" => obj_link($arr["request"]["parent"]),
 			"img" => "preview.gif",
 		));
-		$tb->add_zip_button(array());
+		$file_manager = get_instance("admin/file_manager");
+		$file_manager->add_zip_button(array("tb" => $tb));
 	}
 
 	private function get_cutcopied_objects()
