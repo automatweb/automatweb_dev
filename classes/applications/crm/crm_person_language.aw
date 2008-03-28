@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.5 2008/03/28 09:27:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.6 2008/03/28 09:28:37 instrumental Exp $
 // crm_person_language.aw - Keeleoskus
 /*
 
@@ -95,6 +95,8 @@ class crm_person_language extends class_base
 				));
 			return true;
 		}
+
+		return false;
 	}
 
 	function on_save($arr)
