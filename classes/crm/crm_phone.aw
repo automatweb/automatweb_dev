@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.17 2008/03/27 09:10:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.18 2008/03/28 09:23:40 instrumental Exp $
 // phone.aw - Telefon
 /*
 
@@ -175,28 +175,32 @@ class crm_phone extends class_base
 					"name" => $field,
 					"type" => "varchar(50)"
 				));
-				break;
+
+				// No let's fill this property for all existing persons.
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_PHONE,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"status" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$oid = $o->id();
+					$number = str_replace(array(" ", "-", "(", ")") , "", $o->name());
+
+					$this->db_query("
+						INSERT INTO
+							kliendibaas_telefon (oid, number)
+						VALUES
+							('$oid', '$number')
+					");
+				}
+
+				return true;
 		}
 
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_PHONE,
-			"parent" => array(),
-			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
-		));
-		foreach($ol->arr() as $o)
-		{
-			$oid = $o->id();
-			$number = str_replace(array(" ", "-", "(", ")") , "", $o->name());
-
-			$this->db_query("
-				INSERT INTO
-					kliendibaas_telefon (oid, number)
-				VALUES
-					('$oid', '$number')
-			");
-		}
+		return false;
 	}
 };
 ?>
