@@ -568,6 +568,7 @@ class object_test2 extends UnitTestCase
 		$this->assertEqual($o1->id(), $o2->id());
 		$o3 = obj($o1->create_brother($o1->parent()));
 		$this->assertEqual($o2->id(), $o3->id());
+		$o1->delete(true);
 	}
 
 	function test_subclass()
@@ -594,18 +595,50 @@ class object_test2 extends UnitTestCase
 
 	function test_flags()
 	{
-	}
-	
-	function test_set_flags()
-	{
+		$o = $this->_get_temp_o();
+		define("FL_FOO", 1<<10);
+		$fl |= FL_FOO;
+		$o->set_flags($fl);
+		$this->assertTrue(($o->flags() & FL_FOO) == FL_FOO);
+		$o->delete(true);
 	}
 
-	function test_flag()
+	function test_set_flags()
 	{
+		$o = $this->_get_temp_o();
+		define("FL_FOO", 1<<10);
+		$fl |= FL_FOO;
+		$o->set_flags($fl);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$fl = $this->db->db_fetch_field("SELECT flags FROM objects WHERE oid = $id", "flags");
+		$this->assertTrue(($fl & FL_FOO) == FL_FOO);
+		$o->delete(true);
 	}
 	
+	function test_flag()
+	{
+		$o = $this->_get_temp_o();
+		define("FL_FOO", 1<<10);
+		$o->set_flag(FL_FOO, true);
+		$this->assertTrue($o->flag(FL_FOO));
+		$o->delete(true);
+	}
+
 	function test_set_flag()
 	{
+		$o = $this->_get_temp_o();
+		define("FL_FOO", 1<<10);
+		$o->set_flag(FL_FOO, true);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$id = $o->id();
+		$fl = $this->db->db_fetch_field("SELECT flags FROM objects WHERE oid = $id", "flags");
+		$this->assertTrue($fl & FL_FOO);
+		$o->delete(true);
 	}
 
 	function test_meta()
@@ -672,47 +705,104 @@ class object_test2 extends UnitTestCase
 
 	function test_get_property_list()
 	{
-
+		$o = $this->_get_temp_o();
+		$o->set_class_id(CL_MENU);
+		$props = $o->get_property_list();
+		$this->assertEqual("relpicker", $props["default_image_folder"]["type"]);
+		$o->delete(true);
 	}
 
 	function test_get_group_list()
 	{
-
+		$o = $this->_get_temp_o();
+		$o->set_class_id(CL_MENU);
+		$groups = $o->get_group_list();
+		$this->assertEqual("general", $groups["advanced_settings"]["parent"]);
+		$o->delete(true);
 	}
 
 	function test_get_relinfo()
 	{
-
+		$o = $this->_get_temp_o();
+		$o->set_class_id(CL_MENU);
+		$rels = $o->get_relinfo();
+		$this->assertEqual(178, $rels[4]["clid"][0]);
+		$o->delete(true);
 	}
 	
 	function test_get_tableinfo()
 	{
-
+		$o = $this->_get_temp_o();
+		$o->set_class_id(CL_MENU);
+		$tables = $o->get_tableinfo();
+		$this->assertEqual("id", $tables["menu"]["index"]);
+		$o->delete(true);
 	}
 
 	function test_get_classinfo()
 	{
-
+		$o = $this->_get_temp_o();
+		$o->set_class_id(CL_MENU);
+		$class = $o->get_classinfo();
+		$this->assertEqual("menu", $class["objtable"]);
+		$o->delete(true);
 	}
 	
 	function test_properties()
 	{
-
+		$o = obj();
+		$o->set_class_id(CL_MENU);
+		$o->set_name(1);
+		$props = $o->properties();
+		$this->assertEqual(1, $props["name"]);
+		$o->delete(true);
 	}
 
 	function test_brother_of()
 	{
-
+		$o1 = $this->_get_temp_o();
+		__disable_err();
+		$tmp = $o1->create_brother();
+		$this->assertTrue(__is_err());
+		$o2 = obj($o1->create_brother($o1->parent()));
+		$tmp = $o2->brother_of();
+		$this->assertEqual($tmp, $o1->id());
+		$o1->delete(true);
 	}
 
 	function test_instance()
 	{
+		$o = $this->_get_temp_o();
+		$o->set_class_id(CL_MENU);
+		$i = $o->instance();
+		$this->assertEqual(get_class($i), "menu");
+		$o->delete(true);
+	}
 
+	function test_instance_err()
+	{
+		__disable_err();
+		$o = obj();
+		$i = $o->instance();
+		$this->assertTrue(__is_err());
 	}
 
 	function test_is_connected_to()
 	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
 
+		$this->assertTrue($o->is_connected_to(array(
+			"to" => $rm
+		)));
+		$o->delete(true);
+		aw_restore_acl();
 	}
 
 	function test_acl_set()
