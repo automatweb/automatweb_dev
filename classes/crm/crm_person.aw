@@ -4687,14 +4687,14 @@ class crm_person extends class_base
 					"name" => $field,
 					"type" => "varchar(255)"
 				));
-				break;
+				return true;
 
 			case "drivers_license":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "varchar(20)"
 				));
-				break;
+				return true;
 		}
 		return false;
 	}
