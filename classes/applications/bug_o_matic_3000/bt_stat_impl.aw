@@ -131,11 +131,22 @@ class bt_stat_impl extends core
 
 				foreach($mons as $mon => $wh)
 				{
+					$mon_num = substr($mon, 1);
+					if($mon_num == $arr["request"]["stat_hrs_start"]["month"])
+					{
+						$det_day_start = $arr["request"]["stat_hrs_start"]["day"];
+					}
+					if($mon_num == $arr["request"]["stat_hrs_end"]["month"])
+					{
+						$det_day_end = $arr["request"]["stat_hrs_end"]["day"];
+					}
 					$mons[$mon] = html::href(array(
 						"url" => aw_url_change_var(array(
 							"det_uid" => $uid,
 							"det_year" => $year,
-							"det_mon" => (int)substr($mon, 1)
+							"det_mon" => (int)substr($mon, 1),
+							"det_day_start" => $det_day_start,
+							"det_day_end" => $det_day_end,
 						)),
 						"caption" => number_format($wh, 2, ".", " ")
 					));
@@ -201,11 +212,28 @@ class bt_stat_impl extends core
 		// list all bugs and their times for that person for that time
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stat_det_t($t);
-
+		if($dds = $arr["request"]["det_day_start"])
+		{
+			$startday = $dds;
+		}
+		else
+		{
+			$startday = 1;
+		}
+		if($eds = $arr["request"]["det_day_end"])
+		{
+			$endday = $eds;
+			$endmonth = $arr["request"]["det_mon"];
+		}
+		else
+		{
+			$endday = 0;
+			$endmonth = $arr["request"]["det_mon"]+1;
+		}
 		$fancy_filter = new obj_predicate_compare(
 			OBJ_COMP_BETWEEN_INCLUDING,
-			mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"]),
-			mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"])
+			mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"]),
+			mktime(0,0,0, $endmonth, $endday, $arr["request"]["det_year"])
 		);
 
 		if($arr["request"]["stat_hr_bugs"] || !$arr["request"]["stat_hrs_end"])
@@ -272,11 +300,28 @@ class bt_stat_impl extends core
 
 		$u = get_instance(CL_USER);
 		$p = $u->get_person_for_uid($arr["request"]["det_uid"]);
-
+		if($dds = $arr["request"]["det_day_start"])
+		{
+			$startday = $dds;
+		}
+		else
+		{
+			$startday = 1;
+		}
+		if($eds = $arr["request"]["det_day_end"])
+		{
+			$endday = $eds;
+			$endmonth = $arr["request"]["det_mon"];
+		}
+		else
+		{
+			$endday = 0;
+			$endmonth = $arr["request"]["det_mon"]+1;
+		}
 		$t->set_caption(sprintf(t("%s t&ouml;&ouml;tunnid ajavahemikul %s - %s"),
 			$p->name(),
-			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"])),
-			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"]))
+			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"])),
+			date("d.m.Y", mktime(0,0,0, $endmonth, $endday, $arr["request"]["det_year"]))
 		));
 	}
 
