@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_add_education.aw,v 1.4 2008/03/27 22:23:39 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_add_education.aw,v 1.5 2008/03/28 07:15:44 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -23,7 +23,7 @@
 @property time_text type=textbox
 @caption Aeg
 
-@property lenght_hrs type=textbox
+@property length_hrs type=textbox
 @caption Kestvus tundides
 
 @property length type=textbox
