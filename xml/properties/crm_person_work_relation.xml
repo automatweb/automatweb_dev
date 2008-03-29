@@ -40,6 +40,16 @@
             <caption>Amet</caption>
       </property>
       <property>
+            <name>field</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_FIELD</reltype>
+            <caption>Valdkond</caption>
+      </property>
+      <property>
             <name>room</name>
             <table>objects</table>
             <group>general</group>
@@ -209,6 +219,11 @@
                   <clid>CL_CURRENCY</clid>
                   <caption>Valuuta</caption>
             </CURRENCY>
+            <FIELD>
+                  <value>12</value>
+                  <clid>CL_META</clid>
+                  <caption>Valdkond</caption>
+            </FIELD>
       </reltypes>
 </properties>
 

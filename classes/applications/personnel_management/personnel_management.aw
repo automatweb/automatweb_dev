@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.21 2008/03/29 08:20:33 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.22 2008/03/29 08:37:00 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -182,6 +182,9 @@
 
 				@property cv_previous_rank type=textbox size=18 parent=t88kogemus captionside=top store=no
 				@caption T&ouml;&ouml;kogemuse ametinimetus
+
+				@property cv_previous_field type=textbox size=18 parent=t88kogemus captionside=top store=no
+				@caption Valdkond
 
 				@property cv_company type=textbox size=18 parent=t88kogemus captionside=top store=no
 				@caption Ettev&otilde;te
@@ -466,6 +469,7 @@ class personnel_management extends class_base
 			case "cv_paywish":
 			case "cv_paywish2":
 			case "cv_field":
+			case "cv_previous_field":
 			case "cv_type":
 			case "cv_location":
 			case "cv_load":
@@ -1281,8 +1285,23 @@ class personnel_management extends class_base
 		// T88KOGEMUS
 		if($r["cv_previous_rank"])
 		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_PROFESSION.name"] = "%".$r["cv_previous_rank"]."%";
-			$odl_prms["CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION.name"] = "%".$r["cv_previous_rank"]."%";
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
+					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
+				),
+			));
+		}
+		if($r["cv_previous_field"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
+					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
+				),
+			));
 		}
 		if($r["cv_company"])
 		{
@@ -2389,6 +2408,7 @@ class personnel_management extends class_base
 			$arr["args"]["cv_paywish"] = $arr["request"]["cv_paywish"];
 			$arr["args"]["cv_paywish2"] = $arr["request"]["cv_paywish2"];
 			$arr["args"]["cv_field"] = $arr["request"]["cv_field"];
+			$arr["args"]["cv_previous_field"] = $arr["request"]["cv_previous_field"];
 			$arr["args"]["cv_type"] = $arr["request"]["cv_type"];
 			$arr["args"]["cv_location"] = $arr["request"]["cv_location"];
 			$arr["args"]["cv_load"] = $arr["request"]["cv_load"];

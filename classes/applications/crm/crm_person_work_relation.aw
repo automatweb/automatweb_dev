@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.13 2008/03/27 22:15:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.14 2008/03/29 08:37:01 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -28,6 +28,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 
 @property profession type=relpicker reltype=RELTYPE_PROFESSION
 @caption Amet
+
+@property field type=classificator reltype=RELTYPE_FIELD
+@caption Valdkond
 
 @property room type=textbox
 @caption T&ouml;&ouml;ruum
@@ -95,6 +98,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 
 @reltype CURRENCY value=11 clid=CL_CURRENCY
 @caption Valuuta
+
+@reltype FIELD value=12 clid=CL_META
+@caption Valdkond
 
 */
 

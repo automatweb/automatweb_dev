@@ -628,6 +628,22 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;kogemuse ametinimetus</caption>
       </property>
       <property>
+            <name>cv_previous_field</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>t88kogemus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Valdkond</caption>
+      </property>
+      <property>
             <name>cv_company</name>
             <group>
                   <num_0>employee</num_0>
