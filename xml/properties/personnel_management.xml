@@ -352,6 +352,21 @@
             <caption>Haridustase</caption>
       </property>
       <property>
+            <name>cv_acdeg</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Akadeemiline kraad</caption>
+      </property>
+      <property>
             <name>cv_schl</name>
             <group>
                   <num_0>employee</num_0>

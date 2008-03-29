@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.22 2008/03/29 08:37:00 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.23 2008/03/29 17:25:46 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -124,6 +124,9 @@
 
 				@property cv_edulvl type=select parent=haridus captionside=top store=no
 				@caption Haridustase
+
+				@property cv_acdeg type=select parent=haridus captionside=top store=no
+				@caption Akadeemiline kraad
 
 				@property cv_schl type=textbox size=18 parent=haridus captionside=top store=no
 				@caption Kool
@@ -522,6 +525,15 @@ class personnel_management extends class_base
 			case "cv_edulvl":
 				$person_inst = get_instance(CL_CRM_PERSON);
 				$prop["options"] = $person_inst->edulevel_options;
+
+				$s = $arr['request'][$prop["name"]];
+				$this->dequote(&$s);
+				$prop['value'] = $s;
+				break;
+
+			case "cv_acdeg":
+				$person_inst = get_instance(CL_CRM_PERSON);
+				$prop["options"] = $person_inst->academic_degree_options;
 
 				$s = $arr['request'][$prop["name"]];
 				$this->dequote(&$s);
@@ -1135,6 +1147,10 @@ class personnel_management extends class_base
 		if($r["cv_edulvl"])
 		{
 			$odl_prms["edulevel"] = $r["cv_edulvl"];
+		}
+		if($r["cv_acdeg"])
+		{
+			$odl_prms["academic_degree"] = $r["cv_acdeg"];
 		}
 		if($r["cv_schl"] && is_oid($o->prop("shools_fld")))
 		{
@@ -2429,6 +2445,7 @@ class personnel_management extends class_base
 			$arr["args"]["cv_email"] = $arr["request"]["cv_email"];
 			$arr["args"]["cv_addinfo"] = $arr["request"]["cv_addinfo"];
 			$arr["args"]["cv_edulvl"] = $arr["request"]["cv_edulvl"];
+			$arr["args"]["cv_acdeg"] = $arr["request"]["cv_acdeg"];
 			$arr["args"]["cv_schl"] = $arr["request"]["cv_schl"];
 			$arr["args"]["cv_schl_area"] = $arr["request"]["cv_schl_area"];
 			$arr["args"]["cv_schl_stat"] = $arr["request"]["cv_schl_stat"];
