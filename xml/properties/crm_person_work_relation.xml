@@ -8,6 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ORG</reltype>
+            <store>connect</store>
             <caption>Organisatsioon</caption>
       </property>
       <property>
@@ -27,6 +28,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SECTION</reltype>
+            <store>connect</store>
             <caption>&amp;amp;Uuml;ksus</caption>
       </property>
       <property>
@@ -37,6 +39,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_PROFESSION</reltype>
+            <store>connect</store>
             <caption>Amet</caption>
       </property>
       <property>
@@ -47,6 +50,7 @@
             <method>serialize</method>
             <type>classificator</type>
             <reltype>RELTYPE_FIELD</reltype>
+            <store>connect</store>
             <caption>Valdkond</caption>
       </property>
       <property>
