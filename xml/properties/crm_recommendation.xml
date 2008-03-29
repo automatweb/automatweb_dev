@@ -12,6 +12,16 @@
             <caption>Soovitav isik</caption>
       </property>
       <property>
+            <name>relation</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_RELATION</reltype>
+            <store>connect</store>
+            <field>relation</field>
+            <caption>Suhe soovitajaga</caption>
+      </property>
+      <property>
             <name>jobwish</name>
             <table>objects</table>
             <group>general</group>
@@ -40,6 +50,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Soovitav isik</caption>
             </PERSON>
+            <RELATION>
+                  <value>3</value>
+                  <clid>CL_META</clid>
+                  <caption>Suhe soovitajaga</caption>
+            </RELATION>
       </reltypes>
 </properties>
 

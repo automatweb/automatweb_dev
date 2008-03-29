@@ -10,6 +10,9 @@
 @property person type=relpicker reltype=RELTYPE_PERSON store=connect field=meta method=serialize
 @caption Soovitav isik
 
+@property relation type=classificator reltype=RELTYPE_RELATION store=connect
+@caption Suhe soovitajaga
+
 @property jobwish type=relpicker reltype=RELTYPE_JOBWISH store=connect field=meta method=serialize
 @caption Soovitatav t&ouml;&ouml;
 
@@ -18,6 +21,9 @@
 
 @reltype PERSON value=2 clid=CL_CRM_PERSON
 @caption Soovitav isik
+
+@reltype RELATION value=3 clid=CL_META
+@caption Suhe soovitajaga
 
 */
 
