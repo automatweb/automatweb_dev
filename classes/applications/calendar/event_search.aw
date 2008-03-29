@@ -843,7 +843,7 @@ class event_search extends class_base
 					));
 			}
 		}
-		if ($event_class_id == CL_CALENDAR_EVENT)
+		if ($event_class_id == CL_CALENDAR_EVENT && $show_search_form)
 		{
 			$htmlc->add_property(array(
 				"name" => "end_date",
@@ -852,7 +852,7 @@ class event_search extends class_base
 				"value" => $end_tm,
 				"buttons" => true
 			));
-			if($formconfig["location"]["active"] && $show_search_form)
+			if($formconfig["location"]["active"])
 			{
 				$htmlc->add_property(array(
 					"name" => "location",
@@ -861,7 +861,7 @@ class event_search extends class_base
 					"value" => $arr["location"],
 				));
 			}
-			if($formconfig["level"]["active"] && $show_search_form)
+			if($formconfig["level"]["active"])
 			{
 				$cl_calendar_event = get_instance(CL_CALENDAR_EVENT);
 				$htmlc->add_property(array(
@@ -872,7 +872,7 @@ class event_search extends class_base
 					"options" => array('0' => t('Vali')) + $cl_calendar_event->level_options,
 				));
 			}
-			if($formconfig["sector"]["active"] && $show_search_form)
+			if($formconfig["sector"]["active"])
 			{
 				$cl_calendar_event = get_instance(CL_CALENDAR_EVENT);
 				$htmlc->add_property(array(
