@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.20 2008/03/27 09:23:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.21 2008/03/29 08:20:33 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -22,6 +22,9 @@
 
 		@property offers_fld type=relpicker reltype=RELTYPE_MENU
 		@caption T&ouml;&ouml;pakkumiste kaust
+
+		@property professions_fld type=relpicker reltype=RELTYPE_MENU
+		@caption Ametinimetuste kaust
 
 		@property shools_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Koolide kaust
@@ -1187,7 +1190,13 @@ class personnel_management extends class_base
 		}
 		if($r["cv_job"])
 		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.professions"] = "%".$r["cv_job"]."%";
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.professions" => "%".$r["cv_job"]."%",
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_PROFESSION.name" => "%".$r["cv_job"]."%",
+				),
+			));
 		}
 		if($r["cv_field"])
 		{

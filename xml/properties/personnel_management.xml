@@ -29,6 +29,16 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumiste kaust</caption>
       </property>
       <property>
+            <name>professions_fld</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Ametinimetuste kaust</caption>
+      </property>
+      <property>
             <name>shools_fld</name>
             <group>general2</group>
             <table>objects</table>

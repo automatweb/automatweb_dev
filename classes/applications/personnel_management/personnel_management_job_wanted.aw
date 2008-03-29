@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.9 2008/03/28 09:15:24 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.10 2008/03/29 08:20:33 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -18,6 +18,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @property job_type type=classificator multiple=1 reltype=RELTYPE_JOB_TYPE store=connect
 @caption T&ouml;&ouml; liik
+
+@property professions_rels type=relpicker reltype=RELTYPE_PROFESSION multiple=1 store=connect no_edit=1
+@caption Soovitavad ametid
 
 @property professions type=textarea field=ametinimetus
 @caption Soovitavad ametid
@@ -52,6 +55,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @reltype JOB_TYPE value=5 clid=CL_META
 @caption T&ouml;&ouml; liik
 
+@reltype PROFESSION value=6 clid=CL_CRM_PROFESSION
+@caption Ametinimetus
+
 */
 
 class personnel_management_job_wanted extends class_base
@@ -71,6 +77,25 @@ class personnel_management_job_wanted extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
+			case "professions_rels":
+				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
+				$pm_id = $pm_inst->get_sysdefault();
+				if(is_oid($pm_id))
+				{	
+					$pm_obj = obj($pm_id);
+					if(is_oid($pm_obj->prop("professions_fld")))
+					{
+						$ol = new object_list(array(
+							"parent" => $pm_obj->prop("professions_fld"),
+							"class_id" => CL_CRM_PROFESSION,
+							"status" => object::STAT_ACTIVE,
+							"lang_id" => array(),
+						));
+						$prop["options"] = $ol->names();
+					}
+				}
+				break;
+
 			case "load":
 				$prop["options"] = object_type::get_classificator_options(array(
 					"clid" => CL_PERSONNEL_MANAGEMENT,
