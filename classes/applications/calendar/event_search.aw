@@ -710,7 +710,7 @@ class event_search extends class_base
 
 		$htmlc = get_instance("cfg/htmlclient", array("template" => "webform.tpl"));
 		$htmlc->start_output();
-		
+
 		$formconfig = $ob->meta("formconfig");
 
 		$do_search = false;
@@ -887,7 +887,7 @@ class event_search extends class_base
 		$search_p2 = false;
 		$p_rn1 = $formconfig["project1"]["rootnode"];
 		$p_rn2 = $formconfig["project2"]["rootnode"];
-		
+
 		// dragut starts hacking:
 		// so, if $p_rn1 and $p_rn2 are empty, then maybe there are no root node set
 		// but maybe still there are some event_sources set, so then we try to use them
@@ -951,7 +951,7 @@ class event_search extends class_base
 						$rn1[] = $r;
 					}
 					$search_p1 = true;
-					// this goddamn calendar has to manage the 
+					// this goddamn calendar has to manage the
 					// events from other calendars and projects aswell.. oh hell..
 					$sources = $tmp->connections_from(array(
 						"type" => "RELTYPE_EVENT_SOURCE",
@@ -1244,6 +1244,7 @@ class event_search extends class_base
 				{
 					$search['CL_CALENDAR_EVENT.level'] = (int)$arr['level'];
 				}
+
 				if (!empty($arr['location']))
 				{
 					$search[] = new object_list_filter(array(
@@ -1254,6 +1255,16 @@ class event_search extends class_base
 							"CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.linn.name" => '%'.$arr['location'].'%',
 						)
 					));
+				}
+
+				if (!empty($arr['location_county']))
+				{
+					$search["CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.maakond"] = $arr['location_county'];
+				}
+
+				if (!empty($arr['location_city']))
+				{
+					$search["CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.linn"] = $arr['location_city'];
 				}
 
 				$search[] = new object_list_filter(array(
@@ -1549,7 +1560,7 @@ class event_search extends class_base
 			$res = "";
 			$si = __get_site_instance();
 			$has_proc = method_exists($si, "handle_parse_event_field");
-			
+
 			$aliasmrg = get_instance("alias_parser");
 			foreach($groups as $gkey => $edata)
 			{
