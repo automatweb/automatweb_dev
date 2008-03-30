@@ -121,18 +121,6 @@
             <caption>Lapsi</caption>
       </property>
       <property>
-            <name>children_list</name>
-            <table>objects</table>
-            <group>general2</group>
-            <type>textarea</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <cols>30</cols>
-            <rows>5</rows>
-            <caption>Lapsed</caption>
-            <comment>Nimi ja vanus</comment>
-      </property>
-      <property>
             <name>pictureurl</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -1477,6 +1465,28 @@
             <no_caption>1</no_caption>
             <field>ext_sys_t</field>
       </property>
+      <property>
+            <name>relatives</name>
+            <table>objects</table>
+            <group>relatives</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <props>
+                  <num_0>person</num_0>
+                  <num_1>relation_type</num_1>
+                  <num_2>start</num_2>
+                  <num_3>end</num_3>
+            </props>
+            <table_fields>
+                  <num_0>person</num_0>
+                  <num_1>relation_type</num_1>
+                  <num_2>start</num_2>
+                  <num_3>end</num_3>
+            </table_fields>
+            <reltype>RELTYPE_FAMILY_RELATION</reltype>
+            <store>no</store>
+            <field>relatives</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_PERSON</syslog_type>
@@ -1615,6 +1625,10 @@
                   <caption>Siduss&amp;amp;uuml;steemid</caption>
                   <parent>general</parent>
             </ext_sys>
+            <relatives>
+                  <caption>Sugulased</caption>
+                  <parent>general</parent>
+            </relatives>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>
@@ -1926,6 +1940,11 @@
                   <clid>CL_FILE</clid>
                   <caption>CV failina</caption>
             </CV_FILE>
+            <FAMILY_RELATION>
+                  <value>85</value>
+                  <clid>CL_CRM_FAMILY_RELATION</clid>
+                  <caption>Sugulusside</caption>
+            </FAMILY_RELATION>
       </reltypes>
       <layout>
             <co_bottom_seller>

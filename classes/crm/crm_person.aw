@@ -60,10 +60,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property children1 type=select table=objects field=meta method=serialize
 @caption Lapsi
 
-@property children_list type=textarea table=objects field=meta method=serialize cols=30 rows=5
-@caption Lapsed
-@comment Nimi ja vanus
-
 @property pictureurl type=textbox size=40 maxlength=200
 @caption Pildi/foto url
 
@@ -616,6 +612,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 	@property ext_sys_t type=table store=no no_caption=1
 
+@groupinfo relatives caption="Sugulased" parent=general
+@default group=relatives
+
+	@property relatives type=releditor mode=manager props=person,relation_type,start,end table_fields=person,relation_type,start,end reltype=RELTYPE_FAMILY_RELATION store=no
+
 */
 
 /*
@@ -857,6 +858,9 @@ caption S&otilde;bragrupid
 
 @reltype CV_FILE value=84 clid=CL_FILE
 @caption CV failina
+
+@reltype FAMILY_RELATION value=85 clid=CL_CRM_FAMILY_RELATION
+@caption Sugulusside
 
 */
 
