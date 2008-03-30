@@ -517,7 +517,19 @@ class bug extends class_base
 					"caption" => t("Link"),
 					"url" => obj_link($arr["obj_inst"]->id())
 				));
-				$prop["value"] = ' <span style="font-size:13px; font-weight:bold;">#'.$arr["obj_inst"]->id()."</span> $link ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".$crea;
+				$prop["value"] = html::span(array(
+						"content" => '#'.$arr["obj_inst"]->id(),
+						"textsize" => '13px',
+						"fontweight" => 'bold',
+					))." ".
+					$link.
+					sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".
+					$crea.
+					"/ ".t("Aega kulunud").": ".
+					html::span(array(
+						"content" => '<a href="">00:00:00 (0.0000)</a>',
+						"id" => "bug_stopper_watch_time",
+					));;
 				break;
 
 			case "bug_content":
@@ -2604,10 +2616,132 @@ die($email);
 
 	function callback_generate_scripts($arr)
 	{
+		$s_bug_stopper_watch_v2 = <<<EOF
+		jQuery.fn.stopper_watch = function(arr)
+		{
+			jQuery.stopper_watch($(this), arr);
+			return this;
+		};
+		
+		jQuery.stopper_watch = function(object, arr) {
+			time = 0;
+			var old_time = false; // value in input field
+			var pause = false;
+			var thisdate = new Date();
+			var timestamp_start = thisdate.getTime();
+			var seconds_start = 0;
+			var time_before_pause = 0;
+			
+			_start_stopper();
+			_handlers();
+			// + stop visual jumping
+			object.parent().css("width", "600px");
+			
+			function _handlers()
+			{
+				object.children().click(function () { 
+					_toggle_stopper();
+					return false;
+				});
+			}
+			
+			function _start_stopper()
+			{
+				$.timer(1000, function f (timer){
+					thisdate = new Date();
+					ts_time = thisdate.getTime()-timestamp_start;
+					tmp = ts_time/1000/60/60;
+					if (pause)
+					{
+						//alert (time_before_pause);
+						time_before_pause += tmp;
+						//alert (time_before_pause);
+						timer.stop();
+						return;
+					}
+					time = (time_before_pause+tmp).toFixed(4)*1.0;
+					object.children().html("<a href=''>"+_return_normal_clock(seconds_start)+" ("+time+")</a>")
+					seconds_start++;
+				})
+			}
+			
+			function _toggle_stopper()
+			{
+				if (pause)
+				{
+					pause = false;
+					thisdate = new Date();
+					timestamp_start = thisdate.getTime();
+					_start_stopper();
+				}
+				else if(!pause)
+				{
+					if (old_time===false)
+					{
+						old_time = $("#num_hrs_real").val()*(1.0);
+					}
+					tmp = old_time+time.toFixed(2)*1.0
+					$("#num_hrs_real").val(r2(tmp));
+					pause = true
+				}
+			}
+			
+			function _return_normal_clock(seconds)
+			{
+				var s = seconds;
+				var m = 0;
+				var h = 0;
+				while (s>59)
+				{
+					s -= 60;
+					m++;
+				}
+				while (m>59)
+				{
+					m -= 60;
+					h++;
+				}
+				if (h < 10)
+				{
+					h = "0"+h;
+				}
+				if (m < 10)
+				{
+					m = "0"+m;
+				}
+				if (s < 10)
+				{
+					s = "0"+s;
+				}
+				return h+":"+m+":"+s;
+			}
+			
+			function r2(n)
+			{
+				ans = n * 1000
+				ans = Math.round(ans /10) + ""
+				while (ans.length < 3) {ans = "0" + ans}
+				len = ans.length
+				ans = ans.substring(0,len-2) + "." + ans.substring(len-2,len)
+				return ans
+			}
+		
+		
+		}
+		
+		$("#bug_stopper_watch_time").stopper_watch();
+EOF;
+
+		if ($_GET["group"] == "general")
+		{
+			return $s_bug_stopper_watch_v2;
+		}
+		
 		if (!$arr["new"])
 		{
 			return "";
 		}
+		
 
 		return
 		"function aw_submit_handler() {".
