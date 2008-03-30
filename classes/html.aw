@@ -1147,9 +1147,11 @@ class html extends aw_template
 	function span($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
+		$textsize = ($textsize ? 'font-size: ' . $textsize . ';' : "");
+		$fontweight = ($fontweight ? 'font-weight: ' . $fontweight . ';' : "");
 		$class = ($class ? 'class="' . $class . '"' : "");
-		return "<span $class $textsize>$content</span>";
+		$id = ($id ? 'id="' . $id . '"' : "");
+		return "<span $class style='$textsize $fontweight' $id>$content</span>";
 	}
 
 	/**
