@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.33 2008/01/31 13:52:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.34 2008/03/31 13:55:34 instrumental Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes maintainer=kristo
@@ -80,8 +80,8 @@ class rate extends class_base
 			case "objects_from":
 				$prop['options'] = array(
 					OBJECTS_FROM_RATE_SCALE => t("Hindamisskaala j&auml;rgi"),
-					OBJECTS_FROM_CLID => t("Klassi järgi"),
-					OBJECTS_FROM_FOLDER => t("Kataloogi järgi"),
+					OBJECTS_FROM_CLID => t("Klassi j&auml;rgi"),
+					OBJECTS_FROM_FOLDER => t("Kataloogi j&auml;rgi"),
 					OBJECTS_FROM_OID => t("Objektist"),
 				);
 				break;
@@ -181,6 +181,8 @@ class rate extends class_base
 		@param rate_id optional type=int
 		@param return_url optional 
 		@param rate required
+		@param overwrite_previous optional type=bool
+			If overwrite_previous is set, the previous rating by current uid for this oid will be overwritten. It won't take effect unless rate_id is set.
 		
 		@returns
 		
@@ -209,8 +211,15 @@ class rate extends class_base
 		$o = obj($oid);
 		$rs = $o->meta("__ratings");
 
+
 		// CHECK THE KUUKI!!
 		$rated_objs = unserialize($_COOKIE["rated_objs"]);
+		// Maybe I wanna change my rating for some objs?
+		if($overwrite_previous && $rate_id)
+		{
+			$this->db_query("DELETE FROM ratings WHERE uid = '".aw_global_get("uid")."' AND oid = '$oid' AND rate_id = '$rate_id'");
+			unset($rated_objs[$oid]);
+		}
 		if (!isset($rated_objs[$oid]))
 		{
 			$rated_objs[$oid] = 1;
@@ -228,10 +237,9 @@ class rate extends class_base
 				if (!$rate_id)
 				{
 					$sc = get_instance(CL_RATE_SCALE);
-					$ros =$sc->get_scale_objs_for_obj($oid);
+					$ros = $sc->get_scale_objs_for_obj($oid);
 					$rate_id = $ros[0];
 				}
-
 
 				// Update ratings
 				$this->db_query("
@@ -557,6 +565,48 @@ class rate extends class_base
 		));
 		return $this->parse();
 		
+	}
+
+	/**
+	@attrib name= api=1 params=name
+
+	@param oid required type=oid
+
+	@param uid required type=string
+
+	@param rate_id optional type=array(oid),oid
+
+	**/
+	function obj_rating_by_uid($arr)
+	{
+		extract($arr);
+		$ret = array();
+
+		if(!isset($rate_id))
+		{
+			$this->db_query("SELECT rate_id, rating FROM ratings WHERE oid = '$oid' AND uid = '$uid'");
+			while($row = $this->db_next())
+			{
+				$ret[$row["rate_id"]] = $row["rating"];
+			}
+			return $ret;
+		}
+		else
+		if(!is_array($rate_id))
+		{
+			$rate_ids = array($rate_id);
+		}
+		else
+		{
+			$rate_ids = $rate_id;
+		}
+
+		foreach($rate_ids as $rate_id)
+		{
+			$ret[$rate_id] = $this->db_fetch_field("SELECT rating FROM ratings WHERE oid = '$oid' AND uid = '$uid' AND rate_id = '$rate_id' ORDER BY tm DESC LIMIT 1", "rating");
+		}
+
+		return $ret;
 	}
 }
 ?>
