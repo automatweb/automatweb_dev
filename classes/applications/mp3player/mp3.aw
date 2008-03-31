@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3.aw,v 1.2 2007/12/06 14:33:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3.aw,v 1.3 2008/03/31 04:47:06 hannes Exp $
 // mp3.aw - MP3 
 /*
 
@@ -18,7 +18,7 @@
 	@property md5 type=hidden store=yes table=mp3 field=md5
 	
 	@property play_count type=text table=mp3 field=play_count
-	@caption Mängitud
+	@caption M&auml;ngitud
 
 	@property fileupload type=fileupload store=no
 	@caption Fail
@@ -45,7 +45,7 @@
 		@caption Aasta
 		
 		@property genre type=text table=mp3 field=genre
-		@caption Zanr
+		@caption &#142;anr
 		 
 		@property comment type=text table=mp3 field=comment
 		@caption Kommentaar
@@ -54,10 +54,10 @@
 		@caption Helilooja
 		
 		@property orig_artist type=text table=mp3 field=orig_artist
-		@caption Algupärane artist
+		@caption Algup&auml;rane artist
 		
 		@property copyright type=text table=mp3 field=copyright
-		@caption Koopiaõigus
+		@caption Koopia&otilde;igus
 		
 		@property url type=text table=mp3 field=url
 		@caption URL
@@ -99,7 +99,7 @@
 		@caption encoder_options
 		
 		@property mpeg_info_compression_ratio type=text table=mp3 field=mpeg_info_compression_ratio
-		@caption Pakkimise jõud
+		@caption Pakkimise j&otilde;ud
 		
 		@property mpeg_info_playtime_seconds type=text table=mp3 field=mpeg_info_playtime_seconds
 		@caption Kestus sekundites
@@ -122,7 +122,7 @@ class mp3 extends class_base
 	function mp3()
 	{
 		$this->init(array(
-			"tpldir" => "applications/mp3player",
+			"tpldir" => "applications/awplayer/mp3",
 			"clid" => CL_MP3
 		));
 	}
@@ -135,19 +135,19 @@ class mp3 extends class_base
 		{
 				$s_link_lasering = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "lasering.ee",
+				"caption" => t("lasering.ee"),
 				"onclick" => 'myRef = window.open("'.$this->get_lasering_url($prop["value"]).'","Amazon","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 		
 			$s_link_amazon = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "amazon.com",
+				"caption" => t("amazon.com"),
 				"onclick" => 'myRef = window.open("'.$this->get_amazon_url($prop["value"]).'","Amazon","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 		
 			$s_link_wiki = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "wikipedia",
+				"caption" => t("wikipedia"),
 				"onclick" => 'myRef = window.open("'.$this->get_wiki_url($prop["value"]).'","Wikipedia","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 			
@@ -163,19 +163,19 @@ class mp3 extends class_base
 		{
 			$s_link_lasering = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "lasering.ee",
+				"caption" => t("lasering.ee"),
 				"onclick" => 'myRef = window.open("'.$this->get_lasering_url($prop["value"]).'","Amazon","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 		
 			$s_link_amazon = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "amazon.com",
+				"caption" => t("amazon.com"),
 				"onclick" => 'myRef = window.open("'.$this->get_amazon_url($prop["value"]).'","Amazon","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 			
 			$s_link_wiki = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "wikipedia",
+				"caption" => t("wikipedia"),
 				"onclick" => 'myRef = window.open("'.$this->get_wiki_url($prop["value"]).'","Wikipedia","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 			
@@ -239,7 +239,7 @@ class mp3 extends class_base
 		return $retval;
 	}
 	
-	/** changes some estonians characters to ascii chars like ö to 8 and spaces to _
+	/** changes some estonians characters to ascii chars like &ouml; to 8 and spaces to _
 	
 	@param s_name required
 	
@@ -253,12 +253,45 @@ class mp3 extends class_base
 	function normalize_name($s_name)
 	{
 		$s_name = strtolower($s_name);
-		$a_search = array (" ", "ü", "õ", "ä", "ö");
-		$a_replace = array ("_", "y", "6", "2", "8");
 		
-		$s_name = str_replace ($a_search, $a_replace, $s_name);
-		$s_name = str_replace ("_-_", "-", $s_name);
+		for($i = 0; $i < strlen($s_name); $i++)
+		{
+			if ( ord($s_name{$i}) == 184 ||ord($s_name{$i}) == 180 ) // zcaron or Zcaron
+			{
+				$tmp .= "z";
+			}
+			else if (ord($s_name{$i}) == 168 ||ord($s_name{$i}) == 166) // scaron or Zcaron
+			{
+				$tmp .= "s";
+			}
+			else if (ord($s_name{$i}) == 233 || ord($s_name{$i}) == 201) //e with acute
+			{
+				$tmp .= "e";
+			}
+			else if (ord($s_name{$i}) == 252 || ord($s_name{$i}) == 220) // &uuml; or &Uuml;
+			{
+				$tmp .= "u";
+			}
+			else if (ord($s_name{$i}) == 245 || ord($s_name{$i}) == 213 
+				|| ord($s_name{$i}) == 246 || ord($s_name{$i}) == 214 ) //&otilde; or &Otilde; or &ouml; or &Ouml;
+			{
+				$tmp .= "o";
+			}
+			else if (ord($s_name{$i}) == 228 || ord($s_name{$i}) == 196) //&auml; or &Auml;
+			{
+				$tmp .= "a";
+			}
+			else if (ord($s_name{$i}) == 32)// space
+			{
+				$tmp .= "_";
+			}
+			else
+			{
+				$tmp .= $s_name[$i];
+			}
+		}
 		
+		$s_name = str_replace ("_-_", "-", $tmp);
 		return $s_name;
 	}
 	
@@ -270,16 +303,15 @@ class mp3 extends class_base
 		{
 			$s_filename = $this->normalize_name($o->name()).".mp3";
 			
-			
 			$s_link = html::href(array(
 				"url" => "JavaScript: void(0)",
 				"caption" => $arr["prop"]["value"],
-				"onclick" => 'myRef = window.open("'.$this->get_play_url($o->id(), $s_filename).'","AW MP3 Mängija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
+				"onclick" => 'myRef = window.open("'.$this->get_play_url($o->id(), $s_filename).'","AW MP3 M&auml;ngija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
 			));
 			
 			$s_download = html::href(array(
 				"url" => $this->get_download_url($o->id(), $s_filename),
-				"caption" => "lae alla",
+				"caption" => t("lae alla"),
 			));
 
 			
@@ -309,7 +341,7 @@ class mp3 extends class_base
 		
 		<html>
 		<head>
-			<title>AW MP3 Mängija</title>
+			<title>AW MP3 M&auml;ngija</title>
 			<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/jw_mp3_player/swfobject.js"></script>
 			<style>
 			body, p {margin: 0;padding: 0;}
@@ -435,60 +467,16 @@ class mp3 extends class_base
 		return $retval;
 	}
 	
-	function create_folders($i_parent, $s_path, $s_relative_path)
-	{
-			$s_relative_path = trim($s_relative_path, "/ " ); 
-			
-			$a_folders = explode("/", $s_relative_path);
-			
-			array_pop($a_folders );
-			
-			$i_current_parent = $i_parent;
-			for ($i=0;$i<count($a_folders);$i++)
-			{
-				$ol = new object_list(array(
-						"name" => $a_folders[$i],
-						"parent" => $i_current_parent,
-						"class_id" => CL_MENU,
-				));
-				
-				if ($ol->count() == 0)
-				{
-					$o = new object(array(
-						"name" => $a_folders[$i],
-						"parent" => $i_current_parent,
-						"class_id" => CL_MENU,
-					));
-					$o->set_class_id(CL_MENU);
-					$o->set_status(STAT_ACTIVE);
-					$o->save();
-					$i_current_parent = $o->id();
-				}
-				else if ($ol->count() == 1)
-				{
-					$oid = $ol->ids();
-					$i_current_parent = $oid[0];
-				}
-				else
-				{
-					arr("ei tohiks olla mitu kausta $i_current_parent all...", 1);
-				}
-			}
-			return $i_current_parent;
-	}
-	
-	function new_mp3($i_parent, $src_file, $s_relative_path)
+	function new_mp3($i_parent, $src_file)
 	{
 			// if a file was found, then move it to wherever it should be located
 			if (is_file($src_file))
 			{
-				require_once("../addons/getid3/getid3.php");
+				require_once("../addons/getid3/getid3/getid3.php");
 				$this->getid3 = new getID3;
-				
-				$i_new_parent = mp3::create_folders($i_parent, $src_file, $s_relative_path);
-				
+			
 				$o = new object(array(
-					"parent" => $i_new_parent,
+					"parent" => $i_parent,
 					"class_id" => CL_MP3
 				));
 				$o -> set_class_id(CL_MP3);
@@ -618,44 +606,13 @@ class mp3 extends class_base
 				
 				$o->set_name(mp3::get_name($a_file_id3, "nimetu.mp3"));
 				$o->set_prop("file", $final_name);
-				$o->set_status(STAT_ACTIVE);
-				$o->set_ord(mp3::get_order($a_file_id3));
 				$o->save();
 			}
-	}
-	
-	function get_order($a_file_id3)
-	{
-		if (isset($a_file_id3["tags"]["id3v2"]["track_number"][0]))
-		{
-			$s_track = $a_file_id3["tags"]["id3v2"]["track_number"][0];
-		}
-		else if (isset($a_file_id3["tags"]["id3v1"]["track"][0]))
-		{
-			$s_track = $a_file_id3["tags"]["id3v1"]["track"][0];
-		}
-		
-		$i_out = "";
-		$i=0;
-		while(true)
-		{
-			$char = substr($s_track, $i , 1);
-			if (preg_match ( "/[0-9]{1}/", $char))
-			{
-				$i_out .= $char;
-			}
-			else
-			{
-				break;
-			}
-			$i++;
-		}
-		return $i_out;
 	}
 
 	function set_property($arr = array())
 	{
-		require_once("../addons/getid3/getid3.php");
+		require_once("../addons/getid3/getid3/getid3.php");
 		$this->getid3 = new getID3;
 		$obj_inst = $arr["obj_inst"];
 		$prop = &$arr["prop"];
