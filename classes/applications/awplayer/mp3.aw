@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mp3.aw,v 1.6 2008/03/31 04:01:15 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mp3.aw,v 1.7 2008/03/31 04:04:33 hannes Exp $
 // mp3.aw - MP3 
 /*
 
@@ -277,7 +277,7 @@ class mp3 extends class_base
 			{
 				$tmp .= "o";
 			}
-			else if (ord($s_name{$i}) == 228 || ord($s_name{$i}) == 196) //e with acute
+			else if (ord($s_name{$i}) == 228 || ord($s_name{$i}) == 196) //&auml; or &Auml;
 			{
 				$tmp .= "a";
 			}
