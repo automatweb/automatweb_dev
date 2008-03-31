@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.18 2008/03/27 09:23:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.19 2008/03/31 14:19:57 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -76,14 +76,23 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @property start_working type=chooser
 @caption T&ouml;&ouml;leasumise aeg
 
-@property job_offer_file type=text
+@property job_offer_file_url type=text store=no
+@caption T&ouml;&ouml;pakkumise fail
+
+@property job_offer_file type=releditor reltype=RELTYPE_JOB_OFFER_FILE rel_id=first props=file table=objects field=meta method=serialize
 @caption T&ouml;&ouml;pakkumine failina
+
+@property job_offer_pdf type=text
+@caption T&ouml;&ouml;pakkumine PDF-failina
 
 @property apply type=text
 @caption Kandideerin
 
 @property offer_cfgform type=relpicker reltype=RELTYPE_CFGFORM
 @caption CV seadete vorm
+
+@property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE
+@caption Hindamise skaala
 
 @property default_cfgform type=hidden
 
@@ -127,10 +136,16 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @caption Piirkond
 
 @reltype COUNTY value=9 clid=CL_CRM_COUNTY
-@caption Piirkond
+@caption Maakond
 
 @reltype CITY value=10 clid=CL_CRM_CITY
-@caption Piirkond
+@caption Linn
+
+@reltype RATE_SCALE value=11 clid=CL_RATE_SCALE
+@caption Hindamise skaala
+
+@reltype JOB_OFFER_FILE value=12 clid=CL_FILE
+@caption T&ouml;&ouml;pakkumine failina
 
 */
 
@@ -153,7 +168,7 @@ class personnel_management_job_offer extends class_base
 		
 		switch($prop["name"])
 		{
-			case "job_offer_file":
+			case "job_offer_pdf":
 				$prop["value"] = html::href(array(
 					"caption" => t("T&ouml;&ouml;pakkumine PDF-formaadis"),
 					"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id())),
@@ -253,6 +268,23 @@ class personnel_management_job_offer extends class_base
 		return $grs;
 	}
 
+	function _get_job_offer_file_url($arr)
+	{
+		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_JOB_OFFER_FILE");
+		if (!$o)
+		{
+			return PROP_IGNORE;
+		}
+		
+		$file_inst = get_instance(CL_FILE);
+		$arr["prop"]["value"] = html::img(array(
+				"url" => icons::get_icon_url(CL_FILE),
+			)).html::href(array(
+			"caption" => $o->name(),
+			"url" => $file_inst->get_url($o->id(), $o->name()),
+		));
+	}
+
 	function _get_new_cfgform_tbl($arr)
 	{
 		$cfgform_id = $arr["obj_inst"]->prop("default_cfgform");
@@ -306,7 +338,21 @@ class personnel_management_job_offer extends class_base
 			"img" => "new.gif",
 			"url" => $this->mk_my_orb("new", array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 1, "parent" => $arr["obj_inst"]->id(), "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_CANDIDATE),
 		));
+		$t->add_search_button();
 		$t->add_delete_button();
+		$t->add_button(array(
+			"name" => "send_email",
+			"tooltip" => t("Saada e-kiri"),
+			"img" => "",
+			"action" => "",
+		));
+		$t->add_button(array(
+			"name" => "send_sms",
+			"tooltip" => t("Saada SMS"),
+			"img" => "",
+			"action" => "",
+		));
+		$t->add_save_button();
 	}
 
 	function _get_toolbar($arr)
@@ -342,18 +388,37 @@ class personnel_management_job_offer extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 				
 		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
 			"name" => "person",
-			"caption" => t("Isik"),
+			"caption" => t("Kandideerija nimi"),
 			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => t("Kuup&auml;ev"),
+			"caption" => t("Kandidatuuri lisamise aeg"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "age",
+			"caption" => t("Vanus"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "phones",
+			"caption" => t("Telefonid"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "emails",
+			"caption" => t("E-postiaadressid"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "rate",
+			"caption" => t("Hinne"),
+		));
+		$t->define_field(array(
+			"name" => "rating",
+			"caption" => t("Keskmine hinne"),
 			"sortable" => 1,
 		));
 		$t->define_field(array(
@@ -364,11 +429,19 @@ class personnel_management_job_offer extends class_base
 			"name" => "intro_file",
 			"caption" => t("Kaaskiri (failina)"),
 		));
-			
+		$t->define_field(array(
+			"name" => "addinfo",
+			"caption" => t("Lisainfo"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+		));			
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "id",
 		));
+		$rate_inst = get_instance(CL_RATE);
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CANDIDATE")) as $candidate)
 		{
 			$obj = $candidate->to();
@@ -399,16 +472,59 @@ class personnel_management_job_offer extends class_base
 				"target" => "_blank",
 			)) : t("Puudub");
 
+			$rate = $rate_inst->obj_rating_by_uid(array(
+				"oid" => $id,
+				"uid" => aw_global_get("uid"),
+				"rate_id" => $arr["obj_inst"]->prop("rate_scale"),
+			));
+
+			// Phones
+			$phones = "";
+			foreach($person->connections_from(array("type" => "RELTYPE_PHONE")) as $conn)
+			{
+				if(strlen($phones) > 0)
+				{
+					$phones .= ", ";
+				}
+				$phones .= html::obj_change_url($conn->to());
+			}
+
+			// E-mails
+			$emails = "";
+			foreach($person->connections_from(array("type" => "RELTYPE_EMAIL")) as $conn)
+			{
+				if(strlen($emails) > 0)
+				{
+					$emails .= ", ";
+				}
+				$emails .= html::obj_change_url($conn->to());
+			}
+
 			$t->define_data(array(
-				"name" => html::get_change_url($id, array("return_url" => get_ru()), $obj->name()),
 				"person" => html::href(array(
 					"caption" => $person->prop("firstname")." ".$person->prop("lastname"),
 					"url" =>  html::get_change_url($person->id(), array("group" => "cv_view", "return_url" => get_ru())),
 				)),
+				"age" => $person->get_age(),
+				"phones" => $phones,
+				"emails" => $emails,
+				"rate" => html::select(array(
+					"name" => "rate[".$id."]",
+					"options" => get_instance(CL_RATE_SCALE)->_get_scale($arr["obj_inst"]->prop("rate_scale")),
+					"value" => $rate[$arr["obj_inst"]->prop("rate_scale")],
+				)),
+				"rating" => $rate_inst->get_rating_for_object($id, RATING_AVERAGE, $arr["obj_inst"]->prop("rate_scale")),
 				"date" => get_lc_date($obj->created()),
 				"id" => $id,
 				"intro" => $intro_url,
 				"intro_file" => $intro_file_url,
+				"addinfo" => html::textarea(array(
+					"name" => "addinfo[".$id."]",
+					"cols" => 10,
+					"rows" => 5,
+					"value" => $obj->prop("addinfo"),
+				)),
+				"change" => html::obj_change_url($person, t("Muuda")),
 			));
 		}
 	}
@@ -419,6 +535,10 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "candidate_table":
+				$this->_set_candidate_table($arr);
+				break;
+
 			case "new_cfgform_tbl":
 				$this->_set_new_cfgform_tbl($arr);
 				break;
@@ -429,6 +549,27 @@ class personnel_management_job_offer extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function _set_candidate_table($arr)
+	{
+		$i = get_instance(CL_RATE);
+		foreach($arr["request"]["rate"] as $c_id => $r)
+		{
+			$i->add_rate(array(
+				"oid" => $c_id,
+				"rate_id" => $arr["obj_inst"]->prop("rate_scale"),
+				"rate" => array($arr["obj_inst"]->prop("rate_scale") => $r),
+				"no_redir" => 1,
+				"overwrite_previous" => 1,
+			));
+		}
+		foreach($arr["request"]["addinfo"] as $c_id => $addinfo)
+		{
+			$o = obj($c_id);
+			$o->set_prop("addinfo", $addinfo);
+			$o->save();
+		}
 	}
 
 	function _set_new_cfgform_tbl($arr)
