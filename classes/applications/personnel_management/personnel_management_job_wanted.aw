@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.11 2008/03/31 15:45:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.12 2008/03/31 15:54:17 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -89,7 +89,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @reltype PROFESSION value=6 clid=CL_CRM_PROFESSION
 @caption Ametinimetus
 
-@reltype LOCATION2 value=6 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA 	 
+@reltype LOCATION2 value=7 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA 	 
 @caption Asukoht (teine valik)
 
 */
