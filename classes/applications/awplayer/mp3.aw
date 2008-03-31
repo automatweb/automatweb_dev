@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mp3.aw,v 1.5 2008/03/31 03:57:05 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mp3.aw,v 1.6 2008/03/31 04:01:15 hannes Exp $
 // mp3.aw - MP3 
 /*
 
@@ -135,19 +135,19 @@ class mp3 extends class_base
 		{
 				$s_link_lasering = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "lasering.ee",
+				"caption" => t("lasering.ee"),
 				"onclick" => 'myRef = window.open("'.$this->get_lasering_url($prop["value"]).'","Amazon","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 		
 			$s_link_amazon = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "amazon.com",
+				"caption" => t("amazon.com"),
 				"onclick" => 'myRef = window.open("'.$this->get_amazon_url($prop["value"]).'","Amazon","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 		
 			$s_link_wiki = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "wikipedia",
+				"caption" => t("wikipedia"),
 				"onclick" => 'myRef = window.open("'.$this->get_wiki_url($prop["value"]).'","Wikipedia","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 			
@@ -163,19 +163,19 @@ class mp3 extends class_base
 		{
 			$s_link_lasering = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "lasering.ee",
+				"caption" => t("lasering.ee"),
 				"onclick" => 'myRef = window.open("'.$this->get_lasering_url($prop["value"]).'","Amazon","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 		
 			$s_link_amazon = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "amazon.com",
+				"caption" => t("amazon.com"),
 				"onclick" => 'myRef = window.open("'.$this->get_amazon_url($prop["value"]).'","Amazon","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 			
 			$s_link_wiki = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "wikipedia",
+				"caption" => t("wikipedia"),
 				"onclick" => 'myRef = window.open("'.$this->get_wiki_url($prop["value"]).'","Wikipedia","left=0,top=0,width="+screen.width+",height="+screen.height+",toolbar=1,resizable=1,location=1,directories=0,status=1,menubar=1,scrollbars=1")',
 			));
 			
@@ -311,7 +311,7 @@ class mp3 extends class_base
 			
 			$s_download = html::href(array(
 				"url" => $this->get_download_url($o->id(), $s_filename),
-				"caption" => "lae alla",
+				"caption" => t("lae alla"),
 			));
 
 			
