@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.56 2008/02/11 09:42:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.57 2008/03/31 09:57:03 kristo Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -706,6 +706,11 @@ class cache extends core
 		$dirname = str_replace(".","",$pathinfo["dirname"]);
 
 		$fqfn = $this->cfg["basedir"] . $dirname . "/" . $pathinfo["basename"];
+		if (!is_file($fqfn) || !is_readable($fqfn))
+		{
+			$fqfn = $this->cfg["site_basedir"] . $dirname . "/" . $pathinfo["basename"];
+		}
+
 		// this is all nice and good, but I need a way to load files from the
 		// site directory as well. 
 

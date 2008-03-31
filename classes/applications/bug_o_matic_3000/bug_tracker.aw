@@ -3915,6 +3915,7 @@ echo "<div style='font-size: 10px;'>";
 				continue;
 			}
 
+			echo "bt = ".$bt->name()." (".$bt->id().") <br>";
 			$imap = obj($bt->prop("mail_identity"));
 			$imap_i = $imap->instance();
 			$imap_i->connect_server(array(

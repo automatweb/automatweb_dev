@@ -591,33 +591,30 @@ function classload($args)
 	{
 		// let's not allow including ../../../etc/passwd :)
 		$lib = $olib = str_replace(".","", $lib);
-		// check if we need to load a site class instead
-		if (isset($GLOBALS["cfg"]["site_classes"][$lib]))
+
+		if ($GLOBALS["cfg"]["classes"][aw_ini_get("class_lut.".basename($lib))]["site_class"] == 1)
 		{
-			$lib = $GLOBALS["cfg"]["site_classes"][$lib];
-			$lib = $GLOBALS["cfg"]["site_basedir"]."/classes/".$lib.".".$GLOBALS["cfg"]["ext"];
+			$lib = $GLOBALS["cfg"]["site_basedir"]."/classes/".basename($lib).".".$GLOBALS["cfg"]["ext"];
+		}
+		else
+		if (substr($lib,0,13) == "designedclass")
+		{
+			$lib = basename($lib);
+			$lib = $GLOBALS["cfg"]["site_basedir"]."/files/classes/".$lib.".".$GLOBALS["cfg"]["ext"];
 		}
 		else
 		{
-			if (substr($lib,0,13) == "designedclass")
-			{
-				$lib = basename($lib);
-				$lib = $GLOBALS["cfg"]["site_basedir"]."/files/classes/".$lib.".".$GLOBALS["cfg"]["ext"];
-			}
-			else
-			{
-				$lib = $GLOBALS["cfg"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["ext"];
+			$lib = $GLOBALS["cfg"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["ext"];
 
-				if (isset($GLOBALS['cfg']['user_interface']["default_language"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+			if (isset($GLOBALS['cfg']['user_interface']["default_language"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+			{
+				$trans_fn = $GLOBALS["cfg"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib);
+				if (file_exists($trans_fn))
 				{
-					$trans_fn = $GLOBALS["cfg"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib);
-					if (file_exists($trans_fn))
+					incl_f($trans_fn);
+					if (file_exists($trans_fn) && is_readable($trans_fn))
 					{
-						incl_f($trans_fn);
-						if (file_exists($trans_fn) && is_readable($trans_fn))
-						{
-							require_once($trans_fn);
-						}
+						require_once($trans_fn);
 					}
 				}
 			}
@@ -666,9 +663,10 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 			$class = $GLOBALS["cfg"]["classes"][$class]["file"];
 		}
 	}
-	if (isset($GLOBALS["cfg"]["site_classes"]) && isset($GLOBALS["cfg"]["site_classes"][$class]))
+
+	if ($GLOBALS["cfg"]["classes"][aw_ini_get("class_lut.".basename($class))]["site_class"] == 1)
 	{
-		$class = $GLOBALS["cfg"]["site_classes"][$class];
+		//$class = $GLOBALS["cfg"]["site_classes"][$class];
 		$site = true;
 	}
 	if (substr($class,0,13) == "designedclass")
@@ -1415,7 +1413,7 @@ function __autoload($class_name)
 			//!!! take action
 		}
 	}
-	
+
 	if (!class_exists($class_name, false) and !interface_exists($class_name, false))
 	{ // class may be moved to another file, force update and try again
 		try
@@ -1425,7 +1423,9 @@ function __autoload($class_name)
 		catch (awex_clidx $e)
 		{
 			exit_function("__autoload");
-			exit("Fatal update error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
+			echo ("Fatal update error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
+			echo dbg::process_backtrace(debug_backtrace());
+			die();
 			//!!! take action
 		}
 
@@ -1437,7 +1437,8 @@ function __autoload($class_name)
 		catch (awex_clidx $e)
 		{
 			exit_function("__autoload");
-			exit("Fatal classload error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
+			echo ("Fatal classload error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
+			echo dbg::process_backtrace(debug_backtrace());
 		}
 	}
 	exit_function("__autoload");

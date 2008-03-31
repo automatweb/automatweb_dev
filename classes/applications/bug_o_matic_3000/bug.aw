@@ -1884,6 +1884,7 @@ class bug extends class_base
 	function handle_commit($arr)
 	{
 		aw_disable_acl();
+		$u_inst = get_instance("users");
 		$bug = obj($arr["bugno"]);
 		$msg = trim($this->hexbin($arr["msg"]));
 
@@ -1954,6 +1955,7 @@ class bug extends class_base
 					list($map_cvs_uid, $map_aw_uid) = explode("=", $map_line);
 					if ($map_cvs_uid == $cvs_uid)
 					{
+						$_SESSION["uid_oid"] = $u_inst->get_oid_for_uid($map_aw_uid);
 						aw_switch_user(array("uid" => trim($map_aw_uid)));
 					}
 				}

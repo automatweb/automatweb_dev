@@ -918,6 +918,11 @@ class relationmgr extends aw_template
 		
 		$tb = &$this->_make_toolbar($arr);
 		$this->read_template("list_aliases.tpl");
+
+		$this->vars(array(
+			"id" => $arr["obj_inst"]->id(),
+		));
+
 		// table part
 		classload("vcl/table");
 		$tbl = new vcl_table();
@@ -1113,6 +1118,7 @@ class relationmgr extends aw_template
 			}
 			$tbl->define_data($adat);
 		}
+
 		$defcs = array(CL_IMAGE => "image.default_folder", CL_FILE => "file.default_folder", CL_EXTLINK => "links.default_folder");
 		$def_str = "";
 		$return_url = get_ru();
@@ -1124,13 +1130,17 @@ class relationmgr extends aw_template
 				$this->vars(array(
 					"parent" => $def_val,
 					"period" => $period,
-					"id" => $id,
+					"id" => $arr["obj_inst"]->id(),
 					"return_url" => urlencode($return_url),
 					"def_fld_clid" => $def_clid
 				));
 				$def_str .= $this->parse("HAS_DEF_FOLDER");
 			}
 		}
+		$this->vars(array(
+			"id" => $arr["obj_inst"]->id(),
+		));
+
 		$req = safe_array($arr["request"]);
 		unset($req["action"]);
 		if (!is_array($req))

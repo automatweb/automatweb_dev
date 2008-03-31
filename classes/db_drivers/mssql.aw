@@ -272,7 +272,8 @@ class mssql
 
 	function db_list_tables()
 	{
-		$this->db_query("SELECT name FROM sysobjects");
+		$this->db_query("SELECT TABLE_SCHEMA,TABLE_NAME, OBJECTPROPERTY(object_id(TABLE_NAME), N'IsUserTable') AS type 
+ FROM INFORMATION_SCHEMA.TABLES");
 	}
 
 	function db_next_table()
@@ -282,6 +283,7 @@ class mssql
 		{
 			return false;
 		}
+die(dbg::dump($ret));
 		return $ret["name"];
 	}
 

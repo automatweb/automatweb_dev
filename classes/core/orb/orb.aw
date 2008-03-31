@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.29 2008/03/28 08:04:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.30 2008/03/31 09:57:19 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -614,7 +614,7 @@ class orb extends aw_template
 		}
 		else
 		{
-			if (!file_exists($this->cfg["basedir"]."/xml/orb/$class.xml"))
+			if (!file_exists($this->cfg["basedir"]."/xml/orb/$class.xml") && !file_exists($this->cfg["site_basedir"]."/xml/orb/$class.xml"))
 			{
 				$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 			}

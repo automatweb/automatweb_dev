@@ -90,8 +90,10 @@ class object_data_list
 	**/
 	function arr()
 	{
+		return $this->list_data;
 		$arr = array();
 		$p = &$this->props;
+
 		foreach($this->list_data as $oid => $od)
 		{
 			if (!isset($od["class_id"]) || !isset($p[$od["class_id"]]))

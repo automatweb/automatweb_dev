@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.44 2008/01/31 13:55:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.45 2008/03/31 09:57:27 kristo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. &otilde;igemini ta tagastab need boxid kus seike kiri sees
@@ -1048,6 +1048,10 @@ class imap extends class_base
 	function _set_overview($ovr)
 	{
 		$cache = get_instance("cache");
+		if (!$this->overview_cache_id)
+		{
+			$this->reset_cache_ids();	
+		}
 		$cache->file_set($this->overview_cache_id,aw_serialize($ovr));
 	}
 

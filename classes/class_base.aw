@@ -137,7 +137,9 @@ class class_base extends aw_template
 		$this->new = 1;
 		$this->obj_inst = new object();
 
-		if ("menu" !== $arr["class"])
+		$clss = aw_ini_get("classes");
+
+		if ("menu" !== $arr["class"] && !$clss[$this->clid]["site_class"])
 		{
 			if (class_index::is_extension_of($arr["class"], "class_base"))
 			{

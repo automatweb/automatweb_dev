@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.91 2008/01/31 13:52:00 kristo Exp $
+// $Id: cfgutils.aw,v 1.92 2008/03/31 09:57:10 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 /*
 @classinfo  maintainer=kristo
@@ -10,6 +10,7 @@ class cfgutils extends aw_template
 	{
 		$this->init("");
 		$this->fbasedir = $this->cfg["basedir"] . "/xml/properties/";
+		$this->f_site_basedir = $this->cfg["site_basedir"] . "/xml/properties/";
 		$this->clist_init_done = false;
 		$this->cache = get_instance("cache");
 	}
@@ -89,6 +90,7 @@ class cfgutils extends aw_template
 		{
 			// that check is a bit of stupid, OTOH it needs to be fast
 			$retval = file_exists($this->fbasedir . $fname . '.xml');
+			$retval |= file_exists($this->f_site_basedir . $fname . '.xml');
 		};
 		return $retval;
 	}
@@ -136,7 +138,6 @@ class cfgutils extends aw_template
 	// load_trans - whater to load translated props or not
 	function load_class_properties($args = array())
 	{
-//echo "lcp = ".dbg::dump($args); 
 		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
 		enter_function("load_class_properties");
 		extract($args);
@@ -157,6 +158,10 @@ class cfgutils extends aw_template
 		if (empty($args['source']))
 		{
 			$fqfn = $this->fbasedir . $file . ".xml";
+			if (!is_file($fqfn))
+			{
+				$fqfn = $this->f_site_basedir . $file . ".xml";
+			}
 			$cachename = aw_ini_get("cache.page_cache") . "/propdef_" . $file . ".cache";
 
 
@@ -166,7 +171,6 @@ class cfgutils extends aw_template
 			};
 		}
 		$from_cache = false;
-
 		if (empty($args['source']) && file_exists($cachename) && (filemtime($cachename) > filemtime($fqfn)))
 		{
 			include($cachename);
@@ -635,7 +639,6 @@ class cfgutils extends aw_template
 	**/
 	function load_properties($args = array())
 	{
-//echo dbg::dump($args);
 		$clid = $args["clid"];
 		$file = isset($args["file"]) ? $args["file"] : null;
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
@@ -658,7 +661,15 @@ class cfgutils extends aw_template
 			}
 		}
 
-		$ts = is_readable(aw_ini_get("basedir")."/xml/properties/".$file.".xml") ? filemtime(aw_ini_get("basedir")."/xml/properties/".$file.".xml") : null;
+		$sc = $GLOBALS["cfg"]["classes"][$clid]["site_class"];
+		if ($sc)
+		{
+			$ts = is_readable(aw_ini_get("site_basedir")."/xml/properties/".$file.".xml") ? filemtime(aw_ini_get("site_basedir")."/xml/properties/".$file.".xml") : null;
+		}
+		else
+		{
+			$ts = is_readable(aw_ini_get("basedir")."/xml/properties/".$file.".xml") ? filemtime(aw_ini_get("basedir")."/xml/properties/".$file.".xml") : null;
+		}
 		$args["adm_ui_lc"] = $adm_ui_lc;
 		$key = md5(serialize($args));
 		$res = $this->cache->file_get_ts($key, max($ts, $tft));
@@ -668,7 +679,7 @@ class cfgutils extends aw_template
 			$cache_d = aw_unserialize($res);
 		}
 
-		if (is_array($cache_d))
+		if (is_array($cache_d) && !$sc)
 		{
 			foreach($cache_d as $k => $v)
 			{

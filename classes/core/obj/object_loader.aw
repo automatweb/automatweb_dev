@@ -568,6 +568,7 @@ class _int_object_loader extends core
 			$rv["can_delete"] = $max_acl["can_delete"];
 			return $rv;
 		}
+
 		return $max_acl;
 	}
 
