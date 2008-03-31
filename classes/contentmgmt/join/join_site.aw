@@ -1132,7 +1132,7 @@ class join_site extends class_base
 					$xprop["cols"] = 30;
 				}
 
-				if ($breaks[$clid][$oldn])
+				if (is_array($breaks[$clid]) && $breaks[$clid][$oldn])
 				{
 					foreach(safe_array($xprop["options"]) as $_k => $_v)
 					{
