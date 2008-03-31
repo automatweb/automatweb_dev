@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mp3.aw,v 1.4 2007/12/06 14:32:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awplayer/Attic/mp3.aw,v 1.5 2008/03/31 03:57:05 hannes Exp $
 // mp3.aw - MP3 
 /*
 
@@ -18,7 +18,7 @@
 	@property md5 type=hidden store=yes table=mp3 field=md5
 	
 	@property play_count type=text table=mp3 field=play_count
-	@caption Mängitud
+	@caption M&auml;ngitud
 
 	@property fileupload type=fileupload store=no
 	@caption Fail
@@ -54,10 +54,10 @@
 		@caption Helilooja
 		
 		@property orig_artist type=text table=mp3 field=orig_artist
-		@caption Algupärane artist
+		@caption Algup&auml;rane artist
 		
 		@property copyright type=text table=mp3 field=copyright
-		@caption Koopiaõigus
+		@caption Koopia&otilde;igus
 		
 		@property url type=text table=mp3 field=url
 		@caption URL
@@ -99,7 +99,7 @@
 		@caption encoder_options
 		
 		@property mpeg_info_compression_ratio type=text table=mp3 field=mpeg_info_compression_ratio
-		@caption Pakkimise jõud
+		@caption Pakkimise j&otilde;ud
 		
 		@property mpeg_info_playtime_seconds type=text table=mp3 field=mpeg_info_playtime_seconds
 		@caption Kestus sekundites
@@ -239,7 +239,7 @@ class mp3 extends class_base
 		return $retval;
 	}
 	
-	/** changes some estonians characters to ascii chars like ö to 8 and spaces to _
+	/** changes some estonians characters to ascii chars like &ouml; to 8 and spaces to _
 	
 	@param s_name required
 	
@@ -253,12 +253,45 @@ class mp3 extends class_base
 	function normalize_name($s_name)
 	{
 		$s_name = strtolower($s_name);
-		$a_search = array (" ", "ü", "õ", "ä", "ö");
-		$a_replace = array ("_", "y", "6", "2", "8");
 		
-		$s_name = str_replace ($a_search, $a_replace, $s_name);
-		$s_name = str_replace ("_-_", "-", $s_name);
+		for($i = 0; $i < strlen($s_name); $i++)
+		{
+			if ( ord($s_name{$i}) == 184 ||ord($s_name{$i}) == 180 ) // zcaron or Zcaron
+			{
+				$tmp .= "z";
+			}
+			else if (ord($s_name{$i}) == 168 ||ord($s_name{$i}) == 166) // scaron or Zcaron
+			{
+				$tmp .= "s";
+			}
+			else if (ord($s_name{$i}) == 233 || ord($s_name{$i}) == 201) //e with acute
+			{
+				$tmp .= "e";
+			}
+			else if (ord($s_name{$i}) == 252 || ord($s_name{$i}) == 220) // &uuml; or &Uuml;
+			{
+				$tmp .= "u";
+			}
+			else if (ord($s_name{$i}) == 245 || ord($s_name{$i}) == 213 
+				|| ord($s_name{$i}) == 246 || ord($s_name{$i}) == 214 ) //&otilde; or &Otilde; or &ouml; or &Ouml;
+			{
+				$tmp .= "o";
+			}
+			else if (ord($s_name{$i}) == 228 || ord($s_name{$i}) == 196) //e with acute
+			{
+				$tmp .= "a";
+			}
+			else if (ord($s_name{$i}) == 32)// space
+			{
+				$tmp .= "_";
+			}
+			else
+			{
+				$tmp .= $s_name[$i];
+			}
+		}
 		
+		$s_name = str_replace ("_-_", "-", $tmp);
 		return $s_name;
 	}
 	
@@ -270,11 +303,10 @@ class mp3 extends class_base
 		{
 			$s_filename = $this->normalize_name($o->name()).".mp3";
 			
-			
 			$s_link = html::href(array(
 				"url" => "JavaScript: void(0)",
 				"caption" => $arr["prop"]["value"],
-				"onclick" => 'myRef = window.open("'.$this->get_play_url($o->id(), $s_filename).'","AW MP3 Mängija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
+				"onclick" => 'myRef = window.open("'.$this->get_play_url($o->id(), $s_filename).'","AW MP3 M&auml;ngija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
 			));
 			
 			$s_download = html::href(array(
@@ -309,7 +341,7 @@ class mp3 extends class_base
 		
 		<html>
 		<head>
-			<title>AW MP3 Mängija</title>
+			<title>AW MP3 M&auml;ngija</title>
 			<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/jw_mp3_player/swfobject.js"></script>
 			<style>
 			body, p {margin: 0;padding: 0;}
@@ -440,7 +472,7 @@ class mp3 extends class_base
 			// if a file was found, then move it to wherever it should be located
 			if (is_file($src_file))
 			{
-				require_once("../addons/getid3/getid3.php");
+				require_once("../addons/getid3/getid3/getid3.php");
 				$this->getid3 = new getID3;
 			
 				$o = new object(array(
@@ -580,7 +612,7 @@ class mp3 extends class_base
 
 	function set_property($arr = array())
 	{
-		require_once("../addons/getid3/getid3.php");
+		require_once("../addons/getid3/getid3/getid3.php");
 		$this->getid3 = new getID3;
 		$obj_inst = $arr["obj_inst"];
 		$prop = &$arr["prop"];
