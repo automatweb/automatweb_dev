@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.33 2008/03/13 13:26:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.34 2008/03/31 13:48:18 sander Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -463,6 +463,7 @@ class crm_address extends class_base
 			"KN" => t("Saint Kitts and Nevis"),
 			"KP" => t("Korea (North)"),
 			"KR" => t("Korea (South)"),
+			"KS" => t("Kosovo"),
 			"KW" => t("Kuwait"),
 			"KY" => t("Cayman Islands"),
 			"KZ" => t("Kazakhstan"),
@@ -528,6 +529,7 @@ class crm_address extends class_base
 			"QA" => t("Qatar"),
 			"RE" => t("Reunion"),
 			"RO" => t("Romania"),
+			"RS" => t("Serbia"),
 			"RU" => t("Russian Federation"),
 			"RW" => t("Rwanda"),
 			"SA" => t("Saudi Arabia"),
