@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.260 2008/03/24 09:28:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.261 2008/03/31 06:57:32 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -2285,6 +2285,10 @@ if (!defined("DEFS"))
 					}
 					else
 					{
+						if (strlen($e) > 200)
+						{
+							$e = substr($e, 0, 100)."...".substr($e, -100);
+						}
 						$str[] = "".$e;
 					}
 				}

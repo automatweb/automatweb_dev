@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="docgen_search" folder="applications/docgen" extends="class_base">
+		<action name="doc_search_form" all_args="1">
+			<function name="doc_search_form">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view_usage">
+			<function name="view_usage">
+				<arguments>
+					<required name="file" />
+					<required name="v_class" />
+					<required name="func" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

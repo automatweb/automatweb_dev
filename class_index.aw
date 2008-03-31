@@ -13,6 +13,9 @@ class class_index
 	const UPDATE_EXEC_TIMELIMIT = 300;
 	const CL_NAME_MAXLEN = 1024;
 
+	// update collects implemented interfaces in this, so we can update the interface definitions with the list of classes that implement that interface
+	private static $implements_interface = array();
+
 	/**
 	@attrib api=1 params=pos
 	@param full_update optional type=bool
@@ -21,19 +24,21 @@ class class_index
 	@comment
 		Updates entire class index. Reads all files in class directory and parses them, looking for php class definitions.
 	**/
-	public static function update($full_update = false)
+	public static function update($full_update = true)
 	{
 		// ...
 		$max_execution_time_prev_val = ini_get("max_execution_time");
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);
 
 		// update
+		self::$implements_interface = array();
 		$found_classes = self::_update("", "", $full_update);
 		self::update_one_file(aw_ini_get("basedir")."/class_index.aw", $found_classes, $full_update, "../");
 		self::update_one_file(aw_ini_get("basedir")."/init.aw", $found_classes, $full_update, "../");
 
 		if ($full_update)
 		{
+			self::write_implements_interface();
 			self::clean_up($found_classes);
 		}
 
@@ -267,6 +272,14 @@ class class_index
 			{ // 'implements' always comes right after class name therefore variables are still set.
 				$interface = $token[1];
 				$class_dfn["implements"] = $interface;
+				self::$implements_interface[$interface][] = $class_name;
+				// can't empty type, because we can have multiple implements
+				//$type = "";
+			}
+			else
+			if ($token == "{")
+			{
+				// this comes after all implements and things are done in the class
 				$type = "";
 			}
 		}
@@ -452,6 +465,65 @@ class class_index
 			$e->clidx_file = $index_dir;
 			$e->clidx_op = "opendir";
 			throw $e;
+		}
+	}
+
+	/** Returns a list of classes that implement a particular interface
+		@attrib api=1 params=pos
+
+		@param interface required type=string
+			The name of the interface to search for
+
+		@returns
+			array { class_name_with_folder => class_name } for all classes that implement the given interface
+	**/
+	public static function get_classes_by_interface($interface)
+	{
+		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
+		$if_file = $index_dir.$interface.".".aw_ini_get("ext");
+
+		if (!file_exists($if_file))
+		{
+			self::update(true);
+			if (!file_exists($if_file))
+			{
+				$e = new awex_clidx_filesys("Could not open interface $if_file class index.");
+				$e->clidx_file = $if_file;
+				$e->clidx_op = "file_exists";
+				throw $e;
+			}
+		}
+		$fc = unserialize(file_get_contents($if_file));
+
+		if ($fc["type"] !== "interface")
+		{
+			$e = new awex_clidx("get_classes_by_interface($interface): the requested interface is not an interface!");
+			$e->clidx_cl_name = $interface;
+			throw $e;
+		}
+		return safe_array($fc["implemented_by"]);
+	}
+
+	private static function write_implements_interface()
+	{
+		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
+		foreach(self::$implements_interface as $if_name => $implemented_by)
+		{
+			$if_file = $index_dir.$if_name.".".aw_ini_get("ext");
+
+			$fc = unserialize(file_get_contents($if_file));
+			if (!is_array($fc))
+			{
+				$e = new awex_clidx_filesys("Could not open interface $if_name class index.");
+				$e->clidx_file = $if_name;
+				$e->clidx_op = "file_get_contents";
+				throw $e;
+			}
+
+			$fc["implemented_by"] = $implemented_by;
+			$f = fopen($if_file, "w");
+			fwrite($f, serialize($fc));
+			fclose($f);
 		}
 	}
 }

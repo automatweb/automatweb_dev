@@ -1,5 +1,22 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="object_type" folder="admin" extends="class_base">
+		<action name="get_sysdefault">
+			<function name="get_default_settings">
+				<arguments>
+					<required name="clid" type="class_id" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_classificator_options">
+			<function name="get_classificator_options">
+				<arguments>
+					<required name="clid" type="class_id" />
+					<required name="classificator" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

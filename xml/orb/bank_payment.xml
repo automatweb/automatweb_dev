@@ -26,6 +26,14 @@
 			</function>
 		</action>
 
+		<action name="redir_to_cc">
+			<function name="redir_to_cc">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="pay_site" is_public="1" caption="Change">
 			<function name="pay_site">
 				<arguments>
@@ -41,12 +49,5 @@
 			</function>
 		</action>
 
-		<action name="redir_to_cc" nologin="1">
-			<function name="redir_to_cc">
-				<arguments>
-					<required name="id" type="int"/>
-				</arguments>
-			</function>
-		</action>
 	</class>
 </orb>

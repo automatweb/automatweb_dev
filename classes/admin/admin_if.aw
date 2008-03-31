@@ -38,6 +38,9 @@ class admin_if extends class_base
 	var $use_parent;
 	var $force_0_parent;
 
+	/** this stores a list of {clid => class name } for each class that implements the admin if modifier interface **/
+	private $modifiers_by_clid;
+
 	function admin_if()
 	{
 		$this->init(array(
@@ -62,18 +65,6 @@ class admin_if extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				break;
-
-			case "o_tb":
-				$this->_o_tb($arr);
-				break;
-
-			case "o_tree":
-				$this->_o_tree($arr);
-				break;
-
-			case "o_tbl":
-				$this->_o_tbl($arr);
 				break;
 		};
 		return $retval;
@@ -100,22 +91,21 @@ class admin_if extends class_base
 		$arr["args"]["parent"] = $arr["request"]["parent"];
 	}
 
-	private function _o_tb($arr)
+	function _get_o_tb($arr)
 	{
-		$parent = $arr["request"]["parent"];
-		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
-		$arr["request"]["parent"] = $parent;
+		$parent = !empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : $this->cfg["rootmenu"];
 
 		$tb =& $arr["prop"]["vcl_inst"];
 		// add button only visible if the add privilege is set
-		if ($this->can("add", $arr["request"]["parent"]))
+		$can_add = $this->can("add", $parent);
+		if ($can_add)
 		{
 			$tb->add_menu_button(array(
 				"name" => "new",
 				"tooltip" => t("Lisa"),
 			));
 			
-			$this->generate_new(& $tb, $arr["request"]["parent"]);
+			$this->generate_new($tb, $parent);
 		}
 
 		$tb->add_button(array(
@@ -141,7 +131,7 @@ class admin_if extends class_base
 			"img" => "copy.gif",
 		));
 
-		if (count($this->get_cutcopied_objects()) && $this->can("add", $arr["request"]["parent"]))
+		if (count($this->get_cutcopied_objects()) && $can_add)
 		{
 			$tb->add_button(array(
 				"name" => "paste",
@@ -173,29 +163,32 @@ class admin_if extends class_base
 			"img" => "import.gif"
 		));	
 
-		$tb->add_menu_item(array(
-			"parent" => "import",
-			"text" => t("Impordi kaustu"),
-			"title" => t("Impordi kaustu"),
-			"name" => "import_menus",
-			"tooltip" => t("Impordi kaustu"),
-			"link" => $this->mk_my_orb("import",array("parent" => $arr["request"]["parent"]), "admin_menus"),
-		));
+		if ($can_add)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "import",
+				"text" => t("Impordi kaustu"),
+				"title" => t("Impordi kaustu"),
+				"name" => "import_menus",
+				"tooltip" => t("Impordi kaustu"),
+				"link" => $this->mk_my_orb("import",array("parent" => $parent), "admin_menus"),
+			));
 
-		$tb->add_menu_item(array(
-			"parent" => "import",
-			"text" => t("Impordi faile"),
-			"title" => t("Impordi faile"),
-			"name" => "import_files",
-			"tooltip" => t("Impordi faile"),
-			"link" => aw_url_change_var("group", "fu")
-		));
+			$tb->add_menu_item(array(
+				"parent" => "import",
+				"text" => t("Impordi faile"),
+				"title" => t("Impordi faile"),
+				"name" => "import_files",
+				"tooltip" => t("Impordi faile"),
+				"link" => aw_url_change_var("group", "fu")
+			));
+		}
 
 		$tb->add_button(array(
 			"name" => "preview",
 			"tooltip" => t("Eelvaade"),
 			"target" => "_blank",
-			"url" => obj_link($arr["request"]["parent"]),
+			"url" => obj_link($parent),
 			"img" => "preview.gif",
 		));
 		$file_manager = get_instance("admin/file_manager");
@@ -218,11 +211,10 @@ class admin_if extends class_base
 		return $sel_objs;
 	}
 
-	private function _o_tree($arr)
+	function _get_o_tree($arr)
 	{
 		$tree =& $arr["prop"]["vcl_inst"];
 
-		classload("core/icons");
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
 
 		$this->period = isset($arr["request"]["period"]) ? $arr["request"]["period"] : null;
@@ -233,6 +225,7 @@ class admin_if extends class_base
 		}
 		$this->curl = isset($arr["request"]["curl"]) ? $arr["request"]["curl"] : get_ru();
 		$this->selp = isset($arr["request"]["selp"]) ? $arr["request"]["selp"] : $arr["request"]["parent"];
+
 		$tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"has_root" => $this->use_parent ? 0 : 1,
@@ -354,7 +347,7 @@ class admin_if extends class_base
 		$tree->set_rootnode($this->force_0_parent || (empty($this->use_parent) && $set_by_p) ? 0 : $rn);
 	}
 
-	/**
+	/** Branch func for main tree
 		@attrib name=gen_folders
 		@param period optional
 		@param parent optional
@@ -365,7 +358,7 @@ class admin_if extends class_base
 	{
 		$t = get_instance("vcl/treeview");
 		$this->use_parent = (int)$arr["parent"];
-		$this->_o_tree(array(
+		$this->_get_o_tree(array(
 			"prop" => array(
 				"vcl_inst" => &$t
 			),
@@ -452,14 +445,8 @@ class admin_if extends class_base
 
 	private function mk_home_folder_new()
 	{
-		$us = get_instance(CL_USER);
-		if (!$this->can("view", $us->get_current_user()))
-		{
-			return;
-		}
-		$cur_oid = $us->get_current_user();
-		$ucfg = new object($cur_oid);
-		if (!$this->can("view", $ucfg->prop("home_folder")) || !is_oid($ucfg->prop("home_folder")))
+		$ucfg = new object(aw_global_get("uid_oid"));
+		if (!$this->can("view", $ucfg->prop("home_folder")))
 		{
 			return;
 		}
@@ -476,7 +463,7 @@ class admin_if extends class_base
 		$ol = new object_list(array(
 			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
 			"parent" => $hf->id(),
-			"CL_MENU.type" => new obj_predicate_not(array(MN_FORM_ELEMENT, MN_HOME_FOLDER)),
+			"CL_MENU.type" => new obj_predicate_not(array(MN_HOME_FOLDER)),
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -619,13 +606,11 @@ class admin_if extends class_base
 		));
 	}
 
-	private function _o_tbl($arr)
+	function _get_o_tbl($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->setup_rf_table($t);
 
-
-		get_instance("core/icons");
 		aw_global_set("date","");
 
 		$lang_id = aw_global_get("lang_id");
@@ -634,7 +619,7 @@ class admin_if extends class_base
 		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
 		if (!$this->can("view", $parent))
 		{
-//			return;
+			return;
 		}
 		$menu_obj = new object($parent);
 
@@ -752,14 +737,11 @@ class admin_if extends class_base
 		$q = "SELECT objects.* , IF(class_id=".CL_MENU.",1,2) as c  $query $sby2 $lim";
 		$this->db_query($q);
 
-		// perhaps this should even be in the config file?
-		//$containers = array(CL_MENU,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
 		$containers = get_container_classes();
 
 		$num_records = 0;
 
 		$this->set_parse_method("eval");
-//		$this->read_template('js_popup_menu.tpl');
 		$clss = aw_ini_get("classes");
 
 		$trans = false;
@@ -767,6 +749,8 @@ class admin_if extends class_base
 		{
 			$trans = true;
 		}
+
+		$this->_init_admin_modifier_list();
 
 		while ($row = $this->db_next())
 		{
@@ -776,9 +760,6 @@ class admin_if extends class_base
 			}
 			$row_o = obj($row["oid"]);
 			$can_change = $this->can("edit", $row["oid"]);
-			$can_delete = $this->can("delete", $row["oid"]);
-			$can_admin = $this->can("admin", $row["oid"]);
-			$comment = strip_tags($row["comment"]);
 
 			$row["is_menu"] = 0;
 			if (in_array($row["class_id"],$containers))
@@ -795,88 +776,55 @@ class admin_if extends class_base
 				}
 				if ($can_change)
 				{
-					// make mp3 playable when clicked in admin
-					if ($row["class_id"] == CL_MP3)
-					{
-						$chlink = "JavaScript: void(0)";
-					}
-					else
-					{
-						$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
-					}
+					$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
 				}
 				else
 				{
 					$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
 				}
 			}
-			// make mp3 playable when clicked in admin
-			if ($row["class_id"] == CL_MP3)
-			{
-				$s_play_url = str_replace("automatweb/","",$this->mk_my_orb("play", array("id" => $row["oid"]),"mp3", false,true,"/"))."/".str_replace("/","_","fail.mp3");
-				$s_mp3_onclick = 'myRef = window.open("'.$s_play_url.'","AW MP3 M&auml;ngija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")';
-				$caption = parse_obj_name($row_o->trans_get_val("name"));
-				$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'" onClick=\''.$s_mp3_onclick.'\'>'.$caption."</a>";
-			}
-			else
-			{
-				$caption = parse_obj_name($row_o->trans_get_val("name"));
-				$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'">'.$caption."</a>";
-			}
 
-			if (isset($sel_objs[$row["oid"]]))
-			{
-				$row["cutcopied"] = "#E2E2DB";
-			}
-			else
-			{
-				$row["cutcopied"] = "#FCFCF4";
-			}
+			$row["name"] = html::href(array(
+				"url" => $chlink,
+				"title" => strip_tags($row_o->comment()),
+				"caption" => parse_obj_name($row_o->trans_get_val("name"))
+			));
 
-			$row["lang_id"] = $lar[$row["lang_id"]];
+			$row["cutcopied"] = isset($sel_objs[$row["oid"]]) ? "#E2E2DB" : "#FCFCF4";
+
 			$row["java"] = $this->get_popup_data(array(
 				"obj" => obj($row["oid"]),
 				"period" => $period
 			));
-			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
-			$iconcomm = "Objekti id on ".$row["oid"];
-			$row["icon"] = '<img alt="'.$iconcomm.'" title="'.$iconcomm.'" src="'.$iu.'">';
+
+			$row["icon"] = html::img(array(
+				"url" => icons::get_icon_url($row_o->class_id(),$row_o->name()),
+				"alt" => sprintf(t("Objekti id on %s"), $row_o->id())
+			));
 
 			$row["class_id"] = $clss[$row["class_id"]]["name"];
-
 			if ($row["oid"] != $row["brother_of"])
 			{
 				$row["class_id"] .= " (vend)";
 			}
-						
-			$row["hidden_jrk"] = $row["jrk"];
-			if ($can_change)
-			{
-				$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
-			}
 
+			$row["hidden_jrk"] = $row["jrk"];
 			$row["status_val"] = $row["status"];
 
 			if ($can_change)
 			{
+				$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
 				$row["status"] = "<input type=\"hidden\" name=\"old[status][".$row["oid"]."]\" value=\"".$row["status"]."\"><input type=\"checkbox\" name=\"new[status][".$row["oid"]."]\" value=\"2\" ".checked($row["status"] == 2).">";
-			}
-			else
-			{
-				$row["status"] = $row["status"] == 1 ? t("Mitteaktiivne") : t("Aktiivne");
-			}
-
-			if ($can_change)
-			{
 				$row["select"] = "<input type=\"checkbox\" name=\"sel[".$row["oid"]."]\" value=\"1\">";
 			}
 			else
 			{
+				$row["status"] = $row["status"] == 1 ? t("Mitteaktiivne") : t("Aktiivne");
 				$row["select"] = "&nbsp;";
 			}
 
-			$row["change"] = $can_change ? "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>" : "";
-			
+			$this->_call_admin_modifier_for_row($row_o->class_id(), $row);
+
 			$t->define_data($row);
 			$num_records++;
 		}
@@ -1486,5 +1434,35 @@ class admin_if extends class_base
 			$_SESSION["fu_tm_text"] .= $s;
 		}
 	}
+
+	private function _init_admin_modifier_list()
+	{
+		$this->modifiers_by_clid = array();
+		foreach(class_index::get_classes_by_interface("admin_if_plugin") as $class_name)
+		{
+			$this->modifiers_by_clid[clid_for_name($class_name)] = $class_name;
+		}
+	}
+
+	private function _call_admin_modifier_for_row($class_id, $row)
+	{
+		if (isset($this->modifiers_by_clid[$class_id]))
+		{
+			$inst = get_instance($this->modifiers_by_clid[$class_id]);
+			$inst->admin_if_modify_data($row);
+		}
+	}
+}
+
+/** Implement this interface in your class if you want to apply some special behaviour for your object type in the admin interface **/
+interface admin_if_plugin
+{
+	/** This will be called for each object currently displayed in the admin interface table with the item data
+		@attrib api=1 params=pos
+
+		@param data required type=array
+			The row data for the object that you can modify
+	**/
+	function admin_if_modify_data(&$data);
 }
 ?>

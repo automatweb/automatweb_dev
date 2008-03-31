@@ -44,8 +44,6 @@ class testrunner extends core
 
 		$inst->setup();
 		$key = 0;
-		$an = get_instance("core/docgen/docgen_analyzer");
-		$res = $an->analyze_file("/applications/unittest/localetest.aw");
 		$method_inf = $res["classes"][$script]["functions"];
 		foreach($methods as $method)
 		{

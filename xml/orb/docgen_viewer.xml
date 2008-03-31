@@ -42,14 +42,6 @@
 			</function>
 		</action>
 
-		<action name="search_method">
-			<function name="search_method">
-				<arguments>
-					<required name="method" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="view_source">
 			<function name="view_source">
 				<arguments>
@@ -72,23 +64,6 @@
 			<function name="show_doc">
 				<arguments>
 					<required name="file" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="do_db_update">
-			<function name="do_db_update">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="view_usage">
-			<function name="view_usage">
-				<arguments>
-					<required name="file" />
-					<required name="v_class" />
-					<required name="func" />
 				</arguments>
 			</function>
 		</action>
@@ -117,27 +92,6 @@
 
 		<action name="exception_list">
 			<function name="exception_list">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="doc_search_form" all_args="1">
-			<function name="doc_search_form">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="doc_search_results" all_args="1">
-			<function name="doc_search_results">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="create_search">
-			<function name="doc_srch_create_tbl">
 				<arguments>
 				</arguments>
 			</function>

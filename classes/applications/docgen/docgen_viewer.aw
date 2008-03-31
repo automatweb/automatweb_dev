@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.19 2008/03/07 12:18:46 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.20 2008/03/31 06:57:41 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -765,46 +765,6 @@ class docgen_viewer extends class_base
 		return $this->finish_with_style($op);
 	}
 
-	/**
-		@attrib name=search_method
-		@param method required 
-	**/
-	function search_method($arr)
-	{
-		aw_set_exec_time(AW_LONG_PROCESS);
-		$method = $arr["method"];
-		$p = get_instance("core/aw_code_analyzer/parser");
-		$files = array();
-		$p->_get_class_list(&$files, $this->cfg["classdir"]);
-		
-		sort($files);
-		$found = 0;
-		foreach($files as $file)
-		{
-			$da = get_instance("core/aw_code_analyzer/aw_code_analyzer");
-			$fdat = $da->analyze_file($file,true);
-			$bn = basename($file,".aw");
-			$check = $fdat["classes"][$bn]["functions"][$method];
-			if ($check)
-			{
-				print "fl = $file<br>";
-				$start = $check["start_line"];
-				$offset = $check["end_line"] - $start;
-				$fc = join("",array_slice(file($file),$start-1,$offset+1));
-				$fc = "<" . "?\n" . $fc . "\n" . "?" . ">"; 
-				print "<pre>";
-				print highlight_string($fc,true);
-				//print_r($fdat["classes"][$bn]["functions"][$method]);
-				print "</pre>";
-				$found++;
-			};
-
-
-
-		}
-		print "Found $found instances<br>";
-	}
-
 	function _find_clid_for_name($name)
 	{
 		if ($name == "doc")
@@ -1106,7 +1066,7 @@ class docgen_viewer extends class_base
 		));
 
 		$this->basedir = $this->cfg["basedir"]."/docs/classes";
-		$this->ic = get_instance("core/cons");
+		$this->ic = get_instance("core/icons");
 		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
 
 		$str = $tv->finalize_tree(array(
@@ -1224,166 +1184,6 @@ class docgen_viewer extends class_base
 		return $tpl->parse();
 	}
 
-	/** updates the class/function definitions in the database
-
-		@attrib name=do_db_update
-	**/
-	function do_db_update($arr)
-	{
-		extract($arr);
-		$files = array();
-		$p = get_instance("core/aw_code_analyzer/parser");
-		$p->_get_class_list($files,$this->cfg["classdir"]);
-//$files = array("/www/dev/terryf/automatweb_dev/classes/protocols/mail/aw_mail.aw");
-		foreach($files as $file)
-		{
-	//		echo "file $file <br>\n";
-	//		flush();
-			$da = get_instance("core/aw_code_analyzer/docgen_analyzer_simple_db_writer");
-			$data = $da->analyze_file($file, true);
-			$rel_file = str_replace(aw_ini_get("basedir"), "",$file);
-			$this->db_query("DELETE FROM aw_da_classes WHERE file = '$rel_file'");
-			foreach($data["classes"] as $class => $c_data)
-			{
-				$this->db_query("DELETE FROM aw_da_funcs WHERE class = '$class'");
-				$this->db_query("DELETE FROM aw_da_func_attribs WHERE class = '$class'");
-				echo "writing class $class... <br>\n";
-				flush();
-				$has_apis = "0";
-				foreach($c_data["functions"] as $fname => $fdata)
-				{
-					//echo "&nbsp;&nbsp;&nbsp;writing function $fname... <br>\n";
-					//flush();
-					$this->db_query("INSERT INTO aw_da_funcs(class,func, ret_class, file) 
-						values(
-							'$class',
-							'$fname',
-							'".$fdata["return_var"]["class"]."',
-							'$rel_file'
-						)
-					");
-
-					// also attribs
-					$docc = safe_array($fdata["doc_comment"]["attribs"]);
-					foreach($docc as $aname => $avalue)
-					{
-						$this->db_query("
-							INSERT INTO aw_da_func_attribs(class,func,attrib_name,attrib_value)
-								VALUES('$class','$fname','$aname','$avalue')
-						");
-						if ($aname == "api" && $avalue==1)
-						{
-							$has_apis = 1;
-						}
-					}
-				}
-				$this->db_query("INSERT INTO aw_da_classes(file,class_name,extends,implements,class_type,has_apis,maintainer)
-					VALUES('$rel_file','$class','$c_data[extends]', '".join(",", $c_data["implements"])."', '$c_data[type]', $has_apis, '$c_data[maintainer]') ");
-//echo "------------------<br>";
-//echo dbg::dump($c_data);
-			}
-		}
-//die("yepuh");
-
-		$this->db_query("DELETE FROM aw_da_callers");
-
-		foreach($files as $file)
-		{
-			$da = get_instance("core/aw_code_analyzer/aw_code_analyzer");
-			$data = $da->analyze_file($file, true);
-			foreach($data["classes"] as $class => $c_data)
-			{
-				echo "writing class $class... <br>\n";
-				flush();
-				foreach($c_data["functions"] as $fname => $fdata)
-				{
-					$awa = new aw_array($fdata["local_calls"]);
-					foreach($awa->get() as $calld)
-					{
-						$calld["class"] = basename($calld["class"]);
-						$class = basename($class);
-						$this->db_query("
-							INSERT INTO 
-								aw_da_callers(
-									caller_class,			caller_func,			caller_line,
-									callee_class,			callee_func
-								) 
-							values(
-									'$class',				'$fname',				'".$calld["line"]."',
-									'$class',				'".$calld["func"]."'
-							)
-						");
-					}
-
-					$awa = new aw_array($fdata["foreign_calls"]);
-					foreach($awa->get() as $calld)
-					{
-						$calld["class"] = basename($calld["class"]);
-						$class = basename($class);
-						$this->db_query("
-							INSERT INTO 
-								aw_da_callers(
-									caller_class,			caller_func,			caller_line,
-									callee_class,			callee_func
-								) 
-							values(
-									'$class',				'$fname',				'".$calld["line"]."',
-									'".$calld["class"]."',				'".$calld["func"]."'
-							)
-						");
-					}
-				}
-			}
-		}
-
-		die(t("ALL DONE"));
-	}
-
-	/** displays where the class::function is called from. wildly inaccurate at the moment.
-
-		@attrib name=view_usage
-
-		@param file required
-		@param v_class required
-		@param func required
-	**/
-	function view_usage($arr)
-	{
-		extract($arr);
-		$this->read_template("view_usage.tpl");
-
-		$l = "";
-
-		$q = "SELECT * FROM aw_da_callers WHERE callee_class = '$v_class' AND callee_func = '$func'";
-		$this->db_query($q);
-		while ($row = $this->db_next())
-		{
-			$tmp = aw_ini_get("classes");
-			foreach($tmp as $tclass)
-			{
-				if (basename($tclass["file"]) == $row["caller_class"])
-				{
-					$cl_file = "/".$tclass["file"].".aw";
-				}
-			}
-			$this->vars(array(
-				"from_class" => $row["caller_class"],
-				"from_func" => $row["caller_func"],
-				"from_line" => $row["caller_line"],
-				"link" => $this->mk_my_orb("class_info", array("file" => $cl_file))."#fn.".$row["caller_func"]
-			));
-
-			$l .= $this->parse("LINE");
-		}
-
-		$this->vars(array(
-			"LINE" => $l,
-			"class" => $v_class,
-			"func" => $func
-		));
-		return $this->finish_with_style($this->parse());
-	}
-
 	/** displays top frame 
 
 		@attrib name=topf 
@@ -1445,13 +1245,13 @@ class docgen_viewer extends class_base
 		));
 
 		$ret[] = html::href(array(
-			"url" => $this->mk_my_orb("doc_search_form"),
+			"url" => $this->mk_my_orb("doc_search_form", array(), "docgen_search"),
 			"target" => "classlist",
 			"caption" => t("Search")
 		));
 
 		$ret[] = html::href(array(
-			"url" => $this->mk_my_orb("do_db_update",array('id'=>$arr['id'])),
+			"url" => $this->mk_my_orb("do_db_update",array('id'=>$arr['id']), "docgen_db_writer"),
 			"target" => "bott",
 			"caption" => t("Renew database")
 		));
@@ -1616,160 +1416,6 @@ class docgen_viewer extends class_base
 		return $this->finish_with_style($this->parse());
 	}
 
-	/**	
-		@attrib name=doc_search_form all_args=1
-	**/
-	function doc_search_form($arr)
-	{
-		$search[] = t("Otsingus&otilde;na(d)").":";
-		$search[] = html::textbox(array("name"=>"search"));
-		$search[] = html::submit(array("value"=>t("Otsi")));
-		$search[] = '';
-		$search[] = html::href(array(
-			"url" => $this->mk_my_orb("create_search"),
-			"target" => "list",
-			"caption" => t("Loo otsingu andmebaas")
-		));
-		
-		$ret = html::form(array(
-			"action" => $this->mk_my_orb("doc_search_results"),
-			"method" => "post",
-			"content" => implode('<br />', $search),
-		));
-
-		$this->read_template("style.tpl");
-		$this->vars(array(
-			"content" => $ret,
-		));
-		return $this->parse();
-	}
-
-	/**	
-		@attrib name=doc_search_results all_args=1
-	**/
-	function doc_search_results($arr)
-	{
-		$ret[] = '<u>Tulemused</u>';
-		$words = explode(' ', $arr['search']);
-
-		$basedir = $this->cfg["basedir"]."/docs/tutorials";
-		$tut_ret = array();
-		$this->doc_srch_scan_files($basedir, $words, $tut_ret);
-		if(count($tut_ret))
-		{
-			$ret[] = '';
-			$ret[] = 'Tutorialides:';
-			$ret = array_merge($ret, $tut_ret);
-		}
-		
-		$classdir = $this->cfg["classdir"];
-		$cl_ret = array();
-		$this->doc_srch_class_info($classdir, $words, &$cl_ret);
-		if(count($cl_ret))
-		{
-			$ret[] = '';
-			$ret[] = 'Klasside infos:';
-			$ret = array_merge($ret, $cl_ret);
-		}
-
-		$this->read_template("style.tpl");
-		$this->vars(array(
-			"content" => implode('<br />', $ret),
-		));
-		return $this->parse();
-	}
-	
-	function doc_srch_scan_files($dir, $words, &$ret)
-	{
-		$dh = opendir($dir);
-		while(($file = readdir($dh)) !== false)
-		{
-			$fh = $dir."/".$file;
-			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
-			{
-				if(is_dir($fh))
-				{
-					$this->doc_srch_scan_files($fh, $words, $ret);
-				}
-				else
-				{
-					$fp = fopen($fh, 'r');
-					$data = fread($fp, filesize($fh));
-					fclose($fp);
-					$found = 1;
-					foreach($words as $word)
-					{
-						if(stristr($data, $word) === FALSE)
-						{
-							$found = 0;
-						}
-					}
-					if($found)
-					{
-						$basedir = $this->cfg["basedir"]."/docs/tutorials";
-						$filedir = substr($dir, strlen($basedir));
-						$ret[] = html::href(array(
-							"url" => $this->mk_my_orb("show_doc", array("file" =>$filedir."/".$file)),
-							"target" => "list",
-							"caption" => $file
-						));
-					}
-				}
-			}
-		}
-	}
-
-	function doc_srch_class_info($dir, $words, &$ret)
-	{
-		$wordsql = "`text` LIKE '%".implode("%' AND `text` LIKE '%", $words)."%'";
-		$results = $this->db_fetch_array("SELECT * FROM aw_da_func_data WHERE ".$wordsql);
-		foreach($results as $result)
-		{
-			$ret[] = html::href(array(
-				"url" => $this->mk_my_orb("class_info", array("file" =>$result['file'])),
-				"target" => "list",
-				"caption" => $result['file']
-			));
-		}
-	}
-
-	/**
-		@attrib name=create_search
-	**/
-	function doc_srch_create_tbl()
-	{
-		$this->db_query("CREATE TABLE IF NOT EXISTS aw_da_func_data (`id` INT NOT NULL AUTO_INCREMENT, `text` TEXT, `file` TEXT, PRIMARY KEY (`id`))");
-		$this->db_query("DELETE FROM aw_da_func_data");
-		$dir = $this->cfg["classdir"];
-		$this->doc_srch_create_rows($dir);
-		die("Done.");
-	}
-
-	function doc_srch_create_rows($dir)
-	{
-		$analyzer = get_instance("core/aw_code_analyzer/aw_code_analyzer");
-		$dh = opendir($dir);
-		while(($file = readdir($dh)) !== false)
-		{
-			$fh = $dir."/".$file;
-			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
-			{
-				if(is_dir($fh))
-				{
-					$this->doc_srch_create_rows($fh);
-				}
-				else
-				{
-					$basedir = $this->cfg["classdir"];
-					$filedir = substr($dir, strlen($basedir))."/".$file;
-					$data = $analyzer->analyze_file($filedir);
-					$text = dbg::dump($data);
-					echo "Writing info about ".$filedir."<br />";
-					$this->db_query("INSERT INTO aw_da_func_data(`id`, `text`, `file`) VALUES(0, '".htmlspecialchars($text, ENT_QUOTES)."', '".$filedir."')");
-				}
-			}
-		}
-	}
 	/**
 		@attrib name=proplist
 		@param id required
@@ -2074,7 +1720,7 @@ class aw_language_documenter
 					{
 						$this->options[$key][$tmp_arr[0]] = array();
 					}
-					//vaatame kas juba selline param väärtus existeib
+					//vaatame kas juba selline param v22rtus existeib
 					if(!in_array($tmp_arr[1],$this->options[$key][$tmp_arr[0]]))
 					{
 						$this->options[$key][$tmp_arr[0]][] = $tmp_arr[1];
