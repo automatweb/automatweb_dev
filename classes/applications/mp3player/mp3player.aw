@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.7 2007/12/06 14:33:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.8 2008/03/31 04:29:02 hannes Exp $
 // mp3player.aw - MP3 pleier 
 /*
 
@@ -33,7 +33,16 @@ class mp3player extends class_base
 			"tpldir" => "applications/mp3player",
 			"clid" => CL_MP3PLAYER
 		));
-		
+	}
+	
+	function callback_post_save($arr)
+	{
+		if ($arr["new"])
+		{
+			$o = & $arr["obj_inst"];
+			$o->set_prop("name", aw_global_get("uid") . " " . t("mp3 player"));
+			$o->save();
+		}
 	}
 	
 	function get_cover_url($s_keywords)
@@ -60,8 +69,8 @@ class mp3player extends class_base
 		{
 			$s_link = html::href(array(
 				"url" => "JavaScript: void(0)",
-				"caption" => "mängi",
-				"onclick" => 'myRef = window.open("'.$this->get_play_url($o->id(), $s_filename).'","AW MP3 Mängija","left="+((screen.width/2)-(250/2))+",top="+screen.height/5+",width=250,height=450,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
+				"caption" => t("m&auml;ngi"),
+				"onclick" => 'myRef = window.open("'.$this->get_play_url($o->id(), $s_filename).'","","left="+((screen.width/2)-(250/2))+",top="+screen.height/5+",width=250,height=450,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
 			));
 			
 			$arr["prop"]["value"] = $s_link;
@@ -106,7 +115,7 @@ class mp3player extends class_base
 		
 		$table->define_field(array(
 			"name" => "genre",
-			"caption" => t("Zanr"),
+			"caption" => t("&#142;anr"),
 			"sortable" => 1,
 			"align" => "left"
 		));
@@ -120,14 +129,14 @@ class mp3player extends class_base
 		
 		$table->define_field(array(
 			"name" => "play_count",
-			"caption" => t("Mängitud"),
+			"caption" => t("M&auml;ngitud"),
 			"sortable" => 1,
 			"align" => "left"
 		));
 		
 		$table->define_field(array(
 			"name" => "play",
-			"caption" => t("Mängi"),
+			"caption" => t("M&auml;ngi"),
 			"sortable" => 1,
 			"align" => "left"
 		));
@@ -143,7 +152,7 @@ class mp3player extends class_base
 				"title" => html::href(array(
 					"url" => "JavaScript: void(0)",
 					"caption" => $a_list[$s_key]["title"],
-					"onclick" => 'myRef = window.open("'.$s_link.'","AW MP3 Mängija","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
+					"onclick" => 'myRef = window.open("'.$s_link.'","","left="+((screen.width/2)-(350/2))+",top="+screen.height/5+",width=350,height=150,toolbar=0,resizable=0,location=0,directories=0,status=0,menubar=0,scrollbars=0")',
 				)),
 				"time" => $a_list[$s_key]["time"],
 				 "artist" =>  $a_list[$s_key]["artist"],
