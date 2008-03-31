@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.49 2008/03/13 11:22:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.50 2008/03/31 11:21:41 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -551,9 +551,9 @@ class cb_search extends class_base
 			$t->define_field($dat);
 		}
 		$add_f = array();
+		$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
 		if(count($ctrl) > 0)
 		{
-			$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
 			foreach($ctrl as $key => $v)
 			{
 				foreach($v as $value)
