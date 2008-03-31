@@ -1140,28 +1140,8 @@ class admin_if extends class_base
 			{
 				if ($oid != $parent)
 				{
-					// so, let the object update itself when it is being cut-pasted, if it so desires
 					$o = obj($oid);
-					if ($clss[$o->class_id()]["file"] != "")
-					{
-						$inst = $o->instance();
-						if (method_exists($inst, "cut_hook"))
-						{
-							$inst->cut_hook(array(
-								"oid" => $oid,
-								"new_parent" => $parent
-							));
-						}
-					}
-					
-					$o->set_parent($parent);
-					if ($period)
-					{
-						$o->set_period($period);
-					}
-
-					$o->set_lang($langs->get_langid());
-					$o->save();
+					$this->_do_cut_one_obj($o, $parent, $period);
 				}
 			}
 		}
@@ -1451,6 +1431,60 @@ class admin_if extends class_base
 			$inst = get_instance($this->modifiers_by_clid[$class_id]);
 			$inst->admin_if_modify_data($row);
 		}
+	}
+
+	private function _do_cut_one_obj($o, $parent, $period)
+	{
+		// so, let the object update itself when it is being cut-pasted, if it so desires
+		$inst = $o->instance();
+		if (method_exists($inst, "cut_hook"))
+		{
+			$inst->cut_hook(array(
+				"oid" => $o->id(),
+				"new_parent" => $parent
+			));
+		}
+		
+		// if site id changes after parent change, then update sub-objects as well
+		$old_site_id = $o->site_id();			
+		$o->set_parent($parent);
+		if ($old_site_id != $o->site_id())
+		{
+			$ot = new object_tree(array(
+				"parent" => $o->id(),
+				"site_id" => $old_site_id
+			));
+			$ot->to_list()->foreach_o(array(
+				"func" => "set_site_id",
+				"params" => array($o->site_id()),
+				"save" => true
+			));
+		}
+		
+		if ($period)
+		{
+			$o->set_period($period);
+		}
+
+		if (aw_global_get("lang_id") != $o->lang_id())
+		{
+			// change all objects lang id's below this one as well on cut from one lang to another
+			$ot = new object_tree(array(
+				"parent" => $o->id(),
+				"lang_id" => $o->lang_id(),
+				"site_id" => $old_site_id
+			));
+			$ot->to_list()->foreach_o(array(
+				"func" => "set_lang_id",
+				"params" => array(aw_global_get("lang_id")),
+				"save" => true
+			));
+
+			$o->set_lang_id(aw_global_get("lang_id"));
+		}
+
+		$o->save();
+
 	}
 }
 
