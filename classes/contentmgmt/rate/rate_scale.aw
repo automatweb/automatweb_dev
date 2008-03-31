@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.18 2008/01/31 13:52:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.19 2008/03/31 12:07:55 instrumental Exp $
 
 /*
 
@@ -173,6 +173,13 @@ class rate_scale extends class_base
 		}
 	}
 
+	/**
+		@attrib name=_get_scale api=1 params=pos
+
+		@param id required type=oid acl=view
+
+		@return Array of rate scale options. (value => caption)
+	**/
 	function _get_scale($id)
 	{
 		$ret = array();
