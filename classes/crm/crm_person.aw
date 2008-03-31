@@ -5971,6 +5971,14 @@ class crm_person extends class_base
 				}
 			}
 
+			$professions_rels = "";
+			foreach($to->connections_from(array("type" => "RELTYPE_PROFESSION")) as $conn2)
+			{
+				if(strlen($professions_rels) > 0)
+					$professions_rels .= ", ";
+				$professions_rels .= $conn2->prop("to.name");
+			}
+
 			$recommendations = "";
 			foreach($to->connections_to(array("from.class_id" => CL_CRM_RECOMMENDATION, "type" => "RELTYPE_JOBWISH")) as $conn2)
 			{
@@ -5985,6 +5993,7 @@ class crm_person extends class_base
 				"personnel_management_job_wanted.field" => $field,
 				"personnel_management_job_wanted.job_type" => $job_type,
 				"personnel_management_job_wanted.professions" => nl2br($to->prop("professions")),
+				"personnel_management_job_wanted.professions_rels" => $professions_rels,
 				"personnel_management_job_wanted.load" => is_oid($to->prop("load")) ? $to->prop("load.name") : t("M&auml;&auml;ramata"),
 				"personnel_management_job_wanted.pay" => $to->prop("pay"),
 				"personnel_management_job_wanted.pay2" => $to->prop("pay2"),

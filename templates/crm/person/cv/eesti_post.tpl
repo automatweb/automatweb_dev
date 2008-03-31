@@ -471,12 +471,13 @@ text-decoration:underline;
 			<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="17" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitud t&ouml;&ouml;</strong></span></td>
+					<td height="20" colspan="18" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitud t&ouml;&ouml;</strong></span></td>
 				</tr>
 				<tr>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Tegevusala</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml; liik</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid (vabatekst)</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Palk</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (esimene eelistus)</td>
@@ -496,6 +497,7 @@ text-decoration:underline;
 				<tr>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.field}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.job_type}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions_rels}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.load}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.pay} - {VAR:personnel_management_job_wanted.pay2}</td>
@@ -514,7 +516,7 @@ text-decoration:underline;
 				</tr>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED -->
 				<tr>
-					<td class="cvVormSpacer" colspan="17">&nbsp;</td>
+					<td class="cvVormSpacer" colspan="18">&nbsp;</td>
 				</tr>
 			</table>
 			<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
