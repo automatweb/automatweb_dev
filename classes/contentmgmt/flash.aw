@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.15 2008/02/21 09:17:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.16 2008/03/31 19:55:03 sander Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -20,7 +20,7 @@
 	@caption Laius
 
 	@property height type=textbox size=4 field=meta
-	@caption Kõrgus
+	@caption K&otilde;rgus
 
 	@property preview type=text store=no
 	@caption Eelvaade
@@ -206,6 +206,11 @@ class flash extends class_base
 			{
 
 				header("Content-type: application/x-shockwave-flash");
+				//for IE (flash over https)
+				if ($_SERVER['SERVER_PORT'] == '443')
+				{
+					header("Pragma: cache");
+				}
 				readfile($fname);
 			} 
 			else 
