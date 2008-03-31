@@ -325,24 +325,28 @@ text-decoration:underline;
 			<!-- SUB: CRM_PERSON_ADD_EDUCATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>T&auml;iendkoolitus</strong></span></td>
+					<td height="20" colspan="6" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>T&auml;iendkoolitus</strong></span></td>
 				</tr>
 				<tr>
 					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ettev&otilde;te</td>
 					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Teema</td>
-					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Algus</td>
-					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kestvus p&auml;evades</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Algus</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Aeg</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Maht p&auml;evades</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Maht tundides</td>
 				</tr>
 				<!-- SUB: CRM_PERSON_ADD_EDUCATION -->
 				<tr>
 					<td width="173" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_add_education.org}</td>
 					<td width="173" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_add_education.field}</td>
-					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_add_education.time}</td>
-					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_add_education.length}</td>
+					<td width="50" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_add_education.time}</td>
+					<td width="50" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_add_education.time_text}</td>
+					<td width="50" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_add_education.length}</td>
+					<td width="50" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_add_education.length_hrs}</td>
 				</tr>
 				<!-- END SUB: CRM_PERSON_ADD_EDUCATION -->
 				<tr>
-					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
+					<td class="cvVormSpacer" colspan="6">&nbsp;</td>
 				</tr>
 			</table>
 			<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS -->

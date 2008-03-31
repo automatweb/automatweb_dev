@@ -5509,7 +5509,9 @@ class crm_person extends class_base
 				"crm_person_add_education.org" => $to->prop("org"),
 				"crm_person_add_education.field" => $to->prop("field"),
 				"crm_person_add_education.time" => get_lc_date($to->prop("time")),
+				"crm_person_add_education.time_text" => $to->prop("time_text"),
 				"crm_person_add_education.length" => $to->prop("length"),
+				"crm_person_add_education.length_hrs" => $to->prop("length_hrs"),
 			));
 
 			$CRM_PERSON_ADD_EDUCATION .= $this->parse("CRM_PERSON_ADD_EDUCATION");
