@@ -631,7 +631,7 @@
             <table>kliendibaas_isik</table>
             <group>documents_all</group>
             <type>treeview</type>
-            <parent>docs_left</parent>
+            <parent>docs_tree</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>docs_tree</field>
@@ -644,7 +644,7 @@
             <size>30</size>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_inputs</parent>
             <field>docs_s_name</field>
             <caption>Nimetus</caption>
       </property>
@@ -655,7 +655,7 @@
             <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_inputs</parent>
             <field>docs_s_type</field>
             <caption>Liik</caption>
       </property>
@@ -667,7 +667,7 @@
             <size>30</size>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_inputs</parent>
             <field>docs_s_task</field>
             <caption>Toimetus</caption>
       </property>
@@ -679,7 +679,7 @@
             <size>30</size>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_inputs</parent>
             <field>docs_s_user</field>
             <caption>Tegija</caption>
       </property>
@@ -691,7 +691,7 @@
             <size>30</size>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_inputs</parent>
             <field>docs_s_customer</field>
             <caption>Klient</caption>
       </property>
@@ -2080,15 +2080,28 @@
                   <group>documents_all</group>
                   <area_caption></area_caption>
             </docs_left>
-            <docs_search>
+            <docs_tree>
                   <type>vbox</type>
                   <parent>docs_left</parent>
                   <group>documents_all</group>
                   <area_caption></area_caption>
+            </docs_tree>
+            <docs_search>
+                  <type>vbox</type>
+                  <parent>docs_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Dokumentide&amp;amp;nbsp;otsing</area_caption>
+                  <group>documents_all</group>
             </docs_search>
+            <docs_s_inputs>
+                  <type>vbox</type>
+                  <parent>docs_search</parent>
+                  <group>documents_all</group>
+                  <area_caption></area_caption>
+            </docs_s_inputs>
             <docs_s_but_row>
                   <type>hbox</type>
-                  <parent>docs_left</parent>
+                  <parent>docs_search</parent>
                   <group>documents_all</group>
                   <area_caption></area_caption>
             </docs_s_but_row>

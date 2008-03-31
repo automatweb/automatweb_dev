@@ -285,32 +285,36 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @layout docs_left type=vbox parent=docs_lt
 
-@property docs_tree type=treeview parent=docs_left no_caption=1
+@layout docs_tree type=vbox parent=docs_left
 
-@layout docs_search type=vbox parent=docs_left
+	@property docs_tree type=treeview parent=docs_tree no_caption=1
 
-@property docs_s_name type=textbox size=30 store=no captionside=top parent=docs_search
-@caption Nimetus
+@layout docs_search type=vbox parent=docs_left closeable=1 area_caption=Dokumentide&nbsp;otsing
 
-@property docs_s_type type=select store=no captionside=top parent=docs_search
-@caption Liik
+	@layout docs_s_inputs type=vbox parent=docs_search
 
-@property docs_s_task type=textbox size=30 store=no captionside=top parent=docs_search
-@caption Toimetus
+		@property docs_s_name type=textbox size=30 store=no captionside=top parent=docs_s_inputs
+		@caption Nimetus
 
-@property docs_s_user type=textbox size=30 store=no captionside=top parent=docs_search
-@caption Tegija
+		@property docs_s_type type=select store=no captionside=top parent=docs_s_inputs
+		@caption Liik
 
-@property docs_s_customer type=textbox size=30 store=no captionside=top parent=docs_search
-@caption Klient
+		@property docs_s_task type=textbox size=30 store=no captionside=top parent=docs_s_inputs
+		@caption Toimetus
 
-@layout docs_s_but_row type=hbox parent=docs_left
+		@property docs_s_user type=textbox size=30 store=no captionside=top parent=docs_s_inputs
+		@caption Tegija
 
-@property docs_s_sbt type=submit store=no no_caption=1 parent=docs_s_but_row
-@caption Otsi
+		@property docs_s_customer type=textbox size=30 store=no captionside=top parent=docs_s_inputs
+		@caption Klient
 
-@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
-@caption T&uuml;hista otsing
+	@layout docs_s_but_row type=hbox parent=docs_search
+
+		@property docs_s_sbt type=submit store=no no_caption=1 parent=docs_s_but_row
+		@caption Otsi
+
+		@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
+		@caption T&uuml;hista otsing
 
 @property docs_tbl type=table store=no no_caption=1 parent=docs_lt
 
