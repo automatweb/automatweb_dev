@@ -474,7 +474,7 @@ class crm_company_docs_impl extends class_base
 			"root_icon" => "images/transparent.gif",
 		));
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => array(40,51) /*"RELTYPE_SERVER_FOLDER", "RELTYPE_DOCS_FOLDER")*/)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => array("RELTYPE_SERVER_FOLDER", "RELTYPE_DOCS_FOLDER"))) as $c)
 		{
 			$this->_render_folder_in_tree($arr, $c->to());
 		}
