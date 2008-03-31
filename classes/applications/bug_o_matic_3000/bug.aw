@@ -2734,7 +2734,7 @@ die($email);
 		$("#bug_stopper_watch_time").stopper_watch();
 EOF;
 
-		if ($_GET["group"] == "general")
+		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
 		{
 			return $s_bug_stopper_watch_v2;
 		}
