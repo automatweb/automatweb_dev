@@ -4991,6 +4991,7 @@ class crm_person extends class_base
 		$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 		$sm_inst = get_instance(CL_CRM_SKILL_MANAGER);
 		$jw_inst = get_instance(CL_PERSONNEL_MANAGEMENT_JOB_WANTED);
+		$rate_inst = get_instance(CL_RATE);
 
 		if(!$arr["cv"])
 		{
@@ -6049,6 +6050,8 @@ class crm_person extends class_base
 				"personnel_management_job_offer.profession" => $jo->prop("profession.name"),
 				"personnel_management_job_offer.field" => $jo->prop("field.name"),
 				"personnel_management_job_offer.end" => get_lc_date($jo->prop("end")),
+				"personnel_management_job_offer.rating" => is_oid($jo->prop("rate_scale")) ? $rate_inst->get_rating_for_object($from->id(), RATING_AVERAGE, $jo->prop("rate_scale")) : t("M&auml;&auml;ramata"),
+				"personnel_management_job_offer.addinfo" => nl2br($jo->prop("addinfo")),
 			));
 			$PREVIOUS_CANDIDACY .= $this->parse("PREVIOUS_CANDIDACY");
 			$parse_pc++;
@@ -6084,6 +6087,8 @@ class crm_person extends class_base
 				"personnel_management_job_offer.profession" => $jo->prop("profession.name"),
 				"personnel_management_job_offer.field" => $jo->prop("field.name"),
 				"personnel_management_job_offer.end" => get_lc_date($jo->prop("end")),
+				"personnel_management_job_offer.rating" => is_oid($jo->prop("rate_scale")) ? $rate_inst->get_rating_for_object($from->id(), RATING_AVERAGE, $jo->prop("rate_scale")) : t("M&auml;&auml;ramata"),
+				"personnel_management_job_offer.addinfo" => nl2br($jo->prop("addinfo")),
 			));
 			$PERSONNEL_MANAGEMENT_CANDIDATE .= $this->parse("PERSONNEL_MANAGEMENT_CANDIDATE");
 			$parse_pmc++;

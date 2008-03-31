@@ -246,22 +246,26 @@ text-decoration:underline;
 			<!-- SUB: PREVIOUS_CANDIDACIES -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Varasemad kandideerimised: {VAR:personnel_management.owner_org}</strong></span></td>
+					<td height="20" colspan="5" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Varasemad kandideerimised: {VAR:personnel_management.owner_org}</strong></span></td>
 				</tr>
 				<tr>
-					<td width="240" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametikoht</td>
-					<td width="240" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
+					<td width="165" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametikoht</td>
+					<td width="165" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
 					<td width="66" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&auml;htaeg</td>
+					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kandidatuuri keskmine hinne</td>
+					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
 				</tr>
 					<!-- SUB: PREVIOUS_CANDIDACY -->
 				<tr>
-					<td width="240" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.profession}</td>
-					<td width="240" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.field}</td>
+					<td width="165" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.profession}</td>
+					<td width="165" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.field}</td>
 					<td width="66" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.end}</td>
+					<td width="75" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.rating}</td>
+					<td width="75" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.addinfo}</td>
 				</tr>
 					<!-- END SUB: PREVIOUS_CANDIDACY -->
 				<tr>
-					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
+					<td class="cvVormSpacer" colspan="5">&nbsp;</td>
 				</tr>
 			</table>
 			<!-- END SUB: PREVIOUS_CANDIDACIES -->
@@ -524,24 +528,28 @@ text-decoration:underline;
 			<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Aktiivsed kandideerimised</strong></span></td>
+					<td height="20" colspan="6" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Aktiivsed kandideerimised</strong></span></td>
 				</tr>
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Organisatsioon</td>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametikoht</td>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
+					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Organisatsioon</td>
+					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametikoht</td>
+					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
 					<td width="96" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&auml;htaeg</td>
+					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kandidatuuri keskmine hinne</td>
+					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
 				</tr>
 					<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATE -->
 				<tr>
-					<td width="150" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.company}</td>
-					<td width="150" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.profession}</td>
+					<td width="100" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.company}</td>
+					<td width="100" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.profession}</td>
 					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.field}</td>
 					<td width="96" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.end}</td>
+					<td width="75" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.rating}</td>
+					<td width="75" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.addinfo}</td>
 				</tr>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATE -->
 				<tr>
-					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
+					<td class="cvVormSpacer" colspan="6">&nbsp;</td>
 				</tr>
 			</table>
 			<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES -->
