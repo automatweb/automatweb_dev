@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.6 2008/03/14 11:31:39 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.7 2008/03/31 10:44:22 kristo Exp $
 // document.aw - Dokumentide haldus. 
 /*
 @classinfo  maintainer=kristo
@@ -1651,13 +1651,13 @@ if (is_object($docobj))
 		if ($print || (isset($GLOBALS["action"]) && $GLOBALS["action"] == "print"))
 		{
 			$apd = get_instance("layout/active_page_data");
-			$retval .= $apd->on_shutdown_get_styles();
+			$apd->on_shutdown_get_styles($retval);
 		}
 
 		if ($print)
 		{
 			$apd = get_instance("layout/active_page_data");		
-			die($retval.$apd->on_shutdown_get_styles());
+			die($apd->on_shutdown_get_styles($retval));
 		}
 
 		return $retval;

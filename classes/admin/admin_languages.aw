@@ -64,7 +64,7 @@ class admin_languages extends languages
 			"add" => $this->mk_my_orb("add")
 		));
 
-		return $this->parse();
+		return "<br><br><br>".$this->parse();
 	}
 
 	// the thing is .. you should not be able to enter random crap into "acceptlang" field,

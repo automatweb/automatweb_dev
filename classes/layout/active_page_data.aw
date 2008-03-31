@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.14 2008/01/31 13:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.15 2008/03/31 10:44:23 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -67,7 +67,7 @@ class active_page_data extends class_base
 		aw_global_set("__aw_serialized_styles", $serialized_styles);
 	}
 
-	function on_shutdown_get_styles()
+	function on_shutdown_get_styles(&$text)
 	{
 		$ret = "";
 		$styles = new aw_array(aw_global_get("__aw_site_styles"));
@@ -95,7 +95,15 @@ class active_page_data extends class_base
 		{
 			$ret = "<style type=\"text/css\">".$ret."</style>";
 		}
-		return $ret;
+		if (stristr($text, "</head>") !== false)
+		{
+			$text = str_ireplace("</head>", $ret."</head>", $text);
+		}
+		else
+		{
+			$text .= $ret;
+		}
+		return $text;
 	}
 }
 

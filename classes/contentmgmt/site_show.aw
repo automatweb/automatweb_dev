@@ -137,7 +137,7 @@ class site_show extends class_base
 		$rv = $this->do_show_template($arr);
 
 		$awt->stop("xshow2");
-		$rv .= $apd->on_shutdown_get_styles();
+		$apd->on_shutdown_get_styles($rv);
 		return $rv;
 	}
 

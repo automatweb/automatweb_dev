@@ -71,7 +71,14 @@ class aw_template extends core
 			}
 			else
 			{
-				$this->template_dir = $this->_find_site_template_dir() . "/$basedir";
+				if (is_admin())
+				{
+					$this->template_dir = $this->cfg["basedir"] . "/templates/$basedir";
+				}
+				else
+				{
+					$this->template_dir = $this->_find_site_template_dir() . "/$basedir";
+				}
 				$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
 				$this->site_template_dir = $this->_find_site_template_dir()."/".$basedir;
 			}
@@ -101,7 +108,7 @@ class aw_template extends core
 
 		if (is_admin())
 		{
-			return $dir = $this->cfg["tpldir"];
+			return $dir = $this->cfg["site_tpldir"];
 		}
 
 		if (!aw_global_get("aw_init_done"))
