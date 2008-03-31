@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.1 2008/03/13 20:35:49 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.2 2008/03/31 11:42:28 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");
@@ -197,7 +197,8 @@ class users extends users_user implements request_startup
 			"class_id" => CL_USER,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"blocked" => new obj_predicate_not(1)
+			"blocked" => new obj_predicate_not(1),
+			"brother_of" => new obj_predicate_prop("id")
 		);
 		if ($type == "uid")
 		{
@@ -242,6 +243,7 @@ class users extends users_user implements request_startup
 			);
 		};
 		aw_restore_acl();
+die();
 		return $this->mk_my_orb("send_hash",array("section" => $args["section"]));
 	}
 
@@ -555,7 +557,7 @@ class users extends users_user implements request_startup
 
 		$host = aw_global_get("HTTP_HOST");
 		return str_replace("orb.aw", "index.aw", str_replace("/automatweb", "", $this->mk_my_orb("pwhash",array(
-			"u" => $uid,
+			"u" => $uo->prop("uid"),
 			"k" => $hash,
 			"section" => $this->get_cval("join_hash_section".aw_global_get("LC"))
 		),"users",0,0)));
