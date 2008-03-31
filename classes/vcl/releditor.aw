@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.113 2008/03/24 15:15:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.114 2008/03/31 11:34:39 robert Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1160,7 +1160,8 @@ class releditor extends core
 			$awt->define_field(array(
 				"name" => "id",
 				"caption" => t("ID"),
-				"sortable" => 1
+				"sortable" => 1,
+				"numeric" => 1,
 			));
 
 			foreach($ed_fields as $field)
@@ -1216,7 +1217,7 @@ class releditor extends core
 				$awt->define_field(array(
 					"name" => $table_field,
 					"caption" => $caption,
-					"sortable" => 1
+					"sortable" => 1,
 				));
 				//$fdata[$table_field] = $table_field;
 			};
@@ -1226,7 +1227,8 @@ class releditor extends core
 			$awt->define_field(array(
 				"name" => "id",
 				"caption" => t("ID"),
-				"sortable" => 1
+				"sortable" => 1,
+				"numeric" => 1,
 			));
 
 			$awt->define_field(array(
