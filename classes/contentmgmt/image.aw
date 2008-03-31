@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.11 2008/03/26 12:12:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.12 2008/03/31 11:24:49 robert Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1663,36 +1663,13 @@ class image extends class_base
 			$parse = "with_comments";
 			classload("vcl/comments");
 			$comments = new comments();
-			$cfid = $this->_get_conf_for_folder($imo->parent());
-			$ui = get_instance(CL_USER);
-			$curid = $ui->get_current_user();
-			if(is_oid($curid) && is_oid($cfid))
-			{
-				$cur = obj($curid);
-				$conn = $cur->connections_from(array(
-					"type" => "RELTYPE_GRP"
-				));
-				$cfo = obj($cfid);
-				$grps = $cfo->prop("comm_edit_grp");	
-				$edit_ok = 0;
-				foreach($grps as $grp)
-				{
-					foreach($conn as $c)
-					{
-						if($c->prop("to") == $grp)
-						{
-							$edit_ok = 1;
-						}
-					}
-				}
-			}
 			$ret_list = $comments->init_vcl_property(array(
 				'property' => array(
 					'name' => "image_comm",
 					"no_form" => 1,
 					'no_heading' => 1,
 					'sort_by' => "created desc", // Newer first
-					'edit' => $edit_ok,
+					'edit' => $this->_check_comment_delete($imo),
 				),
 				'obj_inst' => obj($id),
 			));
@@ -2364,6 +2341,53 @@ class image extends class_base
 				"date" => $o->created(),
 			));
 		}
+	}
+
+	/**
+	@attrib name=del_comment all_args=1
+	**/
+	function del_comment($arr)
+	{
+		if(is_oid($arr["id"]))
+		{
+			$o = obj($arr["id"]);
+			$imo = obj($o->parent());
+			$check = $this->_check_comment_delete($imo);
+		}
+		if($check)
+		{
+			$o->delete();
+		}
+		return $arr["return_url"];
+	}
+
+	function _check_comment_delete($imo)
+	{
+		$ii = get_instance(CL_IMAGE);
+		$cfid = $ii->_get_conf_for_folder($imo->parent());
+		$ui = get_instance(CL_USER);
+		$curid = $ui->get_current_user();
+		if(is_oid($curid) && is_oid($cfid))
+		{
+			$cur = obj($curid);
+			$conn = $cur->connections_from(array(
+				"type" => "RELTYPE_GRP"
+			));
+			$cfo = obj($cfid);
+			$grps = $cfo->prop("comm_edit_grp");	
+			$edit_ok = 0;
+			foreach($grps as $grp)
+			{
+				foreach($conn as $c)
+				{
+					if($c->prop("to") == $grp)
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	function do_db_upgrade($t, $f)

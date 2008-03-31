@@ -177,5 +177,12 @@
 			</function>
 		</action>
 
+		<action name="del_comment" all_args="1">
+			<function name="del_comment">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

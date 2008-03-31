@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.15 2008/03/26 12:13:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.16 2008/03/31 11:24:56 robert Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -78,13 +78,13 @@ class comments extends class_base
 							"url" => str_replace($baseurl, $baseurl."/automatweb", $this->mk_my_orb("change", array(
 								"id" => $row["oid"],
 								"return_url" => get_ru()
-							), CL_COMMENT)),
+							), CL_IMAGE)),
 							"caption" => t("Muuda"),
 						)) . " " . html::href(array(
 							"url" => $this->mk_my_orb("del_comment", array(
 								"id" => $row["oid"],
 								"return_url" => get_ru()
-							), CL_COMMENT),
+							), CL_IMAGE),
 							"caption" => t("Kustuta"),
 						));
 					}
