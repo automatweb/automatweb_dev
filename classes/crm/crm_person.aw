@@ -6105,6 +6105,46 @@ class crm_person extends class_base
 		}
 		// END SUB: PERSONNEL_MANAGEMENT_CANDIDATES
 
+		// SUB: CRM_FAMILY_RELATIONS
+		// We use different subs for different relation types, cause maybe we don't want to show parents or kids or wives etc...
+		$parse_cfr = 0;
+		$CRM_FAMILY_RELATION = array();
+
+		$conns = $o->connections_from(array("type" => "RELTYPE_FAMILY_RELATIONS"));
+		foreach($conns as $conn)
+		{
+			$to = $conn->to();
+			if($to->prop("relation_type") > 0 && is_oid($to->prop("person")))
+			{
+				if(!isset($CRM_FAMILY_RELATION[$to->prop("relation_type")]))
+				{
+					$CRM_FAMILY_RELATION[$to->prop("relation_type")] = "";
+				}
+
+				$this->vars(array(
+					"crm_family_relation.person" => $to->prop("person.name"),
+					"crm_family_relation.start" => get_lc_date($to->prop("start")),
+					"crm_family_relation.end" => get_lc_date($to->prop("end")),
+				));
+				$CRM_FAMILY_RELATION[$to->prop("relation_type")] .= $this->parse("CRM_FAMILY_RELATION_".$to->prop("relation_type"));
+				$parse_cfr++;
+			}
+		}
+
+		if($parse_cfr > 0)
+		{
+			foreach($CRM_FAMILY_RELATION as $id => $data)
+			{
+				$this->vars(array(
+					"CRM_FAMILY_RELATION_".$id => $data,
+				));
+			}
+			$this->vars(array(
+				"CRM_FAMILY_RELATIONS" => $this->parse("CRM_FAMILY_RELATIONS"),
+			));
+		}
+		// END SUB: CRM_FAMILY_RELATIONS
+
 
 		return $arr["die"]?die($this->parse()):$this->parse();
 	}

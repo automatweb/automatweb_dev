@@ -604,6 +604,38 @@ text-decoration:underline;
 				</tr>
 			</table>
 			<!-- END SUB: CRM_PERSON.CONTACT -->
+
+			<!-- SUB: CRM_FAMILY_RELATIONS -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Sugulased</strong></span></td>
+				</tr>
+				<!-- SUB: CRM_FAMILY_RELATION_0 -->
+				<!-- Abikaasa -->
+				<tr>
+					<td width="346" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:crm_family_relation.person}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_family_relation.start}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_family_relation.end}</td>
+				</tr>
+				<!-- END SUB: CRM_FAMILY_RELATION_0 -->
+				<!-- SUB: CRM_FAMILY_RELATION_1 -->
+				<!-- Laps -->
+				<tr>
+					<td width="346" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:crm_family_relation.person}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_family_relation.start}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_family_relation.end}</td>
+				</tr>
+				<!-- END SUB: CRM_FAMILY_RELATION_1 -->
+				<!-- SUB: CRM_FAMILY_RELATION_2 -->
+				<!-- Vanem -->
+				<tr>
+					<td width="346" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:crm_family_relation.person}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_family_relation.start}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_family_relation.end}</td>
+				</tr>
+				<!-- END SUB: CRM_FAMILY_RELATION_2 -->
+			</table>
+			<!-- END SUB: CRM_FAMILY_RELATIONS -->
 		</td>
 		<td valign="top">
 			<!-- SUB: CRM_PERSON.PICTURE -->
