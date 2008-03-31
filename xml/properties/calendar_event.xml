@@ -116,6 +116,13 @@
             <field>utextbox10</field>
       </property>
       <property>
+            <name>utextarea1</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>textarea</type>
+            <field>utextarea1</field>
+      </property>
+      <property>
             <name>utextarea2</name>
             <group>general</group>
             <table>planner</table>

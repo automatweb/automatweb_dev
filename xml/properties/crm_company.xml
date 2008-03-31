@@ -16,6 +16,7 @@
             <group>general_sub</group>
             <field>jrk</field>
             <type>textbox</type>
+            <display>none</display>
             <caption>Jrk</caption>
       </property>
       <property>
@@ -567,15 +568,6 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>User-defined TA 5</caption>
-      </property>
-      <property>
-            <name>usercheckbox1</name>
-            <table>kliendibaas_firma</table>
-            <group>add_info</group>
-            <type>checkbox</type>
-            <field>usercheckbox1</field>
-            <ch_value>1</ch_value>
-            <caption>User-defined checkbox 1</caption>
       </property>
       <property>
             <name>description_doc</name>
@@ -3255,35 +3247,6 @@
             <field>my_stats</field>
       </property>
       <property>
-            <name>undone_orders</name>
-            <table>objects</table>
-            <group>customer_situtation</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>undone_orders</field>
-            <caption>Pooleliolevad tellimused</caption>
-      </property>
-      <property>
-            <name>unpaid_bills</name>
-            <table>objects</table>
-            <group>customer_situtation</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>unpaid_bills</field>
-            <caption>Laekumata arved</caption>
-      </property>
-      <property>
-            <name>this_year_cash_flow</name>
-            <table>objects</table>
-            <group>customer_situtation</group>
-            <type>text</type>
-            <store>no</store>
-            <field>this_year_cash_flow</field>
-            <caption>Aasta k&amp;amp;auml;ive</caption>
-      </property>
-      <property>
             <name>qv_cust_inf</name>
             <table>objects</table>
             <group>quick_view</group>
@@ -3829,12 +3792,6 @@
                   <submit>no</submit>
                   <save>no</save>
             </stats_my>
-            <customer_situtation>
-                  <parent>stats</parent>
-                  <caption>Kliendi hetkeseis</caption>
-                  <submit>no</submit>
-                  <save>no</save>
-            </customer_situtation>
             <quick_view>
                   <caption>Vaata</caption>
                   <submit>no</submit>
@@ -3867,6 +3824,7 @@
             <keywords>
                   <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
                   <parent>documents_all</parent>
+                  <submit>no</submit>
             </keywords>
       </groupinfo>
       <tableinfo>

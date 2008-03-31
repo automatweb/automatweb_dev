@@ -176,7 +176,6 @@
             <store>no</store>
             <editonly>1</editonly>
             <field>link_image_show</field>
-            <caption></caption>
       </property>
       <property>
             <name>link_image_check_active</name>

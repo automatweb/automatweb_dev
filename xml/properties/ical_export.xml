@@ -56,7 +56,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>&amp;amp;Auml;ra ekspordi isiklikke s&amp;uuml;ndmusi</caption>
+            <caption>&amp;amp;Auml;ra ekspordi isiklikke s&amp;amp;uuml;ndmusi</caption>
       </property>
       <property>
             <name>url</name>
@@ -92,7 +92,7 @@
             <type>select</type>
             <store>no</store>
             <field>google_calendar_settings_color</field>
-            <caption>V&amp;auml;rv</caption>
+            <caption>V&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>google_calendar_settings_calendar_url</name>

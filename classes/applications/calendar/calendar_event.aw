@@ -1,5 +1,4 @@
 <?php
-// calendar_event.aw - Kalendri sündmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes maintainer=kristo
 
@@ -13,7 +12,7 @@
 @caption Algab
 
 @property end type=datetime_select field=end
-@caption Lõpeb
+@caption L&otilde;peb
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -49,6 +48,9 @@
 @caption
 
 @property utextbox10 type=textbox
+@caption
+
+@property utextarea1 type=textarea
 @caption
 
 @property utextarea2 type=textarea
@@ -560,13 +562,13 @@ class calendar_event extends class_base
 					"size" => 15,
 					"value" => date("d.m.Y H:i" , $o->prop("start")),
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.event_time_'.$o->id().'__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a><font color=red> '.$_SESSION["event_time_save_errors"][$o->id()]." </font>",
+cal.select(changeform.event_time_'.$o->id().'__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuup&auml;ev" name="anchornew" id="anchornew">vali</a><font color=red> '.$_SESSION["event_time_save_errors"][$o->id()]." </font>",
 				"end" => html::textbox(array(
 					"name" => "event_time[".$o->id()."][end]",
 					"size" => 15,
 					"value" => date("d.m.Y H:i" , $o->prop("end")),
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
+cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuup&auml;ev" name="anchornew" id="anchornew">vali</a>',
 				"location" => html::textbox(array(
 					"name" => "event_time[".$o->id()."][location]",
 					"size" => 30,
@@ -590,13 +592,13 @@ cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy H
 					"size" => 15,
 					"value" => "",
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.event_time_new__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a><font color=red> '.$_SESSION["event_time_save_errors"]["new"]." </font>",
+cal.select(changeform.event_time_new__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuup&auml;ev" name="anchornew" id="anchornew">vali</a><font color=red> '.$_SESSION["event_time_save_errors"]["new"]." </font>",
 			"end" => html::textbox(array(
 					"name" => "event_time[new][end]",
 					"size" => 15,
 					"value" => "",
 				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuupäev" name="anchornew" id="anchornew">vali</a>',
+cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuup&auml;ev" name="anchornew" id="anchornew">vali</a>',
 			"location" => html::textbox(array(
 				"name" => "event_time[new][location]",
 				"size" => 30,
@@ -669,7 +671,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 	{
 		$ob = new object($arr["id"]);
 		$cform = $ob->meta("cfgform_id");
-		// feega hea .. nüüd on vaja veel nimed saad
+		// feega hea .. nyyd on vaja veel nimed saad
 		$cform_obj = new object($cform);
 		$output_form = $cform_obj->prop("use_output");
 		if (is_oid($output_form))
@@ -760,7 +762,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 	**/
 	function show($arr)
 	{
-		// nii .. kuidas ma siin saan ära kasutada classbaset mulle vajaliku vormi genereerimiseks?
+		// nii .. kuidas ma siin saan 2ra kasutada classbaset mulle vajaliku vormi genereerimiseks?
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 		$this->vars(array(
