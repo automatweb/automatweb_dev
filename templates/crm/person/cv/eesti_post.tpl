@@ -430,30 +430,32 @@ text-decoration:underline;
 			<!-- SUB: CRM_PERSON_WORK_RELATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="7" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>T&ouml;&ouml;kogemus</strong></span></td>
+					<td height="20" colspan="8" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>T&ouml;&ouml;kogemus</strong></span></td>
 				</tr>
 				<tr>
-					<td width="78" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Organisatsioon</td>
-					<td width="78" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">&Uuml;ksus</td>
-					<td width="78" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Amet</td>
-					<td width="78" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Algus</td>
-					<td width="78" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">L&otilde;pp</td>
-					<td width="78" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">&Uuml;lesanded</td>
-					<td width="78" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
+					<td width="70" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Organisatsioon</td>
+					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">&Uuml;ksus</td>
+					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Amet</td>
+					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Algus</td>
+					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">L&otilde;pp</td>
+					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">&Uuml;lesanded</td>
+					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
+					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kuutasu (bruto)</td>
 				</tr>
 					<!-- SUB: CRM_PERSON_WORK_RELATION -->
 				<tr>
-					<td width="78" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.org}</td>
-					<td width="78" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.section}</td>
-					<td width="78" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.profession}</td>
-					<td width="78" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.start}</td>
-					<td width="78" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.end}</td>
-					<td width="78" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.tasks}</td>
-					<td width="78" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.load}</td>
+					<td width="70" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.org}</td>
+					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.section}</td>
+					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.profession}</td>
+					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.start}</td>
+					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.end}</td>
+					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.tasks}</td>
+					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.load}</td>
+					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.salary}</td>
 				</tr>
 					<!-- END SUB: CRM_PERSON_WORK_RELATION -->
 				<tr>
-					<td class="cvVormSpacer" colspan="7">&nbsp;</td>
+					<td class="cvVormSpacer" colspan="8">&nbsp;</td>
 				</tr>
 			</table>
 			<!-- END SUB: CRM_PERSON_WORK_RELATIONS -->
