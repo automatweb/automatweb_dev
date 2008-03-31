@@ -213,6 +213,12 @@ text-decoration:underline;
 					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.edulevel}</b></td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.EDULEVEL -->
+				<!-- SUB: CRM_PERSON.ACADEMIC_DEGREE -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Akadeemiline kraad:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.academic_degree}</b></td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.ACADEMIC_DEGREE -->
 				<!-- SUB: CRM_PERSON.SOCIAL_STATUS -->
 				<tr>
 					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Perekonnaseis:&nbsp;</strong></td>

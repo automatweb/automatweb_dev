@@ -5356,6 +5356,20 @@ class crm_person extends class_base
 		}
 		//		END SUB: CRM_PERSON.EDULEVEL
 
+		//		SUB: CRM_PERSON.ACADEMIC_DEGREE
+		if($o->prop("academic_degree") > 0)
+		{
+			$options = $this->edulevel_options;
+			$this->vars(array(
+				"crm_person.academic_degree" => $options[$o->prop("academic_degree")],
+			));
+			$this->vars(array(
+				"CRM_PERSON.ACADEMIC_DEGREE" => $this->parse("CRM_PERSON.ACADEMIC_DEGREE"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.EDULEVEL
+
 		//		SUB: CRM_PERSON.SOCIAL_STATUS
 		if($o->prop("social_status") > 0 && $o->prop("social_status") < 5)
 		{
