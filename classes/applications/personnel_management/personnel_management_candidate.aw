@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.5 2008/03/27 09:23:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.6 2008/03/31 11:39:53 instrumental Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
@@ -112,12 +112,18 @@ class personnel_management_candidate extends class_base
 	{
 		$conn = $arr['connection'];
 		$target_obj = $conn->to();
+		$source_obj = $conn->from();
 		$pm = get_instance(CL_PERSONNEL_MANAGEMENT);
-		if($target_obj->class_id() == CL_CRM_PERSON && $this->can("view", $pm->get_sysdefault()))
+		if($source_obj->class_id() == CL_PERSONNEL_MANAGEMENT_CANDIDATE && $this->can("view", $pm->get_sysdefault()))
 		{
 			$pmo = obj($pm->get_sysdefault());
-			if($target_obj->parent != $pmo->prop("persons_fld"));
-				$target_obj->create_brother($pmo->prop("persons_fld"));
+			if($target_obj->parent != $pmo->prop("persons_fld"))
+			{	// If the person's a candidate, one must be found from the personnel management system.
+				$target_obj->connect(array(
+					"to" => $pmo->id(),
+					"reltype" => "RELTYPE_PERSONNEL_MANAGEMENT",
+				));
+			}
 		}
 	}
 
