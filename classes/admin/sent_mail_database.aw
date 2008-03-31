@@ -118,7 +118,9 @@ class sent_mail_database extends class_base
 			$o->set_prop("arguments", $arr["arguments"]);
 			$o->set_prop("content", $arr["content"]);
 			$o->set_prop("app", $arr["app"]);
+			aw_disable_acl();
 			$o->save();
+			aw_restore_acl();
 		}
 	}
 
