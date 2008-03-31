@@ -5867,6 +5867,7 @@ class crm_person extends class_base
 				"crm_person_work_relation.tasks" => nl2br($to->prop("tasks")),
 				"crm_person_work_relation.load" => is_oid($to->prop("load")) ? $to->prop("load.name") : t("M&auml;&auml;ramata"),
 				"crm_person_work_relation.salary" => is_numeric($to->prop("salary")) ? $to->prop("salary") : t("M&auml;&auml;ramata"),
+				"crm_person_work_relation.benefits" => $to->prop("benefits"),
 			));
 			$CRM_PERSON_WORK_RELATION .= $this->parse("CRM_PERSON_WORK_RELATION");
 			$parse_cpwr++;
