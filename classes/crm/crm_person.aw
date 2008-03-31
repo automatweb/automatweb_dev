@@ -4990,6 +4990,7 @@ class crm_person extends class_base
 		$pers_lang_inst = get_instance(CL_CRM_PERSON_LANGUAGE);
 		$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 		$sm_inst = get_instance(CL_CRM_SKILL_MANAGER);
+		$jw_inst = get_instance(CL_PERSONNEL_MANAGEMENT_JOB_WANTED);
 
 		if(!$arr["cv"])
 		{
@@ -5870,6 +5871,7 @@ class crm_person extends class_base
 				"crm_person_work_relation.load" => is_oid($to->prop("load")) ? $to->prop("load.name") : t("M&auml;&auml;ramata"),
 				"crm_person_work_relation.salary" => is_numeric($to->prop("salary")) ? $to->prop("salary") : t("M&auml;&auml;ramata"),
 				"crm_person_work_relation.benefits" => $to->prop("benefits"),
+				"crm_person_work_relation.field" => $to->prop("field.name"),
 			));
 			$CRM_PERSON_WORK_RELATION .= $this->parse("CRM_PERSON_WORK_RELATION");
 			$parse_cpwr++;
@@ -5939,11 +5941,12 @@ class crm_person extends class_base
 				}
 			}
 			$location = "";
-			if(count($to->prop("location")) > 0)
+			$location_2 = "";
+			if(count($to->prop("location")) > 0 || count($to->prop("location_2")) > 0)
 			{
 				$l_ol = new object_list(array(
 					"class_id" => array(CL_CRM_CITY, CL_CRM_COUNTY, CL_CRM_COUNTRY, CL_CRM_AREA),
-					"oid" => $to->prop("location"),
+					"oid" => $to->prop("location") + $to->prop("location_2"),
 					"lang_id" => array(),
 					"parent" => array(),
 					"site_id" => array(),
@@ -5958,6 +5961,14 @@ class crm_person extends class_base
 						$location .= ", ";
 					$location .= $l_nms[$lid];
 				}
+				foreach($to->prop("location_2") as $lid)
+				{
+					if(!is_oid($lid))
+						continue;
+					if(strlen($location_2) > 0)
+						$location_2 .= ", ";
+					$location_2 .= $l_nms[$lid];
+				}
 			}
 
 			$recommendations = "";
@@ -5968,6 +5979,7 @@ class crm_person extends class_base
 					$recommendations .= ", ";
 				$recommendations .= $from->prop("person.name");
 			}
+			$sw_options = $jw_inst->start_working_options;
 
 			$this->vars(array(
 				"personnel_management_job_wanted.field" => $field,
@@ -5977,8 +5989,17 @@ class crm_person extends class_base
 				"personnel_management_job_wanted.pay" => $to->prop("pay"),
 				"personnel_management_job_wanted.pay2" => $to->prop("pay2"),
 				"personnel_management_job_wanted.location" => $location,
+				"personnel_management_job_wanted.location_2" => $location_2,
+				"personnel_management_job_wanted.location_text" => $to->prop("location_text"),
 				"personnel_management_job_wanted.addinfo" => nl2br($to->prop("addinfo")),
 				"recommendation.person" => $recommendations,
+				"personnel_management_job_wanted.work_at_night" => $to->prop("work_at_night") ? t("Jah") : t("Ei"),
+				"personnel_management_job_wanted.work_by_schedule" => $to->prop("work_by_schedule") ? t("Jah") : t("Ei"),
+				"personnel_management_job_wanted.start_working" => ($to->prop("start_working") > 0) ? $sw_options[$to->prop("start_working")] : t("M&auml;&auml;ramata"),
+				"personnel_management_job_wanted.ready_for_errand" => $to->prop("ready_for_errand") ? t("Jah") : t("Ei"),
+				"personnel_management_job_wanted.additional_skills" => nl2br($to->prop("additional_skills")),
+				"personnel_management_job_wanted.handicaps" => nl2br($to->prop("handicaps")),
+				"personnel_management_job_wanted.hobbies_vs_work" => nl2br($to->prop("hobbies_vs_work")),
 			));
 			$PERSONNEL_MANAGEMENT_JOB_WANTED .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED");
 			$parse_pmjw++;

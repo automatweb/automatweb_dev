@@ -434,7 +434,7 @@ text-decoration:underline;
 			<!-- SUB: CRM_PERSON_WORK_RELATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="9" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>T&ouml;&ouml;kogemus</strong></span></td>
+					<td height="20" colspan="10" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>T&ouml;&ouml;kogemus</strong></span></td>
 				</tr>
 				<tr>
 					<td width="66" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Organisatsioon</td>
@@ -446,6 +446,7 @@ text-decoration:underline;
 					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
 					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kuutasu (bruto)</td>
 					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Soodustused ja eritingimused</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
 				</tr>
 					<!-- SUB: CRM_PERSON_WORK_RELATION -->
 				<tr>
@@ -458,10 +459,11 @@ text-decoration:underline;
 					<td width="60" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.load}</td>
 					<td width="60" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.salary}</td>
 					<td width="60" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.benefits}</td>
+					<td width="60" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_work_relation.field}</td>
 				</tr>
 					<!-- END SUB: CRM_PERSON_WORK_RELATION -->
 				<tr>
-					<td class="cvVormSpacer" colspan="9">&nbsp;</td>
+					<td class="cvVormSpacer" colspan="10">&nbsp;</td>
 				</tr>
 			</table>
 			<!-- END SUB: CRM_PERSON_WORK_RELATIONS -->
@@ -469,32 +471,50 @@ text-decoration:underline;
 			<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="8" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitud t&ouml;&ouml;</strong></span></td>
+					<td height="20" colspan="17" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitud t&ouml;&ouml;</strong></span></td>
 				</tr>
 				<tr>
-					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Tegevusala</td>
-					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml; liik</td>
-					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid</td>
-					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
-					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Palk</td>
-					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht</td>
-					<td width="68" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
-					<td width="70" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Soovitajad</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Tegevusala</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml; liik</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Palk</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (esimene eelistus)</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (teine eelistus)</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (t&auml;psemalt)</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Soovitajad</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama graafiku alusel</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml;leasumise aeg</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valmis t&ouml;&ouml;l&auml;hetusteks</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&auml;iendavad oskused</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Takistavad tegurid</td>
+					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Hobid, mille t&otilde;ttu on vajalik t&ouml;&ouml;lt eemal viibida</td>
 				</tr>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED -->
 				<tr>
-					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.field}</td>
-					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.job_type}</td>
-					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions}</td>
-					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.load}</td>
-					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.pay} - {VAR:personnel_management_job_wanted.pay2}</td>
-					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location}</td>
-					<td width="68" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.addinfo}</td>
-					<td width="70" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.field}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.job_type}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.load}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.pay} - {VAR:personnel_management_job_wanted.pay2}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_2}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_text}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.addinfo}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_at_night}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_by_schedule}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.start_working}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.ready_for_errand}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.additional_skills}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.handicaps}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.hobbies_vs_work}</td>
 				</tr>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED -->
 				<tr>
-					<td class="cvVormSpacer" colspan="8">&nbsp;</td>
+					<td class="cvVormSpacer" colspan="17">&nbsp;</td>
 				</tr>
 			</table>
 			<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
