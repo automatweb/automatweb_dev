@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.10 2008/03/29 08:20:33 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.11 2008/03/31 15:45:09 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -34,8 +34,39 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @property pay2 type=textbox size=5 datatype=int field=palgasoov2
 @caption Palgasoov kuni
 
+@property work_by_schedule type=checkbox ch_value=1 	 
+@caption Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel 	 
+ 
+@property work_at_night type=checkbox ch_value=1 	 
+@caption Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel 	 
+ 
+@property ready_for_errand type=checkbox ch_value=1 	 
+@caption Olen valmis t&ouml;&ouml;l&auml;hetusteks
+
 @property location type=relpicker multiple=1 automatic=1 orient=vertical store=connect reltype=RELTYPE_LOCATION
 @caption T&ouml;&ouml; asukoht
+@comment Esimene valik 	 
+	  	 
+@property location_2 type=relpicker multiple=1 automatic=1 orient=vertical store=connect reltype=RELTYPE_LOCATION2 	 
+@caption T&ouml;&ouml; asukoht 	 
+@comment Teine valik 	 
+ 
+@property location_text type=textbox 	 
+@caption T&ouml;&ouml; asukoht 	 
+@comment Vajadusel t&auml;psusta 	 
+ 
+@property start_working type=select 	 
+@caption Soovitud t&ouml;&ouml;le asumise aeg 	 
+ 
+@property additional_skills type=textarea 	 
+@caption T&auml;iendavad oskused 	 
+@comment Kas Teil on t&auml;iendavaid oskusi, mida te peate vajalikuks &auml;ra m&auml;rkida? 	 
+ 
+@property handicaps type=textarea 	 
+@caption Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita 	 
+ 
+@property hobbies_vs_work type=textbox 	 
+@caption Hobid, mille t&otilde;ttu on vajalik t&ouml;&ouml;lt eemal viibida
 
 @property addinfo type=textarea field=lisainfo
 @caption Lisainfo soovitava t&ouml;&ouml; kohta
@@ -50,13 +81,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @caption T&ouml;&ouml;koormus
 
 @reltype LOCATION value=4 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA
-@caption Asukoht
+@caption Asukoht (esimene valik)
 
 @reltype JOB_TYPE value=5 clid=CL_META
 @caption T&ouml;&ouml; liik
 
 @reltype PROFESSION value=6 clid=CL_CRM_PROFESSION
 @caption Ametinimetus
+
+@reltype LOCATION2 value=6 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA 	 
+@caption Asukoht (teine valik)
 
 */
 
@@ -69,6 +103,14 @@ class personnel_management_job_wanted extends class_base
 		$this->init(array(
 			"clid" => CL_PERSONNEL_MANAGEMENT_JOB_WANTED
 		));
+	  	 
+		$this->start_working_options = array( 	 
+			 0 => t("--vali--"), 	 
+			 1 => t("Kohe"), 	 
+			 2 => t("1 kuu jooksul"), 	 
+			 3 => t("2 kuu jooksul"), 	 
+			 4 => t("Kokkuleppel"), 	 
+		);
 	}
 	
 	function get_property($arr)
@@ -77,6 +119,10 @@ class personnel_management_job_wanted extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
+			case "start_working": 	 
+				$prop["options"] = $this->start_working_options; 	 
+				break;
+
 			case "professions_rels":
 				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 				$pm_id = $pm_inst->get_sysdefault();
@@ -152,6 +198,10 @@ class personnel_management_job_wanted extends class_base
 		{
 			case "ametinimetus":
 			case "lisainfo":
+			case "location_text": 	 
+			case "hobbies_vs_work": 	 
+			case "handicaps": 	 
+			case "additional_skills":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "text"
@@ -161,6 +211,10 @@ class personnel_management_job_wanted extends class_base
 			case "koormus":
 			case "palgasoov":
 			case "palgasoov2":
+			case "work_by_schedule": 	 
+			case "work_at_night": 	 
+			case "ready_for_errand": 	 
+			case "start_working":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "int"
