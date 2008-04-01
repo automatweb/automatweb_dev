@@ -100,6 +100,16 @@
             <caption>Default personalikeskkond</caption>
       </property>
       <property>
+            <name>mandatory_controller</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGCONTROLLER</reltype>
+            <caption>Kohustuslikkuse kontroller</caption>
+      </property>
+      <property>
             <name>cv_tpl</name>
             <group>search_conf</group>
             <table>objects</table>
@@ -1014,7 +1024,13 @@
             <SKILL_MANAGER>
                   <value>9</value>
                   <clid>CL_CRM_SKILL_MANAGER</clid>
+                  <caption>Oskuste haldur</caption>
             </SKILL_MANAGER>
+            <CFGCONTROLLER>
+                  <value>10</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CFGCONTROLLER>
       </reltypes>
       <layout>
             <employee>

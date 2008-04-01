@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.19 2008/03/31 14:19:57 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.20 2008/04/01 16:50:58 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -88,13 +88,8 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @property apply type=text
 @caption Kandideerin
 
-@property offer_cfgform type=relpicker reltype=RELTYPE_CFGFORM
-@caption CV seadete vorm
-
 @property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE
 @caption Hindamise skaala
-
-@property default_cfgform type=hidden
 
 @groupinfo candidate caption="Kandideerimised" submit=no
 @default group=candidate
@@ -103,13 +98,20 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 
 @property candidate_table type=table no_caption=1
 
-@groupinfo custom_cfgform caption="Uus CV seadete vorm"
+@groupinfo custom_cfgform caption="CV v&auml;ljad" no_submit=1
 @default group=custom_cfgform 
 
-	@property new_cfgform_name type=textbox store=no
-	@caption Nimi
+	@property offer_cfgform type=relpicker reltype=RELTYPE_CFGFORM
+	@caption CV seadete vorm
 
-	@property new_cfgform_tbl type=table store=no no_caption=1
+	@property default_cfgform type=hidden
+
+	@property new_cfgform_name type=hidden store=no
+
+	@property new_cfgform_tbl type=table store=no
+
+	@property save_cfgform type=checkbox ch_value=1 store=no
+	@caption Salvesta seadetevorm
 
 @reltype CANDIDATE value=1 clid=CL_PERSONNEL_MANAGEMENT_CANDIDATE
 @caption Kandidatuur
@@ -168,6 +170,10 @@ class personnel_management_job_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			case "submit":
+				arr($prop);
+				break;
+
 			case "job_offer_pdf":
 				$prop["value"] = html::href(array(
 					"caption" => t("T&ouml;&ouml;pakkumine PDF-formaadis"),
@@ -287,9 +293,12 @@ class personnel_management_job_offer extends class_base
 
 	function _get_new_cfgform_tbl($arr)
 	{
+		/*
 		$cfgform_id = $arr["obj_inst"]->prop("default_cfgform");
 		if(!is_oid($cfgform_id))
 			$cfgform_id = $arr["obj_inst"]->prop("offer_cfgform");
+		*/
+		$cfgform_id = $arr["obj_inst"]->prop("offer_cfgform");
 		if(!$this->can("view", $cfgform_id))
 		{
 			return false;
@@ -306,11 +315,25 @@ class personnel_management_job_offer extends class_base
 		));
 		$t->define_field(array(
 			"name" => "selected",
-			"caption" => t("Valitud"),
+			"caption" => t("N&auml;ita vormis"),
+		));
+		$t->define_field(array(
+			"name" => "mandatory",
+			"caption" => t("Kohustuslik"),
+		));
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("J&auml;rjekord"),
 		));
 
 		$cfgform = obj($cfgform_id);
-		foreach($cfgform->meta("cfg_proplist") as $pid => $pdata)
+		$cfg_proplist = $cfgform->meta("cfg_proplist");
+		$controllers = $cfgform->meta("controllers");
+		$pm_id = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault();
+		$pm = obj($pm_id);
+		$mand_cont = $pm->prop("mandatory_controller");
+		//foreach($cfgform->meta("cfg_proplist") as $pid => $pdata)
+		foreach(get_instance(CL_CRM_PERSON)->get_all_properties() as $pid => $pdata)
 		{
 			if(is_array($pdata["group"]))
 			{
@@ -318,13 +341,26 @@ class personnel_management_job_offer extends class_base
 			}
 			$t->define_data(array(
 				"group" => $pdata["group"],
-				"property" => $pdata["caption"],
+				"property" => $pdata["caption"] ? $pdata["caption"] : $pdata["name"],
 				"selected" => html::checkbox(array(
-					"name" => "new_cfgform_tbl[".$pid."]",
+					"name" => "new_cfgform_tbl[selected][".$pid."]",
 					"value" => 1,
-					"checked" => 1,
+//					"checked" => 1,
 //					"checked" => (($pdata["disabled"] == 1) ? 0 : 1),
+					"checked" => array_key_exists($pid, $cfg_proplist) ? 1 : 0,
 				)),
+				"mandatory" => html::checkbox(array(
+					"name" => "new_cfgform_tbl[mandatory][".$pid."]",
+					"value" => 1,
+//					"checked" => array_key_exists($pid, $controllers),
+					"checked" => in_array($mand_cont, $controllers[$pid]),
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "new_cfgform_tbl[jrk][".$pid."]",
+					"value" => $cfg_proplist[$pid]["ord"],
+					"size" => 4,
+				)),
+				"jrk_hidden" => $cfg_proplist[$pid]["ord"],
 			));
 		}
 	}
@@ -535,12 +571,15 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "candidate_table":
-				$this->_set_candidate_table($arr);
+			case "new_cfgform_name":
+				if(strlen($prop["value"]) > 0)
+				{
+					$this->set_new_cfgform_tbl($arr);
+				}
 				break;
 
-			case "new_cfgform_tbl":
-				$this->_set_new_cfgform_tbl($arr);
+			case "candidate_table":
+				$this->_set_candidate_table($arr);
 				break;
 		}
 		return $retval;
@@ -572,9 +611,11 @@ class personnel_management_job_offer extends class_base
 		}
 	}
 
-	function _set_new_cfgform_tbl($arr)
+	function set_new_cfgform_tbl($arr)
 	{
-		$data = $arr["request"]["new_cfgform_tbl"];
+		$data = $arr["request"]["new_cfgform_tbl"]["selected"];
+		$data2 = $arr["request"]["new_cfgform_tbl"]["mandatory"];
+		$data3 = $arr["request"]["new_cfgform_tbl"]["jrk"];
 		$cfgform_id = $arr["obj_inst"]->prop("offer_cfgform");
 		if(!$this->can("view", $cfgform_id))
 		{
@@ -586,7 +627,12 @@ class personnel_management_job_offer extends class_base
 		$new_cfgform = obj($new_cfgform_id);
 		$new_cfgform->set_name($arr["request"]["new_cfgform_name"]);
 		$cfg_proplist = $new_cfgform->meta("cfg_proplist");
-//		foreach($data as $i => $v)
+		$controllers = $new_cfgform->meta("controllers");
+
+		$pm_id = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault();
+		$pm = obj($pm_id);
+		$mand_cont = $pm->prop("mandatory_controller");
+
 		foreach($cfg_proplist as $i => $v)
 		{
 			if(!array_key_exists($i, $data))
@@ -597,7 +643,41 @@ class personnel_management_job_offer extends class_base
 				));
 			}
 		}
-		foreach($arr["obj_inst"]->connections_from(array("type" => 7)) as $conn)
+		// Remove the controller, if it's not mandatory
+		foreach($controllers as $i => $v)
+		{
+			if(!array_key_exists($i, $data2))
+			{
+				$v = explode(',', str_replace($mand_cont.',', '', (join(',', $v))));
+			}
+		}
+		// Add the controller, if it's mandatory
+		foreach($data2 as $i => $v)
+		{
+			$controllers[$i][] = $mand_cont;
+		}
+
+		// Connect the controller to the cfgform, if any props are mandatory.
+		if(count($data2) > 0)
+		{
+			$new_cfgform->connect(array(
+				"to" => $mand_cont,
+				"reltype" => "RELTYPE_CONTROLLER",
+			));
+		}
+		$cfg_proplist = $new_cfgform->meta("cfg_proplist");
+		foreach($cfg_proplist as $i => $v)
+		{
+			if(array_key_exists($i, $data3))
+			{
+				$cfg_proplist[$i]["ord"] = $data3[$i];
+			}
+		}
+
+		$new_cfgform->set_meta("cfg_proplist", $cfg_proplist);
+		$new_cfgform->set_meta("controllers", $controllers);
+		$new_cfgform->save();
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CFGFORM")) as $conn)
 		{
 			$conn->delete();
 		}
@@ -880,6 +960,21 @@ class personnel_management_job_offer extends class_base
 				"from" => $conn->prop("from"),
 			));
 		};
+	}
+	
+	function callback_generate_scripts($arr)
+	{
+		$f = "
+		function save_cfgform()
+		{
+			if(aw_get_el('save_cfgform').checked)
+			{
+				aw_get_el('new_cfgform_name').value = prompt('".t("Sisestage salvestatava seadetevormi nimi:")."');
+			}
+		}
+
+		aw_submit_handler = save_cfgform;";
+		return $f;
 	}
 }
 ?>
