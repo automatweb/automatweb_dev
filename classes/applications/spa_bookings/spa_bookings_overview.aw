@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.49 2008/04/01 16:05:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.50 2008/04/01 16:30:10 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -245,6 +245,13 @@ class spa_bookings_overview extends class_base
 					}
 				}
 				break;
+			case "r_ra_booking_from":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				if(!$prop["value"])
+				{
+					$prop["value"] = time() - 3600*24*30;
+				}
+				break;
 			case "r_ra_res_type":
 				$prop["options"] = array(
 					"rooms" => t("Ruumide aruanne"),
@@ -254,7 +261,6 @@ class spa_bookings_overview extends class_base
 				);
 			case "r_ra_name":
 			case "r_ra_booker_name":
-			case "r_ra_booking_from":
 			case "r_ra_seller":
 			case "r_ra_worker":
 			case "r_ra_project":
@@ -463,16 +469,17 @@ class spa_bookings_overview extends class_base
 		$projects = array();
 		foreach ($brons->arr() as $b)
 		{
-			$projects[$b->prop("project")] = $b->prop("project");
-			$data[date("Ymd" , $b->prop("start1"))][$b->prop("project")]++;
+			$project_id = $b->prop("project");
+			$projects[$project_id] = $project_id;
+			$data[date("Ymd" , $b->prop("start1"))][$project_id]++;
 			$data[date("Ymd" , $b->prop("start1"))]["time"] = $b->prop("start1");
 		}
 		ksort($data);
 		foreach($projects as $project)
 		{
+			$p = "";
 			if($this->can("view" , $project))
 			{
-				$p = "";
 				$po = obj($project);
 				$p = $po->name();
 			}
@@ -818,6 +825,15 @@ class spa_bookings_overview extends class_base
 		//broneerimis aja j2rgi
 		$from = date_edit::get_timestamp($r_ra_booking_from);
 		$to = date_edit::get_timestamp($r_ra_booking_to);
+		
+		if(!($from > 0))
+		{
+			$from = time() - 3600*24*30;
+		}
+		if(!($to > 0))
+		{
+			$to = time();
+		}
 		if ($from > 1)
 		{
 			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
