@@ -1235,7 +1235,7 @@ class crm_person extends class_base
 			$parent = ($id == $sm_id) ? "new_skill" : "new_skill_".$id;
 			foreach($data as $id2 => $name)
 			{
-				if(array_key_exists($id2, $skills))
+				if(array_key_exists($id2, $skills) || $name["subheading"])
 				{
 					$t->add_sub_menu(array(
 						"name" => "new_skill_".$id2,
@@ -1243,7 +1243,8 @@ class crm_person extends class_base
 						"parent" => $parent,
 					));
 				}
-				else
+				// If it's not a subheading, we have to be able to click on it. Even if it's a parent skill.
+				if(!$name["subheading"])
 				{
 					$t->add_menu_item(array(
 						"parent" => "new_skill_".$id,
