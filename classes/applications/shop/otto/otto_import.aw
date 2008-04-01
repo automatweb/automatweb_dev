@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.89 2008/03/12 23:10:40 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.90 2008/04/01 07:41:28 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1867,16 +1867,20 @@ class otto_import extends class_base
 			$count++;
 		}
 
-		$t->define_data(array(
-			'file' => html::textbox(array(
-				'name' => 'file_suffix['.$count.'][file]',
-				'size' => '10'
-			)),
-			'suffix' => html::textbox(array(
-				'name' => 'file_suffix['.$count.'][suffix]'
-			)),
-			'line_color' => 'lightblue'
-		));
+		for ($i = 0; $i < 20; $i++)
+		{
+			$t->define_data(array(
+				'file' => html::textbox(array(
+					'name' => 'file_suffix['.$count.'][file]',
+					'size' => '10'
+				)),
+				'suffix' => html::textbox(array(
+					'name' => 'file_suffix['.$count.'][suffix]'
+				)),
+				'line_color' => 'lightblue'
+			));
+			$count++;
+		}
 		return PROP_OK;
 	}
 
