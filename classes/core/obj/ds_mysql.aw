@@ -1861,6 +1861,34 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					$sql[] = $tf.$compr.$tbl2.".".$fld2." ";
 				}
+				else
+				if ($class_name == "obj_predicate_limit")
+				{
+					if (($tmp = $val->get_per_page()) > 0)
+					{
+						$this->limit = " LIMIT ".$val->get_from().",$tmp ";
+					}
+					else
+					{
+						$this->limit = " LIMIT ".$val->get_from()." ";
+					}
+				}
+				else
+				if ($class_name == "obj_predicate_sort")
+				{
+					$this->sby = " ORDER BY ";
+					$tmp = array();
+					foreach($val->get_sorter_list() as $sl_item)
+					{
+						$pd = $this->properties[$sl_item["prop"]];
+						if ($pd["table"])	
+						{
+							$this->used_tables[$pd["table"]] = $pd["table"];
+						}
+						$tmp[] = $pd["table"].".`".$pd["field"]."` ".($sl_item["direction"] == "desc" ? "DESC" : "ASC")." ";
+					}
+					$this->sby .= join(", ", $tmp);
+				}
 			}
 			else
 			if (is_array($val) || (is_object($val) && get_class($val) == "aw_array"))

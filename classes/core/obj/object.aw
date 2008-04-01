@@ -17,6 +17,7 @@ classload(
 	"core/obj/obj_predicate_not",
 	"core/obj/obj_predicate_compare",
 	"core/obj/obj_predicate_prop",
+	"core/obj/obj_predicate_limit",
 	"core/obj/obj_sql_func",
 	"core/obj/oql"
 );
