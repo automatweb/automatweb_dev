@@ -274,6 +274,17 @@
             <caption>Projekt</caption>
       </property>
       <property>
+            <name>r_ra_location</name>
+            <table>objects</table>
+            <group>reports_all</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>ra_srch</parent>
+            <field>r_ra_location</field>
+            <caption>Asukoht</caption>
+      </property>
+      <property>
             <name>r_ra_worker</name>
             <table>objects</table>
             <group>reports_all</group>
@@ -331,14 +342,14 @@
             <name>r_ra_only_done</name>
             <table>objects</table>
             <group>reports_all</group>
-            <type>checkbox</type>
+            <type>chooser</type>
             <ch_value>1</ch_value>
             <store>no</store>
             <parent>ra_srch</parent>
-            <no_caption>1</no_caption>
             <prop_cb>1</prop_cb>
+            <captionside>top</captionside>
             <field>r_ra_only_done</field>
-            <caption>Ainult kohale ilmunud</caption>
+            <caption>Kohale ilmunud</caption>
       </property>
       <property>
             <name>r_ra_unconfirmed</name>
@@ -382,8 +393,18 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>ra_split</parent>
+            <parent>ra_rigth</parent>
             <field>r_ra_list</field>
+      </property>
+      <property>
+            <name>r_ra_days_projects_tab</name>
+            <table>objects</table>
+            <group>reports_all</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ra_rigth</parent>
+            <field>r_ra_days_projects_tab</field>
       </property>
       <property>
             <name>rr_tb</name>
@@ -582,6 +603,12 @@
                   <parent>ra_left</parent>
                   <group>reports_all</group>
             </ra_srch>
+            <ra_rigth>
+                  <type>vbox</type>
+                  <parent>ra_split</parent>
+                  <group>reports_all</group>
+                  <area_caption></area_caption>
+            </ra_rigth>
             <rr_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
