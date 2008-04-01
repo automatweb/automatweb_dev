@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.23 2008/03/29 17:25:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.24 2008/04/01 16:50:58 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -43,6 +43,9 @@
 
 		@property sysdefault_pm type=checkbox ch_value=1 store=no
 		@caption Default personalikeskkond
+
+		@property mandatory_controller type=relpicker reltype=RELTYPE_CFGCONTROLLER
+		@caption Kohustuslikkuse kontroller
 
 	@groupinfo search_conf caption="Otsingu seaded" parent=general
 	@default group=search_conf
@@ -327,6 +330,10 @@
 @caption Soovitud t&ouml;&ouml;koormus
 
 @reltype SKILL_MANAGER value=9 clid=CL_CRM_SKILL_MANAGER
+@caption Oskuste haldur
+
+@reltype CFGCONTROLLER value=10 clid=CL_CFGCONTROLLER
+@caption Kontroller
 
 */
 
@@ -984,7 +991,7 @@ class personnel_management extends class_base
 							"url" => $this->mk_my_orb("show_cv", array("id" => $obj->id(), "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1"), CL_CRM_PERSON),
 							"caption" => $obj->name(),
 						)),
-						"age" => $this->birthday($obj->prop("birthday")),
+						"age" => $obj->get_age(),
 						"gender" => t($gender[$obj->prop("gender")]),
 						"apps" => $apps,
 						"modtime" => date("Y-m-d H:i:s", $obj->prop("modified")),
@@ -1042,7 +1049,7 @@ class personnel_management extends class_base
 						"url" => $this->mk_my_orb("show_cv", array("id" => $obj->id(), "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1"), CL_CRM_PERSON),
 						"caption" => $person["name"],
 					)),
-					"age" => $this->birthday($person["birthday"]),
+					"age" => $obj->get_age(),
 //					"age" => $person["birthday"],
 					"gender" => t($gender[$person["gender"]]),
 					"apps" => $apps,
@@ -1305,7 +1312,7 @@ class personnel_management extends class_base
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
-					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
+					//"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
 				),
 			));
 		}
@@ -1325,10 +1332,10 @@ class personnel_management extends class_base
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$r["cv_company"]."%",
-					//"CL_CRM_PERSON.RELTYPE_ORG_RELATION.RELTYPE_ORG.name" => "%".$r["cv_company"]."%",
-					//"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_ORG.name" => "%".$r["cv_company"]."%",
-					//"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_ORG.name" => "%".$r["cv_company"]."%",
-					//"CL_CRM_PERSON.RELTYPE_COMPANY_RELATION.RELTYPE_COMPANY.name" => "%".$r["cv_company"]."%",
+					//"CL_CRM_PERSON.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_company"]."%",
+					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_company"]."%",
+					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_company"]."%",
+					//"CL_CRM_PERSON.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_company"]."%",
 					// Dunno if keepin' the company's name in the 'name' field of additional education object is the best idea...
 					"CL_CRM_PERSON.RELTYPE_ADD_EDUCATION.name" => "%".$r["cv_company"]."%",
 				),
@@ -1358,7 +1365,6 @@ class personnel_management extends class_base
 				),
 			)
 		);
-
 		return $odl->list_data;
 	}
 
@@ -1758,25 +1764,6 @@ class personnel_management extends class_base
 		
 	}
 
-	function birthday($birthday)
-	{
-		list($year, $month, $day) = explode("-", $birthday);
-		if(!$day)
-		{
-			$birthday = date("Y-m-d", $birthday);
-			list($year, $month, $day) = explode("-", $birthday);
-		}
-		$year_diff = date("Y") - $year;
-		$month_diff = date("m") - $month;
-		$day_diff = date("d") - $day;
-		if ($month_diff < 0)
-			$year_diff--;
-		elseif ($month_diff == 0 && $day_diff < 0)
-			$year_diff--;
-
-		return ($year_diff < 0 || $year_diff > 1000) ? t("m&auml;&auml;ramata") : $year_diff;
-	}
-
 	function candidate_table_flds($arr)
 	{
 		if($arr["request"]["fld_id"])
@@ -1927,7 +1914,7 @@ class personnel_management extends class_base
 						"url" => $this->mk_my_orb("show_cv", array("id" => $obj->id(), "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1"), CL_CRM_PERSON),
 						"caption" => $person["name"],
 					)),
-					"age" => $this->birthday($person["birthday"]),
+					"age" => $obj->get_age(),
 //					"age" => $person["birthday"],
 					"gender" => t($gender[$person["gender"]]),
 					"apps" => $apps,
@@ -1988,7 +1975,7 @@ class personnel_management extends class_base
 						"url" => $this->mk_my_orb("show_cv", array("id" => $obj->id(), "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1"), CL_CRM_PERSON),
 						"caption" => $obj->name(),
 					)),
-					"age" => $this->birthday($obj->prop("birthday")),
+					"age" => $obj->get_age(),
 					"gender" => t($gender[$obj->prop("gender")]),
 					"apps" => $apps,
 					"modtime" => date("Y-m-d H:i:s", $obj->prop("modified")),
@@ -2205,7 +2192,7 @@ class personnel_management extends class_base
 		{
 			case "cv_search_button_save_search":
 			case "cv_search_button_save":
-				if($arr["request"]["cv_search_saved_name"] != "1_do_no_save_it_1")
+				if(strlen($arr["request"]["cv_search_saved_name"]) > 0)
 				{
 					$this->cv_save_search($arr);
 				}
@@ -2351,7 +2338,7 @@ class personnel_management extends class_base
 		$arr["fld_id"] = $_GET["fld_id"];
 		$arr["ofr_id"] = $_GET["ofr_id"];
 		$arr["list_id"] = 0;
-		$arr["cv_search_saved_name"] = "1_do_no_save_it_1";
+		$arr["cv_search_saved_name"] = "";
 	}
 
 	/**

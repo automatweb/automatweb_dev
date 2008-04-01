@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.20 2008/04/01 16:50:58 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.21 2008/04/01 16:51:33 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -184,7 +184,7 @@ class personnel_management_job_offer extends class_base
 
 			case "apply":
 				$prop["value"] = html::href(array(
-					"caption" => "Kandideerin",
+					"caption" => t("Kandideerin"),
 					"url" => $this->mk_my_orb("new", array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 1, "parent" => $arr["obj_inst"]->id(), "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_CANDIDATE),
 				));
 				break;
