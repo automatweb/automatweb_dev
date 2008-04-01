@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.24 2008/04/01 16:50:58 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.25 2008/04/01 17:02:28 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1351,6 +1351,10 @@ class personnel_management extends class_base
 					$odl_prms["CL_CRM_PERSON.RELTYPE_RECOMMENDS.RELTYPE_CURRENT_JOB.org.name"] => "%".$r["cv_recommenders"]."%",
 				),
 			));
+		}
+		if($r["cv_comments"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
 		}
 
 		$odl = new object_data_list(

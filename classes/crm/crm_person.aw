@@ -621,6 +621,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 	@property relatives type=releditor mode=manager props=person,relation_type,start,end table_fields=person,relation_type,start,end reltype=RELTYPE_FAMILY_RELATION store=no
 
+@groupinfo comments caption="Kommentaarid" parent=general
+@default group=comments
+
 */
 
 /*
@@ -693,11 +696,11 @@ caption Lapsed
 @reltype PHONE value=13 clid=CL_CRM_PHONE
 @caption Telefon
 
-reltype PROFILE value=14 clid=CL_PROFILE
-caption Profiil
+#reltype PROFILE value=14 clid=CL_PROFILE
+#caption Profiil
 
-reltype USER_DATA value=15
-caption Andmed
+#reltype USER_DATA value=15
+#caption Andmed
 
 @reltype ORG_RELATION value=16 clid=CL_CRM_PERSON_WORK_RELATION
 @caption Organisatoorne kuuluvus
@@ -865,6 +868,9 @@ caption S&otilde;bragrupid
 
 @reltype FAMILY_RELATION value=85 clid=CL_CRM_FAMILY_RELATION
 @caption Sugulusside
+
+@reltype COMMENT value=86 clid=CL_COMMENT
+@caption Kommentaar
 
 */
 
