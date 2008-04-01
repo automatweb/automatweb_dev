@@ -19,7 +19,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @default group=grp_detailed
 @default group=grp_main
 
-	@groupinfo grp_sub_main parent=grp_main caption="Üldine"
+	@groupinfo grp_sub_main parent=grp_main caption="&Uuml;ldine"
 	@default group=grp_sub_main
 
 		@property header type=text store=no no_caption=1
@@ -49,7 +49,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property expire type=text field=meta method=serialize
 		@caption aegub
 
-//seda järjekorda peab veel mõtlema
+//seda j2rjekorda peab veel m6tlema
 		@property title1 type=text store=no subtitle=1
 		@caption Objekti aadress
 			@property address_connection type=releditor reltype=RELTYPE_REALESTATE_ADDRESS rel_id=first editonly=1 props=location_country,location,postal_code,street_address,po_box,apartment
@@ -1051,32 +1051,32 @@ class realestate_property extends class_base
 
 		switch ($pid_1)
 		{
-			case 1: // 1800–1899  mees;
+			case 1: // 1800-1899  mees;
 				$pid_year += 1800;
 				$gender = PID_GENDER_MALE;
 				break;
 
-			case 2: // 1800–1899  naine;
+			case 2: // 1800-899  naine;
 				$pid_year += 1800;
 				$gender = PID_GENDER_FEMALE;
 				break;
 
-			case 3: // 1900–1999  mees;
+			case 3: // 1900-1999  mees;
 				$pid_year += 1900;
 				$gender = PID_GENDER_MALE;
 				break;
 
-			case 4: // 1900–1999  naine;
+			case 4: // 1900-1999  naine;
 				$pid_year += 1900;
 				$gender = PID_GENDER_FEMALE;
 				break;
 
-			case 5: // 2000–2099  mees;
+			case 5: // 2000-2099  mees;
 				$pid_year += 2000;
 				$gender = PID_GENDER_MALE;
 				break;
 
-			case 6: // 2000–2099  naine;
+			case 6: // 2000-2099  naine;
 				$pid_year += 2000;
 				$gender = PID_GENDER_FEMALE;
 				break;
@@ -1555,7 +1555,7 @@ class realestate_property extends class_base
 					$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
 				}
 
-				//piltide sorteerimine metas elutseva j&auml;rjekorra järgi
+				//piltide sorteerimine metas elutseva j&auml;rjekorra j2rgi
 
 				$i = 1;
 				while (isset ($properties["picture" . $i . "_url"]))
@@ -1645,7 +1645,7 @@ class realestate_property extends class_base
 			$data["additional_info"] = nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")));
 		}
 
-		//et ei näitataks hinda, kui see on 0
+		//et ei n2itataks hinda, kui see on 0
 		if(!$data["transaction_price_value"] > 0)
 		{
 			$data["transaction_price_value"] = null;
@@ -2188,9 +2188,8 @@ class realestate_property extends class_base
 				{
 					$meta_obj = obj($this_object->prop($name));
 					$lang_id = aw_global_get("lang_id");
-					$trans = $meta_obj->meta("tolge");
-					if($trans[$lang_id]) $properties[$name]["strvalue"] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
-					else $properties[$name]["strvalue"] = $this_object->prop_str ($name);
+					$name = $meta_obj->trans_get_val("name");
+					$properties[$name]["strvalue"] = $name;
 				}
 				else $properties[$name]["strvalue"] = $this_object->prop_str ($name);
 			}//echo $properties[$name]["strvalue"].' - '.$this_object->prop_str ($name).'<br>';
@@ -2699,7 +2698,7 @@ class realestate_property extends class_base
 			$pictures = $pictures->arr ();
 			$i = 1;
 
-			//piltide sorteerimine metas elutseva järjekorra järgi
+			//piltide sorteerimine metas elutseva j2rjekorra j2rgi
 
 			if($this_object->meta("pic_order") && sizeof($this_object->meta("pic_order")) > 0)
 			{
@@ -2874,7 +2873,7 @@ class realestate_property extends class_base
 		{
 			$agent_phones[] = $connection->prop ("to.name");
 		}
-		if(!sizeof($agent_phones)>0)//äkki on tegu kasutaja objektiga... sellel telefon teisiti tuleb
+		if(!sizeof($agent_phones)>0)//2kki on tegu kasutaja objektiga... sellel telefon teisiti tuleb
 		{
 			$agent_person = $agent->get_first_obj_by_reltype ("RELTYPE_PERSON");
 

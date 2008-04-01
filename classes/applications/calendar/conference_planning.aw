@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.103 2008/03/13 13:26:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.104 2008/04/01 12:45:37 robert Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1849,7 +1849,7 @@ class conference_planning extends class_base
 				$trans = $obj->meta("tolge");
 				//$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $obj->name();
 				// oh my god this metamgr trans thingi is stupidly done 
-				$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $trans[aw_global_get("ct_lang_id")]?iconv("UTF-8", aw_global_get("charset"), $trans[aw_global_get("ct_lang_id")]):$obj->name();
+				$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $obj->trans_get_val("name");
 				
 			}
 		}

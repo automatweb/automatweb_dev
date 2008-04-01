@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.16 2008/01/31 13:54:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.17 2008/04/01 12:45:16 robert Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -219,7 +219,7 @@ class metamgr extends class_base
 		foreach($langdata as $lid => $lang)
 		{
 			 $new_data[$lid] = html::textbox(array(
-				"name" => "submeta[new][tolge][".$lid."]",
+				"name" => "submeta[new][tolge][".$lid."][name]",
 				"size" => 15,
 				"value" => "",
 			));
@@ -242,13 +242,17 @@ class metamgr extends class_base
 				"ord" => $o->ord(),
 			);
 
-			$tr = $o->meta("tolge");
+			$tr = $o->meta("translations");
+			if(!is_array($tr))
+			{
+				$tr = array();
+			}
 			foreach($langdata as $lid => $lang)
 			{
 				 $trans[$lid] = html::textbox(array(
-					"name" => "submeta[".$id."][tolge][".$lid."]",
+					"name" => "submeta[".$id."][tolge][".$lid."][name]",
 					"size" => 15,
-					"value" => $tr[$lid],
+					"value" => iconv(aw_global_get("charset"), "UTF-8",$tr[$lid]["name"]),
 				));
 			}
 
@@ -302,10 +306,10 @@ class metamgr extends class_base
 				$draw_text = $draw_text.$o->name();
 				foreach($langdata as $id => $lang)
 				{
-					$tr = $o->meta("tolge");
+					$tr = $o->meta("translations");
 					if(($arr["obj_inst"]->lang_id() != $id)&&(strlen($tr[$id])>0))
 					{						
-						$draw_text = $draw_text."\t".$id.":".$tr[$id];
+						$draw_text = $draw_text."\t".$id.":".$tr[$id]["name"];
 					}	
 				}
 				if(strlen($o->comment())>0)
@@ -358,7 +362,6 @@ class metamgr extends class_base
 			foreach($arr["request"]["submeta"] as $key => $val)
 			{
 				$arr["request"]["submeta"][$key]["name"] = iconv("UTF-8", aw_global_get("charset"),  $val["name"]);
-				
 			}
 		}
 		
@@ -379,23 +382,86 @@ class metamgr extends class_base
 			$no->set_comment($new["value"]);
 			$no->set_name($new["name"]);
 			$no->set_prop("ord",(int)$new["ord"]);
-			if($transyes) $no->set_meta("tolge", $new["tolge"]);
+			if($transyes) $no->set_meta("translations",$new["tolge"]);
 			$no->save();
 		};	
 		$submeta = $arr["request"]["submeta"];
 		unset($submeta["new"]);
 		if (is_array($submeta))
 		{
+			$this->_init_save_trans();
 			foreach($submeta as $skey => $sval)
 			{
 				$so = new object($skey);
 				$so->set_name($sval["name"]);
 				$so->set_comment($sval["value"]);
 				$so->set_ord($sval["ord"]);
-				if($transyes) $so->set_meta("tolge", $sval["tolge"]);
+				if($transyes)
+				{
+					$this->_save_trans($so, $sval["tolge"]);
+				}
 				$so->save();
 			};
 		};
+	}
+
+	function _init_save_trans()
+	{
+		$l = get_instance("languages");
+		$this->ll = $l->get_list(array(
+			"all_data" => true,
+			"set_for_user" => true
+		));
+		$this->repls = array(
+			chr(197).chr(161) => "&scaron;",
+			chr(197).chr(160) => "&Scaron;",
+			chr(197).chr(190) => "&#158;",
+			chr(197).chr(189) => "&#142;",
+			chr(195).chr(182) => "&ouml;",
+			chr(195).chr(164) => "&auml;",
+			chr(195).chr(188) => "&uuml;",
+			chr(195).chr(181) => "&otilde;",
+			chr(195).chr(156) => "&Uuml;",
+			chr(195).chr(149) => "&Otilde;",
+			chr(195).chr(150) => "&Ouml;",
+			chr(195).chr(132) => "&Auml;",
+			chr(196).chr(171) => "&#299;",
+			chr(196).chr(129) => "&#257;",
+			chr(196).chr(147) => "&#275;",
+			chr(197).chr(179) => "&#371;",
+			chr(196).chr(141) => "&#269;",
+			chr(197).chr(171) => "&#363;"
+		);
+	}
+	function _save_trans($obj, $data)
+	{
+		foreach($this->ll as $lid => $lang)
+		{
+			if (!$data[$lid])
+			{
+				continue;
+			}
+
+			$nm = "name";
+			$str = $data[$lid][$nm];
+
+			// replace estonian chars in other languages with entities
+			if ($lang["acceptlang"] != "et")
+			{
+				foreach($this->repls as $r1 => $r2)
+				{
+					$str = str_replace($r1, $r2, $str);
+				}
+			}
+
+			$str = str_replace(chr(226).chr(128).chr(147), "-", $str);
+			$nv = iconv("UTF-8", $lang["charset"]."//IGNORE", $str);
+
+			$all_vals[$lid][$nm] = $nv;
+		}
+		$obj->set_meta("trans_".$lid."_status", 1);
+		$obj->set_meta("translations", $all_vals);
+		$obj->save();
 	}
 
 	function do_toolbar($arr = array())
@@ -604,9 +670,9 @@ class metamgr extends class_base
 						break;
 						
 						default:
-						$trans[$prop[0]] = $prop[1];
+						$trans[$prop[0]]["name"] = $prop[1];
 					}
-					$no->set_meta("tolge", $trans);
+					$no->set_meta("translations", $trans);
 				}
 			}
 			$no->save();

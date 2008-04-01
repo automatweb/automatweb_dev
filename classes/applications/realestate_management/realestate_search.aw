@@ -789,7 +789,7 @@ exit_function("jigaboo");
 			);
 		}
 		$search = $this->get_search_args ($args, $this_object);
-		//äkki teeks nii?
+		//2kki teeks nii?
 		if(!$search["sort_by"]) $search["sort_by"]=$this_object->meta("searc_sort_by");
 		if(!$search["sort_by"]) $search["sort_by"]=$this_object->prop("default_searchparam_sort_by");
 		if(!$search["sort_ord"]) $search["sort_ord"]=$this_object->prop("default_searchparam_sort_order");
@@ -1316,7 +1316,7 @@ exit_function("jigaboo");
 						$property = $list->begin ();
 						while (is_object ($property))
 						{
-							//see tegelt jama moment... et võiks olla realestate_property sees miski funktsioon , mis vastavad propertyd tagastab... ja mida ta ise ka kasutab... et moment suht mõttetu kopeerimine väikeste nüanssidega
+							//see tegelt jama moment... et v6iks olla realestate_property sees miski funktsioon , mis vastavad propertyd tagastab... ja mida ta ise ka kasutab... et moment suht m6ttetu kopeerimine v2ikeste nyanssidega
 							$properties = $property_inst->get_property_data (array (
 								"this" => $property,
 								"no_picture_data" => true,
@@ -1371,7 +1371,7 @@ exit_function("jigaboo");
 							$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
 							$data["additional_info"] = $this_object->prop ("additional_info_" . aw_global_get("LC"));
 
-							//et ei näitataks hinda, kui see on 0
+							//et ei n2itataks hinda, kui see on 0
 							if(!$data["transaction_price_value"] > 0)
 							{
 								$data["transaction_price_value"] = null;
@@ -1584,10 +1584,10 @@ exit_function("jigaboo");
 		$lang_id = aw_global_get("lang_id");
 		foreach ($options_tt->arr() as $key=> $val)
 		{
-			$trans = $val->meta("tolge");
+			/*$trans = $val->meta("tolge");
 			if($trans[$lang_id]) $this->options_tt[$key] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
-//			if($trans[$lang_id]) $this->options_tt[$key] = $trans[$lang_id];
-			else $this->options_tt[$key] = $val->name();
+//			if($trans[$lang_id]) $this->options_tt[$key] = $trans[$lang_id];*/
+			$this->options_tt[$key] = $val->trans_get_val("name");
 		}
 		natcasesort ($this->options_tt);
 		$this->options_tt = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik tehingud")) + $this->options_tt;
@@ -1707,10 +1707,11 @@ exit_function("jigaboo");
 		list ($options_c, $name, $use_type) = $this->classificator->get_choices($prop_args);
 		foreach ($options_c->arr() as $key=> $val)
 		{
-			$trans = $val->meta("tolge");
+			/*$trans = $val->meta("tolge");
 			if($trans[$lang_id]) $this->options_c[$key] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
 	//		if($trans[$lang_id]) $this->options_c[$key] = $trans[$lang_id];
-			else $this->options_c[$key] = $val->name();
+			else */
+			$this->options_c[$key] = $val->trans_get_val("name");
 		}
 		natcasesort ($this->options_c);
 		$this->options_c = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik valmidused")) + $this->options_c;
@@ -1724,10 +1725,11 @@ exit_function("jigaboo");
 		$this->options_up = $options_up->names();
 		foreach ($options_up->arr() as $key=> $val)
 		{
-			$trans = $val->meta("tolge");
+			/*$trans = $val->meta("tolge");
 			if($trans[$lang_id]) $this->options_up[$key] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
 			//if($trans[$lang_id]) $this->options_up[$key] = $trans[$lang_id];
-			else $this->options_up[$key] = $val->name();
+			else */
+			$this->options_up[$key] = $val->trans_get_val("name");
 		}
 		$this->options_up = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik t&uuml;&uuml;bid")) + $this->options_up;
 
@@ -1739,10 +1741,11 @@ exit_function("jigaboo");
 		list ($options_ss, $name, $use_type) = $this->classificator->get_choices($prop_args);
 		foreach ($options_ss->arr() as $key=> $val)
 		{
-			$trans = $val->meta("tolge");
+			/*$trans = $val->meta("tolge");
 			if($trans[$lang_id]) $this->options_ss[$key] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
 			if($trans[$lang_id]) $this->options_ss[$key] = $trans[$lang_id];
-			else $this->options_ss[$key] = $val->name();
+			else */
+			$this->options_ss[$key] = $val->trans_get_val("name");
 		}
 		natcasesort ($this->options_ss);
 		$this->options_ss = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik")) + $this->options_ss;
@@ -1979,7 +1982,7 @@ exit_function("jigaboo");
 				$this->search_sort_options = $options;
 			}
 			$search_sort_by = array_key_exists ($arr["sort_by"], $this->search_sort_options) ? $this->search_sort_options[$arr["sort_by"]]["table"] . "" . $arr["sort_by"] : NULL;
-			//tegelt see $arr["sort_by"]]["table"] jääb mulle ikka arusaamatuks, et miks teda vaja läheb.... moment kirjutasin lihtsalt üle selle väärtuse
+			//tegelt see $arr["sort_by"]]["table"] j22b mulle ikka arusaamatuks, et miks teda vaja l2heb.... moment kirjutasin lihtsalt yle selle v22rtuse
 			if($_GET["realestate_sort_by"])$search_sort_by = $_GET["realestate_sort_by"];
 
 			$search_sort_ord = array_key_exists ($arr["sort_ord"], $this->search_sort_orders) ? $arr["sort_ord"] : NULL;
@@ -2571,7 +2574,7 @@ exit_function("jigaboo");
 
 		// $table->define_field(array(
 			// "name" => "visible",
-			// "caption" => <a href='javascript:selall(\"realestatemgr-is_visible\")'>t("Näh&shy;tav")</a>,
+			// "caption" => <a href='javascript:selall(\"realestatemgr-is_visible\")'>t("N&auml;h&shy;tav")</a>,
 			// "tooltip" => t("K&otilde;ik read: vali/kaota valik"),
 		// ));
 
