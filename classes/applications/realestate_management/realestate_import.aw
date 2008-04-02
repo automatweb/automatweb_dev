@@ -27,7 +27,7 @@
 
 @default group=grp_city24_general
 	@property city24_county type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
-	@comment Haldusjaotis aadressisüsteemis, mis vastab maakonnale
+	@comment Haldusjaotis aadressis&uuml;steemis, mis vastab maakonnale
 	@caption Maakond haldusjaotuses
 
 	@property city24_city type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
@@ -50,7 +50,7 @@
 	@caption PHP M&auml;lukasutuse limiit impordil (Mb)
 
 	@property city24_import type=text editonly=1
-	@comment URL millele päringut tehes imporditakse objektid City24 süsteemist AW'i
+	@comment URL millele p&auml;ringut tehes imporditakse objektid City24 s&uuml;steemist AW'i
 	@caption City24 Importimine
 
 @default group=grp_city24_log
@@ -345,7 +345,7 @@ class realestate_import extends class_base
 			!$this->can("view", $this_object->prop ("city24_settlement"))
 		)
 		{
-			if (1 != $quiet) { echo t("Viga: administratiivjaotuse vasted määramata.") . REALESTATE_NEWLINE; }
+			if (1 != $quiet) { echo t("Viga: administratiivjaotuse vasted m&auml;&auml;ramata.") . REALESTATE_NEWLINE; }
 			return REALESTATE_IMPORT_ERR16;
 		}
 
@@ -406,7 +406,7 @@ class realestate_import extends class_base
 			"Suvila" => "cottage",
 			"Majaosa" => "housepart",
 			"Korter" => "apartment",
-			"Ã„ripind" => "commercial",
+			chr(195) . chr(132) . "ripind" => "commercial",
 			"Garaazh" => "garage",
 			"Maa" => "land",
 		);
@@ -464,7 +464,7 @@ class realestate_import extends class_base
 		if (count ($duplicates))
 		{
 			$duplicates = implode (",", $duplicates);
-			$error_msg = t("Loetletud City24 id-ga objekte on AW objektisüsteemis rohkem kui üks:") . $duplicates . REALESTATE_NEWLINE;
+			$error_msg = t("Loetletud City24 id-ga objekte on AW objektis&uuml;steemis rohkem kui &uuml;ks:") . $duplicates . REALESTATE_NEWLINE;
 			$status = REALESTATE_IMPORT_ERR4;
 			$import_log[] = $error_msg;
 
@@ -725,7 +725,7 @@ class realestate_import extends class_base
 
 						if (!is_oid ($agent_oid))
 						{
-							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud süsteemis ühkti kasutajat."), $city24_id, $agent_data) . REALESTATE_NEWLINE;
+							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud s&uuml;steemis &uuml;hkti kasutajat."), $city24_id, $agent_data) . REALESTATE_NEWLINE;
 
 							if (1 != $quiet)
 							{
@@ -765,7 +765,7 @@ class realestate_import extends class_base
 						}
 						else
 						{
-							$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: maakleril puudub üksus."), $city24_id) . REALESTATE_NEWLINE;
+							$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: maakleril puudub &uuml;ksus."), $city24_id) . REALESTATE_NEWLINE;
 
 							if (1 != $quiet)
 							{
@@ -797,7 +797,7 @@ class realestate_import extends class_base
 							}
 							else
 							{
-								$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot jääb salvestamata."), $city24_id) . REALESTATE_NEWLINE;
+								$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot j&auml;&auml;b salvestamata."), $city24_id) . REALESTATE_NEWLINE;
 
 								if (1 != $quiet)
 								{
@@ -810,7 +810,7 @@ class realestate_import extends class_base
 						}
 						else
 						{
-							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot jääb salvestamata."), $city24_id) . REALESTATE_NEWLINE;
+							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot j&auml;&auml;b salvestamata."), $city24_id) . REALESTATE_NEWLINE;
 
 							if (1 != $quiet)
 							{
@@ -908,7 +908,19 @@ class realestate_import extends class_base
 					$address_city24[$maakond_division->id()] = isset($this->property_data["MAAKOND"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["MAAKOND"])) : "";
 					$address_city24[$linn_division->id()] = isset($this->property_data["LINN"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["LINN"])) : "";
 					$address_city24[$linnaosa_division->id()] = isset($this->property_data["LINNAOSA"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["LINNAOSA"])) : "";
-					$address_city24[$vald_division->id()] = isset($this->property_data["VALD"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["VALD"])) : "";
+
+
+					$address_city24[$vald_division->id()] = "";
+					if (isset($this->property_data["VALD"]))
+					{
+						$vald = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["VALD"]));
+						// ignore VALD if lowercase value is 'city'
+						if ("city" != strtolower($vald))
+						{
+							$address_city24[$vald_division->id()] = $vald;
+						}
+					}
+
 					$address_city24[$asula_division->id()] = isset($this->property_data["ASULA"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["ASULA"])) : "";
 					$address_city24["street"] = isset($this->property_data["TANAV"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["TANAV"])) : "";
 
@@ -1104,7 +1116,7 @@ class realestate_import extends class_base
 								}
 
 								$clients = implode(" ", $clients);
-								$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui üks. Ei tea millist valida. AW oid: %s. Leitud kliendid: "), $city24_id, $property->id ()) . '<blockquote>' . $clients . '</blockquote>' . REALESTATE_NEWLINE . REALESTATE_NEWLINE;
+								$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui &uuml;ks. Ei tea millist valida. AW oid: %s. Leitud kliendid: "), $city24_id, $property->id ()) . '<blockquote>' . $clients . '</blockquote>' . REALESTATE_NEWLINE . REALESTATE_NEWLINE;
 
 								if (1 != $quiet)
 								{
@@ -1241,7 +1253,7 @@ class realestate_import extends class_base
 						$image->set_class_id (CL_IMAGE);
 						$image->set_parent ($property->id ());
 						$image->set_status(STAT_ACTIVE);
-						$image->set_name ($property->id () . " " . t("väike pilt"));
+						$image->set_name ($property->id () . " " . t("v&auml;ike pilt"));
 						$image->set_prop ("file", $file);
 						$image->save ();
 						$property->set_prop ("picture_icon_image", $image->id ());
@@ -1910,7 +1922,7 @@ class realestate_import extends class_base
 								}
 								else
 								{
-									$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot jääb salvestamata."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+									$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot j&auml;&auml;b salvestamata."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
 
 									if (1 != $quiet)
 									{
@@ -1923,7 +1935,7 @@ class realestate_import extends class_base
 							}
 							else
 							{
-								$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot jääb salvestamata."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+								$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot j&auml;&auml;b salvestamata."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
 
 								if (1 != $quiet)
 								{
@@ -2020,7 +2032,7 @@ class realestate_import extends class_base
 				"lang_id" => array (),
 			));
 
-			foreach($realestate_objects->arr() as $realestate_object)// et siis muudaks nähtamatuks vaid need objektid, mille maaklerid töötavad selles ettevõttes, mis on impordiobjekti juurde seostatud
+			foreach($realestate_objects->arr() as $realestate_object)// et siis muudaks n&auml;htamatuks vaid need objektid, mille maaklerid t&ouml;&ouml;tavad selles ettev&otilde;ttes, mis on impordiobjekti juurde seostatud
 			{
 				if(!is_oid($realestate_object->prop("realestate_agent1")) and !is_oid($realestate_object->prop("realestate_agent2"))) $realestate_object->set_prop ("is_visible", 0);
 				if(array_key_exists($realestate_object->prop("realestate_agent1") , $all_persons)) $realestate_object->set_prop ("is_visible", 0);
