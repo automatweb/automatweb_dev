@@ -24,6 +24,8 @@ class html extends aw_template
 		if true, selection is disabled
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
+	@param width optional type=int
+		selectbox size in pixels
 	@param tabindex optional type=string
 		tab inde
 
@@ -36,7 +38,7 @@ class html extends aw_template
 		extract($args);
 		$disabled = ($disabled ? " disabled" : "");
 		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
-		$sz = $mz = $onc = $cl = "";
+		$sz = $mz = $onc = $cl = $wid = "";
 		// things that make one go humm.. -- duke
 		if (empty($selected) && isset($value))
 		{
@@ -98,12 +100,17 @@ class html extends aw_template
 			$onc = 'onchange="'.$onchange.'"';
 		}
 
+		if (!empty($width))
+		{
+			$wid = "STYLE='width: ".$width."px'";
+		}
+
 		if (empty($id))
 		{
 			$id = $name;
 		}
 
-		return "<select name=\"$name\" $cl id=\"$id\" $sz $mz $onc $disabled $textsize{$ti}>\n$optstr</select>$post_append_text\n";
+		return "<select name=\"$name\" $cl id=\"$id\" $sz $mz $onc $disabled $textsize{$ti} $wid>\n$optstr</select>$post_append_text\n";
 	}
 
 	/**

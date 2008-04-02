@@ -950,7 +950,8 @@ class crm_company_bills_impl extends class_base
 				$state = html::select(array(
 					"options" => $bill_i->states,
 					"selected" => $bill->prop("state"),
-					"name" => "bill_states[".$bill->id()."]"
+					"name" => "bill_states[".$bill->id()."]",
+					"width" => 100,
 				));
 			}
 			$cursum = $bill_i->get_bill_sum($bill,$tax_add);
