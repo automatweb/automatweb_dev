@@ -32,12 +32,15 @@ class crm_area_obj extends _int_object
 
 		@param status optional type=int
 			The status of the crm_person objects.
+
+		@param by_jobwish optional type=bool
+			
 	**/
 	function get_residents($arr)
 	{
 		$this->prms(&$arr);
 
-		return new object_list(array(
+		$ol_prms = array(
 			"class_id" => CL_CRM_PERSON,
 			new object_list_filter(array(
 				"logic" => "OR",
@@ -47,15 +50,37 @@ class crm_area_obj extends _int_object
 				)
 			)),
 			"status" => $arr["status"],
-			new object_list_filter(array(
+		);
+		if(!$arr["by_jobwish"])
+		{
+			$ol_prms[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_CRM_PERSON.RELTYPE_ADDRESS.RELTYPE_PIIRKOND" => parent::id(),
+					"CL_CRM_PERSON.RELTYPE_ADDRESS.RELTYPE_MAAKOND.parent" => parent::id(),
+					"CL_CRM_PERSON.RELTYPE_ADDRESS.RELTYPE_LINN.parent" => parent::id(),
 					// Do we really need 'em both?? Reltypes, I mean.
 					"CL_CRM_PERSON.RELTYPE_CORRESPOND_ADDRESS.RELTYPE_PIIRKOND" => parent::id(),
+					"CL_CRM_PERSON.RELTYPE_CORRESPOND_ADDRESS.RELTYPE_MAAKOND.parent" => parent::id(),
+					"CL_CRM_PERSON.RELTYPE_CORRESPOND_ADDRESS.RELTYPE_LINN.parent" => parent::id(),
 				),
-			)),
-		));
+			));
+		}
+		else
+		{
+			$ol_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					//"CL_CRM_PERSON.RELTYPE_WORK_WANTED.location_text" = "%".parent::name()."%",
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION" => parent::id(),
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION2" => parent::id(),
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION.parent" => parent::id(),
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION2.parent" => parent::id(),
+				),
+			));
+		}
+
+		return new object_list($ol_prms);
 	}
 
 	function prms($arr)
