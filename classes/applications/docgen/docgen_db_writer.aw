@@ -20,7 +20,7 @@ class docgen_db_writer extends class_base
 
 	/** updates the class/function definitions in the database
 
-		@attrib name=do_db_update
+		@attrib name=do_db_update nologin="1"
 	**/
 	function do_db_update($arr)
 	{
