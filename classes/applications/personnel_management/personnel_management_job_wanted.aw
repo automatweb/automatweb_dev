@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.12 2008/03/31 15:54:17 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.13 2008/04/02 10:35:08 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -29,10 +29,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @caption T&ouml;&ouml;koormus
 
 @property pay type=textbox size=5 datatype=int field=palgasoov
-@caption Palgasoov alates
+@caption Palgasoov
 
-@property pay2 type=textbox size=5 datatype=int field=palgasoov2
-@caption Palgasoov kuni
+#@property pay2 type=textbox size=5 datatype=int field=palgasoov2
+#@caption Palgasoov kuni
 
 @property work_by_schedule type=checkbox ch_value=1 	 
 @caption Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel 	 

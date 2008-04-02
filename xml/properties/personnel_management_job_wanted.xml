@@ -59,17 +59,7 @@
             <size>5</size>
             <datatype>int</datatype>
             <field>palgasoov</field>
-            <caption>Palgasoov alates</caption>
-      </property>
-      <property>
-            <name>pay2</name>
-            <table>personnel_management_job_wanted</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>5</size>
-            <datatype>int</datatype>
-            <field>palgasoov2</field>
-            <caption>Palgasoov kuni</caption>
+            <caption>Palgasoov</caption>
       </property>
       <property>
             <name>work_by_schedule</name>
