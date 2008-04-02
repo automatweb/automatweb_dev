@@ -1487,6 +1487,44 @@
             <store>no</store>
             <field>relatives</field>
       </property>
+      <property>
+            <name>comments_tlb</name>
+            <table>objects</table>
+            <group>comments</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>comments_tlb</field>
+      </property>
+      <property>
+            <name>comments_display</name>
+            <table>objects</table>
+            <group>comments</group>
+            <type>table</type>
+            <store>no</store>
+            <field>comments_display</field>
+            <caption>Sisestatud kommentaarid</caption>
+      </property>
+      <property>
+            <name>comments_title</name>
+            <table>objects</table>
+            <group>comments</group>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>comments_title</field>
+            <caption>Lisa kommentaar</caption>
+      </property>
+      <property>
+            <name>comment_text</name>
+            <table>objects</table>
+            <group>comments</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <store>no</store>
+            <field>comment_text</field>
+            <caption>Kommentaar</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_PERSON</syslog_type>
@@ -1629,6 +1667,10 @@
                   <caption>Sugulased</caption>
                   <parent>general</parent>
             </relatives>
+            <comments>
+                  <caption>Kommentaarid</caption>
+                  <parent>general</parent>
+            </comments>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>
@@ -1945,6 +1987,11 @@
                   <clid>CL_CRM_FAMILY_RELATION</clid>
                   <caption>Sugulusside</caption>
             </FAMILY_RELATION>
+            <COMMENT>
+                  <value>86</value>
+                  <clid>CL_COMMENT</clid>
+                  <caption>Kommentaar</caption>
+            </COMMENT>
       </reltypes>
       <layout>
             <co_bottom_seller>

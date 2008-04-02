@@ -624,6 +624,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @groupinfo comments caption="Kommentaarid" parent=general
 @default group=comments
 
+	@property comments_tlb type=toolbar no_caption=1 store=no
+
+    @property comments_display type=table store=no
+	@caption Sisestatud kommentaarid
+
+    @property comments_title type=text store=no subtitle=1
+	@caption Lisa kommentaar
+
+	@property comment_text type=textarea rows=10 store=no
+	@caption Kommentaar
+
 */
 
 /*
@@ -932,6 +943,23 @@ class crm_person extends class_base
 		$form = &$arr["request"];
 		switch($prop["name"])
 		{
+			case "comment_text":
+				if(strlen($prop["value"]) > 0)
+				{
+					$comm = new object;
+					$comm->set_parent($arr["obj_inst"]->id());
+					$comm->set_class_id(CL_COMMENT);
+					$comm->set_prop("commtext", $prop["value"]);
+					$comm->set_prop("uname", aw_global_get("uid"));
+					$comm->set_prop("ip", $_SERVER['REMOTE_ADDR']);
+					$comm->save();
+					$arr["obj_inst"]->connect(array(
+						"to" => $comm->id(),
+						"reltype" => "RELTYPE_COMMENT",
+					));
+				}
+				break;
+
 			case "edulevel":
 				if($prop["value"] < 7)
 					$arr["obj_inst"]->set_prop("academic_degree", 0);
@@ -1187,6 +1215,51 @@ class crm_person extends class_base
 		{
 			$doomed_conn = new connection($doomed_conn);
 			$doomed_conn->delete();
+		}
+	}
+
+	function _get_comments_tlb($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_obj",
+			"confirm" => t("Oled kindel, et kustutada?"),
+		));
+	}
+
+	function _get_comments_display($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel",
+		));
+		$t->define_field(array(
+			"name" => "uid",
+			"caption" => t("Autor"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "text",
+			"caption" => t("Kommentaar"),
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Loomisaeg"),
+			"sortable" => 1,
+		));
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_COMMENT")) as $conn)
+		{
+			$comm = $conn->to();
+			$t->define_data(array(
+				"oid" => $comm->id(),
+				"uid" => $comm->prop("uname"),
+				"text" => $comm->prop("commtext"),
+				"time" => get_lc_date($comm->created()),
+			));
 		}
 	}
 
