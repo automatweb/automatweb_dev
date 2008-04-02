@@ -526,7 +526,7 @@ text-decoration:underline;
 			<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="18" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitud t&ouml;&ouml;</strong></span></td>
+					<td height="20" colspan="17" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitud t&ouml;&ouml;</strong></span></td>
 				</tr>
 				<tr>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Tegevusala</td>
@@ -539,7 +539,6 @@ text-decoration:underline;
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (teine eelistus)</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (t&auml;psemalt)</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Soovitajad</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama graafiku alusel</td>
 					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml;leasumise aeg</td>
@@ -560,15 +559,6 @@ text-decoration:underline;
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_2}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_text}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.addinfo}</td>
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">
-					<!-- SUB: RECOMMENDATION -->
-					{VAR:recommendation.person}
-					<!-- SUB: RECOMMENDATION.RELATION -->
-					({VAR:recommendation.relation})
-					<!-- END SUB: RECOMMENDATION.RELATION -->
-					<br>
-					<!-- END SUB: RECOMMENDATION -->
-					</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_at_night}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_by_schedule}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.start_working}</td>
@@ -579,7 +569,7 @@ text-decoration:underline;
 				</tr>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED -->
 				<tr>
-					<td class="cvVormSpacer" colspan="18">&nbsp;</td>
+					<td class="cvVormSpacer" colspan="17">&nbsp;</td>
 				</tr>
 			</table>
 			<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
@@ -616,7 +606,7 @@ text-decoration:underline;
 			<!-- SUB: CRM_FAMILY_RELATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Sugulased</strong></span></td>
+					<td height="20" colspan="3" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Sugulased</strong></span></td>
 				</tr>
 				<!-- SUB: CRM_FAMILY_RELATION_0 -->
 				<!-- Abikaasa -->
@@ -642,8 +632,60 @@ text-decoration:underline;
 					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_family_relation.end}</td>
 				</tr>
 				<!-- END SUB: CRM_FAMILY_RELATION_2 -->
+				<tr>
+					<td class="cvVormSpacer" colspan="3">&nbsp;</td>
+				</tr>
 			</table>
 			<!-- END SUB: CRM_FAMILY_RELATIONS -->
+
+			<!-- SUB: RECOMMENDATIONS -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitajad</strong></span></td>
+				</tr>
+				<!-- SUB: RECOMMENDATION -->
+				<tr>
+					<td width="346" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.person}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.relation}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.profession}</td>
+					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.company}</td>
+				</tr>
+				<!-- END SUB: RECOMMENDATION -->
+				<tr>
+					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: RECOMMENDATIONS -->
+
+			<!-- SUB: CRM_PERSON.ADDINFO -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Muud oskused</strong></span></td>
+				</tr>
+				<tr>
+					<td width="546" height="20" align="left" class="link11px" style="padding-left:10px;">{VAR:crm_person.addinfo}</td>
+				</tr>
+				<tr>
+					<td class="cvVormSpacer">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: CRM_PERSON.ADDINFO -->
+
+			<!-- SUB: CRM_PERSON.UDEF_CH1 -->
+			{VAR:crm_person.udef_ch1}<br>
+			<!-- ENDSUB: CRM_PERSON.UDEF_CH1 -->
+
+			<!-- SUB: CRM_PERSON.USER1 -->
+			{VAR:crm_person.user1}<br>
+			<!-- END SUB: CRM_PERSON.USER1 -->
+
+			<!-- SUB: CRM_PERSON.UDEF_TA1 -->
+			{VAR:crm_person.udef_ta1}<br>
+			<!-- END SUB: CRM_PERSON.UDEF_TA1 -->
+
+			<!-- SUB: CRM_PERSON.USERVAR1 -->
+			{VAR:crm_person.uservar1}<br>
+			<!-- END SUB: CRM_PERSON.USERVAR1 -->
 		</td>
 		<td valign="top">
 			<!-- SUB: CRM_PERSON.PICTURE -->
