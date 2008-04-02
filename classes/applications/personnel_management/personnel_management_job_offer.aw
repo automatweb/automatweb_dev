@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.21 2008/04/01 16:51:33 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.22 2008/04/02 10:26:30 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -648,7 +648,8 @@ class personnel_management_job_offer extends class_base
 		{
 			if(!array_key_exists($i, $data2))
 			{
-				$v = explode(',', str_replace($mand_cont.',', '', (join(',', $v))));
+				//$v = explode(',', str_replace($mand_cont.',', '', (join(',', $v))));
+				$v = explode(',,', trim(str_replace(','.$mand_cont.',', '', ',,'.(join(',,', $v)).',,'), ','));
 			}
 		}
 		// Add the controller, if it's mandatory
