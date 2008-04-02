@@ -243,6 +243,57 @@ text-decoration:underline;
 			</table>
 			<!-- END SUB: CRM_PERSON.PERSONAL_INFO -->
 
+			<!-- SUB: CRM_PERSON.CONTACT -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Kontakt</strong></span></td>
+				</tr>
+				<!-- SUB: CRM_PERSON.PHONES -->
+				<tr>
+					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>Telefon:&nbsp;</strong></td>
+					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
+						<!-- SUB: CRM_PERSON.PHONE -->
+						{VAR:crm_person.phone.name} ({VAR:crm_person.phone.type})<br>
+						<!-- END SUB: CRM_PERSON.PHONE -->
+					</td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.PHONES -->
+				<!-- SUB: CRM_PERSON.FAXES -->
+				<tr>
+					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>Faks:&nbsp;</strong></td>
+					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
+						<!-- SUB: CRM_PERSON.FAX -->
+						{VAR:crm_person.fax}<br>
+						<!-- END SUB: CRM_PERSON.FAX -->
+					</td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.FAXES -->
+				<!-- SUB: CRM_PERSON.EMAILS -->
+				<tr>
+					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>E-post:&nbsp;</strong></td>
+					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
+						<!-- SUB: CRM_PERSON.EMAIL -->
+						{VAR:crm_person.email}<br>
+						<!-- END SUB: CRM_PERSON.EMAIL -->
+					</td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.EMAILS -->
+				<!-- SUB: CRM_PERSON.ADDRESSES -->
+				<tr>
+					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>Aadress:&nbsp;</strong></td>
+					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
+						<!-- SUB: CRM_PERSON.ADDRESS -->
+						{VAR:crm_person.address.aadress}, {VAR:crm_person.address.linn} {VAR:crm_person.address.postiindeks}, {VAR:crm_person.address.maakond}, {VAR:crm_person.address.piirkond}, {VAR:crm_person.address.riik}<br>
+						<!-- END SUB: CRM_PERSON.ADDRESS -->
+					</td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.ADDRESSES -->
+				<tr>
+					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: CRM_PERSON.CONTACT -->
+
 			<!-- SUB: PREVIOUS_CANDIDACIES -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
@@ -561,57 +612,6 @@ text-decoration:underline;
 				</tr>
 			</table>
 			<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES -->
-
-			<!-- SUB: CRM_PERSON.CONTACT -->
-			<table width="546" cellpadding="1" cellspacing="1" border="0">
-				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Kontakt</strong></span></td>
-				</tr>
-				<!-- SUB: CRM_PERSON.PHONES -->
-				<tr>
-					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>Telefon:&nbsp;</strong></td>
-					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
-						<!-- SUB: CRM_PERSON.PHONE -->
-						{VAR:crm_person.phone.name} ({VAR:crm_person.phone.type})<br>
-						<!-- END SUB: CRM_PERSON.PHONE -->
-					</td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.PHONES -->
-				<!-- SUB: CRM_PERSON.FAXES -->
-				<tr>
-					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>Faks:&nbsp;</strong></td>
-					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
-						<!-- SUB: CRM_PERSON.FAX -->
-						{VAR:crm_person.fax}<br>
-						<!-- END SUB: CRM_PERSON.FAX -->
-					</td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.FAXES -->
-				<!-- SUB: CRM_PERSON.EMAILS -->
-				<tr>
-					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>E-post:&nbsp;</strong></td>
-					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
-						<!-- SUB: CRM_PERSON.EMAIL -->
-						{VAR:crm_person.email}<br>
-						<!-- END SUB: CRM_PERSON.EMAIL -->
-					</td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.EMAILS -->
-				<!-- SUB: CRM_PERSON.ADDRESSES -->
-				<tr>
-					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>Aadress:&nbsp;</strong></td>
-					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
-						<!-- SUB: CRM_PERSON.ADDRESS -->
-						{VAR:crm_person.address.aadress}, {VAR:crm_person.address.linn} {VAR:crm_person.address.postiindeks}, {VAR:crm_person.address.maakond}, {VAR:crm_person.address.piirkond}, {VAR:crm_person.address.riik}<br>
-						<!-- END SUB: CRM_PERSON.ADDRESS -->
-					</td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.ADDRESSES -->
-				<tr>
-					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
-				</tr>
-			</table>
-			<!-- END SUB: CRM_PERSON.CONTACT -->
 
 			<!-- SUB: CRM_FAMILY_RELATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
