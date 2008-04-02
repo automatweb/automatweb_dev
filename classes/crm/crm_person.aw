@@ -5988,12 +5988,24 @@ class crm_person extends class_base
 			}
 
 			$recommendations = "";
+			$RECOMMENDATION = "";
 			foreach($to->connections_to(array("from.class_id" => CL_CRM_RECOMMENDATION, "type" => "RELTYPE_JOBWISH")) as $conn2)
 			{
 				$from = $conn2->from();
 				if(strlen($recommendations) > 0)
 					$recommendations .= ", ";
 				$recommendations .= $from->prop("person.name");
+				$this->vars(array(
+					"recommendation.person" => $from->prop("person.name"),
+					"recommendation.relation" => $from->prop("relation.name"),
+				));
+				if(is_oid($from->prop("relation")))
+				{
+					$this->vars(array(
+						"RECOMMENDATION.RELATION" => $this->parse("RECOMMENDATION.RELATION"),
+					));
+				}
+				$RECOMMENDATION .= $this->parse("RECOMMENDATION");
 			}
 			$sw_options = $jw_inst->start_working_options;
 
@@ -6009,7 +6021,8 @@ class crm_person extends class_base
 				"personnel_management_job_wanted.location_2" => $location_2,
 				"personnel_management_job_wanted.location_text" => $to->prop("location_text"),
 				"personnel_management_job_wanted.addinfo" => nl2br($to->prop("addinfo")),
-				"recommendation.person" => $recommendations,
+				"RECOMMENDATION" => $RECOMMENDATION,
+				//"recommendation.person" => $recommendations,
 				"personnel_management_job_wanted.work_at_night" => $to->prop("work_at_night") ? t("Jah") : t("Ei"),
 				"personnel_management_job_wanted.work_by_schedule" => $to->prop("work_by_schedule") ? t("Jah") : t("Ei"),
 				"personnel_management_job_wanted.start_working" => ($to->prop("start_working") > 0) ? $sw_options[$to->prop("start_working")] : t("M&auml;&auml;ramata"),

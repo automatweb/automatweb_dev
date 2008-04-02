@@ -509,7 +509,15 @@ text-decoration:underline;
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_2}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_text}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.addinfo}</td>
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person}</td>
+					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">
+					<!-- SUB: RECOMMENDATION -->
+					{VAR:recommendation.person}
+					<!-- SUB: RECOMMENDATION.RELATION -->
+					({VAR:recommendation.relation})
+					<!-- END SUB: RECOMMENDATION.RELATION -->
+					<br>
+					<!-- END SUB: RECOMMENDATION -->
+					</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_at_night}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_by_schedule}</td>
 					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.start_working}</td>
