@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.261 2008/03/31 06:57:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.262 2008/04/02 13:41:35 markop Exp $
 // defs.aw - common functions
 
 /*
@@ -2431,7 +2431,7 @@ if (!defined("DEFS"))
 		function get_lc_month($num)
 		{
 			static $lc_date_inst;
-			$lc_date_inst = get_instance("core/locale/".aw_global_get("ct_lang_lc")."/date", array(), false);
+			$lc_date_inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
 			if(!is_object($lc_date_inst))
 			{
 				$lc_date_inst = get_instance("core/locale/en/date");
