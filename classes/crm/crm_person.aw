@@ -408,7 +408,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property skills_tbl type=table store=no
 	@caption Oskused
 
-	@property drivers_license type=select multiple=1 field=drivers_license table=kliendibaas_isik
+	@property drivers_license type=select multiple=1 field=drivers_license_2 table=kliendibaas_isik
 	@caption Autojuhiload
 
 	@property dl_can_use type=checkbox ch_value=1 table=kliendibaas_isik
@@ -923,17 +923,32 @@ class crm_person extends class_base
 			3 => t("Doktor"),
 		);
 		$this->drivers_licence_categories = array(
-			"a" => "A",
-			"a1" => "A1",
-			"a2" => "A2",
-			"b" => "B",
-			"b1" => "B1",
-			"c" => "C",
-			"c1" => "C1",
-			"d" => "D",
-			"d1" => "D1",
-			"e" => "E",
+			"a" => t("A"),
+			"a1" => t("A1"),
+			"a2" => t("A2"),
+			"b" => t("B"),
+			"b1" => t("B1"),
+			"c" => t("C"),
+			"c1" => t("C1"),
+			"d" => t("D"),
+			"d1" => t("D1"),
+			"e" => t("E"),
+			"f" => t("T&otilde;stuk"),
 		);
+		$this->drivers_licence_original_categories = $this->drivers_licence_categories;
+		$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+		$pm_dl = $pm->prop("drivers_license");
+		$data["options"] = $this->drivers_licence_categories;
+		if(is_array($pm_dl))
+		{
+			foreach($data["options"] as $i => $v)
+			{
+				if(!in_array($i, $pm_dl))
+				{
+					unset($this->drivers_licence_categories[$i]);
+				}
+			}
+		}
 	}
 
 	function set_property($arr)
@@ -995,7 +1010,7 @@ class crm_person extends class_base
 				$s = "";
 				foreach($prop["value"] as $c)
 				{
-					$s .= $c;
+					$s .= $c.",";
 				}
 				$prop["value"] = $s;
 				$arr["obj_inst"]->set_prop("drivers_license", $prop["value"]);
@@ -1291,6 +1306,7 @@ class crm_person extends class_base
 			"name" => "new_skill",
 			"img" => "new.gif",
 		));
+		$t->add_save_button();
 		$t->add_sub_menu(array(
 			"parent" => "new_skill",
 			"name" => "new_lang_skill",
@@ -1335,7 +1351,6 @@ class crm_person extends class_base
 			}
 		}
 		$t->add_delete_button();
-		$t->add_save_button();
 	}
 
 	function _get_skills_lang_tbl($arr)
@@ -1692,16 +1707,8 @@ class crm_person extends class_base
 				break;
 
 			case "drivers_license":
-				$stupid = array("a1", "a2", "a", "b1", "b", "c1", "c", "d1", "d", "e");
 				$data["options"] = $this->drivers_licence_categories;
-				$c = 0;
-				foreach($stupid as $s)
-				{
-					$data["value"] = str_replace($s, "", $data["value"], &$c);
-					if($c > 0)
-						$selected[$s] = $s;
-				}
-				$data["value"] = $selected;
+				$data["value"] = explode(",", $data["value"]);
 				break;
 
 			case "jobs_wanted_tb":
@@ -1894,7 +1901,9 @@ class crm_person extends class_base
 				break;
 			case "cv_view":
 				$v = array_keys($this->get_cv_tpl());
-				$tpl = $arr["request"]["cv_tpl"]?("cv/".basename($v[$arr["request"]["cv_tpl"]])):false;
+				$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+				$default_cv = ($pm->prop("cv_tpl")) ? "cv/".basename($pm->prop("cv_tpl")) : false;
+				$tpl = $arr["request"]["cv_tpl"]?("cv/".basename($v[$arr["request"]["cv_tpl"]])) : $default_cv;
 				$arr["prop"]["value"] .= $this->show_cv(array(
 					"id" => $arr["obj_inst"]->id(),
 					"cv" => $tpl,
@@ -2543,6 +2552,7 @@ class crm_person extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->add_new_button(array(CL_CRM_PERSON_EDUCATION), $arr["obj_inst"]->id(), 23);		// RELTYPE_EDUCATION
+		$t->add_save_button();
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -2550,7 +2560,6 @@ class crm_person extends class_base
 			"action" => "delete_obj",
 			"confirm" => t("Oled kindel, et kustutada?"),
 		));
-		$t->add_save_button();
 	}
 
 	function _get_education_tbl($arr)
@@ -4771,6 +4780,8 @@ class crm_person extends class_base
 				return true;
 
 			case "code":
+			// 20 is too short, damnit!
+			case "drivers_license_2":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "varchar(255)"
@@ -5692,18 +5703,15 @@ class crm_person extends class_base
 		// SUB: CRM_PERSON.DRIVERS_LICENSE
 		if(strlen($o->prop("drivers_license")) > 0)
 		{
-			$stupid = array("a1", "a2", "a", "b1", "b", "c1", "c", "d1", "d", "e");
 			$options = $this->drivers_licence_categories;
-			$dl = $o->prop("drivers_license");
-			foreach($stupid as $s)
+			$dl = explode("," ,$o->prop("drivers_license"));
+			foreach($dl as $s)
 			{
-				$dl = str_replace($s, "", $dl, &$c);
-				if($c > 0)
+				if(strlen($v) > 0)
 				{
-					if(strlen($v) > 0)
-						$v .= ", ";
-					$v .= $options[$s];
+					$v .= ", ";
 				}
+				$v .= $options[$s];
 			}
 			$this->vars(array(
 				"crm_person.drivers_license" => $v,
@@ -6025,9 +6033,10 @@ class crm_person extends class_base
 			$location_2 = "";
 			if(count($to->prop("location")) > 0 || count($to->prop("location_2")) > 0)
 			{
+				$oid = (is_array($to->prop("location")) ? $to->prop("location") : array()) + (is_array($to->prop("location_2")) ? $to->prop("location_2") : array());
 				$l_ol = new object_list(array(
 					"class_id" => array(CL_CRM_CITY, CL_CRM_COUNTY, CL_CRM_COUNTRY, CL_CRM_AREA),
-					"oid" => $to->prop("location") + $to->prop("location_2"),
+					"oid" => $oid,
 					"lang_id" => array(),
 					"parent" => array(),
 					"site_id" => array(),
@@ -6237,6 +6246,130 @@ class crm_person extends class_base
 			));
 		}
 		// END SUB: CRM_FAMILY_RELATIONS
+
+		// SUB: CRM_RECOMMENDATIONS
+		$parse_r = 0;
+
+		$rol = new object_list(array(
+			"class_id" => CL_CRM_RECOMMENCATION,
+			"CL_CRM_RECOMMENDATION.RELTYPE_JOBWISH.RELTYPE_PERSON" => $o->id(),
+			"status" => array(),
+			"lang_id" => array(),
+			"parent" => array(),
+			"site_id" => array(),
+		));
+
+		foreach($rol->arr() as $ro)
+		{
+			$this->vars(array(
+				"recommendation.person" => $ro->prop("person.name"),
+				"recommendation.relation" => $ro->prop("relation.name"),
+				"recommendation.person.profession" => $po->prop("profession.name"),
+				"recommendation.person.company" => $po->prop("company.name"),
+			));
+		}
+		
+		if($parse_r > 0)
+		{
+			$this->vars(array(
+				"CRM_RECOMMENDATION" => $CRM_RECOMMENDATION,
+			));
+			$this->vars(array(
+				"CRM_RECOMMENDATIONS" => $this->parse("CRM_RECOMMENDATIONS"),
+			));
+		}
+		// END SUB: CRM_RECOMMENDATIONS
+
+		// SUB: CRM_PERSON.ADDINFO
+		if(strlen($o->prop("addinfo")) > 0)
+		{
+			$this->vars(array(
+				"crm_person.addinfo" => nl2br($o->prop("addinfo")),
+			));
+			$this->vars(array(
+				"CRM_PERSON.ADDINFO" => $this->parse("CRM_PERSON.ADDINFO"),
+			));
+		}
+		// END SUB: CRM_PERSON.ADDINFO
+
+	///////////////////////// USERDEFINED STUFF
+
+		// SUB: CRM_PERSON.UDEF_CH{n}
+		for($i = 1; $i <= 3; $i++)
+		{
+			if(strlen($o->prop("udef_ch".$i)) > 0)
+			{
+				$this->vars(array(
+					"crm_person.udef_ch".$i => $o->prop("udef_ch".$i) ? t("Jah") : t("Ei"),
+				));
+				$this->vars(array(
+					"CRM_PERSON.UDEF_CH".$i => $this->parse("CRM_PERSON.UDEF_CH".$i),
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.UDEF_CH{n}
+
+		// SUB: CRM_PERSON.USER{n}
+		for($i = 1; $i <= 5; $i++)
+		{
+			if(strlen($o->prop("user".$i)) > 0)
+			{
+				$this->vars(array(
+					"crm_person.user".$i => $o->prop("user".$i),
+				));
+				$this->vars(array(
+					"CRM_PERSON.USER".$i => $this->parse("CRM_PERSON.USER".$i),
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.USER{n}
+
+		// SUB: CRM_PERSON.UDEF_TA{n}
+		for($i = 1; $i <= 5; $i++)
+		{
+			if(strlen($o->prop("udef_ta".$i)) > 0)
+			{
+				$this->vars(array(
+					"crm_person.udef_ta".$i => nl2br($o->prop("udef_ta".$i)),
+				));
+				$this->vars(array(
+					"CRM_PERSON.UDEF_TA".$i => $this->parse("CRM_PERSON.UDEF_TA".$i),
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.UDEF_TA{n}
+
+		// SUB: CRM_PERSON.USERVAR{n}
+		for($i = 1; $i <= 10; $i++)
+		{
+			$USERVAR = "";
+			if(!is_array($o->prop("uservar".$i)) && $o->prop("uservar".$i))
+			{
+				$uservar[$i] = array($o->prop("uservar".$i));
+			}
+			else
+			{
+				$uservar[$i] = $o->prop("uservar".$i);
+			}
+
+			if(is_array($uservar[$i]))
+			{
+				foreach($uservar[$i] as $uv)
+				{
+					$this->vars(array(
+						"crm_person.uservar".$i => $o->prop("uservar".$i.".name"),
+					));
+					$USERVAR .= $this->parse("CRM_PERSON.USERVAR".$i);
+				}
+				$this->vars(array(
+					"CRM_PERSON.USERVAR".$i => $USERVAR,
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.USERVAR{n}
+
+
+	///////////////////////// END USERDEFINED STUFF
 
 
 		return $arr["die"]?die($this->parse()):$this->parse();

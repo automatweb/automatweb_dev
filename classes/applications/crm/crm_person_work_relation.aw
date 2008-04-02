@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.15 2008/03/29 08:49:34 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.16 2008/04/02 15:03:57 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -13,13 +13,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 
 @default table=objects
 @default group=general
-@default field=meta
-@default method=serialize
 
 @property org type=relpicker reltype=RELTYPE_ORG store=connect
 @caption Organisatsioon
 
-@property section type=hidden reltype=RELTYPE_SECTION
+@property section type=hidden reltype=RELTYPE_SECTION store=connect
 #@property section type=relpicker reltype=RELTYPE_SECTION
 #@caption &Uuml;ksus (non-functioning)
 
@@ -31,6 +29,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 
 @property field type=classificator reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
+
+@default field=meta
+@default method=serialize
 
 @property room type=textbox
 @caption T&ouml;&ouml;ruum

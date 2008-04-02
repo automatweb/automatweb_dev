@@ -322,7 +322,7 @@ class crm_skill_manager extends class_base
 	}
 
 	function submit_meta($arr = array())
-	{		
+	{
 		$obj = $arr["obj_inst"];
 		$new = $arr["request"]["submeta"]["new"];
 		if ($new["name"])
@@ -332,7 +332,10 @@ class crm_skill_manager extends class_base
 			if ($arr["request"]["skill"])
 			{
 				$parent = $arr["request"]["skill"];
-			};
+				$parent_obj = obj($parent);
+				$new["lvl"] = $parent->prop("lvl");
+				$new["lvl_meta"] = $parent->prop("lvl_meta");
+			}
 			$no = new object;
 			$no->set_class_id(CL_CRM_SKILL);
 			$no->set_status(STAT_ACTIVE);
@@ -353,8 +356,17 @@ class crm_skill_manager extends class_base
 				$so = new object($skey);
 				$so->set_name($sval["name"]);
 				$so->set_prop("subheading", $sval["subheading"]);
-				$so->set_prop("lvl", $sval["lvl"]);
-				$so->set_prop("lvl_meta", $sval["lvl_meta"]);
+				if($so->parent() == $arr["obj_inst"]->id())
+				{
+					$so->set_prop("lvl", $sval["lvl"]);
+					$so->set_prop("lvl_meta", $sval["lvl_meta"]);
+				}
+				else
+				{
+					$parent_obj = obj($so->parent());
+					$so->set_prop("lvl", $parent_obj->prop("lvl"));
+					$so->set_prop("lvl_meta", $parent_obj->prop("lvl_meta"));
+				}
 				$so->set_ord($sval["ord"]);
 				$so->save();
 			};

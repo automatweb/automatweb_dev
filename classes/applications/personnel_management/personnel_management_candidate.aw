@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.6 2008/03/31 11:39:53 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.7 2008/04/02 15:03:59 instrumental Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
@@ -25,6 +25,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property intro type=textarea field=comment cols=80 rows=40 richtext=1
 @caption Kaaskiri tekstina
+
+@property addinfo type=textarea field=meta method=serialize
+@caption Lisainfo
 
 @reltype PERSON value=1 clid=CL_CRM_PERSON
 @caption Kandideerja

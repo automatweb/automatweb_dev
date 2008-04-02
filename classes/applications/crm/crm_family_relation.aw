@@ -47,6 +47,16 @@ class crm_family_relation extends class_base
 
 		switch($prop["name"])
 		{
+			case "person":
+				if(!$prop["value"])
+				{
+					$prop["post_append_text"] = "";
+					$prop["type"] = "textbox";
+					$prop["autocomplete_source"] = $this->mk_my_orb("person_ac");
+					$prop["autocomplete_params"] = array();
+				}
+				break;
+
 			case "relation_type":
 				$prop["options"] = $this->relation_type_options;
 				break;
@@ -62,6 +72,31 @@ class crm_family_relation extends class_base
 
 		switch($prop["name"])
 		{
+			case "person":
+				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0)
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_PERSON,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					$rev_nms = array_flip($ol->names());
+					if(array_key_exists($prop["value"], $rev_nms))
+					{
+						$arr["obj_inst"]->set_prop("person", $rev_nms[$prop["value"]]);
+					}
+					else
+					{
+						$new_p = new object;
+						$new_p->set_class_id(CL_CRM_PERSON);
+						$new_p->set_parent($arr["obj_inst"]->parent());
+						$new_p->set_name($prop["value"]);
+						$new_p->save();
+						$arr["obj_inst"]->set_prop("person", $new_p->id());
+					}
+					return PROP_IGNORE;
+				}
+				break;
 		}
 
 		return $retval;
@@ -107,6 +142,42 @@ class crm_family_relation extends class_base
 				return true;
 		}
 		return false;
+	}
+	
+	/**
+		@attrib name=person_ac all_args=1
+	**/
+	function person_ac($arr)
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+		
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 500,
+		));
+		$autocomplete_options = $ol->names();
+		foreach($autocomplete_options as $k => $v)
+		{
+			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
+		}
+
+		$autocomplete_options = array_unique($autocomplete_options);
+		header("Content-type: text/html; charset=utf-8");
+		exit ($cl_json->encode($option_data));
 	}
 }
 

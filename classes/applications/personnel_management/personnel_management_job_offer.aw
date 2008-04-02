@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.22 2008/04/02 10:26:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.23 2008/04/02 15:03:59 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -276,6 +276,11 @@ class personnel_management_job_offer extends class_base
 
 	function _get_job_offer_file_url($arr)
 	{
+		if($arr["new"])
+		{
+			return PROP_IGNORE;
+		}
+
 		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_JOB_OFFER_FILE");
 		if (!$o)
 		{
@@ -374,6 +379,7 @@ class personnel_management_job_offer extends class_base
 			"img" => "new.gif",
 			"url" => $this->mk_my_orb("new", array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 1, "parent" => $arr["obj_inst"]->id(), "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_CANDIDATE),
 		));
+		$t->add_save_button();
 		$t->add_search_button();
 		$t->add_delete_button();
 		$t->add_button(array(
@@ -388,7 +394,6 @@ class personnel_management_job_offer extends class_base
 			"img" => "",
 			"action" => "",
 		));
-		$t->add_save_button();
 	}
 
 	function _get_toolbar($arr)

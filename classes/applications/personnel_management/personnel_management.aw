@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.25 2008/04/01 17:02:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.26 2008/04/02 15:03:59 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -65,8 +65,8 @@
 		@property skills_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Oskuste kaust
 
-		@property skills_tbl type=table store=no
-		@caption Oskuste konfiguratsioon
+		@property drivers_license type=select multiple=1
+		@caption Juhilubade kategooriad
 
 	@groupinfo lang_conf caption="Keelte seaded" parent=general
 	@default group=lang_conf
@@ -95,7 +95,7 @@
 
 			@layout employee_search_1 type=vbox parent=employee_search
 
-				@property search_save type=relpicker reltype=RELTYPE_SEARCH_SAVE parent=employee_search_1 captionside=top search_button=1 no_edit=1
+				@property search_save type=relpicker reltype=RELTYPE_SEARCH_SAVE parent=employee_search_1 captionside=top search_button=1 no_edit=1 delete_button=1
 				@caption Varasem otsing
 
 			@layout isikuandmed type=vbox closeable=1 parent=employee_search area_caption=Isikuandmed
@@ -145,13 +145,8 @@
 				@property cv_job type=textbox size=18 parent=soovitud_t88 captionside=top store=no
 				@caption Ametinimetus
 
-				@layout pay type=hbox parent=soovitud_t88
-
-					@property cv_paywish type=textbox parent=pay captionside=top size=6 store=no
-					@caption Palk alates
-
-					@property cv_paywish2 type=textbox parent=pay captionside=top size=6 store=no
-					@caption Palk kuni
+				@property cv_paywish type=textbox parent=soovitud_t88 captionside=top size=6 store=no
+				@caption Palk
 
 				@property cv_field type=textbox size=18 multiple=1 orient=vertical parent=soovitud_t88 captionside=top store=no
 				@caption Tegevusala
@@ -409,6 +404,10 @@ class personnel_management extends class_base
 
 		switch($prop["name"])
 		{
+			case "drivers_license":
+				$prop["options"] = get_instance(CL_CRM_PERSON)->drivers_licence_original_categories;
+				break;
+
 			case "search_save":
 				$u = obj(user::get_current_user());
 				$ssol = new object_list(array(
@@ -683,62 +682,6 @@ class personnel_management extends class_base
 		));
 	}
 
-	function _get_skills_tbl($arr)
-	{
-		$t = &$arr["prop"]["vcl_inst"];
-		$t->define_field(array(
-			"name" => "nr",
-			"caption" => t(""),
-			"align" => "left",
-		));
-		$t->define_field(array(
-			"name" => "skill",
-			"caption" => t("Oskuste grupp"),
-			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "skill_level",
-			"caption" => t("Oskuse tasemed"),
-			"align" => "center",
-		));
-		$udef_skills = $this->get_udef_skills(array("id" => $arr["obj_inst"]->id()));
-		$odl = new object_data_list(
-			array(
-				"class_id" => CL_META,
-				"parent" => $arr["obj_inst"]->prop("skills_fld"),
-				"status" => STAT_ACTIVE,
-			),
-			array(
-				CL_META => array("name"),
-			)
-		);
-		$options[0] = t("--vali--");
-		foreach($odl->arr() as $id => $data)
-		{
-			$options[$id] = $data["name"];
-		}
-		for($i = 1; $i <= 5; $i++)
-		{
-			$t->define_data(array(
-				"nr" => t("Kasutaja defineeritud oskus "). $i,
-				"skill" => html::select(array(
-					"name" => "udef_skills[".$i."][skill]",
-					"options" => $options,
-					"selected" => $udef_skills[$i]["skill"],
-				)),
-				"skill_level" => html::checkbox(array(
-					"name" => "udef_skills[".$i."][levels]",
-					"value" => 1,
-					"checked" => $udef_skills[$i]["levels"],
-				)),
-			));
-		}
-		$t->sort_by(array(
-			"field" => "nr",
-			"sorder" => "ASC",
-		));
-	}
-
 	function employee_tree($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -767,6 +710,7 @@ class personnel_management extends class_base
 				$cnt = $o->get_residents(array(
 					"parent" => $this->persons_fld,
 					"personnel_management" => $arr["obj_inst"]->id(),
+					"by_jobwish" => 1,
 				))->count();
 				if($cnt == 0)
 				{
@@ -843,6 +787,7 @@ class personnel_management extends class_base
 					$cnt_ol = $o->$fn(array(
 						"parent" => $this->$fld,
 						"personnel_management" => $arr["obj_inst"]->id(),
+						"by_jobwish" => ($fn == "get_residents") ? 1 : 0,
 					));
 					$cnt = $cnt_ol->count();
 					$cnt_tot += $cnt;
@@ -872,6 +817,8 @@ class personnel_management extends class_base
 			{
 				$cnt_ol = $o->$fn(array(
 					"parent" => $this->$fld,
+					"personnel_management" => $arr["obj_inst"]->id(),
+					"by_jobwish" => ($fn == "get_residents") ? 1 : 0,
 				));
 				if($arr["request"]["group"] != "candidate")
 				{
@@ -907,12 +854,12 @@ class personnel_management extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->add_new_button(array(CL_CRM_PERSON), $this->persons_fld);
-		$t->add_delete_button();
 		$t->add_search_button(array(
 			"pn" => add_employee,
 			"multiple" => 1,
 			"clid" => CL_CRM_PERSON,
 		));
+		$t->add_delete_button();
 		$t->add_menu_button(array(
 			"name" => "add2list",
 			"img" => "important.png",
@@ -973,6 +920,7 @@ class personnel_management extends class_base
 				$objs = $o->get_residents(array(
 					"parent" => $this->persons_fld,
 					"personnel_management" => $arr["obj_inst"]->id(),
+					"by_jobwish" => 1,
 				));
 				foreach($objs->arr() as $obj)
 				{
@@ -1196,11 +1144,13 @@ class personnel_management extends class_base
 					OBJ_COMP_GREATER_OR_EQ,
 					$r["cv_paywish"]
 				);
+				/*
 				// The lower limit might not be set.
 				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay2"] = new obj_predicate_compare(
 					OBJ_COMP_GREATER_OR_EQ,
 					$r["cv_paywish"]
 				);
+				*/
 			}
 			if($r["cv_paywish2"])
 			{
@@ -1283,11 +1233,11 @@ class personnel_management extends class_base
 					"site_id" => array(),
 					"lang_id" => array(),
 				);
-
-				if(is_oid($r["cv_exp_lvl"][$id]))
+				if($r["cv_exp_lvl"][$id][0] == 0)
 				{
-					$skill_ol_prms["CL_CRM_SKILL_LEVEL.RELTYPE_LEVEL"] = $r["cv_exp_lvl"][$id];
+					unset($r["cv_exp_lvl"][$id][0]);
 				}
+				$skill_ol_prms["CL_CRM_SKILL_LEVEL.RELTYPE_LEVEL"] = $r["cv_exp_lvl"][$id];
 
 				$skill_ol = new object_list($skill_ol_prms);
 				if(count($skill_ol->ids()) == 0)
@@ -1332,10 +1282,10 @@ class personnel_management extends class_base
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$r["cv_company"]."%",
-					//"CL_CRM_PERSON.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_company"]."%",
+					"CL_CRM_PERSON.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_company"]."%",
 					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_company"]."%",
 					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_company"]."%",
-					//"CL_CRM_PERSON.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_company"]."%",
+					"CL_CRM_PERSON.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_company"]."%",
 					// Dunno if keepin' the company's name in the 'name' field of additional education object is the best idea...
 					"CL_CRM_PERSON.RELTYPE_ADD_EDUCATION.name" => "%".$r["cv_company"]."%",
 				),
@@ -1356,7 +1306,6 @@ class personnel_management extends class_base
 		{
 			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
 		}
-
 		$odl = new object_data_list(
 			$odl_prms,
 			array(
@@ -1713,7 +1662,7 @@ class personnel_management extends class_base
 		));
 		$tb->add_menu_item(array(
 			"parent" => "add",
-			"text" => t("Kategooria"),
+			"text" => t("Kaust"),
 			"link" => html::get_new_url(CL_MENU, $pt, array("return_url" => get_ru())),
 		));
 		$tb->add_button(array(
@@ -2089,24 +2038,32 @@ class personnel_management extends class_base
 				if($obj->prop("end") > $r["os_dl_to_time"])
 					continue;
 			}
-			if(!$prof && $this->can("view", $obj->prop("profession")))
+			if($this->can("view", $obj->prop("profession")))
 			{
 				$pr = obj($obj->prop("profession"));
-				$prof = $pr->name();
+				$prof = html::obj_change_url($pr);
 			}
 			if($this->can("view", $obj->prop("company")))
 			{
 				$org = obj($obj->prop("company"));
-				$org = $org->name();
+				$org = html::obj_change_url($org);
 			}
-			if(!$loc && $this->can("view", $obj->prop("location")))
+			// Location
+			$loc = $obj->prop("loc_area.name");
+			if(strlen($loc) > 0)
 			{
-				$loc = obj($obj->prop("location"));
-				$loc = $loc->name();
+				$loc .= ", ";
 			}
+			$loc .= $obj->prop("loc_county.name");
+			if(strlen($loc) > 0)
+			{
+				$loc .= ", ";
+			}
+			$loc .= $obj->prop("loc_city.name"); 
+
 			$end = $obj->prop("end") ? get_lc_date($obj->prop("end")) : t("M&auml;&auml;ramata");
 			$t->define_data(array(
-				"name" => $obj->name(),
+				"name" => html::obj_change_url($obj),
 				"profession" => $prof,
 				"org" => $org,
 				"location" => $loc,
@@ -2165,12 +2122,26 @@ class personnel_management extends class_base
         	{
         		$end = t("m&auml;&auml;ramata");
         	}
+			
+			// Location
+			$loc = $obj->prop("loc_area.name");
+			if(strlen($loc) > 0 && strlen($obj->prop("loc_county.name")) > 0)
+			{
+				$loc .= ", ";
+			}
+			$loc .= $obj->prop("loc_county.name");
+			if(strlen($loc) > 0 && strlen($obj->prop("loc_city.name")) > 0)
+			{
+				$loc .= ", ";
+			}
+			$loc .= $obj->prop("loc_city.name");
+
 			$t->define_data(array(
 				"id" => $obj->id(),
 				"name" => html::get_change_url($obj->id(), array("return_url" => get_ru()), $obj->name()),
 				"profession" => $obj->prop("profession.name"),
 				"org" => html::get_change_url($obj->prop("company"), array("return_url" => get_ru()), $obj->prop("company.name")),
-				"location" => $obj->prop("location.name"),
+				"location" => $loc,
 				"end" => $end,
 				"created" => $obj->created(),
 				"status" => html::hidden(array(
@@ -2208,10 +2179,6 @@ class personnel_management extends class_base
 
 			case "lang_tbl":
 				$arr["obj_inst"]->set_meta("lang_tbl", $arr["request"]["lang_tbl"]);
-				break;
-
-			case "skills_tbl":
-				$arr["obj_inst"]->set_meta("udef_skills", $arr["request"]["udef_skills"]);
 				break;
 
 			case "sysdefault_pm":
