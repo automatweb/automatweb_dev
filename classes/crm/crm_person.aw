@@ -6784,16 +6784,16 @@ class crm_person extends class_base
 				"proj" => html::obj_change_url($task->prop("project")),
 				"task" => html::obj_change_url($task),
 				"content" => $bi->_split_long_words($o->prop("content")),
-				"length" => number_format($o->prop("time_real"), 2, ',', ''),
+				"length" => number_format($o->prop("time_real"), 3, ',', ''),
 				//"length_cust" => number_format($o->prop("time_to_cust"), 2, ',', ''),
 				"length_cust" => (!is_oid($bn))?html::textbox(array(
 					"name" => "rows[".$o->id()."][time_to_cust]",
-					"value" => number_format($o->prop("time_to_cust"), 2, ',', ''),
+					"value" => number_format($o->prop("time_to_cust"), 3, ',', ''),
 					"size" => 4,
 				)).html::hidden(array(
 					"name" => "rows[".$o->id()."][time_to_cust_real]",
-					"value" => number_format($o->prop("time_to_cust"), 2, ',', ''),
-				)):number_format($o->prop("time_to_cust"), 2, ',', ''),
+					"value" => number_format($o->prop("time_to_cust"), 3, ',', ''),
+				)):number_format($o->prop("time_to_cust"), 3, ',', ''),
 
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
@@ -6811,9 +6811,9 @@ class crm_person extends class_base
 
 		$t->define_data(array(
 			"content" => t("<b>Summa</b>"),
-			"length" => number_format($l_sum, 2, ',', ''),
+			"length" => number_format($l_sum, 3, ',', ''),
 			"sum" => number_format($s_sum, 2, ',', ''),
-			"length_cust" => number_format($l_cus_s, 2, ',', ''),
+			"length_cust" => number_format($l_cus_s, 3, ',', ''),
 		));
 		$arr["prop"]["value"] = $t->draw();
 	}

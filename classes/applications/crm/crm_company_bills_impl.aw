@@ -497,7 +497,7 @@ class crm_company_bills_impl extends class_base
 					$t->define_data(array(
 						"oid" => $row_id,
 						"name" => $ro->prop("content"),
-						"hrs" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")), 2),
+						"hrs" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")), 3),
 						"hr_price" => number_format($o->prop("hr_price"),2),
 						"sum" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")) * $o->prop("hr_price"),2),
 						"set_date" => $ro->prop("to_bill_date"),
@@ -510,7 +510,7 @@ class crm_company_bills_impl extends class_base
 				$t->define_data(array(
 					"name" => html::obj_change_url($o),
 					"oid" => $o->id(),
-					"hrs" => number_format($hr2task[$o->id()], 2),
+					"hrs" => number_format($hr2task[$o->id()], 3),
 					"hr_price" => number_format($o->prop("hr_price"),2),
 					"sum" => number_format($sum2task[$o->id()],2)
 				));

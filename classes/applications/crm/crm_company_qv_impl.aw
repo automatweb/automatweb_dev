@@ -91,7 +91,7 @@ class crm_company_qv_impl extends class_base
 				"state" => "%",
 				"limit" => 5
 			));
-			$pd = t("<b>Projektid (5 värskemat)</b>");
+			$pd = t("<b>Projektid (5 v&auml;rskemat)</b>");
 		}
 		$pi = get_instance(CL_PROJECT);
 		$t_i = get_instance(CL_TASK);
@@ -132,7 +132,7 @@ class crm_company_qv_impl extends class_base
 				"date" => date("d.m.Y", $o->prop("start")).($o->prop("end") > 100 ? " - ".date("d.m.Y", $o->prop("end")) : ""),
 				"name" => html::obj_change_url($o),
 				"parts" => join(", ",array_unique($parts)),
-				"hrs" => number_format($hrs, 2, ',', ''),
+				"hrs" => number_format($hrs, 3, ',', ''),
 				"sum" => number_format($sum, 2, ',', ''),
 				"grp_desc" => $pd,
 				"grp_num" => 1,
@@ -206,7 +206,7 @@ class crm_company_qv_impl extends class_base
 				"deadline" => "%",
 				"limit" => 10
 			));
-			$grpd = t("<b>Tegevused (10 värskemat)</b>");
+			$grpd = t("<b>Tegevused (10 v&auml;rskemat)</b>");
 		}
 		classload("core/icons");
 		foreach($ol->arr() as $o)
@@ -257,7 +257,7 @@ class crm_company_qv_impl extends class_base
 				"date" => date("d.m.Y", $o->prop("start1")).$end,
 				"name" => html::obj_change_url($o),
 				"parts" => join(", ", $parts),
-				"hrs" => number_format($hrs, 2, ',', ''),
+				"hrs" => number_format($hrs, 3, ',', ''),
 				"sum" => number_format($sum, 2, ',', ''),
 				"grp_desc" => $grpd,
 				"grp_num" => 2,
@@ -302,7 +302,7 @@ class crm_company_qv_impl extends class_base
 				"bill_no" => "%",
 				"limit" => 10
 			));
-			$bd = t("<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>");
+			$bd = t("<span style='font-size: 0px;'>y</span><b>Arved (10 v&auml;rskemat)</b>");
 		}
 		foreach($ol->arr() as $o)
 		{
@@ -323,7 +323,7 @@ class crm_company_qv_impl extends class_base
 				"date" => $o->prop("bill_date") > 100 ? date("d.m.Y", $o->prop("bill_date")) : "",
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), $o->name()),
 				"parts" => "",
-				"hrs" => number_format($hrs, 2, ',', ''),
+				"hrs" => number_format($hrs, 3, ',', ''),
 				"sum" => number_format($sum, 2, ',', ''),
 				"grp_desc" => $bd,
 				"grp_num" => 3,
@@ -450,8 +450,8 @@ class crm_company_qv_impl extends class_base
 			"contact_p" => $cp,
 			"bills_in_sum" => number_format($this->bills_sum, 2, ',', ''),
 			"done_sum" => number_format($this->sum, 2, ',', ''),
-			"hrs_on_bill" =>  number_format($this->hrs_on_bill, 2, ',', ''),
-			"total_work_hrs" =>  number_format($this->hrs_total, 2, ',', ''),
+			"hrs_on_bill" =>  number_format($this->hrs_on_bill, 3, ',', ''),
+			"total_work_hrs" =>  number_format($this->hrs_total, 3, ',', ''),
 			"timespan" => $ts
 		));
 		return $arr["prop"]["value"] = $this->parse();

@@ -2143,7 +2143,7 @@ class crm_bill extends class_base
 			{
 				$this->vars(array(
 					"unit" => $row["unit"],
-					"amt" => number_format($row["amt"],2), 
+					"amt" => number_format($row["amt"],3), 
 					"price" => number_format($row["price"], 2,".", " "),
 					"sum" => number_format($cur_sum, 2,"."),
 					"desc" => $row["name"],
@@ -2184,7 +2184,7 @@ class crm_bill extends class_base
 			}
 			$this->vars(array(
 				"unit" => $row["unit"],
-				"amt" => number_format($row["amt"],2),
+				"amt" => number_format($row["amt"],3),
 				"price" => number_format($cur_pr, 2,".", " "),
 				"sum" => number_format($cur_sum, 2, ".", " "),
 				"desc" => $row["name"],
@@ -2219,7 +2219,7 @@ class crm_bill extends class_base
 
 		if(!$arr["not_last_page"])
 		{
-			$this->vars(array("tot_amt" => number_format($tot_amt, 2,".", " ")));
+			$this->vars(array("tot_amt" => number_format($tot_amt, 3,".", " ")));
 			$total_ = $this->parse("TOTAL");
 		}
 		$page_no = $arr["page"] + 1;
@@ -2240,7 +2240,7 @@ class crm_bill extends class_base
 			"tax" => number_format($tax, 2,"." , " "),
 			"total" => number_format($sum, 2,".", " "),
 			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc),
-			"tot_amt" => number_format($tot_amt, 2,".", " "),
+			"tot_amt" => number_format($tot_amt, 3,".", " "),
 			"page_no" => $page_no,
 		));
 
@@ -2753,7 +2753,7 @@ class crm_bill extends class_base
 			}
 			$t->define_data(array(
 				"name" => html::obj_change_url($task),
-				"hrs" => number_format($hrs, 2), 
+				"hrs" => number_format($hrs, 3), 
 				"price" => number_format($price, 2,".", " "),
 				"oid" => $task->id()
 			));
