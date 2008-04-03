@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.239 2008/03/18 10:28:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.240 2008/04/03 14:24:01 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1806,7 +1806,7 @@ class room extends class_base
 		enter_function("get_calendar_tbl");
 		//kkui asi tuleb veebist
 		if(is_oid($arr["room"]) && $this->can("view" , $arr["room"]))
-		{	
+		{
 			$arr["obj_inst"] = obj($arr["room"]);
 			if($_GET["start"])
 			{
@@ -2048,7 +2048,7 @@ class room extends class_base
 							}
 							$val = 0;
 							$string = $settings->prop("available_time_string")?$settings->prop("available_time_string") :t("VABA");
-							$col[$x] = "#E1E1E1";
+							$col[$x] = $arr["obj_inst"]->get_color("available");
 							if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
 							{
 								//teeb selle kontrolli ka , et 2kki tyybid yltse teist ruumi tahavad juba... et siis l2heks sassi
@@ -2342,7 +2342,7 @@ class room extends class_base
 				}
 				else
 				{
-					$d[$x] = "<span>".t("Suletud")."</span>";
+					$d[$x] = "<span>".$settings->prop("closed__time_string")?$settings->prop("closed__time_string") :t("Suletud")."</span>";
 				}
 				//$ids[$x] = $arr["room"]."_".$start_step;
 				$ids[$x] = $room_id."_".$start_step;
@@ -2375,7 +2375,7 @@ class room extends class_base
 			$t->set_lower_titlebar_display(true);
 		}
 		
-		if(!$arr["web"])
+		if(!$arr["web"] && $settings->prop("show_workers_in_calander"))
 		{
 			$t->define_data($this->get_day_workers_row($arr["obj_inst"]));
 		}
@@ -2826,7 +2826,7 @@ class room extends class_base
 			{
 				$t->define_field(array(
 					"name" => "d".$i,
-					"caption" => substr(date("l" , $tm) , 0 , 2).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
+					"caption" => substr(ucwords(locale::get_lc_weekday(date("w",$tm))) , 0 , 1).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
 					"width" => $pct."%",
 					"chgbgcolor" => "col".$i,
 					"id" => "id".$i,

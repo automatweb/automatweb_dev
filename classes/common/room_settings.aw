@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.33 2008/03/13 13:26:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.34 2008/04/03 14:24:01 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -79,6 +79,9 @@
 	@property col_closed type=colorpicker 
 	@caption Kinnise aja v&auml;rvi
 
+	@property col_available type=colorpicker 
+	@caption Vaba aja v&auml;rvi
+
 	@property col_recent type=colorpicker 
 	@caption Hiljuti muudetud reserveeringud
 
@@ -94,7 +97,10 @@
 	@caption Puhveraja string
 
 	@property closed_time_string type=textbox 
-	@caption Kinnise aja string
+	@caption Pausi string
+
+	@property closed__time_string type=textbox 
+	@caption Suletud aja string
 
 	@property available_time_string type=textbox 
 	@caption Vaba aja string
@@ -122,6 +128,9 @@
 	
 	@property use_existing_person type=checkbox ch_value=1
 	@caption Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt
+
+	@property show_workers_in_calander type=checkbox ch_value=1
+	@caption N&auml;ita t&ouml;&ouml;tajaid kalendrivaates
 
 	@property bron_required_fields type=table store=no
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad

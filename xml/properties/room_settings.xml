@@ -218,6 +218,15 @@
             <caption>Kinnise aja v&amp;amp;auml;rvi</caption>
       </property>
       <property>
+            <name>col_available</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Vaba aja v&amp;amp;auml;rvi</caption>
+      </property>
+      <property>
             <name>col_recent</name>
             <table>objects</table>
             <group>colours</group>
@@ -251,7 +260,16 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kinnise aja string</caption>
+            <caption>Pausi string</caption>
+      </property>
+      <property>
+            <name>closed__time_string</name>
+            <table>objects</table>
+            <group>settings_gen</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Suletud aja string</caption>
       </property>
       <property>
             <name>available_time_string</name>
@@ -330,6 +348,16 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Samanimeliste isikute puhul v&amp;amp;otilde;etakse aluseks olemasolev isikuobjekt</caption>
+      </property>
+      <property>
+            <name>show_workers_in_calander</name>
+            <table>objects</table>
+            <group>settings_gen</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;amp;auml;ita t&amp;amp;ouml;&amp;amp;ouml;tajaid kalendrivaates</caption>
       </property>
       <property>
             <name>bron_required_fields</name>
