@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.28 2008/01/31 13:54:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.29 2008/04/03 11:20:46 sander Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -419,6 +419,15 @@ class auth_config extends class_base
 			{
 				$this->vars(array(
 					"SERVER_PICKER" => $this->parse("SERVER_PICKER")
+				));
+			}
+			if (aw_ini_get("users.id_login_url") != '')
+			{
+				$this->vars(array(
+					"id_login_url" => str_replace("http:", "https:", aw_ini_get("baseurl"))."/".aw_ini_get("users.id_login_url"),
+				));
+				$this->vars(array(
+					"ID_LOGIN" => $this->parse("ID_LOGIN")
 				));
 			}
 		}
