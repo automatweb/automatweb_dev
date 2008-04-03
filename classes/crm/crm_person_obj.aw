@@ -138,6 +138,50 @@ class crm_person_obj extends _int_object
 
 		return ($age < 0) ? false : $age;
 	}
+
+	function phones()
+	{
+		$ol = new object_list;
+		foreach(parent::connections_from(array("type" => "RELTYPE_PHONE")) as $cn)
+		{
+			$ol->add($cn->prop("to"));
+		}
+		$ids = array();
+		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+		{
+			$ids[] = $cn->prop("to");
+		}
+		if(count($ids) > 0)
+		{
+			foreach(connection::find(array("from" => $ids, "type" => "RELTYPE_PHONE")) as $cn)
+			{
+				$ol->add($cn["to"]);
+			}
+		}
+		return $ol;
+	}
+
+	function emails()
+	{
+		$ol = new object_list;
+		foreach(parent::connections_from(array("type" => "RELTYPE_EMAIL")) as $cn)
+		{
+			$ol->add($cn->prop("to"));
+		}
+		$ids = array();
+		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+		{
+			$ids[] = $cn->prop("to");
+		}
+		if(count($ids) > 0)
+		{
+			foreach(connection::find(array("from" => $ids, "type" => "RELTYPE_EMAIL")) as $cn)
+			{
+				$ol->add($cn["to"]);
+			}
+		}
+		return $ol;
+	}
 }
 
 ?>
