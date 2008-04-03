@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.50 2008/04/01 16:30:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.51 2008/04/03 12:43:37 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -405,13 +405,13 @@ class spa_bookings_overview extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
-		if ($selectah)
-		{
+//		if ($selectah)
+//		{
 			$t->define_chooser(array(
 				"name" => "sel",
 				"field" => "oid"
 			));
-		}
+//		}
 	}
 
 	function _get_report_table(&$arr)
@@ -962,7 +962,7 @@ class spa_bookings_overview extends class_base
 			foreach($room2booking as $room_id => $books)
 			{
 				foreach($books as $booking)
-				{	
+				{
 					foreach($booking->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 					{
 						$_po = $c->to();
@@ -1013,15 +1013,16 @@ class spa_bookings_overview extends class_base
 				));
 				foreach($bookings as $booking)
 				{
-					
-
-					$t->define_data(array(
-						"cal" => html::get_change_url($booking->prop("resource"), array("return_url" => get_ru(), "group" => "calendar"), icons::get_icon(obj($booking->prop("resource")))),
-						"room" => html::get_change_url($booking->prop("resource"), array("return_url" => get_ru(), "group" => "calendar"), $booking->prop("resource.name")),
-						"bron" => html::get_change_url($booking->id(), array("return_url" => get_ru()), date("d.m.Y", $booking->prop("start1"))." / ".date("H:i", $booking->prop("start1"))." - ".date("H:i", $booking->prop("end"))),
-						"oid" => $booking->prop("resource"),
-						"person" => $p_str
-					));
+					if($this->can("view" , $booking->prop("resource")))
+					{
+						$t->define_data(array(
+							"cal" => html::get_change_url($booking->prop("resource"), array("return_url" => get_ru(), "group" => "calendar"), icons::get_icon(obj($booking->prop("resource")))),
+							"room" => html::get_change_url($booking->prop("resource"), array("return_url" => get_ru(), "group" => "calendar"), $booking->prop("resource.name")),
+							"bron" => html::get_change_url($booking->id(), array("return_url" => get_ru()), date("d.m.Y", $booking->prop("start1"))." / ".date("H:i", $booking->prop("start1"))." - ".date("H:i", $booking->prop("end"))),
+							"oid" => $booking->id(),//prop("resource"),
+							"person" => $p_str
+						));
+					}
 				}
 			}
 			$t->sort_by(array(
@@ -1029,7 +1030,7 @@ class spa_bookings_overview extends class_base
 			));
 		}
 		else
-		{	
+		{
 			$this->_init_r_list($t, true);
 			foreach($ol->arr() as $o)
 			{
