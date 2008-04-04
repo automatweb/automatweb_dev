@@ -238,7 +238,14 @@ class file_manager extends aw_template
 		$file_inst = get_instance(CL_FILE);
 		$zip = new ZipArchive();
 
-		$zipfilename = $GLOBALS["sited"]."/files/".time()."files.zip";
+		if($GLOBALS["sited"])
+		{
+			$zipfilename = $GLOBALS["sited"]."/files/".time()."files.zip";
+		}
+		else
+		{
+			$zipfilename = $GLOBALS["site_dir"]."/files/".time()."files.zip";
+		}
 		if ($zip->open($zipfilename, ZIPARCHIVE::CREATE)!==TRUE) {
 			exit("cannot open <$zipfilename>\n");
 		}

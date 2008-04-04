@@ -28,10 +28,9 @@ class package_server_obj extends _int_object
 
 	function packages_list($params)
 	{
-		$server = $params['obj_inst'];
 		$filter = array(
 			'class_id' => CL_PACKAGE,
-			'parent' => $server->prop('packages_folder_aw')
+			'parent' => $this->prop('packages_folder_aw')
 		);
 
 		if (!empty($params['filter']['search_name']))

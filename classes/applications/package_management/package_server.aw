@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.3 2008/01/25 10:33:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.4 2008/04/04 11:50:46 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -58,6 +58,10 @@ class package_server extends class_base
 
 	function get_property($arr)
 	{
+		if(!is_object($this->model))
+		{
+			$this->model = $arr["obj_inst"];
+		}
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -123,6 +127,11 @@ class package_server extends class_base
 			'caption' => t('Kirjeldus')
 		));
 
+		$t->define_field(array(
+			'name' => 'dep',
+			'caption' => t('S&otilde;ltuvused'),
+		));
+
 		$filter = array(
 			'search_name' => $arr['request']['search_name'],
 			'search_version' => $arr['request']['search_version']
@@ -135,6 +144,19 @@ class package_server extends class_base
 
 		foreach ($packages as $oid => $obj)
 		{
+			$deps = $obj->get_dependencies();
+			$deps_arr = array();
+			foreach($deps->arr() as $d)
+			{
+				$deps_arr[] = html::href(array(
+					'caption' => $d->name()." ".$d->prop("version"),
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $d->id()
+					), CL_PACKAGE),
+				));
+			}
+
+
 			$t->define_data(array(
 				'select' => $oid,
 				'name' => html::href(array(
@@ -144,7 +166,8 @@ class package_server extends class_base
 					), CL_PACKAGE),
 				)),
 				'version' => $obj->prop('version'),
-				'description' => substr($obj->prop('description'), 0, 500)
+				'description' => substr($obj->prop('description'), 0, 500),
+				"dep" => join(", " , $deps_arr),
 			));
 		}
 
@@ -198,6 +221,60 @@ class package_server extends class_base
 	{
 		$this->model->remove_packages($arr['selected_ids']);
 		return $arr['post_ru'];
+	}
+
+	/** 
+		@attrib name=download_package_list nologin=1 is_public=1
+
+ 	**/
+	function download_package_list()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PACKAGE_SERVER,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$o = reset($ol->arr());
+		if(!is_object($o))
+		{
+			die(t("Pole sellist ajsa nagu pakihalduse serveri objekt!"));
+		}
+
+		$packages = $o->packages_list();
+		
+		$pa = array();
+
+		foreach($packages as $package)
+		{
+			$deps = $package->get_dependencies();
+			$files = $package->get_files();
+			$pa[] = array(
+				"id" => $package->id(),
+				"name" => $package->name(),
+				"version" => $package->prop("version"),
+				"description" => $package->prop("descriotion"),
+				"dependences" => $deps->ids(),
+				"files"	=> $files->names(),
+			);
+
+		}
+		arr($pa);
+		die();
+	}
+
+	/** 
+		@attrib name=download_package nologin=1 is_public=1 all_args=1
+
+ 	**/
+	function download_package($arr)
+	{
+		extract($arr);
+		$file_manager = get_instance("admin/file_manager");
+		$package = obj($pid);
+		$files = $package->get_files();
+		$arr = array();
+		$arr["sel"] = $files->ids();
+		$file_manager->compress_submit($arr);
 	}
 
 	function do_db_upgrade($table, $field, $query, $error)

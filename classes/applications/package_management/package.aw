@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.1 2008/01/25 10:33:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.2 2008/04/04 11:50:46 markop Exp $
 // package.aw - Pakk 
 /*
 
@@ -15,11 +15,20 @@
 	@property description type=textarea rows=10 cols=40 table=aw_packages field=description
 	@caption Kirjeldus
 
+@groupinfo dependencies caption="S&otilde;ltuvused" no_submit=1
+@default group=dependencies
+
+	@property dep_toolbar type=toolbar no_caption=1
+	@caption Seoste toolbar
+
 	@property dependencies type=table no_caption=1
 	@caption S&otilde;ltuvused
 
 @reltype DEPENDENCY value=1 clid=CL_PACKAGE
 @caption S&otilde;ltuvus
+
+@reltype FILE value=2 clid=CL_FILE
+@caption Fail
 
 */
 
@@ -44,6 +53,47 @@ class package extends class_base
 		return $retval;
 	}
 
+	function _get_dep_toolbar($arr)
+	{
+	
+		$t = &$arr['prop']['vcl_inst'];
+		
+		$t->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Uus pakk'),
+			'url' => $this->mk_my_orb('new', array(
+				'parent' => $arr['obj_inst']->parent(),
+				'return_url' => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 1,
+			), CL_PACKAGE),
+		));
+
+		$t->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta s&otilde;ltuvused'),
+			'action' => 'remove_dep_packages',
+			'confirm' => t('Oled kindel et soovid valitud s&otilde;ltuvused kustutada?')
+		));
+
+		return PROP_OK;
+	}
+
+	/**
+		@attrib name=remove_dep_packages
+	**/
+	function remove_dep_packages($arr)
+	{
+		$obj = obj($arr["id"]);
+		foreach($arr["sel"] as $dep)
+		{
+			$obj->disconnect(array("from" => $dep));
+		}
+		return $arr['post_ru'];
+	}
+
 	function _get_dependencies($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -64,7 +114,21 @@ class package extends class_base
 			'name' => 'description',
 			'caption' => t('Kirjeldus')
 		));
-
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+			"width" => "20px",
+		));
+		$dep_list = $arr["obj_inst"]->get_dependencies();
+		foreach($dep_list->arr() as $dep)
+		{
+			$t->define_data(array(
+				"name" => $dep -> name(),
+				"version" => $dep -> prop("version"),
+				"description" => $dep -> prop("description"),
+				"oid" => $dep->id(),
+			));
+		}
 		return PROP_OK;
 	}
 

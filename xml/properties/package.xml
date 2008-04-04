@@ -19,9 +19,19 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
+            <name>dep_toolbar</name>
+            <table>objects</table>
+            <group>dependencies</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>dep_toolbar</field>
+            <caption>Seoste toolbar</caption>
+      </property>
+      <property>
             <name>dependencies</name>
             <table>objects</table>
-            <group>general</group>
+            <group>dependencies</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -36,6 +46,12 @@
             <prop_cb>1</prop_cb>
             <maintainer>dragut</maintainer>
       </classinfo>
+      <groupinfo>
+            <dependencies>
+                  <caption>S&amp;amp;otilde;ltuvused</caption>
+                  <no_submit>1</no_submit>
+            </dependencies>
+      </groupinfo>
       <tableinfo>
             <aw_packages>
                   <index>oid</index>
@@ -49,6 +65,11 @@
                   <clid>CL_PACKAGE</clid>
                   <caption>S&amp;amp;otilde;ltuvus</caption>
             </DEPENDENCY>
+            <FILE>
+                  <value>2</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Fail</caption>
+            </FILE>
       </reltypes>
 </properties>
 
