@@ -442,9 +442,9 @@ class object_test2 extends UnitTestCase
 		$o->delete(true);
 	}
 
-	function test_createdby()
+	/*function test_createdby()
 	{
-		$uid = $this->db->db_fetch_field("SELECT uid FROM users LIMIT 0,1", "jrk");
+		$uid = $this->db->db_fetch_field("SELECT uid FROM users LIMIT 0,1", "uid");
 		aw_switch_user(array("uid"=>$uid));
 		$o = $this->_get_temp_o();
 		$id = $o->id();
@@ -455,7 +455,7 @@ class object_test2 extends UnitTestCase
 	function test_modifiedby()
 	{
 		$o = $this->_get_temp_o();
-		$uid = $this->db->db_fetch_field("SELECT uid FROM users LIMIT 0,1", "jrk");
+		$uid = $this->db->db_fetch_field("SELECT uid FROM users LIMIT 0,1", "uid");
 		aw_switch_user(array("uid"=>$uid));
 		$o->set_name(1);
 		aw_disable_acl();
@@ -464,7 +464,7 @@ class object_test2 extends UnitTestCase
 		$id = $o->id();
 		$this->assertEqual($uid, $this->db->db_fetch_field("SELECT modifiedby FROM objects WHERE oid= $id", "modifiedby"));
 		$o->delete(true);
-	}
+	}*/
 
 	function test_created()
 	{
@@ -805,29 +805,53 @@ class object_test2 extends UnitTestCase
 		aw_restore_acl();
 	}
 
-	function test_acl_set()
+	function test_acl()
 	{
-
-	}
-
-	function test_acl_get()
-	{
-
+		$o = $this->_get_temp_o();
+		$acl = array("can_view" => 1, "can_edit" => 1, "can_delete" => 1, "can_add" => 0, "can_admin" => 0, "can_subs" => 0);
+		$groupid = $this->db->db_fetch_field("SELECT oid FROM groups LIMIT 0,1", "oid");
+		$group = obj($groupid);
+		aw_disable_acl();
+		$o->acl_set($group, $acl);
+		$o->save();
+		$o2 = obj($o->id());
+		aw_restore_acl();
+		$set_data = array(
+			$group->id() => $acl,
+		);
+		$acldata = $o2->acl_get();
+		$this->assertEqual($set_data, $acldata);
+		$o->delete(true);
 	}
 
 	function test_acl_del()
 	{
-
+		$o = $this->_get_temp_o();
+		$acl = array("can_view" => 1, "can_edit" => 0, "can_delete" => 1);
+		$groupid = $this->db->db_fetch_field("SELECT oid FROM groups LIMIT 0,1", "oid");
+		$group = obj($groupid);
+		$o->acl_set($group, $acl);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+		$o->acl_del($groupid);
+		$this->assertEqual($o->acl_get(), array());
+		$o->delete(true);
 	}
 
-	function test_get_xml()
+	function test_xml()
 	{
-
-	}
-
-	function test_from_xml()
-	{
-
+		$o1 = $this->_get_temp_o();
+		$o1->set_name("foo");
+		aw_disable_acl();
+		$o1->save();
+		aw_restore_acl();
+		aw_global_set("charset", "iso-8859-1");
+		$xml = $o1->get_xml();
+		$o2 = $o1->from_xml($xml, $o1->id());
+		$this->assertEqual($o1->name(), trim($o2->name()));
+		$o1->delete(true);
+		$o2->delete(true);
 	}
 }
 ?>
