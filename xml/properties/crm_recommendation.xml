@@ -28,8 +28,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_JOBWISH</reltype>
             <store>connect</store>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>jobwish</field>
             <caption>Soovitatav t&amp;amp;ouml;&amp;amp;ouml;</caption>
       </property>
       <classinfo>

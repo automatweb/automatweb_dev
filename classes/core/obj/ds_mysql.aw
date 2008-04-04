@@ -424,6 +424,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$tables = array();
 		$tbl2prop = array();
 		$objtblprops = array();
+		$conn_prop_fetch = array();
 		foreach($properties as $prop => $data)
 		{
 			if ($data["store"] == "no")
@@ -434,6 +435,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($data["table"] == "")
 			{
 				$data["table"] = "objects";
+			}
+
+			if ($data["store"] == "connect")
+			{
+				if ($GLOBALS["cfg"]["site_id"] != 139)
+				{
+					// resolve reltype and do find_connections
+					$_co_reltype = $data["reltype"];
+					$_co_reltype = $GLOBALS["relinfo"][$class_id][$_co_reltype]["value"];
+					$conn_prop_fetch[$data["name"]] = $_co_reltype;
+				}
 			}
 
 			if ($data["table"] != "objects")
@@ -449,8 +461,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$objtblprops[] = $data;
 			}
 		}
-
-		$conn_prop_fetch = array();
 
 		$fields = array();
 		// do a query for each table
@@ -470,18 +480,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{
 						$fields[] = $table.".`".$prop["field"]."` AS `".$prop["field"]."`";
 						$_got_fields[$prop["field"]] = true;
-					}
-				}
-				else
-				if ($prop["store"] == "connect")
-				{
-					if ($GLOBALS["cfg"]["site_id"] != 139)
-					{
-						// resolve reltype and do find_connections
-						$_co_reltype = $prop["reltype"];
-						$_co_reltype = $GLOBALS["relinfo"][$class_id][$_co_reltype]["value"];
-
-						$conn_prop_fetch[$prop["name"]] = $_co_reltype;
 					}
 				}
 				else
@@ -1880,7 +1878,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$tmp = array();
 					foreach($val->get_sorter_list() as $sl_item)
 					{
-						$pd = $this->properties[$sl_item["prop"]];
+						if (isset($GLOBALS["object_loader"]->all_ot_flds[$sl_item["prop"]]))
+						{
+							$pd = array("table" => "objects", "field" => $sl_item["prop"]);
+						}
+						else
+						{
+							$pd = $this->properties[$sl_item["prop"]];
+						}
 						if ($pd["table"])	
 						{
 							$this->used_tables[$pd["table"]] = $pd["table"];

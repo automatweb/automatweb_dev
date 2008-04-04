@@ -13,7 +13,7 @@
 @property relation type=classificator reltype=RELTYPE_RELATION store=connect
 @caption Suhe soovitajaga
 
-@property jobwish type=relpicker reltype=RELTYPE_JOBWISH store=connect field=meta method=serialize
+@property jobwish type=relpicker reltype=RELTYPE_JOBWISH store=connect 
 @caption Soovitatav t&ouml;&ouml;
 
 @reltype JOBWISH value=1 clid=CL_PERSONNEL_MANAGEMENT_JOB_WANTED
