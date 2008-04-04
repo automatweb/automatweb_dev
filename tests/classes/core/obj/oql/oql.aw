@@ -295,14 +295,258 @@ class oql_test extends UnitTestCase
 
 	function test_execute_query_where_like()
 	{
+		$o1 = $this->_get_temp_o();
+		$o2 = $this->_get_temp_o();
+		$o3 = $this->_get_temp_o();
+		$o1->set_name("aaNAMEaa");
+		$o2->set_name("NAME");
+		$o3->set_name("NAMEaa");
+		$q = oql::compile_query("
+		SELECT 
+			name
+		FROM
+			CL_MENU
+		WHERE 
+			name LIKE '%s'
+		");
+		$v = oql::execute_query($q, array("NAME"));
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			$o = obj($k);
+			if(strpos("NAME", $o->name()) === false)
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
+		$this->assertTrue(array_key_exists($o1->id(), $v) && array_key_exists($o2->id(), $v) && array_key_exists($o3->id(), $v));
 	}
 	
 	function test_execute_query_where_calculating()
 	{
+		$o = $this->_get_temp_o();
+
+		$q = oql::compile_query("
+			SELECT
+				oid
+			FROM
+				CL_MENU
+			WHERE
+				oid * 69 = '%u'
+		");
+		$id = $o->id() * 69;
+		$v = oql::execute_query($q, array($id));
+		$this->assertTrue(count($v) == 1 && array_key_exists($o->id(), $v));
+	}
+
+	function test_execute_query_where_greater_than()
+	{
+	}
+
+	function test_execute_query_where_equal_to_or_greater_than()
+	{
+	}
+
+	function test_execute_query_where_less_than()
+	{
+	}
+
+	function test_execute_query_where_equal_to_or_less_than()
+	{
+	}
+
+	function test_execute_query_where_this_and_that()
+	{
+		$o1 = $this->_get_temp_o();
+		$o1->set_name("Ahvi P2rdik");
+		$o1->save();
+		$o2 = $this->_get_temp_o();
+		$o2->set_name("Ahvi P2rdik");
+		$o2->save();
+
+		$q = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU
+		WHERE
+			oid = '%u' OR name = '%s'
+		");
+		$v = oql::execute_query($q, array($o1->id(), "Ahvi P2rdik"));
+		$this->assertTrue(count($v) == 1 && array_key_exists($o1->id()));
 	}
 
 	function test_execute_query_where_this_or_that()
 	{
+		$o1 = $this->_get_temp_o();
+		$o2 = $this->_get_temp_o();
+
+		$q = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU
+		WHERE
+			oid = '%u' OR oid = '%u'
+		");
+		$v = oql::execute_query($q, array($o1->id(), $o2->id()));
+		$v0 = $v;
+		unset($v0[$o1->id()]);
+		unset($v0[$o2->id()]);
+		$this->assertTrue(count($v) == 2 && count($v0) == 0);
+	}
+
+	function text_execute_query_where_parent()
+	{
+		$o1 = $this->_get_temp_o();
+		$o2 = $this->_get_temp_o();
+		$o2->set_parent($o1->id());
+		$o2->save();
+
+		$q = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU
+		WHERE
+			parent = '%u'
+		");
+		$v = oql::execute_query($q, array($o1->id()));
+		// Query works correctly if it returns only what I asked for.
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			$o = obj($k);
+			if($o->parent() != $o1->id())
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function text_execute_query_where_oid()
+	{
+		$row = $this->db->db_fetch_row("SELECT oid FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
+		$q = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU
+		WHERE
+			oid = '%u'
+		");
+		$v = oql::execute_query($q, array($row["oid"]));
+		// Query works correctly if it returns only what I asked for.
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			if($k != $row["oid"])
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function text_execute_query_where_status()
+	{
+		$row = $this->db->db_fetch_row("SELECT status FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
+		$q = oql::compile_query("
+		SELECT
+			oid
+		FROM
+			CL_MENU
+		WHERE
+			status = '%s'
+		");
+		$v = oql::execute_query($q, array($row["status"]));
+		// Query works correctly if it returns only what I asked for.
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			$o = obj($k);
+			if($o->status() != $row["status"])
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function text_execute_query_where_brother_of()
+	{
+		$o1 = $this->_get_temp_o();
+		$o2 = obj($o1->create_brother());
+
+		$q = oql::compile_query("
+		SELECT
+			oid
+		FROM
+			CL_MENU
+		WHERE
+			brother_of = '%u'
+		");
+		$v = oql::execute_query($q, array($o1->id()));
+		// Query works correctly if it returns only what I asked for.
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			$o = obj($k);
+			if($o->brother_of() != $o1->id())
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function text_execute_query_where_class_id()
+	{
+	}
+
+	function text_execute_query_select_oid()
+	{
+		$row = $this->db->db_fetch_row("SELECT name, oid FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
+		$ol = new object_list(array(
+			"class_id" => CL_MENU,
+			"parent" => array(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"status" => array(),
+			"name" => $row["name"],
+		));
+		$rv = oql::compile_query("
+		SELECT
+			oid
+		FROM
+			CL_MENU
+		WHERE
+			name = '%s'
+		");
+		$v = oql::execute_query($rv, array($row["name"]));
+		$this->assertTrue($v[$row["oid"]]["oid"] == $row["oid"]);
+	}
+
+	function text_execute_query_select_status()
+	{
+		$row = $this->db->db_fetch_row("SELECT oid, status FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
+		$rv = oql::compile_query("
+		SELECT
+			status
+		FROM
+			CL_MENU
+		WHERE
+			oid = '%u'
+		");
+		$v = oql::execute_query($rv, array($row["oid"]));
+		$this->assertTrue($v[$row["oid"]]["status"] == $row["status"]);
 	}
 
 	function get_class_id($id)
