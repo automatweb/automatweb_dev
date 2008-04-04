@@ -343,18 +343,102 @@ class oql_test extends UnitTestCase
 
 	function test_execute_query_where_greater_than()
 	{
+		$row = $this->db->db_fetch_row("SELECT created FROM objects WHERE class_id = '".CL_MENU."' ORDER BY created DESC LIMIT 5, 1");
+		$q = oql::compile_query("
+		SELECT
+			oid
+		FROM
+			CL_MENU
+		WHERE
+			created > '%u'
+		");
+		$v = oql::execute_query($q, array($row["created"]));
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			$o = obj($k);
+			if($o->created <= $row["created"])
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
 	}
 
 	function test_execute_query_where_equal_to_or_greater_than()
 	{
+		$row = $this->db->db_fetch_row("SELECT created FROM objects WHERE class_id = '".CL_MENU."' ORDER BY created DESC LIMIT 5, 1");
+		$q = oql::compile_query("
+		SELECT
+			oid
+		FROM
+			CL_MENU
+		WHERE
+			created >= '%u'
+		");
+		$v = oql::execute_query($q, array($row["created"]));
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			$o = obj($k);
+			if($o->created < $row["created"])
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
 	}
 
 	function test_execute_query_where_less_than()
 	{
+		$row = $this->db->db_fetch_row("SELECT created FROM objects WHERE class_id = '".CL_MENU."' ORDER BY created ASC LIMIT 5, 1");
+		$q = oql::compile_query("
+		SELECT
+			oid
+		FROM
+			CL_MENU
+		WHERE
+			created < '%u'
+		");
+		$v = oql::execute_query($q, array($row["created"]));
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			$o = obj($k);
+			if($o->created >= $row["created"])
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
 	}
 
 	function test_execute_query_where_equal_to_or_less_than()
 	{
+		$row = $this->db->db_fetch_row("SELECT created FROM objects WHERE class_id = '".CL_MENU."' ORDER BY created ASC LIMIT 5, 1");
+		$q = oql::compile_query("
+		SELECT
+			oid
+		FROM
+			CL_MENU
+		WHERE
+			created <= '%u'
+		");
+		$v = oql::execute_query($q, array($row["created"]));
+		$ok = true;
+		foreach($v as $k => $d)
+		{
+			$o = obj($k);
+			if($o->created > $row["created"])
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
 	}
 
 	function test_execute_query_where_this_and_that()
