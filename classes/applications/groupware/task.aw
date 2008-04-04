@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.214 2008/03/26 15:38:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.215 2008/04/04 11:42:01 robert Exp $
 // task.aw - TODO item
 /*
 
@@ -788,12 +788,12 @@ class task extends class_base
 			tm = stops[stopKey];
 			// add a sec
 			tm[2]++;
-			if (tm[2] > 60)
+			if (tm[2] > 59)
 			{
 				tm[2] = 0;
 				tm[1]++;
 			}
-			if (tm[1] > 60)
+			if (tm[1] > 59)
 			{
 				tm[1] = 0;
 				tm[0]++;
@@ -3423,6 +3423,12 @@ class task extends class_base
 			if ($stos[$arr["ident"]]["state"] != STOPPER_RUNNING)
 			{
 				$new_stop["start"] = time();
+			}
+
+			if(!$arr["source_id"] && $oid = $stos[$arr["ident"]]["oid"])
+			{
+				$o = obj($oid);
+				$arr["name"] = $o->name();
 			}
 
 			if($this->can("view", $arr["source_id"]))
