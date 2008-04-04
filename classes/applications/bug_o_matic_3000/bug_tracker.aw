@@ -850,7 +850,9 @@ class bug_tracker extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_BUG,
 			"bug_status" => 3,
-   			"createdby" => $cur_u
+   			"createdby" => $cur_u,
+			"site_id" => array(),
+			"lang_id" => array(),
 		));
 		$this->get_table_from_ol($ol, $t, $arr);
 		
