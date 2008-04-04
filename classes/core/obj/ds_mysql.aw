@@ -1236,7 +1236,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->joins = array();
 
 		$this->has_data_table_filter = false;
-		list($fetch_sql, $fetch_props, $fetch_metafields, $has_sql_func) = $this->_get_search_fetch($to_fetch);
+		list($fetch_sql, $fetch_props, $fetch_metafields, $has_sql_func) = $this->_get_search_fetch($to_fetch, $params);
 
 		$where = $this->req_make_sql($params);
 
@@ -2656,7 +2656,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$str = str_replace("'", "\\'", str_replace("\\", "\\\\", $str));
 	}*/
 
-	function _get_search_fetch($to_fetch)
+	function _get_search_fetch($to_fetch, &$filter)
 	{
 		if (!is_array($to_fetch))
 		{
@@ -2734,6 +2734,20 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					else
 					{
 						$serialized_fields[$p[$pn]["table"].".`".$p[$pn]["field"]."`"][] = substr($pn, 5);
+					}
+				}
+				else
+				if ($p[$pn]["store"] == "connect")
+				{
+					// fetch value from aliases table
+					if (!isset($filter[$pn]))
+					{
+						$filter[$pn] = new obj_predicate_anything();
+						$ret[$pn] = " aliases_".$pn.".target AS $resn ";
+					}
+					else
+					{
+						$ret[$pn] = " aliases_".$clid."_".$GLOBALS["relinfo"][$clid][$p[$pn]["reltype"]]["value"].".target AS $resn ";
 					}
 				}
 				else
