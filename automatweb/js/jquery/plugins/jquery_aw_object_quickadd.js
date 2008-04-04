@@ -125,7 +125,6 @@
 								$("#"+d_quickadd_box.attr("id")).css("display", "none");
 								url = options["baseurl"]+"/automatweb/"+a_active_list[i_selected_index]["url_obj"];
 								url = url.replace("--p--", settings.parent)
-								alert(url);
 								document.location = url
 							}
 						}
