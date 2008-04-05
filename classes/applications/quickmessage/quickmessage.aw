@@ -53,7 +53,7 @@ class quickmessage extends class_base
 		$box = $arr["request"]["box"];
 
 		if (!is_oid($box))
-		{exit(1);
+		{
 			$status = PROP_ERROR;
 			$arr["prop"]["error"] = t("Specified messagebox id is invalid.");
 		}
@@ -68,7 +68,7 @@ class quickmessage extends class_base
 	function _set_to($arr)
 	{
 		$arr["obj_inst"]->set_prop("to", explode(",", $arr["request"]["to_display"]));
-		return PROP_OK;
+		return PROP_IGNORE;
 	}
 
 	function submit($arr)
@@ -106,7 +106,7 @@ class quickmessage extends class_base
 			{
 				$action = "new";
 				unset($args["id"]);
-				$propvalues["to_display"]["error"] = sprintf(t("Can't post to '%s'"), $arr["to_display"]);
+				$propvalues["to_display"]["error"] = sprintf(t("Can't post to '%s'. %s"), $arr["to_display"], $e->getMessage());
 				aw_session_set("cb_values", $propvalues);
 			}
 			else
