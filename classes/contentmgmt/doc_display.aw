@@ -773,6 +773,7 @@ class doc_display extends aw_template
 		$a_text = array();
 		
 		// read lines to array
+		$i=0;
 		while ( strlen(trim( $tmp)) > 0 )
 		{
 			if (preg_match  ( "/^(.*)\r\n/U" , $tmp, &$mt))
@@ -783,7 +784,12 @@ class doc_display extends aw_template
 			{
 				$tmp = preg_replace  ( "/^(.*)$/U"  , "" , $tmp );
 			}
+			else if (preg_match  ( "/^(.*)\n/U" , $tmp, &$mt))
+			{
+				$tmp = preg_replace  ( "/^(.*)\n/U"  , "" , $tmp );
+			}
 			$a_text[] = array ("text" => $mt[1]);
+			$i++;
 		}
 		
 		// get more info to $a_text:
