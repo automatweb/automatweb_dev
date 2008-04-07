@@ -2001,6 +2001,17 @@ class object
 		}
 		return $ref->set_prop($prop, $value);
 	}
+
+	function __isset($prop)
+	{
+		$ref = $GLOBALS["objects"][$this->oid];
+		return $ref->is_property($prop);
+	}
+
+	function __unset($prop)
+	{
+		$this->__set($prop, null);
+	}
 }
 
 function obj($param = NULL)
