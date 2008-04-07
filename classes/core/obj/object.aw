@@ -1983,12 +1983,23 @@ class object
 
 	function __get($prop)
 	{
-		return $GLOBALS["objects"][$this->oid]->prop($prop);
+		$ref = $GLOBALS["objects"][$this->oid];
+		if (method_exists($ref, $prop))
+		{
+			return $ref->$prop();
+		}
+		return $ref->prop($prop);
 	}
 
 	function __set($prop, $value)
 	{
-		return $GLOBALS["objects"][$this->oid]->set_prop($prop, $value);
+		$ref = $GLOBALS["objects"][$this->oid];
+		$meth = "set_".$prop;
+		if (method_exists($ref, $meth))
+		{
+			return $ref->$meth($value);
+		}
+		return $ref->set_prop($prop, $value);
 	}
 }
 
