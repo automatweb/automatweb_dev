@@ -859,7 +859,7 @@
                   <num_1>field</num_1>
                   <num_2>time</num_2>
                   <num_3>time_text</num_3>
-                  <num_4>lenght_hrs</num_4>
+                  <num_4>length_hrs</num_4>
                   <num_5>length</num_5>
             </props>
             <table_fields>
@@ -867,7 +867,7 @@
                   <num_1>field</num_1>
                   <num_2>time</num_2>
                   <num_3>time_text</num_3>
-                  <num_4>lenght_hrs</num_4>
+                  <num_4>length_hrs</num_4>
                   <num_5>length</num_5>
             </table_fields>
             <field>add_edu_edit</field>
@@ -955,7 +955,7 @@
             <group>addinfo_new</group>
             <type>select</type>
             <multiple>1</multiple>
-            <field>drivers_license</field>
+            <field>drivers_license_2</field>
             <caption>Autojuhiload</caption>
       </property>
       <property>
@@ -1992,6 +1992,11 @@
                   <clid>CL_COMMENT</clid>
                   <caption>Kommentaar</caption>
             </COMMENT>
+            <RECOMMENDATION>
+                  <value>87</value>
+                  <clid>CL_CRM_RECOMMENDATION</clid>
+                  <caption>Soovitus</caption>
+            </RECOMMENDATION>
       </reltypes>
       <layout>
             <co_bottom_seller>
