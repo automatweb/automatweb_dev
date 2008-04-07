@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.20 2008/03/31 06:57:41 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.21 2008/04/07 08:00:33 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -413,6 +413,27 @@ class docgen_viewer extends class_base
 			$this->read_template("class_info.tpl");
 		}
 
+		$ex_list = array();
+		foreach($this->_get_exception_list() as $row)
+		{
+			$ex_list[$row["class_name"]] = str_replace("/classes", "", $row["file"]);
+		}
+		uksort($ex_list, create_function('$a,$b', 'return strlen($b) - strlen($a);'));
+
+		$if_meth_list = $this->_get_if_methods_for_class($data);
+
+		$usage_class = $data["name"];
+		// if this is an object override class, then the class you use things from is object
+		$clss = aw_ini_get("classes");
+		foreach($clss as $cldata)
+		{
+			if (basename($cldata["object_override"]) == $usage_class)
+			{
+				$usage_class = "object";
+				break;
+			}
+		}
+
 		$f = array();
 		$api_count = 0;
 		$orb_count = 0;
@@ -468,11 +489,30 @@ class docgen_viewer extends class_base
 			{
 				$example_links .= "<a href=\"".$url."\">$match</a><br />";
 			}
+		
+	
+			$errs = (empty($f_data['doc_comment']['errors'])) ? t('none') : nl2br($f_data['doc_comment']['errors']);
+			
+			foreach($ex_list as $ex_class => $ex_file)
+			{
+				if (strpos($errs, $ex_class) !== false)
+				{
+					$errs = preg_replace(
+						"/(\s)$ex_class(\s)/", 
+						"\\1".html::href(array(
+							"caption" => $ex_class,
+							"url" => $this->mk_my_orb("class_info", array("file" => $ex_file, "disp" => $ex_class)),
+						))."\\2",
+						$errs
+					);
+				}
+			}
 			$this->vars(array(
 				"proto" => "function $func()",
 				"name" => $func,
 				"view_func" => aw_global_get("REQUEST_URI")."#fn.$func",
 				"start_line" => $f_data["start_line"],
+				"start_line_lxr" => sprintf("%03d", $f_data["start_line"]),
 				"end_line" => $f_data["end_line"],
 				"returns_ref" => ($f_data["returns_ref"] ? "X" : "&nbsp;"),
 				"ARG" => $arg,
@@ -480,12 +520,13 @@ class docgen_viewer extends class_base
 				'ATTRIB' => $attribs,
 				'PARAM' => $params,
 				'returns' => (empty($f_data['doc_comment']['returns'])) ? t('nothing') : nl2br($f_data['doc_comment']['returns']),
-				'errors' => (empty($f_data['doc_comment']['errors'])) ? t('none') : nl2br($f_data['doc_comment']['errors']),
+				'errors' => $errs,
 				'comment' => nl2br($f_data['doc_comment']['comment']),
 				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n\t\t".$f_data['doc_comment']['examples']."\n?>", true).(strlen($example_links)?"<br>".$example_links:""),
 				"view_source" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
-				"view_usage" => $this->mk_my_orb("view_usage", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
-				"doc" => $this->show_doc(array("file" => $doc_file))
+				"view_usage" => $this->mk_my_orb("doc_search_form", array("search" => $usage_class."::".$func, "from" => array("docgen_search_use_func"), "no_reforb" => 1), "docgen_search"),
+				"doc" => $this->show_doc(array("file" => $doc_file)),
+				"file" => $cur_file,
 			));
 			if ($f_data["doc_comment"]["attribs"]["api"] == 1)
 			{
@@ -507,6 +548,18 @@ class docgen_viewer extends class_base
 				$f["PRIVATE"] .= $this->parse("PRIVATE_FUNCTION");
 			}
 			else
+			if (isset($if_meth_list[$func]))
+			{
+				$d = $if_meth_list[$func];
+				$clf = class_index::get_file_by_name(basename($d["class"]));
+				$clf = str_replace(aw_ini_get("classdir"), "", $clf);
+				$if_name = html::href(array(
+					"url" => $this->mk_my_orb("class_info", array("file" => $clf, "disp" => $d["class"])),
+					"caption" => $d["class"]
+				));
+				$f_if[$if_name] .= $this->parse("IF_FUNCTION");
+			}
+			else
 			{
 				$f["OTHER"] .= $this->parse("OTHER_FUNCTION");
 			}
@@ -524,6 +577,19 @@ class docgen_viewer extends class_base
 				));
 			}
 		}
+		$hif = "";
+		foreach($f_if as $if_name => $if_str)
+		{
+			if ($if_str != "")
+			{
+				$this->vars(array(
+					"IF_FUNCTION" => $if_str,
+					"if_name" => $if_name
+				));
+				$hif .= $this->parse("HAS_IF");
+			}
+		}
+		$this->vars(array("HAS_IF" => $hif));
 
 		if ($data["extends"] != "")
 		{
@@ -565,10 +631,24 @@ class docgen_viewer extends class_base
 			"orb_func_count" => $orb_count,
 			"type_name" => $data["type"],
 			"cvsweb_url" => "http://dev.struktuur.ee/cgi-bin/viewcvs.cgi/automatweb_dev/classes".$cur_file,
-			"class_comment" => nl2br($data["class_comment"])
+			"class_comment" => nl2br($data["class_comment"]),
+			"file_url" => $this->mk_my_orb("class_info", array("file" => $cur_file,"api_only" => $_GET["api_only"])),
 		));
 
 		return $this->finish_with_style($this->parse());
+	}
+
+	private function _get_if_methods_for_class($data)
+	{
+		// get all methods for all interfaces class implements
+		$awa = new aw_array($data["implements"]);
+		$this->db_query("SELECT * FROM aw_da_funcs WHERE class IN (".$awa->to_sql().")");
+		$rv = array();
+		while ($row = $this->db_next())
+		{
+			$rv[$row["func"]] = array("class" => str_replace("/classes", "", $row["class"]), "file" => $row["file"]);
+		}
+		return $rv;
 	}
 
 	function _display_implements($impl_arr)
@@ -756,11 +836,11 @@ class docgen_viewer extends class_base
 			{
 				continue;
 			}
-				$op .= $this->display_class($class_data, $file, array(
-					"api_only" => $api_only,
-					"defines" => $data["defines"],
-					"disp" => $arr["disp"]
-				));
+			$op .= $this->display_class($class_data, $file, array(
+				"api_only" => $api_only,
+				"defines" => $data["defines"],
+				"disp" => $arr["disp"]
+			));
 		}
 		return $this->finish_with_style($op);
 	}
@@ -1395,8 +1475,7 @@ class docgen_viewer extends class_base
 
 		$this->ic = get_instance("core/icons");
 		// gather data about things in files
-		$this->db_query("SELECT * from aw_da_classes WHERE class_type = 'exception'");
-		while ($row = $this->db_next())
+		foreach($this->_get_exception_list() as $row)
 		{
 			$tv->add_item(0, array(
 				"name" => $row["class_name"],
@@ -1414,6 +1493,17 @@ class docgen_viewer extends class_base
 		));
 
 		return $this->finish_with_style($this->parse());
+	}
+
+	private function _get_exception_list()
+	{
+		$this->db_query("SELECT * from aw_da_classes WHERE class_type = 'exception'");
+		$rv = array();
+		while ($row = $this->db_next())
+		{
+			$rv[] = $row;
+		}
+		return $rv;
 	}
 
 	/**

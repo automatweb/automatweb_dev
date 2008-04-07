@@ -53,11 +53,11 @@ table.class_info th {
 		<table border="0" width="100%">
 			<tr>
 				<td width="50%">
-					{VAR:type_name} <b>{VAR:name}</b> in file <b>{VAR:file}</b><br>
+					{VAR:type_name} <b>{VAR:name}</b> in file <b><a href='{VAR:file_url}'>{VAR:file}</a></b><br>
 					Maintainer: {VAR:maintainer}<br>
 					CVS Version: <a href='{VAR:cvsweb_url}'>{VAR:cvs_version}</a><br>
 					Methods: {VAR:func_count} total / {VAR:api_func_count} API / {VAR:orb_func_count} ORB<br>
-					View source: <a href="{VAR:view_class}">{VAR:name}</a>
+					View source: <a href="{VAR:view_class}">docgen</a> / <a href="http://dev.struktuur.ee/lxr/source/classes/{VAR:file}">LXR</a>
 				</td>
 				<td valign="top" align="left" width="50%">
 					{VAR:class_comment}
@@ -129,6 +129,15 @@ table.class_info th {
 		<!-- END SUB: ORB_FUNCTION -->
 		<br>
 		<!-- END SUB: HAS_ORB -->
+
+		<!-- SUB: HAS_IF -->
+		<B>methods from interface {VAR:if_name}:</b><br>
+		<!-- SUB: IF_FUNCTION -->
+		<a href='{VAR:view_func}'>{VAR:name}</a><br>
+		<i>{VAR:short_comment}</i>
+		<!-- END SUB: IF_FUNCTION -->
+		<br>
+		<!-- END SUB: HAS_IF -->
 
 		<!-- SUB: HAS_CB -->
 		<b>class_base methods:</b><br>
@@ -257,7 +266,7 @@ table.class_info th {
 	<td class="text" colspan="6">
 		<table border="0" width="100%">
 			<tr>
-				<td class="text"><a name='fn.{VAR:name}'></a><b>{VAR:proto}</b> - <a href='{VAR:view_usage}'>View usage</a> - <a href='{VAR:view_source}'>View source</a></td>
+				<td class="text"><a name='fn.{VAR:name}'></a><b>{VAR:proto}</b> - <a href='{VAR:view_usage}'>View usage</a> - <a href='{VAR:view_source}'>View source</a> / <a href="http://dev.struktuur.ee/lxr/source/classes{VAR:file}#{VAR:start_line_lxr}">LXR</a></td>
 			</tr>
 			<tr>
 				<td class="text">

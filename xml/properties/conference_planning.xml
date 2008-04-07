@@ -267,7 +267,6 @@
             <store>no</store>
             <field>city_mails</field>
       </property>
-
       <property>
             <name>usr_send_mail</name>
             <table>objects</table>

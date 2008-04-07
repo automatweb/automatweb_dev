@@ -522,20 +522,6 @@
 				</arguments>
 			</function>
 		</action>
-		
-		<action name="remove_from_category" all_args="1">
-			<function name="remove_from_category">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="remove_cust_relations" all_args="1">
-			<function name="remove_cust_relations">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
+
 	</class>
 </orb>

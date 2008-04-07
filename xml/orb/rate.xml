@@ -8,6 +8,7 @@
 					<optional name="rate_id" type="int" />
 					<optional name="return_url" />
 					<required name="rate" />
+					<optional name="overwrite_previous" type="bool" />
 				</arguments>
 			</function>
 		</action>

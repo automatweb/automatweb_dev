@@ -275,7 +275,6 @@ define("LC_FORM_DREATE_TABLE","CREATE TABLE form_");*/
 //form_actions.aw
 define("LC_FORM_ACTIONS_FORM_ACTIONS","Form actions");
 define("LC_FORM_ACTIONS_ADD_ACTIONS","'>Form actions</a> / Add action");
-define("LC_FORM_ACTIONS_CHANGED_ACTION","Changed forms $this->name action $name");
 define("LC_FORM_ACTIONS_ADDED_FORM_ACTIONS","Added to form $id action $name");
 define("LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION","'>Form actions</a> / Change action");
 
@@ -407,7 +406,7 @@ define("LC_LISTS_ADD_GATEGORY","Added catagory %s");
 //menuedit.aw
 define("LC_MENUEDIT_ADDED_HOMECAT_FOLDER","Added homecatalogue folder %s");
 define("LC_MENUEDIT_LOOKED_SITE","Looked site %s");
-define("LC_MENUEDIT_TRIED_ACCESS","tried access with object  id '%s'. Kräkkimiskatse?");
+define("LC_MENUEDIT_TRIED_ACCESS","tried access with object  id '%s'. Kr2kkimiskatse?");
 define("LC_MENUEDIT_TRIED_ACCESS2","tried access with not available object id '%s'. Forwarded to frontpage");
 define("LC_MENUEDIT_ADD","Add");
 define("LC_MENUEDIT_CLIENT","Client");

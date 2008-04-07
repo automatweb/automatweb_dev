@@ -8,15 +8,5 @@
 			</function>
 		</action>
 
-		<action name="view_usage">
-			<function name="view_usage">
-				<arguments>
-					<required name="file" />
-					<required name="v_class" />
-					<required name="func" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

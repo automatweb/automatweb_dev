@@ -46,6 +46,15 @@
             <richtext>1</richtext>
             <caption>Kaaskiri tekstina</caption>
       </property>
+      <property>
+            <name>addinfo</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <type>textarea</type>
+            <method>serialize</method>
+            <caption>Lisainfo</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_CANDIDATE</syslog_type>
             <relationmgr>yes</relationmgr>

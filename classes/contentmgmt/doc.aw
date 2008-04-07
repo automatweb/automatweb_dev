@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.4 2008/04/01 10:56:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.5 2008/04/07 08:00:36 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -380,7 +380,7 @@ class doc extends class_base
 			"tpldir" => "automatweb/documents",
 		));
 		$this->trans_props = array(
-			"title","lead","content","user7"
+			"alias", "title","lead","content","user7"
 		);
 	}
 

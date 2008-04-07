@@ -29,37 +29,5 @@
 			</function>
 		</action>
 
-		<action name="pictures_view" nologin="1">
-			<function name="pictures_view">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="print" nologin="1">
-			<function name="print_view">
-				<arguments>
-					<required name="id" type="int" />
-					<required name="contact_type" />
-					<optional name="show_pictures" />
-					<optional name="view_type" />
-					<optional name="return_url" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="save_map_data" nologin="1">
-			<function name="save_map_data">
-				<arguments>
-					<required name="id" type="int" />
-					<optional name="mapUrl" />
-					<optional name="mapPoint" />
-					<optional name="mapArea" />
-					<optional name="mapId" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

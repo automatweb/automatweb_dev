@@ -518,7 +518,7 @@ class admin_if extends class_base
 		$this->period = $tmp;
 	}
 
-	private function setup_rf_table(&$t)
+	private function setup_rf_table(&$t, $row_count, $per_page)
 	{
 		$t->define_field(array(
 			"name" => "icon",
@@ -604,124 +604,9 @@ class admin_if extends class_base
 			"chgbgcolor" => "cutcopied",
 			"field" => "oid"
 		));
-	}
-
-	function _get_o_tbl($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->setup_rf_table($t);
-
-		aw_global_set("date","");
-
-		$lang_id = aw_global_get("lang_id");
-		$site_id = $this->cfg["site_id"];
-		$parent = $arr["request"]["parent"];
-		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
-		if (!$this->can("view", $parent))
-		{
-			return;
-		}
-		$menu_obj = new object($parent);
-
-		if (!isset($period))
-		{
-			$period = null;
-		}
-
-		if ($menu_obj->is_brother())
-		{
-			$menu_obj = $menu_obj->get_original();
-			$parent = $menu_obj->id();
-		}
-
-		$sel_objs = $this->get_cutcopied_objects();
-
-		$la = get_instance("languages");
-		$lar = $la->get_list();
-
-		$ps = "";
-
-		$current_period = aw_global_get("current_period");
-
-		if (!$menu_obj->prop("all_pers"))
-		{
-			if (!empty($period))
-			{
-				$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_MENU." AND objects.periodic = 1)) ";
-			}
-			// if no period is set in the url, BUT the menu is periodic, then only show objects from the current period
-			// this fucks shit up. basically, a periodic menu can have non-periodic submenus
-			// in that case there really is no way of seeing them 
-			else
-			{
-				$ps = " AND (period = 0 OR period IS NULL OR class_id IN (".CL_USER."))";
-			};
-		}
-
-		// do not show relation objects in the list. hm, I wonder whether
-		// I'll burn in hell for this --duke
-		$cls = " AND objects.class_id != " . CL_RELATION;
-
-		// would be nice if we would only query the fields we actually need, otherwise
-		// we just spend a lot of memory on nothing when handling long object lists.
-		// BUT doing this right now would break the custom object list thingie ... -- duke
-
-		// by the way, mk_my_orb is pretty expensive and all those calls to it
-		// here take up to 10% of the time used to create the page -- duke
-
-		$sby = $sby2 = "";
-		if (!empty($_GET["sortby"]))
-		{
-			if ($_GET["sortby"] == "hidden_jrk")
-			{
-				$sby = " ORDER BY jrk ".$_GET["sort_order"];
-				$sby2 = " ORDER BY c,jrk ".$_GET["sort_order"];
-			}
-			else
-			{
-				$sby = " ORDER BY ".$_GET["sortby"]." ".$_GET["sort_order"];
-				$sby2 = " ORDER BY c,".$_GET["sortby"]." ".$_GET["sort_order"];
-			}
-			$sortby = $_GET["sortby"];
-			$GLOBALS["sort_order"] = $_GET["sort_order"];
-		}
-
-		$per_page = 100;
-
-		$ft_page = isset($GLOBALS["ft_page"]) ? $GLOBALS["ft_page"] : null;
-		$lim = "LIMIT ".($ft_page * $per_page).",".$per_page;
-
-		$where = "objects.parent = '$parent' AND
-				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP.",".CL_MSGBOARD_TOPIC.",".CL_LANGUAGE."))
-				 AND
-				status != 0
-				$cls $ps ";
-
-		$query = "FROM objects
-				LEFT JOIN menu m ON m.id = objects.oid
-			WHERE
-				$where ";
-
-/*		$filter = array(
-			"parent" => $parent,
-			new object_list_filter(array(
-				"logic" => "OR",
-				"non_filter_classes" => CL_MENU,
-				"conditions" => array(
-					"lang_id" => $lang_id,
-					"class_id" => array(CL_PERIOD, CL_USER, CL_GROUP, CL_MSGBOARD_TOPIC),
-					"type" => MN_CLIENT
-				)
-			))
-		);
-		$GLOBALS["DUKE"] = 1;
-		$ob = new object_list($filter);
-		die();*/
 
 		// make pageselector.
-		// total count
-		$q = "SELECT count(*) as cnt $query $sby";
-		$t->d_row_cnt = $this->db_fetch_field($q, "cnt");
+		$t->d_row_cnt = $row_count;
 		if ($t->d_row_cnt > $per_page)
 		{
 			$t->define_pageselector(array(
@@ -733,38 +618,38 @@ class admin_if extends class_base
 				"records_per_page" => $per_page
 			));
 		}
+	}
 
-		$q = "SELECT objects.* , IF(class_id=".CL_MENU.",1,2) as c  $query $sby2 $lim";
-		$this->db_query($q);
-
+	function _get_o_tbl($arr)
+	{
+		aw_global_set("date","");
+		$per_page = 100;
+		$period = !empty($arr["request"]["period"]) ? $arr["request"]["period"] : null;
+		$parent = $this->_resolve_tbl_parent($arr);
 		$containers = get_container_classes();
-
-		$num_records = 0;
-
-		$this->set_parse_method("eval");
 		$clss = aw_ini_get("classes");
+		$sel_objs = $this->get_cutcopied_objects();
+		$trans = aw_ini_get("user_interface.full_content_trans") ? true : false;
 
-		$trans = false;
-		if (aw_ini_get("user_interface.full_content_trans"))
-		{
-			$trans = true;
-		}
+		$ob = new object_list($this->_get_object_list_filter($parent, $per_page, $period));
+
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->setup_rf_table($t, $ob->count(), $per_page);
 
 		$this->_init_admin_modifier_list();
-
-		while ($row = $this->db_next())
+		foreach($ob->arr() as $row_o)
 		{
-			if (!$this->can("view", $row["oid"]))
-			{
-				continue;
-			}
-			$row_o = obj($row["oid"]);
-			$can_change = $this->can("edit", $row["oid"]);
+			$row = array(
+				"modifiedby" => $row_o->modifiedby(),
+				"modified" => $row_o->modified(),
+				"oid" => $row_o->id()
+			);
+			$can_change = $this->can("edit", $row_o->id());
 
 			$row["is_menu"] = 0;
-			if (in_array($row["class_id"],$containers))
+			if (in_array($row_o->class_id(),$containers))
 			{
-				$chlink = aw_url_change_var("parent", $row["oid"]);
+				$chlink = aw_url_change_var("parent", $row_o->id());
 				$row["is_menu"] = 1;
 			}
 			else
@@ -776,11 +661,11 @@ class admin_if extends class_base
 				}
 				if ($can_change)
 				{
-					$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
+					$chlink = $this->mk_my_orb("change", array("id" => $row_o->id(), "period" => $period, "group" => $grp),$row_o->class_id());
 				}
 				else
 				{
-					$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
+					$chlink = $this->mk_my_orb("view", array("id" => $row_o->id(), "period" => $period, "group" => $grp),$row_o->class_id());
 				}
 			}
 
@@ -790,10 +675,10 @@ class admin_if extends class_base
 				"caption" => parse_obj_name($row_o->trans_get_val("name"))
 			));
 
-			$row["cutcopied"] = isset($sel_objs[$row["oid"]]) ? "#E2E2DB" : "#FCFCF4";
+			$row["cutcopied"] = isset($sel_objs[$row_o->id()]) ? "#E2E2DB" : "#FCFCF4";
 
 			$row["java"] = $this->get_popup_data(array(
-				"obj" => obj($row["oid"]),
+				"obj" => obj($row_o->id()),
 				"period" => $period
 			));
 
@@ -802,35 +687,55 @@ class admin_if extends class_base
 				"alt" => sprintf(t("Objekti id on %s"), $row_o->id())
 			));
 
-			$row["class_id"] = $clss[$row["class_id"]]["name"];
-			if ($row["oid"] != $row["brother_of"])
+			$row["class_id"] = $clss[$row_o->class_id()]["name"];
+			if ($row["oid"] != $row_o->brother_of())
 			{
 				$row["class_id"] .= " (vend)";
 			}
 
-			$row["hidden_jrk"] = $row["jrk"];
-			$row["status_val"] = $row["status"];
+			$row["hidden_jrk"] = $row_o->ord();
+			$row["status_val"] = $row_o->status();
 
 			if ($can_change)
 			{
-				$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
-				$row["status"] = "<input type=\"hidden\" name=\"old[status][".$row["oid"]."]\" value=\"".$row["status"]."\"><input type=\"checkbox\" name=\"new[status][".$row["oid"]."]\" value=\"2\" ".checked($row["status"] == 2).">";
-				$row["select"] = "<input type=\"checkbox\" name=\"sel[".$row["oid"]."]\" value=\"1\">";
+				$row["jrk"] = html::hidden(array(
+					"name" => "old[jrk][".$row_o->id()."]",
+					"value" => $row_o->ord()
+				)).html::textbox(array(
+					"name" => "new[jrk][".$row_o->id()."]",
+					"value" => $row_o->ord(),
+					"class" => "formtext",
+					"size" => "3"
+				));
+				$row["status"] = html::hidden(array(
+					"name" =>  "old[status][".$row_o->id()."]",
+					"value" => $row_o->status()
+				)).html::checkbox(array(
+					"name" => "new[status][".$row_o->id()."]",
+					"value" => "2",
+					"checked" => ($row_o->status() == STAT_ACTIVE)
+				));
+				$row["select"] = html::checkbox(array(
+					"name" => "sel[".$row_o->id()."]",
+					"value" => "1"
+				));
 			}
 			else
 			{
-				$row["status"] = $row["status"] == 1 ? t("Mitteaktiivne") : t("Aktiivne");
+				$row["status"] = $row_o->status() == STAT_NOTACTIVE ? t("Mitteaktiivne") : t("Aktiivne");
 				$row["select"] = "&nbsp;";
 			}
 
 			$this->_call_admin_modifier_for_row($row_o->class_id(), $row);
 
 			$t->define_data($row);
-			$num_records++;
 		}
+		$this->_do_o_tbl_sorting($t, $parent);
+	}
 
+	private function _do_o_tbl_sorting(&$t, $parent)
+	{
 		$sortby = $_GET["sortby"];
-
 		if($sortby == "status")
 		{
 			$sortby = "status_val";	
@@ -846,9 +751,9 @@ class admin_if extends class_base
 			$sortby = "hidden_jrk";
 		};
 
-		if (empty($GLOBALS["sort_order"]))
+		if (empty($_GET["sort_order"]))
 		{
-			$GLOBALS["sort_order"] = "asc";
+			$_GET["sort_order"] = "asc";
 		};
 
 		$t->set_default_sortby(array("is_menu", "name"));
@@ -860,12 +765,13 @@ class admin_if extends class_base
 		{
 			$t->sort_by(array(
 				"field" => array("is_menu", "name"),
-				"sorder" => array("is_menu" => "desc", $sortby => $GLOBALS["sort_order"]),
+				"sorder" => array("is_menu" => "desc", $sortby => $_GET["sort_order"]),
 			));
 		}
 		else
 		{
 			// if document order is set from folder then use it
+			$menu_obj = obj($parent);
 			if ($menu_obj->prop("doc_ord_apply_to_admin")==1 && !isset($_GET["sort_order"])  )
 			{
 				$a_sort_fields = new aw_array($menu_obj->meta("sort_fields"));
@@ -895,14 +801,14 @@ class admin_if extends class_base
 			{
 				$t->sort_by(array(
 					"field" => array("is_menu", $sortby, "name"),
-					"sorder" => array("is_menu" => "desc", $sortby => $GLOBALS["sort_order"],"name" => "asc")
+					"sorder" => array("is_menu" => "desc", $sortby => $_GET["sort_order"],"name" => "asc")
 				));
 			}
 		}
 		$t->set_sortable(false);
 	}
 
-	function get_popup_data($args = array())
+	private function get_popup_data($args = array())
 	{
 		$obj = $args["obj"];
 		$id = $obj->id();
@@ -968,7 +874,7 @@ class admin_if extends class_base
 		return $pm->get_menu();
 	}
 	
-	function generate_new($tb, $i_parent)
+	private function generate_new($tb, $i_parent)
 	{
 		$atc = get_instance(CL_ADD_TREE_CONF);
 		
@@ -1124,42 +1030,22 @@ class admin_if extends class_base
 	**/
 	function if_paste($arr)
 	{
-		extract($arr);
-
-		$cut_objects = aw_global_get("cut_objects");
-		$copied_objects = aw_global_get("copied_objects");
-
-		$cache = get_instance("cache");
-		$langs = get_instance("languages");
-
-		$clss = aw_ini_get("classes");
-		if (is_array($cut_objects))
+		foreach(safe_array(aw_global_get("cut_objects")) as $oid)
 		{
-			reset($cut_objects);
-			while (list(,$oid) = each($cut_objects))
+			if ($oid != $arr["parent"])
 			{
-				if ($oid != $parent)
-				{
-					$o = obj($oid);
-					$this->_do_cut_one_obj($o, $parent, $period);
-				}
+				$o = obj($oid);
+				$this->_do_cut_one_obj($o, $arr["parent"], $arr["period"]);
 			}
 		}
-		aw_session_set("cut_objects",array());
-
-		$conns = $obj_id_map = array();
-		$msgs = array();
-		if (is_array($copied_objects))
-		{
-			foreach($copied_objects as $oid => $xml)
-			{
-				$oid = object::from_xml($xml, $parent);
-			}
-		}
-
-		aw_session_set("copied_objects",array());
 		$_SESSION["cut_objects"] = false;
+
+		foreach(safe_array(aw_global_get("copied_objects")) as $oid => $xml)
+		{
+			$oid = object::from_xml($xml, $arr["parent"]);
+		}
 		$_SESSION["copied_objects"] = false;
+
 		if (!empty($arr['return_url']))
 		{
 			return $arr['return_url'];
@@ -1206,32 +1092,7 @@ class admin_if extends class_base
 	**/
 	function redir($arr)
 	{
-		if (!empty($_SESSION["cur_admin_if"]))
-		{
-			return html::get_change_url($_SESSION["cur_admin_if"], array("group" => "o", "parent" => isset($arr["parent"]) ? $arr["parent"] : ""));
-		}
-		$ol = new object_list(array(
-			"class_id" => CL_ADMIN_IF,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		if ($ol->count())
-		{
-			$o = $ol->begin();
-		}
-		else
-		{
-			$o = obj();
-			$o->set_parent(aw_ini_get("amenustart"));
-			$o->set_class_id(CL_ADMIN_IF);
-			$o->set_name(t("Administreerimisliides"));
-			aw_disable_acl();
-			$o->save();
-			aw_restore_acl();
-		}
-
-		$_SESSION["cur_admin_if"] = $o->id();
-		return  html::get_change_url($o->id(), array("group" => "o", "parent" => isset($arr["parent"]) ? $arr["parent"] : null));
+		return html::get_change_url($this->find_admin_if_id(), array("group" => "o", "parent" => isset($arr["parent"]) ? $arr["parent"] : ""));
 	}
 
 	/** returns the admin if id
@@ -1485,6 +1346,94 @@ class admin_if extends class_base
 
 		$o->save();
 
+	}
+
+	private function _resolve_tbl_parent($arr)
+	{
+		$parent = !empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : $this->cfg["rootmenu"];
+		if (!$this->can("view", $parent))
+		{
+			return null;
+		}
+		$menu_obj = new object($parent);
+		if ($menu_obj->is_brother())
+		{
+			$menu_obj = $menu_obj->get_original();
+			$parent = $menu_obj->id();
+		}
+		return $parent;
+	}
+
+	private function _get_object_list_filter($parent, $per_page, $period)
+	{
+		$ft_page = isset($GLOBALS["ft_page"]) ? $GLOBALS["ft_page"] : null;
+		$filter = array(
+			"parent" => $parent,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"non_filter_classes" => CL_MENU,
+				"conditions" => array(
+					"lang_id" => aw_global_get("lang_id"),
+					"class_id" => array(CL_PERIOD, CL_USER, CL_GROUP, CL_MSGBOARD_TOPIC, CL_LANGUAGE),
+					"type" => MN_CLIENT
+				)
+			)),
+			"class_id" => new obj_predicate_not(CL_RELATION),
+			new obj_predicate_limit($ft_page * $per_page, $per_page),
+			"site_id" => array(),
+		);
+		$menu_obj = obj($parent);
+		if (!$menu_obj->prop("all_pers"))
+		{
+			if (!empty($period))
+			{
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"period" => $period,
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"class_id" => CL_MENU,
+								"periodic" => 1
+							)
+						))
+					)
+				));
+			}
+			// if no period is set in the url, BUT the menu is periodic, then only show objects from the current period
+			// this fucks shit up. basically, a periodic menu can have non-periodic submenus
+			// in that case there really is no way of seeing them 
+			else
+			{
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"period" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+						"class_id" => CL_USER
+					)
+				));
+			};
+		}
+
+		if (!empty($_GET["sortby"]))
+		{
+			if ($_GET["sortby"] == "hidden_jrk")
+			{
+				$filter[] = new obj_predicate_sort(array(
+					"type" => "desc",	// this makes sure menus are first
+					"jrk" => $_GET["sort_order"]
+				));
+			}
+			else
+			{
+				$filter[] = new obj_predicate_sort(array(
+					"type" => "desc",	// this makes sure menus are first
+					$_GET["sortby"] => $_GET["sort_order"]
+				));
+			}
+		}
+		return $filter;
 	}
 }
 

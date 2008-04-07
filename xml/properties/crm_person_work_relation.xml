@@ -4,53 +4,49 @@
             <name>org</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ORG</reltype>
             <store>connect</store>
+            <field>org</field>
             <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>section</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>hidden</type>
             <reltype>RELTYPE_SECTION</reltype>
+            <store>connect</store>
+            <field>section</field>
       </property>
       <property>
             <name>section2</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SECTION</reltype>
             <store>connect</store>
+            <field>section2</field>
             <caption>&amp;amp;Uuml;ksus</caption>
       </property>
       <property>
             <name>profession</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_PROFESSION</reltype>
             <store>connect</store>
+            <field>profession</field>
             <caption>Amet</caption>
       </property>
       <property>
             <name>field</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>classificator</type>
             <reltype>RELTYPE_FIELD</reltype>
             <store>connect</store>
+            <field>field</field>
             <caption>Valdkond</caption>
       </property>
       <property>

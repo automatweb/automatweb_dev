@@ -23,7 +23,7 @@
             <table>planner</table>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>L&amp;otilde;peb</caption>
+            <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
             <name>project_selector</name>

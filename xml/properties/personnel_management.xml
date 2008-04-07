@@ -149,14 +149,14 @@
             <caption>Oskuste kaust</caption>
       </property>
       <property>
-            <name>skills_tbl</name>
+            <name>drivers_license</name>
             <group>skill_conf</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <caption>Oskuste konfiguratsioon</caption>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Juhilubade kategooriad</caption>
       </property>
       <property>
             <name>lang_tb</name>
@@ -232,6 +232,7 @@
             <captionside>top</captionside>
             <search_button>1</search_button>
             <no_edit>1</no_edit>
+            <delete_button>1</delete_button>
             <caption>Varasem otsing</caption>
       </property>
       <property>
@@ -450,27 +451,11 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <parent>pay</parent>
+            <parent>soovitud_t88</parent>
             <captionside>top</captionside>
             <size>6</size>
             <store>no</store>
-            <caption>Palk alates</caption>
-      </property>
-      <property>
-            <name>cv_paywish2</name>
-            <group>
-                  <num_0>employee</num_0>
-                  <num_1>candidate</num_1>
-            </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <parent>pay</parent>
-            <captionside>top</captionside>
-            <size>6</size>
-            <store>no</store>
-            <caption>Palk kuni</caption>
+            <caption>Palk</caption>
       </property>
       <property>
             <name>cv_field</name>
@@ -1119,15 +1104,6 @@
                         <num_1>candidate</num_1>
                   </group>
             </soovitud_t88>
-            <pay>
-                  <type>hbox</type>
-                  <parent>soovitud_t88</parent>
-                  <group>
-                        <num_0>employee</num_0>
-                        <num_1>candidate</num_1>
-                  </group>
-                  <area_caption></area_caption>
-            </pay>
             <oskused>
                   <type>vbox</type>
                   <parent>employee_search</parent>

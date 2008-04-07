@@ -16,9 +16,9 @@ class docgen_search_use_func extends core implements docgen_search_module, docge
 	{
 		$s = $arr["search"];
 		$this->quote(&$s);
-		if (strpos($search, "::") !== false)
+		if (strpos($s, "::") !== false)
 		{
-			list($class, $method) = explode("::", $search);
+			list($class, $method) = explode("::", $s);
 			$q = "SELECT * FROM aw_da_callers WHERE callee_class = '$class' AND callee_func = '$method'";
 		}
 		else

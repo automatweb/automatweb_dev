@@ -45,7 +45,7 @@
             <type>textbox</type>
             <size>4</size>
             <field>meta</field>
-            <caption>K&amp;otilde;rgus</caption>
+            <caption>K&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>preview</name>
