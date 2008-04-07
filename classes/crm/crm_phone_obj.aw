@@ -49,7 +49,7 @@ class crm_phone_obj extends _int_object
 
 	function set_prop($k, $v)
 	{
-		if($k == "number")
+		if($k == "name")
 		{
 			parent::set_prop("number_without_crap", str_replace(array(" ", "-", "(", ")") , "", $v));
 		}
