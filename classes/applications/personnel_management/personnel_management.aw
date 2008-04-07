@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.28 2008/04/07 11:53:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.29 2008/04/07 13:45:47 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -396,7 +396,7 @@ class personnel_management extends class_base
 		get_instance("core/icons");
 		$person_language_inst = get_instance(CL_CRM_PERSON_LANGUAGE);
 
-		if(is_oid($arr["request"]["search_save"]))
+		if($this->can("view", $arr["request"]["search_save"]))
 		{	// If 'Varasem otsing' is selected.
 			$sso = obj($arr["request"]["search_save"]);
 			$arr["request"] += $sso->meta();
@@ -418,7 +418,10 @@ class personnel_management extends class_base
 				));
 				$prop["options"] = array(0 => t("--vali--")) + $ssol->names();
 				$prop["onchange"] = "submit_changeform();";
-				$prop["value"] = $arr["request"]["search_save"];
+				if($this->can("view", $arr["request"]["search_save"]))
+				{
+					$prop["value"] = $arr["request"]["search_save"];
+				}
 				break;
 
 			case "cv_search_button_save_search":
@@ -437,6 +440,8 @@ class personnel_management extends class_base
 					$this->candidate_table($arr);
 				if($arr["request"]["group"] == "employee")
 					$this->employee_tbl($arr);
+				$arr["obj_inst"]->set_prop("search_save", 0);
+				$arr["obj_inst"]->save();
 				break;
 
 			case "employee_tree":
@@ -949,7 +954,7 @@ class personnel_management extends class_base
 			}
 		}
 		else
-		if($arr["request"]["cv_search_button"] || $arr["request"]["cv_search_button_save_search"] || is_oid($arr["request"]["search_save"]))
+		if($arr["request"]["cv_search_button"] || $arr["request"]["cv_search_button_save_search"] || $this->can("view", $arr["request"]["search_save"]))
 		{
 			$t = &$arr["prop"]["vcl_inst"];
 			$vars = $this->search_vars;
@@ -973,7 +978,7 @@ class personnel_management extends class_base
 				}
 			}
 
-			if(is_oid($arr["request"]["search_save"]))
+			if($this->can("view", $arr["request"]["search_save"]))
 			{
 				$sso = obj($arr["request"]["search_save"]);
 				$arr["request"] += $sso->meta();
@@ -1818,7 +1823,7 @@ class personnel_management extends class_base
 			));
 		}
 		else
-		if($arr["request"]["cv_search_button"] || $arr["request"]["cv_search_button_save_search"] || is_oid($arr["request"]["search_save"]))
+		if($arr["request"]["cv_search_button"] || $arr["request"]["cv_search_button_save_search"] || $this->can("view", $arr["request"]["search_save"]))
 		{
 			$t = &$arr["prop"]["vcl_inst"];
 			$vars = $this->search_vars;
@@ -1842,7 +1847,7 @@ class personnel_management extends class_base
 				}
 			}
 
-			if(is_oid($arr["request"]["search_save"]))
+			if($this->can("view", $arr["request"]["search_save"]))
 			{
 				$sso = obj($arr["request"]["search_save"]);
 				$arr["request"] += $sso->meta();
