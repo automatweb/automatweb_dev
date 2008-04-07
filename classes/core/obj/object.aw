@@ -1980,6 +1980,16 @@ class object
 	{
 		return "AW Object: ".(string)$this->oid;
 	}
+
+	function __get($prop)
+	{
+		return $GLOBALS["objects"][$this->oid]->prop($prop);
+	}
+
+	function __set($prop, $value)
+	{
+		return $GLOBALS["objects"][$this->oid]->set_prop($prop, $value);
+	}
 }
 
 function obj($param = NULL)
