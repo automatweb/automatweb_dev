@@ -6271,28 +6271,30 @@ class crm_person extends class_base
 		unset($rol);
 		if($this->can("view", $arr["job_offer"]))
 		{
-			$jo = obj($arr["job_offer"]);
 			$c_ol = new object_list(array(
 				"class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE,
-				"CL_PERSONNEL_MANAGEMENT_CANDIDATE.person" => $o->id,
-				"CL_PERSONNEL_MANAGEMENT_CANDIDATE.job_offer" => $jo->id,
+				"person" => $o->id,
+				"job_offer" => $arr["job_offer"],
 				"status" => array(),
 				"lang_id" => array(),
 				"parent" => array(),
 				"site_id" => array(),
 			));
-			$rol = new object_list();
-			$rec_conns = connection::find(array(
-				"from" => $c_ol->ids(),
-				"reltype" => "RELTYPE_RECOMMENDATION",
-			));
-			foreach($rec_conns as $rec_conn)
+			if($c_ol->count() > 0)
 			{
-				$rol->add($rec_conn["to"]);
-			}
-			if($rol->count() == 0)
-			{
-				unset($rol);
+				$rol = new object_list();
+				$rec_conns = connection::find(array(
+					"from" => $c_ol->ids(),
+					"reltype" => "RELTYPE_RECOMMENDATION",
+				));
+				foreach($rec_conns as $rec_conn)
+				{
+					$rol->add($rec_conn["to"]);
+				}
+				if($rol->count() == 0)
+				{
+					unset($rol);
+				}
 			}
 		}
 		if(!isset($rol))
@@ -6306,6 +6308,10 @@ class crm_person extends class_base
 
 		foreach($rol->arr() as $ro)
 		{
+			if(!$this->can("view", $ro->prop("person")))
+			{
+				continue;
+			}
 			$po = obj($ro->prop("person"));
 			foreach($po->connections_from(array("type" => "RELTYPE_ORG_RELATION", "to.class_id" => CL_CRM_PERSON_WORK_RELATION)) as $cn)
 			{
@@ -6320,6 +6326,8 @@ class crm_person extends class_base
 				"recommendation.person.profession" => $profession,
 				"recommendation.person.company" => $company,
 			));
+			unset($profession);
+			unset($company);
 			$CRM_RECOMMENDATION .= $this->parse("CRM_RECOMMENDATION");
 			$parse_r++;
 		}
