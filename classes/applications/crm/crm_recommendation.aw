@@ -149,7 +149,7 @@ class crm_recommendation extends class_base
 							"parent" => array(),
 						),
 						array(
-							CL_CRM_PHONE => array("number_without_crap" => "number"),
+							CL_CRM_PHONE => array("clean_number" => "number"),
 						)
 					);
 					foreach($odl->arr() as $k => $v)

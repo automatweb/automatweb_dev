@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.19 2008/03/28 09:24:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.20 2008/04/07 14:15:29 instrumental Exp $
 // phone.aw - Telefon
 /*
 
@@ -15,7 +15,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 @property name type=textbox
 @caption Number
 
-@property number_without_crap type=hidden field=number table=kliendibaas_telefon
+@property clean_number type=hidden field=number table=kliendibaas_telefon
 
 @property comment type=textbox
 @caption Kommentaar
@@ -64,7 +64,7 @@ class crm_phone extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "number_without_crap":
+			case "clean_number":
 				$prop["value"] = str_replace(array(" ", "-", "(", ")") , "", $arr["request"]["name"]);
 				break;
 		};

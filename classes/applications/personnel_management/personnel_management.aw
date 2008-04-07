@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.29 2008/04/07 13:45:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.30 2008/04/07 14:15:26 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1087,7 +1087,7 @@ class personnel_management extends class_base
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_CRM_PERSON.RELTYPE_PHONE.name" => "%".$r["cv_tel"]."%",
-					"CL_CRM_PERSON.RELTYPE_PHONE.number_without_crap" => "%".$r["cv_tel"]."%",
+					"CL_CRM_PERSON.RELTYPE_PHONE.clean_number" => "%".$r["cv_tel"]."%",
 				)
 			));
 		}

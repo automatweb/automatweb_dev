@@ -9,7 +9,7 @@
             <caption>Number</caption>
       </property>
       <property>
-            <name>number_without_crap</name>
+            <name>clean_number</name>
             <table>kliendibaas_telefon</table>
             <group>general</group>
             <type>hidden</type>
