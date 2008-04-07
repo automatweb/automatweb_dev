@@ -77,6 +77,9 @@
 		<action name="delete_objects">
 			<function name="delete_objects">
 				<arguments>
+					<optional name="sel" type="array" />
+					<optional name="check" type="array" />
+					<required name="post_ru" type="string" />
 				</arguments>
 			</function>
 		</action>
@@ -84,6 +87,10 @@
 		<action name="delete_rels">
 			<function name="delete_rels">
 				<arguments>
+					<required name="id" type="oid" />
+					<optional name="sel" type="array" />
+					<optional name="check" type="array" />
+					<required name="post_ru" type="string" />
 				</arguments>
 			</function>
 		</action>

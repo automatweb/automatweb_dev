@@ -339,6 +339,80 @@ class relpicker extends  core
 				"title" => t("Muuda")
 			));
 		}
+		
+		if($val["delete_button"] || $val["delete_rels_button"])
+		{
+			$oids = array();
+			$allow_delete = true;
+
+			if(is_oid($val["value"]))
+			{
+				$oids[] = $val["value"];
+			}
+			else
+			if(is_array($val["value"]))
+			{
+				$oids = $val["value"];
+			}
+			else
+			if(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && $this->can("edit", $this->obj->prop($val["name"])))
+			{
+				$oids[] = $this->obj->prop($val["name"]);
+			}
+			else
+			if(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_array($this->obj->prop($val["name"])))
+			{
+				$oids = $this->obj->prop($val["name"]);
+			}
+			else
+			{
+				$allow_delete = false;
+			}
+
+			foreach($oids as $oid)
+			{
+				if(!$this->can("edit", $oid))
+				{
+					$allow_delete = false;
+					break;
+				}
+			}
+		}
+		if($val["type"] == "select" && is_object($this->obj) && $allow_delete)
+		{
+			if($val["delete_button"])
+			{
+				foreach($oids as $i => $oid)
+				{
+					$awucv["sel[".$i."]"] = $oid;
+				}
+				$awucv["action"] = "delete_objects";
+				$awucv["post_ru"] = post_ru();
+				$val["post_append_text"] .= " ".html::href(array(
+					"url" => aw_url_change_var($awucv),
+					//"url" => "javascript:submit_change_form('delete_objects')",
+					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
+					"title" => t("Kustuta valitud objektid"),
+					"onclick" => "if(!alert('".t("Oled kindel, et soovid valitud objektid kustutada?")."')) { return false; };",
+				));
+			}
+			if($val["delete_rels_button"])
+			{
+				foreach($oids as $i => $oid)
+				{
+					$awucv["sel[".$i."]"] = $oid;
+				}
+				$awucv["action"] = "delete_rels";
+				$awucv["post_ru"] = post_ru();
+				$val["post_append_text"] .= " ".html::href(array(
+					"url" => aw_url_change_var($awucv),
+					//"url" => "javascript:submit_change_form('delete_rels')",					
+					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
+					"title" => t("Kustuta valitud seosed"),
+					"onclick" => "if(!alert('".t("Oled kindel, et soovid valitud seosed kustutada?")."')) { return false; };",
+				));
+			}
+		}
 		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()) && !$val["no_edit"])
 		{
 			$clid = (array)$arr["relinfo"][$reltype]["clid"];

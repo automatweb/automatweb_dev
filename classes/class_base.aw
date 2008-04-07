@@ -5818,6 +5818,9 @@ class class_base extends aw_template
 
 	/**
 	@attrib name=delete_objects
+	@param sel optional type=array
+	@param check optional type=array
+	@param post_ru required type=string
 	**/
 	function delete_objects($arr)
 	{
@@ -5835,6 +5838,10 @@ class class_base extends aw_template
 
 	/**
 	@attrib name=delete_rels
+	@param id required type=oid
+	@param sel optional type=array
+	@param check optional type=array
+	@param post_ru required type=string
 	**/
 	function delete_rels($arr)
 	{
