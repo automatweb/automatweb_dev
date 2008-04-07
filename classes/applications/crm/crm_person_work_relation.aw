@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.16 2008/04/02 15:03:57 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.17 2008/04/07 17:22:01 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -39,7 +39,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @property start type=date_select year_from=1990
 @caption Suhte algus
 
-@property end type=date_select
+@property end type=date_select year_from=1990
 @caption Suhte l&otilde;pp
 
 @property tasks type=textarea
