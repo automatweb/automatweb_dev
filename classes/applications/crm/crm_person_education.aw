@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.11 2008/03/28 09:49:00 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.12 2008/04/07 17:32:18 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -31,6 +31,9 @@
 
 @property in_progress type=chooser field=in_progress
 @caption Omandamisel
+
+@property dnf type=checkbox ch_value=1 field=dnf
+@caption Alustatud, kuid j&auml;&auml;nud l&otilde;petamata
 
 @property obtain_language type=relpicker reltype=RELTYPE_LANGUAGE field=obtain_language
 @caption Omandamise keel
@@ -151,6 +154,7 @@ class crm_person_education extends class_base
 			case "start":
 			case "end":
 			case "end_date":
+			case "dnf":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "int"

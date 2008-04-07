@@ -60,6 +60,15 @@
             <caption>Omandamisel</caption>
       </property>
       <property>
+            <name>dnf</name>
+            <table>kliendibaas_haridus</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>dnf</field>
+            <caption>Alustatud, kuid j&amp;amp;auml;&amp;amp;auml;nud l&amp;amp;otilde;petamata</caption>
+      </property>
+      <property>
             <name>obtain_language</name>
             <table>kliendibaas_haridus</table>
             <group>general</group>
