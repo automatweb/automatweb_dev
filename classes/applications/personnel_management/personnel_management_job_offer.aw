@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.23 2008/04/02 15:03:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.24 2008/04/07 19:41:49 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -8,11 +8,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONNEL_MANAGEMENT_CA
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT_CANDIDATE, on_disconnect_candidate_from_job_offer)
 
 @classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER relationmgr=yes r2=yes no_comment=1 prop_cb=1 maintainer=kristo
+#@tableinfo personnel_management_job index=oid master_table=objects master_index=oid
 
 @default table=objects
 @default group=general
-
-tableinfo personnel_management_job index=oid master_table=objects master_index=oid
 
 @property toolbar type=toolbar no_caption=1
 
@@ -91,14 +90,14 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE
 @caption Hindamise skaala
 
-@groupinfo candidate caption="Kandideerimised" submit=no
+@groupinfo candidate caption=Kandideerimised submit=no
 @default group=candidate
 
 @property candidate_toolbar type=toolbar no_caption=1
 
 @property candidate_table type=table no_caption=1
 
-@groupinfo custom_cfgform caption="CV v&auml;ljad" no_submit=1
+@groupinfo custom_cfgform caption=CV&nbsp;v&auml;ljad no_submit=1
 @default group=custom_cfgform 
 
 	@property offer_cfgform type=relpicker reltype=RELTYPE_CFGFORM
@@ -112,6 +111,26 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 
 	@property save_cfgform type=checkbox ch_value=1 store=no
 	@caption Salvesta seadetevorm
+
+@groupinfo send_email_sms caption=Tagasiside&nbsp;kandideerijatele
+@default group=send_email_sms
+
+	@layout send_email_sms type=hbox width=20%80%
+	
+		@layout send_email_sms_left type=vbox area_caption=Saajad parent=send_email_sms
+
+			@property receivers type=select multiple=1 store=no parent=send_email_sms_left
+
+		@layout send_email_sms_right type=vbox parent=send_email_sms area_caption=S&otilde;num
+			
+			@property add_receivers type=textbox store=no parent=send_email_sms_right
+			@caption Lisa saajaid
+
+			@property subject type=textbox store=no parent=send_email_sms_right
+			@caption Pealkiri
+
+			@property message type=textarea store=no parent=send_email_sms_right
+			@caption S&otilde;num
 
 @reltype CANDIDATE value=1 clid=CL_PERSONNEL_MANAGEMENT_CANDIDATE
 @caption Kandidatuur
@@ -170,8 +189,46 @@ class personnel_management_job_offer extends class_base
 		
 		switch($prop["name"])
 		{
-			case "submit":
-				arr($prop);
+			case "receivers":
+				if(is_array($arr["request"]["sel"]) && count($arr["request"]["sel"]) > 0)
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_PERSON,
+						"oid" => $arr["request"]["sel"],
+						"parent" => array(),
+						"status" => array(),
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					if($arr["request"]["sms"])
+					{
+						foreach($ol->names() as $k => $v)
+						{
+							$o = obj($k);
+							$ph = $o->phones("mobile");
+							foreach($ph->names() as $ph_k => $ph_v)
+							{
+								$ops[$ph_k] = $o->name()." &lt;".$ph_v."&gt;";
+							}
+						}
+					}
+					if($arr["request"]["email"])
+					{
+						foreach($ol->names() as $k => $v)
+						{
+							$o = obj($k);
+							$ml = $o->emails();
+							foreach($ml->arr() as $ml_k => $ml_v)
+							{
+								$m = $ml_v->mail;
+								$ops[$ml_k] = $o->name()." &lt;".$m."&gt;";
+							}
+						}
+					}
+					$prop["options"] = $ops;
+					// By default everything is selected.
+					$prop["value"] = array_keys($ops);
+				}
 				break;
 
 			case "job_offer_pdf":
@@ -386,13 +443,14 @@ class personnel_management_job_offer extends class_base
 			"name" => "send_email",
 			"tooltip" => t("Saada e-kiri"),
 			"img" => "",
-			"action" => "",
+			"action" => "send_email",
+			
 		));
 		$t->add_button(array(
 			"name" => "send_sms",
 			"tooltip" => t("Saada SMS"),
 			"img" => "",
-			"action" => "",
+			"action" => "send_sms",
 		));
 	}
 
@@ -593,6 +651,11 @@ class personnel_management_job_offer extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["sel"] = $arr["request"]["sel"];
 	}
 
 	function _set_candidate_table($arr)
@@ -970,17 +1033,54 @@ class personnel_management_job_offer extends class_base
 	
 	function callback_generate_scripts($arr)
 	{
-		$f = "
-		function save_cfgform()
+		if($arr["group"] == "custom_cfgform")
 		{
-			if(aw_get_el('save_cfgform').checked)
+			$f = "
+			function save_cfgform()
 			{
-				aw_get_el('new_cfgform_name').value = prompt('".t("Sisestage salvestatava seadetevormi nimi:")."');
+				if(aw_get_el('save_cfgform').checked)
+				{
+					aw_get_el('new_cfgform_name').value = prompt('".t("Sisestage salvestatava seadetevormi nimi:")."');
+				}
 			}
-		}
 
-		aw_submit_handler = save_cfgform;";
-		return $f;
+			aw_submit_handler = save_cfgform;";
+			return $f;
+		}
+	}
+
+	/**
+	@attrib name=send_email
+	@param sel optional type=array(oid)
+	**/
+	function send_email($arr)
+	{
+		if(!is_array($arr["sel"]) || count($arr["sel"]) == 0)
+		{
+			return $arr["post_ru"];
+		}
+		foreach(connection::find(array("from" => $arr["sel"], "type" => 1)) as $conn)		// RELTYPE_PERSON
+		{
+			$sel[] = $conn["to"];
+		}
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "send_email_sms", "email" => 1, "sel" => $sel));
+	}
+
+	/**
+	@attrib name=send_sms
+	@param sel optional type=array(oid)
+	**/
+	function send_sms($arr)
+	{
+		if(!is_array($arr["sel"]) || count($arr["sel"]) == 0)
+		{
+			return $arr["post_ru"];
+		}
+		foreach(connection::find(array("from" => $arr["sel"], "type" => 1)) as $conn)		// RELTYPE_PERSON
+		{
+			$sel[] = $conn["to"];
+		}
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "send_email_sms", "sms" => 1, "sel" => $sel));
 	}
 }
 ?>

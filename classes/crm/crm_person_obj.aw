@@ -139,10 +139,16 @@ class crm_person_obj extends _int_object
 		return ($age < 0) ? false : $age;
 	}
 
-	function phones()
+	function phones($type = NULL)
 	{
 		$ol = new object_list;
-		foreach(parent::connections_from(array("type" => "RELTYPE_PHONE")) as $cn)
+		$prms = array("type" => "RELTYPE_PHONE");
+		// You wish! -kaarel
+		/*if(isset($type))
+		{
+			$prms["to.type"] = $type;
+		}*/
+		foreach(parent::connections_from($prms) as $cn)
 		{
 			$ol->add($cn->prop("to"));
 		}
@@ -152,11 +158,29 @@ class crm_person_obj extends _int_object
 			$ids[] = $cn->prop("to");
 		}
 		if(count($ids) > 0)
-		{
-			foreach(connection::find(array("from" => $ids, "type" => "RELTYPE_PHONE")) as $cn)
+		{			
+			$prms = array("from" => $ids, "type" => "RELTYPE_PHONE");
+			// You wish! -kaarel
+			/*if(isset($type))
+			{
+				$prms["to.type"] = $type;
+			}*/
+			foreach(connection::find($prms) as $cn)
 			{
 				$ol->add($cn["to"]);
 			}
+		}
+		if(isset($type))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PHONE,
+				"oid" => $ol->ids(),
+				"type" => $type,
+				"status" => array(),
+				"parent" => array(),
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
 		}
 		return $ol;
 	}
