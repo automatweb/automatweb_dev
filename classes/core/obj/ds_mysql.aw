@@ -494,6 +494,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$fields[] = " (".$table.".`".$prop["field"]."` & ".$prop["ch_value"].") AS `".$prop["name"]."`";
 				}
 				else
+				if ($prop["store"] != "connect")	// must not try to read store=connect fields at all, since they don't have to exist!
 				{
 					$fields[] = $table.".`".$prop["field"]."` AS `".$prop["name"]."`";
 				}
