@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.27 2008/04/07 11:45:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.28 2008/04/07 11:53:26 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1860,7 +1860,7 @@ class personnel_management extends class_base
 						"url" => $this->mk_my_orb("change", array("id" => $app_id, "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
 					));
 				}
-				// We only display persons with that have active applications.
+				// We only display persons that have active applications.
 				if(empty($apps))
 					continue;
 
@@ -1871,7 +1871,6 @@ class personnel_management extends class_base
 						"caption" => $person["name"],
 					)),
 					"age" => $obj->get_age(),
-//					"age" => $person["birthday"],
 					"gender" => t($gender[$person["gender"]]),
 					"apps" => $apps,
 					"modtime" => date("Y-m-d H:i:s", $person["modified"]),
@@ -1928,7 +1927,7 @@ class personnel_management extends class_base
 				$t->define_data(array(
 					"id" => $obj->id(),
 					"name" => html::href(array(
-						"url" => $this->mk_my_orb("show_cv", array("id" => $obj->id(), "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1"), CL_CRM_PERSON),
+						"url" => $this->mk_my_orb("show_cv", array("id" => $obj->id(), "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1", "job_offer" => $arr["request"]["ofr_id"]), CL_CRM_PERSON),
 						"caption" => $obj->name(),
 					)),
 					"age" => $obj->get_age(),
