@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.12 2008/04/07 17:32:18 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.13 2008/04/07 19:11:13 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -39,11 +39,15 @@
 @caption Omandamise keel
 
 # format=month,year doesn't work!!!! -kaarel
-@property start type=date_select field=start
+# @property start type=date_select field=start year_from=1950
+# Since I only need it for years, I can just use select.
+@property start type=select field=start
 @caption Algus
 
 # format=month,year doesn't work!!!! -kaarel
-@property end type=date_select field=end
+# @property end type=date_select field=end year_from=1950 
+# Since I only need it for years, I can just use select.
+@property end type=select field=end
 @caption L&otilde;pp
 
 @property end_date type=date_select field=end_date
@@ -88,11 +92,14 @@ class crm_person_education extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			/*
 			case "start":
 			case "end":
-				$value = mktime(0, 0, 0, $prop["value"]["month"], 1, $prop["value"]["year"]);
+				//$value = mktime(0, 0, 0, $prop["value"]["month"], 1, $prop["value"]["year"]);
+				$value = mktime(0, 0, 0, 1, 1, $prop["value"]);
 				$prop["value"] = $value;
 				break;
+			*/
 		}
 		return $retval;
 	}
@@ -103,6 +110,17 @@ class crm_person_education extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "end":
+			case "start":
+				$ops["---"] = "---";
+				for($i = 1950; $i <= date("Y") + 5; $i++)
+				{
+					$ops[$i] = $i;
+				}
+				$prop["options"] = $ops;
+				//$prop["value"] = date("Y", $prop["value"]);
+				break;
+
 			case "main_speciality":
 				$arr["prop"]["options"] = array(
 					1 => t("Jah"),

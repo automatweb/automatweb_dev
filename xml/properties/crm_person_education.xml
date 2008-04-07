@@ -81,7 +81,7 @@
             <name>start</name>
             <table>kliendibaas_haridus</table>
             <group>general</group>
-            <type>date_select</type>
+            <type>select</type>
             <field>start</field>
             <caption>Algus</caption>
       </property>
@@ -89,7 +89,7 @@
             <name>end</name>
             <table>kliendibaas_haridus</table>
             <group>general</group>
-            <type>date_select</type>
+            <type>select</type>
             <field>end</field>
             <caption>L&amp;amp;otilde;pp</caption>
       </property>
