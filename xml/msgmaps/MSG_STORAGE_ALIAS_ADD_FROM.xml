@@ -100,4 +100,9 @@
       <func>on_add_alias_to_group</func>
       <param>CL_GROUP</param>
 </num_19>
+<num_20>
+      <class>applications/crm/crm_recommendation</class>
+      <func>on_connect_person_to_recommendation</func>
+      <param>CL_CRM_PERSON</param>
+</num_20>
 </xml>

@@ -2,7 +2,9 @@
 // crm_recommendation.aw - Soovitus
 /*
 
-@classinfo syslog_type=ST_CRM_RECOMMENDATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_RECOMMENDATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 no_name=1
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_recommendation)
 
 @default table=objects
 @default group=general
@@ -395,6 +397,18 @@ class crm_recommendation extends class_base
 		$autocomplete_options = array_unique($autocomplete_options);
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
+	}
+
+	function on_connect_person_to_recommendation($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if($target_obj->class_id() == CL_CRM_RECOMMENDATION)
+		{
+			$from = $conn->from();
+			$target_obj->name = $target_obj->prop("person.name").t(" soovitus isikule ").$from->name;
+			$target_obj->save();
+		}
 	}
 }
 
