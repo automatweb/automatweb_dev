@@ -5108,6 +5108,10 @@ class crm_person extends class_base
 
 		@param cv optional type=string
 			The cv template to use.
+
+		@param die optional type=boolean
+
+		@param job_offer optional type=oid
 	**/
 	function show_cv($arr)
 	{
@@ -6104,27 +6108,6 @@ class crm_person extends class_base
 					$professions_rels .= ", ";
 				$professions_rels .= $conn2->prop("to.name");
 			}
-
-			$recommendations = "";
-			$RECOMMENDATION = "";
-			foreach($to->connections_to(array("from.class_id" => CL_CRM_RECOMMENDATION, "type" => "RELTYPE_JOBWISH")) as $conn2)
-			{
-				$from = $conn2->from();
-				if(strlen($recommendations) > 0)
-					$recommendations .= ", ";
-				$recommendations .= $from->prop("person.name");
-				$this->vars(array(
-					"recommendation.person" => $from->prop("person.name"),
-					"recommendation.relation" => $from->prop("relation.name"),
-				));
-				if(is_oid($from->prop("relation")))
-				{
-					$this->vars(array(
-						"RECOMMENDATION.RELATION" => $this->parse("RECOMMENDATION.RELATION"),
-					));
-				}
-				$RECOMMENDATION .= $this->parse("RECOMMENDATION");
-			}
 			$sw_options = $jw_inst->start_working_options;
 
 			$this->vars(array(
@@ -6139,8 +6122,6 @@ class crm_person extends class_base
 				"personnel_management_job_wanted.location_2" => $location_2,
 				"personnel_management_job_wanted.location_text" => $to->prop("location_text"),
 				"personnel_management_job_wanted.addinfo" => nl2br($to->prop("addinfo")),
-				"RECOMMENDATION" => $RECOMMENDATION,
-				//"recommendation.person" => $recommendations,
 				"personnel_management_job_wanted.work_at_night" => $to->prop("work_at_night") ? t("Jah") : t("Ei"),
 				"personnel_management_job_wanted.work_by_schedule" => $to->prop("work_by_schedule") ? t("Jah") : t("Ei"),
 				"personnel_management_job_wanted.start_working" => ($to->prop("start_working") > 0) ? $sw_options[$to->prop("start_working")] : t("M&auml;&auml;ramata"),
@@ -6285,24 +6266,62 @@ class crm_person extends class_base
 
 		// SUB: CRM_RECOMMENDATIONS
 		$parse_r = 0;
+		$CRM_RECOMMENDATION = "";
 
-		$rol = new object_list(array(
-			"class_id" => CL_CRM_RECOMMENCATION,
-			"CL_CRM_RECOMMENDATION.RELTYPE_JOBWISH.RELTYPE_PERSON" => $o->id(),
-			"status" => array(),
-			"lang_id" => array(),
-			"parent" => array(),
-			"site_id" => array(),
-		));
+		unset($rol);
+		if($this->can("view", $arr["job_offer"]))
+		{
+			$jo = obj($arr["job_offer"]);
+			$c_ol = new object_list(array(
+				"class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE,
+				"CL_PERSONNEL_MANAGEMENT_CANDIDATE.person" => $o->id,
+				"CL_PERSONNEL_MANAGEMENT_CANDIDATE.job_offer" => $jo->id,
+				"status" => array(),
+				"lang_id" => array(),
+				"parent" => array(),
+				"site_id" => array(),
+			));
+			$rol = new object_list();
+			$rec_conns = connection::find(array(
+				"from" => $c_ol->ids(),
+				"reltype" => "RELTYPE_RECOMMENDATION",
+			));
+			foreach($rec_conns as $rec_conn)
+			{
+				$rol->add($rec_conn["to"]);
+			}
+			if($rol->count() == 0)
+			{
+				unset($rol);
+			}
+		}
+		if(!isset($rol))
+		{
+			$rol = new object_list();
+			foreach($o->connections_from(array("type" => "RELTYPE_RECOMMENDATION")) as $rcn)
+			{
+				$rol->add($rcn->prop("to"));
+			}
+		}
 
 		foreach($rol->arr() as $ro)
 		{
+			$po = obj($ro->prop("person"));
+			foreach($po->connections_from(array("type" => "RELTYPE_ORG_RELATION", "to.class_id" => CL_CRM_PERSON_WORK_RELATION)) as $cn)
+			{
+				$wr = $cn->to();
+				$profession = $wr->prop("profession.name");
+				$company = $wr->prop("org.name");
+				break;
+			}
 			$this->vars(array(
 				"recommendation.person" => $ro->prop("person.name"),
 				"recommendation.relation" => $ro->prop("relation.name"),
-				"recommendation.person.profession" => $po->prop("profession.name"),
-				"recommendation.person.company" => $po->prop("company.name"),
+				"recommendation.person.profession" => $profession,
+				"recommendation.person.company" => $company,
 			));
+			$CRM_RECOMMENDATION .= $this->parse("CRM_RECOMMENDATION");
+			$parse_r++;
 		}
 		
 		if($parse_r > 0)

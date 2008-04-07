@@ -638,24 +638,24 @@ text-decoration:underline;
 			</table>
 			<!-- END SUB: CRM_FAMILY_RELATIONS -->
 
-			<!-- SUB: RECOMMENDATIONS -->
+			<!-- SUB: CRM_RECOMMENDATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
 					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitajad</strong></span></td>
 				</tr>
-				<!-- SUB: RECOMMENDATION -->
+				<!-- SUB: CRM_RECOMMENDATION -->
 				<tr>
-					<td width="346" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.person}</td>
-					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.relation}</td>
-					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.profession}</td>
-					<td width="100" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.company}</td>
+					<td width="196" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.person}</td>
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.relation}</td>
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.profession}</td>
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.company}</td>
 				</tr>
-				<!-- END SUB: RECOMMENDATION -->
+				<!-- END SUB: CRM_RECOMMENDATION -->
 				<tr>
 					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
 				</tr>
 			</table>
-			<!-- END SUB: RECOMMENDATIONS -->
+			<!-- END SUB: CRM_RECOMMENDATIONS -->
 
 			<!-- SUB: CRM_PERSON.ADDINFO -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
@@ -673,7 +673,7 @@ text-decoration:underline;
 
 			<!-- SUB: CRM_PERSON.UDEF_CH1 -->
 			{VAR:crm_person.udef_ch1}<br>
-			<!-- ENDSUB: CRM_PERSON.UDEF_CH1 -->
+			<!-- END SUB: CRM_PERSON.UDEF_CH1 -->
 
 			<!-- SUB: CRM_PERSON.USER1 -->
 			{VAR:crm_person.user1}<br>
