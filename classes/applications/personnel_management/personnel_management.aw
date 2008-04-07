@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.26 2008/04/02 15:03:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.27 2008/04/07 11:45:46 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1296,9 +1296,12 @@ class personnel_management extends class_base
 			$odl_prms[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					$odl_prms["CL_CRM_PERSON.RELTYPE_RECOMMENDS.name"] => "%".$r["cv_recommenders"]."%",
-					$odl_prms["CL_CRM_PERSON.RELTYPE_RECOMMENDS.RELTYPE_WORK.name"] => "%".$r["cv_recommenders"]."%",
-					$odl_prms["CL_CRM_PERSON.RELTYPE_RECOMMENDS.RELTYPE_CURRENT_JOB.org.name"] => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_WORK.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_recommenders"]."%",
 				),
 			));
 		}

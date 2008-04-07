@@ -385,8 +385,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @groupinfo recommends caption="Soovitajad" parent=cv submit=no
 @default group=recommends
 
-#@property recommends_edit type=releditor store=no mode=manager reltype=RELTYPE_RECOMMENDS props=firstname,lastname,phone,email table_fields=firstname,lastname,phone,email group=recommends
-
 @property recommends_tlb type=toolbar store=no no_caption=1
 
 @property recommends_tbl type=table store=no no_caption=1
@@ -882,6 +880,9 @@ caption S&otilde;bragrupid
 
 @reltype COMMENT value=86 clid=CL_COMMENT
 @caption Kommentaar
+
+@reltype RECOMMENDATION value=87 clid=CL_CRM_RECOMMENDATION
+@caption Soovitus
 
 */
 
@@ -1486,7 +1487,7 @@ class crm_person extends class_base
 	function _get_recommends_tlb($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->add_new_button(array(CL_CRM_RECOMMENDATION), $arr["obj_inst"]->id());
+		$t->add_new_button(array(CL_CRM_RECOMMENDATION), $arr["obj_inst"]->id(), 87);		// RELTYPE_RECOMMENDATION
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -1507,31 +1508,66 @@ class crm_person extends class_base
 			"name" => "person",
 			"caption" => t("Soovitav isik"),
 			"align" => "center",
+			"sortable" => 1,
 		));
 		$t->define_field(array(
-			"name" => "jobwish",
-			"caption" => t("T&ouml;&ouml;soov, mille juurde soovitus kuulub"),
-			"align" => "center",
+			"name" => "phones",
+			"caption" => t("Telefonid"),
+			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "emails",
+			"caption" => t("E-postiaadressid"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "candidates",
+			"caption" => t("Kandideerimised, millega soovitaja on seotud"),
+			"align" => "center"
+		));
+
 		// Waitin for bug #227455.
-		$odl = new object_data_list(
-			array(
-				"class_id" => CL_CRM_RECOMMENDATION,
-				"CL_CRM_RECOMMENDATION.RELTYPE_JOBWISH.RELTYPE_PERSON" => $arr["obj_inst"]->id(),
-			),
-			array(
-				//CL_CRM_RECOMMENDATION => array("person.name" => "person", "jobwish.name" => "jobwish"),			// This is not possible at this very moment.
-				CL_CRM_RECOMMENDATION => array("person", "jobwish"),
-			)
-		);
-		foreach($odl->arr() as $oid => $odata)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RECOMMENDATION")) as $conn)
 		{
-			$p = obj($odata["person"]);
-			$j = obj($odata["jobwish"]);
+			$rec = $conn->to();
+			if($this->can("view", $rec->prop("person")))
+			{
+				$p_obj = obj($rec->prop("person"));
+				$phones = "";
+				foreach($p_obj->phones()->ids() as $id)
+				{
+					if(strlen($phones) > 0)
+					{
+						$phones .= ", ";
+					}
+					$phones .= html::obj_change_url($id);
+				}
+				$emails = "";
+				foreach($p_obj->emails()->ids() as $id)
+				{
+					if(strlen($emails) > 0)
+					{
+						$emails .= ", ";
+					}
+					$emails .= html::obj_change_url($id);
+				}
+			}
+			$candidates = "";
+			foreach($rec->connections_to(array("from.class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE, "type" => "RELTYPE_RECOMMENDATION")) as $cn)
+			{
+				$cand = $cn->from();
+				if(strlen($candidates) > 0)
+				{
+					$candidates .= ", ";
+				}
+				$candidates .= html::obj_change_url($cand->prop("job_offer"));
+			}
 			$t->define_data(array(
-				"oid" => $oid,
-				"person" => html::obj_change_url($odata["person"]),
-				"jobwish" => html::obj_change_url($odata["jobwish"]),
+				"oid" => $rec->id(),
+				"person" => html::obj_change_url($p_obj),
+				"phones" => $phones,
+				"emails" => $emails,
+				"candidates" => $candidates,
 			));
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.7 2008/04/02 15:03:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.8 2008/04/07 11:45:46 instrumental Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
@@ -29,6 +29,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property addinfo type=textarea field=meta method=serialize
 @caption Lisainfo
 
+@property recommendations type=relpicker reltype=RELTYPE_RECOMMENDATION multiple=1 store=connect no_edit=1
+@caption Soovitajad
+
 @reltype PERSON value=1 clid=CL_CRM_PERSON
 @caption Kandideerja
 
@@ -37,6 +40,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @reltype JOB_OFFER value=3 clid=CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 @caption T&ouml;&ouml;pakkumine
+
+@reltype RECOMMENDATION value=4 clid=CL_CRM_RECOMMENDATION
+@caption Soovitus
 
 */
 
@@ -57,6 +63,19 @@ class personnel_management_candidate extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
+			case "recommendations":
+				if($this->can("view", $arr["obj_inst"]->prop("person")))
+				{
+					$p_obj = obj($arr["obj_inst"]->prop("person"));
+					foreach($p_obj->connections_from(array("type" => "RELTYPE_RECOMMENDATION")) as $conn)
+					{
+						$to = $conn->to();
+						$ops[$to->id()] = $to->prop("person.name");
+					}
+					$prop["options"] = $ops;
+				}
+				break;
+
 			case "job_offer":
 				if(is_oid($arr["request"]["alias_to"]) && $arr["request"]["reltype"] == 1)
 				{

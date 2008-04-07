@@ -22,14 +22,40 @@
             <caption>Suhe soovitajaga</caption>
       </property>
       <property>
-            <name>jobwish</name>
+            <name>phones</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_JOBWISH</reltype>
-            <store>connect</store>
-            <field>jobwish</field>
-            <caption>Soovitatav t&amp;amp;ouml;&amp;amp;ouml;</caption>
+            <type>text</type>
+            <store>no</store>
+            <field>phones</field>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>emails</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>emails</field>
+            <caption>E-postiaadress</caption>
+      </property>
+      <property>
+            <name>org</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>org</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;koht</caption>
+      </property>
+      <property>
+            <name>profession</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>profession</field>
+            <caption>Amet</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_RECOMMENDATION</syslog_type>
@@ -39,11 +65,6 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <reltypes>
-            <JOBWISH>
-                  <value>1</value>
-                  <clid>CL_PERSONNEL_MANAGEMENT_JOB_WANTED</clid>
-                  <caption>Soovitatav t&amp;amp;ouml;&amp;amp;ouml;</caption>
-            </JOBWISH>
             <PERSON>
                   <value>2</value>
                   <clid>CL_CRM_PERSON</clid>
