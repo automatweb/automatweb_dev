@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.18 2008/03/13 13:26:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.19 2008/04/08 12:40:23 kristo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -10,6 +10,14 @@
 
 @property copy_redirect type=relpicker reltype=RELTYPE_REDIR_DOC field=meta method=serialize
 @caption Edasisuunamisdokument
+
+@property room_folder type=relpicker multiple=1 reltype=RELTYPE_ROOM_FOLDER field=meta method=serialize
+@caption Ruumide kaust
+
+@property prod_vars_folder type=relpicker reltype=RELTYPE_PROD_VARS_FOLDER field=meta method=serialize
+@caption Toodete muutujate asukoht
+
+@property default_table type=table no_caption=1 store=no
 
 @groupinfo rfps caption="Pakkumise saamis palved"
 @groupinfo rfps_active caption="Aktiivsed" parent=rfps
@@ -38,10 +46,25 @@
 		@layout main type=vbox parent=hsplit
 			@property rfps type=table parent=main no_caption=1
 
+@groupinfo packages caption="Paketid"
+@default group=packages
 
+	@property packages_folder type=relpicker reltype=RELTYPE_PACKAGE_FOLDER field=meta method=serialize
+	@caption Pakettide kaust
+
+	@property packages_tbl type=table store=no no_caption=1
 
 @reltype REDIR_DOC value=1 clid=CL_DOCUMENT
 @caption Konverentsiplaneerija
+
+@reltype ROOM_FOLDER value=2 clid=CL_MENU
+@caption Ruumide kaust
+
+@reltype PACKAGE_FOLDER value=3 clid=CL_MENU,CL_META
+@caption Pakettide kaust
+
+@reltype PROD_VARS_FOLDER value=4 clid=CL_MENU,CL_META
+@caption Toodete muutujate kaust
 */
 
 class rfp_manager extends class_base
@@ -69,8 +92,15 @@ class rfp_manager extends class_base
 			case "s_time_to":
 			case "s_time_from":
 				$_t = &$arr["request"][$prop["name"]];
-				$time = mktime(0,0,0,$_t["month"], $_t["day"], $_t["year"]);
-				$prop["value"] = $time;
+				if($_t)
+				{
+					$time = mktime(0,0,0,$_t["month"], $_t["day"], $_t["year"]);
+					$prop["value"] = $time;
+				}
+				else
+				{
+					$prop["value"] = -1;
+				}
 				break;
 			case "rfps":
 				$act = ($arr["request"]["group"] == "rfps_active" || $arr["request"]["group"] == "rfps")?true:false;
@@ -116,13 +146,21 @@ class rfp_manager extends class_base
 					"chgbgcolor" => "urgent_col",
 				));
 				$t->define_field(array(
+					"name" => "created",
+					"caption" => t("Loodud"),
+					"type" => "time",
+					"numeric" => 1,
+					"format" => "d.m.Y",
+					"chgbgcolor" => "urgent_col",
+				));
+				$t->define_field(array(
 					"name" => "popup",
 					"caption" => t("Tegevus"),
 					"align" => "center",
 					"chgbgcolor" => "urgent_col",
 				));
-
-
+				$t->set_default_sortby("created");
+				$t->set_default_sorder("desc");
 				$rfps = $this->get_rfps($act);
 				$rfps = $this->do_filter_rfps($rfps, $arr["request"]);
 				$uss = get_instance(CL_USER);
@@ -135,7 +173,7 @@ class rfp_manager extends class_base
 					{
 						$places[] = $res["location"];
 					}
-					$c = array("billing_phone_number", "billing_email");
+					$c = array("data_billing_phone", "data_billing_email");
 					unset($contacts);
 					foreach($c as $e)
 					{
@@ -159,34 +197,174 @@ class rfp_manager extends class_base
 						$rooms[] = $_t." ".t("Su");
 					}
 					$acc_rooms = join(", ", $rooms);
+					if(($sd = $obj->prop("data_gen_arrival_date_admin"))>1)
+					{
+						$date_period = date('d.m.Y, H:i', $sd);
+					}
+					if(($ed = $obj->prop("data_gen_departure_date_admin"))>1)
+					{
+						$date_period .= " - ".date('d.m.Y, H:i', $ed);
+					}
 					$t->define_data(array(
 						"function" => html::href(array(
-							"caption" => ($_t = $obj->prop("function_name"))?$_t:t(" - Nimetu - "),
-							"url" => "#",
+							"caption" => ($_t = $obj->prop("data_gen_function_name"))?$_t:(($_n = $obj->name())?$_n:t('(Nimetu)')),
+							/*"url" => "#",
 							"onClick" => "aw_popup_scroll(\"".$this->mk_my_orb("show_overview", array(
 								"oid" => $oid
 							))."\",\"hey\",600,600);",
-							/*
+							*/
 							"url" => $this->mk_my_orb("change", array(
 								"id" => $oid,
 								"return_url" => get_ru(),
 							),CL_RFP),
-							*/
 						)),
-						"org" => $obj->prop("organisation"),
-						"response_date" => $obj->prop("response_date"),
-						"date_period" => $obj->prop("arrival_date")." - ".$obj->prop("departure_date"),
-						"acc_need" => ($obj->prop("accommondation_requirements") == 1)?$acc_rooms:t("Ei"),
-						"delegates" => $obj->prop("delegates_no"),
-						"contact_pers" => $obj->prop("billing_name"),
-						"contacts" => join(", ", $contacts).(strlen($_t = $obj->prop("contact_preference"))?"(".$_t.")":""),
+						"org" => $obj->prop("data_subm_organisation"),
+						"response_date" => (($rd = $obj->prop("data_gen_response_date_admin"))>1)?date('d.m.Y, H:i', $rd):"-",
+						"date_period" => $date_period,
+						"acc_need" => ($obj->prop("data_gen_accommodation_requirements") == 1)?t("Jah"):t("Ei"),
+						"delegates" => $obj->prop("data_gen_attendees_no"),
+						"contact_pers" => $obj->prop("data_billing_contact"),
+						"contacts" => join(", ", $contacts),
+						"created" => $obj->created(),
 						"popup" => $this->gen_popup($oid),
 						"urgent_col" => $urgent_col,
 					));
 				}
+				$t->sort_by();
 				break;
 		};
 		return $retval;
+	}
+
+	function _get_default_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_header(t("S&uuml;steemi vaikimisi objekt"));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Objekt"),
+		));
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$active = $this->get_sysdefault();
+		foreach($ol->arr() as $oid=>$o)
+		{
+			$t->define_data(array(
+				"select" => html::radiobutton(array(
+					"name" => "default",
+					"value" => $oid,
+					"checked" => ($oid == $active)?1:0,
+				)),
+				"name" => html::get_change_url($oid, array(), $o->name()),
+			));
+		}
+	}
+
+	function _set_default_table($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		foreach ($ol->arr() as $item)
+		{
+			if ($item->flag(OBJ_FLAG_IS_SELECTED) && $item->id() != $arr["request"]["default"])
+			{
+				$item->set_flag(OBJ_FLAG_IS_SELECTED, false);
+				$item->save();
+			}
+			elseif ($item->id() == $arr["request"]["default"] && !$item->flag(OBJ_FLAG_IS_SELECTED))
+			{
+				$item->set_flag(OBJ_FLAG_IS_SELECTED, true);
+				$item->save();
+			};
+		};
+	}
+
+	function _get_packages_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind/in"),
+			"align" => "center",
+		));
+		$cur_ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+		));
+		foreach($cur_ol->arr() as $cur)
+		{
+			$t->define_field(array(
+				"name" => "price".$cur->id(),
+				"caption" => $cur->name(),
+				"align" => "center",
+				"parent" => "price",
+			));
+		}
+		$pk_fld = $arr["obj_inst"]->prop("packages_folder");
+		$prices = $arr["obj_inst"]->meta("pk_prices");
+		if($this->can("view", $pk_fld))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_META,
+				"parent" => $pk_fld,
+			));
+			foreach($ol->arr() as $pko)
+			{
+				$data = array(
+					"name" => $pko->name(),
+				);
+				foreach($cur_ol->arr() as $cur)
+				{
+					$data["price".$cur->id()] = html::textbox(array(
+						"name" => "prices[".$pko->id()."][".$cur->id()."]",
+						"value" => $prices[$pko->id()][$cur->id()],
+						"size" => 5,
+					));
+				}
+				$t->define_data($data);
+			}
+		}
+	}
+
+	function _set_packages_tbl($arr)
+	{
+		$arr["obj_inst"]->set_meta("pk_prices", $arr["request"]["prices"]);
+		$arr["obj_inst"]->save();
+	}
+
+	function get_sysdefault()
+	{
+		$active = false;
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"flags" => array(
+				"mask" => OBJ_FLAG_IS_SELECTED,
+				"flags" => OBJ_FLAG_IS_SELECTED
+			)
+		));
+		if (sizeof($ol->ids()) > 0)
+		{
+			$first = $ol->begin();
+			$active = $first->id();
+		};
+		return $active;
 	}
 
 	function set_property($arr = array())
@@ -418,25 +596,25 @@ class rfp_manager extends class_base
 		foreach($rfps as $oid => $obj)
 		{
 			// time
-			if(is_array($_tmp_from) && is_array($_tmp_to))
+			if($_tmp_from["year"] > 0 && $_tmp_to["year"] > 0)
 			{
 				$comp = $obj->created();
 				$s_f = mktime(0,0,0, $_tmp_from["month"], $_tmp_from["day"], $_tmp_from["year"]);
 				$s_t = mktime(0,0,0, $_tmp_to["month"], $_tmp_to["day"], $_tmp_to["year"]);
-				if(($s_f == -1 && $s_t <= $comp) || ($s_t == -1 && $s_f >= $comp) || ($s_f == -1 && $s_t == -1))
+				if(($s_f != -1 && $s_t <= $comp) || ($s_t != -1 && $s_f >= $comp) || ($s_f != -1 && $s_t == -1))
 				{
 					unset($rfps[$oid]);
 				}
 			}
 
 			// func name
-			if(strlen($request["s_name"]) && !stristr($obj->name("organisation") , $request["s_name"]))
+			if(strlen($request["s_name"]) && !stristr($obj->prop("data_gen_function_name") , $request["s_name"]) && !stristr($obj->name() , $request["s_name"]))
 			{
 				unset($rfps[$oid]);
 			}
 
 			// org name
-			if(strlen($request["s_org"]) && !stristr($obj->prop(), $request["s_org"]))
+			if(strlen($request["s_org"]) && !stristr($obj->prop("data_subm_organisation"), $request["s_org"]))
 			{
 				unset($rfps[$oid]);
 			}
@@ -445,7 +623,7 @@ class rfp_manager extends class_base
 			if(strlen($request["s_contact"]))
 			{
 				$is = false;
-				$name = $obj->prop("billing_contact");
+				$name = $obj->prop("data_billing_contact");
 				foreach(split(" ", $request["s_contact"]) as $part)
 				{
 					$is = stristr($name, $part)?true:$is;

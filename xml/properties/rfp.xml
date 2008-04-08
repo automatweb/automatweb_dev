@@ -4,743 +4,794 @@
             <name>conference_planner</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_WEBFORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Tellimuse vorm</caption>
       </property>
       <property>
             <name>final_rooms</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_ROOM</reltype>
+            <field>final_rooms</field>
             <caption>Ruumid</caption>
             <comment>Konverentsi jaoks kasutatavad ruumid</comment>
       </property>
       <property>
             <name>final_theme</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>final_theme</field>
             <caption>Teema</caption>
             <comment>Konverentsi valdkond(&amp;amp;uml;ldteema)</comment>
       </property>
       <property>
             <name>final_international</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>0</default>
+            <field>final_international</field>
             <caption>Rahvusvaheline</caption>
             <comment>Kas &amp;amp;uuml;ritus on rahvusvaheline</comment>
       </property>
       <property>
             <name>final_native_guests</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>final_native_guests</field>
             <caption>Kohalike k&amp;amp;uuml;laliste arv</caption>
             <comment>Konverentsil viibivate kohalike k&amp;amp;uuml;laliste arv</comment>
       </property>
       <property>
             <name>final_foreign_guests</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>final_foreign_guests</field>
             <caption>V&amp;amp;auml;lisk&amp;amp;uuml;laliste arv</caption>
             <comment>Konverentsil viibivate v&amp;amp;auml;lisk&amp;amp;uuml;aliste arv</comment>
       </property>
       <property>
             <name>final_add_reservation_tb</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>
                   <num_0>final_prices</num_0>
                   <num_1>final_resource</num_1>
                   <num_2>final_catering</num_2>
             </group>
-            <field>meta</field>
-            <method>serialize</method>
             <no_caption>1</no_caption>
             <type>toolbar</type>
             <store>no</store>
+            <field>final_add_reservation_tb</field>
       </property>
       <property>
             <name>products_tree</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_catering</group>
-            <field>meta</field>
-            <method>serialize</method>
             <parent>cat_left</parent>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <field>products_tree</field>
       </property>
       <property>
             <name>products_tbl</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_catering</group>
-            <field>meta</field>
-            <method>serialize</method>
             <parent>cat_right</parent>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <field>products_tbl</field>
       </property>
       <property>
             <name>resources_tree</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_resource</group>
-            <field>meta</field>
-            <method>serialize</method>
             <parent>res_left</parent>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <field>resources_tree</field>
       </property>
       <property>
             <name>resources_tbl</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_resource</group>
-            <field>meta</field>
-            <method>serialize</method>
             <parent>res_right</parent>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <field>resources_tbl</field>
       </property>
       <property>
             <name>prices_tree</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_prices</group>
-            <field>meta</field>
-            <method>serialize</method>
             <parent>prs_left</parent>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <field>prices_tree</field>
       </property>
       <property>
             <name>prices_tbl</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>final_prices</group>
-            <field>meta</field>
-            <method>serialize</method>
             <parent>prs_right</parent>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <field>prices_tbl</field>
       </property>
       <property>
-            <name>tmp5</name>
+            <name>data_contactperson</name>
             <table>objects</table>
             <group>final_submission</group>
+            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>data_send_date</name>
+            <table>objects</table>
+            <group>final_submission</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Saatmise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>data_pointer_text</name>
+            <table>objects</table>
+            <group>final_submission</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tekst suunaviitadele</caption>
+      </property>
+      <property>
+            <name>data_payment_method</name>
+            <table>objects</table>
+            <group>final_submission</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Maksmisviis</caption>
+      </property>
+      <property>
+            <name>pdf</name>
+            <table>rfp</table>
+            <group>final_submission</group>
+            <type>text</type>
+            <store>no</store>
+            <field>pdf</field>
+            <caption>Lae PDF</caption>
+      </property>
+      <property>
+            <name>submission</name>
+            <table>rfp</table>
+            <group>final_submission</group>
             <type>text</type>
             <no_caption>1</no_caption>
+            <store>no</store>
+            <field>submission</field>
       </property>
       <property>
             <name>data_subm_name</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>submitter_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_subm_name</field>
             <caption>Ankeedi t&amp;amp;auml;itja</caption>
       </property>
       <property>
             <name>data_subm_country</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>submitter_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_subm_country</field>
             <caption>Ankeedi t&amp;amp;auml;itja asukoht</caption>
       </property>
       <property>
             <name>data_subm_organisation</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>submitter_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_subm_organisation</field>
             <caption>Organisatioon</caption>
       </property>
       <property>
             <name>data_subm_organizer</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>submitter_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Oranisaator</caption>
+            <type>textbox</type>
+            <field>data_subm_organizer</field>
+            <caption>Organisaator</caption>
       </property>
       <property>
             <name>data_subm_email</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>submitter_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_subm_email</field>
             <caption>E-mail</caption>
       </property>
       <property>
             <name>data_subm_phone</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>submitter_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_subm_phone</field>
             <caption>Phone</caption>
       </property>
       <property>
             <name>data_subm_contact_preference</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>submitter_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PREFERENCE</reltype>
+            <field>data_subm_contact_preference</field>
             <caption>Kontakteerumise eelistus</caption>
       </property>
       <property>
             <name>data_gen_function_name</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_gen_function_name</field>
             <caption>&amp;amp;Uuml;rituse nimi</caption>
       </property>
       <property>
             <name>data_gen_attendees_no</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_gen_attendees_no</field>
             <caption>Osalejate arv kokku</caption>
       </property>
       <property>
             <name>data_gen_response_date</name>
             <table>objects</table>
             <group>general_function_info</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
             <caption>Tagasiside aeg</caption>
       </property>
       <property>
             <name>data_gen_decision_date</name>
             <table>objects</table>
             <group>general_function_info</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <caption>Otsuse aeg</caption>
+      </property>
+      <property>
+            <name>data_gen_response_date_admin</name>
+            <table>rfp</table>
+            <group>general_function_info</group>
+            <type>datetime_select</type>
+            <field>data_gen_response_date_admin</field>
+            <caption>Tagasiside aeg</caption>
+      </property>
+      <property>
+            <name>data_gen_decision_date_admin</name>
+            <table>rfp</table>
+            <group>general_function_info</group>
+            <type>datetime_select</type>
+            <field>data_gen_decision_date_admin</field>
             <caption>Otsuse aeg</caption>
       </property>
       <property>
             <name>data_gen_arrival_date</name>
             <table>objects</table>
             <group>general_function_info</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
             <caption>Saabumise aeg</caption>
       </property>
       <property>
             <name>data_gen_departure_date</name>
             <table>objects</table>
             <group>general_function_info</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <caption>Lahkumise aeg</caption>
+      </property>
+      <property>
+            <name>data_gen_arrival_date_admin</name>
+            <table>rfp</table>
+            <group>general_function_info</group>
+            <type>datetime_select</type>
+            <field>data_gen_arrival_date_admin</field>
+            <caption>Saabumise aeg</caption>
+      </property>
+      <property>
+            <name>data_gen_departure_date_admin</name>
+            <table>rfp</table>
+            <group>general_function_info</group>
+            <type>datetime_select</type>
+            <field>data_gen_departure_date_admin</field>
             <caption>Lahkumise aeg</caption>
       </property>
       <property>
             <name>data_gen_open_for_alternative_dates</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>0</default>
+            <field>data_gen_open_for_alternative_dates</field>
             <caption>N&amp;amp;ouml;us alternatiivsete kuup&amp;amp;auml;evadega</caption>
       </property>
       <property>
             <name>data_gen_accommodation_requirements</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>0</default>
+            <field>data_gen_accommodation_requirements</field>
             <caption>Majutusvajadused</caption>
       </property>
       <property>
             <name>data_gen_multi_day</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_gen_multi_day</field>
             <caption>&amp;amp;Uuml;rituse kestus</caption>
       </property>
       <property>
             <name>data_gen_single_rooms</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_gen_single_rooms</field>
             <caption>&amp;amp;Uuml;hekohalised toad</caption>
       </property>
       <property>
             <name>data_gen_double_rooms</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_gen_double_rooms</field>
             <caption>Kahekohalised toad</caption>
       </property>
       <property>
             <name>data_gen_suites</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_gen_suites</field>
             <caption>Sviidid</caption>
       </property>
       <property>
             <name>data_gen_acc_start</name>
             <table>objects</table>
             <group>general_function_info</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
             <caption>Majutuse algusaeg</caption>
       </property>
       <property>
             <name>data_gen_acc_end</name>
             <table>objects</table>
             <group>general_function_info</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <caption>Majutuse l&amp;amp;otilde;puaeg</caption>
+      </property>
+      <property>
+            <name>data_gen_acc_start_admin</name>
+            <table>rfp</table>
+            <group>general_function_info</group>
+            <type>date_select</type>
+            <field>data_gen_acc_start_admin</field>
+            <caption>Majutuse algusaeg</caption>
+      </property>
+      <property>
+            <name>data_gen_acc_end_admin</name>
+            <table>rfp</table>
+            <group>general_function_info</group>
+            <type>date_select</type>
+            <field>data_gen_acc_end_admin</field>
             <caption>Majutuse l&amp;amp;otilde;puaeg</caption>
       </property>
       <property>
             <name>data_gen_dates_are_flexible</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>type</type>
+            <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>0</default>
+            <field>data_gen_dates_are_flexible</field>
             <caption>Kuup&amp;amp;auml;evad on paindlikud</caption>
       </property>
       <property>
             <name>data_gen_meeting_pattern</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>hidden</type>
+            <field>data_gen_meeting_pattern</field>
             <caption>Kuup&amp;amp;auml;evade muster</caption>
       </property>
       <property>
             <name>data_gen_date_comments</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_gen_date_comments</field>
             <caption>Kuup&amp;amp;auml;evade kommentaar</caption>
       </property>
       <property>
             <name>data_gen_city</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TOWN</reltype>
+            <field>data_gen_city</field>
             <caption>Soovitud linn</caption>
       </property>
       <property>
             <name>data_gen_hotel</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LOCATION</reltype>
+            <field>data_gen_hotel</field>
             <caption>Soovitud hotell</caption>
       </property>
       <property>
             <name>archived</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>0</default>
+            <field>archived</field>
             <caption>Arhiveeritud</caption>
       </property>
       <property>
             <name>urgent</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>0</default>
+            <field>urgent</field>
             <caption>Kiire</caption>
       </property>
       <property>
             <name>data_gen_alternative_dates</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>hidden</type>
+            <field>data_gen_alternative_dates</field>
             <caption>Alternatiivsed kuup&amp;amp;auml;evad</caption>
       </property>
       <property>
             <name>data_gen_package</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>general_function_info</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PACKAGE</reltype>
+            <field>data_gen_package</field>
             <caption>Pakett</caption>
       </property>
       <property>
             <name>data_mf_table</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
             <no_caption>1</no_caption>
+            <field>data_mf_table</field>
             <caption>Pea&amp;amp;uuml;ritus</caption>
       </property>
       <property>
             <name>data_mf_event_type</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_TYPE</reltype>
+            <field>data_mf_event_type</field>
             <caption>&amp;amp;Uuml;rituse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>data_mf_table_form</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TABLES</reltype>
+            <field>data_mf_table_form</field>
             <caption>Laudade asetus</caption>
       </property>
       <property>
             <name>data_mf_tech</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_tech</field>
             <caption>Tehniline varustus</caption>
       </property>
       <property>
             <name>data_mf_additional_tech</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_additional_tech</field>
             <caption>Tehnilise varustuse erisoov</caption>
       </property>
       <property>
             <name>data_mf_additional_decorations</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_additional_decorations</field>
             <caption>Dekoratsioonid</caption>
       </property>
       <property>
             <name>data_mf_additional_entertainment</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_additional_entertainment</field>
             <caption>Meelelahutus</caption>
       </property>
       <property>
             <name>data_mf_additional_catering</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_additional_catering</field>
             <caption>Erisoovid toitlustuse kohta</caption>
       </property>
       <property>
             <name>data_mf_breakout_rooms</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>0</default>
+            <field>data_mf_breakout_rooms</field>
             <caption>Puhkeruumide soov</caption>
       </property>
       <property>
             <name>data_mf_breakout_room_setup</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_breakout_room_setup</field>
             <caption>Puhkeruumide asetus</caption>
       </property>
       <property>
             <name>data_mf_breakout_room_additional_tech</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_breakout_room_additional_tech</field>
             <caption>Puhkeruumide eri tehnikavajadused</caption>
       </property>
       <property>
-            <name>door_mf_door_sign</name>
-            <table>objects</table>
+            <name>data_mf_door_sign</name>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_door_sign</field>
             <caption>Uksesilt</caption>
       </property>
       <property>
-            <name>data_mf_attendrees_no</name>
-            <table>objects</table>
+            <name>data_mf_attendees_no</name>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_attendees_no</field>
             <caption>Osalejate arv</caption>
       </property>
       <property>
             <name>data_mf_start_date</name>
             <table>objects</table>
             <group>main_fun</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
             <caption>Algusaeg</caption>
       </property>
       <property>
             <name>data_mf_end_date</name>
             <table>objects</table>
             <group>main_fun</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <caption>L&amp;amp;otilde;puaeg</caption>
+      </property>
+      <property>
+            <name>data_mf_start_date_admin</name>
+            <table>rfp</table>
+            <group>main_fun</group>
+            <type>datetime_select</type>
+            <field>data_mf_start_date_admin</field>
+            <caption>Algusaeg</caption>
+      </property>
+      <property>
+            <name>data_mf_end_date_admin</name>
+            <table>rfp</table>
+            <group>main_fun</group>
+            <type>datetime_select</type>
+            <field>data_mf_end_date_admin</field>
             <caption>L&amp;amp;otilde;puaeg</caption>
       </property>
       <property>
             <name>data_mf_24h</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_24h</field>
             <caption>Hoia 24 tundi kinni</caption>
       </property>
       <property>
             <name>data_mf_catering</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>text</type>
+            <field>data_mf_catering</field>
             <caption>Pea&amp;amp;uuml;rituse toitlustus</caption>
       </property>
       <property>
             <name>data_mf_catering_type</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_catering_type</field>
             <caption>Pea&amp;amp;uuml;rituse toitlustuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>data_mf_catering_attendees_no</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_mf_catering_attendees_no</field>
             <caption>Pea&amp;amp;uuml;rituse toitlustuse osalejate arv</caption>
       </property>
       <property>
             <name>data_mf_catering_start</name>
             <table>objects</table>
             <group>main_fun</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
             <caption>Pea&amp;amp;uuml;rituse toitlustuse algusaeg</caption>
       </property>
       <property>
             <name>data_mf_catering_end</name>
             <table>objects</table>
             <group>main_fun</group>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
             <caption>Pea&amp;amp;uuml;rituse toitlustuse l&amp;amp;otilde;puaeg</caption>
       </property>
       <property>
-            <name>data_af_table</name>
-            <table>objects</table>
-            <group>additional_functions</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Lisa&amp;amp;uuml;ritused</caption>
+            <name>data_mf_catering_start_admin</name>
+            <table>rfp</table>
+            <group>main_fun</group>
+            <type>datetime_select</type>
+            <field>data_mf_catering_start_admin</field>
+            <caption>Pea&amp;amp;uuml;rituse toitlustuse algusaeg</caption>
       </property>
       <property>
-            <name>data_af_catering</name>
-            <table>objects</table>
-            <group>additional_functions</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Lisa&amp;amp;uuml;rituste toitlustus</caption>
-      </property>
-      <property>
-            <name>data_search_results</name>
-            <table>objects</table>
-            <group>search_results</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Otsingutulemused</caption>
-      </property>
-      <property>
-            <name>data_search_selected</name>
-            <table>objects</table>
-            <group>search_results</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Valitud otsingutulemused</caption>
+            <name>data_mf_catering_end_admin</name>
+            <table>rfp</table>
+            <group>main_fun</group>
+            <type>datetime_select</type>
+            <field>data_mf_catering_end_admin</field>
+            <caption>Pea&amp;amp;uuml;rituse toitlustuse l&amp;amp;otilde;puaeg</caption>
       </property>
       <property>
             <name>data_billing_company</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_company</field>
             <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>data_billing_contact</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_contact</field>
             <caption>Kontaktisik</caption>
       </property>
       <property>
             <name>data_billing_street</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_street</field>
             <caption>T&amp;amp;auml;nav</caption>
       </property>
       <property>
             <name>data_billing_city</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_city</field>
             <caption>Linn</caption>
       </property>
       <property>
             <name>data_billing_zip</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_zip</field>
             <caption>Indeks</caption>
       </property>
       <property>
             <name>data_billing_country</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_country</field>
             <caption>Riik</caption>
       </property>
       <property>
             <name>data_billing_name</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_name</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>data_billing_phone</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_phone</field>
             <caption>Telefoninumber</caption>
       </property>
       <property>
             <name>data_billing_email</name>
-            <table>objects</table>
+            <table>rfp</table>
             <group>billing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <field>data_billing_email</field>
             <caption>E-mail</caption>
+      </property>
+      <property>
+            <name>files_tb</name>
+            <table>rfp</table>
+            <group>files</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>files_tb</field>
+      </property>
+      <property>
+            <name>files_tbl</name>
+            <table>rfp</table>
+            <group>files</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>files_tbl</field>
       </property>
       <classinfo>
             <syslog_type>ST_RFP</syslog_type>
@@ -789,19 +840,22 @@
                   <caption>P&amp;amp;otilde;hi&amp;amp;uuml;ritus</caption>
                   <parent>data</parent>
             </main_fun>
-            <additional_functions>
-                  <caption>Lisa&amp;amp;uuml;ritused</caption>
-                  <parent>data</parent>
-            </additional_functions>
-            <search_results>
-                  <caption>Otsingutulemused</caption>
-                  <parent>data</parent>
-            </search_results>
             <billing>
                   <caption>Arve info</caption>
                   <parent>data</parent>
             </billing>
+            <files>
+                  <caption>Failid</caption>
+                  <parent>data</parent>
+            </files>
       </groupinfo>
+      <tableinfo>
+            <rfp>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </rfp>
+      </tableinfo>
       <reltypes>
             <ROOM>
                   <clid>CL_ROOM</clid>
@@ -818,6 +872,36 @@
                   <value>3</value>
                   <caption>Ruumi broneering</caption>
             </RESERVATION>
+            <TOWN>
+                  <clid>CL_META</clid>
+                  <value>4</value>
+                  <caption>Linn</caption>
+            </TOWN>
+            <LOCATION>
+                  <clid>CL_LOCATION</clid>
+                  <value>5</value>
+                  <caption>Asukoht</caption>
+            </LOCATION>
+            <PREFERENCE>
+                  <clid>CL_META</clid>
+                  <value>6</value>
+                  <caption>Kontakti eelistus</caption>
+            </PREFERENCE>
+            <PACKAGE>
+                  <clid>CL_META</clid>
+                  <value>7</value>
+                  <caption>Pakett</caption>
+            </PACKAGE>
+            <EVENT_TYPE>
+                  <clid>CL_META</clid>
+                  <value>8</value>
+                  <caption>S&amp;amp;uuml;ndmuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </EVENT_TYPE>
+            <TABLES>
+                  <clid>CL_META</clid>
+                  <value>9</value>
+                  <caption>Laudade paigutus</caption>
+            </TABLES>
       </reltypes>
       <layout>
             <cat_hsplit>

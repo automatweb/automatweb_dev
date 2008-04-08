@@ -1,17 +1,20 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.20 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.21 2008/04/08 12:40:23 kristo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
 @classinfo syslog_type=ST_RFP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
+@tableinfo rfp index=aw_oid master_index=brother_of master_table=objects
+
 @default table=objects
 @default group=general
-@default field=meta
-@default method=serialize
 
-	@property conference_planner type=relpicker reltype=RELTYPE_WEBFORM
+	@property conference_planner type=relpicker reltype=RELTYPE_WEBFORM field=meta method=serialize
 	@caption Tellimuse vorm
+
+@default table=rfp
+@default group=general
 
 	@groupinfo final_info caption="Tellimuskirjeldus"
 		
@@ -76,52 +79,80 @@
 
 		@groupinfo final_submission caption="Kinnitamine" parent=final_info
 		@default group=final_submission
-			@property tmp5 type=text no_caption=1
+
+			@property data_contactperson type=textbox table=objects field=meta method=serialize
+			@caption Kontaktisik
+
+			@property data_send_date type=date_select table=objects field=meta method=serialize
+			@caption Saatmise kuup&auml;ev
+
+			@property data_pointer_text type=textbox table=objects field=meta method=serialize
+			@caption Tekst suunaviitadele
+
+			@property data_payment_method type=textbox table=objects field=meta method=serialize
+			@caption Maksmisviis
+
+			@property pdf type=text store=no
+			@caption Lae PDF
+
+			@property submission type=text no_caption=1 store=no
 	
 	@groupinfo data caption="Andmed"
 
 		@groupinfo submitter_info caption="Ankeedi t&auml;itja" parent=data
 		@default group=submitter_info
-			@property data_subm_name type=text
+			@property data_subm_name type=textbox
 			@caption Ankeedi t&auml;itja
 
-			@property data_subm_country type=text
+			@property data_subm_country type=textbox
 			@caption Ankeedi t&auml;itja asukoht
 
-			@property data_subm_organisation type=text
+			@property data_subm_organisation type=textbox
 			@caption Organisatioon
 
-			@property data_subm_organizer type=text
-			@caption Oranisaator
+			@property data_subm_organizer type=textbox
+			@caption Organisaator
 			
-			@property data_subm_email type=text
+			@property data_subm_email type=textbox
 			@caption E-mail
 			
-			@property data_subm_phone type=text
+			@property data_subm_phone type=textbox
 			@caption Phone
 
-			@property data_subm_contact_preference type=text
+			@property data_subm_contact_preference type=relpicker reltype=RELTYPE_PREFERENCE
 			@caption Kontakteerumise eelistus
 
 		@groupinfo general_function_info caption="&Uuml;ldine &uuml;rituse info" parent=data
 		@default group=general_function_info
 
-			@property data_gen_function_name type=text
+			@property data_gen_function_name type=textbox
 			@caption &Uuml;rituse nimi
 
-			@property data_gen_attendees_no type=text
+			@property data_gen_attendees_no type=textbox
 			@caption Osalejate arv kokku
 
-			@property data_gen_response_date type=text
+			@property data_gen_response_date type=hidden table=objects field=meta method=serialize
 			@caption Tagasiside aeg
 
-			@property data_gen_decision_date type=text
+			@property data_gen_decision_date type=hidden table=objects field=meta method=serialize
 			@caption Otsuse aeg
 
-			@property data_gen_arrival_date type=text
+			@property data_gen_response_date_admin type=datetime_select
+			@caption Tagasiside aeg
+
+			@property data_gen_decision_date_admin type=datetime_select
+			@caption Otsuse aeg
+
+			@property data_gen_arrival_date type=hidden table=objects field=meta method=serialize
 			@caption Saabumise aeg
 
-			@property data_gen_departure_date type=text
+			@property data_gen_departure_date type=hidden table=objects field=meta method=serialize
+			@caption Lahkumise aeg
+
+			@property data_gen_arrival_date_admin type=datetime_select
+			@caption Saabumise aeg
+
+			@property data_gen_departure_date_admin type=datetime_select
 			@caption Lahkumise aeg
 
 			@property data_gen_open_for_alternative_dates type=checkbox ch_value=1 default=0
@@ -130,37 +161,43 @@
 			@property data_gen_accommodation_requirements type=checkbox ch_value=1 default=0
 			@caption Majutusvajadused
 
-			@property data_gen_multi_day type=text 
+			@property data_gen_multi_day type=textbox
 			@caption &Uuml;rituse kestus
 
-			@property data_gen_single_rooms type=text
+			@property data_gen_single_rooms type=textbox
 			@caption &Uuml;hekohalised toad
 
-			@property data_gen_double_rooms type=text
+			@property data_gen_double_rooms type=textbox
 			@caption Kahekohalised toad
 
-			@property data_gen_suites type=text
+			@property data_gen_suites type=textbox
 			@caption Sviidid
 
-			@property data_gen_acc_start type=text
+			@property data_gen_acc_start type=hidden table=objects field=meta method=serialize
 			@caption Majutuse algusaeg
 
-			@property data_gen_acc_end type=text
+			@property data_gen_acc_end type=hidden table=objects field=meta method=serialize
 			@caption Majutuse l&otilde;puaeg
 
-			@property data_gen_dates_are_flexible type=type=checkbox ch_value=1 default=0
+			@property data_gen_acc_start_admin type=date_select
+			@caption Majutuse algusaeg
+
+			@property data_gen_acc_end_admin type=date_select
+			@caption Majutuse l&otilde;puaeg
+
+			@property data_gen_dates_are_flexible type=checkbox ch_value=1 default=0
 			@caption Kuup&auml;evad on paindlikud
 			
 			@property data_gen_meeting_pattern type=hidden
 			@caption Kuup&auml;evade muster
 
-			@property data_gen_date_comments type=text
+			@property data_gen_date_comments type=textbox
 			@caption Kuup&auml;evade kommentaar
 
-			@property data_gen_city type=text
+			@property data_gen_city type=relpicker reltype=RELTYPE_TOWN
 			@caption Soovitud linn
 
-			@property data_gen_hotel type=text
+			@property data_gen_hotel type=relpicker reltype=RELTYPE_LOCATION
 			@caption Soovitud hotell
 
 			@property archived type=checkbox ch_value=1 default=0
@@ -172,124 +209,122 @@
 			@property data_gen_alternative_dates type=hidden
 			@caption Alternatiivsed kuup&auml;evad
 
-			@property data_gen_package type=text
+			@property data_gen_package type=relpicker reltype=RELTYPE_PACKAGE
 			@caption Pakett
 
 		@groupinfo main_fun caption="P&otilde;hi&uuml;ritus" parent=data
 		@default group=main_fun
 
-			@property data_mf_table type=text no_caption=1
+			@property data_mf_table type=textbox no_caption=1
 			@caption Pea&uuml;ritus
 
-			@property data_mf_event_type type=text
+			@property data_mf_event_type type=relpicker reltype=RELTYPE_EVENT_TYPE
 			@caption &Uuml;rituse t&uuml;&uuml;p
 
-			@property data_mf_table_form type=text
+			@property data_mf_table_form type=relpicker reltype=RELTYPE_TABLES
 			@caption Laudade asetus
 
-			@property data_mf_tech type=text
+			@property data_mf_tech type=textbox
 			@caption Tehniline varustus
 
-			@property data_mf_additional_tech type=text
+			@property data_mf_additional_tech type=textbox
 			@caption Tehnilise varustuse erisoov
 
-			@property data_mf_additional_decorations type=text
+			@property data_mf_additional_decorations type=textbox
 			@caption Dekoratsioonid
 
-			@property data_mf_additional_entertainment type=text
+			@property data_mf_additional_entertainment type=textbox
 			@caption Meelelahutus
 
-			@property data_mf_additional_catering type=text
+			@property data_mf_additional_catering type=textbox
 			@caption Erisoovid toitlustuse kohta
 
 			@property data_mf_breakout_rooms type=checkbox ch_value=1 default=0
 			@caption Puhkeruumide soov
 
-			@property data_mf_breakout_room_setup type=text
+			@property data_mf_breakout_room_setup type=textbox
 			@caption Puhkeruumide asetus
 
-			@property data_mf_breakout_room_additional_tech type=text
+			@property data_mf_breakout_room_additional_tech type=textbox
 			@caption Puhkeruumide eri tehnikavajadused
 
-			@property door_mf_door_sign type=text
+			@property data_mf_door_sign type=textbox
 			@caption Uksesilt
 
-			@property data_mf_attendrees_no type=text
+			@property data_mf_attendees_no type=textbox
 			@caption Osalejate arv
 
-			@property data_mf_start_date type=text
+			@property data_mf_start_date type=hidden field=meta method=serialize table=objects
 			@caption Algusaeg
 
-			@property data_mf_end_date type=text
+			@property data_mf_end_date type=hidden field=meta method=serialize table=objects
 			@caption L&otilde;puaeg
 
-			@property data_mf_24h type=text
+			@property data_mf_start_date_admin type=datetime_select
+			@caption Algusaeg
+
+			@property data_mf_end_date_admin type=datetime_select
+			@caption L&otilde;puaeg
+
+			@property data_mf_24h type=textbox
 			@caption Hoia 24 tundi kinni
 
 			@property data_mf_catering type=text group=main_fun
 			@caption Pea&uuml;rituse toitlustus
 			
-			@property data_mf_catering_type type=text
+			@property data_mf_catering_type type=textbox
 			@caption Pea&uuml;rituse toitlustuse t&uuml;&uuml;p
 			
-			@property data_mf_catering_attendees_no type=text
+			@property data_mf_catering_attendees_no type=textbox
 			@caption Pea&uuml;rituse toitlustuse osalejate arv
 
-			@property data_mf_catering_start type=text
+			@property data_mf_catering_start type=hidden field=meta method=serialize table=objects
 			@caption Pea&uuml;rituse toitlustuse algusaeg
 
-			@property data_mf_catering_end type=text
+			@property data_mf_catering_end type=hidden field=meta method=serialize table=objects
 			@caption Pea&uuml;rituse toitlustuse l&otilde;puaeg
-		
-		@groupinfo additional_functions caption="Lisa&uuml;ritused" parent=data
-		@default group=additional_functions
-			
-			@property data_af_table type=hidden
-			@caption Lisa&uuml;ritused
 
-			@property data_af_catering type=text
-			@caption Lisa&uuml;rituste toitlustus
+			@property data_mf_catering_start_admin type=datetime_select
+			@caption Pea&uuml;rituse toitlustuse algusaeg
 
-		
-		@groupinfo search_results caption="Otsingutulemused" parent=data
-		@default group=search_results
-
-			@property data_search_results type=hidden
-			@caption Otsingutulemused
-
-			@property data_search_selected type=hidden
-			@caption Valitud otsingutulemused
+			@property data_mf_catering_end_admin type=datetime_select
+			@caption Pea&uuml;rituse toitlustuse l&otilde;puaeg
 
 		@groupinfo billing caption="Arve info" parent=data
 		@default group=billing
 			
-			@property data_billing_company type=text
+			@property data_billing_company type=textbox
 			@caption Organisatsioon
 
-			@property data_billing_contact type=text
+			@property data_billing_contact type=textbox
 			@caption Kontaktisik
 
-			@property data_billing_street type=text
+			@property data_billing_street type=textbox
 			@caption T&auml;nav
 
-			@property data_billing_city type=text
+			@property data_billing_city type=textbox
 			@caption Linn
 
-			@property data_billing_zip type=text
+			@property data_billing_zip type=textbox
 			@caption Indeks
 
-			@property data_billing_country type=text
+			@property data_billing_country type=textbox
 			@caption Riik
 
-			@property data_billing_name type=text
+			@property data_billing_name type=textbox
 			@caption Nimi
 
-			@property data_billing_phone type=text
+			@property data_billing_phone type=textbox
 			@caption Telefoninumber
 
-			@property data_billing_email type=text
+			@property data_billing_email type=textbox
 			@caption E-mail
 
+		@groupinfo files caption="Failid" parent=data
+		@default group=files
+			@property files_tb type=toolbar store=no no_caption=1
+			
+			@property files_tbl type=table store=no no_caption=1
 
 #reltypes
 
@@ -302,6 +337,23 @@
 @reltype RESERVATION clid=CL_RESERVATION value=3
 @caption Ruumi broneering
 
+@reltype TOWN clid=CL_META value=4
+@caption Linn
+
+@reltype LOCATION clid=CL_LOCATION value=5
+@caption Asukoht
+
+@reltype PREFERENCE clid=CL_META value=6
+@caption Kontakti eelistus
+
+@reltype PACKAGE clid=CL_META value=7
+@caption Pakett
+
+@reltype EVENT_TYPE clid=CL_META value=8
+@caption S&uuml;ndmuse t&uuml;&uuml;p
+
+@reltype TABLES clid=CL_META value=9
+@caption Laudade paigutus
 */
 
 class rfp extends class_base
@@ -314,8 +366,17 @@ class rfp extends class_base
 		));
 	}
 
+	function date_to_stamp($date)
+	{
+		$day = explode(".", $date["date"]);
+		$time = explode(":", $date["time"]);
+		$stamp = mktime($time[0], $time[1], 0, $day[1], $day[0], $day[2]);
+		return $stamp;
+	}
+
 	function get_property($arr)
 	{
+		//$this->db_query("DROP TABLE `rfp`");die();
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$ignored_props = array(
@@ -330,21 +391,40 @@ class rfp extends class_base
 			"data_mf_catering",
 			"data_gen_accommondation_requirements",
 		);
-		if(substr($prop["name"], 0, 5) == "data_" && !in_array($prop["name"], $ignored_props))
+		/*if(substr($prop["name"], 0, 5) == "data_" && !in_array($prop["name"], $ignored_props))
 		{
 			$prop["value"] = $this->_gen_prop_autom_value($prop["value"]);
 			if(trim($prop["value"]) == "")
 			{
-				return PROP_IGNORE;
+				//return PROP_IGNORE;
 			}
 			return $retval;
-		}
+		}*/
 		
 		// this here deals with props with values to table
-		$prop["name"] = strstr($prop["name"], "ign_")?substr($prop["name"], 4):$prop["name"];
+		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
 			// final_data thingies
+			case "data_mf_catering_end_admin":
+			case "data_mf_catering_start_admin":
+			case "data_mf_end_date_admin":
+			case "data_mf_start_date_admin":
+			case "data_gen_acc_end_admin":
+			case "data_gen_acc_start_admin":
+			case "data_gen_departure_date_admin":
+			case "data_gen_arrival_date_admin":
+			case "data_gen_decision_date_admin":
+			case "data_gen_response_date_admin":
+				if($prop["value"] < 1)
+				{
+					$svar = substr($prop["name"], 0, -6);
+					if($ov = $arr["obj_inst"]->prop($svar))
+					{
+						$prop["value"] = $this->date_to_stamp($ov);
+					}
+				}
+				break;
 			case "final_add_reservation_tb":
 				$tb = &$prop["vcl_inst"];
 				$tb->add_menu_button(array(
@@ -352,16 +432,17 @@ class rfp extends class_base
 					"img" => "new.gif",
 					"tooltip" => t("Reserveering"),
 				));
-				$rooms = $arr["obj_inst"]->prop("final_rooms");
+				$rooms = $this->get_rooms($arr);
 				foreach($rooms as $room)
 				{
-					$url = $this->mk_my_orb("do_add_reservation", array(
-						"id" => $room,
+					$url = $this->mk_my_orb("new", array(
 						"start1" => time(),
 						"end" => time(),
 						"resource" => $room,
 						"parent" => $room,
-					), CL_ROOM);
+						"rfp" => $arr["obj_inst"]->id(),
+						"return_url" => get_ru(),
+					), CL_RESERVATION);
 					
 					$o = obj($room);
 					$tb->add_menu_item(array(
@@ -369,13 +450,14 @@ class rfp extends class_base
 						"text" => sprintf(t("Ruumi '%s'"), $o->name()),
 						"url" => $url,
 					));
+					$tb->add_save_button();
 				}
 				break;
 			case "products_tree":
 			case "resources_tree":
 			case "prices_tree":
 				$t = &$prop["vcl_inst"];
-				$rooms = $arr["obj_inst"]->prop("final_rooms");
+				$rooms = $this->get_rooms($arr);
 				foreach($rooms as $room)
 				{
 					if($this->can("view", $room))
@@ -384,26 +466,35 @@ class rfp extends class_base
 						$t->add_item(0, array(
 							"id" => "room_".$room,
 							"name" => $room_o->name(),
+							"url" => aw_url_change_var(array(
+								"room_oid" => $room,
+							)),
 						));
-						$ol = new object_list(array(
-							"class_id" => CL_RESERVATION,
-							"CL_RESERVATION.RELTYPE_RESOURCE" => $room,
-						));
-						foreach($ol->arr() as $oid => $obj)
-						{
-							$t->add_item("room_".$room, array(
-								"id" => "reserv_".$oid,
-								"name" => date("d.m.Y H:i", $obj->prop("start1")). " - " . date("d.m.Y H:i", $obj->prop("end")),
-								"url" => aw_url_change_var(array(
-									"reservation_oid" => $oid,
-								)),
-							));
-						}
 					}
 					
 				}
+				$conn = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_RESERVATION",
+				));
+				foreach($conn as $c)
+				{
+					$oid = $c->prop("to");
+					$obj = obj($oid);
+					$room = $obj->prop("resource");
+					$t->add_item("room_".$room, array(
+						"id" => "reserv_".$oid,
+						"name" => date("d.m.Y H:i", $obj->prop("start1")). " - " . date("d.m.Y H:i", $obj->prop("end")),
+						"url" => aw_url_change_var(array(
+							"reservation_oid" => $oid,
+						)),
+					));
+				}
 				break;
 			case "products_tbl":
+				if(!$arr["request"]["reservation_oid"])
+				{
+					$prop["value"] = $this->_get_products_tbl($arr);
+				}
 			case "resources_tbl":
 				if($this->can("view", $arr["request"]["reservation_oid"]))
 				{
@@ -436,6 +527,59 @@ class rfp extends class_base
 				}
 				break;
 
+			case "prices_tbl":
+				classload("vcl/table");
+				$args = array(
+					"request" => array(
+						"class" => "reservation",
+						"action" => "change",
+						"id" => $bron,
+					),
+					"groupinfo" => array(),
+					"prop" => array(
+						"store" => "no",
+						"name" => $arr["prop"]["name"],
+						"type" => "table",
+						"no_caption" => "1",
+						"vcl_inst" => new vcl_table(),
+					),
+				);
+				if($this->can("view", $arr["request"]["reservation_oid"]))
+				{
+					$args["obj_inst"] = obj($arr["request"]["reservation_oid"]);
+				}
+				else
+				{
+					if($room = $arr["request"]["room_oid"])
+					{
+						$rooms[$room] = $room;
+					}
+					else
+					{
+						$rooms = $this->get_rooms($arr);
+					}
+					$conn = $arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_RESERVATION",
+					));
+					foreach($conn as $c)
+					{
+						if($this->can("view", $c->prop("to")))
+						{
+							$o = obj($c->prop("to"));
+							$room = $o->prop("resource");
+							if($rooms[$room])
+							{
+								$ids[] = $o->id();
+							}
+						}
+					}
+					$args["ids"] = $ids;
+				}
+				$inst = get_instance(CL_RESERVATION);
+				$function = "_get_".$arr["prop"]["name"];
+				$inst->$function(&$args);
+				$prop["value"] = $args["prop"]["vcl_inst"]->get_html();
+				break;
 
 			case "tmp4":
 				$prop["value"] = "Ruumi hindade/soodustuste & koguhinna/soodustuse määramine";
@@ -457,9 +601,9 @@ class rfp extends class_base
 
 			case "data_mf_event_type":
 				$prop["value"] = aw_unserialize($prop["value"]);
-			case "data_mf_catering_type":
+			/*case "data_mf_catering_type":
 				$prop["value"] = ($prop["value"]["radio"] == 1)?$this->_gen_prop_autom_value($prop["value"]["select"]):$prop["value"]["text"];
-				break;
+				break;*/
 
 			case "data_mf_catering":
 				if(substr($arr["request"]["group"], 0, 5) == "final")
@@ -481,11 +625,19 @@ class rfp extends class_base
 				$dummy_arr = $arr;
 				unset($dummy_arr["prop"]);
 				$dummy_arr["prop"] = $prop;
-				
 				foreach($prop["value"] as $data)
 				{
 					foreach($data as $propname => $value)
 					{
+						if(is_array($value))
+						{
+							$oid = $value["select"];
+							if($this->can("view", $oid))
+							{
+								$o = obj($oid);
+								$value = $o->name();
+							}
+						}
 						//$data[$propname] = ($value["radio"] == 1)?$this->_gen_prop_autom_value($prop["value"]["select"]):$prop["value"]["text"];
 						$dummy_arr["prop"] = array(
 							"name" => "ign_".$propname,
@@ -568,9 +720,379 @@ class rfp extends class_base
 				$this->$fun($data, &$t);
 				$prop["value"] = $t->draw();
 				break;
-
+			case "pdf":
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("get_pdf_file", array("id" => $arr["obj_inst"]->id())),
+					"caption" => t("Fail"),
+				));
+				break;
 		};
 		return $retval;
+	}
+
+	function _get_products_tbl($arr)
+	{
+		$rm = get_instance(CL_RFP_MANAGER);
+		$def = $rm->get_sysdefault();
+		if($def)
+		{
+			$defo = obj($def);
+			$rfs = $defo->prop("prod_vars_folder");
+			if($this->can("view", $rfs))
+			{
+				$prodvars = array(0=>" ");
+				$ol = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $rfs,
+				));
+				foreach($ol->arr() as $o)
+				{
+					$prodvars[$o->id()] = $o->name();
+				}
+			}
+		}
+		classload("vcl/table");
+		$t = new aw_table;
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Toode"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "discount",
+			"caption" => t("Soodustus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "var",
+			"caption" => t("Nimetus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kommentaar"),
+			"align" => "center",
+		));
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_RESERVATION",
+		));
+		$rvi = get_instance(CL_RESERVATION);
+		$prods = $arr["obj_inst"]->meta("prods");
+		foreach($conn as $c)
+		{
+			if($this->can("view", $c->prop("to")))
+			{
+				$rv = $c->to();
+				$prod_list = $rvi->get_room_products($rv->prop("resource"));
+				$amount = $rv->meta("amount");
+				$discount = $rvi->get_product_discount($rv->id());
+				foreach($prod_list->arr() as $prod)
+				{
+					if($count = $amount[$prod->id()])
+					{
+						$prod_price = $rvi->get_product_price(array("product" => $prod->id(), "reservation" => $rv));
+						$price = $rvi->_get_admin_price_view($prod,$prod_price);
+						$disc = $discount[$prod->id()];
+						$data = array(
+							"name" => $prod->name(),
+							"price" => html::hidden(array(
+								"name" => "prods[".$prod->id().$rv->id()."][price]",
+								"value" => $price,
+							)).$price,
+							"amount" => html::hidden(array(
+								"name" => "prods[".$prod->id().$rv->id()."][amount]",
+								"value" => $count,
+							)).$count,
+							"discount" => html::hidden(array(
+								"name" => "prods[".$prod->id().$rv->id()."][discount]",
+								"value" => $disc,
+							)).$disc."%",
+							"time" => html::textbox(array(
+								"name" => "prods[".$prod->id().$rv->id()."][time]",
+								"value" => $prods[$prod->id().$rv->id()]["time"],
+								"size" => 6,
+							)),
+							"var" => html::select(array(
+								"name" => "prods[".$prod->id().$rv->id()."][var]",
+								"value" => $prods[$prod->id().$rv->id()]["var"],
+								"options" => $prodvars,
+							)),
+							"comment" => html::textarea(array(
+								"name" => "prods[".$prod->id().$rv->id()."][comment]",
+								"value" => $prods[$prod->id().$rv->id()]["comment"],
+								"cols" => 12,
+								"rows" => 2,
+							)),
+						);
+						$t->define_data($data);
+					}
+				}
+			}
+		}
+		return $t->draw();
+	}
+
+	function get_rooms($arr)
+	{
+		$rm = get_instance(CL_RFP_MANAGER);
+		$def = $rm->get_sysdefault();
+		if($def)
+		{
+			$defo = obj($def);
+			$rfs = $defo->prop("room_folder");
+		}
+		$rooms = array();
+		unset($rfs[0]);
+		if(count($rfs))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_ROOM,
+				"lang_id" => array(),
+				"parent" => $rfids
+			));
+			foreach($ol->arr() as $oid=>$o)
+			{
+				$rooms[$oid] = $oid;
+			}
+		}
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_ROOM",
+		));
+		foreach($conn as $c)
+		{
+			$rooms[$c->prop("to")] = $c->prop("to");
+		}
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_RESERVATION",
+		));
+		foreach($conn as $c)
+		{
+			$rv = obj($c->prop("to"));
+			if($room = $rv->prop("resource"))
+			{
+				$rooms[$room] = $room;
+			}
+		}
+		return $rooms;
+	}
+
+	function _get_submission($arr)
+	{
+		$prop = &$arr["prop"];
+		
+		$prop["value"] = $this->_get_submission_data($arr);
+	}
+
+	/**
+	@attrib name=get_pdf_file all_args=1
+	**/
+	function get_pdf_file($arr)
+	{
+		$arr["obj_inst"] = obj($arr["id"]);
+		$html = $this->_get_submission_data($arr);
+		classload("core/converters/html2pdf");
+		$i = new html2pdf;
+		if($i->can_convert())
+		{
+			$i->gen_pdf(array(
+				"source" => $html,
+				"filename" => "kinnitus",
+			));
+		}
+		else
+		{
+			die("Serveris puudub htmldoc. PDF-i ei saa genereerida");
+		}
+	}
+
+	function _get_submission_data($arr)
+	{
+		$this->read_template("submission.tpl");
+		$this->vars(array(
+			"send_date" => date('d.m.Y', $arr["obj_inst"]->prop("data_send_date")),
+			"contactperson" => $arr["obj_inst"]->prop("data_contactperson"),
+			"payment_method" => $arr["obj_inst"]->prop("data_payment_method"),
+			"pointer_text" => $arr["obj_inst"]->prop("data_pointer_text"),
+			"title" => $arr["obj_inst"]->prop("data_mf_event_type.name"),
+		));
+		$package_id = $arr["obj_inst"]->prop("data_gen_package");
+		if($this->can("view", $package_id))
+		{
+			$package_o = obj($package_id);
+			$package = $package_o->name();
+		}
+		$tables = $arr["obj_inst"]->prop("data_mf_table_form.name");
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_RESERVATION",
+		));
+		$brons = "";
+		$currency = 745;
+		$resources_total = 0;
+		$colspan = 6;
+		if($package)
+		{
+			$ph = $this->parse("HEADERS_PACKAGE");
+			$this->vars(array(
+				"HEADERS_PACKAGE" => $ph,
+			));
+			$colspan += 2;
+		}
+		else
+		{
+			$nph = $this->parse("HEADERS_NO_PACKAGE");
+			$this->vars(array(
+				"HEADERS_NO_PACKAGE" => $nph,
+			));
+		}
+		$totalprice = 0;
+		$bron_totalprice = 0;
+		foreach($conn as $c)
+		{
+			$rv = obj($c->prop("to"));
+			$start = $rv->prop("start1");
+			$end = $rv->prop("end");
+			$timefrom = date('H:i', $start);
+			$timeto = date('H:i', $end);
+			$datefrom = date('d.m.Y', $start);
+			$dateto = date('d.m.Y', $end);
+			$people = $rv->prop("people_count");
+			if($roomid = $rv->prop("resource"))
+			{
+				$ro = obj($roomid);
+				$room = $ro->name();
+				$room_instance = get_instance(CL_ROOM);
+				$sum = $room_instance->cal_room_price(array(
+					"room" => $roomid,
+					"start" => $start,
+					"end" => $end,
+					"people" => $people,
+					"products" => $rv->meta("amount"),
+					"bron" => $rv,
+				));
+				$price = $sum[$currency];
+			}
+			$comment = $rv->prop("comment");
+			$this->vars(array(
+				"datefrom" => $datefrom,
+				"timefrom" => $timefrom,
+				"timeto" => $timeto,
+				"dateto" => $dateto,
+				"room" => $room,
+				"tables" => $tables,
+				"people" => $people,
+				"comments" => $comment,
+				"colspan" => $colspan,
+			));
+			if($package)
+			{
+				$mgri = get_instance(CL_RFP_MANAGER);
+				$mgrid = $mgri->get_sysdefault();
+				if($this->can("view", $mgrid))
+				{
+					$mgr = obj($mgrid);
+					$pk_prices = $mgr->meta("pk_prices");
+					if(is_array($pk_prices))
+					{
+						$unitprice = $pk_prices[$package_id][$currency];
+					}
+				}
+				$price = $unitprice*$people;
+				$this->vars(array(
+					"unitprice" => $unitprice,
+					"package" => $package,
+					"price" => $price,
+				));
+				$tmp = $this->parse("VALUES_PACKAGE");
+				$this->vars(array(
+					"VALUES_PACKAGE" => $tmp,
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"price" => $price,
+				));
+				$tmp = $this->parse("VALUES_NO_PACKAGE");
+				$this->vars(array(
+					"VALUES_NO_PACKAGE" => $tmp,
+				));
+			}
+			$bron_totalprice += $price;
+			$brons .= $this->parse("BRON");
+			$resources_tmp = $rv->meta("resources_info");
+			if(count($resources_tmp))
+			{
+				foreach($resources_tmp as $rid => $data)
+				{
+					$count = $data["count"];
+					if($count)
+					{
+						$r = obj($rid);
+						$price = $data["prices"][$currency];
+						
+						$total = $price*$count;
+						$resources_total += $total;
+						$resources[] = array(
+							"rid" => $rid,
+							"name" => $r->name(),
+							"price" => $price,
+							"count" => $count,
+							"total" => $total,
+							"time" => $data["time"],
+							"comment" => $data["comment"],
+						);
+					}
+				}
+			}
+		}
+		$this->vars(array(
+			"total_colspan" => $colspan - 2,
+			"bron_totalprice" => $bron_totalprice,
+		));
+		$totalprice += $bron_totalprice;
+		$res_sub = "";
+		if(count($resources))
+		{
+			$res = "";
+			foreach($resources as $r)
+			{
+				$this->vars(array(
+					"name" => $r["name"],
+					"count" => $r["count"],
+					"price" => $r["price"],
+					"total" => $r["total"],
+					"time" => $r["time"],
+					"comment" => $r["comment"],
+				));
+				$res .= $this->parse("RESOURCE");
+			}
+			$this->vars(array(
+				"RESOURCE" => $res,
+				"rtotal" => $resources_total,
+			));
+			$res_sub = $this->parse("RESOURCES");
+		}
+		$totalprice += $resources_total;
+		$this->vars(array(
+			"BRON" => $brons,
+			"RESOURCES" => $res_sub,
+		));
+		return $this->parse();
 	}
 
 	function set_property($arr = array())
@@ -612,6 +1134,24 @@ class rfp extends class_base
 						"resources_info" => $arr["request"]["resources_info"],
 					));
 				}
+			break;
+			case "prices_tbl":
+				foreach($arr["request"] as $var=>$val)
+				{
+					$tmp = explode("_", $var);
+					if($tmp[0] == "discount")
+					{
+						$o = obj($tmp[1]);
+						$o->set_prop("special_discount", $val);	
+						$o->save();
+					}
+					elseif($tmp[0] == "custom")
+					{
+						$o = obj($tmp[1]);
+						$o->set_prop("special_sum", $val);	
+						$o->save();
+					}
+				}			
 			break;
 		}
 		return $retval;
@@ -787,6 +1327,132 @@ class rfp extends class_base
 					"source" => $html,
 				)));
 				break;
+		}
+	}
+
+	function _get_files_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_FILE), $arr["obj_inst"]->id(), '', array());
+		$tb->add_search_button(array(
+			"pn" => $arr["obj_inst"]->id(),
+			"multiple" => 1,
+			"clid" => CL_FILE,
+		));
+		$tb->add_delete_button();
+	}
+
+	function _get_files_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$ol = new object_list(array(
+			"class_id" => CL_FILE,
+			"parent" => $arr["obj_inst"]->id(),
+		));
+		$t->table_from_ol($ol, array("name", "modifiedby", "modified"), CL_FILE);
+	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if($tbl == "rfp")
+		{
+			if($field=="")
+			{
+				$fields = array(
+					array("final_rooms", "varchar(255)"),
+					array("final_theme", "varchar(255)"),
+					array("final_international", "int"),
+					array("final_native_guests", "int"),
+					array("final_foreign_guests", "int"),
+					array("data_subm_name", "varchar(255)"),
+					array("data_subm_country", "varchar(255)"),
+					array("data_subm_organisation", "varchar(255)"),
+					array("data_subm_organizer", "varchar(255)"),
+					array("data_subm_email", "varchar(255)"),
+					array("data_subm_phone", "varchar(255)"),
+					array("data_subm_contact_preference", "varchar(255)"),
+					array("data_gen_function_name", "varchar(255)"),
+					array("data_gen_attendees_no", "int"),
+					array("data_gen_response_date_admin", "int"),
+					array("data_gen_decision_date_admin", "int"),
+					array("data_gen_departure_date_admin", "int"),
+					array("data_gen_arrival_date_admin", "int"),
+					array("data_gen_open_for_alternative_dates", "int"),
+					array("data_gen_accommodation_requirements", "int"),
+					array("data_gen_multi_day", "varchar(255)"),
+					array("data_gen_single_rooms", "int"),
+					array("data_gen_double_rooms", "int"),
+					array("data_gen_suites", "int"),
+					array("data_gen_acc_start_admin", "int"),
+					array("data_gen_acc_end_admin", "int"),
+					array("data_gen_dates_are_flexible", "int"),
+					array("data_gen_meeting_pattern", "varchar(255)"),
+					array("data_gen_date_comments", "text"),
+					array("data_gen_city", "int"),
+					array("data_gen_hotel", "int"),
+					array("archived", "int"),
+					array("urgent", "int"),
+					array("data_gen_alternative_dates", "int"),
+					array("data_gen_package", "int"),
+					array("data_mf_table", "varchar(255)"),
+					array("data_mf_event_type", "int"),
+					array("data_mf_table_form", "int"),
+					array("data_mf_tech", "varchar(255)"),
+					array("data_mf_additional_tech", "text"),
+					array("data_mf_additional_decorations", "text"),
+					array("data_mf_additional_entertainment", "text"),
+					array("data_mf_additional_catering", "text"),
+					array("data_mf_breakout_rooms", "int"),
+					array("data_mf_breakout_room_setup", "text"),
+					array("data_mf_breakout_room_additional_tech", "text"),
+					array("data_mf_door_sign", "varchar(255)"),
+					array("data_mf_attendees_no", "int"),
+					array("data_mf_start_date_admin", "int"),
+					array("data_mf_end_date_admin", "int"),
+					array("data_mf_24h", "varchar(255)"),
+					array("data_mf_catering", "text"),
+					array("data_mf_catering_type", "varchar(255)"),
+					array("data_mf_catering_attendees_no", "int"),
+					array("data_mf_catering_start_admin", "int"),
+					array("data_mf_catering_end_admin", "int"),
+					array("data_billing_company", "varchar(255)"),
+					array("data_billing_contact", "varchar(255)"),
+					array("data_billing_street", "varchar(255)"),
+					array("data_billing_city", "varchar(255)"),
+					array("data_billing_zip", "varchar(255)"),
+					array("data_billing_country", "varchar(255)"),
+					array("data_billing_name", "varchar(255)"),
+					array("data_billing_phone", "varchar(255)"),
+					array("data_billing_email", "varchar(255)"),
+				);
+
+				foreach($fields as $f)
+				{
+					$cfields[] = "`".$f[0]."` ".$f[1];
+					$ifields[] = "`".$f[0]."`";
+				}
+				
+				$cfieldsql = implode(", ", $cfields);
+				$ifieldsql = implode(", ", $ifields);
+
+				$this->db_query("CREATE TABLE rfp (`aw_oid` int primary key, ".$cfieldsql.")");
+
+				$ol = new object_list(array(
+					"class_id" => CL_RFP,
+				));
+				foreach($ol->arr() as $o)
+				{
+					$values = array();
+					foreach($fields as $f)
+					{
+						$values[] = "'".htmlspecialchars($o->meta($f[0]), ENT_QUOTES)."'";
+					}
+					$valuesql = implode(",", $values);
+					$this->db_query("INSERT INTO rfp(`aw_oid`, ".$ifieldsql.") VALUES('".$o->id()."', ".$valuesql.")");
+					
+				}
+				return true;
+			}
 		}
 	}
 }

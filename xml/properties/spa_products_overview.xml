@@ -8,7 +8,7 @@
             <multiple>1</multiple>
             <reltype>RELTYPE_ROOM</reltype>
             <field>meta</field>
-            <mehtod>serialize</mehtod>
+            <method>serialize</method>
             <caption>Ruumid</caption>
       </property>
       <property>

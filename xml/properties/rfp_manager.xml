@@ -11,6 +11,36 @@
             <caption>Edasisuunamisdokument</caption>
       </property>
       <property>
+            <name>room_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_ROOM_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ruumide kaust</caption>
+      </property>
+      <property>
+            <name>prod_vars_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROD_VARS_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toodete muutujate asukoht</caption>
+      </property>
+      <property>
+            <name>default_table</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>default_table</field>
+      </property>
+      <property>
             <name>s_name</name>
             <table>objects</table>
             <group>
@@ -110,6 +140,25 @@
             <store>no</store>
             <field>rfps</field>
       </property>
+      <property>
+            <name>packages_folder</name>
+            <table>objects</table>
+            <group>packages</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PACKAGE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pakettide kaust</caption>
+      </property>
+      <property>
+            <name>packages_tbl</name>
+            <table>objects</table>
+            <group>packages</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>packages_tbl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_RFP_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -130,6 +179,9 @@
                   <caption>Arhiiv</caption>
                   <parent>rfps</parent>
             </rfps_archive>
+            <packages>
+                  <caption>Paketid</caption>
+            </packages>
       </groupinfo>
       <reltypes>
             <REDIR_DOC>
@@ -137,6 +189,27 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Konverentsiplaneerija</caption>
             </REDIR_DOC>
+            <ROOM_FOLDER>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Ruumide kaust</caption>
+            </ROOM_FOLDER>
+            <PACKAGE_FOLDER>
+                  <value>3</value>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_META</num_1>
+                  </clid>
+                  <caption>Pakettide kaust</caption>
+            </PACKAGE_FOLDER>
+            <PROD_VARS_FOLDER>
+                  <value>4</value>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_META</num_1>
+                  </clid>
+                  <caption>Toodete muutujate kaust</caption>
+            </PROD_VARS_FOLDER>
       </reltypes>
       <layout>
             <hsplit>

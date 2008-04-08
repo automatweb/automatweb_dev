@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_products_overview.aw,v 1.3 2008/01/31 13:50:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_products_overview.aw,v 1.4 2008/04/08 12:40:26 kristo Exp $
 // spa_products_overview.aw - Broneeringute toitlustuse haldus 
 /*
 
@@ -11,7 +11,7 @@ tableinfo spa_products_overview index=id master_index=oid master_table=objects
 @default group=general
 
 
-	@property rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM field=meta mehtod=serialize
+	@property rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM field=meta method=serialize
 	@caption Ruumid
 
 @groupinfo reservations caption="Reserveeringud"

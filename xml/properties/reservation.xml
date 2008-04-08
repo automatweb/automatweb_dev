@@ -388,6 +388,16 @@
             <field>products_tbl</field>
       </property>
       <property>
+            <name>prices_tbl</name>
+            <table>objects</table>
+            <group>prices</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>prices_tbl</field>
+      </property>
+      <property>
             <name>ppl_tb</name>
             <table>objects</table>
             <group>ppl</group>
@@ -467,6 +477,9 @@
             <products>
                   <caption>Tooted</caption>
             </products>
+            <prices>
+                  <caption>Hinnad</caption>
+            </prices>
             <ppl>
                   <caption>Kliendid</caption>
             </ppl>

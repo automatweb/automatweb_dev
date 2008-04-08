@@ -11,11 +11,7 @@ if (empty($_COOKIE["nocache"]) && aw_ini_get("config.use_squid"))
 
 ini_set("session.save_handler", "files");
 session_name("automatweb");
-if (empty($_COOKIE["automatweb"]))
-{
-	session_regenerate_id();
-};
-@session_start();
+session_start();
 lc_init();
 classload("aw_template");
 classload("defs");

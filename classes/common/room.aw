@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.241 2008/04/08 08:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.242 2008/04/08 12:40:27 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -33,7 +33,7 @@
 		@property warehouse type=relpicker reltype=RELTYPE_SHOP_WAREHOUSE parent=general_up
 		@caption Ladu
 		
-		@property resources_fld type=hidden reltype=RELTYPE_INVENTORY_FOLDER no_caption=1 parent=general_up
+		@property resources_fld type=relpicker reltype=RELTYPE_INVENTORY_FOLDER parent=general_up
 		@caption Ressursside kataloog
 
 		@property area type=relpicker reltype=RELTYPE_AREA parent=general_up
@@ -505,7 +505,7 @@ class room extends class_base
 				));
 				$prop["value"] = "s"; //$c->draw_month();
 */				case "products_tr":
-					if(!$arr["obj_inst"]->prop("resources_fld"))
+					if(!$this->_get_prod_fld($arr["obj_inst"]))
 					{
 						$prop["error"] = t("Pole valitud lao toodete kataloogi");
 						return PROP_ERROR;
@@ -631,17 +631,7 @@ class room extends class_base
 					$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				}
 				break;
-			case "resources_fld":
-				if(is_oid($arr["request"]["warehouse"]) && $this->can("view" ,$arr["request"]["warehouse"]))
-				{
-					$warehouse = obj($arr["request"]["warehouse"]);
-					if(is_oid($warehouse->prop("conf")) && $this->can("view" ,$warehouse->prop("conf")))
-					{
-						$warehouse->config = obj($warehouse->prop("conf"));
-						$prop["value"] = $warehouse->config->prop("prod_fld");
-					}
-				}
-				break;
+
 			case "deadline":
 				$prop["value"] = time() + 15*60;
 				break;
@@ -3495,7 +3485,7 @@ class room extends class_base
 	function _products_tr($arr)
 	{
 		$arr["prop"]["vcl_inst"] = new object_tree(array(
-			"parent" => $arr["obj_inst"]->prop("resources_fld"),
+			"parent" => $this->_get_prod_fld($arr["obj_inst"]),
 			"class_id" => CL_MENU,
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
 			"sort_by" => "objects.jrk"
@@ -3508,7 +3498,7 @@ class room extends class_base
 				"tree_id" => "prods",
 				"persist_state" => true,
 			),
-			"root_item" => obj($arr["obj_inst"]->prop("resources_fld")),
+			"root_item" => obj($this->_get_prod_fld($arr["obj_inst"])),
 			"ot" => $arr["prop"]["vcl_inst"],
 			"var" => "tree_filter"
 		));
@@ -3579,8 +3569,8 @@ class room extends class_base
 	{
 		$tb =& $data["prop"]["toolbar"];
 
-		$this->prod_type_fld = $data["obj_inst"]->prop("resources_fld");
-		$this->prod_tree_root = isset($_GET["tree_filter"]) ? $_GET["tree_filter"] : $data["obj_inst"]->prop("resources_fld");
+		$this->prod_type_fld = $this->_get_prod_fld($data["obj_inst"]);
+		$this->prod_tree_root = isset($_GET["tree_filter"]) ? $_GET["tree_filter"] : $this->_get_prod_fld($data["obj_inst"]);
 			
 		$tb->add_menu_button(array(
 			"name" => "crt_".$this->prod_type_fld,
@@ -3728,10 +3718,11 @@ class room extends class_base
 		{
 			$o = obj($o);
 		}
-		if(is_oid($o->prop("resources_fld")) && $this->can("view" , $o->prop("resources_fld")))
+		$prod_fld = $this->_get_prod_fld($o);
+		if(is_oid($prod_fld) && $this->can("view" , $prod_fld))
 		{
 			$tree = new object_tree(array(
-				"parent" => $o->prop("resources_fld"),
+				"parent" => $prod_fld,
 				"class_id" => CL_MENU,
 				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
 				"sort_by" => "objects.jrk"
@@ -3743,7 +3734,7 @@ class room extends class_base
 			$parents = $menu_list->ids();
 			foreach($parents as $key => $parent)
 			{
-				if(!$this->prod_data[$parent]["active"] && !($o->prop("resources_fld") == $parent))
+				if(!$this->prod_data[$parent]["active"] && !($prod_fld == $parent))
 				{
 					unset($parents[$key]);
 				}
@@ -6161,6 +6152,26 @@ class room extends class_base
 		return $res;
 	}
 
-	
+	function _get_prod_fld($obj)
+	{
+		$warehouse_id = $obj->prop("warehouse");
+		if(is_oid($warehouse_id) && $this->can("view" ,$warehouse_id))
+		{
+			$warehouse = obj($warehouse_id);
+			if(is_oid($warehouse->prop("conf")) && $this->can("view" ,$warehouse->prop("conf")))
+			{
+				$warehouse->config = obj($warehouse->prop("conf"));
+				$prod_fld = $warehouse->config->prop("prod_fld");
+			}
+		}
+		if(is_oid($prod_fld))
+		{
+			return $prod_fld;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

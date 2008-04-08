@@ -59,9 +59,8 @@
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
-            <type>hidden</type>
+            <type>relpicker</type>
             <reltype>RELTYPE_INVENTORY_FOLDER</reltype>
-            <no_caption>1</no_caption>
             <parent>general_up</parent>
             <caption>Ressursside kataloog</caption>
       </property>

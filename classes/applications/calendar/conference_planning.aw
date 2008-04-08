@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.104 2008/04/01 12:45:37 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.105 2008/04/08 12:40:23 kristo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1757,6 +1757,41 @@ class conference_planning extends class_base
 			unset($data["clid"]);
 			foreach($arr["data"] as $property => $value)
 			{
+				switch($property)
+				{
+					case "data_gen_acc_end":
+					case "data_gen_acc_start":
+						$tmp = $value;
+						$value = array();
+						$value["date"] = $tmp;
+					case "data_mf_catering_end":
+					case "data_mf_catering_start":
+					case "data_mf_end_date":
+					case "data_mf_start_date":
+					case "data_gen_departure_date":
+					case "data_gen_arrival_date":
+					case "data_gen_decision_date":
+					case "data_gen_response_date":
+						$day = explode(".", $value["date"]);
+						$time = explode(":", $value["time"]);
+						$stamp = mktime($time[0], $time[1], 0, $day[1], $day[0], $day[2]);
+						$obj->set_prop($property."_admin", $stamp);
+					break;
+					case "data_mf_event_type":
+						$tmp = explode("\"", $value);
+						foreach($tmp as $t)
+						{
+							if(is_oid($t))
+							{
+								$o = obj($t);
+								if($o->class_id() == CL_META)
+								{
+									$value = $t;
+								}
+							}
+						}
+					break;
+				}
 				$obj->set_prop($property, $value);
 			}
 			$obj->save();
@@ -1870,8 +1905,10 @@ class conference_planning extends class_base
 		{
 			return "";
 		}
-		$el = array_merge($el, $controller);
-
+		if(is_array($controller))
+		{
+			$el = array_merge($el, $controller);
+		}
 		// this here is for strange cases where data needs to be temporarily altered(in controller) to show on web, but can't be stored that way
 		// so, inside the switch statement use $value_to_use instead of $value
 		if(!empty($el["value"]))

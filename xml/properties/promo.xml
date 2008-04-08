@@ -301,6 +301,14 @@
             <field>lm_tb</field>
       </property>
       <property>
+            <name>docs_from_current_menu</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>menus_sub</group>
+            <field>docs_from_current_menu</field>
+            <caption>Dokumendid aktiivse men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
+      </property>
+      <property>
             <name>last_menus</name>
             <type>table</type>
             <group>menus_sub</group>
@@ -308,16 +316,6 @@
             <store>no</store>
             <field>last_menus</field>
             <caption>Vali men&amp;amp;uuml;&amp;amp;uuml;d, mille alt viimaseid dokumente v&amp;amp;otilde;etakse</caption>
-      </property>
-      <property>
-      	<name>docs_from_current_menu</name>
-	<type>checkbox</type>
-	<group>menus_sub</group>
-	<method>serialize</method>
-	<table>objects</table>
-	<field>meta</field>
-	<ch_value>1</ch_value>
-	<caption>Dokumendid aktiivse men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
       </property>
       <property>
             <name>ndocs</name>

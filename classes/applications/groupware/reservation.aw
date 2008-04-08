@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.93 2008/04/08 12:04:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.94 2008/04/08 12:40:25 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -151,6 +151,11 @@ caption Kokkuv&otilde;te
 @default group=products
 	
 	@property products_tbl type=table no_caption=1
+
+@groupinfo prices caption="Hinnad"
+@default group=prices
+
+	@property prices_tbl type=table no_caption=1
 
 @groupinfo ppl caption="Kliendid"
 @default group=ppl
@@ -550,6 +555,10 @@ class reservation extends class_base
 		{
 			$arr["resource"] = $_GET["resource"];
 		}
+		if($_GET["rfp"])
+		{
+			$arr["rfp"] = $_GET["rfp"];
+		}
 	}
 
 	function callback_post_save($arr)
@@ -570,6 +579,14 @@ class reservation extends class_base
 
 		$ps = get_instance("vcl/popup_search");
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["add_p"], 1 /* RELTYPE_CUSTOMER */);
+		if($arr["new"] && is_oid($arr["request"]["rfp"]))
+		{
+			$rfp = obj($arr["request"]["rfp"]);
+			$rfp->connect(array(
+				"type" => "RELTYPE_RESERVATION",
+				"to" => $arr["obj_inst"]->id(),
+			));
+		}
 
 		if ($arr["request"]["sbt_close"] != "")
 		{
@@ -698,6 +715,7 @@ class reservation extends class_base
 		$currency = $room?$room->prop("currency"):array();
 
 		$t = &$arr["prop"]["vcl_inst"];
+
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
@@ -735,7 +753,18 @@ class reservation extends class_base
 			"align" => "center",
 			"chgbgcolor" => "split",
 		));
-
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kommentaar"),
+			"align" => "center",
+			"chgbgcolor" => "split",
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Aeg"),
+			"chgbgcolor" => "split",
+			"align" => "center",
+		));
 		// so, so lets set the total price/discount thingies
 		$res_discount = $this->get_resources_discount($arr["obj_inst"]->id());
 		$t->define_data(array(
@@ -777,6 +806,12 @@ class reservation extends class_base
 			$res = $res_obj->id();
 			$data = array();
 			$data = array(
+				"date" => html::textbox(array(
+					//"name" => "discount[".$res."]",
+					"name" => "resources_info[".$res."][time]",
+					"value" => $rdata[$res]["time"],
+					"size" => 5,
+				)),
 				"name" => $res_obj->name(),
 				"amount" => html::textbox(array(
 					//"name" => "cnt[".$res."]",
@@ -789,6 +824,12 @@ class reservation extends class_base
 					"name" => "resources_info[".$res."][discount]",
 					"value" => $rdata[$res]["discount"],
 					"size" => 5,
+				)),
+				"comment" => html::textarea(array(
+					"name" => "resources_info[".$res."][comment]",
+					"value" => $rdata[$res]["comment"],
+					"cols" => 20,
+					"rows" => 3,
 				)),
 			);
 			foreach($currency as $cur)
@@ -1121,6 +1162,114 @@ class reservation extends class_base
 		));
 		
 		return $t;
+	}
+
+	function _get_prices_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		if($arr["obj_inst"])
+		{
+			$rvs[] = $arr["obj_inst"];
+		}
+		elseif(count($arr["ids"]))
+		{
+			$t->define_field(array(
+				"name" => "name",
+				"caption" => t("Reserveering"),	
+				"chgbgcolor" => "split",
+			));
+			$rvs = array();
+			foreach($arr["ids"] as $id)
+			{
+				$rvs[] = obj($id);
+			}
+		}
+		$t->define_field(array(
+			"name" => "discount",
+			"caption" => t("Soodustus %"),
+			"chgbgcolor" => "split",
+		));
+		$t->define_field(array(
+			"name" => "custom",
+			"caption" => t("Kokkuleppehind"),
+			"chgbgcolor" => "split",
+		));
+		$t->set_sortable(false);
+		$setcur = array();
+		$totals = 0;
+		foreach($rvs as $o)
+		{
+			$d = array();
+			$room_instance = get_instance(CL_ROOM);
+			$sum = $room_instance->cal_room_price(array(
+				"room" => $o->prop("resource"),
+				"start" => $o->prop("start1"),
+				"end" => $o->prop("end"),
+				"people" => $o->prop("people_count"),
+				"products" => $o->meta("amount"),
+				"bron" => $o,
+				"detailed_info" => true
+			));
+			$total = 0;
+			foreach($sum["room_price"] as $cur => $price)
+			{
+				if(!$setcur[$cur])
+				{
+					$co = obj($cur);
+					$t->define_field(array(
+						"name" => "price".$cur,
+						"caption" => $co->name(),
+						"align" => "right",
+						"chgbgcolor" => "split",
+					));
+					$setcur[$cur] = $cur;
+				}
+			}
+			if(!$setcur["total"])
+			{
+				$t->define_field(array(
+					"name" => "total",
+					"caption" => t("Hind"),
+					"chgbgcolor" => "split",
+				));
+				$setcur["total"] = 1;
+			}
+			
+			foreach($sum["room_price"] as $cur => $price)
+			{
+				$price = number_format($price, 2);
+				$d["price".$cur] = $price;
+				$total += $price;
+			}
+			$d["name"] = $o->name();
+			$d["discount"] = html::textbox(array(
+				"name" => "discount_".$o->id(),
+				"value" => $o->prop("special_discount"),
+				"size" => 5
+			));
+			$d["custom"] = html::textbox(array(
+				"name" => "custom_".$o->id(),
+				"value" => $o->prop("special_sum"),
+				"size" => 5
+			));
+			if($c = $o->prop("special_sum"))
+			{
+				$total = $c;
+			}
+			$totals += $total;
+			$d["total"] = number_format($total,2);
+			$t->define_data($d);
+		}
+		if(count($rvs) > 1)
+		{
+			$t->define_data(array(
+				"split" => "#CCCCCC",
+			));
+			$t->define_data(array(
+				"custom" => "<strong>".t("Kokku:")."</strong>",
+				"total" => number_format($totals,2),
+			));
+		}
 	}
 
 	function _get_admin_price_view($prod,$sum)
