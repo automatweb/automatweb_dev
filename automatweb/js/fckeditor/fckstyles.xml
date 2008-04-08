@@ -38,4 +38,13 @@
 		<Attribute name="size" value="1" />
 		<Attribute name="color" value="#ff0000" />
 	</Style>
+	<Style name="Vahepealkiri" element="span">
+		<Attribute name="class" value="vahepealkiri" />
+	</Style>
+	<Style name="Quotation" element="div">
+		<Attribute name="class" value="quote" />
+	</Style>
+        <Style name="Price" element="strong">
+                <Attribute name="class" value="red" />
+        </Style>
 </Styles>

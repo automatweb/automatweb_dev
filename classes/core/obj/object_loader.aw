@@ -464,12 +464,10 @@ class _int_object_loader extends core
 
 			$this->__aw_acl_cache[$oid] = $max_acl;
 		}
-
 		if (!isset($max_acl["can_view"]) && $_SESSION["uid"] == "")
 		{
 			return $GLOBALS["cfg"]["acl"]["default"];
 		}
-
 		return (int)$max_acl["can_".$acl_name];
 	}
 

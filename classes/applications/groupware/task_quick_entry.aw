@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.31 2008/03/10 14:12:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.32 2008/04/08 12:04:00 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -79,6 +79,7 @@ class task_quick_entry extends class_base
 			case "customer":
 				$prop["autocomplete_source"] = $this->mk_my_orb("cust_autocomplete_source");
 				$prop["autocomplete_params"] = array("customer");
+				if(aw_global_get("uid") == "marko") arr($prop);
 				break;
 
 			case "project":

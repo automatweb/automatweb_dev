@@ -273,6 +273,7 @@ class acl_base extends db_connector
 
 	function can_aw($access,$oid)
 	{
+
 		$access="can_".$access;
 
 		//$this->save_handle();
@@ -379,7 +380,6 @@ class acl_base extends db_connector
 		{
 			return $GLOBALS["object_loader"]->can($access, $oid);
 		}
-
 		static $acl_cache;
 		if (!$acl_cache)
 		{

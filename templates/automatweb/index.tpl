@@ -32,7 +32,6 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=aw_object_quickadd&action=get_objects"></script>
 
 
-
 <script type="text/javascript">
 shortcut("Ctrl+Shift+A",function() {
 	desc = prompt("Kirjeldus", "nimetu");

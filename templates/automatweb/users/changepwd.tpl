@@ -53,20 +53,14 @@ background-color: #EFEFEF;
 <td class="tabletext"><input type="text" name="email" VALUE='{VAR:email}'></td>
 </tr>
 <tr>
-<td class="tabletext">Parool:</td><td class="tabletext"><input type='password' NAME='pwd' >  (<a href='#' onClick='gp();'>Genereeri</a>)</td>
+<td class="tabletext">Password:</td><td class="tabletext"><input type='password' NAME='pwd' > </td>
 </tr>
 <tr>
-<td class="tabletext">Parool uuesti:</td><td class="tabletext"><input type='password' NAME='pwd2' ></td>
+<td class="tabletext">Password again:</td><td class="tabletext"><input type='password' NAME='pwd2' ></td>
 </tr>
 <tr>
-<td class="tabletext">Genereeritud parool:</td>
-<td class="tabletext"><input type="text" name="genpwd"></td>
-</tr>
 <tr>
-<td class="tabletext">Saada liitumismeil uuesti:</td><td class="tabletext"><input type="checkbox" name="send_welcome_mail" value="1"></td>
-</tr>
-<tr>
-<td class="tabletext" colspan=2><input type="image" value="submit" src="/automatweb/images/formbutton_salvesta-andmed.gif" border="0"></td>
+<td class="tabletext" colspan=2><input type="submit" value="Save" name="Save"></td>
 </tr>
 </table>
 {VAR:reforb}

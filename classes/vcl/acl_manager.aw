@@ -318,7 +318,7 @@ class acl_manager extends class_base
 			{
 				$obj->acl_set($o, safe_array($arr["acl_matrix"][$o->id()]));
 			}	
-
+			
 			if ($arr["is_rootmenu"][$oid] == 1)
 			{
 				$o->connect(array(
@@ -345,7 +345,6 @@ class acl_manager extends class_base
 				}
 			}
 		}
-
 		return $arr["post_ru"];
 	}
 }

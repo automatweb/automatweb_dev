@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.112 2008/03/13 11:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.113 2008/04/08 12:04:24 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -528,7 +528,7 @@ class aw_table extends aw_template
 		// ok, all those if sentences are getting on my nerves - we will make sure that all sorting options
 		// after this point are always arrays
 		$this->make_sort_prop_arrays();
-
+		
 		// switch to estonian locale
 		$old_loc = setlocale(LC_COLLATE,0);
 		setlocale(LC_COLLATE, 'et_EE');
@@ -2311,7 +2311,6 @@ class aw_table extends aw_template
 			$tbl .= "</td>";
 			$cell_count++;
 		};
-
 		foreach($this->rowdefs as $k => $v)
 		{
 			if (!(($parent == "" && empty($v["parent"])) || isset($parent[$v["parent"]])))

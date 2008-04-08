@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.37 2008/03/04 08:12:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.38 2008/04/08 12:04:05 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -931,7 +931,7 @@ class spa_customer_interface extends class_base
 				"reference_nr" => $o->id(),
 				"lang" => $lang_id,
 			));
-		}
+		}if(aw_global_get("uid") == "struktuur")arr($r);
 		$o->set_meta("ru" , $r);
 		$o->save();
 		return $asd;

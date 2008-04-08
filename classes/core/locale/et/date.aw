@@ -66,6 +66,10 @@ class date
 		$name = ($ucfirst) ? ucfirst($names[$num]) : $names[$num];
 		return $short ? substr($name,0,1) : $name;
 	}
+	function estoo()
+	{
+
+	}
 	
 	function get_lc_month($num)
 	{

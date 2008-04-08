@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.114 2008/02/29 10:47:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.115 2008/04/08 12:03:53 kristo Exp $
 // here we define basic constants needed by all components
 /*
 @classinfo  maintainer=kristo
@@ -41,7 +41,7 @@ if (($QUERY_STRING == "" && $PATH_INFO == "") && $REQUEST_URI != "")
 }
 
 
-if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
+if (false &&  isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
 {
 	// apache 2 fix
 	$QUERY_STRING = str_replace("xmlrpc.aw", "", str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $QUERY_STRING)))));
@@ -58,7 +58,7 @@ if (strlen($QUERY_STRING) > 1)
 };
 
 $_SERVER["REQUEST_URI"] = isset($_SERVER['REQUEST_URI']) ? preg_replace("/\?automatweb=[^&]*/","", $_SERVER["REQUEST_URI"]) : "";
-if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
+if (false &&  isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
 {
 	if ($_SERVER["REQUEST_URI"] != "")
 	{

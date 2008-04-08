@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.92 2008/03/04 13:17:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.93 2008/04/08 12:04:00 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -213,7 +213,7 @@ class reservation extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
-			case "bill_no":
+			case "bill_no"://if(aw_global_get("uid")== "struktuur"){arr($arr["obj_inst"]->meta());arr($this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["obj_inst"]->id() , "tpl" => $tpl,)));}
 				if(!is_oid($prop["value"]))
 				{
 					return PROP_IGNORE;

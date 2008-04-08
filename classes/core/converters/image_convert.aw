@@ -544,6 +544,7 @@ class _int_image_convert_driver_gd extends aw_template
 	// x, y, width, htight, new_width, new_height
 	function resize($arr)
 	{
+		set_time_limit(1200);
 		$tmpimg = imagecreatetruecolor($arr["new_width"], $arr["new_height"]);
 		imagecopyresampled($tmpimg, $this->image,0,0, $arr["x"], $arr["y"], $arr["new_width"], $arr["new_height"], $arr["width"], $arr["height"]);
 		imagedestroy($this->image);

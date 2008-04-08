@@ -3723,7 +3723,6 @@ class crm_person extends class_base
 		};
 	}
 
-
 	function on_connect_section_to_person($arr)
 	{
 		$conn = $arr['connection'];

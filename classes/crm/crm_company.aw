@@ -8217,7 +8217,7 @@ Bank accounts: yksteise all
 				$aa[] = $a->name();
 			}
 			$t->define_data(array(
-				"caption" => t("Telefon".":"),
+				"caption" => t("Telefon").":",
 				"data" => join($aa, ", "),
 			));
 		}

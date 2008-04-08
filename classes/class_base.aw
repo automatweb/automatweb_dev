@@ -5512,8 +5512,11 @@ class class_base extends aw_template
 				$nm = "sep_$lid";
 				$ret[$nm] = array(
 					"name" => $nm,
+					"type" => "text", 
+					"cols" => $pl[$p]["cols"],
+					"rows" => $pl[$p]["rows"],
+					"value" => iconv($lang["charset"], "UTF-8", $vals[$p]),
 					"caption" => $lang["name"]."<a name='#$lid'></a>",
-					"type" => "text",
 					"subtitle" => 1,
 				);
 

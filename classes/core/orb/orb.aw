@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.30 2008/03/31 09:57:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.31 2008/04/08 12:04:18 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -51,7 +51,7 @@ class orb extends aw_template
 				)
 			));
 
-			if ($this->can("view", $cfgform_id))
+			if (false && $this->can("view", $cfgform_id))
 			{
 				$cfi = get_instance(CL_CFGFORM);
 				if (!$cfi->check_user_orb_access(array("action" => $args["action"], "cfgform" => $cfgform_id)))

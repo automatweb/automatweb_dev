@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.68 2008/04/08 12:04:08 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -15,19 +16,19 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 	@property name type=textbox table=objects field=name
 	@caption Nimi
 
-	@property after_join_url type=textbox field=meta method=serialize
+	@property after_join_url type=textbox field=meta method=serialize 
 	@caption P&auml;rast liitumist mine aadressile
 
-	@property obj_folder type=relpicker reltype=RELTYPE_OBJ_FOLDER field=meta method=serialize
+	@property obj_folder type=relpicker reltype=RELTYPE_OBJ_FOLDER field=meta method=serialize 
 	@caption Kataloog, kuhu salvestatakse objektid
 
-	@property autologin type=checkbox ch_value=1 field=meta method=serialize
+	@property autologin type=checkbox ch_value=1 field=meta method=serialize 
 	@caption Kas kasutaja logitakse automaatselt sisse liitumisel
 
-	@property send_join_mail type=checkbox ch_value=1 field=meta method=serialize
+	@property send_join_mail type=checkbox ch_value=1 field=meta method=serialize 
 	@caption Kas liitumisel saadetakse meil
 
-	@property users_blocked_by_default type=checkbox ch_value=1 field=meta method=serialize
+	@property users_blocked_by_default type=checkbox ch_value=1 field=meta method=serialize 
 	@caption Kasutajad vaikimisi blokeeritud
 
 @default group=general_ctrl
@@ -71,12 +72,6 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 	@property username_element type=select field=meta method=serialize
 	@caption Kasutajanime element
-
-	@property auto_pwd type=checkbox ch_value=1 field=meta method=serialize
-	@caption Automaatne parool
-
-	@property default_ctry type=select field=meta method=serialize
-	@caption Vaikimisi maa
 
 	@property prop_settings type=table store=no no_caption=1
 
@@ -160,7 +155,7 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 	@groupinfo trans_eld parent=trans caption="Elemendid"
 	@default group=trans_eld
-
+	
 		@property trans_tb type=table no_caption=1 store=no
 
 	@groupinfo trans_ttl parent=trans caption="Vahepealkirjad"
@@ -214,9 +209,7 @@ class join_site extends class_base
 			"date_select" => 1,
 			"chooser" => 1,
 			"releditor" => 1,
-			"classificator" => 1,
-			"textarea" => 1,
-			"popup_search" => 1
+			"classificator" => 1
 		);
 	}
 
@@ -226,12 +219,6 @@ class join_site extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "default_ctry":
-				$ai = get_instance(CL_CRM_ADDRESS);
-				$data["options"][""] = "";
-				$data["options"] += $ai->get_country_list();
-				break;
-
 			case "prop_settings":
 				$this->_get_prop_settings($arr);
 				break;
@@ -309,11 +296,11 @@ class join_site extends class_base
 
 			case "join_properties":
 				$this->_save_join_properties($arr);
-				break;
+				break;	
 
 			case "join_properties_pages":
 				$this->_save_join_properties_pages($arr);
-				break;
+				break;	
 
 			case "join_properties_page_titles":
 				$this->_save_join_properties_page_titles($arr);
@@ -344,7 +331,7 @@ class join_site extends class_base
 				break;
 		}
 		return $retval;
-	}
+	}	
 
 	function _save_rule($arr)
 	{
@@ -535,19 +522,13 @@ class join_site extends class_base
 	function _do_join_props($arr)
 	{
 		$prop =& $arr["prop"];
-
+		
 		$this->_init_jp_table($prop["vcl_inst"]);
 
 		$required = $arr["obj_inst"]->meta("required");
 		$visible = $arr["obj_inst"]->meta("visible");
 
 		$clss = aw_ini_get("classes");
-
-		$allowed_props = array(
-			CL_CRM_COMPANY => array("phone_id", "telefax_id", "url_id", "email_id", "aw_bank_account"),
-			CL_CRM_PERSON => array("phone"),
-			CL_USER => array()
-		);
 
 		foreach($this->_get_clids($arr["obj_inst"]) as $clid)
 		{
@@ -568,7 +549,7 @@ class join_site extends class_base
 
 			foreach($props as $nprop)
 			{
-				if (!$this->prop_types[$nprop["type"]] && $nprop["name"]!="phone" && !in_array($nprop["name"], $allowed_props[$clid]))
+				if (!$this->prop_types[$nprop["type"]] && $nprop["name"]!="phone")
 				{
 					continue;
 				}
@@ -598,45 +579,6 @@ class join_site extends class_base
 					)),
 					"required" => $req
 				));
-
-				if ($nprop["name"] == "contact")
-				{
-					$ct_props = array(
-						"aadress", "linn", "maakond", "postiindeks", "riik"
-					);
-					$tmp = obj();
-					$tmp->set_class_id(CL_CRM_ADDRESS);
-					$ad_pd = $tmp->get_property_list();
-					foreach($ct_props as $ct_prop)
-					{
-						$nprop = $ad_pd[$ct_prop];
-						$req = html::checkbox(array(
-							"name" => "required[$clid][".$nprop["name"]."]",
-							"value" => 1,
-							"checked" => ($required[$clid][$nprop["name"]] == 1)
-						));
-						if ($clid == CL_USER)
-						{
-							if ($nprop["name"] == "uid_entry" || $nprop["name"] == "passwd" || $nprop["name"] == "passwd_again")
-							{
-								$req = "Jah".html::hidden(array(
-									"name" => "required[$clid][".$nprop["name"]."]",
-									"value" => 1
-										));
-							}
-						}
-
-						$prop["vcl_inst"]->define_data(array(
-							"prop" => str_repeat("&nbsp;", 20).$nprop["caption"]." (".$nprop["name"].")",
-							"visible" => html::checkbox(array(
-								"name" => "visible[$clid][".$nprop["name"]."]",
-								"value" => 1,
-								"checked" => ($visible[$clid][$nprop["name"]] == 1)
-							)),
-							"required" => $req
-						));
-					}
-				}
 			}
 		}
 	}
@@ -644,7 +586,7 @@ class join_site extends class_base
 	function _do_join_props_pages($arr)
 	{
 		$prop =& $arr["prop"];
-
+		
 		$this->_init_jp_table_pages($prop["vcl_inst"]);
 
 		$ord = $arr["obj_inst"]->meta("ord");
@@ -652,7 +594,7 @@ class join_site extends class_base
 		$page = $arr["obj_inst"]->meta("page");
 		$visible = $arr["obj_inst"]->meta("visible");
 
-		// insert all separators
+		// insert all separators 
 		$prop["vcl_inst"]->define_data(array(
 			"prop" => t("<b>Vahepealkirjad</b>"),
 			"visible" => "",
@@ -675,7 +617,7 @@ class join_site extends class_base
 				)),
 			));
 		}
-
+		
 
 		foreach($this->_get_clids($arr["obj_inst"]) as $clid)
 		{
@@ -736,7 +678,7 @@ class join_site extends class_base
 		{
 			$visible[$clid] = $arr["request"]["visible"][$clid];
 			$required[$clid] = $arr["request"]["required"][$clid];
-		}
+		}		
 		$arr["obj_inst"]->set_meta("visible", $visible);
 		$arr["obj_inst"]->set_meta("required", $required);
 	}
@@ -752,7 +694,7 @@ class join_site extends class_base
 			$ord[$clid] = is_array($arr["request"]["ord"][$clid]) ? $arr["request"]["ord"][$clid] : array();
 			$propn[$clid] = is_array($arr["request"]["propn"][$clid]) ? $arr["request"]["propn"][$clid] : array();
 			$page[$clid] = is_array($arr["request"]["page"][$clid]) ? $arr["request"]["page"][$clid] : array();
-		}
+		}		
 		$ord["sep"] = is_array($arr["request"]["ord"]["sep"]) ? $arr["request"]["ord"]["sep"] : array();
 		$page["sep"] = is_array($arr["request"]["page"]["sep"]) ? $arr["request"]["page"]["sep"] : array();
 
@@ -794,12 +736,12 @@ class join_site extends class_base
 
 	/** returns the html form from the join object $id, fills it withu data from objects in $data
 
-		@param id
+		@param id 
 	**/
 	function get_form_from_obj($arr, $sessd = false)
 	{
 		extract($arr);
-
+		
 		$ob = new object($arr["id"]);
 
 		$visible = $ob->meta("visible");
@@ -834,9 +776,9 @@ class join_site extends class_base
 		{
 			$fill_msg = $lang_errs["next_filled"][$lang_id];
 		}
-
+		
 		list($ue_class, $ue_el) = explode("_", $ob->prop("username_element"), 2);
-
+		
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
 		$klomp = array();
@@ -864,7 +806,7 @@ class join_site extends class_base
 			));
 			$tp = array();
 			foreach($props as $pid => $prop)
-			{
+			{	
 				if ($visible[$clid][$prop["name"]])
 				{
 					if (isset($cf_sd[$prop["name"]]))
@@ -877,14 +819,13 @@ class join_site extends class_base
 						// handle person address separately
 						if ($clid == CL_CRM_PERSON && $pid == "address")
 						{
-							// address has: * Street address: * City: * Zip code: * Country:
+							// address has: * Street address: * City: * Zip code: * Country:	
 							$adr_inst = get_instance(CL_CRM_ADDRESS);
 							$tp["p_adr_ctry"] = array(
 								"name" => "p_adr_ctry",
 								"caption" => t("Maa"),
 								"type" => "select",
-								"options" => $adr_inst->get_country_list(),
-								"value" => $ob->prop("default_ctry")
+								"options" => $adr_inst->get_country_list()
 							);
 							$tp["p_adr_zip"] = array(
 								"name" => "p_adr_zip",
@@ -907,78 +848,6 @@ class join_site extends class_base
 								"type" => "textbox",
 							);
 							unset($tp["address"]);
-						}
-						else
-						if ($clid == CL_CRM_COMPANY && $pid == "contact")
-						{
-							// address has: * Street address: * City: * Zip code: * Country:
-							$adr_inst = get_instance(CL_CRM_ADDRESS);
-							if ($visible[$clid]["riik"])
-							{
-								$tp["c_adr_ctry"] = array(
-									"name" => "c_adr_ctry",
-									"caption" => t("Maa"),
-									"type" => "select",
-									"options" => $adr_inst->get_country_list(),
-									"value" => $ob->prop("default_ctry")
-								);
-							}
-							if ($visible[$clid]["postiindeks"])
-							{
-								$tp["c_adr_zip"] = array(
-									"name" => "c_adr_zip",
-									"caption" => t("Postiindeks"),
-									"type" => "textbox",
-								);
-							}
-							if ($visible[$clid]["linn"])
-							{
-								$tp["c_adr_city"] = array(
-									"name" => "c_adr_city",
-									"caption" => t("Linn"),
-									"type" => "textbox",
-								);
-							}
-							if ($visible[$clid]["maakond"])
-							{
-								$tp["c_adr_county"] = array(
-									"name" => "c_adr_county",
-									"caption" => t("Maakond"),
-									"type" => "textbox"
-								);
-							}
-							if ($visible[$clid]["aadress"])
-							{
-								$tp["c_adr_str"] = array(
-									"name" => "c_adr_str",
-									"caption" => t("T&auml;nava nimi"),
-									"type" => "textbox",
-								);
-							}
-							unset($tp["contact"]);
-						}
-						else
-						if ($clid == CL_CRM_COMPANY && $pid == "images")
-						{
-							$tp["c_img_1"] = array(
-								"name" => "c_img_1",
-								"caption" => t("Pilt 1"),
-								"type" => "fileupload",
-								"value" => ""
-							);
-							$tp["c_img_2"] = array(
-								"name" => "c_img_2",
-								"caption" => t("Pilt 2"),
-								"type" => "fileupload",
-								"value" => ""
-							);
-							$tp["c_img_3"] = array(
-								"name" => "c_img_3",
-								"caption" => t("Pilt 3"),
-								"type" => "fileupload",
-								"value" => ""
-							);
-							unset($tp[$pid]);
 						}
 						else
 						if (!empty($el_types[$clid][$pid]))
@@ -1016,43 +885,11 @@ class join_site extends class_base
 						{
 						//	$tp[$pid]["type"] = "textbox";
 						}
-						if ($pid == "gender")
-						{
-							$tp[$pid]["options"] = array(
-								"1" => t("mees"),
-								"2" => t("naine"),
-							);
-						}
 						unset($tp[$pid]["size"]);
-						if ($pid == "pohitegevus")
-						{
-							$cc = get_instance(CL_CRM_COMPANY);
-							$cc->_get_pohitegevus(array(
-								"prop" => &$tp[$pid]
-							));
-							$tp[$pid]["size"] = 5;
-						}
-						if ($pid == "ettevotlusvorm")
-						{
-							$ri = $cfgu->get_relinfo();
-							$rt = $ri[$tp[$pid]["reltype"]];
-							$ops_ol = new object_list(array(
-								"class_id" => $rt["clid"],
-								"lang_id" => array(),
-								"site_id" => array()
-							));
-							$tp[$pid]["options"] = $ops_ol->names();
-						}
-					}
-					else
-					if ($ob->prop("auto_pwd"))
-					{
-						unset($tp[$pid]);
-						continue;
 					}
 				}
 			}
-
+		
 			$wn = "typo_".$clid;
 
 			$i = get_instance($clid);
@@ -1065,7 +902,7 @@ class join_site extends class_base
 			foreach($xp as $xprop)
 			{
 				$oldn = str_replace($wn."[", "", str_replace("]", "", $xprop["name"]));
-
+				
 				if ($clid == CL_USER && ($oldn == "uid_entry" || $oldn == $ue_el) && $je["gen"] != "")
 				{
 					$ermsg = "<font color='#FF0000'>".$je["gen"]."</font>";
@@ -1104,7 +941,7 @@ class join_site extends class_base
 						"sort_by" => $oldn
 					);
 					//$htmlc->add_property($errp);
-					$klomp[$errp["name"]] = $errp;
+					$klomp[$errp["name"]] = $errp;	
 				}
 
 				if (isset($cf_sd[$oldn]))
@@ -1121,7 +958,6 @@ class join_site extends class_base
 					{
 						$xprop["caption"] = $propn[$clid][$oldn];
 					}
-					unset($xprop["no_caption"]);
 				}
 
 				if ($oldn == "comment" && $clid == CL_USER)
@@ -1243,10 +1079,10 @@ class join_site extends class_base
 			"join_but_text" => $tx,
 			"cancel_but_text" => $cb,
 			"reforb" => $this->mk_reforb(
-				"submit_update_form",
+				"submit_update_form", 
 				array(
-					"id" => $o->id(),
-					"add" => 0,
+					"id" => $o->id(), 
+					"add" => 0, 
 					"section" => aw_global_get("section"),
 					"ru" => post_ru()
 				)
@@ -1264,7 +1100,7 @@ class join_site extends class_base
 		{
 			return $this->change_data(obj($arr["id"]));
 		}
-
+		
 		aw_global_set("no_cache", 1);
 
 		$o = obj($arr["id"]);
@@ -1281,7 +1117,7 @@ class join_site extends class_base
 		{
 			$tx = $lang_props["bt"]["__join_but"][$langid];
 		}
-
+		
 		$cb = t("T&uuml;hista");
 		if ($o->prop("cancel_but_text") != "")
 		{
@@ -1315,7 +1151,7 @@ class join_site extends class_base
 			$sessd = aw_global_get("site_join_status");
 		}
 
-
+		
 		// set the data to the session
 		foreach($arr as $k => $v)
 		{
@@ -1334,7 +1170,7 @@ class join_site extends class_base
 	}
 
 	/** submitting a join form will get you here
-
+	
 		@attrib name=submit_join_form nologin="1"
 
 	**/
@@ -1349,12 +1185,7 @@ class join_site extends class_base
 		{
 			list($clid, $el) = explode("_", $obj->prop("username_element"), 2);
 			$arr["typo_".CL_USER]["uid_entry"] = $arr["typo_".$clid][$el];
-		}
-
-		if ($obj->prop("auto_pwd"))
-		{
-			$arr["typo_".CL_USER]["passwd"] = $arr["typo_".CL_USER]["passwd_again"] = generate_password(array("length" => 8));
-		}
+		} 
 
 		// update session data in sess[site_join_status]
 		$this->_update_sess_data($arr);
@@ -1375,7 +1206,7 @@ class join_site extends class_base
 			{
 				if ( $one == 1)
 				{
-					if ($sessd["typo_".$clid][$propn] == "")
+					if ($sessd["typo_".$clid][$propn] == "" || (is_array($sessd["typo_".$clid][$propn]) && ($sessd["typo_".$clid][$propn]["year"] == "---" || $sessd["typo_".$clid][$propn]["month"] == "---" || $sessd["typo_".$clid][$propn]["day"] == "---" )))
 					{
 						$filled = false;
 						$nf["prop"][$clid][$propn] = 1;
@@ -1401,14 +1232,13 @@ class join_site extends class_base
 				}
 			}
 		}
-
 		// if they are , then add the user and go to the after join page
 		if ($filled)
 		{
-			// disable the fucking acl.
+			// disable the fucking acl. 
 			aw_disable_acl();
 			// check if the user can be added
-
+			
 			// get the uid and password
 			// they are from the user object
 			$n_uid = $sessd["typo_".CL_USER]["uid_entry"];
@@ -1421,12 +1251,6 @@ class join_site extends class_base
 			{
 				$join_done = true;
 				// add the user
-
-				obj_set_opt("no_cache", 1);
-				$c = get_instance("cache");
-				$c->full_flush();
-				aw_global_set("no_cache_flush",1);
-
 				$cu = get_instance(CL_USER);
 				$u_oid = $cu->add_user(array(
 					"uid" => $n_uid,
@@ -1435,7 +1259,7 @@ class join_site extends class_base
 					"join_grp" => $obj->id(),
 					"real_name" => $sessd["typo_".CL_CRM_PERSON]["firstname"]." ".$sessd["typo_".CL_CRM_PERSON]["lastname"]
 				));
-
+	
 				// also, create all the objects and do the relations and crap
 				$this->_do_create_data_objects($arr, $u_oid->id());
 
@@ -1452,7 +1276,7 @@ class join_site extends class_base
 					$u_oid->set_prop("blocked", 1);
 					$u_oid->save();
 				}
-
+				
 				aw_restore_acl();
 
 				// if the props say so, log the user in
@@ -1520,7 +1344,7 @@ class join_site extends class_base
 						}
 						$link = $this->mk_my_orb("change", array("id" => $u_oid->id()), $u_oid->class_id(), true);
 						send_mail(
-							$tom,
+							$tom, 
 							$obj->prop("mf_mail_subj"),
 							str_replace("#edit_link#", $link, $obj->prop("mf_mail")),
 							"From: ".$from."\n"
@@ -1547,15 +1371,6 @@ class join_site extends class_base
 			$this->join_done = true;
 			aw_session_set("join_err", array());
 			$rv = $obj->prop("after_join_url");
-			$lang_id = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
-			if ($obj->lang_id() != $lang_id)
-			{
-				$lp = $obj->prop("lang_props");
-				if ($lp["bt"]["__after_join_url"][$lang_id] != "")
-				{
-					$rv = $lp["bt"]["__after_join_url"][$lang_id];
-				}
-			}
 			if ($rv == "")
 			{
 				$rv = aw_ini_get("baseurl");
@@ -1565,7 +1380,7 @@ class join_site extends class_base
 		aw_session_set("join_err", $nf);
 		if ($arr["err_return_url"])
 		{
-
+			
 			return $arr["err_return_url"];
 		}
 
@@ -1613,7 +1428,7 @@ class join_site extends class_base
 			"to" => $c_id,
 			"reltype" => "RELTYPE_WORK" // from crm/crm_person
 		));
-
+		
 		$a_objs = array();
 		foreach($this->_get_clids($obj) as $clid)
 		{
@@ -1637,7 +1452,7 @@ class join_site extends class_base
 				"reltype" => "RELTYPE_USER_DATA" // from crm/crm_person
 			));
 			$a_objs[$o->class_id()] = $o_id;
-
+			
 		}
 
 		// also, do update, all complex element crap is in there
@@ -1728,25 +1543,29 @@ class join_site extends class_base
 		$cfgu = get_instance("cfg/cfgutils");
 
 		$user = isset($params["uid"]) ? $params["uid"] : aw_global_get("uid");
-                $lang_errs = $ob->meta("lang_errs");
-                $fill_msg = "J&auml;rgnev v&auml;li peab olema t&auml;idetud!";
-                $lang_id = aw_global_get("lang_id");
-                if (aw_ini_get("user_interface.full_content_trans"))
-                {
-                        $lang_id = aw_global_get("ct_lang_id");
-                }
-                if (!empty($lang_errs["next_filled"][$lang_id]))
-                {
-                        $fill_msg = $lang_errs["next_filled"][$lang_id];
-                }
-
+		$lang_errs = $ob->meta("lang_errs");
+		$fill_msg = "J&auml;rgnev v&auml;li peab olema t&auml;idetud!";
+		$fill_msg_email = "Palun sisestage korrektne e-maili aadress!";
+		$lang_id = aw_global_get("lang_id");
+		if (aw_ini_get("user_interface.full_contente_trans"))
+		{
+						$lang_id = aw_ini_get("ct_lang_id");
+		}
+		if (!empty($lang_errs["next_filled"][$lang_id]))
+		{
+						$fill_msg = $lang_errs["next_filled"][$lang_id];
+		}
+		if (!empty($lang_errs["wrong_email"][$lang_id]))
+		{
+						$fill_msg_email = $lang_errs["wrong_email"][$lang_id];
+		}
 
 		if ($user != "")
 		{
 			$us = get_instance("users");
 			$u_o = obj($us->get_oid_for_uid($user));
 			$visible[CL_USER]["uid_entry"] = false;
-		}
+		}		
 
 		$sessd = aw_global_get("site_join_status");
 
@@ -1801,7 +1620,7 @@ class join_site extends class_base
 
 			$ttp = array();
 			foreach($props as $pid => $prop)
-			{
+			{	
 				if ($visible[$clid][$pid])
 				{
 					if ($prop["name"] == "phone" || $prop["name"] == "fax")
@@ -1811,9 +1630,8 @@ class join_site extends class_base
 					$ttp[$pid] = $prop;
 				}
 			}
+
 			$adr = $ttp["address"];
-			$ctc = $ttp["contact"];
-			$img = $ttp["images"];
 			$class_inst = get_instance($clid);
 			$class_inst->init_class_base();
 			$ttp = $class_inst->parse_properties(array("properties" => $ttp, "obj_inst" => $data_o));
@@ -1821,29 +1639,19 @@ class join_site extends class_base
 			{
 				$ttp["address"] = $adr;
 			}
-			if ($ctc)
-			{
-				$ttp["contact"] = $ctc;
-			}
-			if ($img)
-			{
-				$ttp["images"] = $img;
-			}
-
 			foreach($ttp as $pid => $prop)
 			{
 				$cpn = $prop["name"];
 				/*if (strpos($cpn, "[") !== false)
 				{
 					$cpn = substr($cpn, 0, strpos($cpn, "["));
-				}*/
-
+				}*/	
 				if ($visible[$clid][$cpn])
 				{
 					$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
 					if ($clid == CL_CRM_PERSON && $pid == "address")
 					{
-						// address has: * Street address: * City: * Zip code: * Country:
+						// address has: * Street address: * City: * Zip code: * Country:	
 						$adr_inst = get_instance(CL_CRM_ADDRESS);
 						$opts = $adr_inst->get_country_list();
 						$tp["p_adr_ctry"] = array(
@@ -1880,113 +1688,6 @@ class join_site extends class_base
 						unset($ttp[$pid]);
 						continue;
 					}
-
-					if ($clid == CL_CRM_COMPANY && $pid == "contact")
-					{
-						// address has: * Street address: * City: * Zip code: * Country:
-						$adr_inst = get_instance(CL_CRM_ADDRESS);
-						$opts = $adr_inst->get_country_list();
-						if ($visible[$clid]["riik"])
-						{
-							$tp["c_adr_ctry"] = array(
-								"name" => "c_adr_ctry",
-								"caption" => t("Maa"),
-								"type" => "select",
-								"options" => $opts,
-								"value" => array_search($data_o->prop("contact.riik.name"), $opts)
-							);
-						}
-						if ($visible[$clid]["postiindeks"])
-						{
-							$tp["c_adr_zip"] = array(
-								"name" => "c_adr_zip",
-								"caption" => t("Postiindeks"),
-								"type" => "textbox",
-								"value" => $data_o->prop("contact.postiindeks")
-							);
-						}
-						if ($visible[$clid]["linn"])
-						{
-							$tp["c_adr_city"] = array(
-								"name" => "c_adr_city",
-								"caption" => t("Linn"),
-								"type" => "textbox",
-								"value" => $data_o->prop("contact.linn.name")
-							);
-						}
-						if ($visible[$clid]["maakond"])
-						{
-							$tp["c_adr_county"] = array(
-								"name" => "c_adr_county",
-								"caption" => t("Maakond"),
-								"type" => "textbox",
-								"value" => $data_o->prop("contact.maakond.name")
-							);
-						}
-						if ($visible[$clid]["aadress"])
-						{
-							$tp["c_adr_str"] = array(
-								"name" => "c_adr_str",
-								"caption" => t("T&auml;nava nimi"),
-								"type" => "textbox",
-								"value" => $data_o->prop("contact.aadress")
-							);
-						}
-						unset($ttp[$pid]);
-						continue;
-					}
-
-					if ($clid == CL_CRM_COMPANY && $oldn == "images")
-					{
-						$imgs = array_values($data_o->connections_from(array("type" => "RELTYPE_IMAGE")));
-						$i = array();
-						$i[1] = $imgs[0];
-						$i[2] = $imgs[1];
-						$i[3] = $imgs[2];
-
-						$imgi = get_instance(CL_IMAGE);
-						if ($i[1])
-						{
-							$v1 = html::href(array(
-								"url" => $imgi->get_url_by_id($i[1]->prop("to")),
-								"caption" => $i[1]->prop("to.name")
-							));
-						}
-						$tp["c_img_1"] = array(
-							"name" => "c_img_1",
-							"caption" => t("Pilt 1"),
-							"type" => "fileupload",
-							"value" => $v1
-						);
-						if ($i[2])
-						{
-							$v2 = html::href(array(
-								"url" => $imgi->get_url_by_id($i[2]->prop("to")),
-								"caption" => $i[2]->prop("to.name")
-							));
-						}
-						$tp["c_img_2"] = array(
-							"name" => "c_img_2",
-							"caption" => t("Pilt 2"),
-							"type" => "fileupload",
-							"value" => $v2
-						);
-						if ($i[3])
-						{
-							$v3 = html::href(array(
-								"url" => $imgi->get_url_by_id($i[3]->prop("to")),
-								"caption" => $i[2]->prop("to.name")
-							));
-						}
-						$tp["c_img_3"] = array(
-							"name" => "c_img_3",
-							"caption" => t("Pilt 3"),
-							"type" => "fileupload",
-							"value" => $v3
-						);
-						unset($ttp[$pid]);
-						continue;
-					}
 					if ($clid == CL_USER && $oldn == "uid_entry")
 					{
 						if ($je["gen"] != "")
@@ -2009,7 +1710,14 @@ class join_site extends class_base
 					}
 					if ($je["prop"][$clid][$pid])
 					{
-						$ermsg = "<font color='#FF0000'>".$fill_msg."</font>";
+						if ($pid == "email")
+						{
+							$ermsg = "<font color='#FF0000'>".$fill_msg_email."</font>";
+						}
+						else
+						{
+							$ermsg = "<font color='#FF0000'>".$fill_msg."</font>";
+						}
 						if ($this->is_template("ERROR_MESSAGE"))
 						{
 							$this->vars(array(
@@ -2041,7 +1749,7 @@ class join_site extends class_base
 					if ($props[$pid]["type"] == "relpicker")
 					{
 						/*$tmp = reset($ob->connections_from(array(
-							"type" => "RELTYPE_REL_OBJ",
+							"type" => "RELTYPE_REL_OBJ", 
 							"to.class_id" => $clid
 						)));
 						if ($tmp)
@@ -2089,16 +1797,6 @@ class join_site extends class_base
 							$prop["value"] = $tdata_o->prop("email.mail");
 						}
 					}
-					else
-					if ($oldn == "phone_id" || $oldn == "telefax_id" || $oldn == "url_id")
-					{
-						$prop["value"] = $data_o->prop($oldn.".name");
-					}
-					else
-					if ($oldn == "email_id")
-					{
-						$prop["value"] = $data_o->prop($oldn.".mail");
-					}
 
 					// set value in property
 					if ($data_o)
@@ -2108,7 +1806,7 @@ class join_site extends class_base
 							$prop["value"] = $data_o->name();
 						}
 						else
-						if ($oldn != "email" && $oldn != "phone" && $oldn != "fax" && $oldn != "rank" && $oldn != "phone_id" && $oldn != "telefax_id" && $oldn != "url_id" && $oldn != "email_id")
+						if ($oldn != "email" && $oldn != "phone" && $oldn != "fax" && $oldn != "rank")
 						{
 							if ($prop["store"] == "connect")
 							{
@@ -2153,7 +1851,6 @@ class join_site extends class_base
 						{
 							$prop["caption"] = $propn[$clid][$oldn];
 						}
-						unset($prop["no_caption"]);
 					}
 					$prop["comment"] = "";
 					if ($oldn == "comment" && $clid == CL_USER)
@@ -2177,11 +1874,6 @@ class join_site extends class_base
         	                                }
 	                                }
 
-					if ($oldn == "pohitegevus")
-					{
-						$prop["type"] = "select";
-						$prop["size"] = 5;
-					}
 					$tp[$pid] = $prop;
 				}
 			}
@@ -2206,7 +1898,7 @@ class join_site extends class_base
 				"value" => !empty($lang_seps[$sepid][$lang_id]) ? $lang_seps[$sepid][$lang_id] : $sepn
 			);
 		}
-
+		
 		// now that we got all props, re-order them based on the order on the pages page
 		$this->_do_final_sort_props($ob, $tp);
 
@@ -2219,7 +1911,7 @@ class join_site extends class_base
 				"value" => $params["err_return_url"]
 			);
 		}
-
+		
 		aw_session_set("join_err", false);
 		return $tp;
 	}
@@ -2238,6 +1930,34 @@ class join_site extends class_base
 		$obj = obj($arr["id"]);
 
 		$us = get_instance("users");
+
+		$nf = array();
+		if ($this->can("view", $obj->prop("check_sbt_controller")))
+		{
+			// if controller returns array, then all props in the array must be filled
+			$ctr_i = get_instance(CL_FORM_CONTROLLER);
+			$rv = $ctr_i->eval_controller($obj->prop("check_sbt_controller"), $arr, $obj, $obj);
+			if (is_array($rv))
+			{
+				$filled = false;
+				foreach($rv as $clid => $props)
+				{
+					foreach($props as $propn)
+					{
+						$nf["prop"][$clid][$propn] = 1;
+					}
+				}
+			}
+		}
+	
+		if (count($nf))
+		{
+			aw_session_set("join_err", $nf);
+			if ($arr["err_return_url"])
+			{
+				return $arr["err_return_url"];
+			}
+		}
 
 		$user = isset($params["uid"]) ? $params["uid"] : aw_global_get("uid");
 		$u_o = obj($us->get_oid_for_uid($user));
@@ -2339,7 +2059,7 @@ class join_site extends class_base
 			{
 				$data_o = obj($a_objs[$clid]);
 			}
-
+			
 			if ($data_o)
 			{
 				$this->_do_fake_form_submit(array(
@@ -2369,7 +2089,7 @@ class join_site extends class_base
 		));
 		$reli = $cu->get_relinfo();
 		foreach($props as $pid => $prop)
-		{
+		{	
 			if ($visible[$clid][$prop["name"]])
 			{
 				$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
@@ -2379,129 +2099,22 @@ class join_site extends class_base
 				{
 					$data_o->set_prop($pid, $cf_sd[$oldn]);
 				}
-				if ($oldn == "ettevotlusvorm")
-				{
-					$data_o->set_prop($pid, $cf_sd[$oldn]);
-					$submit_data[$pid] = $cf_sd[$oldn];
-				}
-				else
-				if ($oldn == "pohitegevus")
-				{
-					$data_o->set_prop($pid, $_POST["pohitegevus"]);
-					$submit_data[$pid] = $_POST["pohitegevus"];
-				}
-				else
-				if ($oldn == "images")
-				{
-					$this->_handle_images_upload($data_o);
-				}
-				else
-				if ($oldn == "phone_id" || $oldn == "phone")
-				{
-					if ($this->can("view", $data_o->prop($oldn)))
-					{
-						$con_o = obj($data_o->prop($oldn));
-					}
-					else
-					{
-						$con_o = obj();
-						$con_o->set_parent($data_o->id());
-						$con_o->set_class_id(CL_CRM_PHONE);
-					}
-					$con_o->set_name($cf_sd[$oldn]);
-					$con_o->save();
-					$data_o->set_prop($oldn, $con_o->id());
-					$data_o->connect(array(
-						"to" => $con_o->id(),
-						"type" => "RELTYPE_PHONE"
-					));
-				}
-				else
-				if ($oldn == "telefax_id")
-				{
-					if ($this->can("view", $data_o->prop($oldn)))
-					{
-						$con_o = obj($data_o->prop($oldn));
-					}
-					else
-					{
-						$con_o = obj();
-						$con_o->set_parent($data_o->id());
-						$con_o->set_class_id(CL_CRM_PHONE);
-					}
-					$con_o->set_name($cf_sd[$oldn]);
-					$con_o->save();
-					$data_o->set_prop($oldn, $con_o->id());
-					$data_o->connect(array(
-						"to" => $con_o->id(),
-						"type" => "RELTYPE_TELEFAX"
-					));
-				}
-				else
-				if ($oldn == "url_id")
-				{
-					if ($this->can("view", $data_o->prop($oldn)))
-					{
-						$con_o = obj($data_o->prop($oldn));
-					}
-					else
-					{
-						$con_o = obj();
-						$con_o->set_parent($data_o->id());
-						$con_o->set_class_id(CL_EXTLINK);
-					}
-					$con_o->set_name($cf_sd[$oldn]);
-					$con_o->set_prop("url",$cf_sd[$oldn]);
-					$con_o->save();
-					$data_o->set_prop($oldn, $con_o->id());
-					$data_o->connect(array(
-						"to" => $con_o->id(),
-						"type" => "RELTYPE_URL"
-					));
-				}
-				else
-				if ($oldn == "email_id")
-				{
-					if ($this->can("view", $data_o->prop($oldn)))
-					{
-						$con_o = obj($data_o->prop($oldn));
-					}
-					else
-					{
-						$con_o = obj();
-						$con_o->set_parent($data_o->id());
-						$con_o->set_class_id(CL_ML_MEMBER);
-					}
-					$con_o->set_name($cf_sd[$oldn]);
-					$con_o->set_prop("mail", $cf_sd[$oldn]);
-					$con_o->save();
-					$data_o->set_prop($oldn, $con_o->id());
-					$data_o->connect(array(
-						"to" => $con_o->id(),
-						"type" => "RELTYPE_EMAIL"
-					));
-				}
-				else
 				if ($prop["type"] == "relmanager" || $prop["type"] == "releditor" || $prop["type"] == "relpicker")
 				{
 					//$submit_data["cb_emb"] = $data["cb_emb"][$wn];
 					// damn. we need to make the right thing from textbox
 					// so check if the object has an object for this property
 					// if so, modify it
-					// if not, create new
+					// if not, create new 
 					// set the object's id as the submit value
 					$p_oid = $data_o->prop($prop["name"]);
-					if ($this->can("view", $p_oid) && ($prop["name"] == "address" || $prop["name"] == "contact" || $data_o->prop($prop["name"].".name") == $cf_sd[$oldn]))
+					if ($this->can("view", $p_oid) && ($prop["name"] == "address" || $data_o->prop($prop["name"].".name") == $cf_sd[$oldn]))
 					{
 						$p_obj = obj($p_oid);
 						// if this is the address thingamajig, then create the address from the separate props
 						if ($prop["name"] == "address")
 						{
 							$this->_update_address_from_req($p_obj, $_POST);
-						}
-						if ($prop["name"] == "contact")
-						{
-							$this->_update_co_address_from_req($p_obj, $_POST);
 						}
 						$p_obj->set_name($cf_sd[$oldn]);
 						aw_disable_acl();
@@ -2526,11 +2139,6 @@ class join_site extends class_base
 							$this->_update_address_from_req($p_obj, $_POST);
 							$p_obj->save();
 						}
-						if ($prop["name"] == "contact")
-						{
-							$this->_update_co_address_from_req($p_obj, $_POST);
-							$p_obj->save();
-						}
 
 						$data_o->connect(array(
 							"to" => $p_obj->id(),
@@ -2547,31 +2155,14 @@ class join_site extends class_base
 				}
 				else
 				{
-
+	
 					$submit_data[$pid] = $cf_sd[$oldn];
 				}
 			}
 		}
-
 		if ($clid == CL_USER)
 		{
-			if (!empty($submit_data["passwd_again"]))
-			{
-				$p = array(
-					"name" => "passwd_again",
-					"value" => $submit_data["passwd_again"],
-				);
-				$pr = array(
-					"request" => $submit_data,
-					"prop" => $p,
-					"obj_inst" => $data_o
-				);
-				$i = get_instance(CL_USER);
-				$i->set_property($pr);
-			}
-			aw_disable_acl();
 			$data_o->save();
-			aw_restore_acl();
 			$data_o_inst = $data_o->instance();
 			$data_o_inst->callback_post_save(array("obj_inst" => $data_o));
 		}
@@ -2599,15 +2190,21 @@ class join_site extends class_base
 		// get order from prop name
 		if (!preg_match("/typo_(.*)\[(.*)\]/U", $a["name"], $a_mt))
 		{
-			$a_mt = array();
-			$a_mt[2] = $a["name"];
-			$a_mt[1] = CL_CRM_PERSON;
+			if (!preg_match("/err_(\d*)_(.*)/", $a["name"], $a_mt))
+			{
+				$a_mt = array();
+				$a_mt[2] = $a["name"];
+				$a_mt[1] = CL_CRM_PERSON;
+			}
 		}
 		if (!preg_match("/typo_(.*)\[(.*)\]/U", $b["name"], $b_mt))
 		{
-			$b_mt = array();
-			$b_mt[2] = $b["name"];
-			$b_mt[1] = CL_CRM_PERSON;
+			if (!preg_match("/err_(\d*)_(.*)/", $b["name"], $b_mt))
+			{
+				$b_mt = array();
+				$b_mt[2] = $b["name"];
+				$b_mt[1] = CL_CRM_PERSON;
+			}
 		}
 		$a_clid = $a_mt[1];
 		$a_prop = $a_mt[2];
@@ -2639,57 +2236,6 @@ class join_site extends class_base
 				$a_diff = -0.4+($a_diff / 100);
 			}
 			$a_prop = "address";
-			$a_clid = CL_CRM_PERSON;
-		}
-
-		if (strpos($a_prop, "c_img") !== false)
-		{
-			if ($a_prop == "c_img_1")
-			{
-				$a_diff = -0.7+($a_diff / 100);
-			}
-			else
-			if ($a_prop == "c_img_2")
-			{
-				$a_diff = -0.5+($a_diff / 100);
-			}
-			else
-			if ($a_prop == "c_img_3")
-			{
-				$a_diff = -0.3+($a_diff / 100);
-			}
-			$a_prop = "images";
-			$a_clid = CL_CRM_COMPANY;
-		}
-
-		if (strpos($a_prop, "c_adr") !== false)
-		{
-			if ($a_prop == "c_adr_str")
-			{
-				$a_diff = -0.7+($a_diff / 100);
-			}
-			else
-			if ($a_prop == "c_adr_zip")
-			{
-				$a_diff = -0.3+($a_diff / 100);
-			}
-			else
-			if ($a_prop == "c_adr_city")
-			{
-				$a_diff = -0.5+($a_diff / 100);
-			}
-			else
-			if ($a_prop == "c_adr_ctry")
-			{
-				$a_diff = -0.1+($a_diff / 100);
-			}
-			else
-			if ($a_prop == "c_adr_county")
-			{
-				$a_diff = -0.4+($a_diff / 100);
-			}
-			$a_prop = "contact";
-			$a_clid = CL_CRM_COMPANY;
 		}
 
 		$b_clid = $b_mt[1];
@@ -2722,61 +2268,9 @@ class join_site extends class_base
                         }
 
 			$b_prop = "address";
-			$b_clid = CL_CRM_PERSON;
 		}
 
-		if (strpos($b_prop, "c_img") !== false)
-		{
-			if ($b_prop == "c_img_1")
-			{
-				$b_diff = -0.7+($b_diff / 100);
-			}
-			else
-			if ($b_prop == "c_img_2")
-			{
-				$b_diff = -0.5+($b_diff / 100);
-			}
-			else
-			if ($b_prop == "c_img_3")
-			{
-				$b_diff = -0.3+($b_diff / 100);
-			}
-			$b_prop = "images";
-			$b_clid = CL_CRM_COMPANY;
-		}
-
-		if (strpos($b_prop, "c_adr") !== false)
-		{
-                        if ($b_prop == "c_adr_str")
-                        {
-                                $b_diff = -0.7+($b_diff / 100);
-                        }
-                        else
-                        if ($b_prop == "c_adr_zip")
-                        {
-                                $b_diff = -0.3+($b_diff / 100);
-                        }
-                        else
-                        if ($b_prop == "c_adr_city")
-                        {
-                                $b_diff = -0.5+($b_diff / 100);
-                        }
-                        else
-                        if ($b_prop == "c_adr_ctry")
-                        {
-                                $b_diff = -0.1+($b_diff / 100);
-                        }
-                        else
-                        if ($b_prop == "c_adr_county")
-                        {
-                                $b_diff = -0.4+($b_diff / 100);
-                        }
-
-			$b_prop = "contact";
-			$b_clid = CL_CRM_COMPANY;
-		}
-
-
+//echo "a _prop = $a_prop , a_diff = $a_diff , bprop = $p_prop , bdiff = $b_diff <br>";
 		if ($a_clid == "sep")
 		{
 			list(, $a_prop) = explode("_", $a_prop);
@@ -2799,7 +2293,6 @@ class join_site extends class_base
 
 		$a_ord += $a_diff;
 		$b_ord += $b_diff;
-
 		if ($a_ord == $b_ord)
 		{
 			return 0;
@@ -2928,7 +2421,7 @@ class join_site extends class_base
 			return t("Sellise koodiga kasutajat pole olemas!");
 		}
 
-		$this->db_query("DELETE FROM user_confirm_hashes WHERE hash = '$arr[h]'");
+		$this->db_query("DELETE FROM user_confirm_hashes WHERE hash = '$arr[h]'");		
 
 		$u = get_instance("users");
 		$oid = $u->get_oid_for_uid($row["uid"]);
@@ -2940,14 +2433,14 @@ class join_site extends class_base
 
 		$pwd = $this->db_fetch_field("SELECT password FROM users WHERE uid = '$row[uid]'", "password");
 
-		aw_ini_set("auth.md5_passwords", 0);
+		aw_ini_set("auth", "md5_passwords", 0);
 
 		return $u->login(array(
 			"uid" => $row["uid"],
 			"password" => $pwd
 		));
 	}
-
+	
 	function _init_prop_settings(&$t)
 	{
 		$t->define_field(array(
@@ -3004,7 +2497,7 @@ class join_site extends class_base
 						"name" => "breaks[$clid][$pn]",
 						"value" => 1,
 						"checked" => $breaks[$clid][$pn] == 1
-					)) : ""
+					)) : "" 
 				));
 			}
 		}
@@ -3029,18 +2522,6 @@ class join_site extends class_base
 		$o->set_name($adr_i->get_name_from_adr($o));
 	}
 
-	function _update_co_address_from_req($o, $r)
-	{
-		$o->set_prop("aadress", isset($r["typo_129"]["c_adr_str"]) ? $r["typo_129"]["c_adr_str"] : $r["c_adr_str"]);
-		$o->set_prop("postiindeks", isset($r["typo_129"]["c_adr_zip"]) ? $r["typo_129"]["c_adr_zip"] : $r["c_adr_zip"]);
-		$this->set_rel_by_val($o, "linn", isset($r["typo_129"]["c_adr_city"]) ? $r["typo_129"]["c_adr_city"] : $r["c_adr_city"]);
-		$this->set_rel_by_val($o, "maakond", isset($r["typo_129"]["c_adr_county"]) ? $r["typo_129"]["c_adr_county"] : $r["c_adr_county"]);
-		$adr_i = $o->instance();
-		$riiks = $adr_i->get_country_list();
-		$this->set_rel_by_val($o, "riik", $riiks[isset($r["typo_129"]["c_adr_ctry"]) ? $r["typo_129"]["c_adr_ctry"] : $r["c_adr_ctry"]]);
-		$o->set_name($adr_i->get_name_from_adr($o));
-	}
-
 	function set_rel_by_val($o, $prop, $val)
 	{
 		$pl = $o->get_property_list();
@@ -3052,7 +2533,7 @@ class join_site extends class_base
 			"lang_id" => array(),
 			"site_id" => array(),
 			"name" => $val
-		));
+		)); 
 		if ($ol->count())
 		{
 			$fo = $ol->begin();
@@ -3167,7 +2648,7 @@ class join_site extends class_base
 				"value" => $lang_props[$clid]["__save_but"][$lid],
 				"size" => 20
 			));
-
+			
 		}
 		$t->define_data($d);
 
@@ -3226,7 +2707,7 @@ class join_site extends class_base
 			$tmp = obj();
 			$tmp->set_class_id($clid);
 			$property_list = $tmp->get_property_list();
-
+		
 			$opts[$clid] = $clss[$clid]["name"];
 
 			foreach($items as $pn => $one)
@@ -3254,7 +2735,7 @@ class join_site extends class_base
                                 "caption" => $lang,
                                 "align" => "center"
                         ));
-                }
+                }	
 	}
 
 	function _trans_errs_t($arr)
@@ -3271,7 +2752,8 @@ class join_site extends class_base
 			"pwd_typo" => t("Sisestatud paroolid on erinevad!"),
 			"pwd_err" => t("Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!"),
 			"uid_short" => t("Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!"),
-			"pwd_short" => t("Paroolis peab olema v&auml;hemalt 3 t&auml;hte!")
+			"pwd_short" => t("Paroolis peab olema v&auml;hemalt 3 t&auml;hte!"),
+			"wrong_email" => t("Palun sisestage korrektne e-maili aadress!")
 		);
 		$lang_errs = $arr["obj_inst"]->meta("lang_errs");
 		foreach($ermsgs as $id => $msg)
@@ -3280,41 +2762,41 @@ class join_site extends class_base
 				"orig" => $msg
 			);
 			foreach($ll as $lid => $lang)
-                        {
+			{
 				$d["l".$lid] = html::textbox(array(
 					"name" => "d[$id][$lid]",
 					"value" => $lang_errs[$id][$lid],
 					"size" => 20
-                                ));
-                        }
-                        $t->define_data($d);
+				));
+			}
+			$t->define_data($d);
 		}
 		$t->set_caption(t("T&otilde;lgi veateateid"));
 	}
 
-        function _init_trans_ttl_t(&$t, $o)
-        {
-                $t->define_field(array(
-                        "name" => "orig",
-                        "caption" => t("Pealkiri"),
-                        "align" => "center"
-                ));
+	function _init_trans_ttl_t(&$t, $o)
+	{
+		$t->define_field(array(
+			"name" => "orig",
+			"caption" => t("Pealkiri"),
+			"align" => "center"
+		));
 
-                $l = get_instance("languages");
-                $ll = $l->get_list();
-                foreach($ll as $lid => $lang)
-                {
-                        if ($lid == $o->lang_id())
-                        {
-                                continue;
-                        }
-                        $t->define_field(array(
-                                "name" => "l".$lid,
-                                "caption" => $lang,
-                                "align" => "center"
-                        ));
-                }
-        }
+		$l = get_instance("languages");
+		$ll = $l->get_list();
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $o->lang_id())
+			{
+				continue;
+			}
+			$t->define_field(array(
+				"name" => "l".$lid,
+				"caption" => $lang,
+				"align" => "center"
+			));
+		}
+	}
 
 	function _trans_ttl_t($arr)
 	{
