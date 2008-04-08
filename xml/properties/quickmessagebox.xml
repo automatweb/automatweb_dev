@@ -33,6 +33,15 @@
             <caption>Allow messages from</caption>
       </property>
       <property>
+            <name>show_addressees</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>select</type>
+            <caption>Allow sending to</caption>
+      </property>
+      <property>
             <name>contactlist</name>
             <table>objects</table>
             <field>meta</field>
@@ -43,7 +52,8 @@
             <size>7</size>
             <reltype>RELTYPE_CONTACT</reltype>
             <automatic>1</automatic>
-            <caption>Contacts</caption>
+            <no_edit>1</no_edit>
+            <caption>Contact list</caption>
       </property>
       <property>
             <name>msg_toolbar</name>

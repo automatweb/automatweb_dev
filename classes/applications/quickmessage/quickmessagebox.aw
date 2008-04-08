@@ -24,8 +24,12 @@
 	@property approved_senders type=select
 	@caption Allow messages from
 
-	@property contactlist type=relpicker multiple=1 size=7 reltype=RELTYPE_CONTACT automatic=1
-	@caption Contacts
+	@property show_addressees type=select
+	@caption Allow sending to
+
+	@property contactlist type=relpicker multiple=1 size=7 reltype=RELTYPE_CONTACT automatic=1 no_edit=1
+	@caption Contact list
+	@comment Select people you want in your contact list
 
 @property msg_toolbar type=toolbar no_caption=1 store=no group=message_inbox,message_outbox
 @property Message list toolbar
@@ -209,6 +213,12 @@ class quickmessagebox extends class_base
 		return PROP_OK;
 	}
 
+	function _get_show_addressees($arr)
+	{
+		$arr["prop"]["options"] = quickmessagebox_obj::get_addressees_options();
+		return PROP_OK;
+	}
+
 	function _get_owner($arr)
 	{
 		$uid = aw_global_get("uid");
@@ -219,6 +229,26 @@ class quickmessagebox extends class_base
 	{
 		$u_oid = reset(array_keys($arr["prop"]["options"], aw_global_get("uid")));
 		unset($arr["prop"]["options"][$u_oid]);
+		$user_i = new user();
+
+		// get person names for visible options
+		foreach ($arr["prop"]["options"] as $u_oid => $tmp)
+		{
+			if ($u_oid)
+			{
+				try
+				{
+					$u_o = new object($u_oid);
+					$p_oid = $user_i->get_person_for_user($u_o);
+					$p_o = new object($p_oid);
+					$arr["prop"]["options"][$u_oid] = $p_o->name();
+				}
+				catch (Exception $e)
+				{
+				}
+			}
+		}
+
 		return PROP_OK;
 	}
 

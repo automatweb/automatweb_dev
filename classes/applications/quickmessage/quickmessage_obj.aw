@@ -29,15 +29,12 @@ class quickmessage_obj extends _int_object
 	}
 
 	public function get_to_options()
-	{//!!! teha ymber, et msgbox v6etaks current useri kaudu
-		if (!$_GET["box"])
-		{
-			return;
-		}
-
+	{
 		try
 		{
-			$msgbox = new object($_GET["box"]);
+			$u_oid = aw_global_get("uid_oid");
+			$u_o = new object($u_oid);
+			$msgbox = quickmessagebox_obj::get_msgbox_for_user($u_o);
 		}
 		catch (Exception $e)
 		{
@@ -45,19 +42,50 @@ class quickmessage_obj extends _int_object
 		}
 
 		$options = array();
-		$contactlist = $msgbox->prop("contactlist");
-		foreach ($contactlist as $u_oid)
+		$user_i = new user();
+
+		switch ($msgbox->prop("show_addressees"))
 		{
-			try
-			{
-				$u_o = new object($u_oid);
-				$p_oid = user::get_person_for_user($u_o);
-				$p_o = new object($p_oid);
-				$options[$u_oid] = $p_o->name();
-			}
-			catch (Exception $e)
-			{
-			}
+			case quickmessagebox_obj::ADDRESSEES_EVERYONE:
+				$users = new object_list(array(
+					"class_id" => CL_USER,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"brother_of" => new obj_predicate_prop("id")
+				));
+
+				for ($u_o = $users->begin(); !$users->end(); $u_o = $users->next())
+				{
+					try
+					{
+						$p_oid = $user_i->get_person_for_user($u_o);
+						$p_o = new object($p_oid);
+						$options[$u_o->id()] = $p_o->name();
+					}
+					catch (Exception $e)
+					{
+					}
+				}
+				break;
+
+			case quickmessagebox_obj::ADDRESSEES_CONTACTS:
+			default:
+				$contactlist = $msgbox->prop("contactlist");
+				$user_i = new user();
+				foreach ($contactlist as $u_oid)
+				{
+					try
+					{
+						$u_o = new object($u_oid);
+						$p_oid = $user_i->get_person_for_user($u_o);
+						$p_o = new object($p_oid);
+						$options[$u_oid] = $p_o->name();
+					}
+					catch (Exception $e)
+					{
+					}
+				}
+				break;
 		}
 
 		return $options;

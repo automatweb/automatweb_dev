@@ -10,6 +10,9 @@ class quickmessagebox_obj extends _int_object
 	const APPROVED_SENDERS_CONTACTS = 2;
 	const APPROVED_SENDERS_NONE = 3;
 
+	const ADDRESSEES_EVERYONE = 1;
+	const ADDRESSEES_CONTACTS = 2;
+
 	const STATUS_READ = 1;
 	const STATUS_UNREAD = 2;
 
@@ -105,8 +108,8 @@ class quickmessagebox_obj extends _int_object
 	public function post_msg(object $msg)
 	{
 		if (
-			(APPROVED_SENDERS_CONTACTS === $this->prop("approved_senders") and !in_array($msg->prop("from"), $this->prop("contactlist"))) or
-			APPROVED_SENDERS_NONE === $this->prop("approved_senders")
+			(self::APPROVED_SENDERS_CONTACTS === $this->prop("approved_senders") and !in_array($msg->prop("from"), $this->prop("contactlist"))) or
+			self::APPROVED_SENDERS_NONE === $this->prop("approved_senders")
 		)
 		{
 			throw new awex_qmsg_unwanted_msg("Message poster is not in this user's approved senders list.");
@@ -128,10 +131,43 @@ class quickmessagebox_obj extends _int_object
 	public static function get_approved_senders_options()
 	{
 		$options = array(
-			APPROVED_SENDERS_ANYONE => t("anyone"),
-			APPROVED_SENDERS_CONTACTS => t("users in my contact list"),
-			APPROVED_SENDERS_NONE => t("no-one")
+			self::APPROVED_SENDERS_ANYONE => t("anyone"),
+			self::APPROVED_SENDERS_CONTACTS => t("users in my contact list"),
+			self::APPROVED_SENDERS_NONE => t("no-one")
 		);
+		array_unshift($options, sprintf(t("system default (currently '%s')"), $options[constant("self::" . aw_ini_get("quickmessaging.approved_senders"))]));
+		return $options;
+	}
+
+	/**
+	@attrib api=1
+	@returns array
+	@comment
+		Options for selecting value for show_addressees setting.
+	**/
+	public static function get_addressees_options()
+	{
+		$options = array(
+			self::ADDRESSEES_EVERYONE => t("all users"),
+			self::ADDRESSEES_CONTACTS => t("users in my contact list"),
+		);
+		array_unshift($options, sprintf(t("system default (currently '%s')"), $options[constant("self::" . aw_ini_get("quickmessaging.show_addressees"))]));
+		return $options;
+	}
+
+	/**
+	@attrib api=1
+	@returns array
+	@comment
+		Options for selecting contacts.
+	**/
+	public static function get_contactlist_options()
+	{
+		$options = array(
+			self::ADDRESSEES_EVERYONE => t("all users"),
+			self::ADDRESSEES_CONTACTS => t("users in my contact list"),
+		);
+		array_unshift($options, sprintf(t("system default (currently '%s')"), $options[constant("self::" . aw_ini_get("quickmessaging.show_addressees"))]));
 		return $options;
 	}
 
