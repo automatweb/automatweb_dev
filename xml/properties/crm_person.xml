@@ -1095,6 +1095,13 @@
             <field>atwork_table</field>
       </property>
       <property>
+            <name>tmp1</name>
+            <table>objects</table>
+            <group>quickmessages</group>
+            <type>text</type>
+            <field>tmp1</field>
+      </property>
+      <property>
             <name>org_actions</name>
             <table>objects</table>
             <group>all_actions</group>
@@ -1644,6 +1651,11 @@
                   <parent>overview</parent>
                   <submit>no</submit>
             </tasks>
+            <quickmessages>
+                  <caption>Kiirteated</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </quickmessages>
             <data>
                   <caption>Andmed</caption>
             </data>

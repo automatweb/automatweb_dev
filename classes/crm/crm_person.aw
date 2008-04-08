@@ -474,6 +474,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @groupinfo calls caption="K&otilde;ned" parent=overview submit=no
 @groupinfo meetings caption="Kohtumised" parent=overview submit=no
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
+@groupinfo quickmessages caption="Kiirteated" parent=overview submit=no
+
+@property tmp1 type=text group=quickmessages
 
 @property org_actions type=calendar no_caption=1 group=all_actions viewtype=relative
 @caption org_actions
@@ -1287,7 +1290,7 @@ class crm_person extends class_base
 		{
 			return PROP_IGNORE;
 		}
-		
+
 		$file_inst = get_instance(CL_FILE);
 		$arr["prop"]["value"] = html::img(array(
 				"url" => icons::get_icon_url(CL_FILE),
@@ -1440,7 +1443,7 @@ class crm_person extends class_base
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SKILL_LEVEL")) as $conn)
 		{
 			$to = $conn->to();
-			
+
 			if(!isset($parents[$to->prop("skill.parent")]))
 			{
 				$parent_obj = obj($to->prop("skill.parent"));
@@ -2658,7 +2661,7 @@ class crm_person extends class_base
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),
-			"align" => "center",			
+			"align" => "center",
 		));
 		$deg_ops = array(
 			"pohiharidus" => t("P&otilde;hiharidus"),
@@ -4148,7 +4151,7 @@ class crm_person extends class_base
 				aw_restore_acl();
 			}
 		}
-		
+
 		if($this->can("view", $arr["obj_inst"]->meta("temp_ofr_id")))
 		{
 			$o = obj($arr["obj_inst"]->meta("temp_ofr_id"));
@@ -4259,7 +4262,7 @@ class crm_person extends class_base
 			$this->set_work_project_tasks($arr["obj_inst"]->id(), $tasks);
 		}
 		$arr["obj_inst"]->set_meta("no_create_user_yet", NULL);
-		
+
 		if (!empty($arr["request"]["ofr_id"]))
 		{
 			$arr["obj_inst"]->set_meta("temp_ofr_id", $arr["request"]["ofr_id"]);
@@ -4848,12 +4851,13 @@ class crm_person extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		$grp = $arr["id"];
+
+		if ("transl" === $grp and aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;
 		}
-
-		if ($arr["id"] == "my_stats")
+		elseif ("my_stats" === $grp)
 		{
 			$u = get_instance(CL_USER);
 			if ($arr["obj_inst"]->id() != $u->get_current_person())
@@ -4861,6 +4865,25 @@ class crm_person extends class_base
 				return false;
 			}
 		}
+		elseif ("quickmessages" === $grp)
+		{
+			try
+			{
+				$u_oid = aw_global_get("uid_oid");
+				$u_o = new object($u_oid);
+				$msgbox = quickmessagebox_obj::get_msgbox_for_user($u_o);
+				$arr["link"] = $this->mk_my_orb("change", array(
+					"id" => $msgbox->id(),
+					"group" => "message_inbox",
+					"return_url" => get_ru()
+				), "quickmessagebox");
+			}
+			catch (Exception $e)
+			{
+				return false;
+			}
+		}
+
 		return true;
 	}
 
@@ -5387,7 +5410,7 @@ class crm_person extends class_base
 			));
 		}
 		// END SUB: CRM_PERSON.PICTURE
-		
+
 		// SUB: CRM_PERSON.PERSONAL_INFO
 		$parse_cppi = 0;
 
@@ -5696,7 +5719,7 @@ class crm_person extends class_base
 
 		if(is_oid($pm_inst->get_sysdefault()))
 		{
-			$pm_obj = obj($pm_inst->get_sysdefault());			
+			$pm_obj = obj($pm_inst->get_sysdefault());
 			$sm_id = $pm_obj->prop("skill_manager");
 
 			$skills = $sm_inst->get_skills(array("id" => $sm_id));
@@ -5820,7 +5843,7 @@ class crm_person extends class_base
 		// SUB: CRM_PERSON.CONTACT
 		$parse_cpc = 0;
 
-		//		SUB: CRM_PERSON.PHONES		
+		//		SUB: CRM_PERSON.PHONES
 		$conns = $o->connections_from(array(
 			"type" => "RELTYPE_PHONE",
 		));
@@ -5828,7 +5851,7 @@ class crm_person extends class_base
 			"type" => "RELTYPE_CURRENT_JOB",
 		));
 		foreach($cns2wrs as $cn2wr)
-		{					
+		{
 			$wr = $cn2wr->to();
 			foreach($wr->connections_from(array("type" => "RELTYPE_PHONE")) as $cn2ph)
 			{
@@ -5868,7 +5891,7 @@ class crm_person extends class_base
 			"type" => "RELTYPE_CURRENT_JOB",
 		));
 		foreach($cns2wrs as $cn2wr)
-		{					
+		{
 			$wr = $cn2wr->to();
 			foreach($wr->connections_from(array("type" => "RELTYPE_FAX")) as $cn2ph)
 			{
@@ -5906,7 +5929,7 @@ class crm_person extends class_base
 			"type" => "RELTYPE_CURRENT_JOB",
 		));
 		foreach($cns2wrs as $cn2wr)
-		{					
+		{
 			$wr = $cn2wr->to();
 			foreach($wr->connections_from(array("type" => "RELTYPE_EMAIL")) as $cn2ph)
 			{
@@ -5981,7 +6004,7 @@ class crm_person extends class_base
 		$CRM_PERSON_WORK_RELATION = "";
 
 		$conns = $o->connections_from(array("type" => array("RELTYPE_CURRENT_JOB", "RELTYPE_PREVIOUS_JOB")));
-		
+
 		foreach($conns as $conn)
 		{
 			$to = $conn->to();
@@ -6021,7 +6044,7 @@ class crm_person extends class_base
 		$PERSONNEL_MANAGEMENT_JOB_WANTED = "";
 
 		$conns = $o->connections_from(array("type" => "RELTYPE_WORK_WANTED"));
-		
+
 		foreach($conns as $conn)
 		{
 			$to = $conn->to();
@@ -6330,7 +6353,7 @@ class crm_person extends class_base
 			$CRM_RECOMMENDATION .= $this->parse("CRM_RECOMMENDATION");
 			$parse_r++;
 		}
-		
+
 		if($parse_r > 0)
 		{
 			$this->vars(array(
