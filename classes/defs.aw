@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.262 2008/04/02 13:41:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.263 2008/04/08 14:42:15 voldemar Exp $
 // defs.aw - common functions
 
 /*
@@ -25,7 +25,7 @@ if (!defined("DEFS"))
 
 		@param method requierd type=string
 			The method in the class to call
-			
+
 		@param params required type=array
 			Additional parameters to pass to the handler method
 
@@ -34,28 +34,28 @@ if (!defined("DEFS"))
 
 
 		@comment
-			Sometimes you need to provide a link for the user to add some object and after the user has added it, you need to do something with it. With this you can. 
+			Sometimes you need to provide a link for the user to add some object and after the user has added it, you need to do something with it. With this you can.
 			You can register an action with this method and recieve a handler id. Then you must add it to the url, as the parameter "pseh". Now, when the user clicks the link, fills in the form and thus creates the object, the callback will be called with the new data object as the first parameter and the array you gave as the second parameter
 
 		@examples
-			class handler 
+			class handler
 			{
 				function handler($obj_inst, $params)
 				{
 					$obj_inst->set_name($params["name"]);
 					$obj_inst->save();
-				}		
+				}
 			}
-			
+
 			.... somewhere else...
 			echo html::href(array(
 				"caption" => t("Click me"),
 				"url" => $this->mk_my_orb("new", array(
 					"parent" => 6,
 					"pseh" => aw_register_ps_event_handler(
-						"handler", 
-						"handler", 
-						array("name" => "allah", 
+						"handler",
+						"handler",
+						array("name" => "allah",
 						CL_MENU
 					)
 				), CL_MENU)
@@ -612,8 +612,8 @@ if (!defined("DEFS"))
 			The text to create the links in
 
 		@comment
-			the difference between this, and create_links is, that this tries to make sure, that if there already is an <a href around the url, it will not double it. 
-			It does fail quite miserably though. 
+			the difference between this, and create_links is, that this tries to make sure, that if there already is an <a href around the url, it will not double it.
+			It does fail quite miserably though.
 
 		@returns
 			The given text with http://www.ee replaced with <a href="http://www.ee">http://www.ee</a>
@@ -878,7 +878,7 @@ if (!defined("DEFS"))
 	}
 
 	/** checks if the current page is in the admin interface
-		@attrib api=1 
+		@attrib api=1
 
 		@returns
 			true if the current page is displayed in the admin interface, false if not
@@ -889,21 +889,21 @@ if (!defined("DEFS"))
 	}
 
 	/** Generates a random and pretty unique id, based on md5
-		@attrib api=1 
+		@attrib api=1
 
 		@returns
 			a random, hard-to-predict 32 character string of numbers and letters
 	**/
 	function gen_uniq_id()
 	{
-		return md5(uniqid('',true)); 
+		return md5(uniqid('',true));
 	};
 
 	/** helper for generating html checkboxes
 		@attrib api=1 params=pos
 
 		@param arg required type=bool
-			
+
 		@returns
 			"CHECKED" if the argument evaluates to true, "" if not
 
@@ -919,7 +919,7 @@ if (!defined("DEFS"))
 		@attrib api=1 params=pos
 
 		@param arg required type=bool
-			
+
 		@returns
 			"selected" if the argument evaluates to true, "" if not
 
@@ -935,7 +935,7 @@ if (!defined("DEFS"))
 		@attrib api=1 params=pos
 
 		@param arg required type=bool
-			
+
 		@returns
 			"DISABLED" if the argument evaluates to true, "" if not
 
@@ -960,7 +960,7 @@ if (!defined("DEFS"))
 			If set to true, the value displayed is fed through htmlspecialchars, so you can see the html tags in yer browser
 
 		@comment
-			Use this to output any value to the user in a pretty way, basically wraps print_r. The value is printed directly to the browser, not returned. 
+			Use this to output any value to the user in a pretty way, basically wraps print_r. The value is printed directly to the browser, not returned.
 
 	**/
 	function arr($arr,$die=false,$see_html=false)
@@ -1001,7 +1001,7 @@ if (!defined("DEFS"))
 		@param array required type=array
 			The array whose contents you want to reformat
 
-		@returns 
+		@returns
 			The array, with the format string applied to each value
 
 		@examples
@@ -1046,8 +1046,8 @@ if (!defined("DEFS"))
 		@param empty optional type=bool
 			If set to true, empty values are included in the result, else they are discarded. defaults to false
 
-		@returns 
-			The array, with the format string applied to each key and value pair. 
+		@returns
+			The array, with the format string applied to each key and value pair.
 
 		@examples
 			foreach(map2("%s: %s ---\n",array("a" => "1","b" => "2","c" => "3")) as $entry)
@@ -1112,7 +1112,7 @@ if (!defined("DEFS"))
 			The name of the object to process
 
 		@returns
-			The name given if it is not empty, (nimetu) if not. 
+			The name given if it is not empty, (nimetu) if not.
 
 		@comment
 			The idea here is, that if the object's name is not empty, the user still sees something to click on for example
@@ -1216,7 +1216,7 @@ if (!defined("DEFS"))
 			The array, as unserialized from the string. If the string is not a valid serialization, returns null
 
 		@comment
-			Use this to unserialize strings created by aw_serialize or php's serialize(), it autodetects the serializer type from the beginning of the string. 
+			Use this to unserialize strings created by aw_serialize or php's serialize(), it autodetects the serializer type from the beginning of the string.
 
 	**/
 	function aw_unserialize($str,$dequote = 0)
@@ -1331,7 +1331,7 @@ if (!defined("DEFS"))
 			The aw global variable value for the given variable
 
 		@comment
-			This fetches values from the request, cookie and session and those set from aw_global_set. 
+			This fetches values from the request, cookie and session and those set from aw_global_set.
 			this function replaces php's GLOBAL - it keeps global variables in a global object instance
 			why is this? well, because then they can't be set from the url, overriding the default values
 			and causing potential security problems
@@ -1379,8 +1379,8 @@ if (!defined("DEFS"))
 			The value fo the key in the given cache
 
 		@comment
-			Use this method instead of $GLOBALS["cache_name"][$key] = foo; because if you do that, then the values can be inserted via the request. This method protects you from that. 
-			Or use static members or static variables. 
+			Use this method instead of $GLOBALS["cache_name"][$key] = foo; because if you do that, then the values can be inserted via the request. This method protects you from that.
+			Or use static members or static variables.
 	**/
 	function aw_cache_get($cache,$key)
 	{
@@ -1447,7 +1447,7 @@ if (!defined("DEFS"))
 			}
 		};
 	}
-	
+
 	/** clears the contents of the given memory cache
 		@attrib api=1 params=pos
 
@@ -1474,7 +1474,7 @@ if (!defined("DEFS"))
 		@param cache required type=string
 			The name of the cache to return
 
-		@returns 
+		@returns
 			Array { key => value } for the given cache
 
 		@examples:
@@ -1511,7 +1511,7 @@ if (!defined("DEFS"))
 		}
 	}
 
-	/** saves a local variable's value to the session 
+	/** saves a local variable's value to the session
 		@attrib api=1 params=pos
 
 		@param name required type=string
@@ -1522,9 +1522,9 @@ if (!defined("DEFS"))
 
 		@comment
 			there is no session_get, because session vars are automatically registered as globals as well, so for retrieval you can use aw_global_get().
-			Also, if the value is empty, this will not do anything for some weird reason. 
-			Just use $_SESSION directly. 
-			This was useful in the days, when there was no $_SESSION. 
+			Also, if the value is empty, this will not do anything for some weird reason.
+			Just use $_SESSION directly.
+			This was useful in the days, when there was no $_SESSION.
 	**/
 	function aw_session_set($name,$value)
 	{
@@ -1541,7 +1541,7 @@ if (!defined("DEFS"))
 		aw_global_set($name,$value);
 	}
 
-	/** deletes a variable from the session 
+	/** deletes a variable from the session
 		@attrib api=1 params=pos
 
 		@param name required type=string
@@ -1551,7 +1551,7 @@ if (!defined("DEFS"))
 			If set to true, the global variable with the same name is not cleared
 
 		@comment
-			Just use $_SESSION directly. 
+			Just use $_SESSION directly.
 	**/
 	function aw_session_del($name, $leave_global = false)
 	{
@@ -1568,9 +1568,9 @@ if (!defined("DEFS"))
 
 		@param pattern required type=string
 			The regex to match with the variable names
-		
+
 		@examples
-			 aw_session_del_patt("/form_rel_tree(.*)/"); 
+			 aw_session_del_patt("/form_rel_tree(.*)/");
 	**/
 	function aw_session_del_patt($pattern)
 	{
@@ -1597,7 +1597,7 @@ if (!defined("DEFS"))
 
 		@comment
 			Use this, when you want to pass data to instances of some class, that get created after the call to this.
-		
+
 		@examples
 			aw_register_default_class_member("document", "shown_document", $docid);
 			// now, wherever a new document class instance is created, it has a memver variable named shown_document with the value in the variable $docid
@@ -1613,9 +1613,9 @@ if (!defined("DEFS"))
 		@attrib api=1 params=name
 
 		@param uid required type=string
-			The username to switch to. 
+			The username to switch to.
 
-		@comment	
+		@comment
 			This can be used to elevate privileges to some other user, so be really careful with it!
 	**/
 	function aw_switch_user($arr)
@@ -1642,7 +1642,7 @@ if (!defined("DEFS"))
 	}
 
 	/** restores the original username the request was running under
-		@attrib api=1 
+		@attrib api=1
 
 		@comment
 			Switches the user back to the one the request was running as, before any calls to aw_switch_user();
@@ -1659,17 +1659,17 @@ if (!defined("DEFS"))
 		aw_global_set("old_uids", $old_uids);
 	}
 
-	/** disables all acl checks 
+	/** disables all acl checks
 		@attrib api=1
 
 		@comment
-			This should only be used just before savin something, not before reading something. The reason for this is, that if you keep this on for a bit loner, then aw will start throwing errors about nonexisting objects. This is because object deletion checks are also done via acl and since acl is turned off, things start to go wrong if anything is deleted. 
-			This behaviour is intentional, to make it really hard to use this function, because you really shouldn't. Acls should be set correctly. 
+			This should only be used just before savin something, not before reading something. The reason for this is, that if you keep this on for a bit loner, then aw will start throwing errors about nonexisting objects. This is because object deletion checks are also done via acl and since acl is turned off, things start to go wrong if anything is deleted.
+			This behaviour is intentional, to make it really hard to use this function, because you really shouldn't. Acls should be set correctly.
 
 		@examples
 			$o = obj($oid);
-			aw_disable_acl();	
-			$o->save();			// this is how this is meant to be used. 
+			aw_disable_acl();
+			$o->save();			// this is how this is meant to be used.
 			aw_restore_acl();
 	**/
 	function aw_disable_acl()
@@ -1704,7 +1704,16 @@ if (!defined("DEFS"))
 	**/
 	function clid_for_name($class_name)
 	{
-		return aw_ini_get("class_lut.".$class_name);
+		try
+		{
+			$clid = aw_ini_get("class_lut.".$class_name);
+		}
+		catch (Exception $e)
+		{
+			$clid = null;
+		}
+
+		return $clid;
 	}
 
 	/** deprecated - do not use. or, rather - needs thinking about. does not work anyway **/
@@ -1727,10 +1736,10 @@ if (!defined("DEFS"))
 		}
 		return "";
 	}
-	
+
 	function xml_job_offerings_temp_function($xml)
 	{
-		$backfile = "http://www.cvkeskus.ee/xml_jobs.php?id=rev01h"; 
+		$backfile = "http://www.cvkeskus.ee/xml_jobs.php?id=rev01h";
 		$ct = file_get_contents($xml?$xml:$backfile);
 		//$ct = html_entity_decode($ct, ENT_QUOTES, "utf-8");
 		$parser = xml_parser_create("utf-8");
@@ -1802,7 +1811,7 @@ if (!defined("DEFS"))
 		return array_search(str_replace("&", "", $a["employer"]["name"]), $sort_order) - array_search(str_replace("&", "", $b["emplyer"]["name"]), $__reval_hotel_list);
 		return 0;
 	}
-	
+
 	function xml_job_temp_list($job_ad_data, $job_doc, $region = null)
 	{
 		$tpl = new aw_template();
@@ -1846,10 +1855,10 @@ if (!defined("DEFS"))
 			 "ROW" => $rows,
 		));
 		$tpl->vars($vars);
-		
+
 		return $tpl->parse();
 	}
-	
+
 	function xml_job_temp_job($job_ad_data)
 	{
 		$job = $job_ad_data[$_GET["job_id"]];
@@ -1912,7 +1921,7 @@ if (!defined("DEFS"))
 				 $vars[$k."_joined"] = "-";
 			 }
 		 }
-		 
+
 		// employer sub
 		 $tpl->vars($job["employer"]);
 		 $vars["EMPLOYER"] = $tpl->parse("EMPLOYER");
@@ -1920,7 +1929,7 @@ if (!defined("DEFS"))
 
 		 $tpl->vars($vars);
 		return $tpl->parse();
-	} 
+	}
 
 	/** internal **/
 	function warning_prop($level = false, $oid = false, $prop = false)
@@ -2038,8 +2047,8 @@ if (!defined("DEFS"))
 
 			@comment
 				The format is 4 numbers, separated by . each must be between 1 and 255
-		
-			@returns 
+
+			@returns
 				true, if the argument is a valid ip address, false if not
 		**/
 		function is_ip($addr)
@@ -2109,7 +2118,7 @@ if (!defined("DEFS"))
 				The string to dump
 
 			@comment
-				Echoes the full string and then for each character, it's character code and position in the string. 
+				Echoes the full string and then for each character, it's character code and position in the string.
 				Useful for debugging character set problems.
 		**/
 		function str_dbg($str)
@@ -2142,7 +2151,7 @@ if (!defined("DEFS"))
 			@param msg required type=string
 				The message to print
 
-			@comment 
+			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
 		function p1($msg)
@@ -2159,7 +2168,7 @@ if (!defined("DEFS"))
 			@param msg required type=string
 				The message to print
 
-			@comment 
+			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
 		function p2($msg)
@@ -2176,7 +2185,7 @@ if (!defined("DEFS"))
 			@param msg required type=string
 				The message to print
 
-			@comment 
+			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
 		function p3($msg)
@@ -2193,7 +2202,7 @@ if (!defined("DEFS"))
 			@param msg required type=string
 				The message to print
 
-			@comment 
+			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
 		function p4($msg)
@@ -2210,7 +2219,7 @@ if (!defined("DEFS"))
 			@param msg required type=string
 				The message to print
 
-			@comment 
+			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
 		function p5($msg)
@@ -2300,7 +2309,7 @@ if (!defined("DEFS"))
 		}
 
 		/** formats a one-line user-readable string from the current backtrace
-			@attrib api=1 
+			@attrib api=1
 
 			@returns
 				One-line string with a human-readable backtrace
@@ -2392,7 +2401,7 @@ if (!defined("DEFS"))
 			@attrib api=1 params=pos
 
 			@param num required type=int
-				The number of the weekday to return. 
+				The number of the weekday to return.
 
 			@param short optional type=bool
 				If true, the short name of the weekday is returned. Defaults to false
@@ -2447,7 +2456,7 @@ if (!defined("DEFS"))
 		}
 
 		/** returns a localized date in the current language
-			@attrib api=1 params=pos 
+			@attrib api=1 params=pos
 
 			@param timestamp required type=int
 				The unix timestamp to return the date for
@@ -2455,13 +2464,13 @@ if (!defined("DEFS"))
 			@param format required type=int
 				One of the defined date formats
 
-			@comment 
+			@comment
 				The date formats are:
 					LC_DATE_FORMAT_SHORT = For example: 20.06.88 or 05.12.98
 					LC_DATE_FORMAT_SHORT_FULLYEAR = For example: 20.06.1999 or 05.12.1998
 					LC_DATE_FORMAT_LONG = For example: 20. juuni 99
 					LC_DATE_FORMAT_LONG_FULLYEAR = For example: 20. juuni 1999
-		**/					
+		**/
 		function get_lc_date($timestamp,$format)
 		{
 			static $lc_date_inst;
@@ -2487,11 +2496,11 @@ if (!defined("DEFS"))
 				The number to stringify
 
 			@returns
-				the text version of the number. 
+				the text version of the number.
 
 			@examples
 				if the language is english, then
-					locale::get_lc_number(7); 
+					locale::get_lc_number(7);
 				returns "seven"
 		**/
 		function get_lc_number($number)
@@ -2511,7 +2520,7 @@ if (!defined("DEFS"))
 				return $number;
 			};
 		}
-	
+
 		/** returns the given amount of money as text with the currency name n the right place
 			@attrib api=1 params=pos
 
@@ -2701,7 +2710,7 @@ if (!defined("DEFS"))
 			@param key required type=string
 				The key to check
 
-			@returns 
+			@returns
 				true if the given key exists in the array, false if not
 		**/
 		function key_exists($key)
@@ -2805,13 +2814,13 @@ if (!defined("DEFS"))
 		}
 		return $retval;
  	}
- 
+
 	/** Merges arrays recursively
 		@attrib api=1 params=pos
 
 		@comment
 			Same as aw_merge, but does the same thing recursevly through array
-	**/	
+	**/
  	function req_aw_merge()
  	{
 		if(($argc = func_num_args()) < 1)
