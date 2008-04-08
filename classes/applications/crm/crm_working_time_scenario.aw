@@ -1,5 +1,4 @@
 <?php
-// crm_working_time_scenario.aw - Tööaja tsenaarium
 /*
 
 @classinfo syslog_type=ST_CRM_WORKING_TIME_SCENARIO relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -7,7 +6,7 @@
 @default table=objects
 @default group=general
 @property weekdays type=text store=no no_caption=1
-@caption Nädalapäevad
+@caption N&auml;dalap&auml;evad
 
 @property days type=text store=no no_caption=1
 @caption P&auml;evade plaan
@@ -26,7 +25,7 @@ class crm_working_time_scenario extends class_base
 			"tpldir" => "applications/crm/crm_working_time_scenario",
 			"clid" => CL_CRM_WORKING_TIME_SCENARIO
 		));
-		$this->days = array(t("Esmaspäev"),t("Teisip&auml;ev"), t("Kolmap&auml;ev"), t("Neljap&auml;ev"),t("Reede"), t("Laup&auml;ev"), t("P&uuml;hap&auml;ev"));
+		$this->days = array(t("Esmasp&auml;ev"),t("Teisip&auml;ev"), t("Kolmap&auml;ev"), t("Neljap&auml;ev"),t("Reede"), t("Laup&auml;ev"), t("P&uuml;hap&auml;ev"));
 	}
 
 	function get_property($arr)
@@ -47,7 +46,7 @@ class crm_working_time_scenario extends class_base
 				$prop["value"] = "";
 				$prop["value"].= html::checkbox(array(
 					"name" => "weekdays[0]",
-					"caption" => t("Esmaspäev"),
+					"caption" => t("Esmasp&auml;ev"),
 					"checked" => $wd[0],
 				));
 				$prop["value"].= html::checkbox(array(
@@ -284,25 +283,32 @@ class crm_working_time_scenario extends class_base
 				{
 					$start = mktime($data["start"]["hour"], $data["start"]["minute"],0,date("m",$tmstmp),date("d",$tmstmp),date("Y",$tmstmp));
 					$end = mktime($data["end"]["hour"], $data["end"]["minute"],0,date("m",$tmstmp),date("d",$tmstmp),date("Y",$tmstmp));
-
-					$bron = $room_inst->make_reservation(array(
-						"not_verified" => 1,
-						"id" => $_POST["room"],
-						"data" => array(
-							"start" => $start,
-							"end" => $end,
-						),
-					));
-					if(is_oid($bron))
+					if($room_inst->check_if_available(array(
+						"room" => $_POST["room"],
+						"start" => $start,
+						"end" => $end,
+					)))
 					{
-						$bron_object = obj($bron);
-						$bron_object->set_prop("people" , $_POST["person"]);
-						if($data["is_pause"])
+						
+						$bron = $room_inst->make_reservation(array(
+							"not_verified" => 1,
+							"id" => $_POST["room"],
+							"data" => array(
+								"start" => $start,
+								"end" => $end,
+							),
+						));
+						if(is_oid($bron))
 						{
-							$bron_object->set_prop("time_closed" , 1);
-							$bron_object->set_prop("closed_info" , $data["pause_reason"]);
+							$bron_object = obj($bron);
+							$bron_object->set_prop("people" , $_POST["person"]);
+							if($data["is_pause"])
+							{
+								$bron_object->set_prop("time_closed" , 1);
+								$bron_object->set_prop("closed_info" , $data["pause_reason"]);
+							}
+							$bron_object->save();
 						}
-						$bron_object->save();
 					}
 //					print "teeb bronni ajale ".date("d.m.Y h:i" , $start)." - ".date("d.m.Y h:i" , $end)."\n<br>";
 				}

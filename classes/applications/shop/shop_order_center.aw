@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.58 2008/03/12 13:12:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.59 2008/04/08 08:13:15 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -263,7 +263,7 @@ class shop_order_center extends class_base
 			case "layoutbl":
 				if ($arr["obj_inst"]->prop("use_controller"))
 				{
-					return PROP_IGNORE;
+//					return PROP_IGNORE;
 				}
 				$this->do_layoutbl($arr);
 				break;
@@ -671,7 +671,7 @@ class shop_order_center extends class_base
 
 			// see if this folder has a special controller
 			$vals = safe_array($soc->meta("fld_controllers"));
-			$so = obj($arr["section"]);
+			$so = obj(aw_global_get("section"));
 			enter_function("shop_order_center::show_items::path");
 			$path = $so->path();
 

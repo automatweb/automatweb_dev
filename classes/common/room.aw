@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.240 2008/04/03 14:24:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.241 2008/04/08 08:13:21 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -6030,12 +6030,20 @@ class room extends class_base
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
 					"title" => t("Muuda")
 			));
+//<<<<<<< room.aw
+/*			$delete_sc = html::href(array(
+				"url" => 'javascript:alert(document.changeform.scenario[420][scenario]);',
+				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
+				"title" => t("Kustuta")
+			));*/
+//=======
 			$delete_sc = html::href(array(
 				"url" => 'javascript:confirm_delete("scenario['.$po->id().'][scenario]","'.aw_url_change_var('return_url' , '').'","delete_scenario")',
 				//	window.location.href="'.aw_url_change_var("return_url" , "").'&delete_scenario="+document.getElementById("scenario[420][scenario]").value;',
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
 				"title" => t("Kustuta")
 			));
+//>>>>>>> 1.239
 			$data = array();
 			$data["name"] = $po->name();
 			$data["start"] = html::date_select(array(

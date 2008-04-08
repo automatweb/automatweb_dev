@@ -3016,7 +3016,7 @@ class bug_tracker extends class_base
 		{
 			$chart->add_row (array (
 				"name" => $gt->id(),
-				"title" => $gt->name(), //." (".$bi->get_sort_priority($gt).") ",
+				"title" => parse_obj_name($gt->name()), //." (".$bi->get_sort_priority($gt).") ",
 				"uri" => html::get_change_url(
 					$gt->id(),
 					array("return_url" => get_ru())
@@ -3065,7 +3065,7 @@ class bug_tracker extends class_base
 				$tot_len = $length;
 				$length = $wd_end - $start;
 				$remaining_len = $tot_len - $length;
-				$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
+				$title = parse_obj_name($gt->name())."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
 
 				$bar = array (
 					"id" => $gt->id (),
@@ -3100,7 +3100,7 @@ class bug_tracker extends class_base
 			}
 			else
 			{
-				$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
+				$title = parse_obj_name($gt->name())."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
 
 				$bar = array (
 					"id" => $gt->id (),

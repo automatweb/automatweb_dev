@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/xml_editor.aw,v 1.3 2008/03/17 10:03:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/xml_editor.aw,v 1.4 2008/04/08 08:13:18 kristo Exp $
 // xml_editor.aw - xml editor 
 /*
 
@@ -37,12 +37,7 @@ class xml_editor extends class_base
 
 		switch($prop["name"])
 		{
-			case "excisting_xml_files":
-				$prop['options'] = $this->get_directory(array("dir" => aw_ini_get("site_basedir")."/files/xml/"));
-				break;
-			case "add_xml_file_to_server":
 
-				break;
 		};
 		return $retval;
 	}
@@ -85,7 +80,7 @@ class xml_editor extends class_base
 		));
 		return $this->parse();
 	}
-	
+
 	function _get_xml_content($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];

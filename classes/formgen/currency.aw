@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.18 2008/01/31 13:54:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.19 2008/04/08 08:13:26 kristo Exp $
 // currency.aw - Currency management
 
 /*
@@ -181,11 +181,11 @@ class currency extends class_base
 		));
 		$t->define_field(array(
 			"name" => "start_date",
-			"caption" => t("Alguskuupäev"),
+			"caption" => t("Alguskuup&auml;ev"),
 		));
 		$t->define_field(array(
 			"name" => "end_date",
-			"caption" => t("Lõppkuupäev"),
+			"caption" => t("L&otilde;ppkuup&auml;ev"),
 		));
 		$t->define_field(array(
 			"name" => "currency",
@@ -201,7 +201,7 @@ class currency extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sell_rate",
-			"caption" => t("Müügikurss"),
+			"caption" => t("M&uuml;&uuml;gikurss"),
 		));
 		for($i = 0; $i < $count+1; $i++)
 		{
@@ -313,7 +313,7 @@ class currency extends class_base
 		{
 			error::raise(array(
 				"id" => ERR_FATAL,
-				"msg" => sprintf(t("currency::convert - kas %s või %s pole valuutadaobjektide id'd"), $to, $from),
+				"msg" => sprintf(t("currency::convert - kas %s v&otilde;i %s pole valuutadaobjektide id'd"), $to, $from),
 			));
 		}
 		
@@ -421,5 +421,42 @@ class currency extends class_base
 		$_t = aw_global_get("currency_cache");
 		return $_t[$id];
 	}
+
+	/** Returns the currency object, given the symbol
+		@attrib api=1 params=pos
+
+		@param symbol required type=string
+			The currency symbol to find the object for
+	**/
+	static public function find_by_symbol($symbol)
+	{
+		if (empty($symbol))
+		{
+			throw new awex_err_param("The required parameter 1 (symbol) was not given!");
+		}
+		static $cache;
+		if (isset($cache[$symbol]))
+		{
+			return $cache[$symbol];
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $symbol
+		));
+		if (!$ol->count())
+		{
+			throw new awex_currency_not_found("The currency you searched for was not found");
+		}
+		$cur = $ol->begin();
+		$cache[$symbol] = $cur;
+		return $cur;
+	}
 }
+
+class awex_err_param extends aw_exception {}
+class awex_currency extends aw_exception {}
+class awex_currency_not_found extends awex_currency {}
+
 ?>

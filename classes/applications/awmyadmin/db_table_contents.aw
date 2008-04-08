@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.13 2007/12/06 14:32:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.14 2008/04/08 08:13:07 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -59,6 +59,7 @@ class db_table_contents extends class_base
 		switch($args['prop']['name'])
 		{
 			case 'db_table':
+return;
 				if (!$args['obj_inst']->prop('db_base'))
 				{
 					return PROP_IGNORE;

@@ -239,8 +239,7 @@ class popup_menu extends aw_template
 		{
 			static $lod_num;
 			$lod_num++;
-
-			return "<div id='lod_".$this->menu_id."'><a href='#' onClick='tb_lod".$lod_num."()' class='nupp'>$href_ct</a></div>
+			return "<div id='lod_".$this->menu_id."'><a href='javascript:void(0);' onClick='tb_lod".$lod_num."()' class='nupp'>$href_ct</a></div>
 			<script language=javascript>
 			function tb_lod".$lod_num."()
 			{

@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.2 2008/03/31 11:42:28 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.3 2008/04/08 08:13:23 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");
@@ -387,7 +387,14 @@ die();
 		{
 			aw_disable_acl();
 			$u_obj = obj($u_oid);
-			$gl = $u_obj->get_groups_for_user();
+			if ($u_obj->class_id() != CL_USER)
+			{
+				$gl = array();
+			}
+			else
+			{
+				$gl = $u_obj->get_groups_for_user();
+			}
 			aw_restore_acl();
 
 			foreach($gl as $g_oid => $g_obj)

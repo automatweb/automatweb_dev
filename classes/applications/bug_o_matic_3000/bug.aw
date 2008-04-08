@@ -1956,7 +1956,7 @@ class bug extends class_base
 					if ($map_cvs_uid == $cvs_uid)
 					{
 						$_SESSION["uid_oid"] = $u_inst->get_oid_for_uid($map_aw_uid);
-						aw_switch_user(array("uid" => trim($map_aw_uid)));
+						//aw_switch_user(array("uid" => trim($map_aw_uid)));
 					}
 				}
 			}
