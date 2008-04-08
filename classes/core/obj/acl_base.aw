@@ -5,15 +5,14 @@
 
 lc_load("definition");
 
-classload("db");
 class acl_base extends db_connector
 {
 	function sql_unpack_string()
 	{
-		// oi kakaja huinja, bljat. 
+		// oi kakaja huinja, bljat.
 		// the point is, that php can only handle 32-bit integers, but mysql can handle 64-bit integers
 		// and so, we do the packing/unpacking to integer in the database. whoop-e
-		// of course, now that we only have 5 acl settings, we don't have to do this in the db no more. 
+		// of course, now that we only have 5 acl settings, we don't have to do this in the db no more.
 		// anyone wanna rewrite it? ;) - terryf
 		$s = '';
 		$qstr = array();
@@ -92,7 +91,7 @@ class acl_base extends db_connector
 			// set default acl if not specified otherwise
 			$aclarr = $GLOBALS["cfg"]["acl"]["default"];
 		};
-		$this->save_acl($oid,$gid,$aclarr, $invd);		
+		$this->save_acl($oid,$gid,$aclarr, $invd);
 		if ($invd)
 		{
 			aw_session_set("__acl_cache", array());
@@ -217,7 +216,7 @@ class acl_base extends db_connector
 						".$this->sql_unpack_string().",
 						groups.priority as priority,
 						acl.oid as oid
-					FROM acl 
+					FROM acl
 						LEFT JOIN groups ON groups.gid = acl.gid
 						LEFT JOIN objects ON objects.oid = acl.oid
 					WHERE acl.oid = '$oid' AND acl.gid = '$gid'
@@ -235,18 +234,18 @@ class acl_base extends db_connector
 		$max_pri = 0;
 		$max_row = array("priority" => null);
 		$q = "
-			SELECT 
-				acl.id as acl_rel_id, 
+			SELECT
+				acl.id as acl_rel_id,
 				objects.parent as parent,
 				".$this->sql_unpack_string().",
 				objects.oid as oid,
 				objects.parent as parent,
 				acl.gid as gid ,
 				objects.brother_of as brother_of
-			FROM 
+			FROM
 				objects
 				LEFT JOIN acl ON objects.oid = acl.oid
-			WHERE 
+			WHERE
 				objects.oid = '$oid' AND objects.status != 0
 		";
 		$this->db_query($q);
@@ -436,7 +435,7 @@ class acl_base extends db_connector
 			}
 
 			$gr = $this->get_user_group($uuid);
-			if (!$gr) 
+			if (!$gr)
 			{
 				if (method_exists($this, "raise_error"))
 				{
@@ -473,7 +472,7 @@ class acl_base extends db_connector
 		}
 
 		$this->add_acl_group_to_obj($all_users_grp, $oid, array(), false);
-		
+
 		// we don't need to flush caches here, because the user that was just created can't have an acl cache anyway
 		$this->save_acl($oid,$all_users_grp, $aclarr, false);		// give no access to all users
 	}
@@ -511,7 +510,7 @@ class acl_base extends db_connector
 		}
 		else
 		{
-			// the only program you can ask for is PRG_MENUEDIT 
+			// the only program you can ask for is PRG_MENUEDIT
 			/*error::raise_if($progid != PRG_MENUEDIT, array(
 				"id" => ERR_PROG_ACL,
 				"msg" => sprintf(t("acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"), $right, $progid)
@@ -535,9 +534,9 @@ class acl_base extends db_connector
 			$tmp = $GLOBALS["cfg"]["acl"]["no_check"];
 			$GLOBALS["cfg"]["acl"]["no_check"] = 1;
 			foreach($gl as $g_oid)
-			{	
+			{
 				$o = obj($g_oid);
-				
+
 				if ($o->prop("type") == 1 || $o->prop("type") == 3)
 				{
 					continue;
@@ -604,8 +603,8 @@ class acl_base extends db_connector
 		$ret = array();
 
 		$sql = "
-			SELECT 
-				objects.name as obj_name, 
+			SELECT
+				objects.name as obj_name,
 				objects.oid,
 				objects.status,
 				objects.createdby as createdby,

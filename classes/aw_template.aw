@@ -4,7 +4,7 @@
 @comment
 	The aw template engine
 */
-classload("core");
+
 class aw_template extends core
 {
 	public $template_dir;
@@ -34,7 +34,7 @@ class aw_template extends core
 				{
 					$this->init(array("tpldir" => "applications/a"));
 				}
-			}	
+			}
 
 	**/
 	function init($args = array())
@@ -89,7 +89,7 @@ class aw_template extends core
 			$this->adm_template_dir = $basedir;
 			$this->site_template_dir = $basedir;
 		}
-		
+
 		$this->vars = array();
 		$this->sub_merge = 0;
 
@@ -157,7 +157,7 @@ class aw_template extends core
 			defaults to ""
 
 		@comment
-			sets the template parsing method used by the current instance of the template parser. 
+			sets the template parsing method used by the current instance of the template parser.
 			the available methods are:
 			"" - the default - uses regular expressions to parse the template
 			"eval" - uses php's eval() function to parse the template - this is faster, but slightly incompatible with the default
@@ -172,7 +172,7 @@ class aw_template extends core
 			$tpl = new aw_template;
 			$tpl->set_parse_method("eval");
 			$tpl->read_template("aa.tpl");
-			echo $tpl->parse(); // this is now slightly faster 
+			echo $tpl->parse(); // this is now slightly faster
 	**/
 	function set_parse_method($method = "")
 	{
@@ -195,7 +195,7 @@ class aw_template extends core
 			$tpl = new aw_template;
 			$tpl->set_parse_method("eval");
 			$tpl->read_template("aa.tpl");
-			echo $tpl->parse(); 
+			echo $tpl->parse();
 			$tpl->reset(); // now no variables are defined nor any template loaded
 	**/
 	function reset()
@@ -204,7 +204,7 @@ class aw_template extends core
 	}
 
 	/** Resets all template content, but not the variable values
-		@attrib api=1 
+		@attrib api=1
 	**/
 	function tpl_reset()
 	{
@@ -254,7 +254,7 @@ class aw_template extends core
 		return $res;
 //		return html::select(array("selected" => $active,"options" => $array,"multiple" => 1));
 	}
-        
+
 	////
 	// !Deprecated - use html::select instead
 	function mpicker($active, $array)
@@ -269,7 +269,7 @@ class aw_template extends core
 		return $this->option_list($active,$array);
 	}
 
-	/** reads the template whose name is given. 
+	/** reads the template whose name is given.
 		@attrib api=1
 
 		@param name required type=string
@@ -308,7 +308,7 @@ class aw_template extends core
 		$this->template_filename = $this->template_dir."/".$name;
 		if (!file_exists($this->template_filename))
 		{
-			$this->template_filename = $this->adm_template_dir . "/" . $name;			
+			$this->template_filename = $this->adm_template_dir . "/" . $name;
 		};
 
 		// try to load a template from aw directory then
@@ -357,7 +357,7 @@ class aw_template extends core
 		$slines = explode("\n",$source);
 		return $this->read_tpl($slines);
 	}
-	
+
 	/** reads a template from a file from the admin template folder
 		@attrib api=1
 
@@ -379,7 +379,7 @@ class aw_template extends core
 			$tpl->vars(array(
 				"foo" => "Mr. T"
 			));
-			echo $tpl->parse();	
+			echo $tpl->parse();
 	**/
 	function read_adm_template($name,$silent = 0)
 	{
@@ -410,9 +410,9 @@ class aw_template extends core
 		@param name required type=string
 			name of the file to load
 
-		@param silent optional 
+		@param silent optional
 			if set to 1, no errors are thrown, instead false is returned on error
-		
+
 		@errors
 			if file is not found, error is thrown, unless silent flag is given
 
@@ -457,7 +457,7 @@ class aw_template extends core
 			name of the file to load
 		@param silent optional
 			if set to 1, no errors are thrown, instead false is returned on error
-		
+
 		@errors
 			if file is not found, error is thrown, unless silent flag is given
 
@@ -470,7 +470,7 @@ class aw_template extends core
 			$tpl->vars(array(
 				"foo" => "Mr. T"
 			));
-			echo $tpl->parse();	
+			echo $tpl->parse();
 	**/
 	function read_any_template($name, $silent = false)
 	{
@@ -556,7 +556,7 @@ class aw_template extends core
 	**/
 	function template_has_var($varname,$tplname = "MAIN")
 	{
-		return strpos($this->v2_templates[$tplname],"{VAR:" . $varname . "}") !== false; 
+		return strpos($this->v2_templates[$tplname],"{VAR:" . $varname . "}") !== false;
 	}
 
 	/** checks if the template contains the given variable. checks the complete template. slow
@@ -587,10 +587,10 @@ class aw_template extends core
 	function template_has_var_full($varname)
 	{
 		$tmp = join("\n", $this->v2_arr);
-		return strpos($tmp,"{VAR:" . $varname . "}") !== false; 
+		return strpos($tmp,"{VAR:" . $varname . "}") !== false;
 	}
 
-	/** checks if the SUB $parent is the immediate parent of the SUB $tpl 
+	/** checks if the SUB $parent is the immediate parent of the SUB $tpl
 		@attrib api=1
 
 		@param tpl required type=string
@@ -625,7 +625,7 @@ class aw_template extends core
 				$this->vars(array(
 					"FOO" => $this->parse("FOO")
 				));
-			}	
+			}
 	**/
 	function is_parent_tpl($tpl,$parent)
 	{
@@ -761,7 +761,7 @@ class aw_template extends core
 		return true;
 	}
 
-	/** imports variables into the current template, overwriting the previous variables of the same name. escapes php code 
+	/** imports variables into the current template, overwriting the previous variables of the same name. escapes php code
 		@attrib api=1
 
 		@param params required type=array
@@ -776,7 +776,7 @@ class aw_template extends core
 		@examples
 			-- template foo.tpl
 			{VAR:allah}
-		
+
 			-- code
 			$tpl = new aw_template;
 			$tpl->read_any_template("foo.tpl");
@@ -793,7 +793,7 @@ class aw_template extends core
 		}
 	}
 
-	/** imports variables into the current template, overwriting the previous variables of the same name. DOES NOT escapes php code 
+	/** imports variables into the current template, overwriting the previous variables of the same name. DOES NOT escapes php code
 		@attrib api=1
 
 		@param params required type=array
@@ -808,7 +808,7 @@ class aw_template extends core
 		@examples
 			-- template foo.tpl
 			{VAR:allah}
-		
+
 			-- code
 			$tpl = new aw_template;
 			$tpl->read_any_template("foo.tpl");
@@ -886,10 +886,10 @@ class aw_template extends core
 			));
 			echo $tpl->parse(); // prints akhbar
 	**/
-	function parse($object = "MAIN") 
+	function parse($object = "MAIN")
 	{
 		$tmp = isset($this->v2_name_map[$object]) ? $this->v2_name_map[$object] : "";
-		$val = isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : ""; 
+		$val = isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : "";
 		if ($this->use_eval)
 		{
 			$cval = $this->c_templates[$tmp];
@@ -964,14 +964,14 @@ class aw_template extends core
 			else
 			if (preg_match("/^(.*)<!-- END SUB: (.*) -->/",$line, $mt))
 			{
-				/* This avoid obligatory newline after each block, making templates more flexible.. 
-				/use eg 
+				/* This avoid obligatory newline after each block, making templates more flexible..
+				/use eg
 				|<!-- SUB: file-->
 				|{VAR:filecontents}
 				|EOF-with-no-linebreak<!-- END SUB: file -->
 				*/
 				$cur_src .= $mt[1];
-				// found an end of this subtemplate, 
+				// found an end of this subtemplate,
 				// finish and exit
 				$this->v2_templates[$fq_name] = $cur_src;
 				if ($this->use_eval)
@@ -1049,7 +1049,7 @@ class aw_template extends core
 		return array_unique($res);
 	}
 
-	/** returns the un-parsed content of the given SUB 
+	/** returns the un-parsed content of the given SUB
 		@attrib api=1
 
 		@param name required type=string
@@ -1059,7 +1059,7 @@ class aw_template extends core
 			none
 
 		@returns
-			the un-parsed content of the given SUB 
+			the un-parsed content of the given SUB
 
 		@examples
 			-- template foo.tpl
@@ -1075,7 +1075,7 @@ class aw_template extends core
 	function get_template_string($name)
 	{
 		$tmp = isset($this->v2_name_map[$name]) ? $this->v2_name_map[$name] : "";
-		return isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : ""; 
+		return isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : "";
 	}
 };
 
