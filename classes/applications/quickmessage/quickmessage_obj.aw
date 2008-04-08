@@ -28,6 +28,13 @@ class quickmessage_obj extends _int_object
 		return $p_name;
 	}
 
+	/**
+	@attrib api=1
+	@returns array
+		Options for selecting message recipient. Key: user oid, value: person name.
+	@errors
+		Throws awex_qmsg_cfg on 'show_addressees' config error.
+	**/
 	public function get_to_options()
 	{
 		try
@@ -43,49 +50,56 @@ class quickmessage_obj extends _int_object
 
 		$options = array();
 		$user_i = new user();
+		$addressees_setting = (int) $msgbox->prop("show_addressees");
 
-		switch ($msgbox->prop("show_addressees"))
+		if (!$addressees_setting)
 		{
-			case quickmessagebox_obj::ADDRESSEES_EVERYONE:
-				$users = new object_list(array(
-					"class_id" => CL_USER,
-					"site_id" => array(),
-					"lang_id" => array(),
-					"brother_of" => new obj_predicate_prop("id")
-				));
+			$addressees_setting = constant(aw_ini_get("quickmessaging.show_addressees"));
+		}
 
-				for ($u_o = $users->begin(); !$users->end(); $u_o = $users->next())
+		if ($addressees_setting === quickmessagebox_obj::ADDRESSEES_CONTACTS)
+		{
+			$contactlist = $msgbox->prop("contactlist");
+			$user_i = new user();
+			foreach ($contactlist as $u_oid)
+			{
+				try
 				{
-					try
-					{
-						$p_oid = $user_i->get_person_for_user($u_o);
-						$p_o = new object($p_oid);
-						$options[$u_o->id()] = $p_o->name();
-					}
-					catch (Exception $e)
-					{
-					}
+					$u_o = new object($u_oid);
+					$p_oid = $user_i->get_person_for_user($u_o);
+					$p_o = new object($p_oid);
+					$options[$u_oid] = $p_o->name();
 				}
-				break;
+				catch (Exception $e)
+				{
+				}
+			}
+		}
+		elseif ($addressees_setting === quickmessagebox_obj::ADDRESSEES_EVERYONE)
+		{
+			$users = new object_list(array(
+				"class_id" => CL_USER,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"brother_of" => new obj_predicate_prop("id")
+			));
 
-			case quickmessagebox_obj::ADDRESSEES_CONTACTS:
-			default:
-				$contactlist = $msgbox->prop("contactlist");
-				$user_i = new user();
-				foreach ($contactlist as $u_oid)
+			for ($u_o = $users->begin(); !$users->end(); $u_o = $users->next())
+			{
+				try
 				{
-					try
-					{
-						$u_o = new object($u_oid);
-						$p_oid = $user_i->get_person_for_user($u_o);
-						$p_o = new object($p_oid);
-						$options[$u_oid] = $p_o->name();
-					}
-					catch (Exception $e)
-					{
-					}
+					$p_oid = $user_i->get_person_for_user($u_o);
+					$p_o = new object($p_oid);
+					$options[$u_o->id()] = $p_o->name();
 				}
-				break;
+				catch (Exception $e)
+				{
+				}
+			}
+		}
+		else
+		{
+			throw new awex_qmsg_cfg("Addressees setting invalid: " . var_export($addressees_setting, true));
 		}
 
 		return $options;
@@ -95,14 +109,14 @@ class quickmessage_obj extends _int_object
 	{
 		if (!is_array($value) or !count($value))
 		{
-			throw new awex_qmsg_param("Invalid message recipient parameter specified. [" . var_export($value, true) . "]");
+			throw new awex_qmsg_param("Invalid message recipient parameter specified: " . var_export($value, true));
 		}
 
 		foreach ($value as $id)
 		{
 			if (!is_oid($id))
 			{
-				throw new awex_qmsg_param("Invalid message recipient id specified. [" . $id . "]");
+				throw new awex_qmsg_param("Invalid message recipient id specified: " . var_export($id, true));
 			}
 		}
 
@@ -110,11 +124,27 @@ class quickmessage_obj extends _int_object
 		return parent::set_prop("to", $value);
 	}
 
+	public function awobj_set_msg($value)
+	{
+		$max_len = aw_ini_get("quickmessaging.msg_max_len");
+		if ($max_len and $max_len < strlen($value))
+		{
+			throw new awex_qmsg_param("Message text too long.");
+		}
+		return parent::set_prop("msg", $value);
+	}
+
 	public function awobj_get_to()
 	{
 		return explode(",", parent::prop("to"));
 	}
 
+	/**
+	@attrib api=1
+	@errors
+		Throws awex_qmsg_box if can't get messagebox for recipient.
+		Forwards awex_obj_acl if no access to recipient's user object.
+	**/
 	public function save()
 	{
 		$new = !$this->obj["oid"];

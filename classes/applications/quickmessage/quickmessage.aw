@@ -71,6 +71,18 @@ class quickmessage extends class_base
 		return PROP_IGNORE;
 	}
 
+	function _set_msg($arr)
+	{
+		$status = PROP_OK;
+		$max_len = aw_ini_get("quickmessaging.msg_max_len");
+		if ($max_len and $max_len < strlen($arr["prop"]["value"]))
+		{
+			$arr["prop"]["error"] = sprintf(t("Message too long. Only %s characters allowed."), $max_len);
+			$status = PROP_ERROR;
+		}
+		return $status;
+	}
+
 	function submit($arr)
 	{
 		try

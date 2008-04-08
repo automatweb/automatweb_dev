@@ -60,6 +60,7 @@ class quickmessagebox extends class_base
 {
 	const COLOUR_READ = "grey";
 	const COLOUR_UNREAD = "#CCEECC";
+	const DATE_FORMAT = "d.m Y H:i:s";
 
 	function quickmessagebox()
 	{
@@ -77,6 +78,7 @@ class quickmessagebox extends class_base
 
 		$msgs = $arr["obj_inst"]->get_read_msgs();
 		$msgs->sort_by(array("prop" => "created", "order" => "asc"));
+		$i = 0;
 		foreach ($msgs->arr() as $msg)
 		{
 			$from = new object($cl_user->get_person_for_user(new object($msg->prop("from"))));
@@ -85,7 +87,8 @@ class quickmessagebox extends class_base
 				"from" => $from->name(),
 				"msg" => $msg->prop("msg"),
 				"sent" => date("d.m Y H:i:s", $msg->created()),
-				// "colour" => self::COLOUR_READ
+				// "colour" => self::COLOUR_READ,
+				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
 			));
 		}
 
@@ -98,8 +101,9 @@ class quickmessagebox extends class_base
 				"oid" => $msg->id(),
 				"from" => $from->name(),
 				"msg" => $msg->prop("msg"),
-				"sent" => date("d.m Y H:i:s", $msg->created()),
-				"colour" => self::COLOUR_UNREAD
+				"sent" => $msg->created(),
+				"colour" => self::COLOUR_UNREAD,
+				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
 			));
 		}
 
@@ -114,6 +118,7 @@ class quickmessagebox extends class_base
 
 		$msgs = $arr["obj_inst"]->get_sent_msgs();
 		$msgs->sort_by(array("prop" => "created", "order" => "asc"));
+		$i = 0;
 		foreach ($msgs->arr() as $msg)
 		{
 			$to = array();
@@ -128,7 +133,8 @@ class quickmessagebox extends class_base
 				"oid" => $msg->id(),
 				"to" => $to,
 				"msg" => $msg->prop("msg"),
-				"sent" => date("d.m Y H:i:s", $msg->created()),
+				"sent" => $msg->created(),
+				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
 			));
 		}
 
@@ -174,8 +180,13 @@ class quickmessagebox extends class_base
 			"name" => "sent",
 			"caption" => t("Sent"),
 			"chgbgcolor" => "colour",
+			"type" => "time",
+			"format" => self::DATE_FORMAT,
 			"sortable" => 1
 		));
+
+		$t->set_default_sortby("i");
+		$t->set_default_sorder("desc");
 	}
 
 	function _get_msg_toolbar($arr)

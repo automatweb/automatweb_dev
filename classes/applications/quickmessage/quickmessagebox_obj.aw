@@ -104,15 +104,24 @@ class quickmessagebox_obj extends _int_object
 	@returns void
 	@comment
 		Posts a message to this box.
+	@errors
+		Throws awex_qmsg_unwanted_msg when poster is not approved.
 	**/
 	public function post_msg(object $msg)
 	{
+		$approved_senders = (int) $this->prop("approved_senders");
+
+		if (!$approved_senders)
+		{
+			$approved_senders = constant(aw_ini_get("quickmessaging.approved_senders"));
+		}
+
 		if (
-			(self::APPROVED_SENDERS_CONTACTS === $this->prop("approved_senders") and !in_array($msg->prop("from"), $this->prop("contactlist"))) or
-			self::APPROVED_SENDERS_NONE === $this->prop("approved_senders")
+			(self::APPROVED_SENDERS_CONTACTS === $approved_senders and !in_array($msg->prop("from"), $this->prop("contactlist"))) or
+			self::APPROVED_SENDERS_NONE === $approved_senders
 		)
 		{
-			throw new awex_qmsg_unwanted_msg("Message poster is not in this user's approved senders list.");
+			throw new awex_qmsg_unwanted_msg("Message poster is not among this user's approved senders.");
 		}
 
 		$this->connect(array(
@@ -146,22 +155,6 @@ class quickmessagebox_obj extends _int_object
 		Options for selecting value for show_addressees setting.
 	**/
 	public static function get_addressees_options()
-	{
-		$options = array(
-			self::ADDRESSEES_EVERYONE => t("all users"),
-			self::ADDRESSEES_CONTACTS => t("users in my contact list"),
-		);
-		array_unshift($options, sprintf(t("system default (currently '%s')"), $options[constant("self::" . aw_ini_get("quickmessaging.show_addressees"))]));
-		return $options;
-	}
-
-	/**
-	@attrib api=1
-	@returns array
-	@comment
-		Options for selecting contacts.
-	**/
-	public static function get_contactlist_options()
 	{
 		$options = array(
 			self::ADDRESSEES_EVERYONE => t("all users"),
