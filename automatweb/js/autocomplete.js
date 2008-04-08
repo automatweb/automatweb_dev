@@ -783,10 +783,7 @@ function awActb(obj, valueObj)
 			default:
 				if ("realtime" == actb_mode /*&& actb_curr.value.length*/)
 				{
-					if ("dynamic" == actb_mode)
-					{
-						actb_loadOptions();
-					}
+					actb_loadOptions();
 					actb_lastKey = a;
 				}
 				else

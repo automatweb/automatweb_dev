@@ -18,7 +18,7 @@
 	@property country type=hidden
 
 @default group=grp_address
-	@property location_country type=hidden store=no
+	@property location_country type=hidden store=no editonly=1
 	@property location type=callback callback=callback_location no_caption=1 store=no
 
 	@property postal_code type=textbox
@@ -86,7 +86,7 @@ class address extends class_base
 					if (!is_object ($this->administrative_structure))
 					{
 						$retval = PROP_FATAL_ERROR;
-						$prop["error"] = t("Haldusjaotus määramata.");
+						$prop["error"] = t("Haldusjaotus m22ramata.");
 					}
 
 					$prop["value"] = $this->administrative_structure->prop ("country");

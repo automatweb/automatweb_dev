@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.7 2008/03/31 10:44:22 kristo Exp $
-// document.aw - Dokumentide haldus. 
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.8 2008/04/08 14:40:12 voldemar Exp $
+// document.aw - Dokumentide haldus.
 /*
 @classinfo  maintainer=kristo
 */
@@ -16,10 +16,10 @@ class document extends aw_template
 		$this->init("automatweb/documents");
 		// see on selleks, kui on vaja perioodilisi dokumente naidata
 		$this->period = $period;
-		
+
 		$this->lc_load("document","lc_document");
 		lc_load("definition");
-			
+
 		// this takes less than 0.1 seconds btw
 		$xml_def = $this->get_file(array("file" => $this->cfg["basedir"]."/xml/documents/defaults.xml"));
 		if ($xml_def)
@@ -58,7 +58,7 @@ $this->subtpl_handlers["FILE"] = "_subtpl_file";
 // !Sets period to use
 function set_period($period)
 {
-$this->period = $period;	
+$this->period = $period;
 }
 
 ////
@@ -95,7 +95,7 @@ foreach($gm_c as $gm)
 			"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
 			"sort_by" => "objects.parent"
 		));
-		$sections = $ot->ids();	
+		$sections = $ot->ids();
 	}
 }
 
@@ -235,7 +235,7 @@ $q = "SELECT documents.lead AS lead,
 $this->db_query($q);
 }
 
-/** Fetces a document from the database 
+/** Fetces a document from the database
 
 @attrib name=fetch params=name default="0"
 
@@ -247,7 +247,7 @@ $this->db_query($q);
 @comment
 
 **/
-function fetch($docid, $no_acl_checks = false) 
+function fetch($docid, $no_acl_checks = false)
 {
 if (is_array($docid))
 {
@@ -261,16 +261,16 @@ if (not($this->can("view",$docid)))
 	return false;
 }
 
-if ($this->period > 0 && !$this->ignore_periods) 
+if ($this->period > 0 && !$this->ignore_periods)
 {
 	$sufix = " && objects.period = " . $this->period;
-} 
-else 
+}
+else
 {
 	$sufix = "";
 };
 
-// I could really use some kind of check in the object constructor ... 
+// I could really use some kind of check in the object constructor ...
 // so that the object is only loaded when it has a correct class id ...
 // it is not a good idea to try to handle some random object as a document ...
 
@@ -282,7 +282,7 @@ if ($this->period > 0 && !$this->ignore_periods)
 {
 	if ($docobj->prop("period") != $this->period)
 	{
-		// maintain status quote .. e.g. do not return anything if 
+		// maintain status quote .. e.g. do not return anything if
 		// the document is not in the correct period or we are ignoring
 		// periods (which is the case if a menu is set to show documents
 		// from multiple periods
@@ -300,13 +300,13 @@ if (is_object($docobj))
 {
 	$retval = $docobj->fetch();
 	$retval["docid"] = $retval["oid"];
-	
+
 /*			print "<pre>";
 	print_r($retval);
 	print "------<br>";
 			print_r($docobj->arr());
 			print "</pre>";*/
-			
+
 		};
 		$retval["title"] = $docobj->trans_get_val("title"); // fix condition when brother has a different name
 		return $retval;
@@ -342,7 +342,7 @@ if (is_object($docobj))
 		$ext = $this->cfg["ext"];
 
 		$lang_id = aw_global_get("lang_id");
-		
+
 		global $awt;
 
 		// kysime dokumendi kohta infot
@@ -433,10 +433,10 @@ if (is_object($docobj))
 			};
 		}
 
-	
+
 		$doc["title"] = $this->sanitize($doc["title"]);
 		$doc["lead"] = $this->sanitize($doc["lead"]);
-		
+
 		if ($doc["meta"])
 		{
 			$meta = $doc["meta"];
@@ -472,7 +472,7 @@ if (is_object($docobj))
 		$tpl = $doc["tpl"];
 
 		$trimmed_lead = trim($doc["lead"]);
-		
+
 		if ($trimmed_lead == "<br>" || $trimmed_lead == "<br />"  || empty($trimmed_lead))
 		{
 			$doc["lead"] = "";
@@ -484,20 +484,20 @@ if (is_object($docobj))
 		{
 			$doc["content"] .= "<p><font size=1><i>".t("Viimati muudetud:")."&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
 		};
-	
+
 
 		$this->tpl_reset();
 
-		
+
 		$this->tpl_init("automatweb/documents");
-		
+
 		// see on sellex et kui on laiem doku, siis menyyeditor tshekib
 		// neid muutujaid ja j2tab paani 2ra kui tshekitud on.
 		$this->no_right_pane = $doc["no_right_pane"];
 		$this->no_left_pane = $doc["no_left_pane"];
 
 
-	
+
 		// use special template for printing if one is set in the cfg file
 		if (aw_global_get("print") && ($this->cfg["print_tpl"]) )
 		{
@@ -505,16 +505,16 @@ if (is_object($docobj))
 		}
 		// kui tpls anti ette, siis loeme template sealt,
 		// muidu failist.
-		if (isset($tpls) && strlen($tpls) > 0) 
+		if (isset($tpls) && strlen($tpls) > 0)
 		{
 			$this->templates["MAIN"] = $tpls;
-		} 
+		}
 		else
-		if (isset($tplsf) && strlen($tplsf) > 0) 
+		if (isset($tplsf) && strlen($tplsf) > 0)
 		{
 			$this->read_any_template($tplsf);
-		} 
-		else 
+		}
+		else
 		{
 			$this->read_any_template($tpl);
 		};
@@ -528,7 +528,7 @@ if (is_object($docobj))
 			return $this->parse("IFRAME");
 		}
 
-		
+
 		$loid = aw_global_get("lang_oid");
 		if ($loid)
 		{
@@ -625,7 +625,7 @@ if (is_object($docobj))
 
 
 		$doc["content"] = str_replace("#nool#", '<IMG SRC="{VAR:baseurl}/img/icon_nool.gif" WIDTH="21" HEIGHT="9" BORDER=0 ALT="">', $doc["content"]);
-		
+
 		# translate stuff between #code# and #/code#
 		if (false !== strpos($doc["content"],"#code#"))
 		{
@@ -641,14 +641,14 @@ if (is_object($docobj))
 		{
 		       $doc["content"] = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$doc["content"]);
 		};
-		
-		
+
+
 		if(aw_ini_get("document.parse_keywords") && $doc_o->prop("link_keywords2"))
-		{	
-			$this->parse_keywords($doc["content"]);	
+		{
+			$this->parse_keywords($doc["content"]);
 			$this->parse_keywords($doc["lead"]);
 		}
-		
+
 
 
 		// in_archive disappears if we move around in archives
@@ -668,7 +668,7 @@ if (is_object($docobj))
 			"act_per_comment" => $pdat['comment'],
 			"act_per_image_url" => ($pdat['data']['image']['url']) ? $pdat['data']['image']['url'] : "/automatweb/images.trans.gif",
 		));
-		
+
 		$this->dequote(&$doc["title"]);
 		$this->title = $doc["title"];
 
@@ -737,13 +737,13 @@ if (is_object($docobj))
 			}
 		}
 
-	
+
 		// laeme vajalikud klassid
 		// kui vaja on n?idata ainult dokumendi leadi, siis see tehakse siin
- 		if ($leadonly > -1) 
+ 		if ($leadonly > -1)
 		{
-			// stripime pildid v?lja. 
-			if ($strip_img) 
+			// stripime pildid v?lja.
+			if ($strip_img)
 			{
 				// ja stripime leadist *koik* objektitagid v?lja.
 				$this->vars(array("imurl" => "/images/trans.gif"));
@@ -751,16 +751,16 @@ if (is_object($docobj))
 			};
 			// damn, that did NOT make any sense at all - terryf
 			$doc["content"] = $doc["lead"];
-		} 
-		else 
+		}
+		else
 		{
 			if (($doc["lead"]) && ($doc["showlead"] == 1 || $showlead == 1) )
 			{
 				if ($this->is_template("image_pos"))
 				{
-					if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc["lead"],$match)) 
+					if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc["lead"],$match))
 					{
-						// asendame 
+						// asendame
 						$img = get_instance(CL_IMAGE);
 						$idata = $img->get_img_by_oid($docid,$match[1]);
 						$this->vars(array(
@@ -789,7 +789,7 @@ if (is_object($docobj))
 				}
 				$txt = "";
 
-				if ($boldlead) 
+				if ($boldlead)
 				{
 					$txt = "<b>";
 				};
@@ -819,7 +819,7 @@ if (is_object($docobj))
 					$txt.=$this->cfg["no_lead_splitter"];
 				}
 
-				if ($boldlead) 
+				if ($boldlead)
 				{
 					$txt .= "</b>";
 				};
@@ -827,7 +827,7 @@ if (is_object($docobj))
 				if (aw_ini_get("content.doctype") == "xhtml")
 				{
 					$txt .= ($this->cfg["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br />" : "")."$doc[content]";
-					
+
 				}
 				else if (aw_ini_get("content.doctype") == "html" )
 				{
@@ -836,16 +836,16 @@ if (is_object($docobj))
 					$doc["content"] = $txt;
 			};
 		};
-		
+
 
 		// all the style magic is performed inside the style engine
-		$doc["content"] = $this->parse_text($doc["content"]); 
+		$doc["content"] = $this->parse_text($doc["content"]);
 
-		
+
 		$doc["content"] = preg_replace("/<loe_edasi>(.*)<\/loe_edasi>/isU","<a href='$baseurl/index.$ext/section=$docid'>\\1</a>",$doc["content"]);
 		// sellel real on midagi pistmist WYSIWYG edimisvormiga
 		// and this also means that we can't have xml inside the document. sniff.
-		$doc["content"] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc["content"]); 
+		$doc["content"] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc["content"]);
 
 
 		$this->docid = $docid;
@@ -891,8 +891,8 @@ if (is_object($docobj))
 			{
 				$doc['content'] = str_replace("#login#", "", $doc['content']);
 			}
-		}		
-	
+		}
+
 		if (isset($params["vars"]) && is_array($params["vars"]))
 		{
 			$this->vars($params["vars"]);
@@ -906,8 +906,8 @@ if (is_object($docobj))
 			$this->create_keyword_relations(&$doc["lead"]);
 		}
 
-		
-	
+
+
 		// v6tame pealkirjast <p> maha
 		$doc["title"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["title"]);
 		// only parse aliases if there might be something to parse
@@ -937,10 +937,10 @@ if (is_object($docobj))
 		$doc["content"] = str_replace("#top#", $top_link,$doc["content"]);
 
 		// noja, mis fucking "undef" see siin on?
-		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
+		// damned if I know , v6tax ta 2kki 2ra siis? - terryf
 		$al = get_instance("alias_parser");
 
-		if (!isset($text) || $text != "undef") 
+		if (!isset($text) || $text != "undef")
 		{
 			if (strpos($doc["content"],"#") !== false)
 			{
@@ -949,7 +949,7 @@ if (is_object($docobj))
 					"text" => $doc["content"],
 				));
 			};
-		}; 
+		};
 
 		if (trim($doc["user3"]) != "" && strpos($doc["user3"],"#") !== false)
 		{
@@ -983,7 +983,7 @@ if (is_object($docobj))
 
 
 			// fuckwits ... meeza thinks we should do the replacements when we are saving the
-			// document .. no? ... cause this nobreak thingie will cause me all kinds of 
+			// document .. no? ... cause this nobreak thingie will cause me all kinds of
 			// problems later on.
 		}
 		else
@@ -1037,7 +1037,7 @@ if (is_object($docobj))
 				$olist = new object_list(array(
 					"parent" => $this->cfg["link_authors_section"],
 					"class_id" => array(CL_MENU,CL_DOCUMENT),
-					"status" => STAT_ACTIVE, 
+					"status" => STAT_ACTIVE,
 					"name" => $doc["photos"],
 				));
 				$author_names = $olist->names();
@@ -1056,15 +1056,15 @@ if (is_object($docobj))
 				}
 				else
 				{
-					while(list($k,$v) = each($x)) 
+					while(list($k,$v) = each($x))
 					{
 						if ($this->cfg["link_default_link"] != "")
 						{
-							if ($v) 
+							if ($v)
 							{
 								$authors[] = sprintf("<a href='%s'>%s</a>",document::get_link($v),$k);
-							} 
-							else 
+							}
+							else
 							{
 								$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
 							};
@@ -1074,8 +1074,8 @@ if (is_object($docobj))
 				$author = join(", ",$authors);
 				$this->vars(array("photos" => $author));
 			 	$pb = $this->parse("pblock");
-			} 
-			else 
+			}
+			else
 			{
 				$this->vars(array("photos" => $doc["photos"]));
 			 	$pb = $this->parse("pblock");
@@ -1085,18 +1085,18 @@ if (is_object($docobj))
 		// <mail to="bla@ee">lahe tyyp</mail>
  		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
 		$doc["content"] = str_replace(LC_DOCUMENT_CURRENT_TIME,$this->time2date(time(),2),$doc["content"]);
-				
+
 		$ab = "";
 
-		if ($doc["author"]) 
+		if ($doc["author"])
 		{
-			if ($this->cfg["link_authors"] && isset($this->templates["ablock"])) 
+			if ($this->cfg["link_authors"] && isset($this->templates["ablock"]))
 			{
 				$authors = array();
 				$olist = new object_list(array(
 					"parent" => $this->cfg["link_authors_section"],
 					"class_id" => array(CL_MENU,CL_DOCUMENT),
-					"status" => STAT_ACTIVE, 
+					"status" => STAT_ACTIVE,
 					"name" => $doc["author"],
 				));
 				$author_names = $olist->names();
@@ -1106,22 +1106,22 @@ if (is_object($docobj))
 				{
 					$x[$doc["author"]] = "";
 				};
-				
+
 				if (empty($this->cfg["link_default_link"]))
 				{
 					$authors = array_keys($x);
 				}
 				else
 				{
-					while(list($k,$v) = each($x)) 
+					while(list($k,$v) = each($x))
 					{
 						if ($this->cfg["link_default_link"] != "")
 						{
-							if ($v) 
+							if ($v)
 							{
 								$authors[] = sprintf("<a href='%s'>%s</a>",document::get_link($v),$k);
-							} 
-							else 
+							}
+							else
 							{
 								$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
 							};
@@ -1132,8 +1132,8 @@ if (is_object($docobj))
 				$author = join(", ",$authors);
 				$this->vars(array("author" => $author));
 				$ab = $this->parse("ablock");
-			} 
-			else 
+			}
+			else
 			{
 				$this->vars(array("author" => $doc["author"]));
 				$ab = $this->parse("ablock");
@@ -1149,7 +1149,7 @@ if (is_object($docobj))
 				$pts.=$this->parse("RATE");
 			}
 		};
-		
+
 
 		if (!$this->can("view", $doc["docid"]))
 		{
@@ -1183,7 +1183,7 @@ if (is_object($docobj))
 			};
 			$conns2 = $dc_obj->connections_to(array(
 				"class" => array(CL_EXTLINK),
-			));		
+			));
 			foreach($conns2 as $item)
 			{
 				$this->vars(array(
@@ -1204,7 +1204,7 @@ if (is_object($docobj))
 
 			// generate a list of objects
 		}
-		
+
 		if ($this->is_template("DOCLIST") && $dc_obj->prop("no_topic_links") != 1)
 		{
 
@@ -1246,9 +1246,9 @@ if (is_object($docobj))
 
 
 		if (	$doc["is_forum"] &&
-			empty($print) && 
+			empty($print) &&
 			($this->template_has_var("num_comments") || $this->is_template("FORUM_ADD_SUB") || $this->is_template("FORUM_ADD_SUB_ALWAYS") || $this->is_template("FORUM_ADD"))
-			
+
 	     	)
 		{
 			$_sect = aw_global_get("section");
@@ -1299,7 +1299,7 @@ if (is_object($docobj))
 		{
 			$lc = $this->parse("lead_comments");
 		}
-		
+
 		classload("image");
 
 
@@ -1371,7 +1371,7 @@ if (is_object($docobj))
 		if (!empty($GLOBALS["DD"]))
 		{
 			echo "for doc $doc[docid] tm = ".$doc["tm"]."  den = $date_est_n odtm = $orig_doc_tm <br>";
-			
+
 		}
 
 		$document_link = obj_link($doc["docid"]);
@@ -1426,13 +1426,13 @@ if (is_object($docobj))
                         $document_link = aw_ini_get("baseurl")."/?section=".$doc_o->id()."&path=".join(",",$new_path).",".$doc_o->id();
 		}
 
-		$o_section = new object($doc_o->parent());	
+		$o_section = new object($doc_o->parent());
 		$s_section_name = $o_section->name();
 
 		if (aw_ini_get("content.doctype") == "html")
 		{
 			$s_content = str_replace("\r\n","<br>", $doc_o->prop("content"));
-			$s_lead_br = $doc["lead"] != "" ? "<br>" : "";	
+			$s_lead_br = $doc["lead"] != "" ? "<br>" : "";
 		}
 		else if (aw_ini_get("content.doctype") == "xhtml")
 		{
@@ -1628,13 +1628,13 @@ if (is_object($docobj))
 					};
 				};
 			}
-			
+
 			$this->vars(array("LANG_BRO" => $langs));
 		}; // keeleseosed
 		global $awt;
 
 		$this->do_subtpl_handlers($doc_o);
-		
+
 		$this->do_plugins($doc_o);
 
 		$retval = $this->parse();
@@ -1656,7 +1656,7 @@ if (is_object($docobj))
 
 		if ($print)
 		{
-			$apd = get_instance("layout/active_page_data");		
+			$apd = get_instance("layout/active_page_data");
 			die($apd->on_shutdown_get_styles($retval));
 		}
 
@@ -1665,23 +1665,23 @@ if (is_object($docobj))
 
 	// kysib "sarnaseid" dokusid mingi v?lja kaudu
 	// XXX
-	function get_relations_by_field($params) 
+	function get_relations_by_field($params)
 	{
 		$field = $params["field"]; // millisest v?ljast otsida
 		$keywords = split(",",$params["keywords"]); // mida sellest v?ljast otsida,
 																		// comma separated listi
 		$section = $params["section"]; // millisest sektsioonist otsida
 		// kui me midagi ei otsi, siis pole siin midagi teha ka enam. GET OUT!
-		if (!is_array($keywords)) 
+		if (!is_array($keywords))
 		{
 			return false;
-		} 
-		else 
+		}
+		else
 		{
 			// moodustame p?ringu dokude (v6i menyyde) saamiseks, mis vastavad meile
 			// vajalikule tingimusele
 			$retval = array();
-			while(list($k,$v) = each($keywords)) 
+			while(list($k,$v) = each($keywords))
 			{
 				$v = trim(strip_tags($v));
 
@@ -1806,20 +1806,20 @@ if (is_object($docobj))
 
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=new params=name is_public="1" caption="New document" default="0"
-		
+
 		@param parent required acl="add"
 		@param period optional
 		@param alias_to optional
 		@param alias_to_prop optional
 		@param return_url optional
 		@param reltype optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1831,18 +1831,18 @@ if (is_object($docobj))
 	}
 
 
-	/** Displays the document edit form 
-		
+	/** Displays the document edit form
+
 		@attrib name=change params=name is_public="1" caption="Edit document" default="0"
-		
+
 		@param id required type=int acl="edit;view"
 		@param section optional
 		@param period optional
 		@param return_url optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1853,14 +1853,14 @@ if (is_object($docobj))
 
 		$oob = obj($id);
 		$oob = $oob->fetch();
-		
+
 		if ($oob["class_id"] == CL_BROTHER_DOCUMENT && $oob["brother_of"])
 		{
 			$id = $oob["brother_of"];
 		}
 
 		return $this->mk_my_orb("change",array(
-			"id" => $oob["oid"], 
+			"id" => $oob["oid"],
 			"section" => $_GET["section"],
 			"period" => $arr["period"],
 			"is_sa" => $_GET["is_sa"],
@@ -1869,19 +1869,19 @@ if (is_object($docobj))
 		),"doc");
 	}
 
-	/** Performs a search from all documents 
-		
+	/** Performs a search from all documents
+
 		@attrib name=search params=name nologin="1" default="0"
-		
+
 		@param parent optional
 		@param str optional
 		@param section optional
 		@param sortby optional
 		@param from optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 		parent - alates millisest sektsioonist otsida
 		str - mida otsida
@@ -2024,13 +2024,13 @@ if (is_object($docobj))
 		{
 			$ml.= " AND objects.oid IN ($ml2) ";
 		}*/
-	
+
 		if ($sortby == "time")
 		{
 			$ml.=" ORDER BY objects.modified DESC";
 		}
 
-		// oh crap. siin peab siis failide seest ka otsima. 
+		// oh crap. siin peab siis failide seest ka otsima.
 		$mtfiles = array();
 		// this query is _very_ expensive, if there are lots of records in
 		// the files table OTOH, it's quite hard to "fix" this as it is -- duke
@@ -2139,8 +2139,8 @@ if (is_object($docobj))
 			$plist = $pei->period_list(0,false,1);
 			$perstr = " AND  objects.period IN (".join(",", array_keys($plist)).")";
 		}
-		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent 
-										 FROM documents 
+		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent
+										 FROM documents
 										 LEFT JOIN objects ON objects.oid = documents.docid
 										 WHERE ($docmatch) AND objects.status = 2 $perstr AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
 		$si = __get_site_instance();
@@ -2154,7 +2154,7 @@ if (is_object($docobj))
 
 			if (aw_global_get("uid") == "" && $search_group["no_usersonly"] == 1)
 			{
-				// check the object 
+				// check the object
 				$o = obj($row["docid"]);
 				$uson = false;
 				foreach($o->path() as $p_o)
@@ -2173,7 +2173,7 @@ if (is_object($docobj))
 
 			// find number of matches in document for search string, for calculating percentage
 			// if match is found in title, then multiply number by 5, to emphasize importance
-			
+
 			// hook for site specific document parsing
 			if (is_object($si))
 			{
@@ -2212,7 +2212,7 @@ if (is_object($docobj))
 			$row["title"] = strip_tags($row["title"]);
 			$title = ($row["title"]) ? $row["title"] : "(nimetu)";
 			$docarr[] = array(
-				"matches" => $c, 
+				"matches" => $c,
 				"title" => $title,
 				"section" => $row["docid"],
 				"content" => $co,
@@ -2221,7 +2221,7 @@ if (is_object($docobj))
 				"parent" => $row["parent"]
 			);
 			$cnt++;
-			
+
 		}
 
 		if ($sortby == "percent")
@@ -2302,7 +2302,7 @@ if (is_object($docobj))
 			"MATCH" => $r,
 			"s_parent" => $parent,
 			"sstring" => htmlspecialchars(urldecode($str)),
-			"sstringn" => htmlspecialchars($str), 
+			"sstringn" => htmlspecialchars($str),
 			"section" => $section,
 			"matches" => $cnt,
 			"sortby" => $sortby
@@ -2388,7 +2388,7 @@ if (is_object($docobj))
 		));
 		$ps = $this->parse("PAGESELECTOR");
 		$this->vars(array(
-			"PAGESELECTOR" => $ps, 
+			"PAGESELECTOR" => $ps,
 			"HEADER" => $this->parse("HEADER")
 		));
 
@@ -2431,17 +2431,17 @@ if (is_object($docobj))
 		}
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=lookup params=name nologin="1" default="0"
-		
+
 		@param id required
 		@param sortby optional
 		@param origin optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2492,15 +2492,15 @@ if (is_object($docobj))
 				"section"  => $this->cfg["link_authors_section"]
 			));
 			$authors = array();
-			while(list($k,$v) = each($x)) 
+			while(list($k,$v) = each($x))
 			{
 				if ($this->cfg["link_default_link"] != "")
 				{
 					if ($v)
 					{
 						$authors[] = sprintf("<a href='%s'>%s</a>",document::get_link($v),$k);
-					} 
-					else 
+					}
+					else
 					{
 						$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
 					};
@@ -2595,7 +2595,7 @@ if (is_object($docobj))
 
 
 	}
-	
+
 	////
 	// !Creates relative links inside the text
 	function create_relative_links(&$text)
@@ -2618,8 +2618,8 @@ if (is_object($docobj))
 	function create_keyword_relations(&$text)
 	{
 		// FIXME: check whether that query is optimal
-		$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations 
-			LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) 
+		$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations
+			LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid)
 			WHERE keywordrelations.id = '$this->docid'";
 		$this->db_query($q);
 		$keywords = array();
@@ -2642,15 +2642,15 @@ if (is_object($docobj))
 		}
 	}
 
-	/** lets the user send a document to someone else 
-		
+	/** lets the user send a document to someone else
+
 		@attrib name=send params=name nologin="1" default="0"
-		
+
 		@param section required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2669,14 +2669,14 @@ if (is_object($docobj))
 		return $this->parse();
 	}
 
-	/** actually sends the document as a link via e-mail 
-		
+	/** actually sends the document as a link via e-mail
+
 		@attrib name=submit_send params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2722,16 +2722,16 @@ if (is_object($docobj))
 		return $this->cfg["baseurl"]."/?section=".$section;
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=feedback params=name nologin="1" default="0"
-		
+
 		@param section required
 		@param e optional type=int
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2763,26 +2763,26 @@ if (is_object($docobj))
 		{
 			$kujundus .= "<tr><td align='right'><input type='radio' name='kujundus' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
-		
-		$struktuur = ""; $tehnika = ""; $ala = "";	
+
+		$struktuur = ""; $tehnika = ""; $ala = "";
 		$a = new aw_array($feedback->struktuur);
 		foreach($a->get() as $k => $v)
 		{
 			$struktuur .= "<tr><td align='right'><input type='radio' name='struktuur' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
-		
+
 		$a = new aw_array($feedback->ala);
 		foreach($a->get() as $k => $v)
 		{
 			$ala .= "<tr><td align='right'><input type='radio' name='ala' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
-		
+
 		$a = new aw_array($feedback->tehnika);
 		foreach($a->get() as $k => $v)
 		{
 			$tehnika .= "<tr><td align='right'><input type='checkbox' name='tehnika[]'  value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
-			
+
    	$this->vars(array(
 			"docid" => $section,
 			"tekst" => $tekst,
@@ -2796,14 +2796,14 @@ if (is_object($docobj))
 		return $this->parse();
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=submit_feedback params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2818,15 +2818,15 @@ if (is_object($docobj))
 		return $this->mk_my_orb("thanks", array("section" => $docid,"eesnimi" => $eesnimi));
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=thanks params=name nologin="1" default="0"
-		
+
 		@param eesnimi optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2840,15 +2840,15 @@ if (is_object($docobj))
 		return $this->parse();
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=print params=name nologin="1" default="0"
-		
+
 		@param section required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2868,7 +2868,7 @@ if (is_object($docobj))
 		preg_match_all("/\<a.*href=\"{1}(.*)\"{1}.*>(.*)\<\/a>/imsU", $str, $a_link_matches);
 		foreach ($a_link_matches[0] as $key => $var)
 		{
-			if (	strpos($a_link_matches[1][$key], "mailto") === false && 
+			if (	strpos($a_link_matches[1][$key], "mailto") === false &&
 					strpos($a_link_matches[1][$key], "http") === false &&
 					 strpos($a_link_matches[1][$key], "https") === false
 					 )
@@ -2902,7 +2902,7 @@ if (is_object($docobj))
 				$a_print_link_find = array(
 					"/<a.*href\s*=\s*[\"']{1}\mailto:(.*)[\"']{1}.*a>/U",
 				);
-	
+
 				$a_print_link_replace = array(
 					"\\1",
 				);
@@ -2942,9 +2942,9 @@ if (is_object($docobj))
 			$perstr = " and objects.period IN (".join(",", array_keys($plist)).")";
 		}
 		$sql = "
-			SELECT docid,title 
-			FROM documents 
-				LEFT JOIN objects ON objects.oid = documents.docid 
+			SELECT docid,title
+			FROM documents
+				LEFT JOIN objects ON objects.oid = documents.docid
 			WHERE author = '$author' AND objects.status = 2 $perstr
 			ORDER BY objects.created DESC $lim
 		";
@@ -3103,7 +3103,7 @@ if (is_object($docobj))
 				"tpl" => $this->templates["plugin.$plg_name"],
 			);
 		}
-		
+
 		$plg_ldr = get_instance("plugins/plugin_loader");
 		$plugindata = $plg_ldr->load_by_category(array(
 			"category" => get_class($this),
@@ -3161,7 +3161,7 @@ if (is_object($docobj))
 			{
 				$this->parsers->$class = get_instance($class);
 			};
-		
+
 			$block = array(
 				"reg" => $reg,
 				"class" => $class,
@@ -3179,8 +3179,8 @@ if (is_object($docobj))
 			);
 		};
 		$this->parsers->reglist[] = $block;
-		
-	
+
+
 		// tagastab 2sja registreeritud parseriobjekti ID nimekirjas
 		return sizeof($this->parsers->reglist) - 1;
 	}
@@ -3195,7 +3195,7 @@ if (is_object($docobj))
 	// function(string) - funktsiooni nimi
 	function register_sub_parser($args = array())
 	{
-		extract($args);	
+		extract($args);
 		/*if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
 		{
 			$this->parsers->$class = get_instance($class);
@@ -3242,7 +3242,7 @@ if (is_object($docobj))
 				{
 					return;
 				};
-				// siia tuleb tekitada mingi if lause, mis 
+				// siia tuleb tekitada mingi if lause, mis
 				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja v2lja
 				if (sizeof($parser["parserchain"] > 0))
 				{
@@ -3273,7 +3273,7 @@ if (is_object($docobj))
 								$this->parsers->$cls = get_instance($cls);
 							}
 							$repl = $this->parsers->$cls->$fun($params);
-							
+
 							if (is_array($repl))
 							{
 								$replacement = $repl["replacement"];
@@ -3288,10 +3288,10 @@ if (is_object($docobj))
 							{
 								$this->blocks = $this->blocks + $this->parsers->$cls->blocks;
 							};
-						
+
 							if ($inplace)
 							{
-								$this->vars(array($inplace => $replacement));	
+								$this->vars(array($inplace => $replacement));
 								$inplace = false;
 								$text = preg_replace($parser["reg"],"",$text,1);
 							}
@@ -3328,16 +3328,16 @@ if (is_object($docobj))
 		};
 
 	}
-	
+
 	//This could be bloody slow
 	function parse_keywords(&$content)
 	{
 		$cleaned = str_replace("&nbsp;", "", strip_tags($content));
-		// ya can't put a dot in here, cause that breaks stupid-ass keywords that have dots in them. so if you need to find keywords that are at the end of the sentence, then 	
+		// ya can't put a dot in here, cause that breaks stupid-ass keywords that have dots in them. so if you need to find keywords that are at the end of the sentence, then
 		// ya gotta figure out a way to regex so that a.b does not get split but a. does.
-		$content_arr = preg_split('/[\s|,]+/', $cleaned);		
-		$content_arr2 = $content_arr;	
-		
+		$content_arr = preg_split('/[\s|,]+/', $cleaned);
+		$content_arr2 = $content_arr;
+
 		for($i=0; $i<count($content_arr); $i++)
 		{
 			$str = trim($content_arr[$i]);
@@ -3353,10 +3353,10 @@ if (is_object($docobj))
 			"keyword" => $content_arr,
 			"site_id" => array()
 		));
-		
+
 		foreach ($keywords->arr() as $keyword)
 		{
-			$keys_arr[strtolower($keyword->prop("keyword"))] = $keyword->id(); 
+			$keys_arr[strtolower($keyword->prop("keyword"))] = $keyword->id();
 		}
 
 		if(!$keys_arr)
@@ -3364,7 +3364,7 @@ if (is_object($docobj))
 			return;
 		}
 
-		
+
 		for($i=0; $i<count($content_arr2); $i++)
 		{
 			$kw = strtolower($content_arr2[$i]);
@@ -3376,15 +3376,15 @@ if (is_object($docobj))
 					"caption" => $content_arr2[$i],
 					"url" => $this->mk_my_orb("show_documents", array(
 						"id" => $keyid,
-						"section" => aw_global_get("section"),	
+						"section" => aw_global_get("section"),
 					), CL_KEYWORD),
 				));
-				$content = preg_replace("/([>|\s|\.|,|\&]+)(".preg_quote($content_arr2[$i]).")([\s|\.|,|\&|<]+)/imsU", "\\1".$href."\\3", $content);	
+				$content = preg_replace("/([>|\s|\.|,|\&]+)(".preg_quote($content_arr2[$i]).")([\s|\.|,|\&|<]+)/imsU", "\\1".$href."\\3", $content);
 			}
 		}
-		return $content;	
+		return $content;
 	}
-	
+
 	function parse_text($text)
 	{
 		foreach ($this->tags as $tag => $val)
@@ -3398,7 +3398,7 @@ if (is_object($docobj))
 
 	function do_db_upgrade($table, $field, $q, $err)
 	{
-		if ($table == "planner" && $field == "deadline")
+		if ($table === "planner" && $field === "deadline")
 		{
 			// create column and copy values from tasks
 			$this->db_add_col($table, array(
@@ -3419,7 +3419,7 @@ if (is_object($docobj))
 			}
 		}
 
-		if($table == "planner" && $field == "aw_is_work")
+		if($table === "planner" && $field === "aw_is_work")
 		{
 			$this->db_add_col($table, array(
 				"name" => $field,
@@ -3475,7 +3475,7 @@ if (is_object($docobj))
 		}
 		return false;
 	}
-	
+
 	// todo 2 viimast if'i
 	function get_date_human_readable($i_timestamp_created)
 	{
@@ -3493,9 +3493,9 @@ if (is_object($docobj))
 			11=>t("november"),
 			12=>t("detsember")
 		);
-	
+
 		$i_time_from_created_to_current_time = time() - $i_timestamp_created;
-		
+
 		if ($i_time_from_created_to_current_time < 60)
 		{
 			return t("Just postitatud");
@@ -3540,11 +3540,11 @@ if (is_object($docobj))
 		{
 			return date("j", $i_timestamp_created).". ".$a_months[date("n", $i_timestamp_created)];
 		}
-		else 
+		else
 		{
 			return date("j", $i_timestamp_created).". ".$a_months[date("n", $i_timestamp_created)]." ".date("Y", $i_timestamp_created);
 		}
 	}
-	
+
 };
 ?>

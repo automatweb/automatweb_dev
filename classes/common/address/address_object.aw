@@ -26,6 +26,7 @@ class address_object extends _int_object
 
 	function address_object ($param)
 	{
+		$this->as_load_data();
 		parent::_int_object ($param);
 	}
 
@@ -128,8 +129,6 @@ class address_object extends _int_object
 	// @returns Associative array: administrative_division_oid => administrative_unit name
 	function as_get_array ()
 	{
-		$this->as_load_data ();
-
 		### make address array
 		$address_array = array ();
 
@@ -167,8 +166,6 @@ class address_object extends _int_object
 	// @returns Associative array: administrative_division_oid => administrative_unit oid
 	function as_get_id_array ()
 	{
-		$this->as_load_data ();
-
 		### make address array
 		$address_array = array ();
 
@@ -334,8 +331,6 @@ class address_object extends _int_object
 	{
 		if (is_oid ($id))
 		{
-			$this->as_load_data ();
-
 			foreach ($this->as_address_data as $unit_data)
 			{
 				if ($unit_data["id"] == (int) $id)
@@ -375,7 +370,6 @@ class address_object extends _int_object
 			return false;
 		}
 
-		$this->as_load_data ();
 		return isset($this->as_address_data[$division_id]["name"]) ? $this->as_address_data[$division_id]["name"] : false;
 	}
 
@@ -437,7 +431,6 @@ class address_object extends _int_object
 			return false;
 		}
 
-		$this->as_load_data ();
 		$division_id = is_object ($division) ? $division->id() : $division;
 		$param = array (
 			"prop" => "encoding_by_unit",

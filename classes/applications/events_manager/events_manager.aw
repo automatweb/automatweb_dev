@@ -277,6 +277,7 @@ class events_manager extends class_base
 					$parent = $this_o->prop("sector_menu");
 					$sectors = new object_tree(array(
 						"parent" => $parent,
+						"lang_id" => array()
 					));
 
 					if (count($sectors->ids()))
