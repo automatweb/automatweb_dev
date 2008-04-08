@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.59 2008/04/08 08:13:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.60 2008/04/08 10:39:26 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -725,6 +725,10 @@ class shop_order_center extends class_base
 				"parent" => aw_global_get("section"),
 				"only_active" => $soc->prop("only_active_items")
 			));
+		}
+		if ($this->can("view", $_GET["show_prod"]))
+		{
+			$pl = array(obj($_GET["show_prod"]));
 		}
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
 	
