@@ -88,8 +88,9 @@ function aw_ini_get($var)
 				$val = $GLOBALS["cfg"][$index];
 			}
 			else
-			{return;
-				// throw new aw_exception("Invalid key");
+			{
+				return;
+				// throw new aw_exception("Invalid key '" . $var . "'");
 			}
 		}
 	}
@@ -592,12 +593,19 @@ function classload($args)
 		// let's not allow including ../../../etc/passwd :)
 		$lib = $olib = str_replace(".","", $lib);
 
-		if ($GLOBALS["cfg"]["classes"][aw_ini_get("class_lut.".basename($lib))]["site_class"] == 1)
+		try
+		{
+			$cl_id = aw_ini_get("class_lut.".basename($lib));
+		}
+		catch (Exception $e)
+		{
+		}
+
+		if ($GLOBALS["cfg"]["classes"][$cl_id]["site_class"] == 1)
 		{
 			$lib = $GLOBALS["cfg"]["site_basedir"]."/classes/".basename($lib).".".$GLOBALS["cfg"]["ext"];
 		}
-		else
-		if (substr($lib,0,13) == "designedclass")
+		elseif (substr($lib,0,13) == "designedclass")
 		{
 			$lib = basename($lib);
 			$lib = $GLOBALS["cfg"]["site_basedir"]."/files/classes/".$lib.".".$GLOBALS["cfg"]["ext"];
@@ -664,19 +672,26 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 		}
 	}
 
-	if ($GLOBALS["cfg"]["classes"][aw_ini_get("class_lut.".basename($class))]["site_class"] == 1)
+	try
 	{
-		//$class = $GLOBALS["cfg"]["site_classes"][$class];
-		$site = true;
+		$cl_id = aw_ini_get("class_lut.".basename($lib));
+		if ($GLOBALS["cfg"]["classes"][$cl_id]["site_class"] == 1)
+		{
+			//$class = $GLOBALS["cfg"]["site_classes"][$class];
+			$site = true;
+		}
 	}
+	catch (Exception $e)
+	{
+		$site = false;
+	}
+
 	if (substr($class,0,13) == "designedclass")
 	{
 		$designed = true;
-	};
-
+	}
 
 	$lib = basename($class);
-
 	$rs = "";
 	$clid = (isset($GLOBALS['cfg']['class_lut']) && isset($GLOBALS["cfg"]["class_lut"][$lib])) ? $GLOBALS["cfg"]["class_lut"][$lib] : 0;
 	if (isset($GLOBALS['cfg']['classes'][$clid]))
@@ -1019,7 +1034,7 @@ function &__get_site_instance()
 				include($fname);
 			}
 		}
-		if (class_exists("site"))
+		if (class_exists("site", false))
 		{
 			$__site_instance = new site;
 		}
@@ -1446,20 +1461,23 @@ function __autoload($class_name)
 
 function aw_exception_handler($e)
 {
-	if (!class_exists("error"))
+	try
 	{
-		classload("core/error");
+		error::raise(array(
+			"id" => ERR_UNCAUGHT_EXCEPTION,
+			"msg" => $e->getMessage(),
+			"fatal" => true,
+			"exception" => $e
+		));
 	}
-	error::raise(array(
-		"id" => ERR_UNCAUGHT_EXCEPTION,
-		"msg" => $e->getMessage(),
-		"fatal" => true,
-		"exception" => $e
-	));
+	catch (Exception $ee)
+	{
+		echo "Couldn't load handler <br/><pre>" . $e->getTraceAsString() . "</pre>";
+	}
 }
 
 
-interface request_startup 
+interface request_startup
 {
 	/** This will get called in the beginning if the aw request and should initialize things that this class needs
 		@attrib api=1
