@@ -1196,10 +1196,13 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		}
 
 		$topics_ol = new object_list($topics_list_params);
-		$topics_ol->sort_by(array(
-			"prop" => "jrk",
-			"order" => "asc"
-		));
+		if (!$is_sorted)
+		{
+			$topics_ol->sort_by(array(
+				"prop" => "jrk",
+				"order" => "asc"
+			));	
+		}
 		$topics_list_ids = $topics_ol->ids();
 
 		list($comment_counts, ) = $this->get_comment_counts(array('parents' => $topics_list_ids));
