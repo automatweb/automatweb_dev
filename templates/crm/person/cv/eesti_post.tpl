@@ -273,7 +273,7 @@ text-decoration:underline;
 					<td width="174" height="20" align="left" valign="top" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;"><strong>E-post:&nbsp;</strong></td>
 					<td class="text11px" height="20" width="372" align="left" style="padding-left:10px;">
 						<!-- SUB: CRM_PERSON.EMAIL -->
-						{VAR:crm_person.email}<br>
+						<a href="mailto:{VAR:crm_person.email}">{VAR:crm_person.email}</a><br>
 						<!-- END SUB: CRM_PERSON.EMAIL -->
 					</td>
 				</tr>
@@ -573,6 +573,124 @@ text-decoration:underline;
 				</tr>
 			</table>
 			<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
+
+			<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitud t&ouml;&ouml;</strong></span></td>
+				</tr>
+			</table>
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr>
+					<td width="150" height="20" width="100" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Tegevusala</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.field}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml; liik</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.job_type}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions_rels}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid (vabatekst)</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.load}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Palk</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PAY -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.pay}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PAY -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (esimene eelistus)</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (teine eelistus)</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2 -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_2}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2 -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (t&auml;psemalt)</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_text}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.addinfo}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_at_night}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama graafiku alusel</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_by_schedule}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml;leasumise aeg</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.start_working}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valmis t&ouml;&ouml;l&auml;hetusteks</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.ready_for_errand}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&auml;iendavad oskused</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.additional_skills}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Takistavad tegurid</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.handicaps}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS -->
+				</tr>
+				<tr>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Hobid, mille t&otilde;ttu on vajalik t&ouml;&ouml;lt eemal viibida</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.hobbies_vs_work}</td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK -->
+				</tr>
+				<tr>
+			</table>
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr>
+					<td class="cvVormSpacer">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL -->
 
 			<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
