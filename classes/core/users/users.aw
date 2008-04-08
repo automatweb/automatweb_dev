@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.3 2008/04/08 08:13:23 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.4 2008/04/08 09:21:40 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");
@@ -974,6 +974,10 @@ die();
 				if ($url == aw_ini_get("baseurl")."/login.aw")
 				{
 					$url = aw_ini_get("baseurl");
+				}
+				if ($url[0] == "/")
+				{
+					$url = aw_ini_get("baseurl").$url;
 				}
 				return $url;
 			}
