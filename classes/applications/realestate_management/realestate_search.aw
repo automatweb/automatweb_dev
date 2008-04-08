@@ -2463,6 +2463,11 @@ exit_function("jigaboo");
 
 				$this->result_count = $result_count;
 			}
+			else
+			{
+				$result_list = new object_list();
+				$this->result_count = 0;
+			}
 		}
 		else
 		{
