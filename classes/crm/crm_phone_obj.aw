@@ -51,7 +51,8 @@ class crm_phone_obj extends _int_object
 	{
 		if($k == "name")
 		{
-			parent::set_prop("clean_number", str_replace(array(" ", "-", "(", ")") , "", $v));
+			parent::set_prop("clean_number", preg_replace("/[^0-9]/", "", $v));
+			//parent::set_prop("clean_number", str_replace(array(" ", "-", "(", ")") , "", $v));
 		}
 		return parent::set_prop($k, $v);
 	}
