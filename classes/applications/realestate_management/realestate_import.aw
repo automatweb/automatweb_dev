@@ -335,6 +335,7 @@ class realestate_import extends class_base
 		$this->changed_legal_statuses = true;
 		$this->changed_roof_types = true;
 		$this->changed_land_uses = true;
+		$admin_structure_changed = false;
 
 		#### admin division objects
 		if (
@@ -890,15 +891,41 @@ class realestate_import extends class_base
 
 					if (!is_object ($address))
 					{
-						$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Objekt (oid: %s) loodi ilma aadressita."), $city24_id, $property->id ()) . REALESTATE_NEWLINE;
+						### create address object
+						$address = new object();
+						$address->set_class_id(CL_ADDRESS);
 
-						if (1 != $quiet)
+						### get country
+						if (is_oid ($manager->prop ("administrative_structure")))
 						{
-							echo end ($status_messages);
+							### set address' country to default country from manager
+							$address->set_parent($manager->prop("administrative_structure"));
+							$address->set_prop("administrative_structure", $manager->prop ("administrative_structure"));
+							aw_disable_acl();
+							$address->save ();
+							aw_restore_acl();
+
+							### connect property to address
+							$property->connect(array(
+								"to" => $address,
+								"reltype" => "RELTYPE_REALESTATE_ADDRESS",
+							));
+
+							$property->create_brother ($address->id());
 						}
 
-						$property_status = REALESTATE_IMPORT_ERR8;
-						continue;
+						if (!is_object ($address))
+						{
+							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Objekt (oid: %s) loodi ilma aadressita."), $city24_id, $property->id ()) . REALESTATE_NEWLINE;
+
+							if (1 != $quiet)
+							{
+								echo end ($status_messages);
+							}
+
+							$property_status = REALESTATE_IMPORT_ERR8;
+							continue;
+						}
 					}
 
 					$maja_nr = isset($this->property_data["MAJANR"]) ? iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["MAJANR"])) : "";
@@ -971,6 +998,7 @@ class realestate_import extends class_base
 						$address_text = implode (", ", $address_text);
 						$name = $address_text . " " . $address->prop ("street_address") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
 						$property->set_name ($name);//!!! nime panemine yhte funktsiooni!
+						$admin_structure_changed = true;
 					}
 
 					$address = null;
@@ -1797,6 +1825,13 @@ class realestate_import extends class_base
 					}
 				}
 			}
+		}
+
+		// save admin structure if addresses changed/added. To update admin structure index
+		if ($admin_structure_changed and is_oid($manager->prop ("administrative_structure")))
+		{
+			$as_o = new object($manager->prop ("administrative_structure"));
+			$as_o->save();
 		}
 
 		$additional_languages = array (
