@@ -7,7 +7,7 @@
 	{
 		var settings = {
 			maxresults     : 4,
-			blank_gif      : "automatweb/images/aw06/blank.gif",
+			blank_gif      : "automatweb/images/aw06/blank.gif"
 		};
 		
         // define defaults and override with options, if available
@@ -182,7 +182,7 @@
 							a_list[a_list.length] = {
 								name       : s_name,
 								url_icon   : a_items[key][key2]["url_icon"],
-								url_obj    : a_items[key][key2]["url_obj"],
+								url_obj    : a_items[key][key2]["url_obj"]
 							}
 						}
 					}

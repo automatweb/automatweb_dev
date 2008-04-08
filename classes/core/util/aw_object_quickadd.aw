@@ -108,11 +108,12 @@ class aw_object_quickadd extends class_base
 				$s_out .= 'name: "'.$a_items[$key][$key2]["name"].'",'.$line_prefix;
 				$s_out .= 'url_obj : "'.$a_items[$key][$key2]["url"].'",'.$line_prefix;
 				$s_out .= 'url_icon: "'.$a_items[$key][$key2]["icon"].'",'.$line_prefix;
-				$s_out .= 'priority: 5,'.$line_prefix;
+				$s_out .= 'priority: 5'.$line_prefix;
 				$s_out .= '};'.$line_prefix;
 				$index++;
 			}
 		}
+		$s_out .= "\n";
 		return $s_out;
 	}
 }
