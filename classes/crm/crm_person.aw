@@ -5723,19 +5723,47 @@ class crm_person extends class_base
 					$to = $conn->to();
 					if(in_array($to->prop("skill"), $ids))
 					{
+						if($to->parent != $id)
+						{
+							$skills_by_parent[$to->prop("skill.parent")][$to->id()]["skill.name"] = $to->prop("skill.name");
+							$skills_by_parent[$to->prop("skill.parent")][$to->id()]["level.name"] = $to->prop("level.name");
+						}
+						/*
 						$this->vars(array(
 							"crm_skill_level.skill" => $to->prop("skill.name"),
 							"crm_skill_level.level" => $to->prop("level.name"),
 						));
 						$CRM_SKILL_LEVEL .= $this->parse("CRM_SKILL_LEVEL");
+						*/
 					}
-					$parse_sk++;
+				}
+				foreach($skills_by_parent as $parent => $skills_of_parent)
+				{
+					$CRM_SKILL_LEVEL = "";
+					foreach($skills_of_parent as $skill_id => $skill_data)
+					{
+						$this->vars(array(
+							"crm_skill_level.skill" => $skill_data["skill.name"],
+							"crm_skill_level.level" => $skill_data["level.name"],
+						));
+						$CRM_SKILL_LEVEL .= $this->parse("CRM_SKILL_LEVEL");
+						$parse_sk++;
+					}
+					$this->vars(array(
+						"crm_skill.parent" => obj($parent)->name(),
+					));
+					$this->vars(array(
+						"CRM_SKILL_LEVEL" => $CRM_SKILL_LEVEL,
+						"CRM_SKILL_LEVEL_SUBHEADING" => $this->parse("CRM_SKILL_LEVEL_SUBHEADING"),
+					));
+					$CRM_SKILL_LEVEL_GROUP .= $this->parse("CRM_SKILL_LEVEL_GROUP");
 				}
 
 				if($parse_sk > 0)
 				{
 					$this->vars(array(
-						"CRM_SKILL_LEVEL" => $CRM_SKILL_LEVEL,
+						//"CRM_SKILL_LEVEL" => $CRM_SKILL_LEVEL,
+						"CRM_SKILL_LEVEL_GROUP" => $CRM_SKILL_LEVEL_GROUP,
 						"crm_skill" => $data["name"],
 					));
 					$this->vars(array(

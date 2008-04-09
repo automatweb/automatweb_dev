@@ -430,12 +430,19 @@ text-decoration:underline;
 				<tr bgcolor="#B1DFF2">
 					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_skill}</strong></span></td>
 				</tr>
+				<!-- SUB: CRM_SKILL_LEVEL_GROUP -->
+				<!-- SUB: CRM_SKILL_LEVEL_SUBHEADING -->
+				<tr>
+					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_skill.parent}</strong></span></td>
+				</tr>
+				<!-- END SUB: CRM_SKILL_LEVEL_SUBHEADING -->
 				<!-- SUB: CRM_SKILL_LEVEL -->
 				<tr>
 					<td width="372" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:crm_skill_level.skill}</td>
 					<td width="174" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_skill_level.level}</td>
 				</tr>
 				<!-- END SUB: CRM_SKILL_LEVEL -->
+				<!-- END SUB: CRM_SKILL_LEVEL_GROUP -->
 				<tr>
 					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
 				</tr>
