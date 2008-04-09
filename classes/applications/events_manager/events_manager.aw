@@ -235,7 +235,7 @@ class events_manager extends class_base
 
 		switch($prop["name"])
 		{
-			case "per_page_str":
+			case "per_page_str":return PROP_IGNORE; 
 				if(!($GLOBALS["event_result_count"] > $this_o->prop("events_per_page")))
 				{
 					return PROP_IGNORE;
@@ -339,8 +339,8 @@ class events_manager extends class_base
 				$prop["value"] = $arr["request"][$prop["name"]];
 				$prop["options"] = array(
 					"arch" => t("Arhiivist"),
-					"curr" => t("Kestvatest"),
-					"new" => t("Uute hulgast")
+//					"curr" => t("Kestvatest"),
+					"new" => t("Aktiivsetest")
 				);
 				break;
 
@@ -734,11 +734,35 @@ class events_manager extends class_base
 
 	function &_get_event_list($this_o, &$args)
 	{
+/*		aw_disable_acl();
+		$x = 45700;
+		set_time_limit(1800);
+		while($x < 50000)
+		{
+			$fi = array("class_id" => CL_CALENDAR_EVENT, "limit" => $x.",100");
+			$ces = new object_list($fi);
+			foreach($ces-> arr() as $ce)
+			{
+				$ce->set_start_end();unset($ce);
+			}
+			$x = $x+100;
+
+			unset($ces);
+			arr($x);
+			flush();
+		}
+aw_restore_acl();
+*/
 		$time = time();
 		$filter = array(
 			"class_id" => array(CL_CALENDAR_EVENT),
 			"parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
 //			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $time)
+		);
+
+		$filter2 = array(
+			"class_id" => array(CL_EVENT_TIME),
+//			"event.parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
 		);
 
 		$groups = aw_global_get("gidlist_oid");
@@ -749,29 +773,32 @@ class events_manager extends class_base
 			foreach ((array) $args["e_find_sectors"] as $oid)
 			{
 				$filter["CL_CALENDAR_EVENT.RELTYPE_SECTOR.id"][] = (int) $oid;
+//				$filter2["CL_EVENT_TIME.event.CL_CALENDAR_EVENT.RELTYPE_SECTOR.id"][] = (int) $oid;
 			}
 		}
 
 		if (count(array_intersect($groups, $editors_groups)))
 		{
 			$filter["createdby"] = aw_global_get("uid");
+//			$filter2["CL_EVENT_TIME.event.createdby"] = aw_global_get("uid");
 		}
 		elseif(!empty($args["e_find_editor"]))
 		{
 			foreach ((array) $args["e_find_editor"] as $uid)
 			{
 				$filter["createdby"][] = (string) $uid;
+//				$filter2["CL_EVENT_TIME.event.createdby"][] = (string) $uid;
 			}
 		}
 
-		if(!empty($args["sort_by_created"]))
-		{
-			$filter["sort_by"] = "created DESC";
-		}
+//		if(!empty($args["sort_by_created"]))
+//		{
+
+//		}
 
 		if(!empty($args["archived"]))
 		{
-			//!!!?
+			$args["e_find_news"] = "arch";
 		}
 
 		if(!empty($args["e_find_text"]))
@@ -784,27 +811,39 @@ class events_manager extends class_base
 					"description" => "%".$args["e_find_text"]."%",
 				)
 			));
-		}
+/*			$filter2[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_EVENT_TIME.event.name" => "%".$args["e_find_text"]."%",
+					"CL_EVENT_TIME.event.title" => "%".$args["e_find_text"]."%",
+					"CL_EVENT_TIME.event.description" => "%".$args["e_find_text"]."%",
+				)
+			));
+*/		}
 
 		if(!empty($args["e_find_county"]))
 		{
 			$filter["CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.maakond"] = $args["e_find_county"];
+//			$filter2["CL_EVENT_TIME.event.CL_CALENDAR_EVENT.RELTYPE_LOCATION.address.maakond"] = $args["e_find_county"];
 		}
 
 		switch ($args["e_find_news"])
 		{
 			case "arch":
 				//$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS, time());
-				$filter[] = new object_list_filter(array(
+/*				$filter[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
 						"end" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
 						"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
 					)
-				));
+				));*/
+				$filter["end"] =  new obj_predicate_compare(OBJ_COMP_LESS, time());
+//				$filter["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end"] =  new obj_predicate_compare(OBJ_COMP_LESS, time());
+//				$filter2["end"] = new obj_predicate_compare(OBJ_COMP_LESS, time());
 				break;
 			case "curr":
-				$filter[] = new object_list_filter(array(
+/*				$filter[] = new object_list_filter(array(
 					"logic" => "AND",
 					"conditions" => array(
 //						"start1" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
@@ -825,26 +864,119 @@ class events_manager extends class_base
 						))
 					)
 				));
+				$filter[] = new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" => array(
+							"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.start" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+							"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+						)
+					));
+				$filter2[] = new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" => array(
+						"start" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+						"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+					)
+				));*/
+
+				$filter[] = new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" => array(
+							"start1" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+							"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+						)
+					));
+
 				break;
 			case "new":
 				//$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
-				$filter[] = new object_list_filter(array(
+/*				$filter[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
 						"start1" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
 						"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.start" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
 					)
-				));
+				));*/
+//				$filter["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.start"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+//				$filter2["start"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+				$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
 				break;
 			default ://see annab uued ja kestvad, juhul kui vastavat nuppu vajutada
-				$filter[] = new object_list_filter(array(
+/*				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+						"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+					)
+				));*/
+/*				$filter[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
 						"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
 						"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIME.end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
 					)
 				));
+				$filter2["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+*/
+				$filter["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+//
 		}
+
+
+
+/*			$filter2["sort_by"] = "start ".(($_GET["sort_order"] == "asc") ? "ASC" : "DESC");
+			$filter2["limit"] = ($_GET["ft_page"]? ($_GET["ft_page"] * $this_o->prop("events_per_page").",") : "").$this_o->prop("events_per_page");
+			$ol = new object_list();
+			$filter["oid"] = array();
+			$t = new object_data_list(
+				$filter2,
+				array(
+					CL_EVENT_TIME =>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "event", "event"))
+				)
+			);
+			foreach($t->arr() as $data)
+			{
+				$filter["oid"][] = $data["event"];
+			}
+
+			//koguarvu jaoks
+			unset($filter2["limit"]);
+			$t = new object_data_list(
+				$filter2,
+				array(
+					CL_EVENT_TIME =>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "event", "event"))
+				)
+			);
+			$this->total_events = count($t->arr());
+
+
+			$ol -> add($filter["oid"]); 
+			return $ol;
+		}
+*/
+
+
+//		if($_GET["sortby"] == "time")
+//		{
+//			$filter["sort_by"] = "aw_event_time.start ".(($_GET["sort_order"] == "asc") ? "ASC" : "DESC");
+//		}
+//$GLOBALS["DUKE"] = 1;
+		//koguarvu jaoks
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_CALENDAR_EVENT =>  array(new obj_sql_func(OBJ_SQL_COUNT,"cnt" , "*"))
+			)
+		);
+		$count = reset($t->arr());
+		$this->total_events = $count["cnt"];
+
+		$filter["sort_by"] = "oid DESC";
+		if($args["sortby"] == "time")
+		{
+			$filter["sort_by"] = "start ".(($_GET["sort_order"] == "asc") ? "ASC" : "DESC");
+		}
+		$filter["limit"] = ($_GET["ft_page"]? ($_GET["ft_page"] * $this_o->prop("events_per_page").",") : "").$this_o->prop("events_per_page");
 		return new object_list($filter);
 	}
 
@@ -854,6 +986,17 @@ class events_manager extends class_base
 		$this->_init_event_table($t,$arr);
 		$cal_event = get_instance(CL_CALENDAR_EVENT);
 		$ol =& $this->_get_event_list($arr["obj_inst"], $arr["request"]);
+		$max_events = $arr["obj_inst"]->prop("events_per_page");
+
+		$t->define_pageselector(array(
+			"type" => "lb",
+			"records_per_page" => $max_events,
+			"d_row_cnt" => $this->total_events,
+		));
+		$pageselector = $t->draw_lb_pageselector(array(
+			"records_per_page" => $max_events
+		));
+
 		$post_ru = post_ru();
 		$get_ru = get_ru();
 		$t_publish = t("Avalda");
@@ -862,27 +1005,31 @@ class events_manager extends class_base
 		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "event");
 		$ol_count = $GLOBALS["event_result_count"] = $ol->count();
 
-		$max_events = $arr["obj_inst"]->prop("events_per_page");
+
+		if($_GET["sort_by"] == "time")
+		{
+			$ol->sort_by_cb(array($this, "__sorter"));
+		}
 
 		$cnt = 0;
 		foreach($ol->ids() as $oid)
 		{
-			if($ol_count > $max_events)
+	/*		if($ol_count > $max_events)
 			{
-				if($_GET["ev_page_start"] && $_GET["ev_page_start"] > $cnt)
+				if(isset($_GET["ft_page"]) && $_GET["ft_page"]*$max_events > $cnt)
 				{
 					$cnt++;
 					continue;
 				}
-				if(isset($_GET["ev_page_start"]) && ($_GET["ev_page_start"] + $max_events) < $cnt)
+				if(isset($_GET["ft_page"]) && ($_GET["ft_page"]*$max_events + $max_events) < $cnt)
 				{
 					break;
 				}
-				elseif($cnt > $max_events)
+				elseif(!$_GET["ft_page"] && $cnt > $max_events)
 				{
 					break;
 				}
-			}
+			}*/
 			$o = obj($oid);
 			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTOR");
 			$can_edit = $this->can("edit" , $oid);
@@ -945,7 +1092,10 @@ class events_manager extends class_base
 			if(($o->prop("start1") || $o->prop("end")))
 			{
 //				$eventtime = date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end"));
-				if($o->prop("start1") > 1000 && ($eventstart >  $o->prop("start1"))) $eventstart = $o->prop("start1");
+				if($o->prop("start1") > 1000 && ($eventstart >  $o->prop("start1")))
+				{
+					$eventstart = $o->prop("start1");
+				}
 				if($eventend <  $o->prop("end")) $eventend = $o->prop("end");
 			}
 			foreach($o->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
@@ -963,7 +1113,8 @@ class events_manager extends class_base
 
 			$t->define_data(array(
 				"name" => ($parse_url)? html::href(array("caption" => $name, "url" => $parse_url)):($can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $name) : $name),
-				"time" => $eventtime,
+				"time" => $eventstart.$eventend,
+				"time_val" => $eventtime,
 				"sector" => (is_object($sec)) ? $sec->name() : "",
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"tasks" => $make_copy . " " . $publish . " " . $change,
@@ -974,6 +1125,52 @@ class events_manager extends class_base
 			));
 			$cnt++;
 		}
+		$t->set_sortable(false);
+	}
+
+	function __sorter($a , $b)
+	{
+			$eventstart = 100000000000;
+			$eventend = 1;
+			$o = $a;
+			if(($o->prop("start1") || $o->prop("end")))
+			{
+				if($o->prop("start1") > 1000 && ($eventstart >  $o->prop("start1")))
+				{
+					$eventstart = $o->prop("start1");
+				}
+				if($eventend <  $o->prop("end")) $eventend = $o->prop("end");
+			}
+			foreach($o->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
+			{
+				$tm = $c->to();
+				if($tm->prop("start") > 1000 && ($eventstart >  $tm->prop("start"))) $eventstart = $tm->prop("start");
+				if($eventend <  $tm->prop("end")) $eventend = $tm->prop("end");
+			}
+			$a_time = $eventstart.$eventend;
+			$eventstart = 100000000000;
+			$eventend = 1;
+			$o = $b;
+			if(($o->prop("start1") || $o->prop("end")))
+			{
+				if($o->prop("start1") > 1000 && ($eventstart >  $o->prop("start1")))
+				{
+					$eventstart = $o->prop("start1");
+				}
+				if($eventend <  $o->prop("end")) $eventend = $o->prop("end");
+			}
+			foreach($o->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
+			{
+				$tm = $c->to();
+				if($tm->prop("start") > 1000 && ($eventstart >  $tm->prop("start"))) $eventstart = $tm->prop("start");
+				if($eventend <  $tm->prop("end")) $eventend = $tm->prop("end");
+			}
+			$b_time = $eventstart.$eventend;
+			if($_GET["sort_order"] == "desc")
+			{
+				return $a_time - $b_time;
+			}
+			return $b_time - $a_time;
 	}
 
 	function _get_similar_table($arr)
@@ -993,10 +1190,11 @@ class events_manager extends class_base
 
 			$t->define_data(array(
 				"name" => (!$this->can("edit" , $o->id()))?$o->name():html::obj_change_url($o->id()),
-				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
+				"time_val" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"sector" => (is_object($sec))?$sec->name():"",
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"oid" => $o->id(),
+				"time" => $eventstart.$eventend,
 			));
 		}
 	}
@@ -1085,26 +1283,47 @@ class events_manager extends class_base
 			"action" => "print_events",
 			"tooltip" => t("S&uuml;ndmuste v&auml;ljatr&uuml;kk"),
 		));
-		$arr["prop"]["vcl_inst"]->add_button(array(
+/*		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "archive",
 			"img" => "archive_small.gif",
 			"url" => aw_url_change_var("archived",($arr["request"]["archived"] == 1 ? -1 : 1)),
 			"tooltip" => $arr["request"]["archived"] == 1 ? t("Uued"):t("Arhiiv"),
 		));
-
+*/
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "sort",
 			"img" => "check_red.gif",
-			"url" => aw_url_change_var("sort_by_created",($arr["request"]["sort_by_created"] == 1 ? 1 : 1)),
+//			"url" => aw_url_change_var("sort_by_created",($arr["request"]["sort_by_created"] == 1 ? 1 : 1)),
+			"url" => aw_url_change_var("sortby","created"),
 			"tooltip" => ($arr["request"]["sort_by_created"] == 1 ? t("J&auml;rjesta laekumise j&auml;rgi") : t("J&auml;rjesta laekumise j&auml;rgi")),
 		));
 
-		$arr["prop"]["vcl_inst"]->add_button(array(
+/*		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "see_all",
 			"img" => "class_31.gif",
 			"url" => $this->mk_my_orb("change" , array("group" => "events" , "id" => $arr["obj_inst"]->id(), "section" => $arr["request"]["section"])),
 			"tooltip" => t("Algseis (kestvad ja tulekul s&uuml;ndmused)"),
 		));
+*/
+
+		$arcu = aw_url_change_var("archived", 1);
+		$newu = aw_url_change_var("archived", 0);
+		$select = html::radiobutton(array(
+			"name" => "arc_button",
+			"id" => "arc_button",
+			"caption" => t("Arhiiv"),
+			"checked" => $_GET["archived"],
+			"onclick" => ""
+		)).html::radiobutton(array(
+			"name" => "new_button",
+			"id" => "new_button",
+			"caption" => t("Aktiivsed"),
+			"checked" => !$_GET["archived"],
+			"onclick" => ""
+		));
+
+		$arr["prop"]["vcl_inst"]->add_cdata($select);
+
 	}
 
 	function _get_similar_tb(&$arr)
@@ -1196,7 +1415,10 @@ class events_manager extends class_base
 			"align" => "center",
 			"sortable" => 1,
 			"chgbgcolor" => "col",
+			"callback" =>  array(&$this, "__time_format"),
+			"callb_pass_row" => true,
 		));
+
 		$t->define_field(array(
 			"name" => "sector",
 			"caption" => t("Valdkond"),
@@ -1235,6 +1457,12 @@ class events_manager extends class_base
 			"field" => "oid",
 			"chgbgcolor" => "col",
 		));
+		$t->set_default_sortby(array("oid"));
+	}
+
+	function __time_format($val)
+	{
+		return $val["time_val"];
 	}
 
 	function callback_mod_reforb($arr)
@@ -1338,11 +1566,13 @@ class events_manager extends class_base
 			$nt->set_prop("start" , $t->prop("start"));
 			$nt->set_prop("end" , $t->prop("end"));
 			$nt->set_prop("location" , $t->prop("location"));
+//			$nt->set_prop("event" , $t->prop("event"));
 			$nt->save();
 
 			$nt->connect(array("to" => $t->prop("location") , "reltype" => 1));
 
-			$o->connect(array("to" => $nt->id() , "reltype" => 9));
+			$o->add_event_time($nt->id());
+//			$o->connect(array("to" => $nt->id() , "reltype" => 9));
 		}
 
 		return $arr["post_ru"];

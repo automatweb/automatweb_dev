@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.5 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.6 2008/04/09 15:58:48 markop Exp $
 // event_time.aw - Toimumisaeg 
 /*
 
@@ -17,14 +17,20 @@ default group=general
 @caption Algab
 
 @property end type=datetime_select field=end
-@caption Lõpeb
+@caption L&otilde;peb
 
 @property location type=relpicker reltype=RELTYPE_LOCATION field=location
 @caption Toimumiskoht
 
+@property event type=relpicker reltype=RELTYPE_EVENT field=event
+@caption S&uuml;ndmus
+
 
 #RELTYPES
 @reltype LOCATION value=1 clid=CL_SCM_LOCATION
+@caption Toimumiskoht
+
+@reltype EVENT value=1 clid=CL_CALENDAR_EVENT
 @caption Toimumiskoht
 
 */
@@ -100,6 +106,7 @@ class event_time extends class_base
 				case "start":
 				case "end":
 				case "location":
+				case "event":
 					$this->db_add_col($t, array(
 						"name" => $f,
 						"type" => "int"

@@ -1,4 +1,5 @@
 <?php
+// calendar_event.aw - Kalendri syndmus
 /*
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes maintainer=kristo
 
@@ -12,7 +13,7 @@
 @caption Algab
 
 @property end type=datetime_select field=end
-@caption L&otilde;peb
+@caption L&otulde;peb
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -48,9 +49,6 @@
 @caption
 
 @property utextbox10 type=textbox
-@caption
-
-@property utextarea1 type=textarea
 @caption
 
 @property utextarea2 type=textarea
@@ -264,9 +262,6 @@ class calendar_event extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-//			case "multifile_upload":
-//				arr($arr); 
-//				die();
 			case "ufupload1":
                                 if (is_uploaded_file($_FILES["ufupload1"]["tmp_name"]))
                                 {
@@ -324,7 +319,7 @@ class calendar_event extends class_base
 				$this->id = $arr["obj_inst"]->id();
 				$this->save_event_times($arr["request"]["event_time"]);
 				break;
-
+			
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -410,6 +405,7 @@ class calendar_event extends class_base
 
 		switch($prop["name"])
 		{
+			//case "multifile_upload": return PROP_IGNORE;
 			case "level":
 				$prop["options"] = $this->level_options;
 				break;
@@ -427,10 +423,10 @@ class calendar_event extends class_base
 				return PROP_IGNORE;
 
 			case "event_time_table":
-				if (!$arr['new'])
-				{
+//				if (!$arr['new'])
+//				{
 					$this->do_event_time_table($arr);
-				}
+//				}
 				break;
 			case "location":
 				//$prop["table_fields"] = array("name","address.riik","afaf");
@@ -479,6 +475,10 @@ class calendar_event extends class_base
 		$event = obj($this->id);
 		foreach($times as $id => $val)
 		{
+			if(!$val["end"])
+			{
+				$val["end"] = $val["start"];
+			}
 			$error[$id] = $this->check_format($val);
 			if(is_oid($id) && $this->can("view" , $id))
 			{
@@ -486,7 +486,7 @@ class calendar_event extends class_base
 			}
 			else
 			{
-				if($val["start"] && $val["location"])
+				if($val["start"])
 				{
 					$o = new object();
 					$o->set_name("");
@@ -512,7 +512,6 @@ class calendar_event extends class_base
 			{
 				$error[$id] = t("Sellist toimumiskohta pole");
 			}
-
 			$start_dt = explode(" ", $val["start"]);
 			$end_dt = explode(" ", $val["end"]);
 			$start_d = explode(".", $start_dt[0]);
@@ -527,8 +526,10 @@ class calendar_event extends class_base
 				$o->set_prop("start" , $start);
 				$o->set_prop("end" , ($end > 1) ? $end : $start);
 				$o->set_prop("location" , $location->id());
+			//	$o->set_prop("event" , $event->id());
 				$o->save();
-				$event->connect(array("to" => $o->id(), "reltype" => 9));
+				$event->add_event_time($o->id());arr($o->id());
+			//	$event->connect(array("to" => $o->id(), "reltype" => 9));
 			}
 		}
 		$_SESSION["event_time_save_errors"] = $error;
@@ -553,39 +554,48 @@ class calendar_event extends class_base
 			"name" => "delete",
 			"caption" => "X",
 		));
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
-		{
-			$o = $c->to();
-			$t->define_data(array(
-				"start" => html::textbox(array(
-					"name" => "event_time[".$o->id()."][start]",
-					"size" => 15,
-					"value" => date("d.m.Y H:i" , $o->prop("start")),
-				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.event_time_'.$o->id().'__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuup&auml;ev" name="anchornew" id="anchornew">vali</a><font color=red> '.$_SESSION["event_time_save_errors"][$o->id()]." </font>",
-				"end" => html::textbox(array(
-					"name" => "event_time[".$o->id()."][end]",
-					"size" => 15,
-					"value" => date("d.m.Y H:i" , $o->prop("end")),
-				)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuup&auml;ev" name="anchornew" id="anchornew">vali</a>',
-				"location" => html::textbox(array(
-					"name" => "event_time[".$o->id()."][location]",
-					"size" => 30,
-					"value" => $o->prop("location.name"),
-					"autocomplete_source" => $this->mk_my_orb ("locations_autocomplete_source", array(), CL_CALENDAR_EVENT, false, true),
-					"autocomplete_params" => "event_time[".$o->id()."][location]",
-				)),
-				"delete" => html::href(array(
-					"caption" => t("Kustuta"),
-					"url" =>  $this->mk_my_orb("remove_event_time", array(
-						"id" => $o->id(),
-						"return_url" => get_ru(),
-					)),
-				)),
-			));
-		}
 
+		if(is_oid($arr["obj_inst"]->id())){
+//			$event_ol = new object_list(array(
+//				"class_id" => CL_EVENT_TIME,
+//				"lang_id" => array(),
+//				"event" => $arr["obj_inst"]->id(),
+//			));
+//			foreach($event_ol->arr() as $o)
+//			{
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
+			{
+				$o = $c->to();
+				$t->define_data(array(
+					"start" => html::textbox(array(
+						"name" => "event_time[".$o->id()."][start]",
+						"size" => 15,
+						"value" => date("d.m.Y H:i" , $o->prop("start")),
+					)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
+	cal.select(changeform.event_time_'.$o->id().'__start_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuup&auml;ev" name="anchornew" id="anchornew">vali</a><font color=red> '.$_SESSION["event_time_save_errors"][$o->id()]." </font>",
+					"end" => html::textbox(array(
+						"name" => "event_time[".$o->id()."][end]",
+						"size" => 15,
+						"value" => date("d.m.Y H:i" , $o->prop("end")),
+					)).'<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
+	cal.select(changeform.event_time_'.$o->id().'__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); return false;" title="Vali kuup&auml;ev" name="anchornew" id="anchornew">vali</a>',
+					"location" => html::textbox(array(
+						"name" => "event_time[".$o->id()."][location]",
+						"size" => 30,
+						"value" => $o->prop("location.name"),
+						"autocomplete_source" => $this->mk_my_orb ("locations_autocomplete_source", array(), CL_CALENDAR_EVENT, false, true),
+						"autocomplete_params" => "event_time[".$o->id()."][location]",
+					)),
+					"delete" => html::href(array(
+						"caption" => t("Kustuta"),
+						"url" =>  $this->mk_my_orb("remove_event_time", array(
+							"id" => $o->id(),
+							"return_url" => get_ru(),
+						)),
+					)),
+				));
+			}
+		}
 		$t->define_data(array(
 			"start" => html::textbox(array(
 					"name" => "event_time[new][start]",
@@ -602,7 +612,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 			"location" => html::textbox(array(
 				"name" => "event_time[new][location]",
 				"size" => 30,
-				"value" => $arr["obj_inst"]->prop("location") ? $arr["obj_inst"]->prop("location.name"):"",
+				"value" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("location") ? $arr["obj_inst"]->prop("location.name"):"",
 				"autocomplete_source" => $this->mk_my_orb ("locations_autocomplete_source", array(), CL_CALENDAR_EVENT, false, true),
 				"autocomplete_params" => "event_time[new][location]",
 			)),
@@ -613,6 +623,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 	/**
 		@attrib name=locations_autocomplete_source
 		@param location optional
+		@param parent optional
 	**/
 	function locations_autocomplete_source($arr)
 	{
@@ -622,6 +633,26 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 		$ol = new object_list(array(
 			"class_id" => CL_SCM_LOCATION,
 			"name" => "%".$arr["location"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 2000,
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
+	/**
+		@attrib name=organizer_autocomplete_source
+		@param organizer optional
+		@param parent optional
+	**/
+	function organizer_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => "%".$arr["organizer"]."%",
 			"lang_id" => array(),
 			"site_id" => array(),
 			"limit" => 2000,
@@ -762,7 +793,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 	**/
 	function show($arr)
 	{
-		// nii .. kuidas ma siin saan 2ra kasutada classbaset mulle vajaliku vormi genereerimiseks?
+		// nii .. kuidas ma siin saan ara kasutada classbaset mulle vajaliku vormi genereerimiseks?
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 		$this->vars(array(
