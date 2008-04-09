@@ -113,7 +113,7 @@ class quickmessagebox_obj extends _int_object
 
 		if (!$approved_senders)
 		{
-			$approved_senders = constant(aw_ini_get("quickmessaging.approved_senders"));
+			$approved_senders = constant("self::" . aw_ini_get("quickmessaging.approved_senders"));
 		}
 
 		if (

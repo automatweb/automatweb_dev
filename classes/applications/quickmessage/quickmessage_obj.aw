@@ -54,7 +54,7 @@ class quickmessage_obj extends _int_object
 
 		if (!$addressees_setting)
 		{
-			$addressees_setting = constant(aw_ini_get("quickmessaging.show_addressees"));
+			$addressees_setting = constant("quickmessagebox_obj::" . aw_ini_get("quickmessaging.show_addressees"));
 		}
 
 		if ($addressees_setting === quickmessagebox_obj::ADDRESSEES_CONTACTS)
