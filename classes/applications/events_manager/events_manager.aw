@@ -976,7 +976,14 @@ aw_restore_acl();
 		{
 			$filter["sort_by"] = "start ".(($_GET["sort_order"] == "asc") ? "ASC" : "DESC");
 		}
-		$filter["limit"] = ($_GET["ft_page"]? ($_GET["ft_page"] * $this_o->prop("events_per_page").",") : "").$this_o->prop("events_per_page");
+		if(!isset($_GET["ft_page"]))
+		{
+			$filter["limit"] = "0,".$this_o->prop("events_per_page");
+		}
+		else
+		{
+			$filter["limit"] = ($_GET["ft_page"]? ($_GET["ft_page"] * $this_o->prop("events_per_page").",") : "").$this_o->prop("events_per_page");
+		}
 		return new object_list($filter);
 	}
 
@@ -1305,21 +1312,22 @@ aw_restore_acl();
 			"tooltip" => t("Algseis (kestvad ja tulekul s&uuml;ndmused)"),
 		));
 */
-
-		$arcu = aw_url_change_var("archived", 1);
-		$newu = aw_url_change_var("archived", 0);
+		$arcu = html::get_change_url($_GET["id"], array("archived" => 1, "return_url" => $_GET["post_ru"], "section" => $_GET["section"]));
+//		$arcu = aw_url_change_var("archived", 1);
+//		$newu = aw_url_change_var("archived", 0);
+		$newu = html::get_change_url($_GET["id"], array("archived" => 0, "return_url" => $_GET["post_ru"], "section" => $_GET["section"]));
 		$select = html::radiobutton(array(
 			"name" => "arc_button",
 			"id" => "arc_button",
 			"caption" => t("Arhiiv"),
-			"checked" => $_GET["archived"],
-			"onclick" => ""
+			"checked" => 0,//$_GET["archived"],
+			"onclick" => 'javascript:window.location.href="'.$arcu.'";'
 		)).html::radiobutton(array(
 			"name" => "new_button",
 			"id" => "new_button",
 			"caption" => t("Aktiivsed"),
-			"checked" => !$_GET["archived"],
-			"onclick" => ""
+			"checked" => 0,//!$_GET["archived"],
+			"onclick" => 'javascript:window.location.href="'.$newu.'";'
 		));
 
 		$arr["prop"]["vcl_inst"]->add_cdata($select);
