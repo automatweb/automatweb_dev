@@ -49,6 +49,11 @@ class personnel_management_mobi_handler extends class_base
 
 	function get_property($arr)
 	{
+		$this->send_sms(array(
+			"id" => $arr["obj_inst"]->id(),
+			"number" => "37255547369",
+			"message" => "Tere",
+		));
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 
