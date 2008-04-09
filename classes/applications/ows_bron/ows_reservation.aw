@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.14 2008/02/13 12:47:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.15 2008/04/09 09:11:03 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -148,8 +148,17 @@
 	@property charge_currency type=textbox field=aw_charge_currency
 	@caption Charge currency
 
+@default group=cancel_data
+
+	@property cancel_type type=textbox field=aw_cancel_type
+	@caption T&uuml;histamise p&otilde;hjus
+
+	@property cancel_other type=textbox fidle=aw_cancel_other
+	@caption Muu p&otilde;hjus
+
 @groupinfo cust_data caption="Sisestatud andmed"
 @groupinfo bron_data caption="Reserveeringu andmed"
+@groupinfo cancel_data caption="T&uuml;histamise p&otilde;hjus"
 
 @reltype OWS_BRON value=1 clid=CL_OWS_BRON
 @caption Reserveeringukeskus

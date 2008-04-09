@@ -370,6 +370,23 @@
             <field>aw_charge_currency</field>
             <caption>Charge currency</caption>
       </property>
+      <property>
+            <name>cancel_type</name>
+            <table>aw_ows_reservations</table>
+            <group>cancel_data</group>
+            <type>textbox</type>
+            <field>aw_cancel_type</field>
+            <caption>T&amp;amp;uuml;histamise p&amp;amp;otilde;hjus</caption>
+      </property>
+      <property>
+            <name>cancel_other</name>
+            <table>aw_ows_reservations</table>
+            <group>cancel_data</group>
+            <type>textbox</type>
+            <fidle>aw_cancel_other</fidle>
+            <field>cancel_other</field>
+            <caption>Muu p&amp;amp;otilde;hjus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OWS_RESERVATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -385,6 +402,9 @@
             <bron_data>
                   <caption>Reserveeringu andmed</caption>
             </bron_data>
+            <cancel_data>
+                  <caption>T&amp;amp;uuml;histamise p&amp;amp;otilde;hjus</caption>
+            </cancel_data>
       </groupinfo>
       <tableinfo>
             <aw_ows_reservations>
