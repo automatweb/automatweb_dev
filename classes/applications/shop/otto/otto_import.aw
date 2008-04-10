@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.90 2008/04/01 07:41:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.91 2008/04/10 08:37:16 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2404,7 +2404,18 @@ class otto_import extends class_base
 		$show_data = array();
 		foreach (safe_array($saved_data) as $category => $data)
 		{
-			$key = (empty($data['image_url'])) ? $data['title'] : $data['image_url'];
+			// ilmselt on vaja refaktoorida seda siin, kui seda grupeerimist t6esti vaja ei ole
+			// samas oleks variant kasutada ka image_url-title kombinatsiooni grupeerimiseks
+			// siis ei tohiks ka mingit "kokku klappimist" enam juhtuda, juhuk kui t6esti kuskil
+			// sama kombo ei esine.
+			if ($_GET['grouped'])
+			{
+				$key = (empty($data['image_url'])) ? $data['title'] : $data['image_url'];
+			}
+			else
+			{
+				$key = $category;	
+			}
 			
 			$show_data[$key]['category'][] = $category;
 			$show_data[$key]['image_url'] = $data['image_url'];
@@ -2507,10 +2518,17 @@ class otto_import extends class_base
 					foreach ($categories as $category)
 					{
 					//	$valid_data[$data['category']] = array(
-						$valid_data[$category] = array(
-							'image_url' => $data['image_url'],
-							'title' => $data['title']
-						);
+						if (empty($data['image_url']) && empty($data['title']))
+						{
+							unset($valid_data[$category]);
+						}
+						else
+						{
+							$valid_data[$category] = array(
+								'image_url' => $data['image_url'],
+								'title' => $data['title']
+							);
+						}
 					}
 				}
 			}
