@@ -510,7 +510,7 @@ class bug extends class_base
 				{
 					$u = get_instance(CL_USER);
 					$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
-					$crea = sprintf(t("Looja: %s / %s"), $p->name(), date("d.m.Y H:i", $arr["obj_inst"]->created()));
+					$crea = sprintf(t("Looja: %s (%s)"), $p->name(), date("d.m.Y H:i", $arr["obj_inst"]->created()));
 				}
 
 				$link = html::href(array(
@@ -522,10 +522,10 @@ class bug extends class_base
 						"textsize" => '13px',
 						"fontweight" => 'bold',
 					))." ".
-					$link.
-					sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".
+					$link." ".
+					sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." || ".
 					$crea.
-					"/ ".t("Aega kulunud").": ".
+					"<br />".t("Aega kulunud").": ".
 					html::span(array(
 						"content" => '<a href="">00:00:00 (0.0000)</a>',
 						"id" => "bug_stopper_watch_time",
