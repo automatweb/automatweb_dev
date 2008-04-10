@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.36 2008/02/25 12:37:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.37 2008/04/10 12:48:24 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -11,35 +11,35 @@
 @default method=serialize
 
 @property company type=relpicker reltype=RELTYPE_COMPANY
-@caption Ettevõte
+@caption Ettev&otilde;te
 
 @property departments type=relpicker multiple=1 reltype=RELTYPE_DEPARTMENT
 @caption Osakonnad
 
 //----------------------------------------------
-@groupinfo view caption=Näitamine
+@groupinfo view caption=N&auml;itamine
 @default group=view
 
 @property show_only_public_phones type=checkbox ch_value=1
-@caption Näita ainult avalikke numbreid
+@caption N&auml;ita ainult avalikke numbreid
 
-- Isikute järjestamisprintsiip (saab valida mitu, peale salvestamist tekib uus valik), Listbox Omadus (perenimi, ametinimetuse jrk, isiku jrk), mille kõrval Listbox Järjestamine (Väiksem enne/Suurem enne)
+- Isikute j2rjestamisprintsiip (saab valida mitu, peale salvestamist tekib uus valik), Listbox Omadus (perenimi, ametinimetuse jrk, isiku jrk), mille k6rval Listbox J2rjestamine (V2iksem enne/Suurem enne)
 @property persons_principe type=callback callback=callback_get_persons_principe
-@caption Isikute järjestamisprintsiip
+@caption Isikute j&auml;rjestamisprintsiip
 
 property persons_principe_property type=select
-caption Isikute järjestamisprintsiibi omadus
+caption Isikute jrjestamisprintsiibi omadus
 
 property persons_principe_direct type=select
 caption .
 
-- Grupeerimine osakonna järgi (märkeruut)
+- Grupeerimine osakonna j2gi (m2rkeruut)
 @property department_grouping type=checkbox ch_value=1
-@caption Grupeerimine osakonna järgi
+@caption Grupeerimine osakonna j&auml;rgi
 
-- Grupeerimise järjestamisprintsiip (analoogne isikutega, osakonna jrk/osakonna nimi alusel)
+- Grupeerimise jarjestamisprintsiip (analoogne isikutega, osakonna jrk/osakonna nimi alusel)
 @property grouping_principe type=callback callback=callback_get_grouping_principe
-@caption Grupeerimise järjestamisprintsiip
+@caption Grupeerimise j&auml;rjestamisprintsiip
 
 - Vaadete tabel (salvestamisel uus rida)
 @property view callback=callback_get_view_table
@@ -49,15 +49,15 @@ caption .
 property view1 type=textbox
 caption Vaade 1
 
--- templeit (tekstikast, viide failisüsteemis olevale templeidile, kataloog on eeldefineeritud)
+-- templeit (tekstikast, viide failisysteemis olevale templeidile, kataloog on eeldefineeritud)
 property template type=textbox
 caption Template
 
--- osakondade tasemeid (tekstikast, mitu osakondade taset sellel lehel sisse on vaja lugeda), võib olla ka kujul 1-2 (ehk loetakse sisse ning kuvatakse 1 ja 2 taseme osakonnad, kui on kirjutatud 1, siis kuvatakse ainult Osakonnad propertys valitud osakonnad)
+-- osakondade tasemeid (tekstikast, mitu osakondade taset sellel lehel sisse on vaja lugeda), v6ib olla ka kujul 1-2 (ehk loetakse sisse ning kuvatakse 1 ja 2 taseme osakonnad, kui on kirjutatud 1, siis kuvatakse ainult Osakonnad propertys valitud osakonnad)
 property department_levels type=textbox
 caption Osakondade tasemed
 
--- raadionupud (ainult osakonnad/koos isikutega) - selleks, et ei loetaks tingimata sisse nende osakondade isikuid, kui on aja näidata ainult osakondade andmeid.
+-- raadionupud (ainult osakonnad/koos isikutega) - selleks, et ei loetaks tingimata sisse nende osakondade isikuid, kui on aja naidata ainult osakondade andmeid.
 property with_without_persons type=chooser orient=vertical store=yes method=serialize
 caption Sisse lugeda
 
@@ -65,11 +65,11 @@ caption Sisse lugeda
 property columns type=textbox
 caption Tulpade arv
 
--- read ametinimetuste alusel (märkeruut) - sama ametinimega isikuid üritatakse sama rea peale paigutada
+-- read ametinimetuste alusel (markeruut) - sama ametinimega isikuid yritatakse sama rea peale paigutada
 property rows_by type=checkbox ch_value=1 
 caption Read ametinimetuse alusel
 
--- min tulpade arv (tekstikast) - erineva tasemega ametinimetusele vastavad isikud võib ka kõrvuti panna, kui min tulpade arv mingis reas ei ole saavutatud.
+-- min tulpade arv (tekstikast) - erineva tasemega ametinimetusele vastavad isikud v6ib ka k6rvuti panna, kui min tulpade arv mingis reas ei ole saavutatud.
 property min_cols type=textbox
 caption Minimaalne tulpade arv
 
@@ -108,17 +108,17 @@ class persons_webview extends class_base
 		
 		$this->education["options"] = array(
 			0 => t("-- vali --"),
-			1 => t("põhi"),
+			1 => t("p&otilde;hi"),
 			2 => t("kesk"),
 			3 => t("kesk-eri"),
-			4 => t("kõrgem"),
+			4 => t("k&otilde;rgem"),
 		);
 		
-		$this->phone_types = array("phone" => "");//see on selleks, et lihtsalt telefoni tüübid kirja panna ja järgmistel inimestel vastavad muutujad ära nullida, muidu võtab eelmiselt isikult
+		$this->phone_types = array("phone" => "");//see on selleks, et lihtsalt telefoni tyybid kirja panna ja jargmistel inimestel vastavad muutujad ara nullida, muidu v6tab eelmiselt isikult
 		
 		$this->help = nl2br(htmlentities(t("
-			Osakondade tasemed, mida näidataks, saab märkida kujul '1,2,3' või '1-2' või '3'
-			juhul , kui on vaja kuvada inimesi üksteise kõrval, siis teplates peaks olema subid umbes kujul:
+			Osakondade tasemed, mida n&auml;idataks, saab m&auml;rkida kujul '1,2,3' v&otilde;i '1-2' v&otilde;i '3'
+			juhul , kui on vaja kuvada inimesi &uuml;ksteise k&otilde;rval, siis teplates peaks olema subid umbes kujul:
 			<!-- SUB: DEPARTMENT -->
 			{VAR:department_name}
 			<table>
@@ -138,16 +138,16 @@ class persons_webview extends class_base
 			</table>
 			<!-- SUB: DEPARTMENT -->
 			
-			kui igal real on 1 inimene, siis võib SUB: LINE vahelt ära jätta
+			kui igal real on 1 inimene, siis v&otilde;ib SUB: LINE vahelt &auml;ra j&auml;tta
 			
-			Kui viimaseks vaateks on üks konkreetne isik, siis template sees ühtegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
+			Kui viimaseks vaateks on &uuml;ks konkreetne isik, siis template sees &uuml;htegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
 			
-			endine variant ka igaks juhuks töötab veel
+			endine variant ka igaks juhuks t&ouml;&ouml;tab veel
 			
-			juhul kui miski taseme osakonda oleks vaja teistmoodi näidata, siis tuleks <!-- SUB: DEPARTMENT --> sisse teha <!-- SUB: LEVEL4DEPARTMENT --> (vastavalt taseme numbrile) , mis oleks muidu sama struktuuriga nagu DEPARTMENT
+			juhul kui miski taseme osakonda oleks vaja teistmoodi n&auml;idata, siis tuleks <!-- SUB: DEPARTMENT --> sisse teha <!-- SUB: LEVEL4DEPARTMENT --> (vastavalt taseme numbrile) , mis oleks muidu sama struktuuriga nagu DEPARTMENT
 
 			muutujad mida saab kasutada:
-			DEPARTMENT sub'is: department_name, address , phone , fax , email , next_level_link (link nägemas antud osakonda uues vaates).
+			DEPARTMENT sub'is: department_name, address , phone , fax , email , next_level_link (link n&auml;gemas antud osakonda uues vaates).
 			sub'is worker :
 			name , name_with_email , email , emails, photo, contact,
 			profession , profession_with_directive , professions , directive (ametijuhend), wage_doc , wage_doc_exist (palgaandmete dokument, kui on olemas),
@@ -158,8 +158,8 @@ class persons_webview extends class_base
 			url, urls,
 			ta1 - ta5 (kasutajadefineeritud muutujad).
 
-			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev.
-			Template'ide tõlkimiseks kasutada faili persons_web_view.aw.
+			Kui lisada objekt men&uuml;&uuml;sse, siis esimeseks vaate infoks tuleb men&uuml;&uuml;s olev.
+			Template'ide t&otilde;lkimiseks kasutada faili persons_web_view.aw.
 			")));
 	}
 
@@ -225,7 +225,7 @@ class persons_webview extends class_base
 			$nm = "persons_principe[".$i."][principe]";
 			$ret[$nm] = array(
 				"name" => $nm,
-				"caption" => t(($i + 1).". Isikute järjestamisprintsiip"),
+				"caption" => ($i + 1).". ".t("Isikute j&auml;rjestamisprintsiip"),
 				"type" => "text", 
 				"value" => html::select(array(
 					"name" => "persons_principe[".$i."][principe]",
@@ -258,7 +258,7 @@ class persons_webview extends class_base
 			$nm = "grouping_principe[".$i."][principe]";
 			$ret[$nm] = array(
 				"name" => $nm,
-				"caption" => t(($i + 1).". Osakondade järjestamisprintsiip"),
+				"caption" => ($i + 1).". ".t("Osakondade j&auml;rjestamisprintsiip"),
 				"type" => "text",
 				"value" => html::select(array(
 					"name" => $nm,
@@ -379,10 +379,10 @@ class persons_webview extends class_base
 		$company_id = $this->view_obj->prop("company");
 		if(is_oid($company_id))	$company = obj($company_id);
 		$departments = $this->view_obj->prop("departments");
-		$this->set_levels(0);//teeb siis erinevatest tasemetest massiivi, mida üldse kuvada ja paneb selle muutujasse $this->levels
+		$this->set_levels(0);//teeb siis erinevatest tasemetest massiivi, mida yldse kuvada ja paneb selle muutujasse $this->levels
 		$this->jrks = array();
 		$sections = $this->get_sections(array("section" => $company , "jrk" => 0));
-		if(in_array(0,$this->levels)) $sections = array_merge(array($company) ,$sections); //võibolla tahetakse ka asutust näha
+		if(in_array(0,$this->levels)) $sections = array_merge(array($company) ,$sections); //v6ibolla tahetakse ka asutust naha
 		$ol = new object_list();
 		foreach($sections as $section)
 		{
@@ -406,6 +406,7 @@ class persons_webview extends class_base
 		CL_PERSONS_WEBVIEW);
 	}
 
+	/*
 	function sort_by($args)
 	{
 		extract($args);
@@ -451,13 +452,62 @@ class persons_webview extends class_base
 			$workers[] = $data["data"];
 		}
 		return $workers;
-	}
+	}*/
 	
+	function do_person_sort($a, $b)
+	{
+		foreach($this->principe as $key => $val)
+		{
+			switch($val["principe"])
+			{
+				case "last_name":
+					$res = strcmp($a["worker"]->prop("lastname"),$b["worker"]->prop("lastname"));
+					if($res)
+					{
+						if($val["order"] == "ASC")
+						{
+							return $res;
+						}
+						return -$res;
+					}
+					continue;
+
+				case "profession":
+					$res = $a["worker"]->prop("rank.jrk") - $b["worker"]->prop("rank.jrk");
+					if($res)
+					{
+						if($val["order"] == "ASC")
+						{
+							return $res;
+						}
+						return -$res;
+					}
+					continue;
+				case "jrk":
+					$res = $a["jrk"] - $b["jrk"];
+					if($res)
+					{
+						if($val["order"] == "ASC")
+						{
+							return $res;
+						}
+						return -$res;
+					}
+					continue;
+				default:
+					;
+			}
+		}
+		return 0;
+	}
+
 	function person_sort($workers)
 	{
 		enter_function("person_webview::person_sort");
-		$principe = $this->view_obj->prop("persons_principe");
-		$count = sizeof($principe);
+		$this->principe = $this->view_obj->prop("persons_principe");
+		uasort($workers, array(&$this, "do_person_sort"));
+
+/*		$count = sizeof($principe);
 		while($count>=0)
 		{
 			if($principe[$count]["principe"])
@@ -470,10 +520,10 @@ class persons_webview extends class_base
 			}
 			$count--;
 		}
-		exit_function("person_webview::person_sort");
+*/		exit_function("person_webview::person_sort");
+//if(aw_global_get("uid") == "struktuur"){foreach($workers as $worker){arr($worker["worker"]->name()); arr($worker["jrk"]); }}
 		return ($workers);
 	}
-	
 	function sort_sections($sections)
 	{
 		enter_function("person_webview::section_sort");
@@ -530,7 +580,7 @@ class persons_webview extends class_base
 		return $sections;
 	}
 
-	//tekitab nimekirja tasemetest mida näidatakse... 
+	//tekitab nimekirja tasemetest mida n2idatakse... 
 	function set_levels($level)
 	{
 		$levels = $this->view["department_levels"];
@@ -558,7 +608,7 @@ class persons_webview extends class_base
 		$this->levels = $levels;
 	}
 	
-	//seda vist siiski ei lähe vaja seekord
+	//seda vist siiski ei l2he vaja seekord
 	function request_execute ($this_object)
 	{
 		return $this->parse_alias (array (
@@ -612,11 +662,11 @@ class persons_webview extends class_base
 			$company = obj($company_id);
 		}
 
-		//miskis lambikohas võib asutust ka vaja minna
+		//miskis lambikohas v6ib asutust ka vaja minna
 		if($company->class_id() == CL_CRM_COMPANY) $this->company=$company;
 		if(!$level)$level = 0;
 		$this->level = $level;
-		$this->set_levels($level);//teeb siis erinevatest tasemetest massiivi, mida üldse kuvada ja paneb selle muutujasse $this->levels
+		$this->set_levels($level);//teeb siis erinevatest tasemetest massiivi, mida yldse kuvada ja paneb selle muutujasse $this->levels
 
 		if($arr["search_results"]) //sel juhul tuleb otsingust
 		{
@@ -641,7 +691,7 @@ class persons_webview extends class_base
 				else $sections = $this->get_sections(array("section" => $company , "jrk" => 0));
 			foreach($sections as $section)
 				{
-					$this->section = $section; // eks seda läheb vast mujal ka vaja... ametinimetuses näiteks
+					$this->section = $section; // eks seda l2heb vast mujal ka vaja... ametinimetuses n2iteks
 					if(!(in_array($section->id(), $this->view_obj->prop("departments")))
 						&& sizeof($this->view_obj->prop("departments"))>0 && array_sum($this->view_obj->prop("departments")) > 0) continue;
 					if($this->view["with_persons"])
@@ -658,14 +708,14 @@ class persons_webview extends class_base
 				$this->vars_safe(array("DEPARTMENT" => $department));
 			}
 		}
-		else //juhul kui osakondade järgi pole grupeeritud, siis saab veidi lihtsamini template jne teha
+		else //juhul kui osakondade j2rgi pole grupeeritud, siis saab veidi lihtsamini template jne teha
 		{
 			if($this->view["with_persons"])
 			{
 				$workers = $this->get_workers($company);
 				$this->parse_persons($workers);
 			}
-			if($this->is_template("DEPARTMENT"))//juhuks kui DEPARTMENT sub sisse on jäänud... mida tegelt pole vaja
+			if($this->is_template("DEPARTMENT"))//juhuks kui DEPARTMENT sub sisse on j22nud... mida tegelt pole vaja
 			{
 				$department .= $this->parse("DEPARTMENT");
 				$this->vars_safe(array("DEPARTMENT" => $department));
@@ -674,7 +724,9 @@ class persons_webview extends class_base
 		$this->vars_safe(array(
 			"name" => $company->prop("name"),
 		));
-		return $this->parse();
+                $ret = $this->parse();
+		$this->vars["DEPARTMENT"] = "";
+                return $ret;
 	}
 
 	function parse_section($section)
@@ -730,7 +782,7 @@ class persons_webview extends class_base
 		$workers_list = new object_list($section->connections_from (array (
 			"type" => "RELTYPE_WORKERS",
 		)));
-		//------------------------sorteerib kõvemad vennad ette;
+		//------------------------sorteerib k6vemad vennad ette;
 		foreach($workers_list->arr() as $worker)
 		{
 			if($this->sw && !in_array($worker->id() , $this->sw))//kui on otsing, kuid tulemustes pole
@@ -783,14 +835,14 @@ class persons_webview extends class_base
 	{
 		$profession = $directive = "";
 		$profession_obj = $worker->get_first_obj_by_reltype("RELTYPE_RANK");
-		//kõik ametid mis tüübil on
+		//k6ik ametid mis tyybil on
 		$conns = $worker->connections_from(array(
 			"type" => "RELTYPE_RANK",
 		));
 
 		$professions = "";
-		//nüüd oleks vaja siis kindlaks teha, et kus ameti all tüüp antud sektsioonis asub
-		//kui siit midagi asjalikku ei leia, siis jääb algul leitud amet.
+		//nyyd oleks vaja siis kindlaks teha, et kus ameti all tyyp antud sektsioonis asub
+		//kui siit midagi asjalikku ei leia, siis j22b algul leitud amet.
 		foreach($conns as $conn)
 		{
 			$tmp_profession_obj = obj($conn->prop("to"));
@@ -827,7 +879,7 @@ class persons_webview extends class_base
 			$directive_obj->prop("name");
 			$profession_with_directive = '<a href ="'.$file_inst->get_url($directive , $directive_obj->prop("name")).'"  target=_new> '. $profession_with_directive.' </a>';
 		}
-		//kirjutab üle kõik juhendi muutujad, kui on viide olemas
+		//kirjutab yle k6ik juhendi muutujad, kui on viide olemas
 		if($directive_link)
 		{
 			$profession_with_directive = '<a href ="'.$directive_link.'"  target=_new> '. $profession.' </a>';
@@ -858,7 +910,7 @@ class persons_webview extends class_base
 			foreach($workers as $val)
 			{
 				$worker = $val["worker"];
-				if($this->view["rows_by"])//ametinimede kaupa grupeerimise porno, et erinevale reale õige arv tuleks jne
+				if($this->view["rows_by"])//ametinimede kaupa grupeerimise porno, et erinevale reale 6ige arv tuleks jne
 				{
 					if(!$this->order_array) $this->make_order_array($workers);
 					if(!$this->calculated) $col_num = $this->get_cols_num($row_num);
@@ -890,7 +942,7 @@ class persons_webview extends class_base
 				}
 			$this->count++;
 			}
-			if(!$parsed)//viimane rida võib olla tegemata
+			if(!$parsed)//viimane rida v6ib olla tegemata
 			{
 				$this->vars_safe(array(
 					"COL" => $column,
@@ -911,7 +963,7 @@ class persons_webview extends class_base
 			foreach($workers as $val)
 			{
 				$worker = $val["worker"];
-				if($this->view["rows_by"])//ametinimede kaupa grupeerimise porno, et erinevale reale õige arv tuleks jne
+				if($this->view["rows_by"])//ametinimede kaupa grupeerimise porno, et erinevale reale 6ige arv tuleks jne
 				{
 					if(!$this->order_array) $this->make_order_array($workers);
 					if(!$this->calculated) $col_num = $this->get_cols_num($row_num);
@@ -939,7 +991,7 @@ class persons_webview extends class_base
 				}
 			$this->count++;
 			}
-			if(!$parsed)//viimane rida võib olla tegemata
+			if(!$parsed)//viimane rida v6ib olla tegemata
 			{
 				$this->vars_safe(array(
 					"WORKER" => $c,
@@ -1131,7 +1183,7 @@ class persons_webview extends class_base
 		if($this->is_template("EDUCATION_SUB"))
 		{
 			$this->education_options = array(
-				"pohiharidus" => t("Põhiharidus"),
+				"pohiharidus" => t("P&otilde;hiharidus"),
 				"keskharidus" => t("Keskharidus"),
 				"keskeriharidus" => t("Kesk-eriharidus"),
 				"diplom" => t("Diplom"),
@@ -1163,7 +1215,7 @@ class persons_webview extends class_base
 			}
 		}
 
-		//peatatud töösuhe
+		//peatatud toosuhe
 		if($this->is_template("STOPPED"))
 		{
 			$stopped_reason = $subsitute = $stopped = "";
@@ -1200,7 +1252,7 @@ class persons_webview extends class_base
 			}
 		}
 
-		//praeguse töösuhte info
+		//praeguse toosuhte info
 		$or = $worker->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
 		if(is_object($or))
 		{
@@ -1295,7 +1347,7 @@ class persons_webview extends class_base
 			$cols++;
 		}
 		$x = 0;
-		while($x < 10)//miski suht random arv moment, et mitu korda ikka läbi käia nimekiri et siis iga sammuga tasandab maksimaalselt ühe võrra
+		while($x < 10)//miski suht random arv moment, et mitu korda ikka l2bi k2ia nimekiri et siis iga sammuga tasandab maksimaalselt yhe v6rra
 		{
 			$small_rows = 0;
 			$row_num = 0;
