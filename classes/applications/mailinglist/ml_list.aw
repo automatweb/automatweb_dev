@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.118 2008/03/24 12:40:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.119 2008/04/10 14:03:27 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -669,7 +669,7 @@ class ml_list extends class_base
 	
 		$erx = array();
 		
-		if(count($use_folders) < 1)
+		if(count($use_folders) < 1 && $args["op"] == 1)
 		{
 			$allow = false;
 			$args["op"] = 0;
