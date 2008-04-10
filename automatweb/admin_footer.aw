@@ -94,6 +94,7 @@ $class_names = array(
 	"config" => t("Seaded"),
 );
 $cur_class = empty($clss[clid_for_name($_GET["class"])]["name"]) ? $class_names[$_GET["class"]] : $clss[clid_for_name($_GET["class"])]["name"];
+$parent = $_GET["parent"] ? $_GET["parent"] : $cur_obj->parent();
 $sf->vars(array(
 	"prod_family" => $pf,
 	"prod_family_href" => $pf_url,
@@ -127,6 +128,7 @@ $sf->vars(array(
 		"load_on_demand_url" => $sf->mk_my_orb("lang_pop", array("url" => get_ru()), "language"),
 		"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 	)),
+	"parent" => $parent,
 ));
 
 if ($sf->prog_acl("view", "disp_person"))
