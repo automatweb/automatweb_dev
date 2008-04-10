@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.37 2008/04/10 12:48:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.38 2008/04/10 13:37:51 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -732,22 +732,52 @@ class persons_webview extends class_base
 	function parse_section($section)
 	{
 		enter_function("person_webview::parse_section");
-		$phone = "";
-		if(is_oid($section->prop("phone_id"))) $phone_obj = obj($section->prop("phone_id"));
-		else $phone_obj = $section->get_first_obj_by_reltype("RELTYPE_PHONE");
-		if(is_object($phone_obj)) $phone = $phone_obj->name();
+		$secvars = array(
+			"department_name" => $section->trans_get_val("name"),
+			"document" => $section->prop("link_document"),
+		);
+
+		if(is_oid($section->prop("phone_id")))
+		{
+			$phone_obj = obj($section->prop("phone_id"));
+		}
+		else
+		{
+			 $phone_obj = $section->get_first_obj_by_reltype("RELTYPE_PHONE");
+		}
+		if(is_object($phone_obj))
+		{
+			$secvars["phone"] = $phone_obj->name();
+			$secvars["phone_comment"] = $phone_obj->trans_get_val("comment");
+		}
+
+		if(is_oid($section->prop("email_id")))
+		{
+			$email_obj = obj($section->prop("email_id"));
+		}
+		else
+		{
+			$email_obj = $section->get_first_obj_by_reltype("RELTYPE_EMAIL");
+		}
+		if(is_object($email_obj))
+		{
+			$secvars["email"] = $email_obj->prop("mail");
+		}
+
+		if(is_oid($section->prop("telefax_id")))
+		{
+			$fax_obj = obj($section->prop("telefax_id"));
+		}
+		else
+		{
+			$fax_obj = $section->get_first_obj_by_reltype("RELTYPE_TELEFAX");
+		}
+		if(is_object($fax_obj))
+		{
+			$secvars["fax"] = $fax_obj->name();
+		}
 		
-		$email = "";
-		if(is_oid($section->prop("email_id"))) $email_obj = obj($section->prop("email_id"));
-		else $email_obj = $section->get_first_obj_by_reltype("RELTYPE_EMAIL");
-		if(is_object($email_obj)) $email = $email_obj->prop("mail");
-		
-		$fax = "";
-		if(is_oid($section->prop("telefax_id"))) $fax_obj = obj($section->prop("telefax_id"));
-		else $fax_obj = $section->get_first_obj_by_reltype("RELTYPE_TELEFAX");
-		if(is_object($fax_obj)) $fax = $fax_obj->name();
-		
-		$next_level_link = $this->mk_my_orb("parse_alias",
+		$secvars["next_level_link"] = $this->mk_my_orb("parse_alias",
 			array(
 				"id" => $this->view_obj->id(),
 				"section" => $section->id(),
@@ -757,24 +787,12 @@ class persons_webview extends class_base
 		),
 		CL_PERSONS_WEBVIEW);
 		
-		$address = "";
-		$address_id = $section->prop("contact");
-		if(is_oid($address_id))
-		{
-			$address_obj = obj($address_id);
-			$address = $address_obj->name();
-		}		
-		$this->vars_safe(array(
-			"department_name" => $section->trans_get_val("name"),
-			"phone"	=> $phone,
-			"email" => $email,
-			"fax" => $fax,
-			"address" => $address,
-			"document" => $section->prop("link_document"),
-			"next_level_link" => $next_level_link,
-		));
+		$secvars["address"] = $section->prop("contact.name");
+		//if(aw_global_get("uid") == "struktuur"){ arr($secvars);arr($phone_obj);}
+		$this->vars_safe($secvars);
 		exit_function("person_webview::parse_section");
 	}
+
 
 	function get_workers($section)
 	{

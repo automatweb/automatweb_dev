@@ -53,12 +53,27 @@
             <method>serialize</method>
             <caption>Avalik</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_PHONE</syslog_type>
             <relationmgr>yes</relationmgr>
             <maintainer>markop</maintainer>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <tableinfo>
             <kliendibaas_telefon>
                   <master_table>objects</master_table>

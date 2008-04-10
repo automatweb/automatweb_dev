@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.20 2008/04/07 14:15:29 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.21 2008/04/10 13:37:51 markop Exp $
 // phone.aw - Telefon
 /*
 
@@ -29,6 +29,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 @property is_public type=checkbox ch_value=1 field=meta method=serialize 
 @caption Avalik
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
+
 @classinfo no_status=1
 */
 
@@ -56,6 +63,9 @@ class crm_phone extends class_base
 			"skype" => t("skype"),
 			"extension" => t("sisetelefon"),
 		);
+		$this->trans_props = array(
+			"comment"
+		);
 	}
 
 	function set_property($arr)
@@ -66,6 +76,9 @@ class crm_phone extends class_base
 		{
 			case "clean_number":
 				$prop["value"] = str_replace(array(" ", "-", "(", ")") , "", $arr["request"]["name"]);
+				break;
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
 				break;
 		};
 		return $retval;
@@ -201,6 +214,11 @@ class crm_phone extends class_base
 		}
 
 		return false;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 };
 ?>
