@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.119 2008/04/10 14:03:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.120 2008/04/10 14:54:06 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -642,6 +642,10 @@ class ml_list extends class_base
 		if (empty($args["mail"]))
 		{
 			$args["mail"] = $args["email"];
+		}
+		if(!is_email($args["mail"]))
+		{
+			$args["op"] = 0 ;
 		}
 		$request = $args;
 		if (is_array($args["udef_txbox"]))
