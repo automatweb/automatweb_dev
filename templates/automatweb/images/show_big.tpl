@@ -20,7 +20,23 @@
 					var ih1 = h;
 					window.resizeTo(iw1,ih1);
 				}
-				rs(iw,ih);
+				
+				var hd = 0;
+				var wd = 0;
+				if (window.outerHeight)
+				{
+					var oh = window.outerHeight;
+					var wih = window.innerHeight;
+					hd = oh - wih;
+					
+				}
+				else
+				{
+					hd = 80;
+					wd = 20;
+					self.moveTo(0,0);
+				}
+				rs(iw+wd,ih+hd);
 			}
 			-->
 		</script>
@@ -29,8 +45,10 @@
 			.button a { color: #000; text-decoration: none; font-family: verdana,arial,tahoma,times,serif; font-size: 10px;}
 		</style>
 	</head>
-	<body onload="preload()" style="margin: 0px">
-		<a title="{VAR:LC_CLOSE}" href='javascript:window.close()'><img alt="{VAR:LC_CLOSE}" title="{VAR:LC_CLOSE}" border="0" src='{VAR:big_url}' /></a>
+	<body onload="preload()" style="height:100%; text-align: center; vertical-align: middle; margin: 0px">
+		<table border="0" cellspacing="0" cellpadding="0" style="height: 100%"><tr><td style="height: 100%; vertical-align: middle">
+			<a title="{VAR:LC_CLOSE}" href='javascript:window.close()'><img alt="{VAR:LC_CLOSE}" title="{VAR:LC_CLOSE}" border="0" src='{VAR:big_url}' /></a>
+		</td></tr></table>
 		<div style="float: right; height: 23px; width: 150px; bottom: 5px; right: 5px; top: auto; left: auto; position: absolute; text-align: right">
 
 <!-- SUB: NEXT_LINK -->
