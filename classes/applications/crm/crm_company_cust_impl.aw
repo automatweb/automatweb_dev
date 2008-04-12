@@ -329,7 +329,7 @@ class crm_company_cust_impl extends class_base
 		}
 
 		### statistics
-		$prefix = sprintf ("<b>%s</b><br />", t("Kokku:"));
+		$prefix = "<b>" . t("Kokku:") . "</b><br />";
 
 		if ($sum_budget)
 		{
@@ -367,7 +367,7 @@ class crm_company_cust_impl extends class_base
 		));
 		$table->define_field(array(
 			"name" => "deadline",
-			"caption" => t("Tähtaeg"),
+			"caption" => t("T&auml;htaeg"),
 			"sortable" => 1,
 			"type" => "time",
 			"numeric" => 1,
@@ -386,7 +386,7 @@ class crm_company_cust_impl extends class_base
 		));
 		$table->define_field(array(
 			"name" => "sales_person",
-			"caption" => t("Müüja/looja"),
+			"caption" => t("M&uuml;&uuml;ja/looja"),
 			"sortable" => 1
 		));
 		$table->define_field(array(
@@ -396,7 +396,7 @@ class crm_company_cust_impl extends class_base
 		));
 		$table->define_field(array(
 			"name" => "outsourcing_expences",
-			"caption" => t("Välja"),
+			"caption" => t("V&auml;lja"),
 			"sortable" => 1
 		));
 		$table->define_field(array(
@@ -1870,7 +1870,7 @@ class crm_company_cust_impl extends class_base
 		{
 			$status = obj($arr["st"]);
 			$oname = $org->name();
-			$tf->table_caption = $oname." kliendid: ".$status->name();
+			$tf->table_caption = $oname.t(" kliendid: ").$status->name();
 		}
 		else
 		{
@@ -2399,8 +2399,8 @@ class crm_company_cust_impl extends class_base
 					"name" => $id,
 					'text' => $cat,
 				));
-	
-				
+
+
 				foreach($ol->arr() as $o)
 				{
 					$linkn = str_replace(urlencode("%s"), "status_".$o->id(), str_replace("%s", 'status_'.$o->id(), $link));

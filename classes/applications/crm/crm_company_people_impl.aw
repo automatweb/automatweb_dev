@@ -1002,7 +1002,7 @@ class crm_company_people_impl extends class_base
 
 	function _get_contact_search_desc($arr)
 	{
-		$arr["prop"]["value"] = "<span style=\"border: 1px black;\"><b>Otsi isikuid</b>";
+		$arr["prop"]["value"] = "<span style=\"border: 1px black;\"><b>" . t("Otsi isikuid") . "</b>";
 	}
 
 	function _get_calendars_for_persons($persons)
@@ -1265,8 +1265,8 @@ class crm_company_people_impl extends class_base
 		$tree_inst->set_root_url(aw_url_change_var("cat", NULL, aw_url_change_var("unit", NULL)));
 	}
 
-	//see funktsioon tegelt vist ebaoluline, a äkki läheb vaja ikka kui seda volituse lisamist muuta
-	//niiet kui aasta on juba 2008 ja sa ikka veel seda kirja näed lugeda, siis kustuta see authorization funktsioon maha, kui tundub hea mõte
+	//see funktsioon tegelt vist ebaoluline, a 2kki l2heb vaja ikka kui seda volituse lisamist muuta
+	//niiet kui aasta on juba 2008 ja sa ikka veel seda kirja n2ed lugeda, siis kustuta see authorization funktsioon maha, kui tundub hea m6te
 	/**
 		@attrib name=authorization all_args=1
 	**/

@@ -1,5 +1,9 @@
 <?php
 
+/*
+@classinfo  maintainer=markop
+*/
+
 class crm_company_overview_impl extends class_base
 {
 	function crm_company_overview_impl()
@@ -25,7 +29,7 @@ class crm_company_overview_impl extends class_base
 		$args["type"] = "RELTYPE_KOHTUMINE";
 		$this->do_org_actions($arr, $args, CL_CRM_MEETING);
 	}
-	
+
 	function _get_org_tasks($arr)
 	{
 		$args = array();
@@ -85,7 +89,7 @@ class crm_company_overview_impl extends class_base
 				{
 					$full_weeks = false;
 					break;
-				}	
+				}
 				else
 				{
 					$full_weeks = true;
@@ -140,14 +144,14 @@ class crm_company_overview_impl extends class_base
 			$e_m = date("m", $end);
 			$pred = $s_m > $e_m ? "OR" : "AND";
 			$q = "
-				SELECT 
+				SELECT
 					objects.name as name,
 					objects.oid as oid,
 					kliendibaas_isik.birthday as bd
-				FROM 
-					objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
-				WHERE	
-					objects.class_id = '145' AND 
+				FROM
+					objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of
+				WHERE
+					objects.class_id = '145' AND
 					objects.status > 0  AND
 					kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null $p_id_filt
 			";
@@ -158,7 +162,7 @@ class crm_company_overview_impl extends class_base
 				if (($s_m > $e_m ? ($m >= $s_m || $m <= $e_m) : ($m >= $s_m && $m <= $e_m)))
 				{
 					$evts[$row["oid"]] = $row["oid"];
-				}	
+				}
 			}
 		}
 		exit_function("do_org_actions:2:2");
@@ -179,7 +183,7 @@ class crm_company_overview_impl extends class_base
 			{
 				$item = $obj;
 			}
-			// relative needs last n and next m items, those might be 
+			// relative needs last n and next m items, those might be
 			// outside of the current range
 			$date = $item->prop("start1");
 			if ($item->class_id() == CL_CRM_DOCUMENT_ACTION)
@@ -349,7 +353,7 @@ class crm_company_overview_impl extends class_base
 			"name" => "sel"
 		));
 		$t->set_caption("Kirjad");
-		
+
 		$cur = get_current_company();
 		$parents[] = $cur->id();
 		$mf = $cur->get_first_obj_by_reltype("RELTYPE_MAILS_FOLDER");
@@ -462,7 +466,7 @@ class crm_company_overview_impl extends class_base
 				"sortable" => 1,
 				"filter" => array_unique($filt["customer"])
 			));
-	
+
 			$t->define_field(array(
 				"caption" => t("Projekt"),
 				"name" => "proj_name",
@@ -472,7 +476,7 @@ class crm_company_overview_impl extends class_base
 				"filter" => array_unique($filt["proj_name"])
 			));
 		}
-		
+
 		$t->define_field(array(
 			"caption" => t("Pealkiri"),
 			"name" => "name",
@@ -482,7 +486,7 @@ class crm_company_overview_impl extends class_base
 			"colspan" => "colspan",
 		));
 
-		
+
 		if ($r["group"] != "meetings")
 		{
 			$t->define_field(array(
@@ -537,7 +541,7 @@ class crm_company_overview_impl extends class_base
 		$b_proj = $b->prop("project");
 		$a_proj = $a->prop("project");
 		$b_cust = $b->prop("customer");
-		$a_cust = $a->prop("customer");	
+		$a_cust = $a->prop("customer");
 
 		if(($a_cust - $b_cust) == 0)
 		{
@@ -578,7 +582,7 @@ class crm_company_overview_impl extends class_base
 		$sts = $seti->get_current_settings();
 		if(is_object($sts) && $sts->prop("group_task_view"))
 		{
-			$group = 1;	
+			$group = 1;
 		}
 		if (aw_global_get("crm_task_view") != CRM_TASK_VIEW_TABLE)
 		{
@@ -619,10 +623,10 @@ class crm_company_overview_impl extends class_base
 		// make task2person list
 		$task2person = $this->_get_participant_list_for_tasks($ol->ids());
 		$task2recur = $this->_get_recur_list_for_tasks($ol->ids());
-		
+
 		$task_nr = 0;
 		$table_data = array();
-		
+
 		$last_cust = $last_proj = 0;
 		$ti = get_instance(CL_TASK);
 		exit_function("get_my_tasks:3");
@@ -634,7 +638,7 @@ class crm_company_overview_impl extends class_base
 			$task = obj($task_id);
 			$cust = $task->prop("customer");
 			$cust_name = "";
-			
+
 			$cust_str = "";
 			if(!$this->can("view", $cust))
 			{
@@ -650,7 +654,7 @@ class crm_company_overview_impl extends class_base
 				$cust_str = html::get_change_url($cust, array("return_url" => get_ru()), parse_obj_name($cust_o->name()));
 				$cust_name = $cust_o->name();
 			}
-			
+
 			if($group)
 			{
 				if($last_proj != $task->prop("project"))
@@ -666,7 +670,7 @@ class crm_company_overview_impl extends class_base
 					$last_proj = $task->prop("project");
 				}
 			}
-			
+
 			if($group)
 			{
 /*				if($last_cust != $task->prop("customer"))
@@ -676,7 +680,7 @@ class crm_company_overview_impl extends class_base
 					);
 					$last_cust = $task->prop("customer");
 				}
-*/				
+*/
 				if($last_proj != $task->prop("project"))
 				{
 					if($this->can("view" , $task->prop("project")))
@@ -754,7 +758,7 @@ class crm_company_overview_impl extends class_base
 			$t_id = $task->id();
 			$pm->begin_menu("task_".$t_id);
 			$pm->add_item(array(
-				"text" => t("Ava read"), 
+				"text" => t("Ava read"),
 				"link" => $this->mk_my_orb("change", array(
 					"id" => $t_id,
 					"group" => "rows",
@@ -764,17 +768,17 @@ class crm_company_overview_impl extends class_base
 
 			$link = $this->mk_my_orb("mark_tasks_done", array(
 					"sel" => array($t_id => $t_id),
-					"post_ru" => "a" 
+					"post_ru" => "a"
 				), CL_CRM_COMPANY);
 
 			$done_ic_url = aw_ini_get("baseurl")."/automatweb/images/icons/class_".$task->class_id()."_done.gif";
 			$pm->add_item(array(
-				"text" => t("M&auml;rgi tehtuks"), 
+				"text" => t("M&auml;rgi tehtuks"),
 				"oncl" => "onClick=\"bg_mark_task_done('$link', 'task$task_nr', '$done_ic_url')\"",
 				"link" => "javascript:void(0)"
 			));
 			$pm->add_item(array(
-				"text" => t("Koosta arve"), 
+				"text" => t("Koosta arve"),
 				"link" => $this->mk_my_orb("create_bill_from_task", array(
 					"id" => $t_id,
 					"post_ru" => get_ru()
@@ -790,8 +794,8 @@ class crm_company_overview_impl extends class_base
 				),CL_TASK);
 
 				$pm->add_item(array(
-					"text" => t("K&auml;ivita stopper"), 
-					"link" => "#", 
+					"text" => t("K&auml;ivita stopper"),
+					"link" => "#",
 					"oncl" => "onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'"
 				));
 			}
@@ -808,16 +812,16 @@ class crm_company_overview_impl extends class_base
 				$elapsed = $ti->get_stopper_time($task->id());
 				$hrs = (int)($elapsed / 3600);
 				$mins = (int)(($elapsed - ($hrs * 3600)) / 60);
-				$elapsed = sprintf("%02d:%02d", $hrs, $mins); 
+				$elapsed = sprintf("%02d:%02d", $hrs, $mins);
 
 				$pm->add_item(array(
-					"text" => sprintf(t("Peata stopper (%s)"), $elapsed), 
+					"text" => sprintf(t("Peata stopper (%s)"), $elapsed),
 					"link" => "#",
 					"oncl" => "onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'"
 				));
 			}
 			$pm->add_item(array(
-				"text" => t("Kustuta"), 
+				"text" => t("Kustuta"),
 				"oncl" => "onClick=\"if(!confirm('".t("Olete kindel et soovide toimetust kustutada?")."')) { return false; } else {window.location = '".$this->mk_my_orb("delete_tasks", array(
 					"sel" => array($t_id => $t_id),
 					"post_ru" => get_ru()
@@ -1001,7 +1005,7 @@ class crm_company_overview_impl extends class_base
 					"logic" => "OR",
 					"conditions" => array(
 						$def.".document(CL_CRM_DEAL).customer.name" => $str_filt,
-						$def.".document(CL_CRM_MEMO).customer.name" => $str_filt	
+						$def.".document(CL_CRM_MEMO).customer.name" => $str_filt
 					)
 				));
 			}
@@ -1010,8 +1014,8 @@ class crm_company_overview_impl extends class_base
 				$res[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"CL_BUG.customer(CL_CRM_COMPANY).name" => $str_filt,	
-						$def.".customer(CL_CRM_COMPANY).name" => $str_filt	
+						"CL_BUG.customer(CL_CRM_COMPANY).name" => $str_filt,
+						$def.".customer(CL_CRM_COMPANY).name" => $str_filt
 					)
 				));
 			}
@@ -1145,7 +1149,7 @@ class crm_company_overview_impl extends class_base
 						"logic" => "OR",
 						"conditions" => array(
 							"oid" => $_res["oid"],
-							$def.".RELTYPE_RESOURCE.name" => $str_filt //map("%%%s%%", explode(",", $r["act_s_part"]))	
+							$def.".RELTYPE_RESOURCE.name" => $str_filt //map("%%%s%%", explode(",", $r["act_s_part"]))
 						)
 					));
 				}
@@ -1165,7 +1169,7 @@ class crm_company_overview_impl extends class_base
 					"conditions" => array(
 						"name" =>  $str_filt, //"%".$r["act_s_task_name"]."%",
 						"CL_CRM_DOCUMENT_ACTION.document.name" => $str_filt // "%".$r["act_s_task_name"]."%",
-					)	
+					)
 				));
 			}
 			else
@@ -1199,7 +1203,7 @@ class crm_company_overview_impl extends class_base
 			$str_filt = $this->_get_string_filt($r["act_s_mail_content"]);
 			$res["content"] = $str_filt;
 		}
-		
+
 		if ($r["act_s_mail_name"] != "")
 		{
 			$str_filt = $this->_get_string_filt($r["act_s_mail_name"]);
@@ -1222,8 +1226,8 @@ class crm_company_overview_impl extends class_base
 				$res[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"CL_BUG.project(CL_PROJECT).name" => $str_filt,	
-						$def.".project(CL_PROJECT).name" => $str_filt	
+						"CL_BUG.project(CL_PROJECT).name" => $str_filt,
+						$def.".project(CL_PROJECT).name" => $str_filt
 					)
 				));
 			}
@@ -1311,7 +1315,7 @@ class crm_company_overview_impl extends class_base
 	function _get_my_tasks_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		
+
 		$tb->add_menu_button(array(
 			'name'=>'add_item',
 			'tooltip'=> t('Uus')
@@ -1351,8 +1355,8 @@ class crm_company_overview_impl extends class_base
 			'parent' => 'add_item',
 			"text" => t("P&auml;eva raport"),
 			'link' => html::get_new_url(
-				CL_CRM_DAY_REPORT, 
-				$arr["obj_inst"]->id(), 
+				CL_CRM_DAY_REPORT,
+				$arr["obj_inst"]->id(),
 				array(
 					"alias_to" => $arr["obj_inst"]->id(),
 					"reltype" => 39,
@@ -1406,12 +1410,12 @@ class crm_company_overview_impl extends class_base
 				"onClick" => "",
 				"img" => "mail_reply.gif",
 			));
-			
+
 			$tb->add_menu_button(array(
 				'name'=>'set_project',
 				'tooltip'=> t('M&auml;&auml;ra projekt')
 			));
-			
+
 			$ol = new object_list(array(
 				"class_id" => CL_PROJECT,
 				"CL_PROJECT.RELTYPE_ORDERER.id" => $arr["obj_inst"]->id(),
@@ -1423,7 +1427,7 @@ class crm_company_overview_impl extends class_base
 			foreach($ol->arr() as $o)
 			{
 				$url = $this->mk_my_orb("set_project_to_mail", array('proj' => $o->id()));
-				
+
 				$tb->add_menu_item(array(
 					'parent'=>'set_project',
 					'text' => $o->name(),
@@ -1435,7 +1439,7 @@ class crm_company_overview_impl extends class_base
 			}
 		}
 	}
-	
+
 	function _get_act_s_part($arr)
 	{
 		if ($arr["request"]["act_s_sbt"] == "" && $arr["request"]["act_s_is_is"] != 1)
@@ -1535,7 +1539,7 @@ class crm_company_overview_impl extends class_base
 				if ($co == $arr["obj_inst"]->id())
 				{
 					$tasks = $i->get_my_tasks(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
-					
+
 				}
 				else
 				{
@@ -1561,7 +1565,7 @@ class crm_company_overview_impl extends class_base
 				if ($co == $arr["obj_inst"]->id())
 				{
 					$tasks = $i->get_my_bugs(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
-					
+
 				}
 				else
 				{
@@ -1577,7 +1581,7 @@ class crm_company_overview_impl extends class_base
 				}
 				break;
 			case "meetings":
-				
+
 				$clid = CL_CRM_MEETING;
 				if ($co == $arr["obj_inst"]->id())
 				{
@@ -1612,7 +1616,7 @@ class crm_company_overview_impl extends class_base
 				break;
 
 			case "calls":
-				
+
 				$clid = CL_CRM_CALL;
 				if ($co == $arr["obj_inst"]->id())
 				{
@@ -1684,13 +1688,13 @@ class crm_company_overview_impl extends class_base
 				else
 				{
 					$clid = CL_CRM_DOCUMENT_ACTION;
-					
+
 					$offers = new object_list(array("class_id" => CL_CRM_OFFER,
 						"site_id" => array(),
 						"lang_id" => array(),
 						"orderer" => $arr["obj_inst"]->id(),
 					));
-					
+
 					$filt = array(
 						"class_id" => CL_CRM_DOCUMENT_ACTION,
 						"site_id" => array(),
@@ -1955,7 +1959,7 @@ class crm_company_overview_impl extends class_base
 			}
 
 			$t_id = $task->id();
-			
+
 			$table_data[] = array(
 				"icon" => html::img(array("url" => icons::get_icon_url($task))),
 				"customer" => $cust_str,
@@ -2191,7 +2195,7 @@ class crm_company_overview_impl extends class_base
 				"name" => t("Kokku:"),
 				"time" => $sum,
 		));
-		
+
 		die(iconv(aw_global_get("charset"), "utf-8", $t->draw()));
 	}
 

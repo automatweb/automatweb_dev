@@ -928,7 +928,7 @@ default group=org_objects
 @default group=ovrv_email
 
 	@layout mail_main type=hbox width=20%:80%
-		
+
 		@property mail_tb type=toolbar store=no no_caption=1
 
 		@layout mail_search type=vbox closeable=1 area_caption=Otsing parent=mail_main
@@ -944,7 +944,7 @@ default group=org_objects
 
 			@property mail_s_submit type=submit parent=mail_search no_caption=1
 			@caption Otsi
-		
+
 		@layout mail_tbl_box type=vbox parent=mail_main
 
 			@property mail_tbl type=table store=no no_caption=1 parent=mail_tbl_box
@@ -2021,12 +2021,12 @@ class crm_company extends class_base
 
 			case "reg_nr":
 				// append link to go to thingie
-				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://ar.eer.ee/lihtparing.py METHOD=POST name=liht><INPUT TYPE=text NAME=nimi><INPUT TYPE=text NAME=rkood><input type=submit><input type=hidden name=search value=1><input type=hidden name=lang value=est></form>\" );win.document.liht.nimi.value = document.changeform.name.value;win.document.liht.rkood.value = document.changeform.reg_nr.value;win.document.liht.submit();'>&Auml;riregistri p&auml;ring</a>";
+				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://ar.eer.ee/lihtparing.py METHOD=POST name=liht><INPUT TYPE=text NAME=nimi><INPUT TYPE=text NAME=rkood><input type=submit><input type=hidden name=search value=1><input type=hidden name=lang value=est></form>\" );win.document.liht.nimi.value = document.changeform.name.value;win.document.liht.rkood.value = document.changeform.reg_nr.value;win.document.liht.submit();'>" . t("&Auml;riregistri p&auml;ring") . "</a>";
 				break;
 
 			case "tax_nr":
 				// append link to go to thingie
-				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://maksuamet.ma.ee/e-service/doc/a0003.xsql METHOD=POST name=kraaks><INPUT TYPE=text NAME=p_kkood><input type=hidden name=p_submit value=Otsi><input type=hidden name=p_isikukood ><input type=hidden name=p_tegevus ><input type=hidden name=p_context ><input type=hidden name=p_tagasi ><input type=hidden name=p_mode value=1><input type=hidden name=p_queryobject></form>\" );win.document.kraaks.p_kkood.value = document.changeform.reg_nr.value;win.document.kraaks.submit();'>Maksuameti p&auml;ring</a>";
+				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://maksuamet.ma.ee/e-service/doc/a0003.xsql METHOD=POST name=kraaks><INPUT TYPE=text NAME=p_kkood><input type=hidden name=p_submit value=Otsi><input type=hidden name=p_isikukood ><input type=hidden name=p_tegevus ><input type=hidden name=p_context ><input type=hidden name=p_tagasi ><input type=hidden name=p_mode value=1><input type=hidden name=p_queryobject></form>\" );win.document.kraaks.p_kkood.value = document.changeform.reg_nr.value;win.document.kraaks.submit();'>" . t("Maksuameti p&auml;ring") . "</a>";
 				break;
 
 			case "contact_person":
@@ -3382,7 +3382,7 @@ class crm_company extends class_base
 	**/
 	function remove_from_category($arr)
 	{
-		
+
 		if (is_array($arr["check"]) && is_oid($arr["category"]) && $this->can("view" , $arr["category"]))
 		{
 			$c = obj($arr["category"]);
@@ -3613,14 +3613,14 @@ class crm_company extends class_base
 		$e_d = mktime(23,59,59, date('m'),date('d')+1+$e_add,date('Y'));
 		$pred = $s_m > $e_m ? "OR" : "AND";
 		$q = "
-			SELECT 
+			SELECT
 				objects.name as name,
 				objects.oid as oid,
 				kliendibaas_isik.birthday as bd
-			FROM 
-				objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
-			WHERE	
-				objects.class_id = '145' AND 
+			FROM
+				objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of
+			WHERE
+				objects.class_id = '145' AND
 				objects.status > 0  AND
 				kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday is not null
 		";
@@ -3689,7 +3689,7 @@ class crm_company extends class_base
 					"company" => ", ".$p->prop("work_contact.name"),
 					"phone" => $p->prop("phone.name")?", ".$p->prop("phone.name"):"",
 					"email" => $p->prop("email.mail")?", ".$p->prop("email.mail"):"",
-				)); 
+				));
 				$tmp2 .= $this->parse("bds");
 			}
 			if($dc == 1)
@@ -5107,7 +5107,7 @@ class crm_company extends class_base
 				$ret = array_merge($ret, $ol->ids());
 			}
 		}
-		
+
 		foreach($this->get_my_offers() as $ofid)
 		{
 			if ($this->can("view", $c["to"]))
@@ -6370,7 +6370,7 @@ class crm_company extends class_base
 		{
 			$o = obj();
 			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
-			$o->set_name("Kliendisuhe ".$buyer->name()." => ".$seller->name());
+			$o->set_name(t("Kliendisuhe ").$buyer->name()." => ".$seller->name());
 			$o->set_parent($buyer->id());
 			$o->set_prop("seller", $buyer->id()); // yes this is correct, cause I'm a lazy iduit
 			$o->set_prop("buyer", $seller->id());
@@ -6425,7 +6425,7 @@ class crm_company extends class_base
 			$my_co = obj($my_co);
 			$o = obj();
 			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
-			$o->set_name("Kliendisuhe ".$my_co->name()." => ".$view_co->name());
+			$o->set_name(t("Kliendisuhe ").$my_co->name()." => ".$view_co->name());
 			$o->set_parent($my_co->id());
 			$o->set_prop("seller", $my_co->id());
 			$o->set_prop("buyer", $view_co->id());
@@ -6541,7 +6541,7 @@ class crm_company extends class_base
 				$arr["link"] = html::get_change_url($msg, array("return_url" => get_ru(), "group" => "main_view"));
 			}
 		}
-	
+
 		if($arr["id"] == "bugs")
 		{
 			$show = 0;
@@ -6703,7 +6703,7 @@ class crm_company extends class_base
 		"num= parseInt(aw_get_url_contents(url));".
 		"if (num >0)
 		{
-			var ansa = confirm('Sellise nimega organisatsioon on juba olemas. Kas soovite minna selle objekti muutmisele?');
+			var ansa = confirm('" . t("Sellise nimega organisatsioon on juba olemas. Kas soovite minna selle objekti muutmisele?") . "');
 			if (ansa)
 			{
 				window.location = '".$this->mk_my_orb("go_to_first_co_by_name", array("return_url" => $arr["request"]["return_url"]))."&co_name=' + document.changeform.name.value;

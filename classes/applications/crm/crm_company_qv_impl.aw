@@ -78,7 +78,7 @@ class crm_company_qv_impl extends class_base
 				"state" => "%",
 				"oid" => $arr["proj"]
 			));
-			$pd = t("<b>Projektid</b>");
+			$pd = "<b>" . t("Projektid") . "</b>";
 		}
 		else
 		{
@@ -91,7 +91,7 @@ class crm_company_qv_impl extends class_base
 				"state" => "%",
 				"limit" => 5
 			));
-			$pd = t("<b>Projektid (5 v&auml;rskemat)</b>");
+			$pd = "<b>" . t("Projektid (5 v&auml;rskemat)") . "</b>";
 		}
 		$pi = get_instance(CL_PROJECT);
 		$t_i = get_instance(CL_TASK);
@@ -193,7 +193,7 @@ class crm_company_qv_impl extends class_base
 			$ol2 = new object_list($filt);
 			$ol->add($ol2);
 
-			$grpd = t("<b>Tegevused</b>");
+			$grpd = "<b>" . t("Tegevused") . "</b>";
 		}
 		else
 		{
@@ -206,7 +206,7 @@ class crm_company_qv_impl extends class_base
 				"deadline" => "%",
 				"limit" => 10
 			));
-			$grpd = t("<b>Tegevused (10 v&auml;rskemat)</b>");
+			$grpd = "<b>" . t("Tegevused (10 v&auml;rskemat)") . "</b>";
 		}
 		classload("core/icons");
 		foreach($ol->arr() as $o)
@@ -245,7 +245,7 @@ class crm_company_qv_impl extends class_base
 				$hrs += $o->prop("time_real");
 				$this->hrs_total += $row["amt"];
 				$this->sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price");
-				$sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price"); 
+				$sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price");
 			}
 			$end = "";
 			if ($o->prop("end") > $o->prop("start1"))
@@ -289,7 +289,7 @@ class crm_company_qv_impl extends class_base
 				"CL_CRM_BILL.RELTYPE_TASK" => $ol->ids() // only from the task list for this co
 			);
 			$ol = new object_list($f);
-			$bd = t("<span style='font-size: 0px;'>y</span><b>Arved</b>");
+			$bd = "<span style='font-size: 0px;'>y</span><b>" . t("Arved") . "</b>";
 		}
 		else
 		{
@@ -302,7 +302,7 @@ class crm_company_qv_impl extends class_base
 				"bill_no" => "%",
 				"limit" => 10
 			));
-			$bd = t("<span style='font-size: 0px;'>y</span><b>Arved (10 v&auml;rskemat)</b>");
+			$bd = "<span style='font-size: 0px;'>y</span><b>" . t("Arved (10 v&auml;rskemat)") . "</b>";
 		}
 		foreach($ol->arr() as $o)
 		{
