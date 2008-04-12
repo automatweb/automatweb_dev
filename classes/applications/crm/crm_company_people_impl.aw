@@ -185,7 +185,7 @@ class crm_company_people_impl extends class_base
 
 		return html::get_change_url(
 			$arr["id"],
-			array("return_url" => get_ru()),
+			array("return_url" => (empty($this->hr_tbl_return_url) ? urlencode(get_ru()) : $this->hr_tbl_return_url)),
 			parse_obj_name($name)
 		);
 	}
@@ -258,6 +258,12 @@ class crm_company_people_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
+
+		if(!empty($arr["caller_ru"]))
+		{
+			$this->hr_tbl_return_url = $arr["caller_ru"];
+		}
+
 		$u = get_instance(CL_USER);
 		classload("core/icons");
 		$t = &$arr["prop"]["vcl_inst"];

@@ -2088,7 +2088,7 @@ class crm_company_cust_impl extends class_base
 				$name = html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()." ".$vorm);
 			}
 
-			$_url = $this->mk_my_orb("get_cust_contact_table", array("id" => $o->id()));
+			$_url = $this->mk_my_orb("get_cust_contact_table", array("id" => $o->id(), "return_url" => post_ru()));
 			$namp = " (<a id='tnr".$o->id()."' href='javascript:void(0)' onClick='
 			if ((trel = document.getElementById(\"trows".$o->id()."\")))
 			{
@@ -2520,6 +2520,7 @@ class crm_company_cust_impl extends class_base
 	/**
 		@attrib name=get_cust_contact_table
 		@param id required type=int acl=view
+		@param return_url optional
 	**/
 	function get_cust_contact_table($arr)
 	{
@@ -2536,6 +2537,7 @@ class crm_company_cust_impl extends class_base
 		$hr->_get_human_resources(array(
 			"obj_inst" => $o,
 			"prop" => &$p,
+			"caller_ru" => $arr["return_url"],
 			"request" => array(
 				"all_if_empty" => true
 			)

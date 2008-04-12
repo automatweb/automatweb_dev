@@ -12,6 +12,7 @@
 			<function name="get_cust_contact_table">
 				<arguments>
 					<required name="id" type="int" acl="view" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>
