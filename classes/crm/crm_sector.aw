@@ -20,7 +20,6 @@
 	@property parent_sector type=select store=no
 	@caption Parent
 
-
 	@property tegevusala_en type=textbox size=55 table=kliendibaas_tegevusala
 	@caption Inglisekeelne nimetus
 
@@ -35,6 +34,9 @@
 
 	@property info_document type=relpicker reltype=RELTYPE_DOCUMENT field=meta method=serialize
 	@caption Tutvustus
+
+	@property ext_id type=hidden table=kliendibaas_tegevusala field=ext_id
+	@caption V&auml;line ID
 
 	@classinfo syslog_type=ST_CRM_SECTOR maintainer=markop
 
@@ -204,6 +206,39 @@ class crm_sector extends class_base
 			"section" => $o->id(),
 			"wv" => 26371
 		));
+	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ($tbl == "kliendibaas_tegevusala" && $field == "")
+		{
+			$this->db_query("
+				CREATE TABLE `kliendibaas_tegevusala` (
+				  `oid` int(11) NOT NULL default '0',
+				  `kood` varchar(30) default NULL,
+				  `ext_id` varchar(50) default NULL,
+				  `tegevusala` text,
+				  `tegevusala_en` text,
+				  `kirjeldus` text,
+				  PRIMARY KEY  (`oid`),
+				  UNIQUE KEY `oid` (`oid`),
+				  KEY `kood_i` (`kood`)
+				) TYPE=MyISAM;
+			");
+			return true;
+		}
+
+		switch($field)
+		{
+			case "ext_id":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "varchar(50)"
+				));
+				return true;
+		}
+
+		return false;
 	}
 }
 ?>

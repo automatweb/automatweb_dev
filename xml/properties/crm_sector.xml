@@ -95,6 +95,14 @@
             <caption>Tutvustus</caption>
       </property>
       <property>
+            <name>ext_id</name>
+            <table>kliendibaas_tegevusala</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>ext_id</field>
+            <caption>V&amp;amp;auml;line ID</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
